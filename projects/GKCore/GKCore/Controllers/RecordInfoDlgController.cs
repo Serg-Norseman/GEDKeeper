@@ -73,7 +73,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_MIFileProperties);
+            fView.Title = LangMan.LS(LSID.MIFileProperties);
         }
     }
 }

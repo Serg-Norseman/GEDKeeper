@@ -125,7 +125,7 @@ namespace GKStdReports
                     fWriter.AddParagraph(GKUtils.GetNameString(iRec, persName, firstSurname, true), fBUFont);
                 }
 
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Sex) + ": " + GKUtils.SexStr(iRec.Sex), fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Sex) + ": " + GKUtils.SexStr(iRec.Sex), fTextFont);
 
                 ShowParentsInfo(iRec);
                 ShowSpousesInfo(baseContext, iRec);
@@ -162,15 +162,15 @@ namespace GKStdReports
                             string.Empty : string.Format(" ({0})", LangMan.LS(GKData.ParentTypes[(int)plType]));
 
                         fWriter.NewLine();
-                        fWriter.AddParagraph(LangMan.LS(LSID.LSID_Parents) + linkType + ":", fTextFont);
+                        fWriter.AddParagraph(LangMan.LS(LSID.Parents) + linkType + ":", fTextFont);
 
                         string st;
 
-                        st = (father == null) ? LangMan.LS(LSID.LSID_UnkMale) : HyperLink(father.XRef, GKUtils.GetNameString(father, false));
-                        fWriter.AddParagraph("  " + LangMan.LS(LSID.LSID_Father) + ": " + st + GKUtils.GetLifeStr(father), fTextFont);
+                        st = (father == null) ? LangMan.LS(LSID.UnkMale) : HyperLink(father.XRef, GKUtils.GetNameString(father, false));
+                        fWriter.AddParagraph("  " + LangMan.LS(LSID.Father) + ": " + st + GKUtils.GetLifeStr(father), fTextFont);
 
-                        st = (mother == null) ? LangMan.LS(LSID.LSID_UnkFemale) : HyperLink(mother.XRef, GKUtils.GetNameString(mother, false));
-                        fWriter.AddParagraph("  " + LangMan.LS(LSID.LSID_Mother) + ": " + st + GKUtils.GetLifeStr(mother), fTextFont);
+                        st = (mother == null) ? LangMan.LS(LSID.UnkFemale) : HyperLink(mother.XRef, GKUtils.GetNameString(mother, false));
+                        fWriter.AddParagraph("  " + LangMan.LS(LSID.Mother) + ": " + st + GKUtils.GetLifeStr(mother), fTextFont);
                     }
                 }
             } catch (Exception ex) {
@@ -191,18 +191,18 @@ namespace GKStdReports
                     string unk;
                     if (iRec.Sex == GDMSex.svMale) {
                         spRec = fTree.GetPtrValue(family.Wife);
-                        st = LangMan.LS(LSID.LSID_Wife) + ": ";
-                        unk = LangMan.LS(LSID.LSID_UnkFemale);
+                        st = LangMan.LS(LSID.Wife) + ": ";
+                        unk = LangMan.LS(LSID.UnkFemale);
                     } else {
                         spRec = fTree.GetPtrValue(family.Husband);
-                        st = LangMan.LS(LSID.LSID_Husband) + ": ";
-                        unk = LangMan.LS(LSID.LSID_UnkMale);
+                        st = LangMan.LS(LSID.Husband) + ": ";
+                        unk = LangMan.LS(LSID.UnkMale);
                     }
                     string marr = GKUtils.GetMarriageDateStr(family, fOptions.DefDateFormat);
                     if (marr != "") {
-                        marr = LangMan.LS(LSID.LSID_LMarriage) + " " + marr;
+                        marr = LangMan.LS(LSID.LMarriage) + " " + marr;
                     } else {
-                        marr = LangMan.LS(LSID.LSID_LFamily);
+                        marr = LangMan.LS(LSID.LFamily);
                     }
 
                     fWriter.NewLine();
@@ -216,7 +216,7 @@ namespace GKStdReports
                     int chNum = family.Children.Count;
                     if (chNum != 0) {
                         fWriter.NewLine();
-                        fWriter.AddParagraph(LangMan.LS(LSID.LSID_Childs) + ":", fTextFont);
+                        fWriter.AddParagraph(LangMan.LS(LSID.Childs) + ":", fTextFont);
 
                         for (int k = 0; k < chNum; k++) {
                             GDMIndividualRecord child = fTree.GetPtrValue(family.Children[k]);
@@ -236,7 +236,7 @@ namespace GKStdReports
             try {
                 if (record.HasEvents) {
                     fWriter.NewLine();
-                    fWriter.AddParagraph(LangMan.LS(LSID.LSID_Events) + ":", fTextFont);
+                    fWriter.AddParagraph(LangMan.LS(LSID.Events) + ":", fTextFont);
 
                     for (int i = 0; i < record.Events.Count; i++) {
                         fWriter.NewLine();
@@ -267,7 +267,7 @@ namespace GKStdReports
             try {
                 if (record.HasMultimediaLinks) {
                     fWriter.NewLine();
-                    fWriter.AddParagraph(LangMan.LS(LSID.LSID_RPMultimedia) + " (" + record.MultimediaLinks.Count.ToString() + "):", fTextFont);
+                    fWriter.AddParagraph(LangMan.LS(LSID.RPMultimedia) + " (" + record.MultimediaLinks.Count.ToString() + "):", fTextFont);
 
                     for (int i = 0; i < record.MultimediaLinks.Count; i++) {
                         GDMMultimediaLink mmLink = record.MultimediaLinks[i];
@@ -276,7 +276,7 @@ namespace GKStdReports
 
                         string st = mmRec.FileReferences[0].Title;
                         AddParagraph("  " + HyperLink(mmRec.XRef, st) + " (" +
-                                    HyperLink(GKData.INFO_HREF_VIEW + mmRec.XRef, LangMan.LS(LSID.LSID_MediaView)) + ")", fTextFont, TextAlignment.taLeft, 6.0f);
+                                    HyperLink(GKData.INFO_HREF_VIEW + mmRec.XRef, LangMan.LS(LSID.MediaView)) + ")", fTextFont, TextAlignment.taLeft, 6.0f);
                     }
                 }
             } catch (Exception ex) {
@@ -289,7 +289,7 @@ namespace GKStdReports
             try {
                 if (record.HasNotes) {
                     fWriter.NewLine();
-                    fWriter.AddParagraph(LangMan.LS(LSID.LSID_RPNotes) + " (" + record.Notes.Count.ToString() + "):", fTextFont);
+                    fWriter.AddParagraph(LangMan.LS(LSID.RPNotes) + " (" + record.Notes.Count.ToString() + "):", fTextFont);
 
                     for (int i = 0; i < record.Notes.Count; i++) {
                         if (i > 0) {
@@ -317,7 +317,7 @@ namespace GKStdReports
                         fWriter.NewLine();
                     }
 
-                    AddParagraph(LangMan.LS(LSID.LSID_RPSources) + " (" + structWSC.SourceCitations.Count.ToString() + "):", fTextFont, TextAlignment.taLeft, indent);
+                    AddParagraph(LangMan.LS(LSID.RPSources) + " (" + structWSC.SourceCitations.Count.ToString() + "):", fTextFont, TextAlignment.taLeft, indent);
 
                     for (int i = 0; i < structWSC.SourceCitations.Count; i++) {
                         GDMSourceCitation sourCit = structWSC.SourceCitations[i];
@@ -346,7 +346,7 @@ namespace GKStdReports
             try {
                 if (record.HasAssociations) {
                     fWriter.NewLine();
-                    fWriter.AddParagraph(LangMan.LS(LSID.LSID_Associations) + ":", fTextFont);
+                    fWriter.AddParagraph(LangMan.LS(LSID.Associations) + ":", fTextFont);
 
                     for (int i = 0; i < record.Associations.Count; i++) {
                         GDMAssociation ast = record.Associations[i];
@@ -368,7 +368,7 @@ namespace GKStdReports
             try {
                 if (record.HasGroups) {
                     fWriter.NewLine();
-                    fWriter.AddParagraph(LangMan.LS(LSID.LSID_RPGroups) + ":", fTextFont);
+                    fWriter.AddParagraph(LangMan.LS(LSID.RPGroups) + ":", fTextFont);
 
                     for (int i = 0; i < record.Groups.Count; i++) {
                         GDMPointer ptr = record.Groups[i];
@@ -394,7 +394,7 @@ namespace GKStdReports
         private void ShowAddressSummary(GDMAddress address)
         {
             if (address != null && !address.IsEmpty()) {
-                fWriter.AddParagraph("    " + LangMan.LS(LSID.LSID_Address) + ":", fTextFont);
+                fWriter.AddParagraph("    " + LangMan.LS(LSID.Address) + ":", fTextFont);
 
                 string ts = "";
                 if (address.AddressCountry != "") {
@@ -452,16 +452,16 @@ namespace GKStdReports
                 fWriter.NewLine();
 
                 GDMIndividualRecord spRec = fTree.GetPtrValue(familyRec.Husband);
-                string st = ((spRec == null) ? LangMan.LS(LSID.LSID_UnkMale) : HyperLink(spRec.XRef, GKUtils.GetNameString(spRec, false)));
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Husband) + ": " + st + GKUtils.GetLifeStr(spRec), fTextFont);
+                string st = ((spRec == null) ? LangMan.LS(LSID.UnkMale) : HyperLink(spRec.XRef, GKUtils.GetNameString(spRec, false)));
+                fWriter.AddParagraph(LangMan.LS(LSID.Husband) + ": " + st + GKUtils.GetLifeStr(spRec), fTextFont);
 
                 spRec = fTree.GetPtrValue(familyRec.Wife);
-                st = ((spRec == null) ? LangMan.LS(LSID.LSID_UnkFemale) : HyperLink(spRec.XRef, GKUtils.GetNameString(spRec, false)));
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Wife) + ": " + st + GKUtils.GetLifeStr(spRec), fTextFont);
+                st = ((spRec == null) ? LangMan.LS(LSID.UnkFemale) : HyperLink(spRec.XRef, GKUtils.GetNameString(spRec, false)));
+                fWriter.AddParagraph(LangMan.LS(LSID.Wife) + ": " + st + GKUtils.GetLifeStr(spRec), fTextFont);
 
                 fWriter.NewLine();
                 if (familyRec.Children.Count != 0) {
-                    fWriter.AddParagraph(LangMan.LS(LSID.LSID_Childs) + ":", fTextFont);
+                    fWriter.AddParagraph(LangMan.LS(LSID.Childs) + ":", fTextFont);
 
                     for (int i = 0; i < familyRec.Children.Count; i++) {
                         var child = fTree.GetPtrValue(familyRec.Children[i]);
@@ -485,7 +485,7 @@ namespace GKStdReports
             try {
                 if (record.HasEvents) {
                     fWriter.NewLine();
-                    fWriter.AddParagraph(LangMan.LS(LSID.LSID_Events) + ":", fTextFont);
+                    fWriter.AddParagraph(LangMan.LS(LSID.Events) + ":", fTextFont);
 
                     for (int i = 0; i < record.Events.Count; i++) {
                         fWriter.NewLine();
@@ -526,7 +526,7 @@ namespace GKStdReports
                     fWriter.NewLine();
                     fWriter.AddParagraph(groupRec.GroupName, fBUFont);
                     fWriter.NewLine();
-                    fWriter.AddParagraph(LangMan.LS(LSID.LSID_Members) + " (" + groupRec.Members.Count.ToString() + "):", fTextFont);
+                    fWriter.AddParagraph(LangMan.LS(LSID.Members) + " (" + groupRec.Members.Count.ToString() + "):", fTextFont);
 
                     int num = groupRec.Members.Count;
                     for (int i = 0; i < num; i++) {
@@ -557,7 +557,7 @@ namespace GKStdReports
         {
             try {
                 GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
-                string mediaTitle = (fileRef == null) ? LangMan.LS(LSID.LSID_Unknown) : fileRef.Title;
+                string mediaTitle = (fileRef == null) ? LangMan.LS(LSID.Unknown) : fileRef.Title;
 
                 fWriter.NewLine();
                 fWriter.AddParagraph(mediaTitle, fBUFont);
@@ -581,14 +581,14 @@ namespace GKStdReports
                 fWriter.NewLine();
                 fWriter.AddParagraph(sourceRec.ShortTitle, fBUFont);
                 fWriter.NewLine();
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Author) + ": " + sourceRec.Originator.Lines.Text.Trim(), fTextFont);
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Title) + ": \"" + sourceRec.Title.Lines.Text.Trim() + "\"", fTextFont);
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Publication) + ": \"" + sourceRec.Publication.Lines.Text.Trim() + "\"", fTextFont);
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Text) + ": \"" + sourceRec.Text.Lines.Text.Trim() + "\"", fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Author) + ": " + sourceRec.Originator.Lines.Text.Trim(), fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Title) + ": \"" + sourceRec.Title.Lines.Text.Trim() + "\"", fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Publication) + ": \"" + sourceRec.Publication.Lines.Text.Trim() + "\"", fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Text) + ": \"" + sourceRec.Text.Lines.Text.Trim() + "\"", fTextFont);
 
                 if (sourceRec.RepositoryCitations.Count > 0) {
                     fWriter.NewLine();
-                    fWriter.AddParagraph(LangMan.LS(LSID.LSID_RPRepositories) + ":", fTextFont);
+                    fWriter.AddParagraph(LangMan.LS(LSID.RPRepositories) + ":", fTextFont);
 
                     for (int i = 0; i < sourceRec.RepositoryCitations.Count; i++) {
                         GDMRepositoryRecord rep = fTree.GetPtrValue<GDMRepositoryRecord>(sourceRec.RepositoryCitations[i]);
@@ -617,7 +617,7 @@ namespace GKStdReports
                     ShowAddressSummary(repositoryRec.Address);
 
                 fWriter.NewLine();
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_RPSources) + ":", fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.RPSources) + ":", fTextFont);
 
                 var sortedSources = new List<Tuple<string, string>>();
                 int num = fTree.RecordsCount;
@@ -649,16 +649,16 @@ namespace GKStdReports
         {
             try {
                 fWriter.NewLine();
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Title) + ": \"" + researchRec.ResearchName.Trim() + "\"", fBUFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Title) + ": \"" + researchRec.ResearchName.Trim() + "\"", fBUFont);
                 fWriter.NewLine();
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Priority) + ": " + LangMan.LS(GKData.PriorityNames[(int)researchRec.Priority]), fTextFont);
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Status) + ": " + LangMan.LS(GKData.StatusNames[(int)researchRec.Status]) + " (" + researchRec.Percent.ToString() + "%)", fTextFont);
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_StartDate) + ": " + researchRec.StartDate.GetDisplayString(fOptions.DefDateFormat), fTextFont);
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_StopDate) + ": " + researchRec.StopDate.GetDisplayString(fOptions.DefDateFormat), fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Priority) + ": " + LangMan.LS(GKData.PriorityNames[(int)researchRec.Priority]), fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Status) + ": " + LangMan.LS(GKData.StatusNames[(int)researchRec.Status]) + " (" + researchRec.Percent.ToString() + "%)", fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.StartDate) + ": " + researchRec.StartDate.GetDisplayString(fOptions.DefDateFormat), fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.StopDate) + ": " + researchRec.StopDate.GetDisplayString(fOptions.DefDateFormat), fTextFont);
 
                 if (researchRec.Tasks.Count > 0) {
                     fWriter.NewLine();
-                    fWriter.AddParagraph(LangMan.LS(LSID.LSID_RPTasks) + ":", fTextFont);
+                    fWriter.AddParagraph(LangMan.LS(LSID.RPTasks) + ":", fTextFont);
 
                     for (int i = 0; i < researchRec.Tasks.Count; i++) {
                         var taskRec = fTree.GetPtrValue<GDMTaskRecord>(researchRec.Tasks[i]);
@@ -668,7 +668,7 @@ namespace GKStdReports
 
                 if (researchRec.Communications.Count > 0) {
                     fWriter.NewLine();
-                    fWriter.AddParagraph(LangMan.LS(LSID.LSID_RPCommunications) + ":", fTextFont);
+                    fWriter.AddParagraph(LangMan.LS(LSID.RPCommunications) + ":", fTextFont);
 
                     for (int i = 0; i < researchRec.Communications.Count; i++) {
                         var corrRec = fTree.GetPtrValue<GDMCommunicationRecord>(researchRec.Communications[i]);
@@ -678,7 +678,7 @@ namespace GKStdReports
 
                 if (researchRec.Groups.Count != 0) {
                     fWriter.NewLine();
-                    fWriter.AddParagraph(LangMan.LS(LSID.LSID_RPGroups) + ":", fTextFont);
+                    fWriter.AddParagraph(LangMan.LS(LSID.RPGroups) + ":", fTextFont);
 
                     for (int i = 0; i < researchRec.Groups.Count; i++) {
                         var grp = fTree.GetPtrValue<GDMGroupRecord>(researchRec.Groups[i]);
@@ -696,11 +696,11 @@ namespace GKStdReports
         {
             try {
                 fWriter.NewLine();
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Goal) + ": " + GKUtils.GetTaskGoalStr(fTree, taskRec) + "", fBUFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Goal) + ": " + GKUtils.GetTaskGoalStr(fTree, taskRec) + "", fBUFont);
                 fWriter.NewLine();
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Priority) + ": " + LangMan.LS(GKData.PriorityNames[(int)taskRec.Priority]), fTextFont);
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_StartDate) + ": " + taskRec.StartDate.GetDisplayString(fOptions.DefDateFormat), fTextFont);
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_StopDate) + ": " + taskRec.StopDate.GetDisplayString(fOptions.DefDateFormat), fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Priority) + ": " + LangMan.LS(GKData.PriorityNames[(int)taskRec.Priority]), fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.StartDate) + ": " + taskRec.StartDate.GetDisplayString(fOptions.DefDateFormat), fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.StopDate) + ": " + taskRec.StopDate.GetDisplayString(fOptions.DefDateFormat), fTextFont);
 
                 RecListNotesRefresh(taskRec);
             } catch (Exception ex) {
@@ -712,11 +712,11 @@ namespace GKStdReports
         {
             try {
                 fWriter.NewLine();
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Theme) + ": \"" + commRec.CommName.Trim() + "\"", fBUFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Theme) + ": \"" + commRec.CommName.Trim() + "\"", fBUFont);
                 fWriter.NewLine();
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Corresponder) + ": " + GKUtils.GetCorresponderStr(fTree, commRec, true), fTextFont);
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Type) + ": " + LangMan.LS(GKData.CommunicationNames[(int)commRec.CommunicationType]), fTextFont);
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Date) + ": " + commRec.Date.GetDisplayString(fOptions.DefDateFormat), fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Corresponder) + ": " + GKUtils.GetCorresponderStr(fTree, commRec, true), fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Type) + ": " + LangMan.LS(GKData.CommunicationNames[(int)commRec.CommunicationType]), fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Date) + ": " + commRec.Date.GetDisplayString(fOptions.DefDateFormat), fTextFont);
 
                 RecListNotesRefresh(commRec);
                 RecListMediaRefresh(commRec);
@@ -731,15 +731,15 @@ namespace GKStdReports
                 fWriter.NewLine();
                 fWriter.AddParagraph(locRec.LocationName.Trim(), fBUFont);
                 fWriter.NewLine();
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Latitude) + ": " + locRec.Map.Lati, fTextFont);
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Longitude) + ": " + locRec.Map.Long, fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Latitude) + ": " + locRec.Map.Lati, fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Longitude) + ": " + locRec.Map.Long, fTextFont);
 
                 var linkList = GKUtils.GetLocationLinks(fTree, locRec);
                 if (linkList.Count > 0) {
                     linkList.Sort();
 
                     fWriter.NewLine();
-                    fWriter.AddParagraph(LangMan.LS(LSID.LSID_Links) + ":", fTextFont);
+                    fWriter.AddParagraph(LangMan.LS(LSID.Links) + ":", fTextFont);
 
                     for (int i = 0; i < linkList.Count; i++) {
                         GDMRecord rec = linkList.GetObject(i) as GDMRecord;
@@ -758,7 +758,7 @@ namespace GKStdReports
         {
             try {
                 fWriter.NewLine();
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_Links) + ":", fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Links) + ":", fTextFont);
 
                 for (int m = 0; m < fTree.RecordsCount; m++) {
                     var record = fTree[m];

@@ -55,20 +55,20 @@ namespace GKCore.Controllers
         public override void SetLocale()
         {
             if (fView.CircleChart.ChartType == CircleChartType.Ancestors) {
-                fView.Title = LangMan.LS(LSID.LSID_AncestorsCircle);
+                fView.Title = LangMan.LS(LSID.AncestorsCircle);
             } else {
-                fView.Title = LangMan.LS(LSID.LSID_DescendantsCircle);
+                fView.Title = LangMan.LS(LSID.DescendantsCircle);
             }
 
-            GetControl<IButtonToolItem>("tbModes").Text = LangMan.LS(LSID.LSID_ModesTip);
-            GetControl<IMenuItem>("miFanMode").Text = LangMan.LS(LSID.LSID_FanMode);
+            GetControl<IButtonToolItem>("tbModes").Text = LangMan.LS(LSID.ModesTip);
+            GetControl<IMenuItem>("miFanMode").Text = LangMan.LS(LSID.FanMode);
 
-            SetToolTip("tbImageSave", LangMan.LS(LSID.LSID_ImageSaveTip));
-            SetToolTip("tbDocPrint", LangMan.LS(LSID.LSID_DocPrint));
-            SetToolTip("tbDocPreview", LangMan.LS(LSID.LSID_DocPreview));
-            SetToolTip("tbPrev", LangMan.LS(LSID.LSID_PrevRec));
-            SetToolTip("tbNext", LangMan.LS(LSID.LSID_NextRec));
-            SetToolTip("tbOptions", LangMan.LS(LSID.LSID_MIOptions));
+            SetToolTip("tbImageSave", LangMan.LS(LSID.ImageSaveTip));
+            SetToolTip("tbDocPrint", LangMan.LS(LSID.DocPrint));
+            SetToolTip("tbDocPreview", LangMan.LS(LSID.DocPreview));
+            SetToolTip("tbPrev", LangMan.LS(LSID.PrevRec));
+            SetToolTip("tbNext", LangMan.LS(LSID.NextRec));
+            SetToolTip("tbOptions", LangMan.LS(LSID.MIOptions));
         }
     }
 }

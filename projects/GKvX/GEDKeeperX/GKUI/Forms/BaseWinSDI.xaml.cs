@@ -288,7 +288,7 @@ namespace GKUI.Forms
             bool result = true;
             if (!fContext.Modified) return result;
 
-            /*DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.LSID_FileSaveQuery), GKData.APP_TITLE, MessageBoxButtons.YesNoCancel, MessageBoxType.Warning);
+            /*DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.FileSaveQuery), GKData.APP_TITLE, MessageBoxButtons.YesNoCancel, MessageBoxType.Warning);
             switch (dialogResult) {
                 case DialogResult.Yes:
                     SaveFileEx(false);
@@ -412,8 +412,8 @@ namespace GKUI.Forms
             IListView rView = GetRecordsViewByType(recType);
             if (rView != null) {
                 var listMan = rView.ListMan;
-                statusLine = LangMan.LS(LSID.LSID_SBRecords) + ": " + listMan.TotalCount.ToString();
-                statusLine = statusLine + ", " + LangMan.LS(LSID.LSID_SBFiltered) + ": " + listMan.FilteredCount.ToString();
+                statusLine = LangMan.LS(LSID.SBRecords) + ": " + listMan.TotalCount.ToString();
+                statusLine = statusLine + ", " + LangMan.LS(LSID.SBFiltered) + ": " + listMan.FilteredCount.ToString();
             }
 
             panStatusText.Text = statusLine;*/
@@ -764,17 +764,12 @@ namespace GKUI.Forms
 
         private void miPedigreeAscend_Click(object sender, EventArgs e)
         {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Ascend);
+            fController.GeneratePedigree(PedigreeType.Ascend);
         }
 
-        private void miPedigree_dAbovilleClick(object sender, EventArgs e)
+        private void miPedigreeDescend_Click(object sender, EventArgs e)
         {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Descend_dAboville);
-        }
-
-        private void miPedigree_KonovalovClick(object sender, EventArgs e)
-        {
-            fController.GeneratePedigree(PedigreeExporter.PedigreeKind.Descend_Konovalov);
+            fController.GeneratePedigree(PedigreeType.Descend);
         }
 
         private void miTreeAncestors_Click(object sender, EventArgs e)

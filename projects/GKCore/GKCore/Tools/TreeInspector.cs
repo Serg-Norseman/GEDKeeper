@@ -141,7 +141,7 @@ namespace GKCore.Tools
 
                 if (invalid) {
                     CheckObj checkObj = new CheckObj(rec, CheckDiag.csDateInvalid, CheckSolve.csEdit);
-                    checkObj.Comment = LangMan.LS(LSID.LSID_DateInvalid) + " (" + evt.Date.StringValue + ")";
+                    checkObj.Comment = LangMan.LS(LSID.DateInvalid) + " (" + evt.Date.StringValue + ")";
                     checksList.Add(checkObj);
                 }
             }
@@ -164,14 +164,14 @@ namespace GKCore.Tools
 
                 if (!family.HasChild(iRec)) {
                     var checkObj = new CheckObj(iRec, family, CheckDiag.cdHalfChdFamLink, CheckSolve.csRepair);
-                    checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_PersonHasHalfLinkOfChildToFamily), iRec.XRef, family.XRef);
+                    checkObj.Comment = string.Format(LangMan.LS(LSID.PersonHasHalfLinkOfChildToFamily), iRec.XRef, family.XRef);
                     checksList.Add(checkObj);
                 }
             }
 
             if (iRec.ChildToFamilyLinks.Count > 1) {
                 var checkObj = new CheckObj(iRec, CheckDiag.cdSeveralParents, CheckSolve.csSkip);
-                checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_SeveralFamiliesOfParents), iRec.XRef);
+                checkObj.Comment = string.Format(LangMan.LS(LSID.SeveralFamiliesOfParents), iRec.XRef);
                 checksList.Add(checkObj);
             }
 
@@ -190,7 +190,7 @@ namespace GKCore.Tools
 
                 if (!family.HasSpouse(iRec)) {
                     var checkObj = new CheckObj(iRec, family, CheckDiag.cdHalfSpsFamLink, CheckSolve.csRepair);
-                    checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_PersonHasHalfLinkOfSpouseToFamily), iRec.XRef, family.XRef);
+                    checkObj.Comment = string.Format(LangMan.LS(LSID.PersonHasHalfLinkOfSpouseToFamily), iRec.XRef, family.XRef);
                     checksList.Add(checkObj);
                 }
             }
@@ -201,20 +201,20 @@ namespace GKCore.Tools
             var husb = tree.GetPtrValue<GDMIndividualRecord>(fRec.Husband);
             if (husb != null && husb.IndexOfSpouse(fRec) < 0) {
                 CheckObj checkObj = new CheckObj(fRec, husb, CheckDiag.cdHalfFamHusbLink, CheckSolve.csRepair);
-                checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_FamilyHasHalfLinkOfHusbandToPerson), fRec.XRef, husb.XRef);
+                checkObj.Comment = string.Format(LangMan.LS(LSID.FamilyHasHalfLinkOfHusbandToPerson), fRec.XRef, husb.XRef);
                 checksList.Add(checkObj);
             }
 
             var wife = tree.GetPtrValue<GDMIndividualRecord>(fRec.Wife);
             if (wife != null && wife.IndexOfSpouse(fRec) < 0) {
                 CheckObj checkObj = new CheckObj(fRec, wife, CheckDiag.cdHalfFamWifeLink, CheckSolve.csRepair);
-                checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_FamilyHasHalfLinkOfWifeToPerson), fRec.XRef, wife.XRef);
+                checkObj.Comment = string.Format(LangMan.LS(LSID.FamilyHasHalfLinkOfWifeToPerson), fRec.XRef, wife.XRef);
                 checksList.Add(checkObj);
             }
 
             if ((husb != null && husb.Sex != GDMSex.svMale) || (wife != null && wife.Sex != GDMSex.svFemale)) {
                 CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdGarbledSpouses, CheckSolve.csRepair);
-                checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_GarbledSpouses), fRec.XRef);
+                checkObj.Comment = string.Format(LangMan.LS(LSID.GarbledSpouses), fRec.XRef);
                 checksList.Add(checkObj);
             }
 
@@ -233,7 +233,7 @@ namespace GKCore.Tools
 
                 if (child.FindChildToFamilyLink(fRec) == null) {
                     CheckObj checkObj = new CheckObj(fRec, child, CheckDiag.cdHalfFamChldLink, CheckSolve.csRepair);
-                    checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_FamilyHasHalfLinkOfChildToParentsFamily), fRec.XRef, child.XRef);
+                    checkObj.Comment = string.Format(LangMan.LS(LSID.FamilyHasHalfLinkOfChildToParentsFamily), fRec.XRef, child.XRef);
                     checksList.Add(checkObj);
                 }
             }
@@ -254,7 +254,7 @@ namespace GKCore.Tools
 
             if (!hasPlace) {
                 CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdUnknownPlaceOfPerson, CheckSolve.csSkip);
-                checkObj.Comment = LangMan.LS(LSID.LSID_UnknownPlaceOfPerson);
+                checkObj.Comment = LangMan.LS(LSID.UnknownPlaceOfPerson);
                 checksList.Add(checkObj);
             }
         }
@@ -270,7 +270,7 @@ namespace GKCore.Tools
 
                 if (age != -1 && age >= GKData.PROVED_LIFE_LENGTH) {
                     CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdPersonLonglived, CheckSolve.csSetIsDead);
-                    checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_PersonLonglived), age);
+                    checkObj.Comment = string.Format(LangMan.LS(LSID.PersonLonglived), age);
                     checksList.Add(checkObj);
                 }
             }
@@ -278,7 +278,7 @@ namespace GKCore.Tools
             GDMSex sex = iRec.Sex;
             if (sex < GDMSex.svMale || sex > GDMSex.svFemale) {
                 CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdPersonSexless, CheckSolve.csDefineSex);
-                checkObj.Comment = LangMan.LS(LSID.LSID_PersonSexless);
+                checkObj.Comment = LangMan.LS(LSID.PersonSexless);
                 checksList.Add(checkObj);
             }
 
@@ -288,7 +288,7 @@ namespace GKCore.Tools
                 int delta = (yDeath - yBirth);
                 if (delta < 0) {
                     CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdLiveYearsInvalid, CheckSolve.csSkip);
-                    checkObj.Comment = LangMan.LS(LSID.LSID_LiveYearsInvalid);
+                    checkObj.Comment = LangMan.LS(LSID.LiveYearsInvalid);
                     checksList.Add(checkObj);
                 }
             }
@@ -296,21 +296,21 @@ namespace GKCore.Tools
             int iAge = GKUtils.GetMarriageAge(tree, iRec);
             if (iAge > 0 && (iAge <= GKData.MIN_MARRIAGE_AGE || iAge >= GKData.PROVED_LIFE_LENGTH)) {
                 CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdStrangeSpouse, CheckSolve.csSkip);
-                checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_StrangeSpouse), iAge.ToString());
+                checkObj.Comment = string.Format(LangMan.LS(LSID.StrangeSpouse), iAge.ToString());
                 checksList.Add(checkObj);
             }
 
             iAge = GKUtils.GetFirstbornAge(iRec, GKUtils.GetFirstborn(tree, iRec));
             if (iAge > 0 && ((iAge <= GKData.MIN_PARENT_AGE) || (sex == GDMSex.svFemale && iAge >= GKData.MAX_MOTHER_AGE) || (sex == GDMSex.svMale && iAge >= GKData.MAX_FATHER_AGE))) {
                 CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdStrangeParent, CheckSolve.csSkip);
-                checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_StrangeParent), iAge.ToString());
+                checkObj.Comment = string.Format(LangMan.LS(LSID.StrangeParent), iAge.ToString());
                 checksList.Add(checkObj);
             }
 
             string cycle = CheckCycle(tree, iRec);
             if (!string.IsNullOrEmpty(cycle)) {
                 CheckObj checkObj = new CheckObj(iRec, CheckDiag.csCycle, CheckSolve.csSkip);
-                checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_DetectedDataLoop), cycle);
+                checkObj.Comment = string.Format(LangMan.LS(LSID.DetectedDataLoop), cycle);
                 checksList.Add(checkObj);
             }
 
@@ -334,7 +334,7 @@ namespace GKCore.Tools
 
             if (empty) {
                 CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdEmptyFamily, CheckSolve.csRemove);
-                checkObj.Comment = LangMan.LS(LSID.LSID_EmptyFamily);
+                checkObj.Comment = LangMan.LS(LSID.EmptyFamily);
                 checksList.Add(checkObj);
             } else {
                 int chNum = fRec.Children.Count;
@@ -342,30 +342,30 @@ namespace GKCore.Tools
                 if (husb == null && wife == null) {
                     if (chNum > 0) {
                         CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdChildWithoutParents, CheckSolve.csSkip);
-                        checkObj.Comment = LangMan.LS(LSID.LSID_ChildWithoutParents);
+                        checkObj.Comment = LangMan.LS(LSID.ChildWithoutParents);
                         checksList.Add(checkObj);
                     } else {
                         CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdFamilyRecordWithoutFamily, CheckSolve.csSkip);
-                        checkObj.Comment = LangMan.LS(LSID.LSID_FamilyRecordWithoutFamily);
+                        checkObj.Comment = LangMan.LS(LSID.FamilyRecordWithoutFamily);
                         checksList.Add(checkObj);
                     }
                 } else {
                     if (fRec.IndexOfChild(husb) >= 0) {
                         CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdFatherAsChild, CheckSolve.csRemove);
-                        checkObj.Comment = LangMan.LS(LSID.LSID_FatherAsChild);
+                        checkObj.Comment = LangMan.LS(LSID.FatherAsChild);
                         checksList.Add(checkObj);
                     }
 
                     if (fRec.IndexOfChild(wife) >= 0) {
                         CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdMotherAsChild, CheckSolve.csRemove);
-                        checkObj.Comment = LangMan.LS(LSID.LSID_MotherAsChild);
+                        checkObj.Comment = LangMan.LS(LSID.MotherAsChild);
                         checksList.Add(checkObj);
                     }
 
                     int spousesDiff = GKUtils.GetSpousesDiff(tree, fRec);
                     if (spousesDiff > GKData.MAX_SPOUSES_DIFF) {
                         CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdHighSpousesDifference, CheckSolve.csSkip);
-                        checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_DifferenceBetweenSpousesIsAbnormallyHigh), spousesDiff);
+                        checkObj.Comment = string.Format(LangMan.LS(LSID.DifferenceBetweenSpousesIsAbnormallyHigh), spousesDiff);
                         checksList.Add(checkObj);
                     }
                 }
@@ -394,7 +394,7 @@ namespace GKCore.Tools
 
                 if (hasDup) {
                     CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdDuplicateChildren, CheckSolve.csEdit);
-                    checkObj.Comment = LangMan.LS(LSID.LSID_DuplicateChildrenInFamily);
+                    checkObj.Comment = LangMan.LS(LSID.DuplicateChildrenInFamily);
                     checksList.Add(checkObj);
                 }
 
@@ -402,7 +402,7 @@ namespace GKCore.Tools
                     int delta = (maxBirth - minBirth);
                     if (delta > GKData.MAX_SIBLINGS_DIFF) {
                         CheckObj checkObj = new CheckObj(fRec, CheckDiag.cdHighSiblingsDifference, CheckSolve.csSkip);
-                        checkObj.Comment = string.Format(LangMan.LS(LSID.LSID_DifferenceBetweenSiblingsIsAbnormallyHigh), delta);
+                        checkObj.Comment = string.Format(LangMan.LS(LSID.DifferenceBetweenSiblingsIsAbnormallyHigh), delta);
                         checksList.Add(checkObj);
                     }
                 }
@@ -413,7 +413,7 @@ namespace GKCore.Tools
         {
             if (mmRec.FileReferences.Count <= 0) {
                 CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdMediaRecordWithoutFiles, CheckSolve.csRemove);
-                checkObj.Comment = LangMan.LS(LSID.LSID_MediaRecordWithoutFiles);
+                checkObj.Comment = LangMan.LS(LSID.MediaRecordWithoutFiles);
                 checksList.Add(checkObj);
                 return;
             }
@@ -427,21 +427,21 @@ namespace GKCore.Tools
 
                 case MediaStoreStatus.mssFileNotFound: {
                         CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdFileNotFound, CheckSolve.csRemove);
-                        checkObj.Comment = LangMan.LS(LSID.LSID_FileNotFound, fileName);
+                        checkObj.Comment = LangMan.LS(LSID.FileNotFound, fileName);
                         checksList.Add(checkObj);
                     }
                     break;
 
                 case MediaStoreStatus.mssStgNotFound: {
                         CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdStgNotFound, CheckSolve.csRemove);
-                        checkObj.Comment = LangMan.LS(LSID.LSID_StgNotFound);
+                        checkObj.Comment = LangMan.LS(LSID.StgNotFound);
                         checksList.Add(checkObj);
                     }
                     break;
 
                 case MediaStoreStatus.mssArcNotFound: {
                         CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdArcNotFound, CheckSolve.csRemove);
-                        checkObj.Comment = LangMan.LS(LSID.LSID_ArcNotFound);
+                        checkObj.Comment = LangMan.LS(LSID.ArcNotFound);
                         checksList.Add(checkObj);
                     }
                     break;
@@ -462,7 +462,7 @@ namespace GKCore.Tools
 
             try {
                 GDMTree tree = baseWin.Context.Tree;
-                progress.Begin(LangMan.LS(LSID.LSID_ToolOp_7), tree.RecordsCount);
+                progress.Begin(LangMan.LS(LSID.ToolOp_7), tree.RecordsCount);
                 checksList.Clear();
 
                 for (int i = 0, num = tree.RecordsCount; i < num; i++) {

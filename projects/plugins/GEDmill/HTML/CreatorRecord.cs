@@ -137,13 +137,13 @@ namespace GEDmill.HTML
                 foreach (GDMUserReference urn in r.UserReferences) {
                     string idType = EscapeHTML(urn.ReferenceType, false);
                     if (idType == "") {
-                        idType = fLangMan.LS(PLS.LSID_URefNumber);
+                        idType = fLangMan.LS(PLS.URefNumber);
                     }
                     f.WriteLine("<p>{0}: {1}</p>", idType, EscapeHTML(urn.StringValue, false));
                 }
 
                 if (!string.IsNullOrEmpty(r.AutomatedRecordID)) {
-                    f.WriteLine("<p>{0} {1}</p>", fLangMan.LS(PLS.LSID_Record), r.AutomatedRecordID);
+                    f.WriteLine("<p>{0} {1}</p>", fLangMan.LS(PLS.Record), r.AutomatedRecordID);
                 }
 
                 if (r.ChangeDate != null) {
@@ -153,7 +153,7 @@ namespace GEDmill.HTML
                         if (dtx != "") {
                             dtx = " " + dtx;
                         }
-                        f.WriteLine("<p id=\"changedate\">{0} {1}</p>", fLangMan.LS(PLS.LSID_RecordLastChanged), dtx);
+                        f.WriteLine("<p id=\"changedate\">{0} {1}</p>", fLangMan.LS(PLS.RecordLastChanged), dtx);
                     }
                 }
 
@@ -167,7 +167,7 @@ namespace GEDmill.HTML
             }
             f.WriteLine("      </div> <!-- footer -->");
 
-            f.WriteLine("<p class=\"plain\">{0} {1}</p>", fLangMan.LS(PLS.LSID_PageCreatedUsingGEDmill), GMConfig.SoftwareVersion);
+            f.WriteLine("<p class=\"plain\">{0} {1}</p>", fLangMan.LS(PLS.PageCreatedUsingGEDmill), GMConfig.SoftwareVersion);
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace GEDmill.HTML
 
                 if (noteStrings.Count > 0) {
                     f.WriteLine("<div id=\"notes\">");
-                    f.WriteLine("<h1>{0}</h1>", fLangMan.LS(PLS.LSID_Notes));
+                    f.WriteLine("<h1>{0}</h1>", fLangMan.LS(PLS.Notes));
                     f.WriteLine("<ul>");
 
                     foreach (string note_string in noteStrings) {

@@ -43,8 +43,8 @@ namespace GKCore.Lists
                 RecordAction.raJump,
                 RecordAction.raCopy, RecordAction.raPaste);
 
-            fListColumns.AddColumn(LSID.LSID_Relation, 300, false);
-            fListColumns.AddColumn(LSID.LSID_Person, 200, false);
+            fListColumns.AddColumn(LSID.Relation, 300, false);
+            fListColumns.AddColumn(LSID.Person, 200, false);
             fListColumns.ResetDefaults();
         }
 
@@ -112,7 +112,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_RemoveAssociationQuery))) {
+                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RemoveAssociationQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationRemove, person, ast);
                     }
                     break;

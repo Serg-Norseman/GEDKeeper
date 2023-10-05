@@ -107,20 +107,20 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_ToolOp_8);
+            fView.Title = LangMan.LS(LSID.ToolOp_8);
 
-            GetControl<ITabPage>("pagePatSearch").Text = LangMan.LS(LSID.LSID_ToolOp_8);
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
-            GetControl<ILabel>("lblMinGenerations").Text = LangMan.LS(LSID.LSID_MinGenerations);
-            GetControl<IButton>("btnSetPatriarch").Text = LangMan.LS(LSID.LSID_SetPatFlag);
-            GetControl<IButton>("btnPatSearch").Text = LangMan.LS(LSID.LSID_Search);
-            GetControl<ICheckBox>("chkWithoutDates").Text = LangMan.LS(LSID.LSID_WithoutDates);
-            GetControl<IButton>("btnPatriarchsDiagram").Text = LangMan.LS(LSID.LSID_PatriarchsDiagram);
+            GetControl<ITabPage>("pagePatSearch").Text = LangMan.LS(LSID.ToolOp_8);
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            GetControl<ILabel>("lblMinGenerations").Text = LangMan.LS(LSID.MinGenerations);
+            GetControl<IButton>("btnSetPatriarch").Text = LangMan.LS(LSID.SetPatFlag);
+            GetControl<IButton>("btnPatSearch").Text = LangMan.LS(LSID.Search);
+            GetControl<ICheckBox>("chkWithoutDates").Text = LangMan.LS(LSID.WithoutDates);
+            GetControl<IButton>("btnPatriarchsDiagram").Text = LangMan.LS(LSID.PatriarchsDiagram);
 
-            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.LSID_Patriarch), 400, false);
-            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.LSID_Birth), 90, false);
-            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.LSID_Descendants), 90, false);
-            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.LSID_Generations), 90, false);
+            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.Patriarch), 400, false);
+            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.Birth), 90, false);
+            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.Descendants), 90, false);
+            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.Generations), 90, false);
         }
     }
 }

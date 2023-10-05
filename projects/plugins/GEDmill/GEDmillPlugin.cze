@@ -1,247 +1,247 @@
 ;1029,cze,Čeština
-Generátor webových stránek (GEDmill)
-Konec
-Dokončit
-verze
-< Zpět
-Další >
-Nápověda
-Nastavení...
-OK
-Zrušit
-Tvorba webových stránek
-Kopírování multimédií
-GEDmill webová stránka rodokmenu
-historie rodokmenu
-Při vytváření souboru HTML došlo k problému:\r\nGEDmill neumístí soubory na plochu.
-Při vytváření souboru HTML došlo k problému:\r\nCesta nebo název souboru {0} nejsou platné.
-Soubor, který jste vybrali, není podporovaný typ obrázku.
-Kopírování obrázku na pozadí
-Vytváření šablony stylů
-Vytváření jednotlivých stránek
-Vytváření indexu osob
-Vytváření zdrojových stránek
-Vytvoření titulní stránky
-Vytváření Javascript souboru
-Hotovo
-Referenční číslo uživatele
-Záznam
-Záznam naposledy změněn
-Stránka vytvořena pomocí GEDmill
-Poznámky
-ne
-Návrat na hlavní stránku
-Vytvořeno dne
-přední strana
-hlavní web
-index
-Neznámý formát obrázku
-manželé s
-partner od
-dítě
-syn
-dcera
-Zdroje
-Další údaje
-Historická data
-Rodiče
-Citace
-Opravdu chcete ukončit GEDmill?
-Vyberte zadní obrázek
-Vyberte přední obrázek
-Vyberte prosím alespoň jednu osobu.
-Chybí soubor {0}. \r\nStránky budou vytvořeny bez obrázku na pozadí.
-V seznamu nejsou žádné osoby.
-Stránka GEDmill pro
-Zdroj
-Text
-Obrázek pro tento zdroj
-Média pro tento zdroj
-Tato webová stránka obsahuje záznamy o
-Web vytvořen{0} pomocí GEDKeeper->GEDmill.
-osoby
-zdroje
-multimediální soubory
-obrázky
-Klíčové osoby
-předchozí dítě
-další dítě
-úmrtí
-narození
- (pravděpodobně)
- (méně pravděpodobné)
-Informace o této osobě byly zadrženy.
-také známý jako
-Mini stromový diagram
-a
-od
-do
-narození
-křtiny
-křest
-úmrtí
-pohřeb
-kremace
-adopce
-bar micva
-bat micva
-požehnání
-křtiny (v dospělosti)
-potvrzení
-první přijímání
-vysvěcení
-naturalizace
-emigrace
-přistěhování
-potvrzení závěti
-sepsána závěť
-promoce
-v důchodu
-další událost
-kasta
-fyzický popis
-vzdělání
-identifikační číslo
-národnost
-počet dětí
-počet sňatků
-povolání
-vlastnictví
-náboženství
-rezidence
-Číslo sociálního pojištění
-další skutečnost
-se nikdy neoženil
-prohlášení manželství za neplatné
-zaznamenané při sčítání lidu
-rozvod
-podání žádosti o rozvod
-angažovanost
-zveřejnění zákazů sňatků
-manželská smlouva
-povolení k uzavření manželství
-vypořádání manželství
-neznámá událost
-Rodinný stav neznámý
-Vyloučit osoby, pokud nejsou navigovatelné od této osoby
-Vyloučit osoby, pokud je nelze navigovat z těchto {0} lidí
-Odebrat obrázky z tohoto zdroje
-Odebrat obrázky z těchto {0} zdrojů
-(Úvodní stránka webu je soubor {0}.{1})
-(Nebyla vygenerována žádná titulní stránka.)
-Zahrnout
-Jméno
-Narození
-Úmrtí
-Id
-Ref. číslo uživatele
-Obrázky
-Osoby
-Žádné příjmení
-Index jmén
-Rodokmen
-Soukromý záznam
-<neznámé>
-v
-Úložiště
-Při vytváření souborů webu došlo k problému
-Při procházení stromové struktury došlo k problému:\r\n\r\n{0}
-Nastavení šířky/výšky obrázku na tak velkou hodnotu může v některých prohlížečích způsobit problémy se zobrazením.\r\nOpravdu nastavit hodnotu na {0}?
-Nelze získat přístup nebo vytvořit složku.
-Složku {0} nelze smazat.\r\n{1}
-Soubor {0} nelze smazat.\r\n{1}
-Nebyly provedeny žádné změny.
-Žádné skryté multimediální soubory.
-Webové stránky
-Obrázky
-Stromové diagramy
-Pokročilé
-Tvorba webových stránek rodokmenu
-Po dokončení výběru klepněte na tlačítko Další.
-Vyloučit všechny potomky této osoby
-Vyloučit všechny předky této osoby
-Zahrnout všechny předky této osoby
-Zahrnout všechny potomky této osoby
-Vyloučit osoby, pokud nejsou navigovatelné od této osoby
-Podrobnosti a obrázky...
-Zahrnout všechny
-Vyloučit všechny
-Vyloučit všechny, kteří jsou stále naživu (a ty, kteří se narodili za posledních 100 let)
-Odebrat obrázky z vybraných zdrojů
-Zahrnout všechny zdroje
-Vyloučit všechny zdroje
-Nyní můžete určit osoby a zdroje, které nechcete na webu zobrazovat. Chcete-li zabránit jejich zobrazení, zrušte zaškrtnutí políčka vedle jejich jména – zobrazí se ti, kteří jsou zaškrtnuti.
-Kliknutím pravým tlačítkem na seznam zobrazíte další možnosti, včetně přidávání obrázků...
-Název webu:
-Klíčové osoby:
-Přidat...
-Odstranit
-Dále si můžete vybrat titulek pro titulní stránku vašeho webu. Nechte pole prázdné, pokud nechcete název.\r\n\r\nMůžete také vybrat, kteří lidé jsou hlavními osobnostmi na titulní stránce.
-Komentář k titulní straně:
-výše uvedený text je HTML)
-Odkaz na váš web: (s předponou http://)
-Text pro zápatí stránky:
-Zahrnout statistiky stránek
-Vícestránkový index jednotlivců
-Referenční čísla uživatele v indexu
-Jednotlivci na stránku indexu:
-Název souboru na titulní straně:
-E-mailová adresa na titulní stránku:
-Obrázek na pozadí:
-Procházet...
-Obrázek na přední straně:
-Maximální velikost jednotlivých obrázků
-Width:
-Výška:
-Maximální velikost zdrojových obrázků
-Povolit obrázky atd.
-Přejmenovat soubory
-Zahrnout původní soubory (v plné velikosti).
-Povolit jiné soubory než obrázky
-Více obrázků osob
-Maximální velikost miniatur obrázků
-Počet mezer pro nahrazení tabulátorů:
-Zobrazit chybějící jména jako:
-Zahrnout zadržené záznamy
-Označit zadržené záznamy s:
-tento text:
-jméno osoby
-Příjmení s VELKÝMI PÍSMENY
-Události začínat velkým písmenem
-Nezobrazovat e-mailové adresy
-Zobrazit povolání v záhlaví stránky
-Zahrnout stromová schémata
-Simulovat průhlednost
-Ušetřit šířku stromu
-Držet pořadí sourozenců z GEDCOM
-Barvy
-Vybrané pole
-Vybraný text
-Obecná schránka
-Text odkazu
-Soukromá schránka
-Soukromý text
-Manželská schránka
-Větve
-Hranice schránky
-Pro názvy souborů použijte vlastní číslo záznamu
-Seznam citujících záznamů na zdrojových stránkách
-Složka:
-Nakonec vyberte složku, ve které chcete soubory webu vytvořit. Pokud složka již neexistuje, bude pro vás vytvořena.
-Kliknutím na tlačítko Další vytvoříte webové stránky...
-Zobrazte webové stránky po dokončení programu.
-<cesta>
-Děkujeme, že používáte GEDmill.
-Soubory webových stránek byly vygenerovány a vloženy;
-Je třeba vytvořit složku {0}. \r\nToto zničí existující soubor s tímto názvem.
-GEDmill vám nedovolí vytvářet soubory přímo na ploše
-Složka {0} již existuje.\r\nChcete před vytvořením souborů webu smazat všechny soubory, které obsahuje?
-Smazáním složky {0} se nezachovají žádné existující soubory úvodní stránky a šablon stylů.\r\nPřesto smazat složku?
-Pokud složka obsahuje jiné soubory než GEDmill, budou také odstraněny.\r\nPřesto smazat složku?
-Složka, kterou jste vybrali, nebyla nalezena.
-Název složky chybí nebo je nezákonný.
-Název složky, který jste vybrali, je příliš dlouhý.
-Cesta, kterou jste vybrali, je pouze pro čtení nebo složka není prázdná.
-Nemáte správná oprávnění pro přístup ke složce.
-Název složky, který jste vybrali, má neplatný formát.
-Název složky, který jste vybrali, má nepodporovaný formát.
+001=Generátor webových stránek (GEDmill)
+002=Konec
+003=Dokončit
+004=verze
+005=< Zpět
+006=Další >
+007=Nápověda
+008=Nastavení...
+009=OK
+010=Zrušit
+011=Tvorba webových stránek
+012=Kopírování multimédií
+013=GEDmill webová stránka rodokmenu
+014=historie rodokmenu
+015=Při vytváření souboru HTML došlo k problému:\r\nGEDmill neumístí soubory na plochu.
+016=Při vytváření souboru HTML došlo k problému:\r\nCesta nebo název souboru {0} nejsou platné.
+017=Soubor, který jste vybrali, není podporovaný typ obrázku.
+018=Kopírování obrázku na pozadí
+019=Vytváření šablony stylů
+020=Vytváření jednotlivých stránek
+021=Vytváření indexu osob
+022=Vytváření zdrojových stránek
+023=Vytvoření titulní stránky
+024=Vytváření Javascript souboru
+025=Hotovo
+026=Referenční číslo uživatele
+027=Záznam
+028=Záznam naposledy změněn
+029=Stránka vytvořena pomocí GEDmill
+030=Poznámky
+031=ne
+032=Návrat na hlavní stránku
+033=Vytvořeno dne
+034=přední strana
+035=hlavní web
+036=index
+037=Neznámý formát obrázku
+038=manželé s
+039=partner od
+040=dítě
+041=syn
+042=dcera
+043=Zdroje
+044=Další údaje
+045=Historická data
+046=Rodiče
+047=Citace
+048=Opravdu chcete ukončit GEDmill?
+049=Vyberte zadní obrázek
+050=Vyberte přední obrázek
+051=Vyberte prosím alespoň jednu osobu.
+052=Chybí soubor {0}. \r\nStránky budou vytvořeny bez obrázku na pozadí.
+053=V seznamu nejsou žádné osoby.
+054=Stránka GEDmill pro
+055=Zdroj
+056=Text
+057=Obrázek pro tento zdroj
+058=Média pro tento zdroj
+059=Tato webová stránka obsahuje záznamy o
+060=Web vytvořen{0} pomocí GEDKeeper->GEDmill.
+061=osoby
+062=zdroje
+063=multimediální soubory
+064=obrázky
+065=Klíčové osoby
+066=předchozí dítě
+067=další dítě
+068=úmrtí
+069=narození
+070= (pravděpodobně)
+071= (méně pravděpodobné)
+072=Informace o této osobě byly zadrženy.
+073=také známý jako
+074=Mini stromový diagram
+075=a
+076=od
+077=do
+078=narození
+079=křtiny
+080=křest
+081=úmrtí
+082=pohřeb
+083=kremace
+084=adopce
+085=bar micva
+086=bat micva
+087=požehnání
+088=křtiny (v dospělosti)
+089=potvrzení
+090=první přijímání
+091=vysvěcení
+092=naturalizace
+093=emigrace
+094=přistěhování
+095=potvrzení závěti
+096=sepsána závěť
+097=promoce
+098=v důchodu
+099=další událost
+100=kasta
+101=fyzický popis
+102=vzdělání
+103=identifikační číslo
+104=národnost
+105=počet dětí
+106=počet sňatků
+107=povolání
+108=vlastnictví
+109=náboženství
+110=rezidence
+111=Číslo sociálního pojištění
+112=další skutečnost
+113=se nikdy neoženil
+114=prohlášení manželství za neplatné
+115=zaznamenané při sčítání lidu
+116=rozvod
+117=podání žádosti o rozvod
+118=angažovanost
+119=zveřejnění zákazů sňatků
+120=manželská smlouva
+121=povolení k uzavření manželství
+122=vypořádání manželství
+123=neznámá událost
+124=Rodinný stav neznámý
+125=Vyloučit osoby, pokud nejsou navigovatelné od této osoby
+126=Vyloučit osoby, pokud je nelze navigovat z těchto {0} lidí
+127=Odebrat obrázky z tohoto zdroje
+128=Odebrat obrázky z těchto {0} zdrojů
+129=(Úvodní stránka webu je soubor {0}.{1})
+130=(Nebyla vygenerována žádná titulní stránka.)
+131=Zahrnout
+132=Jméno
+133=Narození
+134=Úmrtí
+135=Id
+136=Ref. číslo uživatele
+137=Obrázky
+138=Osoby
+139=Žádné příjmení
+140=Index jmén
+141=Rodokmen
+142=Soukromý záznam
+143=<neznámé>
+144=v
+145=Úložiště
+146=Při vytváření souborů webu došlo k problému
+147=Při procházení stromové struktury došlo k problému:\r\n\r\n{0}
+148=Nastavení šířky/výšky obrázku na tak velkou hodnotu může v některých prohlížečích způsobit problémy se zobrazením.\r\nOpravdu nastavit hodnotu na {0}?
+149=Nelze získat přístup nebo vytvořit složku.
+150=Složku {0} nelze smazat.\r\n{1}
+151=Soubor {0} nelze smazat.\r\n{1}
+152=Nebyly provedeny žádné změny.
+153=Žádné skryté multimediální soubory.
+154=Webové stránky
+155=Obrázky
+156=Stromové diagramy
+157=Pokročilé
+158=Tvorba webových stránek rodokmenu
+159=Po dokončení výběru klepněte na tlačítko Další.
+160=Vyloučit všechny potomky této osoby
+161=Vyloučit všechny předky této osoby
+162=Zahrnout všechny předky této osoby
+163=Zahrnout všechny potomky této osoby
+164=Vyloučit osoby, pokud nejsou navigovatelné od této osoby
+165=Podrobnosti a obrázky...
+166=Zahrnout všechny
+167=Vyloučit všechny
+168=Vyloučit všechny, kteří jsou stále naživu (a ty, kteří se narodili za posledních 100 let)
+169=Odebrat obrázky z vybraných zdrojů
+170=Zahrnout všechny zdroje
+171=Vyloučit všechny zdroje
+172=Nyní můžete určit osoby a zdroje, které nechcete na webu zobrazovat. Chcete-li zabránit jejich zobrazení, zrušte zaškrtnutí políčka vedle jejich jména – zobrazí se ti, kteří jsou zaškrtnuti.
+173=Kliknutím pravým tlačítkem na seznam zobrazíte další možnosti, včetně přidávání obrázků...
+174=Název webu:
+175=Klíčové osoby:
+176=Přidat...
+177=Odstranit
+178=Dále si můžete vybrat titulek pro titulní stránku vašeho webu. Nechte pole prázdné, pokud nechcete název.\r\n\r\nMůžete také vybrat, kteří lidé jsou hlavními osobnostmi na titulní stránce.
+179=Komentář k titulní straně:
+180=výše uvedený text je HTML)
+181=Odkaz na váš web: (s předponou http://)
+182=Text pro zápatí stránky:
+183=Zahrnout statistiky stránek
+184=Vícestránkový index jednotlivců
+185=Referenční čísla uživatele v indexu
+186=Jednotlivci na stránku indexu:
+187=Název souboru na titulní straně:
+188=E-mailová adresa na titulní stránku:
+189=Obrázek na pozadí:
+190=Procházet...
+191=Obrázek na přední straně:
+192=Maximální velikost jednotlivých obrázků
+193=Width:
+194=Výška:
+195=Maximální velikost zdrojových obrázků
+196=Povolit obrázky atd.
+197=Přejmenovat soubory
+198=Zahrnout původní soubory (v plné velikosti).
+199=Povolit jiné soubory než obrázky
+200=Více obrázků osob
+201=Maximální velikost miniatur obrázků
+202=Počet mezer pro nahrazení tabulátorů:
+203=Zobrazit chybějící jména jako:
+204=Zahrnout zadržené záznamy
+205=Označit zadržené záznamy s:
+206=tento text:
+207=jméno osoby
+208=Příjmení s VELKÝMI PÍSMENY
+209=Události začínat velkým písmenem
+210=Nezobrazovat e-mailové adresy
+211=Zobrazit povolání v záhlaví stránky
+212=Zahrnout stromová schémata
+213=Simulovat průhlednost
+214=Ušetřit šířku stromu
+215=Držet pořadí sourozenců z GEDCOM
+216=Barvy
+217=Vybrané pole
+218=Vybraný text
+219=Obecná schránka
+220=Text odkazu
+221=Soukromá schránka
+222=Soukromý text
+223=Manželská schránka
+224=Větve
+225=Hranice schránky
+226=Pro názvy souborů použijte vlastní číslo záznamu
+227=Seznam citujících záznamů na zdrojových stránkách
+228=Složka:
+229=Nakonec vyberte složku, ve které chcete soubory webu vytvořit. Pokud složka již neexistuje, bude pro vás vytvořena.
+230=Kliknutím na tlačítko Další vytvoříte webové stránky...
+231=Zobrazte webové stránky po dokončení programu.
+232=<cesta>
+233=Děkujeme, že používáte GEDmill.
+234=Soubory webových stránek byly vygenerovány a vloženy;
+235=Je třeba vytvořit složku {0}. \r\nToto zničí existující soubor s tímto názvem.
+236=GEDmill vám nedovolí vytvářet soubory přímo na ploše
+237=Složka {0} již existuje.\r\nChcete před vytvořením souborů webu smazat všechny soubory, které obsahuje?
+238=Smazáním složky {0} se nezachovají žádné existující soubory úvodní stránky a šablon stylů.\r\nPřesto smazat složku?
+239=Pokud složka obsahuje jiné soubory než GEDmill, budou také odstraněny.\r\nPřesto smazat složku?
+240=Složka, kterou jste vybrali, nebyla nalezena.
+241=Název složky chybí nebo je nezákonný.
+242=Název složky, který jste vybrali, je příliš dlouhý.
+243=Cesta, kterou jste vybrali, je pouze pro čtení nebo složka není prázdná.
+244=Nemáte správná oprávnění pro přístup ke složce.
+245=Název složky, který jste vybrali, má neplatný formát.
+246=Název složky, který jste vybrali, má nepodporovaný formát.

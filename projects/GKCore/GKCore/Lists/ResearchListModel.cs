@@ -56,14 +56,14 @@ namespace GKCore.Lists
         {
             var result = new ListColumns<GDMResearchRecord>();
 
-            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.LSID_Title, DataType.dtString, 300, true, true);
-            result.AddColumn(LSID.LSID_Priority, DataType.dtString, 90, true);
-            result.AddColumn(LSID.LSID_Status, DataType.dtString, 90, true);
-            result.AddColumn(LSID.LSID_StartDate, DataType.dtString, 90, true);
-            result.AddColumn(LSID.LSID_StopDate, DataType.dtString, 90, true);
-            result.AddColumn(LSID.LSID_Percent, DataType.dtInteger, 90, true);
-            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
+            result.AddColumn(LSID.Title, DataType.dtString, 300, true, true);
+            result.AddColumn(LSID.Priority, DataType.dtString, 90, true);
+            result.AddColumn(LSID.Status, DataType.dtString, 90, true);
+            result.AddColumn(LSID.StartDate, DataType.dtString, 90, true);
+            result.AddColumn(LSID.StopDate, DataType.dtString, 90, true);
+            result.AddColumn(LSID.Percent, DataType.dtInteger, 90, true);
+            result.AddColumn(LSID.Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
             return result;
@@ -131,10 +131,10 @@ namespace GKCore.Lists
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
 
-            fListColumns.AddColumn(LSID.LSID_Goal, 250, false);
-            fListColumns.AddColumn(LSID.LSID_Priority, 90, false);
-            fListColumns.AddColumn(LSID.LSID_StartDate, 90, false);
-            fListColumns.AddColumn(LSID.LSID_StopDate, 90, false);
+            fListColumns.AddColumn(LSID.Goal, 250, false);
+            fListColumns.AddColumn(LSID.Priority, 90, false);
+            fListColumns.AddColumn(LSID.StartDate, 90, false);
+            fListColumns.AddColumn(LSID.StopDate, 90, false);
             fListColumns.ResetDefaults();
         }
 
@@ -198,7 +198,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (task != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachTaskQuery))) {
+                    if (task != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachTaskQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchTaskRemove, research, task);
                     }
                     break;
@@ -224,10 +224,10 @@ namespace GKCore.Lists
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
 
-            fListColumns.AddColumn(LSID.LSID_Theme, 150, false);
-            fListColumns.AddColumn(LSID.LSID_Corresponder, 150, false);
-            fListColumns.AddColumn(LSID.LSID_Type, 90, false);
-            fListColumns.AddColumn(LSID.LSID_Date, 90, false);
+            fListColumns.AddColumn(LSID.Theme, 150, false);
+            fListColumns.AddColumn(LSID.Corresponder, 150, false);
+            fListColumns.AddColumn(LSID.Type, 90, false);
+            fListColumns.AddColumn(LSID.Date, 90, false);
             fListColumns.ResetDefaults();
         }
 
@@ -291,7 +291,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (comm != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachCommunicationQuery))) {
+                    if (comm != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachCommunicationQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationRemove, research, comm);
                     }
                     break;
@@ -317,7 +317,7 @@ namespace GKCore.Lists
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
 
-            fListColumns.AddColumn(LSID.LSID_Group, 350, false);
+            fListColumns.AddColumn(LSID.Group, 350, false);
             fListColumns.ResetDefaults();
         }
 
@@ -368,7 +368,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (group != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachGroupQuery))) {
+                    if (group != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachGroupQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchGroupRemove, research, group);
                     }
                     break;

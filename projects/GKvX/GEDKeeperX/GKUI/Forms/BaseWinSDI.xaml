@@ -22,7 +22,7 @@
         <ToolbarItem x:Name="tbTreeDescendants" Order="Primary" Priority="8" IconImageSource="{plat:ImageResourceExt Resources.btn_tree_descendants.gif}" Clicked="miTreeDescendants_Click" />
         <ToolbarItem x:Name="tbTreeBoth" Order="Primary" Priority="9" IconImageSource="{plat:ImageResourceExt Resources.btn_tree_both.gif}" Clicked="miTreeBoth_Click" />
 
-        <ToolbarItem x:Name="tbPedigree" Order="Primary" Priority="10" IconImageSource="{plat:ImageResourceExt Resources.btn_scroll.gif}" Clicked="miPedigree_KonovalovClick" />
+        <ToolbarItem x:Name="tbPedigree" Order="Primary" Priority="10" IconImageSource="{plat:ImageResourceExt Resources.btn_scroll.gif}" Clicked="miPedigreeAscend_Click" />
 
         <ToolbarItem x:Name="tbStats" Order="Primary" Priority="11" IconImageSource="{plat:ImageResourceExt Resources.btn_table.gif}" Clicked="miStats_Click" />
 

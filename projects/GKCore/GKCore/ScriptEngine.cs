@@ -71,7 +71,7 @@ namespace GKCore
                     lua_init(lvm);
                     lvm.DoString(script);
                 } catch (Exception ex) {
-                    print("> " + LangMan.LS(LSID.LSID_Error) + ": " + ex.Message);
+                    print("> " + LangMan.LS(LSID.Error) + ": " + ex.Message);
                 }
             }
         }
@@ -423,7 +423,7 @@ namespace GKCore
                     evt.Date.ParseString(date);
                 }
             } catch {
-                throw new ScriptException(LangMan.LS(LSID.LSID_DateFormatInvalid) + ": " + date);
+                throw new ScriptException(LangMan.LS(LSID.DateFormatInvalid) + ": " + date);
             }
         }
 

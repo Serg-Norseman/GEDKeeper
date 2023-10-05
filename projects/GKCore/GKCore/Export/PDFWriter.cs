@@ -173,7 +173,7 @@ namespace GKCore.Export
 
         public override void EnablePageNumbers()
         {
-            fPdfWriter.PageEvent = new PDFWriterEvents(fBaseFont, LangMan.LS(LSID.LSID_Page) + ": ");
+            fPdfWriter.PageEvent = new PDFWriterEvents(fBaseFont, LangMan.LS(LSID.Page) + ": ");
         }
 
         public override void NewPage()

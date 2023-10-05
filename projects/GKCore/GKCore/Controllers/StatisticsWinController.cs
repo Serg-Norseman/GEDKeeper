@@ -69,7 +69,7 @@ namespace GKCore.Controllers
             fCurrentMode = fView.StatsType.GetSelectedTag<StatsMode>();
 
             fView.ListStats.SetColumnCaption(0, LangMan.LS(GKData.StatsTitles[(int)fCurrentMode].Cap));
-            fView.ListStats.SetColumnCaption(1, LangMan.LS(LSID.LSID_Value));
+            fView.ListStats.SetColumnCaption(1, LangMan.LS(LSID.Value));
 
             fView.ListStats.BeginUpdate();
             fView.ListStats.ClearItems();
@@ -88,14 +88,14 @@ namespace GKCore.Controllers
 
             switch (fCurrentMode) {
                 case StatsMode.smAge:
-                    fChartXTitle = LangMan.LS(LSID.LSID_Age);
-                    fChartYTitle = LangMan.LS(LSID.LSID_People);
+                    fChartXTitle = LangMan.LS(LSID.Age);
+                    fChartYTitle = LangMan.LS(LSID.People);
                     fView.Graph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Point, true, fCurrentValues);
                     break;
 
                 case StatsMode.smLifeExpectancy:
-                    fChartXTitle = LangMan.LS(LSID.LSID_LifeExpectancy);
-                    fChartYTitle = LangMan.LS(LSID.LSID_People);
+                    fChartXTitle = LangMan.LS(LSID.LifeExpectancy);
+                    fChartYTitle = LangMan.LS(LSID.People);
                     fView.Graph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Point, true, fCurrentValues);
                     break;
 
@@ -107,24 +107,24 @@ namespace GKCore.Controllers
                         switch (fCurrentMode) {
                             case StatsMode.smBirthYears:
                             case StatsMode.smDeathYears:
-                                fChartXTitle = LangMan.LS(LSID.LSID_Years);
+                                fChartXTitle = LangMan.LS(LSID.Years);
                                 break;
 
                             case StatsMode.smBirthTenYears:
                             case StatsMode.smDeathTenYears:
-                                fChartXTitle = LangMan.LS(LSID.LSID_Decennial);
+                                fChartXTitle = LangMan.LS(LSID.Decennial);
                                 break;
                         }
 
                         switch (fCurrentMode) {
                             case StatsMode.smBirthYears:
                             case StatsMode.smBirthTenYears:
-                                fChartYTitle = LangMan.LS(LSID.LSID_HowBirthes);
+                                fChartYTitle = LangMan.LS(LSID.HowBirthes);
                                 break;
 
                             case StatsMode.smDeathYears:
                             case StatsMode.smDeathTenYears:
-                                fChartYTitle = LangMan.LS(LSID.LSID_HowDeads);
+                                fChartYTitle = LangMan.LS(LSID.HowDeads);
                                 break;
                         }
 
@@ -133,26 +133,26 @@ namespace GKCore.Controllers
                     }
 
                 case StatsMode.smChildsDistribution:
-                    fChartXTitle = LangMan.LS(LSID.LSID_Childs);
-                    fChartYTitle = LangMan.LS(LSID.LSID_Parents);
+                    fChartXTitle = LangMan.LS(LSID.Childs);
+                    fChartYTitle = LangMan.LS(LSID.Parents);
                     fView.Graph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Bar, true, fCurrentValues);
                     break;
 
                 case StatsMode.smCertaintyIndex:
-                    fChartXTitle = LangMan.LS(LSID.LSID_CertaintyIndex);
-                    fChartYTitle = LangMan.LS(LSID.LSID_People);
+                    fChartXTitle = LangMan.LS(LSID.CertaintyIndex);
+                    fChartYTitle = LangMan.LS(LSID.People);
                     fView.Graph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Bar, true, fCurrentValues);
                     break;
 
                 case StatsMode.smBirthByMonth:
-                    fChartXTitle = LangMan.LS(LSID.LSID_Month);
-                    fChartYTitle = LangMan.LS(LSID.LSID_People);
+                    fChartXTitle = LangMan.LS(LSID.Month);
+                    fChartYTitle = LangMan.LS(LSID.People);
                     fView.Graph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.Bar, true, fCurrentValues);
                     break;
 
                 case StatsMode.smDemography:
-                    fChartXTitle = LangMan.LS(LSID.LSID_LifeExpectancy);
-                    fChartYTitle = LangMan.LS(LSID.LSID_People);
+                    fChartXTitle = LangMan.LS(LSID.LifeExpectancy);
+                    fChartYTitle = LangMan.LS(LSID.People);
                     fView.Graph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.ClusterBar, true, fCurrentValues);
                     break;
 
@@ -191,28 +191,28 @@ namespace GKCore.Controllers
             try {
                 fView.Summary.ClearItems();
 
-                fView.Summary.AddItem(null, LangMan.LS(LSID.LSID_People),
+                fView.Summary.AddItem(null, LangMan.LS(LSID.People),
                     stats.persons.ToString(),
                     stats.persons_m.ToString() + GetPercent(stats.persons_m, stats.persons),
                     stats.persons_f.ToString() + GetPercent(stats.persons_f, stats.persons));
 
-                fView.Summary.AddItem(null, LangMan.LS(LSID.LSID_Living),
+                fView.Summary.AddItem(null, LangMan.LS(LSID.Living),
                     stats.lives.ToString(),
                     stats.lives_m.ToString(),
                     stats.lives_f.ToString());
 
-                fView.Summary.AddItem(null, LangMan.LS(LSID.LSID_Deads),
+                fView.Summary.AddItem(null, LangMan.LS(LSID.Deads),
                     (stats.persons - stats.lives).ToString(),
                     (stats.persons_m - stats.lives_m).ToString(),
                     (stats.persons_f - stats.lives_f).ToString());
 
-                AddCompositeItem(LSID.LSID_AvgAge, stats.age);
-                AddCompositeItem(LSID.LSID_AvgLife, stats.life);
-                AddCompositeItem(LSID.LSID_AvgChilds, stats.childs);
-                AddCompositeItem(LSID.LSID_AvgBorn, stats.fba);
-                AddCompositeItem(LSID.LSID_AvgMarriagesCount, stats.marr);
-                AddCompositeItem(LSID.LSID_AvgMarriagesAge, stats.mage);
-                AddCompositeItem(LSID.LSID_CertaintyIndex, stats.cIndex);
+                AddCompositeItem(LSID.AvgAge, stats.age);
+                AddCompositeItem(LSID.AvgLife, stats.life);
+                AddCompositeItem(LSID.AvgChilds, stats.childs);
+                AddCompositeItem(LSID.AvgBorn, stats.fba);
+                AddCompositeItem(LSID.AvgMarriagesCount, stats.marr);
+                AddCompositeItem(LSID.AvgMarriagesAge, stats.mage);
+                AddCompositeItem(LSID.CertaintyIndex, stats.cIndex);
             } finally {
                 fView.Summary.EndUpdate();
             }
@@ -235,27 +235,27 @@ namespace GKCore.Controllers
             AppHost.Instance.ExecuteWork((controller) => {
                 fTreeStats.WriteStatsReport(fChartTitle,
                     LangMan.LS(GKData.StatsTitles[(int)fCurrentMode].Cap),
-                    LangMan.LS(LSID.LSID_Value),
+                    LangMan.LS(LSID.Value),
                     fCurrentValues, fileName, writer, controller);
             });
         }
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_MIStats);
+            fView.Title = LangMan.LS(LSID.MIStats);
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                GetControl<IGroupBox>("grpSummary").Text = LangMan.LS(LSID.LSID_Summary);
+                GetControl<IGroupBox>("grpSummary").Text = LangMan.LS(LSID.Summary);
             }
 
             var lvSummary = fView.Summary;
             lvSummary.ClearColumns();
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Parameter), 300, false);
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_Total), 100, false);
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_ManSum), 100, false);
-            lvSummary.AddColumn(LangMan.LS(LSID.LSID_WomanSum), 100, false);
+            lvSummary.AddColumn(LangMan.LS(LSID.Parameter), 300, false);
+            lvSummary.AddColumn(LangMan.LS(LSID.Total), 100, false);
+            lvSummary.AddColumn(LangMan.LS(LSID.ManSum), 100, false);
+            lvSummary.AddColumn(LangMan.LS(LSID.WomanSum), 100, false);
 
-            SetToolTip("tbExcelExport", LangMan.LS(LSID.LSID_ExportTable));
+            SetToolTip("tbExcelExport", LangMan.LS(LSID.ExportTable));
 
             int oldIndex = fView.StatsType.SelectedIndex;
             UpdateStatsTypes();

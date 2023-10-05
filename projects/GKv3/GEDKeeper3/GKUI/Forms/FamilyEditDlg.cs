@@ -154,7 +154,7 @@ namespace GKUI.Forms
         public void SetHusband(string value)
         {
             bool res = !string.IsNullOrEmpty(value);
-            txtHusband.Text = (res) ? value : LangMan.LS(LSID.LSID_UnkMale);
+            txtHusband.Text = (res) ? value : LangMan.LS(LSID.UnkMale);
             btnHusbandAdd.Enabled = (!res);
             btnHusbandDelete.Enabled = (res);
             btnHusbandSel.Enabled = (res);
@@ -163,7 +163,7 @@ namespace GKUI.Forms
         public void SetWife(string value)
         {
             bool res = !string.IsNullOrEmpty(value);
-            txtWife.Text = (res) ? value : LangMan.LS(LSID.LSID_UnkFemale);
+            txtWife.Text = (res) ? value : LangMan.LS(LSID.UnkFemale);
             btnWifeAdd.Enabled = (!res);
             btnWifeDelete.Enabled = (res);
             btnWifeSel.Enabled = (res);
@@ -218,7 +218,7 @@ namespace GKUI.Forms
 
         private void EditSpouse_TextChanged(object sender, EventArgs e)
         {
-            Title = string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.LSID_Family), txtHusband.Text, txtWife.Text);
+            Title = string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.Family), txtHusband.Text, txtWife.Text);
         }
 
         private void FamilyEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)

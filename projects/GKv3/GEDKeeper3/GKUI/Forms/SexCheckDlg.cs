@@ -51,13 +51,13 @@ namespace GKUI.Forms
             UIHelper.FixRadioButtons(this, grpSex);
 
             // SetLocale()
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
-            Title = LangMan.LS(LSID.LSID_WinCheckSex);
-            grpSex.Text = LangMan.LS(LSID.LSID_Sex);
+            btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+            Title = LangMan.LS(LSID.WinCheckSex);
+            grpSex.Text = LangMan.LS(LSID.Sex);
             rbNone.Text = "?";
-            rbMale.Text = LangMan.LS(LSID.LSID_SexM);
-            rbFemale.Text = LangMan.LS(LSID.LSID_SexF);
+            rbMale.Text = LangMan.LS(LSID.SexM);
+            rbFemale.Text = LangMan.LS(LSID.SexF);
         }
 
         public string IndividualName

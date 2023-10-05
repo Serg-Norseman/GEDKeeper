@@ -39,8 +39,8 @@ namespace GKCore.Lists
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveUp, RecordAction.raMoveDown);
 
-            fListColumns.AddColumn(LSID.LSID_NumberSym, 25, false);
-            fListColumns.AddColumn(LSID.LSID_Note, 500, false);
+            fListColumns.AddColumn(LSID.NumberSym, 25, false);
+            fListColumns.AddColumn(LSID.Note, 500, false);
             fListColumns.ResetDefaults();
         }
 
@@ -103,7 +103,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachNoteQuery))) {
+                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachNoteQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GDMObject)dataOwner, notes);
                     }
                     break;

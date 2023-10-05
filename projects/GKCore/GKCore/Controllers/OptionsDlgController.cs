@@ -762,42 +762,42 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_MIOptions);
+            fView.Title = LangMan.LS(LSID.MIOptions);
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
 
             // Common
-            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.LSID_Common);
+            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Common);
 
-            GetControl<IGroupBox>("grpInternet").Text = LangMan.LS(LSID.LSID_Internet);
-            GetControl<ICheckBox>("chkUseProxy").Text = LangMan.LS(LSID.LSID_ProxyUse);
-            GetControl<ILabel>("lblProxyServer").Text = LangMan.LS(LSID.LSID_ProxyServer);
-            GetControl<ILabel>("lblProxyPort").Text = LangMan.LS(LSID.LSID_ProxyPort);
-            GetControl<ILabel>("lblProxyLogin").Text = LangMan.LS(LSID.LSID_ProxyLogin);
-            GetControl<ILabel>("lblProxyPassword").Text = LangMan.LS(LSID.LSID_Password);
+            GetControl<IGroupBox>("grpInternet").Text = LangMan.LS(LSID.Internet);
+            GetControl<ICheckBox>("chkUseProxy").Text = LangMan.LS(LSID.ProxyUse);
+            GetControl<ILabel>("lblProxyServer").Text = LangMan.LS(LSID.ProxyServer);
+            GetControl<ILabel>("lblProxyPort").Text = LangMan.LS(LSID.ProxyPort);
+            GetControl<ILabel>("lblProxyLogin").Text = LangMan.LS(LSID.ProxyLogin);
+            GetControl<ILabel>("lblProxyPassword").Text = LangMan.LS(LSID.Password);
 
-            GetControl<IGroupBox>("grpFileBackup").Text = LangMan.LS(LSID.LSID_FileBackup);
-            GetControl<IRadioButton>("radFBNone").Text = LangMan.LS(LSID.LSID_Not);
-            GetControl<IRadioButton>("radFBOnlyPrev").Text = LangMan.LS(LSID.LSID_BackupOnlyPrev);
-            GetControl<IRadioButton>("radFBEachRevision").Text = LangMan.LS(LSID.LSID_BackupEachRevision);
+            GetControl<IGroupBox>("grpFileBackup").Text = LangMan.LS(LSID.FileBackup);
+            GetControl<IRadioButton>("radFBNone").Text = LangMan.LS(LSID.Not);
+            GetControl<IRadioButton>("radFBOnlyPrev").Text = LangMan.LS(LSID.BackupOnlyPrev);
+            GetControl<IRadioButton>("radFBEachRevision").Text = LangMan.LS(LSID.BackupEachRevision);
 
-            GetControl<ICheckBox>("chkAutosave").Text = LangMan.LS(LSID.LSID_Autosave);
-            GetControl<ILabel>("lblMinutes").Text = LangMan.LS(LSID.LSID_Minutes);
-            GetControl<ILabel>("lblBackupRevisionsMaxCount").Text = LangMan.LS(LSID.LSID_BackupRevisionsMaxCount);
+            GetControl<ICheckBox>("chkAutosave").Text = LangMan.LS(LSID.Autosave);
+            GetControl<ILabel>("lblMinutes").Text = LangMan.LS(LSID.Minutes);
+            GetControl<ILabel>("lblBackupRevisionsMaxCount").Text = LangMan.LS(LSID.BackupRevisionsMaxCount);
 
-            GetControl<IGroupBox>("grpOther").Text = LangMan.LS(LSID.LSID_Other);
-            GetControl<ICheckBox>("chkShowOnStart").Text = LangMan.LS(LSID.LSID_StartupTips);
-            GetControl<ICheckBox>("chkLoadRecentFiles").Text = LangMan.LS(LSID.LSID_LoadRecentFiles);
-            GetControl<ICheckBox>("chkAutoCheckUpdates").Text = LangMan.LS(LSID.LSID_AutoCheckUpdates);
-            GetControl<ICheckBox>("chkCharsetDetection").Text = LangMan.LS(LSID.LSID_CharsetDetection);
-            GetControl<ICheckBox>("chkDialogClosingWarn").Text = LangMan.LS(LSID.LSID_WarnForClosingDialog);
+            GetControl<IGroupBox>("grpOther").Text = LangMan.LS(LSID.Other);
+            GetControl<ICheckBox>("chkShowOnStart").Text = LangMan.LS(LSID.StartupTips);
+            GetControl<ICheckBox>("chkLoadRecentFiles").Text = LangMan.LS(LSID.LoadRecentFiles);
+            GetControl<ICheckBox>("chkAutoCheckUpdates").Text = LangMan.LS(LSID.AutoCheckUpdates);
+            GetControl<ICheckBox>("chkCharsetDetection").Text = LangMan.LS(LSID.CharsetDetection);
+            GetControl<ICheckBox>("chkDialogClosingWarn").Text = LangMan.LS(LSID.WarnForClosingDialog);
 
-            GetControl<ILabel>("lblLanguage").Text = LangMan.LS(LSID.LSID_Language);
-            GetControl<ILabel>("lblGeocoder").Text = LangMan.LS(LSID.LSID_Geocoder);
-            GetControl<ILabel>("lblGeoSearchCountry").Text = LangMan.LS(LSID.LSID_GeoSearchCountryRestriction);
+            GetControl<ILabel>("lblLanguage").Text = LangMan.LS(LSID.Language);
+            GetControl<ILabel>("lblGeocoder").Text = LangMan.LS(LSID.Geocoder);
+            GetControl<ILabel>("lblGeoSearchCountry").Text = LangMan.LS(LSID.GeoSearchCountryRestriction);
 
-            GetControl<ILabel>("lblCertaintyAlgorithm").Text = LangMan.LS(LSID.LSID_CertaintyAlgorithm);
+            GetControl<ILabel>("lblCertaintyAlgorithm").Text = LangMan.LS(LSID.CertaintyAlgorithm);
             var cmbCA = GetControl<IComboBox>("cmbCertaintyAlgorithm");
             cmbCA.Clear();
             for (var ca = CertaintyAlgorithm.WeightedAverage; ca <= CertaintyAlgorithm.Maximum; ca++) {
@@ -805,15 +805,15 @@ namespace GKCore.Controllers
             }
 
             // Multimedia
-            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.LSID_RPMultimedia);
+            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.RPMultimedia);
 
-            GetControl<ICheckBox>("chkRemovableMediaWarning").Text = LangMan.LS(LSID.LSID_RemovableMediaWarningOption);
-            GetControl<ICheckBox>("chkEmbeddedMediaPlayer").Text = LangMan.LS(LSID.LSID_EmbeddedMediaPlayer);
+            GetControl<ICheckBox>("chkRemovableMediaWarning").Text = LangMan.LS(LSID.RemovableMediaWarningOption);
+            GetControl<ICheckBox>("chkEmbeddedMediaPlayer").Text = LangMan.LS(LSID.EmbeddedMediaPlayer);
 
-            GetControl<ICheckBox>("chkAllowMediaDirectRefs").Text = LangMan.LS(LSID.LSID_AllowMediaDirectReferences);
-            GetControl<ICheckBox>("chkAllowMediaStoreRelativeReferences").Text = LangMan.LS(LSID.LSID_AllowMediaRelativeReferences);
+            GetControl<ICheckBox>("chkAllowMediaDirectRefs").Text = LangMan.LS(LSID.AllowMediaDirectReferences);
+            GetControl<ICheckBox>("chkAllowMediaStoreRelativeReferences").Text = LangMan.LS(LSID.AllowMediaRelativeReferences);
 
-            GetControl<ILabel>("lblMediaStoreDefault").Text = LangMan.LS(LSID.LSID_MediaStoreDefault);
+            GetControl<ILabel>("lblMediaStoreDefault").Text = LangMan.LS(LSID.MediaStoreDefault);
 
             var combo = GetControl<IComboBox>("cmbMediaStoreDefault");
             combo.Clear();
@@ -821,138 +821,138 @@ namespace GKCore.Controllers
                 combo.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)mst].Name), mst);
             }
 
-            GetControl<ICheckBox>("chkAllowDeleteMediaFileFromStgArc").Text = LangMan.LS(LSID.LSID_AllowDeleteMediaFileFromStgArc);
-            GetControl<ICheckBox>("chkAllowDeleteMediaFileFromRefs").Text = LangMan.LS(LSID.LSID_AllowDeleteMediaFileFromRefs);
-            GetControl<ICheckBox>("chkDeleteMediaFileWithoutConfirm").Text = LangMan.LS(LSID.LSID_DeleteMediaFileWithoutConfirm);
-            GetControl<ICheckBox>("chkHighlightInaccessibleFiles").Text = LangMan.LS(LSID.LSID_HighlightInaccessibleFiles);
+            GetControl<ICheckBox>("chkAllowDeleteMediaFileFromStgArc").Text = LangMan.LS(LSID.AllowDeleteMediaFileFromStgArc);
+            GetControl<ICheckBox>("chkAllowDeleteMediaFileFromRefs").Text = LangMan.LS(LSID.AllowDeleteMediaFileFromRefs);
+            GetControl<ICheckBox>("chkDeleteMediaFileWithoutConfirm").Text = LangMan.LS(LSID.DeleteMediaFileWithoutConfirm);
+            GetControl<ICheckBox>("chkHighlightInaccessibleFiles").Text = LangMan.LS(LSID.HighlightInaccessibleFiles);
 
             // Charts
-            GetControl<ITabPage>("pageCharts").Text = LangMan.LS(LSID.LSID_Charts);
+            GetControl<ITabPage>("pageCharts").Text = LangMan.LS(LSID.Charts);
 
-            GetControl<ITabPage>("pageTreeChart").Text = LangMan.LS(LSID.LSID_Trees);
-            GetControl<IGroupBox>("grpTreePersons").Text = LangMan.LS(LSID.LSID_ViewTree);
+            GetControl<ITabPage>("pageTreeChart").Text = LangMan.LS(LSID.Trees);
+            GetControl<IGroupBox>("grpTreePersons").Text = LangMan.LS(LSID.ViewTree);
 
-            GetControl<ICheckBox>("chkSurname").Text = LangMan.LS(LSID.LSID_Surname);
-            GetControl<ICheckBox>("chkName").Text = LangMan.LS(LSID.LSID_Name);
-            GetControl<ICheckBox>("chkPatronymic").Text = LangMan.LS(LSID.LSID_Patronymic);
-            GetControl<ICheckBox>("chkDiffLines").Text = LangMan.LS(LSID.LSID_DiffLines);
-            GetControl<ICheckBox>("chkBirthDate").Text = LangMan.LS(LSID.LSID_BirthDate);
-            GetControl<ICheckBox>("chkDeathDate").Text = LangMan.LS(LSID.LSID_DeathDate);
-            GetControl<ICheckBox>("chkOnlyYears").Text = LangMan.LS(LSID.LSID_OnlyYears);
-            GetControl<ICheckBox>("chkMarriagesDates").Text = LangMan.LS(LSID.LSID_MarriagesDates);
-            GetControl<ICheckBox>("chkKinship").Text = LangMan.LS(LSID.LSID_Kinship);
-            GetControl<ICheckBox>("chkSignsVisible").Text = LangMan.LS(LSID.LSID_SignsVisible);
-            GetControl<ICheckBox>("chkTreeDecorative").Text = LangMan.LS(LSID.LSID_TreeDecorative);
-            GetControl<ICheckBox>("chkPortraitsVisible").Text = LangMan.LS(LSID.LSID_PortraitsVisible);
-            GetControl<ICheckBox>("chkDefaultPortraits").Text = LangMan.LS(LSID.LSID_DefaultPortraits);
-            GetControl<ICheckBox>("chkInvertedTree").Text = LangMan.LS(LSID.LSID_InvertedTree);
-            GetControl<ICheckBox>("chkChildlessExclude").Text = LangMan.LS(LSID.LSID_ChildlessExclude);
-            GetControl<ICheckBox>("chkShowPlaces").Text = LangMan.LS(LSID.LSID_ShowPlaces);
-            GetControl<ICheckBox>("chkSeparateDAPLines").Text = LangMan.LS(LSID.LSID_SeparateDatesAndPlacesLines);
-            GetControl<ICheckBox>("chkOnlyLocality").Text = LangMan.LS(LSID.LSID_OnlyLocality);
-            GetControl<ICheckBox>("chkHideUnknownSpouses").Text = LangMan.LS(LSID.LSID_HideUnknownSpouses);
-            GetControl<ICheckBox>("chkCheckTreeSize").Text = LangMan.LS(LSID.LSID_CheckTreeSize);
-            GetControl<ICheckBox>("chkDottedLinesOfAdoptedChildren").Text = LangMan.LS(LSID.LSID_DottedLinesOfAdoptedChildren);
-            GetControl<ICheckBox>("chkBoldNames").Text = LangMan.LS(LSID.LSID_BoldNames);
-            GetControl<ICheckBox>("chkMinimizingWidth").Text = LangMan.LS(LSID.LSID_MinimizingWidth);
-            GetControl<ICheckBox>("chkShowAge").Text = LangMan.LS(LSID.LSID_ShowAge);
-            GetControl<ICheckBox>("chkTreeSurnameFirst").Text = LangMan.LS(LSID.LSID_SurnameFirstInOrder);
-            GetControl<ICheckBox>("chkURNotesVisible").Text = LangMan.LS(LSID.LSID_ShowTreeNotes);
-            GetControl<ICheckBox>("chkShortenDateRanges").Text = LangMan.LS(LSID.LSID_ShortenDateRanges);
-            GetControl<ICheckBox>("chkSameCardsWidth").Text = LangMan.LS(LSID.LSID_SameCardsWidth);
+            GetControl<ICheckBox>("chkSurname").Text = LangMan.LS(LSID.Surname);
+            GetControl<ICheckBox>("chkName").Text = LangMan.LS(LSID.Name);
+            GetControl<ICheckBox>("chkPatronymic").Text = LangMan.LS(LSID.Patronymic);
+            GetControl<ICheckBox>("chkDiffLines").Text = LangMan.LS(LSID.DiffLines);
+            GetControl<ICheckBox>("chkBirthDate").Text = LangMan.LS(LSID.BirthDate);
+            GetControl<ICheckBox>("chkDeathDate").Text = LangMan.LS(LSID.DeathDate);
+            GetControl<ICheckBox>("chkOnlyYears").Text = LangMan.LS(LSID.OnlyYears);
+            GetControl<ICheckBox>("chkMarriagesDates").Text = LangMan.LS(LSID.MarriagesDates);
+            GetControl<ICheckBox>("chkKinship").Text = LangMan.LS(LSID.Kinship);
+            GetControl<ICheckBox>("chkSignsVisible").Text = LangMan.LS(LSID.SignsVisible);
+            GetControl<ICheckBox>("chkTreeDecorative").Text = LangMan.LS(LSID.TreeDecorative);
+            GetControl<ICheckBox>("chkPortraitsVisible").Text = LangMan.LS(LSID.PortraitsVisible);
+            GetControl<ICheckBox>("chkDefaultPortraits").Text = LangMan.LS(LSID.DefaultPortraits);
+            GetControl<ICheckBox>("chkInvertedTree").Text = LangMan.LS(LSID.InvertedTree);
+            GetControl<ICheckBox>("chkChildlessExclude").Text = LangMan.LS(LSID.ChildlessExclude);
+            GetControl<ICheckBox>("chkShowPlaces").Text = LangMan.LS(LSID.ShowPlaces);
+            GetControl<ICheckBox>("chkSeparateDAPLines").Text = LangMan.LS(LSID.SeparateDatesAndPlacesLines);
+            GetControl<ICheckBox>("chkOnlyLocality").Text = LangMan.LS(LSID.OnlyLocality);
+            GetControl<ICheckBox>("chkHideUnknownSpouses").Text = LangMan.LS(LSID.HideUnknownSpouses);
+            GetControl<ICheckBox>("chkCheckTreeSize").Text = LangMan.LS(LSID.CheckTreeSize);
+            GetControl<ICheckBox>("chkDottedLinesOfAdoptedChildren").Text = LangMan.LS(LSID.DottedLinesOfAdoptedChildren);
+            GetControl<ICheckBox>("chkBoldNames").Text = LangMan.LS(LSID.BoldNames);
+            GetControl<ICheckBox>("chkMinimizingWidth").Text = LangMan.LS(LSID.MinimizingWidth);
+            GetControl<ICheckBox>("chkShowAge").Text = LangMan.LS(LSID.ShowAge);
+            GetControl<ICheckBox>("chkTreeSurnameFirst").Text = LangMan.LS(LSID.SurnameFirstInOrder);
+            GetControl<ICheckBox>("chkURNotesVisible").Text = LangMan.LS(LSID.ShowTreeNotes);
+            GetControl<ICheckBox>("chkShortenDateRanges").Text = LangMan.LS(LSID.ShortenDateRanges);
+            GetControl<ICheckBox>("chkSameCardsWidth").Text = LangMan.LS(LSID.SameCardsWidth);
 
-            GetControl<IGroupBox>("grpTreeDecor").Text = LangMan.LS(LSID.LSID_Decor);
-            GetControl<ILabel>("lblMaleColor").Text = LangMan.LS(LSID.LSID_Man);
-            GetControl<ILabel>("lblFemaleColor").Text = LangMan.LS(LSID.LSID_Woman);
-            GetControl<ILabel>("lblUnkSexColor").Text = LangMan.LS(LSID.LSID_UnkSex);
-            GetControl<ILabel>("lblUnHusbandColor").Text = LangMan.LS(LSID.LSID_UnHusband);
-            GetControl<ILabel>("lblUnWifeColor").Text = LangMan.LS(LSID.LSID_UnWife);
-            //lblFont.Text = LangMan.LS(LSID.LSID_Font);
+            GetControl<IGroupBox>("grpTreeDecor").Text = LangMan.LS(LSID.Decor);
+            GetControl<ILabel>("lblMaleColor").Text = LangMan.LS(LSID.Man);
+            GetControl<ILabel>("lblFemaleColor").Text = LangMan.LS(LSID.Woman);
+            GetControl<ILabel>("lblUnkSexColor").Text = LangMan.LS(LSID.UnkSex);
+            GetControl<ILabel>("lblUnHusbandColor").Text = LangMan.LS(LSID.UnHusband);
+            GetControl<ILabel>("lblUnWifeColor").Text = LangMan.LS(LSID.UnWife);
+            //lblFont.Text = LangMan.LS(LSID.Font);
 
-            GetControl<IGroupBox>("grpSpacings").Text = LangMan.LS(LSID.LSID_Spacings);
-            GetControl<ILabel>("lblMargins").Text = LangMan.LS(LSID.LSID_Margins);
-            GetControl<ILabel>("lblBranchDist").Text = LangMan.LS(LSID.LSID_BranchDist);
-            GetControl<ILabel>("lblGenDist").Text = LangMan.LS(LSID.LSID_GenDist);
-            GetControl<ILabel>("lblSpouseDist").Text = LangMan.LS(LSID.LSID_SpouseDist);
+            GetControl<IGroupBox>("grpSpacings").Text = LangMan.LS(LSID.Spacings);
+            GetControl<ILabel>("lblMargins").Text = LangMan.LS(LSID.Margins);
+            GetControl<ILabel>("lblBranchDist").Text = LangMan.LS(LSID.BranchDist);
+            GetControl<ILabel>("lblGenDist").Text = LangMan.LS(LSID.GenDist);
+            GetControl<ILabel>("lblSpouseDist").Text = LangMan.LS(LSID.SpouseDist);
 
-            GetControl<ICheckBox>("chkSeparateDepth").Text = LangMan.LS(LSID.LSID_SeparateDepth);
-            GetControl<ILabel>("lblDefaultDepth").Text = LangMan.LS(LSID.LSID_DefaultDepth);
-            GetControl<ILabel>("lblDefaultDepthAncestors").Text = LangMan.LS(LSID.LSID_DefaultDepth) + ": " + LangMan.LS(LSID.LSID_Ancestors);
-            GetControl<ILabel>("lblDefaultDepthDescendants").Text = LangMan.LS(LSID.LSID_DefaultDepth) + ": " + LangMan.LS(LSID.LSID_Descendants);
+            GetControl<ICheckBox>("chkSeparateDepth").Text = LangMan.LS(LSID.SeparateDepth);
+            GetControl<ILabel>("lblDefaultDepth").Text = LangMan.LS(LSID.DefaultDepth);
+            GetControl<ILabel>("lblDefaultDepthAncestors").Text = LangMan.LS(LSID.DefaultDepth) + ": " + LangMan.LS(LSID.Ancestors);
+            GetControl<ILabel>("lblDefaultDepthDescendants").Text = LangMan.LS(LSID.DefaultDepth) + ": " + LangMan.LS(LSID.Descendants);
 
-            GetControl<ICheckBox>("chkUseExtraControls").Text = LangMan.LS(LSID.LSID_UseExtraControls);
+            GetControl<ICheckBox>("chkUseExtraControls").Text = LangMan.LS(LSID.UseExtraControls);
 
-            GetControl<ITabPage>("pageAncCircle").Text = LangMan.LS(LSID.LSID_AncestorsCircle);
+            GetControl<ITabPage>("pageAncCircle").Text = LangMan.LS(LSID.AncestorsCircle);
 
             // UIView
-            GetControl<ITabPage>("pageUIView").Text = LangMan.LS(LSID.LSID_Interface);
+            GetControl<ITabPage>("pageUIView").Text = LangMan.LS(LSID.Interface);
 
-            GetControl<ITabPage>("pageViewCommon").Text = LangMan.LS(LSID.LSID_ListsAll);
+            GetControl<ITabPage>("pageViewCommon").Text = LangMan.LS(LSID.ListsAll);
 
-            GetControl<IGroupBox>("rgFNPFormat").Text = LangMan.LS(LSID.LSID_NamesFormat);
-            GetControl<IRadioButton>("radSNP").Text = LangMan.LS(LSID.LSID_NF1);
-            GetControl<IRadioButton>("radS_NP").Text = LangMan.LS(LSID.LSID_NF2);
-            GetControl<IRadioButton>("radS_N_P").Text = LangMan.LS(LSID.LSID_NF3);
+            GetControl<IGroupBox>("rgFNPFormat").Text = LangMan.LS(LSID.NamesFormat);
+            GetControl<IRadioButton>("radSNP").Text = LangMan.LS(LSID.NF1);
+            GetControl<IRadioButton>("radS_NP").Text = LangMan.LS(LSID.NF2);
+            GetControl<IRadioButton>("radS_N_P").Text = LangMan.LS(LSID.NF3);
 
-            GetControl<ICheckBox>("chkPlacesWithAddress").Text = LangMan.LS(LSID.LSID_PlacesWithAddress);
-            GetControl<ICheckBox>("chkHighlightUnparented").Text = LangMan.LS(LSID.LSID_HighlightUnparented);
-            GetControl<ICheckBox>("chkHighlightUnmarried").Text = LangMan.LS(LSID.LSID_HighlightUnmarried);
+            GetControl<ICheckBox>("chkPlacesWithAddress").Text = LangMan.LS(LSID.PlacesWithAddress);
+            GetControl<ICheckBox>("chkHighlightUnparented").Text = LangMan.LS(LSID.HighlightUnparented);
+            GetControl<ICheckBox>("chkHighlightUnmarried").Text = LangMan.LS(LSID.HighlightUnmarried);
 
-            GetControl<ICheckBox>("chkAutoSortChildren").Text = LangMan.LS(LSID.LSID_AutoSortChildren);
-            GetControl<ICheckBox>("chkAutoSortSpouses").Text = LangMan.LS(LSID.LSID_AutoSortSpouses);
-            GetControl<ICheckBox>("chkFirstCapitalLetterInNames").Text = LangMan.LS(LSID.LSID_FirstCapitalLetterInNames);
-            GetControl<ICheckBox>("chkShortKinshipForm").Text = LangMan.LS(LSID.LSID_ShortKinshipForm);
-            GetControl<ICheckBox>("chkSurnameFirstInOrder").Text = LangMan.LS(LSID.LSID_SurnameFirstInOrder);
-            GetControl<ICheckBox>("chkSurnameInCapitals").Text = LangMan.LS(LSID.LSID_SurnameInCapitals);
+            GetControl<ICheckBox>("chkAutoSortChildren").Text = LangMan.LS(LSID.AutoSortChildren);
+            GetControl<ICheckBox>("chkAutoSortSpouses").Text = LangMan.LS(LSID.AutoSortSpouses);
+            GetControl<ICheckBox>("chkFirstCapitalLetterInNames").Text = LangMan.LS(LSID.FirstCapitalLetterInNames);
+            GetControl<ICheckBox>("chkShortKinshipForm").Text = LangMan.LS(LSID.ShortKinshipForm);
+            GetControl<ICheckBox>("chkSurnameFirstInOrder").Text = LangMan.LS(LSID.SurnameFirstInOrder);
+            GetControl<ICheckBox>("chkSurnameInCapitals").Text = LangMan.LS(LSID.SurnameInCapitals);
 
-            GetControl<ICheckBox>("chkUseSurnamesInPSF").Text = LangMan.LS(LSID.LSID_UseSurnamesInPersonSelectionFilter);
-            GetControl<ICheckBox>("chkUseBirthDatesInPSF").Text = LangMan.LS(LSID.LSID_UseBirthDatesInPersonSelectionFilter);
+            GetControl<ICheckBox>("chkUseSurnamesInPSF").Text = LangMan.LS(LSID.UseSurnamesInPersonSelectionFilter);
+            GetControl<ICheckBox>("chkUseBirthDatesInPSF").Text = LangMan.LS(LSID.UseBirthDatesInPersonSelectionFilter);
 
-            GetControl<IGroupBox>("grpDateFormat").Text = LangMan.LS(LSID.LSID_DateFormat);
-            GetControl<ICheckBox>("chkShowDatesCalendar").Text = LangMan.LS(LSID.LSID_ShowDatesCalendar);
-            GetControl<ICheckBox>("chkShowDatesSigns").Text = LangMan.LS(LSID.LSID_ShowDatesSigns);
-            GetControl<ICheckBox>("chkLocalizedCalendarSignatures").Text = LangMan.LS(LSID.LSID_LocalizedCalendarSignaturesOptLabel);
+            GetControl<IGroupBox>("grpDateFormat").Text = LangMan.LS(LSID.DateFormat);
+            GetControl<ICheckBox>("chkShowDatesCalendar").Text = LangMan.LS(LSID.ShowDatesCalendar);
+            GetControl<ICheckBox>("chkShowDatesSigns").Text = LangMan.LS(LSID.ShowDatesSigns);
+            GetControl<ICheckBox>("chkLocalizedCalendarSignatures").Text = LangMan.LS(LSID.LocalizedCalendarSignaturesOptLabel);
 
-            GetControl<IGroupBox>("grpAdvancedNames").Text = LangMan.LS(LSID.LSID_AdditionalNames);
-            GetControl<ICheckBox>("chkExtendWomanSurnames").Text = LangMan.LS(LSID.LSID_ExtendedWomanSurnames);
-            GetControl<IRadioButton>("radMaiden_Married").Text = LangMan.LS(LSID.LSID_WSF_Maiden_Married);
-            GetControl<IRadioButton>("radMarried_Maiden").Text = LangMan.LS(LSID.LSID_WSF_Married_Maiden);
-            GetControl<IRadioButton>("radMaiden").Text = LangMan.LS(LSID.LSID_WSF_Maiden);
-            GetControl<IRadioButton>("radMarried").Text = LangMan.LS(LSID.LSID_WSF_Married);
+            GetControl<IGroupBox>("grpAdvancedNames").Text = LangMan.LS(LSID.AdditionalNames);
+            GetControl<ICheckBox>("chkExtendWomanSurnames").Text = LangMan.LS(LSID.ExtendedWomanSurnames);
+            GetControl<IRadioButton>("radMaiden_Married").Text = LangMan.LS(LSID.WSF_Maiden_Married);
+            GetControl<IRadioButton>("radMarried_Maiden").Text = LangMan.LS(LSID.WSF_Married_Maiden);
+            GetControl<IRadioButton>("radMaiden").Text = LangMan.LS(LSID.WSF_Maiden);
+            GetControl<IRadioButton>("radMarried").Text = LangMan.LS(LSID.WSF_Married);
 
-            GetControl<ITabPage>("pageViewPersons").Text = LangMan.LS(LSID.LSID_ListPersons);
-            GetControl<IButton>("btnResetDefaults").Text = LangMan.LS(LSID.LSID_DefList);
+            GetControl<ITabPage>("pageViewPersons").Text = LangMan.LS(LSID.ListPersons);
+            GetControl<IButton>("btnResetDefaults").Text = LangMan.LS(LSID.DefList);
 
             // Pedigree
-            GetControl<ITabPage>("pagePedigree").Text = LangMan.LS(LSID.LSID_Pedigrees);
+            GetControl<ITabPage>("pagePedigree").Text = LangMan.LS(LSID.Pedigrees);
 
-            GetControl<IGroupBox>("grpPedigree").Text = LangMan.LS(LSID.LSID_PedigreeGen);
-            GetControl<ICheckBox>("chkAttributes").Text = LangMan.LS(LSID.LSID_IncludeAttributes);
-            GetControl<ICheckBox>("chkNotes").Text = LangMan.LS(LSID.LSID_IncludeNotes);
-            GetControl<ICheckBox>("chkSources").Text = LangMan.LS(LSID.LSID_IncludeSources);
-            GetControl<ICheckBox>("chkGenerations").Text = LangMan.LS(LSID.LSID_IncludeGenerations);
+            GetControl<IGroupBox>("grpPedigree").Text = LangMan.LS(LSID.PedigreeGen);
+            GetControl<ICheckBox>("chkAttributes").Text = LangMan.LS(LSID.IncludeAttributes);
+            GetControl<ICheckBox>("chkNotes").Text = LangMan.LS(LSID.IncludeNotes);
+            GetControl<ICheckBox>("chkSources").Text = LangMan.LS(LSID.IncludeSources);
+            GetControl<ICheckBox>("chkGenerations").Text = LangMan.LS(LSID.IncludeGenerations);
 
-            GetControl<IGroupBox>("grpPedigreeFormat").Text = LangMan.LS(LSID.LSID_PedigreeFormat);
-            GetControl<IRadioButton>("radExcess").Text = LangMan.LS(LSID.LSID_PF1);
-            GetControl<IRadioButton>("radCompact").Text = LangMan.LS(LSID.LSID_PF2);
+            GetControl<IGroupBox>("grpPedigreeFormat").Text = LangMan.LS(LSID.PedigreeFormat);
+            GetControl<IRadioButton>("radExcess").Text = LangMan.LS(LSID.PF1);
+            GetControl<IRadioButton>("radCompact").Text = LangMan.LS(LSID.PF2);
 
-            GetControl<ILabel>("lblAscendNumbering").Text = LangMan.LS(LSID.LSID_AscendNumbering);
-            GetControl<ILabel>("lblDescendNumbering").Text = LangMan.LS(LSID.LSID_DescendNumbering);
+            GetControl<ILabel>("lblAscendNumbering").Text = LangMan.LS(LSID.AscendNumbering);
+            GetControl<ILabel>("lblDescendNumbering").Text = LangMan.LS(LSID.DescendNumbering);
 
             // Specials
-            GetControl<ITabPage>("pageSpecials").Text = LangMan.LS(LSID.LSID_Specials);
-            GetControl<ICheckBox>("chkUseInlineImagesInSvg").Text = LangMan.LS(LSID.LSID_UseInlineImagesInSvg);
-            GetControl<ICheckBox>("chkUseExtendedNotes").Text = LangMan.LS(LSID.LSID_UseExtendedNotes);
-            GetControl<ICheckBox>("chkKeepRichNames").Text = LangMan.LS(LSID.LSID_KeepRichNames);
-            GetControl<ICheckBox>("chkMaximizeChartWindows").Text = LangMan.LS(LSID.LSID_MaximizeChartWindows);
-            GetControl<ICheckBox>("chkExtendedTree").Text = LangMan.LS(LSID.LSID_ExtendedTree);
-            GetControl<ICheckBox>("chkSAFByAllNames").Text = LangMan.LS(LSID.LSID_SearchAndFilterByAllNames);
-            GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Text = LangMan.LS(LSID.LSID_KeepInfoPansOverallSize);
-            GetControl<ICheckBox>("chkFilesOverwriteWarn").Text = LangMan.LS(LSID.LSID_FilesOverwriteWarn);
-            GetControl<ICheckBox>("chkExtendedKinships").Text = LangMan.LS(LSID.LSID_ExtendedKinships);
+            GetControl<ITabPage>("pageSpecials").Text = LangMan.LS(LSID.Specials);
+            GetControl<ICheckBox>("chkUseInlineImagesInSvg").Text = LangMan.LS(LSID.UseInlineImagesInSvg);
+            GetControl<ICheckBox>("chkUseExtendedNotes").Text = LangMan.LS(LSID.UseExtendedNotes);
+            GetControl<ICheckBox>("chkKeepRichNames").Text = LangMan.LS(LSID.KeepRichNames);
+            GetControl<ICheckBox>("chkMaximizeChartWindows").Text = LangMan.LS(LSID.MaximizeChartWindows);
+            GetControl<ICheckBox>("chkExtendedTree").Text = LangMan.LS(LSID.ExtendedTree);
+            GetControl<ICheckBox>("chkSAFByAllNames").Text = LangMan.LS(LSID.SearchAndFilterByAllNames);
+            GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Text = LangMan.LS(LSID.KeepInfoPansOverallSize);
+            GetControl<ICheckBox>("chkFilesOverwriteWarn").Text = LangMan.LS(LSID.FilesOverwriteWarn);
+            GetControl<ICheckBox>("chkExtendedKinships").Text = LangMan.LS(LSID.ExtendedKinships);
 
             // Plugins
-            GetControl<ITabPage>("pagePlugins").Text = LangMan.LS(LSID.LSID_Plugins);
+            GetControl<ITabPage>("pagePlugins").Text = LangMan.LS(LSID.Plugins);
         }
     }
 }

@@ -311,7 +311,7 @@ namespace GEDmill.HTML
                 // Output HTML.
                 OutputIndexPageColumns(f, firstHalf, secondHalf);
             } else {
-                f.WriteLine("    <p>{0}</p>", fLangMan.LS(PLS.LSID_ThereAreNoIndividualsToList));
+                f.WriteLine("    <p>{0}</p>", fLangMan.LS(PLS.ThereAreNoIndividualsToList));
             }
         }
 

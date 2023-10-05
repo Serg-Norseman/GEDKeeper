@@ -151,10 +151,10 @@ namespace GKCore.Controllers
         public bool SwitchActive()
         {
             if (!fActive) {
-                GetControl<IButtonToolItem>("tbStart").Text = LangMan.LS(LSID.LSID_Stop);
+                GetControl<IButtonToolItem>("tbStart").Text = LangMan.LS(LSID.Stop);
                 fTimer.Start();
             } else {
-                GetControl<IButtonToolItem>("tbStart").Text = LangMan.LS(LSID.LSID_Start);
+                GetControl<IButtonToolItem>("tbStart").Text = LangMan.LS(LSID.Start);
                 fTimer.Stop();
             }
 
@@ -165,12 +165,12 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_Slideshow);
+            fView.Title = LangMan.LS(LSID.Slideshow);
 
-            GetControl<IButtonToolItem>("tbStart").Text = LangMan.LS(LSID.LSID_Start);
+            GetControl<IButtonToolItem>("tbStart").Text = LangMan.LS(LSID.Start);
 
-            SetToolTip("tbPrev", LangMan.LS(LSID.LSID_PrevRec));
-            SetToolTip("tbNext", LangMan.LS(LSID.LSID_NextRec));
+            SetToolTip("tbPrev", LangMan.LS(LSID.PrevRec));
+            SetToolTip("tbNext", LangMan.LS(LSID.NextRec));
         }
     }
 }

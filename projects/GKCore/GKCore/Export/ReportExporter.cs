@@ -68,8 +68,8 @@ namespace GKCore.Export
 
         public override void Generate(bool show)
         {
-            string availableFormats = LangMan.LS(LSID.LSID_HTMLFilter) + "|" + LangMan.LS(LSID.LSID_RTFFilter);
-            availableFormats += "|" + LangMan.LS(LSID.LSID_PDFFilter);
+            string availableFormats = LangMan.LS(LSID.HTMLFilter) + "|" + LangMan.LS(LSID.RTFFilter);
+            availableFormats += "|" + LangMan.LS(LSID.PDFFilter);
 
             fPath = AppHost.StdDialogs.GetSaveFile(GlobalOptions.Instance.ReportExportLastDir, availableFormats);
             if (string.IsNullOrEmpty(fPath)) return;
@@ -91,7 +91,7 @@ namespace GKCore.Export
 
             #if !CI_MODE
             if (!success) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_GenerationFailed));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.GenerationFailed));
             } else {
                 if (show) ShowResult();
             }

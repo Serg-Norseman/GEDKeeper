@@ -146,102 +146,102 @@ namespace GEDmill
 
         public void SetLocale()
         {
-            Text = fLangMan.LS(PLS.LSID_Title);
-            btnCancel.Text = fLangMan.LS(PLS.LSID_Quit);
-            btnBack.Text = fLangMan.LS(PLS.LSID_Back);
-            btnNext.Text = fLangMan.LS(PLS.LSID_Next);
-            btnSettings.Text = fLangMan.LS(PLS.LSID_Settings);
-            btnSettingsCancel.Text = fLangMan.LS(PLS.LSID_Cancel);
+            Text = fLangMan.LS(PLS.Title);
+            btnCancel.Text = fLangMan.LS(PLS.Quit);
+            btnBack.Text = fLangMan.LS(PLS.Back);
+            btnNext.Text = fLangMan.LS(PLS.Next);
+            btnSettings.Text = fLangMan.LS(PLS.Settings);
+            btnSettingsCancel.Text = fLangMan.LS(PLS.Cancel);
 
-            pageSettingsWebpages.Text = fLangMan.LS(PLS.LSID_Webpages);
-            pageSettingsImages.Text = fLangMan.LS(PLS.LSID_Images);
+            pageSettingsWebpages.Text = fLangMan.LS(PLS.Webpages);
+            pageSettingsImages.Text = fLangMan.LS(PLS.Images);
             pageSettingsGedcom.Text = "GEDCOM";
-            pageSettingsTreeDiagrams.Text = fLangMan.LS(PLS.LSID_TreeDiagrams);
-            pageIndividuals.Text = fLangMan.LS(PLS.LSID_Individuals);
-            pageSources.Text = fLangMan.LS(PLS.LSID_Sources);
+            pageSettingsTreeDiagrams.Text = fLangMan.LS(PLS.TreeDiagrams);
+            pageIndividuals.Text = fLangMan.LS(PLS.Individuals);
+            pageSources.Text = fLangMan.LS(PLS.Sources);
 
-            lblWelcomeVersion.Text = fLangMan.LS(PLS.LSID_Version) + " " + GMConfig.SoftwareVersion;
-            lblWelcomeSubtitle.Text = fLangMan.LS(PLS.LSID_WelcomeSubtitle);
-            lblRecordsContinue.Text = fLangMan.LS(PLS.LSID_RecordsContinue);
-            miIndiDescendantsExclude.Text = fLangMan.LS(PLS.LSID_IndiDescendantsExclude);
-            miIndiAncestorsExclude.Text = fLangMan.LS(PLS.LSID_IndiAncestorsExclude);
-            miIndiDescendantsInclude.Text = fLangMan.LS(PLS.LSID_IndiDescendantsInclude);
-            miIndiAncestorsInclude.Text = fLangMan.LS(PLS.LSID_IndiAncestorsInclude);
-            miUnconnectedExclude.Text = fLangMan.LS(PLS.LSID_UnconnectedExclude);
-            miIndividualDetails.Text = fLangMan.LS(PLS.LSID_Details);
-            miIndividualsEveryoneInclude.Text = fLangMan.LS(PLS.LSID_IndividualsEveryoneInclude);
-            miIndividualsEveryoneExclude.Text = fLangMan.LS(PLS.LSID_IndividualsEveryoneExclude);
-            miIndividualsAliveExclude.Text = fLangMan.LS(PLS.LSID_IndividualsAliveExclude);
-            miSourceDetails.Text = fLangMan.LS(PLS.LSID_Details);
-            miSourceRemovePics.Text = fLangMan.LS(PLS.LSID_SourceRemovePics);
-            miSourcesAllInclude.Text = fLangMan.LS(PLS.LSID_SourcesAllInclude);
-            miSourcesAllExclude.Text = fLangMan.LS(PLS.LSID_SourcesAllExclude);
-            lblPruneRecordsInstructions.Text = fLangMan.LS(PLS.LSID_PruneRecordsInstructions);
-            lblPruneRecordsButtons.Text = fLangMan.LS(PLS.LSID_PruneRecordsButtons);
-            lblSelectKey.Text = fLangMan.LS(PLS.LSID_SelectKey);
-            lblSelectKeyIndividuals.Text = fLangMan.LS(PLS.LSID_SelectKeyIndividuals);
-            btnSelectKeyAdd.Text = fLangMan.LS(PLS.LSID_SelectKeyAdd);
-            btnSelectKeyDelete.Text = fLangMan.LS(PLS.LSID_SelectKeyDelete);
-            lblSelectKeyInstructions.Text = fLangMan.LS(PLS.LSID_SelectKeyInstructions);
-            lblConfigCommentary.Text = fLangMan.LS(PLS.LSID_ConfigCommentary);
-            chkConfigCommentaryIsHtml.Text = fLangMan.LS(PLS.LSID_IsHtml);
-            lblConfigUserLink.Text = fLangMan.LS(PLS.LSID_ConfigUserLink);
-            lblConfigCustomFooter.Text = fLangMan.LS(PLS.LSID_ConfigCustomFooter);
-            chkConfigFooterIsHtml.Text = fLangMan.LS(PLS.LSID_IsHtml);
-            chkConfigStats.Text = fLangMan.LS(PLS.LSID_ConfigStats);
-            chkConfigMultiPageIndex.Text = fLangMan.LS(PLS.LSID_ConfigMultiPageIndex);
-            lblConfigMultiPageIndexNumber.Text = fLangMan.LS(PLS.LSID_ConfigMultiPageIndexNumber);
-            lblConfigIndexName.Text = fLangMan.LS(PLS.LSID_ConfigIndexName);
-            lblConfigEmail.Text = fLangMan.LS(PLS.LSID_ConfigEmail);
-            lblConfigBackImageEdit.Text = fLangMan.LS(PLS.LSID_ConfigBackImageEdit);
-            btnConfigBackImageBrowse.Text = fLangMan.LS(PLS.LSID_Browse);
-            lblConfigFrontImageEdit.Text = fLangMan.LS(PLS.LSID_ConfigFrontImageEdit);
-            btnConfigFrontImageBrowse.Text = fLangMan.LS(PLS.LSID_Browse);
-            lblConfigIndiImageSize.Text = fLangMan.LS(PLS.LSID_ConfigIndiImageSize);
-            lblConfigIndiImageWidth.Text = fLangMan.LS(PLS.LSID_Width);
-            lblConfigIndiImageHeight.Text = fLangMan.LS(PLS.LSID_Height);
-            lblConfigSourceImageSize.Text = fLangMan.LS(PLS.LSID_ConfigSourceImageSize);
-            lblConfigSourceImageWidth.Text = fLangMan.LS(PLS.LSID_Width);
-            lblConfigSourceImageHeight.Text = fLangMan.LS(PLS.LSID_Height);
-            chkConfigAllowMultimedia.Text = fLangMan.LS(PLS.LSID_ConfigAllowMultimedia);
-            chkConfigRenameOriginals.Text = fLangMan.LS(PLS.LSID_ConfigRenameOriginals);
-            chkConfigKeepOriginals.Text = fLangMan.LS(PLS.LSID_ConfigKeepOriginals);
-            chkConfigNonPictures.Text = fLangMan.LS(PLS.LSID_ConfigNonPictures);
-            chkConfigIndiImages.Text = fLangMan.LS(PLS.LSID_ConfigIndiImages);
-            lblConfigThumbnailImageSize.Text = fLangMan.LS(PLS.LSID_ConfigThumbnailImageSize);
-            lblConfigThumbnailImageWidth.Text = fLangMan.LS(PLS.LSID_Width);
-            lblConfigThumbnailImageHeight.Text = fLangMan.LS(PLS.LSID_Height);
-            lblConfigNoName.Text = fLangMan.LS(PLS.LSID_ConfigNoName);
-            chkConfigShowWithheldRecords.Text = fLangMan.LS(PLS.LSID_ConfigShowWithheldRecords);
-            gbConfigWithheldName.Text = fLangMan.LS(PLS.LSID_ConfigWithheldName);
-            radConfigWithheldNameLabel.Text = fLangMan.LS(PLS.LSID_ConfigWithheldNameLabel);
-            radConfigWithheldNameName.Text = fLangMan.LS(PLS.LSID_ConfigWithheldNameName);
-            chkConfigCapSurnames.Text = fLangMan.LS(PLS.LSID_ConfigCapSurnames);
-            chkConfigCapEvents.Text = fLangMan.LS(PLS.LSID_ConfigCapEvents);
-            chkConfigHideEmails.Text = fLangMan.LS(PLS.LSID_ConfigHideEmails);
-            chkConfigOccupationHeadline.Text = fLangMan.LS(PLS.LSID_ConfigOccupationHeadline);
-            chkConfigIncludeTreeDiagrams.Text = fLangMan.LS(PLS.LSID_ConfigIncludeTreeDiagrams);
-            chkConfigTreeDiagramsFakeBg.Text = fLangMan.LS(PLS.LSID_ConfigTreeDiagramsFakeBg);
-            chkConfigConserveTreeWidth.Text = fLangMan.LS(PLS.LSID_ConfigConserveTreeWidth);
-            gbMiniTreeColors.Text = fLangMan.LS(PLS.LSID_MiniTreeColors);
-            btnConfigMiniTreeColorIndiHighlight.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorIndiHighlight);
-            btnConfigMiniTreeColorIndiText.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorIndiText);
-            btnConfigMiniTreeColorIndiBackground.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorIndiBackground);
-            btnConfigMiniTreeColorIndiLink.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorIndiLink);
-            btnConfigMiniTreeColorIndiBgConcealed.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorIndiBgConcealed);
-            btnConfigMiniTreeColorIndiFgConcealed.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorIndiFgConcealed);
-            btnConfigMiniTreeColorIndiShade.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorIndiShade);
-            btnConfigMiniTreeColorBranch.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorBranch);
-            btnConfigMiniTreeColorIndiBorder.Text = fLangMan.LS(PLS.LSID_ConfigMiniTreeColorIndiBorder);
-            chkConfigSupressBackreferences.Text = fLangMan.LS(PLS.LSID_ConfigSupressBackreferences);
-            lblChooseOutput.Text = fLangMan.LS(PLS.LSID_ChooseOutput);
-            btnChooseOutputBrowse.Text = fLangMan.LS(PLS.LSID_Browse);
-            lblChooseOutputInstructions.Text = fLangMan.LS(PLS.LSID_ChooseOutputInstructions);
-            lblChooseOutputContinue.Text = fLangMan.LS(PLS.LSID_ChooseOutputContinue);
-            chkAllDoneShowSite.Text = fLangMan.LS(PLS.LSID_AllDoneShowSite);
-            lblAllDone.Text = fLangMan.LS(PLS.LSID_AllDone);
-            lblAllDoneThankYou.Text = fLangMan.LS(PLS.LSID_AllDoneThankYou);
-            lblAllDoneDirectory.Text = fLangMan.LS(PLS.LSID_AllDoneDirectory);
+            lblWelcomeVersion.Text = fLangMan.LS(PLS.Version) + " " + GMConfig.SoftwareVersion;
+            lblWelcomeSubtitle.Text = fLangMan.LS(PLS.WelcomeSubtitle);
+            lblRecordsContinue.Text = fLangMan.LS(PLS.RecordsContinue);
+            miIndiDescendantsExclude.Text = fLangMan.LS(PLS.IndiDescendantsExclude);
+            miIndiAncestorsExclude.Text = fLangMan.LS(PLS.IndiAncestorsExclude);
+            miIndiDescendantsInclude.Text = fLangMan.LS(PLS.IndiDescendantsInclude);
+            miIndiAncestorsInclude.Text = fLangMan.LS(PLS.IndiAncestorsInclude);
+            miUnconnectedExclude.Text = fLangMan.LS(PLS.UnconnectedExclude);
+            miIndividualDetails.Text = fLangMan.LS(PLS.Details);
+            miIndividualsEveryoneInclude.Text = fLangMan.LS(PLS.IndividualsEveryoneInclude);
+            miIndividualsEveryoneExclude.Text = fLangMan.LS(PLS.IndividualsEveryoneExclude);
+            miIndividualsAliveExclude.Text = fLangMan.LS(PLS.IndividualsAliveExclude);
+            miSourceDetails.Text = fLangMan.LS(PLS.Details);
+            miSourceRemovePics.Text = fLangMan.LS(PLS.SourceRemovePics);
+            miSourcesAllInclude.Text = fLangMan.LS(PLS.SourcesAllInclude);
+            miSourcesAllExclude.Text = fLangMan.LS(PLS.SourcesAllExclude);
+            lblPruneRecordsInstructions.Text = fLangMan.LS(PLS.PruneRecordsInstructions);
+            lblPruneRecordsButtons.Text = fLangMan.LS(PLS.PruneRecordsButtons);
+            lblSelectKey.Text = fLangMan.LS(PLS.SelectKey);
+            lblSelectKeyIndividuals.Text = fLangMan.LS(PLS.SelectKeyIndividuals);
+            btnSelectKeyAdd.Text = fLangMan.LS(PLS.SelectKeyAdd);
+            btnSelectKeyDelete.Text = fLangMan.LS(PLS.SelectKeyDelete);
+            lblSelectKeyInstructions.Text = fLangMan.LS(PLS.SelectKeyInstructions);
+            lblConfigCommentary.Text = fLangMan.LS(PLS.ConfigCommentary);
+            chkConfigCommentaryIsHtml.Text = fLangMan.LS(PLS.IsHtml);
+            lblConfigUserLink.Text = fLangMan.LS(PLS.ConfigUserLink);
+            lblConfigCustomFooter.Text = fLangMan.LS(PLS.ConfigCustomFooter);
+            chkConfigFooterIsHtml.Text = fLangMan.LS(PLS.IsHtml);
+            chkConfigStats.Text = fLangMan.LS(PLS.ConfigStats);
+            chkConfigMultiPageIndex.Text = fLangMan.LS(PLS.ConfigMultiPageIndex);
+            lblConfigMultiPageIndexNumber.Text = fLangMan.LS(PLS.ConfigMultiPageIndexNumber);
+            lblConfigIndexName.Text = fLangMan.LS(PLS.ConfigIndexName);
+            lblConfigEmail.Text = fLangMan.LS(PLS.ConfigEmail);
+            lblConfigBackImageEdit.Text = fLangMan.LS(PLS.ConfigBackImageEdit);
+            btnConfigBackImageBrowse.Text = fLangMan.LS(PLS.Browse);
+            lblConfigFrontImageEdit.Text = fLangMan.LS(PLS.ConfigFrontImageEdit);
+            btnConfigFrontImageBrowse.Text = fLangMan.LS(PLS.Browse);
+            lblConfigIndiImageSize.Text = fLangMan.LS(PLS.ConfigIndiImageSize);
+            lblConfigIndiImageWidth.Text = fLangMan.LS(PLS.Width);
+            lblConfigIndiImageHeight.Text = fLangMan.LS(PLS.Height);
+            lblConfigSourceImageSize.Text = fLangMan.LS(PLS.ConfigSourceImageSize);
+            lblConfigSourceImageWidth.Text = fLangMan.LS(PLS.Width);
+            lblConfigSourceImageHeight.Text = fLangMan.LS(PLS.Height);
+            chkConfigAllowMultimedia.Text = fLangMan.LS(PLS.ConfigAllowMultimedia);
+            chkConfigRenameOriginals.Text = fLangMan.LS(PLS.ConfigRenameOriginals);
+            chkConfigKeepOriginals.Text = fLangMan.LS(PLS.ConfigKeepOriginals);
+            chkConfigNonPictures.Text = fLangMan.LS(PLS.ConfigNonPictures);
+            chkConfigIndiImages.Text = fLangMan.LS(PLS.ConfigIndiImages);
+            lblConfigThumbnailImageSize.Text = fLangMan.LS(PLS.ConfigThumbnailImageSize);
+            lblConfigThumbnailImageWidth.Text = fLangMan.LS(PLS.Width);
+            lblConfigThumbnailImageHeight.Text = fLangMan.LS(PLS.Height);
+            lblConfigNoName.Text = fLangMan.LS(PLS.ConfigNoName);
+            chkConfigShowWithheldRecords.Text = fLangMan.LS(PLS.ConfigShowWithheldRecords);
+            gbConfigWithheldName.Text = fLangMan.LS(PLS.ConfigWithheldName);
+            radConfigWithheldNameLabel.Text = fLangMan.LS(PLS.ConfigWithheldNameLabel);
+            radConfigWithheldNameName.Text = fLangMan.LS(PLS.ConfigWithheldNameName);
+            chkConfigCapSurnames.Text = fLangMan.LS(PLS.ConfigCapSurnames);
+            chkConfigCapEvents.Text = fLangMan.LS(PLS.ConfigCapEvents);
+            chkConfigHideEmails.Text = fLangMan.LS(PLS.ConfigHideEmails);
+            chkConfigOccupationHeadline.Text = fLangMan.LS(PLS.ConfigOccupationHeadline);
+            chkConfigIncludeTreeDiagrams.Text = fLangMan.LS(PLS.ConfigIncludeTreeDiagrams);
+            chkConfigTreeDiagramsFakeBg.Text = fLangMan.LS(PLS.ConfigTreeDiagramsFakeBg);
+            chkConfigConserveTreeWidth.Text = fLangMan.LS(PLS.ConfigConserveTreeWidth);
+            gbMiniTreeColors.Text = fLangMan.LS(PLS.MiniTreeColors);
+            btnConfigMiniTreeColorIndiHighlight.Text = fLangMan.LS(PLS.ConfigMiniTreeColorIndiHighlight);
+            btnConfigMiniTreeColorIndiText.Text = fLangMan.LS(PLS.ConfigMiniTreeColorIndiText);
+            btnConfigMiniTreeColorIndiBackground.Text = fLangMan.LS(PLS.ConfigMiniTreeColorIndiBackground);
+            btnConfigMiniTreeColorIndiLink.Text = fLangMan.LS(PLS.ConfigMiniTreeColorIndiLink);
+            btnConfigMiniTreeColorIndiBgConcealed.Text = fLangMan.LS(PLS.ConfigMiniTreeColorIndiBgConcealed);
+            btnConfigMiniTreeColorIndiFgConcealed.Text = fLangMan.LS(PLS.ConfigMiniTreeColorIndiFgConcealed);
+            btnConfigMiniTreeColorIndiShade.Text = fLangMan.LS(PLS.ConfigMiniTreeColorIndiShade);
+            btnConfigMiniTreeColorBranch.Text = fLangMan.LS(PLS.ConfigMiniTreeColorBranch);
+            btnConfigMiniTreeColorIndiBorder.Text = fLangMan.LS(PLS.ConfigMiniTreeColorIndiBorder);
+            chkConfigSupressBackreferences.Text = fLangMan.LS(PLS.ConfigSupressBackreferences);
+            lblChooseOutput.Text = fLangMan.LS(PLS.ChooseOutput);
+            btnChooseOutputBrowse.Text = fLangMan.LS(PLS.Browse);
+            lblChooseOutputInstructions.Text = fLangMan.LS(PLS.ChooseOutputInstructions);
+            lblChooseOutputContinue.Text = fLangMan.LS(PLS.ChooseOutputContinue);
+            chkAllDoneShowSite.Text = fLangMan.LS(PLS.AllDoneShowSite);
+            lblAllDone.Text = fLangMan.LS(PLS.AllDone);
+            lblAllDoneThankYou.Text = fLangMan.LS(PLS.AllDoneThankYou);
+            lblAllDoneDirectory.Text = fLangMan.LS(PLS.AllDoneDirectory);
         }
 
         #endregion
@@ -331,7 +331,7 @@ namespace GEDmill
 
             if (fCurrentPanel != PanelKind.Finish) {
                 // Cancel button is "Finish" in panel 6
-                dialogResult = ShowQuestionYN(fLangMan.LS(PLS.LSID_ExitQuestion));
+                dialogResult = ShowQuestionYN(fLangMan.LS(PLS.ExitQuestion));
             }
 
             if (dialogResult) {
@@ -454,7 +454,7 @@ namespace GEDmill
         {
             string sPath = GMHelper.GetInitialDirectory(txtConfigBackImageEdit.Text);
             //openFileDialog.FileName = txtConfigBackImageEdit.Text;
-            string backFile = AppHost.StdDialogs.GetOpenFile(fLangMan.LS(PLS.LSID_SelectBackImage), sPath, GMHelper.GfxFilter, 1, "");
+            string backFile = AppHost.StdDialogs.GetOpenFile(fLangMan.LS(PLS.SelectBackImage), sPath, GMHelper.GfxFilter, 1, "");
             if (!string.IsNullOrEmpty(backFile) && IsSupportedFile(backFile)) {
                 txtConfigBackImageEdit.Text = backFile;
                 txtConfigBackImageEdit.SelectAll();
@@ -464,7 +464,7 @@ namespace GEDmill
         private void btnConfigFrontImageBrowse_Click(object sender, EventArgs e)
         {
             string sPath = GMHelper.GetInitialDirectory(txtConfigFrontImageEdit.Text);
-            string frontFile = AppHost.StdDialogs.GetOpenFile(fLangMan.LS(PLS.LSID_SelectFrontImage), sPath, GMHelper.GfxFilter, 1, "");
+            string frontFile = AppHost.StdDialogs.GetOpenFile(fLangMan.LS(PLS.SelectFrontImage), sPath, GMHelper.GfxFilter, 1, "");
             if (!string.IsNullOrEmpty(frontFile) && IsSupportedFile(frontFile)) {
                 txtConfigFrontImageEdit.Text = frontFile;
                 txtConfigFrontImageEdit.SelectAll();
@@ -476,7 +476,7 @@ namespace GEDmill
             if (!string.IsNullOrEmpty(fileName)) {
                 string exten = Path.GetExtension(fileName).ToLower();
                 if (exten != ".jpg" && exten != ".jpeg" && exten != ".png" && exten != ".gif" && exten != ".bmp") {
-                    ShowAlert(fLangMan.LS(PLS.LSID_NotSupportedPictureType));
+                    ShowAlert(fLangMan.LS(PLS.NotSupportedPictureType));
                     return false;
                 }
             }
@@ -618,7 +618,7 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.LSID_individuals));
+            ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.individuals));
         }
 
         private void miIndiDescendantsExclude_Click(Object sender, EventArgs e)
@@ -650,7 +650,7 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.LSID_individuals));
+            ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.individuals));
         }
 
         private void miIndiDescendantsInclude_Click(Object sender, EventArgs e)
@@ -682,7 +682,7 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.LSID_individuals));
+            ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.individuals));
         }
 
         private void miIndiAncestorsExclude_Click(Object sender, EventArgs e)
@@ -714,7 +714,7 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.LSID_individuals));
+            ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.individuals));
         }
 
         private void miIndiAncestorsInclude_Click(Object sender, EventArgs e)
@@ -746,7 +746,7 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.LSID_individuals));
+            ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.individuals));
         }
 
         private void miIndividualsEveryoneInclude_Click(Object sender, EventArgs e)
@@ -771,7 +771,7 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowRestrictsResult(0, recordsIncluded, fLangMan.LS(PLS.LSID_individuals));
+            ShowRestrictsResult(0, recordsIncluded, fLangMan.LS(PLS.individuals));
         }
 
         // Removes pictures from the selected source
@@ -827,7 +827,7 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowRestrictsResult(recordsExcluded, 0, fLangMan.LS(PLS.LSID_individuals));
+            ShowRestrictsResult(recordsExcluded, 0, fLangMan.LS(PLS.individuals));
         }
 
         private void miSourcesAllInclude_Click(Object sender, EventArgs e)
@@ -853,7 +853,7 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowRestrictsResult(0, recordsIncluded, fLangMan.LS(PLS.LSID_sources));
+            ShowRestrictsResult(0, recordsIncluded, fLangMan.LS(PLS.sources));
         }
 
         private void miSourcesAllExclude_Click(Object sender, EventArgs e)
@@ -879,7 +879,7 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowRestrictsResult(recordsExcluded, 0, fLangMan.LS(PLS.LSID_sources));
+            ShowRestrictsResult(recordsExcluded, 0, fLangMan.LS(PLS.sources));
         }
 
         // Excludes people who aren't dead, but leave people we're not sure about
@@ -911,7 +911,7 @@ namespace GEDmill
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
 
-            ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.LSID_individuals));
+            ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.individuals));
         }
 
         private void menuIndividuals_Popup(Object sender, EventArgs e)
@@ -919,9 +919,9 @@ namespace GEDmill
             int selectedCount = lvIndividuals.SelectedItems.Count;
             miUnconnectedExclude.Enabled = (selectedCount > 0);
             if (selectedCount <= 1) {
-                miUnconnectedExclude.Text = fLangMan.LS(PLS.LSID_ExcludeIndividuals);
+                miUnconnectedExclude.Text = fLangMan.LS(PLS.ExcludeIndividuals);
             } else {
-                miUnconnectedExclude.Text = string.Format(fLangMan.LS(PLS.LSID_ExcludeIndividualsX), selectedCount);
+                miUnconnectedExclude.Text = string.Format(fLangMan.LS(PLS.ExcludeIndividualsX), selectedCount);
             }
 
             miIndiDescendantsExclude.Enabled = (selectedCount == 1);
@@ -937,9 +937,9 @@ namespace GEDmill
             miSourceDetails.Enabled = (selectedCount == 1);
             miSourceRemovePics.Enabled = (selectedCount > 0);
             if (selectedCount <= 1) {
-                miSourceRemovePics.Text = fLangMan.LS(PLS.LSID_RemovePictures);
+                miSourceRemovePics.Text = fLangMan.LS(PLS.RemovePictures);
             } else {
-                miSourceRemovePics.Text = string.Format(fLangMan.LS(PLS.LSID_RemovePicturesX), selectedCount);
+                miSourceRemovePics.Text = string.Format(fLangMan.LS(PLS.RemovePicturesX), selectedCount);
             }
         }
 
@@ -1002,7 +1002,7 @@ namespace GEDmill
             btnCancel.Visible = false; // To give the panel a "modal" feeling
 
             // Make config button an "OK" button
-            btnSettings.Text = fLangMan.LS(PLS.LSID_Ok);
+            btnSettings.Text = fLangMan.LS(PLS.Ok);
             btnSettings.Location = new Point(344, 288);
             btnSettings.Size = new Size(fDefaultButtonSize);
 
@@ -1031,7 +1031,7 @@ namespace GEDmill
             btnCancel.Visible = true;
 
             // Make config button back to a config button
-            btnSettings.Text = fLangMan.LS(PLS.LSID_Settings);
+            btnSettings.Text = fLangMan.LS(PLS.Settings);
             btnSettings.Location = new Point(88, 288);
             btnSettings.Size = new Size(fConfigButtonSize);
 
@@ -1072,13 +1072,13 @@ namespace GEDmill
                 btnSettings.Visible = (fCurrentPanel < PanelKind.Finish);
 
                 if (fCurrentPanel == PanelKind.Finish) {
-                    btnCancel.Text = fLangMan.LS(PLS.LSID_Finish);
+                    btnCancel.Text = fLangMan.LS(PLS.Finish);
                     // Can't go back , because we can't undo the file creations.
                     btnBack.Visible = false;
                     btnCancel.Location = new Point(424, 288);
                     btnNext.Visible = false;
                 } else if (fCurrentPanel > PanelKind.Finish) {
-                    btnNext.Text = fLangMan.LS(PLS.LSID_Finish);
+                    btnNext.Text = fLangMan.LS(PLS.Finish);
                     btnCancel.Visible = false;
                     // Can't go back , because we can't undo the file creations.
                     btnBack.Visible = false;
@@ -1089,9 +1089,9 @@ namespace GEDmill
                     txtChooseOutput.Focus();
                     txtChooseOutput.SelectAll();
                 } else {
-                    btnNext.Text = fLangMan.LS(PLS.LSID_Next);
+                    btnNext.Text = fLangMan.LS(PLS.Next);
                     btnCancel.Visible = true;
-                    btnCancel.Text = fLangMan.LS(PLS.LSID_Quit);
+                    btnCancel.Text = fLangMan.LS(PLS.Quit);
                     btnCancel.Location = new Point(8, 288);
                 }
 
@@ -1173,10 +1173,10 @@ namespace GEDmill
                     chkAllDoneShowSite.Checked = GMConfig.Instance.OpenWebsiteOnExit;
                     lblAllDone.Text = GMConfig.Instance.OutputFolder;
                     if (GMConfig.Instance.FrontPageFilename != "") {
-                        lblAllDoneStartFile.Text = string.Format(fLangMan.LS(PLS.LSID_FrontPageFile), GMConfig.Instance.FrontPageFilename, "html");
+                        lblAllDoneStartFile.Text = string.Format(fLangMan.LS(PLS.FrontPageFile), GMConfig.Instance.FrontPageFilename, "html");
                         lblAllDoneStartFile.Visible = true;
                     } else {
-                        lblAllDoneStartFile.Text = fLangMan.LS(PLS.LSID_NoFrontPage);
+                        lblAllDoneStartFile.Text = fLangMan.LS(PLS.NoFrontPage);
                         lblAllDoneStartFile.Visible = false;
                     }
                     break;
@@ -1222,7 +1222,7 @@ namespace GEDmill
                         }
 
                         if (!somethingChecked) {
-                            ShowAlert(fLangMan.LS(PLS.LSID_PleaseSelectAtLeastOneIndividual));
+                            ShowAlert(fLangMan.LS(PLS.PleaseSelectAtLeastOneIndividual));
                             return false;
                         }
 
@@ -1300,14 +1300,14 @@ namespace GEDmill
 
             lvIndividuals.View = View.Details;
             int nameWidth = lvIndividuals.Width - 70 - 70 - 20;
-            lvIndividuals.Columns.Add(fLangMan.LS(PLS.LSID_Include), 30, HorizontalAlignment.Left);
+            lvIndividuals.Columns.Add(fLangMan.LS(PLS.Include), 30, HorizontalAlignment.Left);
             nameWidth -= 30;
-            lvIndividuals.Columns.Add(fLangMan.LS(PLS.LSID_Name), nameWidth, HorizontalAlignment.Left);
-            lvIndividuals.Columns.Add(fLangMan.LS(PLS.LSID_Born), 70, HorizontalAlignment.Left);
-            lvIndividuals.Columns.Add(fLangMan.LS(PLS.LSID_Died), 70, HorizontalAlignment.Left);
-            lvIndividuals.Columns.Add(fLangMan.LS(PLS.LSID_Id), 60, HorizontalAlignment.Left);
-            lvIndividuals.Columns.Add(fLangMan.LS(PLS.LSID_UserRef), 78, HorizontalAlignment.Left);
-            lvIndividuals.Columns.Add(fLangMan.LS(PLS.LSID_Pics), 48, HorizontalAlignment.Left);
+            lvIndividuals.Columns.Add(fLangMan.LS(PLS.Name), nameWidth, HorizontalAlignment.Left);
+            lvIndividuals.Columns.Add(fLangMan.LS(PLS.Born), 70, HorizontalAlignment.Left);
+            lvIndividuals.Columns.Add(fLangMan.LS(PLS.Died), 70, HorizontalAlignment.Left);
+            lvIndividuals.Columns.Add(fLangMan.LS(PLS.Id), 60, HorizontalAlignment.Left);
+            lvIndividuals.Columns.Add(fLangMan.LS(PLS.UserRef), 78, HorizontalAlignment.Left);
+            lvIndividuals.Columns.Add(fLangMan.LS(PLS.Pics), 48, HorizontalAlignment.Left);
 
             // Build an array first then blit the whole array to the list control. This is faster than adding each item to the list control individually.
             var temporaryItemsList = new ListViewItem[indiRecs.Count];
@@ -1328,7 +1328,7 @@ namespace GEDmill
             lvIndividuals.Items.AddRange(temporaryItemsList);
             lvIndividuals.Sort();
 
-            pageIndividuals.Text = string.Format("{0} ({1})", fLangMan.LS(PLS.LSID_Individuals), lvIndividuals.Items.Count);
+            pageIndividuals.Text = string.Format("{0} ({1})", fLangMan.LS(PLS.Individuals), lvIndividuals.Items.Count);
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
@@ -1383,16 +1383,16 @@ namespace GEDmill
 
             lvSources.View = View.Details;
             int nWidthTitle = lvSources.Width - 140 - 20;
-            lvSources.Columns.Add(fLangMan.LS(PLS.LSID_Include), 30, HorizontalAlignment.Left);
+            lvSources.Columns.Add(fLangMan.LS(PLS.Include), 30, HorizontalAlignment.Left);
             nWidthTitle -= 30;
-            lvSources.Columns.Add(fLangMan.LS(PLS.LSID_Title), nWidthTitle, HorizontalAlignment.Left);
-            lvSources.Columns.Add(fLangMan.LS(PLS.LSID_Repository), 100, HorizontalAlignment.Left);
-            lvSources.Columns.Add(fLangMan.LS(PLS.LSID_Citations), 60, HorizontalAlignment.Left);
+            lvSources.Columns.Add(fLangMan.LS(PLS.Title), nWidthTitle, HorizontalAlignment.Left);
+            lvSources.Columns.Add(fLangMan.LS(PLS.Repository), 100, HorizontalAlignment.Left);
+            lvSources.Columns.Add(fLangMan.LS(PLS.Citations), 60, HorizontalAlignment.Left);
             lvSources.Columns.Add("B", 30, HorizontalAlignment.Left);
             lvSources.Columns.Add("M", 30, HorizontalAlignment.Left);
             lvSources.Columns.Add("D", 30, HorizontalAlignment.Left);
-            lvSources.Columns.Add(fLangMan.LS(PLS.LSID_Id), 60, HorizontalAlignment.Left);
-            lvSources.Columns.Add(fLangMan.LS(PLS.LSID_Pics), 48, HorizontalAlignment.Left);
+            lvSources.Columns.Add(fLangMan.LS(PLS.Id), 60, HorizontalAlignment.Left);
+            lvSources.Columns.Add(fLangMan.LS(PLS.Pics), 48, HorizontalAlignment.Left);
 
             var temporaryItemsList = new ListViewItem[sources.Count];
             int nItem = 0;
@@ -1408,7 +1408,7 @@ namespace GEDmill
             lvSources.Items.AddRange(temporaryItemsList);
             lvSources.Sort();
 
-            pageSources.Text = string.Format("{0} ({1})", fLangMan.LS(PLS.LSID_Sources), lvSources.Items.Count);
+            pageSources.Text = string.Format("{0} ({1})", fLangMan.LS(PLS.Sources), lvSources.Items.Count);
 
             Cursor.Current = Cursors.Default;
             Cursor.Hide();
@@ -1522,7 +1522,7 @@ namespace GEDmill
             if (!string.IsNullOrEmpty(GMConfig.Instance.BackgroundImage) && File.Exists(GMConfig.Instance.BackgroundImage) == false) {
                 fLogger.WriteError("Can't find background image " + GMConfig.Instance.BackgroundImage);
 
-                bool result = ShowQuestionYN(string.Format(fLangMan.LS(PLS.LSID_BackgroundMissed), GMConfig.Instance.BackgroundImage));
+                bool result = ShowQuestionYN(string.Format(fLangMan.LS(PLS.BackgroundMissed), GMConfig.Instance.BackgroundImage));
                 if (!result) {
                     fLogger.WriteInfo("Message box cancelled (1)");
                     return false;
@@ -1533,7 +1533,7 @@ namespace GEDmill
 
             var website = new Website(fBase.Context, outputFolder, fLangMan);
 
-            bool res = AppHost.Instance.ExecuteWorkExt(website.Create, fLangMan.LS(PLS.LSID_CreatingWebsite));
+            bool res = AppHost.Instance.ExecuteWorkExt(website.Create, fLangMan.LS(PLS.CreatingWebsite));
 
             fLogger.WriteInfo("Website create done.");
 
@@ -1567,7 +1567,7 @@ namespace GEDmill
         /// </summary>
         private void ReportRestrictError(Exception e)
         {
-            ShowAlert(string.Format(fLangMan.LS(PLS.LSID_TreeError), e.StackTrace));
+            ShowAlert(string.Format(fLangMan.LS(PLS.TreeError), e.StackTrace));
             fLogger.WriteInfo(string.Format("Caught navigation exception : {0}", e.ToString()));
         }
 
@@ -1579,7 +1579,7 @@ namespace GEDmill
         {
             string msg = "";
             if (excluded == 0 && included == 0) {
-                msg = fLangMan.LS(PLS.LSID_NoChangesMade);
+                msg = fLangMan.LS(PLS.NoChangesMade);
             } else {
                 if (included != 0) {
                     msg = string.Format("{0} {1}{2} checked.", included, type, included > 1 ? "s" : "");
@@ -1602,7 +1602,7 @@ namespace GEDmill
         {
             string msg = "";
             if (hidden == 0) {
-                msg = fLangMan.LS(PLS.LSID_NoMultimediaFilesHidden);
+                msg = fLangMan.LS(PLS.NoMultimediaFilesHidden);
             } else {
                 msg = string.Format("{0} multimedia file{1} hidden.", hidden, hidden > 1 ? "s" : "");
             }
@@ -1758,7 +1758,7 @@ namespace GEDmill
                 if (maxImageWidth > 0 && maxImageWidth <= 300) {
                     GMConfig.Instance.MaxImageWidth = maxImageWidth;
                 } else if (GMConfig.Instance.MaxImageWidth != maxImageWidth && maxImageWidth > 300) {
-                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.LSID_ImageSizeProblem), maxImageWidth));
+                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxImageWidth));
                     if (dialogResult) {
                         GMConfig.Instance.MaxImageWidth = maxImageWidth;
                     }
@@ -1773,7 +1773,7 @@ namespace GEDmill
                 if (maxImageHeight > 0 && maxImageHeight <= 800) {
                     GMConfig.Instance.MaxImageHeight = maxImageHeight;
                 } else if (GMConfig.Instance.MaxImageHeight != maxImageHeight && maxImageHeight > 800) {
-                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.LSID_ImageSizeProblem), maxImageHeight));
+                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxImageHeight));
                     if (dialogResult) {
                         GMConfig.Instance.MaxImageHeight = maxImageHeight;
                     }
@@ -1788,7 +1788,7 @@ namespace GEDmill
                 if (maxSourceImageWidth > 0 && maxSourceImageWidth <= 800) {
                     GMConfig.Instance.MaxSourceImageWidth = maxSourceImageWidth;
                 } else if (GMConfig.Instance.MaxSourceImageWidth != maxSourceImageWidth && maxSourceImageWidth > 800) {
-                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.LSID_ImageSizeProblem), maxSourceImageWidth));
+                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxSourceImageWidth));
                     if (dialogResult) {
                         GMConfig.Instance.MaxSourceImageWidth = maxSourceImageWidth;
                     }
@@ -1803,7 +1803,7 @@ namespace GEDmill
                 if (maxSourceImageHeight > 0 && maxSourceImageHeight <= 800) {
                     GMConfig.Instance.MaxSourceImageHeight = maxSourceImageHeight;
                 } else if (GMConfig.Instance.MaxSourceImageHeight != maxSourceImageHeight && maxSourceImageHeight > 800) {
-                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.LSID_ImageSizeProblem), maxSourceImageHeight));
+                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxSourceImageHeight));
                     if (dialogResult) {
                         GMConfig.Instance.MaxSourceImageHeight = maxSourceImageHeight;
                     }
@@ -1818,7 +1818,7 @@ namespace GEDmill
                 if (maxThumbnailImageWidth > 0 && maxThumbnailImageWidth < 80) {
                     GMConfig.Instance.MaxThumbnailImageWidth = maxThumbnailImageWidth;
                 } else if (GMConfig.Instance.MaxThumbnailImageWidth != maxThumbnailImageWidth && maxThumbnailImageWidth > 80) {
-                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.LSID_ImageSizeProblem), maxThumbnailImageWidth));
+                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxThumbnailImageWidth));
                     if (dialogResult) {
                         GMConfig.Instance.MaxThumbnailImageWidth = maxThumbnailImageWidth;
                     }
@@ -1833,7 +1833,7 @@ namespace GEDmill
                 if (maxThumbnailImageHeight > 0 && maxThumbnailImageHeight < 80) {
                     GMConfig.Instance.MaxThumbnailImageHeight = maxThumbnailImageHeight;
                 } else if (GMConfig.Instance.MaxThumbnailImageHeight != maxThumbnailImageHeight && maxThumbnailImageHeight > 80) {
-                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.LSID_ImageSizeProblem), maxThumbnailImageHeight));
+                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxThumbnailImageHeight));
                     if (dialogResult) {
                         GMConfig.Instance.MaxThumbnailImageHeight = maxThumbnailImageHeight;
                     }
@@ -1951,7 +1951,7 @@ namespace GEDmill
         {
             fLogger.WriteInfo(string.Format("PrepareOutputDirectory({0})", outputFolder));
 
-            string message = fLangMan.LS(PLS.LSID_FolderAccessError);
+            string message = fLangMan.LS(PLS.FolderAccessError);
             MessageBoxButtons messageBoxButtons = MessageBoxButtons.RetryCancel;
             DialogResult dialogResult;
             bool failed;
@@ -1962,8 +1962,8 @@ namespace GEDmill
                 fLogger.WriteInfo("Folder clashes with file : " + outputFolder);
 
                 // Earn user that file is being deleted
-                dialogResult = MessageBox.Show(this, string.Format(fLangMan.LS(PLS.LSID_FolderNeedsToBeCreated), outputFolder),
-                    fLangMan.LS(PLS.LSID_CreatingWebsite), MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+                dialogResult = MessageBox.Show(this, string.Format(fLangMan.LS(PLS.FolderNeedsToBeCreated), outputFolder),
+                    fLangMan.LS(PLS.CreatingWebsite), MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
                 if (dialogResult == DialogResult.Cancel) {
                     fLogger.WriteInfo("Message box cancelled (2)");
                     return DialogResult.Cancel;
@@ -1993,9 +1993,9 @@ namespace GEDmill
 
                     if (failed) {
                         // Catch failure, e.g. if user has dir/file open elsewhere
-                        message = string.Format(fLangMan.LS(PLS.LSID_FileCouldNotBeDeleted), outputFolder, exceptionMessage);
+                        message = string.Format(fLangMan.LS(PLS.FileCouldNotBeDeleted), outputFolder, exceptionMessage);
                         messageBoxButtons = MessageBoxButtons.RetryCancel;
-                        dialogResult = MessageBox.Show(this, message, fLangMan.LS(PLS.LSID_CreatingWebsite), messageBoxButtons, MessageBoxIcon.Exclamation);
+                        dialogResult = MessageBox.Show(this, message, fLangMan.LS(PLS.CreatingWebsite), messageBoxButtons, MessageBoxIcon.Exclamation);
                     }
                 }
                 while (failed && dialogResult == DialogResult.Retry);
@@ -2012,15 +2012,15 @@ namespace GEDmill
                 fLogger.WriteInfo("Folder exists(11) : " + outputFolder);
 
                 if (GMHelper.IsDesktop(outputFolder)) {
-                    dialogResult = MessageBox.Show(this, fLangMan.LS(PLS.LSID_WillNotAllowToCreateFilesDirectlyOnDesktop),
-                        fLangMan.LS(PLS.LSID_CreatingWebsite), MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    dialogResult = MessageBox.Show(this, fLangMan.LS(PLS.WillNotAllowToCreateFilesDirectlyOnDesktop),
+                        fLangMan.LS(PLS.CreatingWebsite), MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     fLogger.WriteInfo("Desktop detected as output folder.");
                     return DialogResult.Cancel;
                 }
 
                 // Warn user that file is being deleted
-                dialogResult = MessageBox.Show(this, string.Format(fLangMan.LS(PLS.LSID_FolderAlreadyExists), outputFolder),
-                    fLangMan.LS(PLS.LSID_CreatingWebsite), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                dialogResult = MessageBox.Show(this, string.Format(fLangMan.LS(PLS.FolderAlreadyExists), outputFolder),
+                    fLangMan.LS(PLS.CreatingWebsite), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.Cancel) {
                     fLogger.WriteInfo("Message box cancelled (3a)");
                     return DialogResult.Cancel;
@@ -2028,15 +2028,15 @@ namespace GEDmill
 
                 if (dialogResult == DialogResult.Yes) {
                     if (preserveFiles) {
-                        dialogResult = MessageBox.Show(this, string.Format(fLangMan.LS(PLS.LSID_DeletingFolderWillNotPreserveAnyExistingFiles), outputFolder),
-                            fLangMan.LS(PLS.LSID_CreatingWebsite), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                        dialogResult = MessageBox.Show(this, string.Format(fLangMan.LS(PLS.DeletingFolderWillNotPreserveAnyExistingFiles), outputFolder),
+                            fLangMan.LS(PLS.CreatingWebsite), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
                         if (dialogResult == DialogResult.Cancel) {
                             fLogger.WriteInfo("Message box cancelled (3b)");
                             return DialogResult.Cancel;
                         }
                     } else {
-                        dialogResult = MessageBox.Show(this, fLangMan.LS(PLS.LSID_IfFolderContainsOtherFilesTheyWillBeDeletedAlso),
-                            fLangMan.LS(PLS.LSID_CreatingWebsite), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                        dialogResult = MessageBox.Show(this, fLangMan.LS(PLS.IfFolderContainsOtherFilesTheyWillBeDeletedAlso),
+                            fLangMan.LS(PLS.CreatingWebsite), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
                         if (dialogResult == DialogResult.Cancel) {
                             fLogger.WriteInfo("Message box cancelled (3c)");
                             return DialogResult.Cancel;
@@ -2068,9 +2068,9 @@ namespace GEDmill
                             }
                             if (failed) {
                                 // Catch failure, e.g. if user has dir/file open elsewhere
-                                message = string.Format(fLangMan.LS(PLS.LSID_FolderCouldNotBeDeleted), outputFolder, exceptionMessage);
+                                message = string.Format(fLangMan.LS(PLS.FolderCouldNotBeDeleted), outputFolder, exceptionMessage);
                                 messageBoxButtons = MessageBoxButtons.RetryCancel;
-                                dialogResult = MessageBox.Show(this, message, fLangMan.LS(PLS.LSID_CreatingWebsite),
+                                dialogResult = MessageBox.Show(this, message, fLangMan.LS(PLS.CreatingWebsite),
                                     messageBoxButtons, MessageBoxIcon.Exclamation);
                             }
                         }
@@ -2091,43 +2091,43 @@ namespace GEDmill
             }
             // Order of catches is important here, due to hierarchy of exception classes.
             catch (DirectoryNotFoundException e) {
-                message = fLangMan.LS(PLS.LSID_FolderNotFound);
+                message = fLangMan.LS(PLS.FolderNotFound);
                 exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
                 fLogger.WriteError("Caught DirectoryNotFoundException(5) : ", e);
                 failed = true;
             } catch (ArgumentNullException e) {
-                message = fLangMan.LS(PLS.LSID_FolderNameIsIllegal);
+                message = fLangMan.LS(PLS.FolderNameIsIllegal);
                 exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
                 fLogger.WriteError("Caught ArgumentNullException(5) : ", e);
                 failed = true;
             } catch (PathTooLongException e) {
-                message = fLangMan.LS(PLS.LSID_FolderNameIsTooLong);
+                message = fLangMan.LS(PLS.FolderNameIsTooLong);
                 exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
                 fLogger.WriteError("Caught PathTooLongException(5) : ", e);
                 failed = true;
             } catch (IOException e) {
-                message = fLangMan.LS(PLS.LSID_PathIsReadonlyOrNotEmpty);
+                message = fLangMan.LS(PLS.PathIsReadonlyOrNotEmpty);
                 exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.RetryCancel; // Let them correct this outside of app
                 fLogger.WriteError("Caught IOException(5) : ", e);
                 failed = true;
             } catch (UnauthorizedAccessException e) {
-                message = fLangMan.LS(PLS.LSID_NotHaveCorrectPermissionsToAccess);
+                message = fLangMan.LS(PLS.NotHaveCorrectPermissionsToAccess);
                 exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.RetryCancel; // Let them correct this outside of app
                 fLogger.WriteError("Caught UnauthorizedAccessException(5) : ", e);
                 failed = true;
             } catch (ArgumentException e) {
-                message = fLangMan.LS(PLS.LSID_FolderNameIsIllegalFormat);
+                message = fLangMan.LS(PLS.FolderNameIsIllegalFormat);
                 exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
                 fLogger.WriteError("Caught ArgumentException(5) : ", e);
                 failed = true;
             } catch (NotSupportedException e) {
-                message = fLangMan.LS(PLS.LSID_FolderNameIsUnsupportedFormat);
+                message = fLangMan.LS(PLS.FolderNameIsUnsupportedFormat);
                 exceptionMessage = e.Message;
                 messageBoxButtons = MessageBoxButtons.OK; // Ok meaning nothing you can do here, go back to main form.
                 fLogger.WriteError("Caught NotSupportedException(5) : ", e);
@@ -2136,7 +2136,7 @@ namespace GEDmill
 
             // Handle any failure with a sMessage box
             if (failed) {
-                dialogResult = MessageBox.Show(this, string.Concat(message, "\r\n", exceptionMessage), fLangMan.LS(PLS.LSID_CreatingWebsite), messageBoxButtons, MessageBoxIcon.Exclamation);
+                dialogResult = MessageBox.Show(this, string.Concat(message, "\r\n", exceptionMessage), fLangMan.LS(PLS.CreatingWebsite), messageBoxButtons, MessageBoxIcon.Exclamation);
 
                 if (dialogResult == DialogResult.Retry) {
                     return DialogResult.Retry;

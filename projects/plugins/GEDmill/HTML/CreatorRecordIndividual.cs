@@ -298,16 +298,16 @@ namespace GEDmill.HTML
             switch (fr.Status) {
                 case GDMMarriageStatus.Unknown:
                 default:
-                    result = fLangMan.LS(PLS.LSID_MaritalStatusUnknown);
+                    result = fLangMan.LS(PLS.MaritalStatusUnknown);
                     break;
                 case GDMMarriageStatus.MarrRegistered:
-                    result = fLangMan.LS(PLS.LSID_Married);
+                    result = fLangMan.LS(PLS.Married);
                     break;
                 case GDMMarriageStatus.MarrNotRegistered:
-                    result = fLangMan.LS(PLS.LSID_PartnerOf);
+                    result = fLangMan.LS(PLS.PartnerOf);
                     break;
                 case GDMMarriageStatus.MarrDivorced:
-                    result = fLangMan.LS(PLS.LSID_divorced);
+                    result = fLangMan.LS(PLS.divorced);
                     break;
             }
             return result;
@@ -372,15 +372,15 @@ namespace GEDmill.HTML
                             if (difference < 0) {
                                 if (difference > previousDifference) {
                                     previousDifference = difference;
-                                    fPreviousChildLink = MakeLink(child, fLangMan.LS(PLS.LSID_previous_child));
+                                    fPreviousChildLink = MakeLink(child, fLangMan.LS(PLS.previous_child));
                                 }
                             } else if (difference > 0) {
                                 if (difference < nextDifference) {
                                     nextDifference = difference;
-                                    fNextChildLink = MakeLink(child, fLangMan.LS(PLS.LSID_next_child));
+                                    fNextChildLink = MakeLink(child, fLangMan.LS(PLS.next_child));
                                 }
                             } else {
-                                fNextChildLink = MakeLink(child, fLangMan.LS(PLS.LSID_next_child));
+                                fNextChildLink = MakeLink(child, fLangMan.LS(PLS.next_child));
                             }
                         }
                     }
@@ -489,7 +489,7 @@ namespace GEDmill.HTML
                                 }
 
                                 sourceRefs = AddSources(ref fReferenceList, ies.SourceCitations);
-                                var iEvent = new Event(spouseDeathDate, "_SPOUSEDIED", string.Concat(fLangMan.LS(PLS.LSID_death_of), " ", spouseLink, place, ".", sourceRefs), "", null, false, GMConfig.Instance.CapitaliseEventDescriptions);
+                                var iEvent = new Event(spouseDeathDate, "_SPOUSEDIED", string.Concat(fLangMan.LS(PLS.death_of), " ", spouseLink, place, ".", sourceRefs), "", null, false, GMConfig.Instance.CapitaliseEventDescriptions);
                                 fEventList.Add(iEvent);
                             }
                             break;
@@ -512,12 +512,12 @@ namespace GEDmill.HTML
                 if (child != null) {
                     bool childConcealed = !GMHelper.GetVisibility(child);
 
-                    string childSex = fLangMan.LS(PLS.LSID_Child);
+                    string childSex = fLangMan.LS(PLS.Child);
                     if (!childConcealed) {
                         if (child.Sex == GDMSex.svMale) {
-                            childSex = fLangMan.LS(PLS.LSID_Son);
+                            childSex = fLangMan.LS(PLS.Son);
                         } else if (child.Sex == GDMSex.svFemale) {
-                            childSex = fLangMan.LS(PLS.LSID_Daughter);
+                            childSex = fLangMan.LS(PLS.Daughter);
                         }
                     }
 
@@ -551,7 +551,7 @@ namespace GEDmill.HTML
 
                         if (childDeathdate != null && fInferredDeathday != null && fInferredDeathday.Date != null && (childDeathdate.CompareTo(fInferredDeathday.Date) <= 0)) {
                             sourceRefs = AddSources(ref fReferenceList, childDeathday.SourceCitations);
-                            Event iEvent = new Event(childDeathdate, "_CHILDDIED", string.Concat(fLangMan.LS(PLS.LSID_death_of), " ", childSex, " ", childLink, deathPlace, ".", sourceRefs), "", null, false, GMConfig.Instance.CapitaliseEventDescriptions);
+                            Event iEvent = new Event(childDeathdate, "_CHILDDIED", string.Concat(fLangMan.LS(PLS.death_of), " ", childSex, " ", childLink, deathPlace, ".", sourceRefs), "", null, false, GMConfig.Instance.CapitaliseEventDescriptions);
                             fEventList.Add(iEvent);
                         }
                     }
@@ -583,10 +583,10 @@ namespace GEDmill.HTML
                     }
 
                     if (childBirthdate == null) {
-                        var iEvent = new Event(null, "_CHILDBORN", string.Concat(fLangMan.LS(PLS.LSID_birth_of), " ", childSex, " ", childLink, birthPlace, ".", sourceRefs), "", null, true, GMConfig.Instance.CapitaliseEventDescriptions);
+                        var iEvent = new Event(null, "_CHILDBORN", string.Concat(fLangMan.LS(PLS.birth_of), " ", childSex, " ", childLink, birthPlace, ".", sourceRefs), "", null, true, GMConfig.Instance.CapitaliseEventDescriptions);
                         fAttributeList.Add(iEvent);
                     } else {
-                        var iEvent = new Event(childBirthdate, "_CHILDBORN", string.Concat(fLangMan.LS(PLS.LSID_birth_of), " ", childSex, " ", childLink, birthPlace, ".", sourceRefs), "", null, true, GMConfig.Instance.CapitaliseEventDescriptions);
+                        var iEvent = new Event(childBirthdate, "_CHILDBORN", string.Concat(fLangMan.LS(PLS.birth_of), " ", childSex, " ", childLink, birthPlace, ".", sourceRefs), "", null, true, GMConfig.Instance.CapitaliseEventDescriptions);
                         fEventList.Add(iEvent);
                     }
                 }
@@ -666,8 +666,8 @@ namespace GEDmill.HTML
         private void OutputHTML(string title, MTTree miniTree)
         {
             HTMLFile f = null;
-            string pageDescription = fLangMan.LS(PLS.LSID_PageDescription) + " " + fFullName;
-            string keywords = fLangMan.LS(PLS.LSID_Keywords) + " " + fFullName;
+            string pageDescription = fLangMan.LS(PLS.PageDescription) + " " + fFullName;
+            string keywords = fLangMan.LS(PLS.Keywords) + " " + fFullName;
             string relativeFilename = GetIndividualHTMLFilename(fIndiRec);
             string fullFilename = string.Concat(GMConfig.Instance.OutputFolder, "\\", relativeFilename);
 
@@ -733,7 +733,7 @@ namespace GEDmill.HTML
         {
             if (fReferenceList.Count > 0) {
                 f.WriteLine("        <div id=\"references\">");
-                f.WriteLine("          <h1>{0}</h1>", fLangMan.LS(PLS.LSID_Sources));
+                f.WriteLine("          <h1>{0}</h1>", fLangMan.LS(PLS.Sources));
                 f.WriteLine("          <ul>");
 
                 for (int i = 0; i < fReferenceList.Count; i++) {
@@ -793,7 +793,7 @@ namespace GEDmill.HTML
         {
             if (fAttributeList.Count > 0) {
                 f.WriteLine("        <div id=\"facts\">");
-                f.WriteLine("          <h1>{0}</h1>", fLangMan.LS(PLS.LSID_OtherFacts));
+                f.WriteLine("          <h1>{0}</h1>", fLangMan.LS(PLS.OtherFacts));
                 f.WriteLine("          <table>");
 
                 for (int i = 0; i < fAttributeList.Count; i++) {
@@ -819,7 +819,7 @@ namespace GEDmill.HTML
         {
             if (fEventList.Count > 0) {
                 f.WriteLine("        <div id=\"events\">");
-                f.WriteLine("          <h1>{0}</h1>", fLangMan.LS(PLS.LSID_LifeHistory));
+                f.WriteLine("          <h1>{0}</h1>", fLangMan.LS(PLS.LifeHistory));
                 f.WriteLine("          <table>");
 
                 for (int i = 0; i < fEventList.Count; i++) {
@@ -831,9 +831,9 @@ namespace GEDmill.HTML
 
                     string preference = "";
                     if (iEvent.Preference == EventPreference.First) {
-                        preference = fLangMan.LS(PLS.LSID_most_likely);
+                        preference = fLangMan.LS(PLS.most_likely);
                     } else if (iEvent.Preference == EventPreference.Subsequent) {
-                        preference = fLangMan.LS(PLS.LSID_less_likely);
+                        preference = fLangMan.LS(PLS.less_likely);
                     }
                     f.WriteLine("            <tr>");
                     f.WriteLine("              <td class=\"date\"><p{0}>{1}</p></td>", importance, EscapeHTML(iEvent.Date, false));
@@ -852,13 +852,13 @@ namespace GEDmill.HTML
         {
             if (fParents.Count > 0) {
                 f.WriteLine("        <div id=\"parents\">");
-                f.WriteLine("          <h1>{0}</h1>", fLangMan.LS(PLS.LSID_Parents));
+                f.WriteLine("          <h1>{0}</h1>", fLangMan.LS(PLS.Parents));
 
-                string sChild = fLangMan.LS(PLS.LSID_Child);
+                string sChild = fLangMan.LS(PLS.Child);
                 if (fIndiRec.Sex == GDMSex.svMale) {
-                    sChild = fLangMan.LS(PLS.LSID_Son);
+                    sChild = fLangMan.LS(PLS.Son);
                 } else if (fIndiRec.Sex == GDMSex.svFemale) {
-                    sChild = fLangMan.LS(PLS.LSID_Daughter);
+                    sChild = fLangMan.LS(PLS.Daughter);
                 }
 
                 for (int i = 0; i < fParents.Count; i++) {
@@ -911,7 +911,7 @@ namespace GEDmill.HTML
                 f.WriteLine(string.Concat("            <p>", fOccupation, "</p>"));
             }
             if (fConcealed) {
-                f.WriteLine("            <p>{0}</p>", fLangMan.LS(PLS.LSID_InformationWithheld));
+                f.WriteLine("            <p>{0}</p>", fLangMan.LS(PLS.InformationWithheld));
             }
             f.WriteLine("          </div> <!-- individualSummary -->");
         }
@@ -934,7 +934,7 @@ namespace GEDmill.HTML
             f.WriteLine(string.Concat("            <h1>", EscapeHTML(fFullName, false), fNameSources, nicknames, "</h1>"));
 
             foreach (NameAndSource otherName in fOtherNames) {
-                f.WriteLine(string.Concat("            <h2>", fLangMan.LS(PLS.LSID_also_known_as), " ", EscapeHTML(otherName.Name, false), otherName.SourceHtml, "</h2>"));
+                f.WriteLine(string.Concat("            <h2>", fLangMan.LS(PLS.also_known_as), " ", EscapeHTML(otherName.Name, false), otherName.SourceHtml, "</h2>"));
             }
 
             f.WriteLine("          </div> <!-- names -->");
@@ -1049,7 +1049,7 @@ namespace GEDmill.HTML
                     }
                 }
                 f.WriteLine("      </map>");
-                f.WriteLine("      <img src=\"{0}\"  usemap=\"#treeMap\" alt=\"{1}\"/>", relativeTreeFilename, fLangMan.LS(PLS.LSID_MiniTreeDiagram));
+                f.WriteLine("      <img src=\"{0}\"  usemap=\"#treeMap\" alt=\"{1}\"/>", relativeTreeFilename, fLangMan.LS(PLS.MiniTreeDiagram));
                 f.WriteLine("    </div>");
             }
         }
@@ -1109,7 +1109,7 @@ namespace GEDmill.HTML
             GDMDateValue date = null;
             string place = "";
             string placeWord = GMConfig.Instance.PlaceWord;
-            string alternativePlaceWord = fLangMan.LS(PLS.LSID_and); // For want of anything better...
+            string alternativePlaceWord = fLangMan.LS(PLS.and); // For want of anything better...
             string alternativePlace = "";
             if (es.Date != null) {
                 date = es.Date;
@@ -1154,7 +1154,7 @@ namespace GEDmill.HTML
                         fInferredBirthday = new QualifiedDate(date, DateQualification.Birth);
                     }
                     fBirthdaySourceRefs = sourceRefs;
-                    escapedDescription = fLangMan.LS(PLS.LSID_born);
+                    escapedDescription = fLangMan.LS(PLS.born);
                     important = true;
                     break;
 
@@ -1170,7 +1170,7 @@ namespace GEDmill.HTML
                         fInferredBirthday = new QualifiedDate(date, DateQualification.Christening);
                         fBirthdaySourceRefs = sourceRefs;
                     }
-                    escapedDescription = fLangMan.LS(PLS.LSID_christened);
+                    escapedDescription = fLangMan.LS(PLS.christened);
                     break;
 
                 case "BAPM":
@@ -1185,7 +1185,7 @@ namespace GEDmill.HTML
                         fInferredBirthday = new QualifiedDate(date, DateQualification.Baptism);
                         fBirthdaySourceRefs = sourceRefs;
                     }
-                    escapedDescription = fLangMan.LS(PLS.LSID_baptised);
+                    escapedDescription = fLangMan.LS(PLS.baptised);
                     break;
 
                 case "DEAT":
@@ -1201,7 +1201,7 @@ namespace GEDmill.HTML
                         fInferredDeathday = new QualifiedDate(date, DateQualification.Death);
                     }
                     fDeathdaySourceRefs = sourceRefs;
-                    escapedDescription = fLangMan.LS(PLS.LSID_died);
+                    escapedDescription = fLangMan.LS(PLS.died);
                     important = true;
                     break;
 
@@ -1218,7 +1218,7 @@ namespace GEDmill.HTML
                         fInferredDeathday = new QualifiedDate(date, DateQualification.Burial);
                         fDeathdaySourceRefs = sourceRefs;
                     }
-                    escapedDescription = fLangMan.LS(PLS.LSID_buried);
+                    escapedDescription = fLangMan.LS(PLS.buried);
                     break;
 
                 case "CREM":
@@ -1234,78 +1234,78 @@ namespace GEDmill.HTML
                         fInferredDeathday = new QualifiedDate(date, DateQualification.Cremation);
                         fDeathdaySourceRefs = sourceRefs;
                     }
-                    escapedDescription = fLangMan.LS(PLS.LSID_cremated);
+                    escapedDescription = fLangMan.LS(PLS.cremated);
                     break;
 
                 case "ADOP":
-                    escapedDescription = fLangMan.LS(PLS.LSID_adopted);
+                    escapedDescription = fLangMan.LS(PLS.adopted);
                     break;
 
                 case "BARM":
-                    escapedDescription = fLangMan.LS(PLS.LSID_bar_mitzvah);
+                    escapedDescription = fLangMan.LS(PLS.bar_mitzvah);
                     break;
 
                 case "BASM":
-                    escapedDescription = fLangMan.LS(PLS.LSID_bat_mitzvah);
+                    escapedDescription = fLangMan.LS(PLS.bat_mitzvah);
                     break;
 
                 case "BLES":
-                    escapedDescription = fLangMan.LS(PLS.LSID_blessing);
+                    escapedDescription = fLangMan.LS(PLS.blessing);
                     break;
 
                 case "CHRA":
-                    escapedDescription = fLangMan.LS(PLS.LSID_christened_as_adult);
+                    escapedDescription = fLangMan.LS(PLS.christened_as_adult);
                     break;
 
                 case "CONF":
-                    escapedDescription = fLangMan.LS(PLS.LSID_confirmed);
+                    escapedDescription = fLangMan.LS(PLS.confirmed);
                     break;
 
                 case "FCOM":
-                    escapedDescription = fLangMan.LS(PLS.LSID_first_communion);
+                    escapedDescription = fLangMan.LS(PLS.first_communion);
                     break;
 
                 case "ORDN":
-                    escapedDescription = fLangMan.LS(PLS.LSID_ordained);
+                    escapedDescription = fLangMan.LS(PLS.ordained);
                     break;
 
                 case "NATU":
-                    escapedDescription = fLangMan.LS(PLS.LSID_naturalized);
+                    escapedDescription = fLangMan.LS(PLS.naturalized);
                     break;
 
                 case "EMIG":
-                    escapedDescription = fLangMan.LS(PLS.LSID_emigrated);
-                    placeWord = fLangMan.LS(PLS.LSID_from);
-                    alternativePlaceWord = fLangMan.LS(PLS.LSID_to);
+                    escapedDescription = fLangMan.LS(PLS.emigrated);
+                    placeWord = fLangMan.LS(PLS.from);
+                    alternativePlaceWord = fLangMan.LS(PLS.to);
                     break;
 
                 case "IMMI":
-                    escapedDescription = fLangMan.LS(PLS.LSID_immigrated);
-                    placeWord = fLangMan.LS(PLS.LSID_to);
-                    alternativePlaceWord = fLangMan.LS(PLS.LSID_from);
+                    escapedDescription = fLangMan.LS(PLS.immigrated);
+                    placeWord = fLangMan.LS(PLS.to);
+                    alternativePlaceWord = fLangMan.LS(PLS.from);
                     break;
 
                 case "PROB":
-                    escapedDescription = fLangMan.LS(PLS.LSID_probate);
+                    escapedDescription = fLangMan.LS(PLS.probate);
                     break;
 
                 case "WILL":
-                    escapedDescription = fLangMan.LS(PLS.LSID_wrote_will);
+                    escapedDescription = fLangMan.LS(PLS.wrote_will);
                     break;
 
                 case "GRAD":
-                    escapedDescription = fLangMan.LS(PLS.LSID_graduated);
+                    escapedDescription = fLangMan.LS(PLS.graduated);
                     break;
 
                 case "RETI":
-                    escapedDescription = fLangMan.LS(PLS.LSID_retired);
+                    escapedDescription = fLangMan.LS(PLS.retired);
                     break;
 
                 case "EVEN":
                     if (!string.IsNullOrEmpty(subtype)) {
                         escapedDescription = EscapeHTML(subtype, false);
                     } else {
-                        escapedDescription = fLangMan.LS(PLS.LSID_other_event);
+                        escapedDescription = fLangMan.LS(PLS.other_event);
                     }
                     if (!string.IsNullOrEmpty(es.StringValue)) {
                         escapedDescription += ": " + es.StringValue;
@@ -1313,7 +1313,7 @@ namespace GEDmill.HTML
                     break;
 
                 case "CAST":
-                    escapedDescription = fLangMan.LS(PLS.LSID_caste);
+                    escapedDescription = fLangMan.LS(PLS.caste);
                     if (!string.IsNullOrEmpty(es.StringValue))
                         escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
@@ -1321,7 +1321,7 @@ namespace GEDmill.HTML
                     break;
 
                 case "DSCR":
-                    escapedDescription = fLangMan.LS(PLS.LSID_physical_description);
+                    escapedDescription = fLangMan.LS(PLS.physical_description);
                     if (!string.IsNullOrEmpty(es.StringValue))
                         escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
@@ -1329,7 +1329,7 @@ namespace GEDmill.HTML
                     break;
 
                 case "EDUC":
-                    escapedDescription = fLangMan.LS(PLS.LSID_educated);
+                    escapedDescription = fLangMan.LS(PLS.educated);
                     if (!string.IsNullOrEmpty(es.StringValue))
                         escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
@@ -1337,7 +1337,7 @@ namespace GEDmill.HTML
                     break;
 
                 case "IDNO":
-                    escapedDescription = fLangMan.LS(PLS.LSID_ID_number);
+                    escapedDescription = fLangMan.LS(PLS.ID_number);
                     if (!string.IsNullOrEmpty(es.StringValue))
                         escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
@@ -1345,7 +1345,7 @@ namespace GEDmill.HTML
                     break;
 
                 case "NATI":
-                    escapedDescription = fLangMan.LS(PLS.LSID_nationality);
+                    escapedDescription = fLangMan.LS(PLS.nationality);
                     if (!string.IsNullOrEmpty(es.StringValue))
                         escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
@@ -1354,7 +1354,7 @@ namespace GEDmill.HTML
 
                 case "NCHI":
                     typeIsAOneOff = true;
-                    escapedDescription = fLangMan.LS(PLS.LSID_number_of_children);
+                    escapedDescription = fLangMan.LS(PLS.number_of_children);
                     if (!string.IsNullOrEmpty(es.StringValue))
                         escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
@@ -1363,7 +1363,7 @@ namespace GEDmill.HTML
 
                 case "NMR":
                     typeIsAOneOff = true;
-                    escapedDescription = fLangMan.LS(PLS.LSID_number_of_marriages);
+                    escapedDescription = fLangMan.LS(PLS.number_of_marriages);
                     if (!string.IsNullOrEmpty(es.StringValue))
                         escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
@@ -1371,7 +1371,7 @@ namespace GEDmill.HTML
                     break;
 
                 case "OCCU":
-                    escapedDescription = fLangMan.LS(PLS.LSID_occupation);
+                    escapedDescription = fLangMan.LS(PLS.occupation);
                     if (!string.IsNullOrEmpty(es.StringValue)) {
                         OccupationCounter oc = new OccupationCounter(EscapeHTML(es.StringValue, false) + sourceRefs, date);
                         fOccupations.Add(oc);
@@ -1382,7 +1382,7 @@ namespace GEDmill.HTML
                     break;
 
                 case "PROP":
-                    escapedDescription = fLangMan.LS(PLS.LSID_property);
+                    escapedDescription = fLangMan.LS(PLS.property);
                     if (!string.IsNullOrEmpty(es.StringValue))
                         escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
@@ -1390,7 +1390,7 @@ namespace GEDmill.HTML
                     break;
 
                 case "RELI":
-                    escapedDescription = fLangMan.LS(PLS.LSID_religion);
+                    escapedDescription = fLangMan.LS(PLS.religion);
                     if (!string.IsNullOrEmpty(es.StringValue))
                         escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
@@ -1398,7 +1398,7 @@ namespace GEDmill.HTML
                     break;
 
                 case "RESI":
-                    escapedDescription = fLangMan.LS(PLS.LSID_resident);
+                    escapedDescription = fLangMan.LS(PLS.resident);
                     if (!string.IsNullOrEmpty(es.StringValue))
                         escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
@@ -1406,7 +1406,7 @@ namespace GEDmill.HTML
                     break;
 
                 case "SSN":
-                    escapedDescription = fLangMan.LS(PLS.LSID_Social_Security_number);
+                    escapedDescription = fLangMan.LS(PLS.Social_Security_number);
                     if (!string.IsNullOrEmpty(es.StringValue))
                         escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
@@ -1419,7 +1419,7 @@ namespace GEDmill.HTML
                     break;
 
                 case "FACT":
-                    escapedDescription = fLangMan.LS(PLS.LSID_other_fact);
+                    escapedDescription = fLangMan.LS(PLS.other_fact);
                     if (!string.IsNullOrEmpty(es.StringValue))
                         escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
@@ -1429,7 +1429,7 @@ namespace GEDmill.HTML
 
                 case "_NMR": // _NMR Brother's Keeper
                     typeIsAOneOff = true;
-                    escapedDescription = fLangMan.LS(PLS.LSID_never_married);
+                    escapedDescription = fLangMan.LS(PLS.never_married);
                     if (!string.IsNullOrEmpty(es.StringValue))
                         escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
@@ -1438,7 +1438,7 @@ namespace GEDmill.HTML
 
                 case "_AKA": // _AKA Brother's Keeper
                 case "_AKAN": // _AKAN Brother's Keeper
-                    escapedDescription = fLangMan.LS(PLS.LSID_also_known_as);
+                    escapedDescription = fLangMan.LS(PLS.also_known_as);
                     if (!string.IsNullOrEmpty(es.StringValue))
                         escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
@@ -1447,56 +1447,56 @@ namespace GEDmill.HTML
 
                 // Now the fr events:
                 case "ANUL":
-                    escapedDescription = fLangMan.LS(PLS.LSID_annulment_of_marriage);
+                    escapedDescription = fLangMan.LS(PLS.annulment_of_marriage);
                     if (!string.IsNullOrEmpty(es.StringValue))
                         escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else
                         needValue = true;
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escapedDescription = string.Concat(escapedDescription, " ", fLangMan.LS(PLS.LSID_to), " ", linkToOtherParty);
+                        escapedDescription = string.Concat(escapedDescription, " ", fLangMan.LS(PLS.to), " ", linkToOtherParty);
                     }
                     break;
 
                 case "CENS":
-                    escapedDescription = fLangMan.LS(PLS.LSID_recorded_in_census);
+                    escapedDescription = fLangMan.LS(PLS.recorded_in_census);
                     break;
 
                 case "DIV":
                     if (es.StringValue != null && (es.StringValue == "N" || es.StringValue == "n")) {
                         place = ""; // Clear place to prevent this event being shown
                     } else {
-                        escapedDescription = fLangMan.LS(PLS.LSID_divorced);
+                        escapedDescription = fLangMan.LS(PLS.divorced);
                         if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                            escapedDescription = string.Concat(escapedDescription, " ", fLangMan.LS(PLS.LSID_from), " ", linkToOtherParty);
+                            escapedDescription = string.Concat(escapedDescription, " ", fLangMan.LS(PLS.from), " ", linkToOtherParty);
                         }
                     }
                     break;
 
                 case "DIVF":
-                    escapedDescription = fLangMan.LS(PLS.LSID_filing_of_divorce);
+                    escapedDescription = fLangMan.LS(PLS.filing_of_divorce);
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escapedDescription = string.Concat(escapedDescription, " ", fLangMan.LS(PLS.LSID_from), " ", linkToOtherParty);
+                        escapedDescription = string.Concat(escapedDescription, " ", fLangMan.LS(PLS.from), " ", linkToOtherParty);
                     }
                     break;
 
                 case "ENGA":
-                    escapedDescription = fLangMan.LS(PLS.LSID_engagement);
+                    escapedDescription = fLangMan.LS(PLS.engagement);
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escapedDescription = string.Concat(escapedDescription, " ", fLangMan.LS(PLS.LSID_to), " ", linkToOtherParty);
+                        escapedDescription = string.Concat(escapedDescription, " ", fLangMan.LS(PLS.to), " ", linkToOtherParty);
                     }
                     break;
 
                 case "MARB":
-                    escapedDescription = fLangMan.LS(PLS.LSID_publication_of_banns_of_marriage);
+                    escapedDescription = fLangMan.LS(PLS.publication_of_banns_of_marriage);
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escapedDescription = string.Concat(escapedDescription, " ", fLangMan.LS(PLS.LSID_to), " ", linkToOtherParty);
+                        escapedDescription = string.Concat(escapedDescription, " ", fLangMan.LS(PLS.to), " ", linkToOtherParty);
                     }
                     break;
 
                 case "MARC":
-                    escapedDescription = fLangMan.LS(PLS.LSID_contract_of_marriage);
+                    escapedDescription = fLangMan.LS(PLS.contract_of_marriage);
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escapedDescription = string.Concat(escapedDescription, " ", fLangMan.LS(PLS.LSID_to), " ", linkToOtherParty);
+                        escapedDescription = string.Concat(escapedDescription, " ", fLangMan.LS(PLS.to), " ", linkToOtherParty);
                     }
                     break;
 
@@ -1506,21 +1506,21 @@ namespace GEDmill.HTML
                     break;
 
                 case "MARL":
-                    escapedDescription = fLangMan.LS(PLS.LSID_licence_obtained_for_marriage);
+                    escapedDescription = fLangMan.LS(PLS.licence_obtained_for_marriage);
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escapedDescription = string.Concat(escapedDescription, " ", fLangMan.LS(PLS.LSID_to), " ", linkToOtherParty);
+                        escapedDescription = string.Concat(escapedDescription, " ", fLangMan.LS(PLS.to), " ", linkToOtherParty);
                     }
                     break;
 
                 case "MARS":
-                    escapedDescription = fLangMan.LS(PLS.LSID_settlement_of_marriage);
+                    escapedDescription = fLangMan.LS(PLS.settlement_of_marriage);
                     if (!string.IsNullOrEmpty(linkToOtherParty)) {
-                        escapedDescription = string.Concat(escapedDescription, " ", fLangMan.LS(PLS.LSID_to), " ", linkToOtherParty);
+                        escapedDescription = string.Concat(escapedDescription, " ", fLangMan.LS(PLS.to), " ", linkToOtherParty);
                     }
                     break;
 
                 default:
-                    escapedDescription = fLangMan.LS(PLS.LSID_unknown_event);
+                    escapedDescription = fLangMan.LS(PLS.unknown_event);
                     if (!string.IsNullOrEmpty(es.StringValue))
                         escapedDescription = string.Concat(escapedDescription, " ", EscapeHTML(es.StringValue, false));
                     else

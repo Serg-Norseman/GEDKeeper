@@ -364,11 +364,11 @@ namespace GEDmill.HTML
             if (GMConfig.Instance.IncludeNavbar) {
                 string frontPageLink = "";
                 if (GMConfig.Instance.FrontPageFilename != "") {
-                    frontPageLink += string.Concat("<a href=\"", GMConfig.Instance.FrontPageFilename, ".html", "\">", fLangMan.LS(PLS.LSID_FrontPage), "</a>");
+                    frontPageLink += string.Concat("<a href=\"", GMConfig.Instance.FrontPageFilename, ".html", "\">", fLangMan.LS(PLS.FrontPage), "</a>");
                 }
                 string mainSiteLink = "";
                 if (GMConfig.Instance.MainWebsiteLink != "") {
-                    mainSiteLink += string.Concat("<a href=\"", GMConfig.Instance.MainWebsiteLink, "\">", fLangMan.LS(PLS.LSID_MainSite), "</a>");
+                    mainSiteLink += string.Concat("<a href=\"", GMConfig.Instance.MainWebsiteLink, "\">", fLangMan.LS(PLS.MainSite), "</a>");
                 }
 
                 bool includeNavbar = previousChildLink != "" || nextChildLink != "" || includeIndexLink || frontPageLink != "" || mainSiteLink != "";
@@ -386,7 +386,7 @@ namespace GEDmill.HTML
                     }
 
                     if (includeIndexLink) {
-                        f.WriteLine(string.Concat("<li><a href=\"individuals1.html\">", fLangMan.LS(PLS.LSID_Index), "</a></li>"));
+                        f.WriteLine(string.Concat("<li><a href=\"individuals1.html\">", fLangMan.LS(PLS.Index), "</a></li>"));
                     }
 
                     if (frontPageLink != "") {

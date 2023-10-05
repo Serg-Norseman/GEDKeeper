@@ -184,19 +184,19 @@ namespace GKUI.Components
                 Content = new TabControl() {
                     Pages = {
                         new TabPage() {
-                            Text = LangMan.LS(LSID.LSID_Source),
+                            Text = LangMan.LS(LSID.Source),
                             Content = new TableLayout() {
                                 Spacing = new Size(4, 4),
                                 Rows = {
                                     new TableRow() {
                                         Cells = {
-                                            new Label() { Text = LangMan.LS(LSID.LSID_SourceYear) },
+                                            new Label() { Text = LangMan.LS(LSID.SourceYear) },
                                             txtSourceYear
                                         }
                                     },
                                     new TableRow() {
                                         Cells = {
-                                            new Label() { Text = LangMan.LS(LSID.LSID_AgeAtYear) },
+                                            new Label() { Text = LangMan.LS(LSID.AgeAtYear) },
                                             txtAgeAtYear
                                         }
                                     }

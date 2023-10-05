@@ -37,7 +37,7 @@ namespace GKCore.Tools
         {
             var patList = new List<PatriarchObj>();
 
-            progress.Begin(LangMan.LS(LSID.LSID_PatSearch), context.Tree.RecordsCount);
+            progress.Begin(LangMan.LS(LSID.PatSearch), context.Tree.RecordsCount);
 
             try {
                 int num = context.Tree.RecordsCount;
@@ -87,7 +87,7 @@ namespace GKCore.Tools
         {
             var patList = GetPatriarchsList(context, gensMin, datesCheck, progress, false);
 
-            progress.Begin(LangMan.LS(LSID.LSID_LinksSearch), patList.Count);
+            progress.Begin(LangMan.LS(LSID.LinksSearch), patList.Count);
             try {
                 int num2 = patList.Count;
                 for (int i = 0; i < num2; i++) {
@@ -177,7 +177,7 @@ namespace GKCore.Tools
 
                 try {
                     int patCount = patList.Count;
-                    progress.Begin(LangMan.LS(LSID.LSID_LinksSearch), patCount);
+                    progress.Begin(LangMan.LS(LSID.LinksSearch), patCount);
 
                     for (int i = 0; i < patCount; i++) {
                         PatriarchObj patr = patList[i];

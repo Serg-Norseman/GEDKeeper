@@ -49,12 +49,12 @@ namespace GKCore.Lists
             var result = new ListColumns<GDMCommunicationRecord>();
 
             // not to change the order of these lines in their changes
-            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.LSID_Theme, DataType.dtString, 300, true, true);
-            result.AddColumn(LSID.LSID_Corresponder, DataType.dtString, 200, true);
-            result.AddColumn(LSID.LSID_Type, DataType.dtString, 90, true);
-            result.AddColumn(LSID.LSID_Date, DataType.dtString, 90, true);
-            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
+            result.AddColumn(LSID.Theme, DataType.dtString, 300, true, true);
+            result.AddColumn(LSID.Corresponder, DataType.dtString, 200, true);
+            result.AddColumn(LSID.Type, DataType.dtString, 90, true);
+            result.AddColumn(LSID.Date, DataType.dtString, 90, true);
+            result.AddColumn(LSID.Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
             return result;

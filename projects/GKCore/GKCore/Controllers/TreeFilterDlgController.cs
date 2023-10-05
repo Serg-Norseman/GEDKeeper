@@ -93,9 +93,9 @@ namespace GKCore.Controllers
             fTemp = fFilter.BranchPersons;
 
             fView.SourceCombo.Clear();
-            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAll), null);
-            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcNot), null);
-            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.LSID_SrcAny), null);
+            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.SrcAll), null);
+            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.SrcNot), null);
+            fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.SrcAny), null);
             var sources = GKUtils.GetSources(tree);
             foreach (var item in sources) {
                 fView.SourceCombo.AddItem<GDMRecord>(item.ShortTitle, item);
@@ -188,18 +188,18 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_MIFilter);
+            fView.Title = LangMan.LS(LSID.MIFilter);
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
-            GetControl<IGroupBox>("rgBranchCut").Text = LangMan.LS(LSID.LSID_BranchCut);
-            GetControl<IRadioButton>("rbCutNone").Text = LangMan.LS(LSID.LSID_Not);
-            GetControl<IRadioButton>("rbCutYears").Text = LangMan.LS(LSID.LSID_BCut_Years);
-            GetControl<ILabel>("lblYear").Text = LangMan.LS(LSID.LSID_Year);
-            GetControl<IRadioButton>("rbCutPersons").Text = LangMan.LS(LSID.LSID_BCut_Persons);
-            GetControl<ILabel>("lblRPSources").Text = LangMan.LS(LSID.LSID_RPSources);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            GetControl<IGroupBox>("rgBranchCut").Text = LangMan.LS(LSID.BranchCut);
+            GetControl<IRadioButton>("rbCutNone").Text = LangMan.LS(LSID.Not);
+            GetControl<IRadioButton>("rbCutYears").Text = LangMan.LS(LSID.BCut_Years);
+            GetControl<ILabel>("lblYear").Text = LangMan.LS(LSID.Year);
+            GetControl<IRadioButton>("rbCutPersons").Text = LangMan.LS(LSID.BCut_Persons);
+            GetControl<ILabel>("lblRPSources").Text = LangMan.LS(LSID.RPSources);
 
-            fView.PersonsList.ListView.AddColumn(LangMan.LS(LSID.LSID_RPIndividuals), 350, false);
+            fView.PersonsList.ListView.AddColumn(LangMan.LS(LSID.RPIndividuals), 350, false);
         }
     }
 }

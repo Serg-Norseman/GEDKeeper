@@ -48,12 +48,12 @@ namespace GEDmill.HTML
         /// </summary>
         public void Create()
         {
-            string keywords = fLangMan.LS(PLS.LSID_Keywords) + " " + GMConfig.Instance.OwnersName;
+            string keywords = fLangMan.LS(PLS.Keywords) + " " + GMConfig.Instance.OwnersName;
             string title = GMConfig.Instance.SiteTitle;
 
             HTMLFile f = null;
             try {
-                f = new HTMLFile(fLangMan, GMConfig.Instance.FrontPageURL, title, fLangMan.LS(PLS.LSID_FrontPageDescription), keywords); // Creates a new file, and puts standard header html into it.
+                f = new HTMLFile(fLangMan, GMConfig.Instance.FrontPageURL, title, fLangMan.LS(PLS.FrontPageDescription), keywords); // Creates a new file, and puts standard header html into it.
                 f.WriteLine("  <div id=\"page\"> <!-- page -->");
                 f.WriteLine("    <div id=\"cover\"> <!-- cover -->");
 
@@ -76,14 +76,14 @@ namespace GEDmill.HTML
                 }
 
                 if (GMConfig.Instance.ShowFrontPageStats) {
-                    string individuals = fLangMan.LS(PLS.LSID_individuals) + " " + (fStats.Individuals == 0 ? fLangMan.LS(PLS.LSID_No) : fStats.Individuals.ToString());
+                    string individuals = fLangMan.LS(PLS.individuals) + " " + (fStats.Individuals == 0 ? fLangMan.LS(PLS.No) : fStats.Individuals.ToString());
 
-                    string sources = (fStats.Sources == 0 ? "" : string.Concat(", ", fLangMan.LS(PLS.LSID_sources) + " " + fStats.Sources.ToString()));
+                    string sources = (fStats.Sources == 0 ? "" : string.Concat(", ", fLangMan.LS(PLS.sources) + " " + fStats.Sources.ToString()));
 
-                    string fileType = fStats.NonPicturesIncluded ? fLangMan.LS(PLS.LSID_multimedia) : fLangMan.LS(PLS.LSID_images);
+                    string fileType = fStats.NonPicturesIncluded ? fLangMan.LS(PLS.multimedia) : fLangMan.LS(PLS.images);
                     string multimedia = fStats.MultimediaFiles == 0 ? "" : string.Concat(", ", fileType, " ", fStats.MultimediaFiles.ToString());
 
-                    f.WriteLine(string.Concat("       <p>", fLangMan.LS(PLS.LSID_ThisWebsiteContainsRecordsOn), " ", individuals, sources, multimedia, ".</p>"));
+                    f.WriteLine(string.Concat("       <p>", fLangMan.LS(PLS.ThisWebsiteContainsRecordsOn), " ", individuals, sources, multimedia, ".</p>"));
                 }
 
                 f.WriteLine("       <div id=\"links\"> <!-- links -->");
@@ -102,7 +102,7 @@ namespace GEDmill.HTML
 
                     if (censoredKeyIndividuals.Count > 0) {
                         f.WriteLine("<div id=\"keyindividuals\">");
-                        f.WriteLine("<p>{0}:</p>", fLangMan.LS(PLS.LSID_KeyIndividuals));
+                        f.WriteLine("<p>{0}:</p>", fLangMan.LS(PLS.KeyIndividuals));
                         f.WriteLine("<ul>");
                         foreach (string air_link in censoredKeyIndividuals) {
                             f.WriteLine("<li>{0}</li>", air_link);
@@ -119,16 +119,16 @@ namespace GEDmill.HTML
                 }
 
                 // Add brand and contact label
-                f.WriteLine("<p>{0}</p>", string.Format(fLangMan.LS(PLS.LSID_WebsiteCreatedUsingGEDmill), byEmail));
+                f.WriteLine("<p>{0}</p>", string.Format(fLangMan.LS(PLS.WebsiteCreatedUsingGEDmill), byEmail));
 
                 // Add last update string
                 if (GMConfig.Instance.AddHomePageCreateTime) {
-                    f.WriteLine("<p>{0} {1}.</p>", fLangMan.LS(PLS.LSID_CreatedOn), GMHelper.GetNowDateStr());
+                    f.WriteLine("<p>{0} {1}.</p>", fLangMan.LS(PLS.CreatedOn), GMHelper.GetNowDateStr());
                 }
 
                 // Add link to users main website
                 if (!string.IsNullOrEmpty(GMConfig.Instance.MainWebsiteLink)) {
-                    f.WriteLine("<p><a href=\"{0}\">{1}</a></p>", GMConfig.Instance.MainWebsiteLink, fLangMan.LS(PLS.LSID_ReturnToMainSite));
+                    f.WriteLine("<p><a href=\"{0}\">{1}</a></p>", GMConfig.Instance.MainWebsiteLink, fLangMan.LS(PLS.ReturnToMainSite));
                 }
 
                 f.WriteLine("    </div> <!-- cover -->");

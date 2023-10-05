@@ -135,10 +135,10 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_Note);
+            fView.Title = LangMan.LS(LSID.Note);
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
         }
     }
 
@@ -157,13 +157,13 @@ namespace GKCore.Controllers
             GetControl<IButtonToolItem>("cmbSizes").Text = "Sizes";
 #endif
 
-            GetControl<IButtonToolItem>("ddbtnActions").Text = LangMan.LS(LSID.LSID_Actions);
-            GetControl<IMenuItem>("miSelectAndCopy").Text = LangMan.LS(LSID.LSID_SelectAndCopy);
-            GetControl<IMenuItem>("miImport").Text = LangMan.LS(LSID.LSID_Import);
-            GetControl<IMenuItem>("miExport").Text = LangMan.LS(LSID.LSID_MIExport);
-            GetControl<IMenuItem>("miClear").Text = LangMan.LS(LSID.LSID_Clear);
-            GetControl<ITabPage>("pageEditor").Text = LangMan.LS(LSID.LSID_Note);
-            GetControl<ITabPage>("pagePreview").Text = LangMan.LS(LSID.LSID_DocPreview);
+            GetControl<IButtonToolItem>("ddbtnActions").Text = LangMan.LS(LSID.Actions);
+            GetControl<IMenuItem>("miSelectAndCopy").Text = LangMan.LS(LSID.SelectAndCopy);
+            GetControl<IMenuItem>("miImport").Text = LangMan.LS(LSID.Import);
+            GetControl<IMenuItem>("miExport").Text = LangMan.LS(LSID.MIExport);
+            GetControl<IMenuItem>("miClear").Text = LangMan.LS(LSID.Clear);
+            GetControl<ITabPage>("pageEditor").Text = LangMan.LS(LSID.Note);
+            GetControl<ITabPage>("pagePreview").Text = LangMan.LS(LSID.DocPreview);
         }
     }
 }

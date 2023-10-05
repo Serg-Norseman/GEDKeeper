@@ -38,9 +38,9 @@ namespace GKCore.Lists
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
 
-            fListColumns.AddColumn(LSID.LSID_NumberSym, 25, false);
-            fListColumns.AddColumn(LSID.LSID_Name, 300, false);
-            fListColumns.AddColumn(LSID.LSID_BirthDate, 100, false);
+            fListColumns.AddColumn(LSID.NumberSym, 25, false);
+            fListColumns.AddColumn(LSID.Name, 300, false);
+            fListColumns.AddColumn(LSID.BirthDate, 100, false);
             fListColumns.ResetDefaults();
         }
 
@@ -114,7 +114,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    result = (child != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachChildQuery)));
+                    result = (child != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachChildQuery)));
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, child, family);
                     }
@@ -189,7 +189,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    result = (child != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachChildQuery)));
+                    result = (child != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachChildQuery)));
                     if (result) {
                         GDMFamilyRecord family2 = tree.FindChildFamily(indiRec, child);
                         result = (family2 != null) && fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, child, family2);

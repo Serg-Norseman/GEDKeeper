@@ -1,247 +1,247 @@
 ;1033,eng,English
-Website Generator (GEDmill)
-Quit
-Finish
-version
-< Back
-Next >
-Help
-Settings...
-Ok
-Cancel
-Creating website
-Copying multimedia
-GEDmill family history website
-family tree history
-A problem occurred when creating an HTML file:\r\nGEDmill will not place files onto the Desktop.
-A problem occurred when creating an HTML file:\r\nThe path or filename {0} is not valid.
-The file you have selected is not a supported picture type.
-Copying background image
-Creating style sheet
-Creating individual pages
-Creating individuals index
-Creating source pages
-Creating front page
-Creating Javascript file
-Done
-User reference number
-Record
-Record last changed
-Page created using GEDmill
-Notes
-no
-Return to main site
-Created on
-front page
-main site
-index
-Unknown image format
-married
-partner of
-child
-son
-daughter
-Sources
-Other facts
-Life History
-Parents
-Citations
-Are you sure you wish to exit GEDmill?
-Select back image
-Select front image
-Please select at least one individual.
-The file {0} is missing. \r\nPages will be created without any background image.
-There are no individuals to list.
-GEDmill page for
-Source
-Text
-Image for this source
-Media for this source
-This website contains records on
-Website created{0} using GEDKeeper->GEDmill.
-individuals
-sources
-multimedia files
-images
-Key Individuals
-previous child
-next child
-death of
-birth of
- (most likely)
- (less likely)
-Information about this individual has been withheld.
-also known as
-Mini tree diagram
-and
-from
-to
-born
-christened
-baptised
-died
-buried
-cremated
-adopted
-bar mitzvah
-bat mitzvah
-blessing
-christened (as adult)
-confirmed
-first communion
-ordained
-naturalized
-emigrated
-immigrated
-probate
-wrote will
-graduated
-retired
-other event
-caste
-physical description
-educated
-ID number
-nationality
-number of children
-number of marriages
-occupation
-property
-religion
-resident
-Social Security number
-other fact
-never married
-annulment of marriage
-recorded in census
-divorced
-filing of divorce
-engagement
-publication of banns of marriage
-contract of marriage
-licence obtained for marriage
-settlement of marriage
-unknown event
-Marital status unknown
-Exclude individuals unless navigable from this person
-Exclude individuals unless navigable from these {0} people
-Remove pictures from this source
-Remove pictures from these {0} sources
-(The front page for the website is the file {0}.{1})
-(No front page was generated.)
-Include
-Name
-Born
-Died
-Id
-User ref
-Pics
-Individuals
-No Surname
-Index of Names
-Family history
-Private Record
-<unknown>
-in
-Repository
-A problem was encountered while creating the website files
-A problem was encountered while navigating the tree structure:\r\n\r\n{0}
-Setting the image width/height to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?
-Could not access or create folder.
-The folder {0} could not be deleted.\r\n{1}
-The file {0} could not be deleted.\r\n{1}
-No changes made.
-No multimedia files hidden.
-Webpages
-Images
-Tree Diagrams
-Advanced
-Family History Website Creator
-When you have finished selecting, click Next.
-Exclude all descendants of this person
-Exclude all ancestors of this person
-Include all descendants of this person
-Include all ancestors of this person
-Exclude individuals unless navigable from this person
-Details and pictures...
-Include everyone
-Exclude everyone
-Exclude everyone still alive (and those born in last 100 years)
-Remove pictures from selected sources
-Include all sources
-Exclude all sources
-Now, you can specify any individuals and sources you don\'t want to appear in the website. Clear the box next to their name to prevent them from appearing - those left ticked will appear.
-Right-click on the list for more options, including adding pictures...
-Website Title:
-Key Individuals:
-Add...
-Remove
-Next, you can choose a title for the front page of your website. Leave it blank if you don\'t want a title.\r\n\r\nYou can also select which people feature as key individuals on the front page.
-Commentary for title page:
-the above text is HTML)
-Link to your website: (with http:// prefix)
-Text for page footer:
-Include website statistics
-Multi-page individuals index
-User Reference numbers in index
-Individuals per index page:
-Name of front page file:
-Email address to put on front page:
-Background image:
-Browse...
-Picture on front page:
-Maximum size of individual images
-Width:
-Height:
-Maximum size of source images
-Allow images etc.
-Rename files
-Include original (full-size) files
-Allow files other than pictures
-Multiple individual images
-Maximum size of thumbnail images
-Num spaces to replace tabs:
-Show missing names as:
-Include withheld records
-Label withheld records with:
-this text:
-the individual's name
-Put surnames in CAPITALS
-Start events with a capital letter
-Don't show email addresses
-Show occupation in page heading
-Include tree diagrams
-Simulate transparency
-Conserve tree width
-Keep sibling order from GEDCOM
-Colors
-Selected box
-Selected text
-General box
-Link text
-Private box
-Private text
-Spouse box
-Branches
-Box borders
-Use custom record number for filenames
-List citing records on source pages
-Folder:
-Finally, select the folder where you wish to the website files to be created. If the folder doesn\'t exist already it will be created for you.
-Click Next to create the web pages...
-Display web pages after program finishes.
-<path>
-Thank you for using GEDmill.
-The website files have been generated and put in;
-The folder {0} needs to be created. \r\nThis will destroy an existing file with that name.
-GEDmill will not allow you to create files directly on the Desktop
-The folder {0} already exists.\r\nWould you like to delete any files it contains before creating the website files?
-Deleting the folder {0} will not preserve any existing front page and stylesheet files.\r\nDelete folder anyway?
-If the folder contains non-GEDmill files they will be deleted also.\r\nDelete folder anyway?
-The folder you have selected could not be found.
-The folder name is missing or illegal.
-The folder name you have selected is too long.
-The path you have selected is read-only, or the folder is not empty.
-You do not have the correct permissions to access the folder.
-The folder name you have selected is of an illegal format.
-The folder name you have selected is of an unsupported format.
+001=Website Generator (GEDmill)
+002=Quit
+003=Finish
+004=version
+005=< Back
+006=Next >
+007=Help
+008=Settings...
+009=Ok
+010=Cancel
+011=Creating website
+012=Copying multimedia
+013=GEDmill family history website
+014=family tree history
+015=A problem occurred when creating an HTML file:\r\nGEDmill will not place files onto the Desktop.
+016=A problem occurred when creating an HTML file:\r\nThe path or filename {0} is not valid.
+017=The file you have selected is not a supported picture type.
+018=Copying background image
+019=Creating style sheet
+020=Creating individual pages
+021=Creating individuals index
+022=Creating source pages
+023=Creating front page
+024=Creating Javascript file
+025=Done
+026=User reference number
+027=Record
+028=Record last changed
+029=Page created using GEDmill
+030=Notes
+031=no
+032=Return to main site
+033=Created on
+034=front page
+035=main site
+036=index
+037=Unknown image format
+038=married
+039=partner of
+040=child
+041=son
+042=daughter
+043=Sources
+044=Other facts
+045=Life History
+046=Parents
+047=Citations
+048=Are you sure you wish to exit GEDmill?
+049=Select back image
+050=Select front image
+051=Please select at least one individual.
+052=The file {0} is missing. \r\nPages will be created without any background image.
+053=There are no individuals to list.
+054=GEDmill page for
+055=Source
+056=Text
+057=Image for this source
+058=Media for this source
+059=This website contains records on
+060=Website created{0} using GEDKeeper->GEDmill.
+061=individuals
+062=sources
+063=multimedia files
+064=images
+065=Key Individuals
+066=previous child
+067=next child
+068=death of
+069=birth of
+070= (most likely)
+071= (less likely)
+072=Information about this individual has been withheld.
+073=also known as
+074=Mini tree diagram
+075=and
+076=from
+077=to
+078=born
+079=christened
+080=baptised
+081=died
+082=buried
+083=cremated
+084=adopted
+085=bar mitzvah
+086=bat mitzvah
+087=blessing
+088=christened (as adult)
+089=confirmed
+090=first communion
+091=ordained
+092=naturalized
+093=emigrated
+094=immigrated
+095=probate
+096=wrote will
+097=graduated
+098=retired
+099=other event
+100=caste
+101=physical description
+102=educated
+103=ID number
+104=nationality
+105=number of children
+106=number of marriages
+107=occupation
+108=property
+109=religion
+110=resident
+111=Social Security number
+112=other fact
+113=never married
+114=annulment of marriage
+115=recorded in census
+116=divorced
+117=filing of divorce
+118=engagement
+119=publication of banns of marriage
+120=contract of marriage
+121=licence obtained for marriage
+122=settlement of marriage
+123=unknown event
+124=Marital status unknown
+125=Exclude individuals unless navigable from this person
+126=Exclude individuals unless navigable from these {0} people
+127=Remove pictures from this source
+128=Remove pictures from these {0} sources
+129=(The front page for the website is the file {0}.{1})
+130=(No front page was generated.)
+131=Include
+132=Name
+133=Born
+134=Died
+135=Id
+136=User ref
+137=Pics
+138=Individuals
+139=No Surname
+140=Index of Names
+141=Family history
+142=Private Record
+143=<unknown>
+144=in
+145=Repository
+146=A problem was encountered while creating the website files
+147=A problem was encountered while navigating the tree structure:\r\n\r\n{0}
+148=Setting the image width/height to such a large value may cause display problems in some browsers.\r\nReally set value to {0}?
+149=Could not access or create folder.
+150=The folder {0} could not be deleted.\r\n{1}
+151=The file {0} could not be deleted.\r\n{1}
+152=No changes made.
+153=No multimedia files hidden.
+154=Webpages
+155=Images
+156=Tree Diagrams
+157=Advanced
+158=Family History Website Creator
+159=When you have finished selecting, click Next.
+160=Exclude all descendants of this person
+161=Exclude all ancestors of this person
+162=Include all descendants of this person
+163=Include all ancestors of this person
+164=Exclude individuals unless navigable from this person
+165=Details and pictures...
+166=Include everyone
+167=Exclude everyone
+168=Exclude everyone still alive (and those born in last 100 years)
+169=Remove pictures from selected sources
+170=Include all sources
+171=Exclude all sources
+172=Now, you can specify any individuals and sources you don\'t want to appear in the website. Clear the box next to their name to prevent them from appearing - those left ticked will appear.
+173=Right-click on the list for more options, including adding pictures...
+174=Website Title:
+175=Key Individuals:
+176=Add...
+177=Remove
+178=Next, you can choose a title for the front page of your website. Leave it blank if you don\'t want a title.\r\n\r\nYou can also select which people feature as key individuals on the front page.
+179=Commentary for title page:
+180=the above text is HTML)
+181=Link to your website: (with http:// prefix)
+182=Text for page footer:
+183=Include website statistics
+184=Multi-page individuals index
+185=User Reference numbers in index
+186=Individuals per index page:
+187=Name of front page file:
+188=Email address to put on front page:
+189=Background image:
+190=Browse...
+191=Picture on front page:
+192=Maximum size of individual images
+193=Width:
+194=Height:
+195=Maximum size of source images
+196=Allow images etc.
+197=Rename files
+198=Include original (full-size) files
+199=Allow files other than pictures
+200=Multiple individual images
+201=Maximum size of thumbnail images
+202=Num spaces to replace tabs:
+203=Show missing names as:
+204=Include withheld records
+205=Label withheld records with:
+206=this text:
+207=the individual's name
+208=Put surnames in CAPITALS
+209=Start events with a capital letter
+210=Don't show email addresses
+211=Show occupation in page heading
+212=Include tree diagrams
+213=Simulate transparency
+214=Conserve tree width
+215=Keep sibling order from GEDCOM
+216=Colors
+217=Selected box
+218=Selected text
+219=General box
+220=Link text
+221=Private box
+222=Private text
+223=Spouse box
+224=Branches
+225=Box borders
+226=Use custom record number for filenames
+227=List citing records on source pages
+228=Folder:
+229=Finally, select the folder where you wish to the website files to be created. If the folder doesn\'t exist already it will be created for you.
+230=Click Next to create the web pages...
+231=Display web pages after program finishes.
+232=<path>
+233=Thank you for using GEDmill.
+234=The website files have been generated and put in;
+235=The folder {0} needs to be created. \r\nThis will destroy an existing file with that name.
+236=GEDmill will not allow you to create files directly on the Desktop
+237=The folder {0} already exists.\r\nWould you like to delete any files it contains before creating the website files?
+238=Deleting the folder {0} will not preserve any existing front page and stylesheet files.\r\nDelete folder anyway?
+239=If the folder contains non-GEDmill files they will be deleted also.\r\nDelete folder anyway?
+240=The folder you have selected could not be found.
+241=The folder name is missing or illegal.
+242=The folder name you have selected is too long.
+243=The path you have selected is read-only, or the folder is not empty.
+244=You do not have the correct permissions to access the folder.
+245=The folder name you have selected is of an illegal format.
+246=The folder name you have selected is of an unsupported format.

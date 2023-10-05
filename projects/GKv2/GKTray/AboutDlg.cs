@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2018 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,6 @@
 
 using System;
 using System.Windows.Forms;
-
 using GKCore;
 using GKUI.Components;
 
@@ -37,8 +36,8 @@ namespace GKTray
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
 
-            Text = LangMan.LS(LSID.LSID_MIAbout);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
+            Text = LangMan.LS(LSID.MIAbout);
+            btnClose.Text = LangMan.LS(LSID.DlgClose);
             lblProduct.Text = GKTray.APP_TITLE;
             lblVersion.Text = @"Version " + AppHost.GetAppVersion();
             lblCopyright.Text = AppHost.GetAppCopyright();

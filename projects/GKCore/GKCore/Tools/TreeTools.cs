@@ -285,7 +285,7 @@ namespace GKCore.Tools
 
             if (logBox != null) {
                 logBox.Clear();
-                logBox.AppendText(string.Format(LangMan.LS(LSID.LSID_MainBaseSize), mainTree.RecordsCount.ToString()) + CRLF);
+                logBox.AppendText(string.Format(LangMan.LS(LSID.MainBaseSize), mainTree.RecordsCount.ToString()) + CRLF);
             }
 
             List<int> fragments = new List<int>();
@@ -318,7 +318,7 @@ namespace GKCore.Tools
                 }
 
                 if (logBox != null) {
-                    logBox.AppendText(string.Format(LangMan.LS(LSID.LSID_MainBaseSize), mainTree.RecordsCount.ToString()) + CRLF);
+                    logBox.AppendText(string.Format(LangMan.LS(LSID.MainBaseSize), mainTree.RecordsCount.ToString()) + CRLF);
                 }
             }
 
@@ -372,7 +372,7 @@ namespace GKCore.Tools
                 throw new ArgumentNullException("sourceRec");
 
             if (targetRec.RecordType == GDMRecordType.rtRepository) {
-                if (!AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_RepoRecsMergeWarning))) {
+                if (!AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RepoRecsMergeWarning))) {
                     return;
                 }
             }
@@ -636,7 +636,7 @@ namespace GKCore.Tools
 
             Dictionary<string, List<GDMIndividualRecord>> families = new Dictionary<string, List<GDMIndividualRecord>>();
 
-            progress.Begin(LangMan.LS(LSID.LSID_Stage) + "1", tree.RecordsCount, true);
+            progress.Begin(LangMan.LS(LSID.Stage) + "1", tree.RecordsCount, true);
 
             // make a table of surnames and persons, related to these surnames
             int num = tree.RecordsCount;
@@ -665,7 +665,7 @@ namespace GKCore.Tools
                 progress.Increment();
             }
 
-            progress.Begin(LangMan.LS(LSID.LSID_Stage) + "2", families.Count, true);
+            progress.Begin(LangMan.LS(LSID.Stage) + "2", families.Count, true);
 
             // find all persons of one surname, not related by ties of kinship
             foreach (KeyValuePair<string, List<GDMIndividualRecord>> entry in families) {
@@ -733,7 +733,7 @@ namespace GKCore.Tools
             mParams.YearsInaccuracy = 3;
             mParams.CheckEventPlaces = false;
 
-            pc.Begin(LangMan.LS(LSID.LSID_DuplicatesSearch), treeA.RecordsCount, true);
+            pc.Begin(LangMan.LS(LSID.DuplicatesSearch), treeA.RecordsCount, true);
             try {
                 for (int i = 0; i < treeA.RecordsCount; i++) {
                     GDMRecord recA = treeA[i];
@@ -792,7 +792,7 @@ namespace GKCore.Tools
             StringList names = new StringList();
 
             try {
-                logBox.AppendText(LangMan.LS(LSID.LSID_SearchMatches) + CRLF);
+                logBox.AppendText(LangMan.LS(LSID.SearchMatches) + CRLF);
 
                 int mainCount = mainTree.RecordsCount;
                 for (int i = 0; i < mainCount; i++) {
@@ -840,7 +840,7 @@ namespace GKCore.Tools
 
                 int famsCount = fams.Count;
                 if (famsCount != 0) {
-                    logBox.AppendText(LangMan.LS(LSID.LSID_SimilarSurnames) + CRLF);
+                    logBox.AppendText(LangMan.LS(LSID.SimilarSurnames) + CRLF);
                     for (int i = 0; i < famsCount; i++) {
                         logBox.AppendText("    " + fams[i] + CRLF);
                     }
@@ -848,7 +848,7 @@ namespace GKCore.Tools
 
                 int namesCount = names.Count;
                 if (namesCount != 0) {
-                    logBox.AppendText(LangMan.LS(LSID.LSID_SimilarNames) + CRLF);
+                    logBox.AppendText(LangMan.LS(LSID.SimilarNames) + CRLF);
                     for (int i = 0; i < namesCount; i++) {
                         logBox.AppendText("    " + names[i] + CRLF);
                         var lst = (IList<GDMIndividualRecord>) names.GetObject(i);
@@ -862,7 +862,7 @@ namespace GKCore.Tools
                 }
 
                 if (famsCount == 0 && namesCount == 0) {
-                    logBox.AppendText(LangMan.LS(LSID.LSID_MatchesNotFound) + CRLF);
+                    logBox.AppendText(LangMan.LS(LSID.MatchesNotFound) + CRLF);
                 }
             } finally {
                 int namesCount = names.Count;
@@ -947,7 +947,7 @@ namespace GKCore.Tools
 
             try {
                 int recsCount = tree.RecordsCount;
-                pc.Begin(LangMan.LS(LSID.LSID_PlacesPrepare), recsCount);
+                pc.Begin(LangMan.LS(LSID.PlacesPrepare), recsCount);
 
                 for (int i = 0; i < recsCount; i++) {
                     pc.Increment();
@@ -976,7 +976,7 @@ namespace GKCore.Tools
             var result = new List<List<GDMRecord>>();
 
             if (progress != null) {
-                progress.Begin(LangMan.LS(LSID.LSID_CheckFamiliesConnection), tree.RecordsCount);
+                progress.Begin(LangMan.LS(LSID.CheckFamiliesConnection), tree.RecordsCount);
             }
 
             var prepared = new List<GDMRecord>();

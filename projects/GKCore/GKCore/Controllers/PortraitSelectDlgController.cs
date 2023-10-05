@@ -91,10 +91,10 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_PortraitSelect);
+            fView.Title = LangMan.LS(LSID.PortraitSelect);
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
         }
     }
 }

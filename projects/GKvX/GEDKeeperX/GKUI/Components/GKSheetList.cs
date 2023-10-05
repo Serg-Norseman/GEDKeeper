@@ -108,15 +108,15 @@ namespace GKUI.Components
 
         public GKSheetList()
         {
-            fBtnPaste = CreateButton("btnPaste", UIHelper.LoadResourceImage("Resources.btn_paste.gif"), LangMan.LS(LSID.LSID_Paste), ItemPaste);
-            fBtnCut = CreateButton("btnCut", UIHelper.LoadResourceImage("Resources.btn_cut.gif"), LangMan.LS(LSID.LSID_Cut), ItemCut);
-            fBtnCopy = CreateButton("btnCopy", UIHelper.LoadResourceImage("Resources.btn_copy.gif"), LangMan.LS(LSID.LSID_Copy), ItemCopy);
-            fBtnMoveDown = CreateButton("btnDown", UIHelper.LoadResourceImage("Resources.btn_down.gif"), LangMan.LS(LSID.LSID_RecordMoveDown), ItemMoveDown);
-            fBtnMoveUp = CreateButton("btnUp", UIHelper.LoadResourceImage("Resources.btn_up.gif"), LangMan.LS(LSID.LSID_RecordMoveUp), ItemMoveUp);
-            fBtnLinkJump = CreateButton("btnJump", UIHelper.LoadResourceImage("Resources.btn_jump.gif"), LangMan.LS(LSID.LSID_RecordGoto), ItemJump);
-            fBtnDelete = CreateButton("btnDelete", UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif"), LangMan.LS(LSID.LSID_MIRecordDelete), ItemDelete);
-            fBtnEdit = CreateButton("btnEdit", UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif"), LangMan.LS(LSID.LSID_MIRecordEdit), ItemEdit);
-            fBtnAdd = CreateButton("btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.LSID_MIRecordAdd), ItemAdd);
+            fBtnPaste = CreateButton("btnPaste", UIHelper.LoadResourceImage("Resources.btn_paste.gif"), LangMan.LS(LSID.Paste), ItemPaste);
+            fBtnCut = CreateButton("btnCut", UIHelper.LoadResourceImage("Resources.btn_cut.gif"), LangMan.LS(LSID.Cut), ItemCut);
+            fBtnCopy = CreateButton("btnCopy", UIHelper.LoadResourceImage("Resources.btn_copy.gif"), LangMan.LS(LSID.Copy), ItemCopy);
+            fBtnMoveDown = CreateButton("btnDown", UIHelper.LoadResourceImage("Resources.btn_down.gif"), LangMan.LS(LSID.RecordMoveDown), ItemMoveDown);
+            fBtnMoveUp = CreateButton("btnUp", UIHelper.LoadResourceImage("Resources.btn_up.gif"), LangMan.LS(LSID.RecordMoveUp), ItemMoveUp);
+            fBtnLinkJump = CreateButton("btnJump", UIHelper.LoadResourceImage("Resources.btn_jump.gif"), LangMan.LS(LSID.RecordGoto), ItemJump);
+            fBtnDelete = CreateButton("btnDelete", UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif"), LangMan.LS(LSID.MIRecordDelete), ItemDelete);
+            fBtnEdit = CreateButton("btnEdit", UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif"), LangMan.LS(LSID.MIRecordEdit), ItemEdit);
+            fBtnAdd = CreateButton("btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.MIRecordAdd), ItemAdd);
 
             fList = new GKListView();
             fList.HorizontalOptions = LayoutOptions.FillAndExpand;

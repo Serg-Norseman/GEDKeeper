@@ -45,9 +45,9 @@ namespace GKCore.Lists
         {
             var result = new ListColumns<GDMRepositoryRecord>();
 
-            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.LSID_Repository, DataType.dtString, 400, true, true);
-            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
+            result.AddColumn(LSID.Repository, DataType.dtString, 400, true, true);
+            result.AddColumn(LSID.Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
             return result;

@@ -64,7 +64,7 @@ namespace GKCore.Controllers
                 GDMSourceRecord sourceRec = ((idx < 0) ? null : (fSourcesList.GetObject(idx) as GDMSourceRecord));
 
                 if (sourceRec == null) {
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DoNotSetSource));
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.DoNotSetSource));
 
                     return false;
                 } else {
@@ -140,17 +140,17 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_WinSourceCitEdit);
+            fView.Title = LangMan.LS(LSID.WinSourceCitEdit);
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
-            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.LSID_Common);
-            GetControl<ITabPage>("pageOther").Text = LangMan.LS(LSID.LSID_Other);
-            GetControl<ILabel>("lblSource").Text = LangMan.LS(LSID.LSID_Source);
-            GetControl<ILabel>("lblPage").Text = LangMan.LS(LSID.LSID_Page);
-            GetControl<ILabel>("lblCertainty").Text = LangMan.LS(LSID.LSID_Certainty);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Common);
+            GetControl<ITabPage>("pageOther").Text = LangMan.LS(LSID.Other);
+            GetControl<ILabel>("lblSource").Text = LangMan.LS(LSID.Source);
+            GetControl<ILabel>("lblPage").Text = LangMan.LS(LSID.Page);
+            GetControl<ILabel>("lblCertainty").Text = LangMan.LS(LSID.Certainty);
 
-            SetToolTip("btnSourceAdd", LangMan.LS(LSID.LSID_SourceAddTip));
+            SetToolTip("btnSourceAdd", LangMan.LS(LSID.SourceAddTip));
         }
     }
 }

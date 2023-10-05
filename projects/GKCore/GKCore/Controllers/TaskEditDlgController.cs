@@ -79,7 +79,7 @@ namespace GKCore.Controllers
                     case GDMGoalType.gtFamily:
                     case GDMGoalType.gtSource:
                         if (fTempRec == null) {
-                            AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoGoalRecordSpecified));
+                            AppHost.StdDialogs.ShowError(LangMan.LS(LSID.NoGoalRecordSpecified));
                             return false;
                         } else {
                             fTaskRecord.Goal = GEDCOMUtils.EncloseXRef(fTempRec.XRef);
@@ -185,17 +185,17 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_WinTaskEdit);
+            fView.Title = LangMan.LS(LSID.WinTaskEdit);
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.LSID_RPNotes);
-            GetControl<ILabel>("lblGoal").Text = LangMan.LS(LSID.LSID_Goal);
-            GetControl<ILabel>("lblPriority").Text = LangMan.LS(LSID.LSID_Priority);
-            GetControl<ILabel>("lblStartDate").Text = LangMan.LS(LSID.LSID_StartDate);
-            GetControl<ILabel>("lblStopDate").Text = LangMan.LS(LSID.LSID_StopDate);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
+            GetControl<ILabel>("lblGoal").Text = LangMan.LS(LSID.Goal);
+            GetControl<ILabel>("lblPriority").Text = LangMan.LS(LSID.Priority);
+            GetControl<ILabel>("lblStartDate").Text = LangMan.LS(LSID.StartDate);
+            GetControl<ILabel>("lblStopDate").Text = LangMan.LS(LSID.StopDate);
 
-            SetToolTip("btnGoalSelect", LangMan.LS(LSID.LSID_GoalSelectTip));
+            SetToolTip("btnGoalSelect", LangMan.LS(LSID.GoalSelectTip));
         }
     }
 }

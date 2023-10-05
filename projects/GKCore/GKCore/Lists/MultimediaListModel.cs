@@ -54,11 +54,11 @@ namespace GKCore.Lists
         {
             var result = new ListColumns<GDMMultimediaRecord>();
 
-            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.LSID_Title, DataType.dtString, 150, true, true);
-            result.AddColumn(LSID.LSID_Type, DataType.dtString, 85, true);
-            result.AddColumn(LSID.LSID_File, DataType.dtString, 300, true);
-            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
+            result.AddColumn(LSID.Title, DataType.dtString, 150, true, true);
+            result.AddColumn(LSID.Type, DataType.dtString, 85, true);
+            result.AddColumn(LSID.File, DataType.dtString, 300, true);
+            result.AddColumn(LSID.Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
             return result;

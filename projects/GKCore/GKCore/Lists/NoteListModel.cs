@@ -48,9 +48,9 @@ namespace GKCore.Lists
         {
             var result = new ListColumns<GDMNoteRecord>();
 
-            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.LSID_Note, DataType.dtString, 400, true);
-            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
+            result.AddColumn(LSID.Note, DataType.dtString, 400, true);
+            result.AddColumn(LSID.Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
             return result;

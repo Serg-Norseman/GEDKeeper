@@ -44,23 +44,23 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_FindAndReplace);
+            fView.Title = LangMan.LS(LSID.FindAndReplace);
 
-            GetControl<ILabel>("lblPattern").Text = LangMan.LS(LSID.LSID_Find);
-            GetControl<ILabel>("lblReplacement").Text = LangMan.LS(LSID.LSID_ReplaceWith);
+            GetControl<ILabel>("lblPattern").Text = LangMan.LS(LSID.Find);
+            GetControl<ILabel>("lblReplacement").Text = LangMan.LS(LSID.ReplaceWith);
 
-            GetControl<ICheckBox>("chkMatchCase").Text = LangMan.LS(LSID.LSID_MatchCase);
-            GetControl<ICheckBox>("chkMatchWildcards").Text = LangMan.LS(LSID.LSID_MatchWildcards);
-            GetControl<ICheckBox>("chkWholeWord").Text = LangMan.LS(LSID.LSID_WholeWord);
+            GetControl<ICheckBox>("chkMatchCase").Text = LangMan.LS(LSID.MatchCase);
+            GetControl<ICheckBox>("chkMatchWildcards").Text = LangMan.LS(LSID.MatchWildcards);
+            GetControl<ICheckBox>("chkWholeWord").Text = LangMan.LS(LSID.WholeWord);
 
-            GetControl<IGroupBox>("gbFilters").Text = LangMan.LS(LSID.LSID_MIFilter);
-            GetControl<ILabel>("lblRecord").Text = LangMan.LS(LSID.LSID_Record);
-            GetControl<ILabel>("lblProperty").Text = LangMan.LS(LSID.LSID_Property);
+            GetControl<IGroupBox>("gbFilters").Text = LangMan.LS(LSID.MIFilter);
+            GetControl<ILabel>("lblRecord").Text = LangMan.LS(LSID.Record);
+            GetControl<ILabel>("lblProperty").Text = LangMan.LS(LSID.Property);
 
-            GetControl<IButton>("btnPrev").Text = LangMan.LS(LSID.LSID_Prev);
-            GetControl<IButton>("btnNext").Text = LangMan.LS(LSID.LSID_Next);
-            GetControl<IButton>("btnReplace").Text = LangMan.LS(LSID.LSID_Replace);
-            GetControl<IButton>("btnReplaceAll").Text = LangMan.LS(LSID.LSID_ReplaceAll);
+            GetControl<IButton>("btnPrev").Text = LangMan.LS(LSID.Prev);
+            GetControl<IButton>("btnNext").Text = LangMan.LS(LSID.Next);
+            GetControl<IButton>("btnReplace").Text = LangMan.LS(LSID.Replace);
+            GetControl<IButton>("btnReplaceAll").Text = LangMan.LS(LSID.ReplaceAll);
 
             var cmbRecord = GetControl<IComboBox>("cmbRecord");
             for (var rt = GDMRecordType.rtIndividual; rt < GDMRecordType.rtFamily; rt++) {
@@ -150,7 +150,7 @@ namespace GKCore.Controllers
             GetParameters();
 
             if (fStrategy == null || !fStrategy.HasResults()) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.NoMatchesFound));
                 return false;
             }
 

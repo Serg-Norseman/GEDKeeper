@@ -52,22 +52,22 @@ namespace GKUI.Components
 
         public void SetLocale()
         {
-            //Title = LangMan.LS(LSID.LSID_MIOptions);
+            //Title = LangMan.LS(LSID.MIOptions);
 
-            //SheetAncCircle.Text = LangMan.LS(LSID.LSID_AncestorsCircle);
-            acb0.Text = LangMan.LS(LSID.LSID_Circle) + @" 0";
-            acb1.Text = LangMan.LS(LSID.LSID_Circle) + @" 1";
-            acb2.Text = LangMan.LS(LSID.LSID_Circle) + @" 2";
-            acb3.Text = LangMan.LS(LSID.LSID_Circle) + @" 3";
-            acb4.Text = LangMan.LS(LSID.LSID_Circle) + @" 4";
-            acb5.Text = LangMan.LS(LSID.LSID_Circle) + @" 5";
-            acb6.Text = LangMan.LS(LSID.LSID_Circle) + @" 6";
-            acb7.Text = LangMan.LS(LSID.LSID_Circle) + @" 7";
-            acbText.Text = LangMan.LS(LSID.LSID_TextColor);
-            acbBack.Text = LangMan.LS(LSID.LSID_BackColor);
-            acbLine.Text = LangMan.LS(LSID.LSID_LinesColor);
-            chkHideEmptySegments.Text = LangMan.LS(LSID.LSID_HideEmptySegments);
-            chkArcText.Text = LangMan.LS(LSID.LSID_ArcText);
+            //SheetAncCircle.Text = LangMan.LS(LSID.AncestorsCircle);
+            acb0.Text = LangMan.LS(LSID.Circle) + @" 0";
+            acb1.Text = LangMan.LS(LSID.Circle) + @" 1";
+            acb2.Text = LangMan.LS(LSID.Circle) + @" 2";
+            acb3.Text = LangMan.LS(LSID.Circle) + @" 3";
+            acb4.Text = LangMan.LS(LSID.Circle) + @" 4";
+            acb5.Text = LangMan.LS(LSID.Circle) + @" 5";
+            acb6.Text = LangMan.LS(LSID.Circle) + @" 6";
+            acb7.Text = LangMan.LS(LSID.Circle) + @" 7";
+            acbText.Text = LangMan.LS(LSID.TextColor);
+            acbBack.Text = LangMan.LS(LSID.BackColor);
+            acbLine.Text = LangMan.LS(LSID.LinesColor);
+            chkHideEmptySegments.Text = LangMan.LS(LSID.HideEmptySegments);
+            chkArcText.Text = LangMan.LS(LSID.ArcText);
         }
 
         public void AcceptChanges()

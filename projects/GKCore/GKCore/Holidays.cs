@@ -103,19 +103,19 @@ namespace GKCore
                         string tip;
 
                         if (firstTip) {
-                            tipsList.Add("#" + LangMan.LS(LSID.LSID_Holidays));
+                            tipsList.Add("#" + LangMan.LS(LSID.Holidays));
                             firstTip = false;
                         }
 
                         if (days == 0) {
                             tip = string.Format(
-                                LangMan.LS(LSID.LSID_HolidayToday), holiday.Name);
+                                LangMan.LS(LSID.HolidayToday), holiday.Name);
                         } else if (days == 1) {
                             tip = string.Format(
-                                LangMan.LS(LSID.LSID_HolidayTomorrow), holiday.Name);
+                                LangMan.LS(LSID.HolidayTomorrow), holiday.Name);
                         } else {
                             tip = string.Format(
-                                LangMan.LS(LSID.LSID_DaysRemainedBeforeHoliday), holiday.Name, days);
+                                LangMan.LS(LSID.DaysRemainedBeforeHoliday), holiday.Name, days);
                         }
 
                         tipsList.Add(tip);

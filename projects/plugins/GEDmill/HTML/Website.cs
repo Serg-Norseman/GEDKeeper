@@ -91,7 +91,7 @@ namespace GEDmill.HTML
                     return;
                 }
                 // Copy the images to use in place of non-pic multimedia files.
-                progressWnd.SetText(fLangMan.LS(PLS.LSID_CopyingMultimedia));
+                progressWnd.SetText(fLangMan.LS(PLS.CopyingMultimedia));
                 CopyIcons();
                 if (progressWnd.IsCanceled) {
                     return;
@@ -102,7 +102,7 @@ namespace GEDmill.HTML
                 var indiIndexCreator = new CreatorIndexIndividuals(fContext, fLangMan);
 
                 // Copy the image for the background of the webpages.
-                progressWnd.SetText(fLangMan.LS(PLS.LSID_CopyingBackground));
+                progressWnd.SetText(fLangMan.LS(PLS.CopyingBackground));
                 string backgroundImageFilename = CopyBackgroundImage();
                 if (progressWnd.IsCanceled) {
                     return;
@@ -110,7 +110,7 @@ namespace GEDmill.HTML
                 progressWnd.Increment();
 
                 // Create the style sheet
-                progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingStyleSheet));
+                progressWnd.SetText(fLangMan.LS(PLS.CreatingStyleSheet));
                 string cssFilename = string.Concat(fOutputFolder, "\\", GMConfig.StylesheetFilename);
                 if (GMConfig.StylesheetFilename.Length > 0) {
                     var csc = new CreatorStylesheet(fContext, fLangMan, cssFilename, backgroundImageFilename);
@@ -122,7 +122,7 @@ namespace GEDmill.HTML
                 progressWnd.Increment();
 
                 // Create the pages for the individual records.
-                progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingIndividualPages));
+                progressWnd.SetText(fLangMan.LS(PLS.CreatingIndividualPages));
                 var indiList = fTree.GetRecords<GDMIndividualRecord>();
                 foreach (GDMIndividualRecord ir in indiList) {
                     var ipc = new CreatorRecordIndividual(fContext, fLangMan, ir, indiIndexCreator);
@@ -136,7 +136,7 @@ namespace GEDmill.HTML
                 }
 
                 // Create the index for the individual records pages.
-                progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingIndividualsIndex));
+                progressWnd.SetText(fLangMan.LS(PLS.CreatingIndividualsIndex));
                 indiIndexCreator.Create();
                 if (progressWnd.IsCanceled) {
                     return;
@@ -148,7 +148,7 @@ namespace GEDmill.HTML
                 Creator.ClearCopiedFilesList();
 
                 // Create the pages for the source records.
-                progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingSourcePages));
+                progressWnd.SetText(fLangMan.LS(PLS.CreatingSourcePages));
                 var sourList = fTree.GetRecords<GDMSourceRecord>();
                 foreach (GDMSourceRecord sr in sourList) {
                     var spc = new CreatorRecordSource(fContext, fLangMan, sr);
@@ -168,7 +168,7 @@ namespace GEDmill.HTML
                 }
 
                 // Create the front page
-                progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingFrontPage));
+                progressWnd.SetText(fLangMan.LS(PLS.CreatingFrontPage));
                 if (GMConfig.Instance.FrontPageFilename.Length > 0) {
                     CreatorFrontPage fpc = new CreatorFrontPage(fContext, fLangMan, stats);
                     fpc.Create();
@@ -179,7 +179,7 @@ namespace GEDmill.HTML
                 }
 
                 // Copy the Javascript
-                progressWnd.SetText(fLangMan.LS(PLS.LSID_CreatingJSFile));
+                progressWnd.SetText(fLangMan.LS(PLS.CreatingJSFile));
                 // Currently (10Dec08) the only thing that uses javascript is the multiple images feature.
                 if (GMConfig.Instance.AllowMultipleImages) {
                     CreateJavascriptFiles();
@@ -191,7 +191,7 @@ namespace GEDmill.HTML
 
                 // Done
                 fLogger.WriteInfo("Website::CreateFinished");
-                progressWnd.SetText(fLangMan.LS(PLS.LSID_Done));
+                progressWnd.SetText(fLangMan.LS(PLS.Done));
                 threaderror.Error = 0;
                 threaderror.Message = "";
             } catch (ArgumentException e) {

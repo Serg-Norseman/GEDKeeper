@@ -549,7 +549,7 @@ namespace GKCore
                     int days = GKUtils.GetDaysForBirth(iRec);
                     if (days >= 0 && days < 3) {
                         if (firstTip) {
-                            tipsList.Add("#" + LangMan.LS(LSID.LSID_BirthDays));
+                            tipsList.Add("#" + LangMan.LS(LSID.BirthDays));
                             firstTip = false;
                         }
 
@@ -558,13 +558,13 @@ namespace GKCore
                         string tip;
                         switch (days) {
                             case 0:
-                                tip = string.Format(LangMan.LS(LSID.LSID_BirthdayToday), nm);
+                                tip = string.Format(LangMan.LS(LSID.BirthdayToday), nm);
                                 break;
                             case 1:
-                                tip = string.Format(LangMan.LS(LSID.LSID_BirthdayTomorrow), nm);
+                                tip = string.Format(LangMan.LS(LSID.BirthdayTomorrow), nm);
                                 break;
                             default:
-                                tip = string.Format(LangMan.LS(LSID.LSID_DaysRemained), nm, days);
+                                tip = string.Format(LangMan.LS(LSID.DaysRemained), nm, days);
                                 break;
                         }
                         tipsList.Add(tip);
@@ -574,7 +574,7 @@ namespace GKCore
                     days = GKUtils.GetDaysForBirthAnniversary(iRec, out years);
                     if (days >= 0 && days < 3) {
                         if (firstTip) {
-                            tipsList.Add("#" + LangMan.LS(LSID.LSID_BirthDays));
+                            tipsList.Add("#" + LangMan.LS(LSID.BirthDays));
                             firstTip = false;
                         }
 
@@ -583,13 +583,13 @@ namespace GKCore
                         string tip;
                         switch (days) {
                             case 0:
-                                tip = string.Format(LangMan.LS(LSID.LSID_AnniversaryToday), nm);
+                                tip = string.Format(LangMan.LS(LSID.AnniversaryToday), nm);
                                 break;
                             case 1:
-                                tip = string.Format(LangMan.LS(LSID.LSID_AnniversaryTomorrow), nm);
+                                tip = string.Format(LangMan.LS(LSID.AnniversaryTomorrow), nm);
                                 break;
                             default:
-                                tip = string.Format(LangMan.LS(LSID.LSID_AnniversaryDaysRemained), nm, days);
+                                tip = string.Format(LangMan.LS(LSID.AnniversaryDaysRemained), nm, days);
                                 break;
                         }
                         tipsList.Add(tip);
@@ -826,7 +826,7 @@ namespace GKCore
 
             bool result = (!string.IsNullOrEmpty(path));
             if (!result) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NewDBFileNeedToSave));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.NewDBFileNeedToSave));
             }
             return result;
         }
@@ -853,7 +853,7 @@ namespace GKCore
                             throw new MediaFileNotFoundException(targetFn);
                         }
 
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_MediaFileNotLoaded));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.MediaFileNotLoaded));
                     } else {
                         stream = new FileStream(targetFn, FileMode.Open, FileAccess.Read);
                     }
@@ -867,7 +867,7 @@ namespace GKCore
                             throw new MediaFileNotFoundException(arcFile);
                         }
 
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_MediaFileNotLoaded));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.MediaFileNotLoaded));
                     } else {
                         ArcFileLoad(targetFn, stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -884,7 +884,7 @@ namespace GKCore
                         if (throwException) {
                             throw new MediaFileNotFoundException(targetFn);
                         }
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileNotFound, targetFn));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FileNotFound, targetFn));
                     } else {
                         stream = new FileStream(targetFn, FileMode.Open, FileAccess.Read);
                     }
@@ -921,7 +921,7 @@ namespace GKCore
                         FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
                         try {
                             if (!File.Exists(GetArcFileName())) {
-                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_MediaFileNotLoaded));
+                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.MediaFileNotLoaded));
                             } else {
                                 ArcFileLoad(targetFn, fs);
                             }
@@ -999,7 +999,7 @@ namespace GKCore
             // verify existence
             bool alreadyExists = MediaExists(refPath);
             if (alreadyExists) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExists));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FileWithSameNameAlreadyExists));
                 return false;
             }
 
@@ -1021,7 +1021,7 @@ namespace GKCore
                         result = CopyFile(fileName, targetFn, !AppHost.TEST_MODE);
                     } catch (IOException ex) {
                         Logger.WriteError(string.Format("BaseContext.MediaSave({0}, {1})", fileName, targetFn), ex);
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileWithSameNameAlreadyExists));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FileWithSameNameAlreadyExists));
                         result = false;
                     }
                     break;
@@ -1060,7 +1060,7 @@ namespace GKCore
                             }
 
                             if (!GlobalOptions.Instance.DeleteMediaFileWithoutConfirm) {
-                                string msg = string.Format(LangMan.LS(LSID.LSID_MediaFileDeleteQuery));
+                                string msg = string.Format(LangMan.LS(LSID.MediaFileDeleteQuery));
                                 // TODO: may be Yes/No/Cancel?
                                 if (!AppHost.StdDialogs.ShowQuestion(msg)) {
                                     return false;
@@ -1077,15 +1077,15 @@ namespace GKCore
                         break;
 
                     case MediaStoreStatus.mssFileNotFound:
-                        result = AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_ContinueQuestion, LangMan.LS(LSID.LSID_FileNotFound, fileName)));
+                        result = AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.ContinueQuestion, LangMan.LS(LSID.FileNotFound, fileName)));
                         break;
 
                     case MediaStoreStatus.mssStgNotFound:
-                        result = AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_ContinueQuestion, LangMan.LS(LSID.LSID_StgNotFound)));
+                        result = AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.ContinueQuestion, LangMan.LS(LSID.StgNotFound)));
                         break;
 
                     case MediaStoreStatus.mssArcNotFound:
-                        result = AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_ContinueQuestion, LangMan.LS(LSID.LSID_ArcNotFound)));
+                        result = AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.ContinueQuestion, LangMan.LS(LSID.ArcNotFound)));
                         break;
 
                     case MediaStoreStatus.mssBadData:
@@ -1108,15 +1108,15 @@ namespace GKCore
             if (storeStatus != MediaStoreStatus.mssExists) {
                 switch (storeStatus) {
                     case MediaStoreStatus.mssFileNotFound:
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileNotFound, fileName));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FileNotFound, fileName));
                         break;
 
                     case MediaStoreStatus.mssStgNotFound:
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_StgNotFound));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.StgNotFound));
                         break;
 
                     case MediaStoreStatus.mssArcNotFound:
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ArcNotFound));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.ArcNotFound));
                         break;
 
                     case MediaStoreStatus.mssBadData:
@@ -1215,7 +1215,7 @@ namespace GKCore
 
                     AppHost.Instance.ExecuteWork((controller) => {
                         try {
-                            controller.Begin(LangMan.LS(LSID.LSID_CopyingFile), 100);
+                            controller.Begin(LangMan.LS(LSID.CopyingFile), 100);
                             try {
                                 GKUtils.CopyFile(source, target, controller);
                                 result = true;
@@ -1373,8 +1373,8 @@ namespace GKCore
                     fileProvider = new GEDCOMProvider(fTree);
 
                     if (loadSecure) {
-                        if (!AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
-                            AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
+                        if (!AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password), ref pw)) {
+                            AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
                             return false;
                         }
                     } else {
@@ -1393,7 +1393,7 @@ namespace GKCore
                     FileLoad(fileProvider, fileName, pw, null);
                 } else {
                     AppHost.Instance.ExecuteWork((controller) => {
-                        controller.Begin(LangMan.LS(LSID.LSID_Loading), 100);
+                        controller.Begin(LangMan.LS(LSID.Loading), 100);
                         FileLoad(fileProvider, fileName, pw, controller);
                         controller.End();
                     });
@@ -1416,7 +1416,7 @@ namespace GKCore
                 result = true;
             } catch (Exception ex) {
                 Logger.WriteError("BaseContext.FileLoad()", ex);
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_LoadGedComFailed));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LoadGedComFailed));
             }
 
             return result;
@@ -1444,17 +1444,17 @@ namespace GKCore
             try {
                 string pw = null;
                 string ext = FileHelper.GetFileExtension(fileName);
-                if (ext == ".geds" && !AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.LSID_Password), ref pw)) {
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_PasswordIsNotSpecified));
+                if (ext == ".geds" && !AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password), ref pw)) {
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
                     return false;
                 }
 
                 FileSave(fileName, pw);
                 result = true;
             } catch (UnauthorizedAccessException) {
-                AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, ": access denied" }));
+                AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.FileSaveError), new object[] { fileName, ": access denied" }));
             } catch (Exception ex) {
-                AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_FileSaveError), new object[] { fileName, "" }));
+                AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.FileSaveError), new object[] { fileName, "" }));
                 Logger.WriteError("BaseContext.FileSave()", ex);
             }
 
@@ -1614,7 +1614,7 @@ namespace GKCore
             string gsh = Encoding.ASCII.GetString(gsHeader);
 
             if (!string.Equals(gsh, GEDSEC_HEADER)) {
-                throw new GKException(LangMan.LS(LSID.LSID_ItsNotGEDSECCompatibleFile));
+                throw new GKException(LangMan.LS(LSID.ItsNotGEDSECCompatibleFile));
             }
 
             if (gsMajVer < GS_MAJOR_VER || gsMinVer < GS_MINOR_VER) {
@@ -1753,7 +1753,7 @@ namespace GKCore
 
             if (!result) {
                 // message, for exclude of duplication
-                AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_RecordIsLocked));
+                AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.RecordIsLocked));
             }
 
             return result;
@@ -1847,7 +1847,7 @@ namespace GKCore
                     GDMIndividualRecord husb = fTree.GetPtrValue(fam.Husband);
                     GDMIndividualRecord wife = fTree.GetPtrValue(fam.Wife);
                     if (husb == newParent || wife == newParent) {
-                        string msg = string.Format(LangMan.LS(LSID.LSID_ParentsQuery), GKUtils.GetFamilyString(fTree, fam));
+                        string msg = string.Format(LangMan.LS(LSID.ParentsQuery), GKUtils.GetFamilyString(fTree, fam));
                         if (AppHost.StdDialogs.ShowQuestion(msg)) {
                             result = fam;
                             break;
@@ -1889,7 +1889,7 @@ namespace GKCore
 
             GDMSex sex = spouse.Sex;
             if (sex < GDMSex.svMale || sex > GDMSex.svFemale) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.IsNotDefinedSex));
                 return null;
             }
 
@@ -1904,7 +1904,7 @@ namespace GKCore
 
             if (parent != null) {
                 if (parent.SpouseToFamilyLinks.Count > 1) {
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_ThisPersonHasSeveralFamilies));
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.ThisPersonHasSeveralFamilies));
                 } else {
                     GDMFamilyRecord family;
 
@@ -1948,7 +1948,7 @@ namespace GKCore
                     break;
 
                 default:
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.IsNotDefinedSex));
                     return null;
             }
 

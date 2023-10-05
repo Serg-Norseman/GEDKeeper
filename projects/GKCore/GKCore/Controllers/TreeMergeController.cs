@@ -40,7 +40,7 @@ namespace GKCore.Controllers
 
         public void Merge()
         {
-            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (string.IsNullOrEmpty(fileName)) return;
 
             fView.UpdateBase.Text = fileName;
@@ -51,13 +51,13 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_ToolOp_2);
-            GetControl<ITabPage>("pageTreeMerge").Text = LangMan.LS(LSID.LSID_ToolOp_2);
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
-            GetControl<IButton>("btnTreeMerge").Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
-            GetControl<ILabel>("lblMasterBase").Text = LangMan.LS(LSID.LSID_MasterBase);
-            GetControl<ILabel>("lblOtherBase").Text = LangMan.LS(LSID.LSID_OtherBase);
-            GetControl<ITextBox>("edMasterBase").Text = LangMan.LS(LSID.LSID_CurrentBase);
+            fView.Title = LangMan.LS(LSID.ToolOp_2);
+            GetControl<ITabPage>("pageTreeMerge").Text = LangMan.LS(LSID.ToolOp_2);
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            GetControl<IButton>("btnTreeMerge").Text = LangMan.LS(LSID.DlgSelect) + @"...";
+            GetControl<ILabel>("lblMasterBase").Text = LangMan.LS(LSID.MasterBase);
+            GetControl<ILabel>("lblOtherBase").Text = LangMan.LS(LSID.OtherBase);
+            GetControl<ITextBox>("edMasterBase").Text = LangMan.LS(LSID.CurrentBase);
         }
     }
 }

@@ -83,7 +83,7 @@ namespace GKCore.Controllers
 
                     string fileName = fView.File.Text;
                     if (string.IsNullOrEmpty(fileName) || (gst != MediaStoreType.mstURL && !File.Exists(fileName))) {
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_InvalidFileName));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.InvalidFileName));
                         return false;
                     }
 
@@ -195,11 +195,11 @@ namespace GKCore.Controllers
 
         public void SelectFile()
         {
-            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_AllFilter), 1, "");
+            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.AllFilter), 1, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             if (GlobalOptions.Instance.RemovableMediaWarning && FileHelper.IsRemovableDrive(fileName)) {
-                if (!AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_RemovableMediaWarningMessage))) {
+                if (!AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RemovableMediaWarningMessage))) {
                     return;
                 }
             }
@@ -229,18 +229,18 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_RPMultimedia);
+            fView.Title = LangMan.LS(LSID.RPMultimedia);
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
-            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.LSID_Common);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.LSID_RPNotes);
-            GetControl<ITabPage>("pageSources").Text = LangMan.LS(LSID.LSID_RPSources);
-            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.LSID_Title);
-            GetControl<ILabel>("lblType").Text = LangMan.LS(LSID.LSID_Type);
-            GetControl<ILabel>("lblStoreType").Text = LangMan.LS(LSID.LSID_StoreType);
-            GetControl<ILabel>("lblFile").Text = LangMan.LS(LSID.LSID_File);
-            GetControl<IButton>("btnView").Text = LangMan.LS(LSID.LSID_View) + @"...";
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Common);
+            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
+            GetControl<ITabPage>("pageSources").Text = LangMan.LS(LSID.RPSources);
+            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Title);
+            GetControl<ILabel>("lblType").Text = LangMan.LS(LSID.Type);
+            GetControl<ILabel>("lblStoreType").Text = LangMan.LS(LSID.StoreType);
+            GetControl<ILabel>("lblFile").Text = LangMan.LS(LSID.File);
+            GetControl<IButton>("btnView").Text = LangMan.LS(LSID.View) + @"...";
         }
     }
 }

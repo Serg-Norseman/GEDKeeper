@@ -20,7 +20,6 @@
 
 using System;
 using GDModel.Providers.GEDCOM;
-using GKCore.Calendar;
 using GKCore.Types;
 
 namespace GDModel
@@ -173,6 +172,12 @@ namespace GDModel
             base.Dispose(disposing);
         }
 
+        public void SetName(string tagName)
+        {
+            int tagId = GEDCOMTagsTable.Lookup(tagName);
+            SetName(tagId);
+        }
+
         internal override void TrimExcess()
         {
             base.TrimExcess();
@@ -290,12 +295,6 @@ namespace GDModel
         public int GetChronologicalYear()
         {
             return Date.GetChronologicalYear();
-        }
-
-        public void SetName(string tagName)
-        {
-            int tagId = GEDCOMTagsTable.Lookup(tagName);
-            SetName(tagId);
         }
     }
 }

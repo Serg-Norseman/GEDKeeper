@@ -712,7 +712,7 @@ namespace GKCore
 
             string result = dt + ": " + st + attrVal + ".";
             if (evt.HasPlace && evt.Place.StringValue != "") {
-                result = result + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Place.StringValue;
+                result = result + " " + LangMan.LS(LSID.Place) + ": " + evt.Place.StringValue;
             }
             return result;
         }
@@ -1314,7 +1314,7 @@ namespace GKCore
             if (!globOptions.LocalizedCalendarSignatures) {
                 return GKData.DateCalendars[ix].Sign;
             } else {
-                string signs = LangMan.LS(LSID.LSID_LocalizedCalendarSignaturesValues);
+                string signs = LangMan.LS(LSID.LocalizedCalendarSignaturesValues);
                 string[] parts = signs.Split('|');
                 return " " + ((ix < parts.Length) ? parts[ix] : GKData.DateCalendars[ix].Sign);
             }
@@ -1894,15 +1894,15 @@ namespace GKCore
 
         public static string GetImageFilter(bool svg)
         {
-            string filter = LangMan.LS(LSID.LSID_TreeImagesFilter);
+            string filter = LangMan.LS(LSID.TreeImagesFilter);
 
 #if !NETCORE
             // Emf is not supported by Eto.Drawing
-            filter += LangMan.LS(LSID.LSID_EmfFilter);
+            filter += LangMan.LS(LSID.EmfFilter);
 #endif
 
             if (svg) {
-                filter += LangMan.LS(LSID.LSID_SvgFilter);
+                filter += LangMan.LS(LSID.SvgFilter);
             }
 
             return filter;
@@ -1915,7 +1915,7 @@ namespace GKCore
         private static void ShowAddressSummary(GDMAddress address, StringList summary)
         {
             if (address != null && !address.IsEmpty() && summary != null) {
-                summary.Add("    " + LangMan.LS(LSID.LSID_Address) + ":");
+                summary.Add("    " + LangMan.LS(LSID.Address) + ":");
 
                 string ts = "";
                 if (address.AddressCountry != "") {
@@ -2043,7 +2043,7 @@ namespace GKCore
 
                     if (asso.Individual == iRec) {
                         if (first) {
-                            summary.Add(LangMan.LS(LSID.LSID_Associations) + ":");
+                            summary.Add(LangMan.LS(LSID.Associations) + ":");
                             first = false;
                         }
                         summary.Add("    " + HyperLink(ir.XRef, ir.GetNameString(true, false), 0));
@@ -2075,7 +2075,7 @@ namespace GKCore
 
                     if (namesakes.Count > 0) {
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_Namesakes) + ":");
+                        summary.Add(LangMan.LS(LSID.Namesakes) + ":");
 
                         int num4 = namesakes.Count;
                         for (int i = 0; i < num4; i++) {
@@ -2132,7 +2132,7 @@ namespace GKCore
 
                 if (linkList.Count > 0) {
                     summary.Add("");
-                    summary.Add(LangMan.LS(LSID.LSID_Links) + ":");
+                    summary.Add(LangMan.LS(LSID.Links) + ":");
 
                     if (sort) {
                         linkList.Sort();
@@ -2237,7 +2237,7 @@ namespace GKCore
             try {
                 if (record.HasMultimediaLinks) {
                     summary.Add("");
-                    summary.Add(LangMan.LS(LSID.LSID_RPMultimedia) + " (" + record.MultimediaLinks.Count.ToString() + "):");
+                    summary.Add(LangMan.LS(LSID.RPMultimedia) + " (" + record.MultimediaLinks.Count.ToString() + "):");
 
                     int num = record.MultimediaLinks.Count;
                     for (int i = 0; i < num; i++) {
@@ -2247,7 +2247,7 @@ namespace GKCore
 
                         string st = mmRec.FileReferences[0].Title;
                         summary.Add("  " + HyperLink(mmRec.XRef, st, 0) + " (" +
-                                    HyperLink(GKData.INFO_HREF_VIEW + mmRec.XRef, LangMan.LS(LSID.LSID_MediaView), 0) + ")");
+                                    HyperLink(GKData.INFO_HREF_VIEW + mmRec.XRef, LangMan.LS(LSID.MediaView), 0) + ")");
                     }
                 }
             } catch (Exception ex) {
@@ -2262,7 +2262,7 @@ namespace GKCore
             try {
                 if (record.HasNotes) {
                     summary.Add("");
-                    summary.Add(LangMan.LS(LSID.LSID_RPNotes) + " (" + record.Notes.Count.ToString() + "):");
+                    summary.Add(LangMan.LS(LSID.RPNotes) + " (" + record.Notes.Count.ToString() + "):");
 
                     int num = record.Notes.Count;
                     for (int i = 0; i < num; i++) {
@@ -2292,7 +2292,7 @@ namespace GKCore
                         summary.Add("");
                     }
 
-                    summary.Add(indent + LangMan.LS(LSID.LSID_RPSources) + " (" + structWSC.SourceCitations.Count.ToString() + "):");
+                    summary.Add(indent + LangMan.LS(LSID.RPSources) + " (" + structWSC.SourceCitations.Count.ToString() + "):");
 
                     int num = structWSC.SourceCitations.Count;
                     for (int i = 0; i < num; i++) {
@@ -2324,7 +2324,7 @@ namespace GKCore
             try {
                 if (record.HasAssociations) {
                     summary.Add("");
-                    summary.Add(LangMan.LS(LSID.LSID_Associations) + ":");
+                    summary.Add(LangMan.LS(LSID.Associations) + ":");
 
                     int num = record.Associations.Count;
                     for (int i = 0; i < num; i++) {
@@ -2349,7 +2349,7 @@ namespace GKCore
             try {
                 if (record.HasEvents) {
                     summary.Add("");
-                    summary.Add(LangMan.LS(LSID.LSID_Events) + ":");
+                    summary.Add(LangMan.LS(LSID.Events) + ":");
 
                     int num = record.Events.Count;
                     for (int i = 0; i < num; i++) {
@@ -2392,7 +2392,7 @@ namespace GKCore
             try {
                 if (record.HasEvents) {
                     summary.Add("");
-                    summary.Add(LangMan.LS(LSID.LSID_Events) + ":");
+                    summary.Add(LangMan.LS(LSID.Events) + ":");
 
                     int num = record.Events.Count;
                     for (int i = 0; i < num; i++) {
@@ -2419,7 +2419,7 @@ namespace GKCore
             try {
                 if (record.HasGroups) {
                     summary.Add("");
-                    summary.Add(LangMan.LS(LSID.LSID_RPGroups) + ":");
+                    summary.Add(LangMan.LS(LSID.RPGroups) + ":");
 
                     int num = record.Groups.Count;
                     for (int i = 0; i < num; i++) {
@@ -2447,16 +2447,16 @@ namespace GKCore
                         summary.Add("");
 
                         GDMIndividualRecord spRec = baseContext.Tree.GetPtrValue(familyRec.Husband);
-                        string st = ((spRec == null) ? LangMan.LS(LSID.LSID_UnkMale) : HyperLink(spRec.XRef, GetNameString(spRec, false), 0));
-                        summary.Add(LangMan.LS(LSID.LSID_Husband) + ": " + st + GetLifeStr(spRec));
+                        string st = ((spRec == null) ? LangMan.LS(LSID.UnkMale) : HyperLink(spRec.XRef, GetNameString(spRec, false), 0));
+                        summary.Add(LangMan.LS(LSID.Husband) + ": " + st + GetLifeStr(spRec));
 
                         spRec = baseContext.Tree.GetPtrValue(familyRec.Wife);
-                        st = ((spRec == null) ? LangMan.LS(LSID.LSID_UnkFemale) : HyperLink(spRec.XRef, GetNameString(spRec, false), 0));
-                        summary.Add(LangMan.LS(LSID.LSID_Wife) + ": " + st + GetLifeStr(spRec));
+                        st = ((spRec == null) ? LangMan.LS(LSID.UnkFemale) : HyperLink(spRec.XRef, GetNameString(spRec, false), 0));
+                        summary.Add(LangMan.LS(LSID.Wife) + ": " + st + GetLifeStr(spRec));
 
                         summary.Add("");
                         if (familyRec.Children.Count != 0) {
-                            summary.Add(LangMan.LS(LSID.LSID_Childs) + ":");
+                            summary.Add(LangMan.LS(LSID.Childs) + ":");
                         }
 
                         int num = familyRec.Children.Count;
@@ -2492,7 +2492,7 @@ namespace GKCore
                         summary.Add("");
                         summary.Add("[u][b][size=+1]" + groupRec.GroupName + "[/size][/b][/u]");
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_Members) + " (" + groupRec.Members.Count.ToString() + "):");
+                        summary.Add(LangMan.LS(LSID.Members) + " (" + groupRec.Members.Count.ToString() + "):");
 
                         int num = groupRec.Members.Count;
                         for (int i = 0; i < num; i++) {
@@ -2532,13 +2532,13 @@ namespace GKCore
                     summary.Clear();
                     if (mediaRec != null) {
                         GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
-                        string mediaTitle = (fileRef == null) ? LangMan.LS(LSID.LSID_Unknown) : fileRef.Title;
+                        string mediaTitle = (fileRef == null) ? LangMan.LS(LSID.Unknown) : fileRef.Title;
 
                         summary.Add("");
                         summary.Add("[u][b][size=+1]" + mediaTitle + "[/size][/b][/u]");
                         summary.Add("");
                         if (fileRef != null) {
-                            summary.Add("( " + HyperLink(GKData.INFO_HREF_VIEW + mediaRec.XRef, LangMan.LS(LSID.LSID_View), 0) + " )");
+                            summary.Add("( " + HyperLink(GKData.INFO_HREF_VIEW + mediaRec.XRef, LangMan.LS(LSID.View), 0) + " )");
                         }
 
                         ShowSubjectLinks(baseContext.Tree, mediaRec, summary);
@@ -2595,15 +2595,15 @@ namespace GKCore
                             string.Empty : string.Format(" ({0})", LangMan.LS(GKData.ParentTypes[(int)plType]));
 
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_Parents) + linkType + ":");
+                        summary.Add(LangMan.LS(LSID.Parents) + linkType + ":");
 
                         string st;
 
-                        st = (father == null) ? LangMan.LS(LSID.LSID_UnkMale) : HyperLink(father.XRef, GetNameString(father, false), 0);
-                        summary.Add("  " + LangMan.LS(LSID.LSID_Father) + ": " + st + GetLifeStr(father));
+                        st = (father == null) ? LangMan.LS(LSID.UnkMale) : HyperLink(father.XRef, GetNameString(father, false), 0);
+                        summary.Add("  " + LangMan.LS(LSID.Father) + ": " + st + GetLifeStr(father));
 
-                        st = (mother == null) ? LangMan.LS(LSID.LSID_UnkFemale) : HyperLink(mother.XRef, GetNameString(mother, false), 0);
-                        summary.Add("  " + LangMan.LS(LSID.LSID_Mother) + ": " + st + GetLifeStr(mother));
+                        st = (mother == null) ? LangMan.LS(LSID.UnkFemale) : HyperLink(mother.XRef, GetNameString(mother, false), 0);
+                        summary.Add("  " + LangMan.LS(LSID.Mother) + ": " + st + GetLifeStr(mother));
                     }
                 }
             } catch (Exception ex) {
@@ -2627,18 +2627,18 @@ namespace GKCore
                     string unk;
                     if (iRec.Sex == GDMSex.svMale) {
                         spRec = tree.GetPtrValue(family.Wife);
-                        st = LangMan.LS(LSID.LSID_Wife) + ": ";
-                        unk = LangMan.LS(LSID.LSID_UnkFemale);
+                        st = LangMan.LS(LSID.Wife) + ": ";
+                        unk = LangMan.LS(LSID.UnkFemale);
                     } else {
                         spRec = tree.GetPtrValue(family.Husband);
-                        st = LangMan.LS(LSID.LSID_Husband) + ": ";
-                        unk = LangMan.LS(LSID.LSID_UnkMale);
+                        st = LangMan.LS(LSID.Husband) + ": ";
+                        unk = LangMan.LS(LSID.UnkMale);
                     }
                     string marr = GetMarriageDateStr(family, GlobalOptions.Instance.DefDateFormat);
                     if (marr != "") {
-                        marr = LangMan.LS(LSID.LSID_LMarriage) + " " + marr;
+                        marr = LangMan.LS(LSID.LMarriage) + " " + marr;
                     } else {
-                        marr = LangMan.LS(LSID.LSID_LFamily);
+                        marr = LangMan.LS(LSID.LFamily);
                     }
 
                     summary.Add("");
@@ -2652,7 +2652,7 @@ namespace GKCore
                     int chNum = family.Children.Count;
                     if (chNum != 0) {
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_Childs) + ":");
+                        summary.Add(LangMan.LS(LSID.Childs) + ":");
 
                         for (int k = 0; k < chNum; k++) {
                             GDMIndividualRecord child = tree.GetPtrValue(family.Children[k]);
@@ -2686,7 +2686,7 @@ namespace GKCore
                             summary.Add("[u][b][size=+1]" + GetNameString(iRec, persName, firstSurname, true) + "[/size][/u][/b]");
                         }
 
-                        summary.Add(LangMan.LS(LSID.LSID_Sex) + ": " + SexStr(iRec.Sex));
+                        summary.Add(LangMan.LS(LSID.Sex) + ": " + SexStr(iRec.Sex));
 
                         ShowParentsInfo(tree, iRec, summary);
                         ShowSpousesInfo(baseContext, tree, iRec, summary);
@@ -2745,14 +2745,14 @@ namespace GKCore
                         summary.Add("");
                         summary.Add("[u][b][size=+1]" + sourceRec.ShortTitle + "[/size][/b][/u]");
                         summary.Add("");
-                        summary.AddMultiline(LangMan.LS(LSID.LSID_Author) + ": " + sourceRec.Originator.Lines.Text.Trim());
-                        summary.AddMultiline(LangMan.LS(LSID.LSID_Title) + ": \"" + sourceRec.Title.Lines.Text.Trim() + "\"");
-                        summary.AddMultiline(LangMan.LS(LSID.LSID_Publication) + ": \"" + sourceRec.Publication.Lines.Text.Trim() + "\"");
-                        summary.AddMultiline(LangMan.LS(LSID.LSID_Text) + ": \"" + sourceRec.Text.Lines.Text.Trim() + "\"");
+                        summary.AddMultiline(LangMan.LS(LSID.Author) + ": " + sourceRec.Originator.Lines.Text.Trim());
+                        summary.AddMultiline(LangMan.LS(LSID.Title) + ": \"" + sourceRec.Title.Lines.Text.Trim() + "\"");
+                        summary.AddMultiline(LangMan.LS(LSID.Publication) + ": \"" + sourceRec.Publication.Lines.Text.Trim() + "\"");
+                        summary.AddMultiline(LangMan.LS(LSID.Text) + ": \"" + sourceRec.Text.Lines.Text.Trim() + "\"");
 
                         if (sourceRec.RepositoryCitations.Count > 0) {
                             summary.Add("");
-                            summary.Add(LangMan.LS(LSID.LSID_RPRepositories) + ":");
+                            summary.Add(LangMan.LS(LSID.RPRepositories) + ":");
 
                             int num = sourceRec.RepositoryCitations.Count;
                             for (int i = 0; i < num; i++) {
@@ -2769,7 +2769,7 @@ namespace GKCore
 
                         summary.Add("");
                         summary.Add("");
-                        summary.Add("[ " + HyperLink(GKData.INFO_HREF_FILTER_INDI + sourceRec.XRef, LangMan.LS(LSID.LSID_MIFilter), 0) + " ]");
+                        summary.Add("[ " + HyperLink(GKData.INFO_HREF_FILTER_INDI + sourceRec.XRef, LangMan.LS(LSID.MIFilter), 0) + " ]");
                         summary.Add("");
                     }
                 } finally {
@@ -2797,7 +2797,7 @@ namespace GKCore
                             ShowAddressSummary(repositoryRec.Address, summary);
 
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_RPSources) + ":");
+                        summary.Add(LangMan.LS(LSID.RPSources) + ":");
 
                         var sortedSources = new List<Tuple<string, string>>();
                         GDMTree tree = baseContext.Tree;
@@ -2841,16 +2841,16 @@ namespace GKCore
                     summary.Clear();
                     if (researchRec != null) {
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_Title) + ": [u][b][size=+1]\"" + researchRec.ResearchName.Trim() + "\"[/size][/b][/u]");
+                        summary.Add(LangMan.LS(LSID.Title) + ": [u][b][size=+1]\"" + researchRec.ResearchName.Trim() + "\"[/size][/b][/u]");
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_Priority) + ": " + LangMan.LS(GKData.PriorityNames[(int)researchRec.Priority]));
-                        summary.Add(LangMan.LS(LSID.LSID_Status) + ": " + LangMan.LS(GKData.StatusNames[(int)researchRec.Status]) + " (" + researchRec.Percent.ToString() + "%)");
-                        summary.Add(LangMan.LS(LSID.LSID_StartDate) + ": " + researchRec.StartDate.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
-                        summary.Add(LangMan.LS(LSID.LSID_StopDate) + ": " + researchRec.StopDate.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
+                        summary.Add(LangMan.LS(LSID.Priority) + ": " + LangMan.LS(GKData.PriorityNames[(int)researchRec.Priority]));
+                        summary.Add(LangMan.LS(LSID.Status) + ": " + LangMan.LS(GKData.StatusNames[(int)researchRec.Status]) + " (" + researchRec.Percent.ToString() + "%)");
+                        summary.Add(LangMan.LS(LSID.StartDate) + ": " + researchRec.StartDate.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
+                        summary.Add(LangMan.LS(LSID.StopDate) + ": " + researchRec.StopDate.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
 
                         if (researchRec.Tasks.Count > 0) {
                             summary.Add("");
-                            summary.Add(LangMan.LS(LSID.LSID_RPTasks) + ":");
+                            summary.Add(LangMan.LS(LSID.RPTasks) + ":");
 
                             int num = researchRec.Tasks.Count;
                             for (int i = 0; i < num; i++) {
@@ -2861,7 +2861,7 @@ namespace GKCore
 
                         if (researchRec.Communications.Count > 0) {
                             summary.Add("");
-                            summary.Add(LangMan.LS(LSID.LSID_RPCommunications) + ":");
+                            summary.Add(LangMan.LS(LSID.RPCommunications) + ":");
 
                             int num2 = researchRec.Communications.Count;
                             for (int i = 0; i < num2; i++) {
@@ -2872,7 +2872,7 @@ namespace GKCore
 
                         if (researchRec.Groups.Count != 0) {
                             summary.Add("");
-                            summary.Add(LangMan.LS(LSID.LSID_RPGroups) + ":");
+                            summary.Add(LangMan.LS(LSID.RPGroups) + ":");
 
                             int num3 = researchRec.Groups.Count;
                             for (int i = 0; i < num3; i++) {
@@ -2901,11 +2901,11 @@ namespace GKCore
                     summary.Clear();
                     if (taskRec != null) {
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_Goal) + ": [u][b][size=+1]" + GetTaskGoalStr(baseContext.Tree, taskRec) + "[/size][/b][/u]");
+                        summary.Add(LangMan.LS(LSID.Goal) + ": [u][b][size=+1]" + GetTaskGoalStr(baseContext.Tree, taskRec) + "[/size][/b][/u]");
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_Priority) + ": " + LangMan.LS(GKData.PriorityNames[(int)taskRec.Priority]));
-                        summary.Add(LangMan.LS(LSID.LSID_StartDate) + ": " + taskRec.StartDate.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
-                        summary.Add(LangMan.LS(LSID.LSID_StopDate) + ": " + taskRec.StopDate.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
+                        summary.Add(LangMan.LS(LSID.Priority) + ": " + LangMan.LS(GKData.PriorityNames[(int)taskRec.Priority]));
+                        summary.Add(LangMan.LS(LSID.StartDate) + ": " + taskRec.StartDate.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
+                        summary.Add(LangMan.LS(LSID.StopDate) + ": " + taskRec.StopDate.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
 
                         RecListNotesRefresh(baseContext, taskRec, summary);
                     }
@@ -2929,11 +2929,11 @@ namespace GKCore
                         GDMTree tree = baseContext.Tree;
 
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_Theme) + ": [u][b][size=+1]\"" + commRec.CommName.Trim() + "\"[/size][/b][/u]");
+                        summary.Add(LangMan.LS(LSID.Theme) + ": [u][b][size=+1]\"" + commRec.CommName.Trim() + "\"[/size][/b][/u]");
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_Corresponder) + ": " + GetCorresponderStr(tree, commRec, true));
-                        summary.Add(LangMan.LS(LSID.LSID_Type) + ": " + LangMan.LS(GKData.CommunicationNames[(int)commRec.CommunicationType]));
-                        summary.Add(LangMan.LS(LSID.LSID_Date) + ": " + commRec.Date.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
+                        summary.Add(LangMan.LS(LSID.Corresponder) + ": " + GetCorresponderStr(tree, commRec, true));
+                        summary.Add(LangMan.LS(LSID.Type) + ": " + LangMan.LS(GKData.CommunicationNames[(int)commRec.CommunicationType]));
+                        summary.Add(LangMan.LS(LSID.Date) + ": " + commRec.Date.GetDisplayString(GlobalOptions.Instance.DefDateFormat));
 
                         RecListNotesRefresh(baseContext, commRec, summary);
                         RecListMediaRefresh(baseContext, commRec, summary);
@@ -2959,8 +2959,8 @@ namespace GKCore
                         summary.Add("");
                         summary.Add("[u][b][size=+1]" + locRec.LocationName.Trim() + "[/size][/b][/u]");
                         summary.Add("");
-                        summary.Add(LangMan.LS(LSID.LSID_Latitude) + ": " + locRec.Map.Lati);
-                        summary.Add(LangMan.LS(LSID.LSID_Longitude) + ": " + locRec.Map.Long);
+                        summary.Add(LangMan.LS(LSID.Latitude) + ": " + locRec.Map.Lati);
+                        summary.Add(LangMan.LS(LSID.Longitude) + ": " + locRec.Map.Long);
 
                         GDMTree tree = baseContext.Tree;
 
@@ -2970,7 +2970,7 @@ namespace GKCore
                             linkList.Sort();
 
                             summary.Add("");
-                            summary.Add(LangMan.LS(LSID.LSID_Links) + ":");
+                            summary.Add(LangMan.LS(LSID.Links) + ":");
 
                             int num = linkList.Count;
                             for (int i = 0; i < num; i++) {
@@ -3351,7 +3351,7 @@ namespace GKCore
             if (family == null)
                 throw new ArgumentNullException("family");
 
-            return GetFamilyString(tree, family, LangMan.LS(LSID.LSID_UnkMale), LangMan.LS(LSID.LSID_UnkFemale));
+            return GetFamilyString(tree, family, LangMan.LS(LSID.UnkMale), LangMan.LS(LSID.UnkFemale));
         }
 
         public static string GetFamilyString(GDMTree tree, GDMFamilyRecord family, string unkHusband, string unkWife)

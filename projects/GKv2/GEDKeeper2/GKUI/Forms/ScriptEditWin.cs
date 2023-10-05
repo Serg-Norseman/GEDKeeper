@@ -97,7 +97,7 @@ namespace GKUI.Forms
             bool result = true;
             if (!Modified) return result;
 
-            DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.LSID_FileSaveQuery), GKData.APP_TITLE, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+            DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.FileSaveQuery), GKData.APP_TITLE, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
             switch (dialogResult) {
                 case DialogResult.Yes:
                     tbSaveScript_Click(this, null);

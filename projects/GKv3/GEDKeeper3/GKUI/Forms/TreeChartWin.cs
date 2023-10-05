@@ -567,7 +567,7 @@ namespace GKUI.Forms
 
         private void miFillImage_Click(object sender, EventArgs e)
         {
-            string fileName = AppHost.StdDialogs.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.LSID_ImagesFilter), 1, "");
+            string fileName = AppHost.StdDialogs.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.ImagesFilter), 1, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             Image img = new Bitmap(fileName);
@@ -665,7 +665,7 @@ namespace GKUI.Forms
         {
             try {
                 if (startPerson == null) {
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.NotSelectedPerson));
                 } else {
                     fPerson = startPerson;
                     fTreeBox.GenChart(fPerson, chartKind, true);
@@ -695,10 +695,10 @@ namespace GKUI.Forms
                 fController.UpdateTitle();
                 UpdateModesMenu();
 
-                StatusLines[0] = string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fTreeBox.IndividualsCount);
+                StatusLines[0] = string.Format(LangMan.LS(LSID.TreeIndividualsCount), fTreeBox.IndividualsCount);
                 var imageSize = fTreeBox.GetImageSize();
-                StatusLines[1] = string.Format(LangMan.LS(LSID.LSID_ImageSize), imageSize.Width, imageSize.Height);
-                StatusLines[2] = string.Format("{0}: {1:f0} %", LangMan.LS(LSID.LSID_Scale), fTreeBox.Scale * 100);
+                StatusLines[1] = string.Format(LangMan.LS(LSID.ImageSize), imageSize.Width, imageSize.Height);
+                StatusLines[2] = string.Format("{0}: {1:f0} %", LangMan.LS(LSID.Scale), fTreeBox.Scale * 100);
 
                 tbPrev.Enabled = NavCanBackward();
                 tbNext.Enabled = NavCanForward();

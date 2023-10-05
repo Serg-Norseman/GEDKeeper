@@ -95,7 +95,7 @@ namespace GKCore
 
                 if (curVersion.CompareTo(newVersion) < 0) {
 #if !CI_MODE
-                    string question = LangMan.LS(LSID.LSID_UpdateToLatestVersion, curVersion, newVersion);
+                    string question = LangMan.LS(LSID.UpdateToLatestVersion, curVersion, newVersion);
                     if (AppHost.StdDialogs.ShowQuestion(question)) {
                         Process.Start(url);
                     }

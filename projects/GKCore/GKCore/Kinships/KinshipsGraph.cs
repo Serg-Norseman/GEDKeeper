@@ -257,7 +257,7 @@ namespace GKCore.Kinships
             string name1 = fContext.Culture.GetPossessiveName(ind1);
             string name2 = GKUtils.GetNameString(ind2, true, false);
 
-            rel = string.Format(LangMan.LS(LSID.LSID_RelationshipMask), name2, rel, name1);
+            rel = string.Format(LangMan.LS(LSID.RelationshipMask), name2, rel, name1);
             return rel;
         }
 

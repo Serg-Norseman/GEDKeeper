@@ -178,7 +178,7 @@ namespace GKUI.Platform
             if (page == null) return string.Empty;
 
             var title = GKData.APP_TITLE;
-            return await page.DisplayPromptAsync(title, prompt, LangMan.LS(LSID.LSID_DlgAccept), LangMan.LS(LSID.LSID_DlgCancel));
+            return await page.DisplayPromptAsync(title, prompt, LangMan.LS(LSID.DlgAccept), LangMan.LS(LSID.DlgCancel));
         }
 
         public bool GetPassword(string prompt, ref string value)

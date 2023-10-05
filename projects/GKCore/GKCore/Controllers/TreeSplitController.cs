@@ -83,7 +83,7 @@ namespace GKCore.Controllers
             fSplitList.Clear();
 
             if (startPerson == null) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NotSelectedPerson));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.NotSelectedPerson));
             } else {
                 TreeTools.WalkTree(fBase.Context.Tree, startPerson, walkMode, fSplitList);
             }
@@ -108,12 +108,12 @@ namespace GKCore.Controllers
             UpdateView();
             fBase.RefreshLists(false);
 
-            AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_RecsDeleted));
+            AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.RecsDeleted));
         }
 
         public void Save()
         {
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT, "");
+            string fileName = AppHost.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             TreeTools.CheckRelations(fBase.Context.Tree, fSplitList);
@@ -129,19 +129,19 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_ToolOp_3);
+            fView.Title = LangMan.LS(LSID.ToolOp_3);
 
-            GetControl<ITabPage>("pageTreeSplit").Text = LangMan.LS(LSID.LSID_ToolOp_3);
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
-            GetControl<IButton>("btnSelectAll").Text = LangMan.LS(LSID.LSID_SelAll);
-            GetControl<IButton>("btnSelectFamily").Text = LangMan.LS(LSID.LSID_SelFamily);
-            GetControl<IButton>("btnSelectAncestors").Text = LangMan.LS(LSID.LSID_SelAncestors);
-            GetControl<IButton>("btnSelectDescendants").Text = LangMan.LS(LSID.LSID_SelDescendants);
-            GetControl<IButton>("btnDelete").Text = LangMan.LS(LSID.LSID_DoDelete);
-            GetControl<IButton>("btnSave").Text = LangMan.LS(LSID.LSID_MIFileSaveAs);
+            GetControl<ITabPage>("pageTreeSplit").Text = LangMan.LS(LSID.ToolOp_3);
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            GetControl<IButton>("btnSelectAll").Text = LangMan.LS(LSID.SelAll);
+            GetControl<IButton>("btnSelectFamily").Text = LangMan.LS(LSID.SelFamily);
+            GetControl<IButton>("btnSelectAncestors").Text = LangMan.LS(LSID.SelAncestors);
+            GetControl<IButton>("btnSelectDescendants").Text = LangMan.LS(LSID.SelDescendants);
+            GetControl<IButton>("btnDelete").Text = LangMan.LS(LSID.DoDelete);
+            GetControl<IButton>("btnSave").Text = LangMan.LS(LSID.MIFileSaveAs);
 
-            fView.SelectedList.AddColumn(LangMan.LS(LSID.LSID_Person), 300, false);
-            fView.SkippedList.AddColumn(LangMan.LS(LSID.LSID_Person), 300, false);
+            fView.SelectedList.AddColumn(LangMan.LS(LSID.Person), 300, false);
+            fView.SkippedList.AddColumn(LangMan.LS(LSID.Person), 300, false);
         }
     }
 }

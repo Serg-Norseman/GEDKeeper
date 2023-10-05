@@ -461,14 +461,14 @@ namespace GKCore.Controllers
 
             if (iFilter.SourceMode == FilterGroupMode.Selected) {
                 var src = baseWin.Context.Tree.FindXRef<GDMSourceRecord>(iFilter.SourceRef);
-                if (src != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_IncludedSourceFilter))) {
+                if (src != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.IncludedSourceFilter))) {
                     indivRec.AddSource(src, "", 0);
                 }
             }
 
             if (iFilter.FilterGroupMode == FilterGroupMode.Selected) {
                 var grp = baseWin.Context.Tree.FindXRef<GDMGroupRecord>(iFilter.GroupRef);
-                if (grp != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_IncludedGroupFilter))) {
+                if (grp != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.IncludedGroupFilter))) {
                     grp.AddMember(indivRec);
                 }
             }
@@ -541,7 +541,7 @@ namespace GKCore.Controllers
                 if (targetType == TargetMode.tmSpouse && target != null) {
                     GDMSex sex = target.Sex;
                     if (sex < GDMSex.svMale || sex > GDMSex.svFemale) {
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_IsNotDefinedSex));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.IsNotDefinedSex));
                         return false;
                     }
                 }
@@ -800,11 +800,11 @@ namespace GKCore.Controllers
             string msg = "";
             switch (record.RecordType) {
                 case GDMRecordType.rtIndividual:
-                    msg = string.Format(LangMan.LS(LSID.LSID_PersonDeleteQuery), GKUtils.GetNameString(((GDMIndividualRecord)record), false));
+                    msg = string.Format(LangMan.LS(LSID.PersonDeleteQuery), GKUtils.GetNameString(((GDMIndividualRecord)record), false));
                     break;
 
                 case GDMRecordType.rtFamily:
-                    msg = string.Format(LangMan.LS(LSID.LSID_FamilyDeleteQuery), GKUtils.GetFamilyString(baseWin.Context.Tree, (GDMFamilyRecord)record));
+                    msg = string.Format(LangMan.LS(LSID.FamilyDeleteQuery), GKUtils.GetFamilyString(baseWin.Context.Tree, (GDMFamilyRecord)record));
                     break;
 
                 case GDMRecordType.rtNote: {
@@ -812,41 +812,41 @@ namespace GKCore.Controllers
                         if (string.IsNullOrEmpty(value)) {
                             value = string.Format("#{0}", record.GetId().ToString());
                         }
-                        msg = string.Format(LangMan.LS(LSID.LSID_NoteDeleteQuery), value);
+                        msg = string.Format(LangMan.LS(LSID.NoteDeleteQuery), value);
                         break;
                     }
 
                 case GDMRecordType.rtMultimedia:
-                    msg = string.Format(LangMan.LS(LSID.LSID_MediaDeleteQuery), ((GDMMultimediaRecord)record).GetFileTitle());
+                    msg = string.Format(LangMan.LS(LSID.MediaDeleteQuery), ((GDMMultimediaRecord)record).GetFileTitle());
                     break;
 
                 case GDMRecordType.rtSource:
-                    msg = string.Format(LangMan.LS(LSID.LSID_SourceDeleteQuery), ((GDMSourceRecord)record).ShortTitle);
+                    msg = string.Format(LangMan.LS(LSID.SourceDeleteQuery), ((GDMSourceRecord)record).ShortTitle);
                     break;
 
                 case GDMRecordType.rtRepository:
-                    msg = string.Format(LangMan.LS(LSID.LSID_RepositoryDeleteQuery), ((GDMRepositoryRecord)record).RepositoryName);
+                    msg = string.Format(LangMan.LS(LSID.RepositoryDeleteQuery), ((GDMRepositoryRecord)record).RepositoryName);
                     break;
 
                 case GDMRecordType.rtGroup:
-                    msg = string.Format(LangMan.LS(LSID.LSID_GroupDeleteQuery), ((GDMGroupRecord)record).GroupName);
+                    msg = string.Format(LangMan.LS(LSID.GroupDeleteQuery), ((GDMGroupRecord)record).GroupName);
                     break;
 
                 case GDMRecordType.rtResearch:
-                    msg = string.Format(LangMan.LS(LSID.LSID_ResearchDeleteQuery), ((GDMResearchRecord)record).ResearchName);
+                    msg = string.Format(LangMan.LS(LSID.ResearchDeleteQuery), ((GDMResearchRecord)record).ResearchName);
                     break;
 
                 case GDMRecordType.rtTask:
-                    msg = string.Format(LangMan.LS(LSID.LSID_TaskDeleteQuery),
+                    msg = string.Format(LangMan.LS(LSID.TaskDeleteQuery),
                                         GKUtils.GetTaskGoalStr(baseWin.Context.Tree, (GDMTaskRecord)record));
                     break;
 
                 case GDMRecordType.rtCommunication:
-                    msg = string.Format(LangMan.LS(LSID.LSID_CommunicationDeleteQuery), ((GDMCommunicationRecord)record).CommName);
+                    msg = string.Format(LangMan.LS(LSID.CommunicationDeleteQuery), ((GDMCommunicationRecord)record).CommName);
                     break;
 
                 case GDMRecordType.rtLocation:
-                    msg = string.Format(LangMan.LS(LSID.LSID_LocationDeleteQuery), ((GDMLocationRecord)record).LocationName);
+                    msg = string.Format(LangMan.LS(LSID.LocationDeleteQuery), ((GDMLocationRecord)record).LocationName);
                     break;
             }
             return msg;
@@ -877,7 +877,7 @@ namespace GKCore.Controllers
             if (father == null) return result;
 
             if (father == person) {
-                AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_FatherAsChild));
+                AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.FatherAsChild));
                 return result;
             }
 
@@ -901,7 +901,7 @@ namespace GKCore.Controllers
         {
             bool result = false;
 
-            if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachFatherQuery))) {
+            if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachFatherQuery))) {
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
                 if (family != null) {
                     GDMIndividualRecord father = baseWin.Context.Tree.GetPtrValue(family.Husband);
@@ -920,7 +920,7 @@ namespace GKCore.Controllers
             if (mother == null) return result;
 
             if (mother == person) {
-                AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.LSID_MotherAsChild));
+                AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.MotherAsChild));
                 return result;
             }
 
@@ -943,7 +943,7 @@ namespace GKCore.Controllers
         {
             bool result = false;
 
-            if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachMotherQuery))) {
+            if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachMotherQuery))) {
                 GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
                 if (family != null) {
                     GDMIndividualRecord mother = baseWin.Context.Tree.GetPtrValue(family.Wife);
@@ -975,7 +975,7 @@ namespace GKCore.Controllers
             GDMIndividualRecord husband = baseWin.Context.Tree.GetPtrValue(family.Husband);
             if (!baseWin.Context.IsAvailableRecord(husband)) return false;
 
-            if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachHusbandQuery))) {
+            if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachHusbandQuery))) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, husband);
             }
 
@@ -1002,7 +1002,7 @@ namespace GKCore.Controllers
             GDMIndividualRecord wife = baseWin.Context.Tree.GetPtrValue(family.Wife);
             if (!baseWin.Context.IsAvailableRecord(wife)) return false;
 
-            if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachWifeQuery))) {
+            if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachWifeQuery))) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, wife);
             }
 
@@ -1076,7 +1076,7 @@ namespace GKCore.Controllers
         {
             string res = TreeInspector.DetectCycle(tree, iRec);
             if (!string.IsNullOrEmpty(res)) {
-                AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.LSID_DetectedDataLoop), res));
+                AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.DetectedDataLoop), res));
                 return true;
             }
             return false;

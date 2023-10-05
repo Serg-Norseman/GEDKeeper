@@ -68,8 +68,8 @@ namespace GKUI.Components
 
         public FilterGridView(IRecordsListModel listMan)
         {
-            fBtnDelete = CreateButton("btnDelete", UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif"), LangMan.LS(LSID.LSID_MIRecordDelete), ItemDelete);
-            fBtnAdd = CreateButton("btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.LSID_MIRecordAdd), ItemAdd);
+            fBtnDelete = CreateButton("btnDelete", UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif"), LangMan.LS(LSID.MIRecordDelete), ItemDelete);
+            fBtnAdd = CreateButton("btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.MIRecordAdd), ItemAdd);
 
             fToolBar = new ToolStrip();
             fToolBar.Name = "ToolBar";
@@ -172,9 +172,9 @@ namespace GKUI.Components
             fGridView.Rows.Clear();
             ((System.ComponentModel.ISupportInitialize)(fGridView)).BeginInit();
             fGridView.Columns.AddRange(new DataGridViewColumn[] {
-                AddComboColumn("FField", LangMan.LS(LSID.LSID_Field), fFields, 200),
-                AddComboColumn("FCondition", LangMan.LS(LSID.LSID_Condition), GKData.CondSigns, 150),
-                AddTextColumn("FValue", LangMan.LS(LSID.LSID_Value), 300)
+                AddComboColumn("FField", LangMan.LS(LSID.Field), fFields, 200),
+                AddComboColumn("FCondition", LangMan.LS(LSID.Condition), GKData.CondSigns, 150),
+                AddTextColumn("FValue", LangMan.LS(LSID.Value), 300)
             });
 
             fGridView.CellBeginEdit += dataGridView1_CellBeginEdit;

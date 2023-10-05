@@ -135,28 +135,28 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_MergeDuplicates);
+            fView.Title = LangMan.LS(LSID.MergeDuplicates);
 
-            GetControl<ITabPage>("pageMerge").Text = LangMan.LS(LSID.LSID_RecMerge);
-            GetControl<ITabPage>("pageMergeOptions").Text = LangMan.LS(LSID.LSID_MIOptions);
-            GetControl<IButton>("btnAutoSearch").Text = LangMan.LS(LSID.LSID_RM_Search);
-            GetControl<IButton>("btnSkip").Text = LangMan.LS(LSID.LSID_RM_Skip);
-            GetControl<IGroupBox>("rgMode").Text = LangMan.LS(LSID.LSID_RM_Records);
-            GetControl<IRadioButton>("radPersons").Text = LangMan.LS(LSID.LSID_RPIndividuals);
-            GetControl<IRadioButton>("radNotes").Text = LangMan.LS(LSID.LSID_RPNotes);
-            GetControl<IRadioButton>("radFamilies").Text = LangMan.LS(LSID.LSID_RPFamilies);
-            GetControl<IRadioButton>("radSources").Text = LangMan.LS(LSID.LSID_RPSources);
-            GetControl<IGroupBox>("grpSearchPersons").Text = LangMan.LS(LSID.LSID_RM_SearchPersons);
-            GetControl<ICheckBox>("chkIndistinctMatching").Text = LangMan.LS(LSID.LSID_RM_IndistinctMatching);
-            GetControl<ICheckBox>("chkBirthYear").Text = LangMan.LS(LSID.LSID_RM_BirthYear);
-            GetControl<ILabel>("lblNameAccuracy").Text = LangMan.LS(LSID.LSID_RM_NameAccuracy);
-            GetControl<ILabel>("lblYearInaccuracy").Text = LangMan.LS(LSID.LSID_RM_YearInaccuracy);
-            GetControl<IGroupBox>("grpMergeOther").Text = LangMan.LS(LSID.LSID_Other);
-            GetControl<ICheckBox>("chkBookmarkMerged").Text = LangMan.LS(LSID.LSID_BookmarkMerged);
-            GetControl<IButton>("btnRec1Select").Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
-            GetControl<IButton>("btnRec2Select").Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
-            GetControl<IButton>("btnEditLeft").Text = LangMan.LS(LSID.LSID_DoEdit);
-            GetControl<IButton>("btnEditRight").Text = LangMan.LS(LSID.LSID_DoEdit);
+            GetControl<ITabPage>("pageMerge").Text = LangMan.LS(LSID.RecMerge);
+            GetControl<ITabPage>("pageMergeOptions").Text = LangMan.LS(LSID.MIOptions);
+            GetControl<IButton>("btnAutoSearch").Text = LangMan.LS(LSID.RM_Search);
+            GetControl<IButton>("btnSkip").Text = LangMan.LS(LSID.RM_Skip);
+            GetControl<IGroupBox>("rgMode").Text = LangMan.LS(LSID.RM_Records);
+            GetControl<IRadioButton>("radPersons").Text = LangMan.LS(LSID.RPIndividuals);
+            GetControl<IRadioButton>("radNotes").Text = LangMan.LS(LSID.RPNotes);
+            GetControl<IRadioButton>("radFamilies").Text = LangMan.LS(LSID.RPFamilies);
+            GetControl<IRadioButton>("radSources").Text = LangMan.LS(LSID.RPSources);
+            GetControl<IGroupBox>("grpSearchPersons").Text = LangMan.LS(LSID.RM_SearchPersons);
+            GetControl<ICheckBox>("chkIndistinctMatching").Text = LangMan.LS(LSID.RM_IndistinctMatching);
+            GetControl<ICheckBox>("chkBirthYear").Text = LangMan.LS(LSID.RM_BirthYear);
+            GetControl<ILabel>("lblNameAccuracy").Text = LangMan.LS(LSID.RM_NameAccuracy);
+            GetControl<ILabel>("lblYearInaccuracy").Text = LangMan.LS(LSID.RM_YearInaccuracy);
+            GetControl<IGroupBox>("grpMergeOther").Text = LangMan.LS(LSID.Other);
+            GetControl<ICheckBox>("chkBookmarkMerged").Text = LangMan.LS(LSID.BookmarkMerged);
+            GetControl<IButton>("btnRec1Select").Text = LangMan.LS(LSID.DlgSelect) + @"...";
+            GetControl<IButton>("btnRec2Select").Text = LangMan.LS(LSID.DlgSelect) + @"...";
+            GetControl<IButton>("btnEditLeft").Text = LangMan.LS(LSID.DoEdit);
+            GetControl<IButton>("btnEditRight").Text = LangMan.LS(LSID.DoEdit);
         }
 
         public void ChangeOption()

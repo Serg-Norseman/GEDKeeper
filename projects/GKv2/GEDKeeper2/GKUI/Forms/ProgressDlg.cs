@@ -51,11 +51,11 @@ namespace GKUI.Forms
             fBeginEvent = new ManualResetEvent(false);
             fCancelEvent = new ManualResetEvent(false);
 
-            Text = LangMan.LS(LSID.LSID_Progress);
-            lblTimePassed.Text = LangMan.LS(LSID.LSID_TimePassed);
-            lblTimeRemain.Text = LangMan.LS(LSID.LSID_TimeRemain);
-            lblTimeTotal.Text = LangMan.LS(LSID.LSID_TimeTotal);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            Text = LangMan.LS(LSID.Progress);
+            lblTimePassed.Text = LangMan.LS(LSID.TimePassed);
+            lblTimeRemain.Text = LangMan.LS(LSID.TimeRemain);
+            lblTimeTotal.Text = LangMan.LS(LSID.TimeTotal);
+            btnCancel.Text = LangMan.LS(LSID.DlgCancel);
         }
 
         protected override void Dispose(bool disposing)

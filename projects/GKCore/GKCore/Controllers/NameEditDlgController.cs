@@ -85,15 +85,15 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_Name);
+            fView.Title = LangMan.LS(LSID.Name);
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
-            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.LSID_Name);
-            GetControl<ILabel>("lblSex").Text = LangMan.LS(LSID.LSID_Sex);
-            GetControl<IGroupBox>("grpPatronymics").Text = LangMan.LS(LSID.LSID_Patronymic);
-            GetControl<ILabel>("lblFemale").Text = LangMan.LS(LSID.LSID_PatFemale);
-            GetControl<ILabel>("lblMale").Text = LangMan.LS(LSID.LSID_PatMale);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Name);
+            GetControl<ILabel>("lblSex").Text = LangMan.LS(LSID.Sex);
+            GetControl<IGroupBox>("grpPatronymics").Text = LangMan.LS(LSID.Patronymic);
+            GetControl<ILabel>("lblFemale").Text = LangMan.LS(LSID.PatFemale);
+            GetControl<ILabel>("lblMale").Text = LangMan.LS(LSID.PatMale);
         }
     }
 }

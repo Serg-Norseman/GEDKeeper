@@ -65,7 +65,7 @@ namespace GKCore.Controllers
             if (fStrategy == null) return;
 
             if (!fStrategy.HasResults()) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.NoMatchesFound));
                 return;
             }
 
@@ -80,7 +80,7 @@ namespace GKCore.Controllers
             if (fStrategy == null) return;
 
             if (!fStrategy.HasResults()) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_NoMatchesFound));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.NoMatchesFound));
                 return;
             }
 
@@ -92,10 +92,10 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_Search);
-            //txtSearchPattern.Text = LangMan.LS(LSID.LSID_NoMatchesFound);
-            SetToolTip("btnPrev", LangMan.LS(LSID.LSID_FindPrevious));
-            SetToolTip("btnNext", LangMan.LS(LSID.LSID_FindNext));
+            fView.Title = LangMan.LS(LSID.Search);
+            //txtSearchPattern.Text = LangMan.LS(LSID.NoMatchesFound);
+            SetToolTip("btnPrev", LangMan.LS(LSID.FindPrevious));
+            SetToolTip("btnNext", LangMan.LS(LSID.FindNext));
         }
     }
 }

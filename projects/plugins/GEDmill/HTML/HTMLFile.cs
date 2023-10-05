@@ -56,7 +56,7 @@ namespace GEDmill.HTML
 
             // This is for CJ who ended up with 17000 files plastered all over her desktop...
             if (GMHelper.IsDesktop(filename)) {
-                throw new HTMLException(fLangMan.LS(PLS.LSID_DesktopException));
+                throw new HTMLException(fLangMan.LS(PLS.DesktopException));
             }
 
             fLogger.WriteInfo("HTMLFile : " + filename);
@@ -70,7 +70,7 @@ namespace GEDmill.HTML
             try {
                 fStream = new FileStream(filename, FileMode.Create, FileAccess.Write);
             } catch (NotSupportedException) {
-                throw new HTMLException(string.Format(fLangMan.LS(PLS.LSID_PathException), filename));
+                throw new HTMLException(string.Format(fLangMan.LS(PLS.PathException), filename));
             }
 
             if (fStream != null) {

@@ -2080,7 +2080,7 @@ namespace GKCore.Charts
 
                 int ancCount = GKUtils.GetAncestorsCount(tree, iRec, ancestorsLimit);
                 if (ancCount > 2048) {
-                    AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_AncestorsNumberIsInvalid), ancCount.ToString()));
+                    AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.AncestorsNumberIsInvalid), ancCount.ToString()));
                     return false;
                 }
             }
@@ -2090,7 +2090,7 @@ namespace GKCore.Charts
 
                 int descCount = GKUtils.GetDescendantsCount(tree, iRec, descendantsLimit);
                 if (descCount > 2048) {
-                    AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.LSID_DescendantsNumberIsInvalid), descCount.ToString()));
+                    AppHost.StdDialogs.ShowMessage(string.Format(LangMan.LS(LSID.DescendantsNumberIsInvalid), descCount.ToString()));
                     result = false;
                 }
             }

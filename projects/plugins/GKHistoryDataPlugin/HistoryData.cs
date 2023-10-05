@@ -97,7 +97,7 @@ namespace GKHistoryDataPlugin
         {
             string csvPath = AppHost.GetAppPath() + "externals/" + fileName;
             if (!File.Exists(csvPath)) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FileNotFound, fileName));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FileNotFound, fileName));
                 return false;
             }
 

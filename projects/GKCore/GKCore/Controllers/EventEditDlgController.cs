@@ -76,7 +76,7 @@ namespace GKCore.Controllers
 
                     fEvent.Date.ParseString(dt.StringValue);
                 } catch (Exception ex) {
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_DateInvalid));
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.DateInvalid));
                     throw ex;
                 }
 
@@ -87,7 +87,7 @@ namespace GKCore.Controllers
                     var attrValue = fView.Attribute.Text;
 
                     if (string.IsNullOrEmpty(attrValue)) {
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_FactValueIsInvalid));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FactValueIsInvalid));
                         throw new Exception();
                     }
 
@@ -283,24 +283,24 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_Event);
+            fView.Title = LangMan.LS(LSID.Event);
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
-            GetControl<IButton>("btnAddress").Text = LangMan.LS(LSID.LSID_Address) + @"...";
-            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.LSID_Common);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.LSID_RPNotes);
-            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            GetControl<ITabPage>("pageSources").Text = LangMan.LS(LSID.LSID_RPSources);
-            GetControl<ILabel>("lblEvent").Text = LangMan.LS(LSID.LSID_Event);
-            GetControl<ILabel>("lblAttrValue").Text = LangMan.LS(LSID.LSID_Value);
-            GetControl<ILabel>("lblPlace").Text = LangMan.LS(LSID.LSID_Place);
-            GetControl<ILabel>("lblDate").Text = LangMan.LS(LSID.LSID_Date);
-            GetControl<ILabel>("lblCause").Text = LangMan.LS(LSID.LSID_Cause);
-            GetControl<ILabel>("lblOrg").Text = LangMan.LS(LSID.LSID_Agency);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            GetControl<IButton>("btnAddress").Text = LangMan.LS(LSID.Address) + @"...";
+            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Common);
+            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
+            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.RPMultimedia);
+            GetControl<ITabPage>("pageSources").Text = LangMan.LS(LSID.RPSources);
+            GetControl<ILabel>("lblEvent").Text = LangMan.LS(LSID.Event);
+            GetControl<ILabel>("lblAttrValue").Text = LangMan.LS(LSID.Value);
+            GetControl<ILabel>("lblPlace").Text = LangMan.LS(LSID.Place);
+            GetControl<ILabel>("lblDate").Text = LangMan.LS(LSID.Date);
+            GetControl<ILabel>("lblCause").Text = LangMan.LS(LSID.Cause);
+            GetControl<ILabel>("lblOrg").Text = LangMan.LS(LSID.Agency);
 
-            SetToolTip("btnPlaceAdd", LangMan.LS(LSID.LSID_PlaceAddTip));
-            SetToolTip("btnPlaceDelete", LangMan.LS(LSID.LSID_PlaceDeleteTip));
+            SetToolTip("btnPlaceAdd", LangMan.LS(LSID.PlaceAddTip));
+            SetToolTip("btnPlaceDelete", LangMan.LS(LSID.PlaceDeleteTip));
         }
     }
 }

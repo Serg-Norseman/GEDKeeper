@@ -112,10 +112,10 @@ namespace GKCore.Controllers
             fView.MarriedSurname.Text = fPersonalName.MarriedName;
 
             if (!IsExtendedWomanSurname()) {
-                fView.SurnameLabel.Text = LangMan.LS(LSID.LSID_Surname);
+                fView.SurnameLabel.Text = LangMan.LS(LSID.Surname);
                 fView.MarriedSurname.Enabled = false;
             } else {
-                fView.SurnameLabel.Text = LangMan.LS(LSID.LSID_MaidenSurname);
+                fView.SurnameLabel.Text = LangMan.LS(LSID.MaidenSurname);
                 fView.MarriedSurname.Enabled = true;
             }
 
@@ -164,20 +164,20 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_Name);
+            fView.Title = LangMan.LS(LSID.Name);
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
-            GetControl<ILabel>("lblSurname").Text = LangMan.LS(LSID.LSID_Surname);
-            GetControl<ILabel>("lblMarriedSurname").Text = LangMan.LS(LSID.LSID_MarriedSurname);
-            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.LSID_Name);
-            GetControl<ILabel>("lblPatronymic").Text = LangMan.LS(LSID.LSID_Patronymic);
-            GetControl<ILabel>("lblNickname").Text = LangMan.LS(LSID.LSID_Nickname);
-            GetControl<ILabel>("lblSurnamePrefix").Text = LangMan.LS(LSID.LSID_SurnamePrefix);
-            GetControl<ILabel>("lblNamePrefix").Text = LangMan.LS(LSID.LSID_NamePrefix);
-            GetControl<ILabel>("lblNameSuffix").Text = LangMan.LS(LSID.LSID_NameSuffix);
-            GetControl<ILabel>("lblType").Text = LangMan.LS(LSID.LSID_Type);
-            GetControl<ILabel>("lblLanguage").Text = LangMan.LS(LSID.LSID_Language);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            GetControl<ILabel>("lblSurname").Text = LangMan.LS(LSID.Surname);
+            GetControl<ILabel>("lblMarriedSurname").Text = LangMan.LS(LSID.MarriedSurname);
+            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Name);
+            GetControl<ILabel>("lblPatronymic").Text = LangMan.LS(LSID.Patronymic);
+            GetControl<ILabel>("lblNickname").Text = LangMan.LS(LSID.Nickname);
+            GetControl<ILabel>("lblSurnamePrefix").Text = LangMan.LS(LSID.SurnamePrefix);
+            GetControl<ILabel>("lblNamePrefix").Text = LangMan.LS(LSID.NamePrefix);
+            GetControl<ILabel>("lblNameSuffix").Text = LangMan.LS(LSID.NameSuffix);
+            GetControl<ILabel>("lblType").Text = LangMan.LS(LSID.Type);
+            GetControl<ILabel>("lblLanguage").Text = LangMan.LS(LSID.Language);
         }
     }
 }

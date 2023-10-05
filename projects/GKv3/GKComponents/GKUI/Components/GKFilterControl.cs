@@ -56,8 +56,8 @@ namespace GKUI.Components
 
         public void SetLocale()
         {
-            btnSettings.ToolTip = LangMan.LS(LSID.LSID_MIOptions);
-            chkIndistinctMatching.Text = LangMan.LS(LSID.LSID_RM_IndistinctMatching);
+            btnSettings.ToolTip = LangMan.LS(LSID.MIOptions);
+            chkIndistinctMatching.Text = LangMan.LS(LSID.RM_IndistinctMatching);
         }
 
         private void Control_LostFocus(object sender, EventArgs e)

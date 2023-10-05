@@ -472,7 +472,7 @@ namespace GKUI.Forms
             bool result = true;
             if (!fContext.Modified) return result;
 
-            DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.LSID_FileSaveQuery), GKData.APP_TITLE, MessageBoxButtons.YesNoCancel, MessageBoxType.Warning);
+            DialogResult dialogResult = MessageBox.Show(LangMan.LS(LSID.FileSaveQuery), GKData.APP_TITLE, MessageBoxButtons.YesNoCancel, MessageBoxType.Warning);
             switch (dialogResult) {
                 case DialogResult.Yes:
                     SaveFileEx(false);
@@ -602,8 +602,8 @@ namespace GKUI.Forms
             IListView rView = GetRecordsViewByType(recType);
             if (rView != null) {
                 var listMan = rView.ListMan;
-                statusLine = LangMan.LS(LSID.LSID_SBRecords) + ": " + listMan.TotalCount.ToString();
-                statusLine = statusLine + ", " + LangMan.LS(LSID.LSID_SBFiltered) + ": " + listMan.FilteredCount.ToString();
+                statusLine = LangMan.LS(LSID.SBRecords) + ": " + listMan.TotalCount.ToString();
+                statusLine = statusLine + ", " + LangMan.LS(LSID.SBFiltered) + ": " + listMan.FilteredCount.ToString();
             }
 
             panStatusText.Text = statusLine;

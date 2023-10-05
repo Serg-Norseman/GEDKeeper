@@ -55,8 +55,8 @@ namespace GKUI.Components
             DefaultButton = btnAccept;
             AbortButton = btnCancel;
 
-            btnAccept.Text = LangMan.LS(LSID.LSID_DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            btnAccept.Text = LangMan.LS(LSID.DlgAccept);
+            btnCancel.Text = LangMan.LS(LSID.DlgCancel);
         }
 
         protected override void Dispose(bool disposing)

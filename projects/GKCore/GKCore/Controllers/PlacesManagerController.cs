@@ -78,7 +78,7 @@ namespace GKCore.Controllers
             if (pObj == null) return;
 
             if (pObj.Name.IndexOf("[*]") == 0) {
-                AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.LSID_PlaceAlreadyInBook));
+                AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.PlaceAlreadyInBook));
             } else {
                 GDMLocationRecord locRec = fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
                 if (locRec == null) return;
@@ -100,16 +100,16 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_ToolOp_9);
+            fView.Title = LangMan.LS(LSID.ToolOp_9);
 
-            GetControl<ITabPage>("pagePlaceManage").Text = LangMan.LS(LSID.LSID_ToolOp_9);
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
-            GetControl<IButton>("btnIntoList").Text = LangMan.LS(LSID.LSID_InsertIntoBook);
-            GetControl<IButton>("btnAnalysePlaces").Text = LangMan.LS(LSID.LSID_Analyze);
-            GetControl<ILabel>("lblFilter").Text = LangMan.LS(LSID.LSID_MIFilter);
+            GetControl<ITabPage>("pagePlaceManage").Text = LangMan.LS(LSID.ToolOp_9);
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            GetControl<IButton>("btnIntoList").Text = LangMan.LS(LSID.InsertIntoBook);
+            GetControl<IButton>("btnAnalysePlaces").Text = LangMan.LS(LSID.Analyze);
+            GetControl<ILabel>("lblFilter").Text = LangMan.LS(LSID.MIFilter);
 
-            fView.PlacesList.AddColumn(LangMan.LS(LSID.LSID_Place), 400, false);
-            fView.PlacesList.AddColumn(LangMan.LS(LSID.LSID_LinksCount), 100, false);
+            fView.PlacesList.AddColumn(LangMan.LS(LSID.Place), 400, false);
+            fView.PlacesList.AddColumn(LangMan.LS(LSID.LinksCount), 100, false);
         }
     }
 }

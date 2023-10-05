@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -66,11 +66,11 @@ namespace GKUI.Forms
             fBeginEvent = new ManualResetEvent(false);
             fCancelEvent = new ManualResetEvent(false);
 
-            Title = LangMan.LS(LSID.LSID_Progress);
-            lblTimePassed.Text = LangMan.LS(LSID.LSID_TimePassed);
-            lblTimeRemain.Text = LangMan.LS(LSID.LSID_TimeRemain);
-            lblTimeTotal.Text = LangMan.LS(LSID.LSID_TimeTotal);
-            btnCancel.Text = LangMan.LS(LSID.LSID_DlgCancel);
+            Title = LangMan.LS(LSID.Progress);
+            lblTimePassed.Text = LangMan.LS(LSID.TimePassed);
+            lblTimeRemain.Text = LangMan.LS(LSID.TimeRemain);
+            lblTimeTotal.Text = LangMan.LS(LSID.TimeTotal);
+            btnCancel.Text = LangMan.LS(LSID.DlgCancel);
         }
 
         protected override void Dispose(bool disposing)

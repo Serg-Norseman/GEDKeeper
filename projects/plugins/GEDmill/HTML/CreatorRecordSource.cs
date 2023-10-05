@@ -53,8 +53,8 @@ namespace GEDmill.HTML
             }
 
             // Create the strings to use for the HTML file.
-            string pageDescription = fLangMan.LS(PLS.LSID_PageDescription) + " " + fSourceRecord.ShortTitle;
-            string keywords = fLangMan.LS(PLS.LSID_Keywords) + " " + fSourceRecord.ShortTitle;
+            string pageDescription = fLangMan.LS(PLS.PageDescription) + " " + fSourceRecord.ShortTitle;
+            string keywords = fLangMan.LS(PLS.Keywords) + " " + fSourceRecord.ShortTitle;
             string filename = string.Concat(GMConfig.Instance.OutputFolder, "\\sour", fSourceRecord.XRef);
             string fullFilename = string.Concat(filename, ".html");
 
@@ -76,7 +76,7 @@ namespace GEDmill.HTML
                 f.WriteLine("          <div id=\"names\">");
                 string sourName = fSourceRecord.ShortTitle;
                 if (sourName == "") {
-                    sourName = fLangMan.LS(PLS.LSID_Source) + " ";
+                    sourName = fLangMan.LS(PLS.Source) + " ";
                     bool gotSourceName = false;
                     // Try user reference number
                     foreach (var userRef in fSourceRecord.UserReferences) {
@@ -146,7 +146,7 @@ namespace GEDmill.HTML
                 }
                 if (!string.IsNullOrEmpty(cleanText)) {
                     f.WriteLine("        <div id=\"text\">");
-                    f.WriteLine("          <h1>{0}</h1>", fLangMan.LS(PLS.LSID_Text));
+                    f.WriteLine("          <h1>{0}</h1>", fLangMan.LS(PLS.Text));
                     f.WriteLine("          <p class=\"pretext\">");
                     f.WriteLine(EscapeHTML(cleanText, false));
                     f.WriteLine("            </p>");
@@ -158,7 +158,7 @@ namespace GEDmill.HTML
 
                 if (!GMConfig.Instance.SupressBackreferences) {
                     f.WriteLine("        <div id=\"citations\">");
-                    f.WriteLine("          <h1>{0}</h1>", fLangMan.LS(PLS.LSID_Citations));
+                    f.WriteLine("          <h1>{0}</h1>", fLangMan.LS(PLS.Citations));
                     f.WriteLine("          <ul>");
 
                     var htBackrefs = GMHelper.MakeBackReferences(fSourceRecord);
@@ -218,7 +218,7 @@ namespace GEDmill.HTML
                     if (iMultimedia.Width != 0 && iMultimedia.Height != 0) {
                         // Must be a picture.
                         if (altName == "") {
-                            altName = fLangMan.LS(PLS.LSID_ImageForThisSource);
+                            altName = fLangMan.LS(PLS.ImageForThisSource);
                         }
                         if (iMultimedia.LargeFileName.Length > 0) {
                             f.WriteLine(string.Concat("            <a href=\"", iMultimedia.LargeFileName, "\"><img src=\"", iMultimedia.FileName, "\" alt=\"", altName, "\" /></a>")); // TODO: clip and scale properly. Use MainForm.s_config to set a max scale
@@ -228,7 +228,7 @@ namespace GEDmill.HTML
                     } else {
                         // Other multimedia
                         if (altName == "") {
-                            altName = fLangMan.LS(PLS.LSID_MediaForThisSource);
+                            altName = fLangMan.LS(PLS.MediaForThisSource);
                         }
 
                         if (GMConfig.Instance.LinkOriginalPicture) {

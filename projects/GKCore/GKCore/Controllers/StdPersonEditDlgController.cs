@@ -85,11 +85,11 @@ namespace GKCore.Controllers
         {
             base.SetLocale();
 
-            GetControl<ILabel>("lblSurnamePrefix").Text = LangMan.LS(LSID.LSID_SurnamePrefix);
-            GetControl<ILabel>("lblNamePrefix").Text = LangMan.LS(LSID.LSID_NamePrefix);
-            GetControl<ILabel>("lblNameSuffix").Text = LangMan.LS(LSID.LSID_NameSuffix);
+            GetControl<ILabel>("lblSurnamePrefix").Text = LangMan.LS(LSID.SurnamePrefix);
+            GetControl<ILabel>("lblNamePrefix").Text = LangMan.LS(LSID.NamePrefix);
+            GetControl<ILabel>("lblNameSuffix").Text = LangMan.LS(LSID.NameSuffix);
 
-            GetControl<ITabPage>("pageChilds").Text = LangMan.LS(LSID.LSID_Childs);
+            GetControl<ITabPage>("pageChilds").Text = LangMan.LS(LSID.Childs);
         }
     }
 }

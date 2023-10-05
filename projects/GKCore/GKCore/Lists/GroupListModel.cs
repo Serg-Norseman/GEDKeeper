@@ -50,9 +50,9 @@ namespace GKCore.Lists
         {
             var result = new ListColumns<GDMGroupRecord>();
 
-            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.LSID_Group, DataType.dtString, 400, true, true);
-            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
+            result.AddColumn(LSID.Group, DataType.dtString, 400, true, true);
+            result.AddColumn(LSID.Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
             return result;
@@ -100,7 +100,7 @@ namespace GKCore.Lists
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raDelete /*, RecordAction.raJump*/);
 
-            fListColumns.AddColumn(LSID.LSID_Name, 300, false);
+            fListColumns.AddColumn(LSID.Name, 300, false);
             fListColumns.ResetDefaults();
         }
 
@@ -151,7 +151,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (member != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachMemberQuery))) {
+                    if (member != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachMemberQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, grp, member);
                     }
                     break;

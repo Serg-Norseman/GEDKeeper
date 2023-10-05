@@ -309,7 +309,7 @@ namespace GEDmill
             RestrictConfidential = false;
             RestrictPrivacy = false;
             OutputFolder = "";
-            UnknownName = langMan.LS(PLS.LSID_UnknownName); // "no name" implied we knew them and they had no name.
+            UnknownName = langMan.LS(PLS.UnknownName); // "no name" implied we knew them and they had no name.
             NameCapitalisation = 1;
             CopyMultimedia = true;
             ImageFolder = "multimedia";
@@ -318,14 +318,14 @@ namespace GEDmill
             MaxImageHeight = 160;
             MaxNumberMultimediaFiles = 32;
             AgeForOccupation = 50;
-            NoSurname = langMan.LS(PLS.LSID_NoSurname);
-            IndexTitle = langMan.LS(PLS.LSID_IndexTitle);
+            NoSurname = langMan.LS(PLS.NoSurname);
+            IndexTitle = langMan.LS(PLS.IndexTitle);
             MaxSourceImageWidth = 800;
             MaxSourceImageHeight = 800;
             MaxThumbnailImageWidth = 45;
             MaxThumbnailImageHeight = 45;
             FirstRecordXRef = "";
-            PlaceWord = langMan.LS(PLS.LSID_PlaceWord);
+            PlaceWord = langMan.LS(PLS.PlaceWord);
             CapitaliseEventDescriptions = true;
             RestrictAssociatedSources = true;
             RenameMultimedia = true;
@@ -335,7 +335,7 @@ namespace GEDmill
 
             OwnersName = Environment.UserName;
 
-            SiteTitle = langMan.LS(PLS.LSID_SiteTitle);
+            SiteTitle = langMan.LS(PLS.SiteTitle);
             if (!string.IsNullOrEmpty(OwnersName))
                 SiteTitle += " of " + OwnersName;
 
@@ -364,7 +364,7 @@ namespace GEDmill
             AllowNonPictures = true;
             MainWebsiteLink = "";
             OnlyConceal = false;
-            ConcealedName = langMan.LS(PLS.LSID_ConcealedName);
+            ConcealedName = langMan.LS(PLS.ConcealedName);
             LinkOriginalPicture = false;
             RenameOriginalPicture = false;
             ExcludeFileDir = "";
@@ -391,7 +391,7 @@ namespace GEDmill
                     RestrictConfidential = ini.ReadBool("Common", "RestrictConfidential", false);
                     RestrictPrivacy = ini.ReadBool("Common", "RestrictPrivacy", false);
                     OutputFolder = ini.ReadString("Common", "OutputFolder", "");
-                    UnknownName = ini.ReadString("Common", "UnknownName", fLangMan.LS(PLS.LSID_UnknownName));
+                    UnknownName = ini.ReadString("Common", "UnknownName", fLangMan.LS(PLS.UnknownName));
                     NameCapitalisation = ini.ReadInteger("Common", "NameCapitalisation", 1);
                     CopyMultimedia = ini.ReadBool("Common", "CopyMultimedia", true);
                     ImageFolder = ini.ReadString("Common", "ImageFolder", "multimedia");
@@ -402,14 +402,14 @@ namespace GEDmill
                     MaxNumberMultimediaFiles = ini.ReadInteger("Common", "MaxNumberMultimediaFiles", 32);
                     AgeForOccupation = ini.ReadInteger("Common", "AgeForOccupation", 50);
                     OwnersName = ini.ReadString("Common", "OwnersName", "");
-                    NoSurname = ini.ReadString("Common", "NoSurname", fLangMan.LS(PLS.LSID_NoSurname));
-                    IndexTitle = ini.ReadString("Common", "IndexTitle", fLangMan.LS(PLS.LSID_IndexTitle));
+                    NoSurname = ini.ReadString("Common", "NoSurname", fLangMan.LS(PLS.NoSurname));
+                    IndexTitle = ini.ReadString("Common", "IndexTitle", fLangMan.LS(PLS.IndexTitle));
                     MaxSourceImageWidth = ini.ReadInteger("Common", "MaxSourceImageWidth", 800);
                     MaxSourceImageHeight = ini.ReadInteger("Common", "MaxSourceImageHeight", 800);
                     FirstRecordXRef = ini.ReadString("Common", "FirstRecordXRef", "");
-                    SiteTitle = ini.ReadString("Common", "SiteTitle", fLangMan.LS(PLS.LSID_SiteTitle));
+                    SiteTitle = ini.ReadString("Common", "SiteTitle", fLangMan.LS(PLS.SiteTitle));
                     FrontPageImageFilename = ini.ReadString("Common", "FrontPageImageFilename", FrontPageImageFilename);
-                    PlaceWord = ini.ReadString("Common", "PlaceWord", fLangMan.LS(PLS.LSID_PlaceWord));
+                    PlaceWord = ini.ReadString("Common", "PlaceWord", fLangMan.LS(PLS.PlaceWord));
                     CapitaliseEventDescriptions = ini.ReadBool("Common", "CapitaliseEventDescriptions", true);
                     RestrictAssociatedSources = ini.ReadBool("Common", "RestrictAssociatedSources", true);
                     RenameMultimedia = ini.ReadBool("Common", "RenameMultimedia", true);
@@ -449,7 +449,7 @@ namespace GEDmill
                     MainWebsiteLink = ini.ReadString("Common", "MainWebsiteLink", "");
                     MiniTreeColorIndiBgConcealed = SysUtils.ParseColor(ini.ReadString("Common", "MiniTreeColorIndiBgConcealed", "#cccccc"));
                     OnlyConceal = ini.ReadBool("Common", "OnlyConceal", false);
-                    ConcealedName = ini.ReadString("Common", "ConcealedName", fLangMan.LS(PLS.LSID_ConcealedName));
+                    ConcealedName = ini.ReadString("Common", "ConcealedName", fLangMan.LS(PLS.ConcealedName));
                     MiniTreeColorIndiFgConcealed = SysUtils.ParseColor(ini.ReadString("Common", "MiniTreeColorIndiFgConcealed", "#000000"));
                     LinkOriginalPicture = ini.ReadBool("Common", "LinkOriginalPicture", false);
                     RenameOriginalPicture = ini.ReadBool("Common", "RenameOriginalPicture", false);

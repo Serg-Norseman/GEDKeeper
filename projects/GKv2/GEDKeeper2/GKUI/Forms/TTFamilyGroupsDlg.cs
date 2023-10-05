@@ -91,7 +91,7 @@ namespace GKUI.Forms
         {
             if (args == null) return;
 
-            args.Hint = string.Format(LangMan.LS(LSID.LSID_LogHint), args.FragmentNumber, args.Size);
+            args.Hint = string.Format(LangMan.LS(LSID.LogHint), args.FragmentNumber, args.Size);
         }
 
         private void miDetails_Click(object sender, EventArgs e)

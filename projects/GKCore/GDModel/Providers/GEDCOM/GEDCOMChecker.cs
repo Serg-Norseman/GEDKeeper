@@ -443,7 +443,7 @@ namespace GDModel.Providers.GEDCOM
         private void ConvertIdentifiers()
         {
             if (fProgress != null)
-                fProgress.Begin(LangMan.LS(LSID.LSID_IDsCorrect), fTree.RecordsCount * 2);
+                fProgress.Begin(LangMan.LS(LSID.IDsCorrect), fTree.RecordsCount * 2);
 
             GDMXRefReplacer repMap = new GDMXRefReplacer();
             try {
@@ -499,7 +499,7 @@ namespace GDModel.Providers.GEDCOM
                 }
 
                 if (fProgress != null)
-                    fProgress.Begin(LangMan.LS(LSID.LSID_FormatCheck), 100);
+                    fProgress.Begin(LangMan.LS(LSID.FormatCheck), 100);
 
                 try {
                     bool xrefValid = true;
@@ -537,7 +537,7 @@ namespace GDModel.Providers.GEDCOM
                 }
             } catch (Exception ex) {
                 Logger.WriteError("GEDCOMChecker.CheckFormat()", ex);
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_CheckGedComFailed));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.CheckGedComFailed));
             }
 
             return result;

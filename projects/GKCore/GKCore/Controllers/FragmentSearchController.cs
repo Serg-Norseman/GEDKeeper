@@ -77,7 +77,7 @@ namespace GKCore.Controllers
                     int cnt = groupRecords.Count;
                     int groupNum = (i + 1);
                     ITVNode groupItem = fView.GroupsTree.AddNode(null,
-                        groupNum.ToString() + " " + LangMan.LS(LSID.LSID_Group).ToLower() + " (" + cnt.ToString() + ")", null);
+                        groupNum.ToString() + " " + LangMan.LS(LSID.Group).ToLower() + " (" + cnt.ToString() + ")", null);
 
                     for (int j = 0; j < cnt; j++) {
                         var iRec = (GDMIndividualRecord)groupRecords[j];
@@ -131,17 +131,17 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_ToolOp_6);
+            fView.Title = LangMan.LS(LSID.ToolOp_6);
 
-            GetControl<ITabPage>("pageFamilyGroups").Text = LangMan.LS(LSID.LSID_ToolOp_6);
-            GetControl<IButton>("btnAnalyseGroups").Text = LangMan.LS(LSID.LSID_Analyze);
-            GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.LSID_Details);
-            GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
-            GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.LSID_CopyXRef);
+            GetControl<ITabPage>("pageFamilyGroups").Text = LangMan.LS(LSID.ToolOp_6);
+            GetControl<IButton>("btnAnalyseGroups").Text = LangMan.LS(LSID.Analyze);
+            GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.Details);
+            GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
+            GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.CopyXRef);
 
-            GetControl<ITabPage>("pageDataQuality").Text = LangMan.LS(LSID.LSID_DataQuality);
-            GetControl<IMenuItem>("miDQRefresh").Text = LangMan.LS(LSID.LSID_Refresh);
-            GetControl<IMenuItem>("miDQResetFilter").Text = LangMan.LS(LSID.LSID_ResetFilter);
+            GetControl<ITabPage>("pageDataQuality").Text = LangMan.LS(LSID.DataQuality);
+            GetControl<IMenuItem>("miDQRefresh").Text = LangMan.LS(LSID.Refresh);
+            GetControl<IMenuItem>("miDQResetFilter").Text = LangMan.LS(LSID.ResetFilter);
         }
 
         public void OpeningContextMenu()
@@ -183,7 +183,7 @@ namespace GKCore.Controllers
         {
             treemapModel.Items.Clear();
 
-            string hint = LangMan.LS(LSID.LSID_DQHint);
+            string hint = LangMan.LS(LSID.DQHint);
 
             GDMTree tree = fBase.Context.Tree;
             List<GDMIndividualRecord> prepared = new List<GDMIndividualRecord>();

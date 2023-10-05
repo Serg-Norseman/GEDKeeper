@@ -90,12 +90,12 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_Repository);
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
-            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.LSID_Title);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.LSID_RPNotes);
-            GetControl<IButton>("btnAddress").Text = LangMan.LS(LSID.LSID_Address) + @"...";
+            fView.Title = LangMan.LS(LSID.Repository);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Title);
+            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
+            GetControl<IButton>("btnAddress").Text = LangMan.LS(LSID.Address) + @"...";
         }
     }
 }

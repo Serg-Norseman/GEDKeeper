@@ -48,8 +48,8 @@ namespace GKCore.Charts
         {
             get {
                 int depthLimit = GetDepthLimit();
-                string gen = (depthLimit == -1) ? LangMan.LS(LSID.LSID_Unlimited) : depthLimit.ToString();
-                return LangMan.LS(LSID.LSID_Generations) + ": " + gen;
+                string gen = (depthLimit == -1) ? LangMan.LS(LSID.Unlimited) : depthLimit.ToString();
+                return LangMan.LS(LSID.Generations) + ": " + gen;
             }
         }
 

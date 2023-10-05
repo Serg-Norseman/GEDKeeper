@@ -368,7 +368,7 @@ namespace GKCore
             LangManager langMan = new LangManager();
             Assert.IsNotNull(langMan);
 
-            Assert.AreEqual("?", langMan.LS(LSID.LSID_First));
+            Assert.AreEqual("?", langMan.LS(LSID.First));
         }
     }
 }

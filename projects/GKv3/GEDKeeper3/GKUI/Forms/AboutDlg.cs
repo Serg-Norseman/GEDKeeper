@@ -48,8 +48,8 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            Title = LangMan.LS(LSID.LSID_MIAbout);
-            btnClose.Text = LangMan.LS(LSID.LSID_DlgClose);
+            Title = LangMan.LS(LSID.MIAbout);
+            btnClose.Text = LangMan.LS(LSID.DlgClose);
             //lblProduct.Text = GKData.APP_TITLE;
             lblVersion.Text = @"Version " + AppHost.GetAppVersion();
             lblCopyright.Text = AppHost.GetAppCopyright();

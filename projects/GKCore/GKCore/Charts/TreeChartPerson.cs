@@ -369,7 +369,7 @@ namespace GKCore.Charts
                             }
                         } catch (MediaFileNotFoundException) {
                             if (!fModel.HasMediaFail) {
-                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_MediaFileNotLoaded));
+                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.MediaFileNotLoaded));
                                 fModel.HasMediaFail = true;
                             }
                         }

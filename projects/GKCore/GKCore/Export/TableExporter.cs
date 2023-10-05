@@ -43,7 +43,7 @@ namespace GKCore.Export
         private void GenerateInt(IProgressController progress)
         {
             int recordsCount = fListMan.FilteredCount;
-            progress.Begin(LangMan.LS(LSID.LSID_MIExport) + "...", recordsCount);
+            progress.Begin(LangMan.LS(LSID.MIExport) + "...", recordsCount);
             try {
                 var columns = fListMan.ColumnsMap;
                 int colNum = columns.Count;

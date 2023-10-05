@@ -141,7 +141,7 @@ namespace GKStdReports
 
             var selPerson = curBase.GetSelectedPerson();
             if (selPerson == null) {
-                AppHost.StdDialogs.ShowError(GKCore.LangMan.LS(LSID.LSID_NotSelectedPerson));
+                AppHost.StdDialogs.ShowError(GKCore.LangMan.LS(LSID.NotSelectedPerson));
                 return;
             }
 
@@ -179,7 +179,7 @@ namespace GKStdReports
 
             var selPerson = curBase.GetSelectedPerson();
             if (selPerson == null) {
-                AppHost.StdDialogs.ShowError(GKCore.LangMan.LS(LSID.LSID_NotSelectedPerson));
+                AppHost.StdDialogs.ShowError(GKCore.LangMan.LS(LSID.NotSelectedPerson));
                 return;
             }
 
@@ -249,7 +249,7 @@ namespace GKStdReports
 
             var selPerson = curBase.GetSelectedPerson();
             if (selPerson == null) {
-                AppHost.StdDialogs.ShowError(GKCore.LangMan.LS(LSID.LSID_NotSelectedPerson));
+                AppHost.StdDialogs.ShowError(GKCore.LangMan.LS(LSID.NotSelectedPerson));
                 return;
             }
 

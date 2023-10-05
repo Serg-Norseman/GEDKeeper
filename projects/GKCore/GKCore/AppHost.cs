@@ -228,7 +228,7 @@ namespace GKCore
             if (fTips.Count <= 0) return;
 
             using (var dlg = fIocContainer.Resolve<IDayTipsDlg>()) {
-                dlg.Init(LangMan.LS(LSID.LSID_BirthDays), AppHost.Options.ShowTips, fTips);
+                dlg.Init(LangMan.LS(LSID.BirthDays), AppHost.Options.ShowTips, fTips);
                 ShowModalX(dlg, null, false);
                 AppHost.Options.ShowTips = dlg.ShowTipsChecked;
             }

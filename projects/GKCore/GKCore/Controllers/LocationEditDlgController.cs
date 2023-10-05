@@ -175,27 +175,27 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_Location);
+            fView.Title = LangMan.LS(LSID.Location);
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
-            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.LSID_Common);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.LSID_RPNotes);
-            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.LSID_Title);
-            GetControl<ILabel>("lblLatitude").Text = LangMan.LS(LSID.LSID_Latitude);
-            GetControl<ILabel>("lblLongitude").Text = LangMan.LS(LSID.LSID_Longitude);
-            GetControl<IButton>("btnShowOnMap").Text = LangMan.LS(LSID.LSID_Show);
-            GetControl<IGroupBox>("grpSearch").Text = LangMan.LS(LSID.LSID_SearchCoords);
-            GetControl<IButton>("btnSearch").Text = LangMan.LS(LSID.LSID_Search);
-            GetControl<IButton>("btnSelect").Text = LangMan.LS(LSID.LSID_SelectCoords);
-            GetControl<IButton>("btnSelectName").Text = LangMan.LS(LSID.LSID_SelectName);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Common);
+            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
+            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.RPMultimedia);
+            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Title);
+            GetControl<ILabel>("lblLatitude").Text = LangMan.LS(LSID.Latitude);
+            GetControl<ILabel>("lblLongitude").Text = LangMan.LS(LSID.Longitude);
+            GetControl<IButton>("btnShowOnMap").Text = LangMan.LS(LSID.Show);
+            GetControl<IGroupBox>("grpSearch").Text = LangMan.LS(LSID.SearchCoords);
+            GetControl<IButton>("btnSearch").Text = LangMan.LS(LSID.Search);
+            GetControl<IButton>("btnSelect").Text = LangMan.LS(LSID.SelectCoords);
+            GetControl<IButton>("btnSelectName").Text = LangMan.LS(LSID.SelectName);
 
-            SetToolTip("btnShowOnMap", LangMan.LS(LSID.LSID_ShowOnMapTip));
+            SetToolTip("btnShowOnMap", LangMan.LS(LSID.ShowOnMapTip));
 
-            fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.LSID_Title), 200, false);
-            fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.LSID_Latitude), 80, false);
-            fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.LSID_Longitude), 80, false);
+            fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.Title), 200, false);
+            fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.Latitude), 80, false);
+            fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.Longitude), 80, false);
         }
     }
 }

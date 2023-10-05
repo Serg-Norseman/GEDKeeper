@@ -425,8 +425,6 @@ namespace GKCore.Options
                             string lngSign = lngParams[1];
                             string lngName = lngParams[2];
 
-                            //bool xt = (lngParams.Length == 4 && lngParams[3] == "xt");
-
                             LangRecord lngRec = new LangRecord((ushort)int.Parse(lngCode), lngSign, lngName, fileName, resAssembly);
                             fLanguages.Add(lngRec);
                         }

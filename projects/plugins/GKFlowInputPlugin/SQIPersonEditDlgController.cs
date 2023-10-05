@@ -40,8 +40,8 @@ namespace GKFlowInputPlugin
         {
             base.SetLocale();
 
-            GetControl<ITabPage>("pageFamily").Text = LangMan.LS(LSID.LSID_Family);
-            GetControl<ITabPage>("pageOther").Text = LangMan.LS(LSID.LSID_Other);
+            GetControl<ITabPage>("pageFamily").Text = LangMan.LS(LSID.Family);
+            GetControl<ITabPage>("pageOther").Text = LangMan.LS(LSID.Other);
         }
     }
 }

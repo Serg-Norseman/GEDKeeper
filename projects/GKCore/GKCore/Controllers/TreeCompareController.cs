@@ -47,7 +47,7 @@ namespace GKCore.Controllers
 
         public void SelectExternalFile()
         {
-            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.LSID_GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (string.IsNullOrEmpty(fileName)) return;
 
             fExternalFile = fileName;
@@ -91,7 +91,7 @@ namespace GKCore.Controllers
                             uln = TreeTools.GetUnlinkedNamesakes(fBase, controller);
                         });
 
-                        fView.CompareOutput.AppendText("  " + LangMan.LS(LSID.LSID_SearchUnlinkedNamesakes) + ":\r\n");
+                        fView.CompareOutput.AppendText("  " + LangMan.LS(LSID.SearchUnlinkedNamesakes) + ":\r\n");
                         if (uln != null && uln.Count > 0) {
                             foreach (TreeTools.ULIndividual indiv in uln) {
                                 fView.CompareOutput.AppendText("    - [" + indiv.Family + "] " + GKUtils.GetNameString(indiv.IRec, false) + "\r\n");
@@ -125,17 +125,17 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_ToolOp_1);
+            fView.Title = LangMan.LS(LSID.ToolOp_1);
 
-            GetControl<ITabPage>("pageTreeCompare").Text = LangMan.LS(LSID.LSID_ToolOp_1);
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
-            GetControl<ILabel>("lblFile").Text = LangMan.LS(LSID.LSID_MIFile);
-            GetControl<IButton>("btnFileChoose").Text = LangMan.LS(LSID.LSID_DlgSelect) + @"...";
-            GetControl<IGroupBox>("grpMatchType").Text = LangMan.LS(LSID.LSID_MatchType);
-            GetControl<IRadioButton>("radMatchInternal").Text = LangMan.LS(LSID.LSID_MatchInternal);
-            GetControl<IRadioButton>("radMathExternal").Text = LangMan.LS(LSID.LSID_MathExternal);
-            GetControl<IRadioButton>("radAnalysis").Text = LangMan.LS(LSID.LSID_Analyze);
-            GetControl<IButton>("btnMatch").Text = LangMan.LS(LSID.LSID_Match);
+            GetControl<ITabPage>("pageTreeCompare").Text = LangMan.LS(LSID.ToolOp_1);
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            GetControl<ILabel>("lblFile").Text = LangMan.LS(LSID.MIFile);
+            GetControl<IButton>("btnFileChoose").Text = LangMan.LS(LSID.DlgSelect) + @"...";
+            GetControl<IGroupBox>("grpMatchType").Text = LangMan.LS(LSID.MatchType);
+            GetControl<IRadioButton>("radMatchInternal").Text = LangMan.LS(LSID.MatchInternal);
+            GetControl<IRadioButton>("radMathExternal").Text = LangMan.LS(LSID.MathExternal);
+            GetControl<IRadioButton>("radAnalysis").Text = LangMan.LS(LSID.Analyze);
+            GetControl<IButton>("btnMatch").Text = LangMan.LS(LSID.Match);
         }
     }
 }

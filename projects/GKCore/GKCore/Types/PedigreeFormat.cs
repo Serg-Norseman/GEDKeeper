@@ -67,10 +67,10 @@ namespace GKCore.Types
 
 
         public static readonly NumberingStruct[] Numberings = new NumberingStruct[] {
-            new NumberingStruct(LSID.LSID_PN_Aboville, PedigreeType.Descend),           // Aboville
-            new NumberingStruct(LSID.LSID_PN_Kobrin_Konovalov, PedigreeType.Ascend),    // Kobrin_Konovalov_A
-            new NumberingStruct(LSID.LSID_PN_Kobrin_Konovalov, PedigreeType.Descend),   // Kobrin_Konovalov_D
-            new NumberingStruct(LSID.LSID_PN_Sosa_Stradonitz, PedigreeType.Ascend),     // Sosa_Stradonitz
+            new NumberingStruct(LSID.PN_Aboville, PedigreeType.Descend),           // Aboville
+            new NumberingStruct(LSID.PN_Kobrin_Konovalov, PedigreeType.Ascend),    // Kobrin_Konovalov_A
+            new NumberingStruct(LSID.PN_Kobrin_Konovalov, PedigreeType.Descend),   // Kobrin_Konovalov_D
+            new NumberingStruct(LSID.PN_Sosa_Stradonitz, PedigreeType.Ascend),     // Sosa_Stradonitz
         };
     }
 }

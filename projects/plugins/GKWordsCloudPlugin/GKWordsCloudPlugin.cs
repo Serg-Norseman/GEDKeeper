@@ -138,14 +138,14 @@ namespace GKWordsCloudPlugin
         }
 
         internal static readonly CloudType[] CloudTypes = new CloudType[] {
-            new CloudType(LSID.LSID_Surname, StatsMode.smSurnames),
-            new CloudType(LSID.LSID_Name, StatsMode.smNames),
-            new CloudType(LSID.LSID_Occupation, StatsMode.smOccupation),
-            new CloudType(LSID.LSID_Religion, StatsMode.smReligious),
-            new CloudType(LSID.LSID_Nationality, StatsMode.smNational),
-            new CloudType(LSID.LSID_Education, StatsMode.smEducation),
-            new CloudType(LSID.LSID_Caste, StatsMode.smCaste),
-            new CloudType(LSID.LSID_Hobby, StatsMode.smHobby),
+            new CloudType(LSID.Surname, StatsMode.smSurnames),
+            new CloudType(LSID.Name, StatsMode.smNames),
+            new CloudType(LSID.Occupation, StatsMode.smOccupation),
+            new CloudType(LSID.Religion, StatsMode.smReligious),
+            new CloudType(LSID.Nationality, StatsMode.smNational),
+            new CloudType(LSID.Education, StatsMode.smEducation),
+            new CloudType(LSID.Caste, StatsMode.smCaste),
+            new CloudType(LSID.Hobby, StatsMode.smHobby),
         };
 
         internal void CollectData(IBaseWindow baseWin, StatsMode mode, List<Word> words)

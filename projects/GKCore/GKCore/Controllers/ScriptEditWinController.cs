@@ -57,7 +57,7 @@ namespace GKCore.Controllers
         {
             if (!fView.CheckModified()) return;
 
-            string fileName = AppHost.StdDialogs.GetOpenFile("", GlobalOptions.Instance.ScriptsLastDir, LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT);
+            string fileName = AppHost.StdDialogs.GetOpenFile("", GlobalOptions.Instance.ScriptsLastDir, LangMan.LS(LSID.ScriptsFilter), 1, GKData.LUA_EXT);
             if (string.IsNullOrEmpty(fileName)) return;
 
             GlobalOptions.Instance.ScriptsLastDir = Path.GetDirectoryName(fileName);
@@ -72,7 +72,7 @@ namespace GKCore.Controllers
 
         public void SaveScript()
         {
-            string fileName = AppHost.StdDialogs.GetSaveFile("", GlobalOptions.Instance.ScriptsLastDir, LangMan.LS(LSID.LSID_ScriptsFilter), 1, GKData.LUA_EXT, fView.FileName);
+            string fileName = AppHost.StdDialogs.GetSaveFile("", GlobalOptions.Instance.ScriptsLastDir, LangMan.LS(LSID.ScriptsFilter), 1, GKData.LUA_EXT, fView.FileName);
             if (string.IsNullOrEmpty(fileName)) return;
 
             GlobalOptions.Instance.ScriptsLastDir = Path.GetDirectoryName(fileName);
@@ -97,10 +97,10 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            SetToolTip("tbNewScript", LangMan.LS(LSID.LSID_NewScriptTip));
-            SetToolTip("tbLoadScript", LangMan.LS(LSID.LSID_LoadScriptTip));
-            SetToolTip("tbSaveScript", LangMan.LS(LSID.LSID_SaveScriptTip));
-            SetToolTip("tbRun", LangMan.LS(LSID.LSID_RunScriptTip));
+            SetToolTip("tbNewScript", LangMan.LS(LSID.NewScriptTip));
+            SetToolTip("tbLoadScript", LangMan.LS(LSID.LoadScriptTip));
+            SetToolTip("tbSaveScript", LangMan.LS(LSID.SaveScriptTip));
+            SetToolTip("tbRun", LangMan.LS(LSID.RunScriptTip));
         }
     }
 }

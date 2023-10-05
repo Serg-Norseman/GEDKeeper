@@ -107,11 +107,11 @@ namespace GKUI.Components
 
         public FilterGridView()
         {
-            GKData.CondSigns[6] = LangMan.LS(LSID.LSID_CondContains);
-            GKData.CondSigns[7] = LangMan.LS(LSID.LSID_CondNotContains);
+            GKData.CondSigns[6] = LangMan.LS(LSID.CondContains);
+            GKData.CondSigns[7] = LangMan.LS(LSID.CondNotContains);
 
-            fBtnDelete = CreateButton("btnDelete", UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif"), LangMan.LS(LSID.LSID_MIRecordDelete), ItemDelete);
-            fBtnAdd = CreateButton("btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.LSID_MIRecordAdd), ItemAdd);
+            fBtnDelete = CreateButton("btnDelete", UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif"), LangMan.LS(LSID.MIRecordDelete), ItemDelete);
+            fBtnAdd = CreateButton("btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.MIRecordAdd), ItemAdd);
 
             fGridView = new GridView();
 
@@ -180,9 +180,9 @@ namespace GKUI.Components
         private void InitGrid()
         {
             fGridView.Columns.Clear();
-            fGridView.AddComboColumn<FilterConditionRow>(LangMan.LS(LSID.LSID_Field), fFields, r => r.ColumnText, 200, false, true);
-            fGridView.AddComboColumn<FilterConditionRow>(LangMan.LS(LSID.LSID_Condition), GKData.CondSigns, r => r.ConditionText, 150, false, true);
-            fGridView.AddTextColumn<FilterConditionRow>(LangMan.LS(LSID.LSID_Value), r => r.ValueText, 300, false, true);
+            fGridView.AddComboColumn<FilterConditionRow>(LangMan.LS(LSID.Field), fFields, r => r.ColumnText, 200, false, true);
+            fGridView.AddComboColumn<FilterConditionRow>(LangMan.LS(LSID.Condition), GKData.CondSigns, r => r.ConditionText, 150, false, true);
+            fGridView.AddTextColumn<FilterConditionRow>(LangMan.LS(LSID.Value), r => r.ValueText, 300, false, true);
         }
 
         private void ItemAdd(object sender, EventArgs e)

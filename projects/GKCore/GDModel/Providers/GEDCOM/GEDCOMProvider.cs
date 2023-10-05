@@ -88,7 +88,7 @@ namespace GDModel.Providers.GEDCOM
 
         public override string GetFilesFilter()
         {
-            return LangMan.LS(LSID.LSID_GEDCOMFilter);
+            return LangMan.LS(LSID.GEDCOMFilter);
         }
 
         #region Encoding routines

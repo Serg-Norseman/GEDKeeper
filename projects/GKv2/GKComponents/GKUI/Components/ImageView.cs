@@ -91,9 +91,9 @@ namespace GKUI.Components
 
         public void SetLocale()
         {
-            btnSizeToFit.Text = LangMan.LS(LSID.LSID_SizeToFit);
-            btnZoomIn.Text = LangMan.LS(LSID.LSID_ZoomIn);
-            btnZoomOut.Text = LangMan.LS(LSID.LSID_ZoomOut);
+            btnSizeToFit.Text = LangMan.LS(LSID.SizeToFit);
+            btnZoomIn.Text = LangMan.LS(LSID.ZoomIn);
+            btnZoomOut.Text = LangMan.LS(LSID.ZoomOut);
         }
 
         #region Component design

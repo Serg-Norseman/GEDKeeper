@@ -82,7 +82,7 @@ namespace GKCore.Charts
 
         public override string Tip
         {
-            get { return LangMan.LS(LSID.LSID_Scale); }
+            get { return LangMan.LS(LSID.Scale); }
         }
 
         #endregion

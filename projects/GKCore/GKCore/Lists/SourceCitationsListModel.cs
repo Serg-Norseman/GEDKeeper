@@ -40,11 +40,11 @@ namespace GKCore.Lists
                 RecordAction.raMoveUp, RecordAction.raMoveDown,
                 RecordAction.raCopy, RecordAction.raPaste);
 
-            fListColumns.AddColumn(LSID.LSID_NumberSym, 25, false);
-            fListColumns.AddColumn(LSID.LSID_Title, 260, false);
-            fListColumns.AddColumn(LSID.LSID_Page, 80, false);
-            fListColumns.AddColumn(LSID.LSID_Certainty, 220, false);
-            fListColumns.AddColumn(LSID.LSID_Author, 70, false);
+            fListColumns.AddColumn(LSID.NumberSym, 25, false);
+            fListColumns.AddColumn(LSID.Title, 260, false);
+            fListColumns.AddColumn(LSID.Page, 80, false);
+            fListColumns.AddColumn(LSID.Certainty, 220, false);
+            fListColumns.AddColumn(LSID.Author, 70, false);
             fListColumns.ResetDefaults();
         }
 
@@ -105,7 +105,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachSourceQuery))) {
+                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachSourceQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitRemove, fDataOwner, srcCit);
                     }
                     break;

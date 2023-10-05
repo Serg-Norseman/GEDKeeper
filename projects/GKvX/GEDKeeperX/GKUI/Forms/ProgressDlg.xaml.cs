@@ -38,10 +38,10 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //Title = LangMan.LS(LSID.LSID_Progress);
-            lblTimePassed.Text = LangMan.LS(LSID.LSID_TimePassed);
-            lblTimeRemain.Text = LangMan.LS(LSID.LSID_TimeRemain);
-            lblTimeTotal.Text = LangMan.LS(LSID.LSID_TimeTotal);
+            //Title = LangMan.LS(LSID.Progress);
+            lblTimePassed.Text = LangMan.LS(LSID.TimePassed);
+            lblTimeRemain.Text = LangMan.LS(LSID.TimeRemain);
+            lblTimeTotal.Text = LangMan.LS(LSID.TimeTotal);
         }
 
         public bool ShowModalX(IView owner)

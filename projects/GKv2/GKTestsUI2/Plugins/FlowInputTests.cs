@@ -84,7 +84,7 @@ namespace GKFlowInputPlugin
             return LSDefList[idx];
         }
 
-        public bool LoadFromFile(string fileName, Assembly resAssembly, int offset = 0)
+        public bool LoadFromFile(string fileName, Assembly resAssembly)
         {
             return true;
         }

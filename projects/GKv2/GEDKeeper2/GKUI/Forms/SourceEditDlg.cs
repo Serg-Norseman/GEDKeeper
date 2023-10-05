@@ -117,7 +117,7 @@ namespace GKUI.Forms
 
         private void EditShortTitle_TextChanged(object sender, EventArgs e)
         {
-            Title = string.Format("{0} \"{1}\"", LangMan.LS(LSID.LSID_Source), txtShortTitle.Text);
+            Title = string.Format("{0} \"{1}\"", LangMan.LS(LSID.Source), txtShortTitle.Text);
         }
     }
 }

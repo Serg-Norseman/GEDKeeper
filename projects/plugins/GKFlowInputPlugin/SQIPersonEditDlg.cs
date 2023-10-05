@@ -355,7 +355,7 @@ namespace GKFlowInputPlugin
 
         private void Names_TextChanged(object sender, EventArgs e)
         {
-            Title = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.LSID_Person), txtSurname.Text, txtName.Text,
+            Title = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.Person), txtSurname.Text, txtName.Text,
                                   cmbPatronymic.Text, fController.IndividualRecord.GetXRefNum());
         }
 

@@ -41,15 +41,15 @@ namespace GKCore.Lists
                 RecordAction.raMoveUp, RecordAction.raMoveDown,
                 RecordAction.raCopy, RecordAction.raPaste);
 
-            fListColumns.AddColumn(LSID.LSID_NumberSym, 25, false);
-            fListColumns.AddColumn(LSID.LSID_Event, 90, false);
-            fListColumns.AddColumn(LSID.LSID_Date, 80, false);
+            fListColumns.AddColumn(LSID.NumberSym, 25, false);
+            fListColumns.AddColumn(LSID.Event, 90, false);
+            fListColumns.AddColumn(LSID.Date, 80, false);
             if (!fPersonsMode) {
-                fListColumns.AddColumn(LSID.LSID_Place, 200, false);
+                fListColumns.AddColumn(LSID.Place, 200, false);
             } else {
-                fListColumns.AddColumn(LSID.LSID_PlaceAndAttribute, 200, false);
+                fListColumns.AddColumn(LSID.PlaceAndAttribute, 200, false);
             }
-            fListColumns.AddColumn(LSID.LSID_Cause, 130, false);
+            fListColumns.AddColumn(LSID.Cause, 130, false);
             fListColumns.ResetDefaults();
         }
 
@@ -149,7 +149,7 @@ namespace GKCore.Lists
                         break;
 
                     case RecordAction.raDelete:
-                        if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_RemoveEventQuery))) {
+                        if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RemoveEventQuery))) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, evt);
                             evt = null;
                         }

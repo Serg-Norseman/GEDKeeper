@@ -39,7 +39,7 @@ namespace GDModel.Providers.GedML
 
         public override string GetFilesFilter()
         {
-            return LangMan.LS(LSID.LSID_GedMLFilter);
+            return LangMan.LS(LSID.GedMLFilter);
         }
 
         protected override Encoding GetDefaultEncoding()

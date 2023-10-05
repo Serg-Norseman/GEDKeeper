@@ -197,25 +197,25 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
-            GetControl<IGroupBox>("GroupBox1").Text = LangMan.LS(LSID.LSID_Family);
-            GetControl<ILabel>("lblHusband").Text = LangMan.LS(LSID.LSID_Husband);
-            GetControl<ILabel>("lblWife").Text = LangMan.LS(LSID.LSID_Wife);
-            GetControl<ILabel>("lblStatus").Text = LangMan.LS(LSID.LSID_Status);
-            GetControl<ITabPage>("pageChilds").Text = LangMan.LS(LSID.LSID_Childs);
-            GetControl<ITabPage>("pageEvents").Text = LangMan.LS(LSID.LSID_Events);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.LSID_RPNotes);
-            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            GetControl<ITabPage>("pageSources").Text = LangMan.LS(LSID.LSID_RPSources);
-            GetControl<ILabel>("lblRestriction").Text = LangMan.LS(LSID.LSID_Restriction);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            GetControl<IGroupBox>("GroupBox1").Text = LangMan.LS(LSID.Family);
+            GetControl<ILabel>("lblHusband").Text = LangMan.LS(LSID.Husband);
+            GetControl<ILabel>("lblWife").Text = LangMan.LS(LSID.Wife);
+            GetControl<ILabel>("lblStatus").Text = LangMan.LS(LSID.Status);
+            GetControl<ITabPage>("pageChilds").Text = LangMan.LS(LSID.Childs);
+            GetControl<ITabPage>("pageEvents").Text = LangMan.LS(LSID.Events);
+            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
+            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.RPMultimedia);
+            GetControl<ITabPage>("pageSources").Text = LangMan.LS(LSID.RPSources);
+            GetControl<ILabel>("lblRestriction").Text = LangMan.LS(LSID.Restriction);
 
-            SetToolTip("btnHusbandAdd", LangMan.LS(LSID.LSID_HusbandAddTip));
-            SetToolTip("btnHusbandDelete", LangMan.LS(LSID.LSID_HusbandDeleteTip));
-            SetToolTip("btnHusbandSel", LangMan.LS(LSID.LSID_HusbandSelTip));
-            SetToolTip("btnWifeAdd", LangMan.LS(LSID.LSID_WifeAddTip));
-            SetToolTip("btnWifeDelete", LangMan.LS(LSID.LSID_WifeDeleteTip));
-            SetToolTip("btnWifeSel", LangMan.LS(LSID.LSID_WifeSelTip));
+            SetToolTip("btnHusbandAdd", LangMan.LS(LSID.HusbandAddTip));
+            SetToolTip("btnHusbandDelete", LangMan.LS(LSID.HusbandDeleteTip));
+            SetToolTip("btnHusbandSel", LangMan.LS(LSID.HusbandSelTip));
+            SetToolTip("btnWifeAdd", LangMan.LS(LSID.WifeAddTip));
+            SetToolTip("btnWifeDelete", LangMan.LS(LSID.WifeDeleteTip));
+            SetToolTip("btnWifeSel", LangMan.LS(LSID.WifeSelTip));
         }
     }
 }

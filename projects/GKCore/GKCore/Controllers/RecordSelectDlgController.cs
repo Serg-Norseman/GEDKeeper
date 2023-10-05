@@ -173,13 +173,13 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_WinRecordSelect);
+            fView.Title = LangMan.LS(LSID.WinRecordSelect);
 
-            GetControl<IButton>("btnCreate").Text = LangMan.LS(LSID.LSID_DlgAppend);
-            GetControl<IButton>("btnSelect").Text = LangMan.LS(LSID.LSID_DlgSelect);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
+            GetControl<IButton>("btnCreate").Text = LangMan.LS(LSID.DlgAppend);
+            GetControl<IButton>("btnSelect").Text = LangMan.LS(LSID.DlgSelect);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
 
-            SetToolTip("txtFastFilter", LangMan.LS(LSID.LSID_PressEnterToSaveFilter));
+            SetToolTip("txtFastFilter", LangMan.LS(LSID.PressEnterToSaveFilter));
         }
     }
 }

@@ -39,9 +39,9 @@ namespace GKCore.Lists
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveUp, RecordAction.raMoveDown);
 
-            fListColumns.AddColumn(LSID.LSID_NumberSym, 25, false);
-            fListColumns.AddColumn(LSID.LSID_RPMultimedia, 300, false);
-            fListColumns.AddColumn(LSID.LSID_Type, 300, false);
+            fListColumns.AddColumn(LSID.NumberSym, 25, false);
+            fListColumns.AddColumn(LSID.RPMultimedia, 300, false);
+            fListColumns.AddColumn(LSID.Type, 300, false);
             fListColumns.ResetDefaults();
         }
 
@@ -113,7 +113,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachMultimediaQuery))) {
+                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachMultimediaQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaRemove, (GDMObject)dataOwner, mmLink);
                     }
                     break;

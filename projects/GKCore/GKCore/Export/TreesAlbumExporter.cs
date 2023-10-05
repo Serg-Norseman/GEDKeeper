@@ -46,7 +46,7 @@ namespace GKCore.Export
         {
             fIndiQueue = new List<IndiObj>();
             fProcessed = new StringList();
-            fTitle = LangMan.LS(LSID.LSID_TreesAlbum);
+            fTitle = LangMan.LS(LSID.TreesAlbum);
         }
 
         protected override void InternalGenerate()

@@ -151,22 +151,22 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_ToolOp_7);
+            fView.Title = LangMan.LS(LSID.ToolOp_7);
 
-            GetControl<ITabPage>("pageTreeCheck").Text = LangMan.LS(LSID.LSID_ToolOp_7);
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.LSID_DlgClose);
-            GetControl<IButton>("btnAnalyseBase").Text = LangMan.LS(LSID.LSID_Analyze);
-            GetControl<IButton>("btnBaseRepair").Text = LangMan.LS(LSID.LSID_Repair);
-            GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.LSID_Details);
-            GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
-            GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.LSID_CopyXRef);
+            GetControl<ITabPage>("pageTreeCheck").Text = LangMan.LS(LSID.ToolOp_7);
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            GetControl<IButton>("btnAnalyseBase").Text = LangMan.LS(LSID.Analyze);
+            GetControl<IButton>("btnBaseRepair").Text = LangMan.LS(LSID.Repair);
+            GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.Details);
+            GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
+            GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.CopyXRef);
 
-            GetControl<ITabPage>("pageOptions").Text = LangMan.LS(LSID.LSID_MIOptions);
-            GetControl<ICheckBox>("chkCheckPersonPlaces").Text = LangMan.LS(LSID.LSID_CheckPersonPlaces);
+            GetControl<ITabPage>("pageOptions").Text = LangMan.LS(LSID.MIOptions);
+            GetControl<ICheckBox>("chkCheckPersonPlaces").Text = LangMan.LS(LSID.CheckPersonPlaces);
 
-            fView.ChecksList.AddColumn(LangMan.LS(LSID.LSID_Record), 400, false);
-            fView.ChecksList.AddColumn(LangMan.LS(LSID.LSID_Problem), 200, false);
-            fView.ChecksList.AddColumn(LangMan.LS(LSID.LSID_Solve), 200, false);
+            fView.ChecksList.AddColumn(LangMan.LS(LSID.Record), 400, false);
+            fView.ChecksList.AddColumn(LangMan.LS(LSID.Problem), 200, false);
+            fView.ChecksList.AddColumn(LangMan.LS(LSID.Solve), 200, false);
         }
     }
 }

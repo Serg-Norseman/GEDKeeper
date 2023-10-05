@@ -86,14 +86,14 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_Association);
+            fView.Title = LangMan.LS(LSID.Association);
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
-            GetControl<ILabel>("lblRelation").Text = LangMan.LS(LSID.LSID_Relation);
-            GetControl<ILabel>("lblPerson").Text = LangMan.LS(LSID.LSID_Person);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            GetControl<ILabel>("lblRelation").Text = LangMan.LS(LSID.Relation);
+            GetControl<ILabel>("lblPerson").Text = LangMan.LS(LSID.Person);
 
-            SetToolTip("btnPersonAdd", LangMan.LS(LSID.LSID_PersonAttachTip));
+            SetToolTip("btnPersonAdd", LangMan.LS(LSID.PersonAttachTip));
         }
     }
 }

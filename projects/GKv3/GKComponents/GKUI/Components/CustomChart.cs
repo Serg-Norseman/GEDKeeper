@@ -180,7 +180,7 @@ namespace GKUI.Components
             }
 
             if ((ext == ".bmp" || ext == ".jpg") && imageSize.Width >= 65535) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.TooMuchWidth));
             } else {
                 ImageFormat imFmt = ImageFormat.Png;
                 if (ext == ".bmp") {
@@ -199,7 +199,7 @@ namespace GKUI.Components
                 try {
                     pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
                 } catch {
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_TooMuchWidth));
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.TooMuchWidth));
                     return;
                 }
 

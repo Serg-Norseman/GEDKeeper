@@ -89,25 +89,25 @@ namespace GKCore.Lists
             var sb = new StringBuilder();
 
             if (Sex != GDMSex.svUnknown)
-                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.LSID_Sex), GKUtils.SexStr(Sex)));
+                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.Sex), GKUtils.SexStr(Sex)));
 
             if (Name != "*")
-                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.LSID_NameMask), Name));
+                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.NameMask), Name));
 
             if (Residence != "*")
-                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.LSID_PlaceMask), Residence));
+                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.PlaceMask), Residence));
 
             if (EventVal != "*")
-                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.LSID_EventMask), EventVal));
+                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.EventMask), EventVal));
 
             if (PatriarchOnly)
-                AddCSChunk(sb, string.Format("{0}", LangMan.LS(LSID.LSID_OnlyPatriarchs)));
+                AddCSChunk(sb, string.Format("{0}", LangMan.LS(LSID.OnlyPatriarchs)));
 
             if (FilterGroupMode != FilterGroupMode.All)
-                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.LSID_RPGroups), GroupRef));
+                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.RPGroups), GroupRef));
 
             if (SourceMode != FilterGroupMode.All)
-                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.LSID_RPSources), SourceRef));
+                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.RPSources), SourceRef));
 
             AddCSChunk(sb, base.ToString(listSource));
 
@@ -200,32 +200,32 @@ namespace GKCore.Lists
         {
             var result = new ListColumns<GDMIndividualRecord>();
 
-            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.LSID_Patriarch, DataType.dtString, 25, true);
-            result.AddColumn(LSID.LSID_FullName, DataType.dtString, 300, true);
-            result.AddColumn(LSID.LSID_Nickname, DataType.dtString, 75, false);
-            result.AddColumn(LSID.LSID_Sex, DataType.dtString, 45, true);
-            result.AddColumn(LSID.LSID_BirthDate, DataType.dtGEDCOMDate, 100, true);
-            result.AddColumn(LSID.LSID_DeathDate, DataType.dtGEDCOMDate, 100, true);
-            result.AddColumn(LSID.LSID_BirthPlace, DataType.dtString, 100, true);
-            result.AddColumn(LSID.LSID_DeathPlace, DataType.dtString, 100, true);
-            result.AddColumn(LSID.LSID_Residence, DataType.dtString, 100, true);
-            result.AddColumn(LSID.LSID_Age, DataType.dtInteger, 100, false);
-            result.AddColumn(LSID.LSID_LifeExpectancy, DataType.dtInteger, 100, false);
-            result.AddColumn(LSID.LSID_DaysForBirth, DataType.dtInteger, 100, false);
-            result.AddColumn(LSID.LSID_RPGroups, DataType.dtString, 200, false);
-            result.AddColumn(LSID.LSID_Religion, DataType.dtString, 200, false);
-            result.AddColumn(LSID.LSID_Nationality, DataType.dtString, 200, false);
-            result.AddColumn(LSID.LSID_Education, DataType.dtString, 200, false);
-            result.AddColumn(LSID.LSID_Occupation, DataType.dtString, 200, false);
-            result.AddColumn(LSID.LSID_Caste, DataType.dtString, 200, false);
-            result.AddColumn(LSID.LSID_Mili, DataType.dtString, 200, false);
-            result.AddColumn(LSID.LSID_MiliInd, DataType.dtString, 200, false);
-            result.AddColumn(LSID.LSID_MiliDis, DataType.dtString, 200, false);
-            result.AddColumn(LSID.LSID_MiliRank, DataType.dtString, 200, false);
-            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
-            result.AddColumn(LSID.LSID_Bookmark, DataType.dtString, 25, true);
-            result.AddColumn(LSID.LSID_NobilityTitle, DataType.dtString, 200, false);
+            result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
+            result.AddColumn(LSID.Patriarch, DataType.dtString, 25, true);
+            result.AddColumn(LSID.FullName, DataType.dtString, 300, true);
+            result.AddColumn(LSID.Nickname, DataType.dtString, 75, false);
+            result.AddColumn(LSID.Sex, DataType.dtString, 45, true);
+            result.AddColumn(LSID.BirthDate, DataType.dtGEDCOMDate, 100, true);
+            result.AddColumn(LSID.DeathDate, DataType.dtGEDCOMDate, 100, true);
+            result.AddColumn(LSID.BirthPlace, DataType.dtString, 100, true);
+            result.AddColumn(LSID.DeathPlace, DataType.dtString, 100, true);
+            result.AddColumn(LSID.Residence, DataType.dtString, 100, true);
+            result.AddColumn(LSID.Age, DataType.dtInteger, 100, false);
+            result.AddColumn(LSID.LifeExpectancy, DataType.dtInteger, 100, false);
+            result.AddColumn(LSID.DaysForBirth, DataType.dtInteger, 100, false);
+            result.AddColumn(LSID.RPGroups, DataType.dtString, 200, false);
+            result.AddColumn(LSID.Religion, DataType.dtString, 200, false);
+            result.AddColumn(LSID.Nationality, DataType.dtString, 200, false);
+            result.AddColumn(LSID.Education, DataType.dtString, 200, false);
+            result.AddColumn(LSID.Occupation, DataType.dtString, 200, false);
+            result.AddColumn(LSID.Caste, DataType.dtString, 200, false);
+            result.AddColumn(LSID.Mili, DataType.dtString, 200, false);
+            result.AddColumn(LSID.MiliInd, DataType.dtString, 200, false);
+            result.AddColumn(LSID.MiliDis, DataType.dtString, 200, false);
+            result.AddColumn(LSID.MiliRank, DataType.dtString, 200, false);
+            result.AddColumn(LSID.Changed, DataType.dtDateTime, 150, true);
+            result.AddColumn(LSID.Bookmark, DataType.dtString, 25, true);
+            result.AddColumn(LSID.NobilityTitle, DataType.dtString, 200, false);
 
             result.ResetDefaults();
             return result;
@@ -674,14 +674,14 @@ namespace GKCore.Lists
                 if (bColType == (byte)ColumnType.ctName && defNameFormat != NameFormat.nfFNP) {
                     switch (defNameFormat) {
                         case NameFormat.nfF_N_P:
-                            AddColumn(LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
-                            AddColumn(LangMan.LS(LSID.LSID_Name), 100, asz, bColType, 1);
-                            AddColumn(LangMan.LS(LSID.LSID_Patronymic), 150, asz, bColType, 2);
+                            AddColumn(LangMan.LS(LSID.Surname), 150, asz, bColType, 0);
+                            AddColumn(LangMan.LS(LSID.Name), 100, asz, bColType, 1);
+                            AddColumn(LangMan.LS(LSID.Patronymic), 150, asz, bColType, 2);
                             break;
 
                         case NameFormat.nfF_NP:
-                            AddColumn(LangMan.LS(LSID.LSID_Surname), 150, asz, bColType, 0);
-                            AddColumn(LangMan.LS(LSID.LSID_Name) + "," + LangMan.LS(LSID.LSID_Patronymic), 150, asz, bColType, 1);
+                            AddColumn(LangMan.LS(LSID.Surname), 150, asz, bColType, 0);
+                            AddColumn(LangMan.LS(LSID.Name) + "," + LangMan.LS(LSID.Patronymic), 150, asz, bColType, 1);
                             break;
                     }
                 } else {
@@ -704,7 +704,7 @@ namespace GKCore.Lists
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump);
 
-            fListColumns.AddColumn(LSID.LSID_Group, 350, false);
+            fListColumns.AddColumn(LSID.Group, 350, false);
             fListColumns.ResetDefaults();
         }
 
@@ -755,7 +755,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachGroupQuery))) {
+                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachGroupQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, groupRec, iRec);
                     }
                     break;
@@ -780,10 +780,10 @@ namespace GKCore.Lists
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveDown, RecordAction.raMoveUp);
 
-            fListColumns.AddColumn(LSID.LSID_NumberSym, 25, false);
-            fListColumns.AddColumn(LSID.LSID_Name, 350, false);
-            fListColumns.AddColumn(LSID.LSID_Type, 100, false);
-            fListColumns.AddColumn(LSID.LSID_Language, 150, false);
+            fListColumns.AddColumn(LSID.NumberSym, 25, false);
+            fListColumns.AddColumn(LSID.Name, 350, false);
+            fListColumns.AddColumn(LSID.Type, 100, false);
+            fListColumns.AddColumn(LSID.Language, 150, false);
             fListColumns.ResetDefaults();
         }
 
@@ -853,12 +853,12 @@ namespace GKCore.Lists
 
                 case RecordAction.raDelete:
                     if (iRec.PersonalNames.Count > 1) {
-                        result = (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_RemoveNameQuery)));
+                        result = (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RemoveNameQuery)));
                         if (result) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualNameRemove, iRec, persName);
                         }
                     } else {
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_RemoveNameFailed));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.RemoveNameFailed));
                     }
                     break;
 
@@ -899,9 +899,9 @@ namespace GKCore.Lists
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveDown, RecordAction.raMoveUp);
 
-            fListColumns.AddColumn(LSID.LSID_NumberSym, 25, false);
-            fListColumns.AddColumn(LSID.LSID_Name, 350, false);
-            fListColumns.AddColumn(LSID.LSID_Type, 100, false);
+            fListColumns.AddColumn(LSID.NumberSym, 25, false);
+            fListColumns.AddColumn(LSID.Name, 350, false);
+            fListColumns.AddColumn(LSID.Type, 100, false);
             fListColumns.ResetDefaults();
         }
 
@@ -968,7 +968,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachParentsQuery))) {
+                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachParentsQuery))) {
                         var famRec = fBaseContext.Tree.GetPtrValue(cfLink);
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, iRec, famRec);
                     }
@@ -1012,9 +1012,9 @@ namespace GKCore.Lists
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raJump, RecordAction.raMoveUp, RecordAction.raMoveDown);
 
-            fListColumns.AddColumn(LSID.LSID_NumberSym, 25, false);
-            fListColumns.AddColumn(LSID.LSID_Spouse, 300, false);
-            fListColumns.AddColumn(LSID.LSID_MarriageDate, 100, false);
+            fListColumns.AddColumn(LSID.NumberSym, 25, false);
+            fListColumns.AddColumn(LSID.Spouse, 300, false);
+            fListColumns.AddColumn(LSID.MarriageDate, 100, false);
             fListColumns.ResetDefaults();
         }
 
@@ -1034,10 +1034,10 @@ namespace GKCore.Lists
 
             if (iRec.Sex == GDMSex.svMale) {
                 relPerson = fBaseContext.Tree.GetPtrValue(fFamilyRec.Wife);
-                fRelName = LangMan.LS(LSID.LSID_UnkFemale);
+                fRelName = LangMan.LS(LSID.UnkFemale);
             } else {
                 relPerson = fBaseContext.Tree.GetPtrValue(fFamilyRec.Husband);
-                fRelName = LangMan.LS(LSID.LSID_UnkMale);
+                fRelName = LangMan.LS(LSID.UnkMale);
             }
 
             if (relPerson != null) {
@@ -1096,7 +1096,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (family != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachSpouseQuery))) {
+                    if (family != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachSpouseQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, iRec);
                     }
                     break;
@@ -1140,8 +1140,8 @@ namespace GKCore.Lists
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
 
-            fListColumns.AddColumn(LSID.LSID_Reference, 300, false);
-            fListColumns.AddColumn(LSID.LSID_Type, 200, false);
+            fListColumns.AddColumn(LSID.Reference, 300, false);
+            fListColumns.AddColumn(LSID.Type, 200, false);
             fListColumns.ResetDefaults();
         }
 
@@ -1205,7 +1205,7 @@ namespace GKCore.Lists
                 case RecordAction.raDelete:
                     {
                         string confirmation = !string.IsNullOrEmpty(userRef.StringValue) ? userRef.StringValue : userRef.ReferenceType;
-                        if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_RemoveUserRefQuery, confirmation))) {
+                        if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RemoveUserRefQuery, confirmation))) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualURefRemove, iRec, userRef);
                             fBaseWin.Context.Modified = true;
                         }

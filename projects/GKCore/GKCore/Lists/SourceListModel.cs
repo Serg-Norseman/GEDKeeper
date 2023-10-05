@@ -53,12 +53,12 @@ namespace GKCore.Lists
         {
             var result = new ListColumns<GDMSourceRecord>();
 
-            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.LSID_ShortTitle, DataType.dtString, 120, true, true);
-            result.AddColumn(LSID.LSID_Author, DataType.dtString, 200, true);
-            result.AddColumn(LSID.LSID_Title, DataType.dtString, 200, true);
-            result.AddColumn(LSID.LSID_RPRepositories, DataType.dtString, 200, true);
-            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
+            result.AddColumn(LSID.ShortTitle, DataType.dtString, 120, true, true);
+            result.AddColumn(LSID.Author, DataType.dtString, 200, true);
+            result.AddColumn(LSID.Title, DataType.dtString, 200, true);
+            result.AddColumn(LSID.RPRepositories, DataType.dtString, 200, true);
+            result.AddColumn(LSID.Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
             return result;
@@ -119,7 +119,7 @@ namespace GKCore.Lists
                 RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump,
                 RecordAction.raCopy, RecordAction.raPaste);
 
-            fListColumns.AddColumn(LSID.LSID_Repository, 300, false);
+            fListColumns.AddColumn(LSID.Repository, 300, false);
             fListColumns.ResetDefaults();
         }
 
@@ -171,7 +171,7 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (repoCit != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.LSID_DetachRepositoryQuery))) {
+                    if (repoCit != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachRepositoryQuery))) {
                         repoRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(repoCit);
                         result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, source, repoRec);
                     }

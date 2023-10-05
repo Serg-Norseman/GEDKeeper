@@ -212,7 +212,7 @@ namespace GKUI.Platform
                 if (dialogResult == DialogResult.Abort) {
                     if (progressForm.ThreadError.Message == "") {
                         // Abort means there were file IO errors
-                        StdDialogs.ShowAlert("UnkProblem" /*fLangMan.LS(PLS.LSID_UnkProblem)*/);
+                        StdDialogs.ShowAlert("UnkProblem" /*fLangMan.LS(PLS.UnkProblem)*/);
                     } else {
                         // Abort means there were file IO errors
                         StdDialogs.ShowAlert(progressForm.ThreadError.Message);

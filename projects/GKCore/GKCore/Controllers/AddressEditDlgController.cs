@@ -101,14 +101,14 @@ namespace GKCore.Controllers
             switch (action) {
                 case RecordAction.raAdd:
                     val = "";
-                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.LSID_Telephone), ref val)) {
+                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.Telephone), ref val)) {
                         fAddress.AddPhoneNumber(val);
                     }
                     break;
 
                 case RecordAction.raEdit:
                     val = itemTag.StringValue;
-                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.LSID_Telephone), ref val)) {
+                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.Telephone), ref val)) {
                         itemTag.StringValue = val;
                     }
                     break;
@@ -126,14 +126,14 @@ namespace GKCore.Controllers
             switch (action) {
                 case RecordAction.raAdd:
                     val = "";
-                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.LSID_Mail), ref val)) {
+                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.Mail), ref val)) {
                         fAddress.AddEmailAddress(val);
                     }
                     break;
 
                 case RecordAction.raEdit:
                     val = itemTag.StringValue;
-                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.LSID_Mail), ref val)) {
+                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.Mail), ref val)) {
                         itemTag.StringValue = val;
                     }
                     break;
@@ -151,14 +151,14 @@ namespace GKCore.Controllers
             switch (action) {
                 case RecordAction.raAdd:
                     val = "";
-                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.LSID_WebSite), ref val)) {
+                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.WebSite), ref val)) {
                         fAddress.AddWebPage(val);
                     }
                     break;
 
                 case RecordAction.raEdit:
                     val = itemTag.StringValue;
-                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.LSID_WebSite), ref val)) {
+                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.WebSite), ref val)) {
                         itemTag.StringValue = val;
                     }
                     break;
@@ -172,23 +172,23 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_Address);
+            fView.Title = LangMan.LS(LSID.Address);
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
-            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.LSID_Address);
-            GetControl<ILabel>("lblCountry").Text = LangMan.LS(LSID.LSID_AdCountry);
-            GetControl<ILabel>("lblState").Text = LangMan.LS(LSID.LSID_AdState);
-            GetControl<ILabel>("lblCity").Text = LangMan.LS(LSID.LSID_AdCity);
-            GetControl<ILabel>("lblPostalCode").Text = LangMan.LS(LSID.LSID_AdPostalCode);
-            GetControl<ILabel>("lblAddress").Text = LangMan.LS(LSID.LSID_Address);
-            GetControl<ITabPage>("pagePhones").Text = LangMan.LS(LSID.LSID_Telephones);
-            GetControl<ITabPage>("pageEmails").Text = LangMan.LS(LSID.LSID_EMails);
-            GetControl<ITabPage>("pageWebPages").Text = LangMan.LS(LSID.LSID_WebSites);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Address);
+            GetControl<ILabel>("lblCountry").Text = LangMan.LS(LSID.AdCountry);
+            GetControl<ILabel>("lblState").Text = LangMan.LS(LSID.AdState);
+            GetControl<ILabel>("lblCity").Text = LangMan.LS(LSID.AdCity);
+            GetControl<ILabel>("lblPostalCode").Text = LangMan.LS(LSID.AdPostalCode);
+            GetControl<ILabel>("lblAddress").Text = LangMan.LS(LSID.Address);
+            GetControl<ITabPage>("pagePhones").Text = LangMan.LS(LSID.Telephones);
+            GetControl<ITabPage>("pageEmails").Text = LangMan.LS(LSID.EMails);
+            GetControl<ITabPage>("pageWebPages").Text = LangMan.LS(LSID.WebSites);
 
-            fView.PhonesList.ListView.AddColumn(LangMan.LS(LSID.LSID_Telephone), 350, false);
-            fView.MailsList.ListView.AddColumn(LangMan.LS(LSID.LSID_Mail), 350, false);
-            fView.WebsList.ListView.AddColumn(LangMan.LS(LSID.LSID_WebSite), 350, false);
+            fView.PhonesList.ListView.AddColumn(LangMan.LS(LSID.Telephone), 350, false);
+            fView.MailsList.ListView.AddColumn(LangMan.LS(LSID.Mail), 350, false);
+            fView.WebsList.ListView.AddColumn(LangMan.LS(LSID.WebSite), 350, false);
         }
     }
 }

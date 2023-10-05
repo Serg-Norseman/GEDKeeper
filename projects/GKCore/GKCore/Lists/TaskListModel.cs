@@ -48,12 +48,12 @@ namespace GKCore.Lists
         {
             var result = new ListColumns<GDMTaskRecord>();
 
-            result.AddColumn(LSID.LSID_NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.LSID_Goal, DataType.dtString, 300, true, true);
-            result.AddColumn(LSID.LSID_Priority, DataType.dtString, 90, true);
-            result.AddColumn(LSID.LSID_StartDate, DataType.dtString, 90, true);
-            result.AddColumn(LSID.LSID_StopDate, DataType.dtString, 90, true);
-            result.AddColumn(LSID.LSID_Changed, DataType.dtDateTime, 150, true);
+            result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
+            result.AddColumn(LSID.Goal, DataType.dtString, 300, true, true);
+            result.AddColumn(LSID.Priority, DataType.dtString, 90, true);
+            result.AddColumn(LSID.StartDate, DataType.dtString, 90, true);
+            result.AddColumn(LSID.StopDate, DataType.dtString, 90, true);
+            result.AddColumn(LSID.Changed, DataType.dtDateTime, 150, true);
 
             result.ResetDefaults();
             return result;

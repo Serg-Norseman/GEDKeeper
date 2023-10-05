@@ -58,8 +58,8 @@ namespace GKCore.Controllers
             }
 
             fView.Dir.AddRange(new object[] {
-                LangMan.LS(LSID.LSID_CD_1),
-                LangMan.LS(LSID.LSID_CD_2)
+                LangMan.LS(LSID.CD_1),
+                LangMan.LS(LSID.CD_2)
             });
 
             fView.Name.Activate();
@@ -132,18 +132,18 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LSID_WinCommunicationEdit);
+            fView.Title = LangMan.LS(LSID.WinCommunicationEdit);
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.LSID_RPNotes);
-            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.LSID_RPMultimedia);
-            GetControl<ILabel>("lblTheme").Text = LangMan.LS(LSID.LSID_Theme);
-            GetControl<ILabel>("lblCorresponder").Text = LangMan.LS(LSID.LSID_Corresponder);
-            GetControl<ILabel>("lblType").Text = LangMan.LS(LSID.LSID_Type);
-            GetControl<ILabel>("lblDate").Text = LangMan.LS(LSID.LSID_Date);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
+            GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.RPMultimedia);
+            GetControl<ILabel>("lblTheme").Text = LangMan.LS(LSID.Theme);
+            GetControl<ILabel>("lblCorresponder").Text = LangMan.LS(LSID.Corresponder);
+            GetControl<ILabel>("lblType").Text = LangMan.LS(LSID.Type);
+            GetControl<ILabel>("lblDate").Text = LangMan.LS(LSID.Date);
 
-            SetToolTip("btnPersonAdd", LangMan.LS(LSID.LSID_PersonAttachTip));
+            SetToolTip("btnPersonAdd", LangMan.LS(LSID.PersonAttachTip));
         }
     }
 }

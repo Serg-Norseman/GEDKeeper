@@ -182,9 +182,9 @@ namespace GKUI.Forms
         public void UpdateControls()
         {
             try {
-                StatusLines[0] = string.Format(LangMan.LS(LSID.LSID_TreeIndividualsCount), fCircleChart.Model.IndividualsCount);
+                StatusLines[0] = string.Format(LangMan.LS(LSID.TreeIndividualsCount), fCircleChart.Model.IndividualsCount);
                 var imageSize = fCircleChart.GetImageSize();
-                StatusLines[1] = string.Format(LangMan.LS(LSID.LSID_ImageSize), imageSize.Width, imageSize.Height);
+                StatusLines[1] = string.Format(LangMan.LS(LSID.ImageSize), imageSize.Width, imageSize.Height);
 
                 tbPrev.Enabled = NavCanBackward();
                 tbNext.Enabled = NavCanForward();

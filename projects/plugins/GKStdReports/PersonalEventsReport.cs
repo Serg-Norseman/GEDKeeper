@@ -146,7 +146,7 @@ namespace GKStdReports
 
                 string li = dt + ": " + st + ".";
                 if (evt.HasPlace && evt.Place.StringValue != "") {
-                    li = li + " " + LangMan.LS(LSID.LSID_Place) + ": " + evt.Place.StringValue;
+                    li = li + " " + LangMan.LS(LSID.Place) + ": " + evt.Place.StringValue;
                 }
                 fWriter.AddListItem("   " + li, textFont);
 
@@ -156,16 +156,16 @@ namespace GKStdReports
                     if (evt.GetTagType() == GEDCOMTagType.BIRT) {
                         if (evObj.Type == EventType.Personal) {
                             if (father != null) {
-                                fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.LSID_Father) + ": " + GKUtils.GetNameString(father, true, false) + " ", textFont);
+                                fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.Father) + ": " + GKUtils.GetNameString(father, true, false) + " ", textFont);
                             }
                             if (mother != null) {
-                                fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.LSID_Mother) + ": " + GKUtils.GetNameString(mother, true, false) + " ", textFont);
+                                fWriter.AddListItem("   " + "   " + LangMan.LS(LSID.Mother) + ": " + GKUtils.GetNameString(mother, true, false) + " ", textFont);
                             }
                         } else if (evObj.Type == EventType.Child) {
                             if (iRec.Sex == GDMSex.svMale) {
-                                st = LangMan.LS(LSID.LSID_RK_Son) + ": ";
+                                st = LangMan.LS(LSID.RK_Son) + ": ";
                             } else {
-                                st = LangMan.LS(LSID.LSID_RK_Daughter) + ": ";
+                                st = LangMan.LS(LSID.RK_Daughter) + ": ";
                             }
                             st = StringHelper.UniformName(st) + GKUtils.GetNameString(iRec, true, false);
                             fWriter.AddListItem("   " + "   " + st, textFont);
@@ -178,12 +178,12 @@ namespace GKStdReports
                     string unk;
                     if (fPerson.Sex == GDMSex.svMale) {
                         sp = baseContext.Tree.GetPtrValue(famRec.Wife);
-                        st = LangMan.LS(LSID.LSID_Wife) + ": ";
-                        unk = LangMan.LS(LSID.LSID_UnkFemale);
+                        st = LangMan.LS(LSID.Wife) + ": ";
+                        unk = LangMan.LS(LSID.UnkFemale);
                     } else {
                         sp = baseContext.Tree.GetPtrValue(famRec.Husband);
-                        st = LangMan.LS(LSID.LSID_Husband) + ": ";
-                        unk = LangMan.LS(LSID.LSID_UnkMale);
+                        st = LangMan.LS(LSID.Husband) + ": ";
+                        unk = LangMan.LS(LSID.UnkMale);
                     }
 
                     string sps;

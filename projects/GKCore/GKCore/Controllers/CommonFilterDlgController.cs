@@ -76,13 +76,13 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            GKData.CondSigns[6] = LangMan.LS(LSID.LSID_CondContains);
-            GKData.CondSigns[7] = LangMan.LS(LSID.LSID_CondNotContains);
+            GKData.CondSigns[6] = LangMan.LS(LSID.CondContains);
+            GKData.CondSigns[7] = LangMan.LS(LSID.CondNotContains);
 
-            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.LSID_DlgAccept);
-            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.LSID_DlgCancel);
-            GetControl<IButton>("btnReset").Text = LangMan.LS(LSID.LSID_DlgReset);
-            GetControl<ITabPage>("pageFieldsFilter").Text = LangMan.LS(LSID.LSID_FieldsFilter);
+            GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
+            GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+            GetControl<IButton>("btnReset").Text = LangMan.LS(LSID.DlgReset);
+            GetControl<ITabPage>("pageFieldsFilter").Text = LangMan.LS(LSID.FieldsFilter);
         }
     }
 }

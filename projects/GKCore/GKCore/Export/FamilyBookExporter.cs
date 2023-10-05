@@ -64,14 +64,14 @@ namespace GKCore.Export
         }
 
         private readonly CatalogProps[] BookCatalogs = {
-            new CatalogProps("Catalog_BirthYears", LangMan.LS(LSID.LSID_BirthYears)),
-            new CatalogProps("Catalog_DeathYears", LangMan.LS(LSID.LSID_DeathYears)),
-            new CatalogProps("Catalog_BirthPlaces", LangMan.LS(LSID.LSID_MSBirthPlaces)),
-            new CatalogProps("Catalog_DeathPlaces", LangMan.LS(LSID.LSID_MSDeathPlaces)),
-            new CatalogProps("Catalog_DeathCauses", LangMan.LS(LSID.LSID_DeathCauses)),
-            new CatalogProps("Catalog_Occupations", LangMan.LS(LSID.LSID_Occupation)),
-            new CatalogProps("Catalog_Religion", LangMan.LS(LSID.LSID_Religion)),
-            new CatalogProps("Catalog_Sources", LangMan.LS(LSID.LSID_RPSources))
+            new CatalogProps("Catalog_BirthYears", LangMan.LS(LSID.BirthYears)),
+            new CatalogProps("Catalog_DeathYears", LangMan.LS(LSID.DeathYears)),
+            new CatalogProps("Catalog_BirthPlaces", LangMan.LS(LSID.MSBirthPlaces)),
+            new CatalogProps("Catalog_DeathPlaces", LangMan.LS(LSID.MSDeathPlaces)),
+            new CatalogProps("Catalog_DeathCauses", LangMan.LS(LSID.DeathCauses)),
+            new CatalogProps("Catalog_Occupations", LangMan.LS(LSID.Occupation)),
+            new CatalogProps("Catalog_Religion", LangMan.LS(LSID.Religion)),
+            new CatalogProps("Catalog_Sources", LangMan.LS(LSID.RPSources))
         };
 
         private IFont fTitleFont;
@@ -96,7 +96,7 @@ namespace GKCore.Export
         public FamilyBookExporter(IBaseWindow baseWin)
             : base(baseWin, true)
         {
-            fTitle = LangMan.LS(LSID.LSID_FamilyBook);
+            fTitle = LangMan.LS(LSID.FamilyBook);
         }
 
         protected override void Dispose(bool disposing)
@@ -148,10 +148,10 @@ namespace GKCore.Export
                 fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taCenter);
                 fWriter.NewPage();
 
-                fWriter.AddParagraph(LangMan.LS(LSID.LSID_TableOfContents), fChapFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.TableOfContents), fChapFont);
                 fWriter.NewLine();
-                fWriter.AddParagraphLink("1. " + LangMan.LS(LSID.LSID_PersonalRecords), fLinkFont, "IndividualRecords");
-                fWriter.AddParagraphLink("2. " + LangMan.LS(LSID.LSID_Indexes), fLinkFont, "Catalogs");
+                fWriter.AddParagraphLink("1. " + LangMan.LS(LSID.PersonalRecords), fLinkFont, "IndividualRecords");
+                fWriter.AddParagraphLink("2. " + LangMan.LS(LSID.Indexes), fLinkFont, "Catalogs");
 
                 int catNum = 0;
                 for (BookCatalog cat = BookCatalog.Catalog_First; cat <= BookCatalog.Catalog_Last; cat++) {
@@ -170,7 +170,7 @@ namespace GKCore.Export
                 fWriter.NewPage();
 
                 fWriter.BeginParagraph(TextAlignment.taCenter, 0, 20f);
-                fWriter.AddParagraphChunkAnchor(LangMan.LS(LSID.LSID_PersonalRecords), fChapFont, "IndividualRecords");
+                fWriter.AddParagraphChunkAnchor(LangMan.LS(LSID.PersonalRecords), fChapFont, "IndividualRecords");
                 fWriter.EndParagraph();
                 fWriter.NewLine();
 
@@ -199,7 +199,7 @@ namespace GKCore.Export
                 fWriter.NewPage();
 
                 fWriter.BeginParagraph(TextAlignment.taCenter, 0, 20f);
-                fWriter.AddParagraphChunkAnchor(LangMan.LS(LSID.LSID_Indexes), fChapFont, "Catalogs");
+                fWriter.AddParagraphChunkAnchor(LangMan.LS(LSID.Indexes), fChapFont, "Catalogs");
                 fWriter.EndParagraph();
                 fWriter.NewLine();
 
@@ -338,14 +338,14 @@ namespace GKCore.Export
 
             if (father != null) {
                 fWriter.BeginParagraph(TextAlignment.taLeft, 0, 0, 0);
-                fWriter.AddParagraphChunk(LangMan.LS(LSID.LSID_Father) + ": ", fTextFont);
+                fWriter.AddParagraphChunk(LangMan.LS(LSID.Father) + ": ", fTextFont);
                 fWriter.AddParagraphChunkLink(GKUtils.GetNameString(father, true, false), fLinkFont, father.XRef);
                 fWriter.EndParagraph();
             }
 
             if (mother != null) {
                 fWriter.BeginParagraph(TextAlignment.taLeft, 0, 0, 0);
-                fWriter.AddParagraphChunk(LangMan.LS(LSID.LSID_Mother) + ": ", fTextFont);
+                fWriter.AddParagraphChunk(LangMan.LS(LSID.Mother) + ": ", fTextFont);
                 fWriter.AddParagraphChunkLink(GKUtils.GetNameString(mother, true, false), fLinkFont, mother.XRef);
                 fWriter.EndParagraph();
             }

@@ -57,13 +57,13 @@ namespace GKCore.Controllers
             string kindName = "";
             switch (fView.TreeBox.Model.Kind) {
                 case TreeChartKind.ckAncestors:
-                    kindName = LangMan.LS(LSID.LSID_MITreeAncestors);
+                    kindName = LangMan.LS(LSID.MITreeAncestors);
                     break;
                 case TreeChartKind.ckDescendants:
-                    kindName = LangMan.LS(LSID.LSID_MITreeDescendants);
+                    kindName = LangMan.LS(LSID.MITreeDescendants);
                     break;
                 case TreeChartKind.ckBoth:
-                    kindName = LangMan.LS(LSID.LSID_MITreeBoth);
+                    kindName = LangMan.LS(LSID.MITreeBoth);
                     break;
             }
 
@@ -331,49 +331,49 @@ namespace GKCore.Controllers
         {
             if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) return;
 
-            GetControl<IButtonToolItem>("tbGensCommon").Text = LangMan.LS(LSID.LSID_Generations);
-            GetControl<IButtonToolItem>("tbGensAncestors").Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_Ancestors);
-            GetControl<IButtonToolItem>("tbGensDescendants").Text = LangMan.LS(LSID.LSID_Generations) + ": " + LangMan.LS(LSID.LSID_Descendants);
-            GetControl<IButtonToolItem>("tbModes").Text = LangMan.LS(LSID.LSID_ModesTip);
-            GetControl<IButtonToolItem>("tbBorders").Text = LangMan.LS(LSID.LSID_Borders);
+            GetControl<IButtonToolItem>("tbGensCommon").Text = LangMan.LS(LSID.Generations);
+            GetControl<IButtonToolItem>("tbGensAncestors").Text = LangMan.LS(LSID.Generations) + ": " + LangMan.LS(LSID.Ancestors);
+            GetControl<IButtonToolItem>("tbGensDescendants").Text = LangMan.LS(LSID.Generations) + ": " + LangMan.LS(LSID.Descendants);
+            GetControl<IButtonToolItem>("tbModes").Text = LangMan.LS(LSID.ModesTip);
+            GetControl<IButtonToolItem>("tbBorders").Text = LangMan.LS(LSID.Borders);
 
-            GetControl<IMenuItem>("miGensInfCommon").Text = LangMan.LS(LSID.LSID_Unlimited);
-            GetControl<IMenuItem>("miGensInfAncestors").Text = LangMan.LS(LSID.LSID_Unlimited);
-            GetControl<IMenuItem>("miGensInfDescendants").Text = LangMan.LS(LSID.LSID_Unlimited);
-            GetControl<IMenuItem>("miModeBoth").Text = LangMan.LS(LSID.LSID_TM_Both);
-            GetControl<IMenuItem>("miModeAncestors").Text = LangMan.LS(LSID.LSID_TM_Ancestors);
-            GetControl<IMenuItem>("miModeDescendants").Text = LangMan.LS(LSID.LSID_TM_Descendants);
-            GetControl<IMenuItem>("miEdit").Text = LangMan.LS(LSID.LSID_DoEdit);
-            GetControl<IMenuItem>("miFatherAdd").Text = LangMan.LS(LSID.LSID_FatherAdd);
-            GetControl<IMenuItem>("miMotherAdd").Text = LangMan.LS(LSID.LSID_MotherAdd);
-            GetControl<IMenuItem>("miFamilyAdd").Text = LangMan.LS(LSID.LSID_FamilyAdd);
-            GetControl<IMenuItem>("miSpouseAdd").Text = LangMan.LS(LSID.LSID_SpouseAdd);
-            GetControl<IMenuItem>("miSonAdd").Text = LangMan.LS(LSID.LSID_SonAdd);
-            GetControl<IMenuItem>("miDaughterAdd").Text = LangMan.LS(LSID.LSID_DaughterAdd);
-            GetControl<IMenuItem>("miDelete").Text = LangMan.LS(LSID.LSID_DoDelete);
-            GetControl<IMenuItem>("miRebuildTree").Text = LangMan.LS(LSID.LSID_RebuildTree);
-            GetControl<IMenuItem>("miRebuildKinships").Text = LangMan.LS(LSID.LSID_RebuildKinships);
-            GetControl<IMenuItem>("miFillColor").Text = LangMan.LS(LSID.LSID_FillColor);
-            GetControl<IMenuItem>("miFillImage").Text = LangMan.LS(LSID.LSID_FillImage);
-            GetControl<IMenuItem>("miTraceSelected").Text = LangMan.LS(LSID.LSID_TM_TraceSelected);
-            GetControl<IMenuItem>("miTraceKinships").Text = LangMan.LS(LSID.LSID_TM_TraceKinships);
-            GetControl<IMenuItem>("miCertaintyIndex").Text = LangMan.LS(LSID.LSID_CertaintyIndex);
-            GetControl<IMenuItem>("miXRefVisible").Text = LangMan.LS(LSID.LSID_XRefVisible);
-            GetControl<IMenuItem>("miSelectColor").Text = LangMan.LS(LSID.LSID_SelectColor);
-            GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.LSID_GoToPersonRecord);
-            GetControl<IMenuItem>("miGoToPrimaryBranch").Text = LangMan.LS(LSID.LSID_GoToPrimaryBranch);
-            GetControl<IMenuItem>("miOpenInNewWindow").Text = LangMan.LS(LSID.LSID_OpenInNewWindow);
-            GetControl<IMenuItem>("miMergeDuplicates").Text = LangMan.LS(LSID.LSID_MergeDuplicates);
-            GetControl<IMenuItem>("miHideDescSpouses").Text = LangMan.LS(LSID.LSID_HideDescSpouses);
+            GetControl<IMenuItem>("miGensInfCommon").Text = LangMan.LS(LSID.Unlimited);
+            GetControl<IMenuItem>("miGensInfAncestors").Text = LangMan.LS(LSID.Unlimited);
+            GetControl<IMenuItem>("miGensInfDescendants").Text = LangMan.LS(LSID.Unlimited);
+            GetControl<IMenuItem>("miModeBoth").Text = LangMan.LS(LSID.TM_Both);
+            GetControl<IMenuItem>("miModeAncestors").Text = LangMan.LS(LSID.TM_Ancestors);
+            GetControl<IMenuItem>("miModeDescendants").Text = LangMan.LS(LSID.TM_Descendants);
+            GetControl<IMenuItem>("miEdit").Text = LangMan.LS(LSID.DoEdit);
+            GetControl<IMenuItem>("miFatherAdd").Text = LangMan.LS(LSID.FatherAdd);
+            GetControl<IMenuItem>("miMotherAdd").Text = LangMan.LS(LSID.MotherAdd);
+            GetControl<IMenuItem>("miFamilyAdd").Text = LangMan.LS(LSID.FamilyAdd);
+            GetControl<IMenuItem>("miSpouseAdd").Text = LangMan.LS(LSID.SpouseAdd);
+            GetControl<IMenuItem>("miSonAdd").Text = LangMan.LS(LSID.SonAdd);
+            GetControl<IMenuItem>("miDaughterAdd").Text = LangMan.LS(LSID.DaughterAdd);
+            GetControl<IMenuItem>("miDelete").Text = LangMan.LS(LSID.DoDelete);
+            GetControl<IMenuItem>("miRebuildTree").Text = LangMan.LS(LSID.RebuildTree);
+            GetControl<IMenuItem>("miRebuildKinships").Text = LangMan.LS(LSID.RebuildKinships);
+            GetControl<IMenuItem>("miFillColor").Text = LangMan.LS(LSID.FillColor);
+            GetControl<IMenuItem>("miFillImage").Text = LangMan.LS(LSID.FillImage);
+            GetControl<IMenuItem>("miTraceSelected").Text = LangMan.LS(LSID.TM_TraceSelected);
+            GetControl<IMenuItem>("miTraceKinships").Text = LangMan.LS(LSID.TM_TraceKinships);
+            GetControl<IMenuItem>("miCertaintyIndex").Text = LangMan.LS(LSID.CertaintyIndex);
+            GetControl<IMenuItem>("miXRefVisible").Text = LangMan.LS(LSID.XRefVisible);
+            GetControl<IMenuItem>("miSelectColor").Text = LangMan.LS(LSID.SelectColor);
+            GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
+            GetControl<IMenuItem>("miGoToPrimaryBranch").Text = LangMan.LS(LSID.GoToPrimaryBranch);
+            GetControl<IMenuItem>("miOpenInNewWindow").Text = LangMan.LS(LSID.OpenInNewWindow);
+            GetControl<IMenuItem>("miMergeDuplicates").Text = LangMan.LS(LSID.MergeDuplicates);
+            GetControl<IMenuItem>("miHideDescSpouses").Text = LangMan.LS(LSID.HideDescSpouses);
 
-            SetToolTip("tbModes", LangMan.LS(LSID.LSID_ModesTip));
-            SetToolTip("tbImageSave", LangMan.LS(LSID.LSID_ImageSaveTip));
-            SetToolTip("tbDocPrint", LangMan.LS(LSID.LSID_DocPrint));
-            SetToolTip("tbDocPreview", LangMan.LS(LSID.LSID_DocPreview));
-            SetToolTip("tbPrev", LangMan.LS(LSID.LSID_PrevRec));
-            SetToolTip("tbNext", LangMan.LS(LSID.LSID_NextRec));
-            SetToolTip("tbFilter", LangMan.LS(LSID.LSID_MIFilter));
-            SetToolTip("tbOptions", LangMan.LS(LSID.LSID_MIOptions));
+            SetToolTip("tbModes", LangMan.LS(LSID.ModesTip));
+            SetToolTip("tbImageSave", LangMan.LS(LSID.ImageSaveTip));
+            SetToolTip("tbDocPrint", LangMan.LS(LSID.DocPrint));
+            SetToolTip("tbDocPreview", LangMan.LS(LSID.DocPreview));
+            SetToolTip("tbPrev", LangMan.LS(LSID.PrevRec));
+            SetToolTip("tbNext", LangMan.LS(LSID.NextRec));
+            SetToolTip("tbFilter", LangMan.LS(LSID.MIFilter));
+            SetToolTip("tbOptions", LangMan.LS(LSID.MIOptions));
         }
     }
 }

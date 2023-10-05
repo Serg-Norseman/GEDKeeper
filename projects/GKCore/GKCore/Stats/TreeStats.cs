@@ -429,7 +429,7 @@ namespace GKCore.Stats
 
             try {
                 int rowsCount = vals.Count;
-                progress.Begin(LangMan.LS(LSID.LSID_MIExport) + "...", rowsCount);
+                progress.Begin(LangMan.LS(LSID.MIExport) + "...", rowsCount);
 
                 try {
                     writer.BeginWrite();
@@ -453,7 +453,7 @@ namespace GKCore.Stats
                 }
             } catch (Exception ex) {
                 Logger.WriteError("TreeStats.WriteStatsReport()", ex);
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LSID_UploadErrorInExcel));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.UploadErrorInExcel));
             }
         }
     }
