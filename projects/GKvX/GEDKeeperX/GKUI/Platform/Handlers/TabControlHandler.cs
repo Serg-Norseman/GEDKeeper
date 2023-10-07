@@ -53,7 +53,7 @@ namespace GKUI.Platform
     {
         private class TabPageItems : ITabPages
         {
-            private TabViewControl fTabControl;
+            private readonly TabViewControl fTabControl;
 
             public ITabPage this[int index]
             {
@@ -76,7 +76,7 @@ namespace GKUI.Platform
             }
         }
 
-        private TabPageItems fItems;
+        private readonly TabPageItems fItems;
 
         public TabControlHandler(TabViewControl control) : base(control)
         {

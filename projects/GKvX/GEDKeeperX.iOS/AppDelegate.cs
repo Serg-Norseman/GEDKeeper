@@ -1,4 +1,6 @@
-﻿using Foundation;
+﻿using System.Threading;
+using Foundation;
+using GKUI;
 using UIKit;
 
 namespace GEDKeeperX.iOS
@@ -7,7 +9,7 @@ namespace GEDKeeperX.iOS
     // User Interface of the application, as well as listening (and optionally responding) to 
     // application events from iOS.
     [Register("AppDelegate")]
-    public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
+    public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate, IPlatformSpecifics
     {
         //
         // This method is invoked when the application has loaded and is ready to run. In this 
@@ -19,9 +21,14 @@ namespace GEDKeeperX.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new GKUI.App());
+            LoadApplication(new GKUI.App(this));
 
             return base.FinishedLaunching(app, options);
+        }
+
+        void IPlatformSpecifics.CloseApplication()
+        {
+            Thread.CurrentThread.Abort();
         }
     }
 }

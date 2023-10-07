@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using BSLib;
 using GDModel;
 using GKCore;
@@ -27,18 +28,15 @@ using GKCore.Charts;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 using GKUI.Components;
 using Xam.Plugin.TabView;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class BaseWinSDI : CommonWindow, IBaseWindowView, IProgressController
     {
         #region Private fields
@@ -107,6 +105,10 @@ namespace GKUI.Forms
             CreatePage("Locations", GDMRecordType.rtLocation);
 
             /*fController.SetLocale();*/
+
+            // FIXME: temp debug
+            ((IBaseWindow)this).UpdateControls();
+            UpdateShieldState();
         }
 
         private void CreatePage(string pageText, GDMRecordType recType)
@@ -407,7 +409,7 @@ namespace GKUI.Forms
 
         void IWorkWindow.UpdateControls()
         {
-            /*string statusLine = "";
+            string statusLine = "";
             GDMRecordType recType = GetSelectedRecordType();
             IListView rView = GetRecordsViewByType(recType);
             if (rView != null) {
@@ -416,7 +418,7 @@ namespace GKUI.Forms
                 statusLine = statusLine + ", " + LangMan.LS(LSID.SBFiltered) + ": " + listMan.FilteredCount.ToString();
             }
 
-            panStatusText.Text = statusLine;*/
+            panStatusText.Text = statusLine;
         }
 
         void IWorkWindow.UpdateSettings()
@@ -539,18 +541,25 @@ namespace GKUI.Forms
 
         private void UpdateShieldState()
         {
-            /*Bitmap img = (Bitmap)((ImageHandler)fController.GetShieldImage()).Handle;
+            var img = ((ImageHandler)fController.GetShieldImage()).Handle;
             if (img != null) {
-                panStatusShieldImage.Image = img;
-            }*/
+                /*var imageSource = ImageSource.FromStream(() => {
+                    var stream = new MemoryStream();
+                    img.Image.EncodedData.SaveTo(stream);
+                    return stream;
+                });
+                if (imageSource != null) {
+                    panStatusShieldImage.Source = imageSource;
+                }*/
+                panStatusShieldImage.Source = img;
+            }
         }
 
-        /*private void StatusBar_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void StatusBar_MouseDoubleClick(object sender, EventArgs e)
         {
             fContext.SwitchShieldState();
             UpdateShieldState();
-            e.Handled = true;
-        }*/
+        }
 
         private void MRUFileClick(object sender, EventArgs e)
         {

@@ -21,11 +21,9 @@
 using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LanguageSelectDlg : CommonDialog<ILanguageSelectDlg, LanguageSelectDlgController>, ILanguageSelectDlg
     {
         public int SelectedLanguage

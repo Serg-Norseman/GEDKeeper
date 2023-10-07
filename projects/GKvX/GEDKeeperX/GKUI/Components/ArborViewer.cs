@@ -25,7 +25,6 @@ using GKCore;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace GKUI.Components
 {

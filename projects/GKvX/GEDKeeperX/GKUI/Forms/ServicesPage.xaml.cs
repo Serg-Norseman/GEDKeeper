@@ -23,12 +23,10 @@ using System.Linq;
 using DLToolkit.Forms.Controls;
 using GKCore;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 using Xamvvm;
 
 namespace GKUI.Forms
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ServicesPage : ContentPage
     {
         private FlowPageModel fModel;

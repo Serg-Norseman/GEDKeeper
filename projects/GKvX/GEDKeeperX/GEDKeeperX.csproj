@@ -24,10 +24,10 @@
     <ItemGroup>
         <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
 
-        <PackageReference Include="Xamarin.Forms" Version="5.0.0.2612" />
+        <PackageReference Include="Xamarin.Forms" Version="5.0.0.2291" />
         <PackageReference Include="Xamarin.Forms.InputKit" Version="3.7.2" />
         <PackageReference Include="Xamarin.Forms.DataGrid" Version="4.8.0" />
-        <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
+        <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
         <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.6" />
 
         <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.2" />

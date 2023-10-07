@@ -39,16 +39,5 @@ namespace GKUI.Components
         public GKComboItem(string text, T tag, IImage image) : base(text, tag, image)
         {
         }
-
-        /*public static IEnumerable<GKComboItem> Convert(IEnumerable<string> items)
-        {
-            var result = new List<GKComboItem>();
-
-            foreach (var item in items) {
-                result.Add(new GKComboItem(item));
-            }
-
-            return result;
-        }*/
     }
 }

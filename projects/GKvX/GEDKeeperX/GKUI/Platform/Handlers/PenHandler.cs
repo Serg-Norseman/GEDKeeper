@@ -18,36 +18,38 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using GKCore;
-using Xamarin.CommunityToolkit.Extensions;
-using Xamarin.Forms;
+using BSLib;
+using GKCore.Design.Graphics;
+using SkiaSharp;
+using SkiaSharp.Views.Forms;
 
-namespace GKUI.Forms
+namespace GKUI.Components
 {
-    public partial class TestsPage : ContentPage
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class PenHandler: TypeHandler<SKPaint>, IPen
     {
-        public TestsPage()
+        public IColor Color
         {
-            InitializeComponent();
+            get { return UIHelper.ConvertColor(Handle.Color.ToFormsColor()); }
         }
 
-        private async void btnOpenFile_Clicked(object sender, EventArgs e)
+        public float Width
         {
-            string fileName = await AppHost.StdDialogs.GetOpenFileAsync("title", "context", "GEDCOM Files|*.ged,*.gedz,*.gedsec", 0, "");
-            AppHost.StdDialogs.ShowAlert(fileName);
+            get { return Handle.StrokeWidth; }
         }
 
-        private async void btnLangSelect_Clicked(object sender, EventArgs e)
+        public PenHandler(SKPaint handle) : base(handle)
         {
-            var curPage = Application.Current.MainPage;
-            curPage.Navigation.ShowPopup(new PopupTest());
         }
 
-        private async void btnAddress_Clicked(object sender, EventArgs e)
+        protected override void Dispose(bool disposing)
         {
-            var curPage = (MainPage)Application.Current.MainPage;
-            curPage.CurrentPage = new NavigationPage(new AddressEditDlg());
+            if (disposing) {
+                Handle.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

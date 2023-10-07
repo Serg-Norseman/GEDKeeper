@@ -6,7 +6,7 @@
         <ResourceDictionary>
 
             <Style x:Key="dlgBtn" TargetType="Button">
-                <Setter Property="HeightRequest" Value="32" />
+                <!--Setter Property="HeightRequest" Value="32" /-->
                 <Setter Property="WidthRequest" Value="120" />
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
                 <Setter Property="HorizontalOptions" Value="Center" />

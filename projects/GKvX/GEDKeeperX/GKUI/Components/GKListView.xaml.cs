@@ -268,11 +268,7 @@ namespace GKUI.Components
 
         public void Activate()
         {
-            try {
-                Focus();
-            } catch {
-                // why is an exception thrown here?
-            }
+            Focus();
         }
 
         public void BeginUpdate()

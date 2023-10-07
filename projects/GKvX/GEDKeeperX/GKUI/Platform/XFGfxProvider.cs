@@ -21,6 +21,7 @@
 using System;
 using System.IO;
 using BSLib;
+using GKCore;
 using GKCore.Design.Graphics;
 using GKUI.Components;
 using SkiaSharp;
@@ -75,9 +76,16 @@ namespace GKUI.Platform
             if (string.IsNullOrEmpty(resName))
                 return null;
 
-            /*Bitmap img = (Bitmap)UIHelper.LoadResourceImage("Resources." + resName);
+            /*using (var stream = GKUtils.LoadResourceStream(typeof(GKUtils), resName)) {
+                var img = SKImage.FromEncodedData(stream);
 
-            if (makeTransp) {
+                return new ImageHandler(img);
+            }*/
+
+            var img = ImageSource.FromResource(resName, typeof(GKUtils).Assembly);
+            return new ImageHandler(img);
+
+            /*if (makeTransp) {
                 img = (Bitmap)img.Clone();
 
                 #if __MonoCS__
@@ -85,10 +93,7 @@ namespace GKUI.Platform
                 #else
                 img.MakeTransparent(img.GetPixel(0, 0));
                 #endif
-            }
-
-            return new ImageHandler(img);*/
-            return null;
+            }*/
         }
 
         public void SaveImage(IImage image, string fileName)

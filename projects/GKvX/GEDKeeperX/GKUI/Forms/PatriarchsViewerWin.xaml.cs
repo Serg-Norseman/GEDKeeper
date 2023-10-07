@@ -28,11 +28,9 @@ using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Components;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PatriarchsViewerWin : CommonWindow, IPatriarchsViewer
     {
         private readonly IBaseWindow fBase;

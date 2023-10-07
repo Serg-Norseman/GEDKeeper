@@ -21,7 +21,6 @@
 using BSLib;
 using GKCore.Design.Controls;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace GKUI.Components
 {
@@ -30,7 +29,6 @@ namespace GKUI.Components
     /// <summary>
     ///
     /// </summary>
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HyperView : ContentView, IHyperView
     {
         private readonly StringList fLines;

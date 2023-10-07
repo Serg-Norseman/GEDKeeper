@@ -24,15 +24,13 @@ using GKUI.Forms;
 using GKUI.Platform;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 using static Xamarin.Essentials.Permissions;
 
 namespace GKUI
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class App : Application
     {
-        public App()
+        public App(IPlatformSpecifics platformSpecifics)
         {
             InitializeComponent();
 
@@ -40,7 +38,7 @@ namespace GKUI
             FlowListView.Init();
 
             LangMan.DefInit();
-            XFAppHost.Startup(null);
+            XFAppHost.Startup(platformSpecifics, null);
 
             MainPage = new MainPage();
         }

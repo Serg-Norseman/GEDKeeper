@@ -22,7 +22,6 @@ using BSLib;
 using GKCore.Design.Graphics;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
-using IBrush = GKCore.Design.Graphics.IBrush;
 
 namespace GKUI.Components
 {
@@ -30,7 +29,7 @@ namespace GKUI.Components
     {
         public IColor Color
         {
-            get { return UIHelper.ConvertColor(((SKPaint)Handle).Color.ToFormsColor()); }
+            get { return UIHelper.ConvertColor(Handle.Color.ToFormsColor()); }
         }
 
         public BrushHandler(SKPaint handle) : base(handle)

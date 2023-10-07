@@ -30,11 +30,9 @@ using GKCore.Interfaces;
 using GKCore.Options;
 using GKUI.Components;
 using GKUI.Platform;
-using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TreeChartWin : PrintableForm, ITreeChartWin
     {
         private readonly TreeChartWinController fController;

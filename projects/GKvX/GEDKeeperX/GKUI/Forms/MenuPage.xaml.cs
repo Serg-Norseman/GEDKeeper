@@ -19,8 +19,8 @@
  */
 
 using System.Collections.Generic;
+using GKCore;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
 {
@@ -36,10 +36,10 @@ namespace GKUI.Forms
         Tests,
         Launch,
         Services,
+        Exit,
     }
 
 
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MenuPage : ContentPage
     {
         private sealed class HomeMenuItem
@@ -80,6 +80,7 @@ namespace GKUI.Forms
                 new HomeMenuItem (MenuItemType.Tests, "Tests"),
                 new HomeMenuItem (MenuItemType.Launch, "Launch"),
                 new HomeMenuItem (MenuItemType.Services, "Services"),
+                new HomeMenuItem (MenuItemType.Exit, "Exit"),
             };
 
             ListViewMenu.ItemsSource = fMenuItems;
@@ -126,6 +127,9 @@ namespace GKUI.Forms
                     break;
                 case MenuItemType.Services:
                     result = new ServicesPage();
+                    break;
+                case MenuItemType.Exit:
+                    AppHost.Instance.Quit();
                     break;
             }
             return result;

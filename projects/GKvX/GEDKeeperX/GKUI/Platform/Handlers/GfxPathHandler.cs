@@ -18,13 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.IO;
 using BSLib;
 using GKCore.Design.Graphics;
 using SkiaSharp;
-using SkiaSharp.Views.Forms;
-using Xamarin.Forms;
-using IImage = GKCore.Design.Graphics.IImage;
 
 namespace GKUI.Components
 {
@@ -97,117 +93,6 @@ namespace GKUI.Components
 
         public GfxCircleSegmentPathHandler(SKPath handle) : base(handle)
         {
-        }
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class PenHandler: TypeHandler<SKPaint>, IPen
-    {
-        public IColor Color
-        {
-            get { return UIHelper.ConvertColor(Handle.Color.ToFormsColor()); }
-        }
-
-        public float Width
-        {
-            get { return Handle.StrokeWidth; }
-        }
-
-        public PenHandler(SKPaint handle) : base(handle)
-        {
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                Handle.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class FontHandler: TypeHandler<SKPaint>, IFont
-    {
-        public string FontFamilyName
-        {
-            get { return Handle.Typeface.FamilyName; }
-        }
-
-        public string Name
-        {
-            get { return Handle.Typeface.FamilyName; }
-        }
-
-        public float Size
-        {
-            get { return Handle.TextSize; }
-        }
-
-        public FontHandler(SKPaint handle) : base(handle)
-        {
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                Handle.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class ImageHandler : TypeHandler<Image>, IImage
-    {
-        public int Height
-        {
-            get { return 0; /* Handle.Height; */ }
-        }
-
-        public int Width
-        {
-            get { return 0; /* Handle.Width; */ }
-        }
-
-        public ImageHandler(Image handle) : base(handle)
-        {
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                //Handle.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        public byte[] GetBytes()
-        {
-            return GetBytes("bmp");
-        }
-
-        public byte[] GetBytes(string format)
-        {
-            //Handle.get
-            using (var stream = new MemoryStream()) {
-                //Handle.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
-                return stream.ToArray();
-            }
-        }
-
-        public IImage Resize(int newWidth, int newHeight)
-        {
-            return this;
         }
     }
 }

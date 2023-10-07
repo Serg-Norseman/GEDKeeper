@@ -22,11 +22,9 @@ using System;
 using GKCore;
 using GKCore.Options;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AboutPage : ContentPage
     {
         public AboutPage()

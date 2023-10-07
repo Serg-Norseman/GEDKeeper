@@ -22,11 +22,9 @@ using System;
 using GKCore;
 using GKCore.Design;
 using GKCore.Interfaces;
-using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public sealed partial class ProgressDlg : CommonForm, IProgressController
     {
         private int fMaximum;

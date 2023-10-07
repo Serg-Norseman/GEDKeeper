@@ -43,6 +43,7 @@ namespace GKUI.Components
         private readonly Button fBtnCut;
         private readonly Button fBtnPaste;
         private readonly GKListView fList;
+        private readonly StackLayout fToolBar;
 
         private EnumSet<SheetButton> fButtons;
         private ISheetModel fListModel;
@@ -122,7 +123,7 @@ namespace GKUI.Components
             fList.HorizontalOptions = LayoutOptions.FillAndExpand;
             //fList.MouseDoubleClick += List_DoubleClick;
 
-            var toolbar = new StackLayout() {
+            fToolBar = new StackLayout() {
                 Orientation = StackOrientation.Vertical,
                 Spacing = 4,
                 Children = { fBtnAdd, fBtnEdit, fBtnDelete, fBtnLinkJump, fBtnMoveUp, fBtnMoveDown, fBtnCopy, fBtnCut, fBtnPaste },
@@ -132,7 +133,7 @@ namespace GKUI.Components
             Content = new StackLayout() {
                 Orientation = StackOrientation.Horizontal,
                 Spacing = 4,
-                Children = { fList, toolbar }
+                Children = { fList, fToolBar }
             };
 
             Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
@@ -174,7 +175,7 @@ namespace GKUI.Components
                 fBtnCopy.IsVisible = fButtons.Contains(SheetButton.lbCopy);
                 fBtnCut.IsVisible = fButtons.Contains(SheetButton.lbCut);
                 fBtnPaste.IsVisible = fButtons.Contains(SheetButton.lbPaste);
-                //fToolBar.Enabled = !fButtons.IsEmpty();
+                fToolBar.IsEnabled = !fButtons.IsEmpty();
             } else {
                 EnumSet<RecordAction> allowedActions = fListModel.AllowedActions;
                 fBtnAdd.IsVisible = allowedActions.Contains(RecordAction.raAdd);
@@ -186,7 +187,7 @@ namespace GKUI.Components
                 fBtnCopy.IsVisible = allowedActions.Contains(RecordAction.raCopy);
                 fBtnCut.IsVisible = allowedActions.Contains(RecordAction.raCut);
                 fBtnPaste.IsVisible = allowedActions.Contains(RecordAction.raPaste);
-                //fToolBar.Visible = !allowedActions.IsEmpty();
+                fToolBar.IsEnabled = !allowedActions.IsEmpty();
             }
         }
 

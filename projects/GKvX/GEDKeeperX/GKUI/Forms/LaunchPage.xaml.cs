@@ -19,11 +19,9 @@
  */
 
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LaunchPage : ContentPage
     {
         public LaunchPage()

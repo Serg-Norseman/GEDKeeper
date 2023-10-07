@@ -29,10 +29,19 @@
         <ToolbarItem x:Name="miOrganizer" Text="Organizer" Order="Secondary" Priority="1" IconImageSource="{plat:ImageResourceExt Resources.btn_organizer.gif}" Clicked="miOrganizer_Click" />
     </ContentPage.ToolbarItems>
 
-    <StackLayout VerticalOptions="FillAndExpand">
+    <StackLayout VerticalOptions="FillAndExpand" Spacing="0" Padding="0">
         <ProgressBar x:Name="progressBar" IsVisible="false" VerticalOptions="Start" />
 
         <xp:TabViewControl x:Name="tabsRecords" VerticalOptions="FillAndExpand" />
+
+        <StackLayout x:Name="StatusBar" Orientation="Horizontal" Spacing="1" HorizontalOptions="FillAndExpand" VerticalOptions="End" Padding="1">
+            <Label x:Name="panStatusText" Text="-" HorizontalOptions="FillAndExpand" />
+            <Image x:Name="panStatusShieldImage" HeightRequest="18" WidthRequest="18" HorizontalOptions="End">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="StatusBar_MouseDoubleClick" NumberOfTapsRequired="2" />
+                </Image.GestureRecognizers>
+            </Image>
+        </StackLayout>
     </StackLayout>
 
 </forms:CommonWindow>

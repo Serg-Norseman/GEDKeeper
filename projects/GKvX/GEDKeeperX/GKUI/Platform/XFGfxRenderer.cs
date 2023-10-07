@@ -56,7 +56,6 @@ namespace GKUI.Platform
 
         public override void SetSmoothing(bool value)
         {
-            // -> SKPaint.IsAntialias!
             fAntiAlias = value;
         }
 

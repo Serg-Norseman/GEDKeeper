@@ -112,7 +112,7 @@ namespace GKUI.Platform
 
         public override void Quit()
         {
-            Application.Current.Quit();
+            fPlatformSpecifics.CloseApplication();
         }
 
         private IProgressController GetProgressController()
@@ -313,8 +313,12 @@ namespace GKUI.Platform
 
         #endregion
 
-        public static void Startup(string[] args)
+        private static IPlatformSpecifics fPlatformSpecifics;
+
+        public static void Startup(IPlatformSpecifics platformSpecifics, string[] args)
         {
+            fPlatformSpecifics = platformSpecifics;
+
             ConfigureBootstrap();
             //CheckPortable(args);
             Logger.Init(GetLogFilename());

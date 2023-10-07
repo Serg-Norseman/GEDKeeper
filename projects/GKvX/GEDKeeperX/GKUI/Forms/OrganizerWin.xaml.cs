@@ -23,11 +23,9 @@ using GKCore.Controllers;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public sealed partial class OrganizerWin : CommonDialog<IOrganizerWin, OrganizerController>, IOrganizerWin
     {
         #region View Interface

@@ -23,11 +23,9 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
-using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public sealed partial class QuickSearchDlg : CommonForm, IQuickSearchDlg
     {
         private readonly QuickSearchDlgController fController;

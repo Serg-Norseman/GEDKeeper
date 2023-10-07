@@ -1,9 +1,7 @@
 ﻿using System;
-using Xamarin.Forms.Xaml;
 
 namespace GKUI.Forms
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PopupTest : Xamarin.CommunityToolkit.UI.Views.Popup
     {
         public PopupTest()

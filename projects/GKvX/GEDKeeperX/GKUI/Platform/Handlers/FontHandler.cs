@@ -18,36 +18,42 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using GKCore;
-using Xamarin.CommunityToolkit.Extensions;
-using Xamarin.Forms;
+using BSLib;
+using GKCore.Design.Graphics;
+using SkiaSharp;
 
-namespace GKUI.Forms
+namespace GKUI.Components
 {
-    public partial class TestsPage : ContentPage
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class FontHandler: TypeHandler<SKPaint>, IFont
     {
-        public TestsPage()
+        public string FontFamilyName
         {
-            InitializeComponent();
+            get { return Handle.Typeface.FamilyName; }
         }
 
-        private async void btnOpenFile_Clicked(object sender, EventArgs e)
+        public string Name
         {
-            string fileName = await AppHost.StdDialogs.GetOpenFileAsync("title", "context", "GEDCOM Files|*.ged,*.gedz,*.gedsec", 0, "");
-            AppHost.StdDialogs.ShowAlert(fileName);
+            get { return Handle.Typeface.FamilyName; }
         }
 
-        private async void btnLangSelect_Clicked(object sender, EventArgs e)
+        public float Size
         {
-            var curPage = Application.Current.MainPage;
-            curPage.Navigation.ShowPopup(new PopupTest());
+            get { return Handle.TextSize; }
         }
 
-        private async void btnAddress_Clicked(object sender, EventArgs e)
+        public FontHandler(SKPaint handle) : base(handle)
         {
-            var curPage = (MainPage)Application.Current.MainPage;
-            curPage.CurrentPage = new NavigationPage(new AddressEditDlg());
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                Handle.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
