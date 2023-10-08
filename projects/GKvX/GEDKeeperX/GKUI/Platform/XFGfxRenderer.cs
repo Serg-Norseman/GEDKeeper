@@ -66,16 +66,42 @@ namespace GKUI.Platform
             fCanvas.DrawArc(sdPen, x, y, width, height, startAngle, sweepAngle);*/
         }
 
-        public override void DrawImage(IImage image, float x, float y,
-                                       float width, float height, string imName)
+        public override IImage LoadImage(string fileName)
         {
-            try {
-                /*if (fCanvas != null && image != null) {
-                    var sdImage = ((ImageHandler)image).Handle;
+            if (fileName == null)
+                throw new ArgumentNullException("fileName");
 
-                    // TODO: implement output with transparency
-                    fCanvas.DrawImage(sdImage, x, y, width, height);
-                }*/
+            var img = SKImage.FromEncodedData(fileName);
+            return new SKImageHandler(img);
+        }
+
+        public override IImage LoadResourceImage(Type baseType, string resName)
+        {
+            if (string.IsNullOrEmpty(resName))
+                return null;
+
+            using (var stream = GKUtils.LoadResourceStream(baseType, resName)) {
+                var img = SKImage.FromEncodedData(stream);
+                return new SKImageHandler(img);
+            }
+        }
+
+        public override IImage LoadResourceImage(string resName, bool makeTransp = false)
+        {
+            return LoadResourceImage(typeof(GKUtils), resName);
+        }
+
+        public override void DrawImage(IImage image, float destX, float destY,
+                                       float destWidth, float destHeight, string imName)
+        {
+            if (fCanvas == null || image == null)
+                return;
+
+            try {
+                var skImage = ((SKImageHandler)image).Handle;
+                var destRect = SKRect.Create(destX, destY, destWidth, destHeight);
+                var sourRect = SKRect.Create(0, 0, skImage.Image.Width, skImage.Image.Height);
+                fCanvas.DrawImage(skImage, sourRect, destRect);
             } catch (Exception ex) {
                 Logger.WriteError(string.Format("EtoGfxRenderer.DrawImage({0})", imName), ex);
             }
@@ -83,11 +109,13 @@ namespace GKUI.Platform
 
         public override void DrawImage(IImage image, ExtRect destinationRect, ExtRect sourceRect)
         {
-            /*var sdImage = ((ImageHandler)image).Handle;
+            if (fCanvas == null || image == null)
+                return;
 
-            Rectangle destRect = UIHelper.Rt2Rt(destinationRect);
-            Rectangle sourRect = UIHelper.Rt2Rt(sourceRect);
-            fCanvas.DrawImage(sdImage, sourRect, destRect);*/
+            var skImage = ((SKImageHandler)image).Handle;
+            var destRect = UIHelper.Rt2SkRt(destinationRect);
+            var sourRect = UIHelper.Rt2SkRt(sourceRect);
+            fCanvas.DrawImage(skImage, sourRect, destRect);
         }
 
         public override ExtSizeF GetTextSize(string text, IFont font)

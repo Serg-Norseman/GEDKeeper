@@ -80,6 +80,33 @@ namespace GKCore.Charts
 
         public abstract void SetTarget(object target);
 
+        /// <summary>
+        /// A separate implementation only for those cases when different classes
+        /// at the UI and diagram rendering levels are responsible for the image.
+        /// </summary>
+        public virtual IImage LoadImage(string fileName)
+        {
+            return AppHost.GfxProvider.LoadImage(fileName);
+        }
+
+        /// <summary>
+        /// A separate implementation only for those cases when different classes
+        /// at the UI and diagram rendering levels are responsible for the image.
+        /// </summary>
+        public virtual IImage LoadResourceImage(Type baseType, string resName)
+        {
+            return AppHost.GfxProvider.LoadResourceImage(baseType, resName);
+        }
+
+        /// <summary>
+        /// A separate implementation only for those cases when different classes
+        /// at the UI and diagram rendering levels are responsible for the image.
+        /// </summary>
+        public virtual IImage LoadResourceImage(string resName, bool makeTransp = false)
+        {
+            return AppHost.GfxProvider.LoadResourceImage(resName, makeTransp);
+        }
+
         public void DrawImage(IImage image, float x, float y, string imName)
         {
             if (image == null) return;
@@ -87,8 +114,8 @@ namespace GKCore.Charts
             DrawImage(image, x, y, image.Width, image.Height, imName);
         }
 
-        public abstract void DrawImage(IImage image, float x, float y,
-                                       float width, float height, string imName);
+        public abstract void DrawImage(IImage image, float destX, float destY,
+                                       float destWidth, float destHeight, string imName);
         public abstract void DrawImage(IImage image, ExtRect destinationRect,
                                        ExtRect sourceRect);
 

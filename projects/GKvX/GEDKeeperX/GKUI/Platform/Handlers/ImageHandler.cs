@@ -29,7 +29,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    /*public sealed class ImageHandler : TypeHandler<SKImageImageSource>, IImage
+    public sealed class SKImageHandler : TypeHandler<SKImageImageSource>, IImage
     {
         public int Height
         {
@@ -41,16 +41,8 @@ namespace GKUI.Components
             get { return Handle.Image.Width; }
         }
 
-        public ImageHandler(SKImageImageSource handle) : base(handle)
+        public SKImageHandler(SKImageImageSource handle) : base(handle)
         {
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                //Handle.Dispose();
-            }
-            base.Dispose(disposing);
         }
 
         public byte[] GetBytes()
@@ -60,7 +52,6 @@ namespace GKUI.Components
 
         public byte[] GetBytes(string format)
         {
-            //Handle.get
             using (var stream = new MemoryStream()) {
                 //Handle.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
                 return stream.ToArray();
@@ -71,8 +62,13 @@ namespace GKUI.Components
         {
             return this;
         }
-    }*/
-    public sealed class ImageHandler : TypeHandler<ImageSource>, IImage
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class XFImageHandler : TypeHandler<ImageSource>, IImage
     {
         public int Height
         {
@@ -84,16 +80,8 @@ namespace GKUI.Components
             get { return 0; }
         }
 
-        public ImageHandler(ImageSource handle) : base(handle)
+        public XFImageHandler(ImageSource handle) : base(handle)
         {
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                //Handle.Dispose();
-            }
-            base.Dispose(disposing);
         }
 
         public byte[] GetBytes()
@@ -103,7 +91,6 @@ namespace GKUI.Components
 
         public byte[] GetBytes(string format)
         {
-            //Handle.get
             using (var stream = new MemoryStream()) {
                 //Handle.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
                 return stream.ToArray();

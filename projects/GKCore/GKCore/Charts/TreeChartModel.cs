@@ -288,31 +288,34 @@ namespace GKCore.Charts
             base.Dispose(disposing);
         }
 
-        private static IImage PrepareImage(string name, bool makeTransp)
+        private static IImage PrepareImage(ChartRenderer renderer, string name, bool makeTransp)
         {
             if (string.IsNullOrEmpty(name))
                 return null;
 
             try {
-                return AppHost.GfxProvider.LoadResourceImage("Resources." + name, makeTransp);
+                return renderer.LoadResourceImage("Resources." + name, makeTransp);
             } catch (Exception ex) {
                 Logger.WriteError("TreeChartModel.PrepareImage()", ex);
                 return null;
             }
         }
 
-        private void InitSigns()
+        private void InitSigns(ChartRenderer renderer)
         {
+            if (fSignsPic != null)
+                return;
+
             try {
                 int uRefsNum = GKData.SpecialUserRefs.Length;
                 fSignsPic = new IImage[uRefsNum];
                 for (int i = 0; i < uRefsNum; i++) {
-                    fSignsPic[i] = PrepareImage(GKData.SpecialUserRefs[i].ResName, false);
+                    fSignsPic[i] = PrepareImage(renderer, GKData.SpecialUserRefs[i].ResName, false);
                 }
 
-                fExpPic = PrepareImage("btn_expand.gif", true);
-                fPersExpPic = PrepareImage("btn_expand2.gif", true);
-                fInfoPic = PrepareImage("btn_info.gif", true);
+                fExpPic = PrepareImage(renderer, "btn_expand.gif", true);
+                fPersExpPic = PrepareImage(renderer, "btn_expand2.gif", true);
+                fInfoPic = PrepareImage(renderer, "btn_info.gif", true);
             } catch (Exception ex) {
                 Logger.WriteError("TreeChartModel.InitSigns()", ex);
             }
@@ -1571,7 +1574,7 @@ namespace GKCore.Charts
         {
             base.SetRenderer(renderer);
 
-            InitSigns();
+            InitSigns(renderer);
             InitGraphics();
         }
 
@@ -1728,8 +1731,7 @@ namespace GKCore.Charts
                 ExtRect brt = prt;
                 if (person.Portrait != null) {
                     ExtRect portRt = person.PortraitArea.GetOffset(prt.Left, prt.Top);
-                    fRenderer.DrawImage(person.Portrait, portRt.Left, portRt.Top,
-                                        portRt.GetWidth(), portRt.GetHeight(), person.Rec.XRef);
+                    fRenderer.DrawImage(person.Portrait, portRt.Left, portRt.Top, portRt.GetWidth(), portRt.GetHeight(), person.Rec.XRef);
 
                     prt.Left += person.PortraitWidth;
                 }

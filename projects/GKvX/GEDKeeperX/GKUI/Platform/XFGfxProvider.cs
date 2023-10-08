@@ -51,49 +51,25 @@ namespace GKUI.Platform
 
         public IImage LoadImage(string fileName)
         {
-            /*if (fileName == null)
+            if (fileName == null)
                 throw new ArgumentNullException("fileName");
 
-            using (Bitmap bmp = new Bitmap(fileName))
-            {
-                // cloning is necessary to release the resource
-                // loaded from the image stream
-                Bitmap resImage = (Bitmap)bmp.Clone();
-
-                return new ImageHandler(resImage);
-            }*/
-            throw new NotImplementedException();
+            var img = ImageSource.FromFile(fileName);
+            return new XFImageHandler(img);
         }
 
         public IImage LoadResourceImage(Type baseType, string resName)
         {
-            //return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(baseType, resName)));
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(resName))
+                return null;
+
+            var img = ImageSource.FromResource(resName, baseType.Assembly);
+            return new XFImageHandler(img);
         }
 
         public IImage LoadResourceImage(string resName, bool makeTransp = false)
         {
-            if (string.IsNullOrEmpty(resName))
-                return null;
-
-            /*using (var stream = GKUtils.LoadResourceStream(typeof(GKUtils), resName)) {
-                var img = SKImage.FromEncodedData(stream);
-
-                return new ImageHandler(img);
-            }*/
-
-            var img = ImageSource.FromResource(resName, typeof(GKUtils).Assembly);
-            return new ImageHandler(img);
-
-            /*if (makeTransp) {
-                img = (Bitmap)img.Clone();
-
-                #if __MonoCS__
-                img.MakeTransparent();
-                #else
-                img.MakeTransparent(img.GetPixel(0, 0));
-                #endif
-            }*/
+            return LoadResourceImage(typeof(GKUtils), resName);
         }
 
         public void SaveImage(IImage image, string fileName)

@@ -22,6 +22,7 @@ using System;
 using BSLib;
 using GKCore;
 using GKCore.Design.Graphics;
+using SkiaSharp;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -35,6 +36,16 @@ namespace GKUI.Components
         }
 
         public static ExtRect Rt2Rt(Rectangle ert)
+        {
+            return ExtRect.CreateBounds((int)ert.Left, (int)ert.Top, (int)ert.Width, (int)ert.Height);
+        }
+
+        public static SKRect Rt2SkRt(ExtRect ert)
+        {
+            return new SKRect(ert.Left, ert.Top, ert.GetWidth(), ert.GetHeight());
+        }
+
+        public static ExtRect SkRt2Rt(SKRect ert)
         {
             return ExtRect.CreateBounds((int)ert.Left, (int)ert.Top, (int)ert.Width, (int)ert.Height);
         }

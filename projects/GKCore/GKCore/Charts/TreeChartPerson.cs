@@ -365,7 +365,7 @@ namespace GKCore.Charts
 
                             if (fPortrait == null && options.DefaultPortraits) {
                                 string resImage = GKData.SexData[(int)fSex].DefPortraitImage;
-                                fPortrait = AppHost.GfxProvider.LoadResourceImage(resImage, false);
+                                fPortrait = fModel.Renderer.LoadResourceImage(resImage, false);
                             }
                         } catch (MediaFileNotFoundException) {
                             if (!fModel.HasMediaFail) {
@@ -547,8 +547,7 @@ namespace GKCore.Charts
                     }
                 }
 
-                int pad2side = (fModel.NodePadding * 2);
-
+                int pad2side = fModel.NodePadding * 2;
                 fWidth = pad2side + maxwid;
                 fHeight = pad2side + height;
 

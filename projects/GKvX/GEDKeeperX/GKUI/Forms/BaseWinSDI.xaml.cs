@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using BSLib;
 using GDModel;
 using GKCore;
@@ -522,16 +521,6 @@ namespace GKUI.Forms
             // not supported
         }
 
-        private void Form_DragEnter(object sender, DragEventArgs e)
-        {
-            // not supported
-        }
-
-        private void Form_DragDrop(object sender, DragEventArgs e)
-        {
-            // not supported
-        }
-
         void IBaseWindowView.LoadBase(string fileName)
         {
             /*Application.Instance.Invoke(delegate () {
@@ -541,16 +530,8 @@ namespace GKUI.Forms
 
         private void UpdateShieldState()
         {
-            var img = ((ImageHandler)fController.GetShieldImage()).Handle;
+            var img = ((XFImageHandler)fController.GetShieldImage()).Handle;
             if (img != null) {
-                /*var imageSource = ImageSource.FromStream(() => {
-                    var stream = new MemoryStream();
-                    img.Image.EncodedData.SaveTo(stream);
-                    return stream;
-                });
-                if (imageSource != null) {
-                    panStatusShieldImage.Source = imageSource;
-                }*/
                 panStatusShieldImage.Source = img;
             }
         }
@@ -589,16 +570,6 @@ namespace GKUI.Forms
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.UpdateMRU()", ex);
             }*/
-        }
-
-        private void ThemeClick(object sender, EventArgs e)
-        {
-            // not supported
-        }
-
-        private void UpdateThemesItems()
-        {
-            // not supported
         }
 
         public void UpdateControls(bool forceDeactivate, bool blockDependent = false)
@@ -824,26 +795,6 @@ namespace GKUI.Forms
         private void miContext_Click(object sender, EventArgs e)
         {
             AppHost.Instance.ShowHelpTopic("");
-        }
-
-        private void miWinCascade_Click(object sender, EventArgs e)
-        {
-            AppHost.Instance.LayoutWindows(WinLayout.Cascade);
-        }
-
-        private void miWinHTile_Click(object sender, EventArgs e)
-        {
-            AppHost.Instance.LayoutWindows(WinLayout.TileHorizontal);
-        }
-
-        private void miWinVTile_Click(object sender, EventArgs e)
-        {
-            AppHost.Instance.LayoutWindows(WinLayout.TileVertical);
-        }
-
-        private void miWinMinimize_Click(object sender, EventArgs e)
-        {
-            AppHost.Instance.LayoutWindows(WinLayout.Minimize);
         }
 
         #endregion
