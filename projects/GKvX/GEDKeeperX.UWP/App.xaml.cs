@@ -46,7 +46,6 @@ namespace GEDKeeperX.UWP
                 List<Assembly> assembliesToInclude = new List<Assembly>();
                 assembliesToInclude.Add(typeof(CarouselViewRenderer).GetTypeInfo().Assembly);
                 Xamarin.Forms.Forms.Init(e, assembliesToInclude);
-                //Xamarin.Forms.Forms.Init(e);
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated) {
                     //TODO: Load state from previously suspended application

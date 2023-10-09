@@ -41,17 +41,7 @@ namespace GKUI.Components
     {
         BSDListItem IControlItems<BSDListItem>.this[int index]
         {
-            get { return (BSDListItem)base[index]; }
-        }
-
-        public new BSDListItem this[int index]
-        {
-            get { return (BSDListItem)base[index]; }
-        }
-
-        public new int Count
-        {
-            get { return base.Count; }
+            get { return base[index]; }
         }
 
         public ObservableExtList()
@@ -262,6 +252,7 @@ namespace GKUI.Components
 
             ItemsSource = fItems;
             RowsBackgroundColorPalette = new RowBgProvider(this);
+            RowHeight = 26;
 
             fListMan = null;
         }
@@ -496,12 +487,10 @@ namespace GKUI.Components
         public void ResizeColumn(int columnIndex)
         {
             try {
-                /*if (columnIndex >= 0 && Items.Count > 0)
-                {
+                /*if (columnIndex >= 0 && Items.Count > 0) {
                     AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.ColumnContent);
 
-                    if (Columns[columnIndex].Width < 20)
-                    {
+                    if (Columns[columnIndex].Width < 20) {
                         AutoResizeColumn(columnIndex, ColumnHeaderAutoResizeStyle.HeaderSize);
                     }
                 }*/
@@ -554,7 +543,7 @@ namespace GKUI.Components
             try {
                 var result = new List<object>();
 
-                /*if (fListMan == null) {
+                /*if (!fIsVirtual) {
                     foreach (GKListItem item in SelectedItems) {
                         result.Add(item.Tag);
                     }
@@ -600,18 +589,17 @@ namespace GKUI.Components
         public void SelectItem(object rowData)
         {
             try {
-                if (fListMan != null) {
-                    // "virtual" mode
-                    int idx = fListMan.IndexOfItem(rowData);
-                    SelectItem(idx);
-                } else {
-                    int num = fItems.Count;
-                    for (int i = 0; i < num; i++) {
+                if (!fIsVirtual) {
+                    for (int i = 0, num = fItems.Count; i < num; i++) {
                         if (fItems[i].Tag == rowData) {
                             SelectItem(i);
                             return;
                         }
                     }
+                } else {
+                    // "virtual" mode
+                    int idx = fListMan.IndexOfItem(rowData);
+                    SelectItem(idx);
                 }
             } catch (Exception ex) {
                 Logger.WriteError("GKListView.SelectItem()", ex);

@@ -469,13 +469,13 @@ namespace GKCore
         public IBaseWindow GetCurrentFile(bool extMode = false)
         {
             IWindow activeWnd = GetActiveWindow();
-            IChartWindow curChart = ((activeWnd is IChartWindow) ? ((IChartWindow) activeWnd) : null);
+            IChartWindow curChart = (activeWnd is IChartWindow) ? (IChartWindow)activeWnd : null;
             IBaseWindow result;
 
             if (extMode && curChart != null) {
                 result = curChart.OwnerWindow as IBaseWindow;
             } else {
-                result = ((activeWnd is IBaseWindow) ? ((IBaseWindow) activeWnd) : null);
+                result = (activeWnd is IBaseWindow) ? (IBaseWindow)activeWnd : null;
             }
 
             return result;
@@ -897,6 +897,10 @@ namespace GKCore
 
         public static ushort RequestLanguage()
         {
+            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                return LangMan.LS_DEF_CODE;
+            }
+
             using (var dlg = AppHost.ResolveDialog<ILanguageSelectDlg>()) {
                 if (AppHost.Instance.ShowModalX(dlg, null, false)) {
                     return (ushort)dlg.SelectedLanguage;

@@ -86,6 +86,12 @@ namespace GKUI.Forms
         {
         }
 
+        /*protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            ApplyTheme();
+        }*/
+
         public virtual void ApplyTheme()
         {
             if (AppHost.Instance != null) {
@@ -113,6 +119,18 @@ namespace GKUI.Forms
         public virtual void SetLocale()
         {
         }
+
+        /*protected override void OnAppearing()
+        {
+            AppHost.Instance.LoadWindow(this);
+            base.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            AppHost.Instance.CloseWindow(this);
+            base.OnDisappearing();
+        }*/
     }
 
 

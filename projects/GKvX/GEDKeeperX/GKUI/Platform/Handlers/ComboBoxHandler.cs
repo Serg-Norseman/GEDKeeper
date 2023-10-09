@@ -145,11 +145,24 @@ namespace GKUI.Platform
 
         public T GetSelectedTag<T>()
         {
-            return default(T);
+            var selectedItem = SelectedItem as ComboItem<T>;
+            return (selectedItem == null) ? default : selectedItem.Tag;
         }
 
         public void SetSelectedTag<T>(T tagValue, bool allowDefault = true)
         {
+            foreach (object item in fItems) {
+                var comboItem = item as ComboItem<T>;
+
+                if (comboItem != null && Equals(comboItem.Tag, tagValue)) {
+                    SelectedItem = item;
+                    return;
+                }
+            }
+
+            if (allowDefault) {
+                Control.SelectedIndex = 0;
+            }
         }
     }
 }

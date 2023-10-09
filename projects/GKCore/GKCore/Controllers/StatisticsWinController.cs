@@ -164,7 +164,7 @@ namespace GKCore.Controllers
 
         public void UpdateStatsTypes()
         {
-            bool hasPatronymic = (fBase == null) ? false : fBase.Context.Culture.HasPatronymic;
+            bool hasPatronymic = fBase != null && fBase.Context.Culture.HasPatronymic;
 
             fView.StatsType.BeginUpdate();
             fView.StatsType.Clear();

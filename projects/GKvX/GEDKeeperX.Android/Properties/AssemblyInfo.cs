@@ -10,4 +10,6 @@ using GKCore;
 [assembly: AssemblyCulture("")]
 
 [assembly: UsesPermission(Android.Manifest.Permission.Internet)]
+[assembly: UsesPermission(Android.Manifest.Permission.SetOrientation)]
+[assembly: UsesPermission(Android.Manifest.Permission.ReadExternalStorage)]
 [assembly: UsesPermission(Android.Manifest.Permission.WriteExternalStorage)]

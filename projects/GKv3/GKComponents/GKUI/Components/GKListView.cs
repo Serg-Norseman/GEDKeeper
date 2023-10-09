@@ -42,17 +42,7 @@ namespace GKUI.Components
     {
         BSDListItem IControlItems<BSDListItem>.this[int index]
         {
-            get { return (BSDListItem)base[index]; }
-        }
-
-        public new BSDListItem this[int index]
-        {
-            get { return (BSDListItem)base[index]; }
-        }
-
-        public new int Count
-        {
-            get { return base.Count; }
+            get { return base[index]; }
         }
 
         public ObservableExtList()

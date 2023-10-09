@@ -20,6 +20,11 @@
 
 
     <ItemGroup>
+      <Compile Include="..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+    </ItemGroup>
+
+
+    <ItemGroup>
         <Reference Include="BSLib">
             <HintPath>..\libs\netstd\BSLib.dll</HintPath>
         </Reference>

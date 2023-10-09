@@ -121,13 +121,15 @@ namespace GKUI.Components
 
             fList = new GKListView();
             fList.HorizontalOptions = LayoutOptions.FillAndExpand;
+            fList.VerticalOptions = LayoutOptions.FillAndExpand;
             //fList.MouseDoubleClick += List_DoubleClick;
 
             fToolBar = new StackLayout() {
                 Orientation = StackOrientation.Vertical,
                 Spacing = 4,
                 Children = { fBtnAdd, fBtnEdit, fBtnDelete, fBtnLinkJump, fBtnMoveUp, fBtnMoveDown, fBtnCopy, fBtnCut, fBtnPaste },
-                HorizontalOptions = LayoutOptions.End
+                HorizontalOptions = LayoutOptions.End,
+                VerticalOptions = LayoutOptions.FillAndExpand
             };
 
             Content = new StackLayout() {

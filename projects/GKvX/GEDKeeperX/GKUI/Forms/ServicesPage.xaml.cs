@@ -35,8 +35,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            // https://metanit.com/sharp/xamarin/4.10.php
-
             var services = new List<FlowItem>();
             services.Add(new FlowItem("Services", "Organizer"));
             services.Add(new FlowItem("Services", "Slideshow"));

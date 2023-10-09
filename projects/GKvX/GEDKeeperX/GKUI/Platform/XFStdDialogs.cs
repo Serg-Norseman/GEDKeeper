@@ -63,7 +63,7 @@ namespace GKUI.Platform
                 var customFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>> {
                     { DevicePlatform.UWP, ConvertFilePickerFilters(filter) },
                     { DevicePlatform.iOS, ConvertFilePickerFilters(filter, true) },
-                    { DevicePlatform.Android, ConvertFilePickerFilters(filter, true) },
+                    { DevicePlatform.Android, new string[] { } /*ConvertFilePickerFilters(filter, true)*/ },
                 });
                 var options = new PickOptions {
                     PickerTitle = title,

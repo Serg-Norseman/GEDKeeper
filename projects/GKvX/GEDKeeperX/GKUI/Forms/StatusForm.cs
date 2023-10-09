@@ -93,7 +93,7 @@ namespace GKUI.Forms
 
         protected void SetStatusLine(int index, string value)
         {
-            Label panel = null;
+            Label panel;
             if (index < 0) {
                 return;
             } else if (index >= fStatusBar.Children.Count) {
@@ -102,18 +102,8 @@ namespace GKUI.Forms
                     fStatusBar.Children.Add(panel);
                 }
             }
-
             panel = (Label)fStatusBar.Children[index];
-            if (panel == null) {
-                panel = new Label();
-                fStatusBar.Children[index] = panel;
-            }
             panel.Text = value;
-
-            /*for (int i = 0; i < fStatusBar.Children.Count; i++) {
-                fStatusBar.Children[i].HorizontalOptions = LayoutOptions.Start;
-            }*/
-            //fStatusBar.Panels[fStatusBar.Panels.Count - 1].AutoSize = StatusBarPanelAutoSize.Spring;
         }
     }
 }

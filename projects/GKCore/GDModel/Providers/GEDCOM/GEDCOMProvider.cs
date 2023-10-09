@@ -177,7 +177,9 @@ namespace GDModel.Providers.GEDCOM
 
         protected override Encoding GetDefaultEncoding()
         {
-            return Encoding.GetEncoding(DEF_CODEPAGE);
+            // FIXME: dirty hack
+            var result = AppHost.Instance.HasFeatureSupport(GKCore.Types.Feature.Mobile) ? Encoding.UTF8 : Encoding.GetEncoding(DEF_CODEPAGE);
+            return result;
         }
 
         protected override string DetectCharset(Stream inputStream, bool charsetDetection)
