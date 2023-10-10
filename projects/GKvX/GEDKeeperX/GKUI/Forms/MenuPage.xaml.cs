@@ -20,6 +20,7 @@
 
 using System.Collections.Generic;
 using GKCore;
+using GKUI.Platform;
 using Xamarin.Forms;
 
 namespace GKUI.Forms
@@ -33,9 +34,6 @@ namespace GKUI.Forms
         Progress,
         PatriarchsViewer,
         LanguageSelect,
-        Tests,
-        Launch,
-        Services,
         Exit,
     }
 
@@ -58,12 +56,6 @@ namespace GKUI.Forms
 
         private readonly List<HomeMenuItem> fMenuItems;
 
-        private MainPage RootPage
-        {
-            get {
-                return Application.Current.MainPage as MainPage;
-            }
-        }
 
         public MenuPage()
         {
@@ -71,26 +63,21 @@ namespace GKUI.Forms
 
             fMenuItems = new List<HomeMenuItem>() {
                 new HomeMenuItem (MenuItemType.Browse, "Browse"),
-                new HomeMenuItem (MenuItemType.About, "About"),
                 new HomeMenuItem (MenuItemType.UserRef, "UserRef"),
                 new HomeMenuItem (MenuItemType.QuickSearch, "QuickSearch"),
                 new HomeMenuItem (MenuItemType.Progress, "Progress"),
                 new HomeMenuItem (MenuItemType.PatriarchsViewer, "PatriarchsViewer"),
                 new HomeMenuItem (MenuItemType.LanguageSelect, "LanguageSelect"),
-                new HomeMenuItem (MenuItemType.Tests, "Tests"),
-                new HomeMenuItem (MenuItemType.Launch, "Launch"),
-                new HomeMenuItem (MenuItemType.Services, "Services"),
+                new HomeMenuItem (MenuItemType.About, "About"),
                 new HomeMenuItem (MenuItemType.Exit, "Exit"),
             };
 
             ListViewMenu.ItemsSource = fMenuItems;
             ListViewMenu.SelectedItem = fMenuItems[0];
             ListViewMenu.ItemSelected += async (sender, e) => {
-                if (e.SelectedItem == null)
-                    return;
-
-                var id = (int)((HomeMenuItem)e.SelectedItem).Id;
-                await RootPage.NavigateFromMenu(id);
+                var item = e.SelectedItem as HomeMenuItem;
+                if (item == null) return;
+                await XFAppHost.GetMainPage().NavigateMenuAsync((int)item.Id);
             };
         }
 
@@ -117,16 +104,7 @@ namespace GKUI.Forms
                     result = new PatriarchsViewerWin();
                     break;
                 case MenuItemType.LanguageSelect:
-                    result = new LanguageSelectDlg();
-                    break;
-                case MenuItemType.Tests:
-                    result = new TestsPage();
-                    break;
-                case MenuItemType.Launch:
-                    result = new LaunchPage();
-                    break;
-                case MenuItemType.Services:
-                    result = new ServicesPage();
+                    //result = new LanguageSelectDlg();
                     break;
                 case MenuItemType.Exit:
                     AppHost.Instance.Quit();

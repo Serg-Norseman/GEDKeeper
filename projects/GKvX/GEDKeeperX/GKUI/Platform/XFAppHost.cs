@@ -63,9 +63,14 @@ namespace GKUI.Platform
         {
         }
 
+        public static MainPage GetMainPage()
+        {
+            return ((NavigationPage)Application.Current.MainPage).RootPage as MainPage;
+        }
+
         private Page GetCurrentPage()
         {
-            var navPage = ((MainPage)Application.Current.MainPage).CurrentPage as NavigationPage;
+            var navPage = (NavigationPage)Application.Current.MainPage;
             return (navPage == null) ? null : navPage.CurrentPage;
         }
 

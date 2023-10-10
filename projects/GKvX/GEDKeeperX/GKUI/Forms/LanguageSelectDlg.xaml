@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<forms:CommonDialog xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+<forms:XCTDialog
+    xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:forms="clr-namespace:GKUI.Forms" xmlns:plat="clr-namespace:GKUI.Platform" xmlns:comp="clr-namespace:GKUI.Components"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore" xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     x:Class="GKUI.Forms.LanguageSelectDlg" Title="Select language"
@@ -7,7 +8,7 @@
 
     <StackLayout Orientation="Vertical" Spacing="8" Padding="8">
 
-        <comp:GKListView x:Name="lstLanguages" WidthRequest="280" HeightRequest="380" />
+        <comp:GKListView x:Name="lstLanguages" WidthRequest="180" HeightRequest="280" />
 
         <StackLayout Spacing="8" Orientation="Horizontal">
             <Label HorizontalOptions="FillAndExpand" />
@@ -17,4 +18,4 @@
 
     </StackLayout>
 
-</forms:CommonDialog>
+</forms:XCTDialog>

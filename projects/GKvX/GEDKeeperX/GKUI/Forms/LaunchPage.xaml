@@ -5,26 +5,41 @@
 
     <StackLayout Padding="16">
         <Frame CornerRadius="8" Padding="16">
-            <ListView x:Name="launchList" HasUnevenRows="True" ItemsSource="{Binding LaunchItems}" IsGroupingEnabled="True">
-                <ListView.GroupHeaderTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Label Text="{Binding Name}" FontSize="Large" Margin="8" />
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.GroupHeaderTemplate>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Label Text="{Binding Title}" Margin="6">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="Item_Tapped" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <StackLayout Orientation="Horizontal" Spacing="16" Padding="0">
+                <ListView x:Name="launchList" HasUnevenRows="True" ItemsSource="{Binding LaunchItems}" IsGroupingEnabled="True" ItemSelected="lv_ItemSelected">
+                    <ListView.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Label Text="{Binding Name}" FontSize="Large" Margin="8" />
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.GroupHeaderTemplate>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Label Text="{Binding Title}" Margin="6" />
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <ListView x:Name="servicesList" HasUnevenRows="True" ItemsSource="{Binding ServiceItems}" IsGroupingEnabled="True" ItemSelected="lv_ItemSelected">
+                    <ListView.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Label Text="{Binding Name}" FontSize="Large" Margin="8" />
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.GroupHeaderTemplate>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Label Text="{Binding Title}" Margin="6" />
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
         </Frame>
     </StackLayout>
 

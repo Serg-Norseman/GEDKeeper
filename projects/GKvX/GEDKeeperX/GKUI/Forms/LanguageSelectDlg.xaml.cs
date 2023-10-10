@@ -24,7 +24,7 @@ using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {
-    public partial class LanguageSelectDlg : CommonDialog<ILanguageSelectDlg, LanguageSelectDlgController>, ILanguageSelectDlg
+    public partial class LanguageSelectDlg : XCTDialog<ILanguageSelectDlg, LanguageSelectDlgController>, ILanguageSelectDlg
     {
         public int SelectedLanguage
         {

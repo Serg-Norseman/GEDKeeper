@@ -24,63 +24,46 @@ using Xamarin.Forms;
 
 namespace GKUI.Forms
 {
-    public partial class MainPage : MasterDetailPage
+    public class MainPage : MasterDetailPage
     {
-        private readonly Dictionary<int, NavigationPage> fMenuPages;
-        private Page fCurrentPage;
+        private readonly Dictionary<int, Page> fMenuPages;
 
-        public Page CurrentPage
-        {
-            get { return fCurrentPage; }
-            set {
-                fCurrentPage = value;
-                Detail = fCurrentPage;
-            }
-        }
 
         public MainPage()
         {
             MasterBehavior = MasterBehavior.Popover;
-
-            var navPage = new NavigationPage(new BaseWinSDI());
-            if (Device.RuntimePlatform == Device.iOS) {
-                navPage.Icon = "tab_feed.png"; // FileImageSource
-            }
-
             Master = new MenuPage();
-            CurrentPage = navPage;
+            Detail = new LaunchPage();
 
-            fMenuPages = new Dictionary<int, NavigationPage>();
-            fMenuPages.Add((int)MenuItemType.Browse, navPage);
+            fMenuPages = new Dictionary<int, Page>();
         }
 
-        public void NavigateEx(Page page)
+        public void Navigate(Page page)
         {
             if (page == null) return;
 
-            CurrentPage = new NavigationPage(page);
-            IsPresented = false;
+            //IsPresented = false;
+            Navigation.PushAsync(page);
         }
 
-        public async Task NavigateFromMenu(int id)
+        public async void NavigateAsync(Page page)
         {
-            NavigationPage newPage;
-            if (!fMenuPages.TryGetValue(id, out newPage)) {
-                var page = MenuPage.CreatePageInstance(id);
+            if (page == null) return;
+
+            //IsPresented = false;
+            await Navigation.PushAsync(page);
+        }
+
+        public async Task NavigateMenuAsync(int id)
+        {
+            Page page;
+            if (!fMenuPages.TryGetValue(id, out page)) {
+                page = MenuPage.CreatePageInstance(id);
                 if (page != null) {
-                    newPage = new NavigationPage(page);
-                    fMenuPages.Add(id, newPage);
+                    fMenuPages.Add(id, page);
                 }
             }
-
-            if (newPage != null && Detail != newPage) {
-                CurrentPage = newPage;
-
-                if (Device.RuntimePlatform == Device.Android)
-                    await Task.Delay(100);
-
-                IsPresented = false;
-            }
+            NavigateAsync(page);
         }
     }
 }
