@@ -269,9 +269,15 @@ namespace GKCore
             if (mf != null) SaveWinState(baseWin, mf);
         }
 
-        public abstract void SaveWinState(IBaseWindow baseWin, MRUFile mf);
+        public virtual void SaveWinState(IBaseWindow baseWin, MRUFile mf)
+        {
+            // May have a desktop-only implementation
+        }
 
-        public abstract void RestoreWinState(IBaseWindow baseWin, MRUFile mf);
+        public virtual void RestoreWinState(IBaseWindow baseWin, MRUFile mf)
+        {
+            // May have a desktop-only implementation
+        }
 
         public void RestoreWinMRU(IBaseWindow baseWin)
         {
@@ -321,15 +327,14 @@ namespace GKCore
 
         public abstract bool ExecuteWorkExt(ProgressStart proc, string title);
 
-        public abstract void LayoutWindows(WinLayout layout);
+        public virtual void LayoutWindows(WinLayout layout)
+        {
+            // May have a desktop-only implementation
+        }
 
         #region Extended clipboard functions
 
         public abstract void SetClipboardText(string text);
-
-        //public abstract void SetClipboardObject(string objTypeName, string objContent);
-
-        //public abstract string GetClipboardObject(string objTypeName);
 
         public void SetClipboardObj<T>(object obj) where T : class
         {
@@ -374,24 +379,22 @@ namespace GKCore
 
         #region Executing environment
 
-        private static Assembly GetAssembly()
+        private static Assembly GetImplementationAssembly()
         {
-            Assembly asm = Assembly.GetEntryAssembly();
-            if (asm == null) {
-                asm = Assembly.GetExecutingAssembly();
-            }
+            Assembly asm = (fInstance != null) ? fInstance.GetType().Assembly : Assembly.GetEntryAssembly();
+            if (asm == null) asm = Assembly.GetExecutingAssembly();
             return asm;
         }
 
         public static Version GetAppVersion()
         {
-            var asm = GetAssembly();
+            var asm = GetImplementationAssembly();
             return (asm == null) ? null : asm.GetName().Version;
         }
 
         public static string GetAppCopyright()
         {
-            var asm = GetAssembly();
+            var asm = GetImplementationAssembly();
             if (asm == null) {
                 return string.Empty;
             } else {
@@ -530,7 +533,10 @@ namespace GKCore
 
         public abstract ExtRect GetActiveScreenWorkingArea();
 
-        public abstract void WidgetLocate(IWidgetForm view, WidgetLocation location);
+        public virtual void WidgetLocate(IWidgetForm view, WidgetLocation location)
+        {
+            // May have a desktop-only implementation
+        }
 
         protected ExtPoint WidgetLocate(ExtRect formBounds, WidgetLocation location)
         {

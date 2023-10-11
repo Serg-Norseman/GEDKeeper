@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//define DEBUG_PRINT
-
 using GKCore.Design.Graphics;
 
 namespace GKUI.Forms
@@ -32,10 +30,6 @@ namespace GKUI.Forms
         protected PrintableForm()
         {
         }
-
-        #region Internal print support
-
-        #endregion
 
         #region Public interface
 

@@ -21,6 +21,7 @@
 using System;
 using GKCore;
 using GKCore.Options;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace GKUI.Forms
@@ -31,10 +32,8 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            // FontSize="12" FontAttributes="Bold"
-
             Title = LangMan.LS(LSID.MIAbout);
-            btnClose.Text = LangMan.LS(LSID.DlgClose);
+            //btnClose.Text = LangMan.LS(LSID.DlgClose);
             //lblProduct.Text = GKData.APP_TITLE;
             lblVersion.Text = @"Version " + AppHost.GetAppVersion();
             lblCopyright.Text = AppHost.GetAppCopyright();
@@ -48,11 +47,11 @@ namespace GKUI.Forms
             }
         }
 
-        private void lblURL_Clicked(object sender, EventArgs e)
+        private async void lblURL_Clicked(object sender, EventArgs e)
         {
             var btn = sender as Button;
             if (btn != null) {
-                Device.OpenUri(new Uri(btn.Text));
+                await Launcher.TryOpenAsync(new Uri(btn.Text));
             }
         }
     }

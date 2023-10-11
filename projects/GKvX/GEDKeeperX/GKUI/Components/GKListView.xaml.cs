@@ -582,8 +582,10 @@ namespace GKUI.Components
                     item = fListMan.ContentList[index];
             }
 
-            if (item != null)
+            if (item != null) {
                 SelectedItem = item;
+                ScrollTo(item, ScrollToPosition.MakeVisible, true);
+            }
         }
 
         public void SelectItem(object rowData)

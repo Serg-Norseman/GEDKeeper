@@ -6,7 +6,7 @@ using GKCore;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyProduct(GKData.APP_TITLE)]
 [assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
-[assembly: AssemblyVersion("4.0.0.0")]
+[assembly: AssemblyVersion(GKData.APP_VERSION_3X)]
 [assembly: AssemblyCulture("")]
 
 #if DEBUG

@@ -11,7 +11,6 @@ using Xamarin.Forms.Xaml;
 
 namespace GKUI.Platform
 {
-    //[Preserve(AllMembers = true)]
     [ContentProperty("Source")]
     public class ImageResourceExt : IMarkupExtension
     {

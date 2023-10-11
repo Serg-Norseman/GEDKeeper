@@ -4,7 +4,8 @@
     xmlns:forms="clr-namespace:GKUI.Forms" xmlns:plat="clr-namespace:GKUI.Platform" xmlns:comp="clr-namespace:GKUI.Components"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore" xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
     x:Class="GKUI.Forms.LanguageSelectDlg" Title="Select language"
-    x:TypeArguments="mvp:ILanguageSelectDlg, contr:LanguageSelectDlgController">
+    x:TypeArguments="mvp:ILanguageSelectDlg, contr:LanguageSelectDlgController"
+    Size="300,300">
 
     <StackLayout Orientation="Vertical" Spacing="8" Padding="8">
 

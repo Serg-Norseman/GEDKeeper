@@ -81,10 +81,5 @@ namespace GKUI.Components
         {
             return ImageSource.FromResource(resName, baseType.Assembly);
         }
-
-        public static void SetClipboardText(string text)
-        {
-            Clipboard.SetTextAsync(text);
-        }
     }
 }

@@ -82,65 +82,12 @@ namespace GKUI.Forms
             BindingContext = this;
         }
 
-        private void Item_Tapped(object sender, EventArgs e)
-        {
-            var item = launchList.SelectedItem as LaunchItem;
-            if (item != null) {
-                AppHost.StdDialogs.ShowMessage($"Tapped {item.Title}");
-                //item.Action?.Invoke();
-            }
-            /*
-                            <Grid>
-                                <Grid.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="Item_Tapped" />
-                                </Grid.GestureRecognizers>
-                            </Grid>
-             */
-        }
-
         private async void lv_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var item = e.SelectedItem as LaunchItem;
             item?.Action?.Invoke();
         }
-
-        /*public void FlowScrollTo(object item)
-        {
-            flowListView.FlowScrollTo(item, ScrollToPosition.MakeVisible, true);
-        }*/
     }
-
-    /*
-        <ListView x:Name="launchList" HasUnevenRows="True" ItemsSource="{Binding LaunchItems}" IsGroupingEnabled="True">
-            <ListView.GroupHeaderTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <Label Text="{Binding Name}" FontSize="Large" Margin="8" />
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.GroupHeaderTemplate>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <Label Text="{Binding Title}" Margin="6" />
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
-        <CollectionView x:Name="launchList" ItemsSource="{Binding LaunchItems}" IsGrouped="true">
-            <CollectionView.GroupHeaderTemplate>
-                <DataTemplate>
-                    <Label Text="{Binding Name}" TextColor="Orange" FontSize="Large" FontAttributes="Bold" Margin="8" />
-                </DataTemplate>
-            </CollectionView.GroupHeaderTemplate>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                        <Label Text="{Binding Title}" Margin="6" />
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-     */
 
     public class Grouping<K, T> : ObservableCollection<T>
     {

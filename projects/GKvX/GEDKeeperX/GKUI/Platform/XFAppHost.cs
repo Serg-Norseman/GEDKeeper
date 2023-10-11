@@ -29,11 +29,11 @@ using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.IoC;
-using GKCore.Options;
 using GKCore.Types;
 using GKUI.Components;
 using GKUI.Forms;
 using Xam.Plugin.TabView;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using XFRadioButton = Xamarin.Forms.RadioButton;
 
@@ -101,14 +101,6 @@ namespace GKUI.Platform
             throw new NotImplementedException();
         }
 
-        public override void SaveWinState(IBaseWindow baseWin, MRUFile mf)
-        {
-        }
-
-        public override void RestoreWinState(IBaseWindow baseWin, MRUFile mf)
-        {
-        }
-
         public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
         {
             var result = new XFUITimer(msInterval, elapsedHandler);
@@ -158,11 +150,6 @@ namespace GKUI.Platform
             throw new NotImplementedException();
         }
 
-        public override void WidgetLocate(IWidgetForm view, WidgetLocation location)
-        {
-            throw new NotSupportedException();
-        }
-
         public override string SelectFolder(string folderPath)
         {
             return string.Empty;
@@ -198,13 +185,6 @@ namespace GKUI.Platform
             }
         }
 
-        public override void LayoutWindows(WinLayout layout)
-        {
-            throw new NotSupportedException();
-        }
-
-        #region KeyLayout functions
-
         public override int GetKeyLayout()
         {
             return 0;
@@ -216,10 +196,8 @@ namespace GKUI.Platform
 
         public override void SetClipboardText(string text)
         {
-            UIHelper.SetClipboardText(text);
+            Clipboard.SetTextAsync(text);
         }
-
-        #endregion
 
         #region Bootstrapper
 

@@ -18,8 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GKCore;
 using GKCore.Design.Controls;
-using GKUI.Components;
 using Xamarin.Forms;
 
 namespace GKUI.Platform
@@ -86,7 +86,7 @@ namespace GKUI.Platform
 
         public void Copy()
         {
-            UIHelper.SetClipboardText(SelectedText);
+            AppHost.Instance.SetClipboardText(SelectedText);
         }
 
         public void SelectAll()
@@ -155,7 +155,7 @@ namespace GKUI.Platform
 
         public void Copy()
         {
-            UIHelper.SetClipboardText(SelectedText);
+            AppHost.Instance.SetClipboardText(SelectedText);
         }
 
         public void SelectAll()

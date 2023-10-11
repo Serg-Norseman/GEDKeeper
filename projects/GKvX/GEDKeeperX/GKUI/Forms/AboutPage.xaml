@@ -39,11 +39,6 @@
                         BackgroundColor="{StaticResource Primary}" TextColor="White" />
         </StackLayout>
 
-        <StackLayout Spacing="8" Orientation="Horizontal">
-            <Label HorizontalOptions="FillAndExpand" />
-            <Button x:Name="btnClose" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" />
-        </StackLayout>
-
     </StackLayout>
 
 </ContentPage>
