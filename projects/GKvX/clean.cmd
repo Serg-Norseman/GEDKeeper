@@ -9,6 +9,3 @@ del .\GEDKeeperX.Android\*.csproj.user /s /q
 
 rmdir .\GEDKeeperX.iOS\bin /s /q
 rmdir .\GEDKeeperX.iOS\obj /s /q
-
-rmdir .\GEDKeeperX.UWP\bin /s /q
-rmdir .\GEDKeeperX.UWP\obj /s /q

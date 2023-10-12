@@ -40,18 +40,19 @@ namespace GKUI.Forms
 
             var launchItems = new List<LaunchItem>
             {
-                new LaunchItem("File", "New"),
-                new LaunchItem("File", "Load"),
+                new LaunchItem("File", "New", async () => {
+                }),
+                new LaunchItem("File", "Open"),
                 new LaunchItem("File", "Save"),
-                new LaunchItem("File", "Close"),
+                new LaunchItem("File", "Save As"),
+                new LaunchItem("File", "Properties"),
                 new LaunchItem("Recent", "Europe Kings.ged"),
                 new LaunchItem("Recent", "My Kins.ged"),
-                new LaunchItem("Edit", "Add"),
+                new LaunchItem("Export", "Export table"),
 
-                new LaunchItem("Test", "OpenFile", async () => {
-                    string fileName = await AppHost.StdDialogs.GetOpenFileAsync("title", "context", "GEDCOM Files|*.ged,*.gedz,*.gedsec", 0, "");
-                    AppHost.StdDialogs.ShowAlert(fileName);
-                }),
+                new LaunchItem("Help", "Content"),
+                new LaunchItem("Help", "About"),
+
                 new LaunchItem("Test", "LangSelect", async () => {
                     var curPage = Application.Current.MainPage;
                     curPage.Navigation.ShowPopup(new LanguageSelectDlg());
@@ -65,15 +66,19 @@ namespace GKUI.Forms
             LaunchItems = new ObservableCollection<Grouping<string, LaunchItem>>(groups);
 
             var servicesItems = new List<LaunchItem>() {
+                new LaunchItem("Pedigree", "Relationship Calculator"),
                 new LaunchItem("Services", "Organizer"),
                 new LaunchItem("Services", "Slideshow"),
                 new LaunchItem("Services", "Scripts"),
-                new LaunchItem("Tools", "Compare"),
-                new LaunchItem("Tools", "Merge"),
-                new LaunchItem("Tools", "Split"),
-                new LaunchItem("Tools", "Check"),
-                new LaunchItem("Tools", "Search"),
-                new LaunchItem("Tools", "Manage"),
+                new LaunchItem("Services", "Options"),
+                new LaunchItem("Tools", "Compare databases"),
+                new LaunchItem("Tools", "Merge databases"),
+                new LaunchItem("Tools", "Split database"),
+                new LaunchItem("Tools", "Merge records"),
+                new LaunchItem("Tools", "Check connection of families"),
+                new LaunchItem("Tools", "Check database"),
+                new LaunchItem("Tools", "Search the patriarchs"),
+                new LaunchItem("Tools", "Manage places"),
             };
 
             var services = servicesItems.GroupBy(p => p.Group).Select(g => new Grouping<string, LaunchItem>(g.Key, g));
