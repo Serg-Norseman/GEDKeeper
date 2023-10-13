@@ -11,14 +11,14 @@
     x:Class="GKUI.Forms.RepositoryEditDlg"
     x:TypeArguments="mvp:IRepositoryEditDlg, contr:RepositoryEditDlgController">
 
-    <StackLayout Orientation="Vertical" Spacing="8" Padding="8">
+    <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <StackLayout Orientation="Horizontal" Spacing="4">
+        <StackLayout Orientation="Horizontal" Spacing="4" VerticalOptions="Start">
             <Label x:Name="lblName" />
             <Entry x:Name="txtName" HorizontalOptions="FillAndExpand" />
         </StackLayout>
 
-        <xp:TabViewControl x:Name="tabsData" HorizontalOptions="Fill" VerticalOptions="Fill">
+        <xp:TabViewControl x:Name="tabsData" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
             <xp:TabViewControl.ItemSource>
                 <xp:TabItem x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
@@ -26,7 +26,7 @@
             </xp:TabViewControl.ItemSource>
         </xp:TabViewControl>
 
-        <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayout Style="{StaticResource dlgFooter}">
             <Button x:Name="btnAddress" Clicked="btnAddress_Click" />
             <Label HorizontalOptions="FillAndExpand" />
             <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />

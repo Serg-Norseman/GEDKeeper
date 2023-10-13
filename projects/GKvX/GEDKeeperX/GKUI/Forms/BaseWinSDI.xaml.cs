@@ -143,8 +143,8 @@ namespace GKUI.Forms
                     new RowDefinition() { Height = GridLength.Auto }
                 }
             };
-            spl.Children.Add(recView, 0, 0);
-            spl.Children.Add(summary, 1, 0);
+            spl.Children.Add(new Frame() { Content = recView, Padding = 1, BorderColor = Color.Red }, 0, 0);
+            spl.Children.Add(new Frame() { Content = summary, Padding = 1, BorderColor = Color.Red }, 1, 0);
 
             var tabPage = new TabItem(); //ContentPage();
             tabPage.HeaderText = pageText;

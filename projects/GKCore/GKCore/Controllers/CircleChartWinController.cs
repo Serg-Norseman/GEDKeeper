@@ -24,6 +24,7 @@ using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Options;
 using System.IO;
+using GKCore.Types;
 
 namespace GKCore.Controllers
 {
@@ -59,6 +60,8 @@ namespace GKCore.Controllers
             } else {
                 fView.Title = LangMan.LS(LSID.DescendantsCircle);
             }
+
+            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) return;
 
             GetControl<IButtonToolItem>("tbModes").Text = LangMan.LS(LSID.ModesTip);
             GetControl<IMenuItem>("miFanMode").Text = LangMan.LS(LSID.FanMode);

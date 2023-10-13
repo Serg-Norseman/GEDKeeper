@@ -2,6 +2,7 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
     x:Class="GKUI.Forms.ProgressDlg">
 
     <StackLayout Orientation="Vertical" Spacing="10">
@@ -31,5 +32,13 @@
                 <Label Text="lblTotalVal" x:Name="lblTotalVal" HorizontalTextAlignment="End" Grid.Column="1" Grid.Row="4" />
             </Grid.Children>
         </Grid>
+
+        <input:CheckBox Text="Option 0 Plain Checkbox" />
+
+        <input:RadioButtonGroupView x:Name="groupView">
+            <input:RadioButton Text="Option 1" LabelPosition="After"/>
+            <input:RadioButton Text="Option 2" LabelPosition="Before"/>
+            <input:RadioButton Text="Option 5 Disabled" IsDisabled="True"/>
+        </input:RadioButtonGroupView>
     </StackLayout>
 </forms:CommonForm>

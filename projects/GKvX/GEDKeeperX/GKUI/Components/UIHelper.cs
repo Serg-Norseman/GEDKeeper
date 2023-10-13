@@ -62,14 +62,16 @@ namespace GKUI.Components
 
         public static Color Darker(Color color, float fraction)
         {
-            int rgb = ColorExtensions.ToInt(color);
-            return Color.FromUint((uint)GfxHelper.Darker(rgb, fraction));
+            int rgb = (int)(ColorExtensions.ToUInt(color) & 0xffffff);
+            int newColor = GfxHelper.Darker(rgb, fraction);
+            return Color.FromUint((uint)newColor);
         }
 
         public static Color Lighter(Color color, float fraction)
         {
-            int rgb = ColorExtensions.ToInt(color);
-            return Color.FromUint((uint)GfxHelper.Lighter(rgb, fraction));
+            int rgb = (int)(ColorExtensions.ToUInt(color) & 0xffffff);
+            int newColor = GfxHelper.Lighter(rgb, fraction);
+            return Color.FromUint((uint)newColor);
         }
 
         public static ImageSource LoadResourceImage(string resName)

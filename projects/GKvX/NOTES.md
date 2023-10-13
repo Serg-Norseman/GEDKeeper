@@ -18,21 +18,28 @@
 1. LanguageSelectDlg (locales) - canceled, OptionsDlg only
 2. ProgressDlg - canceled, only popup progressbar at top of pages
 
+
 # Experimental
 
 1. https://www.nuget.org/packages/C1.Xamarin.Forms.Grid
 2. https://www.nuget.org/packages/Syncfusion.Xamarin.SfDataGrid
 
-
-# Canceled
+## Canceled
 
 1. DLToolkit.Forms.Controls and Xamvvm.Forms - obsolete, on Android - ugly
 
-
-# Problems
+## Problems
 
 1. Xamarin.Forms.DataGrid >= 5.0.0.2515 - dont works
 2. Xamarin.Forms.DataGrid 4.8.0 - selecting items does not work correctly after scrolling
+
+## Checked packages
+
+Xamarin.Forms 5.0.0.2291-2545
+Xamarin.Essentials 1.7.0-3 -> TargetFrameworkVersion=v10.0, android:targetSdkVersion="29"
+Xamarin.Forms.InputKit 3.7.2, 4.1.6
+Xamarin.Forms.DataGrid 4.8.0
+Xamarin.CommunityToolkit 2.0.6
 
 
 # Dev Requirements
@@ -45,20 +52,7 @@ Emulator: sc query intelhaxm
 
 Android Device Image: Tablet M 10.1in (Android Pie 9.0 - API 28), 1 gb
 
-
-## Bad performance (Android)
+## Performance (Android)
 
 Start application: 512 mb - 122 s; 1gb - 8-15 s; 2 gb - 7-8 s
-Load gedcom (370 kb): 512 mb - 74 s; 1gb - 2 s; 2gb - <1 s
-
-
-# Xamarin.Essentials
-
-1.7.0 -> TargetFrameworkVersion=v10.0, android:targetSdkVersion="29"
-
-
-## Works
-
-Xamarin.Forms 5.0.0.2291-2545
-Xamarin.Essentials 1.7.0-3
-Xamarin.Forms.DataGrid 4.8.0
+Load gedcom (370 kb): 512 mb - 74 s; 1gb - 2 s; 2 gb - <1 s

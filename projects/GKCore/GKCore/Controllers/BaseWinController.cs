@@ -774,8 +774,8 @@ namespace GKCore.Controllers
         {
             try {
                 IWorkWindow workWin = AppHost.Instance.GetWorkWindow();
-                IBaseWindow curBase = ((forceDeactivate) ? null : AppHost.Instance.GetCurrentFile());
-                IChartWindow curChart = ((workWin is IChartWindow) ? ((IChartWindow)workWin) : null);
+                IBaseWindow curBase = (forceDeactivate) ? null : AppHost.Instance.GetCurrentFile();
+                IChartWindow curChart = (workWin is IChartWindow) ? (IChartWindow)workWin : null;
 
                 GDMRecordType rt = (curBase == null) ? GDMRecordType.rtNone : curBase.GetSelectedRecordType();
                 bool baseEn = (rt != GDMRecordType.rtNone);
@@ -791,8 +791,8 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miRecordAdd").Enabled = baseEn;
                 GetControl<IMenuItem>("miRecordEdit").Enabled = baseEn;
                 GetControl<IMenuItem>("miRecordDelete").Enabled = baseEn;
-                GetControl<IMenuItem>("miFilter").Enabled = (workWin != null && workWin.AllowFilter());
-                GetControl<IMenuItem>("miSearch").Enabled = (workWin != null && workWin.AllowQuickSearch());
+                GetControl<IMenuItem>("miFilter").Enabled = workWin != null && workWin.AllowFilter();
+                GetControl<IMenuItem>("miSearch").Enabled = workWin != null && workWin.AllowQuickSearch();
 
                 GetControl<IMenuItem>("miPedigree").Enabled = indivEn;
                 GetControl<IMenuItem>("miTreeAncestors").Enabled = ifEn;

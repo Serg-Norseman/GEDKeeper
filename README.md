@@ -57,7 +57,7 @@ If your problem or idea is not addressed yet, please open a new issue.
 
 - "GEDKeeper2", standard (NET4.7.1 & WinForms)
 - "GEDKeeper3", cross-platform (NET6 & Eto.Forms)
-- "GEDKeeperX", future mobile (NET Standard & Xamarin), initial experience
+- "GEDKeeperX", future mobile (NET Standard & Xamarin), prototype
 
 
 ## Supported languages

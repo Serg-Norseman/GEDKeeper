@@ -29,8 +29,7 @@ namespace GEDKeeperX.Droid
 
         void IPlatformSpecifics.CloseApplication()
         {
-            var activity = (Activity)Forms.Context;
-            activity.FinishAffinity();
+            FinishAffinity();
         }
     }
 }

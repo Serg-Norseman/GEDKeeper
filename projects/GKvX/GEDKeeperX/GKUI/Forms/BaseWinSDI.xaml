@@ -24,8 +24,8 @@
         <ToolbarItem x:Name="tbTreeDescendants" Order="Primary" Priority="8" IconImageSource="{plat:ImageResourceExt Resources.btn_tree_descendants.gif}" Clicked="miTreeDescendants_Click" />
         <ToolbarItem x:Name="tbTreeBoth" Order="Primary" Priority="9" IconImageSource="{plat:ImageResourceExt Resources.btn_tree_both.gif}" Clicked="miTreeBoth_Click" />
 
-        <ToolbarItem x:Name="miCircleAncestors" Text="CircleAncestors" Order="Secondary" Priority="1" />
-        <ToolbarItem x:Name="miCircleDescendants" Text="CircleDescendants" Order="Secondary" Priority="1" />
+        <ToolbarItem x:Name="miCircleAncestors" Text="CircleAncestors" Order="Secondary" Priority="1" Clicked="miAncestorsCircle_Click" />
+        <ToolbarItem x:Name="miCircleDescendants" Text="CircleDescendants" Order="Secondary" Priority="1" Clicked="miDescendantsCircle_Click" />
 
         <ToolbarItem x:Name="tbPedigree" Order="Primary" Priority="10" IconImageSource="{plat:ImageResourceExt Resources.btn_scroll.gif}" Clicked="miPedigreeAscend_Click" />
 

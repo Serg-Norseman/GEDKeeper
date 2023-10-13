@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+<Application
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="GKUI.App">
 
     <Application.Resources>
@@ -18,6 +20,19 @@
                 <Setter Property="WidthRequest" Value="34" />
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
                 <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
+
+            <Style x:Key="dlgFooter" TargetType="StackLayout">
+                <Setter Property="Spacing" Value="8" />
+                <Setter Property="Orientation" Value="Horizontal" />
+                <Setter Property="VerticalOptions" Value="End" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+            </Style>
+
+            <Style x:Key="paddedDlg88" TargetType="StackLayout">
+                <Setter Property="Spacing" Value="8" />
+                <Setter Property="Padding" Value="8" />
+                <Setter Property="Orientation" Value="Vertical" />
             </Style>
 
         </ResourceDictionary>

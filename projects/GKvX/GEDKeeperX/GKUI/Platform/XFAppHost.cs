@@ -227,7 +227,7 @@ namespace GKUI.Platform
             //container.Register<IAddressEditDlg, AddressEditDlg>(LifeCycle.Transient);
             //container.Register<IAssociationEditDlg, AssociationEditDlg>(LifeCycle.Transient);
             container.Register<IBaseWindow, BaseWinSDI>(LifeCycle.Transient);
-            //container.Register<ICircleChartWin, CircleChartWin>(LifeCycle.Transient);
+            container.Register<ICircleChartWin, CircleChartWin>(LifeCycle.Transient);
             //container.Register<ICommunicationEditDlg, CommunicationEditDlg>(LifeCycle.Transient);
             //container.Register<ICommonFilterDlg, CommonFilterDlg>(LifeCycle.Transient);
             //container.Register<IDayTipsDlg, DayTipsDlg>(LifeCycle.Transient);
@@ -242,7 +242,7 @@ namespace GKUI.Platform
             //container.Register<IMapsViewerWin, MapsViewerWin>(LifeCycle.Transient);
             //container.Register<IMediaEditDlg, MediaEditDlg>(LifeCycle.Transient);
             //container.Register<INameEditDlg, NameEditDlg>(LifeCycle.Transient);
-            //container.Register<INoteEditDlg, NoteEditDlg>(LifeCycle.Transient);
+            container.Register<INoteEditDlg, NoteEditDlg>(LifeCycle.Transient);
             //container.Register<INoteEditDlgEx, NoteEditDlgEx>(LifeCycle.Transient);
             //container.Register<IOptionsDlg, OptionsDlg>(LifeCycle.Transient);
             container.Register<IOrganizerWin, OrganizerWin>(LifeCycle.Transient);
@@ -261,7 +261,7 @@ namespace GKUI.Platform
             //container.Register<IResearchEditDlg, ResearchEditDlg>(LifeCycle.Transient);
             //container.Register<ISexCheckDlg, SexCheckDlg>(LifeCycle.Transient);
             //container.Register<ISourceCitEditDlg, SourceCitEditDlg>(LifeCycle.Transient);
-            //container.Register<ISourceEditDlg, SourceEditDlg>(LifeCycle.Transient);
+            container.Register<ISourceEditDlg, SourceEditDlg>(LifeCycle.Transient);
             //container.Register<IScriptEditWin, ScriptEditWin>(LifeCycle.Transient);
             //container.Register<ISlideshowWin, SlideshowWin>(LifeCycle.Transient);
             container.Register<IStatisticsWin, StatisticsWin>(LifeCycle.Transient);
