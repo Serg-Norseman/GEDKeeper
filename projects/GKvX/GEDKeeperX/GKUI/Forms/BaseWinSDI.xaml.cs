@@ -53,6 +53,11 @@ namespace GKUI.Forms
             get { return fContext; }
         }
 
+        public BaseWinController Controller
+        {
+            get { return fController; }
+        }
+
         public NavigationStack<GDMRecord> Navman
         {
             get { return fController.Navman; }

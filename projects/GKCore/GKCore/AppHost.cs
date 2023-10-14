@@ -469,7 +469,7 @@ namespace GKCore
             return (activeWnd is IWorkWindow) ? (IWorkWindow) activeWnd : null;
         }
 
-        public IBaseWindow GetCurrentFile(bool extMode = false)
+        public virtual IBaseWindow GetCurrentFile(bool extMode = false)
         {
             IWindow activeWnd = GetActiveWindow();
             IChartWindow curChart = (activeWnd is IChartWindow) ? (IChartWindow)activeWnd : null;
@@ -688,7 +688,7 @@ namespace GKCore
             }
         }
 
-        public IBaseWindow CreateBase(string fileName)
+        public virtual IBaseWindow CreateBase(string fileName)
         {
             IBaseWindow result = null;
 

@@ -86,7 +86,7 @@ namespace GKUI.Forms
             Page result = null;
             switch ((MenuItemType)id) {
                 case MenuItemType.Browse:
-                    result = new BaseWinSDI();
+                    result = AppHost.Instance.GetCurrentFile() as Page;
                     break;
                 case MenuItemType.About:
                     result = new AboutPage();

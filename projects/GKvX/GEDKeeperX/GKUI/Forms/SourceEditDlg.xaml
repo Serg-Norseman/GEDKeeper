@@ -16,19 +16,23 @@
         <xp:TabViewControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <xp:TabViewControl.ItemSource>
                 <xp:TabItem x:Name="pageCommon">
-                    <Grid ColumnSpacing="4" RowSpacing="4">
-                        <Label x:Name="lblShortTitle" Grid.Column="0" Grid.Row="0" />
-                        <Entry x:Name="txtShortTitle" Grid.Column="1" Grid.Row="0" TextChanged="EditShortTitle_TextChanged" />
+                    <StackLayout Orientation="Vertical">
+                        <Grid ColumnSpacing="4" RowSpacing="4">
+                            <Label x:Name="lblShortTitle" Grid.Column="0" Grid.Row="0" />
+                            <Entry x:Name="txtShortTitle" Grid.Column="1" Grid.Row="0" TextChanged="EditShortTitle_TextChanged" />
 
-                        <Label x:Name="lblAuthor" Grid.Column="0" Grid.Row="1" />
-                        <Entry x:Name="txtAuthor" Grid.Column="1" Grid.Row="1" />
+                            <Label x:Name="lblAuthor" Grid.Column="0" Grid.Row="1" />
+                            <Entry x:Name="txtAuthor" Grid.Column="1" Grid.Row="1" />
 
-                        <Label x:Name="lblTitle" Grid.Column="0" Grid.Row="2" />
-                        <Entry x:Name="txtTitle" Grid.Column="1" Grid.Row="2" />
+                            <Label x:Name="lblTitle" Grid.Column="0" Grid.Row="2" />
+                            <Entry x:Name="txtTitle" Grid.Column="1" Grid.Row="2" />
 
-                        <Label x:Name="lblPublication" Grid.Column="0" Grid.Row="3" />
-                        <Entry x:Name="txtPublication" Grid.Column="1" Grid.Row="3" />
-                    </Grid>
+                            <Label x:Name="lblPublication" Grid.Column="0" Grid.Row="3" />
+                            <Entry x:Name="txtPublication" Grid.Column="1" Grid.Row="3" />
+                        </Grid>
+
+                        <Label VerticalOptions="FillAndExpand" />
+                    </StackLayout>
                 </xp:TabItem>
 
                 <xp:TabItem x:Name="pageText">

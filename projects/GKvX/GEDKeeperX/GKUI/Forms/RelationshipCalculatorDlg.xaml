@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    x:Class="GKUI.Forms.RelationshipCalculatorDlg">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <StackLayout Orientation="Horizontal" Spacing="4">
+            <Label x:Name="Lab1" />
+            <Entry x:Name="Edit1" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnRec1Select" WidthRequest="100" Clicked="btnRec1Select_Click" />
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal" Spacing="4">
+            <Label x:Name="Lab2" />
+            <Entry x:Name="Edit2" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnRec2Select" WidthRequest="100" Clicked="btnRec2Select_Click" />
+        </StackLayout>
+
+        <Label x:Name="lblKinship" />
+        <Editor x:Name="txtResult" IsReadOnly="True" VerticalOptions="FillAndExpand" />
+
+        <StackLayout Style="{StaticResource dlgFooter}">
+            <Button x:Name="btnSwap" Style="{StaticResource dlgBtn}" Clicked="btnSwap_Click" />
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnClose" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>

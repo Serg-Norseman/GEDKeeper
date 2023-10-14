@@ -45,9 +45,14 @@ namespace GKUI.Forms
                 new LaunchItem("File", "Open"),
                 new LaunchItem("File", "Save"),
                 new LaunchItem("File", "Save As"),
-                new LaunchItem("File", "Properties"),
+                new LaunchItem("File", "Properties", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    baseWin?.Controller.ShowFileProperties();
+                }),
+
                 new LaunchItem("Recent", "Europe Kings.ged"),
                 new LaunchItem("Recent", "My Kins.ged"),
+
                 new LaunchItem("Export", "Export table"),
 
                 new LaunchItem("Help", "Content"),
@@ -66,7 +71,10 @@ namespace GKUI.Forms
             LaunchItems = new ObservableCollection<Grouping<string, LaunchItem>>(groups);
 
             var servicesItems = new List<LaunchItem>() {
-                new LaunchItem("Pedigree", "Relationship Calculator"),
+                new LaunchItem("Pedigree", "Relationship Calculator", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    baseWin?.Controller.ShowRelationshipCalculator();
+                }),
                 new LaunchItem("Services", "Organizer"),
                 new LaunchItem("Services", "Slideshow"),
                 new LaunchItem("Services", "Scripts"),

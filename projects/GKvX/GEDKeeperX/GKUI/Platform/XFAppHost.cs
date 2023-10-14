@@ -45,6 +45,8 @@ namespace GKUI.Platform
     /// </summary>
     public sealed class XFAppHost : AppHost
     {
+        private IBaseWindow fCurrentBase;
+
         static XFAppHost()
         {
             SetAppSign("GEDKeeperX");
@@ -61,6 +63,20 @@ namespace GKUI.Platform
 
         public override void Activate()
         {
+        }
+
+        public override IBaseWindow CreateBase(string fileName)
+        {
+            // FIXME: temp solution
+            IBaseWindow result = base.CreateBase(fileName);
+            fCurrentBase = result;
+            return result;
+        }
+
+        public override IBaseWindow GetCurrentFile(bool extMode = false)
+        {
+            // FIXME: temp solution
+            return fCurrentBase;
         }
 
         public static MainPage GetMainPage()
@@ -233,9 +249,9 @@ namespace GKUI.Platform
             //container.Register<IDayTipsDlg, DayTipsDlg>(LifeCycle.Transient);
             //container.Register<IEventEditDlg, EventEditDlg>(LifeCycle.Transient);
             //container.Register<IFamilyEditDlg, FamilyEditDlg>(LifeCycle.Transient);
-            //container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
+            container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
             //container.Register<IFragmentSearchDlg, TTFamilyGroupsDlg>(LifeCycle.Transient);
-            //container.Register<IGroupEditDlg, GroupEditDlg>(LifeCycle.Transient);
+            container.Register<IGroupEditDlg, GroupEditDlg>(LifeCycle.Transient);
             //container.Register<ILanguageEditDlg, LanguageEditDlg>(LifeCycle.Transient);
             container.Register<ILanguageSelectDlg, LanguageSelectDlg>(LifeCycle.Transient);
             //container.Register<ILocationEditDlg, LocationEditDlg>(LifeCycle.Transient);
@@ -256,7 +272,7 @@ namespace GKUI.Platform
             //container.Register<IPortraitSelectDlg, PortraitSelectDlg>(LifeCycle.Transient);
             //container.Register<IRecMergeDlg, TTRecMergeDlg>(LifeCycle.Transient);
             //container.Register<IRecordSelectDialog, RecordSelectDlg>(LifeCycle.Transient);
-            //container.Register<IRelationshipCalculatorDlg, RelationshipCalculatorDlg>(LifeCycle.Transient);
+            container.Register<IRelationshipCalculatorDlg, RelationshipCalculatorDlg>(LifeCycle.Transient);
             container.Register<IRepositoryEditDlg, RepositoryEditDlg>(LifeCycle.Transient);
             //container.Register<IResearchEditDlg, ResearchEditDlg>(LifeCycle.Transient);
             //container.Register<ISexCheckDlg, SexCheckDlg>(LifeCycle.Transient);
