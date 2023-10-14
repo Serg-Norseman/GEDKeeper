@@ -75,8 +75,14 @@ namespace GKUI.Forms
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowRelationshipCalculator();
                 }),
-                new LaunchItem("Services", "Organizer"),
-                new LaunchItem("Services", "Slideshow"),
+                new LaunchItem("Services", "Organizer", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    baseWin?.Controller.ShowOrganizer();
+                }),
+                new LaunchItem("Services", "Slideshow", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    baseWin?.Controller.ShowSlideshow();
+                }),
                 new LaunchItem("Services", "Scripts"),
                 new LaunchItem("Services", "Options"),
                 new LaunchItem("Tools", "Compare databases"),

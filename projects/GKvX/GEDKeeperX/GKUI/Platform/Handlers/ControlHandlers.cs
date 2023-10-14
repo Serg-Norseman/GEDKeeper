@@ -19,6 +19,7 @@
  */
 
 using GKCore;
+using GKCore.Design;
 using GKCore.Design.Controls;
 using Xamarin.Forms;
 
@@ -352,4 +353,29 @@ namespace GKUI.Platform
             Control.Items.Clear();
         }
     }*/
+
+    public sealed class ButtonToolItemHandler : ControlHandler<ToolbarItem, ButtonToolItemHandler>, IButtonToolItem
+    {
+        public ButtonToolItemHandler(ToolbarItem control) : base(control)
+        {
+        }
+
+        public bool Enabled
+        {
+            get { return Control.IsEnabled; }
+            set { Control.IsEnabled = value; }
+        }
+
+        public string Text
+        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+
+        public bool Visible
+        {
+            get { return true; }
+            set { }
+        }
+    }
 }

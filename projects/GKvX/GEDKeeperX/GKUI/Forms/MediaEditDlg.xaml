@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    x:Class="GKUI.Forms.MediaEditDlg"
+    x:TypeArguments="mvp:IMediaEditDlg, contr:MediaEditDlgController">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <xp:TabViewControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <xp:TabViewControl.ItemSource>
+
+                <xp:TabItem x:Name="pageCommon">
+
+                    <StackLayout Orientation="Vertical">
+
+                        <Grid ColumnSpacing="4" RowSpacing="4">
+
+                            <Label x:Name="lblName" Grid.Column="0" Grid.Row="0" />
+                            <Entry x:Name="txtName" Grid.Column="1" Grid.Row="0" TextChanged="edName_TextChanged" />
+
+                            <Label x:Name="lblFile" Grid.Column="0" Grid.Row="1" />
+                            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
+                                <Entry x:Name="txtFile" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
+                                <Button x:Name="btnFileSelect" Clicked="btnFileSelect_Click" Text="..." HorizontalOptions="End" />
+                            </StackLayout>
+
+                            <Label x:Name="lblType" Grid.Column="0" Grid.Row="2" />
+                            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="2">
+                                <Picker x:Name="cmbMediaType" />
+                                <Label x:Name="lblStoreType" />
+                                <Picker x:Name="cmbStoreType" SelectedIndexChanged="cmbStoreType_SelectedIndexChanged" />
+                            </StackLayout>
+
+                        </Grid>
+
+                        <Label VerticalOptions="FillAndExpand" />
+                    </StackLayout>
+
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageNotes">
+                    <comcom:GKSheetList x:Name="fNotesList" />
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageSources">
+                    <comcom:GKSheetList x:Name="fSourcesList" />
+                </xp:TabItem>
+
+            </xp:TabViewControl.ItemSource>
+        </xp:TabViewControl>
+
+        <StackLayout Style="{StaticResource dlgFooter}">
+            <Button x:Name="btnView" Style="{StaticResource dlgBtn}" Clicked="btnView_Click" />
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />
+            <Button x:Name="btnCancel" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>

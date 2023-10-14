@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:StatusForm
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:components="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    x:Class="GKUI.Forms.SlideshowWin">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="tbStart" Order="Primary" Priority="0" IconImageSource="{plat:ImageResourceExt Resources.btn_start.gif}" Clicked="tsbStart_Click" />
+        <ToolbarItem x:Name="tbPrev" Order="Primary" Priority="1" IconImageSource="{plat:ImageResourceExt Resources.btn_left.gif}" Clicked="tsbPrev_Click" />
+        <ToolbarItem x:Name="tbNext" Order="Primary" Priority="2" IconImageSource="{plat:ImageResourceExt Resources.btn_right.gif}" Clicked="tsbNext_Click" />
+    </ContentPage.ToolbarItems>
+
+    <components:ImageBox x:Name="fImageCtl" ImageBorderStyle="FixedSingleGlowShadow" ImageBorderColor="AliceBlue" SelectionMode="Zoom" />
+
+</forms:StatusForm>
