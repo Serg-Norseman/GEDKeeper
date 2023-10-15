@@ -13,12 +13,12 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <StackLayout Orientation="Horizontal" Spacing="4">
+        <StackLayout Orientation="Horizontal" Spacing="4" VerticalOptions="Start">
             <Label x:Name="lblName" />
             <Entry x:Name="edName" HorizontalOptions="FillAndExpand" />
         </StackLayout>
 
-        <xp:TabViewControl>
+        <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <xp:TabViewControl.ItemSource>
                 <xp:TabItem x:Name="pageMembers">
                     <comcom:GKSheetList x:Name="fMembersList" OnModify="ModifyMembersSheet" />

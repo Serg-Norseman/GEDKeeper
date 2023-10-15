@@ -142,6 +142,8 @@ namespace GKCore.Controllers
         }
     }
 
+#if !MOBILE
+
     public class NoteEditDlgExController : NoteEditDlgController
     {
         public NoteEditDlgExController(INoteEdit view) : base(view)
@@ -166,4 +168,6 @@ namespace GKCore.Controllers
             GetControl<ITabPage>("pagePreview").Text = LangMan.LS(LSID.DocPreview);
         }
     }
+
+#endif
 }

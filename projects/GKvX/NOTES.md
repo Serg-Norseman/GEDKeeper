@@ -12,11 +12,15 @@
   - Reports and Plugins - integrate to monolith application
   - View error log - canceled
   - Send error log - ?
+5. Scripts
+6. No extended notes
 
 ## Windows and dialogs
 
 1. LanguageSelectDlg (locales) - canceled, OptionsDlg only
 2. ProgressDlg - canceled, only popup progressbar at top of pages
+3. ScriptEditWin - canceled
+4. NoteEditDlgEx - canceled
 
 
 # Experimental

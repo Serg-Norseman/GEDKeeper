@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    x:Class="GKUI.Forms.CommunicationEditDlg"
+    x:TypeArguments="mvp:ICommunicationEditDlg, contr:CommunicationEditDlgController">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label x:Name="lblTheme" Grid.Column="0" Grid.Row="0" />
+            <Entry x:Name="txtName" Grid.Column="1" Grid.Row="0" />
+
+            <Label x:Name="lblCorresponder" Grid.Column="0" Grid.Row="1" />
+            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
+                <Picker x:Name="txtDir" WidthRequest="100" />
+                <Entry x:Name="txtCorresponder" IsReadOnly="True" WidthRequest="200" />
+                <Button x:Name="btnPersonAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnPersonAdd_Click" />
+            </StackLayout>
+
+            <Label x:Name="lblType" Grid.Column="0" Grid.Row="2" />
+            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="2">
+                <Picker x:Name="cmbCorrType" />
+                <Label x:Name="lblDate" />
+                <comcom:GKDateBox x:Name="txtDate" />
+            </StackLayout>
+        </Grid>
+
+        <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <xp:TabViewControl.ItemSource>
+                <xp:TabItem x:Name="pageNotes">
+                    <comcom:GKSheetList x:Name="fNotesList" />
+                </xp:TabItem>
+                <xp:TabItem x:Name="pageMultimedia">
+                    <comcom:GKSheetList x:Name="fMediaList" />
+                </xp:TabItem>
+            </xp:TabViewControl.ItemSource>
+        </xp:TabViewControl>
+
+        <StackLayout Style="{StaticResource dlgFooter}">
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />
+            <Button x:Name="btnCancel" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>

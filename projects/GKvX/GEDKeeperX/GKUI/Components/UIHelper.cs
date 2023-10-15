@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GKCore;
+using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using SkiaSharp;
 using Xamarin.Essentials;
@@ -82,6 +83,28 @@ namespace GKUI.Components
         public static ImageSource LoadResourceImage(Type baseType, string resName)
         {
             return ImageSource.FromResource(resName, baseType.Assembly);
+        }
+
+        public static T GetSelectedTag<T>(this Picker picker)
+        {
+            var selectedItem = picker.SelectedItem as ComboItem<T>;
+            return (selectedItem == null) ? default : selectedItem.Tag;
+        }
+
+        public static void SetSelectedTag<T>(this Picker picker, T tagValue, bool allowDefault = true)
+        {
+            foreach (object item in picker.Items) {
+                var comboItem = item as ComboItem<T>;
+
+                if (comboItem != null && Equals(comboItem.Tag, tagValue)) {
+                    picker.SelectedItem = item;
+                    return;
+                }
+            }
+
+            if (allowDefault) {
+                picker.SelectedIndex = 0;
+            }
         }
     }
 }

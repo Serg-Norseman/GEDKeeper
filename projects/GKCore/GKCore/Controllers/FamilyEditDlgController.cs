@@ -199,7 +199,9 @@ namespace GKCore.Controllers
         {
             GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
             GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<IGroupBox>("GroupBox1").Text = LangMan.LS(LSID.Family);
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<IGroupBox>("GroupBox1").Text = LangMan.LS(LSID.Family);
+            }
             GetControl<ILabel>("lblHusband").Text = LangMan.LS(LSID.Husband);
             GetControl<ILabel>("lblWife").Text = LangMan.LS(LSID.Wife);
             GetControl<ILabel>("lblStatus").Text = LangMan.LS(LSID.Status);

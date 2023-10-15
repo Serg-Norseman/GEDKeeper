@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    x:Class="GKUI.Forms.ResearchEditDlg"
+    x:TypeArguments="mvp:IResearchEditDlg, contr:ResearchEditDlgController">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label x:Name="lblName" Grid.Column="0" Grid.Row="0" />
+            <Entry x:Name="txtName" Grid.Column="1" Grid.Row="0" />
+
+            <Label x:Name="lblPriority" Grid.Column="0" Grid.Row="1" />
+            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
+                <Picker x:Name="cmbPriority" />
+                <Label x:Name="lblStatus" />
+                <Picker x:Name="cmbStatus" />
+                <Label x:Name="lblPercent" />
+                <Stepper x:Name="nudPercent" Increment="5" />
+            </StackLayout>
+
+            <Label x:Name="lblStartDate" Grid.Column="0" Grid.Row="2" />
+            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="2">
+                <comcom:GKDateBox x:Name="txtStartDate" />
+                <Label x:Name="lblStopDate" />
+                <comcom:GKDateBox x:Name="txtStopDate" />
+            </StackLayout>
+
+        </Grid>
+
+        <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <xp:TabViewControl.ItemSource>
+                <xp:TabItem x:Name="pageTasks">
+                    <comcom:GKSheetList x:Name="fTasksList" OnModify="ListJumpHandler" />
+                </xp:TabItem>
+                <xp:TabItem x:Name="pageCommunications">
+                    <comcom:GKSheetList x:Name="fCommunicationsList" OnModify="ListJumpHandler" />
+                </xp:TabItem>
+                <xp:TabItem x:Name="pageGroups">
+                    <comcom:GKSheetList x:Name="fGroupsList" OnModify="ListJumpHandler" />
+                </xp:TabItem>
+                <xp:TabItem x:Name="pageNotes">
+                    <comcom:GKSheetList x:Name="fNotesList" />
+                </xp:TabItem>
+            </xp:TabViewControl.ItemSource>
+        </xp:TabViewControl>
+
+        <StackLayout Style="{StaticResource dlgFooter}">
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />
+            <Button x:Name="btnCancel" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>

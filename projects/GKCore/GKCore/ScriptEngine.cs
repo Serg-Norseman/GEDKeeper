@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if !MOBILE
+
 using System;
 using System.Data;
 using System.IO;
@@ -841,3 +843,5 @@ namespace GKCore
         #endregion
     }
 }
+
+#endif

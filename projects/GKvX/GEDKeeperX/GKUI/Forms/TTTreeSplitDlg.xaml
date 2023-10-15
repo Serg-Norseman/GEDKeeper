@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    x:Class="GKUI.Forms.TTTreeSplitDlg"
+    x:TypeArguments="mvp:ITreeSplitDlg, contr:TreeSplitController">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <comcom:GKListView x:Name="ListSelected" Grid.Column="0" Grid.Row="0" />
+            <comcom:GKListView x:Name="ListSkipped" Grid.Column="1" Grid.Row="0" />
+        </Grid>
+
+        <StackLayout Spacing="8" Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="FillAndExpand">
+            <Button x:Name="btnSelectAll" Style="{StaticResource dlgBtn}" Clicked="btnSelectAll_Click" />
+            <Button x:Name="btnSelectFamily" Style="{StaticResource dlgBtn}" Clicked="btnSelectFamily_Click" />
+            <Button x:Name="btnSelectAncestors" Style="{StaticResource dlgBtn}" Clicked="btnSelectAncestors_Click" />
+            <Button x:Name="btnSelectDescendants" Style="{StaticResource dlgBtn}" Clicked="btnSelectDescendants_Click" />
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnSave" Style="{StaticResource dlgBtn}" Clicked="btnSave_Click" />
+            <Button x:Name="btnDelete" Style="{StaticResource dlgBtn}" Clicked="btnDelete_Click" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>

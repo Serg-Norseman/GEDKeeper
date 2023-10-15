@@ -315,9 +315,16 @@ namespace GKCore
             #endif
         }
 
-        public abstract int GetKeyLayout();
+        public virtual int GetKeyLayout()
+        {
+            // May have a desktop-only implementation
+            return 0;
+        }
 
-        public abstract void SetKeyLayout(int layout);
+        public virtual void SetKeyLayout(int layout)
+        {
+            // May have a desktop-only implementation
+        }
 
         public abstract ITimer CreateTimer(double msInterval, EventHandler elapsedHandler);
 

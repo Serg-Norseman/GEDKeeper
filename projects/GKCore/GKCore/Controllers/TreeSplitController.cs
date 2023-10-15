@@ -27,6 +27,7 @@ using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Options;
 using GKCore.Tools;
+using GKCore.Types;
 
 namespace GKCore.Controllers
 {
@@ -131,8 +132,10 @@ namespace GKCore.Controllers
         {
             fView.Title = LangMan.LS(LSID.ToolOp_3);
 
-            GetControl<ITabPage>("pageTreeSplit").Text = LangMan.LS(LSID.ToolOp_3);
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<ITabPage>("pageTreeSplit").Text = LangMan.LS(LSID.ToolOp_3);
+                GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            }
             GetControl<IButton>("btnSelectAll").Text = LangMan.LS(LSID.SelAll);
             GetControl<IButton>("btnSelectFamily").Text = LangMan.LS(LSID.SelFamily);
             GetControl<IButton>("btnSelectAncestors").Text = LangMan.LS(LSID.SelAncestors);

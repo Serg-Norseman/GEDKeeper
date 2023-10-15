@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -65,6 +65,10 @@ namespace GKUI.Forms
                 new LaunchItem("Test", "Address", async () => {
                     XFAppHost.GetMainPage().NavigateAsync(new AddressEditDlg());
                 }),
+                new LaunchItem("Test", "SourceCitEditDlg", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    XFAppHost.GetMainPage().NavigateAsync(new SourceCitEditDlg(baseWin));
+                }),
             };
 
             var groups = launchItems.GroupBy(p => p.Group).Select(g => new Grouping<string, LaunchItem>(g.Key, g));
@@ -87,7 +91,10 @@ namespace GKUI.Forms
                 new LaunchItem("Services", "Options"),
                 new LaunchItem("Tools", "Compare databases"),
                 new LaunchItem("Tools", "Merge databases"),
-                new LaunchItem("Tools", "Split database"),
+                new LaunchItem("Tools", "Split database", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    baseWin?.Controller.ShowTreeSplit();
+                }),
                 new LaunchItem("Tools", "Merge records"),
                 new LaunchItem("Tools", "Check connection of families"),
                 new LaunchItem("Tools", "Check database"),

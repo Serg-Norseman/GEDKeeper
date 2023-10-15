@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -46,6 +46,12 @@ namespace GKUI.Components
         {
             get { return GKUtils.GetNormalizeDate(txtMaskedDate.Text, fRegionalDatePattern); }
             set { txtMaskedDate.Text = GKUtils.GetRegionalDate(value, fRegionalDatePattern); }
+        }
+
+        public string Placeholder
+        {
+            get { return txtMaskedDate.Placeholder; }
+            set { txtMaskedDate.Placeholder = value; }
         }
 
         public bool ReadOnly

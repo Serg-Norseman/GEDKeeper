@@ -19,11 +19,16 @@
     <PropertyGroup Condition=" $(Configuration.Contains('MacOS_')) ">
         <DefineConstants>$(DefineConstants);OS_MACOS</DefineConstants>
     </PropertyGroup>
-
+    <PropertyGroup Condition=" $(Configuration.Contains('Android_')) ">
+        <DefineConstants>$(DefineConstants);OS_ANDROID;MOBILE</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" $(Configuration.Contains('iOS_')) ">
+        <DefineConstants>$(DefineConstants);OS_IOS;MOBILE</DefineConstants>
+    </PropertyGroup>
 
     <PropertyGroup Condition=" $(Configuration.Contains('_Debug')) ">
         <DebugSymbols>True</DebugSymbols>
-        <DebugType>Full</DebugType>
+        <DebugType>Portable</DebugType>
         <Optimize>False</Optimize>
         <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
         <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>

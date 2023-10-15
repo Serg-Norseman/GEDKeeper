@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -226,7 +226,7 @@ namespace GKUI.Platform
         }
     }*/
 
-    /*public sealed class NumericBoxHandler : BaseControlHandler<Stepper, NumericBoxHandler>, INumericBoxHandler
+    public sealed class NumericBoxHandler : BaseControlHandler<Stepper, NumericBoxHandler>, INumericBox
     {
         public NumericBoxHandler(Stepper control) : base(control)
         {
@@ -234,8 +234,8 @@ namespace GKUI.Platform
 
         public bool ReadOnly
         {
-            get { return Control.ReadOnly; }
-            set { Control.ReadOnly = value; }
+            get { return false; }
+            set { }
         }
 
         public string Text
@@ -249,7 +249,7 @@ namespace GKUI.Platform
             get { return Control.Value; }
             set { Control.Value = value; }
         }
-    }*/
+    }
 
     /*public sealed class TreeViewHandler : BaseControlHandler<TreeView, TreeViewHandler>, ITreeViewHandler
     {

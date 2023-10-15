@@ -8,7 +8,14 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <DefineConstants>GK3;NETCORE</DefineConstants>
 
-        <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release;FreeBSD_Debug;FreeBSD_Release</Configurations>
+        <Configurations>
+            MSWin_Debug;MSWin_Release;
+            Linux_Debug;Linux_Release;
+            MacOS_Debug;MacOS_Release;
+            FreeBSD_Debug;FreeBSD_Release;
+            Android_Debug;Android_Release;
+            iOS_Debug;iOS_Release
+        </Configurations>
     </PropertyGroup>
 
     <Import Project="..\GKConfigurations3.targets" />
@@ -43,12 +50,16 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
         <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-        <PackageReference Include="NLua" Version="1.6.2" />
         <PackageReference Include="YamlDotNet" Version="12.0.0" />
         <PackageReference Include="UTF.Unknown" Version="2.5.1" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="iTextSharp.LGPLv2.Core" Version="3.3.3" />
         <PackageReference Include="log4net" Version="2.0.15" />
+    </ItemGroup>
+
+
+    <ItemGroup Condition=" !$(DefineConstants.Contains('MOBILE')) ">
+        <PackageReference Include="NLua" Version="1.6.2" />
     </ItemGroup>
 
 
