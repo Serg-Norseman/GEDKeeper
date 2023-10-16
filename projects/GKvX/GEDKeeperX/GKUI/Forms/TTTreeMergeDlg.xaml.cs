@@ -18,27 +18,41 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+using GKCore.Controllers;
 using GKCore.Design.Controls;
-using XFIKRadioButton = Plugin.InputKit.Shared.Controls.RadioButton;
+using GKCore.Design.Views;
+using GKCore.Interfaces;
 
-namespace GKUI.Platform
+namespace GKUI.Forms
 {
-    public sealed class RadioButtonHandler : BaseControlHandler<XFIKRadioButton, RadioButtonHandler>, IRadioButton
+    public sealed partial class TTTreeMergeDlg : CommonDialog<ITreeMergeDlg, TreeMergeController>, ITreeMergeDlg
     {
-        public RadioButtonHandler(XFIKRadioButton control) : base(control)
+        #region View Interface
+
+        ITextBox ITreeMergeDlg.UpdateBase
         {
+            get { return GetControlHandler<ITextBox>(edUpdateBase); }
         }
 
-        public bool Checked
+        ITextBox ITreeMergeDlg.SyncLog
         {
-            get { return Control.IsChecked; }
-            set { Control.IsChecked = value; }
+            get { return GetControlHandler<ITextBox>(mSyncRes); }
         }
 
-        public string Text
+        #endregion
+
+        public TTTreeMergeDlg(IBaseWindow baseWin)
         {
-            get { return Control.Text; }
-            set { Control.Text = value; }
+            InitializeComponent();
+
+            fController = new TreeMergeController(this);
+            fController.Init(baseWin);
+        }
+
+        private void btnTreeMerge_Click(object sender, EventArgs e)
+        {
+            fController.Merge();
         }
     }
 }

@@ -22,6 +22,7 @@ using GKCore.Design.Controls;
 using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Tools;
+using GKCore.Types;
 
 namespace GKCore.Controllers
 {
@@ -52,8 +53,10 @@ namespace GKCore.Controllers
         public override void SetLocale()
         {
             fView.Title = LangMan.LS(LSID.ToolOp_2);
-            GetControl<ITabPage>("pageTreeMerge").Text = LangMan.LS(LSID.ToolOp_2);
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<ITabPage>("pageTreeMerge").Text = LangMan.LS(LSID.ToolOp_2);
+                GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            }
             GetControl<IButton>("btnTreeMerge").Text = LangMan.LS(LSID.DlgSelect) + @"...";
             GetControl<ILabel>("lblMasterBase").Text = LangMan.LS(LSID.MasterBase);
             GetControl<ILabel>("lblOtherBase").Text = LangMan.LS(LSID.OtherBase);

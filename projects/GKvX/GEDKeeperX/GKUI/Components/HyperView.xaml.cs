@@ -33,6 +33,7 @@ namespace GKUI.Components
     {
         private readonly StringList fLines;
 
+        private Color fLinkColor;
         private bool fWordWrap;
 
         public event LinkEventHandler OnLink;
@@ -46,6 +47,12 @@ namespace GKUI.Components
         public StringList Lines
         {
             get { return fLines; }
+        }
+
+        public Color LinkColor
+        {
+            get { return fLinkColor; }
+            set { fLinkColor = value; }
         }
 
         public bool WordWrap

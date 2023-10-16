@@ -69,6 +69,22 @@ namespace GKUI.Forms
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     XFAppHost.GetMainPage().NavigateAsync(new SourceCitEditDlg(baseWin));
                 }),
+                new LaunchItem("Test", "AssociationEditDlg", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    XFAppHost.GetMainPage().NavigateAsync(new AssociationEditDlg(baseWin));
+                }),
+                new LaunchItem("Test", "EventEditDlg", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    XFAppHost.GetMainPage().NavigateAsync(new EventEditDlg(baseWin));
+                }),
+                new LaunchItem("Test", "ParentsEditDlg", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    XFAppHost.GetMainPage().NavigateAsync(new ParentsEditDlg(baseWin));
+                }),
+                new LaunchItem("Test", "PersonalNameEditDlg", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    XFAppHost.GetMainPage().NavigateAsync(new PersonalNameEditDlg(baseWin));
+                }),
             };
 
             var groups = launchItems.GroupBy(p => p.Group).Select(g => new Grouping<string, LaunchItem>(g.Key, g));
@@ -89,8 +105,14 @@ namespace GKUI.Forms
                 }),
                 new LaunchItem("Services", "Scripts"),
                 new LaunchItem("Services", "Options"),
-                new LaunchItem("Tools", "Compare databases"),
-                new LaunchItem("Tools", "Merge databases"),
+                new LaunchItem("Tools", "Compare databases", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    baseWin?.Controller.ShowTreeCompare();
+                }),
+                new LaunchItem("Tools", "Merge databases", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    baseWin?.Controller.ShowTreeMerge();
+                }),
                 new LaunchItem("Tools", "Split database", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowTreeSplit();

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    x:Class="GKUI.Forms.EventEditDlg"
+    x:TypeArguments="mvp:IEventEditDlg, contr:EventEditDlgController">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <xp:TabViewControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <xp:TabViewControl.ItemSource>
+                <xp:TabItem x:Name="pageCommon">
+                    <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                        <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+                            <Label x:Name="lblEvent" Grid.Column="0" Grid.Row="0" />
+                            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="0">
+                                <comcom:GKComboBox x:Name="cmbEventType" IsReadOnly="True" SelectedIndexChanged="EditEventType_SelectedIndexChanged" />
+                                <Entry x:Name="txtEventName" />
+                            </StackLayout>
+
+                            <Label x:Name="lblAttrValue" Grid.Column="0" Grid.Row="1" />
+                            <comcom:GKComboBox x:Name="txtAttribute" Grid.Column="1" Grid.Row="1" />
+
+                            <Label x:Name="lblPlace" Grid.Column="0" Grid.Row="2" />
+                            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="2">
+                                <Entry x:Name="txtEventPlace" />
+                                <Button x:Name="btnPlaceAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" IsEnabled="False" Clicked="btnPlaceAdd_Click" />
+                                <Button x:Name="btnPlaceDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" IsEnabled="False" Clicked="btnPlaceDelete_Click" />
+                            </StackLayout>
+
+                            <Label x:Name="lblDate" Grid.Column="0" Grid.Row="3" />
+                            <comcom:GKDateControl x:Name="dateCtl" Grid.Column="1" Grid.Row="3" />
+
+                            <Label x:Name="lblCause" Grid.Column="0" Grid.Row="4" />
+                            <Entry x:Name="txtEventCause" Grid.Column="1" Grid.Row="4" />
+
+                            <Label x:Name="lblOrg" Grid.Column="0" Grid.Row="5" />
+                            <Entry x:Name="txtEventOrg" Grid.Column="1" Grid.Row="5" />
+                        </Grid>
+
+                        <Label VerticalOptions="FillAndExpand" />
+                    </StackLayout>
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageNotes">
+                    <comcom:GKSheetList x:Name="fNotesList" />
+                </xp:TabItem>
+                <xp:TabItem x:Name="pageMultimedia">
+                    <comcom:GKSheetList x:Name="fMediaList" />
+                </xp:TabItem>
+                <xp:TabItem x:Name="pageSources">
+                    <comcom:GKSheetList x:Name="fSourcesList" />
+                </xp:TabItem>
+            </xp:TabViewControl.ItemSource>
+        </xp:TabViewControl>
+
+        <StackLayout Style="{StaticResource dlgFooter}">
+            <Button x:Name="btnAddress" Style="{StaticResource dlgBtn}" Clicked="btnAddress_Click" />
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />
+            <Button x:Name="btnCancel" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>

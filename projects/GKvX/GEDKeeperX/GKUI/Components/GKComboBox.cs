@@ -18,27 +18,27 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Design.Controls;
-using XFIKRadioButton = Plugin.InputKit.Shared.Controls.RadioButton;
+using System;
+using Plugin.InputKit.Shared.Controls;
 
-namespace GKUI.Platform
+namespace GKUI.Components
 {
-    public sealed class RadioButtonHandler : BaseControlHandler<XFIKRadioButton, RadioButtonHandler>, IRadioButton
+    public class GKComboBox : AutoCompleteEntry
     {
-        public RadioButtonHandler(XFIKRadioButton control) : base(control)
+        // FIXME: temp stub
+        public bool IsReadOnly
         {
+            get { return IsDisabled; }
+            set { IsDisabled = value; }
         }
 
-        public bool Checked
+        // FIXME: temp stub
+        public int SelectedIndex
         {
-            get { return Control.IsChecked; }
-            set { Control.IsChecked = value; }
+            get;
+            set;
         }
 
-        public string Text
-        {
-            get { return Control.Text; }
-            set { Control.Text = value; }
-        }
+        public event EventHandler SelectedIndexChanged;
     }
 }

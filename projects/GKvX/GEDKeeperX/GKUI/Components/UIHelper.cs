@@ -20,15 +20,22 @@
 
 using System;
 using BSLib;
+using GDModel;
 using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
+using GKCore.Interfaces;
+using GKCore.Lists;
+using GKCore.Options;
 using SkiaSharp;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace GKUI.Components
 {
+    /// <summary>
+    /// Static functions only for UI implementation.
+    /// </summary>
     public static class UIHelper
     {
         public static Rectangle Rt2Rt(ExtRect ert)
@@ -49,6 +56,43 @@ namespace GKUI.Components
         public static ExtRect SkRt2Rt(SKRect ert)
         {
             return ExtRect.CreateBounds((int)ert.Left, (int)ert.Top, (int)ert.Width, (int)ert.Height);
+        }
+
+        public static T GetSelectedTag<T>(this Picker picker)
+        {
+            var selectedItem = picker.SelectedItem as ComboItem<T>;
+            return (selectedItem == null) ? default : selectedItem.Tag;
+        }
+
+        public static void SetSelectedTag<T>(this Picker picker, T tagValue, bool allowDefault = true)
+        {
+            foreach (object item in picker.Items) {
+                var comboItem = item as ComboItem<T>;
+
+                if (comboItem != null && Equals(comboItem.Tag, tagValue)) {
+                    picker.SelectedItem = item;
+                    return;
+                }
+            }
+
+            if (allowDefault) {
+                picker.SelectedIndex = 0;
+            }
+        }
+
+        public static GKListView CreateRecordsView(ContentView parent, IBaseContext baseContext, GDMRecordType recType, bool simpleList)
+        {
+            if (parent == null)
+                throw new ArgumentNullException("parent");
+
+            if (baseContext == null)
+                throw new ArgumentNullException("baseContext");
+
+            GKListView recView = new GKListView();
+            recView.ListMan = RecordsListModel<GDMRecord>.Create(baseContext, recType, simpleList);
+            parent.Content = recView;
+
+            return recView;
         }
 
         public static IColor ConvertColor(Color color)
@@ -75,6 +119,19 @@ namespace GKUI.Components
             return Color.FromUint((uint)newColor);
         }
 
+        public static void ProcessName(object sender)
+        {
+            var tb = (sender as Entry);
+            if (tb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
+                tb.Text = GKUtils.UniformName(tb.Text);
+            }
+
+            var cmb = (sender as GKComboBox);
+            if (cmb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
+                cmb.Text = GKUtils.UniformName(cmb.Text);
+            }
+        }
+
         public static ImageSource LoadResourceImage(string resName)
         {
             return ImageSource.FromResource(resName, typeof(GKUtils).Assembly);
@@ -83,28 +140,6 @@ namespace GKUI.Components
         public static ImageSource LoadResourceImage(Type baseType, string resName)
         {
             return ImageSource.FromResource(resName, baseType.Assembly);
-        }
-
-        public static T GetSelectedTag<T>(this Picker picker)
-        {
-            var selectedItem = picker.SelectedItem as ComboItem<T>;
-            return (selectedItem == null) ? default : selectedItem.Tag;
-        }
-
-        public static void SetSelectedTag<T>(this Picker picker, T tagValue, bool allowDefault = true)
-        {
-            foreach (object item in picker.Items) {
-                var comboItem = item as ComboItem<T>;
-
-                if (comboItem != null && Equals(comboItem.Tag, tagValue)) {
-                    picker.SelectedItem = item;
-                    return;
-                }
-            }
-
-            if (allowDefault) {
-                picker.SelectedIndex = 0;
-            }
         }
     }
 }

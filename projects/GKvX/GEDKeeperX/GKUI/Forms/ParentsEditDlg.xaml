@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    x:Class="GKUI.Forms.ParentsEditDlg"
+    x:TypeArguments="mvp:IParentsEditDlg, contr:ParentsEditDlgController">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+            <Label x:Name="lblChildName" Grid.Column="0" Grid.Row="0" />
+            <Entry x:Name="txtChildName" IsReadOnly="True" Grid.Column="1" Grid.Row="0" />
+
+            <Label x:Name="lblLinkageType" Grid.Column="0" Grid.Row="1" />
+            <comcom:GKComboBox x:Name="cmbLinkageType" Grid.Column="1" Grid.Row="1" />
+        </Grid>
+
+        <Frame x:Name="panCtlParents" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <StackLayout Orientation="Vertical">
+                <Grid x:Name="parentsTab" ColumnSpacing="4" RowSpacing="4">
+                    <Label x:Name="lblParents" Grid.Column="0" Grid.Row="0" />
+                    <Entry x:Name="txtFather" IsEnabled="False" Grid.Column="1" Grid.Row="0" />
+                    <Entry x:Name="txtMother" IsEnabled="False" Grid.Column="2" Grid.Row="0" />
+                    <Button x:Name="btnParentsEdit" Grid.Column="3" Grid.Row="0" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_edit.gif}" Clicked="btnParentsEdit_Click" />
+
+                    <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
+                        <Button x:Name="btnFatherAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnFatherAdd_Click" />
+                        <Button x:Name="btnFatherDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="btnFatherDelete_Click" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="2" Grid.Row="1">
+                        <Button x:Name="btnMotherAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnMotherAdd_Click" />
+                        <Button x:Name="btnMotherDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="btnMotherDelete_Click" />
+                    </StackLayout>
+                </Grid>
+
+                <Label VerticalOptions="FillAndExpand" />
+            </StackLayout>
+        </Frame>
+
+        <StackLayout Style="{StaticResource dlgFooter}">
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />
+            <Button x:Name="btnCancel" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>

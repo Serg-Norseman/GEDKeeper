@@ -18,27 +18,45 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GDModel;
+using GKCore.Controllers;
 using GKCore.Design.Controls;
-using XFIKRadioButton = Plugin.InputKit.Shared.Controls.RadioButton;
+using GKCore.Design.Views;
+using GKCore.Interfaces;
 
-namespace GKUI.Platform
+namespace GKUI.Forms
 {
-    public sealed class RadioButtonHandler : BaseControlHandler<XFIKRadioButton, RadioButtonHandler>, IRadioButton
+    public sealed partial class RecordInfoDlg : CommonDialog, IRecordInfoDlg
     {
-        public RadioButtonHandler(XFIKRadioButton control) : base(control)
+        private readonly RecordInfoDlgController fController;
+
+        public GDMRecord Record
         {
+            get { return fController.Record; }
+            set { fController.Record = value; }
         }
 
-        public bool Checked
+        #region View Interface
+
+        IHyperView IRecordInfoDlg.HyperView
         {
-            get { return Control.IsChecked; }
-            set { Control.IsChecked = value; }
+            get { return hyperView1; }
         }
 
-        public string Text
+        #endregion
+
+        public RecordInfoDlg(IBaseWindow baseWin)
         {
-            get { return Control.Text; }
-            set { Control.Text = value; }
+            InitializeComponent();
+
+            fController = new RecordInfoDlgController(this);
+            fController.Init(baseWin);
+            fController.UpdateView();
+        }
+
+        private void HyperViewLink(object sender, string linkName)
+        {
+            fController.SelectLink(linkName);
         }
     }
 }

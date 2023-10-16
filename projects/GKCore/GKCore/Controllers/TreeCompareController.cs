@@ -25,6 +25,7 @@ using GKCore.Interfaces;
 using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Tools;
+using GKCore.Types;
 
 namespace GKCore.Controllers
 {
@@ -127,11 +128,13 @@ namespace GKCore.Controllers
         {
             fView.Title = LangMan.LS(LSID.ToolOp_1);
 
-            GetControl<ITabPage>("pageTreeCompare").Text = LangMan.LS(LSID.ToolOp_1);
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<ITabPage>("pageTreeCompare").Text = LangMan.LS(LSID.ToolOp_1);
+                GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+                GetControl<IGroupBox>("grpMatchType").Text = LangMan.LS(LSID.MatchType);
+            }
             GetControl<ILabel>("lblFile").Text = LangMan.LS(LSID.MIFile);
             GetControl<IButton>("btnFileChoose").Text = LangMan.LS(LSID.DlgSelect) + @"...";
-            GetControl<IGroupBox>("grpMatchType").Text = LangMan.LS(LSID.MatchType);
             GetControl<IRadioButton>("radMatchInternal").Text = LangMan.LS(LSID.MatchInternal);
             GetControl<IRadioButton>("radMathExternal").Text = LangMan.LS(LSID.MathExternal);
             GetControl<IRadioButton>("radAnalysis").Text = LangMan.LS(LSID.Analyze);
