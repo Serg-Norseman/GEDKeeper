@@ -16,7 +16,7 @@
         <ToolbarItem x:Name="tbRecordEdit" Order="Primary" Priority="4" IconImageSource="{plat:ImageResourceExt Resources.btn_rec_edit.gif}" Clicked="miRecordEdit_Click" />
         <ToolbarItem x:Name="tbRecordDelete" Order="Primary" Priority="5" IconImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="miRecordDelete_Click" />
 
-        <ToolbarItem x:Name="miSearch" Text="Search" Order="Secondary" Priority="1" />
+        <ToolbarItem x:Name="miSearch" Order="Primary" Priority="6" IconImageSource="{plat:ImageResourceExt Resources.btn_search.gif}" />
         <ToolbarItem x:Name="miFindAndReplace" Text="FindAndReplace" Order="Secondary" Priority="1" />
         <ToolbarItem x:Name="tbFilter" Order="Primary" Priority="6" IconImageSource="{plat:ImageResourceExt Resources.btn_filter.gif}" Clicked="miFilter_Click" />
 
@@ -28,15 +28,6 @@
         <ToolbarItem x:Name="miCircleDescendants" Text="CircleDescendants" Order="Secondary" Priority="1" Clicked="miDescendantsCircle_Click" />
 
         <ToolbarItem x:Name="tbPedigree" Order="Primary" Priority="10" IconImageSource="{plat:ImageResourceExt Resources.btn_scroll.gif}" Clicked="miPedigreeAscend_Click" />
-
-        <ToolbarItem x:Name="miFamiliesBook" Text="FamiliesBook" Order="Secondary" Priority="1" />
-        <ToolbarItem x:Name="miAlbumOfTrees" Text="AlbumOfTrees" Order="Secondary" Priority="1" />
-
-        <ToolbarItem x:Name="miMaps" Text="Maps" Order="Secondary" Priority="1" />
-
-        <ToolbarItem x:Name="tbStats" Order="Primary" Priority="11" IconImageSource="{plat:ImageResourceExt Resources.btn_table.gif}" Clicked="miStats_Click" />
-
-        <ToolbarItem x:Name="miOrganizer" Text="Organizer" Order="Secondary" Priority="1" IconImageSource="{plat:ImageResourceExt Resources.btn_organizer.gif}" Clicked="miOrganizer_Click" />
     </ContentPage.ToolbarItems>
 
     <StackLayout VerticalOptions="FillAndExpand" Spacing="0" Padding="0">

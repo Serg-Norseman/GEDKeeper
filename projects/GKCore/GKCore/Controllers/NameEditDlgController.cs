@@ -24,6 +24,7 @@ using GKCore.Design.Controls;
 using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Names;
+using GKCore.Types;
 
 namespace GKCore.Controllers
 {
@@ -91,7 +92,11 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
             GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Name);
             GetControl<ILabel>("lblSex").Text = LangMan.LS(LSID.Sex);
-            GetControl<IGroupBox>("grpPatronymics").Text = LangMan.LS(LSID.Patronymic);
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<IGroupBox>("grpPatronymics").Text = LangMan.LS(LSID.Patronymic);
+            } else {
+                GetControl<ILabel>("grpPatronymics").Text = LangMan.LS(LSID.Patronymic);
+            }
             GetControl<ILabel>("lblFemale").Text = LangMan.LS(LSID.PatFemale);
             GetControl<ILabel>("lblMale").Text = LangMan.LS(LSID.PatMale);
         }

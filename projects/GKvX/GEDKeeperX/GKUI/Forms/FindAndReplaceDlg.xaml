@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonWindow
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+    x:Class="GKUI.Forms.FindAndReplaceDlg"
+    x:TypeArguments="mvp:IFARDlg, contr:FARDlgController">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+            <Label x:Name="lblPattern" Grid.Column="0" Grid.Row="0" />
+            <comcom:GKComboBox x:Name="cmbPattern" Grid.Column="1" Grid.Row="0" />
+
+            <Label x:Name="lblReplacement" Grid.Column="0" Grid.Row="1" />
+            <comcom:GKComboBox x:Name="cmbReplacement" Grid.Column="1" Grid.Row="1" />
+        </Grid>
+
+        <StackLayout Orientation="Horizontal" Spacing="4">
+            <StackLayout Orientation="Vertical" Spacing="4">
+                <input:CheckBox x:Name="chkMatchCase" />
+                <input:CheckBox x:Name="chkMatchWildcards" />
+                <input:CheckBox x:Name="chkWholeWord" />
+                <Label VerticalOptions="FillAndExpand" />
+            </StackLayout>
+
+            <StackLayout Orientation="Vertical">
+                <Label x:Name="gbFilters" />
+                <Frame>
+                    <Grid ColumnSpacing="4" RowSpacing="4">
+                        <Label x:Name="lblRecord" Grid.Column="0" Grid.Row="0" />
+                        <Picker x:Name="cmbRecord" Grid.Column="1" Grid.Row="0" />
+
+                        <Label x:Name="lblProperty" Grid.Column="0" Grid.Row="1" />
+                        <Picker x:Name="cmbProperty" Grid.Column="1" Grid.Row="1" />
+                    </Grid>
+                </Frame>
+                <Label VerticalOptions="FillAndExpand" />
+            </StackLayout>
+        </StackLayout>
+
+        <Label HorizontalOptions="FillAndExpand" />
+
+        <StackLayout Style="{StaticResource dlgFooter}">
+            <Button x:Name="btnPrev" Style="{StaticResource dlgBtn}" Clicked="btnPrev_Click" />
+            <Button x:Name="btnNext" Style="{StaticResource dlgBtn}" Clicked="btnNext_Click" />
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnReplace" Style="{StaticResource dlgBtn}" Clicked="btnReplace_Click" />
+            <Button x:Name="btnReplaceAll" Style="{StaticResource dlgBtn}" Clicked="btnReplaceAll_Click" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonWindow>

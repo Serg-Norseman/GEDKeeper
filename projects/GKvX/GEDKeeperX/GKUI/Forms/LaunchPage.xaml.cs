@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using GKCore;
+using GKUI.Components;
 using GKUI.Platform;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
@@ -40,12 +41,15 @@ namespace GKUI.Forms
 
             var launchItems = new List<LaunchItem>
             {
-                new LaunchItem("File", "New", async () => {
+                new LaunchItem("File", "New", UIHelper.LoadResourceImage("Resources.btn_create_new.gif"), async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    baseWin?.Controller.NewFile();
+                    XFAppHost.GetMainPage().NavigateAsync(baseWin);
                 }),
-                new LaunchItem("File", "Open"),
-                new LaunchItem("File", "Save"),
+                new LaunchItem("File", "Open", UIHelper.LoadResourceImage("Resources.btn_load.gif")),
+                new LaunchItem("File", "Save", UIHelper.LoadResourceImage("Resources.btn_save.gif")),
                 new LaunchItem("File", "Save As"),
-                new LaunchItem("File", "Properties", async () => {
+                new LaunchItem("File", "Properties", UIHelper.LoadResourceImage("Resources.btn_properties.gif"), async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowFileProperties();
                 }),
@@ -53,17 +57,16 @@ namespace GKUI.Forms
                 new LaunchItem("Recent", "Europe Kings.ged"),
                 new LaunchItem("Recent", "My Kins.ged"),
 
-                new LaunchItem("Export", "Export table"),
+                new LaunchItem("Export", "Export table", UIHelper.LoadResourceImage("Resources.btn_excel.gif")),
+                new LaunchItem("Export", "Book of Families"),
+                new LaunchItem("Export", "Album of Trees"),
 
-                new LaunchItem("Help", "Content"),
-                new LaunchItem("Help", "About"),
+                new LaunchItem("Help", "Content", UIHelper.LoadResourceImage("Resources.btn_help.gif")),
+                new LaunchItem("Help", "About", UIHelper.LoadResourceImage("Resources.btn_scroll.gif")),
 
                 new LaunchItem("Test", "LangSelect", async () => {
                     var curPage = Application.Current.MainPage;
                     curPage.Navigation.ShowPopup(new LanguageSelectDlg());
-                }),
-                new LaunchItem("Test", "Address", async () => {
-                    XFAppHost.GetMainPage().NavigateAsync(new AddressEditDlg());
                 }),
                 new LaunchItem("Test", "SourceCitEditDlg", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
@@ -85,26 +88,59 @@ namespace GKUI.Forms
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     XFAppHost.GetMainPage().NavigateAsync(new PersonalNameEditDlg(baseWin));
                 }),
+
+                new LaunchItem("Test", "UserRef", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    XFAppHost.GetMainPage().NavigateAsync(new UserRefEditDlg(baseWin));
+                }),
+                new LaunchItem("Test", "QuickSearch", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    XFAppHost.GetMainPage().NavigateAsync(new QuickSearchDlg(baseWin));
+                }),
+                new LaunchItem("Test", "Progress", async () => {
+                    XFAppHost.GetMainPage().NavigateAsync(new ProgressDlg());
+                }),
+                new LaunchItem("Test", "PatriarchsViewer", async () => {
+                    XFAppHost.GetMainPage().NavigateAsync(new PatriarchsViewerWin());
+                }),
+                new LaunchItem("Test", "SexCheckDlg", async () => {
+                    XFAppHost.GetMainPage().NavigateAsync(new SexCheckDlg());
+                }),
+                new LaunchItem("Test", "NameEditDlg", async () => {
+                    XFAppHost.GetMainPage().NavigateAsync(new NameEditDlg());
+                }),
+                new LaunchItem("Test", "FindAndReplaceDlg", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    XFAppHost.GetMainPage().NavigateAsync(new FindAndReplaceDlg(baseWin));
+                }),
+                new LaunchItem("Test", "PortraitSelectDlg", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    XFAppHost.GetMainPage().NavigateAsync(new PortraitSelectDlg(baseWin));
+                }),
             };
 
             var groups = launchItems.GroupBy(p => p.Group).Select(g => new Grouping<string, LaunchItem>(g.Key, g));
             LaunchItems = new ObservableCollection<Grouping<string, LaunchItem>>(groups);
 
             var servicesItems = new List<LaunchItem>() {
+                new LaunchItem("Pedigree", "Maps"),
                 new LaunchItem("Pedigree", "Relationship Calculator", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowRelationshipCalculator();
                 }),
-                new LaunchItem("Services", "Organizer", async () => {
+                new LaunchItem("Pedigree", "Statistics", UIHelper.LoadResourceImage("Resources.btn_table.gif"), async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    baseWin?.Controller.ShowStats();
+                }),
+                new LaunchItem("Services", "Organizer", UIHelper.LoadResourceImage("Resources.btn_organizer.gif"), async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowOrganizer();
                 }),
-                new LaunchItem("Services", "Slideshow", async () => {
+                new LaunchItem("Services", "Slideshow", UIHelper.LoadResourceImage("Resources.btn_slideshow.png"), async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowSlideshow();
                 }),
-                new LaunchItem("Services", "Scripts"),
-                new LaunchItem("Services", "Options"),
+                new LaunchItem("Services", "Options", UIHelper.LoadResourceImage("Resources.btn_tools.gif")),
                 new LaunchItem("Tools", "Compare databases", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowTreeCompare();
@@ -119,7 +155,10 @@ namespace GKUI.Forms
                 }),
                 new LaunchItem("Tools", "Merge records"),
                 new LaunchItem("Tools", "Check connection of families"),
-                new LaunchItem("Tools", "Check database"),
+                new LaunchItem("Tools", "Check database", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    baseWin?.Controller.ShowTreeCheck();
+                }),
                 new LaunchItem("Tools", "Search the patriarchs"),
                 new LaunchItem("Tools", "Manage places"),
             };
@@ -152,6 +191,7 @@ namespace GKUI.Forms
     {
         public string Group { get; set; }
         public string Title { get; set; }
+        public ImageSource Image { get; set; }
         public Action Action { get; set; }
 
         public LaunchItem(string group, string title)
@@ -160,10 +200,25 @@ namespace GKUI.Forms
             Title = title;
         }
 
+        public LaunchItem(string group, string title, ImageSource image)
+        {
+            Group = group;
+            Title = title;
+            Image = image;
+        }
+
         public LaunchItem(string group, string title, Action action)
         {
             Group = group;
             Title = title;
+            Action = action;
+        }
+
+        public LaunchItem(string group, string title, ImageSource image, Action action)
+        {
+            Group = group;
+            Title = title;
+            Image = image;
             Action = action;
         }
     }

@@ -29,11 +29,6 @@ namespace GKUI.Forms
     {
         Browse,
         About,
-        UserRef,
-        QuickSearch,
-        Progress,
-        PatriarchsViewer,
-        LanguageSelect,
         Exit,
     }
 
@@ -63,11 +58,6 @@ namespace GKUI.Forms
 
             fMenuItems = new List<HomeMenuItem>() {
                 new HomeMenuItem (MenuItemType.Browse, "Browse"),
-                new HomeMenuItem (MenuItemType.UserRef, "UserRef"),
-                new HomeMenuItem (MenuItemType.QuickSearch, "QuickSearch"),
-                new HomeMenuItem (MenuItemType.Progress, "Progress"),
-                new HomeMenuItem (MenuItemType.PatriarchsViewer, "PatriarchsViewer"),
-                new HomeMenuItem (MenuItemType.LanguageSelect, "LanguageSelect"),
                 new HomeMenuItem (MenuItemType.About, "About"),
                 new HomeMenuItem (MenuItemType.Exit, "Exit"),
             };
@@ -90,21 +80,6 @@ namespace GKUI.Forms
                     break;
                 case MenuItemType.About:
                     result = new AboutPage();
-                    break;
-                case MenuItemType.UserRef:
-                    result = new UserRefEditDlg();
-                    break;
-                case MenuItemType.QuickSearch:
-                    result = new QuickSearchDlg();
-                    break;
-                case MenuItemType.Progress:
-                    result = new ProgressDlg();
-                    break;
-                case MenuItemType.PatriarchsViewer:
-                    result = new PatriarchsViewerWin();
-                    break;
-                case MenuItemType.LanguageSelect:
-                    //result = new LanguageSelectDlg();
                     break;
                 case MenuItemType.Exit:
                     AppHost.Instance.Quit();

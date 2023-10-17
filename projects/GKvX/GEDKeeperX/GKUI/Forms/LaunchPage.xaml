@@ -17,7 +17,10 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Label Text="{Binding Title}" Margin="6" />
+                                <StackLayout Orientation="Horizontal" Spacing="8">
+                                    <Image Source="{Binding Image}" />
+                                    <Label Text="{Binding Title}" Margin="6" />
+                                </StackLayout>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -34,7 +37,10 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Label Text="{Binding Title}" Margin="6" />
+                                <StackLayout Orientation="Horizontal" Spacing="8">
+                                    <Image Source="{Binding Image}" />
+                                    <Label Text="{Binding Title}" Margin="6" />
+                                </StackLayout>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>

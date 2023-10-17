@@ -18,32 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib;
-using GKCore.Design.Controls;
-using GKCore.Design.Graphics;
 using Xamarin.Forms;
 
 namespace GKUI.Components
 {
-    public class ImageView : ContentView, IImageView
+    public class FilterGridView : ContentView
     {
-        public bool Enabled { get; set; }
-        public ExtRect SelectionRegion { get; set; }
-        public bool ShowNamedRegionTips { get; set; }
-        public ImageBoxSelectionMode SelectionMode { get; set; }
-        public bool ShowToolbar { get; set; }
-
-
-        public void Activate()
-        {
-        }
-
-        public void AddNamedRegion(string name, ExtRect region)
-        {
-        }
-
-        public void OpenImage(IImage image)
-        {
-        }
     }
 }

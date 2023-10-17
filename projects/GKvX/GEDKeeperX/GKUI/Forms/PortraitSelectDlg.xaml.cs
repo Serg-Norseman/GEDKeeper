@@ -18,32 +18,37 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib;
+using GDModel;
+using GKCore.Controllers;
 using GKCore.Design.Controls;
-using GKCore.Design.Graphics;
-using Xamarin.Forms;
+using GKCore.Design.Views;
+using GKCore.Interfaces;
 
-namespace GKUI.Components
+namespace GKUI.Forms
 {
-    public class ImageView : ContentView, IImageView
+    public sealed partial class PortraitSelectDlg : CommonDialog<IPortraitSelectDlg, PortraitSelectDlgController>, IPortraitSelectDlg
     {
-        public bool Enabled { get; set; }
-        public ExtRect SelectionRegion { get; set; }
-        public bool ShowNamedRegionTips { get; set; }
-        public ImageBoxSelectionMode SelectionMode { get; set; }
-        public bool ShowToolbar { get; set; }
-
-
-        public void Activate()
+        public GDMMultimediaLink MultimediaLink
         {
+            get { return fController.MultimediaLink; }
+            set { fController.MultimediaLink = value; }
         }
 
-        public void AddNamedRegion(string name, ExtRect region)
+        #region View Interface
+
+        IImageView IPortraitSelectDlg.ImageCtl
         {
+            get { return imageView1; }
         }
 
-        public void OpenImage(IImage image)
+        #endregion
+
+        public PortraitSelectDlg(IBaseWindow baseWin)
         {
+            InitializeComponent();
+
+            fController = new PortraitSelectDlgController(this);
+            fController.Init(baseWin);
         }
     }
 }

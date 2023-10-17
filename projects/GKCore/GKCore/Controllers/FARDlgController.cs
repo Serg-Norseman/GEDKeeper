@@ -26,6 +26,7 @@ using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Options;
 using GKCore.Search;
+using GKCore.Types;
 
 namespace GKCore.Controllers
 {
@@ -53,7 +54,11 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkMatchWildcards").Text = LangMan.LS(LSID.MatchWildcards);
             GetControl<ICheckBox>("chkWholeWord").Text = LangMan.LS(LSID.WholeWord);
 
-            GetControl<IGroupBox>("gbFilters").Text = LangMan.LS(LSID.MIFilter);
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<IGroupBox>("gbFilters").Text = LangMan.LS(LSID.MIFilter);
+            } else {
+                GetControl<ILabel>("gbFilters").Text = LangMan.LS(LSID.MIFilter);
+            }
             GetControl<ILabel>("lblRecord").Text = LangMan.LS(LSID.Record);
             GetControl<ILabel>("lblProperty").Text = LangMan.LS(LSID.Property);
 

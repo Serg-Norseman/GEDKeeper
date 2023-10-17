@@ -25,6 +25,7 @@ using GKCore.Design.Controls;
 using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Tools;
+using GKCore.Types;
 
 namespace GKCore.Controllers
 {
@@ -153,13 +154,16 @@ namespace GKCore.Controllers
         {
             fView.Title = LangMan.LS(LSID.ToolOp_7);
 
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+                GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.Details);
+                GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
+                GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.CopyXRef);
+            }
+
             GetControl<ITabPage>("pageTreeCheck").Text = LangMan.LS(LSID.ToolOp_7);
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
             GetControl<IButton>("btnAnalyseBase").Text = LangMan.LS(LSID.Analyze);
             GetControl<IButton>("btnBaseRepair").Text = LangMan.LS(LSID.Repair);
-            GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.Details);
-            GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
-            GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.CopyXRef);
 
             GetControl<ITabPage>("pageOptions").Text = LangMan.LS(LSID.MIOptions);
             GetControl<ICheckBox>("chkCheckPersonPlaces").Text = LangMan.LS(LSID.CheckPersonPlaces);

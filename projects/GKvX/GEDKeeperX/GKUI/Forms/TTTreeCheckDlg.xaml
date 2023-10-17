@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    x:Class="GKUI.Forms.TTTreeCheckDlg"
+    x:TypeArguments="mvp:ITreeCheckDlg, contr:TreeCheckController">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <xp:TabViewControl.ItemSource>
+                <xp:TabItem x:Name="pageTreeCheck">
+                    <StackLayout Orientation="Vertical" Spacing="8">
+                        <comcom:GKListView x:Name="ListChecks" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+
+                        <StackLayout Spacing="4" Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="FillAndExpand">
+                            <Button x:Name="btnAnalyseBase" Style="{StaticResource dlgBtn}" Clicked="btnAnalyseBase_Click" />
+                            <Label HorizontalOptions="FillAndExpand" />
+                            <Button x:Name="btnBaseRepair" Style="{StaticResource dlgBtn}" Clicked="btnBaseRepair_Click" />
+                        </StackLayout>
+                    </StackLayout>
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageOptions">
+                    <StackLayout Orientation="Vertical" Spacing="8">
+                        <input:CheckBox x:Name="chkCheckPersonPlaces" />
+
+                        <Label VerticalOptions="FillAndExpand" />
+                    </StackLayout>
+                </xp:TabItem>
+            </xp:TabViewControl.ItemSource>
+        </xp:TabViewControl>
+
+    </StackLayout>
+
+</forms:CommonDialog>
