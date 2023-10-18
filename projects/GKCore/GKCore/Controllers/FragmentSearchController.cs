@@ -27,6 +27,7 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Tools;
+using GKCore.Types;
 
 namespace GKCore.Controllers
 {
@@ -133,15 +134,18 @@ namespace GKCore.Controllers
         {
             fView.Title = LangMan.LS(LSID.ToolOp_6);
 
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.Details);
+                GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
+                GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.CopyXRef);
+                GetControl<IMenuItem>("miDQRefresh").Text = LangMan.LS(LSID.Refresh);
+                GetControl<IMenuItem>("miDQResetFilter").Text = LangMan.LS(LSID.ResetFilter);
+            }
+
             GetControl<ITabPage>("pageFamilyGroups").Text = LangMan.LS(LSID.ToolOp_6);
             GetControl<IButton>("btnAnalyseGroups").Text = LangMan.LS(LSID.Analyze);
-            GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.Details);
-            GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
-            GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.CopyXRef);
 
             GetControl<ITabPage>("pageDataQuality").Text = LangMan.LS(LSID.DataQuality);
-            GetControl<IMenuItem>("miDQRefresh").Text = LangMan.LS(LSID.Refresh);
-            GetControl<IMenuItem>("miDQResetFilter").Text = LangMan.LS(LSID.ResetFilter);
         }
 
         public void OpeningContextMenu()

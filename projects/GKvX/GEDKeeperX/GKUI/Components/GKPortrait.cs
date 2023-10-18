@@ -18,11 +18,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GKCore.Design.Controls;
 using Xamarin.Forms;
 
 namespace GKUI.Components
 {
-    public class GKPortrait : ContentView
+    public class GKPortrait : ContentView, IPortraitControl
     {
+        public bool Enabled { get; set; }
+        int IPortraitControl.Height { get; set; }
+        int IPortraitControl.Width { get; set; }
+
+        public ImageSource Image { get; set; }
+
+        public void Activate()
+        {
+        }
+
+        public void AddButton(Button btn)
+        {
+        }
     }
 }

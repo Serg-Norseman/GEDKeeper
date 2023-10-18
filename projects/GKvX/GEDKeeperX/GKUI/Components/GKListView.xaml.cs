@@ -167,6 +167,10 @@ namespace GKUI.Components
             get { return (IUpdatableCollection)this.ItemsSource; }
         }
 
+        public event EventHandler MouseDoubleClick;
+
+        public bool AllowMultipleSelection { get; set; }
+
         public bool Enabled
         {
             get { return base.IsEnabled; }

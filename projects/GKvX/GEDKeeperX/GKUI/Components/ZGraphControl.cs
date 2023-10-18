@@ -19,8 +19,14 @@
  */
 
 using System.Collections.Generic;
+using BSLib;
+using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Stats;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
+using OxyPlot.Xamarin.Forms;
 using Xamarin.Forms;
 
 namespace GKUI.Components
@@ -30,8 +36,8 @@ namespace GKUI.Components
     /// </summary>
     public sealed class ZGraphControl : ContentView, IGraphControl
     {
-        //private readonly PlotView fGraph;
-        //private PlotModel fModel;
+        private readonly PlotView fGraph;
+        private PlotModel fModel;
 
         public bool Enabled
         {
@@ -41,18 +47,11 @@ namespace GKUI.Components
 
         public ZGraphControl()
         {
-            Content = new Label() {
-                Text = "This is GraphControl!",
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Center,
-                BackgroundColor = Color.CadetBlue
-            };
-
-            /*fModel = new PlotModel();
+            fModel = new PlotModel();
 
             fGraph = new PlotView();
             fGraph.Model = fModel;
-            Content = fGraph;*/
+            Content = fGraph;
         }
 
         public void Activate()
@@ -62,8 +61,8 @@ namespace GKUI.Components
 
         public void Clear()
         {
-            /*fModel = new PlotModel();
-            fGraph.Model = fModel;*/
+            fModel = new PlotModel();
+            fGraph.Model = fModel;
         }
 
         public void PrepareArray(string title, string xAxis, string yAxis, ChartStyle style, bool excludeUnknowns, List<StatsItem> vals)
@@ -71,7 +70,7 @@ namespace GKUI.Components
             try {
                 Clear();
 
-                /*fModel.Title = title;
+                fModel.Title = title;
                 fModel.Background = OxyColors.White;
 
                 vals.Sort((a, b) => GKUtils.StrCompareEx(b.Caption, a.Caption));
@@ -123,7 +122,7 @@ namespace GKUI.Components
                             fModel.Series.Add(seriesM);
                         }
                         break;
-                }*/
+                }
             } finally {
             }
         }

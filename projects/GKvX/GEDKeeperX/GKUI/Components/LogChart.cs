@@ -18,11 +18,32 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using Xamarin.Forms;
 
 namespace GKUI.Components
 {
+    public class HintRequestEventArgs : EventArgs
+    {
+        public int FragmentNumber { get; private set; }
+        public int Size { get; private set; }
+        public string Hint { get; set; }
+
+        public HintRequestEventArgs(int fragmentNumber, int size)
+        {
+            FragmentNumber = fragmentNumber;
+            Size = size;
+        }
+    }
+
+    public delegate void HintRequestEventHandler(object sender, HintRequestEventArgs args);
+
+    /// <summary>
+    /// Logarithmic graph of fragmented data.
+    /// </summary>
     public class LogChart : ContentView
     {
+
+        public event HintRequestEventHandler OnHintRequest;
     }
 }

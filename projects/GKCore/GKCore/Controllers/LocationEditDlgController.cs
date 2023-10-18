@@ -186,7 +186,13 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblLatitude").Text = LangMan.LS(LSID.Latitude);
             GetControl<ILabel>("lblLongitude").Text = LangMan.LS(LSID.Longitude);
             GetControl<IButton>("btnShowOnMap").Text = LangMan.LS(LSID.Show);
-            GetControl<IGroupBox>("grpSearch").Text = LangMan.LS(LSID.SearchCoords);
+
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<IGroupBox>("grpSearch").Text = LangMan.LS(LSID.SearchCoords);
+            } else {
+                GetControl<ILabel>("grpSearch").Text = LangMan.LS(LSID.SearchCoords);
+            }
+
             GetControl<IButton>("btnSearch").Text = LangMan.LS(LSID.Search);
             GetControl<IButton>("btnSelect").Text = LangMan.LS(LSID.SelectCoords);
             GetControl<IButton>("btnSelectName").Text = LangMan.LS(LSID.SelectName);

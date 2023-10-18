@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    x:Class="GKUI.Forms.TTPlacesManagerDlg"
+    x:TypeArguments="mvp:IPlacesManagerDlg, contr:PlacesManagerController">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <comcom:GKListView x:Name="ListPlaces" Sorting="True" AllowMultipleSelection="True" MouseDoubleClick="ListPlaces_DblClick" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+
+        <StackLayout Style="{StaticResource dlgFooter}">
+            <Button x:Name="btnAnalysePlaces" Clicked="btnAnalysePlaces_Click" />
+            <Label x:Name="lblFilter" />
+            <Entry x:Name="txtFilter" Text="*" />
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnIntoList" Clicked="btnIntoList_Click" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>

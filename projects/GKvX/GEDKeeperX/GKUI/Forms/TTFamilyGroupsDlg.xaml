@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<forms:CommonWindow
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    x:Class="GKUI.Forms.TTFamilyGroupsDlg"
+    x:TypeArguments="mvp:IFragmentSearchDlg, contr:FragmentSearchController"
+    Disappearing="Form_Closed">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <xp:TabViewControl.ItemSource>
+                <xp:TabItem x:Name="pageFamilyGroups">
+                    <StackLayout Orientation="Vertical">
+                        <comcom:TreeView x:Name="tvGroups" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                        </comcom:TreeView>
+
+                        <StackLayout Spacing="4" Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="FillAndExpand">
+                            <Button x:Name="btnAnalyseGroups" Clicked="btnAnalyseGroups_Click" />
+                            <comcom:LogChart x:Name="gkLogChart1" OnHintRequest="HintRequestEventHandler" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+                        </StackLayout>
+                    </StackLayout>
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageDataQuality">
+                    <comcom:TreeMapViewer x:Name="fDataMap">
+                    </comcom:TreeMapViewer>
+                </xp:TabItem>
+            </xp:TabViewControl.ItemSource>
+        </xp:TabViewControl>
+
+    </StackLayout>
+
+</forms:CommonWindow>

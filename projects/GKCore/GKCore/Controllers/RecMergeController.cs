@@ -137,21 +137,28 @@ namespace GKCore.Controllers
         {
             fView.Title = LangMan.LS(LSID.MergeDuplicates);
 
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<IGroupBox>("grpSearchPersons").Text = LangMan.LS(LSID.RM_SearchPersons);
+                GetControl<IGroupBox>("grpMergeOther").Text = LangMan.LS(LSID.Other);
+                GetControl<IGroupBox>("rgMode").Text = LangMan.LS(LSID.RM_Records);
+            } else {
+                GetControl<ILabel>("grpSearchPersons").Text = LangMan.LS(LSID.RM_SearchPersons);
+                GetControl<ILabel>("grpMergeOther").Text = LangMan.LS(LSID.Other);
+                GetControl<ILabel>("rgMode").Text = LangMan.LS(LSID.RM_Records);
+            }
+
             GetControl<ITabPage>("pageMerge").Text = LangMan.LS(LSID.RecMerge);
             GetControl<ITabPage>("pageMergeOptions").Text = LangMan.LS(LSID.MIOptions);
             GetControl<IButton>("btnAutoSearch").Text = LangMan.LS(LSID.RM_Search);
             GetControl<IButton>("btnSkip").Text = LangMan.LS(LSID.RM_Skip);
-            GetControl<IGroupBox>("rgMode").Text = LangMan.LS(LSID.RM_Records);
             GetControl<IRadioButton>("radPersons").Text = LangMan.LS(LSID.RPIndividuals);
             GetControl<IRadioButton>("radNotes").Text = LangMan.LS(LSID.RPNotes);
             GetControl<IRadioButton>("radFamilies").Text = LangMan.LS(LSID.RPFamilies);
             GetControl<IRadioButton>("radSources").Text = LangMan.LS(LSID.RPSources);
-            GetControl<IGroupBox>("grpSearchPersons").Text = LangMan.LS(LSID.RM_SearchPersons);
             GetControl<ICheckBox>("chkIndistinctMatching").Text = LangMan.LS(LSID.RM_IndistinctMatching);
             GetControl<ICheckBox>("chkBirthYear").Text = LangMan.LS(LSID.RM_BirthYear);
             GetControl<ILabel>("lblNameAccuracy").Text = LangMan.LS(LSID.RM_NameAccuracy);
             GetControl<ILabel>("lblYearInaccuracy").Text = LangMan.LS(LSID.RM_YearInaccuracy);
-            GetControl<IGroupBox>("grpMergeOther").Text = LangMan.LS(LSID.Other);
             GetControl<ICheckBox>("chkBookmarkMerged").Text = LangMan.LS(LSID.BookmarkMerged);
             GetControl<IButton>("btnRec1Select").Text = LangMan.LS(LSID.DlgSelect) + @"...";
             GetControl<IButton>("btnRec2Select").Text = LangMan.LS(LSID.DlgSelect) + @"...";

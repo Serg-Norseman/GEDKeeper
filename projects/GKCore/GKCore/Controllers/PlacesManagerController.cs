@@ -25,6 +25,7 @@ using GKCore.Design.Controls;
 using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Tools;
+using GKCore.Types;
 
 namespace GKCore.Controllers
 {
@@ -102,8 +103,11 @@ namespace GKCore.Controllers
         {
             fView.Title = LangMan.LS(LSID.ToolOp_9);
 
-            GetControl<ITabPage>("pagePlaceManage").Text = LangMan.LS(LSID.ToolOp_9);
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<ITabPage>("pagePlaceManage").Text = LangMan.LS(LSID.ToolOp_9);
+                GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            }
+
             GetControl<IButton>("btnIntoList").Text = LangMan.LS(LSID.InsertIntoBook);
             GetControl<IButton>("btnAnalysePlaces").Text = LangMan.LS(LSID.Analyze);
             GetControl<ILabel>("lblFilter").Text = LangMan.LS(LSID.MIFilter);

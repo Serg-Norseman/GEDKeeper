@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    x:Class="GKUI.Forms.TTRecMergeDlg"
+    x:TypeArguments="mvp:IRecMergeDlg, contr:RecMergeController">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <xp:TabViewControl.ItemSource>
+                <xp:TabItem x:Name="pageMerge">
+
+                    <StackLayout Orientation="Vertical">
+
+                        <Grid x:Name="MergeControl" ColumnSpacing="2" RowSpacing="2" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                            <Label x:Name="Lab1" Grid.Column="0" Grid.Row="0">XXX1</Label>
+                            <Label x:Name="Lab2" Grid.Column="1" Grid.Row="0">XXX2</Label>
+
+                            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="0" Grid.Row="1">
+                                <Entry x:Name="Edit1" IsReadOnly="True" />
+                                <Button x:Name="btnRec1Select" Text="btnRec1Select" Clicked="btnRec1Select_Click" />
+                            </StackLayout>
+
+                            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
+                                <Entry x:Name="Edit2" IsReadOnly="True" />
+                                <Button x:Name="btnRec2Select" Text="btnRec2Select" Clicked="btnRec2Select_Click" />
+                            </StackLayout>
+
+                            <comcom:HyperView x:Name="fView1" Grid.Column="0" Grid.Row="2" />
+
+                            <comcom:HyperView x:Name="fView2" Grid.Column="1" Grid.Row="2" />
+
+                            <StackLayout Orientation="Horizontal" Grid.Column="0" Grid.Row="3">
+                                <Button x:Name="btnEditLeft" IsEnabled="False" Clicked="btnEditLeft_Click" Text="&lt;&lt;&lt;" />
+                                <Label HorizontalOptions="FillAndExpand" />
+                                <Button x:Name="btnMergeToLeft" IsEnabled="False" Clicked="btnMergeToLeft_Click" Text="&lt;&lt;&lt;" />
+                            </StackLayout>
+
+                            <StackLayout Orientation="Horizontal" Grid.Column="1" Grid.Row="3">
+                                <Button x:Name="btnMergeToRight" IsEnabled="False" Clicked="btnMergeToRight_Click" Text="&gt;&gt;&gt;" />
+                                <Label HorizontalOptions="FillAndExpand" />
+                                <Button x:Name="btnEditRight" IsEnabled="False" Clicked="btnEditRight_Click" Text="&gt;&gt;&gt;" />
+                            </StackLayout>
+                        </Grid>
+
+                        <StackLayout Spacing="8" Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="FillAndExpand">
+                            <Button x:Name="btnAutoSearch" Style="{StaticResource funcBtn}" Clicked="btnSearch_Click" />
+                            <Button x:Name="btnSkip" Style="{StaticResource funcBtn}" Clicked="btnSkip_Click" />
+                            <ProgressBar x:Name="ProgressBar1" HorizontalOptions="FillAndExpand" />
+                        </StackLayout>
+
+                    </StackLayout>
+
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageMergeOptions">
+                    <StackLayout Orientation="Vertical">
+                        <Label x:Name="rgMode" />
+                        <Frame>
+                            <input:RadioButtonGroupView>
+                                <input:RadioButton x:Name="radPersons" IsChecked="true" Checked="radMergeMode_Click" />
+                                <input:RadioButton x:Name="radFamilies" Checked="radMergeMode_Click" />
+                                <input:RadioButton x:Name="radNotes" Checked="radMergeMode_Click" />
+                                <input:RadioButton x:Name="radSources" Checked="radMergeMode_Click" />
+                            </input:RadioButtonGroupView>
+                        </Frame>
+
+                        <Label x:Name="grpSearchPersons" />
+                        <Frame>
+                            <StackLayout Orientation="Vertical">
+                                <input:CheckBox x:Name="chkIndistinctMatching" />
+
+                                <StackLayout Orientation="Horizontal">
+                                    <Label x:Name="lblNameAccuracy" />
+                                    <Stepper x:Name="edNameAccuracy" Value="90" />
+                                </StackLayout>
+
+                                <CheckBox x:Name="chkBirthYear" />
+
+                                <StackLayout Orientation="Horizontal">
+                                    <Label x:Name="lblYearInaccuracy" />
+                                    <Stepper x:Name="edYearInaccuracy" Value="3" />
+                                </StackLayout>
+                            </StackLayout>
+                        </Frame>
+
+                        <Label x:Name="grpMergeOther" />
+                        <Frame Padding="8">
+                            <CheckBox x:Name="chkBookmarkMerged" CheckedChanged="chkBookmarkMerged_CheckedChanged" />
+                        </Frame>
+
+                        <Label VerticalOptions="FillAndExpand" />
+                    </StackLayout>
+                </xp:TabItem>
+            </xp:TabViewControl.ItemSource>
+        </xp:TabViewControl>
+
+    </StackLayout>
+
+</forms:CommonDialog>

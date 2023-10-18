@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    x:Class="GKUI.Forms.PersonEditDlg"
+    x:TypeArguments="mvp:IStdPersonEditDlg, contr:StdPersonEditDlgController">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <Label x:Name="GroupBox1" />
+        <Frame>
+            <StackLayout Orientation="Horizontal">
+                <Grid x:Name="personLayout" ColumnSpacing="4" RowSpacing="4" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                    <StackLayout Spacing="2" Grid.Column="0" Grid.Row="0">
+                        <Label x:Name="lblSurname" />
+                        <Entry x:Name="txtSurname" Width="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" />
+                    </StackLayout>
+                    <StackLayout Spacing="2" Grid.Column="1" Grid.Row="0">
+                        <Label x:Name="lblSurnamePrefix" />
+                        <Entry x:Name="txtSurnamePrefix" Width="180" />
+                    </StackLayout>
+
+                    <StackLayout Spacing="2" Grid.Column="0" Grid.Row="1">
+                        <Label x:Name="lblMarriedSurname" />
+                        <Entry x:Name="txtMarriedSurname" Width="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" />
+                    </StackLayout>
+                    <StackLayout Spacing="2" Grid.Column="1" Grid.Row="1">
+                        <Label x:Name="lblNamePrefix" />
+                        <Entry x:Name="txtNamePrefix" Width="180" />
+                    </StackLayout>
+                    <StackLayout Spacing="2" Grid.Column="2" Grid.Row="1">
+                        <Label x:Name="lblSex" />
+                        <Picker x:Name="cmbSex" Width="180" SelectedIndexChanged="cbSex_SelectedIndexChanged" />
+                    </StackLayout>
+
+                    <StackLayout Spacing="2" Grid.Column="0" Grid.Row="2">
+                        <Label x:Name="lblName" />
+                        <Entry x:Name="txtName" Width="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" />
+                    </StackLayout>
+                    <StackLayout Spacing="2" Grid.Column="1" Grid.Row="2">
+                        <Label x:Name="lblNameSuffix" />
+                        <Entry x:Name="txtNameSuffix" Width="180" />
+                    </StackLayout>
+                    <StackLayout Spacing="2" Grid.Column="2" Grid.Row="2">
+                        <Label x:Name="dummy1"></Label>
+                        <input:CheckBox x:Name="chkBookmark" />
+                    </StackLayout>
+
+                    <StackLayout Spacing="2" Grid.Column="0" Grid.Row="3">
+                        <Label x:Name="lblPatronymic" />
+                        <comcom:GKComboBox x:Name="cmbPatronymic" Width="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" />
+                    </StackLayout>
+                    <StackLayout Spacing="2" Grid.Column="1" Grid.Row="3">
+                        <Label x:Name="lblNickname" />
+                        <Entry x:Name="txtNickname" Width="180" />
+                    </StackLayout>
+                    <StackLayout Spacing="2" Grid.Column="2" Grid.Row="3">
+                        <Label x:Name="dummy2"></Label>
+                        <input:CheckBox x:Name="chkPatriarch" />
+                    </StackLayout>
+                </Grid>
+
+                <StackLayout Orientation="Vertical">
+                    <comcom:GKPortrait x:Name="imgPortrait" WidthRequest="140" HeightRequest="160" />
+
+                    <StackLayout Orientation="Horizontal" Spacing="4">
+                        <Label HorizontalOptions="StartAndExpand" />
+                        <Button x:Name="btnPortraitAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnPortraitAdd_Click" />
+                        <Button x:Name="btnPortraitDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="btnPortraitDelete_Click" />
+                        <Label HorizontalOptions="EndAndExpand" />
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </Frame>
+
+        <StackLayout Orientation="Vertical">
+            <Label x:Name="panCtlParents" />
+            <Frame>
+                <Grid x:Name="parentsTab" ColumnSpacing="4" RowSpacing="4">
+                    <Label x:Name="lblParents" Grid.Column="0" Grid.Row="0" />
+
+                    <Entry x:Name="txtFather" IsEnabled="False" Width="100" Grid.Column="1" Grid.Row="0" />
+
+                    <Entry x:Name="txtMother" IsEnabled="False" Width="100" Grid.Column="2" Grid.Row="0" />
+
+                    <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="3" Grid.Row="0">
+                        <Button x:Name="btnParentsAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnParentsAdd_Click" />
+                        <Button x:Name="btnParentsEdit" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_edit.gif}" Clicked="btnParentsEdit_Click" />
+                        <Button x:Name="btnParentsDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="btnParentsDelete_Click" />
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
+                        <Button x:Name="btnFatherAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnFatherAdd_Click" />
+                        <Button x:Name="btnFatherDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="btnFatherDelete_Click" />
+                        <Button x:Name="btnFatherSel" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_jump.gif}" Clicked="btnFatherSel_Click" />
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="2" Grid.Row="1">
+                        <Button x:Name="btnMotherAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnMotherAdd_Click" />
+                        <Button x:Name="btnMotherDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="btnMotherDelete_Click" />
+                        <Button x:Name="btnMotherSel" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_jump.gif}" Clicked="btnMotherSel_Click" />
+                    </StackLayout>
+                </Grid>
+            </Frame>
+        </StackLayout>
+
+        <xp:TabViewControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <xp:TabViewControl.ItemSource>
+                <xp:TabItem x:Name="pageEvents">
+                    <comcom:GKSheetList x:Name="fEventsList" />
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageSpouses">
+                    <comcom:GKSheetList x:Name="fSpousesList" OnModify="ModifySpousesSheet" OnBeforeChange="BeforeChangeSpousesSheet" />
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageNames">
+                    <comcom:GKSheetList x:Name="fNamesList" OnModify="ModifyNamesSheet" />
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageAssociations">
+                    <comcom:GKSheetList x:Name="fAssociationsList" OnModify="ModifyAssociationsSheet" />
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageNotes">
+                    <comcom:GKSheetList x:Name="fNotesList" />
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageMultimedia">
+                    <comcom:GKSheetList x:Name="fMediaList" />
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageSources">
+                    <comcom:GKSheetList x:Name="fSourcesList" />
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageGroups">
+                    <comcom:GKSheetList x:Name="fGroupsList" OnModify="ModifyGroupsSheet" />
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageUserRefs">
+                    <comcom:GKSheetList x:Name="fUserRefList" />
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageParents">
+                    <comcom:GKSheetList x:Name="fParentsList" OnModify="ModifyParentsSheet" />
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageChilds">
+                    <comcom:GKSheetList x:Name="fChildrenList" OnModify="ModifyChildrenSheet" OnItemValidating="PersonEditDlg_ItemValidating" />
+                </xp:TabItem>
+            </xp:TabViewControl.ItemSource>
+        </xp:TabViewControl>
+
+        <StackLayout Style="{StaticResource dlgFooter}">
+            <Label x:Name="lblRestriction" />
+            <Picker x:Name="cmbRestriction" SelectedIndexChanged="cbRestriction_SelectedIndexChanged" />
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnNameCopy" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_copy.gif}" Clicked="btnNameCopy_Click" />
+            <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />
+            <Button x:Name="btnCancel" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>

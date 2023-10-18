@@ -21,6 +21,7 @@
 2. ProgressDlg - canceled, only popup progressbar at top of pages
 3. ScriptEditWin - canceled
 4. NoteEditDlgEx - canceled
+5. LanguageEditDlg (from FilePropertiesDlg) - canceled
 
 
 # Experimental

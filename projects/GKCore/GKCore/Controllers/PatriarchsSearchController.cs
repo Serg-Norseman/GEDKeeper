@@ -109,8 +109,11 @@ namespace GKCore.Controllers
         {
             fView.Title = LangMan.LS(LSID.ToolOp_8);
 
-            GetControl<ITabPage>("pagePatSearch").Text = LangMan.LS(LSID.ToolOp_8);
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<ITabPage>("pagePatSearch").Text = LangMan.LS(LSID.ToolOp_8);
+                GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            }
+
             GetControl<ILabel>("lblMinGenerations").Text = LangMan.LS(LSID.MinGenerations);
             GetControl<IButton>("btnSetPatriarch").Text = LangMan.LS(LSID.SetPatFlag);
             GetControl<IButton>("btnPatSearch").Text = LangMan.LS(LSID.Search);

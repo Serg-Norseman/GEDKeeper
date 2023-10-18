@@ -18,11 +18,61 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections.Generic;
+using GKCore.Design.Controls;
+using GKCore.Maps;
 using Xamarin.Forms;
 
 namespace GKUI.Components
 {
-    public class GKMapBrowser : ContentView
+    public class GKMapBrowser : ContentView, IMapBrowser
     {
+        public bool ShowLines { get; set; }
+        public bool ShowPoints { get; set; }
+
+        public IList<GeoPoint> MapPoints { get; }
+
+        public bool Enabled { get; set; }
+
+        public void Activate()
+        {
+        }
+
+        public int AddPoint(double latitude, double longitude, string hint)
+        {
+            return 0;
+        }
+
+        public void BeginUpdate()
+        {
+        }
+
+        public void ClearPoints()
+        {
+        }
+
+        public void DeletePoint(int index)
+        {
+        }
+
+        public void EndUpdate()
+        {
+        }
+
+        public void RefreshPoints()
+        {
+        }
+
+        public void SaveSnapshot(string fileName)
+        {
+        }
+
+        public void SetCenter(double latitude, double longitude, int scale)
+        {
+        }
+
+        public void ZoomToBounds()
+        {
+        }
     }
 }

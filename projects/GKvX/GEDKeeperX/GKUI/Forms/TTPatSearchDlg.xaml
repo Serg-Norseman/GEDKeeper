@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+    x:Class="GKUI.Forms.TTPatSearchDlg"
+    x:TypeArguments="mvp:IPatriarchsSearchDlg, contr:PatriarchsSearchController">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <comcom:GKListView x:Name="ListPatriarchs" MouseDoubleClick="ListPatriarchs_DblClick" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+
+        <StackLayout Spacing="4" Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="FillAndExpand">
+            <Label x:Name="lblMinGenerations" />
+            <Stepper x:Name="edMinGens" Value="2" />
+            <input:CheckBox x:Name="chkWithoutDates" />
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnSetPatriarch" Clicked="btnSetPatriarch_Click" />
+            <Button x:Name="btnPatSearch" Clicked="btnPatSearch_Click" />
+            <Button x:Name="btnPatriarchsDiagram" Clicked="btnPatriarchsDiagram_Click" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>
