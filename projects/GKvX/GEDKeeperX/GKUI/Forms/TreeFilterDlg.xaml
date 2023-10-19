@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+    x:Class="GKUI.Forms.TreeFilterDlg"
+    x:TypeArguments="mvp:ITreeFilterDlg, contr:TreeFilterDlgController"
+    Appearing="TreeFilterDlg_Load">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <comcom:GroupBox x:Name="rgBranchCut">
+            <StackLayout Orientation="Vertical" Spacing="4">
+                <input:RadioButtonGroupView>
+                    <input:RadioButton x:Name="rbCutNone" IsChecked="True" Checked="rbCutX_CheckedChanged" />
+
+                    <input:RadioButton x:Name="rbCutYears" Checked="rbCutX_CheckedChanged" />
+
+                    <StackLayout Orientation="Horizontal" Spacing="20">
+                        <Label />
+                        <StackLayout Orientation="Horizontal" Spacing="4">
+                            <Label x:Name="lblYear" />
+                            <comcom:NumericStepper x:Name="edYear" Increment="10" MaxValue="3000" />
+                        </StackLayout>
+                    </StackLayout>
+
+                    <input:RadioButton x:Name="rbCutPersons" Checked="rbCutX_CheckedChanged" />
+                </input:RadioButtonGroupView>
+
+                <comcom:GKSheetList x:Name="fPersonsList" OnModify="ListModify" />
+            </StackLayout>
+        </comcom:GroupBox>
+
+        <StackLayout Orientation="Horizontal" Spacing="4">
+            <Label x:Name="lblRPSources" />
+            <comcom:GKComboBox x:Name="cmbSource" IsReadOnly="True" WidthRequest="260" />
+        </StackLayout>
+
+        <Label VerticalOptions="FillAndExpand" />
+
+        <StackLayout Style="{StaticResource dlgFooter}">
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />
+            <Button x:Name="btnCancel" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>

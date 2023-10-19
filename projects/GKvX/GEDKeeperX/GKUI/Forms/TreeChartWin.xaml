@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <forms:PrintableForm
-    xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:forms="clr-namespace:GKUI.Forms" xmlns:complat="clr-namespace:GKUI.Platform"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
     x:Class="GKUI.Forms.TreeChartWin"
     WidthRequest="1020" HeightRequest="760">
+
+    <forms:PrintableForm.ToolbarItems>
+        <ToolbarItem x:Name="tbImageSave" Order="Primary" Priority="0" IconImageSource="{plat:ImageResourceExt Resources.btn_save_image.gif}" Clicked="tbImageSave_Click" />
+        <ToolbarItem x:Name="tbFilter" Order="Primary" Priority="1" IconImageSource="{plat:ImageResourceExt Resources.btn_filter.gif}" Clicked="ToolBar1_ButtonClick" />
+        <ToolbarItem x:Name="tbPrev" Order="Primary" Priority="2" IconImageSource="{plat:ImageResourceExt Resources.btn_left.gif}" Clicked="ToolBar1_ButtonClick" />
+        <ToolbarItem x:Name="tbNext" Order="Primary" Priority="3" IconImageSource="{plat:ImageResourceExt Resources.btn_right.gif}" Clicked="ToolBar1_ButtonClick" />
+        <ToolbarItem x:Name="tbOptions" Order="Primary" Priority="4" IconImageSource="{plat:ImageResourceExt Resources.btn_tools.gif}" Clicked="tbOptions_Click" />
+    </forms:PrintableForm.ToolbarItems>
 
 
 </forms:PrintableForm>

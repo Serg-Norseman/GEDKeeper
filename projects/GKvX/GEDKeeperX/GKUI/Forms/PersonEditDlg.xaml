@@ -14,57 +14,32 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <Label x:Name="GroupBox1" />
         <Frame>
             <StackLayout Orientation="Horizontal">
                 <Grid x:Name="personLayout" ColumnSpacing="4" RowSpacing="4" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                    <StackLayout Spacing="2" Grid.Column="0" Grid.Row="0">
-                        <Label x:Name="lblSurname" />
-                        <Entry x:Name="txtSurname" Width="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" />
-                    </StackLayout>
-                    <StackLayout Spacing="2" Grid.Column="1" Grid.Row="0">
-                        <Label x:Name="lblSurnamePrefix" />
-                        <Entry x:Name="txtSurnamePrefix" Width="180" />
-                    </StackLayout>
+                    <Label x:Name="lblSurname" Grid.Column="0" Grid.Row="0" />
+                    <Entry x:Name="txtSurname" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="0" />
+                    <Label x:Name="lblSurnamePrefix" Grid.Column="2" Grid.Row="0" />
+                    <Entry x:Name="txtSurnamePrefix" WidthRequest="180" Grid.Column="3" Grid.Row="0" />
 
-                    <StackLayout Spacing="2" Grid.Column="0" Grid.Row="1">
-                        <Label x:Name="lblMarriedSurname" />
-                        <Entry x:Name="txtMarriedSurname" Width="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" />
-                    </StackLayout>
-                    <StackLayout Spacing="2" Grid.Column="1" Grid.Row="1">
-                        <Label x:Name="lblNamePrefix" />
-                        <Entry x:Name="txtNamePrefix" Width="180" />
-                    </StackLayout>
-                    <StackLayout Spacing="2" Grid.Column="2" Grid.Row="1">
-                        <Label x:Name="lblSex" />
-                        <Picker x:Name="cmbSex" Width="180" SelectedIndexChanged="cbSex_SelectedIndexChanged" />
-                    </StackLayout>
+                    <Label x:Name="lblMarriedSurname" Grid.Column="0" Grid.Row="1" />
+                    <Entry x:Name="txtMarriedSurname" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="1" />
+                    <Label x:Name="lblNamePrefix" Grid.Column="2" Grid.Row="1" />
+                    <Entry x:Name="txtNamePrefix" WidthRequest="180" Grid.Column="3" Grid.Row="1" />
+                    <Label x:Name="lblSex" Grid.Column="4" Grid.Row="1" />
+                    <Picker x:Name="cmbSex" WidthRequest="180" SelectedIndexChanged="cbSex_SelectedIndexChanged" Grid.Column="5" Grid.Row="1" />
 
-                    <StackLayout Spacing="2" Grid.Column="0" Grid.Row="2">
-                        <Label x:Name="lblName" />
-                        <Entry x:Name="txtName" Width="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" />
-                    </StackLayout>
-                    <StackLayout Spacing="2" Grid.Column="1" Grid.Row="2">
-                        <Label x:Name="lblNameSuffix" />
-                        <Entry x:Name="txtNameSuffix" Width="180" />
-                    </StackLayout>
-                    <StackLayout Spacing="2" Grid.Column="2" Grid.Row="2">
-                        <Label x:Name="dummy1"></Label>
-                        <input:CheckBox x:Name="chkBookmark" />
-                    </StackLayout>
+                    <Label x:Name="lblName" Grid.Column="0" Grid.Row="2" />
+                    <Entry x:Name="txtName" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="2" />
+                    <Label x:Name="lblNameSuffix" Grid.Column="2" Grid.Row="2" />
+                    <Entry x:Name="txtNameSuffix" WidthRequest="180" Grid.Column="3" Grid.Row="2" />
+                    <input:CheckBox x:Name="chkBookmark" Grid.Column="4" Grid.Row="2" Grid.ColumnSpan="2" />
 
-                    <StackLayout Spacing="2" Grid.Column="0" Grid.Row="3">
-                        <Label x:Name="lblPatronymic" />
-                        <comcom:GKComboBox x:Name="cmbPatronymic" Width="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" />
-                    </StackLayout>
-                    <StackLayout Spacing="2" Grid.Column="1" Grid.Row="3">
-                        <Label x:Name="lblNickname" />
-                        <Entry x:Name="txtNickname" Width="180" />
-                    </StackLayout>
-                    <StackLayout Spacing="2" Grid.Column="2" Grid.Row="3">
-                        <Label x:Name="dummy2"></Label>
-                        <input:CheckBox x:Name="chkPatriarch" />
-                    </StackLayout>
+                    <Label x:Name="lblPatronymic" Grid.Column="0" Grid.Row="3" />
+                    <comcom:GKComboBox x:Name="cmbPatronymic" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="3" />
+                    <Label x:Name="lblNickname" Grid.Column="2" Grid.Row="3" />
+                    <Entry x:Name="txtNickname" WidthRequest="180" Grid.Column="3" Grid.Row="3" />
+                    <input:CheckBox x:Name="chkPatriarch" Grid.Column="4" Grid.Row="3" Grid.ColumnSpan="2" />
                 </Grid>
 
                 <StackLayout Orientation="Vertical">
@@ -80,36 +55,29 @@
             </StackLayout>
         </Frame>
 
-        <StackLayout Orientation="Vertical">
-            <Label x:Name="panCtlParents" />
-            <Frame>
-                <Grid x:Name="parentsTab" ColumnSpacing="4" RowSpacing="4">
-                    <Label x:Name="lblParents" Grid.Column="0" Grid.Row="0" />
+        <Frame>
+            <Grid x:Name="parentsTab" ColumnSpacing="4" RowSpacing="4">
+                <Label x:Name="lblParents" Grid.Column="0" Grid.Row="0" />
+                <Entry x:Name="txtFather" IsEnabled="False" WidthRequest="100" Grid.Column="1" Grid.Row="0" />
+                <Entry x:Name="txtMother" IsEnabled="False" WidthRequest="100" Grid.Column="2" Grid.Row="0" />
+                <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="3" Grid.Row="0">
+                    <Button x:Name="btnParentsAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnParentsAdd_Click" />
+                    <Button x:Name="btnParentsEdit" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_edit.gif}" Clicked="btnParentsEdit_Click" />
+                    <Button x:Name="btnParentsDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="btnParentsDelete_Click" />
+                </StackLayout>
 
-                    <Entry x:Name="txtFather" IsEnabled="False" Width="100" Grid.Column="1" Grid.Row="0" />
-
-                    <Entry x:Name="txtMother" IsEnabled="False" Width="100" Grid.Column="2" Grid.Row="0" />
-
-                    <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="3" Grid.Row="0">
-                        <Button x:Name="btnParentsAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnParentsAdd_Click" />
-                        <Button x:Name="btnParentsEdit" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_edit.gif}" Clicked="btnParentsEdit_Click" />
-                        <Button x:Name="btnParentsDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="btnParentsDelete_Click" />
-                    </StackLayout>
-
-                    <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
-                        <Button x:Name="btnFatherAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnFatherAdd_Click" />
-                        <Button x:Name="btnFatherDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="btnFatherDelete_Click" />
-                        <Button x:Name="btnFatherSel" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_jump.gif}" Clicked="btnFatherSel_Click" />
-                    </StackLayout>
-
-                    <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="2" Grid.Row="1">
-                        <Button x:Name="btnMotherAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnMotherAdd_Click" />
-                        <Button x:Name="btnMotherDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="btnMotherDelete_Click" />
-                        <Button x:Name="btnMotherSel" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_jump.gif}" Clicked="btnMotherSel_Click" />
-                    </StackLayout>
-                </Grid>
-            </Frame>
-        </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
+                    <Button x:Name="btnFatherAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnFatherAdd_Click" />
+                    <Button x:Name="btnFatherDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="btnFatherDelete_Click" />
+                    <Button x:Name="btnFatherSel" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_jump.gif}" Clicked="btnFatherSel_Click" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="2" Grid.Row="1">
+                    <Button x:Name="btnMotherAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnMotherAdd_Click" />
+                    <Button x:Name="btnMotherDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="btnMotherDelete_Click" />
+                    <Button x:Name="btnMotherSel" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_jump.gif}" Clicked="btnMotherSel_Click" />
+                </StackLayout>
+            </Grid>
+        </Frame>
 
         <xp:TabViewControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <xp:TabViewControl.ItemSource>

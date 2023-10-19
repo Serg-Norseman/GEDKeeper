@@ -80,14 +80,14 @@
 
                                 <StackLayout Orientation="Horizontal">
                                     <Label x:Name="lblNameAccuracy" />
-                                    <Stepper x:Name="edNameAccuracy" Value="90" />
+                                    <comcom:NumericStepper x:Name="edNameAccuracy" Value="90" />
                                 </StackLayout>
 
                                 <CheckBox x:Name="chkBirthYear" />
 
                                 <StackLayout Orientation="Horizontal">
                                     <Label x:Name="lblYearInaccuracy" />
-                                    <Stepper x:Name="edYearInaccuracy" Value="3" />
+                                    <comcom:NumericStepper x:Name="edYearInaccuracy" Value="3" />
                                 </StackLayout>
                             </StackLayout>
                         </Frame>

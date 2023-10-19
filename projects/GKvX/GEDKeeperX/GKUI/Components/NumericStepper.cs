@@ -18,41 +18,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Design.Controls;
-using GKCore.Interfaces;
 using Xamarin.Forms;
 
 namespace GKUI.Components
 {
-    public class FilterGridView : ContentView, IFilterGridView
+    public class NumericStepper : ContentView
     {
-        private readonly IRecordsListModel fListMan;
-
-        public FilterCondition this[int index]
-        {
-            get { return null; }
-        }
-
-        public IRecordsListModel ListMan { get; set; }
-
-        public int Count { get; set; }
-
-        public bool Enabled { get; set; }
-
-        public void Activate()
-        {
-        }
-
-        public void AddCondition(FilterCondition fcond)
-        {
-        }
-
-        public void Clear()
-        {
-        }
-
-        public void RemoveCondition(int index)
-        {
-        }
+        public int Increment { get; set; }
+        public int MinValue { get; set; }
+        public int MaxValue { get; set; }
+        public int Value { get; set; }
     }
 }

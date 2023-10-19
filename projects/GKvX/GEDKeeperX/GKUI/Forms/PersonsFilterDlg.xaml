@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    x:Class="GKUI.Forms.PersonsFilterDlg">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <xp:TabViewControl x:Name="tabsFilters" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <xp:TabViewControl.ItemSource>
+                <xp:TabItem x:Name="pageFieldsFilter">
+                    <comcom:FilterGridView x:Name="filterView" />
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageSpecificFilter">
+                    <StackLayout Orientation="Vertical" Spacing="4">
+                        <StackLayout Orientation="Horizontal" Spacing="4">
+                            <comcom:GroupBox x:Name="rgSex">
+                                <input:RadioButtonGroupView>
+                                    <input:RadioButton x:Name="rbSexAll" />
+                                    <input:RadioButton x:Name="rbSexMale" />
+                                    <input:RadioButton x:Name="rbSexFemale" />
+                                </input:RadioButtonGroupView>
+                            </comcom:GroupBox>
+
+                            <comcom:GroupBox x:Name="rgLife">
+                                <input:RadioButtonGroupView>
+                                    <input:RadioButton x:Name="rbAll" Checked="rgLife_CheckedChanged" />
+                                    <input:RadioButton x:Name="rbOnlyLive" Checked="rgLife_CheckedChanged" />
+                                    <input:RadioButton x:Name="rbOnlyDead" Checked="rgLife_CheckedChanged" />
+                                    <input:RadioButton x:Name="rbAliveBefore" Checked="rgLife_CheckedChanged" />
+                                    <StackLayout Orientation="Horizontal" Spacing="4">
+                                        <Label x:Name="lblAliveBefore" />
+                                        <Entry x:Name="txtAliveBeforeDate" IsEnabled="False" />
+                                    </StackLayout>
+                                </input:RadioButtonGroupView>
+                            </comcom:GroupBox>
+                        </StackLayout>
+
+                        <Grid x:Name="masksPanel" ColumnSpacing="4" RowSpacing="4">
+                            <Label x:Name="lblNameMask" Grid.Column="0" Grid.Row="0" />
+                            <comcom:GKComboBox x:Name="txtName" Grid.Column="1" Grid.Row="0" />
+
+                            <Label x:Name="lblPlaceMask" Grid.Column="0" Grid.Row="1" />
+                            <comcom:GKComboBox x:Name="cmbResidence" Grid.Column="1" Grid.Row="1" />
+
+                            <Label x:Name="lblEventsMask" Grid.Column="0" Grid.Row="2" />
+                            <comcom:GKComboBox x:Name="cmbEventVal" Grid.Column="1" Grid.Row="2" />
+
+                            <Label x:Name="lblGroups" Grid.Column="0" Grid.Row="3" />
+                            <comcom:GKComboBox x:Name="cmbGroup" IsReadOnly="True" Grid.Column="1" Grid.Row="3" />
+
+                            <Label x:Name="lblSources" Grid.Column="0" Grid.Row="4" />
+                            <comcom:GKComboBox x:Name="cmbSource" IsReadOnly="True" Grid.Column="1" Grid.Row="4" />
+
+                            <input:CheckBox x:Name="chkOnlyPatriarchs" Grid.Column="0" Grid.Row="5" />
+                        </Grid>
+
+                        <Label VerticalOptions="FillAndExpand" />
+
+                    </StackLayout>
+                </xp:TabItem>
+            </xp:TabViewControl.ItemSource>
+        </xp:TabViewControl>
+
+        <StackLayout Style="{StaticResource dlgFooter}">
+            <Button x:Name="btnReset" Style="{StaticResource dlgBtn}" Clicked="btnReset_Click" />
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />
+            <Button x:Name="btnCancel" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>

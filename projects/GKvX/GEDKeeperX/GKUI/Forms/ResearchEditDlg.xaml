@@ -28,7 +28,7 @@
                 <Label x:Name="lblStatus" />
                 <Picker x:Name="cmbStatus" />
                 <Label x:Name="lblPercent" />
-                <Stepper x:Name="nudPercent" Increment="5" />
+                <comcom:NumericStepper x:Name="nudPercent" Increment="5" />
             </StackLayout>
 
             <Label x:Name="lblStartDate" Grid.Column="0" Grid.Row="2" />

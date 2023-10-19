@@ -19,40 +19,20 @@
  */
 
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
-using Xamarin.Forms;
+using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
-    public class FilterGridView : ContentView, IFilterGridView
+    public sealed class GroupBoxHandler : BaseControlHandler<GroupBox, GroupBoxHandler>, IGroupBox
     {
-        private readonly IRecordsListModel fListMan;
-
-        public FilterCondition this[int index]
-        {
-            get { return null; }
-        }
-
-        public IRecordsListModel ListMan { get; set; }
-
-        public int Count { get; set; }
-
-        public bool Enabled { get; set; }
-
-        public void Activate()
+        public GroupBoxHandler(GroupBox control) : base(control)
         {
         }
 
-        public void AddCondition(FilterCondition fcond)
+        public string Text
         {
-        }
-
-        public void Clear()
-        {
-        }
-
-        public void RemoveCondition(int index)
-        {
+            get { return Control.Text; }
+            set { Control.Text = value; }
         }
     }
 }

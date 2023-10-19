@@ -62,7 +62,6 @@ namespace GKUI.Forms
         /*
     <Form.ToolBar>
         <ToolBar TextAlign="Right" Style="tbsi">
-            <ButtonToolItem x:Name="tbImageSave" Image="{Resource Resources.btn_save_image.gif, GKCore}" Click="tbImageSave_Click" />
             <SeparatorToolItem />
 
             <complat:GKDropDownToolItem x:Name="tbGensCommon">
@@ -96,14 +95,10 @@ namespace GKUI.Forms
             </complat:GKDropDownToolItem>
 
             <SeparatorToolItem />
-            <ButtonToolItem x:Name="tbFilter" Image="{Resource Resources.btn_filter.gif, GKCore}" Click="ToolBar1_ButtonClick" />
-            <ButtonToolItem x:Name="tbPrev" Image="{Resource Resources.btn_left.gif, GKCore}" Enabled="False" Click="ToolBar1_ButtonClick" />
-            <ButtonToolItem x:Name="tbNext" Image="{Resource Resources.btn_right.gif, GKCore}" Enabled="False" Click="ToolBar1_ButtonClick" />
             <SeparatorToolItem />
             <ButtonToolItem x:Name="tbDocPreview" Image="{Resource Resources.btn_preview.gif, GKCore}" Click="tbDocPreview_Click" />
             <ButtonToolItem x:Name="tbDocPrint" Image="{Resource Resources.btn_print.gif, GKCore}" Click="tbDocPrint_Click" />
             <SeparatorToolItem />
-            <ButtonToolItem x:Name="tbOptions" Image="{Resource Resources.btn_tools.gif, GKCore}" Click="tbOptions_Click" />
             <SeparatorToolItem />
 
             <complat:GKDropDownToolItem x:Name="tbBorders">
@@ -309,13 +304,13 @@ namespace GKUI.Forms
 
         private void ToolBar1_ButtonClick(object sender, EventArgs e)
         {
-            /*if (sender == tbFilter) {
+            if (sender == tbFilter) {
                 SetFilter();
             } else if (sender == tbPrev) {
                 NavPrev();
             } else if (sender == tbNext) {
                 NavNext();
-            }*/
+            }
         }
 
         private void UpdateModesMenu()

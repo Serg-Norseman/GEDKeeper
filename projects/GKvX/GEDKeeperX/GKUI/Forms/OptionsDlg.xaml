@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    x:Class="GKUI.Forms.OptionsDlg"
+    x:TypeArguments="mvp:IOptionsDlg, contr:OptionsDlgController">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <xp:TabViewControl x:Name="PageControl1" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <xp:TabViewControl.ItemSource>
+
+                <xp:TabItem x:Name="pageCommon">
+                    <StackLayout Orientation="Vertical">
+                        <StackLayout Orientation="Horizontal">
+
+                            <comcom:GroupBox x:Name="grpOther">
+                                <StackLayout Orientation="Vertical">
+
+                                    <input:CheckBox x:Name="chkLoadRecentFiles" />
+                                    <input:CheckBox x:Name="chkShowOnStart" />
+                                    <input:CheckBox x:Name="chkAutoCheckUpdates" />
+                                    <input:CheckBox x:Name="chkCharsetDetection" />
+                                    <input:CheckBox x:Name="chkDialogClosingWarn" />
+
+                                    <Grid ColumnSpacing="4" RowSpacing="4">
+
+                                        <Label x:Name="lblLanguage" Grid.Column="0" Grid.Row="0" />
+                                        <comcom:GKComboBox x:Name="cmbLanguages" IsReadOnly="True" Grid.Column="1" Grid.Row="0" />
+
+                                        <Label x:Name="lblGeocoder" Grid.Column="0" Grid.Row="1" />
+                                        <comcom:GKComboBox x:Name="cmbGeocoder" IsReadOnly="True" Grid.Column="1" Grid.Row="1" />
+
+                                        <Label x:Name="lblGeoSearchCountry" Grid.Column="0" Grid.Row="2" />
+                                        <comcom:GKComboBox x:Name="cmbGeoSearchCountry" IsReadOnly="True" Grid.Column="1" Grid.Row="2" />
+
+                                        <Label x:Name="lblCertaintyAlgorithm" Grid.Column="0" Grid.Row="3" />
+                                        <comcom:GKComboBox x:Name="cmbCertaintyAlgorithm" IsReadOnly="True" Grid.Column="1" Grid.Row="3" />
+
+                                    </Grid>
+
+                                    <Label VerticalOptions="FillAndExpand" />
+
+                                </StackLayout>
+                            </comcom:GroupBox>
+
+                            <comcom:GroupBox x:Name="grpInternet">
+                                <Grid ColumnSpacing="4" RowSpacing="4">
+                                    <input:CheckBox x:Name="chkUseProxy" Grid.Column="0" Grid.Row="0" />
+
+                                    <Label x:Name="lblProxyServer" Grid.Column="0" Grid.Row="1" />
+                                    <Entry x:Name="txtProxyServer" Grid.Column="1" Grid.Row="1" />
+
+                                    <Label x:Name="lblProxyPort" Grid.Column="0" Grid.Row="2" />
+                                    <Entry x:Name="txtProxyPort" Grid.Column="1" Grid.Row="2" />
+
+                                    <Label x:Name="lblProxyLogin" Grid.Column="0" Grid.Row="3" />
+                                    <Entry x:Name="txtProxyLogin" Grid.Column="1" Grid.Row="3" />
+
+                                    <Label x:Name="lblProxyPassword" Grid.Column="0" Grid.Row="4" />
+                                    <Entry x:Name="txtProxyPass" Grid.Column="1" Grid.Row="4" />
+                                </Grid>
+                            </comcom:GroupBox>
+
+                            <Label VerticalOptions="FillAndExpand" />
+
+                        </StackLayout>
+
+                        <comcom:GroupBox x:Name="groupBox1">
+                            <StackLayout Orientation="Vertical">
+
+                                <comcom:GroupBox x:Name="grpFileBackup">
+                                    <input:RadioButtonGroupView>
+                                        <input:RadioButton x:Name="radFBNone" />
+                                        <input:RadioButton x:Name="radFBOnlyPrev" />
+                                        <input:RadioButton x:Name="radFBEachRevision" />
+                                    </input:RadioButtonGroupView>
+                                </comcom:GroupBox>
+
+                                <StackLayout Orientation="Horizontal" Spacing="4">
+                                    <input:CheckBox x:Name="chkAutosave" />
+                                    <comcom:NumericStepper x:Name="numASMin" MaxValue="120" MinValue="1" WidthRequest="60" Value="1" />
+                                    <Label x:Name="lblMinutes" />
+                                </StackLayout>
+
+                                <StackLayout Orientation="Horizontal" Spacing="4">
+                                    <Label x:Name="lblBackupRevisionsMaxCount" />
+                                    <comcom:NumericStepper x:Name="numBackupRevisionsMaxCount" MaxValue="1000" MinValue="0" WidthRequest="80" Value="0" />
+                                </StackLayout>
+
+                            </StackLayout>
+                        </comcom:GroupBox>
+
+                        <Label VerticalOptions="FillAndExpand" />
+                    </StackLayout>
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageMultimedia">
+                    <StackLayout Orientation="Vertical">
+
+                        <input:CheckBox x:Name="chkRemovableMediaWarning" />
+                        <input:CheckBox x:Name="chkEmbeddedMediaPlayer" />
+                        <input:CheckBox x:Name="chkAllowMediaDirectRefs" />
+                        <input:CheckBox x:Name="chkAllowMediaStoreRelativeReferences" />
+
+                        <StackLayout Orientation="Horizontal" Spacing="4">
+                            <Label x:Name="lblMediaStoreDefault" />
+                            <comcom:GKComboBox x:Name="cmbMediaStoreDefault" WidthRequest="200" IsReadOnly="True" />
+                        </StackLayout>
+
+                        <input:CheckBox x:Name="chkAllowDeleteMediaFileFromStgArc" />
+                        <input:CheckBox x:Name="chkAllowDeleteMediaFileFromRefs" />
+                        <input:CheckBox x:Name="chkDeleteMediaFileWithoutConfirm" />
+                        <input:CheckBox x:Name="chkHighlightInaccessibleFiles" />
+
+                    </StackLayout>
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageCharts">
+
+                    <xp:TabViewControl x:Name="tabsCharts">
+                        <xp:TabViewControl.ItemSource>
+                            <xp:TabItem x:Name="pageTreeChart">
+                                <StackLayout Orientation="Horizontal" Spacing="8">
+
+                                    <comcom:GroupBox x:Name="grpTreePersons">
+                                        <ScrollView>
+                                            <StackLayout Orientation="Vertical">
+
+                                                <input:CheckBox x:Name="chkSurname" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <StackLayout Orientation="Horizontal" Spacing="20">
+                                                    <Label HorizontalOptions="Start" Text="\t" />
+                                                    <input:CheckBox x:Name="chkTreeSurnameFirst" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                </StackLayout>
+                                                <input:CheckBox x:Name="chkName" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkPatronymic" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <StackLayout Orientation="Horizontal" Spacing="20">
+                                                    <Label HorizontalOptions="Start" Text="\t" />
+                                                    <input:CheckBox x:Name="chkDiffLines" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                </StackLayout>
+                                                <input:CheckBox x:Name="chkBirthDate" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkDeathDate" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <StackLayout Orientation="Horizontal" Spacing="20">
+                                                    <Label HorizontalOptions="Start" Text="\t" />
+                                                    <input:CheckBox x:Name="chkOnlyYears" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                </StackLayout>
+                                                <StackLayout Orientation="Horizontal" Spacing="20">
+                                                    <Label HorizontalOptions="Start" Text="\t" />
+                                                    <input:CheckBox x:Name="chkShowAge" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                </StackLayout>
+                                                <input:CheckBox x:Name="chkMarriagesDates" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkKinship" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkSignsVisible" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkTreeDecorative" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkPortraitsVisible" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkDefaultPortraits" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkInvertedTree" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkChildlessExclude" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkShowPlaces" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <StackLayout Orientation="Horizontal" Spacing="20">
+                                                    <Label HorizontalOptions="Start" Text="\t" />
+                                                    <input:CheckBox x:Name="chkSeparateDAPLines" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                </StackLayout>
+                                                <StackLayout Orientation="Horizontal" Spacing="20">
+                                                    <Label HorizontalOptions="Start" Text="\t" />
+                                                    <input:CheckBox x:Name="chkOnlyLocality" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                </StackLayout>
+                                                <input:CheckBox x:Name="chkHideUnknownSpouses" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkCheckTreeSize" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkDottedLinesOfAdoptedChildren" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkBoldNames" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkMinimizingWidth" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkURNotesVisible" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkSameCardsWidth" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkUseInlineImagesInSvg" />
+                                                <input:CheckBox x:Name="chkExtendedTree" />
+
+                                                <Label VerticalOptions="FillAndExpand" />
+
+                                            </StackLayout>
+                                        </ScrollView>
+                                    </comcom:GroupBox>
+
+                                    <StackLayout Spacing="4">
+
+                                        <comcom:GroupBox x:Name="grpTreeDecor">
+                                            <Grid ColumnSpacing="4" RowSpacing="4">
+
+                                                <Frame Style="{StaticResource ColorBox}" x:Name="panMaleColor" Grid.Column="0" Grid.Row="0">
+                                                    <Label x:Name="lblMaleColor" Style="{StaticResource ColorLbl}" />
+                                                </Frame>
+                                                <Frame Style="{StaticResource ColorBox}" x:Name="panFemaleColor" Grid.Column="1" Grid.Row="0">
+                                                    <Label x:Name="lblFemaleColor" Style="{StaticResource ColorLbl}" />
+                                                </Frame>
+
+                                                <Frame Style="{StaticResource ColorBox}" x:Name="panUnkSexColor" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+                                                    <Label x:Name="lblUnkSexColor" Style="{StaticResource ColorLbl}" />
+                                                </Frame>
+
+                                                <Frame Style="{StaticResource ColorBox}" x:Name="panUnHusbandColor" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+                                                    <Label x:Name="lblUnHusbandColor" Style="{StaticResource ColorLbl}" />
+                                                </Frame>
+
+                                                <Frame Style="{StaticResource ColorBox}" x:Name="panUnWifeColor" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
+                                                    <Label x:Name="lblUnWifeColor" Style="{StaticResource ColorLbl}" />
+                                                </Frame>
+
+                                                <Frame Style="{StaticResource ColorBox}" x:Name="panDefFont" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2">
+                                                    <Label x:Name="lblChartFont" Style="{StaticResource ColorLbl}" />
+                                                </Frame>
+
+                                            </Grid>
+                                        </comcom:GroupBox>
+
+                                        <comcom:GroupBox x:Name="grpSpacings">
+                                            <Grid ColumnSpacing="4" RowSpacing="4">
+
+                                                <Label x:Name="lblMargins" Grid.Column="0" Grid.Row="0" />
+                                                <comcom:NumericStepper x:Name="numMargins" MaxValue="120" MinValue="1" WidthRequest="60" Value="1" Grid.Column="1" Grid.Row="0" />
+
+                                                <Label x:Name="lblBranchDist" Grid.Column="0" Grid.Row="1" />
+                                                <comcom:NumericStepper x:Name="numBranchDist" MaxValue="120" MinValue="1" WidthRequest="60" Value="1" Grid.Column="1" Grid.Row="1" />
+
+                                                <Label x:Name="lblGenDist" Grid.Column="0" Grid.Row="2" />
+                                                <comcom:NumericStepper x:Name="numGenDist" MaxValue="120" MinValue="1" WidthRequest="60" Value="1" Grid.Column="1" Grid.Row="2" />
+
+                                                <Label x:Name="lblSpouseDist" Grid.Column="0" Grid.Row="3" />
+                                                <comcom:NumericStepper x:Name="numSpouseDist" MaxValue="120" MinValue="1" WidthRequest="60" Value="1" Grid.Column="1" Grid.Row="3" />
+
+                                            </Grid>
+                                        </comcom:GroupBox>
+
+                                        <Grid ColumnSpacing="4" RowSpacing="4">
+
+                                            <input:CheckBox x:Name="chkSeparateDepth" CheckChanged="chkSeparateDepth_CheckedChanged" Grid.Column="0" Grid.Row="0" />
+
+                                            <Label x:Name="lblDefaultDepth" Grid.Column="0" Grid.Row="1" />
+                                            <comcom:NumericStepper x:Name="numDefaultDepth" MaxValue="9" MinValue="-1" WidthRequest="60" Value="-1" Grid.Column="1" Grid.Row="1" />
+
+                                            <Label x:Name="lblDefaultDepthAncestors" Grid.Column="0" Grid.Row="2" />
+                                            <comcom:NumericStepper x:Name="numDefaultDepthAncestors" MaxValue="9" MinValue="-1" WidthRequest="60" Value="-1" Grid.Column="1" Grid.Row="2" />
+
+                                            <Label x:Name="lblDefaultDepthDescendants" Grid.Column="0" Grid.Row="3" />
+                                            <comcom:NumericStepper x:Name="numDefaultDepthDescendants" MaxValue="9" MinValue="-1" WidthRequest="60" Value="-1" Grid.Column="1" Grid.Row="3" />
+
+                                        </Grid>
+
+                                        <input:CheckBox x:Name="chkUseExtraControls" />
+
+                                        <Label VerticalOptions="FillAndExpand" />
+
+                                    </StackLayout>
+
+                                </StackLayout>
+                            </xp:TabItem>
+
+                            <xp:TabItem x:Name="pageAncCircle">
+                                <comcom:ACOptionsControl x:Name="ancOptionsControl1" />
+                            </xp:TabItem>
+
+                        </xp:TabViewControl.ItemSource>
+                    </xp:TabViewControl>
+
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageUIView">
+
+                    <xp:TabViewControl x:Name="PageControl2">
+                        <xp:TabViewControl.ItemSource>
+
+                            <xp:TabItem x:Name="pageViewCommon">
+                                <StackLayout Orientation="Vertical">
+
+                                    <Grid ColumnSpacing="4" RowSpacing="4">
+                                        <comcom:GroupBox x:Name="rgFNPFormat" Grid.Column="0" Grid.Row="0">
+                                            <input:RadioButtonGroupView>
+                                                <input:RadioButton x:Name="radS_N_P" Checked="rgFNPFormat_CheckedChanged" />
+                                                <input:RadioButton x:Name="radS_NP" Checked="rgFNPFormat_CheckedChanged" />
+                                                <input:RadioButton x:Name="radSNP" Checked="rgFNPFormat_CheckedChanged" />
+                                                <Label />
+                                                <input:CheckBox x:Name="chkSurnameFirstInOrder" />
+                                            </input:RadioButtonGroupView>
+                                        </comcom:GroupBox>
+
+                                        <comcom:GroupBox x:Name="grpDateFormat" Grid.Column="1" Grid.Row="0">
+                                            <input:RadioButtonGroupView>
+                                                <input:RadioButton x:Name="radDMY" Text="DD.MM.YYYY" />
+                                                <input:RadioButton x:Name="radYMD" Text="YYYY.MM.DD" />
+                                                <Label />
+                                                <input:CheckBox x:Name="chkShowDatesSigns" />
+                                                <input:CheckBox x:Name="chkShowDatesCalendar" />
+                                                <input:CheckBox x:Name="chkLocalizedCalendarSignatures" />
+                                            </input:RadioButtonGroupView>
+                                        </comcom:GroupBox>
+
+                                        <comcom:GroupBox x:Name="grpAdvancedNames" Grid.Column="0" Grid.Row="1">
+                                            <input:RadioButtonGroupView>
+                                                <input:CheckBox x:Name="chkExtendWomanSurnames" CheckChanged="chkExtendWomanSurnames_CheckedChanged" />
+                                                <Label />
+                                                <input:RadioButton x:Name="radMaiden_Married" />
+                                                <input:RadioButton x:Name="radMarried_Maiden" />
+                                                <input:RadioButton x:Name="radMaiden" />
+                                                <input:RadioButton x:Name="radMarried" />
+                                            </input:RadioButtonGroupView>
+                                        </comcom:GroupBox>
+
+                                        <StackLayout Orientation="Vertical" Grid.Column="1" Grid.Row="1">
+                                            <input:CheckBox x:Name="chkPlacesWithAddress" />
+                                            <Label />
+                                            <input:CheckBox x:Name="chkHighlightUnparented" />
+                                            <input:CheckBox x:Name="chkHighlightUnmarried" />
+                                            <Label />
+                                            <input:CheckBox x:Name="chkAutoSortChildren" />
+                                            <input:CheckBox x:Name="chkAutoSortSpouses" />
+                                            <Label />
+                                            <input:CheckBox x:Name="chkFirstCapitalLetterInNames" />
+                                            <input:CheckBox x:Name="chkSurnameInCapitals" />
+                                            <Label />
+                                            <input:CheckBox x:Name="chkShortKinshipForm" />
+                                            <Label />
+                                            <input:CheckBox x:Name="chkUseSurnamesInPSF" />
+                                            <input:CheckBox x:Name="chkUseBirthDatesInPSF" />
+                                        </StackLayout>
+
+                                    </Grid>
+
+                                    <Label VerticalOptions="FillAndExpand" />
+                                </StackLayout>
+                            </xp:TabItem>
+
+                            <xp:TabItem x:Name="pageViewPersons">
+                                <StackLayout Orientation="Horizontal" Spacing="8">
+
+                                    <comcom:GKListView x:Name="lstPersonColumns" HorizontalOptions="StartAndExpand" VerticalOptions="FillAndExpand" />
+
+                                    <StackLayout Spacing="4" Orientation="Vertical" HorizontalOptions="End" VerticalOptions="FillAndExpand">
+                                        <Button x:Name="btnColumnUp" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_up.gif}" Clicked="btnColumnUp_Click" />
+                                        <Button x:Name="btnColumnDown" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_down.gif}" Clicked="btnColumnDown_Click" />
+                                        <Label VerticalOptions="FillAndExpand" />
+                                    </StackLayout>
+
+                                </StackLayout>
+                            </xp:TabItem>
+
+                        </xp:TabViewControl.ItemSource>
+                    </xp:TabViewControl>
+
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pagePedigree">
+
+                    <comcom:GroupBox x:Name="grpPedigree">
+                        <StackLayout Orientation="Vertical">
+                            <comcom:GroupBox x:Name="grpPedigreeFormat">
+                                <input:RadioButtonGroupView>
+                                    <input:RadioButton x:Name="radExcess" />
+                                    <input:RadioButton x:Name="radCompact" />
+                                </input:RadioButtonGroupView>
+                            </comcom:GroupBox>
+
+                            <input:CheckBox x:Name="chkAttributes" />
+                            <input:CheckBox x:Name="chkNotes" />
+                            <input:CheckBox x:Name="chkSources" />
+                            <input:CheckBox x:Name="chkGenerations" />
+
+                            <Grid ColumnSpacing="4" RowSpacing="4">
+                                <Label x:Name="lblAscendNumbering" Grid.Column="0" Grid.Row="0" />
+                                <comcom:GKComboBox x:Name="cmbAscendNumbering" IsReadOnly="True" Grid.Column="1" Grid.Row="0" />
+
+                                <Label x:Name="lblDescendNumbering" Grid.Column="0" Grid.Row="1" />
+                                <comcom:GKComboBox x:Name="cmbDescendNumbering" IsReadOnly="True" Grid.Column="1" Grid.Row="1" />
+                            </Grid>
+                        </StackLayout>
+                    </comcom:GroupBox>
+
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageSpecials">
+                    <StackLayout Orientation="Vertical">
+                        <input:CheckBox x:Name="chkUseExtendedNotes" />
+                        <input:CheckBox x:Name="chkKeepRichNames" />
+                        <input:CheckBox x:Name="chkMaximizeChartWindows" />
+                        <input:CheckBox x:Name="chkSAFByAllNames" />
+                        <input:CheckBox x:Name="chkShortenDateRanges" />
+                        <input:CheckBox x:Name="chkKeepInfoPansOverallSize" />
+                        <input:CheckBox x:Name="chkFilesOverwriteWarn" />
+                        <input:CheckBox x:Name="chkExtendedKinships" />
+
+                        <Label VerticalOptions="FillAndExpand" />
+                    </StackLayout>
+                </xp:TabItem>
+
+            </xp:TabViewControl.ItemSource>
+        </xp:TabViewControl>
+
+        <StackLayout Style="{StaticResource dlgFooter}">
+            <Button x:Name="btnResetDefaults" Style="{StaticResource dlgBtn}" Clicked="btnResetDefaults_Click" />
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />
+            <Button x:Name="btnCancel" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>

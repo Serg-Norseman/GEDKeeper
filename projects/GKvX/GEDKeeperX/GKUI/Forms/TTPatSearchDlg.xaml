@@ -16,7 +16,7 @@
 
         <StackLayout Spacing="4" Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="FillAndExpand">
             <Label x:Name="lblMinGenerations" />
-            <Stepper x:Name="edMinGens" Value="2" />
+            <comcom:NumericStepper x:Name="edMinGens" Value="2" />
             <input:CheckBox x:Name="chkWithoutDates" />
             <Label HorizontalOptions="FillAndExpand" />
             <Button x:Name="btnSetPatriarch" Clicked="btnSetPatriarch_Click" />

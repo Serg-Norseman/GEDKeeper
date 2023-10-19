@@ -19,13 +19,12 @@
  */
 
 using System;
-using BSLib;
 using GDModel;
+using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Design;
-using GKCore.Design.Views;
 using GKCore.Options;
 using GKCore.Types;
 

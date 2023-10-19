@@ -21,6 +21,7 @@
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Controls;
+using GKUI.Components;
 using Xamarin.Forms;
 
 namespace GKUI.Platform
@@ -226,9 +227,9 @@ namespace GKUI.Platform
         }
     }*/
 
-    public sealed class NumericBoxHandler : BaseControlHandler<Stepper, NumericBoxHandler>, INumericBox
+    public sealed class NumericBoxHandler : BaseControlHandler<NumericStepper, NumericBoxHandler>, INumericBox
     {
-        public NumericBoxHandler(Stepper control) : base(control)
+        public NumericBoxHandler(NumericStepper control) : base(control)
         {
         }
 
@@ -247,7 +248,7 @@ namespace GKUI.Platform
         public double Value
         {
             get { return Control.Value; }
-            set { Control.Value = value; }
+            set { Control.Value = (int)value; }
         }
     }
 

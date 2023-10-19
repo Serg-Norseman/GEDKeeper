@@ -726,7 +726,9 @@ namespace GKCore.Controllers
             UpdateSpecials();
 
             // plugins
-            UpdatePlugins();
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                UpdatePlugins();
+            }
         }
 
         public override bool Accept()
@@ -755,7 +757,9 @@ namespace GKCore.Controllers
             AcceptSpecials();
 
             // plugins
-            AcceptPlugins();
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                AcceptPlugins();
+            }
 
             return true;
         }
@@ -952,7 +956,9 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkExtendedKinships").Text = LangMan.LS(LSID.ExtendedKinships);
 
             // Plugins
-            GetControl<ITabPage>("pagePlugins").Text = LangMan.LS(LSID.Plugins);
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<ITabPage>("pagePlugins").Text = LangMan.LS(LSID.Plugins);
+            }
         }
     }
 }
