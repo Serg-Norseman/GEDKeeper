@@ -22,6 +22,7 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Names;
+using GKUI.Platform;
 
 namespace GKUI.Forms
 {
@@ -61,14 +62,11 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            txtName.Behaviors.Add(new NameValidationBehavior());
+            txtFPatr.Behaviors.Add(new NameValidationBehavior());
+            txtMPatr.Behaviors.Add(new NameValidationBehavior());
+
             fController = new NameEditDlgController(this);
         }
-
-        /*private void edName_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyChar == '/') {
-                e.Handled = true;
-            }
-        }*/
     }
 }

@@ -294,12 +294,6 @@ namespace GKUI.Forms
             return fTreeBox;
         }
 
-        public override void ApplyTheme()
-        {
-            base.ApplyTheme();
-            //AppHost.Instance.ApplyTheme(this, MenuPerson);
-        }
-
         #region Interface handlers
 
         private void ToolBar1_ButtonClick(object sender, EventArgs e)
@@ -339,18 +333,6 @@ namespace GKUI.Forms
             switch (e.Key) {
                 case Keys.F5:
                     GenChart();
-                    break;
-
-                case Keys.F6:
-                    miRebuildTree_Click(null, null);
-                    break;
-
-                case Keys.F7:
-                    fTreeBox.RebuildKinships();
-                    break;
-
-                case Keys.Escape:
-                    Close();
                     break;
 
                 case Keys.F:
@@ -687,8 +669,8 @@ namespace GKUI.Forms
                 StatusLines[1] = string.Format(LangMan.LS(LSID.ImageSize), imageSize.Width, imageSize.Height);
                 StatusLines[2] = string.Format("{0}: {1:f0} %", LangMan.LS(LSID.Scale), fTreeBox.Scale * 100);
 
-                /*tbPrev.Enabled = NavCanBackward();
-                tbNext.Enabled = NavCanForward();*/
+                tbPrev.IsEnabled = NavCanBackward();
+                tbNext.IsEnabled = NavCanForward();
 
                 AppHost.Instance.UpdateControls(false, true);
             } catch (Exception ex) {

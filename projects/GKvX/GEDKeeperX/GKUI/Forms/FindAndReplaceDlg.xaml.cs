@@ -46,22 +46,6 @@ namespace GKUI.Forms
             fController.UpdateView();
         }
 
-        /*protected override void OnShown(EventArgs e)
-        {
-            base.OnShown(e);
-            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VBottom);
-        }
-
-        private void Form_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.Key) {
-                case Keys.Escape:
-                    e.Handled = true;
-                    Close();
-                    break;
-            }
-        }*/
-
         private void btnPrev_Click(object sender, EventArgs e)
         {
             fController.Prev();

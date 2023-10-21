@@ -58,9 +58,7 @@ namespace GKUI.Forms
 
         public void SetToolTip(object component, string toolTip)
         {
-            if (component != null && !string.IsNullOrEmpty(toolTip)) {
-                // not supported
-            }
+            // not supported
         }
 
         public void Activate()
@@ -87,17 +85,9 @@ namespace GKUI.Forms
         {
         }
 
-        /*protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            ApplyTheme();
-        }*/
-
         public virtual void ApplyTheme()
         {
-            if (AppHost.Instance != null) {
-                AppHost.Instance.ApplyTheme(this);
-            }
+            // not supported
         }
 
         public virtual bool SkipTheme(IDisposable component)
@@ -143,13 +133,6 @@ namespace GKUI.Forms
         where TController : FormController<TView>
     {
         protected TController fController;
-
-
-        public override void ApplyTheme()
-        {
-            base.ApplyTheme();
-            fController.ApplyTheme();
-        }
     }
 
 
@@ -239,12 +222,6 @@ namespace GKUI.Forms
             base.OnClosing(e);
             e.Cancel = fController.CheckChangesPersistence();
         }*/
-
-        public override void ApplyTheme()
-        {
-            base.ApplyTheme();
-            fController.ApplyTheme();
-        }
     }
 
 
@@ -262,7 +239,7 @@ namespace GKUI.Forms
         public string Title
         {
             get { return string.Empty; }
-            set {  }
+            set { }
         }
 
         public bool Enabled
@@ -299,9 +276,7 @@ namespace GKUI.Forms
 
         public void SetToolTip(object component, string toolTip)
         {
-            if (component != null && !string.IsNullOrEmpty(toolTip)) {
-                // not supported
-            }
+            // not supported
         }
 
         public void Activate()
@@ -340,9 +315,7 @@ namespace GKUI.Forms
 
         public virtual void ApplyTheme()
         {
-            /*if (AppHost.Instance != null) {
-                AppHost.Instance.ApplyTheme(this);
-            }*/
+            // not supported
         }
 
         public virtual bool SkipTheme(IDisposable component)
@@ -403,11 +376,5 @@ namespace GKUI.Forms
             base.OnClosing(e);
             e.Cancel = fController.CheckChangesPersistence();
         }*/
-
-        public override void ApplyTheme()
-        {
-            base.ApplyTheme();
-            fController.ApplyTheme();
-        }
     }
 }

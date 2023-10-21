@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma warning disable CS0618
-
 using System;
 using BSLib.DataViz.TreeMap;
 using GKCore;
@@ -56,10 +54,10 @@ namespace GKUI.Forms
             fController.Init(baseWin);
 
             fDataMap.Model.CreatingItem += fController.DataMap_CreateGroupItem;
-            //fDataMap.MouseDoubleClick += DataMap_DoubleClick;
+            fDataMap.MouseDoubleClick += DataMap_DoubleClick;
             fDataMap.PaintItem += DataMap_PaintItem;
 
-            //tvGroups.MouseDoubleClick += tvGroups_DoubleClick;
+            tvGroups.MouseDoubleClick += tvGroups_DoubleClick;
             gkLogChart1.OnHintRequest += HintRequestEventHandler;
         }
 
@@ -95,10 +93,10 @@ namespace GKUI.Forms
             UpdateTreeMap();
         }
 
-        /*private void tvGroups_DoubleClick(object sender, MouseEventArgs e)
+        private void tvGroups_DoubleClick(object sender, EventArgs e)
         {
-            fController.SelectPerson();
-        }*/
+            //fController.SelectPerson();
+        }
 
         private void HintRequestEventHandler(object sender, HintRequestEventArgs args)
         {
@@ -168,11 +166,11 @@ namespace GKUI.Forms
             }
         }
 
-        /*private void DataMap_DoubleClick(object sender, MouseEventArgs e)
+        private void DataMap_DoubleClick(object sender, EventArgs e)
         {
-            Point mpt = new Point(e.Location);
-            fController.DoubleClickGroupItem(fDataMap.Model, mpt.X, mpt.Y);
-        }*/
+            //Point mpt = new Point(e.Location);
+            //fController.DoubleClickGroupItem(fDataMap.Model, mpt.X, mpt.Y);
+        }
 
         #endregion
     }

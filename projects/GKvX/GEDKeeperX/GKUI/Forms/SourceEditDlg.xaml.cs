@@ -90,8 +90,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
-
             fController = new SourceEditDlgController(this);
             fController.Init(baseWin);
         }

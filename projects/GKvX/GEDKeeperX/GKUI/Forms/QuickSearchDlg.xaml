@@ -6,7 +6,7 @@
 
     <StackLayout Orientation="Vertical" Spacing="8" Padding="8">
         <StackLayout Orientation="Horizontal" Spacing="8">
-            <Entry x:Name="txtSearchPattern" WidthRequest="150" />
+            <Entry x:Name="txtSearchPattern" WidthRequest="150" TextChanged="SearchPattern_TextChanged" />
             <Button x:Name="btnPrev" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_left.gif}" Clicked="FindPrev_Click" />
             <Button x:Name="btnNext" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_right.gif}" Clicked="FindNext_Click" />
         </StackLayout>

@@ -58,8 +58,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //tabsData.PositionChanged += tabControl_SelectedIndexChanged;
-
             fController = new RepositoryEditDlgController(this);
             fController.Init(baseWin);
         }

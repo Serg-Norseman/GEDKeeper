@@ -21,6 +21,10 @@
                     <StackLayout Orientation="Vertical">
 
                         <Grid ColumnSpacing="4" RowSpacing="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
                             <Label x:Name="lblName" Grid.Column="0" Grid.Row="0" />
                             <Entry x:Name="txtName" Grid.Column="1" Grid.Row="0" TextChanged="edName_TextChanged" />
@@ -33,7 +37,7 @@
 
                             <Label x:Name="lblType" Grid.Column="0" Grid.Row="2" />
                             <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="2">
-                                <Picker x:Name="cmbMediaType" />
+                                <Picker x:Name="cmbMediaType" WidthRequest="200" />
                                 <Label x:Name="lblStoreType" />
                                 <Picker x:Name="cmbStoreType" SelectedIndexChanged="cmbStoreType_SelectedIndexChanged" />
                             </StackLayout>

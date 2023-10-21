@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <forms:PrintableForm
-    xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:forms="clr-namespace:GKUI.Forms" xmlns:complat="clr-namespace:GKUI.Platform"
-    x:Class="GKUI.Forms.CircleChartWin"
-    WidthRequest="1020" HeightRequest="760">
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    x:Class="GKUI.Forms.CircleChartWin">
 
-  <!--Form.ToolBar>
+    <forms:PrintableForm.ToolbarItems>
+        <ToolbarItem x:Name="tbImageSave" Order="Primary" Priority="0" IconImageSource="{plat:ImageResourceExt Resources.btn_save_image.gif}" Clicked="tbImageSave_Click" />
+        <ToolbarItem x:Name="tbPrev" Order="Primary" Priority="2" IconImageSource="{plat:ImageResourceExt Resources.btn_left.gif}" Clicked="ToolBar1_ButtonClick" />
+        <ToolbarItem x:Name="tbNext" Order="Primary" Priority="3" IconImageSource="{plat:ImageResourceExt Resources.btn_right.gif}" Clicked="ToolBar1_ButtonClick" />
+        <ToolbarItem x:Name="tbOptions" Order="Primary" Priority="4" IconImageSource="{plat:ImageResourceExt Resources.btn_tools.gif}" Clicked="tbOptions_Click" />
+    </forms:PrintableForm.ToolbarItems>
+
+    <!--Form.ToolBar>
     <ToolBar TextAlign="Right" Style="tbsi">
-      <ButtonToolItem x:Name="tbImageSave" Image="{Resource Resources.btn_save_image.gif, GKCore}" Click="tbImageSave_Click" />
       <SeparatorToolItem />
-      <ButtonToolItem x:Name="tbPrev" Image="{Resource Resources.btn_left.gif, GKCore}" Enabled="False" Click="ToolBar1_ButtonClick" />
-      <ButtonToolItem x:Name="tbNext" Image="{Resource Resources.btn_right.gif, GKCore}" Enabled="False" Click="ToolBar1_ButtonClick" />
       <SeparatorToolItem />
       <ButtonToolItem x:Name="tbDocPreview" Image="{Resource Resources.btn_preview.gif, GKCore}" Click="tbDocPreview_Click" />
       <ButtonToolItem x:Name="tbDocPrint" Image="{Resource Resources.btn_print.gif, GKCore}" Click="tbDocPrint_Click" />
@@ -22,7 +27,6 @@
           </ContextMenu>
         </complat:GKDropDownToolItem.ContextMenu>
       </complat:GKDropDownToolItem>
-      <ButtonToolItem x:Name="tbOptions" Image="{Resource Resources.btn_tools.gif, GKCore}" Click="tbOptions_Click" />
     </ToolBar>
   </Form.ToolBar-->
 

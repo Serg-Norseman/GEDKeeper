@@ -91,8 +91,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
-
             fController = new FamilyEditDlgController(this);
             fController.Init(baseWin);
         }

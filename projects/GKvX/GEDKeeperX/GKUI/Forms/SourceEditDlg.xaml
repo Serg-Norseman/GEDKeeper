@@ -18,6 +18,11 @@
                 <xp:TabItem x:Name="pageCommon">
                     <StackLayout Orientation="Vertical">
                         <Grid ColumnSpacing="4" RowSpacing="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
                             <Label x:Name="lblShortTitle" Grid.Column="0" Grid.Row="0" />
                             <Entry x:Name="txtShortTitle" Grid.Column="1" Grid.Row="0" TextChanged="EditShortTitle_TextChanged" />
 

@@ -13,10 +13,12 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <StackLayout Orientation="Horizontal" Spacing="4" VerticalOptions="Start">
-            <Label x:Name="lblName" />
-            <Entry x:Name="txtName" HorizontalOptions="FillAndExpand" />
-        </StackLayout>
+        <Frame Padding="8" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+            <StackLayout Orientation="Horizontal" Spacing="4">
+                <Label x:Name="lblName" />
+                <Entry x:Name="txtName" HorizontalOptions="FillAndExpand" />
+            </StackLayout>
+        </Frame>
 
         <xp:TabViewControl x:Name="tabsData" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
             <xp:TabViewControl.ItemSource>

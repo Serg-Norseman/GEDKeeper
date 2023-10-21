@@ -80,8 +80,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
-
             fController = new MediaEditDlgController(this);
             fController.Init(baseWin);
         }

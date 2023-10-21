@@ -50,14 +50,6 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
-        /*protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                fController.Clear();
-            }
-            base.Dispose(disposing);
-        }*/
-
         private void btnAnalysePlaces_Click(object sender, EventArgs e)
         {
             fController.CheckPlaces();

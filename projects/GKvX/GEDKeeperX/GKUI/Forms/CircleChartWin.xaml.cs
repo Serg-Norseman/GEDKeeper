@@ -29,7 +29,6 @@ using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKUI.Components;
-using GKUI.Platform;
 
 namespace GKUI.Forms
 {
@@ -71,14 +70,6 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
-        /*protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                fCircleChart.Dispose();
-            }
-            base.Dispose(disposing);
-        }*/
-
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -107,19 +98,14 @@ namespace GKUI.Forms
             GenChart();
         }
 
-        /*private void CircleChartWin_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Keys.Escape) Close();
-        }*/
-
-        /*private void ToolBar1_ButtonClick(object sender, EventArgs e)
+        private void ToolBar1_ButtonClick(object sender, EventArgs e)
         {
             if (sender == tbPrev) {
                 NavPrev();
             } else if (sender == tbNext) {
                 NavNext();
             }
-        }*/
+        }
 
         private void tbImageSave_Click(object sender, EventArgs e)
         {

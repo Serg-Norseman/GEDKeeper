@@ -29,6 +29,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 using GKUI.Components;
+using GKUI.Platform;
 
 namespace GKUI.Forms
 {
@@ -196,7 +197,9 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
+            txtSurname.Behaviors.Add(new NameValidationBehavior());
+            txtName.Behaviors.Add(new NameValidationBehavior());
+            txtMarriedSurname.Behaviors.Add(new NameValidationBehavior());
 
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);
@@ -372,15 +375,6 @@ namespace GKUI.Forms
         {
             fController.DeletePortrait();
         }
-
-        /*private void txtXName_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Keys.Down && e.Control) {
-                UIHelper.ProcessName(sender);
-            } else if (e.KeyChar == '/') {
-                e.Handled = true;
-            }
-        }*/
 
         private void txtXName_Leave(object sender, EventArgs e)
         {

@@ -239,7 +239,7 @@ namespace GKUI.Platform
             container.Register<ICircleChartWin, CircleChartWin>(LifeCycle.Transient);
             container.Register<ICommonFilterDlg, CommonFilterDlg>(LifeCycle.Transient);
             container.Register<ICommunicationEditDlg, CommunicationEditDlg>(LifeCycle.Transient);
-            //container.Register<IDayTipsDlg, DayTipsDlg>(LifeCycle.Transient);
+            container.Register<IDayTipsDlg, DayTipsDlg>(LifeCycle.Transient);
             container.Register<IEventEditDlg, EventEditDlg>(LifeCycle.Transient);
             container.Register<IFamilyEditDlg, FamilyEditDlg>(LifeCycle.Transient);
             container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
@@ -247,7 +247,7 @@ namespace GKUI.Platform
             container.Register<IGroupEditDlg, GroupEditDlg>(LifeCycle.Transient);
             container.Register<ILanguageSelectDlg, LanguageSelectDlg>(LifeCycle.Transient);
             container.Register<ILocationEditDlg, LocationEditDlg>(LifeCycle.Transient);
-            //container.Register<IMapsViewerWin, MapsViewerWin>(LifeCycle.Transient);
+            container.Register<IMapsViewerWin, MapsViewerWin>(LifeCycle.Transient);
             container.Register<IMediaEditDlg, MediaEditDlg>(LifeCycle.Transient);
             container.Register<INameEditDlg, NameEditDlg>(LifeCycle.Transient);
             container.Register<INoteEditDlg, NoteEditDlg>(LifeCycle.Transient);

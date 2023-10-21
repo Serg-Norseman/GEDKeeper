@@ -13,32 +13,24 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+        <Frame Padding="8" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+            <Grid ColumnSpacing="4" RowSpacing="4">
+                <Label x:Name="lblName" Grid.Column="0" Grid.Row="0" />
+                <Entry x:Name="txtName" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="5" />
 
-            <Label x:Name="lblName" Grid.Column="0" Grid.Row="0" />
-            <Entry x:Name="txtName" Grid.Column="1" Grid.Row="0" />
+                <Label x:Name="lblPriority" Grid.Column="0" Grid.Row="1" />
+                <Picker x:Name="cmbPriority" Grid.Column="1" Grid.Row="1" />
+                <Label x:Name="lblStatus" Grid.Column="2" Grid.Row="1" />
+                <Picker x:Name="cmbStatus" Grid.Column="3" Grid.Row="1" />
+                <Label x:Name="lblPercent" Grid.Column="4" Grid.Row="1" />
+                <comcom:NumericStepper x:Name="nudPercent" Increment="5" Grid.Column="5" Grid.Row="1" />
 
-            <Label x:Name="lblPriority" Grid.Column="0" Grid.Row="1" />
-            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
-                <Picker x:Name="cmbPriority" />
-                <Label x:Name="lblStatus" />
-                <Picker x:Name="cmbStatus" />
-                <Label x:Name="lblPercent" />
-                <comcom:NumericStepper x:Name="nudPercent" Increment="5" />
-            </StackLayout>
-
-            <Label x:Name="lblStartDate" Grid.Column="0" Grid.Row="2" />
-            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="2">
-                <comcom:GKDateBox x:Name="txtStartDate" />
-                <Label x:Name="lblStopDate" />
-                <comcom:GKDateBox x:Name="txtStopDate" />
-            </StackLayout>
-
-        </Grid>
+                <Label x:Name="lblStartDate" Grid.Column="0" Grid.Row="2" />
+                <comcom:GKDateBox x:Name="txtStartDate" Grid.Column="1" Grid.Row="2" />
+                <Label x:Name="lblStopDate" Grid.Column="2" Grid.Row="2" />
+                <comcom:GKDateBox x:Name="txtStopDate" Grid.Column="3" Grid.Row="2" />
+            </Grid>
+        </Frame>
 
         <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <xp:TabViewControl.ItemSource>

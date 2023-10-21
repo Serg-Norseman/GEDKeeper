@@ -28,7 +28,7 @@ namespace GKUI.Components
 {
     public class PaintItemEventArgs : EventArgs
     {
-        private SKSurface surface;
+        private readonly SKSurface surface;
         private readonly MapItem item;
 
         public SKSurface Surface
@@ -144,6 +144,8 @@ namespace GKUI.Components
         public event TMHintRequestEventHandler HintRequest;
 
         public event PaintItemEventHandler PaintItem;
+
+        public event EventHandler MouseDoubleClick;
 
 
         public TreeMapViewer()

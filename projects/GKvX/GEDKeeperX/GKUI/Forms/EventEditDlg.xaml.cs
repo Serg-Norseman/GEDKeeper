@@ -95,8 +95,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
-
             fController = new EventEditDlgController(this);
             fController.Init(baseWin);
         }
@@ -105,13 +103,6 @@ namespace GKUI.Forms
         {
             fController.ModifyAddress();
         }
-
-        /*private void EditEventPlace_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Keys.Down && e.Control) {
-                txtEventPlace.Text = txtEventPlace.Text.ToLower();
-            }
-        }*/
 
         private void btnPlaceAdd_Click(object sender, EventArgs e)
         {

@@ -87,29 +87,9 @@ namespace GKUI.Forms
                     var curPage = Application.Current.MainPage;
                     curPage.Navigation.ShowPopup(new LanguageSelectDlg());
                 }),
-                new LaunchItem("Test", "SourceCitEditDlg", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    XFAppHost.GetMainPage().NavigateAsync(new SourceCitEditDlg(baseWin));
-                }),
-                new LaunchItem("Test", "AssociationEditDlg", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    XFAppHost.GetMainPage().NavigateAsync(new AssociationEditDlg(baseWin));
-                }),
-                new LaunchItem("Test", "EventEditDlg", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    XFAppHost.GetMainPage().NavigateAsync(new EventEditDlg(baseWin));
-                }),
                 new LaunchItem("Test", "ParentsEditDlg", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     XFAppHost.GetMainPage().NavigateAsync(new ParentsEditDlg(baseWin));
-                }),
-                new LaunchItem("Test", "PersonalNameEditDlg", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    XFAppHost.GetMainPage().NavigateAsync(new PersonalNameEditDlg(baseWin));
-                }),
-                new LaunchItem("Test", "UserRef", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    XFAppHost.GetMainPage().NavigateAsync(new UserRefEditDlg(baseWin));
                 }),
                 new LaunchItem("Test", "QuickSearch", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
@@ -134,6 +114,10 @@ namespace GKUI.Forms
                 new LaunchItem("Test", "PortraitSelectDlg", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     XFAppHost.GetMainPage().NavigateAsync(new PortraitSelectDlg(baseWin));
+                }),
+                new LaunchItem("Test", "DayTipsDlg", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    XFAppHost.GetMainPage().NavigateAsync(new DayTipsDlg());
                 }),
             };
 

@@ -29,6 +29,8 @@ namespace GKUI.Components
         private ImageBoxSelectionMode fSelectionMode;
 
 
+        public ImageSource Image { get; set; }
+
         public Color ImageBorderColor
         {
             get { return fImageBorderColor; }
@@ -59,6 +61,10 @@ namespace GKUI.Components
 
 
         public ImageBox()
+        {
+        }
+
+        public void ZoomToFit()
         {
         }
     }

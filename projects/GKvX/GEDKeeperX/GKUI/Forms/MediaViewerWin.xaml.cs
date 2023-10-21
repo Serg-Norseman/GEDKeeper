@@ -64,11 +64,11 @@ namespace GKUI.Forms
             if (localizable != null) localizable.SetLocale();
         }
 
-        /*protected override void OnLoad(EventArgs e)
+        protected override void OnAppearing()
         {
-            base.OnLoad(e);
+            base.OnAppearing();
             if (fViewer != null) fViewer.Focus();
-        }*/
+        }
 
         private void MediaViewerWin_FormClosing(object sender, CancelEventArgs e)
         {
@@ -150,9 +150,7 @@ namespace GKUI.Forms
             fViewer = ctl;
             SetLocale();
 
-            //SuspendLayout();
             Content = fViewer;
-            //ResumeLayout();
         }
     }
 }

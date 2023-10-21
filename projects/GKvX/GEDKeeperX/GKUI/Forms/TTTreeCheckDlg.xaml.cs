@@ -48,7 +48,6 @@ namespace GKUI.Forms
         }
 
         /*
-        MouseDoubleClick="ListChecks_DblClick"
         <comcom:GKListView.ContextMenu>
             <ContextMenu Opening="contextMenu_Opening">
                 <ButtonMenuItem x:Name="miDetails" Click="miDetails_Click" />

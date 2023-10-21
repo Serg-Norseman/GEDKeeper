@@ -24,8 +24,6 @@ using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKUI.Components;
-using GKUI.Platform;
-using GKUI.Platform.Handlers;
 
 namespace GKUI.Forms
 {
@@ -42,9 +40,6 @@ namespace GKUI.Forms
         public SlideshowWin(IBaseWindow baseWin)
         {
             InitializeComponent();
-
-            // while using GKButtonToolItem
-            //tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
 
             fController = new SlideshowController(this);
             fController.Init(baseWin);
@@ -68,9 +63,9 @@ namespace GKUI.Forms
 
         public void SetImage(IImage image)
         {
-            /*Image img = (image == null) ? null : ((ImageHandler)image).Handle;
+            var img = (image == null) ? null : ((XFImageHandler)image).Handle;
             fImageCtl.Image = img;
-            fImageCtl.ZoomToFit();*/
+            fImageCtl.ZoomToFit();
         }
 
         private void tsbStart_Click(object sender, EventArgs e)
@@ -78,9 +73,9 @@ namespace GKUI.Forms
             bool active = fController.SwitchActive();
 
             if (active) {
-                //tbStart.IconImageSource = UIHelper.LoadResourceImage("Resources.btn_stop.gif");
+                tbStart.IconImageSource = UIHelper.LoadResourceImage("Resources.btn_stop.gif");
             } else {
-                //tbStart.IconImageSource = UIHelper.LoadResourceImage("Resources.btn_start.gif");
+                tbStart.IconImageSource = UIHelper.LoadResourceImage("Resources.btn_start.gif");
             }
         }
 

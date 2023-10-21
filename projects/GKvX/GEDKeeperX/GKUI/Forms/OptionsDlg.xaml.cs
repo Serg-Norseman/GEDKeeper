@@ -40,13 +40,9 @@ namespace GKUI.Forms
             SetLabelClickEvent(lblUnWifeColor);
             // lblChartFont <- panDefFont_Click
 
-            /*
-            <comcom:GKComboBox x:Name="cmbGeocoder" IsReadOnly="True">
-                <ListItem>Google</ListItem>
-                <ListItem>Yandex</ListItem>
-                <ListItem>OSM</ListItem>
-            </comcom:GKComboBox>
-             */
+            cmbGeocoder.AddItem("Google");
+            cmbGeocoder.AddItem("Yandex");
+            cmbGeocoder.AddItem("OSM");
 
             fController = new OptionsDlgController(this);
 

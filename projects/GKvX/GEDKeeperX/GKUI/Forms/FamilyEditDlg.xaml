@@ -13,31 +13,35 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+        <Frame Padding="8" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+            <Grid ColumnSpacing="4" RowSpacing="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-            <Label x:Name="lblHusband" Grid.Column="0" Grid.Row="0" />
-            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="0">
-                <Entry x:Name="txtHusband" TextChanged="EditSpouse_TextChanged" IsEnabled="False" HorizontalOptions="FillAndExpand" />
-                <Button x:Name="btnHusbandAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" IsEnabled="False" Clicked="btnHusbandAddClick" />
-                <Button x:Name="btnHusbandDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" IsEnabled="False" Clicked="btnHusbandDeleteClick" />
-                <Button x:Name="btnHusbandSel" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_jump.gif}" IsEnabled="False" Clicked="btnHusbandSelClick" />
-            </StackLayout>
+                <Label x:Name="lblHusband" Grid.Column="0" Grid.Row="0" />
+                <Entry x:Name="txtHusband" TextChanged="EditSpouse_TextChanged" IsEnabled="False" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" />
+                <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="3" Grid.Row="0">
+                    <Button x:Name="btnHusbandAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" IsEnabled="False" Clicked="btnHusbandAddClick" />
+                    <Button x:Name="btnHusbandDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" IsEnabled="False" Clicked="btnHusbandDeleteClick" />
+                    <Button x:Name="btnHusbandSel" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_jump.gif}" IsEnabled="False" Clicked="btnHusbandSelClick" />
+                </StackLayout>
 
-            <Label x:Name="lblWife" Grid.Column="0" Grid.Row="1" />
-            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
-                <Entry x:Name="txtWife" TextChanged="EditSpouse_TextChanged" IsEnabled="False" HorizontalOptions="FillAndExpand" />
-                <Button x:Name="btnWifeAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" IsEnabled="False" Clicked="btnWifeAddClick" />
-                <Button x:Name="btnWifeDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" IsEnabled="False" Clicked="btnWifeDeleteClick" />
-                <Button x:Name="btnWifeSel" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_jump.gif}" IsEnabled="False" Clicked="btnWifeSelClick" />
-            </StackLayout>
+                <Label x:Name="lblWife" Grid.Column="0" Grid.Row="1" />
+                <Entry x:Name="txtWife" TextChanged="EditSpouse_TextChanged" IsEnabled="False" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" />
+                <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="3" Grid.Row="1">
+                    <Button x:Name="btnWifeAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" IsEnabled="False" Clicked="btnWifeAddClick" />
+                    <Button x:Name="btnWifeDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" IsEnabled="False" Clicked="btnWifeDeleteClick" />
+                    <Button x:Name="btnWifeSel" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_jump.gif}" IsEnabled="False" Clicked="btnWifeSelClick" />
+                </StackLayout>
 
-            <Label x:Name="lblStatus" Grid.Column="0" Grid.Row="2" />
-            <Picker x:Name="cmbMarriageStatus" Grid.Column="1" Grid.Row="2" />
-        </Grid>
+                <Label x:Name="lblStatus" Grid.Column="0" Grid.Row="2" />
+                <Picker x:Name="cmbMarriageStatus" Grid.Column="1" Grid.Row="2" />
+            </Grid>
+        </Frame>
 
         <xp:TabViewControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <xp:TabViewControl.ItemSource>

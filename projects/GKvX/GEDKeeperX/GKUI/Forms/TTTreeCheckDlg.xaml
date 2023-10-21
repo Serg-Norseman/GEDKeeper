@@ -17,7 +17,7 @@
             <xp:TabViewControl.ItemSource>
                 <xp:TabItem x:Name="pageTreeCheck">
                     <StackLayout Orientation="Vertical" Spacing="8">
-                        <comcom:GKListView x:Name="ListChecks" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+                        <comcom:GKListView x:Name="ListChecks" MouseDoubleClick="ListChecks_DblClick" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
 
                         <StackLayout Spacing="4" Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="FillAndExpand">
                             <Button x:Name="btnAnalyseBase" Style="{StaticResource dlgBtn}" Clicked="btnAnalyseBase_Click" />

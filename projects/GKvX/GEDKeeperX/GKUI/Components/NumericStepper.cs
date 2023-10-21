@@ -24,9 +24,74 @@ namespace GKUI.Components
 {
     public class NumericStepper : ContentView
     {
-        public int Increment { get; set; }
-        public int MinValue { get; set; }
-        public int MaxValue { get; set; }
-        public int Value { get; set; }
+        private readonly Entry fEntry;
+        private readonly Stepper fStepper;
+        private bool fInternalHandler;
+
+
+        public int Increment
+        {
+            get { return (int)fStepper.Increment; }
+            set { fStepper.Increment = value; }
+        }
+
+        public int MinValue
+        {
+            get { return (int)fStepper.Minimum; }
+            set { fStepper.Minimum = value; }
+        }
+
+        public int MaxValue
+        {
+            get { return (int)fStepper.Maximum; }
+            set { fStepper.Maximum = value; }
+        }
+
+        public int Value
+        {
+            get { return (int)fStepper.Value; }
+            set { fStepper.Value = value; }
+        }
+
+
+        public NumericStepper()
+        {
+            fEntry = new Entry();
+            fEntry.HorizontalOptions = LayoutOptions.StartAndExpand;
+            fEntry.TextChanged += OnTextChanged;
+            fEntry.Keyboard = Keyboard.Numeric;
+            fEntry.WidthRequest = 60;
+            fEntry.HorizontalTextAlignment = TextAlignment.End;
+
+            fStepper = new Stepper();
+            fStepper.HorizontalOptions = LayoutOptions.End;
+            fStepper.ValueChanged += OnValueChanged;
+
+            Content = new StackLayout() {
+                Orientation = StackOrientation.Horizontal,
+                Spacing = 0,
+                Children = { fEntry, fStepper }
+            };
+
+            fInternalHandler = false;
+        }
+
+        private void OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!fInternalHandler && int.TryParse(e.NewTextValue, out int val)) {
+                fInternalHandler = true;
+                fStepper.Value = val;
+                fInternalHandler = false;
+            }
+        }
+
+        private void OnValueChanged(object sender, ValueChangedEventArgs e)
+        {
+            if (!fInternalHandler) {
+                fInternalHandler = true;
+                fEntry.Text = ((int)e.NewValue).ToString();
+                fInternalHandler = false;
+            }
+        }
     }
 }

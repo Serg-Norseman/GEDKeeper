@@ -14,8 +14,8 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <Frame>
-            <StackLayout Orientation="Horizontal">
+        <Frame Padding="8">
+            <StackLayout Orientation="Horizontal" Spacing="4" Padding="0">
                 <Grid x:Name="personLayout" ColumnSpacing="4" RowSpacing="4" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                     <Label x:Name="lblSurname" Grid.Column="0" Grid.Row="0" />
                     <Entry x:Name="txtSurname" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="0" />
@@ -55,7 +55,7 @@
             </StackLayout>
         </Frame>
 
-        <Frame>
+        <Frame Padding="8">
             <Grid x:Name="parentsTab" ColumnSpacing="4" RowSpacing="4">
                 <Label x:Name="lblParents" Grid.Column="0" Grid.Row="0" />
                 <Entry x:Name="txtFather" IsEnabled="False" WidthRequest="100" Grid.Column="1" Grid.Row="0" />

@@ -19,60 +19,57 @@
  */
 
 using System;
+using BSLib;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 
 namespace GKUI.Forms
 {
-    public sealed partial class QuickSearchDlg : CommonForm, IQuickSearchDlg
+    public partial class DayTipsDlg : CommonDialog, IDayTipsDlg
     {
-        private readonly QuickSearchDlgController fController;
+        private readonly DayTipsDlgController fController;
 
-        public IWindow OwnerWindow
+        public bool ShowTipsChecked
         {
-            get { return fController.WorkWindow; }
+            get { return chkShow.IsChecked; }
+            set { chkShow.IsChecked = value; }
         }
 
         #region View Interface
 
-        ITextBox IQuickSearchDlg.SearchPattern
+        ILabel IDayTipsDlg.TitleLabel
         {
-            get { return GetControlHandler<ITextBox>(txtSearchPattern); }
+            get { return GetControlHandler<ILabel>(lblTitle); }
+        }
+
+        ITextContainer IDayTipsDlg.TipText
+        {
+            get { return GetControlHandler<ITextContainer>(txtTip); }
+        }
+
+        IButton IDayTipsDlg.NextButton
+        {
+            get { return GetControlHandler<IButton>(btnNextTip); }
         }
 
         #endregion
 
-        public QuickSearchDlg() : this(null)
-        {
-        }
-
-        public QuickSearchDlg(IWorkWindow workWindow)
+        public DayTipsDlg()
         {
             InitializeComponent();
 
-            fController = new QuickSearchDlgController(this, workWindow);
+            fController = new DayTipsDlgController(this);
         }
 
-        private void SearchPattern_TextChanged(object sender, EventArgs e)
+        private void btnNextTip_Click(object sender, EventArgs e)
         {
-            fController.ChangeText();
+            fController.GetNextTip();
         }
 
-        private void FindNext_Click(object sender, EventArgs e)
+        public void Init(string caption, bool showTipsChecked, StringList tips)
         {
-            fController.FindNext();
-        }
-
-        private void FindPrev_Click(object sender, EventArgs e)
-        {
-            fController.FindPrev();
-        }
-
-        public void SetLocale()
-        {
-            fController.SetLocale();
+            fController.InitTips(caption, showTipsChecked, tips);
         }
     }
 }

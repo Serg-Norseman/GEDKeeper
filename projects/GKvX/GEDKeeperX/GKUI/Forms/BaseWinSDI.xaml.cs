@@ -124,7 +124,7 @@ namespace GKUI.Forms
 
             var recView = new GKListView();
             //recView.AllowMultipleSelection = true;
-            //recView.MouseDoubleClick += miRecordEdit_Click;
+            recView.MouseDoubleClick += miRecordEdit_Click;
             recView.ItemSelected += List_SelectedIndexChanged;
             //recView.ContextMenu = contextMenu;
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);

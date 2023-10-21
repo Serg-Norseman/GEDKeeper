@@ -86,13 +86,6 @@ namespace GKUI.Forms
             // <comcom:GKListView x:Name="ListGeoCoords" MouseDown="ListGeoCoords_Click" />
         }
 
-        /*private void EditName_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Keys.Down && e.Control) {
-                txtName.Text = txtName.Text.ToLower();
-            }
-        }*/
-
         private void btnSearch_Click(object sender, EventArgs e)
         {
             fController.Search();

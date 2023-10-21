@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -143,6 +144,36 @@ namespace GKUI.Platform
 
         public void StepTo(int value)
         {
+        }
+    }
+
+
+    public class NameValidationBehavior : Behavior<Entry>
+    {
+        //Here we have added the characters we wanted to restrict while entering data
+        private const string SpecialCharacters = @"'/\%*‘;$£&#^@|?+=<>\""";
+
+        protected override void OnAttachedTo(Entry entry)
+        {
+            entry.TextChanged += OnEntryTextChanged;
+            base.OnAttachedTo(entry);
+        }
+
+        protected override void OnDetachingFrom(Entry entry)
+        {
+            entry.TextChanged -= OnEntryTextChanged;
+            base.OnDetachingFrom(entry);
+        }
+
+        private static void OnEntryTextChanged(object sender, TextChangedEventArgs args)
+        {
+            string newText = args.NewTextValue;
+
+            if (!string.IsNullOrWhiteSpace(newText)) {
+                bool isValid = newText.ToCharArray().All(x => !SpecialCharacters.Contains(x));
+
+                ((Entry)sender).Text = isValid ? newText : newText.Remove(newText.Length - 1);
+            }
         }
     }
 }

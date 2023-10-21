@@ -13,21 +13,23 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+        <Frame Padding="8" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+            <Grid ColumnSpacing="4" RowSpacing="4">
 
-            <Label x:Name="lblGoal" Grid.Column="0" Grid.Row="0" />
-            <Picker x:Name="cmbGoalType" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" SelectedIndexChanged="cmbGoalType_SelectedIndexChanged" />
-            <Entry x:Name="txtGoal" IsReadOnly="True" Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="2" />
-            <Button x:Name="btnGoalSelect" Style="{StaticResource iconBtn}" Grid.Column="5" Grid.Row="0" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnGoalSelect_Click" />
+                <Label x:Name="lblGoal" Grid.Column="0" Grid.Row="0" />
+                <Picker x:Name="cmbGoalType" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" SelectedIndexChanged="cmbGoalType_SelectedIndexChanged" />
+                <Entry x:Name="txtGoal" IsReadOnly="True" Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="2" />
+                <Button x:Name="btnGoalSelect" Style="{StaticResource iconBtn}" Grid.Column="5" Grid.Row="0" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnGoalSelect_Click" />
 
-            <Label x:Name="lblPriority" Grid.Column="0" Grid.Row="1" />
-            <Picker x:Name="txtPriority" Grid.Column="1" Grid.Row="1" />
-            <Label x:Name="lblStartDate" Grid.Column="2" Grid.Row="1" />
-            <comcom:GKDateBox x:Name="txtStartDate" MinimumWidthRequest="100" Grid.Column="3" Grid.Row="1" />
-            <Label x:Name="lblStopDate" Grid.Column="4" Grid.Row="1" />
-            <comcom:GKDateBox x:Name="txtStopDate" MinimumWidthRequest="100" Grid.Column="5" Grid.Row="1" />
+                <Label x:Name="lblPriority" Grid.Column="0" Grid.Row="1" />
+                <Picker x:Name="txtPriority" Grid.Column="1" Grid.Row="1" />
+                <Label x:Name="lblStartDate" Grid.Column="2" Grid.Row="1" />
+                <comcom:GKDateBox x:Name="txtStartDate" MinimumWidthRequest="100" Grid.Column="3" Grid.Row="1" />
+                <Label x:Name="lblStopDate" Grid.Column="4" Grid.Row="1" />
+                <comcom:GKDateBox x:Name="txtStopDate" MinimumWidthRequest="100" Grid.Column="5" Grid.Row="1" />
 
-        </Grid>
+            </Grid>
+        </Frame>
 
         <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <xp:TabViewControl.ItemSource>

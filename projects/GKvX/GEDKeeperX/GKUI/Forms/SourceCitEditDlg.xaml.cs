@@ -77,12 +77,7 @@ namespace GKUI.Forms
             fController.AddSource();
         }
 
-        /*private void cbSource_KeyDown(object sender, KeyEventArgs e)
-        {
-            // dummy
-        }
-
-        private void cbSource_KeyUp(object sender, KeyEventArgs e)
+        /*private void cbSource_KeyUp(object sender, KeyEventArgs e)
         {
             fController.RefreshSourcesList(cmbSource.Text);
             //cmbSource.SelectionStart = cmbSource.Text.Length;

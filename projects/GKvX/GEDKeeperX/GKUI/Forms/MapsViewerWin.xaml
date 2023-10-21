@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonWindow
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    x:Class="GKUI.Forms.MapsViewerWin">
+
+    <!--Form.ToolBar>
+        <ToolBar TextAlign="Right" Style="tbsi">
+            <ButtonToolItem x:Name="tbLoadPlaces" Click="tbLoadPlaces_Click" />
+            <SeparatorToolItem />
+            <ButtonToolItem x:Name="tbSaveSnapshot" Image="{Resource Resources.btn_save_image.gif, GKCore}" Click="tbSaveSnapshot_Click" />
+            <SeparatorToolItem />
+
+            <complat:GKDropDownToolItem x:Name="tbProviders">
+                <complat:GKDropDownToolItem.ContextMenu>
+                    <ContextMenu x:Name="MenuProviders">
+                    </ContextMenu>
+                </complat:GKDropDownToolItem.ContextMenu>
+            </complat:GKDropDownToolItem>
+
+            <SeparatorToolItem />
+            <ButtonToolItem x:Name="tbClear" Click="tbClear_Click" />
+            <ButtonToolItem x:Name="tbZoomCenter" Text="Zoom Center" Click="tbZoomCenter_Click" />
+        </ToolBar>
+    </Form.ToolBar-->
+
+    <StackLayout Orientation="Horizontal">
+        <xp:TabViewControl x:Name="PageControl1">
+            <xp:TabViewControl.ItemSource>
+                <xp:TabItem x:Name="pagePlaces">
+                    <StackLayout Spacing="4">
+                        <comcom:GroupBox x:Name="grpSelection" VerticalOptions="Start">
+                            <input:RadioButtonGroupView>
+                                <input:RadioButton x:Name="radTotal" Checked="radTotal_Click" />
+                                <input:CheckBox x:Name="chkBirth" />
+                                <input:CheckBox x:Name="chkDeath" />
+                                <input:CheckBox x:Name="chkResidence" />
+                                <input:RadioButton x:Name="radSelected" Checked="radTotal_Click" />
+                                <comcom:GKComboBox x:Name="cmbPersons" />
+                                <input:CheckBox x:Name="chkLinesVisible" IsChecked="True" />
+                                <Button x:Name="btnSelectPlaces" IsEnabled="False" Clicked="btnSelectPlaces_Click" />
+                            </input:RadioButtonGroupView>
+                        </comcom:GroupBox>
+
+                        <comcom:TreeView x:Name="tvPlaces" MouseDoubleClick="TreePlaces_DoubleClick" VerticalOptions="FillAndExpand" />
+                    </StackLayout>
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageCoordinates">
+                    <StackLayout>
+                        <comcom:GroupBox x:Name="gbCoords">
+                            <Grid ColumnSpacing="4" RowSpacing="4">
+                                <Label x:Name="lblPlace" Grid.Column="0" Grid.Row="0" Text="place" />
+                                <Entry x:Name="txtPlace" Grid.Column="1" Grid.Row="0" />
+
+                                <Label x:Name="lblLat" Grid.Column="0" Grid.Row="1" Text="lat" />
+                                <Entry x:Name="txtLat" Grid.Column="1" Grid.Row="1" />
+
+                                <Label x:Name="lblLng" Grid.Column="0" Grid.Row="2" Text="lng" />
+                                <Entry x:Name="txtLng" Grid.Column="1" Grid.Row="2" />
+                            </Grid>
+                        </comcom:GroupBox>
+
+                        <Button x:Name="btnSearch" Clicked="btnSearch_Click" />
+                        <Button x:Name="btnAddRouteMarker" Clicked="btnAddRouteMarker_Click" Text="Add Route Marker" />
+                        <Button x:Name="btnAddPolygonMarker" Clicked="btnAddPolygonMarker_Click" Text="Add Polygon Marker" />
+                    </StackLayout>
+                </xp:TabItem>
+            </xp:TabViewControl.ItemSource>
+        </xp:TabViewControl>
+
+        <StackLayout Orientation="Horizontal" Spacing="4">
+            <comcom:GKMapBrowser x:Name="fMapBrowser" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+
+            <StackLayout Orientation="Vertical">
+                <Button x:Name="btnZoomUp" WidthRequest="32" Clicked="btnZoomUp_Click" VerticalOptions="Start" Text="+" />
+                <Slider x:Name="trkZoom" ValueChanged="trkZoom_ValueChanged" VerticalOptions="FillAndExpand" />
+                <Button x:Name="btnZoomDown" WidthRequest="32" Clicked="btnZoomDown_Click" VerticalOptions="End" Text="-" />
+            </StackLayout>
+        </StackLayout>
+    </StackLayout>
+
+</forms:CommonWindow>

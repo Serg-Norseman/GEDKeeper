@@ -25,6 +25,7 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKUI.Components;
+using GKUI.Platform;
 
 namespace GKUI.Forms
 {
@@ -105,18 +106,14 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            txtSurname.Behaviors.Add(new NameValidationBehavior());
+            txtMarriedSurname.Behaviors.Add(new NameValidationBehavior());
+            txtName.Behaviors.Add(new NameValidationBehavior());
+            txtPatronymic.Behaviors.Add(new NameValidationBehavior());
+
             fController = new PersonalNameEditDlgController(this);
             fController.Init(baseWin);
         }
-
-        /*private void edName_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Keys.Down && e.Control) {
-                UIHelper.ProcessName(sender);
-            } else if (e.KeyChar == '/') {
-                e.Handled = true;
-            }
-        }*/
 
         private void txtXName_Leave(object sender, EventArgs e)
         {

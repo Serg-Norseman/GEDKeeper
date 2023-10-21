@@ -40,5 +40,9 @@ namespace GKUI.Components
         }
 
         public event EventHandler SelectedIndexChanged;
+
+        public void AddItem(string text)
+        {
+        }
     }
 }
