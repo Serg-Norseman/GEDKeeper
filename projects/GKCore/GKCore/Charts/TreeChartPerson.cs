@@ -52,7 +52,7 @@ namespace GKCore.Charts
         pfHasInvAnc, pfHasInvDesc, // invisible flags
         pfSpecialMark, // debug flag for special goals
         pfOutsideKin, pfCanExpand, pfAdopted,
-        pfRootSpouse
+        pfRootSpouse, pfBookmark
     }
 
     /// <summary>
@@ -374,6 +374,8 @@ namespace GKCore.Charts
                             }
                         }
                     }
+
+                    SetFlag(PersonFlag.pfBookmark, iRec.Bookmark);
 
                     CertaintyAssessment = GKUtils.GetCertaintyAssessment(iRec);
                 } else {

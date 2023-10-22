@@ -88,6 +88,7 @@ namespace GKCore.Charts
 #else
         private TreeChartDesk fDesk;
 #endif
+        private IImage fBookmarkPic;
         private IImage fExpPic;
         private IImage fInfoPic;
         private IImage fPersExpPic;
@@ -316,6 +317,7 @@ namespace GKCore.Charts
                 fExpPic = PrepareImage(renderer, "btn_expand.gif", true);
                 fPersExpPic = PrepareImage(renderer, "btn_expand2.gif", true);
                 fInfoPic = PrepareImage(renderer, "btn_info.gif", true);
+                fBookmarkPic = PrepareImage(renderer, "tg_bookmark.png", false);
             } catch (Exception ex) {
                 Logger.WriteError("TreeChartModel.InitSigns()", ex);
             }
@@ -339,6 +341,7 @@ namespace GKCore.Charts
             fDottedLinePen = sourceModel.fDottedLinePen;
             fDottedDecorativeLinePen = sourceModel.fDottedDecorativeLinePen;
             fDrawFont = sourceModel.fDrawFont;
+            fBookmarkPic = sourceModel.fBookmarkPic;
             fExpPic = sourceModel.fExpPic;
             fPersExpPic = sourceModel.fPersExpPic;
             fInfoPic = sourceModel.fInfoPic;
@@ -1806,9 +1809,14 @@ namespace GKCore.Charts
                         fRenderer.DrawImage(fPersExpPic, expRt.Left, expRt.Top, string.Empty);
                     }
 
+                    ExtRect infoRt = GetInfoRect(brt);
+
                     if (person.Selected) {
-                        ExtRect infoRt = GetInfoRect(brt);
                         fRenderer.DrawImage(fInfoPic, infoRt.Left, infoRt.Top, string.Empty);
+                    }
+
+                    if (person.HasFlag(PersonFlag.pfBookmark)) {
+                        fRenderer.DrawImage(fBookmarkPic, infoRt.Left - 16, infoRt.Top, string.Empty);
                     }
                 }
             } catch (Exception ex) {

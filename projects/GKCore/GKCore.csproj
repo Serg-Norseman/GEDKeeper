@@ -609,6 +609,7 @@
     <EmbeddedResource Include="Resources\btn_volume_mute.png" />
     <EmbeddedResource Include="Resources\pnl_video.png" />
     <EmbeddedResource Include="Resources\btn_info.gif" />
+    <EmbeddedResource Include="Resources\tg_bookmark.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
