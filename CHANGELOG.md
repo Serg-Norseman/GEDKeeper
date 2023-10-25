@@ -1,4 +1,19 @@
 ## 28.10.2023 [v2.28.0 &amp; v3.4.0]
+- Updated Hungarian, German and Icelandic localizations.
+- Added display of person bookmarks in tree diagrams.
+- Added localization into Dutch [Leo Krap].
+- Added separate options for selecting the numbering of ascending and descending pedigrees.
+- Added indistinct matching feature to record filtering.
+- Added filter to manage places dialog.
+- Added place substitution from the input field of the event editing dialog to the adding/selecting record dialog.
+- Added sorting of languages by frequency of use in the dialog for editing personal names.
+- Added options for using surnames and dates of birth of children in the parent selection dialog filter (or parents in the children selection filter).
+- Added a check to add the person himself as a parent.
+- Added report "Record card".
+- Added the feature to copy the text of an record from the info panel.
+- Fixed selection of background image file for tree diagram.
+- Fixed file viewing in media edit dialog.
+- Added conversion from _FSFTID (FamilSearch Family Tree ID) to RFN (from RootsMagic files).
 
 ## 28.08.2023 [v2.27.0 &amp; v3.3.0]
 - Fixed error sending mail in Linux.

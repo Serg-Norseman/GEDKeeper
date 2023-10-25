@@ -47,18 +47,9 @@ namespace GKFlowInputPlugin
             fBase = baseWin;
             fFlowInput = new FlowInput(plugin, baseWin);
 
-            cbEventType.Items.AddRange(new object[] {
-                                           fPlugin.LangMan.LS(PLS.Birth),
-                                           fPlugin.LangMan.LS(PLS.Death),
-                                           fPlugin.LangMan.LS(PLS.Marriage) });
-
             InitGrid(dataGridView1);
             InitSimpleControls();
             InitSourceControls();
-
-            for (PersonLink pl = PersonLink.plPerson; pl <= PersonLink.plChild; pl++) {
-                cbPersonLink.Items.Add(fLangMan.LS(FlowInput.PersonLinks[(int)pl]));
-            }
 
             SetLocale();
         }
@@ -91,6 +82,15 @@ namespace GKFlowInputPlugin
 
             rbSK_Rev.Text = fLangMan.LS(PLS.SK_Rev);
             rbSK_Met.Text = fLangMan.LS(PLS.SK_Met);
+
+            cbEventType.Items.AddRange(new object[] {
+                                           fPlugin.LangMan.LS(PLS.Birth),
+                                           fPlugin.LangMan.LS(PLS.Death),
+                                           fPlugin.LangMan.LS(PLS.Marriage) });
+
+            for (PersonLink pl = PersonLink.plPerson; pl <= PersonLink.plChild; pl++) {
+                cbPersonLink.Items.Add(fLangMan.LS(FlowInput.PersonLinks[(int)pl]));
+            }
         }
 
         #region Parse functions

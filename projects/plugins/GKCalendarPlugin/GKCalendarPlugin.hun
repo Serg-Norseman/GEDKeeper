@@ -1,0 +1,32 @@
+;1038,hun,Magyar
+01=Naptár
+02=Dátum
+03=Gregorián
+04=Julián
+05=Héber
+06=Iszlám
+07=Perzsa
+08=Indiai
+09=Bahai
+10=Január|Február|Március|Április|Május|Június|Július|Augusztus|Szeptember|Október|November|December ; Bahai Months
+11=Hétfő|Kedd|Szerda|Csütörtök|Péntek|Szombat|Vasárnap ; Bahai Weekdays
+12=Január|Február|Március|Április|Május|Június|Július|Augusztus|Szeptember|Október|November|December ; Classic Months
+13=Hétfő|Kedd|Szerda|Csütörtök|Péntek|Szombat|Vasárnap ; Classic Weekdays
+14=Január|Február|Március|Április|Május|Június|Július|Augusztus|Szeptember|Október|November|December ; Hebrew Months
+15=Hétfő|Kedd|Szerda|Csütörtök|Péntek|Szombat|Vasárnap ; Hebrew Weekdays
+16=Január|Február|Március|Április|Május|Június|Július|Augusztus|Szeptember|Október|November|December ; Indian Civil Months
+17=Hétfő|Kedd|Szerda|Csütörtök|Péntek|Szombat|Vasárnap ; Indian Civil Weekdays
+18=Január|Február|Március|Április|Május|Június|Július|Augusztus|Szeptember|Október|November|December ; Islamic Months
+19=Hétfő|Kedd|Szerda|Csütörtök|Péntek|Szombat|Vasárnap ; Islamic Weekdays
+20=Január|Február|Március|Április|Május|Június|Július|Augusztus|Szeptember|Október|November|December ; Persian Months
+21=Hétfő|Kedd|Szerda|Csütörtök|Péntek|Szombat|Vasárnap ; Persian Weekdays
+22=Bahá'í naptár'{0}, Váhid {1} ; Bahai Cycles
+23=Bizánci
+24=Január|Február|Március|Április|Május|Június|Július|Augusztus|Szeptember|Október|November|December ; Byzantine Months
+25=Nap
+26=Hónap
+27=Év
+28=Forrás dátuma
+29=Dátum átváltása
+
+

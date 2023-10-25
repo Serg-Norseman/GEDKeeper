@@ -25,14 +25,14 @@
 024=Stammbaum der Vorfahren
 025=Stammbaum der Nachkommen
 026=Vollständiger Stammbaum
-027=Nachkommenliste (D'Aboville)
-028=Nachkommenliste (Konowalow)
+027=Nachkommenliste
+028=<?>
 029=Karten
 030=Statistiken
 031=Ahnenliste
-032=<?>
-033=<?>
-034=<?>
+032=d'Aboville
+033=Kobrin-Konovalov
+034=Sosa-Stradonitz
 035=Adressbuch
 036=Skripte...
 037=<?>
@@ -595,7 +595,7 @@
 594=Durchschnittsalter der Eltern bei erster Kindsgeburt im Verhältnis zum Alter der Eltern
 595=Durchschnittsalter der Eltern bei erster Kindsgeburt im Verhältnis zum Alter der Kinder
 596=Familiendatensatz ist leer
-597=Jede Dateiversion speichern
+597=Jede Dateiversion sichern
 598=Laden
 599=Fehler beim Speichern der Datei "{0}"{1}.
 600=Hintergrundfarbe...
@@ -662,8 +662,8 @@
 661=Stammbaum der Nachkommen anzeigen
 662=Stammbaum vollständig anzeigen
 663=Nachkommenlisten
-664=Nachkommenlisten (D'Aboville)
-665=Nachkommenlisten (Konowalow)
+664=Aufsteigende Nummerierung
+665=Absteigende Nummerierung
 666=Statistiken
 667=Bild speichern
 668=Anzeigemodus
@@ -937,3 +937,6 @@
 930=[Neunter|Neunte]
 
 931=Erweiterte Definition von Verwandtschaft
+932=Verwende Nachnamen im Filter für Personen
+933=Verwende Geburtsdaten im Filter für Personen
+934=Wert der Tatsache ist leer oder ungültig

@@ -93,6 +93,7 @@ namespace GKUI.Components
             fGridView.Margin = new Padding(2);
             fGridView.MultiSelect = false;
             fGridView.RowHeadersVisible = false;
+            fGridView.Name = "dataGridView1";
 
             fListMan = listMan;
             fFields = fListMan.CreateFields();

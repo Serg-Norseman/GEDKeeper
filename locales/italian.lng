@@ -25,14 +25,14 @@
 024=Albero genealogico
 025=Albero dei discendenti
 026=Albero completo
-027=d'Aboville pedigree discendente
-028=Konovalov pedigree discendente
+027=Descending pedigree
+028=<?>
 029=Mappe
 030=Statistiche
 031=Pedigree degli ascendenti
-032=<?>
-033=<?>
-034=<?>
+032=d'Aboville
+033=Kobrin-Konovalov
+034=Sosa-Stradonitz
 035=Organizer
 036=Scripts...
 037=<?>
@@ -662,8 +662,8 @@
 661=Mostra un albero genealogico dei discendenti
 662=Mostra l’albero genealogico completo
 663=Pedigree
-664=Pedigree secondo d'Aboville
-665=Pedigree secondo Konovalov
+664=Ascend numbering
+665=Descend numbering
 666=Analisi statistica dei dati
 667=Salva l‘immagine
 668=Modalità di visualizzazione
@@ -937,3 +937,6 @@
 930=ninth
 
 931=Extended definition of kinship
+932=Use surnames in person selection filter
+933=Use dates of birth in person selection filter
+934=Fact value is empty or invalid

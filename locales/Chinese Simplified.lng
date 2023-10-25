@@ -25,14 +25,14 @@
 024=前辈树
 025=后代树
 026=完整树
-027=生成迪氏谱
-028=生成科氏谱
+027=Descending pedigree
+028=<?>
 029=地图
 030=统计
 031=前辈
-032=<?>
-033=<?>
-034=<?>
+032=d'Aboville
+033=Kobrin-Konovalov
+034=Sosa-Stradonitz
 035=组织者
 036=脚本...
 037=<?>
@@ -662,8 +662,8 @@
 661=显示后代树
 662=显示完整树
 663=家谱
-664=迪氏谱
-665=科氏谱
+664=Ascend numbering
+665=Descend numbering
 666=统计分析
 667=保存此图片
 668=展示模式
@@ -937,3 +937,6 @@
 930=ninth
 
 931=Extended definition of kinship
+932=Use surnames in person selection filter
+933=Use dates of birth in person selection filter
+934=Fact value is empty or invalid

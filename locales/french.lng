@@ -25,14 +25,14 @@
 024=Arbre d'ancêtres
 025=Arbre de descendants
 026=Arbre complet
-027=Pedigree descendant selon D'Aboville
-028=Pedigree descendant selon Konovalov
+027=Descending pedigree
+028=<?>
 029=Cartes
 030=Statistiques
 031=Ascendant pedigree
-032=<?>
-033=<?>
-034=<?>
+032=d'Aboville
+033=Kobrin-Konovalov
+034=Sosa-Stradonitz
 035=Agenda
 036=Scripts...
 037=<?>
@@ -635,7 +635,7 @@
 634=Le post suivant
 635=Generation a échoué
 636=Début
-637=Stop
+637=Arrêter
 638=Demographie
 639=Noms
 640=Faux nom
@@ -662,8 +662,8 @@
 661=Montrer un arbre de descendants
 662=Afficher l'arbre complet
 663=Pedigree
-664=Pedigree par d'Aboville
-665=Pedigree par Konovalov
+664=Ascend numbering
+665=Descend numbering
 666=Analyse statistique des données
 667=Enregistrer l'image
 668=Modes d'affichage
@@ -794,7 +794,7 @@
 793=Fichier "{0}" introuvable
 794=Autoriser les références relatives aux fichiers multimédia
 795=Type de stockage par défaut
-796=Allow deleting media files from storage and archive
+796=Autoriser la suppression des fichiers multimédias du stockage et des archives
 797=Allow deleting media files by direct and relative references
 798=Supprimer les fichiers multimédia sans confirmation
 799=Enregistrement multimédia sans fichiers
@@ -828,12 +828,12 @@
 824=Bar-mitsvah
 825=Bat-mitsvah
 826=Blessing
-827=Adult christening
+827=Baptême d'adulte
 828=Confirmation
 829=Première communion
 830=Ordination
-831=Restriction geo search by country
-832=Separate depth
+831=Restreindre la recherche géographique sur un pays
+832=Distinguer les profondeurs
 833=Ancêtres
 834=Aucune correspondance trouvée
 835=Short kinship form
@@ -846,7 +846,7 @@
 842=Only locality
 843=Go to the primary branch
 844=Minimizing width
-845={0}. Continuer ?
+845={0}. Continuer?
 846=Indiquer âge
 847=Nom de famille en majuscules
 848=|Fichiers SVG (*.svg)|*.svg
@@ -937,3 +937,6 @@
 930=neuvième
 
 931=Définition étendue de la parenté
+932=Use surnames in person selection filter
+933=Use dates of birth in person selection filter
+934=Fact value is empty or invalid

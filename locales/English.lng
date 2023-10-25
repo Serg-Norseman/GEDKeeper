@@ -595,7 +595,7 @@
 594=Average age of parents at the time the first-born appeared, relative to parents' age
 595=Average age of parents at the time the first-born appeared, relative to children's age
 596=Empty family record
-597=backup each file revision
+597=each file revision
 598=Loading
 599=File saving error "{0}"{1}.
 600=Background color...
@@ -782,7 +782,7 @@
 781=Adopted
 782=Birth
 783=Foster
-784=Detect Charset at load
+784=Detect Charset on load
 785=Linkage type
 786=Was born			; fact for male subject
 787=Was born			; fact for female subject

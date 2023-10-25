@@ -25,14 +25,14 @@
 024=Ancestors tree
 025=Descendants tree
 026=Complete tree
-027=d'Aboville descending pedigree
-028=Konovalov descending pedigree
+027=Descending pedigree
+028=<?>
 029=Mapas
 030=Estadísticas
 031=Ascending pedigree
-032=<?>
-033=<?>
-034=<?>
+032=d'Aboville
+033=Kobrin-Konovalov
+034=Sosa-Stradonitz
 035=Organizer
 036=Scripts...
 037=<?>
@@ -595,7 +595,7 @@
 594=Average age of parents at the time the first-born appeared, relative to parents' age
 595=Average age of parents at the time the first-born appeared, relative to children's age
 596=Empty family record
-597=backup each file revision
+597=each file revision
 598=Loading
 599=File saving error "{0}"{1}.
 600=Background color...
@@ -662,8 +662,8 @@
 661=Show a tree of descendants
 662=Show full tree
 663=Pedigree
-664=Pedigree by d'Aboville
-665=Pedigree by Konovalov
+664=Ascend numbering
+665=Descend numbering
 666=Statistical analysis of data
 667=Save the image
 668=Display modes
@@ -782,7 +782,7 @@
 781=Adopted
 782=Birth
 783=Foster
-784=Detect Charset at load
+784=Detect Charset on load
 785=Linkage type
 786=Was born
 787=Was born
@@ -937,3 +937,6 @@
 930=ninth
 
 931=Extended definition of kinship
+932=Use surnames in person selection filter
+933=Use dates of birth in person selection filter
+934=Fact value is empty or invalid

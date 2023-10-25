@@ -22,6 +22,7 @@ using System;
 using BSLib;
 using GDModel.Providers.GEDCOM;
 using GKTests;
+using GKTests.Stubs;
 using NUnit.Framework;
 
 namespace GDModel
@@ -32,6 +33,7 @@ namespace GDModel
         public GDMAddressTests()
         {
             TestUtils.InitGEDCOMProviderTest();
+            AppHostStub.ConfigureBootstrap();
         }
 
         [Test]

@@ -35,6 +35,7 @@ namespace GKFlowInputPlugin
     public class FITestLangMan : ILangMan
     {
         private static readonly string[] LSDefList = new string[] {
+            "",
             "Stream input...",
             "Male",
             "Female",

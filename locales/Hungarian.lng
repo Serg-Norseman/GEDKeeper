@@ -1,16 +1,16 @@
 ;1038,hun,Magyar
 001=Fájl
 002=Szerkesztés
-003=Származás
+003=Családfa
 004=Szolgáltatás
 005=Ablakok
 006=Segítség
 007=Új
-008=Nyitás...
-009=Újranyitás
+008=Megnyitás...
+009=Újbóli megnyitás
 010=Mentés
 011=Bezár
-012=Tulajdonság
+012=Tulajdonságok
 013=Kivitel
 014=Családi könyv...
 015=Mentés másképpen...
@@ -25,14 +25,14 @@
 024=Ős fa
 025=Leszármazotti fa
 026=Teljes fa
-027=d'Aboville leszármazotti családfája
-028=Konovalov leszármazotti családfája
+027=Csökkenő családfa
+028=<?>
 029=Térképek
 030=Statisztika
 031=Felmenő családfa
-032=<?>
-033=<?>
-034=<?>
+032=d'Aboville
+033=Kobrin-Konovalov
+034=Sosa-Stradonitz
 035=Szervező
 036=Szkriptek...
 037=<?>
@@ -662,8 +662,8 @@
 661=Mutass egy leszármazotti fát
 662=Teljes fa megjelenítése
 663=Családfa
-664=d'Aboville családfája
-665=Konovalov családfája
+664=Növekvő számozás
+665=Csökkenő számozás
 666=Az adatok statisztikai elemzése
 667=Kép mentése
 668=Megjelenítési módok
@@ -916,24 +916,27 @@
 912=nagynéni
 913=A leszármazottak házastársainak elrejtése
 
-914=blood
-915=uterine
+914=vér szerinti
+915=féltestvér
 916=örökbefogadó
 917=örökbefogadótt
-918=Törvényes férj
+918=köztörvényes
 
 919=<?>
 920=<?>
 
 921=-
-922=fiúgyerek/lánygyerek
-923=fiúunoka/lányunoka
-924=fiúdédunoka/lánydédunoka
-925=fiúszépunoka/lányszépunoka
-926=fiúutód/lányutód
+922=első
+923=unokatestvér
+924=másod
+925=negyedik
+926=ötdik
 927=hatodik
 928=hetedik
 929=nyolcadik
 930=kilencedik
 
 931=A rokonság fok kiterjesztett meghatározása
+932=Használja a vezetékneveket a személyválasztó szűrőben
+933=Használja a születési dátumokat a személyes kiválasztási szűrőben
+934=A tényérték üres vagy érvénytelen

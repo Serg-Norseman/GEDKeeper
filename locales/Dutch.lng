@@ -192,7 +192,7 @@
 191=Bewerk taak
 192=Bewerk communicatie
 193=Fout
-194=Start met LUA niet gelukt!
+194=Start met Lua niet gelukt!
 195=Datum indeling onjuist
 196=Land
 197=Provincie
@@ -395,7 +395,7 @@
 394=Alleen geselecteerd
 395=Opslaan afbeelding...
 396=Indeling niet ondersteund
-397=Laad fout
+397=Laad fout.
 398=Afdrukken
 399=Voorbeeld
 400=Generatie
@@ -654,9 +654,9 @@
 653=Nieuw
 654=Open
 655=Opslaan
-656=Toevoegen
-657=Bewerken
-658=Verwijderen
+656=Toevoegen (Ctrl+I)
+657=Bewerken (Ctrl+Enter)
+658=Verwijderen (Ctrl+L)
 659=Filter lijst
 660=Toon voorouders boom
 661=Toon afstammelingen boom
@@ -784,8 +784,8 @@
 783=Wees
 784=Karakterset decteren bij inladen
 785=Koppelingvorm
-786=Geboren:
-787=Geboren:
+786=Geboren
+787=Geboren
 788=GedML bestand (*.xml)|*.xml
 789=Kind zonder ouders gevonden
 790=Familie verslag zonder ouders en/of kinderen gevonden
@@ -846,7 +846,7 @@
 842=Alleen lokaal
 843=Ga naar primaire tak
 844=verklein breedte
-845={0}. verder?
+845={0}. Verder?
 846=Toon leeftijd
 847=Voornaam in Hoofdletters
 848=|SVG bestand (*.svg)|*.svg
@@ -916,11 +916,11 @@
 912=tante
 913=Verberg partners van afstammelingen
 
-914=Vaderskant
-915=Moederskant
-916=Adoptief
-917=Geadopteerd
-918=Wederhelft
+914=vaderskant
+915=moederskant
+916=adoptief
+917=geadopteerd
+918=wederhelft
 
 919=<?>
 920=<?>
