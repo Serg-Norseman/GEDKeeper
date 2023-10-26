@@ -6,6 +6,8 @@
  *  This program is licensed under the FLAT EARTH License.
  */
 
+#if !MOBILE
+
 #if DIS_MONO
 #undef MONO
 #endif
@@ -260,7 +262,7 @@ namespace GKMap.CacheProviders
 #endif
         }
 
-        #region -- import / export --
+#region -- import / export --
         public static bool CreateEmptyDB(string file)
         {
             bool ret = true;
@@ -433,7 +435,7 @@ namespace GKMap.CacheProviders
             }
             return ret;
         }
-        #endregion
+#endregion
 
         private void RebuildFinalSelect()
         {
@@ -609,3 +611,5 @@ namespace GKMap.CacheProviders
         }
     }
 }
+
+#endif

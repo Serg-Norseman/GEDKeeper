@@ -18,15 +18,18 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using Xamarin.Forms;
+using GKCore.Design.Controls;
+using GKUI.Components;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
-    public class GKComboBox : Picker
+    public sealed class NumericBoxHandler : BaseControlHandler<NumericStepper, NumericBoxHandler>, INumericBox
     {
-        // FIXME: temp stub
-        public bool IsReadOnly
+        public NumericBoxHandler(NumericStepper control) : base(control)
+        {
+        }
+
+        public bool ReadOnly
         {
             get { return false; }
             set { }
@@ -34,15 +37,14 @@ namespace GKUI.Components
 
         public string Text
         {
-            get;
-            set;
+            get { return Value.ToString(); }
+            set { } // TODO
         }
 
-        public event EventHandler Completed;
-        public event EventHandler TextChanged;
-
-        public void AddItem(string text)
+        public double Value
         {
+            get { return Control.Value; }
+            set { Control.Value = (int)value; }
         }
     }
 }

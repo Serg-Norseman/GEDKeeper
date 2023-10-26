@@ -27,7 +27,7 @@
                     <Label x:Name="lblNamePrefix" Grid.Column="2" Grid.Row="1" />
                     <Entry x:Name="txtNamePrefix" WidthRequest="180" Grid.Column="3" Grid.Row="1" />
                     <Label x:Name="lblSex" Grid.Column="4" Grid.Row="1" />
-                    <Picker x:Name="cmbSex" WidthRequest="180" SelectedIndexChanged="cbSex_SelectedIndexChanged" Grid.Column="5" Grid.Row="1" />
+                    <comcom:GKComboBox x:Name="cmbSex" WidthRequest="180" SelectedIndexChanged="cbSex_SelectedIndexChanged" Grid.Column="5" Grid.Row="1" />
 
                     <Label x:Name="lblName" Grid.Column="0" Grid.Row="2" />
                     <Entry x:Name="txtName" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="2" />
@@ -129,7 +129,7 @@
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label x:Name="lblRestriction" />
-            <Picker x:Name="cmbRestriction" SelectedIndexChanged="cbRestriction_SelectedIndexChanged" />
+            <comcom:GKComboBox x:Name="cmbRestriction" SelectedIndexChanged="cbRestriction_SelectedIndexChanged" />
             <Label HorizontalOptions="FillAndExpand" />
             <Button x:Name="btnNameCopy" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_copy.gif}" Clicked="btnNameCopy_Click" />
             <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />

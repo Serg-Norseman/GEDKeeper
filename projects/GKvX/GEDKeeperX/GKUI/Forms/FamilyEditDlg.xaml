@@ -39,7 +39,7 @@
                 </StackLayout>
 
                 <Label x:Name="lblStatus" Grid.Column="0" Grid.Row="2" />
-                <Picker x:Name="cmbMarriageStatus" Grid.Column="1" Grid.Row="2" />
+                <comcom:GKComboBox x:Name="cmbMarriageStatus" Grid.Column="1" Grid.Row="2" />
             </Grid>
         </Frame>
 
@@ -65,7 +65,7 @@
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label x:Name="lblRestriction" />
-            <Picker x:Name="cmbRestriction" SelectedIndexChanged="cbRestriction_SelectedIndexChanged" />
+            <comcom:GKComboBox x:Name="cmbRestriction" SelectedIndexChanged="cbRestriction_SelectedIndexChanged" />
             <Label HorizontalOptions="FillAndExpand" />
             <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />
             <Button x:Name="btnCancel" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />

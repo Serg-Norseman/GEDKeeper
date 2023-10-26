@@ -286,8 +286,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(Editor), typeof(TextAreaHandler));
             ControlsManager.RegisterHandlerType(typeof(Entry), typeof(TextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
-            ControlsManager.RegisterHandlerType(typeof(Picker), typeof(PickerHandler));
-            ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(PickerHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(XFIKRadioButton), typeof(RadioButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(XFIKCheckBox), typeof(CheckBoxHandler));

@@ -18,25 +18,67 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+using System.Collections.Generic;
 using GKCore.Design.Controls;
 using Xamarin.Forms;
 
 namespace GKUI.Components
 {
+    using XFPictureBox = Xamarin.Forms.Image;
+
     public class GKPortrait : ContentView, IPortraitControl
     {
+        private readonly List<Button> fBtnsList;
+
         public bool Enabled { get; set; }
         int IPortraitControl.Height { get; set; }
         int IPortraitControl.Width { get; set; }
 
-        public ImageSource Image { get; set; }
+
+        public ImageSource Image
+        {
+            get { return fImageBox.Source; }
+            set {
+                if (fImageBox.Source != null) {
+                    //fImageBox.Source.Dispose();
+                }
+                fImageBox.Source = value;
+            }
+        }
+
+
+        public GKPortrait()
+        {
+            InitializeComponent();
+
+            fBtnsList = new List<Button>();
+        }
 
         public void Activate()
         {
         }
 
-        public void AddButton(Button btn)
+        public void AddButton(Button b)
+        {
+            fBtnsList.Add(b);
+            RedrawButtons();
+        }
+
+        private void RedrawButtons()
         {
         }
+
+        #region Design
+
+        private XFPictureBox fImageBox;
+
+        private void InitializeComponent()
+        {
+            fImageBox = new XFPictureBox();
+            Content = fImageBox;
+        }
+
+        #endregion
     }
 }

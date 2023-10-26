@@ -11,28 +11,25 @@
     xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
     x:Class="GKUI.Forms.MapsViewerWin">
 
-    <!--Form.ToolBar>
-        <ToolBar TextAlign="Right" Style="tbsi">
-            <ButtonToolItem x:Name="tbLoadPlaces" Click="tbLoadPlaces_Click" />
-            <SeparatorToolItem />
-            <ButtonToolItem x:Name="tbSaveSnapshot" Image="{Resource Resources.btn_save_image.gif, GKCore}" Click="tbSaveSnapshot_Click" />
-            <SeparatorToolItem />
+    <forms:CommonWindow.ToolbarItems>
+        <ToolbarItem x:Name="tbLoadPlaces" Order="Primary" Priority="0" Clicked="tbLoadPlaces_Click" />
+        <ToolbarItem x:Name="tbSaveSnapshot" Order="Primary" Priority="1" IconImageSource="{plat:ImageResourceExt Resources.btn_save_image.gif}" Clicked="tbSaveSnapshot_Click" />
+        <ToolbarItem x:Name="tbProviders" Order="Primary" Priority="2" />
+        <ToolbarItem x:Name="tbClear" Order="Primary" Priority="3" Clicked="tbClear_Click" />
+        <ToolbarItem x:Name="tbZoomCenter" Order="Primary" Priority="4" Clicked="tbZoomCenter_Click" />
+    </forms:CommonWindow.ToolbarItems>
 
+    <!--Form.ToolBar>
             <complat:GKDropDownToolItem x:Name="tbProviders">
                 <complat:GKDropDownToolItem.ContextMenu>
                     <ContextMenu x:Name="MenuProviders">
                     </ContextMenu>
                 </complat:GKDropDownToolItem.ContextMenu>
             </complat:GKDropDownToolItem>
-
-            <SeparatorToolItem />
-            <ButtonToolItem x:Name="tbClear" Click="tbClear_Click" />
-            <ButtonToolItem x:Name="tbZoomCenter" Text="Zoom Center" Click="tbZoomCenter_Click" />
-        </ToolBar>
     </Form.ToolBar-->
 
     <StackLayout Orientation="Horizontal">
-        <xp:TabViewControl x:Name="PageControl1">
+        <xp:TabViewControl x:Name="PageControl1" HorizontalOptions="Start" VerticalOptions="FillAndExpand">
             <xp:TabViewControl.ItemSource>
                 <xp:TabItem x:Name="pagePlaces">
                     <StackLayout Spacing="4">
@@ -76,10 +73,10 @@
             </xp:TabViewControl.ItemSource>
         </xp:TabViewControl>
 
-        <StackLayout Orientation="Horizontal" Spacing="4">
+        <StackLayout Orientation="Horizontal" Spacing="4" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
             <comcom:GKMapBrowser x:Name="fMapBrowser" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
 
-            <StackLayout Orientation="Vertical">
+            <StackLayout Orientation="Vertical" HorizontalOptions="End" VerticalOptions="FillAndExpand">
                 <Button x:Name="btnZoomUp" WidthRequest="32" Clicked="btnZoomUp_Click" VerticalOptions="Start" Text="+" />
                 <Slider x:Name="trkZoom" ValueChanged="trkZoom_ValueChanged" VerticalOptions="FillAndExpand" />
                 <Button x:Name="btnZoomDown" WidthRequest="32" Clicked="btnZoomDown_Click" VerticalOptions="End" Text="-" />

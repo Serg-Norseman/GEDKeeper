@@ -31,11 +31,11 @@ using Xamarin.Forms;
 
 namespace GKUI.Platform
 {
-    public sealed class PickerHandler : BaseControlHandler<Picker, PickerHandler>, IComboBox
+    public sealed class PickerHandler : BaseControlHandler<GKComboBox, PickerHandler>, IComboBox
     {
         private readonly IList fItems;
 
-        public PickerHandler(Picker control) : base(control)
+        public PickerHandler(GKComboBox control) : base(control)
         {
             fItems = new ObservableCollection<IComboItem>();
             control.ItemsSource = fItems;
@@ -169,7 +169,7 @@ namespace GKUI.Platform
     }
 
 
-    public sealed class ComboBoxHandler : BaseControlHandler<GKComboBox, ComboBoxHandler>, IComboBox
+    /*public sealed class ComboBoxHandler : BaseControlHandler<GKComboBox, ComboBoxHandler>, IComboBox
     {
         private readonly ObservableCollection<IComboItem> fItems;
         private readonly List<string> fStrItems;
@@ -231,7 +231,7 @@ namespace GKUI.Platform
             }
         }*/
 
-        public string Text
+        /*public string Text
         {
             get { return Control.Text; }
             set { Control.Text = value; }
@@ -320,5 +320,5 @@ namespace GKUI.Platform
                 Control.SelectedIndex = 0;
             }
         }
-    }
+    }*/
 }

@@ -19,9 +19,9 @@
                 <Entry x:Name="txtName" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="5" />
 
                 <Label x:Name="lblPriority" Grid.Column="0" Grid.Row="1" />
-                <Picker x:Name="cmbPriority" Grid.Column="1" Grid.Row="1" />
+                <comcom:GKComboBox x:Name="cmbPriority" Grid.Column="1" Grid.Row="1" />
                 <Label x:Name="lblStatus" Grid.Column="2" Grid.Row="1" />
-                <Picker x:Name="cmbStatus" Grid.Column="3" Grid.Row="1" />
+                <comcom:GKComboBox x:Name="cmbStatus" Grid.Column="3" Grid.Row="1" />
                 <Label x:Name="lblPercent" Grid.Column="4" Grid.Row="1" />
                 <comcom:NumericStepper x:Name="nudPercent" Increment="5" Grid.Column="5" Grid.Row="1" />
 

@@ -60,10 +60,12 @@ namespace GKMap
             set {
                 fImageCacheLocation = value;
 
+#if !MOBILE
                 var cache = ImageCache as SQLitePureImageCache;
                 if (cache != null) {
                     cache.CacheLocation = value;
                 }
+#endif
 
                 fCacheDelay = true;
             }
@@ -114,6 +116,7 @@ namespace GKMap
 
         private void InitCache()
         {
+#if !MOBILE
             ImageCache = new SQLitePureImageCache();
 
             string newCache = CacheLocation;
@@ -135,6 +138,7 @@ namespace GKMap
             } else {
                 ImageCacheLocation = newCache;
             }
+#endif
         }
 
         private static readonly SHA1 HashProvider = SHA1.Create();
@@ -222,8 +226,10 @@ namespace GKMap
         {
             TileImageProxy = imageProxy;
 
+#if !MOBILE
             // triggers dynamic SQLite loading, call this before you use SQLite for other reasons than caching maps
             SQLitePureImageCache.Ping();
+#endif
         }
 
         /// <summary>

@@ -18,16 +18,16 @@
 
         <ToolbarItem x:Name="miSearch" Order="Primary" Priority="6" IconImageSource="{plat:ImageResourceExt Resources.btn_search.gif}" />
         <ToolbarItem x:Name="miFindAndReplace" Text="FindAndReplace" Order="Secondary" Priority="1" />
-        <ToolbarItem x:Name="tbFilter" Order="Primary" Priority="6" IconImageSource="{plat:ImageResourceExt Resources.btn_filter.gif}" Clicked="miFilter_Click" />
+        <ToolbarItem x:Name="tbFilter" Order="Primary" Priority="8" IconImageSource="{plat:ImageResourceExt Resources.btn_filter.gif}" Clicked="miFilter_Click" />
 
-        <ToolbarItem x:Name="tbTreeAncestors" Order="Primary" Priority="7" IconImageSource="{plat:ImageResourceExt Resources.btn_tree_ancestry.gif}" Clicked="miTreeAncestors_Click" />
-        <ToolbarItem x:Name="tbTreeDescendants" Order="Primary" Priority="8" IconImageSource="{plat:ImageResourceExt Resources.btn_tree_descendants.gif}" Clicked="miTreeDescendants_Click" />
-        <ToolbarItem x:Name="tbTreeBoth" Order="Primary" Priority="9" IconImageSource="{plat:ImageResourceExt Resources.btn_tree_both.gif}" Clicked="miTreeBoth_Click" />
+        <ToolbarItem x:Name="tbTreeAncestors" Order="Primary" Priority="9" IconImageSource="{plat:ImageResourceExt Resources.btn_tree_ancestry.gif}" Clicked="miTreeAncestors_Click" />
+        <ToolbarItem x:Name="tbTreeDescendants" Order="Primary" Priority="10" IconImageSource="{plat:ImageResourceExt Resources.btn_tree_descendants.gif}" Clicked="miTreeDescendants_Click" />
+        <ToolbarItem x:Name="tbTreeBoth" Order="Primary" Priority="11" IconImageSource="{plat:ImageResourceExt Resources.btn_tree_both.gif}" Clicked="miTreeBoth_Click" />
 
-        <ToolbarItem x:Name="miCircleAncestors" Text="CircleAncestors" Order="Secondary" Priority="1" Clicked="miAncestorsCircle_Click" />
-        <ToolbarItem x:Name="miCircleDescendants" Text="CircleDescendants" Order="Secondary" Priority="1" Clicked="miDescendantsCircle_Click" />
+        <ToolbarItem x:Name="miCircleAncestors" Order="Primary" Priority="12" IconImageSource="{plat:ImageResourceExt Resources.btn_circle.png}" Clicked="miAncestorsCircle_Click" />
+        <ToolbarItem x:Name="miCircleDescendants" Order="Primary" Priority="13" IconImageSource="{plat:ImageResourceExt Resources.btn_circle.png}" Clicked="miDescendantsCircle_Click" />
 
-        <ToolbarItem x:Name="tbPedigree" Order="Primary" Priority="10" IconImageSource="{plat:ImageResourceExt Resources.btn_scroll.gif}" Clicked="miPedigreeAscend_Click" />
+        <ToolbarItem x:Name="tbPedigree" Order="Primary" Priority="14" IconImageSource="{plat:ImageResourceExt Resources.btn_scroll.gif}" Clicked="miPedigreeAscend_Click" />
     </ContentPage.ToolbarItems>
 
     <StackLayout VerticalOptions="FillAndExpand" Spacing="0" Padding="0">

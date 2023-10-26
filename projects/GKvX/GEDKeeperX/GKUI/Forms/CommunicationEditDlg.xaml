@@ -25,14 +25,14 @@
 
                 <Label x:Name="lblCorresponder" Grid.Column="0" Grid.Row="1" />
                 <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
-                    <Picker x:Name="txtDir" WidthRequest="100" />
+                    <comcom:GKComboBox x:Name="txtDir" WidthRequest="100" />
                     <Entry x:Name="txtCorresponder" IsReadOnly="True" WidthRequest="200" />
                     <Button x:Name="btnPersonAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnPersonAdd_Click" />
                 </StackLayout>
 
                 <Label x:Name="lblType" Grid.Column="0" Grid.Row="2" />
                 <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="2">
-                    <Picker x:Name="cmbCorrType" />
+                    <comcom:GKComboBox x:Name="cmbCorrType" />
                     <Label x:Name="lblDate" />
                     <comcom:GKDateBox x:Name="txtDate" />
                 </StackLayout>

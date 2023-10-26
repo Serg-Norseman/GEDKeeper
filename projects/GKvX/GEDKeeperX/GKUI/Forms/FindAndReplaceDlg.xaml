@@ -34,10 +34,10 @@
                 <Frame>
                     <Grid ColumnSpacing="4" RowSpacing="4">
                         <Label x:Name="lblRecord" Grid.Column="0" Grid.Row="0" />
-                        <Picker x:Name="cmbRecord" Grid.Column="1" Grid.Row="0" />
+                        <comcom:GKComboBox x:Name="cmbRecord" Grid.Column="1" Grid.Row="0" />
 
                         <Label x:Name="lblProperty" Grid.Column="0" Grid.Row="1" />
-                        <Picker x:Name="cmbProperty" Grid.Column="1" Grid.Row="1" />
+                        <comcom:GKComboBox x:Name="cmbProperty" Grid.Column="1" Grid.Row="1" />
                     </Grid>
                 </Frame>
                 <Label VerticalOptions="FillAndExpand" />

@@ -37,9 +37,9 @@
 
                             <Label x:Name="lblType" Grid.Column="0" Grid.Row="2" />
                             <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="2">
-                                <Picker x:Name="cmbMediaType" WidthRequest="200" />
+                                <comcom:GKComboBox x:Name="cmbMediaType" WidthRequest="200" />
                                 <Label x:Name="lblStoreType" />
-                                <Picker x:Name="cmbStoreType" SelectedIndexChanged="cmbStoreType_SelectedIndexChanged" />
+                                <comcom:GKComboBox x:Name="cmbStoreType" SelectedIndexChanged="cmbStoreType_SelectedIndexChanged" />
                             </StackLayout>
 
                         </Grid>

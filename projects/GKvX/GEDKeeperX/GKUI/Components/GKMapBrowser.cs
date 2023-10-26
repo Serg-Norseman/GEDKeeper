@@ -19,60 +19,330 @@
  */
 
 using System.Collections.Generic;
+using System.Net;
 using GKCore.Design.Controls;
 using GKCore.Maps;
+using GKCore.Options;
+using GKMap;
+using GKMap.Xamarin;
+using GKMap.MapObjects;
+using GKMap.MapProviders;
 using Xamarin.Forms;
 
 namespace GKUI.Components
 {
+    /// <summary>
+    ///
+    /// </summary>
     public class GKMapBrowser : ContentView, IMapBrowser
     {
-        public bool ShowLines { get; set; }
-        public bool ShowPoints { get; set; }
+        private readonly List<GeoPoint> fMapPoints;
+        private bool fShowPoints;
+        private bool fShowLines;
+        private int fUpdateCount;
 
-        public IList<GeoPoint> MapPoints { get; }
+
+        public bool ShowPoints
+        {
+            get {
+                return fShowPoints;
+            }
+            set {
+                fShowPoints = value;
+                RefreshPoints();
+            }
+        }
+
+        public bool ShowLines
+        {
+            get {
+                return fShowLines;
+            }
+            set {
+                fShowLines = value;
+                RefreshPoints();
+            }
+        }
+
+        public IList<GeoPoint> MapPoints
+        {
+            get { return fMapPoints; }
+        }
 
         public bool Enabled { get; set; }
 
+        public GKMapBrowser()
+        {
+            InitControl();
+
+            fMapPoints = new List<GeoPoint>();
+            fUpdateCount = 0;
+            fShowPoints = true;
+            fShowLines = true;
+        }
+
         public void Activate()
         {
+            Focus();
         }
 
         public int AddPoint(double latitude, double longitude, string hint)
         {
-            return 0;
-        }
+            BeginUpdate();
+            GeoPoint pt = new GeoPoint(latitude, longitude, hint);
+            int res = fMapPoints.Count;
+            fMapPoints.Add(pt);
+            EndUpdate();
 
-        public void BeginUpdate()
-        {
+            return res;
         }
 
         public void ClearPoints()
         {
+            fObjects.Clear();
+            fMapPoints.Clear();
         }
 
         public void DeletePoint(int index)
         {
+            fMapPoints.RemoveAt(index);
+            RefreshPoints();
+        }
+
+        public void BeginUpdate()
+        {
+            fUpdateCount++;
         }
 
         public void EndUpdate()
         {
+            fUpdateCount--;
+            if (fUpdateCount <= 0) {
+                RefreshPoints();
+                fUpdateCount = 0;
+            }
         }
 
         public void RefreshPoints()
         {
-        }
+            fObjects.Clear();
+            if (fMapPoints.Count <= 0) return;
 
-        public void SaveSnapshot(string fileName)
-        {
+            var points = new List<PointLatLng>();
+
+            int num = fMapPoints.Count;
+            for (int i = 0; i < num; i++) {
+                GeoPoint pt = fMapPoints[i];
+
+                var point = new PointLatLng(pt.Latitude, pt.Longitude);
+
+                if (fShowPoints) {
+                    AddMarker(point, GMarkerIconType.green, MarkerTooltipMode.OnMouseOver, pt.Hint);
+                    if (i == num - 1) {
+                        SetCenter(pt.Latitude, pt.Longitude, -1);
+                    }
+                }
+
+                if (fShowLines) {
+                    points.Add(point);
+                }
+            }
+
+            if (fShowLines) {
+                AddRoute("route", points);
+            }
+
+            ZoomToBounds();
         }
 
         public void SetCenter(double latitude, double longitude, int scale)
         {
+            fTargetMarker.Position = new PointLatLng(latitude, longitude);
+            ZoomToBounds();
         }
 
         public void ZoomToBounds()
         {
+            fMapControl.ZoomAndCenterMarkers(null);
         }
+
+        #region Inner control
+
+        private readonly GMapOverlay fObjects = new GMapOverlay("objects");
+        private readonly GMapOverlay fTopOverlay = new GMapOverlay();
+
+        private MapObject fCurrentObj;
+        private bool fIsMouseDown;
+        private GMapControl fMapControl;
+        private MapMarker fTargetMarker;
+
+        public GMapControl MapControl
+        {
+            get { return fMapControl; }
+        }
+
+        public GMapOverlay Objects
+        {
+            get { return fObjects; }
+        }
+
+        public PointLatLng TargetPosition
+        {
+            get { return fTargetMarker.Position; }
+        }
+
+        private void InitControl()
+        {
+            fMapControl = new GMapControl();
+            //fMapControl.Margin = new Padding(4);
+            fMapControl.MaxZoom = 17;
+            fMapControl.MinZoom = 2;
+            fMapControl.Zoom = 0;
+            fMapControl.HorizontalOptions = LayoutOptions.FillAndExpand;
+            fMapControl.VerticalOptions = LayoutOptions.FillAndExpand;
+            Content = fMapControl;
+
+            if (!GMapControl.IsDesignerHosted) {
+                var proxy = GlobalOptions.Instance.Proxy;
+                if (proxy.UseProxy) {
+                    GMapProvider.IsSocksProxy = true;
+                    GMapProvider.WebProxy = new WebProxy(proxy.Server, int.Parse(proxy.Port));
+                    GMapProvider.WebProxy.Credentials = new NetworkCredential(proxy.Login, proxy.Password);
+                } else {
+                    GMapProvider.WebProxy = WebRequest.DefaultWebProxy;
+                }
+
+                // config map
+                fMapControl.MapProvider = GMapProviders.OpenStreetMap;
+                fMapControl.Position = new PointLatLng(30.0447272077905, 31.2361907958984);
+                fMapControl.MinZoom = 0;
+                fMapControl.MaxZoom = 24;
+                fMapControl.Zoom = 9;
+
+                // add custom layers
+                fMapControl.Overlays.Add(fObjects);
+                fMapControl.Overlays.Add(fTopOverlay);
+
+                // map events
+                fMapControl.OnMapTypeChanged += MainMap_OnMapTypeChanged;
+                /*fMapControl.OnMarkerClick += MainMap_OnMarkerClick;
+                fMapControl.OnMarkerEnter += MainMap_OnMarkerEnter;
+                fMapControl.OnMarkerLeave += MainMap_OnMarkerLeave;
+                fMapControl.OnPolygonEnter += MainMap_OnPolygonEnter;
+                fMapControl.OnPolygonLeave += MainMap_OnPolygonLeave;
+                fMapControl.OnRouteEnter += MainMap_OnRouteEnter;
+                fMapControl.OnRouteLeave += MainMap_OnRouteLeave;
+                fMapControl.MouseMove += MainMap_MouseMove;
+                fMapControl.MouseDown += MainMap_MouseDown;
+                fMapControl.MouseUp += MainMap_MouseUp;
+                fMapControl.KeyUp += MainForm_KeyUp;*/
+
+                // set current marker
+                fTargetMarker = new GMarkerIcon(fMapControl.Position, GMarkerIconType.arrow);
+                fTargetMarker.IsHitTestVisible = false;
+                fTargetMarker.IsVisible = true;
+                fTopOverlay.Markers.Add(fTargetMarker);
+
+                // add start location
+                GeocoderStatusCode status;
+                PointLatLng? pos = GMapProviders.OpenStreetMap.GetPoint("Russia, Moscow", out status);
+                if (pos != null && status == GeocoderStatusCode.Success) {
+                    fTargetMarker.Position = pos.Value;
+                    fMapControl.ZoomAndCenterMarkers(null);
+                }
+            }
+        }
+
+        public void GeneratePolygon()
+        {
+            var points = new List<PointLatLng>();
+            foreach (MapMarker m in fObjects.Markers) {
+                points.Add(m.Position);
+            }
+            AddPolygon("polygon test", points);
+        }
+
+        public void GenerateRoute()
+        {
+            var points = new List<PointLatLng>();
+            foreach (MapMarker m in fObjects.Markers) {
+                points.Add(m.Position);
+            }
+            AddRoute("route test", points);
+        }
+
+        public GMapRoute AddRoute(string name, List<PointLatLng> points)
+        {
+            var route = new GMapRoute(name, points);
+            route.IsHitTestVisible = true;
+            fObjects.Routes.Add(route);
+            return route;
+        }
+
+        public GMapPolygon AddPolygon(string name, List<PointLatLng> points)
+        {
+            var polygon = new GMapPolygon(name, points);
+            polygon.IsHitTestVisible = true;
+            fObjects.Polygons.Add(polygon);
+            return polygon;
+        }
+
+        /// <summary>
+        /// adds marker using geocoder
+        /// </summary>
+        /// <param name="place"></param>
+        public void AddLocationMarker(string place)
+        {
+            GeocoderStatusCode status;
+            PointLatLng? pos = GMapProviders.GoogleMap.GetPoint(place, out status);
+            if (pos != null && status == GeocoderStatusCode.Success) {
+                var m = new GMarkerIcon(pos.Value, GMarkerIconType.green);
+                m.ToolTipText = place;
+                m.ToolTipMode = MarkerTooltipMode.Always;
+
+                fObjects.Markers.Add(m);
+            }
+        }
+
+        public void AddMarker(PointLatLng position, GMarkerIconType iconType, MarkerTooltipMode tooltipMode, string toolTip = "")
+        {
+            var m = new GMarkerIcon(position, iconType); // GMarkerIconType.green
+            m.ToolTipMode = tooltipMode; // MarkerTooltipMode.OnMouseOver
+
+            if (!string.IsNullOrEmpty(toolTip)) {
+                m.ToolTipText = toolTip;
+            } else {
+                Placemark? p = null;
+                GeocoderStatusCode status;
+                var ret = GMapProviders.GoogleMap.GetPlacemark(position, out status);
+                if (status == GeocoderStatusCode.Success && ret != null) {
+                    p = ret;
+                }
+                m.ToolTipText = (p != null) ? p.Value.Address : position.ToString();
+            }
+
+            fObjects.Markers.Add(m);
+        }
+
+        public void SaveSnapshot(string fileName)
+        {
+            var tmpImage = fMapControl.ToImage();
+            if (tmpImage != null) {
+                using (tmpImage) {
+                    //tmpImage.Save(fileName, ImageFormat.Bitmap);
+                }
+            }
+        }
+
+        #region Event handlers
+
+        private void MainMap_OnMapTypeChanged(GMapProvider type)
+        {
+            fMapControl.ZoomAndCenterMarkers("objects");
+        }
+
+        #endregion
+
+        #endregion
     }
 }

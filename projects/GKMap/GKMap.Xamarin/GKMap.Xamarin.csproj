@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <AssemblyName>GKMap.Xamarin</AssemblyName>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+        <Configurations>
+            MSWin_Debug;MSWin_Release;
+            Linux_Debug;Linux_Release;
+            MacOS_Debug;MacOS_Release;
+            FreeBSD_Debug;FreeBSD_Release;
+            Android_Debug;Android_Release;
+            iOS_Debug;iOS_Release
+        </Configurations>
+    </PropertyGroup>
+
+    <Import Project="..\..\GKConfigurations3.targets" />
+
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\GKMap\GKMap.Core\GKMap.Core.nstd.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+        <PackageReference Include="Xamarin.Forms" Version="5.0.0.2545" />
+        <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.2" />
+    </ItemGroup>
+
+</Project>

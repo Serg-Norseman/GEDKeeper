@@ -11,10 +11,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKCore.nstd", "..\GKCore\GK
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeperX.iOS", "GEDKeeperX.iOS\GEDKeeperX.iOS.csproj", "{775D3A08-83E0-4D23-99AA-77D0EF0D5E74}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKMap.Core.nstd", "..\GKMap\GKMap.Core\GKMap.Core.nstd.csproj", "{393B70CD-E0C0-46D4-B16C-69F765034A55}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKMap.Xamarin", "..\GKMap\GKMap.Xamarin\GKMap.Xamarin.csproj", "{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{279A71E6-A9A5-4977-B167-30E8C73D38C5}"
 	ProjectSection(SolutionItems) = preProject
 		NOTES.md = NOTES.md
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "subprojects", "subprojects", "{22EFE45F-4915-4720-94EF-AF127E2E1DDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +32,16 @@ Global
 		Release|iPhoneSimulator = Release|iPhoneSimulator
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Debug|Android.ActiveCfg = Debug|Android
+		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Debug|Android.Build.0 = Debug|Android
+		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Debug|Android.Deploy.0 = Debug|Android
+		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Debug|iPhone.ActiveCfg = Debug|Android
+		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Debug|iPhoneSimulator.ActiveCfg = Debug|Android
+		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Release|Android.ActiveCfg = Release|Android
+		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Release|Android.Build.0 = Release|Android
+		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Release|Android.Deploy.0 = Release|Android
+		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Release|iPhone.ActiveCfg = Release|Android
+		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Release|iPhoneSimulator.ActiveCfg = Release|Android
 		{9528C5A8-EF89-4F3A-B8BF-D9CD316B89D9}.Debug|Android.ActiveCfg = Debug|Any CPU
 		{9528C5A8-EF89-4F3A-B8BF-D9CD316B89D9}.Debug|Android.Build.0 = Debug|Any CPU
 		{9528C5A8-EF89-4F3A-B8BF-D9CD316B89D9}.Debug|Android.Deploy.0 = Debug|Any CPU
@@ -56,16 +72,6 @@ Global
 		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Release|iPhone.Build.0 = iOS_Release|Any CPU
 		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Release|iPhoneSimulator.ActiveCfg = iOS_Release|Any CPU
 		{80BB677B-48EF-46CF-9476-C9C81E6D58AE}.Release|iPhoneSimulator.Build.0 = iOS_Release|Any CPU
-		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Debug|Android.ActiveCfg = Debug|Android
-		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Debug|Android.Build.0 = Debug|Android
-		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Debug|Android.Deploy.0 = Debug|Android
-		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Debug|iPhone.ActiveCfg = Debug|Android
-		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Debug|iPhoneSimulator.ActiveCfg = Debug|Android
-		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Release|Android.ActiveCfg = Release|Android
-		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Release|Android.Build.0 = Release|Android
-		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Release|Android.Deploy.0 = Release|Android
-		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Release|iPhone.ActiveCfg = Release|Android
-		{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}.Release|iPhoneSimulator.ActiveCfg = Release|Android
 		{775D3A08-83E0-4D23-99AA-77D0EF0D5E74}.Debug|Android.ActiveCfg = Debug|iPhoneSimulator
 		{775D3A08-83E0-4D23-99AA-77D0EF0D5E74}.Debug|Android.Deploy.0 = Debug|iPhoneSimulator
 		{775D3A08-83E0-4D23-99AA-77D0EF0D5E74}.Debug|iPhone.ActiveCfg = Debug|iPhone
@@ -82,9 +88,37 @@ Global
 		{775D3A08-83E0-4D23-99AA-77D0EF0D5E74}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{775D3A08-83E0-4D23-99AA-77D0EF0D5E74}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{775D3A08-83E0-4D23-99AA-77D0EF0D5E74}.Release|iPhoneSimulator.Deploy.0 = Release|iPhoneSimulator
+		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Debug|Android.ActiveCfg = Android_Debug|Any CPU
+		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Debug|Android.Build.0 = Android_Debug|Any CPU
+		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Debug|iPhone.ActiveCfg = iOS_Debug|Any CPU
+		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Debug|iPhone.Build.0 = iOS_Debug|Any CPU
+		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Debug|iPhoneSimulator.ActiveCfg = iOS_Debug|Any CPU
+		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Debug|iPhoneSimulator.Build.0 = iOS_Debug|Any CPU
+		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Release|Android.ActiveCfg = Android_Release|Any CPU
+		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Release|Android.Build.0 = Android_Release|Any CPU
+		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Release|iPhone.ActiveCfg = iOS_Release|Any CPU
+		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Release|iPhone.Build.0 = iOS_Release|Any CPU
+		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Release|iPhoneSimulator.ActiveCfg = iOS_Release|Any CPU
+		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Release|iPhoneSimulator.Build.0 = iOS_Release|Any CPU
+		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6}.Debug|Android.ActiveCfg = Android_Debug|Any CPU
+		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6}.Debug|Android.Build.0 = Android_Debug|Any CPU
+		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6}.Debug|iPhone.ActiveCfg = iOS_Debug|Any CPU
+		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6}.Debug|iPhone.Build.0 = iOS_Debug|Any CPU
+		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6}.Debug|iPhoneSimulator.ActiveCfg = iOS_Debug|Any CPU
+		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6}.Debug|iPhoneSimulator.Build.0 = iOS_Debug|Any CPU
+		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6}.Release|Android.ActiveCfg = Android_Release|Any CPU
+		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6}.Release|Android.Build.0 = Android_Release|Any CPU
+		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6}.Release|iPhone.ActiveCfg = iOS_Release|Any CPU
+		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6}.Release|iPhone.Build.0 = iOS_Release|Any CPU
+		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6}.Release|iPhoneSimulator.ActiveCfg = iOS_Release|Any CPU
+		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6}.Release|iPhoneSimulator.Build.0 = iOS_Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{393B70CD-E0C0-46D4-B16C-69F765034A55} = {22EFE45F-4915-4720-94EF-AF127E2E1DDD}
+		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6} = {22EFE45F-4915-4720-94EF-AF127E2E1DDD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {573B756F-0B8D-4BED-9C53-669AF5135D1A}

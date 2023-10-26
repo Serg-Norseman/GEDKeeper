@@ -18,31 +18,34 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
+using GKCore.Design;
+using GKCore.Design.Controls;
 using Xamarin.Forms;
 
-namespace GKUI.Components
+namespace GKUI.Platform
 {
-    public class GKComboBox : Picker
+    public sealed class ButtonToolItemHandler : ControlHandler<ToolbarItem, ButtonToolItemHandler>, IButtonToolItem
     {
-        // FIXME: temp stub
-        public bool IsReadOnly
+        public ButtonToolItemHandler(ToolbarItem control) : base(control)
         {
-            get { return false; }
-            set { }
+        }
+
+        public bool Enabled
+        {
+            get { return Control.IsEnabled; }
+            set { Control.IsEnabled = value; }
         }
 
         public string Text
         {
-            get;
-            set;
+            get { return Control.Text; }
+            set { Control.Text = value; }
         }
 
-        public event EventHandler Completed;
-        public event EventHandler TextChanged;
-
-        public void AddItem(string text)
+        public bool Visible
         {
+            get { return true; }
+            set { }
         }
     }
 }

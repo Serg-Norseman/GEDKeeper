@@ -38,6 +38,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
+        <ProjectReference Include="..\..\GKMap\GKMap.Core\GKMap.Core.nstd.csproj" />
+        <ProjectReference Include="..\..\GKMap\GKMap.Xamarin\GKMap.Xamarin.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -21,152 +21,10 @@
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Controls;
-using GKUI.Components;
 using Xamarin.Forms;
 
 namespace GKUI.Platform
 {
-    public sealed class TextBoxHandler : BaseControlHandler<Entry, TextBoxHandler>, ITextBox
-    {
-        public TextBoxHandler(Entry control) : base(control)
-        {
-        }
-
-        public new bool Enabled
-        {
-            get { return Control.IsEnabled; }
-            set {
-                Control.IsEnabled = value;
-                SetBackColor();
-            }
-        }
-
-        public string[] Lines
-        {
-            get { return /*UIHelper.Convert(Control.Text)*/ null; }
-            set { } // TODO
-        }
-
-        public bool ReadOnly
-        {
-            get { return Control.IsReadOnly; }
-            set {
-                Control.IsReadOnly = value;
-                SetBackColor();
-            }
-        }
-
-        public string SelectedText
-        {
-            get {
-                string selectedText = (Control.Text == null) ? string.Empty : Control.Text.Substring(Control.CursorPosition, Control.SelectionLength);
-                return selectedText;
-            }
-            set { /*Control.SelectedText = value;*/ }
-        }
-
-        public string Text
-        {
-            get { return Control.Text; }
-            set { Control.Text = value; }
-        }
-
-        public void AppendText(string text)
-        {
-            //Control.Append(text, true);
-        }
-
-        public void Clear()
-        {
-            Control.Text = string.Empty;
-        }
-
-        private void SetBackColor()
-        {
-            //Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
-        }
-
-        public void Copy()
-        {
-            AppHost.Instance.SetClipboardText(SelectedText);
-        }
-
-        public void SelectAll()
-        {
-            Control.CursorPosition = 0;
-            Control.SelectionLength = Control.Text != null ? Control.Text.Length : 0;
-        }
-    }
-
-    public sealed class TextAreaHandler : BaseControlHandler<Editor, TextAreaHandler>, ITextBox
-    {
-        public TextAreaHandler(Editor control) : base(control)
-        {
-        }
-
-        public new bool Enabled
-        {
-            get { return Control.IsEnabled; }
-            set {
-                Control.IsEnabled = value;
-                SetBackColor();
-            }
-        }
-
-        public string[] Lines
-        {
-            get { /*return UIHelper.Convert(Control.Text);*/ return null; }
-            set { } // TODO
-        }
-
-        public bool ReadOnly
-        {
-            get { return Control.IsReadOnly; }
-            set {
-                Control.IsReadOnly = value;
-                SetBackColor();
-            }
-        }
-
-        public string SelectedText
-        {
-            get { return /*Control.SelectedText*/ null; }
-            set { /*Control.SelectedText = value;*/ }
-        }
-
-        public string Text
-        {
-            get { return Control.Text; }
-            set { Control.Text = value; }
-        }
-
-        public void AppendText(string text)
-        {
-            //Control.Append(text, true);
-        }
-
-        public void Clear()
-        {
-            Control.Text = string.Empty;
-        }
-
-        private void SetBackColor()
-        {
-            //Control.BackgroundColor = (!Control.IsReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
-        }
-
-        public void Copy()
-        {
-            AppHost.Instance.SetClipboardText(SelectedText);
-        }
-
-        public void SelectAll()
-        {
-            //Control.CursorPosition = 0;
-            //Control.SelectionLength = Control.Text != null ? Control.Text.Length : 0;
-        }
-    }
-
     /*public sealed class MaskedTextBoxHandler : BaseControlHandler<Entry, MaskedTextBoxHandler>, ITextBox
     {
         public MaskedTextBoxHandler(Entry control) : base(control)
@@ -226,31 +84,6 @@ namespace GKUI.Platform
             Control.SelectAll();
         }
     }*/
-
-    public sealed class NumericBoxHandler : BaseControlHandler<NumericStepper, NumericBoxHandler>, INumericBox
-    {
-        public NumericBoxHandler(NumericStepper control) : base(control)
-        {
-        }
-
-        public bool ReadOnly
-        {
-            get { return false; }
-            set { }
-        }
-
-        public string Text
-        {
-            get { return Value.ToString(); }
-            set { } // TODO
-        }
-
-        public double Value
-        {
-            get { return Control.Value; }
-            set { Control.Value = (int)value; }
-        }
-    }
 
     /*public sealed class TreeViewHandler : BaseControlHandler<TreeView, TreeViewHandler>, ITreeViewHandler
     {
@@ -354,29 +187,4 @@ namespace GKUI.Platform
             Control.Items.Clear();
         }
     }*/
-
-    public sealed class ButtonToolItemHandler : ControlHandler<ToolbarItem, ButtonToolItemHandler>, IButtonToolItem
-    {
-        public ButtonToolItemHandler(ToolbarItem control) : base(control)
-        {
-        }
-
-        public bool Enabled
-        {
-            get { return Control.IsEnabled; }
-            set { Control.IsEnabled = value; }
-        }
-
-        public string Text
-        {
-            get { return Control.Text; }
-            set { Control.Text = value; }
-        }
-
-        public bool Visible
-        {
-            get { return true; }
-            set { }
-        }
-    }
 }

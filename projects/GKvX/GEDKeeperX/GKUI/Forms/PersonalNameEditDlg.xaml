@@ -34,10 +34,10 @@
             <Entry x:Name="txtNickname" Grid.Column="3" Grid.Row="3" />
 
             <Label x:Name="lblType" Grid.Column="0" Grid.Row="4" />
-            <comcom:GKComboBox x:Name="cmbNameType" Grid.Column="1" Grid.Row="4" IsReadOnly="true" />
+            <comcom:GKComboBox x:Name="cmbNameType" Grid.Column="1" Grid.Row="4" />
 
             <Label x:Name="lblLanguage" Grid.Column="0" Grid.Row="5" />
-            <comcom:GKComboBox x:Name="cmbLanguage" Grid.Column="1" Grid.Row="5" IsReadOnly="true" SelectedIndexChanged="cmbLanguage_SelectedIndexChanged" />
+            <comcom:GKComboBox x:Name="cmbLanguage" Grid.Column="1" Grid.Row="5" SelectedIndexChanged="cmbLanguage_SelectedIndexChanged" />
         </Grid>
 
         <Label VerticalOptions="FillAndExpand" />

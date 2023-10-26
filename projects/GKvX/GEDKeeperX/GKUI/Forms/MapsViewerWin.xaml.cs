@@ -28,10 +28,10 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
-/*using GKMap;
-using GKMap.EtoForms;
+using GKMap;
+using GKMap.Xamarin;
 using GKMap.MapObjects;
-using GKMap.MapProviders;*/
+using GKMap.MapProviders;
 using GKUI.Components;
 using GKUI.Platform;
 
@@ -160,8 +160,8 @@ namespace GKUI.Forms
 
         private void PopulateContextMenus()
         {
-            /*var providers = GMapProviders.List;
-            RadioMenuItem controller = null;
+            var providers = GMapProviders.List;
+            /*RadioMenuItem controller = null;
             foreach (var prv in providers) {
                 var item = UIHelper.AddToolStripItem(MenuProviders, controller, prv.Name, prv, miProviderX_Click);
                 if (controller == null)
@@ -203,24 +203,24 @@ namespace GKUI.Forms
 
         private void tbClear_Click(object sender, EventArgs e)
         {
-            //fMapBrowser.Objects.Clear();
+            fMapBrowser.Objects.Clear();
         }
 
         private void tbZoomCenter_Click(object sender, EventArgs e)
         {
-            //fMapBrowser.MapControl.ZoomAndCenterMarkers("objects");
+            fMapBrowser.MapControl.ZoomAndCenterMarkers("objects");
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            /*try {
+            try {
                 double lat = double.Parse(txtLat.Text, CultureInfo.InvariantCulture);
                 double lng = double.Parse(txtLng.Text, CultureInfo.InvariantCulture);
 
                 fMapBrowser.MapControl.Position = new PointLatLng(lat, lng);
             } catch (Exception ex) {
-                MessageBox.Show("incorrect coordinate format: " + ex.Message);
-            }*/
+                //MessageBox.Show("incorrect coordinate format: " + ex.Message);
+            }
         }
 
         /*private void txtPlace_KeyPress(object sender, KeyEventArgs e)
