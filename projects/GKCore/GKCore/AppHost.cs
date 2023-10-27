@@ -910,13 +910,11 @@ namespace GKCore
 
         public static ushort RequestLanguage()
         {
-            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                return LangMan.LS_DEF_CODE;
-            }
-
-            using (var dlg = AppHost.ResolveDialog<ILanguageSelectDlg>()) {
-                if (AppHost.Instance.ShowModalX(dlg, null, false)) {
-                    return (ushort)dlg.SelectedLanguage;
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                using (var dlg = AppHost.ResolveDialog<ILanguageSelectDlg>()) {
+                    if (AppHost.Instance.ShowModalX(dlg, null, false)) {
+                        return (ushort)dlg.SelectedLanguage;
+                    }
                 }
             }
 

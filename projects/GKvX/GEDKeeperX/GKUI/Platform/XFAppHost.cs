@@ -241,11 +241,11 @@ namespace GKUI.Platform
             container.Register<ICommunicationEditDlg, CommunicationEditDlg>(LifeCycle.Transient);
             container.Register<IDayTipsDlg, DayTipsDlg>(LifeCycle.Transient);
             container.Register<IEventEditDlg, EventEditDlg>(LifeCycle.Transient);
+            container.Register<IFARDlg, FindAndReplaceDlg>(LifeCycle.Transient);
             container.Register<IFamilyEditDlg, FamilyEditDlg>(LifeCycle.Transient);
             container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
             container.Register<IFragmentSearchDlg, TTFamilyGroupsDlg>(LifeCycle.Transient);
             container.Register<IGroupEditDlg, GroupEditDlg>(LifeCycle.Transient);
-            container.Register<ILanguageSelectDlg, LanguageSelectDlg>(LifeCycle.Transient);
             container.Register<ILocationEditDlg, LocationEditDlg>(LifeCycle.Transient);
             container.Register<IMapsViewerWin, MapsViewerWin>(LifeCycle.Transient);
             container.Register<IMediaEditDlg, MediaEditDlg>(LifeCycle.Transient);
@@ -300,7 +300,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(NumericStepper), typeof(NumericBoxHandler));
             //ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
             //ControlsManager.RegisterHandlerType(typeof(ButtonMenuItem), typeof(MenuItemHandler));
-            //ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
+            ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
         }
 
         #endregion

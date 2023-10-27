@@ -37,10 +37,10 @@
                         <Button x:Name="btnMotherDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="btnMotherDelete_Click" />
                     </StackLayout>
                 </Grid>
-
-                <Label VerticalOptions="FillAndExpand" />
             </StackLayout>
         </Frame>
+
+        <Label VerticalOptions="FillAndExpand" />
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label HorizontalOptions="FillAndExpand" />

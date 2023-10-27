@@ -139,7 +139,7 @@ namespace GKUI.Components
             }
         }
 
-        public float Scale
+        public new float Scale
         {
             get { return fModel.Scale; }
         }

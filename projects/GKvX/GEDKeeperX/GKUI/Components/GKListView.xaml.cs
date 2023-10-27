@@ -282,7 +282,7 @@ namespace GKUI.Components
             }
         }
 
-        protected BSDSortOrder GetColumnSortOrder(int columnIndex)
+        private BSDSortOrder GetColumnSortOrder(int columnIndex)
         {
             return (fSortColumn == columnIndex) ? fSortOrder : BSDSortOrder.None;
         }

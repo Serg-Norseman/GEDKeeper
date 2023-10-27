@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma warning disable CS0618
-
 using System;
 using System.Globalization;
 using GDModel;
@@ -29,11 +27,10 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKMap;
-using GKMap.Xamarin;
 using GKMap.MapObjects;
 using GKMap.MapProviders;
+using GKMap.Xamarin;
 using GKUI.Components;
-using GKUI.Platform;
 
 namespace GKUI.Forms
 {
@@ -104,21 +101,18 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            PopulateContextMenus();
-
             radTotal.IsChecked = true;
 
             fController = new MapsViewerWinController(this, baseWin.GetContentList(GDMRecordType.rtIndividual));
             fController.Init(baseWin);
 
-            /*if (!GMapControl.IsDesignerHosted) {
+            if (!GMapControl.IsDesignerHosted) {
                 fMapBrowser.MapControl.OnMapTypeChanged += MainMap_OnMapTypeChanged;
                 fMapBrowser.MapControl.OnMapZoomChanged += MainMap_OnMapZoomChanged;
 
                 // get zoom  
-                trkZoom.MinValue = fMapBrowser.MapControl.MinZoom * 100;
-                trkZoom.MaxValue = fMapBrowser.MapControl.MaxZoom * 100;
-                trkZoom.TickFrequency = 100;
+                trkZoom.Minimum = fMapBrowser.MapControl.MinZoom * 100;
+                trkZoom.Maximum = fMapBrowser.MapControl.MaxZoom * 100;
 
                 if (fMapBrowser.MapControl.Zoom >= fMapBrowser.MapControl.MinZoom && fMapBrowser.MapControl.Zoom <= fMapBrowser.MapControl.MaxZoom) {
                     trkZoom.Value = fMapBrowser.MapControl.Zoom * 100;
@@ -127,7 +121,7 @@ namespace GKUI.Forms
                 // get position
                 txtLat.Text = fMapBrowser.MapControl.Position.Lat.ToString(CultureInfo.InvariantCulture);
                 txtLng.Text = fMapBrowser.MapControl.Position.Lng.ToString(CultureInfo.InvariantCulture);
-            }*/
+            }
         }
 
         private void radTotal_Click(object sender, EventArgs e)
@@ -158,21 +152,12 @@ namespace GKUI.Forms
             fController.SetCenter();
         }
 
-        private void PopulateContextMenus()
+        private async void miProviderX_Click(object sender, EventArgs e)
         {
-            var providers = GMapProviders.List;
-            /*RadioMenuItem controller = null;
-            foreach (var prv in providers) {
-                var item = UIHelper.AddToolStripItem(MenuProviders, controller, prv.Name, prv, miProviderX_Click);
-                if (controller == null)
-                    controller = item;
-            }*/
-        }
-
-        private void miProviderX_Click(object sender, EventArgs e)
-        {
-            //var provider = UIHelper.GetMenuItemTag<GMapProvider>(MenuProviders, sender);
-            //fMapBrowser.MapControl.MapProvider = provider;
+            var provider = await UIHelper.SelectItem(this, GMapProviders.List);
+            if (provider != null) {
+                fMapBrowser.MapControl.MapProvider = provider;
+            }
         }
 
         public override void SetLocale()
@@ -219,7 +204,7 @@ namespace GKUI.Forms
 
                 fMapBrowser.MapControl.Position = new PointLatLng(lat, lng);
             } catch (Exception ex) {
-                //MessageBox.Show("incorrect coordinate format: " + ex.Message);
+                AppHost.StdDialogs.ShowError("incorrect coordinate format: " + ex.Message);
             }
         }
 
@@ -233,44 +218,44 @@ namespace GKUI.Forms
             }
         }*/
 
-        /*private void MainMap_OnMapTypeChanged(GMapProvider type)
+        private void MainMap_OnMapTypeChanged(GMapProvider type)
         {
             //cmbMapType.SelectedItem = type;
-            trkZoom.MinValue = fMapBrowser.MapControl.MinZoom * 100;
-            trkZoom.MaxValue = fMapBrowser.MapControl.MaxZoom * 100;
+            trkZoom.Minimum = fMapBrowser.MapControl.MinZoom * 100;
+            trkZoom.Maximum = fMapBrowser.MapControl.MaxZoom * 100;
             fMapBrowser.MapControl.ZoomAndCenterMarkers("objects");
-        }*/
+        }
 
-        /*private void MainMap_OnMapZoomChanged()
+        private void MainMap_OnMapZoomChanged()
         {
             trkZoom.Value = (int)(fMapBrowser.MapControl.Zoom * 100.0);
-        }*/
+        }
 
         private void trkZoom_ValueChanged(object sender, EventArgs e)
         {
-            //fMapBrowser.MapControl.Zoom = (int)Math.Floor(trkZoom.Value / 100.0);
+            fMapBrowser.MapControl.Zoom = (int)Math.Floor(trkZoom.Value / 100.0);
         }
 
         private void btnZoomUp_Click(object sender, EventArgs e)
         {
-            //fMapBrowser.MapControl.Zoom = fMapBrowser.MapControl.Zoom + 1;
+            fMapBrowser.MapControl.Zoom = fMapBrowser.MapControl.Zoom + 1;
         }
 
         private void btnZoomDown_Click(object sender, EventArgs e)
         {
-            //fMapBrowser.MapControl.Zoom = ((int)(fMapBrowser.MapControl.Zoom + 0.99)) - 1;
+            fMapBrowser.MapControl.Zoom = ((int)(fMapBrowser.MapControl.Zoom + 0.99)) - 1;
         }
 
         private void btnAddRouteMarker_Click(object sender, EventArgs e)
         {
-            //fMapBrowser.AddMarker(fMapBrowser.TargetPosition, GMarkerIconType.blue_small, MarkerTooltipMode.OnMouseOver, "");
-            //fMapBrowser.GenerateRoute();
+            fMapBrowser.AddMarker(fMapBrowser.TargetPosition, GMarkerIconType.blue_small, MarkerTooltipMode.OnMouseOver, "");
+            fMapBrowser.GenerateRoute();
         }
 
         private void btnAddPolygonMarker_Click(object sender, EventArgs e)
         {
-            //fMapBrowser.AddMarker(fMapBrowser.TargetPosition, GMarkerIconType.purple_small, MarkerTooltipMode.OnMouseOver, "");
-            //fMapBrowser.GeneratePolygon();
+            fMapBrowser.AddMarker(fMapBrowser.TargetPosition, GMarkerIconType.purple_small, MarkerTooltipMode.OnMouseOver, "");
+            fMapBrowser.GeneratePolygon();
         }
     }
 }

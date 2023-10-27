@@ -44,8 +44,8 @@ namespace GKUI.Platform
 
         public bool Visible
         {
-            get { return true; }
-            set { }
+            get { return Control.IsEnabled; }
+            set { Control.IsEnabled = value; }
         }
     }
 }

@@ -4,8 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:forms="clr-namespace:GKUI.Forms"
     xmlns:plat="clr-namespace:GKUI.Platform"
-    x:Class="GKUI.Forms.TreeChartWin"
-    WidthRequest="1020" HeightRequest="760">
+    x:Class="GKUI.Forms.TreeChartWin">
 
     <forms:PrintableForm.ToolbarItems>
         <ToolbarItem x:Name="tbImageSave" Order="Primary" Priority="0" IconImageSource="{plat:ImageResourceExt Resources.btn_save_image.gif}" Clicked="tbImageSave_Click" />
@@ -13,7 +12,12 @@
         <ToolbarItem x:Name="tbPrev" Order="Primary" Priority="2" IconImageSource="{plat:ImageResourceExt Resources.btn_left.gif}" Clicked="ToolBar1_ButtonClick" />
         <ToolbarItem x:Name="tbNext" Order="Primary" Priority="3" IconImageSource="{plat:ImageResourceExt Resources.btn_right.gif}" Clicked="ToolBar1_ButtonClick" />
         <ToolbarItem x:Name="tbOptions" Order="Primary" Priority="4" IconImageSource="{plat:ImageResourceExt Resources.btn_tools.gif}" Clicked="tbOptions_Click" />
-    </forms:PrintableForm.ToolbarItems>
 
+        <ToolbarItem x:Name="tbGensCommon" Order="Primary" Priority="5" Clicked="miGensX_Click" />
+        <ToolbarItem x:Name="tbGensAncestors" Order="Primary" Priority="5" Clicked="miGensXAncestors_Click" />
+        <ToolbarItem x:Name="tbGensDescendants" Order="Primary" Priority="5" Clicked="miGensXDescendants_Click" />
+
+        <ToolbarItem x:Name="tbBorders" Order="Primary" Priority="5" Clicked="miBorderX_Click" />
+    </forms:PrintableForm.ToolbarItems>
 
 </forms:PrintableForm>

@@ -318,8 +318,6 @@ namespace GKCore.Controllers
 
         public void SetupDepth()
         {
-            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) return;
-
             var treeOptions = GlobalOptions.Instance.TreeChartOptions;
 
             GetControl<IButtonToolItem>("tbGensCommon").Visible = !treeOptions.SeparateDepth;
@@ -329,13 +327,14 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) return;
-
             GetControl<IButtonToolItem>("tbGensCommon").Text = LangMan.LS(LSID.Generations);
             GetControl<IButtonToolItem>("tbGensAncestors").Text = LangMan.LS(LSID.Generations) + ": " + LangMan.LS(LSID.Ancestors);
             GetControl<IButtonToolItem>("tbGensDescendants").Text = LangMan.LS(LSID.Generations) + ": " + LangMan.LS(LSID.Descendants);
-            GetControl<IButtonToolItem>("tbModes").Text = LangMan.LS(LSID.ModesTip);
             GetControl<IButtonToolItem>("tbBorders").Text = LangMan.LS(LSID.Borders);
+
+            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) return;
+
+            GetControl<IButtonToolItem>("tbModes").Text = LangMan.LS(LSID.ModesTip);
 
             GetControl<IMenuItem>("miGensInfCommon").Text = LangMan.LS(LSID.Unlimited);
             GetControl<IMenuItem>("miGensInfAncestors").Text = LangMan.LS(LSID.Unlimited);

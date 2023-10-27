@@ -112,16 +112,6 @@ namespace GKUI.Forms
             fController.SaveSnapshot();
         }
 
-        private void tbDocPreview_Click(object sender, EventArgs e)
-        {
-            DoPrintPreview();
-        }
-
-        private void tbDocPrint_Click(object sender, EventArgs e)
-        {
-            DoPrint();
-        }
-
         private void tbOptions_Click(object sender, EventArgs e)
         {
             AppHost.Instance.ShowOptions(this, OptionsPage.opCircleChart);
@@ -160,8 +150,8 @@ namespace GKUI.Forms
                 var imageSize = fCircleChart.GetImageSize();
                 StatusLines[1] = string.Format(LangMan.LS(LSID.ImageSize), imageSize.Width, imageSize.Height);
 
-                //tbPrev.Enabled = NavCanBackward();
-                //tbNext.Enabled = NavCanForward();
+                tbPrev.IsEnabled = NavCanBackward();
+                tbNext.IsEnabled = NavCanForward();
 
                 AppHost.Instance.UpdateControls(false, true);
             } catch (Exception ex) {

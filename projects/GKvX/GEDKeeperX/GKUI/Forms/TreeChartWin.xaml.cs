@@ -41,9 +41,8 @@ namespace GKUI.Forms
 
         private GDMIndividualRecord fPerson;
 
-        /*private RadioMenuItem miGensInfCommon;
-        private RadioMenuItem miGensInfAncestors;
-        private RadioMenuItem miGensInfDescendants;*/
+        private List<GKComboItem<GfxBorderStyle>> fBorderItems;
+        private List<GKComboItem<int>> fGenItems;
 
         public IWindow OwnerWindow
         {
@@ -62,48 +61,9 @@ namespace GKUI.Forms
         /*
     <Form.ToolBar>
         <ToolBar TextAlign="Right" Style="tbsi">
-            <SeparatorToolItem />
-
-            <complat:GKDropDownToolItem x:Name="tbGensCommon">
-                <complat:GKDropDownToolItem.ContextMenu>
-                    <ContextMenu x:Name="MenuGensCommon">
-                    </ContextMenu>
-                </complat:GKDropDownToolItem.ContextMenu>
-            </complat:GKDropDownToolItem>
-
-            <complat:GKDropDownToolItem x:Name="tbGensAncestors">
-                <complat:GKDropDownToolItem.ContextMenu>
-                    <ContextMenu x:Name="MenuGensAncestors">
-                    </ContextMenu>
-                </complat:GKDropDownToolItem.ContextMenu>
-            </complat:GKDropDownToolItem>
-
-            <complat:GKDropDownToolItem x:Name="tbGensDescendants">
-                <complat:GKDropDownToolItem.ContextMenu>
-                    <ContextMenu x:Name="MenuGensDescendants">
-                    </ContextMenu>
-                </complat:GKDropDownToolItem.ContextMenu>
-            </complat:GKDropDownToolItem>
-
-            <SeparatorToolItem />
-
             <complat:GKDropDownToolItem x:Name="tbModes">
                 <complat:GKDropDownToolItem.ContextMenu>
                     <ContextMenu x:Name="MenuModes">
-                    </ContextMenu>
-                </complat:GKDropDownToolItem.ContextMenu>
-            </complat:GKDropDownToolItem>
-
-            <SeparatorToolItem />
-            <SeparatorToolItem />
-            <ButtonToolItem x:Name="tbDocPreview" Image="{Resource Resources.btn_preview.gif, GKCore}" Click="tbDocPreview_Click" />
-            <ButtonToolItem x:Name="tbDocPrint" Image="{Resource Resources.btn_print.gif, GKCore}" Click="tbDocPrint_Click" />
-            <SeparatorToolItem />
-            <SeparatorToolItem />
-
-            <complat:GKDropDownToolItem x:Name="tbBorders">
-                <complat:GKDropDownToolItem.ContextMenu>
-                    <ContextMenu x:Name="MenuBorders">
                     </ContextMenu>
                 </complat:GKDropDownToolItem.ContextMenu>
             </complat:GKDropDownToolItem>
@@ -386,44 +346,47 @@ namespace GKUI.Forms
 
         private void PopulateContextMenus()
         {
-            /*miGensInfCommon = UIHelper.AddToolStripItem(MenuGensCommon, null, "Inf", -1, miGensX_Click);
-            miGensInfAncestors = UIHelper.AddToolStripItem(MenuGensAncestors, null, "Inf", -1, miGensXAncestors_Click);
-            miGensInfDescendants = UIHelper.AddToolStripItem(MenuGensDescendants, null, "Inf", -1, miGensXDescendants_Click);
-
+            fGenItems = new List<GKComboItem<int>>();
+            fGenItems.Add(new GKComboItem<int>(LangMan.LS(LSID.Unlimited), -1));
             for (int i = 1; i <= 9; i++) {
-                UIHelper.AddToolStripItem(MenuGensCommon, miGensInfCommon, i.ToString(), i, miGensX_Click);
-                UIHelper.AddToolStripItem(MenuGensAncestors, miGensInfAncestors, i.ToString(), i, miGensXAncestors_Click);
-                UIHelper.AddToolStripItem(MenuGensDescendants, miGensInfDescendants, i.ToString(), i, miGensXDescendants_Click);
+                fGenItems.Add(new GKComboItem<int>(i.ToString(), i));
             }
 
-            RadioMenuItem controller = null;
+            fBorderItems = new List<GKComboItem<GfxBorderStyle>>();
             for (var bs = GfxBorderStyle.None; bs <= GfxBorderStyle.Last; bs++) {
-                var item = UIHelper.AddToolStripItem(MenuBorders, controller, bs.ToString(), (int)bs, miBorderX_Click);
-                if (controller == null)
-                    controller = item;
-            }*/
+                fBorderItems.Add(new GKComboItem<GfxBorderStyle>(bs.ToString(), bs));
+            }
         }
 
-        private void miGensX_Click(object sender, EventArgs e)
+        private async void miGensX_Click(object sender, EventArgs e)
         {
-            /*int depth = UIHelper.GetMenuItemTag<int>(MenuGensCommon, sender);
-            fTreeBox.DepthLimitAncestors = depth;
-            fTreeBox.DepthLimitDescendants = depth;
-            GenChart();*/
+            var depthItem = await UIHelper.SelectItem(this, fGenItems);
+            if (depthItem != null) {
+                //AppHost.StdDialogs.ShowMessage(depthItem.ToString());
+                fTreeBox.DepthLimitAncestors = depthItem.Tag;
+                fTreeBox.DepthLimitDescendants = depthItem.Tag;
+                GenChart();
+            }
         }
 
-        private void miGensXAncestors_Click(object sender, EventArgs e)
+        private async void miGensXAncestors_Click(object sender, EventArgs e)
         {
-            /*int depth = UIHelper.GetMenuItemTag<int>(MenuGensAncestors, sender);
-            fTreeBox.DepthLimitAncestors = depth;
-            GenChart();*/
+            var depthItem = await UIHelper.SelectItem(this, fGenItems);
+            if (depthItem != null) {
+                //AppHost.StdDialogs.ShowMessage(depthItem.ToString());
+                fTreeBox.DepthLimitAncestors = depthItem.Tag;
+                GenChart();
+            }
         }
 
-        private void miGensXDescendants_Click(object sender, EventArgs e)
+        private async void miGensXDescendants_Click(object sender, EventArgs e)
         {
-            /*int depth = UIHelper.GetMenuItemTag<int>(MenuGensDescendants, sender);
-            fTreeBox.DepthLimitDescendants = depth;
-            GenChart();*/
+            var depthItem = await UIHelper.SelectItem(this, fGenItems);
+            if (depthItem != null) {
+                //AppHost.StdDialogs.ShowMessage(depthItem.ToString());
+                fTreeBox.DepthLimitDescendants = depthItem.Tag;
+                GenChart();
+            }
         }
 
         private void SetupDepth()
@@ -442,11 +405,14 @@ namespace GKUI.Forms
             UIHelper.SetMenuItemTag(MenuBorders, (int)GlobalOptions.Instance.TreeChartOptions.BorderStyle);*/
         }
 
-        private void miBorderX_Click(object sender, EventArgs e)
+        private async void miBorderX_Click(object sender, EventArgs e)
         {
-            /*int borderStyle = UIHelper.GetMenuItemTag<int>(MenuBorders, sender);
-            GlobalOptions.Instance.TreeChartOptions.BorderStyle = (GfxBorderStyle)borderStyle;
-            fTreeBox.Invalidate();*/
+            var borderItem = await UIHelper.SelectItem(this, fBorderItems);
+            if (borderItem != null) {
+                //AppHost.StdDialogs.ShowMessage(borderItem.ToString());
+                GlobalOptions.Instance.TreeChartOptions.BorderStyle = borderItem.Tag;
+                fTreeBox.Invalidate();
+            }
         }
 
         private void miEdit_Click(object sender, EventArgs e)
@@ -582,16 +548,6 @@ namespace GKUI.Forms
 
             TreeChartPerson p = fTreeBox.Selected;
             miGoToPrimaryBranch.Enabled = (p != null && p.Rec != null && p.IsDup);*/
-        }
-
-        private void tbDocPreview_Click(object sender, EventArgs e)
-        {
-            DoPrintPreview();
-        }
-
-        private void tbDocPrint_Click(object sender, EventArgs e)
-        {
-            DoPrint();
         }
 
         private void tbOptions_Click(object sender, EventArgs e)

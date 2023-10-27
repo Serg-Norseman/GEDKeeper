@@ -83,14 +83,6 @@ namespace GKUI.Forms
                     baseWin?.Controller.ShowAbout();
                 }),
 
-                new LaunchItem("Test", "LangSelect", async () => {
-                    var curPage = Application.Current.MainPage;
-                    curPage.Navigation.ShowPopup(new LanguageSelectDlg());
-                }),
-                new LaunchItem("Test", "ParentsEditDlg", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    XFAppHost.GetMainPage().NavigateAsync(new ParentsEditDlg(baseWin));
-                }),
                 new LaunchItem("Test", "QuickSearch", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     XFAppHost.GetMainPage().NavigateAsync(new QuickSearchDlg(baseWin));
@@ -106,10 +98,6 @@ namespace GKUI.Forms
                 }),
                 new LaunchItem("Test", "NameEditDlg", async () => {
                     XFAppHost.GetMainPage().NavigateAsync(new NameEditDlg());
-                }),
-                new LaunchItem("Test", "FindAndReplaceDlg", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    XFAppHost.GetMainPage().NavigateAsync(new FindAndReplaceDlg(baseWin));
                 }),
                 new LaunchItem("Test", "PortraitSelectDlg", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;

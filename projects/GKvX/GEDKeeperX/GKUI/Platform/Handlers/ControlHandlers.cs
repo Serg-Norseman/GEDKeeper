@@ -21,6 +21,7 @@
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Controls;
+using GKUI.Components;
 using Xamarin.Forms;
 
 namespace GKUI.Platform
@@ -126,23 +127,6 @@ namespace GKUI.Platform
             if (treeNode != null) {
                 treeNode.Expanded = true;
             }
-        }
-    }*/
-
-    /*public sealed class LogChartHandler : BaseControlHandler<LogChart, LogChartHandler>, ILogChart
-    {
-        public LogChartHandler(LogChart control) : base(control)
-        {
-        }
-
-        public void AddFragment(int val)
-        {
-            Control.AddFragment(val);
-        }
-
-        public void Clear()
-        {
-            Control.Clear();
         }
     }*/
 

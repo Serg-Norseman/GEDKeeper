@@ -18,36 +18,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Controllers;
 using GKCore.Design.Controls;
-using GKCore.Design.Views;
+using GKUI.Components;
 
-namespace GKUI.Forms
+namespace GKUI.Platform.Handlers
 {
-    public partial class LanguageSelectDlg : XCTDialog<ILanguageSelectDlg, LanguageSelectDlgController>, ILanguageSelectDlg
+    public sealed class LogChartHandler : BaseControlHandler<LogChart, LogChartHandler>, ILogChart
     {
-        public int SelectedLanguage
+        public LogChartHandler(LogChart control) : base(control)
         {
-            get { return fController.SelectedLanguage; }
-            set { fController.SelectedLanguage = value; }
         }
 
-        #region View Interface
-
-        IListView ILanguageSelectDlg.LanguagesList
+        public void AddFragment(int val)
         {
-            get { return lstLanguages; }
+            Control.AddFragment(val);
         }
 
-        #endregion
-
-        public LanguageSelectDlg()
+        public void Clear()
         {
-            InitializeComponent();
-
-            lstLanguages.AddColumn(@"Language", 300);
-
-            fController = new LanguageSelectDlgController(this);
+            Control.Clear();
         }
     }
 }

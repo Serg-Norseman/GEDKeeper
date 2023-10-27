@@ -19,6 +19,9 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore;
@@ -140,6 +143,17 @@ namespace GKUI.Components
         public static ImageSource LoadResourceImage(Type baseType, string resName)
         {
             return ImageSource.FromResource(resName, baseType.Assembly);
+        }
+
+        public static async Task<T> SelectItem<T>(object owner, IEnumerable<T> items)
+        {
+            var page = owner as Page;
+            if (page == null) return default(T);
+
+            var title = GKData.APP_TITLE;
+            string[] strItems = items.Select(x => x.ToString()).ToArray();
+            string action = await page.DisplayActionSheet(title, "Cancel", null, strItems);
+            return string.IsNullOrEmpty(action) ? default(T) : items.FirstOrDefault(x => x.ToString() == action);
         }
     }
 }

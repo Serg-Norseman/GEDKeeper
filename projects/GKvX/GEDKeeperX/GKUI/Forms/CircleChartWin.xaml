@@ -15,11 +15,6 @@
 
     <!--Form.ToolBar>
     <ToolBar TextAlign="Right" Style="tbsi">
-      <SeparatorToolItem />
-      <SeparatorToolItem />
-      <ButtonToolItem x:Name="tbDocPreview" Image="{Resource Resources.btn_preview.gif, GKCore}" Click="tbDocPreview_Click" />
-      <ButtonToolItem x:Name="tbDocPrint" Image="{Resource Resources.btn_print.gif, GKCore}" Click="tbDocPrint_Click" />
-      <SeparatorToolItem />
       <complat:GKDropDownToolItem x:Name="tbModes">
         <complat:GKDropDownToolItem.ContextMenu>
           <ContextMenu x:Name="MenuModes">

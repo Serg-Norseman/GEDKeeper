@@ -136,23 +136,23 @@
 
                                                 <input:CheckBox x:Name="chkSurname" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 <StackLayout Orientation="Horizontal" Spacing="20">
-                                                    <Label HorizontalOptions="Start" Text="\t" />
+                                                    <Label HorizontalOptions="Start" Text="" />
                                                     <input:CheckBox x:Name="chkTreeSurnameFirst" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 </StackLayout>
                                                 <input:CheckBox x:Name="chkName" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 <input:CheckBox x:Name="chkPatronymic" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 <StackLayout Orientation="Horizontal" Spacing="20">
-                                                    <Label HorizontalOptions="Start" Text="\t" />
+                                                    <Label HorizontalOptions="Start" Text="" />
                                                     <input:CheckBox x:Name="chkDiffLines" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 </StackLayout>
                                                 <input:CheckBox x:Name="chkBirthDate" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 <input:CheckBox x:Name="chkDeathDate" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 <StackLayout Orientation="Horizontal" Spacing="20">
-                                                    <Label HorizontalOptions="Start" Text="\t" />
+                                                    <Label HorizontalOptions="Start" Text="" />
                                                     <input:CheckBox x:Name="chkOnlyYears" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 </StackLayout>
                                                 <StackLayout Orientation="Horizontal" Spacing="20">
-                                                    <Label HorizontalOptions="Start" Text="\t" />
+                                                    <Label HorizontalOptions="Start" Text="" />
                                                     <input:CheckBox x:Name="chkShowAge" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 </StackLayout>
                                                 <input:CheckBox x:Name="chkMarriagesDates" CheckChanged="chkTreeChartOption_CheckedChanged" />
@@ -165,11 +165,11 @@
                                                 <input:CheckBox x:Name="chkChildlessExclude" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 <input:CheckBox x:Name="chkShowPlaces" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 <StackLayout Orientation="Horizontal" Spacing="20">
-                                                    <Label HorizontalOptions="Start" Text="\t" />
+                                                    <Label HorizontalOptions="Start" Text="" />
                                                     <input:CheckBox x:Name="chkSeparateDAPLines" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 </StackLayout>
                                                 <StackLayout Orientation="Horizontal" Spacing="20">
-                                                    <Label HorizontalOptions="Start" Text="\t" />
+                                                    <Label HorizontalOptions="Start" Text="" />
                                                     <input:CheckBox x:Name="chkOnlyLocality" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 </StackLayout>
                                                 <input:CheckBox x:Name="chkHideUnknownSpouses" CheckChanged="chkTreeChartOption_CheckedChanged" />

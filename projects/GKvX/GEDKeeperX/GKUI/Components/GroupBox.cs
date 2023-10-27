@@ -24,6 +24,49 @@ namespace GKUI.Components
 {
     public class GroupBox : ContentView
     {
-        public string Text { get; set; }
+        private readonly Frame fContent;
+        private readonly Label fTitle;
+
+        public new View Content
+        {
+            get { return fContent.Content; }
+            set { fContent.Content = value; }
+        }
+
+        public string Text
+        {
+            get { return fTitle.Text; }
+            set {
+                fTitle.Text = value;
+                ForceLayout();
+            }
+        }
+
+        public GroupBox()
+        {
+            fTitle = new Label() {
+                //HorizontalOptions = LayoutOptions.FillAndExpand,
+                //VerticalOptions = LayoutOptions.Start,
+                Text = "GroupBox",
+            };
+
+            fContent = new Frame() {
+                //HorizontalOptions = LayoutOptions.FillAndExpand,
+                //VerticalOptions = LayoutOptions.FillAndExpand,
+                //Padding = 4
+            };
+
+            var contentGrid = new Grid() {
+                //Padding = new Thickness(4),
+                //HorizontalOptions = LayoutOptions.FillAndExpand,
+                //VerticalOptions = LayoutOptions.FillAndExpand,
+                //Orientation = StackOrientation.Vertical,
+                //Children = { fTitle, fContent }
+            };
+            contentGrid.Children.Add(fTitle, 0, 0);
+            contentGrid.Children.Add(fContent, 0, 1);
+
+            base.Content = contentGrid;
+        }
     }
 }

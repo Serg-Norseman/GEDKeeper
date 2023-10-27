@@ -130,12 +130,15 @@ namespace GKUI.Components
             base.Padding = new Thickness(0);
 
             fCanvas = new SKCanvasView();
+            fCanvas.IgnorePixelScaling = true;
             fCanvas.PaintSurface += PaintHandler;
+            fCanvas.EnableTouchEvents = true;
             /*fCanvas.KeyDown += KeyDownHandler;
             fCanvas.KeyUp += KeyUpHandler;
             fCanvas.CanFocus = true;*/
             Content = fCanvas;
 
+            base.Orientation = ScrollOrientation.Both;
             base.SizeChanged += OnSizeChanged;
             base.Scrolled += OnScroll;
 

@@ -3,29 +3,32 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
     xmlns:plat="clr-namespace:GKUI.Platform"
     x:Class="GKUI.Forms.DayTipsDlg">
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <StackLayout Orientation="Horizontal" Spacing="0">
-            <Frame x:Name="Shape1" BackgroundColor="Gray" WidthRequest="100" Padding="8">
-                <Image Source="{plat:ImageResourceExt Resources.image_tips_light.png}" />
+        <StackLayout Orientation="Horizontal" Spacing="0" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
+            <Frame x:Name="Shape1" BackgroundColor="Gray" WidthRequest="100" Padding="8" HorizontalOptions="Start">
+                <Image Source="{plat:ImageResourceExt Resources.image_tips_light.png}" HorizontalOptions="Center" VerticalOptions="Start" />
             </Frame>
 
-            <StackLayout Orientation="Vertical" Spacing="0">
-                <Frame x:Name="Shape2" BackgroundColor="White" Height="50" Padding="8">
+            <StackLayout Orientation="Vertical" Spacing="0" HorizontalOptions="FillAndExpand">
+                <Frame x:Name="Shape2" BackgroundColor="White" HeightRequest="50" Padding="8" VerticalOptions="Start">
                     <Label x:Name="lblTitle" WidthRequest="370" Font="Bold+16pt" HorizontalTextAlignment="Left" VerticalTextAlignment="Center" />
                 </Frame>
 
-                <Frame x:Name="Shape3" BackgroundColor="White" Height="204" Padding="8">
+                <Frame x:Name="Shape3" BackgroundColor="White" HeightRequest="204" Padding="8" VerticalOptions="FillAndExpand">
                     <Label x:Name="txtTip" WidthRequest="370" HeightRequest="164" />
                 </Frame>
             </StackLayout>
         </StackLayout>
 
+        <Label VerticalOptions="FillAndExpand" />
+
         <StackLayout Style="{StaticResource dlgFooter}">
-            <CheckBox x:Name="chkShow" IsChecked="True" />
+            <input:CheckBox x:Name="chkShow" IsChecked="True" />
             <Label HorizontalOptions="FillAndExpand" />
             <Button x:Name="btnNextTip" Style="{StaticResource dlgBtn}" Clicked="btnNextTip_Click" />
             <Button x:Name="btnClose" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />
