@@ -2031,7 +2031,7 @@ namespace GKCore
 
             if (resAssembly == null && !File.Exists(fileName)) return result;
 
-            using (var inputStream = (resAssembly == null) ? new FileStream(fileName, FileMode.Open) : resAssembly.GetManifestResourceStream(fileName)) {
+            using (var inputStream = (resAssembly == null) ? new FileStream(fileName, FileMode.Open, FileAccess.Read) : resAssembly.GetManifestResourceStream(fileName)) {
                 fList.Clear();
 
                 using (StreamReader lngFile = new StreamReader(inputStream, Encoding.UTF8)) {

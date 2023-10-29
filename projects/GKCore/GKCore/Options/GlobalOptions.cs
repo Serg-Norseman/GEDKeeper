@@ -411,7 +411,7 @@ namespace GKCore.Options
         private void LngPrepareProc(string fileName, Assembly resAssembly)
         {
             try {
-                using (var inputStream = (resAssembly == null) ? new FileStream(fileName, FileMode.Open) : resAssembly.GetManifestResourceStream(fileName)) {
+                using (var inputStream = (resAssembly == null) ? new FileStream(fileName, FileMode.Open, FileAccess.Read) : resAssembly.GetManifestResourceStream(fileName)) {
                     using (var reader = new StreamReader(inputStream, Encoding.UTF8)) {
                         string st = reader.ReadLine(); // header
 
