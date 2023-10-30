@@ -82,7 +82,7 @@ namespace GKUI.Components
 
     public sealed class ArborViewer : ContentView, IArborRenderer
     {
-        private SKCanvasView fCanvas;
+        private readonly SKCanvasView fCanvas;
         private bool fEnergyDebug;
         private ArborNode fDragged;
         private bool fNodesDragging;

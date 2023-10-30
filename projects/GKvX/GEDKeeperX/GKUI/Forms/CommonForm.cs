@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using GKCore;
 using GKCore.Design;
 using GKCore.Interfaces;
@@ -70,13 +71,14 @@ namespace GKUI.Forms
             return FindByName(controlName);
         }
 
-        public void Close()
+        public virtual void Close()
         {
-            //base.Close();
+            Navigation.PopAsync();
         }
 
         public void Dispose()
         {
+            // not supported
         }
 
         public virtual void ApplyTheme()
@@ -135,47 +137,45 @@ namespace GKUI.Forms
     /// </summary>
     public class CommonDialog : CommonForm, ICommonDialog
     {
-        /*public DialogResult DialogResult
+        private DialogResult fResult;
+
+        public DialogResult DialogResult
         {
-            get { return base.Result; }
-            set {
-                if (base.Result != value) {
-                    base.Result = value;
-                    if (value != DialogResult.None) {
-                        Close();
-                    }
-                }
-            }
-        }*/
+            get { return fResult; }
+        }
 
         public CommonDialog()
         {
+            fResult = DialogResult.None;
         }
 
         public virtual bool ShowModalX(IView owner)
         {
-            XFAppHost.GetMainPage().Navigate(this);
+            XFAppHost.GetMainPage().Navigation.PushModalAsync(this);
             return false;//(ShowModal((Control)owner) == DialogResult.Ok);
         }
 
-        /*public void Close(DialogResult dialogResult)
+        public override void Close()
+        {
+            Navigation.PopModalAsync();
+        }
+
+        public void Close(DialogResult dialogResult)
         {
             fResult = dialogResult;
             if (fResult != DialogResult.None) {
-                Close();
+                Navigation.PopModalAsync();
             }
-        }*/
+        }
 
         protected async virtual void AcceptClickHandler(object sender, EventArgs e)
         {
-            //Close(DialogResult.Cancel);
-            await Navigation.PopAsync();
+            Close(DialogResult.Ok);
         }
 
         protected async virtual void CancelClickHandler(object sender, EventArgs e)
         {
-            //Close(DialogResult.Cancel);
-            await Navigation.PopAsync();
+            Close(DialogResult.Cancel);
         }
     }
 
@@ -192,9 +192,8 @@ namespace GKUI.Forms
         protected async override void AcceptClickHandler(object sender, EventArgs e)
         {
             try {
-                fController.Accept();
-                await Navigation.PopAsync();
-                //DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+                if (fController.Accept())
+                    Close(DialogResult.Ok);
             } catch (Exception ex) {
                 Logger.WriteError("CommonDialog<>.AcceptClickHandler()", ex);
             }
@@ -203,18 +202,14 @@ namespace GKUI.Forms
         protected async override void CancelClickHandler(object sender, EventArgs e)
         {
             try {
-                fController.Cancel();
-                await Navigation.PopAsync();
-                //DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+                if (fController.CheckChangesPersistence())
+                    return;
+
+                if (fController.Cancel())
+                    Close(DialogResult.Cancel);
             } catch (Exception ex) {
                 Logger.WriteError("CommonDialog<>.CancelClickHandler()", ex);
             }
         }
-
-        /*protected override void OnClosing(CancelEventArgs e)
-        {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
-        }*/
     }
 }

@@ -20,13 +20,14 @@
 
 using System;
 using GKCore;
+using GKCore.Design.Views;
 using GKCore.Options;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace GKUI.Forms
 {
-    public partial class AboutPage : ContentPage
+    public partial class AboutPage : CommonDialog, IAboutDlg
     {
         public AboutPage()
         {

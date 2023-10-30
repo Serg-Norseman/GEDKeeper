@@ -25,20 +25,25 @@ namespace GKUI.Components
     public class GroupBox : ContentView
     {
         private readonly Frame fContent;
+        private readonly StackLayout fContentLayout;
         private readonly Label fTitle;
 
         public new View Content
         {
-            get { return fContent.Content; }
-            set { fContent.Content = value; }
+            get {
+                return fContent.Content;
+            }
+            set {
+                fContent.Content = value;
+            }
         }
 
         public string Text
         {
             get { return fTitle.Text; }
             set {
-                fTitle.Text = value;
-                ForceLayout();
+                ///fTitle.Text = value;
+                //ForceLayout();
             }
         }
 
@@ -50,13 +55,24 @@ namespace GKUI.Components
                 Text = "GroupBox",
             };
 
+            fContentLayout = new StackLayout() {
+                Orientation = StackOrientation.Vertical,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand
+            };
+
             fContent = new Frame() {
                 //HorizontalOptions = LayoutOptions.FillAndExpand,
                 //VerticalOptions = LayoutOptions.FillAndExpand,
                 //Padding = 4
+                Content = fContentLayout
             };
 
             var contentGrid = new Grid() {
+                RowDefinitions = {
+                    new RowDefinition() { Height = GridLength.Auto },
+                    new RowDefinition() { Height = GridLength.Auto }
+                }
                 //Padding = new Thickness(4),
                 //HorizontalOptions = LayoutOptions.FillAndExpand,
                 //VerticalOptions = LayoutOptions.FillAndExpand,
@@ -68,5 +84,23 @@ namespace GKUI.Components
 
             base.Content = contentGrid;
         }
+
+        /*protected override void OnChildAdded(Element child)
+        {
+            View childView = child as View;
+            if (childView != null) {
+                ((Layout<View>)fContentLayout).Children.Add(childView);
+                base.OnChildAdded(child);
+            }
+        }
+
+        protected override void OnChildRemoved(Element child, int oldLogicalIndex)
+        {
+            View childView = child as View;
+            if (childView != null) {
+                ((Layout<View>)fContentLayout).Children.Remove(childView);
+                base.OnChildRemoved(child, oldLogicalIndex);
+            }
+        }*/
     }
 }

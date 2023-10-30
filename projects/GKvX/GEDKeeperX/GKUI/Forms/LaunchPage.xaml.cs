@@ -24,9 +24,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using GKCore;
 using GKCore.Controllers;
+using GKCore.Names;
 using GKUI.Components;
 using GKUI.Platform;
-using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
 
 namespace GKUI.Forms
@@ -90,22 +90,18 @@ namespace GKUI.Forms
                 new LaunchItem("Test", "Progress", async () => {
                     XFAppHost.GetMainPage().NavigateAsync(new ProgressDlg());
                 }),
-                new LaunchItem("Test", "PatriarchsViewer", async () => {
-                    XFAppHost.GetMainPage().NavigateAsync(new PatriarchsViewerWin());
-                }),
                 new LaunchItem("Test", "SexCheckDlg", async () => {
-                    XFAppHost.GetMainPage().NavigateAsync(new SexCheckDlg());
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    baseWin.Context.DefineSex(baseWin, "Ivan", "Ivanovich");
                 }),
                 new LaunchItem("Test", "NameEditDlg", async () => {
-                    XFAppHost.GetMainPage().NavigateAsync(new NameEditDlg());
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    var nameEntry = new NameEntry();
+                    BaseController.ModifyName(baseWin, baseWin.Context, ref nameEntry);
                 }),
                 new LaunchItem("Test", "PortraitSelectDlg", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     XFAppHost.GetMainPage().NavigateAsync(new PortraitSelectDlg(baseWin));
-                }),
-                new LaunchItem("Test", "DayTipsDlg", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    XFAppHost.GetMainPage().NavigateAsync(new DayTipsDlg());
                 }),
             };
 

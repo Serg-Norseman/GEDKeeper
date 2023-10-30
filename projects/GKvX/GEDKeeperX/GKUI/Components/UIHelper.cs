@@ -152,7 +152,7 @@ namespace GKUI.Components
 
             var title = GKData.APP_TITLE;
             string[] strItems = items.Select(x => x.ToString()).ToArray();
-            string action = await page.DisplayActionSheet(title, "Cancel", null, strItems);
+            string action = await page.DisplayActionSheet(title, LangMan.LS(LSID.DlgCancel), null, strItems);
             return string.IsNullOrEmpty(action) ? default(T) : items.FirstOrDefault(x => x.ToString() == action);
         }
     }

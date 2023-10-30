@@ -1,4 +1,4 @@
-<forms:CommonForm
+<forms:CommonDialog
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:forms="clr-namespace:GKUI.Forms" xmlns:plat="clr-namespace:GKUI.Platform"
@@ -12,4 +12,4 @@
         </StackLayout>
     </StackLayout>
 
-</forms:CommonForm>
+</forms:CommonDialog>

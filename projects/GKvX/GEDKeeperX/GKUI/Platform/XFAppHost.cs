@@ -232,7 +232,7 @@ namespace GKUI.Platform
             container.Register<ITreeChart, TreeChartBox>(LifeCycle.Transient);
 
             // dialogs
-            //container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);
+            container.Register<IAboutDlg, AboutPage>(LifeCycle.Transient);
             container.Register<IAddressEditDlg, AddressEditDlg>(LifeCycle.Transient);
             container.Register<IAssociationEditDlg, AssociationEditDlg>(LifeCycle.Transient);
             container.Register<IBaseWindow, BaseWinSDI>(LifeCycle.Transient);

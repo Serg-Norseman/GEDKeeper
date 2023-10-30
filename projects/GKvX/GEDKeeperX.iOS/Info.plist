@@ -25,7 +25,7 @@
     <key>CFBundleDisplayName</key>
     <string>GEDKeeperX</string>
     <key>CFBundleIdentifier</key>
-    <string>com.companyname.GEDKeeperX</string>
+    <string>com.SVZsoft.GEDKeeperX</string>
     <key>CFBundleVersion</key>
     <string>1.0</string>
     <key>UILaunchStoryboardName</key>

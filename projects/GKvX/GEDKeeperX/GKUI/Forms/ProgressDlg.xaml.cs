@@ -25,7 +25,7 @@ using GKCore.Interfaces;
 
 namespace GKUI.Forms
 {
-    public sealed partial class ProgressDlg : CommonForm, IProgressController
+    public sealed partial class ProgressDlg : CommonDialog, IProgressController
     {
         private int fMaximum;
         private DateTime fStartTime;

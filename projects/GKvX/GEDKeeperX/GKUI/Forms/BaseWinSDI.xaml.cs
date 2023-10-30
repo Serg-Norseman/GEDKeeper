@@ -667,11 +667,6 @@ namespace GKUI.Forms
             AppHost.Instance.ShowOptions(this);
         }
 
-        private void miFileClose_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
         private void miFileNew_Click(object sender, EventArgs e)
         {
             fController.NewFile();

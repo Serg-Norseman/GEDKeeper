@@ -1,4 +1,4 @@
-<forms:CommonForm
+<forms:CommonDialog
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:forms="clr-namespace:GKUI.Forms"
@@ -41,4 +41,4 @@
             <input:RadioButton Text="Option 5 Disabled" IsDisabled="True"/>
         </input:RadioButtonGroupView>
     </StackLayout>
-</forms:CommonForm>
+</forms:CommonDialog>

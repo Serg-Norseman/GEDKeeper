@@ -176,4 +176,12 @@ namespace GKUI.Platform
             }
         }
     }
+
+
+    public enum DialogResult
+    {
+        None,
+        Cancel,
+        Ok
+    }
 }

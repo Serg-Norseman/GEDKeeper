@@ -26,7 +26,7 @@ using GKCore.Interfaces;
 
 namespace GKUI.Forms
 {
-    public sealed partial class QuickSearchDlg : CommonForm, IQuickSearchDlg
+    public sealed partial class QuickSearchDlg : CommonDialog, IQuickSearchDlg
     {
         private readonly QuickSearchDlgController fController;
 
