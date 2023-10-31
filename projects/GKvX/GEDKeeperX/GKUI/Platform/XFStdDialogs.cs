@@ -72,7 +72,7 @@ namespace GKUI.Platform
 
                 var res = await FilePicker.PickAsync(options);
                 return (res == null) ? string.Empty : res.FullPath;
-            } catch (Exception ex) {
+            } catch {
                 // The user canceled or something went wrong
             }
 

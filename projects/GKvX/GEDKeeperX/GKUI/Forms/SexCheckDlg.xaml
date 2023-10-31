@@ -3,6 +3,7 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:comcom="clr-namespace:GKUI.Components"
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
     x:Class="GKUI.Forms.SexCheckDlg">
@@ -11,13 +12,15 @@
 
         <Entry x:Name="txtName" IsReadOnly="True" VerticalOptions="Start" HorizontalOptions="FillAndExpand" />
 
-        <Frame VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <input:RadioButtonGroupView x:Name="grpSex">
+        <comcom:GroupBox x:Name="grpSex" HorizontalOptions="FillAndExpand">
+            <input:RadioButtonGroupView>
                 <input:RadioButton x:Name="rbNone" />
                 <input:RadioButton x:Name="rbMale" />
                 <input:RadioButton x:Name="rbFemale" />
             </input:RadioButtonGroupView>
-        </Frame>
+        </comcom:GroupBox>
+
+        <Label VerticalOptions="FillAndExpand" />
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label HorizontalOptions="FillAndExpand" />

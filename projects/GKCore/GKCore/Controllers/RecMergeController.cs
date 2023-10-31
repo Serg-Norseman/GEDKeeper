@@ -137,15 +137,9 @@ namespace GKCore.Controllers
         {
             fView.Title = LangMan.LS(LSID.MergeDuplicates);
 
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                GetControl<IGroupBox>("grpSearchPersons").Text = LangMan.LS(LSID.RM_SearchPersons);
-                GetControl<IGroupBox>("grpMergeOther").Text = LangMan.LS(LSID.Other);
-                GetControl<IGroupBox>("rgMode").Text = LangMan.LS(LSID.RM_Records);
-            } else {
-                GetControl<ILabel>("grpSearchPersons").Text = LangMan.LS(LSID.RM_SearchPersons);
-                GetControl<ILabel>("grpMergeOther").Text = LangMan.LS(LSID.Other);
-                GetControl<ILabel>("rgMode").Text = LangMan.LS(LSID.RM_Records);
-            }
+            GetControl<IGroupBox>("grpSearchPersons").Text = LangMan.LS(LSID.RM_SearchPersons);
+            GetControl<IGroupBox>("grpMergeOther").Text = LangMan.LS(LSID.Other);
+            GetControl<IGroupBox>("rgMode").Text = LangMan.LS(LSID.RM_Records);
 
             GetControl<ITabPage>("pageMerge").Text = LangMan.LS(LSID.RecMerge);
             GetControl<ITabPage>("pageMergeOptions").Text = LangMan.LS(LSID.MIOptions);

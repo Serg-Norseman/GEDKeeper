@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Design;
@@ -653,6 +654,11 @@ namespace GKCore
         public virtual bool ShowModalX(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
             return (dialog != null && dialog.ShowModalX(owner));
+        }
+
+        public virtual async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
+        {
+            return false;
         }
 
         public void ShowHelpTopic(string topic)

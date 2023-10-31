@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using GDModel;
 using GKCore;
 using GKCore.Design.Views;
@@ -35,7 +34,7 @@ namespace GKUI.Forms
             btnAccept.Text = LangMan.LS(LSID.DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.DlgCancel);
             Title = LangMan.LS(LSID.WinCheckSex);
-            //grpSex.Text = LangMan.LS(LSID.Sex);
+            grpSex.Text = LangMan.LS(LSID.Sex);
             rbNone.Text = "?";
             rbMale.Text = LangMan.LS(LSID.SexM);
             rbFemale.Text = LangMan.LS(LSID.SexF);
@@ -74,16 +73,6 @@ namespace GKUI.Forms
                         break;
                 }
             }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            //DialogResult = DialogResult.Ok;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            //DialogResult = DialogResult.Cancel;
         }
     }
 }

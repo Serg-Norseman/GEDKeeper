@@ -18,89 +18,53 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections.Generic;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace GKUI.Components
 {
+    [ContentProperty("Contents")]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public class GroupBox : ContentView
     {
-        private readonly Frame fContent;
         private readonly StackLayout fContentLayout;
         private readonly Label fTitle;
 
-        public new View Content
-        {
-            get {
-                return fContent.Content;
-            }
-            set {
-                fContent.Content = value;
-            }
-        }
+        public IList<View> Contents { get => fContentLayout.Children; }
 
         public string Text
         {
             get { return fTitle.Text; }
-            set {
-                ///fTitle.Text = value;
-                //ForceLayout();
-            }
+            set { fTitle.Text = value; }
         }
 
         public GroupBox()
         {
-            fTitle = new Label() {
-                //HorizontalOptions = LayoutOptions.FillAndExpand,
-                //VerticalOptions = LayoutOptions.Start,
-                Text = "GroupBox",
-            };
+            fTitle = new Label();
 
             fContentLayout = new StackLayout() {
                 Orientation = StackOrientation.Vertical,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                Padding = 0,
+                Spacing = 0
             };
 
-            fContent = new Frame() {
-                //HorizontalOptions = LayoutOptions.FillAndExpand,
-                //VerticalOptions = LayoutOptions.FillAndExpand,
-                //Padding = 4
-                Content = fContentLayout
-            };
-
-            var contentGrid = new Grid() {
-                RowDefinitions = {
-                    new RowDefinition() { Height = GridLength.Auto },
-                    new RowDefinition() { Height = GridLength.Auto }
+            var content = new StackLayout() {
+                Orientation = StackOrientation.Vertical,
+                Padding = 0,
+                Spacing = 0,
+                Children = {
+                    fTitle,
+                    new Frame() {
+                        Padding = 8,
+                        Content = fContentLayout
+                    }
                 }
-                //Padding = new Thickness(4),
-                //HorizontalOptions = LayoutOptions.FillAndExpand,
-                //VerticalOptions = LayoutOptions.FillAndExpand,
-                //Orientation = StackOrientation.Vertical,
-                //Children = { fTitle, fContent }
             };
-            contentGrid.Children.Add(fTitle, 0, 0);
-            contentGrid.Children.Add(fContent, 0, 1);
 
-            base.Content = contentGrid;
+            base.Content = content;
         }
-
-        /*protected override void OnChildAdded(Element child)
-        {
-            View childView = child as View;
-            if (childView != null) {
-                ((Layout<View>)fContentLayout).Children.Add(childView);
-                base.OnChildAdded(child);
-            }
-        }
-
-        protected override void OnChildRemoved(Element child, int oldLogicalIndex)
-        {
-            View childView = child as View;
-            if (childView != null) {
-                ((Layout<View>)fContentLayout).Children.Remove(childView);
-                base.OnChildRemoved(child, oldLogicalIndex);
-            }
-        }*/
     }
 }

@@ -21,17 +21,24 @@
                     <StackLayout Orientation="Vertical">
 
                         <Grid x:Name="MergeControl" ColumnSpacing="2" RowSpacing="2" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
                             <Label x:Name="Lab1" Grid.Column="0" Grid.Row="0">XXX1</Label>
                             <Label x:Name="Lab2" Grid.Column="1" Grid.Row="0">XXX2</Label>
 
                             <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="0" Grid.Row="1">
-                                <Entry x:Name="Edit1" IsReadOnly="True" />
-                                <Button x:Name="btnRec1Select" Text="btnRec1Select" Clicked="btnRec1Select_Click" />
+                                <Entry x:Name="Edit1" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
+                                <Button x:Name="btnRec1Select" Text="btnRec1Select" Clicked="btnRec1Select_Click" HorizontalOptions="End" />
                             </StackLayout>
 
                             <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
-                                <Entry x:Name="Edit2" IsReadOnly="True" />
-                                <Button x:Name="btnRec2Select" Text="btnRec2Select" Clicked="btnRec2Select_Click" />
+                                <Entry x:Name="Edit2" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
+                                <Button x:Name="btnRec2Select" Text="btnRec2Select" Clicked="btnRec2Select_Click" HorizontalOptions="End" />
                             </StackLayout>
 
                             <comcom:HyperView x:Name="fView1" Grid.Column="0" Grid.Row="2" />
@@ -63,18 +70,16 @@
 
                 <xp:TabItem x:Name="pageMergeOptions">
                     <StackLayout Orientation="Vertical">
-                        <Label x:Name="rgMode" />
-                        <Frame>
+                        <comcom:GroupBox x:Name="rgMode">
                             <input:RadioButtonGroupView>
                                 <input:RadioButton x:Name="radPersons" IsChecked="true" Checked="radMergeMode_Click" />
                                 <input:RadioButton x:Name="radFamilies" Checked="radMergeMode_Click" />
                                 <input:RadioButton x:Name="radNotes" Checked="radMergeMode_Click" />
                                 <input:RadioButton x:Name="radSources" Checked="radMergeMode_Click" />
                             </input:RadioButtonGroupView>
-                        </Frame>
+                        </comcom:GroupBox>
 
-                        <Label x:Name="grpSearchPersons" />
-                        <Frame>
+                        <comcom:GroupBox x:Name="grpSearchPersons">
                             <StackLayout Orientation="Vertical">
                                 <input:CheckBox x:Name="chkIndistinctMatching" />
 
@@ -83,19 +88,18 @@
                                     <comcom:NumericStepper x:Name="edNameAccuracy" Value="90" />
                                 </StackLayout>
 
-                                <CheckBox x:Name="chkBirthYear" />
+                                <input:CheckBox x:Name="chkBirthYear" />
 
                                 <StackLayout Orientation="Horizontal">
                                     <Label x:Name="lblYearInaccuracy" />
                                     <comcom:NumericStepper x:Name="edYearInaccuracy" Value="3" />
                                 </StackLayout>
                             </StackLayout>
-                        </Frame>
+                        </comcom:GroupBox>
 
-                        <Label x:Name="grpMergeOther" />
-                        <Frame Padding="8">
-                            <CheckBox x:Name="chkBookmarkMerged" CheckedChanged="chkBookmarkMerged_CheckedChanged" />
-                        </Frame>
+                        <comcom:GroupBox x:Name="grpMergeOther">
+                            <input:CheckBox x:Name="chkBookmarkMerged" CheckChanged="chkBookmarkMerged_CheckedChanged" />
+                        </comcom:GroupBox>
 
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>

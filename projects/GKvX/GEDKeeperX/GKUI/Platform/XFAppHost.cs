@@ -21,6 +21,7 @@
 using System;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using BSLib;
 using GKCore;
 using GKCore.Charts;
@@ -112,6 +113,15 @@ namespace GKUI.Platform
         public override bool ShowModalX(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
             return base.ShowModalX(dialog, owner, keepModeless);
+        }
+
+        public override async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
+        {
+            var xfModal = dialog as CommonDialog;
+            if (xfModal == null) return false;
+
+            await GetMainPage().Navigation.PushModalAsync(xfModal);
+            return await xfModal.DialogResultTask;
         }
 
         public override void EnableWindow(IWidgetForm form, bool value)

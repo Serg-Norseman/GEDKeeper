@@ -94,10 +94,24 @@ namespace GKUI.Forms
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin.Context.DefineSex(baseWin, "Ivan", "Ivanovich");
                 }),
-                new LaunchItem("Test", "NameEditDlg", async () => {
+                new LaunchItem("Test", "NameEditDlg (def)", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     var nameEntry = new NameEntry();
-                    BaseController.ModifyName(baseWin, baseWin.Context, ref nameEntry);
+                    if (BaseController.ModifyName(baseWin, baseWin.Context, ref nameEntry)) {
+                        AppHost.StdDialogs.ShowMessage("True!");
+                    } else {
+                        AppHost.StdDialogs.ShowMessage("False!");
+                    }
+                }),
+                new LaunchItem("Test", "NameEditDlg (ASYNC)", async () => {
+                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+                    var nameEntry = new NameEntry();
+                    bool res = await BaseController.ModifyNameAsync(baseWin, baseWin.Context, nameEntry);
+                    if (res) {
+                        AppHost.StdDialogs.ShowMessage("True!");
+                    } else {
+                        AppHost.StdDialogs.ShowMessage("False!");
+                    }
                 }),
                 new LaunchItem("Test", "PortraitSelectDlg", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
@@ -105,8 +119,7 @@ namespace GKUI.Forms
                 }),
             };
 
-            var groups = launchItems.GroupBy(p => p.Group).Select(g => new Grouping<string, LaunchItem>(g.Key, g));
-            LaunchItems = new ObservableCollection<Grouping<string, LaunchItem>>(groups);
+            LaunchItems = PrepareItems(launchItems);
 
             var servicesItems = new List<LaunchItem>() {
                 new LaunchItem("Pedigree", "Maps", async () => {
@@ -167,8 +180,7 @@ namespace GKUI.Forms
                 }),
             };
 
-            var services = servicesItems.GroupBy(p => p.Group).Select(g => new Grouping<string, LaunchItem>(g.Key, g));
-            ServiceItems = new ObservableCollection<Grouping<string, LaunchItem>>(services);
+            ServiceItems = PrepareItems(servicesItems);
 
             BindingContext = this;
         }
@@ -176,7 +188,14 @@ namespace GKUI.Forms
         private async void lv_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var item = e.SelectedItem as LaunchItem;
+            ((ListView)sender).SelectedItem = null;
             item?.Action?.Invoke();
+        }
+
+        private static ObservableCollection<Grouping<string, LaunchItem>> PrepareItems(List<LaunchItem> items)
+        {
+            var groups = items.GroupBy(p => p.Group).Select(g => new Grouping<string, LaunchItem>(g.Key, g));
+            return new ObservableCollection<Grouping<string, LaunchItem>>(groups);
         }
     }
 

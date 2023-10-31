@@ -90,7 +90,7 @@ namespace GKUI.Components
             }
         }
 
-        public new float Zoom
+        public float Zoom
         {
             get {
                 return fZoom;

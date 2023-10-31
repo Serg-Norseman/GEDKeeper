@@ -20,21 +20,17 @@
             <comcom:GKComboBox x:Name="cmbSex" Grid.Column="1" Grid.Row="1" />
         </Grid>
 
-        <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <Label x:Name="grpPatronymics" VerticalOptions="Start" />
+        <comcom:GroupBox x:Name="grpPatronymics" HorizontalOptions="FillAndExpand">
+            <Grid ColumnSpacing="4" RowSpacing="4">
+                <Label x:Name="lblFemale" Grid.Column="0" Grid.Row="0" />
+                <Entry x:Name="txtFPatr" Grid.Column="1" Grid.Row="0" />
 
-            <Frame>
-                <Grid ColumnSpacing="4" RowSpacing="4">
-                    <Label x:Name="lblFemale" Grid.Column="0" Grid.Row="0" />
-                    <Entry x:Name="txtFPatr" Grid.Column="1" Grid.Row="0" />
+                <Label x:Name="lblMale" Grid.Column="0" Grid.Row="1" />
+                <Entry x:Name="txtMPatr" Grid.Column="1" Grid.Row="1" />
+            </Grid>
+        </comcom:GroupBox>
 
-                    <Label x:Name="lblMale" Grid.Column="0" Grid.Row="1" />
-                    <Entry x:Name="txtMPatr" Grid.Column="1" Grid.Row="1" />
-                </Grid>
-            </Frame>
-
-            <Label VerticalOptions="FillAndExpand" />
-        </StackLayout>
+        <Label VerticalOptions="FillAndExpand" />
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label HorizontalOptions="FillAndExpand" />

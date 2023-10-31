@@ -18,18 +18,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Threading.Tasks;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Charts;
+using GKCore.Design;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Design.Views;
 using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
-using GKCore.Design;
 
 namespace GKCore.Controllers
 {
@@ -609,6 +610,24 @@ namespace GKCore.Controllers
                 using (var dlg = AppHost.ResolveDialog<INameEditDlg>()) {
                     dlg.IName = nameEntry;
                     result = AppHost.Instance.ShowModalX(dlg, owner, false);
+                }
+            } finally {
+                context.EndUpdate();
+            }
+
+            return result;
+        }
+
+        public static async Task<bool> ModifyNameAsync(IView owner, IBaseContext context, NameEntry nameEntry)
+        {
+            bool result;
+
+            try {
+                context.BeginUpdate();
+
+                using (var dlg = AppHost.ResolveDialog<INameEditDlg>()) {
+                    dlg.IName = nameEntry;
+                    result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                 }
             } finally {
                 context.EndUpdate();

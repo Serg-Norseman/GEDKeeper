@@ -588,7 +588,7 @@ namespace GKMap.Xamarin
         /// <summary>
         /// enqueue built-in thread safe invalidation
         /// </summary>
-        public new void Invalidate()
+        public void Invalidate()
         {
             if (fCore.RefreshEvent != null && !HoldInvalidation) {
                 fCore.RefreshEvent.Set();

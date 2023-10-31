@@ -133,11 +133,18 @@ namespace GKUI.Forms
 
 
     /// <summary>
-    /// 
+    ///
+    /// Ref: https://stackoverflow.com/questions/24174241/how-can-i-await-modal-form-dismissal-using-xamarin-forms
     /// </summary>
     public class CommonDialog : CommonForm, ICommonDialog
     {
         private DialogResult fResult;
+        private readonly TaskCompletionSource<bool> fTaskSource;
+
+        public Task<bool> DialogResultTask
+        {
+            get { return fTaskSource.Task; }
+        }
 
         public DialogResult DialogResult
         {
@@ -146,6 +153,7 @@ namespace GKUI.Forms
 
         public CommonDialog()
         {
+            fTaskSource = new TaskCompletionSource<bool>();
             fResult = DialogResult.None;
         }
 
@@ -160,22 +168,23 @@ namespace GKUI.Forms
             Navigation.PopModalAsync();
         }
 
-        public void Close(DialogResult dialogResult)
+        protected async Task Close(DialogResult dialogResult)
         {
             fResult = dialogResult;
             if (fResult != DialogResult.None) {
-                Navigation.PopModalAsync();
+                await Navigation.PopModalAsync();
+                fTaskSource.SetResult(dialogResult == DialogResult.Ok);
             }
         }
 
         protected async virtual void AcceptClickHandler(object sender, EventArgs e)
         {
-            Close(DialogResult.Ok);
+            await Close(DialogResult.Ok);
         }
 
         protected async virtual void CancelClickHandler(object sender, EventArgs e)
         {
-            Close(DialogResult.Cancel);
+            await Close(DialogResult.Cancel);
         }
     }
 
@@ -193,7 +202,7 @@ namespace GKUI.Forms
         {
             try {
                 if (fController.Accept())
-                    Close(DialogResult.Ok);
+                    await Close(DialogResult.Ok);
             } catch (Exception ex) {
                 Logger.WriteError("CommonDialog<>.AcceptClickHandler()", ex);
             }
@@ -206,7 +215,7 @@ namespace GKUI.Forms
                     return;
 
                 if (fController.Cancel())
-                    Close(DialogResult.Cancel);
+                    await Close(DialogResult.Cancel);
             } catch (Exception ex) {
                 Logger.WriteError("CommonDialog<>.CancelClickHandler()", ex);
             }
