@@ -54,6 +54,9 @@ namespace GKUI.Components
 
     public delegate void PaintItemEventHandler(object sender, PaintItemEventArgs args);
 
+    /// <summary>
+    /// TreeMap Viewer's control.
+    /// </summary>
     public class TreeMapViewer : ContentView
     {
         private MapItem fCurrentItem;
@@ -150,6 +153,8 @@ namespace GKUI.Components
 
         public TreeMapViewer()
         {
+            fModel = new TreemapModel();
+            fModel.CreatingItem += CreateSimpleItem;
         }
 
         private MapItem CreateSimpleItem(MapItem parent, string name, double size)
@@ -164,6 +169,9 @@ namespace GKUI.Components
 
         public void UpdateView()
         {
+            try {
+            } catch {
+            }
         }
     }
 }

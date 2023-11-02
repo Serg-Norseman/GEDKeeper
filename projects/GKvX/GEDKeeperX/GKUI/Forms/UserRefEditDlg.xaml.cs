@@ -48,10 +48,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        public UserRefEditDlg() : this(null)
-        {
-        }
-
         public UserRefEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();

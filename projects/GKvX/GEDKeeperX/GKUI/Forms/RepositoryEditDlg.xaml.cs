@@ -50,10 +50,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        public RepositoryEditDlg() : this(null)
-        {
-        }
-
         public RepositoryEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();

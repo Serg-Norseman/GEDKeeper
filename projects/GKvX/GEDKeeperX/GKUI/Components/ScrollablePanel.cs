@@ -154,6 +154,7 @@ namespace GKUI.Components
 
         private void PaintHandler(object sender, SKPaintSurfaceEventArgs e)
         {
+            e.Surface.Canvas.Clear();
             OnPaint(e);
 
             #if DEBUG_VIEWPORT

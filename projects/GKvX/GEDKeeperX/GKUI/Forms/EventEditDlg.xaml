@@ -18,6 +18,11 @@
                 <xp:TabItem x:Name="pageCommon">
                     <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                         <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
                             <Label x:Name="lblEvent" Grid.Column="0" Grid.Row="0" />
                             <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="0">
                                 <comcom:GKComboBox x:Name="cmbEventType" IsReadOnly="True" SelectedIndexChanged="EditEventType_SelectedIndexChanged" />

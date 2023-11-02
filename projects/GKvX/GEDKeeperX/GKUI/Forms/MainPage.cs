@@ -38,14 +38,6 @@ namespace GKUI.Forms
             fMenuPages = new Dictionary<int, Page>();
         }
 
-        public void Navigate(Page page)
-        {
-            if (page == null) return;
-
-            //IsPresented = false;
-            Navigation.PushAsync(page);
-        }
-
         public async void NavigateAsync(Page page)
         {
             if (page == null) return;

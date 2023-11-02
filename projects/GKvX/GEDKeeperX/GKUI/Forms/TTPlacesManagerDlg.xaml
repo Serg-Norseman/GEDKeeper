@@ -16,7 +16,7 @@
         <StackLayout Style="{StaticResource dlgFooter}">
             <Button x:Name="btnAnalysePlaces" Clicked="btnAnalysePlaces_Click" />
             <Label x:Name="lblFilter" />
-            <Entry x:Name="txtFilter" Text="*" />
+            <Entry x:Name="txtFilter" Text="*"  WidthRequest="200"/>
             <Label HorizontalOptions="FillAndExpand" />
             <Button x:Name="btnIntoList" Clicked="btnIntoList_Click" />
         </StackLayout>

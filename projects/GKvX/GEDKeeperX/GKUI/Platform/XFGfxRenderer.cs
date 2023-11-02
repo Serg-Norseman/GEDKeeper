@@ -61,9 +61,10 @@ namespace GKUI.Platform
 
         public override void DrawArc(IPen pen, float x, float y, float width, float height, float startAngle, float sweepAngle)
         {
-            /*Pen sdPen = ((PenHandler)pen).Handle;
-
-            fCanvas.DrawArc(sdPen, x, y, width, height, startAngle, sweepAngle);*/
+            if (pen != null) {
+                var skPaint = ((PenHandler)pen).Handle;
+                fCanvas.DrawArc(SKRect.Create(x, y, width, height), startAngle, sweepAngle, false, skPaint);
+            }
         }
 
         public override IImage LoadImage(string fileName)
@@ -240,15 +241,15 @@ namespace GKUI.Platform
         public override IGfxPath CreateCirclePath(float x, float y, float width, float height)
         {
             var path = new SKPath();
-            var result = new GfxCirclePathHandler(path);
 
+            var result = new GfxCirclePathHandler(path);
             result.X = x;
             result.Y = y;
             result.Width = width;
             result.Height = height;
 
             path.Reset();
-            path.AddOval(new SKRect(x, y, width, height));
+            path.AddOval(SKRect.Create(x, y, width, height));
             path.Close();
 
             return result;
@@ -257,15 +258,43 @@ namespace GKUI.Platform
         public override IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle, float ang1, float ang2)
         {
             var path = new SKPath();
-            var result = new GfxCircleSegmentPathHandler(path);
 
+            var result = new GfxCircleSegmentPathHandler(path);
             result.InRad = inRad;
             result.ExtRad = extRad;
             result.WedgeAngle = wedgeAngle;
             result.Ang1 = ang1;
             result.Ang2 = ang2;
 
-            //UIHelper.CreateCircleSegment(path, ctX, ctY, inRad, extRad, wedgeAngle, ang1, ang2);
+            float angCos, angSin;
+
+            float angval1 = (float)(ang1 * Math.PI / 180.0f);
+            angCos = (float)Math.Cos(angval1);
+            angSin = (float)Math.Sin(angval1);
+            float px1 = ctX + (inRad * angCos);
+            float py1 = ctY + (inRad * angSin);
+            float px2 = ctX + (extRad * angCos);
+            float py2 = ctY + (extRad * angSin);
+
+            float angval2 = (float)(ang2 * Math.PI / 180.0f);
+            angCos = (float)Math.Cos(angval2);
+            angSin = (float)Math.Sin(angval2);
+            float nx1 = ctX + (inRad * angCos);
+            float ny1 = ctY + (inRad * angSin);
+            float nx2 = ctX + (extRad * angCos);
+            float ny2 = ctY + (extRad * angSin);
+
+            float ir2 = inRad * 2.0f;
+            float er2 = extRad * 2.0f;
+
+            path.Reset();
+            path.MoveTo(px2, py2);
+            path.LineTo(px1, py1);
+            if (ir2 > 0) path.AddArc(SKRect.Create(ctX - inRad, ctY - inRad, ir2, ir2), ang1, wedgeAngle);
+            path.MoveTo(nx1, ny1);
+            path.LineTo(nx2, ny2);
+            path.AddArc(SKRect.Create(ctX - extRad, ctY - extRad, er2, er2), ang2, -wedgeAngle);
+            path.Close();
 
             return result;
         }

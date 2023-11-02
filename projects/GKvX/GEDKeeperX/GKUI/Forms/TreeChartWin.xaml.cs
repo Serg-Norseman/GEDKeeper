@@ -93,10 +93,7 @@ namespace GKUI.Forms
 
             PopulateContextMenus();
 
-            /*miGensInfCommon.Checked = true;
-            miGensInfAncestors.Checked = true;
-            miGensInfDescendants.Checked = true;
-
+            /*
             miCertaintyIndex.Checked = fTreeBox.Options.CertaintyIndexVisible;
             fTreeBox.CertaintyIndex = fTreeBox.Options.CertaintyIndexVisible;
 
@@ -362,7 +359,6 @@ namespace GKUI.Forms
         {
             var depthItem = await UIHelper.SelectItem(this, fGenItems);
             if (depthItem != null) {
-                //AppHost.StdDialogs.ShowMessage(depthItem.ToString());
                 fTreeBox.DepthLimitAncestors = depthItem.Tag;
                 fTreeBox.DepthLimitDescendants = depthItem.Tag;
                 GenChart();
@@ -373,7 +369,6 @@ namespace GKUI.Forms
         {
             var depthItem = await UIHelper.SelectItem(this, fGenItems);
             if (depthItem != null) {
-                //AppHost.StdDialogs.ShowMessage(depthItem.ToString());
                 fTreeBox.DepthLimitAncestors = depthItem.Tag;
                 GenChart();
             }
@@ -383,7 +378,6 @@ namespace GKUI.Forms
         {
             var depthItem = await UIHelper.SelectItem(this, fGenItems);
             if (depthItem != null) {
-                //AppHost.StdDialogs.ShowMessage(depthItem.ToString());
                 fTreeBox.DepthLimitDescendants = depthItem.Tag;
                 GenChart();
             }
@@ -409,7 +403,6 @@ namespace GKUI.Forms
         {
             var borderItem = await UIHelper.SelectItem(this, fBorderItems);
             if (borderItem != null) {
-                //AppHost.StdDialogs.ShowMessage(borderItem.ToString());
                 GlobalOptions.Instance.TreeChartOptions.BorderStyle = borderItem.Tag;
                 fTreeBox.Invalidate();
             }

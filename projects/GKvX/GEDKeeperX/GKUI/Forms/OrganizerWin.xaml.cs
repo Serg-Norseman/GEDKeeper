@@ -52,10 +52,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        public OrganizerWin() : this(null)
-        {
-        }
-
         public OrganizerWin(IBaseWindow baseWin)
         {
             InitializeComponent();

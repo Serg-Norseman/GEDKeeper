@@ -836,16 +836,16 @@ namespace GKUI.Forms
 
         void IProgressController.End()
         {
-            /*Device.BeginInvokeOnMainThread(() => {
+            Device.BeginInvokeOnMainThread(() => {
                 progressBar.IsVisible = false;
-            });*/
+            });
         }
 
         void IProgressController.End(ThreadError threadError)
         {
-            /*Device.BeginInvokeOnMainThread(() => {
+            Device.BeginInvokeOnMainThread(() => {
                 progressBar.IsVisible = false;
-            });*/
+            });
         }
 
         void IProgressController.SetText(string text)

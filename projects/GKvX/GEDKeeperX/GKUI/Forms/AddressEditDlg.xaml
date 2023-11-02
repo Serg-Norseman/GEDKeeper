@@ -18,24 +18,27 @@
                 <xp:TabItem x:Name="pageCommon">
                     <StackLayout Orientation="Vertical">
                         <Grid ColumnSpacing="4" RowSpacing="4">
-                            <Grid.Children>
-                                <Label x:Name="lblCountry" Grid.Column="0" Grid.Row="0" />
-                                <Entry x:Name="txtCountry" Grid.Column="1" Grid.Row="0" />
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
-                                <Label x:Name="lblState" Grid.Column="0" Grid.Row="1" />
-                                <Entry x:Name="txtState" Grid.Column="1" Grid.Row="1" />
+                            <Label x:Name="lblCountry" Grid.Column="0" Grid.Row="0" />
+                            <Entry x:Name="txtCountry" Grid.Column="1" Grid.Row="0" />
 
-                                <Label x:Name="lblCity" Grid.Column="0" Grid.Row="2" />
-                                <Entry x:Name="txtCity" Grid.Column="1" Grid.Row="2" />
+                            <Label x:Name="lblState" Grid.Column="0" Grid.Row="1" />
+                            <Entry x:Name="txtState" Grid.Column="1" Grid.Row="1" />
 
-                                <Label x:Name="lblPostalCode" Grid.Column="0" Grid.Row="3" />
-                                <Entry x:Name="txtPostalCode" Grid.Column="1" Grid.Row="3" />
+                            <Label x:Name="lblCity" Grid.Column="0" Grid.Row="2" />
+                            <Entry x:Name="txtCity" Grid.Column="1" Grid.Row="2" />
 
-                                <Label x:Name="lblAddress" Grid.Column="0" Grid.Row="4" />
-                                <Entry x:Name="txtAddress" Grid.Column="1" Grid.Row="4" />
-                            </Grid.Children>
+                            <Label x:Name="lblPostalCode" Grid.Column="0" Grid.Row="3" />
+                            <Entry x:Name="txtPostalCode" Grid.Column="1" Grid.Row="3" />
+
+                            <Label x:Name="lblAddress" Grid.Column="0" Grid.Row="4" />
+                            <Entry x:Name="txtAddress" Grid.Column="1" Grid.Row="4" />
                         </Grid>
-                        
+
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>
                 </xp:TabItem>

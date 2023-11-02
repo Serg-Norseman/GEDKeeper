@@ -44,10 +44,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        public QuickSearchDlg() : this(null)
-        {
-        }
-
         public QuickSearchDlg(IWorkWindow workWindow)
         {
             InitializeComponent();

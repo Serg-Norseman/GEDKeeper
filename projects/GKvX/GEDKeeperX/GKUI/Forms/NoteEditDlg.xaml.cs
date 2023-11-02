@@ -43,10 +43,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        public NoteEditDlg() : this(null)
-        {
-        }
-
         public NoteEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();

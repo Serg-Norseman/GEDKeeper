@@ -131,8 +131,8 @@ namespace GKCore.Controllers
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ITabPage>("pageTreeCompare").Text = LangMan.LS(LSID.ToolOp_1);
                 GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
-                GetControl<IGroupBox>("grpMatchType").Text = LangMan.LS(LSID.MatchType);
             }
+            GetControl<IGroupBox>("grpMatchType").Text = LangMan.LS(LSID.MatchType);
             GetControl<ILabel>("lblFile").Text = LangMan.LS(LSID.MIFile);
             GetControl<IButton>("btnFileChoose").Text = LangMan.LS(LSID.DlgSelect) + @"...";
             GetControl<IRadioButton>("radMatchInternal").Text = LangMan.LS(LSID.MatchInternal);

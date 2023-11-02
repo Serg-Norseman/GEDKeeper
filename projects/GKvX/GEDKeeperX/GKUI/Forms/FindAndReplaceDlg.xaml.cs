@@ -32,11 +32,6 @@ namespace GKUI.Forms
             get { return fController.Base; }
         }
 
-        public FindAndReplaceDlg()
-        {
-            InitializeComponent();
-        }
-
         public FindAndReplaceDlg(IBaseWindow baseWin)
         {
             InitializeComponent();

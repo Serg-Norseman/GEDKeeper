@@ -18,8 +18,8 @@
 
             <Label x:Name="lblPerson" Grid.Column="0" Grid.Row="1" />
             <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="1">
-                <Entry x:Name="txtPerson" IsReadOnly="true" />
-                <Button x:Name="btnPersonAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnPersonAdd_Click" />
+                <Entry x:Name="txtPerson" IsReadOnly="true" HorizontalOptions="FillAndExpand" />
+                <Button x:Name="btnPersonAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnPersonAdd_Click" HorizontalOptions="End" />
             </StackLayout>
         </Grid>
 

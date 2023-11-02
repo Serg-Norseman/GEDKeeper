@@ -22,6 +22,8 @@
             </Grid.Children>
         </Grid>
 
+        <Label VerticalOptions="FillAndExpand" />
+
         <StackLayout Style="{StaticResource dlgFooter}">
             <Label HorizontalOptions="FillAndExpand" />
             <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />

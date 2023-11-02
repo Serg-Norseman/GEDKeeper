@@ -42,10 +42,6 @@ namespace GKUI.Forms
             get { return fBase; }
         }
 
-        public PatriarchsViewerWin() : this(null, 0)
-        {
-        }
-
         public PatriarchsViewerWin(IBaseWindow baseWin, int minGens)
         {
             InitializeComponent();

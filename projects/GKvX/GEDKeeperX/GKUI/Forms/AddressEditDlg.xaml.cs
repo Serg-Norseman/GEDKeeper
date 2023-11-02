@@ -81,10 +81,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        public AddressEditDlg() : this(null)
-        {
-        }
-
         public AddressEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();

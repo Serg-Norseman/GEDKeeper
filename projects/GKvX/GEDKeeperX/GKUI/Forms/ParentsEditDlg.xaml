@@ -23,6 +23,13 @@
         <Frame x:Name="panCtlParents" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <StackLayout Orientation="Vertical">
                 <Grid x:Name="parentsTab" ColumnSpacing="4" RowSpacing="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
                     <Label x:Name="lblParents" Grid.Column="0" Grid.Row="0" />
                     <Entry x:Name="txtFather" IsEnabled="False" Grid.Column="1" Grid.Row="0" />
                     <Entry x:Name="txtMother" IsEnabled="False" Grid.Column="2" Grid.Row="0" />

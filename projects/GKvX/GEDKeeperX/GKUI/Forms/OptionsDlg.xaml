@@ -18,35 +18,59 @@
             <xp:TabViewControl.ItemSource>
 
                 <xp:TabItem x:Name="pageCommon">
-                    <StackLayout Orientation="Vertical">
-                        <StackLayout Orientation="Horizontal">
+                    <StackLayout Orientation="Horizontal">
 
-                            <comcom:GroupBox x:Name="grpOther">
+                        <comcom:GroupBox x:Name="grpOther">
+                            <StackLayout Orientation="Vertical">
+
+                                <input:CheckBox x:Name="chkLoadRecentFiles" />
+                                <input:CheckBox x:Name="chkShowOnStart" />
+                                <input:CheckBox x:Name="chkAutoCheckUpdates" />
+                                <input:CheckBox x:Name="chkCharsetDetection" />
+                                <input:CheckBox x:Name="chkDialogClosingWarn" />
+
+                                <Grid ColumnSpacing="4" RowSpacing="4">
+
+                                    <Label x:Name="lblLanguage" Grid.Column="0" Grid.Row="0" />
+                                    <comcom:GKComboBox x:Name="cmbLanguages" IsReadOnly="True" Grid.Column="1" Grid.Row="0" />
+
+                                    <Label x:Name="lblGeocoder" Grid.Column="0" Grid.Row="1" />
+                                    <comcom:GKComboBox x:Name="cmbGeocoder" IsReadOnly="True" Grid.Column="1" Grid.Row="1" />
+
+                                    <Label x:Name="lblGeoSearchCountry" Grid.Column="0" Grid.Row="2" />
+                                    <comcom:GKComboBox x:Name="cmbGeoSearchCountry" IsReadOnly="True" Grid.Column="1" Grid.Row="2" />
+
+                                    <Label x:Name="lblCertaintyAlgorithm" Grid.Column="0" Grid.Row="3" />
+                                    <comcom:GKComboBox x:Name="cmbCertaintyAlgorithm" IsReadOnly="True" Grid.Column="1" Grid.Row="3" />
+
+                                </Grid>
+
+                            </StackLayout>
+                        </comcom:GroupBox>
+
+                        <StackLayout Orientation="Vertical">
+
+                            <comcom:GroupBox x:Name="groupBox1">
                                 <StackLayout Orientation="Vertical">
 
-                                    <input:CheckBox x:Name="chkLoadRecentFiles" />
-                                    <input:CheckBox x:Name="chkShowOnStart" />
-                                    <input:CheckBox x:Name="chkAutoCheckUpdates" />
-                                    <input:CheckBox x:Name="chkCharsetDetection" />
-                                    <input:CheckBox x:Name="chkDialogClosingWarn" />
+                                    <comcom:GroupBox x:Name="grpFileBackup">
+                                        <input:RadioButtonGroupView>
+                                            <input:RadioButton x:Name="radFBNone" />
+                                            <input:RadioButton x:Name="radFBOnlyPrev" />
+                                            <input:RadioButton x:Name="radFBEachRevision" />
+                                        </input:RadioButtonGroupView>
+                                    </comcom:GroupBox>
 
-                                    <Grid ColumnSpacing="4" RowSpacing="4">
+                                    <StackLayout Orientation="Horizontal" Spacing="4">
+                                        <input:CheckBox x:Name="chkAutosave" />
+                                        <comcom:NumericStepper x:Name="numASMin" MaxValue="120" MinValue="1" WidthRequest="60" Value="1" />
+                                        <Label x:Name="lblMinutes" />
+                                    </StackLayout>
 
-                                        <Label x:Name="lblLanguage" Grid.Column="0" Grid.Row="0" />
-                                        <comcom:GKComboBox x:Name="cmbLanguages" IsReadOnly="True" Grid.Column="1" Grid.Row="0" />
-
-                                        <Label x:Name="lblGeocoder" Grid.Column="0" Grid.Row="1" />
-                                        <comcom:GKComboBox x:Name="cmbGeocoder" IsReadOnly="True" Grid.Column="1" Grid.Row="1" />
-
-                                        <Label x:Name="lblGeoSearchCountry" Grid.Column="0" Grid.Row="2" />
-                                        <comcom:GKComboBox x:Name="cmbGeoSearchCountry" IsReadOnly="True" Grid.Column="1" Grid.Row="2" />
-
-                                        <Label x:Name="lblCertaintyAlgorithm" Grid.Column="0" Grid.Row="3" />
-                                        <comcom:GKComboBox x:Name="cmbCertaintyAlgorithm" IsReadOnly="True" Grid.Column="1" Grid.Row="3" />
-
-                                    </Grid>
-
-                                    <Label VerticalOptions="FillAndExpand" />
+                                    <StackLayout Orientation="Horizontal" Spacing="4">
+                                        <Label x:Name="lblBackupRevisionsMaxCount" />
+                                        <comcom:NumericStepper x:Name="numBackupRevisionsMaxCount" MaxValue="1000" MinValue="0" WidthRequest="80" Value="0" />
+                                    </StackLayout>
 
                                 </StackLayout>
                             </comcom:GroupBox>
@@ -72,33 +96,6 @@
                             <Label VerticalOptions="FillAndExpand" />
 
                         </StackLayout>
-
-                        <comcom:GroupBox x:Name="groupBox1">
-                            <StackLayout Orientation="Vertical">
-
-                                <comcom:GroupBox x:Name="grpFileBackup">
-                                    <input:RadioButtonGroupView>
-                                        <input:RadioButton x:Name="radFBNone" />
-                                        <input:RadioButton x:Name="radFBOnlyPrev" />
-                                        <input:RadioButton x:Name="radFBEachRevision" />
-                                    </input:RadioButtonGroupView>
-                                </comcom:GroupBox>
-
-                                <StackLayout Orientation="Horizontal" Spacing="4">
-                                    <input:CheckBox x:Name="chkAutosave" />
-                                    <comcom:NumericStepper x:Name="numASMin" MaxValue="120" MinValue="1" WidthRequest="60" Value="1" />
-                                    <Label x:Name="lblMinutes" />
-                                </StackLayout>
-
-                                <StackLayout Orientation="Horizontal" Spacing="4">
-                                    <Label x:Name="lblBackupRevisionsMaxCount" />
-                                    <comcom:NumericStepper x:Name="numBackupRevisionsMaxCount" MaxValue="1000" MinValue="0" WidthRequest="80" Value="0" />
-                                </StackLayout>
-
-                            </StackLayout>
-                        </comcom:GroupBox>
-
-                        <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>
                 </xp:TabItem>
 

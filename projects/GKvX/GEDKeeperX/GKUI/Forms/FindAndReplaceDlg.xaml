@@ -29,22 +29,18 @@
                 <Label VerticalOptions="FillAndExpand" />
             </StackLayout>
 
-            <StackLayout Orientation="Vertical">
-                <Label x:Name="gbFilters" />
-                <Frame>
-                    <Grid ColumnSpacing="4" RowSpacing="4">
-                        <Label x:Name="lblRecord" Grid.Column="0" Grid.Row="0" />
-                        <comcom:GKComboBox x:Name="cmbRecord" Grid.Column="1" Grid.Row="0" />
+            <comcom:GroupBox x:Name="gbFilters">
+                <Grid ColumnSpacing="4" RowSpacing="4">
+                    <Label x:Name="lblRecord" Grid.Column="0" Grid.Row="0" />
+                    <comcom:GKComboBox x:Name="cmbRecord" Grid.Column="1" Grid.Row="0" />
 
-                        <Label x:Name="lblProperty" Grid.Column="0" Grid.Row="1" />
-                        <comcom:GKComboBox x:Name="cmbProperty" Grid.Column="1" Grid.Row="1" />
-                    </Grid>
-                </Frame>
-                <Label VerticalOptions="FillAndExpand" />
-            </StackLayout>
+                    <Label x:Name="lblProperty" Grid.Column="0" Grid.Row="1" />
+                    <comcom:GKComboBox x:Name="cmbProperty" Grid.Column="1" Grid.Row="1" />
+                </Grid>
+            </comcom:GroupBox>
         </StackLayout>
 
-        <Label HorizontalOptions="FillAndExpand" />
+        <Label VerticalOptions="FillAndExpand" />
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Button x:Name="btnPrev" Style="{StaticResource dlgBtn}" Clicked="btnPrev_Click" />

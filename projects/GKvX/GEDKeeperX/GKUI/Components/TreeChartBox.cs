@@ -187,8 +187,8 @@ namespace GKUI.Components
             fTraceSelected = true;
 
             fTreeControls = new TreeControlsList<ITreeControl>();
-            fTreeControls.Add(new TCScaleControl(this));
-            fTreeControls.Add(new TCGenerationsControl(this, TreeChartKind.ckDescendants));
+            //fTreeControls.Add(new TCScaleControl(this));
+            //fTreeControls.Add(new TCGenerationsControl(this, TreeChartKind.ckDescendants));
             //fPersonControl = new PersonControl(this);
 
             InitTimer();

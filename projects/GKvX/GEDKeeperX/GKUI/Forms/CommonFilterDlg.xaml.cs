@@ -50,13 +50,10 @@ namespace GKUI.Forms
 
         #endregion
 
-        public CommonFilterDlg()
+        public CommonFilterDlg(IBaseWindow baseWin, IRecordsListModel listMan)
         {
             InitializeComponent();
-        }
 
-        public CommonFilterDlg(IBaseWindow baseWin, IRecordsListModel listMan) : this()
-        {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
 

@@ -18,6 +18,11 @@
                 <xp:TabItem x:Name="pageAuthor">
                     <StackLayout Orientation="Vertical">
                         <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
                             <Label x:Name="lblName" Grid.Column="0" Grid.Row="0" />
                             <Entry x:Name="txtName" Grid.Column="1" Grid.Row="0" />
 
@@ -28,8 +33,7 @@
                             <Entry x:Name="txtTel" Grid.Column="1" Grid.Row="2" />
 
                             <Label x:Name="lblLanguage" Grid.Column="0" Grid.Row="3" />
-                            <Entry x:Name="txtLanguage" Grid.Column="1" Grid.Row="3" IsReadOnly="True" />
-                            <Button x:Name="btnLangEdit" Grid.Column="2" Grid.Row="3" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_edit.gif}" Clicked="btnLangEdit_Click" />
+                            <comcom:GKComboBox x:Name="txtLanguage" Grid.Column="1" Grid.Row="3" IsReadOnly="True" />
                         </Grid>
 
                         <Label VerticalOptions="FillAndExpand" />

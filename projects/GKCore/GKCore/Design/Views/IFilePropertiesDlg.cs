@@ -32,4 +32,15 @@ namespace GKCore.Design.Views
         ITextBox Address { get; }
         ITextBox Tel { get; }
     }
+
+
+    public interface IDesktopFilePropertiesDlg : IFilePropertiesDlg
+    {
+    }
+
+
+    public interface IMobileFilePropertiesDlg : IFilePropertiesDlg
+    {
+        IComboBox LanguageCombo { get; }
+    }
 }

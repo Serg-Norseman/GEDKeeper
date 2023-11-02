@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
@@ -26,7 +25,7 @@ using GKCore.Interfaces;
 
 namespace GKUI.Forms
 {
-    public sealed partial class FilePropertiesDlg : CommonDialog<IFilePropertiesDlg, FilePropertiesDlgController>, IFilePropertiesDlg
+    public sealed partial class FilePropertiesDlg : CommonDialog<IFilePropertiesDlg, FilePropertiesDlgController>, IFilePropertiesDlg, IMobileFilePropertiesDlg
     {
         public IBaseWindow Base
         {
@@ -43,6 +42,11 @@ namespace GKUI.Forms
         ITextBox IFilePropertiesDlg.Language
         {
             get { return GetControlHandler<ITextBox>(txtLanguage); }
+        }
+
+        IComboBox IMobileFilePropertiesDlg.LanguageCombo
+        {
+            get { return GetControlHandler<IComboBox>(txtLanguage); }
         }
 
         ITextBox IFilePropertiesDlg.Name
@@ -69,11 +73,6 @@ namespace GKUI.Forms
             fController = new FilePropertiesDlgController(this);
             fController.Init(baseWin);
             fController.UpdateView();
-        }
-
-        private void btnLangEdit_Click(object sender, EventArgs e)
-        {
-            fController.ChangeLanguage();
         }
     }
 }

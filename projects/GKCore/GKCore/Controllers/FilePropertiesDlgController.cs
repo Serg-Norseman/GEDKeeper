@@ -36,12 +36,23 @@ namespace GKCore.Controllers
 
         public FilePropertiesDlgController(IFilePropertiesDlg view) : base(view)
         {
+            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                var mobileView = view as IMobileFilePropertiesDlg;
+                for (var lid = GDMLanguageID.Unknown; lid < GDMLanguageID.Yiddish; lid++) {
+                    mobileView.LanguageCombo.AddItem(GEDCOMUtils.GetLanguageStr(lid), lid);
+                }
+            }
         }
 
         public override bool Accept()
         {
             try {
-                fBase.Context.Tree.Header.Language = GEDCOMUtils.GetLanguageVal(fView.Language.Text);
+                if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                    fBase.Context.Tree.Header.Language = GEDCOMUtils.GetLanguageVal(fView.Language.Text);
+                } else {
+                    var mobileView = fView as IMobileFilePropertiesDlg;
+                    fBase.Context.Tree.Header.Language = mobileView.LanguageCombo.GetSelectedTag<GDMLanguageID>();
+                }
 
                 GDMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
                 submitter.Name = fView.Name.Text;
@@ -64,7 +75,12 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Language.Text = GEDCOMUtils.GetLanguageStr(fBase.Context.Tree.Header.Language);
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                fView.Language.Text = GEDCOMUtils.GetLanguageStr(fBase.Context.Tree.Header.Language);
+            } else {
+                var mobileView = fView as IMobileFilePropertiesDlg;
+                mobileView.LanguageCombo.Text = GEDCOMUtils.GetLanguageStr(fBase.Context.Tree.Header.Language);
+            }
 
             GDMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
             fView.Name.Text = submitter.Name;
@@ -84,6 +100,9 @@ namespace GKCore.Controllers
 
         public void ChangeLanguage()
         {
+            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile))
+                return;
+
             using (var dlg = AppHost.ResolveDialog<ILanguageEditDlg>()) {
                 dlg.LanguageID = fBase.Context.Tree.Header.Language;
 

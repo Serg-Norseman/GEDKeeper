@@ -27,25 +27,22 @@
                             <Entry x:Name="txtLongitude" Grid.Column="2" Grid.Row="1" />
                         </Grid>
 
-                        <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                            <Label x:Name="grpSearch" VerticalOptions="Start" />
-                            <Frame>
-                                <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                                    <StackLayout Orientation="Horizontal" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
-                                        <comcom:GKListView x:Name="ListGeoCoords" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+                        <comcom:GroupBox x:Name="grpSearch" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                            <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                <StackLayout Orientation="Horizontal" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+                                    <comcom:GKListView x:Name="ListGeoCoords" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
 
-                                        <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="End">
-                                            <Button x:Name="btnSearch" Style="{StaticResource funcBtn}" Clicked="btnSearch_Click" />
-                                            <Button x:Name="btnSelect" Style="{StaticResource funcBtn}" Clicked="btnSelect_Click" />
-                                            <Button x:Name="btnSelectName" Style="{StaticResource funcBtn}" Clicked="btnSelectName_Click" />
-                                            <Button x:Name="btnShowOnMap" Style="{StaticResource funcBtn}" Clicked="btnShowOnMap_Click" />
-                                        </StackLayout>
+                                    <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="End">
+                                        <Button x:Name="btnSearch" Style="{StaticResource funcBtn}" Clicked="btnSearch_Click" />
+                                        <Button x:Name="btnSelect" Style="{StaticResource funcBtn}" Clicked="btnSelect_Click" />
+                                        <Button x:Name="btnSelectName" Style="{StaticResource funcBtn}" Clicked="btnSelectName_Click" />
+                                        <Button x:Name="btnShowOnMap" Style="{StaticResource funcBtn}" Clicked="btnShowOnMap_Click" />
                                     </StackLayout>
-
-                                    <comcom:GKMapBrowser x:Name="fMapBrowser" ShowLines="False" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
                                 </StackLayout>
-                            </Frame>
-                        </StackLayout>
+
+                                <comcom:GKMapBrowser x:Name="fMapBrowser" ShowLines="False" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+                            </StackLayout>
+                        </comcom:GroupBox>
                     </StackLayout>
                 </xp:TabItem>
 

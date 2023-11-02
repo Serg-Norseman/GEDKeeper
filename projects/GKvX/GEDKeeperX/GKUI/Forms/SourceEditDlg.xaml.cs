@@ -82,10 +82,6 @@ namespace GKUI.Forms
 
         #endregion
 
-        public SourceEditDlg() : this(null)
-        {
-        }
-
         public SourceEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();

@@ -12,23 +12,25 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <input:RadioButtonGroupView x:Name="groupView">
-            <input:RadioButton x:Name="radMatchInternal" LabelPosition="After" IsChecked="True" Checked="rbtnMatch_CheckedChanged" />
+        <comcom:GroupBox x:Name="grpMatchType">
+            <input:RadioButtonGroupView x:Name="groupView">
+                <input:RadioButton x:Name="radMatchInternal" LabelPosition="After" IsChecked="True" Checked="rbtnMatch_CheckedChanged" />
 
-            <StackLayout Spacing="4" Orientation="Vertical">
-                <input:RadioButton x:Name="radMathExternal" LabelPosition="After" Checked="rbtnMatch_CheckedChanged" />
-                <StackLayout Spacing="4" Orientation="Horizontal">
-                    <Label x:Name="lblFile" />
-                    <Entry x:Name="txtCompareFile" IsEnabled="False" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
-                    <Button x:Name="btnFileChoose" Style="{StaticResource dlgBtn}" IsEnabled="False" Clicked="btnFileChoose_Click" />
+                <StackLayout Spacing="4" Orientation="Vertical">
+                    <input:RadioButton x:Name="radMathExternal" LabelPosition="After" Checked="rbtnMatch_CheckedChanged" />
+                    <StackLayout Spacing="4" Orientation="Horizontal">
+                        <Label x:Name="lblFile" />
+                        <Entry x:Name="txtCompareFile" IsEnabled="False" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
+                        <Button x:Name="btnFileChoose" Style="{StaticResource dlgBtn}" IsEnabled="False" Clicked="btnFileChoose_Click" />
+                    </StackLayout>
                 </StackLayout>
-            </StackLayout>
 
-            <StackLayout Spacing="4" Orientation="Horizontal">
-                <input:RadioButton x:Name="radAnalysis" LabelPosition="After" Checked="rbtnMatch_CheckedChanged" />
-                <Button x:Name="btnMatch" Style="{StaticResource dlgBtn}" Clicked="btnMatch_Click" />
-            </StackLayout>
-        </input:RadioButtonGroupView>
+                <StackLayout Spacing="4" Orientation="Horizontal">
+                    <input:RadioButton x:Name="radAnalysis" LabelPosition="After" Checked="rbtnMatch_CheckedChanged" />
+                    <Button x:Name="btnMatch" Style="{StaticResource dlgBtn}" Clicked="btnMatch_Click" />
+                </StackLayout>
+            </input:RadioButtonGroupView>
+        </comcom:GroupBox>
 
         <Editor x:Name="ListCompare" IsReadOnly="True" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
 
