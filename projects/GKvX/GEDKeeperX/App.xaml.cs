@@ -36,7 +36,7 @@ namespace GKUI
             Xamarin.Forms.DataGrid.DataGridComponent.Init();
 
             LangMan.DefInit();
-            XFAppHost.Startup(platformSpecifics, null);
+            XFAppHost.Startup(platformSpecifics);
 
             MainPage = new NavigationPage(new MainPage());
         }

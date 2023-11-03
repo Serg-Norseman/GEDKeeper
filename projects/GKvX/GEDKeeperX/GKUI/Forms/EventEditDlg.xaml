@@ -20,13 +20,13 @@
                         <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
                             <Label x:Name="lblEvent" Grid.Column="0" Grid.Row="0" />
                             <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="0">
-                                <comcom:GKComboBox x:Name="cmbEventType" IsReadOnly="True" SelectedIndexChanged="EditEventType_SelectedIndexChanged" />
-                                <Entry x:Name="txtEventName" />
+                                <comcom:GKComboBox x:Name="cmbEventType" IsReadOnly="True" SelectedIndexChanged="EditEventType_SelectedIndexChanged" WidthRequest="260" />
+                                <Entry x:Name="txtEventName" HorizontalOptions="FillAndExpand" />
                             </StackLayout>
 
                             <Label x:Name="lblAttrValue" Grid.Column="0" Grid.Row="1" />
@@ -34,7 +34,7 @@
 
                             <Label x:Name="lblPlace" Grid.Column="0" Grid.Row="2" />
                             <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="2">
-                                <Entry x:Name="txtEventPlace" />
+                                <Entry x:Name="txtEventPlace" HorizontalOptions="FillAndExpand" />
                                 <Button x:Name="btnPlaceAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" IsEnabled="False" Clicked="btnPlaceAdd_Click" />
                                 <Button x:Name="btnPlaceDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" IsEnabled="False" Clicked="btnPlaceDelete_Click" />
                             </StackLayout>

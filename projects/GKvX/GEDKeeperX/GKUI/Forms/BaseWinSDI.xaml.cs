@@ -118,7 +118,6 @@ namespace GKUI.Forms
         private void CreatePage(string pageText, GDMRecordType recType)
         {
             var summary = new HyperView();
-            //summary.BorderWidth = 4;
             summary.OnLink += mPersonSummaryLink;
             //summary.ContextMenu = summaryMenu;
 
@@ -148,10 +147,10 @@ namespace GKUI.Forms
                     new RowDefinition() { Height = GridLength.Auto }
                 }
             };
-            spl.Children.Add(new Frame() { Content = recView, Padding = 1, BorderColor = Color.Red }, 0, 0);
-            spl.Children.Add(new Frame() { Content = summary, Padding = 1, BorderColor = Color.Red }, 1, 0);
+            spl.Children.Add(new Frame() { Content = recView, Padding = 1, BorderColor = Color.LightGray }, 0, 0);
+            spl.Children.Add(new Frame() { Content = summary, Padding = 1, BorderColor = Color.LightGray }, 1, 0);
 
-            var tabPage = new TabItem(); //ContentPage();
+            var tabPage = new TabItem();
             tabPage.HeaderText = pageText;
             tabPage.Content = spl;
             tabsRecords.AddTab(tabPage);

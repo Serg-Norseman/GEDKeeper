@@ -24,9 +24,9 @@ using Xamarin.Forms;
 
 namespace GKUI.Platform
 {
-    public sealed class ButtonToolItemHandler : ControlHandler<ToolbarItem, ButtonToolItemHandler>, IButtonToolItem
+    public sealed class ToolbarItemHandler : ControlHandler<ToolbarItem, ToolbarItemHandler>, IButtonToolItem
     {
-        public ButtonToolItemHandler(ToolbarItem control) : base(control)
+        public ToolbarItemHandler(ToolbarItem control) : base(control)
         {
         }
 

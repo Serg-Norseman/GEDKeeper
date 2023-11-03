@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define DEBUG_VIEWPORT
-
 using System;
 using BSLib;
 using SkiaSharp.Views.Forms;
@@ -133,9 +131,8 @@ namespace GKUI.Components
             fCanvas.IgnorePixelScaling = true;
             fCanvas.PaintSurface += PaintHandler;
             fCanvas.EnableTouchEvents = true;
-            /*fCanvas.KeyDown += KeyDownHandler;
-            fCanvas.KeyUp += KeyUpHandler;
-            fCanvas.CanFocus = true;*/
+            fCanvas.VerticalOptions = LayoutOptions.CenterAndExpand;
+            fCanvas.HorizontalOptions = LayoutOptions.CenterAndExpand;
             Content = fCanvas;
 
             base.Orientation = ScrollOrientation.Both;
@@ -156,20 +153,6 @@ namespace GKUI.Components
         {
             e.Surface.Canvas.Clear();
             OnPaint(e);
-
-            #if DEBUG_VIEWPORT
-            var gfx = e.Graphics;
-            using (var pen = new Pen(Colors.Red, 1.0f)) {
-                gfx.DrawRectangle(pen, new Rectangle(fImageViewport.Left, fImageViewport.Top, fImageSize.Width - 1, fImageSize.Height - 1));
-            }
-            using (var pen = new Pen(Colors.Blue, 1.0f)) {
-                gfx.DrawRectangle(pen, new Rectangle(fViewport.Left, fViewport.Top, fViewport.Width - 1, fViewport.Height - 1));
-            }
-            using (var brush = new SolidBrush(Colors.Fuchsia)) {
-                Point center = fImageRect.Center;
-                gfx.FillRectangle(brush, new Rectangle(center.X - 3, center.Y - 3, 6, 6));
-            }
-            #endif
         }
 
         protected virtual void OnPaint(SKPaintSurfaceEventArgs e)

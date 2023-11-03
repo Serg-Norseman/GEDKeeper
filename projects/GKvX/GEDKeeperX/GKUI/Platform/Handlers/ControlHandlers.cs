@@ -21,71 +21,12 @@
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Design.Graphics;
 using GKUI.Components;
 using Xamarin.Forms;
 
 namespace GKUI.Platform
 {
-    /*public sealed class MaskedTextBoxHandler : BaseControlHandler<Entry, MaskedTextBoxHandler>, ITextBox
-    {
-        public MaskedTextBoxHandler(Entry control) : base(control)
-        {
-        }
-
-        public new bool Enabled
-        {
-            get { return Control.IsEnabled; }
-            set {
-                Control.IsEnabled = value;
-                //Control.BackgroundColor = (value) ? SystemColors.WindowBackground : SystemColors.Control;
-            }
-        }
-
-        public string[] Lines
-        {
-            get { return UIHelper.Convert(Control.Text); }
-            set {  } // TODO
-        }
-
-        public bool ReadOnly
-        {
-            get { return Control.ReadOnly; }
-            set { Control.ReadOnly = value; }
-        }
-
-        public string SelectedText
-        {
-            get { return Control.SelectedText; }
-            set { Control.SelectedText = value; }
-        }
-
-        public string Text
-        {
-            get { return Control.Text; }
-            set { Control.Text = value; }
-        }
-
-        public void AppendText(string text)
-        {
-            //Control.Append(text, true);
-        }
-
-        public void Clear()
-        {
-            Control.Text = string.Empty;
-        }
-
-        public void Copy()
-        {
-            UIHelper.SetClipboardText(Control.SelectedText);
-        }
-
-        public void SelectAll()
-        {
-            Control.SelectAll();
-        }
-    }*/
-
     /*public sealed class TreeViewHandler : BaseControlHandler<TreeView, TreeViewHandler>, ITreeViewHandler
     {
         private TreeItem fRootNode;
@@ -130,9 +71,10 @@ namespace GKUI.Platform
         }
     }*/
 
-    /*public sealed class MenuItemHandler : ControlHandler<ButtonMenuItem, MenuItemHandler>, IMenuItem
+
+    public sealed class MenuItemHandler : ControlHandler<MenuItem, MenuItemHandler>, IMenuItem
     {
-        public MenuItemHandler(ButtonMenuItem control) : base(control)
+        public MenuItemHandler(MenuItem control) : base(control)
         {
         }
 
@@ -144,31 +86,46 @@ namespace GKUI.Platform
 
         public bool Enabled
         {
-            get { return Control.Enabled; }
-            set { Control.Enabled = value; }
+            get { return Control.IsEnabled; }
+            set { Control.IsEnabled = value; }
+        }
+
+        public IImage Glyph
+        {
+            get { return null; }
+            set { }
+        }
+
+        public IMenuItems SubItems
+        {
+            get { return null; }
+            set { }
         }
 
         public object Tag
         {
-            get { return Control.Tag; }
-            set { Control.Tag = value; }
+            get { return null; }
+            set {  }
+        }
+
+        public string Text
+        {
+            get { return string.Empty; }
+            set { }
         }
 
         public int ItemsCount
         {
-            get { return Control.Items.Count; }
+            get { return 0; }
         }
 
         public IMenuItem AddItem(string text, object tag, IImage image, ItemAction action)
         {
-            var item = new MenuItemEx(text, tag, image, action);
-            Control.Items.Add(item);
-            return item;
+            return null;
         }
 
         public void ClearItems()
         {
-            Control.Items.Clear();
         }
-    }*/
+    }
 }

@@ -302,14 +302,13 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(XFIKCheckBox), typeof(CheckBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TabItem), typeof(TabPageHandler));
             ControlsManager.RegisterHandlerType(typeof(TabViewControl), typeof(TabControlHandler));
-            ControlsManager.RegisterHandlerType(typeof(ToolbarItem), typeof(ButtonToolItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(ToolbarItem), typeof(ToolbarItemHandler));
             ControlsManager.RegisterHandlerType(typeof(GroupBox), typeof(GroupBoxHandler));
 
             ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
-            //ControlsManager.RegisterHandlerType(typeof(MaskedEntry), typeof(MaskedTextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(NumericStepper), typeof(NumericBoxHandler));
             //ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
-            //ControlsManager.RegisterHandlerType(typeof(ButtonMenuItem), typeof(MenuItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(MenuItem), typeof(MenuItemHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
         }
 
@@ -317,12 +316,11 @@ namespace GKUI.Platform
 
         private static IPlatformSpecifics fPlatformSpecifics;
 
-        public static void Startup(IPlatformSpecifics platformSpecifics, string[] args)
+        public static void Startup(IPlatformSpecifics platformSpecifics)
         {
             fPlatformSpecifics = platformSpecifics;
 
             ConfigureBootstrap();
-            //CheckPortable(args);
             Logger.Init(GetLogFilename());
             LogSysInfo();
         }

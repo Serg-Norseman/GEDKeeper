@@ -136,17 +136,14 @@ namespace GKUI.Forms
 
         #endregion
 
-        public PersonsFilterDlg()
+        public PersonsFilterDlg(IBaseWindow baseWin, IRecordsListModel listMan)
         {
             InitializeComponent();
 
             var mask = "00/00/0000";
             txtAliveBeforeDate.Behaviors.Add(new MaskedBehavior() { Mask = mask, UnMaskedCharacter = '0' });
             txtAliveBeforeDate.Placeholder = mask;
-        }
 
-        public PersonsFilterDlg(IBaseWindow baseWin, IRecordsListModel listMan) : this()
-        {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
 
@@ -158,13 +155,13 @@ namespace GKUI.Forms
             filterView.ListMan = fListMan;
 
             fCommonController = new CommonFilterDlgController(this, listMan);
-            fCommonController.Init(baseWin);
+            fCommonController.Init(fBase);
             fCommonController.UpdateView();
 
             tabsFilters.SelectedTabIndex = 1;
 
             fController = new PersonsFilterDlgController(this, listMan);
-            fController.Init(baseWin);
+            fController.Init(fBase);
             fController.UpdateView();
         }
 

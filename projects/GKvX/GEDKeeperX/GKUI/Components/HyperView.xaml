@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentView
+<ScrollView
     xmlns="http://xamarin.com/schemas/2014/forms" 
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="GKUI.Components.HyperView">
 
-    <ContentView.Content>
+    <ScrollView.Content>
         <Label x:Name="hvContent" TextType="Html" />
-    </ContentView.Content>
+    </ScrollView.Content>
 
-</ContentView>
+</ScrollView>

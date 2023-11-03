@@ -284,16 +284,12 @@ namespace GKUI.Platform
             float nx2 = ctX + (extRad * angCos);
             float ny2 = ctY + (extRad * angSin);
 
-            float ir2 = inRad * 2.0f;
-            float er2 = extRad * 2.0f;
-
             path.Reset();
             path.MoveTo(px2, py2);
             path.LineTo(px1, py1);
-            if (ir2 > 0) path.AddArc(SKRect.Create(ctX - inRad, ctY - inRad, ir2, ir2), ang1, wedgeAngle);
-            path.MoveTo(nx1, ny1);
+            if (inRad > 0) path.ArcTo(inRad, inRad, 0, SKPathArcSize.Small, SKPathDirection.Clockwise, nx1, ny1);
             path.LineTo(nx2, ny2);
-            path.AddArc(SKRect.Create(ctX - extRad, ctY - extRad, er2, er2), ang2, -wedgeAngle);
+            path.ArcTo(extRad, extRad, 0, SKPathArcSize.Small, SKPathDirection.CounterClockwise, px2, py2);
             path.Close();
 
             return result;

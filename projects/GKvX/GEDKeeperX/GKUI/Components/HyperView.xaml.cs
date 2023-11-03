@@ -29,9 +29,10 @@ namespace GKUI.Components
     /// <summary>
     ///
     /// </summary>
-    public partial class HyperView : ContentView, IHyperView
+    public partial class HyperView : ScrollView, IHyperView
     {
         private readonly StringList fLines;
+        //private ICommand _navigationCommand;
 
         private Color fLinkColor;
         private bool fWordWrap;
@@ -66,6 +67,14 @@ namespace GKUI.Components
         {
             InitializeComponent();
 
+            Orientation = ScrollOrientation.Both;
+            Padding = 8;
+
+            /*_navigationCommand = new Command<string>((url) => {
+                var eventHandler = OnLink;
+                eventHandler?.Invoke(this, url);
+            });*/
+
             fLines = new StringList();
             fLines.OnChange += LinesChanged;
             fWordWrap = true;
@@ -73,22 +82,92 @@ namespace GKUI.Components
 
         public void Activate()
         {
-            try {
-                Focus();
-            } catch {
-                // why is an exception thrown here?
-            }
+            Focus();
         }
 
         private void LinesChanged(object sender)
         {
-            //UpdateScrollPosition(0, 0);
-            ArrangeText();
+            string str = fLines.Text;
+            str = str.
+                Replace("[b]", "<b>").Replace("[/b]", "</b>").
+                Replace("[u]", "<u>").Replace("[/u]", "</u>").
+                Replace("[s]", "<s>").Replace("[/s]", "</s>").
+                Replace("[i]", "<i>").Replace("[/i]", "</i>").
+                Replace("\r\n", "<br>").
+                Replace("[/url]", "</a>").Replace("[url=", "<a href='").
+                Replace("[/size]", "</font>").Replace("[size=", "<font size='").
+                Replace("]", "'>");
+
+            //hvContent.FormattedText = Convert(str);
+            hvContent.Text = str;
         }
 
-        private void ArrangeText()
+        /*private FormattedString Convert(string value)
         {
-            hvContent.Text = fLines.Text;
+            var formatted = new FormattedString();
+
+            foreach (var item in ProcessString(value))
+                formatted.Spans.Add(CreateSpan(item));
+
+            return formatted;
         }
+
+        private Span CreateSpan(StringSection section)
+        {
+            var span = new Span() {
+                Text = section.Text
+            };
+
+            if (!string.IsNullOrEmpty(section.Link)) {
+                span.GestureRecognizers.Add(new TapGestureRecognizer() {
+                    Command = _navigationCommand,
+                    CommandParameter = section.Link
+                });
+                span.TextColor = Color.Blue;
+            }
+
+            return span;
+        }
+
+        public IList<StringSection> ProcessString(string rawText)
+        {
+            const string spanPattern = @"(<a.*?>.*?</a>)";
+
+            MatchCollection collection = Regex.Matches(rawText, spanPattern, RegexOptions.Singleline);
+
+            var sections = new List<StringSection>();
+
+            var lastIndex = 0;
+
+            foreach (Match item in collection) {
+                var foundText = item.Value;
+                try {
+                    var prevText = rawText.Substring(lastIndex, item.Index - lastIndex);
+                    sections.Add(new StringSection() { Text = prevText });
+                } catch (Exception ex) {
+                    Logger.WriteError("", ex);
+                }
+                
+                lastIndex = item.Index + item.Length;
+
+                // Get HTML href 
+                var html = new StringSection() {
+                    Link = Regex.Match(item.Value, "(?<=href=\\\')[\\S]+(?=\\\')").Value,
+                    Text = Regex.Replace(item.Value, "<.*?>", string.Empty)
+                };
+
+                sections.Add(html);
+            }
+
+            sections.Add(new StringSection() { Text = rawText.Substring(lastIndex) });
+
+            return sections;
+        }
+
+        public class StringSection
+        {
+            public string Text { get; set; }
+            public string Link { get; set; }
+        }*/
     }
 }

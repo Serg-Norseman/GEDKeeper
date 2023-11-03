@@ -474,6 +474,9 @@ namespace GKCore.Controllers
 
         public void SetSummaryWidth(bool uiAction)
         {
+            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile))
+                return;
+
             if (!GlobalOptions.Instance.KeepInfoPansOverallSize)
                 return;
 
@@ -781,48 +784,53 @@ namespace GKCore.Controllers
                 bool baseEn = (rt != GDMRecordType.rtNone);
                 bool indivEn = baseEn && rt == GDMRecordType.rtIndividual;
                 bool ifEn = baseEn && (rt == GDMRecordType.rtIndividual || rt == GDMRecordType.rtFamily);
+                bool canSave = baseEn || (curChart != null);
+                bool canFlt = workWin != null && workWin.AllowFilter();
 
-                GetControl<IMenuItem>("miFileSave").Enabled = baseEn || (curChart != null);
-                GetControl<IMenuItem>("miFileSaveAs").Enabled = GetControl<IMenuItem>("miFileSave").Enabled;
-                GetControl<IMenuItem>("miFileClose").Enabled = baseEn;
-                GetControl<IMenuItem>("miFileProperties").Enabled = baseEn;
-                GetControl<IMenuItem>("miExportTable").Enabled = baseEn;
+                if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                    GetControl<IMenuItem>("miFileSave").Enabled = canSave;
+                    GetControl<IMenuItem>("miFileSaveAs").Enabled = canSave;
 
-                GetControl<IMenuItem>("miRecordAdd").Enabled = baseEn;
-                GetControl<IMenuItem>("miRecordEdit").Enabled = baseEn;
-                GetControl<IMenuItem>("miRecordDelete").Enabled = baseEn;
-                GetControl<IMenuItem>("miFilter").Enabled = workWin != null && workWin.AllowFilter();
-                GetControl<IMenuItem>("miSearch").Enabled = workWin != null && workWin.AllowQuickSearch();
+                    GetControl<IMenuItem>("miFileClose").Enabled = baseEn;
+                    GetControl<IMenuItem>("miFileProperties").Enabled = baseEn;
+                    GetControl<IMenuItem>("miExportTable").Enabled = baseEn;
 
-                GetControl<IMenuItem>("miPedigree").Enabled = indivEn;
-                GetControl<IMenuItem>("miTreeAncestors").Enabled = ifEn;
-                GetControl<IMenuItem>("miTreeDescendants").Enabled = ifEn;
-                GetControl<IMenuItem>("miTreeBoth").Enabled = ifEn;
+                    GetControl<IMenuItem>("miRecordAdd").Enabled = baseEn;
+                    GetControl<IMenuItem>("miRecordEdit").Enabled = baseEn;
+                    GetControl<IMenuItem>("miRecordDelete").Enabled = baseEn;
+                    GetControl<IMenuItem>("miFilter").Enabled = canFlt;
+                    GetControl<IMenuItem>("miSearch").Enabled = workWin != null && workWin.AllowQuickSearch();
 
-                GetControl<IMenuItem>("miPedigreeAscend").Enabled = indivEn;
-                GetControl<IMenuItem>("miPedigreeDescend").Enabled = indivEn;
+                    GetControl<IMenuItem>("miPedigree").Enabled = indivEn;
+                    GetControl<IMenuItem>("miTreeAncestors").Enabled = ifEn;
+                    GetControl<IMenuItem>("miTreeDescendants").Enabled = ifEn;
+                    GetControl<IMenuItem>("miTreeBoth").Enabled = ifEn;
 
-                GetControl<IMenuItem>("miStats").Enabled = baseEn;
-                GetControl<IMenuItem>("miExportToFamilyBook").Enabled = baseEn;
-                GetControl<IMenuItem>("miExportToTreesAlbum").Enabled = baseEn;
+                    GetControl<IMenuItem>("miPedigreeAscend").Enabled = indivEn;
+                    GetControl<IMenuItem>("miPedigreeDescend").Enabled = indivEn;
 
-                GetControl<IMenuItem>("miTreeTools").Enabled = baseEn;
-                GetControl<IMenuItem>("miOrganizer").Enabled = baseEn;
-                GetControl<IMenuItem>("miSlideshow").Enabled = baseEn;
-                GetControl<IMenuItem>("miScripts").Enabled = baseEn;
+                    GetControl<IMenuItem>("miStats").Enabled = baseEn;
+                    GetControl<IMenuItem>("miExportToFamilyBook").Enabled = baseEn;
+                    GetControl<IMenuItem>("miExportToTreesAlbum").Enabled = baseEn;
+
+                    GetControl<IMenuItem>("miTreeTools").Enabled = baseEn;
+                    GetControl<IMenuItem>("miOrganizer").Enabled = baseEn;
+                    GetControl<IMenuItem>("miSlideshow").Enabled = baseEn;
+                    GetControl<IMenuItem>("miScripts").Enabled = baseEn;
+                }
 
                 if (fHasToolbar) {
-                    GetControl<IToolItem>("tbFileSave").Enabled = GetControl<IMenuItem>("miFileSave").Enabled;
-                    GetControl<IToolItem>("tbRecordAdd").Enabled = GetControl<IMenuItem>("miRecordAdd").Enabled;
-                    GetControl<IToolItem>("tbRecordEdit").Enabled = GetControl<IMenuItem>("miRecordEdit").Enabled;
-                    GetControl<IToolItem>("tbRecordDelete").Enabled = GetControl<IMenuItem>("miRecordDelete").Enabled;
-                    GetControl<IToolItem>("tbStats").Enabled = GetControl<IMenuItem>("miStats").Enabled;
-                    GetControl<IToolItem>("tbFilter").Enabled = GetControl<IMenuItem>("miFilter").Enabled;
-                    GetControl<IToolItem>("tbTreeAncestors").Enabled = GetControl<IMenuItem>("miTreeAncestors").Enabled;
-                    GetControl<IToolItem>("tbTreeDescendants").Enabled = GetControl<IMenuItem>("miTreeDescendants").Enabled;
-                    GetControl<IToolItem>("tbTreeBoth").Enabled = GetControl<IMenuItem>("miTreeBoth").Enabled;
+                    GetControl<IToolItem>("tbFileSave").Enabled = canSave;
+                    GetControl<IToolItem>("tbRecordAdd").Enabled = baseEn;
+                    GetControl<IToolItem>("tbRecordEdit").Enabled = baseEn;
+                    GetControl<IToolItem>("tbRecordDelete").Enabled = baseEn;
+                    GetControl<IToolItem>("tbStats").Enabled = baseEn;
+                    GetControl<IToolItem>("tbFilter").Enabled = canFlt;
+                    GetControl<IToolItem>("tbTreeAncestors").Enabled = ifEn;
+                    GetControl<IToolItem>("tbTreeDescendants").Enabled = ifEn;
+                    GetControl<IToolItem>("tbTreeBoth").Enabled = ifEn;
 
-                    GetControl<IToolItem>("tbPedigree").Enabled = GetControl<IMenuItem>("miPedigree").Enabled;
+                    GetControl<IToolItem>("tbPedigree").Enabled = indivEn;
                     GetControl<IMenuItem>("miPedigreeAscend2").Enabled = indivEn;
                     GetControl<IMenuItem>("miPedigreeDescend2").Enabled = indivEn;
                 }
@@ -840,99 +848,6 @@ namespace GKCore.Controllers
         public override void SetLocale()
         {
             try {
-                GetControl<IMenuItem>("miFile").Text = LangMan.LS(LSID.MIFile);
-                GetControl<IMenuItem>("miEdit").Text = LangMan.LS(LSID.MIEdit);
-                GetControl<IMenuItem>("miPedigree").Text = LangMan.LS(LSID.MIPedigree);
-                GetControl<IMenuItem>("miService").Text = LangMan.LS(LSID.MIService);
-                GetControl<IMenuItem>("miReports").Text = LangMan.LS(LSID.Reports);
-                GetControl<IMenuItem>("miPlugins").Text = LangMan.LS(LSID.Plugins);
-                GetControl<IMenuItem>("miHelp").Text = LangMan.LS(LSID.MIHelp);
-
-                GetControl<IMenuItem>("miFileNew").Text = LangMan.LS(LSID.MIFileNew);
-                GetControl<IMenuItem>("miFileLoad").Text = LangMan.LS(LSID.MIFileLoad);
-                GetControl<IMenuItem>("miMRUFiles").Text = LangMan.LS(LSID.MIMRUFiles);
-                GetControl<IMenuItem>("miFileSave").Text = LangMan.LS(LSID.MIFileSave);
-                GetControl<IMenuItem>("miFileSaveAs").Text = LangMan.LS(LSID.MIFileSaveAs);
-                GetControl<IMenuItem>("miFileClose").Text = LangMan.LS(LSID.MIFileClose);
-                GetControl<IMenuItem>("miFileProperties").Text = LangMan.LS(LSID.MIFileProperties) + @"...";
-                GetControl<IMenuItem>("miExport").Text = LangMan.LS(LSID.MIExport);
-                GetControl<IMenuItem>("miExportToFamilyBook").Text = LangMan.LS(LSID.MIExportToFamilyBook);
-                GetControl<IMenuItem>("miExportToTreesAlbum").Text = LangMan.LS(LSID.TreesAlbum);
-                GetControl<IMenuItem>("miExportTable").Text = LangMan.LS(LSID.ExportTable);
-                GetControl<IMenuItem>("miExit").Text = LangMan.LS(LSID.MIExit);
-
-                GetControl<IMenuItem>("miRecordAdd").Text = LangMan.LS(LSID.MIRecordAdd);
-                GetControl<IMenuItem>("miRecordEdit").Text = LangMan.LS(LSID.MIRecordEdit);
-                GetControl<IMenuItem>("miRecordDelete").Text = LangMan.LS(LSID.MIRecordDelete);
-                GetControl<IMenuItem>("miSearch").Text = LangMan.LS(LSID.Search);
-                GetControl<IMenuItem>("miFindAndReplace").Text = LangMan.LS(LSID.FindAndReplace);
-                GetControl<IMenuItem>("miFilter").Text = LangMan.LS(LSID.MIFilter) + @"...";
-
-                GetControl<IMenuItem>("miTreeAncestors").Text = LangMan.LS(LSID.MITreeAncestors);
-                GetControl<IMenuItem>("miTreeDescendants").Text = LangMan.LS(LSID.MITreeDescendants);
-                GetControl<IMenuItem>("miTreeBoth").Text = LangMan.LS(LSID.MITreeBoth);
-                GetControl<IMenuItem>("miPedigreeAscend").Text = LangMan.LS(LSID.MIPedigreeAscend);
-                GetControl<IMenuItem>("miPedigreeDescend").Text = LangMan.LS(LSID.MIPedigreeDescend);
-                GetControl<IMenuItem>("miMap").Text = LangMan.LS(LSID.MIMap) + @"...";
-                GetControl<IMenuItem>("miStats").Text = LangMan.LS(LSID.MIStats) + @"...";
-                GetControl<IMenuItem>("miAncestorsCircle").Text = LangMan.LS(LSID.AncestorsCircle);
-                GetControl<IMenuItem>("miDescendantsCircle").Text = LangMan.LS(LSID.DescendantsCircle);
-                GetControl<IMenuItem>("miRelationshipCalculator").Text = LangMan.LS(LSID.RelationshipCalculator);
-
-                GetControl<IMenuItem>("miOrganizer").Text = LangMan.LS(LSID.MIOrganizer) + @"...";
-                GetControl<IMenuItem>("miSlideshow").Text = LangMan.LS(LSID.Slideshow) + @"...";
-                GetControl<IMenuItem>("miScripts").Text = LangMan.LS(LSID.MIScripts);
-                GetControl<IMenuItem>("miTreeTools").Text = LangMan.LS(LSID.MITreeTools);
-                GetControl<IMenuItem>("miOptions").Text = LangMan.LS(LSID.MIOptions) + @"...";
-
-                GetControl<IMenuItem>("miTreeCompare").Text = LangMan.LS(LSID.ToolOp_1);
-                GetControl<IMenuItem>("miTreeMerge").Text = LangMan.LS(LSID.ToolOp_2);
-                GetControl<IMenuItem>("miTreeSplit").Text = LangMan.LS(LSID.ToolOp_3);
-                GetControl<IMenuItem>("miRecMerge").Text = LangMan.LS(LSID.MergeDuplicates);
-                GetControl<IMenuItem>("miFamilyGroups").Text = LangMan.LS(LSID.ToolOp_6);
-                GetControl<IMenuItem>("miTreeCheck").Text = LangMan.LS(LSID.ToolOp_7);
-                GetControl<IMenuItem>("miPatSearch").Text = LangMan.LS(LSID.ToolOp_8);
-                GetControl<IMenuItem>("miPlacesManager").Text = LangMan.LS(LSID.ToolOp_9);
-
-                GetControl<IMenuItem>("miContext").Text = LangMan.LS(LSID.MIContext);
-                GetControl<IMenuItem>("miAbout").Text = LangMan.LS(LSID.MIAbout) + @"...";
-                GetControl<IMenuItem>("miLogSend").Text = LangMan.LS(LSID.LogSend);
-                GetControl<IMenuItem>("miLogView").Text = LangMan.LS(LSID.LogView);
-
-                GetControl<IMenuItem>("miWindow").Text = LangMan.LS(LSID.MIWindow);
-                GetControl<IMenuItem>("miWinCascade").Text = LangMan.LS(LSID.MIWinCascade);
-                GetControl<IMenuItem>("miWinHTile").Text = LangMan.LS(LSID.MIWinHTile);
-                GetControl<IMenuItem>("miWinVTile").Text = LangMan.LS(LSID.MIWinVTile);
-                GetControl<IMenuItem>("miWinMinimize").Text = LangMan.LS(LSID.MIWinMinimize);
-
-                if (fHasToolbar) {
-                    SetToolTip("tbFileNew", LangMan.LS(LSID.FileNewTip));
-                    SetToolTip("tbFileLoad", LangMan.LS(LSID.FileLoadTip));
-                    SetToolTip("tbFileSave", LangMan.LS(LSID.FileSaveTip));
-                    SetToolTip("tbRecordAdd", LangMan.LS(LSID.RecordAddTip));
-                    SetToolTip("tbRecordEdit", LangMan.LS(LSID.RecordEditTip));
-                    SetToolTip("tbRecordDelete", LangMan.LS(LSID.RecordDeleteTip));
-                    SetToolTip("tbFilter", LangMan.LS(LSID.FilterTip));
-                    SetToolTip("tbTreeAncestors", LangMan.LS(LSID.TreeAncestorsTip));
-                    SetToolTip("tbTreeDescendants", LangMan.LS(LSID.TreeDescendantsTip));
-                    SetToolTip("tbTreeBoth", LangMan.LS(LSID.TreeBothTip));
-                    SetToolTip("tbPedigree", LangMan.LS(LSID.PedigreeTip));
-                    SetToolTip("tbStats", LangMan.LS(LSID.StatsTip));
-                    SetToolTip("tbPrev", LangMan.LS(LSID.PrevRec));
-                    SetToolTip("tbNext", LangMan.LS(LSID.NextRec));
-
-                    GetControl<IMenuItem>("miPedigreeAscend2").Text = LangMan.LS(LSID.MIPedigreeAscend);
-                    GetControl<IMenuItem>("miPedigreeDescend2").Text = LangMan.LS(LSID.MIPedigreeDescend);
-                }
-
-                GetControl<IMenuItem>("miContRecordAdd").Text = LangMan.LS(LSID.MIRecordAdd);
-                GetControl<IMenuItem>("miContRecordEdit").Text = LangMan.LS(LSID.MIRecordEdit);
-                GetControl<IMenuItem>("miContRecordDelete").Text = LangMan.LS(LSID.MIRecordDelete);
-                GetControl<IMenuItem>("miContRecordDuplicate").Text = LangMan.LS(LSID.RecordDuplicate);
-                GetControl<IMenuItem>("miContRecordMerge").Text = LangMan.LS(LSID.MergeDuplicates);
-
-                GetControl<IMenuItem>("miCopyContent").Text = LangMan.LS(LSID.Copy);
-
                 var tabControl = GetControl<ITabControl>("tabsRecords");
                 if (tabControl.Pages.Count >= 11) {
                     tabControl.Pages[0].Text = LangMan.LS(LSID.RPIndividuals);
@@ -948,18 +863,113 @@ namespace GKCore.Controllers
                     tabControl.Pages[10].Text = LangMan.LS(LSID.RPLocations);
                 }
 
-                var miPlugins = GetControl<IMenuItem>("miPlugins");
-                int num = miPlugins.SubItems.Count;
-                for (int i = 0; i < num; i++) {
-                    var mi = miPlugins.SubItems[i];
-                    IPlugin plugin = (IPlugin)mi.Tag;
-                    mi.Text = plugin.DisplayName;
-                }
+                if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                    GetControl<IMenuItem>("miFile").Text = LangMan.LS(LSID.MIFile);
+                    GetControl<IMenuItem>("miEdit").Text = LangMan.LS(LSID.MIEdit);
+                    GetControl<IMenuItem>("miPedigree").Text = LangMan.LS(LSID.MIPedigree);
+                    GetControl<IMenuItem>("miService").Text = LangMan.LS(LSID.MIService);
+                    GetControl<IMenuItem>("miReports").Text = LangMan.LS(LSID.Reports);
+                    GetControl<IMenuItem>("miPlugins").Text = LangMan.LS(LSID.Plugins);
+                    GetControl<IMenuItem>("miHelp").Text = LangMan.LS(LSID.MIHelp);
 
-                var miThemes = GetControl<IMenuItem>("miThemes");
-                miThemes.Text = LangMan.LS(LSID.Themes);
-                if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) {
-                    miThemes.Enabled = false;
+                    GetControl<IMenuItem>("miFileNew").Text = LangMan.LS(LSID.MIFileNew);
+                    GetControl<IMenuItem>("miFileLoad").Text = LangMan.LS(LSID.MIFileLoad);
+                    GetControl<IMenuItem>("miMRUFiles").Text = LangMan.LS(LSID.MIMRUFiles);
+                    GetControl<IMenuItem>("miFileSave").Text = LangMan.LS(LSID.MIFileSave);
+                    GetControl<IMenuItem>("miFileSaveAs").Text = LangMan.LS(LSID.MIFileSaveAs);
+                    GetControl<IMenuItem>("miFileClose").Text = LangMan.LS(LSID.MIFileClose);
+                    GetControl<IMenuItem>("miFileProperties").Text = LangMan.LS(LSID.MIFileProperties) + @"...";
+                    GetControl<IMenuItem>("miExport").Text = LangMan.LS(LSID.MIExport);
+                    GetControl<IMenuItem>("miExportToFamilyBook").Text = LangMan.LS(LSID.MIExportToFamilyBook);
+                    GetControl<IMenuItem>("miExportToTreesAlbum").Text = LangMan.LS(LSID.TreesAlbum);
+                    GetControl<IMenuItem>("miExportTable").Text = LangMan.LS(LSID.ExportTable);
+                    GetControl<IMenuItem>("miExit").Text = LangMan.LS(LSID.MIExit);
+
+                    GetControl<IMenuItem>("miRecordAdd").Text = LangMan.LS(LSID.MIRecordAdd);
+                    GetControl<IMenuItem>("miRecordEdit").Text = LangMan.LS(LSID.MIRecordEdit);
+                    GetControl<IMenuItem>("miRecordDelete").Text = LangMan.LS(LSID.MIRecordDelete);
+                    GetControl<IMenuItem>("miSearch").Text = LangMan.LS(LSID.Search);
+                    GetControl<IMenuItem>("miFindAndReplace").Text = LangMan.LS(LSID.FindAndReplace);
+                    GetControl<IMenuItem>("miFilter").Text = LangMan.LS(LSID.MIFilter) + @"...";
+
+                    GetControl<IMenuItem>("miTreeAncestors").Text = LangMan.LS(LSID.MITreeAncestors);
+                    GetControl<IMenuItem>("miTreeDescendants").Text = LangMan.LS(LSID.MITreeDescendants);
+                    GetControl<IMenuItem>("miTreeBoth").Text = LangMan.LS(LSID.MITreeBoth);
+                    GetControl<IMenuItem>("miPedigreeAscend").Text = LangMan.LS(LSID.MIPedigreeAscend);
+                    GetControl<IMenuItem>("miPedigreeDescend").Text = LangMan.LS(LSID.MIPedigreeDescend);
+                    GetControl<IMenuItem>("miMap").Text = LangMan.LS(LSID.MIMap) + @"...";
+                    GetControl<IMenuItem>("miStats").Text = LangMan.LS(LSID.MIStats) + @"...";
+                    GetControl<IMenuItem>("miAncestorsCircle").Text = LangMan.LS(LSID.AncestorsCircle);
+                    GetControl<IMenuItem>("miDescendantsCircle").Text = LangMan.LS(LSID.DescendantsCircle);
+                    GetControl<IMenuItem>("miRelationshipCalculator").Text = LangMan.LS(LSID.RelationshipCalculator);
+
+                    GetControl<IMenuItem>("miOrganizer").Text = LangMan.LS(LSID.MIOrganizer) + @"...";
+                    GetControl<IMenuItem>("miSlideshow").Text = LangMan.LS(LSID.Slideshow) + @"...";
+                    GetControl<IMenuItem>("miScripts").Text = LangMan.LS(LSID.MIScripts);
+                    GetControl<IMenuItem>("miTreeTools").Text = LangMan.LS(LSID.MITreeTools);
+                    GetControl<IMenuItem>("miOptions").Text = LangMan.LS(LSID.MIOptions) + @"...";
+
+                    GetControl<IMenuItem>("miTreeCompare").Text = LangMan.LS(LSID.ToolOp_1);
+                    GetControl<IMenuItem>("miTreeMerge").Text = LangMan.LS(LSID.ToolOp_2);
+                    GetControl<IMenuItem>("miTreeSplit").Text = LangMan.LS(LSID.ToolOp_3);
+                    GetControl<IMenuItem>("miRecMerge").Text = LangMan.LS(LSID.MergeDuplicates);
+                    GetControl<IMenuItem>("miFamilyGroups").Text = LangMan.LS(LSID.ToolOp_6);
+                    GetControl<IMenuItem>("miTreeCheck").Text = LangMan.LS(LSID.ToolOp_7);
+                    GetControl<IMenuItem>("miPatSearch").Text = LangMan.LS(LSID.ToolOp_8);
+                    GetControl<IMenuItem>("miPlacesManager").Text = LangMan.LS(LSID.ToolOp_9);
+
+                    GetControl<IMenuItem>("miContext").Text = LangMan.LS(LSID.MIContext);
+                    GetControl<IMenuItem>("miAbout").Text = LangMan.LS(LSID.MIAbout) + @"...";
+                    GetControl<IMenuItem>("miLogSend").Text = LangMan.LS(LSID.LogSend);
+                    GetControl<IMenuItem>("miLogView").Text = LangMan.LS(LSID.LogView);
+
+                    GetControl<IMenuItem>("miWindow").Text = LangMan.LS(LSID.MIWindow);
+                    GetControl<IMenuItem>("miWinCascade").Text = LangMan.LS(LSID.MIWinCascade);
+                    GetControl<IMenuItem>("miWinHTile").Text = LangMan.LS(LSID.MIWinHTile);
+                    GetControl<IMenuItem>("miWinVTile").Text = LangMan.LS(LSID.MIWinVTile);
+                    GetControl<IMenuItem>("miWinMinimize").Text = LangMan.LS(LSID.MIWinMinimize);
+
+                    if (fHasToolbar) {
+                        SetToolTip("tbFileNew", LangMan.LS(LSID.FileNewTip));
+                        SetToolTip("tbFileLoad", LangMan.LS(LSID.FileLoadTip));
+                        SetToolTip("tbFileSave", LangMan.LS(LSID.FileSaveTip));
+                        SetToolTip("tbRecordAdd", LangMan.LS(LSID.RecordAddTip));
+                        SetToolTip("tbRecordEdit", LangMan.LS(LSID.RecordEditTip));
+                        SetToolTip("tbRecordDelete", LangMan.LS(LSID.RecordDeleteTip));
+                        SetToolTip("tbFilter", LangMan.LS(LSID.FilterTip));
+                        SetToolTip("tbTreeAncestors", LangMan.LS(LSID.TreeAncestorsTip));
+                        SetToolTip("tbTreeDescendants", LangMan.LS(LSID.TreeDescendantsTip));
+                        SetToolTip("tbTreeBoth", LangMan.LS(LSID.TreeBothTip));
+                        SetToolTip("tbPedigree", LangMan.LS(LSID.PedigreeTip));
+                        SetToolTip("tbStats", LangMan.LS(LSID.StatsTip));
+                        SetToolTip("tbPrev", LangMan.LS(LSID.PrevRec));
+                        SetToolTip("tbNext", LangMan.LS(LSID.NextRec));
+
+                        GetControl<IMenuItem>("miPedigreeAscend2").Text = LangMan.LS(LSID.MIPedigreeAscend);
+                        GetControl<IMenuItem>("miPedigreeDescend2").Text = LangMan.LS(LSID.MIPedigreeDescend);
+                    }
+
+                    GetControl<IMenuItem>("miContRecordAdd").Text = LangMan.LS(LSID.MIRecordAdd);
+                    GetControl<IMenuItem>("miContRecordEdit").Text = LangMan.LS(LSID.MIRecordEdit);
+                    GetControl<IMenuItem>("miContRecordDelete").Text = LangMan.LS(LSID.MIRecordDelete);
+                    GetControl<IMenuItem>("miContRecordDuplicate").Text = LangMan.LS(LSID.RecordDuplicate);
+                    GetControl<IMenuItem>("miContRecordMerge").Text = LangMan.LS(LSID.MergeDuplicates);
+
+                    GetControl<IMenuItem>("miCopyContent").Text = LangMan.LS(LSID.Copy);
+
+                    var miPlugins = GetControl<IMenuItem>("miPlugins");
+                    int num = miPlugins.SubItems.Count;
+                    for (int i = 0; i < num; i++) {
+                        var mi = miPlugins.SubItems[i];
+                        IPlugin plugin = (IPlugin)mi.Tag;
+                        mi.Text = plugin.DisplayName;
+                    }
+
+                    var miThemes = GetControl<IMenuItem>("miThemes");
+                    miThemes.Text = LangMan.LS(LSID.Themes);
+                    if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) {
+                        miThemes.Enabled = false;
+                    }
                 }
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.SetLocale()", ex);
