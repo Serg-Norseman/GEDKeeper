@@ -198,7 +198,7 @@ namespace GKCore
         {
             fRunningForms.Remove(window);
 
-            if (fRunningForms.Count == 0) {
+            if (fRunningForms.Count == 0 && !HasFeatureSupport(Feature.Mobile)) {
                 Quit();
             }
         }
@@ -651,6 +651,13 @@ namespace GKCore
             }
         }
 
+        public bool ShowDialog<T>(IView owner, bool keepModeless = false) where T : ICommonDialog
+        {
+            using (var dlg = AppHost.Container.Resolve<T>(owner)) {
+                return ShowModalX(dlg, owner, keepModeless);
+            }
+        }
+
         public virtual bool ShowModalX(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
             return (dialog != null && dialog.ShowModalX(owner));
@@ -1037,10 +1044,10 @@ namespace GKCore
 
         public void ShowOptions(IView owner, OptionsPage page)
         {
-            using (var dlgOptions = AppHost.ResolveDialog<IOptionsDlg>(AppHost.Instance)) {
-                dlgOptions.SetPage(page);
+            using (var dlg = AppHost.ResolveDialog<IOptionsDlg>(AppHost.Instance)) {
+                dlg.SetPage(page);
 
-                if (AppHost.Instance.ShowModalX(dlgOptions, owner)) {
+                if (AppHost.Instance.ShowModalX(dlg, owner)) {
                     AppHost.Instance.ApplyOptions();
                 }
             }

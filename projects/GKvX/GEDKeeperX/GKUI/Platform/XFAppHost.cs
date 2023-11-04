@@ -110,11 +110,6 @@ namespace GKUI.Platform
             throw new NotImplementedException();
         }
 
-        public override bool ShowModalX(ICommonDialog dialog, IView owner, bool keepModeless = false)
-        {
-            return base.ShowModalX(dialog, owner, keepModeless);
-        }
-
         public override async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
             var xfModal = dialog as CommonDialog;

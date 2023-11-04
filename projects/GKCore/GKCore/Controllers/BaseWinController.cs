@@ -787,7 +787,9 @@ namespace GKCore.Controllers
                 bool canSave = baseEn || (curChart != null);
                 bool canFlt = workWin != null && workWin.AllowFilter();
 
-                if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                bool hasMobile = AppHost.Instance.HasFeatureSupport(Feature.Mobile);
+
+                if (!hasMobile) {
                     GetControl<IMenuItem>("miFileSave").Enabled = canSave;
                     GetControl<IMenuItem>("miFileSaveAs").Enabled = canSave;
 
@@ -824,15 +826,17 @@ namespace GKCore.Controllers
                     GetControl<IToolItem>("tbRecordAdd").Enabled = baseEn;
                     GetControl<IToolItem>("tbRecordEdit").Enabled = baseEn;
                     GetControl<IToolItem>("tbRecordDelete").Enabled = baseEn;
-                    GetControl<IToolItem>("tbStats").Enabled = baseEn;
                     GetControl<IToolItem>("tbFilter").Enabled = canFlt;
                     GetControl<IToolItem>("tbTreeAncestors").Enabled = ifEn;
                     GetControl<IToolItem>("tbTreeDescendants").Enabled = ifEn;
                     GetControl<IToolItem>("tbTreeBoth").Enabled = ifEn;
 
-                    GetControl<IToolItem>("tbPedigree").Enabled = indivEn;
-                    GetControl<IMenuItem>("miPedigreeAscend2").Enabled = indivEn;
-                    GetControl<IMenuItem>("miPedigreeDescend2").Enabled = indivEn;
+                    if (!hasMobile) {
+                        GetControl<IToolItem>("tbStats").Enabled = baseEn;
+                        GetControl<IToolItem>("tbPedigree").Enabled = indivEn;
+                        GetControl<IMenuItem>("miPedigreeAscend2").Enabled = indivEn;
+                        GetControl<IMenuItem>("miPedigreeDescend2").Enabled = indivEn;
+                    }
                 }
 
                 UpdateNavControls();

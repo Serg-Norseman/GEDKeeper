@@ -109,10 +109,6 @@ namespace GKUI.Forms
             CreatePage("Locations", GDMRecordType.rtLocation);
 
             /*fController.SetLocale();*/
-
-            // FIXME: temp debug
-            ((IBaseWindow)this).UpdateControls();
-            UpdateShieldState();
         }
 
         private void CreatePage(string pageText, GDMRecordType recType)
@@ -422,6 +418,8 @@ namespace GKUI.Forms
             }
 
             panStatusText.Text = statusLine;
+
+            UpdateShieldState();
         }
 
         void IWorkWindow.UpdateSettings()

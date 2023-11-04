@@ -102,36 +102,43 @@ namespace GKCore
             }
         }
 
+        public void Reset()
+        {
+            ChangeReset();
+        }
+
         #region Private methods
+
+        private void Handle(NotifyCollectionChangedEventArgs args)
+        {
+            var handler = CollectionChanged;
+            if (handler != null && fUpdateCount == 0)
+                handler(this, args);
+        }
 
         private void ChangeReset()
         {
-            if (CollectionChanged != null && fUpdateCount == 0)
-                CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            Handle(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         private void ChangeAdded(T item, int index)
         {
-            if (CollectionChanged != null && fUpdateCount == 0)
-                CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
+            Handle(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
         }
 
         private void ChangeRemoved(T item, int index)
         {
-            if (CollectionChanged != null && fUpdateCount == 0)
-                CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
+            Handle(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
         }
 
         private void ChangeMoved(T item, int oldIndex, int newIndex)
         {
-            if (CollectionChanged != null && fUpdateCount == 0)
-                CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, item, newIndex, oldIndex));
+            Handle(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, item, newIndex, oldIndex));
         }
 
         private void ChangeReplaced(T item, int index)
         {
-            if (CollectionChanged != null && fUpdateCount == 0)
-                CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item, item, index));
+            Handle(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item, item, index));
         }
 
         #endregion

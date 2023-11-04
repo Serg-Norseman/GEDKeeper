@@ -41,11 +41,11 @@ namespace GKCore.Controllers
     {
         public static void ViewRecordInfo(IView owner, IBaseWindow baseWin, GDMRecord record)
         {
-            if (record != null) {
-                using (var dlg = AppHost.ResolveDialog<IRecordInfoDlg>(baseWin)) {
-                    dlg.Record = record;
-                    AppHost.Instance.ShowModalX(dlg, owner, false);
-                }
+            if (record == null) return;
+
+            using (var dlg = AppHost.ResolveDialog<IRecordInfoDlg>(baseWin)) {
+                dlg.Record = record;
+                AppHost.Instance.ShowModalX(dlg, owner, false);
             }
         }
 
@@ -1031,9 +1031,9 @@ namespace GKCore.Controllers
         public static bool SelectPortraitRegion(IView owner, IBaseWindow baseWin, GDMMultimediaLink mmLink)
         {
             bool result;
-            using (var selectDlg = AppHost.ResolveDialog<IPortraitSelectDlg>(baseWin)) {
-                selectDlg.MultimediaLink = mmLink;
-                result = AppHost.Instance.ShowModalX(selectDlg, owner, false);
+            using (var dlg = AppHost.ResolveDialog<IPortraitSelectDlg>(baseWin)) {
+                dlg.MultimediaLink = mmLink;
+                result = AppHost.Instance.ShowModalX(dlg, owner, false);
             }
             return result;
         }

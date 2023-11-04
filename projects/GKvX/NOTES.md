@@ -65,3 +65,12 @@ ASUS Nexus 7, Android 6.0.1 (API 23), 2015
 
 Start application: 512 mb - 122 s; 1gb - 8-15 s; 2 gb - 7-8 s
 Load gedcom (370 kb): 512 mb - 74 s; 1gb - 2 s; 2 gb - <1 s
+
+
+# Incomprehensible problems
+
+- The main window grids are not updated after updating the connected collections (INotifyCollectionChanged),
+  but they are updated after switching tabs. However, grids in dialogs immediately have content.
+- A label in HyperView does not support tapping on hyperlinks in html mode, but it has markup.
+  But it supports taps on hyperlinks if it works on spans without html markup.
+- How to control scrolling and size of SkCanvasView in ScrollView (Charts)?

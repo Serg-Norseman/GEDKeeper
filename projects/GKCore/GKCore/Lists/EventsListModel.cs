@@ -109,7 +109,7 @@ namespace GKCore.Lists
                 switch (eArgs.Action) {
                     case RecordAction.raAdd:
                     case RecordAction.raEdit:
-                        using (var dlgEventEdit = AppHost.ResolveDialog<IEventEditDlg>(fBaseWin)) {
+                        using (var dlg = AppHost.ResolveDialog<IEventEditDlg>(fBaseWin)) {
                             bool exists = (evt != null);
 
                             GDMCustomEvent newEvent;
@@ -123,15 +123,15 @@ namespace GKCore.Lists
                                 }
                             }
 
-                            dlgEventEdit.Event = newEvent;
-                            result = AppHost.Instance.ShowModalX(dlgEventEdit, fOwner, true);
+                            dlg.Event = newEvent;
+                            result = AppHost.Instance.ShowModalX(dlg, fOwner, true);
 
                             if (!result) {
                                 if (!exists) {
                                     newEvent.Dispose();
                                 }
                             } else {
-                                newEvent = dlgEventEdit.Event;
+                                newEvent = dlg.Event;
 
                                 if (!exists) {
                                     result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventAdd, record, newEvent);

@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using BSLib;
 using GKCore;
 using GKCore.Design;
@@ -424,9 +425,33 @@ namespace GKUI.Components
                 }
 
                 if (tempRec != null) SelectItem(tempRec);
+
+                ReloadEx();
             } catch (Exception ex) {
                 Logger.WriteError("GKListView.UpdateContents()", ex);
             }
+        }
+
+        private void ReloadEx()
+        {
+            try {
+                //MethodInfo dynMethod = base.GetType().GetMethod("Reload", BindingFlags.NonPublic | BindingFlags.Instance);
+                //dynMethod.Invoke(this, new object[] { });
+
+                //fListMan.ContentList.Reset();
+
+                //InvokeMethod((DataGrid)this, "Reload", null);
+                InvokeMethod((DataGrid)this, "HandleItemsSourceCollectionChanged", new object[] { fListMan.ContentList, null });
+            } catch (Exception ex) {
+                Logger.WriteError("ReloadEx()", ex);
+            }
+        }
+
+        public static object InvokeMethod<T>(T obj, string methodName, params object[] args)
+        {
+            var type = typeof(T);
+            var method = type.GetTypeInfo().GetDeclaredMethod(methodName);
+            return method.Invoke(obj, args);
         }
 
         public void DeleteRecord(object data)

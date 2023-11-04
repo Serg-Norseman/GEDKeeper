@@ -107,7 +107,7 @@ namespace GKUI.Forms
         {
         }
 
-        /*protected override void OnAppearing()
+        protected override void OnAppearing()
         {
             AppHost.Instance.LoadWindow(this);
             base.OnAppearing();
@@ -117,7 +117,7 @@ namespace GKUI.Forms
         {
             AppHost.Instance.CloseWindow(this);
             base.OnDisappearing();
-        }*/
+        }
     }
 
 
