@@ -83,9 +83,9 @@ namespace GKCore.Controllers
             fView.NotesList.ListModel.DataOwner = fRepositoryRecord;
         }
 
-        public void ModifyAddress()
+        public async void ModifyAddress()
         {
-            BaseController.ModifyAddress(fView, fBase, fRepositoryRecord.Address);
+            await BaseController.ModifyAddress(fView, fBase, fRepositoryRecord.Address);
         }
 
         public override void SetLocale()

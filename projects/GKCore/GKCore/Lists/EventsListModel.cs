@@ -96,7 +96,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async void Modify(object sender, ModifyEventArgs eArgs)
         {
             GDMRecordWithEvents record = fDataOwner as GDMRecordWithEvents;
             if (fBaseWin == null || record == null) return;
@@ -124,7 +124,7 @@ namespace GKCore.Lists
                             }
 
                             dlg.Event = newEvent;
-                            result = AppHost.Instance.ShowModalX(dlg, fOwner, true);
+                            result = await AppHost.Instance.ShowModalAsync(dlg, fOwner, true);
 
                             if (!result) {
                                 if (!exists) {

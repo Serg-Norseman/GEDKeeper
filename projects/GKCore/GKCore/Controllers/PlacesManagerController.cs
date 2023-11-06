@@ -73,7 +73,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void CreateLocationRecord(IList<object> placesList)
+        public async void CreateLocationRecord(IList<object> placesList)
         {
             PlaceObj pObj = placesList.Count > 0 ? (PlaceObj) placesList[0] : null;
             if (pObj == null) return;
@@ -81,7 +81,7 @@ namespace GKCore.Controllers
             if (pObj.Name.IndexOf("[*]") == 0) {
                 AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.PlaceAlreadyInBook));
             } else {
-                GDMLocationRecord locRec = fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
+                GDMLocationRecord locRec = await fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
                 if (locRec == null) return;
 
                 for (var pi = 0; pi < placesList.Count; pi++) {

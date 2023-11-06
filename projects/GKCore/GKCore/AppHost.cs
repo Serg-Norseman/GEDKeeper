@@ -1042,12 +1042,12 @@ namespace GKCore
             ShowOptions(owner, page);
         }
 
-        public void ShowOptions(IView owner, OptionsPage page)
+        public async void ShowOptions(IView owner, OptionsPage page)
         {
             using (var dlg = AppHost.ResolveDialog<IOptionsDlg>(AppHost.Instance)) {
                 dlg.SetPage(page);
 
-                if (AppHost.Instance.ShowModalX(dlg, owner)) {
+                if (await AppHost.Instance.ShowModalAsync(dlg, owner)) {
                     AppHost.Instance.ApplyOptions();
                 }
             }

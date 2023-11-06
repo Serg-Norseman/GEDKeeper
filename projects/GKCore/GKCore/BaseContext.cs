@@ -24,6 +24,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GDModel.Providers;
@@ -604,7 +605,7 @@ namespace GKCore
 
         #region Name and sex functions
 
-        public string DefinePatronymic(IView owner, string name, GDMSex sex, bool confirm)
+        public async Task<string> DefinePatronymic(IView owner, string name, GDMSex sex, bool confirm)
         {
             ICulture culture = this.Culture;
             if (!culture.HasPatronymic) return string.Empty;
@@ -637,7 +638,7 @@ namespace GKCore
                     return result;
                 }
 
-                BaseController.ModifyName(owner, this, ref n);
+                await BaseController.ModifyName(owner, this, n);
             }
 
             switch (sex) {
@@ -653,7 +654,7 @@ namespace GKCore
             return result;
         }
 
-        public GDMSex DefineSex(IView owner, string iName, string iPatr)
+        public async Task<GDMSex> DefineSex(IView owner, string iName, string iPatr)
         {
             INamesTable namesTable = AppHost.NamesTable;
 
@@ -665,7 +666,7 @@ namespace GKCore
                     result = this.Culture.GetSex(iName, iPatr, false);
 
                     dlg.Sex = result;
-                    if (AppHost.Instance.ShowModalX(dlg, owner, false)) {
+                    if (await AppHost.Instance.ShowModalAsync(dlg, owner, false)) {
                         result = dlg.Sex;
 
                         if (result != GDMSex.svUnknown) {
@@ -678,7 +679,7 @@ namespace GKCore
             return result;
         }
 
-        public void CheckPersonSex(IView owner, GDMIndividualRecord iRec)
+        public async void CheckPersonSex(IView owner, GDMIndividualRecord iRec)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
@@ -688,7 +689,7 @@ namespace GKCore
 
                 if (iRec.Sex != GDMSex.svMale && iRec.Sex != GDMSex.svFemale) {
                     var parts = GKUtils.GetNameParts(fTree, iRec);
-                    iRec.Sex = DefineSex(owner, parts.Name, parts.Patronymic);
+                    iRec.Sex = await DefineSex(owner, parts.Name, parts.Patronymic);
                 }
             } finally {
                 EndUpdate();
@@ -1763,7 +1764,7 @@ namespace GKCore
 
         #region UI control functions
 
-        public GDMFamilyRecord SelectFamily(IView owner, GDMIndividualRecord target, TargetMode targetMode = TargetMode.tmFamilyChild)
+        public async Task<GDMFamilyRecord> SelectFamily(IView owner, GDMIndividualRecord target, TargetMode targetMode = TargetMode.tmFamilyChild)
         {
             GDMFamilyRecord result;
 
@@ -1771,7 +1772,7 @@ namespace GKCore
                 using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtFamily)) {
                     dlg.SetTarget(targetMode, target, GDMSex.svUnknown);
 
-                    if (AppHost.Instance.ShowModalX(dlg, owner, false)) {
+                    if (await AppHost.Instance.ShowModalAsync(dlg, owner, false)) {
                         result = (dlg.ResultRecord as GDMFamilyRecord);
                     } else {
                         result = null;
@@ -1785,7 +1786,7 @@ namespace GKCore
             return result;
         }
 
-        public GDMIndividualRecord SelectPerson(IView owner, GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex)
+        public async Task<GDMIndividualRecord> SelectPerson(IView owner, GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex)
         {
             GDMIndividualRecord result;
 
@@ -1793,7 +1794,7 @@ namespace GKCore
                 using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtIndividual)) {
                     dlg.SetTarget(targetMode, target, needSex);
 
-                    if (AppHost.Instance.ShowModalX(dlg, owner, false)) {
+                    if (await AppHost.Instance.ShowModalAsync(dlg, owner, false)) {
                         result = (dlg.ResultRecord as GDMIndividualRecord);
                     } else {
                         result = null;
@@ -1807,7 +1808,7 @@ namespace GKCore
             return result;
         }
 
-        public GDMRecord SelectRecord(IView owner, GDMRecordType mode, params object[] args)
+        public async Task<GDMRecord> SelectRecord(IView owner, GDMRecordType mode, params object[] args)
         {
             GDMRecord result;
 
@@ -1816,7 +1817,7 @@ namespace GKCore
                     var flt = (args != null && args.Length > 0) ? (args[0] as string) : "*";
                     dlg.SetTarget(TargetMode.tmNone, null, GDMSex.svUnknown, flt);
 
-                    if (AppHost.Instance.ShowModalX(dlg, owner, false)) {
+                    if (await AppHost.Instance.ShowModalAsync(dlg, owner, false)) {
                         result = dlg.ResultRecord;
                     } else {
                         result = null;
@@ -1898,7 +1899,7 @@ namespace GKCore
             return family;
         }
 
-        public GDMIndividualRecord AddChildForParent(IView owner, GDMIndividualRecord parent, GDMSex needSex)
+        public async Task<GDMIndividualRecord> AddChildForParent(IView owner, GDMIndividualRecord parent, GDMSex needSex)
         {
             GDMIndividualRecord resultChild = null;
 
@@ -1917,7 +1918,7 @@ namespace GKCore
                         family = fTree.GetPtrValue(parent.SpouseToFamilyLinks[0]);
                     }
 
-                    GDMIndividualRecord child = SelectPerson(owner, fTree.GetPtrValue(family.Husband), TargetMode.tmParent, needSex);
+                    GDMIndividualRecord child = await SelectPerson(owner, fTree.GetPtrValue(family.Husband), TargetMode.tmParent, needSex);
 
                     if (child != null && family.AddChild(child)) {
                         // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
@@ -1932,7 +1933,7 @@ namespace GKCore
             return resultChild;
         }
 
-        public GDMIndividualRecord SelectSpouseFor(IView owner, GDMIndividualRecord iRec)
+        public async Task<GDMIndividualRecord> SelectSpouseFor(IView owner, GDMIndividualRecord iRec)
         {
             if (iRec == null)
                 throw new ArgumentNullException(@"iRec");
@@ -1952,7 +1953,7 @@ namespace GKCore
                     return null;
             }
 
-            return SelectPerson(owner, iRec, TargetMode.tmSpouse, needSex);
+            return await SelectPerson(owner, iRec, TargetMode.tmSpouse, needSex);
         }
 
         public void ProcessFamily(GDMFamilyRecord famRec)

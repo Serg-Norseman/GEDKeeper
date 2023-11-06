@@ -157,9 +157,9 @@ namespace GKCore.Controllers
             fView.SourcesList.UpdateSheet();
         }
 
-        public void AddHusband()
+        public async void AddHusband()
         {
-            if (BaseController.AddFamilyHusband(fView, fBase, fLocalUndoman, fFamilyRecord)) {
+            if (await BaseController.AddFamilyHusband(fView, fBase, fLocalUndoman, fFamilyRecord)) {
                 UpdateControls();
             }
         }
@@ -171,9 +171,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public void AddWife()
+        public async void AddWife()
         {
-            if (BaseController.AddFamilyWife(fView, fBase, fLocalUndoman, fFamilyRecord)) {
+            if (await BaseController.AddFamilyWife(fView, fBase, fLocalUndoman, fFamilyRecord)) {
                 UpdateControls();
             }
         }

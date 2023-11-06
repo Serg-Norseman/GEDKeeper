@@ -90,12 +90,12 @@ namespace GKCore.Controllers
             UpdateChart();
         }
 
-        private void InternalChildAdd(GDMSex needSex)
+        private async void InternalChildAdd(GDMSex needSex)
         {
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            GDMIndividualRecord child = fBase.Context.AddChildForParent(fView, p.Rec, needSex);
+            GDMIndividualRecord child = await fBase.Context.AddChildForParent(fView, p.Rec, needSex);
             if (child == null) return;
 
             UpdateChart();
@@ -111,13 +111,13 @@ namespace GKCore.Controllers
             InternalChildAdd(GDMSex.svFemale);
         }
 
-        public void AddSpouse()
+        public async void AddSpouse()
         {
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
             GDMIndividualRecord iRec = p.Rec;
-            GDMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(fView, iRec);
+            GDMIndividualRecord iSpouse = await fBase.Context.SelectSpouseFor(fView, iRec);
             if (iSpouse == null) return;
 
             GDMFamilyRecord fam = fBase.Context.Tree.CreateFamily();
@@ -126,7 +126,7 @@ namespace GKCore.Controllers
             UpdateChart();
         }
 
-        private void ParentAdd(GDMSex needSex)
+        private async void ParentAdd(GDMSex needSex)
         {
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
@@ -147,7 +147,7 @@ namespace GKCore.Controllers
             }
 
             if (needParent) {
-                GDMIndividualRecord parent = fBase.Context.SelectPerson(fView, p.Rec, TargetMode.tmChild, needSex);
+                GDMIndividualRecord parent = await fBase.Context.SelectPerson(fView, p.Rec, TargetMode.tmChild, needSex);
                 if (parent != null) {
                     if (!familyExist) {
                         fam = fBase.Context.Tree.CreateFamily();
@@ -191,7 +191,7 @@ namespace GKCore.Controllers
             UpdateChart();
         }
 
-        public void ModifyPerson(TreeChartPerson person)
+        public async void ModifyPerson(TreeChartPerson person)
         {
             if (person == null) return;
 
@@ -207,7 +207,7 @@ namespace GKCore.Controllers
                 GDMFamilyRecord baseFamily = person.BaseFamily;
 
                 if (baseSpouse != null && baseFamily != null) {
-                    GDMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(fView, person.BaseSpouse.Rec);
+                    GDMIndividualRecord iSpouse = await fBase.Context.SelectSpouseFor(fView, person.BaseSpouse.Rec);
 
                     if (iSpouse != null) {
                         modified = baseFamily.AddSpouse(iSpouse);
@@ -285,12 +285,12 @@ namespace GKCore.Controllers
             }
         }
 
-        public void SetFilter()
+        public async void SetFilter()
         {
             using (var dlgFilter = AppHost.Container.Resolve<ITreeFilterDlg>(fBase)) {
                 dlgFilter.Filter = fView.TreeBox.Model.Filter;
 
-                if (dlgFilter.ShowModalX(fView)) {
+                if (await AppHost.Instance.ShowModalAsync(dlgFilter, fView)) {
                     fView.GenChart();
                 }
             }

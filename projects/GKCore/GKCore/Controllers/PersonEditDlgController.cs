@@ -385,9 +385,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public void AddPortrait()
+        public async void AddPortrait()
         {
-            if (BaseController.AddIndividualPortrait(fView, fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.AddIndividualPortrait(fView, fBase, fLocalUndoman, fIndividualRecord)) {
                 fView.MediaList.UpdateSheet();
                 UpdatePortrait(true);
             }
@@ -400,11 +400,11 @@ namespace GKCore.Controllers
             }
         }
 
-        public void AddParents()
+        public async void AddParents()
         {
             AcceptTempData();
 
-            GDMFamilyRecord family = fBase.Context.SelectFamily(fView, fIndividualRecord);
+            GDMFamilyRecord family = await fBase.Context.SelectFamily(fView, fIndividualRecord);
             if (family != null && family.IndexOfChild(fIndividualRecord) < 0) {
                 fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, fIndividualRecord, family);
             }
@@ -434,11 +434,11 @@ namespace GKCore.Controllers
             UpdateControls();
         }
 
-        public void AddFather()
+        public async void AddFather()
         {
             AcceptTempData();
 
-            if (BaseController.AddIndividualFather(fView, fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.AddIndividualFather(fView, fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
@@ -452,11 +452,11 @@ namespace GKCore.Controllers
             }
         }
 
-        public void AddMother()
+        public async void AddMother()
         {
             AcceptTempData();
 
-            if (BaseController.AddIndividualMother(fView, fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.AddIndividualMother(fView, fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }

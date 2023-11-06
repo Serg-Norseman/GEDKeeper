@@ -211,16 +211,16 @@ namespace GKCore.Controllers
             }
         }
 
-        public void SelectRec1()
+        public async void SelectRec1()
         {
-            GDMRecord irec = fBase.Context.SelectRecord(fView, fMergeMode, null);
+            GDMRecord irec = await fBase.Context.SelectRecord(fView, fMergeMode, null);
             if (irec != null)
                 SetRec1(irec);
         }
 
-        public void SelectRec2()
+        public async void SelectRec2()
         {
-            GDMRecord irec = fBase.Context.SelectRecord(fView, fMergeMode, null);
+            GDMRecord irec = await fBase.Context.SelectRecord(fView, fMergeMode, null);
             if (irec != null)
                 SetRec2(irec);
         }

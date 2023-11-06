@@ -1034,20 +1034,20 @@ namespace GKCore.Controllers
 
         #region Dialogs
 
-        private void ShowCommonFilter(GDMRecordType rt, IRecordsListModel listMan)
+        private async void ShowCommonFilter(GDMRecordType rt, IRecordsListModel listMan)
         {
             using (var dlg = AppHost.Container.Resolve<ICommonFilterDlg>(fView, listMan)) {
-                if (AppHost.Instance.ShowModalX(dlg, fView, false)) {
+                if (await AppHost.Instance.ShowModalAsync(dlg, fView, false)) {
                     AppHost.Instance.NotifyFilter(fView, rt, listMan, listMan.Filter);
                     ApplyFilter(rt);
                 }
             }
         }
 
-        private void ShowPersonsFilter(GDMRecordType rt, IRecordsListModel listMan)
+        private async void ShowPersonsFilter(GDMRecordType rt, IRecordsListModel listMan)
         {
             using (var dlg = AppHost.Container.Resolve<IPersonsFilterDlg>(fView, listMan)) {
-                if (AppHost.Instance.ShowModalX(dlg, fView, false)) {
+                if (await AppHost.Instance.ShowModalAsync(dlg, fView, false)) {
                     ApplyFilter(rt, listMan);
                 }
             }
@@ -1077,98 +1077,98 @@ namespace GKCore.Controllers
             }
         }
 
-        public void ShowFileProperties()
+        public async void ShowFileProperties()
         {
             try {
                 fContext.BeginUpdate();
 
                 using (var dlg = AppHost.ResolveDialog<IFilePropertiesDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, fView, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
             }
         }
 
-        public void ShowScripts()
+        public async void ShowScripts()
         {
             try {
                 fContext.BeginUpdate();
 
                 using (var dlg = AppHost.Container.Resolve<IScriptEditWin>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, fView, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
             }
         }
 
-        public void ShowTreeSplit()
+        public async void ShowTreeSplit()
         {
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<ITreeSplitDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, fView, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
             }
         }
 
-        public void ShowTreeMerge()
+        public async void ShowTreeMerge()
         {
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<ITreeMergeDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, fView, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
             }
         }
 
-        public void ShowTreeCompare()
+        public async void ShowTreeCompare()
         {
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<ITreeCompareDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, fView, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
             }
         }
 
-        public void ShowTreeCheck()
+        public async void ShowTreeCheck()
         {
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<ITreeCheckDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, fView, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
             }
         }
 
-        public void ShowPlacesManager()
+        public async void ShowPlacesManager()
         {
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<IPlacesManagerDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, fView, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
             }
         }
 
-        public void ShowPatSearch()
+        public async void ShowPatSearch()
         {
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<IPatriarchsSearchDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, fView, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
@@ -1198,17 +1198,17 @@ namespace GKCore.Controllers
             AppHost.Instance.ShowWindow(mapsWin);
         }
 
-        public void ShowOrganizer()
+        public async void ShowOrganizer()
         {
             using (var dlg = AppHost.Container.Resolve<IOrganizerWin>(fView)) {
-                AppHost.Instance.ShowModalX(dlg, fView, false);
+                await AppHost.Instance.ShowModalAsync(dlg, fView, false);
             }
         }
 
-        public void ShowRelationshipCalculator()
+        public async void ShowRelationshipCalculator()
         {
             using (var dlg = AppHost.Container.Resolve<IRelationshipCalculatorDlg>(fView)) {
-                AppHost.Instance.ShowModalX(dlg, fView, false);
+                await AppHost.Instance.ShowModalAsync(dlg, fView, false);
             }
         }
 
@@ -1286,10 +1286,10 @@ namespace GKCore.Controllers
             GKUtils.LoadExtFile(AppHost.GetLogFilename());
         }
 
-        public void ShowAbout()
+        public async void ShowAbout()
         {
             using (var dlg = AppHost.Container.Resolve<IAboutDlg>()) {
-                AppHost.Instance.ShowModalX(dlg, fView, false);
+                await AppHost.Instance.ShowModalAsync(dlg, fView, false);
             }
         }
 

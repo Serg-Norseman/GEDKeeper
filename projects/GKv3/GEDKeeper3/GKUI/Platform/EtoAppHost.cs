@@ -25,6 +25,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
@@ -44,6 +45,7 @@ using GKUI.Themes;
 
 namespace GKUI.Platform
 {
+    using CommonDialog = Forms.CommonDialog;
     using FormWindowState = Eto.Forms.WindowState;
 
     /// <summary>
@@ -199,6 +201,15 @@ namespace GKUI.Platform
             //UIHelper.CenterFormByParent((Window)form, mainHandle);
 
             return (dialog != null && dialog.ShowModalX(owner));
+        }
+
+        public override async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
+        {
+            var efModal = dialog as CommonDialog;
+            if (efModal == null) return false;
+
+            efModal.ShowModal(owner as Control);
+            return await efModal.DialogResultTask;
         }
 
         public override void EnableWindow(IWidgetForm form, bool value)

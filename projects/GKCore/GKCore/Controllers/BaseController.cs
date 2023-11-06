@@ -39,13 +39,13 @@ namespace GKCore.Controllers
     /// </summary>
     public static class BaseController
     {
-        public static void ViewRecordInfo(IView owner, IBaseWindow baseWin, GDMRecord record)
+        public static async void ViewRecordInfo(IView owner, IBaseWindow baseWin, GDMRecord record)
         {
             if (record == null) return;
 
             using (var dlg = AppHost.ResolveDialog<IRecordInfoDlg>(baseWin)) {
                 dlg.Record = record;
-                AppHost.Instance.ShowModalX(dlg, owner, false);
+                await AppHost.Instance.ShowModalAsync(dlg, owner, false);
             }
         }
 
@@ -582,7 +582,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyAddress(IView owner, IBaseWindow baseWin, GDMAddress address)
+        public static async Task<bool> ModifyAddress(IView owner, IBaseWindow baseWin, GDMAddress address)
         {
             bool result;
 
@@ -591,7 +591,7 @@ namespace GKCore.Controllers
 
                 using (var dlg = AppHost.ResolveDialog<IAddressEditDlg>(baseWin)) {
                     dlg.Address = address;
-                    result = (AppHost.Instance.ShowModalX(dlg, owner, false));
+                    result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                 }
             } finally {
                 baseWin.Context.EndUpdate();
@@ -600,25 +600,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyName(IView owner, IBaseContext context, ref NameEntry nameEntry)
-        {
-            bool result;
-
-            try {
-                context.BeginUpdate();
-
-                using (var dlg = AppHost.ResolveDialog<INameEditDlg>()) {
-                    dlg.IName = nameEntry;
-                    result = AppHost.Instance.ShowModalX(dlg, owner, false);
-                }
-            } finally {
-                context.EndUpdate();
-            }
-
-            return result;
-        }
-
-        public static async Task<bool> ModifyNameAsync(IView owner, IBaseContext context, NameEntry nameEntry)
+        public static async Task<bool> ModifyName(IView owner, IBaseContext context, NameEntry nameEntry)
         {
             bool result;
 
@@ -888,11 +870,11 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool AddIndividualFather(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
+        public static async Task<bool> AddIndividualFather(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
         {
             bool result = false;
 
-            GDMIndividualRecord father = baseWin.Context.SelectPerson(owner, person, TargetMode.tmChild, GDMSex.svMale);
+            GDMIndividualRecord father = await baseWin.Context.SelectPerson(owner, person, TargetMode.tmChild, GDMSex.svMale);
             if (father == null) return result;
 
             if (father == person) {
@@ -931,11 +913,11 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool AddIndividualMother(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
+        public static async Task<bool> AddIndividualMother(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
         {
             bool result = false;
 
-            GDMIndividualRecord mother = baseWin.Context.SelectPerson(owner, person, TargetMode.tmChild, GDMSex.svFemale);
+            GDMIndividualRecord mother = await baseWin.Context.SelectPerson(owner, person, TargetMode.tmChild, GDMSex.svFemale);
             if (mother == null) return result;
 
             if (mother == person) {
@@ -974,12 +956,12 @@ namespace GKCore.Controllers
         }
 
 
-        public static bool AddFamilyHusband(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
+        public static async Task<bool> AddFamilyHusband(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
         {
             bool result = false;
 
             var wife = baseWin.Context.Tree.GetPtrValue(family.Wife);
-            GDMIndividualRecord husband = baseWin.Context.SelectPerson(owner, wife, TargetMode.tmSpouse, GDMSex.svMale);
+            GDMIndividualRecord husband = await baseWin.Context.SelectPerson(owner, wife, TargetMode.tmSpouse, GDMSex.svMale);
             if (husband != null && family.Husband.IsEmpty()) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, husband);
             }
@@ -1001,12 +983,12 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool AddFamilyWife(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
+        public static async Task<bool> AddFamilyWife(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
         {
             bool result = false;
 
             var husband = baseWin.Context.Tree.GetPtrValue(family.Husband);
-            GDMIndividualRecord wife = baseWin.Context.SelectPerson(owner, husband, TargetMode.tmSpouse, GDMSex.svFemale);
+            GDMIndividualRecord wife = await baseWin.Context.SelectPerson(owner, husband, TargetMode.tmSpouse, GDMSex.svFemale);
             if (wife != null && family.Wife.IsEmpty()) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, wife);
             }
@@ -1028,21 +1010,21 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool SelectPortraitRegion(IView owner, IBaseWindow baseWin, GDMMultimediaLink mmLink)
+        public static async Task<bool> SelectPortraitRegion(IView owner, IBaseWindow baseWin, GDMMultimediaLink mmLink)
         {
             bool result;
             using (var dlg = AppHost.ResolveDialog<IPortraitSelectDlg>(baseWin)) {
                 dlg.MultimediaLink = mmLink;
-                result = AppHost.Instance.ShowModalX(dlg, owner, false);
+                result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
             }
             return result;
         }
 
-        public static bool AddIndividualPortrait(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord iRec)
+        public static async Task<bool> AddIndividualPortrait(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord iRec)
         {
             bool result = false;
 
-            GDMMultimediaRecord mmRec = baseWin.Context.SelectRecord(owner, GDMRecordType.rtMultimedia, null) as GDMMultimediaRecord;
+            GDMMultimediaRecord mmRec = await baseWin.Context.SelectRecord(owner, GDMRecordType.rtMultimedia, null) as GDMMultimediaRecord;
             if (mmRec == null) return false;
 
             // remove previous portrait link
@@ -1055,7 +1037,7 @@ namespace GKCore.Controllers
             mmLink = iRec.SetPrimaryMultimediaLink(mmRec);
 
             // select portrait area
-            result = SelectPortraitRegion(owner, baseWin, mmLink);
+            result = await SelectPortraitRegion(owner, baseWin, mmLink);
 
             if (result) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otIndividualPortraitAttach, iRec, mmLink);
@@ -1073,14 +1055,14 @@ namespace GKCore.Controllers
             return false;
         }
 
-        public static void ShowRecMerge(IView owner, IBaseWindow baseWin, GDMRecord rec1, GDMRecord rec2)
+        public static async void ShowRecMerge(IView owner, IBaseWindow baseWin, GDMRecord rec1, GDMRecord rec2)
         {
             try {
                 baseWin.Context.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<IRecMergeDlg>(baseWin)) {
                     dlg.SetRec1(rec1);
                     dlg.SetRec2(rec2);
-                    AppHost.Instance.ShowModalX(dlg, owner, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                 }
             } finally {
                 baseWin.Context.EndUpdate();

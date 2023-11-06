@@ -130,13 +130,13 @@ namespace GKCore.Controllers
             }
         }
 
-        public void ModifyPersons(RecordAction action, object itemData)
+        public async void ModifyPersons(RecordAction action, object itemData)
         {
             GDMIndividualRecord iRec = itemData as GDMIndividualRecord;
 
             switch (action) {
                 case RecordAction.raAdd:
-                    iRec = fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
+                    iRec = await fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
                     if (iRec != null) {
                         fTemp = fTemp + iRec.XRef + ";";
                     }

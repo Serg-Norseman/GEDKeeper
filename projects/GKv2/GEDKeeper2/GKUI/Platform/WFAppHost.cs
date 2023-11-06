@@ -24,6 +24,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using BSLib;
 using GKCore;
@@ -39,6 +40,7 @@ using GKUI.Components;
 using GKUI.Forms;
 using GKUI.Platform.Handlers;
 using GKUI.Themes;
+using CommonDialog = GKUI.Forms.CommonDialog;
 
 namespace GKUI.Platform
 {
@@ -123,6 +125,15 @@ namespace GKUI.Platform
             UIHelper.CenterFormByParent((Form)dialog, mainHandle);
 
             return base.ShowModalX(dialog, owner, keepModeless);
+        }
+
+        public override async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
+        {
+            var wfModal = dialog as CommonDialog;
+            if (wfModal == null) return false;
+
+            wfModal.ShowDialog(owner as IWin32Window);
+            return await wfModal.DialogResultTask;
         }
 
         public override void EnableWindow(IWidgetForm form, bool value)

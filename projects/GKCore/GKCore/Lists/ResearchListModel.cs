@@ -176,7 +176,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async void Modify(object sender, ModifyEventArgs eArgs)
         {
             var research = fDataOwner as GDMResearchRecord;
             if (fBaseWin == null || research == null) return;
@@ -187,7 +187,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    task = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtTask, null) as GDMTaskRecord;
+                    task = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtTask, null) as GDMTaskRecord;
                     if (task != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchTaskAdd, research, task);
                     }
@@ -269,7 +269,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async void Modify(object sender, ModifyEventArgs eArgs)
         {
             var research = fDataOwner as GDMResearchRecord;
             if (fBaseWin == null || research == null) return;
@@ -280,7 +280,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    comm = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtCommunication, null) as GDMCommunicationRecord;
+                    comm = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtCommunication, null) as GDMCommunicationRecord;
                     if (comm != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationAdd, research, comm);
                     }
@@ -350,7 +350,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async void Modify(object sender, ModifyEventArgs eArgs)
         {
             var research = fDataOwner as GDMResearchRecord;
             if (fBaseWin == null || research == null) return;
@@ -361,7 +361,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    group = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtGroup, null) as GDMGroupRecord;
+                    group = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtGroup, null) as GDMGroupRecord;
                     if (group != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchGroupAdd, research, group);
                     }

@@ -737,7 +737,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async void Modify(object sender, ModifyEventArgs eArgs)
         {
             var iRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || iRec == null) return;
@@ -748,7 +748,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    groupRec = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtGroup, null) as GDMGroupRecord;
+                    groupRec = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtGroup, null) as GDMGroupRecord;
                     if (groupRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, groupRec, iRec);
                     }
@@ -819,7 +819,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async void Modify(object sender, ModifyEventArgs eArgs)
         {
             var iRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || iRec == null) return;
@@ -839,7 +839,7 @@ namespace GKCore.Lists
 
                         dlg.IndividualRecord = iRec;
                         dlg.PersonalName = persName;
-                        result = AppHost.Instance.ShowModalX(dlg, fOwner, false);
+                        result = await AppHost.Instance.ShowModalAsync(dlg, fOwner, false);
 
                         if (!exists) {
                             if (result) {
@@ -940,7 +940,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async void Modify(object sender, ModifyEventArgs eArgs)
         {
             var iRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || iRec == null) return;
@@ -951,7 +951,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    GDMFamilyRecord family = fBaseWin.Context.SelectFamily(fOwner, iRec);
+                    GDMFamilyRecord family = await fBaseWin.Context.SelectFamily(fOwner, iRec);
                     if (family != null && family.IndexOfChild(iRec) < 0) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, iRec, family);
                     }
@@ -962,7 +962,7 @@ namespace GKCore.Lists
                         using (var dlg = AppHost.ResolveDialog<IParentsEditDlg>(fBaseWin)) {
                             dlg.IndividualRecord = iRec;
                             dlg.ChildLink = cfLink;
-                            result = AppHost.Instance.ShowModalX(dlg, fOwner, false);
+                            result = await AppHost.Instance.ShowModalAsync(dlg, fOwner, false);
                         }
                     }
                     break;
@@ -1171,7 +1171,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async void Modify(object sender, ModifyEventArgs eArgs)
         {
             var iRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || iRec == null) return;
@@ -1190,7 +1190,7 @@ namespace GKCore.Lists
                         }
 
                         dlg.UserReference = userRef;
-                        result = AppHost.Instance.ShowModalX(dlg, fOwner, false);
+                        result = await AppHost.Instance.ShowModalAsync(dlg, fOwner, false);
 
                         if (!exists) {
                             if (result) {

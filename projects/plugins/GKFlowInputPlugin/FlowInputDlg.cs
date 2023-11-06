@@ -106,7 +106,7 @@ namespace GKFlowInputPlugin
         }
 
         // TODO: rollback changes when exception!
-        private void ParseSource()
+        private async void ParseSource()
         {
             int srcYear;
             if (!int.TryParse(edSourceYear.Text, out srcYear)) {
@@ -127,7 +127,7 @@ namespace GKFlowInputPlugin
             }
             string eventDate = edEventDate.Text;
 
-            GDMIndividualRecord iMain = null;
+            fFlowInput.InitMainPerson();
 
             int num = dataGridView1.Rows.Count;
             for (int r = 0; r < num; r++) {
@@ -139,7 +139,7 @@ namespace GKFlowInputPlugin
                 string age = (string)row.Cells[4].Value;
                 string comment = (string)row.Cells[5].Value;
 
-                fFlowInput.ParseSource(srcRec, srcYear, srcPage, place, ref iMain, lnk, nm, pt, fm, age, comment, eventType, eventDate);
+                await fFlowInput.ParseSource(srcRec, srcYear, srcPage, place, lnk, nm, pt, fm, age, comment, eventType, eventDate);
             }
 
             InitSourceControls();

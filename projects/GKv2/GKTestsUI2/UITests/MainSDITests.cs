@@ -167,7 +167,7 @@ namespace GKUI.Forms
         }
 
         [Test]
-        public void Test_TabsAndLists()
+        public async void Test_TabsAndLists()
         {
             // calls to the different Editors
             for (GDMRecordType rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
@@ -228,7 +228,7 @@ namespace GKUI.Forms
             fCurBase.ApplyFilter();
 
             // default lang for tests is English
-            string patr = fCurBase.Context.DefinePatronymic(null, "Ivan", GDMSex.svMale, false);
+            string patr = await fCurBase.Context.DefinePatronymic(null, "Ivan", GDMSex.svMale, false);
             Assert.AreEqual("", patr);
         }
 

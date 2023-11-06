@@ -94,19 +94,10 @@ namespace GKUI.Forms
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin.Context.DefineSex(baseWin, "Ivan", "Ivanovich");
                 }),
-                new LaunchItem("Test", "NameEditDlg (def)", async () => {
+                new LaunchItem("Test", "NameEditDlg", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     var nameEntry = new NameEntry();
-                    if (BaseController.ModifyName(baseWin, baseWin.Context, ref nameEntry)) {
-                        AppHost.StdDialogs.ShowMessage("True!");
-                    } else {
-                        AppHost.StdDialogs.ShowMessage("False!");
-                    }
-                }),
-                new LaunchItem("Test", "NameEditDlg (ASYNC)", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    var nameEntry = new NameEntry();
-                    bool res = await BaseController.ModifyNameAsync(baseWin, baseWin.Context, nameEntry);
+                    bool res = await BaseController.ModifyName(baseWin, baseWin.Context, nameEntry);
                     if (res) {
                         AppHost.StdDialogs.ShowMessage("True!");
                     } else {

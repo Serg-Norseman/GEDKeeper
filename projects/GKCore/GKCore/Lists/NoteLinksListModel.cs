@@ -76,7 +76,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async void Modify(object sender, ModifyEventArgs eArgs)
         {
             var dataOwner = fDataOwner as IGDMStructWithNotes;
             if (fBaseWin == null || dataOwner == null) return;
@@ -88,7 +88,7 @@ namespace GKCore.Lists
             GDMNoteRecord noteRec;
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    noteRec = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtNote, null) as GDMNoteRecord;
+                    noteRec = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtNote, null) as GDMNoteRecord;
                     if (noteRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GDMObject)dataOwner, noteRec);
                         notes = dataOwner.FindNotes(noteRec);

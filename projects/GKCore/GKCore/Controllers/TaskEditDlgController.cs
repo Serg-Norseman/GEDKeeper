@@ -141,22 +141,22 @@ namespace GKCore.Controllers
             ChangeGoalType();
         }
 
-        public void SelectGoal()
+        public async void SelectGoal()
         {
             GDMGoalType gt = (GDMGoalType)fView.GoalType.SelectedIndex;
             switch (gt) {
                 case GDMGoalType.gtIndividual:
-                    fTempRec = fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
+                    fTempRec = await fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
                     fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 
                 case GDMGoalType.gtFamily:
-                    fTempRec = fBase.Context.SelectRecord(fView, GDMRecordType.rtFamily, new object[0]);
+                    fTempRec = await fBase.Context.SelectRecord(fView, GDMRecordType.rtFamily, new object[0]);
                     fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 
                 case GDMGoalType.gtSource:
-                    fTempRec = fBase.Context.SelectRecord(fView, GDMRecordType.rtSource, new object[0]);
+                    fTempRec = await fBase.Context.SelectRecord(fView, GDMRecordType.rtSource, new object[0]);
                     fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 

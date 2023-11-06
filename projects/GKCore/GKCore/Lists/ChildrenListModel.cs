@@ -90,7 +90,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async void Modify(object sender, ModifyEventArgs eArgs)
         {
             var family = fDataOwner as GDMFamilyRecord;
             if (fBaseWin == null || family == null) return;
@@ -102,7 +102,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    child = fBaseWin.Context.SelectPerson(fOwner, tree.GetPtrValue(family.Husband), TargetMode.tmParent, GDMSex.svUnknown);
+                    child = await fBaseWin.Context.SelectPerson(fOwner, tree.GetPtrValue(family.Husband), TargetMode.tmParent, GDMSex.svUnknown);
                     result = (child != null && fBaseWin.Context.IsAvailableRecord(child) && !family.HasChild(child));
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, family);
@@ -161,7 +161,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async void Modify(object sender, ModifyEventArgs eArgs)
         {
             var indiRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || indiRec == null) return;
@@ -173,10 +173,10 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    GDMFamilyRecord family = fBaseWin.Context.SelectFamily(fOwner, indiRec, TargetMode.tmFamilySpouse);
+                    GDMFamilyRecord family = await fBaseWin.Context.SelectFamily(fOwner, indiRec, TargetMode.tmFamilySpouse);
                     if (family != null && fBaseWin.Context.IsAvailableRecord(family)) {
                         GDMIndividualRecord target = (indiRec.Sex == GDMSex.svMale) ? indiRec : null;
-                        child = fBaseWin.Context.SelectPerson(fOwner, target, TargetMode.tmParent, GDMSex.svUnknown);
+                        child = await fBaseWin.Context.SelectPerson(fOwner, target, TargetMode.tmParent, GDMSex.svUnknown);
                         result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
                         if (result) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, family);

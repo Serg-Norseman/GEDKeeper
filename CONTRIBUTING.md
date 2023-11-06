@@ -15,7 +15,7 @@ No code is perfect and we always welcome third-party patches. This document desc
 ## Making changes
 
 - Create a topic branch from where you want to base your work,
-- Make your changes taking [style guide](CODINGSTYLE.md) into account,
+- Make your changes taking style of sources into account,
 - Check for whitespace errors issuing `git diff --check`, `git diff --cached --check` or `git diff HEAD --check`,
 - Make commits writing good [commit messages](http://chris.beams.io/posts/git-commit/),
 

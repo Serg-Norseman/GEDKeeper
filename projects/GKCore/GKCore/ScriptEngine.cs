@@ -25,6 +25,7 @@ using System.Data;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -565,11 +566,11 @@ namespace GKCore
             fRec.AddChild(chRec);
         }
 
-        public string define_sex(string name, string patr)
+        public async Task<string> define_sex(string name, string patr)
         {
-            GDMSex sx = fBase.Context.DefineSex(fView, name, patr);
+            GDMSex sx = await fBase.Context.DefineSex(fView, name, patr);
 
-            return (GKData.SexData[(int)sx].Sign);
+            return GKData.SexData[(int)sx].Sign;
         }
 
         public object find_source(string name)
@@ -584,11 +585,11 @@ namespace GKCore
             return evt;
         }
 
-        public string define_patronymic(string fatherName, string childSex, bool confirm)
+        public async Task<string> define_patronymic(string fatherName, string childSex, bool confirm)
         {
             GDMSex sex = (childSex.Length == 1) ? GKUtils.GetSexBySign(childSex[0]) : GDMSex.svUnknown;
 
-            return fBase.Context.DefinePatronymic(fView, fatherName, sex, confirm);
+            return await fBase.Context.DefinePatronymic(fView, fatherName, sex, confirm);
         }
 
         public object get_individual_parents_family(object recPtr)

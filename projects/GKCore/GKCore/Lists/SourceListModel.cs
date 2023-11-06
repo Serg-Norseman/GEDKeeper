@@ -152,7 +152,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async void Modify(object sender, ModifyEventArgs eArgs)
         {
             var source = fDataOwner as GDMSourceRecord;
             if (fBaseWin == null || source == null) return;
@@ -164,7 +164,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    repoRec = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtRepository, null) as GDMRepositoryRecord;
+                    repoRec = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtRepository, null) as GDMRepositoryRecord;
                     if (repoRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, source, repoRec);
                     }

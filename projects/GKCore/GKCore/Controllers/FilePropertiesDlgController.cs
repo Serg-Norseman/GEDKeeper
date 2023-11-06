@@ -98,7 +98,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void ChangeLanguage()
+        public async void ChangeLanguage()
         {
             if (AppHost.Instance.HasFeatureSupport(Feature.Mobile))
                 return;
@@ -106,7 +106,7 @@ namespace GKCore.Controllers
             using (var dlg = AppHost.ResolveDialog<ILanguageEditDlg>()) {
                 dlg.LanguageID = fBase.Context.Tree.Header.Language;
 
-                if (dlg.ShowModalX(fView)) {
+                if (await AppHost.Instance.ShowModalAsync(dlg, fView)) {
                     // Assignment in control, instead of the header's property to work Cancel.
                     fView.Language.Text = GEDCOMUtils.GetLanguageStr(dlg.LanguageID);
                 }

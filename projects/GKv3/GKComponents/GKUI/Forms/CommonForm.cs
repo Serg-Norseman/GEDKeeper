@@ -21,6 +21,7 @@
 using System;
 using System.ComponentModel;
 using System.Reflection;
+using System.Threading.Tasks;
 using Eto.Forms;
 using GKCore;
 using GKCore.Design;
@@ -155,6 +156,12 @@ namespace GKUI.Forms
     public class CommonDialog : Dialog<DialogResult>, ICommonDialog, IThemedView
     {
         private readonly ControlsManager fControlsManager;
+        private readonly TaskCompletionSource<bool> fTaskSource;
+
+        public Task<bool> DialogResultTask
+        {
+            get { return fTaskSource.Task; }
+        }
 
         #region View Interface
 
@@ -187,6 +194,8 @@ namespace GKUI.Forms
             ShowInTaskbar = false;
 
             fControlsManager = new ControlsManager(this);
+
+            fTaskSource = new TaskCompletionSource<bool>();
 
             // Option: Enter in dialogs is always the "Accept/Apply/Ok" button
             /*Styles.Add<Button>(null, b => {
@@ -221,9 +230,31 @@ namespace GKUI.Forms
             return (ShowModal(owner as Control) == DialogResult.Ok);
         }
 
-        protected virtual void CancelClickHandler(object sender, EventArgs e)
+        protected async Task Close(DialogResult dialogResult)
         {
-            Close(DialogResult.Cancel);
+            if (dialogResult != DialogResult.None) {
+                DialogResult = dialogResult;
+                fTaskSource.SetResult(dialogResult == DialogResult.Ok);
+            }
+        }
+
+        protected async virtual void AcceptClickHandler(object sender, EventArgs e)
+        {
+            await Close(DialogResult.Ok);
+        }
+
+        protected async virtual void CancelClickHandler(object sender, EventArgs e)
+        {
+            await Close(DialogResult.Cancel);
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            // To correctly close the dialog using the button in the dialog header.
+            if (!e.Cancel && !fTaskSource.Task.IsCompleted)
+                fTaskSource.SetResult(false);
+
+            base.OnClosing(e);
         }
 
         protected T GetControlHandler<T>(object control) where T : class, IControl
@@ -279,19 +310,21 @@ namespace GKUI.Forms
     {
         protected TController fController;
 
-        protected virtual void AcceptClickHandler(object sender, EventArgs e)
+        protected override async void AcceptClickHandler(object sender, EventArgs e)
         {
             try {
-                DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
+                if (fController.Accept())
+                    await Close(DialogResult.Ok);
             } catch (Exception ex) {
                 Logger.WriteError("CommonDialog<>.AcceptClickHandler()", ex);
             }
         }
 
-        protected override void CancelClickHandler(object sender, EventArgs e)
+        protected override async void CancelClickHandler(object sender, EventArgs e)
         {
             try {
-                DialogResult = fController.Cancel() ? DialogResult.Cancel : DialogResult.None;
+                if (fController.Cancel())
+                    await Close(DialogResult.Cancel);
             } catch (Exception ex) {
                 Logger.WriteError("CommonDialog<>.CancelClickHandler()", ex);
             }
@@ -299,8 +332,8 @@ namespace GKUI.Forms
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            base.OnClosing(e);
             e.Cancel = fController.CheckChangesPersistence();
+            base.OnClosing(e);
         }
 
         /// <summary>

@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -70,6 +71,7 @@ namespace GKFlowInputPlugin
         private readonly IPlugin fPlugin;
         private readonly ILangMan fLangMan;
         private readonly IBaseWindow fBase;
+        private GDMIndividualRecord fMainPerson;
 
 
         public FlowInput(IPlugin plugin, IBaseWindow baseWin)
@@ -153,8 +155,13 @@ namespace GKFlowInputPlugin
             return (val == null) ? string.Empty : val;
         }
 
-        public void ParseSource(GDMSourceRecord srcRec, int srcYear, string srcPage, string place,
-            ref GDMIndividualRecord iMain, string lnk, string nm, string pt, string fm, string age, string comment,
+        public void InitMainPerson()
+        {
+            fMainPerson = null;
+        }
+
+        public async Task ParseSource(GDMSourceRecord srcRec, int srcYear, string srcPage, string place,
+            string lnk, string nm, string pt, string fm, string age, string comment,
             int eventType, string eventDate)
         {
             lnk = CheckStr(lnk);
@@ -168,7 +175,7 @@ namespace GKFlowInputPlugin
                 PersonLink link = GetLinkByName(lnk);
                 if (link == PersonLink.plNone) return;
 
-                GDMSex sx = fBase.Context.DefineSex(fBase, nm, pt);
+                GDMSex sx = await fBase.Context.DefineSex(fBase, nm, pt);
                 GDMIndividualRecord iRec = fBase.Context.CreatePersonEx(nm, pt, fm, sx, false);
 
                 if (!string.IsNullOrEmpty(age) && ConvertHelper.IsDigits(age)) {
@@ -197,7 +204,7 @@ namespace GKFlowInputPlugin
 
                 if (link == PersonLink.plPerson) {
 
-                    iMain = iRec;
+                    fMainPerson = iRec;
                     string evName = "";
 
                     if (eventType >= 0) {
@@ -225,27 +232,27 @@ namespace GKFlowInputPlugin
 
                 } else {
 
-                    if (iMain == null) {
+                    if (fMainPerson == null) {
                         throw new PersonScanException(fLangMan.LS(PLS.BasePersonInvalid));
                     } else {
                         switch (link) {
                             case PersonLink.plFather:
                             case PersonLink.plMother:
-                                family = fBase.Context.GetParentsFamily(iMain, true);
+                                family = fBase.Context.GetParentsFamily(fMainPerson, true);
                                 family.AddSpouse(iRec);
                                 break;
 
                             case PersonLink.plGodparent:
-                                iMain.AddAssociation(fLangMan.LS(PLS.PLGodparent), iRec);
+                                fMainPerson.AddAssociation(fLangMan.LS(PLS.PLGodparent), iRec);
                                 break;
 
                             case PersonLink.plSpouse:
-                                family = fBase.Context.GetMarriageFamily(iMain, true);
+                                family = fBase.Context.GetMarriageFamily(fMainPerson, true);
                                 family.AddSpouse(iRec);
                                 break;
 
                             case PersonLink.plChild:
-                                family = fBase.Context.GetMarriageFamily(iMain, true);
+                                family = fBase.Context.GetMarriageFamily(fMainPerson, true);
                                 family.AddChild(iRec);
                                 break;
                         }

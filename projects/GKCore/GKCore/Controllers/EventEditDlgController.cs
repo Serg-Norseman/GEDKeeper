@@ -198,9 +198,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public void AddPlace()
+        public async void AddPlace()
         {
-            fTempLocation = fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, new object[] { fView.Place.Text }) as GDMLocationRecord;
+            fTempLocation = await fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, new object[] { fView.Place.Text }) as GDMLocationRecord;
             UpdatePlace();
         }
 
@@ -210,9 +210,9 @@ namespace GKCore.Controllers
             UpdatePlace();
         }
 
-        public void ModifyAddress()
+        public async void ModifyAddress()
         {
-            BaseController.ModifyAddress(fView, fBase, fEvent.Address);
+            await BaseController.ModifyAddress(fView, fBase, fEvent.Address);
         }
 
         private void SetAttributeMode(bool active)

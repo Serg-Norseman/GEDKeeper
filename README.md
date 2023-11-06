@@ -62,23 +62,8 @@ If your problem or idea is not addressed yet, please open a new issue.
 
 ## Supported languages
 
-- Belarusian, initial
-- Chinese (simplified)
-- Czech
-- Dutch
-- English
-- French
-- German
-- Hungarian
-- Icelandic, partial
-- Italian
-- Kazakh (Cyrillic), partial
-- Polish
-- Portuguese, initial
-- Russian
-- Serbian (Latin), partial
-- Spanish, initial
-- Ukrainian
+Belarusian, Chinese (simplified), Czech, Dutch, English, French, German, Hungarian, Icelandic, 
+Italian, Kazakh (Cyrillic), Polish, Portuguese, Russian, Serbian (Latin), Spanish, Ukrainian.
 
 Platform for project localization: [Crowdin](https://crowdin.com/project/gedkeeper)
 
@@ -86,12 +71,4 @@ Platform for project localization: [Crowdin](https://crowdin.com/project/gedkeep
 ## Docs & Help
 
 - [Contributing and Development guide](/CONTRIBUTING.md)
-- [Coding style guide](/CODINGSTYLE.md)
 - [Changelog](/CHANGELOG.md)
-
-
-## Links
-
-https://gedkeeper.net/
-
-https://sourceforge.net/projects/gedkeeper/

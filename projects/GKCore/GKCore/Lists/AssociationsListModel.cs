@@ -80,7 +80,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async void Modify(object sender, ModifyEventArgs eArgs)
         {
             var person = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || person == null) return;
@@ -99,7 +99,7 @@ namespace GKCore.Lists
                         }
 
                         dlg.Association = ast;
-                        result = AppHost.Instance.ShowModalX(dlg, fOwner, false);
+                        result = await AppHost.Instance.ShowModalAsync(dlg, fOwner, false);
 
                         if (!exists) {
                             if (result) {

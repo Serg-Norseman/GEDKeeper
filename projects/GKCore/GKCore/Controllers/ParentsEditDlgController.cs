@@ -130,9 +130,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public void AddFather()
+        public async void AddFather()
         {
-            if (BaseController.AddIndividualFather(fView, fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.AddIndividualFather(fView, fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
@@ -144,9 +144,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public void AddMother()
+        public async void AddMother()
         {
-            if (BaseController.AddIndividualMother(fView, fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.AddIndividualMother(fView, fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }

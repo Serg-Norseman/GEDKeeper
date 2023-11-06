@@ -96,10 +96,10 @@ namespace GKCore.Controllers
             fView.DataText.Text = fSourceCitation.Data.Text.Lines.Text.Trim();
         }
 
-        public void AddSource()
+        public async void AddSource()
         {
             object[] anArgs = new object[0];
-            GDMSourceRecord src = fBase.Context.SelectRecord(fView, GDMRecordType.rtSource, anArgs) as GDMSourceRecord;
+            GDMSourceRecord src = await fBase.Context.SelectRecord(fView, GDMRecordType.rtSource, anArgs) as GDMSourceRecord;
             if (src == null) return;
 
             fBase.Context.GetSourcesList(fSourcesList);
