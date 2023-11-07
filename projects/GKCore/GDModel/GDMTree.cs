@@ -289,7 +289,7 @@ namespace GDModel
 
         public List<T> GetRecords<T>() where T : GDMRecord
         {
-            List<T> result = new List<T>();
+            List<T> result = new List<T>(fRecords.Count);
 
             for (int i = 0; i < fRecords.Count; i++) {
                 T rec = fRecords[i] as T;

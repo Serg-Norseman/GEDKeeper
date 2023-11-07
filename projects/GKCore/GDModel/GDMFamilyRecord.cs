@@ -188,17 +188,29 @@ namespace GDModel
 
             base.MoveTo(targetRecord);
 
-            targetFamily.RemoveSpouse(fTree.GetPtrValue<GDMIndividualRecord>(targetFamily.Husband));
-            targetFamily.Husband.XRef = fHusband.XRef;
+            MoveSpouse(fTree, targetFamily, fHusband, targetFamily.Husband);
+            MoveSpouse(fTree, targetFamily, fWife, targetFamily.Wife);
 
-            targetFamily.RemoveSpouse(fTree.GetPtrValue<GDMIndividualRecord>(targetFamily.Wife));
-            targetFamily.Wife.XRef = fWife.XRef;
-
-            targetFamily.Status = fStatus;
+            if (fStatus != GDMMarriageStatus.Unknown) {
+                targetFamily.Status = fStatus;
+            }
 
             while (fChildren.Count > 0) {
                 var obj = fChildren.Extract(0);
                 targetFamily.Children.Add(obj);
+            }
+        }
+
+        private void MoveSpouse(GDMTree tree, GDMFamilyRecord targetFamily, GDMPointer from, GDMPointer to)
+        {
+            var fromSpouse = tree.GetPtrValue<GDMIndividualRecord>(from);
+            var toSpouse = tree.GetPtrValue<GDMIndividualRecord>(to);
+            RemoveSpouse(fromSpouse);
+            if (toSpouse == null) {
+                targetFamily.AddSpouse(fromSpouse);
+            } else if (fromSpouse != null && !ReferenceEquals(fromSpouse, toSpouse)) {
+                fromSpouse.MoveTo(toSpouse);
+                tree.DeleteRecord(fromSpouse);
             }
         }
 

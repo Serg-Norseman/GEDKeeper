@@ -380,22 +380,22 @@ namespace GKCore.Tools
             using (var repMap = new GDMXRefReplacer()) {
                 repMap.AddXRef(sourceRec, sourceRec.XRef, targetRec.XRef);
 
-                GDMTree tree = baseWin.Context.Tree;
-                int num = tree.RecordsCount;
-                for (int i = 0; i < num; i++) {
-                    tree[i].ReplaceXRefs(repMap);
-                }
-
                 sourceRec.MoveTo(targetRec);
-                baseWin.Context.DeleteRecord(sourceRec);
 
-                if (targetRec.RecordType == GDMRecordType.rtIndividual && bookmark) {
-                    ((GDMIndividualRecord)targetRec).Bookmark = true;
+                int num = baseWin.Context.Tree.RecordsCount;
+                for (int i = 0; i < num; i++) {
+                    baseWin.Context.Tree[i].ReplaceXRefs(repMap);
                 }
 
-                baseWin.NotifyRecord(targetRec, RecordAction.raEdit);
-                baseWin.RefreshLists(false);
+                baseWin.Context.Tree.DeleteRecord(sourceRec);
             }
+
+            if (targetRec.RecordType == GDMRecordType.rtIndividual && bookmark) {
+                ((GDMIndividualRecord)targetRec).Bookmark = true;
+            }
+
+            baseWin.NotifyRecord(targetRec, RecordAction.raEdit);
+            baseWin.RefreshLists(false);
         }
 
         #endregion
