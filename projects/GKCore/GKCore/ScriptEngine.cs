@@ -715,9 +715,11 @@ namespace GKCore
             if (!File.Exists(fileName)) return result;
 
             try {
-                fCSVData = CSVReader.ReadCSVFile(fileName, Encoding.Unicode, hasHeader);
+                fCSVData = CSVReader.ReadCSVFile(fileName, GKUtils.DetectEncoding(fileName), hasHeader);
                 result = true;
-            } catch {
+            } catch (Exception e) {
+                Logger.WriteError("ScriptEngine.csv_load(" + fileName + "): fail", e);
+
                 result = false;
             }
 

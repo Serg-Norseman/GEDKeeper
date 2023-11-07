@@ -44,7 +44,7 @@ using UtfUnknown;
 namespace GKCore
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static class GKUtils
     {
@@ -369,9 +369,9 @@ namespace GKCore
         public static string GetTaskGoalStr(GDMTree tree, GDMTaskRecord taskRec)
         {
             if (tree == null || taskRec == null) return string.Empty;
-            
+
             string result = "";
-            
+
             var goal = GetTaskGoal(tree, taskRec);
 
             switch (goal.GoalType) {
@@ -482,7 +482,13 @@ namespace GKCore
             return result;
         }
 
-        public static StreamReader GetDetectedStreamReader(Stream stream)
+        public static Encoding DetectEncoding(string fileName)
+        {
+            using (var file = File.OpenRead(fileName))
+                return DetectEncoding(file);
+        }
+
+        public static Encoding DetectEncoding(Stream stream)
         {
             Encoding defaultEncoding;
             try {
@@ -491,6 +497,13 @@ namespace GKCore
             } catch {
                 defaultEncoding = Encoding.UTF8;
             }
+
+            return defaultEncoding;
+        }
+
+        public static StreamReader GetDetectedStreamReader(Stream stream)
+        {
+            var defaultEncoding = DetectEncoding(stream);
 
             StreamReader reader = new StreamReader(stream, defaultEncoding);
             return reader;
@@ -821,8 +834,8 @@ namespace GKCore
         }
 
         /// <summary>
-        /// The result of the function is a "normalized date", delimited by '.' and fixed order of parts: "dd.mm.yyyy". 
-        /// The pattern and regional date contain the delimiter '/'. 
+        /// The result of the function is a "normalized date", delimited by '.' and fixed order of parts: "dd.mm.yyyy".
+        /// The pattern and regional date contain the delimiter '/'.
         /// The pattern defines the position of the parts in a regional date format.
         /// </summary>
         /// <param name="regionalDate">date similar "01/20/1970"</param>
@@ -863,8 +876,8 @@ namespace GKCore
         }
 
         /// <summary>
-        /// The result of the function is a "regional date", delimited by '/' and regional order of parts: "mm/dd/yyyy" 
-        /// or any other. The pattern and regional date contain the delimiter '/'. 
+        /// The result of the function is a "regional date", delimited by '/' and regional order of parts: "mm/dd/yyyy"
+        /// or any other. The pattern and regional date contain the delimiter '/'.
         /// The pattern defines the position of the parts in a regional date format.
         /// </summary>
         /// <param name="normalizeDate">date with format "dd.mm.yyyy"</param>
@@ -1235,7 +1248,7 @@ namespace GKCore
                                     double curN = curY + curM / 12.0 + curD / 12.0 / 31.0;
                                     bdY = (bdN < curN) ? (curY + 1) : curY;
 
-                                    // There are valid birthdays on February 29th in leap years. 
+                                    // There are valid birthdays on February 29th in leap years.
                                     // For other years, we need a correction for an acceptable day.
                                     if (bdD == 29 && bdM == 2 && !DateTime.IsLeapYear(bdY)) {
                                         bdD -= 1;
@@ -1287,7 +1300,7 @@ namespace GKCore
                                     if (anniversary) {
                                         bdY = (bdN < curN) ? (curY + 1) : curY;
 
-                                        // There are valid birthdays on February 29th in leap years. 
+                                        // There are valid birthdays on February 29th in leap years.
                                         // For other years, we need a correction for an acceptable day.
                                         if (bdD == 29 && bdM == 2 && !DateTime.IsLeapYear(bdY)) {
                                             bdD -= 1;
@@ -2080,7 +2093,7 @@ namespace GKCore
                         int num4 = namesakes.Count;
                         for (int i = 0; i < num4; i++) {
                             GDMIndividualRecord relPerson = (GDMIndividualRecord)namesakes.GetObject(i);
-                            
+
                             summary.Add("    " + HyperLink(relPerson.XRef, namesakes[i], 0));
                         }
                     }
