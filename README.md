@@ -36,21 +36,7 @@ Project's homepage site: [http://gedkeeper.net/](http://gedkeeper.net/)
 
 Community group: [Google Groups: GEDKeeper (en)](https://groups.google.com/g/gedkeeper-en)
 
-### Support
-
-The project is completely free - no restrictions are imposed on its use. I just like to do useful things. 
-If you have a desire to help, tell friends about the project.
-Thanks!
-
-### Contributing
-
-All contributions are welcomed. Contributions may close an issue, fix a bug (reported or not), add new design blocks, 
-improve the existing code, add a new feature, and so on.
-
-### Bugs and feature requests
-
-Have a bug or a feature request? Please first search for existing and closed [issues](https://github.com/Serg-Norseman/GEDKeeper/issues).
-If your problem or idea is not addressed yet, please open a new issue.
+[Contributing and Development guide](/CONTRIBUTING.md)
 
 
 ## Implementations
@@ -66,9 +52,3 @@ Belarusian, Chinese (simplified), Czech, Dutch, English, French, German, Hungari
 Italian, Kazakh (Cyrillic), Polish, Portuguese, Russian, Serbian (Latin), Spanish, Ukrainian.
 
 Platform for project localization: [Crowdin](https://crowdin.com/project/gedkeeper)
-
-
-## Docs & Help
-
-- [Contributing and Development guide](/CONTRIBUTING.md)
-- [Changelog](/CHANGELOG.md)

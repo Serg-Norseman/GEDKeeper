@@ -45,16 +45,16 @@ namespace GKUI.Forms
                 new LaunchItem("File", "New", UIHelper.LoadResourceImage("Resources.btn_create_new.gif"), async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.NewFile();
-                    XFAppHost.GetMainPage().NavigateAsync(baseWin);
+                    await XFAppHost.GetMainPage().NavigateAsync(baseWin);
                 }),
                 new LaunchItem("File", "Open", UIHelper.LoadResourceImage("Resources.btn_load.gif"), async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.LoadFileAsync();
-                    XFAppHost.GetMainPage().NavigateAsync(baseWin);
+                    await XFAppHost.GetMainPage().NavigateAsync(baseWin);
                 }),
                 new LaunchItem("File", "Save", UIHelper.LoadResourceImage("Resources.btn_save.gif")),
                 new LaunchItem("File", "Save As"),
-                new LaunchItem("File", "Properties", UIHelper.LoadResourceImage("Resources.btn_properties.gif"), async () => {
+                new LaunchItem("File", "Properties", UIHelper.LoadResourceImage("Resources.btn_properties.gif"), () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowFileProperties();
                 }),
@@ -62,37 +62,37 @@ namespace GKUI.Forms
                 new LaunchItem("Recent", "Europe Kings.ged"),
                 new LaunchItem("Recent", "My Kins.ged"),
 
-                new LaunchItem("Export", "Export table", UIHelper.LoadResourceImage("Resources.btn_excel.gif"), async () => {
+                new LaunchItem("Export", "Export table", UIHelper.LoadResourceImage("Resources.btn_excel.gif"), () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ExportTable();
                 }),
-                new LaunchItem("Export", "Book of Families", async () => {
+                new LaunchItem("Export", "Book of Families", () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ExportToFamilyBook();
                 }),
-                new LaunchItem("Export", "Album of Trees", async () => {
+                new LaunchItem("Export", "Album of Trees", () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ExportToTreesAlbum();
                 }),
 
-                new LaunchItem("Help", "Content", UIHelper.LoadResourceImage("Resources.btn_help.gif"), async () => {
+                new LaunchItem("Help", "Content", UIHelper.LoadResourceImage("Resources.btn_help.gif"), () => {
                     AppHost.Instance.ShowHelpTopic("");
                 }),
-                new LaunchItem("Help", "About", UIHelper.LoadResourceImage("Resources.btn_scroll.gif"), async () => {
+                new LaunchItem("Help", "About", UIHelper.LoadResourceImage("Resources.btn_scroll.gif"), () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowAbout();
                 }),
 
                 new LaunchItem("Test", "QuickSearch", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    XFAppHost.GetMainPage().NavigateAsync(new QuickSearchDlg(baseWin));
+                    await XFAppHost.GetMainPage().NavigateAsync(new QuickSearchDlg(baseWin));
                 }),
                 new LaunchItem("Test", "Progress", async () => {
-                    XFAppHost.GetMainPage().NavigateAsync(new ProgressDlg());
+                    await XFAppHost.GetMainPage().NavigateAsync(new ProgressDlg());
                 }),
                 new LaunchItem("Test", "SexCheckDlg", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin.Context.DefineSex(baseWin, "Ivan", "Ivanovich");
+                    await baseWin.Context.DefineSex(baseWin, "Ivan", "Ivanovich");
                 }),
                 new LaunchItem("Test", "NameEditDlg", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
@@ -106,66 +106,66 @@ namespace GKUI.Forms
                 }),
                 new LaunchItem("Test", "PortraitSelectDlg", async () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    XFAppHost.GetMainPage().NavigateAsync(new PortraitSelectDlg(baseWin));
+                    await XFAppHost.GetMainPage().NavigateAsync(new PortraitSelectDlg(baseWin));
                 }),
             };
 
             LaunchItems = PrepareItems(launchItems);
 
             var servicesItems = new List<LaunchItem>() {
-                new LaunchItem("Pedigree", "Maps", async () => {
+                new LaunchItem("Pedigree", "Maps", () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowMap();
                 }),
-                new LaunchItem("Pedigree", "Relationship Calculator", async () => {
+                new LaunchItem("Pedigree", "Relationship Calculator", () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowRelationshipCalculator();
                 }),
-                new LaunchItem("Pedigree", "Statistics", UIHelper.LoadResourceImage("Resources.btn_table.gif"), async () => {
+                new LaunchItem("Pedigree", "Statistics", UIHelper.LoadResourceImage("Resources.btn_table.gif"), () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowStats();
                 }),
-                new LaunchItem("Services", "Organizer", UIHelper.LoadResourceImage("Resources.btn_organizer.gif"), async () => {
+                new LaunchItem("Services", "Organizer", UIHelper.LoadResourceImage("Resources.btn_organizer.gif"), () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowOrganizer();
                 }),
-                new LaunchItem("Services", "Slideshow", UIHelper.LoadResourceImage("Resources.btn_slideshow.png"), async () => {
+                new LaunchItem("Services", "Slideshow", UIHelper.LoadResourceImage("Resources.btn_slideshow.png"), () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowSlideshow();
                 }),
-                new LaunchItem("Services", "Options", UIHelper.LoadResourceImage("Resources.btn_tools.gif"), async () => {
+                new LaunchItem("Services", "Options", UIHelper.LoadResourceImage("Resources.btn_tools.gif"), () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     AppHost.Instance.ShowOptions(baseWin);
                 }),
-                new LaunchItem("Tools", "Compare databases", async () => {
+                new LaunchItem("Tools", "Compare databases", () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowTreeCompare();
                 }),
-                new LaunchItem("Tools", "Merge databases", async () => {
+                new LaunchItem("Tools", "Merge databases", () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowTreeMerge();
                 }),
-                new LaunchItem("Tools", "Split database", async () => {
+                new LaunchItem("Tools", "Split database", () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowTreeSplit();
                 }),
-                new LaunchItem("Tools", "Merge records", async () => {
+                new LaunchItem("Tools", "Merge records", () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     BaseController.ShowRecMerge(baseWin, baseWin, null, null);
                 }),
-                new LaunchItem("Tools", "Check connection of families", async () => {
+                new LaunchItem("Tools", "Check connection of families", () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowFamilyGroups();
                 }),
-                new LaunchItem("Tools", "Check database", async () => {
+                new LaunchItem("Tools", "Check database", () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowTreeCheck();
                 }),
-                new LaunchItem("Tools", "Search the patriarchs", async () => {
+                new LaunchItem("Tools", "Search the patriarchs", () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowPatSearch();
                 }),
-                new LaunchItem("Tools", "Manage places", async () => {
+                new LaunchItem("Tools", "Manage places", () => {
                     var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
                     baseWin?.Controller.ShowPlacesManager();
                 }),
@@ -176,7 +176,7 @@ namespace GKUI.Forms
             BindingContext = this;
         }
 
-        private async void lv_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private void lv_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var item = e.SelectedItem as LaunchItem;
             ((ListView)sender).SelectedItem = null;

@@ -69,16 +69,13 @@ namespace GKUI.Components
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
-            Close();
+            Close(DialogResult.Cancel);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
-                switch (fNumbersMode)
-                {
+            try {
+                switch (fNumbersMode) {
                     case NumbersMode.nmNone:
                         break;
 
@@ -91,10 +88,8 @@ namespace GKUI.Components
                         break;
                 }
 
-                DialogResult = DialogResult.Ok;
-            }
-            catch
-            {
+                Close(DialogResult.Ok);
+            } catch {
                 AppHost.StdDialogs.ShowError("Number format is invalid");
                 DialogResult = DialogResult.None;
             }
@@ -106,10 +101,8 @@ namespace GKUI.Components
             bool result = false;
             value = 0.0;
 
-            using (var inputBox = new GKInputBox(caption, prompt, value.ToString(), NumbersMode.nmFloat))
-            {
-                if (inputBox.ShowModal() == DialogResult.Ok)
-                {
+            using (var inputBox = new GKInputBox(caption, prompt, value.ToString(), NumbersMode.nmFloat)) {
+                if (inputBox.ShowModal() == DialogResult.Ok) {
                     result = double.TryParse(inputBox.Value, out value);
                 }
             }
@@ -122,10 +115,8 @@ namespace GKUI.Components
             bool result = false;
             value = 0;
 
-            using (var inputBox = new GKInputBox(caption, prompt, value.ToString(), NumbersMode.nmInt))
-            {
-                if (inputBox.ShowModal() == DialogResult.Ok)
-                {
+            using (var inputBox = new GKInputBox(caption, prompt, value.ToString(), NumbersMode.nmInt)) {
+                if (inputBox.ShowModal() == DialogResult.Ok) {
                     result = int.TryParse(inputBox.Value, out value);
                 }
             }
@@ -151,10 +142,8 @@ namespace GKUI.Components
         {
             bool result = false;
 
-            using (var inputBox = new GKInputBox(caption, prompt, value, NumbersMode.nmNone, true))
-            {
-                if (inputBox.ShowModal() == DialogResult.Ok)
-                {
+            using (var inputBox = new GKInputBox(caption, prompt, value, NumbersMode.nmNone, true)) {
+                if (inputBox.ShowModal() == DialogResult.Ok) {
                     value = inputBox.Value.Trim();
                     result = true;
                 }

@@ -14,17 +14,17 @@
 
     <ul>
         <li>Legacy "GEDKeeper2" (NET4.7.1 & WinForms)
-        <li>Cross-platform desktop "GEDKeeper3" (NET6 & <a href="https://github.com/picoe/eto"></a>Eto.Forms)
-        <li>Future mobile "GEDKeeperX" (NET Standard & <a href="https://github.com/xamarin/xamarin.forms">Xamarin</a>), initial experience
+        <li>Cross-platform desktop "GEDKeeper3" (NET6 & <a href="https://github.com/picoe/eto">Eto.Forms</a>)
+        <li>Mobile "GEDKeeperX" (NET Standard & <a href="https://github.com/xamarin/xamarin.forms">Xamarin</a>), prototype
     </ul>
 
     <h2>Compatibility Matrix</h2>
 
     <table>
-        <tr><td>Implementation</td><td>Windows</td><td>Linux</td><td>Mac OS X</td></tr>
-        <tr><td>GEDKeeper2</td><td>fully operational</td><td>fully operational</td><td>not supported</td></tr>
-        <tr><td>GEDKeeper3</td><td>in process</td><td>in process</td><td>in process</td></tr>
-        <tr><td>GEDKeeperX</td><td>initial experiment</td><td>not supported</td><td>initial experiment</td></tr>
+        <tr><td>Implementation</td><td>Windows</td><td>Linux</td><td>Mac OS X</td><td>Android</td><td>iOS</td></tr>
+        <tr><td>GEDKeeper2</td><td>fully operational</td><td>not supported</td><td>not supported</td><td>not supported</td><td>not supported</td></tr>
+        <tr><td>GEDKeeper3</td><td>fully operational</td><td>fully operational</td><td>in process</td><td>not supported</td><td>not supported</td></tr>
+        <tr><td>GEDKeeperX</td><td>not supported</td><td>not supported</td><td>not supported</td><td>in process</td><td>in process</td></tr>
     </table>
 
     <h2>Implementations Detail</h2>
@@ -67,18 +67,12 @@
     <p>Development period: <b>05.11.2018 - 20.05.2021</b>.</p>
     <p>Specificity: C#, UWP.</p>
     <p>Status: <b>discarded</b>.</p>
-    <p>Reason: using the framework (UWP) targeting only one operating system (Windows) has no future for the project.</p>
 
 
     <h3>GEDKeeperA (GKvA)</h3>
     <p>Development period: <b>19.05.2021 - 26.05.2021</b>.</p>
     <p>Specificity: C#, <a href="https://github.com/AvaloniaUI/Avalonia">Avalonia</a>.</p>
     <p>Status: <b>discarded</b>.</p>
-    <p>
-        Reason: multiple problems with UI elements (no editable ComboBox, spacing for grid cells, options for disable minimize/resize buttons in dialogs, masked text box,
-        an obscure and complex way to implement graphics drawing components using pure framework means without diving into specific platform-specific renders).
-        Fully covered by the functionality of Eto.Forms in the absence of the same problems.
-    </p>
 
 </body>
 </html>

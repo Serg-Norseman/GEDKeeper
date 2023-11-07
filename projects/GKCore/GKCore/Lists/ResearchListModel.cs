@@ -194,7 +194,10 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raEdit:
-                    result = (task != null && BaseController.ModifyTask(fOwner, fBaseWin, ref task));
+                    if (task != null) {
+                        var taskRes = await BaseController.ModifyTask(fOwner, fBaseWin, task);
+                        result = taskRes.Result;
+                    }
                     break;
 
                 case RecordAction.raDelete:
@@ -287,7 +290,10 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raEdit:
-                    result = (comm != null && BaseController.ModifyCommunication(fOwner, fBaseWin, ref comm));
+                    if (comm != null) {
+                        var commRes = await BaseController.ModifyCommunication(fOwner, fBaseWin, comm);
+                        result = commRes.Result;
+                    }
                     break;
 
                 case RecordAction.raDelete:

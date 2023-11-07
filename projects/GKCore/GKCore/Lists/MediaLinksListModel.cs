@@ -108,7 +108,8 @@ namespace GKCore.Lists
                 case RecordAction.raEdit:
                     if (mmLink != null) {
                         mmRec = fBaseContext.Tree.GetPtrValue<GDMMultimediaRecord>(mmLink);
-                        result = BaseController.ModifyMedia(fOwner, fBaseWin, ref mmRec);
+                        var mmRes = await BaseController.ModifyMedia(fOwner, fBaseWin, mmRec);
+                        result = mmRes.Result;
                     }
                     break;
 

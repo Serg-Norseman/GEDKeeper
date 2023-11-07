@@ -157,12 +157,6 @@ namespace GKUI.Forms
             fResult = DialogResult.None;
         }
 
-        public virtual bool ShowModalX(IView owner)
-        {
-            XFAppHost.GetMainPage().Navigation.PushModalAsync(this);
-            return false;//(ShowModal((Control)owner) == DialogResult.Ok);
-        }
-
         public override void Close()
         {
             Navigation.PopModalAsync();

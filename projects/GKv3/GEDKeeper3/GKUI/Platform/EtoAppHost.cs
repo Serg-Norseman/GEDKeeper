@@ -146,9 +146,9 @@ namespace GKUI.Platform
             //AppHost.Instance.SaveLastBases();
         }
 
-        public override void Init(string[] args, bool isMDI)
+        public override async Task Init(string[] args, bool isMDI)
         {
-            base.Init(args, isMDI);
+            await base.Init(args, isMDI);
             Application.Instance.Terminating += OnApplicationExit;
         }
 
@@ -187,8 +187,11 @@ namespace GKUI.Platform
             return IntPtr.Zero;
         }
 
-        public override bool ShowModalX(ICommonDialog dialog, IView owner, bool keepModeless = false)
+        public override async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
+            var efModal = dialog as CommonDialog;
+            if (efModal == null) return false;
+
             //Window activeWin = GetActiveForm() as Window;
             //Console.WriteLine((owner == null) ? "null" : owner.ToString());
 
@@ -199,14 +202,6 @@ namespace GKUI.Platform
             }*/
 
             //UIHelper.CenterFormByParent((Window)form, mainHandle);
-
-            return (dialog != null && dialog.ShowModalX(owner));
-        }
-
-        public override async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
-        {
-            var efModal = dialog as CommonDialog;
-            if (efModal == null) return false;
 
             efModal.ShowModal(owner as Control);
             return await efModal.DialogResultTask;
@@ -271,7 +266,7 @@ namespace GKUI.Platform
                 try {
                     workerThread.Start(progressForm);
 
-                    progressForm.ShowModalX(activeWnd);
+                    ((Dialog)progressForm).ShowModal(activeWnd as Control);
                 } catch (Exception ex) {
                     Logger.WriteError("ExecuteWork()", ex);
                 }

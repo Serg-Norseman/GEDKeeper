@@ -18,10 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
-using GKCore.Design.Controls;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Tools;
 using GKCore.Types;
@@ -239,20 +240,20 @@ namespace GKCore.Controllers
             SetRec2(fRec2);
         }
 
-        private bool EditRecord(GDMRecord record)
+        private async Task<bool> EditRecord(GDMRecord record)
         {
-            return (record != null && BaseController.EditRecord(fView, fBase, record));
+            return (record != null && await BaseController.EditRecord(fView, fBase, record));
         }
 
-        public void EditLeft()
+        public async void EditLeft()
         {
-            if (EditRecord(fRec1))
+            if (await EditRecord(fRec1))
                 SetRec1(fRec1);
         }
 
-        public void EditRight()
+        public async void EditRight()
         {
-            if (EditRecord(fRec2))
+            if (await EditRecord(fRec2))
                 SetRec2(fRec2);
         }
     }

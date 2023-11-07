@@ -225,27 +225,22 @@ namespace GKUI.Forms
             Focus();
         }
 
-        public virtual bool ShowModalX(IView owner)
-        {
-            return (ShowModal(owner as Control) == DialogResult.Ok);
-        }
-
-        protected async Task Close(DialogResult dialogResult)
+        protected new void Close(DialogResult dialogResult)
         {
             if (dialogResult != DialogResult.None) {
-                DialogResult = dialogResult;
                 fTaskSource.SetResult(dialogResult == DialogResult.Ok);
+                DialogResult = dialogResult;
             }
         }
 
-        protected async virtual void AcceptClickHandler(object sender, EventArgs e)
+        protected virtual void AcceptClickHandler(object sender, EventArgs e)
         {
-            await Close(DialogResult.Ok);
+            Close(DialogResult.Ok);
         }
 
-        protected async virtual void CancelClickHandler(object sender, EventArgs e)
+        protected virtual void CancelClickHandler(object sender, EventArgs e)
         {
-            await Close(DialogResult.Cancel);
+            Close(DialogResult.Cancel);
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -310,21 +305,21 @@ namespace GKUI.Forms
     {
         protected TController fController;
 
-        protected override async void AcceptClickHandler(object sender, EventArgs e)
+        protected override void AcceptClickHandler(object sender, EventArgs e)
         {
             try {
                 if (fController.Accept())
-                    await Close(DialogResult.Ok);
+                    Close(DialogResult.Ok);
             } catch (Exception ex) {
                 Logger.WriteError("CommonDialog<>.AcceptClickHandler()", ex);
             }
         }
 
-        protected override async void CancelClickHandler(object sender, EventArgs e)
+        protected override void CancelClickHandler(object sender, EventArgs e)
         {
             try {
                 if (fController.Cancel())
-                    await Close(DialogResult.Cancel);
+                    Close(DialogResult.Cancel);
             } catch (Exception ex) {
                 Logger.WriteError("CommonDialog<>.CancelClickHandler()", ex);
             }

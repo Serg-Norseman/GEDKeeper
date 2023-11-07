@@ -679,7 +679,7 @@ namespace GKCore
             return result;
         }
 
-        public async void CheckPersonSex(IView owner, GDMIndividualRecord iRec)
+        public async Task CheckPersonSex(IView owner, GDMIndividualRecord iRec)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");

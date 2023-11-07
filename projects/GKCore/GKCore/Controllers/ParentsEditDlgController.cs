@@ -122,11 +122,14 @@ namespace GKCore.Controllers
             }
         }
 
-        public void EditParents()
+        public async void EditParents()
         {
             GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
-            if (family != null && BaseController.ModifyFamily(fView, fBase, ref family, TargetMode.tmNone, null)) {
-                UpdateControls();
+            if (family != null) {
+                var famRes = await BaseController.ModifyFamily(fView, fBase, family, TargetMode.tmNone, null);
+                if (famRes.Result) {
+                    UpdateControls();
+                }
             }
         }
 

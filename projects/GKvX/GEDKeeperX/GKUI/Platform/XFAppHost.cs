@@ -59,19 +59,19 @@ namespace GKUI.Platform
         {
         }
 
-        public override void Init(string[] args, bool isMDI)
+        public override async Task Init(string[] args, bool isMDI)
         {
-            base.Init(args, isMDI);
+            await base.Init(args, isMDI);
         }
 
         public override void Activate()
         {
         }
 
-        public override IBaseWindow CreateBase(string fileName)
+        public override async Task<IBaseWindow> CreateBase(string fileName)
         {
             // FIXME: temp solution
-            IBaseWindow result = base.CreateBase(fileName);
+            IBaseWindow result = await base.CreateBase(fileName);
             fCurrentBase = result;
             return result;
         }

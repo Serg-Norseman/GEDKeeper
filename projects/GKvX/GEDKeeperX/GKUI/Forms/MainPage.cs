@@ -38,7 +38,7 @@ namespace GKUI.Forms
             fMenuPages = new Dictionary<int, Page>();
         }
 
-        public async void NavigateAsync(Page page)
+        public async Task NavigateAsync(Page page)
         {
             if (page == null) return;
 
@@ -55,7 +55,7 @@ namespace GKUI.Forms
                     fMenuPages.Add(id, page);
                 }
             }
-            NavigateAsync(page);
+            await NavigateAsync(page);
         }
     }
 }

@@ -177,7 +177,7 @@ namespace GKCore.Controllers
             GetControl<IComboBox>("cmbCertaintyAlgorithm").SetSelectedTag(fOptions.CertaintyAlgorithm);
         }
 
-        public void AcceptOtherOptions()
+        public async void AcceptOtherOptions()
         {
             fOptions.ShowTips = GetControl<ICheckBox>("chkShowOnStart").Checked;
             fOptions.LoadRecentFiles = GetControl<ICheckBox>("chkLoadRecentFiles").Checked;
@@ -190,7 +190,7 @@ namespace GKCore.Controllers
 
             var item = GetControl<IComboBox>("cmbLanguages").SelectedItem as ComboItem<int>;
             if (item != null) {
-                AppHost.Instance.LoadLanguage(item.Tag);
+                await AppHost.Instance.LoadLanguage(item.Tag);
             }
 
             fOptions.CertaintyAlgorithm = GetControl<IComboBox>("cmbCertaintyAlgorithm").GetSelectedTag<CertaintyAlgorithm>();

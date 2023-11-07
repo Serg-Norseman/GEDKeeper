@@ -214,7 +214,8 @@ namespace GKUI.Forms
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            DialogResult = (fCommonController.Accept() && fController.Accept()) ? DialogResult.Ok : DialogResult.None;
+            if (fCommonController.Accept() && fController.Accept())
+                Close(DialogResult.Ok);
         }
 
         private void btnReset_Click(object sender, EventArgs e)

@@ -109,8 +109,10 @@ namespace GKCore.Lists
                     }
                     break;
 
-                case RecordAction.raEdit:
-                    result = (BaseController.ModifyIndividual(fOwner, fBaseWin, ref child, null, TargetMode.tmNone, GDMSex.svUnknown));
+                case RecordAction.raEdit: {
+                        var indiRes = await BaseController.ModifyIndividual(fOwner, fBaseWin, child, null, TargetMode.tmNone, GDMSex.svUnknown);
+                        result = indiRes.Result;
+                    }
                     break;
 
                 case RecordAction.raDelete:
@@ -184,8 +186,10 @@ namespace GKCore.Lists
                     }
                     break;
 
-                case RecordAction.raEdit:
-                    result = (BaseController.ModifyIndividual(fOwner, fBaseWin, ref child, null, TargetMode.tmNone, GDMSex.svUnknown));
+                case RecordAction.raEdit: {
+                        var indiRes = await BaseController.ModifyIndividual(fOwner, fBaseWin, child, null, TargetMode.tmNone, GDMSex.svUnknown);
+                        result = indiRes.Result;
+                    }
                     break;
 
                 case RecordAction.raDelete:

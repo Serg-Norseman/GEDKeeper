@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -242,7 +243,7 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_CheckBaseAndRepairProblem()
+        public async Task Test_CheckBaseAndRepairProblem()
         {
             var progress = Substitute.For<IProgressController>();
 
@@ -258,10 +259,10 @@ namespace GKCore
             Assert.AreEqual(TreeInspector.CheckDiag.cdStrangeSpouse, checksList[1].Diag);
             Assert.AreEqual(TreeInspector.CheckDiag.cdPersonLonglived, checksList[2].Diag);
 
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeInspector.RepairProblem(null, null, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeInspector.RepairProblem(null, fBaseWin, null); });
+            Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await TreeInspector.RepairProblem(null, null, null); });
+            Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await TreeInspector.RepairProblem(null, fBaseWin, null); });
 
-            TreeInspector.RepairProblem(null, fBaseWin, checksList[2]);
+            await TreeInspector.RepairProblem(null, fBaseWin, checksList[2]);
         }
 
         [Test]

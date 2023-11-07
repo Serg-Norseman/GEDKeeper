@@ -141,15 +141,15 @@ namespace GKCore
             }
         }
 
-        public virtual void Init(string[] args, bool isMDI)
+        public virtual async Task Init(string[] args, bool isMDI)
         {
             GKUtils.InitGEDCOM();
-            LoadLanguage(AppHost.Options.InterfaceLang);
+            await LoadLanguage(AppHost.Options.InterfaceLang);
             SetArgs(args);
             StartupWork();
         }
 
-        public virtual void StartupWork()
+        public virtual async void StartupWork()
         {
             if (HasFeatureSupport(Feature.Themes)) {
                 ThemeManager.LoadThemes();
@@ -162,16 +162,17 @@ namespace GKCore
                 try {
                     BeginLoading();
 
-                    int result = LoadArgs(false);
-                    result += ReloadRecentBases();
+                    int result = await LoadArgs(false);
+                    result += await ReloadRecentBases();
                     if (result == 0) {
-                        CreateBase("");
+                        await CreateBase("");
                     }
 
                     ProcessHolidays();
                     ProcessTips();
+
+                    await EndLoading();
                 } finally {
-                    EndLoading();
                 }
 
                 if (Options.AutoCheckUpdates) {
@@ -215,22 +216,22 @@ namespace GKCore
             fLoadingCount++;
         }
 
-        public void EndLoading()
+        public async Task EndLoading()
         {
             fLoadingCount--;
 
             if (fLoadingCount == 0) {
-                ShowTips();
+                await ShowTips();
             }
         }
 
-        public void ShowTips()
+        public async Task ShowTips()
         {
             if (fTips.Count <= 0) return;
 
             using (var dlg = fIocContainer.Resolve<IDayTipsDlg>()) {
                 dlg.Init(LangMan.LS(LSID.BirthDays), AppHost.Options.ShowTips, fTips);
-                ShowModalX(dlg, null, false);
+                await ShowModalAsync(dlg, null, false);
                 AppHost.Options.ShowTips = dlg.ShowTipsChecked;
             }
 
@@ -651,18 +652,6 @@ namespace GKCore
             }
         }
 
-        public bool ShowDialog<T>(IView owner, bool keepModeless = false) where T : ICommonDialog
-        {
-            using (var dlg = AppHost.Container.Resolve<T>(owner)) {
-                return ShowModalX(dlg, owner, keepModeless);
-            }
-        }
-
-        public virtual bool ShowModalX(ICommonDialog dialog, IView owner, bool keepModeless = false)
-        {
-            return (dialog != null && dialog.ShowModalX(owner));
-        }
-
         public virtual async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
             return false;
@@ -708,7 +697,7 @@ namespace GKCore
             }
         }
 
-        public virtual IBaseWindow CreateBase(string fileName)
+        public virtual async Task<IBaseWindow> CreateBase(string fileName)
         {
             IBaseWindow result = null;
 
@@ -733,8 +722,9 @@ namespace GKCore
                     }
 
                     RestoreWinMRU(result);
+
+                    await EndLoading();
                 } finally {
-                    EndLoading();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("AppHost.CreateBase()", ex);
@@ -743,7 +733,7 @@ namespace GKCore
             return result;
         }
 
-        public void LoadBase(IBaseWindow baseWin, string fileName)
+        public async Task LoadBase(IBaseWindow baseWin, string fileName)
         {
             if (baseWin == null)
                 throw new ArgumentNullException(@"baseWin");
@@ -752,7 +742,7 @@ namespace GKCore
                 if (!HasFeatureSupport(Feature.Mobile)) {
                     // Multiple documents/bases
                     if (!baseWin.Context.IsUnknown() || !baseWin.Context.Tree.IsEmpty) {
-                        CreateBase(fileName);
+                        await CreateBase(fileName);
                         return;
                     }
 
@@ -776,8 +766,9 @@ namespace GKCore
                         ProcessLoaded(baseWin.Context);
                         RestoreWinMRU(baseWin);
                     }
+
+                    await EndLoading();
                 } finally {
-                    EndLoading();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("AppHost.LoadBase()", ex);
@@ -821,7 +812,7 @@ namespace GKCore
         /// Verify and load the databases specified in the command line arguments.
         /// </summary>
         /// <returns>number of loaded files</returns>
-        public int LoadArgs(bool invoke)
+        public async Task<int> LoadArgs(bool invoke)
         {
             int result = 0;
             if (fCommandArgs != null && fCommandArgs.Length > 0) {
@@ -831,7 +822,7 @@ namespace GKCore
                             var baseWin = GetActiveWindow() as IBaseWindowView;
                             baseWin.LoadBase(arg);
                         } else {
-                            AppHost.Instance.CreateBase(arg);
+                            await AppHost.Instance.CreateBase(arg);
                         }
                         result += 1;
                     }
@@ -843,7 +834,7 @@ namespace GKCore
         /// <summary>
         /// Reload recently opened files at startup.
         /// </summary>
-        public int ReloadRecentBases()
+        public async Task<int> ReloadRecentBases()
         {
             int result = 0;
             if (!GlobalOptions.Instance.LoadRecentFiles) return result;
@@ -855,12 +846,13 @@ namespace GKCore
                 for (int i = 0; i < num; i++) {
                     string lb = AppHost.Options.LastBases[i];
                     if (File.Exists(lb)) {
-                        AppHost.Instance.CreateBase(lb);
+                        await AppHost.Instance.CreateBase(lb);
                         result += 1;
                     }
                 }
+
+                await EndLoading();
             } finally {
-                EndLoading();
             }
 
             return result;
@@ -921,11 +913,11 @@ namespace GKCore
             // dummy
         }
 
-        public static ushort RequestLanguage()
+        public static async Task<ushort> RequestLanguage()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 using (var dlg = AppHost.ResolveDialog<ILanguageSelectDlg>()) {
-                    if (AppHost.Instance.ShowModalX(dlg, null, false)) {
+                    if (await AppHost.Instance.ShowModalAsync(dlg, null, false)) {
                         return (ushort)dlg.SelectedLanguage;
                     }
                 }
@@ -934,11 +926,11 @@ namespace GKCore
             return LangMan.LS_DEF_CODE;
         }
 
-        public void LoadLanguage(int langCode)
+        public async Task LoadLanguage(int langCode)
         {
             try {
                 if (langCode <= 0) {
-                    langCode = RequestLanguage();
+                    langCode = await RequestLanguage();
                 }
 
                 AppHost.Options.LoadLanguage(langCode);

@@ -20,6 +20,7 @@
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -548,7 +549,7 @@ namespace GKCore
         [Test]
         public void Test_CheckPersonSex()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { fContext.CheckPersonSex(null, null); });
+            Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await fContext.CheckPersonSex(null, null); });
         }
 
         [Test]
@@ -593,16 +594,16 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_AddChildForParent()
+        public async Task Test_AddChildForParent()
         {
-            var result = fContext.AddChildForParent(null, null, GDMSex.svMale);
+            var result = await fContext.AddChildForParent(null, null, GDMSex.svMale);
             Assert.IsNull(result);
         }
 
         [Test]
         public void Test_SelectSpouseFor()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { fContext.SelectSpouseFor(null, null); });
+            Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await fContext.SelectSpouseFor(null, null); });
         }
     }
 }

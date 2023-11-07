@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using BSLib;
 using GDModel;
@@ -106,7 +107,7 @@ namespace GKFlowInputPlugin
         }
 
         // TODO: rollback changes when exception!
-        private async void ParseSource()
+        private async Task ParseSource()
         {
             int srcYear;
             if (!int.TryParse(edSourceYear.Text, out srcYear)) {
@@ -262,7 +263,7 @@ namespace GKFlowInputPlugin
             }
         }
 
-        private void btnParse_Click(object sender, EventArgs e)
+        private async void btnParse_Click(object sender, EventArgs e)
         {
             try {
                 try {
@@ -272,7 +273,7 @@ namespace GKFlowInputPlugin
                             break;
 
                         case 1:
-                            ParseSource();
+                            await ParseSource();
                             break;
                     }
                 } finally {

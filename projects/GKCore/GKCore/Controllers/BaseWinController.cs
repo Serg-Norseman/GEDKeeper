@@ -122,10 +122,10 @@ namespace GKCore.Controllers
             fContext.Modified = false;
         }
 
-        public void NewFile()
+        public async void NewFile()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                AppHost.Instance.CreateBase("");
+                await AppHost.Instance.CreateBase("");
             } else {
                 CreateNewFile();
             }
@@ -158,14 +158,14 @@ namespace GKCore.Controllers
 #endif
         }
 
-        public void LoadFileEx()
+        public async void LoadFileEx()
         {
             string homePath, filters;
             PrepareLoadFile(out homePath, out filters);
 
             string fileName = AppHost.StdDialogs.GetOpenFile("", homePath, filters, 1, GKData.GEDCOM_EXT);
             if (!string.IsNullOrEmpty(fileName)) {
-                AppHost.Instance.LoadBase(fView, fileName);
+                await AppHost.Instance.LoadBase(fView, fileName);
             }
         }
 
@@ -176,7 +176,7 @@ namespace GKCore.Controllers
 
             string fileName = await AppHost.StdDialogs.GetOpenFileAsync("", homePath, filters, 1, GKData.GEDCOM_EXT);
             if (!string.IsNullOrEmpty(fileName)) {
-                AppHost.Instance.LoadBase(fView, fileName);
+                await AppHost.Instance.LoadBase(fView, fileName);
             }
         }
 
@@ -315,11 +315,11 @@ namespace GKCore.Controllers
             fView.SelectRecordByXRef(target.XRef);
         }
 
-        public void AddRecord()
+        public async void AddRecord()
         {
             GDMRecordType rt = GetSelectedRecordType();
 
-            GDMRecord record = BaseController.AddRecord(fView, fView, rt, null);
+            GDMRecord record = await BaseController.AddRecord(fView, fView, rt, null);
             if (record != null) {
                 RefreshLists(false);
             }
@@ -327,10 +327,10 @@ namespace GKCore.Controllers
             UpdateChangedRecords(record);
         }
 
-        public void EditRecord()
+        public async void EditRecord()
         {
             GDMRecord record = GetSelectedRecordEx();
-            if (record != null && BaseController.EditRecord(fView, fView, record)) {
+            if (record != null && await BaseController.EditRecord(fView, fView, record)) {
                 RefreshLists(false);
             }
 

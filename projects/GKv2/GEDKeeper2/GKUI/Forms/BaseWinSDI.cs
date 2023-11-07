@@ -667,7 +667,7 @@ namespace GKUI.Forms
             e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
         }
 
-        private void Form_DragDrop(object sender, DragEventArgs e)
+        private async void Form_DragDrop(object sender, DragEventArgs e)
         {
             try {
                 try {
@@ -678,10 +678,11 @@ namespace GKUI.Forms
 
                     for (int i = 0; i < files.Length; i++) {
                         string fn = files[i];
-                        AppHost.Instance.LoadBase(this, fn);
+                        await AppHost.Instance.LoadBase(this, fn);
                     }
+
+                    await AppHost.Instance.EndLoading();
                 } finally {
-                    AppHost.Instance.EndLoading();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.Form_DragDrop()", ex);
@@ -690,8 +691,8 @@ namespace GKUI.Forms
 
         void IBaseWindowView.LoadBase(string fileName)
         {
-            MethodInvoker invoker = delegate() {
-                AppHost.Instance.LoadBase(this, fileName);
+            MethodInvoker invoker = async delegate() {
+                await AppHost.Instance.LoadBase(this, fileName);
             };
 
             if (InvokeRequired) {
@@ -715,10 +716,10 @@ namespace GKUI.Forms
             UpdateShieldState();
         }
 
-        private void MRUFileClick(object sender, EventArgs e)
+        private async void MRUFileClick(object sender, EventArgs e)
         {
             int idx = (int)((MenuItemEx)sender).Tag;
-            AppHost.Instance.LoadBase(this, AppHost.Options.MRUFiles[idx].FileName);
+            await AppHost.Instance.LoadBase(this, AppHost.Options.MRUFiles[idx].FileName);
         }
 
         public void UpdateMRU()

@@ -115,7 +115,7 @@ namespace GKCore.Interfaces
 
         Task<string> DefinePatronymic(IView owner, string name, GDMSex sex, bool confirm);
         Task<GDMSex> DefineSex(IView owner, string iName, string iPatr);
-        void CheckPersonSex(IView owner, GDMIndividualRecord iRec);
+        Task CheckPersonSex(IView owner, GDMIndividualRecord iRec);
 
         Task<GDMFamilyRecord> SelectFamily(IView owner, GDMIndividualRecord target, TargetMode targetMode = TargetMode.tmFamilyChild);
         Task<GDMIndividualRecord> SelectPerson(IView owner, GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex);

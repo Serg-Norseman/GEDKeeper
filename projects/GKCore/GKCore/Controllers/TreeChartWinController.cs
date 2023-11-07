@@ -171,13 +171,13 @@ namespace GKCore.Controllers
             ParentAdd(GDMSex.svFemale);
         }
 
-        public void Edit()
+        public async void Edit()
         {
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            GDMIndividualRecord iRec = p.Rec;
-            if (BaseController.ModifyIndividual(fView, fBase, ref iRec, null, TargetMode.tmNone, GDMSex.svUnknown)) {
+            var indiRes = await BaseController.ModifyIndividual(fView, fBase, p.Rec, null, TargetMode.tmNone, GDMSex.svUnknown);
+            if (indiRes.Result) {
                 UpdateChart();
             }
         }
@@ -198,8 +198,8 @@ namespace GKCore.Controllers
             bool modified = false;
 
             if (person.Rec != null) {
-                GDMIndividualRecord iRec = person.Rec;
-                modified = BaseController.ModifyIndividual(fView, fBase, ref iRec, null, TargetMode.tmNone, GDMSex.svUnknown);
+                var indiRes = await BaseController.ModifyIndividual(fView, fBase, person.Rec, null, TargetMode.tmNone, GDMSex.svUnknown);
+                modified = indiRes.Result;
             } else {
                 // this is "stub" person, only in descendant tree
                 // key properties = BaseSpouse & BaseFamily

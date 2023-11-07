@@ -89,7 +89,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async void Modify(object sender, ModifyEventArgs eArgs)
         {
             var dataOwner = fDataOwner as IGDMStructWithSourceCitations;
             if (fBaseWin == null || dataOwner == null) return;
@@ -100,8 +100,11 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                case RecordAction.raEdit:
-                    result = BaseController.ModifySourceCitation(fOwner, fBaseWin, fUndoman, dataOwner, ref srcCit);
+                case RecordAction.raEdit: {
+                        var srcCitRes = await BaseController.ModifySourceCitation(fOwner, fBaseWin, fUndoman, dataOwner, srcCit);
+                        srcCit = srcCitRes.Record;
+                        result = srcCitRes.Result;
+                    }
                     break;
 
                 case RecordAction.raDelete:

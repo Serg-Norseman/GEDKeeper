@@ -1074,7 +1074,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async void Modify(object sender, ModifyEventArgs eArgs)
         {
             var iRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || iRec == null) return;
@@ -1084,15 +1084,19 @@ namespace GKCore.Lists
             bool result = false;
 
             switch (eArgs.Action) {
-                case RecordAction.raAdd:
-                    result = (BaseController.ModifyFamily(fOwner, fBaseWin, ref family, TargetMode.tmSpouse, iRec));
-                    if (result) {
-                        eArgs.ItemData = family;
+                case RecordAction.raAdd: {
+                        var famRes = await BaseController.ModifyFamily(fOwner, fBaseWin, family, TargetMode.tmSpouse, iRec);
+                        result = famRes.Result;
+                        if (result) {
+                            eArgs.ItemData = famRes.Record;
+                        }
                     }
                     break;
 
-                case RecordAction.raEdit:
-                    result = (BaseController.ModifyFamily(fOwner, fBaseWin, ref family, TargetMode.tmNone, null));
+                case RecordAction.raEdit: {
+                        var famRes = await BaseController.ModifyFamily(fOwner, fBaseWin, family, TargetMode.tmNone, null);
+                        result = famRes.Result;
+                    }
                     break;
 
                 case RecordAction.raDelete:

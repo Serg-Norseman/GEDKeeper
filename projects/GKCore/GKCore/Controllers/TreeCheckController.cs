@@ -20,9 +20,10 @@
 
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using GDModel;
-using GKCore.Design.Controls;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Tools;
 using GKCore.Types;
@@ -76,7 +77,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void Repair()
+        public async Task Repair()
         {
             try {
                 int num = fView.ChecksList.Items.Count;
@@ -84,7 +85,7 @@ namespace GKCore.Controllers
                     IListItem item = fView.ChecksList.Items[i];
                     if (item.Checked) {
                         var checkObj = item.Tag as TreeInspector.CheckObj;
-                        TreeInspector.RepairProblem(fView, fBase, checkObj);
+                        await TreeInspector.RepairProblem(fView, fBase, checkObj);
                     }
                 }
             } finally {
