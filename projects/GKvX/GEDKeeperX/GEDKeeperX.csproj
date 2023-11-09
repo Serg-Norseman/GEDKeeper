@@ -32,7 +32,7 @@
 
         <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.2" />
         <PackageReference Include="Xam.Plugin.TabView" Version="1.1.1" />
-        <PackageReference Include="CarouselView.FormsPlugin" Version="6.0.0" />
+        <PackageReference Include="CarouselView.FormsPlugin" Version="5.2.0" />
         <PackageReference Include="OxyPlot.Xamarin.Forms" Version="2.1.0" />
     </ItemGroup>
 

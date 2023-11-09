@@ -41,9 +41,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBox IRecordSelectDialog.FilterBox
+        IComboBox IRecordSelectDialog.FilterCombo
         {
-            get { return GetControlHandler<IComboBox>(txtFastFilter); }
+            get { return null; }
+        }
+
+        ITextBox IRecordSelectDialog.FilterText
+        {
+            get { return GetControlHandler<ITextBox>(txtFastFilter); }
         }
 
         IFilterControl IRecordSelectDialog.FilterCtl

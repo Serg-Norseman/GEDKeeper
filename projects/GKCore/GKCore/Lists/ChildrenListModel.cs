@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Controllers;
@@ -90,7 +91,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override async void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var family = fDataOwner as GDMFamilyRecord;
             if (fBaseWin == null || family == null) return;
@@ -163,7 +164,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override async void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var indiRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || indiRec == null) return;

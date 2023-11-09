@@ -63,10 +63,10 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
-        private void ListModify(object sender, ModifyEventArgs eArgs)
+        private async void ListModify(object sender, ModifyEventArgs eArgs)
         {
             if (sender == fPersonsList) {
-                fController.ModifyPersons(eArgs.Action, eArgs.ItemData);
+                await fController.ModifyPersons(eArgs.Action, eArgs.ItemData);
             }
         }
 

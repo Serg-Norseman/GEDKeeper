@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Design;
@@ -152,7 +153,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override async void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var source = fDataOwner as GDMSourceRecord;
             if (fBaseWin == null || source == null) return;

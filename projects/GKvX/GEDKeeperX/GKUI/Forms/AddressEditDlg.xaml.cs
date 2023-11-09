@@ -89,17 +89,17 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
-        private void ListModify(object sender, ModifyEventArgs eArgs)
+        private async void ListModify(object sender, ModifyEventArgs eArgs)
         {
             GDMTag itemTag = eArgs.ItemData as GDMTag;
             if ((eArgs.Action == RecordAction.raEdit || eArgs.Action == RecordAction.raDelete) && (itemTag == null)) return;
 
             if (sender == fPhonesList) {
-                fController.DoPhonesAction(eArgs.Action, itemTag);
+                await fController.DoPhonesAction(eArgs.Action, itemTag);
             } else if (sender == fMailsList) {
-                fController.DoMailsAction(eArgs.Action, itemTag);
+                await fController.DoMailsAction(eArgs.Action, itemTag);
             } else if (sender == fWebsList) {
-                fController.DoWebsAction(eArgs.Action, itemTag);
+                await fController.DoWebsAction(eArgs.Action, itemTag);
             }
         }
     }

@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -318,8 +319,7 @@ namespace GKCore.Lists
                 && (IsMatchesNames(iFilter.Name))
                 && (IsMatchesPlace(iFilter.Residence))
                 && (IsMatchesEventVal(iFilter.EventVal))
-                && (!iFilter.PatriarchOnly || fFetchedRec.Patriarch))
-            {
+                && (!iFilter.PatriarchOnly || fFetchedRec.Patriarch)) {
                 bool isLive = (buf_dd == null);
 
                 switch (iFilter.FilterLifeMode) {
@@ -737,7 +737,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override async void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var iRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || iRec == null) return;
@@ -819,7 +819,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override async void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var iRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || iRec == null) return;
@@ -830,16 +830,17 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                case RecordAction.raEdit:
-                    using (var dlg = AppHost.ResolveDialog<IPersonalNameEditDlg>(fBaseWin)) {
+                case RecordAction.raEdit: {
                         bool exists = (persName != null);
                         if (!exists) {
                             persName = new GDMPersonalName();
                         }
 
-                        dlg.IndividualRecord = iRec;
-                        dlg.PersonalName = persName;
-                        result = await AppHost.Instance.ShowModalAsync(dlg, fOwner, false);
+                        using (var dlg = AppHost.ResolveDialog<IPersonalNameEditDlg>(fBaseWin)) {
+                            dlg.IndividualRecord = iRec;
+                            dlg.PersonalName = persName;
+                            result = await AppHost.Instance.ShowModalAsync(dlg, fOwner, false);
+                        }
 
                         if (!exists) {
                             if (result) {
@@ -940,7 +941,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override async void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var iRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || iRec == null) return;
@@ -1074,7 +1075,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override async void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var iRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || iRec == null) return;
@@ -1106,12 +1107,10 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raMoveUp:
-                case RecordAction.raMoveDown:
-                    {
+                case RecordAction.raMoveDown: {
                         int idx = iRec.IndexOfSpouse(family);
 
-                        switch (eArgs.Action)
-                        {
+                        switch (eArgs.Action) {
                             case RecordAction.raMoveUp:
                                 iRec.ExchangeSpouses(idx - 1, idx);
                                 break;
@@ -1175,7 +1174,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override async void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var iRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || iRec == null) return;
@@ -1186,15 +1185,16 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                case RecordAction.raEdit:
-                    using (var dlg = AppHost.ResolveDialog<IUserRefEditDlg>(fBaseWin)) {
+                case RecordAction.raEdit: {
                         bool exists = (userRef != null);
                         if (!exists) {
                             userRef = new GDMUserReference();
                         }
 
-                        dlg.UserReference = userRef;
-                        result = await AppHost.Instance.ShowModalAsync(dlg, fOwner, false);
+                        using (var dlg = AppHost.ResolveDialog<IUserRefEditDlg>(fBaseWin)) {
+                            dlg.UserReference = userRef;
+                            result = await AppHost.Instance.ShowModalAsync(dlg, fOwner, false);
+                        }
 
                         if (!exists) {
                             if (result) {
@@ -1206,8 +1206,7 @@ namespace GKCore.Lists
                     }
                     break;
 
-                case RecordAction.raDelete:
-                    {
+                case RecordAction.raDelete: {
                         string confirmation = !string.IsNullOrEmpty(userRef.StringValue) ? userRef.StringValue : userRef.ReferenceType;
                         if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RemoveUserRefQuery, confirmation))) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualURefRemove, iRec, userRef);

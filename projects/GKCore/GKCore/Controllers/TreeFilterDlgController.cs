@@ -19,13 +19,14 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Charts;
-using GKCore.Design.Controls;
-using GKCore.Lists;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Lists;
 using GKCore.Types;
 
 namespace GKCore.Controllers
@@ -130,7 +131,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public async void ModifyPersons(RecordAction action, object itemData)
+        public async Task ModifyPersons(RecordAction action, object itemData)
         {
             GDMIndividualRecord iRec = itemData as GDMIndividualRecord;
 

@@ -1773,7 +1773,7 @@ namespace GKCore
                     dlg.SetTarget(targetMode, target, GDMSex.svUnknown);
 
                     if (await AppHost.Instance.ShowModalAsync(dlg, owner, false)) {
-                        result = (dlg.ResultRecord as GDMFamilyRecord);
+                        result = dlg.ResultRecord as GDMFamilyRecord;
                     } else {
                         result = null;
                     }
@@ -1795,7 +1795,7 @@ namespace GKCore
                     dlg.SetTarget(targetMode, target, needSex);
 
                     if (await AppHost.Instance.ShowModalAsync(dlg, owner, false)) {
-                        result = (dlg.ResultRecord as GDMIndividualRecord);
+                        result = dlg.ResultRecord as GDMIndividualRecord;
                     } else {
                         result = null;
                     }

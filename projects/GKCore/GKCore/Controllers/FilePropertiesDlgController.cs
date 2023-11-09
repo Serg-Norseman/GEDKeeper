@@ -21,8 +21,8 @@
 using System;
 using GDModel;
 using GDModel.Providers.GEDCOM;
-using GKCore.Design.Controls;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Types;
 

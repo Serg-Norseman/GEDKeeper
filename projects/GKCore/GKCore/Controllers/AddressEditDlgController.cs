@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
@@ -95,20 +96,34 @@ namespace GKCore.Controllers
             }
         }
 
-        public void DoPhonesAction(RecordAction action, GDMTag itemTag)
+        private async Task<string> GetInput(string title, string val)
+        {
+            string strResult;
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                strResult = val;
+                if (!AppHost.StdDialogs.GetInput(fView, title, ref strResult)) {
+                    strResult = string.Empty;
+                }
+            } else {
+                strResult = await AppHost.StdDialogs.GetInputAsync(fView, title);
+            }
+            return strResult;
+        }
+
+        public async Task DoPhonesAction(RecordAction action, GDMTag itemTag)
         {
             string val;
             switch (action) {
                 case RecordAction.raAdd:
                     val = "";
-                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.Telephone), ref val)) {
+                    if (!string.IsNullOrEmpty(val = await GetInput(LangMan.LS(LSID.Telephone), val))) {
                         fAddress.AddPhoneNumber(val);
                     }
                     break;
 
                 case RecordAction.raEdit:
                     val = itemTag.StringValue;
-                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.Telephone), ref val)) {
+                    if (!string.IsNullOrEmpty(val = await GetInput(LangMan.LS(LSID.Telephone), val))) {
                         itemTag.StringValue = val;
                     }
                     break;
@@ -120,20 +135,20 @@ namespace GKCore.Controllers
             UpdateLists();
         }
 
-        public void DoMailsAction(RecordAction action, GDMTag itemTag)
+        public async Task DoMailsAction(RecordAction action, GDMTag itemTag)
         {
             string val;
             switch (action) {
                 case RecordAction.raAdd:
                     val = "";
-                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.Mail), ref val)) {
+                    if (!string.IsNullOrEmpty(val = await GetInput(LangMan.LS(LSID.Mail), val))) {
                         fAddress.AddEmailAddress(val);
                     }
                     break;
 
                 case RecordAction.raEdit:
                     val = itemTag.StringValue;
-                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.Mail), ref val)) {
+                    if (!string.IsNullOrEmpty(val = await GetInput(LangMan.LS(LSID.Mail), val))) {
                         itemTag.StringValue = val;
                     }
                     break;
@@ -145,20 +160,20 @@ namespace GKCore.Controllers
             UpdateLists();
         }
 
-        public void DoWebsAction(RecordAction action, GDMTag itemTag)
+        public async Task DoWebsAction(RecordAction action, GDMTag itemTag)
         {
             string val;
             switch (action) {
                 case RecordAction.raAdd:
                     val = "";
-                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.WebSite), ref val)) {
+                    if (!string.IsNullOrEmpty(val = await GetInput(LangMan.LS(LSID.WebSite), val))) {
                         fAddress.AddWebPage(val);
                     }
                     break;
 
                 case RecordAction.raEdit:
                     val = itemTag.StringValue;
-                    if (AppHost.StdDialogs.GetInput(fView, LangMan.LS(LSID.WebSite), ref val)) {
+                    if (!string.IsNullOrEmpty(val = await GetInput(LangMan.LS(LSID.WebSite), val))) {
                         itemTag.StringValue = val;
                     }
                     break;

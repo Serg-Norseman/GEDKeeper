@@ -19,13 +19,14 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
-using GKCore.Interfaces;
+using GKCore.Design;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
-using GKCore.Design;
 
 namespace GKCore.Lists
 {
@@ -80,7 +81,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override async void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var person = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || person == null) return;
@@ -91,15 +92,16 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                case RecordAction.raEdit:
-                    using (var dlg = AppHost.ResolveDialog<IAssociationEditDlg>(fBaseWin)) {
+                case RecordAction.raEdit: {
                         bool exists = (ast != null);
                         if (!exists) {
                             ast = new GDMAssociation();
                         }
 
-                        dlg.Association = ast;
-                        result = await AppHost.Instance.ShowModalAsync(dlg, fOwner, false);
+                        using (var dlg = AppHost.ResolveDialog<IAssociationEditDlg>(fBaseWin)) {
+                            dlg.Association = ast;
+                            result = await AppHost.Instance.ShowModalAsync(dlg, fOwner, false);
+                        }
 
                         if (!exists) {
                             if (result) {

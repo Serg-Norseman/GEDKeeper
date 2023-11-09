@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
@@ -133,6 +134,24 @@ namespace GKUI.Components
             if (cmb != null && GlobalOptions.Instance.FirstCapitalLetterInNames) {
                 cmb.Text = GKUtils.UniformName(cmb.Text);
             }
+        }
+
+        public static string[] Convert(string text)
+        {
+            var strList = new StringList(text);
+            return strList.ToArray();
+        }
+
+        public static string Convert(string[] lines)
+        {
+            StringBuilder strBuilder = new StringBuilder();
+            foreach (var line in lines) {
+                if (strBuilder.Length > 0) {
+                    strBuilder.Append(Environment.NewLine);
+                }
+                strBuilder.Append(line);
+            }
+            return strBuilder.ToString();
         }
 
         public static ImageSource LoadResourceImage(string resName)
