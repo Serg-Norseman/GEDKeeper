@@ -913,14 +913,14 @@ namespace GKCore.Controllers
                     GetControl<IMenuItem>("miTreeTools").Text = LangMan.LS(LSID.MITreeTools);
                     GetControl<IMenuItem>("miOptions").Text = LangMan.LS(LSID.MIOptions) + @"...";
 
-                    GetControl<IMenuItem>("miTreeCompare").Text = LangMan.LS(LSID.ToolOp_1);
-                    GetControl<IMenuItem>("miTreeMerge").Text = LangMan.LS(LSID.ToolOp_2);
-                    GetControl<IMenuItem>("miTreeSplit").Text = LangMan.LS(LSID.ToolOp_3);
+                    GetControl<IMenuItem>("miTreeCompare").Text = LangMan.LS(LSID.TreeCompare);
+                    GetControl<IMenuItem>("miTreeMerge").Text = LangMan.LS(LSID.TreeMerge);
+                    GetControl<IMenuItem>("miTreeSplit").Text = LangMan.LS(LSID.TreeSplit);
                     GetControl<IMenuItem>("miRecMerge").Text = LangMan.LS(LSID.MergeDuplicates);
-                    GetControl<IMenuItem>("miFamilyGroups").Text = LangMan.LS(LSID.ToolOp_6);
-                    GetControl<IMenuItem>("miTreeCheck").Text = LangMan.LS(LSID.ToolOp_7);
-                    GetControl<IMenuItem>("miPatSearch").Text = LangMan.LS(LSID.ToolOp_8);
-                    GetControl<IMenuItem>("miPlacesManager").Text = LangMan.LS(LSID.ToolOp_9);
+                    GetControl<IMenuItem>("miFamilyGroups").Text = LangMan.LS(LSID.FragmentSearch);
+                    GetControl<IMenuItem>("miTreeCheck").Text = LangMan.LS(LSID.TreeCheck);
+                    GetControl<IMenuItem>("miPatSearch").Text = LangMan.LS(LSID.PatriarchsSearch);
+                    GetControl<IMenuItem>("miPlacesManager").Text = LangMan.LS(LSID.PlacesManager);
 
                     GetControl<IMenuItem>("miContext").Text = LangMan.LS(LSID.MIContext);
                     GetControl<IMenuItem>("miAbout").Text = LangMan.LS(LSID.MIAbout) + @"...";

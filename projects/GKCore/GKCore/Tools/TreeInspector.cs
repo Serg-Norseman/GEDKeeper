@@ -463,7 +463,7 @@ namespace GKCore.Tools
 
             try {
                 GDMTree tree = baseWin.Context.Tree;
-                progress.Begin(LangMan.LS(LSID.ToolOp_7), tree.RecordsCount);
+                progress.Begin(LangMan.LS(LSID.TreeCheck), tree.RecordsCount);
                 checksList.Clear();
 
                 for (int i = 0, num = tree.RecordsCount; i < num; i++) {

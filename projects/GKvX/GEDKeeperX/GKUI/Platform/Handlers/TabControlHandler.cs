@@ -58,7 +58,7 @@ namespace GKUI.Platform
             public ITabPage this[int index]
             {
                 get {
-                    if (index < 0 || index >= fTabControl.Children.Count)
+                    if (index < 0 || index >= fTabControl.ItemSource.Count)
                         throw new ArgumentOutOfRangeException("index");
 
                     return new TabPageHandler(fTabControl.ItemSource[index]);
@@ -67,7 +67,7 @@ namespace GKUI.Platform
 
             public int Count
             {
-                get { return fTabControl.Children.Count; }
+                get { return fTabControl.ItemSource.Count; }
             }
 
             public TabPageItems(TabViewControl control)

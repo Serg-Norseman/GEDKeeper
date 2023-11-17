@@ -108,7 +108,7 @@ namespace GKUI.Forms
             CreatePage("Communications", GDMRecordType.rtCommunication);
             CreatePage("Locations", GDMRecordType.rtLocation);
 
-            /*fController.SetLocale();*/
+            fController.SetLocale();
         }
 
         private void CreatePage(string pageText, GDMRecordType recType)

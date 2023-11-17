@@ -20,11 +20,12 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GKCore.Interfaces;
 using Xamarin.Forms;
 
 namespace GKUI.Forms
 {
-    public class MainPage : MasterDetailPage
+    public class MainPage : MasterDetailPage, ILocalizable
     {
         private readonly Dictionary<int, Page> fMenuPages;
 
@@ -56,6 +57,10 @@ namespace GKUI.Forms
                 }
             }
             await NavigateAsync(page);
+        }
+
+        public void SetLocale()
+        {
         }
     }
 }

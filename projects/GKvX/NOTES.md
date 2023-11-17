@@ -55,11 +55,12 @@ Project: Android 10.0 Q (API 29), MinAndVer 5.0 (API 21), MaxAndVer 8.1 (API 27)
 
 Emulator: sc query intelhaxm
 
-Android Device Image: Tablet M 10.1in (Android Pie 9.0 - API 28), 1 gb
+Android Device Image: Tablet M 10.1in (Android 9.0 - API 28), 1 gb
 
 ## Checked configurations (Android real devices)
 
 ASUS Nexus 7, Android 6.0.1 (API 23), 2015
+Samsung Galaxy A32, Android 13 (API 33), 2022
 
 ## Performance (Android emulator)
 
@@ -74,3 +75,4 @@ Load gedcom (370 kb): 512 mb - 74 s; 1gb - 2 s; 2 gb - <1 s
 - A label in HyperView does not support tapping on hyperlinks in html mode, but it has markup.
   But it supports taps on hyperlinks if it works on spans without html markup.
 - How to control scrolling and size of SkCanvasView in ScrollView (Charts)?
+- DataGrid unused space background color black not turning off.

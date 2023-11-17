@@ -126,10 +126,10 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.ToolOp_1);
+            fView.Title = LangMan.LS(LSID.TreeCompare);
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                GetControl<ITabPage>("pageTreeCompare").Text = LangMan.LS(LSID.ToolOp_1);
+                GetControl<ITabPage>("pageTreeCompare").Text = LangMan.LS(LSID.TreeCompare);
                 GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
             }
             GetControl<IGroupBox>("grpMatchType").Text = LangMan.LS(LSID.MatchType);

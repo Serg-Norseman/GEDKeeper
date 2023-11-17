@@ -55,11 +55,12 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            int contentSize = fBaseContext.Tree.RecordsCount;
+            var tree = fBaseContext.Tree;
+            int contentSize = tree.RecordsCount;
             InitContent(contentSize);
 
             for (int i = 0; i < contentSize; i++) {
-                GDMRecord rec = fBaseContext.Tree[i];
+                GDMRecord rec = tree[i];
                 if (rec.RecordType == fRecordType) {
                     var tRec = (T)rec;
                     AddFilteredContent(tRec);

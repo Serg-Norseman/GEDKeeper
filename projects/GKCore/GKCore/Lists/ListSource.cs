@@ -627,12 +627,7 @@ namespace GKCore.Lists
 
         public object GetContentItem(int itemIndex)
         {
-            object result;
-            if (itemIndex < 0 || itemIndex >= fContentList.Count) {
-                result = null;
-            } else {
-                result = fContentList[itemIndex].Record;
-            }
+            object result = (itemIndex < 0 || itemIndex >= fContentList.Count) ? null : fContentList[itemIndex].Record;
             return result;
         }
 

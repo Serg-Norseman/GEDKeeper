@@ -101,10 +101,10 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.ToolOp_9);
+            fView.Title = LangMan.LS(LSID.PlacesManager);
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                GetControl<ITabPage>("pagePlaceManage").Text = LangMan.LS(LSID.ToolOp_9);
+                GetControl<ITabPage>("pagePlaceManage").Text = LangMan.LS(LSID.PlacesManager);
                 GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
             }
 

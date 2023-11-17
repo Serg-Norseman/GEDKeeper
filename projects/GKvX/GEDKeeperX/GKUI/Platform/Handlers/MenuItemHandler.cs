@@ -18,52 +18,67 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Design.Graphics;
 using Xamarin.Forms;
 
 namespace GKUI.Platform
 {
-    public sealed class ProgressBarHandler : BaseControlHandler<ProgressBar, ProgressBarHandler>, IProgressBar
+    public sealed class MenuItemHandler : ControlHandler<MenuItem, MenuItemHandler>, IMenuItem
     {
-        private int fMin;
-        private int fMax;
-        private int fValue;
-
-        public ProgressBarHandler(ProgressBar control) : base(control)
+        public MenuItemHandler(MenuItem control) : base(control)
         {
         }
 
-        public int Minimum
+        public bool Checked
         {
-            get { return fMin; }
-            set { fMin = value; }
+            get { return false; }
+            set { }
         }
 
-        public int Maximum
+        public bool Enabled
         {
-            get { return fMax; }
-            set { fMax = value; }
+            get { return Control.IsEnabled; }
+            set { Control.IsEnabled = value; }
         }
 
-        public int Value
+        public IImage Glyph
         {
-            get { return fValue; }
-            set {
-                fValue = value;
-                UpdateValue();
-            }
+            get { return null; }
+            set { }
         }
 
-        public void Increment(int value)
+        public IMenuItems SubItems
         {
-            fValue += value;
-            UpdateValue();
+            get { return null; }
+            set { }
         }
 
-        private void UpdateValue()
+        public object Tag
         {
-            int divider = fMax - fMin;
-            Control.Progress = (divider == 0) ? 0 : fValue / divider;
+            get { return null; }
+            set {  }
+        }
+
+        public string Text
+        {
+            get { return string.Empty; }
+            set { }
+        }
+
+        public int ItemsCount
+        {
+            get { return 0; }
+        }
+
+        public IMenuItem AddItem(string text, object tag, IImage image, ItemAction action)
+        {
+            return null;
+        }
+
+        public void ClearItems()
+        {
         }
     }
 }

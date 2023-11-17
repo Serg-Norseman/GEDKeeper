@@ -132,7 +132,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.ToolOp_6);
+            fView.Title = LangMan.LS(LSID.FragmentSearch);
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.Details);
@@ -142,7 +142,7 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miDQResetFilter").Text = LangMan.LS(LSID.ResetFilter);
             }
 
-            GetControl<ITabPage>("pageFamilyGroups").Text = LangMan.LS(LSID.ToolOp_6);
+            GetControl<ITabPage>("pageFamilyGroups").Text = LangMan.LS(LSID.FragmentSearch);
             GetControl<IButton>("btnAnalyseGroups").Text = LangMan.LS(LSID.Analyze);
 
             GetControl<ITabPage>("pageDataQuality").Text = LangMan.LS(LSID.DataQuality);

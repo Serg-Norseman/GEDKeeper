@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -56,15 +57,6 @@ namespace GKUI.Platform
         }
 
         public XFAppHost()
-        {
-        }
-
-        public override async Task Init(string[] args, bool isMDI)
-        {
-            await base.Init(args, isMDI);
-        }
-
-        public override void Activate()
         {
         }
 
@@ -119,9 +111,34 @@ namespace GKUI.Platform
             return await xfModal.DialogResultTask;
         }
 
-        public override void EnableWindow(IWidgetForm form, bool value)
+        public override IEnumerable<T> GetRunningForms<T>()
         {
-            throw new NotImplementedException();
+            var navPage = (NavigationPage)Application.Current.MainPage;
+            foreach (var page in navPage.Pages) {
+                T form = page as T;
+                if (form != null) {
+                    yield return form;
+                }
+            }
+        }
+
+        protected override void UpdateLang()
+        {
+            var navPage = (NavigationPage)Application.Current.MainPage;
+
+            var mainPage = (MainPage)navPage.RootPage;
+            mainPage.SetLocale();
+
+            var menuPage = (MenuPage)mainPage.Master;
+            menuPage.SetLocale();
+
+            var launchPage = (LaunchPage)mainPage.Detail;
+            launchPage.SetLocale();
+
+            var baseWin = GetCurrentFile();
+            baseWin.SetLocale();
+
+            base.UpdateLang();
         }
 
         public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
@@ -162,10 +179,6 @@ namespace GKUI.Platform
         public override bool ExecuteWorkExt(ProgressStart proc, string title)
         {
             return false;
-        }
-
-        public override void CloseDependentWindows(IWindow owner)
-        {
         }
 
         public override ExtRect GetActiveScreenWorkingArea()
@@ -302,7 +315,7 @@ namespace GKUI.Platform
 
             ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(NumericStepper), typeof(NumericBoxHandler));
-            //ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
+            ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
             ControlsManager.RegisterHandlerType(typeof(MenuItem), typeof(MenuItemHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
         }

@@ -59,11 +59,11 @@ namespace GKCore
     /// </summary>
     public abstract class AppHost : IHost, ISingleInstanceEnforcer
     {
-        #if CI_MODE
+#if CI_MODE
         public static bool TEST_MODE = true;
-        #else
+#else
         public static bool TEST_MODE = false;
-        #endif
+#endif
 
 
         private static string fAppSign;
@@ -93,11 +93,6 @@ namespace GKCore
             get { return fActiveWidgets; }
         }
 
-        public IList<IWindow> RunningForms
-        {
-            get { return fRunningForms; }
-        }
-
 
         protected AppHost()
         {
@@ -112,11 +107,8 @@ namespace GKCore
         private void AutosaveTimer_Tick(object sender, EventArgs e)
         {
             try {
-                foreach (IWindow win in fRunningForms) {
-                    var baseWin = win as IBaseWindow;
-                    if (baseWin != null) {
-                        baseWin.CheckAutosave();
-                    }
+                foreach (var baseWin in GetRunningForms<IBaseWindow>()) {
+                    baseWin.CheckAutosave();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("AppHost.AutosaveTimer_Tick()", ex);
@@ -204,11 +196,20 @@ namespace GKCore
             }
         }
 
+        public virtual IEnumerable<T> GetRunningForms<T>() where T : class
+        {
+            for (int i = 0, num = fRunningForms.Count; i < num; i++) {
+                T form = fRunningForms[i] as T;
+                if (form != null) {
+                    yield return form;
+                }
+            }
+        }
+
         public string GetCurrentFileName()
         {
             IBaseWindow cb = GetCurrentFile();
-            string result = ((cb == null) ? "" : cb.Context.FileName);
-            return result;
+            return (cb == null) ? "" : cb.Context.FileName;
         }
 
         public void BeginLoading()
@@ -238,7 +239,10 @@ namespace GKCore
             fTips.Clear();
         }
 
-        public abstract void Activate();
+        public virtual void Activate()
+        {
+            // May have a desktop-only implementation
+        }
 
         public abstract IForm GetActiveForm();
 
@@ -253,7 +257,10 @@ namespace GKCore
             }
         }
 
-        public abstract void EnableWindow(IWidgetForm form, bool value);
+        public virtual void EnableWindow(IWidgetForm form, bool value)
+        {
+            // May have a desktop-only implementation
+        }
 
         public MRUFile GetMRUFile(IBaseWindow baseWin)
         {
@@ -287,34 +294,29 @@ namespace GKCore
             if (mf != null) RestoreWinState(baseWin, mf);
         }
 
-        protected void UpdateLang()
+        protected virtual void UpdateLang()
         {
-            foreach (IWindow win in fRunningForms) {
+            foreach (var win in GetRunningForms<IWindow>()) {
                 win.SetLocale();
             }
         }
 
         protected void UpdateMRU()
         {
-            foreach (IWindow win in fRunningForms) {
-                if (win is IBaseWindow) {
-                    ((IBaseWindow)win).UpdateMRU();
-                }
+            foreach (var baseWin in GetRunningForms<IBaseWindow>()) {
+                baseWin.UpdateMRU();
             }
         }
 
         public void SaveLastBases()
         {
-            #if !CI_MODE
+#if !CI_MODE
             AppHost.Options.LastBases.Clear();
 
-            foreach (IWindow win in fRunningForms) {
-                var baseWin = win as IBaseWindow;
-                if (baseWin != null) {
-                    AppHost.Options.LastBases.Add(baseWin.Context.FileName);
-                }
+            foreach (var baseWin in GetRunningForms<IBaseWindow>()) {
+                AppHost.Options.LastBases.Add(baseWin.Context.FileName);
             }
-            #endif
+#endif
         }
 
         public virtual int GetKeyLayout()
@@ -470,12 +472,15 @@ namespace GKCore
 
         #region IHost implementation
 
-        public abstract void CloseDependentWindows(IWindow owner);
+        public virtual void CloseDependentWindows(IWindow owner)
+        {
+            // May have a desktop-only implementation
+        }
 
         public IWorkWindow GetWorkWindow()
         {
             IWindow activeWnd = GetActiveWindow();
-            return (activeWnd is IWorkWindow) ? (IWorkWindow) activeWnd : null;
+            return (activeWnd is IWorkWindow) ? (IWorkWindow)activeWnd : null;
         }
 
         public virtual IBaseWindow GetCurrentFile(bool extMode = false)
@@ -779,11 +784,8 @@ namespace GKCore
         {
             IBaseWindow result = null;
 
-            int num = fRunningForms.Count;
-            for (int i = 0; i < num; i++) {
-                IBaseWindow baseWin = fRunningForms[i] as IBaseWindow;
-
-                if (baseWin != null && string.Equals(baseWin.Context.FileName, fileName)) {
+            foreach (var baseWin in GetRunningForms<IBaseWindow>()) {
+                if (string.Equals(baseWin.Context.FileName, fileName)) {
                     result = baseWin;
                     break;
                 }
@@ -794,14 +796,9 @@ namespace GKCore
 
         public void CriticalSave()
         {
-            try
-            {
-                int num = fRunningForms.Count;
-                for (int i = 0; i < num; i++) {
-                    IBaseWindow baseWin = fRunningForms[i] as IBaseWindow;
-                    if (baseWin != null) {
-                        baseWin.Context.CriticalSave();
-                    }
+            try {
+                foreach (var baseWin in GetRunningForms<IBaseWindow>()) {
+                    baseWin.Context.CriticalSave();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("AppHost.CriticalSave()", ex);
@@ -899,12 +896,8 @@ namespace GKCore
 
         public void UpdateControls(bool forceDeactivate, bool blockDependent = false)
         {
-            int num = fRunningForms.Count;
-            for (int i = 0; i < num; i++) {
-                IBaseWindow baseWin = fRunningForms[i] as IBaseWindow;
-                if (baseWin != null) {
-                    baseWin.UpdateControls(forceDeactivate, blockDependent);
-                }
+            foreach (var baseWin in GetRunningForms<IBaseWindow>()) {
+                baseWin.UpdateControls(forceDeactivate, blockDependent);
             }
         }
 
@@ -1055,10 +1048,8 @@ namespace GKCore
             }
             fAutosaveTimer.Enabled = AppHost.Options.Autosave;
 
-            foreach (IWindow win in fRunningForms) {
-                if (win is IWorkWindow) {
-                    (win as IWorkWindow).UpdateSettings();
-                }
+            foreach (var win in GetRunningForms<IWorkWindow>()) {
+                win.UpdateSettings();
             }
         }
 
@@ -1070,11 +1061,8 @@ namespace GKCore
             ThemeManager.SetTheme(name);
             GlobalOptions.Instance.Theme = name;
 
-            foreach (IWindow win in fRunningForms) {
-                IThemedView themedView = win as IThemedView;
-                if (themedView != null) {
-                    themedView.ApplyTheme();
-                }
+            foreach (var themedView in GetRunningForms<IThemedView>()) {
+                themedView.ApplyTheme();
             }
         }
 
@@ -1112,7 +1100,7 @@ namespace GKCore
 
         void ISingleInstanceEnforcer.OnMessageReceived(MessageEventArgs e)
         {
-            OnMessageReceivedInvoker invoker = delegate(MessageEventArgs eventArgs) {
+            OnMessageReceivedInvoker invoker = delegate (MessageEventArgs eventArgs) {
                 try {
                     string msg = eventArgs.Message as string;
 

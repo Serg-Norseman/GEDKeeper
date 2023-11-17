@@ -18,8 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using GKCore;
+using GKCore.Interfaces;
 using GKUI.Platform;
 using Xamarin.Forms;
 
@@ -33,7 +34,7 @@ namespace GKUI.Forms
     }
 
 
-    public partial class MenuPage : ContentPage
+    public partial class MenuPage : ContentPage, ILocalizable
     {
         private sealed class HomeMenuItem
         {
@@ -49,18 +50,15 @@ namespace GKUI.Forms
         }
 
 
-        private readonly List<HomeMenuItem> fMenuItems;
+        private readonly ObservableCollection<HomeMenuItem> fMenuItems;
 
 
         public MenuPage()
         {
             InitializeComponent();
 
-            fMenuItems = new List<HomeMenuItem>() {
-                new HomeMenuItem (MenuItemType.Browse, "Browse"),
-                new HomeMenuItem (MenuItemType.About, "About"),
-                new HomeMenuItem (MenuItemType.Exit, "Exit"),
-            };
+            fMenuItems = new ObservableCollection<HomeMenuItem>();
+            ReloadMenu();
 
             ListViewMenu.ItemsSource = fMenuItems;
             ListViewMenu.SelectedItem = fMenuItems[0];
@@ -69,6 +67,14 @@ namespace GKUI.Forms
                 if (item == null) return;
                 await XFAppHost.GetMainPage().NavigateMenuAsync((int)item.Id);
             };
+        }
+
+        private void ReloadMenu()
+        {
+            fMenuItems.Clear();
+            fMenuItems.Add(new HomeMenuItem(MenuItemType.Browse, LangMan.LS(LSID.RM_Records)));
+            fMenuItems.Add(new HomeMenuItem(MenuItemType.About, LangMan.LS(LSID.MIAbout)));
+            fMenuItems.Add(new HomeMenuItem(MenuItemType.Exit, LangMan.LS(LSID.MIExit)));
         }
 
         public static Page CreatePageInstance(int id)
@@ -86,6 +92,11 @@ namespace GKUI.Forms
                     break;
             }
             return result;
+        }
+
+        public void SetLocale()
+        {
+            ReloadMenu();
         }
     }
 }

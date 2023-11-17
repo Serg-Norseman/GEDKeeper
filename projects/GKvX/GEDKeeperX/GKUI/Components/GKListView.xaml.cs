@@ -255,6 +255,7 @@ namespace GKUI.Components
             fSortColumn = 0;
             fSortOrder = BSDSortOrder.None;
 
+            IsSortable = true;
             ItemsSource = fItems;
             RowsBackgroundColorPalette = new RowBgProvider(this);
             RowHeight = 26;
@@ -270,6 +271,7 @@ namespace GKUI.Components
         public void BeginUpdate()
         {
             if (fUpdateCount == 0) {
+                IsRefreshing = true;
                 ContentList.BeginUpdate();
             }
             fUpdateCount++;
@@ -280,6 +282,7 @@ namespace GKUI.Components
             fUpdateCount--;
             if (fUpdateCount == 0) {
                 ContentList.EndUpdate();
+                IsRefreshing = false;
             }
         }
 
@@ -426,31 +429,17 @@ namespace GKUI.Components
 
                 if (tempRec != null) SelectItem(tempRec);
 
-                ReloadEx();
+                fListMan.ContentList.Reset();
+                //InvokeMethod((DataGrid)this, "Reload", null);
+                //InvokeMethod((DataGrid)this, "HandleItemsSourceCollectionChanged", new object[] { fListMan.ContentList, null });
             } catch (Exception ex) {
                 Logger.WriteError("GKListView.UpdateContents()", ex);
             }
         }
 
-        private void ReloadEx()
-        {
-            try {
-                //MethodInfo dynMethod = base.GetType().GetMethod("Reload", BindingFlags.NonPublic | BindingFlags.Instance);
-                //dynMethod.Invoke(this, new object[] { });
-
-                //fListMan.ContentList.Reset();
-
-                //InvokeMethod((DataGrid)this, "Reload", null);
-                InvokeMethod((DataGrid)this, "HandleItemsSourceCollectionChanged", new object[] { fListMan.ContentList, null });
-            } catch (Exception ex) {
-                Logger.WriteError("ReloadEx()", ex);
-            }
-        }
-
         public static object InvokeMethod<T>(T obj, string methodName, params object[] args)
         {
-            var type = typeof(T);
-            var method = type.GetTypeInfo().GetDeclaredMethod(methodName);
+            var method = typeof(T).GetTypeInfo().GetDeclaredMethod(methodName);
             return method.Invoke(obj, args);
         }
 
@@ -480,6 +469,8 @@ namespace GKUI.Components
 
         public void AddCheckedColumn(string caption, int width, bool autoSize = false)
         {
+            fCheckedList = true;
+            AddColumn(caption, width, autoSize, BSDTypes.HorizontalAlignment.Center);
         }
 
         public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign)

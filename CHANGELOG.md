@@ -1,4 +1,5 @@
 ## 28.10.2023 [v2.28.0 &amp; v3.4.0]
+
 - Updated Hungarian, German and Icelandic localizations.
 - Added display of person bookmarks in tree diagrams.
 - Added localization into Dutch [Leo Krap].
@@ -16,6 +17,7 @@
 - Added conversion from _FSFTID (FamilSearch Family Tree ID) to RFN (from RootsMagic files).
 
 ## 28.08.2023 [v2.27.0 &amp; v3.3.0]
+
 - Fixed error sending mail in Linux.
 - Fixed error opening media files with a space in the name in Linux.
 - Fixed ancestor circle segment calculation error.
@@ -44,6 +46,7 @@
 - Minor fixes to localization files.
 
 ## 30.05.2023 [v2.26.1 &amp; v3.2.1]
+
 - Fixed font selection in tree diagram options (GKv3).
 - Missing text issue on very large tree diagrams with very small font (GKv3) is partially resolved.
 - Added option (tree diagram window, mode menu) to display person IDs in trees (GKv2/3).
@@ -55,6 +58,7 @@
 - The display of portraits in the person edit dialog (GKv2) has been fixed.
 
 ## 14.05.2023 [v2.26.0/Windows &amp; v3.2.0/Linux,MacOS,Windows]
+
 - Added an option to remember the overall size of the records info panels.
 - Added control and closing of dependent windows when the main one is closed.
 - Fixed errors in displaying tree diagrams.
@@ -64,6 +68,7 @@
 - Updated, cleaned up and ported to GKv3 all plugins except GEDmill.
 
 ## 14.04.2023 [v2.25.2/Windows &amp; v3.1.0/Linux]
+
 - The first release of the 3rd cross-platform (Windows, Linux, MacOS) generation of GEDKeeper - GKv3 has been released. 
   This version is for Linux only.
 - Updated Czech translation of plugins [Jerry Verner].
@@ -71,11 +76,13 @@
 - Help updated.
 
 ## 02.04.2023 [v2.25.1]
+
 - The .NET Framework has been downgraded to version 4.7.1 to be compatible with some versions of Mono (Fedora, FreeBSD).
 - Fixed error loading images that require scaling.
 - Fixed many minor bugs and shortcomings in the Linux implementation [tested by Andrey Maltsev].
 
 ## 28.03.2023 [v2.25.0]
+
 - Fixed bug with missing spaces in notes.
 - Updated Czech translation [Jerry Verner].
 - Added display of days remaining until birth anniversaries, multiples of 10 and 25 years.
@@ -100,6 +107,7 @@
 - The .NET Framework has been updated to version 4.7.2.
 
 ## 28.02.2023 [v2.24.0]
+
 - "Data Quality" plugin has been merged with the "Check сonnection of families" tool.
 - Added option to search and filter by all names.
 - Program language cultures linked to system cultures for improved string sorting.
@@ -114,6 +122,7 @@
 - The control of the maximum number of persons in the tree has been changed, taking into account the number of generations specified in the options.
 
 ## 14.01.2023 [v2.23.0]
+
 - Fixed bugs loading places in maps.
 - Added option to display special notes to persons in the tree (user references).
 - Added option to switch the order of surnames in the tree.
@@ -125,6 +134,7 @@
 - The "Calendar" plugin completely redesigned into a date converter.
 
 ## 28.11.2022 [v2.22.0]
+
 - Added feature "Find and Replace".
 - Fixed inconsistent display of names between list of persons and the information panel.
 - Added output of event sources to the pedigree report.
@@ -147,6 +157,7 @@
 - Fixed display error of some relationships [se-sss].
 
 ## 28.08.2022 [v2.21.0]
+
 - Changed the display of several families of parents in the information panel.
 - Added diagnostics for several families of parents in personal records.
 - Added option to turn off extra tree chart controls.
@@ -169,6 +180,7 @@
 - Fixed a bug in the database splitting tool.
 
 ## 14.04.2022 [v2.20.1]
+
 - Fixed support for negative coordinates in FTB files.
 - Added option to display surnames in capital letters.
 - Fixed error resetting name in person edit dialog when adding father/mother.
@@ -179,6 +191,7 @@
 - Fixed issue with typing Return in note editor.
 
 ## 28.03.2022 [v2.20.0]
+
 - Fixed declension of partial names in birthday message.
 - Fixed a bug with calling the log and help in Linux.
 - Fixed display of parents' names in person and family dialogs.
@@ -201,6 +214,7 @@
 - Introduced the display of the borders of the tree diagram.
 
 ## 28.09.2021 [v2.19.0]
+
 - Fixed a bug with filtering by locations, groups and sources.
 - Added option to display names in reverse order - first name at the beginning, surname at the end.
 - Fixed a bug in the work of events when creating an empty file, before loading any GEDCOM files.
@@ -214,6 +228,7 @@
 - Added ability to assign multiple places at once in the places manager [Alex Zaytsev].
 
 ## 28.07.2021 [v2.18.0]
+
 - Optimized data model to save memory [Alex Zaytsev]
   (new achievement: 635 mb file (2.674.481 records) loaded in 3:46 minutes).
 - Added option for separate depth of ancestors and descendants in tree diagrams [Milan Kosina].
@@ -243,6 +258,7 @@
 - Improved support of Geni file loading.
 
 ## 14.03.2021 [v2.17.0]
+
 - Fixed a logical error in the default records filtering method.
 - Optimized data model to save memory when loading large files (over 100 MB).
 - Updated German translation [Patrik Studer].
@@ -268,6 +284,7 @@
 - Implements maximum number of backups for each revision backup [Milan Kosina].
 
 ## 18.09.2019 [v2.16.2]
+
 - Implemented moving notes up and down [Milan Kosina].
 - Implemented line wrapping in the HyperView of information panel.
 - Added check for file existence when creating multimedia records.
@@ -314,6 +331,7 @@ one marriage and a large tree of descendants from the first wife.
 (from 30 thousand records to very large files - 91mb, 538 thousand records, load time 25 seconds!).
 
 ## 14.02.2019 [v2.15.0]
+
 - Added control unit for several families of parents and for the type of 
 child/parent linkage (adoption, foster, etc.).
 - Improved handling of parts of names.
@@ -331,6 +349,7 @@ spouses for family's records.
 
 
 ## 10.08.2018 [v2.14.0]
+
 - Fixed the bug with adding/removing portraits of persons.
 - Returned the status bar to the chart's windows and added 
 information about the size of the image.
@@ -347,9 +366,11 @@ death places.
 - Implemented portable mode of the program.
 
 ## 14.07.2018 [v2.13.2]
+
 - Fixed the bug of reading standard GEDCOM notes.
 
-## 28.06.2018 [[v2.13.1](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.13.1)]
+## 28.06.2018 [v2.13.1]
+
 - Implemented the saving of circle charts in SVG.
 - Fixed bug in the tree's chart with folding of branches.
 - Fixed bug in the plugin "History Data".
@@ -358,7 +379,8 @@ death places.
 - Fixed bug of loading of files "Agelong Tree" with incorrect encoding ANSEL.
 - Fixed a crash in checking for new versions in WinXP.
 
-## 08.06.2018 [[v2.13.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.13.0)]
+## 08.06.2018 [v2.13.0]
+
 - Added the folding of tree branches.
 - The generator "Family Book" has been revised.
 - Added option of displaying dates of marriages in tree diagrams.
@@ -386,7 +408,8 @@ death places.
 - Fixed the problem of extra lines in family records while saving
 GEDCOM files, which led to import problems in other programs.
 
-## 17.06.2017 [[v2.12.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.12.0)]
+## 17.06.2017 [v2.12.0]
+
 - Created the Chinese translation [Cui Jianquan (崔建全)].
 - Created the German translation [Gleb Buzhinsky].
 - The way in the interface for working with multiple files is changed 
@@ -409,7 +432,7 @@ you need to manually edit the file of paths.
  the program and databases between Windows and Linux (for advanced users).
 - Fixed the cache of portraits in case of two links to one photo.
 
-## 28.02.2017 [[v2.11.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.11.0)]
+## 28.02.2017 [v2.11.0]
 
 - Added French localization (thanks to Diana Shilnikova).
 - Added images cache for portraits. This improves tree chart performance
@@ -435,7 +458,7 @@ circle and tree charts [@ruslangaripov].
 - Improved the popup control for tree chart zooming [@ruslangaripov].
 - Fixed HOME directory processing error occurred after new operating
 system has been installed (both Linux and Microsoft Windows).
-- Added generating and exporting of a new document type -- &quot;Album of
+- Added generating and exporting of a new document type - &quot;Album of
 Trees&quot;.
 - &quot;GEDKeeper GUI localization manual&quot; was updated and translated
 to English [@ruslangaripov].
@@ -444,7 +467,7 @@ setting up default portraits showing in the tree [@g10101k].
 - Made small improvements and optimizations.
 - Considered more national language features aware of name processing.
 
-## 26.12.2016 [[v2.10.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.10.0)]
+## 26.12.2016 [v2.10.0]
 
 - Added a geocoding engine (Yandex) and their choice in the options (Google/Yandex).
 - Restored search for locations in the editor of locations and window of maps (GoogleAPI).
@@ -452,7 +475,7 @@ setting up default portraits showing in the tree [@g10101k].
 - Save files in any encoding except UTF-8 are deprecated and disabled.
 - Added check for updates on the website sourceforge.net.
 
-## 18.12.2016 [[v2.9.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.9.0)]
+## 18.12.2016 [v2.9.0]
 
 - Added localization for Polish (Jacek).
 - Fixed problems with European encodings of GEDCOM files.
@@ -479,7 +502,7 @@ setting up default portraits showing in the tree [@g10101k].
 - Improve English localization [@ruslangaripov].
 - Add calculator of relation degree.
 
-## 03.09.2016 [[v2.8.1](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.8.1)]
+## 03.09.2016 [v2.8.1]
 
 - Correct English localization of the user interface [@ruslangaripov].
 - Add preliminary version of demonstration database for USA users (President).
@@ -492,13 +515,13 @@ internationalization of GEDKeeper.
 - Add demonstration database for Russian users (Pushkin's family).
 - Add prototype of the new plug-in: &quot;Navigator&quot;.
 
-## 14.08.2016 [[v2.8.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.8.0)]
+## 14.08.2016 [v2.8.0]
 
 - Clean and optimize code.
 - Included are a selection of the interface language at first run after installation.
 - Implemented selection of portraits from photos.
 
-## 31.07.2016 [[v2.7.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.7.0)]
+## 31.07.2016 [v2.7.0]
 
 - Added a diagram of the circle of descendants.
 - Improved options of the circle of ancestors.
@@ -509,7 +532,7 @@ internationalization of GEDKeeper.
 - Added backup of files before saving.
 - Fixed display of links in location information.
 
-## 20.06.2016 [[v2.6.0](https://github.com/Serg-Norseman/GEDKeeper/releases/tag/v2.6.0)]
+## 20.06.2016 [v2.6.0]
 
 - Added English localization of help [@ruslangaripov].
 - Export pedigrees to RTF.
@@ -569,7 +592,7 @@ rendering is completely separated from dates processing and sorting).
 - Optimize file loading.
 - Remove text flickering when output text in record summaries.
 - Add an experiment: storing and loading encrypted files (it is
-unable to use it on regular basis -- there is no complete specification
+unable to use it on regular basis - there is no complete specification
 for encrypted file format).
 - Update English and Ukrainian localizations.
 - Improve locking against modifying of person records and
@@ -623,7 +646,7 @@ database window. (this, for example, allows to view scanned image of a
 census and add data simultaneously, without having resort to third
 party image viewers).
 - Move &quot;Ancestors circle&quot; diagram into an optional plug-in.
-- Restore optional &quot;Life&quot; plug-in -- a game to relax a
+- Restore optional &quot;Life&quot; plug-in - a game to relax a
 little bit.
 
 ## 18.01.2015 [v2.2.0]
@@ -640,7 +663,7 @@ out from program to plug-ins.
 
 ## 06.03.2014 [v2.1.0]
 
-- Implement emergency save -- save user data when application get crashed.
+- Implement emergency save - save user data when application get crashed.
 - Improve multimedia content viewing.
 - Improve diagram functions and controlling.
 - Change output of pedigree generation from HTML to PDF.
@@ -767,7 +790,7 @@ memory resources.
 - Add support for stream data input from register of births and
 audit tales (beta pre-release).
 - Add support for exporting large images of trees into EMF files.
-- Improve events dialog -- user can specify calendar for dates.
+- Improve events dialog - user can specify calendar for dates.
 - Improve statistics calculation speed.
 - Add new tests for database checking.
 - Improve supporting MyHeritage GEDCOM loading.
@@ -1121,7 +1144,7 @@ descendants and their wives works.
 ## 14.01.2009
 
 - Add and remove children from families.
-- Add the first tree -- ancestors tree; add setup.
+- Add the first tree - ancestors tree; add setup.
 - Add preliminary print preview.
 - Save a tree setting between application sessions.
 - Add dates processing.
