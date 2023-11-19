@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\GKConfigurations.targets" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -141,47 +142,6 @@
     <EmbeddedResource Include="Resources\System.Data.SQLite.x64.NET4.dll.gz" />
     <EmbeddedResource Include="Resources\System.Data.SQLite.x86.NET4.dll.gz" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\CreateTileDb.sql" />
-    <EmbeddedResource Include="Resources\Images\arrow.png" />
-    <EmbeddedResource Include="Resources\Images\arrow_shadow.png" />
-    <EmbeddedResource Include="Resources\Images\black_small.png" />
-    <EmbeddedResource Include="Resources\Images\blue-dot.png" />
-    <EmbeddedResource Include="Resources\Images\blue.png" />
-    <EmbeddedResource Include="Resources\Images\blue_small.png" />
-    <EmbeddedResource Include="Resources\Images\brown_small.png" />
-    <EmbeddedResource Include="Resources\Images\drag_cross_67_16.png" />
-    <EmbeddedResource Include="Resources\Images\gray_small.png" />
-    <EmbeddedResource Include="Resources\Images\green-dot.png" />
-    <EmbeddedResource Include="Resources\Images\green.png" />
-    <EmbeddedResource Include="Resources\Images\green_small.png" />
-    <EmbeddedResource Include="Resources\Images\lightblue.png" />
-    <EmbeddedResource Include="Resources\Images\ltblue-dot.png" />
-    <EmbeddedResource Include="Resources\Images\msmarker_shadow.png" />
-    <EmbeddedResource Include="Resources\Images\orange-dot.png" />
-    <EmbeddedResource Include="Resources\Images\orange.png" />
-    <EmbeddedResource Include="Resources\Images\orange_small.png" />
-    <EmbeddedResource Include="Resources\Images\pink-dot.png" />
-    <EmbeddedResource Include="Resources\Images\pink.png" />
-    <EmbeddedResource Include="Resources\Images\purple-dot.png" />
-    <EmbeddedResource Include="Resources\Images\purple.png" />
-    <EmbeddedResource Include="Resources\Images\purple_small.png" />
-    <EmbeddedResource Include="Resources\Images\red-dot.png" />
-    <EmbeddedResource Include="Resources\Images\red.png" />
-    <EmbeddedResource Include="Resources\Images\red_small.png" />
-    <EmbeddedResource Include="Resources\Images\shadow_small.png" />
-    <EmbeddedResource Include="Resources\Images\white_small.png" />
-    <EmbeddedResource Include="Resources\Images\yellow-dot.png" />
-    <EmbeddedResource Include="Resources\Images\yellow.png" />
-    <EmbeddedResource Include="Resources\Images\yellow_small.png" />
-  </ItemGroup>
-  <ItemGroup />
+  <Import Project="GKMap.Core.props" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

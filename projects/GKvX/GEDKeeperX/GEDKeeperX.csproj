@@ -4,16 +4,20 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <RootNamespace />
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>Android;iPhone</Platforms>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <DebugSymbols>True</DebugSymbols>
         <DebugType>Portable</DebugType>
         <Optimize>False</Optimize>
         <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
         <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
         <DebugSymbols>False</DebugSymbols>
         <DebugType>None</DebugType>
         <Optimize>True</Optimize>

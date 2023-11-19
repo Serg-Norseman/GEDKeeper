@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -79,7 +80,8 @@ namespace GKUI.Forms
             GlobalOptions.Instance.AllowMediaStoreReferences = true;
 
             // at complex tests, first form hasn't focus
-            ((Form)AppHost.Instance.RunningForms[0]).Show();
+            var form0 = AppHost.Instance.GetRunningForms<Form>().FirstOrDefault();
+            if (form0 != null) form0.Show();
             fMainWin = (Form)AppHost.Instance.GetActiveWindow();
 
             fCurBase = AppHost.Instance.GetCurrentFile();

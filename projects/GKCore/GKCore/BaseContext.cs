@@ -661,18 +661,18 @@ namespace GKCore
             GDMSex result = namesTable.GetSexByName(iName);
 
             if (result == GDMSex.svUnknown) {
+                result = this.Culture.GetSex(iName, iPatr, false);
+
                 using (var dlg = AppHost.ResolveDialog<ISexCheckDlg>()) {
                     dlg.IndividualName = iName + " " + iPatr;
-                    result = this.Culture.GetSex(iName, iPatr, false);
-
                     dlg.Sex = result;
                     if (await AppHost.Instance.ShowModalAsync(dlg, owner, false)) {
                         result = dlg.Sex;
-
-                        if (result != GDMSex.svUnknown) {
-                            namesTable.SetNameSex(iName, result);
-                        }
                     }
+                }
+
+                if (result != GDMSex.svUnknown) {
+                    namesTable.SetNameSex(iName, result);
                 }
             }
 

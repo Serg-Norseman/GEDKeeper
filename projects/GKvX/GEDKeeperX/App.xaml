@@ -8,14 +8,14 @@
         <ResourceDictionary>
 
             <Style x:Key="dlgBtn" TargetType="Button">
-                <Setter Property="WidthRequest" Value="120" />
+                <Setter Property="WidthRequest" Value="140" />
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
                 <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="ContentLayout" Value="Left, 8" />
             </Style>
 
             <Style x:Key="funcBtn" TargetType="Button">
-                <Setter Property="WidthRequest" Value="120" />
+                <Setter Property="WidthRequest" Value="140" />
                 <Setter Property="VerticalOptions" Value="CenterAndExpand" />
                 <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="ContentLayout" Value="Left, 8" />

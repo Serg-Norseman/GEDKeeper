@@ -55,7 +55,7 @@ namespace GKHistoryDataPlugin
 
     internal class HistoryData
     {
-        private List<LinkItem> fItems;
+        private readonly List<LinkItem> fItems;
         private int fLinkColumn;
 
         public string[] CSVFiles { get; private set; }

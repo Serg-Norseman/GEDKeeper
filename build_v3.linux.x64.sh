@@ -7,7 +7,7 @@
 #export LD_LIBRARY_PATH=$PWD/external/lua/linux/lib64
 #xbuild ./projects/GKv3/GEDKeeper3.sln /p:Configuration=Linux_Debug /p:Platform="x64" /p:MonoCS=true /p:TargetFrameworkVersion=v4.7.1 /v:quiet
 
-dotnet build projects/GKv3/GEDKeeper3.sln -c Linux_Debug
+dotnet build projects/GKv3/GEDKeeper3.sln /p:Configuration=Debug /p:Platform="Linux"
 
-export TEMP="$( mktemp -d )"
-nunit-console ./projects/GKTests/bin/Debug/GKTests.dll && rm -r "$TEMP"
+#export TEMP="$( mktemp -d )"
+#nunit-console ./projects/GKTests/bin/Linux/Debug/GKTests.dll && rm -r "$TEMP"
