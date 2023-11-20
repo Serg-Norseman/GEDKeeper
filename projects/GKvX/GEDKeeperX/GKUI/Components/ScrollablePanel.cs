@@ -20,11 +20,37 @@
 
 using System;
 using BSLib;
+using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 
 namespace GKUI.Components
 {
+    public class MouseEventArgs : EventArgs
+    {
+        //public Keys Modifiers { get; private set; }
+
+        public SKMouseButton Buttons { get; private set; }
+
+        public Point Location { get; private set; }
+
+        public bool Handled { get; set; }
+
+        public float Pressure { get; private set; }
+
+        public int Delta { get; private set; }
+
+        public MouseEventArgs(SKMouseButton buttons/*, Keys modifiers*/, Point location, int delta = 0, float pressure = 1f)
+        {
+            Buttons = buttons;
+            //Modifiers = modifiers;
+            Location = location;
+            Delta = delta;
+            Pressure = pressure;
+        }
+    }
+
+
     /// <summary>
     ///
     /// </summary>
@@ -131,8 +157,10 @@ namespace GKUI.Components
             fCanvas.IgnorePixelScaling = true;
             fCanvas.PaintSurface += PaintHandler;
             fCanvas.EnableTouchEvents = true;
+            fCanvas.Touch += OnTouch;
             fCanvas.VerticalOptions = LayoutOptions.CenterAndExpand;
             fCanvas.HorizontalOptions = LayoutOptions.CenterAndExpand;
+            //fCanvas.SizeChanged += OnSizeChanged;
             Content = fCanvas;
 
             base.Orientation = ScrollOrientation.Both;
@@ -300,13 +328,7 @@ namespace GKUI.Components
 
         protected Point GetImageRelativeLocation(Point mpt, bool buttons)
         {
-            /*
-             * In Eto/Gtk, mouse events coming to Scrollable handlers have coordinates 
-             * with the origin of the Scrollable control if no key is pressed and 
-             * with the origin of the nested Canvas if any key is pressed.
-             */
-
-            Point pt = Point.Zero;
+            Point pt = mpt;
             /*if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && buttons) {
                 int aX = (int)mpt.X - fImageViewport.X;
                 int aY = (int)mpt.Y - fImageViewport.Y;
@@ -315,22 +337,12 @@ namespace GKUI.Components
             } else {
                 pt = new Point((int)mpt.X + fMouseOffsetX, (int)mpt.Y + fMouseOffsetY);
             }*/
-
-            // for debug purposes
-            //Console.WriteLine("IR: " + new Point(mpt).ToString() + " -- " + pt.ToString() + " -- " + MouseOffset.ToString() + " -- " + buttons + " -- " + fImageViewport.ToString());
-
             return pt;
         }
 
         protected Point GetControlRelativeLocation(Point mpt, bool buttons)
         {
-            /*
-             * In Eto/Gtk, mouse events coming to Scrollable handlers have coordinates 
-             * with the origin of the Scrollable control if no key is pressed and 
-             * with the origin of the nested Canvas if any key is pressed.
-             */
-
-            Point pt = Point.Zero;
+            Point pt = mpt;
             /*if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && buttons) {
                 int aX = (int)mpt.X - ((!fHasHScroll) ? 0 : fMouseOffsetX);
                 int aY = (int)mpt.Y - ((!fHasVScroll) ? 0 : fMouseOffsetY);
@@ -339,16 +351,80 @@ namespace GKUI.Components
             } else {
                 pt = new PointF(mpt.X, mpt.Y);
             }*/
-
-            // for debug purposes
-            //Console.WriteLine("CTL: " + new Point(mpt).ToString() + " -- " + pt.ToString() + " -- " + MouseOffset.ToString() + " -- " + buttons + " -- " + fImageViewport.ToString());
-
             return pt;
         }
 
         protected void InvalidateContent()
         {
             fCanvas.InvalidateSurface();
+        }
+
+        protected virtual void OnMouseDoubleClick(EventArgs e)
+        {
+        }
+
+        protected virtual void OnMouseDown(MouseEventArgs e)
+        {
+        }
+
+        protected virtual void OnMouseUp(MouseEventArgs e)
+        {
+        }
+
+        protected virtual void OnMouseMove(MouseEventArgs e)
+        {
+        }
+
+        protected virtual void OnMouseWheel(MouseEventArgs e)
+        {
+        }
+
+        private static int fClickCount;
+
+        private bool ClickHandle()
+        {
+            if (fClickCount > 1) {
+                // double tap
+                OnMouseDoubleClick(EventArgs.Empty);
+            } else {
+                // single tap
+            }
+            fClickCount = 0;
+            return false;
+        }
+
+        private void OnTouch(object sender, SKTouchEventArgs e)
+        {
+            var xPt = new Point(e.Location.X, e.Location.Y);
+            var mouseArgs = new MouseEventArgs(e.MouseButton, xPt, e.WheelDelta, e.Pressure);
+
+            switch (e.ActionType) {
+                case SKTouchAction.Pressed: {
+                        if (!IsFocused) base.Focus();
+                        OnMouseDown(mouseArgs);
+
+                        if (fClickCount < 1) {
+                            TimeSpan tt = new TimeSpan(0, 0, 0, 0, 250);
+                            Device.StartTimer(tt, ClickHandle);
+                        }
+                        fClickCount++;
+                    }
+                    break;
+
+                case SKTouchAction.Released:
+                    OnMouseUp(mouseArgs);
+                    break;
+
+                case SKTouchAction.Moved:
+                    OnMouseMove(mouseArgs);
+                    break;
+
+                case SKTouchAction.WheelChanged:
+                    OnMouseWheel(mouseArgs);
+                    break;
+            }
+
+            e.Handled = mouseArgs.Handled;
         }
     }
 }

@@ -267,5 +267,10 @@ namespace GKUI.Platform
 #endif
             return fontName;
         }
+
+        public float GetDefaultFontSize()
+        {
+            return 8.0f;
+        }
     }
 }

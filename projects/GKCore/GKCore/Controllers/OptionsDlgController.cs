@@ -609,7 +609,9 @@ namespace GKCore.Controllers
             GetControl<INumericBox>("numDefaultDepthAncestors").Value = fOptions.TreeChartOptions.DepthLimitAncestors;
             GetControl<INumericBox>("numDefaultDepthDescendants").Value = fOptions.TreeChartOptions.DepthLimitDescendants;
 
-            GetControl<ICheckBox>("chkUseExtraControls").Checked = fOptions.TreeChartOptions.UseExtraControls;
+            var hasExtraControls = !AppHost.Instance.HasFeatureSupport(Feature.Mobile);
+            GetControl<ICheckBox>("chkUseExtraControls").Checked = fOptions.TreeChartOptions.UseExtraControls && hasExtraControls;
+            GetControl<ICheckBox>("chkUseExtraControls").Enabled = hasExtraControls;
 
             UpdateTreeChartFont();
         }

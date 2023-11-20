@@ -143,7 +143,7 @@ namespace GKUI.Components
             try {
                 SKPaint textPaint = new SKPaint {
                     Color = SKColors.White,
-                    TextSize = (float)Device.GetNamedSize(NamedSize.Default, typeof(Label))
+                    TextSize = AppHost.GfxProvider.GetDefaultFontSize()
                 };
 
                 foreach (ArborNode node in fSys.Nodes) {

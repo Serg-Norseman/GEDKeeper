@@ -134,9 +134,10 @@ namespace GKUI.Platform
             var color = (brush != null) ? ((BrushHandler)brush).Handle.Color.ToFormsColor() : Color.Black;
 
             var skPaint = ((FontHandler)font).Handle;
+            var yOffset = skPaint.FontMetrics.Ascent;
             skPaint.IsAntialias = fAntiAlias;
             skPaint.Color = color.ToSKColor();
-            fCanvas.DrawText(text, x, y, skPaint);
+            fCanvas.DrawText(text, x, y - yOffset, skPaint);
         }
 
         public override void DrawLine(IPen pen, float x1, float y1, float x2, float y2)

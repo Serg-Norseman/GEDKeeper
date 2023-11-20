@@ -130,5 +130,10 @@ namespace GKUI.Platform
 #endif
             return fontName;
         }
+
+        public float GetDefaultFontSize()
+        {
+            return (float)Device.GetNamedSize(NamedSize.Default, typeof(Label));
+        }
     }
 }

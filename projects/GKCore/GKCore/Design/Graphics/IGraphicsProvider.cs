@@ -60,5 +60,7 @@ namespace GKCore.Design.Graphics
         ExtSizeF GetTextSize(string text, IFont font, object target);
 
         string GetDefaultFontName();
+
+        float GetDefaultFontSize();
     }
 }

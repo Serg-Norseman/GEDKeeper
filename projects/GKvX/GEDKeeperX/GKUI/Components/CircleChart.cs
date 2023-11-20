@@ -48,7 +48,6 @@ namespace GKUI.Components
         private readonly CircleChartModel fModel;
 
         private CircleChartType fChartType;
-        private string fHint;
         //private float fOffsetX;
         //private float fOffsetY;
         /* Zoom factors */
@@ -246,15 +245,15 @@ namespace GKUI.Components
             RootPerson = obj as GDMIndividualRecord;
         }
 
-        /*protected override void OnMouseDoubleClick(MouseEventArgs e)
+        protected override void OnMouseDoubleClick(EventArgs e)
         {
             if (fChartType == CircleChartType.Ancestors) {
                 fModel.GroupsMode = !fModel.GroupsMode;
             }
 
-            e.Handled = true;
+            //e.Handled = true;
             base.OnMouseDoubleClick(e);
-        }*/
+        }
 
         protected override void OnPaint(SKPaintSurfaceEventArgs e)
         {
@@ -270,89 +269,11 @@ namespace GKUI.Components
             Changed();
         }
 
-        /*protected override void OnKeyDown(KeyEventArgs e)
+        protected override void OnMouseDown(MouseEventArgs e)
         {
-            switch (e.Key) {
-                case Keys.Add:
-                    if (Keys.None == e.Modifiers) {
-                        Zoom = Math.Min(fZoom * 1.05f, ZOOM_HIGH_LIMIT);
-                    }
-                    e.Handled = true;
-                    break;
+            Point irPt = GetImageRelativeLocation(e.Location, e.Buttons != SKMouseButton.Unknown);
 
-                case Keys.Subtract:
-                    if (Keys.None == e.Modifiers) {
-                        Zoom = Math.Max(fZoom * 0.95f, ZOOM_LOW_LIMIT);
-                    }
-                    e.Handled = true;
-                    break;
-
-                case Keys.D0:
-                    if (e.Control) {
-                        Zoom = 1.0f;
-                    }
-                    e.Handled = true;
-                    break;
-
-                case Keys.Keypad8:
-                case Keys.Up:
-                    if (Keys.None == e.Modifiers) {
-                        VisibleGenerations += 1;
-                    }
-                    e.Handled = true;
-                    break;
-
-                case Keys.Keypad2:
-                case Keys.Down:
-                    if (Keys.None == e.Modifiers) {
-                        VisibleGenerations -= 1;
-                    }
-                    e.Handled = true;
-                    break;
-
-                case Keys.Keypad4:
-                case Keys.Left:
-                case Keys.Keypad6:
-                case Keys.Right:
-                    if (fChartType == CircleChartType.Ancestors && fModel.RootPerson != null) {
-                        GDMIndividualRecord father, mother;
-                        fModel.Base.Context.Tree.GetParents(fModel.RootPerson, out father, out mother);
-                        var target = (e.Key == Keys.Left || e.Key == Keys.Keypad4) ? father : mother;
-                        if (target != null) {
-                            RootPerson = target;
-                        }
-                    }
-                    e.Handled = true;
-                    break;
-
-                default:
-                    base.OnKeyDown(e);
-                    break;
-            }
-        }*/
-
-        /*protected override void OnMouseDown(MouseEventArgs e)
-        {
-            if ((e.Buttons == MouseButtons.Alternate) && (HScroll || VScroll)) {
-                Point pt = new Point(e.Location);
-                fMouseCaptured = MouseCaptured.mcDrag;
-                fMouseCaptureX = pt.X;
-                fMouseCaptureY = pt.Y;
-                Cursor = Cursors.Move;
-            }
-
-            e.Handled = true;
-            base.OnMouseDown(e);
-        }*/
-
-        /*protected override void OnMouseUp(MouseEventArgs e)
-        {
-            Point irPt = GetImageRelativeLocation(e.Location, e.Buttons != MouseButtons.None);
-
-            if (fMouseCaptured == MouseCaptured.mcDrag) {
-                fMouseCaptured = MouseCaptured.mcNone;
-                Cursor = Cursors.Default;
-            } else if (e.Buttons == MouseButtons.Primary) {
+            if (e.Buttons == SKMouseButton.Left) {
                 CircleSegment selected = FindSegment(irPt);
                 if (selected != null && selected.IRec != null) {
                     RootPerson = selected.IRec;
@@ -360,54 +281,20 @@ namespace GKUI.Components
             }
 
             e.Handled = true;
-            base.OnMouseUp(e);
-        }*/
+            base.OnMouseDown(e);
+        }
 
-        /*protected override void OnMouseMove(MouseEventArgs e)
+        protected override void OnMouseUp(MouseEventArgs e)
         {
-            Point irPt = GetImageRelativeLocation(e.Location, e.Buttons != MouseButtons.None);
+            // unused
+            base.OnMouseUp(e);
+        }
 
-            switch (fMouseCaptured) {
-                case MouseCaptured.mcNone:
-                    {
-                        CircleSegment selected = FindSegment(irPt);
-
-                        string hint = "";
-                        if (!Equals(fModel.Selected, selected)) {
-                            fModel.Selected = selected;
-
-                            if (selected != null && selected.IRec != null) {
-                                string name = GKUtils.GetNameString(selected.IRec, true, false);
-                                hint = name;
-                            }
-
-                            InvalidateContent();
-                        }
-
-                        if (!Equals(fHint, hint)) {
-                            fHint = hint;
-
-                            if (!string.IsNullOrEmpty(hint)) {
-                                //fToolTip.Show(hint, this, mpt.X, mpt.Y, 3000);
-                                ToolTip = hint;
-                            }
-                        }
-                    }
-                    break;
-
-                case MouseCaptured.mcDrag:
-                    {
-                        Point pt = new Point(e.Location);
-                        AdjustScroll(-(pt.X - fMouseCaptureX), -(pt.Y - fMouseCaptureY));
-                        fMouseCaptureX = pt.X;
-                        fMouseCaptureY = pt.Y;
-                    }
-                    break;
-            }
-
-            e.Handled = true;
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            // unused
             base.OnMouseMove(e);
-        }*/
+        }
 
         /*protected override void OnMouseWheel(MouseEventArgs e)
         {
