@@ -1,6 +1,6 @@
 #!/bin/sh
 
 APP_VER="3.4.1"
-dotnet build ../projects/GKv3/GEDKeeper3.sln -c FreeBSD_Release
+dotnet build ../projects/GKv3/GEDKeeper3.sln /p:Configuration=Release /p:Platform=FreeBSD
 #cd ./deploy/
 sh ./gk_freebsd_image.sh $APP_VER
