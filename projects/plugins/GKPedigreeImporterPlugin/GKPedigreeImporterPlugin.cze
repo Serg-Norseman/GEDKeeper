@@ -32,6 +32,6 @@
 31=Jméno Patronymické Příjmení
 32=Příjmení Jméno Patronymické
 33=žádné speciální
-34=Všechny podporované formáty (*.txt, *.csv, *.doc, *.xls)|*.txt,*.csv,*.doc,*.xls|Rodokmen ve formátu txt (*.txt)|*.txt|Rodokmen ve formátu csv (*.csv)|*.csv|Rodokmen ve formátu MS Word (*.doc)|*.doc|Rodokmen ve formátu MS Excel (*.xls)|*.xls
+34=Všechny podporované formáty (*.txt, *.csv, *.doc, *.xls)|*.txt,*.csv,*.doc*,*.xls*|Rodokmen ve formátu txt (*.txt)|*.txt|Rodokmen ve formátu csv (*.csv)|*.csv|Rodokmen ve formátu MS Word (*.doc)|*.doc*|Rodokmen ve formátu MS Excel (*.xls)|*.xls*
 35=Všechny podporované formáty (*.txt, *.csv)|*.txt,*.csv|Rodokmen ve formátu txt (*.txt)|*.txt|Rodokmen ve formátu csv (*.csv)|*.csv
 36=Konfliktní informace o manželích

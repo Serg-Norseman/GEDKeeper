@@ -208,6 +208,25 @@ namespace GKCore.Controllers
             }
         }
 
+        public async void SaveFileAsync(bool saveAs)
+        {
+            string oldFileName = fContext.FileName;
+            bool isUnknown = fContext.IsUnknown();
+
+            if (!isUnknown && !saveAs) {
+                SaveFile(oldFileName);
+            } else {
+                string homePath = AppHost.Instance.GetUserFilesPath(Path.GetDirectoryName(oldFileName));
+                string newFileName = await AppHost.StdDialogs.GetSaveFileAsync("", homePath, LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT, oldFileName, GlobalOptions.Instance.FilesOverwriteWarn);
+                if (!string.IsNullOrEmpty(newFileName)) {
+                    SaveFile(newFileName);
+                    if (!isUnknown && !string.Equals(oldFileName, newFileName)) {
+                        AppHost.Instance.BaseRenamed(fView, oldFileName, newFileName);
+                    }
+                }
+            }
+        }
+
         public void CheckAutosave()
         {
             // file is modified, isn't updated now, and isn't now created (exists)

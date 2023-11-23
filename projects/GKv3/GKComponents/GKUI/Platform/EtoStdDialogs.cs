@@ -189,6 +189,12 @@ namespace GKUI.Platform
             }
         }
 
+        public async Task<string> GetSaveFileAsync(string title, string context, string filter, int filterIndex, string defaultExt,
+                                  string suggestedFileName, bool overwritePrompt = true)
+        {
+            throw new NotSupportedException();
+        }
+
 
         public void ShowAlert(string msg, string title = "")
         {

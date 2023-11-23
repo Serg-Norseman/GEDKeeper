@@ -276,7 +276,7 @@ namespace GKUI.Forms
 
         public void SaveFileEx(bool saveAs)
         {
-            fController.SaveFileEx(saveAs);
+            fController.SaveFileAsync(saveAs);
         }
 
         public void CheckAutosave()

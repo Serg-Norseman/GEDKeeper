@@ -473,6 +473,8 @@ SectionGroup /e "$(gkplg)"
     Section "$(gkp_pi)"
         SetOutPath "$INSTDIR\plugins"
         File "..\plugins\GKPedigreeImporterPlugin.*"
+        File "..\plugins\NPOI*.*"
+        File "..\plugins\ICSharpCode.SharpZipLib.dll"
     SectionEnd
 
     Section "$(gkp_ts)"

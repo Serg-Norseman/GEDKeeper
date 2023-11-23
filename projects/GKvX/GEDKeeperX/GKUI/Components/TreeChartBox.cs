@@ -587,10 +587,13 @@ namespace GKUI.Components
             base.OnMouseDoubleClick(e);
         }
 
+        protected override void OnZoom(ZoomEventArgs e)
+        {
+            base.OnZoom(e);
+        }
+
         /*protected override void OnMouseWheel(MouseEventArgs e)
         {
-            //Console.WriteLine("TreeChartBox.OnMouseWheel()");
-
             if (e.Modifiers == Keys.Control) {
                 float newScale = (e.Delta.Height > 0) ? fModel.Scale + 0.05f : fModel.Scale - 0.05f;
                 //Console.WriteLine(string.Format("{0} - {1} - {2}", e.Delta.Height, fModel.Scale, newScale));

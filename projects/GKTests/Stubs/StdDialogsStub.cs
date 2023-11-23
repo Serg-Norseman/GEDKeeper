@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Threading.Tasks;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
@@ -33,7 +34,7 @@ namespace GKTests.Stubs
 
         public Task<string> GetInputAsync(object owner, string prompt)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public string GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt)
@@ -43,7 +44,7 @@ namespace GKTests.Stubs
 
         public Task<string> GetOpenFileAsync(string title, string context, string filter, int filterIndex, string defaultExt)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public bool GetPassword(string prompt, ref string value)
@@ -64,6 +65,12 @@ namespace GKTests.Stubs
         public string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt, string suggestedFileName, bool overwritePrompt = true)
         {
             return string.Empty;
+        }
+
+        public async Task<string> GetSaveFileAsync(string title, string context, string filter, int filterIndex, string defaultExt,
+                                  string suggestedFileName, bool overwritePrompt = true)
+        {
+            throw new NotSupportedException();
         }
 
         public IColor SelectColor(IColor color)
@@ -95,7 +102,7 @@ namespace GKTests.Stubs
 
         public Task<bool> ShowQuestionAsync(string msg, string title = "")
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void ShowWarning(string msg, string title = "")

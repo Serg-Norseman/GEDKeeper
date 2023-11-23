@@ -95,6 +95,12 @@ namespace GKUI.Platform
             throw new NotSupportedException();
         }
 
+        public async Task<string> GetSaveFileAsync(string title, string context, string filter, int filterIndex, string defaultExt,
+                                  string suggestedFileName, bool overwritePrompt = true)
+        {
+            throw new NotSupportedException();
+        }
+
         private static IEnumerable<string> ConvertFilePickerFilters(string filter, bool withoutDot = false)
         {
             var result = new List<string>();

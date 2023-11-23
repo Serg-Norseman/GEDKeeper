@@ -127,5 +127,10 @@ namespace GKTests.Stubs
         {
             return null;
         }
+
+        public float GetDefaultFontSize()
+        {
+            return 8.0f;
+        }
     }
 }

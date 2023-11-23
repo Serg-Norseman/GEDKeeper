@@ -18,14 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if MONO
-#define NO_DEPEND
-#endif
-
-#if CI_MODE
-#define NO_DEPEND
-#endif
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -41,9 +33,20 @@ using GKCore.Types;
 
 namespace GKPedigreeImporterPlugin
 {
-#if !NO_DEPEND
+#if MSO
     using MSOExcel = Microsoft.Office.Interop.Excel;
     using MSOWord = Microsoft.Office.Interop.Word;
+#elif SPIRE
+    using Spire.Doc;
+    using Spire.Doc.Interface;
+    using Spire.Xls;
+    using Spire.Xls.Core;
+    using System.Linq;
+#else
+    using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
+    using NPOI.XSSF.UserModel;
+    using NPOI.XWPF.UserModel;
 #endif
 
     [Serializable]
@@ -98,12 +101,14 @@ namespace GKPedigreeImporterPlugin
 
     public sealed class RawLine
     {
+        public string Text;
         public int SourceNum;
         public RawLineType Type;
         public PersonNumbersType NumbersType;
 
-        public RawLine(int sourceNum)
+        public RawLine(string text, int sourceNum)
         {
+            Text = text.Trim();
             SourceNum = sourceNum;
         }
     }
@@ -119,7 +124,7 @@ namespace GKPedigreeImporterPlugin
         private readonly IBaseWindow fBase;
         private readonly ILangMan fLangMan;
         private readonly IList fLog;
-        private readonly StringList fRawContents;
+        private readonly List<RawLine> fRawContents;
         private readonly GDMTree fTree;
         private readonly IView fView;
 
@@ -139,7 +144,7 @@ namespace GKPedigreeImporterPlugin
 
         public bool SpecialFormat_1;
 
-        public StringList RawContents
+        public List<RawLine> RawContents
         {
             get { return fRawContents; }
         }
@@ -158,13 +163,13 @@ namespace GKPedigreeImporterPlugin
             SurnamesNormalize = false;
 
             fPersonsList = new Dictionary<string, GDMIndividualRecord>();
-            fRawContents = new StringList();
+            fRawContents = new List<RawLine>();
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                if (fRawContents != null) fRawContents.Dispose();
+                fRawContents.Clear();
                 fPersonsList = null;
             }
             base.Dispose(disposing);
@@ -356,7 +361,7 @@ namespace GKPedigreeImporterPlugin
             }
         }
 
-        private void SetEvent(GDMRecordWithEvents record, string evName, string date)
+        private void SetEvent(IProgressController progress, GDMRecordWithEvents record, string evName, string date)
         {
             int[] val = new int[3];
             GDMCustomEvent evt = fBase.Context.CreateEventEx(record, evName, "", "");
@@ -419,11 +424,11 @@ namespace GKPedigreeImporterPlugin
 
                 evt.Date.ParseString(tmp);
             } catch (Exception) {
-                fLog.Add(">>>> " + fLangMan.LS(PLS.ParseError_DateInvalid) + " \"" + date + "\"");
+                LogAdd(progress, ">>>> " + fLangMan.LS(PLS.ParseError_DateInvalid) + " \"" + date + "\"");
             }
         }
 
-        private GDMIndividualRecord DefinePerson(string str, GDMSex proposeSex)
+        private GDMIndividualRecord DefinePerson(IProgressController progress, string str, GDMSex proposeSex)
         {
             var persName = DefinePersonName(str);
 
@@ -433,13 +438,13 @@ namespace GKPedigreeImporterPlugin
                 fBase.Context.CheckPersonSex(fView, result);
             }
 
-            if (persName.BirthDate != "") SetEvent(result, GEDCOMTagName.BIRT, persName.BirthDate);
-            if (persName.DeathDate != "") SetEvent(result, GEDCOMTagName.DEAT, persName.DeathDate);
+            if (persName.BirthDate != "") SetEvent(progress, result, GEDCOMTagName.BIRT, persName.BirthDate);
+            if (persName.DeathDate != "") SetEvent(progress, result, GEDCOMTagName.DEAT, persName.DeathDate);
 
             return result;
         }
 
-        private GDMIndividualRecord ParsePerson(GDMLines buffer, string str, ref int selfId)
+        private GDMIndividualRecord ParsePerson(IProgressController progress, GDMLines buffer, string str, ref int selfId)
         {
             try {
                 selfId = -1;
@@ -456,7 +461,7 @@ namespace GKPedigreeImporterPlugin
                 pid_end = plRet.Pos;
 
                 if (fPersonsList.ContainsKey(plRet.PersId)) {
-                    fLog.Add(">>>> " + fLangMan.LS(PLS.ParseError_NumDuplicate) + " \"" + plRet.PersId + "\".");
+                    LogAdd(progress, ">>>> " + fLangMan.LS(PLS.ParseError_NumDuplicate) + " \"" + plRet.PersId + "\".");
                     return null;
                 }
 
@@ -467,9 +472,9 @@ namespace GKPedigreeImporterPlugin
 
                 str = str.Substring(pid_end).Trim();
 
-                GDMSex proposeSex = GetProposeSex(buffer);
+                GDMSex proposeSex = GetProposeSex(progress, buffer);
 
-                GDMIndividualRecord result = DefinePerson(str, proposeSex);
+                GDMIndividualRecord result = DefinePerson(progress, str, proposeSex);
 
                 fPersonsList.Add(plRet.PersId, result);
 
@@ -478,7 +483,7 @@ namespace GKPedigreeImporterPlugin
                     if (fPersonsList.TryGetValue(plRet.ParentId, out parent)) {
                         AddChild(parent, marrNum, result);
                     } else {
-                        fLog.Add(">>>> " + fLangMan.LS(PLS.ParseError_AncNotFound) + " \"" + plRet.ParentId + "\".");
+                        LogAdd(progress, ">>>> " + fLangMan.LS(PLS.ParseError_AncNotFound) + " \"" + plRet.ParentId + "\".");
                     }
                 }
 
@@ -489,7 +494,7 @@ namespace GKPedigreeImporterPlugin
             }
         }
 
-        private GDMSex GetProposeSex(GDMLines buffer)
+        private GDMSex GetProposeSex(IProgressController progress, GDMLines buffer)
         {
             GDMSex result = GDMSex.svUnknown;
             if (buffer == null) return result;
@@ -510,7 +515,7 @@ namespace GKPedigreeImporterPlugin
                             result = res;
                         } else {
                             if (result != res) {
-                                fLog.Add(">>>> " + fLangMan.LS(PLS.SpousesInfoConflict));
+                                LogAdd(progress, ">>>> " + fLangMan.LS(PLS.SpousesInfoConflict));
                                 return GDMSex.svUnknown;
                             } else {
                                 // matched, checked
@@ -525,7 +530,7 @@ namespace GKPedigreeImporterPlugin
             return result;
         }
 
-        private void CheckSpouses(GDMLines buffer, GDMIndividualRecord curPerson)
+        private void CheckSpouses(IProgressController progress, GDMLines buffer, GDMIndividualRecord curPerson)
         {
             int num2 = buffer.Count;
             for (int i = 0; i < num2; i++) {
@@ -543,7 +548,7 @@ namespace GKPedigreeImporterPlugin
                         line = line.Substring(slRet.Pos).Trim();
 
                         if (!string.IsNullOrEmpty(line)) {
-                            GDMIndividualRecord spouse = DefinePerson(line, sx);
+                            GDMIndividualRecord spouse = DefinePerson(progress, line, sx);
                             GDMFamilyRecord family = GetFamilyByNum(curPerson, slRet.MarrNum);
 
                             if (spouse == null || family == null) {
@@ -556,7 +561,7 @@ namespace GKPedigreeImporterPlugin
                                     string marrDate = slRet.ExtData.Substring(1, slRet.ExtData.Length - 2).Trim();
 
                                     if (marrDate != "")
-                                        SetEvent(family, GEDCOMTagName.MARR, marrDate);
+                                        SetEvent(progress, family, GEDCOMTagName.MARR, marrDate);
                                 }
                             }
                         }
@@ -567,12 +572,12 @@ namespace GKPedigreeImporterPlugin
             }
         }
 
-        private void CheckBuffer(GDMLines buffer, GDMIndividualRecord curPerson)
+        private void CheckBuffer(IProgressController progress, GDMLines buffer, GDMIndividualRecord curPerson)
         {
             if (buffer.IsEmpty()) return;
 
             if (curPerson != null) {
-                CheckSpouses(buffer, curPerson);
+                CheckSpouses(progress, buffer, curPerson);
             }
 
             GDMNoteRecord noteRec = fTree.CreateNote();
@@ -587,10 +592,8 @@ namespace GKPedigreeImporterPlugin
         /// </summary>
         /// <param name="buffer"></param>
         /// <returns>prevId, identifier of person</returns>
-        private int ParseBuffer(GDMLines buffer)
+        private int ParseBuffer(IProgressController progress, GDMLines buffer, int prevId)
         {
-            int prevId = 0;
-
             try {
                 if (buffer.IsEmpty()) {
                     return prevId;
@@ -599,18 +602,18 @@ namespace GKPedigreeImporterPlugin
                 string s = buffer[0];
                 string personId = IsPersonLine(s);
                 if (!string.IsNullOrEmpty(personId)) {
-                    fLog.Add("> " + fLangMan.LS(PLS.PersonParsed) + " \"" + personId + "\"");
+                    LogAdd(progress, "> " + fLangMan.LS(PLS.PersonParsed) + " \"" + personId + "\"");
 
                     int selfId = 0;
-                    GDMIndividualRecord curPerson = ParsePerson(buffer, s, ref selfId);
+                    GDMIndividualRecord curPerson = ParsePerson(progress, buffer, s, ref selfId);
 
                     if (NumbersType == PersonNumbersType.pnKonovalov && selfId - prevId > 1) {
-                        fLog.Add(">>>> " + fLangMan.LS(PLS.ParseError_LineSeq));
+                        LogAdd(progress, ">>>> " + fLangMan.LS(PLS.ParseError_LineSeq));
                     }
 
                     prevId = selfId;
 
-                    CheckBuffer(buffer, curPerson);
+                    CheckBuffer(progress, buffer, curPerson);
                 }
             } catch (Exception ex) {
                 Logger.WriteError("Importer.ParseBuffer()", ex);
@@ -644,7 +647,7 @@ namespace GKPedigreeImporterPlugin
 
         #region Integral loading
 
-        private bool AnalyseRaw(IProgressController progress)
+        private bool AnalyseRawLines(IProgressController progress)
         {
             if (SourceType == SourceType.stTable) {
                 return false;
@@ -658,8 +661,8 @@ namespace GKPedigreeImporterPlugin
                     progress.Begin(fLangMan.LS(PLS.Analyzing), num);
 
                     for (int i = 0; i < num; i++) {
-                        string txt = fRawContents[i].Trim();
-                        RawLine rawLine = (RawLine)fRawContents.GetObject(i);
+                        RawLine rawLine = fRawContents[i];
+                        string txt = rawLine.Text;
 
                         if (!string.IsNullOrEmpty(txt)) {
                             if (IsGenerationLine(txt)) {
@@ -686,11 +689,7 @@ namespace GKPedigreeImporterPlugin
                         progress.Increment();
                     }
 
-                    if (numberStats[1] > numberStats[2]) {
-                        CanNumbersType = PersonNumbersType.pnDAboville;
-                    } else {
-                        CanNumbersType = PersonNumbersType.pnKonovalov;
-                    }
+                    CanNumbersType = (numberStats[1] > numberStats[2]) ? PersonNumbersType.pnDAboville : PersonNumbersType.pnKonovalov;
 
                     return true;
                 } finally {
@@ -704,39 +703,37 @@ namespace GKPedigreeImporterPlugin
 
         public bool ImportContent()
         {
-            AppHost.Instance.ExecuteWork((controller) => {
-                AnalyseRaw(controller);
-            });
-
             bool result = false;
             switch (SourceType) {
                 case SourceType.stText:
-                    result = ImportTextContent();
+                    AppHost.Instance.ExecuteWork((controller) => {
+                        result = ImportTextContent(controller);
+                    });
                     break;
 
                 case SourceType.stTable:
-#if !NO_DEPEND
                     AppHost.Instance.ExecuteWork((controller) => {
                         result = ImportTableContent(controller);
                     });
-#endif
                     break;
             }
             return result;
         }
 
-        private bool ImportTextContent()
+        private bool ImportTextContent(IProgressController progress)
         {
             try {
-                fLog.Clear();
+                LogClear(progress);
 
                 GDMLines buffer = new GDMLines();
-                int prev_id = 0;
+                int prevId = 0;
 
                 int num = fRawContents.Count;
+                progress.Begin(fLangMan.LS(PLS.Loading), num);
+
                 for (int i = 0; i < num; i++) {
-                    string line = PrepareLine(fRawContents[i]);
-                    RawLine rawLine = (RawLine)fRawContents.GetObject(i);
+                    RawLine rawLine = fRawContents[i];
+                    string line = PrepareLine(rawLine.Text);
 
                     switch (rawLine.Type) {
                         case RawLineType.rltComment:
@@ -746,7 +743,7 @@ namespace GKPedigreeImporterPlugin
                         case RawLineType.rltPerson:
                         case RawLineType.rltRomeGeneration:
                         case RawLineType.rltEOF: {
-                                prev_id = ParseBuffer(buffer);
+                                prevId = ParseBuffer(progress, buffer, prevId);
                                 buffer.Clear();
 
                                 switch (rawLine.Type) {
@@ -754,16 +751,20 @@ namespace GKPedigreeImporterPlugin
                                         buffer.Add(line);
                                         break;
                                     case RawLineType.rltRomeGeneration:
-                                        fLog.Add("> " + fLangMan.LS(PLS.Generation) + " \"" + line + "\"");
+                                        LogAdd(progress, "> " + fLangMan.LS(PLS.Generation) + " \"" + line + "\"");
                                         break;
                                     case RawLineType.rltEOF:
-                                        fLog.Add("> EOF.");
+                                        LogAdd(progress, "> EOF.");
                                         break;
                                 }
                             }
                             break;
                     }
+
+                    progress.Increment();
                 }
+
+                progress.End();
 
                 return true;
             } catch (Exception ex) {
@@ -772,17 +773,31 @@ namespace GKPedigreeImporterPlugin
             }
         }
 
+        private void LogClear(IProgressController progress)
+        {
+            progress.InvokeEx(() => {
+                fLog.Clear();
+            });
+        }
+
+        private void LogAdd(IProgressController progress, string msg)
+        {
+            progress.InvokeEx(() => {
+                fLog.Add(msg);
+            });
+        }
+
+#if MSO
         private static string GetCell(object[,] values, int row, int col)
         {
             object obj = values[row, col];
             return (obj == null) ? "" : obj.ToString();
         }
 
-#if !NO_DEPEND
         private bool ImportTableContent(IProgressController progress)
         {
             try {
-                fLog.Clear();
+                LogClear(progress);
 
                 MSOExcel.Application excel;
                 try {
@@ -857,7 +872,7 @@ namespace GKPedigreeImporterPlugin
                             case RawLineType.rltPerson:
                             case RawLineType.rltRomeGeneration:
                             case RawLineType.rltEOF: {
-                                    prevId = ParseBuffer(buffer);
+                                    prevId = ParseBuffer(progress, buffer, prevId);
                                     buffer.Clear();
 
                                     switch (lineType) {
@@ -865,10 +880,10 @@ namespace GKPedigreeImporterPlugin
                                             buffer.Add(line);
                                             break;
                                         case RawLineType.rltRomeGeneration:
-                                            fLog.Add("> " + fLangMan.LS(PLS.Generation) + " \"" + line + "\"");
+                                            LogAdd(progress, "> " + fLangMan.LS(PLS.Generation) + " \"" + line + "\"");
                                             break;
                                         case RawLineType.rltEOF:
-                                            fLog.Add("> EOF.");
+                                            LogAdd(progress, "> EOF.");
                                             break;
                                     }
                                 }
@@ -879,7 +894,7 @@ namespace GKPedigreeImporterPlugin
                     }
 
                     // hack: processing last items before end
-                    prevId = ParseBuffer(buffer);
+                    prevId = ParseBuffer(progress, buffer, prevId);
 
                     return true;
                 } finally {
@@ -892,84 +907,316 @@ namespace GKPedigreeImporterPlugin
                     excel = null;
                 }
             } catch (Exception ex) {
-                fLog.Add(">>>> " + fLangMan.LS(PLS.DataLoadError));
+                LogAdd(progress, ">>>> " + fLangMan.LS(PLS.DataLoadError));
                 Logger.WriteError("Importer.ImportTableContent()", ex);
+                return false;
+            }
+        }
+#elif SPIRE
+        private static string GetCell(IWorksheet sheet, int row, int col)
+        {
+            object obj = sheet[row, col];
+            return (obj == null) ? "" : obj.ToString().Trim();
+        }
+
+        private bool ImportTableContent(IProgressController progress)
+        {
+            try {
+                LogClear(progress);
+
+                var workbook = new Workbook();
+                workbook.LoadFromFile(fFileName);
+                var sheet = workbook.Worksheets.First();
+
+                GDMLines buffer = new GDMLines();
+                try {
+                    int rowsCount = sheet.Rows.Length;
+                    //int colsCount = sheet.UsedRange.Columns.Count;
+
+                    progress.Begin(fLangMan.LS(PLS.Loading), rowsCount);
+
+                    int prevId = 0;
+
+                    for (int row = 1; row <= rowsCount; row++) {
+                        string c1 = GetCell(sheet, row, 1); // position number
+                        string c2 = GetCell(sheet, row, 2); // ancestor number
+                        string c3 = GetCell(sheet, row, 3); // name, maybe start with the number of marriage
+                        string c4 = GetCell(sheet, row, 4); // birth date
+                        string c5 = GetCell(sheet, row, 5); // death date
+                        string c6 = GetCell(sheet, row, 6); // birth or residence place
+
+                        string s123 = c1 + c2;
+                        if (s123 != "" && !string.IsNullOrEmpty(c3) && c3[0] != '/') {
+                            s123 += ". " + c3;
+                        } else {
+                            s123 += c3;
+                        }
+
+                        if (s123 == "") {
+                            continue;
+                        }
+
+                        string line, p_id = "";
+                        RawLineType lineType = RawLineType.rltComment;
+
+                        if (IsGenerationLine(s123)) {
+                            line = s123;
+                            lineType = RawLineType.rltRomeGeneration;
+                        } else {
+                            line = s123 + " " + c4 + " " + c5;
+                            if (c6 != "") {
+                                line = line + ". " + c6 + ".";
+                            }
+
+                            line = line.Trim();
+
+                            p_id = IsPersonLine(line);
+                            if (!string.IsNullOrEmpty(p_id)) {
+                                lineType = RawLineType.rltPerson;
+                            }
+                        }
+
+                        switch (lineType) {
+                            case RawLineType.rltComment:
+                                buffer.Add(line);
+                                break;
+
+                            case RawLineType.rltPerson:
+                            case RawLineType.rltRomeGeneration:
+                            case RawLineType.rltEOF: {
+                                    prevId = ParseBuffer(progress, buffer, prevId);
+                                    buffer.Clear();
+
+                                    switch (lineType) {
+                                        case RawLineType.rltPerson:
+                                            buffer.Add(line);
+                                            break;
+                                        case RawLineType.rltRomeGeneration:
+                                            LogAdd(progress, "> " + fLangMan.LS(PLS.Generation) + " \"" + line + "\"");
+                                            break;
+                                        case RawLineType.rltEOF:
+                                            LogAdd(progress, "> EOF.");
+                                            break;
+                                    }
+                                }
+                                break;
+                        }
+
+                        progress.Increment();
+                    }
+
+                    // hack: processing last items before end
+                    prevId = ParseBuffer(progress, buffer, prevId);
+
+                    return true;
+                } finally {
+                    progress.End();
+
+                    buffer.Clear();
+                    buffer = null;
+
+                    workbook.Dispose();
+                }
+            } catch (Exception ex) {
+                LogAdd(progress, ">>>> " + fLangMan.LS(PLS.DataLoadError));
+                Logger.WriteError("Importer.ImportTableContent_Sp()", ex);
+                return false;
+            }
+        }
+#else
+        private static string GetCell(ISheet sheet, int row, int col)
+        {
+            string value = string.Empty;
+
+            var srow = sheet.GetRow(row);
+            if (srow == null) return value;
+
+            var cell = srow.GetCell(col);
+            if (cell != null) {
+                switch (cell.CellType) {
+                    case NPOI.SS.UserModel.CellType.String:
+                        value = cell.StringCellValue;
+                        break;
+                    case NPOI.SS.UserModel.CellType.Numeric:
+                        value = cell.NumericCellValue.ToString();
+                        break;
+                }
+            }
+
+            return value.Trim();
+        }
+
+        private bool ImportTableContent(IProgressController progress)
+        {
+            try {
+                LogClear(progress);
+
+                IWorkbook workbook;
+                if (fFileName.EndsWith("xlsx")) {
+                    workbook = new XSSFWorkbook(fFileName);
+                } else {
+                    using (var stream = new FileStream(fFileName, FileMode.Open, FileAccess.Read)) {
+                        workbook = new HSSFWorkbook(stream);
+                    }
+                }
+
+                var sheet = workbook.GetSheetAt(0);
+
+                GDMLines buffer = new GDMLines();
+                try {
+                    int rowsCount = sheet.LastRowNum - sheet.FirstRowNum;
+
+                    progress.Begin(fLangMan.LS(PLS.Loading), rowsCount);
+
+                    int prevId = 0;
+
+                    for (int row = sheet.FirstRowNum; row <= sheet.LastRowNum; row++) {
+                        string c1 = GetCell(sheet, row, 0); // position number
+                        string c2 = GetCell(sheet, row, 1); // ancestor number
+                        string c3 = GetCell(sheet, row, 2); // name, maybe start with the number of marriage
+                        string c4 = GetCell(sheet, row, 3); // birth date
+                        string c5 = GetCell(sheet, row, 4); // death date
+                        string c6 = GetCell(sheet, row, 5); // birth or residence place
+
+                        string s123 = c1 + c2;
+                        if (s123 != "" && !string.IsNullOrEmpty(c3) && c3[0] != '/') {
+                            s123 += ". " + c3;
+                        } else {
+                            s123 += c3;
+                        }
+
+                        if (s123 == "") {
+                            continue;
+                        }
+
+                        string line, p_id = "";
+                        RawLineType lineType = RawLineType.rltComment;
+
+                        if (IsGenerationLine(s123)) {
+                            line = s123;
+                            lineType = RawLineType.rltRomeGeneration;
+                        } else {
+                            line = s123 + " " + c4 + " " + c5;
+                            if (c6 != "") {
+                                line = line + ". " + c6 + ".";
+                            }
+
+                            line = line.Trim();
+
+                            p_id = IsPersonLine(line);
+                            if (!string.IsNullOrEmpty(p_id)) {
+                                lineType = RawLineType.rltPerson;
+                            }
+                        }
+
+                        switch (lineType) {
+                            case RawLineType.rltComment:
+                                buffer.Add(line);
+                                break;
+
+                            case RawLineType.rltPerson:
+                            case RawLineType.rltRomeGeneration:
+                            case RawLineType.rltEOF: {
+                                    prevId = ParseBuffer(progress, buffer, prevId);
+                                    buffer.Clear();
+
+                                    switch (lineType) {
+                                        case RawLineType.rltPerson:
+                                            buffer.Add(line);
+                                            break;
+                                        case RawLineType.rltRomeGeneration:
+                                            LogAdd(progress, "> " + fLangMan.LS(PLS.Generation) + " \"" + line + "\"");
+                                            break;
+                                        case RawLineType.rltEOF:
+                                            LogAdd(progress, "> EOF.");
+                                            break;
+                                    }
+                                }
+                                break;
+                        }
+
+                        progress.Increment();
+                    }
+
+                    // hack: processing last items before end
+                    prevId = ParseBuffer(progress, buffer, prevId);
+
+                    return true;
+                } finally {
+                    progress.End();
+
+                    buffer.Clear();
+                    buffer = null;
+
+                    workbook.Close();
+                }
+            } catch (Exception ex) {
+                LogAdd(progress, ">>>> " + fLangMan.LS(PLS.DataLoadError));
+                Logger.WriteError("Importer.ImportTableContent_Sp()", ex);
                 return false;
             }
         }
 #endif
 
-        private bool LoadRawText(IProgressController progress)
+        private bool LoadTextFile(IProgressController progress)
         {
             SourceType = SourceType.stText;
 
             try {
                 using (Stream fs = new FileStream(fFileName, FileMode.Open, FileAccess.Read))
                 using (StreamReader strd = GKUtils.GetDetectedStreamReader(fs)) {
+                    progress.Begin(fLangMan.LS(PLS.Loading), (int)strd.BaseStream.Length);
                     try {
-                        progress.Begin(fLangMan.LS(PLS.Loading), (int)strd.BaseStream.Length);
-
                         int lineNum = 0;
                         while (strd.Peek() != -1) {
-                            string txt = strd.ReadLine().Trim();
-
+                            string txt = strd.ReadLine();
                             if (!string.IsNullOrEmpty(txt)) {
-                                fRawContents.AddObject(txt, new RawLine(lineNum));
+                                fRawContents.Add(new RawLine(txt, lineNum));
                             }
-
                             progress.StepTo((int)strd.BaseStream.Position);
                             lineNum++;
                         }
-                        fRawContents.AddObject("", new RawLine(lineNum));
+                        fRawContents.Add(new RawLine("", lineNum));
                     } finally {
                         progress.End();
                     }
                 }
 
-                return AnalyseRaw(progress);
+                return true;
             } catch (Exception ex) {
-                fLog.Add(">>>> " + fLangMan.LS(PLS.DataLoadError));
+                LogAdd(progress, ">>>> " + fLangMan.LS(PLS.DataLoadError));
                 Logger.WriteError("Importer.LoadRawText()", ex);
                 return false;
             }
         }
 
-#if !NO_DEPEND
-        private bool LoadRawWord(IProgressController progress)
+        private bool LoadDocFile(IProgressController progress)
         {
             SourceType = SourceType.stText;
 
             try {
-                MSOWord.Application wordApp;
-                try {
-                    wordApp = new MSOWord.Application();
-                } catch {
-                    return false;
-                }
-
+#if MSO
+                var wordApp = new MSOWord.Application();
                 try {
                     wordApp.Visible = DEBUG_WORD;
                     wordApp.WindowState = MSOWord.WdWindowState.wdWindowStateMaximize;
 
-                    MSOWord.Document doc = wordApp.Documents.Open(fFileName);
+                    var doc = wordApp.Documents.Open(fFileName);
 
                     progress.Begin(fLangMan.LS(PLS.Loading), doc.Paragraphs.Count);
 
                     int lineNum = 0;
                     for (int i = 0; i < doc.Paragraphs.Count; i++) {
                         string txt = doc.Paragraphs[i + 1].Range.Text;
-                        txt = txt.Trim();
-
                         if (!string.IsNullOrEmpty(txt)) {
-                            fRawContents.AddObject(txt, new RawLine(lineNum));
+                            fRawContents.Add(new RawLine(txt, lineNum));
                         }
-
                         progress.Increment();
                         lineNum++;
                     }
-                    fRawContents.AddObject("", new RawLine(lineNum));
+                    fRawContents.Add(new RawLine("", lineNum));
 
-                    return AnalyseRaw(progress);
+                    return true;
                 } finally {
                     progress.End();
 
@@ -977,26 +1224,76 @@ namespace GKPedigreeImporterPlugin
                     wordApp.Quit(ref saveOptionsObject);
                     wordApp = null;
                 }
-            } catch (Exception ex) {
-                fLog.Add(">>>> " + fLangMan.LS(PLS.DataLoadError));
+#elif SPIRE
+                var doc = new Document();
+                try {
+                    doc.LoadFromFile(fFileName);
+
+                    var paragraphs = new List<IParagraph>();
+                    foreach (Section section in doc.Sections) {
+                        foreach (IParagraph paragraph in section.Paragraphs) {
+                            paragraphs.Add(paragraph);
+                        }
+                    }
+
+                    progress.Begin(fLangMan.LS(PLS.Loading), paragraphs.Count);
+
+                    int lineNum = 0;
+                    for (int i = 0; i < paragraphs.Count; i++) {
+                        string txt = paragraphs[i].Text;
+                        if (!string.IsNullOrEmpty(txt)) {
+                            fRawContents.Add(new RawLine(txt, lineNum));
+                        }
+                        progress.Increment();
+                        lineNum++;
+                    }
+                    fRawContents.Add(new RawLine("", lineNum));
+
+                    return true;
+                } finally {
+                    progress.End();
+
+                    doc.Close();
+                }
+#else
+                IBody doc;
+                using (var stream = new FileStream(fFileName, FileMode.Open, FileAccess.Read)) {
+                    if (fFileName.EndsWith("docx")) {
+                        doc = new XWPFDocument(stream);
+                    } else {
+#if NETCORE
+#else
+#endif
+                        return false;
+                    }
+                }
+
+                progress.Begin(fLangMan.LS(PLS.Loading), doc.Paragraphs.Count);
+                try {
+                    int lineNum = 0;
+                    for (int i = 0; i < doc.Paragraphs.Count; i++) {
+                        string txt = doc.Paragraphs[i].Text;
+                        if (!string.IsNullOrEmpty(txt)) {
+                            fRawContents.Add(new RawLine(txt, lineNum));
+                        }
+                        progress.Increment();
+                        lineNum++;
+                    }
+                    fRawContents.Add(new RawLine("", lineNum));
+
+                    return true;
+                } finally {
+                    progress.End();
+                }
+#endif
+                    } catch (Exception ex) {
+                LogAdd(progress, ">>>> " + fLangMan.LS(PLS.DataLoadError));
                 Logger.WriteError("Importer.LoadRawWord()", ex);
                 return false;
             }
         }
-#endif
 
-        private bool LoadRawExcel()
-        {
-            SourceType = SourceType.stTable;
-
-            bool result = false;
-            AppHost.Instance.ExecuteWork((controller) => {
-                result = AnalyseRaw(controller);
-            });
-            return result;
-        }
-
-        public bool LoadRawData(string fileName)
+        public bool LoadFile(string fileName)
         {
             fRawContents.Clear();
 
@@ -1006,21 +1303,25 @@ namespace GKPedigreeImporterPlugin
             bool result = false;
             if (ext == ".txt") {
                 AppHost.Instance.ExecuteWork((controller) => {
-                    result = LoadRawText(controller);
+                    result = LoadTextFile(controller);
                 });
-            } else if (ext == ".doc") {
-#if !NO_DEPEND
+            } else if (ext == ".doc" || ext == ".docx") {
                 AppHost.Instance.ExecuteWork((controller) => {
-                    result = LoadRawWord(controller);
+                    result = LoadDocFile(controller);
                 });
-#endif
-            } else if (ext == ".xls") {
-#if !NO_DEPEND
-                return LoadRawExcel();
-#endif
+            } else if (ext == ".xls" || ext == ".xlsx") {
+                SourceType = SourceType.stTable;
+                result = true;
             } else {
                 throw new ImporterException(fLangMan.LS(PLS.FormatUnsupported));
             }
+
+            if (result && SourceType != SourceType.stTable) {
+                AppHost.Instance.ExecuteWork((controller) => {
+                    result = AnalyseRawLines(controller);
+                });
+            }
+
             return result;
         }
 

@@ -499,12 +499,13 @@ SectionGroup /e "$(gkplg)"
     Section "$(gkp_pi)"
         SetOutPath "$INSTDIR\plugins"
         File "..\plugins\GKPedigreeImporterPlugin.*"
+        File "..\plugins\NPOI*.*"
+        File "..\plugins\ICSharpCode.SharpZipLib.dll"
     SectionEnd
 
     Section "$(gkp_ts)"
         SetOutPath "$INSTDIR\plugins"
         File "..\plugins\Lucene.Net.dll"
-        File "..\plugins\ICSharpCode.SharpZipLib.dll"
         File "..\plugins\GKTextSearchPlugin.*"
     SectionEnd
 

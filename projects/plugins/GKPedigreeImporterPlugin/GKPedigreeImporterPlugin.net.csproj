@@ -8,7 +8,8 @@
         <OutputPath>..\..\..\plugins\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-        <DefineConstants>NO_DEPEND;ETO</DefineConstants>
+        <DefineConstants>ETO;NETCORE</DefineConstants>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
         <Configurations>Debug;Release</Configurations>
         <Platforms>MSWin86;MSWin64;Linux;MacOS;FreeBSD</Platforms>
@@ -31,6 +32,7 @@
     <ItemGroup>
         <PackageReference Include="Eto.Forms" Version="2.8.0" />
         <PackageReference Include="Eto.Serialization.Xaml" Version="2.8.0" />
+        <PackageReference Include="NPOI" Version="2.6.2" />
     </ItemGroup>
 
     <Import Project="GKPedigreeImporterPlugin.props" />

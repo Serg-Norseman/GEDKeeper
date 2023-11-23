@@ -46,6 +46,9 @@ namespace GKCore.Design.Views
         string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
                            string suggestedFileName, bool overwritePrompt = true);
 
+        Task<string> GetSaveFileAsync(string title, string context, string filter, int filterIndex, string defaultExt,
+                                  string suggestedFileName, bool overwritePrompt = true);
+
         IColor SelectColor(IColor color);
 
         IFont SelectFont(IFont font);

@@ -4,7 +4,7 @@
   <Import Project="..\..\GKConfigurations.targets" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{859C2F5B-FBF1-4D3B-8442-CF8E44E8B74B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>GKPedigreeImporterPlugin</RootNamespace>
@@ -18,26 +18,39 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\..\..\plugins\</OutputPath>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(CIMode)' != 'true' And '$(MonoCS)' != 'true' ">
-    <Reference Include="Microsoft.Office.Interop.Excel" />
-    <Reference Include="Microsoft.Office.Interop.Word" />
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="BSLib">
       <HintPath>..\..\libs\BSLib.dll</HintPath>
     </Reference>
+    <Reference Include="NPOI, Version=2.5.6.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\libs\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.5.6.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\libs\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.5.6.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\libs\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.5.6.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\libs\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GKPedigreeImporterPlugin.cs" />
     <Compile Include="PedigreeImporterDlg.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PedigreeImporterDlg.Designer.cs">
       <DependentUpon>PedigreeImporterDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKPedigreeImporterPlugin.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GKv2\GKComponents\GKComponents.csproj">

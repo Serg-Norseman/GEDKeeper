@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -157,6 +158,12 @@ namespace GKUI.Platform
                 sfd.FileName = suggestedFileName;
 
             return sfd;
+        }
+
+        public async Task<string> GetSaveFileAsync(string title, string context, string filter, int filterIndex, string defaultExt,
+                                  string suggestedFileName, bool overwritePrompt = true)
+        {
+            throw new NotSupportedException();
         }
 
 

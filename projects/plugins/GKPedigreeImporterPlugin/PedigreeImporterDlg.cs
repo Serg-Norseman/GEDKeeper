@@ -109,7 +109,7 @@ namespace GKPedigreeImporterPlugin
             edImportFile.Text = fileName;
 
             try {
-                bool res = fImporter.LoadRawData(edImportFile.Text);
+                bool res = fImporter.LoadFile(edImportFile.Text);
                 if (res) {
                     fAvailableStage++;
 
