@@ -25,7 +25,7 @@
 
                             <Label x:Name="lblEvent" Grid.Column="0" Grid.Row="0" />
                             <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="0">
-                                <comcom:GKComboBox x:Name="cmbEventType" IsReadOnly="True" SelectedIndexChanged="EditEventType_SelectedIndexChanged" WidthRequest="260" />
+                                <comcom:GKComboBox x:Name="cmbEventType" SelectedIndexChanged="EditEventType_SelectedIndexChanged" WidthRequest="260" />
                                 <Entry x:Name="txtEventName" HorizontalOptions="FillAndExpand" />
                             </StackLayout>
 

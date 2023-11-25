@@ -32,16 +32,16 @@
                                 <Grid ColumnSpacing="4" RowSpacing="4">
 
                                     <Label x:Name="lblLanguage" Grid.Column="0" Grid.Row="0" />
-                                    <comcom:GKComboBox x:Name="cmbLanguages" IsReadOnly="True" Grid.Column="1" Grid.Row="0" />
+                                    <comcom:GKComboBox x:Name="cmbLanguages" Grid.Column="1" Grid.Row="0" />
 
                                     <Label x:Name="lblGeocoder" Grid.Column="0" Grid.Row="1" />
-                                    <comcom:GKComboBox x:Name="cmbGeocoder" IsReadOnly="True" Grid.Column="1" Grid.Row="1" />
+                                    <comcom:GKComboBox x:Name="cmbGeocoder" Grid.Column="1" Grid.Row="1" />
 
                                     <Label x:Name="lblGeoSearchCountry" Grid.Column="0" Grid.Row="2" />
-                                    <comcom:GKComboBox x:Name="cmbGeoSearchCountry" IsReadOnly="True" Grid.Column="1" Grid.Row="2" />
+                                    <comcom:GKComboBox x:Name="cmbGeoSearchCountry" Grid.Column="1" Grid.Row="2" />
 
                                     <Label x:Name="lblCertaintyAlgorithm" Grid.Column="0" Grid.Row="3" />
-                                    <comcom:GKComboBox x:Name="cmbCertaintyAlgorithm" IsReadOnly="True" Grid.Column="1" Grid.Row="3" />
+                                    <comcom:GKComboBox x:Name="cmbCertaintyAlgorithm" Grid.Column="1" Grid.Row="3" />
 
                                 </Grid>
 
@@ -109,7 +109,7 @@
 
                         <StackLayout Orientation="Horizontal" Spacing="4">
                             <Label x:Name="lblMediaStoreDefault" />
-                            <comcom:GKComboBox x:Name="cmbMediaStoreDefault" WidthRequest="200" IsReadOnly="True" />
+                            <comcom:GKComboBox x:Name="cmbMediaStoreDefault" WidthRequest="200" />
                         </StackLayout>
 
                         <input:CheckBox x:Name="chkAllowDeleteMediaFileFromStgArc" />
@@ -369,10 +369,10 @@
 
                             <Grid ColumnSpacing="4" RowSpacing="4">
                                 <Label x:Name="lblAscendNumbering" Grid.Column="0" Grid.Row="0" />
-                                <comcom:GKComboBox x:Name="cmbAscendNumbering" IsReadOnly="True" Grid.Column="1" Grid.Row="0" />
+                                <comcom:GKComboBox x:Name="cmbAscendNumbering" Grid.Column="1" Grid.Row="0" />
 
                                 <Label x:Name="lblDescendNumbering" Grid.Column="0" Grid.Row="1" />
-                                <comcom:GKComboBox x:Name="cmbDescendNumbering" IsReadOnly="True" Grid.Column="1" Grid.Row="1" />
+                                <comcom:GKComboBox x:Name="cmbDescendNumbering" Grid.Column="1" Grid.Row="1" />
                             </Grid>
                         </StackLayout>
                     </comcom:GroupBox>

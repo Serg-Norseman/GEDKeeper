@@ -604,7 +604,7 @@ namespace GKUI.Components
 
             if (item != null) {
                 SelectedItem = item;
-                ScrollTo(item, ScrollToPosition.MakeVisible, true);
+                ScrollTo(item, ScrollToPosition.MakeVisible, false);
             }
         }
 

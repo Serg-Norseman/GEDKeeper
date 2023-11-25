@@ -174,5 +174,15 @@ namespace GKUI.Components
             string action = await page.DisplayActionSheet(title, LangMan.LS(LSID.DlgCancel), null, strItems);
             return string.IsNullOrEmpty(action) ? default(T) : items.FirstOrDefault(x => x.ToString() == action);
         }
+
+        public static Page GetParentPage(Element element)
+        {
+            if (element == null) return null;
+
+            while (element != null && !(element is Page)) {
+                element = element.Parent;
+            }
+            return element as Page;
+        }
     }
 }

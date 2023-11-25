@@ -75,7 +75,7 @@ namespace GKUI.Components
         public const int SmallChange = 1;
         public const int LargeChange = 10;
 
-        private SKCanvasView fCanvas;
+        private readonly SKCanvasView fCanvas;
         private bool fCenteredImage;
         private Font fFont;
         private bool fHasHScroll;

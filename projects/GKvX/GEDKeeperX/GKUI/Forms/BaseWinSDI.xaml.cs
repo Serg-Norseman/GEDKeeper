@@ -125,14 +125,7 @@ namespace GKUI.Forms
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
             recView.UpdateContents();
 
-            //var spl = new StackLayout();
             string splID = "splitter" + ((int)recType).ToString();
-            /*spl.Panel1 = recView;
-            spl.Panel2 = summary;
-            spl.RelativePosition = 300;
-            spl.Orientation = Orientation.Horizontal;
-            spl.FixedPanel = SplitterFixedPanel.Panel2;
-            spl.PositionChanged += Spl_PositionChanged;*/
             var spl = new Grid {
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 ColumnDefinitions = new ColumnDefinitionCollection() {
@@ -366,18 +359,12 @@ namespace GKUI.Forms
                 string targetFile = fContext.MediaLoad(fileRef);
                 GKUtils.LoadExtFile(targetFile);
             } else {
-                //var mediaViewer = AppHost.Container.Resolve<IMediaViewerWin>(this);
-                /*MediaViewerWin mediaViewer = new MediaViewerWin(this);
+                /*var mediaViewer = AppHost.Container.Resolve<IMediaViewerWin>(this);
                 try {
-                    try {
-                        mediaViewer.MultimediaRecord = mediaRec;
-                        mediaViewer.ShowInTaskbar = true;
-                        mediaViewer.Show();
-                    } finally {
-                        //if (modal) mediaViewer.Dispose();
-                    }
+                    mediaViewer.MultimediaRecord = mediaRec;
+                    mediaViewer.ShowInTaskbar = true;
+                    mediaViewer.Show();
                 } catch (Exception ex) {
-                    if (mediaViewer != null) mediaViewer.Dispose();
                     Logger.WriteError("BaseWinSDI.ShowMedia()", ex);
                 }*/
             }
@@ -390,16 +377,6 @@ namespace GKUI.Forms
         public override void SetLocale()
         {
             fController.SetLocale();
-        }
-
-        #endregion
-
-        #region IThemedView implementation
-
-        public override void ApplyTheme()
-        {
-            base.ApplyTheme();
-            fController.ApplyTheme();
         }
 
         #endregion
@@ -544,124 +521,14 @@ namespace GKUI.Forms
             UpdateShieldState();
         }
 
-        private void MRUFileClick(object sender, EventArgs e)
-        {
-            /*int idx = (int)((ButtonMenuItem)sender).Tag;
-            AppHost.Instance.LoadBase(this, AppHost.Options.MRUFiles[idx].FileName);*/
-        }
-
         public void UpdateMRU()
         {
-            /*try {
-                miMRUFiles.Enabled = (AppHost.Options.MRUFiles.Count > 0);
-                miMRUFiles.Items.Clear();
-                MenuMRU.Items.Clear();
-
-                int num = AppHost.Options.MRUFiles.Count;
-                for (int i = 0; i < num; i++) {
-                    string fn = AppHost.Options.MRUFiles[i].FileName;
-
-                    MenuItemEx mi = new MenuItemEx(fn, i);
-                    mi.Click += MRUFileClick;
-                    miMRUFiles.Items.Add(mi);
-
-                    MenuItemEx tsmi = new MenuItemEx(fn, i);
-                    tsmi.Click += MRUFileClick;
-                    MenuMRU.Items.Add(tsmi);
-                }
-            } catch (Exception ex) {
-                Logger.WriteError("BaseWinSDI.UpdateMRU()", ex);
-            }*/
+            // not supported
         }
 
         public void UpdateControls(bool forceDeactivate, bool blockDependent = false)
         {
             fController.UpdateControls(forceDeactivate, blockDependent);
-        }
-
-        private void miExit_Click(object sender, EventArgs e)
-        {
-            AppHost.Instance.Quit();
-        }
-
-        private void miUndo_Click(object sender, EventArgs e)
-        {
-            fController.Undo();
-        }
-
-        private void miRedo_Click(object sender, EventArgs e)
-        {
-            fController.Redo();
-        }
-
-        private void miExportToFamilyBook_Click(object sender, EventArgs e)
-        {
-            fController.ExportToFamilyBook();
-        }
-
-        private void miExportToTreesAlbum_Click(object sender, EventArgs e)
-        {
-            fController.ExportToTreesAlbum();
-        }
-
-        private void miExportTable_Click(object sender, EventArgs e)
-        {
-            fController.ExportTable();
-        }
-
-        private void miFileProperties_Click(object sender, EventArgs e)
-        {
-            fController.ShowFileProperties();
-        }
-
-        private void miScripts_Click(object sender, EventArgs e)
-        {
-            fController.ShowScripts();
-        }
-
-        private void miTTTreeSplit_Click(object sender, EventArgs e)
-        {
-            fController.ShowTreeSplit();
-        }
-
-        private void miTTTreeMerge_Click(object sender, EventArgs e)
-        {
-            fController.ShowTreeMerge();
-        }
-
-        private void miTTTreeCompare_Click(object sender, EventArgs e)
-        {
-            fController.ShowTreeCompare();
-        }
-
-        private void miTTTreeCheck_Click(object sender, EventArgs e)
-        {
-            fController.ShowTreeCheck();
-        }
-
-        private void miTTRecMerge_Click(object sender, EventArgs e)
-        {
-            BaseController.ShowRecMerge(this, this, null, null);
-        }
-
-        private void miTTPlacesManager_Click(object sender, EventArgs e)
-        {
-            fController.ShowPlacesManager();
-        }
-
-        private void miTTPatSearch_Click(object sender, EventArgs e)
-        {
-            fController.ShowPatSearch();
-        }
-
-        private void miTTFamilyGroups_Click(object sender, EventArgs e)
-        {
-            fController.ShowFamilyGroups();
-        }
-
-        private void miOptions_Click(object sender, EventArgs e)
-        {
-            AppHost.Instance.ShowOptions(this);
         }
 
         private void miFileNew_Click(object sender, EventArgs e)
@@ -709,36 +576,6 @@ namespace GKUI.Forms
             fController.NavNext();
         }
 
-        private void tbSendMail_Click(object sender, EventArgs e)
-        {
-            fController.SendMail();
-        }
-
-        private void miMap_Click(object sender, EventArgs e)
-        {
-            fController.ShowMap();
-        }
-
-        private void miOrganizer_Click(object sender, EventArgs e)
-        {
-            fController.ShowOrganizer();
-        }
-
-        private void miRelationshipCalculator_Click(object sender, EventArgs e)
-        {
-            fController.ShowRelationshipCalculator();
-        }
-
-        private void miSlideshow_Click(object sender, EventArgs e)
-        {
-            fController.ShowSlideshow();
-        }
-
-        private void miStats_Click(object sender, EventArgs e)
-        {
-            fController.ShowStats();
-        }
-
         private void miPedigreeAscend_Click(object sender, EventArgs e)
         {
             fController.GeneratePedigree(PedigreeType.Ascend);
@@ -772,26 +609,6 @@ namespace GKUI.Forms
         private void miDescendantsCircle_Click(object sender, EventArgs e)
         {
             fController.ShowCircleChart(CircleChartType.Descendants);
-        }
-
-        private void miLogSend_Click(object sender, EventArgs e)
-        {
-            fController.SendLog();
-        }
-
-        private void miLogView_Click(object sender, EventArgs e)
-        {
-            fController.ShowLog();
-        }
-
-        private void miAbout_Click(object sender, EventArgs e)
-        {
-            fController.ShowAbout();
-        }
-
-        private void miContext_Click(object sender, EventArgs e)
-        {
-            AppHost.Instance.ShowHelpTopic("");
         }
 
         #endregion

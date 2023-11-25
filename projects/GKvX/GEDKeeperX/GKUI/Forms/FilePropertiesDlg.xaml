@@ -33,7 +33,7 @@
                             <Entry x:Name="txtTel" Grid.Column="1" Grid.Row="2" />
 
                             <Label x:Name="lblLanguage" Grid.Column="0" Grid.Row="3" />
-                            <comcom:GKComboBox x:Name="txtLanguage" Grid.Column="1" Grid.Row="3" IsReadOnly="True" />
+                            <comcom:GKComboBox x:Name="txtLanguage" Grid.Column="1" Grid.Row="3" />
                         </Grid>
 
                         <Label VerticalOptions="FillAndExpand" />

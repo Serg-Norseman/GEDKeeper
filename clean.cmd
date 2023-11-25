@@ -72,6 +72,20 @@ rmdir .\projects\GKv3\GEDKeeper3\obj /s /q
 rmdir .\projects\GKv3\GKComponents\bin /s /q
 rmdir .\projects\GKv3\GKComponents\obj /s /q
 
+rem <<< GKvX >>>
+
+rmdir .\projects\GKvX\.vs /s /q
+
+rmdir .\projects\GKvX\GEDKeeperX\bin /s /q
+rmdir .\projects\GKvX\GEDKeeperX\obj /s /q
+
+rmdir .\projects\GKvX\GEDKeeperX.Android\bin /s /q
+rmdir .\projects\GKvX\GEDKeeperX.Android\obj /s /q
+del .\projects\GKvX\GEDKeeperX.Android\*.csproj.user /s /q
+
+rmdir .\projects\GKvX\GEDKeeperX.iOS\bin /s /q
+rmdir .\projects\GKvX\GEDKeeperX.iOS\obj /s /q
+
 rem <<< Plugins cleaning >>>
 
 rmdir .\projects\plugins\GEDmill\bin /s /q
