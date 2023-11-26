@@ -37,7 +37,7 @@ namespace GKUI.Components
         private bool fReadOnly;
         private string fAppendNew;
 
-        public IList Items
+        public new IList Items
         {
             get { return fItems; }
         }
@@ -99,7 +99,6 @@ namespace GKUI.Components
         public void AddRange(IEnumerable<object> items, bool sorted = false)
         {
             //Control.Sorted = false;
-            //Control.Items.AddRange(GKComboItem.Convert((string[])items));
             foreach (var itm in items) {
                 fItems.Add(new GKComboItem<object>(itm.ToString(), null));
             }

@@ -23,6 +23,7 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
+using GKUI.Platform;
 using Xamarin.CommunityToolkit.Behaviors;
 
 namespace GKUI.Forms
@@ -170,9 +171,10 @@ namespace GKUI.Forms
             txtAliveBeforeDate.IsEnabled = rbAliveBefore.IsChecked;
         }
 
-        private void btnAccept_Click(object sender, EventArgs e)
+        protected async override void AcceptClickHandler(object sender, EventArgs e)
         {
-            //DialogResult = (fCommonController.Accept() && fController.Accept()) ? DialogResult.Ok : DialogResult.None;
+            if (fCommonController.Accept() && fController.Accept())
+                await Close(DialogResult.Ok);
         }
 
         private void btnReset_Click(object sender, EventArgs e)

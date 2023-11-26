@@ -331,10 +331,26 @@ namespace GKCore.Controllers
             GetControl<IButtonToolItem>("tbGensAncestors").Text = LangMan.LS(LSID.Generations) + ": " + LangMan.LS(LSID.Ancestors);
             GetControl<IButtonToolItem>("tbGensDescendants").Text = LangMan.LS(LSID.Generations) + ": " + LangMan.LS(LSID.Descendants);
             GetControl<IButtonToolItem>("tbBorders").Text = LangMan.LS(LSID.Borders);
-
-            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) return;
-
             GetControl<IButtonToolItem>("tbModes").Text = LangMan.LS(LSID.ModesTip);
+
+            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<IButtonToolItem>("miEdit").Text = LangMan.LS(LSID.DoEdit);
+                GetControl<IButtonToolItem>("miFatherAdd").Text = LangMan.LS(LSID.FatherAdd);
+                GetControl<IButtonToolItem>("miMotherAdd").Text = LangMan.LS(LSID.MotherAdd);
+                GetControl<IButtonToolItem>("miFamilyAdd").Text = LangMan.LS(LSID.FamilyAdd);
+                GetControl<IButtonToolItem>("miSpouseAdd").Text = LangMan.LS(LSID.SpouseAdd);
+                GetControl<IButtonToolItem>("miSonAdd").Text = LangMan.LS(LSID.SonAdd);
+                GetControl<IButtonToolItem>("miDaughterAdd").Text = LangMan.LS(LSID.DaughterAdd);
+                GetControl<IButtonToolItem>("miDelete").Text = LangMan.LS(LSID.DoDelete);
+                GetControl<IButtonToolItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
+                GetControl<IButtonToolItem>("miGoToPrimaryBranch").Text = LangMan.LS(LSID.GoToPrimaryBranch);
+                GetControl<IButtonToolItem>("miOpenInNewWindow").Text = LangMan.LS(LSID.OpenInNewWindow);
+                GetControl<IButtonToolItem>("miMergeDuplicates").Text = LangMan.LS(LSID.MergeDuplicates);
+                GetControl<IButtonToolItem>("miRebuildTree").Text = LangMan.LS(LSID.RebuildTree);
+                GetControl<IButtonToolItem>("miRebuildKinships").Text = LangMan.LS(LSID.RebuildKinships);
+                GetControl<IButtonToolItem>("miSelectColor").Text = LangMan.LS(LSID.SelectColor);
+                return;
+            }
 
             GetControl<IMenuItem>("miGensInfCommon").Text = LangMan.LS(LSID.Unlimited);
             GetControl<IMenuItem>("miGensInfAncestors").Text = LangMan.LS(LSID.Unlimited);
@@ -342,6 +358,7 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miModeBoth").Text = LangMan.LS(LSID.TM_Both);
             GetControl<IMenuItem>("miModeAncestors").Text = LangMan.LS(LSID.TM_Ancestors);
             GetControl<IMenuItem>("miModeDescendants").Text = LangMan.LS(LSID.TM_Descendants);
+
             GetControl<IMenuItem>("miEdit").Text = LangMan.LS(LSID.DoEdit);
             GetControl<IMenuItem>("miFatherAdd").Text = LangMan.LS(LSID.FatherAdd);
             GetControl<IMenuItem>("miMotherAdd").Text = LangMan.LS(LSID.MotherAdd);
@@ -350,19 +367,20 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miSonAdd").Text = LangMan.LS(LSID.SonAdd);
             GetControl<IMenuItem>("miDaughterAdd").Text = LangMan.LS(LSID.DaughterAdd);
             GetControl<IMenuItem>("miDelete").Text = LangMan.LS(LSID.DoDelete);
+            GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
+            GetControl<IMenuItem>("miGoToPrimaryBranch").Text = LangMan.LS(LSID.GoToPrimaryBranch);
+            GetControl<IMenuItem>("miOpenInNewWindow").Text = LangMan.LS(LSID.OpenInNewWindow);
+            GetControl<IMenuItem>("miMergeDuplicates").Text = LangMan.LS(LSID.MergeDuplicates);
             GetControl<IMenuItem>("miRebuildTree").Text = LangMan.LS(LSID.RebuildTree);
             GetControl<IMenuItem>("miRebuildKinships").Text = LangMan.LS(LSID.RebuildKinships);
+            GetControl<IMenuItem>("miSelectColor").Text = LangMan.LS(LSID.SelectColor);
+
             GetControl<IMenuItem>("miFillColor").Text = LangMan.LS(LSID.FillColor);
             GetControl<IMenuItem>("miFillImage").Text = LangMan.LS(LSID.FillImage);
             GetControl<IMenuItem>("miTraceSelected").Text = LangMan.LS(LSID.TM_TraceSelected);
             GetControl<IMenuItem>("miTraceKinships").Text = LangMan.LS(LSID.TM_TraceKinships);
             GetControl<IMenuItem>("miCertaintyIndex").Text = LangMan.LS(LSID.CertaintyIndex);
             GetControl<IMenuItem>("miXRefVisible").Text = LangMan.LS(LSID.XRefVisible);
-            GetControl<IMenuItem>("miSelectColor").Text = LangMan.LS(LSID.SelectColor);
-            GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
-            GetControl<IMenuItem>("miGoToPrimaryBranch").Text = LangMan.LS(LSID.GoToPrimaryBranch);
-            GetControl<IMenuItem>("miOpenInNewWindow").Text = LangMan.LS(LSID.OpenInNewWindow);
-            GetControl<IMenuItem>("miMergeDuplicates").Text = LangMan.LS(LSID.MergeDuplicates);
             GetControl<IMenuItem>("miHideDescSpouses").Text = LangMan.LS(LSID.HideDescSpouses);
 
             SetToolTip("tbModes", LangMan.LS(LSID.ModesTip));

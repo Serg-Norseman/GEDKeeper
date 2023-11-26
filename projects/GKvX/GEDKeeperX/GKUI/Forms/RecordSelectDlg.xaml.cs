@@ -81,7 +81,6 @@ namespace GKUI.Forms
         {
             if (fListRecords != null) {
                 fListRecords.ListMan = null;
-                //fListRecords.Dispose();
                 fListRecords = null;
             }
             fListRecords = UIHelper.CreateRecordsView(panList, fController.Base.Context, fController.RecType, true);
@@ -95,7 +94,6 @@ namespace GKUI.Forms
             } catch (Exception ex) {
                 Logger.WriteError("RecordSelectDlg.btnSelect_Click()", ex);
                 ResultRecord = null;
-                //DialogResult = DialogResult.None;
             }
         }
 
@@ -110,7 +108,6 @@ namespace GKUI.Forms
             } catch (Exception ex) {
                 Logger.WriteError("RecordSelectDlg.btnCreate_Click()", ex);
                 ResultRecord = null;
-                //DialogResult = DialogResult.None;
             }
         }
 

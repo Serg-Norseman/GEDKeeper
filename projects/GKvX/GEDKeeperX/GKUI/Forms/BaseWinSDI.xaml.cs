@@ -74,12 +74,12 @@ namespace GKUI.Forms
 
         IMenuItem IBaseWindowView.ReportsItem
         {
-            get { return /*GetControlHandler<IMenuItem>(miReports)*/ null; }
+            get { return null; }
         }
 
         IMenuItem IBaseWindowView.PluginsItem
         {
-            get { return /*GetControlHandler<IMenuItem>(miPlugins) */ null; }
+            get { return null; }
         }
 
         #endregion
@@ -359,14 +359,13 @@ namespace GKUI.Forms
                 string targetFile = fContext.MediaLoad(fileRef);
                 GKUtils.LoadExtFile(targetFile);
             } else {
-                /*var mediaViewer = AppHost.Container.Resolve<IMediaViewerWin>(this);
                 try {
+                    var mediaViewer = AppHost.Container.Resolve<IMediaViewerWin>(this);
                     mediaViewer.MultimediaRecord = mediaRec;
-                    mediaViewer.ShowInTaskbar = true;
-                    mediaViewer.Show();
+                    mediaViewer.Show(true);
                 } catch (Exception ex) {
                     Logger.WriteError("BaseWinSDI.ShowMedia()", ex);
-                }*/
+                }
             }
         }
 
@@ -502,9 +501,7 @@ namespace GKUI.Forms
 
         void IBaseWindowView.LoadBase(string fileName)
         {
-            /*Application.Instance.Invoke(delegate () {
-                AppHost.Instance.LoadBase(this, fileName);
-            });*/
+            // not supported
         }
 
         private void UpdateShieldState()

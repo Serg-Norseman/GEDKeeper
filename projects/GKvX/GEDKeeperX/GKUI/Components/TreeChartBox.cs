@@ -634,21 +634,21 @@ namespace GKUI.Components
                 }
 
                 ExtRect expRt = TreeChartModel.GetExpanderRect(persRt);
-                if ((e.Buttons == SKMouseButton.Left && mouseEvent == MouseEvent.meUp) && expRt.Contains(aX, aY)) {
+                if (e.Buttons == SKMouseButton.Left && mouseEvent == MouseEvent.meUp && expRt.Contains(aX, aY)) {
                     person = p;
                     result = MouseAction.Expand;
                     break;
                 }
 
                 expRt = TreeChartModel.GetPersonExpandRect(persRt);
-                if ((e.Buttons == SKMouseButton.Left && mouseEvent == MouseEvent.meUp) && expRt.Contains(aX, aY)) {
+                if (e.Buttons == SKMouseButton.Left && mouseEvent == MouseEvent.meUp && expRt.Contains(aX, aY)) {
                     person = p;
                     result = MouseAction.PersonExpand;
                     break;
                 }
 
                 ExtRect infoRt = TreeChartModel.GetInfoRect(persRt);
-                if ((e.Buttons == SKMouseButton.Left && mouseEvent == MouseEvent.meUp) && infoRt.Contains(aX, aY)) {
+                if (e.Buttons == SKMouseButton.Left && mouseEvent == MouseEvent.meUp && infoRt.Contains(aX, aY)) {
                     person = p;
                     result = MouseAction.Info;
                     break;

@@ -3,10 +3,13 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
     xmlns:comcom="clr-namespace:GKUI.Components"
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
-    x:Class="GKUI.Forms.SexCheckDlg">
+    x:Class="GKUI.Forms.SexCheckDlg"
+    x:TypeArguments="mvp:ISexCheckDlg, contr:SexCheckController">
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
