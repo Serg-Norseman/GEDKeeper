@@ -33,19 +33,15 @@
 
 1. DLToolkit.Forms.Controls and Xamvvm.Forms - obsolete, on Android - ugly
 
-## Problems
-
-1. Xamarin.Forms.DataGrid >= 5.0.0.2515 - dont works
-2. Xamarin.Forms.DataGrid 4.8.0 - selecting items does not work correctly after scrolling
-
 ## Checked packages
 
 Xamarin.Forms 5.0.0.2291-2545
 Xamarin.Essentials 1.7.0-3 -> TargetFrameworkVersion=v10.0, android:targetSdkVersion="29"
 Xamarin.Forms.InputKit 3.7.2, 4.1.6
 Xamarin.Forms.DataGrid 4.8.0
+  - 4.8.0 - selecting items does not work correctly after scrolling
+  - >= 5.0.0.2515 - dont works
 Xamarin.CommunityToolkit 2.0.6
-
 
 # Dev Requirements
 
@@ -66,8 +62,5 @@ Samsung Galaxy A32, Android 13 (API 33), 2022
 
 # Incomprehensible problems
 
-- The main window grids are not updated after updating the connected collections (INotifyCollectionChanged),
-  but they are updated after switching tabs. However, grids in dialogs immediately have content.
-- How to control scrolling and size of SkCanvasView in ScrollView (Charts)?
-- Zoom (pinch) don't works in ScrollView + SkCanvasView.
+- How to control scrolling and size of SkCanvasView in ScrollView (Charts); centering in container?
 - DataGrid unused space background color black not turning off.

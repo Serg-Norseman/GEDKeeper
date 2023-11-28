@@ -430,16 +430,10 @@ namespace GKUI.Components
             if (fListMan == null) return;
 
             try {
-                if (fListMan.ColumnsHaveBeenChanged != columnsChanged && columnsChanged) {
-                    fListMan.ColumnsHaveBeenChanged = columnsChanged;
-                }
-
                 object tempRec = GetSelectedData();
-
                 BeginUpdate();
                 try {
-                    if (columnsChanged || Columns.Count == 0 || fListMan.ColumnsHaveBeenChanged) {
-                        Columns.Clear();
+                    if (columnsChanged || Columns.Count == 0) {
                         fListMan.UpdateColumns(this);
                     }
 
@@ -449,9 +443,8 @@ namespace GKUI.Components
                     ResizeColumns();
                 } finally {
                     EndUpdate();
+                    if (tempRec != null) SelectItem(tempRec);
                 }
-
-                if (tempRec != null) SelectItem(tempRec);
             } catch (Exception ex) {
                 Logger.WriteError("GKListView.UpdateContents()", ex);
             }

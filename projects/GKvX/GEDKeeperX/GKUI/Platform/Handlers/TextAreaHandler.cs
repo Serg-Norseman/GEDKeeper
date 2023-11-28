@@ -58,7 +58,7 @@ namespace GKUI.Platform
 
         public string SelectedText
         {
-            get { return /*Control.SelectedText*/ null; }
+            get { return /*Control.SelectedText*/ string.Empty; }
             set { /*Control.SelectedText = value;*/ }
         }
 

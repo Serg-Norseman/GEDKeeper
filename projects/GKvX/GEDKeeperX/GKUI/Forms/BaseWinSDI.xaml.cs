@@ -20,7 +20,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using BSLib;
+using CarouselView.FormsPlugin.Abstractions;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
@@ -90,6 +92,7 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            UnsetAnimateTransition();
             tabsRecords.PositionChanged += tabsRecords_SelectedIndexChanged;
 
             fController = new BaseWinController(this, true);
@@ -111,11 +114,23 @@ namespace GKUI.Forms
             fController.SetLocale();
         }
 
+        private void UnsetAnimateTransition()
+        {
+            // TabViewControl._carouselView.AnimateTransition = false (!)
+            var _carouselView = typeof(TabViewControl).GetField("_carouselView", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tabsRecords) as CarouselViewControl;
+            if (_carouselView != null) {
+                _carouselView.AnimateTransition = false;
+            }
+        }
+
         private void CreatePage(string pageText, GDMRecordType recType)
         {
             var summary = new HyperView();
             summary.OnLink += mPersonSummaryLink;
             //summary.ContextMenu = summaryMenu;
+            summary.HorizontalOptions = LayoutOptions.FillAndExpand;
+            summary.VerticalOptions = LayoutOptions.FillAndExpand;
+            summary.WidthRequest = 300;
 
             var recView = new GKListView();
             //recView.AllowMultipleSelection = true;
@@ -124,20 +139,22 @@ namespace GKUI.Forms
             //recView.ContextMenu = contextMenu;
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
             recView.UpdateContents();
+            recView.HorizontalOptions = LayoutOptions.FillAndExpand;
+            recView.VerticalOptions = LayoutOptions.FillAndExpand;
 
             string splID = "splitter" + ((int)recType).ToString();
-            var spl = new Grid {
+            // Using Grid resulted in data appearing only after switching tabs of the main window.
+            var spl = new StackLayout() {
+                Orientation = StackOrientation.Horizontal,
+                Padding = 0,
+                Spacing = 0,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                ColumnDefinitions = new ColumnDefinitionCollection() {
-                    new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) },
-                    new ColumnDefinition() { Width = new GridLength(300, GridUnitType.Absolute) },
-                },
-                RowDefinitions = new RowDefinitionCollection() {
-                    new RowDefinition() { Height = GridLength.Auto }
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                Children = {
+                    new Frame() { Content = recView, Padding = 1, BorderColor = Color.LightGray, HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.FillAndExpand },
+                    new Frame() { Content = summary, Padding = 1, BorderColor = Color.LightGray, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.FillAndExpand }
                 }
             };
-            spl.Children.Add(new Frame() { Content = recView, Padding = 1, BorderColor = Color.LightGray }, 0, 0);
-            spl.Children.Add(new Frame() { Content = summary, Padding = 1, BorderColor = Color.LightGray }, 1, 0);
 
             var tabPage = new TabItem();
             tabPage.HeaderText = pageText;

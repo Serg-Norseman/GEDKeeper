@@ -406,16 +406,10 @@ namespace GKUI.Components
             if (fListMan == null) return;
 
             try {
-                if (fListMan.ColumnsHaveBeenChanged != columnsChanged && columnsChanged) {
-                    fListMan.ColumnsHaveBeenChanged = columnsChanged;
-                }
-
                 object tempRec = GetSelectedData();
-
                 BeginUpdate();
                 try {
-                    if (columnsChanged || Columns.Count == 0 || fListMan.ColumnsHaveBeenChanged) {
-                        Columns.Clear();
+                    if (columnsChanged || Columns.Count == 0) {
                         fListMan.UpdateColumns(this);
                     }
 
@@ -425,22 +419,11 @@ namespace GKUI.Components
                     ResizeColumns();
                 } finally {
                     EndUpdate();
+                    if (tempRec != null) SelectItem(tempRec);
                 }
-
-                if (tempRec != null) SelectItem(tempRec);
-
-                fListMan.ContentList.Reset();
-                //InvokeMethod((DataGrid)this, "Reload", null);
-                //InvokeMethod((DataGrid)this, "HandleItemsSourceCollectionChanged", new object[] { fListMan.ContentList, null });
             } catch (Exception ex) {
                 Logger.WriteError("GKListView.UpdateContents()", ex);
             }
-        }
-
-        public static object InvokeMethod<T>(T obj, string methodName, params object[] args)
-        {
-            var method = typeof(T).GetTypeInfo().GetDeclaredMethod(methodName);
-            return method.Invoke(obj, args);
         }
 
         public void DeleteRecord(object data)

@@ -426,34 +426,37 @@ namespace GKCore.Controllers
         {
             GetControl<ICheckBox>("chkUseInlineImagesInSvg").Checked = fOptions.TreeChartOptions.UseInlineImagesInSvg;
             GetControl<ICheckBox>("chkExtendedTree").Checked = fOptions.TreeChartOptions.ExtendedTree;
-
-            GetControl<ICheckBox>("chkUseExtendedNotes").Checked = fOptions.UseExtendedNotes;
-            GetControl<ICheckBox>("chkKeepRichNames").Checked = fOptions.KeepRichNames;
-            GetControl<ICheckBox>("chkMaximizeChartWindows").Checked = fOptions.MaximizeChartWindows;
+            GetControl<ICheckBox>("chkExtendedKinships").Checked = fOptions.ExtendedKinships;
             GetControl<ICheckBox>("chkSAFByAllNames").Checked = fOptions.SearchAndFilterByAllNames;
-            GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Checked = fOptions.KeepInfoPansOverallSize;
+
+            var isMobile = AppHost.Instance.HasFeatureSupport(Feature.Mobile);
+            GetControl<ICheckBox>("chkUseExtendedNotes").Checked = fOptions.UseExtendedNotes && !isMobile;
+            GetControl<ICheckBox>("chkUseExtendedNotes").Enabled = !isMobile;
+            GetControl<ICheckBox>("chkKeepRichNames").Checked = fOptions.KeepRichNames && !isMobile;
+            GetControl<ICheckBox>("chkKeepRichNames").Enabled = !isMobile;
+            GetControl<ICheckBox>("chkMaximizeChartWindows").Checked = fOptions.MaximizeChartWindows && !isMobile;
+            GetControl<ICheckBox>("chkMaximizeChartWindows").Enabled = !isMobile;
+            GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Checked = fOptions.KeepInfoPansOverallSize && !isMobile;
+            GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Enabled = !isMobile;
 
             var hasOverwritePrompt = AppHost.Instance.HasFeatureSupport(Feature.OverwritePrompt);
-            GetControl<ICheckBox>("chkFilesOverwriteWarn").Enabled = hasOverwritePrompt;
             GetControl<ICheckBox>("chkFilesOverwriteWarn").Checked = fOptions.FilesOverwriteWarn && hasOverwritePrompt;
-
-            GetControl<ICheckBox>("chkExtendedKinships").Checked = fOptions.ExtendedKinships;
+            GetControl<ICheckBox>("chkFilesOverwriteWarn").Enabled = hasOverwritePrompt;
         }
 
         public void AcceptSpecials()
         {
             fOptions.TreeChartOptions.UseInlineImagesInSvg = GetControl<ICheckBox>("chkUseInlineImagesInSvg").Checked;
             fOptions.TreeChartOptions.ExtendedTree = GetControl<ICheckBox>("chkExtendedTree").Checked;
+            fOptions.ExtendedKinships = GetControl<ICheckBox>("chkExtendedKinships").Checked;
+            fOptions.SearchAndFilterByAllNames = GetControl<ICheckBox>("chkSAFByAllNames").Checked;
 
             fOptions.UseExtendedNotes = GetControl<ICheckBox>("chkUseExtendedNotes").Checked;
             fOptions.KeepRichNames = GetControl<ICheckBox>("chkKeepRichNames").Checked;
             fOptions.MaximizeChartWindows = GetControl<ICheckBox>("chkMaximizeChartWindows").Checked;
-            fOptions.SearchAndFilterByAllNames = GetControl<ICheckBox>("chkSAFByAllNames").Checked;
             fOptions.KeepInfoPansOverallSize = GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Checked;
 
             fOptions.FilesOverwriteWarn = GetControl<ICheckBox>("chkFilesOverwriteWarn").Checked;
-
-            fOptions.ExtendedKinships = GetControl<ICheckBox>("chkExtendedKinships").Checked;
         }
 
         public void UpdatePlugins()

@@ -52,6 +52,7 @@ namespace GKCore.Controllers
         public AssociationEditDlgController(IAssociationEditDlg view) : base(view)
         {
             fView.Relation.AddStrings(GlobalOptions.Instance.Relations);
+            fView.Relation.ReadOnly = false;
         }
 
         public override bool Accept()

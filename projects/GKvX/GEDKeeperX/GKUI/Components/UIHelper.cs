@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using BSLib;
@@ -183,6 +184,12 @@ namespace GKUI.Components
                 element = element.Parent;
             }
             return element as Page;
+        }
+
+        public static object InvokeMethod<T>(T obj, string methodName, params object[] args)
+        {
+            var method = typeof(T).GetTypeInfo().GetDeclaredMethod(methodName);
+            return method?.Invoke(obj, args);
         }
     }
 }

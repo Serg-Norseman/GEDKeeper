@@ -20,7 +20,6 @@
 
 using System;
 using BSLib;
-using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 
@@ -28,8 +27,6 @@ namespace GKUI.Components
 {
     public class MouseEventArgs : EventArgs
     {
-        //public Keys Modifiers { get; private set; }
-
         public SKMouseButton Buttons { get; private set; }
 
         public Point Location { get; private set; }
@@ -40,10 +37,9 @@ namespace GKUI.Components
 
         public int Delta { get; private set; }
 
-        public MouseEventArgs(SKMouseButton buttons/*, Keys modifiers*/, Point location, int delta = 0, float pressure = 1f)
+        public MouseEventArgs(SKMouseButton buttons, Point location, int delta = 0, float pressure = 1f)
         {
             Buttons = buttons;
-            //Modifiers = modifiers;
             Location = location;
             Delta = delta;
             Pressure = pressure;
@@ -53,16 +49,14 @@ namespace GKUI.Components
 
     public class ZoomEventArgs : EventArgs
     {
-        public double Scale { get; } = 1.0;
+        public float Scale { get; } = 1.0f;
 
         public Point ScaleOrigin { get; }
 
-        public GestureStatus Status { get; }
-
-        public ZoomEventArgs(GestureStatus status, double scale, Point origin)
+        public ZoomEventArgs(float scale, Point origin)
         {
-            ScaleOrigin = origin;
             Scale = scale;
+            ScaleOrigin = origin;
         }
     }
 
@@ -183,10 +177,6 @@ namespace GKUI.Components
             base.SizeChanged += OnSizeChanged;
             base.Scrolled += OnScroll;
 
-            var pinch = new PinchGestureRecognizer();
-            pinch.PinchUpdated += OnPinchUpdated;
-            fCanvas.GestureRecognizers.Add(pinch);
-
             var tap = new TapGestureRecognizer { NumberOfTapsRequired = 2 };
             tap.Tapped += OnTapped;
             fCanvas.GestureRecognizers.Add(tap);
@@ -261,22 +251,6 @@ namespace GKUI.Components
 
             e.Handled = true;
             base.OnMouseDown(e);
-        }
-
-        protected override void OnMouseWheel(MouseEventArgs e)
-        {
-            //Console.WriteLine("ScrollablePanel.OnMouseWheel()");
-
-            int delta = -(int)(e.Delta.Height * 120.0f);
-
-            if (Keys.None == e.Modifiers) {
-                AdjustScroll(0, delta);
-            } else if (Keys.Shift == e.Modifiers) {
-                AdjustScroll(delta, 0);
-            }
-
-            e.Handled = true;
-            base.OnMouseWheel(e);
         }
 
         protected override void OnShown(EventArgs e)
@@ -456,37 +430,8 @@ namespace GKUI.Components
             e.Handled = mouseArgs.Handled;
         }
 
-        protected virtual void OnZoom(ZoomEventArgs e)
+        internal virtual void OnZoom(ZoomEventArgs e)
         {
-        }
-
-        private void OnPinchUpdated(object sender, PinchGestureUpdatedEventArgs e)
-        {
-            var args = new ZoomEventArgs(e.Status, e.Scale, e.ScaleOrigin);
-            OnZoom(args);
-
-            switch (e.Status) {
-                case GestureStatus.Started:
-                    /*LastScale = e.Scale;
-                    StartScale = Scale;
-                    AnchorX = e.ScaleOrigin.X;
-                    AnchorY = e.ScaleOrigin.Y;*/
-                    break;
-
-                case GestureStatus.Running:
-                    /*if (e.Scale < 0 || Math.Abs(LastScale - e.Scale) > (LastScale * 1.3) - LastScale) { return; }
-                    LastScale = e.Scale;
-                    var current = Scale + (e.Scale - 1) * StartScale;
-                    Scale = Clamp(current, MIN_SCALE * (1 - OVERSHOOT), MAX_SCALE * (1 + OVERSHOOT));*/
-                    break;
-
-                case GestureStatus.Completed:
-                    /*if (Scale > MAX_SCALE)
-                        this.ScaleTo(MAX_SCALE, 250, Easing.SpringOut);
-                    else if (Scale < MIN_SCALE)
-                        this.ScaleTo(MIN_SCALE, 250, Easing.SpringOut);*/
-                    break;
-            }
         }
     }
 }

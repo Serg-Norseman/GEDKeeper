@@ -518,30 +518,6 @@ namespace GKUI.Components
                 eventHandler(this, new EventArgs());
         }
 
-        /*protected override void OnKeyDown(KeyEventArgs e)
-        {
-            switch (e.Key) {
-                case Keys.F4:
-                    ToggleCollapse();
-                    e.Handled = true;
-                    break;
-
-                case Keys.Add:
-                    SetScale(fModel.Scale + 0.05f);
-                    e.Handled = true;
-                    break;
-
-                case Keys.Subtract:
-                    SetScale(fModel.Scale - 0.05f);
-                    e.Handled = true;
-                    break;
-
-                default:
-                    base.OnKeyDown(e);
-                    break;
-            }
-        }*/
-
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
@@ -587,21 +563,10 @@ namespace GKUI.Components
             base.OnMouseDoubleClick(e);
         }
 
-        protected override void OnZoom(ZoomEventArgs e)
+        internal override void OnZoom(ZoomEventArgs e)
         {
-            base.OnZoom(e);
+            SetScale(e.Scale);
         }
-
-        /*protected override void OnMouseWheel(MouseEventArgs e)
-        {
-            if (e.Modifiers == Keys.Control) {
-                float newScale = (e.Delta.Height > 0) ? fModel.Scale + 0.05f : fModel.Scale - 0.05f;
-                //Console.WriteLine(string.Format("{0} - {1} - {2}", e.Delta.Height, fModel.Scale, newScale));
-                SetScale(newScale);
-
-                e.Handled = true;
-            } else base.OnMouseWheel(e);
-        }*/
 
         private MouseAction GetMouseAction(MouseEventArgs e, MouseEvent mouseEvent, out TreeChartPerson person)
         {
