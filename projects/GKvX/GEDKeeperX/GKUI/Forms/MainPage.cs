@@ -20,7 +20,10 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GKCore;
 using GKCore.Interfaces;
+using GKUI.Platform;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace GKUI.Forms
@@ -37,6 +40,19 @@ namespace GKUI.Forms
             Detail = new LaunchPage();
 
             fMenuPages = new Dictionary<int, Page>();
+
+            DeviceDisplay.MainDisplayInfoChanged += DeviceDisplay_MainDisplayInfoChanged;
+        }
+
+        public static BaseWinSDI GetBaseWin()
+        {
+            return AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+        }
+
+        private void DeviceDisplay_MainDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e)
+        {
+            ((IDisplayChangeable)Detail).OnDisplayChanged(e.DisplayInfo);
+            ((IDisplayChangeable)GetBaseWin()).OnDisplayChanged(e.DisplayInfo);
         }
 
         public async Task NavigateAsync(Page page)

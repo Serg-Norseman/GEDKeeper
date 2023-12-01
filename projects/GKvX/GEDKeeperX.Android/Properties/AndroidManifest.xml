@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.SVZsoft.GEDKeeperX">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="2" android:versionName="3.4.1" package="com.SVZsoft.GEDKeeperX">
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="29" />
-    <application android:label="GEDKeeperX.Android"></application>
+    <application android:label="GEDKeeperX"></application>
 </manifest>

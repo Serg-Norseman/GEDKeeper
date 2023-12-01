@@ -237,6 +237,17 @@ namespace GKUI.Themes
             ThemeContextMenuStripHandler(view, component, theme);
         }
 
+        private static void FilterGridViewHandler(IThemedView view, Component component, Theme theme)
+        {
+            var ctl = (ContainerControl)component;
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Grid);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.GridText);
+
+            foreach (Control item in ctl.Controls) {
+                ApplyTheme(view, item, theme);
+            }
+        }
+
         private static void ThemeFormHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (Form)component;
@@ -553,7 +564,7 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(MenuItemEx), ThemeToolStripItemHandler);      // ?
 
             RegisterControlHandler(typeof(ArborViewer), ThemeUserControlHandler);       // ?
-            RegisterControlHandler(typeof(FilterGridView), ThemeDataGridViewHandler);   // ?
+            RegisterControlHandler(typeof(FilterGridView), FilterGridViewHandler);      // ?
             RegisterControlHandler(typeof(GKTabControl), ThemeTabControlHandler);       // ready +
             RegisterControlHandler(typeof(GKComboBox), ThemeComboBoxHandler);           // ?
             RegisterControlHandler(typeof(GKDateBox), ThemeTextBoxHandler);             // ?

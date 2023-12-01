@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "subprojects", "subprojects", "{22EFE45F-4915-4720-94EF-AF127E2E1DDD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKGenetix.Core.nstd", "..\GKGenetix\GKGenetix.Core\GKGenetix.Core.nstd.csproj", "{3BA0A98B-56F5-4A9F-B9EC-E662A564D95C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Android = Debug|Android
@@ -112,6 +114,18 @@ Global
 		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6}.Release|iPhone.Build.0 = Release|iPhone
 		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6}.Release|iPhoneSimulator.ActiveCfg = Release|iPhone
 		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6}.Release|iPhoneSimulator.Build.0 = Release|iPhone
+		{3BA0A98B-56F5-4A9F-B9EC-E662A564D95C}.Debug|Android.ActiveCfg = Debug|Any CPU
+		{3BA0A98B-56F5-4A9F-B9EC-E662A564D95C}.Debug|Android.Build.0 = Debug|Any CPU
+		{3BA0A98B-56F5-4A9F-B9EC-E662A564D95C}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{3BA0A98B-56F5-4A9F-B9EC-E662A564D95C}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{3BA0A98B-56F5-4A9F-B9EC-E662A564D95C}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{3BA0A98B-56F5-4A9F-B9EC-E662A564D95C}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{3BA0A98B-56F5-4A9F-B9EC-E662A564D95C}.Release|Android.ActiveCfg = Release|Any CPU
+		{3BA0A98B-56F5-4A9F-B9EC-E662A564D95C}.Release|Android.Build.0 = Release|Any CPU
+		{3BA0A98B-56F5-4A9F-B9EC-E662A564D95C}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{3BA0A98B-56F5-4A9F-B9EC-E662A564D95C}.Release|iPhone.Build.0 = Release|Any CPU
+		{3BA0A98B-56F5-4A9F-B9EC-E662A564D95C}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{3BA0A98B-56F5-4A9F-B9EC-E662A564D95C}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,6 +133,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{393B70CD-E0C0-46D4-B16C-69F765034A55} = {22EFE45F-4915-4720-94EF-AF127E2E1DDD}
 		{2911A2E3-003E-4FB3-9A43-D6EB2BBA84E6} = {22EFE45F-4915-4720-94EF-AF127E2E1DDD}
+		{3BA0A98B-56F5-4A9F-B9EC-E662A564D95C} = {22EFE45F-4915-4720-94EF-AF127E2E1DDD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {573B756F-0B8D-4BED-9C53-669AF5135D1A}

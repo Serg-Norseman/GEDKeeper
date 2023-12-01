@@ -20,9 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using BSLib;
-using CarouselView.FormsPlugin.Abstractions;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
@@ -33,12 +31,14 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 using GKUI.Components;
+using GKUI.Platform;
 using Xam.Plugin.TabView;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace GKUI.Forms
 {
-    public partial class BaseWinSDI : CommonWindow, IBaseWindowView, IProgressController
+    public partial class BaseWinSDI : CommonWindow, IBaseWindowView, IProgressController, IDisplayChangeable
     {
         #region Private fields
 
@@ -92,7 +92,7 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            UnsetAnimateTransition();
+            UIHelper.UnsetAnimateTransition(tabsRecords);
             tabsRecords.PositionChanged += tabsRecords_SelectedIndexChanged;
 
             fController = new BaseWinController(this, true);
@@ -111,16 +111,9 @@ namespace GKUI.Forms
             CreatePage("Communications", GDMRecordType.rtCommunication);
             CreatePage("Locations", GDMRecordType.rtLocation);
 
-            fController.SetLocale();
-        }
+            ResetView();
 
-        private void UnsetAnimateTransition()
-        {
-            // TabViewControl._carouselView.AnimateTransition = false (!)
-            var _carouselView = typeof(TabViewControl).GetField("_carouselView", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tabsRecords) as CarouselViewControl;
-            if (_carouselView != null) {
-                _carouselView.AnimateTransition = false;
-            }
+            fController.SetLocale();
         }
 
         private void CreatePage(string pageText, GDMRecordType recType)
@@ -128,9 +121,6 @@ namespace GKUI.Forms
             var summary = new HyperView();
             summary.OnLink += mPersonSummaryLink;
             //summary.ContextMenu = summaryMenu;
-            summary.HorizontalOptions = LayoutOptions.FillAndExpand;
-            summary.VerticalOptions = LayoutOptions.FillAndExpand;
-            summary.WidthRequest = 300;
 
             var recView = new GKListView();
             //recView.AllowMultipleSelection = true;
@@ -139,21 +129,18 @@ namespace GKUI.Forms
             //recView.ContextMenu = contextMenu;
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
             recView.UpdateContents();
-            recView.HorizontalOptions = LayoutOptions.FillAndExpand;
-            recView.VerticalOptions = LayoutOptions.FillAndExpand;
+
+            var listFrame = new Frame() { Content = recView, Padding = 1, BorderColor = Color.LightGray };
+            FlexLayout.SetBasis(listFrame, new FlexBasis(0.7f, true));
+
+            var summFrame = new Frame() { Content = summary, Padding = 1, BorderColor = Color.LightGray };
+            FlexLayout.SetBasis(summFrame, new FlexBasis(0.3f, true));
 
             string splID = "splitter" + ((int)recType).ToString();
-            // Using Grid resulted in data appearing only after switching tabs of the main window.
-            var spl = new StackLayout() {
-                Orientation = StackOrientation.Horizontal,
+            var spl = new FlexLayout() {
+                Wrap = FlexWrap.NoWrap,
                 Padding = 0,
-                Spacing = 0,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                Children = {
-                    new Frame() { Content = recView, Padding = 1, BorderColor = Color.LightGray, HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.FillAndExpand },
-                    new Frame() { Content = summary, Padding = 1, BorderColor = Color.LightGray, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.FillAndExpand }
-                }
+                Children = { listFrame, summFrame }
             };
 
             var tabPage = new TabItem();
@@ -162,6 +149,43 @@ namespace GKUI.Forms
             tabsRecords.AddTab(tabPage);
 
             fController.SetTabPart(recType, recView, splID, summary);
+        }
+
+        private void ResetView()
+        {
+            var orientation = DeviceDisplay.MainDisplayInfo.Orientation;
+            var flexDir = (orientation == DisplayOrientation.Portrait) ? FlexDirection.Column : FlexDirection.Row;
+
+            tabsRecords.BatchBegin();
+
+            // HACK: Without this, after changing the orientation of the page, the positions of the children are not updated.
+            var x = tabsRecords.SelectedTabIndex;
+            tabsRecords.SelectedTabIndex = (x == 0) ? tabsRecords.ItemSource.Count - 1 : 0;
+
+            for (int i = 0; i < tabsRecords.ItemSource.Count; i++) {
+                var layout = tabsRecords.ItemSource[i].Content as FlexLayout;
+                if (layout != null) {
+                    layout.Direction = flexDir;
+                }
+            }
+
+            tabsRecords.SelectedTabIndex = x;
+
+            tabsRecords.BatchCommit();
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            // HACK: Content of TabViewControl disappears when switching to menu+start screen and then returning back.
+            //tabsRecords.Layout(new Rectangle(0, 0, width, height));
+            tabsRecords.Layout((tabsRecords.Parent as View).Bounds);
+        }
+
+        void IDisplayChangeable.OnDisplayChanged(DisplayInfo displayInfo)
+        {
+            ResetView();
         }
 
         #endregion

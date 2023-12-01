@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GKCore;
 using GKCore.Interfaces;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -181,5 +182,11 @@ namespace GKUI.Platform
         None,
         Cancel,
         Ok
+    }
+
+
+    public interface IDisplayChangeable
+    {
+        void OnDisplayChanged(DisplayInfo displayInfo);
     }
 }

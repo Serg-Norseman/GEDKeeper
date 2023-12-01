@@ -25,6 +25,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using BSLib;
+using CarouselView.FormsPlugin.Abstractions;
 using GDModel;
 using GKCore;
 using GKCore.Design.Controls;
@@ -33,6 +34,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using SkiaSharp;
+using Xam.Plugin.TabView;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -190,6 +192,15 @@ namespace GKUI.Components
         {
             var method = typeof(T).GetTypeInfo().GetDeclaredMethod(methodName);
             return method?.Invoke(obj, args);
+        }
+
+        public static void UnsetAnimateTransition(TabViewControl tabView)
+        {
+            // TabViewControl._carouselView.AnimateTransition = false (!)
+            var _carouselView = typeof(TabViewControl).GetField("_carouselView", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tabView) as CarouselViewControl;
+            if (_carouselView != null) {
+                _carouselView.AnimateTransition = false;
+            }
         }
     }
 }

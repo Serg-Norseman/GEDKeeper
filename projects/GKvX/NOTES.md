@@ -1,4 +1,4 @@
-
+﻿
 # Solutions
 
 ## Disabled and removed features
@@ -57,8 +57,12 @@ Android Device Image: Tablet M 10.1in (Android 9.0 - API 28), 1 gb
 
 ## Checked configurations (Android real devices)
 
-ASUS Nexus 7, Android 6.0.1 (API 23), 2015
-Samsung Galaxy A32, Android 13 (API 33), 2022
+ASUS Nexus 7, 7" (1920x1200), 323 PPI, Android 6.0.1 (API 23), 2015
+Samsung Galaxy S7, 5.1" (2560x1440), 576 PPI, Android 8.0 (API 26), 2016
+Xiaomi Mi 5X, 5.5" (1920x1080), 401 PPI, Android 8.1 (API 27), 2017
+Samsung Galaxy Note 10 Lite, 6.7" (2400x1080), 393 PPI, Android 13 (API 33), 2020
+ASUS Zenfone 8, 5.9" (2400x1080), 446 PPI, Android 12 (API 32), 2021
+Samsung Galaxy A32, 6.6" (2340x1080), 390 PPI, Android 13 (API 33), 2022
 
 # Incomprehensible problems
 

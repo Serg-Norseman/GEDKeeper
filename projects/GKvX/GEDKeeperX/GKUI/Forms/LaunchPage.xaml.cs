@@ -27,11 +27,12 @@ using GKCore.Controllers;
 using GKCore.Interfaces;
 using GKUI.Components;
 using GKUI.Platform;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace GKUI.Forms
 {
-    public partial class LaunchPage : ContentPage, ILocalizable
+    public partial class LaunchPage : ContentPage, ILocalizable, IDisplayChangeable
     {
         public ObservableCollection<Grouping<string, LaunchItem>> LaunchItems { get; set; }
         public ObservableCollection<Grouping<string, LaunchItem>> ServiceItems { get; set; }
@@ -97,8 +98,6 @@ namespace GKUI.Forms
                 }));
             }
 
-            LaunchItems = PrepareItems(launchItems);
-
             var servicesItems = new List<LaunchItem>() {
                 new LaunchItem(LangMan.LS(LSID.MIPedigree), LangMan.LS(LSID.MIMap), (item) => {
                     GetBaseWin()?.Controller.ShowMap();
@@ -148,9 +147,24 @@ namespace GKUI.Forms
                 }),
             };
 
-            ServiceItems = PrepareItems(servicesItems);
-
             BindingContext = this;
+
+            var orientation = DeviceDisplay.MainDisplayInfo.Orientation;
+            if (orientation == DisplayOrientation.Landscape) {
+                LaunchItems = PrepareItems(launchItems);
+                ServiceItems = PrepareItems(servicesItems);
+
+                launchList.IsVisible = true;
+                servicesList.IsVisible = true;
+            } else {
+                launchItems.AddRange(servicesItems);
+
+                LaunchItems = PrepareItems(launchItems);
+                ServiceItems = null;
+
+                launchList.IsVisible = true;
+                servicesList.IsVisible = false;
+            }
 
             launchList.ItemsSource = LaunchItems;
             servicesList.ItemsSource = ServiceItems;
@@ -175,6 +189,11 @@ namespace GKUI.Forms
         }
 
         public void SetLocale()
+        {
+            ResetView();
+        }
+
+        void IDisplayChangeable.OnDisplayChanged(DisplayInfo displayInfo)
         {
             ResetView();
         }
