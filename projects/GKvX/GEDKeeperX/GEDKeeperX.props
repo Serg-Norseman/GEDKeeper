@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\btn_accept@2x.png" />
+        <EmbeddedResource Include="Resources\btn_cancel@2x.png" />
+        <EmbeddedResource Include="Resources\btn_copy@2x.png" />
+        <EmbeddedResource Include="Resources\btn_cut@2x.png" />
+        <EmbeddedResource Include="Resources\btn_paste@2x.png" />
+        <EmbeddedResource Include="Resources\btn_create_new@2x.png" />
+        <EmbeddedResource Include="Resources\btn_down@2x.png" />
+        <EmbeddedResource Include="Resources\btn_excel@2x.png" />
+        <EmbeddedResource Include="Resources\btn_filter@2x.png" />
+        <EmbeddedResource Include="Resources\btn_jump@2x.png" />
+        <EmbeddedResource Include="Resources\btn_left@2x.png" />
+        <EmbeddedResource Include="Resources\btn_load@2x.png" />
+        <EmbeddedResource Include="Resources\btn_preview@2x.png" />
+        <EmbeddedResource Include="Resources\btn_print@2x.png" />
+        <EmbeddedResource Include="Resources\btn_rec_delete@2x.png" />
+        <EmbeddedResource Include="Resources\btn_rec_edit@2x.png" />
+        <EmbeddedResource Include="Resources\btn_rec_new@2x.png" />
+        <EmbeddedResource Include="Resources\btn_redo@2x.png" />
+        <EmbeddedResource Include="Resources\btn_right@2x.png" />
+        <EmbeddedResource Include="Resources\btn_save@2x.png" />
+        <EmbeddedResource Include="Resources\btn_save_image@2x.png" />
+        <EmbeddedResource Include="Resources\btn_scroll@2x.png" />
+        <EmbeddedResource Include="Resources\btn_size_to_fit@2x.png" />
+        <EmbeddedResource Include="Resources\btn_start@2x.png" />
+        <EmbeddedResource Include="Resources\btn_stop@2x.png" />
+        <EmbeddedResource Include="Resources\btn_table@2x.png" />
+        <EmbeddedResource Include="Resources\btn_tools@2x.png" />
+        <EmbeddedResource Include="Resources\btn_tree_ancestry@2x.png" />
+        <EmbeddedResource Include="Resources\btn_tree_both@2x.png" />
+        <EmbeddedResource Include="Resources\btn_tree_descendants@2x.png" />
+        <EmbeddedResource Include="Resources\btn_undo@2x.png" />
+        <EmbeddedResource Include="Resources\btn_up@2x.png" />
+        <EmbeddedResource Include="Resources\btn_zoom_in@2x.png" />
+        <EmbeddedResource Include="Resources\btn_zoom_out@2x.png" />
+        <EmbeddedResource Include="Resources\btn_organizer@2x.png" />
+        <EmbeddedResource Include="Resources\btn_slideshow@2x.png" />
+        <EmbeddedResource Include="Resources\btn_mail@2x.png" />
+        <EmbeddedResource Include="Resources\btn_properties@2x.png" />
+        <EmbeddedResource Include="Resources\btn_help@2x.png" />
+        <EmbeddedResource Include="Resources\btn_export@2x.png" />
+        <EmbeddedResource Include="Resources\btn_exit@2x.png" />
+        <EmbeddedResource Include="Resources\btn_search@2x.png" />
+    </ItemGroup>
+
+</Project>

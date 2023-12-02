@@ -120,6 +120,14 @@ namespace GKUI.Forms
     }
 
 
+    public enum DialogResult
+    {
+        None,
+        Cancel,
+        Ok
+    }
+
+
     /// <summary>
     ///
     /// Ref: https://stackoverflow.com/questions/24174241/how-can-i-await-modal-form-dismissal-using-xamarin-forms

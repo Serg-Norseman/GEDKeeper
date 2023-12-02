@@ -111,6 +111,11 @@ namespace GKUI.Platform
             return await xfModal.DialogResultTask;
         }
 
+        public override async void OpenURL(string uriString)
+        {
+            await Launcher.TryOpenAsync(new Uri(uriString));
+        }
+
         public override IEnumerable<T> GetRunningForms<T>()
         {
             var navPage = (NavigationPage)Application.Current.MainPage;

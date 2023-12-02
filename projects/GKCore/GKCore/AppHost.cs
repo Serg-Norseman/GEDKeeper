@@ -667,20 +667,26 @@ namespace GKCore
             string lngSign = AppHost.Options.GetLanguageSign();
             if (string.IsNullOrEmpty(lngSign)) return;
 
-            string helpPath = GKUtils.GetHelpPath(lngSign);
-
             if (string.IsNullOrEmpty(topic)) {
-                topic = helpPath + "GEDKeeper.html";
+                topic = "GEDKeeper.html";
+            }
+            topic = "help_" + lngSign + "/" + topic;
+
+            if (!HasFeatureSupport(Feature.Mobile)) {
+                string topicPath = GKUtils.GetLangsPath() + topic;
+                if (!File.Exists(topicPath)) {
+                    AppHost.StdDialogs.ShowError(@"For that language help is unavailable");
+                } else {
+                    GKUtils.LoadExtFile(topicPath);
+                }
             } else {
-                topic = helpPath + topic;
+                string topicURL = GKData.APP_SITE + topic;
+                OpenURL(topicURL);
             }
+        }
 
-            if (!File.Exists(topic)) {
-                AppHost.StdDialogs.ShowError(@"For that language help is unavailable");
-                return;
-            }
-
-            GKUtils.LoadExtFile(topic);
+        public virtual void OpenURL(string uriString)
+        {
         }
 
         public string GetUserFilesPath(string filePath)

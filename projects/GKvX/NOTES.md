@@ -10,8 +10,8 @@
   - File\Close - canceled
   - Edit\(quick) Search - popup panel of basewin below infopanel
   - Reports and Plugins - integrate to monolith application
-  - View error log - canceled
-  - Send error log - ?
+  - View error log - ?
+  - Send error log - canceled
 5. Scripts
 6. No extended notes
 
@@ -55,14 +55,33 @@ Android Device Image: Tablet M 10.1in (Android 9.0 - API 28), 1 gb
   Start application: 512 mb - 122 s; 1gb - 8-15 s; 2 gb - 7-8 s
   Load gedcom (370 kb): 512 mb - 74 s; 1gb - 2 s; 2 gb - <1 s
 
+## Supported screen densities
+
+ScrDens  |   DPI   | Factor | Base | Actual | Support |
+ldpi     |   120   |  0.75X |  24  |   18   |    +    |
+mdpi     |   160   |   1X   |  24  |   24   |    +    |
+hdpi     |   240   |  1.5X  |  24  |   36   |         |
+x-hdpi   |   320   |   2X   |  24  |   48   |         |
+xx-hdpi  |   480   |   3X   |  24  |   72   |    +    |
+xxx-hdpi |   640   |   4X   |  24  |   96   |         |
+
+* Base size of GK toolbar icons = 20px. For `ldpi` and `mdpi` - good size.
+
+## Checked configurations (Emulator devices)
+
+Tablet M-DPI 10.1in         | 10.1"  (1280x800) | 149 PPI |   l | Android 9.0 (API 28)
+Phone M-DPI 5.4in           |  5.4"   (480x854) | 181 PPI |   m | Android 9.0 (API 28)
+Phone Xh-DPI 4.7in          |  4.7"  (1280x720) | 312 PPI |  xh | Android 9.0 (API 28)
+Phone Xxh-DPI 4.7in         |  4.7" (1080x2636) | 606 PPI | xxh | Android 9.0 (API 28)
+
 ## Checked configurations (Android real devices)
 
-ASUS Nexus 7, 7" (1920x1200), 323 PPI, Android 6.0.1 (API 23), 2015
-Samsung Galaxy S7, 5.1" (2560x1440), 576 PPI, Android 8.0 (API 26), 2016
-Xiaomi Mi 5X, 5.5" (1920x1080), 401 PPI, Android 8.1 (API 27), 2017
-Samsung Galaxy Note 10 Lite, 6.7" (2400x1080), 393 PPI, Android 13 (API 33), 2020
-ASUS Zenfone 8, 5.9" (2400x1080), 446 PPI, Android 12 (API 32), 2021
-Samsung Galaxy A32, 6.6" (2340x1080), 390 PPI, Android 13 (API 33), 2022
+ASUS Nexus 7                |  7.0" (1920x1200) | 323 PPI |  xh | Android 6.0.1 (API 23) | 2015
+Samsung Galaxy S7           |  5.1" (2560x1440) | 576 PPI | xxh | Android 8.0   (API 26) | 2016
+Xiaomi Mi 5X                |  5.5" (1920x1080) | 401 PPI |  xh | Android 8.1   (API 27) | 2017
+Samsung Galaxy Note 10 Lite |  6.7" (2400x1080) | 393 PPI |  xh | Android 13    (API 33) | 2020
+ASUS Zenfone 8              |  5.9" (2400x1080) | 446 PPI |  xh | Android 12    (API 32) | 2021
+Samsung Galaxy A32          |  6.6" (2340x1080) | 390 PPI |  xh | Android 13    (API 33) | 2022
 
 # Incomprehensible problems
 

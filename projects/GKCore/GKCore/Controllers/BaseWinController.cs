@@ -1295,6 +1295,29 @@ namespace GKCore.Controllers
             AppHost.Instance.ShowWindow(fmChart);
         }
 
+        public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal)
+        {
+            if (mediaRec == null)
+                throw new ArgumentNullException("mediaRec");
+
+            GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
+            if (fileRef == null) return;
+
+            if (!GKUtils.UseEmbeddedViewer(fileRef.MultimediaFormat)) {
+                string targetFile = fContext.MediaLoad(fileRef);
+                GKUtils.LoadExtFile(targetFile);
+            } else {
+                var mediaViewer = AppHost.Container.Resolve<IMediaViewerWin>(this);
+                try {
+                    mediaViewer.MultimediaRecord = mediaRec;
+                    mediaViewer.Show(true);
+                } catch (Exception ex) {
+                    if (mediaViewer != null) mediaViewer.Dispose();
+                    Logger.WriteError("BaseWinController.ShowMedia()", ex);
+                }
+            }
+        }
+
         public void SendLog()
         {
             SysUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: feedback", "This automatic notification of error.", AppHost.GetLogFilename());

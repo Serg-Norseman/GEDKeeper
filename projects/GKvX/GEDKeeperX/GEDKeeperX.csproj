@@ -112,4 +112,5 @@
         </EmbeddedResource>
     </ItemGroup>
 
+    <Import Project="GEDKeeperX.props" />
 </Project>

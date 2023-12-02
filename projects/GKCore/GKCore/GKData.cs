@@ -45,6 +45,7 @@ namespace GKCore
 
 
         public const string APP_MAIL = "gedkeeper@yandex.ru";
+        public const string APP_SITE = "https://gedkeeper.net/";
 
         public const string APP_FORUM_EN = "https://groups.google.com/g/gedkeeper-en";
         public const string APP_CHANNEL_EN = "https://t.me/gedkeeper_en";

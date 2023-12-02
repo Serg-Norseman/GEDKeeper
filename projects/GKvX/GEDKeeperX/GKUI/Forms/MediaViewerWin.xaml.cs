@@ -83,12 +83,12 @@ namespace GKUI.Forms
         public void SetViewText(string text)
         {
             try {
-                /*TextArea txtBox = new TextArea();
-                txtBox.ReadOnly = true;
+                var txtBox = new Editor();
+                txtBox.IsReadOnly = true;
                 // FIXME: fix encoding! and test other!!!
                 txtBox.Text = text;
 
-                SetViewControl(txtBox);*/
+                SetViewControl(txtBox);
             } catch (Exception ex) {
                 Logger.WriteError("MediaViewerWin.SetViewText()", ex);
             }

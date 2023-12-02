@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -159,6 +160,20 @@ namespace GKUI.Components
 
         public static ImageSource LoadResourceImage(string resName)
         {
+            if (string.IsNullOrEmpty(resName)) {
+                return null;
+            }
+
+            var dens = DeviceDisplay.MainDisplayInfo.Density;
+            if (dens >= 2) {
+                string fileName = Path.GetFileNameWithoutExtension(resName);
+                string newName = string.Format("{0}@2x.png", fileName);
+                var asm = typeof(UIHelper).Assembly;
+                if (asm.GetManifestResourceInfo(newName) != null) {
+                    return ImageSource.FromResource(newName, asm);
+                }
+            }
+
             return ImageSource.FromResource(resName, typeof(GKUtils).Assembly);
         }
 

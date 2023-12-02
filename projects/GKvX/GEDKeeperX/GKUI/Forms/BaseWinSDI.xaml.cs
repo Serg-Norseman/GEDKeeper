@@ -390,24 +390,7 @@ namespace GKUI.Forms
 
         public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal)
         {
-            if (mediaRec == null)
-                throw new ArgumentNullException("mediaRec");
-
-            GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
-            if (fileRef == null) return;
-
-            if (!GKUtils.UseEmbeddedViewer(fileRef.MultimediaFormat)) {
-                string targetFile = fContext.MediaLoad(fileRef);
-                GKUtils.LoadExtFile(targetFile);
-            } else {
-                try {
-                    var mediaViewer = AppHost.Container.Resolve<IMediaViewerWin>(this);
-                    mediaViewer.MultimediaRecord = mediaRec;
-                    mediaViewer.Show(true);
-                } catch (Exception ex) {
-                    Logger.WriteError("BaseWinSDI.ShowMedia()", ex);
-                }
-            }
+            fController.ShowMedia(mediaRec, modal);
         }
 
         #endregion

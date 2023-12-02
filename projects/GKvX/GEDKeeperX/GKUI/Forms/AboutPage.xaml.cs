@@ -50,7 +50,7 @@ namespace GKUI.Forms
         {
             var btn = sender as Button;
             if (btn != null) {
-                await Launcher.TryOpenAsync(new Uri(btn.Text));
+                AppHost.Instance.OpenURL(btn.Text);
             }
         }
     }
