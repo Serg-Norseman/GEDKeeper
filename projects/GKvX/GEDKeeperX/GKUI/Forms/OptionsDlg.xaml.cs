@@ -23,6 +23,7 @@ using GKCore.Controllers;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKUI.Components;
 using Xamarin.Forms;
 
 namespace GKUI.Forms
@@ -32,6 +33,11 @@ namespace GKUI.Forms
         public OptionsDlg(IHost host)
         {
             InitializeComponent();
+
+            UIHelper.UnsetAnimateTransition(PageControl1);
+            UIHelper.UnsetAnimateTransition(tabsCharts);
+            UIHelper.UnsetAnimateTransition(PageControl2);
+            PageControl1.PositionChanged += PageControl1_PositionChanged;
 
             SetLabelClickEvent(lblMaleColor);
             SetLabelClickEvent(lblFemaleColor);
@@ -109,6 +115,30 @@ namespace GKUI.Forms
         private void btnColumnDown_Click(object sender, EventArgs e)
         {
             fController.MoveColumnDown();
+        }
+
+        private void PageControl1_PositionChanged(object sender, Xam.Plugin.TabView.PositionChangedEventArgs e)
+        {
+            // FIXME: When switching between tabs multiple times, nested tabs disappear.
+
+            switch (PageControl1.SelectedTabIndex) {
+                case 0: // common
+                case 1: // multimedia
+                    break;
+
+                case 2: // charts
+                    //UIHelper.ResetTabViewLayout(tabsCharts); // did not help
+                    break;
+
+                case 3: // interface
+                    //UIHelper.ResetTabViewLayout(PageControl2); // did not help
+                    break;
+
+                case 4: // pedigrees
+                case 5: // specials
+                case 6: // plugins
+                    break;
+            }
         }
 
         private void btnResetDefaults_Click(object sender, EventArgs e)

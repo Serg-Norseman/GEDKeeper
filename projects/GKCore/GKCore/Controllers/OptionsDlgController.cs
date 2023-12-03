@@ -122,6 +122,9 @@ namespace GKCore.Controllers
 
         public void UpdateProxyOptions()
         {
+            var isMobile = AppHost.Instance.HasFeatureSupport(Feature.Mobile);
+            GetControl<IGroupBox>("grpInternet").Visible = !isMobile;
+
             var hasInternetProxy = AppHost.Instance.HasFeatureSupport(Feature.InternetProxy);
             GetControl<IGroupBox>("grpInternet").Enabled = hasInternetProxy;
 
@@ -431,13 +434,13 @@ namespace GKCore.Controllers
 
             var isMobile = AppHost.Instance.HasFeatureSupport(Feature.Mobile);
             GetControl<ICheckBox>("chkUseExtendedNotes").Checked = fOptions.UseExtendedNotes && !isMobile;
-            GetControl<ICheckBox>("chkUseExtendedNotes").Enabled = !isMobile;
+            GetControl<ICheckBox>("chkUseExtendedNotes").Visible = !isMobile;
             GetControl<ICheckBox>("chkKeepRichNames").Checked = fOptions.KeepRichNames && !isMobile;
-            GetControl<ICheckBox>("chkKeepRichNames").Enabled = !isMobile;
+            GetControl<ICheckBox>("chkKeepRichNames").Visible = !isMobile;
             GetControl<ICheckBox>("chkMaximizeChartWindows").Checked = fOptions.MaximizeChartWindows && !isMobile;
-            GetControl<ICheckBox>("chkMaximizeChartWindows").Enabled = !isMobile;
+            GetControl<ICheckBox>("chkMaximizeChartWindows").Visible = !isMobile;
             GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Checked = fOptions.KeepInfoPansOverallSize && !isMobile;
-            GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Enabled = !isMobile;
+            GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Visible = !isMobile;
 
             var hasOverwritePrompt = AppHost.Instance.HasFeatureSupport(Feature.OverwritePrompt);
             GetControl<ICheckBox>("chkFilesOverwriteWarn").Checked = fOptions.FilesOverwriteWarn && hasOverwritePrompt;
@@ -614,7 +617,7 @@ namespace GKCore.Controllers
 
             var hasExtraControls = !AppHost.Instance.HasFeatureSupport(Feature.Mobile);
             GetControl<ICheckBox>("chkUseExtraControls").Checked = fOptions.TreeChartOptions.UseExtraControls && hasExtraControls;
-            GetControl<ICheckBox>("chkUseExtraControls").Enabled = hasExtraControls;
+            GetControl<ICheckBox>("chkUseExtraControls").Visible = hasExtraControls;
 
             UpdateTreeChartFont();
         }

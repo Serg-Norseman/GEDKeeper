@@ -178,9 +178,7 @@ namespace GKUI.Forms
         {
             base.OnAppearing();
 
-            // HACK: Content of TabViewControl disappears when switching to menu+start screen and then returning back.
-            //tabsRecords.Layout(new Rectangle(0, 0, width, height));
-            tabsRecords.Layout((tabsRecords.Parent as View).Bounds);
+            UIHelper.ResetTabViewLayout(tabsRecords);
         }
 
         void IDisplayChangeable.OnDisplayChanged(DisplayInfo displayInfo)

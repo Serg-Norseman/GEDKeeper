@@ -34,5 +34,11 @@ namespace GKUI.Platform
             get { return Control.Text; }
             set { Control.Text = value; }
         }
+
+        public bool Visible
+        {
+            get { return Control.IsVisible; }
+            set { Control.IsVisible = value; }
+        }
     }
 }

@@ -186,6 +186,11 @@ namespace GKUI.Platform
             return false;
         }
 
+        public override string GetExternalStorageDirectory()
+        {
+            return fPlatformSpecifics.GetExternalStorageDirectory();
+        }
+
         public override ExtRect GetActiveScreenWorkingArea()
         {
             throw new NotImplementedException();

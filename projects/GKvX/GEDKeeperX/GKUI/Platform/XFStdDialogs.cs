@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using GKCore;
 using GKCore.Design.Graphics;
@@ -98,7 +99,10 @@ namespace GKUI.Platform
         public async Task<string> GetSaveFileAsync(string title, string context, string filter, int filterIndex, string defaultExt,
                                   string suggestedFileName, bool overwritePrompt = true)
         {
-            throw new NotSupportedException();
+            var owner = XFAppHost.GetMainPage();
+            string path = XFAppHost.Instance.GetExternalStorageDirectory();
+            string fileName = await GetInputAsync(owner, title);
+            return Path.Combine(path, Path.ChangeExtension(fileName, defaultExt));
         }
 
         private static IEnumerable<string> ConvertFilePickerFilters(string filter, bool withoutDot = false)

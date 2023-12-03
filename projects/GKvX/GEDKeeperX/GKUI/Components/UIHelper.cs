@@ -217,5 +217,11 @@ namespace GKUI.Components
                 _carouselView.AnimateTransition = false;
             }
         }
+
+        public static void ResetTabViewLayout(TabViewControl tabView)
+        {
+            // HACK: Content of TabViewControl disappears when switching to menu+start screen and then returning back.
+            tabView.Layout((tabView.Parent as View).Bounds);
+        }
     }
 }

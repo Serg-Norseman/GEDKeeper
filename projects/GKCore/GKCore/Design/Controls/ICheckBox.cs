@@ -24,5 +24,6 @@ namespace GKCore.Design.Controls
     {
         bool Checked { get; set; }
         string Text { get; set; }
+        bool Visible { get; set; }
     }
 }

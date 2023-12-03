@@ -60,8 +60,8 @@ Android Device Image: Tablet M 10.1in (Android 9.0 - API 28), 1 gb
 ScrDens  |   DPI   | Factor | Base | Actual | Support |
 ldpi     |   120   |  0.75X |  24  |   18   |    +    |
 mdpi     |   160   |   1X   |  24  |   24   |    +    |
-hdpi     |   240   |  1.5X  |  24  |   36   |         |
-x-hdpi   |   320   |   2X   |  24  |   48   |         |
+hdpi     |   240   |  1.5X  |  24  |   36   |    +    |
+x-hdpi   |   320   |   2X   |  24  |   48   |    +    |
 xx-hdpi  |   480   |   3X   |  24  |   72   |    +    |
 xxx-hdpi |   640   |   4X   |  24  |   96   |         |
 
@@ -71,6 +71,7 @@ xxx-hdpi |   640   |   4X   |  24  |   96   |         |
 
 Tablet M-DPI 10.1in         | 10.1"  (1280x800) | 149 PPI |   l | Android 9.0 (API 28)
 Phone M-DPI 5.4in           |  5.4"   (480x854) | 181 PPI |   m | Android 9.0 (API 28)
+Phone H-DPI 4in             |  4.0"   (480x800) | 233 PPI |   h | Android 9.0 (API 28)
 Phone Xh-DPI 4.7in          |  4.7"  (1280x720) | 312 PPI |  xh | Android 9.0 (API 28)
 Phone Xxh-DPI 4.7in         |  4.7" (1080x2636) | 606 PPI | xxh | Android 9.0 (API 28)
 
@@ -87,3 +88,5 @@ Samsung Galaxy A32          |  6.6" (2340x1080) | 390 PPI |  xh | Android 13    
 
 - How to control scrolling and size of SkCanvasView in ScrollView (Charts); centering in container?
 - DataGrid unused space background color black not turning off.
+- When switching between tabs multiple times, nested tabs disappear (OptionsDlg).
+- input:CheckBox - very large margins, not adjustable

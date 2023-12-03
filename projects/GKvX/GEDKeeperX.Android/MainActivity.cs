@@ -32,5 +32,12 @@ namespace GEDKeeperX.Droid
         {
             FinishAffinity();
         }
+
+        string IPlatformSpecifics.GetExternalStorageDirectory()
+        {
+            // DirectoryDcim, DirectoryMovies, DirectoryMusic, DirectoryPictures, DirectoryScreenshots
+            // DirectoryDocuments, DirectoryDownloads
+            return Environment.GetExternalStoragePublicDirectory(Environment.DirectoryDownloads).AbsolutePath;
+        }
     }
 }

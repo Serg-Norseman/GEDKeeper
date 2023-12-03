@@ -343,6 +343,12 @@ namespace GKCore
             // May have a desktop-only implementation
         }
 
+        public virtual string GetExternalStorageDirectory()
+        {
+            // May have a mobile-only implementation
+            throw new NotImplementedException();
+        }
+
         #region Extended clipboard functions
 
         public abstract void SetClipboardText(string text);
