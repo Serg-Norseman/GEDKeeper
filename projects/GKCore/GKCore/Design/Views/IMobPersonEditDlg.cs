@@ -18,30 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Design.Controls;
-using Xamarin.Forms;
-using XFIKRadioButton = Plugin.InputKit.Shared.Controls.RadioButton;
-
-namespace GKUI.Platform
+namespace GKCore.Design.Views
 {
-    public sealed class RadioButtonHandler : BaseControlHandler<XFIKRadioButton, RadioButtonHandler>, IRadioButton
+    public interface IMobPersonEditDlg : IPersonEditDlg
     {
-        public RadioButtonHandler(XFIKRadioButton control) : base(control)
-        {
-            control.Color = Color.Black;
-            control.Padding = new Thickness(0, 0);
-        }
-
-        public bool Checked
-        {
-            get { return Control.IsChecked; }
-            set { Control.IsChecked = value; }
-        }
-
-        public string Text
-        {
-            get { return Control.Text; }
-            set { Control.Text = value; }
-        }
     }
 }

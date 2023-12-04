@@ -69,24 +69,25 @@ xxx-hdpi |   640   |   4X   |  24  |   96   |         |
 
 ## Checked configurations (Emulator devices)
 
-Tablet M-DPI 10.1in         | 10.1"  (1280x800) | 149 PPI |   l | Android 9.0 (API 28)
-Phone M-DPI 5.4in           |  5.4"   (480x854) | 181 PPI |   m | Android 9.0 (API 28)
-Phone H-DPI 4in             |  4.0"   (480x800) | 233 PPI |   h | Android 9.0 (API 28)
-Phone Xh-DPI 4.7in          |  4.7"  (1280x720) | 312 PPI |  xh | Android 9.0 (API 28)
-Phone Xxh-DPI 4.7in         |  4.7" (1080x2636) | 606 PPI | xxh | Android 9.0 (API 28)
+Phone H-DPI 4in             |  4.0"   (480x800) | +++++++++++++ | Android 5.1   (API 22) |
+Tablet M-DPI 10.1in         | 10.1"  (1280x800) | 149 PPI |   l | Android 9.0   (API 28) |
+Phone M-DPI 5.4in           |  5.4"   (480x854) | 181 PPI |   m | Android 9.0   (API 28) |
+Phone H-DPI 4in             |  4.0"   (480x800) | 233 PPI |   h | Android 9.0   (API 28) |
+Phone Xh-DPI 4.7in          |  4.7"  (720x1280) | 312 PPI |  xh | Android 9.0   (API 28) |
+Phone Xxh-DPI 4.7in         |  4.7" (1080x2636) | 606 PPI | xxh | Android 9.0   (API 28) |
 
 ## Checked configurations (Android real devices)
 
 ASUS Nexus 7                |  7.0" (1920x1200) | 323 PPI |  xh | Android 6.0.1 (API 23) | 2015
-Samsung Galaxy S7           |  5.1" (2560x1440) | 576 PPI | xxh | Android 8.0   (API 26) | 2016
-Xiaomi Mi 5X                |  5.5" (1920x1080) | 401 PPI |  xh | Android 8.1   (API 27) | 2017
-Samsung Galaxy Note 10 Lite |  6.7" (2400x1080) | 393 PPI |  xh | Android 13    (API 33) | 2020
-ASUS Zenfone 8              |  5.9" (2400x1080) | 446 PPI |  xh | Android 12    (API 32) | 2021
-Samsung Galaxy A32          |  6.6" (2340x1080) | 390 PPI |  xh | Android 13    (API 33) | 2022
+Samsung Galaxy J1           |  4.5"   (480x800) | ------------- | Android 5.1.1 (API 22) | 2016
+Samsung Galaxy S7           |  5.1" (1440x2560) | 576 PPI | xxh | Android 8.0   (API 26) | 2016
+Xiaomi Mi 5X                |  5.5" (1080x1920) | 401 PPI |  xh | Android 8.1   (API 27) | 2017
+Samsung Galaxy Note 10 Lite |  6.7" (1080x2400) | 393 PPI |  xh | Android 13    (API 33) | 2020
+ASUS Zenfone 8              |  5.9" (1080x2400) | 446 PPI |  xh | Android 12    (API 31) | 2021
+Samsung Galaxy A32          |  6.6" (1080x2340) | 390 PPI |  xh | Android 13    (API 33) | 2022
 
 # Incomprehensible problems
 
 - How to control scrolling and size of SkCanvasView in ScrollView (Charts); centering in container?
 - DataGrid unused space background color black not turning off.
 - When switching between tabs multiple times, nested tabs disappear (OptionsDlg).
-- input:CheckBox - very large margins, not adjustable

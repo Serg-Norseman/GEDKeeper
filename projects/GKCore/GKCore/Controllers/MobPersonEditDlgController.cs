@@ -19,29 +19,21 @@
  */
 
 using GKCore.Design.Controls;
-using Xamarin.Forms;
-using XFIKRadioButton = Plugin.InputKit.Shared.Controls.RadioButton;
+using GKCore.Design.Views;
 
-namespace GKUI.Platform
+namespace GKCore.Controllers
 {
-    public sealed class RadioButtonHandler : BaseControlHandler<XFIKRadioButton, RadioButtonHandler>, IRadioButton
+    public class MobPersonEditDlgController : PersonEditDlgController<IMobPersonEditDlg>
     {
-        public RadioButtonHandler(XFIKRadioButton control) : base(control)
+        public MobPersonEditDlgController(IMobPersonEditDlg view) : base(view)
         {
-            control.Color = Color.Black;
-            control.Padding = new Thickness(0, 0);
         }
 
-        public bool Checked
+        public override void SetLocale()
         {
-            get { return Control.IsChecked; }
-            set { Control.IsChecked = value; }
-        }
+            base.SetLocale();
 
-        public string Text
-        {
-            get { return Control.Text; }
-            set { Control.Text = value; }
+            GetControl<ITabPage>("pagePortrait").Text = LangMan.LS(LSID.Portrait);
         }
     }
 }

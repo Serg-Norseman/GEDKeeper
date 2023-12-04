@@ -21,7 +21,7 @@
                     <StackLayout Orientation="Horizontal">
 
                         <comcom:GroupBox x:Name="grpOther">
-                            <StackLayout Orientation="Vertical">
+                            <StackLayout Orientation="Vertical" Spacing="4">
 
                                 <input:CheckBox x:Name="chkLoadRecentFiles" />
                                 <input:CheckBox x:Name="chkShowOnStart" />
@@ -54,7 +54,7 @@
                                 <StackLayout Orientation="Vertical">
 
                                     <comcom:GroupBox x:Name="grpFileBackup">
-                                        <input:RadioButtonGroupView>
+                                        <input:RadioButtonGroupView Spacing="4">
                                             <input:RadioButton x:Name="radFBNone" />
                                             <input:RadioButton x:Name="radFBOnlyPrev" />
                                             <input:RadioButton x:Name="radFBEachRevision" />
@@ -100,7 +100,7 @@
                 </xp:TabItem>
 
                 <xp:TabItem x:Name="pageMultimedia">
-                    <StackLayout Orientation="Vertical">
+                    <StackLayout Orientation="Vertical" Padding="4" Spacing="4">
 
                         <input:CheckBox x:Name="chkRemovableMediaWarning" />
                         <input:CheckBox x:Name="chkEmbeddedMediaPlayer" />
@@ -380,7 +380,7 @@
                 </xp:TabItem>
 
                 <xp:TabItem x:Name="pageSpecials">
-                    <StackLayout Orientation="Vertical">
+                    <StackLayout Orientation="Vertical" Padding="4" Spacing="4">
                         <input:CheckBox x:Name="chkUseExtendedNotes" />
                         <input:CheckBox x:Name="chkKeepRichNames" />
                         <input:CheckBox x:Name="chkMaximizeChartWindows" />

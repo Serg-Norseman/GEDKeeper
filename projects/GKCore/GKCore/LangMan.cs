@@ -1004,8 +1004,9 @@ namespace GKCore
         /* 932 */ UseSurnamesInPersonSelectionFilter,
         /* 933 */ UseBirthDatesInPersonSelectionFilter,
         /* 934 */ FactValueIsInvalid,
+        /* 935 */ Portrait,
 
-        /* 000 */ Last = FactValueIsInvalid
+        /* 000 */ Last = Portrait
     }
 
 
@@ -1963,6 +1964,7 @@ namespace GKCore
             /* 932 */ "Use surnames in person selection filter",
             /* 933 */ "Use dates of birth in person selection filter",
             /* 934 */ "Fact value is empty or invalid",
+            /* 935 */ "Portrait",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

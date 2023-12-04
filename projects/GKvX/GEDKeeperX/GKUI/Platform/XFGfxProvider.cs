@@ -46,7 +46,11 @@ namespace GKUI.Platform
 
         public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea)
         {
-            return null;
+            if (stream == null)
+                throw new ArgumentNullException("stream");
+
+            var img = SKImage.FromEncodedData(stream);
+            return new SKImageHandler(img);
         }
 
         public IImage LoadImage(string fileName)

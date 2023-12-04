@@ -10,7 +10,7 @@
     xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
     xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
     x:Class="GKUI.Forms.PersonEditDlg"
-    x:TypeArguments="mvp:IStdPersonEditDlg, contr:StdPersonEditDlgController">
+    x:TypeArguments="mvp:IMobPersonEditDlg, contr:MobPersonEditDlgController">
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
@@ -19,39 +19,22 @@
                 <Grid x:Name="personLayout" ColumnSpacing="4" RowSpacing="4" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                     <Label x:Name="lblSurname" Grid.Column="0" Grid.Row="0" />
                     <Entry x:Name="txtSurname" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="0" />
-                    <Label x:Name="lblSurnamePrefix" Grid.Column="2" Grid.Row="0" />
-                    <Entry x:Name="txtSurnamePrefix" WidthRequest="180" Grid.Column="3" Grid.Row="0" />
+                    <Label x:Name="lblNickname" Grid.Column="2" Grid.Row="0" />
+                    <Entry x:Name="txtNickname" WidthRequest="180" Grid.Column="3" Grid.Row="0" />
 
                     <Label x:Name="lblMarriedSurname" Grid.Column="0" Grid.Row="1" />
                     <Entry x:Name="txtMarriedSurname" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="1" />
-                    <Label x:Name="lblNamePrefix" Grid.Column="2" Grid.Row="1" />
-                    <Entry x:Name="txtNamePrefix" WidthRequest="180" Grid.Column="3" Grid.Row="1" />
-                    <Label x:Name="lblSex" Grid.Column="4" Grid.Row="1" />
-                    <comcom:GKComboBox x:Name="cmbSex" WidthRequest="180" SelectedIndexChanged="cbSex_SelectedIndexChanged" Grid.Column="5" Grid.Row="1" />
+                    <Label x:Name="lblSex" Grid.Column="2" Grid.Row="1" />
+                    <comcom:GKComboBox x:Name="cmbSex" WidthRequest="180" SelectedIndexChanged="cbSex_SelectedIndexChanged" Grid.Column="3" Grid.Row="1" />
 
                     <Label x:Name="lblName" Grid.Column="0" Grid.Row="2" />
                     <Entry x:Name="txtName" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="2" />
-                    <Label x:Name="lblNameSuffix" Grid.Column="2" Grid.Row="2" />
-                    <Entry x:Name="txtNameSuffix" WidthRequest="180" Grid.Column="3" Grid.Row="2" />
-                    <input:CheckBox x:Name="chkBookmark" Grid.Column="4" Grid.Row="2" Grid.ColumnSpan="2" />
+                    <input:CheckBox x:Name="chkBookmark" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" />
 
                     <Label x:Name="lblPatronymic" Grid.Column="0" Grid.Row="3" />
                     <comcom:GKComboBox x:Name="cmbPatronymic" WidthRequest="180" Completed="txtXName_Leave" TextChanged="Names_TextChanged" Grid.Column="1" Grid.Row="3" />
-                    <Label x:Name="lblNickname" Grid.Column="2" Grid.Row="3" />
-                    <Entry x:Name="txtNickname" WidthRequest="180" Grid.Column="3" Grid.Row="3" />
-                    <input:CheckBox x:Name="chkPatriarch" Grid.Column="4" Grid.Row="3" Grid.ColumnSpan="2" />
+                    <input:CheckBox x:Name="chkPatriarch" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" />
                 </Grid>
-
-                <StackLayout Orientation="Vertical">
-                    <comcom:GKPortrait x:Name="imgPortrait" WidthRequest="140" HeightRequest="160" />
-
-                    <StackLayout Orientation="Horizontal" Spacing="4">
-                        <Label HorizontalOptions="StartAndExpand" />
-                        <Button x:Name="btnPortraitAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnPortraitAdd_Click" />
-                        <Button x:Name="btnPortraitDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="btnPortraitDelete_Click" />
-                        <Label HorizontalOptions="EndAndExpand" />
-                    </StackLayout>
-                </StackLayout>
             </StackLayout>
         </Frame>
 
@@ -128,8 +111,17 @@
                     <comcom:GKSheetList x:Name="fParentsList" OnModify="ModifyParentsSheet" />
                 </xp:TabItem>
 
-                <xp:TabItem x:Name="pageChilds">
-                    <comcom:GKSheetList x:Name="fChildrenList" OnModify="ModifyChildrenSheet" OnItemValidating="PersonEditDlg_ItemValidating" />
+                <xp:TabItem x:Name="pagePortrait">
+                    <StackLayout Orientation="Vertical">
+                        <comcom:GKPortrait x:Name="imgPortrait" WidthRequest="140" HeightRequest="160" />
+
+                        <StackLayout Orientation="Horizontal" Spacing="4">
+                            <Label HorizontalOptions="StartAndExpand" />
+                            <Button x:Name="btnPortraitAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnPortraitAdd_Click" />
+                            <Button x:Name="btnPortraitDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="btnPortraitDelete_Click" />
+                            <Label HorizontalOptions="EndAndExpand" />
+                        </StackLayout>
+                    </StackLayout>
                 </xp:TabItem>
             </xp:TabViewControl.ItemSource>
         </xp:TabViewControl>

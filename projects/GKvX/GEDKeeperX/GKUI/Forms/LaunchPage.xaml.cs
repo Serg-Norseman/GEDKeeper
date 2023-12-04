@@ -64,8 +64,7 @@ namespace GKUI.Forms
                     GetBaseWin()?.Controller.ShowFileProperties();
                 }),
 
-                new LaunchItem("Recent", "Europe Kings.ged"),
-                new LaunchItem("Recent", "My Kins.ged"),
+                new LaunchItem("Recent", "Sample.ged"), // stub for position hold
 
                 new LaunchItem(LangMan.LS(LSID.MIExport), LangMan.LS(LSID.ExportTable), UIHelper.LoadResourceImage("Resources.btn_excel.gif"), (item) => {
                     GetBaseWin()?.Controller.ExportTable();
@@ -164,6 +163,14 @@ namespace GKUI.Forms
 
                 launchList.IsVisible = true;
                 servicesList.IsVisible = false;
+            }
+
+            var recent = LaunchItems.FirstOrDefault(x => x.Name == "Recent");
+            if (recent != null) {
+                var stubItem = recent.FirstOrDefault(x => x.Title == "Sample.ged");
+                if (stubItem != null) {
+                    recent.Remove(stubItem);
+                }
             }
 
             launchList.ItemsSource = LaunchItems;
