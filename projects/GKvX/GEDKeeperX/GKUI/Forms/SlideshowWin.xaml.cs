@@ -63,7 +63,7 @@ namespace GKUI.Forms
 
         public void SetImage(IImage image)
         {
-            var img = (image == null) ? null : ((XFImageHandler)image).Handle;
+            var img = (image == null) ? null : ((SKImageHandler)image).Handle;
             fImageCtl.Image = img;
             fImageCtl.ZoomToFit();
         }

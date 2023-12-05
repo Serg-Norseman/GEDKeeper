@@ -23,6 +23,15 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
                             <Label x:Name="lblEvent" Grid.Column="0" Grid.Row="0" />
                             <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="0">
                                 <comcom:GKComboBox x:Name="cmbEventType" SelectedIndexChanged="EditEventType_SelectedIndexChanged" WidthRequest="260" />

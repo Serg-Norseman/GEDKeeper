@@ -1307,7 +1307,7 @@ namespace GKCore.Controllers
                 string targetFile = fContext.MediaLoad(fileRef);
                 GKUtils.LoadExtFile(targetFile);
             } else {
-                var mediaViewer = AppHost.Container.Resolve<IMediaViewerWin>(this);
+                var mediaViewer = AppHost.Container.Resolve<IMediaViewerWin>(fView);
                 try {
                     mediaViewer.MultimediaRecord = mediaRec;
                     mediaViewer.Show(true);

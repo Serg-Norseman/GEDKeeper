@@ -126,19 +126,11 @@ namespace GKUI.Components
             toolStrip.Content = new StackLayout() {
                 Orientation = Orientation.Horizontal,
                 Spacing = 10,
-                Items = {
-                    btnSizeToFit,
-                    btnZoomIn,
-                    btnZoomOut,
-                    cbZoomLevels
-                }
+                Items = { btnSizeToFit, btnZoomIn, btnZoomOut, cbZoomLevels }
             };
 
             imageBox = new ImageBox();
             imageBox.AllowZoom = true;
-            imageBox.BackgroundColor = Colors.Gray;
-            imageBox.ImageBorderColor = Colors.AliceBlue;
-            imageBox.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
             imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
             imageBox.ZoomChanged += imageBox_ZoomChanged;
 

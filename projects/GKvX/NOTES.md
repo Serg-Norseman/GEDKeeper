@@ -79,12 +79,13 @@ Phone Xxh-DPI 4.7in         |  4.7" (1080x2636) | 606 PPI | xxh | Android 9.0   
 ## Checked configurations (Android real devices)
 
 ASUS Nexus 7                |  7.0" (1920x1200) | 323 PPI |  xh | Android 6.0.1 (API 23) | 2015
-Samsung Galaxy J1           |  4.5"   (480x800) | ------------- | Android 5.1.1 (API 22) | 2016
+Samsung Galaxy J1           |  4.5"   (480x800) | 207 PPI |   m | Android 5.1.1 (API 22) | 2016
 Samsung Galaxy S7           |  5.1" (1440x2560) | 576 PPI | xxh | Android 8.0   (API 26) | 2016
 Xiaomi Mi 5X                |  5.5" (1080x1920) | 401 PPI |  xh | Android 8.1   (API 27) | 2017
 Samsung Galaxy Note 10 Lite |  6.7" (1080x2400) | 393 PPI |  xh | Android 13    (API 33) | 2020
 ASUS Zenfone 8              |  5.9" (1080x2400) | 446 PPI |  xh | Android 12    (API 31) | 2021
 Samsung Galaxy A32          |  6.6" (1080x2340) | 390 PPI |  xh | Android 13    (API 33) | 2022
+Google Pixel 6a             |  6.1" (1080x2400) | 431 PPI |  xh | Android 14    (API 34) | 2022
 
 # Incomprehensible problems
 
