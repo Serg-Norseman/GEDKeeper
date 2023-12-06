@@ -23,7 +23,6 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
-using GKUI.Platform;
 using Xamarin.CommunityToolkit.Behaviors;
 
 namespace GKUI.Forms

@@ -14,6 +14,7 @@
   - Send error log - canceled
 5. Scripts
 6. No extended notes
+7. FindAndReplace - excluded because it is unsafe if the found/modified record cannot be seen
 
 ## Windows and dialogs
 

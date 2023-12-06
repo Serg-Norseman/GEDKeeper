@@ -633,7 +633,7 @@ namespace GKCore
                     break;
             }
 
-            if (result == "") {
+            if (string.IsNullOrEmpty(result)) {
                 if (!confirm) {
                     return result;
                 }

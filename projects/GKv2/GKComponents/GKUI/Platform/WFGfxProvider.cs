@@ -186,12 +186,12 @@ namespace GKUI.Platform
             }
         }
 
-        public IImage LoadResourceImage(Type baseType, string resName)
+        public IImage LoadResourceImage(Type baseType, string resName, ImageTarget target)
         {
             return new ImageHandler(new Bitmap(GKUtils.LoadResourceStream(baseType, resName)));
         }
 
-        public IImage LoadResourceImage(string resName, bool makeTransp = false)
+        public IImage LoadResourceImage(string resName, ImageTarget target, bool makeTransp = false)
         {
             if (string.IsNullOrEmpty(resName))
                 return null;

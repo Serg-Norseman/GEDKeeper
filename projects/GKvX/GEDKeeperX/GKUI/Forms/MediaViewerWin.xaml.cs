@@ -97,6 +97,7 @@ namespace GKUI.Forms
         public void SetViewRTF(string text)
         {
             try {
+                // https://www.nuget.org/packages/RtfPipe
                 /*RichTextArea rtfBox = new RichTextArea();
                 rtfBox.ReadOnly = true;
                 rtfBox.Text = text;
@@ -110,10 +111,15 @@ namespace GKUI.Forms
         public void SetViewHTML(Stream stm)
         {
             try {
-                /*var browser = new WebView();
-                browser.LoadHtml(stm);
+                StreamReader reader = new StreamReader(stm);
+                string htmlString = reader.ReadToEnd();
 
-                SetViewControl(browser);*/
+                var browser = new WebView();
+                var htmlSource = new HtmlWebViewSource();
+                htmlSource.Html = htmlString;
+                browser.Source = htmlSource;
+
+                SetViewControl(browser);
             } catch (Exception ex) {
                 Logger.WriteError("MediaViewerWin.SetViewHTML()", ex);
             }
@@ -141,7 +147,6 @@ namespace GKUI.Forms
 
         public void DisposeViewControl()
         {
-            //if (fViewer != null) fViewer.Dispose();
         }
 
         private void SetViewControl(View ctl)

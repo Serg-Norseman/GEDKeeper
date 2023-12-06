@@ -216,7 +216,7 @@ namespace GKUI.Forms
 
         public void SetPortrait(IImage portrait)
         {
-            var img = (portrait == null) ? null : ((XFImageHandler)portrait).Handle;
+            var img = (portrait == null) ? null : ((SKImageHandler)portrait).Handle;
             imgPortrait.Image = img;
         }
 

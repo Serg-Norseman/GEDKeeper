@@ -139,7 +139,6 @@ namespace GKUI.Components
                                          new ToolStripSeparator()});
 
             imageBox = new ImageBox();
-            imageBox.AllowZoom = true;
             imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
             imageBox.ZoomChanged += imageBox_ZoomChanged;
             imageBox.Dock = DockStyle.Fill;

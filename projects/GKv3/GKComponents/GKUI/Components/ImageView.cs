@@ -130,7 +130,6 @@ namespace GKUI.Components
             };
 
             imageBox = new ImageBox();
-            imageBox.AllowZoom = true;
             imageBox.SelectionMode = ImageBoxSelectionMode.Zoom;
             imageBox.ZoomChanged += imageBox_ZoomChanged;
 

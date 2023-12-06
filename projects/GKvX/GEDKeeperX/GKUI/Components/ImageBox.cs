@@ -34,8 +34,6 @@ namespace GKUI.Components
     /// </summary>
     public sealed class ImageBox : ScrollablePanel
     {
-        #region Instance Fields
-
         private readonly List<NamedRegion> fNamedRegions;
         private readonly List<int> fZoomLevels;
 
@@ -44,7 +42,6 @@ namespace GKUI.Components
         private int fDropShadowSize;
         private SKImageImageSource fImage;
         private Color fImageBorderColor;
-        private ImageBoxBorderStyle fImageBorderStyle;
         private int fScaledImageHeight;
         private int fScaledImageWidth;
         private Color fSelectionColor;
@@ -58,9 +55,6 @@ namespace GKUI.Components
         private float fZoomFactor;
         private Thickness fImagePadding;
 
-        #endregion
-
-        #region Events
 
         /// <summary>
         ///   Occurs when the Image property is changed.
@@ -72,9 +66,6 @@ namespace GKUI.Components
         /// </summary>
         public event EventHandler ZoomChanged;
 
-        #endregion
-
-        #region Properties
 
         /// <summary>
         ///   Gets or sets a value indicating whether the user can change the zoom level.
@@ -197,31 +188,23 @@ namespace GKUI.Components
             get { return fZoomLevels; }
         }
 
-        #endregion
-
-        #region Constructors
 
         public ImageBox()
         {
+            BackgroundColor = Color.Gray;
+            Padding = new Thickness(0);
+
             fNamedRegions = new List<NamedRegion>();
             fZoomLevels = new List<int>(new[] { 7, 10, 15, 20, 25, 30, 50, 70, 100, 150, 200, 300, 400, 500, 600, 700, 800, 1200, 1600 });
 
-            AllowZoom = true;
-            AutoPan = true;
-            BackgroundColor = Color.Gray;
+            fAllowZoom = true;
+            fAutoPan = true;
             fDropShadowSize = 3;
             fImageBorderColor = Color.AliceBlue;
-            fImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
             fImagePadding = new Thickness(10);
-            Padding = new Thickness(0);
             fSelectionColor = Color.LightBlue;
-
-            ActualSize();
+            fZoom = 100;
         }
-
-        #endregion
-
-        #region Members
 
         private bool AllowPainting()
         {
@@ -359,12 +342,6 @@ namespace GKUI.Components
         {
         }
 
-        private void DrawNamedRegions(Graphics gfx)
-        {
-        }
-
-        #region Overriden methods
-
         protected override void OnPaint(SKPaintSurfaceEventArgs e)
         {
             var info = e.Info;
@@ -372,12 +349,7 @@ namespace GKUI.Components
             if (!AllowPainting()) return;
 
             Graphics gfx = e.Surface.Canvas;
-            gfx.Clear();
-
-            // draw the background
-            /*using (var brush = new SolidBrush(BackgroundColor)) {
-                gfx.FillRectangle(brush, Viewport);
-            }*/
+            gfx.Clear(BackgroundColor.ToSKColor());
 
             // draw the image
             if (fImage != null) {
@@ -390,8 +362,6 @@ namespace GKUI.Components
                 // draw the selection
                 if (fSelectionRegion != Rectangle.Zero) {
                 }
-
-                DrawNamedRegions(gfx);
             }
         }
 
@@ -399,8 +369,6 @@ namespace GKUI.Components
         {
             AdjustLayout();
         }
-
-        #endregion
 
         private void OnImageChanged(EventArgs e)
         {
@@ -454,7 +422,5 @@ namespace GKUI.Components
 
             return fZoomLevels[index];
         }
-
-        #endregion
     }
 }

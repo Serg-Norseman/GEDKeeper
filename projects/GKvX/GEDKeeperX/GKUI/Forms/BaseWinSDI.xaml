@@ -17,7 +17,6 @@
         <ToolbarItem x:Name="tbRecordDelete" Order="Primary" Priority="5" IconImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="miRecordDelete_Click" />
 
         <ToolbarItem x:Name="miSearch" Order="Primary" Priority="6" IconImageSource="{plat:ImageResourceExt Resources.btn_search.gif}" />
-        <ToolbarItem x:Name="miFindAndReplace" Text="FindAndReplace" Order="Secondary" Priority="1" Clicked="miFindAndReplace_Click" />
         <ToolbarItem x:Name="tbFilter" Order="Primary" Priority="8" IconImageSource="{plat:ImageResourceExt Resources.btn_filter.gif}" Clicked="miFilter_Click" />
 
         <ToolbarItem x:Name="tbTreeAncestors" Order="Primary" Priority="9" IconImageSource="{plat:ImageResourceExt Resources.btn_tree_ancestry.gif}" Clicked="miTreeAncestors_Click" />

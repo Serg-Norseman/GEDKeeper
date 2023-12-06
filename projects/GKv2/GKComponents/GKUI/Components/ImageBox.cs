@@ -33,8 +33,6 @@ namespace GKUI.Components
     /// </summary>
     public sealed class ImageBox : ScrollablePanel
     {
-        #region Instance Fields
-
         private readonly List<NamedRegion> fNamedRegions;
         private readonly ToolTip fToolTip;
         private readonly List<int> fZoomLevels;
@@ -44,7 +42,6 @@ namespace GKUI.Components
         private int fDropShadowSize;
         private Image fImage;
         private Color fImageBorderColor;
-        private ImageBoxBorderStyle fImageBorderStyle;
         private bool fIsPanning;
         private bool fIsSelecting;
         private int fScaledImageHeight;
@@ -63,9 +60,6 @@ namespace GKUI.Components
         private float fZoomFactor;
         private Padding fImagePadding;
 
-        #endregion
-
-        #region Events
 
         /// <summary>
         ///   Occurs when the Image property is changed.
@@ -77,9 +71,6 @@ namespace GKUI.Components
         /// </summary>
         public event EventHandler ZoomChanged;
 
-        #endregion
-
-        #region Properties
 
         /// <summary>
         ///   Gets or sets a value indicating whether the user can change the zoom level.
@@ -206,9 +197,6 @@ namespace GKUI.Components
             get { return fZoomLevels; }
         }
 
-        #endregion
-
-        #region Constructors
 
         public ImageBox()
         {
@@ -217,28 +205,27 @@ namespace GKUI.Components
                      ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
             UpdateStyles();
 
+            AutoSize = false;
+            AutoScroll = true;
+            BackColor = Color.Gray;
+            Padding = new Padding(0);
+
             fNamedRegions = new List<NamedRegion>();
             fZoomLevels = new List<int>(new[] { 7, 10, 15, 20, 25, 30, 50, 70, 100, 150, 200, 300, 400, 500, 600, 700, 800, 1200, 1600 });
 
-            AllowZoom = true;
-            AutoSize = false;
-            AutoScroll = true;
-            AutoPan = true;
-            BackColor = Color.Gray;
+            fAllowZoom = true;
+            fAutoPan = true;
             fDropShadowSize = 3;
             fImageBorderColor = Color.AliceBlue;
-            fImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
             fImagePadding = new Padding(10);
-            Padding = new Padding(0);
             fSelectionColor = SystemColors.Highlight;
+            fZoom = 100;
 
             fToolTip = new ToolTip();
             fToolTip.AutoPopDelay = 5000;
             fToolTip.InitialDelay = 250;
             fToolTip.ReshowDelay = 50;
             fToolTip.ShowAlways = true;
-
-            ActualSize();
         }
 
         protected override void Dispose(bool disposing)
@@ -250,10 +237,6 @@ namespace GKUI.Components
             }
             base.Dispose(disposing);
         }
-
-        #endregion
-
-        #region Members
 
         private void SetPanning(bool value)
         {
@@ -272,7 +255,19 @@ namespace GKUI.Components
             if (fIsSelecting != value) {
                 if (!value && fSelectionMode == ImageBoxSelectionMode.Zoom) {
                     if (fSelectionRegion.Width > ImageBoxConstants.SELECTION_DEAD_ZONE && fSelectionRegion.Height > ImageBoxConstants.SELECTION_DEAD_ZONE) {
-                        ZoomToRegion(fSelectionRegion);
+                        // Adjusts the view port to fit the given region
+                        var clientSize = ClientSize;
+                        double ratioX = clientSize.Width / fSelectionRegion.Width;
+                        double ratioY = clientSize.Height / fSelectionRegion.Height;
+                        double zoomFactor = Math.Min(ratioX, ratioY);
+                        int cx = (int)(fSelectionRegion.X + (fSelectionRegion.Width / 2));
+                        int cy = (int)(fSelectionRegion.Y + (fSelectionRegion.Height / 2));
+
+                        Zoom = (int)(zoomFactor * 100);
+
+                        // Centers the given point in the image in the center of the control
+                        ScrollTo(new Point(cx, cy), new Point(clientSize.Width / 2, clientSize.Height / 2));
+
                         SelectionRegion = RectangleF.Empty;
                     }
                 }
@@ -450,30 +445,11 @@ namespace GKUI.Components
 
             AutoScrollMinSize = Size.Empty;
 
-            var innerRectangle = GetInsideViewport();
-            double aspectRatio = GfxHelper.ZoomToFit(fImage.Width, fImage.Height, innerRectangle.Width - fImagePadding.Horizontal, innerRectangle.Height - fImagePadding.Vertical);
+            var innerSize = base.ClientSize;
+            double aspectRatio = GfxHelper.ZoomToFit(fImage.Width, fImage.Height, innerSize.Width - fImagePadding.Horizontal, innerSize.Height - fImagePadding.Vertical);
             double zoom = aspectRatio * 100.0;
 
             Zoom = (int)Math.Round(Math.Floor(zoom));
-        }
-
-        /// <summary>
-        ///   Adjusts the view port to fit the given region.
-        /// </summary>
-        /// <param name="rectangle">The rectangle to fit the view port to.</param>
-        public void ZoomToRegion(RectangleF rectangle)
-        {
-            var clientSize = ClientSize;
-            double ratioX = clientSize.Width / rectangle.Width;
-            double ratioY = clientSize.Height / rectangle.Height;
-            double zoomFactor = Math.Min(ratioX, ratioY);
-            int cx = (int)(rectangle.X + (rectangle.Width / 2));
-            int cy = (int)(rectangle.Y + (rectangle.Height / 2));
-
-            Zoom = (int)(zoomFactor * 100);
-
-            // Centers the given point in the image in the center of the control
-            ScrollTo(new Point(cx, cy), new Point(ClientSize.Width / 2, ClientSize.Height / 2));
         }
 
         private void AdjustLayout()
@@ -495,86 +471,24 @@ namespace GKUI.Components
 
         private void DrawImageBorder(Graphics gfx)
         {
-            if (fImageBorderStyle == ImageBoxBorderStyle.None) return;
-
-            gfx.SetClip(GetInsideViewport()); // make sure the image border doesn't overwrite the control border
-
             Rectangle viewPort = GetImageViewport();
             viewPort = new Rectangle(viewPort.Left - 1, viewPort.Top - 1, viewPort.Width + 1, viewPort.Height + 1);
 
             using (var borderPen = new Pen(fImageBorderColor))
                 gfx.DrawRectangle(borderPen, viewPort);
 
-            switch (fImageBorderStyle) {
-                case ImageBoxBorderStyle.FixedSingleDropShadow: {
-                        var rightEdge = new Rectangle(viewPort.Right + 1, viewPort.Top + fDropShadowSize, fDropShadowSize, viewPort.Height);
-                        var bottomEdge = new Rectangle(viewPort.Left + fDropShadowSize, viewPort.Bottom + 1, viewPort.Width + 1, fDropShadowSize);
+            var rightEdge = new Rectangle(viewPort.Right + 1, viewPort.Top + fDropShadowSize, fDropShadowSize, viewPort.Height);
+            var bottomEdge = new Rectangle(viewPort.Left + fDropShadowSize, viewPort.Bottom + 1, viewPort.Width + 1, fDropShadowSize);
 
-                        using (Brush brush = new SolidBrush(fImageBorderColor))
-                            gfx.FillRectangles(brush, new[] { rightEdge, bottomEdge });
-                    }
-                    break;
-
-                case ImageBoxBorderStyle.FixedSingleGlowShadow: {
-                        gfx.SetClip(viewPort, CombineMode.Exclude); // make sure the inside glow doesn't appear
-
-                        using (var path = new GraphicsPath()) {
-                            path.AddRectangle(viewPort);
-
-                            int glowSize = fDropShadowSize * 3;
-                            const int feather = 50;
-
-                            for (int i = 1; i <= glowSize; i += 2) {
-                                int alpha = feather - ((feather / glowSize) * i);
-
-                                var color = Color.FromArgb(alpha, fImageBorderColor);
-                                using (var pen = new Pen(color, i) { LineJoin = LineJoin.Round })
-                                    gfx.DrawPath(pen, path);
-                            }
-                        }
-                    }
-                    break;
-            }
-
-            gfx.ResetClip();
-        }
-
-        private void DrawNamedRegions(Graphics gfx)
-        {
-            //var color = Color.FromArgb(128, fSelectionColor);
-            foreach (var region in fNamedRegions) {
-                RectangleF rect = GetOffsetRectangle(UIHelper.Rt2Rt(region.Region));
-
-                //using (Brush brush = new SolidBrush(color))
-                    //gfx.FillRectangle(brush, rect);
-
-                using (var pen = new Pen(fImageBorderColor, 2))
-                    gfx.DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
-            }
+            var color = Color.FromArgb(255 / 2, fImageBorderColor);
+            using (Brush brush = new SolidBrush(color))
+                gfx.FillRectangles(brush, new[] { rightEdge, bottomEdge });
         }
 
         private int GetImageBorderOffset()
         {
-            int offset;
-
-            switch (fImageBorderStyle) {
-                case ImageBoxBorderStyle.FixedSingle:
-                    offset = 1;
-                    break;
-
-                case ImageBoxBorderStyle.FixedSingleDropShadow:
-                    offset = (fDropShadowSize + 1);
-                    break;
-
-                default:
-                    offset = 0;
-                    break;
-            }
-
-            return offset;
+            return (fDropShadowSize + 1);
         }
-
-        #region Overriden methods
 
         protected override bool IsInputKey(Keys keyData)
         {
@@ -587,12 +501,6 @@ namespace GKUI.Components
                 result = base.IsInputKey(keyData);
 
             return result;
-        }
-
-        protected override void OnBackColorChanged(EventArgs e)
-        {
-            base.OnBackColorChanged(e);
-            Invalidate();
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -651,7 +559,7 @@ namespace GKUI.Components
                 Focus();
 
             if (e.Button == MouseButtons.Left && fSelectionMode != ImageBoxSelectionMode.None)
-                SelectionRegion = Rectangle.Empty;
+                SelectionRegion = RectangleF.Empty;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -726,12 +634,7 @@ namespace GKUI.Components
             if (!AllowPainting()) return;
 
             Graphics gfx = e.Graphics;
-
-            Rectangle innerRectangle = GetInsideViewport();
-
-            // draw the background
-            using (var brush = new SolidBrush(BackColor))
-                gfx.FillRectangle(brush, innerRectangle);
+            gfx.Clear(BackColor);
 
             // draw the image
             if (fImage != null) {
@@ -740,8 +643,6 @@ namespace GKUI.Components
                 gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
                 gfx.DrawImage(fImage, GetImageViewport(), GetSourceImageRegion(), GraphicsUnit.Pixel);
-
-                gfx.SetClip(GetInsideViewport());
 
                 // draw the selection
                 if (fSelectionRegion != Rectangle.Empty) {
@@ -754,9 +655,13 @@ namespace GKUI.Components
                         gfx.DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
                 }
 
-                DrawNamedRegions(gfx);
-
-                gfx.ResetClip();
+                // draw named regions
+                using (var pen = new Pen(fImageBorderColor, 2)) {
+                    foreach (var region in fNamedRegions) {
+                        RectangleF rect = GetOffsetRectangle(UIHelper.Rt2Rt(region.Region));
+                        gfx.DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
+                    }
+                }
             }
 
             base.OnPaint(e);
@@ -768,8 +673,6 @@ namespace GKUI.Components
 
             base.OnResize(e);
         }
-
-        #endregion
 
         private void OnImageChanged(EventArgs e)
         {
@@ -885,7 +788,5 @@ namespace GKUI.Components
 
             return fZoomLevels[index];
         }
-
-        #endregion
     }
 }

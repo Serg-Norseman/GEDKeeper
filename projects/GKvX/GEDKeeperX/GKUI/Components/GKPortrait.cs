@@ -21,12 +21,11 @@
 using System;
 using System.Collections.Generic;
 using GKCore.Design.Controls;
+using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 
 namespace GKUI.Components
 {
-    using XFPictureBox = Xamarin.Forms.Image;
-
     public class GKPortrait : ContentView, IPortraitControl
     {
         private readonly List<Button> fBtnsList;
@@ -36,14 +35,14 @@ namespace GKUI.Components
         int IPortraitControl.Width { get; set; }
 
 
-        public ImageSource Image
+        public SKImageImageSource Image
         {
-            get { return fImageBox.Source; }
+            get { return fImageBox.Image; }
             set {
-                if (fImageBox.Source != null) {
+                if (fImageBox.Image != null) {
                     //fImageBox.Source.Dispose();
                 }
-                fImageBox.Source = value;
+                fImageBox.Image = value;
             }
         }
 
@@ -71,11 +70,15 @@ namespace GKUI.Components
 
         #region Design
 
-        private XFPictureBox fImageBox;
+        private ImageBox fImageBox;
 
         private void InitializeComponent()
         {
-            fImageBox = new XFPictureBox();
+            fImageBox = new ImageBox();
+            fImageBox.AllowZoom = false;
+            fImageBox.AutoPan = false;
+            fImageBox.SelectionMode = ImageBoxSelectionMode.None;
+            fImageBox.SizeToFit = true;
             Content = fImageBox;
         }
 

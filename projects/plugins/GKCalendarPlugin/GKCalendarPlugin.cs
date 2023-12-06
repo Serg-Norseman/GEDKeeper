@@ -123,7 +123,7 @@ namespace GKCalendarPlugin
         {
             bool result = base.Startup(host);
             try {
-                fIcon = AppHost.GfxProvider.LoadResourceImage(this.GetType(), "GKCalendarPlugin.Resources.icon_time.gif");
+                fIcon = AppHost.GfxProvider.LoadResourceImage(this.GetType(), "GKCalendarPlugin.Resources.icon_time.gif", ImageTarget.UI);
             } catch (Exception ex) {
                 Logger.WriteError("GKCalendarPlugin.Startup()", ex);
                 result = false;

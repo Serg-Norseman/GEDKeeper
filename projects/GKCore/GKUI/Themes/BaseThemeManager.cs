@@ -197,7 +197,7 @@ namespace GKUI.Themes
                         string imgName = telVal.ToString();
                         if (!string.IsNullOrEmpty(imgName)) {
                             if (sysDefault) {
-                                telVal = AppHost.GfxProvider.LoadResourceImage(imgName);
+                                telVal = AppHost.GfxProvider.LoadResourceImage(imgName, ImageTarget.UI);
                             } else {
                                 telVal = AppHost.GfxProvider.LoadImage(GetThemesPath() + imgName);
                             }

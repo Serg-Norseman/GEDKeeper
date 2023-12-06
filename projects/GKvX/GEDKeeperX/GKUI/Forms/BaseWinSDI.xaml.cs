@@ -575,10 +575,11 @@ namespace GKUI.Forms
             (this as IWorkWindow).QuickSearch();
         }
 
-        private void miFindAndReplace_Click(object sender, EventArgs e)
+        /*private void miFindAndReplace_Click(object sender, EventArgs e)
         {
+            // mobile platforms: excluded
             fController.FindAndReplace();
-        }
+        }*/
 
         private void miFilter_Click(object sender, EventArgs e)
         {

@@ -77,7 +77,7 @@ namespace GKCore.Controllers
             for (GDMSex sx = GDMSex.svUnknown; sx <= GDMSex.svLast; sx++) {
                 string name = GKUtils.SexStr(sx);
                 string resImage = GKData.SexData[(int)sx].SymImage;
-                IImage image = AppHost.GfxProvider.LoadResourceImage(resImage, true);
+                IImage image = AppHost.GfxProvider.LoadResourceImage(resImage, ImageTarget.UI, true);
                 fView.SexCombo.AddItem(name, sx, image);
             }
         }
@@ -307,7 +307,16 @@ namespace GKCore.Controllers
                 // using avatar's image
                 GDMSex curSex = (GDMSex)fView.SexCombo.SelectedIndex;
                 string resImage = GKData.SexData[(int)curSex].DefPortraitImage;
-                img = AppHost.GfxProvider.LoadResourceImage(resImage, false);
+
+                // HACK: on GKvX portrait's control on base ImageBox (SkiaSharp)
+                ImageTarget target;
+                if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                    target = ImageTarget.Chart;
+                } else {
+                    target = ImageTarget.UI;
+                }
+
+                img = AppHost.GfxProvider.LoadResourceImage(resImage, target, false);
             }
             fView.SetPortrait(img);
 

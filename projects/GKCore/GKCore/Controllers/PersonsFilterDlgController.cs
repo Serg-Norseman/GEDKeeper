@@ -124,14 +124,17 @@ namespace GKCore.Controllers
             fView.NameCombo.Clear();
             fView.NameCombo.Add("*");
             fView.NameCombo.AddStrings(options.NameFilters);
+            fView.NameCombo.ReadOnly = false;
 
             fView.ResidenceCombo.Clear();
             fView.ResidenceCombo.Add("*");
             fView.ResidenceCombo.AddStrings(options.ResidenceFilters);
+            fView.ResidenceCombo.ReadOnly = false;
 
             fView.EventValCombo.Clear();
             fView.EventValCombo.Add("*");
             fView.EventValCombo.AddStrings(options.EventFilters);
+            fView.EventValCombo.ReadOnly = false;
 
             int lifeSel;
             if (iFilter.FilterLifeMode != FilterLifeMode.lmTimeLocked) {

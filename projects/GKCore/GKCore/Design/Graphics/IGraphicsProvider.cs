@@ -24,6 +24,13 @@ using BSLib;
 
 namespace GKCore.Design.Graphics
 {
+    public enum ImageTarget
+    {
+        UI,
+        Chart
+    }
+
+
     /// <summary>
     /// Interface for platform-independent graphics rendering providers.
     /// </summary>
@@ -49,8 +56,8 @@ namespace GKCore.Design.Graphics
         /// </summary>
         IImage LoadImage(string fileName);
 
-        IImage LoadResourceImage(Type baseType, string resName);
-        IImage LoadResourceImage(string resName, bool makeTransp = false);
+        IImage LoadResourceImage(Type baseType, string resName, ImageTarget target);
+        IImage LoadResourceImage(string resName, ImageTarget target, bool makeTransp = false);
 
         /// <summary>
         /// Saving portrait images for caching purposes.

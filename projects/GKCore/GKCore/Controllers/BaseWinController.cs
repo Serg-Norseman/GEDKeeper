@@ -762,13 +762,13 @@ namespace GKCore.Controllers
             var gfxProvider = AppHost.GfxProvider;
             switch (fContext.ShieldState) {
                 case ShieldState.None:
-                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_none.gif", true);
+                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_none.gif", ImageTarget.UI, true);
                     break;
                 case ShieldState.Middle:
-                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_mid.gif", true);
+                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_mid.gif", ImageTarget.UI, true);
                     break;
                 case ShieldState.Maximum:
-                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_max.gif", true);
+                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_max.gif", ImageTarget.UI, true);
                     break;
             }
             return img;
@@ -1381,6 +1381,10 @@ namespace GKCore.Controllers
 
         public void FindAndReplace()
         {
+            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                throw new NotImplementedException();
+            }
+
             var win = AppHost.Container.Resolve<IFARDlg>(fView);
             AppHost.Instance.ShowWindow(win);
         }
