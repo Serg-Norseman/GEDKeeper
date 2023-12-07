@@ -66,8 +66,6 @@ namespace GKMap.EtoForms
         /// <summary>
         /// location of cache
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public string CacheLocation
         {
             get {
@@ -109,8 +107,6 @@ namespace GKMap.EtoForms
         /// <summary>
         /// is mouse over marker
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public bool IsMouseOverMarker
         {
             get {
@@ -125,8 +121,6 @@ namespace GKMap.EtoForms
         /// <summary>
         /// is mouse over polygon
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public bool IsMouseOverPolygon
         {
             get {
@@ -141,8 +135,6 @@ namespace GKMap.EtoForms
         /// <summary>
         /// is mouse over route
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public bool IsMouseOverRoute
         {
             get {
@@ -154,8 +146,6 @@ namespace GKMap.EtoForms
             }
         }
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public GMapProvider MapProvider
         {
             get {
@@ -187,10 +177,8 @@ namespace GKMap.EtoForms
         }
 
         /// <summary>
-        /// max zoom
-        /// </summary>         
-        [Category("GKMap")]
-        [Description("maximum zoom level of map")]
+        /// maximum zoom level of map
+        /// </summary>
         public int MaxZoom
         {
             get {
@@ -202,10 +190,8 @@ namespace GKMap.EtoForms
         }
 
         /// <summary>
-        /// min zoom
-        /// </summary>      
-        [Category("GKMap")]
-        [Description("minimum zoom level of map")]
+        /// minimum zoom level of map
+        /// </summary>
         public int MinZoom
         {
             get {
@@ -224,8 +210,6 @@ namespace GKMap.EtoForms
         /// <summary>
         /// current map center position
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public PointLatLng Position
         {
             get {
@@ -240,7 +224,6 @@ namespace GKMap.EtoForms
             }
         }
 
-        [Category("GKMap"), DefaultValue(0)]
         public int Zoom
         {
             get {
@@ -481,11 +464,6 @@ namespace GKMap.EtoForms
             Zoom = 0;
 
             if (!IsDesignerHosted) {
-                //SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-                //SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-                //SetStyle(ControlStyles.UserPaint, true);
-                //SetStyle(ControlStyles.Opaque, true);
-                //ResizeRedraw = true;
                 //TileFlipXYAttributes.SetWrapMode(WrapMode.TileFlipXY);
 
                 //CenterFormat.Alignment = StringAlignment.Center;

@@ -17,7 +17,7 @@
             <xp:TabViewControl.ItemSource>
                 <xp:TabItem x:Name="pageFamilyGroups">
                     <StackLayout Orientation="Vertical">
-                        <comcom:TreeView x:Name="tvGroups" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+                        <comcom:GKTreeView x:Name="tvGroups" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
 
                         <StackLayout Spacing="4" Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="FillAndExpand">
                             <Button x:Name="btnAnalyseGroups" Clicked="btnAnalyseGroups_Click" />

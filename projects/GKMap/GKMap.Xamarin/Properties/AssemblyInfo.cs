@@ -9,8 +9,8 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("GKMap.EtoForms")]
-[assembly: AssemblyDescription("GKMap EtoForms UI")]
+[assembly: AssemblyTitle("GKMap.Xamarin")]
+[assembly: AssemblyDescription("GKMap Xamarin UI")]
 [assembly: AssemblyCulture("")]
 
 [assembly: AssemblyProduct("GKMap")]

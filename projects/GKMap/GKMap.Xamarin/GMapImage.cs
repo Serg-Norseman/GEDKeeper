@@ -18,7 +18,7 @@ namespace GKMap.Xamarin
     /// </summary>
     public class GMapImage : PureImage
     {
-        public SKBitmap Img;
+        public SKImage Img;
 
         public override void Dispose()
         {
@@ -50,7 +50,7 @@ namespace GKMap.Xamarin
             GMapImage ret;
             try {
                 ret = new GMapImage();
-                ret.Img = SKBitmap.Decode(stream);
+                ret.Img = SKImage.FromEncodedData(stream);
             } catch (Exception ex) {
                 ret = null;
                 Debug.WriteLine("FromStream: " + ex);

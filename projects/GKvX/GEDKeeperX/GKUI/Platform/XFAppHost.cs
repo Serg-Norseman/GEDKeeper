@@ -326,7 +326,7 @@ namespace GKUI.Platform
 
             ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(NumericStepper), typeof(NumericBoxHandler));
-            ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKTreeView), typeof(TreeViewHandler));
             ControlsManager.RegisterHandlerType(typeof(MenuItem), typeof(MenuItemHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
         }

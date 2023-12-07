@@ -44,6 +44,7 @@
         <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
         <ProjectReference Include="..\..\GKMap\GKMap.Core\GKMap.Core.nstd.csproj" />
         <ProjectReference Include="..\..\GKMap\GKMap.Xamarin\GKMap.Xamarin.csproj" />
+        <ProjectReference Include="..\Adapt.Presentation.Controls\Adapt.Presentation.Controls.csproj" />
     </ItemGroup>
 
     <ItemGroup>
