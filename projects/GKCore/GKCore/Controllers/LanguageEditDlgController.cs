@@ -24,6 +24,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Design.Controls;
 using GKCore.Design;
 using GKCore.Design.Views;
+using System.Threading.Tasks;
 
 namespace GKCore.Controllers
 {
@@ -63,9 +64,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public override bool Cancel()
+        public override async Task<bool> Cancel()
         {
-            return true;
+            return await Task.FromResult(true);
         }
 
         public override void UpdateView()

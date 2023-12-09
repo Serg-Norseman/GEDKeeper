@@ -124,7 +124,7 @@ namespace GKCore.Controllers
 
         public async void EditParents()
         {
-            GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
+            GDMFamilyRecord family = await fBase.Context.GetChildFamily(fIndividualRecord, false, null);
             if (family != null) {
                 var famRes = await BaseController.ModifyFamily(fView, fBase, family, TargetMode.tmNone, null);
                 if (famRes.Result) {
@@ -140,9 +140,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public void DeleteFather()
+        public async void DeleteFather()
         {
-            if (BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
@@ -154,9 +154,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public void DeleteMother()
+        public async void DeleteMother()
         {
-            if (BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }

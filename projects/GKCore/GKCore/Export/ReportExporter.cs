@@ -66,12 +66,12 @@ namespace GKCore.Export
             return result;
         }
 
-        public override void Generate(bool show)
+        public async override void Generate(bool show)
         {
             string availableFormats = LangMan.LS(LSID.HTMLFilter) + "|" + LangMan.LS(LSID.RTFFilter);
             availableFormats += "|" + LangMan.LS(LSID.PDFFilter);
 
-            fPath = AppHost.StdDialogs.GetSaveFile(GlobalOptions.Instance.ReportExportLastDir, availableFormats);
+            fPath = await AppHost.StdDialogs.GetSaveFile(GlobalOptions.Instance.ReportExportLastDir, availableFormats);
             if (string.IsNullOrEmpty(fPath)) return;
 
             GlobalOptions.Instance.ReportExportLastDir = Path.GetDirectoryName(fPath);

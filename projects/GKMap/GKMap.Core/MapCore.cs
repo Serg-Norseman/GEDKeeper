@@ -85,8 +85,6 @@ namespace GKMap
 
         public TileMatrix Matrix { get; private set; }
 
-        public GPoint MouseCurrent { get; set; }
-
         public GPoint MouseDown { get; set; }
 
         public GPoint MouseLastZoom { get; set; }
@@ -218,11 +216,16 @@ namespace GKMap
             }
             set {
                 if (fZoom != value && !IsDragging) {
-                    fZoom = value;
+                    if (value > MaxZoom) {
+                        fZoom = MaxZoom;
+                    } else if (value < MinZoom) {
+                        fZoom = MinZoom;
+                    } else {
+                        fZoom = value;
+                    }
 
                     fMinOfTiles = fProvider.Projection.GetTileMatrixMinXY(value);
                     fMaxOfTiles = fProvider.Projection.GetTileMatrixMaxXY(value);
-
                     fPositionPixel = fProvider.Projection.FromLatLngToPixel(Position, value);
 
                     if (IsStarted) {
@@ -261,21 +264,6 @@ namespace GKMap
         /// occurs when current position is changed
         /// </summary>
         public event PositionChanged OnCurrentPositionChanged;
-
-        /// <summary>
-        /// occurs when tile set load is complete
-        /// </summary>
-        public event TileLoadComplete OnTileLoadComplete;
-
-        /// <summary>
-        /// occurs when tile set is starting to load
-        /// </summary>
-        public event TileLoadStart OnTileLoadStart;
-
-        /// <summary>
-        /// occurs on map drag
-        /// </summary>
-        public event MapDrag OnMapDrag;
 
         /// <summary>
         /// occurs on map zoom changed
@@ -539,8 +527,6 @@ namespace GKMap
         public void ReloadMap()
         {
             if (IsStarted) {
-                Debug.WriteLine("------------------");
-
                 okZoom = 0;
                 skipOverZoom = 0;
 
@@ -571,8 +557,7 @@ namespace GKMap
             RenderOffset = GPoint.Empty;
             DragPoint = GPoint.Empty;
 
-            var d = new GPoint(Width / 2, Height / 2);
-            Drag(d);
+            Drag(Width / 2, Height / 2);
         }
 
         /// <summary>
@@ -619,21 +604,16 @@ namespace GKMap
             Position = FromLocalToLatLng(Width / 2, Height / 2);
             IsDragging = false;
 
-            if (OnMapDrag != null) {
-                OnMapDrag();
-            }
-
             ForceUpdateOverlays();
         }
 
         /// <summary>
         /// drag map
         /// </summary>
-        /// <param name="pt"></param>
-        public void Drag(GPoint pt)
+        public void Drag(long x, long y)
         {
-            RenderOffset.X = pt.X - DragPoint.X;
-            RenderOffset.Y = pt.Y - DragPoint.Y;
+            RenderOffset.X = x - DragPoint.X;
+            RenderOffset.Y = y - DragPoint.Y;
 
             UpdateCenterTileXYLocation();
 
@@ -644,10 +624,6 @@ namespace GKMap
 
             if (IsDragging) {
                 Position = FromLocalToLatLng(Width / 2, Height / 2);
-
-                if (OnMapDrag != null) {
-                    OnMapDrag();
-                }
             }
         }
 
@@ -807,7 +783,6 @@ namespace GKMap
             fLastTileLoadEnd = DateTime.Now;
             long lastTileLoadTimeMs = (long)(fLastTileLoadEnd - fLastTileLoadStart).TotalMilliseconds;
 
-            #region -- clear stuff--
             if (IsStarted) {
                 TileDrawingListLock.AcquireReaderLock();
                 try {
@@ -816,7 +791,6 @@ namespace GKMap
                     TileDrawingListLock.ReleaseReaderLock();
                 }
             }
-            #endregion
 
 #if UseGC
             GC.Collect();
@@ -825,9 +799,7 @@ namespace GKMap
 #endif
             Debug.WriteLine(ctid + " - OnTileLoadComplete: " + lastTileLoadTimeMs + "ms");
 
-            if (OnTileLoadComplete != null) {
-                OnTileLoadComplete(lastTileLoadTimeMs);
-            }
+            fView.Refresh();
         }
 
         /// <summary>
@@ -843,7 +815,6 @@ namespace GKMap
 
             TileDrawingListLock.AcquireWriterLock();
             try {
-                #region -- find tiles around --
                 TileDrawingList.Clear();
 
                 for (long i = -fSizeOfMapArea.Width, countI = fSizeOfMapArea.Width; i <= countI; i++) {
@@ -866,7 +837,6 @@ namespace GKMap
                 }
 
                 TileDrawingList.Sort();
-                #endregion
             } finally {
                 TileDrawingListLock.ReleaseWriterLock();
             }
@@ -886,10 +856,6 @@ namespace GKMap
             fLastTileLoadStart = DateTime.Now;
             Debug.WriteLine("OnTileLoadStart - at zoom " + Zoom + ", time: " + fLastTileLoadStart.TimeOfDay);
             UpdatingBounds = false;
-
-            if (OnTileLoadStart != null) {
-                OnTileLoadStart();
-            }
         }
 
         ~MapCore()

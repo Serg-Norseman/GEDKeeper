@@ -46,9 +46,9 @@ namespace GKCore.Controllers
         {
         }
 
-        public void SelectExternalFile()
+        public async void SelectExternalFile()
         {
-            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            string fileName = await AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (string.IsNullOrEmpty(fileName)) return;
 
             fExternalFile = fileName;

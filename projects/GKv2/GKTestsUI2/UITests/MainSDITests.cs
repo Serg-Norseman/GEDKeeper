@@ -219,7 +219,7 @@ namespace GKUI.Forms
             IList<ISearchResult> search = fCurBase.FindAll("Maria");
             Assert.AreEqual(1, search.Count);
 
-            Assert.AreEqual(null, fCurBase.Context.GetChildFamily(null, false, null));
+            Assert.AreEqual(null, await fCurBase.Context.GetChildFamily(null, false, null));
 
             fCurBase.NotifyRecord(null, RecordAction.raEdit);
 

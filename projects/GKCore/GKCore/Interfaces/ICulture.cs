@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Threading.Tasks;
 using GDModel;
 using GKCore.Types;
 
@@ -43,7 +44,7 @@ namespace GKCore.Interfaces
 
         string NormalizeSurname(string sn, bool aFemale);
         string GetMarriedSurname(string husbSurname);
-        GDMSex GetSex(string iName, string iPat, bool canQuery);
+        Task<GDMSex> GetSex(string iName, string iPat, bool canQuery);
 
         string[] GetSurnames(string surname, bool female);
         string[] GetSurnames(GDMIndividualRecord iRec);

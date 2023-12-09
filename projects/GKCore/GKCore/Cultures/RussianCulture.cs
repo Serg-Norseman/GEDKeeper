@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore.Linguistics;
 
@@ -105,7 +106,7 @@ namespace GKCore.Cultures
             return str.IndexOf(c) >= 0;
         }
 
-        public override GDMSex GetSex(string iName, string iPat, bool canQuery)
+        public override async Task<GDMSex> GetSex(string iName, string iPat, bool canQuery)
         {
             GDMSex result = GDMSex.svUnknown;
             if (string.IsNullOrEmpty(iName)) return result;
@@ -128,7 +129,7 @@ namespace GKCore.Cultures
 
             if (result == GDMSex.svUnknown && canQuery) {
                 string fn = iName + " " + iPat;
-                bool res = AppHost.StdDialogs.ShowQuestion(string.Format(LangMan.LS(LSID.NotDeterminedPersonSex), fn));
+                bool res = await AppHost.StdDialogs.ShowQuestion(string.Format(LangMan.LS(LSID.NotDeterminedPersonSex), fn));
                 result = res ? GDMSex.svMale : GDMSex.svFemale;
             }
 

@@ -554,10 +554,10 @@ namespace GKCore.Controllers
             fOptions.FileBackupEachRevisionMaxCount = (int)GetControl<INumericBox>("numBackupRevisionsMaxCount").Value;
         }
 
-        public void SelectLabColor(ILabel lbl)
+        public async void SelectLabColor(ILabel lbl)
         {
             if (lbl != null) {
-                lbl.BackColor = AppHost.StdDialogs.SelectColor(lbl.BackColor);
+                lbl.BackColor = await AppHost.StdDialogs.SelectColor(lbl.BackColor);
             }
         }
 

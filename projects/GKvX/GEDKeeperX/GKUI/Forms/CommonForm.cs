@@ -201,10 +201,10 @@ namespace GKUI.Forms
         protected async override void CancelClickHandler(object sender, EventArgs e)
         {
             try {
-                if (fController.CheckChangesPersistence())
+                if (await fController.CheckChangesPersistence())
                     return;
 
-                if (fController.Cancel())
+                if (await fController.Cancel())
                     await Close(DialogResult.Cancel);
             } catch (Exception ex) {
                 Logger.WriteError("CommonDialog<>.CancelClickHandler()", ex);

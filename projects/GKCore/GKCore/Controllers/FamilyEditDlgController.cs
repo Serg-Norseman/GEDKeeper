@@ -164,9 +164,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public void DeleteHusband()
+        public async void DeleteHusband()
         {
-            if (BaseController.DeleteFamilyHusband(fBase, fLocalUndoman, fFamilyRecord)) {
+            if (await BaseController.DeleteFamilyHusband(fBase, fLocalUndoman, fFamilyRecord)) {
                 UpdateControls();
             }
         }
@@ -178,9 +178,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public void DeleteWife()
+        public async void DeleteWife()
         {
-            if (BaseController.DeleteFamilyWife(fBase, fLocalUndoman, fFamilyRecord)) {
+            if (await BaseController.DeleteFamilyWife(fBase, fLocalUndoman, fFamilyRecord)) {
                 UpdateControls();
             }
         }

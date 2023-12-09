@@ -38,7 +38,7 @@ namespace GKCore
     [TestFixture]
     public class TreeToolsTests
     {
-        private IBaseWindow fBaseWin;
+        private readonly IBaseWindow fBaseWin;
 
         public TreeToolsTests()
         {
@@ -58,7 +58,7 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_SearchTreeFragments_MergeTree()
+        public async Task Test_SearchTreeFragments_MergeTree()
         {
             List<List<GDMRecord>> treeFragments;
 
@@ -101,7 +101,7 @@ namespace GKCore
                     GDMIndividualRecord iRec2 = ctx1.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
                     Assert.IsNotNull(iRec2);
 
-                    TreeTools.MergeRecord(baseWin, iRec1, iRec2, true);
+                    await TreeTools.MergeRecord(baseWin, iRec1, iRec2, true);
 
                     treeFragments = TreeTools.SearchTreeFragments(ctx1.Tree, null);
                     Assert.AreEqual(3, treeFragments.Count);
@@ -135,14 +135,14 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_MergeRecord_Null()
+        public async Task Test_MergeRecord_Null()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.MergeRecord(null, null, null, false); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.MergeRecord(fBaseWin, null, null, false); });
+            Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await TreeTools.MergeRecord(null, null, null, false); });
+            Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await TreeTools.MergeRecord(fBaseWin, null, null, false); });
         }
 
         [Test]
-        public void Test_MergeRecord_Indi()
+        public async Task Test_MergeRecord_Indi()
         {
             using (var ctx1 = new BaseContext(null)) {
                 IBaseWindow baseWin = new BaseWindowStub(ctx1);
@@ -158,12 +158,12 @@ namespace GKCore
                 GDMIndividualRecord iRec2 = ctx1.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec2);
 
-                TreeTools.MergeRecord(baseWin, iRec1, iRec2, true);
+                await TreeTools.MergeRecord(baseWin, iRec1, iRec2, true);
             }
         }
 
         [Test]
-        public void Test_MergeRecord_Fam()
+        public async Task Test_MergeRecord_Fam()
         {
             using (var ctx1 = new BaseContext(null)) {
                 IBaseWindow baseWin = new BaseWindowStub(ctx1);
@@ -179,7 +179,7 @@ namespace GKCore
                 GDMFamilyRecord famRec2 = ctx1.Tree.XRefIndex_Find("F2") as GDMFamilyRecord;
                 Assert.IsNotNull(famRec2);
 
-                TreeTools.MergeRecord(baseWin, famRec1, famRec2, true);
+                await TreeTools.MergeRecord(baseWin, famRec1, famRec2, true);
             }
         }
 

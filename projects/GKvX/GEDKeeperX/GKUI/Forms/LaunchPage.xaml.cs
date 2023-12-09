@@ -55,7 +55,7 @@ namespace GKUI.Forms
                 }),
                 new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileLoad), UIHelper.LoadResourceImage("Resources.btn_load.gif"), async (item) => {
                     var baseWin = GetBaseWin();
-                    baseWin?.Controller.LoadFileAsync();
+                    baseWin?.Controller.LoadFileEx();
                     await XFAppHost.GetMainPage().NavigateAsync(baseWin);
                 }),
                 new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileSave), UIHelper.LoadResourceImage("Resources.btn_save.gif")),

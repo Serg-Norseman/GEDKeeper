@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -39,7 +38,7 @@ namespace GKUI.Platform
         {
         }
 
-        public IColor SelectColor(IColor color)
+        public async Task<IColor> SelectColor(IColor color)
         {
             using (var clrDlg = new ColorDialog()) {
                 clrDlg.FullOpen = true;
@@ -50,40 +49,29 @@ namespace GKUI.Platform
                     clrDlg.Color = sdColor;
                 }
 
-                if (clrDlg.ShowDialog() == DialogResult.OK) {
-                    return new ColorHandler(clrDlg.Color);
-                } else {
-                    return color;
-                }
+                var retVal = (clrDlg.ShowDialog() == DialogResult.OK) ? new ColorHandler(clrDlg.Color) : color;
+                return await Task.FromResult(retVal);
             }
         }
 
-        public IFont SelectFont(IFont font)
+        public async Task<IFont> SelectFont(IFont font)
         {
             Font sdFont = ((FontHandler)font).Handle;
 
             using (FontDialog fontDlg = new FontDialog()) {
                 fontDlg.Font = sdFont;
-                return (fontDlg.ShowDialog() != DialogResult.OK) ? null : new FontHandler(fontDlg.Font);
+                var retVal = (fontDlg.ShowDialog() == DialogResult.OK) ? new FontHandler(fontDlg.Font) : null;
+                return await Task.FromResult(retVal);
             }
         }
 
-        public string GetOpenFile(string title, string context, string filter,
-                                  int filterIndex, string defaultExt)
+        public async Task<string> GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt)
         {
             filter = filter.Replace(',', ';');
             using (OpenFileDialog ofd = CreateOpenFileDialog(title, context, filter, filterIndex, defaultExt, false)) {
-                if (ofd.ShowDialog() == DialogResult.OK) {
-                    return ofd.FileName;
-                } else {
-                    return string.Empty;
-                }
+                string retStr = (ofd.ShowDialog() == DialogResult.OK) ? ofd.FileName : string.Empty;
+                return await Task.FromResult(retStr);
             }
-        }
-
-        public Task<string> GetOpenFileAsync(string title, string context, string filter, int filterIndex, string defaultExt)
-        {
-            throw new System.NotImplementedException();
         }
 
         private static OpenFileDialog CreateOpenFileDialog(string title, string context, string filter,
@@ -111,26 +99,23 @@ namespace GKUI.Platform
             return ofd;
         }
 
-        public string GetSaveFile(string filter)
+        /*public async Task<string> GetSaveFile(string filter)
         {
-            return GetSaveFile("", "", filter, 1, "", "");
+            return await GetSaveFile("", "", filter, 1, "", "");
+        }*/
+
+        public async Task<string> GetSaveFile(string context, string filter)
+        {
+            return await GetSaveFile("", context, filter, 1, "", "");
         }
 
-        public string GetSaveFile(string context, string filter)
-        {
-            return GetSaveFile("", context, filter, 1, "", "");
-        }
-
-        public string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
-                                  string suggestedFileName, bool overwritePrompt = true)
+        public async Task<string> GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
+                                              string suggestedFileName, bool overwritePrompt = true)
         {
             using (SaveFileDialog sfd = CreateSaveFileDialog(title, context, filter, filterIndex, defaultExt, suggestedFileName)) {
                 sfd.OverwritePrompt = overwritePrompt;
-                if (sfd.ShowDialog() == DialogResult.OK) {
-                    return sfd.FileName;
-                } else {
-                    return string.Empty;
-                }
+                string retStr = (sfd.ShowDialog() == DialogResult.OK) ? sfd.FileName : string.Empty;
+                return await Task.FromResult(retStr);
             }
         }
 
@@ -160,13 +145,6 @@ namespace GKUI.Platform
             return sfd;
         }
 
-        public async Task<string> GetSaveFileAsync(string title, string context, string filter, int filterIndex, string defaultExt,
-                                  string suggestedFileName, bool overwritePrompt = true)
-        {
-            throw new NotSupportedException();
-        }
-
-
         public void ShowAlert(string msg, string title = "")
         {
             if (string.IsNullOrEmpty(title)) {
@@ -194,18 +172,14 @@ namespace GKUI.Platform
             MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Hand);
         }
 
-        public bool ShowQuestion(string msg, string title = "")
+        public async Task<bool> ShowQuestion(string msg, string title = "")
         {
             if (string.IsNullOrEmpty(title)) {
                 title = GKData.APP_TITLE;
             }
 
-            return MessageBox.Show(msg, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
-        }
-
-        public Task<bool> ShowQuestionAsync(string msg, string title = "")
-        {
-            throw new System.NotImplementedException();
+            bool retVal = MessageBox.Show(msg, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+            return await Task.FromResult(retVal);
         }
 
         public void ShowWarning(string msg, string title = "")
@@ -217,22 +191,19 @@ namespace GKUI.Platform
             MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-
-        public bool GetInput(object owner, string prompt, ref string value)
+        public async Task<string> GetInput(object owner, string prompt, string value)
         {
             bool res = GKInputBox.QueryText(owner, GKData.APP_TITLE, prompt, ref value);
-            return res && !string.IsNullOrEmpty(value);
+            string retVal = (res && !string.IsNullOrEmpty(value)) ? value : string.Empty;
+            return await Task.FromResult(retVal);
         }
 
-        public Task<string> GetInputAsync(object owner, string prompt)
+        public async Task<string> GetPassword(string prompt)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public bool GetPassword(string prompt, ref string value)
-        {
+            string value = string.Empty;
             bool res = GKInputBox.QueryPassword(GKData.APP_TITLE, prompt, ref value);
-            return res && !string.IsNullOrEmpty(value);
+            string retVal = (res && !string.IsNullOrEmpty(value)) ? value : string.Empty;
+            return await Task.FromResult(retVal);
         }
     }
 }

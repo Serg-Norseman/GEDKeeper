@@ -92,7 +92,7 @@ namespace GKCore.Controllers
             UpdateView();
         }
 
-        public void Delete()
+        public async void Delete()
         {
             int num = fSplitList.Count;
             if (num == 0) return;
@@ -101,7 +101,7 @@ namespace GKCore.Controllers
                 object obj = fSplitList[i];
 
                 if (obj is GDMIndividualRecord) {
-                    BaseController.DeleteRecord(fBase, obj as GDMIndividualRecord, false);
+                    await BaseController.DeleteRecord(fBase, obj as GDMIndividualRecord, false);
                 }
             }
 
@@ -112,9 +112,9 @@ namespace GKCore.Controllers
             AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.RecsDeleted));
         }
 
-        public void Save()
+        public async void Save()
         {
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT, "");
+            string fileName = await AppHost.StdDialogs.GetSaveFile("", "", LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             TreeTools.CheckRelations(fBase.Context.Tree, fSplitList);

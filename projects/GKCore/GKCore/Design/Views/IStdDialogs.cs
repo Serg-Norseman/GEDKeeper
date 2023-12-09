@@ -28,30 +28,22 @@ namespace GKCore.Design.Views
     /// </summary>
     public interface IStdDialogs
     {
-        bool GetInput(object owner, string prompt, ref string value);
-        Task<string> GetInputAsync(object owner, string prompt);
+        Task<string> GetInput(object owner, string prompt, string value);
 
-        string GetOpenFile(string title, string context, string filter,
-                           int filterIndex, string defaultExt);
+        Task<string> GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt);
 
-        Task<string> GetOpenFileAsync(string title, string context, string filter,
-                                  int filterIndex, string defaultExt);
+        Task<string> GetPassword(string prompt);
 
-        bool GetPassword(string prompt, ref string value);
+        //Task<string> GetSaveFile(string filter);
 
-        string GetSaveFile(string filter);
+        Task<string> GetSaveFile(string context, string filter);
 
-        string GetSaveFile(string context, string filter);
+        Task<string> GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
+                                 string suggestedFileName, bool overwritePrompt = true);
 
-        string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
-                           string suggestedFileName, bool overwritePrompt = true);
+        Task<IColor> SelectColor(IColor color);
 
-        Task<string> GetSaveFileAsync(string title, string context, string filter, int filterIndex, string defaultExt,
-                                  string suggestedFileName, bool overwritePrompt = true);
-
-        IColor SelectColor(IColor color);
-
-        IFont SelectFont(IFont font);
+        Task<IFont> SelectFont(IFont font);
 
         void ShowAlert(string msg, string title = "");
 
@@ -59,9 +51,7 @@ namespace GKCore.Design.Views
 
         void ShowMessage(string msg, string title = "");
 
-        bool ShowQuestion(string msg, string title = "");
-
-        Task<bool> ShowQuestionAsync(string msg, string title = "");
+        Task<bool> ShowQuestion(string msg, string title = "");
 
         void ShowWarning(string msg, string title = "");
     }

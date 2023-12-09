@@ -42,10 +42,10 @@ namespace GKCore.Controllers
         {
         }
 
-        public void SaveSnapshot()
+        public async void SaveSnapshot()
         {
             string filters = GKUtils.GetImageFilter(true);
-            string fileName = AppHost.StdDialogs.GetSaveFile("", GlobalOptions.Instance.ImageExportLastDir, filters, 2, "jpg", "");
+            string fileName = await AppHost.StdDialogs.GetSaveFile("", GlobalOptions.Instance.ImageExportLastDir, filters, 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName)) {
                 GlobalOptions.Instance.ImageExportLastDir = Path.GetDirectoryName(fileName);
 

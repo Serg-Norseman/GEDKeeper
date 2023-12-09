@@ -98,15 +98,7 @@ namespace GKCore.Controllers
 
         private async Task<string> GetInput(string title, string val)
         {
-            string strResult;
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                strResult = val;
-                if (!AppHost.StdDialogs.GetInput(fView, title, ref strResult)) {
-                    strResult = string.Empty;
-                }
-            } else {
-                strResult = await AppHost.StdDialogs.GetInputAsync(fView, title);
-            }
+            string strResult = await AppHost.StdDialogs.GetInput(fView, title, val);
             return strResult;
         }
 

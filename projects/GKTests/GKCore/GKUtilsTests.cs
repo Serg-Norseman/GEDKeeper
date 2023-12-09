@@ -633,7 +633,7 @@ namespace GKCore
         [Test]
         public void Test_GetNormalizeDate()
         {
-            Assert.AreEqual("", GKUtils.GetNormalizeDate("", "mm/dd/yyyy"));
+            Assert.AreEqual("", GKUtils.GetNormalizeDate("..", "mm/dd/yyyy"));
             Assert.AreEqual("30.01.1980", GKUtils.GetNormalizeDate("01/30/1980", "mm/dd/yyyy"));
             Assert.AreEqual("30.01.1980", GKUtils.GetNormalizeDate("1980/01/30", "yyyy/mm/dd"));
         }

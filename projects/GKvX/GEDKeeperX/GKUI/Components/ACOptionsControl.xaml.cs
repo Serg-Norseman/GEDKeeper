@@ -144,11 +144,11 @@ namespace GKUI.Components
             UpdateControls();
         }*/
 
-        private void lblColorClick(object sender, EventArgs e)
+        private async void lblColorClick(object sender, EventArgs e)
         {
             Label lbl = sender as Label;
             if (lbl == null) return;
-            lbl.BackgroundColor = UIHelper.ConvertColor(AppHost.StdDialogs.SelectColor(UIHelper.ConvertColor(lbl.BackgroundColor)));
+            lbl.BackgroundColor = UIHelper.ConvertColor(await AppHost.StdDialogs.SelectColor(UIHelper.ConvertColor(lbl.BackgroundColor)));
         }
     }
 }

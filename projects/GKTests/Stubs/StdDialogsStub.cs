@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Threading.Tasks;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
@@ -27,60 +26,44 @@ namespace GKTests.Stubs
 {
     public class StdDialogsStub : IStdDialogs
     {
-        public bool GetInput(object owner, string prompt, ref string value)
+        public async Task<string> GetInput(object owner, string prompt, string value)
         {
-            return false;
+            return await Task.FromResult(string.Empty);
         }
 
-        public Task<string> GetInputAsync(object owner, string prompt)
+        public async Task<string> GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt)
         {
-            throw new NotImplementedException();
+            return await Task.FromResult(string.Empty);
         }
 
-        public string GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt)
+        public async Task<string> GetPassword(string prompt)
         {
-            return string.Empty;
+            return await Task.FromResult(string.Empty);
         }
 
-        public Task<string> GetOpenFileAsync(string title, string context, string filter, int filterIndex, string defaultExt)
+        /*public async Task<string> GetSaveFile(string filter)
         {
-            throw new NotImplementedException();
+            return await Task.FromResult(string.Empty);
+        }*/
+
+        public async Task<string> GetSaveFile(string context, string filter)
+        {
+            return await Task.FromResult(string.Empty);
         }
 
-        public bool GetPassword(string prompt, ref string value)
+        public async Task<string> GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt, string suggestedFileName, bool overwritePrompt = true)
         {
-            return false;
+            return await Task.FromResult(string.Empty);
         }
 
-        public string GetSaveFile(string filter)
+        public async Task<IColor> SelectColor(IColor color)
         {
-            return string.Empty;
+            return await Task.FromResult(color);
         }
 
-        public string GetSaveFile(string context, string filter)
+        public async Task<IFont> SelectFont(IFont font)
         {
-            return string.Empty;
-        }
-
-        public string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt, string suggestedFileName, bool overwritePrompt = true)
-        {
-            return string.Empty;
-        }
-
-        public async Task<string> GetSaveFileAsync(string title, string context, string filter, int filterIndex, string defaultExt,
-                                  string suggestedFileName, bool overwritePrompt = true)
-        {
-            throw new NotSupportedException();
-        }
-
-        public IColor SelectColor(IColor color)
-        {
-            return color;
-        }
-
-        public IFont SelectFont(IFont font)
-        {
-            return font;
+            return await Task.FromResult(font);
         }
 
         public void ShowAlert(string msg, string title = "")
@@ -95,14 +78,9 @@ namespace GKTests.Stubs
         {
         }
 
-        public bool ShowQuestion(string msg, string title = "")
+        public async Task<bool> ShowQuestion(string msg, string title = "")
         {
-            return false;
-        }
-
-        public Task<bool> ShowQuestionAsync(string msg, string title = "")
-        {
-            throw new NotImplementedException();
+            return await Task.FromResult(false);
         }
 
         public void ShowWarning(string msg, string title = "")

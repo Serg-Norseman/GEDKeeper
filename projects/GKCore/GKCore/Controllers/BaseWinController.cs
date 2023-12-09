@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Charts;
@@ -131,11 +132,11 @@ namespace GKCore.Controllers
             }
         }
 
-        public void LoadFile(string fileName)
+        public async void LoadFile(string fileName)
         {
             Clear();
 
-            if (fContext.FileLoad(fileName)) {
+            if (await fContext.FileLoad(fileName)) {
                 fContext.Modified = false;
                 ChangeFileName();
                 RefreshLists(false);
@@ -158,38 +159,27 @@ namespace GKCore.Controllers
 #endif
         }
 
-        public async void LoadFileEx()
+        public async Task LoadFileEx()
         {
             string homePath, filters;
             PrepareLoadFile(out homePath, out filters);
 
-            string fileName = AppHost.StdDialogs.GetOpenFile("", homePath, filters, 1, GKData.GEDCOM_EXT);
+            string fileName = await AppHost.StdDialogs.GetOpenFile("", homePath, filters, 1, GKData.GEDCOM_EXT);
             if (!string.IsNullOrEmpty(fileName)) {
                 await AppHost.Instance.LoadBase(fView, fileName);
             }
         }
 
-        public async void LoadFileAsync()
+        public async void SaveFile(string fileName)
         {
-            string homePath, filters;
-            PrepareLoadFile(out homePath, out filters);
-
-            string fileName = await AppHost.StdDialogs.GetOpenFileAsync("", homePath, filters, 1, GKData.GEDCOM_EXT);
-            if (!string.IsNullOrEmpty(fileName)) {
-                await AppHost.Instance.LoadBase(fView, fileName);
-            }
-        }
-
-        public void SaveFile(string fileName)
-        {
-            if (fContext.FileSave(fileName)) {
+            if (await fContext.FileSave(fileName)) {
                 fContext.Modified = false;
                 ChangeFileName();
                 AppHost.Instance.BaseSaved(fView, fileName);
             }
         }
 
-        public void SaveFileEx(bool saveAs)
+        public async void SaveFileEx(bool saveAs)
         {
             string oldFileName = fContext.FileName;
             bool isUnknown = fContext.IsUnknown();
@@ -198,7 +188,7 @@ namespace GKCore.Controllers
                 SaveFile(oldFileName);
             } else {
                 string homePath = AppHost.Instance.GetUserFilesPath(Path.GetDirectoryName(oldFileName));
-                string newFileName = AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT, oldFileName, GlobalOptions.Instance.FilesOverwriteWarn);
+                string newFileName = await AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT, oldFileName, GlobalOptions.Instance.FilesOverwriteWarn);
                 if (!string.IsNullOrEmpty(newFileName)) {
                     SaveFile(newFileName);
                     if (!isUnknown && !string.Equals(oldFileName, newFileName)) {
@@ -217,7 +207,7 @@ namespace GKCore.Controllers
                 SaveFile(oldFileName);
             } else {
                 string homePath = AppHost.Instance.GetUserFilesPath(Path.GetDirectoryName(oldFileName));
-                string newFileName = await AppHost.StdDialogs.GetSaveFileAsync("", homePath, LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT, oldFileName, GlobalOptions.Instance.FilesOverwriteWarn);
+                string newFileName = await AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT, oldFileName, GlobalOptions.Instance.FilesOverwriteWarn);
                 if (!string.IsNullOrEmpty(newFileName)) {
                     SaveFile(newFileName);
                     if (!isUnknown && !string.Equals(oldFileName, newFileName)) {
@@ -356,10 +346,10 @@ namespace GKCore.Controllers
             UpdateChangedRecords(record);
         }
 
-        public void DeleteRecord()
+        public async void DeleteRecord()
         {
             GDMRecord record = GetSelectedRecordEx();
-            if (record != null && BaseController.DeleteRecord(fView, record, true)) {
+            if (record != null && await BaseController.DeleteRecord(fView, record, true)) {
                 RefreshLists(false);
             }
         }

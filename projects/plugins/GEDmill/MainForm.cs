@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using GDModel;
 using GEDmill.HTML;
@@ -263,7 +264,7 @@ namespace GEDmill
             ShowCurrentPanel();
         }
 
-        private void btnNext_Click(object sender, EventArgs e)
+        private async void btnNext_Click(object sender, EventArgs e)
         {
             fLogger.WriteInfo("Next button clicked. Current panel = " + fCurrentPanel.ToString());
 
@@ -282,7 +283,7 @@ namespace GEDmill
             btnCancel.Enabled = false;
             btnSettings.Enabled = false;
 
-            if (ValidateCurrentPanel()) {
+            if (await ValidateCurrentPanel()) {
                 if ((int)fCurrentPanel < 9) // Allow for extra ftp panels
                     ++fCurrentPanel;
                 else {
@@ -310,9 +311,9 @@ namespace GEDmill
             EnableCurrentPanel(true);
         }
 
-        private bool ShowQuestionYN(string msg, string title = GMConfig.SoftwareName)
+        private async Task<bool> ShowQuestionYN(string msg, string title = GMConfig.SoftwareName)
         {
-            return AppHost.StdDialogs.ShowQuestion(msg, title);
+            return await AppHost.StdDialogs.ShowQuestion(msg, title);
         }
 
         private void ShowAlert(string msg, string title = GMConfig.SoftwareName)
@@ -325,13 +326,13 @@ namespace GEDmill
             AppHost.StdDialogs.ShowMessage(msg, title);
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private async void btnCancel_Click(object sender, EventArgs e)
         {
             bool dialogResult = true;
 
             if (fCurrentPanel != PanelKind.Finish) {
                 // Cancel button is "Finish" in panel 6
-                dialogResult = ShowQuestionYN(fLangMan.LS(PLS.ExitQuestion));
+                dialogResult = await ShowQuestionYN(fLangMan.LS(PLS.ExitQuestion));
             }
 
             if (dialogResult) {
@@ -450,21 +451,21 @@ namespace GEDmill
             }
         }
 
-        private void btnConfigBackImageBrowse_Click(object sender, EventArgs e)
+        private async void btnConfigBackImageBrowse_Click(object sender, EventArgs e)
         {
             string sPath = GMHelper.GetInitialDirectory(txtConfigBackImageEdit.Text);
             //openFileDialog.FileName = txtConfigBackImageEdit.Text;
-            string backFile = AppHost.StdDialogs.GetOpenFile(fLangMan.LS(PLS.SelectBackImage), sPath, GMHelper.GfxFilter, 1, "");
+            string backFile = await AppHost.StdDialogs.GetOpenFile(fLangMan.LS(PLS.SelectBackImage), sPath, GMHelper.GfxFilter, 1, "");
             if (!string.IsNullOrEmpty(backFile) && IsSupportedFile(backFile)) {
                 txtConfigBackImageEdit.Text = backFile;
                 txtConfigBackImageEdit.SelectAll();
             }
         }
 
-        private void btnConfigFrontImageBrowse_Click(object sender, EventArgs e)
+        private async void btnConfigFrontImageBrowse_Click(object sender, EventArgs e)
         {
             string sPath = GMHelper.GetInitialDirectory(txtConfigFrontImageEdit.Text);
-            string frontFile = AppHost.StdDialogs.GetOpenFile(fLangMan.LS(PLS.SelectFrontImage), sPath, GMHelper.GfxFilter, 1, "");
+            string frontFile = await AppHost.StdDialogs.GetOpenFile(fLangMan.LS(PLS.SelectFrontImage), sPath, GMHelper.GfxFilter, 1, "");
             if (!string.IsNullOrEmpty(frontFile) && IsSupportedFile(frontFile)) {
                 txtConfigFrontImageEdit.Text = frontFile;
                 txtConfigFrontImageEdit.SelectAll();
@@ -488,57 +489,57 @@ namespace GEDmill
             EnableMiniTreeButtons();
         }
 
-        private void btnConfigMiniTreeColorIndiBackground_Click(object sender, EventArgs e)
+        private async void btnConfigMiniTreeColorIndiBackground_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiBackground = TreeDrawer.SelectColor(fConfigMiniTreeColorIndiBackground);
+            fConfigMiniTreeColorIndiBackground = await TreeDrawer.SelectColor(fConfigMiniTreeColorIndiBackground);
             SetMiniTreeColorConfigButtons();
         }
 
-        private void btnConfigMiniTreeColorIndiHighlight_Click(object sender, EventArgs e)
+        private async void btnConfigMiniTreeColorIndiHighlight_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiHighlight = TreeDrawer.SelectColor(fConfigMiniTreeColorIndiHighlight);
+            fConfigMiniTreeColorIndiHighlight = await TreeDrawer.SelectColor(fConfigMiniTreeColorIndiHighlight);
             SetMiniTreeColorConfigButtons();
         }
 
-        private void btnConfigMiniTreeColorIndiBgConcealed_Click(object sender, EventArgs e)
+        private async void btnConfigMiniTreeColorIndiBgConcealed_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiBgConcealed = TreeDrawer.SelectColor(fConfigMiniTreeColorIndiBgConcealed);
+            fConfigMiniTreeColorIndiBgConcealed = await TreeDrawer.SelectColor(fConfigMiniTreeColorIndiBgConcealed);
             SetMiniTreeColorConfigButtons();
         }
 
-        private void btnConfigMiniTreeColorIndiShade_Click(object sender, EventArgs e)
+        private async void btnConfigMiniTreeColorIndiShade_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiShade = TreeDrawer.SelectColor(fConfigMiniTreeColorIndiShade);
+            fConfigMiniTreeColorIndiShade = await TreeDrawer.SelectColor(fConfigMiniTreeColorIndiShade);
             SetMiniTreeColorConfigButtons();
         }
 
-        private void btnConfigMiniTreeColorIndiText_Click(object sender, EventArgs e)
+        private async void btnConfigMiniTreeColorIndiText_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiText = TreeDrawer.SelectColor(fConfigMiniTreeColorIndiText);
+            fConfigMiniTreeColorIndiText = await TreeDrawer.SelectColor(fConfigMiniTreeColorIndiText);
             SetMiniTreeColorConfigButtons();
         }
 
-        private void btnConfigMiniTreeColorIndiLink_Click(object sender, EventArgs e)
+        private async void btnConfigMiniTreeColorIndiLink_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiLink = TreeDrawer.SelectColor(fConfigMiniTreeColorIndiLink);
+            fConfigMiniTreeColorIndiLink = await TreeDrawer.SelectColor(fConfigMiniTreeColorIndiLink);
             SetMiniTreeColorConfigButtons();
         }
 
-        private void btnConfigMiniTreeColorBranch_Click(object sender, EventArgs e)
+        private async void btnConfigMiniTreeColorBranch_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorBranch = TreeDrawer.SelectColor(fConfigMiniTreeColorBranch);
+            fConfigMiniTreeColorBranch = await TreeDrawer.SelectColor(fConfigMiniTreeColorBranch);
             SetMiniTreeColorConfigButtons();
         }
 
-        private void btnConfigMiniTreeColorIndiBorder_Click(object sender, EventArgs e)
+        private async void btnConfigMiniTreeColorIndiBorder_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiBorder = TreeDrawer.SelectColor(fConfigMiniTreeColorIndiBorder);
+            fConfigMiniTreeColorIndiBorder = await TreeDrawer.SelectColor(fConfigMiniTreeColorIndiBorder);
             SetMiniTreeColorConfigButtons();
         }
 
-        private void btnConfigMiniTreeColorIndiFgConcealed_Click(object sender, EventArgs e)
+        private async void btnConfigMiniTreeColorIndiFgConcealed_Click(object sender, EventArgs e)
         {
-            fConfigMiniTreeColorIndiFgConcealed = TreeDrawer.SelectColor(fConfigMiniTreeColorIndiFgConcealed);
+            fConfigMiniTreeColorIndiFgConcealed = await TreeDrawer.SelectColor(fConfigMiniTreeColorIndiFgConcealed);
             SetMiniTreeColorConfigButtons();
         }
 
@@ -1188,7 +1189,7 @@ namespace GEDmill
         /// <summary>
         /// Handles the processing needed at each stage of the app, as the user moves through each page of the wizard.
         /// </summary>
-        private bool ValidateCurrentPanel()
+        private async Task<bool> ValidateCurrentPanel()
         {
             DialogResult result;
 
@@ -1269,7 +1270,7 @@ namespace GEDmill
                             }
                         }
 
-                        if (CreateWebsite(outputFolder, imageFolder)) {
+                        if (await CreateWebsite(outputFolder, imageFolder)) {
                             return true;
                         }
 
@@ -1514,7 +1515,7 @@ namespace GEDmill
         /// <summary>
         /// Spawns the website creation thread, which calls CWebsite.Create to do the work.
         /// </summary>
-        private bool CreateWebsite(string outputFolder, string imagesFolder)
+        private async Task<bool> CreateWebsite(string outputFolder, string imagesFolder)
         {
             fLogger.WriteInfo("Creating website");
 
@@ -1522,7 +1523,7 @@ namespace GEDmill
             if (!string.IsNullOrEmpty(GMConfig.Instance.BackgroundImage) && File.Exists(GMConfig.Instance.BackgroundImage) == false) {
                 fLogger.WriteError("Can't find background image " + GMConfig.Instance.BackgroundImage);
 
-                bool result = ShowQuestionYN(string.Format(fLangMan.LS(PLS.BackgroundMissed), GMConfig.Instance.BackgroundImage));
+                bool result = await ShowQuestionYN(string.Format(fLangMan.LS(PLS.BackgroundMissed), GMConfig.Instance.BackgroundImage));
                 if (!result) {
                     fLogger.WriteInfo("Message box cancelled (1)");
                     return false;
@@ -1747,7 +1748,7 @@ namespace GEDmill
 
         // Saves changes made in config panel back to main config.
         // Reads (and sanity checks) values from all controls in the config panel and puts them into the CConfig instance.
-        private void SaveConfigPanelSettings()
+        private async void SaveConfigPanelSettings()
         {
             GMConfig.Instance.FrontPageImageFilename = txtConfigFrontImageEdit.Text;
             GMConfig.Instance.BackgroundImage = txtConfigBackImageEdit.Text;
@@ -1758,7 +1759,7 @@ namespace GEDmill
                 if (maxImageWidth > 0 && maxImageWidth <= 300) {
                     GMConfig.Instance.MaxImageWidth = maxImageWidth;
                 } else if (GMConfig.Instance.MaxImageWidth != maxImageWidth && maxImageWidth > 300) {
-                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxImageWidth));
+                    bool dialogResult = await ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxImageWidth));
                     if (dialogResult) {
                         GMConfig.Instance.MaxImageWidth = maxImageWidth;
                     }
@@ -1773,7 +1774,7 @@ namespace GEDmill
                 if (maxImageHeight > 0 && maxImageHeight <= 800) {
                     GMConfig.Instance.MaxImageHeight = maxImageHeight;
                 } else if (GMConfig.Instance.MaxImageHeight != maxImageHeight && maxImageHeight > 800) {
-                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxImageHeight));
+                    bool dialogResult = await ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxImageHeight));
                     if (dialogResult) {
                         GMConfig.Instance.MaxImageHeight = maxImageHeight;
                     }
@@ -1788,7 +1789,7 @@ namespace GEDmill
                 if (maxSourceImageWidth > 0 && maxSourceImageWidth <= 800) {
                     GMConfig.Instance.MaxSourceImageWidth = maxSourceImageWidth;
                 } else if (GMConfig.Instance.MaxSourceImageWidth != maxSourceImageWidth && maxSourceImageWidth > 800) {
-                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxSourceImageWidth));
+                    bool dialogResult = await ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxSourceImageWidth));
                     if (dialogResult) {
                         GMConfig.Instance.MaxSourceImageWidth = maxSourceImageWidth;
                     }
@@ -1803,7 +1804,7 @@ namespace GEDmill
                 if (maxSourceImageHeight > 0 && maxSourceImageHeight <= 800) {
                     GMConfig.Instance.MaxSourceImageHeight = maxSourceImageHeight;
                 } else if (GMConfig.Instance.MaxSourceImageHeight != maxSourceImageHeight && maxSourceImageHeight > 800) {
-                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxSourceImageHeight));
+                    bool dialogResult = await ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxSourceImageHeight));
                     if (dialogResult) {
                         GMConfig.Instance.MaxSourceImageHeight = maxSourceImageHeight;
                     }
@@ -1818,7 +1819,7 @@ namespace GEDmill
                 if (maxThumbnailImageWidth > 0 && maxThumbnailImageWidth < 80) {
                     GMConfig.Instance.MaxThumbnailImageWidth = maxThumbnailImageWidth;
                 } else if (GMConfig.Instance.MaxThumbnailImageWidth != maxThumbnailImageWidth && maxThumbnailImageWidth > 80) {
-                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxThumbnailImageWidth));
+                    bool dialogResult = await ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxThumbnailImageWidth));
                     if (dialogResult) {
                         GMConfig.Instance.MaxThumbnailImageWidth = maxThumbnailImageWidth;
                     }
@@ -1833,7 +1834,7 @@ namespace GEDmill
                 if (maxThumbnailImageHeight > 0 && maxThumbnailImageHeight < 80) {
                     GMConfig.Instance.MaxThumbnailImageHeight = maxThumbnailImageHeight;
                 } else if (GMConfig.Instance.MaxThumbnailImageHeight != maxThumbnailImageHeight && maxThumbnailImageHeight > 80) {
-                    bool dialogResult = ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxThumbnailImageHeight));
+                    bool dialogResult = await ShowQuestionYN(string.Format(fLangMan.LS(PLS.ImageSizeProblem), maxThumbnailImageHeight));
                     if (dialogResult) {
                         GMConfig.Instance.MaxThumbnailImageHeight = maxThumbnailImageHeight;
                     }

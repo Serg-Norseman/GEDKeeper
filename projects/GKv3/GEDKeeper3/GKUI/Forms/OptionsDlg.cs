@@ -253,13 +253,13 @@ namespace GKUI.Forms
             fController.SelectLabColor(GetControlHandler<ILabel>(sender as Label));
         }
 
-        private void panDefFont_Click(object sender, EventArgs e)
+        private async void panDefFont_Click(object sender, EventArgs e)
         {
             TreeChartOptions chartOptions = fController.Options.TreeChartOptions;
 
             var sdFont = new Font(chartOptions.DefFontName, chartOptions.DefFontSize);
             IFont font = new FontHandler(sdFont);
-            font = AppHost.StdDialogs.SelectFont(font);
+            font = await AppHost.StdDialogs.SelectFont(font);
             if (font != null) {
                 chartOptions.DefFontName = font.Name;
                 chartOptions.DefFontSize = (int)(Math.Round(font.Size));

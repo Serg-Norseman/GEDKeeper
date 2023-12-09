@@ -226,10 +226,10 @@ namespace GKCore.Controllers
                 string.Format("{0:0.00}", item.FemaleVal));
         }
 
-        public void ExportToExcel()
+        public async void ExportToExcel()
         {
-            string fileName;
-            var writer = TableExporter.GetTableWriterWFN(out fileName);
+            string fileName = await TableExporter.GetTableFile();
+            var writer = TableExporter.GetTableWriter(fileName);
             if (writer == null) return;
 
             AppHost.Instance.ExecuteWork((controller) => {

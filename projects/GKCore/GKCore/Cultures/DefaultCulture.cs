@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Types;
@@ -51,9 +52,9 @@ namespace GKCore.Cultures
             return husbSurname;
         }
 
-        public virtual GDMSex GetSex(string iName, string iPat, bool canQuery)
+        public virtual async Task<GDMSex> GetSex(string iName, string iPat, bool canQuery)
         {
-            return GDMSex.svUnknown;
+            return await Task.FromResult(GDMSex.svUnknown);
         }
 
         public virtual string[] GetSurnames(string surname, bool female)

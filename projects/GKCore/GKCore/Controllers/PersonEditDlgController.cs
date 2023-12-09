@@ -424,7 +424,7 @@ namespace GKCore.Controllers
         {
             AcceptTempData();
 
-            GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
+            GDMFamilyRecord family = await fBase.Context.GetChildFamily(fIndividualRecord, false, null);
             if (family != null) {
                 var famRes = await BaseController.ModifyFamily(fView, fBase, family, TargetMode.tmNone, null);
                 if (famRes.Result) {
@@ -433,11 +433,12 @@ namespace GKCore.Controllers
             }
         }
 
-        public void DeleteParents()
+        public async void DeleteParents()
         {
-            if (!AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachParentsQuery))) return;
+            var res = await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachParentsQuery));
+            if (!res) return;
 
-            GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
+            GDMFamilyRecord family = await fBase.Context.GetChildFamily(fIndividualRecord, false, null);
             if (family == null) return;
 
             AcceptTempData();
@@ -455,11 +456,11 @@ namespace GKCore.Controllers
             }
         }
 
-        public void DeleteFather()
+        public async void DeleteFather()
         {
             AcceptTempData();
 
-            if (BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
@@ -473,26 +474,26 @@ namespace GKCore.Controllers
             }
         }
 
-        public void DeleteMother()
+        public async void DeleteMother()
         {
             AcceptTempData();
 
-            if (BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
 
-        public void JumpToFather()
+        public async void JumpToFather()
         {
-            GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
+            GDMFamilyRecord family = await fBase.Context.GetChildFamily(fIndividualRecord, false, null);
             if (family == null) return;
 
             JumpToRecord(family.Husband);
         }
 
-        public void JumpToMother()
+        public async void JumpToMother()
         {
-            GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
+            GDMFamilyRecord family = await fBase.Context.GetChildFamily(fIndividualRecord, false, null);
             if (family == null) return;
 
             JumpToRecord(family.Wife);

@@ -271,16 +271,14 @@ namespace GKCore
             fBase.RefreshLists(false);
         }
 
-        public string select_file()
+        public async Task<string> select_file()
         {
-            string filename = AppHost.StdDialogs.GetOpenFile("", "", "All files (*.*)|*.*", 0, "");
-            return filename;
+            return await AppHost.StdDialogs.GetOpenFile("", "", "All files (*.*)|*.*", 0, "");
         }
 
-        public string select_new_file()
+        public async Task<string> select_new_file()
         {
-            string filename = AppHost.StdDialogs.GetSaveFile("", "", "All files (*.*)|*.*", 0, "", "", true);
-            return filename;
+            return await AppHost.StdDialogs.GetSaveFile("", "", "All files (*.*)|*.*", 0, "", "", true);
         }
 
         #endregion
@@ -303,10 +301,10 @@ namespace GKCore
             return (rec == null) ? (int)GDMRecordType.rtNone : (int)rec.RecordType;
         }
 
-        public bool delete_record(object recPtr)
+        public async Task<bool> delete_record(object recPtr)
         {
             GDMRecord rec = recPtr as GDMRecord;
-            return BaseController.DeleteRecord(fBase, rec, false);
+            return await BaseController.DeleteRecord(fBase, rec, false);
         }
 
         public string get_record_xref(object recPtr)

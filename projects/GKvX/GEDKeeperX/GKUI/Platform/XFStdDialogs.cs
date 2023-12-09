@@ -39,23 +39,17 @@ namespace GKUI.Platform
         {
         }
 
-        public IColor SelectColor(IColor color)
+        public async Task<IColor> SelectColor(IColor color)
         {
             throw new NotSupportedException();
         }
 
-        public IFont SelectFont(IFont font)
+        public async Task<IFont> SelectFont(IFont font)
         {
             throw new NotSupportedException();
         }
 
-        public string GetOpenFile(string title, string context, string filter,
-                                  int filterIndex, string defaultExt)
-        {
-            throw new NotSupportedException();
-        }
-
-        public async Task<string> GetOpenFileAsync(string title, string context, string filter,
+        public async Task<string> GetOpenFile(string title, string context, string filter,
                                   int filterIndex, string defaultExt)
         {
             filter = filter.Replace(',', ';');
@@ -80,28 +74,22 @@ namespace GKUI.Platform
             return string.Empty;
         }
 
-        public string GetSaveFile(string filter)
+        public async Task<string> GetSaveFile(string filter)
         {
-            return GetSaveFile("", "", filter, 1, "", "");
+            return await GetSaveFile("", "", filter, 1, "", "");
         }
 
-        public string GetSaveFile(string context, string filter)
+        public async Task<string> GetSaveFile(string context, string filter)
         {
-            return GetSaveFile("", context, filter, 1, "", "");
+            return await GetSaveFile("", context, filter, 1, "", "");
         }
 
-        public string GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
-                                  string suggestedFileName, bool overwritePrompt = true)
-        {
-            throw new NotSupportedException();
-        }
-
-        public async Task<string> GetSaveFileAsync(string title, string context, string filter, int filterIndex, string defaultExt,
+        public async Task<string> GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
                                   string suggestedFileName, bool overwritePrompt = true)
         {
             var owner = XFAppHost.GetMainPage();
             string path = XFAppHost.Instance.GetExternalStorageDirectory();
-            string fileName = await GetInputAsync(owner, title);
+            string fileName = await GetInput(owner, title, suggestedFileName);
             return Path.Combine(path, Path.ChangeExtension(fileName, defaultExt));
         }
 
@@ -131,7 +119,6 @@ namespace GKUI.Platform
             return result;
         }
 
-
         public void ShowAlert(string msg, string title = "")
         {
             ShowMessage(msg, title);
@@ -154,12 +141,7 @@ namespace GKUI.Platform
             ShowMessage(msg, title);
         }
 
-        public bool ShowQuestion(string msg, string title = "")
-        {
-            throw new NotSupportedException();
-        }
-
-        public async Task<bool> ShowQuestionAsync(string msg, string title = "")
+        public async Task<bool> ShowQuestion(string msg, string title = "")
         {
             var curPage = Application.Current.MainPage;
             if (curPage == null) return false;
@@ -176,13 +158,7 @@ namespace GKUI.Platform
             ShowMessage(msg, title);
         }
 
-
-        public bool GetInput(object owner, string prompt, ref string value)
-        {
-            throw new NotSupportedException();
-        }
-
-        public async Task<string> GetInputAsync(object owner, string prompt)
+        public async Task<string> GetInput(object owner, string prompt, string value)
         {
             var page = owner as Page;
             if (page == null) return string.Empty;
@@ -191,7 +167,7 @@ namespace GKUI.Platform
             return await page.DisplayPromptAsync(title, prompt, LangMan.LS(LSID.DlgAccept), LangMan.LS(LSID.DlgCancel));
         }
 
-        public bool GetPassword(string prompt, ref string value)
+        public async Task<string> GetPassword(string prompt)
         {
             throw new NotSupportedException();
         }

@@ -264,7 +264,7 @@ namespace GKCore
             return iRec;
         }
 
-        public bool DeleteRecord(GDMRecord record)
+        public async Task<bool> DeleteRecord(GDMRecord record)
         {
             bool result = false;
             if (record == null) return result;
@@ -286,7 +286,7 @@ namespace GKCore
                         break;
 
                     case GDMRecordType.rtMultimedia:
-                        result = DeleteMediaRecord(record as GDMMultimediaRecord);
+                        result = await DeleteMediaRecord(record as GDMMultimediaRecord);
                         break;
 
                     case GDMRecordType.rtSource:
@@ -333,13 +333,13 @@ namespace GKCore
             return result;
         }
 
-        public bool DeleteMediaRecord(GDMMultimediaRecord mRec)
+        public async Task<bool> DeleteMediaRecord(GDMMultimediaRecord mRec)
         {
             if (mRec == null)
                 throw new ArgumentNullException("mRec");
 
             if (mRec.FileReferences.Count > 0) {
-                bool fileDeleted = MediaDelete(mRec.FileReferences[0]);
+                bool fileDeleted = await MediaDelete(mRec.FileReferences[0]);
                 if (!fileDeleted) {
                     // message?
                     return false;
@@ -661,7 +661,7 @@ namespace GKCore
             GDMSex result = namesTable.GetSexByName(iName);
 
             if (result == GDMSex.svUnknown) {
-                result = this.Culture.GetSex(iName, iPatr, false);
+                result = await this.Culture.GetSex(iName, iPatr, false);
 
                 using (var dlg = AppHost.ResolveDialog<ISexCheckDlg>()) {
                     dlg.IndividualName = iName + " " + iPatr;
@@ -1035,7 +1035,7 @@ namespace GKCore
             return result;
         }
 
-        public bool MediaDelete(GDMFileReference fileReference)
+        public async Task<bool> MediaDelete(GDMFileReference fileReference)
         {
             if (fileReference == null) return false;
 
@@ -1063,7 +1063,8 @@ namespace GKCore
                             if (!GlobalOptions.Instance.DeleteMediaFileWithoutConfirm) {
                                 string msg = string.Format(LangMan.LS(LSID.MediaFileDeleteQuery));
                                 // TODO: may be Yes/No/Cancel?
-                                if (!AppHost.StdDialogs.ShowQuestion(msg)) {
+                                var res = await AppHost.StdDialogs.ShowQuestion(msg);
+                                if (!res) {
                                     return false;
                                 }
                             }
@@ -1078,15 +1079,15 @@ namespace GKCore
                         break;
 
                     case MediaStoreStatus.mssFileNotFound:
-                        result = AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.ContinueQuestion, LangMan.LS(LSID.FileNotFound, fileName)));
+                        result = await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.ContinueQuestion, LangMan.LS(LSID.FileNotFound, fileName)));
                         break;
 
                     case MediaStoreStatus.mssStgNotFound:
-                        result = AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.ContinueQuestion, LangMan.LS(LSID.StgNotFound)));
+                        result = await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.ContinueQuestion, LangMan.LS(LSID.StgNotFound)));
                         break;
 
                     case MediaStoreStatus.mssArcNotFound:
-                        result = AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.ContinueQuestion, LangMan.LS(LSID.ArcNotFound)));
+                        result = await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.ContinueQuestion, LangMan.LS(LSID.ArcNotFound)));
                         break;
 
                     case MediaStoreStatus.mssBadData:
@@ -1354,12 +1355,12 @@ namespace GKCore
             fUndoman.Clear();
         }
 
-        public bool FileLoad(string fileName, bool showProgress = true)
+        public async Task<bool> FileLoad(string fileName, bool showProgress = true)
         {
-            return FileLoad(fileName, true, showProgress, true);
+            return await FileLoad(fileName, true, showProgress, true);
         }
 
-        public bool FileLoad(string fileName, bool loadSecure, bool showProgress, bool checkValidation)
+        public async Task<bool> FileLoad(string fileName, bool loadSecure, bool showProgress, bool checkValidation)
         {
             bool result = false;
 
@@ -1374,7 +1375,8 @@ namespace GKCore
                     fileProvider = new GEDCOMProvider(fTree);
 
                     if (loadSecure) {
-                        if (!AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password), ref pw)) {
+                        pw = await AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password));
+                        if (string.IsNullOrEmpty(pw)) {
                             AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
                             return false;
                         }
@@ -1438,16 +1440,19 @@ namespace GKCore
             fFileName = fileName;
         }
 
-        public bool FileSave(string fileName)
+        public async Task<bool> FileSave(string fileName)
         {
             bool result = false;
 
             try {
                 string pw = null;
                 string ext = FileHelper.GetFileExtension(fileName);
-                if (ext == ".geds" && !AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password), ref pw)) {
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
-                    return false;
+                if (ext == ".geds") {
+                    pw = await AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password));
+                    if (string.IsNullOrEmpty(pw)) {
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
+                        return false;
+                    }
                 }
 
                 FileSave(fileName, pw);
@@ -1835,7 +1840,7 @@ namespace GKCore
 
         #region Data modification functions
 
-        private GDMFamilyRecord GetFamilyBySpouse(GDMIndividualRecord newParent)
+        private async Task<GDMFamilyRecord> GetFamilyBySpouse(GDMIndividualRecord newParent)
         {
             GDMFamilyRecord result = null;
 
@@ -1849,7 +1854,7 @@ namespace GKCore
                     GDMIndividualRecord wife = fTree.GetPtrValue(fam.Wife);
                     if (husb == newParent || wife == newParent) {
                         string msg = string.Format(LangMan.LS(LSID.ParentsQuery), GKUtils.GetFamilyString(fTree, fam));
-                        if (AppHost.StdDialogs.ShowQuestion(msg)) {
+                        if (await AppHost.StdDialogs.ShowQuestion(msg)) {
                             result = fam;
                             break;
                         }
@@ -1860,7 +1865,7 @@ namespace GKCore
             return result;
         }
 
-        public GDMFamilyRecord GetChildFamily(GDMIndividualRecord iChild, bool canCreate,
+        public async Task<GDMFamilyRecord> GetChildFamily(GDMIndividualRecord iChild, bool canCreate,
                                                  GDMIndividualRecord newParent)
         {
             GDMFamilyRecord result = null;
@@ -1870,7 +1875,7 @@ namespace GKCore
                     result = fTree.GetPtrValue(iChild.ChildToFamilyLinks[0]);
                 } else {
                     if (canCreate) {
-                        GDMFamilyRecord fam = GetFamilyBySpouse(newParent);
+                        GDMFamilyRecord fam = await GetFamilyBySpouse(newParent);
                         if (fam == null) {
                             fam = fTree.CreateFamily();
                         }

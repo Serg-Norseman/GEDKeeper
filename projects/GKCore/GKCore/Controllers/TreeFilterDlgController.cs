@@ -82,10 +82,10 @@ namespace GKCore.Controllers
             }
         }
 
-        public override bool Cancel()
+        public override async Task<bool> Cancel()
         {
             fFilter.Reset();
-            return true;
+            return await Task.FromResult(true);
         }
 
         public override void UpdateView()

@@ -232,19 +232,19 @@ namespace GKUI.Forms
             }
         }
 
-        protected override void CancelClickHandler(object sender, EventArgs e)
+        protected override async void CancelClickHandler(object sender, EventArgs e)
         {
             try {
-                if (fController.Cancel())
+                if (await fController.Cancel())
                     Close(DialogResult.Cancel);
             } catch (Exception ex) {
                 Logger.WriteError("CommonDialog<>.CancelClickHandler()", ex);
             }
         }
 
-        protected override void OnClosing(CancelEventArgs e)
+        protected override async void OnClosing(CancelEventArgs e)
         {
-            e.Cancel = fController.CheckChangesPersistence();
+            e.Cancel = await fController.CheckChangesPersistence();
             base.OnClosing(e);
         }
 

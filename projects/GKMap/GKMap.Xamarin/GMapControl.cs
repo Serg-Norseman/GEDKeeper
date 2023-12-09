@@ -59,16 +59,10 @@ namespace GKMap.Xamarin
         public string CacheLocation
         {
             get {
-#if !DESIGN
                 return GMaps.CacheLocation;
-#else
-                return string.Empty;
-#endif
             }
             set {
-#if !DESIGN
                 GMaps.CacheLocation = value;
-#endif
             }
         }
 
@@ -221,15 +215,7 @@ namespace GKMap.Xamarin
             }
             set {
                 if (fCore.Zoom != value) {
-                    Debug.WriteLine("ZoomPropertyChanged: " + fCore.Zoom + " -> " + value);
-
-                    if (value > MaxZoom) {
-                        fCore.Zoom = MaxZoom;
-                    } else if (value < MinZoom) {
-                        fCore.Zoom = MinZoom;
-                    } else {
-                        fCore.Zoom = value;
-                    }
+                    fCore.Zoom = value;
 
                     if (fCore.IsStarted && !fCore.IsDragging) {
                         fCore.ForceUpdateOverlays();
@@ -252,45 +238,6 @@ namespace GKMap.Xamarin
             }
             remove {
                 fCore.OnCurrentPositionChanged -= value;
-            }
-        }
-
-        /// <summary>
-        /// occurs when tile set load is complete
-        /// </summary>
-        public event TileLoadComplete OnTileLoadComplete
-        {
-            add {
-                fCore.OnTileLoadComplete += value;
-            }
-            remove {
-                fCore.OnTileLoadComplete -= value;
-            }
-        }
-
-        /// <summary>
-        /// occurs when tile set is starting to load
-        /// </summary>
-        public event TileLoadStart OnTileLoadStart
-        {
-            add {
-                fCore.OnTileLoadStart += value;
-            }
-            remove {
-                fCore.OnTileLoadStart -= value;
-            }
-        }
-
-        /// <summary>
-        /// occurs on map drag
-        /// </summary>
-        public event MapDrag OnMapDrag
-        {
-            add {
-                fCore.OnMapDrag += value;
-            }
-            remove {
-                fCore.OnMapDrag -= value;
             }
         }
 
@@ -436,10 +383,6 @@ namespace GKMap.Xamarin
             GMaps.Initialize(GMapImageProxy.Instance);
         }
 
-#if !DESIGN
-        /// <summary>
-        /// constructor
-        /// </summary>
         public GMapControl()
         {
             EnableTouchEvents = true;
@@ -459,8 +402,6 @@ namespace GKMap.Xamarin
 
             OnLoad(null);
         }
-
-#endif
 
         /*protected override void Dispose(bool disposing)
         {
@@ -539,10 +480,8 @@ namespace GKMap.Xamarin
             }
 
             base.InvalidateSurface();
-            //base.Refresh();
         }
 
-#if !DESIGN
         /// <summary>
         /// enqueue built-in thread safe invalidation
         /// </summary>
@@ -552,7 +491,6 @@ namespace GKMap.Xamarin
                 fCore.RefreshEvent.Set();
             }
         }
-#endif
 
         /// <summary>
         /// sets to max zoom to fit all markers and centers them in map
@@ -737,8 +675,7 @@ namespace GKMap.Xamarin
                         }
 
                         if (fCore.IsDragging) {
-                            fCore.MouseCurrent = gpt;
-                            fCore.Drag(fCore.MouseCurrent);
+                            fCore.Drag(gpt.X, gpt.Y);
                             base.InvalidateSurface();
                         } else {
                             if (fCore.MouseDown.IsEmpty) {

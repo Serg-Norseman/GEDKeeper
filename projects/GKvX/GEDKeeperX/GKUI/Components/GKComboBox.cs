@@ -131,7 +131,7 @@ namespace GKUI.Components
         {
             var view = UIHelper.GetParentPage(this);
             if (Text == fAppendNew && view != null) {
-                string newValue = await AppHost.StdDialogs.GetInputAsync(view, LangMan.LS(LSID.Value));
+                string newValue = await AppHost.StdDialogs.GetInput(view, LangMan.LS(LSID.Value), string.Empty);
                 Add(newValue);
                 Text = newValue;
             }

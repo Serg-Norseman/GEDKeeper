@@ -226,16 +226,16 @@ namespace GKCore.Controllers
                 SetRec2(irec);
         }
 
-        public void MergeToLeft()
+        public async void MergeToLeft()
         {
-            TreeTools.MergeRecord(fBase, fRec1, fRec2, fBookmark);
+            await TreeTools.MergeRecord(fBase, fRec1, fRec2, fBookmark);
             SetRec1(fRec1);
             SetRec2(null);
         }
 
-        public void MergeToRight()
+        public async void MergeToRight()
         {
-            TreeTools.MergeRecord(fBase, fRec2, fRec1, fBookmark);
+            await TreeTools.MergeRecord(fBase, fRec2, fRec1, fBookmark);
             SetRec1(null);
             SetRec2(fRec2);
         }

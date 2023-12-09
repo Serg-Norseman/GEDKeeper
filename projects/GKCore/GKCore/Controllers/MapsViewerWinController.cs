@@ -235,12 +235,12 @@ namespace GKCore.Controllers
         }
 
         // TODO: localize?
-        public void SaveSnapshot()
+        public async void SaveSnapshot()
         {
             try {
                 string filter1 = "Image files|*.jpg";
 
-                string fileName = AppHost.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
+                string fileName = await AppHost.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
                 if (!string.IsNullOrEmpty(fileName)) {
                     fView.MapBrowser.SaveSnapshot(fileName);
                 }

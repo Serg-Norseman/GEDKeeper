@@ -101,9 +101,9 @@ namespace GKCore.Controllers
             fView.Note.Copy();
         }
 
-        public void Import()
+        public async void Import()
         {
-            string fileName = AppHost.StdDialogs.GetOpenFile("", "", "Text files (*.txt)|*.txt|All files (*.*)|*.*", 0, ".txt");
+            string fileName = await AppHost.StdDialogs.GetOpenFile("", "", "Text files (*.txt)|*.txt|All files (*.*)|*.*", 0, ".txt");
             if (string.IsNullOrEmpty(fileName))
                 return;
 
@@ -112,9 +112,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public void Export()
+        public async void Export()
         {
-            string fileName = AppHost.StdDialogs.GetSaveFile("", "", "Text files (*.txt)|*.txt|All files (*.*)|*.*", 0, ".txt", "", true);
+            string fileName = await AppHost.StdDialogs.GetSaveFile("", "", "Text files (*.txt)|*.txt|All files (*.*)|*.*", 0, ".txt", "", true);
             if (string.IsNullOrEmpty(fileName))
                 return;
 

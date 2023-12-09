@@ -46,8 +46,8 @@ namespace GKCore.Interfaces
 
         bool IsUnknown();
         void Clear();
-        bool FileLoad(string fileName, bool showProgress = true);
-        bool FileSave(string fileName);
+        Task<bool> FileLoad(string fileName, bool showProgress = true);
+        Task<bool> FileSave(string fileName);
         void SetFileName(string fileName);
         void CriticalSave();
 
@@ -55,7 +55,7 @@ namespace GKCore.Interfaces
         GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evSign, string evDate, string evPlace);
         GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evSign, GDMCustomDate evDate, string evPlace);
         GDMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GDMSex iSex, bool birthEvent);
-        bool DeleteRecord(GDMRecord record);
+        Task<bool> DeleteRecord(GDMRecord record);
         bool IsRecordAccess(GDMRestriction restriction);
 
         // Individual utils
@@ -120,7 +120,7 @@ namespace GKCore.Interfaces
         Task<GDMFamilyRecord> SelectFamily(IView owner, GDMIndividualRecord target, TargetMode targetMode = TargetMode.tmFamilyChild);
         Task<GDMIndividualRecord> SelectPerson(IView owner, GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex);
         Task<GDMRecord> SelectRecord(IView owner, GDMRecordType mode, params object[] args);
-        GDMFamilyRecord GetChildFamily(GDMIndividualRecord iChild, bool canCreate, GDMIndividualRecord newParent);
+        Task<GDMFamilyRecord> GetChildFamily(GDMIndividualRecord iChild, bool canCreate, GDMIndividualRecord newParent);
         GDMFamilyRecord AddFamilyForSpouse(GDMIndividualRecord spouse);
         Task<GDMIndividualRecord> AddChildForParent(IView owner, GDMIndividualRecord parent, GDMSex needSex);
         Task<GDMIndividualRecord> SelectSpouseFor(IView owner, GDMIndividualRecord iRec);

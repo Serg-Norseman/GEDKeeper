@@ -478,7 +478,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        private static void PostProcessPerson(IBaseWindow baseWin, GDMIndividualRecord indivRec)
+        private static async Task PostProcessPerson(IBaseWindow baseWin, GDMIndividualRecord indivRec)
         {
             baseWin.Context.ImportNames(indivRec);
 
@@ -489,14 +489,14 @@ namespace GKCore.Controllers
 
             if (iFilter.SourceMode == FilterGroupMode.Selected) {
                 var src = baseWin.Context.Tree.FindXRef<GDMSourceRecord>(iFilter.SourceRef);
-                if (src != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.IncludedSourceFilter))) {
+                if (src != null && await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.IncludedSourceFilter))) {
                     indivRec.AddSource(src, "", 0);
                 }
             }
 
             if (iFilter.FilterGroupMode == FilterGroupMode.Selected) {
                 var grp = baseWin.Context.Tree.FindXRef<GDMGroupRecord>(iFilter.GroupRef);
-                if (grp != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.IncludedGroupFilter))) {
+                if (grp != null && await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.IncludedGroupFilter))) {
                     grp.AddMember(indivRec);
                 }
             }
@@ -542,7 +542,7 @@ namespace GKCore.Controllers
 
                 if (!exists) {
                     if (result.Result) {
-                        PostProcessPerson(baseWin, indivRec);
+                        await PostProcessPerson(baseWin, indivRec);
 
                         tree.AddRecord(indivRec);
                     } else {
@@ -887,17 +887,17 @@ namespace GKCore.Controllers
             return msg;
         }
 
-        public static bool DeleteRecord(IBaseWindow baseWin, GDMRecord record, bool confirm)
+        public static async Task<bool> DeleteRecord(IBaseWindow baseWin, GDMRecord record, bool confirm)
         {
             bool result;
 
             if (record == null) {
                 result = false;
             } else {
-                if (confirm && !AppHost.StdDialogs.ShowQuestion(GetDeleteMessage(baseWin, record))) {
+                if (confirm && !await AppHost.StdDialogs.ShowQuestion(GetDeleteMessage(baseWin, record))) {
                     result = false;
                 } else {
-                    result = baseWin.Context.DeleteRecord(record);
+                    result = await baseWin.Context.DeleteRecord(record);
                 }
             }
 
@@ -916,7 +916,7 @@ namespace GKCore.Controllers
                 return result;
             }
 
-            GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, father);
+            GDMFamilyRecord family = await baseWin.Context.GetChildFamily(person, true, father);
             if (family == null) return result;
 
             var husb = baseWin.Context.Tree.GetPtrValue<GDMIndividualRecord>(family.Husband);
@@ -932,12 +932,12 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool DeleteIndividualFather(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
+        public static async Task<bool> DeleteIndividualFather(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
         {
             bool result = false;
 
-            if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachFatherQuery))) {
-                GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
+            if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachFatherQuery))) {
+                GDMFamilyRecord family = await baseWin.Context.GetChildFamily(person, false, null);
                 if (family != null) {
                     GDMIndividualRecord father = baseWin.Context.Tree.GetPtrValue(family.Husband);
                     result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, father);
@@ -959,7 +959,7 @@ namespace GKCore.Controllers
                 return result;
             }
 
-            GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, mother);
+            GDMFamilyRecord family = await baseWin.Context.GetChildFamily(person, true, mother);
             if (family == null) return result;
 
             var wife = baseWin.Context.Tree.GetPtrValue<GDMIndividualRecord>(family.Wife);
@@ -974,12 +974,12 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool DeleteIndividualMother(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
+        public static async Task<bool> DeleteIndividualMother(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
         {
             bool result = false;
 
-            if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachMotherQuery))) {
-                GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
+            if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachMotherQuery))) {
+                GDMFamilyRecord family = await baseWin.Context.GetChildFamily(person, false, null);
                 if (family != null) {
                     GDMIndividualRecord mother = baseWin.Context.Tree.GetPtrValue(family.Wife);
                     result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, mother);
@@ -1003,14 +1003,14 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool DeleteFamilyHusband(IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
+        public static async Task<bool> DeleteFamilyHusband(IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
         {
             bool result = false;
 
             GDMIndividualRecord husband = baseWin.Context.Tree.GetPtrValue(family.Husband);
             if (!baseWin.Context.IsAvailableRecord(husband)) return false;
 
-            if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachHusbandQuery))) {
+            if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachHusbandQuery))) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, husband);
             }
 
@@ -1030,14 +1030,14 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool DeleteFamilyWife(IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
+        public static async Task<bool> DeleteFamilyWife(IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
         {
             bool result = false;
 
             GDMIndividualRecord wife = baseWin.Context.Tree.GetPtrValue(family.Wife);
             if (!baseWin.Context.IsAvailableRecord(wife)) return false;
 
-            if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachWifeQuery))) {
+            if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachWifeQuery))) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, wife);
             }
 
@@ -1056,8 +1056,6 @@ namespace GKCore.Controllers
 
         public static async Task<bool> AddIndividualPortrait(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord iRec)
         {
-            bool result = false;
-
             GDMMultimediaRecord mmRec = await baseWin.Context.SelectRecord(owner, GDMRecordType.rtMultimedia, null) as GDMMultimediaRecord;
             if (mmRec == null) return false;
 
@@ -1071,7 +1069,7 @@ namespace GKCore.Controllers
             mmLink = iRec.SetPrimaryMultimediaLink(mmRec);
 
             // select portrait area
-            result = await SelectPortraitRegion(owner, baseWin, mmLink);
+            bool result = await SelectPortraitRegion(owner, baseWin, mmLink);
 
             if (result) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otIndividualPortraitAttach, iRec, mmLink);

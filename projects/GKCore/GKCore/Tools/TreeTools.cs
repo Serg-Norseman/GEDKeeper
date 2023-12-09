@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using BSLib;
 using BSLib.DataViz.SmartGraph;
 using GDModel;
@@ -360,7 +361,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void MergeRecord(IBaseWindow baseWin, GDMRecord targetRec, GDMRecord sourceRec, bool bookmark)
+        public static async Task MergeRecord(IBaseWindow baseWin, GDMRecord targetRec, GDMRecord sourceRec, bool bookmark)
         {
             if (baseWin == null)
                 throw new ArgumentNullException("baseWin");
@@ -372,7 +373,8 @@ namespace GKCore.Tools
                 throw new ArgumentNullException("sourceRec");
 
             if (targetRec.RecordType == GDMRecordType.rtRepository) {
-                if (!AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RepoRecsMergeWarning))) {
+                var res = await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RepoRecsMergeWarning));
+                if (!res) {
                     return;
                 }
             }
@@ -387,7 +389,7 @@ namespace GKCore.Tools
                 }
 
                 sourceRec.MoveTo(targetRec);
-                baseWin.Context.DeleteRecord(sourceRec);
+                await baseWin.Context.DeleteRecord(sourceRec);
 
                 if (targetRec.RecordType == GDMRecordType.rtIndividual && bookmark) {
                     ((GDMIndividualRecord)targetRec).Bookmark = true;

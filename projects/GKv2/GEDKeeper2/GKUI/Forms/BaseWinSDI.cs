@@ -859,9 +859,9 @@ namespace GKUI.Forms
             fController.NewFile();
         }
 
-        private void miFileLoad_Click(object sender, EventArgs e)
+        private async void miFileLoad_Click(object sender, EventArgs e)
         {
-            fController.LoadFileEx();
+            await fController.LoadFileEx();
         }
 
         private void miFileSaveAs_Click(object sender, EventArgs e)

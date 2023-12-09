@@ -22,6 +22,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading.Tasks;
 using BSLib;
 using GEDmill.HTML;
 using GEDmill.MiniTree;
@@ -274,9 +275,9 @@ namespace GEDmill
         }
 
 
-        public static int SelectColor(int color)
+        public static async Task<int> SelectColor(int color)
         {
-            var colorHandle = AppHost.StdDialogs.SelectColor(new ColorHandler(Color.FromArgb(color)));
+            var colorHandle = await AppHost.StdDialogs.SelectColor(new ColorHandler(Color.FromArgb(color)));
             var newColor = colorHandle.ToArgb();
             return newColor;
         }

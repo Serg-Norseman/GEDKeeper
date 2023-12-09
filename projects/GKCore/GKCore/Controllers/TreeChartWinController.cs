@@ -182,12 +182,12 @@ namespace GKCore.Controllers
             }
         }
 
-        public void Delete()
+        public async void Delete()
         {
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null || p == fView.TreeBox.Model.Root) return;
 
-            BaseController.DeleteRecord(fBase, p.Rec, true);
+            await BaseController.DeleteRecord(fBase, p.Rec, true);
             UpdateChart();
         }
 
@@ -274,10 +274,10 @@ namespace GKCore.Controllers
             return (p != null && p.Rec != null);
         }
 
-        public void SaveSnapshot()
+        public async void SaveSnapshot()
         {
             string filters = GKUtils.GetImageFilter(true);
-            string fileName = AppHost.StdDialogs.GetSaveFile("", GlobalOptions.Instance.ImageExportLastDir, filters, 2, "jpg", "");
+            string fileName = await AppHost.StdDialogs.GetSaveFile("", GlobalOptions.Instance.ImageExportLastDir, filters, 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName)) {
                 GlobalOptions.Instance.ImageExportLastDir = Path.GetDirectoryName(fileName);
 
@@ -296,12 +296,12 @@ namespace GKCore.Controllers
             }
         }
 
-        public void SelectColor()
+        public async void SelectColor()
         {
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            p.UserColor = AppHost.StdDialogs.SelectColor(p.UserColor);
+            p.UserColor = await AppHost.StdDialogs.SelectColor(p.UserColor);
             fView.TreeBox.Invalidate();
         }
 
