@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Controllers;
@@ -76,7 +77,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var dataOwner = fDataOwner as IGDMStructWithNotes;
             if (fBaseWin == null || dataOwner == null) return;
@@ -88,7 +89,7 @@ namespace GKCore.Lists
             GDMNoteRecord noteRec;
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    noteRec = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtNote, null) as GDMNoteRecord;
+                    noteRec = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtNote, null) as GDMNoteRecord;
                     if (noteRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GDMObject)dataOwner, noteRec);
                         notes = dataOwner.FindNotes(noteRec);
@@ -98,12 +99,13 @@ namespace GKCore.Lists
                 case RecordAction.raEdit:
                     if (notes != null) {
                         noteRec = fBaseContext.Tree.GetPtrValue<GDMNoteRecord>(notes);
-                        result = BaseController.ModifyNote(fOwner, fBaseWin, ref noteRec);
+                        var noteRes = await BaseController.ModifyNote(fOwner, fBaseWin, noteRec);
+                        result = noteRes.Result;
                     }
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachNoteQuery))) {
+                    if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachNoteQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteRemove, (GDMObject)dataOwner, notes);
                     }
                     break;

@@ -20,9 +20,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using BSLib;
+using CarouselView.FormsPlugin.Abstractions;
 using GDModel;
 using GKCore;
 using GKCore.Design.Controls;
@@ -31,6 +35,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using SkiaSharp;
+using Xam.Plugin.TabView;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -135,8 +140,40 @@ namespace GKUI.Components
             }
         }
 
+        public static string[] Convert(string text)
+        {
+            var strList = new StringList(text);
+            return strList.ToArray();
+        }
+
+        public static string Convert(string[] lines)
+        {
+            StringBuilder strBuilder = new StringBuilder();
+            foreach (var line in lines) {
+                if (strBuilder.Length > 0) {
+                    strBuilder.Append(Environment.NewLine);
+                }
+                strBuilder.Append(line);
+            }
+            return strBuilder.ToString();
+        }
+
         public static ImageSource LoadResourceImage(string resName)
         {
+            if (string.IsNullOrEmpty(resName)) {
+                return null;
+            }
+
+            var dens = DeviceDisplay.MainDisplayInfo.Density;
+            if (dens >= 2) {
+                string fileName = Path.GetFileNameWithoutExtension(resName);
+                string newName = string.Format("{0}@2x.png", fileName);
+                var asm = typeof(UIHelper).Assembly;
+                if (asm.GetManifestResourceInfo(newName) != null) {
+                    return ImageSource.FromResource(newName, asm);
+                }
+            }
+
             return ImageSource.FromResource(resName, typeof(GKUtils).Assembly);
         }
 
@@ -154,6 +191,37 @@ namespace GKUI.Components
             string[] strItems = items.Select(x => x.ToString()).ToArray();
             string action = await page.DisplayActionSheet(title, LangMan.LS(LSID.DlgCancel), null, strItems);
             return string.IsNullOrEmpty(action) ? default(T) : items.FirstOrDefault(x => x.ToString() == action);
+        }
+
+        public static Page GetParentPage(Element element)
+        {
+            if (element == null) return null;
+
+            while (element != null && !(element is Page)) {
+                element = element.Parent;
+            }
+            return element as Page;
+        }
+
+        public static object InvokeMethod<T>(T obj, string methodName, params object[] args)
+        {
+            var method = typeof(T).GetTypeInfo().GetDeclaredMethod(methodName);
+            return method?.Invoke(obj, args);
+        }
+
+        public static void UnsetAnimateTransition(TabViewControl tabView)
+        {
+            // TabViewControl._carouselView.AnimateTransition = false (!)
+            var _carouselView = typeof(TabViewControl).GetField("_carouselView", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tabView) as CarouselViewControl;
+            if (_carouselView != null) {
+                _carouselView.AnimateTransition = false;
+            }
+        }
+
+        public static void ResetTabViewLayout(TabViewControl tabView)
+        {
+            // HACK: Content of TabViewControl disappears when switching to menu+start screen and then returning back.
+            tabView.Layout((tabView.Parent as View).Bounds);
         }
     }
 }

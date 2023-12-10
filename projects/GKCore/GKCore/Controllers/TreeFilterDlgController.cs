@@ -19,13 +19,14 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Charts;
-using GKCore.Design.Controls;
-using GKCore.Lists;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Lists;
 using GKCore.Types;
 
 namespace GKCore.Controllers
@@ -81,10 +82,10 @@ namespace GKCore.Controllers
             }
         }
 
-        public override bool Cancel()
+        public override async Task<bool> Cancel()
         {
             fFilter.Reset();
-            return true;
+            return await Task.FromResult(true);
         }
 
         public override void UpdateView()
@@ -130,13 +131,13 @@ namespace GKCore.Controllers
             }
         }
 
-        public void ModifyPersons(RecordAction action, object itemData)
+        public async Task ModifyPersons(RecordAction action, object itemData)
         {
             GDMIndividualRecord iRec = itemData as GDMIndividualRecord;
 
             switch (action) {
                 case RecordAction.raAdd:
-                    iRec = fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
+                    iRec = await fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
                     if (iRec != null) {
                         fTemp = fTemp + iRec.XRef + ";";
                     }

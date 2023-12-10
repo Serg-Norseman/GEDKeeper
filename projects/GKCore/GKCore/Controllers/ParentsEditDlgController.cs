@@ -122,38 +122,41 @@ namespace GKCore.Controllers
             }
         }
 
-        public void EditParents()
+        public async void EditParents()
         {
-            GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
-            if (family != null && BaseController.ModifyFamily(fView, fBase, ref family, TargetMode.tmNone, null)) {
+            GDMFamilyRecord family = await fBase.Context.GetChildFamily(fIndividualRecord, false, null);
+            if (family != null) {
+                var famRes = await BaseController.ModifyFamily(fView, fBase, family, TargetMode.tmNone, null);
+                if (famRes.Result) {
+                    UpdateControls();
+                }
+            }
+        }
+
+        public async void AddFather()
+        {
+            if (await BaseController.AddIndividualFather(fView, fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
 
-        public void AddFather()
+        public async void DeleteFather()
         {
-            if (BaseController.AddIndividualFather(fView, fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
 
-        public void DeleteFather()
+        public async void AddMother()
         {
-            if (BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.AddIndividualMother(fView, fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
 
-        public void AddMother()
+        public async void DeleteMother()
         {
-            if (BaseController.AddIndividualMother(fView, fBase, fLocalUndoman, fIndividualRecord)) {
-                UpdateControls();
-            }
-        }
-
-        public void DeleteMother()
-        {
-            if (BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }

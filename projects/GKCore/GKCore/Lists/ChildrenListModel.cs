@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Controllers;
@@ -90,7 +91,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var family = fDataOwner as GDMFamilyRecord;
             if (fBaseWin == null || family == null) return;
@@ -102,19 +103,21 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    child = fBaseWin.Context.SelectPerson(fOwner, tree.GetPtrValue(family.Husband), TargetMode.tmParent, GDMSex.svUnknown);
+                    child = await fBaseWin.Context.SelectPerson(fOwner, tree.GetPtrValue(family.Husband), TargetMode.tmParent, GDMSex.svUnknown);
                     result = (child != null && fBaseWin.Context.IsAvailableRecord(child) && !family.HasChild(child));
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, family);
                     }
                     break;
 
-                case RecordAction.raEdit:
-                    result = (BaseController.ModifyIndividual(fOwner, fBaseWin, ref child, null, TargetMode.tmNone, GDMSex.svUnknown));
+                case RecordAction.raEdit: {
+                        var indiRes = await BaseController.ModifyIndividual(fOwner, fBaseWin, child, null, TargetMode.tmNone, GDMSex.svUnknown);
+                        result = indiRes.Result;
+                    }
                     break;
 
                 case RecordAction.raDelete:
-                    result = (child != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachChildQuery)));
+                    result = (child != null && await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachChildQuery)));
                     if (result) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, child, family);
                     }
@@ -161,7 +164,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var indiRec = fDataOwner as GDMIndividualRecord;
             if (fBaseWin == null || indiRec == null) return;
@@ -173,10 +176,10 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    GDMFamilyRecord family = fBaseWin.Context.SelectFamily(fOwner, indiRec, TargetMode.tmFamilySpouse);
+                    GDMFamilyRecord family = await fBaseWin.Context.SelectFamily(fOwner, indiRec, TargetMode.tmFamilySpouse);
                     if (family != null && fBaseWin.Context.IsAvailableRecord(family)) {
                         GDMIndividualRecord target = (indiRec.Sex == GDMSex.svMale) ? indiRec : null;
-                        child = fBaseWin.Context.SelectPerson(fOwner, target, TargetMode.tmParent, GDMSex.svUnknown);
+                        child = await fBaseWin.Context.SelectPerson(fOwner, target, TargetMode.tmParent, GDMSex.svUnknown);
                         result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
                         if (result) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, family);
@@ -184,12 +187,14 @@ namespace GKCore.Lists
                     }
                     break;
 
-                case RecordAction.raEdit:
-                    result = (BaseController.ModifyIndividual(fOwner, fBaseWin, ref child, null, TargetMode.tmNone, GDMSex.svUnknown));
+                case RecordAction.raEdit: {
+                        var indiRes = await BaseController.ModifyIndividual(fOwner, fBaseWin, child, null, TargetMode.tmNone, GDMSex.svUnknown);
+                        result = indiRes.Result;
+                    }
                     break;
 
                 case RecordAction.raDelete:
-                    result = (child != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachChildQuery)));
+                    result = (child != null && await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachChildQuery)));
                     if (result) {
                         GDMFamilyRecord family2 = tree.FindChildFamily(indiRec, child);
                         result = (family2 != null) && fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsDetach, child, family2);

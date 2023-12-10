@@ -66,21 +66,13 @@ namespace GKMap.EtoForms
         /// <summary>
         /// location of cache
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public string CacheLocation
         {
             get {
-#if !DESIGN
                 return GMaps.CacheLocation;
-#else
-                return string.Empty;
-#endif
             }
             set {
-#if !DESIGN
                 GMaps.CacheLocation = value;
-#endif
             }
         }
 
@@ -109,8 +101,6 @@ namespace GKMap.EtoForms
         /// <summary>
         /// is mouse over marker
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public bool IsMouseOverMarker
         {
             get {
@@ -125,8 +115,6 @@ namespace GKMap.EtoForms
         /// <summary>
         /// is mouse over polygon
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public bool IsMouseOverPolygon
         {
             get {
@@ -141,8 +129,6 @@ namespace GKMap.EtoForms
         /// <summary>
         /// is mouse over route
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public bool IsMouseOverRoute
         {
             get {
@@ -154,8 +140,6 @@ namespace GKMap.EtoForms
             }
         }
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public GMapProvider MapProvider
         {
             get {
@@ -187,10 +171,8 @@ namespace GKMap.EtoForms
         }
 
         /// <summary>
-        /// max zoom
-        /// </summary>         
-        [Category("GKMap")]
-        [Description("maximum zoom level of map")]
+        /// maximum zoom level of map
+        /// </summary>
         public int MaxZoom
         {
             get {
@@ -202,10 +184,8 @@ namespace GKMap.EtoForms
         }
 
         /// <summary>
-        /// min zoom
-        /// </summary>      
-        [Category("GKMap")]
-        [Description("minimum zoom level of map")]
+        /// minimum zoom level of map
+        /// </summary>
         public int MinZoom
         {
             get {
@@ -224,8 +204,6 @@ namespace GKMap.EtoForms
         /// <summary>
         /// current map center position
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public PointLatLng Position
         {
             get {
@@ -240,7 +218,6 @@ namespace GKMap.EtoForms
             }
         }
 
-        [Category("GKMap"), DefaultValue(0)]
         public int Zoom
         {
             get {
@@ -248,15 +225,7 @@ namespace GKMap.EtoForms
             }
             set {
                 if (fCore.Zoom != value) {
-                    Debug.WriteLine("ZoomPropertyChanged: " + fCore.Zoom + " -> " + value);
-
-                    if (value > MaxZoom) {
-                        fCore.Zoom = MaxZoom;
-                    } else if (value < MinZoom) {
-                        fCore.Zoom = MinZoom;
-                    } else {
-                        fCore.Zoom = value;
-                    }
+                    fCore.Zoom = value;
 
                     if (fCore.IsStarted && !fCore.IsDragging) {
                         fCore.ForceUpdateOverlays();
@@ -279,45 +248,6 @@ namespace GKMap.EtoForms
             }
             remove {
                 fCore.OnCurrentPositionChanged -= value;
-            }
-        }
-
-        /// <summary>
-        /// occurs when tile set load is complete
-        /// </summary>
-        public event TileLoadComplete OnTileLoadComplete
-        {
-            add {
-                fCore.OnTileLoadComplete += value;
-            }
-            remove {
-                fCore.OnTileLoadComplete -= value;
-            }
-        }
-
-        /// <summary>
-        /// occurs when tile set is starting to load
-        /// </summary>
-        public event TileLoadStart OnTileLoadStart
-        {
-            add {
-                fCore.OnTileLoadStart += value;
-            }
-            remove {
-                fCore.OnTileLoadStart -= value;
-            }
-        }
-
-        /// <summary>
-        /// occurs on map drag
-        /// </summary>
-        public event MapDrag OnMapDrag
-        {
-            add {
-                fCore.OnMapDrag += value;
-            }
-            remove {
-                fCore.OnMapDrag -= value;
             }
         }
 
@@ -465,10 +395,6 @@ namespace GKMap.EtoForms
             }
         }
 
-#if !DESIGN
-        /// <summary>
-        /// constructor
-        /// </summary>
         public GMapControl()
         {
             fCore = new MapCore(this);
@@ -481,11 +407,6 @@ namespace GKMap.EtoForms
             Zoom = 0;
 
             if (!IsDesignerHosted) {
-                //SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-                //SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-                //SetStyle(ControlStyles.UserPaint, true);
-                //SetStyle(ControlStyles.Opaque, true);
-                //ResizeRedraw = true;
                 //TileFlipXYAttributes.SetWrapMode(WrapMode.TileFlipXY);
 
                 //CenterFormat.Alignment = StringAlignment.Center;
@@ -497,8 +418,6 @@ namespace GKMap.EtoForms
                 Overlays.CollectionChanged += Overlays_CollectionChanged;
             }
         }
-
-#endif
 
         protected override void Dispose(bool disposing)
         {
@@ -578,11 +497,10 @@ namespace GKMap.EtoForms
                 fCore.LastInvalidation = DateTime.Now;
             }
 
-            base.Invalidate();
-            //base.Refresh();
+            // FIXME
+            Application.Instance.Invoke(new Action(base.Invalidate));
         }
 
-#if !DESIGN
         /// <summary>
         /// enqueue built-in thread safe invalidation
         /// </summary>
@@ -592,7 +510,6 @@ namespace GKMap.EtoForms
                 fCore.RefreshEvent.Set();
             }
         }
-#endif
 
         /// <summary>
         /// sets to max zoom to fit all markers and centers them in map
@@ -876,8 +793,7 @@ namespace GKMap.EtoForms
 
             if (fCore.IsDragging) {
                 SetCursorDrag();
-                fCore.MouseCurrent = new GPoint(mpt.X, mpt.Y);
-                fCore.Drag(fCore.MouseCurrent);
+                fCore.Drag(mpt.X, mpt.Y);
                 base.Invalidate();
             } else {
                 if (fCore.MouseDown.IsEmpty) {

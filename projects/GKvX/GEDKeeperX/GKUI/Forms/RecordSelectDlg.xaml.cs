@@ -41,9 +41,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBox IRecordSelectDialog.FilterBox
+        IComboBox IRecordSelectDialog.FilterCombo
         {
-            get { return GetControlHandler<IComboBox>(txtFastFilter); }
+            get { return null; }
+        }
+
+        ITextBox IRecordSelectDialog.FilterText
+        {
+            get { return GetControlHandler<ITextBox>(txtFastFilter); }
         }
 
         IFilterControl IRecordSelectDialog.FilterCtl
@@ -76,36 +81,33 @@ namespace GKUI.Forms
         {
             if (fListRecords != null) {
                 fListRecords.ListMan = null;
-                //fListRecords.Dispose();
                 fListRecords = null;
             }
             fListRecords = UIHelper.CreateRecordsView(panList, fController.Base.Context, fController.RecType, true);
         }
 
-        private void btnSelect_Click(object sender, EventArgs e)
+        private async void btnSelect_Click(object sender, EventArgs e)
         {
             try {
                 ResultRecord = fListRecords.GetSelectedData() as GDMRecord;
-                //DialogResult = DialogResult.Ok;
+                await Close(DialogResult.Ok);
             } catch (Exception ex) {
                 Logger.WriteError("RecordSelectDlg.btnSelect_Click()", ex);
                 ResultRecord = null;
-                //DialogResult = DialogResult.None;
             }
         }
 
-        private void btnCreate_Click(object sender, EventArgs e)
+        private async void btnCreate_Click(object sender, EventArgs e)
         {
             try {
-                GDMRecord rec = BaseController.AddRecord(this, fController.Base, fController.RecType, fController.Target);
+                GDMRecord rec = await BaseController.AddRecord(this, fController.Base, fController.RecType, fController.Target);
                 if (rec != null) {
                     ResultRecord = rec;
-                    //DialogResult = DialogResult.Ok;
+                    await Close(DialogResult.Ok);
                 }
             } catch (Exception ex) {
                 Logger.WriteError("RecordSelectDlg.btnCreate_Click()", ex);
                 ResultRecord = null;
-                //DialogResult = DialogResult.None;
             }
         }
 

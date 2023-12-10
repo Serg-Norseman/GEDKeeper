@@ -843,27 +843,28 @@ namespace GKCore
         /// <returns>normalized date as "dd.mm.yyyy"</returns>
         public static string GetNormalizeDate(string regionalDate, string pattern)
         {
-            if (string.IsNullOrEmpty(regionalDate)) return string.Empty;
-
             try {
-                string[] regionalParts = regionalDate.Split('/');
-                string[] patternParts = pattern.Split('/');
                 string[] resultParts = new string[3];
 
-                for (int i = 0; i < patternParts.Length; i++) {
-                    string part = patternParts[i];
-                    switch (part[0]) {
-                        case 'd':
-                            resultParts[0] = regionalParts[i];
-                            break;
+                if (!string.IsNullOrEmpty(regionalDate)) {
+                    string[] regionalParts = regionalDate.Split('/');
+                    string[] patternParts = pattern.Split('/');
 
-                        case 'm':
-                            resultParts[1] = regionalParts[i];
-                            break;
+                    for (int i = 0; i < patternParts.Length; i++) {
+                        string part = patternParts[i];
+                        switch (part[0]) {
+                            case 'd':
+                                resultParts[0] = regionalParts[i];
+                                break;
 
-                        case 'y':
-                            resultParts[2] = regionalParts[i];
-                            break;
+                            case 'm':
+                                resultParts[1] = regionalParts[i];
+                                break;
+
+                            case 'y':
+                                resultParts[2] = regionalParts[i];
+                                break;
+                        }
                     }
                 }
 
@@ -1823,12 +1824,6 @@ namespace GKCore
         {
             string appPath = GetLangsPath();
             return appPath + "cultures" + Path.DirectorySeparatorChar;
-        }
-
-        public static string GetHelpPath(string langSign)
-        {
-            string appPath = GetLangsPath();
-            return appPath + "help_" + langSign + Path.DirectorySeparatorChar;
         }
 
         public static string GetBackgroundsPath()

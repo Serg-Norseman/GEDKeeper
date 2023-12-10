@@ -95,7 +95,6 @@ namespace GKCore.Interfaces
     public interface IListSource
     {
         IBaseContext BaseContext { get; }
-        bool ColumnsHaveBeenChanged { get; set; }
         List<MapColumnRec> ColumnsMap { get; }
         ExtObservableList<ContentItem> ContentList { get; }
         ExternalFilterHandler ExternalFilter { get; set; }

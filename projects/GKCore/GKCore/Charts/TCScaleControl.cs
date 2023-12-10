@@ -89,7 +89,7 @@ namespace GKCore.Charts
 
         public TCScaleControl(ITreeChart chart) : base(chart)
         {
-            fControlsImage = AppHost.GfxProvider.LoadResourceImage("Resources.chart_controls.png", false);
+            fControlsImage = AppHost.GfxProvider.LoadResourceImage("Resources.chart_controls.png", ImageTarget.Chart, false);
         }
 
         public override void UpdateView()

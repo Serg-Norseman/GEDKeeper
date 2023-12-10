@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Design;
@@ -152,7 +153,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var source = fDataOwner as GDMSourceRecord;
             if (fBaseWin == null || source == null) return;
@@ -164,14 +165,14 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    repoRec = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtRepository, null) as GDMRepositoryRecord;
+                    repoRec = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtRepository, null) as GDMRepositoryRecord;
                     if (repoRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, source, repoRec);
                     }
                     break;
 
                 case RecordAction.raDelete:
-                    if (repoCit != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachRepositoryQuery))) {
+                    if (repoCit != null && await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachRepositoryQuery))) {
                         repoRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(repoCit);
                         result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, source, repoRec);
                     }

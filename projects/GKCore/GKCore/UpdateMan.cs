@@ -83,7 +83,7 @@ namespace GKCore
             return newVersion;
         }
 
-        private static void WorkerMethod()
+        private static async void WorkerMethod()
         {
             try {
                 Version curVersion = AppHost.GetAppVersion();
@@ -96,7 +96,7 @@ namespace GKCore
                 if (curVersion.CompareTo(newVersion) < 0) {
 #if !CI_MODE
                     string question = LangMan.LS(LSID.UpdateToLatestVersion, curVersion, newVersion);
-                    if (AppHost.StdDialogs.ShowQuestion(question)) {
+                    if (await AppHost.StdDialogs.ShowQuestion(question)) {
                         Process.Start(url);
                     }
 #endif

@@ -40,7 +40,6 @@ namespace GKCore.Lists
     public abstract class ListSource<T> : IListSource
         where T : GDMTag
     {
-        private bool fColumnsHaveBeenChanged;
         private readonly ExtObservableList<ContentItem> fContentList;
         private SGCulture fSysCulture;
         private int fTotalCount;
@@ -63,12 +62,6 @@ namespace GKCore.Lists
         public IBaseContext BaseContext
         {
             get { return fBaseContext; }
-        }
-
-        public bool ColumnsHaveBeenChanged
-        {
-            get { return fColumnsHaveBeenChanged; }
-            set { fColumnsHaveBeenChanged = value; }
         }
 
         public List<MapColumnRec> ColumnsMap
@@ -147,13 +140,13 @@ namespace GKCore.Lists
             UpdateColumnsMap();
 
             if (listView != null) {
+                listView.ClearColumns();
+
                 int num = fColumnsMap.Count;
                 for (int i = 0; i < num; i++) {
                     var cm = fColumnsMap[i];
                     listView.AddColumn(cm.Caption, cm.Width, cm.AutoSize);
                 }
-
-                ColumnsHaveBeenChanged = false;
             }
         }
 
@@ -627,12 +620,7 @@ namespace GKCore.Lists
 
         public object GetContentItem(int itemIndex)
         {
-            object result;
-            if (itemIndex < 0 || itemIndex >= fContentList.Count) {
-                result = null;
-            } else {
-                result = fContentList[itemIndex].Record;
-            }
+            object result = (itemIndex < 0 || itemIndex >= fContentList.Count) ? null : fContentList[itemIndex].Record;
             return result;
         }
 

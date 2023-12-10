@@ -32,6 +32,6 @@
 31=Naam Patroniem Achternaam
 32=Achternaam Naam Patroniem
 33=niet speciaal
-34=Alle ondersteunde formaten (*.txt, *.csv, *.doc, *.xls)|*.txt,*.csv,*.doc,*.xls|Stamboom in txt formaat (*.txt)|*.txt|Stamboom in csv formaat (*.csv)|*.csv|Stamboom in MS Word formaat (*.doc)|*.doc|Stamboom in MS Excel formaat (*.xls)|*.xls
+34=Alle ondersteunde formaten (*.txt, *.csv, *.doc, *.xls)|*.txt,*.csv,*.doc*,*.xls*|Stamboom in txt formaat (*.txt)|*.txt|Stamboom in csv formaat (*.csv)|*.csv|Stamboom in MS Word formaat (*.doc)|*.doc*|Stamboom in MS Excel formaat (*.xls)|*.xls*
 35=Alle ondersteunde formaten (*.txt, *.csv)|*.txt,*.csv|Stamboom in txt formaat (*.txt)|*.txt|Stamboom in csv formaat (*.csv)|*.csv
 36=Tegenstrijdige informatie over echtgenoten

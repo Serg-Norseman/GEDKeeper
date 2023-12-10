@@ -1,59 +1,47 @@
-﻿using System;
+﻿/*
+ *  "GEDKeeper", the personal genealogical database editor.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *
+ *  This file is part of "GEDKeeper".
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using GKCore;
 using GKCore.Interfaces;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+using Xamarin.Essentials;
 
 namespace GKUI.Platform
 {
-    [ContentProperty("Source")]
-    public class ImageResourceExt : IMarkupExtension
-    {
-        public string Source { get; set; }
-
-        public object ProvideValue(IServiceProvider serviceProvider)
-        {
-            if (Source == null) {
-                return null;
-            }
-
-            string resName = Source;//Application.Current.Resources[Source] as string;
-            var imageSource = ImageSource.FromResource(resName, typeof(GKUtils).Assembly);
-            return imageSource;
-        }
-    }
-
-
     internal static class AsyncHelper
     {
-        private static readonly TaskFactory _myTaskFactory = new
-          TaskFactory(CancellationToken.None,
-                      TaskCreationOptions.None,
-                      TaskContinuationOptions.None,
-                      TaskScheduler.Default);
+        private static readonly TaskFactory _myTaskFactory =
+            new TaskFactory(CancellationToken.None, TaskCreationOptions.None, TaskContinuationOptions.None, TaskScheduler.Default);
 
         public static TResult RunSync<TResult>(Func<Task<TResult>> func)
         {
-            return AsyncHelper._myTaskFactory
-              .StartNew<Task<TResult>>(func)
-              .Unwrap<TResult>()
-              .GetAwaiter()
-              .GetResult();
+            return _myTaskFactory.StartNew(func).Unwrap().GetAwaiter().GetResult();
         }
 
         public static void RunSync(Func<Task> func)
         {
-            AsyncHelper._myTaskFactory
-              .StartNew<Task>(func)
-              .Unwrap()
-              .GetAwaiter()
-              .GetResult();
+            _myTaskFactory.StartNew(func).Unwrap().GetAwaiter().GetResult();
         }
     }
 
@@ -93,7 +81,6 @@ namespace GKUI.Platform
             return true;
         }
 
-        #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
@@ -103,7 +90,6 @@ namespace GKUI.Platform
 
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
     }
 
 
@@ -148,40 +134,8 @@ namespace GKUI.Platform
     }
 
 
-    public class NameValidationBehavior : Behavior<Entry>
+    public interface IDisplayChangeable
     {
-        //Here we have added the characters we wanted to restrict while entering data
-        private const string SpecialCharacters = @"'/\%*‘;$£&#^@|?+=<>\""";
-
-        protected override void OnAttachedTo(Entry entry)
-        {
-            entry.TextChanged += OnEntryTextChanged;
-            base.OnAttachedTo(entry);
-        }
-
-        protected override void OnDetachingFrom(Entry entry)
-        {
-            entry.TextChanged -= OnEntryTextChanged;
-            base.OnDetachingFrom(entry);
-        }
-
-        private static void OnEntryTextChanged(object sender, TextChangedEventArgs args)
-        {
-            string newText = args.NewTextValue;
-
-            if (!string.IsNullOrWhiteSpace(newText)) {
-                bool isValid = newText.ToCharArray().All(x => !SpecialCharacters.Contains(x));
-
-                ((Entry)sender).Text = isValid ? newText : newText.Remove(newText.Length - 1);
-            }
-        }
-    }
-
-
-    public enum DialogResult
-    {
-        None,
-        Cancel,
-        Ok
+        void OnDisplayChanged(DisplayInfo displayInfo);
     }
 }

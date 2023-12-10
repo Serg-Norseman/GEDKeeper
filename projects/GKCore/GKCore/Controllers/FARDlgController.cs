@@ -86,7 +86,10 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             GetControl<IComboBox>("cmbPattern").AddStrings(GlobalOptions.Instance.FARPatterns);
+            GetControl<IComboBox>("cmbPattern").ReadOnly = false;
+
             GetControl<IComboBox>("cmbReplacement").AddStrings(GlobalOptions.Instance.FARReplacements);
+            GetControl<IComboBox>("cmbReplacement").ReadOnly = false;
 
             GetControl<ICheckBox>("chkWholeWord").Enabled = false; // TODO: next version
 

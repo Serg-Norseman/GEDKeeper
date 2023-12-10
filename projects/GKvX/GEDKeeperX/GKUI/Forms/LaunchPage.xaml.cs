@@ -24,14 +24,15 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using GKCore;
 using GKCore.Controllers;
-using GKCore.Names;
+using GKCore.Interfaces;
 using GKUI.Components;
 using GKUI.Platform;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace GKUI.Forms
 {
-    public partial class LaunchPage : ContentPage
+    public partial class LaunchPage : ContentPage, ILocalizable, IDisplayChangeable
     {
         public ObservableCollection<Grouping<string, LaunchItem>> LaunchItems { get; set; }
         public ObservableCollection<Grouping<string, LaunchItem>> ServiceItems { get; set; }
@@ -40,162 +41,168 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            var launchItems = new List<LaunchItem>
-            {
-                new LaunchItem("File", "New", UIHelper.LoadResourceImage("Resources.btn_create_new.gif"), async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.NewFile();
-                    XFAppHost.GetMainPage().NavigateAsync(baseWin);
-                }),
-                new LaunchItem("File", "Open", UIHelper.LoadResourceImage("Resources.btn_load.gif"), async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.LoadFileAsync();
-                    XFAppHost.GetMainPage().NavigateAsync(baseWin);
-                }),
-                new LaunchItem("File", "Save", UIHelper.LoadResourceImage("Resources.btn_save.gif")),
-                new LaunchItem("File", "Save As"),
-                new LaunchItem("File", "Properties", UIHelper.LoadResourceImage("Resources.btn_properties.gif"), async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ShowFileProperties();
-                }),
-
-                new LaunchItem("Recent", "Europe Kings.ged"),
-                new LaunchItem("Recent", "My Kins.ged"),
-
-                new LaunchItem("Export", "Export table", UIHelper.LoadResourceImage("Resources.btn_excel.gif"), async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ExportTable();
-                }),
-                new LaunchItem("Export", "Book of Families", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ExportToFamilyBook();
-                }),
-                new LaunchItem("Export", "Album of Trees", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ExportToTreesAlbum();
-                }),
-
-                new LaunchItem("Help", "Content", UIHelper.LoadResourceImage("Resources.btn_help.gif"), async () => {
-                    AppHost.Instance.ShowHelpTopic("");
-                }),
-                new LaunchItem("Help", "About", UIHelper.LoadResourceImage("Resources.btn_scroll.gif"), async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ShowAbout();
-                }),
-
-                new LaunchItem("Test", "QuickSearch", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    XFAppHost.GetMainPage().NavigateAsync(new QuickSearchDlg(baseWin));
-                }),
-                new LaunchItem("Test", "Progress", async () => {
-                    XFAppHost.GetMainPage().NavigateAsync(new ProgressDlg());
-                }),
-                new LaunchItem("Test", "SexCheckDlg", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin.Context.DefineSex(baseWin, "Ivan", "Ivanovich");
-                }),
-                new LaunchItem("Test", "NameEditDlg (def)", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    var nameEntry = new NameEntry();
-                    if (BaseController.ModifyName(baseWin, baseWin.Context, ref nameEntry)) {
-                        AppHost.StdDialogs.ShowMessage("True!");
-                    } else {
-                        AppHost.StdDialogs.ShowMessage("False!");
-                    }
-                }),
-                new LaunchItem("Test", "NameEditDlg (ASYNC)", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    var nameEntry = new NameEntry();
-                    bool res = await BaseController.ModifyNameAsync(baseWin, baseWin.Context, nameEntry);
-                    if (res) {
-                        AppHost.StdDialogs.ShowMessage("True!");
-                    } else {
-                        AppHost.StdDialogs.ShowMessage("False!");
-                    }
-                }),
-                new LaunchItem("Test", "PortraitSelectDlg", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    XFAppHost.GetMainPage().NavigateAsync(new PortraitSelectDlg(baseWin));
-                }),
-            };
-
-            LaunchItems = PrepareItems(launchItems);
-
-            var servicesItems = new List<LaunchItem>() {
-                new LaunchItem("Pedigree", "Maps", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ShowMap();
-                }),
-                new LaunchItem("Pedigree", "Relationship Calculator", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ShowRelationshipCalculator();
-                }),
-                new LaunchItem("Pedigree", "Statistics", UIHelper.LoadResourceImage("Resources.btn_table.gif"), async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ShowStats();
-                }),
-                new LaunchItem("Services", "Organizer", UIHelper.LoadResourceImage("Resources.btn_organizer.gif"), async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ShowOrganizer();
-                }),
-                new LaunchItem("Services", "Slideshow", UIHelper.LoadResourceImage("Resources.btn_slideshow.png"), async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ShowSlideshow();
-                }),
-                new LaunchItem("Services", "Options", UIHelper.LoadResourceImage("Resources.btn_tools.gif"), async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    AppHost.Instance.ShowOptions(baseWin);
-                }),
-                new LaunchItem("Tools", "Compare databases", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ShowTreeCompare();
-                }),
-                new LaunchItem("Tools", "Merge databases", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ShowTreeMerge();
-                }),
-                new LaunchItem("Tools", "Split database", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ShowTreeSplit();
-                }),
-                new LaunchItem("Tools", "Merge records", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    BaseController.ShowRecMerge(baseWin, baseWin, null, null);
-                }),
-                new LaunchItem("Tools", "Check connection of families", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ShowFamilyGroups();
-                }),
-                new LaunchItem("Tools", "Check database", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ShowTreeCheck();
-                }),
-                new LaunchItem("Tools", "Search the patriarchs", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ShowPatSearch();
-                }),
-                new LaunchItem("Tools", "Manage places", async () => {
-                    var baseWin = AppHost.Instance.GetCurrentFile() as BaseWinSDI;
-                    baseWin?.Controller.ShowPlacesManager();
-                }),
-            };
-
-            ServiceItems = PrepareItems(servicesItems);
-
-            BindingContext = this;
+            ResetView();
         }
 
-        private async void lv_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private void ResetView()
+        {
+            var launchItems = new List<LaunchItem>
+            {
+                new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileNew), UIHelper.LoadResourceImage("Resources.btn_create_new.gif"), async (item) => {
+                    var baseWin = GetBaseWin();
+                    baseWin?.Controller.NewFile();
+                    await XFAppHost.GetMainPage().NavigateAsync(baseWin);
+                }),
+                new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileLoad), UIHelper.LoadResourceImage("Resources.btn_load.gif"), async (item) => {
+                    var baseWin = GetBaseWin();
+                    baseWin?.Controller.LoadFileEx();
+                    await XFAppHost.GetMainPage().NavigateAsync(baseWin);
+                }),
+                new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileSave), UIHelper.LoadResourceImage("Resources.btn_save.gif")),
+                new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileSaveAs)),
+                new LaunchItem(LangMan.LS(LSID.MIFile), LangMan.LS(LSID.MIFileProperties), UIHelper.LoadResourceImage("Resources.btn_properties.gif"), (item) => {
+                    GetBaseWin()?.Controller.ShowFileProperties();
+                }),
+
+                new LaunchItem("Recent", "Sample.ged"), // stub for position hold
+
+                new LaunchItem(LangMan.LS(LSID.MIExport), LangMan.LS(LSID.ExportTable), UIHelper.LoadResourceImage("Resources.btn_excel.gif"), (item) => {
+                    GetBaseWin()?.Controller.ExportTable();
+                }),
+                new LaunchItem(LangMan.LS(LSID.MIExport), LangMan.LS(LSID.FamilyBook), (item) => {
+                    GetBaseWin()?.Controller.ExportToFamilyBook();
+                }),
+                new LaunchItem(LangMan.LS(LSID.MIExport), LangMan.LS(LSID.TreesAlbum), (item) => {
+                    GetBaseWin()?.Controller.ExportToTreesAlbum();
+                }),
+
+                new LaunchItem(LangMan.LS(LSID.MIHelp), LangMan.LS(LSID.LogView), (item) => {
+                    GetBaseWin()?.Controller.ShowLog();
+                }),
+                new LaunchItem(LangMan.LS(LSID.MIHelp), LangMan.LS(LSID.TableOfContents), UIHelper.LoadResourceImage("Resources.btn_help.gif"), (item) => {
+                    AppHost.Instance.ShowHelpTopic("");
+                }),
+                new LaunchItem(LangMan.LS(LSID.MIHelp), LangMan.LS(LSID.MIAbout), UIHelper.LoadResourceImage("Resources.btn_scroll.gif"), (item) => {
+                    GetBaseWin()?.Controller.ShowAbout();
+                }),
+            };
+
+            var mruFiles = AppHost.Options.MRUFiles;
+            for (int i = 0, num = mruFiles.Count; i < num; i++) {
+                string fn = mruFiles[i].FileName;
+
+                launchItems.Add(new LaunchItem("Recent", fn, async (item) => {
+                    var baseWin = GetBaseWin();
+                    await AppHost.Instance.LoadBase(baseWin, item.Title);
+                }));
+            }
+
+            var servicesItems = new List<LaunchItem>() {
+                new LaunchItem(LangMan.LS(LSID.MIPedigree), LangMan.LS(LSID.MIMap), (item) => {
+                    GetBaseWin()?.Controller.ShowMap();
+                }),
+                new LaunchItem(LangMan.LS(LSID.MIPedigree), LangMan.LS(LSID.RelationshipCalculator), (item) => {
+                    GetBaseWin()?.Controller.ShowRelationshipCalculator();
+                }),
+                new LaunchItem(LangMan.LS(LSID.MIPedigree), LangMan.LS(LSID.MIStats), UIHelper.LoadResourceImage("Resources.btn_table.gif"), (item) => {
+                    GetBaseWin()?.Controller.ShowStats();
+                }),
+
+                new LaunchItem(LangMan.LS(LSID.MIService), LangMan.LS(LSID.MIOrganizer), UIHelper.LoadResourceImage("Resources.btn_organizer.gif"), (item) => {
+                    GetBaseWin()?.Controller.ShowOrganizer();
+                }),
+                new LaunchItem(LangMan.LS(LSID.MIService), LangMan.LS(LSID.Slideshow), UIHelper.LoadResourceImage("Resources.btn_slideshow.png"), (item) => {
+                    GetBaseWin()?.Controller.ShowSlideshow();
+                }),
+                new LaunchItem(LangMan.LS(LSID.MIService), LangMan.LS(LSID.MIOptions), UIHelper.LoadResourceImage("Resources.btn_tools.gif"), (item) => {
+                    var baseWin = GetBaseWin();
+                    AppHost.Instance.ShowOptions(baseWin);
+                }),
+
+                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.TreeCompare), (item) => {
+                    GetBaseWin()?.Controller.ShowTreeCompare();
+                }),
+                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.TreeMerge), (item) => {
+                    GetBaseWin()?.Controller.ShowTreeMerge();
+                }),
+                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.TreeSplit), (item) => {
+                    GetBaseWin()?.Controller.ShowTreeSplit();
+                }),
+                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.MergeDuplicates), (item) => {
+                    var baseWin = GetBaseWin();
+                    BaseController.ShowRecMerge(baseWin, baseWin, null, null);
+                }),
+                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.FragmentSearch), (item) => {
+                    GetBaseWin()?.Controller.ShowFamilyGroups();
+                }),
+                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.TreeCheck), (item) => {
+                    GetBaseWin()?.Controller.ShowTreeCheck();
+                }),
+                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.PatriarchsSearch), (item) => {
+                    GetBaseWin()?.Controller.ShowPatSearch();
+                }),
+                new LaunchItem(LangMan.LS(LSID.MITreeTools), LangMan.LS(LSID.PlacesManager), (item) => {
+                    GetBaseWin()?.Controller.ShowPlacesManager();
+                }),
+            };
+
+            BindingContext = this;
+
+            var orientation = DeviceDisplay.MainDisplayInfo.Orientation;
+            if (orientation == DisplayOrientation.Landscape) {
+                LaunchItems = PrepareItems(launchItems);
+                ServiceItems = PrepareItems(servicesItems);
+
+                launchList.IsVisible = true;
+                servicesList.IsVisible = true;
+            } else {
+                launchItems.AddRange(servicesItems);
+
+                LaunchItems = PrepareItems(launchItems);
+                ServiceItems = null;
+
+                launchList.IsVisible = true;
+                servicesList.IsVisible = false;
+            }
+
+            var recent = LaunchItems.FirstOrDefault(x => x.Name == "Recent");
+            if (recent != null) {
+                var stubItem = recent.FirstOrDefault(x => x.Title == "Sample.ged");
+                if (stubItem != null) {
+                    recent.Remove(stubItem);
+                }
+            }
+
+            launchList.ItemsSource = LaunchItems;
+            servicesList.ItemsSource = ServiceItems;
+        }
+
+        private void lv_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var item = e.SelectedItem as LaunchItem;
             ((ListView)sender).SelectedItem = null;
-            item?.Action?.Invoke();
+            item?.Action?.Invoke(item);
         }
 
         private static ObservableCollection<Grouping<string, LaunchItem>> PrepareItems(List<LaunchItem> items)
         {
             var groups = items.GroupBy(p => p.Group).Select(g => new Grouping<string, LaunchItem>(g.Key, g));
             return new ObservableCollection<Grouping<string, LaunchItem>>(groups);
+        }
+
+        private static BaseWinSDI GetBaseWin()
+        {
+            return AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+        }
+
+        public void SetLocale()
+        {
+            ResetView();
+        }
+
+        void IDisplayChangeable.OnDisplayChanged(DisplayInfo displayInfo)
+        {
+            ResetView();
         }
     }
 
@@ -215,7 +222,7 @@ namespace GKUI.Forms
         public string Group { get; set; }
         public string Title { get; set; }
         public ImageSource Image { get; set; }
-        public Action Action { get; set; }
+        public Action<LaunchItem> Action { get; set; }
 
         public LaunchItem(string group, string title)
         {
@@ -230,14 +237,14 @@ namespace GKUI.Forms
             Image = image;
         }
 
-        public LaunchItem(string group, string title, Action action)
+        public LaunchItem(string group, string title, Action<LaunchItem> action)
         {
             Group = group;
             Title = title;
             Action = action;
         }
 
-        public LaunchItem(string group, string title, ImageSource image, Action action)
+        public LaunchItem(string group, string title, ImageSource image, Action<LaunchItem> action)
         {
             Group = group;
             Title = title;

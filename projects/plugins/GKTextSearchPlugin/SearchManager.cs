@@ -53,9 +53,9 @@ namespace GKTextSearchPlugin
     {
         private readonly object fLock;
         private readonly Plugin fPlugin;
-        private StandardAnalyzer fAnalyzer;
-        private IndexWriter fWriter;
-        private IndexSearcher fSearcher;
+        private readonly StandardAnalyzer fAnalyzer;
+        private readonly IndexWriter fWriter;
+        private readonly IndexSearcher fSearcher;
 
         public SearchManager(Plugin plugin)
         {

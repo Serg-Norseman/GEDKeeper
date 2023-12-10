@@ -73,7 +73,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void CreateLocationRecord(IList<object> placesList)
+        public async void CreateLocationRecord(IList<object> placesList)
         {
             PlaceObj pObj = placesList.Count > 0 ? (PlaceObj) placesList[0] : null;
             if (pObj == null) return;
@@ -81,7 +81,7 @@ namespace GKCore.Controllers
             if (pObj.Name.IndexOf("[*]") == 0) {
                 AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.PlaceAlreadyInBook));
             } else {
-                GDMLocationRecord locRec = fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
+                GDMLocationRecord locRec = await fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
                 if (locRec == null) return;
 
                 for (var pi = 0; pi < placesList.Count; pi++) {
@@ -101,10 +101,10 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.ToolOp_9);
+            fView.Title = LangMan.LS(LSID.PlacesManager);
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                GetControl<ITabPage>("pagePlaceManage").Text = LangMan.LS(LSID.ToolOp_9);
+                GetControl<ITabPage>("pagePlaceManage").Text = LangMan.LS(LSID.PlacesManager);
                 GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
             }
 

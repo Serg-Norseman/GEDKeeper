@@ -18,15 +18,15 @@ namespace GKMap.Xamarin
     /// </summary>
     public sealed class GMarkerIcon : MapIconMarker, IRenderable
     {
-        private static readonly Dictionary<string, SKBitmap> IconCache = new Dictionary<string, SKBitmap>();
+        private static readonly Dictionary<string, SKImage> IconCache = new Dictionary<string, SKImage>();
 
 
-        private SKBitmap fBitmap;
-        private SKBitmap fBitmapShadow;
+        private SKImage fBitmap;
+        private SKImage fBitmapShadow;
 
-        private static SKBitmap fArrowShadow;
-        private static SKBitmap fMarkerShadow;
-        private static SKBitmap fShadowSmall;
+        private static SKImage fArrowShadow;
+        private static SKImage fMarkerShadow;
+        private static SKImage fShadowSmall;
 
 
         public override string ToolTipText
@@ -53,7 +53,7 @@ namespace GKMap.Xamarin
         /// </summary>
         /// <param name="p"></param>
         /// <param name="bitmap"></param>
-        public GMarkerIcon(PointLatLng p, SKBitmap bitmap)
+        public GMarkerIcon(PointLatLng p, SKImage bitmap)
             : base(p)
         {
             fBitmap = bitmap;
@@ -123,13 +123,13 @@ namespace GKMap.Xamarin
             }
         }
 
-        internal static SKBitmap GetIcon(string name)
+        internal static SKImage GetIcon(string name)
         {
-            SKBitmap ret;
+            SKImage ret;
             if (!IconCache.TryGetValue(name, out ret)) {
                 string resName = "GKMap.Resources.Images." + name + ".png";
                 Stream resStream = Stuff.LoadResourceStream(resName);
-                ret = SKBitmap.Decode(resStream);
+                ret = SKImage.FromEncodedData(resStream);
                 IconCache.Add(name, ret);
             }
             return ret;
@@ -138,9 +138,9 @@ namespace GKMap.Xamarin
         public void OnRender(SKCanvas g)
         {
             if (fBitmapShadow != null) {
-                g.DrawBitmap(fBitmapShadow, SKRect.Create(LocalPosition.X, LocalPosition.Y, fBitmapShadow.Width, fBitmapShadow.Height));
+                g.DrawImage(fBitmapShadow, SKRect.Create(LocalPosition.X, LocalPosition.Y, fBitmapShadow.Width, fBitmapShadow.Height));
             }                
-            g.DrawBitmap(fBitmap, SKRect.Create(LocalPosition.X, LocalPosition.Y, Size.Width, Size.Height));
+            g.DrawImage(fBitmap, SKRect.Create(LocalPosition.X, LocalPosition.Y, Size.Width, Size.Height));
         }
 
         protected override void Dispose(bool disposing)

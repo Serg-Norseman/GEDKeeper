@@ -23,5 +23,6 @@ namespace GKCore.Design.Controls
     public interface IGroupBox : IBaseControl
     {
         string Text { get; set; }
+        bool Visible { get; set; }
     }
 }

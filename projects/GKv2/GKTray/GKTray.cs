@@ -144,7 +144,7 @@ namespace GKTray
             GKUtils.LoadExtFile(appPath, mf.FileName);
         }
 
-        private void LoadEvents()
+        private async void LoadEvents()
         {
             int num = fMRUFiles.Count;
             for (int i = 0; i < num; i++) {
@@ -153,7 +153,7 @@ namespace GKTray
 
                 try {
                     using (var baseContext = new BaseContext(null)) {
-                        bool isLoaded = baseContext.FileLoad(gedFileName, false, false, false);
+                        bool isLoaded = await baseContext.FileLoad(gedFileName, false, false, false);
                         if (isLoaded) {
                             baseContext.CollectTips(fTipsList);
                         }

@@ -18,7 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections.Generic;
+using System.Windows.Input;
 using BSLib;
+using GKCore;
+using GKCore.BBText;
+using GKCore.Design;
 using GKCore.Design.Controls;
 using Xamarin.Forms;
 
@@ -32,7 +37,7 @@ namespace GKUI.Components
     public partial class HyperView : ScrollView, IHyperView
     {
         private readonly StringList fLines;
-        //private ICommand _navigationCommand;
+        private ICommand fNavigationCommand;
 
         private Color fLinkColor;
         private bool fWordWrap;
@@ -70,14 +75,15 @@ namespace GKUI.Components
             Orientation = ScrollOrientation.Both;
             Padding = 8;
 
-            /*_navigationCommand = new Command<string>((url) => {
-                var eventHandler = OnLink;
-                eventHandler?.Invoke(this, url);
-            });*/
-
             fLines = new StringList();
             fLines.OnChange += LinesChanged;
+            fLinkColor = Color.Blue;
             fWordWrap = true;
+
+            fNavigationCommand = new Command<string>((url) => {
+                var eventHandler = OnLink;
+                eventHandler?.Invoke(this, url);
+            });
         }
 
         public void Activate()
@@ -87,87 +93,67 @@ namespace GKUI.Components
 
         private void LinesChanged(object sender)
         {
-            string str = fLines.Text;
-            str = str.
-                Replace("[b]", "<b>").Replace("[/b]", "</b>").
-                Replace("[u]", "<u>").Replace("[/u]", "</u>").
-                Replace("[s]", "<s>").Replace("[/s]", "</s>").
-                Replace("[i]", "<i>").Replace("[/i]", "</i>").
-                Replace("\r\n", "<br>").
-                Replace("[/url]", "</a>").Replace("[url=", "<a href='").
-                Replace("[/size]", "</font>").Replace("[size=", "<font size='").
-                Replace("]", "'>");
+            var formattedString = new FormattedString();
 
-            //hvContent.FormattedText = Convert(str);
-            hvContent.Text = str;
-        }
+            if (fLines.Count != 0) {
+                var parser = new BBTextParser(AppHost.GfxProvider, AppHost.GfxProvider.GetDefaultFontSize(),
+                                              new ColorHandler(fLinkColor), new ColorHandler(Color.Black));
 
-        /*private FormattedString Convert(string value)
-        {
-            var formatted = new FormattedString();
+                string text = SysUtils.StripHTML(fLines.Text);
+                var chunks = new List<BBTextChunk>();
+                parser.ParseText(chunks, text);
 
-            foreach (var item in ProcessString(value))
-                formatted.Spans.Add(CreateSpan(item));
+                int line = -1;
+                int chunksCount = chunks.Count;
+                int k = 0;
+                while (k < chunksCount) {
+                    BBTextChunk chunk = chunks[k];
 
-            return formatted;
-        }
+                    if (line != chunk.Line) {
+                        line = chunk.Line;
 
-        private Span CreateSpan(StringSection section)
-        {
-            var span = new Span() {
-                Text = section.Text
-            };
+                        if (line != -1) {
+                            var span = new Span();
+                            span.Text = "\r\n";
+                            formattedString.Spans.Add(span);
+                        }
+                    }
 
-            if (!string.IsNullOrEmpty(section.Link)) {
-                span.GestureRecognizers.Add(new TapGestureRecognizer() {
-                    Command = _navigationCommand,
-                    CommandParameter = section.Link
-                });
-                span.TextColor = Color.Blue;
-            }
+                    string chunkText = chunk.Text;
+                    if (!string.IsNullOrEmpty(chunkText)) {
+                        var span = new Span();
+                        span.Text = chunkText;
+                        span.TextColor = ((ColorHandler)chunk.Color).Handle;
+                        span.FontSize = chunk.Size;
 
-            return span;
-        }
+                        var chunkStyle = chunk.Style;
+                        if (chunkStyle.HasFlag(BSDTypes.FontStyle.Bold)) {
+                            span.FontAttributes = FontAttributes.Bold;
+                        } else if (chunkStyle.HasFlag(BSDTypes.FontStyle.Italic)) {
+                            span.FontAttributes = FontAttributes.Italic;
+                        }
+                        if (chunkStyle.HasFlag(BSDTypes.FontStyle.Strikeout)) {
+                            span.TextDecorations = TextDecorations.Strikethrough;
+                        } else if (chunkStyle.HasFlag(BSDTypes.FontStyle.Underline)) {
+                            span.TextDecorations = TextDecorations.Underline;
+                        }
 
-        public IList<StringSection> ProcessString(string rawText)
-        {
-            const string spanPattern = @"(<a.*?>.*?</a>)";
+                        if (!string.IsNullOrEmpty(chunk.URL)) {
+                            var tapRecognizer = new TapGestureRecognizer();
+                            tapRecognizer.Command = fNavigationCommand;
+                            tapRecognizer.CommandParameter = chunk.URL;
+                            span.GestureRecognizers.Add(tapRecognizer);
+                            span.TextColor = Color.Blue;
+                            span.TextDecorations = TextDecorations.Underline;
+                        }
 
-            MatchCollection collection = Regex.Matches(rawText, spanPattern, RegexOptions.Singleline);
-
-            var sections = new List<StringSection>();
-
-            var lastIndex = 0;
-
-            foreach (Match item in collection) {
-                var foundText = item.Value;
-                try {
-                    var prevText = rawText.Substring(lastIndex, item.Index - lastIndex);
-                    sections.Add(new StringSection() { Text = prevText });
-                } catch (Exception ex) {
-                    Logger.WriteError("", ex);
+                        formattedString.Spans.Add(span);
+                    }
+                    k++;
                 }
-                
-                lastIndex = item.Index + item.Length;
-
-                // Get HTML href 
-                var html = new StringSection() {
-                    Link = Regex.Match(item.Value, "(?<=href=\\\')[\\S]+(?=\\\')").Value,
-                    Text = Regex.Replace(item.Value, "<.*?>", string.Empty)
-                };
-
-                sections.Add(html);
             }
 
-            sections.Add(new StringSection() { Text = rawText.Substring(lastIndex) });
-
-            return sections;
+            hvContent.FormattedText = formattedString;
         }
-
-        public class StringSection
-        {
-            public string Text { get; set; }
-            public string Link { get; set; }
-        }*/
     }
 }

@@ -4,16 +4,20 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <RootNamespace />
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>Android;iPhone</Platforms>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <DebugSymbols>True</DebugSymbols>
         <DebugType>Portable</DebugType>
         <Optimize>False</Optimize>
         <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
         <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
         <DebugSymbols>False</DebugSymbols>
         <DebugType>None</DebugType>
         <Optimize>True</Optimize>
@@ -32,7 +36,7 @@
 
         <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.2" />
         <PackageReference Include="Xam.Plugin.TabView" Version="1.1.1" />
-        <PackageReference Include="CarouselView.FormsPlugin" Version="6.0.0" />
+        <PackageReference Include="CarouselView.FormsPlugin" Version="5.2.0" />
         <PackageReference Include="OxyPlot.Xamarin.Forms" Version="2.1.0" />
     </ItemGroup>
 
@@ -40,6 +44,7 @@
         <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
         <ProjectReference Include="..\..\GKMap\GKMap.Core\GKMap.Core.nstd.csproj" />
         <ProjectReference Include="..\..\GKMap\GKMap.Xamarin\GKMap.Xamarin.csproj" />
+        <ProjectReference Include="..\Adapt.Presentation.Controls\Adapt.Presentation.Controls.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -108,4 +113,5 @@
         </EmbeddedResource>
     </ItemGroup>
 
+    <Import Project="GEDKeeperX.props" />
 </Project>

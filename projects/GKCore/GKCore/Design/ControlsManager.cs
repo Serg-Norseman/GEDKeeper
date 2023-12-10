@@ -51,7 +51,7 @@ namespace GKCore.Design
                         handler = (IControl)Activator.CreateInstance(handlerType, control);
                         fObjHandlers.Add(control, handler);
                     } else {
-                        throw new Exception("handler type not found");
+                        throw new Exception(string.Format("handler type for `{0}` not found", controlType.Name));
                     }
                 }
             }

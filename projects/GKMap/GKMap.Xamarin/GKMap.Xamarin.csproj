@@ -6,14 +6,8 @@
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 
-        <Configurations>
-            MSWin_Debug;MSWin_Release;
-            Linux_Debug;Linux_Release;
-            MacOS_Debug;MacOS_Release;
-            FreeBSD_Debug;FreeBSD_Release;
-            Android_Debug;Android_Release;
-            iOS_Debug;iOS_Release
-        </Configurations>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>Android;iPhone</Platforms>
     </PropertyGroup>
 
     <Import Project="..\..\GKConfigurations3.targets" />

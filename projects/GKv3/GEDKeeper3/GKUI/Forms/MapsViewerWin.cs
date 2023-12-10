@@ -21,7 +21,6 @@
 #pragma warning disable CS0618
 
 using System;
-using System.Globalization;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
@@ -32,7 +31,6 @@ using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKMap;
 using GKMap.EtoForms;
-using GKMap.MapObjects;
 using GKMap.MapProviders;
 using GKUI.Components;
 using GKUI.Platform;
@@ -63,15 +61,8 @@ namespace GKUI.Forms
         private ButtonToolItem tbZoomCenter;
         private TabPage pageCoordinates;
         private GroupBox gbCoords;
-        private Label lblPlace;
         private TextBox txtPlace;
-        private Label lblLng;
-        private Label lblLat;
-        private TextBox txtLng;
-        private TextBox txtLat;
         private Button btnSearch;
-        private Button btnAddRouteMarker;
-        private Button btnAddPolygonMarker;
         private Slider trkZoom;
         private Button btnZoomUp;
         private Button btnZoomDown;
@@ -166,10 +157,6 @@ namespace GKUI.Forms
                 if (fMapBrowser.MapControl.Zoom >= fMapBrowser.MapControl.MinZoom && fMapBrowser.MapControl.Zoom <= fMapBrowser.MapControl.MaxZoom) {
                     trkZoom.Value = fMapBrowser.MapControl.Zoom * 100;
                 }
-
-                // get position
-                txtLat.Text = fMapBrowser.MapControl.Position.Lat.ToString(CultureInfo.InvariantCulture);
-                txtLng.Text = fMapBrowser.MapControl.Position.Lng.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -267,23 +254,9 @@ namespace GKUI.Forms
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            try {
-                double lat = double.Parse(txtLat.Text, CultureInfo.InvariantCulture);
-                double lng = double.Parse(txtLng.Text, CultureInfo.InvariantCulture);
-
-                fMapBrowser.MapControl.Position = new PointLatLng(lat, lng);
-            } catch (Exception ex) {
-                MessageBox.Show("incorrect coordinate format: " + ex.Message);
-            }
-        }
-
-        private void txtPlace_KeyPress(object sender, KeyEventArgs e)
-        {
-            if ((Keys)e.KeyChar == Keys.Enter) {
-                GeocoderStatusCode status = fMapBrowser.MapControl.SetPositionByKeywords(txtPlace.Text);
-                if (status != GeocoderStatusCode.Success) {
-                    AppHost.StdDialogs.ShowError("Geocoder can't find: '" + txtPlace.Text + "', reason: " + status);
-                }
+            GeocoderStatusCode status = fMapBrowser.MapControl.SetPositionByKeywords(txtPlace.Text);
+            if (status != GeocoderStatusCode.Success) {
+                AppHost.StdDialogs.ShowError("Geocoder can't find: '" + txtPlace.Text + "', reason: " + status);
             }
         }
 
@@ -313,18 +286,6 @@ namespace GKUI.Forms
         private void btnZoomDown_Click(object sender, EventArgs e)
         {
             fMapBrowser.MapControl.Zoom = ((int)(fMapBrowser.MapControl.Zoom + 0.99)) - 1;
-        }
-
-        private void btnAddRouteMarker_Click(object sender, EventArgs e)
-        {
-            fMapBrowser.AddMarker(fMapBrowser.TargetPosition, GMarkerIconType.blue_small, MarkerTooltipMode.OnMouseOver, "");
-            fMapBrowser.GenerateRoute();
-        }
-
-        private void btnAddPolygonMarker_Click(object sender, EventArgs e)
-        {
-            fMapBrowser.AddMarker(fMapBrowser.TargetPosition, GMarkerIconType.purple_small, MarkerTooltipMode.OnMouseOver, "");
-            fMapBrowser.GeneratePolygon();
         }
     }
 }

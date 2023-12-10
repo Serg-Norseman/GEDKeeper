@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Operations;
@@ -47,9 +48,9 @@ namespace GKCore.Design
             return true;
         }
 
-        public virtual bool Cancel()
+        public virtual async Task<bool> Cancel()
         {
-            if (CheckChangesPersistence()) {
+            if (await CheckChangesPersistence()) {
                 return false;
             }
 
@@ -78,10 +79,10 @@ namespace GKCore.Design
         /// Check the persistence of changes, the need to save or cancel them.
         /// </summary>
         /// <returns>if `true`, discard dialog closing events</returns>
-        public bool CheckChangesPersistence()
+        public async Task<bool> CheckChangesPersistence()
         {
             if (GlobalOptions.Instance.DialogClosingWarn && fLocalUndoman != null && fLocalUndoman.HasChanges()) {
-                return (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.WarningOfDialogUnsavedChanges)));
+                return (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.WarningOfDialogUnsavedChanges)));
             } else {
                 return false;
             }

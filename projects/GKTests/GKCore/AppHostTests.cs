@@ -41,7 +41,7 @@ namespace GKCore
 
             Assert.IsNotEmpty(AppHost.Instance.GetAppDataPath());
 
-            Assert.Throws(typeof(ArgumentNullException), () => { AppHost.Instance.LoadBase(null, null); });
+            Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await AppHost.Instance.LoadBase(null, null); });
 
             AppHost.Instance.SetArgs(new string[] { "" });
 

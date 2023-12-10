@@ -75,27 +75,12 @@ namespace GKUI.Components
             Assert.AreEqual(img, fImageBox.Image);
             fImageBox.EndUpdate();
 
-            fImageBox.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleDropShadow;
-            Assert.AreEqual(ImageBoxBorderStyle.FixedSingleDropShadow, fImageBox.ImageBorderStyle);
-
-            fImageBox.ImageBorderColor = Color.Blue;
-            Assert.AreEqual(Color.Blue, fImageBox.ImageBorderColor);
-
-            fImageBox.SelectionColor = Color.Red;
-            Assert.AreEqual(Color.Red, fImageBox.SelectionColor);
-
-            fImageBox.DropShadowSize = 5;
-            Assert.AreEqual(5, fImageBox.DropShadowSize);
-
             fImageBox.SelectionMode = ImageBoxSelectionMode.Rectangle;
             Assert.AreEqual(ImageBoxSelectionMode.Rectangle, fImageBox.SelectionMode);
 
             fImageBox.ZoomToFit();
             fImageBox.ZoomIn();
             fImageBox.ZoomOut();
-
-            fImageBox.SelectAll();
-            fImageBox.SelectNone();
 
             fImageBox.Zoom = 200;
             Assert.AreEqual(200, fImageBox.Zoom);
@@ -111,23 +96,12 @@ namespace GKUI.Components
             fImageBox.AutoPan = true;
             Assert.AreEqual(true, fImageBox.AutoPan);
 
-            fImageBox.IsPanning = true;
-            Assert.AreEqual(true, fImageBox.IsPanning);
-            fImageBox.IsPanning = false;
-            Assert.AreEqual(false, fImageBox.IsPanning);
-
-            fImageBox.IsSelecting = false;
-            Assert.AreEqual(false, fImageBox.IsSelecting);
-            fImageBox.IsSelecting = true;
-            Assert.AreEqual(true, fImageBox.IsSelecting);
-
             fImageBox.ShowNamedRegionTips = false;
             Assert.AreEqual(false, fImageBox.ShowNamedRegionTips);
             fImageBox.ShowNamedRegionTips = true;
             Assert.AreEqual(true, fImageBox.ShowNamedRegionTips);
 
             fImageBox.ActualSize();
-            fImageBox.CenterAt(100, 100);
 
             fForm.Show();
 

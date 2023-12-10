@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Design;
@@ -108,7 +109,7 @@ namespace GKCore.Lists
         GDMObject DataOwner { get; set; }
         ISheetList SheetList { get; set; }
 
-        void Modify(object sender, ModifyEventArgs eArgs);
+        Task Modify(object sender, ModifyEventArgs eArgs);
     }
 
 
@@ -177,6 +178,8 @@ namespace GKCore.Lists
             DoneContent();
         }
 
-        public abstract void Modify(object sender, ModifyEventArgs eArgs);
+        public virtual async Task Modify(object sender, ModifyEventArgs eArgs)
+        {
+        }
     }
 }

@@ -62,7 +62,8 @@ namespace GKUI.Platform
 
         private void UpdateValue()
         {
-            Control.Progress = fValue / (fMax - fMin);
+            int divider = fMax - fMin;
+            Control.Progress = (divider == 0) ? 0 : fValue / divider;
         }
     }
 }

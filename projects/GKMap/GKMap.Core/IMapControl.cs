@@ -13,11 +13,6 @@ using GKMap.MapProviders;
 namespace GKMap
 {
     public delegate void PositionChanged(PointLatLng point);
-
-    public delegate void TileLoadComplete(long elapsedMilliseconds);
-    public delegate void TileLoadStart();
-
-    public delegate void MapDrag();
     public delegate void MapZoomChanged();
     public delegate void MapTypeChanged(GMapProvider type);
 
@@ -49,9 +44,6 @@ namespace GKMap
         ObservableCollectionThreadSafe<MapOverlay> Overlays { get; }
 
         event PositionChanged OnPositionChanged;
-        event TileLoadComplete OnTileLoadComplete;
-        event TileLoadStart OnTileLoadStart;
-        event MapDrag OnMapDrag;
         event MapZoomChanged OnMapZoomChanged;
         event MapTypeChanged OnMapTypeChanged;
 

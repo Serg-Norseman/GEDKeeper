@@ -57,10 +57,7 @@ namespace GKUI.Forms
             fImageCtl.Dock = DockStyle.Fill;
             fImageCtl.Location = new Point(0, 0);
             fImageCtl.Size = new Size(100, 100);
-            fImageCtl.BackColor = SystemColors.ControlDark;
             fImageCtl.Margin = new Padding(4);
-            fImageCtl.ImageBorderStyle = ImageBoxBorderStyle.FixedSingleGlowShadow;
-            fImageCtl.ImageBorderColor = Color.AliceBlue;
             fImageCtl.SelectionMode = ImageBoxSelectionMode.Zoom;
             Controls.Add(fImageCtl);
             Controls.SetChildIndex(fImageCtl, 0);

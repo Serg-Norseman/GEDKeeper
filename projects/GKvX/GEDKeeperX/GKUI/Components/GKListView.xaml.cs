@@ -255,6 +255,7 @@ namespace GKUI.Components
             fSortColumn = 0;
             fSortOrder = BSDSortOrder.None;
 
+            IsSortable = true;
             ItemsSource = fItems;
             RowsBackgroundColorPalette = new RowBgProvider(this);
             RowHeight = 26;
@@ -270,6 +271,7 @@ namespace GKUI.Components
         public void BeginUpdate()
         {
             if (fUpdateCount == 0) {
+                IsRefreshing = true;
                 ContentList.BeginUpdate();
             }
             fUpdateCount++;
@@ -280,6 +282,7 @@ namespace GKUI.Components
             fUpdateCount--;
             if (fUpdateCount == 0) {
                 ContentList.EndUpdate();
+                IsRefreshing = false;
             }
         }
 
@@ -403,16 +406,10 @@ namespace GKUI.Components
             if (fListMan == null) return;
 
             try {
-                if (fListMan.ColumnsHaveBeenChanged != columnsChanged && columnsChanged) {
-                    fListMan.ColumnsHaveBeenChanged = columnsChanged;
-                }
-
                 object tempRec = GetSelectedData();
-
                 BeginUpdate();
                 try {
-                    if (columnsChanged || Columns.Count == 0 || fListMan.ColumnsHaveBeenChanged) {
-                        Columns.Clear();
+                    if (columnsChanged || Columns.Count == 0) {
                         fListMan.UpdateColumns(this);
                     }
 
@@ -422,36 +419,11 @@ namespace GKUI.Components
                     ResizeColumns();
                 } finally {
                     EndUpdate();
+                    if (tempRec != null) SelectItem(tempRec);
                 }
-
-                if (tempRec != null) SelectItem(tempRec);
-
-                ReloadEx();
             } catch (Exception ex) {
                 Logger.WriteError("GKListView.UpdateContents()", ex);
             }
-        }
-
-        private void ReloadEx()
-        {
-            try {
-                //MethodInfo dynMethod = base.GetType().GetMethod("Reload", BindingFlags.NonPublic | BindingFlags.Instance);
-                //dynMethod.Invoke(this, new object[] { });
-
-                //fListMan.ContentList.Reset();
-
-                //InvokeMethod((DataGrid)this, "Reload", null);
-                InvokeMethod((DataGrid)this, "HandleItemsSourceCollectionChanged", new object[] { fListMan.ContentList, null });
-            } catch (Exception ex) {
-                Logger.WriteError("ReloadEx()", ex);
-            }
-        }
-
-        public static object InvokeMethod<T>(T obj, string methodName, params object[] args)
-        {
-            var type = typeof(T);
-            var method = type.GetTypeInfo().GetDeclaredMethod(methodName);
-            return method.Invoke(obj, args);
         }
 
         public void DeleteRecord(object data)
@@ -480,6 +452,8 @@ namespace GKUI.Components
 
         public void AddCheckedColumn(string caption, int width, bool autoSize = false)
         {
+            fCheckedList = true;
+            AddColumn(caption, width, autoSize, BSDTypes.HorizontalAlignment.Center);
         }
 
         public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign)
@@ -613,7 +587,7 @@ namespace GKUI.Components
 
             if (item != null) {
                 SelectedItem = item;
-                ScrollTo(item, ScrollToPosition.MakeVisible, true);
+                ScrollTo(item, ScrollToPosition.MakeVisible, false);
             }
         }
 

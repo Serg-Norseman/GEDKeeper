@@ -74,6 +74,7 @@ namespace GKUI.Components
 
         private readonly Button fBtnAdd;
         private readonly Button fBtnDelete;
+        private readonly GKListView fGridView;
 
         private IRecordsListModel fListMan;
         private ObservableCollection<FilterConditionRow> fCollection;
@@ -112,8 +113,24 @@ namespace GKUI.Components
             fBtnDelete = CreateButton("btnDelete", UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif"), LangMan.LS(LSID.MIRecordDelete), ItemDelete);
             fBtnAdd = CreateButton("btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.MIRecordAdd), ItemAdd);
 
+            fGridView = new GKListView();
+            fGridView.HorizontalOptions = LayoutOptions.FillAndExpand;
+
+            var toolbar = new StackLayout() {
+                Orientation = StackOrientation.Vertical,
+                Spacing = 4,
+                Children = { fBtnAdd, fBtnDelete },
+                HorizontalOptions = LayoutOptions.End
+            };
+            Content = new StackLayout() {
+                Orientation = StackOrientation.Horizontal,
+                Spacing = 4,
+                Children = { fGridView, toolbar }
+            };
 
             fCollection = new ObservableCollection<FilterConditionRow>();
+            fGridView.ItemsSource = fCollection;
+            fGridView.AllowMultipleSelection = false;
         }
 
         public void AddCondition(FilterCondition fcond)
@@ -143,17 +160,20 @@ namespace GKUI.Components
         private Button CreateButton(string name, ImageSource image, string toolTip, EventHandler click)
         {
             var btn = new Button();
-           // btn.Style = "iconBtn";
+            //btn.Style = "iconBtn";
             btn.ImageSource = image;
-            //btn.ToolTip = toolTip;
             btn.Clicked += click;
             return btn;
         }
 
         private void InitGrid()
         {
-            /*fGridView.Columns.Clear();
-            fGridView.AddComboColumn<FilterConditionRow>(LangMan.LS(LSID.Field), fFields, r => r.ColumnText, 200, false, true);
+            fGridView.ClearColumns();
+            fGridView.AddColumn(LangMan.LS(LSID.Field), 200);
+            fGridView.AddColumn(LangMan.LS(LSID.Condition), 150);
+            fGridView.AddColumn(LangMan.LS(LSID.Value), 300);
+
+            /*fGridView.AddComboColumn<FilterConditionRow>(LangMan.LS(LSID.Field), fFields, r => r.ColumnText, 200, false, true);
             fGridView.AddComboColumn<FilterConditionRow>(LangMan.LS(LSID.Condition), GKData.CondSigns, r => r.ConditionText, 150, false, true);
             fGridView.AddTextColumn<FilterConditionRow>(LangMan.LS(LSID.Value), r => r.ValueText, 300, false, true);*/
         }
@@ -166,7 +186,7 @@ namespace GKUI.Components
 
         private void ItemDelete(object sender, EventArgs e)
         {
-            //RemoveCondition(fGridView.SelectedRow);
+            RemoveCondition(fGridView.SelectedIndex);
         }
 
         #endregion

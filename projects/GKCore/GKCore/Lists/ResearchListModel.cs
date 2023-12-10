@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Controllers;
@@ -176,7 +177,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var research = fDataOwner as GDMResearchRecord;
             if (fBaseWin == null || research == null) return;
@@ -187,18 +188,21 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    task = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtTask, null) as GDMTaskRecord;
+                    task = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtTask, null) as GDMTaskRecord;
                     if (task != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchTaskAdd, research, task);
                     }
                     break;
 
                 case RecordAction.raEdit:
-                    result = (task != null && BaseController.ModifyTask(fOwner, fBaseWin, ref task));
+                    if (task != null) {
+                        var taskRes = await BaseController.ModifyTask(fOwner, fBaseWin, task);
+                        result = taskRes.Result;
+                    }
                     break;
 
                 case RecordAction.raDelete:
-                    if (task != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachTaskQuery))) {
+                    if (task != null && await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachTaskQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchTaskRemove, research, task);
                     }
                     break;
@@ -269,7 +273,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var research = fDataOwner as GDMResearchRecord;
             if (fBaseWin == null || research == null) return;
@@ -280,18 +284,21 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    comm = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtCommunication, null) as GDMCommunicationRecord;
+                    comm = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtCommunication, null) as GDMCommunicationRecord;
                     if (comm != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationAdd, research, comm);
                     }
                     break;
 
                 case RecordAction.raEdit:
-                    result = (comm != null && BaseController.ModifyCommunication(fOwner, fBaseWin, ref comm));
+                    if (comm != null) {
+                        var commRes = await BaseController.ModifyCommunication(fOwner, fBaseWin, comm);
+                        result = commRes.Result;
+                    }
                     break;
 
                 case RecordAction.raDelete:
-                    if (comm != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachCommunicationQuery))) {
+                    if (comm != null && await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachCommunicationQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationRemove, research, comm);
                     }
                     break;
@@ -350,7 +357,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var research = fDataOwner as GDMResearchRecord;
             if (fBaseWin == null || research == null) return;
@@ -361,14 +368,14 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    group = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtGroup, null) as GDMGroupRecord;
+                    group = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtGroup, null) as GDMGroupRecord;
                     if (group != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchGroupAdd, research, group);
                     }
                     break;
 
                 case RecordAction.raDelete:
-                    if (group != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachGroupQuery))) {
+                    if (group != null && await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachGroupQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchGroupRemove, research, group);
                     }
                     break;

@@ -19,6 +19,7 @@
  */
 
 using System.IO;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Interfaces;
@@ -69,9 +70,10 @@ namespace GKCore.Export
             }
         }
 
-        public override void Generate(bool show)
+        public override async void Generate(bool show)
         {
-            fWriter = GetTableWriterWFN(out fPath);
+            fPath = await GetTableFile();
+            fWriter = GetTableWriter(fPath);
             if (fWriter == null) return;
 
             fWriter.BeginWrite();
@@ -85,11 +87,7 @@ namespace GKCore.Export
 #endif
         }
 
-        /// <summary>
-        /// Returns the writer of the table, given the availability of the output method and the selected filename.
-        /// </summary>
-        /// <returns></returns>
-        public static TableWriter GetTableWriterWFN(out string fileName)
+        public static async Task<string> GetTableFile()
         {
             string availableFormats = "CSV files (*.csv)|*.csv";
 #if !NETCORE
@@ -98,7 +96,15 @@ namespace GKCore.Export
             availableFormats += "|" + "Excel files (*.xlsx)|*.xlsx";
 #endif
 
-            fileName = AppHost.StdDialogs.GetSaveFile(GlobalOptions.Instance.ReportExportLastDir, availableFormats);
+            return await AppHost.StdDialogs.GetSaveFile(GlobalOptions.Instance.ReportExportLastDir, availableFormats);
+        }
+
+        /// <summary>
+        /// Returns the writer of the table, given the availability of the output method and the selected filename.
+        /// </summary>
+        /// <returns></returns>
+        public static TableWriter GetTableWriter(string fileName)
+        {
             if (string.IsNullOrEmpty(fileName)) return null;
 
             GlobalOptions.Instance.ReportExportLastDir = Path.GetDirectoryName(fileName);

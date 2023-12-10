@@ -32,6 +32,6 @@
 31=Nazwisko rodowe
 32=Nazwisko imię nazwisko patronimiczne
 33=Oferta Specjalna
-34=Wszystkie obsługiwane formaty (*.txt, *.csv, *.doc, *.xls)|*.txt,*.csv,*.doc,*.xls|Rodowód w formacie txt (*.txt)|*.txt|Rodowód w formacie csv (*.csv)|*.csv|Rodowód w formacie MS Word (*.doc)|*.doc|Rodowód w formacie MS Excel (*.xls)|*.xls
+34=Wszystkie obsługiwane formaty (*.txt, *.csv, *.doc, *.xls)|*.txt,*.csv,*.doc*,*.xls*|Rodowód w formacie txt (*.txt)|*.txt|Rodowód w formacie csv (*.csv)|*.csv|Rodowód w formacie MS Word (*.doc)|*.doc*|Rodowód w formacie MS Excel (*.xls)|*.xls*
 35=Wszystkie obsługiwane formaty (*.txt, *.csv)|*.txt,*.csv|Rodowód w formacie txt (*.txt)|*.txt|Rodowód w formacie csv (*.csv)|*.csv
 36=Sprzeczne informacje na temat małżonków

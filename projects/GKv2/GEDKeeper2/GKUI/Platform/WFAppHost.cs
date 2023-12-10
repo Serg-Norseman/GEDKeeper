@@ -24,6 +24,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using BSLib;
 using GKCore;
@@ -39,6 +40,7 @@ using GKUI.Components;
 using GKUI.Forms;
 using GKUI.Platform.Handlers;
 using GKUI.Themes;
+using CommonDialog = GKUI.Forms.CommonDialog;
 
 namespace GKUI.Platform
 {
@@ -63,9 +65,9 @@ namespace GKUI.Platform
             //AppHost.Instance.SaveLastBases();
         }
 
-        public override void Init(string[] args, bool isMDI)
+        public override async Task Init(string[] args, bool isMDI)
         {
-            base.Init(args, isMDI);
+            await base.Init(args, isMDI);
             Application.ApplicationExit += OnApplicationExit;
         }
 
@@ -104,8 +106,11 @@ namespace GKUI.Platform
             return (ownerForm == null) ? IntPtr.Zero : ownerForm.Handle;
         }
 
-        public override bool ShowModalX(ICommonDialog dialog, IView owner, bool keepModeless = false)
+        public override async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
+            var wfModal = dialog as CommonDialog;
+            if (wfModal == null) return false;
+
             IntPtr mainHandle = GetTopWindowHandle();
 
             if (keepModeless) {
@@ -113,16 +118,17 @@ namespace GKUI.Platform
                     if (win is IBaseWindow) {
                         IntPtr handle = ((Form)win).Handle;
 
-                        #if !MONO
+#if !MONO
                         PostMessageExt(handle, WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
-                        #endif
+#endif
                     }
                 }
             }
 
             UIHelper.CenterFormByParent((Form)dialog, mainHandle);
 
-            return base.ShowModalX(dialog, owner, keepModeless);
+            wfModal.ShowDialog(owner as IWin32Window);
+            return await wfModal.DialogResultTask;
         }
 
         public override void EnableWindow(IWidgetForm form, bool value)
@@ -182,7 +188,7 @@ namespace GKUI.Platform
                 try {
                     workerThread.Start(progressForm);
 
-                    progressForm.ShowModalX(activeWnd);
+                    ((Form)progressForm).ShowDialog(activeWnd as IWin32Window);
                 } catch (Exception ex) {
                     Logger.WriteError("ExecuteWork()", ex);
                 }
@@ -462,6 +468,7 @@ namespace GKUI.Platform
             container.Register<ILocationEditDlg, LocationEditDlg>(LifeCycle.Transient);
             container.Register<IMapsViewerWin, MapsViewerWin>(LifeCycle.Transient);
             container.Register<IMediaEditDlg, MediaEditDlg>(LifeCycle.Transient);
+            container.Register<IMediaViewerWin, MediaViewerWin>(LifeCycle.Transient);
             container.Register<INameEditDlg, NameEditDlg>(LifeCycle.Transient);
             container.Register<INoteEditDlg, NoteEditDlg>(LifeCycle.Transient);
             container.Register<INoteEditDlgEx, NoteEditDlgEx>(LifeCycle.Transient);

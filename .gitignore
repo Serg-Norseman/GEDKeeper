@@ -24,3 +24,4 @@ opencover.xml
 /projects/GKTests/PartCover/
 /projects/GKv3/packages/**/
 .idea/
+adb-copy.cmd

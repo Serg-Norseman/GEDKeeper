@@ -202,8 +202,9 @@ namespace GKUI.Components
 
         private void InitControl()
         {
+            Padding = new Padding(4);
+
             fMapControl = new GMapControl();
-            //fMapControl.Margin = new Padding(4);
             fMapControl.MaxZoom = 17;
             fMapControl.MinZoom = 2;
             fMapControl.Zoom = 0;

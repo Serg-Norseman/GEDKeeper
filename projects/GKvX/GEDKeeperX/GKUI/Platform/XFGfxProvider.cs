@@ -46,7 +46,11 @@ namespace GKUI.Platform
 
         public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea)
         {
-            return null;
+            if (stream == null)
+                throw new ArgumentNullException("stream");
+
+            var img = SKImage.FromEncodedData(stream);
+            return new SKImageHandler(img);
         }
 
         public IImage LoadImage(string fileName)
@@ -58,18 +62,25 @@ namespace GKUI.Platform
             return new XFImageHandler(img);
         }
 
-        public IImage LoadResourceImage(Type baseType, string resName)
+        public IImage LoadResourceImage(Type baseType, string resName, ImageTarget target)
         {
             if (string.IsNullOrEmpty(resName))
                 return null;
 
-            var img = ImageSource.FromResource(resName, baseType.Assembly);
-            return new XFImageHandler(img);
+            if (target == ImageTarget.UI) {
+                var img = ImageSource.FromResource(resName, baseType.Assembly);
+                return new XFImageHandler(img);
+            } else {
+                using (var stream = GKUtils.LoadResourceStream(baseType, resName)) {
+                    var img = SKImage.FromEncodedData(stream);
+                    return new SKImageHandler(img);
+                }
+            }
         }
 
-        public IImage LoadResourceImage(string resName, bool makeTransp = false)
+        public IImage LoadResourceImage(string resName, ImageTarget target, bool makeTransp = false)
         {
-            return LoadResourceImage(typeof(GKUtils), resName);
+            return LoadResourceImage(typeof(GKUtils), resName, target);
         }
 
         public void SaveImage(IImage image, string fileName)
@@ -129,6 +140,11 @@ namespace GKUI.Platform
             fontName = "Verdana";
 #endif
             return fontName;
+        }
+
+        public float GetDefaultFontSize()
+        {
+            return (float)Device.GetNamedSize(NamedSize.Default, typeof(Label));
         }
     }
 }

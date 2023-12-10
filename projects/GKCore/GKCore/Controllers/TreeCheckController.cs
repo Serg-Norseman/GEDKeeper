@@ -20,9 +20,10 @@
 
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using GDModel;
-using GKCore.Design.Controls;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Tools;
 using GKCore.Types;
@@ -76,7 +77,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void Repair()
+        public async Task Repair()
         {
             try {
                 int num = fView.ChecksList.Items.Count;
@@ -84,7 +85,7 @@ namespace GKCore.Controllers
                     IListItem item = fView.ChecksList.Items[i];
                     if (item.Checked) {
                         var checkObj = item.Tag as TreeInspector.CheckObj;
-                        TreeInspector.RepairProblem(fView, fBase, checkObj);
+                        await TreeInspector.RepairProblem(fView, fBase, checkObj);
                     }
                 }
             } finally {
@@ -152,7 +153,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.ToolOp_7);
+            fView.Title = LangMan.LS(LSID.TreeCheck);
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
@@ -161,7 +162,7 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.CopyXRef);
             }
 
-            GetControl<ITabPage>("pageTreeCheck").Text = LangMan.LS(LSID.ToolOp_7);
+            GetControl<ITabPage>("pageTreeCheck").Text = LangMan.LS(LSID.TreeCheck);
             GetControl<IButton>("btnAnalyseBase").Text = LangMan.LS(LSID.Analyze);
             GetControl<IButton>("btnBaseRepair").Text = LangMan.LS(LSID.Repair);
 

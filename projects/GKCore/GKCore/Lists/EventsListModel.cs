@@ -19,13 +19,14 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
-using GKCore.Interfaces;
+using GKCore.Design;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Types;
-using GKCore.Design;
 
 namespace GKCore.Lists
 {
@@ -96,7 +97,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             GDMRecordWithEvents record = fDataOwner as GDMRecordWithEvents;
             if (fBaseWin == null || record == null) return;
@@ -108,12 +109,11 @@ namespace GKCore.Lists
             try {
                 switch (eArgs.Action) {
                     case RecordAction.raAdd:
-                    case RecordAction.raEdit:
-                        using (var dlg = AppHost.ResolveDialog<IEventEditDlg>(fBaseWin)) {
+                    case RecordAction.raEdit: {
                             bool exists = (evt != null);
 
                             GDMCustomEvent newEvent;
-                            if (evt != null) {
+                            if (exists) {
                                 newEvent = evt;
                             } else {
                                 if (record is GDMIndividualRecord) {
@@ -123,16 +123,17 @@ namespace GKCore.Lists
                                 }
                             }
 
-                            dlg.Event = newEvent;
-                            result = AppHost.Instance.ShowModalX(dlg, fOwner, true);
+                            using (var dlg = AppHost.ResolveDialog<IEventEditDlg>(fBaseWin)) {
+                                dlg.Event = newEvent;
+                                result = await AppHost.Instance.ShowModalAsync(dlg, fOwner, true);
+                                newEvent = dlg.Event; // In this dialog the event object can be replaced
+                            }
 
                             if (!result) {
                                 if (!exists) {
                                     newEvent.Dispose();
                                 }
                             } else {
-                                newEvent = dlg.Event;
-
                                 if (!exists) {
                                     result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventAdd, record, newEvent);
                                 } else {
@@ -149,15 +150,14 @@ namespace GKCore.Lists
                         break;
 
                     case RecordAction.raDelete:
-                        if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RemoveEventQuery))) {
+                        if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RemoveEventQuery))) {
                             result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventRemove, record, evt);
                             evt = null;
                         }
                         break;
 
                     case RecordAction.raMoveUp:
-                    case RecordAction.raMoveDown:
-                        {
+                    case RecordAction.raMoveDown: {
                             int idx = record.Events.IndexOf(evt);
                             switch (eArgs.Action) {
                                 case RecordAction.raMoveUp:

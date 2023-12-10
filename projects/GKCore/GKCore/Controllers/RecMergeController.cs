@@ -18,10 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
-using GKCore.Design.Controls;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Tools;
 using GKCore.Types;
@@ -211,48 +212,48 @@ namespace GKCore.Controllers
             }
         }
 
-        public void SelectRec1()
+        public async void SelectRec1()
         {
-            GDMRecord irec = fBase.Context.SelectRecord(fView, fMergeMode, null);
+            GDMRecord irec = await fBase.Context.SelectRecord(fView, fMergeMode, null);
             if (irec != null)
                 SetRec1(irec);
         }
 
-        public void SelectRec2()
+        public async void SelectRec2()
         {
-            GDMRecord irec = fBase.Context.SelectRecord(fView, fMergeMode, null);
+            GDMRecord irec = await fBase.Context.SelectRecord(fView, fMergeMode, null);
             if (irec != null)
                 SetRec2(irec);
         }
 
-        public void MergeToLeft()
+        public async void MergeToLeft()
         {
-            TreeTools.MergeRecord(fBase, fRec1, fRec2, fBookmark);
+            await TreeTools.MergeRecord(fBase, fRec1, fRec2, fBookmark);
             SetRec1(fRec1);
             SetRec2(null);
         }
 
-        public void MergeToRight()
+        public async void MergeToRight()
         {
-            TreeTools.MergeRecord(fBase, fRec2, fRec1, fBookmark);
+            await TreeTools.MergeRecord(fBase, fRec2, fRec1, fBookmark);
             SetRec1(null);
             SetRec2(fRec2);
         }
 
-        private bool EditRecord(GDMRecord record)
+        private async Task<bool> EditRecord(GDMRecord record)
         {
-            return (record != null && BaseController.EditRecord(fView, fBase, record));
+            return (record != null && await BaseController.EditRecord(fView, fBase, record));
         }
 
-        public void EditLeft()
+        public async void EditLeft()
         {
-            if (EditRecord(fRec1))
+            if (await EditRecord(fRec1))
                 SetRec1(fRec1);
         }
 
-        public void EditRight()
+        public async void EditRight()
         {
-            if (EditRecord(fRec2))
+            if (await EditRecord(fRec2))
                 SetRec2(fRec2);
         }
     }

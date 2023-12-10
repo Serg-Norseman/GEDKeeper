@@ -8,7 +8,8 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <DefineConstants>DIS_VLC</DefineConstants>
 
-        <Configurations>MSWin_Debug;MSWin_Release;Linux_Debug;Linux_Release;MacOS_Debug;MacOS_Release;FreeBSD_Debug;FreeBSD_Release</Configurations>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>MSWin86;MSWin64;Linux;MacOS;FreeBSD</Platforms>
     </PropertyGroup>
 
     <Import Project="..\..\GKConfigurations3.targets" />
@@ -45,13 +46,21 @@
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <StartupObject>GEDKeeper3.GKProgram</StartupObject>
         <ApplicationIcon>icon_gedkeeper.ico</ApplicationIcon>
-
-        <RuntimeIdentifier>win-x86</RuntimeIdentifier>
     </PropertyGroup>
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
         <PackageReference Include="Eto.Platform.Wpf" Version="2.8.0" />
     </ItemGroup>
+
+    <PropertyGroup Condition=" '$(Platform)' == 'MSWin86' ">
+        <PlatformTarget>x86</PlatformTarget>
+        <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Platform)' == 'MSWin64' ">
+        <PlatformTarget>x64</PlatformTarget>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    </PropertyGroup>
 
 
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) ">

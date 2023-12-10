@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Charts;
@@ -122,20 +123,20 @@ namespace GKCore.Controllers
             fContext.Modified = false;
         }
 
-        public void NewFile()
+        public async void NewFile()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                AppHost.Instance.CreateBase("");
+                await AppHost.Instance.CreateBase("");
             } else {
                 CreateNewFile();
             }
         }
 
-        public void LoadFile(string fileName)
+        public async void LoadFile(string fileName)
         {
             Clear();
 
-            if (fContext.FileLoad(fileName)) {
+            if (await fContext.FileLoad(fileName)) {
                 fContext.Modified = false;
                 ChangeFileName();
                 RefreshLists(false);
@@ -158,38 +159,27 @@ namespace GKCore.Controllers
 #endif
         }
 
-        public void LoadFileEx()
+        public async Task LoadFileEx()
         {
             string homePath, filters;
             PrepareLoadFile(out homePath, out filters);
 
-            string fileName = AppHost.StdDialogs.GetOpenFile("", homePath, filters, 1, GKData.GEDCOM_EXT);
+            string fileName = await AppHost.StdDialogs.GetOpenFile("", homePath, filters, 1, GKData.GEDCOM_EXT);
             if (!string.IsNullOrEmpty(fileName)) {
-                AppHost.Instance.LoadBase(fView, fileName);
+                await AppHost.Instance.LoadBase(fView, fileName);
             }
         }
 
-        public async void LoadFileAsync()
+        public async void SaveFile(string fileName)
         {
-            string homePath, filters;
-            PrepareLoadFile(out homePath, out filters);
-
-            string fileName = await AppHost.StdDialogs.GetOpenFileAsync("", homePath, filters, 1, GKData.GEDCOM_EXT);
-            if (!string.IsNullOrEmpty(fileName)) {
-                AppHost.Instance.LoadBase(fView, fileName);
-            }
-        }
-
-        public void SaveFile(string fileName)
-        {
-            if (fContext.FileSave(fileName)) {
+            if (await fContext.FileSave(fileName)) {
                 fContext.Modified = false;
                 ChangeFileName();
                 AppHost.Instance.BaseSaved(fView, fileName);
             }
         }
 
-        public void SaveFileEx(bool saveAs)
+        public async void SaveFileEx(bool saveAs)
         {
             string oldFileName = fContext.FileName;
             bool isUnknown = fContext.IsUnknown();
@@ -198,7 +188,26 @@ namespace GKCore.Controllers
                 SaveFile(oldFileName);
             } else {
                 string homePath = AppHost.Instance.GetUserFilesPath(Path.GetDirectoryName(oldFileName));
-                string newFileName = AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT, oldFileName, GlobalOptions.Instance.FilesOverwriteWarn);
+                string newFileName = await AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT, oldFileName, GlobalOptions.Instance.FilesOverwriteWarn);
+                if (!string.IsNullOrEmpty(newFileName)) {
+                    SaveFile(newFileName);
+                    if (!isUnknown && !string.Equals(oldFileName, newFileName)) {
+                        AppHost.Instance.BaseRenamed(fView, oldFileName, newFileName);
+                    }
+                }
+            }
+        }
+
+        public async void SaveFileAsync(bool saveAs)
+        {
+            string oldFileName = fContext.FileName;
+            bool isUnknown = fContext.IsUnknown();
+
+            if (!isUnknown && !saveAs) {
+                SaveFile(oldFileName);
+            } else {
+                string homePath = AppHost.Instance.GetUserFilesPath(Path.GetDirectoryName(oldFileName));
+                string newFileName = await AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT, oldFileName, GlobalOptions.Instance.FilesOverwriteWarn);
                 if (!string.IsNullOrEmpty(newFileName)) {
                     SaveFile(newFileName);
                     if (!isUnknown && !string.Equals(oldFileName, newFileName)) {
@@ -315,11 +324,11 @@ namespace GKCore.Controllers
             fView.SelectRecordByXRef(target.XRef);
         }
 
-        public void AddRecord()
+        public async void AddRecord()
         {
             GDMRecordType rt = GetSelectedRecordType();
 
-            GDMRecord record = BaseController.AddRecord(fView, fView, rt, null);
+            GDMRecord record = await BaseController.AddRecord(fView, fView, rt, null);
             if (record != null) {
                 RefreshLists(false);
             }
@@ -327,20 +336,20 @@ namespace GKCore.Controllers
             UpdateChangedRecords(record);
         }
 
-        public void EditRecord()
+        public async void EditRecord()
         {
             GDMRecord record = GetSelectedRecordEx();
-            if (record != null && BaseController.EditRecord(fView, fView, record)) {
+            if (record != null && await BaseController.EditRecord(fView, fView, record)) {
                 RefreshLists(false);
             }
 
             UpdateChangedRecords(record);
         }
 
-        public void DeleteRecord()
+        public async void DeleteRecord()
         {
             GDMRecord record = GetSelectedRecordEx();
-            if (record != null && BaseController.DeleteRecord(fView, record, true)) {
+            if (record != null && await BaseController.DeleteRecord(fView, record, true)) {
                 RefreshLists(false);
             }
         }
@@ -743,13 +752,13 @@ namespace GKCore.Controllers
             var gfxProvider = AppHost.GfxProvider;
             switch (fContext.ShieldState) {
                 case ShieldState.None:
-                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_none.gif", true);
+                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_none.gif", ImageTarget.UI, true);
                     break;
                 case ShieldState.Middle:
-                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_mid.gif", true);
+                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_mid.gif", ImageTarget.UI, true);
                     break;
                 case ShieldState.Maximum:
-                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_max.gif", true);
+                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_max.gif", ImageTarget.UI, true);
                     break;
             }
             return img;
@@ -913,14 +922,14 @@ namespace GKCore.Controllers
                     GetControl<IMenuItem>("miTreeTools").Text = LangMan.LS(LSID.MITreeTools);
                     GetControl<IMenuItem>("miOptions").Text = LangMan.LS(LSID.MIOptions) + @"...";
 
-                    GetControl<IMenuItem>("miTreeCompare").Text = LangMan.LS(LSID.ToolOp_1);
-                    GetControl<IMenuItem>("miTreeMerge").Text = LangMan.LS(LSID.ToolOp_2);
-                    GetControl<IMenuItem>("miTreeSplit").Text = LangMan.LS(LSID.ToolOp_3);
+                    GetControl<IMenuItem>("miTreeCompare").Text = LangMan.LS(LSID.TreeCompare);
+                    GetControl<IMenuItem>("miTreeMerge").Text = LangMan.LS(LSID.TreeMerge);
+                    GetControl<IMenuItem>("miTreeSplit").Text = LangMan.LS(LSID.TreeSplit);
                     GetControl<IMenuItem>("miRecMerge").Text = LangMan.LS(LSID.MergeDuplicates);
-                    GetControl<IMenuItem>("miFamilyGroups").Text = LangMan.LS(LSID.ToolOp_6);
-                    GetControl<IMenuItem>("miTreeCheck").Text = LangMan.LS(LSID.ToolOp_7);
-                    GetControl<IMenuItem>("miPatSearch").Text = LangMan.LS(LSID.ToolOp_8);
-                    GetControl<IMenuItem>("miPlacesManager").Text = LangMan.LS(LSID.ToolOp_9);
+                    GetControl<IMenuItem>("miFamilyGroups").Text = LangMan.LS(LSID.FragmentSearch);
+                    GetControl<IMenuItem>("miTreeCheck").Text = LangMan.LS(LSID.TreeCheck);
+                    GetControl<IMenuItem>("miPatSearch").Text = LangMan.LS(LSID.PatriarchsSearch);
+                    GetControl<IMenuItem>("miPlacesManager").Text = LangMan.LS(LSID.PlacesManager);
 
                     GetControl<IMenuItem>("miContext").Text = LangMan.LS(LSID.MIContext);
                     GetControl<IMenuItem>("miAbout").Text = LangMan.LS(LSID.MIAbout) + @"...";
@@ -1034,20 +1043,20 @@ namespace GKCore.Controllers
 
         #region Dialogs
 
-        private void ShowCommonFilter(GDMRecordType rt, IRecordsListModel listMan)
+        private async void ShowCommonFilter(GDMRecordType rt, IRecordsListModel listMan)
         {
             using (var dlg = AppHost.Container.Resolve<ICommonFilterDlg>(fView, listMan)) {
-                if (AppHost.Instance.ShowModalX(dlg, fView, false)) {
+                if (await AppHost.Instance.ShowModalAsync(dlg, fView, false)) {
                     AppHost.Instance.NotifyFilter(fView, rt, listMan, listMan.Filter);
                     ApplyFilter(rt);
                 }
             }
         }
 
-        private void ShowPersonsFilter(GDMRecordType rt, IRecordsListModel listMan)
+        private async void ShowPersonsFilter(GDMRecordType rt, IRecordsListModel listMan)
         {
             using (var dlg = AppHost.Container.Resolve<IPersonsFilterDlg>(fView, listMan)) {
-                if (AppHost.Instance.ShowModalX(dlg, fView, false)) {
+                if (await AppHost.Instance.ShowModalAsync(dlg, fView, false)) {
                     ApplyFilter(rt, listMan);
                 }
             }
@@ -1077,98 +1086,98 @@ namespace GKCore.Controllers
             }
         }
 
-        public void ShowFileProperties()
+        public async void ShowFileProperties()
         {
             try {
                 fContext.BeginUpdate();
 
                 using (var dlg = AppHost.ResolveDialog<IFilePropertiesDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, fView, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
             }
         }
 
-        public void ShowScripts()
+        public async void ShowScripts()
         {
             try {
                 fContext.BeginUpdate();
 
                 using (var dlg = AppHost.Container.Resolve<IScriptEditWin>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, fView, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
             }
         }
 
-        public void ShowTreeSplit()
+        public async void ShowTreeSplit()
         {
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<ITreeSplitDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, fView, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
             }
         }
 
-        public void ShowTreeMerge()
+        public async void ShowTreeMerge()
         {
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<ITreeMergeDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, fView, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
             }
         }
 
-        public void ShowTreeCompare()
+        public async void ShowTreeCompare()
         {
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<ITreeCompareDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, fView, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
             }
         }
 
-        public void ShowTreeCheck()
+        public async void ShowTreeCheck()
         {
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<ITreeCheckDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, fView, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
             }
         }
 
-        public void ShowPlacesManager()
+        public async void ShowPlacesManager()
         {
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<IPlacesManagerDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, fView, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
             }
         }
 
-        public void ShowPatSearch()
+        public async void ShowPatSearch()
         {
             try {
                 fContext.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<IPatriarchsSearchDlg>(fView)) {
-                    AppHost.Instance.ShowModalX(dlg, fView, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
                 }
             } finally {
                 fContext.EndUpdate();
@@ -1198,17 +1207,17 @@ namespace GKCore.Controllers
             AppHost.Instance.ShowWindow(mapsWin);
         }
 
-        public void ShowOrganizer()
+        public async void ShowOrganizer()
         {
             using (var dlg = AppHost.Container.Resolve<IOrganizerWin>(fView)) {
-                AppHost.Instance.ShowModalX(dlg, fView, false);
+                await AppHost.Instance.ShowModalAsync(dlg, fView, false);
             }
         }
 
-        public void ShowRelationshipCalculator()
+        public async void ShowRelationshipCalculator()
         {
             using (var dlg = AppHost.Container.Resolve<IRelationshipCalculatorDlg>(fView)) {
-                AppHost.Instance.ShowModalX(dlg, fView, false);
+                await AppHost.Instance.ShowModalAsync(dlg, fView, false);
             }
         }
 
@@ -1276,6 +1285,29 @@ namespace GKCore.Controllers
             AppHost.Instance.ShowWindow(fmChart);
         }
 
+        public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal)
+        {
+            if (mediaRec == null)
+                throw new ArgumentNullException("mediaRec");
+
+            GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
+            if (fileRef == null) return;
+
+            if (!GKUtils.UseEmbeddedViewer(fileRef.MultimediaFormat)) {
+                string targetFile = fContext.MediaLoad(fileRef);
+                GKUtils.LoadExtFile(targetFile);
+            } else {
+                var mediaViewer = AppHost.Container.Resolve<IMediaViewerWin>(fView);
+                try {
+                    mediaViewer.MultimediaRecord = mediaRec;
+                    mediaViewer.Show(true);
+                } catch (Exception ex) {
+                    if (mediaViewer != null) mediaViewer.Dispose();
+                    Logger.WriteError("BaseWinController.ShowMedia()", ex);
+                }
+            }
+        }
+
         public void SendLog()
         {
             SysUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: feedback", "This automatic notification of error.", AppHost.GetLogFilename());
@@ -1286,10 +1318,10 @@ namespace GKCore.Controllers
             GKUtils.LoadExtFile(AppHost.GetLogFilename());
         }
 
-        public void ShowAbout()
+        public async void ShowAbout()
         {
             using (var dlg = AppHost.Container.Resolve<IAboutDlg>()) {
-                AppHost.Instance.ShowModalX(dlg, fView, false);
+                await AppHost.Instance.ShowModalAsync(dlg, fView, false);
             }
         }
 
@@ -1339,6 +1371,10 @@ namespace GKCore.Controllers
 
         public void FindAndReplace()
         {
+            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                throw new NotImplementedException();
+            }
+
             var win = AppHost.Container.Resolve<IFARDlg>(fView);
             AppHost.Instance.ShowWindow(win);
         }

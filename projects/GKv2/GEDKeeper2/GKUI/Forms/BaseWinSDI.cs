@@ -490,35 +490,7 @@ namespace GKUI.Forms
 
         public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal)
         {
-            if (mediaRec == null)
-                throw new ArgumentNullException("mediaRec");
-
-            GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
-            if (fileRef == null) return;
-
-            if (!GKUtils.UseEmbeddedViewer(fileRef.MultimediaFormat)) {
-                string targetFile = fContext.MediaLoad(fileRef);
-                GKUtils.LoadExtFile(targetFile);
-            } else {
-                //var mediaViewer = AppHost.Container.Resolve<IMediaViewerWin>(this);
-                MediaViewerWin mediaViewer = new MediaViewerWin(this);
-                try {
-                    try {
-                        mediaViewer.MultimediaRecord = mediaRec;
-                        if (modal) {
-                            mediaViewer.ShowDialog();
-                        } else {
-                            mediaViewer.ShowInTaskbar = true;
-                            mediaViewer.Show();
-                        }
-                    } finally {
-                        if (modal) mediaViewer.Dispose();
-                    }
-                } catch (Exception ex) {
-                    if (mediaViewer != null) mediaViewer.Dispose();
-                    Logger.WriteError("BaseWinSDI.ShowMedia()", ex);
-                }
-            }
+            fController.ShowMedia(mediaRec, modal);
         }
 
         #endregion
@@ -667,7 +639,7 @@ namespace GKUI.Forms
             e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
         }
 
-        private void Form_DragDrop(object sender, DragEventArgs e)
+        private async void Form_DragDrop(object sender, DragEventArgs e)
         {
             try {
                 try {
@@ -678,10 +650,11 @@ namespace GKUI.Forms
 
                     for (int i = 0; i < files.Length; i++) {
                         string fn = files[i];
-                        AppHost.Instance.LoadBase(this, fn);
+                        await AppHost.Instance.LoadBase(this, fn);
                     }
+
+                    await AppHost.Instance.EndLoading();
                 } finally {
-                    AppHost.Instance.EndLoading();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.Form_DragDrop()", ex);
@@ -690,8 +663,8 @@ namespace GKUI.Forms
 
         void IBaseWindowView.LoadBase(string fileName)
         {
-            MethodInvoker invoker = delegate() {
-                AppHost.Instance.LoadBase(this, fileName);
+            MethodInvoker invoker = async delegate() {
+                await AppHost.Instance.LoadBase(this, fileName);
             };
 
             if (InvokeRequired) {
@@ -715,10 +688,10 @@ namespace GKUI.Forms
             UpdateShieldState();
         }
 
-        private void MRUFileClick(object sender, EventArgs e)
+        private async void MRUFileClick(object sender, EventArgs e)
         {
             int idx = (int)((MenuItemEx)sender).Tag;
-            AppHost.Instance.LoadBase(this, AppHost.Options.MRUFiles[idx].FileName);
+            await AppHost.Instance.LoadBase(this, AppHost.Options.MRUFiles[idx].FileName);
         }
 
         public void UpdateMRU()
@@ -886,9 +859,9 @@ namespace GKUI.Forms
             fController.NewFile();
         }
 
-        private void miFileLoad_Click(object sender, EventArgs e)
+        private async void miFileLoad_Click(object sender, EventArgs e)
         {
-            fController.LoadFileEx();
+            await fController.LoadFileEx();
         }
 
         private void miFileSaveAs_Click(object sender, EventArgs e)

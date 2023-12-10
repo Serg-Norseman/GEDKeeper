@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Threading.Tasks;
 using GDModel;
 using GKCore.Design;
 using GKCore.Options;
@@ -36,8 +37,8 @@ namespace GKCore.Interfaces
         string GetAppDataPath();
         string GetUserFilesPath(string filePath);
 
-        IBaseWindow CreateBase(string fileName);
-        void LoadBase(IBaseWindow baseWin, string fileName);
+        Task<IBaseWindow> CreateBase(string fileName);
+        Task LoadBase(IBaseWindow baseWin, string fileName);
         IBaseWindow FindBase(string fileName);
         void BaseChanged(IBaseWindow baseWin);
         void BaseClosed(IBaseWindow baseWin);
@@ -56,7 +57,7 @@ namespace GKCore.Interfaces
 
         void EnableWindow(IWidgetForm form, bool value);
         MRUFile GetMRUFile(IBaseWindow baseWin);
-        bool ShowModalX(ICommonDialog dialog, IView owner, bool keepModeless = false);
+        Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false);
         void ShowWindow(IWindow window);
 
         ILangMan CreateLangMan(object sender);

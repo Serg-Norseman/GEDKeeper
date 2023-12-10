@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Controllers;
@@ -82,7 +83,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var dataOwner = fDataOwner as IGDMStructWithMultimediaLinks;
             if (fBaseWin == null || dataOwner == null) return;
@@ -94,13 +95,13 @@ namespace GKCore.Lists
             GDMMultimediaRecord mmRec;
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    mmRec = fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtMultimedia, new object[0]) as GDMMultimediaRecord;
+                    mmRec = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtMultimedia, new object[0]) as GDMMultimediaRecord;
                     if (mmRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaAdd, (GDMObject)dataOwner, mmRec);
                         mmLink = dataOwner.FindMultimediaLink(mmRec);
 
                         if (result && mmLink != null && (dataOwner is GDMIndividualRecord) && GKUtils.MayContainPortrait(mmRec)) {
-                            BaseController.SelectPortraitRegion(fOwner, fBaseWin, mmLink);
+                            await BaseController.SelectPortraitRegion(fOwner, fBaseWin, mmLink);
                         }
                     }
                     break;
@@ -108,12 +109,13 @@ namespace GKCore.Lists
                 case RecordAction.raEdit:
                     if (mmLink != null) {
                         mmRec = fBaseContext.Tree.GetPtrValue<GDMMultimediaRecord>(mmLink);
-                        result = BaseController.ModifyMedia(fOwner, fBaseWin, ref mmRec);
+                        var mmRes = await BaseController.ModifyMedia(fOwner, fBaseWin, mmRec);
+                        result = mmRes.Result;
                     }
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachMultimediaQuery))) {
+                    if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachMultimediaQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaRemove, (GDMObject)dataOwner, mmLink);
                     }
                     break;

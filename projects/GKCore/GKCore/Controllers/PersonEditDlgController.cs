@@ -77,7 +77,7 @@ namespace GKCore.Controllers
             for (GDMSex sx = GDMSex.svUnknown; sx <= GDMSex.svLast; sx++) {
                 string name = GKUtils.SexStr(sx);
                 string resImage = GKData.SexData[(int)sx].SymImage;
-                IImage image = AppHost.GfxProvider.LoadResourceImage(resImage, true);
+                IImage image = AppHost.GfxProvider.LoadResourceImage(resImage, ImageTarget.UI, true);
                 fView.SexCombo.AddItem(name, sx, image);
             }
         }
@@ -307,7 +307,16 @@ namespace GKCore.Controllers
                 // using avatar's image
                 GDMSex curSex = (GDMSex)fView.SexCombo.SelectedIndex;
                 string resImage = GKData.SexData[(int)curSex].DefPortraitImage;
-                img = AppHost.GfxProvider.LoadResourceImage(resImage, false);
+
+                // HACK: on GKvX portrait's control on base ImageBox (SkiaSharp)
+                ImageTarget target;
+                if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                    target = ImageTarget.Chart;
+                } else {
+                    target = ImageTarget.UI;
+                }
+
+                img = AppHost.GfxProvider.LoadResourceImage(resImage, target, false);
             }
             fView.SetPortrait(img);
 
@@ -385,9 +394,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public void AddPortrait()
+        public async void AddPortrait()
         {
-            if (BaseController.AddIndividualPortrait(fView, fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.AddIndividualPortrait(fView, fBase, fLocalUndoman, fIndividualRecord)) {
                 fView.MediaList.UpdateSheet();
                 UpdatePortrait(true);
             }
@@ -400,32 +409,36 @@ namespace GKCore.Controllers
             }
         }
 
-        public void AddParents()
+        public async void AddParents()
         {
             AcceptTempData();
 
-            GDMFamilyRecord family = fBase.Context.SelectFamily(fView, fIndividualRecord);
+            GDMFamilyRecord family = await fBase.Context.SelectFamily(fView, fIndividualRecord);
             if (family != null && family.IndexOfChild(fIndividualRecord) < 0) {
                 fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, fIndividualRecord, family);
             }
             UpdateControls();
         }
 
-        public void EditParents()
+        public async void EditParents()
         {
             AcceptTempData();
 
-            GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
-            if (family != null && BaseController.ModifyFamily(fView, fBase, ref family, TargetMode.tmNone, null)) {
-                UpdateControls();
+            GDMFamilyRecord family = await fBase.Context.GetChildFamily(fIndividualRecord, false, null);
+            if (family != null) {
+                var famRes = await BaseController.ModifyFamily(fView, fBase, family, TargetMode.tmNone, null);
+                if (famRes.Result) {
+                    UpdateControls();
+                }
             }
         }
 
-        public void DeleteParents()
+        public async void DeleteParents()
         {
-            if (!AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachParentsQuery))) return;
+            var res = await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachParentsQuery));
+            if (!res) return;
 
-            GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
+            GDMFamilyRecord family = await fBase.Context.GetChildFamily(fIndividualRecord, false, null);
             if (family == null) return;
 
             AcceptTempData();
@@ -434,53 +447,53 @@ namespace GKCore.Controllers
             UpdateControls();
         }
 
-        public void AddFather()
+        public async void AddFather()
         {
             AcceptTempData();
 
-            if (BaseController.AddIndividualFather(fView, fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.AddIndividualFather(fView, fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
 
-        public void DeleteFather()
+        public async void DeleteFather()
         {
             AcceptTempData();
 
-            if (BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.DeleteIndividualFather(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
 
-        public void AddMother()
+        public async void AddMother()
         {
             AcceptTempData();
 
-            if (BaseController.AddIndividualMother(fView, fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.AddIndividualMother(fView, fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
 
-        public void DeleteMother()
+        public async void DeleteMother()
         {
             AcceptTempData();
 
-            if (BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
+            if (await BaseController.DeleteIndividualMother(fBase, fLocalUndoman, fIndividualRecord)) {
                 UpdateControls();
             }
         }
 
-        public void JumpToFather()
+        public async void JumpToFather()
         {
-            GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
+            GDMFamilyRecord family = await fBase.Context.GetChildFamily(fIndividualRecord, false, null);
             if (family == null) return;
 
             JumpToRecord(family.Husband);
         }
 
-        public void JumpToMother()
+        public async void JumpToMother()
         {
-            GDMFamilyRecord family = fBase.Context.GetChildFamily(fIndividualRecord, false, null);
+            GDMFamilyRecord family = await fBase.Context.GetChildFamily(fIndividualRecord, false, null);
             if (family == null) return;
 
             JumpToRecord(family.Wife);

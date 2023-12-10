@@ -20,6 +20,7 @@
 
 using System;
 using System.Windows.Forms;
+using GKCore;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
@@ -100,7 +101,12 @@ namespace GKUI.Forms
 
         protected override void AcceptClickHandler(object sender, EventArgs e)
         {
-            DialogResult = Accept() ? DialogResult.OK : DialogResult.None;
+            try {
+                if (Accept())
+                    Close(DialogResult.OK);
+            } catch (Exception ex) {
+                Logger.WriteError("CommonFilterDlg.AcceptClickHandler()", ex);
+            }
         }
     }
 }

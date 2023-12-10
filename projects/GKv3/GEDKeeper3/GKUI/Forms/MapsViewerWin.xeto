@@ -56,23 +56,12 @@
             <GroupBox x:Name="gbCoords">
               <TableLayout Style="paddedTable">
                 <TableRow>
-                  <Label x:Name="lblPlace">place</Label>
                   <TextBox x:Name="txtPlace" />
-                </TableRow>
-                <TableRow>
-                  <Label x:Name="lblLat">lat</Label>
-                  <TextBox x:Name="txtLat" />
-                </TableRow>
-                <TableRow>
-                  <Label x:Name="lblLng">lng</Label>
-                  <TextBox x:Name="txtLng" />
+                  <Button x:Name="btnSearch" Click="btnSearch_Click" />
                 </TableRow>
               </TableLayout>
             </GroupBox>
 
-            <Button x:Name="btnSearch" Click="btnSearch_Click" />
-            <Button x:Name="btnAddRouteMarker" Click="btnAddRouteMarker_Click">Add Route Marker</Button>
-            <Button x:Name="btnAddPolygonMarker" Click="btnAddPolygonMarker_Click">Add Polygon Marker</Button>
           </StackLayout>
         </TabPage>
       </TabControl>

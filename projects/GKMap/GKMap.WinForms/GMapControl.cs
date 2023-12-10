@@ -76,16 +76,10 @@ namespace GKMap.WinForms
         public string CacheLocation
         {
             get {
-#if !DESIGN
                 return GMaps.CacheLocation;
-#else
-                return string.Empty;
-#endif
             }
             set {
-#if !DESIGN
                 GMaps.CacheLocation = value;
-#endif
             }
         }
 
@@ -253,15 +247,7 @@ namespace GKMap.WinForms
             }
             set {
                 if (fCore.Zoom != value) {
-                    Debug.WriteLine("ZoomPropertyChanged: " + fCore.Zoom + " -> " + value);
-
-                    if (value > MaxZoom) {
-                        fCore.Zoom = MaxZoom;
-                    } else if (value < MinZoom) {
-                        fCore.Zoom = MinZoom;
-                    } else {
-                        fCore.Zoom = value;
-                    }
+                    fCore.Zoom = value;
 
                     if (fCore.IsStarted && !fCore.IsDragging) {
                         fCore.ForceUpdateOverlays();
@@ -284,45 +270,6 @@ namespace GKMap.WinForms
             }
             remove {
                 fCore.OnCurrentPositionChanged -= value;
-            }
-        }
-
-        /// <summary>
-        /// occurs when tile set load is complete
-        /// </summary>
-        public event TileLoadComplete OnTileLoadComplete
-        {
-            add {
-                fCore.OnTileLoadComplete += value;
-            }
-            remove {
-                fCore.OnTileLoadComplete -= value;
-            }
-        }
-
-        /// <summary>
-        /// occurs when tile set is starting to load
-        /// </summary>
-        public event TileLoadStart OnTileLoadStart
-        {
-            add {
-                fCore.OnTileLoadStart += value;
-            }
-            remove {
-                fCore.OnTileLoadStart -= value;
-            }
-        }
-
-        /// <summary>
-        /// occurs on map drag
-        /// </summary>
-        public event MapDrag OnMapDrag
-        {
-            add {
-                fCore.OnMapDrag += value;
-            }
-            remove {
-                fCore.OnMapDrag -= value;
             }
         }
 
@@ -470,10 +417,6 @@ namespace GKMap.WinForms
             }
         }
 
-#if !DESIGN
-        /// <summary>
-        /// constructor
-        /// </summary>
         public GMapControl()
         {
             fCore = new MapCore(this);
@@ -503,8 +446,6 @@ namespace GKMap.WinForms
                 Overlays.CollectionChanged += Overlays_CollectionChanged;
             }
         }
-
-#endif
 
         protected override void Dispose(bool disposing)
         {
@@ -584,10 +525,10 @@ namespace GKMap.WinForms
                 fCore.LastInvalidation = DateTime.Now;
             }
 
-            base.Refresh();
+            // FIXME
+            BeginInvoke(new Action(base.Refresh), null);
         }
 
-#if !DESIGN
         /// <summary>
         /// enqueue built-in thread safe invalidation
         /// </summary>
@@ -597,7 +538,6 @@ namespace GKMap.WinForms
                 fCore.RefreshEvent.Set();
             }
         }
-#endif
 
         /// <summary>
         /// sets to max zoom to fit all markers and centers them in map
@@ -606,8 +546,7 @@ namespace GKMap.WinForms
         /// <returns></returns>
         public bool ZoomAndCenterMarkers(string overlayId)
         {
-            bool result = fCore.ZoomAndCenterMarkers(overlayId);
-            return result;
+            return fCore.ZoomAndCenterMarkers(overlayId);
         }
 
         /// <summary>
@@ -867,8 +806,7 @@ namespace GKMap.WinForms
 
             if (fCore.IsDragging) {
                 SetCursorDrag();
-                fCore.MouseCurrent = new GPoint(e.X, e.Y);
-                fCore.Drag(fCore.MouseCurrent);
+                fCore.Drag(e.X, e.Y);
                 base.Invalidate();
             } else {
                 if (fCore.MouseDown.IsEmpty) {

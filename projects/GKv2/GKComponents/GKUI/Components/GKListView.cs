@@ -415,18 +415,6 @@ namespace GKUI.Components
                         DrawSortArrow(gfx, rt, "▼");
                         break;
                 }
-
-                /*if (e.ColumnIndex == Columns.Count - 1) {
-                    IntPtr headerControl = Win32.GetHeaderControl(this);
-                    IntPtr hdc = Win32.GetDC(headerControl);
-                    Graphics g = Graphics.FromHdc(hdc);
-                    Rectangle rc = new Rectangle(e.Bounds.Right, e.Bounds.Top, ClientRectangle.Width - e.Bounds.X, e.Bounds.Height);
-                    using (Brush brush = new SolidBrush(fAppearance.Header)) {
-                        g.FillRectangle(brush, rc);
-                    }
-                    g.Dispose();
-                    Win32.ReleaseDC(headerControl, hdc);
-                }*/
             }
 
             base.OnDrawColumnHeader(e);
@@ -575,16 +563,10 @@ namespace GKUI.Components
             if (fListMan == null) return;
 
             try {
-                if (fListMan.ColumnsHaveBeenChanged != columnsChanged && columnsChanged) {
-                    fListMan.ColumnsHaveBeenChanged = columnsChanged;
-                }
-
                 object tempRec = GetSelectedData();
-
                 BeginUpdate();
                 try {
-                    if (columnsChanged || Columns.Count == 0 || fListMan.ColumnsHaveBeenChanged) {
-                        Columns.Clear();
+                    if (columnsChanged || Columns.Count == 0) {
                         fListMan.UpdateColumns(this);
                     }
 
@@ -601,9 +583,8 @@ namespace GKUI.Components
                     ResizeColumns();
                 } finally {
                     EndUpdate();
+                    if (tempRec != null) SelectItem(tempRec);
                 }
-
-                if (tempRec != null) SelectItem(tempRec);
             } catch (Exception ex) {
                 Logger.WriteError("GKListView.UpdateContents()", ex);
             }

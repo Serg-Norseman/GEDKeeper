@@ -19,6 +19,7 @@
  */
 
 using GKCore.Design.Controls;
+using Xamarin.Forms;
 using XFIKCheckBox = Plugin.InputKit.Shared.Controls.CheckBox;
 
 namespace GKUI.Platform
@@ -27,6 +28,8 @@ namespace GKUI.Platform
     {
         public CheckBoxHandler(XFIKCheckBox control) : base(control)
         {
+            control.Color = Color.Black;
+            control.Padding = new Thickness(0, 0);
         }
 
         public bool Checked
@@ -39,6 +42,12 @@ namespace GKUI.Platform
         {
             get { return Control.Text; }
             set { Control.Text = value; }
+        }
+
+        public bool Visible
+        {
+            get { return Control.IsVisible; }
+            set { Control.IsVisible = value; }
         }
     }
 }

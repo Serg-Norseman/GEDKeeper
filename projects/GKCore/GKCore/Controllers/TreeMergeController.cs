@@ -39,9 +39,9 @@ namespace GKCore.Controllers
         {
         }
 
-        public void Merge()
+        public async void Merge()
         {
-            string fileName = AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT);
+            string fileName = await AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT);
             if (string.IsNullOrEmpty(fileName)) return;
 
             fView.UpdateBase.Text = fileName;
@@ -52,9 +52,9 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.ToolOp_2);
+            fView.Title = LangMan.LS(LSID.TreeMerge);
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                GetControl<ITabPage>("pageTreeMerge").Text = LangMan.LS(LSID.ToolOp_2);
+                GetControl<ITabPage>("pageTreeMerge").Text = LangMan.LS(LSID.TreeMerge);
                 GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
             }
             GetControl<IButton>("btnTreeMerge").Text = LangMan.LS(LSID.DlgSelect) + @"...";

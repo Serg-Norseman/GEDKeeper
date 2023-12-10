@@ -95,7 +95,7 @@ namespace GKCore.Charts
         /// </summary>
         public virtual IImage LoadResourceImage(Type baseType, string resName)
         {
-            return AppHost.GfxProvider.LoadResourceImage(baseType, resName);
+            return AppHost.GfxProvider.LoadResourceImage(baseType, resName, ImageTarget.Chart);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace GKCore.Charts
         /// </summary>
         public virtual IImage LoadResourceImage(string resName, bool makeTransp = false)
         {
-            return AppHost.GfxProvider.LoadResourceImage(resName, makeTransp);
+            return AppHost.GfxProvider.LoadResourceImage(resName, ImageTarget.Chart, makeTransp);
         }
 
         public void DrawImage(IImage image, float x, float y, string imName)

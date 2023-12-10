@@ -8,12 +8,10 @@
 
 //#define DEBUG_TILE_COORDS
 //#define DEBUG_CENTER
-//#define DEBUG_RENDER
 
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using GKMap.MapObjects;
 using GKMap.MapProviders;
 using SkiaSharp;
@@ -35,13 +33,7 @@ namespace GKMap.Xamarin
     /// </summary>   
     public class GMapControl : SKCanvasView, IMapControl
     {
-        public static readonly bool IsDesignerHosted = LicenseManager.UsageMode == LicenseUsageMode.Designtime;
-
-        //private SKBitmap fBackBuffer;
         private MapCore fCore;
-        //private Cursor fCursorBefore = Cursors.Default;
-        private bool fForceDoubleBuffer;
-        //private SKCanvas fGxOff;
         private bool fIsMouseOverMarker;
         private bool fIsMouseOverPolygon;
         private bool fIsMouseOverRoute;
@@ -52,12 +44,11 @@ namespace GKMap.Xamarin
         private readonly SKPaint EmptyTileBrush = new SKPaint() { Color = SKColors.Navy, Style = SKPaintStyle.Fill };
         private readonly string EmptyTileText = "We are sorry, but we don't\nhave imagery at this zoom\nlevel for this region.";
         private readonly SKPaint MissingDataFont = new SKPaint(new SKFont(SKTypeface.FromFamilyName("Sans"), 11) { Embolden = true }) { Color = SKColors.Red };
-        //private readonly SKFont ScaleFont = new SKFont(FontFamilies.SansFamilyName, 5, FontStyle.Italic);
         //private readonly ImageAttributes TileFlipXYAttributes = new ImageAttributes();
 
-#if DEBUG_CENTER || DEBUG_RENDER
-        private readonly Pen CenterPen = new Pen(Brushes.Red, 1);
-        private readonly Pen ScalePen = new Pen(Brushes.Blue, 1);
+#if DEBUG_CENTER
+        private readonly SKPaint CenterPen = new SKPaint() { Color = SKColors.Red, StrokeWidth = 1, Style = SKPaintStyle.Stroke };
+        private readonly SKPaint ScalePen = new SKPaint() { Color = SKColors.Blue, StrokeWidth = 1, Style = SKPaintStyle.Stroke };
 #endif
 
         #region Properties
@@ -65,21 +56,13 @@ namespace GKMap.Xamarin
         /// <summary>
         /// location of cache
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public string CacheLocation
         {
             get {
-#if !DESIGN
                 return GMaps.CacheLocation;
-#else
-                return string.Empty;
-#endif
             }
             set {
-#if !DESIGN
                 GMaps.CacheLocation = value;
-#endif
             }
         }
 
@@ -108,8 +91,6 @@ namespace GKMap.Xamarin
         /// <summary>
         /// is mouse over marker
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public bool IsMouseOverMarker
         {
             get {
@@ -124,8 +105,6 @@ namespace GKMap.Xamarin
         /// <summary>
         /// is mouse over polygon
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public bool IsMouseOverPolygon
         {
             get {
@@ -140,8 +119,6 @@ namespace GKMap.Xamarin
         /// <summary>
         /// is mouse over route
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public bool IsMouseOverRoute
         {
             get {
@@ -153,8 +130,6 @@ namespace GKMap.Xamarin
             }
         }
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public GMapProvider MapProvider
         {
             get {
@@ -186,10 +161,8 @@ namespace GKMap.Xamarin
         }
 
         /// <summary>
-        /// max zoom
-        /// </summary>         
-        [Category("GKMap")]
-        [Description("maximum zoom level of map")]
+        /// maximum zoom level of map
+        /// </summary>
         public int MaxZoom
         {
             get {
@@ -201,10 +174,8 @@ namespace GKMap.Xamarin
         }
 
         /// <summary>
-        /// min zoom
-        /// </summary>      
-        [Category("GKMap")]
-        [Description("minimum zoom level of map")]
+        /// minimum zoom level of map
+        /// </summary>
         public int MinZoom
         {
             get {
@@ -223,8 +194,6 @@ namespace GKMap.Xamarin
         /// <summary>
         /// current map center position
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Browsable(false)]
         public PointLatLng Position
         {
             get {
@@ -239,7 +208,6 @@ namespace GKMap.Xamarin
             }
         }
 
-        [Category("GKMap"), DefaultValue(0)]
         public int Zoom
         {
             get {
@@ -247,15 +215,7 @@ namespace GKMap.Xamarin
             }
             set {
                 if (fCore.Zoom != value) {
-                    Debug.WriteLine("ZoomPropertyChanged: " + fCore.Zoom + " -> " + value);
-
-                    if (value > MaxZoom) {
-                        fCore.Zoom = MaxZoom;
-                    } else if (value < MinZoom) {
-                        fCore.Zoom = MinZoom;
-                    } else {
-                        fCore.Zoom = value;
-                    }
+                    fCore.Zoom = value;
 
                     if (fCore.IsStarted && !fCore.IsDragging) {
                         fCore.ForceUpdateOverlays();
@@ -278,45 +238,6 @@ namespace GKMap.Xamarin
             }
             remove {
                 fCore.OnCurrentPositionChanged -= value;
-            }
-        }
-
-        /// <summary>
-        /// occurs when tile set load is complete
-        /// </summary>
-        public event TileLoadComplete OnTileLoadComplete
-        {
-            add {
-                fCore.OnTileLoadComplete += value;
-            }
-            remove {
-                fCore.OnTileLoadComplete -= value;
-            }
-        }
-
-        /// <summary>
-        /// occurs when tile set is starting to load
-        /// </summary>
-        public event TileLoadStart OnTileLoadStart
-        {
-            add {
-                fCore.OnTileLoadStart += value;
-            }
-            remove {
-                fCore.OnTileLoadStart -= value;
-            }
-        }
-
-        /// <summary>
-        /// occurs on map drag
-        /// </summary>
-        public event MapDrag OnMapDrag
-        {
-            add {
-                fCore.OnMapDrag += value;
-            }
-            remove {
-                fCore.OnMapDrag -= value;
             }
         }
 
@@ -459,19 +380,13 @@ namespace GKMap.Xamarin
 
         static GMapControl()
         {
-            if (!IsDesignerHosted) {
-                GMaps.Initialize(GMapImageProxy.Instance);
-            }
+            GMaps.Initialize(GMapImageProxy.Instance);
         }
 
-#if !DESIGN
-        /// <summary>
-        /// constructor
-        /// </summary>
         public GMapControl()
         {
-            SizeChanged += OnSizeChanged;
             EnableTouchEvents = true;
+            SizeChanged += OnSizeChanged;
 
             fCore = new MapCore(this);
 
@@ -482,25 +397,11 @@ namespace GKMap.Xamarin
             MinZoom = 2;
             Zoom = 0;
 
-            if (!IsDesignerHosted) {
-                //SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-                //SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-                //SetStyle(ControlStyles.UserPaint, true);
-                //SetStyle(ControlStyles.Opaque, true);
-                //ResizeRedraw = true;
-                //TileFlipXYAttributes.SetWrapMode(WrapMode.TileFlipXY);
+            //TileFlipXYAttributes.SetWrapMode(WrapMode.TileFlipXY);
+            Overlays.CollectionChanged += Overlays_CollectionChanged;
 
-                //CenterFormat.Alignment = StringAlignment.Center;
-                //CenterFormat.LineAlignment = StringAlignment.Center;
-
-                //BottomFormat.Alignment = StringAlignment.Center;
-                //BottomFormat.LineAlignment = StringAlignment.Far;
-
-                Overlays.CollectionChanged += Overlays_CollectionChanged;
-            }
+            OnLoad(null);
         }
-
-#endif
 
         /*protected override void Dispose(bool disposing)
         {
@@ -519,13 +420,11 @@ namespace GKMap.Xamarin
                 ScalePen.Dispose();
 #endif
 
-                ScaleFont.Dispose();
                 //CenterFormat.Dispose();
                 //BottomFormat.Dispose();
                 CopyrightFont.Dispose();
                 EmptyTileBorders.Dispose();
                 EmptyTileBrush.Dispose();
-                ClearBackBuffer();
             }
             base.Dispose(disposing);
         }*/
@@ -581,10 +480,8 @@ namespace GKMap.Xamarin
             }
 
             base.InvalidateSurface();
-            //base.Refresh();
         }
 
-#if !DESIGN
         /// <summary>
         /// enqueue built-in thread safe invalidation
         /// </summary>
@@ -594,7 +491,6 @@ namespace GKMap.Xamarin
                 fCore.RefreshEvent.Set();
             }
         }
-#endif
 
         /// <summary>
         /// sets to max zoom to fit all markers and centers them in map
@@ -633,18 +529,8 @@ namespace GKMap.Xamarin
         public SKBitmap ToImage()
         {
             SKBitmap ret = null;
-
-            //bool r = fForceDoubleBuffer;
             try {
-                /*UpdateBackBuffer();
-
-                if (!r) {
-                    fForceDoubleBuffer = true;
-                }*/
-
                 Refresh();
-                //Application.DoEvents();
-
                 /*using (MemoryStream ms = new MemoryStream()) {
                     using (var frame = (fBackBuffer.Clone() as SKBitmap)) {
                         frame.Save(ms, ImageFormat.Png);
@@ -654,10 +540,6 @@ namespace GKMap.Xamarin
             } catch (Exception) {
                 throw;
             } finally {
-                /*if (!r) {
-                    fForceDoubleBuffer = false;
-                    ClearBackBuffer();
-                }*/
             }
             return ret;
         }
@@ -669,29 +551,24 @@ namespace GKMap.Xamarin
         /// <param name="y"></param>
         public void Offset(int x, int y)
         {
-            /*if (IsHandleCreated)*/ {
-                fCore.DragOffset(new GPoint(x, y));
-            }
+            fCore.DragOffset(new GPoint(x, y));
         }
 
         #region UserControl Events
 
-        /*protected override void OnLoad(EventArgs e)
+        protected /*override*/ void OnLoad(EventArgs e)
         {
-            base.OnLoad(e);
+            //base.OnLoad(e);
 
-            if (!IsDesignerHosted) {
-                fCore.ResetZoomToFitRect();
-                fCore.OnMapOpen().ProgressChanged += invalidatorEngage;
-                fCore.ForceUpdateOverlays();
-            }
-        }*/
+            fCore.ResetZoomToFitRect();
+            fCore.OnMapOpen().ProgressChanged += invalidatorEngage;
+            fCore.ForceUpdateOverlays();
+        }
 
         /*protected override void OnCreateControl()
         {
             base.OnCreateControl();
 
-            if (!IsDesignerHosted) {
                 var f = ParentForm;
                 if (f != null) {
                     while (f.ParentForm != null) {
@@ -700,80 +577,39 @@ namespace GKMap.Xamarin
 
                     f.FormClosing += ParentForm_FormClosing;
                 }
-            }
         }*/
-
-#if DEBUG_RENDER
-        private int fCounter;
-        private readonly Font fDebugFont = new Font(FontFamilies.SansFamilyName, 12, FontStyle.None);
-        private DateTime fStart;
-        private DateTime fEnd;
-        private int fDelta;
-#endif
 
         protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
         {
-#if DEBUG_RENDER
-            fStart = DateTime.Now;
-#endif
+            SKCanvas g = e.Surface.Canvas;
 
-            /*if (fForceDoubleBuffer) {
-                if (fGxOff != null) {
-                    DrawGraphics(fGxOff);
-                    e.Graphics.DrawImage(fBackBuffer, 0, 0);
-                }
-            } else */{
-                DrawGraphics(e.Surface.Canvas);
-            }
-
-#if DEBUG_RENDER
-            fEnd = DateTime.Now;
-            fDelta = (int)(fEnd - fStart).TotalMilliseconds;
-#endif
-        }
-
-        private void DrawGraphics(SKCanvas g)
-        {
             // render white background
             g.Clear(EmptyMapBackground);
-
             g.Save();
-
             g.Translate(fCore.RenderOffset.X, fCore.RenderOffset.Y);
-            fCore.DrawMap(g);
-            OnPaintOverlays(g);
-        }
 
-        /// <summary>
-        /// override, to render something more
-        /// </summary>
-        /// <param name="g"></param>
-        protected virtual void OnPaintOverlays(SKCanvas g)
-        {
-            //g.AntiAlias = true;
-            //g.SmoothingMode = SmoothingMode.HighQuality;
+            fCore.DrawMap(g);
+
             foreach (GMapOverlay o in Overlays) {
                 if (o.IsVisible) {
                     o.OnRender(g);
                 }
             }
 
-            // center in virtual space...
 #if DEBUG_CENTER
-            g.DrawLine(ScalePen, -20, 0, 20, 0);
-            g.DrawLine(ScalePen, 0, -20, 0, 20);
-            g.DrawString("debug: virtual space center", CopyrightFont, Brushes.Blue, 2, CopyrightFont.Height);
+            // center in virtual space...
+            g.DrawLine(-20, 0, 20, 0, ScalePen);
+            g.DrawLine(0, -20, 0, 20, ScalePen);
 #endif
 
             g.Restore();
 
-#if DEBUG_RENDER
+#if DEBUG_CENTER
             // show center
-            g.DrawLine(CenterPen, Width / 2 - 5, Height / 2, Width / 2 + 5, Height / 2);
-            g.DrawLine(CenterPen, Width / 2, Height / 2 - 5, Width / 2, Height / 2 + 5);
-
-            // debug info
-            g.DrawString(string.Format("{0:0.0}", Zoom) + "z, " + MapProvider + ", refresh: " + fCounter++ + ", render: " + fDelta + "ms", fDebugFont, Brushes.Blue, fDebugFont.Height, fDebugFont.Height + 20);
+            float hw = (float)Width / 2;
+            float hh = (float)Height / 2;
+            g.DrawLine(hw - 5, hh, hw + 5, hh, CenterPen);
+            g.DrawLine(hw, hh - 5, hw, hh + 5, CenterPen);
 #endif
         }
 
@@ -789,50 +625,85 @@ namespace GKMap.Xamarin
                 return;
             }
 
-            if (!IsDesignerHosted) {
-                if (fForceDoubleBuffer) {
-                    //UpdateBackBuffer();
-                }
-
-                fCore.OnMapSizeChanged((int)CanvasSize.Width, (int)CanvasSize.Height);
-
-                if (IsVisible /*&& IsHandleCreated*/ && fCore.IsStarted) {
-                    fCore.ForceUpdateOverlays();
-                }
+            fCore.OnMapSizeChanged((int)Width, (int)Height);
+            if (IsVisible && fCore.IsStarted) {
+                fCore.ForceUpdateOverlays();
             }
         }
 
         protected override void OnTouch(SKTouchEventArgs e)
         {
+            base.OnTouch(e);
 
+            //Point mpt = new Point(e.Location.X, e.Location.Y);
+            //SKPoint mpt = e.Location.ToPoint();
+            var gpt = new GPoint((long)e.Location.X, (long)e.Location.Y);
+
+            switch (e.ActionType) {
+                case SKTouchAction.Pressed: {
+                        if (!IsMouseOverMarker && e.MouseButton == SKMouseButton.Left) {
+                            fCore.MouseDown = gpt;
+                            Invalidate();
+                        }
+                    }
+                    break;
+
+                case SKTouchAction.Released:
+                case SKTouchAction.Cancelled: {
+                        if (fCore.IsDragging) {
+                            fCore.EndDrag();
+                        } else {
+                            if (e.MouseButton == SKMouseButton.Left) {
+                                fCore.MouseDown = GPoint.Empty;
+                            }
+                            Invalidate();
+                        }
+                    }
+                    break;
+
+                case SKTouchAction.Moved: {
+                        if (!fCore.IsDragging && !fCore.MouseDown.IsEmpty) {
+                            // Gets the width and height of a rectangle centered on the point the mouse
+                            // button was pressed, within which a drag operation will not begin.
+
+                            // FIXME
+                            var dragSize = new SKSize(8, 8); //SystemInformation.DragSize;
+
+                            if (Math.Abs(gpt.X - fCore.MouseDown.X) * 2 >= dragSize.Width || Math.Abs(gpt.Y - fCore.MouseDown.Y) * 2 >= dragSize.Height) {
+                                fCore.BeginDrag(fCore.MouseDown);
+                            }
+                        }
+
+                        if (fCore.IsDragging) {
+                            fCore.Drag(gpt.X, gpt.Y);
+                            base.InvalidateSurface();
+                        } else {
+                            if (fCore.MouseDown.IsEmpty) {
+                                fCore.ProcessOverlaysMouseMove((int)gpt.X, (int)gpt.Y);
+                            }
+                        }
+                    }
+                    break;
+
+                case SKTouchAction.WheelChanged: {
+                        fCore.ProcessMouseWheel((int)gpt.X, (int)gpt.Y, (int)e.WheelDelta);
+                    }
+                    break;
+
+                case SKTouchAction.Entered: {
+                        Focus();
+                        fCore.MouseIn = true;
+                    }
+                    break;
+
+                case SKTouchAction.Exited: {
+                        fCore.MouseIn = false;
+                    }
+                    break;
+            }
+
+            e.Handled = true;
         }
-
-        /*protected override void OnMouseDown(MouseEventArgs e)
-        {
-            base.OnMouseDown(e);
-
-            SKPoint mpt = e.Location.ToPoint();
-            if (!IsMouseOverMarker && e.Buttons == MouseButtons.Primary) {
-                fCore.MouseDown = new GPoint(mpt.X, mpt.Y);
-                Invalidate();
-            }
-        }*/
-
-        /*protected override void OnMouseUp(MouseEventArgs e)
-        {
-            base.OnMouseUp(e);
-
-            if (fCore.IsDragging) {
-                RestoreCursor();
-                fCore.EndDrag();
-            } else {
-                if (e.Buttons == MouseButtons.Primary) {
-                    fCore.MouseDown = GPoint.Empty;
-                }
-
-                Invalidate();
-            }
-        }*/
 
         // FIXME
         /*protected override void OnMouseClick(MouseEventArgs e)
@@ -851,59 +722,6 @@ namespace GKMap.Xamarin
             fCore.ProcessMouseDoubleClick(mpt.X, mpt.Y, e);
         }*/
 
-        /*protected override void OnMouseMove(MouseEventArgs e)
-        {
-            base.OnMouseMove(e);
-
-            SKPoint mpt = e.Location.ToPoint();
-
-            if (!fCore.IsDragging && !fCore.MouseDown.IsEmpty) {
-                // Gets the width and height of a rectangle centered on the point the mouse
-                // button was pressed, within which a drag operation will not begin.
-
-                // FIXME
-                var dragSize = new SKSize(8, 8); //SystemInformation.DragSize;
-
-                if (Math.Abs(mpt.X - fCore.MouseDown.X) * 2 >= dragSize.Width || Math.Abs(mpt.Y - fCore.MouseDown.Y) * 2 >= dragSize.Height) {
-                    fCore.BeginDrag(fCore.MouseDown);
-                }
-            }
-
-            if (fCore.IsDragging) {
-                SetCursorDrag();
-                fCore.MouseCurrent = new GPoint(mpt.X, mpt.Y);
-                fCore.Drag(fCore.MouseCurrent);
-                base.InvalidateSurface();
-            } else {
-                if (fCore.MouseDown.IsEmpty) {
-                    fCore.ProcessOverlaysMouseMove(mpt.X, mpt.Y);
-                }
-            }
-        }*/
-
-        /*protected override void OnMouseEnter(MouseEventArgs e)
-        {
-            base.OnMouseEnter(e);
-
-            Focus();
-            fCore.MouseIn = true;
-        }*/
-
-        /*protected override void OnMouseLeave(MouseEventArgs e)
-        {
-            base.OnMouseLeave(e);
-
-            fCore.MouseIn = false;
-        }*/
-
-        /*protected override void OnMouseWheel(MouseEventArgs e)
-        {
-            base.OnMouseWheel(e);
-
-            SKPoint mpt = e.Location.ToPoint();
-            fCore.ProcessMouseWheel(mpt.X, mpt.Y, (int)e.Delta.Height);
-        }*/
-
         #endregion
 
         #region Core callbacks and aux private methods
@@ -913,26 +731,6 @@ namespace GKMap.Xamarin
         {
             if (e.CloseReason == CloseReason.WindowsShutDown || e.CloseReason == CloseReason.TaskManagerClosing) {
                 GMaps.Instance.CancelTileCaching();
-            }
-        }*/
-
-        /*private void UpdateBackBuffer()
-        {
-            ClearBackBuffer();
-
-            //fBackBuffer = new SKBitmap(Width, Height, PixelFormat.Format32bppRgb);
-            //fGxOff = new Graphics(fBackBuffer);
-        }
-
-        private void ClearBackBuffer()
-        {
-            if (fBackBuffer != null) {
-                fBackBuffer.Dispose();
-                fBackBuffer = null;
-            }
-            if (fGxOff != null) {
-                fGxOff.Dispose();
-                fGxOff = null;
             }
         }*/
 
@@ -966,13 +764,13 @@ namespace GKMap.Xamarin
 
                 if (!img.IsParent) {
                     SKRect dst = SKRect.Create(fCore.TileRect.X, fCore.TileRect.Y, fCore.TileRect.Width, fCore.TileRect.Height);
-                    g.DrawBitmap(img.Img, dst);
+                    g.DrawImage(img.Img, dst);
                 } else {
                     float wix = ((float)img.Img.Width / img.Ix);
                     float hix = ((float)img.Img.Height / img.Ix);
                     SKRect srcRect = SKRect.Create(img.Xoff * wix, img.Yoff * hix, wix, hix);
                     SKRect dst = SKRect.Create(fCore.TileRect.X, fCore.TileRect.Y, fCore.TileRect.Width, fCore.TileRect.Height);
-                    g.DrawBitmap(img.Img, srcRect, dst);
+                    g.DrawImage(img.Img, srcRect, dst);
                 }
             }
         }
@@ -990,7 +788,7 @@ namespace GKMap.Xamarin
                 SKRect dst = SKRect.Create((int)fCore.TileRect.X, (int)fCore.TileRect.Y,
                     (int)fCore.TileRect.Width, (int)fCore.TileRect.Height);
 
-                g.DrawBitmap(img.Img, srcRect, dst);
+                g.DrawImage(img.Img, srcRect, dst);
             }
         }
 
@@ -1010,16 +808,10 @@ namespace GKMap.Xamarin
         void IMapControl.ShowTileGridLines(object go, DrawTile tilePoint)
         {
 #if DEBUG_TILE_COORDS
-            Graphics g = (Graphics)go;
-
+            SKCanvas g = (SKCanvas)go;
             // show tile grid lines
-            g.DrawRectangle(EmptyTileBorders, (int)fCore.TileRect.X, (int)fCore.TileRect.Y,
-                (int)fCore.TileRect.Width, (int)fCore.TileRect.Height);
-            g.DrawString(
-                (tilePoint.PosXY == fCore.CenterTileXYLocation ? "CENTER: " : "TILE: ") + tilePoint,
-                MissingDataFont, Brushes.DimGray,
-                new RectangleF(fCore.TileRect.X, fCore.TileRect.Y, fCore.TileRect.Width, fCore.TileRect.Height),
-                CenterFormat);
+            g.DrawRect((int)fCore.TileRect.X, (int)fCore.TileRect.Y, (int)fCore.TileRect.Width, (int)fCore.TileRect.Height, EmptyTileBorders);
+            g.DrawText((tilePoint.PosXY == fCore.CenterTileXYLocation ? "CENTER: " : "TILE: ") + tilePoint, fCore.TileRect.X, fCore.TileRect.Y, MissingDataFont);
 #endif
         }
 
@@ -1057,44 +849,23 @@ namespace GKMap.Xamarin
             }*/
         }
 
-        private void SetCursorHand()
-        {
-            //fCursorBefore = Cursor;
-            //Cursor = Cursors.Pointer;
-        }
-
-        private void SetCursorDrag()
-        {
-            //fCursorBefore = Cursor;
-            //Cursor = Cursors.Move;
-        }
-
-        private void RestoreCursor()
-        {
-            //Cursor = Cursors.Arrow;
-            //fCursorBefore = null;
-        }
-
         void IMapControl.RestoreCursorOnLeave()
         {
-            /*if (fOverObjectCount <= 0 && fCursorBefore != null) {
+            if (fOverObjectCount <= 0) {
                 fOverObjectCount = 0;
-                RestoreCursor();
-            }*/
+            }
         }
 
         void IMapControl.SetCursorHandOnEnter()
         {
-            /*if (fOverObjectCount <= 0 && Cursor != Cursors.Pointer) {
+            if (fOverObjectCount <= 0) {
                 fOverObjectCount = 0;
-                SetCursorHand();
-            }*/
+            }
         }
 
         void IMapControl.SetMousePositionToMapCenter()
         {
-            //SKPoint p = PointToScreen(new SKPoint(Width / 2, Height / 2));
-            //Mouse.Position = p;
+            // not used
         }
 
         #endregion

@@ -52,12 +52,12 @@ namespace GKTests.Stubs
             return Substitute.For<IImage>();
         }
 
-        public IImage LoadResourceImage(Type baseType, string resName)
+        public IImage LoadResourceImage(Type baseType, string resName, ImageTarget target)
         {
             return Substitute.For<IImage>();
         }
 
-        public IImage LoadResourceImage(string resName, bool makeTransp)
+        public IImage LoadResourceImage(string resName, ImageTarget target, bool makeTransp)
         {
             return Substitute.For<IImage>();
         }
@@ -126,6 +126,11 @@ namespace GKTests.Stubs
         public string GetDefaultFontName()
         {
             return null;
+        }
+
+        public float GetDefaultFontSize()
+        {
+            return 8.0f;
         }
     }
 }

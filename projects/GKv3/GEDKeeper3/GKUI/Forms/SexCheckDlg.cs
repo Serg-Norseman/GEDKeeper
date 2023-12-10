@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
@@ -93,16 +92,6 @@ namespace GKUI.Forms
                         break;
                 }
             }
-        }
-
-        private void btnAccept_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Ok;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
         }
     }
 }

@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Design;
@@ -45,8 +46,8 @@ namespace GKCore.Interfaces
 
         bool IsUnknown();
         void Clear();
-        bool FileLoad(string fileName, bool showProgress = true);
-        bool FileSave(string fileName);
+        Task<bool> FileLoad(string fileName, bool showProgress = true);
+        Task<bool> FileSave(string fileName);
         void SetFileName(string fileName);
         void CriticalSave();
 
@@ -54,7 +55,7 @@ namespace GKCore.Interfaces
         GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evSign, string evDate, string evPlace);
         GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evSign, GDMCustomDate evDate, string evPlace);
         GDMIndividualRecord CreatePersonEx(string iName, string iPatronymic, string iSurname, GDMSex iSex, bool birthEvent);
-        bool DeleteRecord(GDMRecord record);
+        Task<bool> DeleteRecord(GDMRecord record);
         bool IsRecordAccess(GDMRestriction restriction);
 
         // Individual utils
@@ -112,19 +113,17 @@ namespace GKCore.Interfaces
         GDMSourceRecord FindSource(string sourceName);
         void GetSourcesList(StringList sources);
 
-        string DefinePatronymic(IView owner, string name, GDMSex sex, bool confirm);
-        GDMSex DefineSex(IView owner, string iName, string iPatr);
-        void CheckPersonSex(IView owner, GDMIndividualRecord iRec);
+        Task<string> DefinePatronymic(IView owner, string name, GDMSex sex, bool confirm);
+        Task<GDMSex> DefineSex(IView owner, string iName, string iPatr);
+        Task CheckPersonSex(IView owner, GDMIndividualRecord iRec);
 
-        GDMFamilyRecord SelectFamily(IView owner, GDMIndividualRecord target, TargetMode targetMode = TargetMode.tmFamilyChild);
-        GDMIndividualRecord SelectPerson(IView owner, GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex);
-        GDMRecord SelectRecord(IView owner, GDMRecordType mode, params object[] args);
-        GDMFamilyRecord GetChildFamily(GDMIndividualRecord iChild,
-                                          bool canCreate,
-                                          GDMIndividualRecord newParent);
+        Task<GDMFamilyRecord> SelectFamily(IView owner, GDMIndividualRecord target, TargetMode targetMode = TargetMode.tmFamilyChild);
+        Task<GDMIndividualRecord> SelectPerson(IView owner, GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex);
+        Task<GDMRecord> SelectRecord(IView owner, GDMRecordType mode, params object[] args);
+        Task<GDMFamilyRecord> GetChildFamily(GDMIndividualRecord iChild, bool canCreate, GDMIndividualRecord newParent);
         GDMFamilyRecord AddFamilyForSpouse(GDMIndividualRecord spouse);
-        GDMIndividualRecord AddChildForParent(IView owner, GDMIndividualRecord parent, GDMSex needSex);
-        GDMIndividualRecord SelectSpouseFor(IView owner, GDMIndividualRecord iRec);
+        Task<GDMIndividualRecord> AddChildForParent(IView owner, GDMIndividualRecord parent, GDMSex needSex);
+        Task<GDMIndividualRecord> SelectSpouseFor(IView owner, GDMIndividualRecord iRec);
 
         void ProcessFamily(GDMFamilyRecord famRec);
         void ProcessIndividual(GDMIndividualRecord indiRec);

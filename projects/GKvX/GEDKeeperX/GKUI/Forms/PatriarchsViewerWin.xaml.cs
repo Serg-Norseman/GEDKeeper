@@ -35,7 +35,6 @@ namespace GKUI.Forms
     {
         private readonly IBaseWindow fBase;
         private readonly int fMinGens;
-        private bool fTipShow;
 
         public IWindow OwnerWindow
         {
@@ -48,8 +47,6 @@ namespace GKUI.Forms
 
             fBase = baseWin;
             fMinGens = minGens;
-
-            fTipShow = false;
 
             Appearing += Form_Load;
 
@@ -87,8 +84,7 @@ namespace GKUI.Forms
 
         private void Form_Load(object sender, EventArgs e)
         {
-            //LoadGraph();
-            ArborSystem.CreateSample(arborViewer.Sys.Graph);
+            LoadGraph();
             arborViewer.Start();
         }
 
@@ -97,14 +93,7 @@ namespace GKUI.Forms
             /*Point mpt = new Point(e.Location);
             ArborNode resNode = fArborViewer.getNodeByCoord(mpt.X, mpt.Y);
 
-            if (resNode == null) {
-                if (fTipShow) {
-                    //fTip.Hide(arborViewer1);
-                    fArborViewer.ToolTip = string.Empty;
-                    fTipShow = false;
-                }
-            } else {
-                if (!fTipShow) {
+            if (resNode != null) {
                     string xref = resNode.Sign;
                     GEDCOMFamilyRecord famRec = fBase.Context.Tree.XRefIndex_Find(xref) as GEDCOMFamilyRecord;
                     string txt = GKUtils.GetFamilyString(famRec) + " [" + xref + "] "; //  + resNode.Mass.ToString()
@@ -112,7 +101,6 @@ namespace GKUI.Forms
                     //fTip.Show(txt, arborViewer1, mpt.X + 24, mpt.Y);
                     fArborViewer.ToolTip = txt;
                     fTipShow = true;
-                }
             }*/
         }
     }

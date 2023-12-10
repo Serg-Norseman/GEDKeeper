@@ -18,8 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GKCore;
 using GKCore.Design.Controls;
+using GKUI.Components;
 using Xamarin.Forms;
 
 namespace GKUI.Platform
@@ -41,8 +43,8 @@ namespace GKUI.Platform
 
         public string[] Lines
         {
-            get { /*return UIHelper.Convert(Control.Text);*/ return null; }
-            set { } // TODO
+            get { return UIHelper.Convert(Control.Text); }
+            set { Control.Text = UIHelper.Convert(value); }
         }
 
         public bool ReadOnly
@@ -56,7 +58,7 @@ namespace GKUI.Platform
 
         public string SelectedText
         {
-            get { return /*Control.SelectedText*/ null; }
+            get { return /*Control.SelectedText*/ string.Empty; }
             set { /*Control.SelectedText = value;*/ }
         }
 
@@ -68,7 +70,12 @@ namespace GKUI.Platform
 
         public void AppendText(string text)
         {
-            //Control.Append(text, true);
+            string strResult = Control.Text;
+            if (!string.IsNullOrEmpty(strResult)) {
+                strResult += Environment.NewLine;
+            }
+            strResult += text;
+            Control.Text = strResult;
         }
 
         public void Clear()

@@ -79,10 +79,11 @@
 			this.btnAccept.TabIndex = 2;
 			this.btnAccept.Text = "btnAccept";
 			this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// btnCancel
-			// 
-			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnAccept.Click += new System.EventHandler(this.AcceptClickHandler);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.btnCancel.Location = new System.Drawing.Point(381, 117);
 			this.btnCancel.Name = "btnCancel";
@@ -90,10 +91,11 @@
 			this.btnCancel.TabIndex = 3;
 			this.btnCancel.Text = "btnCancel";
 			this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// SexCheckDlg
-			// 
-			this.AcceptButton = this.btnAccept;
+            this.btnCancel.Click += new System.EventHandler(this.CancelClickHandler);
+            // 
+            // SexCheckDlg
+            // 
+            this.AcceptButton = this.btnAccept;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.btnCancel;

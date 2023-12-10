@@ -33,7 +33,7 @@ using GKUI.Platform;
 
 namespace GKUI.Forms
 {
-    public partial class PersonEditDlg : CommonDialog<IStdPersonEditDlg, StdPersonEditDlgController>, IStdPersonEditDlg
+    public partial class PersonEditDlg : CommonDialog<IMobPersonEditDlg, MobPersonEditDlgController>, IMobPersonEditDlg
     {
         public GDMIndividualRecord IndividualRecord
         {
@@ -106,11 +106,6 @@ namespace GKUI.Forms
             get { return fParentsList; }
         }
 
-        ISheetList IStdPersonEditDlg.ChildrenList
-        {
-            get { return fChildrenList; }
-        }
-
         IPortraitControl IPersonEditDlg.Portrait
         {
             get { return imgPortrait; }
@@ -146,24 +141,9 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbPatronymic); }
         }
 
-        ITextBox IStdPersonEditDlg.NamePrefix
-        {
-            get { return GetControlHandler<ITextBox>(txtNamePrefix); }
-        }
-
         ITextBox IPersonEditDlg.Nickname
         {
             get { return GetControlHandler<ITextBox>(txtNickname); }
-        }
-
-        ITextBox IStdPersonEditDlg.SurnamePrefix
-        {
-            get { return GetControlHandler<ITextBox>(txtSurnamePrefix); }
-        }
-
-        ITextBox IStdPersonEditDlg.NameSuffix
-        {
-            get { return GetControlHandler<ITextBox>(txtNameSuffix); }
         }
 
         ITextBox IPersonEditDlg.MarriedSurname
@@ -204,7 +184,7 @@ namespace GKUI.Forms
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);
 
-            fController = new StdPersonEditDlgController(this);
+            fController = new MobPersonEditDlgController(this);
             fController.Init(baseWin);
         }
 
@@ -236,7 +216,7 @@ namespace GKUI.Forms
 
         public void SetPortrait(IImage portrait)
         {
-            var img = (portrait == null) ? null : ((XFImageHandler)portrait).Handle;
+            var img = (portrait == null) ? null : ((SKImageHandler)portrait).Handle;
             imgPortrait.Image = img;
         }
 
@@ -301,13 +281,6 @@ namespace GKUI.Forms
         {
             var record = e.Item as GDMRecord;
             e.IsAvailable = record == null || fController.Base.Context.IsAvailableRecord(record);
-        }
-
-        private void ModifyChildrenSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMIndividualRecord);
-            }
         }
 
         private void Names_TextChanged(object sender, EventArgs e)

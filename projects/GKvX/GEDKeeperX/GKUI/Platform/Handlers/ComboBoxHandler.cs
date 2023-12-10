@@ -20,36 +20,24 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
 using BSLib;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKUI.Components;
-using Xamarin.Forms;
 
 namespace GKUI.Platform
 {
     public sealed class PickerHandler : BaseControlHandler<GKComboBox, PickerHandler>, IComboBox
     {
-        private readonly IList fItems;
-
-        public PickerHandler(GKComboBox control) : base(control)
-        {
-            fItems = new ObservableCollection<IComboItem>();
-            control.ItemsSource = fItems;
-        }
-
         public IList Items
         {
-            get { return fItems; }
+            get { return Control.Items; }
         }
 
         public bool ReadOnly
         {
-            get { return true; }
-            set { /*Control.ReadOnly = value;*/ }
+            get { return Control.ReadOnly; }
+            set { Control.ReadOnly = value; }
         }
 
         public int SelectedIndex
@@ -74,70 +62,49 @@ namespace GKUI.Platform
             }
         }
 
-        /*public object SelectedTag
-        {
-            get {
-                return ((GKComboItem)Control.SelectedItem).Tag;
-            }
-            set {
-                var ctl = Control;
-                foreach (object item in ctl.Items) {
-                    GKComboItem comboItem = (GKComboItem)item;
-                    if (comboItem.Tag == value) {
-                        ctl.SelectedItem = item;
-                        return;
-                    }
-                }
-                ctl.SelectedIndex = 0;
-            }
-        }*/
-
         public string Text
         {
-            get { return /*Control.Text*/string.Empty; }
-            set { /*Control.Text = value;*/ }
+            get { return Control.Text; }
+            set { Control.Text = value; }
+        }
+
+        public PickerHandler(GKComboBox control) : base(control)
+        {
         }
 
         public void Add(object item)
         {
-            AddItem<object>(item.ToString(), null);
+            Control.Add(item);
         }
 
         public void AddItem<T>(string caption, T tag, IImage image = null)
         {
-            fItems.Add(new GKComboItem<T>(caption, tag, image));
+            Control.AddItem(caption, tag, image);
         }
 
         public void AddRange(IEnumerable<object> items, bool sorted = false)
         {
-            //Control.Sorted = false;
-            //Control.Items.AddRange(GKComboItem.Convert((string[])items));
-            foreach (var itm in items) {
-                fItems.Add(new GKComboItem<object>(itm.ToString(), null));
-            }
-            //Control.Sorted = sorted;
+            Control.AddRange(items, sorted);
         }
 
         public void AddStrings(StringList strings)
         {
-            for (int i = 0, num = strings.Count; i < num; i++) {
-                fItems.Add(new GKComboItem<object>(strings[i], strings.GetObject(i)));
-            }
+            Control.AddStrings(strings);
         }
 
         public void BeginUpdate()
         {
-            Control.ItemsSource = null;
+            Control.BeginUpdate();
         }
 
         public void Clear()
         {
-            fItems.Clear();
+            Control.Clear();
         }
 
         public void EndUpdate()
         {
-            Control.ItemsSource = fItems;
+            Control.EndUpdate();
         }
 
         public void Sort()
@@ -153,7 +120,7 @@ namespace GKUI.Platform
 
         public void SetSelectedTag<T>(T tagValue, bool allowDefault = true)
         {
-            foreach (object item in fItems) {
+            foreach (object item in Control.Items) {
                 var comboItem = item as ComboItem<T>;
 
                 if (comboItem != null && Equals(comboItem.Tag, tagValue)) {
@@ -167,158 +134,4 @@ namespace GKUI.Platform
             }
         }
     }
-
-
-    /*public sealed class ComboBoxHandler : BaseControlHandler<GKComboBox, ComboBoxHandler>, IComboBox
-    {
-        private readonly ObservableCollection<IComboItem> fItems;
-        private readonly List<string> fStrItems;
-
-        public IList Items
-        {
-            get { return fItems; }
-        }
-
-        public bool ReadOnly
-        {
-            get { return Control.IsReadOnly; }
-            set { Control.IsReadOnly = value; }
-        }
-
-        public int SelectedIndex
-        {
-            get { return Control.SelectedIndex; }
-            set { Control.SelectedIndex = value; }
-        }
-
-        public object SelectedItem
-        {
-            get {
-                var item = fItems.FirstOrDefault(x => x.Text == Control.Text);
-                return item;
-            }
-            set {
-                var item = value as IComboItem;
-                Control.Text = (item == null) ? string.Empty : item.Text;
-            }
-        }
-
-        public bool Sorted
-        {
-            get { return false; }
-            set {
-                if (value) {
-                    Sort();
-                }
-            }
-        }
-
-        /*public object SelectedTag
-        {
-            get {
-                return ((GKComboItem)Control.SelectedItem).Tag;
-            }
-            set {
-                var ctl = Control;
-                foreach (object item in ctl.Items) {
-                    GKComboItem comboItem = (GKComboItem)item;
-                    if (comboItem.Tag == value) {
-                        ctl.SelectedItem = item;
-                        return;
-                    }
-                }
-                ctl.SelectedIndex = 0;
-            }
-        }*/
-
-        /*public string Text
-        {
-            get { return Control.Text; }
-            set { Control.Text = value; }
-        }
-
-        public ComboBoxHandler(GKComboBox control) : base(control)
-        {
-            fItems = new ObservableCollection<IComboItem>();
-            fItems.CollectionChanged += ItemsChanged;
-
-            fStrItems = new List<string>();
-            control.ItemsSource = fStrItems;
-        }
-
-        private void ItemsChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            fStrItems.Clear();
-            foreach (var item in fItems) fStrItems.Add(item.Text);
-        }
-
-        public void Add(object item)
-        {
-            AddItem<object>(item.ToString(), null);
-        }
-
-        public void AddItem<T>(string caption, T tag, IImage image = null)
-        {
-            fItems.Add(new GKComboItem<T>(caption, tag, image));
-        }
-
-        public void AddRange(IEnumerable<object> items, bool sorted = false)
-        {
-            //Control.Sorted = false;
-            //Control.Items.AddRange(GKComboItem.Convert((string[])items));
-            foreach (var itm in items) {
-                fItems.Add(new GKComboItem<object>(itm.ToString(), null));
-            }
-            //Control.Sorted = sorted;
-        }
-
-        public void AddStrings(StringList strings)
-        {
-            for (int i = 0, num = strings.Count; i < num; i++) {
-                fItems.Add(new GKComboItem<object>(strings[i], strings.GetObject(i)));
-            }
-        }
-
-        public void BeginUpdate()
-        {
-            Control.ItemsSource = null;
-        }
-
-        public void Clear()
-        {
-            fItems.Clear();
-        }
-
-        public void EndUpdate()
-        {
-            Control.ItemsSource = fStrItems;
-        }
-
-        public void Sort()
-        {
-            //Control.SortItems();
-        }
-
-        public T GetSelectedTag<T>()
-        {
-            var selectedItem = SelectedItem as ComboItem<T>;
-            return (selectedItem == null) ? default : selectedItem.Tag;
-        }
-
-        public void SetSelectedTag<T>(T tagValue, bool allowDefault = true)
-        {
-            foreach (object item in fItems) {
-                var comboItem = item as ComboItem<T>;
-
-                if (comboItem != null && Equals(comboItem.Tag, tagValue)) {
-                    SelectedItem = item;
-                    return;
-                }
-            }
-
-            if (allowDefault) {
-                Control.SelectedIndex = 0;
-            }
-        }
-    }*/
 }

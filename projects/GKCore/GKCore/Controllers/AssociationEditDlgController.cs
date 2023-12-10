@@ -52,6 +52,7 @@ namespace GKCore.Controllers
         public AssociationEditDlgController(IAssociationEditDlg view) : base(view)
         {
             fView.Relation.AddStrings(GlobalOptions.Instance.Relations);
+            fView.Relation.ReadOnly = false;
         }
 
         public override bool Accept()
@@ -78,9 +79,9 @@ namespace GKCore.Controllers
             fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, false);
         }
 
-        public void SetPerson()
+        public async void SetPerson()
         {
-            fTempPerson = fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
+            fTempPerson = await fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
             fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, false);
         }
 

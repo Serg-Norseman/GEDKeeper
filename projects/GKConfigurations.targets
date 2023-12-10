@@ -39,11 +39,6 @@
     <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" $(Configuration.Contains('Debug')) ">
-  </PropertyGroup>
-  <PropertyGroup Condition=" $(Configuration.Contains('Release')) ">
-  </PropertyGroup>
-
   <PropertyGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">
     <DefineConstants>$(DefineConstants);NET40</DefineConstants>
   </PropertyGroup>

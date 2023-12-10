@@ -106,18 +106,6 @@ namespace GKUI.Forms
         public virtual void SetLocale()
         {
         }
-
-        protected override void OnAppearing()
-        {
-            AppHost.Instance.LoadWindow(this);
-            base.OnAppearing();
-        }
-
-        protected override void OnDisappearing()
-        {
-            AppHost.Instance.CloseWindow(this);
-            base.OnDisappearing();
-        }
     }
 
 
@@ -129,6 +117,14 @@ namespace GKUI.Forms
         where TController : FormController<TView>
     {
         protected TController fController;
+    }
+
+
+    public enum DialogResult
+    {
+        None,
+        Cancel,
+        Ok
     }
 
 
@@ -155,12 +151,6 @@ namespace GKUI.Forms
         {
             fTaskSource = new TaskCompletionSource<bool>();
             fResult = DialogResult.None;
-        }
-
-        public virtual bool ShowModalX(IView owner)
-        {
-            XFAppHost.GetMainPage().Navigation.PushModalAsync(this);
-            return false;//(ShowModal((Control)owner) == DialogResult.Ok);
         }
 
         public override void Close()
@@ -211,10 +201,10 @@ namespace GKUI.Forms
         protected async override void CancelClickHandler(object sender, EventArgs e)
         {
             try {
-                if (fController.CheckChangesPersistence())
+                if (await fController.CheckChangesPersistence())
                     return;
 
-                if (fController.Cancel())
+                if (await fController.Cancel())
                     await Close(DialogResult.Cancel);
             } catch (Exception ex) {
                 Logger.WriteError("CommonDialog<>.CancelClickHandler()", ex);

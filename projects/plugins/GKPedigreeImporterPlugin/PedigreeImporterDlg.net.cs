@@ -128,7 +128,7 @@ namespace GKPedigreeImporterPlugin
             chkSpecial_1.Text = fLangMan.LS(PLS.Special_1);
         }
 
-        private void btnImportFileChoose_Click(object sender, EventArgs e)
+        private async void btnImportFileChoose_Click(object sender, EventArgs e)
         {
             string filter;
 #if !MONO
@@ -137,13 +137,13 @@ namespace GKPedigreeImporterPlugin
             filter = fLangMan.LS(PLS.AllFiltersL);
 #endif
 
-            string fileName = AppHost.StdDialogs.GetOpenFile("", "", filter, 1, "");
+            string fileName = await AppHost.StdDialogs.GetOpenFile("", "", filter, 1, "");
             if (string.IsNullOrEmpty(fileName)) return;
 
             edImportFile.Text = fileName;
 
             try {
-                bool res = fImporter.LoadRawData(edImportFile.Text);
+                bool res = fImporter.LoadFile(edImportFile.Text);
                 if (res) {
                     fAvailableStage++;
 

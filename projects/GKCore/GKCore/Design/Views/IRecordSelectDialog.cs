@@ -32,7 +32,9 @@ namespace GKCore.Design.Views
     {
         GDMRecord ResultRecord { get; set; }
 
-        IComboBox FilterBox { get; }
+        IComboBox FilterCombo { get; }
+        ITextBox FilterText { get; }
+
         IFilterControl FilterCtl { get; }
         IListView RecordsList { get; }
 

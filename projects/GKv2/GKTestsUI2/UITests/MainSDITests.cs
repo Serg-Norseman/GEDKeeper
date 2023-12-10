@@ -25,7 +25,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using BSLib;
 using GDModel;
@@ -56,7 +58,7 @@ namespace GKUI.Forms
         private Form fMainWin;
         private IBaseWindow fCurBase;
 
-        public override void Setup()
+        public override async void Setup()
         {
             TestUtilsUI.InitUITest();
 
@@ -65,7 +67,7 @@ namespace GKUI.Forms
             // prevent LanguageSelectDlg modal dialog from showing on first run
             AppHost.Options.InterfaceLang = LangMan.LS_DEF_CODE;
 
-            appHost.Init(null, false);
+            await appHost.Init(null, false);
 
             var indiCols = GlobalOptions.Instance.IndividualListColumns;
             for (int i = 0; i < indiCols.Count; i++) {
@@ -78,7 +80,8 @@ namespace GKUI.Forms
             GlobalOptions.Instance.AllowMediaStoreReferences = true;
 
             // at complex tests, first form hasn't focus
-            ((Form)AppHost.Instance.RunningForms[0]).Show();
+            var form0 = AppHost.Instance.GetRunningForms<Form>().FirstOrDefault();
+            if (form0 != null) form0.Show();
             fMainWin = (Form)AppHost.Instance.GetActiveWindow();
 
             fCurBase = AppHost.Instance.GetCurrentFile();
@@ -167,7 +170,7 @@ namespace GKUI.Forms
         }
 
         [Test]
-        public void Test_TabsAndLists()
+        public async Task Test_TabsAndLists()
         {
             // calls to the different Editors
             for (GDMRecordType rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
@@ -211,24 +214,19 @@ namespace GKUI.Forms
             Assert.IsTrue(fCurBase.RecordIsFiltered(record));
 
             Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.ShowMedia(null, false); });
-            Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.Context.SelectSpouseFor(null, null); });
             fCurBase.NotifyRecord(null, RecordAction.raAdd);
 
             IList<ISearchResult> search = fCurBase.FindAll("Maria");
             Assert.AreEqual(1, search.Count);
 
-            Assert.AreEqual(null, fCurBase.Context.GetChildFamily(null, false, null));
-            Assert.AreEqual(null, fCurBase.Context.AddChildForParent(null, null, GDMSex.svUnknown));
-            Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.Context.AddFamilyForSpouse(null); });
-
-            Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.Context.CheckPersonSex(null, null); });
+            Assert.AreEqual(null, await fCurBase.Context.GetChildFamily(null, false, null));
 
             fCurBase.NotifyRecord(null, RecordAction.raEdit);
 
             fCurBase.ApplyFilter();
 
             // default lang for tests is English
-            string patr = fCurBase.Context.DefinePatronymic(null, "Ivan", GDMSex.svMale, false);
+            string patr = await fCurBase.Context.DefinePatronymic(null, "Ivan", GDMSex.svMale, false);
             Assert.AreEqual("", patr);
         }
 
@@ -450,21 +448,21 @@ namespace GKUI.Forms
         }
 
         [Test]
-        public void Test_ShowLanguageSelectDlg()
+        public async Task Test_ShowLanguageSelectDlg()
         {
             ModalFormHandler = LanguageSelectDlgTests.LanguageSelectDlg_Accept_Handler;
-            AppHost.Instance.LoadLanguage(0);
+            await AppHost.Instance.LoadLanguage(0);
         }
 
         [Test]
-        public void Test_ShowDayTipsDlg()
+        public async Task Test_ShowDayTipsDlg()
         {
             Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.Context.CollectTips(null); });
             fCurBase.Context.CollectTips(new StringList());
 
             // FIXME: don't show dialog because BirthDays is empty
             //ModalFormHandler = DayTipsDlgTests.CloseModalHandler;
-            AppHost.Instance.ShowTips();
+            await AppHost.Instance.ShowTips();
         }
 
         [Test]

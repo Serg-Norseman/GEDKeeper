@@ -145,24 +145,23 @@ namespace GKUI.Forms
 
         private void DataMap_PaintItem(object sender, PaintItemEventArgs args)
         {
-            var gfx = args.Surface.Canvas;
+            var fDrawFont = new SKPaint(new SKFont(SKTypeface.FromFamilyName("Sans"), 9)) { Color = SKColors.Black };
+            var fBorderPen = new SKPaint() { Color = SKColors.Black, Style = SKPaintStyle.Stroke };
+
+            var gfx = args.Canvas;
             var item = args.Item;
             MapRect bounds = item.Bounds;
             if (bounds.W > 2f && bounds.H > 2f) {
                 var simpleItem = (FragmentSearchController.GroupMapItem)item;
-                var fillColor = new SKColor((uint)simpleItem.Color);
-                var fillPaint = new SKPaint {
-                    Style = SKPaintStyle.Fill,
-                    Color = fillColor
-                };
-                gfx.DrawRect(bounds.X, bounds.Y, bounds.W, bounds.H, fillPaint);
 
-                /*gfx.FillRectangle(new SolidBrush(Color.FromArgb(simpleItem.Color)), bounds.X, bounds.Y, bounds.W, bounds.H);
-                gfx.DrawRectangle(fDataMap.BorderPen, bounds.X, bounds.Y, bounds.W, bounds.H);
+                var skRect = SKRect.Create(bounds.X, bounds.Y, bounds.W, bounds.H);
 
-                var rect = new Rectangle(bounds.X, bounds.Y, bounds.W, bounds.H);
-                //gfx.DrawString(simpleItem.Name, Font, fDataMap.HeaderBrush, rect);
-                gfx.DrawText(fDataMap.DrawFont, new SolidBrush(Colors.Black), rect, simpleItem.Name);*/
+                var fillColor = new SKColor((uint)(simpleItem.Color & 0xffffff));
+                var fillPaint = new SKPaint { Color = fillColor, Style = SKPaintStyle.Fill };
+                gfx.DrawRect(skRect, fillPaint);
+
+                gfx.DrawRect(skRect, fBorderPen);
+                gfx.DrawText(item.Name, bounds.X, bounds.Y, fDrawFont);
             }
         }
 

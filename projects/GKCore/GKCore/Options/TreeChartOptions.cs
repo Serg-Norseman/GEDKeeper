@@ -149,7 +149,7 @@ namespace GKCore.Options
             UnWifeColor = ChartRenderer.GetColor(UN_WIFE_COLOR);
 
             DefFontName = AppHost.GfxProvider.GetDefaultFontName();
-            DefFontSize = 8;
+            DefFontSize = (int)AppHost.GfxProvider.GetDefaultFontSize();
             DefFontColor = ChartRenderer.GetColor(BSDColors.Black);
             DefFontStyle = BSDTypes.FontStyle.None;
 
@@ -273,7 +273,7 @@ namespace GKCore.Options
             UnWifeColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "UnWifeColor", UN_WIFE_COLOR));
 
             DefFontName = iniFile.ReadString("Chart", "FontName", AppHost.GfxProvider.GetDefaultFontName());
-            DefFontSize = iniFile.ReadInteger("Chart", "FontSize", 8);
+            DefFontSize = iniFile.ReadInteger("Chart", "FontSize", (int)AppHost.GfxProvider.GetDefaultFontSize());
             DefFontColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FontColor", BSDColors.Black));
             DefFontStyle = (BSDTypes.FontStyle)iniFile.ReadInteger("Chart", "FontStyle", 0);
 

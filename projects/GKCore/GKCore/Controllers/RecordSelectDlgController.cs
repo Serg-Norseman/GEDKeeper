@@ -60,12 +60,32 @@ namespace GKCore.Controllers
 
         private void UpdateFilters()
         {
-            var filters = GlobalOptions.Instance.GetRSFilters(fRecType);
-            filters.Sort();
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                var filters = GlobalOptions.Instance.GetRSFilters(fRecType);
+                filters.Sort();
 
-            fView.FilterBox.Clear();
-            fView.FilterBox.Add("*");
-            fView.FilterBox.AddStrings(filters);
+                fView.FilterCombo.Clear();
+                fView.FilterCombo.Add("*");
+                fView.FilterCombo.AddStrings(filters);
+            }
+        }
+
+        private string GetFilter()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                return fView.FilterCombo.Text;
+            } else {
+                return fView.FilterText.Text;
+            }
+        }
+
+        private void SetFilter(string value)
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                fView.FilterCombo.Text = value;
+            } else {
+                fView.FilterText.Text = value;
+            }
         }
 
         public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex, string defFilter = "*")
@@ -81,7 +101,7 @@ namespace GKCore.Controllers
                 }
             }
 
-            fView.FilterBox.Text = defFilter;
+            SetFilter(defFilter);
 
             UpdateView();
         }
@@ -116,14 +136,14 @@ namespace GKCore.Controllers
 
         public void ChangeFilter()
         {
-            string flt = fView.FilterBox.Text;
+            string flt = GetFilter();
             GKUtils.SaveFilter(flt, GlobalOptions.Instance.GetRSFilters(fRecType));
             UpdateFilters();
         }
 
         public override void UpdateView()
         {
-            string flt = fView.FilterBox.Text;
+            string flt = GetFilter();
             if (string.IsNullOrEmpty(flt)) {
                 flt = "*";
             } else if (flt != "*") {

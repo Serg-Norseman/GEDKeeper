@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Design;
@@ -133,7 +134,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var grp = fDataOwner as GDMGroupRecord;
             if (fBaseWin == null || grp == null) return;
@@ -144,14 +145,14 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    member = fBaseWin.Context.SelectPerson(fOwner, null, TargetMode.tmNone, GDMSex.svUnknown);
+                    member = await fBaseWin.Context.SelectPerson(fOwner, null, TargetMode.tmNone, GDMSex.svUnknown);
                     if (member != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, grp, member);
                     }
                     break;
 
                 case RecordAction.raDelete:
-                    if (member != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachMemberQuery))) {
+                    if (member != null && await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachMemberQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberDetach, grp, member);
                     }
                     break;

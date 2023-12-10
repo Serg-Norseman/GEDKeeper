@@ -14,6 +14,6 @@
         <ToolbarItem x:Name="tbNext" Order="Primary" Priority="2" IconImageSource="{plat:ImageResourceExt Resources.btn_right.gif}" Clicked="tsbNext_Click" />
     </ContentPage.ToolbarItems>
 
-    <components:ImageBox x:Name="fImageCtl" ImageBorderStyle="FixedSingleGlowShadow" ImageBorderColor="AliceBlue" SelectionMode="Zoom" />
+    <components:ImageBox x:Name="fImageCtl" SelectionMode="Zoom" />
 
 </forms:StatusForm>

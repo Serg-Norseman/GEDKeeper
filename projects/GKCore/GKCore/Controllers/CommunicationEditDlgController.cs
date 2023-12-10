@@ -124,9 +124,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public void SetPerson()
+        public async void SetPerson()
         {
-            fTempInd = fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
+            fTempInd = await fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
             fView.Corresponder.Text = ((fTempInd == null) ? "" : GKUtils.GetNameString(fTempInd, false));
         }
 

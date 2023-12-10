@@ -20,6 +20,7 @@
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -89,21 +90,21 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_DeleteRecord()
+        public async Task Test_DeleteRecord()
         {
-            Assert.IsFalse(fContext.DeleteRecord(null));
+            Assert.IsFalse(await fContext.DeleteRecord(null));
 
-            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateIndividual()));
-            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateFamily()));
-            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateNote()));
-            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateMultimedia()));
-            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateSource()));
-            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateRepository()));
-            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateGroup()));
-            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateResearch()));
-            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateTask()));
-            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateCommunication()));
-            Assert.IsTrue(fContext.DeleteRecord(fContext.Tree.CreateLocation()));
+            Assert.IsTrue(await fContext.DeleteRecord(fContext.Tree.CreateIndividual()));
+            Assert.IsTrue(await fContext.DeleteRecord(fContext.Tree.CreateFamily()));
+            Assert.IsTrue(await fContext.DeleteRecord(fContext.Tree.CreateNote()));
+            Assert.IsTrue(await fContext.DeleteRecord(fContext.Tree.CreateMultimedia()));
+            Assert.IsTrue(await fContext.DeleteRecord(fContext.Tree.CreateSource()));
+            Assert.IsTrue(await fContext.DeleteRecord(fContext.Tree.CreateRepository()));
+            Assert.IsTrue(await fContext.DeleteRecord(fContext.Tree.CreateGroup()));
+            Assert.IsTrue(await fContext.DeleteRecord(fContext.Tree.CreateResearch()));
+            Assert.IsTrue(await fContext.DeleteRecord(fContext.Tree.CreateTask()));
+            Assert.IsTrue(await fContext.DeleteRecord(fContext.Tree.CreateCommunication()));
+            Assert.IsTrue(await fContext.DeleteRecord(fContext.Tree.CreateLocation()));
         }
 
         [Test]
@@ -529,7 +530,7 @@ namespace GKCore
         [Test]
         public void Test_DeleteMediaRecord()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { fContext.DeleteMediaRecord(null); });
+            Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await fContext.DeleteMediaRecord(null); });
         }
 
         [Test]
@@ -548,13 +549,13 @@ namespace GKCore
         [Test]
         public void Test_CheckPersonSex()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { fContext.CheckPersonSex(null, null); });
+            Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await fContext.CheckPersonSex(null, null); });
         }
 
         [Test]
-        public void Test_MediaDelete()
+        public async Task Test_MediaDelete()
         {
-            var result = fContext.MediaDelete(null);
+            var result = await fContext.MediaDelete(null);
             Assert.IsFalse(result);
         }
 
@@ -580,9 +581,9 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_GetChildFamily()
+        public async Task Test_GetChildFamily()
         {
-            var result = fContext.GetChildFamily(null, false, null);
+            var result = await fContext.GetChildFamily(null, false, null);
             Assert.IsNull(result);
         }
 
@@ -593,16 +594,16 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_AddChildForParent()
+        public async Task Test_AddChildForParent()
         {
-            var result = fContext.AddChildForParent(null, null, GDMSex.svMale);
+            var result = await fContext.AddChildForParent(null, null, GDMSex.svMale);
             Assert.IsNull(result);
         }
 
         [Test]
         public void Test_SelectSpouseFor()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { fContext.SelectSpouseFor(null, null); });
+            Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await fContext.SelectSpouseFor(null, null); });
         }
     }
 }

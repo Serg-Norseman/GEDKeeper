@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <RootNamespace>Adapt.Presentation.Controls</RootNamespace>
+        <AssemblyName>Adapt.Presentation.Controls</AssemblyName>
+
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\CollapsedGlyph.png" />
+        <EmbeddedResource Include="Resources\OpenedGlyph.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Xamarin.Forms" Version="5.0.0.2545" />
+    </ItemGroup>
+
+</Project>

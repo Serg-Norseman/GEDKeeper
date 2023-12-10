@@ -38,7 +38,7 @@
 
         <StackLayout Orientation="Horizontal" Spacing="4">
             <Label x:Name="lblRPSources" />
-            <comcom:GKComboBox x:Name="cmbSource" IsReadOnly="True" WidthRequest="260" />
+            <comcom:GKComboBox x:Name="cmbSource" WidthRequest="260" />
         </StackLayout>
 
         <Label VerticalOptions="FillAndExpand" />

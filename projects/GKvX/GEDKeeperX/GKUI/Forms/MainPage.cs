@@ -20,11 +20,15 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GKCore;
+using GKCore.Interfaces;
+using GKUI.Platform;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace GKUI.Forms
 {
-    public class MainPage : MasterDetailPage
+    public class MainPage : MasterDetailPage, ILocalizable
     {
         private readonly Dictionary<int, Page> fMenuPages;
 
@@ -36,9 +40,22 @@ namespace GKUI.Forms
             Detail = new LaunchPage();
 
             fMenuPages = new Dictionary<int, Page>();
+
+            DeviceDisplay.MainDisplayInfoChanged += DeviceDisplay_MainDisplayInfoChanged;
         }
 
-        public async void NavigateAsync(Page page)
+        public static BaseWinSDI GetBaseWin()
+        {
+            return AppHost.Instance.GetCurrentFile() as BaseWinSDI;
+        }
+
+        private void DeviceDisplay_MainDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e)
+        {
+            ((IDisplayChangeable)Detail).OnDisplayChanged(e.DisplayInfo);
+            ((IDisplayChangeable)GetBaseWin()).OnDisplayChanged(e.DisplayInfo);
+        }
+
+        public async Task NavigateAsync(Page page)
         {
             if (page == null) return;
 
@@ -55,7 +72,11 @@ namespace GKUI.Forms
                     fMenuPages.Add(id, page);
                 }
             }
-            NavigateAsync(page);
+            await NavigateAsync(page);
+        }
+
+        public void SetLocale()
+        {
         }
     }
 }

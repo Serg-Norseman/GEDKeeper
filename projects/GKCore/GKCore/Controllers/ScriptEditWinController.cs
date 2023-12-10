@@ -55,11 +55,11 @@ namespace GKCore.Controllers
             fView.Modified = false;
         }
 
-        public void LoadScript()
+        public async void LoadScript()
         {
             if (!fView.CheckModified()) return;
 
-            string fileName = AppHost.StdDialogs.GetOpenFile("", GlobalOptions.Instance.ScriptsLastDir, LangMan.LS(LSID.ScriptsFilter), 1, GKData.LUA_EXT);
+            string fileName = await AppHost.StdDialogs.GetOpenFile("", GlobalOptions.Instance.ScriptsLastDir, LangMan.LS(LSID.ScriptsFilter), 1, GKData.LUA_EXT);
             if (string.IsNullOrEmpty(fileName)) return;
 
             GlobalOptions.Instance.ScriptsLastDir = Path.GetDirectoryName(fileName);
@@ -72,9 +72,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public void SaveScript()
+        public async void SaveScript()
         {
-            string fileName = AppHost.StdDialogs.GetSaveFile("", GlobalOptions.Instance.ScriptsLastDir, LangMan.LS(LSID.ScriptsFilter), 1, GKData.LUA_EXT, fView.FileName);
+            string fileName = await AppHost.StdDialogs.GetSaveFile("", GlobalOptions.Instance.ScriptsLastDir, LangMan.LS(LSID.ScriptsFilter), 1, GKData.LUA_EXT, fView.FileName);
             if (string.IsNullOrEmpty(fileName)) return;
 
             GlobalOptions.Instance.ScriptsLastDir = Path.GetDirectoryName(fileName);

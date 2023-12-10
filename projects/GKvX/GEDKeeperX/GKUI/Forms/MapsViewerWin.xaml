@@ -37,7 +37,7 @@
                             </input:RadioButtonGroupView>
                         </comcom:GroupBox>
 
-                        <comcom:TreeView x:Name="tvPlaces" MouseDoubleClick="TreePlaces_DoubleClick" VerticalOptions="FillAndExpand" />
+                        <comcom:GKTreeView x:Name="tvPlaces" MouseDoubleClick="TreePlaces_DoubleClick" VerticalOptions="FillAndExpand" />
                     </StackLayout>
                 </xp:TabItem>
 
@@ -45,20 +45,10 @@
                     <StackLayout>
                         <comcom:GroupBox x:Name="gbCoords">
                             <Grid ColumnSpacing="4" RowSpacing="4">
-                                <Label x:Name="lblPlace" Grid.Column="0" Grid.Row="0" Text="place" />
-                                <Entry x:Name="txtPlace" Grid.Column="1" Grid.Row="0" />
-
-                                <Label x:Name="lblLat" Grid.Column="0" Grid.Row="1" Text="lat" />
-                                <Entry x:Name="txtLat" Grid.Column="1" Grid.Row="1" />
-
-                                <Label x:Name="lblLng" Grid.Column="0" Grid.Row="2" Text="lng" />
-                                <Entry x:Name="txtLng" Grid.Column="1" Grid.Row="2" />
+                                <Entry x:Name="txtPlace" Grid.Column="0" Grid.Row="0" />
+                                <Button x:Name="btnSearch" Clicked="btnSearch_Click" Grid.Column="1" Grid.Row="0" />
                             </Grid>
                         </comcom:GroupBox>
-
-                        <Button x:Name="btnSearch" Clicked="btnSearch_Click" />
-                        <Button x:Name="btnAddRouteMarker" Clicked="btnAddRouteMarker_Click" Text="Add Route Marker" />
-                        <Button x:Name="btnAddPolygonMarker" Clicked="btnAddPolygonMarker_Click" Text="Add Polygon Marker" />
                     </StackLayout>
                 </xp:TabItem>
             </xp:TabViewControl.ItemSource>

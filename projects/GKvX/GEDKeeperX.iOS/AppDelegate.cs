@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Foundation;
 using GKUI;
 using UIKit;
@@ -29,6 +30,11 @@ namespace GEDKeeperX.iOS
         void IPlatformSpecifics.CloseApplication()
         {
             Thread.CurrentThread.Abort();
+        }
+
+        string IPlatformSpecifics.GetExternalStorageDirectory()
+        {
+            throw new NotImplementedException();
         }
     }
 }

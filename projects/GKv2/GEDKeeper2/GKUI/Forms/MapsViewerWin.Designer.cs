@@ -27,16 +27,9 @@
         private System.Windows.Forms.ToolStripButton tbClear;
         private System.Windows.Forms.ToolStripButton tbZoomCenter;
         private System.Windows.Forms.TabPage pageCoordinates;
-        private System.Windows.Forms.Button btnAddRouteMarker;
-        private System.Windows.Forms.Button btnAddPolygonMarker;
         private System.Windows.Forms.GroupBox gbCoords;
-        private System.Windows.Forms.Label lblPlace;
         private System.Windows.Forms.TextBox txtPlace;
         private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.Label lblLng;
-        private System.Windows.Forms.Label lblLat;
-        private System.Windows.Forms.TextBox txtLng;
-        private System.Windows.Forms.TextBox txtLat;
         private System.Windows.Forms.TableLayoutPanel panClient;
         private System.Windows.Forms.TrackBar trkZoom;
         private System.Windows.Forms.Button btnZoomUp;
@@ -79,15 +72,8 @@
             this.radSelected = new System.Windows.Forms.RadioButton();
             this.chkLinesVisible = new System.Windows.Forms.CheckBox();
             this.pageCoordinates = new System.Windows.Forms.TabPage();
-            this.btnAddPolygonMarker = new System.Windows.Forms.Button();
-            this.btnAddRouteMarker = new System.Windows.Forms.Button();
             this.gbCoords = new System.Windows.Forms.GroupBox();
-            this.lblPlace = new System.Windows.Forms.Label();
             this.txtPlace = new System.Windows.Forms.TextBox();
-            this.lblLng = new System.Windows.Forms.Label();
-            this.lblLat = new System.Windows.Forms.Label();
-            this.txtLng = new System.Windows.Forms.TextBox();
-            this.txtLat = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
             this.panClient = new System.Windows.Forms.TableLayoutPanel();
             this.panZoom = new System.Windows.Forms.TableLayoutPanel();
@@ -319,10 +305,7 @@
             // pageCoordinates
             // 
             this.pageCoordinates.BackColor = System.Drawing.SystemColors.Control;
-            this.pageCoordinates.Controls.Add(this.btnAddPolygonMarker);
-            this.pageCoordinates.Controls.Add(this.btnAddRouteMarker);
             this.pageCoordinates.Controls.Add(this.gbCoords);
-            this.pageCoordinates.Controls.Add(this.btnSearch);
             this.pageCoordinates.Location = new System.Drawing.Point(4, 26);
             this.pageCoordinates.Name = "pageCoordinates";
             this.pageCoordinates.Padding = new System.Windows.Forms.Padding(3);
@@ -330,36 +313,10 @@
             this.pageCoordinates.TabIndex = 1;
             this.pageCoordinates.Text = "pageCoordinates";
             // 
-            // btnAddPolygonMarker
-            // 
-            this.btnAddPolygonMarker.Location = new System.Drawing.Point(119, 187);
-            this.btnAddPolygonMarker.Margin = new System.Windows.Forms.Padding(4);
-            this.btnAddPolygonMarker.Name = "btnAddPolygonMarker";
-            this.btnAddPolygonMarker.Size = new System.Drawing.Size(149, 30);
-            this.btnAddPolygonMarker.TabIndex = 12;
-            this.btnAddPolygonMarker.Text = "Add Polygon Marker";
-            this.btnAddPolygonMarker.UseVisualStyleBackColor = true;
-            this.btnAddPolygonMarker.Click += new System.EventHandler(this.btnAddPolygonMarker_Click);
-            // 
-            // btnAddRouteMarker
-            // 
-            this.btnAddRouteMarker.Location = new System.Drawing.Point(119, 149);
-            this.btnAddRouteMarker.Margin = new System.Windows.Forms.Padding(4);
-            this.btnAddRouteMarker.Name = "btnAddRouteMarker";
-            this.btnAddRouteMarker.Size = new System.Drawing.Size(149, 30);
-            this.btnAddRouteMarker.TabIndex = 12;
-            this.btnAddRouteMarker.Text = "Add Route Marker";
-            this.btnAddRouteMarker.UseVisualStyleBackColor = true;
-            this.btnAddRouteMarker.Click += new System.EventHandler(this.btnAddRouteMarker_Click);
-            // 
             // gbCoords
             // 
-            this.gbCoords.Controls.Add(this.lblPlace);
             this.gbCoords.Controls.Add(this.txtPlace);
-            this.gbCoords.Controls.Add(this.lblLng);
-            this.gbCoords.Controls.Add(this.lblLat);
-            this.gbCoords.Controls.Add(this.txtLng);
-            this.gbCoords.Controls.Add(this.txtLat);
+            this.gbCoords.Controls.Add(this.btnSearch);
             this.gbCoords.Dock = System.Windows.Forms.DockStyle.Top;
             this.gbCoords.Location = new System.Drawing.Point(3, 3);
             this.gbCoords.Margin = new System.Windows.Forms.Padding(4);
@@ -369,68 +326,19 @@
             this.gbCoords.TabIndex = 28;
             this.gbCoords.TabStop = false;
             // 
-            // lblPlace
-            // 
-            this.lblPlace.AutoSize = true;
-            this.lblPlace.Location = new System.Drawing.Point(176, 91);
-            this.lblPlace.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblPlace.Name = "lblPlace";
-            this.lblPlace.Size = new System.Drawing.Size(39, 17);
-            this.lblPlace.TabIndex = 11;
-            this.lblPlace.Text = "place";
-            // 
             // txtPlace
             // 
-            this.txtPlace.Location = new System.Drawing.Point(12, 87);
+            this.txtPlace.Location = new System.Drawing.Point(12, 7);
             this.txtPlace.Margin = new System.Windows.Forms.Padding(4);
             this.txtPlace.Name = "txtPlace";
             this.txtPlace.Size = new System.Drawing.Size(161, 24);
             this.txtPlace.TabIndex = 10;
             this.txtPlace.Text = "Egypt, Cairo";
-            this.txtPlace.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPlace_KeyPress);
-            // 
-            // lblLng
-            // 
-            this.lblLng.AutoSize = true;
-            this.lblLng.Location = new System.Drawing.Point(176, 59);
-            this.lblLng.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblLng.Name = "lblLng";
-            this.lblLng.Size = new System.Drawing.Size(26, 17);
-            this.lblLng.TabIndex = 3;
-            this.lblLng.Text = "lng";
-            // 
-            // lblLat
-            // 
-            this.lblLat.AutoSize = true;
-            this.lblLat.Location = new System.Drawing.Point(176, 27);
-            this.lblLat.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblLat.Name = "lblLat";
-            this.lblLat.Size = new System.Drawing.Size(22, 17);
-            this.lblLat.TabIndex = 2;
-            this.lblLat.Text = "lat";
-            // 
-            // txtLng
-            // 
-            this.txtLng.Location = new System.Drawing.Point(12, 55);
-            this.txtLng.Margin = new System.Windows.Forms.Padding(4);
-            this.txtLng.Name = "txtLng";
-            this.txtLng.Size = new System.Drawing.Size(161, 24);
-            this.txtLng.TabIndex = 1;
-            this.txtLng.Text = "31.2361907958984";
-            // 
-            // txtLat
-            // 
-            this.txtLat.Location = new System.Drawing.Point(12, 23);
-            this.txtLat.Margin = new System.Windows.Forms.Padding(4);
-            this.txtLat.Name = "txtLat";
-            this.txtLat.Size = new System.Drawing.Size(161, 24);
-            this.txtLat.TabIndex = 0;
-            this.txtLat.Text = "30.0447272077905";
             // 
             // btnSearch
             // 
             this.btnSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSearch.Location = new System.Drawing.Point(15, 151);
+            this.btnSearch.Location = new System.Drawing.Point(176, 6);
             this.btnSearch.Margin = new System.Windows.Forms.Padding(4);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(96, 30);

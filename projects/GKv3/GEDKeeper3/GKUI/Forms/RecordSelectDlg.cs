@@ -56,9 +56,14 @@ namespace GKUI.Forms
 
         #region View Interface
 
-        IComboBox IRecordSelectDialog.FilterBox
+        IComboBox IRecordSelectDialog.FilterCombo
         {
             get { return GetControlHandler<IComboBox>(txtFastFilter); }
+        }
+
+        ITextBox IRecordSelectDialog.FilterText
+        {
+            get { return null; }
         }
 
         IFilterControl IRecordSelectDialog.FilterCtl
@@ -109,7 +114,7 @@ namespace GKUI.Forms
         {
             try {
                 ResultRecord = fListRecords.GetSelectedData() as GDMRecord;
-                DialogResult = DialogResult.Ok;
+                Close(DialogResult.Ok);
             } catch (Exception ex) {
                 Logger.WriteError("RecordSelectDlg.btnSelect_Click()", ex);
                 ResultRecord = null;
@@ -117,13 +122,13 @@ namespace GKUI.Forms
             }
         }
 
-        private void btnCreate_Click(object sender, EventArgs e)
+        private async void btnCreate_Click(object sender, EventArgs e)
         {
             try {
-                GDMRecord rec = BaseController.AddRecord(this, fController.Base, fController.RecType, fController.Target);
+                GDMRecord rec = await BaseController.AddRecord(this, fController.Base, fController.RecType, fController.Target);
                 if (rec != null) {
                     ResultRecord = rec;
-                    DialogResult = DialogResult.Ok;
+                    Close(DialogResult.Ok);
                 }
             } catch (Exception ex) {
                 Logger.WriteError("RecordSelectDlg.btnCreate_Click()", ex);

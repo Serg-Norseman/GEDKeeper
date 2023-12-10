@@ -13,11 +13,30 @@
         <ToolbarItem x:Name="tbNext" Order="Primary" Priority="3" IconImageSource="{plat:ImageResourceExt Resources.btn_right.gif}" Clicked="ToolBar1_ButtonClick" />
         <ToolbarItem x:Name="tbOptions" Order="Primary" Priority="4" IconImageSource="{plat:ImageResourceExt Resources.btn_tools.gif}" Clicked="tbOptions_Click" />
 
+        <ToolbarItem x:Name="tbModes" Order="Primary" Priority="5" Clicked="miModeItem_Click" />
+
         <ToolbarItem x:Name="tbGensCommon" Order="Primary" Priority="5" Clicked="miGensX_Click" />
         <ToolbarItem x:Name="tbGensAncestors" Order="Primary" Priority="5" Clicked="miGensXAncestors_Click" />
         <ToolbarItem x:Name="tbGensDescendants" Order="Primary" Priority="5" Clicked="miGensXDescendants_Click" />
 
         <ToolbarItem x:Name="tbBorders" Order="Primary" Priority="5" Clicked="miBorderX_Click" />
+
+
+        <ToolbarItem x:Name="miEdit" Text="miEdit" Order="Secondary" Priority="1" Clicked="miEdit_Click" />
+        <ToolbarItem x:Name="miFatherAdd" Text="miFatherAdd" Order="Secondary" Priority="2" Clicked="miFatherAdd_Click" />
+        <ToolbarItem x:Name="miMotherAdd" Text="miMotherAdd" Order="Secondary" Priority="3" Clicked="miMotherAdd_Click" />
+        <ToolbarItem x:Name="miFamilyAdd" Text="miFamilyAdd" Order="Secondary" Priority="4" Clicked="miFamilyAdd_Click" />
+        <ToolbarItem x:Name="miSpouseAdd" Text="miSpouseAdd" Order="Secondary" Priority="5" Clicked="miSpouseAdd_Click" />
+        <ToolbarItem x:Name="miSonAdd" Text="miSonAdd" Order="Secondary" Priority="6" Clicked="miSonAdd_Click" />
+        <ToolbarItem x:Name="miDaughterAdd" Text="miDaughterAdd" Order="Secondary" Priority="7" Clicked="miDaughterAdd_Click" />
+        <ToolbarItem x:Name="miDelete" Text="miDelete" Order="Secondary" Priority="8" Clicked="miDelete_Click" />
+        <ToolbarItem x:Name="miGoToRecord" Text="miGoToRecord" Order="Secondary" Priority="9" Clicked="miGoToRecord_Click" />
+        <ToolbarItem x:Name="miGoToPrimaryBranch" Text="miGoToPrimaryBranch" Order="Secondary" Priority="10" Clicked="miGoToPrimaryBranch_Click" />
+        <ToolbarItem x:Name="miOpenInNewWindow" Text="miOpenInNewWindow" Order="Secondary" Priority="11" Clicked="miOpenInNewWindow_Click" />
+        <ToolbarItem x:Name="miMergeDuplicates" Text="miMergeDuplicates" Order="Secondary" Priority="12" Clicked="miMergeDuplicates_Click" />
+        <ToolbarItem x:Name="miRebuildTree" Text="miRebuildTree" Order="Secondary" Priority="13" Clicked="miRebuildTree_Click" />
+        <ToolbarItem x:Name="miRebuildKinships" Text="miRebuildKinships" Order="Secondary" Priority="14" Clicked="miRebuildKinships_Click" />
+        <ToolbarItem x:Name="miSelectColor" Text="miSelectColor" Order="Secondary" Priority="15" Clicked="miSelectColor_Click" />
     </forms:PrintableForm.ToolbarItems>
 
 </forms:PrintableForm>

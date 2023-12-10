@@ -25,6 +25,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
@@ -44,6 +45,7 @@ using GKUI.Themes;
 
 namespace GKUI.Platform
 {
+    using CommonDialog = Forms.CommonDialog;
     using FormWindowState = Eto.Forms.WindowState;
 
     /// <summary>
@@ -144,9 +146,9 @@ namespace GKUI.Platform
             //AppHost.Instance.SaveLastBases();
         }
 
-        public override void Init(string[] args, bool isMDI)
+        public override async Task Init(string[] args, bool isMDI)
         {
-            base.Init(args, isMDI);
+            await base.Init(args, isMDI);
             Application.Instance.Terminating += OnApplicationExit;
         }
 
@@ -185,8 +187,11 @@ namespace GKUI.Platform
             return IntPtr.Zero;
         }
 
-        public override bool ShowModalX(ICommonDialog dialog, IView owner, bool keepModeless = false)
+        public override async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
+            var efModal = dialog as CommonDialog;
+            if (efModal == null) return false;
+
             //Window activeWin = GetActiveForm() as Window;
             //Console.WriteLine((owner == null) ? "null" : owner.ToString());
 
@@ -198,7 +203,8 @@ namespace GKUI.Platform
 
             //UIHelper.CenterFormByParent((Window)form, mainHandle);
 
-            return (dialog != null && dialog.ShowModalX(owner));
+            efModal.ShowModal(owner as Control);
+            return await efModal.DialogResultTask;
         }
 
         public override void EnableWindow(IWidgetForm form, bool value)
@@ -260,7 +266,7 @@ namespace GKUI.Platform
                 try {
                     workerThread.Start(progressForm);
 
-                    progressForm.ShowModalX(activeWnd);
+                    ((Dialog)progressForm).ShowModal(activeWnd as Control);
                 } catch (Exception ex) {
                     Logger.WriteError("ExecuteWork()", ex);
                 }
@@ -511,6 +517,7 @@ namespace GKUI.Platform
             container.Register<ILocationEditDlg, LocationEditDlg>(LifeCycle.Transient);
             container.Register<IMapsViewerWin, MapsViewerWin>(LifeCycle.Transient);
             container.Register<IMediaEditDlg, MediaEditDlg>(LifeCycle.Transient);
+            container.Register<IMediaViewerWin, MediaViewerWin>(LifeCycle.Transient);
             container.Register<INameEditDlg, NameEditDlg>(LifeCycle.Transient);
             container.Register<INoteEditDlg, NoteEditDlg>(LifeCycle.Transient);
             container.Register<INoteEditDlgEx, NoteEditDlgEx>(LifeCycle.Transient);

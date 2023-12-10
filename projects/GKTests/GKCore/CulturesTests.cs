@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore.Cultures;
 using GKCore.Interfaces;
@@ -41,7 +42,7 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_AncientCulture()
+        public async Task Test_AncientCulture()
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
@@ -52,7 +53,7 @@ namespace GKCore
             Assert.IsFalse(culture.HasSurname);
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
-            Assert.AreEqual(GDMSex.svUnknown, culture.GetSex("Alef", "", false));
+            Assert.AreEqual(GDMSex.svUnknown, await culture.GetSex("Alef", "", false));
 
             var surnames = culture.GetSurnames(iRec);
             Assert.AreEqual(1, surnames.Length);
@@ -64,7 +65,7 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_IcelandCulture()
+        public async Task Test_IcelandCulture()
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
@@ -75,7 +76,7 @@ namespace GKCore
             Assert.IsFalse(culture.HasSurname);
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
-            Assert.AreEqual(GDMSex.svUnknown, culture.GetSex("Alef", "", false));
+            Assert.AreEqual(GDMSex.svUnknown, await culture.GetSex("Alef", "", false));
 
             var surnames = culture.GetSurnames(iRec);
             Assert.AreEqual(1, surnames.Length);
@@ -85,7 +86,7 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_BritishCulture()
+        public async Task Test_BritishCulture()
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
@@ -96,7 +97,7 @@ namespace GKCore
             Assert.IsTrue(culture.HasSurname);
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
-            Assert.AreEqual(GDMSex.svUnknown, culture.GetSex("Alef", "", false));
+            Assert.AreEqual(GDMSex.svUnknown, await culture.GetSex("Alef", "", false));
 
             var surnames = culture.GetSurnames(iRec);
             Assert.AreEqual(1, surnames.Length);
@@ -106,7 +107,7 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_SwedishCulture()
+        public async Task Test_SwedishCulture()
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
@@ -117,7 +118,7 @@ namespace GKCore
             Assert.IsTrue(culture.HasSurname);
             Assert.AreEqual("Alef", culture.NormalizeSurname("Alef", false));
             Assert.AreEqual("Alef", culture.GetMarriedSurname("Alef"));
-            Assert.AreEqual(GDMSex.svUnknown, culture.GetSex("Alef", "", false));
+            Assert.AreEqual(GDMSex.svUnknown, await culture.GetSex("Alef", "", false));
 
             var surnames = culture.GetSurnames(iRec);
             Assert.AreEqual(1, surnames.Length);
@@ -127,7 +128,7 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_RussianCulture()
+        public async Task Test_RussianCulture()
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
@@ -175,13 +176,13 @@ namespace GKCore
             Assert.AreEqual("Бельский", snms[0]);
 
 
-            GDMSex sx = rusCulture.GetSex("Мария", "Петровна", false);
+            GDMSex sx = await rusCulture.GetSex("Мария", "Петровна", false);
             Assert.AreEqual(GDMSex.svFemale, sx);
 
-            sx = rusCulture.GetSex("Иван", "Петрович", false);
+            sx = await rusCulture.GetSex("Иван", "Петрович", false);
             Assert.AreEqual(GDMSex.svMale, sx);
 
-            Assert.AreEqual(GDMSex.svUnknown, rusCulture.GetSex("", "", false));
+            Assert.AreEqual(GDMSex.svUnknown, await rusCulture.GetSex("", "", false));
 
             Assert.AreEqual("Иванова Ивана Ивановича", rusCulture.GetPossessiveName("Иванов Иван Иванович"));
 

@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Controllers;
@@ -89,7 +90,7 @@ namespace GKCore.Lists
             }
         }
 
-        public override void Modify(object sender, ModifyEventArgs eArgs)
+        public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
             var dataOwner = fDataOwner as IGDMStructWithSourceCitations;
             if (fBaseWin == null || dataOwner == null) return;
@@ -100,12 +101,15 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                case RecordAction.raEdit:
-                    result = BaseController.ModifySourceCitation(fOwner, fBaseWin, fUndoman, dataOwner, ref srcCit);
+                case RecordAction.raEdit: {
+                        var srcCitRes = await BaseController.ModifySourceCitation(fOwner, fBaseWin, fUndoman, dataOwner, srcCit);
+                        srcCit = srcCitRes.Record;
+                        result = srcCitRes.Result;
+                    }
                     break;
 
                 case RecordAction.raDelete:
-                    if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachSourceQuery))) {
+                    if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachSourceQuery))) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordSourceCitRemove, fDataOwner, srcCit);
                     }
                     break;

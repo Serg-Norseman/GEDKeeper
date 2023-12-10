@@ -565,15 +565,15 @@ namespace GKCore
         /* 509 */ DuplicatesSearch,
         /* 510 */ ValueInvalid,
         /* 511 */ Operation,
-        /* 512 */ ToolOp_1,
-        /* 513 */ ToolOp_2,
-        /* 514 */ ToolOp_3,
+        /* 512 */ TreeCompare,
+        /* 513 */ TreeMerge,
+        /* 514 */ TreeSplit,
         /* 515 */ MergeDuplicates,
         /* 516 */ SearchUnlinkedNamesakes,
-        /* 517 */ ToolOp_6,
-        /* 518 */ ToolOp_7,
-        /* 519 */ ToolOp_8,
-        /* 520 */ ToolOp_9,
+        /* 517 */ FragmentSearch,
+        /* 518 */ TreeCheck,
+        /* 519 */ PatriarchsSearch,
+        /* 520 */ PlacesManager,
         /* 521 */ SearchMatches,
         /* 522 */ CheckFamiliesConnection,
         /* 523 */ All,
@@ -1004,8 +1004,9 @@ namespace GKCore
         /* 932 */ UseSurnamesInPersonSelectionFilter,
         /* 933 */ UseBirthDatesInPersonSelectionFilter,
         /* 934 */ FactValueIsInvalid,
+        /* 935 */ Portrait,
 
-        /* 000 */ Last = FactValueIsInvalid
+        /* 000 */ Last = Portrait
     }
 
 
@@ -1963,6 +1964,7 @@ namespace GKCore
             /* 932 */ "Use surnames in person selection filter",
             /* 933 */ "Use dates of birth in person selection filter",
             /* 934 */ "Fact value is empty or invalid",
+            /* 935 */ "Portrait",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

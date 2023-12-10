@@ -20,6 +20,9 @@
 
 using System;
 using System.Collections.Generic;
+using GKCore;
+using SkiaSharp;
+using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 
 namespace GKUI.Components
@@ -58,19 +61,29 @@ namespace GKUI.Components
             public Rectangle Rect;
         }
 
-        private readonly Brush fEmptyBrush;
-        private readonly Brush fFragBrush;
+        private readonly SKCanvasView fCanvas;
+        private readonly SKPaint fEmptyBrush;
+        private readonly SKPaint fFragBrush;
         private readonly List<Fragment> fList;
-        private string fHint;
 
         public event HintRequestEventHandler OnHintRequest;
 
         public LogChart()
         {
+            fCanvas = new SKCanvasView();
+            fCanvas.PaintSurface += OnPaint;
+            Content = fCanvas;
+
             fList = new List<Fragment>();
 
-            fEmptyBrush = new SolidColorBrush(Color.Gray);
-            fFragBrush = new SolidColorBrush(Color.Green);
+            fEmptyBrush = new SKPaint {
+                Color = SKColors.Gray,
+                Style = SKPaintStyle.Fill
+            };
+            fFragBrush = new SKPaint {
+                Color = SKColors.Green,
+                Style = SKPaintStyle.Fill
+            };
         }
 
         public void Clear()
@@ -160,7 +173,7 @@ namespace GKUI.Components
                 x = x + (frag.Width + 1);
             }
 
-            //Invalidate();
+            fCanvas.InvalidateSurface();
         }
 
         private class FragmentComparer: IComparer<Fragment>
@@ -171,71 +184,36 @@ namespace GKUI.Components
             }
         }
 
-        /*protected override void OnSizeChanged(EventArgs e)
+        private void OnPaint(object sender, SKPaintSurfaceEventArgs args)
         {
-            base.OnSizeChanged(e);
-            UpdateContents();
-        }*/
+            var info = args.Info;
+            var surface = args.Surface;
+            var canvas = surface.Canvas;
 
-        /*protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
+            canvas.Clear();
 
-            if (Width <= 0 || Height <= 0) return;
+            try {
+                if (info.Width <= 0 || info.Height <= 0) return;
 
-            Graphics gfx = e.Graphics;
-
-            int count = fList.Count;
-            if (count > 0) {
-                for (int i = 0; i < count; i++) {
-                    Fragment frag = fList[i];
-                    DrawRect(gfx, frag.X, frag.Width, fFragBrush);
+                int count = fList.Count;
+                if (count > 0) {
+                    for (int i = 0; i < count; i++) {
+                        Fragment frag = fList[i];
+                        DrawRect(canvas, frag.X, frag.Width, info.Height, fFragBrush);
+                    }
+                } else {
+                    DrawRect(canvas, 0, info.Width, info.Height, fEmptyBrush);
                 }
-            } else {
-                DrawRect(gfx, 0, Width, fEmptyBrush);
+            } catch (Exception ex) {
+                Logger.WriteError("LogChart.OnPaint()", ex);
             }
         }
 
-        private void DrawRect(Graphics gfx, int x, int width, Brush lb)
+        private void DrawRect(SKCanvas gfx, int x, int width, int height, SKPaint lb)
         {
             if (width > 0) {
-                gfx.FillRectangle(lb, x, 0, width, Height);
+                gfx.DrawRect(SKRect.Create(x, 0, width, height), lb);
             }
-        }*/
-
-        private string HintRequest(int fragmentNumber, int size)
-        {
-            var onHintRequest = OnHintRequest;
-            if (onHintRequest == null) return string.Empty;
-
-            HintRequestEventArgs args = new HintRequestEventArgs(fragmentNumber, size);
-            onHintRequest(this, args);
-            return args.Hint;
         }
-
-        /*protected override void OnMouseMove(MouseEventArgs e)
-        {
-            Point mpt = new Point(e.Location);
-
-            string hint = "";
-            int count = fList.Count;
-            for (int i = 0; i < count; i++) {
-                Fragment frag = fList[i];
-
-                if (frag.Rect.Contains(mpt.X, mpt.Y)) {
-                    hint = HintRequest(i + 1, frag.SrcVal);
-                    break;
-                }
-            }
-
-            if (fHint != hint) {
-                fHint = hint;
-                //fToolTip.Show(hint, this, mpt.X, mpt.Y, 3000);
-                ToolTip = hint;
-            }
-
-            e.Handled = true;
-            base.OnMouseMove(e);
-        }*/
     }
 }

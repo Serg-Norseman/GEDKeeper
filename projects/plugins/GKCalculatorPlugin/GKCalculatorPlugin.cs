@@ -94,7 +94,7 @@ namespace GKCalculatorPlugin
         {
             bool result = base.Startup(host);
             try {
-                fIcon = AppHost.GfxProvider.LoadResourceImage(this.GetType(), "GKCalculatorPlugin.Resources.icon_calc.gif");
+                fIcon = AppHost.GfxProvider.LoadResourceImage(this.GetType(), "GKCalculatorPlugin.Resources.icon_calc.gif", ImageTarget.UI);
             } catch (Exception ex) {
                 Logger.WriteError("GKCalculatorPlugin.Startup()", ex);
                 result = false;

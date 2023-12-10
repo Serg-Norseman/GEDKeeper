@@ -86,7 +86,7 @@ namespace GKTests.Stubs
                 try {
                     workerThread.Start(progressForm);
 
-                    progressForm.ShowModalX(activeWnd);
+                    //progressForm.ShowModalX(activeWnd);
                 } catch (Exception ex) {
                     Logger.WriteError("ExecuteWork()", ex);
                 }

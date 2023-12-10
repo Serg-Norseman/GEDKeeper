@@ -19,6 +19,7 @@
  */
 
 using GKCore.Design.Controls;
+using Xamarin.Forms;
 using XFIKRadioButton = Plugin.InputKit.Shared.Controls.RadioButton;
 
 namespace GKUI.Platform
@@ -27,6 +28,8 @@ namespace GKUI.Platform
     {
         public RadioButtonHandler(XFIKRadioButton control) : base(control)
         {
+            control.Color = Color.Black;
+            control.Padding = new Thickness(0, 0);
         }
 
         public bool Checked

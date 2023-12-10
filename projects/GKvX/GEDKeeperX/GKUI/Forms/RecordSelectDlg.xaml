@@ -5,7 +5,6 @@
     xmlns:comcom="clr-namespace:GKUI.Components"
     xmlns:forms="clr-namespace:GKUI.Forms"
     xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
-    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
     xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
     xmlns:plat="clr-namespace:GKUI.Platform"
     x:Class="GKUI.Forms.RecordSelectDlg">
@@ -13,8 +12,8 @@
     <StackLayout Style="{StaticResource paddedDlg88}">
 
         <StackLayout Spacing="4" Orientation="Horizontal" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
-            <Entry x:Name="txtFastFilter" TextChanged="txtFastFilter_TextChanged" />
-            <comcom:GKFilterControl x:Name="fltCtl" />
+            <Entry x:Name="txtFastFilter" TextChanged="txtFastFilter_TextChanged" HorizontalOptions="FillAndExpand" />
+            <comcom:GKFilterControl x:Name="fltCtl" HorizontalOptions="End" />
         </StackLayout>
 
         <ContentView x:Name="panList" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />

@@ -32,6 +32,6 @@
 31=Name Patronymic Surname
 32=Surname Name Patronymic
 33=no special
-34=All supported formats (*.txt, *.csv, *.doc, *.xls)|*.txt,*.csv,*.doc,*.xls|Pedigree in txt format (*.txt)|*.txt|Pedigree in the csv format (*.csv)|*.csv|Pedigree in MS Word format (*.doc)|*.doc|Pedigree in MS Excel format (*.xls)|*.xls
+34=All supported formats (*.txt, *.csv, *.doc, *.xls)|*.txt,*.csv,*.doc*,*.xls*|Pedigree in txt format (*.txt)|*.txt|Pedigree in the csv format (*.csv)|*.csv|Pedigree in MS Word format (*.doc)|*.doc*|Pedigree in MS Excel format (*.xls)|*.xls*
 35=All supported formats (*.txt, *.csv)|*.txt,*.csv|Pedigree in txt format (*.txt)|*.txt|Pedigree in the csv format (*.csv)|*.csv
 36=Conflicting information about spouses

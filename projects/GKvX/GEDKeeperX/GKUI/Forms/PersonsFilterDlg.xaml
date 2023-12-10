@@ -23,11 +23,15 @@
                     <StackLayout Orientation="Vertical" Spacing="4">
                         <StackLayout Orientation="Horizontal" Spacing="4">
                             <comcom:GroupBox x:Name="rgSex">
-                                <input:RadioButtonGroupView>
-                                    <input:RadioButton x:Name="rbSexAll" />
-                                    <input:RadioButton x:Name="rbSexMale" />
-                                    <input:RadioButton x:Name="rbSexFemale" />
-                                </input:RadioButtonGroupView>
+                                <StackLayout Orientation="Vertical">
+                                    <input:RadioButtonGroupView>
+                                        <input:RadioButton x:Name="rbSexAll" />
+                                        <input:RadioButton x:Name="rbSexMale" />
+                                        <input:RadioButton x:Name="rbSexFemale" />
+                                    </input:RadioButtonGroupView>
+                                    <Label />
+                                    <input:CheckBox x:Name="chkOnlyPatriarchs" />
+                                </StackLayout>
                             </comcom:GroupBox>
 
                             <comcom:GroupBox x:Name="rgLife">
@@ -55,12 +59,10 @@
                             <comcom:GKComboBox x:Name="cmbEventVal" Grid.Column="1" Grid.Row="2" />
 
                             <Label x:Name="lblGroups" Grid.Column="0" Grid.Row="3" />
-                            <comcom:GKComboBox x:Name="cmbGroup" IsReadOnly="True" Grid.Column="1" Grid.Row="3" />
+                            <comcom:GKComboBox x:Name="cmbGroup" Grid.Column="1" Grid.Row="3" />
 
                             <Label x:Name="lblSources" Grid.Column="0" Grid.Row="4" />
-                            <comcom:GKComboBox x:Name="cmbSource" IsReadOnly="True" Grid.Column="1" Grid.Row="4" />
-
-                            <input:CheckBox x:Name="chkOnlyPatriarchs" Grid.Column="0" Grid.Row="5" />
+                            <comcom:GKComboBox x:Name="cmbSource" Grid.Column="1" Grid.Row="4" />
                         </Grid>
 
                         <Label VerticalOptions="FillAndExpand" />

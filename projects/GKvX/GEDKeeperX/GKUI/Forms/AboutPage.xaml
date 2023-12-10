@@ -15,29 +15,20 @@
 
     <StackLayout Orientation="Vertical" Spacing="8" Padding="8">
 
-        <StackLayout Spacing="8">
-            <StackLayout Spacing="8" Orientation="Horizontal">
+        <Image Source="{plat:ImageResourceExt Resources.image_logo.png}" Aspect="AspectFit" />
+        <Label x:Name="lblVersion" Font="Bold+12pt" />
+        <Label x:Name="lblCopyright" Font="Bold+12pt" />
 
-                <StackLayout Spacing="8">
-                    <Image Source="{plat:ImageResourceExt Resources.image_logo.png}" />
-                    <Label x:Name="lblVersion" Font="Bold+12pt" />
-                </StackLayout>
+        <Label VerticalOptions="FillAndExpand" />
 
-                <Label HorizontalOptions="FillAndExpand" />
-
-            </StackLayout>
-
-            <Label x:Name="lblCopyright" Font="Bold+12pt" />
-            <Label VerticalOptions="FillAndExpand" />
-            <Button x:Name="lblProjSite" Font="Bold" Clicked="lblURL_Clicked"
+        <Button x:Name="lblProjSite" Font="Bold" Clicked="lblURL_Clicked"
                         BackgroundColor="{StaticResource Primary}" TextColor="White" Text="https://gedkeeper.net/" />
-            <Button x:Name="lblMail" Font="Bold" Clicked="lblURL_Clicked"
+        <Button x:Name="lblMail" Font="Bold" Clicked="lblURL_Clicked"
                         BackgroundColor="{StaticResource Primary}" TextColor="White" Text="mailto:gedkeeper@yandex.ru" />
-            <Button x:Name="lblForum" Font="Bold" Clicked="lblURL_Clicked"
+        <Button x:Name="lblForum" Font="Bold" Clicked="lblURL_Clicked"
                         BackgroundColor="{StaticResource Primary}" TextColor="White" />
-            <Button x:Name="lblChannel" Font="Bold" Clicked="lblURL_Clicked"
+        <Button x:Name="lblChannel" Font="Bold" Clicked="lblURL_Clicked"
                         BackgroundColor="{StaticResource Primary}" TextColor="White" />
-        </StackLayout>
 
     </StackLayout>
 

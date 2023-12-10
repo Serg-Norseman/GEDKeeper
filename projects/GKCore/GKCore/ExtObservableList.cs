@@ -21,6 +21,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace GKCore
 {
@@ -34,11 +35,21 @@ namespace GKCore
     /// <summary>
     /// 
     /// </summary>
-    public class ExtObservableList<T> : List<T>, IUpdatableCollection, INotifyCollectionChanged
+    public class ExtObservableList<T> : List<T>, IUpdatableCollection, INotifyCollectionChanged, INotifyPropertyChanged
     {
         private int fUpdateCount;
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+        {
+            add {
+                PropertyChanged += value;
+            }
+            remove {
+                PropertyChanged -= value;
+            }
+        }
 
         public ExtObservableList()
         {
@@ -109,7 +120,7 @@ namespace GKCore
 
         #region Private methods
 
-        private void Handle(NotifyCollectionChangedEventArgs args)
+        private void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
         {
             var handler = CollectionChanged;
             if (handler != null && fUpdateCount == 0)
@@ -118,28 +129,48 @@ namespace GKCore
 
         private void ChangeReset()
         {
-            Handle(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            OnPropertyChanged(CountProp);
+            OnPropertyChanged(IndexerProp);
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         private void ChangeAdded(T item, int index)
         {
-            Handle(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
+            OnPropertyChanged(CountProp);
+            OnPropertyChanged(IndexerProp);
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
         }
 
         private void ChangeRemoved(T item, int index)
         {
-            Handle(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
+            OnPropertyChanged(CountProp);
+            OnPropertyChanged(IndexerProp);
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
         }
 
         private void ChangeMoved(T item, int oldIndex, int newIndex)
         {
-            Handle(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, item, newIndex, oldIndex));
+            OnPropertyChanged(IndexerProp);
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, item, newIndex, oldIndex));
         }
 
         private void ChangeReplaced(T item, int index)
         {
-            Handle(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item, item, index));
+            OnPropertyChanged(IndexerProp);
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item, item, index));
         }
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual event PropertyChangedEventHandler PropertyChanged;
+
+        private const string CountProp = "Count";
+        private const string IndexerProp = "Item[]";
 
         #endregion
     }

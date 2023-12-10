@@ -34,57 +34,65 @@ using GKCore.Types;
 
 namespace GKCore.Controllers
 {
+    public sealed class ModificationResult<T> where T : GDMObject
+    {
+        public bool Result;
+        public T Record;
+    }
+
     /// <summary>
     /// 
     /// </summary>
     public static class BaseController
     {
-        public static void ViewRecordInfo(IView owner, IBaseWindow baseWin, GDMRecord record)
+        public static async void ViewRecordInfo(IView owner, IBaseWindow baseWin, GDMRecord record)
         {
             if (record == null) return;
 
             using (var dlg = AppHost.ResolveDialog<IRecordInfoDlg>(baseWin)) {
                 dlg.Record = record;
-                AppHost.Instance.ShowModalX(dlg, owner, false);
+                await AppHost.Instance.ShowModalAsync(dlg, owner, false);
             }
         }
 
         #region Modify routines
 
-        public static bool ModifyMedia(IView owner, IBaseWindow baseWin, ref GDMMultimediaRecord mediaRec)
+        public static async Task<ModificationResult<GDMMultimediaRecord>> ModifyMedia(IView owner, IBaseWindow baseWin, GDMMultimediaRecord mediaRec)
         {
-            bool result;
+            var result = new ModificationResult<GDMMultimediaRecord>();
 
             try {
                 baseWin.Context.BeginUpdate();
                 GDMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.ResolveDialog<IMediaEditDlg>(baseWin)) {
-                    bool exists = mediaRec != null;
-                    if (!exists) {
-                        mediaRec = new GDMMultimediaRecord(tree);
-                        mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle());
-                        tree.NewXRef(mediaRec);
-                    }
+                bool exists = mediaRec != null;
+                if (!exists) {
+                    mediaRec = new GDMMultimediaRecord(tree);
+                    mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle());
+                    tree.NewXRef(mediaRec);
+                }
 
-                    try {
-                        baseWin.Context.LockRecord(mediaRec);
+                try {
+                    baseWin.Context.LockRecord(mediaRec);
 
+                    using (var dlg = AppHost.ResolveDialog<IMediaEditDlg>(baseWin)) {
                         dlg.MultimediaRecord = mediaRec;
-                        result = (AppHost.Instance.ShowModalX(dlg, owner, false));
-                    } finally {
-                        baseWin.Context.UnlockRecord(mediaRec);
+                        result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                     }
+                } finally {
+                    baseWin.Context.UnlockRecord(mediaRec);
+                }
 
-                    if (!exists) {
-                        if (result) {
-                            tree.AddRecord(mediaRec);
-                        } else {
-                            mediaRec.Dispose();
-                            mediaRec = null;
-                        }
+                if (!exists) {
+                    if (result.Result) {
+                        tree.AddRecord(mediaRec);
+                    } else {
+                        mediaRec.Dispose();
+                        mediaRec = null;
                     }
                 }
+
+                result.Record = mediaRec;
             } finally {
                 baseWin.Context.EndUpdate();
             }
@@ -92,9 +100,9 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyNote(IView owner, IBaseWindow baseWin, ref GDMNoteRecord noteRec)
+        public static async Task<ModificationResult<GDMNoteRecord>> ModifyNote(IView owner, IBaseWindow baseWin, GDMNoteRecord noteRec)
         {
-            bool result;
+            var result = new ModificationResult<GDMNoteRecord>();
 
             try {
                 baseWin.Context.BeginUpdate();
@@ -112,12 +120,12 @@ namespace GKCore.Controllers
                     if (GlobalOptions.Instance.UseExtendedNotes) {
                         using (var dlg = AppHost.ResolveDialog<INoteEditDlgEx>(baseWin)) {
                             dlg.NoteRecord = noteRec;
-                            result = (AppHost.Instance.ShowModalX(dlg, owner, false));
+                            result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                         }
                     } else {
                         using (var dlg = AppHost.ResolveDialog<INoteEditDlg>(baseWin)) {
                             dlg.NoteRecord = noteRec;
-                            result = (AppHost.Instance.ShowModalX(dlg, owner, false));
+                            result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                         }
                     }
                 } finally {
@@ -125,13 +133,15 @@ namespace GKCore.Controllers
                 }
 
                 if (!exists) {
-                    if (result) {
+                    if (result.Result) {
                         tree.AddRecord(noteRec);
                     } else {
                         noteRec.Dispose();
                         noteRec = null;
                     }
                 }
+
+                result.Record = noteRec;
             } finally {
                 baseWin.Context.EndUpdate();
             }
@@ -139,39 +149,41 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifySource(IView owner, IBaseWindow baseWin, ref GDMSourceRecord sourceRec)
+        public static async Task<ModificationResult<GDMSourceRecord>> ModifySource(IView owner, IBaseWindow baseWin, GDMSourceRecord sourceRec)
         {
-            bool result;
+            var result = new ModificationResult<GDMSourceRecord>();
 
             try {
                 baseWin.Context.BeginUpdate();
                 GDMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.ResolveDialog<ISourceEditDlg>(baseWin)) {
-                    bool exists = sourceRec != null;
-                    if (!exists) {
-                        sourceRec = new GDMSourceRecord(tree);
-                        tree.NewXRef(sourceRec);
-                    }
+                bool exists = sourceRec != null;
+                if (!exists) {
+                    sourceRec = new GDMSourceRecord(tree);
+                    tree.NewXRef(sourceRec);
+                }
 
-                    try {
-                        baseWin.Context.LockRecord(sourceRec);
+                try {
+                    baseWin.Context.LockRecord(sourceRec);
 
+                    using (var dlg = AppHost.ResolveDialog<ISourceEditDlg>(baseWin)) {
                         dlg.SourceRecord = sourceRec;
-                        result = (AppHost.Instance.ShowModalX(dlg, owner, false));
-                    } finally {
-                        baseWin.Context.UnlockRecord(sourceRec);
+                        result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                     }
+                } finally {
+                    baseWin.Context.UnlockRecord(sourceRec);
+                }
 
-                    if (!exists) {
-                        if (result) {
-                            tree.AddRecord(sourceRec);
-                        } else {
-                            sourceRec.Dispose();
-                            sourceRec = null;
-                        }
+                if (!exists) {
+                    if (result.Result) {
+                        tree.AddRecord(sourceRec);
+                    } else {
+                        sourceRec.Dispose();
+                        sourceRec = null;
                     }
                 }
+
+                result.Record = sourceRec;
             } finally {
                 baseWin.Context.EndUpdate();
             }
@@ -179,31 +191,34 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifySourceCitation(IView owner, IBaseWindow baseWin, ChangeTracker undoman,
-                                                IGDMStructWithSourceCitations _struct, ref GDMSourceCitation cit)
+        public static async Task<ModificationResult<GDMSourceCitation>> ModifySourceCitation(IView owner, IBaseWindow baseWin, ChangeTracker undoman,
+                                                IGDMStructWithSourceCitations _struct, GDMSourceCitation cit)
         {
-            bool result;
+            var result = new ModificationResult<GDMSourceCitation>();
 
             try {
                 baseWin.Context.BeginUpdate();
+
+                bool exists = cit != null;
+                if (!exists) {
+                    cit = new GDMSourceCitation();
+                }
 
                 using (var dlg = AppHost.ResolveDialog<ISourceCitEditDlg>(baseWin)) {
-                    bool exists = cit != null;
-                    if (!exists) {
-                        cit = new GDMSourceCitation();
-                    }
-
                     dlg.SourceCitation = cit;
-                    result = AppHost.Instance.ShowModalX(dlg, owner, false);
+                    result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
+                }
 
-                    if (!exists) {
-                        if (result) {
-                            result = undoman.DoOrdinaryOperation(OperationType.otRecordSourceCitAdd, (GDMObject)_struct, cit);
-                        } else {
-                            cit.Dispose();
-                        }
+                if (!exists) {
+                    if (result.Result) {
+                        result.Result = undoman.DoOrdinaryOperation(OperationType.otRecordSourceCitAdd, (GDMObject)_struct, cit);
+                    } else {
+                        cit.Dispose();
+                        cit = null;
                     }
                 }
+
+                result.Record = cit;
             } finally {
                 baseWin.Context.EndUpdate();
             }
@@ -211,39 +226,41 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyRepository(IView owner, IBaseWindow baseWin, ref GDMRepositoryRecord repRec)
+        public static async Task<ModificationResult<GDMRepositoryRecord>> ModifyRepository(IView owner, IBaseWindow baseWin, GDMRepositoryRecord repRec)
         {
-            bool result;
+            var result = new ModificationResult<GDMRepositoryRecord>();
 
             try {
                 baseWin.Context.BeginUpdate();
                 GDMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.ResolveDialog<IRepositoryEditDlg>(baseWin)) {
-                    bool exists = repRec != null;
-                    if (!exists) {
-                        repRec = new GDMRepositoryRecord(tree);
-                        tree.NewXRef(repRec);
-                    }
+                bool exists = repRec != null;
+                if (!exists) {
+                    repRec = new GDMRepositoryRecord(tree);
+                    tree.NewXRef(repRec);
+                }
 
-                    try {
-                        baseWin.Context.LockRecord(repRec);
+                try {
+                    baseWin.Context.LockRecord(repRec);
 
+                    using (var dlg = AppHost.ResolveDialog<IRepositoryEditDlg>(baseWin)) {
                         dlg.RepositoryRecord = repRec;
-                        result = AppHost.Instance.ShowModalX(dlg, owner, false);
-                    } finally {
-                        baseWin.Context.UnlockRecord(repRec);
+                        result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                     }
+                } finally {
+                    baseWin.Context.UnlockRecord(repRec);
+                }
 
-                    if (!exists) {
-                        if (result) {
-                            tree.AddRecord(repRec);
-                        } else {
-                            repRec.Dispose();
-                            repRec = null;
-                        }
+                if (!exists) {
+                    if (result.Result) {
+                        tree.AddRecord(repRec);
+                    } else {
+                        repRec.Dispose();
+                        repRec = null;
                     }
                 }
+
+                result.Record = repRec;
             } finally {
                 baseWin.Context.EndUpdate();
             }
@@ -251,39 +268,41 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyGroup(IView owner, IBaseWindow baseWin, ref GDMGroupRecord groupRec)
+        public static async Task<ModificationResult<GDMGroupRecord>> ModifyGroup(IView owner, IBaseWindow baseWin, GDMGroupRecord groupRec)
         {
-            bool result;
+            var result = new ModificationResult<GDMGroupRecord>();
 
             try {
                 baseWin.Context.BeginUpdate();
                 GDMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.ResolveDialog<IGroupEditDlg>(baseWin)) {
-                    bool exists = groupRec != null;
-                    if (!exists) {
-                        groupRec = new GDMGroupRecord(tree);
-                        tree.NewXRef(groupRec);
-                    }
+                bool exists = groupRec != null;
+                if (!exists) {
+                    groupRec = new GDMGroupRecord(tree);
+                    tree.NewXRef(groupRec);
+                }
 
-                    try {
-                        baseWin.Context.LockRecord(groupRec);
+                try {
+                    baseWin.Context.LockRecord(groupRec);
 
+                    using (var dlg = AppHost.ResolveDialog<IGroupEditDlg>(baseWin)) {
                         dlg.GroupRecord = groupRec;
-                        result = (AppHost.Instance.ShowModalX(dlg, owner, false));
-                    } finally {
-                        baseWin.Context.UnlockRecord(groupRec);
+                        result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                     }
+                } finally {
+                    baseWin.Context.UnlockRecord(groupRec);
+                }
 
-                    if (!exists) {
-                        if (result) {
-                            tree.AddRecord(groupRec);
-                        } else {
-                            groupRec.Dispose();
-                            groupRec = null;
-                        }
+                if (!exists) {
+                    if (result.Result) {
+                        tree.AddRecord(groupRec);
+                    } else {
+                        groupRec.Dispose();
+                        groupRec = null;
                     }
                 }
+
+                result.Record = groupRec;
             } finally {
                 baseWin.Context.EndUpdate();
             }
@@ -291,39 +310,41 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyResearch(IView owner, IBaseWindow baseWin, ref GDMResearchRecord researchRec)
+        public static async Task<ModificationResult<GDMResearchRecord>> ModifyResearch(IView owner, IBaseWindow baseWin, GDMResearchRecord researchRec)
         {
-            bool result;
+            var result = new ModificationResult<GDMResearchRecord>();
 
             try {
                 baseWin.Context.BeginUpdate();
                 GDMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.ResolveDialog<IResearchEditDlg>(baseWin)) {
-                    bool exists = researchRec != null;
-                    if (!exists) {
-                        researchRec = new GDMResearchRecord(tree);
-                        tree.NewXRef(researchRec);
-                    }
+                bool exists = researchRec != null;
+                if (!exists) {
+                    researchRec = new GDMResearchRecord(tree);
+                    tree.NewXRef(researchRec);
+                }
 
-                    try {
-                        baseWin.Context.LockRecord(researchRec);
+                try {
+                    baseWin.Context.LockRecord(researchRec);
 
+                    using (var dlg = AppHost.ResolveDialog<IResearchEditDlg>(baseWin)) {
                         dlg.ResearchRecord = researchRec;
-                        result = AppHost.Instance.ShowModalX(dlg, owner, false);
-                    } finally {
-                        baseWin.Context.UnlockRecord(researchRec);
+                        result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                     }
+                } finally {
+                    baseWin.Context.UnlockRecord(researchRec);
+                }
 
-                    if (!exists) {
-                        if (result) {
-                            tree.AddRecord(researchRec);
-                        } else {
-                            researchRec.Dispose();
-                            researchRec = null;
-                        }
+                if (!exists) {
+                    if (result.Result) {
+                        tree.AddRecord(researchRec);
+                    } else {
+                        researchRec.Dispose();
+                        researchRec = null;
                     }
                 }
+
+                result.Record = researchRec;
             } finally {
                 baseWin.Context.EndUpdate();
             }
@@ -331,39 +352,41 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyTask(IView owner, IBaseWindow baseWin, ref GDMTaskRecord taskRec)
+        public static async Task<ModificationResult<GDMTaskRecord>> ModifyTask(IView owner, IBaseWindow baseWin, GDMTaskRecord taskRec)
         {
-            bool result;
+            var result = new ModificationResult<GDMTaskRecord>();
 
             try {
                 baseWin.Context.BeginUpdate();
                 GDMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.ResolveDialog<ITaskEditDlg>(baseWin)) {
-                    bool exists = taskRec != null;
-                    if (!exists) {
-                        taskRec = new GDMTaskRecord(tree);
-                        tree.NewXRef(taskRec);
-                    }
+                bool exists = taskRec != null;
+                if (!exists) {
+                    taskRec = new GDMTaskRecord(tree);
+                    tree.NewXRef(taskRec);
+                }
 
-                    try {
-                        baseWin.Context.LockRecord(taskRec);
+                try {
+                    baseWin.Context.LockRecord(taskRec);
 
+                    using (var dlg = AppHost.ResolveDialog<ITaskEditDlg>(baseWin)) {
                         dlg.TaskRecord = taskRec;
-                        result = AppHost.Instance.ShowModalX(dlg, owner, false);
-                    } finally {
-                        baseWin.Context.UnlockRecord(taskRec);
+                        result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                     }
+                } finally {
+                    baseWin.Context.UnlockRecord(taskRec);
+                }
 
-                    if (!exists) {
-                        if (result) {
-                            tree.AddRecord(taskRec);
-                        } else {
-                            taskRec.Dispose();
-                            taskRec = null;
-                        }
+                if (!exists) {
+                    if (result.Result) {
+                        tree.AddRecord(taskRec);
+                    } else {
+                        taskRec.Dispose();
+                        taskRec = null;
                     }
                 }
+
+                result.Record = taskRec;
             } finally {
                 baseWin.Context.EndUpdate();
             }
@@ -371,39 +394,41 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyCommunication(IView owner, IBaseWindow baseWin, ref GDMCommunicationRecord commRec)
+        public static async Task<ModificationResult<GDMCommunicationRecord>> ModifyCommunication(IView owner, IBaseWindow baseWin, GDMCommunicationRecord commRec)
         {
-            bool result;
+            var result = new ModificationResult<GDMCommunicationRecord>();
 
             try {
                 baseWin.Context.BeginUpdate();
                 GDMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.ResolveDialog<ICommunicationEditDlg>(baseWin)) {
-                    bool exists = commRec != null;
-                    if (!exists) {
-                        commRec = new GDMCommunicationRecord(tree);
-                        tree.NewXRef(commRec);
-                    }
+                bool exists = commRec != null;
+                if (!exists) {
+                    commRec = new GDMCommunicationRecord(tree);
+                    tree.NewXRef(commRec);
+                }
 
-                    try {
-                        baseWin.Context.LockRecord(commRec);
+                try {
+                    baseWin.Context.LockRecord(commRec);
 
+                    using (var dlg = AppHost.ResolveDialog<ICommunicationEditDlg>(baseWin)) {
                         dlg.CommunicationRecord = commRec;
-                        result = AppHost.Instance.ShowModalX(dlg, owner, false);
-                    } finally {
-                        baseWin.Context.UnlockRecord(commRec);
+                        result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                     }
+                } finally {
+                    baseWin.Context.UnlockRecord(commRec);
+                }
 
-                    if (!exists) {
-                        if (result) {
-                            tree.AddRecord(commRec);
-                        } else {
-                            commRec.Dispose();
-                            commRec = null;
-                        }
+                if (!exists) {
+                    if (result.Result) {
+                        tree.AddRecord(commRec);
+                    } else {
+                        commRec.Dispose();
+                        commRec = null;
                     }
                 }
+
+                result.Record = commRec;
             } finally {
                 baseWin.Context.EndUpdate();
             }
@@ -411,39 +436,41 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyLocation(IView owner, IBaseWindow baseWin, ref GDMLocationRecord locRec)
+        public static async Task<ModificationResult<GDMLocationRecord>> ModifyLocation(IView owner, IBaseWindow baseWin, GDMLocationRecord locRec)
         {
-            bool result;
+            var result = new ModificationResult<GDMLocationRecord>();
 
             try {
                 baseWin.Context.BeginUpdate();
                 GDMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.ResolveDialog<ILocationEditDlg>(baseWin)) {
-                    bool exists = locRec != null;
-                    if (!exists) {
-                        locRec = new GDMLocationRecord(tree);
-                        tree.NewXRef(locRec);
-                    }
+                bool exists = locRec != null;
+                if (!exists) {
+                    locRec = new GDMLocationRecord(tree);
+                    tree.NewXRef(locRec);
+                }
 
-                    try {
-                        baseWin.Context.LockRecord(locRec);
+                try {
+                    baseWin.Context.LockRecord(locRec);
 
+                    using (var dlg = AppHost.ResolveDialog<ILocationEditDlg>(baseWin)) {
                         dlg.LocationRecord = locRec;
-                        result = AppHost.Instance.ShowModalX(dlg, owner, false);
-                    } finally {
-                        baseWin.Context.UnlockRecord(locRec);
+                        result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                     }
+                } finally {
+                    baseWin.Context.UnlockRecord(locRec);
+                }
 
-                    if (!exists) {
-                        if (result) {
-                            tree.AddRecord(locRec);
-                        } else {
-                            locRec.Dispose();
-                            locRec = null;
-                        }
+                if (!exists) {
+                    if (result.Result) {
+                        tree.AddRecord(locRec);
+                    } else {
+                        locRec.Dispose();
+                        locRec = null;
                     }
                 }
+
+                result.Record = locRec;
             } finally {
                 baseWin.Context.EndUpdate();
             }
@@ -451,7 +478,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        private static void PostProcessPerson(IBaseWindow baseWin, GDMIndividualRecord indivRec)
+        private static async Task PostProcessPerson(IBaseWindow baseWin, GDMIndividualRecord indivRec)
         {
             baseWin.Context.ImportNames(indivRec);
 
@@ -462,41 +489,41 @@ namespace GKCore.Controllers
 
             if (iFilter.SourceMode == FilterGroupMode.Selected) {
                 var src = baseWin.Context.Tree.FindXRef<GDMSourceRecord>(iFilter.SourceRef);
-                if (src != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.IncludedSourceFilter))) {
+                if (src != null && await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.IncludedSourceFilter))) {
                     indivRec.AddSource(src, "", 0);
                 }
             }
 
             if (iFilter.FilterGroupMode == FilterGroupMode.Selected) {
                 var grp = baseWin.Context.Tree.FindXRef<GDMGroupRecord>(iFilter.GroupRef);
-                if (grp != null && AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.IncludedGroupFilter))) {
+                if (grp != null && await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.IncludedGroupFilter))) {
                     grp.AddMember(indivRec);
                 }
             }
         }
 
-        public static bool ModifyIndividual(IView owner, IBaseWindow baseWin, ref GDMIndividualRecord indivRec,
+        public static async Task<ModificationResult<GDMIndividualRecord>> ModifyIndividual(IView owner, IBaseWindow baseWin, GDMIndividualRecord indivRec,
                                      GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex)
         {
-            bool result;
+            var result = new ModificationResult<GDMIndividualRecord>();
 
             try {
                 baseWin.Context.BeginUpdate();
                 GDMTree tree = baseWin.Context.Tree;
 
-                using (var dlg = AppHost.ResolveDialog<IPersonEditDlg>(baseWin)) {
-                    bool exists = (indivRec != null);
-                    if (!exists) {
-                        indivRec = new GDMIndividualRecord(tree);
-                        tree.NewXRef(indivRec);
+                bool exists = (indivRec != null);
+                if (!exists) {
+                    indivRec = new GDMIndividualRecord(tree);
+                    tree.NewXRef(indivRec);
 
-                        indivRec.AddPersonalName(new GDMPersonalName());
-                        baseWin.Context.CreateEventEx(indivRec, GEDCOMTagName.BIRT, "", "");
-                    }
+                    indivRec.AddPersonalName(new GDMPersonalName());
+                    baseWin.Context.CreateEventEx(indivRec, GEDCOMTagName.BIRT, "", "");
+                }
 
-                    try {
-                        baseWin.Context.LockRecord(indivRec);
+                try {
+                    baseWin.Context.LockRecord(indivRec);
 
+                    using (var dlg = AppHost.ResolveDialog<IPersonEditDlg>(baseWin)) {
                         dlg.IndividualRecord = indivRec;
 
                         if (targetMode != TargetMode.tmNone) {
@@ -507,23 +534,25 @@ namespace GKCore.Controllers
                             dlg.Target = target;
                         }
 
-                        result = (AppHost.Instance.ShowModalX(dlg, owner, false));
-                    } finally {
-                        baseWin.Context.UnlockRecord(indivRec);
+                        result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                     }
+                } finally {
+                    baseWin.Context.UnlockRecord(indivRec);
+                }
 
-                    if (!exists) {
-                        if (result) {
-                            PostProcessPerson(baseWin, indivRec);
+                if (!exists) {
+                    if (result.Result) {
+                        await PostProcessPerson(baseWin, indivRec);
 
-                            tree.AddRecord(indivRec);
-                        } else {
-                            indivRec.Clear();
-                            indivRec.Dispose();
-                            indivRec = null;
-                        }
+                        tree.AddRecord(indivRec);
+                    } else {
+                        indivRec.Clear();
+                        indivRec.Dispose();
+                        indivRec = null;
                     }
                 }
+
+                result.Record = indivRec;
             } finally {
                 baseWin.Context.EndUpdate();
             }
@@ -531,9 +560,10 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyFamily(IView owner, IBaseWindow baseWin, ref GDMFamilyRecord familyRec, TargetMode targetType, GDMIndividualRecord target)
+        public static async Task<ModificationResult<GDMFamilyRecord>> ModifyFamily(IView owner, IBaseWindow baseWin, GDMFamilyRecord familyRec,
+            TargetMode targetType, GDMIndividualRecord target)
         {
-            bool result;
+            var result = new ModificationResult<GDMFamilyRecord>();
 
             try {
                 baseWin.Context.BeginUpdate();
@@ -543,38 +573,42 @@ namespace GKCore.Controllers
                     GDMSex sex = target.Sex;
                     if (sex < GDMSex.svMale || sex > GDMSex.svFemale) {
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.IsNotDefinedSex));
-                        return false;
+                        result.Record = familyRec;
+                        result.Result = false;
+                        return result;
                     }
                 }
 
-                using (var dlg = AppHost.ResolveDialog<IFamilyEditDlg>(baseWin)) {
-                    bool exists = (familyRec != null);
-                    if (!exists) {
-                        familyRec = new GDMFamilyRecord(tree);
-                        tree.NewXRef(familyRec);
-                    }
+                bool exists = (familyRec != null);
+                if (!exists) {
+                    familyRec = new GDMFamilyRecord(tree);
+                    tree.NewXRef(familyRec);
+                }
 
-                    try {
-                        baseWin.Context.LockRecord(familyRec);
+                try {
+                    baseWin.Context.LockRecord(familyRec);
 
+                    using (var dlg = AppHost.ResolveDialog<IFamilyEditDlg>(baseWin)) {
                         dlg.FamilyRecord = familyRec;
                         dlg.SetTarget(targetType, target);
 
-                        result = (AppHost.Instance.ShowModalX(dlg, owner, false));
-                    } finally {
-                        baseWin.Context.UnlockRecord(familyRec);
+                        result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                     }
+                } finally {
+                    baseWin.Context.UnlockRecord(familyRec);
+                }
 
-                    if (!exists) {
-                        if (result) {
-                            tree.AddRecord(familyRec);
-                        } else {
-                            familyRec.Clear();
-                            familyRec.Dispose();
-                            familyRec = null;
-                        }
+                if (!exists) {
+                    if (result.Result) {
+                        tree.AddRecord(familyRec);
+                    } else {
+                        familyRec.Clear();
+                        familyRec.Dispose();
+                        familyRec = null;
                     }
                 }
+
+                result.Record = familyRec;
             } finally {
                 baseWin.Context.EndUpdate();
             }
@@ -582,7 +616,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyAddress(IView owner, IBaseWindow baseWin, GDMAddress address)
+        public static async Task<bool> ModifyAddress(IView owner, IBaseWindow baseWin, GDMAddress address)
         {
             bool result;
 
@@ -591,7 +625,7 @@ namespace GKCore.Controllers
 
                 using (var dlg = AppHost.ResolveDialog<IAddressEditDlg>(baseWin)) {
                     dlg.Address = address;
-                    result = (AppHost.Instance.ShowModalX(dlg, owner, false));
+                    result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                 }
             } finally {
                 baseWin.Context.EndUpdate();
@@ -600,25 +634,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool ModifyName(IView owner, IBaseContext context, ref NameEntry nameEntry)
-        {
-            bool result;
-
-            try {
-                context.BeginUpdate();
-
-                using (var dlg = AppHost.ResolveDialog<INameEditDlg>()) {
-                    dlg.IName = nameEntry;
-                    result = AppHost.Instance.ShowModalX(dlg, owner, false);
-                }
-            } finally {
-                context.EndUpdate();
-            }
-
-            return result;
-        }
-
-        public static async Task<bool> ModifyNameAsync(IView owner, IBaseContext context, NameEntry nameEntry)
+        public static async Task<bool> ModifyName(IView owner, IBaseContext context, NameEntry nameEntry)
         {
             bool result;
 
@@ -640,109 +656,98 @@ namespace GKCore.Controllers
 
         #region Data modification functions for UI
 
-        public static GDMRecord AddRecord(IView owner, IBaseWindow baseWin, GDMRecordType rt, Target target)
+        public static async Task<GDMRecord> AddRecord(IView owner, IBaseWindow baseWin, GDMRecordType rt, Target target)
         {
             bool result = false;
             GDMRecord rec = null;
 
             switch (rt) {
-                case GDMRecordType.rtIndividual:
-                    {
+                case GDMRecordType.rtIndividual: {
                         // FIXME: legacy code, checkit
                         if (target == null) {
                             target = new Target();
                             target.TargetMode = TargetMode.tmParent;
                         }
 
-                        GDMIndividualRecord indivRec = null;
-                        result = ModifyIndividual(owner, baseWin, ref indivRec, target.TargetIndividual, target.TargetMode, target.NeedSex);
-                        rec = indivRec;
+                        var indiRes = await ModifyIndividual(owner, baseWin, null, target.TargetIndividual, target.TargetMode, target.NeedSex);
+                        rec = indiRes.Record;
+                        result = indiRes.Result;
                         break;
                     }
 
-                case GDMRecordType.rtFamily:
-                    {
+                case GDMRecordType.rtFamily: {
                         if (target == null) {
                             target = new Target();
                         }
 
                         TargetMode famTarget = (target.TargetMode != TargetMode.tmFamilyChild) ? TargetMode.tmNone : target.TargetMode;
 
-                        GDMFamilyRecord fam = null;
-                        result = ModifyFamily(owner, baseWin, ref fam, famTarget, target.TargetIndividual);
-                        rec = fam;
+                        var famRes = await ModifyFamily(owner, baseWin, null, famTarget, target.TargetIndividual);
+                        rec = famRes.Record;
+                        result = famRes.Result;
                         break;
                     }
 
-                case GDMRecordType.rtNote:
-                    {
-                        GDMNoteRecord note = null;
-                        result = ModifyNote(owner, baseWin, ref note);
-                        rec = note;
+                case GDMRecordType.rtNote: {
+                        var noteRes = await ModifyNote(owner, baseWin, null);
+                        rec = noteRes.Record;
+                        result = noteRes.Result;
                         break;
                     }
 
-                case GDMRecordType.rtMultimedia:
-                    {
-                        GDMMultimediaRecord mmRec = null;
-                        result = ModifyMedia(owner, baseWin, ref mmRec);
-                        rec = mmRec;
+                case GDMRecordType.rtMultimedia: {
+                        var mmRes = await ModifyMedia(owner, baseWin, null);
+                        rec = mmRes.Record;
+                        result = mmRes.Result;
                         break;
                     }
 
-                case GDMRecordType.rtSource:
-                    {
-                        GDMSourceRecord src = null;
-                        result = ModifySource(owner, baseWin, ref src);
-                        rec = src;
+                case GDMRecordType.rtSource: {
+                        var srcRes = await ModifySource(owner, baseWin, null);
+                        rec = srcRes.Record;
+                        result = srcRes.Result;
                         break;
                     }
 
-                case GDMRecordType.rtRepository:
-                    {
-                        GDMRepositoryRecord rep = null;
-                        result = ModifyRepository(owner, baseWin, ref rep);
-                        rec = rep;
+                case GDMRecordType.rtRepository: {
+                        var repRes = await ModifyRepository(owner, baseWin, null);
+                        rec = repRes.Record;
+                        result = repRes.Result;
                         break;
                     }
 
-                case GDMRecordType.rtGroup:
-                    {
-                        GDMGroupRecord grp = null;
-                        result = ModifyGroup(owner, baseWin, ref grp);
-                        rec = grp;
+                case GDMRecordType.rtGroup: {
+                        var grpRes = await ModifyGroup(owner, baseWin, null);
+                        rec = grpRes.Record;
+                        result = grpRes.Result;
                         break;
                     }
 
-                case GDMRecordType.rtResearch:
-                    {
-                        GDMResearchRecord rsr = null;
-                        result = ModifyResearch(owner, baseWin, ref rsr);
-                        rec = rsr;
+                case GDMRecordType.rtResearch: {
+                        var resRes = await ModifyResearch(owner, baseWin, null);
+                        rec = resRes.Record;
+                        result = resRes.Result;
                         break;
                     }
 
-                case GDMRecordType.rtTask:
-                    {
-                        GDMTaskRecord tsk = null;
-                        result = ModifyTask(owner, baseWin, ref tsk);
-                        rec = tsk;
+                case GDMRecordType.rtTask: {
+                        var tskRes = await ModifyTask(owner, baseWin, null);
+                        rec = tskRes.Record;
+                        result = tskRes.Result;
                         break;
                     }
 
-                case GDMRecordType.rtCommunication:
-                    {
-                        GDMCommunicationRecord comm = null;
-                        result = ModifyCommunication(owner, baseWin, ref comm);
-                        rec = comm;
+                case GDMRecordType.rtCommunication: {
+                        var commRes = await ModifyCommunication(owner, baseWin, null);
+                        rec = commRes.Record;
+                        result = commRes.Result;
                         break;
                     }
 
-                case GDMRecordType.rtLocation:
-                    {
-                        GDMLocationRecord loc = null;
-                        result = ModifyLocation(owner, baseWin, ref loc);
-                        rec = loc;
+                case GDMRecordType.rtLocation: {
+                        var locRes = await ModifyLocation(owner, baseWin, null);
+                        rec = locRes.Record;
+                        result = locRes.Result;
                         break;
                     }
             }
@@ -750,64 +755,75 @@ namespace GKCore.Controllers
             return (result) ? rec : null;
         }
 
-        public static bool EditRecord(IView owner, IBaseWindow baseWin, GDMRecord rec)
+        public static async Task<bool> EditRecord(IView owner, IBaseWindow baseWin, GDMRecord rec)
         {
             bool result = false;
 
             switch (rec.RecordType) {
-                case GDMRecordType.rtIndividual:
-                    GDMIndividualRecord ind = rec as GDMIndividualRecord;
-                    result = ModifyIndividual(owner, baseWin, ref ind, null, TargetMode.tmNone, GDMSex.svUnknown);
+                case GDMRecordType.rtIndividual: {
+                        var indiRes = await ModifyIndividual(owner, baseWin, rec as GDMIndividualRecord, null, TargetMode.tmNone, GDMSex.svUnknown);
+                        result = indiRes.Result;
+                    }
                     break;
 
-                case GDMRecordType.rtFamily:
-                    GDMFamilyRecord fam = rec as GDMFamilyRecord;
-                    result = ModifyFamily(owner, baseWin, ref fam, TargetMode.tmNone, null);
+                case GDMRecordType.rtFamily: {
+                        var famRes = await ModifyFamily(owner, baseWin, rec as GDMFamilyRecord, TargetMode.tmNone, null);
+                        result = famRes.Result;
+                    }
                     break;
 
-                case GDMRecordType.rtNote:
-                    GDMNoteRecord note = rec as GDMNoteRecord;
-                    result = ModifyNote(owner, baseWin, ref note);
+                case GDMRecordType.rtNote: {
+                        var noteRes = await ModifyNote(owner, baseWin, rec as GDMNoteRecord);
+                        result = noteRes.Result;
+                    }
                     break;
 
-                case GDMRecordType.rtMultimedia:
-                    GDMMultimediaRecord mmRec = rec as GDMMultimediaRecord;
-                    result = ModifyMedia(owner, baseWin, ref mmRec);
+                case GDMRecordType.rtMultimedia: {
+                        var mmRes = await ModifyMedia(owner, baseWin, rec as GDMMultimediaRecord);
+                        result = mmRes.Result;
+                    }
                     break;
 
-                case GDMRecordType.rtSource:
-                    GDMSourceRecord src = rec as GDMSourceRecord;
-                    result = ModifySource(owner, baseWin, ref src);
+                case GDMRecordType.rtSource: {
+                        var srcRes = await ModifySource(owner, baseWin, rec as GDMSourceRecord);
+                        result = srcRes.Result;
+                    }
                     break;
 
-                case GDMRecordType.rtRepository:
-                    GDMRepositoryRecord rep = rec as GDMRepositoryRecord;
-                    result = ModifyRepository(owner, baseWin, ref rep);
+                case GDMRecordType.rtRepository: {
+                        var repRes = await ModifyRepository(owner, baseWin, rec as GDMRepositoryRecord);
+                        result = repRes.Result;
+                    }
                     break;
 
-                case GDMRecordType.rtGroup:
-                    GDMGroupRecord grp = rec as GDMGroupRecord;
-                    result = ModifyGroup(owner, baseWin, ref grp);
+                case GDMRecordType.rtGroup: {
+                        var grpRes = await ModifyGroup(owner, baseWin, rec as GDMGroupRecord);
+                        result = grpRes.Result;
+                    }
                     break;
 
-                case GDMRecordType.rtResearch:
-                    GDMResearchRecord rsr = rec as GDMResearchRecord;
-                    result = ModifyResearch(owner, baseWin, ref rsr);
+                case GDMRecordType.rtResearch: {
+                        var resRes = await ModifyResearch(owner, baseWin, rec as GDMResearchRecord);
+                        result = resRes.Result;
+                    }
                     break;
 
-                case GDMRecordType.rtTask:
-                    GDMTaskRecord tsk = rec as GDMTaskRecord;
-                    result = ModifyTask(owner, baseWin, ref tsk);
+                case GDMRecordType.rtTask: {
+                        var taskRes = await ModifyTask(owner, baseWin, rec as GDMTaskRecord);
+                        result = taskRes.Result;
+                    }
                     break;
 
-                case GDMRecordType.rtCommunication:
-                    GDMCommunicationRecord comm = rec as GDMCommunicationRecord;
-                    result = ModifyCommunication(owner, baseWin, ref comm);
+                case GDMRecordType.rtCommunication: {
+                        var commRes = await ModifyCommunication(owner, baseWin, rec as GDMCommunicationRecord);
+                        result = commRes.Result;
+                    }
                     break;
 
-                case GDMRecordType.rtLocation:
-                    GDMLocationRecord loc = rec as GDMLocationRecord;
-                    result = ModifyLocation(owner, baseWin, ref loc);
+                case GDMRecordType.rtLocation: {
+                        var locRes = await ModifyLocation(owner, baseWin, rec as GDMLocationRecord);
+                        result = locRes.Result;
+                    }
                     break;
             }
 
@@ -871,28 +887,28 @@ namespace GKCore.Controllers
             return msg;
         }
 
-        public static bool DeleteRecord(IBaseWindow baseWin, GDMRecord record, bool confirm)
+        public static async Task<bool> DeleteRecord(IBaseWindow baseWin, GDMRecord record, bool confirm)
         {
             bool result;
 
             if (record == null) {
                 result = false;
             } else {
-                if (confirm && !AppHost.StdDialogs.ShowQuestion(GetDeleteMessage(baseWin, record))) {
+                if (confirm && !await AppHost.StdDialogs.ShowQuestion(GetDeleteMessage(baseWin, record))) {
                     result = false;
                 } else {
-                    result = baseWin.Context.DeleteRecord(record);
+                    result = await baseWin.Context.DeleteRecord(record);
                 }
             }
 
             return result;
         }
 
-        public static bool AddIndividualFather(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
+        public static async Task<bool> AddIndividualFather(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
         {
             bool result = false;
 
-            GDMIndividualRecord father = baseWin.Context.SelectPerson(owner, person, TargetMode.tmChild, GDMSex.svMale);
+            GDMIndividualRecord father = await baseWin.Context.SelectPerson(owner, person, TargetMode.tmChild, GDMSex.svMale);
             if (father == null) return result;
 
             if (father == person) {
@@ -900,7 +916,7 @@ namespace GKCore.Controllers
                 return result;
             }
 
-            GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, father);
+            GDMFamilyRecord family = await baseWin.Context.GetChildFamily(person, true, father);
             if (family == null) return result;
 
             var husb = baseWin.Context.Tree.GetPtrValue<GDMIndividualRecord>(family.Husband);
@@ -916,12 +932,12 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool DeleteIndividualFather(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
+        public static async Task<bool> DeleteIndividualFather(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
         {
             bool result = false;
 
-            if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachFatherQuery))) {
-                GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
+            if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachFatherQuery))) {
+                GDMFamilyRecord family = await baseWin.Context.GetChildFamily(person, false, null);
                 if (family != null) {
                     GDMIndividualRecord father = baseWin.Context.Tree.GetPtrValue(family.Husband);
                     result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, father);
@@ -931,11 +947,11 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool AddIndividualMother(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
+        public static async Task<bool> AddIndividualMother(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
         {
             bool result = false;
 
-            GDMIndividualRecord mother = baseWin.Context.SelectPerson(owner, person, TargetMode.tmChild, GDMSex.svFemale);
+            GDMIndividualRecord mother = await baseWin.Context.SelectPerson(owner, person, TargetMode.tmChild, GDMSex.svFemale);
             if (mother == null) return result;
 
             if (mother == person) {
@@ -943,7 +959,7 @@ namespace GKCore.Controllers
                 return result;
             }
 
-            GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, true, mother);
+            GDMFamilyRecord family = await baseWin.Context.GetChildFamily(person, true, mother);
             if (family == null) return result;
 
             var wife = baseWin.Context.Tree.GetPtrValue<GDMIndividualRecord>(family.Wife);
@@ -958,12 +974,12 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool DeleteIndividualMother(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
+        public static async Task<bool> DeleteIndividualMother(IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
         {
             bool result = false;
 
-            if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachMotherQuery))) {
-                GDMFamilyRecord family = baseWin.Context.GetChildFamily(person, false, null);
+            if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachMotherQuery))) {
+                GDMFamilyRecord family = await baseWin.Context.GetChildFamily(person, false, null);
                 if (family != null) {
                     GDMIndividualRecord mother = baseWin.Context.Tree.GetPtrValue(family.Wife);
                     result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, mother);
@@ -974,12 +990,12 @@ namespace GKCore.Controllers
         }
 
 
-        public static bool AddFamilyHusband(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
+        public static async Task<bool> AddFamilyHusband(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
         {
             bool result = false;
 
             var wife = baseWin.Context.Tree.GetPtrValue(family.Wife);
-            GDMIndividualRecord husband = baseWin.Context.SelectPerson(owner, wife, TargetMode.tmSpouse, GDMSex.svMale);
+            GDMIndividualRecord husband = await baseWin.Context.SelectPerson(owner, wife, TargetMode.tmSpouse, GDMSex.svMale);
             if (husband != null && family.Husband.IsEmpty()) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, husband);
             }
@@ -987,26 +1003,26 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool DeleteFamilyHusband(IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
+        public static async Task<bool> DeleteFamilyHusband(IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
         {
             bool result = false;
 
             GDMIndividualRecord husband = baseWin.Context.Tree.GetPtrValue(family.Husband);
             if (!baseWin.Context.IsAvailableRecord(husband)) return false;
 
-            if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachHusbandQuery))) {
+            if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachHusbandQuery))) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, husband);
             }
 
             return result;
         }
 
-        public static bool AddFamilyWife(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
+        public static async Task<bool> AddFamilyWife(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
         {
             bool result = false;
 
             var husband = baseWin.Context.Tree.GetPtrValue(family.Husband);
-            GDMIndividualRecord wife = baseWin.Context.SelectPerson(owner, husband, TargetMode.tmSpouse, GDMSex.svFemale);
+            GDMIndividualRecord wife = await baseWin.Context.SelectPerson(owner, husband, TargetMode.tmSpouse, GDMSex.svFemale);
             if (wife != null && family.Wife.IsEmpty()) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, wife);
             }
@@ -1014,35 +1030,33 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static bool DeleteFamilyWife(IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
+        public static async Task<bool> DeleteFamilyWife(IBaseWindow baseWin, ChangeTracker localUndoman, GDMFamilyRecord family)
         {
             bool result = false;
 
             GDMIndividualRecord wife = baseWin.Context.Tree.GetPtrValue(family.Wife);
             if (!baseWin.Context.IsAvailableRecord(wife)) return false;
 
-            if (AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachWifeQuery))) {
+            if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachWifeQuery))) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseDetach, family, wife);
             }
 
             return result;
         }
 
-        public static bool SelectPortraitRegion(IView owner, IBaseWindow baseWin, GDMMultimediaLink mmLink)
+        public static async Task<bool> SelectPortraitRegion(IView owner, IBaseWindow baseWin, GDMMultimediaLink mmLink)
         {
             bool result;
             using (var dlg = AppHost.ResolveDialog<IPortraitSelectDlg>(baseWin)) {
                 dlg.MultimediaLink = mmLink;
-                result = AppHost.Instance.ShowModalX(dlg, owner, false);
+                result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
             }
             return result;
         }
 
-        public static bool AddIndividualPortrait(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord iRec)
+        public static async Task<bool> AddIndividualPortrait(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord iRec)
         {
-            bool result = false;
-
-            GDMMultimediaRecord mmRec = baseWin.Context.SelectRecord(owner, GDMRecordType.rtMultimedia, null) as GDMMultimediaRecord;
+            GDMMultimediaRecord mmRec = await baseWin.Context.SelectRecord(owner, GDMRecordType.rtMultimedia, null) as GDMMultimediaRecord;
             if (mmRec == null) return false;
 
             // remove previous portrait link
@@ -1055,7 +1069,7 @@ namespace GKCore.Controllers
             mmLink = iRec.SetPrimaryMultimediaLink(mmRec);
 
             // select portrait area
-            result = SelectPortraitRegion(owner, baseWin, mmLink);
+            bool result = await SelectPortraitRegion(owner, baseWin, mmLink);
 
             if (result) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otIndividualPortraitAttach, iRec, mmLink);
@@ -1073,14 +1087,14 @@ namespace GKCore.Controllers
             return false;
         }
 
-        public static void ShowRecMerge(IView owner, IBaseWindow baseWin, GDMRecord rec1, GDMRecord rec2)
+        public static async void ShowRecMerge(IView owner, IBaseWindow baseWin, GDMRecord rec1, GDMRecord rec2)
         {
             try {
                 baseWin.Context.BeginUpdate();
                 using (var dlg = AppHost.Container.Resolve<IRecMergeDlg>(baseWin)) {
                     dlg.SetRec1(rec1);
                     dlg.SetRec2(rec2);
-                    AppHost.Instance.ShowModalX(dlg, owner, false);
+                    await AppHost.Instance.ShowModalAsync(dlg, owner, false);
                 }
             } finally {
                 baseWin.Context.EndUpdate();

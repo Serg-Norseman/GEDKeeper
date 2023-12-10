@@ -19,27 +19,13 @@
  */
 
 using GDModel;
-using GKCore;
+using GKCore.Controllers;
 using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {
-    public sealed partial class SexCheckDlg : CommonDialog, ISexCheckDlg
+    public sealed partial class SexCheckDlg : CommonDialog<ISexCheckDlg, SexCheckController>, ISexCheckDlg
     {
-        public SexCheckDlg()
-        {
-            InitializeComponent();
-
-            // SetLocale()
-            btnAccept.Text = LangMan.LS(LSID.DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.DlgCancel);
-            Title = LangMan.LS(LSID.WinCheckSex);
-            grpSex.Text = LangMan.LS(LSID.Sex);
-            rbNone.Text = "?";
-            rbMale.Text = LangMan.LS(LSID.SexM);
-            rbFemale.Text = LangMan.LS(LSID.SexF);
-        }
-
         public string IndividualName
         {
             get { return txtName.Text; }
@@ -48,31 +34,15 @@ namespace GKUI.Forms
 
         public GDMSex Sex
         {
-            get {
-                if (rbMale.IsChecked) {
-                    return GDMSex.svMale;
-                }
-                if (rbFemale.IsChecked) {
-                    return GDMSex.svFemale;
-                }
-                return GDMSex.svUnknown;
-            }
-            set {
-                switch (value) {
-                    case GDMSex.svUnknown:
-                    case GDMSex.svIntersex:
-                        rbNone.IsChecked = true;
-                        break;
+            get { return fController.Sex; }
+            set { fController.Sex = value; }
+        }
 
-                    case GDMSex.svMale:
-                        rbMale.IsChecked = true;
-                        break;
+        public SexCheckDlg()
+        {
+            InitializeComponent();
 
-                    case GDMSex.svFemale:
-                        rbFemale.IsChecked = true;
-                        break;
-                }
-            }
+            fController = new SexCheckController(this);
         }
     }
 }

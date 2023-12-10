@@ -20,6 +20,7 @@
 
 using GKCore;
 using GKCore.Design.Controls;
+using GKUI.Components;
 using Xamarin.Forms;
 
 namespace GKUI.Platform
@@ -41,8 +42,8 @@ namespace GKUI.Platform
 
         public string[] Lines
         {
-            get { return /*UIHelper.Convert(Control.Text)*/ null; }
-            set { } // TODO
+            get { return UIHelper.Convert(Control.Text); }
+            set { Control.Text = UIHelper.Convert(value); }
         }
 
         public bool ReadOnly

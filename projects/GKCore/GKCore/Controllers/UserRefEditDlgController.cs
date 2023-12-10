@@ -20,8 +20,8 @@
 
 using System;
 using GDModel;
-using GKCore.Design.Controls;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Types;
 
@@ -53,9 +53,11 @@ namespace GKCore.Controllers
                 string sur = LangMan.LS(GKData.SpecialUserRefs[(int)ur].Title);
                 fView.Ref.Add(sur);
             }
+            fView.Ref.ReadOnly = false;
 
             fView.RefType.Add("");
             fView.RefType.Add(LangMan.LS(GKData.URTreeNoteType));
+            fView.RefType.ReadOnly = false;
         }
 
         public override bool Accept()

@@ -442,6 +442,11 @@ SectionGroup /e "$(gklang)"
         SetOutPath "$INSTDIR\locales"
         File "..\locales\Dutch.lng"
     SectionEnd
+
+    Section "日本語" (Nihongo)"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Japanese.lng"
+    SectionEnd
 SectionGroupEnd
 
 SectionGroup /e "$(gkplg)"
@@ -473,6 +478,8 @@ SectionGroup /e "$(gkplg)"
     Section "$(gkp_pi)"
         SetOutPath "$INSTDIR\plugins"
         File "..\plugins\GKPedigreeImporterPlugin.*"
+        File "..\plugins\NPOI*.*"
+        File "..\plugins\ICSharpCode.SharpZipLib.dll"
     SectionEnd
 
     Section "$(gkp_ts)"

@@ -90,12 +90,12 @@ namespace GKCore.Controllers
             UpdateChart();
         }
 
-        private void InternalChildAdd(GDMSex needSex)
+        private async void InternalChildAdd(GDMSex needSex)
         {
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            GDMIndividualRecord child = fBase.Context.AddChildForParent(fView, p.Rec, needSex);
+            GDMIndividualRecord child = await fBase.Context.AddChildForParent(fView, p.Rec, needSex);
             if (child == null) return;
 
             UpdateChart();
@@ -111,13 +111,13 @@ namespace GKCore.Controllers
             InternalChildAdd(GDMSex.svFemale);
         }
 
-        public void AddSpouse()
+        public async void AddSpouse()
         {
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
             GDMIndividualRecord iRec = p.Rec;
-            GDMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(fView, iRec);
+            GDMIndividualRecord iSpouse = await fBase.Context.SelectSpouseFor(fView, iRec);
             if (iSpouse == null) return;
 
             GDMFamilyRecord fam = fBase.Context.Tree.CreateFamily();
@@ -126,7 +126,7 @@ namespace GKCore.Controllers
             UpdateChart();
         }
 
-        private void ParentAdd(GDMSex needSex)
+        private async void ParentAdd(GDMSex needSex)
         {
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
@@ -147,7 +147,7 @@ namespace GKCore.Controllers
             }
 
             if (needParent) {
-                GDMIndividualRecord parent = fBase.Context.SelectPerson(fView, p.Rec, TargetMode.tmChild, needSex);
+                GDMIndividualRecord parent = await fBase.Context.SelectPerson(fView, p.Rec, TargetMode.tmChild, needSex);
                 if (parent != null) {
                     if (!familyExist) {
                         fam = fBase.Context.Tree.CreateFamily();
@@ -171,35 +171,35 @@ namespace GKCore.Controllers
             ParentAdd(GDMSex.svFemale);
         }
 
-        public void Edit()
+        public async void Edit()
         {
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            GDMIndividualRecord iRec = p.Rec;
-            if (BaseController.ModifyIndividual(fView, fBase, ref iRec, null, TargetMode.tmNone, GDMSex.svUnknown)) {
+            var indiRes = await BaseController.ModifyIndividual(fView, fBase, p.Rec, null, TargetMode.tmNone, GDMSex.svUnknown);
+            if (indiRes.Result) {
                 UpdateChart();
             }
         }
 
-        public void Delete()
+        public async void Delete()
         {
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null || p == fView.TreeBox.Model.Root) return;
 
-            BaseController.DeleteRecord(fBase, p.Rec, true);
+            await BaseController.DeleteRecord(fBase, p.Rec, true);
             UpdateChart();
         }
 
-        public void ModifyPerson(TreeChartPerson person)
+        public async void ModifyPerson(TreeChartPerson person)
         {
             if (person == null) return;
 
             bool modified = false;
 
             if (person.Rec != null) {
-                GDMIndividualRecord iRec = person.Rec;
-                modified = BaseController.ModifyIndividual(fView, fBase, ref iRec, null, TargetMode.tmNone, GDMSex.svUnknown);
+                var indiRes = await BaseController.ModifyIndividual(fView, fBase, person.Rec, null, TargetMode.tmNone, GDMSex.svUnknown);
+                modified = indiRes.Result;
             } else {
                 // this is "stub" person, only in descendant tree
                 // key properties = BaseSpouse & BaseFamily
@@ -207,7 +207,7 @@ namespace GKCore.Controllers
                 GDMFamilyRecord baseFamily = person.BaseFamily;
 
                 if (baseSpouse != null && baseFamily != null) {
-                    GDMIndividualRecord iSpouse = fBase.Context.SelectSpouseFor(fView, person.BaseSpouse.Rec);
+                    GDMIndividualRecord iSpouse = await fBase.Context.SelectSpouseFor(fView, person.BaseSpouse.Rec);
 
                     if (iSpouse != null) {
                         modified = baseFamily.AddSpouse(iSpouse);
@@ -274,10 +274,10 @@ namespace GKCore.Controllers
             return (p != null && p.Rec != null);
         }
 
-        public void SaveSnapshot()
+        public async void SaveSnapshot()
         {
             string filters = GKUtils.GetImageFilter(true);
-            string fileName = AppHost.StdDialogs.GetSaveFile("", GlobalOptions.Instance.ImageExportLastDir, filters, 2, "jpg", "");
+            string fileName = await AppHost.StdDialogs.GetSaveFile("", GlobalOptions.Instance.ImageExportLastDir, filters, 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName)) {
                 GlobalOptions.Instance.ImageExportLastDir = Path.GetDirectoryName(fileName);
 
@@ -285,23 +285,23 @@ namespace GKCore.Controllers
             }
         }
 
-        public void SetFilter()
+        public async void SetFilter()
         {
             using (var dlgFilter = AppHost.Container.Resolve<ITreeFilterDlg>(fBase)) {
                 dlgFilter.Filter = fView.TreeBox.Model.Filter;
 
-                if (dlgFilter.ShowModalX(fView)) {
+                if (await AppHost.Instance.ShowModalAsync(dlgFilter, fView)) {
                     fView.GenChart();
                 }
             }
         }
 
-        public void SelectColor()
+        public async void SelectColor()
         {
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            p.UserColor = AppHost.StdDialogs.SelectColor(p.UserColor);
+            p.UserColor = await AppHost.StdDialogs.SelectColor(p.UserColor);
             fView.TreeBox.Invalidate();
         }
 
@@ -331,10 +331,26 @@ namespace GKCore.Controllers
             GetControl<IButtonToolItem>("tbGensAncestors").Text = LangMan.LS(LSID.Generations) + ": " + LangMan.LS(LSID.Ancestors);
             GetControl<IButtonToolItem>("tbGensDescendants").Text = LangMan.LS(LSID.Generations) + ": " + LangMan.LS(LSID.Descendants);
             GetControl<IButtonToolItem>("tbBorders").Text = LangMan.LS(LSID.Borders);
-
-            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) return;
-
             GetControl<IButtonToolItem>("tbModes").Text = LangMan.LS(LSID.ModesTip);
+
+            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<IButtonToolItem>("miEdit").Text = LangMan.LS(LSID.DoEdit);
+                GetControl<IButtonToolItem>("miFatherAdd").Text = LangMan.LS(LSID.FatherAdd);
+                GetControl<IButtonToolItem>("miMotherAdd").Text = LangMan.LS(LSID.MotherAdd);
+                GetControl<IButtonToolItem>("miFamilyAdd").Text = LangMan.LS(LSID.FamilyAdd);
+                GetControl<IButtonToolItem>("miSpouseAdd").Text = LangMan.LS(LSID.SpouseAdd);
+                GetControl<IButtonToolItem>("miSonAdd").Text = LangMan.LS(LSID.SonAdd);
+                GetControl<IButtonToolItem>("miDaughterAdd").Text = LangMan.LS(LSID.DaughterAdd);
+                GetControl<IButtonToolItem>("miDelete").Text = LangMan.LS(LSID.DoDelete);
+                GetControl<IButtonToolItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
+                GetControl<IButtonToolItem>("miGoToPrimaryBranch").Text = LangMan.LS(LSID.GoToPrimaryBranch);
+                GetControl<IButtonToolItem>("miOpenInNewWindow").Text = LangMan.LS(LSID.OpenInNewWindow);
+                GetControl<IButtonToolItem>("miMergeDuplicates").Text = LangMan.LS(LSID.MergeDuplicates);
+                GetControl<IButtonToolItem>("miRebuildTree").Text = LangMan.LS(LSID.RebuildTree);
+                GetControl<IButtonToolItem>("miRebuildKinships").Text = LangMan.LS(LSID.RebuildKinships);
+                GetControl<IButtonToolItem>("miSelectColor").Text = LangMan.LS(LSID.SelectColor);
+                return;
+            }
 
             GetControl<IMenuItem>("miGensInfCommon").Text = LangMan.LS(LSID.Unlimited);
             GetControl<IMenuItem>("miGensInfAncestors").Text = LangMan.LS(LSID.Unlimited);
@@ -342,6 +358,7 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miModeBoth").Text = LangMan.LS(LSID.TM_Both);
             GetControl<IMenuItem>("miModeAncestors").Text = LangMan.LS(LSID.TM_Ancestors);
             GetControl<IMenuItem>("miModeDescendants").Text = LangMan.LS(LSID.TM_Descendants);
+
             GetControl<IMenuItem>("miEdit").Text = LangMan.LS(LSID.DoEdit);
             GetControl<IMenuItem>("miFatherAdd").Text = LangMan.LS(LSID.FatherAdd);
             GetControl<IMenuItem>("miMotherAdd").Text = LangMan.LS(LSID.MotherAdd);
@@ -350,19 +367,20 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miSonAdd").Text = LangMan.LS(LSID.SonAdd);
             GetControl<IMenuItem>("miDaughterAdd").Text = LangMan.LS(LSID.DaughterAdd);
             GetControl<IMenuItem>("miDelete").Text = LangMan.LS(LSID.DoDelete);
+            GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
+            GetControl<IMenuItem>("miGoToPrimaryBranch").Text = LangMan.LS(LSID.GoToPrimaryBranch);
+            GetControl<IMenuItem>("miOpenInNewWindow").Text = LangMan.LS(LSID.OpenInNewWindow);
+            GetControl<IMenuItem>("miMergeDuplicates").Text = LangMan.LS(LSID.MergeDuplicates);
             GetControl<IMenuItem>("miRebuildTree").Text = LangMan.LS(LSID.RebuildTree);
             GetControl<IMenuItem>("miRebuildKinships").Text = LangMan.LS(LSID.RebuildKinships);
+            GetControl<IMenuItem>("miSelectColor").Text = LangMan.LS(LSID.SelectColor);
+
             GetControl<IMenuItem>("miFillColor").Text = LangMan.LS(LSID.FillColor);
             GetControl<IMenuItem>("miFillImage").Text = LangMan.LS(LSID.FillImage);
             GetControl<IMenuItem>("miTraceSelected").Text = LangMan.LS(LSID.TM_TraceSelected);
             GetControl<IMenuItem>("miTraceKinships").Text = LangMan.LS(LSID.TM_TraceKinships);
             GetControl<IMenuItem>("miCertaintyIndex").Text = LangMan.LS(LSID.CertaintyIndex);
             GetControl<IMenuItem>("miXRefVisible").Text = LangMan.LS(LSID.XRefVisible);
-            GetControl<IMenuItem>("miSelectColor").Text = LangMan.LS(LSID.SelectColor);
-            GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
-            GetControl<IMenuItem>("miGoToPrimaryBranch").Text = LangMan.LS(LSID.GoToPrimaryBranch);
-            GetControl<IMenuItem>("miOpenInNewWindow").Text = LangMan.LS(LSID.OpenInNewWindow);
-            GetControl<IMenuItem>("miMergeDuplicates").Text = LangMan.LS(LSID.MergeDuplicates);
             GetControl<IMenuItem>("miHideDescSpouses").Text = LangMan.LS(LSID.HideDescSpouses);
 
             SetToolTip("tbModes", LangMan.LS(LSID.ModesTip));

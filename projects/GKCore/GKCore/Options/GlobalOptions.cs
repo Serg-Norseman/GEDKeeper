@@ -513,11 +513,20 @@ namespace GKCore.Options
 
         #region MRU
 
+        private static bool EqualsFileNames(string mruFileName, string fileName)
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                return mruFileName == fileName;
+            } else {
+                return Path.GetFileName(mruFileName) == Path.GetFileName(fileName);
+            }
+        }
+
         public int MRUFiles_IndexOf(string fileName)
         {
             int num = fMRUFiles.Count;
             for (int i = 0; i < num; i++) {
-                if (fMRUFiles[i].FileName == fileName) {
+                if (EqualsFileNames(fMRUFiles[i].FileName, fileName)) {
                     return i;
                 }
             }
@@ -541,6 +550,18 @@ namespace GKCore.Options
                         mruFiles.Add(mf);
                     } else {
                         MRUFile.DeleteKeys(ini, sect);
+                    }
+                }
+
+                // remove duplicates (only for Mobile)
+                if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                    for (int i = 0; i < cnt; i++) {
+                        for (int k = cnt - 1; k > i; k--) {
+                            if (EqualsFileNames(mruFiles[i].FileName, mruFiles[k].FileName)) {
+                                mruFiles.RemoveAt(k);
+                                cnt--;
+                            }
+                        }
                     }
                 }
             } catch (Exception ex) {
