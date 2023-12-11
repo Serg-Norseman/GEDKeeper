@@ -64,6 +64,13 @@ namespace GKUI.Components
             }
 
 
+            public object[] Values
+            {
+                get { return new object[] { ColumnText, ConditionText, ValueText }; }
+                set { }
+            }
+
+
             public FilterConditionRow(FilterGridView grid, FilterCondition filterCondition)
                 : base(filterCondition.ColumnIndex, filterCondition.Condition, filterCondition.Value)
             {
@@ -75,6 +82,9 @@ namespace GKUI.Components
         private readonly Button fBtnAdd;
         private readonly Button fBtnDelete;
         private readonly GKListView fGridView;
+        private readonly GKComboBox fFieldCombo;
+        private readonly GKComboBox fConditionCombo;
+        private readonly Entry fValueText;
 
         private IRecordsListModel fListMan;
         private ObservableCollection<FilterConditionRow> fCollection;
@@ -114,7 +124,29 @@ namespace GKUI.Components
             fBtnAdd = CreateButton("btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.MIRecordAdd), ItemAdd);
 
             fGridView = new GKListView();
-            fGridView.HorizontalOptions = LayoutOptions.FillAndExpand;
+            fGridView.VerticalOptions = LayoutOptions.FillAndExpand;
+            fGridView.ItemSelected += GridView_ItemSelected;
+
+            fFieldCombo = new GKComboBox() { WidthRequest = 200 };
+
+            fConditionCombo = new GKComboBox() { WidthRequest = 150 };
+            fConditionCombo.AddRange(GKData.CondSigns);
+
+            fValueText = new Entry() { WidthRequest = 300 };
+
+            var editPanel = new StackLayout() {
+                Orientation = StackOrientation.Horizontal,
+                Spacing = 4,
+                Children = { fFieldCombo, fConditionCombo, fValueText },
+                VerticalOptions = LayoutOptions.End
+            };
+
+            var mainPanel = new StackLayout() {
+                Orientation = StackOrientation.Vertical,
+                Spacing = 4,
+                Children = { fGridView, editPanel },
+                HorizontalOptions = LayoutOptions.FillAndExpand
+            };
 
             var toolbar = new StackLayout() {
                 Orientation = StackOrientation.Vertical,
@@ -122,15 +154,27 @@ namespace GKUI.Components
                 Children = { fBtnAdd, fBtnDelete },
                 HorizontalOptions = LayoutOptions.End
             };
+
             Content = new StackLayout() {
                 Orientation = StackOrientation.Horizontal,
                 Spacing = 4,
-                Children = { fGridView, toolbar }
+                Children = { mainPanel, toolbar }
             };
 
             fCollection = new ObservableCollection<FilterConditionRow>();
             fGridView.ItemsSource = fCollection;
             fGridView.AllowMultipleSelection = false;
+        }
+
+        private void GridView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            if (e.SelectedItem != null) {
+                var row = e.SelectedItem as FilterConditionRow;
+
+                fFieldCombo.Text = row.ColumnText.ToString();
+                fConditionCombo.Text = row.ConditionText.ToString();
+                fValueText.Text = row.ValueText;
+            }
         }
 
         public void AddCondition(FilterCondition fcond)
@@ -173,6 +217,8 @@ namespace GKUI.Components
             fGridView.AddColumn(LangMan.LS(LSID.Condition), 150);
             fGridView.AddColumn(LangMan.LS(LSID.Value), 300);
 
+            fFieldCombo.AddRange(fFields);
+
             /*fGridView.AddComboColumn<FilterConditionRow>(LangMan.LS(LSID.Field), fFields, r => r.ColumnText, 200, false, true);
             fGridView.AddComboColumn<FilterConditionRow>(LangMan.LS(LSID.Condition), GKData.CondSigns, r => r.ConditionText, 150, false, true);
             fGridView.AddTextColumn<FilterConditionRow>(LangMan.LS(LSID.Value), r => r.ValueText, 300, false, true);*/
@@ -180,8 +226,11 @@ namespace GKUI.Components
 
         private void ItemAdd(object sender, EventArgs e)
         {
-            FilterCondition fcond = new FilterCondition(0, ConditionKind.ck_Contains, "");
-            AddCondition(fcond);
+            var columnId = fListMan.GetFieldColumnId(fFields, fFieldCombo.Text);
+            var condition = fListMan.GetCondByName(fConditionCombo.Text);
+            var value = fValueText.Text;
+
+            AddCondition(new FilterCondition(columnId, condition, value));
         }
 
         private void ItemDelete(object sender, EventArgs e)

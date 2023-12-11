@@ -46,6 +46,9 @@ namespace GKUI.Forms
 
         private readonly IBaseContext fContext;
 
+        private readonly QuickSearchDlg fQuickSearch;
+        private readonly ContentView[] fQSPlaceholders;
+
         #endregion
 
         #region Public properties
@@ -99,6 +102,9 @@ namespace GKUI.Forms
             fContext = fController.Context;
             ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
 
+            fQSPlaceholders = new ContentView[(int)GDMRecordType.rtLast];
+            fQuickSearch = new QuickSearchDlg(this);
+
             CreatePage("Individuals", GDMRecordType.rtIndividual);
             CreatePage("Families", GDMRecordType.rtFamily);
             CreatePage("Notes", GDMRecordType.rtNote);
@@ -122,6 +128,8 @@ namespace GKUI.Forms
             summary.OnLink += mPersonSummaryLink;
             //summary.ContextMenu = summaryMenu;
 
+            var summFrame = new Frame() { Content = summary, Padding = 4, CornerRadius = 4, BorderColor = Color.LightBlue, VerticalOptions = LayoutOptions.FillAndExpand };
+
             var recView = new GKListView();
             //recView.AllowMultipleSelection = true;
             recView.MouseDoubleClick += miRecordEdit_Click;
@@ -130,17 +138,25 @@ namespace GKUI.Forms
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
             recView.UpdateContents();
 
-            var listFrame = new Frame() { Content = recView, Padding = 1, BorderColor = Color.LightGray };
+            var listFrame = new Frame() { Content = recView, Padding = 4, CornerRadius = 4, BorderColor = Color.LightBlue };
             FlexLayout.SetBasis(listFrame, new FlexBasis(0.7f, true));
 
-            var summFrame = new Frame() { Content = summary, Padding = 1, BorderColor = Color.LightGray };
-            FlexLayout.SetBasis(summFrame, new FlexBasis(0.3f, true));
+            var qsHorizPlaceholder = new ContentView();
+            qsHorizPlaceholder.VerticalOptions = LayoutOptions.Start;
+            fQSPlaceholders[(int)recType] = qsHorizPlaceholder;
+
+            var summStack = new StackLayout() {
+                Orientation = StackOrientation.Vertical,
+                Padding = 0,
+                Children = { qsHorizPlaceholder, summFrame }
+            };
+            FlexLayout.SetBasis(summStack, new FlexBasis(0.3f, true));
 
             string splID = "splitter" + ((int)recType).ToString();
             var spl = new FlexLayout() {
                 Wrap = FlexWrap.NoWrap,
                 Padding = 0,
-                Children = { listFrame, summFrame }
+                Children = { listFrame, summStack }
             };
 
             var tabPage = new TabItem();
@@ -158,20 +174,53 @@ namespace GKUI.Forms
 
             tabsRecords.BatchBegin();
 
+            ResetQuickSearch(false);
+
             // HACK: Without this, after changing the orientation of the page, the positions of the children are not updated.
             var x = tabsRecords.SelectedTabIndex;
             tabsRecords.SelectedTabIndex = (x == 0) ? tabsRecords.ItemSource.Count - 1 : 0;
 
             for (int i = 0; i < tabsRecords.ItemSource.Count; i++) {
-                var layout = tabsRecords.ItemSource[i].Content as FlexLayout;
-                if (layout != null) {
-                    layout.Direction = flexDir;
+                var tab = tabsRecords.ItemSource[i];
+                try {
+                    var layout = tab.Content as FlexLayout;
+                    if (layout != null) {
+                        layout.Direction = flexDir;
+                    }
+                } catch {
+                    // ???
                 }
             }
 
             tabsRecords.SelectedTabIndex = x;
 
             tabsRecords.BatchCommit();
+        }
+
+        private void ResetQuickSearch(bool value)
+        {
+            fQuickSearch.IsVisible = value;
+
+            qsVertPlaceholder.Content = null;
+            foreach (var ph in fQSPlaceholders) {
+                if (ph != null) {
+                    ph.Content = null;
+                    ph.IsVisible = false;
+                }
+            }
+
+            if (fQuickSearch.IsVisible) {
+                var orientation = DeviceDisplay.MainDisplayInfo.Orientation;
+                if (orientation == DisplayOrientation.Portrait) {
+                    qsVertPlaceholder.Content = fQuickSearch;
+                } else {
+                    var rt = GetSelectedRecordType();
+                    var ph = fQSPlaceholders[(int)rt];
+
+                    ph.Content = fQuickSearch;
+                    ph.IsVisible = true;
+                }
+            }
         }
 
         protected override void OnAppearing()
@@ -241,6 +290,7 @@ namespace GKUI.Forms
 
         private void tabsRecords_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ResetQuickSearch(false);
             AppHost.Instance.UpdateControls(false);
             AppHost.Instance.TabChanged(this);
         }
@@ -572,7 +622,9 @@ namespace GKUI.Forms
 
         private void miSearch_Click(object sender, EventArgs e)
         {
-            (this as IWorkWindow).QuickSearch();
+            //(this as IWorkWindow).QuickSearch();
+
+            ResetQuickSearch(!fQuickSearch.IsVisible);
         }
 
         /*private void miFindAndReplace_Click(object sender, EventArgs e)

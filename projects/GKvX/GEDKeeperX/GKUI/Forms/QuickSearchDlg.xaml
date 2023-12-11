@@ -1,15 +1,15 @@
-<forms:CommonDialog
+<ContentView
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:forms="clr-namespace:GKUI.Forms" xmlns:plat="clr-namespace:GKUI.Platform"
     x:Class="GKUI.Forms.QuickSearchDlg">
 
-    <StackLayout Orientation="Vertical" Spacing="8" Padding="8">
+    <Frame BorderColor="LightBlue" Padding="4" CornerRadius="4">
         <StackLayout Orientation="Horizontal" Spacing="8">
-            <Entry x:Name="txtSearchPattern" WidthRequest="150" TextChanged="SearchPattern_TextChanged" />
-            <Button x:Name="btnPrev" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_left.gif}" Clicked="FindPrev_Click" />
-            <Button x:Name="btnNext" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_right.gif}" Clicked="FindNext_Click" />
+            <Entry x:Name="txtSearchPattern" WidthRequest="150" TextChanged="SearchPattern_TextChanged" HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnPrev" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_left.gif}" Clicked="FindPrev_Click" HorizontalOptions="End" />
+            <Button x:Name="btnNext" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_right.gif}" Clicked="FindNext_Click" HorizontalOptions="End" />
         </StackLayout>
-    </StackLayout>
+    </Frame>
 
-</forms:CommonDialog>
+</ContentView>

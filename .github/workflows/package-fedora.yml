@@ -25,7 +25,7 @@ jobs:
 #      run: dotnet restore
 #      working-directory: projects/GKv3
     - name: Build
-      run: dotnet build -c Linux_Release
+      run: dotnet build -p:Configuration=Release -p:Platform=Linux
       working-directory: projects/GKv3
     - name: Package
       run: rpmbuild --build-in-place -bb deploy/rpm/gedkeeper-github.spec

@@ -19,56 +19,84 @@
  */
 
 using System;
-using GKCore.Controllers;
-using GKCore.Design.Controls;
-using GKCore.Design.Views;
+using GKCore;
 using GKCore.Interfaces;
+using GKCore.Search;
+using Xamarin.Forms;
 
 namespace GKUI.Forms
 {
-    public sealed partial class QuickSearchDlg : CommonDialog, IQuickSearchDlg
+    public sealed partial class QuickSearchDlg : ContentView
     {
-        private readonly QuickSearchDlgController fController;
+        private readonly IWorkWindow fWorkWindow;
+        private ISearchStrategy fStrategy;
 
-        public IWindow OwnerWindow
-        {
-            get { return fController.WorkWindow; }
-        }
-
-        #region View Interface
-
-        ITextBox IQuickSearchDlg.SearchPattern
-        {
-            get { return GetControlHandler<ITextBox>(txtSearchPattern); }
-        }
-
-        #endregion
 
         public QuickSearchDlg(IWorkWindow workWindow)
         {
             InitializeComponent();
-
-            fController = new QuickSearchDlgController(this, workWindow);
+            fWorkWindow = workWindow;
         }
 
         private void SearchPattern_TextChanged(object sender, EventArgs e)
         {
-            fController.ChangeText();
+            ChangeText();
         }
 
         private void FindNext_Click(object sender, EventArgs e)
         {
-            fController.FindNext();
+            FindNext();
         }
 
         private void FindPrev_Click(object sender, EventArgs e)
         {
-            fController.FindPrev();
+            FindPrev();
         }
 
-        public void SetLocale()
+        #region Controller
+
+        private void ChangeText()
         {
-            fController.SetLocale();
+            fStrategy = new SearchStrategy(fWorkWindow, txtSearchPattern.Text);
         }
+
+        private void SelectResult(SearchResult result)
+        {
+            if (result != null && result.Record != null) {
+                fWorkWindow.SelectByRec(result.Record);
+            }
+        }
+
+        private void FindNext()
+        {
+            if (fStrategy == null) return;
+
+            if (!fStrategy.HasResults()) {
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.NoMatchesFound));
+                return;
+            }
+
+            ISearchResult result = fStrategy.FindNext();
+            if (result != null) {
+                SelectResult(result as SearchResult);
+            }
+        }
+
+        private void FindPrev()
+        {
+            if (fStrategy == null) return;
+
+            if (!fStrategy.HasResults()) {
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.NoMatchesFound));
+                return;
+            }
+
+            ISearchResult result = fStrategy.FindPrev();
+            if (result != null) {
+                SelectResult(result as SearchResult);
+            }
+        }
+
+        #endregion
     }
 }
