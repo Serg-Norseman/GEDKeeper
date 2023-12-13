@@ -1,0 +1,31 @@
+;1041,jpn,日本語
+01=カレンダー
+02=日付
+03=グレゴリオ暦
+04=ユリウス暦
+05=ヘブライ
+06=イスラム暦
+07=ペルシャ
+08=インディアン
+09=バハイ
+10=Bahá|Jalál|Jamál|‘Aẓamat|Núr|Raḥmat|Kalimát|Kamál|Asmá’|‘Izzat|Mashíyyat|‘Ilm|Qudrat|Qawl|Masá’il|Sharaf|Sulṭán|Mulk|Ayyám-i-Há|‘Alá’ ; Bahai Months
+11=Jamál|Kamál|Fiḍál|‘Idál|Istijlál|Istiqlál|Jalál ; Bahai Weekdays
+12=１月|２月|３月|４月|５月|６月|７月|８月|９月|１０月|１１月|１２月 ; Classic Months
+13=月曜日|火曜日|水曜日|木曜日|金曜日|土曜日|日曜日 ; Classic Weekdays
+14=ニサン|イヤル|シヴァン|タンムズ|アブ|エルール|ティシュリー|ヘシュバン|キスレーウ|テベット|シュバット|アダル|ヴァアダル ; Hebrew Months
+15=Alef|Bet|Gimel|Dalet|He|Vav|Zayin ; Hebrew Weekdays
+16=Caitra|Vaisakha|Jyaistha|Asadha|Sravana|Bhadra|Asvina|Kartika|Agrahayana|Pausa|Magha|Phalguna ; Indian Civil Months
+17=Ravivara|Somavara|Mangalavara|Budhavara|Brahaspativara|Sukravara|Sanivara ; Indian Civil Weekdays
+18=Muharram|Safar|Rabi`al-Awwal|Rabi`ath-Thani|Jumada l-Ula|Jumada t-Tania|Rajab|Sha`ban|Ramadan|Shawwal|Dhu l-Qa`da|Dhu l-Hijja ; Islamic Months
+19=Al-'ahad|Al-'ithnayn|Ath-thalatha'|Al-'arb`a'|Al-khamis|Al-jum`a|As-sabt ; Islamic Weekdays
+20=Farvardin|Ordibehesht|Khordad|Tir|Mordad|Shahrivar|Mehr|Aban|Azar|Dey|Bahman|Esfand ; Persian Months
+21=Yekshanbeh|Doshanbeh|Seshhanbeh|Chaharshanbeh|Panjshanbeh|Jomeh|Shanbeh ; Persian Weekdays
+22=Kull-i-Shay’ {0}, Váḥid {1} ; Bahai Cycles
+23=ビザンチン
+24=Ianuarius|Februarius|Martius|Aprilis|Maius|Iunius|Iulius|Augustus|September|October|November|December ; Byzantine Months
+25=日
+26=月
+27=年
+28=ソースの日付
+29=変換された日付
+

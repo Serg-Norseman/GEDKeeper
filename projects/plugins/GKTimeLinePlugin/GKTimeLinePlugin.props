@@ -20,6 +20,9 @@
         <None Include="GKTimeLinePlugin.isl">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Include="GKTimeLinePlugin.jpn">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKTimeLinePlugin.pol">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

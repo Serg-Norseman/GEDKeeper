@@ -11,6 +11,9 @@
         <None Include="GKBackupPlugin.hun">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Include="GKBackupPlugin.jpn">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKBackupPlugin.rus">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

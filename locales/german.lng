@@ -238,7 +238,7 @@
 237=Ehe
 238=Familie
 239=Namensvettern
-240=Datensatz löschen?
+240=Ereignis löschen?
 241=Sind Sie sicher, dass Sie den Verweis auf die Bemerkung löschen möchten?
 242=Sind Sie sicher, dass Sie den Verweis auf den Multimedia-Datensatz löschen möchten?
 243=Sind Sie sicher, dass Sie den Verweis auf die Quelle löschen möchten?
@@ -939,5 +939,5 @@
 931=Erweiterte Definition von Verwandtschaft
 932=Verwende Nachnamen im Filter für Personen
 933=Verwende Geburtsdaten im Filter für Personen
-934=Wert der Tatsache ist leer oder ungültig
-935=Portrait
+934=Wert ist leer oder ungültig
+935=Porträt
