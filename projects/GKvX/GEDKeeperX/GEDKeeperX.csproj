@@ -72,6 +72,9 @@
         <EmbeddedResource Include="..\..\..\locales\czech.lng" Link="Resources\locales\czech.lng">
             <LogicalName>Resources.locales.czech.lng</LogicalName>
         </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\Dutch.lng" Link="Resources\locales\Dutch.lng">
+            <LogicalName>Resources.locales.Dutch.lng</LogicalName>
+        </EmbeddedResource>
         <EmbeddedResource Include="..\..\..\locales\English.lng" Link="Resources\locales\English.lng">
             <LogicalName>Resources.locales.English.lng</LogicalName>
         </EmbeddedResource>
@@ -89,6 +92,9 @@
         </EmbeddedResource>
         <EmbeddedResource Include="..\..\..\locales\italian.lng" Link="Resources\locales\italian.lng">
             <LogicalName>Resources.locales.italian.lng</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="..\..\..\locales\Japanese.lng" Link="Resources\locales\Japanese.lng">
+            <LogicalName>Resources.locales.Japanese.lng</LogicalName>
         </EmbeddedResource>
         <EmbeddedResource Include="..\..\..\locales\Kazakh (Cyrillic).lng" Link="Resources\locales\Kazakh %28Cyrillic%29.lng">
             <LogicalName>Resources.locales.Kazakh (Cyrillic).lng</LogicalName>

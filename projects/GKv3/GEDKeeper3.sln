@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{4AF8
 		..\..\locales\Hungarian.lng = ..\..\locales\Hungarian.lng
 		..\..\locales\Icelandic.lng = ..\..\locales\Icelandic.lng
 		..\..\locales\italian.lng = ..\..\locales\italian.lng
+		..\..\locales\Japanese.lng = ..\..\locales\Japanese.lng
 		..\..\locales\Kazakh (Cyrillic).lng = ..\..\locales\Kazakh (Cyrillic).lng
 		..\..\locales\polish.lng = ..\..\locales\polish.lng
 		..\..\locales\Portuguese.lng = ..\..\locales\Portuguese.lng
