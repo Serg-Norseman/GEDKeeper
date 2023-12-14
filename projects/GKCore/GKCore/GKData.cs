@@ -119,12 +119,14 @@ namespace GKCore
             public LSID Name;
             public string Sign;
             public PersonEventKind Kind;
+            public bool AcceptableEmpty;
 
-            public EventStruct(LSID name, string sign, PersonEventKind kind)
+            public EventStruct(LSID name, string sign, PersonEventKind kind, bool acceptableEmpty = false)
             {
                 Name = name;
                 Sign = sign;
                 Kind = kind;
+                AcceptableEmpty = acceptableEmpty;
             }
         }
 
@@ -386,7 +388,7 @@ namespace GKCore
                 new EventStruct(LSID.Fact, GEDCOMTagName.FACT, PersonEventKind.ekFact),
                 new EventStruct(LSID.Religion, GEDCOMTagName.RELI, PersonEventKind.ekFact),
                 new EventStruct(LSID.Nationality, GEDCOMTagName.NATI, PersonEventKind.ekFact),
-                new EventStruct(LSID.Residence, GEDCOMTagName.RESI, PersonEventKind.ekFact),
+                new EventStruct(LSID.Residence, GEDCOMTagName.RESI, PersonEventKind.ekFact, true),
                 new EventStruct(LSID.PhysicalDesc, GEDCOMTagName.DSCR, PersonEventKind.ekFact),
                 new EventStruct(LSID.NationalIDNumber, GEDCOMTagName.IDNO, PersonEventKind.ekFact),
                 new EventStruct(LSID.SocialSecurityNumber, GEDCOMTagName.SSN, PersonEventKind.ekFact),

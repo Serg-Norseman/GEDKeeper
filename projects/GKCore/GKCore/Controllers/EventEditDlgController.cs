@@ -86,7 +86,7 @@ namespace GKCore.Controllers
                 if (eventProps.Kind == PersonEventKind.ekFact) {
                     var attrValue = fView.Attribute.Text;
 
-                    if (string.IsNullOrEmpty(attrValue)) {
+                    if (string.IsNullOrEmpty(attrValue) && !eventProps.AcceptableEmpty) {
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FactValueIsInvalid));
                         throw new Exception();
                     }
