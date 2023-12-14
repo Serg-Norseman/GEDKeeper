@@ -19,6 +19,7 @@
  */
 
 using System.Threading.Tasks;
+using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Charts;
@@ -1042,6 +1043,30 @@ namespace GKCore.Controllers
             }
 
             return result;
+        }
+
+        public static async Task<bool> SelectPhotoRegion(IView owner, IBaseWindow baseWin, GDMMultimediaRecord mediaRecord, ExtRect region)
+        {
+            var indiRec = await baseWin.Context.SelectPerson(owner, null, TargetMode.tmNone, GDMSex.svUnknown);
+            if (indiRec == null) return false;
+
+            GDMMultimediaLink mmLink = indiRec.GetPrimaryMultimediaLink();
+            if (mmLink == null) {
+                mmLink = indiRec.SetPrimaryMultimediaLink(mediaRecord);
+            } else {
+                mmLink = indiRec.AddMultimedia(mediaRecord);
+            }
+            SetMultimediaLinkRegion(mmLink, region, false);
+
+            return true;
+        }
+
+        public static void SetMultimediaLinkRegion(GDMMultimediaLink mmLink, ExtRect selectionRegion, bool isPrimary)
+        {
+            if (mmLink != null) {
+                mmLink.CutoutPosition.Value = selectionRegion;
+                mmLink.IsPrimaryCutout = isPrimary;
+            }
         }
 
         public static async Task<bool> SelectPortraitRegion(IView owner, IBaseWindow baseWin, GDMMultimediaLink mmLink)

@@ -26,6 +26,7 @@ using System.Windows.Forms;
 using BSLib;
 using GKCore.Design.Graphics;
 using GKTests;
+using GKUI.Platform.Handlers;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
@@ -61,14 +62,10 @@ namespace GKUI.Components
         public void TestMethod()
         {
             IImage image1 = null;
-            fImageView.OpenImage(image1); // return without exceptions
+            fImageView.OpenImage(null, image1); // return without exceptions
 
-            Image image2 = null;
-            fImageView.OpenImage(image2); // return without exceptions
-
-            Bitmap img = new Bitmap(TestUtils.LoadResourceStream("shaytan_plant.jpg"));
-
-            fImageView.OpenImage(img);
+            image1 = new ImageHandler(new Bitmap(TestUtils.LoadResourceStream("shaytan_plant.jpg")));
+            fImageView.OpenImage(null, image1);
 
             fForm.Show();
 

@@ -13,6 +13,6 @@
     </ToolBar>
   </Form.ToolBar>
 
-  <components:ImageBox x:Name="fImageCtl" SelectionMode="Zoom" Size="780, 560" />
+  <components:ImageBox x:Name="fImageCtl" Size="780, 560" />
 
 </Form>

@@ -67,6 +67,11 @@ namespace GKUI.Components
         public event EventHandler ImageChanged;
 
         /// <summary>
+        ///   Occurs when the SelectionRegion property is changed.
+        /// </summary>
+        public event EventHandler SelectionRegionChanged;
+
+        /// <summary>
         ///   Occurs when the Zoom property is changed.
         /// </summary>
         public event EventHandler ZoomChanged;
@@ -139,6 +144,7 @@ namespace GKUI.Components
                 if (fSelectionRegion != value) {
                     fSelectionRegion = value;
                     Invalidate();
+                    OnSelectionRegionChanged(EventArgs.Empty);
                 }
             }
         }
@@ -677,6 +683,13 @@ namespace GKUI.Components
         private void OnImageChanged(EventArgs e)
         {
             EventHandler handler = ImageChanged;
+            if (handler != null)
+                handler(this, e);
+        }
+
+        private void OnSelectionRegionChanged(EventArgs e)
+        {
+            EventHandler handler = SelectionRegionChanged;
             if (handler != null)
                 handler(this, e);
         }

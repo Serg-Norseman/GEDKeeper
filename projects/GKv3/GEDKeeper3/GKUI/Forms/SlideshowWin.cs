@@ -60,6 +60,8 @@ namespace GKUI.Forms
             // while using GKButtonToolItem
             tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
 
+            fImageCtl.SelectionMode = ImageBoxSelectionMode.Zoom;
+
             fController = new SlideshowController(this);
             fController.Init(baseWin);
             fController.LoadList();

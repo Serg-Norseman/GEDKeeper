@@ -93,6 +93,7 @@
         <EmbeddedResource Include="Resources\btn_info.gif" />
         <EmbeddedResource Include="Resources\tg_bookmark.png" />
         <EmbeddedResource Include="Resources\btn_circle.png" />
+        <EmbeddedResource Include="Resources\btn_portrait.png" />
     </ItemGroup>
 
 

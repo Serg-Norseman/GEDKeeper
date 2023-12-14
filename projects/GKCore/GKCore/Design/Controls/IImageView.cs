@@ -19,13 +19,13 @@
  */
 
 using BSLib;
+using GDModel;
 using GKCore.Design.Graphics;
-using GKCore.Design.Controls;
 
 namespace GKCore.Design.Controls
 {
     /// <summary>
-    /// 
+    /// This control is used only in MediaViewerWin and PortraitSelectDlg.
     /// </summary>
     public interface IImageView : IBaseControl
     {
@@ -33,6 +33,6 @@ namespace GKCore.Design.Controls
         bool ShowNamedRegionTips { get; set; }
 
         void AddNamedRegion(string name, ExtRect region);
-        void OpenImage(IImage image);
+        void OpenImage(GDMMultimediaRecord mediaRecord, IImage image);
     }
 }

@@ -54,15 +54,7 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                ExtRect selectRegion = fView.ImageCtl.SelectionRegion;
-
-                if (!selectRegion.IsEmpty()) {
-                    fMultimediaLink.IsPrimaryCutout = true;
-                    fMultimediaLink.CutoutPosition.Value = selectRegion;
-                } else {
-                    fMultimediaLink.IsPrimaryCutout = false;
-                    fMultimediaLink.CutoutPosition.Value = ExtRect.CreateEmpty();
-                }
+                BaseController.SetMultimediaLinkRegion(fMultimediaLink, fView.ImageCtl.SelectionRegion, true);
 
                 var uid = fMultimediaLink.GetUID(fBase.Context.Tree);
                 PortraitsCache.Instance.RemoveObsolete(uid);
@@ -82,7 +74,7 @@ namespace GKCore.Controllers
             IImage img = fBase.Context.LoadMediaImage(mmRec, -1, -1, ExtRect.Empty, false);
             if (img == null) return;
 
-            fView.ImageCtl.OpenImage(img);
+            fView.ImageCtl.OpenImage(mmRec, img);
 
             if (fMultimediaLink.IsPrimaryCutout) {
                 fView.ImageCtl.SelectionRegion = fMultimediaLink.CutoutPosition.Value;
