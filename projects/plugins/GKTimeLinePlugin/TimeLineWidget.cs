@@ -96,6 +96,7 @@ namespace GKTimeLinePlugin
         {
             if (fBase != null) {
                 fYearCurrent = tbTimeLine.Value;
+                GKUtils.SetTimeLineYear(fBase, fYearCurrent);
                 fBase.ApplyFilter(GDMRecordType.rtIndividual);
             }
             UpdateStatus();
@@ -105,11 +106,12 @@ namespace GKTimeLinePlugin
         {
             if (fBase != baseWin) {
                 // restore filter's default state
+                fYearCurrent = -1;
+                GKUtils.SetTimeLineYear(fBase, fYearCurrent);
                 GKUtils.SetBaseExternalFilter(fBase, FilterLifeMode.lmAll, null);
 
                 // initialize data
                 fBase = baseWin;
-                fYearCurrent = -1;
                 GKUtils.CollectTimeLineData(fBase, out fYearMin, out fYearMax);
 
                 // set new filter parameters

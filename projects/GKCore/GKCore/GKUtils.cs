@@ -37,6 +37,7 @@ using GKCore.Calendar;
 using GKCore.Cultures;
 using GKCore.Import;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
 using UtfUnknown;
@@ -1083,7 +1084,14 @@ namespace GKCore
             return (evt == null) ? 0 : evt.Date.GetChronologicalYear();
         }
 
-        public static int GetEventsYearsDiff(GDMCustomEvent ev1, GDMCustomEvent ev2, bool currentEnd)
+        /// <summary>
+        /// Calculate the difference in years between two dates.
+        /// </summary>
+        /// <param name="ev1">Starting event.</param>
+        /// <param name="ev2">End event.</param>
+        /// <param name="inference">If the 'inference' argument is given, then if there is no end date, it is possible to use the current year.</param>
+        /// <returns></returns>
+        public static int GetEventsYearsDiff(GDMCustomEvent ev1, GDMCustomEvent ev2, bool inference)
         {
             int result = -1;
 
@@ -1101,13 +1109,20 @@ namespace GKCore
                 }
 #else
                 var udn1 = (ev1 == null) ? UDN.CreateUnknown() : ev1.Date.GetUDN();
-                var udn2 = (ev2 == null) ? UDN.CreateUnknown() : ev2.Date.GetUDN();
-
-                DateTime dt2 = (currentEnd || !udn2.HasKnownYear()) ? DateTime.Now : udn2.GetGregorianDateTime();
-
                 if (udn1.HasKnownYear()) {
                     DateTime dt1 = udn1.GetGregorianDateTime();
-                    result = GetDifferenceInYears(dt1, dt2);
+
+                    var udn2 = (ev2 == null) ? UDN.CreateUnknown() : ev2.Date.GetUDN();
+                    DateTime dt2;
+                    if (udn2.HasKnownYear()) {
+                        dt2 = udn2.GetGregorianDateTime();
+                        result = GetDifferenceInYears(dt1, dt2);
+                    } else {
+                        if (inference) {
+                            dt2 = DateTime.Now;
+                            result = GetDifferenceInYears(dt1, dt2);
+                        }
+                    }
                 }
 #endif
             } catch (Exception ex) {
@@ -3623,6 +3638,16 @@ namespace GKCore
                     ((IIndividualListFilter)listMan.Filter).FilterLifeMode = mode;
                 }
                 baseWindow.ApplyFilter(GDMRecordType.rtIndividual);
+            }
+        }
+
+        public static void SetTimeLineYear(IBaseWindow baseWindow, int year)
+        {
+            if (baseWindow != null) {
+                IRecordsListModel listMan = baseWindow.GetRecordsListManByType(GDMRecordType.rtIndividual);
+                if (listMan != null) {
+                    ((IndividualListFilter)listMan.Filter).TimeLineYear = year;
+                }
             }
         }
 

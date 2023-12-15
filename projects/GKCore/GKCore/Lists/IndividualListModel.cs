@@ -55,6 +55,7 @@ namespace GKCore.Lists
         public FilterGroupMode SourceMode;
         public string SourceRef;
         public string EventVal;
+        public int TimeLineYear;
 
         public FilterLifeMode FilterLifeMode { get; set; }
 
@@ -80,6 +81,7 @@ namespace GKCore.Lists
             SourceMode = FilterGroupMode.All;
             SourceRef = "";
             EventVal = "*";
+            TimeLineYear = -1;
         }
 
         public override string ToString(IListSource listSource)
@@ -144,6 +146,7 @@ namespace GKCore.Lists
             SourceMode = otherFilter.SourceMode;
             SourceRef = otherFilter.SourceRef;
             EventVal = otherFilter.EventVal;
+            TimeLineYear = otherFilter.TimeLineYear;
         }
 
         public override void Deserialize(string value)
@@ -484,7 +487,8 @@ namespace GKCore.Lists
                     break;
 
                 case ColumnType.ctAge:
-                    result = (isVisible) ? (object)GKUtils.GetAgeStr(fFetchedRec, -1) : GKUtils.GetAge(fFetchedRec, -1);
+                    int tlYear = ((IndividualListFilter)fFilter).TimeLineYear;
+                    result = (isVisible) ? (object)GKUtils.GetAgeStr(fFetchedRec, tlYear) : GKUtils.GetAge(fFetchedRec, tlYear);
                     break;
 
                 case ColumnType.ctLifeExpectancy:
