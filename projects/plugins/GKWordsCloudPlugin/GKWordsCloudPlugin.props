@@ -19,6 +19,9 @@
         <None Include="GKWordsCloudPlugin.enu">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Include="GKWordsCloudPlugin.hun">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKWordsCloudPlugin.jpn">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
