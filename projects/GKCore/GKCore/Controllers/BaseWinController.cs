@@ -20,6 +20,7 @@
 
 #define GEDML_SUPPORT
 #define FAMX_SUPPORT
+//#define GDZ_SUPPORT
 
 using System;
 using System.Collections.Generic;
@@ -156,6 +157,10 @@ namespace GKCore.Controllers
 
 #if FAMX_SUPPORT
             filters += "|" + "Family.Show files (*.familyx)|*.familyx";
+#endif
+
+#if GDZ_SUPPORT
+            filters += "|" + "GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip";
 #endif
         }
 

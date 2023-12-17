@@ -31,6 +31,7 @@ using GDModel.Providers;
 using GDModel.Providers.FamilyShow;
 using GDModel.Providers.GEDCOM;
 using GDModel.Providers.GedML;
+using GDModel.Providers.GEDZIP;
 using GKCore.Controllers;
 using GKCore.Cultures;
 using GKCore.Design;
@@ -1387,6 +1388,8 @@ namespace GKCore
                     fileProvider = new GedMLProvider(fTree);
                 } else if (ext == ".familyx") {
                     fileProvider = new FamilyXProvider(fTree);
+                } else if (ext == ".gdz" || ext == ".zip") {
+                    fileProvider = new GEDZIPProvider(fTree);
                 } else {
                     // TODO: message?
                     return false;
