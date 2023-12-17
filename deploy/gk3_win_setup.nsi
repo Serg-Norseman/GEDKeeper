@@ -5,7 +5,7 @@
 Unicode true
 
 !include "MUI2.nsh"
-!define MUI_ICON "..\projects\GKv3\GEDKeeper3\icon_gedkeeper.ico"
+!define MUI_ICON "..\projects\GEDKeeper_48.ico"
 
 Name "GEDKeeper"
 OutFile "gedkeeper_3.4.1_win86.exe"

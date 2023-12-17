@@ -6,7 +6,7 @@ Unicode true
 
 !include "MUI2.nsh"
 !include "DotNetChecker.nsh"
-!define MUI_ICON "..\projects\GKv2\GEDKeeper2\GEDKeeper2.ico"
+!define MUI_ICON "..\projects\GEDKeeper_48.ico"
 
 Name "GEDKeeper"
 OutFile "gedkeeper_2.28.1_win86.exe"

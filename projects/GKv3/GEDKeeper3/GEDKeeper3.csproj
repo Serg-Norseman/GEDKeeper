@@ -45,7 +45,7 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <StartupObject>GEDKeeper3.GKProgram</StartupObject>
-        <ApplicationIcon>icon_gedkeeper.ico</ApplicationIcon>
+        <ApplicationIcon>..\..\GEDKeeper_48.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">

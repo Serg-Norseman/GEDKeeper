@@ -10,7 +10,7 @@
     <SignAssembly>False</SignAssembly>
     <DelaySign>False</DelaySign>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <ApplicationIcon>GEDKeeper2.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\GEDKeeper_48.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <MapFileExtensions>true</MapFileExtensions>
     <UseApplicationTrust>false</UseApplicationTrust>
