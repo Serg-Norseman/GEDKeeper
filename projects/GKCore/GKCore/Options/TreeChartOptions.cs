@@ -33,8 +33,11 @@ namespace GKCore.Options
     /// </summary>
     public sealed class TreeChartOptions : IOptions
     {
-        public static readonly int MALE_COLOR = -3750145; // FFC6C6FF
-        public static readonly int FEMALE_COLOR = -14650; // FFFFC6C6
+        //public static readonly int MALE_COLOR = -3750145; // FFC6C6FF
+        //public static readonly int FEMALE_COLOR = -14650; // FFFFC6C6
+
+        public static readonly int MALE_COLOR = -3223042; // FFCED1FE
+        public static readonly int FEMALE_COLOR = -12328; // FFFFCFD8
         public static readonly int UNK_SEX_COLOR = -14593; // FFFFC6FF
         public static readonly int UN_HUSBAND_COLOR = -2631681; // FFD7D7FF
         public static readonly int UN_WIFE_COLOR = -10281; // FFFFD7D7
