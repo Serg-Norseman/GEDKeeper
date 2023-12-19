@@ -38,6 +38,7 @@ namespace GKUI.Components
     public class ImageView : UserControl, ILocalizable, IImageView
     {
         private GDMMultimediaRecord fMediaRecord;
+        private MediaViewerController fController;
 
         private ImageBox imageBox;
         private ToolStrip toolStrip;
@@ -173,10 +174,14 @@ namespace GKUI.Components
             imageBox.NamedRegions.Add(new NamedRegion(name, region));
         }
 
-        public void OpenImage(GDMMultimediaRecord mediaRecord, IImage image)
+        public void OpenImage(MediaViewerController controller, IImage image)
         {
+            fController = controller;
+            if (fController != null) {
+                fMediaRecord = fController.MultimediaRecord;
+            }
+
             if (image != null) {
-                fMediaRecord = mediaRecord;
                 OpenImage(((ImageHandler)image).Handle);
             }
         }
@@ -237,6 +242,9 @@ namespace GKUI.Components
 
             if (await BaseController.SelectPhotoRegion(mediaWin, baseWin, fMediaRecord, UIHelper.Rt2Rt(imageBox.SelectionRegion))) {
                 imageBox.SelectionRegion = RectangleF.Empty;
+
+                if (fController != null)
+                    fController.ProcessPortraits(this);
             }
         }
 

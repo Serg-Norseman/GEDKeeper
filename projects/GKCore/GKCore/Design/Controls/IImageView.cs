@@ -19,7 +19,7 @@
  */
 
 using BSLib;
-using GDModel;
+using GKCore.Controllers;
 using GKCore.Design.Graphics;
 
 namespace GKCore.Design.Controls
@@ -33,6 +33,6 @@ namespace GKCore.Design.Controls
         bool ShowNamedRegionTips { get; set; }
 
         void AddNamedRegion(string name, ExtRect region);
-        void OpenImage(GDMMultimediaRecord mediaRecord, IImage image);
+        void OpenImage(MediaViewerController controller, IImage image);
     }
 }

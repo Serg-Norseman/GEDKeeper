@@ -74,7 +74,7 @@ namespace GKCore.Controllers
             IImage img = fBase.Context.LoadMediaImage(mmRec, -1, -1, ExtRect.Empty, false);
             if (img == null) return;
 
-            fView.ImageCtl.OpenImage(mmRec, img);
+            fView.ImageCtl.OpenImage(null, img);
 
             if (fMultimediaLink.IsPrimaryCutout) {
                 fView.ImageCtl.SelectionRegion = fMultimediaLink.CutoutPosition.Value;

@@ -1053,10 +1053,11 @@ namespace GKCore.Controllers
             GDMMultimediaLink mmLink = indiRec.GetPrimaryMultimediaLink();
             if (mmLink == null) {
                 mmLink = indiRec.SetPrimaryMultimediaLink(mediaRecord);
+                SetMultimediaLinkRegion(mmLink, region, true);
             } else {
                 mmLink = indiRec.AddMultimedia(mediaRecord);
+                SetMultimediaLinkRegion(mmLink, region, false);
             }
-            SetMultimediaLinkRegion(mmLink, region, false);
 
             return true;
         }
