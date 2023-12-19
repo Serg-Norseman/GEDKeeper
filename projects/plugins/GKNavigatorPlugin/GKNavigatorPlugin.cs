@@ -52,28 +52,9 @@ namespace GKNavigatorPlugin
         Bookmarks,
         Languages,
         Records,
-
-        Individuals,
-        Families,
-        Notes,
-        Multimedia,
-        Sources,
-        Repositories,
-        Groups,
-        Researches,
-        Tasks,
-        Communications,
-        Locations,
-
-        Language,
-        Person,
-        Record,
         Time,
         Name,
         Action,
-        Filter,
-        Associations,
-        Relation,
     }
 
     public sealed class Plugin : WidgetPlugin, ISubscriber

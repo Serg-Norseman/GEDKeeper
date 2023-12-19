@@ -105,7 +105,7 @@ namespace GKNavigatorPlugin
             tnFilters.Text = fLangMan.LS(PLS.Filters);
             tnBookmarks.Text = fLangMan.LS(PLS.Bookmarks);
             tnLanguages.Text = fLangMan.LS(PLS.Languages);
-            tnAssociations.Text = fLangMan.LS(PLS.Associations);
+            tnAssociations.Text = LangMan.LS(LSID.Associations);
             tnRecords.Text = fLangMan.LS(PLS.Records);
         }
 
@@ -167,17 +167,17 @@ namespace GKNavigatorPlugin
                     treeView1.BeginUpdate();
 
                     tnRoot.Text = dbName;
-                    tnRecsIndividual.Text = FmtTitle(fLangMan.LS(PLS.Individuals), stats[(int)GDMRecordType.rtIndividual]);
-                    tnRecsFamily.Text = FmtTitle(fLangMan.LS(PLS.Families), stats[(int)GDMRecordType.rtFamily]);
-                    tnRecsNote.Text = FmtTitle(fLangMan.LS(PLS.Notes), stats[(int)GDMRecordType.rtNote]);
-                    tnRecsMultimedia.Text = FmtTitle(fLangMan.LS(PLS.Multimedia), stats[(int)GDMRecordType.rtMultimedia]);
-                    tnRecsSource.Text = FmtTitle(fLangMan.LS(PLS.Sources), stats[(int)GDMRecordType.rtSource]);
-                    tnRecsRepository.Text = FmtTitle(fLangMan.LS(PLS.Repositories), stats[(int)GDMRecordType.rtRepository]);
-                    tnRecsGroup.Text = FmtTitle(fLangMan.LS(PLS.Groups), stats[(int)GDMRecordType.rtGroup]);
-                    tnRecsResearch.Text = FmtTitle(fLangMan.LS(PLS.Researches), stats[(int)GDMRecordType.rtResearch]);
-                    tnRecsTask.Text = FmtTitle(fLangMan.LS(PLS.Tasks), stats[(int)GDMRecordType.rtTask]);
-                    tnRecsCommunication.Text = FmtTitle(fLangMan.LS(PLS.Communications), stats[(int)GDMRecordType.rtCommunication]);
-                    tnRecsLocation.Text = FmtTitle(fLangMan.LS(PLS.Locations), stats[(int)GDMRecordType.rtLocation]);
+                    tnRecsIndividual.Text = FmtTitle(LangMan.LS(LSID.RPIndividuals), stats[(int)GDMRecordType.rtIndividual]);
+                    tnRecsFamily.Text = FmtTitle(LangMan.LS(LSID.RPFamilies), stats[(int)GDMRecordType.rtFamily]);
+                    tnRecsNote.Text = FmtTitle(LangMan.LS(LSID.RPNotes), stats[(int)GDMRecordType.rtNote]);
+                    tnRecsMultimedia.Text = FmtTitle(LangMan.LS(LSID.RPMultimedia), stats[(int)GDMRecordType.rtMultimedia]);
+                    tnRecsSource.Text = FmtTitle(LangMan.LS(LSID.RPSources), stats[(int)GDMRecordType.rtSource]);
+                    tnRecsRepository.Text = FmtTitle(LangMan.LS(LSID.RPRepositories), stats[(int)GDMRecordType.rtRepository]);
+                    tnRecsGroup.Text = FmtTitle(LangMan.LS(LSID.RPGroups), stats[(int)GDMRecordType.rtGroup]);
+                    tnRecsResearch.Text = FmtTitle(LangMan.LS(LSID.RPResearches), stats[(int)GDMRecordType.rtResearch]);
+                    tnRecsTask.Text = FmtTitle(LangMan.LS(LSID.RPTasks), stats[(int)GDMRecordType.rtTask]);
+                    tnRecsCommunication.Text = FmtTitle(LangMan.LS(LSID.RPCommunications), stats[(int)GDMRecordType.rtCommunication]);
+                    tnRecsLocation.Text = FmtTitle(LangMan.LS(LSID.RPLocations), stats[(int)GDMRecordType.rtLocation]);
 
                     treeView1.ExpandAll();
                 } finally {
