@@ -205,11 +205,12 @@ namespace GKCore.Controllers
                 }
             }
 
+            var storeType = fView.StoreType.GetSelectedTag<MediaStoreType>();
             fView.File.Text = fileName;
             bool canArc = GKUtils.FileCanBeArchived(fileName);
             RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, canArc,
                               GlobalOptions.Instance.AllowMediaStoreRelativeReferences,
-                              GlobalOptions.Instance.MediaStoreDefault);
+                              storeType);
             fView.StoreType.Enabled = true;
         }
 
