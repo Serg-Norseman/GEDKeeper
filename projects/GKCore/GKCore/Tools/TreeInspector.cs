@@ -34,6 +34,7 @@ namespace GKCore.Tools
     public class TreeInspectionOptions
     {
         public bool CheckIndividualPlaces;
+        public bool CheckCensuses;
     }
 
     /// <summary>
@@ -72,6 +73,7 @@ namespace GKCore.Tools
             cdUnknownPlaceOfPerson,
             cdHighSpousesDifference,
             cdHighSiblingsDifference,
+            cdMatchedCensus,
         }
 
         public enum CheckSolve
@@ -266,7 +268,10 @@ namespace GKCore.Tools
 
             CheckIndividualLinks(tree, iRec, checksList);
 
-            if (iRec.FindEvent(GEDCOMTagType.DEAT) == null) {
+            var evtBirth = iRec.FindEvent(GEDCOMTagType.BIRT);
+            var evtDeath = iRec.FindEvent(GEDCOMTagType.DEAT);
+
+            if (evtDeath == null) {
                 int age = GKUtils.GetAge(iRec, -1);
 
                 if (age != -1 && age >= GKData.PROVED_LIFE_LENGTH) {
@@ -283,8 +288,8 @@ namespace GKCore.Tools
                 checksList.Add(checkObj);
             }
 
-            int yBirth = iRec.GetChronologicalYear(GEDCOMTagName.BIRT);
-            int yDeath = iRec.GetChronologicalYear(GEDCOMTagName.DEAT);
+            int yBirth = (evtBirth == null) ? 0 : evtBirth.GetChronologicalYear();
+            int yDeath = (evtDeath == null) ? 0 : evtDeath.GetChronologicalYear();
             if (yBirth != 0 && yDeath != 0) {
                 int delta = (yDeath - yBirth);
                 if (delta < 0) {
@@ -315,8 +320,20 @@ namespace GKCore.Tools
                 checksList.Add(checkObj);
             }
 
-            if (options != null && options.CheckIndividualPlaces) {
-                CheckIndividualPlaces(iRec, checksList);
+            if (options != null) {
+                if (options.CheckIndividualPlaces) {
+                    CheckIndividualPlaces(iRec, checksList);
+                }
+
+                // FIXME: skip individuals with sources (temp solution!)
+                if (options.CheckCensuses && !iRec.HasSourceCitations && (evtBirth != null || evtDeath != null)) {
+                    var res = Censuses.Instance.FindMatchedIndividualCensuses(evtBirth, evtDeath);
+                    foreach (var cens in res) {
+                        CheckObj checkObj = new CheckObj(iRec, CheckDiag.cdMatchedCensus, CheckSolve.csSkip);
+                        checkObj.Comment = string.Format(LangMan.LS(LSID.PersonCanBeFoundInCensus), cens.Name);
+                        checksList.Add(checkObj);
+                    }
+                }
             }
         }
 
@@ -460,6 +477,8 @@ namespace GKCore.Tools
 
             if (checksList == null)
                 throw new ArgumentNullException("checksList");
+
+            Censuses.Instance.Load(GKUtils.GetExternalsPath() + "censuses\\Russia.yaml");
 
             try {
                 GDMTree tree = baseWin.Context.Tree;

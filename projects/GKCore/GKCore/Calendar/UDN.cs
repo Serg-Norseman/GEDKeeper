@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Runtime.CompilerServices;
 using BSLib;
 
 namespace GKCore.Calendar
@@ -204,6 +205,7 @@ namespace GKCore.Calendar
         /// <param name="r">The right value to compare</param>
         /// <returns>'-1' when the `l` is less than the `r`, '1' when the `l` is greater than the `r` and '0' when
         /// the `l` and the `r` are equal.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int CompareVal(int l, int r)
         {
             int result = 0;
@@ -319,7 +321,7 @@ namespace GKCore.Calendar
         }
 
         /// <summary>
-        /// Calculates Julian day nubmer (JDN, https://en.wikipedia.org/wiki/Julian_day) using the specified date in
+        /// Calculates Julian day number (JDN, https://en.wikipedia.org/wiki/Julian_day) using the specified date in
         /// the specified <paramref name="calendar"/>.
         /// Return value of this method ain't a usual JDN. See Returns section for more information.
         /// </summary>
@@ -336,6 +338,7 @@ namespace GKCore.Calendar
         ///
         /// This method doesn't change the 27th and 28th bit ("date before" and "date after").
         /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int CreateVal(UDNCalendarType calendar, int year, int month, int day)
         {
             int result = 0;

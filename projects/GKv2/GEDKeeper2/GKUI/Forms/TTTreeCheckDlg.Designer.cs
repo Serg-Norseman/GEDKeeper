@@ -16,6 +16,7 @@
 		private System.Windows.Forms.ToolStripMenuItem miCopyXRef;
         private System.Windows.Forms.TabPage pageOptions;
         private System.Windows.Forms.CheckBox chkCheckPersonPlaces;
+        private System.Windows.Forms.CheckBox chkCheckCensuses;
 
         private void InitializeComponent()
 		{
@@ -33,6 +34,7 @@
 		    this.miCopyXRef = new System.Windows.Forms.ToolStripMenuItem();
 		    this.N1 = new System.Windows.Forms.ToolStripSeparator();
             this.chkCheckPersonPlaces = new System.Windows.Forms.CheckBox();
+            this.chkCheckCensuses = new System.Windows.Forms.CheckBox();
             this.tabsTools.SuspendLayout();
 		    this.pageTreeCheck.SuspendLayout();
             this.pageOptions.SuspendLayout();
@@ -63,6 +65,7 @@
             // pageOptions
             // 
             this.pageOptions.Controls.Add(this.chkCheckPersonPlaces);
+            this.pageOptions.Controls.Add(this.chkCheckCensuses);
             this.pageOptions.Location = new System.Drawing.Point(4, 26); 
             this.pageOptions.Name = "pageOptions";
             this.pageOptions.Size = new System.Drawing.Size(1002, 515);
@@ -151,6 +154,15 @@
             this.chkCheckPersonPlaces.TabIndex = 0;
             this.chkCheckPersonPlaces.Text = "chkCheckPersonPlaces";
             this.chkCheckPersonPlaces.UseVisualStyleBackColor = true;
+            // 
+            // chkCheckCensuses
+            // 
+            this.chkCheckCensuses.Location = new System.Drawing.Point(10, 41);
+            this.chkCheckCensuses.Name = "chkCheckCensuses";
+            this.chkCheckCensuses.Size = new System.Drawing.Size(319, 24);
+            this.chkCheckCensuses.TabIndex = 0;
+            this.chkCheckCensuses.Text = "chkCheckCensuses";
+            this.chkCheckCensuses.UseVisualStyleBackColor = true;
             // 
             // TTTreeCheckDlg
             // 

@@ -35,6 +35,7 @@
         <TabPage x:Name="pageOptions">
           <StackLayout Style="vertListStack">
             <CheckBox x:Name="chkCheckPersonPlaces" />
+            <CheckBox x:Name="chkCheckCensuses" />
           </StackLayout>
         </TabPage>
       </TabControl>

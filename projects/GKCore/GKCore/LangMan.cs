@@ -1005,8 +1005,10 @@ namespace GKCore
         /* 933 */ UseBirthDatesInPersonSelectionFilter,
         /* 934 */ FactValueIsInvalid,
         /* 935 */ Portrait,
+        /* 936 */ CensusAnalysis,
+        /* 937 */ PersonCanBeFoundInCensus,
 
-        /* 000 */ Last = Portrait
+        /* 000 */ Last = PersonCanBeFoundInCensus
     }
 
 
@@ -1965,6 +1967,8 @@ namespace GKCore
             /* 933 */ "Use dates of birth in person selection filter",
             /* 934 */ "Fact value is empty or invalid",
             /* 935 */ "Portrait",
+            /* 936 */ "Census analysis",
+            /* 937 */ "The person can be found in the census `{0}`",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

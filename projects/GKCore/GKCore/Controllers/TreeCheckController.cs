@@ -53,6 +53,7 @@ namespace GKCore.Controllers
         public void CheckBase()
         {
             fOptions.CheckIndividualPlaces = GetControl<ICheckBox>("chkCheckPersonPlaces").Checked;
+            fOptions.CheckCensuses = GetControl<ICheckBox>("chkCheckCensuses").Checked;
 
             AppHost.Instance.ExecuteWork((controller) => {
                 TreeInspector.CheckBase(fBase, fChecksList, controller, fOptions);
@@ -168,6 +169,7 @@ namespace GKCore.Controllers
 
             GetControl<ITabPage>("pageOptions").Text = LangMan.LS(LSID.MIOptions);
             GetControl<ICheckBox>("chkCheckPersonPlaces").Text = LangMan.LS(LSID.CheckPersonPlaces);
+            GetControl<ICheckBox>("chkCheckCensuses").Text = LangMan.LS(LSID.CensusAnalysis);
 
             fView.ChecksList.AddColumn(LangMan.LS(LSID.Record), 400, false);
             fView.ChecksList.AddColumn(LangMan.LS(LSID.Problem), 200, false);

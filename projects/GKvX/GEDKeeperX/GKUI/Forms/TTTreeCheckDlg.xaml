@@ -30,6 +30,7 @@
                 <xp:TabItem x:Name="pageOptions">
                     <StackLayout Orientation="Vertical" Spacing="8">
                         <input:CheckBox x:Name="chkCheckPersonPlaces" />
+                        <input:CheckBox x:Name="chkCheckCensuses" />
 
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>

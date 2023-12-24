@@ -146,7 +146,7 @@
 		    this.ListCompare.Name = "ListCompare";
 		    this.ListCompare.ReadOnly = true;
 		    this.ListCompare.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-		    this.ListCompare.Size = new System.Drawing.Size(976, 351);
+		    this.ListCompare.Size = new System.Drawing.Size(976, 421);
 		    this.ListCompare.TabIndex = 0;
 		    // 
 		    // btnClose
