@@ -58,6 +58,14 @@ namespace GKCore.Controllers
             fTarget = new Target();
         }
 
+        public void ShowDetails()
+        {
+            GDMRecord rec = fView.RecordsList.GetSelectedData() as GDMRecord;
+            if (rec == null) return;
+
+            BaseController.ViewRecordInfo(fView, fBase, rec);
+        }
+
         private void UpdateFilters()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {

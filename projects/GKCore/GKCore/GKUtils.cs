@@ -2785,7 +2785,7 @@ namespace GKCore
                             }
                         }
 
-                        ShowSubjectLinks(baseContext.Tree, sourceRec, summary);
+                        ShowSubjectLinks(baseContext.Tree, sourceRec, summary, true);
 
                         RecListNotesRefresh(baseContext, sourceRec, summary);
                         RecListMediaRefresh(baseContext, sourceRec, summary);

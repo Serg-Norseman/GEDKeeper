@@ -50,6 +50,7 @@ namespace GKUI.Forms
         private readonly RecordSelectDlgController fController;
 
         private GKListView fListRecords;
+        private ContextMenu contextMenu;
 
 
         public GDMRecord ResultRecord { get; set; }
@@ -89,6 +90,13 @@ namespace GKUI.Forms
 
             fltCtl.ParamsChanged += txtFastFilter_TextChanged;
 
+            var miDetails = new ButtonMenuItem();
+            miDetails.Text = LangMan.LS(LSID.Details);
+            miDetails.Click += miDetails_Click;
+
+            contextMenu = new ContextMenu();
+            contextMenu.Items.AddRange(new MenuItem[] { miDetails });
+
             UpdateRecordsView();
         }
 
@@ -108,6 +116,12 @@ namespace GKUI.Forms
                 fListRecords = null;
             }
             fListRecords = UIHelper.CreateRecordsView(panList, fController.Base.Context, fController.RecType, true);
+            fListRecords.ContextMenu = contextMenu;
+        }
+
+        private void miDetails_Click(object sender, EventArgs e)
+        {
+            fController.ShowDetails();
         }
 
         private void btnSelect_Click(object sender, EventArgs e)

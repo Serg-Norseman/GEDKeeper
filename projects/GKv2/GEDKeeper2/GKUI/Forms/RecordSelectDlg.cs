@@ -23,6 +23,7 @@ using System.Windows.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
@@ -38,6 +39,7 @@ namespace GKUI.Forms
         private readonly RecordSelectDlgController fController;
 
         private GKListView fListRecords;
+        private ContextMenuStrip contextMenu;
 
 
         public GDMRecord ResultRecord { get; set; }
@@ -80,6 +82,13 @@ namespace GKUI.Forms
 
             fltCtl.ParamsChanged += txtFastFilter_TextChanged;
 
+            var miDetails = new ToolStripMenuItem();
+            miDetails.Text = LangMan.LS(LSID.Details);
+            miDetails.Click += miDetails_Click;
+
+            contextMenu = new ContextMenuStrip();
+            contextMenu.Items.AddRange(new ToolStripItem[] { miDetails });
+
             UpdateRecordsView();
         }
 
@@ -104,6 +113,12 @@ namespace GKUI.Forms
             }
             fListRecords = UIHelper.CreateRecordsView(panList, fController.Base.Context, fController.RecType, true);
             fListRecords.Name = "fListRecords";
+            fListRecords.ContextMenuStrip = contextMenu;
+        }
+
+        private void miDetails_Click(object sender, EventArgs e)
+        {
+            fController.ShowDetails();
         }
 
         private void btnSelect_Click(object sender, EventArgs e)
