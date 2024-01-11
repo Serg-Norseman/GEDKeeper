@@ -1764,6 +1764,7 @@ namespace GKCore
 
             string subm = header.Submitter.XRef;
             int oldRev = header.File.Revision;
+            string uid = header.File.UID;
             GDMLanguageID langId = header.Language;
             string note = header.Note.Lines.Text.Trim();
 
@@ -1778,6 +1779,7 @@ namespace GKCore
             header.TransmissionDateTime = DateTime.Now;
 
             header.Source.Version = GKData.APP_FORMAT_CURVER.ToString();
+            header.File.UID = uid;
 
             if (zeroRev) {
                 header.File.Revision = 0;
