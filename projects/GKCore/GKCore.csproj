@@ -64,6 +64,9 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GDModel\GDMLocationLink.cs" />
+    <Compile Include="GDModel\GDMLocationName.cs" />
+    <Compile Include="GDModel\GDMLocationType.cs" />
     <Compile Include="GDModel\Providers\GEDZIP\GEDZIPProvider.cs" />
     <Compile Include="GKCore\Censuses.cs" />
     <Compile Include="GKCore\Design\Controls\IFilterControl.cs" />
