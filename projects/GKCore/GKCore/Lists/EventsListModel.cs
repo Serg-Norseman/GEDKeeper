@@ -51,6 +51,9 @@ namespace GKCore.Lists
                 fListColumns.AddColumn(LSID.PlaceAndAttribute, 200, false);
             }
             fListColumns.AddColumn(LSID.Cause, 130, false);
+            fListColumns.AddColumn(LSID.RPSources, 30, false);
+            fListColumns.AddColumn(LSID.RPNotes, 30, false);
+            fListColumns.AddColumn(LSID.RPMultimedia, 30, false);
             fListColumns.ResetDefaults();
         }
 
@@ -80,6 +83,15 @@ namespace GKCore.Lists
                     break;
                 case 4:
                     result = GKUtils.GetEventCause(fFetchedRec);
+                    break;
+                case 5:
+                    result = fFetchedRec.HasSourceCitations ? " + " : string.Empty;
+                    break;
+                case 6:
+                    result = fFetchedRec.HasNotes ? " + " : string.Empty;
+                    break;
+                case 7:
+                    result = fFetchedRec.HasMultimediaLinks ? " + " : string.Empty;
                     break;
             }
             return result;
