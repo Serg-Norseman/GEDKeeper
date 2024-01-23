@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -49,18 +49,6 @@ namespace GDModel
 
             Assert.AreEqual("The\r\nstring\r\nlist\r\ntest", strList.Text);
 
-            var strList1 = new GDMLines("The\r\nstring\r\nlist\r\ntest");
-            Assert.AreEqual("The", strList1[0]);
-            Assert.AreEqual("string", strList1[1]);
-            Assert.AreEqual("list", strList1[2]);
-            Assert.AreEqual("test", strList1[3]);
-
-            strList1 = new GDMLines("The1\nstring1\nlist1\ntest1");
-            Assert.AreEqual("The1", strList1[0]);
-            Assert.AreEqual("string1", strList1[1]);
-            Assert.AreEqual("list1", strList1[2]);
-            Assert.AreEqual("test1", strList1[3]);
-
             GDMLines strList2 = new GDMLines();
             strList2.Assign(null);
             strList2.Assign(strList);
@@ -101,6 +89,40 @@ namespace GDModel
 
             string[] strArr = null;
             Assert.Throws(typeof(ArgumentNullException), () => { strList.AddRange(strArr); });
+        }
+
+        [Test]
+        public void Test_CRLF()
+        {
+            var strList1 = new GDMLines("The\r\nstring\r\n\r\nlist\r\ntest");
+            Assert.AreEqual("The", strList1[0]);
+            Assert.AreEqual("string", strList1[1]);
+            Assert.AreEqual("", strList1[2]);
+            Assert.AreEqual("list", strList1[3]);
+            Assert.AreEqual("test", strList1[4]);
+        }
+
+        [Test]
+        public void Test_LFOnly()
+        {
+            var strList1 = new GDMLines("The1\nstring1\n\nlist1\ntest1");
+            Assert.AreEqual("The1", strList1[0]);
+            Assert.AreEqual("string1", strList1[1]);
+            Assert.AreEqual("", strList1[2]);
+            Assert.AreEqual("list1", strList1[3]);
+            Assert.AreEqual("test1", strList1[4]);
+        }
+
+        [Test]
+        public void Test_EmptyLines()
+        {
+            var strList = new GDMLines();
+            strList.Text = "The string\r\n\r\n list test";
+            Assert.AreEqual("The string\r\n\r\n list test", strList.Text);
+
+            Assert.AreEqual("The string", strList[0]);
+            Assert.AreEqual("", strList[1]);
+            Assert.AreEqual(" list test", strList[2]);
         }
     }
 }

@@ -84,6 +84,8 @@ namespace GDModel
         /// <summary>
         /// A function for safely platform-independent string splitting by newlines.
         /// Because in some UI (Eto.Forms) string on Windows may come with '\n' delimiter instead of '\r\n'.
+        ///
+        /// Variants: \n - Unix & Unix-like (including MacOSX aka macOS?), \r\n - Windows, \r - classic MacOS before 2001.
         /// </summary>
         private void ParseLine(string line)
         {
@@ -97,19 +99,24 @@ namespace GDModel
 
             int inPos = 0, inLen = line.Length;
             int outPos = 0, outLen = 0;
+            bool wasLF = false;
             while (true) {
                 char ch = (inPos >= inLen) ? '\0' : line[inPos];
                 inPos += 1;
 
-                if (ch == '\r' || ch == '\n' || ch == '\0') {
-                    if (outLen > 0) {
+                if (ch == '\n' || ch == '\0') {
+                    if (outLen > 0 || wasLF) {
                         string piece = line.Substring(outPos, outLen);
                         Add(piece);
                     }
                     outPos = inPos;
                     outLen = 0;
+                    wasLF = true;
+                } else if (ch == '\r') {
+                    // skipped
                 } else {
                     outLen += 1;
+                    wasLF = false;
                 }
 
                 if (ch == '\0') break;
