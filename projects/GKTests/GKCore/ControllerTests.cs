@@ -556,6 +556,7 @@ namespace GKCore.Controllers
 
             SubstituteControl<ITabPage>(view, "pageOptions");
             SubstituteControl<ICheckBox>(view, "chkCheckPersonPlaces");
+            SubstituteControl<ICheckBox>(view, "chkCheckCensuses");
 
             view.ChecksList.Returns(Substitute.For<IListView>());
 

@@ -50,6 +50,8 @@ namespace GKUI.Forms
             TestUtilsUI.InitUITest();
             LangMan.DefInit();
 
+            GlobalOptions.Instance.AllowMediaStoreReferences = true;
+
             fBase = new BaseWindowStub();
             fMultimediaRecord = new GDMMultimediaRecord(fBase.Context.Tree);
             fMultimediaRecord.FileReferences.Add(new GDMFileReferenceWithTitle());
@@ -92,7 +94,6 @@ namespace GKUI.Forms
         {
             EnterText("txtName", form, "sample text");
             SelectCombo("cmbMediaType", form, 1);
-            GlobalOptions.Instance.AllowMediaStoreReferences = true;
             SelectCombo("cmbStoreType", form, 0); // Reference
 
             MediaSampleFile = TestUtils.PrepareTestFile("shaytan_plant.jpg");

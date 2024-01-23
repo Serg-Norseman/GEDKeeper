@@ -60,7 +60,7 @@ namespace GKCore.Controllers
         {
             fView.Title = fFileReference.Title;
 
-            MultimediaKind mmKind = GKUtils.GetMultimediaKind(fFileReference.MultimediaFormat);
+            MultimediaKind mmKind = GKUtils.GetMultimediaKind(fFileReference.GetMultimediaFormat());
 
             try {
                 switch (mmKind) {
@@ -86,7 +86,7 @@ namespace GKCore.Controllers
                             Stream fs = fBase.Context.MediaLoad(fFileReference, false);
                             if (fs != null) {
                                 bool disposeStream = true;
-                                switch (fFileReference.MultimediaFormat) {
+                                switch (fFileReference.GetMultimediaFormat()) {
                                     case GDMMultimediaFormat.mfTXT:
                                         using (StreamReader strd = GKUtils.GetDetectedStreamReader(fs)) {
                                             string text = strd.ReadToEnd();

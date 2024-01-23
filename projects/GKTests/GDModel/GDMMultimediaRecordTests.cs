@@ -60,7 +60,7 @@ namespace GDModel
                 fileRef.LinkFile("sample.png");
                 fileRef.MediaType = GDMMediaType.mtManuscript;
                 Assert.AreEqual("sample.png", fileRef.StringValue);
-                Assert.AreEqual(GDMMultimediaFormat.mfPNG, fileRef.MultimediaFormat);
+                Assert.AreEqual("png", fileRef.MultimediaFormat);
                 Assert.AreEqual(GDMMediaType.mtManuscript, fileRef.MediaType);
 
                 string title = mediaRec.GetFileTitle();

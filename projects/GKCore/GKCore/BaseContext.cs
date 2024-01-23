@@ -824,7 +824,7 @@ namespace GKCore
         /// <returns>The status of the existence of the file path.</returns>
         public bool CheckBasePath()
         {
-            string path = Path.GetDirectoryName(fFileName);
+            string path = string.IsNullOrEmpty(fFileName) ? string.Empty : Path.GetDirectoryName(fFileName);
 
             bool result = (!string.IsNullOrEmpty(path));
             if (!result) {

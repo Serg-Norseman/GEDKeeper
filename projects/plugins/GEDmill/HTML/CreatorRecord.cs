@@ -67,7 +67,7 @@ namespace GEDmill.HTML
                 GDMFileReferenceWithTitle mfr = fileRefs[i] as GDMFileReferenceWithTitle;
                 if (mfr == null) continue;
 
-                MultimediaKind mmKind = GKUtils.GetMultimediaKind(mfr.MultimediaFormat);
+                MultimediaKind mmKind = GKUtils.GetMultimediaKind(mfr.GetMultimediaFormat());
                 bool blockThisMediaType = (mmKind == MultimediaKind.mkNone);
 
                 string copyFilename = "";

@@ -93,7 +93,7 @@ namespace GKCore.Controllers
                 GDMMultimediaRecord mediaRec = (GDMMultimediaRecord)record;
                 GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
 
-                MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.MultimediaFormat);
+                MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.GetMultimediaFormat());
                 if (mmKind == MultimediaKind.mkImage) {
                     fFileRefs.Add(new ImageRef(mediaRec, fileRef.Title));
                 }

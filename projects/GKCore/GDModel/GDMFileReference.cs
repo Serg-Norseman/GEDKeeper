@@ -46,7 +46,6 @@ namespace GDModel
     }
 
 
-    // TODO: doc/docx/odt, xls/xlsx/ods, ppt/pptx/odp
     public enum GDMMultimediaFormat
     {
         mfNone,
@@ -60,6 +59,7 @@ namespace GDModel
         mfPNG,
         mfRAW,
         mfPSD,
+        mfWEBP,
 
         mfTXT,
         mfRTF,
@@ -101,11 +101,11 @@ namespace GDModel
 
     public class GDMFileReference : GDMValueTag
     {
-        private GDMMultimediaFormat fMultimediaFormat;
+        private string fMultimediaFormat;
         private GDMMediaType fMediaType;
 
 
-        public GDMMultimediaFormat MultimediaFormat
+        public string MultimediaFormat
         {
             get { return fMultimediaFormat; }
             set { fMultimediaFormat = value; }
@@ -122,7 +122,7 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.FILE);
 
-            fMultimediaFormat = GDMMultimediaFormat.mfNone;
+            fMultimediaFormat = string.Empty;
             fMediaType = GDMMediaType.mtUnknown;
         }
 
@@ -142,32 +142,41 @@ namespace GDModel
         {
             base.Clear();
 
-            fMultimediaFormat = GDMMultimediaFormat.mfNone;
+            fMultimediaFormat = string.Empty;
             fMediaType = GDMMediaType.mtUnknown;
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fMultimediaFormat == GDMMultimediaFormat.mfNone) && (fMediaType == GDMMediaType.mtUnknown);
+            return base.IsEmpty() && string.IsNullOrEmpty(fMultimediaFormat) && (fMediaType == GDMMediaType.mtUnknown);
         }
 
         public void LinkFile(string fileName)
         {
             fStringValue = fileName;
-            MultimediaFormat = RecognizeFormat(fileName);
+            fMultimediaFormat = GetMultimediaExt(fileName);
         }
 
-        public static GDMMultimediaFormat RecognizeFormat(string fileName)
+        public GDMMultimediaFormat GetMultimediaFormat()
         {
-            if (string.IsNullOrEmpty(fileName)) return GDMMultimediaFormat.mfUnknown;
+            return RecognizeFormat(fStringValue);
+        }
+
+        public static string GetMultimediaExt(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName)) return string.Empty;
 
             string ext = FileHelper.GetFileExtension(fileName);
             if (!string.IsNullOrEmpty(ext) && ext[0] == '.') {
                 ext = ext.Remove(0, 1);
             }
+            return ext;
+        }
 
-            GDMMultimediaFormat result = GEDCOMUtils.GetMultimediaFormatVal(ext);
-            return result;
+        public static GDMMultimediaFormat RecognizeFormat(string fileName)
+        {
+            var strFmt = GetMultimediaExt(fileName);
+            return string.IsNullOrEmpty(strFmt) ? GDMMultimediaFormat.mfUnknown : GEDCOMUtils.GetMultimediaFormatVal(strFmt);
         }
     }
 }

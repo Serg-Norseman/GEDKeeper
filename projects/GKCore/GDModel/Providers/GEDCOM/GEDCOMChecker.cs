@@ -65,7 +65,7 @@ namespace GDModel.Providers.GEDCOM
 
                 tgtFileRef.LinkFile(srcFileRef.StringValue);
 
-                if (srcFileRef.MultimediaFormat != GDMMultimediaFormat.mfNone) {
+                if (srcFileRef.GetMultimediaFormat() != GDMMultimediaFormat.mfNone) {
                     tgtFileRef.MultimediaFormat = srcFileRef.MultimediaFormat;
                 }
                 if (srcFileRef.MediaType != GDMMediaType.mtUnknown) {
@@ -375,10 +375,10 @@ namespace GDModel.Providers.GEDCOM
             for (int i = 0; i < mmRec.FileReferences.Count; i++) {
                 GDMFileReferenceWithTitle fileRef = mmRec.FileReferences[i];
 
-                GDMMultimediaFormat mmFormat = fileRef.MultimediaFormat;
+                GDMMultimediaFormat mmFormat = fileRef.GetMultimediaFormat();
                 if (mmFormat == GDMMultimediaFormat.mfUnknown || mmFormat == GDMMultimediaFormat.mfNone) {
                     // tag 'FORM' can be corrupted or GEDCOMCore in past not recognize format attempt recovery
-                    fileRef.MultimediaFormat = GDMFileReference.RecognizeFormat(fileRef.StringValue);
+                    fileRef.MultimediaFormat = GDMFileReference.GetMultimediaExt(fileRef.StringValue);
                 }
 
                 if (fFormat == GEDCOMFormat.gf_Native && fileVer == 39) {

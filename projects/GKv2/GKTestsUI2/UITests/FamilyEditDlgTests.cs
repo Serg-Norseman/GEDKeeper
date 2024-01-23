@@ -26,6 +26,7 @@ using System.Windows.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Options;
 using GKTests;
 using GKTests.Stubs;
 using NUnit.Extensions.Forms;
@@ -46,6 +47,8 @@ namespace GKUI.Forms
         public override void Setup()
         {
             TestUtilsUI.InitUITest();
+
+            GlobalOptions.Instance.AllowMediaStoreReferences = true;
 
             fBase = new BaseWindowStub();
             fFamilyRecord = new GDMFamilyRecord(fBase.Context.Tree);

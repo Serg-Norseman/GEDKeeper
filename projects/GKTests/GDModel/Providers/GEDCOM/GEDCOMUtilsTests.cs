@@ -337,6 +337,8 @@ namespace GDModel.Providers.GEDCOM
             Assert.AreEqual(GDMMultimediaFormat.mfRAR, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfRAR)));
             Assert.AreEqual(GDMMultimediaFormat.mf7Z, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mf7Z)));
 
+            Assert.AreEqual(GDMMultimediaFormat.mfWEBP, GEDCOMUtils.GetMultimediaFormatVal(GEDCOMUtils.GetMultimediaFormatStr(GDMMultimediaFormat.mfWEBP)));
+
             Assert.AreEqual(GDMMultimediaFormat.mfUnknown, GEDCOMUtils.GetMultimediaFormatVal("xxx"));
         }
 

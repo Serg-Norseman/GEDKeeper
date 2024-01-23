@@ -1231,6 +1231,8 @@ namespace GDModel.Providers.GEDCOM
                 result = GDMMultimediaFormat.mfRAR;
             } else if (str == "7z") {
                 result = GDMMultimediaFormat.mf7Z;
+            } else if (str == "webp") {
+                result = GDMMultimediaFormat.mfWEBP;
             } else {
                 result = GDMMultimediaFormat.mfUnknown;
             }
@@ -1354,6 +1356,9 @@ namespace GDModel.Providers.GEDCOM
                     break;
                 case GDMMultimediaFormat.mf7Z:
                     s = "7z";
+                    break;
+                case GDMMultimediaFormat.mfWEBP:
+                    s = "webp";
                     break;
                 default:
                     s = "";

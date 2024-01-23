@@ -1942,7 +1942,7 @@ namespace GDModel.Providers.GEDCOM
             if (tagType == GEDCOMTagType.TITL) {
                 fileRef.Title = tagValue;
             } else if (tagType == GEDCOMTagType.FORM) {
-                fileRef.MultimediaFormat = GEDCOMUtils.GetMultimediaFormatVal(tagValue);
+                fileRef.MultimediaFormat = tagValue;
                 curTag = fileRef;
                 addHandler = AddFileReferenceWithTitleTag;
             } else if (tagType == GEDCOMTagType.TYPE) {
@@ -1962,7 +1962,7 @@ namespace GDModel.Providers.GEDCOM
             if (!WriteBaseTag(stream, level, fileRef)) return false;
 
             level += 1;
-            GEDCOMProvider.WriteTagLine(stream, level, GEDCOMTagName.FORM, GEDCOMUtils.GetMultimediaFormatStr(fileRef.MultimediaFormat), true);
+            GEDCOMProvider.WriteTagLine(stream, level, GEDCOMTagName.FORM, fileRef.MultimediaFormat, true);
             GEDCOMProvider.WriteTagLine(stream, (level+1), GEDCOMTagName.TYPE, GEDCOMUtils.GetMediaTypeStr(fileRef.MediaType), true);
             GEDCOMProvider.WriteTagLine(stream, level, GEDCOMTagName.TITL, fileRef.Title, true);
             return true;
@@ -1978,7 +1978,7 @@ namespace GDModel.Providers.GEDCOM
 
             GEDCOMTagType tagType = (GEDCOMTagType)tagId;
             if (tagType == GEDCOMTagType.FORM) {
-                fileRef.MultimediaFormat = GEDCOMUtils.GetMultimediaFormatVal(tagValue);
+                fileRef.MultimediaFormat = tagValue;
                 curTag = fileRef;
                 addHandler = AddFileReferenceTag;
             } else if (tagType == GEDCOMTagType.MEDI) {
@@ -1998,7 +1998,7 @@ namespace GDModel.Providers.GEDCOM
             if (!WriteBaseTag(stream, level, fileRef)) return false;
 
             level += 1;
-            GEDCOMProvider.WriteTagLine(stream, level, GEDCOMTagName.FORM, GEDCOMUtils.GetMultimediaFormatStr(fileRef.MultimediaFormat), true);
+            GEDCOMProvider.WriteTagLine(stream, level, GEDCOMTagName.FORM, fileRef.MultimediaFormat, true);
             GEDCOMProvider.WriteTagLine(stream, ++level, GEDCOMTagName.MEDI, GEDCOMUtils.GetMediaTypeStr(fileRef.MediaType), true);
             return true;
         }

@@ -54,8 +54,7 @@ namespace GKUI.Forms
             fDialog.Dispose();
         }
 
-        private GDMMultimediaRecord GetTestMultimedia(
-            string resName, GDMMultimediaFormat multimediaFormat, out string targetName)
+        private GDMMultimediaRecord GetTestMultimedia(string resName, out string targetName)
         {
             targetName = TestUtils.PrepareTestFile(resName);
 
@@ -66,7 +65,6 @@ namespace GKUI.Forms
             fileRefV.Title = "File Title";
             fileRefV.LinkFile(targetName);
             fileRefV.MediaType = GDMMediaType.mtManuscript;
-            fileRefV.MultimediaFormat = multimediaFormat;
 
             return mediaRec;
         }
@@ -75,7 +73,7 @@ namespace GKUI.Forms
         public void Test_Image()
         {
             string targetName;
-            var fileRefV = GetTestMultimedia("shaytan_plant.jpg", GDMMultimediaFormat.mfJPG, out targetName);
+            var fileRefV = GetTestMultimedia("shaytan_plant.jpg", out targetName);
             try {
                 Assert.IsTrue(File.Exists(targetName));
 
@@ -98,7 +96,7 @@ namespace GKUI.Forms
         public void Test_Text()
         {
             string targetName;
-            var fileRefV = GetTestMultimedia("lorem_ipsum.txt", GDMMultimediaFormat.mfTXT, out targetName);
+            var fileRefV = GetTestMultimedia("lorem_ipsum.txt", out targetName);
             try {
                 Assert.IsTrue(File.Exists(targetName));
 
@@ -117,7 +115,7 @@ namespace GKUI.Forms
         public void Test_RTF()
         {
             string targetName;
-            var fileRefV = GetTestMultimedia("lorem_ipsum.rtf", GDMMultimediaFormat.mfRTF, out targetName);
+            var fileRefV = GetTestMultimedia("lorem_ipsum.rtf", out targetName);
             try {
                 Assert.IsTrue(File.Exists(targetName));
 
@@ -136,7 +134,7 @@ namespace GKUI.Forms
         public void Test_HTML()
         {
             string targetName;
-            var fileRefV = GetTestMultimedia("lorem_ipsum.htm", GDMMultimediaFormat.mfHTM, out targetName);
+            var fileRefV = GetTestMultimedia("lorem_ipsum.htm", out targetName);
             try {
                 Assert.IsTrue(File.Exists(targetName));
 
@@ -156,7 +154,7 @@ namespace GKUI.Forms
         public void Test_Video()
         {
             string targetName;
-            var fileRefV = GetTestMultimedia("test_video.3gp", GDMMultimediaFormat.mfMKV, out targetName);
+            var fileRefV = GetTestMultimedia("test_video.3gp", out targetName);
 
             try {
                 Assert.IsTrue(File.Exists(targetName));

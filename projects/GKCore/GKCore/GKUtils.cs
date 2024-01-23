@@ -3140,6 +3140,7 @@ namespace GKCore
                 case GDMMultimediaFormat.mfPNG:
                 case GDMMultimediaFormat.mfRAW: // .net isn't supports
                 case GDMMultimediaFormat.mfPSD: // .net isn't supports
+                case GDMMultimediaFormat.mfWEBP: // .net isn't supports
                     return MultimediaKind.mkImage;
 
                 case GDMMultimediaFormat.mfTXT:
@@ -3250,7 +3251,7 @@ namespace GKCore
             if (fileRef == null)
                 return false;
 
-            MultimediaKind mmKind = GetMultimediaKind(fileRef.MultimediaFormat);
+            MultimediaKind mmKind = GetMultimediaKind(fileRef.GetMultimediaFormat());
             return (mmKind == MultimediaKind.mkImage);
         }
 

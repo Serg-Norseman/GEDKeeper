@@ -1298,7 +1298,7 @@ namespace GKCore.Controllers
             GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
             if (fileRef == null) return;
 
-            if (!GKUtils.UseEmbeddedViewer(fileRef.MultimediaFormat)) {
+            if (!GKUtils.UseEmbeddedViewer(fileRef.GetMultimediaFormat())) {
                 string targetFile = fContext.MediaLoad(fileRef);
                 GKUtils.LoadExtFile(targetFile);
             } else {
