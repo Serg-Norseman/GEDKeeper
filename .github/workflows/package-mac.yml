@@ -26,5 +26,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: GEDKeeper3
-        path: projects/GKv3/GEDKeeper3/bin/MacOS_Debug/*.dmg
+        path: projects/GKv3/GEDKeeper3/bin/Debug/MacOS/*.dmg
         if-no-files-found: error
