@@ -125,7 +125,8 @@ namespace GKUI.Platform
                 }
             }
 
-            UIHelper.CenterFormByParent((Form)dialog, mainHandle);
+            // for WinForms works better without this
+            //UIHelper.CenterFormByParent((Form)dialog, mainHandle);
 
             wfModal.ShowDialog(owner as IWin32Window);
             return await wfModal.DialogResultTask;

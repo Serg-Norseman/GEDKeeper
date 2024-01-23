@@ -25,8 +25,15 @@ namespace GDModel
 {
     public sealed class GDMLocationName : GDMValueTag
     {
+        private string fAbbreviation;
         private readonly GDMDateValue fDate;
         private GDMLanguageID fLanguage;
+
+        public string Abbreviation
+        {
+            get { return fAbbreviation; }
+            set { fAbbreviation = value; }
+        }
 
         public GDMDateValue Date
         {
@@ -67,6 +74,7 @@ namespace GDModel
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
             base.Assign(sourceObj);
+            fAbbreviation = sourceObj.fAbbreviation;
             fDate.Assign(sourceObj.fDate);
             fLanguage = sourceObj.fLanguage;
         }
@@ -74,13 +82,14 @@ namespace GDModel
         public override void Clear()
         {
             base.Clear();
+            fAbbreviation = string.Empty;
             fDate.Clear();
             fLanguage = GDMLanguageID.Unknown;
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fDate.IsEmpty() && (fLanguage == GDMLanguageID.Unknown);
+            return base.IsEmpty() && fDate.IsEmpty() && string.IsNullOrEmpty(fAbbreviation) && (fLanguage == GDMLanguageID.Unknown);
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)

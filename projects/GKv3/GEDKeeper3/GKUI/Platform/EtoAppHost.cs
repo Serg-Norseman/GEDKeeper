@@ -201,6 +201,7 @@ namespace GKUI.Platform
 #endif
             }*/
 
+            // for EtoForms works without this (Win10)
             //UIHelper.CenterFormByParent((Window)form, mainHandle);
 
             efModal.ShowModal(owner as Control);

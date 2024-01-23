@@ -61,6 +61,9 @@ rmdir .\projects\GKMap\GKMap.WinForms\obj /s /q
 rmdir .\projects\GKMap\GKMap.EtoForms\bin /s /q
 rmdir .\projects\GKMap\GKMap.EtoForms\obj /s /q
 
+rmdir .\projects\GKMap\GKMap.Xamarin\bin /s /q
+rmdir .\projects\GKMap\GKMap.Xamarin\obj /s /q
+
 rem <<< GKv3 >>>
 
 rmdir .\projects\GKv3\.vs /s /q
