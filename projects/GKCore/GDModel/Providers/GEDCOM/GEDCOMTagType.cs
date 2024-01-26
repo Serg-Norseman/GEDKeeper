@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -175,6 +175,7 @@ namespace GDModel.Providers.GEDCOM
         _BGRO, // [MyFamilyTree] INDI.ATTR
         _BOOKMARK, // [GK]
         _CENN, // Census Name [BKW6]
+        _DATE, // Date value in non-standard use (source records) [GK]
         _ELEC, // Election [???] INDI.ATTR
         _EXCM, // Excommunication [FTM] INDI.ATTR
         _EYES, // [Gen] INDI.ATTR
@@ -367,6 +368,7 @@ namespace GDModel.Providers.GEDCOM
         public const string _AWARD = "_AWARD";
         public const string _BGRO = "_BGRO"; // [MyFamilyTree]
         public const string _CENN = "_CENN"; // Census Name [BKW6]
+        public const string _DATE = "_DATE"; // Date value in non-standard use (source records) [GK]
         public const string _ELEC = "_ELEC"; // Election [???]
         public const string _EXCM = "_EXCM"; // Excommunication [FTM]
         public const string _EYES = "_EYES"; // [Gen]

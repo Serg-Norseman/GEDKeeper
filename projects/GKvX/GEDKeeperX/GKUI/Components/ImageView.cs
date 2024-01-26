@@ -21,6 +21,8 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
+using GDModel;
+using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
@@ -32,6 +34,9 @@ namespace GKUI.Components
 {
     public class ImageView : ContentView, ILocalizable, IImageView
     {
+        private GDMMultimediaRecord fMediaRecord;
+        private MediaViewerController fController;
+
         private ImageBox imageBox;
         private StackLayout toolStrip;
         private GKComboBox cbZoomLevels;
@@ -140,8 +145,13 @@ namespace GKUI.Components
             imageBox.NamedRegions.Add(new NamedRegion(name, region));
         }
 
-        public void OpenImage(IImage image)
+        public void OpenImage(MediaViewerController controller, IImage image)
         {
+            fController = controller;
+            if (fController != null) {
+                fMediaRecord = fController.MultimediaRecord;
+            }
+
             if (image != null) {
                 OpenImage(((SKImageHandler)image).Handle);
             }

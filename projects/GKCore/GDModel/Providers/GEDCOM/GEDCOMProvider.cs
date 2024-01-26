@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -814,6 +814,9 @@ namespace GDModel.Providers.GEDCOM
                 curTag = sourRec.Title;
                 curTag.ParseString(tagValue);
                 addHandler = AddTextTag;
+            } else if (tagType == GEDCOMTagType._DATE) {
+                curTag = sourRec.Date;
+                GEDCOMUtils.ParseDateValue(fTree, sourRec.Date, tagValue);
             } else {
                 return AddRecordTag(owner, tagLevel, tagId, tagValue);
             }
@@ -836,6 +839,8 @@ namespace GDModel.Providers.GEDCOM
             WriteSourceData(stream, level, sourRec.Data);
             WriteText(stream, level, sourRec.Originator);
             WriteText(stream, level, sourRec.Text);
+
+            WriteBaseTag(stream, level, sourRec.Date);
         }
 
 
@@ -2674,6 +2679,7 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._AWARD, GEDCOMTagName._AWARD, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._BGRO, GEDCOMTagName._BGRO, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._CENN, GEDCOMTagName._CENN, true);
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType._DATE, GEDCOMTagName._DATE, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._ELEC, GEDCOMTagName._ELEC, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._EXCM, GEDCOMTagName._EXCM, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._EYES, GEDCOMTagName._EYES, true);

@@ -138,7 +138,7 @@ namespace GKUI.Forms
         public void SetViewImage(IImage img)
         {
             var imageCtl = new GKUI.Components.ImageView();
-            imageCtl.OpenImage(img);
+            imageCtl.OpenImage(fController, img);
 
             fController.ProcessPortraits(imageCtl);
 

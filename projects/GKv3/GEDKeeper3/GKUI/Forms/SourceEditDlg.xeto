@@ -15,6 +15,10 @@
               <TextBox x:Name="txtShortTitle" TextChanged="EditShortTitle_TextChanged" />
             </TableRow>
             <TableRow>
+              <Label x:Name="lblDate" />
+              <comcom:GKDateControl x:Name="dateCtl" />
+            </TableRow>
+            <TableRow>
               <Label x:Name="lblAuthor" />
               <TextArea x:Name="txtAuthor" />
             </TableRow>

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -37,9 +37,11 @@ namespace GKCore.Lists
         public enum ColumnType
         {
             ctXRefNum,
-            ctShortName,
+            ctShortTitle,
+            ctDate,
             ctAuthor,
             ctTitle,
+            //ctPublication,
             ctRepositories,
             ctChangeDate
         }
@@ -56,8 +58,10 @@ namespace GKCore.Lists
 
             result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.ShortTitle, DataType.dtString, 120, true, true);
+            result.AddColumn(LSID.Date, 80, false);
             result.AddColumn(LSID.Author, DataType.dtString, 200, true);
             result.AddColumn(LSID.Title, DataType.dtString, 200, true);
+            //result.AddColumn(LSID.Publication, DataType.dtString, 200, true);
             result.AddColumn(LSID.RPRepositories, DataType.dtString, 200, true);
             result.AddColumn(LSID.Changed, DataType.dtDateTime, 150, true);
 
@@ -82,8 +86,12 @@ namespace GKCore.Lists
                     result = fFetchedRec.GetId();
                     break;
 
-                case ColumnType.ctShortName:
+                case ColumnType.ctShortTitle:
                     result = fFetchedRec.ShortTitle.Trim();
+                    break;
+
+                case ColumnType.ctDate:
+                    result = new GDMDateItem(fFetchedRec.Date.Value);
                     break;
 
                 case ColumnType.ctAuthor:
@@ -93,6 +101,10 @@ namespace GKCore.Lists
                 case ColumnType.ctTitle:
                     result = fFetchedRec.Title.Lines.Text.Trim();
                     break;
+
+                //case ColumnType.ctPublication:
+                //    result = fFetchedRec.Publication.Lines.Text.Trim();
+                //    break;
 
                 case ColumnType.ctRepositories:
                     result = GKUtils.GetSourceRepositories(fBaseContext.Tree, fFetchedRec);

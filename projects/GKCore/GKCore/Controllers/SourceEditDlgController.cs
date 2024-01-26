@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -75,6 +75,16 @@ namespace GKCore.Controllers
                 fSourceRecord.Text.Clear();
                 fSourceRecord.SetTextArray(fView.Text.Lines);
 
+                try {
+                    GDMCustomDate dt = fView.Date.Date;
+                    if (dt == null) throw new ArgumentNullException("dt");
+
+                    fSourceRecord.Date.ParseString(dt.StringValue);
+                } catch (Exception ex) {
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.DateInvalid));
+                    throw ex;
+                }
+
                 fLocalUndoman.Commit();
 
                 fBase.NotifyRecord(fSourceRecord, RecordAction.raEdit);
@@ -94,6 +104,8 @@ namespace GKCore.Controllers
             fView.Publication.Text = fSourceRecord.Publication.Lines.Text.Trim();
             fView.Text.Text = fSourceRecord.Text.Lines.Text.Trim();
 
+            fView.Date.Date = fSourceRecord.Date.Value;
+
             fView.RepositoriesList.ListModel.DataOwner = fSourceRecord;
             fView.NotesList.ListModel.DataOwner = fSourceRecord;
             fView.MediaList.ListModel.DataOwner = fSourceRecord;
@@ -109,6 +121,7 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblAuthor").Text = LangMan.LS(LSID.Author);
             GetControl<ILabel>("lblTitle").Text = LangMan.LS(LSID.Title);
             GetControl<ILabel>("lblPublication").Text = LangMan.LS(LSID.Publication);
+            GetControl<ILabel>("lblDate").Text = LangMan.LS(LSID.Date);
             GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Common);
             GetControl<ITabPage>("pageText").Text = LangMan.LS(LSID.Text);
             GetControl<ITabPage>("pageRepositories").Text = LangMan.LS(LSID.RPRepositories);
