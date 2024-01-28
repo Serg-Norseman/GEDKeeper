@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,6 +27,7 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Controllers
@@ -175,7 +176,7 @@ namespace GKCore.Controllers
         private void UpdatePlace()
         {
             if (fTempLocation != null) {
-                fView.Place.Text = fTempLocation.LocationName;
+                fView.Place.Text = GKUtils.GetLocationNameExt(fTempLocation, fView.Date.Date);
                 SetLocationMode(true);
             } else {
                 fView.Place.Text = fEvent.Place.StringValue;
@@ -279,6 +280,11 @@ namespace GKCore.Controllers
                 var dateControl = fView.Date;
                 dateControl.PasteValue(data);
             }
+        }
+
+        public void OnDateChanged()
+        {
+            UpdatePlace();
         }
 
         public override void SetLocale()

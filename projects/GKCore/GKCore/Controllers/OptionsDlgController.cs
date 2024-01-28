@@ -445,6 +445,8 @@ namespace GKCore.Controllers
             var hasOverwritePrompt = AppHost.Instance.HasFeatureSupport(Feature.OverwritePrompt);
             GetControl<ICheckBox>("chkFilesOverwriteWarn").Checked = fOptions.FilesOverwriteWarn && hasOverwritePrompt;
             GetControl<ICheckBox>("chkFilesOverwriteWarn").Enabled = hasOverwritePrompt;
+
+            GetControl<ICheckBox>("chkExtendedLocations").Checked = fOptions.ExtendedLocations;
         }
 
         public void AcceptSpecials()
@@ -460,6 +462,8 @@ namespace GKCore.Controllers
             fOptions.KeepInfoPansOverallSize = GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Checked;
 
             fOptions.FilesOverwriteWarn = GetControl<ICheckBox>("chkFilesOverwriteWarn").Checked;
+
+            fOptions.ExtendedLocations = GetControl<ICheckBox>("chkExtendedLocations").Checked;
         }
 
         public void UpdatePlugins()
@@ -962,6 +966,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Text = LangMan.LS(LSID.KeepInfoPansOverallSize);
             GetControl<ICheckBox>("chkFilesOverwriteWarn").Text = LangMan.LS(LSID.FilesOverwriteWarn);
             GetControl<ICheckBox>("chkExtendedKinships").Text = LangMan.LS(LSID.ExtendedKinships);
+            GetControl<ICheckBox>("chkExtendedLocations").Text = LangMan.LS(LSID.ExtendedLocations);
 
             // Plugins
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {

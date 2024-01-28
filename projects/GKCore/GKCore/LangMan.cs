@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -1007,8 +1007,11 @@ namespace GKCore
         /* 935 */ Portrait,
         /* 936 */ CensusAnalysis,
         /* 937 */ PersonCanBeFoundInCensus,
+        /* 938 */ History,
+        /* 939 */ ThePeriodsOfPlaceNamesOverlap,
+        /* 940 */ ExtendedLocations,
 
-        /* 000 */ Last = PersonCanBeFoundInCensus
+        /* 000 */ Last = ExtendedLocations
     }
 
 
@@ -1969,6 +1972,9 @@ namespace GKCore
             /* 935 */ "Portrait",
             /* 936 */ "Census analysis",
             /* 937 */ "The person can be found in the census `{0}`",
+            /* 938 */ "History",
+            /* 939 */ "The periods of place names overlap. This will cause errors when searching for a place name by date.",
+            /* 940 */ "Extended locations",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -479,6 +479,41 @@ namespace GKCore.Controllers
             return result;
         }
 
+        public static async Task<ModificationResult<GDMLocationName>> ModifyLocationName(IView owner, IBaseWindow baseWin, ChangeTracker undoman,
+                                                GDMLocationRecord locRec, GDMLocationName locName)
+        {
+            var result = new ModificationResult<GDMLocationName>();
+
+            try {
+                baseWin.Context.BeginUpdate();
+
+                bool exists = locName != null;
+                if (!exists) {
+                    locName = new GDMLocationName();
+                }
+
+                using (var dlg = AppHost.ResolveDialog<ILocationNameEditDlg>(baseWin)) {
+                    dlg.LocationName = locName;
+                    result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
+                }
+
+                if (!exists) {
+                    if (result.Result) {
+                        result.Result = undoman.DoOrdinaryOperation(OperationType.otLocationNameAdd, locRec, locName);
+                    } else {
+                        locName.Dispose();
+                        locName = null;
+                    }
+                }
+
+                result.Record = locName;
+            } finally {
+                baseWin.Context.EndUpdate();
+            }
+
+            return result;
+        }
+
         private static async Task PostProcessPerson(IBaseWindow baseWin, GDMIndividualRecord indivRec)
         {
             baseWin.Context.ImportNames(indivRec);

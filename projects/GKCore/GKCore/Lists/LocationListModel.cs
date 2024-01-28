@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
@@ -58,9 +59,32 @@ namespace GKCore.Lists
             return result;
         }
 
+        private bool CheckQuickFilter()
+        {
+            var quickFilter = base.QuickFilter;
+
+            var names = fFetchedRec.Names;
+            for (int i = 0; i < names.Count; i++) {
+                var locName = names[i].StringValue;
+
+                bool res;
+                if (quickFilter.Type == MatchType.Indistinct) {
+                    res = (IndistinctMatching.GetSimilarity(locName, quickFilter.Value) >= quickFilter.IndistinctThreshold);
+                } else {
+                    res = IsMatchesMask(locName, quickFilter.Value);
+                }
+
+                if (res) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public override bool CheckFilter()
         {
-            bool res = CheckQuickFilter(fFetchedRec.LocationName);
+            bool res = CheckQuickFilter();
 
             res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 

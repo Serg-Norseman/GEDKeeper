@@ -71,7 +71,10 @@ namespace GKCore.Operations
 
         otIndividualBookmarkChange,
         otIndividualPatriarchChange,
-        otIndividualSexChange
+        otIndividualSexChange,
+
+        otLocationNameAdd,
+        otLocationNameRemove,
     }
 
     /// <summary>
@@ -203,6 +206,11 @@ namespace GKCore.Operations
 
                 case OperationType.otIndividualSexChange:
                     result = ProcessIndividualSexChange(redo);
+                    break;
+
+                case OperationType.otLocationNameAdd:
+                case OperationType.otLocationNameRemove:
+                    result = ProcessLocationName(redo);
                     break;
 
                 default:
@@ -605,6 +613,26 @@ namespace GKCore.Operations
                 iRec.Sex = (GDMSex) fNewVal;
             } else {
                 iRec.Sex = (GDMSex) fOldVal;
+            }
+            return true;
+        }
+
+        private bool ProcessLocationName(bool redo)
+        {
+            GDMLocationRecord locRec = fObj as GDMLocationRecord;
+            GDMLocationName locName = fNewVal as GDMLocationName;
+
+            if (locRec == null || locName == null) {
+                return false;
+            }
+
+            if (fType == OperationType.otLocationNameRemove) {
+                redo = !redo;
+            }
+            if (redo) {
+                locRec.Names.Add(locName);
+            } else {
+                locRec.Names.Extract(locName);
             }
             return true;
         }

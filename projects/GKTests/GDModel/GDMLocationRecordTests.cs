@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -85,6 +85,125 @@ namespace GDModel
                 string buf1 = GEDCOMProvider.GetTagStreamText(locRec, 0);
                 Assert.AreEqual("0 @L1@ _LOC\r\n", buf1);
             }
+        }
+
+        [Test]
+        public void Test_Names()
+        {
+            using (GDMLocationRecord locRec = fContext.Tree.CreateLocation()) {
+                locRec.LocationName = "РФ, Кировская обл., Верхнекамский р-н, д. Прислонская";
+
+                var locName = locRec.Names.Add(new GDMLocationName());
+                locName.StringValue = "Российское царство, Вятка, Слободской уезд, Екатерининского мон. вотч., поч. Старое раменье";
+                locName.Date.ParseString("FROM 1678 TO 1708");
+
+                locName = locRec.Names.Add(new GDMLocationName());
+                locName.StringValue = "Сибирская губерния, Вятка, Слободской уезд, Екатерининского мон. вотч., поч. Старое раменье";
+                locName.Date.ParseString("FROM 1709 TO 1719");
+
+                locName = locRec.Names.Add(new GDMLocationName());
+                locName.StringValue = "Сибирская губ., Вятская пров., Слободской дистр., Верховская вол., д. Прислонская";
+                locName.Date.ParseString("FROM 1719 TO 1726");
+
+                locName = locRec.Names.Add(new GDMLocationName());
+                locName.StringValue = "Казанская губ., Вятская пров., Слободской уезд, Верховская вол., д. Мокрая Слободка";
+                locName.Date.ParseString("FROM 1727 TO 1764");
+
+                // Сибирская губерния, 18 DEC 1708 - 18 JAN 1782
+                // Казанская губерния, 1796 - 1920
+                // Вятская провинция, to Sib 29 MAY 1719 — 28 APR 1727, to Kazan 29 APR 1727 — 10 SEP 1780
+
+                // Вятское наместничество, 11 SEP 1780 - 30 DEC 1796
+                // Вятская губерния, 31 DEC 1796 - 13 DEC 1929
+
+                string buf = GEDCOMProvider.GetTagStreamText(locRec, 0);
+                Assert.AreEqual("0 @L4@ _LOC\r\n" +
+                                "1 NAME РФ, Кировская обл., Верхнекамский р-н, д. Прислонская\r\n" +
+                                "1 NAME Российское царство, Вятка, Слободской уезд, Екатерининского мон. вотч., поч. Старое раменье\r\n" +
+                                "2 DATE FROM 1678 TO 1708\r\n" +
+                                "1 NAME Сибирская губерния, Вятка, Слободской уезд, Екатерининского мон. вотч., поч. Старое раменье\r\n" +
+                                "2 DATE FROM 1709 TO 1719\r\n" +
+                                "1 NAME Сибирская губ., Вятская пров., Слободской дистр., Верховская вол., д. Прислонская\r\n" +
+                                "2 DATE FROM 1719 TO 1726\r\n" +
+                                "1 NAME Казанская губ., Вятская пров., Слободской уезд, Верховская вол., д. Мокрая Слободка\r\n" +
+                                "2 DATE FROM 1727 TO 1764\r\n", buf);
+
+                Assert.IsFalse(locRec.IsEmpty());
+                locRec.Clear();
+                Assert.IsTrue(locRec.IsEmpty());
+            }
+        }
+
+        [Test]
+        public void Test_NamesByDate()
+        {
+            using (GDMLocationRecord locRec = new GDMLocationRecord(null)) {
+                locRec.LocationName = "РФ, Кировская обл., Верхнекамский р-н, д. Прислонская";
+
+                var locName = locRec.Names.Add(new GDMLocationName());
+                locName.StringValue = "Российское царство, Вятка, Слободской уезд, Екатерининского мон. вотч., поч. Старое раменье";
+                locName.Date.ParseString("FROM 1678 TO 1708");
+
+                locName = locRec.Names.Add(new GDMLocationName());
+                locName.StringValue = "Сибирская губерния, Вятка, Слободской уезд, Екатерининского мон. вотч., поч. Старое раменье";
+                locName.Date.ParseString("FROM 1709 TO 1719");
+
+                locName = locRec.Names.Add(new GDMLocationName());
+                locName.StringValue = "Сибирская губ., Вятская пров., Слободской дистр., Верховская вол., д. Прислонская";
+                locName.Date.ParseString("FROM 1719 TO 1726");
+
+                locName = locRec.Names.Add(new GDMLocationName());
+                locName.StringValue = "Казанская губ., Вятская пров., Слободской уезд, Верховская вол., д. Мокрая Слободка";
+                locName.Date.ParseString("FROM 1727 TO 1764");
+
+                // null date -> default name
+                Assert.AreEqual("РФ, Кировская обл., Верхнекамский р-н, д. Прислонская", locRec.GetNameByDate(null));
+
+                // empty date -> default name
+                var dateVal = new GDMDate();
+                Assert.AreEqual("РФ, Кировская обл., Верхнекамский р-н, д. Прислонская", locRec.GetNameByDate(dateVal));
+
+                //
+                dateVal.ParseString("10 JAN 1701");
+                Assert.AreEqual("Российское царство, Вятка, Слободской уезд, Екатерининского мон. вотч., поч. Старое раменье", locRec.GetNameByDate(dateVal));
+
+                //
+                dateVal.ParseString("1711");
+                Assert.AreEqual("Сибирская губерния, Вятка, Слободской уезд, Екатерининского мон. вотч., поч. Старое раменье", locRec.GetNameByDate(dateVal));
+
+                //
+                dateVal.ParseString("1726");
+                Assert.AreEqual("Сибирская губ., Вятская пров., Слободской дистр., Верховская вол., д. Прислонская", locRec.GetNameByDate(dateVal));
+
+                //
+                dateVal.ParseString("1747");
+                Assert.AreEqual("Казанская губ., Вятская пров., Слободской уезд, Верховская вол., д. Мокрая Слободка", locRec.GetNameByDate(dateVal));
+
+                Assert.IsFalse(locRec.IsEmpty());
+                locRec.Clear();
+                Assert.IsTrue(locRec.IsEmpty());
+            }
+        }
+
+        [Test]
+        public void Test_DateIntersections()
+        {
+            var r1 = GetRange("FROM 1708 TO 1929");
+
+            var r2 = GetRange("FROM 1719 TO 1727");
+            var r3 = GetRange("FROM 1701 TO 1780");
+            var r4 = GetRange("FROM 1780 TO 1936");
+
+            Assert.AreEqual("FROM 1719 TO 1727", GDMCustomDate.GetIntersection(r1, r2).StringValue);
+            Assert.AreEqual("FROM 1708 TO 1780", GDMCustomDate.GetIntersection(r1, r3).StringValue);
+            Assert.AreEqual("FROM 1780 TO 1929", GDMCustomDate.GetIntersection(r1, r4).StringValue);
+        }
+
+        private static GDMDatePeriod GetRange(string strDateRange)
+        {
+            var result = new GDMDatePeriod();
+            result.ParseString(strDateRange);
+            return result;
         }
     }
 }

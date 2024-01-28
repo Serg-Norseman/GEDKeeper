@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -116,6 +116,7 @@ namespace GKUI.Components
             fList = new GKListView();
             fList.MouseDoubleClick += List_DoubleClick;
             fList.KeyDown += List_KeyDown;
+            fList.SelectedItemsChanged += List_SelectedIndexChanged;
 
             SuspendLayout();
 
@@ -183,7 +184,7 @@ namespace GKUI.Components
             return btn;
         }
 
-        private void UpdateButtons()
+        public void UpdateButtons()
         {
             if (fListModel == null) {
                 fBtnAdd.Visible = fButtons.Contains(SheetButton.lbAdd);
@@ -224,6 +225,17 @@ namespace GKUI.Components
             fBtnPaste.Enabled = !fReadOnly;
 
             fList.BackgroundColor = (fReadOnly) ? SystemColors.Control : SystemColors.WindowBackground;
+        }
+
+        private void List_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (fListModel != null) {
+                int itemIndex = -1; // fList.SelectedIndex;
+                object itemData = fList.GetSelectedData();
+                if (itemData == null) return;
+
+                fListModel.OnItemSelected(itemIndex, itemData);
+            }
         }
 
         private void List_DoubleClick(object sender, EventArgs e)

@@ -24,8 +24,9 @@
 		private System.Windows.Forms.ColumnHeader ColumnHeader1;
 		private System.Windows.Forms.ColumnHeader ColumnHeader2;
 		private System.Windows.Forms.ColumnHeader ColumnHeader3;
+        private System.Windows.Forms.TabPage pageHistory;
 
-		private void InitializeComponent()
+        private void InitializeComponent()
 		{
 		    this.btnAccept = new System.Windows.Forms.Button();
 		    this.btnCancel = new System.Windows.Forms.Button();
@@ -49,7 +50,8 @@
 		    this.btnShowOnMap = new System.Windows.Forms.Button();
 		    this.pageNotes = new System.Windows.Forms.TabPage();
 		    this.pageMultimedia = new System.Windows.Forms.TabPage();
-		    this.tabsData.SuspendLayout();
+            this.pageHistory = new System.Windows.Forms.TabPage();
+            this.tabsData.SuspendLayout();
 		    this.pageCommon.SuspendLayout();
 		    this.grpSearch.SuspendLayout();
 		    this.SuspendLayout();
@@ -80,7 +82,8 @@
 		    // tabsData
 		    // 
 		    this.tabsData.Controls.Add(this.pageCommon);
-		    this.tabsData.Controls.Add(this.pageNotes);
+            this.tabsData.Controls.Add(this.pageHistory);
+            this.tabsData.Controls.Add(this.pageNotes);
 		    this.tabsData.Controls.Add(this.pageMultimedia);
 		    this.tabsData.Location = new System.Drawing.Point(0, 0);
 		    this.tabsData.Name = "tabsData";
@@ -241,13 +244,21 @@
 		    this.btnShowOnMap.TabIndex = 6;
 		    this.btnShowOnMap.Text = "btnShowOnMap";
 		    this.btnShowOnMap.Click += new System.EventHandler(this.btnShowOnMap_Click);
-		    // 
-		    // pageNotes
-		    // 
-		    this.pageNotes.Location = new System.Drawing.Point(4, 26);
+            // 
+            // pageHistory
+            // 
+            this.pageHistory.Location = new System.Drawing.Point(4, 26);
+            this.pageHistory.Name = "pageHistory";
+            this.pageHistory.Size = new System.Drawing.Size(777, 486);
+            this.pageHistory.TabIndex = 1;
+            this.pageHistory.Text = "pageHistory";
+            // 
+            // pageNotes
+            // 
+            this.pageNotes.Location = new System.Drawing.Point(4, 26);
 		    this.pageNotes.Name = "pageNotes";
 		    this.pageNotes.Size = new System.Drawing.Size(777, 486);
-		    this.pageNotes.TabIndex = 1;
+		    this.pageNotes.TabIndex = 2;
 		    this.pageNotes.Text = "pageNotes";
 		    // 
 		    // pageMultimedia
@@ -255,12 +266,12 @@
 		    this.pageMultimedia.Location = new System.Drawing.Point(4, 26);
 		    this.pageMultimedia.Name = "pageMultimedia";
 		    this.pageMultimedia.Size = new System.Drawing.Size(777, 486);
-		    this.pageMultimedia.TabIndex = 2;
+		    this.pageMultimedia.TabIndex = 3;
 		    this.pageMultimedia.Text = "pageMultimedia";
-		    // 
-		    // LocationEditDlg
-		    // 
-		    this.AcceptButton = this.btnAccept;
+            // 
+            // LocationEditDlg
+            // 
+            this.AcceptButton = this.btnAccept;
 		    this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
 		    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 		    this.CancelButton = this.btnCancel;

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,31 +20,17 @@
 
 using GDModel;
 using GKCore.Design.Controls;
-using GKUI.Components;
+using GKCore.Interfaces;
 
-namespace GKUI.Platform.Handlers
+namespace GKCore.Design.Views
 {
-    public sealed class DateControlHandler : BaseControlHandler<GKDateControl, DateControlHandler>, IDateControl
+    public interface ILocationNameEditDlg : ICommonDialog, IBaseEditor
     {
-        public GDMCustomDate Date
-        {
-            get { return Control.Date; }
-            set { Control.Date = value; }
-        }
+        GDMLocationName LocationName { get; set; }
 
-        public GDMDateType FixedDateType
-        {
-            get { return Control.FixedDateType; }
-            set { Control.FixedDateType = value; }
-        }
+        ITextBox NameText { get; }
+        ITextBox AbbrText { get; }
 
-        public DateControlHandler(GKDateControl control) : base(control)
-        {
-        }
-
-        public void PasteValue(string value)
-        {
-            Control.PasteValue(value);
-        }
+        IDateControl DateCtl { get; }
     }
 }

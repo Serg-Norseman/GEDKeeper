@@ -64,6 +64,8 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCore\Controllers\LocationNameEditDlgController.cs" />
+    <Compile Include="GKCore\Design\Views\ILocationNameEditDlg.cs" />
     <Compile Include="GDModel\GDMLocationLink.cs" />
     <Compile Include="GDModel\GDMLocationName.cs" />
     <Compile Include="GDModel\GDMLocationType.cs" />
@@ -525,6 +527,7 @@
     <Compile Include="GKCore\Design\Controls\IMapBrowser.cs" />
     <Compile Include="GKCore\Design\Controls\IPortraitControl.cs" />
     <Compile Include="GKCore\Interfaces\IDataReceiver.cs" />
+    <Compile Include="GKCore\Lists\LocationNamesListModel.cs" />
   </ItemGroup>
   <Import Project="GKCore.props" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

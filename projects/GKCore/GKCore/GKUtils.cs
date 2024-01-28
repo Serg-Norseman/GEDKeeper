@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -1403,6 +1403,20 @@ namespace GKCore
             }
 
             return result;
+        }
+
+        public static string GetLocationNameExt(GDMLocationRecord locRec, GDMCustomDate date)
+        {
+            try {
+                if (GlobalOptions.Instance.ExtendedLocations) {
+                    return locRec.GetNameByDate(date);
+                } else {
+                    return locRec.LocationName;
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.GetLocationNameExt()", ex);
+                return locRec.LocationName;
+            }
         }
 
         #endregion
@@ -2982,8 +2996,25 @@ namespace GKCore
                     summary.Clear();
                     if (locRec != null) {
                         summary.Add("");
-                        summary.Add("[u][b][size=+1]" + locRec.LocationName.Trim() + "[/size][/b][/u]");
-                        summary.Add("");
+
+                        GlobalOptions glob = GlobalOptions.Instance;
+                        for (int i = 0; i < locRec.Names.Count; i++) {
+                            var locName = locRec.Names[i];
+                            summary.Add("[u][b][size=+1]" + locName.StringValue + "[/size][/b][/u]");
+
+                            string st = locName.Abbreviation;
+                            if (!string.IsNullOrEmpty(st)) {
+                                summary.Add("    " + st);
+                            }
+
+                            st = locName.Date.GetDisplayStringExt(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
+                            if (!string.IsNullOrEmpty(st)) {
+                                summary.Add("    " + st);
+                            }
+
+                            summary.Add("");
+                        }
+
                         summary.Add(LangMan.LS(LSID.Latitude) + ": " + locRec.Map.Lati);
                         summary.Add(LangMan.LS(LSID.Longitude) + ": " + locRec.Map.Long);
 

@@ -1811,7 +1811,9 @@ namespace GDModel.Providers.GEDCOM
 
             GEDCOMTagType tagType = (GEDCOMTagType)tagId;
             if (tagType == GEDCOMTagType.NAME) {
-                locRec.LocationName = tagValue;
+                curTag = locRec.Names.Add(new GDMLocationName());
+                curTag.ParseString(tagValue);
+                addHandler = AddLocationNameTag;
             } else if (tagType == GEDCOMTagType.MAP) {
                 curTag = locRec.Map;
                 addHandler = AddMapTag;
@@ -1830,7 +1832,44 @@ namespace GDModel.Providers.GEDCOM
 
             level += 1;
             WriteMap(stream, level, locRec.Map);
-            WriteTagLine(stream, level, GEDCOMTagName.NAME, locRec.LocationName, true);
+
+            WriteList(stream, level, locRec.Names, WriteLocationName);
+        }
+
+
+        private StackTuple AddLocationNameTag(GDMTag owner, int tagLevel, int tagId, string tagValue)
+        {
+            GDMLocationName locName = (GDMLocationName)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;
+
+            GEDCOMTagType tagType = (GEDCOMTagType)tagId;
+            if (tagType == GEDCOMTagType.ABBR) {
+                locName.Abbreviation = tagValue;
+            } else if (tagType == GEDCOMTagType.DATE) {
+                curTag = locName.Date;
+                GEDCOMUtils.ParseDateValue(fTree, locName.Date, tagValue);
+            } else if (tagType == GEDCOMTagType.LANG) {
+                locName.Language = GEDCOMUtils.GetLanguageVal(tagValue);
+            } else {
+                return AddBaseTag(locName, tagLevel, tagId, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static bool WriteLocationName(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMLocationName locName = (GDMLocationName)tag;
+
+            if (!WriteBaseTag(stream, level, locName)) return false;
+
+            int lev = level + 1;
+            WriteTagLine(stream, lev, GEDCOMTagName.ABBR, locName.Abbreviation, true);
+            WriteBaseTag(stream, lev, locName.Date);
+            WriteTagLine(stream, lev, GEDCOMTagName.LANG, GEDCOMUtils.GetLanguageStr(locName.Language), true);
+
+            return true;
         }
 
 

@@ -182,6 +182,7 @@
         private System.Windows.Forms.ComboBox cmbDescendNumbering;
         private System.Windows.Forms.Label lblAscendNumbering;
         private System.Windows.Forms.ComboBox cmbAscendNumbering;
+        private System.Windows.Forms.CheckBox chkExtendedLocations;
 
         private void InitializeComponent()
         {
@@ -365,6 +366,7 @@
             this.cmbAscendNumbering = new System.Windows.Forms.ComboBox();
             this.lblDescendNumbering = new System.Windows.Forms.Label();
             this.cmbDescendNumbering = new System.Windows.Forms.ComboBox();
+            this.chkExtendedLocations = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -2276,6 +2278,7 @@
             this.pageSpecials.Controls.Add(this.chkKeepInfoPansOverallSize);
             this.pageSpecials.Controls.Add(this.chkFilesOverwriteWarn);
             this.pageSpecials.Controls.Add(this.chkExtendedKinships);
+            this.pageSpecials.Controls.Add(this.chkExtendedLocations);
             this.pageSpecials.BackColor = System.Drawing.SystemColors.Control;
             this.pageSpecials.Location = new System.Drawing.Point(4, 26);
             this.pageSpecials.Margin = new System.Windows.Forms.Padding(0);
@@ -2383,6 +2386,15 @@
             this.chkExtendedKinships.Size = new System.Drawing.Size(600, 22);
             this.chkExtendedKinships.TabIndex = 17;
             this.chkExtendedKinships.Text = "chkExtendedKinships";
+            // 
+            // chkExtendedLocations
+            // 
+            this.chkExtendedLocations.Location = new System.Drawing.Point(20, 471);
+            this.chkExtendedLocations.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkExtendedLocations.Name = "chkExtendedLocations";
+            this.chkExtendedLocations.Size = new System.Drawing.Size(600, 22);
+            this.chkExtendedLocations.TabIndex = 18;
+            this.chkExtendedLocations.Text = "chkExtendedLocations";
             // 
             // pagePlugins
             // 

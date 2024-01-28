@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -36,6 +36,23 @@ namespace GDModel
         dcUnknown,
 
         dcLast = dcUnknown
+    }
+
+
+    public enum GDMDateType
+    {
+        Exact,
+        Before,
+        After,
+        Between,
+        PeriodTo,
+        PeriodFrom,
+        PeriodBetween,
+        About,
+        Calculated,
+        Estimated,
+
+        None
     }
 
 
@@ -162,6 +179,45 @@ namespace GDModel
             if (dateAfter != null) result.After.Assign(dateAfter);
             if (dateBefore != null) result.Before.Assign(dateBefore);
             return result;
+        }
+
+
+        public static void GetDateRange(GDMCustomDate date, out GDMDate dateStart, out GDMDate dateEnd)
+        {
+            if (date is GDMDateRange) {
+                GDMDateRange dtRange = date as GDMDateRange;
+                dateStart = dtRange.After;
+                dateEnd = dtRange.Before;
+            } else if (date is GDMDatePeriod) {
+                GDMDatePeriod dtPeriod = date as GDMDatePeriod;
+                dateStart = dtPeriod.DateFrom;
+                dateEnd = dtPeriod.DateTo;
+            } else {
+                var dt = date as GDMDate;
+                dateStart = dt;
+                dateEnd = dt;
+            }
+        }
+
+        public static GDMDatePeriod GetIntersection(GDMCustomDate range1, GDMCustomDate range2)
+        {
+            if (range1 == null || range1.IsEmpty() || range2 == null || range2.IsEmpty())
+                return GDMDatePeriod.Empty;
+
+            GDMDate r1start, r1end, r2start, r2end;
+
+            GetDateRange(range1, out r1start, out r1end);
+            GetDateRange(range2, out r2start, out r2end);
+
+            GDMDate greatestStart = r1start.CompareTo(r2start) > 0 ? r1start : r2start;
+            GDMDate smallestEnd = r1end.CompareTo(r2end) < 0 ? r1end : r2end;
+
+            // no intersection
+            if (greatestStart.CompareTo(smallestEnd) > 0) {
+                return GDMDatePeriod.Empty;
+            }
+
+            return CreatePeriod(greatestStart, smallestEnd);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -125,6 +125,8 @@ namespace GKCore.Options
         }
 
         public bool ExtendedKinships { get; set; }
+
+        public bool ExtendedLocations { get; set; }
 
         public StringList FARPatterns
         {
@@ -399,6 +401,7 @@ namespace GKCore.Options
             InfoPansOverallSize = -1;
             KeepInfoPansOverallSize = false;
             ExtendedKinships = false;
+            ExtendedLocations = false;
         }
 
         public void Assign(IOptions source)
@@ -806,6 +809,7 @@ namespace GKCore.Options
             KeepInfoPansOverallSize = ini.ReadBool("Common", "KeepInfoPansOverallSize", false);
             FilesOverwriteWarn = ini.ReadBool("Common", "FilesOverwriteWarn", true);
             ExtendedKinships = ini.ReadBool("Common", "ExtendedKinships", false);
+            ExtendedLocations = ini.ReadBool("Common", "ExtendedLocations", false);
 
             UseSurnamesInPersonSelectionFilter = ini.ReadBool("Common", "UseSurnamesInPersonSelectionFilter", false);
             UseBirthDatesInPersonSelectionFilter = ini.ReadBool("Common", "UseBirthDatesInPersonSelectionFilter", false);
@@ -951,6 +955,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "KeepInfoPansOverallSize", KeepInfoPansOverallSize);
             ini.WriteBool("Common", "FilesOverwriteWarn", FilesOverwriteWarn);
             ini.WriteBool("Common", "ExtendedKinships", ExtendedKinships);
+            ini.WriteBool("Common", "ExtendedLocations", ExtendedLocations);
 
             ini.WriteBool("Common", "UseSurnamesInPersonSelectionFilter", UseSurnamesInPersonSelectionFilter);
             ini.WriteBool("Common", "UseBirthDatesInPersonSelectionFilter", UseBirthDatesInPersonSelectionFilter);

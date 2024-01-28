@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -35,6 +35,7 @@ namespace GKUI.Forms
     {
         private readonly GKMapBrowser fMapBrowser;
         private readonly GKSheetList fMediaList;
+        private readonly GKSheetList fNamesList;
         private readonly GKSheetList fNotesList;
 
         public GDMLocationRecord LocationRecord
@@ -48,6 +49,11 @@ namespace GKUI.Forms
         IMapBrowser ILocationEditDlg.MapBrowser
         {
             get { return fMapBrowser; }
+        }
+
+        ISheetList ILocationEditDlg.NamesList
+        {
+            get { return fNamesList; }
         }
 
         ISheetList ILocationEditDlg.MediaList
@@ -94,6 +100,7 @@ namespace GKUI.Forms
             fMapBrowser.Dock = DockStyle.Fill;
             panMap.Controls.Add(fMapBrowser);
 
+            fNamesList = new GKSheetList(pageHistory);
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
 

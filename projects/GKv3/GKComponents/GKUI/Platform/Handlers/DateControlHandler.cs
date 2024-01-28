@@ -32,6 +32,12 @@ namespace GKUI.Platform.Handlers
             set { Control.Date = value; }
         }
 
+        public GDMDateType FixedDateType
+        {
+            get { return Control.FixedDateType; }
+            set { Control.FixedDateType = value; }
+        }
+
         public DateControlHandler(GKDateControl control) : base(control)
         {
         }

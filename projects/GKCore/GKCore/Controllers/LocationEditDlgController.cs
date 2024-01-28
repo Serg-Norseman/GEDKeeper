@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -61,6 +61,7 @@ namespace GKCore.Controllers
         {
             base.Init(baseWin);
 
+            fView.NamesList.ListModel = new LocationNamesListModel(fView, baseWin, fLocalUndoman);
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
             fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
         }
@@ -74,9 +75,11 @@ namespace GKCore.Controllers
                 fLocationRecord.Map.Lati = ConvertHelper.ParseFloat(fView.Latitude.Text, 0.0);
                 fLocationRecord.Map.Long = ConvertHelper.ParseFloat(fView.Longitude.Text, 0.0);
 
+                bool isChanged = isRenamed || fLocalUndoman.HasChanges();
+
                 fLocalUndoman.Commit();
 
-                if (isRenamed) {
+                if (isChanged) {
                     fBase.Context.Tree.RenameLocationRecord(fLocationRecord);
                 }
 
@@ -95,6 +98,7 @@ namespace GKCore.Controllers
             fView.Latitude.Text = GEDCOMUtils.CoordToStr(fLocationRecord.Map.Lati);
             fView.Longitude.Text = GEDCOMUtils.CoordToStr(fLocationRecord.Map.Long);
 
+            fView.NamesList.ListModel.DataOwner = fLocationRecord;
             fView.NotesList.ListModel.DataOwner = fLocationRecord;
             fView.MediaList.ListModel.DataOwner = fLocationRecord;
 
@@ -196,6 +200,8 @@ namespace GKCore.Controllers
             fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.Title), 200, false);
             fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.Latitude), 80, false);
             fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.Longitude), 80, false);
+
+            GetControl<ITabPage>("pageHistory").Text = LangMan.LS(LSID.History);
         }
     }
 }

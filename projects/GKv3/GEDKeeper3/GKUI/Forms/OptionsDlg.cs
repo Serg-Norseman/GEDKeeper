@@ -201,6 +201,7 @@ namespace GKUI.Forms
         private ComboBox cmbDescendNumbering;
         private Label lblAscendNumbering;
         private ComboBox cmbAscendNumbering;
+        private CheckBox chkExtendedLocations;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion

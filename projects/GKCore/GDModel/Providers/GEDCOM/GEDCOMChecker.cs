@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -172,19 +172,18 @@ namespace GDModel.Providers.GEDCOM
             CheckTagWithSourceCitations(swl);
         }
 
-        private void CheckEventPlace(GDMPlace place)
+        private void CheckEventPlace(GDMPlace place, GDMCustomEvent evt)
         {
             GDMPointer placeLocation = place.Location;
             GDMLocationRecord locRec = fTree.GetPtrValue<GDMLocationRecord>(placeLocation);
 
+            // if the pointer is damaged
             if (placeLocation.XRef != "" && locRec == null) {
                 placeLocation.XRef = "";
             }
 
-            if (place.StringValue != "") {
-                if (locRec != null && place.StringValue != locRec.LocationName) {
-                    place.StringValue = locRec.LocationName;
-                }
+            if (place.StringValue != "" && locRec != null) {
+                place.StringValue = GKUtils.GetLocationNameExt(locRec, evt.Date.Value);
             }
 
             CheckTagWithNotes(place);
@@ -220,7 +219,7 @@ namespace GDModel.Providers.GEDCOM
             }
 
             if (evt.HasPlace) {
-                CheckEventPlace(evt.Place);
+                CheckEventPlace(evt.Place, evt);
             }
 
             fBaseContext.EventStats.Increment(evt.GetTagName());

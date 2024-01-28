@@ -469,6 +469,7 @@
             <CheckBox x:Name="chkKeepInfoPansOverallSize" />
             <CheckBox x:Name="chkFilesOverwriteWarn" />
             <CheckBox x:Name="chkExtendedKinships" />
+            <CheckBox x:Name="chkExtendedLocations" />
           </StackLayout>
         </TabPage>
 

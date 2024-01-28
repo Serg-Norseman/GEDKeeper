@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,6 +27,9 @@ namespace GDModel
 {
     public sealed class GDMDateRange : GDMCustomDate
     {
+        public static readonly GDMDateRange Empty = new GDMDateRange();
+
+
         private readonly GDMDate fDateAfter;
         private readonly GDMDate fDateBefore;
 

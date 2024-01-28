@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -151,6 +151,11 @@ namespace GKUI.Forms
         public void SendData(string signature, string data)
         {
             fController.SendData(signature, data);
+        }
+
+        private void dateCtl_DateChanged(object sender, System.EventArgs e)
+        {
+            fController.OnDateChanged();
         }
     }
 }

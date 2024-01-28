@@ -389,6 +389,7 @@
                         <input:CheckBox x:Name="chkKeepInfoPansOverallSize" />
                         <input:CheckBox x:Name="chkFilesOverwriteWarn" />
                         <input:CheckBox x:Name="chkExtendedKinships" />
+                        <input:CheckBox x:Name="chkExtendedLocations" />
 
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>

@@ -683,6 +683,10 @@ namespace GKCore.Lists
             return false;
         }
 
+        public virtual void OnItemSelected(int itemIndex, object rowData)
+        {
+        }
+
         #endregion
 
         #region Sort support

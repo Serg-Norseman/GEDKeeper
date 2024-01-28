@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,25 +20,40 @@
 
 using System;
 using GDModel.Providers.GEDCOM;
+using GKCore.Calendar;
 using GKCore.Types;
 
 namespace GDModel
 {
     public sealed class GDMLocationRecord : GDMRecord
     {
-        private string fLocationName;
         private readonly GDMMap fMap;
+        private GDMList<GDMLocationName> fNames;
 
 
         public string LocationName
         {
-            get { return fLocationName; }
-            set { fLocationName = value; }
+            get { return (fNames.Count == 0) ? string.Empty : fNames[0].StringValue; }
+            set {
+                GDMLocationName locName;
+                if (fNames.Count == 0) {
+                    locName = new GDMLocationName();
+                    fNames.Add(locName);
+                } else {
+                    locName = fNames[0];
+                }
+                locName.StringValue = value;
+            }
         }
 
         public GDMMap Map
         {
             get { return fMap; }
+        }
+
+        public GDMList<GDMLocationName> Names
+        {
+            get { return fNames; }
         }
 
 
@@ -47,6 +62,7 @@ namespace GDModel
             SetName(GEDCOMTagType._LOC);
 
             fMap = new GDMMap();
+            fNames = new GDMList<GDMLocationName>();
         }
 
         internal override void TrimExcess()
@@ -54,6 +70,7 @@ namespace GDModel
             base.TrimExcess();
 
             fMap.TrimExcess();
+            fNames.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -64,21 +81,21 @@ namespace GDModel
 
             base.Assign(otherLoc);
 
-            fLocationName = otherLoc.fLocationName;
             fMap.Assign(otherLoc.fMap);
+            AssignList(otherLoc.fNames, Names);
         }
 
         public override void Clear()
         {
             base.Clear();
 
-            fLocationName = string.Empty;
             fMap.Clear();
+            fNames.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && string.IsNullOrEmpty(fLocationName) && fMap.IsEmpty();
+            return base.IsEmpty() && fMap.IsEmpty() && (fNames.Count == 0);
         }
 
         // TODO: connect to use
@@ -95,6 +112,52 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
             fMap.ReplaceXRefs(map);
+            fNames.ReplaceXRefs(map);
+        }
+
+        public string GetNameByDate(GDMCustomDate date)
+        {
+            if (date != null && !date.IsEmpty()) {
+                for (int i = 1; i < fNames.Count; i++) {
+                    var locName = fNames[i];
+                    if (!locName.Date.IsEmpty()) {
+                        var interDate = GDMCustomDate.GetIntersection(date, locName.Date.Value);
+                        if (!interDate.IsEmpty()) {
+                            return locName.StringValue;
+                        }
+                    }
+                }
+            }
+
+            return LocationName;
+        }
+
+        public bool ValidateNames()
+        {
+            GDMCustomDate prevDate = null;
+            for (int i = 0; i < fNames.Count; i++) {
+                var locName = fNames[i];
+                if (!locName.Date.IsEmpty()) {
+                    var interDate = GDMCustomDate.GetIntersection(prevDate, locName.Date.Value);
+                    if (!interDate.IsEmpty()) {
+                        return false;
+                    }
+                }
+                prevDate = locName.Date.Value;
+            }
+            return true;
+        }
+
+        public void SortNames()
+        {
+            fNames.Sort(ChildrenEventsCompare);
+        }
+
+        private static int ChildrenEventsCompare(GDMLocationName cp1, GDMLocationName cp2)
+        {
+            UDN udn1 = cp1.Date.GetUDN();
+            UDN udn2 = cp2.Date.GetUDN();
+            return -udn1.CompareTo(udn2);
         }
     }
 }

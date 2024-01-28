@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -73,6 +73,16 @@ namespace GKUI.Components
         {
             get { return txtMaskedDate.Text; }
             set { txtMaskedDate.Text = value; }
+        }
+
+        public event EventHandler<EventArgs> TextChanged
+        {
+            add {
+                txtMaskedDate.Properties.AddHandlerEvent("TextControl.TextChanged", value);
+            }
+            remove {
+                txtMaskedDate.Properties.RemoveEvent("TextControl.TextChanged", value);
+            }
         }
 
 

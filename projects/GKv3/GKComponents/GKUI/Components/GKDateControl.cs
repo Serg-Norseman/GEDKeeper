@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -35,17 +35,37 @@ namespace GKUI.Components
     /// </summary>
     public class GKDateControl : Panel, IDateControl, ILocalizable
     {
+        private GDMDateType fFixedDateType;
+
+
         public GDMCustomDate Date
         {
             get { return GetDate(); }
             set { SetDate(value); }
         }
 
+        public event EventHandler DateChanged;
+
+        public GDMDateType FixedDateType
+        {
+            get { return fFixedDateType; }
+            set { fFixedDateType = value; }
+        }
+
 
         public GKDateControl()
         {
+            fFixedDateType = GDMDateType.None;
+
             InitializeComponent();
             SetLocale();
+        }
+
+        private void DoDateChanged()
+        {
+            var eventHandler = DateChanged;
+            if (eventHandler != null)
+                eventHandler(this, new EventArgs());
         }
 
         public void Activate()
@@ -91,6 +111,8 @@ namespace GKUI.Components
             txtDate2.Enabled = vis2;
             cmbDate2Calendar.Enabled = vis2;
             chkBC2.Enabled = vis2;
+
+            DoDateChanged();
         }
 
         private void cmbDateType_SelectedIndexChanged(object sender, EventArgs e)
@@ -133,44 +155,44 @@ namespace GKUI.Components
             if (gcd2 == null) throw new ArgumentNullException("gcd2");
             gcd2.YearBC = chkBC2.Checked.Value;
 
-            switch (cmbDateType.SelectedIndex) {
-                case 0:
+            switch ((GDMDateType)cmbDateType.SelectedIndex) {
+                case GDMDateType.Exact:
                     result = gcd1;
                     break;
 
-                case 1: // BEF gcd2
+                case GDMDateType.Before: // BEF gcd2
                     result = GDMCustomDate.CreateRange(null, gcd2);
                     break;
 
-                case 2: // AFT gcd1
+                case GDMDateType.After: // AFT gcd1
                     result = GDMCustomDate.CreateRange(gcd1, null);
                     break;
 
-                case 3: // "BET " + gcd1 + " AND " + gcd2
+                case GDMDateType.Between: // "BET " + gcd1 + " AND " + gcd2
                     result = GDMCustomDate.CreateRange(gcd1, gcd2);
                     break;
 
-                case 4: // TO gcd2
+                case GDMDateType.PeriodTo: // TO gcd2
                     result = GDMCustomDate.CreatePeriod(null, gcd2);
                     break;
 
-                case 5: // FROM gcd1
+                case GDMDateType.PeriodFrom: // FROM gcd1
                     result = GDMCustomDate.CreatePeriod(gcd1, null);
                     break;
 
-                case 6: // FROM gcd1 TO gcd2
+                case GDMDateType.PeriodBetween: // FROM gcd1 TO gcd2
                     result = GDMCustomDate.CreatePeriod(gcd1, gcd2);
                     break;
 
-                case 7: // ABT gcd1
+                case GDMDateType.About: // ABT gcd1
                     result = GDMCustomDate.CreateApproximated(gcd1, GDMApproximated.daAbout);
                     break;
 
-                case 8: // CAL gcd1
+                case GDMDateType.Calculated: // CAL gcd1
                     result = GDMCustomDate.CreateApproximated(gcd1, GDMApproximated.daCalculated);
                     break;
 
-                case 9: // EST gcd1
+                case GDMDateType.Estimated: // EST gcd1
                     result = GDMCustomDate.CreateApproximated(gcd1, GDMApproximated.daEstimated);
                     break;
             }
@@ -231,6 +253,14 @@ namespace GKUI.Components
                 cmbDate1Calendar.SetSelectedTag(GDMCalendar.dcGregorian);
                 chkBC1.Checked = false;
             }
+
+            if (fFixedDateType != GDMDateType.None) {
+                cmbDateType.SelectedIndex = (int)fFixedDateType;
+                cmbDateType.Enabled = false;
+            } else {
+                cmbDateType.SelectedIndex = 0;
+                cmbDateType.Enabled = true;
+            }
         }
 
         private void FillControls(int dateIndex, GDMDate date)
@@ -259,6 +289,21 @@ namespace GKUI.Components
             }
         }
 
+        private void chkBC_CheckedChanged(object sender, EventArgs e)
+        {
+            DoDateChanged();
+        }
+
+        private void txtDate_TextChanged(object sender, EventArgs e)
+        {
+            DoDateChanged();
+        }
+
+        private void cmbDateCalendar_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DoDateChanged();
+        }
+
         #region Design
 
         private ComboBox cmbDateType;
@@ -282,24 +327,30 @@ namespace GKUI.Components
             txtDate1.DragOver += txtDateX_DragOver;
             txtDate1.DragDrop += txtDateX_DragDrop;
             txtDate1.CalcMode = true;
+            txtDate1.TextChanged += txtDate_TextChanged;
 
             txtDate2 = new GKDateBox();
             txtDate2.AllowDrop = true;
             txtDate2.DragOver += txtDateX_DragOver;
             txtDate2.DragDrop += txtDateX_DragDrop;
             txtDate2.CalcMode = true;
+            txtDate2.TextChanged += txtDate_TextChanged;
 
             cmbDate1Calendar = new ComboBox();
             cmbDate1Calendar.ReadOnly = true;
+            cmbDate1Calendar.SelectedIndexChanged += cmbDateCalendar_SelectedIndexChanged;
 
             cmbDate2Calendar = new ComboBox();
             cmbDate2Calendar.ReadOnly = true;
+            cmbDate2Calendar.SelectedIndexChanged += cmbDateCalendar_SelectedIndexChanged;
 
             chkBC1 = new CheckBox();
             chkBC1.Text = "BC";
+            chkBC1.CheckedChanged += chkBC_CheckedChanged;
 
             chkBC2 = new CheckBox();
             chkBC2.Text = "BC";
+            chkBC2.CheckedChanged += chkBC_CheckedChanged;
 
             Content = new TableLayout {
                 Padding = new Padding(0),

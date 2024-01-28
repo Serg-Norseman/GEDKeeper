@@ -943,3 +943,6 @@
 935=Portré
 936=Census analysis
 937=The person can be found in the census `{0}`
+938=History
+939=The periods of place names overlap. This will cause errors when searching for a place name by date.
+940=Extended locations

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -99,6 +99,7 @@ namespace GKCore.Lists
         IListView ListView { get; }
         bool ReadOnly { get; set; }
 
+        void UpdateButtons();
         void UpdateSheet();
     }
 
@@ -131,7 +132,12 @@ namespace GKCore.Lists
         public EnumSet<RecordAction> AllowedActions
         {
             get { return fAllowedActions; }
-            set { fAllowedActions = value; }
+            set {
+                fAllowedActions = value;
+                if (fSheetList != null) {
+                    fSheetList.UpdateButtons();
+                }
+            }
         }
 
         public GDMObject DataOwner

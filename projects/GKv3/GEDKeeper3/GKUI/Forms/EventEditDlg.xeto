@@ -36,7 +36,7 @@
 
             <TableRow>
               <Label x:Name="lblDate" />
-              <comcom:GKDateControl x:Name="dateCtl" />
+              <comcom:GKDateControl x:Name="dateCtl" DateChanged="dateCtl_DateChanged" />
             </TableRow>
 
             <TableRow>

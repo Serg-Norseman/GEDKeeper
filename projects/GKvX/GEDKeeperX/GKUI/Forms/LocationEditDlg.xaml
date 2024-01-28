@@ -46,6 +46,10 @@
                     </StackLayout>
                 </xp:TabItem>
 
+                <xp:TabItem x:Name="pageHistory">
+                    <comcom:GKSheetList x:Name="fNamesList" />
+                </xp:TabItem>
+
                 <xp:TabItem x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" />
                 </xp:TabItem>

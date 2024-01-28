@@ -89,7 +89,7 @@ namespace GKCore.Controllers
                     int num = place.Facts.Count;
                     for (int i = 0; i < num; i++) {
                         GDMCustomEvent evt = place.Facts[i];
-                        evt.Place.StringValue = locRec.LocationName;
+                        evt.Place.StringValue = GKUtils.GetLocationNameExt(locRec, evt.Date.Value);
                         evt.Place.Location.XRef = locRec.XRef;
                     }
                 }

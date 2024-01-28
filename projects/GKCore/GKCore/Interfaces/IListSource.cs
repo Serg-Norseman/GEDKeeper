@@ -137,6 +137,7 @@ namespace GKCore.Interfaces
         int GetFieldColumnId(string[] fields, string fieldName);
         int IndexOfItem(object data);
         bool IsColumnAutosize(int colIndex);
+        void OnItemSelected(int itemIndex, object rowData);
         void SortContents(int sortColumn, bool sortAscending);
         void UpdateColumns(IListView listView);
         void UpdateContents();

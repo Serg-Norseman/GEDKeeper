@@ -121,10 +121,11 @@
 		    this.dateCtl.Name = "dateCtl";
 		    this.dateCtl.Size = new System.Drawing.Size(474, 63);
 		    this.dateCtl.TabIndex = 10;
-		    // 
-		    // lblEvent
-		    // 
-		    this.lblEvent.AutoSize = true;
+            this.dateCtl.DateChanged += new System.EventHandler(this.dateCtl_DateChanged);
+            // 
+            // lblEvent
+            // 
+            this.lblEvent.AutoSize = true;
 		    this.lblEvent.Location = new System.Drawing.Point(11, 10);
 		    this.lblEvent.Name = "lblEvent";
 		    this.lblEvent.Size = new System.Drawing.Size(56, 17);
@@ -296,5 +297,5 @@
 		    this.pageCommon.PerformLayout();
 		    this.ResumeLayout(false);
 		}
-	}
+    }
 }
