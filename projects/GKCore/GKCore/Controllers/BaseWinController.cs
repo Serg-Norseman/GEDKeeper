@@ -976,9 +976,15 @@ namespace GKCore.Controllers
                     GetControl<IMenuItem>("miCopyContent").Text = LangMan.LS(LSID.Copy);
 
                     var miPlugins = GetControl<IMenuItem>("miPlugins");
-                    int num = miPlugins.SubItems.Count;
-                    for (int i = 0; i < num; i++) {
+                    for (int i = 0, num = miPlugins.SubItems.Count; i < num; i++) {
                         var mi = miPlugins.SubItems[i];
+                        IPlugin plugin = (IPlugin)mi.Tag;
+                        mi.Text = plugin.DisplayName;
+                    }
+
+                    var miReports = GetControl<IMenuItem>("miReports");
+                    for (int i = 0, num = miReports.SubItems.Count; i < num; i++) {
+                        var mi = miReports.SubItems[i];
                         IPlugin plugin = (IPlugin)mi.Tag;
                         mi.Text = plugin.DisplayName;
                     }
