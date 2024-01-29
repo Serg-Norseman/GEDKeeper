@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -935,6 +935,7 @@ namespace GKCore.Controllers
                     GetControl<IMenuItem>("miTreeCheck").Text = LangMan.LS(LSID.TreeCheck);
                     GetControl<IMenuItem>("miPatSearch").Text = LangMan.LS(LSID.PatriarchsSearch);
                     GetControl<IMenuItem>("miPlacesManager").Text = LangMan.LS(LSID.PlacesManager);
+                    GetControl<IMenuItem>("miPhotosBatchAdding").Text = LangMan.LS(LSID.PhotosBatchAdding);
 
                     GetControl<IMenuItem>("miContext").Text = LangMan.LS(LSID.MIContext);
                     GetControl<IMenuItem>("miAbout").Text = LangMan.LS(LSID.MIAbout) + @"...";
@@ -1201,6 +1202,59 @@ namespace GKCore.Controllers
                 var dlg = AppHost.Container.Resolve<IFragmentSearchDlg>(fView);
                 AppHost.Instance.ShowWindow(dlg);
             } finally {
+            }
+        }
+
+        public async void ShowPhotosBatchAdding()
+        {
+            try {
+                if (!fContext.CheckBasePath())
+                    return;
+
+                string[] fileNames = await AppHost.StdDialogs.GetOpenFiles("", string.Empty, LangMan.LS(LSID.ImagesFilter), 1, "");
+                if (fileNames == null || fileNames.Length == 0) return;
+
+                int added = 0;
+                for (int i = 0; i < fileNames.Length; i++) {
+                    var filePath = fileNames[i];
+
+                    try {
+                        string fName = Path.GetFileNameWithoutExtension(filePath);
+                        if (!string.IsNullOrEmpty(fName) && fName.Contains(",")) {
+                            string[] parts = fName.Split(',');
+                            string indiName = parts[0].Trim();
+                            string indiYear = parts[1].Trim();
+
+                            Dictionary<string, string> facts = new Dictionary<string, string>();
+                            facts.Add("birth_year", indiYear);
+
+                            var indi = fContext.FindIndividual(indiName, facts);
+                            if (indi != null) {
+                                var mediaRec = new GDMMultimediaRecord(fContext.Tree);
+                                fContext.Tree.NewXRef(mediaRec);
+
+                                var fileRef = mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle());
+                                fileRef.MediaType = GDMMediaType.mtPhoto;
+                                fileRef.Title = fName;
+
+                                if (fContext.MediaSave(fileRef, filePath, GlobalOptions.Instance.MediaStoreDefault)) {
+                                    fContext.Tree.AddRecord(mediaRec);
+
+                                    var mmLink = indi.AddMultimedia(mediaRec);
+                                    added += 1;
+                                }
+                            }
+                        }
+                    } catch (Exception ex) {
+                        Logger.WriteError("BaseWinController.ShowPhotosBatchAdding().1", ex);
+                    }
+                }
+
+                RefreshLists(false);
+
+                AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.AddedNPhotos, added, fileNames.Length));
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowPhotosBatchAdding().0", ex);
             }
         }
 

@@ -114,6 +114,7 @@
         private System.Windows.Forms.ToolStripMenuItem miWinMinimize;
         private System.Windows.Forms.ContextMenuStrip summaryMenu;
         private System.Windows.Forms.ToolStripMenuItem miCopyContent;
+        private System.Windows.Forms.ToolStripMenuItem miPhotosBatchAdding;
 
         private void InitializeComponent()
         {
@@ -229,6 +230,7 @@
             this.miWinMinimize = new System.Windows.Forms.ToolStripMenuItem();
             this.summaryMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miCopyContent = new System.Windows.Forms.ToolStripMenuItem();
+            this.miPhotosBatchAdding = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusBar.SuspendLayout();
             this.ToolBar1.SuspendLayout();
             this.MenuPedigree.SuspendLayout();
@@ -852,7 +854,8 @@
                                     this.miFamilyGroups,
                                     this.miTreeCheck,
                                     this.miPatSearch,
-                                    this.miPlacesManager});
+                                    this.miPlacesManager,
+                                    this.miPhotosBatchAdding});
             this.miTreeTools.Name = "miTreeTools";
             this.miTreeTools.Size = new System.Drawing.Size(204, 24);
             this.miTreeTools.Text = "miTreeTools";
@@ -912,6 +915,13 @@
             this.miPlacesManager.Size = new System.Drawing.Size(204, 24);
             this.miPlacesManager.Text = "miPlacesManager";
             this.miPlacesManager.Click += new System.EventHandler(this.miTTPlacesManager_Click);
+            // 
+            // miPhotosBatchAdding
+            // 
+            this.miPhotosBatchAdding.Name = "miPhotosBatchAdding";
+            this.miPhotosBatchAdding.Size = new System.Drawing.Size(204, 24);
+            this.miPhotosBatchAdding.Text = "miPhotosBatchAdding";
+            this.miPhotosBatchAdding.Click += new System.EventHandler(this.miPhotosBatchAdding_Click);
             // 
             // N10
             // 

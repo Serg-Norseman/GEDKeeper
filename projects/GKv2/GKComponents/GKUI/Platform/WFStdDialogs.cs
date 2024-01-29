@@ -74,6 +74,15 @@ namespace GKUI.Platform
             }
         }
 
+        public async Task<string[]> GetOpenFiles(string title, string context, string filter, int filterIndex, string defaultExt)
+        {
+            filter = filter.Replace(',', ';');
+            using (OpenFileDialog ofd = CreateOpenFileDialog(title, context, filter, filterIndex, defaultExt, true)) {
+                string[] retStr = (ofd.ShowDialog() == DialogResult.OK) ? ofd.FileNames : new string[0];
+                return await Task.FromResult(retStr);
+            }
+        }
+
         private static OpenFileDialog CreateOpenFileDialog(string title, string context, string filter,
                                                            int filterIndex, string defaultExt, bool multiSelect)
         {

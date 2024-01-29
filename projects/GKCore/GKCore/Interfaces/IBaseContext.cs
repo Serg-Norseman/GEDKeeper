@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -110,6 +110,7 @@ namespace GKCore.Interfaces
         void UnlockRecord(GDMRecord record);
         bool IsAvailableRecord(GDMRecord record);
 
+        GDMIndividualRecord FindIndividual(string searchName, Dictionary<string, string> facts);
         GDMSourceRecord FindSource(string sourceName);
         void GetSourcesList(StringList sources);
 

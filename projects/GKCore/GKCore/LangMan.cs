@@ -1010,8 +1010,10 @@ namespace GKCore
         /* 938 */ History,
         /* 939 */ ThePeriodsOfPlaceNamesOverlap,
         /* 940 */ ExtendedLocations,
+        /* 941 */ PhotosBatchAdding,
+        /* 942 */ AddedNPhotos,
 
-        /* 000 */ Last = ExtendedLocations
+        /* 000 */ Last = AddedNPhotos
     }
 
 
@@ -1975,6 +1977,8 @@ namespace GKCore
             /* 938 */ "History",
             /* 939 */ "The periods of place names overlap. This will cause errors when searching for a place name by date.",
             /* 940 */ "Extended locations",
+            /* 941 */ "Photos batch adding",
+            /* 942 */ "Added {0} photos from {1}.",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

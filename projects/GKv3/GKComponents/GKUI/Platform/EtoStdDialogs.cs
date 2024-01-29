@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Eto.Drawing;
 using Eto.Forms;
@@ -78,6 +79,17 @@ namespace GKUI.Platform
                 var dlgRes = ofd.ShowDialog(null);
 
                 string retStr = (dlgRes == DialogResult.Ok) ? ofd.FileName : string.Empty;
+                return await Task.FromResult(retStr);
+            }
+        }
+
+        public async Task<string[]> GetOpenFiles(string title, string context, string filter, int filterIndex, string defaultExt)
+        {
+            filter = filter.Replace(',', ';');
+            using (OpenFileDialog ofd = CreateOpenFileDialog(title, context, filter, filterIndex, defaultExt, true)) {
+                var dlgRes = ofd.ShowDialog(null);
+
+                string[] retStr = (dlgRes == DialogResult.Ok) ? ofd.Filenames.ToArray() : new string[0];
                 return await Task.FromResult(retStr);
             }
         }

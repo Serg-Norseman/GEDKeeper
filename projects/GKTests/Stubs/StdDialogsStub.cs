@@ -36,6 +36,11 @@ namespace GKTests.Stubs
             return await Task.FromResult(string.Empty);
         }
 
+        public async Task<string[]> GetOpenFiles(string title, string context, string filter, int filterIndex, string defaultExt)
+        {
+            return await Task.FromResult(new string[0]);
+        }
+
         public async Task<string> GetPassword(string prompt)
         {
             return await Task.FromResult(string.Empty);

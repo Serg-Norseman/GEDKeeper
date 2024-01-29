@@ -113,6 +113,7 @@
           <ButtonMenuItem x:Name="miTreeCheck" Click="miTTTreeCheck_Click" />
           <ButtonMenuItem x:Name="miPatSearch" Click="miTTPatSearch_Click" />
           <ButtonMenuItem x:Name="miPlacesManager" Click="miTTPlacesManager_Click" />
+          <ButtonMenuItem x:Name="miPhotosBatchAdding" Click="miPhotosBatchAdding_Click" />
         </ButtonMenuItem>
         <SeparatorMenuItem />
         <ButtonMenuItem x:Name="miThemes" />

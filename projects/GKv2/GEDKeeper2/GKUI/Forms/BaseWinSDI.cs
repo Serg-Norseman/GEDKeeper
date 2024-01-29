@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -842,6 +842,11 @@ namespace GKUI.Forms
         private void miTTFamilyGroups_Click(object sender, EventArgs e)
         {
             fController.ShowFamilyGroups();
+        }
+
+        private void miPhotosBatchAdding_Click(object sender, EventArgs e)
+        {
+            fController.ShowPhotosBatchAdding();
         }
 
         private void miOptions_Click(object sender, EventArgs e)

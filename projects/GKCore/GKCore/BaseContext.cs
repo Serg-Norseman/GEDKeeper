@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -394,6 +394,34 @@ namespace GKCore
         #endregion
 
         #region Data search
+
+        public GDMIndividualRecord FindIndividual(string searchName, Dictionary<string, string> facts)
+        {
+            int num = fTree.RecordsCount;
+            for (int i = 0; i < num; i++) {
+                var rec = fTree[i] as GDMIndividualRecord;
+                if (rec == null) continue;
+
+                string indiName = GKUtils.GetNameString(rec, false);
+                if (indiName == searchName) {
+                    var res = true;
+                    foreach (var pair in facts) {
+                        if (pair.Key == "birth_year") {
+                            int birthYear = rec.GetChronologicalYear(GEDCOMTagName.BIRT);
+                            res = res && (birthYear.ToString() == pair.Value);
+                        }
+
+                        if (!res) break;
+                    }
+
+                    if (res) {
+                        return rec;
+                    }
+                }
+            }
+
+            return null;
+        }
 
         public GDMSourceRecord FindSource(string sourceName)
         {
