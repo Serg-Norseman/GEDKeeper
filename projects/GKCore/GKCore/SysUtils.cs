@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -67,6 +67,7 @@ namespace GKCore
         Windows8,
         Windows81,
         Windows10,
+        Windows11,
     }
 
     public static class SysUtils
@@ -317,7 +318,11 @@ namespace GKCore
                                 }
                                 break;
                             case 10:
-                                result = OSType.Windows10;
+                                if (osVersion.Version.Build >= 22000) {
+                                    result = OSType.Windows11;
+                                } else {
+                                    result = OSType.Windows10;
+                                }
                                 break;
                         }
                         break;

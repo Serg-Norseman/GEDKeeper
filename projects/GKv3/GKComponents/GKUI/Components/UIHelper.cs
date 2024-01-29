@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih, Ruslan Garipov.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -140,16 +140,28 @@ namespace GKUI.Components
         {
             if (form == null) return;
 
-            //form.StartPosition = FormStartPosition.Manual;
-
-            // Center the new window on a monitor, where the parent window
-            // is located.
+            // Center the new window on a monitor, where the parent window is located.
             Screen screen = Screen.FromRectangle(parentRect);
             if (screen != null) {
                 var workArea = screen.WorkingArea;
 
-                int fx = (int)workArea.Left + (((int)workArea.Width - form.Width) >> 1);
-                int fy = (int)workArea.Top + (((int)workArea.Height - form.Height) >> 1);
+                //Logger.WriteInfo(string.Format("ParentRect: {0} - {1} - {2} - {3}", parentRect.Left, parentRect.Top, parentRect.Width, parentRect.Height));
+                //Logger.WriteInfo(string.Format("Dlg: {0} - {1}", form.Width, form.Height));
+
+                int fx = (int)parentRect.Left + ((int)(parentRect.Width - form.Width) / 2);
+                int fy = (int)parentRect.Top + ((int)(parentRect.Height - form.Height) / 2);
+
+                //Logger.WriteInfo(string.Format("Loc: {0} - {1}", fx, fy));
+
+                if (!workArea.Contains(fx, fy)) {
+                    //Logger.WriteInfo("not contains");
+
+                    fx = (int)workArea.Left + ((int)(workArea.Width - form.Width) / 2);
+                    fy = (int)workArea.Top + ((int)(workArea.Height - form.Height) / 2);
+
+                    //Logger.WriteInfo(string.Format("Loc: {0} - {1}", fx, fy));
+                }
+
                 form.Location = new Point(fx, fy);
             }
         }

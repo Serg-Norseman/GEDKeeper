@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,6 +26,7 @@ using Eto.Forms;
 using GKCore;
 using GKCore.Design;
 using GKCore.Interfaces;
+using GKUI.Components;
 using GKUI.Themes;
 
 namespace GKUI.Forms
@@ -273,14 +274,20 @@ namespace GKUI.Forms
             ApplyTheme();
         }
 
-        /*protected override void OnShown(EventArgs e)
+        protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            //BringToFront();
+
+            /*BringToFront();
             if (ParentWindow != null) {
                 ParentWindow.SendToBack();
+            }*/
+
+            // Only for Windows7
+            if (SysUtils.GetOSType() < OSType.Windows8 && Owner != null) {
+                UIHelper.CenterFormByParent(this, Owner.Bounds);
             }
-        }*/
+        }
 
         public virtual void ApplyTheme()
         {

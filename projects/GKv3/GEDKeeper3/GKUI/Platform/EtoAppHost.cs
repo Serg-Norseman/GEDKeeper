@@ -193,16 +193,11 @@ namespace GKUI.Platform
             if (efModal == null) return false;
 
             //Window activeWin = GetActiveForm() as Window;
-            //Console.WriteLine((owner == null) ? "null" : owner.ToString());
-
             /*if (keepModeless) {
 #if OS_MSWIN
                 //NativeMethods.PostMessage(mainHandle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
 #endif
             }*/
-
-            // for EtoForms works without this (Win10)
-            //UIHelper.CenterFormByParent((Window)form, mainHandle);
 
             efModal.ShowModal(owner as Control);
             return await efModal.DialogResultTask;
