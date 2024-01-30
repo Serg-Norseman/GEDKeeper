@@ -164,5 +164,10 @@ namespace GDModel
             string result = (fValue == null) ? string.Empty : fValue.GetDisplayStringExt(format, sign, showCalendar, shorten);
             return result;
         }
+
+        public override string ToString()
+        {
+            return GetDisplayStringExt(DateFormat.dfDD_MM_YYYY, true, true, false);
+        }
     }
 }
