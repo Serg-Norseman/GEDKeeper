@@ -1814,6 +1814,10 @@ namespace GDModel.Providers.GEDCOM
                 curTag = locRec.Names.Add(new GDMLocationName());
                 curTag.ParseString(tagValue);
                 addHandler = AddLocationNameTag;
+            } else if (tagType == GEDCOMTagType._LOC) {
+                curTag = locRec.TopLevels.Add(new GDMLocationLink());
+                curTag.ParseString(tagValue);
+                addHandler = AddLocationLinkTag;
             } else if (tagType == GEDCOMTagType.MAP) {
                 curTag = locRec.Map;
                 addHandler = AddMapTag;
@@ -1834,6 +1838,7 @@ namespace GDModel.Providers.GEDCOM
             WriteMap(stream, level, locRec.Map);
 
             WriteList(stream, level, locRec.Names, WriteLocationName);
+            WriteList(stream, level, locRec.TopLevels, WriteLocationLink);
         }
 
 
@@ -1869,6 +1874,35 @@ namespace GDModel.Providers.GEDCOM
             WriteBaseTag(stream, lev, locName.Date);
             WriteTagLine(stream, lev, GEDCOMTagName.LANG, GEDCOMUtils.GetLanguageStr(locName.Language), true);
 
+            return true;
+        }
+
+
+        private StackTuple AddLocationLinkTag(GDMTag owner, int tagLevel, int tagId, string tagValue)
+        {
+            GDMLocationLink locLink = (GDMLocationLink)owner;
+            GDMTag curTag = null;
+            AddTagHandler addHandler = null;
+
+            GEDCOMTagType tagType = (GEDCOMTagType)tagId;
+            if (tagType == GEDCOMTagType.DATE) {
+                curTag = locLink.Date;
+                GEDCOMUtils.ParseDateValue(fTree, locLink.Date, tagValue);
+            } else {
+                return AddBaseTag(owner, tagLevel, tagId, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static bool WriteLocationLink(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMLocationLink locLink = (GDMLocationLink)tag;
+
+            if (!WriteBaseTag(stream, level, locLink)) return false;
+
+            level += 1;
+            WriteBaseTag(stream, level, locLink.Date);
             return true;
         }
 

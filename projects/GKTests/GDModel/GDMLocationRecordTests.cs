@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GDModel.Providers.GEDCOM;
 using GKCore;
@@ -196,7 +197,7 @@ namespace GDModel
             locRus.AddLocName("Российская республика", "FROM 01 SEP 1917 TO 18 JUL 1918");//++
             locRus.AddLocName("РСФСР", "FROM 19 JUL 1918 TO 29 DEC 1922");//++
             locRus.AddLocName("СССР", "FROM 30 DEC 1922 TO 26 DEC 1991");//++
-            locRus.AddLocName("РФ", "FROM 27 DEC 1991 TO 9999");//++
+            locRus.AddLocName("РФ", "FROM 27 DEC 1991");//++
 
             IList<GDMLocationName> fullNames = locRus.GetFullNames(tree);
             string result = string.Join("\n", fullNames.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
@@ -206,17 +207,17 @@ namespace GDModel
                             "'01.09.1917 [G] - 18.07.1918 [G]': 'Российская республика'\n" +
                             "'19.07.1918 [G] - 29.12.1922 [G]': 'РСФСР'\n" +
                             "'30.12.1922 [G] - 26.12.1991 [G]': 'СССР'\n" +
-                            "'27.12.1991 [G] - __.__.9999 [G]': 'РФ'",
+                            "'27.12.1991 [G] >': 'РФ'",
                 result);
 
             var locSibGub = tree.CreateLocation();
-            locSibGub.AddLocName("Сибирская губерния", "FROM 18 DEC 1708 TO 18 JAN 1782");
-            locSibGub.AddLocLink(locRus, "FROM 18 DEC 1708 TO 18 JAN 1782");
+            locSibGub.AddLocName("Сибирская губерния", "FROM 18 DEC 1708 TO 19 JAN 1782");
+            locSibGub.AddLocLink(locRus, "FROM 18 DEC 1708 TO 19 JAN 1782");
 
             fullNames = locSibGub.GetFullNames(tree);
             result = string.Join("\n", fullNames.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
             Assert.AreEqual("'18.12.1708 [G] - 21.10.1721 [G]': 'Сибирская губерния, Российское царство'\n" +
-                            "'22.10.1721 [G] - 18.01.1782 [G]': 'Сибирская губерния, Российская империя'",
+                            "'22.10.1721 [G] - 19.01.1782 [G]': 'Сибирская губерния, Российская империя'",
                 result);
 
             var locKazGub = tree.CreateLocation();
@@ -253,7 +254,7 @@ namespace GDModel
             locVyatGub.AddLocName("Вятская губерния", "FROM 31 DEC 1796 TO 14 JUL 1929");
             locVyatGub.AddLocName("Вятский округ", "FROM 15 JUL 1929 TO 29 JUL 1930");
             locVyatGub.AddLocName("Кировский край", "FROM 07 DEC 1934 TO 04 DEC 1936");
-            locVyatGub.AddLocName("Кировская область", "FROM 05 DEC 1936 TO 9999");
+            locVyatGub.AddLocName("Кировская область", "FROM 05 DEC 1936");
             locVyatGub.AddLocLink(locSibGub, "FROM 29 MAY 1719 TO 28 APR 1727");
             locVyatGub.AddLocLink(locKazGub, "FROM 29 APR 1727 TO 10 SEP 1780");
             locVyatGub.AddLocLink(locRus, "FROM 11 SEP 1780 TO 14 JUL 1929");
@@ -280,19 +281,19 @@ namespace GDModel
             locSlobUezd.AddLocName("Слободской уезд", "FROM 1646 TO 1719");
             locSlobUezd.AddLocName("Слободской дистр.", "FROM 1719 TO 1726");
             locSlobUezd.AddLocName("Слободской уезд", "FROM 1727 TO 09 JUN 1929");
-            locSlobUezd.AddLocName("Слободской район", "FROM 10 JUN 1929 TO 9999");
+            locSlobUezd.AddLocName("Слободской район", "FROM 10 JUN 1929");
             locSlobUezd.AddLocLink(locRus, "TO 1718");
             locSlobUezd.AddLocLink(locVyatGub, "FROM 1719 TO 1726");
-            locSlobUezd.AddLocLink(locKazGub, "FROM 1727 TO 10 SEP 1780");
+            locSlobUezd.AddLocLink(locVyatGub, "FROM 1727 TO 10 SEP 1780");
             locSlobUezd.AddLocLink(locVyatGub, "FROM 11 SEP 1780 TO 10 JUN 1929");
 
             var locOmutUezd = tree.CreateLocation();
             locOmutUezd.AddLocName("Омутнинский уезд", "FROM 05 JAN 1921 TO 09 JUN 1929");
-            locOmutUezd.AddLocName("Омутнинский район", "FROM 10 JUN 1929 TO 9999");
+            locOmutUezd.AddLocName("Омутнинский район", "FROM 10 JUN 1929");
             locOmutUezd.AddLocLink(locVyatGub, "FROM 05 JAN 1921 TO 9999");
 
             var locVerhkamRn = tree.CreateLocation();
-            locVerhkamRn.AddLocName("Верхнекамский район", "FROM 12 JAN 1965 TO 9999");
+            locVerhkamRn.AddLocName("Верхнекамский район", "FROM 12 JAN 1965");
             locVerhkamRn.AddLocLink(locVyatGub, "FROM 12 JAN 1965 TO 9999");
 
             fullNames = locSlobUezd.GetFullNames(tree);
@@ -300,7 +301,8 @@ namespace GDModel
             Assert.AreEqual("'__.__.1646 [G] - __.__.1718 [G]': 'Слободской уезд, Российское царство'\n" +
                             "'29.05.1719 [G] - 21.10.1721 [G]': 'Слободской дистр., Вятская провинция, Сибирская губерния, Российское царство'\n" +
                             "'22.10.1721 [G] - __.__.1726 [G]': 'Слободской дистр., Вятская провинция, Сибирская губерния, Российская империя'\n" +
-                            "'__.__.1727 [G] - 10.09.1780 [G]': 'Слободской уезд, Казанская губерния, Российская империя'\n" +
+                            "'__.__.1727 [G] - 28.04.1727 [G]': 'Слободской уезд, Вятская провинция, Сибирская губерния, Российская империя'\n" +
+                            "'29.04.1727 [G] - 10.09.1780 [G]': 'Слободской уезд, Вятская провинция, Казанская губерния, Российская империя'\n" +
                             "'11.09.1780 [G] - 30.12.1796 [G]': 'Слободской уезд, Вятское наместничество, Российская империя'\n" +
                             "'31.12.1796 [G] - 31.08.1917 [G]': 'Слободской уезд, Вятская губерния, Российская империя'\n" +
                             "'01.09.1917 [G] - 18.07.1918 [G]': 'Слободской уезд, Вятская губерния, Российская республика'\n" +
@@ -339,7 +341,8 @@ namespace GDModel
             Assert.AreEqual("'__.__.1678 [G] - __.__.1718 [G]': 'поч. Старое раменье, Слободской уезд, Российское царство'\n" +
                             "'__.__.1720 [G] - 21.10.1721 [G]': 'д. Прислонская, Верховская вол., Слободской дистр., Вятская провинция, Сибирская губерния, Российское царство'\n" +
                             "'22.10.1721 [G] - __.__.1726 [G]': 'д. Прислонская, Верховская вол., Слободской дистр., Вятская провинция, Сибирская губерния, Российская империя'\n" +
-                            "'__.__.1727 [G] - __.__.1764 [G]': 'д. Мокрая Слободка, Верховская вол., Слободской уезд, Казанская губерния, Российская империя'\n" +
+                            "'__.__.1727 [G] - 28.04.1727 [G]': 'д. Мокрая Слободка, Верховская вол., Слободской уезд, Вятская провинция, Сибирская губерния, Российская империя'\n" +
+                            "'29.04.1727 [G] - __.__.1764 [G]': 'д. Мокрая Слободка, Верховская вол., Слободской уезд, Вятская провинция, Казанская губерния, Российская империя'\n" +
                             "'__.__.1802 [G] - __.__.1883 [G]': 'д. Мокрая Слободка, Лоинская вол., Слободской уезд, Вятская губерния, Российская империя'\n" +
                             "'__.__.1884 [G] - 31.08.1917 [G]': 'д. Мокрая Слободка, Кирсинская вол., Слободской уезд, Вятская губерния, Российская империя'\n" +
                             "'01.09.1917 [G] - 18.07.1918 [G]': 'д. Мокрая Слободка, Кирсинская вол., Слободской уезд, Вятская губерния, Российская республика'\n" +
@@ -353,6 +356,9 @@ namespace GDModel
                             "'05.12.1936 [G] - __.__.1964 [G]': 'д. Колегово, Омутнинский район, Кировская область, СССР'\n" +
                             "'12.01.1965 [G] - __.__.1978 [G]': 'д. Колегово, Верхнекамский район, Кировская область, СССР'",
                 result);
+
+            //var gedcomProvider = new GEDCOMProvider(tree);
+            //gedcomProvider.SaveToStreamExt(new FileStream("d:\\Russia.ged", FileMode.CreateNew), GEDCOMCharacterSet.csUTF8);
         }
 
         [Test]
@@ -364,9 +370,25 @@ namespace GDModel
             var r3 = GetRange("FROM 1701 TO 1780");
             var r4 = GetRange("FROM 1780 TO 1936");
 
-            Assert.AreEqual("FROM 1719 TO 1727", GDMCustomDate.GetIntersection(r1, r2).StringValue);
-            Assert.AreEqual("FROM 1708 TO 1780", GDMCustomDate.GetIntersection(r1, r3).StringValue);
-            Assert.AreEqual("FROM 1780 TO 1929", GDMCustomDate.GetIntersection(r1, r4).StringValue);
+            Assert.AreEqual("FROM 1719 TO 1727", GDMCustomDate.GetIntersection(r1, r2).StringValue); // r2 inside r1
+            Assert.AreEqual("FROM 1708 TO 1780", GDMCustomDate.GetIntersection(r1, r3).StringValue); // r3 to left of r1
+            Assert.AreEqual("FROM 1780 TO 1929", GDMCustomDate.GetIntersection(r1, r4).StringValue); // r4 to right of r1
+
+            Assert.AreEqual("FROM 1747 TO 1764", GDMCustomDate.GetIntersection(GetRange("TO 1764"), GetRange("FROM 1747 TO 1834")).StringValue);
+            Assert.AreEqual("FROM 1747 TO 1764", GDMCustomDate.GetIntersection(GetRange("FROM 1747 TO 1834"), GetRange("TO 1764")).StringValue);
+
+            Assert.AreEqual("FROM 1782 TO 1834", GDMCustomDate.GetIntersection(GetRange("FROM 1782"), GetRange("FROM 1747 TO 1834")).StringValue);
+            Assert.AreEqual("FROM 1782 TO 1834", GDMCustomDate.GetIntersection(GetRange("FROM 1747 TO 1834"), GetRange("FROM 1782")).StringValue);
+
+            Assert.AreEqual("FROM 1782 TO 1834", GDMCustomDate.GetIntersection(GetRange("FROM 1782"), GetRange("TO 1834")).StringValue);
+            Assert.AreEqual("FROM 1782 TO 1834", GDMCustomDate.GetIntersection(GetRange("TO 1834"), GetRange("FROM 1782")).StringValue);
+
+            Assert.AreEqual("", GDMCustomDate.GetIntersection(GetRange("FROM 1858"), GetRange("TO 1834")).StringValue); // no intersects
+            Assert.AreEqual("", GDMCustomDate.GetIntersection(GetRange("TO 1834"), GetRange("FROM 1858")).StringValue); // no intersects
+
+            Assert.AreEqual("", GDMCustomDate.GetIntersection(GetRange(""), GetRange("FROM 1747 TO 1834")).StringValue); // no intersects
+
+            Assert.AreEqual("", GDMCustomDate.GetIntersection(GetRange("FROM 1719 TO 1727"), GetRange("FROM 1747 TO 1834")).StringValue); // no intersects
         }
 
         private static GDMDatePeriod GetRange(string strDateRange)

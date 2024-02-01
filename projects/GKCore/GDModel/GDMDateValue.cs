@@ -169,5 +169,15 @@ namespace GDModel
         {
             return GetDisplayStringExt(DateFormat.dfDD_MM_YYYY, true, true, false);
         }
+
+        public override void GetDateRange(out GDMDate dateStart, out GDMDate dateEnd)
+        {
+            if (fValue == null) {
+                dateStart = null;
+                dateEnd = null;
+            } else {
+                fValue.GetDateRange(out dateStart, out dateEnd);
+            }
+        }
     }
 }

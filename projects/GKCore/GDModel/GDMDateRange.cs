@@ -168,5 +168,11 @@ namespace GDModel
 
             return result;
         }
+
+        public override void GetDateRange(out GDMDate dateStart, out GDMDate dateEnd)
+        {
+            dateStart = fDateAfter;
+            dateEnd = fDateBefore;
+        }
     }
 }
