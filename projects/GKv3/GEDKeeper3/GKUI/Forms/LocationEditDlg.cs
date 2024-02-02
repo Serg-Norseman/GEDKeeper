@@ -57,7 +57,10 @@ namespace GKUI.Forms
         private GKMapBrowser fMapBrowser;
         private GKSheetList fMediaList;
         private GKSheetList fNamesList;
+        private GKSheetList fLinksList;
         private GKSheetList fNotesList;
+        private TabPage pageHistNames;
+        private TabPage pageHistLinks;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -78,6 +81,11 @@ namespace GKUI.Forms
         ISheetList ILocationEditDlg.NamesList
         {
             get { return fNamesList; }
+        }
+
+        ISheetList ILocationEditDlg.LinksList
+        {
+            get { return fLinksList; }
         }
 
         ISheetList ILocationEditDlg.MediaList

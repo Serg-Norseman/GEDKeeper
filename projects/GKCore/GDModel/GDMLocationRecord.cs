@@ -142,7 +142,6 @@ namespace GDModel
                     var topNames = topLoc.GetFullNames(tree);
                     for (int i = 0; i < topNames.Count; i++) {
                         var topName = topNames[i];
-                        if (topName.Date.IsEmpty()) continue;
 
                         var interDate = GDMCustomDate.GetIntersection(topLevel.Date.Value, topName.Date.Value);
                         if (!interDate.IsEmpty()) {
@@ -152,7 +151,6 @@ namespace GDModel
                             buffer.Add(newLocName);
                         }
                     }
-                    //buffer.AddRange(topNames);
                 }
 
                 for (int j = 0; j < buffer.Count; j++) {
@@ -162,7 +160,6 @@ namespace GDModel
 
                     for (int i = 0; i < fNames.Count; i++) {
                         var locName = fNames[i];
-                        if (locName.Date.IsEmpty()) continue;
 
                         var interDate = GDMCustomDate.GetIntersection(topDate, locName.Date.Value);
                         if (!interDate.IsEmpty()) {
@@ -192,11 +189,10 @@ namespace GDModel
             if (date != null && !date.IsEmpty()) {
                 for (int i = 1; i < fNames.Count; i++) {
                     var locName = fNames[i];
-                    if (!locName.Date.IsEmpty()) {
-                        var interDate = GDMCustomDate.GetIntersection(date, locName.Date.Value);
-                        if (!interDate.IsEmpty()) {
-                            return locName.StringValue;
-                        }
+
+                    var interDate = GDMCustomDate.GetIntersection(date, locName.Date.Value);
+                    if (!interDate.IsEmpty()) {
+                        return locName.StringValue;
                     }
                 }
             }
@@ -209,39 +205,53 @@ namespace GDModel
             GDMCustomDate prevDate = null;
             for (int i = 0; i < fNames.Count; i++) {
                 var locName = fNames[i];
-                if (!locName.Date.IsEmpty()) {
-                    var interDate = GDMCustomDate.GetIntersection(prevDate, locName.Date.Value);
-                    if (!interDate.IsEmpty()) {
-                        return false;
-                    }
+
+                var interDate = GDMCustomDate.GetIntersection(prevDate, locName.Date.Value);
+                if (!interDate.IsEmpty()) {
+                    return false;
                 }
+
                 prevDate = locName.Date.Value;
+            }
+            return true;
+        }
+
+        public bool ValidateLinks()
+        {
+            GDMCustomDate prevDate = null;
+            for (int i = 0; i < fTopLevels.Count; i++) {
+                var locLink = fTopLevels[i];
+
+                var interDate = GDMCustomDate.GetIntersection(prevDate, locLink.Date.Value);
+                if (!interDate.IsEmpty()) {
+                    return false;
+                }
+
+                prevDate = locLink.Date.Value;
             }
             return true;
         }
 
         public void SortNames()
         {
-            fNames.Sort(NamesCompare);
-        }
-
-        private static int NamesCompare(GDMLocationName cp1, GDMLocationName cp2)
-        {
-            UDN udn1 = cp1.Date.GetUDN();
-            UDN udn2 = cp2.Date.GetUDN();
-            return -udn1.CompareTo(udn2);
+            fNames.Sort(ElementsCompare);
         }
 
         public void SortTopLevels()
         {
-            fTopLevels.Sort(TopLevelsCompare);
+            fTopLevels.Sort(ElementsCompare);
         }
 
-        private static int TopLevelsCompare(GDMLocationLink cp1, GDMLocationLink cp2)
+        private static int ElementsCompare(IGDMLocationElement cp1, IGDMLocationElement cp2)
         {
             UDN udn1 = cp1.Date.GetUDN();
             UDN udn2 = cp2.Date.GetUDN();
             return -udn1.CompareTo(udn2);
         }
+    }
+
+    public interface IGDMLocationElement
+    {
+        GDMDateValue Date { get; }
     }
 }

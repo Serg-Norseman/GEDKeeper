@@ -23,7 +23,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMLocationName : GDMValueTag
+    public sealed class GDMLocationName : GDMValueTag, IGDMLocationElement
     {
         private string fAbbreviation;
         private readonly GDMDateValue fDate;

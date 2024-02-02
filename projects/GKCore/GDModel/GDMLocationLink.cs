@@ -29,7 +29,7 @@ namespace GDModel
     }
 
 
-    public sealed class GDMLocationLink : GDMPointer
+    public sealed class GDMLocationLink : GDMPointer, IGDMLocationElement
     {
         private readonly GDMDateValue fDate;
         private GDMLocationRelationship fRelationship;

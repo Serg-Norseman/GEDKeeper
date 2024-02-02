@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,22 +21,15 @@
 using GDModel;
 using GKCore.Design.Controls;
 using GKCore.Interfaces;
-using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
-    public interface ILocationEditDlg : ICommonDialog, IBaseEditor
+    public interface ILocationLinkEditDlg : ICommonDialog, IBaseEditor
     {
-        GDMLocationRecord LocationRecord { get; set; }
+        GDMLocationLink LocationLink { get; set; }
 
-        IMapBrowser MapBrowser { get; }
-        ISheetList MediaList { get; }
-        ISheetList NotesList { get; }
-        ISheetList NamesList { get; }
-        ISheetList LinksList { get; }
-        IListView GeoCoordsList { get; }
-        ITextBox Name { get; }
-        ITextBox Latitude { get; }
-        ITextBox Longitude { get; }
+        ITextBox TopLevelText { get; }
+
+        IDateControl DateCtl { get; }
     }
 }

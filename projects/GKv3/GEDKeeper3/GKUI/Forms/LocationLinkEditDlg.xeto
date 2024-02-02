@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.LocationLinkEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <Panel>
+      <TableLayout Style="paddedTable">
+        <TableRow>
+          <Label x:Name="lblLocation" />
+          <StackLayout Orientation="Horizontal" Spacing="4">
+            <StackLayoutItem Expand="True">
+              <TextBox x:Name="txtTopLevel" ReadOnly="true" />
+            </StackLayoutItem>
+            <Button x:Name="btnLocationAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnLocationAdd_Click" />
+          </StackLayout>
+        </TableRow>
+        <TableRow>
+          <Label x:Name="lblDate" />
+          <comcom:GKDateControl x:Name="dateCtl" />
+        </TableRow>
+      </TableLayout>
+    </Panel>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
+        <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

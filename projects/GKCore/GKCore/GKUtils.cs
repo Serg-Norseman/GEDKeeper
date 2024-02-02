@@ -3020,6 +3020,20 @@ namespace GKCore
 
                         GDMTree tree = baseContext.Tree;
 
+                        var fullNames = locRec.GetFullNames(tree);
+                        if (fullNames.Count > 0) {
+                            //linkList.Sort();
+
+                            summary.Add("");
+                            summary.Add(LangMan.LS(LSID.History) + ":");
+
+                            int num = fullNames.Count;
+                            for (int i = 0; i < num; i++) {
+                                var xName = fullNames[i];
+                                summary.Add("    " + string.Format("{0}: {1}", xName.Date.GetDisplayStringExt(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar, false), xName.StringValue));
+                            }
+                        }
+
                         linkList = GetLocationLinks(tree, locRec);
 
                         if (linkList.Count > 0) {

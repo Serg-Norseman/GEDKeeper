@@ -47,7 +47,16 @@
                 </xp:TabItem>
 
                 <xp:TabItem x:Name="pageHistory">
-                    <comcom:GKSheetList x:Name="fNamesList" />
+                    <xp:TabViewControl x:Name="tabsHistory" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                        <xp:TabViewControl.ItemSource>
+                            <xp:TabItem x:Name="pageHistNames">
+                                <comcom:GKSheetList x:Name="fNamesList" />
+                            </xp:TabItem>
+                            <xp:TabItem x:Name="pageHistLinks">
+                                <comcom:GKSheetList x:Name="fLinksList" />
+                            </xp:TabItem>
+                        </xp:TabViewControl.ItemSource>
+                    </xp:TabViewControl>
                 </xp:TabItem>
 
                 <xp:TabItem x:Name="pageNotes">

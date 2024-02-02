@@ -58,7 +58,14 @@
         </TabPage>
 
         <TabPage x:Name="pageHistory">
-          <comcom:GKSheetList x:Name="fNamesList" />
+          <TabControl x:Name="tabsHistory">
+            <TabPage x:Name="pageHistNames">
+              <comcom:GKSheetList x:Name="fNamesList" />
+            </TabPage>
+            <TabPage x:Name="pageHistLinks">
+              <comcom:GKSheetList x:Name="fLinksList" />
+            </TabPage>
+          </TabControl>
         </TabPage>
 
         <TabPage x:Name="pageNotes">

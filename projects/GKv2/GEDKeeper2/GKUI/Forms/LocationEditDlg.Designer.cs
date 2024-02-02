@@ -25,6 +25,9 @@
 		private System.Windows.Forms.ColumnHeader ColumnHeader2;
 		private System.Windows.Forms.ColumnHeader ColumnHeader3;
         private System.Windows.Forms.TabPage pageHistory;
+        private GKUI.Components.GKTabControl tabsHistory;
+        private System.Windows.Forms.TabPage pageHistNames;
+        private System.Windows.Forms.TabPage pageHistLinks;
 
         private void InitializeComponent()
 		{
@@ -51,8 +54,12 @@
 		    this.pageNotes = new System.Windows.Forms.TabPage();
 		    this.pageMultimedia = new System.Windows.Forms.TabPage();
             this.pageHistory = new System.Windows.Forms.TabPage();
+            this.tabsHistory = new GKUI.Components.GKTabControl();
+            this.pageHistNames = new System.Windows.Forms.TabPage();
+            this.pageHistLinks = new System.Windows.Forms.TabPage();
             this.tabsData.SuspendLayout();
-		    this.pageCommon.SuspendLayout();
+            this.tabsHistory.SuspendLayout();
+            this.pageCommon.SuspendLayout();
 		    this.grpSearch.SuspendLayout();
 		    this.SuspendLayout();
 		    // 
@@ -245,8 +252,35 @@
 		    this.btnShowOnMap.Text = "btnShowOnMap";
 		    this.btnShowOnMap.Click += new System.EventHandler(this.btnShowOnMap_Click);
             // 
+            // pageHistNames
+            // 
+            this.pageHistNames.Location = new System.Drawing.Point(4, 26);
+            this.pageHistNames.Name = "pageHistNames";
+            this.pageHistNames.Size = new System.Drawing.Size(777, 486);
+            this.pageHistNames.TabIndex = 0;
+            this.pageHistNames.Text = "pageHistNames";
+            // 
+            // pageHistLinks
+            // 
+            this.pageHistLinks.Location = new System.Drawing.Point(4, 26);
+            this.pageHistLinks.Name = "pageHistLinks";
+            this.pageHistLinks.Size = new System.Drawing.Size(777, 486);
+            this.pageHistLinks.TabIndex = 1;
+            this.pageHistLinks.Text = "pageHistLinks";
+            // 
+            // tabsHistory
+            // 
+            this.tabsHistory.Controls.Add(this.pageHistNames);
+            this.tabsHistory.Controls.Add(this.pageHistLinks);
+            this.tabsHistory.Location = new System.Drawing.Point(0, 0);
+            this.tabsHistory.Name = "tabsHistory";
+            this.tabsHistory.SelectedIndex = 0;
+            this.tabsHistory.Size = new System.Drawing.Size(785, 516);
+            this.tabsHistory.TabIndex = 0;
+            // 
             // pageHistory
             // 
+            this.pageHistory.Controls.Add(this.tabsHistory);
             this.pageHistory.Location = new System.Drawing.Point(4, 26);
             this.pageHistory.Name = "pageHistory";
             this.pageHistory.Size = new System.Drawing.Size(777, 486);
@@ -287,7 +321,8 @@
 		    this.ShowInTaskbar = false;
 		    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 		    this.Text = "LocationEditDlg";
-		    this.tabsData.ResumeLayout(false);
+            this.tabsHistory.ResumeLayout(false);
+            this.tabsData.ResumeLayout(false);
 		    this.pageCommon.ResumeLayout(false);
 		    this.pageCommon.PerformLayout();
 		    this.grpSearch.ResumeLayout(false);

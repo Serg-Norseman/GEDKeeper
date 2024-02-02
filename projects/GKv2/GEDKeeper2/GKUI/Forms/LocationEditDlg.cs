@@ -36,6 +36,7 @@ namespace GKUI.Forms
         private readonly GKMapBrowser fMapBrowser;
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fNamesList;
+        private readonly GKSheetList fLinksList;
         private readonly GKSheetList fNotesList;
 
         public GDMLocationRecord LocationRecord
@@ -54,6 +55,11 @@ namespace GKUI.Forms
         ISheetList ILocationEditDlg.NamesList
         {
             get { return fNamesList; }
+        }
+
+        ISheetList ILocationEditDlg.LinksList
+        {
+            get { return fLinksList; }
         }
 
         ISheetList ILocationEditDlg.MediaList
@@ -100,7 +106,9 @@ namespace GKUI.Forms
             fMapBrowser.Dock = DockStyle.Fill;
             panMap.Controls.Add(fMapBrowser);
 
-            fNamesList = new GKSheetList(pageHistory);
+            fNamesList = new GKSheetList(pageHistNames);
+            fLinksList = new GKSheetList(pageHistLinks);
+
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
 
