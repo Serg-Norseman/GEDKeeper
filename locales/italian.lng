@@ -944,7 +944,7 @@
 936=Census analysis
 937=The person can be found in the census `{0}`
 938=History
-939=The periods of place names overlap. This will cause errors when searching for a place name by date.
+939=The periods overlap. This will cause errors when searching for a place name by date.
 940=Extended locations
 941=Photos batch adding
 942=Added {0} photos from {1}.

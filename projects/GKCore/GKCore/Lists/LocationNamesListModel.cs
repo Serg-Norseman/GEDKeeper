@@ -38,8 +38,8 @@ namespace GKCore.Lists
 
             fListColumns.AddColumn(LSID.NumberSym, 25, false);
             fListColumns.AddColumn(LSID.Name, 300, false);
-            fListColumns.AddColumn(LSID.ShortTitle, 100, false);
-            fListColumns.AddColumn(LSID.Date, 140, false);
+            fListColumns.AddColumn(LSID.ShortTitle, 80, false);
+            fListColumns.AddColumn(LSID.Date, 160, false);
             fListColumns.ResetDefaults();
         }
 
@@ -107,7 +107,7 @@ namespace GKCore.Lists
 
                         if (result) {
                             if (!dataOwner.ValidateNames()) {
-                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.ThePeriodsOfPlaceNamesOverlap));
+                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PeriodsOverlap));
                             }
                             dataOwner.SortNames();
                         }
