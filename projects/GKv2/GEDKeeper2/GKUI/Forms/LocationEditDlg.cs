@@ -98,6 +98,8 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            tabsData.SelectedIndexChanged += tabsData_SelectedIndexChanged;
+
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
@@ -114,6 +116,15 @@ namespace GKUI.Forms
 
             fController = new LocationEditDlgController(this);
             fController.Init(baseWin);
+        }
+
+        private void tabsData_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var tabCtl = (TabControl)sender;
+            var selectedTab = tabCtl.SelectedIndex;
+            if (selectedTab == 1) {
+                fController.CheckPrimaryName();
+            }
         }
 
         private void EditName_KeyDown(object sender, KeyEventArgs e)

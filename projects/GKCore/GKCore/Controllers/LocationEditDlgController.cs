@@ -75,6 +75,15 @@ namespace GKCore.Controllers
             fView.Name.Text = fLocationRecord.LocationName;
         }
 
+        public void CheckPrimaryName()
+        {
+            if (!string.IsNullOrEmpty(fView.Name.Text) && string.IsNullOrEmpty(fLocationRecord.LocationName)) {
+                // new record
+                fLocationRecord.LocationName = fView.Name.Text;
+                fView.NamesList.UpdateSheet();
+            }
+        }
+
         public override bool Accept()
         {
             try {
