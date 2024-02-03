@@ -99,6 +99,8 @@ namespace GKCore.Lists
         IListView ListView { get; }
         bool ReadOnly { get; set; }
 
+        event ModifyEventHandler OnModify;
+
         void UpdateButtons();
         void UpdateSheet();
     }

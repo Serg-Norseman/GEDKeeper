@@ -66,6 +66,13 @@ namespace GKCore.Controllers
 
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
             fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
+
+            fView.NamesList.OnModify += ModifyNamesSheet;
+        }
+
+        private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
+        {
+            fView.Name.Text = fLocationRecord.LocationName;
         }
 
         public override bool Accept()
@@ -207,7 +214,7 @@ namespace GKCore.Controllers
 
             GetControl<ITabPage>("pageHistory").Text = LangMan.LS(LSID.History);
             GetControl<ITabPage>("pageHistNames").Text = LangMan.LS(LSID.Names);
-            GetControl<ITabPage>("pageHistLinks").Text = LangMan.LS(LSID.Links);
+            GetControl<ITabPage>("pageHistLinks").Text = LangMan.LS(LSID.TopLevelLinks);
         }
     }
 }

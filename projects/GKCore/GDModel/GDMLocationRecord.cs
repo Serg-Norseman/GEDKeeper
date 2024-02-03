@@ -246,7 +246,7 @@ namespace GDModel
         {
             UDN udn1 = cp1.Date.GetUDN();
             UDN udn2 = cp2.Date.GetUDN();
-            return -udn1.CompareTo(udn2);
+            return udn1.CompareTo(udn2);
         }
     }
 

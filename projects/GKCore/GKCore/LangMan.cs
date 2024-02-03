@@ -1012,8 +1012,10 @@ namespace GKCore
         /* 940 */ ExtendedLocations,
         /* 941 */ PhotosBatchAdding,
         /* 942 */ AddedNPhotos,
+        /* 943 */ TopLevelLinks,
+        /* 944 */ RemoveTopLevelLinkQuery,
 
-        /* 000 */ Last = AddedNPhotos
+        /* 000 */ Last = RemoveTopLevelLinkQuery
     }
 
 
@@ -1979,6 +1981,8 @@ namespace GKCore
             /* 940 */ "Extended locations",
             /* 941 */ "Photos batch adding",
             /* 942 */ "Added {0} photos from {1}.",
+            /* 943 */ "Top level links",
+            /* 944 */ "Remove top level link?",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

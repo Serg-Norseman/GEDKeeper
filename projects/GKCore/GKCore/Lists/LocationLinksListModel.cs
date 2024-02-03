@@ -105,8 +105,8 @@ namespace GKCore.Lists
                     break;
 
                 case RecordAction.raDelete:
-                    if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RemoveNameQuery))) {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otLocationNameRemove, dataOwner, locLink);
+                    if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RemoveTopLevelLinkQuery))) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otLocationLinkRemove, dataOwner, locLink);
                     }
                     break;
             }
