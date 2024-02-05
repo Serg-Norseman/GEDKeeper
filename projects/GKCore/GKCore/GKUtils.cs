@@ -1409,7 +1409,7 @@ namespace GKCore
         {
             try {
                 if (GlobalOptions.Instance.ExtendedLocations) {
-                    return locRec.GetNameByDate(date);
+                    return locRec.GetNameByDate(date, true);
                 } else {
                     return locRec.LocationName;
                 }

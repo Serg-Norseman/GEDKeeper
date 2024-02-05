@@ -50,6 +50,8 @@ namespace GKCore.Controllers
         public LocationLinkEditDlgController(ILocationLinkEditDlg view) : base(view)
         {
             fView.TopLevelText.Activate();
+
+            fView.DateCtl.DateChanged += new EventHandler(OnDateChanged);
         }
 
         public override bool Accept()
@@ -79,15 +81,24 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             fView.DateCtl.FixedDateType = GDMDateType.PeriodBetween;
-
-            fView.TopLevelText.Text = (fTempLocation == null) ? "" : fTempLocation.GetNameByDate(fView.DateCtl.Date);
             fView.DateCtl.Date = fLocationLink.Date.Value;
+            UpdateLocationName();
         }
 
         public async void SetLocation()
         {
             fTempLocation = await fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, null) as GDMLocationRecord;
+            UpdateLocationName();
+        }
+
+        public void UpdateLocationName()
+        {
             fView.TopLevelText.Text = (fTempLocation == null) ? "" : fTempLocation.GetNameByDate(fView.DateCtl.Date);
+        }
+
+        private void OnDateChanged(object sender, EventArgs e)
+        {
+            UpdateLocationName();
         }
 
         public override void SetLocale()

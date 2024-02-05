@@ -29,20 +29,24 @@ namespace GDModel
     public sealed class GDMLocationRecord : GDMRecord
     {
         private readonly GDMMap fMap;
-        private GDMList<GDMLocationName> fNames;
-        private GDMList<GDMLocationLink> fTopLevels;
+        private readonly GDMList<GDMLocationName> fNames;
+        private readonly GDMList<GDMLocationLink> fTopLevels;
 
 
         public string LocationName
         {
-            get { return (fNames.Count == 0) ? string.Empty : fNames[0].StringValue; }
+            get {
+                int num = fNames.Count;
+                return (num == 0) ? string.Empty : fNames[num - 1].StringValue;
+            }
             set {
                 GDMLocationName locName;
-                if (fNames.Count == 0) {
+                int num = fNames.Count;
+                if (num == 0) {
                     locName = new GDMLocationName();
                     fNames.Add(locName);
                 } else {
-                    locName = fNames[0];
+                    locName = fNames[num - 1];
                 }
                 locName.StringValue = value;
             }
@@ -127,9 +131,9 @@ namespace GDModel
             fTopLevels.ReplaceXRefs(map);
         }
 
-        public IList<GDMLocationName> GetFullNames(GDMTree tree)
+        public GDMList<GDMLocationName> GetFullNames(GDMTree tree)
         {
-            var result = new List<GDMLocationName>();
+            var result = new GDMList<GDMLocationName>();
 
             if (fTopLevels.Count > 0) {
                 var buffer = new List<GDMLocationName>();
@@ -184,11 +188,13 @@ namespace GDModel
             return result;
         }
 
-        public string GetNameByDate(GDMCustomDate date)
+        public string GetNameByDate(GDMCustomDate date, bool full = false)
         {
             if (date != null && !date.IsEmpty()) {
-                for (int i = 1; i < fNames.Count; i++) {
-                    var locName = fNames[i];
+                var namesList = !full ? fNames : GetFullNames(Tree);
+
+                for (int i = 0; i < namesList.Count; i++) {
+                    var locName = namesList[i];
 
                     var interDate = GDMCustomDate.GetIntersection(date, locName.Date.Value);
                     if (!interDate.IsEmpty()) {

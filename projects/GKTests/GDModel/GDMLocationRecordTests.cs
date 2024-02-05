@@ -136,9 +136,11 @@ namespace GDModel
         public void Test_NamesByDate()
         {
             using (GDMLocationRecord locRec = new GDMLocationRecord(null)) {
-                locRec.LocationName = "РФ, Кировская обл., Верхнекамский р-н, д. Прислонская";
-
                 var locName = locRec.Names.Add(new GDMLocationName());
+                locName.StringValue = locRec.LocationName = "РФ, Кировская обл., Верхнекамский р-н, д. Прислонская";
+                locName.Date.ParseString("FROM 1765");
+
+                locName = locRec.Names.Add(new GDMLocationName());
                 locName.StringValue = "Российское царство, Вятка, Слободской уезд, Екатерининского мон. вотч., поч. Старое раменье";
                 locName.Date.ParseString("FROM 1678 TO 1708");
 
@@ -153,6 +155,8 @@ namespace GDModel
                 locName = locRec.Names.Add(new GDMLocationName());
                 locName.StringValue = "Казанская губ., Вятская пров., Слободской уезд, Верховская вол., д. Мокрая Слободка";
                 locName.Date.ParseString("FROM 1727 TO 1764");
+
+                locRec.SortNames();
 
                 // null date -> default name
                 Assert.AreEqual("РФ, Кировская обл., Верхнекамский р-н, д. Прислонская", locRec.GetNameByDate(null));
@@ -199,7 +203,7 @@ namespace GDModel
             locRus.AddLocName("СССР", "FROM 30 DEC 1922 TO 26 DEC 1991");//++
             locRus.AddLocName("РФ", "FROM 27 DEC 1991");//++
 
-            IList<GDMLocationName> fullNames = locRus.GetFullNames(tree);
+            var fullNames = locRus.GetFullNames(tree);
             string result = string.Join("\n", fullNames.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
             Assert.AreEqual("'__.__._862 [G] - __.__.1546 [G]': 'Россия'\n" +
                             "'__.__.1547 [G] - 21.10.1721 [G]': 'Российское царство'\n" +
@@ -356,6 +360,24 @@ namespace GDModel
                             "'05.12.1936 [G] - __.__.1964 [G]': 'д. Колегово, Омутнинский район, Кировская область, СССР'\n" +
                             "'12.01.1965 [G] - __.__.1978 [G]': 'д. Колегово, Верхнекамский район, Кировская область, СССР'",
                 result);
+
+            var dateVal = new GDMDate();
+
+            // null or empty date
+            Assert.AreEqual("д. Колегово", locPrislon.GetNameByDate(null));
+            Assert.AreEqual("д. Колегово", locPrislon.GetNameByDate(dateVal, true));
+
+            dateVal.ParseString("10 JAN 1701");
+            Assert.AreEqual("поч. Старое раменье, Слободской уезд, Российское царство", locPrislon.GetNameByDate(dateVal, true));
+
+            dateVal.ParseString("1724");
+            Assert.AreEqual("д. Прислонская, Верховская вол., Слободской дистр., Вятская провинция, Сибирская губерния, Российская империя", locPrislon.GetNameByDate(dateVal, true));
+
+            dateVal.ParseString("1834");
+            Assert.AreEqual("д. Мокрая Слободка, Лоинская вол., Слободской уезд, Вятская губерния, Российская империя", locPrislon.GetNameByDate(dateVal, true));
+
+            dateVal.ParseString("1930");
+            Assert.AreEqual("д. Колегово, Омутнинский район, Вятский округ, Нижегородский край, СССР", locPrislon.GetNameByDate(dateVal, true));
 
             //var gedcomProvider = new GEDCOMProvider(tree);
             //gedcomProvider.SaveToStreamExt(new FileStream("d:\\Russia.ged", FileMode.CreateNew), GEDCOMCharacterSet.csUTF8);
