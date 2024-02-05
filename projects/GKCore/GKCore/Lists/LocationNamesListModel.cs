@@ -75,18 +75,22 @@ namespace GKCore.Lists
             }
         }
 
-        public override void OnItemSelected(int itemIndex, object rowData)
+        private void UpdateButtons()
         {
             var actions = AllowedActions;
 
-            itemIndex = fStructList.IndexOf(rowData as GDMLocationName);
-            if (itemIndex == 0) {
+            if (fStructList.Count <= 1) {
                 actions.Exclude(RecordAction.raDelete);
             } else {
                 actions.Include(RecordAction.raDelete);
             }
 
             AllowedActions = actions;
+        }
+
+        public override void OnItemSelected(int itemIndex, object rowData)
+        {
+            UpdateButtons();
         }
 
         public override async Task Modify(object sender, ModifyEventArgs eArgs)
@@ -122,6 +126,8 @@ namespace GKCore.Lists
             }
 
             if (result) {
+                UpdateButtons();
+
                 if (eArgs.Action == RecordAction.raAdd) {
                     eArgs.ItemData = locName;
                 }
