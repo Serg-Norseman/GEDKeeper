@@ -58,14 +58,19 @@
         </TabPage>
 
         <TabPage x:Name="pageHistory">
-          <TabControl x:Name="tabsHistory">
-            <TabPage x:Name="pageHistNames">
-              <comcom:GKSheetList x:Name="fNamesList" />
-            </TabPage>
-            <TabPage x:Name="pageHistLinks">
-              <comcom:GKSheetList x:Name="fLinksList" />
-            </TabPage>
-          </TabControl>
+          <TableLayout x:Name="tabsHistory">
+            <TableRow ScaleHeight="true">
+              <GroupBox x:Name="pageHistNames">
+                <comcom:GKSheetList x:Name="fNamesList" />
+              </GroupBox>
+            </TableRow>
+
+            <TableRow ScaleHeight="true">
+              <GroupBox x:Name="pageHistLinks">
+                <comcom:GKSheetList x:Name="fLinksList" />
+              </GroupBox>
+            </TableRow>
+          </TableLayout>
         </TabPage>
 
         <TabPage x:Name="pageNotes">

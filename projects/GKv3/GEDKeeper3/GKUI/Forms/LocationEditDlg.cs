@@ -60,8 +60,8 @@ namespace GKUI.Forms
         private GKSheetList fNamesList;
         private GKSheetList fLinksList;
         private GKSheetList fNotesList;
-        private TabPage pageHistNames;
-        private TabPage pageHistLinks;
+        private GroupBox pageHistNames;
+        private GroupBox pageHistLinks;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion

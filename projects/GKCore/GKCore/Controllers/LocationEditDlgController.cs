@@ -222,8 +222,8 @@ namespace GKCore.Controllers
             fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.Longitude), 80, false);
 
             GetControl<ITabPage>("pageHistory").Text = LangMan.LS(LSID.History);
-            GetControl<ITabPage>("pageHistNames").Text = LangMan.LS(LSID.Names);
-            GetControl<ITabPage>("pageHistLinks").Text = LangMan.LS(LSID.TopLevelLinks);
+            GetControl<IGroupBox>("pageHistNames").Text = LangMan.LS(LSID.Names);
+            GetControl<IGroupBox>("pageHistLinks").Text = LangMan.LS(LSID.TopLevelLinks);
         }
     }
 }

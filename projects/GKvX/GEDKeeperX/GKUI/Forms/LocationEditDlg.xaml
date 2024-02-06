@@ -47,16 +47,14 @@
                 </xp:TabItem>
 
                 <xp:TabItem x:Name="pageHistory">
-                    <xp:TabViewControl x:Name="tabsHistory" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                        <xp:TabViewControl.ItemSource>
-                            <xp:TabItem x:Name="pageHistNames">
-                                <comcom:GKSheetList x:Name="fNamesList" />
-                            </xp:TabItem>
-                            <xp:TabItem x:Name="pageHistLinks">
-                                <comcom:GKSheetList x:Name="fLinksList" />
-                            </xp:TabItem>
-                        </xp:TabViewControl.ItemSource>
-                    </xp:TabViewControl>
+                    <Grid x:Name="tabsHistory" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                        <comcom:GroupBox x:Name="pageHistNames" Grid.Column="0" Grid.Row="0">
+                            <comcom:GKSheetList x:Name="fNamesList" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+                        </comcom:GroupBox>
+                        <comcom:GroupBox x:Name="pageHistLinks" Grid.Column="0" Grid.Row="1">
+                            <comcom:GKSheetList x:Name="fLinksList" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+                        </comcom:GroupBox>
+                    </Grid>
                 </xp:TabItem>
 
                 <xp:TabItem x:Name="pageNotes">
