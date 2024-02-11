@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using GDModel.Providers.GEDCOM;
 using GKCore.Calendar;
 using GKCore.Types;
@@ -28,19 +29,24 @@ namespace GDModel
     public sealed class GDMLocationRecord : GDMRecord
     {
         private readonly GDMMap fMap;
-        private GDMList<GDMLocationName> fNames;
+        private readonly GDMList<GDMLocationName> fNames;
+        private readonly GDMList<GDMLocationLink> fTopLevels;
 
 
         public string LocationName
         {
-            get { return (fNames.Count == 0) ? string.Empty : fNames[0].StringValue; }
+            get {
+                int num = fNames.Count;
+                return (num == 0) ? string.Empty : fNames[num - 1].StringValue;
+            }
             set {
                 GDMLocationName locName;
-                if (fNames.Count == 0) {
+                int num = fNames.Count;
+                if (num == 0) {
                     locName = new GDMLocationName();
                     fNames.Add(locName);
                 } else {
-                    locName = fNames[0];
+                    locName = fNames[num - 1];
                 }
                 locName.StringValue = value;
             }
@@ -56,6 +62,11 @@ namespace GDModel
             get { return fNames; }
         }
 
+        public GDMList<GDMLocationLink> TopLevels
+        {
+            get { return fTopLevels; }
+        }
+
 
         public GDMLocationRecord(GDMTree tree) : base(tree)
         {
@@ -63,6 +74,7 @@ namespace GDModel
 
             fMap = new GDMMap();
             fNames = new GDMList<GDMLocationName>();
+            fTopLevels = new GDMList<GDMLocationLink>();
         }
 
         internal override void TrimExcess()
@@ -71,6 +83,7 @@ namespace GDModel
 
             fMap.TrimExcess();
             fNames.TrimExcess();
+            fTopLevels.TrimExcess();
         }
 
         public override void Assign(GDMTag source)
@@ -83,6 +96,7 @@ namespace GDModel
 
             fMap.Assign(otherLoc.fMap);
             AssignList(otherLoc.fNames, Names);
+            AssignList(otherLoc.fTopLevels, TopLevels);
         }
 
         public override void Clear()
@@ -91,11 +105,12 @@ namespace GDModel
 
             fMap.Clear();
             fNames.Clear();
+            fTopLevels.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && fMap.IsEmpty() && (fNames.Count == 0);
+            return base.IsEmpty() && fMap.IsEmpty() && (fNames.Count == 0) && (fTopLevels.Count == 0);
         }
 
         // TODO: connect to use
@@ -113,18 +128,77 @@ namespace GDModel
             base.ReplaceXRefs(map);
             fMap.ReplaceXRefs(map);
             fNames.ReplaceXRefs(map);
+            fTopLevels.ReplaceXRefs(map);
         }
 
-        public string GetNameByDate(GDMCustomDate date)
+        public GDMList<GDMLocationName> GetFullNames(GDMTree tree)
+        {
+            var result = new GDMList<GDMLocationName>();
+
+            if (fTopLevels.Count > 0) {
+                var buffer = new List<GDMLocationName>();
+
+                for (int j = 0; j < fTopLevels.Count; j++) {
+                    var topLevel = fTopLevels[j];
+                    var topLoc = tree.GetPtrValue<GDMLocationRecord>(topLevel);
+                    if (topLoc == null) continue;
+
+                    var topNames = topLoc.GetFullNames(tree);
+                    for (int i = 0; i < topNames.Count; i++) {
+                        var topName = topNames[i];
+
+                        var interDate = GDMCustomDate.GetIntersection(topLevel.Date.Value, topName.Date.Value);
+                        if (!interDate.IsEmpty()) {
+                            var newLocName = new GDMLocationName();
+                            newLocName.StringValue = topName.StringValue;
+                            newLocName.Date.ParseString(interDate.StringValue);
+                            buffer.Add(newLocName);
+                        }
+                    }
+                }
+
+                for (int j = 0; j < buffer.Count; j++) {
+                    var topLocName = buffer[j];
+                    var topName = topLocName.StringValue;
+                    var topDate = topLocName.Date.Value;
+
+                    for (int i = 0; i < fNames.Count; i++) {
+                        var locName = fNames[i];
+
+                        var interDate = GDMCustomDate.GetIntersection(topDate, locName.Date.Value);
+                        if (!interDate.IsEmpty()) {
+                            string newName = locName.StringValue + ", " + topName;
+
+                            var newLocName = new GDMLocationName();
+                            newLocName.StringValue = newName;
+                            newLocName.Date.ParseString(interDate.StringValue);
+                            result.Add(newLocName);
+                        }
+                    }
+                }
+            } else {
+                for (int i = 0; i < fNames.Count; i++) {
+                    var locName = fNames[i];
+                    if (locName.Date.IsEmpty()) continue;
+
+                    result.Add(locName);
+                }
+            }
+
+            return result;
+        }
+
+        public string GetNameByDate(GDMCustomDate date, bool full = false)
         {
             if (date != null && !date.IsEmpty()) {
-                for (int i = 1; i < fNames.Count; i++) {
-                    var locName = fNames[i];
-                    if (!locName.Date.IsEmpty()) {
-                        var interDate = GDMCustomDate.GetIntersection(date, locName.Date.Value);
-                        if (!interDate.IsEmpty()) {
-                            return locName.StringValue;
-                        }
+                var namesList = !full ? fNames : GetFullNames(Tree);
+
+                for (int i = 0; i < namesList.Count; i++) {
+                    var locName = namesList[i];
+
+                    var interDate = GDMCustomDate.GetIntersection(date, locName.Date.Value);
+                    if (!interDate.IsEmpty()) {
+                        return locName.StringValue;
                     }
                 }
             }
@@ -137,27 +211,53 @@ namespace GDModel
             GDMCustomDate prevDate = null;
             for (int i = 0; i < fNames.Count; i++) {
                 var locName = fNames[i];
-                if (!locName.Date.IsEmpty()) {
-                    var interDate = GDMCustomDate.GetIntersection(prevDate, locName.Date.Value);
-                    if (!interDate.IsEmpty()) {
-                        return false;
-                    }
+
+                var interDate = GDMCustomDate.GetIntersection(prevDate, locName.Date.Value);
+                if (!interDate.IsEmpty()) {
+                    return false;
                 }
+
                 prevDate = locName.Date.Value;
+            }
+            return true;
+        }
+
+        public bool ValidateLinks()
+        {
+            GDMCustomDate prevDate = null;
+            for (int i = 0; i < fTopLevels.Count; i++) {
+                var locLink = fTopLevels[i];
+
+                var interDate = GDMCustomDate.GetIntersection(prevDate, locLink.Date.Value);
+                if (!interDate.IsEmpty()) {
+                    return false;
+                }
+
+                prevDate = locLink.Date.Value;
             }
             return true;
         }
 
         public void SortNames()
         {
-            fNames.Sort(ChildrenEventsCompare);
+            fNames.Sort(ElementsCompare);
         }
 
-        private static int ChildrenEventsCompare(GDMLocationName cp1, GDMLocationName cp2)
+        public void SortTopLevels()
+        {
+            fTopLevels.Sort(ElementsCompare);
+        }
+
+        private static int ElementsCompare(IGDMLocationElement cp1, IGDMLocationElement cp2)
         {
             UDN udn1 = cp1.Date.GetUDN();
             UDN udn2 = cp2.Date.GetUDN();
-            return -udn1.CompareTo(udn2);
+            return udn1.CompareTo(udn2);
         }
+    }
+
+    public interface IGDMLocationElement
+    {
+        GDMDateValue Date { get; }
     }
 }

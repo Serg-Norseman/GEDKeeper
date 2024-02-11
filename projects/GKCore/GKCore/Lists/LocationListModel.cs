@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -89,6 +90,21 @@ namespace GKCore.Lists
             res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
 
             return res;
+        }
+
+        protected override bool CheckCommonCondition(FilterCondition fcond)
+        {
+            if ((ColumnType)fcond.ColumnIndex == ColumnType.ctName) {
+                var names = fFetchedRec.Names;
+                for (int i = 0; i < names.Count; i++) {
+                    if (CheckCondition(fcond, names[i].StringValue)) {
+                        return true;
+                    }
+                }
+                return false;
+            } else {
+                return base.CheckCommonCondition(fcond);
+            }
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

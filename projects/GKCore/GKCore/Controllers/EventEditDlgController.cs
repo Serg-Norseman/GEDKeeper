@@ -57,6 +57,7 @@ namespace GKCore.Controllers
         {
             fTempLocation = null;
             fView.EventType.Activate();
+            fView.Date.DateChanged += new EventHandler(dateCtl_DateChanged);
         }
 
         public override void Init(IBaseWindow baseWin)
@@ -166,19 +167,19 @@ namespace GKCore.Controllers
             fView.Agency.Text = fEvent.Agency;
 
             fTempLocation = fBase.Context.Tree.GetPtrValue<GDMLocationRecord>(fEvent.Place.Location);
-            UpdatePlace();
+            UpdatePlace(true);
 
             fView.NotesList.UpdateSheet();
             fView.MediaList.UpdateSheet();
             fView.SourcesList.UpdateSheet();
         }
 
-        private void UpdatePlace()
+        private void UpdatePlace(bool forced)
         {
             if (fTempLocation != null) {
                 fView.Place.Text = GKUtils.GetLocationNameExt(fTempLocation, fView.Date.Date);
                 SetLocationMode(true);
-            } else {
+            } else if (forced) {
                 fView.Place.Text = fEvent.Place.StringValue;
                 SetLocationMode(false);
             }
@@ -202,13 +203,13 @@ namespace GKCore.Controllers
         public async void AddPlace()
         {
             fTempLocation = await fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, new object[] { fView.Place.Text }) as GDMLocationRecord;
-            UpdatePlace();
+            UpdatePlace(true);
         }
 
         public void RemovePlace()
         {
             fTempLocation = null;
-            UpdatePlace();
+            UpdatePlace(true);
         }
 
         public async void ModifyAddress()
@@ -282,9 +283,9 @@ namespace GKCore.Controllers
             }
         }
 
-        public void OnDateChanged()
+        private void dateCtl_DateChanged(object sender, System.EventArgs e)
         {
-            UpdatePlace();
+            UpdatePlace(false);
         }
 
         public override void SetLocale()

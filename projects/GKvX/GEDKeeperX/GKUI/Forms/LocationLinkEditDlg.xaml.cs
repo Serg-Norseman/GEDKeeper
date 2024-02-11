@@ -20,38 +20,46 @@
 
 using System;
 using GDModel;
+using GKCore.Controllers;
 using GKCore.Design.Controls;
-using GKUI.Components;
+using GKCore.Design.Views;
+using GKCore.Interfaces;
 
-namespace GKUI.Platform.Handlers
+namespace GKUI.Forms
 {
-    public sealed class DateControlHandler : BaseControlHandler<GKDateControl, DateControlHandler>, IDateControl
+    public sealed partial class LocationLinkEditDlg : CommonDialog<ILocationLinkEditDlg, LocationLinkEditDlgController>, ILocationLinkEditDlg
     {
-        public GDMCustomDate Date
+        public GDMLocationLink LocationLink
         {
-            get { return Control.Date; }
-            set { Control.Date = value; }
+            get { return fController.LocationLink; }
+            set { fController.LocationLink = value; }
         }
 
-        public GDMDateType FixedDateType
+        #region View Interface
+
+        ITextBox ILocationLinkEditDlg.TopLevelText
         {
-            get { return Control.FixedDateType; }
-            set { Control.FixedDateType = value; }
+            get { return GetControlHandler<ITextBox>(txtTopLevel); }
         }
 
-        public event EventHandler DateChanged
+        IDateControl ILocationLinkEditDlg.DateCtl
         {
-            add { Control.DateChanged += value; }
-            remove { Control.DateChanged -= value; }
+            get { return GetControlHandler<IDateControl>(dateCtl); }
         }
 
-        public DateControlHandler(GKDateControl control) : base(control)
+        #endregion
+
+        public LocationLinkEditDlg(IBaseWindow baseWin)
         {
+            InitializeComponent();
+
+            fController = new LocationLinkEditDlgController(this);
+            fController.Init(baseWin);
         }
 
-        public void PasteValue(string value)
+        private void btnLocationAdd_Click(object sender, EventArgs e)
         {
-            Control.PasteValue(value);
+            fController.SetLocation();
         }
     }
 }

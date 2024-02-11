@@ -25,6 +25,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using BSLib;
 
 namespace GKCore
@@ -337,25 +338,7 @@ namespace GKCore
 
         public static string StripHTML(string source)
         {
-            char[] array = new char[source.Length];
-            int arrayIndex = 0;
-            bool inside = false;
-            for (int i = 0; i < source.Length; i++) {
-                char let = source[i];
-                if (let == '<') {
-                    inside = true;
-                    continue;
-                }
-                if (let == '>') {
-                    inside = false;
-                    continue;
-                }
-                if (!inside) {
-                    array[arrayIndex] = let;
-                    arrayIndex++;
-                }
-            }
-            return new string(array, 0, arrayIndex);
+            return source == null ? string.Empty : Regex.Replace(source, "<.*?>", string.Empty);
         }
 
         public static void Shuffle<T>(this T[] array)

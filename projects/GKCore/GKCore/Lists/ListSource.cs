@@ -335,24 +335,16 @@ namespace GKCore.Lists
             fFilter.Conditions.Add(fltCond);
         }
 
-        private bool CheckCondition(FilterCondition fcond)
+        protected bool CheckCondition(FilterCondition fcond, object dataval)
         {
             bool res = true;
 
             try {
-                object dataval;
-                try {
-                    dataval = GetColumnValueEx(fcond.ColumnIndex, -1, false);
-                } catch (Exception ex) {
-                    Logger.WriteError("ListSource.CheckCondition()", ex);
-                    dataval = null;
-                }
-
                 if (dataval == null)
                     return true;
 
                 int compRes = 0;
-                if (fcond.Condition != ConditionKind.ck_Contains) {
+                if (fcond.Condition < ConditionKind.ck_Contains) {
                     compRes = ((IComparable)dataval).CompareTo(fcond.Value);
                 }
 
@@ -397,6 +389,19 @@ namespace GKCore.Lists
             return res;
         }
 
+        protected virtual bool CheckCommonCondition(FilterCondition fcond)
+        {
+            object dataval;
+            try {
+                dataval = GetColumnValueEx(fcond.ColumnIndex, -1, false);
+            } catch (Exception ex) {
+                Logger.WriteError("ListSource.CheckCommonCondition()", ex);
+                dataval = null;
+            }
+
+            return CheckCondition(fcond, dataval);
+        }
+
         protected bool CheckCommonFilter()
         {
             bool res = true;
@@ -405,7 +410,7 @@ namespace GKCore.Lists
                 var conditions = fFilter.Conditions;
                 for (int i = 0, num = conditions.Count; i < num; i++) {
                     FilterCondition fcond = conditions[i];
-                    res = res && CheckCondition(fcond);
+                    res = res && CheckCommonCondition(fcond);
                     if (!res) break;
                 }
             } catch (Exception ex) {

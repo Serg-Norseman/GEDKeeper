@@ -75,6 +75,9 @@ namespace GKCore.Operations
 
         otLocationNameAdd,
         otLocationNameRemove,
+
+        otLocationLinkAdd,
+        otLocationLinkRemove,
     }
 
     /// <summary>
@@ -211,6 +214,11 @@ namespace GKCore.Operations
                 case OperationType.otLocationNameAdd:
                 case OperationType.otLocationNameRemove:
                     result = ProcessLocationName(redo);
+                    break;
+
+                case OperationType.otLocationLinkAdd:
+                case OperationType.otLocationLinkRemove:
+                    result = ProcessLocationLink(redo);
                     break;
 
                 default:
@@ -633,6 +641,26 @@ namespace GKCore.Operations
                 locRec.Names.Add(locName);
             } else {
                 locRec.Names.Extract(locName);
+            }
+            return true;
+        }
+
+        private bool ProcessLocationLink(bool redo)
+        {
+            GDMLocationRecord locRec = fObj as GDMLocationRecord;
+            GDMLocationLink locLink = fNewVal as GDMLocationLink;
+
+            if (locRec == null || locLink == null) {
+                return false;
+            }
+
+            if (fType == OperationType.otLocationLinkRemove) {
+                redo = !redo;
+            }
+            if (redo) {
+                locRec.TopLevels.Add(locLink);
+            } else {
+                locRec.TopLevels.Extract(locLink);
             }
             return true;
         }

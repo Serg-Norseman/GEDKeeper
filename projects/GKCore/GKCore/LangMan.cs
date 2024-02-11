@@ -1008,12 +1008,14 @@ namespace GKCore
         /* 936 */ CensusAnalysis,
         /* 937 */ PersonCanBeFoundInCensus,
         /* 938 */ History,
-        /* 939 */ ThePeriodsOfPlaceNamesOverlap,
+        /* 939 */ PeriodsOverlap,
         /* 940 */ ExtendedLocations,
         /* 941 */ PhotosBatchAdding,
         /* 942 */ AddedNPhotos,
+        /* 943 */ TopLevelLinks,
+        /* 944 */ RemoveTopLevelLinkQuery,
 
-        /* 000 */ Last = AddedNPhotos
+        /* 000 */ Last = RemoveTopLevelLinkQuery
     }
 
 
@@ -1975,10 +1977,12 @@ namespace GKCore
             /* 936 */ "Census analysis",
             /* 937 */ "The person can be found in the census `{0}`",
             /* 938 */ "History",
-            /* 939 */ "The periods of place names overlap. This will cause errors when searching for a place name by date.",
+            /* 939 */ "The periods overlap. This will cause errors when searching for a place name by date.",
             /* 940 */ "Extended locations",
             /* 941 */ "Photos batch adding",
             /* 942 */ "Added {0} photos from {1}.",
+            /* 943 */ "Top level links",
+            /* 944 */ "Remove top level link?",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

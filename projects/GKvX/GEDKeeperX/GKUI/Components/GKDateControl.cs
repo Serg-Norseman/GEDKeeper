@@ -247,7 +247,6 @@ namespace GKUI.Components
                 cmbDateType.SelectedIndex = (int)fFixedDateType;
                 cmbDateType.IsEnabled = false;
             } else {
-                cmbDateType.SelectedIndex = 0;
                 cmbDateType.IsEnabled = true;
             }
         }

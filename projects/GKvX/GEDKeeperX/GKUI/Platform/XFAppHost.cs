@@ -276,6 +276,7 @@ namespace GKUI.Platform
             container.Register<IGroupEditDlg, GroupEditDlg>(LifeCycle.Transient);
             container.Register<ILocationEditDlg, LocationEditDlg>(LifeCycle.Transient);
             container.Register<ILocationNameEditDlg, LocationNameEditDlg>(LifeCycle.Transient);
+            container.Register<ILocationLinkEditDlg, LocationLinkEditDlg>(LifeCycle.Transient);
             container.Register<IMapsViewerWin, MapsViewerWin>(LifeCycle.Transient);
             container.Register<IMediaEditDlg, MediaEditDlg>(LifeCycle.Transient);
             container.Register<IMediaViewerWin, MediaViewerWin>(LifeCycle.Transient);

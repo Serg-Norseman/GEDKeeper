@@ -44,7 +44,7 @@ namespace GKCore.Lists
 
             fListColumns.AddColumn(LSID.NumberSym, 25, false);
             fListColumns.AddColumn(LSID.Event, 90, false);
-            fListColumns.AddColumn(LSID.Date, 80, false);
+            fListColumns.AddColumn(LSID.Date, 90, false);
             if (!fPersonsMode) {
                 fListColumns.AddColumn(LSID.Place, 200, false);
             } else {

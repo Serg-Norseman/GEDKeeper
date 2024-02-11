@@ -36,6 +36,8 @@ namespace GDModel
     /// </summary>
     public class GDMDate : GDMCustomDate
     {
+        public static readonly GDMDate Empty = new GDMDate();
+
         public const int UNKNOWN_YEAR = -1;
 
         private GDMApproximated fApproximated;
@@ -585,5 +587,11 @@ namespace GDModel
         }
 
         #endregion
+
+        public override void GetDateRange(out GDMDate dateStart, out GDMDate dateEnd)
+        {
+            dateStart = this;
+            dateEnd = this;
+        }
     }
 }

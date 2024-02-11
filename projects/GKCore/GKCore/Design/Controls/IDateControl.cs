@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel;
 
 namespace GKCore.Design.Controls
@@ -29,6 +30,8 @@ namespace GKCore.Design.Controls
     {
         GDMCustomDate Date { get; set; }
         GDMDateType FixedDateType { get; set; }
+
+        event EventHandler DateChanged;
 
         void PasteValue(string value);
     }

@@ -62,8 +62,26 @@ namespace GKCore.Controllers
             base.Init(baseWin);
 
             fView.NamesList.ListModel = new LocationNamesListModel(fView, baseWin, fLocalUndoman);
+            fView.LinksList.ListModel = new LocationLinksListModel(fView, baseWin, fLocalUndoman);
+
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
             fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
+
+            fView.NamesList.OnModify += ModifyNamesSheet;
+        }
+
+        private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
+        {
+            fView.Name.Text = fLocationRecord.LocationName;
+        }
+
+        public void CheckPrimaryName()
+        {
+            if (!string.IsNullOrEmpty(fView.Name.Text) && string.IsNullOrEmpty(fLocationRecord.LocationName)) {
+                // new record
+                fLocationRecord.LocationName = fView.Name.Text;
+                fView.NamesList.UpdateSheet();
+            }
         }
 
         public override bool Accept()
@@ -99,6 +117,8 @@ namespace GKCore.Controllers
             fView.Longitude.Text = GEDCOMUtils.CoordToStr(fLocationRecord.Map.Long);
 
             fView.NamesList.ListModel.DataOwner = fLocationRecord;
+            fView.LinksList.ListModel.DataOwner = fLocationRecord;
+
             fView.NotesList.ListModel.DataOwner = fLocationRecord;
             fView.MediaList.ListModel.DataOwner = fLocationRecord;
 
@@ -202,6 +222,8 @@ namespace GKCore.Controllers
             fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.Longitude), 80, false);
 
             GetControl<ITabPage>("pageHistory").Text = LangMan.LS(LSID.History);
+            GetControl<IGroupBox>("pageHistNames").Text = LangMan.LS(LSID.Names);
+            GetControl<IGroupBox>("pageHistLinks").Text = LangMan.LS(LSID.TopLevelLinks);
         }
     }
 }

@@ -49,6 +49,11 @@ namespace GKUI.Forms
             get { return fNamesList; }
         }
 
+        ISheetList ILocationEditDlg.LinksList
+        {
+            get { return fLinksList; }
+        }
+
         ISheetList ILocationEditDlg.MediaList
         {
             get { return fMediaList; }

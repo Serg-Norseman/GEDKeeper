@@ -736,7 +736,8 @@ namespace GKCore
             if (evt == null)
                 throw new ArgumentNullException("evt");
 
-            string dt = GEDCOMEventToDateStr(evt, GlobalOptions.Instance.DefDateFormat, false);
+            var globOpts = GlobalOptions.Instance;
+            string dt = GEDCOMEventToDateStr(evt, globOpts.DefDateFormat, globOpts.ShowDatesSign);
 
             string place = string.Empty;
             if (evt.HasPlace) {
@@ -1409,7 +1410,7 @@ namespace GKCore
         {
             try {
                 if (GlobalOptions.Instance.ExtendedLocations) {
-                    return locRec.GetNameByDate(date);
+                    return locRec.GetNameByDate(date, true);
                 } else {
                     return locRec.LocationName;
                 }
@@ -3019,6 +3020,20 @@ namespace GKCore
                         summary.Add(LangMan.LS(LSID.Longitude) + ": " + locRec.Map.Long);
 
                         GDMTree tree = baseContext.Tree;
+
+                        var fullNames = locRec.GetFullNames(tree);
+                        if (fullNames.Count > 0) {
+                            //linkList.Sort();
+
+                            summary.Add("");
+                            summary.Add(LangMan.LS(LSID.History) + ":");
+
+                            int num = fullNames.Count;
+                            for (int i = 0; i < num; i++) {
+                                var xName = fullNames[i];
+                                summary.Add("    " + string.Format("{0}: {1}", xName.Date.GetDisplayStringExt(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar, false), xName.StringValue));
+                            }
+                        }
 
                         linkList = GetLocationLinks(tree, locRec);
 

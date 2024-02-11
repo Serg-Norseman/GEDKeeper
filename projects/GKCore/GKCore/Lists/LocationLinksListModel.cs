@@ -30,17 +30,24 @@ using GKCore.Types;
 
 namespace GKCore.Lists
 {
-    public sealed class LocationNamesListModel : SheetModel<GDMLocationName>
+    public sealed class LocationLinksListModel : SheetModel<GDMLocationLink>
     {
-        public LocationNamesListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
+        private GDMLocationRecord fRelLocation;
+
+        public LocationLinksListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
 
             fListColumns.AddColumn(LSID.NumberSym, 25, false);
             fListColumns.AddColumn(LSID.Name, 300, false);
-            fListColumns.AddColumn(LSID.ShortTitle, 80, false);
             fListColumns.AddColumn(LSID.Date, 160, false);
             fListColumns.ResetDefaults();
+        }
+
+        public override void Fetch(GDMLocationLink aRec)
+        {
+            base.Fetch(aRec);
+            fRelLocation = fBaseContext.Tree.GetPtrValue<GDMLocationRecord>(fFetchedRec);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -51,12 +58,9 @@ namespace GKCore.Lists
                     result = fStructList.IndexOf(fFetchedRec) + 1;
                     break;
                 case 1:
-                    result = fFetchedRec.StringValue;
+                    result = (fRelLocation == null) ? string.Empty : fRelLocation.GetNameByDate(fFetchedRec.Date.Value);
                     break;
                 case 2:
-                    result = fFetchedRec.Abbreviation;
-                    break;
-                case 3:
                     result = new GDMDateItem(fFetchedRec.Date.Value);
                     break;
             }
@@ -69,28 +73,10 @@ namespace GKCore.Lists
             if (dataOwner == null) return;
 
             try {
-                UpdateStructList(dataOwner.Names);
+                UpdateStructList(dataOwner.TopLevels);
             } catch (Exception ex) {
-                Logger.WriteError("LocationNamesListModel.UpdateContents()", ex);
+                Logger.WriteError("LocationLinksListModel.UpdateContents()", ex);
             }
-        }
-
-        private void UpdateButtons()
-        {
-            var actions = AllowedActions;
-
-            if (fStructList.Count <= 1) {
-                actions.Exclude(RecordAction.raDelete);
-            } else {
-                actions.Include(RecordAction.raDelete);
-            }
-
-            AllowedActions = actions;
-        }
-
-        public override void OnItemSelected(int itemIndex, object rowData)
-        {
-            UpdateButtons();
         }
 
         public override async Task Modify(object sender, ModifyEventArgs eArgs)
@@ -98,38 +84,36 @@ namespace GKCore.Lists
             var dataOwner = fDataOwner as GDMLocationRecord;
             if (fBaseWin == null || dataOwner == null) return;
 
-            var locName = eArgs.ItemData as GDMLocationName;
+            var locLink = eArgs.ItemData as GDMLocationLink;
 
             bool result = false;
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit: {
-                        var locNameRes = await BaseController.ModifyLocationName(fOwner, fBaseWin, fUndoman, dataOwner, locName);
-                        locName = locNameRes.Record;
-                        result = locNameRes.Result;
+                        var locLinkRes = await BaseController.ModifyLocationLink(fOwner, fBaseWin, fUndoman, dataOwner, locLink);
+                        locLink = locLinkRes.Record;
+                        result = locLinkRes.Result;
 
                         if (result) {
-                            if (!dataOwner.ValidateNames()) {
+                            if (!dataOwner.ValidateLinks()) {
                                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PeriodsOverlap));
                             }
-                            dataOwner.SortNames();
+                            dataOwner.SortTopLevels();
                         }
                     }
                     break;
 
                 case RecordAction.raDelete:
-                    if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RemoveNameQuery))) {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otLocationNameRemove, dataOwner, locName);
+                    if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RemoveTopLevelLinkQuery))) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otLocationLinkRemove, dataOwner, locLink);
                     }
                     break;
             }
 
             if (result) {
-                UpdateButtons();
-
                 if (eArgs.Action == RecordAction.raAdd) {
-                    eArgs.ItemData = locName;
+                    eArgs.ItemData = locLink;
                 }
 
                 fBaseWin.Context.Modified = true;

@@ -49,7 +49,7 @@
                             </StackLayout>
 
                             <Label x:Name="lblDate" Grid.Column="0" Grid.Row="3" />
-                            <comcom:GKDateControl x:Name="dateCtl" DateChanged="dateCtl_DateChanged" Grid.Column="1" Grid.Row="3" />
+                            <comcom:GKDateControl x:Name="dateCtl" Grid.Column="1" Grid.Row="3" />
 
                             <Label x:Name="lblCause" Grid.Column="0" Grid.Row="4" />
                             <Entry x:Name="txtEventCause" Grid.Column="1" Grid.Row="4" />

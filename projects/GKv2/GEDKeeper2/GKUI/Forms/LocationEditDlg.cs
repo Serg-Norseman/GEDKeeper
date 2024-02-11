@@ -36,6 +36,7 @@ namespace GKUI.Forms
         private readonly GKMapBrowser fMapBrowser;
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fNamesList;
+        private readonly GKSheetList fLinksList;
         private readonly GKSheetList fNotesList;
 
         public GDMLocationRecord LocationRecord
@@ -54,6 +55,11 @@ namespace GKUI.Forms
         ISheetList ILocationEditDlg.NamesList
         {
             get { return fNamesList; }
+        }
+
+        ISheetList ILocationEditDlg.LinksList
+        {
+            get { return fLinksList; }
         }
 
         ISheetList ILocationEditDlg.MediaList
@@ -92,6 +98,8 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            tabsData.SelectedIndexChanged += tabsData_SelectedIndexChanged;
+
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
@@ -100,12 +108,23 @@ namespace GKUI.Forms
             fMapBrowser.Dock = DockStyle.Fill;
             panMap.Controls.Add(fMapBrowser);
 
-            fNamesList = new GKSheetList(pageHistory);
+            fNamesList = new GKSheetList(pageHistNames);
+            fLinksList = new GKSheetList(pageHistLinks);
+
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
 
             fController = new LocationEditDlgController(this);
             fController.Init(baseWin);
+        }
+
+        private void tabsData_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var tabCtl = (TabControl)sender;
+            var selectedTab = tabCtl.SelectedIndex;
+            if (selectedTab == 1) {
+                fController.CheckPrimaryName();
+            }
         }
 
         private void EditName_KeyDown(object sender, KeyEventArgs e)

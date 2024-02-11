@@ -74,6 +74,12 @@ namespace GKUI.Platform
             return string.Empty;
         }
 
+        public async Task<string[]> GetOpenFiles(string title, string context, string filter,
+                                  int filterIndex, string defaultExt)
+        {
+            return new string[0];
+        }
+
         public async Task<string> GetSaveFile(string filter)
         {
             return await GetSaveFile("", "", filter, 1, "", "");

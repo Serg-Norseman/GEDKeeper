@@ -514,6 +514,41 @@ namespace GKCore.Controllers
             return result;
         }
 
+        public static async Task<ModificationResult<GDMLocationLink>> ModifyLocationLink(IView owner, IBaseWindow baseWin, ChangeTracker undoman,
+                                                GDMLocationRecord locRec, GDMLocationLink locLink)
+        {
+            var result = new ModificationResult<GDMLocationLink>();
+
+            try {
+                baseWin.Context.BeginUpdate();
+
+                bool exists = locLink != null;
+                if (!exists) {
+                    locLink = new GDMLocationLink();
+                }
+
+                using (var dlg = AppHost.ResolveDialog<ILocationLinkEditDlg>(baseWin)) {
+                    dlg.LocationLink = locLink;
+                    result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
+                }
+
+                if (!exists) {
+                    if (result.Result) {
+                        result.Result = undoman.DoOrdinaryOperation(OperationType.otLocationLinkAdd, locRec, locLink);
+                    } else {
+                        locLink.Dispose();
+                        locLink = null;
+                    }
+                }
+
+                result.Record = locLink;
+            } finally {
+                baseWin.Context.EndUpdate();
+            }
+
+            return result;
+        }
+
         private static async Task PostProcessPerson(IBaseWindow baseWin, GDMIndividualRecord indivRec)
         {
             baseWin.Context.ImportNames(indivRec);

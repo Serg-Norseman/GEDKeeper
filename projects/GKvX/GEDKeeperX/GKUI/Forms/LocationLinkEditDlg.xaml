@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:xp="clr-namespace:Xam.Plugin.TabView;assembly=Xam.Plugin.TabView"
+    x:Class="GKUI.Forms.LocationLinkEditDlg"
+    x:TypeArguments="mvp:ILocationLinkEditDlg, contr:LocationLinkEditDlgController">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <Grid ColumnSpacing="2" RowSpacing="2" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+            <Label x:Name="lblLocation" Grid.Column="0" Grid.Row="0" />
+            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="0">
+                <Entry x:Name="txtTopLevel" IsReadOnly="true" HorizontalOptions="FillAndExpand" />
+                <Button x:Name="btnLocationAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnLocationAdd_Click" HorizontalOptions="End" />
+            </StackLayout>
+
+            <Label x:Name="lblDate" Grid.Column="0" Grid.Row="1" />
+            <comcom:GKDateControl x:Name="dateCtl" Grid.Column="1" Grid.Row="1" />
+        </Grid>
+
+        <Label VerticalOptions="FillAndExpand" />
+
+        <StackLayout Style="{StaticResource dlgFooter}">
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />
+            <Button x:Name="btnCancel" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>
