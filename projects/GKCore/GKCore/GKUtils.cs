@@ -736,7 +736,8 @@ namespace GKCore
             if (evt == null)
                 throw new ArgumentNullException("evt");
 
-            string dt = GEDCOMEventToDateStr(evt, GlobalOptions.Instance.DefDateFormat, false);
+            var globOpts = GlobalOptions.Instance;
+            string dt = GEDCOMEventToDateStr(evt, globOpts.DefDateFormat, globOpts.ShowDatesSign);
 
             string place = string.Empty;
             if (evt.HasPlace) {

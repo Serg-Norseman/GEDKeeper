@@ -121,7 +121,6 @@
 		    this.dateCtl.Name = "dateCtl";
 		    this.dateCtl.Size = new System.Drawing.Size(474, 63);
 		    this.dateCtl.TabIndex = 10;
-            this.dateCtl.DateChanged += new System.EventHandler(this.dateCtl_DateChanged);
             // 
             // lblEvent
             // 

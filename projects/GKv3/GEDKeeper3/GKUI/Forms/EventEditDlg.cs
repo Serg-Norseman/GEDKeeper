@@ -173,10 +173,5 @@ namespace GKUI.Forms
         {
             fController.SendData(signature, data);
         }
-
-        private void dateCtl_DateChanged(object sender, System.EventArgs e)
-        {
-            fController.OnDateChanged();
-        }
     }
 }
