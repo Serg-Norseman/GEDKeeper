@@ -313,9 +313,12 @@ namespace GKCore.Controllers
             SubstituteControl<IButton>(view, "btnSearch");
             SubstituteControl<IButton>(view, "btnSelect");
             SubstituteControl<IButton>(view, "btnSelectName");
+            SubstituteControl<IGroupBox>(view, "pageHistNames");
+            SubstituteControl<IGroupBox>(view, "pageHistLinks");
 
             view.MapBrowser.Returns(Substitute.For<IMapBrowser>());
             view.NamesList.Returns(Substitute.For<ISheetList>());
+            view.LinksList.Returns(Substitute.For<ISheetList>());
             view.NotesList.Returns(Substitute.For<ISheetList>());
             view.MediaList.Returns(Substitute.For<ISheetList>());
             view.GeoCoordsList.Returns(Substitute.For<IListView>());

@@ -25,7 +25,7 @@
 024=Strom předků
 025=Strom potomků
 026=Celý strom
-027=Descending pedigree
+027=Sestupný rodokmen
 028=<?>
 029=Mapy
 030=Statistiky
@@ -313,8 +313,8 @@
 312=Povolání
 313=Kasta
 314=Vojenská služba
-315=Military Induction
-316=Military Discharge
+315=Vojenská indukce
+316=Vojenské propuštění
 317=Mili hodnost
 318=Změněno
 319=Manželství se zaregistrovalo
@@ -343,7 +343,7 @@
 342=Vlastnictví
 343=Titul
 344=Cesty
-345=Hobby
+345=Záliba
 346=Cena
 347=?
 348=otec
@@ -377,12 +377,12 @@
 376=pra
 377=strýc
 378=teta
-379=stepfather
-380=stepmother
+379=nevlastní otec
+380=nevlastní matka
 381=Šířka obrázku je více než 65 000 pixelů. Nelze uložit.
 382=Zpět
 383=Další
-384=Previous
+384=Předchozí
 385=Další
 386=Víte že ...
 387=Načíst a vyhledat místa
@@ -634,8 +634,8 @@
 633=Předchozí záznam
 634=Další záznam
 635=Generace se nezdařila
-636=Start
-637=Stop
+636=Začít
+637=Ukončit
 638=Demografie
 639=Jména
 640=Jméno-přezdívka
@@ -662,8 +662,8 @@
 661=Zobrazit strom potomků
 662=Zobrazit celý strom
 663=Rodokmen
-664=Ascend numbering
-665=Descend numbering
+664=Vzestupné číslování
+665=Sestupné číslování
 666=Statistická analýza dat
 667=Uložit obrázek
 668=Režimy zobrazení
@@ -727,8 +727,8 @@
 726=Krevní skupina
 727=Barva vlasů
 728=Barva očí
-729=mtDNA haplogroup
-730=Y-DNA haplogroup
+729=haploskupina mtDNA
+730=Y-DNA haploskupina
 731=Záznam je uzamčen editorem
 732=Rodné příjmení
 733=Příjmení po sňatku
@@ -740,7 +740,7 @@
 739=Formát "Vdaná"
 740=H
 741=W
-742=Geocoder
+742=Geokodér
 743=Přidat otce
 744=Přidat matku
 745=Zobrazit výchozí portréty
@@ -882,7 +882,7 @@
 878=Najít a nahradit
 879=Najít
 880=Nahradit s
-881=Match case
+881=Porovnat velikost písma
 882=Porovnat zástupné znaky
 883=Celé slovo
 884=Nahradit
@@ -916,31 +916,31 @@
 912=teta
 913=Skrýt manželky potomků
 
-914=blood
-915=uterine
-916=adoptive
-917=adopted
-918=common-law
+914=pokrevní
+915=děložní
+916=adoptivní
+917=adoptován(a)
+918=společná domácnost
 
 919=<?>
 920=<?>
 
 921=-
-922=first
-923=second
-924=third
-925=fourth
-926=fifth
-927=sixth
-928=seventh
-929=eighth
-930=ninth
+922=první
+923=dryhý(á)
+924=třetí
+925=čtvrtý(á)
+926=pátý(á)
+927=šestý(á)
+928=sedmý(á)
+929=osmý(á)
+930=devátý(á)
 
-931=Extended definition of kinship
-932=Use surnames in person selection filter
-933=Use dates of birth in person selection filter
-934=Fact value is empty or invalid
-935=Portrait
+931=Rozšířená definice příbuzenství
+932=Použít příjmení ve filtru výběru osob
+933=Použít data narození ve filtru výběru osob
+934=Faktická hodnota je prázdná nebo neplatná
+935=Portrét
 936=Census analysis
 937=The person can be found in the census `{0}`
 938=History

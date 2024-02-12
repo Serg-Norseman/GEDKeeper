@@ -1,3 +1,21 @@
+## 14.02.2024 [v2.29.0 &amp; v3.5.0]
+- Updated localizations: Hungarian [Kékesi Lajos], German [Christian Bettinger], Dutch [Annelotte], Japanese [難波鷹史] and Czech [Jerry Verner].
+- Added the "Extended locations" option, which includes substitution of full place names depending on the date of events when using the historical ATD hierarchy.
+- Added a tool for batch adding photos.
+- Added support for multiple names and date periods in location records (GEDCOM 5.5 EL).
+- Added a non-standard date attribute to source records (for clarifying and sorting censuses, parish books, confession books and personal documents).
+- Fixed missing empty lines in notes.
+- Fixed an error in attaching unknown (and webp) multimedia files.
+- Added columns for signs of the presence of multimedia, notes and sources to the lists of events/facts.
+- Added a call to quickly view information in the record selection dialog (list pop-up menu).
+- Added a simple definition of the list of censuses in which persons from the database can be found (so far only for the Russian Empire 1718-1859).
+- Fixed stability of setting the storage type when selecting a multimedia file.
+- Restored the original mode for calculating age and lifetime, the dependence of age on the use of the Time Line plugin.
+- Added the feature to add multiple people in the photo viewing window.
+- Restored the possibility of empty value of residence facts.
+- Added localization to Japanese [Takashi Namba (難波鷹史)].
+- Fixed encoding detection when reading CSV files [Alex Zaytsev].
+
 ## 28.10.2023 [v2.28.0 &amp; v3.4.0]
 
 - Updated Hungarian, German and Icelandic localizations.

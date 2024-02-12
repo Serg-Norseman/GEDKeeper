@@ -8,7 +8,7 @@ Unicode true
 !define MUI_ICON "..\projects\GEDKeeper_48.ico"
 
 Name "GEDKeeper"
-OutFile "gedkeeper_3.4.1_win86.exe"
+OutFile "gedkeeper_3.5.0_win86.exe"
 InstallDir $PROGRAMFILES\GEDKeeper3
 
 CRCCheck on
@@ -233,7 +233,7 @@ LangString gkp_navig ${LANG_SPANISH} "Navegador"
 LangString gk_shellopen ${LANG_SPANISH} "Abrir"
 
 !insertmacro MUI_LANGUAGE "Japanese"
-LangString gkreq ${LANG_JAPANESE} "GEDKeeper3 (必要)"
+LangString gkreq ${LANG_JAPANESE} "GEDKeeper3 (必須)"
 LangString gkscr ${LANG_JAPANESE} "スクリプトのサンプル"
 LangString gkreg ${LANG_JAPANESE} "システムの登録"
 LangString gklang ${LANG_JAPANESE} "言語"
@@ -274,6 +274,28 @@ LangString gkp_stdreports ${LANG_HUNGARIAN} "Standard jelentések"
 LangString gkp_navig ${LANG_HUNGARIAN} "Navigátor"
 LangString gk_shellopen ${LANG_HUNGARIAN} "Nyitás"
 
+!insertmacro MUI_LANGUAGE "Dutch"
+LangString gkreq ${LANG_DUTCH} "GEDKeeper3 (required)"
+LangString gkscr ${LANG_DUTCH} "Script samples"
+LangString gkreg ${LANG_DUTCH} "Systeemregistratie"
+LangString gklang ${LANG_DUTCH} "Talen"
+LangString gkplg ${LANG_DUTCH} "Plug-ins"
+LangString gkp_calc ${LANG_DUTCH} "Expression calculator"
+LangString gkp_calendar ${LANG_DUTCH} "Kalender"
+LangString gkp_nb ${LANG_DUTCH} "Names book"
+LangString gkp_timeline ${LANG_DUTCH} "Tijdlijn"
+LangString gkp_flowinput ${LANG_DUTCH} "Flow input"
+LangString gkp_pi ${LANG_DUTCH} "Pedigrees importer"
+LangString gkp_ts ${LANG_DUTCH} "Zoeken op tekst"
+LangString gkp_cl ${LANG_DUTCH} "Conway Life"
+LangString gkp_chron ${LANG_DUTCH} "Chronicle"
+LangString gkp_cloud ${LANG_DUTCH} "Words Cloud"
+LangString gkp_histdata ${LANG_DUTCH} "Historische Data (links)"
+LangString gkp_stdreports ${LANG_DUTCH} "Standaard rapporten"
+LangString gkp_navig ${LANG_DUTCH} "Navigator"
+LangString gk_shellopen ${LANG_DUTCH} "Openen"
+
+
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
 InstallDirRegKey HKLM "Software\GEDKeeper3" "Install_Dir"
@@ -297,12 +319,12 @@ Section "$(gkreq)"
 
     SetOutPath $INSTDIR
 
-    File "..\LICENSE"
-
     CreateDirectory "$INSTDIR\bin"
     SetOutPath "$INSTDIR\bin"
 
     File "..\bin\*.*"
+
+    File "..\LICENSE"
 
     CreateDirectory "$INSTDIR\locales"
     SetOutPath "$INSTDIR\locales"
