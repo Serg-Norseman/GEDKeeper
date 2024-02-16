@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -106,62 +106,66 @@ namespace GKUI.Platform
             return transformStream;
         }
 
-        public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea)
+        public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea, string cachedFile)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
 
-            Bitmap bmp = new Bitmap(stream);
-            Bitmap result = null;
-
             try {
-                int imgWidth, imgHeight;
+                Bitmap bmp = new Bitmap(stream);
+                Bitmap result = null;
 
-                bool cutoutIsEmpty = cutoutArea.IsEmpty();
-                if (cutoutIsEmpty) {
-                    imgWidth = bmp.Width;
-                    imgHeight = bmp.Height;
-                } else {
-                    imgWidth = cutoutArea.Width;
-                    imgHeight = cutoutArea.Height;
-                }
+                try {
+                    int imgWidth, imgHeight;
 
-                bool thumbIsEmpty = (thumbWidth <= 0 && thumbHeight <= 0);
-                if (!thumbIsEmpty) {
-                    float ratio = GfxHelper.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
-                    imgWidth = (int)(imgWidth * ratio);
-                    imgHeight = (int)(imgHeight * ratio);
-                }
-
-                if (cutoutIsEmpty && thumbIsEmpty) {
-                    result = bmp;
-                } else {
-                    Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
-                    using (Graphics graphic = Graphics.FromImage(newImage)) {
-                        graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                        graphic.SmoothingMode = SmoothingMode.HighQuality;
-                        graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                        graphic.CompositingQuality = CompositingQuality.HighQuality;
-
-                        if (cutoutIsEmpty) {
-                            graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
-                        } else {
-                            //Rectangle srcRect = cutoutArea.ToRectangle();
-                            var destRect = new Rectangle(0, 0, imgWidth, imgHeight);
-                            graphic.DrawImage(bmp, destRect,
-                                              cutoutArea.Left, cutoutArea.Top,
-                                              cutoutArea.Width, cutoutArea.Height,
-                                              GraphicsUnit.Pixel);
-                        }
+                    bool cutoutIsEmpty = cutoutArea.IsEmpty();
+                    if (cutoutIsEmpty) {
+                        imgWidth = bmp.Width;
+                        imgHeight = bmp.Height;
+                    } else {
+                        imgWidth = cutoutArea.Width;
+                        imgHeight = cutoutArea.Height;
                     }
-                    result = newImage;
-                }
-            } finally {
-                if (result != bmp)
-                    bmp.Dispose();
-            }
 
-            return new ImageHandler(result);
+                    bool thumbIsEmpty = (thumbWidth <= 0 && thumbHeight <= 0);
+                    if (!thumbIsEmpty) {
+                        float ratio = GfxHelper.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
+                        imgWidth = (int)(imgWidth * ratio);
+                        imgHeight = (int)(imgHeight * ratio);
+                    }
+
+                    if (cutoutIsEmpty && thumbIsEmpty) {
+                        result = bmp;
+                    } else {
+                        Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
+                        using (Graphics graphic = Graphics.FromImage(newImage)) {
+                            graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            graphic.SmoothingMode = SmoothingMode.HighQuality;
+                            graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                            graphic.CompositingQuality = CompositingQuality.HighQuality;
+
+                            if (cutoutIsEmpty) {
+                                graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
+                            } else {
+                                //Rectangle srcRect = cutoutArea.ToRectangle();
+                                var destRect = new Rectangle(0, 0, imgWidth, imgHeight);
+                                graphic.DrawImage(bmp, destRect,
+                                                  cutoutArea.Left, cutoutArea.Top,
+                                                  cutoutArea.Width, cutoutArea.Height,
+                                                  GraphicsUnit.Pixel);
+                            }
+                        }
+                        result = newImage;
+                    }
+                } finally {
+                    if (result != bmp)
+                        bmp.Dispose();
+                }
+
+                return new ImageHandler(result);
+            } finally {
+                stream.Close();
+            }
         }
 
         public IImage LoadImage(string fileName)

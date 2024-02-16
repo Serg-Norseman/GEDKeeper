@@ -37,7 +37,7 @@ namespace GKTests.Stubs
             return inputStream;
         }
 
-        public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea)
+        public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea, string cachedFile)
         {
             return Substitute.For<IImage>();
         }

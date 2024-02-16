@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -48,7 +48,7 @@ namespace GKCore.Design.Graphics
 
         IFont CreateFont(string fontName, float size, bool bold);
 
-        IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea);
+        IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea, string cachedFile);
 
         /// <summary>
         /// Loading an image from a file (already cached by other functions or service images/icons of application).

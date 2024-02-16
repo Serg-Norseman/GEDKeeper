@@ -1303,14 +1303,8 @@ namespace GKCore
                     }
                 }
 
-                if (inputStream != null) {
-                    try {
-                        if (inputStream.Length != 0) {
-                            result = gfxProvider.LoadImage(inputStream, thumbWidth, thumbHeight, cutoutArea);
-                        }
-                    } finally {
-                        inputStream.Dispose();
-                    }
+                if (inputStream != null && inputStream.Length != 0) {
+                    result = gfxProvider.LoadImage(inputStream, thumbWidth, thumbHeight, cutoutArea, cachedFile);
                 }
             } catch (MediaFileNotFoundException) {
                 throw;

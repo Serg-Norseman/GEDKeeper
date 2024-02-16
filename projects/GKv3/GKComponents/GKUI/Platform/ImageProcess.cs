@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih, Ruslan Garipov.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -63,6 +63,21 @@ namespace GKUI.Platform
                 image.Mutate(x => x./*Resize(targetWidth, targetHeight).*/AutoOrient());
                 var encoder = new BmpEncoder() { BitsPerPixel = BmpBitsPerPixel.Pixel16 };
                 image.SaveAsBmp(outputStream, encoder);
+            }
+            return outputStream;
+        }
+
+        public static Stream LoadProblemImage(Stream inputStream, string outputFileName)
+        {
+            var outputStream = new FileStream(outputFileName, FileMode.Create);
+            using (var image = Image.Load<Bgr565>(inputStream)) {
+                image.Mutate(x => x.AutoOrient());
+                var encoder = new BmpEncoder() { BitsPerPixel = BmpBitsPerPixel.Pixel16 };
+                image.SaveAsBmp(outputStream, encoder);
+
+                inputStream.Close();
+
+                outputStream.Seek(0, SeekOrigin.Begin);
             }
             return outputStream;
         }
