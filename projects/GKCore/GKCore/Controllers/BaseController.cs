@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -52,6 +52,16 @@ namespace GKCore.Controllers
 
             using (var dlg = AppHost.ResolveDialog<IRecordInfoDlg>(baseWin)) {
                 dlg.Record = record;
+                await AppHost.Instance.ShowModalAsync(dlg, owner, false);
+            }
+        }
+
+        public static async void ViewTextInfo(IView owner, IBaseWindow baseWin, string text)
+        {
+            if (string.IsNullOrEmpty(text)) return;
+
+            using (var dlg = AppHost.ResolveDialog<IRecordInfoDlg>(baseWin)) {
+                dlg.HyperView.Lines.Text = text;
                 await AppHost.Instance.ShowModalAsync(dlg, owner, false);
             }
         }

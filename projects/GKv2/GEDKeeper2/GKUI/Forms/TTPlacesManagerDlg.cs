@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,8 @@
  */
 
 using System;
+using System.Windows.Forms;
+using GKCore;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
@@ -30,6 +32,7 @@ namespace GKUI.Forms
     public sealed partial class TTPlacesManagerDlg : CommonDialog<IPlacesManagerDlg, PlacesManagerController>, IPlacesManagerDlg
     {
         private GKListView ListPlaces;
+        private ContextMenuStrip contextMenu;
 
         #region View Interface
 
@@ -51,8 +54,16 @@ namespace GKUI.Forms
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
+            var miDetails = new ToolStripMenuItem();
+            miDetails.Text = LangMan.LS(LSID.Details);
+            miDetails.Click += miDetails_Click;
+
+            contextMenu = new ContextMenuStrip();
+            contextMenu.Items.AddRange(new ToolStripItem[] { miDetails });
+
             ListPlaces = UIHelper.CreateListView(Panel4);
             ListPlaces.DoubleClick += ListPlaces_DblClick;
+            ListPlaces.ContextMenuStrip = contextMenu;
 
             fController = new PlacesManagerController(this);
             fController.Init(baseWin);
@@ -64,6 +75,11 @@ namespace GKUI.Forms
                 fController.Clear();
             }
             base.Dispose(disposing);
+        }
+
+        private void miDetails_Click(object sender, EventArgs e)
+        {
+            fController.ShowDetails();
         }
 
         private void btnAnalysePlaces_Click(object sender, EventArgs e)

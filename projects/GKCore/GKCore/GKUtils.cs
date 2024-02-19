@@ -1999,7 +1999,7 @@ namespace GKCore
             }
         }
 
-        private static void ShowDetailCause(GDMCustomEvent evt, StringList summary)
+        public static void ShowDetailCause(GDMCustomEvent evt, StringList summary)
         {
             string cause = GetEventCause(evt);
             if (summary != null && !string.IsNullOrEmpty(cause)) {
@@ -2416,7 +2416,7 @@ namespace GKCore
             }
         }
 
-        private static string GetFactValueStr(GDMCustomEvent evt)
+        public static string GetFactValueStr(GDMCustomEvent evt)
         {
             string result = evt.StringValue;
             if (result.StartsWith(GKData.INFO_HTTP_PREFIX)) {

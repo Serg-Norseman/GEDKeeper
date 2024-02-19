@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,8 +21,8 @@
 using System.Collections.Generic;
 using BSLib;
 using GDModel;
-using GKCore.Design.Controls;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Tools;
 using GKCore.Types;
@@ -52,12 +52,36 @@ namespace GKCore.Controllers
             fPlaces.Dispose();
         }
 
+        public void ShowDetails()
+        {
+            var placeObj = fView.PlacesList.GetSelectedData() as PlaceObj;
+            if (placeObj == null) return;
+
+            var strList = new StringList();
+            strList.Add("[u][b][size=+1]" + placeObj.Name + "[/size][/b][/u]");
+            strList.Add("");
+            strList.Add(LangMan.LS(LSID.Events) + ":");
+            for (int i = 0; i < placeObj.Facts.Count; i++) {
+                var evt = placeObj.Facts[i];
+                strList.Add("");
+
+                string st = GKUtils.GetEventName(evt);
+                strList.Add("  " + st + ": " + GKUtils.GetEventDesc(fBase.Context.Tree, evt));
+            }
+            strList.Add("");
+
+            string result = strList.Text;
+
+            BaseController.ViewTextInfo(fView, fBase, result);
+        }
+
         public void CheckPlaces()
         {
             fView.PlacesList.BeginUpdate();
             try {
+                string fltText = fView.FilterBox.Text;
                 AppHost.Instance.ExecuteWork((controller) => {
-                    TreeTools.SearchPlaces(fBase.Context.Tree, fPlaces, controller, fView.FilterBox.Text);
+                    TreeTools.SearchPlaces(fBase.Context.Tree, fPlaces, controller, fltText);
                 });
 
                 fView.PlacesList.ClearItems();

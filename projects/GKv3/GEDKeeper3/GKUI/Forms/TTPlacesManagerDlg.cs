@@ -21,6 +21,7 @@
 using System;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
+using GKCore;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
@@ -42,6 +43,7 @@ namespace GKUI.Forms
         private GKListView ListPlaces;
         private Label lblFilter;
         private TextBox txtFilter;
+        private ContextMenu contextMenu;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -64,6 +66,15 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
+            var miDetails = new ButtonMenuItem();
+            miDetails.Text = LangMan.LS(LSID.Details);
+            miDetails.Click += miDetails_Click;
+
+            contextMenu = new ContextMenu();
+            contextMenu.Items.AddRange(new MenuItem[] { miDetails });
+
+            ListPlaces.ContextMenu = contextMenu;
+
             fController = new PlacesManagerController(this);
             fController.Init(baseWin);
         }
@@ -74,6 +85,11 @@ namespace GKUI.Forms
                 fController.Clear();
             }
             base.Dispose(disposing);
+        }
+
+        private void miDetails_Click(object sender, EventArgs e)
+        {
+            fController.ShowDetails();
         }
 
         private void btnAnalysePlaces_Click(object sender, EventArgs e)

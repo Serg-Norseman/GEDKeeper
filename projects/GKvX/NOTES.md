@@ -88,6 +88,7 @@ Samsung Galaxy Note 10 Lite |  6.7" (1080x2400) | 393 PPI |  xh | Android 13    
 ASUS Zenfone 8              |  5.9" (1080x2400) | 446 PPI |  xh | Android 12    (API 31) | 2021
 Samsung Galaxy A32          |  6.6" (1080x2340) | 390 PPI |  xh | Android 13    (API 33) | 2022
 Google Pixel 6a             |  6.1" (1080x2400) | 431 PPI |  xh | Android 14    (API 34) | 2022
+Xiaomi 13T                  |  6.7" (2712x1220) | 446 ppi |  xh | Android 14    (API 34) | 2023
 
 # Incomprehensible problems
 
