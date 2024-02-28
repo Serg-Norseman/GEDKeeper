@@ -216,13 +216,17 @@ namespace GKMap
             }
             set {
                 if (fZoom != value && !IsDragging) {
+                    int newZoom;
                     if (value > MaxZoom) {
-                        fZoom = MaxZoom;
+                        newZoom = MaxZoom;
                     } else if (value < MinZoom) {
-                        fZoom = MinZoom;
+                        newZoom = MinZoom;
                     } else {
-                        fZoom = value;
+                        newZoom = value;
                     }
+                    if (fZoom == newZoom) return;
+
+                    fZoom = newZoom;
 
                     fMinOfTiles = fProvider.Projection.GetTileMatrixMinXY(value);
                     fMaxOfTiles = fProvider.Projection.GetTileMatrixMaxXY(value);
