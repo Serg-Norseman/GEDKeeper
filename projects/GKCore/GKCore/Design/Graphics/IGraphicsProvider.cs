@@ -48,6 +48,8 @@ namespace GKCore.Design.Graphics
 
         IFont CreateFont(string fontName, float size, bool bold);
 
+        void FreeImage(ref IImage image);
+
         IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea, string cachedFile);
 
         /// <summary>

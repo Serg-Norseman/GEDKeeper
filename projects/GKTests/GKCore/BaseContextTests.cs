@@ -353,6 +353,9 @@ namespace GKCore
             fContext.Tree.Header.Language = GDMLanguageID.German;
             Assert.IsInstanceOf(typeof(GermanCulture), fContext.Culture);
 
+            fContext.Tree.Header.Language = GDMLanguageID.Czech;
+            Assert.IsInstanceOf(typeof(CzechCulture), fContext.Culture);
+
             fContext.Tree.Header.Language = GDMLanguageID.Polish;
             Assert.IsInstanceOf(typeof(PolishCulture), fContext.Culture);
 

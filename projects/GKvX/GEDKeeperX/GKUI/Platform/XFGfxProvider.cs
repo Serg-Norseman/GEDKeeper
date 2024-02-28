@@ -39,6 +39,37 @@ namespace GKUI.Platform
         {
         }
 
+        public void FreeImage(ref IImage image)
+        {
+            try {
+                if (image == null) return;
+
+                if (image is SKImageHandler) {
+                    var imgHandler = image as SKImageHandler;
+                    if (imgHandler == null) return;
+
+                    var imgDisposable = imgHandler.Handle.Image as IDisposable;
+                    if (imgDisposable == null) return;
+
+                    imgDisposable.Dispose();
+                }
+
+                if (image is XFImageHandler) {
+                    var imgHandler = image as XFImageHandler;
+                    if (imgHandler == null) return;
+
+                    var imgDisposable = imgHandler.Handle as IDisposable;
+                    if (imgDisposable == null) return;
+
+                    imgDisposable.Dispose();
+                }
+
+                image = null;
+            } catch (Exception ex) {
+                Logger.WriteError("XFGfxProvider.FreeImage()", ex);
+            }
+        }
+
         public Stream CheckOrientation(Stream inputStream)
         {
             return inputStream;

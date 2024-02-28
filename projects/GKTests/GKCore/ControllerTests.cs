@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -80,8 +80,18 @@ namespace GKCore.Controllers
             view.Country.Text = "sample country";
 
             controller.Accept();
+            controller.UpdateView();
 
             Assert.AreEqual("sample country", addr.AddressCountry);
+        }
+
+        private static IBaseWindow GetBaseSubst()
+        {
+            var baseContext = Substitute.For<IBaseContext>();
+            baseContext.Tree.Returns(new GDMTree());
+            var baseWin = Substitute.For<IBaseWindow>();
+            baseWin.Context.Returns(baseContext);
+            return baseWin;
         }
 
         [Test]
@@ -100,11 +110,7 @@ namespace GKCore.Controllers
             Assert.IsNotNull(view.Person);
             Assert.IsNotNull(view.Relation);
 
-            var baseContext = Substitute.For<IBaseContext>();
-            baseContext.Tree.Returns(new GDMTree());
-            var baseWin = Substitute.For<IBaseWindow>();
-            baseWin.Context.Returns(baseContext);
-            var tree = baseContext.Tree;
+            var baseWin = GetBaseSubst();
             var association = new GDMAssociation(); // for xref pointers to work
 
             var controller = new AssociationEditDlgController(view);
@@ -122,18 +128,18 @@ namespace GKCore.Controllers
             // the relation is empty, an exception will be thrown, accept will be false
             Assert.IsFalse(controller.Accept());
 
-            var relValue = "test relation";
-            var relPerson = tree.CreateIndividual();
-
             // substitutes of values
+            var relValue = "test relation";
             view.Relation.Text.Returns(relValue);
+            var relPerson = baseWin.Context.Tree.CreateIndividual();
             baseWin.Context.SelectPerson(view, null, TargetMode.tmNone, GDMSex.svUnknown).Returns(relPerson);
 
             controller.SetPerson();
 
             Assert.IsTrue(controller.Accept());
+            controller.UpdateView();
             Assert.AreEqual(relValue, association.Relation);
-            Assert.AreEqual(relPerson, tree.GetPtrValue(association));
+            Assert.AreEqual(relPerson, baseWin.Context.Tree.GetPtrValue(association));
         }
 
         [Test]
@@ -154,7 +160,20 @@ namespace GKCore.Controllers
         public void Test_CommonFilterDlgController()
         {
             var view = Substitute.For<ICommonFilterDlg>();
-            //var controller = new CommonFilterDlgController(view);
+
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<IButton>(view, "btnReset");
+            SubstituteControl<ITabPage>(view, "pageFieldsFilter");
+
+            view.FilterGrid.Returns(Substitute.For<IFilterGridView>());
+
+            var listMan = new NoteListModel(fBaseWin.Context);
+            var controller = new CommonFilterDlgController(view, listMan);
+
+            controller.Accept();
+            controller.UpdateView();
+            controller.Reset();
         }
 
         [Test]
@@ -184,6 +203,7 @@ namespace GKCore.Controllers
             view.Name.Text = "sample theme";
 
             controller.Accept();
+            controller.UpdateView();
 
             Assert.AreEqual("sample theme", comm.CommName);
         }
@@ -192,28 +212,141 @@ namespace GKCore.Controllers
         public void Test_DayTipsDlgController()
         {
             var view = Substitute.For<IDayTipsDlg>();
-            //var controller = new DayTipsDlgController(view);
+
+            SubstituteControl<IButton>(view, "btnClose");
+            SubstituteControl<IButton>(view, "btnNextTip");
+            SubstituteControl<ICheckBox>(view, "chkShow");
+            SubstituteControl<ILabel>(view, "lblTitle");
+
+            view.TitleLabel.Returns(Substitute.For<ILabel>());
+            view.TipText.Returns(Substitute.For<ITextContainer>());
+            view.NextButton.Returns(Substitute.For<IButton>());
+
+            var controller = new DayTipsDlgController(view);
+
+            controller.GetNextTip();
+            controller.UpdateView();
         }
 
         [Test]
         public void Test_EventEditDlgController()
         {
             var view = Substitute.For<IEventEditDlg>();
-            //var controller = new EventEditDlgController(view);
+
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<IButton>(view, "btnAddress");
+            SubstituteControl<IButton>(view, "btnPlaceAdd");
+            SubstituteControl<IButton>(view, "btnPlaceDelete");
+            SubstituteControl<ITabPage>(view, "pageCommon");
+            SubstituteControl<ITabPage>(view, "pageNotes");
+            SubstituteControl<ITabPage>(view, "pageMultimedia");
+            SubstituteControl<ITabPage>(view, "pageSources");
+            SubstituteControl<ILabel>(view, "lblEvent");
+            SubstituteControl<ILabel>(view, "lblAttrValue");
+            SubstituteControl<ILabel>(view, "lblPlace");
+            SubstituteControl<ILabel>(view, "lblDate");
+            SubstituteControl<ILabel>(view, "lblCause");
+            SubstituteControl<ILabel>(view, "lblOrg");
+
+            view.EventType.Returns(Substitute.For<IComboBox>());
+            view.Date.Returns(Substitute.For<IDateControl>());
+            view.Attribute.Returns(Substitute.For<IComboBox>());
+            view.Place.Returns(Substitute.For<ITextBox>());
+            view.EventName.Returns(Substitute.For<ITextBox>());
+            view.Cause.Returns(Substitute.For<ITextBox>());
+            view.Agency.Returns(Substitute.For<ITextBox>());
+            view.NotesList.Returns(Substitute.For<ISheetList>());
+            view.MediaList.Returns(Substitute.For<ISheetList>());
+            view.SourcesList.Returns(Substitute.For<ISheetList>());
+
+            var controller = new EventEditDlgController(view);
         }
 
         [Test]
         public void Test_FamilyEditDlgController()
         {
             var view = Substitute.For<IFamilyEditDlg>();
-            //var controller = new FamilyEditDlgController(view);
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<ITabPage>(view, "pageChilds");
+            SubstituteControl<ITabPage>(view, "pageEvents");
+            SubstituteControl<ITabPage>(view, "pageNotes");
+            SubstituteControl<ITabPage>(view, "pageMultimedia");
+            SubstituteControl<ITabPage>(view, "pageSources");
+            SubstituteControl<IGroupBox>(view, "GroupBox1");
+            SubstituteControl<ILabel>(view, "lblHusband");
+            SubstituteControl<ILabel>(view, "lblWife");
+            SubstituteControl<ILabel>(view, "lblStatus");
+            SubstituteControl<ILabel>(view, "lblRestriction");
+
+            view.NotesList.Returns(Substitute.For<ISheetList>());
+            view.MediaList.Returns(Substitute.For<ISheetList>());
+            view.SourcesList.Returns(Substitute.For<ISheetList>());
+            view.ChildrenList.Returns(Substitute.For<ISheetList>());
+            view.EventsList.Returns(Substitute.For<ISheetList>());
+
+            var controller = new FamilyEditDlgController(view);
+
+            var baseWin = GetBaseSubst();
+            controller.Init(baseWin);
+
+            var fam = baseWin.Context.Tree.CreateFamily();
+
+            controller.FamilyRecord = fam;
+            Assert.AreEqual(fam, controller.FamilyRecord);
+
+            var relHusband = baseWin.Context.Tree.CreateIndividual();
+            relHusband.Sex = GDMSex.svMale;
+            baseWin.Context.SelectPerson(view, null, TargetMode.tmSpouse, GDMSex.svMale).Returns(relHusband);
+
+            controller.AddHusband();
+
+            var relWife = baseWin.Context.Tree.CreateIndividual();
+            relWife.Sex = GDMSex.svFemale;
+            baseWin.Context.SelectPerson(view, relHusband, TargetMode.tmSpouse, GDMSex.svFemale).Returns(relWife);
+
+            controller.AddWife();
+
+            controller.UpdateView();
+            controller.Accept();
+
+            Assert.AreEqual(relHusband, baseWin.Context.Tree.GetPtrValue(fam.Husband));
+            Assert.AreEqual(relWife, baseWin.Context.Tree.GetPtrValue(fam.Wife));
+
+            controller.JumpToHusband();
+            controller.JumpToWife();
+
+            //controller.DeleteHusband();
+            //controller.DeleteWife();
         }
 
         [Test]
         public void Test_FilePropertiesDlgController()
         {
             var view = Substitute.For<IFilePropertiesDlg>();
-            //var controller = new FilePropertiesDlgController(view);
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<ITabPage>(view, "pageAuthor");
+            SubstituteControl<ITabPage>(view, "pageOther");
+            SubstituteControl<ILabel>(view, "lblName");
+            SubstituteControl<ILabel>(view, "lblAddress");
+            SubstituteControl<ILabel>(view, "lblTelephone");
+            SubstituteControl<ILabel>(view, "lblLanguage");
+
+            view.RecordStats.Returns(Substitute.For<IListView>());
+            view.Language.Returns(Substitute.For<ITextBox>());
+            view.Name.Returns(Substitute.For<ITextBox>());
+            view.Address.Returns(Substitute.For<ITextBox>());
+            view.Tel.Returns(Substitute.For<ITextBox>());
+
+            var controller = new FilePropertiesDlgController(view);
+
+            var baseWin = GetBaseSubst();
+            controller.Init(baseWin);
+
+            controller.UpdateView();
+            controller.Accept();
         }
 
         [Test]
@@ -249,6 +382,7 @@ namespace GKCore.Controllers
             view.Name.Text = "sample group";
 
             controller.Accept();
+            controller.UpdateView();
 
             Assert.AreEqual("sample group", group.GroupName);
 
@@ -284,6 +418,7 @@ namespace GKCore.Controllers
             // substitutes of values
             view.LanguageCombo.GetSelectedTag<GDMLanguageID>().Returns(langValue);
 
+            controller.UpdateView();
             Assert.IsTrue(controller.Accept());
             Assert.AreEqual(langValue, controller.LanguageID);
         }
@@ -334,6 +469,7 @@ namespace GKCore.Controllers
             view.Name.Text = "sample location";
 
             controller.Accept();
+            controller.UpdateView();
 
             Assert.AreEqual("sample location", locRec.LocationName);
 
@@ -453,7 +589,19 @@ namespace GKCore.Controllers
         public void Test_QuickSearchDlgController()
         {
             var view = Substitute.For<IQuickSearchDlg>();
-            //var controller = new QuickSearchDlgController(view);
+            SubstituteControl<IButton>(view, "btnPrev");
+            SubstituteControl<IButton>(view, "btnNext");
+
+            view.SearchPattern.Returns(Substitute.For<ITextBox>());
+
+            var baseWin = GetBaseSubst();
+            var controller = new QuickSearchDlgController(view, baseWin);
+
+            controller.UpdateView();
+
+            controller.ChangeText();
+            controller.FindNext();
+            controller.FindPrev();
         }
 
         [Test]
@@ -481,14 +629,59 @@ namespace GKCore.Controllers
         public void Test_RelationshipCalculatorDlgController()
         {
             var view = Substitute.For<IRelationshipCalculatorDlg>();
-            //var controller = new RelationshipCalculatorDlgController(view);
+
+            SubstituteControl<IButton>(view, "btnClose");
+            SubstituteControl<IButton>(view, "btnRec1Select");
+            SubstituteControl<IButton>(view, "btnRec2Select");
+            SubstituteControl<ILabel>(view, "lblKinship");
+            SubstituteControl<IButton>(view, "btnSwap");
+
+            var controller = new RelationshipCalculatorDlgController(view);
+
+            var baseWin = GetBaseSubst();
+            controller.Init(baseWin);
+
+            controller.SetRec1(null);
+            controller.SetRec2(null);
+
+            var relRec1 = baseWin.Context.Tree.CreateIndividual();
+            baseWin.Context.SelectRecord(view, GDMRecordType.rtIndividual, null).Returns(relRec1);
+            controller.SelectRec1();
+
+            var relRec2 = baseWin.Context.Tree.CreateIndividual();
+            baseWin.Context.SelectRecord(view, GDMRecordType.rtIndividual, null).Returns(relRec2);
+            controller.SelectRec2();
+
+            controller.UpdateView();
+
+            controller.Swap();
         }
 
         [Test]
         public void Test_RepositoryEditDlgController()
         {
             var view = Substitute.For<IRepositoryEditDlg>();
-            //var controller = new RepositoryEditDlgController(view);
+
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<ITabPage>(view, "pageNotes");
+            SubstituteControl<IButton>(view, "btnAddress");
+            SubstituteControl<ILabel>(view, "lblName");
+
+            view.NotesList.Returns(Substitute.For<ISheetList>());
+
+            var controller = new RepositoryEditDlgController(view);
+
+            var baseWin = GetBaseSubst();
+            controller.Init(baseWin);
+
+            var rep = baseWin.Context.Tree.CreateRepository();
+
+            controller.RepositoryRecord = rep;
+            Assert.AreEqual(rep, controller.RepositoryRecord);
+
+            controller.UpdateView();
+            controller.Accept();
         }
 
         [Test]
@@ -567,6 +760,8 @@ namespace GKCore.Controllers
 
             var controller = new TreeCheckController(view);
             controller.Init(fBaseWin);
+
+            controller.UpdateView();
         }
 
         [Test]
@@ -585,6 +780,8 @@ namespace GKCore.Controllers
 
             var controller = new TreeCompareController(view);
             controller.Init(fBaseWin);
+
+            controller.UpdateView();
         }
 
         [Test]
@@ -610,6 +807,8 @@ namespace GKCore.Controllers
 
             var controller = new TreeMergeController(view);
             controller.Init(fBaseWin);
+
+            controller.UpdateView();
         }
 
         [Test]
@@ -630,6 +829,8 @@ namespace GKCore.Controllers
 
             GDMIndividualRecord iRec = fBaseWin.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
             Assert.IsNotNull(iRec);
+
+            controller.UpdateView();
 
             controller.Select(iRec, Tools.TreeTools.TreeWalkMode.twmAll);
 
@@ -659,6 +860,7 @@ namespace GKCore.Controllers
             view.RefType.Text = "sample text3";
 
             controller.Accept();
+            controller.UpdateView();
 
             Assert.AreEqual("sample text2", userRef.StringValue);
             Assert.AreEqual("sample text3", userRef.ReferenceType);

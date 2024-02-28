@@ -61,24 +61,33 @@ namespace GDModel
         protected override string GetStringValue()
         {
             string result;
-            if (!fDateAfter.IsEmpty() && !fDateBefore.IsEmpty()) {
+
+            bool aftEmpty = fDateAfter.IsEmpty();
+            bool befEmpty = fDateBefore.IsEmpty();
+
+            if (!aftEmpty && !befEmpty) {
                 result = string.Concat(GEDCOMConsts.GEDCOMDateRangeArray[2], " ", fDateAfter.StringValue, " ", GEDCOMConsts.GEDCOMDateRangeArray[3], " ", fDateBefore.StringValue);
-            } else if (!fDateAfter.IsEmpty()) {
+            } else if (!aftEmpty) {
                 result = GEDCOMConsts.GEDCOMDateRangeArray[0] + " " + fDateAfter.StringValue;
-            } else if (!fDateBefore.IsEmpty()) {
+            } else if (!befEmpty) {
                 result = GEDCOMConsts.GEDCOMDateRangeArray[1] + " " + fDateBefore.StringValue;
             } else {
                 result = "";
             }
+
             return result;
         }
 
         public override DateTime GetDateTime()
         {
             DateTime result;
-            if (fDateAfter.IsEmpty()) {
+
+            bool aftEmpty = fDateAfter.IsEmpty();
+            bool befEmpty = fDateBefore.IsEmpty();
+
+            if (aftEmpty) {
                 result = fDateBefore.GetDateTime();
-            } else if (fDateBefore.IsEmpty()) {
+            } else if (befEmpty) {
                 result = fDateAfter.GetDateTime();
             } else {
                 result = new DateTime(0);
@@ -125,12 +134,15 @@ namespace GDModel
         {
             UDN result;
 
-            if (fDateAfter.StringValue == "" && fDateBefore.StringValue != "") {
-                result = UDN.CreateBefore(fDateBefore.GetUDN());
-            } else if (fDateAfter.StringValue != "" && fDateBefore.StringValue == "") {
-                result = UDN.CreateAfter(fDateAfter.GetUDN());
-            } else if (fDateAfter.StringValue != "" && fDateBefore.StringValue != "") {
+            bool aftEmpty = fDateAfter.IsEmpty();
+            bool befEmpty = fDateBefore.IsEmpty();
+
+            if (!aftEmpty && !befEmpty) {
                 result = UDN.CreateBetween(fDateAfter.GetUDN(), fDateBefore.GetUDN(), false);
+            } else if (!aftEmpty) {
+                result = UDN.CreateAfter(fDateAfter.GetUDN());
+            } else if (!befEmpty) {
+                result = UDN.CreateBefore(fDateBefore.GetUDN());
             } else {
                 result = UDN.CreateUnknown();
             }
@@ -140,15 +152,12 @@ namespace GDModel
 
         public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar, bool shorten = false)
         {
-            string result = "";
+            string result;
 
-            if (fDateAfter.StringValue == "" && fDateBefore.StringValue != "") {
-                result = fDateBefore.GetDisplayString(format, true, showCalendar);
-                if (sign) result = "< " + result;
-            } else if (fDateAfter.StringValue != "" && fDateBefore.StringValue == "") {
-                result = fDateAfter.GetDisplayString(format, true, showCalendar);
-                if (sign) result += " >";
-            } else if (fDateAfter.StringValue != "" && fDateBefore.StringValue != "") {
+            bool aftEmpty = fDateAfter.IsEmpty();
+            bool befEmpty = fDateBefore.IsEmpty();
+
+            if (!aftEmpty && !befEmpty) {
                 var dateAfter = fDateAfter.GetDisplayString(format, true, showCalendar);
                 var dateBefore = fDateBefore.GetDisplayString(format, true, showCalendar);
 
@@ -164,6 +173,14 @@ namespace GDModel
                 } else {
                     result = dateAfter + " - " + dateBefore;
                 }
+            } else if (!aftEmpty) {
+                result = fDateAfter.GetDisplayString(format, true, showCalendar);
+                if (sign) result += " >";
+            } else if (!befEmpty) {
+                result = fDateBefore.GetDisplayString(format, true, showCalendar);
+                if (sign) result = "< " + result;
+            } else {
+                result = "";
             }
 
             return result;

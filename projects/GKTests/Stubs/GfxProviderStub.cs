@@ -32,6 +32,10 @@ namespace GKTests.Stubs
         {
         }
 
+        public void FreeImage(ref IImage image)
+        {
+        }
+
         public Stream CheckOrientation(Stream inputStream)
         {
             return inputStream;

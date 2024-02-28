@@ -203,14 +203,16 @@ namespace GKCore
 
         public static string HyperLink(string xref, string text, int num = 0)
         {
-            string result = "";
+            string result;
 
             if (!string.IsNullOrEmpty(xref) && string.IsNullOrEmpty(text)) {
                 text = "???";
             }
 
             if (!string.IsNullOrEmpty(xref) && !string.IsNullOrEmpty(text)) {
-                result = "[url=" + xref + "]" + text + "[/url]";
+                result = string.Concat("[url=", xref, "]", text, "[/url]");
+            } else {
+                result = "";
             }
 
             return result;
@@ -711,10 +713,10 @@ namespace GKCore
             if (iAttr.HasPlace) {
                 place = iAttr.Place.StringValue;
                 if (place != "") {
-                    place = " [" + place + "]";
+                    place = string.Concat(" [", place, "]");
                 }
             }
-            return st + ": " + iAttr.StringValue + place;
+            return string.Concat(st, ": ", iAttr.StringValue, place);
         }
 
         public static string GetEventStr(GDMCustomEvent evt)
@@ -724,9 +726,9 @@ namespace GKCore
 
             string attrVal = (IsAttribute(evt) && !string.IsNullOrEmpty(evt.StringValue)) ? string.Format(" `{0}`", evt.StringValue) : string.Empty;
 
-            string result = dt + ": " + st + attrVal + ".";
+            string result = string.Concat(dt, ": ", st, attrVal, ".");
             if (evt.HasPlace && evt.Place.StringValue != "") {
-                result = result + " " + LangMan.LS(LSID.Place) + ": " + evt.Place.StringValue;
+                result = string.Concat(result, " ", LangMan.LS(LSID.Place), ": ", evt.Place.StringValue);
             }
             return result;
         }
@@ -779,7 +781,7 @@ namespace GKCore
                 if (result != "") {
                     result += " ";
                 }
-                result = result + "[" + evt.Agency + "]";
+                result = string.Concat(result, "[", evt.Agency, "]");
             }
 
             return result;
@@ -2067,66 +2069,62 @@ namespace GKCore
 
         private static void ShowPersonExtInfo(GDMTree tree, GDMIndividualRecord iRec, StringList summary)
         {
-            /*if (tree == null || iRec == null || summary == null) return;
+            if (tree == null || iRec == null || summary == null) return;
+
+            if (!GlobalOptions.Instance.ShowIndiAssociations) return;
 
             summary.Add("");
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++) {
-        		GEDCOMRecord rec = tree[i];
-                if (rec.RecordType != GEDCOMRecordType.rtIndividual) continue;
+                GDMRecord rec = tree[i];
+                if (rec.RecordType != GDMRecordType.rtIndividual) continue;
 
-                GEDCOMIndividualRecord ir = (GEDCOMIndividualRecord)rec;
+                GDMIndividualRecord ir = (GDMIndividualRecord)rec;
+                if (!ir.HasAssociations) continue;
 
                 bool first = true;
                 for (int k = 0, cnt = ir.Associations.Count; k < cnt; k++) {
-                    GEDCOMAssociation asso = ir.Associations[k];
+                    GDMAssociation asso = ir.Associations[k];
 
-                    if (asso.Individual == iRec) {
+                    if (asso.XRef == iRec.XRef) {
                         if (first) {
                             summary.Add(LangMan.LS(LSID.Associations) + ":");
                             first = false;
                         }
-                        summary.Add("    " + HyperLink(ir.XRef, ir.GetNameString(true, false), 0));
+                        summary.Add("    " + HyperLink(ir.XRef, GetNameString(ir, true, false)));
                     }
                 }
-            }*/
+            }
         }
 
         private static void ShowPersonNamesakes(GDMTree tree, GDMIndividualRecord iRec, StringList summary)
         {
+            if (!GlobalOptions.Instance.ShowIndiNamesakes) return;
+
             try {
-                StringList namesakes = new StringList();
-                try {
-                    string st = GetNameString(iRec, false);
+                var namesakes = new List<string>();
+                string st = GetNameString(iRec, false);
 
-                    int num3 = tree.RecordsCount;
-                    for (int i = 0; i < num3; i++) {
-                        GDMRecord rec = tree[i];
+                int num3 = tree.RecordsCount;
+                for (int i = 0; i < num3; i++) {
+                    GDMRecord rec = tree[i];
+                    if (rec.RecordType != GDMRecordType.rtIndividual || rec == iRec) continue;
 
-                        if (rec is GDMIndividualRecord && rec != iRec) {
-                            GDMIndividualRecord relPerson = (GDMIndividualRecord) rec;
-
-                            string unk = GetNameString(relPerson, false);
-                            if (st == unk) {
-                                namesakes.AddObject(unk + GetLifeStr(relPerson), relPerson);
-                            }
-                        }
-                    }
-
-                    if (namesakes.Count > 0) {
-                        summary.Add("");
-                        summary.Add(LangMan.LS(LSID.Namesakes) + ":");
-
-                        int num4 = namesakes.Count;
-                        for (int i = 0; i < num4; i++) {
-                            GDMIndividualRecord relPerson = (GDMIndividualRecord)namesakes.GetObject(i);
-
-                            summary.Add("    " + HyperLink(relPerson.XRef, namesakes[i], 0));
-                        }
+                    GDMIndividualRecord relPerson = (GDMIndividualRecord)rec;
+                    string unk = GetNameString(relPerson, false);
+                    if (st == unk) {
+                        namesakes.Add(HyperLink(relPerson.XRef, unk + GetLifeStr(relPerson)));
                     }
                 }
-                finally {
-                    namesakes.Dispose();
+
+                if (namesakes.Count > 0) {
+                    summary.Add("");
+                    summary.Add(LangMan.LS(LSID.Namesakes) + ":");
+
+                    int num4 = namesakes.Count;
+                    for (int i = 0; i < num4; i++) {
+                        summary.Add("    " + namesakes[i]);
+                    }
                 }
             } catch (Exception ex) {
                 Logger.WriteError("GKUtils.ShowPersonNamesakes()", ex);
@@ -3434,27 +3432,23 @@ namespace GKCore
             if (family == null)
                 throw new ArgumentNullException("family");
 
-            string result = "";
+            string husband, wife;
 
             GDMIndividualRecord spouse = tree.GetPtrValue(family.Husband);
             if (spouse == null) {
-                if (unkHusband == null) unkHusband = "?";
-                result += unkHusband;
+                husband = (unkHusband == null) ? "?" : unkHusband;
             } else {
-                result += GetNameString(spouse, false);
+                husband = GetNameString(spouse, false);
             }
-
-            result += " - ";
 
             spouse = tree.GetPtrValue(family.Wife);
             if (spouse == null) {
-                if (unkWife == null) unkWife = "?";
-                result += unkWife;
+                wife = (unkWife == null) ? "?" : unkWife;
             } else {
-                result += GetNameString(spouse, false);
+                wife = GetNameString(spouse, false);
             }
 
-            return result;
+            return string.Concat(husband, " - ", wife);
         }
 
         public static string GetNickString(GDMIndividualRecord iRec)
@@ -3480,16 +3474,16 @@ namespace GKCore
                     case WomanSurnameFormat.wsfMaiden_Married:
                         result = defSurname;
                         if (marriedSurname.Length > 0) {
-                            if (result.Length > 0) result += " ";
-                            result += "(" + marriedSurname + ")";
+                            string op = (result.Length > 0) ? " (" : "(";
+                            result = string.Concat(result, op, marriedSurname, ")");
                         }
                         break;
 
                     case WomanSurnameFormat.wsfMarried_Maiden:
                         result = marriedSurname;
                         if (defSurname.Length > 0) {
-                            if (result.Length > 0) result += " ";
-                            result += "(" + defSurname + ")";
+                            string op = (result.Length > 0) ? " (" : "(";
+                            result = string.Concat(result, op, defSurname, ")");
                         }
                         break;
 
@@ -3532,14 +3526,14 @@ namespace GKCore
             surname = GetFmtSurname(iRec.Sex, np, surname);
 
             if (firstSurname) {
-                result = surname + " " + firstPart;
+                result = string.Concat(surname, " ", firstPart);
             } else {
-                result = firstPart + " " + surname;
+                result = string.Concat(firstPart, " ", surname);
             }
 
             if (includePieces) {
                 string nick = np.Nickname;
-                if (!string.IsNullOrEmpty(nick)) result = result + " [" + nick + "]";
+                if (!string.IsNullOrEmpty(nick)) result = string.Concat(result, " [", nick, "]");
             }
 
             return result.Trim();

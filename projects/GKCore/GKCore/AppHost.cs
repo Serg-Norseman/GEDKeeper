@@ -104,6 +104,10 @@ namespace GKCore
             fTips = new StringList();
         }
 
+        protected virtual void ApplicationExit()
+        {
+        }
+
         private void AutosaveTimer_Tick(object sender, EventArgs e)
         {
             try {

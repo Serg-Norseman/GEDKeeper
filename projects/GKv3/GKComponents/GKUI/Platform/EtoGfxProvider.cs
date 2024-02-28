@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -37,6 +37,25 @@ namespace GKUI.Platform
     {
         public EtoGfxProvider()
         {
+        }
+
+        public void FreeImage(ref IImage image)
+        {
+            try {
+                if (image == null) return;
+
+                var imgHandler = image as ImageHandler;
+                if (imgHandler == null) return;
+
+                var imgDisposable = imgHandler.Handle as IDisposable;
+                if (imgDisposable == null) return;
+
+                imgDisposable.Dispose();
+
+                image = null;
+            } catch (Exception ex) {
+                Logger.WriteError("EtoGfxProvider.FreeImage()", ex);
+            }
         }
 
         public Stream CheckOrientation(Stream inputStream)

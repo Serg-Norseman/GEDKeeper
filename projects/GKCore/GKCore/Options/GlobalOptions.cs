@@ -259,6 +259,10 @@ namespace GKCore.Options
 
         public bool ShowDatesSign { get; set; }
 
+        public bool ShowIndiAssociations { get; set; }
+
+        public bool ShowIndiNamesakes { get; set; }
+
         public bool ShowTips { get; set; }
 
         public bool SurnameFirstInOrder { get; set; }
@@ -388,6 +392,9 @@ namespace GKCore.Options
             WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
             UseSurnamesInPersonSelectionFilter = false;
             UseBirthDatesInPersonSelectionFilter = false;
+
+            ShowIndiAssociations = false;
+            ShowIndiNamesakes = true;
         }
 
         public void ResetDefaults_Specials()

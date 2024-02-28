@@ -40,6 +40,25 @@ namespace GKUI.Platform
         {
         }
 
+        public void FreeImage(ref IImage image)
+        {
+            try {
+                if (image == null) return;
+
+                var imgHandler = image as ImageHandler;
+                if (imgHandler == null) return;
+
+                var imgDisposable = imgHandler.Handle as IDisposable;
+                if (imgDisposable == null) return;
+
+                imgDisposable.Dispose();
+
+                image = null;
+            } catch (Exception ex) {
+                Logger.WriteError("WFGfxProvider.FreeImage()", ex);
+            }
+        }
+
         private static void NormalizeOrientation(Image image)
         {
             const int ExifOrientationTagId = 274;

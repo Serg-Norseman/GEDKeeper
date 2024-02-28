@@ -200,7 +200,7 @@ namespace GDModel
         /// <summary>
         /// Internal helper method for parser
         /// </summary>
-        internal void SetRawData(GDMApproximated approximated, GDMCalendar calendar, 
+        internal void SetRawData(GDMApproximated approximated, GDMCalendar calendar,
                                  short year, bool yearBC, string yearModifier, byte month, byte day)
         {
             fApproximated = approximated;
@@ -219,8 +219,7 @@ namespace GDModel
         public static string[] GetMonthNames(GDMCalendar calendar)
         {
             string[] monthes;
-            switch (calendar)
-            {
+            switch (calendar) {
                 case GDMCalendar.dcGregorian:
                 case GDMCalendar.dcJulian:
                 case GDMCalendar.dcRoman:
@@ -267,22 +266,23 @@ namespace GDModel
 
         protected override string GetStringValue()
         {
-            var parts = new List<string>(5);
+            var parts = new string[5];
+            int pIdx = 0;
             if (fApproximated != GDMApproximated.daExact) {
-                parts.Add(GEDCOMConsts.GEDCOMDateApproximatedArray[(int)fApproximated]);
+                parts[pIdx++] = GEDCOMConsts.GEDCOMDateApproximatedArray[(int)fApproximated];
             }
 
             if (fCalendar != GDMCalendar.dcGregorian) {
-                parts.Add(GEDCOMConsts.GEDCOMDateEscapeArray[(int)fCalendar]);
+                parts[pIdx++] = GEDCOMConsts.GEDCOMDateEscapeArray[(int)fCalendar];
             }
 
             if (fDay > 0) {
-                parts.Add(fDay.ToString("D2"));
+                parts[pIdx++] = fDay.ToString("D2");
             }
 
             if (fMonth > 0) {
                 string[] months = GetMonthNames(fCalendar);
-                parts.Add(months[fMonth - 1]);
+                parts[pIdx++] = months[fMonth - 1];
             }
 
             if (fYear != UNKNOWN_YEAR) {
@@ -295,10 +295,10 @@ namespace GDModel
                     yearStr += GEDCOMConsts.YearBC;
                 }
 
-                parts.Add(yearStr);
+                parts[pIdx++] = yearStr;
             }
 
-            return string.Join(" ", parts);
+            return string.Join(" ", parts, 0, pIdx);
         }
 
         private static byte GetMonthNumber(GDMCalendar calendar, string strMonth)
@@ -526,7 +526,8 @@ namespace GDModel
 
         public string GetDisplayString(DateFormat format, bool includeBC = false, bool showCalendar = false)
         {
-            string result = "";
+            var parts = new string[5];
+            int pIdx = 0;
 
             int year = fYear;
             int month = fMonth;
@@ -536,44 +537,39 @@ namespace GDModel
             if (year > 0 || month > 0 || day > 0) {
                 switch (format) {
                     case DateFormat.dfDD_MM_YYYY:
-                        result += day > 0 ? ConvertHelper.AdjustNumber(day, 2) + "." : "__.";
-                        result += month > 0 ? ConvertHelper.AdjustNumber(month, 2) + "." : "__.";
-                        result += year > 0 ? year.ToString().PadLeft(4, '_') : "____";
+                        parts[pIdx++] = day > 0 ? ConvertHelper.AdjustNumber(day, 2) + "." : "__.";
+                        parts[pIdx++] = month > 0 ? ConvertHelper.AdjustNumber(month, 2) + "." : "__.";
+                        parts[pIdx++] = year > 0 ? year.ToString().PadLeft(4, '_') : "____";
+                        if (includeBC && ybc) {
+                            parts[pIdx++] = " BC";
+                        }
                         break;
 
                     case DateFormat.dfYYYY_MM_DD:
-                        result += year > 0 ? year.ToString().PadLeft(4, '_') + "." : "____.";
-                        result += month > 0 ? ConvertHelper.AdjustNumber(month, 2) + "." : "__.";
-                        result += day > 0 ? ConvertHelper.AdjustNumber(day, 2) : "__";
+                        if (includeBC && ybc) {
+                            parts[pIdx++] = "BC ";
+                        }
+                        parts[pIdx++] = year > 0 ? year.ToString().PadLeft(4, '_') + "." : "____.";
+                        parts[pIdx++] = month > 0 ? ConvertHelper.AdjustNumber(month, 2) + "." : "__.";
+                        parts[pIdx++] = day > 0 ? ConvertHelper.AdjustNumber(day, 2) : "__";
                         break;
 
                     case DateFormat.dfYYYY:
                         if (year > 0) {
-                            result = year.ToString().PadLeft(4, '_');
+                            if (includeBC && ybc) {
+                                parts[pIdx++] = "BC ";
+                            }
+                            parts[pIdx++] = year.ToString().PadLeft(4, '_');
                         }
                         break;
                 }
             }
 
-            if (includeBC && ybc) {
-                switch (format) {
-                    case DateFormat.dfDD_MM_YYYY:
-                        result = result + " BC";
-                        break;
-                    case DateFormat.dfYYYY_MM_DD:
-                        result = "BC " + result;
-                        break;
-                    case DateFormat.dfYYYY:
-                        result = "BC " + result;
-                        break;
-                }
-            }
-
             if (showCalendar) {
-                result = result + GKUtils.GetCalendarSign(fCalendar);
+                parts[pIdx] = GKUtils.GetCalendarSign(fCalendar);
             }
 
-            return result;
+            return string.Concat(parts);
         }
 
         public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar, bool shorten = false)

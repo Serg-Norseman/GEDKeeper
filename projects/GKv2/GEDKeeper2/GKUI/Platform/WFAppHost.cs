@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -62,6 +62,7 @@ namespace GKUI.Platform
 
         private void OnApplicationExit(object sender, EventArgs e)
         {
+            ApplicationExit();
             //AppHost.Instance.SaveLastBases();
         }
 
