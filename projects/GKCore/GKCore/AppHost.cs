@@ -678,17 +678,18 @@ namespace GKCore
             if (string.IsNullOrEmpty(topic)) {
                 topic = "GEDKeeper.html";
             }
-            topic = "help_" + lngSign + "/" + topic;
+            string topicWL = "help_" + lngSign + "/" + topic;
 
             if (!HasFeatureSupport(Feature.Mobile)) {
-                string topicPath = GKUtils.GetLangsPath() + topic;
+                string topicPath = GKUtils.GetLangsPath() + topicWL;
                 if (!File.Exists(topicPath)) {
-                    AppHost.StdDialogs.ShowError(@"For that language help is unavailable");
-                } else {
-                    GKUtils.LoadExtFile(topicPath);
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.HelpIsNotAvailable));
+                    topicWL = "help_enu/" + topic;
+                    topicPath = GKUtils.GetLangsPath() + topicWL;
                 }
+                GKUtils.LoadExtFile(topicPath);
             } else {
-                string topicURL = GKData.APP_SITE + topic;
+                string topicURL = GKData.APP_SITE + topicWL;
                 OpenURL(topicURL);
             }
         }

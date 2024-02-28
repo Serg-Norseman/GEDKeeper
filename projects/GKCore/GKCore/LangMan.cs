@@ -1014,8 +1014,9 @@ namespace GKCore
         /* 942 */ AddedNPhotos,
         /* 943 */ TopLevelLinks,
         /* 944 */ RemoveTopLevelLinkQuery,
+        /* 945 */ HelpIsNotAvailable,
 
-        /* 000 */ Last = RemoveTopLevelLinkQuery
+        /* 000 */ Last = HelpIsNotAvailable
     }
 
 
@@ -1983,6 +1984,7 @@ namespace GKCore
             /* 942 */ "Added {0} photos from {1}.",
             /* 943 */ "Top level links",
             /* 944 */ "Remove top level link?",
+            /* 945 */ "Help is not available for this language. An English help will be shown.",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
