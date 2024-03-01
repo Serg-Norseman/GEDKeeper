@@ -400,13 +400,15 @@ namespace GKCore.Lists
             if (colSubtype == -1) {
                 result = GKUtils.GetNameString(fFetchedRec, false);
             } else {
-                NameFormat defNameFormat = (SimpleList) ? NameFormat.nfFNP : GlobalOptions.Instance.DefNameFormat;
+                var globOpts = GlobalOptions.Instance;
+
+                NameFormat defNameFormat = (SimpleList) ? NameFormat.nfFNP : globOpts.DefNameFormat;
                 NamePartsRet parts;
                 GDMLanguageID defLang = fBaseContext.DefaultLanguage;
 
                 switch (defNameFormat) {
                     case NameFormat.nfFNP:
-                        result = GKUtils.GetNameString(fFetchedRec, GlobalOptions.Instance.SurnameFirstInOrder, false, defLang);
+                        result = GKUtils.GetNameString(fFetchedRec, globOpts.SurnameFirstInOrder, false, defLang);
                         break;
 
                     case NameFormat.nfF_NP:
@@ -451,7 +453,7 @@ namespace GKCore.Lists
                     break;
 
                 case ColumnType.ctPatriarch:
-                    result = ((fFetchedRec.Patriarch) ? "*" : " ");
+                    result = fFetchedRec.Patriarch ? "*" : " ";
                     break;
 
                 case ColumnType.ctName:
@@ -545,7 +547,7 @@ namespace GKCore.Lists
                     break;
 
                 case ColumnType.ctBookmark:
-                    result = ((fFetchedRec.Bookmark) ? "*" : " ");
+                    result = fFetchedRec.Bookmark ? "*" : " ";
                     break;
 
                 case ColumnType.ctTitle:

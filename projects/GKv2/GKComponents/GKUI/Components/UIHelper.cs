@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih, Ruslan Garipov.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -265,7 +265,9 @@ namespace GKUI.Components
 
         public static Bitmap LoadResourceImage(string resName)
         {
-            return new Bitmap(GKUtils.LoadResourceStream(resName));
+            using (var stream = GKUtils.LoadResourceStream(resName)) {
+                return new Bitmap(stream);
+            }
         }
 
         public static void ProcessName(object sender)

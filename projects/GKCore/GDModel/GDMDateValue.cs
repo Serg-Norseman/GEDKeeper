@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -60,12 +60,12 @@ namespace GDModel
 
         protected override string GetStringValue()
         {
-            return ((fValue == null) ? "" : fValue.StringValue);
+            return (fValue == null) ? "" : fValue.StringValue;
         }
 
         public override DateTime GetDateTime()
         {
-            DateTime result = ((fValue == null) ? new DateTime(0) : fValue.GetDateTime());
+            DateTime result = (fValue == null) ? new DateTime(0) : fValue.GetDateTime();
             return result;
         }
 

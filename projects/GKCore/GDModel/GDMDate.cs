@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using BSLib;
 using GDModel.Providers.GEDCOM;
 using GKCore;
@@ -537,8 +536,8 @@ namespace GDModel
             if (year > 0 || month > 0 || day > 0) {
                 switch (format) {
                     case DateFormat.dfDD_MM_YYYY:
-                        parts[pIdx++] = day > 0 ? ConvertHelper.AdjustNumber(day, 2) + "." : "__.";
-                        parts[pIdx++] = month > 0 ? ConvertHelper.AdjustNumber(month, 2) + "." : "__.";
+                        parts[pIdx++] = day > 0 ? day.ToString("D2", null) + "." : "__.";
+                        parts[pIdx++] = month > 0 ? month.ToString("D2", null) + "." : "__.";
                         parts[pIdx++] = year > 0 ? year.ToString().PadLeft(4, '_') : "____";
                         if (includeBC && ybc) {
                             parts[pIdx++] = " BC";
@@ -550,8 +549,8 @@ namespace GDModel
                             parts[pIdx++] = "BC ";
                         }
                         parts[pIdx++] = year > 0 ? year.ToString().PadLeft(4, '_') + "." : "____.";
-                        parts[pIdx++] = month > 0 ? ConvertHelper.AdjustNumber(month, 2) + "." : "__.";
-                        parts[pIdx++] = day > 0 ? ConvertHelper.AdjustNumber(day, 2) : "__";
+                        parts[pIdx++] = month > 0 ? month.ToString("D2", null) + "." : "__.";
+                        parts[pIdx++] = day > 0 ? day.ToString("D2", null) : "__";
                         break;
 
                     case DateFormat.dfYYYY:
@@ -563,10 +562,10 @@ namespace GDModel
                         }
                         break;
                 }
-            }
 
-            if (showCalendar) {
-                parts[pIdx] = GKUtils.GetCalendarSign(fCalendar);
+                if (showCalendar) {
+                    parts[pIdx] = GKUtils.GetCalendarSign(fCalendar);
+                }
             }
 
             return string.Concat(parts);

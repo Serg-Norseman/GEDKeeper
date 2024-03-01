@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -93,6 +93,12 @@ namespace GKCore.Lists
             fOrderedColumns = new List<ListColumn>();
 
             ResetDefaults();
+        }
+
+        public void Clear()
+        {
+            fColumns.Clear();
+            fOrderedColumns.Clear();
         }
 
         public void AddColumn(LSID colName, int defWidth, bool autosize = false)

@@ -65,10 +65,12 @@ namespace GDModel
             bool aftEmpty = fDateAfter.IsEmpty();
             bool befEmpty = fDateBefore.IsEmpty();
 
-            if (!aftEmpty && !befEmpty) {
-                result = string.Concat(GEDCOMConsts.GEDCOMDateRangeArray[2], " ", fDateAfter.StringValue, " ", GEDCOMConsts.GEDCOMDateRangeArray[3], " ", fDateBefore.StringValue);
-            } else if (!aftEmpty) {
-                result = GEDCOMConsts.GEDCOMDateRangeArray[0] + " " + fDateAfter.StringValue;
+            if (!aftEmpty) {
+                if (!befEmpty) {
+                    result = string.Concat(GEDCOMConsts.GEDCOMDateRangeArray[2], " ", fDateAfter.StringValue, " ", GEDCOMConsts.GEDCOMDateRangeArray[3], " ", fDateBefore.StringValue);
+                } else {
+                    result = GEDCOMConsts.GEDCOMDateRangeArray[0] + " " + fDateAfter.StringValue;
+                }
             } else if (!befEmpty) {
                 result = GEDCOMConsts.GEDCOMDateRangeArray[1] + " " + fDateBefore.StringValue;
             } else {
@@ -137,10 +139,12 @@ namespace GDModel
             bool aftEmpty = fDateAfter.IsEmpty();
             bool befEmpty = fDateBefore.IsEmpty();
 
-            if (!aftEmpty && !befEmpty) {
-                result = UDN.CreateBetween(fDateAfter.GetUDN(), fDateBefore.GetUDN(), false);
-            } else if (!aftEmpty) {
-                result = UDN.CreateAfter(fDateAfter.GetUDN());
+            if (!aftEmpty) {
+                if (!befEmpty) {
+                    result = UDN.CreateBetween(fDateAfter.GetUDN(), fDateBefore.GetUDN(), false);
+                } else {
+                    result = UDN.CreateAfter(fDateAfter.GetUDN());
+                }
             } else if (!befEmpty) {
                 result = UDN.CreateBefore(fDateBefore.GetUDN());
             } else {
@@ -157,25 +161,27 @@ namespace GDModel
             bool aftEmpty = fDateAfter.IsEmpty();
             bool befEmpty = fDateBefore.IsEmpty();
 
-            if (!aftEmpty && !befEmpty) {
-                var dateAfter = fDateAfter.GetDisplayString(format, true, showCalendar);
-                var dateBefore = fDateBefore.GetDisplayString(format, true, showCalendar);
+            if (!aftEmpty) {
+                if (!befEmpty) {
+                    var dateAfter = fDateAfter.GetDisplayString(format, true, showCalendar);
+                    var dateBefore = fDateBefore.GetDisplayString(format, true, showCalendar);
 
-                if (shorten) {
-                    // FIXME: bad algorithm!
-                    string dtA = dateAfter.Replace("__.__.", "");
-                    string dtB = dateBefore.Replace("__.__.", "");
-                    if (dtA.Length == 4 && dtB.Length == 4 && dtB.StartsWith(dtA.Substring(0, 2))) {
-                        result = dtA + "/" + dtB.Substring(2);
+                    if (shorten) {
+                        // FIXME: bad algorithm!
+                        string dtA = dateAfter.Replace("__.__.", "");
+                        string dtB = dateBefore.Replace("__.__.", "");
+                        if (dtA.Length == 4 && dtB.Length == 4 && dtB.StartsWith(dtA.Substring(0, 2))) {
+                            result = dtA + "/" + dtB.Substring(2);
+                        } else {
+                            result = dateAfter + " - " + dateBefore;
+                        }
                     } else {
                         result = dateAfter + " - " + dateBefore;
                     }
                 } else {
-                    result = dateAfter + " - " + dateBefore;
+                    result = fDateAfter.GetDisplayString(format, true, showCalendar);
+                    if (sign) result += " >";
                 }
-            } else if (!aftEmpty) {
-                result = fDateAfter.GetDisplayString(format, true, showCalendar);
-                if (sign) result += " >";
             } else if (!befEmpty) {
                 result = fDateBefore.GetDisplayString(format, true, showCalendar);
                 if (sign) result = "< " + result;

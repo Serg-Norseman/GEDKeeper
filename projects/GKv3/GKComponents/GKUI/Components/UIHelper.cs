@@ -259,7 +259,9 @@ namespace GKUI.Components
 
         public static Bitmap LoadResourceImage(string resName)
         {
-            return new Bitmap(GKUtils.LoadResourceStream(resName));
+            using (var stream = GKUtils.LoadResourceStream(resName)) {
+                return new Bitmap(stream);
+            }
         }
 
         public static void ProcessName(object sender)

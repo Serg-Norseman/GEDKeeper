@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -115,6 +115,23 @@ namespace GKCore.Lists
             fQuickFilter = new QuickFilterParams();
 
             CreateFilter();
+        }
+
+        public void Clear()
+        {
+            fContentList.Clear();
+            fTotalCount = 0;
+
+            fMask = string.Empty;
+            fRegexMask = null;
+            fSimpleMask = string.Empty;
+            fExternalFilter = null;
+            fFilter.Clear();
+
+            fFetchedRec = null;
+
+            fColumnsMap.Clear();
+            fListColumns.Clear();
         }
 
         #region Columns
@@ -514,8 +531,8 @@ namespace GKCore.Lists
                     return ((double)val).ToString(cs.Format, cs.NumFmt);
 
                 case DataType.dtDateTime:
-                    DateTime dtx = ((DateTime)val);
-                    return ((dtx.Ticks == 0) ? "" : dtx.ToString("yyyy.MM.dd HH:mm:ss", null));
+                    DateTime dtx = (DateTime)val;
+                    return (dtx.Ticks == 0) ? "" : dtx.ToString("yyyy.MM.dd HH:mm:ss", null);
 
                 case DataType.dtGEDCOMDate:
                     return val.ToString();

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -81,6 +81,7 @@ namespace GKCore.Interfaces
         ListColumn this[int index] { get; }
         IList<ListColumn> OrderedColumns { get; }
 
+        void Clear();
         void CopyTo(IListColumns target);
         bool MoveColumn(int idx, bool up);
         void ResetDefaults();

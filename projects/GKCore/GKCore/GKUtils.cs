@@ -3467,7 +3467,9 @@ namespace GKCore
 
             string result;
 
-            WomanSurnameFormat wsFmt = GlobalOptions.Instance.WomanSurnameFormat;
+            var globOpts = GlobalOptions.Instance;
+
+            WomanSurnameFormat wsFmt = globOpts.WomanSurnameFormat;
             if (iSex == GDMSex.svFemale && wsFmt != WomanSurnameFormat.wsfNotExtend) {
                 string marriedSurname = personalName.MarriedName;
                 switch (wsFmt) {
@@ -3503,7 +3505,7 @@ namespace GKCore
                 result = defSurname;
             }
 
-            if (GlobalOptions.Instance.SurnameInCapitals) {
+            if (globOpts.SurnameInCapitals) {
                 result = result.ToUpper();
             }
 

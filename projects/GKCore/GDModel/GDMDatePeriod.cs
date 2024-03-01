@@ -65,10 +65,12 @@ namespace GDModel
             bool frEmpty = fDateFrom.IsEmpty();
             bool toEmpty = fDateTo.IsEmpty();
 
-            if (!frEmpty && !toEmpty) {
-                result = string.Concat("FROM ", fDateFrom.StringValue, " TO ", fDateTo.StringValue);
-            } else if (!frEmpty) {
-                result = "FROM " + fDateFrom.StringValue;
+            if (!frEmpty) {
+                if (!toEmpty) {
+                    result = string.Concat("FROM ", fDateFrom.StringValue, " TO ", fDateTo.StringValue);
+                } else {
+                    result = "FROM " + fDateFrom.StringValue;
+                }
             } else if (!toEmpty) {
                 result = "TO " + fDateTo.StringValue;
             } else {
@@ -139,10 +141,12 @@ namespace GDModel
             bool frEmpty = fDateFrom.IsEmpty();
             bool toEmpty = fDateTo.IsEmpty();
 
-            if (!frEmpty && !toEmpty) {
-                result = UDN.CreateBetween(fDateFrom.GetUDN(), fDateTo.GetUDN(), false);
-            } else if (!frEmpty) {
-                result = UDN.CreateAfter(fDateFrom.GetUDN());
+            if (!frEmpty) {
+                if (!toEmpty) {
+                    result = UDN.CreateBetween(fDateFrom.GetUDN(), fDateTo.GetUDN(), false);
+                } else {
+                    result = UDN.CreateAfter(fDateFrom.GetUDN());
+                }
             } else if (!toEmpty) {
                 result = UDN.CreateBefore(fDateTo.GetUDN());
             } else {
@@ -159,11 +163,13 @@ namespace GDModel
             bool frEmpty = fDateFrom.IsEmpty();
             bool toEmpty = fDateTo.IsEmpty();
 
-            if (!frEmpty && !toEmpty) {
-                result = fDateFrom.GetDisplayString(format, true, showCalendar) + " - " + fDateTo.GetDisplayString(format, true, showCalendar);
-            } else if (!frEmpty) {
-                result = fDateFrom.GetDisplayString(format, true, showCalendar);
-                if (sign) result += " >";
+            if (!frEmpty) {
+                if (!toEmpty) {
+                    result = fDateFrom.GetDisplayString(format, true, showCalendar) + " - " + fDateTo.GetDisplayString(format, true, showCalendar);
+                } else {
+                    result = fDateFrom.GetDisplayString(format, true, showCalendar);
+                    if (sign) result += " >";
+                }
             } else if (!toEmpty) {
                 result = fDateTo.GetDisplayString(format, true, showCalendar);
                 if (sign) result = "< " + result;

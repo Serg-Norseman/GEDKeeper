@@ -259,8 +259,14 @@ namespace GKCore.Options
 
         public bool ShowDatesSign { get; set; }
 
+        /// <summary>
+        /// Hidden option.
+        /// </summary>
         public bool ShowIndiAssociations { get; set; }
 
+        /// <summary>
+        /// Hidden option.
+        /// </summary>
         public bool ShowIndiNamesakes { get; set; }
 
         public bool ShowTips { get; set; }
@@ -392,7 +398,6 @@ namespace GKCore.Options
             WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
             UseSurnamesInPersonSelectionFilter = false;
             UseBirthDatesInPersonSelectionFilter = false;
-
             ShowIndiAssociations = false;
             ShowIndiNamesakes = true;
         }
@@ -820,6 +825,8 @@ namespace GKCore.Options
 
             UseSurnamesInPersonSelectionFilter = ini.ReadBool("Common", "UseSurnamesInPersonSelectionFilter", false);
             UseBirthDatesInPersonSelectionFilter = ini.ReadBool("Common", "UseBirthDatesInPersonSelectionFilter", false);
+            ShowIndiAssociations = ini.ReadBool("Common", "ShowIndiAssociations", false);
+            ShowIndiNamesakes = ini.ReadBool("Common", "ShowIndiNamesakes", false);
 
             Theme = ini.ReadString("Common", "Theme", "");
 
@@ -966,6 +973,8 @@ namespace GKCore.Options
 
             ini.WriteBool("Common", "UseSurnamesInPersonSelectionFilter", UseSurnamesInPersonSelectionFilter);
             ini.WriteBool("Common", "UseBirthDatesInPersonSelectionFilter", UseBirthDatesInPersonSelectionFilter);
+            ini.WriteBool("Common", "ShowIndiAssociations", ShowIndiAssociations);
+            ini.WriteBool("Common", "ShowIndiNamesakes", ShowIndiNamesakes);
 
             ini.WriteString("Common", "Theme", Theme);
 
