@@ -1,3 +1,8 @@
+## 02.03.2024 [v2.29.1 &amp; v3.5.1]
+- Added localization to Afrikaans language [Steyn van der Walt].
+- Added call to detailed information about places in the place management tool (pop-up menu).
+- Fixed loading of some jpeg images.
+
 ## 14.02.2024 [v2.29.0 &amp; v3.5.0]
 - Updated localizations: Hungarian [Kékesi Lajos], German [Christian Bettinger], Dutch [Annelotte], Japanese [難波鷹史] and Czech [Jerry Verner].
 - Added the "Extended locations" option, which includes substitution of full place names depending on the date of events when using the historical ATD hierarchy.

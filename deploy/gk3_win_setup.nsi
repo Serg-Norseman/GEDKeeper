@@ -8,7 +8,7 @@ Unicode true
 !define MUI_ICON "..\projects\GEDKeeper_48.ico"
 
 Name "GEDKeeper"
-OutFile "gedkeeper_3.5.0_win86.exe"
+OutFile "gedkeeper_3.5.1_win86.exe"
 InstallDir $PROGRAMFILES\GEDKeeper3
 
 CRCCheck on
