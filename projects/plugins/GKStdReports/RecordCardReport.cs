@@ -435,7 +435,7 @@ namespace GKStdReports
             }
         }
 
-        private string GetFactValueStr(GDMCustomEvent evt)
+        private static string GetFactValueStr(GDMCustomEvent evt)
         {
             string result = evt.StringValue;
             if (result.StartsWith(GKData.INFO_HTTP_PREFIX)) {
@@ -884,7 +884,7 @@ namespace GKStdReports
             return result;
         }
 
-        private string HyperLink(string xref, string text)
+        private static string HyperLink(string xref, string text)
         {
             string result = "";
 

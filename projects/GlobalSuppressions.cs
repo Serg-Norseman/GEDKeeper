@@ -11,5 +11,6 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0028:Collection initialization can be simplified")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0031:Use null propagation")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0038:Use pattern matching")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:new' expression can be simplified")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0063:'using' statement can be simplified")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:'new' expression can be simplified")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.")]

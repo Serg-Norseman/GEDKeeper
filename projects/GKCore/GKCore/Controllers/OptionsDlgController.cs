@@ -31,7 +31,7 @@ namespace GKCore.Controllers
 {
     public class OptionsDlgController : DialogController<IOptionsDlg>
     {
-        private GlobalOptions fOptions;
+        private readonly GlobalOptions fOptions;
         private readonly IListColumns fTempColumns;
 
 

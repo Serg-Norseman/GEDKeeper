@@ -31,7 +31,7 @@ namespace GKCore
     [TestFixture]
     public class OptionsTests
     {
-        private BaseContext fContext;
+        private readonly BaseContext fContext;
 
         public OptionsTests()
         {

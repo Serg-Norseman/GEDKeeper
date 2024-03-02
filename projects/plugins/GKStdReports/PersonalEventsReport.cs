@@ -71,7 +71,7 @@ namespace GKStdReports
             fPerson = selectedPerson;
         }
 
-        private void ExtractEvents(EventType type, IList<PersonalEvent> list, IGDMRecordWithEvents record)
+        private static void ExtractEvents(EventType type, IList<PersonalEvent> list, IGDMRecordWithEvents record)
         {
             if (!record.HasEvents) return;
 

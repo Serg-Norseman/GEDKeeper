@@ -133,7 +133,7 @@ namespace GKCore.Controllers
                 freqList.Add(new FreqItem<int>(i, LangMan.LS(eventTypes[i].Name), stat));
             }
 
-            FreqCollection<string>.PopulateCombo(fView.EventType, freqList, 0);
+            FreqCollection<string>.PopulateCombo(fView.EventType, freqList, -1);
         }
 
         public override void UpdateView()
@@ -232,6 +232,10 @@ namespace GKCore.Controllers
         public void ChangeEventType()
         {
             int idx = fView.EventType.GetSelectedTag<int>();
+            if (idx < 0) {
+                idx = 0;
+                fView.EventType.SetSelectedTag(idx);
+            }
 
             if (fEvent is GDMFamilyEvent) {
                 SetAttributeMode(false);

@@ -201,7 +201,7 @@ namespace GKCore
             return linksList;
         }
 
-        public static string HyperLink(string xref, string text, int num = 0)
+        public static string HyperLink(string xref, string text)
         {
             string result;
 
@@ -288,7 +288,7 @@ namespace GKCore
             string result = "";
 
             if (record != null) {
-                result = HyperLink(record.XRef, GetRecordName(tree, record, signed), 0);
+                result = HyperLink(record.XRef, GetRecordName(tree, record, signed));
             }
 
             return result;
@@ -298,7 +298,7 @@ namespace GKCore
         {
             if (record != null) {
                 string recName = GetRecordName(tree, record, signed);
-                string recLink = HyperLink(record.XRef, recName, 0);
+                string recLink = HyperLink(record.XRef, recName);
                 return new Tuple<string, string>(recName, recLink);
             } else {
                 return new Tuple<string, string>(string.Empty, string.Empty);
@@ -319,7 +319,7 @@ namespace GKCore
             if (corr != null) {
                 string nm = GetNameString(corr, false);
                 if (aLink) {
-                    nm = HyperLink(corr.XRef, nm, 0);
+                    nm = HyperLink(corr.XRef, nm);
                 }
                 result = "[ " + LangMan.LS(GKData.CommunicationDirs[(int)commRec.CommDirection]) + " ] " + nm;
             }
@@ -758,7 +758,7 @@ namespace GKCore
                 GDMLocationRecord location = tree.GetPtrValue<GDMLocationRecord>(evt.Place.Location);
 
                 if (place != "" && location != null && hyperLink) {
-                    place = HyperLink(location.XRef, place, 0);
+                    place = HyperLink(location.XRef, place);
                 }
             }
 
@@ -2295,8 +2295,8 @@ namespace GKCore
                         if (mmRec == null || mmRec.FileReferences.Count == 0) continue;
 
                         string st = mmRec.FileReferences[0].Title;
-                        summary.Add("  " + HyperLink(mmRec.XRef, st, 0) + " (" +
-                                    HyperLink(GKData.INFO_HREF_VIEW + mmRec.XRef, LangMan.LS(LSID.MediaView), 0) + ")");
+                        summary.Add("  " + HyperLink(mmRec.XRef, st) + " (" +
+                                    HyperLink(GKData.INFO_HREF_VIEW + mmRec.XRef, LangMan.LS(LSID.MediaView)) + ")");
                     }
                 }
             } catch (Exception ex) {
@@ -2353,7 +2353,7 @@ namespace GKCore
                         if (!string.IsNullOrEmpty(sourCit.Page)) {
                             nm = nm + ", " + sourCit.Page;
                         }
-                        summary.Add(indent + "  " + HyperLink(sourceRec.XRef, nm, 0));
+                        summary.Add(indent + "  " + HyperLink(sourceRec.XRef, nm));
 
                         var text = sourCit.Data.Text;
                         if (!text.IsEmpty()) {
@@ -2383,7 +2383,7 @@ namespace GKCore
                         string nm = ((relIndi == null) ? string.Empty : GetNameString(relIndi, false));
                         string xref = ((relIndi == null) ? string.Empty : relIndi.XRef);
 
-                        summary.Add("    " + ast.Relation + " " + HyperLink(xref, nm, 0));
+                        summary.Add("    " + ast.Relation + " " + HyperLink(xref, nm));
                     }
                 }
             } catch (Exception ex) {
@@ -2476,7 +2476,7 @@ namespace GKCore
                         GDMGroupRecord grp = baseContext.Tree.GetPtrValue<GDMGroupRecord>(ptr);
                         if (grp == null) continue;
 
-                        summary.Add("    " + HyperLink(grp.XRef, grp.GroupName, 0));
+                        summary.Add("    " + HyperLink(grp.XRef, grp.GroupName));
                     }
                 }
             } catch (Exception ex) {
@@ -2496,11 +2496,11 @@ namespace GKCore
                         summary.Add("");
 
                         GDMIndividualRecord spRec = baseContext.Tree.GetPtrValue(familyRec.Husband);
-                        string st = ((spRec == null) ? LangMan.LS(LSID.UnkMale) : HyperLink(spRec.XRef, GetNameString(spRec, false), 0));
+                        string st = ((spRec == null) ? LangMan.LS(LSID.UnkMale) : HyperLink(spRec.XRef, GetNameString(spRec, false)));
                         summary.Add(LangMan.LS(LSID.Husband) + ": " + st + GetLifeStr(spRec));
 
                         spRec = baseContext.Tree.GetPtrValue(familyRec.Wife);
-                        st = ((spRec == null) ? LangMan.LS(LSID.UnkFemale) : HyperLink(spRec.XRef, GetNameString(spRec, false), 0));
+                        st = ((spRec == null) ? LangMan.LS(LSID.UnkFemale) : HyperLink(spRec.XRef, GetNameString(spRec, false)));
                         summary.Add(LangMan.LS(LSID.Wife) + ": " + st + GetLifeStr(spRec));
 
                         summary.Add("");
@@ -2511,7 +2511,7 @@ namespace GKCore
                         int num = familyRec.Children.Count;
                         for (int i = 0; i < num; i++) {
                             var child = baseContext.Tree.GetPtrValue(familyRec.Children[i]);
-                            summary.Add("    " + HyperLink(child.XRef, GetNameString(child, false), 0) + GetLifeStr(child));
+                            summary.Add("    " + HyperLink(child.XRef, GetNameString(child, false)) + GetLifeStr(child));
                         }
                         summary.Add("");
 
@@ -2556,7 +2556,7 @@ namespace GKCore
                         for (int i = 0; i < num2; i++) {
                             GDMIndividualRecord member = (GDMIndividualRecord)mbrList.GetObject(i);
 
-                            summary.Add("    " + HyperLink(member.XRef, mbrList[i], i + 1));
+                            summary.Add("    " + HyperLink(member.XRef, mbrList[i]));
                         }
 
                         RecListNotesRefresh(baseContext, groupRec, summary);
@@ -2587,7 +2587,7 @@ namespace GKCore
                         summary.Add("[u][b][size=+1]" + mediaTitle + "[/size][/b][/u]");
                         summary.Add("");
                         if (fileRef != null) {
-                            summary.Add("( " + HyperLink(GKData.INFO_HREF_VIEW + mediaRec.XRef, LangMan.LS(LSID.View), 0) + " )");
+                            summary.Add("( " + HyperLink(GKData.INFO_HREF_VIEW + mediaRec.XRef, LangMan.LS(LSID.View)) + " )");
                         }
 
                         ShowSubjectLinks(baseContext.Tree, mediaRec, summary);
@@ -2648,10 +2648,10 @@ namespace GKCore
 
                         string st;
 
-                        st = (father == null) ? LangMan.LS(LSID.UnkMale) : HyperLink(father.XRef, GetNameString(father, false), 0);
+                        st = (father == null) ? LangMan.LS(LSID.UnkMale) : HyperLink(father.XRef, GetNameString(father, false));
                         summary.Add("  " + LangMan.LS(LSID.Father) + ": " + st + GetLifeStr(father));
 
-                        st = (mother == null) ? LangMan.LS(LSID.UnkFemale) : HyperLink(mother.XRef, GetNameString(mother, false), 0);
+                        st = (mother == null) ? LangMan.LS(LSID.UnkFemale) : HyperLink(mother.XRef, GetNameString(mother, false));
                         summary.Add("  " + LangMan.LS(LSID.Mother) + ": " + st + GetLifeStr(mother));
                     }
                 }
@@ -2692,9 +2692,9 @@ namespace GKCore
 
                     summary.Add("");
                     if (spRec != null) {
-                        st = st + HyperLink(spRec.XRef, GetNameString(spRec, false), 0) + " (" + HyperLink(family.XRef, marr, 0) + ")";
+                        st = st + HyperLink(spRec.XRef, GetNameString(spRec, false)) + " (" + HyperLink(family.XRef, marr) + ")";
                     } else {
-                        st = st + unk + " (" + HyperLink(family.XRef, marr, 0) + ")";
+                        st = st + unk + " (" + HyperLink(family.XRef, marr) + ")";
                     }
                     summary.Add(st);
 
@@ -2707,7 +2707,7 @@ namespace GKCore
                             GDMIndividualRecord child = tree.GetPtrValue(family.Children[k]);
                             if (child == null) continue;
 
-                            summary.Add("    " + HyperLink(child.XRef, GetNameString(child, false), 0) + GetLifeStr(child));
+                            summary.Add("    " + HyperLink(child.XRef, GetNameString(child, false)) + GetLifeStr(child));
                         }
                     }
                 }
@@ -2807,7 +2807,7 @@ namespace GKCore
                             for (int i = 0; i < num; i++) {
                                 GDMRepositoryRecord rep = baseContext.Tree.GetPtrValue<GDMRepositoryRecord>(sourceRec.RepositoryCitations[i]);
 
-                                summary.Add("    " + HyperLink(rep.XRef, rep.RepositoryName, 0));
+                                summary.Add("    " + HyperLink(rep.XRef, rep.RepositoryName));
                             }
                         }
 
@@ -2818,7 +2818,7 @@ namespace GKCore
 
                         summary.Add("");
                         summary.Add("");
-                        summary.Add("[ " + HyperLink(GKData.INFO_HREF_FILTER_INDI + sourceRec.XRef, LangMan.LS(LSID.MIFilter), 0) + " ]");
+                        summary.Add("[ " + HyperLink(GKData.INFO_HREF_FILTER_INDI + sourceRec.XRef, LangMan.LS(LSID.MIFilter)) + " ]");
                         summary.Add("");
                     }
                 } finally {
@@ -2926,7 +2926,7 @@ namespace GKCore
                             int num3 = researchRec.Groups.Count;
                             for (int i = 0; i < num3; i++) {
                                 var grp = baseContext.Tree.GetPtrValue<GDMGroupRecord>(researchRec.Groups[i]);
-                                summary.Add("    " + HyperLink(grp.XRef, grp.GroupName, 0));
+                                summary.Add("    " + HyperLink(grp.XRef, grp.GroupName));
                             }
                         }
 
@@ -3055,7 +3055,7 @@ namespace GKCore
                             int num = linkList.Count;
                             for (int i = 0; i < num; i++) {
                                 GDMRecord rec = linkList.GetObject(i) as GDMRecord;
-                                summary.Add("    " + HyperLink(rec.XRef, linkList[i], 0));
+                                summary.Add("    " + HyperLink(rec.XRef, linkList[i]));
                             }
                         }
 

@@ -33,7 +33,7 @@ namespace GKCore
     [TestFixture]
     public class GKUtilsTests
     {
-        private BaseContext fContext;
+        private readonly BaseContext fContext;
 
         public GKUtilsTests()
         {
@@ -508,10 +508,10 @@ namespace GKCore
         [Test]
         public void Test_HyperLink()
         {
-            string st1 = GKUtils.HyperLink("@X001@", "test", 0);
+            string st1 = GKUtils.HyperLink("@X001@", "test");
             Assert.AreEqual("[url=" + "@X001@" + "]" + "test" + "[/url]", st1);
 
-            st1 = GKUtils.HyperLink("@X001@", "", 0);
+            st1 = GKUtils.HyperLink("@X001@", "");
             Assert.AreEqual("[url=" + "@X001@" + "]" + "???" + "[/url]", st1);
         }
 
