@@ -1015,8 +1015,9 @@ namespace GKCore
         /* 943 */ TopLevelLinks,
         /* 944 */ RemoveTopLevelLinkQuery,
         /* 945 */ HelpIsNotAvailable,
+        /* 946 */ AddressLine,
 
-        /* 000 */ Last = HelpIsNotAvailable
+        /* 000 */ Last = AddressLine
     }
 
 
@@ -1985,6 +1986,7 @@ namespace GKCore
             /* 943 */ "Top level links",
             /* 944 */ "Remove top level link?",
             /* 945 */ "Help is not available for this language. An English help will be shown.",
+            /* 946 */ "Address (st. & h.n.)",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

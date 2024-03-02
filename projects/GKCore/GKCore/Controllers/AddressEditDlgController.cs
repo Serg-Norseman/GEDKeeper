@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -188,7 +188,7 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblState").Text = LangMan.LS(LSID.AdState);
             GetControl<ILabel>("lblCity").Text = LangMan.LS(LSID.AdCity);
             GetControl<ILabel>("lblPostalCode").Text = LangMan.LS(LSID.AdPostalCode);
-            GetControl<ILabel>("lblAddress").Text = LangMan.LS(LSID.Address);
+            GetControl<ILabel>("lblAddress").Text = LangMan.LS(LSID.AddressLine);
             GetControl<ITabPage>("pagePhones").Text = LangMan.LS(LSID.Telephones);
             GetControl<ITabPage>("pageEmails").Text = LangMan.LS(LSID.EMails);
             GetControl<ITabPage>("pageWebPages").Text = LangMan.LS(LSID.WebSites);
