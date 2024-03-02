@@ -847,7 +847,7 @@ namespace GKStdReports
 
             string suffix;
             if (aTag is GDMCustomEvent) {
-                suffix = ", " + GKUtils.GetEventName((GDMCustomEvent)aTag).ToLower();
+                suffix = ", " + GKUtils.GetEventNameLd((GDMCustomEvent)aTag);
             } else {
                 suffix = "";
             }

@@ -394,6 +394,12 @@ namespace GKCore
         }
 
         [Test]
+        public void Test_GetEventNameLd()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventNameLd(null); });
+        }
+
+        [Test]
         public void Test_GetEventCause()
         {
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetEventCause(null); });

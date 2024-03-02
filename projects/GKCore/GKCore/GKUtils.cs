@@ -193,7 +193,7 @@ namespace GKCore
                     GDMCustomEvent evt = evsRec.Events[j];
 
                     if (evt.HasPlace && evt.Place.Location.XRef == locRec.XRef) {
-                        linksList.AddObject(GetRecordName(tree, evsRec, true) + ", " + GetEventName(evt).ToLower(), evsRec);
+                        linksList.AddObject(GetRecordName(tree, evsRec, true) + ", " + GetEventNameLd(evt), evsRec);
                     }
                 }
             }
@@ -673,6 +673,17 @@ namespace GKCore
             }
 
             return res;
+        }
+
+        /// <summary>
+        /// Localized event name.
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <returns></returns>
+        public static string GetEventNameLd(GDMCustomEvent evt)
+        {
+            string evtName = GetEventName(evt);
+            return LocaleOptions.Instance.AlwaysCapitalizeNouns() ? evtName : evtName.ToLower();
         }
 
         public static string GetEventName(GDMCustomEvent evt)
@@ -2060,7 +2071,7 @@ namespace GKCore
 
             string suffix;
             if (aTag is GDMCustomEvent) {
-                suffix = ", " + GetEventName((GDMCustomEvent) aTag).ToLower();
+                suffix = ", " + GetEventNameLd((GDMCustomEvent) aTag);
             } else {
                 suffix = "";
             }

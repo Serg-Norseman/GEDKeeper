@@ -494,6 +494,8 @@ namespace GKCore.Options
             }
 
             InterfaceLang = (ushort)langCode;
+
+            LocaleOptions.Instance.SetLocale((ushort)langCode);
         }
 
         public LangRecord GetLangByCode(int code)
