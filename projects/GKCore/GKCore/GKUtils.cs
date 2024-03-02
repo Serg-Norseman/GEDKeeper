@@ -91,7 +91,7 @@ namespace GKCore
                 if (File.Exists(fileName)) {
                     Process.Start(new ProcessStartInfo("file://" + fileName) { UseShellExecute = true, Arguments = args });
                 } else {
-                    Process.Start(fileName);
+                    Process.Start(new ProcessStartInfo(fileName) { UseShellExecute = true });
                 }
 #endif
 #endif

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -97,7 +96,7 @@ namespace GKCore
 #if !CI_MODE
                     string question = LangMan.LS(LSID.UpdateToLatestVersion, curVersion, newVersion);
                     if (await AppHost.StdDialogs.ShowQuestion(question)) {
-                        Process.Start(url);
+                        GKUtils.LoadExtFile(url);
                     }
 #endif
                 }
