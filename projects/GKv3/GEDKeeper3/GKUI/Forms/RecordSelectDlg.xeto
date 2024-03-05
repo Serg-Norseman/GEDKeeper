@@ -9,7 +9,7 @@
     <TableRow>
       <StackLayout Style="dlgFooter">
         <StackLayoutItem Expand="True">
-          <ComboBox x:Name="txtFastFilter" TextChanged="txtFastFilter_TextChanged" KeyDown="txtFastFilter_KeyDown" />
+          <ComboBox x:Name="txtFastFilter" TabIndex = "1" TextChanged="txtFastFilter_TextChanged" KeyDown="txtFastFilter_KeyDown" />
         </StackLayoutItem>
         <comcom:GKFilterControl x:Name="fltCtl" />
       </StackLayout>
@@ -22,9 +22,9 @@
     <TableRow>
       <StackLayout Style="dlgFooter">
         <StackLayoutItem Expand="True" />
-        <Button x:Name="btnCreate" Style="dlgBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnCreate_Click" />
-        <Button x:Name="btnSelect" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="btnSelect_Click" />
-        <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        <Button x:Name="btnCreate" Style="dlgBtn" TabIndex = "4" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnCreate_Click" />
+        <Button x:Name="btnSelect" Style="dlgBtn" TabIndex = "3" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="btnSelect_Click" />
+        <Button x:Name="btnCancel" Style="dlgBtn" TabIndex = "5" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
       </StackLayout>
     </TableRow>
 

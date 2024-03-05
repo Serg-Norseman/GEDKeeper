@@ -16,7 +16,7 @@
             </TableRow>
             <TableRow ScaleHeight="True">
               <Label x:Name="lblAddress" />
-              <TextArea x:Name="txtAddress" />
+              <TextArea x:Name="txtAddress" AcceptsReturn="True" AcceptsTab="False" />
             </TableRow>
             <TableRow>
               <Label x:Name="lblTelephone" />

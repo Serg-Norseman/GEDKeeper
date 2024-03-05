@@ -250,6 +250,7 @@ namespace GKUI.Forms
             recView.AllowMultipleSelection = true;
             recView.MouseDoubleClick += miRecordEdit_Click;
             recView.SelectedItemsChanged += List_SelectedIndexChanged;
+            recView.KeyDown += Form_KeyDown;
             recView.ContextMenu = contextMenu;
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
             recView.UpdateContents();
@@ -342,6 +343,43 @@ namespace GKUI.Forms
 
         private void Form_KeyDown(object sender, KeyEventArgs e)
         {
+            switch (e.Key) {
+                /*case Keys.I:
+                    ItemAdd();
+                    break;
+                case Keys.D:
+                    ItemDelete();
+                    break;*/
+
+                case Keys.Enter:
+                    if (e.Control) {
+                        EditRecord();
+                        e.Handled = true;
+                    }
+                    break;
+
+                case Keys.Home:
+                case Keys.End:
+                    if (sender is GKListView) {
+                        var listView = sender as GKListView;
+                        if (e.Key == Keys.Home) {
+                            listView.SelectedIndex = 0;
+                        } else {
+                            listView.SelectedIndex = -1;
+                        }
+                        e.Handled = true;
+                    }
+                    break;
+
+                case Keys.F12:
+                    break;
+
+                /*case Keys.F:
+                    if (e.Control) {
+                        QuickFind();
+                    }
+                    break;*/
+            }
         }
 
         private void contextMenu_Opening(object sender, EventArgs e)

@@ -32,7 +32,7 @@
     <TableRow ScaleHeight="True">
       <StackLayout Spacing="2">
         <Label x:Name="lblKinship" />
-        <TextArea x:Name="txtResult" ReadOnly="True" Size="400, 140" />
+        <TextArea x:Name="txtResult" AcceptsReturn="False" AcceptsTab="False" ReadOnly="True" Size="400, 140" />
       </StackLayout>
     </TableRow>
 

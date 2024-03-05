@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -214,6 +214,8 @@ namespace GKUI.Components
 
         public event ItemCheckEventHandler ItemCheck;
 
+        public event EventHandler ItemsUpdated;
+
 
         public GKListView()
         {
@@ -425,6 +427,12 @@ namespace GKUI.Components
             }
         }
 
+        private void DoItemsUpdated()
+        {
+            var eventHandler = ItemsUpdated;
+            if (eventHandler != null) eventHandler(this, new EventArgs());
+        }
+
         public void UpdateContents(bool columnsChanged = false)
         {
             if (fListMan == null) return;
@@ -444,6 +452,8 @@ namespace GKUI.Components
                 } finally {
                     EndUpdate();
                     if (tempRec != null) SelectItem(tempRec);
+
+                    DoItemsUpdated();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("GKListView.UpdateContents()", ex);
@@ -612,6 +622,10 @@ namespace GKUI.Components
 
         public void SelectItem(int index)
         {
+            if (index == -1) {
+                index = ContentList.Count - 1;
+            }
+
             if (index >= 0 && index < ContentList.Count) {
                 ScrollToRow(index);
                 UnselectAll();

@@ -246,6 +246,7 @@ namespace GKUI.Components
         private void List_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control) {
+                bool handled = true;
                 switch (e.Key) {
                     case Keys.I:
                         ItemAdd(sender, e);
@@ -266,7 +267,11 @@ namespace GKUI.Components
                     case Keys.V:
                         ItemPaste(sender, e);
                         break;
+                    default:
+                        handled = false;
+                        break;
                 }
+                e.Handled = handled;
             }
         }
 

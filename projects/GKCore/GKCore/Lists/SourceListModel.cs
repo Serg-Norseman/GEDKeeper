@@ -95,11 +95,11 @@ namespace GKCore.Lists
                     break;
 
                 case ColumnType.ctAuthor:
-                    result = fFetchedRec.Originator.Lines.Text.Trim();
+                    result = GKUtils.MergeStrings(fFetchedRec.Originator.Lines);
                     break;
 
                 case ColumnType.ctTitle:
-                    result = fFetchedRec.Title.Lines.Text.Trim();
+                    result = GKUtils.MergeStrings(fFetchedRec.Title.Lines);
                     break;
 
                 //case ColumnType.ctPublication:

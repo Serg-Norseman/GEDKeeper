@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -84,6 +84,8 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
+            txtFastFilter.KeyDown += Ctrl_KeyDown;
+
             fController = new RecordSelectDlgController(this);
             fController.Init(baseWin);
             fController.RecType = recType;
@@ -108,15 +110,32 @@ namespace GKUI.Forms
             base.Dispose(disposing);
         }
 
+        private void Ctrl_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Keys.Tab) {
+                if (sender == fListRecords) {
+                    btnSelect.Focus();
+                    e.Handled = true;
+                }
+                if (sender == txtFastFilter) {
+                    fListRecords.Focus();
+                    fListRecords.SelectItem(0);
+                    e.Handled = true;
+                }
+            }
+        }
+
         private void UpdateRecordsView()
         {
             if (fListRecords != null) {
+                fListRecords.KeyDown -= Ctrl_KeyDown;
                 fListRecords.ListMan = null;
                 fListRecords.Dispose();
                 fListRecords = null;
             }
             fListRecords = UIHelper.CreateRecordsView(panList, fController.Base.Context, fController.RecType, true);
             fListRecords.ContextMenu = contextMenu;
+            fListRecords.KeyDown += Ctrl_KeyDown;
         }
 
         private void miDetails_Click(object sender, EventArgs e)

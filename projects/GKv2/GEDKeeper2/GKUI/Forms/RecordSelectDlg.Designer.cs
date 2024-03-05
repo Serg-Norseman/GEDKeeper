@@ -28,17 +28,17 @@
             this.btnSelect.Location = new System.Drawing.Point(280, 466);
             this.btnSelect.Name = "btnSelect";
             this.btnSelect.Size = new System.Drawing.Size(113, 31);
-            this.btnSelect.TabIndex = 3;
+            this.btnSelect.TabIndex = 2;
             this.btnSelect.Text = "btnSelect";
             this.btnSelect.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
             // 
             // btnCreate
-            // 
+            //
             this.btnCreate.Location = new System.Drawing.Point(146, 466);
             this.btnCreate.Name = "btnCreate";
             this.btnCreate.Size = new System.Drawing.Size(113, 31);
-            this.btnCreate.TabIndex = 2;
+            this.btnCreate.TabIndex = 3;
             this.btnCreate.Text = "btnCreate";
             this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
             // 
@@ -78,6 +78,7 @@
             this.fltCtl.Name = "fltCtl";
             this.fltCtl.Size = new System.Drawing.Size(36, 32);
             this.fltCtl.TabIndex = 1;
+            this.fltCtl.TabStop = false;
             // 
             // panList
             // 

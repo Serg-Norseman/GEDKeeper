@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -73,6 +73,8 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            TabIndexChanged += Form_TabIndexChanged;
+
             btnSelect.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
@@ -90,6 +92,14 @@ namespace GKUI.Forms
             contextMenu.Items.AddRange(new ToolStripItem[] { miDetails });
 
             UpdateRecordsView();
+        }
+
+        private void Form_TabIndexChanged(object sender, EventArgs e)
+        {
+            if (fltCtl.Focused) {
+                fListRecords.Focus();
+                fListRecords.SelectItem(0);
+            }
         }
 
         protected override void Dispose(bool disposing)

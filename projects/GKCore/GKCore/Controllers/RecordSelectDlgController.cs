@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -197,6 +197,13 @@ namespace GKCore.Controllers
             }
 
             recordsList.UpdateContents();
+
+            UpdateButtons();
+        }
+
+        private void UpdateButtons()
+        {
+            GetControl<IButton>("btnSelect").Enabled = fView.RecordsList.ListMan.FilteredCount > 0;
         }
 
         public override void SetLocale()
