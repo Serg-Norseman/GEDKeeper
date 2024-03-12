@@ -929,7 +929,7 @@ namespace GKCore
         /* 866 */ UseInlineImagesInSvg,
         /* 867 */ UseExtendedNotes,
         /* 868 */ KeepRichNames,
-        /* 869 */ MaximizeChartWindows,
+        /* 869 */ ChartWindowsShowMode,
         /* 870 */ ExtendedTree,
         /* 871 */ FanMode,
         /* 872 */ OpenInNewWindow,
@@ -1017,7 +1017,12 @@ namespace GKCore
         /* 945 */ HelpIsNotAvailable,
         /* 946 */ AddressLine,
 
-        /* 000 */ Last = AddressLine
+        /* 947 */ CWSM_Default,
+        /* 948 */ CWSM_Maximize,
+        /* 949 */ CWSM_LeftHalf,
+        /* 950 */ CWSM_RightHalf,
+
+        /* 000 */ Last = CWSM_RightHalf
     }
 
 
@@ -1900,7 +1905,7 @@ namespace GKCore
             /* 866 */ "Use inline images in SVG",
             /* 867 */ "Use extended notes",
             /* 868 */ "Keep rich names",
-            /* 869 */ "Maximize chart windows",
+            /* 869 */ "Chart windows show mode",
             /* 870 */ "Extended tree",
             /* 871 */ "Fan chart (only ancestors)",
             /* 872 */ "Open in new window",
@@ -1987,6 +1992,11 @@ namespace GKCore
             /* 944 */ "Remove top level link?",
             /* 945 */ "Help is not available for this language. An English help will be shown.",
             /* 946 */ "Address (st. & h.n.)",
+
+            /* 947 */ "Default",
+            /* 948 */ "Maximize",
+            /* 949 */ "Left half",
+            /* 950 */ "Right half",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

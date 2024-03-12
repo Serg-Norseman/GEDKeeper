@@ -165,7 +165,8 @@
         private System.Windows.Forms.CheckBox chkUseInlineImagesInSvg;
         private System.Windows.Forms.CheckBox chkUseExtendedNotes;
         private System.Windows.Forms.CheckBox chkKeepRichNames;
-        private System.Windows.Forms.CheckBox chkMaximizeChartWindows;
+        private System.Windows.Forms.Label lblChartWindowsShowMode;
+        private System.Windows.Forms.ComboBox cmbChartWindowsShowMode;
         private System.Windows.Forms.CheckBox chkExtendedTree;
         private System.Windows.Forms.CheckBox chkHighlightInaccessibleFiles;
         private System.Windows.Forms.CheckBox chkTreeSurnameFirst;
@@ -349,7 +350,8 @@
             this.chkUseInlineImagesInSvg = new System.Windows.Forms.CheckBox();
             this.chkUseExtendedNotes = new System.Windows.Forms.CheckBox();
             this.chkKeepRichNames = new System.Windows.Forms.CheckBox();
-            this.chkMaximizeChartWindows = new System.Windows.Forms.CheckBox();
+            this.lblChartWindowsShowMode = new System.Windows.Forms.Label();
+            this.cmbChartWindowsShowMode = new System.Windows.Forms.ComboBox();
             this.chkExtendedTree = new System.Windows.Forms.CheckBox();
             this.chkHighlightInaccessibleFiles = new System.Windows.Forms.CheckBox();
             this.chkTreeSurnameFirst = new System.Windows.Forms.CheckBox();
@@ -2270,7 +2272,8 @@
             this.pageSpecials.Controls.Add(this.chkUseInlineImagesInSvg);
             this.pageSpecials.Controls.Add(this.chkUseExtendedNotes);
             this.pageSpecials.Controls.Add(this.chkKeepRichNames);
-            this.pageSpecials.Controls.Add(this.chkMaximizeChartWindows);
+            this.pageSpecials.Controls.Add(this.lblChartWindowsShowMode);
+            this.pageSpecials.Controls.Add(this.cmbChartWindowsShowMode);
             this.pageSpecials.Controls.Add(this.chkExtendedTree);
             this.pageSpecials.Controls.Add(this.chkUseExtraControls);
             this.pageSpecials.Controls.Add(this.chkSAFByAllNames);
@@ -2315,14 +2318,24 @@
             this.chkKeepRichNames.TabIndex = 12;
             this.chkKeepRichNames.Text = "chkKeepRichNames";
             // 
-            // chkMaximizeChartWindows
+            // lblChartWindowsShowMode
             // 
-            this.chkMaximizeChartWindows.Location = new System.Drawing.Point(20, 143);
-            this.chkMaximizeChartWindows.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkMaximizeChartWindows.Name = "chkMaximizeChartWindows";
-            this.chkMaximizeChartWindows.Size = new System.Drawing.Size(600, 22);
-            this.chkMaximizeChartWindows.TabIndex = 12;
-            this.chkMaximizeChartWindows.Text = "chkMaximizeChartWindows";
+            this.lblChartWindowsShowMode.Location = new System.Drawing.Point(20, 143);
+            this.lblChartWindowsShowMode.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.lblChartWindowsShowMode.Name = "lblChartWindowsShowMode";
+            this.lblChartWindowsShowMode.Size = new System.Drawing.Size(300, 22);
+            this.lblChartWindowsShowMode.TabIndex = 12;
+            this.lblChartWindowsShowMode.Text = "lblChartWindowsShowMode";
+            // 
+            // cmbChartWindowsShowMode
+            //
+            this.cmbChartWindowsShowMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbChartWindowsShowMode.Location = new System.Drawing.Point(320, 143);
+            this.cmbChartWindowsShowMode.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.cmbChartWindowsShowMode.Name = "cmbChartWindowsShowMode";
+            this.cmbChartWindowsShowMode.Size = new System.Drawing.Size(220, 22);
+            this.cmbChartWindowsShowMode.TabIndex = 12;
+            this.cmbChartWindowsShowMode.Text = "cmbChartWindowsShowMode";
             // 
             // chkExtendedTree
             // 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -89,8 +89,7 @@ namespace GKUI.Forms
         {
             base.OnLoad(e);
 
-            if (GlobalOptions.Instance.MaximizeChartWindows)
-                this.WindowState = FormWindowState.Maximized;
+            AppHost.Instance.SetWindowBounds(this, GlobalOptions.Instance.ChartWindowsShowMode);
 
             fCircleChart.Select();
             UpdateControls();

@@ -613,7 +613,7 @@ namespace GKUI.Components
                     }
                 }
 
-                ExtRect expRt = TreeChartModel.GetExpanderRect(persRt);
+                ExtRect expRt = fModel.GetExpanderRect(persRt);
                 if ((e.Buttons == MouseButtons.Primary && mouseEvent == MouseEvent.meUp) && expRt.Contains(aX, aY)) {
                     person = p;
                     result = MouseAction.Expand;
@@ -627,7 +627,7 @@ namespace GKUI.Components
                     break;
                 }
 
-                ExtRect infoRt = TreeChartModel.GetInfoRect(persRt);
+                ExtRect infoRt = fModel.GetInfoRect(persRt);
                 if ((e.Buttons == MouseButtons.Primary && mouseEvent == MouseEvent.meUp) && infoRt.Contains(aX, aY)) {
                     person = p;
                     result = MouseAction.Info;

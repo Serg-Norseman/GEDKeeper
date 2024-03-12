@@ -870,7 +870,7 @@
 866=Használjon beágyazott képeket SVG formátumban
 867=Használjon kiterjesztett jegyzeteket
 868=A gazdag nevek megtartása (csak haladó felhasználók)
-869=Legagyobb ablak méret
+869=Chart windows show mode
 870=Kiterjesztett fa
 871=Rajongói diagram (csak ősök)
 872=Megnyitás új ablakban
@@ -952,3 +952,8 @@
 944=Eltávolítja a legfelső szintű linket?
 945=Ezen a nyelven nem érhető el súgó. Megjelenik egy angol nyelvű súgó.
 946=Address (st. & h.n.)
+
+947=Default
+948=Maximize
+949=Left half
+950=Right half

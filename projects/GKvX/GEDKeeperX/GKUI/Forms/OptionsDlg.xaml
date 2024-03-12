@@ -383,7 +383,12 @@
                     <StackLayout Orientation="Vertical" Padding="4" Spacing="4">
                         <input:CheckBox x:Name="chkUseExtendedNotes" />
                         <input:CheckBox x:Name="chkKeepRichNames" />
-                        <input:CheckBox x:Name="chkMaximizeChartWindows" />
+
+                        <StackLayout Orientation="Horizontal" Spacing="4">
+                            <Label x:Name="lblChartWindowsShowMode" />
+                            <comcom:GKComboBox x:Name="cmbChartWindowsShowMode" WidthRequest="200" />
+                        </StackLayout>
+
                         <input:CheckBox x:Name="chkSAFByAllNames" />
                         <input:CheckBox x:Name="chkShortenDateRanges" />
                         <input:CheckBox x:Name="chkKeepInfoPansOverallSize" />

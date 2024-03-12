@@ -88,8 +88,7 @@ namespace GKUI.Forms
             fController = new CircleChartWinController(this);
             fController.Init(baseWin);
 
-            if (GlobalOptions.Instance.MaximizeChartWindows)
-                this.WindowState = Eto.Forms.WindowState.Maximized;
+            AppHost.Instance.SetWindowBounds(this, GlobalOptions.Instance.ChartWindowsShowMode);
         }
 
         protected override void Dispose(bool disposing)

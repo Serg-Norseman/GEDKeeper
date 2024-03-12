@@ -30,5 +30,7 @@ namespace GKCore.Design.Controls
     public interface ILabel : ITextContainer
     {
         IColor BackColor { get; set; }
+
+        bool Visible { get; set; }
     }
 }

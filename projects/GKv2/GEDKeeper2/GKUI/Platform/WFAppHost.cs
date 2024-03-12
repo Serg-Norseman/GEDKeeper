@@ -253,6 +253,14 @@ namespace GKUI.Platform
             return UIHelper.Rt2Rt(screen.WorkingArea);
         }
 
+        public override void SetWindowBounds(IWindow window, ExtRect bounds)
+        {
+            var form = window as Form;
+            if (form == null) return;
+
+            form.Bounds = UIHelper.Rt2Rt(bounds);
+        }
+
         public override void WidgetLocate(IWidgetForm view, WidgetLocation location)
         {
             var form = view as Form;

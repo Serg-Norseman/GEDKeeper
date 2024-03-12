@@ -246,5 +246,9 @@ namespace GKTests.Stubs
         public override void LayoutWindows(WinLayout layout)
         {
         }
+
+        public override void SetWindowBounds(IWindow window, ExtRect bounds)
+        {
+        }
     }
 }

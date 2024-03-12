@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -598,7 +598,7 @@ namespace GKUI.Components
                     }
                 }
 
-                ExtRect expRt = TreeChartModel.GetExpanderRect(persRt);
+                ExtRect expRt = fModel.GetExpanderRect(persRt);
                 if (e.Buttons == SKMouseButton.Left && mouseEvent == MouseEvent.meUp && expRt.Contains(aX, aY)) {
                     person = p;
                     result = MouseAction.Expand;
@@ -612,7 +612,7 @@ namespace GKUI.Components
                     break;
                 }
 
-                ExtRect infoRt = TreeChartModel.GetInfoRect(persRt);
+                ExtRect infoRt = fModel.GetInfoRect(persRt);
                 if (e.Buttons == SKMouseButton.Left && mouseEvent == MouseEvent.meUp && infoRt.Contains(aX, aY)) {
                     person = p;
                     result = MouseAction.Info;

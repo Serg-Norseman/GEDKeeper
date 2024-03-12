@@ -51,6 +51,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTray", "GKTray\GKTray.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{4AF8EEE8-8592-420C-B5C5-E6DDBA389BA1}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\locales\Afrikaans.lng = ..\..\locales\Afrikaans.lng
 		..\..\locales\Belarusian.lng = ..\..\locales\Belarusian.lng
 		..\..\locales\Chinese Simplified.lng = ..\..\locales\Chinese Simplified.lng
 		..\..\locales\czech.lng = ..\..\locales\czech.lng

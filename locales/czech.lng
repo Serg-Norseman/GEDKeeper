@@ -870,7 +870,7 @@
 866=Použít vložené obrázky ve formátu SVG
 867=Použít rozšířené poznámky
 868=Ponechat zvýrazněné názvy (pouze pokročilí uživatelé)
-869=Maximalizovat okna grafu
+869=Chart windows show mode
 870=Rozšířený strom
 871=Graf vějíř (pouze předci)
 872=Otevřít v novém okně
@@ -952,3 +952,8 @@
 944=Remove top level link?
 945=Help is not available for this language. An English help will be shown.
 946=Address (st. & h.n.)
+
+947=Default
+948=Maximize
+949=Left half
+950=Right half

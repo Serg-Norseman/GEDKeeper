@@ -192,7 +192,7 @@ namespace GKCore.Options
 
         public bool LoadRecentFiles { get; set; }
 
-        public bool MaximizeChartWindows { get; set; }
+        public ChartWindowsShowMode ChartWindowsShowMode { get; set; }
 
         public MediaStoreType MediaStoreDefault { get; set; }
 
@@ -406,7 +406,7 @@ namespace GKCore.Options
         {
             UseExtendedNotes = false;
             KeepRichNames = true;
-            MaximizeChartWindows = false;
+            ChartWindowsShowMode = ChartWindowsShowMode.Default;
             SearchAndFilterByAllNames = false;
             FilesOverwriteWarn = true;
 
@@ -804,7 +804,7 @@ namespace GKCore.Options
             ReversePlaceEntitiesOrder = ini.ReadBool("Common", "ReversePlaceEntitiesOrder", false);
             CertaintyAlgorithm = (CertaintyAlgorithm)ini.ReadInteger("Common", "CertaintyAlgorithm", 0);
             LocalizedCalendarSignatures = ini.ReadBool("Common", "LocalizedCalendarSignatures", false);
-            MaximizeChartWindows = ini.ReadBool("Common", "MaximizeChartWindows", false);
+            ChartWindowsShowMode = (ChartWindowsShowMode)ini.ReadInteger("Common", "ChartWindowsShowMode", 0);
             HighlightInaccessibleFiles = ini.ReadBool("Common", "HighlightInaccessibleFiles", false);
 
             LoadStringList(ini, fFARPatterns, "FARPatterns");
@@ -952,7 +952,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "ReversePlaceEntitiesOrder", ReversePlaceEntitiesOrder);
             ini.WriteInteger("Common", "CertaintyAlgorithm", (int)CertaintyAlgorithm);
             ini.WriteBool("Common", "LocalizedCalendarSignatures", LocalizedCalendarSignatures);
-            ini.WriteBool("Common", "MaximizeChartWindows", MaximizeChartWindows);
+            ini.WriteInteger("Common", "ChartWindowsShowMode", (int)ChartWindowsShowMode);
             ini.WriteBool("Common", "HighlightInaccessibleFiles", HighlightInaccessibleFiles);
 
             SaveStringList(ini, fFARPatterns, "FARPatterns");

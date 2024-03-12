@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,15 @@
 
 namespace GKCore.Interfaces
 {
+    public enum ChartWindowsShowMode
+    {
+        Default,
+        Maximize,
+        LeftHalf,
+        RightHalf,
+    }
+
+
     /// <summary>
     /// Interface for windows of different charts with support
     /// for working functions and localization, and printing.

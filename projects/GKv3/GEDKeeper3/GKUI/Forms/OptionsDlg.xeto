@@ -463,7 +463,12 @@
           <StackLayout Style="vertListStack">
             <CheckBox x:Name="chkUseExtendedNotes" />
             <CheckBox x:Name="chkKeepRichNames" />
-            <CheckBox x:Name="chkMaximizeChartWindows" />
+
+            <StackLayout Orientation="Horizontal" Spacing="4">
+              <Label x:Name="lblChartWindowsShowMode" />
+              <ComboBox x:Name="cmbChartWindowsShowMode" ReadOnly="True" />
+            </StackLayout>
+
             <CheckBox x:Name="chkSAFByAllNames" />
             <CheckBox x:Name="chkShortenDateRanges" />
             <CheckBox x:Name="chkKeepInfoPansOverallSize" />

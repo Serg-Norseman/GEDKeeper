@@ -33,6 +33,7 @@ namespace GKCore.Design.Controls
         object SelectedItem { get; set; }
         bool Sorted { get; set; }
         string Text { get; set; }
+        bool Visible { get; set; }
 
         void Add(object item);
         void AddItem<T>(string text, T tag, IImage image = null);

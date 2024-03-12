@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -437,8 +437,12 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkUseExtendedNotes").Visible = !isMobile;
             GetControl<ICheckBox>("chkKeepRichNames").Checked = fOptions.KeepRichNames && !isMobile;
             GetControl<ICheckBox>("chkKeepRichNames").Visible = !isMobile;
-            GetControl<ICheckBox>("chkMaximizeChartWindows").Checked = fOptions.MaximizeChartWindows && !isMobile;
-            GetControl<ICheckBox>("chkMaximizeChartWindows").Visible = !isMobile;
+
+            var chartWinMode = !isMobile ? fOptions.ChartWindowsShowMode : ChartWindowsShowMode.Default;
+            GetControl<IComboBox>("cmbChartWindowsShowMode").SetSelectedTag(chartWinMode);
+            GetControl<IComboBox>("cmbChartWindowsShowMode").Visible = !isMobile;
+            GetControl<ILabel>("lblChartWindowsShowMode").Visible = !isMobile;
+
             GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Checked = fOptions.KeepInfoPansOverallSize && !isMobile;
             GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Visible = !isMobile;
 
@@ -458,7 +462,9 @@ namespace GKCore.Controllers
 
             fOptions.UseExtendedNotes = GetControl<ICheckBox>("chkUseExtendedNotes").Checked;
             fOptions.KeepRichNames = GetControl<ICheckBox>("chkKeepRichNames").Checked;
-            fOptions.MaximizeChartWindows = GetControl<ICheckBox>("chkMaximizeChartWindows").Checked;
+
+            fOptions.ChartWindowsShowMode = GetControl<IComboBox>("cmbChartWindowsShowMode").GetSelectedTag<ChartWindowsShowMode>();
+
             fOptions.KeepInfoPansOverallSize = GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Checked;
 
             fOptions.FilesOverwriteWarn = GetControl<ICheckBox>("chkFilesOverwriteWarn").Checked;
@@ -960,7 +966,14 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkUseInlineImagesInSvg").Text = LangMan.LS(LSID.UseInlineImagesInSvg);
             GetControl<ICheckBox>("chkUseExtendedNotes").Text = LangMan.LS(LSID.UseExtendedNotes);
             GetControl<ICheckBox>("chkKeepRichNames").Text = LangMan.LS(LSID.KeepRichNames);
-            GetControl<ICheckBox>("chkMaximizeChartWindows").Text = LangMan.LS(LSID.MaximizeChartWindows);
+
+            GetControl<ILabel>("lblChartWindowsShowMode").Text = LangMan.LS(LSID.ChartWindowsShowMode);
+            combo = GetControl<IComboBox>("cmbChartWindowsShowMode");
+            combo.Clear();
+            for (ChartWindowsShowMode cwsm = ChartWindowsShowMode.Default; cwsm <= ChartWindowsShowMode.RightHalf; cwsm++) {
+                combo.AddItem(LangMan.LS(GKData.ChartWindowsShowModes[(int)cwsm]), cwsm);
+            }
+
             GetControl<ICheckBox>("chkExtendedTree").Text = LangMan.LS(LSID.ExtendedTree);
             GetControl<ICheckBox>("chkSAFByAllNames").Text = LangMan.LS(LSID.SearchAndFilterByAllNames);
             GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Text = LangMan.LS(LSID.KeepInfoPansOverallSize);

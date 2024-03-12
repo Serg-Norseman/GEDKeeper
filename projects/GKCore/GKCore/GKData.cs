@@ -242,6 +242,7 @@ namespace GKCore
         public static readonly string BloodGroups;
         public static readonly FARPropertyStruct[] FARPropertyTypes;
         public static readonly LSID URTreeNoteType;
+        public static readonly LSID[] ChartWindowsShowModes;
 
 
         /// <summary>
@@ -557,6 +558,13 @@ namespace GKCore
             };
 
             URTreeNoteType = LSID.URTreeNoteType;
+
+            ChartWindowsShowModes = new LSID[] {
+                LSID.CWSM_Default,
+                LSID.CWSM_Maximize,
+                LSID.CWSM_LeftHalf,
+                LSID.CWSM_RightHalf,
+            };
         }
     }
 }

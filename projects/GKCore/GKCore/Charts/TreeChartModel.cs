@@ -106,6 +106,7 @@ namespace GKCore.Charts
         private TreeChartPerson fRoot;
         private GDMIndividualRecord fRootRec;
         private float fScale;
+        private float fPicScale;
         private IImage[] fSignsPic;
         private IBrush fSolidBlack;
         private int fSpouseDistance;
@@ -864,6 +865,7 @@ namespace GKCore.Charts
 
         private void Predef()
         {
+            fPicScale = (fScale < 1.0f) ? fScale : 1.0f;
             float fsz = (float)Math.Round(fOptions.DefFontSize * fScale, 2);
 #if NETCORE && OS_MSWIN
             // Eto.Forms [WPF] <= 2.7.4
@@ -1609,15 +1611,17 @@ namespace GKCore.Charts
             if (fSolidBlack != null) fSolidBlack.Dispose();
         }
 
-        public static ExtRect GetExpanderRect(ExtRect personRect)
+        public ExtRect GetExpanderRect(ExtRect personRect)
         {
-            ExtRect expRt = ExtRect.Create(personRect.Left, personRect.Top - 18, personRect.Left + 16 - 1, personRect.Top - 2);
+            int psz = (int)(16 * fPicScale);
+            ExtRect expRt = ExtRect.Create(personRect.Left, personRect.Top - psz - 2, personRect.Left + psz - 1, personRect.Top - 2);
             return expRt;
         }
 
-        public static ExtRect GetInfoRect(ExtRect personRect)
+        public ExtRect GetInfoRect(ExtRect personRect)
         {
-            ExtRect expRt = ExtRect.Create(personRect.Right - 16, personRect.Top - 18, personRect.Right, personRect.Top - 2);
+            int psz = (int)(16 * fPicScale);
+            ExtRect expRt = ExtRect.Create(personRect.Right - psz, personRect.Top - psz - 2, personRect.Right, personRect.Top - 2);
             return expRt;
         }
 
@@ -1774,11 +1778,14 @@ namespace GKCore.Charts
 
                 if (fOptions.SignsVisible && !person.Signs.IsEmpty()) {
                     int i = 0;
+                    int dy = (int)(21 * fPicScale);
                     for (var cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++) {
                         if (!person.Signs.Contains(cps)) continue;
 
                         IImage pic = fSignsPic[(int)cps];
-                        fRenderer.DrawImage(pic, brt.Right + 1, brt.Top - 21 + i * pic.Height, cps.ToString());
+                        int pW = (int)(pic.Width * fPicScale);
+                        int pH = (int)(pic.Height * fPicScale);
+                        fRenderer.DrawImage(pic, brt.Right + 1, brt.Top - dy + i * pH, pW, pH, cps.ToString());
                         i++;
                     }
                 }
@@ -1801,7 +1808,7 @@ namespace GKCore.Charts
                 if (drawMode == ChartDrawMode.dmInteractive) {
                     if (person.HasFlag(PersonFlag.pfCanExpand)) {
                         ExtRect expRt = GetExpanderRect(brt);
-                        fRenderer.DrawImage(fExpPic, expRt.Left, expRt.Top, string.Empty);
+                        fRenderer.DrawImage(fExpPic, expRt.Left, expRt.Top, expRt.Width, expRt.Height, string.Empty);
                     }
 
                     if (person.IsCollapsed) {
@@ -1812,11 +1819,13 @@ namespace GKCore.Charts
                     ExtRect infoRt = GetInfoRect(brt);
 
                     if (person.Selected) {
-                        fRenderer.DrawImage(fInfoPic, infoRt.Left, infoRt.Top, string.Empty);
+                        fRenderer.DrawImage(fInfoPic, infoRt.Left, infoRt.Top, infoRt.Width, infoRt.Height, string.Empty);
                     }
 
                     if (person.HasFlag(PersonFlag.pfBookmark)) {
-                        fRenderer.DrawImage(fBookmarkPic, infoRt.Left - 16, infoRt.Top, string.Empty);
+                        int pW = (int)(fBookmarkPic.Width * fPicScale);
+                        int pH = (int)(fBookmarkPic.Height * fPicScale);
+                        fRenderer.DrawImage(fBookmarkPic, brt.Right - pW * 2, brt.Top - pH - 2, pW, pH, string.Empty);
                     }
                 }
             } catch (Exception ex) {

@@ -559,6 +559,36 @@ namespace GKCore
 
         public abstract ExtRect GetActiveScreenWorkingArea();
 
+        public abstract void SetWindowBounds(IWindow window, ExtRect bounds);
+
+        public void SetWindowBounds(IWindow window, ChartWindowsShowMode mode)
+        {
+            var scrBounds = GetActiveScreenWorkingArea();
+
+            switch (mode) {
+                case ChartWindowsShowMode.Default:
+                    break;
+
+                case ChartWindowsShowMode.Maximize:
+                    SetWindowBounds(window, scrBounds);
+                    break;
+
+                case ChartWindowsShowMode.LeftHalf: {
+                        int half = scrBounds.Width / 2;
+                        var halfBounds = new ExtRect(scrBounds.Left, scrBounds.Top, half, scrBounds.Height);
+                        SetWindowBounds(window, halfBounds);
+                    }
+                    break;
+
+                case ChartWindowsShowMode.RightHalf: {
+                        int half = scrBounds.Width / 2;
+                        var halfBounds = new ExtRect(scrBounds.Left + half, scrBounds.Top, half, scrBounds.Height);
+                        SetWindowBounds(window, halfBounds);
+                    }
+                    break;
+            }
+        }
+
         public virtual void WidgetLocate(IWidgetForm view, WidgetLocation location)
         {
             // May have a desktop-only implementation
