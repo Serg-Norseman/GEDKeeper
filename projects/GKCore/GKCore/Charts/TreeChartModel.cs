@@ -266,6 +266,7 @@ namespace GKCore.Charts
             fPreparedFamilies = new HashSet<string>();
             fPreparedIndividuals = new HashSet<string>();
             fScale = 1.0f;
+            fPicScale = 1.0f;
 
             fBranchDistance = DEF_BRANCH_DISTANCE;
             fLevelDistance = DEF_LEVEL_DISTANCE;

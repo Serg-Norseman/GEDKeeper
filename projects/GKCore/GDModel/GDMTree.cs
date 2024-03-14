@@ -697,17 +697,38 @@ namespace GDModel
 
             int num = fRecords.Count;
             for (int i = 0; i < num; i++) {
-                var evsRec = fRecords[i] as GDMRecordWithEvents;
-                if (evsRec == null || !evsRec.HasEvents) continue;
+                var rec = fRecords[i];
 
-                for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
-                    var evt = evsRec.Events[j];
-                    if (!evt.HasPlace) continue;
+                switch (rec.RecordType) {
+                    case GDMRecordType.rtIndividual:
+                    case GDMRecordType.rtFamily: {
+                            var evsRec = rec as GDMRecordWithEvents;
+                            if (evsRec == null || !evsRec.HasEvents) continue;
 
-                    GDMPointer evLocation = evt.Place.Location;
-                    if (evLocation.XRef == locRec.XRef) {
-                        evLocation.XRef = string.Empty;
-                    }
+                            for (int j = evsRec.Events.Count - 1; j >= 0; j--) {
+                                var evt = evsRec.Events[j];
+                                if (!evt.HasPlace) continue;
+
+                                GDMPointer evLocation = evt.Place.Location;
+                                if (evLocation.XRef == locRec.XRef) {
+                                    evLocation.XRef = string.Empty;
+                                }
+                            }
+                        }
+                        break;
+
+                    case GDMRecordType.rtLocation: {
+                            var lRec = rec as GDMLocationRecord;
+                            if (lRec == null) continue;
+
+                            for (int j = lRec.TopLevels.Count - 1; j >= 0; j--) {
+                                var topLev = lRec.TopLevels[j];
+                                if (topLev.XRef == locRec.XRef) {
+                                    lRec.TopLevels.DeleteAt(j);
+                                }
+                            }
+                        }
+                        break;
                 }
             }
 

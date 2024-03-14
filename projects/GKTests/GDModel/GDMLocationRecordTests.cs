@@ -24,6 +24,7 @@ using System.IO;
 using System.Linq;
 using GDModel.Providers.GEDCOM;
 using GKCore;
+using GKCore.Options;
 using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
@@ -190,6 +191,8 @@ namespace GDModel
         [Test]
         public void Test_Hierarchy()
         {
+            GlobalOptions.Instance.ReversePlaceEntitiesOrder = true;
+
             var tree = new GDMTree();
 
             // J2G Rus transfer: 26 JAN 1918 (Julian), 1 FEB -> 14 FEB 1918
@@ -381,6 +384,8 @@ namespace GDModel
 
             //var gedcomProvider = new GEDCOMProvider(tree);
             //gedcomProvider.SaveToStreamExt(new FileStream("d:\\Russia.ged", FileMode.CreateNew), GEDCOMCharacterSet.csUTF8);
+
+            GlobalOptions.Instance.ReversePlaceEntitiesOrder = false;
         }
 
         [Test]

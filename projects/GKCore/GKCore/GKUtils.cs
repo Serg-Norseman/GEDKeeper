@@ -3025,10 +3025,32 @@ namespace GKCore
                             summary.Add("");
                         }
 
+                        GDMTree tree = baseContext.Tree;
+
+                        if (locRec.TopLevels.Count > 0) {
+                            summary.Add("");
+                            summary.Add(LangMan.LS(LSID.TopLevelLinks) + ":");
+
+                            for (int i = 0; i < locRec.TopLevels.Count; i++) {
+                                var topLev = locRec.TopLevels[i];
+                                var topLoc = tree.GetPtrValue<GDMLocationRecord>(topLev);
+
+                                string st = HyperLink(topLev.XRef, topLoc.GetNameByDate(topLev.Date.Value));
+                                if (!string.IsNullOrEmpty(st)) {
+                                    summary.Add("    " + st);
+                                }
+
+                                st = topLev.Date.GetDisplayStringExt(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
+                                if (!string.IsNullOrEmpty(st)) {
+                                    summary.Add("    " + st);
+                                }
+
+                                summary.Add("");
+                            }
+                        }
+
                         summary.Add(LangMan.LS(LSID.Latitude) + ": " + locRec.Map.Lati);
                         summary.Add(LangMan.LS(LSID.Longitude) + ": " + locRec.Map.Long);
-
-                        GDMTree tree = baseContext.Tree;
 
                         var fullNames = locRec.GetFullNames(tree);
                         if (fullNames.Count > 0) {

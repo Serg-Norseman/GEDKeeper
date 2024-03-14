@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using GDModel.Providers.GEDCOM;
 using GKCore.Calendar;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GDModel
@@ -99,6 +100,35 @@ namespace GDModel
             AssignList(otherLoc.fTopLevels, TopLevels);
         }
 
+        /// <summary>
+        /// The MoveTo() merges records and their references, but does not change the text in the target.
+        /// </summary>
+        /// <param name="targetRecord"></param>
+        public override void MoveTo(GDMRecord targetRecord)
+        {
+            GDMLocationRecord targetLoc = (targetRecord as GDMLocationRecord);
+            if (targetLoc == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
+
+            base.MoveTo(targetRecord);
+
+            if (targetLoc.Map.IsEmpty() && !fMap.IsEmpty()) {
+                targetLoc.Map.Assign(fMap);
+            }
+
+            while (fNames.Count > 0) {
+                GDMLocationName obj = fNames.Extract(0);
+                targetLoc.Names.Add(obj);
+            }
+            SortNames();
+
+            while (fTopLevels.Count > 0) {
+                GDMLocationLink obj = fTopLevels.Extract(0);
+                targetLoc.TopLevels.Add(obj);
+            }
+            SortTopLevels();
+        }
+
         public override void Clear()
         {
             base.Clear();
@@ -133,16 +163,20 @@ namespace GDModel
 
         public GDMList<GDMLocationName> GetFullNames(GDMTree tree)
         {
-            var result = new GDMList<GDMLocationName>();
+            GDMList<GDMLocationName> result;
 
-            if (fTopLevels.Count > 0) {
+            if (fTopLevels.Count == 0) {
+                result = fNames;
+            } else {
+                result = new GDMList<GDMLocationName>();
+
                 var buffer = new List<GDMLocationName>();
-
                 for (int j = 0; j < fTopLevels.Count; j++) {
                     var topLevel = fTopLevels[j];
                     var topLoc = tree.GetPtrValue<GDMLocationRecord>(topLevel);
                     if (topLoc == null) continue;
 
+                    bool wasJoin = false;
                     var topNames = topLoc.GetFullNames(tree);
                     for (int i = 0; i < topNames.Count; i++) {
                         var topName = topNames[i];
@@ -153,10 +187,19 @@ namespace GDModel
                             newLocName.StringValue = topName.StringValue;
                             newLocName.Date.ParseString(interDate.StringValue);
                             buffer.Add(newLocName);
+                            wasJoin = true;
                         }
+                    }
+
+                    if (!wasJoin && topNames.Count > 0) {
+                        var newLocName = new GDMLocationName();
+                        newLocName.StringValue = topNames[topNames.Count - 1].StringValue;
+                        newLocName.Date.ParseString(topLevel.Date.StringValue);
+                        buffer.Add(newLocName);
                     }
                 }
 
+                bool reverseOrder = GlobalOptions.Instance.ReversePlaceEntitiesOrder;
                 for (int j = 0; j < buffer.Count; j++) {
                     var topLocName = buffer[j];
                     var topName = topLocName.StringValue;
@@ -167,7 +210,7 @@ namespace GDModel
 
                         var interDate = GDMCustomDate.GetIntersection(topDate, locName.Date.Value);
                         if (!interDate.IsEmpty()) {
-                            string newName = locName.StringValue + ", " + topName;
+                            string newName = (!reverseOrder) ? topName + ", " + locName.StringValue : locName.StringValue + ", " + topName;
 
                             var newLocName = new GDMLocationName();
                             newLocName.StringValue = newName;
@@ -175,13 +218,6 @@ namespace GDModel
                             result.Add(newLocName);
                         }
                     }
-                }
-            } else {
-                for (int i = 0; i < fNames.Count; i++) {
-                    var locName = fNames[i];
-                    if (locName.Date.IsEmpty()) continue;
-
-                    result.Add(locName);
                 }
             }
 
