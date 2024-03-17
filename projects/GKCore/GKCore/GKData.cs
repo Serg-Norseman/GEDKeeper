@@ -260,6 +260,7 @@ namespace GKCore
         static GKData()
         {
             SpecialUserRefs = new SpecialUserRef[] {
+                new SpecialUserRef(LSID.RI_Recruit, "tg_recruit.png"),
                 new SpecialUserRef(LSID.RI_GeorgeKnight, "tg_george_cross.gif"),
                 new SpecialUserRef(LSID.USSR_WWII_Combatant, "tg_soldier.gif"),
                 new SpecialUserRef(LSID.USSR_WWII_KilledInBattle, "tg_soldier_fall.gif"),

@@ -1022,7 +1022,9 @@ namespace GKCore
         /* 949 */ CWSM_LeftHalf,
         /* 950 */ CWSM_RightHalf,
 
-        /* 000 */ Last = CWSM_RightHalf
+        /* 951 */ RI_Recruit,
+
+        /* 000 */ Last = RI_Recruit
     }
 
 
@@ -1997,6 +1999,8 @@ namespace GKCore
             /* 948 */ "Maximize",
             /* 949 */ "Left half",
             /* 950 */ "Right half",
+
+            /* 951 */ "RI:Recruit",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
