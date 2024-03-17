@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -44,7 +44,13 @@ namespace GDModel
 
         public GDMSourceCitationData Data
         {
-            get { return fData; }
+            get {
+                if (fData == null) {
+                    fData = new GDMSourceCitationData();
+                }
+
+                return fData;
+            }
         }
 
         public GDMLines Description
@@ -103,7 +109,13 @@ namespace GDModel
 
         public GDMTextTag Text
         {
-            get { return fText; }
+            get {
+                if (fText == null) {
+                    fText = new GDMTextTag((int)GEDCOMTagType.TEXT);
+                }
+
+                return fText;
+            }
         }
 
 
@@ -114,16 +126,13 @@ namespace GDModel
             fCertaintyAssessment = -1;
             fDescription = new GDMLines();
             fPage = string.Empty;
-
-            fData = new GDMSourceCitationData();
-            fText = new GDMTextTag((int)GEDCOMTagType.TEXT);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                fData.Dispose();
-                fText.Dispose();
+                if (fData != null) fData.Dispose();
+                if (fText != null) fText.Dispose();
                 if (fNotes != null) fNotes.Dispose();
                 if (fMultimediaLinks != null) fMultimediaLinks.Dispose();
             }
@@ -134,9 +143,9 @@ namespace GDModel
         {
             base.TrimExcess();
 
-            fData.TrimExcess();
+            if (fData != null) fData.TrimExcess();
             fDescription.TrimExcess();
-            fText.TrimExcess();
+            if (fText != null) fText.TrimExcess();
             if (fNotes != null) fNotes.TrimExcess();
             if (fMultimediaLinks != null) fMultimediaLinks.TrimExcess();
         }
@@ -151,9 +160,9 @@ namespace GDModel
 
             fCertaintyAssessment = sourceObj.fCertaintyAssessment;
             fPage = sourceObj.fPage;
-            fData.Assign(sourceObj.fData);
+            if (sourceObj.fData != null) Data.Assign(sourceObj.fData);
             fDescription.Assign(sourceObj.fDescription);
-            fText.Assign(sourceObj.fText);
+            if (sourceObj.fText != null) Text.Assign(sourceObj.fText);
             if (sourceObj.fNotes != null) AssignList(sourceObj.fNotes, Notes);
             if (sourceObj.fMultimediaLinks != null) AssignList(sourceObj.fMultimediaLinks, MultimediaLinks);
         }
@@ -163,10 +172,10 @@ namespace GDModel
             base.Clear();
 
             fCertaintyAssessment = -1;
-            fData.Clear();
+            if (fData != null) fData.Clear();
             fDescription.Clear();
             fPage = string.Empty;
-            fText.Clear();
+            if (fText != null) fText.Clear();
             if (fNotes != null) fNotes.Clear();
             if (fMultimediaLinks != null) fMultimediaLinks.Clear();
         }
@@ -180,9 +189,9 @@ namespace GDModel
                 && (fMultimediaLinks == null || fMultimediaLinks.Count == 0);
 
             if (IsPointer) {
-                result = base.IsEmpty() && isCommonEmpty && fData.IsEmpty();
+                result = base.IsEmpty() && isCommonEmpty && (fData == null || fData.IsEmpty());
             } else {
-                result = fDescription.IsEmpty() && (SubTags.Count == 0) && fText.IsEmpty() && isCommonEmpty;
+                result = fDescription.IsEmpty() && (SubTags.Count == 0) && (fText == null || fText.IsEmpty()) && isCommonEmpty;
             }
 
             return result;

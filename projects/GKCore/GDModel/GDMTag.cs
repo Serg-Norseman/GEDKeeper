@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -76,9 +76,20 @@ namespace GDModel
             fId = 0; // Unknown
         }
 
-        public GDMTag(int tagId, string tagValue) : this()
+        public GDMTag(int tagId, string tagValue)
         {
-            SetNameValue(tagId, tagValue);
+            fId = tagId;
+            if (!string.IsNullOrEmpty(tagValue)) {
+                ParseString(tagValue);
+            }
+        }
+
+        public void SetNameValue(int tagId, string tagValue)
+        {
+            fId = tagId;
+            if (!string.IsNullOrEmpty(tagValue)) {
+                ParseString(tagValue);
+            }
         }
 
         protected override void Dispose(bool disposing)
@@ -96,17 +107,6 @@ namespace GDModel
         {
             if (fTags != null) {
                 fTags.ReplaceXRefs(map);
-            }
-        }
-
-        public void SetNameValue(int tagId, string tagValue)
-        {
-            if (tagId != 0) {
-                SetName(tagId);
-            }
-
-            if (!string.IsNullOrEmpty(tagValue)) {
-                ParseString(tagValue);
             }
         }
 
@@ -128,7 +128,7 @@ namespace GDModel
 
         public void SetName(GEDCOMTagType tag)
         {
-            SetName((int)tag);
+            fId = (int)tag;
         }
 
         public GDMTag AddTag(GDMTag tag)
@@ -293,9 +293,8 @@ namespace GDModel
             fStringValue = string.Empty;
         }
 
-        public GDMValueTag(int tagId, string tagValue) : this()
+        public GDMValueTag(int tagId, string tagValue) : base(tagId, tagValue)
         {
-            SetNameValue(tagId, tagValue);
         }
 
         public override void Clear()

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -227,7 +227,6 @@ namespace GDModel.Providers.GEDCOM
             tagValue = string.Empty;
 
             int result = 0;
-            //var strTok = new GEDCOMParser(str, false);
             strTok.SkipWhitespaces();
 
             var token = strTok.CurrentToken; // already trimmed
@@ -235,7 +234,7 @@ namespace GDModel.Providers.GEDCOM
                 return -2;
             }
             if (token != GEDCOMToken.Number) {
-                tagValue = /*str;//*/strTok.GetFullStr();
+                tagValue = strTok.GetFullStr();
                 return -1;
             }
             tagLevel = strTok.GetNumber();
@@ -972,11 +971,7 @@ namespace GDModel.Providers.GEDCOM
             int idx = (int)enumVal;
             #endif
 
-            if (idx < 0 || idx >= values.Length) {
-                return string.Empty;
-            } else {
-                return values[idx];
-            }
+            return (idx < 0 || idx >= values.Length) ? string.Empty : values[idx];
         }
 
         /**
@@ -1023,8 +1018,26 @@ namespace GDModel.Providers.GEDCOM
                 }
                 if (num3 < 0) {
                     i = num2 + 1;
+                } else {
+                    num = num2 - 1;
                 }
-                else {
+            }
+            return ~i;
+        }
+
+        public static int BinarySearch<T>(T[] array, T value) where T : IComparable<T>
+        {
+            int i = 0;
+            int num = array.Length - 1;
+            while (i <= num) {
+                int num2 = i + (num - i >> 1);
+                int num3 = array[num2].CompareTo(value);
+                if (num3 == 0) {
+                    return num2;
+                }
+                if (num3 < 0) {
+                    i = num2 + 1;
+                } else {
                     num = num2 - 1;
                 }
             }
@@ -1061,6 +1074,9 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
+        public static readonly string[] Restrictions = new string[] {
+            "", "locked", "confidential", "privacy" };
+
         public static GDMRestriction GetRestrictionVal(string str)
         {
             if (string.IsNullOrEmpty(str)) return GDMRestriction.rnNone;
@@ -1082,27 +1098,7 @@ namespace GDModel.Providers.GEDCOM
 
         public static string GetRestrictionStr(GDMRestriction value)
         {
-            string s;
-
-            switch (value) {
-                case GDMRestriction.rnConfidential:
-                    s = "confidential";
-                    break;
-
-                case GDMRestriction.rnLocked:
-                    s = "locked";
-                    break;
-
-                case GDMRestriction.rnPrivacy:
-                    s = "privacy";
-                    break;
-
-                default:
-                    s = "";
-                    break;
-            }
-
-            return s;
+            return GEDCOMUtils.Enum2Str(value, Restrictions);
         }
 
 
@@ -1147,6 +1143,16 @@ namespace GDModel.Providers.GEDCOM
             return GEDCOMUtils.Enum2Str(value, CommunicationTypes);
         }
 
+
+        public static readonly string[] MultimediaFormats = new string[] {
+            "",
+            "bmp", "gif", "jpg", "pcx", "tif", "tga", "png", "raw", "psd", "webp",
+            "txt", "rtf", "htm", "pdf",
+            "wav", "mp3", "wma", "mka",
+            "avi", "mpg", "wmv", "mp4", "ogv", "mkv", "mov",
+            "djvu", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "odt", "ods", "odp",
+            "zip", "rar", "7z",
+            "ole", "z" };
 
         public static GDMMultimediaFormat GetMultimediaFormatVal(string str)
         {
@@ -1241,130 +1247,7 @@ namespace GDModel.Providers.GEDCOM
 
         public static string GetMultimediaFormatStr(GDMMultimediaFormat value)
         {
-            string s;
-            switch (value) {
-                case GDMMultimediaFormat.mfBMP:
-                    s = "bmp";
-                    break;
-                case GDMMultimediaFormat.mfGIF:
-                    s = "gif";
-                    break;
-                case GDMMultimediaFormat.mfJPG:
-                    s = "jpg";
-                    break;
-                case GDMMultimediaFormat.mfOLE:
-                    s = "ole";
-                    break;
-                case GDMMultimediaFormat.mfPCX:
-                    s = "pcx";
-                    break;
-                case GDMMultimediaFormat.mfTIF:
-                    s = "tif";
-                    break;
-                case GDMMultimediaFormat.mfWAV:
-                    s = "wav";
-                    break;
-                case GDMMultimediaFormat.mfTXT:
-                    s = "txt";
-                    break;
-                case GDMMultimediaFormat.mfRTF:
-                    s = "rtf";
-                    break;
-                case GDMMultimediaFormat.mfAVI:
-                    s = "avi";
-                    break;
-                case GDMMultimediaFormat.mfTGA:
-                    s = "tga";
-                    break;
-                case GDMMultimediaFormat.mfPNG:
-                    s = "png";
-                    break;
-                case GDMMultimediaFormat.mfMPG:
-                    s = "mpg";
-                    break;
-                case GDMMultimediaFormat.mfHTM:
-                    s = "htm";
-                    break;
-                case GDMMultimediaFormat.mfRAW:
-                    s = "raw";
-                    break;
-                case GDMMultimediaFormat.mfMP3:
-                    s = "mp3";
-                    break;
-                case GDMMultimediaFormat.mfWMA:
-                    s = "wma";
-                    break;
-                case GDMMultimediaFormat.mfPSD:
-                    s = "psd";
-                    break;
-                case GDMMultimediaFormat.mfPDF:
-                    s = "pdf";
-                    break;
-                case GDMMultimediaFormat.mfMP4:
-                    s = "mp4";
-                    break;
-                case GDMMultimediaFormat.mfOGV:
-                    s = "ogv";
-                    break;
-                case GDMMultimediaFormat.mfMKA:
-                    s = "mka";
-                    break;
-                case GDMMultimediaFormat.mfWMV:
-                    s = "wmv";
-                    break;
-                case GDMMultimediaFormat.mfMKV:
-                    s = "mkv";
-                    break;
-                case GDMMultimediaFormat.mfMOV:
-                    s = "mov";
-                    break;
-                case GDMMultimediaFormat.mfDJVU:
-                    s = "djvu";
-                    break;
-                case GDMMultimediaFormat.mfDOC:
-                    s = "doc";
-                    break;
-                case GDMMultimediaFormat.mfDOCX:
-                    s = "docx";
-                    break;
-                case GDMMultimediaFormat.mfXLS:
-                    s = "xls";
-                    break;
-                case GDMMultimediaFormat.mfXLSX:
-                    s = "xlsx";
-                    break;
-                case GDMMultimediaFormat.mfPPT:
-                    s = "ppt";
-                    break;
-                case GDMMultimediaFormat.mfPPTX:
-                    s = "pptx";
-                    break;
-                case GDMMultimediaFormat.mfODT:
-                    s = "odt";
-                    break;
-                case GDMMultimediaFormat.mfODS:
-                    s = "ods";
-                    break;
-                case GDMMultimediaFormat.mfODP:
-                    s = "odp";
-                    break;
-                case GDMMultimediaFormat.mfZIP:
-                    s = "zip";
-                    break;
-                case GDMMultimediaFormat.mfRAR:
-                    s = "rar";
-                    break;
-                case GDMMultimediaFormat.mf7Z:
-                    s = "7z";
-                    break;
-                case GDMMultimediaFormat.mfWEBP:
-                    s = "webp";
-                    break;
-                default:
-                    s = "";
-                    break;
-            }
-            return s;
+            return GEDCOMUtils.Enum2Str(value, MultimediaFormats);
         }
 
 
@@ -1434,6 +1317,9 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
+        public static readonly string[] ResearchStatuses = new string[] {
+            "defined", "inprogress", "onhold", "problems", "completed", "withdrawn" };
+
         public static GDMResearchStatus GetStatusVal(string str)
         {
             if (string.IsNullOrEmpty(str)) return GDMResearchStatus.rsDefined;
@@ -1459,34 +1345,14 @@ namespace GDModel.Providers.GEDCOM
 
         public static string GetStatusStr(GDMResearchStatus value)
         {
-            string s = "";
-            switch (value) {
-                case GDMResearchStatus.rsDefined:
-                    s = "defined";
-                    break;
-                case GDMResearchStatus.rsInProgress:
-                    s = "inprogress";
-                    break;
-                case GDMResearchStatus.rsOnHold:
-                    s = "onhold";
-                    break;
-                case GDMResearchStatus.rsProblems:
-                    s = "problems";
-                    break;
-                case GDMResearchStatus.rsCompleted:
-                    s = "completed";
-                    break;
-                case GDMResearchStatus.rsWithdrawn:
-                    s = "withdrawn";
-                    break;
-            }
-            return s;
+            string str = ResearchStatuses[(int)value];
+            return str;
         }
 
 
         public static int GetIntVal(string str, int defValue = 0)
         {
-            int result = (string.IsNullOrEmpty(str) ? defValue : ConvertHelper.ParseInt(str, defValue));
+            int result = string.IsNullOrEmpty(str) ? defValue : ConvertHelper.ParseInt(str, defValue);
             return result;
         }
 
@@ -1509,64 +1375,22 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
+        public static readonly string[] OrdinanceProcessFlags = new string[] {
+            "", "no", "yes" };
+
         public static GDMOrdinanceProcessFlag GetOrdinanceProcessFlagVal(string su)
         {
-            if (string.IsNullOrEmpty(su)) return GDMOrdinanceProcessFlag.opNone;
-
-            GDMOrdinanceProcessFlag result;
-
-            su = InvariantTextInfo.ToUpper(su);
-            if (su == "YES") {
-                result = GDMOrdinanceProcessFlag.opYes;
-            } else if (su == "NO") {
-                result = GDMOrdinanceProcessFlag.opNo;
-            } else {
-                result = GDMOrdinanceProcessFlag.opNone;
-            }
-
-            return result;
+            return Str2Enum(su, OrdinanceProcessFlags, GDMOrdinanceProcessFlag.opNone);
         }
 
         public static string GetOrdinanceProcessFlagStr(GDMOrdinanceProcessFlag value)
         {
-            string str = "";
-            switch (value) {
-                case GDMOrdinanceProcessFlag.opNone:
-                    str = "";
-                    break;
-                case GDMOrdinanceProcessFlag.opYes:
-                    str = "yes";
-                    break;
-                case GDMOrdinanceProcessFlag.opNo:
-                    str = "no";
-                    break;
-            }
-            return str;
+            return GEDCOMUtils.Enum2Str(value, OrdinanceProcessFlags);
         }
 
 
-        public static string GetPriorityStr(GDMResearchPriority value)
-        {
-            string str = "";
-            switch (value) {
-                case GDMResearchPriority.rpNone:
-                    str = "";
-                    break;
-                case GDMResearchPriority.rpLow:
-                    str = "low";
-                    break;
-                case GDMResearchPriority.rpNormal:
-                    str = "normal";
-                    break;
-                case GDMResearchPriority.rpHigh:
-                    str = "high";
-                    break;
-                case GDMResearchPriority.rpTop:
-                    str = "top";
-                    break;
-            }
-            return str;
-        }
+        public static readonly string[] ResearchPriorities = new string[] {
+            "", "low", "normal", "high", "top" };
 
         public static GDMResearchPriority GetPriorityVal(string str)
         {
@@ -1590,26 +1414,14 @@ namespace GDModel.Providers.GEDCOM
             return result;
         }
 
-
-        public static string GetCharacterSetStr(GEDCOMCharacterSet value)
+        public static string GetPriorityStr(GDMResearchPriority value)
         {
-            string str = "";
-            switch (value) {
-                case GEDCOMCharacterSet.csASCII:
-                    str = "ASCII";
-                    break;
-                case GEDCOMCharacterSet.csANSEL:
-                    str = "ANSEL";
-                    break;
-                case GEDCOMCharacterSet.csUNICODE:
-                    str = "UNICODE";
-                    break;
-                case GEDCOMCharacterSet.csUTF8:
-                    str = "UTF-8";
-                    break;
-            }
-            return str;
+            return ResearchPriorities[(int)value];
         }
+
+
+        public static readonly string[] CharacterSets = new string[] {
+            "ASCII", "ANSEL", "UNICODE", "UTF-8" };
 
         public static GEDCOMCharacterSet GetCharacterSetVal(string str)
         {
@@ -1633,6 +1445,14 @@ namespace GDModel.Providers.GEDCOM
             return result;
         }
 
+        public static string GetCharacterSetStr(GEDCOMCharacterSet value)
+        {
+            return CharacterSets[(int)value];
+        }
+
+
+        public static readonly string[] Sexes = new string[] {
+            "U", "M", "F", "X" };
 
         public static GDMSex GetSexVal(string str)
         {
@@ -1656,22 +1476,7 @@ namespace GDModel.Providers.GEDCOM
 
         public static string GetSexStr(GDMSex value)
         {
-            string str;
-            switch (value) {
-                case GDMSex.svMale:
-                    str = "M";
-                    break;
-                case GDMSex.svFemale:
-                    str = "F";
-                    break;
-                case GDMSex.svIntersex:
-                    str = "X";
-                    break;
-                default:
-                    str = "U";
-                    break;
-            }
-            return str;
+            return Sexes[(int)value];
         }
 
 
@@ -1772,60 +1577,6 @@ namespace GDModel.Providers.GEDCOM
             return result;
         }
 
-        #endregion
-
-        #region Event type detection
-
-        public static int CompareGEDCOMTag(GEDCOMTagType tagA, GEDCOMTagType tagB)
-        {
-            return tagA.CompareTo(tagB);
-        }
-
-        public static readonly GEDCOMTagType[] IndiEvents = new GEDCOMTagType[] {
-            GEDCOMTagType.ADOP, GEDCOMTagType.BAPM, GEDCOMTagType.BARM, GEDCOMTagType.BASM, GEDCOMTagType.BIRT,
-            GEDCOMTagType.BLES, GEDCOMTagType.BURI, GEDCOMTagType.CENS, GEDCOMTagType.CHR, GEDCOMTagType.CHRA,
-            GEDCOMTagType.CONF, GEDCOMTagType.CREM, GEDCOMTagType.DEAT, GEDCOMTagType.EMIG, GEDCOMTagType.EVEN,
-            GEDCOMTagType.FCOM, GEDCOMTagType.GRAD, GEDCOMTagType.IMMI, GEDCOMTagType.NATU, GEDCOMTagType.ORDN,
-            GEDCOMTagType.PROB, GEDCOMTagType.RETI, GEDCOMTagType.WILL, 
-        };
-
-        public static bool IsIndiEvent(GEDCOMTagType tag)
-        {
-            int idx = ArrayHelper.BinarySearch<GEDCOMTagType>(IndiEvents, tag, CompareGEDCOMTag);
-            return idx >= 0;
-        }
-
-
-        public static readonly GEDCOMTagType[] IndiAttrs = new GEDCOMTagType[] {
-            GEDCOMTagType.CAST, GEDCOMTagType.DSCR, GEDCOMTagType.EDUC, GEDCOMTagType.FACT, GEDCOMTagType.IDNO,
-            GEDCOMTagType.NATI, GEDCOMTagType.NCHI, GEDCOMTagType.NMR, GEDCOMTagType.OCCU, GEDCOMTagType.PROP,
-            GEDCOMTagType.RELI, GEDCOMTagType.RESI, GEDCOMTagType.SSN, GEDCOMTagType.TITL,
-
-            GEDCOMTagType._AWARD, GEDCOMTagType._BGRO, GEDCOMTagType._EYES, GEDCOMTagType._HAIR, GEDCOMTagType._HOBBY,
-            GEDCOMTagType._MDNA, GEDCOMTagType._MILI, GEDCOMTagType._MILI_DIS, GEDCOMTagType._MILI_IND,
-            GEDCOMTagType._MILI_RANK, GEDCOMTagType._TRAVEL, GEDCOMTagType._YDNA,
-        };
-
-        public static bool IsIndiAttr(GEDCOMTagType tag)
-        {
-            int idx = ArrayHelper.BinarySearch<GEDCOMTagType>(IndiAttrs, tag, CompareGEDCOMTag);
-            return idx >= 0;
-        }
-
-
-        public static readonly GEDCOMTagType[] FamEvents = new GEDCOMTagType[] {
-            GEDCOMTagType.ANUL, GEDCOMTagType.CENS, GEDCOMTagType.DIV, GEDCOMTagType.DIVF, GEDCOMTagType.ENGA,
-            GEDCOMTagType.EVEN, GEDCOMTagType.MARB, GEDCOMTagType.MARC, GEDCOMTagType.MARL, GEDCOMTagType.MARR,
-            GEDCOMTagType.MARS, GEDCOMTagType.RESI,
-        };
-
-        public static bool IsFamEvent(GEDCOMTagType tag)
-        {
-            int idx = ArrayHelper.BinarySearch<GEDCOMTagType>(FamEvents, tag, CompareGEDCOMTag);
-            return idx >= 0;
-        }
-
-
         public static GDMLines GetTagStrings(GDMTag strTag)
         {
             var strings = new GDMLines();
@@ -1897,6 +1648,25 @@ namespace GDModel.Providers.GEDCOM
                     }
                 }
             }
+        }
+
+        #endregion
+
+        #region Event type detection
+
+        public static bool IsIndiEvent(GEDCOMTagType tag)
+        {
+            return (tag == GEDCOMTagType.CENS || tag == GEDCOMTagType.EVEN) || (tag >= GEDCOMTagType.ADOP && tag <= GEDCOMTagType.WILL);
+        }
+
+        public static bool IsIndiAttr(GEDCOMTagType tag)
+        {
+            return (tag == GEDCOMTagType.RESI) || (tag >= GEDCOMTagType.CAST && tag <= GEDCOMTagType._YDNA);
+        }
+
+        public static bool IsFamEvent(GEDCOMTagType tag)
+        {
+            return (tag >= GEDCOMTagType.CENS && tag <= GEDCOMTagType.RESI) || (tag >= GEDCOMTagType.ANUL && tag <= GEDCOMTagType.MARS);
         }
 
         #endregion

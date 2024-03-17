@@ -269,6 +269,7 @@ namespace GDModel.Providers.GEDCOM
                 GDMTag curRecord = null;
                 GDMTag curTag = null;
                 var stack = new Stack<StackTuple>(9);
+                var header = fTree.Header;
 
                 int lineNum = 0;
                 int lineLen;
@@ -315,7 +316,7 @@ namespace GDModel.Providers.GEDCOM
                             curRecord.TrimExcess();
                         }
 
-                        if (curRecord == fTree.Header && fEncodingState == EncodingState.esUnchecked) {
+                        if (curRecord == header && fEncodingState == EncodingState.esUnchecked) {
                             // beginning recognition of the first is not header record
                             // to check for additional versions of the code page
                             var format = GetGEDCOMFormat(fTree);
@@ -609,26 +610,26 @@ namespace GDModel.Providers.GEDCOM
                 curTag = indiRec.AddPersonalName(new GDMPersonalName());
                 curTag.ParseString(tagValue);
                 addHandler = AddPersonalNameTag;
-            } else if (tagType == GEDCOMTagType.ASSO) {
-                curTag = indiRec.Associations.Add(new GDMAssociation());
-                curTag.ParseString(tagValue);
-                addHandler = AddAssociationTag;
-            } else if (tagType == GEDCOMTagType.ALIA) {
-                var asso = new GDMAssociation();
-                asso.ParseString(tagValue);
-                asso.Relation = "possible_duplicate";
-                curTag = indiRec.Associations.Add(asso);
-                addHandler = AddAssociationTag;
+            } else if (tagType == GEDCOMTagType.SEX) {
+                indiRec.Sex = GEDCOMUtils.GetSexVal(tagValue);
             } else if (GEDCOMUtils.IsIndiEvent(tagType)) {
                 curTag = indiRec.AddEvent(new GDMIndividualEvent(tagId, tagValue));
                 addHandler = AddCustomEventTag;
             } else if (GEDCOMUtils.IsIndiAttr(tagType)) {
                 curTag = indiRec.AddEvent(new GDMIndividualAttribute(tagId, tagValue));
                 addHandler = AddCustomEventTag;
+            } else if (tagType == GEDCOMTagType.ASSO) {
+                curTag = indiRec.Associations.Add(new GDMAssociation());
+                curTag.ParseString(tagValue);
+                addHandler = AddAssociationTag;
             } else if (tagType == GEDCOMTagType._GROUP) {
                 curTag = indiRec.Groups.Add(new GDMPointer(tagId, tagValue));
-            } else if (tagType == GEDCOMTagType.SEX) {
-                indiRec.Sex = GEDCOMUtils.GetSexVal(tagValue);
+            } else if (tagType == GEDCOMTagType.ALIA) {
+                var asso = new GDMAssociation();
+                asso.ParseString(tagValue);
+                asso.Relation = "possible_duplicate";
+                curTag = indiRec.Associations.Add(asso);
+                addHandler = AddAssociationTag;
             } else {
                 return AddRecordWithEventsTag(owner, tagLevel, tagId, tagValue);
             }
@@ -1134,14 +1135,19 @@ namespace GDModel.Providers.GEDCOM
             AddTagHandler addHandler = null;
 
             GEDCOMTagType tagType = (GEDCOMTagType)tagId;
-            if (tagType == GEDCOMTagType.NOTE) {
-                curTag = record.Notes.Add(new GDMNotes());
-                curTag.ParseString(tagValue);
-                addHandler = AddNoteTag;
+            if (tagType == GEDCOMTagType._UID) {
+                record.UID = tagValue;
+            } else if (tagType == GEDCOMTagType.CHAN) {
+                curTag = record.ChangeDate;
+                addHandler = AddChangeDateTag;
             } else if (tagType == GEDCOMTagType.SOUR) {
                 curTag = record.SourceCitations.Add(new GDMSourceCitation());
                 curTag.ParseString(tagValue);
                 addHandler = AddSourceCitationTag;
+            } else if (tagType == GEDCOMTagType.NOTE) {
+                curTag = record.Notes.Add(new GDMNotes());
+                curTag.ParseString(tagValue);
+                addHandler = AddNoteTag;
             } else if (tagType == GEDCOMTagType.OBJE) {
                 curTag = record.MultimediaLinks.Add(new GDMMultimediaLink());
                 curTag.ParseString(tagValue);
@@ -1150,13 +1156,8 @@ namespace GDModel.Providers.GEDCOM
                 curTag = record.UserReferences.Add(new GDMUserReference());
                 curTag.ParseString(tagValue);
                 addHandler = AddUserReferenceTag;
-            } else if (tagType == GEDCOMTagType._UID) {
-                record.UID = tagValue;
             } else if (tagType == GEDCOMTagType.RIN) {
                 record.AutomatedRecordID = tagValue;
-            } else if (tagType == GEDCOMTagType.CHAN) {
-                curTag = record.ChangeDate;
-                addHandler = AddChangeDateTag;
             } else {
                 return AddBaseTag(owner, tagLevel, tagId, tagValue);
             }
@@ -1449,15 +1450,7 @@ namespace GDModel.Providers.GEDCOM
             AddTagHandler addHandler = null;
 
             GEDCOMTagType tagType = (GEDCOMTagType)tagId;
-            if (tagType == GEDCOMTagType.ADDR) {
-                curTag = custEvent.Address;
-                curTag.ParseString(tagValue);
-                addHandler = AddAddressTag;
-            } else if (tagType == GEDCOMTagType.AGNC) {
-                custEvent.Agency = tagValue;
-            } else if (tagType == GEDCOMTagType.CAUS) {
-                custEvent.Cause = tagValue;
-            } else if (tagType == GEDCOMTagType.TYPE) {
+            if (tagType == GEDCOMTagType.TYPE) {
                 custEvent.Classification = tagValue;
             } else if (tagType == GEDCOMTagType.DATE) {
                 curTag = custEvent.Date;
@@ -1466,12 +1459,10 @@ namespace GDModel.Providers.GEDCOM
                 curTag = custEvent.Place;
                 curTag.ParseString(tagValue);
                 addHandler = AddPlaceTag;
-            } else if (tagType == GEDCOMTagType.RELI) {
-                custEvent.ReligiousAffilation = tagValue;
-            } else if (tagType == GEDCOMTagType.RESN) {
-                custEvent.Restriction = GEDCOMUtils.GetRestrictionVal(tagValue);
-            } else if (tagType == GEDCOMTagType.PHON || tagType == GEDCOMTagType.EMAIL || tagType == GEDCOMTagType.FAX || tagType == GEDCOMTagType.WWW) {
-                return AddAddressTag(custEvent.Address, tagLevel, tagId, tagValue);
+            } else if (tagType == GEDCOMTagType.AGNC) {
+                custEvent.Agency = tagValue;
+            } else if (tagType == GEDCOMTagType.CAUS) {
+                custEvent.Cause = tagValue;
             } else if (tagType == GEDCOMTagType.NOTE) {
                 curTag = custEvent.Notes.Add(new GDMNotes());
                 curTag.ParseString(tagValue);
@@ -1484,6 +1475,16 @@ namespace GDModel.Providers.GEDCOM
                 curTag = custEvent.MultimediaLinks.Add(new GDMMultimediaLink());
                 curTag.ParseString(tagValue);
                 addHandler = AddMultimediaLinkTag;
+            } else if (tagType == GEDCOMTagType.ADDR) {
+                curTag = custEvent.Address;
+                curTag.ParseString(tagValue);
+                addHandler = AddAddressTag;
+            } else if (tagType == GEDCOMTagType.PHON || tagType == GEDCOMTagType.EMAIL || tagType == GEDCOMTagType.FAX || tagType == GEDCOMTagType.WWW) {
+                return AddAddressTag(custEvent.Address, tagLevel, tagId, tagValue);
+            } else if (tagType == GEDCOMTagType.RELI) {
+                custEvent.ReligiousAffilation = tagValue;
+            } else if (tagType == GEDCOMTagType.RESN) {
+                custEvent.Restriction = GEDCOMUtils.GetRestrictionVal(tagValue);
             } else {
                 return AddBaseTag(owner, tagLevel, tagId, tagValue);
             }
@@ -2160,9 +2161,7 @@ namespace GDModel.Providers.GEDCOM
             AddTagHandler addHandler = null;
 
             GEDCOMTagType tagType = (GEDCOMTagType)tagId;
-            if (IsTextTag(tagType)) {
-                return AddTextTag(sourCit, tagLevel, tagId, tagValue);
-            } else if (tagType == GEDCOMTagType.QUAY) {
+            if (tagType == GEDCOMTagType.QUAY) {
                 sourCit.CertaintyAssessment = GEDCOMUtils.GetIntVal(tagValue);
             } else if (tagType == GEDCOMTagType.PAGE) {
                 sourCit.Page = tagValue;
@@ -2181,6 +2180,8 @@ namespace GDModel.Providers.GEDCOM
             } else if (tagType == GEDCOMTagType.DATA) {
                 curTag = sourCit.Data;
                 addHandler = AddSourceCitationDataTag;
+            } else if (IsTextTag(tagType)) {
+                return AddTextTag(sourCit, tagLevel, tagId, tagValue);
             } else {
                 return AddBaseTag(owner, tagLevel, tagId, tagValue);
             }

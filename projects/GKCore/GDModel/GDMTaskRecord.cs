@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -70,8 +70,8 @@ namespace GDModel
         {
             SetName(GEDCOMTagType._TASK);
 
-            fStartDate = new GDMDate((int)GEDCOMTagType._STARTDATE, string.Empty);
-            fStopDate = new GDMDate((int)GEDCOMTagType._STOPDATE, string.Empty);
+            fStartDate = new GDMDate((int)GEDCOMTagType._STARTDATE);
+            fStopDate = new GDMDate((int)GEDCOMTagType._STOPDATE);
         }
 
         public override void Assign(GDMTag source)

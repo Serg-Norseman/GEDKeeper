@@ -39,10 +39,81 @@ namespace GDModel.Providers.GEDCOM
         SUBN, // Submission [std]
         SUBM, // Submitter [std]
 
+        // don't change the order of elements because it is used for bounds checks
+        CENS, // INDI.EVEN, FAM.EVEN
+        EVEN, // INDI.EVEN
+        RESI, // INDI.ATTR, FAM.EVEN
+
+        // don't change the order of elements because it is used for bounds checks
+        ADOP, // INDI.EVEN
+        BAPM, // INDI.EVEN
+        BARM, // INDI.EVEN
+        BASM, // INDI.EVEN
+        BIRT, // INDI.EVEN
+        BLES, // INDI.EVEN
+        BURI, // INDI.EVEN
+        CHR, // INDI.EVEN
+        CHRA, // INDI.EVEN
+        CONF, // INDI.EVEN
+        CREM, // INDI.EVEN
+        DEAT, // INDI.EVEN
+        EMIG, // INDI.EVEN
+        FCOM, // INDI.EVEN
+        GRAD, // INDI.EVEN
+        IMMI, // INDI.EVEN
+        NATU, // INDI.EVEN
+        ORDN, // INDI.EVEN
+        PROB, // INDI.EVEN
+        RETI, // INDI.EVEN
+        WILL, // INDI.EVEN
+
+        CAST, // INDI.ATTR
+        DSCR, // INDI.ATTR
+        EDUC, // INDI.ATTR
+        FACT, // INDI.ATTR
+        IDNO, // INDI.ATTR
+        NATI, // INDI.ATTR
+        NCHI, // INDI.ATTR
+        NMR, // INDI.ATTR
+        OCCU, // INDI.ATTR
+        PROP, // INDI.ATTR
+        RELI, // INDI.ATTR
+        SSN, // INDI.ATTR
+        TITL, // INDI.ATTR
+
+        _AWARD, // [???] INDI.ATTR
+        _BGRO, // [MyFamilyTree] INDI.ATTR
+        _ELEC, // Election [???] INDI.ATTR
+        _EXCM, // Excommunication [FTM] INDI.ATTR
+        _EYES, // [Gen] INDI.ATTR
+        _HAIR, // [BKW6, PAF] INDI.ATTR
+        _HOBBY, // Hobby [GK] INDI.ATTR
+        _MDCL, // Medical condition [FTM, FTW] INDI.ATTR
+        _MDNA, // [MyFamilyTree] INDI.ATTR
+        _MILI, // [GK] INDI.ATTR
+        _MILI_DIS, // [GK] INDI.ATTR
+        _MILI_IND, // [GK] INDI.ATTR
+        _MILI_RANK, // [GK] INDI.ATTR
+        _MILT, // Military Services [FTM, PAF5] INDI.ATTR
+        _OBIT, // Obituary [???] INDI.ATTR
+        _RACE, // Race [Gen, FTW, Reunion]
+        _TRAVEL, // [GK] INDI.ATTR
+        _YDNA, // [MyFamilyTree] INDI.ATTR
+
+        // don't change the order of elements because it is used for bounds checks
+        ANUL, // FAM.EVEN
+        DIV, // FAM.EVEN
+        DIVF, // FAM.EVEN
+        ENGA, // FAM.EVEN
+        MARB, // FAM.EVEN
+        MARC, // FAM.EVEN
+        MARL, // FAM.EVEN
+        MARR, // FAM.EVEN
+        MARS, // FAM.EVEN
+
         // Other tags
         ABBR,
         ADDR,
-        ADOP, // INDI.EVEN
         ADR1,
         ADR2,
         ADR3,
@@ -51,102 +122,60 @@ namespace GDModel.Providers.GEDCOM
         ALIA,
         ANCE,
         ANCI,
-        ANUL, // FAM.EVEN
         ASSO,
         AUTH,
         BAPL,
-        BAPM, // INDI.EVEN
-        BARM, // INDI.EVEN
-        BASM, // INDI.EVEN
-        BIRT, // INDI.EVEN
-        BLES, // INDI.EVEN
-        BURI, // INDI.EVEN
-        CAST, // INDI.ATTR
         CAUS,
-        CENS,
         CHAN,
         CHAR,
         CHIL,
-        CHR, // INDI.EVEN
-        CHRA, // INDI.EVEN
         CITY,
         CONC,
-        CONF, // INDI.EVEN
         CONL,
         CONT,
         COPR,
         CORP,
-        CREM, // INDI.EVEN
         CTRY,
         DATA,
         DATE,
-        DEAT, // INDI.EVEN
         DESC,
         DESI,
         DEST,
-        DIV, // FAM.EVEN
-        DIVF, // FAM.EVEN
-        DSCR, // INDI.ATTR
-        EDUC, // INDI.ATTR
         ENDL,
-        EVEN,
         EMAIL,
-        EMIG, // INDI.EVEN
-        ENGA, // FAM.EVEN
-        FACT, // INDI.ATTR
         FAMC,
         FAMF,
         FAMS,
         FAX,
-        FCOM, // INDI.EVEN
         FILE,
         FONE,
         FORM,
         FROM,
         GEDC,
         GIVN,
-        GRAD, // INDI.EVEN
         HEAD,
         HUSB,
-        IDNO, // INDI.ATTR
-        IMMI, // INDI.EVEN
         INT,
         LANG,
         LATI,
         LONG,
         MAP,
-        MARB, // FAM.EVEN
-        MARC, // FAM.EVEN
-        MARL, // FAM.EVEN
-        MARR, // FAM.EVEN
-        MARS, // FAM.EVEN
         MEDI,
         NAME,
-        NATI, // INDI.ATTR
-        NATU, // INDI.EVEN
-        NCHI, // INDI.ATTR
         NICK,
-        NMR, // INDI.ATTR
         NPFX,
         NSFX,
-        OCCU, // INDI.ATTR
         ORDI,
-        ORDN, // INDI.EVEN
         PAGE,
         PEDI,
         PHON,
         PLAC,
         POST,
-        PROB, // INDI.EVEN
-        PROP, // INDI.ATTR
         PUBL,
         QUAY,
         REFN,
         RELA,
-        RELI, // INDI.ATTR
-        RESI,
         RESN, // Restriction
-        RETI, // INDI.EVEN
         RFN, // PermanentRecordFileNumber
         RIN, // AutomatedRecordID
         ROMN,
@@ -154,49 +183,31 @@ namespace GDModel.Providers.GEDCOM
         SLGC,
         SLGS,
         SPFX,
-        SSN, // INDI.ATTR
         STAE,
         STAT,
         SURN,
         TEMP,
         TEXT,
         TIME,
-        TITL, // INDI.ATTR
         TO,
         TRLR,
         TYPE,
         VERS,
         WIFE,
-        WILL, // INDI.EVEN
         WWW,
 
         // non-standard extended tags
-        _AWARD, // [???] INDI.ATTR
-        _BGRO, // [MyFamilyTree] INDI.ATTR
         _BOOKMARK, // [GK]
         _CENN, // Census Name [BKW6]
         _DATE, // Date value in non-standard use (source records) [GK]
-        _ELEC, // Election [???] INDI.ATTR
-        _EXCM, // Excommunication [FTM] INDI.ATTR
-        _EYES, // [Gen] INDI.ATTR
         _FOLDER, // [GK]
         _GOAL, // [GK]
         _GRP, // Group record [Genney]
-        _HAIR, // [BKW6, PAF] INDI.ATTR
-        _HOBBY, // Hobby [GK] INDI.ATTR
         _LANG, // [GK], outdated, replaced by LANG
         _MARN, // Married Surname [BKW6]
         _MARNM, // Married Surname [AQ3, PAF5, Geni]
-        _MDCL, // Medical condition [FTM, FTW] INDI.ATTR
-        _MDNA, // [MyFamilyTree] INDI.ATTR
         _MEMBER, // [GK]
         _MIDN, // Middle Name [WikiTree]
-        _MILI, // [GK] INDI.ATTR
-        _MILI_DIS, // [GK] INDI.ATTR
-        _MILI_IND, // [GK] INDI.ATTR
-        _MILI_RANK, // [GK] INDI.ATTR
-        _MILT, // Military Services [FTM, PAF5]
-        _OBIT, // Obituary [???] INDI.ATTR
         _PATN, // Patronymic Name
         _PATRIARCH, // [GK]
         _PERCENT, // [GK]
@@ -206,7 +217,6 @@ namespace GDModel.Providers.GEDCOM
         _PRIM, // [PhpGedView, AQ3, PAF5, FO7]
         _PRIM_CUTOUT, // [FTB]
         _PRIORITY, // [GK]
-        _RACE, // Race [Gen, FTW, Reunion]
         _RELN, // Religious Name [BKW6]
         _REV, // [GK]
         _SLDN, // Soldier name [BKW6, PAF5]
@@ -214,9 +224,7 @@ namespace GDModel.Providers.GEDCOM
         _STAT,
         _STATUS, // [GK]
         _STOPDATE, // [GK]
-        _TRAVEL, // [GK] INDI.ATTR
         _UID, // 
-        _YDNA, // [MyFamilyTree] INDI.ATTR
 
         // non-standard convertible tags
         _FREL, // [Ages, FTM/FTW, Legacy, Family Tree Maker]

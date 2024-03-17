@@ -277,8 +277,8 @@ namespace GDModel
         public void SetXRef(string oldXRef, GDMRecord record, bool removeOldXRef)
         {
             if (removeOldXRef && !string.IsNullOrEmpty(oldXRef)) {
-                bool exists = fXRefIndex.ContainsKey(oldXRef);
-                if (exists) fXRefIndex.Remove(oldXRef);
+                // remove can verify existing of key
+                fXRefIndex.Remove(oldXRef);
             }
 
             XRefIndex_AddRecord(record);

@@ -91,7 +91,7 @@ namespace GDModel
             fTitle = new GDMTextTag((int)GEDCOMTagType.TITL);
 
             fDate = new GDMDateValue();
-            fDate.SetName((int)GEDCOMTagType._DATE);
+            fDate.SetName(GEDCOMTagType._DATE);
         }
 
         protected override void Dispose(bool disposing)
