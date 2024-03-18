@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -153,6 +153,8 @@ namespace GKCore
             Assert.AreEqual("Ivanovo", GKUtils.GetPlaceStr(evt, false, false));
             Assert.AreEqual("Ivanovo", GKUtils.GetPlaceStr(evt, false, true));
 
+            GlobalOptions.Instance.ReversePlaceEntitiesOrder = true;
+
             evt.Place.StringValue = "Ivanovo, Ivanovo obl., Russia";
             Assert.AreEqual("Ivanovo, Ivanovo obl., Russia", GKUtils.GetPlaceStr(evt, false, false));
             Assert.AreEqual("Ivanovo", GKUtils.GetPlaceStr(evt, false, true));
@@ -165,7 +167,7 @@ namespace GKCore
             Assert.AreEqual(", Ivanovo obl., Russia", GKUtils.GetPlaceStr(evt, false, false));
             Assert.AreEqual("", GKUtils.GetPlaceStr(evt, false, true));
 
-            GlobalOptions.Instance.ReversePlaceEntitiesOrder = true;
+            GlobalOptions.Instance.ReversePlaceEntitiesOrder = false;
 
             evt.Place.StringValue = "Russia, Ivanovo obl., Ivanovo";
             Assert.AreEqual("Russia, Ivanovo obl., Ivanovo", GKUtils.GetPlaceStr(evt, false, false));

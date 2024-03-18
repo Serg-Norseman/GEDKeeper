@@ -246,6 +246,11 @@ namespace GKCore.Options
 
         /// <summary>
         /// Hidden option for non-standard order.
+        ///
+        /// Initial implementation (now just default) for enumerating ATDs: from largest to smallest.
+        /// Reverse order of places: from smallest to largest.
+        ///
+        /// This option affects the display of places in trees and in event editing dialogs.
         /// </summary>
         public bool ReversePlaceEntitiesOrder { get; set; }
 

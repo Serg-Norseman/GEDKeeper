@@ -475,6 +475,7 @@
             <CheckBox x:Name="chkFilesOverwriteWarn" />
             <CheckBox x:Name="chkExtendedKinships" />
             <CheckBox x:Name="chkExtendedLocations" />
+            <CheckBox x:Name="chkReversePlacesOrder" />
           </StackLayout>
         </TabPage>
 

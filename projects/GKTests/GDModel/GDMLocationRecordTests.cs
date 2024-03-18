@@ -191,8 +191,6 @@ namespace GDModel
         [Test]
         public void Test_Hierarchy()
         {
-            GlobalOptions.Instance.ReversePlaceEntitiesOrder = true;
-
             var tree = new GDMTree();
 
             // J2G Rus transfer: 26 JAN 1918 (Julian), 1 FEB -> 14 FEB 1918
@@ -206,7 +204,7 @@ namespace GDModel
             locRus.AddLocName("СССР", "FROM 30 DEC 1922 TO 26 DEC 1991");//++
             locRus.AddLocName("РФ", "FROM 27 DEC 1991");//++
 
-            var fullNames = locRus.GetFullNames(tree);
+            var fullNames = locRus.GetFullNames(tree, ATDEnumeration.fStL);
             string result = string.Join("\n", fullNames.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
             Assert.AreEqual("'__.__._862 [G] - __.__.1546 [G]': 'Россия'\n" +
                             "'__.__.1547 [G] - 21.10.1721 [G]': 'Российское царство'\n" +
@@ -221,7 +219,7 @@ namespace GDModel
             locSibGub.AddLocName("Сибирская губерния", "FROM 18 DEC 1708 TO 19 JAN 1782");
             locSibGub.AddLocLink(locRus, "FROM 18 DEC 1708 TO 19 JAN 1782");
 
-            fullNames = locSibGub.GetFullNames(tree);
+            fullNames = locSibGub.GetFullNames(tree, ATDEnumeration.fStL);
             result = string.Join("\n", fullNames.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
             Assert.AreEqual("'18.12.1708 [G] - 21.10.1721 [G]': 'Сибирская губерния, Российское царство'\n" +
                             "'22.10.1721 [G] - 19.01.1782 [G]': 'Сибирская губерния, Российская империя'",
@@ -233,7 +231,7 @@ namespace GDModel
             locKazGub.AddLocName("Казанская губерния", "FROM 12 DEC 1796 TO 27 MAY 1920");
             locKazGub.AddLocLink(locRus, "FROM 18 DEC 1708 TO 27 MAY 1920");
 
-            fullNames = locKazGub.GetFullNames(tree);
+            fullNames = locKazGub.GetFullNames(tree, ATDEnumeration.fStL);
             result = string.Join("\n", fullNames.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
             Assert.AreEqual("'18.12.1708 [G] - 21.10.1721 [G]': 'Казанская губерния, Российское царство'\n" +
                             "'22.10.1721 [G] - 27.09.1781 [G]': 'Казанская губерния, Российская империя'\n" +
@@ -268,7 +266,7 @@ namespace GDModel
             locVyatGub.AddLocLink(locNizhNovgGub, "FROM 15 JUL 1929 TO 29 JUL 1930");
             locVyatGub.AddLocLink(locRus, "FROM 30 JUL 1930 TO 9999");
 
-            fullNames = locVyatGub.GetFullNames(tree);
+            fullNames = locVyatGub.GetFullNames(tree, ATDEnumeration.fStL);
             result = string.Join("\n", fullNames.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
             Assert.AreEqual("'29.05.1719 [G] - 21.10.1721 [G]': 'Вятская провинция, Сибирская губерния, Российское царство'\n" +
                             "'22.10.1721 [G] - 28.04.1727 [G]': 'Вятская провинция, Сибирская губерния, Российская империя'\n" +
@@ -303,7 +301,7 @@ namespace GDModel
             locVerhkamRn.AddLocName("Верхнекамский район", "FROM 12 JAN 1965");
             locVerhkamRn.AddLocLink(locVyatGub, "FROM 12 JAN 1965 TO 9999");
 
-            fullNames = locSlobUezd.GetFullNames(tree);
+            fullNames = locSlobUezd.GetFullNames(tree, ATDEnumeration.fStL);
             result = string.Join("\n", fullNames.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
             Assert.AreEqual("'__.__.1646 [G] - __.__.1718 [G]': 'Слободской уезд, Российское царство'\n" +
                             "'29.05.1719 [G] - 21.10.1721 [G]': 'Слободской дистр., Вятская провинция, Сибирская губерния, Российское царство'\n" +
@@ -343,7 +341,7 @@ namespace GDModel
             locPrislon.AddLocLink(locOmutUezd, "FROM 1927 TO 1964");
             locPrislon.AddLocLink(locVerhkamRn, "FROM 1965 TO 9999");
 
-            fullNames = locPrislon.GetFullNames(tree);
+            fullNames = locPrislon.GetFullNames(tree, ATDEnumeration.fStL);
             result = string.Join("\n", fullNames.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
             Assert.AreEqual("'__.__.1678 [G] - __.__.1718 [G]': 'поч. Старое раменье, Слободской уезд, Российское царство'\n" +
                             "'__.__.1720 [G] - 21.10.1721 [G]': 'д. Прислонская, Верховская вол., Слободской дистр., Вятская провинция, Сибирская губерния, Российское царство'\n" +
@@ -368,24 +366,23 @@ namespace GDModel
 
             // null or empty date
             Assert.AreEqual("д. Колегово", locPrislon.GetNameByDate(null));
-            Assert.AreEqual("д. Колегово", locPrislon.GetNameByDate(dateVal, true));
+            Assert.AreEqual("д. Колегово", locPrislon.GetNameByDate(dateVal, false));
+            Assert.AreEqual("д. Колегово, Верхнекамский район, Кировская область, СССР", locPrislon.GetNameByDate(dateVal, ATDEnumeration.fStL, true));
 
             dateVal.ParseString("10 JAN 1701");
-            Assert.AreEqual("поч. Старое раменье, Слободской уезд, Российское царство", locPrislon.GetNameByDate(dateVal, true));
+            Assert.AreEqual("поч. Старое раменье, Слободской уезд, Российское царство", locPrislon.GetNameByDate(dateVal, ATDEnumeration.fStL, true));
 
             dateVal.ParseString("1724");
-            Assert.AreEqual("д. Прислонская, Верховская вол., Слободской дистр., Вятская провинция, Сибирская губерния, Российская империя", locPrislon.GetNameByDate(dateVal, true));
+            Assert.AreEqual("д. Прислонская, Верховская вол., Слободской дистр., Вятская провинция, Сибирская губерния, Российская империя", locPrislon.GetNameByDate(dateVal, ATDEnumeration.fStL, true));
 
             dateVal.ParseString("1834");
-            Assert.AreEqual("д. Мокрая Слободка, Лоинская вол., Слободской уезд, Вятская губерния, Российская империя", locPrislon.GetNameByDate(dateVal, true));
+            Assert.AreEqual("д. Мокрая Слободка, Лоинская вол., Слободской уезд, Вятская губерния, Российская империя", locPrislon.GetNameByDate(dateVal, ATDEnumeration.fStL, true));
 
             dateVal.ParseString("1930");
-            Assert.AreEqual("д. Колегово, Омутнинский район, Вятский округ, Нижегородский край, СССР", locPrislon.GetNameByDate(dateVal, true));
+            Assert.AreEqual("д. Колегово, Омутнинский район, Вятский округ, Нижегородский край, СССР", locPrislon.GetNameByDate(dateVal, ATDEnumeration.fStL, true));
 
             //var gedcomProvider = new GEDCOMProvider(tree);
             //gedcomProvider.SaveToStreamExt(new FileStream("d:\\Russia.ged", FileMode.CreateNew), GEDCOMCharacterSet.csUTF8);
-
-            GlobalOptions.Instance.ReversePlaceEntitiesOrder = false;
         }
 
         [Test]

@@ -93,7 +93,7 @@ namespace GKCore.Controllers
 
         public void UpdateLocationName()
         {
-            fView.TopLevelText.Text = (fTempLocation == null) ? "" : fTempLocation.GetNameByDate(fView.DateCtl.Date);
+            fView.TopLevelText.Text = (fTempLocation == null) ? "" : fTempLocation.GetNameByDate(fView.DateCtl.Date, true);
         }
 
         private void OnDateChanged(object sender, EventArgs e)

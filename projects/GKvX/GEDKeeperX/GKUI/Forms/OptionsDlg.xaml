@@ -395,6 +395,7 @@
                         <input:CheckBox x:Name="chkFilesOverwriteWarn" />
                         <input:CheckBox x:Name="chkExtendedKinships" />
                         <input:CheckBox x:Name="chkExtendedLocations" />
+                        <input:CheckBox x:Name="chkReversePlacesOrder" />
 
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>

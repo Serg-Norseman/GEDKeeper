@@ -58,7 +58,7 @@ namespace GKCore.Lists
                     result = fStructList.IndexOf(fFetchedRec) + 1;
                     break;
                 case 1:
-                    result = (fRelLocation == null) ? string.Empty : fRelLocation.GetNameByDate(fFetchedRec.Date.Value);
+                    result = (fRelLocation == null) ? string.Empty : fRelLocation.GetNameByDate(fFetchedRec.Date.Value, true);
                     break;
                 case 2:
                     result = new GDMDateItem(fFetchedRec.Date.Value);

@@ -1393,10 +1393,8 @@ namespace GKCore
             if (!string.IsNullOrEmpty(result) && onlyLocality) {
                 string[] placeParts = result.Split(PLACE_DELIMITERS, StringSplitOptions.None);
                 if (placeParts.Length > 1) {
-                    // for compatibility with strange cases
                     bool reverseOrder = GlobalOptions.Instance.ReversePlaceEntitiesOrder;
-
-                    result = ((!reverseOrder) ? placeParts[0] : placeParts[placeParts.Length - 1]).Trim();
+                    result = ((reverseOrder) ? placeParts[0] : placeParts[placeParts.Length - 1]).Trim();
                 }
             }
 
@@ -3035,7 +3033,7 @@ namespace GKCore
                                 var topLev = locRec.TopLevels[i];
                                 var topLoc = tree.GetPtrValue<GDMLocationRecord>(topLev);
 
-                                string st = HyperLink(topLev.XRef, topLoc.GetNameByDate(topLev.Date.Value));
+                                string st = HyperLink(topLev.XRef, topLoc.GetNameByDate(topLev.Date.Value, ATDEnumeration.fStL));
                                 if (!string.IsNullOrEmpty(st)) {
                                     summary.Add("    " + st);
                                 }
@@ -3052,7 +3050,7 @@ namespace GKCore
                         summary.Add(LangMan.LS(LSID.Latitude) + ": " + locRec.Map.Lati);
                         summary.Add(LangMan.LS(LSID.Longitude) + ": " + locRec.Map.Long);
 
-                        var fullNames = locRec.GetFullNames(tree);
+                        var fullNames = locRec.GetFullNames(tree, ATDEnumeration.fStL);
                         if (fullNames.Count > 0) {
                             //linkList.Sort();
 

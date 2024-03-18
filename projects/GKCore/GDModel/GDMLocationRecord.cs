@@ -27,6 +27,18 @@ using GKCore.Types;
 
 namespace GDModel
 {
+    /// <summary>
+    /// Enumeration of administrative territorial divisions (ATD).
+    /// </summary>
+    public enum ATDEnumeration
+    {
+        // from largest to smallest
+        fLtS,
+        // from smallest to largest
+        fStL
+    }
+
+
     public sealed class GDMLocationRecord : GDMRecord
     {
         private readonly GDMMap fMap;
@@ -161,7 +173,7 @@ namespace GDModel
             fTopLevels.ReplaceXRefs(map);
         }
 
-        public GDMList<GDMLocationName> GetFullNames(GDMTree tree)
+        public GDMList<GDMLocationName> GetFullNames(GDMTree tree, ATDEnumeration atdEnum)
         {
             GDMList<GDMLocationName> result;
 
@@ -177,7 +189,7 @@ namespace GDModel
                     if (topLoc == null) continue;
 
                     bool wasJoin = false;
-                    var topNames = topLoc.GetFullNames(tree);
+                    var topNames = topLoc.GetFullNames(tree, atdEnum);
                     for (int i = 0; i < topNames.Count; i++) {
                         var topName = topNames[i];
 
@@ -199,7 +211,6 @@ namespace GDModel
                     }
                 }
 
-                bool reverseOrder = GlobalOptions.Instance.ReversePlaceEntitiesOrder;
                 for (int j = 0; j < buffer.Count; j++) {
                     var topLocName = buffer[j];
                     var topName = topLocName.StringValue;
@@ -210,7 +221,7 @@ namespace GDModel
 
                         var interDate = GDMCustomDate.GetIntersection(topDate, locName.Date.Value);
                         if (!interDate.IsEmpty()) {
-                            string newName = (!reverseOrder) ? topName + ", " + locName.StringValue : locName.StringValue + ", " + topName;
+                            string newName = (atdEnum == ATDEnumeration.fLtS) ? topName + ", " + locName.StringValue : locName.StringValue + ", " + topName;
 
                             var newLocName = new GDMLocationName();
                             newLocName.StringValue = newName;
@@ -224,11 +235,11 @@ namespace GDModel
             return result;
         }
 
-        public string GetNameByDate(GDMCustomDate date, bool full = false)
+        public string GetNameByDate(GDMCustomDate date, ATDEnumeration atdEnum, bool full = false)
         {
-            if (date != null && !date.IsEmpty()) {
-                var namesList = !full ? fNames : GetFullNames(Tree);
+            var namesList = (!full) ? fNames : GetFullNames(Tree, atdEnum);
 
+            if (date != null && !date.IsEmpty()) {
                 for (int i = 0; i < namesList.Count; i++) {
                     var locName = namesList[i];
 
@@ -239,7 +250,15 @@ namespace GDModel
                 }
             }
 
-            return LocationName;
+            int num = namesList.Count;
+            return (num == 0) ? string.Empty : namesList[num - 1].StringValue;
+        }
+
+        public string GetNameByDate(GDMCustomDate date, bool full = false)
+        {
+            ATDEnumeration atdEnum = (!GlobalOptions.Instance.ReversePlaceEntitiesOrder) ? ATDEnumeration.fLtS : ATDEnumeration.fStL;
+
+            return GetNameByDate(date, atdEnum, full);
         }
 
         public bool ValidateNames()

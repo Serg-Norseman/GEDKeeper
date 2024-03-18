@@ -1023,8 +1023,9 @@ namespace GKCore
         /* 950 */ CWSM_RightHalf,
 
         /* 951 */ RI_Recruit,
+        /* 952 */ ReversePlacesOrder,
 
-        /* 000 */ Last = RI_Recruit
+        /* 000 */ Last = ReversePlacesOrder
     }
 
 
@@ -2001,6 +2002,7 @@ namespace GKCore
             /* 950 */ "Right half",
 
             /* 951 */ "RI:Recruit",
+            /* 952 */ "Reverse order of places",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

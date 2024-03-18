@@ -451,6 +451,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkFilesOverwriteWarn").Enabled = hasOverwritePrompt;
 
             GetControl<ICheckBox>("chkExtendedLocations").Checked = fOptions.ExtendedLocations;
+            GetControl<ICheckBox>("chkReversePlacesOrder").Checked = fOptions.ReversePlaceEntitiesOrder;
         }
 
         public void AcceptSpecials()
@@ -470,6 +471,7 @@ namespace GKCore.Controllers
             fOptions.FilesOverwriteWarn = GetControl<ICheckBox>("chkFilesOverwriteWarn").Checked;
 
             fOptions.ExtendedLocations = GetControl<ICheckBox>("chkExtendedLocations").Checked;
+            fOptions.ReversePlaceEntitiesOrder = GetControl<ICheckBox>("chkReversePlacesOrder").Checked;
         }
 
         public void UpdatePlugins()
@@ -980,6 +982,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkFilesOverwriteWarn").Text = LangMan.LS(LSID.FilesOverwriteWarn);
             GetControl<ICheckBox>("chkExtendedKinships").Text = LangMan.LS(LSID.ExtendedKinships);
             GetControl<ICheckBox>("chkExtendedLocations").Text = LangMan.LS(LSID.ExtendedLocations);
+            GetControl<ICheckBox>("chkReversePlacesOrder").Text = LangMan.LS(LSID.ReversePlacesOrder);
 
             // Plugins
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {

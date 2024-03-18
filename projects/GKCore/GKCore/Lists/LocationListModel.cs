@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -116,7 +115,7 @@ namespace GKCore.Lists
                     break;
 
                 case ColumnType.ctName:
-                    result = fFetchedRec.LocationName;
+                    result = fFetchedRec.GetNameByDate(null, ATDEnumeration.fLtS, true);
                     break;
 
                 case ColumnType.ctLati:
