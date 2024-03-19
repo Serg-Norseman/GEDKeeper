@@ -76,20 +76,14 @@ namespace GDModel
             fId = 0; // Unknown
         }
 
-        public GDMTag(int tagId, string tagValue)
+        public GDMTag(int tagId)
         {
             fId = tagId;
-            if (!string.IsNullOrEmpty(tagValue)) {
-                ParseString(tagValue);
-            }
         }
 
-        public void SetNameValue(int tagId, string tagValue)
+        public GDMTag(int tagId, string tagValue)
         {
-            fId = tagId;
-            if (!string.IsNullOrEmpty(tagValue)) {
-                ParseString(tagValue);
-            }
+            SetNameValue(tagId, tagValue);
         }
 
         protected override void Dispose(bool disposing)
@@ -120,6 +114,14 @@ namespace GDModel
         #endregion
 
         #region Content management
+
+        protected void SetNameValue(int tagId, string tagValue)
+        {
+            fId = tagId;
+            if (!string.IsNullOrEmpty(tagValue)) {
+                ParseString(tagValue);
+            }
+        }
 
         public void SetName(int tagId)
         {
@@ -293,8 +295,14 @@ namespace GDModel
             fStringValue = string.Empty;
         }
 
-        public GDMValueTag(int tagId, string tagValue) : base(tagId, tagValue)
+        public GDMValueTag(int tagId) : base(tagId)
         {
+            fStringValue = string.Empty;
+        }
+
+        public GDMValueTag(int tagId, string tagValue)
+        {
+            SetNameValue(tagId, tagValue);
         }
 
         public override void Clear()

@@ -28,8 +28,13 @@ namespace GDModel
         {
         }
 
-        public GDMIndividualLink(int tagId, string tagValue) : base(tagId, tagValue)
+        public GDMIndividualLink(int tagId) : base(tagId)
         {
+        }
+
+        public GDMIndividualLink(int tagId, string tagValue)
+        {
+            SetNameValue(tagId, tagValue);
         }
     }
 
@@ -47,8 +52,9 @@ namespace GDModel
             XRef = childXRef;
         }
 
-        public GDMChildLink(int tagId, string tagValue) : base(tagId, tagValue)
+        public GDMChildLink(int tagId, string tagValue)
         {
+            SetNameValue(tagId, tagValue);
         }
     }
 }

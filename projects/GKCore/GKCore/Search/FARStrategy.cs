@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -38,15 +38,15 @@ namespace GKCore.Search
     }
 
 
-    public delegate void FARReplacer(GDMObject prop);
+    public delegate void FARReplacer(IGDMObject prop);
 
 
     public class FARSearchResult : SearchResult
     {
-        public readonly GDMObject Property;
+        public readonly IGDMObject Property;
         public readonly FARReplacer Replacer;
 
-        public FARSearchResult(GDMRecord record, GDMObject property, FARReplacer replacer) : base(record)
+        public FARSearchResult(GDMRecord record, IGDMObject property, FARReplacer replacer) : base(record)
         {
             Property = property;
             Replacer = replacer;
@@ -153,13 +153,13 @@ namespace GKCore.Search
             }
         }
 
-        private void ReplaceGivenName(GDMObject prop)
+        private void ReplaceGivenName(IGDMObject prop)
         {
             var persName = (GDMPersonalName)prop;
             persName.Given = ReplacePattern(persName.Given);
         }
 
-        private void ReplaceSurname(GDMObject prop)
+        private void ReplaceSurname(IGDMObject prop)
         {
             var persName = (GDMPersonalName)prop;
             persName.Surname = ReplacePattern(persName.Surname);
@@ -177,7 +177,7 @@ namespace GKCore.Search
             }
         }
 
-        private void ReplaceAssociationRelation(GDMObject prop)
+        private void ReplaceAssociationRelation(IGDMObject prop)
         {
             var ast = (GDMAssociation)prop;
             ast.Relation = ReplacePattern(ast.Relation);
@@ -195,7 +195,7 @@ namespace GKCore.Search
             }
         }
 
-        private void ReplaceFact(GDMObject prop)
+        private void ReplaceFact(IGDMObject prop)
         {
             var evt = (GDMCustomEvent)prop;
             evt.StringValue = ReplacePattern(evt.StringValue);

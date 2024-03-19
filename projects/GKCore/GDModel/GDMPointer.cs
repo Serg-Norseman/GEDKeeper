@@ -44,8 +44,14 @@ namespace GDModel
             fXRef = string.Empty;
         }
 
-        public GDMPointer(int tagId, string tagValue) : base(tagId, tagValue)
+        public GDMPointer(int tagId) : base(tagId)
         {
+            fXRef = string.Empty;
+        }
+
+        public GDMPointer(int tagId, string tagValue)
+        {
+            SetNameValue(tagId, tagValue);
         }
 
         public override void Clear()

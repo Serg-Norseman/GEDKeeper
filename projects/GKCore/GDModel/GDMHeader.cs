@@ -260,8 +260,8 @@ namespace GDModel
             fNote = new GDMTextTag((int)GEDCOMTagType.NOTE);
             fPlace = new GDMPlace();
             fSource = new GDMHeaderSource();
-            fSubmission = new GDMPointer((int)GEDCOMTagType.SUBN, string.Empty);
-            fSubmitter = new GDMPointer((int)GEDCOMTagType.SUBM, string.Empty);
+            fSubmission = new GDMPointer((int)GEDCOMTagType.SUBN);
+            fSubmitter = new GDMPointer((int)GEDCOMTagType.SUBM);
         }
 
         internal override void TrimExcess()

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -86,12 +86,12 @@ namespace GKCore.Operations
     public class OrdinaryOperation : CustomOperation
     {
         private readonly OperationType fType;
-        private readonly GDMObject fObj;
+        private readonly IGDMObject fObj;
         private object fOldVal;
         private readonly object fNewVal;
 
         public OrdinaryOperation(UndoManager manager, OperationType type,
-                                 GDMObject obj, object newVal) : base(manager)
+                                 IGDMObject obj, object newVal) : base(manager)
         {
             fType = type;
             fObj = obj;

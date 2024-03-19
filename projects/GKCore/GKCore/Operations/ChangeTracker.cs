@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -41,7 +41,7 @@ namespace GKCore.Operations
             fBaseContext = baseContext;
         }
 
-        public bool DoOrdinaryOperation(OperationType type, GDMObject obj, object newVal)
+        public bool DoOrdinaryOperation(OperationType type, IGDMObject obj, object newVal)
         {
             if (obj == null)
                 throw new ArgumentNullException("obj");

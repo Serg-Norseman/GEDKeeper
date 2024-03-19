@@ -196,8 +196,7 @@ namespace GDModel
                         var interDate = GDMCustomDate.GetIntersection(topLevel.Date.Value, topName.Date.Value);
                         if (!interDate.IsEmpty()) {
                             var newLocName = new GDMLocationName();
-                            newLocName.StringValue = topName.StringValue;
-                            newLocName.Date.ParseString(interDate.StringValue);
+                            newLocName.SetRawData(topName.StringValue, interDate);
                             buffer.Add(newLocName);
                             wasJoin = true;
                         }
@@ -205,8 +204,7 @@ namespace GDModel
 
                     if (!wasJoin && topNames.Count > 0) {
                         var newLocName = new GDMLocationName();
-                        newLocName.StringValue = topNames[topNames.Count - 1].StringValue;
-                        newLocName.Date.ParseString(topLevel.Date.StringValue);
+                        newLocName.SetRawData(topNames[topNames.Count - 1].StringValue, topLevel.Date.Value);
                         buffer.Add(newLocName);
                     }
                 }
@@ -224,8 +222,7 @@ namespace GDModel
                             string newName = (atdEnum == ATDEnumeration.fLtS) ? topName + ", " + locName.StringValue : locName.StringValue + ", " + topName;
 
                             var newLocName = new GDMLocationName();
-                            newLocName.StringValue = newName;
-                            newLocName.Date.ParseString(interDate.StringValue);
+                            newLocName.SetRawData(newName, interDate);
                             result.Add(newLocName);
                         }
                     }

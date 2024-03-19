@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,15 +32,6 @@ namespace GDModel.Providers.GEDCOM
             Assert.Throws(typeof(ArgumentNullException), () => {
                 string data = null;
                 new GEDCOMParser(data, false);
-            });
-        }
-
-        [Test]
-        public void Test_CtorCharArrNull()
-        {
-            Assert.Throws(typeof(ArgumentNullException), () => {
-                char[] data = null;
-                new GEDCOMParser(data, 0, 0, false);
             });
         }
     }

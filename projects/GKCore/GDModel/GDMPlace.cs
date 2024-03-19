@@ -73,7 +73,7 @@ namespace GDModel
             SetName(GEDCOMTagType.PLAC);
 
             fForm = string.Empty;
-            fLocation = new GDMPointer((int)GEDCOMTagType._LOC, string.Empty);
+            fLocation = new GDMPointer((int)GEDCOMTagType._LOC);
         }
 
         protected override void Dispose(bool disposing)

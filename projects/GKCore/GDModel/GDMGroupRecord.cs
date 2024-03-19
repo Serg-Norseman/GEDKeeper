@@ -126,11 +126,11 @@ namespace GDModel
         {
             if (member == null) return false;
 
-            GDMIndividualLink mbrLink = new GDMIndividualLink((int)GEDCOMTagType._MEMBER, string.Empty);
+            GDMIndividualLink mbrLink = new GDMIndividualLink((int)GEDCOMTagType._MEMBER);
             mbrLink.XRef = member.XRef;
             fMembers.Add(mbrLink);
 
-            var ptr = new GDMPointer((int)GEDCOMTagType._GROUP, string.Empty);
+            var ptr = new GDMPointer((int)GEDCOMTagType._GROUP);
             ptr.XRef = this.XRef;
             member.Groups.Add(ptr);
 

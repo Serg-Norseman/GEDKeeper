@@ -109,7 +109,7 @@ namespace GKCore.Lists
     public interface ISheetModel : IListSource
     {
         EnumSet<RecordAction> AllowedActions { get; set; }
-        GDMObject DataOwner { get; set; }
+        IGDMObject DataOwner { get; set; }
         ISheetList SheetList { get; set; }
 
         Task Modify(object sender, ModifyEventArgs eArgs);
@@ -126,7 +126,7 @@ namespace GKCore.Lists
         protected ISheetList fSheetList;
         protected readonly IBaseWindow fBaseWin;
         protected readonly ChangeTracker fUndoman;
-        protected GDMObject fDataOwner;
+        protected IGDMObject fDataOwner;
         protected IView fOwner;
         protected GDMList<T> fStructList;
 
@@ -142,7 +142,7 @@ namespace GKCore.Lists
             }
         }
 
-        public GDMObject DataOwner
+        public IGDMObject DataOwner
         {
             get {
                 return fDataOwner;

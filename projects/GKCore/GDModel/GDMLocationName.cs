@@ -97,5 +97,11 @@ namespace GDModel
             base.ReplaceXRefs(map);
             fDate.ReplaceXRefs(map);
         }
+
+        internal void SetRawData(string strValue, GDMCustomDate date)
+        {
+            StringValue = strValue;
+            Date.SetRawData(date);
+        }
     }
 }

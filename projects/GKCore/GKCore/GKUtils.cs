@@ -2194,7 +2194,7 @@ namespace GKCore
             }
         }
 
-        public static void SearchRecordLinks(List<GDMObject> linksList, GDMRecord inRecord, GDMRecord searchRec)
+        public static void SearchRecordLinks(List<IGDMObject> linksList, GDMRecord inRecord, GDMRecord searchRec)
         {
             try {
                 int num;
@@ -2244,7 +2244,7 @@ namespace GKCore
             }
         }
 
-        public static void SearchRecordLinks(List<GDMObject> linksList, GDMTree tree, GDMRecord searchRec)
+        public static void SearchRecordLinks(List<IGDMObject> linksList, GDMTree tree, GDMRecord searchRec)
         {
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++) {

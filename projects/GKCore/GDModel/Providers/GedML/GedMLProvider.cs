@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -70,7 +70,8 @@ namespace GDModel.Providers.GedML
                 settings.DtdProcessing = DtdProcessing.Ignore;
 
                 int tagLevel = -1;
-                string xrefPtr, tagName = null, tagValue = null, xrefId;
+                string xrefPtr, tagName = null, xrefId;
+                StringSpan tagValue = StringSpan.Empty;
                 int tagId = 0; // Unknown
                 bool tagOpened = false;
 
@@ -78,7 +79,7 @@ namespace GDModel.Providers.GedML
                     while (xr.Read()) {
                         if (xr.NodeType == XmlNodeType.Element) {
                             if (tagOpened) {
-                                curTag = GEDCOMProvider.ProcessTag(stack, tagLevel, tagId, tagValue);
+                                curTag = GEDCOMProvider.ProcessTag(fTree, stack, tagLevel, tagId, tagValue);
                                 tagOpened = false;
                             }
 
@@ -88,11 +89,11 @@ namespace GDModel.Providers.GedML
                             // GEDML only has 2 attributes - REF and ID.
                             xrefPtr = xr.GetAttribute("REF");
                             xrefId = xr.GetAttribute("ID");
-                            tagValue = string.Empty;
+                            tagValue = StringSpan.Empty;
 
                             if (tagLevel == 0) {
-                                StackTuple stackTuple = AddTreeTag(fTree, tagLevel, tagId, string.Empty);
-                                if (stackTuple != null) {
+                                StackTuple stackTuple = AddTreeTag(fTree, tagLevel, tagId, StringSpan.Empty);
+                                if (stackTuple.Level >= 0) {
                                     stack.Clear();
                                     stack.Push(stackTuple);
 
@@ -105,7 +106,7 @@ namespace GDModel.Providers.GedML
                                 if (!string.IsNullOrEmpty(xrefPtr)) {
                                     // since the default method of the GEDCOM provider is used, 
                                     // a standard character `@` is expected
-                                    curTag = GEDCOMProvider.ProcessTag(stack, tagLevel, tagId, "@" + xrefPtr + "@");
+                                    curTag = GEDCOMProvider.ProcessTag(fTree, stack, tagLevel, tagId, "@" + xrefPtr + "@");
                                 } else {
                                     tagOpened = true;
                                 }
@@ -114,7 +115,7 @@ namespace GDModel.Providers.GedML
                             tagValue = xr.Value;
 
                             if (tagLevel > 0 && curRecord != null) {
-                                curTag = GEDCOMProvider.ProcessTag(stack, tagLevel, tagId, tagValue);
+                                curTag = GEDCOMProvider.ProcessTag(fTree, stack, tagLevel, tagId, tagValue);
                             }
                         }
 

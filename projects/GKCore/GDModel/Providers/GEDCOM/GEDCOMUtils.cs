@@ -105,8 +105,9 @@ namespace GDModel.Providers.GEDCOM
 
             while (li < ri && str[li] <= ' ') li++;
             while (ri >= li && str[ri] <= ' ') ri--;
+            int newLen = ri - li + 1;
 
-            string result = str.Substring(li, ri - li + 1);
+            string result = (newLen == str.Length) ? str : str.Substring(li, newLen);
             return result;
         }
 
@@ -219,12 +220,12 @@ namespace GDModel.Providers.GEDCOM
         #region Special parsing routines
 
         // Line format: <level>_<@xref@>_<tag>_<value>
-        public static int ParseTag(GEDCOMParser strTok, out int tagLevel, out string tagXRef, out string tagName, out string tagValue)
+        public static int ParseTag(GEDCOMParser strTok, out int tagLevel, out string tagXRef, out string tagName, out StringSpan tagValue)
         {
             tagLevel = 0;
             tagXRef = string.Empty;
             tagName = string.Empty;
-            tagValue = string.Empty;
+            tagValue = StringSpan.Empty;
 
             int result = 0;
             strTok.SkipWhitespaces();
@@ -234,7 +235,7 @@ namespace GDModel.Providers.GEDCOM
                 return -2;
             }
             if (token != GEDCOMToken.Number) {
-                tagValue = strTok.GetFullStr();
+                tagValue = strTok.GetFullSpan();
                 return -1;
             }
             tagLevel = strTok.GetNumber();
@@ -268,7 +269,7 @@ namespace GDModel.Providers.GEDCOM
 
             token = strTok.Next();
             if (token == GEDCOMToken.Whitespace) {
-                tagValue = strTok.GetRest();
+                tagValue = strTok.GetRestSpan();
                 result += 1;
             }
 
@@ -330,15 +331,16 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // Time format: hour:minutes:seconds.fraction
-        public static string ParseTime(string strValue, out byte hour, out byte minutes, out byte seconds, out short fraction)
+        public static string ParseTime(StringSpan strValue, out byte hour, out byte minutes, out byte seconds, out short fraction)
         {
             hour = 0;
             minutes = 0;
             seconds = 0;
             fraction = 0;
 
-            if (!string.IsNullOrEmpty(strValue)) {
-                var strTok = new GEDCOMParser(strValue, true);
+            if (!strValue.IsEmpty) {
+                var strTok = GEDCOMParser.Default;
+                strTok.Reset(strValue);
 
                 hour = (byte)strTok.RequestNextInt();
                 strTok.RequestNextSymbol(':');
@@ -363,7 +365,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // CutoutPosition format: x1 y1 x2 y2
-        public static string ParseCutoutPosition(string strValue, GDMCutoutPosition position)
+        public static string ParseCutoutPosition(StringSpan strValue, GDMCutoutPosition position)
         {
             try {
                 int x1 = 0;
@@ -371,7 +373,7 @@ namespace GDModel.Providers.GEDCOM
                 int x2 = 0;
                 int y2 = 0;
 
-                if (!string.IsNullOrEmpty(strValue)) {
+                if (!strValue.IsEmpty) {
                     var parser = new GEDCOMParser(strValue, true);
                     x1 = parser.RequestNextSignedInt();
                     y1 = parser.RequestNextSignedInt();
@@ -394,7 +396,20 @@ namespace GDModel.Providers.GEDCOM
                 return string.Empty;
             }
 
-            var strTok = new GEDCOMParser(str, false);
+            var strTok = GEDCOMParser.Default;
+            strTok.Reset(str);
+            return ParseDateValue(owner, dateValue, strTok);
+        }
+
+        // DateValue format: INT/FROM/TO/etc..._<date>
+        public static string ParseDateValue(GDMTree owner, GDMDateValue dateValue, StringSpan strSpan)
+        {
+            if (strSpan.IsEmpty) {
+                return string.Empty;
+            }
+
+            var strTok = GEDCOMParser.Default;
+            strTok.Reset(strSpan);
             return ParseDateValue(owner, dateValue, strTok);
         }
 
@@ -442,7 +457,8 @@ namespace GDModel.Providers.GEDCOM
         // Format: FROM DATE1 TO DATE2
         public static string ParsePeriodDate(GDMDatePeriod date, string strValue)
         {
-            var strTok = new GEDCOMParser(strValue, false);
+            var strTok = GEDCOMParser.Default;
+            strTok.Reset(strValue);
             // only standard GEDCOM dates (for owner == null)
             return ParsePeriodDate(null, date, strTok);
         }
@@ -470,7 +486,8 @@ namespace GDModel.Providers.GEDCOM
         // Format: AFT DATE | BEF DATE | BET AFT_DATE AND BEF_DATE
         public static string ParseRangeDate(GDMDateRange date, string strValue)
         {
-            var strTok = new GEDCOMParser(strValue, false);
+            var strTok = GEDCOMParser.Default;
+            strTok.Reset(strValue);
             // only standard GEDCOM dates (for owner == null)
             return ParseRangeDate(null, date, strTok);
         }
@@ -522,7 +539,8 @@ namespace GDModel.Providers.GEDCOM
         // Format: INT DATE (phrase)
         public static string ParseIntDate(GDMDateInterpreted date, string strValue)
         {
-            var strTok = new GEDCOMParser(strValue, false);
+            var strTok = GEDCOMParser.Default;
+            strTok.Reset(strValue);
             // only standard GEDCOM dates (for owner == null)
             return ParseIntDate(null, date, strTok);
         }
@@ -558,7 +576,16 @@ namespace GDModel.Providers.GEDCOM
 
         public static string ParseDate(GDMDate date, string strValue)
         {
-            var strTok = new GEDCOMParser(strValue, false);
+            var strTok = GEDCOMParser.Default;
+            strTok.Reset(strValue);
+            // only standard GEDCOM dates (for owner == null)
+            return ParseDate(null, date, strTok);
+        }
+
+        public static string ParseDate(GDMDate date, StringSpan strValue)
+        {
+            var strTok = GEDCOMParser.Default;
+            strTok.Reset(strValue);
             // only standard GEDCOM dates (for owner == null)
             return ParseDate(null, date, strTok);
         }
@@ -903,7 +930,7 @@ namespace GDModel.Providers.GEDCOM
             return stream;
         }
 
-        public static string ParseDate(GDMTree owner, string strValue, out DateTime date)
+        public static string ParseDate(GDMTree owner, StringSpan strValue, out DateTime date)
         {
             GDMApproximated approximated;
             GDMCalendar calendar;
@@ -913,7 +940,8 @@ namespace GDModel.Providers.GEDCOM
             byte month;
             byte day;
 
-            var strTok = new GEDCOMParser(strValue, false);
+            var strTok = GEDCOMParser.Default;
+            strTok.Reset(strValue);
             string result = ParseDate(owner, strTok, out approximated, out calendar, out year, out yearBC,
                                       out yearModifier, out month, out day);
 
@@ -947,7 +975,7 @@ namespace GDModel.Providers.GEDCOM
             return result;
         }
 
-        public static string ParseTime(string strValue, out TimeSpan time)
+        public static string ParseTime(StringSpan strValue, out TimeSpan time)
         {
             byte hour;
             byte minutes;
@@ -1638,12 +1666,12 @@ namespace GDModel.Providers.GEDCOM
                     if (i == 0 && !isRecordTag) {
                         tag.StringValue = sub;
                     } else {
-                        GEDCOMProvider.AddBaseTag(tag, 0, (int)GEDCOMTagType.CONT, sub);
+                        tag.AddTag(new GDMValueTag((int)GEDCOMTagType.CONT, sub));
                     }
 
                     while (str.Length > 0) {
                         len = Math.Min(str.Length, GEDCOMConsts.MaxLineLength);
-                        GEDCOMProvider.AddBaseTag(tag, 0, (int)GEDCOMTagType.CONC, str.Substring(0, len));
+                        tag.AddTag(new GDMValueTag((int)GEDCOMTagType.CONC, str.Substring(0, len)));
                         str = str.Remove(0, len);
                     }
                 }

@@ -179,8 +179,9 @@ namespace GDModel
             SetName(GEDCOMTagType.LANG);
         }
 
-        public GDMLanguage(int tagId, string tagValue) : base(tagId, tagValue)
+        public GDMLanguage(int tagId, string tagValue)
         {
+            SetNameValue(tagId, tagValue);
         }
     }
 }

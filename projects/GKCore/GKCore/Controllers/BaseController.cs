@@ -35,7 +35,7 @@ using GKCore.Types;
 
 namespace GKCore.Controllers
 {
-    public sealed class ModificationResult<T> where T : GDMObject
+    public sealed class ModificationResult<T> where T : IGDMObject
     {
         public bool Result;
         public T Record;

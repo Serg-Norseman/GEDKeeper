@@ -70,8 +70,8 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.FAM);
 
-            fHusband = new GDMIndividualLink((int)GEDCOMTagType.HUSB, string.Empty);
-            fWife = new GDMIndividualLink((int)GEDCOMTagType.WIFE, string.Empty);
+            fHusband = new GDMIndividualLink((int)GEDCOMTagType.HUSB);
+            fWife = new GDMIndividualLink((int)GEDCOMTagType.WIFE);
             fChildren = new GDMList<GDMChildLink>();
         }
 

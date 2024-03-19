@@ -114,7 +114,7 @@ namespace GDModel
             if (index < 0) return;
 
             while (index >= fLanguages.Count) {
-                fLanguages.Add(new GDMLanguage((int)GEDCOMTagType.LANG, ""));
+                fLanguages.Add(new GDMLanguage());
             }
             fLanguages[index].StringValue = value;
         }
