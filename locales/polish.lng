@@ -796,9 +796,9 @@
 795=Default media storage type
 796=Allow deleting media files from storage and archive
 797=Allow deleting media files by direct and relative references
-798=Delete media files without confirm
-799=Media record without files
-800=Archive not found
+798=Usuwaj pliki mediów bez potwierdzenia
+799=Wpis mediów bez pliku
+800=Nie znaleziono archiwum
 
 801=RI:George Knight
 802=USSR:WWII:Combatant
@@ -824,17 +824,17 @@
 821=Copy XRef to the clipboard
 822=Bold font of names
 
-823=Baptism
+823=Chrzest
 824=Bar mitzvah
 825=Bat mitzvah
-826=Blessing
+826=Błogosławieństwo
 827=Adult christening
-828=Confirmation
-829=First communion
+828=Bierzmowanie
+829=Pierwsza komunia
 830=Ordination
 831=Restriction geo search by country
 832=Separate depth
-833=Ancestors
+833=Przodkowie
 834=Matches not found
 835=Short kinship form
 836=Surname first in order
@@ -846,10 +846,10 @@
 842=Only locality
 843=Go to the primary branch
 844=Minimizing width
-845={0}. Continue?
-846=Show age
-847=Surname in capitals
-848=|SVG files (*.svg)|*.svg
+845={0}. Kontynuować?
+846=Pokaż wiek
+847=Zapisuj nazwisko dużymi literami
+848=|Pliki SVG (*.svg)|*.svg
 849=Certainty assessment algorithm
 850=Localized calendar signatures
 851=G|J|H|FR|R|I|?
@@ -926,15 +926,15 @@
 920=<?>
 
 921=-
-922=first
-923=second
-924=third
-925=fourth
-926=fifth
-927=sixth
-928=seventh
-929=eighth
-930=ninth
+922=pierwszy
+923=drugi
+924=trzeci
+925=czwarty
+926=piąty
+927=szóśty
+928=siódmy
+929=ósmy
+930=dziewiąty
 
 931=Extended definition of kinship
 932=Use surnames in person selection filter
@@ -950,15 +950,15 @@
 942=Added {0} photos from {1}.
 943=Top level links
 944=Remove top level link?
-945=Help is not available for this language. An English help will be shown.
+945=Pomoc nie jest dostępna w tym języku. Pokazana zostanie pomoc w języku angielskim.
 946=Address (st. & h.n.)
 
-947=Default
-948=Maximize
-949=Left half
-950=Right half
+947=Domyślny
+948=Maksymalizuj
+949=Lewa połowa
+950=Prawa połowa
 
 951=RI:Recruit
-952=Reverse order of places
-953=Abbreviated location names
-954=Dotted lines of divorced spouses
+952=Odwróć kolejność miejsc
+953=Skrócone nazwy miejsc
+954=Użyj linii kropkowanej dla rozwiedzionych małżeństw
