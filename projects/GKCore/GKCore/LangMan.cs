@@ -1026,8 +1026,9 @@ namespace GKCore
         /* 952 */ ReversePlacesOrder,
         /* 953 */ EL_AbbreviatedNames,
         /* 954 */ DottedLinesOfDivorcedSpouses,
+        /* 955 */ ShowNumberOfSubstructures,
 
-        /* 000 */ Last = DottedLinesOfDivorcedSpouses
+        /* 000 */ Last = ShowNumberOfSubstructures
     }
 
 
@@ -2007,6 +2008,7 @@ namespace GKCore
             /* 952 */ "Reverse order of places",
             /* 953 */ "Abbreviated location names",
             /* 954 */ "Dotted lines of divorced spouses",
+            /* 955 */ "Show number of substructures instead of check marks",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

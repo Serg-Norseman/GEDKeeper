@@ -276,6 +276,8 @@ namespace GKCore.Options
         /// </summary>
         public bool ShowIndiNamesakes { get; set; }
 
+        public bool ShowNumberOfSubstructures { get; set; }
+
         public bool ShowTips { get; set; }
 
         public bool SurnameFirstInOrder { get; set; }
@@ -423,6 +425,8 @@ namespace GKCore.Options
 
             ExtendedLocations = false;
             EL_AbbreviatedNames = true;
+
+            ShowNumberOfSubstructures = false;
         }
 
         public void Assign(IOptions source)
@@ -839,6 +843,7 @@ namespace GKCore.Options
             UseBirthDatesInPersonSelectionFilter = ini.ReadBool("Common", "UseBirthDatesInPersonSelectionFilter", false);
             ShowIndiAssociations = ini.ReadBool("Common", "ShowIndiAssociations", false);
             ShowIndiNamesakes = ini.ReadBool("Common", "ShowIndiNamesakes", false);
+            ShowNumberOfSubstructures = ini.ReadBool("Common", "ShowNumberOfSubstructures", false);
 
             Theme = ini.ReadString("Common", "Theme", "");
 
@@ -988,6 +993,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "UseBirthDatesInPersonSelectionFilter", UseBirthDatesInPersonSelectionFilter);
             ini.WriteBool("Common", "ShowIndiAssociations", ShowIndiAssociations);
             ini.WriteBool("Common", "ShowIndiNamesakes", ShowIndiNamesakes);
+            ini.WriteBool("Common", "ShowNumberOfSubstructures", ShowNumberOfSubstructures);
 
             ini.WriteString("Common", "Theme", Theme);
 

@@ -454,6 +454,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkELAbbreviatedNames").Checked = fOptions.EL_AbbreviatedNames;
 
             GetControl<ICheckBox>("chkReversePlacesOrder").Checked = fOptions.ReversePlaceEntitiesOrder;
+            GetControl<ICheckBox>("chkShowNumberOfSubstructures").Checked = fOptions.ShowNumberOfSubstructures;
         }
 
         public void AcceptSpecials()
@@ -476,6 +477,7 @@ namespace GKCore.Controllers
             fOptions.EL_AbbreviatedNames = GetControl<ICheckBox>("chkELAbbreviatedNames").Checked;
 
             fOptions.ReversePlaceEntitiesOrder = GetControl<ICheckBox>("chkReversePlacesOrder").Checked;
+            fOptions.ShowNumberOfSubstructures = GetControl<ICheckBox>("chkShowNumberOfSubstructures").Checked;
         }
 
         public void UpdatePlugins()
@@ -991,6 +993,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkExtendedLocations").Text = LangMan.LS(LSID.ExtendedLocations);
             GetControl<ICheckBox>("chkELAbbreviatedNames").Text = LangMan.LS(LSID.EL_AbbreviatedNames);
             GetControl<ICheckBox>("chkReversePlacesOrder").Text = LangMan.LS(LSID.ReversePlacesOrder);
+            GetControl<ICheckBox>("chkShowNumberOfSubstructures").Text = LangMan.LS(LSID.ShowNumberOfSubstructures);
 
             // Plugins
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {

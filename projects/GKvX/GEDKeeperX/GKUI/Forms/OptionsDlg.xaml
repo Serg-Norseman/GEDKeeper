@@ -404,6 +404,8 @@
 
                         <input:CheckBox x:Name="chkReversePlacesOrder" />
 
+                        <input:CheckBox x:Name="chkShowNumberOfSubstructures" />
+
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>
                 </xp:TabItem>

@@ -187,6 +187,7 @@
         private System.Windows.Forms.CheckBox chkExtendedLocations;
         private System.Windows.Forms.CheckBox chkELAbbreviatedNames;
         private System.Windows.Forms.CheckBox chkReversePlacesOrder;
+        private System.Windows.Forms.CheckBox chkShowNumberOfSubstructures;
 
         private void InitializeComponent()
         {
@@ -375,6 +376,7 @@
             this.chkExtendedLocations = new System.Windows.Forms.CheckBox();
             this.chkELAbbreviatedNames = new System.Windows.Forms.CheckBox();
             this.chkReversePlacesOrder = new System.Windows.Forms.CheckBox();
+            this.chkShowNumberOfSubstructures = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -2302,6 +2304,7 @@
             this.pageSpecials.Controls.Add(this.chkExtendedLocations);
             this.pageSpecials.Controls.Add(this.chkELAbbreviatedNames);
             this.pageSpecials.Controls.Add(this.chkReversePlacesOrder);
+            this.pageSpecials.Controls.Add(this.chkShowNumberOfSubstructures);
             this.pageSpecials.BackColor = System.Drawing.SystemColors.Control;
             this.pageSpecials.Location = new System.Drawing.Point(4, 26);
             this.pageSpecials.Margin = new System.Windows.Forms.Padding(0);
@@ -2446,6 +2449,15 @@
             this.chkReversePlacesOrder.Size = new System.Drawing.Size(600, 22);
             this.chkReversePlacesOrder.TabIndex = 19;
             this.chkReversePlacesOrder.Text = "chkReversePlacesOrder";
+            // 
+            // chkShowNumberOfSubstructures
+            // 
+            this.chkShowNumberOfSubstructures.Location = new System.Drawing.Point(20, 594);
+            this.chkShowNumberOfSubstructures.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkShowNumberOfSubstructures.Name = "chkShowNumberOfSubstructures";
+            this.chkShowNumberOfSubstructures.Size = new System.Drawing.Size(600, 22);
+            this.chkShowNumberOfSubstructures.TabIndex = 20;
+            this.chkShowNumberOfSubstructures.Text = "chkShowNumberOfSubstructures";
             // 
             // pagePlugins
             // 

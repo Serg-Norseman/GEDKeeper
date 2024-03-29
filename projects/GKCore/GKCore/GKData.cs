@@ -87,6 +87,8 @@ namespace GKCore
         public const string DEF_FONT = "Tahoma";
         #endif
 
+        public const string CHECK_MARK = " ✔ ";
+
         public sealed class SexStruct
         {
             public LSID NameId;

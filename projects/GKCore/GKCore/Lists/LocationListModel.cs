@@ -121,7 +121,7 @@ namespace GKCore.Lists
                     break;
 
                 case ColumnType.ctExt:
-                    result = (fFetchedRec.Names.Count > 1 || fFetchedRec.TopLevels.Count > 0) ? " ✔ " : string.Empty;
+                    result = (fFetchedRec.Names.Count > 1 || fFetchedRec.TopLevels.Count > 0) ? GKData.CHECK_MARK : string.Empty;
                     break;
 
                 case ColumnType.ctLati:

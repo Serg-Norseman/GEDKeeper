@@ -483,6 +483,8 @@
             </StackLayout>
 
             <CheckBox x:Name="chkReversePlacesOrder" />
+
+            <CheckBox x:Name="chkShowNumberOfSubstructures" />
           </StackLayout>
         </TabPage>
 

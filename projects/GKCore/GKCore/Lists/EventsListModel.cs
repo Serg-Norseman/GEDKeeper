@@ -26,12 +26,14 @@ using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Operations;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Lists
 {
     public sealed class EventsListModel : SheetModel<GDMCustomEvent>
     {
+        private readonly GlobalOptions fOptions;
         private readonly bool fPersonsMode;
 
         public EventsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman, bool personsMode) : base(owner, baseWin, undoman)
@@ -55,6 +57,8 @@ namespace GKCore.Lists
             fListColumns.AddColumn(LSID.RPNotes, 30, false);
             fListColumns.AddColumn(LSID.RPMultimedia, 30, false);
             fListColumns.ResetDefaults();
+
+            fOptions = GlobalOptions.Instance;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -85,13 +89,13 @@ namespace GKCore.Lists
                     result = GKUtils.GetEventCause(fFetchedRec);
                     break;
                 case 5:
-                    result = fFetchedRec.HasSourceCitations ? " + " : string.Empty;
+                    result = fFetchedRec.HasSourceCitations ? (fOptions.ShowNumberOfSubstructures ? fFetchedRec.SourceCitations.Count.ToString() : GKData.CHECK_MARK) : string.Empty;
                     break;
                 case 6:
-                    result = fFetchedRec.HasNotes ? " + " : string.Empty;
+                    result = fFetchedRec.HasNotes ? (fOptions.ShowNumberOfSubstructures ? fFetchedRec.Notes.Count.ToString() : GKData.CHECK_MARK) : string.Empty;
                     break;
                 case 7:
-                    result = fFetchedRec.HasMultimediaLinks ? " + " : string.Empty;
+                    result = fFetchedRec.HasMultimediaLinks ? (fOptions.ShowNumberOfSubstructures ? fFetchedRec.MultimediaLinks.Count.ToString() : GKData.CHECK_MARK) : string.Empty;
                     break;
             }
             return result;
