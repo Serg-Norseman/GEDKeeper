@@ -172,6 +172,7 @@
                                                 <input:CheckBox x:Name="chkHideUnknownSpouses" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 <input:CheckBox x:Name="chkCheckTreeSize" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 <input:CheckBox x:Name="chkDottedLinesOfAdoptedChildren" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                <input:CheckBox x:Name="chkDottedLinesOfDivorcedSpouses" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 <input:CheckBox x:Name="chkBoldNames" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 <input:CheckBox x:Name="chkMinimizingWidth" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 <input:CheckBox x:Name="chkURNotesVisible" CheckChanged="chkTreeChartOption_CheckedChanged" />

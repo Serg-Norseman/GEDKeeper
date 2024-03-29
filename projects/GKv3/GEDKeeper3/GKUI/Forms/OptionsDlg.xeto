@@ -195,6 +195,7 @@
                         <CheckBox x:Name="chkHideUnknownSpouses" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkCheckTreeSize" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkDottedLinesOfAdoptedChildren" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkDottedLinesOfDivorcedSpouses" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkBoldNames" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkMinimizingWidth" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkURNotesVisible" CheckedChanged="chkTreeChartOption_CheckedChanged" />

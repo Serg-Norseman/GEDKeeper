@@ -140,6 +140,7 @@
         private System.Windows.Forms.CheckBox chkFirstCapitalLetterInNames;
         private System.Windows.Forms.CheckBox chkDialogClosingWarn;
         private System.Windows.Forms.CheckBox chkDottedLinesOfAdoptedChildren;
+        private System.Windows.Forms.CheckBox chkDottedLinesOfDivorcedSpouses;
         private System.Windows.Forms.CheckBox chkSeparateDAPLines;
         private System.Windows.Forms.CheckBox chkBoldNames;
         private System.Windows.Forms.Label lblGeoSearchCountry;
@@ -274,6 +275,7 @@
             this.chkMinimizingWidth = new System.Windows.Forms.CheckBox();
             this.chkBoldNames = new System.Windows.Forms.CheckBox();
             this.chkDottedLinesOfAdoptedChildren = new System.Windows.Forms.CheckBox();
+            this.chkDottedLinesOfDivorcedSpouses = new System.Windows.Forms.CheckBox();
             this.chkCheckTreeSize = new System.Windows.Forms.CheckBox();
             this.chkHideUnknownSpouses = new System.Windows.Forms.CheckBox();
             this.chkInvertedTree = new System.Windows.Forms.CheckBox();
@@ -1265,6 +1267,7 @@
             this.panTreePersons.Controls.Add(this.chkHideUnknownSpouses);
             this.panTreePersons.Controls.Add(this.chkCheckTreeSize);
             this.panTreePersons.Controls.Add(this.chkDottedLinesOfAdoptedChildren);
+            this.panTreePersons.Controls.Add(this.chkDottedLinesOfDivorcedSpouses);
             this.panTreePersons.Controls.Add(this.chkBoldNames);
             this.panTreePersons.Controls.Add(this.chkMinimizingWidth);
             this.panTreePersons.Controls.Add(this.chkURNotesVisible);
@@ -1544,47 +1547,58 @@
             this.chkDottedLinesOfAdoptedChildren.Text = "chkDottedLinesOfAdoptedChildren";
             this.chkDottedLinesOfAdoptedChildren.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
             // 
+            // chkDottedLinesOfDivorcedSpouses
+            // 
+            this.chkDottedLinesOfDivorcedSpouses.AutoSize = true;
+            this.chkDottedLinesOfDivorcedSpouses.Location = new System.Drawing.Point(6, 605);
+            this.chkDottedLinesOfDivorcedSpouses.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkDottedLinesOfDivorcedSpouses.Name = "chkDottedLinesOfDivorcedSpouses";
+            this.chkDottedLinesOfDivorcedSpouses.Size = new System.Drawing.Size(349, 21);
+            this.chkDottedLinesOfDivorcedSpouses.TabIndex = 23;
+            this.chkDottedLinesOfDivorcedSpouses.Text = "chkDottedLinesOfDivorcedSpouses";
+            this.chkDottedLinesOfDivorcedSpouses.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
+            // 
             // chkBoldNames
             // 
             this.chkBoldNames.AutoSize = true;
-            this.chkBoldNames.Location = new System.Drawing.Point(6, 604);
+            this.chkBoldNames.Location = new System.Drawing.Point(6, 632);
             this.chkBoldNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkBoldNames.Name = "chkBoldNames";
             this.chkBoldNames.Size = new System.Drawing.Size(349, 21);
-            this.chkBoldNames.TabIndex = 23;
+            this.chkBoldNames.TabIndex = 24;
             this.chkBoldNames.Text = "chkBoldNames";
             this.chkBoldNames.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
             // 
             // chkMinimizingWidth
             // 
             this.chkMinimizingWidth.AutoSize = true;
-            this.chkMinimizingWidth.Location = new System.Drawing.Point(6, 630);
+            this.chkMinimizingWidth.Location = new System.Drawing.Point(6, 659);
             this.chkMinimizingWidth.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkMinimizingWidth.Name = "chkMinimizingWidth";
             this.chkMinimizingWidth.Size = new System.Drawing.Size(349, 21);
-            this.chkMinimizingWidth.TabIndex = 24;
+            this.chkMinimizingWidth.TabIndex = 25;
             this.chkMinimizingWidth.Text = "chkMinimizingWidth";
             this.chkMinimizingWidth.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
             // 
             // chkURNotesVisible
             // 
             this.chkURNotesVisible.AutoSize = true;
-            this.chkURNotesVisible.Location = new System.Drawing.Point(6, 656);
+            this.chkURNotesVisible.Location = new System.Drawing.Point(6, 686);
             this.chkURNotesVisible.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkURNotesVisible.Name = "chkURNotesVisible";
             this.chkURNotesVisible.Size = new System.Drawing.Size(349, 21);
-            this.chkURNotesVisible.TabIndex = 24;
+            this.chkURNotesVisible.TabIndex = 26;
             this.chkURNotesVisible.Text = "chkURNotesVisible";
             this.chkURNotesVisible.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
             // 
             // chkSameCardsWidth
             // 
             this.chkSameCardsWidth.AutoSize = true;
-            this.chkSameCardsWidth.Location = new System.Drawing.Point(6, 682);
+            this.chkSameCardsWidth.Location = new System.Drawing.Point(6, 713);
             this.chkSameCardsWidth.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkSameCardsWidth.Name = "chkSameCardsWidth";
             this.chkSameCardsWidth.Size = new System.Drawing.Size(349, 21);
-            this.chkSameCardsWidth.TabIndex = 25;
+            this.chkSameCardsWidth.TabIndex = 27;
             this.chkSameCardsWidth.Text = "chkSameCardsWidth";
             this.chkSameCardsWidth.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
             // 

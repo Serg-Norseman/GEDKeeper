@@ -604,6 +604,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkHideUnknownSpouses").Checked = fOptions.TreeChartOptions.HideUnknownSpouses;
             GetControl<ICheckBox>("chkCheckTreeSize").Checked = fOptions.CheckTreeSize;
             GetControl<ICheckBox>("chkDottedLinesOfAdoptedChildren").Checked = fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren;
+            GetControl<ICheckBox>("chkDottedLinesOfDivorcedSpouses").Checked = fOptions.TreeChartOptions.DottedLinesOfDivorcedSpouses;
             GetControl<ICheckBox>("chkSeparateDAPLines").Checked = fOptions.TreeChartOptions.SeparateDatesAndPlacesLines;
             GetControl<ICheckBox>("chkOnlyLocality").Checked = fOptions.TreeChartOptions.OnlyLocality;
             GetControl<ICheckBox>("chkBoldNames").Checked = fOptions.TreeChartOptions.BoldNames;
@@ -687,6 +688,7 @@ namespace GKCore.Controllers
             fOptions.TreeChartOptions.HideUnknownSpouses = GetControl<ICheckBox>("chkHideUnknownSpouses").Checked;
             fOptions.CheckTreeSize = GetControl<ICheckBox>("chkCheckTreeSize").Checked;
             fOptions.TreeChartOptions.DottedLinesOfAdoptedChildren = GetControl<ICheckBox>("chkDottedLinesOfAdoptedChildren").Checked;
+            fOptions.TreeChartOptions.DottedLinesOfDivorcedSpouses = GetControl<ICheckBox>("chkDottedLinesOfDivorcedSpouses").Checked;
             fOptions.TreeChartOptions.SeparateDatesAndPlacesLines = GetControl<ICheckBox>("chkSeparateDAPLines").Checked;
             fOptions.TreeChartOptions.OnlyLocality = GetControl<ICheckBox>("chkOnlyLocality").Checked;
             fOptions.TreeChartOptions.BoldNames = GetControl<ICheckBox>("chkBoldNames").Checked;
@@ -881,6 +883,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkHideUnknownSpouses").Text = LangMan.LS(LSID.HideUnknownSpouses);
             GetControl<ICheckBox>("chkCheckTreeSize").Text = LangMan.LS(LSID.CheckTreeSize);
             GetControl<ICheckBox>("chkDottedLinesOfAdoptedChildren").Text = LangMan.LS(LSID.DottedLinesOfAdoptedChildren);
+            GetControl<ICheckBox>("chkDottedLinesOfDivorcedSpouses").Text = LangMan.LS(LSID.DottedLinesOfDivorcedSpouses);
             GetControl<ICheckBox>("chkBoldNames").Text = LangMan.LS(LSID.BoldNames);
             GetControl<ICheckBox>("chkMinimizingWidth").Text = LangMan.LS(LSID.MinimizingWidth);
             GetControl<ICheckBox>("chkShowAge").Text = LangMan.LS(LSID.ShowAge);

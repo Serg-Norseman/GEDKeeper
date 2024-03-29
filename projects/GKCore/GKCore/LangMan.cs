@@ -1025,8 +1025,9 @@ namespace GKCore
         /* 951 */ RI_Recruit,
         /* 952 */ ReversePlacesOrder,
         /* 953 */ EL_AbbreviatedNames,
+        /* 954 */ DottedLinesOfDivorcedSpouses,
 
-        /* 000 */ Last = EL_AbbreviatedNames
+        /* 000 */ Last = DottedLinesOfDivorcedSpouses
     }
 
 
@@ -2005,6 +2006,7 @@ namespace GKCore
             /* 951 */ "RI:Recruit",
             /* 952 */ "Reverse order of places",
             /* 953 */ "Abbreviated location names",
+            /* 954 */ "Dotted lines of divorced spouses",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

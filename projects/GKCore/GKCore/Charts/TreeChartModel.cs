@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -1931,9 +1931,13 @@ namespace GKCore.Charts
                 case GDMSex.svMale:
                     for (int i = 0; i < spousesCount; i++) {
                         TreeChartPerson spouse = person.GetSpouse(i);
+                        bool divorced = fOptions.DottedLinesOfDivorcedSpouses && spouse.HasFlag(PersonFlag.pfDivorced);
+
+                        var linePen = (!divorced) ? fLinePen : fDottedLinePen;
+                        var decorativeLinePen = (!divorced) ? fDecorativeLinePen : fDottedDecorativeLinePen;
 
                         int spbV = spbBeg + spbOfs * i;
-                        DrawLine(person.Rect.Right + 1, spbV, spouse.Rect.Left, spbV); // h
+                        DrawLine(person.Rect.Right + 1, spbV, spouse.Rect.Left, spbV, linePen, decorativeLinePen); // h
 
                         if (!string.IsNullOrEmpty(spouse.MarriageDate)) {
                             int q = (!fOptions.InvertedTree) ? 4 : 3;
@@ -1945,9 +1949,13 @@ namespace GKCore.Charts
                 case GDMSex.svFemale:
                     for (int i = 0; i < spousesCount; i++) {
                         TreeChartPerson spouse = person.GetSpouse(i);
+                        bool divorced = fOptions.DottedLinesOfDivorcedSpouses && spouse.HasFlag(PersonFlag.pfDivorced);
+
+                        var linePen = (!divorced) ? fLinePen : fDottedLinePen;
+                        var decorativeLinePen = (!divorced) ? fDecorativeLinePen : fDottedDecorativeLinePen;
 
                         int spbV = spbBeg + spbOfs * i;
-                        DrawLine(spouse.Rect.Right + 1, spbV, person.Rect.Left, spbV); // h
+                        DrawLine(spouse.Rect.Right + 1, spbV, person.Rect.Left, spbV, linePen, decorativeLinePen); // h
 
                         if (!string.IsNullOrEmpty(spouse.MarriageDate)) {
                             int q = (!fOptions.InvertedTree) ? 1 : 2;
