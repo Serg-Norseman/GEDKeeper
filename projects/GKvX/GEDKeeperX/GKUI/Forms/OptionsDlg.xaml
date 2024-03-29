@@ -394,7 +394,13 @@
                         <input:CheckBox x:Name="chkKeepInfoPansOverallSize" />
                         <input:CheckBox x:Name="chkFilesOverwriteWarn" />
                         <input:CheckBox x:Name="chkExtendedKinships" />
+
                         <input:CheckBox x:Name="chkExtendedLocations" />
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                            <Label HorizontalOptions="Start" Text="" />
+                            <input:CheckBox x:Name="chkELAbbreviatedNames" />
+                        </StackLayout>
+
                         <input:CheckBox x:Name="chkReversePlacesOrder" />
 
                         <Label VerticalOptions="FillAndExpand" />

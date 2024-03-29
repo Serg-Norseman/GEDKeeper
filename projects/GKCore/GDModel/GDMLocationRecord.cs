@@ -173,7 +173,7 @@ namespace GDModel
             fTopLevels.ReplaceXRefs(map);
         }
 
-        public GDMList<GDMLocationName> GetFullNames(GDMTree tree, ATDEnumeration atdEnum)
+        public GDMList<GDMLocationName> GetFullNames(GDMTree tree, ATDEnumeration atdEnum, bool abbreviations = false)
         {
             GDMList<GDMLocationName> result;
 
@@ -189,14 +189,16 @@ namespace GDModel
                     if (topLoc == null) continue;
 
                     bool wasJoin = false;
-                    var topNames = topLoc.GetFullNames(tree, atdEnum);
+                    var topNames = topLoc.GetFullNames(tree, atdEnum, abbreviations);
                     for (int i = 0; i < topNames.Count; i++) {
                         var topName = topNames[i];
 
                         var interDate = GDMCustomDate.GetIntersection(topLevel.Date.Value, topName.Date.Value);
                         if (!interDate.IsEmpty()) {
+                            string tnVal = (abbreviations && !string.IsNullOrEmpty(topName.Abbreviation)) ? topName.Abbreviation : topName.StringValue;
+
                             var newLocName = new GDMLocationName();
-                            newLocName.SetRawData(topName.StringValue, interDate);
+                            newLocName.SetRawData(tnVal, interDate);
                             buffer.Add(newLocName);
                             wasJoin = true;
                         }
@@ -219,7 +221,9 @@ namespace GDModel
 
                         var interDate = GDMCustomDate.GetIntersection(topDate, locName.Date.Value);
                         if (!interDate.IsEmpty()) {
-                            string newName = (atdEnum == ATDEnumeration.fLtS) ? topName + ", " + locName.StringValue : locName.StringValue + ", " + topName;
+                            string nVal = (abbreviations && !string.IsNullOrEmpty(locName.Abbreviation)) ? locName.Abbreviation : locName.StringValue;
+
+                            string newName = (atdEnum == ATDEnumeration.fLtS) ? topName + ", " + nVal : nVal + ", " + topName;
 
                             var newLocName = new GDMLocationName();
                             newLocName.SetRawData(newName, interDate);
@@ -234,7 +238,7 @@ namespace GDModel
 
         public string GetNameByDate(GDMCustomDate date, ATDEnumeration atdEnum, bool full = false)
         {
-            var namesList = (!full) ? fNames : GetFullNames(Tree, atdEnum);
+            var namesList = (!full) ? fNames : GetFullNames(Tree, atdEnum, GlobalOptions.Instance.EL_AbbreviatedNames);
 
             if (date != null && !date.IsEmpty()) {
                 for (int i = 0; i < namesList.Count; i++) {

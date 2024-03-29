@@ -184,6 +184,7 @@
         private System.Windows.Forms.Label lblAscendNumbering;
         private System.Windows.Forms.ComboBox cmbAscendNumbering;
         private System.Windows.Forms.CheckBox chkExtendedLocations;
+        private System.Windows.Forms.CheckBox chkELAbbreviatedNames;
         private System.Windows.Forms.CheckBox chkReversePlacesOrder;
 
         private void InitializeComponent()
@@ -370,6 +371,7 @@
             this.lblDescendNumbering = new System.Windows.Forms.Label();
             this.cmbDescendNumbering = new System.Windows.Forms.ComboBox();
             this.chkExtendedLocations = new System.Windows.Forms.CheckBox();
+            this.chkELAbbreviatedNames = new System.Windows.Forms.CheckBox();
             this.chkReversePlacesOrder = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
@@ -2284,6 +2286,7 @@
             this.pageSpecials.Controls.Add(this.chkFilesOverwriteWarn);
             this.pageSpecials.Controls.Add(this.chkExtendedKinships);
             this.pageSpecials.Controls.Add(this.chkExtendedLocations);
+            this.pageSpecials.Controls.Add(this.chkELAbbreviatedNames);
             this.pageSpecials.Controls.Add(this.chkReversePlacesOrder);
             this.pageSpecials.BackColor = System.Drawing.SystemColors.Control;
             this.pageSpecials.Location = new System.Drawing.Point(4, 26);
@@ -2412,9 +2415,18 @@
             this.chkExtendedLocations.TabIndex = 18;
             this.chkExtendedLocations.Text = "chkExtendedLocations";
             // 
+            // chkELAbbreviatedNames
+            // 
+            this.chkELAbbreviatedNames.Location = new System.Drawing.Point(50, 512);
+            this.chkELAbbreviatedNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkELAbbreviatedNames.Name = "chkELAbbreviatedNames";
+            this.chkELAbbreviatedNames.Size = new System.Drawing.Size(600, 22);
+            this.chkELAbbreviatedNames.TabIndex = 18;
+            this.chkELAbbreviatedNames.Text = "chkELAbbreviatedNames";
+            // 
             // chkReversePlacesOrder
             // 
-            this.chkReversePlacesOrder.Location = new System.Drawing.Point(20, 512);
+            this.chkReversePlacesOrder.Location = new System.Drawing.Point(20, 553);
             this.chkReversePlacesOrder.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkReversePlacesOrder.Name = "chkReversePlacesOrder";
             this.chkReversePlacesOrder.Size = new System.Drawing.Size(600, 22);

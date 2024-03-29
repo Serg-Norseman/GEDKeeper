@@ -143,7 +143,7 @@ namespace GKCore.Lists
             int num = fListColumns.Count;
             for (int i = 0; i < num; i++) {
                 ListColumn cs = fListColumns.OrderedColumns[i];
-                AddColumn(LangMan.LS(cs.ColName), cs.CurWidth, false, cs.Id, 0);
+                AddColumn(cs.ColName, cs.CurWidth, false, cs.Id, 0);
             }
         }
 
@@ -169,20 +169,12 @@ namespace GKCore.Lists
 
         public string GetColumnName(int columnId)
         {
-            if (columnId >= 0 && columnId < fListColumns.Count) {
-                return LangMan.LS(fListColumns[columnId].ColName);
-            }
-
-            return "<?>";
+            return (columnId >= 0 && columnId < fListColumns.Count) ? fListColumns[columnId].ColName : "<?>";
         }
 
         public DataType GetColumnDataType(int columnId)
         {
-            if (columnId >= 0 && columnId < fListColumns.Count) {
-                return fListColumns[columnId].DataType;
-            }
-
-            return DataType.dtString;
+            return (columnId >= 0 && columnId < fListColumns.Count) ? fListColumns[columnId].DataType : DataType.dtString;
         }
 
         public virtual void ChangeColumnWidth(int colIndex, int colWidth)

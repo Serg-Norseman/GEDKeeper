@@ -87,17 +87,17 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                bool isRenamed = (fLocationRecord.LocationName != fView.Name.Text);
+                //bool isRenamed = (fLocationRecord.LocationName != fView.Name.Text);
 
                 fLocationRecord.LocationName = fView.Name.Text;
                 fLocationRecord.Map.Lati = ConvertHelper.ParseFloat(fView.Latitude.Text, 0.0);
                 fLocationRecord.Map.Long = ConvertHelper.ParseFloat(fView.Longitude.Text, 0.0);
 
-                bool isChanged = isRenamed || fLocalUndoman.HasChanges();
+                //bool isChanged = isRenamed || fLocalUndoman.HasChanges();
 
                 fLocalUndoman.Commit();
 
-                if (isChanged) {
+                /*if (isChanged)*/ {
                     fBase.Context.Tree.RenameLocationRecord(fLocationRecord);
                 }
 

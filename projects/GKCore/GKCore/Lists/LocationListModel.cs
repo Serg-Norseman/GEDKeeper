@@ -34,6 +34,7 @@ namespace GKCore.Lists
         {
             ctXRefNum,
             ctName,
+            ctExt,
             ctLati,
             ctLong,
             ctChangeDate
@@ -51,6 +52,7 @@ namespace GKCore.Lists
 
             result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.Title, DataType.dtString, 300, true, true);
+            result.AddColumn("Ext", DataType.dtString, 60, true, true);
             result.AddColumn(LSID.Latitude, DataType.dtFloat, 120, true, false, GEDCOMUtils.CoordFormat, GEDCOMUtils.CoordNumberFormatInfo);
             result.AddColumn(LSID.Longitude, DataType.dtFloat, 120, true, false, GEDCOMUtils.CoordFormat, GEDCOMUtils.CoordNumberFormatInfo);
             result.AddColumn(LSID.Changed, DataType.dtDateTime, 150, true);
@@ -116,6 +118,10 @@ namespace GKCore.Lists
 
                 case ColumnType.ctName:
                     result = fFetchedRec.GetNameByDate(null, ATDEnumeration.fLtS, true);
+                    break;
+
+                case ColumnType.ctExt:
+                    result = (fFetchedRec.Names.Count > 1 || fFetchedRec.TopLevels.Count > 0) ? " ✔ " : string.Empty;
                     break;
 
                 case ColumnType.ctLati:

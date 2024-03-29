@@ -3050,7 +3050,7 @@ namespace GKCore
                         summary.Add(LangMan.LS(LSID.Latitude) + ": " + locRec.Map.Lati);
                         summary.Add(LangMan.LS(LSID.Longitude) + ": " + locRec.Map.Long);
 
-                        var fullNames = locRec.GetFullNames(tree, ATDEnumeration.fStL);
+                        var fullNames = locRec.GetFullNames(tree, ATDEnumeration.fStL, glob.EL_AbbreviatedNames);
                         if (fullNames.Count > 0) {
                             //linkList.Sort();
 

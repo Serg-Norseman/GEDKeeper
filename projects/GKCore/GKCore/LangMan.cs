@@ -1024,8 +1024,9 @@ namespace GKCore
 
         /* 951 */ RI_Recruit,
         /* 952 */ ReversePlacesOrder,
+        /* 953 */ EL_AbbreviatedNames,
 
-        /* 000 */ Last = ReversePlacesOrder
+        /* 000 */ Last = EL_AbbreviatedNames
     }
 
 
@@ -2003,6 +2004,7 @@ namespace GKCore
 
             /* 951 */ "RI:Recruit",
             /* 952 */ "Reverse order of places",
+            /* 953 */ "Abbreviated location names",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

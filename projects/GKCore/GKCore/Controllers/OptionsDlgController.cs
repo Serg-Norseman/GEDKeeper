@@ -75,7 +75,7 @@ namespace GKCore.Controllers
                 int num = fTempColumns.Count;
                 for (int i = 0; i < num; i++) {
                     ListColumn column = fTempColumns.OrderedColumns[i];
-                    listView.AddItem(null, column.CurActive, LangMan.LS(column.ColName));
+                    listView.AddItem(null, column.CurActive, column.ColName);
                 }
             } finally {
                 listView.EndUpdate();
@@ -451,6 +451,8 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkFilesOverwriteWarn").Enabled = hasOverwritePrompt;
 
             GetControl<ICheckBox>("chkExtendedLocations").Checked = fOptions.ExtendedLocations;
+            GetControl<ICheckBox>("chkELAbbreviatedNames").Checked = fOptions.EL_AbbreviatedNames;
+
             GetControl<ICheckBox>("chkReversePlacesOrder").Checked = fOptions.ReversePlaceEntitiesOrder;
         }
 
@@ -471,6 +473,8 @@ namespace GKCore.Controllers
             fOptions.FilesOverwriteWarn = GetControl<ICheckBox>("chkFilesOverwriteWarn").Checked;
 
             fOptions.ExtendedLocations = GetControl<ICheckBox>("chkExtendedLocations").Checked;
+            fOptions.EL_AbbreviatedNames = GetControl<ICheckBox>("chkELAbbreviatedNames").Checked;
+
             fOptions.ReversePlaceEntitiesOrder = GetControl<ICheckBox>("chkReversePlacesOrder").Checked;
         }
 
@@ -982,6 +986,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkFilesOverwriteWarn").Text = LangMan.LS(LSID.FilesOverwriteWarn);
             GetControl<ICheckBox>("chkExtendedKinships").Text = LangMan.LS(LSID.ExtendedKinships);
             GetControl<ICheckBox>("chkExtendedLocations").Text = LangMan.LS(LSID.ExtendedLocations);
+            GetControl<ICheckBox>("chkELAbbreviatedNames").Text = LangMan.LS(LSID.EL_AbbreviatedNames);
             GetControl<ICheckBox>("chkReversePlacesOrder").Text = LangMan.LS(LSID.ReversePlacesOrder);
 
             // Plugins

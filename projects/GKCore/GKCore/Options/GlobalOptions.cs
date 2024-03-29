@@ -128,6 +128,8 @@ namespace GKCore.Options
 
         public bool ExtendedLocations { get; set; }
 
+        public bool EL_AbbreviatedNames { get; set; }
+
         public StringList FARPatterns
         {
             get { return fFARPatterns; }
@@ -418,7 +420,9 @@ namespace GKCore.Options
             InfoPansOverallSize = -1;
             KeepInfoPansOverallSize = false;
             ExtendedKinships = false;
+
             ExtendedLocations = false;
+            EL_AbbreviatedNames = true;
         }
 
         public void Assign(IOptions source)
@@ -829,6 +833,7 @@ namespace GKCore.Options
             FilesOverwriteWarn = ini.ReadBool("Common", "FilesOverwriteWarn", true);
             ExtendedKinships = ini.ReadBool("Common", "ExtendedKinships", false);
             ExtendedLocations = ini.ReadBool("Common", "ExtendedLocations", false);
+            EL_AbbreviatedNames = ini.ReadBool("Common", "EL_AbbreviatedNames", true);
 
             UseSurnamesInPersonSelectionFilter = ini.ReadBool("Common", "UseSurnamesInPersonSelectionFilter", false);
             UseBirthDatesInPersonSelectionFilter = ini.ReadBool("Common", "UseBirthDatesInPersonSelectionFilter", false);
@@ -977,6 +982,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "FilesOverwriteWarn", FilesOverwriteWarn);
             ini.WriteBool("Common", "ExtendedKinships", ExtendedKinships);
             ini.WriteBool("Common", "ExtendedLocations", ExtendedLocations);
+            ini.WriteBool("Common", "EL_AbbreviatedNames", EL_AbbreviatedNames);
 
             ini.WriteBool("Common", "UseSurnamesInPersonSelectionFilter", UseSurnamesInPersonSelectionFilter);
             ini.WriteBool("Common", "UseBirthDatesInPersonSelectionFilter", UseBirthDatesInPersonSelectionFilter);

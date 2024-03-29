@@ -33,7 +33,7 @@ namespace GKCore.Lists
     public sealed class ListColumn
     {
         public readonly byte Id;
-        public readonly LSID ColName;
+        public readonly string ColName;
         public readonly DataType DataType;
         public readonly int DefWidth;
         public readonly bool DefActive;
@@ -45,7 +45,7 @@ namespace GKCore.Lists
         public bool CurActive;
         public int Order;
 
-        public ListColumn(byte id, LSID colName, DataType dataType,
+        public ListColumn(byte id, string colName, DataType dataType,
                           int defWidth, bool defActive, bool autosize = false,
                           string format = null, NumberFormatInfo numFmt = null)
         {
@@ -103,15 +103,25 @@ namespace GKCore.Lists
 
         public void AddColumn(LSID colName, int defWidth, bool autosize = false)
         {
-            AddColumn(colName, DataType.dtString, defWidth, true, autosize, null, null);
+            AddColumn(LangMan.LS(colName), DataType.dtString, defWidth, true, autosize, null, null);
         }
 
         public void AddColumn(LSID colName, DataType dataType, int defWidth, bool defActive, bool autosize = false)
+        {
+            AddColumn(LangMan.LS(colName), dataType, defWidth, defActive, autosize, null, null);
+        }
+
+        public void AddColumn(string colName, DataType dataType, int defWidth, bool defActive, bool autosize = false)
         {
             AddColumn(colName, dataType, defWidth, defActive, autosize, null, null);
         }
 
         public void AddColumn(LSID colName, DataType dataType, int defWidth, bool defActive, bool autosize, string format, NumberFormatInfo nfi)
+        {
+            AddColumn(LangMan.LS(colName), dataType, defWidth, defActive, autosize, format, nfi);
+        }
+
+        public void AddColumn(string colName, DataType dataType, int defWidth, bool defActive, bool autosize, string format, NumberFormatInfo nfi)
         {
             fLastId += 1;
             fColumns.Add(new ListColumn((byte)fLastId, colName, dataType, defWidth, defActive, autosize, format, nfi));

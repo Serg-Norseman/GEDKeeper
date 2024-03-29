@@ -105,7 +105,7 @@ namespace GKCore
         [Test]
         public void Test_ListColumn()
         {
-            var colStatic = new ListColumn(0, 0, DataType.dtString, 0, true);
+            var colStatic = new ListColumn(0, "", DataType.dtString, 0, true);
             Assert.IsNotNull(colStatic);
             Assert.AreEqual(0, colStatic.Order);
             Assert.AreEqual(false, colStatic.CurActive);

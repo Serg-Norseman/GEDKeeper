@@ -691,7 +691,7 @@ namespace GKCore.Lists
                             break;
                     }
                 } else {
-                    AddColumn(LangMan.LS(columnProps.ColName), columnProps.CurWidth, false, bColType, 0);
+                    AddColumn(columnProps.ColName, columnProps.CurWidth, false, bColType, 0);
                 }
             }
         }
