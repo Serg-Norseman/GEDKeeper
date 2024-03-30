@@ -455,11 +455,11 @@ namespace GKCore.Charts
                         bool divorced = (family.Status == GDMMarriageStatus.MarrDivorced);
 
                         if (iFather != null && fContext.IsRecordAccess(iFather.Restriction)) {
-                            personNode.Father = VisitParent(personNode, iFather, personNode.Generation - 1, isDup, divorced, adopted);
+                            personNode.Father = VisitParent(personNode, iFather, personNode.Generation - 1, isDup, divorced, adopted, commonLaw);
                         }
 
                         if (iMother != null && fContext.IsRecordAccess(iMother.Restriction)) {
-                            personNode.Mother = VisitParent(personNode, iMother, personNode.Generation - 1, isDup, divorced, adopted);
+                            personNode.Mother = VisitParent(personNode, iMother, personNode.Generation - 1, isDup, divorced, adopted, commonLaw);
                         }
 
                         if (personNode.Father != null && personNode.Mother != null && fOptions.Kinship) {
@@ -494,7 +494,7 @@ namespace GKCore.Charts
         }
 
         private TreeChartPerson VisitParent(TreeChartPerson childNode, GDMIndividualRecord parentRec, int generation,
-            bool dupFlag = false, bool divorced = false, bool adopted = false)
+            bool dupFlag = false, bool divorced = false, bool adopted = false, bool commonLaw = false)
         {
             if (parentRec == null) return null;
 
@@ -503,6 +503,7 @@ namespace GKCore.Charts
 
                 result = CreatePerson(parentRec, generation);
 
+                result.SetFlag(PersonFlag.pfCommonLaw, commonLaw);
                 result.SetFlag(PersonFlag.pfDivorced, divorced);
                 result.IsDup = dupFlag;
 
@@ -629,6 +630,7 @@ namespace GKCore.Charts
                     if (!isDup) fPreparedFamilies.Add(family.XRef);
 
                     bool commonLaw = (family.Status == GDMMarriageStatus.MarrNotRegistered);
+                    result.SetFlag(PersonFlag.pfCommonLaw, commonLaw);
 
                     bool divorced = (family.Status == GDMMarriageStatus.MarrDivorced);
                     result.SetFlag(PersonFlag.pfDivorced, divorced);
@@ -648,6 +650,7 @@ namespace GKCore.Charts
                                     resParent = AddDescPerson(null, sp, true, generation);
                                     resParent.Sex = GDMSex.svMale;
                                     resParent.SetFlag(PersonFlag.pfSpouse);
+                                    resParent.SetFlag(PersonFlag.pfCommonLaw, commonLaw);
                                     resParent.SetFlag(PersonFlag.pfDivorced, divorced);
 
 #if DESK_METHOD
@@ -678,6 +681,7 @@ namespace GKCore.Charts
                                     resParent = AddDescPerson(null, sp, true, generation);
                                     resParent.Sex = GDMSex.svFemale;
                                     resParent.SetFlag(PersonFlag.pfSpouse);
+                                    resParent.SetFlag(PersonFlag.pfCommonLaw, commonLaw);
                                     resParent.SetFlag(PersonFlag.pfDivorced, divorced);
 
 #if DESK_METHOD
@@ -1931,10 +1935,10 @@ namespace GKCore.Charts
                 case GDMSex.svMale:
                     for (int i = 0; i < spousesCount; i++) {
                         TreeChartPerson spouse = person.GetSpouse(i);
-                        bool divorced = fOptions.DottedLinesOfDivorcedSpouses && spouse.HasFlag(PersonFlag.pfDivorced);
+                        bool commonLaw = fOptions.DottedLinesOfCommonLawSpouses && spouse.HasFlag(PersonFlag.pfCommonLaw);
 
-                        var linePen = (!divorced) ? fLinePen : fDottedLinePen;
-                        var decorativeLinePen = (!divorced) ? fDecorativeLinePen : fDottedDecorativeLinePen;
+                        var linePen = (!commonLaw) ? fLinePen : fDottedLinePen;
+                        var decorativeLinePen = (!commonLaw) ? fDecorativeLinePen : fDottedDecorativeLinePen;
 
                         int spbV = spbBeg + spbOfs * i;
                         DrawLine(person.Rect.Right + 1, spbV, spouse.Rect.Left, spbV, linePen, decorativeLinePen); // h
@@ -1949,10 +1953,10 @@ namespace GKCore.Charts
                 case GDMSex.svFemale:
                     for (int i = 0; i < spousesCount; i++) {
                         TreeChartPerson spouse = person.GetSpouse(i);
-                        bool divorced = fOptions.DottedLinesOfDivorcedSpouses && spouse.HasFlag(PersonFlag.pfDivorced);
+                        bool commonLaw = fOptions.DottedLinesOfCommonLawSpouses && spouse.HasFlag(PersonFlag.pfCommonLaw);
 
-                        var linePen = (!divorced) ? fLinePen : fDottedLinePen;
-                        var decorativeLinePen = (!divorced) ? fDecorativeLinePen : fDottedDecorativeLinePen;
+                        var linePen = (!commonLaw) ? fLinePen : fDottedLinePen;
+                        var decorativeLinePen = (!commonLaw) ? fDecorativeLinePen : fDottedDecorativeLinePen;
 
                         int spbV = spbBeg + spbOfs * i;
                         DrawLine(spouse.Rect.Right + 1, spbV, person.Rect.Left, spbV, linePen, decorativeLinePen); // h

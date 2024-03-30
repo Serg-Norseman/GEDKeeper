@@ -64,7 +64,7 @@ namespace GKCore.Options
         public bool ShowPlaces;
         public bool HideUnknownSpouses;
         public bool DottedLinesOfAdoptedChildren;
-        public bool DottedLinesOfDivorcedSpouses;
+        public bool DottedLinesOfCommonLawSpouses;
         public bool SeparateDatesAndPlacesLines;
         public bool BoldNames;
         public bool OnlyLocality;
@@ -134,7 +134,7 @@ namespace GKCore.Options
             ShowPlaces = false;
             HideUnknownSpouses = false;
             DottedLinesOfAdoptedChildren = false;
-            DottedLinesOfDivorcedSpouses = false;
+            DottedLinesOfCommonLawSpouses = false;
             SeparateDatesAndPlacesLines = false;
             BoldNames = false;
             OnlyLocality = false;
@@ -209,7 +209,7 @@ namespace GKCore.Options
             ShowPlaces = srcOptions.ShowPlaces;
             HideUnknownSpouses = srcOptions.HideUnknownSpouses;
             DottedLinesOfAdoptedChildren = srcOptions.DottedLinesOfAdoptedChildren;
-            DottedLinesOfDivorcedSpouses = srcOptions.DottedLinesOfDivorcedSpouses;
+            DottedLinesOfCommonLawSpouses = srcOptions.DottedLinesOfCommonLawSpouses;
             SeparateDatesAndPlacesLines = srcOptions.SeparateDatesAndPlacesLines;
             BoldNames = srcOptions.BoldNames;
             SeparateDepth = srcOptions.SeparateDepth;
@@ -261,7 +261,7 @@ namespace GKCore.Options
             ShowPlaces = iniFile.ReadBool("Chart", "ShowPlaces", false);
             HideUnknownSpouses = iniFile.ReadBool("Chart", "HideUnknownSpouses", false);
             DottedLinesOfAdoptedChildren = iniFile.ReadBool("Chart", "DottedLinesOfAdoptedChildren", false);
-            DottedLinesOfDivorcedSpouses = iniFile.ReadBool("Chart", "DottedLinesOfDivorcedSpouses", false);
+            DottedLinesOfCommonLawSpouses = iniFile.ReadBool("Chart", "DottedLinesOfCommonLawSpouses", false);
             SeparateDatesAndPlacesLines = iniFile.ReadBool("Chart", "SeparateDatesAndPlacesLines", false);
             BoldNames = iniFile.ReadBool("Chart", "BoldNames", false);
             BorderStyle = (GfxBorderStyle)iniFile.ReadInteger("Chart", "BorderStyle", 0);
@@ -328,7 +328,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "ShowPlaces", ShowPlaces);
             iniFile.WriteBool("Chart", "HideUnknownSpouses", HideUnknownSpouses);
             iniFile.WriteBool("Chart", "DottedLinesOfAdoptedChildren", DottedLinesOfAdoptedChildren);
-            iniFile.WriteBool("Chart", "DottedLinesOfDivorcedSpouses", DottedLinesOfDivorcedSpouses);
+            iniFile.WriteBool("Chart", "DottedLinesOfCommonLawSpouses", DottedLinesOfCommonLawSpouses);
             iniFile.WriteBool("Chart", "SeparateDatesAndPlacesLines", SeparateDatesAndPlacesLines);
             iniFile.WriteBool("Chart", "BoldNames", BoldNames);
             iniFile.WriteInteger("Chart", "BorderStyle", (int)BorderStyle);

@@ -1025,7 +1025,7 @@ namespace GKCore
         /* 951 */ RI_Recruit,
         /* 952 */ ReversePlacesOrder,
         /* 953 */ EL_AbbreviatedNames,
-        /* 954 */ DottedLinesOfDivorcedSpouses,
+        /* 954 */ DottedLinesOfCommonLawSpouses,
         /* 955 */ ShowNumberOfSubstructures,
 
         /* 000 */ Last = ShowNumberOfSubstructures
@@ -2007,7 +2007,7 @@ namespace GKCore
             /* 951 */ "RI:Recruit",
             /* 952 */ "Reverse order of places",
             /* 953 */ "Abbreviated location names",
-            /* 954 */ "Dotted lines of divorced spouses",
+            /* 954 */ "Dotted lines of common law spouses",
             /* 955 */ "Show number of substructures instead of check marks",
         };
 
