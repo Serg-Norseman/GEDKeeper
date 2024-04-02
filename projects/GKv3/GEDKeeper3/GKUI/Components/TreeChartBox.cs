@@ -328,23 +328,28 @@ namespace GKUI.Components
 
         private void DrawBackground(RenderTarget target, BackgroundMode background)
         {
+            int width, height;
+            if (target == RenderTarget.Screen) {
+                var rect = CanvasRectangle;
+                width = rect.Width;
+                height = rect.Height;
+            } else {
+                // when rendering goes to a file, the fill should be on the entire area
+                width = fModel.ImageWidth;
+                height = fModel.ImageHeight;
+            }
+
             switch (background) {
                 case BackgroundMode.bmNone:
+                    // EtoForms/WPF: black background of image's area
+                    if (target == RenderTarget.Printer) {
+                        fRenderer.DrawRectangle(null, UIHelper.ConvertColor(Colors.White), 0, 0, width, height);
+                    }
                     break;
 
                 case BackgroundMode.bmImage:
                 case BackgroundMode.bmFill:
                 case BackgroundMode.bmAny:
-                    int width, height;
-                    if (target == RenderTarget.Screen) {
-                        var rect = CanvasRectangle;
-                        width = rect.Width;
-                        height = rect.Height;
-                    } else {
-                        // when rendering goes to a file, the fill should be on the entire area
-                        width = fModel.ImageWidth;
-                        height = fModel.ImageHeight;
-                    }
                     if (BackgroundImage != null) {
                         // when printing, sheet filling is not needed
                         if (target != RenderTarget.Printer) {
