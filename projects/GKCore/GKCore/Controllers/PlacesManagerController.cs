@@ -21,6 +21,7 @@
 using System.Collections.Generic;
 using BSLib;
 using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
@@ -44,6 +45,13 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
+        }
+
+        public void SyncAll()
+        {
+            AppHost.Instance.ExecuteWork((controller) => {
+                GEDCOMChecker.SyncTreeLocations(fBase.Context, controller);
+            });
         }
 
         public void Clear()

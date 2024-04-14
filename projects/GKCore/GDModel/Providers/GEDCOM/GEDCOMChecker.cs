@@ -182,9 +182,9 @@ namespace GDModel.Providers.GEDCOM
                 placeLocation.XRef = "";
             }
 
-            if (place.StringValue != "" && locRec != null) {
+            /*if (place.StringValue != "" && locRec != null) {
                 place.StringValue = GKUtils.GetLocationNameExt(locRec, evt.Date.Value);
-            }
+            }*/
 
             CheckTagWithNotes(place);
         }
@@ -549,6 +549,53 @@ namespace GDModel.Providers.GEDCOM
 
             var instance = new GEDCOMChecker(baseContext, pc);
             return instance.CheckFormat();
+        }
+
+
+        public static void SyncTreeLocations(IBaseContext baseContext, IProgressController pc)
+        {
+            if (baseContext == null)
+                throw new ArgumentNullException("baseContext");
+
+            if (pc == null)
+                throw new ArgumentNullException("pc");
+
+            try {
+                var tree = baseContext.Tree;
+                pc.Begin(LangMan.LS(LSID.FormatCheck), 100);
+
+                try {
+                    int progress = 0;
+                    int num = tree.RecordsCount;
+                    for (int i = 0; i < num; i++) {
+                        GDMRecord rec = tree[i];
+                        if (rec.RecordType == GDMRecordType.rtIndividual || rec.RecordType == GDMRecordType.rtFamily) {
+                            var rwe = rec as GDMRecordWithEvents;
+                            if (rwe.HasEvents) {
+                                for (int k = 0, num2 = rwe.Events.Count; k < num2; k++) {
+                                    GDMCustomEvent evt = rwe.Events[k];
+                                    if (!evt.HasPlace) continue;
+
+                                    GDMLocationRecord locRec = tree.GetPtrValue<GDMLocationRecord>(evt.Place.Location);
+                                    if (locRec != null) {
+                                        evt.Place.StringValue = GKUtils.GetLocationNameExt(locRec, evt.Date.Value);
+                                    }
+                                }
+                            }
+                        }
+
+                        int newProgress = (int)Math.Min(100, ((i + 1) * 100.0f) / num);
+                        if (progress != newProgress) {
+                            progress = newProgress;
+                            pc.StepTo(progress);
+                        }
+                    }
+                } finally {
+                    pc.End();
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("GEDCOMChecker.SyncTreeLocations()", ex);
+            }
         }
     }
 }

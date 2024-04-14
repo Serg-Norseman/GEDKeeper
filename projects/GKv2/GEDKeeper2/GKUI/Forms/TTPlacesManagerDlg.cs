@@ -77,6 +77,11 @@ namespace GKUI.Forms
             base.Dispose(disposing);
         }
 
+        private void Form_Load(object sender, EventArgs e)
+        {
+            fController.SyncAll();
+        }
+
         private void miDetails_Click(object sender, EventArgs e)
         {
             fController.ShowDetails();

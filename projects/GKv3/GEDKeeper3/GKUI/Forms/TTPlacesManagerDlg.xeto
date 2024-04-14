@@ -2,7 +2,7 @@
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
   x:Class="GKUI.Forms.TTPlacesManagerDlg"
-  AbortButton="{x:Reference btnClose}">
+  AbortButton="{x:Reference btnClose}" Load="Form_Load">
 
   <TableLayout Style="paddedTable8">
 
