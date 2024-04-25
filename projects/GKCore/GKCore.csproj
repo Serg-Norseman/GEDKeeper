@@ -8,6 +8,7 @@
     <OutputType>Library</OutputType>
     <AssemblyName>GKCore</AssemblyName>
     <NoWin32Manifest>False</NoWin32Manifest>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>

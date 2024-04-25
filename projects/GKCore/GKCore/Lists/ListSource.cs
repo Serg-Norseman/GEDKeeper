@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+//#define REGEX_MASKS
+
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -238,6 +240,15 @@ namespace GKCore.Lists
 
         protected bool IsMatchesMask(string str, string mask)
         {
+#if !REGEX_MASKS
+
+            // This method of processing name matching with a pattern mask compared to using RegEx:
+            //   4.6 times faster if without unsafe operations (601 -> 129 ms)
+            //   and 11.5 times faster if with unsafe operations (601 -> 52 ms).
+            return SysUtils.MatchPattern(mask, str);
+
+#else
+
             if (string.IsNullOrEmpty(mask) || mask == "*") {
                 return true;
             }
@@ -259,6 +270,7 @@ namespace GKCore.Lists
             } else {
                 return fRegexMask.IsMatch(str, 0);
             }
+#endif
         }
 
         protected bool IsMatchesMask(GDMLines strList, string mask)

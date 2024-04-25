@@ -370,5 +370,22 @@ namespace GKCore
 
             Assert.AreEqual("?", langMan.LS(LSID.First));
         }
+
+
+
+        [Test]
+        [TestCase(true, "Silkin*", "Silkinova")]
+        [TestCase(true, "Si*kin", "Silkin")]
+        [TestCase(true, "Si?kin", "Silkin")]
+        [TestCase(false, "Si*kin", "Sunkin")]
+        [TestCase(true, "Iv*nov", "Ivanov")]
+        [TestCase(true, "Iv*nov|Sid*v", "Sidorov")]
+        [TestCase(true, "Sid*v|Pe*ov|Iv*nov", "Ivanov")]
+        [TestCase(true, "Sid*v|Iv*nov", "Sidorov")]
+        [Parallelizable(ParallelScope.All)]
+        public void Test_PatternMatcher(bool value, string expression, string name)
+        {
+            Assert.AreEqual(value, SysUtils.MatchPattern(expression, name));
+        }
     }
 }

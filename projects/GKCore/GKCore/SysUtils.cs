@@ -545,5 +545,257 @@ namespace GKCore
                 throw ex;
             }
         }
+
+        /// <summary>
+        /// Tells whether a given name matches the expression given with a strict semantics.
+        /// In words: * - matches 0 or more characters, ? - matches exactly 1 character.
+        /// </summary>
+        /// <param name="expression">Supplies the input expression to check against.</param>
+        /// <param name="name">Supplies the input name to check for.</param>
+        /// <returns>True if Name is an element in the set of strings denoted by the input Expression and False otherwise.</returns>
+        public static unsafe bool MatchPattern(string expression, string name)
+        {
+            const int MATCHES_ARRAY_SIZE = 16;
+
+            if (name == null || name.Length == 0) {
+                return false;
+            }
+
+            //  Special case by far the most common wild card search of *
+            if (expression == null || expression.Length == 0 || expression.Equals("*")) {
+                return true;
+            }
+
+            int exprLen = expression.Length;
+            int starPos = expression.IndexOf('*', 1);
+
+            //  Also special case expressions of the form *X.  With this and the prior
+            //  case we have covered virtually all normal queries.
+            if (expression[0] == '*' && starPos == -1) {
+                int rightLength = exprLen - 1;
+                // if name is shorter that the stuff to the right of * in expression, we don't
+                // need to do the string compare, otherwise we compare rightlength characters
+                // and the end of both strings.
+                if (name.Length >= rightLength && string.Compare(expression, 1, name, name.Length - rightLength, rightLength, StringComparison.Ordinal) == 0) {
+                    return true;
+                }
+            }
+
+            //  Also special case expressions of the form X*.  With this and the prior
+            //  case we have covered virtually all normal queries.
+            if (expression[0] != '*' && starPos == exprLen - 1) {
+                int leftLength = exprLen - 1;
+                // if name is shorter that the stuff to the right of * in expression, we don't
+                // need to do the string compare, otherwise we compare rightlength characters
+                // and the end of both strings.
+                if (name.Length >= leftLength && string.Compare(expression, 0, name, 0, leftLength, StringComparison.Ordinal) == 0) {
+                    return true;
+                }
+            }
+
+            //  Expression wild cards are evaluated in the nondeterministic finite automatons.
+            //
+            //  The idea behind the algorithm is pretty simple.  We keep track of
+            //  all possible locations in the regular expression that are matching
+            //  the name.  If when the name has been exhausted one of the locations
+            //  in the expression is also just exhausted, the name is in the language
+            //  defined by the regular expression.
+            //
+            //  Walk through the name string, picking off characters.  We go one
+            //  character beyond the end because some wild cards are able to match
+            //  zero characters beyond the end of the string.
+            //
+            //  With each new name character we determine a new set of states that
+            //  match the name so far.  We use two arrays that we swap back and forth
+            //  for this purpose.  One array lists the possible expression states for
+            //  all name characters up to but not including the current one, and other
+            //  array is used to build up the list of states considering the current
+            //  name character as well.  The arrays are then switched and the process
+            //  repeated.
+            //
+            //  There is not a one-to-one correspondence between state number and
+            //  offset into the expression.  This is evident from the NFAs in the
+            //  initial comment to this function.  State numbering is not continuous.
+            //  This allows a simple conversion between state number and expression
+            //  offset.  Each character in the expression can represent one or two
+            //  states.  * generate two states: ExprOffset*2 and ExprOffset*2 + 1.
+            //  All other expreesion characters can produce only a single state.
+            //  Thus ExprOffset = State/2.
+            //
+            //  Here is a short description of the variables involved:
+            //    NameOffset  - The offset of the current name char being processed.
+            //    ExprOffset  - The offset of the current expression char being processed.
+            //    SrcCount    - Prior match being investigated with current name char
+            //    DestCount   - Next location to put a matching assuming current name char
+            //    NameFinished - Allows one more itteration through the Matches array after the name is exhusted (to come *s for example)
+            //    PreviousDestCount - This is used to prevent entry duplication, see coment
+            //    PreviousMatches   - Holds the previous set of matches (the Src array)
+            //    CurrentMatches    - Holds the current set of matches (the Dest array)
+
+            int exprStart = 0;
+            int exprEnd = expression.IndexOf('|');
+            if (exprEnd < 0) {
+                //exprLen = expression.Length;
+            } else {
+                exprLen = exprEnd;
+            }
+
+            //  Set up the initial variables
+            int maxState = exprLen * 2;
+            int[] currentMatches = new int[MATCHES_ARRAY_SIZE];
+            int[] previousMatches = new int[MATCHES_ARRAY_SIZE];
+            previousMatches[0] = 0;
+            char nameChar = '\0';
+            bool nameFinished = false;
+            int matchesCount = 1;
+            int nameOffset = 0;
+
+            fixed (char* ptr_name = name)
+            fixed (char* ptr_expr = expression)
+                while (!nameFinished) {
+                    if (nameOffset < name.Length) {
+                        nameChar = ptr_name[nameOffset++];
+                    } else {
+                        nameFinished = true;
+
+                        //  if we have already exhasted the expression.  Don't continue.
+                        if (previousMatches[matchesCount - 1] == maxState) {
+                            break;
+                        }
+                    }
+
+                    //  Now, for each of the previous stored expression matches, see what
+                    //  we can do with this name character.
+                    int srcCount = 0;
+                    int destCount = 0;
+                    int previousDestCount = 0;
+
+                    while (srcCount < matchesCount) {
+
+                        //  We have to carry on our expression analysis as far as possible
+                        //  for each character of name, so we loop here until the
+                        //  expression stops matching.  A clue here is that expression
+                        //  cases that can match zero or more characters end with a
+                        //  continue, while those that can accept only a single character
+                        //  end with a break.
+                        int exprOffset = ((previousMatches[srcCount++] + 1) / 2);
+                        int length = 0;
+
+                        while (true) {
+                            if (exprOffset == exprLen) {
+                                break;
+                            }
+
+                            //  The first time through the loop we don't want to increment ExprOffset.
+                            exprOffset += length;
+
+                            int currentState = exprOffset * 2;
+
+                            if (exprOffset == exprLen) {
+                                currentMatches[destCount++] = maxState;
+                                break;
+                            }
+
+                            char exprChar = ptr_expr[exprStart + exprOffset];
+                            length = 1;
+
+                            //  Before we get started, we have to check for something
+                            //  really gross.  We may be about to exhaust the local
+                            //  space for expressionMatches[][], so we have to allocate
+                            //  some pool if this is the case.
+                            if (destCount >= MATCHES_ARRAY_SIZE - 2) {
+                                int newSize = currentMatches.Length * 2;
+
+                                int[] tmp = new int[newSize];
+                                Array.Copy(currentMatches, tmp, currentMatches.Length);
+                                currentMatches = tmp;
+
+                                tmp = new int[newSize];
+                                Array.Copy(previousMatches, tmp, previousMatches.Length);
+                                previousMatches = tmp;
+                            }
+
+                            //  * matches any character zero or more times.
+                            if (exprChar == '*') {
+                                currentMatches[destCount++] = currentState;
+                                currentMatches[destCount++] = currentState + 1;
+                                continue;
+                            }
+
+                            //  The following expression characters all match by consuming
+                            //  a character, thus force the expression, and thus state forward.
+                            currentState += length * 2;
+
+                            //  From this point on a name character is required to even
+                            //  continue, let alone make a match.
+                            if (nameFinished) {
+                                break;
+                            }
+
+                            //  If this expression was a '?' we can match it once.
+                            if (exprChar == '?') {
+                                currentMatches[destCount++] = currentState;
+                                break;
+                            }
+
+                            //  Finally, check if the expression char matches the name char
+                            if (exprChar == nameChar) {
+                                currentMatches[destCount++] = currentState;
+                                break;
+                            }
+
+                            //  The expression didn't match so go look at the next previous match.
+                            break;
+                        }
+
+                        //  Prevent duplication in the destination array.
+                        //  Each of the arrays is monotonically increasing and non-
+                        //  duplicating, thus we skip over any source element in the src
+                        //  array if we just added the same element to the destination
+                        //  array.  This guarentees non-duplication in the dest. array.
+                        if ((srcCount < matchesCount) && (previousDestCount < destCount)) {
+                            while (previousDestCount < destCount) {
+                                int previousLength = previousMatches.Length;
+                                while ((srcCount < previousLength) && (previousMatches[srcCount] < currentMatches[previousDestCount])) {
+                                    srcCount += 1;
+                                }
+                                previousDestCount += 1;
+                            }
+                        }
+                    }
+
+                    //  If we found no matches in the just finished iteration, it's time to bail.
+                    if (destCount == 0) {
+                        // If we have other patterns
+                        if (exprEnd >= 0) {
+                            exprStart = exprEnd + 1;
+                            exprEnd = expression.IndexOf('|', exprStart);
+                            exprLen = (exprEnd < 0) ? expression.Length - exprStart : exprEnd - exprStart;
+
+                            //  Reset the initial variables
+                            maxState = exprLen * 2;
+                            previousMatches[0] = 0;
+                            nameChar = '\0';
+                            nameFinished = false;
+                            matchesCount = 1;
+                            nameOffset = 0;
+
+                            continue;
+                        }
+
+                        return false;
+                    }
+
+                    {
+                        int[] tmp = previousMatches;
+                        previousMatches = currentMatches;
+                        currentMatches = tmp;
+                    }
+
+                    matchesCount = destCount;
+                }
+
+            return (previousMatches[matchesCount - 1] == maxState);
+        }
     }
 }
