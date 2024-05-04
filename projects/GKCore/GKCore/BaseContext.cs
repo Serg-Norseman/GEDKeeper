@@ -1937,25 +1937,31 @@ namespace GKCore
                 if (parent.SpouseToFamilyLinks.Count > 1) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.ThisPersonHasSeveralFamilies));
                 } else {
-                    GDMFamilyRecord family;
-
-                    if (parent.SpouseToFamilyLinks.Count == 0) {
-                        family = AddFamilyForSpouse(parent);
-                        if (family == null) {
-                            return null;
-                        }
-                    } else {
-                        family = fTree.GetPtrValue(parent.SpouseToFamilyLinks[0]);
+                    GDMFamilyRecord family = (parent.SpouseToFamilyLinks.Count == 0) ? null : fTree.GetPtrValue(parent.SpouseToFamilyLinks[0]);
+                    GDMIndividualRecord father = (family == null) ? null : fTree.GetPtrValue(family.Husband);
+                    if (father == null && parent.Sex == GDMSex.svMale) {
+                        father = parent;
                     }
 
-                    GDMIndividualRecord child = await SelectPerson(owner, fTree.GetPtrValue(family.Husband), TargetMode.tmParent, needSex);
+                    GDMIndividualRecord child = await SelectPerson(owner, father, TargetMode.tmParent, needSex);
 
-                    if (child != null && family.AddChild(child)) {
-                        // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
-                        // what to call AddChild () is no; all this is necessary in order to in the namebook were correct patronymics.
-                        ImportNames(child);
+                    if (child != null) {
+                        if (family == null) {
+                            family = AddFamilyForSpouse(parent);
+                            if (family == null) {
+                                return null;
+                            }
+                        }
 
-                        resultChild = child;
+                        if (family.AddChild(child)) {
+                            // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
+                            // what to call AddChild () is no; all this is necessary in order to in the namebook were correct patronymics.
+                            ImportNames(child);
+
+                            ProcessIndividual(child);
+
+                            resultChild = child;
+                        }
                     }
                 }
             }
@@ -1991,7 +1997,7 @@ namespace GKCore
             if (famRec == null) return;
 
             if (GlobalOptions.Instance.AutoSortChildren) {
-                fTree.SortChilds(famRec);
+                fTree.SortChildren(famRec);
             }
         }
 

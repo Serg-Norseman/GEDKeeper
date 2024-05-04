@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2015-2023 by Serg V. Zhdanovskih.
+ *  Copyright (C) 2015-2024 by Serg V. Zhdanovskih.
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace GKCore.Linguistics
@@ -669,11 +670,13 @@ namespace GKCore.Linguistics
                 word = LCase(word);
             }
 
-            string res;
-            DeclensionCase _dc = (DeclensionCase)Math.Max(declCase, -declCase);
-
             string z7 = Right(word, 3);
             string z8 = Right(z7, 2);
+
+            if (part == 1 && "иа их".Contains(z8)) {
+                return word;
+            }
+
             string z9 = Right(z8, 1);
             z5 = word.Length;
 
@@ -681,6 +684,8 @@ namespace GKCore.Linguistics
             int za = InStr("ая ия ел ок яц ий па да ца ша ба та га ка на ма", z8);
             int zb = InStr("аеёийоуэюяжнгхкчшщ", Left(z7, 1));
             int zd = (za == 4) ? 5 : InStr("айяь", z9);
+
+            DeclensionCase _dc = (DeclensionCase)Math.Max(declCase, -declCase);
 
             if (_dc == DeclensionCase.Nominative || z9 == "." ||
                 (part == 2 && InStr("оиеу" + (gender == "ч" ? "" : "бвгджзклмнпрстфхцчшщъ"), z9) > 0) ||
@@ -704,6 +709,8 @@ namespace GKCore.Linguistics
                     zd = 8;
                 }
             }
+
+            string res;
 
             int ze = InStr("лец нёк вей бей дец пец мец нец рец вец бец тец жец аец иец ыец бер", z7);
 
@@ -829,11 +836,13 @@ namespace GKCore.Linguistics
 
         #region Aux functions
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static string Replace(string p, string p_2, string p_3)
         {
             return p.Replace(p_2, p_3);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int InStr(string s, string match)
         {
             return s.IndexOf(match) + 1;
@@ -841,40 +850,48 @@ namespace GKCore.Linguistics
 
         private static int MinMax(int x, int min, int max)
         {
-            return Math.Max(Math.Min(x, max), min);
+            //return Math.Max(Math.Min(x, max), min);
+            return (x < min) ? min : (x > max) ? max : x;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static string Mid(string s, int i, int len)
         {
             int start = MinMax(i - 1, 0, s.Length);
             return s.Substring(start, MinMax(len, 0, s.Length - start));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static string Mid(string s, int i)
         {
             return (i > s.Length) ? string.Empty : s.Substring(i - 1);
         }
 
-        private static string Left(string s, int len)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string Left(string s, int len)
         {
             return s.Substring(0, Math.Min(len, s.Length));
         }
 
-        private static string Right(string s, int len)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string Right(string s, int len)
         {
             return s.Substring(s.Length - Math.Min(len, s.Length));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static string LCase(string s)
         {
             return s.ToLowerInvariant();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static string UCase(string p)
         {
             return p.ToUpperInvariant();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static string RTrim(string s)
         {
             return s.TrimEnd();
@@ -1029,9 +1046,9 @@ namespace GKCore.Linguistics
             new string[] { "Ч",   "CH", "CH", "C`", "CH",  "CH" },
             new string[] { "Ш",   "SH", "SH", "S`", "SH",  "SH" },
             new string[] { "Щ", "SHCH",  "W", "H`", "HH", "SCH" },
-            new string[] { "Ъ",    "\"",  "X", "X`", "``",   "`" },
+            new string[] { "Ъ",   "\"",  "X", "X`", "``",   "`" },
             new string[] { "Ы",    "Y",  "Y",  "Y",  "Y",   "Y" },
-            new string[] { "Ь",   "'",  "Q",  "X",  "`",  "'" },
+            new string[] { "Ь",    "'",  "Q",  "X",  "`",   "'" },
             new string[] { "Э",   "EH", "EH", "E`", "EH",   "E" },
             new string[] { "Ю",   "JU", "JU", "U`", "JU",  "YU" },
             new string[] { "Я",   "JA", "JA", "A`", "JA",  "YA" }

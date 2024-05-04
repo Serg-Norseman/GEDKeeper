@@ -273,7 +273,7 @@ namespace GKCore
 
             listManager.QuickFilter.Value = "*";
             Assert.IsTrue(listManager.CheckFilter());
-            listManager.QuickFilter.Value = "*locat*";
+            listManager.QuickFilter.Value = "*Locat*";
             Assert.IsTrue(listManager.CheckFilter());
             listManager.QuickFilter.Value = "*xxxx*";
             Assert.IsFalse(listManager.CheckFilter());

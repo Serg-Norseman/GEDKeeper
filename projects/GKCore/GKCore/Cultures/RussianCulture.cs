@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -83,15 +83,16 @@ namespace GKCore.Cultures
                 res = husbSurname;
 
                 char lastSym = res[res.Length - 1];
+                var end2 = Morpher.Right(res, 2);
 
-                if (CONSONANTS.IndexOf(lastSym) >= 0) {
-                    if (!res.EndsWith("ких")) {
+                if (!"иа их ых ко".Contains(end2)) {
+                    if (CONSONANTS.IndexOf(lastSym) >= 0) {
                         res = res + "а";
+                    } else if (res.EndsWith("кий")) {
+                        res = res.Substring(0, res.Length - 3) + "кая";
+                    } else if (res.EndsWith("ный")) {
+                        res = res.Substring(0, res.Length - 3) + "ная";
                     }
-                } else if (res.EndsWith("кий")) {
-                    res = res.Substring(0, res.Length - 3) + "кая";
-                } else if (res.EndsWith("ный")) {
-                    res = res.Substring(0, res.Length - 3) + "ная";
                 }
             }
 

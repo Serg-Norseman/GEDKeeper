@@ -159,6 +159,8 @@ namespace GKCore
             Assert.AreEqual("Бельская", rusCulture.GetMarriedSurname("Бельский"));
             Assert.AreEqual("Грозная", rusCulture.GetMarriedSurname("Грозный"));
 
+            Assert.AreEqual("Глухих", rusCulture.GetMarriedSurname("Глухих"));
+
             Assert.AreEqual("?", rusCulture.GetMarriedSurname(""));
             Assert.AreEqual("?", rusCulture.GetMarriedSurname(null));
 

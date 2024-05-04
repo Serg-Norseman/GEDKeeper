@@ -110,7 +110,7 @@ namespace GDModel
 
             //
 
-            tree.SortChilds(famRec);
+            tree.SortChildren(famRec);
 
             //
 

@@ -768,7 +768,7 @@ namespace GDModel
             return udn1.CompareTo(udn2);
         }
 
-        public void SortChilds(GDMFamilyRecord famRec)
+        public void SortChildren(GDMFamilyRecord famRec)
         {
             if (famRec != null) {
                 famRec.Children.Sort(ChildrenEventsCompare);

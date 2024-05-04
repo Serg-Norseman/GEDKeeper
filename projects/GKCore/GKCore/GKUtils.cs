@@ -1148,15 +1148,8 @@ namespace GKCore
 
         public static int GetDifferenceInYears(DateTime startDate, DateTime endDate)
         {
-            /*DateTime tmp = startDate;
-            int years = -1;
-            while (tmp < endDate) {
-                years++;
-                tmp = tmp.AddYears(1);
-            }
-            return years;*/
-
-            int diff = endDate.Year - startDate.Year - 1 + (endDate.Month >= startDate.Month && endDate.Day >= startDate.Day ? 1 : 0);
+            int offset = ((endDate.Month > startDate.Month) || (endDate.Month == startDate.Month && endDate.Day >= startDate.Day)) ? 1 : 0;
+            int diff = endDate.Year - startDate.Year - 1 + offset;
             return (diff < 0) ? 0 : diff;
         }
 
