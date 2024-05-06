@@ -474,6 +474,18 @@ namespace GKCore
             return path;
         }
 
+        public static void CleanImagesCache()
+        {
+            string path = GetCachePath();
+
+            DirectoryInfo dir = new DirectoryInfo(path);
+            foreach (FileInfo fi in dir.GetFiles()) {
+                try {
+                    fi.Delete();
+                } catch (Exception) { } // Ignore all exceptions
+            }
+        }
+
         public static string GetLogFilename()
         {
             string path = GetAppDataPathStatic() + "GEDKeeper2.log";

@@ -115,6 +115,7 @@
         private System.Windows.Forms.ContextMenuStrip summaryMenu;
         private System.Windows.Forms.ToolStripMenuItem miCopyContent;
         private System.Windows.Forms.ToolStripMenuItem miPhotosBatchAdding;
+        private System.Windows.Forms.ToolStripMenuItem miCleanImagesCache;
 
         private void InitializeComponent()
         {
@@ -231,6 +232,7 @@
             this.summaryMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miCopyContent = new System.Windows.Forms.ToolStripMenuItem();
             this.miPhotosBatchAdding = new System.Windows.Forms.ToolStripMenuItem();
+            this.miCleanImagesCache = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusBar.SuspendLayout();
             this.ToolBar1.SuspendLayout();
             this.MenuPedigree.SuspendLayout();
@@ -855,7 +857,8 @@
                                     this.miTreeCheck,
                                     this.miPatSearch,
                                     this.miPlacesManager,
-                                    this.miPhotosBatchAdding});
+                                    this.miPhotosBatchAdding,
+                                    this.miCleanImagesCache});
             this.miTreeTools.Name = "miTreeTools";
             this.miTreeTools.Size = new System.Drawing.Size(204, 24);
             this.miTreeTools.Text = "miTreeTools";
@@ -922,6 +925,13 @@
             this.miPhotosBatchAdding.Size = new System.Drawing.Size(204, 24);
             this.miPhotosBatchAdding.Text = "miPhotosBatchAdding";
             this.miPhotosBatchAdding.Click += new System.EventHandler(this.miPhotosBatchAdding_Click);
+            // 
+            // miCleanImagesCache
+            // 
+            this.miCleanImagesCache.Name = "miCleanImagesCache";
+            this.miCleanImagesCache.Size = new System.Drawing.Size(204, 24);
+            this.miCleanImagesCache.Text = "miCleanImagesCache";
+            this.miCleanImagesCache.Click += new System.EventHandler(this.miCleanImagesCache_Click);
             // 
             // N10
             // 

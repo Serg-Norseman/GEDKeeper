@@ -936,6 +936,7 @@ namespace GKCore.Controllers
                     GetControl<IMenuItem>("miPatSearch").Text = LangMan.LS(LSID.PatriarchsSearch);
                     GetControl<IMenuItem>("miPlacesManager").Text = LangMan.LS(LSID.PlacesManager);
                     GetControl<IMenuItem>("miPhotosBatchAdding").Text = LangMan.LS(LSID.PhotosBatchAdding);
+                    GetControl<IMenuItem>("miCleanImagesCache").Text = LangMan.LS(LSID.CleanImagesCache);
 
                     GetControl<IMenuItem>("miContext").Text = LangMan.LS(LSID.MIContext);
                     GetControl<IMenuItem>("miAbout").Text = LangMan.LS(LSID.MIAbout) + @"...";

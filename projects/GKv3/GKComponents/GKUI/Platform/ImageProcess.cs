@@ -19,6 +19,7 @@
  */
 
 using System.IO;
+using Eto.Forms;
 using ExifLibrary;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Bmp;
@@ -29,42 +30,56 @@ namespace GKUI.Platform
 {
     public static class ImageProcess
     {
-        public static bool IsNeedOrient(Stream inputStream)
+        public static Stream PrepareImage(Stream inputStream)
         {
+            bool isNeedOrient;
+            bool changeDPI;
+
             try {
                 try {
                     var file = ImageFile.FromStream(inputStream);
-                    var orientProp = file.Properties.Get<ExifEnumProperty<Orientation>>(ExifTag.Orientation);
-                    return (orientProp != null && orientProp.Value != Orientation.Normal);
+                    var orientProp = file.Properties.Get<ExifEnumProperty<ExifLibrary.Orientation>>(ExifTag.Orientation);
+                    isNeedOrient = (orientProp != null && orientProp.Value != ExifLibrary.Orientation.Normal);
+
+                    var resolPropX = file.Properties.Get<ExifURational>(ExifTag.XResolution);
+                    var resolPropY = file.Properties.Get<ExifURational>(ExifTag.YResolution);
+                    changeDPI = ((resolPropX != null && (float)resolPropX >= 100.0f) || (resolPropY != null && (float)resolPropY >= 100.0f));
                 } finally {
                     inputStream.Seek(0, SeekOrigin.Begin);
                 }
             } catch {
-                return false;
+                isNeedOrient = false;
+                changeDPI = false;
             }
-        }
 
-        public static Stream AutoOrient(Stream inputStream)
-        {
-            var outputStream = new MemoryStream();
-            using (var image = Image.Load<Bgr565>(inputStream)) {
-                /*var scrSize = Screen.PrimaryScreen.Bounds.Size;
-                var resizeRatio = GfxHelper.ZoomToFit(image.Width, image.Height, scrSize.Width, scrSize.Height);
-                int targetWidth = (int)Math.Round(image.Width * resizeRatio);
-                int targetHeight = (int)Math.Round(image.Height * resizeRatio);*/
+            if (!isNeedOrient && !changeDPI) {
+                return inputStream;
+            } else {
+                var outputStream = new MemoryStream();
+                using (var image = Image.Load<Bgr565>(inputStream)) {
+                    if (changeDPI) {
+                        var targetDPI = Screen.PrimaryScreen.DPI;
 
-                /*var targetDPI = Screen.PrimaryScreen.DPI;
-                double currentDPI = image.Metadata.HorizontalResolution;
-                double resizeRatio = targetDPI / currentDPI;
-                if (resizeRatio < 0.1) { resizeRatio *= 10.0f; }
-                int targetWidth = (int)Math.Round(image.Width * resizeRatio);
-                int targetHeight = (int)Math.Round(image.Height * resizeRatio);*/
+                        /*double currentDPI = image.Metadata.HorizontalResolution;
+                        double resizeRatio = targetDPI / currentDPI;
+                        if (resizeRatio < 0.1) { resizeRatio *= 10.0f; }
+                        int targetWidth = (int)Math.Round(image.Width * resizeRatio);
+                        int targetHeight = (int)Math.Round(image.Height * resizeRatio);
+                        image.Mutate(x => x.Resize(targetWidth, targetHeight));*/
 
-                image.Mutate(x => x./*Resize(targetWidth, targetHeight).*/AutoOrient());
-                var encoder = new BmpEncoder() { BitsPerPixel = BmpBitsPerPixel.Pixel16 };
-                image.SaveAsBmp(outputStream, encoder);
+                        image.Metadata.HorizontalResolution = targetDPI;
+                        image.Metadata.VerticalResolution = targetDPI;
+                    }
+
+                    if (isNeedOrient) {
+                        image.Mutate(x => x.AutoOrient());
+                    }
+
+                    var encoder = new BmpEncoder() { BitsPerPixel = BmpBitsPerPixel.Pixel16 };
+                    image.SaveAsBmp(outputStream, encoder);
+                }
+                return outputStream;
             }
-            return outputStream;
         }
 
         public static Stream LoadProblemImage(Stream inputStream, string outputFileName)

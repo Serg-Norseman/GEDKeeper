@@ -1027,8 +1027,9 @@ namespace GKCore
         /* 953 */ EL_AbbreviatedNames,
         /* 954 */ DottedLinesOfCommonLawSpouses,
         /* 955 */ ShowNumberOfSubstructures,
+        /* 956 */ CleanImagesCache,
 
-        /* 000 */ Last = ShowNumberOfSubstructures
+        /* 000 */ Last = CleanImagesCache
     }
 
 
@@ -2009,6 +2010,7 @@ namespace GKCore
             /* 953 */ "Abbreviated location names",
             /* 954 */ "Dotted lines of common law spouses",
             /* 955 */ "Show number of substructures instead of check marks",
+            /* 956 */ "Clean images cache",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

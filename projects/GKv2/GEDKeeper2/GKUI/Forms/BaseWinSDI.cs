@@ -849,6 +849,11 @@ namespace GKUI.Forms
             fController.ShowPhotosBatchAdding();
         }
 
+        private void miCleanImagesCache_Click(object sender, EventArgs e)
+        {
+            AppHost.CleanImagesCache();
+        }
+
         private void miOptions_Click(object sender, EventArgs e)
         {
             AppHost.Instance.ShowOptions(this);

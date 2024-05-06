@@ -140,6 +140,7 @@ namespace GKUI.Forms
         private ContextMenu summaryMenu;
         private ButtonMenuItem miCopyContent;
         private ButtonMenuItem miPhotosBatchAdding;
+        private ButtonMenuItem miCleanImagesCache;
 
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
@@ -933,6 +934,11 @@ namespace GKUI.Forms
         private void miPhotosBatchAdding_Click(object sender, EventArgs e)
         {
             fController.ShowPhotosBatchAdding();
+        }
+
+        private void miCleanImagesCache_Click(object sender, EventArgs e)
+        {
+            AppHost.CleanImagesCache();
         }
 
         private void miOptions_Click(object sender, EventArgs e)
