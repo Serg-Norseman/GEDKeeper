@@ -42,9 +42,9 @@ namespace GKCore.Cultures
                     sn = GetMaidenSurname(sn);
 
                     if (sn.EndsWith("nа")) {
-                        sn = sn.Substring(0, sn.Length - 2) + "ny";
+                        sn = sn.Substring(0, sn.Length - 1) + "y";
                     } else if (sn.EndsWith("ska") || sn.EndsWith("cka") || sn.EndsWith("dzka")) {
-                        sn = sn.Substring(0, sn.Length - 2) + "ki";
+                        sn = sn.Substring(0, sn.Length - 1) + "i";
                     }
                 }
             }
