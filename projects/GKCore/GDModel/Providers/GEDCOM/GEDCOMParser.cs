@@ -158,7 +158,7 @@ namespace GDModel.Providers.GEDCOM
             fValueReset = false;
         }
 
-        public GEDCOMToken Next()
+        public GEDCOMToken Next(bool skipOneSpace = false)
         {
             while (true) {
                 char ch = (fPos >= fLength) ? EOL : fData[fPos];
@@ -209,12 +209,15 @@ namespace GDModel.Providers.GEDCOM
 
                     fSavePos = fPos;
                     fPos++;
-                    while (true) {
-                        ch = (fPos >= fLength) ? EOL : fData[fPos];
-                        if (ch == ' ' || ch == '\t')
-                            fPos++;
-                        else
-                            break;
+
+                    if (!skipOneSpace) {
+                        while (true) {
+                            ch = (fPos >= fLength) ? EOL : fData[fPos];
+                            if (ch == ' ' || ch == '\t')
+                                fPos++;
+                            else
+                                break;
+                        }
                     }
 
                     fTokenEnd = fPos;

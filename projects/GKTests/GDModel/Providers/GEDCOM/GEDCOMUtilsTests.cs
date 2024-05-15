@@ -481,6 +481,23 @@ namespace GDModel.Providers.GEDCOM
             str = "";
             res2 = ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
             Assert.AreEqual(-2, res2);
+
+            // Leading spaces in CONT lines (fix #551)
+            str = "2 CONT      test leading spaces";
+            res2 = ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            Assert.AreEqual(2, tagLevel2);
+            Assert.AreEqual("", tagXRef2);
+            Assert.AreEqual(GEDCOMTagName.CONT, tagName2);
+            Assert.AreEqual("     test leading spaces", (string)tagValue2);
+            Assert.AreEqual(3, res2);
+
+            str = "2 CONC      test leading spaces";
+            res2 = ParseTag(str, out tagLevel2, out tagXRef2, out tagName2, out tagValue2);
+            Assert.AreEqual(2, tagLevel2);
+            Assert.AreEqual("", tagXRef2);
+            Assert.AreEqual(GEDCOMTagName.CONC, tagName2);
+            Assert.AreEqual("test leading spaces", (string)tagValue2);
+            Assert.AreEqual(3, res2);
         }
 
         [Test]

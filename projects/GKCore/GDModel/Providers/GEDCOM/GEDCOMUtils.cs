@@ -267,7 +267,12 @@ namespace GDModel.Providers.GEDCOM
             tagName = strTok.GetWord();
             result += 1;
 
-            token = strTok.Next();
+            // GEDCOM specification (https://gedcom.io/specifications/ged551.pdf, page 86)
+            // When importing values from CONT lines the reader should assume only one delimiter character following the CONT tag.
+            // Assume that the rest of the leading spaces are to be a part of the value.
+            bool skipOneSpace = string.Equals(tagName, GEDCOMTagName.CONT);
+            token = strTok.Next(skipOneSpace);
+
             if (token == GEDCOMToken.Whitespace) {
                 tagValue = strTok.GetRestSpan();
                 result += 1;

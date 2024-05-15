@@ -1,0 +1,17 @@
+﻿0 HEAD
+1 SOUR GEDKeeper
+1 DEST GEDKeeper
+1 CHAR UTF-8
+1 LANG English
+1 GEDC
+2 VERS 5.5.1
+2 FORM LINEAGE-LINKED
+1 FILE test.ged
+0 @N1@ NOTE Test1
+1 CONT     test2
+1 CONT   test3
+0 @N2@ NOTE
+1 CONT     Test
+1 CONT   test2
+1 CONT       test3
+0 TRLR

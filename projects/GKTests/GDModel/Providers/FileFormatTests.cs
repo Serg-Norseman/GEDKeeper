@@ -218,9 +218,9 @@ namespace GDModel.Providers
         }
 
         [Test]
-        public void Test_StdGEDCOM_Notes()
+        public void Test_Notes_StdGEDCOM()
         {
-            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_stdgedcom_notes.ged")) {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_notes_stdgedcom.ged")) {
                 Assert.AreEqual(GEDCOMFormat.gf_Native, ctx.Tree.Format);
 
                 GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
@@ -230,6 +230,22 @@ namespace GDModel.Providers
                 GDMNoteRecord noteRec2 = ctx.Tree.XRefIndex_Find("N2") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec2);
                 Assert.AreEqual("Test\r\ntest2\r\ntest3", noteRec2.Lines.Text);
+            }
+        }
+
+        [Test]
+        public void Test_Notes_LeadingSpaces()
+        {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_notes_leadspaces.ged")) {
+                Assert.AreEqual(GEDCOMFormat.gf_Native, ctx.Tree.Format);
+
+                GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
+                Assert.IsNotNull(noteRec1);
+                Assert.AreEqual("Test1\r\n    test2\r\n  test3", noteRec1.Lines.Text);
+
+                GDMNoteRecord noteRec2 = ctx.Tree.XRefIndex_Find("N2") as GDMNoteRecord;
+                Assert.IsNotNull(noteRec2);
+                Assert.AreEqual("    Test\r\n  test2\r\n      test3", noteRec2.Lines.Text);
             }
         }
 
