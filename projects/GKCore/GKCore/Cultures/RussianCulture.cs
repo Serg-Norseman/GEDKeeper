@@ -37,15 +37,6 @@ namespace GKCore.Cultures
             HasSurname = true;
         }
 
-        private static string GetMaidenSurname(string surname)
-        {
-            if (string.IsNullOrEmpty(surname)) return "";
-
-            int p = surname.IndexOf(" (");
-            string result = ((p >= 0) ? surname.Substring(0, p) : surname);
-            return result;
-        }
-
         public override string NormalizeSurname(string sn, bool aFemale)
         {
             if (string.IsNullOrEmpty(sn) || (sn[0] == '(' && sn[sn.Length - 1] == ')'))

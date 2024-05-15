@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -194,6 +194,21 @@ namespace GKCore
             iRec2.PersonalNames.Add(persName);
 
             Assert.AreEqual("Иванова Ивана Ивановича", rusCulture.GetPossessiveName(iRec2));
+        }
+
+        [Test]
+        public void Test_PolishCulture()
+        {
+            ICulture culture = new PolishCulture();
+            Assert.IsNotNull(culture);
+            Assert.IsFalse(culture.HasPatronymic);
+            Assert.IsTrue(culture.HasSurname);
+
+            Assert.AreEqual("Kowalski", culture.NormalizeSurname("Kowalska", true));
+
+            Assert.AreEqual("?", culture.NormalizeSurname(null, false));
+            Assert.AreEqual("?", culture.NormalizeSurname("", false));
+            Assert.AreEqual("?", culture.NormalizeSurname("(Kowalska)", false));
         }
     }
 }

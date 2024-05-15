@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -45,6 +45,15 @@ namespace GKCore.Cultures
         public virtual string NormalizeSurname(string sn, bool aFemale)
         {
             return sn;
+        }
+
+        public static string GetMaidenSurname(string surname)
+        {
+            if (string.IsNullOrEmpty(surname)) return string.Empty;
+
+            int p = surname.IndexOf(" (");
+            string result = ((p >= 0) ? surname.Substring(0, p) : surname);
+            return result;
         }
 
         public virtual string GetMarriedSurname(string husbSurname)
