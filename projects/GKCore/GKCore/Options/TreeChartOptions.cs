@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -76,6 +76,8 @@ namespace GKCore.Options
         public bool ShortenDateRanges;
         public bool SameCardsWidth;
         public bool HideDescSpouses; // without option's load/save
+        public bool TrackSelectedLines;
+        public bool TrackMatchedSources;
 
         public IColor MaleColor;
         public IColor FemaleColor;
@@ -146,6 +148,8 @@ namespace GKCore.Options
             ShortenDateRanges = false;
             SameCardsWidth = false;
             HideDescSpouses = false;
+            TrackSelectedLines = true;
+            TrackMatchedSources = false;
 
             MaleColor = ChartRenderer.GetColor(MALE_COLOR);
             FemaleColor = ChartRenderer.GetColor(FEMALE_COLOR);
@@ -222,6 +226,8 @@ namespace GKCore.Options
             ShortenDateRanges = srcOptions.ShortenDateRanges;
             SameCardsWidth = srcOptions.SameCardsWidth;
             HideDescSpouses = srcOptions.HideDescSpouses;
+            TrackSelectedLines = srcOptions.TrackSelectedLines;
+            TrackMatchedSources = srcOptions.TrackMatchedSources;
 
             BranchDistance = srcOptions.BranchDistance;
             LevelDistance = srcOptions.LevelDistance;
@@ -298,6 +304,8 @@ namespace GKCore.Options
             UseInlineImagesInSvg = iniFile.ReadBool("Chart", "UseInlineImagesInSvg", true);
             ExtendedTree = iniFile.ReadBool("Chart", "ExtendedTree", false);
             XRefVisible = iniFile.ReadBool("Chart", "XRefVisible", false);
+            TrackSelectedLines = iniFile.ReadBool("Chart", "TrackSelectedLines", true);
+            TrackMatchedSources = iniFile.ReadBool("Chart", "TrackMatchedSources", false);
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -365,6 +373,8 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "UseInlineImagesInSvg", UseInlineImagesInSvg);
             iniFile.WriteBool("Chart", "ExtendedTree", ExtendedTree);
             iniFile.WriteBool("Chart", "XRefVisible", XRefVisible);
+            iniFile.WriteBool("Chart", "TrackSelectedLines", TrackSelectedLines);
+            iniFile.WriteBool("Chart", "TrackMatchedSources", TrackMatchedSources);
         }
     }
 }

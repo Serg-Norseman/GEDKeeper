@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -33,6 +33,14 @@ namespace GKUI.Components
         public IColor Color
         {
             get { return UIHelper.ConvertColor(Handle.Color.ToFormsColor()); }
+            set { Handle.Color = ((ColorHandler)value).Handle.ToSKColor(); }
+        }
+
+        // FIXME: don't exists? SKPaint.PathEffect.Phase
+        public float DashOffset
+        {
+            get { return 0; }
+            set { }
         }
 
         public float Width

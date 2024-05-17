@@ -1028,8 +1028,10 @@ namespace GKCore
         /* 954 */ DottedLinesOfCommonLawSpouses,
         /* 955 */ ShowNumberOfSubstructures,
         /* 956 */ CleanImagesCache,
+        /* 957 */ TrackSelectedLines,
+        /* 958 */ TrackMatchedSources,
 
-        /* 000 */ Last = CleanImagesCache
+        /* 000 */ Last = TrackMatchedSources
     }
 
 
@@ -2011,6 +2013,8 @@ namespace GKCore
             /* 954 */ "Dotted lines of common law spouses",
             /* 955 */ "Show number of substructures instead of check marks",
             /* 956 */ "Clean images cache",
+            /* 957 */ "Highlight the lines of the selection",
+            /* 958 */ "Track matching sources",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

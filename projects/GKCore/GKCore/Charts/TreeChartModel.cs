@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using BSLib;
 using GDModel;
@@ -50,11 +51,24 @@ namespace GKCore.Charts
         ckBoth
     }
 
+    public struct LineHandle
+    {
+        public int X1, Y1;
+        public int X2, Y2;
+
+        public float Distance
+        {
+            get { return (float)Math.Sqrt(X1 * X2 + Y1 * Y2); }
+        }
+    }
+
     /// <summary>
     ///
     /// </summary>
     public class TreeChartModel : ChartModel
     {
+        private Dictionary<LineHandle, float> fLines = new Dictionary<LineHandle, float>();
+
         private const int EDGES_SIZE = 255; // -127..+127, 0..254, 255, 1 unused
 
         public const int DEF_MARGINS = 24;
@@ -71,17 +85,16 @@ namespace GKCore.Charts
         private readonly HashSet<string> fPreparedFamilies;
         private readonly HashSet<string> fPreparedIndividuals;
 
+        private IColor fClrBlack;
+
         private IBaseContext fContext;
         private IBaseWindow fBase;
         private IFont fBoldFont;
         private int fBranchDistance;
         private bool fCertaintyIndex;
-        private IPen fDecorativeLinePen;
         private int fDefCharWidth;
         private int fDepthLimitAncestors;
         private int fDepthLimitDescendants;
-        private IPen fDottedLinePen;
-        private IPen fDottedDecorativeLinePen;
         private IFont fDrawFont;
 #if !DESK_METHOD
         private int[] fEdges;
@@ -96,10 +109,18 @@ namespace GKCore.Charts
         private KinshipsGraph fGraph;
         private bool fHasMediaFail;
         private TreeChartPerson fHighlightedPerson;
+        private long fHighlightedStart;
         private TreeChartKind fKind;
         private TreeChartPerson fKinRoot;
         private int fLevelDistance;
         private IPen fLinePen;
+        private IPen fLineDecorativePen;
+        private IPen fLineSelectedPen;
+        private IPen fLineDottedPen;
+        private IPen fLineDottedDecorativePen;
+        private IPen fLineDottedSelectedPen;
+        private IPen fLineTMSYPen;
+        private IPen fLineTMSNPen;
         private int fMargins;
         private int fNodePadding;
         private TreeChartOptions fOptions;
@@ -110,8 +131,10 @@ namespace GKCore.Charts
         private IImage[] fSignsPic;
         private IBrush fSolidBlack;
         private int fSpouseDistance;
+        private ITimer fTimer;
         private GDMTree fTree;
         private ExtRect fTreeBounds;
+        private ITreeChart fView;
         private ExtRect fVisibleArea;
         private bool fXRefVisible;
 
@@ -177,7 +200,10 @@ namespace GKCore.Charts
         public TreeChartPerson HighlightedPerson
         {
             get { return fHighlightedPerson; }
-            set { fHighlightedPerson = value; }
+            set {
+                fHighlightedPerson = value;
+                fHighlightedStart = DateTime.Now.ToBinary();
+            }
         }
 
         public TreeChartKind Kind
@@ -250,7 +276,7 @@ namespace GKCore.Charts
         }
 
 
-        public TreeChartModel()
+        public TreeChartModel(ITreeChart view)
         {
             fDepthLimitAncestors = -1;
             fDepthLimitDescendants = -1;
@@ -272,6 +298,10 @@ namespace GKCore.Charts
             fLevelDistance = DEF_LEVEL_DISTANCE;
             fSpouseDistance = DEF_SPOUSE_DISTANCE;
             fMargins = DEF_MARGINS;
+
+            fView = view;
+            fTimer = AppHost.Instance.CreateTimer(100, TickTimer);
+            fTimer.Enabled = true;
         }
 
         protected override void Dispose(bool disposing)
@@ -287,8 +317,38 @@ namespace GKCore.Charts
 #if DESK_METHOD
                 fDesk.Clear();
 #endif
+
+                if (fTimer != null) fTimer.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void TickTimer(object sender, EventArgs e)
+        {
+            if (fHighlightedPerson != null) {
+                DateTime st = DateTime.FromBinary(fHighlightedStart);
+                DateTime cur = DateTime.Now;
+                TimeSpan d = cur - st;
+
+                if (d.TotalSeconds >= 1/* && !fPersonControl.Visible*/) {
+                    fHighlightedPerson = null;
+                    //fPersonControl.Visible = true;
+                    if (fView != null) fView.Invalidate();
+                }
+            }
+
+            if (fOptions.TrackMatchedSources && fLines.Count > 0) {
+                foreach (var lineKey in fLines.Keys.ToList()) {
+                    var dashOffset = fLines[lineKey];
+                    if (dashOffset < lineKey.Distance) {
+                        dashOffset += 1;
+                    } else {
+                        dashOffset = 0;
+                    }
+                    fLines[lineKey] = dashOffset;
+                }
+                if (fView != null) fView.Invalidate();
+            }
         }
 
         private static IImage PrepareImage(ChartRenderer renderer, string name, bool makeTransp)
@@ -337,11 +397,8 @@ namespace GKCore.Charts
             fBoldFont = sourceModel.fBoldFont;
             fBranchDistance = sourceModel.fBranchDistance;
             fCertaintyIndex = sourceModel.fCertaintyIndex;
-            fDecorativeLinePen = sourceModel.fDecorativeLinePen;
             fDepthLimitAncestors = sourceModel.fDepthLimitAncestors;
             fDepthLimitDescendants= sourceModel.fDepthLimitDescendants;
-            fDottedLinePen = sourceModel.fDottedLinePen;
-            fDottedDecorativeLinePen = sourceModel.fDottedDecorativeLinePen;
             fDrawFont = sourceModel.fDrawFont;
             fBookmarkPic = sourceModel.fBookmarkPic;
             fExpPic = sourceModel.fExpPic;
@@ -351,6 +408,11 @@ namespace GKCore.Charts
             //fKinRoot = sourceModel.fKinRoot;
             fLevelDistance = sourceModel.fLevelDistance;
             fLinePen = sourceModel.fLinePen;
+            fLineDecorativePen = sourceModel.fLineDecorativePen;
+            fLineSelectedPen = sourceModel.fLineSelectedPen;
+            fLineDottedPen = sourceModel.fLineDottedPen;
+            fLineDottedDecorativePen = sourceModel.fLineDottedDecorativePen;
+            fLineDottedSelectedPen = sourceModel.fLineDottedSelectedPen;
             fMargins = sourceModel.fMargins;
             fNodePadding = sourceModel.fNodePadding;
             fOptions = sourceModel.fOptions;
@@ -379,6 +441,8 @@ namespace GKCore.Charts
 
         public void GenChart(GDMIndividualRecord indiRec, TreeChartKind kind)
         {
+            fLines.Clear();
+
             fPersons.Clear();
             fGraph.Clear();
             fPreparedIndividuals.Clear();
@@ -1592,27 +1656,40 @@ namespace GKCore.Charts
         {
             DoneGraphics();
 
+            fClrBlack = ChartRenderer.GetColor(BSDColors.Black);
+
             // Anti-aliasing works differently in EtoForms and WinForms.
-            int clrLine, clrDecor;
+            IColor clrLine, clrDecor;
 #if GK3
-            clrLine = BSDColors.DimGray;
-            clrDecor = BSDColors.DarkGray;
+            clrLine = ChartRenderer.GetColor(BSDColors.DimGray);
+            clrDecor = ChartRenderer.GetColor(BSDColors.DarkGray);
 #else
-            clrLine = BSDColors.Black;
-            clrDecor = BSDColors.DimGray;
+            clrLine = ChartRenderer.GetColor(BSDColors.Black);
+            clrDecor = ChartRenderer.GetColor(BSDColors.DimGray);
 #endif
 
-            fLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(clrLine), 1f);
-            fDottedLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(clrLine), 1f, new float[] {4.0F, 2.0F});
-            fDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(clrDecor), 1f);
-            fDottedDecorativeLinePen = fRenderer.CreatePen(ChartRenderer.GetColor(clrDecor), 1f, new float[] {4.0F, 2.0F});
-            fSolidBlack = fRenderer.CreateBrush(ChartRenderer.GetColor(BSDColors.Black));
+            fLinePen = fRenderer.CreatePen(clrLine, 1f);
+            fLineDecorativePen = fRenderer.CreatePen(clrDecor, 1f);
+            fLineSelectedPen = fRenderer.CreatePen(clrLine, 2.4f);
+            fLineDottedPen = fRenderer.CreatePen(clrLine, 1f, new float[] { 4.0F, 2.0F });
+            fLineDottedDecorativePen = fRenderer.CreatePen(clrDecor, 1f, new float[] {4.0F, 2.0F});
+            fLineDottedSelectedPen = fRenderer.CreatePen(clrLine, 2.4f, new float[] { 4.0F, 2.0F });
+            fSolidBlack = fRenderer.CreateBrush(fClrBlack);
+
+            var clrGreen = ChartRenderer.GetColor(BSDColors.ForestGreen);
+            fLineTMSYPen = fRenderer.CreatePen(clrGreen, 2.4f, new float[] { 4.0F, 2.0F });
+            var clrCrimson = ChartRenderer.GetColor(BSDColors.Crimson);
+            fLineTMSNPen = fRenderer.CreatePen(clrCrimson, 2.4f, new float[] { 4.0F, 2.0F });
         }
 
         private void DoneGraphics()
         {
             if (fLinePen != null) fLinePen.Dispose();
-            if (fDecorativeLinePen != null) fDecorativeLinePen.Dispose();
+            if (fLineDecorativePen != null) fLineDecorativePen.Dispose();
+            if (fLineSelectedPen != null) fLineSelectedPen.Dispose();
+            if (fLineDottedPen != null) fLineDottedPen.Dispose();
+            if (fLineDottedDecorativePen != null) fLineDottedDecorativePen.Dispose();
+            if (fLineDottedSelectedPen != null) fLineDottedSelectedPen.Dispose();
             if (fSolidBlack != null) fSolidBlack.Dispose();
         }
 
@@ -1666,14 +1743,44 @@ namespace GKCore.Charts
             return rangeX.IsOverlapped(new Range<int>(x1, x2)) && rangeY.IsOverlapped(new Range<int>(y1, y2));
         }
 
-        private void DrawLine(int x1, int y1, int x2, int y2)
-        {
-            DrawLine(x1, y1, x2, y2, fLinePen, fDecorativeLinePen);
-        }
-
-        private void DrawLine(int x1, int y1, int x2, int y2, IPen linePen, IPen decorativeLinePen)
+        private void DrawLine(int x1, int y1, int x2, int y2, bool isDotted, bool isTracked, bool isMatched)
         {
             if (!IsLineVisible(x1, y1, x2, y2)) return;
+
+            IPen linePen, decorativeLinePen;
+
+            if (isTracked && fOptions.TrackMatchedSources) {
+                /*if (!isDotted) {
+                    linePen = fLineSelectedPen;
+                } else {
+                    linePen = fLineDottedSelectedPen;
+                }*/
+                linePen = isMatched ? fLineTMSYPen : fLineTMSNPen;
+                decorativeLinePen = null;
+
+                var lineHandle = new LineHandle() { X1 = x1, Y1 = y1, X2 = x2, Y2 = y2 };
+                float dashOffset;
+                if (!fLines.TryGetValue(lineHandle, out dashOffset)) {
+                    dashOffset = 0;
+                    fLines.Add(lineHandle, dashOffset);
+                }
+                linePen.DashOffset = dashOffset;
+            } else if (isTracked && fOptions.TrackSelectedLines) {
+                if (!isDotted) {
+                    linePen = fLineSelectedPen;
+                } else {
+                    linePen = fLineDottedSelectedPen;
+                }
+                decorativeLinePen = null;
+            } else {
+                if (!isDotted) {
+                    linePen = fLinePen;
+                    decorativeLinePen = fLineDecorativePen;
+                } else {
+                    linePen = fLineDottedPen;
+                    decorativeLinePen = fLineDottedDecorativePen;
+                }
+            }
 
             int sX = fOffsetX + x1;
             int sX2 = fOffsetX + x2;
@@ -1681,7 +1788,7 @@ namespace GKCore.Charts
             int sY2 = fOffsetY + y2;
             fRenderer.DrawLine(linePen, sX, sY, sX2, sY2);
 
-            if (fOptions.Decorative) {
+            if (fOptions.Decorative && decorativeLinePen != null) {
                 if (sX == sX2) {
                     fRenderer.DrawLine(decorativeLinePen, sX + 1, sY + 1, sX2 + 1, sY2 - 1);
                 } else if (sY == sY2) {
@@ -1711,7 +1818,7 @@ namespace GKCore.Charts
             return str;
         }
 
-        private void DrawPerson(TreeChartPerson person, ChartDrawMode drawMode)
+        private void DrawPerson(TreeChartPerson person, ChartDrawMode drawMode, bool isSelected)
         {
             try {
                 ExtRect prt = person.Rect;
@@ -1727,11 +1834,11 @@ namespace GKCore.Charts
 
                 IPen xpen = null;
                 try {
-                    if (drawMode == ChartDrawMode.dmInteractive && person.Selected) {
+                    if (isSelected) {
                         IColor penColor = person.GetSelectedColor();
                         xpen = fRenderer.CreatePen(penColor, 2.0f);
                     } else {
-                        xpen = fRenderer.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 1.0f);
+                        xpen = fRenderer.CreatePen(fClrBlack, 1.0f);
                     }
 
                     DrawBorder(xpen, prt, false, person);
@@ -1838,15 +1945,54 @@ namespace GKCore.Charts
             }
         }
 
+        #region Tracking
+
+        private bool HasTrackedSources(TreeChartPerson person1, TreeChartPerson person2)
+        {
+            if (person1 == null || person2 == null) return false;
+
+            var results = person1.Sources.Intersect(person2.Sources, StringComparer.Ordinal);
+            return results.Any();
+        }
+
+        private bool HasTrackedChild(TreeChartPerson person, ChartDrawMode drawMode)
+        {
+            int childrenCount = person.GetChildsCount();
+            for (int i = 0; i < childrenCount; i++) {
+                TreeChartPerson child = person.GetChild(i);
+                if (HasTrackedLines(child, drawMode)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool HasTrackedLines(TreeChartPerson person, ChartDrawMode drawMode)
+        {
+            return (drawMode == ChartDrawMode.dmInteractive && person != null && person.Selected);
+        }
+
+        #endregion
+
         private bool IsDottedLines(TreeChartPerson person)
         {
             return (person != null && person.HasFlag(PersonFlag.pfAdopted) && fOptions.DottedLinesOfAdoptedChildren);
         }
 
-        private void DrawAncestors(TreeChartPerson person, ChartDrawMode drawMode)
+        private void DrawAncestors(TreeChartPerson person, ChartDrawMode drawMode, bool isTracked)
         {
             if (person.IsCollapsed || (person.Father == null && person.Mother == null)) {
                 return;
+            }
+
+            bool isTrackedAncestors = isTracked || HasTrackedLines(person.Father, drawMode) || HasTrackedLines(person.Mother, drawMode);
+            bool isMatchedFather, isMatchedMother;
+            if (isTrackedAncestors) {
+                isMatchedFather = HasTrackedSources(person, person.Father);
+                isMatchedMother = HasTrackedSources(person, person.Mother);
+            } else {
+                isMatchedFather = false;
+                isMatchedMother = false;
             }
 
             Draw(person.Father, TreeChartKind.ckAncestors, drawMode);
@@ -1862,16 +2008,14 @@ namespace GKCore.Charts
             }
 
             bool dotted = IsDottedLines(person);
-            var linePen = (!dotted) ? fLinePen : fDottedLinePen;
-            var decorativeLinePen = (!dotted) ? fDecorativeLinePen : fDottedDecorativeLinePen;
 
-            DrawLine(person.PtX, crY, person.PtX, person.PtY, linePen, decorativeLinePen); // v
+            DrawLine(person.PtX, crY, person.PtX, person.PtY, dotted, isTrackedAncestors, isMatchedFather || isMatchedMother); // v
 
             string marrDate = null;
 
             if (person.Father != null) {
-                DrawLine(person.Father.PtX, crY, person.PtX, crY, linePen, decorativeLinePen); // h
-                DrawLine(person.Father.PtX, parY, person.Father.PtX, crY, linePen, decorativeLinePen); // v
+                DrawLine(person.Father.PtX, crY, person.PtX, crY, dotted, isTrackedAncestors, isMatchedFather); // h
+                DrawLine(person.Father.PtX, parY, person.Father.PtX, crY, dotted, isTrackedAncestors, isMatchedFather); // v
 
                 if (!string.IsNullOrEmpty(person.Father.MarriageDate) && marrDate == null) {
                     marrDate = person.Father.MarriageDate;
@@ -1879,8 +2023,8 @@ namespace GKCore.Charts
             }
 
             if (person.Mother != null) {
-                DrawLine(person.PtX, crY, person.Mother.PtX, crY, linePen, decorativeLinePen); // h
-                DrawLine(person.Mother.PtX, parY, person.Mother.PtX, crY, linePen, decorativeLinePen); // v
+                DrawLine(person.Mother.PtX, crY, person.PtX, crY, dotted, isTrackedAncestors, isMatchedMother); // h
+                DrawLine(person.Mother.PtX, parY, person.Mother.PtX, crY, dotted, isTrackedAncestors, isMatchedMother); // v
 
                 if (!string.IsNullOrEmpty(person.Mother.MarriageDate) && marrDate == null) {
                     marrDate = person.Mother.MarriageDate;
@@ -1923,7 +2067,7 @@ namespace GKCore.Charts
             fRenderer.DrawString(text, fDrawFont, fSolidBlack, x, y);
         }
 
-        private void DrawDescendants(TreeChartPerson person, ChartDrawMode drawMode)
+        private void DrawDescendants(TreeChartPerson person, ChartDrawMode drawMode, bool isTracked)
         {
             int spousesCount = person.GetSpousesCount();
             int childrenCount = person.GetChildsCount();
@@ -1936,12 +2080,11 @@ namespace GKCore.Charts
                     for (int i = 0; i < spousesCount; i++) {
                         TreeChartPerson spouse = person.GetSpouse(i);
                         bool commonLaw = fOptions.DottedLinesOfCommonLawSpouses && spouse.HasFlag(PersonFlag.pfCommonLaw);
-
-                        var linePen = (!commonLaw) ? fLinePen : fDottedLinePen;
-                        var decorativeLinePen = (!commonLaw) ? fDecorativeLinePen : fDottedDecorativeLinePen;
+                        bool isTrackedSpouse = isTracked || HasTrackedLines(spouse, drawMode) || HasTrackedChild(spouse, drawMode);
+                        bool isMatchedSpouse = isTrackedSpouse && HasTrackedSources(person, spouse);
 
                         int spbV = spbBeg + spbOfs * i;
-                        DrawLine(person.Rect.Right + 1, spbV, spouse.Rect.Left, spbV, linePen, decorativeLinePen); // h
+                        DrawLine(spouse.Rect.Left, spbV, person.Rect.Right + 1, spbV, commonLaw, isTrackedSpouse, isMatchedSpouse); // h
 
                         if (!string.IsNullOrEmpty(spouse.MarriageDate)) {
                             int q = (!fOptions.InvertedTree) ? 4 : 3;
@@ -1954,12 +2097,11 @@ namespace GKCore.Charts
                     for (int i = 0; i < spousesCount; i++) {
                         TreeChartPerson spouse = person.GetSpouse(i);
                         bool commonLaw = fOptions.DottedLinesOfCommonLawSpouses && spouse.HasFlag(PersonFlag.pfCommonLaw);
-
-                        var linePen = (!commonLaw) ? fLinePen : fDottedLinePen;
-                        var decorativeLinePen = (!commonLaw) ? fDecorativeLinePen : fDottedDecorativeLinePen;
+                        bool isTrackedSpouse = isTracked || HasTrackedLines(spouse, drawMode) || HasTrackedChild(spouse, drawMode);
+                        bool isMatchedSpouse = isTrackedSpouse && HasTrackedSources(person, spouse);
 
                         int spbV = spbBeg + spbOfs * i;
-                        DrawLine(spouse.Rect.Right + 1, spbV, person.Rect.Left, spbV, linePen, decorativeLinePen); // h
+                        DrawLine(spouse.Rect.Right + 1, spbV, person.Rect.Left, spbV, commonLaw, isTrackedSpouse, isMatchedSpouse); // h
 
                         if (!string.IsNullOrEmpty(spouse.MarriageDate)) {
                             int q = (!fOptions.InvertedTree) ? 1 : 2;
@@ -2007,40 +2149,48 @@ namespace GKCore.Charts
                     vertLineBySpouse = false;
                 }
 
+                if (person.BaseSpouse != null && HasTrackedLines(person.BaseSpouse, drawMode)) {
+                    isTracked = true;
+                }
+
                 TreeChartPerson child0 = person.GetChild(0);
                 int chY = (!fOptions.InvertedTree) ? child0.PtY : child0.PtY + child0.Height;
                 int chXB = child0.PtX;
                 int chXE = (childrenCount > 1) ? person.GetChild(childrenCount - 1).PtX : child0.PtX;
                 int chXM = (chXB + chXE) / 2;
 
+                bool isTrackedChildren = false;
+                bool isMatchedChildren = false;
                 for (int i = 0; i < childrenCount; i++) {
                     TreeChartPerson child = person.GetChild(i);
-
                     bool dotted = IsDottedLines(child);
-                    var linePen = (!dotted) ? fLinePen : fDottedLinePen;
-                    var decorativeLinePen = (!dotted) ? fDecorativeLinePen : fDottedDecorativeLinePen;
+
+                    bool isTrackedChild = isTracked || HasTrackedLines(child, drawMode);
+                    if (isTrackedChild) isTrackedChildren = true;
+                    bool isMatchedChild = isTrackedChild && HasTrackedSources(person, child);
+                    if (isMatchedChild) isMatchedChildren = true;
 
                     if (childrenCount > 1) {
                         int jX;
-                        if (child.PtX < chXM) {
-                            jX = Math.Min(chXM, person.GetChild(i + 1).PtX);
+                        if (child.PtX < cx /*chXM*/) {
+                            jX = Math.Min(cx /*chXM*/, person.GetChild(i + 1).PtX);
                         } else {
-                            jX = Math.Max(chXM, person.GetChild(i - 1).PtX);
+                            jX = Math.Max(cx /*chXM*/, person.GetChild(i - 1).PtX);
                         }
-                        DrawLine(child.PtX, crY, jX, crY, linePen, decorativeLinePen); // h
+                        DrawLine(child.PtX, crY, jX, crY, dotted, isTrackedChild, isMatchedChild); // h
                     }
 
-                    DrawLine(child.PtX, crY, child.PtX, chY, linePen, decorativeLinePen); // v
+                    DrawLine(child.PtX, chY, child.PtX, crY, dotted, isTrackedChild, isMatchedChild); // v
                 }
 
                 // vertical line from the horizontal junction of spouses to the horizontal junction of children
                 if (vertLineBySpouse || (cx >= chXB && cx <= chXE)) {
-                    DrawLine(cx, spbBeg, cx, crY); // v
+                    DrawLine(cx, crY, cx, spbBeg, false, isTrackedChildren, isMatchedChildren); // v
                 } else {
                     if (chXM >= spXB && chXM <= spXE) {
-                        DrawLine(chXM, spbBeg, chXM, crY); // v
+                        DrawLine(chXM, crY, chXM, spbBeg, false, isTrackedChildren, isMatchedChildren); // v
                     } else {
-                        DrawLine(cx, spbBeg, cx, crY); // v
+                        DrawLine(cx, crY, cx, spbBeg, false, isTrackedChildren, isMatchedChildren); // v
                     }
                 }
 
@@ -2080,22 +2230,24 @@ namespace GKCore.Charts
         {
             if (person == null) return;
 
+            bool isTracked = HasTrackedLines(person, drawMode);
+
             switch (dirKind) {
                 case TreeChartKind.ckAncestors:
-                    DrawAncestors(person, drawMode);
+                    DrawAncestors(person, drawMode, isTracked);
                     break;
 
                 case TreeChartKind.ckDescendants:
-                    DrawDescendants(person, drawMode);
+                    DrawDescendants(person, drawMode, isTracked);
                     break;
 
                 case TreeChartKind.ckBoth:
-                    if (person == fRoot || dirKind == TreeChartKind.ckAncestors) DrawAncestors(person, drawMode);
-                    if (person == fRoot || dirKind == TreeChartKind.ckDescendants) DrawDescendants(person, drawMode);
+                    if (person == fRoot || dirKind == TreeChartKind.ckAncestors) DrawAncestors(person, drawMode, isTracked);
+                    if (person == fRoot || dirKind == TreeChartKind.ckDescendants) DrawDescendants(person, drawMode, isTracked);
                     break;
             }
 
-            DrawPerson(person, drawMode);
+            DrawPerson(person, drawMode, isTracked);
         }
 
         #endregion

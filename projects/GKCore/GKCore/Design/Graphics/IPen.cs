@@ -27,7 +27,8 @@ namespace GKCore.Design.Graphics
     /// </summary>
     public interface IPen : IDisposable
     {
-        IColor Color { get; }
+        IColor Color { get; set; }
+        float DashOffset { get; set; }
         float Width { get; }
     }
 }

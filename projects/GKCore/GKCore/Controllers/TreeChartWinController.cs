@@ -381,6 +381,8 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miTraceKinships").Text = LangMan.LS(LSID.TM_TraceKinships);
             GetControl<IMenuItem>("miCertaintyIndex").Text = LangMan.LS(LSID.CertaintyIndex);
             GetControl<IMenuItem>("miXRefVisible").Text = LangMan.LS(LSID.XRefVisible);
+            GetControl<IMenuItem>("miTrackSelectedLines").Text = LangMan.LS(LSID.TrackSelectedLines);
+            GetControl<IMenuItem>("miTrackMatchedSources").Text = LangMan.LS(LSID.TrackMatchedSources);
             GetControl<IMenuItem>("miHideDescSpouses").Text = LangMan.LS(LSID.HideDescSpouses);
 
             SetToolTip("tbModes", LangMan.LS(LSID.ModesTip));

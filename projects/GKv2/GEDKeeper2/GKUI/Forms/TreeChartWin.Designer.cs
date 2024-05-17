@@ -25,6 +25,8 @@
         private System.Windows.Forms.ToolStripMenuItem miTraceKinships;
         private System.Windows.Forms.ToolStripMenuItem miCertaintyIndex;
         private System.Windows.Forms.ToolStripMenuItem miXRefVisible;
+        private System.Windows.Forms.ToolStripMenuItem miTrackSelectedLines;
+        private System.Windows.Forms.ToolStripMenuItem miTrackMatchedSources;
         private System.Windows.Forms.ToolStripMenuItem miRebuildTree;
         private System.Windows.Forms.ToolStripSeparator N8;
         private System.Windows.Forms.ToolStripMenuItem miFillColor;
@@ -86,6 +88,8 @@
             this.miTraceKinships = new System.Windows.Forms.ToolStripMenuItem();
             this.miCertaintyIndex = new System.Windows.Forms.ToolStripMenuItem();
             this.miXRefVisible = new System.Windows.Forms.ToolStripMenuItem();
+            this.miTrackSelectedLines = new System.Windows.Forms.ToolStripMenuItem();
+            this.miTrackMatchedSources = new System.Windows.Forms.ToolStripMenuItem();
             this.N8 = new System.Windows.Forms.ToolStripSeparator();
             this.miFillColor = new System.Windows.Forms.ToolStripMenuItem();
             this.miFillImage = new System.Windows.Forms.ToolStripMenuItem();
@@ -228,6 +232,8 @@
             this.miTraceKinships,
             this.miCertaintyIndex,
             this.miXRefVisible,
+            this.miTrackSelectedLines,
+            this.miTrackMatchedSources,
             this.N8,
             this.miFillColor,
             this.miFillImage,
@@ -301,6 +307,20 @@
             this.miXRefVisible.Size = new System.Drawing.Size(186, 22);
             this.miXRefVisible.Text = "miXRefVisible";
             this.miXRefVisible.Click += new System.EventHandler(this.miXRefVisible_Click);
+            // 
+            // miTrackSelectedLines
+            // 
+            this.miTrackSelectedLines.Name = "miTrackSelectedLines";
+            this.miTrackSelectedLines.Size = new System.Drawing.Size(186, 22);
+            this.miTrackSelectedLines.Text = "miTrackSelectedLines";
+            this.miTrackSelectedLines.Click += new System.EventHandler(this.miTrackSelectedLines_Click);
+            // 
+            // miTrackMatchedSources
+            // 
+            this.miTrackMatchedSources.Name = "miTrackMatchedSources";
+            this.miTrackMatchedSources.Size = new System.Drawing.Size(186, 22);
+            this.miTrackMatchedSources.Text = "miTrackMatchedSources";
+            this.miTrackMatchedSources.Click += new System.EventHandler(this.miTrackMatchedSources_Click);
             // 
             // N8
             // 

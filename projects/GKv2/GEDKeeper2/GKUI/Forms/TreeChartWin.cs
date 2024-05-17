@@ -107,6 +107,10 @@ namespace GKUI.Forms
             miXRefVisible.Checked = fTreeBox.Options.XRefVisible;
             fTreeBox.XRefVisible = fTreeBox.Options.XRefVisible;
 
+            miTrackSelectedLines.Checked = fTreeBox.Options.TrackSelectedLines;
+
+            miTrackMatchedSources.Checked = fTreeBox.Options.TrackMatchedSources;
+
             miTraceSelected.Checked = fTreeBox.Options.TraceSelected;
             fTreeBox.TraceSelected = fTreeBox.Options.TraceSelected;
 
@@ -401,6 +405,20 @@ namespace GKUI.Forms
 
             fTreeBox.Options.XRefVisible = miXRefVisible.Checked;
             fTreeBox.XRefVisible = miXRefVisible.Checked;
+        }
+
+        private void miTrackSelectedLines_Click(object sender, EventArgs e)
+        {
+            miTrackSelectedLines.Checked = !miTrackSelectedLines.Checked;
+            fTreeBox.Options.TrackSelectedLines = miTrackSelectedLines.Checked;
+            fTreeBox.Invalidate();
+        }
+
+        private void miTrackMatchedSources_Click(object sender, EventArgs e)
+        {
+            miTrackMatchedSources.Checked = !miTrackMatchedSources.Checked;
+            fTreeBox.Options.TrackMatchedSources = miTrackMatchedSources.Checked;
+            fTreeBox.Invalidate();
         }
 
         private void miFillColor_Click(object sender, EventArgs e)

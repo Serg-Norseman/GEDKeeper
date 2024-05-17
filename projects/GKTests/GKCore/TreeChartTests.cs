@@ -166,7 +166,7 @@ namespace GKCore
         [Test]
         public void Test_TreeChartModel()
         {
-            using (var model = new TreeChartModel())
+            using (var model = new TreeChartModel(null))
             {
                 Assert.IsNotNull(model);
 

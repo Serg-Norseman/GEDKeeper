@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -35,6 +35,20 @@ namespace GKUI.Platform.Handlers
         public IColor Color
         {
             get { return UIHelper.ConvertColor(Handle.Color); }
+            set {
+                // FIXME: don't works in Eto.Forms?!
+                Handle.Color = UIHelper.ConvertColor(value);
+            }
+        }
+
+        public float DashOffset
+        {
+            get { return (Handle.DashStyle == null) ? 0 : Handle.DashStyle.Offset; }
+            set {
+                if (Handle.DashStyle != null) {
+                    Handle.DashStyle = new DashStyle(value, Handle.DashStyle.Dashes);
+                }
+            }
         }
 
         public float Width

@@ -48,15 +48,12 @@ namespace GKUI.Components
         private readonly TweenLibrary fTween;
 
         private ITreeControl fActiveControl;
-        private IContainer fComponents;
-        private long fHighlightedStart;
         private ChartControlMode fMode = ChartControlMode.Default;
         private int fMouseX;
         private int fMouseY;
         private TreeChartOptions fOptions;
         private TreeChartPerson fSelected;
         private GDMIndividualRecord fSaveSelection;
-        private Timer fTimer;
         private bool fTraceKinships;
         private bool fTraceSelected;
 
@@ -171,7 +168,7 @@ namespace GKUI.Components
 
         public TreeChartBox()
         {
-            fModel = new TreeChartModel();
+            fModel = new TreeChartModel(this);
             fRenderer = null;
             fSelected = null;
             fToolTip = new ToolTip();
@@ -182,7 +179,6 @@ namespace GKUI.Components
             fTreeControls.Add(new TCGenerationsControl(this, TreeChartKind.ckDescendants));
             //fPersonControl = new PersonControl(this);
 
-            InitTimer();
             fTween = new TweenLibrary();
         }
 
@@ -198,7 +194,6 @@ namespace GKUI.Components
                 fModel.Dispose();
 
                 if (fTreeControls != null) fTreeControls.Dispose();
-                if (fComponents != null) fComponents.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -207,32 +202,6 @@ namespace GKUI.Components
         {
             base.SetRenderer(renderer);
             fModel.SetRenderer(renderer);
-        }
-
-        private void InitTimer()
-        {
-            fComponents = new Container();
-            fTimer = new Timer(fComponents);
-            fTimer.Interval = 1;
-            fTimer.Tick += TickTimer;
-            fTimer.Stop();
-            fTimer.Enabled = false;
-            fTimer.Enabled = true;
-        }
-
-        private void TickTimer(object sender, EventArgs e)
-        {
-            if (fModel.HighlightedPerson == null) return;
-
-            DateTime st = DateTime.FromBinary(fHighlightedStart);
-            DateTime cur = DateTime.Now;
-            TimeSpan d = cur - st;
-
-            if (d.TotalSeconds >= 1/* && !fPersonControl.Visible*/) {
-                fModel.HighlightedPerson = null;
-                //fPersonControl.Visible = true;
-                Invalidate();
-            }
         }
 
         public void SetScale(float value)
@@ -798,7 +767,6 @@ namespace GKUI.Components
             if (fModel.HighlightedPerson == person) return;
 
             fModel.HighlightedPerson = person;
-            fHighlightedStart = DateTime.Now.ToBinary();
 
             /*if (person == null) {
                 //fPersonControl.Visible = false;

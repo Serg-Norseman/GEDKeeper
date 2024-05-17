@@ -29,9 +29,11 @@ namespace GKCore.Charts
 {
     internal class FakePen : IPen
     {
-        public IColor Color { get; private set; }
+        public IColor Color { get; set; }
 
         public float Width { get; private set; }
+
+        public float DashOffset { get; set; }
 
         public FakePen(IColor color, float width)
         {

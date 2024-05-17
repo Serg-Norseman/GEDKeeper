@@ -45,7 +45,6 @@ namespace GKUI.Components
         private readonly TweenLibrary fTween;
 
         private ITreeControl fActiveControl;
-        private long fHighlightedStart;
         private ChartControlMode fMode = ChartControlMode.Default;
         private int fMouseX;
         private int fMouseY;
@@ -181,7 +180,7 @@ namespace GKUI.Components
         {
             BackgroundColor = Color.White;
 
-            fModel = new TreeChartModel();
+            fModel = new TreeChartModel(this);
             fRenderer = null;
             fSelected = null;
             fTraceSelected = true;
@@ -191,7 +190,6 @@ namespace GKUI.Components
             //fTreeControls.Add(new TCGenerationsControl(this, TreeChartKind.ckDescendants));
             //fPersonControl = new PersonControl(this);
 
-            InitTimer();
             fTween = new TweenLibrary();
         }
 
@@ -221,27 +219,6 @@ namespace GKUI.Components
         {
             base.SetRenderer(renderer);
             fModel.SetRenderer(renderer);
-        }
-
-        private void InitTimer()
-        {
-            fTimer = AppHost.Instance.CreateTimer(10, TickTimer);
-            fTimer.Start();
-        }
-
-        private void TickTimer(object sender, EventArgs e)
-        {
-            if (fModel.HighlightedPerson == null) return;
-
-            DateTime st = DateTime.FromBinary(fHighlightedStart);
-            DateTime cur = DateTime.Now;
-            TimeSpan d = cur - st;
-
-            if (d.TotalSeconds >= 1/* && !fPersonControl.Visible*/) {
-                fModel.HighlightedPerson = null;
-                //fPersonControl.Visible = true;
-                Invalidate();
-            }
         }
 
         public void SetScale(float value)
@@ -767,7 +744,6 @@ namespace GKUI.Components
             if (fModel.HighlightedPerson == person) return;
 
             fModel.HighlightedPerson = person;
-            fHighlightedStart = DateTime.Now.ToBinary();
 
             /*if (person == null) {
                 //fPersonControl.Visible = false;

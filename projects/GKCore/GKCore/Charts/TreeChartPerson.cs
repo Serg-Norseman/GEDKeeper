@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -103,6 +103,7 @@ namespace GKCore.Charts
         public IColor UserColor;
         public int NameLines;
         public string Note;
+        public string[] Sources;
 
 
         public int Height
@@ -378,6 +379,18 @@ namespace GKCore.Charts
                     SetFlag(PersonFlag.pfBookmark, iRec.Bookmark);
 
                     CertaintyAssessment = GKUtils.GetCertaintyAssessment(iRec);
+
+                    if (options.TrackMatchedSources && fRec.HasSourceCitations) {
+                        int num = fRec.SourceCitations.Count;
+                        Sources = new string[num];
+                        for (int i = 0; i < num; i++) {
+                            var srcCit = fRec.SourceCitations[i];
+                            string srcRef = srcCit.XRef /*+ ":" + srcCit.Page*/;
+                            Sources[i] = srcRef;
+                        }
+                    } else {
+                        Sources = new string[0];
+                    }
                 } else {
                     fSurname = "";
                     fName = "< ? >";
@@ -392,6 +405,7 @@ namespace GKCore.Charts
                     fSex = GDMSex.svUnknown;
 
                     CertaintyAssessment = 0.0f;
+                    Sources = new string[0];
                 }
             } catch (Exception ex) {
                 Logger.WriteError("TreeChartPerson.BuildBy()", ex);

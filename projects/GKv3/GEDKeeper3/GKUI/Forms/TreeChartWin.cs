@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -60,6 +60,8 @@ namespace GKUI.Forms
         private CheckMenuItem miTraceKinships;
         private CheckMenuItem miCertaintyIndex;
         private CheckMenuItem miXRefVisible;
+        private CheckMenuItem miTrackSelectedLines;
+        private CheckMenuItem miTrackMatchedSources;
         private ButtonMenuItem miRebuildTree;
         private ButtonMenuItem miFillColor;
         private ButtonMenuItem miFillImage;
@@ -144,6 +146,10 @@ namespace GKUI.Forms
             miXRefVisible.Checked = fTreeBox.Options.XRefVisible;
             fTreeBox.XRefVisible = fTreeBox.Options.XRefVisible;
 
+            miTrackSelectedLines.Checked = fTreeBox.Options.TrackSelectedLines;
+
+            miTrackMatchedSources.Checked = fTreeBox.Options.TrackMatchedSources;
+
             miTraceSelected.Checked = fTreeBox.Options.TraceSelected;
             fTreeBox.TraceSelected = fTreeBox.Options.TraceSelected;
 
@@ -195,6 +201,12 @@ namespace GKUI.Forms
             miXRefVisible = new CheckMenuItem();
             miXRefVisible.Click += miXRefVisible_Click;
 
+            miTrackSelectedLines = new CheckMenuItem();
+            miTrackSelectedLines.Click += miTrackSelectedLines_Click;
+
+            miTrackMatchedSources = new CheckMenuItem();
+            miTrackMatchedSources.Click += miTrackMatchedSources_Click;
+
             miFillColor = new ButtonMenuItem();
             miFillColor.Click += miFillColor_Click;
 
@@ -212,6 +224,8 @@ namespace GKUI.Forms
                                          miTraceKinships,
                                          miCertaintyIndex,
                                          miXRefVisible,
+                                         miTrackSelectedLines,
+                                         miTrackMatchedSources,
                                          new SeparatorMenuItem(),
                                          miFillColor,
                                          miFillImage,
@@ -551,6 +565,18 @@ namespace GKUI.Forms
         {
             fTreeBox.Options.XRefVisible = miXRefVisible.Checked;
             fTreeBox.XRefVisible = miXRefVisible.Checked;
+        }
+
+        private void miTrackSelectedLines_Click(object sender, EventArgs e)
+        {
+            fTreeBox.Options.TrackSelectedLines = miTrackSelectedLines.Checked;
+            fTreeBox.Invalidate();
+        }
+
+        private void miTrackMatchedSources_Click(object sender, EventArgs e)
+        {
+            fTreeBox.Options.TrackMatchedSources = miTrackMatchedSources.Checked;
+            fTreeBox.Invalidate();
         }
 
         private void miFillColor_Click(object sender, EventArgs e)

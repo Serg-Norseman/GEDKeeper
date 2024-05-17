@@ -27,6 +27,9 @@ Eto.Forms v2.7.4 compatible with netfw462
 8. Eto.Forms 2.7.4 [WPF]
   - FontDialog don't return selected font.
 
+9. Eto.Forms 2.7.4 [WPF+, Gtk?]
+  - Pen.Color setter don't works, also Pen.Brush.Color.
+
 # Other
 
 LibVLCSharp.GTK

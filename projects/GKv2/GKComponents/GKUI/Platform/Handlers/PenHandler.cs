@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,6 +32,13 @@ namespace GKUI.Platform.Handlers
         public IColor Color
         {
             get { return new ColorHandler(Handle.Color); }
+            set { Handle.Color = ((ColorHandler)value).Handle; }
+        }
+
+        public float DashOffset
+        {
+            get { return Handle.DashOffset; }
+            set { Handle.DashOffset = value; }
         }
 
         public float Width
