@@ -194,7 +194,7 @@
 193=Fehler
 194=Start von Lua fehlgeschlagen!
 195=Ungültiges Datumsformat
-196=Staat
+196=Land
 197=Region
 198=Stadt
 199=Postleitzahl
@@ -666,7 +666,7 @@
 665=Absteigende Nummerierung
 666=Statistiken
 667=Bild speichern
-668=Anzeigemodus
+668=Anzeigemodi
 669=Neues Skript erstellen
 670=Skript öffnen
 671=Skript speichern
@@ -832,7 +832,7 @@
 828=Konfirmation
 829=Erstkommunion
 830=Ordination
-831=Beschränke Geokodierung auf Staat
+831=Beschränke Geokodierung auf Land
 832=Unterschiedliche Tiefe
 833=Vorfahren
 834=Keine Übereinstimmung gefunden
@@ -870,7 +870,7 @@
 866=Bilder in SVG-Dateien einbetten
 867=Erweiterte Formatierung von Bemerkungen
 868=Schreibe immer alle Namensbestandteile (nur für fortgeschrittene Benutzer)
-869=Chart windows show mode
+869=Diagramm-Anzeigemodus
 870=Erweiterter Stammbaum
 871=Fächerdiagramm (nur Vorfahren)
 872=In neuem Fenster öffnen
@@ -951,18 +951,18 @@
 943=Verweise auf oberster Ebene
 944=Verweis auf oberster Ebene löschen?
 945=Hilfe ist für diese Sprache nicht verfügbar. Es wird eine englische Hilfe angezeigt.
-946=Address (st. & h.n.)
+946=Straße & Hausnr.
 
-947=Default
-948=Maximize
-949=Left half
-950=Right half
+947=Standard
+948=Maximieren
+949=Linke Hälfte
+950=Rechte Hälfte
 
-951=RI:Recruit
-952=Reverse order of places
-953=Abbreviated location names
-954=Dotted lines of common law spouses
-955=Show number of event substructures instead of checkmarks
-956=Clean images cache
-957=Highlight the lines of the selection
+951=Russisches Kaiserreich:Rekrut
+952=Reihenfolge der Orte umkehren
+953=Abgekürzte Ortsnamen
+954=Linie bei Lebensgefährten gepunktet
+955=Nummer der Ereignis-Substrukturen anstelle von Haken anzeigen
+956=Bilder-Cache leeren
+957=Auswahllinien hervorheben
 958=Track matching sources

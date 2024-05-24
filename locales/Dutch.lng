@@ -1,4 +1,4 @@
-﻿;1043,dut,Nederlands,xt
+﻿;1043,dut,Nederlands
 001=Bestand
 002=Bewerk
 003=Stamboom
@@ -6,7 +6,7 @@
 005=Beeld
 006=Help
 007=Nieuw
-008=Openen...
+008=Open...
 009=Recent
 010=Opslaan
 011=Sluit
@@ -50,7 +50,7 @@
 049=Inhoud
 050=Over
 051=Totaal
-052=Gefilterd
+052=gefilterd
 053=Personen
 054=Families
 055=Notities
@@ -128,10 +128,10 @@
 127=Personen
 128=Bewerk groep
 129=Verbinding met persoon loskoppelen?
-130=Bekijken
+130=bekijken
 131=Fase
 132=Telefoon
-133=Email
+133=email
 134=Website
 135=Archief
 136=Voortgang
@@ -384,7 +384,7 @@
 383=Volgende
 384=Vorige
 385=Volgende
-386=Wist je dat...
+386=Wist je dat?
 387=Plaats laden en zoeken
 388=(niet gekozen)
 389=Voorbeeld
@@ -494,7 +494,7 @@
 493=RTF bestand (*.rtf)|*.rtf
 494=HTML bestand (*.html)|*.html
 495=Backup bestand
-496=Alleen vorig bestand
+496=alleen vorig bestand
 497=Aftakking afsnijden
 498=niet
 499=in jaren
@@ -522,11 +522,11 @@
 521=Koppelen...
 522=Controleer familie verbinding
 523=alles
-524=Alleen levend
-525=Alleen overleden
+524=alleen levend
+525=alleen overleden
 526=Leefde voor
-527=Alleen mannen
-528=Alleen vrouwen
+527=alleen mannen
+528=alleen vrouwen
 529=Masker van namen
 530=Masker van verblijf
 531=Masker van de feiten
@@ -662,8 +662,8 @@
 661=Toon afstammelingen boom
 662=Toon volledige boom
 663=Stamboom
-664=Oplopende nummering
-665=Aflopende nummering
+664=Oplopende stamboom
+665=Aflopende stamboom
 666=Statistiek gegevens
 667=Afbeelding opslaan
 668=Weergavemodus
@@ -870,7 +870,7 @@
 866=Afbeeldingen gebruiken in SVG
 867=Uitgebreide notities gebruiken
 868=Uitgebreide namen behouden (alleen geavanceerde gebruikers)
-869=Chart windows show mode
+869=Grafiekvensters maximaliseren
 870=Verlengde boom
 871=Cirkelgrafiek (alleen voorouders)
 872=Open in nieuw venster
@@ -937,26 +937,26 @@
 930=negende
 
 931=Uitgebreide definitie van verwantschap
-932=Use surnames in person selection filter
-933=Use dates of birth in person selection filter
-934=Fact value is empty or invalid
+932=Gebruik achternamen in persoon selectie filter
+933=Gebruik geboortedata in persoon selectie filter
+934=Feiten waarde is leeg of ongeldig
 935=Portret
-936=Census analysis
-937=The person can be found in the census `{0}`
+936=Census analyse
+937=De persoon is te vinden in de volkstelling `{0}`
 938=Geschiedenis
-939=The periods overlap. This will cause errors when searching for a place name by date.
+939=De perioden overlappen elkaar. Dit veroorzaakt fouten bij het zoeken naar een plaatsnaam op datum.
 940=Uitgebreide locaties
-941=Photos batch adding
-942=Added {0} photos from {1}.
-943=Top level links
-944=Remove top level link?
-945=Help is not available for this language. An English help will be shown.
-946=Address (st. & h.n.)
+941=Foto's batchgewijs toevoegen
+942=Toegevoegd {0} fotos van {1}.
+943=Hoogste niveau koppelingen
+944=Verwijder hoogste niveau koppeling?
+945=Help is niet beschikbaar voor deze taal. Er wordt een Engelse help getoond.
+946=Adres (straat & huisnr.)
 
-947=Default
-948=Maximize
-949=Left half
-950=Right half
+947=Standaard
+948=Maximaliseren
+949=Linker helft
+950=Rechter helft
 
 951=RI:Recruit
 952=Reverse order of places

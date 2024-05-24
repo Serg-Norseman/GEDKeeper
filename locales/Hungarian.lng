@@ -74,7 +74,7 @@
 073=Biztosan eltávolítja a családot "{0}"?
 074=Biztosan eltávolítja a jegyzetet "{0}"?
 075=Biztosan eltávolítja a forrást "{0}"?
-076=Biztos vagy benne, hogy el akarod távolítani Videót/hangot "{0}"?
+076=Biztos vagy benne, hogy el akarod távolítani média tárat "{0}"?
 077=Biztosan eltávolítja a tárat "{0}"?
 078=Biztosan eltávolítja a csoportot "{0}"?
 079=Biztosan eltávolítja a kutatást "{0}"?
@@ -870,7 +870,7 @@
 866=Használjon beágyazott képeket SVG formátumban
 867=Használjon kiterjesztett jegyzeteket
 868=A gazdag nevek megtartása (csak haladó felhasználók)
-869=Chart windows show mode
+869=A diagram ablakot jelenítse meg
 870=Kiterjesztett fa
 871=Rajongói diagram (csak ősök)
 872=Megnyitás új ablakban
@@ -951,18 +951,18 @@
 943=Legfelső szintű linkek
 944=Eltávolítja a legfelső szintű linket?
 945=Ezen a nyelven nem érhető el súgó. Megjelenik egy angol nyelvű súgó.
-946=Address (st. & h.n.)
+946=Cím (st. & h.n.)
 
-947=Default
-948=Maximize
-949=Left half
-950=Right half
+947=Alapértelmezett
+948=Teljes méret
+949=Bal oldal
+950=Jobb oldal
 
-951=RI:Recruit
-952=Reverse order of places
-953=Abbreviated location names
-954=Dotted lines of common law spouses
-955=Show number of event substructures instead of checkmarks
-956=Clean images cache
+951=RI:Toborzás
+952=A helyek fordított sorrendje
+953=Helyszínek rövidített nevei
+954=A köztörvényes házastársak szaggatott vonalai
+955=Az eseményalstruktúrák számának megjelenítése pipa helyett 
+956=Kép gyorsítótár törlés
 957=Highlight the lines of the selection
 958=Track matching sources

@@ -4,6 +4,9 @@
     <ItemGroup>
         <Compile Include="NavigatorData.cs" />
 
+        <None Include="GKNavigatorPlugin.afr">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKNavigatorPlugin.cze">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
@@ -20,6 +23,9 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Include="GKNavigatorPlugin.jpn">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKNavigatorPlugin.pol">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Include="GKNavigatorPlugin.rus">

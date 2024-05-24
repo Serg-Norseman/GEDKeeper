@@ -7,6 +7,9 @@
         <Compile Include="WordsCloud\QuadTreeNode.cs" />
         <Compile Include="WordsCloud\Word.cs" />
 
+        <None Include="GKWordsCloudPlugin.afr">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKWordsCloudPlugin.cze">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

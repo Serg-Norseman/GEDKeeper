@@ -16,6 +16,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Include="GKStdReports.afr">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKStdReports.cze">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
@@ -29,6 +32,15 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Include="GKStdReports.fra">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKStdReports.hun">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKStdReports.jpn">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKStdReports.pol">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Include="GKStdReports.rus">
