@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -58,6 +58,8 @@ namespace GKCore.Options
 
         public int SortColumn { get; set; }
 
+        public int SplitterPosition { get; set; }
+
         public ListOptions(GDMRecordType recType)
         {
             fName = RecordTypeNames[(int)recType] + "List";
@@ -67,6 +69,7 @@ namespace GKCore.Options
         public void ResetDefaults()
         {
             SortColumn = 0;
+            SplitterPosition = 300;
         }
 
         public void Assign(IOptions source)
@@ -75,6 +78,7 @@ namespace GKCore.Options
             if (srcOptions == null) return;
 
             SortColumn = srcOptions.SortColumn;
+            SplitterPosition = srcOptions.SplitterPosition;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -84,6 +88,7 @@ namespace GKCore.Options
 
             try {
                 SortColumn = iniFile.ReadInteger(fName, "SortColumn", 0);
+                SplitterPosition = iniFile.ReadInteger(fName, "SplitterPosition", 300);
             } catch (Exception) {
                 throw new ListOptionsException("Error loading ListOptions");
             }
@@ -95,6 +100,7 @@ namespace GKCore.Options
                 throw new ArgumentNullException("iniFile");
 
             iniFile.WriteInteger(fName, "SortColumn", SortColumn);
+            iniFile.WriteInteger(fName, "SplitterPosition", SplitterPosition);
         }
     }
 

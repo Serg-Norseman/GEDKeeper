@@ -486,39 +486,61 @@ namespace GKCore.Controllers
             fTabParts[(int)recType] = new TabParts(listView, splitterName, summary);
         }
 
-        public void SetSummaryWidth(bool uiAction)
+        /// <summary>
+        /// Sets tab splitter positions in response to interface events.
+        /// </summary>
+        /// <param name="userChange">true - if user change event (SplitterMoved), false - settings change event</param>
+        public void SetSummaryWidth(bool userChange)
         {
             if (AppHost.Instance.HasFeatureSupport(Feature.Mobile))
                 return;
 
-            if (!GlobalOptions.Instance.KeepInfoPansOverallSize)
-                return;
-
             try {
-                int currentTab, splitterPos;
+                GlobalOptions globOpts = GlobalOptions.Instance;
+                int currentTab;
 
-                if (uiAction) {
+                if (userChange) {
                     currentTab = fView.RecordTabs.SelectedIndex + 1;
-                    splitterPos = GetControl<ISplitter>(fTabParts[currentTab].SplitterName).Position;
-                    GlobalOptions.Instance.InfoPansOverallSize = splitterPos;
+                    int splitterPos = GetControl<ISplitter>(fTabParts[currentTab].SplitterName).Position;
+
+                    if (globOpts.KeepInfoPansOverallSize) {
+                        globOpts.InfoPansOverallSize = splitterPos;
+                    } else {
+                        GDMRecordType rt = (GDMRecordType)currentTab;
+                        globOpts.ListOptions[rt].SplitterPosition = splitterPos;
+                    }
                 } else {
                     currentTab = 0;
-                    splitterPos = GlobalOptions.Instance.InfoPansOverallSize;
-                    if (splitterPos <= 0) splitterPos = 300;
                 }
 
                 for (int i = 0; i < fTabParts.Length; i++) {
                     var tab = fTabParts[i];
-                    if (i != currentTab && tab != null) {
-                        var splitterHandler = GetControl<ISplitter>(tab.SplitterName);
-                        fView.EnableSplitterEvent(splitterHandler, false);
-                        splitterHandler.Position = splitterPos;
-                        fView.EnableSplitterEvent(splitterHandler, true);
+                    if (tab == null) continue;
+
+                    if (globOpts.KeepInfoPansOverallSize) {
+                        if (i != currentTab) {
+                            SetSplitterPos(tab, globOpts.InfoPansOverallSize);
+                        }
+                    } else {
+                        if (!userChange) {
+                            GDMRecordType rt = (GDMRecordType)i;
+                            SetSplitterPos(tab, globOpts.ListOptions[rt].SplitterPosition);
+                        }
                     }
                 }
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinController.SetSummaryWidth()", ex);
             }
+        }
+
+        private void SetSplitterPos(TabParts tab, int splitterPos)
+        {
+            if (splitterPos <= 0) splitterPos = 300;
+
+            var splitterHandler = GetControl<ISplitter>(tab.SplitterName);
+            fView.EnableSplitterEvent(splitterHandler, false);
+            splitterHandler.Position = splitterPos;
+            fView.EnableSplitterEvent(splitterHandler, true);
         }
 
         public GDMRecordType GetSelectedRecordType()
