@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,8 +34,8 @@ namespace GKCore
 
         public const string APP_COPYRIGHT = "Copyright © 2009-2024 by Sergey V. Zhdanovskih";
 
-        public const string APP_VERSION_2X = "2.29.1.0";
-        public const string APP_VERSION_3X = "3.5.1.0";
+        public const string APP_VERSION_2X = "2.30.0.0";
+        public const string APP_VERSION_3X = "3.6.0.0";
 
 #if !GK3
         public const string UpdateURL = "https://sourceforge.net/projects/gedkeeper/files/gk_version.xml";
