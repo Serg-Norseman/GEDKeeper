@@ -1,3 +1,16 @@
+## 28.05.2024 [v2.30.0 &amp; v3.6.0]
+- Added options for displaying tree diagrams: highlighting lines of a selected person, tracking (highlighting) lines of persons with matching sources.
+- Localizations updated: Afrikaans [Steyn van der Walt], Dutch [Annelotte and Leo Krap], German [Christian Bettinger], Hungarian [Kékesi Lajos], Japanese [Takashi Namba], Polish [burtek].
+- Added normalization of Polish feminine forms of surnames to masculine ones (burtek).
+- Improved saving of notes with text aligned with spaces.
+- Improved output of portraits from photos with DPI > 100 in GKv3.
+- Improved age calculation for some date combinations.
+- Improved sorting of children when adding in trees to diagrams.
+- Fixed cancellation of adding children in tree diagrams.
+- Fixed black background of tree diagram in print preview (GKv3/Windows).
+- Fixed type selection in the event dialog.
+- Fixed an error in opening the download link for the new version.
+
 ## 02.03.2024 [v2.29.1 &amp; v3.5.1]
 - Added localization to Afrikaans language [Steyn van der Walt].
 - Added call to detailed information about places in the place management tool (pop-up menu).
