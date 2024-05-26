@@ -535,6 +535,7 @@ namespace GKCore
 
             NameTypes = new LSID[] {
                 LSID.DefaultValue,
+                LSID.Adoption, // FIXME: user defined name types (gh#550)
                 LSID.NTAka,
                 LSID.NTBirth,
                 LSID.NTImmigrant,

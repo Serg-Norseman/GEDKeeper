@@ -1337,7 +1337,7 @@ namespace GDModel.Providers.GEDCOM
 
 
         public static readonly string[] NameTypes = new string[] {
-            "", "aka", "birth", "immigrant", "maiden", "married" };
+            "", "adoption", "aka", "birth", "immigrant", "maiden", "married" };
 
         public static GDMNameType GetNameTypeVal(string str)
         {

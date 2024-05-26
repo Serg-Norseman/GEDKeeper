@@ -26,6 +26,7 @@ namespace GDModel
     public enum GDMNameType
     {
         ntNone,
+        ntAdoption, // FIXME: user defined name types (gh#550)
         ntAka,
         ntBirth,
         ntImmigrant,

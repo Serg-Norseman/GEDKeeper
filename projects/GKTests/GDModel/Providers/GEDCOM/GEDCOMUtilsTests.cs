@@ -196,6 +196,7 @@ namespace GDModel.Providers.GEDCOM
         {
             Assert.AreEqual(GDMNameType.ntNone, GEDCOMUtils.GetNameTypeVal("unk"));
             Assert.AreEqual(GDMNameType.ntNone, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(GDMNameType.ntNone)));
+            Assert.AreEqual(GDMNameType.ntAdoption, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(GDMNameType.ntAdoption)));
             Assert.AreEqual(GDMNameType.ntAka, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(GDMNameType.ntAka)));
             Assert.AreEqual(GDMNameType.ntBirth, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(GDMNameType.ntBirth)));
             Assert.AreEqual(GDMNameType.ntImmigrant, GEDCOMUtils.GetNameTypeVal(GEDCOMUtils.GetNameTypeStr(GDMNameType.ntImmigrant)));
