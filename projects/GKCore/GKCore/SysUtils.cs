@@ -797,5 +797,34 @@ namespace GKCore
 
             return (previousMatches[matchesCount - 1] == maxState);
         }
+
+        public static unsafe int StrDifference(string s1, string s2)
+        {
+            if (s1 == null || s1.Length == 0) {
+                if (s2 == null || s2.Length == 0) {
+                    return 0;
+                } else {
+                    return s2.Length;
+                }
+            } else {
+                if (s2 == null || s2.Length == 0) {
+                    return s1.Length;
+                }
+            }
+
+            int differences = Math.Abs(s1.Length - s2.Length);
+
+            int strLen = Math.Min(s1.Length, s2.Length);
+            fixed (char* ptr_s1 = s1)
+            fixed (char* ptr_s2 = s2) {
+                for (int i = 0; i < strLen; i++) {
+                    if (ptr_s1[i] != ptr_s2[i]) {
+                        differences++;
+                    }
+                }
+            }
+
+            return differences;
+        }
     }
 }

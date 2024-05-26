@@ -1951,8 +1951,7 @@ namespace GKCore.Charts
         {
             if (person1 == null || person2 == null) return false;
 
-            var results = person1.Sources.Intersect(person2.Sources, StringComparer.Ordinal);
-            return results.Any();
+            return person1.IntersectSources(person2);
         }
 
         private bool HasTrackedChild(TreeChartPerson person, ChartDrawMode drawMode)
@@ -2167,7 +2166,7 @@ namespace GKCore.Charts
 
                     bool isTrackedChild = isTracked || HasTrackedLines(child, drawMode);
                     if (isTrackedChild) isTrackedChildren = true;
-                    bool isMatchedChild = isTrackedChild && HasTrackedSources(person, child);
+                    bool isMatchedChild = isTrackedChild && (HasTrackedSources(person, child) || (person.BaseSpouse != null && HasTrackedSources(person.BaseSpouse, child)));
                     if (isMatchedChild) isMatchedChildren = true;
 
                     if (childrenCount > 1) {

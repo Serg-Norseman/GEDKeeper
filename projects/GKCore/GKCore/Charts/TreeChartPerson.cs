@@ -103,7 +103,7 @@ namespace GKCore.Charts
         public IColor UserColor;
         public int NameLines;
         public string Note;
-        public string[] Sources;
+        public GDMSourceCitation[] Sources;
 
 
         public int Height
@@ -382,14 +382,14 @@ namespace GKCore.Charts
 
                     if (options.TrackMatchedSources && fRec.HasSourceCitations) {
                         int num = fRec.SourceCitations.Count;
-                        Sources = new string[num];
+                        Sources = new GDMSourceCitation[num];
                         for (int i = 0; i < num; i++) {
                             var srcCit = fRec.SourceCitations[i];
-                            string srcRef = srcCit.XRef /*+ ":" + srcCit.Page*/;
-                            Sources[i] = srcRef;
+                            //string srcRef = srcCit.XRef /*+ ":" + srcCit.Page*/;
+                            Sources[i] = srcCit;
                         }
                     } else {
-                        Sources = new string[0];
+                        Sources = new GDMSourceCitation[0];
                     }
                 } else {
                     fSurname = "";
@@ -405,7 +405,7 @@ namespace GKCore.Charts
                     fSex = GDMSex.svUnknown;
 
                     CertaintyAssessment = 0.0f;
-                    Sources = new string[0];
+                    Sources = new GDMSourceCitation[0];
                 }
             } catch (Exception ex) {
                 Logger.WriteError("TreeChartPerson.BuildBy()", ex);
@@ -646,6 +646,34 @@ namespace GKCore.Charts
                     break;
             }
             return result;
+        }
+
+        public bool IntersectSources(TreeChartPerson other)
+        {
+            //var results = this.Sources.Intersect(other.Sources, StringComparer.Ordinal);
+            //return results.Any();
+
+            for (int i = 0; i < Sources.Length; i++) {
+                var srcCit1 = Sources[i];
+
+                for (int k = 0; k < other.Sources.Length; k++) {
+                    var srcCit2 = other.Sources[k];
+
+                    if (string.Equals(srcCit1.XRef, srcCit2.XRef)) {
+                        /*int diff = SysUtils.StrDifference(srcCit1.Page, srcCit2.Page);
+                        // One family can be listed on 1-2 pages of a census or other source,
+                        // therefore the difference in page numbers should not exceed 1 character.
+                        // But what to do with cases like "p. 235" and "p. 235bck" ("л. 235" and "л. 235об")?
+                        if (diff == 0 || diff == 1) {
+                            return true;
+                        }*/
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }
