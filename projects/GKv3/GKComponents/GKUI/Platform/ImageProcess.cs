@@ -33,7 +33,7 @@ namespace GKUI.Platform
         public static Stream PrepareImage(Stream inputStream)
         {
             bool isNeedOrient;
-            bool changeDPI;
+            bool changeDPI = false;
 
             try {
                 try {
@@ -41,9 +41,17 @@ namespace GKUI.Platform
                     var orientProp = file.Properties.Get<ExifEnumProperty<ExifLibrary.Orientation>>(ExifTag.Orientation);
                     isNeedOrient = (orientProp != null && orientProp.Value != ExifLibrary.Orientation.Normal);
 
-                    var resolPropX = file.Properties.Get<ExifURational>(ExifTag.XResolution);
-                    var resolPropY = file.Properties.Get<ExifURational>(ExifTag.YResolution);
-                    changeDPI = ((resolPropX != null && (float)resolPropX >= 100.0f) || (resolPropY != null && (float)resolPropY >= 100.0f));
+                    var resX = file.Properties.Get<ExifURational>(ExifTag.XResolution);
+                    var resY = file.Properties.Get<ExifURational>(ExifTag.YResolution);
+                    if (resX != null && resY != null) {
+                        changeDPI = ((resX != null && (float)resX >= 100.0f) || (resY != null && (float)resY >= 100.0f));
+                    } else {
+                        var densX = file.Properties.Get<ExifUShort>(ExifTag.XDensity);
+                        var densY = file.Properties.Get<ExifUShort>(ExifTag.YDensity);
+                        if (densX != null && densY != null) {
+                            changeDPI = ((densX != null && (float)densX >= 100.0f) || (densY != null && (float)densY >= 100.0f));
+                        }
+                    }
                 } finally {
                     inputStream.Seek(0, SeekOrigin.Begin);
                 }
