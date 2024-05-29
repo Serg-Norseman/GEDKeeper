@@ -2270,23 +2270,23 @@ namespace GKCore
             return result;
         }
 
-        private static void RecListMediaRefresh(IBaseContext baseContext, GDMRecord record, StringList summary)
+        private static void RecListMediaRefresh(IBaseContext baseContext, IGDMStructWithMultimediaLinks structWML, StringList summary, string indent = "")
         {
-            if (record == null || summary == null) return;
+            if (structWML == null || summary == null) return;
 
             try {
-                if (record.HasMultimediaLinks) {
+                if (structWML.HasMultimediaLinks) {
                     summary.Add("");
-                    summary.Add(LangMan.LS(LSID.RPMultimedia) + " (" + record.MultimediaLinks.Count.ToString() + "):");
+                    summary.Add(indent + LangMan.LS(LSID.RPMultimedia) + " (" + structWML.MultimediaLinks.Count.ToString() + "):");
 
-                    int num = record.MultimediaLinks.Count;
+                    int num = structWML.MultimediaLinks.Count;
                     for (int i = 0; i < num; i++) {
-                        GDMMultimediaLink mmLink = record.MultimediaLinks[i];
+                        GDMMultimediaLink mmLink = structWML.MultimediaLinks[i];
                         GDMMultimediaRecord mmRec = baseContext.Tree.GetPtrValue<GDMMultimediaRecord>(mmLink);
                         if (mmRec == null || mmRec.FileReferences.Count == 0) continue;
 
                         string st = mmRec.FileReferences[0].Title;
-                        summary.Add("  " + HyperLink(mmRec.XRef, st) + " (" +
+                        summary.Add(indent + "  " + HyperLink(mmRec.XRef, st) + " (" +
                                     HyperLink(GKData.INFO_HREF_VIEW + mmRec.XRef, LangMan.LS(LSID.MediaView)) + ")");
                     }
                 }
@@ -2295,25 +2295,25 @@ namespace GKCore
             }
         }
 
-        private static void RecListNotesRefresh(IBaseContext baseContext, GDMRecord record, StringList summary)
+        private static void RecListNotesRefresh(IBaseContext baseContext, IGDMStructWithNotes structWN, StringList summary, string indent = "")
         {
-            if (record == null || summary == null) return;
+            if (structWN == null || summary == null) return;
 
             try {
-                if (record.HasNotes) {
+                if (structWN.HasNotes) {
                     summary.Add("");
-                    summary.Add(LangMan.LS(LSID.RPNotes) + " (" + record.Notes.Count.ToString() + "):");
+                    summary.Add(indent + LangMan.LS(LSID.RPNotes) + " (" + structWN.Notes.Count.ToString() + "):");
 
-                    int num = record.Notes.Count;
+                    int num = structWN.Notes.Count;
                     for (int i = 0; i < num; i++) {
                         if (i > 0) {
                             summary.Add("");
                         }
 
-                        GDMLines noteLines = baseContext.Tree.GetNoteLines(record.Notes[i]);
+                        GDMLines noteLines = baseContext.Tree.GetNoteLines(structWN.Notes[i]);
                         int num2 = noteLines.Count;
                         for (int k = 0; k < num2; k++) {
-                            summary.Add(noteLines[k]);
+                            summary.Add(indent + noteLines[k]);
                         }
                     }
                 }
@@ -2408,7 +2408,10 @@ namespace GKCore
                         if (evt.HasAddress) {
                             ShowAddressSummary(evt.Address, summary);
                         }
+
                         RecListSourcesRefresh(baseContext, evt, summary, "    ");
+                        RecListNotesRefresh(baseContext, evt, summary, "    ");
+                        RecListMediaRefresh(baseContext, evt, summary, "    ");
                     }
                 }
             } catch (Exception ex) {
