@@ -72,7 +72,7 @@ namespace GKCore.Lists
                     result = LangMan.LS(GKData.CertaintyAssessments[fFetchedRec.GetValidCertaintyAssessment()]);
                     break;
                 case 4:
-                    result = fSourceRec.Originator.Lines.Text.Trim();
+                    result = GKUtils.MergeStrings(fSourceRec.Originator.Lines);
                     break;
             }
             return result;
