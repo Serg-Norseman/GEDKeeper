@@ -207,7 +207,7 @@ namespace GKUI.Forms
             GDMRecord record = ((BaseWinSDI)fCurBase).GetSelectedRecordEx();
             Assert.IsNotNull(record);
 
-            StringList recordContent = fCurBase.GetRecordContent(record);
+            StringList recordContent = fCurBase.GetRecordContent(record, RecordContentType.Quick);
             Assert.IsNotNull(recordContent);
 
             Assert.IsTrue(fCurBase.Context.IsAvailableRecord(record));

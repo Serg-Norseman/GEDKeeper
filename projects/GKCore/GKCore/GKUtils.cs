@@ -2776,7 +2776,7 @@ namespace GKCore
             summary.Add(HyperLink(fullURL, string.Format("{0}: {1}", res.Name, fullURL)));
         }
 
-        public static void ShowSourceInfo(IBaseContext baseContext, GDMSourceRecord sourceRec, StringList summary)
+        public static void ShowSourceInfo(IBaseContext baseContext, GDMSourceRecord sourceRec, StringList summary, RecordContentType contentType)
         {
             if (summary == null) return;
 
@@ -2812,8 +2812,10 @@ namespace GKCore
 
                         summary.Add("");
                         summary.Add("");
-                        summary.Add("[ " + HyperLink(GKData.INFO_HREF_FILTER_INDI + sourceRec.XRef, LangMan.LS(LSID.MIFilter)) + " ]");
-                        summary.Add("");
+                        if (contentType == RecordContentType.Full) {
+                            summary.Add("[ " + HyperLink(GKData.INFO_HREF_FILTER_INDI + sourceRec.XRef, LangMan.LS(LSID.MIFilter)) + " ]");
+                            summary.Add("");
+                        }
                     }
                 } finally {
                     summary.EndUpdate();
@@ -3087,7 +3089,7 @@ namespace GKCore
             }
         }
 
-        public static void GetRecordContent(IBaseContext baseContext, GDMRecord record, StringList ctx)
+        public static void GetRecordContent(IBaseContext baseContext, GDMRecord record, StringList ctx, RecordContentType contentType)
         {
             if (record != null && ctx != null) {
                 try {
@@ -3109,7 +3111,7 @@ namespace GKCore
                             break;
 
                         case GDMRecordType.rtSource:
-                            GKUtils.ShowSourceInfo(baseContext, record as GDMSourceRecord, ctx);
+                            GKUtils.ShowSourceInfo(baseContext, record as GDMSourceRecord, ctx, contentType);
                             break;
 
                         case GDMRecordType.rtRepository:

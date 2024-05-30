@@ -23,6 +23,7 @@ using System.IO;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests;
@@ -582,9 +583,9 @@ namespace GKCore
             GKUtils.ShowPersonInfo(fContext, indRec, summary);
 
             summary.Clear();
-            GKUtils.ShowSourceInfo(null, null, null);
+            GKUtils.ShowSourceInfo(null, null, null, RecordContentType.Quick);
             GDMSourceRecord srcRec = fContext.Tree.XRefIndex_Find("S1") as GDMSourceRecord;
-            GKUtils.ShowSourceInfo(fContext, srcRec, summary);
+            GKUtils.ShowSourceInfo(fContext, srcRec, summary, RecordContentType.Quick);
 
             summary.Clear();
             GKUtils.ShowRepositoryInfo(null, null, null);
@@ -657,7 +658,7 @@ namespace GKCore
         [Test]
         public void Test_GetRecordContent()
         {
-            GKUtils.GetRecordContent(null, null, null);
+            GKUtils.GetRecordContent(null, null, null, RecordContentType.Quick);
         }
 
         [Test]

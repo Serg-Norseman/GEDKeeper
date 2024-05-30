@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -123,7 +123,7 @@ namespace GKTextSearchPlugin
 
         private Document SetDocumentContext(IBaseWindow baseWin, GDMRecord rec)
         {
-            StringList ctx = baseWin.GetRecordContent(rec);
+            StringList ctx = baseWin.GetRecordContent(rec, RecordContentType.Quick);
             if (ctx == null) return null;
 
             string recLastchange = rec.ChangeDate.ToString();
@@ -308,7 +308,7 @@ namespace GKTextSearchPlugin
 
                         strList.Add(string.Format("[b][size=+1][url={0}] {0} [/url][/size][/b]", entry.XRef));
 
-                        StringList ctx = baseWin.GetRecordContent(rec);
+                        StringList ctx = baseWin.GetRecordContent(rec, RecordContentType.Quick);
                         strList.AddStrings(ctx);
                         strList.Add("");
                     }

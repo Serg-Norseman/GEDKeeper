@@ -43,6 +43,7 @@ namespace GKUI.Components
         private readonly Button fBtnCopy;
         private readonly Button fBtnCut;
         private readonly Button fBtnPaste;
+        private readonly ContextMenu fContextMenu;
         private readonly GKListView fList;
 
         private EnumSet<SheetButton> fButtons;
@@ -76,12 +77,17 @@ namespace GKUI.Components
                     if (fListModel != null) {
                         fListModel.SheetList = null;
                     }
+                    fList.ContextMenu = null;
 
                     fListModel = value;
 
                     if (fListModel != null) {
                         fList.ListMan = fListModel;
                         fListModel.SheetList = this;
+
+                        if (fListModel.AllowedActions.Contains(RecordAction.raDetails)) {
+                            fList.ContextMenu = fContextMenu;
+                        }
                     }
                 }
 
@@ -112,6 +118,13 @@ namespace GKUI.Components
             fBtnDelete = CreateButton("btnDelete", UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif"), LangMan.LS(LSID.MIRecordDelete), ItemDelete);
             fBtnEdit = CreateButton("btnEdit", UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif"), LangMan.LS(LSID.MIRecordEdit), ItemEdit);
             fBtnAdd = CreateButton( "btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.MIRecordAdd), ItemAdd);
+
+            var miDetails = new ButtonMenuItem();
+            miDetails.Text = LangMan.LS(LSID.Details);
+            miDetails.Click += miDetails_Click;
+
+            fContextMenu = new ContextMenu();
+            fContextMenu.Items.AddRange(new MenuItem[] { miDetails });
 
             fList = new GKListView();
             fList.MouseDoubleClick += List_DoubleClick;
@@ -235,6 +248,16 @@ namespace GKUI.Components
                 if (itemData == null) return;
 
                 fListModel.OnItemSelected(itemIndex, itemData);
+            }
+        }
+
+        private void miDetails_Click(object sender, EventArgs e)
+        {
+            if (fListModel != null) {
+                object itemData = fList.GetSelectedData();
+                if (itemData != null) {
+                    fListModel.ShowDetails(itemData);
+                }
             }
         }
 

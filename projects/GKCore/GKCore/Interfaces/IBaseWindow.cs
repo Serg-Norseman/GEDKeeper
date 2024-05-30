@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,6 +25,9 @@ using GKCore.Types;
 
 namespace GKCore.Interfaces
 {
+    public enum RecordContentType { Full, Quick }
+
+
     public interface IBaseWindow : IWorkWindow
     {
         IBaseContext Context { get; }
@@ -54,7 +57,7 @@ namespace GKCore.Interfaces
 
         void ApplyFilter(GDMRecordType recType = GDMRecordType.rtNone);
         List<GDMRecord> GetContentList(GDMRecordType recType);
-        StringList GetRecordContent(GDMRecord record);
+        StringList GetRecordContent(GDMRecord record, RecordContentType contentType);
         IRecordsListModel GetRecordsListManByType(GDMRecordType recType);
         GDMIndividualRecord GetSelectedPerson();
         GDMRecordType GetSelectedRecordType();

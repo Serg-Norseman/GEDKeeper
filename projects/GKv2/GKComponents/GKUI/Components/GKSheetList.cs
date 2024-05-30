@@ -44,6 +44,7 @@ namespace GKUI.Components
         private readonly ToolStripButton fBtnCut;
         private readonly ToolStripButton fBtnPaste;
         private readonly ToolStrip fToolBar;
+        private readonly ContextMenuStrip fContextMenu;
         private readonly GKListView fList;
 
         private EnumSet<SheetButton> fButtons;
@@ -77,12 +78,17 @@ namespace GKUI.Components
                     if (fListModel != null) {
                         fListModel.SheetList = null;
                     }
+                    fList.ContextMenuStrip = null;
 
                     fListModel = value;
 
                     if (fListModel != null) {
                         fList.ListMan = fListModel;
                         fListModel.SheetList = this;
+
+                        if (fListModel.AllowedActions.Contains(RecordAction.raDetails)) {
+                            fList.ContextMenuStrip = fContextMenu;
+                        }
                     }
                 }
 
@@ -122,6 +128,13 @@ namespace GKUI.Components
             fToolBar.ImageScalingSize = new Size(24, 20);
             fToolBar.AutoSize = true;
             fToolBar.ShowItemToolTips = true;
+
+            var miDetails = new ToolStripMenuItem();
+            miDetails.Text = LangMan.LS(LSID.Details);
+            miDetails.Click += miDetails_Click;
+
+            fContextMenu = new ContextMenuStrip();
+            fContextMenu.Items.AddRange(new ToolStripItem[] { miDetails });
 
             fList = new GKListView();
             fList.Dock = DockStyle.Fill;
@@ -268,6 +281,16 @@ namespace GKUI.Components
                 if (itemData == null) return;
 
                 fListModel.OnItemSelected(itemIndex, itemData);
+            }
+        }
+
+        private void miDetails_Click(object sender, EventArgs e)
+        {
+            if (fListModel != null) {
+                object itemData = fList.GetSelectedData();
+                if (itemData != null) {
+                    fListModel.ShowDetails(itemData);
+                }
             }
         }
 

@@ -22,6 +22,7 @@ using System;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
+using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Interfaces;
@@ -113,6 +114,8 @@ namespace GKCore.Lists
         ISheetList SheetList { get; set; }
 
         Task Modify(object sender, ModifyEventArgs eArgs);
+
+        void ShowDetails(object itemData);
     }
 
 
@@ -188,6 +191,16 @@ namespace GKCore.Lists
 
         public virtual async Task Modify(object sender, ModifyEventArgs eArgs)
         {
+        }
+
+        protected virtual GDMRecord GetReferenceRecord(object itemData)
+        {
+            return null;
+        }
+
+        public void ShowDetails(object itemData)
+        {
+            BaseController.ViewRecordInfo(fOwner, fBaseWin, GetReferenceRecord(itemData));
         }
     }
 }

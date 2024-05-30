@@ -207,7 +207,7 @@ namespace GKCore.Controllers
             } else {
                 GetControl<ILabel>("Lab1").Text = fRec1.XRef;
                 GetControl<ITextBox>("Edit1").Text = GKUtils.GetRecordName(fBase.Context.Tree, fRec1, false);
-                fView.View1.Lines.Assign(fBase.GetRecordContent(fRec1));
+                fView.View1.Lines.Assign(fBase.GetRecordContent(fRec1, RecordContentType.Quick));
             }
         }
 
@@ -223,7 +223,7 @@ namespace GKCore.Controllers
             } else {
                 GetControl<ILabel>("Lab2").Text = fRec2.XRef;
                 GetControl<ITextBox>("Edit2").Text = GKUtils.GetRecordName(fBase.Context.Tree, fRec2, false);
-                fView.View2.Lines.Assign(fBase.GetRecordContent(fRec2));
+                fView.View2.Lines.Assign(fBase.GetRecordContent(fRec2, RecordContentType.Quick));
             }
         }
 

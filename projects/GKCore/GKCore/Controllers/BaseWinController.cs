@@ -366,7 +366,7 @@ namespace GKCore.Controllers
             try {
                 IHyperView hyperView = GetHyperViewByType(record.RecordType);
                 if (hyperView != null) {
-                    GKUtils.GetRecordContent(fContext, record, hyperView.Lines);
+                    GKUtils.GetRecordContent(fContext, record, hyperView.Lines, RecordContentType.Full);
                 }
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.ShowRecordInfo()", ex);
@@ -442,10 +442,10 @@ namespace GKCore.Controllers
             }
         }
 
-        public StringList GetRecordContent(GDMRecord record)
+        public StringList GetRecordContent(GDMRecord record, RecordContentType contentType)
         {
             StringList ctx = new StringList();
-            GKUtils.GetRecordContent(fContext, record, ctx);
+            GKUtils.GetRecordContent(fContext, record, ctx, contentType);
             return ctx;
         }
 

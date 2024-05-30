@@ -613,9 +613,9 @@ namespace GKUI.Forms
             fController.SelectRecordByXRef(xref, delayedTransition);
         }
 
-        public StringList GetRecordContent(GDMRecord record)
+        public StringList GetRecordContent(GDMRecord record, RecordContentType contentType)
         {
-            return fController.GetRecordContent(record);
+            return fController.GetRecordContent(record, contentType);
         }
 
         public bool RecordIsFiltered(GDMRecord record)

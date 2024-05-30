@@ -39,7 +39,7 @@ namespace GKCore.Lists
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveUp, RecordAction.raMoveDown,
-                RecordAction.raCopy, RecordAction.raPaste);
+                RecordAction.raCopy, RecordAction.raPaste, RecordAction.raDetails);
 
             fListColumns.AddColumn(LSID.NumberSym, 25, false);
             fListColumns.AddColumn(LSID.Title, 260, false);
@@ -47,6 +47,12 @@ namespace GKCore.Lists
             fListColumns.AddColumn(LSID.Certainty, 220, false);
             fListColumns.AddColumn(LSID.Author, 70, false);
             fListColumns.ResetDefaults();
+        }
+
+        protected override GDMRecord GetReferenceRecord(object itemData)
+        {
+            var srcCit = itemData as GDMSourceCitation;
+            return (srcCit == null) ? null : fBaseContext.Tree.GetPtrValue<GDMSourceRecord>(srcCit);
         }
 
         public override void Fetch(GDMSourceCitation aRec)

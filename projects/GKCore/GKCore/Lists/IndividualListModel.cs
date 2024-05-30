@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -904,12 +904,18 @@ namespace GKCore.Lists
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
-                RecordAction.raMoveDown, RecordAction.raMoveUp);
+                RecordAction.raMoveDown, RecordAction.raMoveUp, RecordAction.raDetails);
 
             fListColumns.AddColumn(LSID.NumberSym, 25, false);
             fListColumns.AddColumn(LSID.Name, 350, false);
             fListColumns.AddColumn(LSID.Type, 100, false);
             fListColumns.ResetDefaults();
+        }
+
+        protected override GDMRecord GetReferenceRecord(object itemData)
+        {
+            var parents = itemData as GDMChildToFamilyLink;
+            return (parents == null) ? null : fBaseContext.Tree.GetPtrValue(parents);
         }
 
         public override void Fetch(GDMChildToFamilyLink aRec)
@@ -1017,12 +1023,18 @@ namespace GKCore.Lists
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
-                RecordAction.raJump, RecordAction.raMoveUp, RecordAction.raMoveDown);
+                RecordAction.raJump, RecordAction.raMoveUp, RecordAction.raMoveDown, RecordAction.raDetails);
 
             fListColumns.AddColumn(LSID.NumberSym, 25, false);
             fListColumns.AddColumn(LSID.Spouse, 300, false);
             fListColumns.AddColumn(LSID.MarriageDate, 100, false);
             fListColumns.ResetDefaults();
+        }
+
+        protected override GDMRecord GetReferenceRecord(object itemData)
+        {
+            var famRec = itemData as GDMSpouseToFamilyLink;
+            return (famRec == null) ? null : fBaseContext.Tree.GetPtrValue(famRec);
         }
 
         public override void Fetch(GDMSpouseToFamilyLink aRec)

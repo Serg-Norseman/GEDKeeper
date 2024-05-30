@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using GDModel;
 using GKCore.Design;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
 
 namespace GKCore.Controllers
 {
@@ -49,7 +50,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.HyperView.Lines.Assign(fBase.GetRecordContent(fRecord));
+            fView.HyperView.Lines.Assign(fBase.GetRecordContent(fRecord, RecordContentType.Quick));
         }
 
         public void SelectLink(string linkName)
@@ -67,7 +68,7 @@ namespace GKCore.Controllers
                 }
             } else {
                 GDMRecord record = Base.Context.Tree.XRefIndex_Find(linkName);
-                fView.HyperView.Lines.Assign(fBase.GetRecordContent(record));
+                fView.HyperView.Lines.Assign(fBase.GetRecordContent(record, RecordContentType.Quick));
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -42,11 +42,17 @@ namespace GKCore.Lists
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raJump,
-                RecordAction.raCopy, RecordAction.raPaste);
+                RecordAction.raCopy, RecordAction.raPaste, RecordAction.raDetails);
 
             fListColumns.AddColumn(LSID.Relation, 300, false);
             fListColumns.AddColumn(LSID.Person, 200, false);
             fListColumns.ResetDefaults();
+        }
+
+        protected override GDMRecord GetReferenceRecord(object itemData)
+        {
+            var ast = itemData as GDMAssociation;
+            return (ast == null) ? null : fBaseContext.Tree.GetPtrValue<GDMIndividualRecord>(ast);
         }
 
         public override void Fetch(GDMAssociation aRec)

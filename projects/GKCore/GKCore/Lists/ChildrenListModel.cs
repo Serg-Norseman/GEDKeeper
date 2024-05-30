@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -37,12 +37,18 @@ namespace GKCore.Lists
         protected ChildrenListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
         {
             AllowedActions = EnumSet<RecordAction>.Create(
-                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump, RecordAction.raDetails);
 
             fListColumns.AddColumn(LSID.NumberSym, 25, false);
             fListColumns.AddColumn(LSID.Name, 300, false);
             fListColumns.AddColumn(LSID.BirthDate, 100, false);
             fListColumns.ResetDefaults();
+        }
+
+        protected override GDMRecord GetReferenceRecord(object itemData)
+        {
+            var child = itemData as GDMIndividualLink;
+            return (child == null) ? null : fBaseContext.Tree.GetPtrValue(child);
         }
 
         public override void Fetch(GDMChildLink aRec)
