@@ -61,6 +61,11 @@ namespace GKCore.Charts
         {
         }
 
+        public virtual void SetViewport(int width, int height)
+        {
+            // dummy
+        }
+
         public abstract void SetSmoothing(bool value);
 
         public virtual void BeginDrawing()
@@ -157,6 +162,11 @@ namespace GKCore.Charts
                                                   float width, float height, float radius);
 
         public abstract void DrawPath(IPen pen, IBrush brush, IGfxPath path);
+
+        public virtual IFont CreateFont(string fontName, float size, bool bold)
+        {
+            return AppHost.GfxProvider.CreateFont(fontName, size, bold);
+        }
 
         public IPen CreatePen(int argb, float width = 1.0f)
         {

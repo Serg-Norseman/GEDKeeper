@@ -941,8 +941,9 @@ namespace GKCore.Charts
             // https://social.msdn.microsoft.com/Forums/en-US/98717e53-89f7-4d5f-823b-7184781a7b85/wpf-formattedtext-randomly-disappears-in-high-resolution-images
             fsz = Math.Max(fsz, 5.0f);
 #endif
-            fBoldFont = AppHost.GfxProvider.CreateFont(fOptions.DefFontName, fsz, true);
-            fDrawFont = AppHost.GfxProvider.CreateFont(fOptions.DefFontName, fsz, false);
+            string fontName = fOptions.DefFontName;
+            fBoldFont = fRenderer.CreateFont(fontName, fsz, true);
+            fDrawFont = fRenderer.CreateFont(fontName, fsz, false);
             if (fRenderer != null) {
                 fDefCharWidth = fRenderer.GetTextWidth("A", fDrawFont);
             }

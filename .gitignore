@@ -25,3 +25,6 @@ opencover.xml
 /projects/GKv3/packages/**/
 .idea/
 adb-copy.cmd
+
+GEDKeeper2Lux.sln
+/projects/plugins/GKLuxTree/
