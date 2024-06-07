@@ -31,6 +31,7 @@
                     <StackLayout Orientation="Vertical" Spacing="8">
                         <input:CheckBox x:Name="chkCheckPersonPlaces" />
                         <input:CheckBox x:Name="chkCheckCensuses" />
+                        <input:CheckBox x:Name="chkCheckLinks" />
 
                         <Label VerticalOptions="FillAndExpand" />
                     </StackLayout>

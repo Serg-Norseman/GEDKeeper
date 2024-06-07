@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -35,6 +35,7 @@ namespace GKCore.Tools
     {
         public bool CheckIndividualPlaces;
         public bool CheckCensuses;
+        public bool CheckLinks;
     }
 
     /// <summary>
@@ -74,6 +75,8 @@ namespace GKCore.Tools
             cdHighSpousesDifference,
             cdHighSiblingsDifference,
             cdMatchedCensus,
+            cdNoteWithoutLinks,
+            cdSourceWithoutLinks,
         }
 
         public enum CheckSolve
@@ -120,6 +123,14 @@ namespace GKCore.Tools
 
                     case GDMRecordType.rtFamily:
                         result = GKUtils.GetFamilyString(tree, (GDMFamilyRecord)Rec);
+                        break;
+
+                    case GDMRecordType.rtNote:
+                        result = ((GDMNoteRecord)Rec).Lines[0]; // TODO: bad solution?!
+                        break;
+
+                    case GDMRecordType.rtSource:
+                        result = ((GDMSourceRecord)Rec).ShortTitle;
                         break;
                 }
 
@@ -470,6 +481,85 @@ namespace GKCore.Tools
             }
         }
 
+        private static bool CheckStructLinks(IGDMStructWithLists strWL, GDMRecord subject)
+        {
+            switch (subject.RecordType) {
+                case GDMRecordType.rtNote:
+                    if (strWL.HasNotes) {
+                        for (int i = 0, num = strWL.Notes.Count; i < num; i++) {
+                            if (strWL.Notes[i].XRef == subject.XRef) {
+                                return true;
+                            }
+                        }
+                    }
+                    break;
+
+                case GDMRecordType.rtMultimedia:
+                    if (strWL.HasMultimediaLinks) {
+                        for (int i = 0, num = strWL.MultimediaLinks.Count; i < num; i++) {
+                            if (strWL.MultimediaLinks[i].XRef == subject.XRef) {
+                                return true;
+                            }
+                        }
+                    }
+                    break;
+
+                case GDMRecordType.rtSource:
+                    if (strWL.HasSourceCitations) {
+                        for (int i = 0, num = strWL.SourceCitations.Count; i < num; i++) {
+                            var sourCit = strWL.SourceCitations[i];
+                            if (sourCit.XRef == subject.XRef) {
+                                return true;
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            return false;
+        }
+
+        private static bool CheckRecordLinks(IBaseContext baseContext, GDMRecord subject)
+        {
+            var tree = baseContext.Tree;
+            for (int k = 0, num2 = tree.RecordsCount; k < num2; k++) {
+                GDMRecord record = tree[k];
+
+                if (CheckStructLinks(record, subject))
+                    return true;
+
+                var evsRec = record as GDMRecordWithEvents;
+                if (evsRec != null && evsRec.HasEvents) {
+                    for (int i = 0, num = evsRec.Events.Count; i < num; i++) {
+                        if (CheckStructLinks(evsRec.Events[i], subject))
+                            return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static void CheckNoteRecord(IBaseContext baseContext, GDMNoteRecord noteRec, List<CheckObj> checksList)
+        {
+            if (!CheckRecordLinks(baseContext, noteRec)) {
+                CheckObj checkObj = new CheckObj(noteRec, CheckDiag.cdNoteWithoutLinks, CheckSolve.csRemove);
+                checkObj.Comment = LangMan.LS(LSID.NoteWithoutLinks);
+                checksList.Add(checkObj);
+                return;
+            }
+        }
+
+        private static void CheckSourceRecord(IBaseContext baseContext, GDMSourceRecord sourRec, List<CheckObj> checksList)
+        {
+            if (!CheckRecordLinks(baseContext, sourRec)) {
+                CheckObj checkObj = new CheckObj(sourRec, CheckDiag.cdSourceWithoutLinks, CheckSolve.csRemove);
+                checkObj.Comment = LangMan.LS(LSID.SourceWithoutLinks);
+                checksList.Add(checkObj);
+                return;
+            }
+        }
+
         public static void CheckBase(IBaseWindow baseWin, List<CheckObj> checksList, IProgressController progress, TreeInspectionOptions options = null)
         {
             if (baseWin == null)
@@ -500,6 +590,14 @@ namespace GKCore.Tools
 
                         case GDMRecordType.rtMultimedia:
                             CheckMultimediaRecord(baseWin.Context, rec as GDMMultimediaRecord, checksList);
+                            break;
+
+                        case GDMRecordType.rtNote:
+                            if (options.CheckLinks) CheckNoteRecord(baseWin.Context, rec as GDMNoteRecord, checksList);
+                            break;
+
+                        case GDMRecordType.rtSource:
+                            if (options.CheckLinks) CheckSourceRecord(baseWin.Context, rec as GDMSourceRecord, checksList);
                             break;
                     }
                 }
@@ -653,6 +751,11 @@ namespace GKCore.Tools
 
                         CheckAndRepairGarbledSpouses(tree, famRec);
                     }
+                    break;
+
+                case CheckDiag.cdNoteWithoutLinks:
+                case CheckDiag.cdSourceWithoutLinks:
+                    tree.DeleteRecord(checkObj.Rec);
                     break;
             }
         }

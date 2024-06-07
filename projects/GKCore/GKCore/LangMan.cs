@@ -1030,8 +1030,11 @@ namespace GKCore
         /* 956 */ CleanImagesCache,
         /* 957 */ TrackSelectedLines,
         /* 958 */ TrackMatchedSources,
+        /* 959 */ NoteWithoutLinks,
+        /* 960 */ SourceWithoutLinks,
+        /* 961 */ CheckLinks,
 
-        /* 000 */ Last = TrackMatchedSources
+        /* 000 */ Last = CheckLinks
     }
 
 
@@ -2015,6 +2018,9 @@ namespace GKCore
             /* 956 */ "Clean images cache",
             /* 957 */ "Highlight the lines of the selection",
             /* 958 */ "Track matching sources",
+            /* 959 */ "Note without links",
+            /* 960 */ "Source without links",
+            /* 961 */ "Check links",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

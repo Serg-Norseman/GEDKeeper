@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -54,6 +54,7 @@ namespace GKCore.Controllers
         {
             fOptions.CheckIndividualPlaces = GetControl<ICheckBox>("chkCheckPersonPlaces").Checked;
             fOptions.CheckCensuses = GetControl<ICheckBox>("chkCheckCensuses").Checked;
+            fOptions.CheckLinks = GetControl<ICheckBox>("chkCheckLinks").Checked;
 
             AppHost.Instance.ExecuteWork((controller) => {
                 TreeInspector.CheckBase(fBase, fChecksList, controller, fOptions);
@@ -170,6 +171,7 @@ namespace GKCore.Controllers
             GetControl<ITabPage>("pageOptions").Text = LangMan.LS(LSID.MIOptions);
             GetControl<ICheckBox>("chkCheckPersonPlaces").Text = LangMan.LS(LSID.CheckPersonPlaces);
             GetControl<ICheckBox>("chkCheckCensuses").Text = LangMan.LS(LSID.CensusAnalysis);
+            GetControl<ICheckBox>("chkCheckLinks").Text = LangMan.LS(LSID.CheckLinks);
 
             fView.ChecksList.AddColumn(LangMan.LS(LSID.Record), 400, false);
             fView.ChecksList.AddColumn(LangMan.LS(LSID.Problem), 200, false);
