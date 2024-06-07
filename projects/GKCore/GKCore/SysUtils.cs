@@ -557,13 +557,14 @@ namespace GKCore
         {
             const int MATCHES_ARRAY_SIZE = 16;
 
-            if (name == null || name.Length == 0) {
-                return false;
+            //  Special case by far the most common wild card search of *
+            bool any = false;
+            if (expression == null || expression.Length == 0 || (any = expression.Equals("*"))) {
+                return true;
             }
 
-            //  Special case by far the most common wild card search of *
-            if (expression == null || expression.Length == 0 || expression.Equals("*")) {
-                return true;
+            if (name == null || name.Length == 0) {
+                return any;
             }
 
             int exprLen = expression.Length;

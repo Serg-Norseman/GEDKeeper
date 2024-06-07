@@ -249,12 +249,13 @@ namespace GKCore.Lists
 
 #else
 
-            if (string.IsNullOrEmpty(mask) || mask == "*") {
+            bool any = false;
+            if (string.IsNullOrEmpty(mask) || (any = mask.Equals("*"))) {
                 return true;
             }
 
             if (string.IsNullOrEmpty(str)) {
-                return false;
+                return any;
             }
 
             if (fMask != mask) {
