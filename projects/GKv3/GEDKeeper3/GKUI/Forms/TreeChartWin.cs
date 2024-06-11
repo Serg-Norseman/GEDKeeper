@@ -444,7 +444,8 @@ namespace GKUI.Forms
 
             RadioMenuItem controller = null;
             for (var bs = GfxBorderStyle.None; bs <= GfxBorderStyle.Last; bs++) {
-                var item = UIHelper.AddToolStripItem(MenuBorders, controller, bs.ToString(), (int)bs, miBorderX_Click);
+                int bsIdx = (int)bs;
+                var item = UIHelper.AddToolStripItem(MenuBorders, controller, LangMan.LS(BorderPainter.StyleNames[bsIdx]), bsIdx, miBorderX_Click);
                 if (controller == null)
                     controller = item;
             }

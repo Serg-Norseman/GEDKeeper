@@ -276,7 +276,8 @@ namespace GKUI.Forms
             }
 
             for (var bs = GfxBorderStyle.None; bs <= GfxBorderStyle.Last; bs++) {
-                UIHelper.AddToolStripItem(MenuBorders, bs.ToString(), (int)bs, miBorderX_Click);
+                int bsIdx = (int)bs;
+                UIHelper.AddToolStripItem(MenuBorders, LangMan.LS(BorderPainter.StyleNames[bsIdx]), bsIdx, miBorderX_Click);
             }
         }
 

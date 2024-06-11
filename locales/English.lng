@@ -969,3 +969,26 @@
 959=Note without links
 960=Source without links
 961=Check links
+
+962=<?>
+963=<?>
+964=<?>
+965=<?>
+966=<?>
+967=<?>
+968=<?>
+969=<?>
+970=<?>
+
+971=Single              ; tree border style
+972=Double              ; tree border style
+973=Triple              ; tree border style
+974=Sunken 3D           ; tree border style
+975=Raised 3D           ; tree border style
+976=Single Square Cuts  ; tree border style
+977=Double Square Cuts  ; tree border style
+978=Single Round Cuts   ; tree border style
+979=Double Round Cuts   ; tree border style
+980=Single Bevels       ; tree border style
+981=Double Bevels       ; tree border style
+982=Cross Corners       ; tree border style

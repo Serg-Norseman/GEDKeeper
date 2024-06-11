@@ -221,7 +221,7 @@ namespace GKUI.Forms
 
             fBorderItems = new List<GKComboItem<GfxBorderStyle>>();
             for (var bs = GfxBorderStyle.None; bs <= GfxBorderStyle.Last; bs++) {
-                fBorderItems.Add(new GKComboItem<GfxBorderStyle>(bs.ToString(), bs));
+                fBorderItems.Add(new GKComboItem<GfxBorderStyle>(LangMan.LS(BorderPainter.StyleNames[(int)bs]), bs));
             }
 
             fModes = new List<GKComboItem<TreeChartKind>>();

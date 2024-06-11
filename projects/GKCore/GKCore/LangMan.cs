@@ -1034,7 +1034,30 @@ namespace GKCore
         /* 960 */ SourceWithoutLinks,
         /* 961 */ CheckLinks,
 
-        /* 000 */ Last = CheckLinks
+        /* 962 */ Reserved_962,
+        /* 963 */ Reserved_963,
+        /* 964 */ Reserved_964,
+        /* 965 */ Reserved_965,
+        /* 966 */ Reserved_966,
+        /* 967 */ Reserved_967,
+        /* 968 */ Reserved_968,
+        /* 969 */ Reserved_969,
+        /* 970 */ Reserved_970,
+
+        /* 971 */ TBS_Single,
+        /* 972 */ TBS_Double,
+        /* 973 */ TBS_Triple,
+        /* 974 */ TBS_Sunken3D,
+        /* 975 */ TBS_Raised3D,
+        /* 976 */ TBS_SingleSquareCuts,
+        /* 977 */ TBS_DoubleSquareCuts,
+        /* 978 */ TBS_SingleRoundCuts,
+        /* 979 */ TBS_DoubleRoundCuts,
+        /* 980 */ TBS_SingleBevels,
+        /* 981 */ TBS_DoubleBevels,
+        /* 982 */ TBS_CrossCorners,
+
+        /* 000 */ Last = TBS_CrossCorners
     }
 
 
@@ -2021,6 +2044,29 @@ namespace GKCore
             /* 959 */ "Note without links",
             /* 960 */ "Source without links",
             /* 961 */ "Check links",
+
+            /* 962 */ "<?>",
+            /* 963 */ "<?>",
+            /* 964 */ "<?>",
+            /* 965 */ "<?>",
+            /* 966 */ "<?>",
+            /* 967 */ "<?>",
+            /* 968 */ "<?>",
+            /* 969 */ "<?>",
+            /* 970 */ "<?>",
+
+            /* 971 */ "Single",
+            /* 972 */ "Double",
+            /* 973 */ "Triple",
+            /* 974 */ "Sunken 3D",
+            /* 975 */ "Raised 3D",
+            /* 976 */ "Single Square Cuts",
+            /* 977 */ "Double Square Cuts",
+            /* 978 */ "Single Round Cuts",
+            /* 979 */ "Double Round Cuts",
+            /* 980 */ "Single Bevels",
+            /* 981 */ "Double Bevels",
+            /* 982 */ "Cross Corners",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

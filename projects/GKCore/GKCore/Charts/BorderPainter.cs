@@ -25,19 +25,19 @@ namespace GKCore.Charts
 {
     public enum GfxBorderStyle
     {
-        None,
-        Single,
-        Double,
-        Triple,
-        Sunken3D,
-        Raised3D,
-        SingleSquareCuts,
-        DoubleSquareCuts,
-        SingleRoundCuts,
-        DoubleRoundCuts,
-        SingleBevels,
-        DoubleBevels,
-        CrossCorners,
+        None                = 0,
+        Single              = 1,
+        Double              = 2,
+        Triple              = 3,
+        Sunken3D            = 4,
+        Raised3D            = 5,
+        SingleSquareCuts    = 6,
+        DoubleSquareCuts    = 7,
+        SingleRoundCuts     = 8,
+        DoubleRoundCuts     = 9,
+        SingleBevels        = 10,
+        DoubleBevels        = 11,
+        CrossCorners        = 12,
 
         Last = CrossCorners
     }
@@ -47,9 +47,30 @@ namespace GKCore.Charts
     /// </summary>
     public static class BorderPainter
     {
+        public static readonly LSID[] StyleNames;
+
         private const int DefaultPenWidth = 1;
         private const int DefaultAngleOffset = 12;
         private const int DefaultStreak = 3;
+
+        static BorderPainter()
+        {
+            StyleNames = new LSID[] {
+                LSID.DefaultValue,
+                LSID.TBS_Single,
+                LSID.TBS_Double,
+                LSID.TBS_Triple,
+                LSID.TBS_Sunken3D,
+                LSID.TBS_Raised3D,
+                LSID.TBS_SingleSquareCuts,
+                LSID.TBS_DoubleSquareCuts,
+                LSID.TBS_SingleRoundCuts,
+                LSID.TBS_DoubleRoundCuts,
+                LSID.TBS_SingleBevels,
+                LSID.TBS_DoubleBevels,
+                LSID.TBS_CrossCorners,
+            };
+        }
 
         public static void DrawBorder(ChartRenderer renderer, ExtRect rect, GfxBorderStyle borderStyle)
         {
