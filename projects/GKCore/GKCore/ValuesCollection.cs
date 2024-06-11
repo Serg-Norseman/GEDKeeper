@@ -67,7 +67,7 @@ namespace GKCore
         {
             List<string> list;
             if (!fValues.TryGetValue(name, out list)) {
-                return null;
+                return new string[0];
             }
 
             int num = list.Count;

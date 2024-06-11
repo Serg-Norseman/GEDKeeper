@@ -237,37 +237,31 @@ namespace GKCore.Controllers
                 fView.EventType.SetSelectedTag(idx);
             }
 
-            if (fEvent is GDMFamilyEvent) {
-                SetAttributeMode(false);
-            } else {
-                if (idx >= 0) {
-                    if (GKData.PersonEvents[idx].Kind == PersonEventKind.ekEvent) {
-                        SetAttributeMode(false);
-                    } else {
-                        SetAttributeMode(true);
-                    }
-                }
-            }
-
             string evName;
+
             if (fEvent is GDMFamilyEvent) {
                 evName = GKData.FamilyEvents[idx].Sign;
+
+                SetAttributeMode(false);
             } else {
                 evName = GKData.PersonEvents[idx].Sign;
+
+                bool isFact = (GKData.PersonEvents[idx].Kind == PersonEventKind.ekFact);
+                SetAttributeMode(isFact);
             }
 
             // TODO: It is necessary to provide the registrable list of values for different tag types.
             string[] vals;
-            bool canbeSorted, userInput;
+            bool canbeSorted, fixedList;
 
             if (evName == GEDCOMTagName._BGRO) {
                 vals = GKData.BloodGroups.Split('|');
                 canbeSorted = false;
-                userInput = false;
+                fixedList = true;
             } else {
                 vals = fBase.Context.ValuesCollection.GetValues(evName);
                 canbeSorted = true;
-                userInput = true;
+                fixedList = false;
             }
 
             if (vals != null) {
@@ -275,7 +269,7 @@ namespace GKCore.Controllers
                 fView.Attribute.Clear();
                 fView.Attribute.AddRange(vals, canbeSorted);
                 fView.Attribute.Text = tmp;
-                fView.Attribute.ReadOnly = (!userInput);
+                fView.Attribute.ReadOnly = fixedList;
             }
         }
 
