@@ -41,6 +41,7 @@ namespace GKUI.Components
 
         protected CustomChart()
         {
+            CenteredImage = true;
             BackColor = Color.White;
             BorderStyle = BorderStyle.Fixed3D;
             TabStop = true;

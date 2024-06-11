@@ -243,7 +243,7 @@ namespace GKUI.Components
                 if (!value && fSelectionMode == ImageBoxSelectionMode.Zoom) {
                     if (fSelectionRegion.Width > ImageBoxConstants.SELECTION_DEAD_ZONE && fSelectionRegion.Height > ImageBoxConstants.SELECTION_DEAD_ZONE) {
                         // Adjusts the view port to fit the given region
-                        var clientSize = Viewport.Size;
+                        var clientSize = Viewport;
                         double ratioX = clientSize.Width / fSelectionRegion.Width;
                         double ratioY = clientSize.Height / fSelectionRegion.Height;
                         double zoomFactor = Math.Min(ratioX, ratioY);
@@ -303,7 +303,7 @@ namespace GKUI.Components
             Rectangle viewport;
 
             if (!fImageSize.IsEmpty) {
-                Rectangle innerRectangle = base.Viewport;
+                var innerRectangle = base.Viewport;
 
                 /*if (!HScroll && !VScroll) {
                     // if no scrolling is present, tinker the view port so that the image and any applicable borders all fit inside
@@ -365,7 +365,7 @@ namespace GKUI.Components
             int x, y;
 
             Point pt = GetImageRelativeLocation(point, false);
-            if (ImageViewport.Contains(pt) || fitToBounds) {
+            if (ImageViewport.Contains(pt.X, pt.Y) || fitToBounds) {
                 x = Algorithms.CheckBounds((int)(pt.X / fZoomFactor), 0, fImageSize.Width);
                 y = Algorithms.CheckBounds((int)(pt.Y / fZoomFactor), 0, fImageSize.Height);
             } else {
@@ -518,7 +518,7 @@ namespace GKUI.Components
                     break;
             }
             if (fZoom != previousZoom && !ScrollSize.IsEmpty) {
-                Point viewportCenter = Viewport.Center;
+                var viewportCenter = Viewport.GetCenter();
                 UpdateScrollPosition(viewportCenter.X, viewportCenter.Y);
             }
         }

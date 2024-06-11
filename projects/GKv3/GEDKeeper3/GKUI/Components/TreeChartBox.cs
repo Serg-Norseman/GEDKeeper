@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -341,50 +341,9 @@ namespace GKUI.Components
 
         private void InternalDraw(RenderTarget target, ChartDrawMode drawMode, BackgroundMode background)
         {
-            // drawing relative offset of tree on graphics
-            int spx = 0;
-            int spy = 0;
-
-            if (drawMode == ChartDrawMode.dmInteractive) {
-                var imageViewport = base.ImageViewport;
-                spx = imageViewport.Left;
-                spy = imageViewport.Top;
-                fModel.VisibleArea = UIHelper.Rt2Rt(base.Viewport);
-            } else {
-                if (drawMode == ChartDrawMode.dmStaticCentered) {
-                    Size clientSize = CanvasRectangle.Size;
-
-                    if (fModel.ImageWidth < clientSize.Width) {
-                        spx += (clientSize.Width - fModel.ImageWidth) / 2;
-                    }
-
-                    if (fModel.ImageHeight < clientSize.Height) {
-                        spy += (clientSize.Height - fModel.ImageHeight) / 2;
-                    }
-                }
-
-                fModel.VisibleArea = ExtRect.CreateBounds(0, 0, fModel.ImageWidth, fModel.ImageHeight);
-            }
-
-            fModel.SetOffsets(spx, spy);
-
-            fRenderer.SetSmoothing(true);
-
+            fModel.PrepareDraw(drawMode);
             DrawBackground(target, background);
-
-            #if DEBUG_IMAGE
-            using (Pen pen = new Pen(Colors.Red)) {
-                fRenderer.DrawRectangle(pen, Colors.Transparent, spx, spy, fModel.ImageWidth, fModel.ImageHeight);
-            }
-            #endif
-
-            fRenderer.SetTranslucent(0.0f);
             fModel.Draw(drawMode);
-
-            if (fOptions.BorderStyle != GfxBorderStyle.None) {
-                var rt = ExtRect.CreateBounds(spx, spy, fModel.ImageWidth, fModel.ImageHeight);
-                BorderPainter.DrawBorder(fRenderer, rt, fOptions.BorderStyle);
-            }
         }
 
         #endregion
@@ -398,8 +357,8 @@ namespace GKUI.Components
 
         public ExtPoint GetDrawOrigin()
         {
-            var viewportLoc = base.Viewport.Location;
-            return new ExtPoint(viewportLoc.X, viewportLoc.Y);
+            var viewport = base.Viewport;
+            return new ExtPoint(viewport.Left, viewport.Top);
         }
 
         public void RecalcChart(bool noRedraw = false)
@@ -507,8 +466,6 @@ namespace GKUI.Components
 
         protected override void OnSizeChanged(EventArgs e)
         {
-            base.OnSizeChanged(e);
-
             SaveSelection();
 
             var imageSize = GetImageSize();
@@ -516,6 +473,8 @@ namespace GKUI.Components
             fTreeControls.UpdateView();
 
             RestoreSelection();
+
+            base.OnSizeChanged(e);
         }
 
         protected override void OnScroll(ScrollEventArgs e)
@@ -840,9 +799,9 @@ namespace GKUI.Components
 
         public void CenterPerson(TreeChartPerson person, bool animation = true)
         {
-            if (person == null) return;
+            if (person == null || fTween.Busy) return;
 
-            Rectangle viewport = this.Viewport;
+            var viewport = this.Viewport;
             int widthMax = fModel.ImageWidth - viewport.Width;
             int heightMax = fModel.ImageHeight - viewport.Height;
 
@@ -863,7 +822,7 @@ namespace GKUI.Components
 
         public override ExtSize GetImageSize()
         {
-            return fModel.ImageSize;
+            return (fModel != null) ? fModel.ImageSize : ExtSize.Empty;
         }
 
         public override void RenderImage(RenderTarget target, bool forciblyCentered = false)

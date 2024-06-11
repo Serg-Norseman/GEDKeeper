@@ -101,6 +101,7 @@ namespace GKUI.Forms
         private RadioMenuItem miGensInfAncestors;
         private RadioMenuItem miGensInfDescendants;
 
+
         public IWindow OwnerWindow
         {
             get { return fController.Base; }
@@ -304,6 +305,7 @@ namespace GKUI.Forms
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
             fTreeBox.Focus();
             UpdateControls();
         }

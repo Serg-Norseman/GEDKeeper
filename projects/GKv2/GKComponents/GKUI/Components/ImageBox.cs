@@ -215,6 +215,7 @@ namespace GKUI.Components
             AutoScroll = true;
             BackColor = Color.Gray;
             Padding = new Padding(0);
+            CenteredImage = true;
 
             fNamedRegions = new List<NamedRegion>();
             fZoomLevels = new List<int>(new[] { 7, 10, 15, 20, 25, 30, 50, 70, 100, 150, 200, 300, 400, 500, 600, 700, 800, 1200, 1600 });

@@ -533,6 +533,7 @@
     <Compile Include="GKCore\Interfaces\IDataReceiver.cs" />
     <Compile Include="GKCore\Lists\LocationNamesListModel.cs" />
     <Compile Include="GKCore\Lists\LocationLinksListModel.cs" />
+    <Compile Include="GKCore\Interfaces\IScrollableContainer.cs" />
   </ItemGroup>
   <Import Project="GKCore.props" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -18,17 +18,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Interfaces;
+using BSLib;
 
-namespace GKCore.Charts
+namespace GKCore.Interfaces
 {
-	/// <summary>
-	/// 
-	/// </summary>
-    public interface IChart : IScrollableContainer
+    public interface IScrollableContainer
     {
-        IBaseWindow Base { get; set; }
+        ExtRect ImageViewport { get; }
 
-        void SaveSnapshot(string fileName);
+        ExtRect Viewport { get; }
+
+        /// <summary>
+        /// Virtual canvas - if the size of the drawing canvas is based on the client area of ​​the scrollable container.
+        /// </summary>
+        bool VirtualCanvas { get; }
     }
 }

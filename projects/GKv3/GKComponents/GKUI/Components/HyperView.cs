@@ -304,7 +304,7 @@ namespace GKUI.Components
                 SolidBrush brush = new SolidBrush(this.TextColor);
                 Font font = null;
                 try {
-                    gfx.FillRectangle(new SolidBrush(BackgroundColor), Viewport);
+                    gfx.FillRectangle(new SolidBrush(BackgroundColor), UIHelper.Rt2Rt(Viewport));
 
                     var scrollPos = ImageViewport;
                     int xOffset = fBorderWidth + scrollPos.Left;

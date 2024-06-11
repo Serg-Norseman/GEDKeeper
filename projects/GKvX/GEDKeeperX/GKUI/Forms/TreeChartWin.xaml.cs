@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -45,6 +45,7 @@ namespace GKUI.Forms
         private List<GKComboItem<int>> fGenItems;
         private List<GKComboItem<TreeChartKind>> fModes;
 
+
         public IWindow OwnerWindow
         {
             get { return fController.Base; }
@@ -83,6 +84,10 @@ namespace GKUI.Forms
 
             miXRefVisible.Checked = fTreeBox.Options.XRefVisible;
             fTreeBox.XRefVisible = fTreeBox.Options.XRefVisible;
+
+            miTrackSelectedLines.Checked = fTreeBox.Options.TrackSelectedLines;
+
+            miTrackMatchedSources.Checked = fTreeBox.Options.TrackMatchedSources;
 
             miTraceSelected.Checked = fTreeBox.Options.TraceSelected;
             fTreeBox.TraceSelected = fTreeBox.Options.TraceSelected;
@@ -136,6 +141,7 @@ namespace GKUI.Forms
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
             fTreeBox.Focus();
             UpdateControls();
         }
@@ -255,6 +261,7 @@ namespace GKUI.Forms
         private void SetupDepth()
         {
             var treeOptions = GlobalOptions.Instance.TreeChartOptions;
+
             fController.SetupDepth();
         }
 

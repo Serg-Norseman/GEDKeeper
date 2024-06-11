@@ -2203,6 +2203,9 @@ namespace GKCore.Charts
 
         public void Draw(ChartDrawMode drawMode)
         {
+            fRenderer.SetSmoothing(true);
+            fRenderer.SetTranslucent(0.0f);
+
             InitGraphics();
 
             if (IsExtendedTree()) {
@@ -2223,6 +2226,11 @@ namespace GKCore.Charts
                 }
             } else {
                 Draw(fRoot, fKind, drawMode);
+            }
+
+            if (fOptions.BorderStyle != GfxBorderStyle.None) {
+                var rt = ExtRect.CreateBounds(fOffsetX, fOffsetY, fImageWidth, fImageHeight);
+                BorderPainter.DrawBorder(fRenderer, rt, fOptions.BorderStyle);
             }
         }
 
@@ -2248,6 +2256,48 @@ namespace GKCore.Charts
             }
 
             DrawPerson(person, drawMode, isTracked);
+        }
+
+        public void PrepareDraw(ChartDrawMode drawMode)
+        {
+            // drawing relative offset of tree on graphics
+            var viewport = fView.Viewport;
+
+            if (drawMode == ChartDrawMode.dmInteractive) {
+                fVisibleArea = viewport;
+            } else {
+                fVisibleArea = ExtRect.CreateBounds(0, 0, fImageWidth, fImageHeight);
+            }
+
+            int spx, spy;
+            if (drawMode == ChartDrawMode.dmStatic) {
+                spx = 0;
+                spy = 0;
+            } else {
+                bool virtualCanvas = fView.VirtualCanvas;
+                var imgViewport = fView.ImageViewport;
+
+                if (fImageWidth < viewport.Width) {
+                    spx = (viewport.Width - fImageWidth) / 2;
+                } else {
+                    if (virtualCanvas) {
+                        spx = -viewport.Left;
+                    } else {
+                        spx = imgViewport.Left;
+                    }
+                }
+
+                if (fImageHeight < viewport.Height) {
+                    spy = (viewport.Height - fImageHeight) / 2;
+                } else {
+                    if (virtualCanvas) {
+                        spy = -viewport.Top;
+                    } else {
+                        spy = imgViewport.Top;
+                    }
+                }
+            }
+            SetOffsets(spx, spy);
         }
 
         #endregion

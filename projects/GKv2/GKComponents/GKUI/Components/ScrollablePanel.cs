@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,14 +22,47 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
     /// <summary>
     /// 
     /// </summary>
-    public class ScrollablePanel : Panel
+    public class ScrollablePanel : Panel, IScrollableContainer
     {
+        private bool fCenteredImage;
+        private Size fImageSize;
+        private ExtRect fImageViewport;
+        //private ExtRect fViewport;
+
+        protected bool CenteredImage
+        {
+            get { return fCenteredImage; }
+            set { fCenteredImage = value; }
+        }
+
+        public ExtRect ImageViewport
+        {
+            get { return fImageViewport; }
+        }
+
+        public ExtRect Viewport
+        {
+            get {
+                var scrollPos = AutoScrollPosition;
+                var clientSize = ClientSize;
+                return ExtRect.CreateBounds(Math.Abs(scrollPos.X), Math.Abs(scrollPos.Y), clientSize.Width, clientSize.Height);
+                //return fViewport;
+            }
+        }
+
+        public bool VirtualCanvas
+        {
+            get { return true; }
+        }
+
+
         public ScrollablePanel()
         {
             AutoScroll = true;
@@ -51,6 +84,49 @@ namespace GKUI.Components
             }
 
             return new Rectangle(left, top, width, height);
+        }
+
+        private void UpdateProperties()
+        {
+            //if (fViewport.IsEmpty) return;
+
+            var viewport = this.Viewport;
+            var fHasHScroll = (viewport.Width < fImageSize.Width);
+            var fHasVScroll = (viewport.Height < fImageSize.Height);
+
+            int destX, destY;
+
+            if (fHasHScroll) {
+                destX = 0;
+                //fMouseOffsetX = fViewport.Left;
+            } else {
+                if (fCenteredImage) {
+                    destX = (viewport.Width - fImageSize.Width) / 2;
+                    //fMouseOffsetX = -destX;
+                } else {
+                    destX = 0;
+                    //fMouseOffsetX = 0;
+                }
+            }
+
+            if (fHasVScroll) {
+                destY = 0;
+                //fMouseOffsetY = fViewport.Top;
+            } else {
+                if (fCenteredImage) {
+                    destY = (viewport.Height - fImageSize.Height) / 2;
+                    //fMouseOffsetY = -destY;
+                } else {
+                    destY = 0;
+                    //fMouseOffsetY = 0;
+                }
+            }
+
+            //fImageRect = new Rectangle(destX, destY, fImageSize.Width, fImageSize.Height);
+
+            int width = Math.Min(fImageSize.Width, viewport.Width);
+            int height = Math.Min(fImageSize.Height, viewport.Height);
+            fImageViewport = ExtRect.CreateBounds(destX, destY, width, height);
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -75,6 +151,9 @@ namespace GKUI.Components
                         break;
                 }
             }
+
+            UpdateProperties();
+
             base.OnScroll(e);
         }
 
@@ -106,7 +185,11 @@ namespace GKUI.Components
         protected void SetImageSize(ExtSize imageSize, bool noRedraw = false)
         {
             if (AutoScroll && !imageSize.IsEmpty) {
+                fImageSize = new Size(imageSize.Width, imageSize.Height);
+
                 AutoScrollMinSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
+
+                UpdateProperties();
             }
 
             if (!noRedraw) Invalidate();

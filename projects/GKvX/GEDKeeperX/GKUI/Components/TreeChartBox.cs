@@ -354,51 +354,9 @@ namespace GKUI.Components
 
         private void InternalDraw(RenderTarget target, ChartDrawMode drawMode, BackgroundMode background)
         {
-            // drawing relative offset of tree on graphics
-            int spx = 0;
-            int spy = 0;
-
-            if (drawMode == ChartDrawMode.dmInteractive) {
-                var imageViewport = base.ImageViewport;
-                spx = imageViewport.Left;
-                spy = imageViewport.Top;
-                fModel.VisibleArea = base.Viewport;
-            } else {
-                if (drawMode == ChartDrawMode.dmStaticCentered) {
-                    var crSize = CanvasRectangle.Size;
-                    var clientSize = new ExtSize((int)crSize.Width, (int)crSize.Height);
-
-                    if (fModel.ImageWidth < clientSize.Width) {
-                        spx += (clientSize.Width - fModel.ImageWidth) / 2;
-                    }
-
-                    if (fModel.ImageHeight < clientSize.Height) {
-                        spy += (clientSize.Height - fModel.ImageHeight) / 2;
-                    }
-                }
-
-                fModel.VisibleArea = ExtRect.CreateBounds(0, 0, fModel.ImageWidth, fModel.ImageHeight);
-            }
-
-            fModel.SetOffsets(spx, spy);
-
-            fRenderer.SetSmoothing(true);
-
+            fModel.PrepareDraw(drawMode);
             DrawBackground(target, background);
-
-            #if DEBUG_IMAGE
-            using (Pen pen = new Pen(Colors.Red)) {
-                fRenderer.DrawRectangle(pen, Colors.Transparent, spx, spy, fModel.ImageWidth, fModel.ImageHeight);
-            }
-            #endif
-
-            fRenderer.SetTranslucent(0.0f);
             fModel.Draw(drawMode);
-
-            if (fOptions.BorderStyle != GfxBorderStyle.None) {
-                var rt = ExtRect.CreateBounds(spx, spy, fModel.ImageWidth, fModel.ImageHeight);
-                BorderPainter.DrawBorder(fRenderer, rt, fOptions.BorderStyle);
-            }
         }
 
         #endregion
@@ -786,7 +744,7 @@ namespace GKUI.Components
 
         public void CenterPerson(TreeChartPerson person, bool animation = true)
         {
-            if (person == null) return;
+            if (person == null || fTween.Busy) return;
 
             var viewport = this.Viewport;
             int widthMax = fModel.ImageWidth - viewport.Width;

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -67,6 +67,10 @@ namespace GKCore.Charts
             return new ExtPoint(fOffsetX, fOffsetY);
         }
 
+        /// <summary>
+        /// Sets the offset for the start of drawing if the image is smaller than the drawing canvas (the tree is displayed in the center,
+        /// and the canvas is not virtual and occupies the entire area of ​​the scrolled component).
+        /// </summary>
         public void SetOffsets(int offsetX, int offsetY)
         {
             fOffsetX = offsetX;

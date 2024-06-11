@@ -93,6 +93,7 @@ namespace GKUI.Components
                      ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
             UpdateStyles();
 
+            CenteredImage = false;
             BorderStyle = BorderStyle.Fixed3D;
             DoubleBuffered = true;
             TabStop = true;

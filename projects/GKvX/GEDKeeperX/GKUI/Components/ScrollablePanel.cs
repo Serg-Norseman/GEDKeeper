@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using System;
 using BSLib;
+using GKCore.Interfaces;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 
@@ -64,7 +65,7 @@ namespace GKUI.Components
     /// <summary>
     ///
     /// </summary>
-    public class ScrollablePanel : ScrollView
+    public class ScrollablePanel : ScrollView, IScrollableContainer
     {
         public const int SmallChange = 1;
         public const int LargeChange = 10;
@@ -76,7 +77,7 @@ namespace GKUI.Components
         private bool fHasVScroll;
         private ExtSize fImageSize;
         private Rectangle fImageRect;
-        private Rectangle fImageViewport;
+        private ExtRect fImageViewport;
         private int fMouseOffsetX, fMouseOffsetY;
         private Color fTextColor;
         private ExtRect fViewport;
@@ -122,9 +123,9 @@ namespace GKUI.Components
             get { return fImageRect; }
         }
 
-        protected ExtRect ImageViewport
+        public ExtRect ImageViewport
         {
-            get { return UIHelper.Rt2Rt(fImageViewport); }
+            get { return fImageViewport; }
         }
 
         public Point MouseOffset
@@ -156,6 +157,11 @@ namespace GKUI.Components
         public ExtRect Viewport
         {
             get { return fViewport; }
+        }
+
+        public bool VirtualCanvas
+        {
+            get { return false; }
         }
 
 
@@ -240,7 +246,7 @@ namespace GKUI.Components
 
             int width = Math.Min(fImageSize.Width, fViewport.Width);
             int height = Math.Min(fImageSize.Height, fViewport.Height);
-            fImageViewport = new Rectangle(destX, destY, width, height);
+            fImageViewport = ExtRect.CreateBounds(destX, destY, width, height);
         }
 
         /*protected override void OnMouseDown(MouseEventArgs e)

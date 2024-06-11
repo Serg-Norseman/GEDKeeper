@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,13 +25,14 @@ using System.Runtime.InteropServices;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
+using GKCore.Interfaces;
 
 namespace GKUI.Components
 {
     /// <summary>
     ///
     /// </summary>
-    public class ScrollablePanel : Scrollable
+    public class ScrollablePanel : Scrollable, IScrollableContainer
     {
         public const int SmallChange = 1;
         public const int LargeChange = 10;
@@ -43,10 +44,10 @@ namespace GKUI.Components
         private bool fHasVScroll;
         private Size fImageSize;
         private Rectangle fImageRect;
-        private Rectangle fImageViewport;
+        private ExtRect fImageViewport;
         private int fMouseOffsetX, fMouseOffsetY;
         private Color fTextColor;
-        private Rectangle fViewport;
+        private ExtRect fViewport;
 
 
         public Rectangle CanvasRectangle
@@ -87,7 +88,7 @@ namespace GKUI.Components
             get { return fImageRect; }
         }
 
-        protected Rectangle ImageViewport
+        public ExtRect ImageViewport
         {
             get { return fImageViewport; }
         }
@@ -118,9 +119,14 @@ namespace GKUI.Components
         /// <summary>
         /// The rectangle that is visible to the user.
         /// </summary>
-        public Rectangle Viewport
+        public ExtRect Viewport
         {
             get { return fViewport; }
+        }
+
+        public bool VirtualCanvas
+        {
+            get { return false; }
         }
 
 
@@ -219,7 +225,7 @@ namespace GKUI.Components
 
             int width = Math.Min(fImageSize.Width, fViewport.Width);
             int height = Math.Min(fImageSize.Height, fViewport.Height);
-            fImageViewport = new Rectangle(destX, destY, width, height);
+            fImageViewport = ExtRect.CreateBounds(destX, destY, width, height);
         }
 
         // unsupported in Wpf and maybe in other platforms (exclude WinForms), don't use
@@ -262,7 +268,7 @@ namespace GKUI.Components
         {
             if (Loaded) {
                 try {
-                    fViewport = VisibleRect;
+                    fViewport = UIHelper.Rt2Rt(VisibleRect);
                     UpdateProperties();
                 } catch {
                     // FIXME: works in MacOS and doesn't work in Wpf
@@ -275,7 +281,7 @@ namespace GKUI.Components
         protected override void OnSizeChanged(EventArgs e)
         {
             if (Loaded) {
-                fViewport = VisibleRect;
+                fViewport = UIHelper.Rt2Rt(VisibleRect);
                 UpdateProperties();
             }
             base.OnSizeChanged(e);
@@ -284,7 +290,7 @@ namespace GKUI.Components
         protected override void OnScroll(ScrollEventArgs e)
         {
             if (Loaded) {
-                fViewport = VisibleRect;
+                fViewport = UIHelper.Rt2Rt(VisibleRect);
                 UpdateProperties();
                 fCanvas.Invalidate();
             }
@@ -322,7 +328,7 @@ namespace GKUI.Components
             if (!imageSize.IsEmpty) {
                 fImageSize = new Size(imageSize.Width, imageSize.Height);
 
-                Size clientSize = fViewport.Size;
+                var clientSize = fViewport;
                 int canvWidth = Math.Max(imageSize.Width, clientSize.Width);
                 int canvHeight = Math.Max(imageSize.Height, clientSize.Height);
                 fCanvas.Size = new Size(canvWidth, canvHeight);
@@ -344,8 +350,8 @@ namespace GKUI.Components
 
             Point pt;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && buttons) {
-                int aX = (int)mpt.X - fImageViewport.X;
-                int aY = (int)mpt.Y - fImageViewport.Y;
+                int aX = (int)mpt.X - fImageViewport.Left;
+                int aY = (int)mpt.Y - fImageViewport.Top;
 
                 pt = new Point(aX, aY);
             } else {
