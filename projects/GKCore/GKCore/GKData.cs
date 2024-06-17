@@ -88,6 +88,7 @@ namespace GKCore
         #endif
 
         public const string CHECK_MARK = " ✔ ";
+        public const string CROSS_MARK = " ❌ ";
 
         public sealed class SexStruct
         {
@@ -114,22 +115,6 @@ namespace GKCore
             {
                 Name = name;
                 StatSign = sign;
-            }
-        }
-
-        public sealed class EventStruct
-        {
-            public LSID Name;
-            public string Sign;
-            public PersonEventKind Kind;
-            public bool AcceptableEmpty;
-
-            public EventStruct(LSID name, string sign, PersonEventKind kind, bool acceptableEmpty = false)
-            {
-                Name = name;
-                Sign = sign;
-                Kind = kind;
-                AcceptableEmpty = acceptableEmpty;
             }
         }
 
@@ -223,10 +208,9 @@ namespace GKCore
         public static readonly RecordTypeStruct[] RecordTypes;
         public static readonly SexStruct[] SexData;
         public static readonly MarStatusStruct[] MarriageStatus;
-        public static readonly EventStruct[] PersonEvents;
+        public static readonly PredefinedEvent[] PredefinedEvents;
         public static readonly DateKindStruct[] DateKinds;
         public static readonly CalendarStruct[] DateCalendars;
-        public static readonly EventStruct[] FamilyEvents;
         public static readonly StoreTypeRec[] GKStoreTypes;
         public static readonly LSID[] MediaTypes;
         public static readonly LSID[] PriorityNames;
@@ -373,73 +357,71 @@ namespace GKCore
                 new DateKindStruct(LSID.DK_9, 1)  // Estimated; 1
             };
 
-            PersonEvents = new EventStruct[] {
-                new EventStruct(LSID.Event, GEDCOMTagName.EVEN, PersonEventKind.ekEvent),
-                new EventStruct(LSID.Birth, GEDCOMTagName.BIRT, PersonEventKind.ekEvent),
-                new EventStruct(LSID.Adoption, GEDCOMTagName.ADOP, PersonEventKind.ekEvent),
-                new EventStruct(LSID.Christening, GEDCOMTagName.CHR, PersonEventKind.ekEvent),
-                new EventStruct(LSID.Graduation, GEDCOMTagName.GRAD, PersonEventKind.ekEvent),
-                new EventStruct(LSID.Retirement, GEDCOMTagName.RETI, PersonEventKind.ekEvent),
-                new EventStruct(LSID.Naturalization, GEDCOMTagName.NATU, PersonEventKind.ekEvent),
-                new EventStruct(LSID.Emigration, GEDCOMTagName.EMIG, PersonEventKind.ekEvent),
-                new EventStruct(LSID.Immigration, GEDCOMTagName.IMMI, PersonEventKind.ekEvent),
-                new EventStruct(LSID.Census, GEDCOMTagName.CENS, PersonEventKind.ekEvent),
-                new EventStruct(LSID.LastWill, GEDCOMTagName.WILL, PersonEventKind.ekEvent),
-                new EventStruct(LSID.ProbateOfWill, GEDCOMTagName.PROB, PersonEventKind.ekEvent),
-                new EventStruct(LSID.Death, GEDCOMTagName.DEAT, PersonEventKind.ekEvent),
-                new EventStruct(LSID.Burial, GEDCOMTagName.BURI, PersonEventKind.ekEvent),
-                new EventStruct(LSID.Cremation, GEDCOMTagName.CREM, PersonEventKind.ekEvent),
+            PredefinedEvents = new PredefinedEvent[] {
+                new PredefinedEvent(LSID.Event, GEDCOMTagName.EVEN, EventKind.ekEvent, EventTarget.etAny),
 
-                new EventStruct(LSID.Fact, GEDCOMTagName.FACT, PersonEventKind.ekFact),
-                new EventStruct(LSID.Religion, GEDCOMTagName.RELI, PersonEventKind.ekFact),
-                new EventStruct(LSID.Nationality, GEDCOMTagName.NATI, PersonEventKind.ekFact),
-                new EventStruct(LSID.Residence, GEDCOMTagName.RESI, PersonEventKind.ekFact, true),
-                new EventStruct(LSID.PhysicalDesc, GEDCOMTagName.DSCR, PersonEventKind.ekFact),
-                new EventStruct(LSID.NationalIDNumber, GEDCOMTagName.IDNO, PersonEventKind.ekFact),
-                new EventStruct(LSID.SocialSecurityNumber, GEDCOMTagName.SSN, PersonEventKind.ekFact),
-                new EventStruct(LSID.ChildsCount, GEDCOMTagName.NCHI, PersonEventKind.ekFact),
-                new EventStruct(LSID.MarriagesCount, GEDCOMTagName.NMR, PersonEventKind.ekFact),
-                new EventStruct(LSID.Education, GEDCOMTagName.EDUC, PersonEventKind.ekFact),
-                new EventStruct(LSID.Occupation, GEDCOMTagName.OCCU, PersonEventKind.ekFact),
-                new EventStruct(LSID.Caste, GEDCOMTagName.CAST, PersonEventKind.ekFact),
-                new EventStruct(LSID.PersonalProperty, GEDCOMTagName.PROP, PersonEventKind.ekFact),
-                new EventStruct(LSID.NobilityTitle, GEDCOMTagName.TITL, PersonEventKind.ekFact),
+                new PredefinedEvent(LSID.Birth, GEDCOMTagName.BIRT, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Adoption, GEDCOMTagName.ADOP, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Christening, GEDCOMTagName.CHR, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Graduation, GEDCOMTagName.GRAD, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Retirement, GEDCOMTagName.RETI, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Naturalization, GEDCOMTagName.NATU, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Emigration, GEDCOMTagName.EMIG, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Immigration, GEDCOMTagName.IMMI, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Census, GEDCOMTagName.CENS, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.LastWill, GEDCOMTagName.WILL, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.ProbateOfWill, GEDCOMTagName.PROB, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Death, GEDCOMTagName.DEAT, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Burial, GEDCOMTagName.BURI, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Cremation, GEDCOMTagName.CREM, EventKind.ekEvent, EventTarget.etIndividual),
 
-                new EventStruct(LSID.Travel, GEDCOMTagName._TRAVEL, PersonEventKind.ekFact),
-                new EventStruct(LSID.Hobby, GEDCOMTagName._HOBBY, PersonEventKind.ekFact),
-                new EventStruct(LSID.Award, GEDCOMTagName._AWARD, PersonEventKind.ekFact),
-                new EventStruct(LSID.Mili, GEDCOMTagName._MILI, PersonEventKind.ekFact),
-                new EventStruct(LSID.MiliInd, GEDCOMTagName._MILI_IND, PersonEventKind.ekFact),
-                new EventStruct(LSID.MiliDis, GEDCOMTagName._MILI_DIS, PersonEventKind.ekFact),
-                new EventStruct(LSID.MiliRank, GEDCOMTagName._MILI_RANK, PersonEventKind.ekFact),
+                new PredefinedEvent(LSID.Fact, GEDCOMTagName.FACT, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Religion, GEDCOMTagName.RELI, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Nationality, GEDCOMTagName.NATI, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Residence, GEDCOMTagName.RESI, EventKind.ekFact, EventTarget.etIndividual, true),
+                new PredefinedEvent(LSID.PhysicalDesc, GEDCOMTagName.DSCR, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.NationalIDNumber, GEDCOMTagName.IDNO, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.SocialSecurityNumber, GEDCOMTagName.SSN, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.ChildsCount, GEDCOMTagName.NCHI, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.MarriagesCount, GEDCOMTagName.NMR, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Education, GEDCOMTagName.EDUC, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Occupation, GEDCOMTagName.OCCU, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Caste, GEDCOMTagName.CAST, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.PersonalProperty, GEDCOMTagName.PROP, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.NobilityTitle, GEDCOMTagName.TITL, EventKind.ekFact, EventTarget.etIndividual),
 
-                new EventStruct(LSID.BloodGroup, GEDCOMTagName._BGRO, PersonEventKind.ekFact),
-                new EventStruct(LSID.HairColor, GEDCOMTagName._HAIR, PersonEventKind.ekFact),
-                new EventStruct(LSID.EyesColor, GEDCOMTagName._EYES, PersonEventKind.ekFact),
-                new EventStruct(LSID.MDNAHaplogroup, GEDCOMTagName._MDNA, PersonEventKind.ekFact),
-                new EventStruct(LSID.YDNAHaplogroup, GEDCOMTagName._YDNA, PersonEventKind.ekFact),
+                new PredefinedEvent(LSID.Travel, GEDCOMTagName._TRAVEL, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Hobby, GEDCOMTagName._HOBBY, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Award, GEDCOMTagName._AWARD, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Mili, GEDCOMTagName._MILI, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.MiliInd, GEDCOMTagName._MILI_IND, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.MiliDis, GEDCOMTagName._MILI_DIS, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.MiliRank, GEDCOMTagName._MILI_RANK, EventKind.ekFact, EventTarget.etIndividual),
 
-                new EventStruct(LSID.Baptism, GEDCOMTagName.BAPM, PersonEventKind.ekEvent),
-                new EventStruct(LSID.BarMitzvah, GEDCOMTagName.BARM, PersonEventKind.ekEvent),
-                new EventStruct(LSID.BatMitzvah, GEDCOMTagName.BASM, PersonEventKind.ekEvent),
-                new EventStruct(LSID.Blessing, GEDCOMTagName.BLES, PersonEventKind.ekEvent),
-                new EventStruct(LSID.AdultChristening, GEDCOMTagName.CHRA, PersonEventKind.ekEvent),
-                new EventStruct(LSID.Confirmation, GEDCOMTagName.CONF, PersonEventKind.ekEvent),
-                new EventStruct(LSID.FirstCommunion, GEDCOMTagName.FCOM, PersonEventKind.ekEvent),
-                new EventStruct(LSID.Ordination, GEDCOMTagName.ORDN, PersonEventKind.ekEvent),
-            };
+                new PredefinedEvent(LSID.BloodGroup, GEDCOMTagName._BGRO, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.HairColor, GEDCOMTagName._HAIR, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.EyesColor, GEDCOMTagName._EYES, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.MDNAHaplogroup, GEDCOMTagName._MDNA, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.YDNAHaplogroup, GEDCOMTagName._YDNA, EventKind.ekFact, EventTarget.etIndividual),
 
-            FamilyEvents = new EventStruct[] {
-                new EventStruct(LSID.Event, GEDCOMTagName.EVEN, PersonEventKind.ekEvent),
-                new EventStruct(LSID.FEvt_1, GEDCOMTagName.ENGA, PersonEventKind.ekEvent),
-                new EventStruct(LSID.FEvt_2, GEDCOMTagName.MARR, PersonEventKind.ekEvent),
-                new EventStruct(LSID.FEvt_3, GEDCOMTagName.MARB, PersonEventKind.ekEvent),
-                new EventStruct(LSID.FEvt_4, GEDCOMTagName.MARC, PersonEventKind.ekEvent),
-                new EventStruct(LSID.FEvt_5, GEDCOMTagName.MARL, PersonEventKind.ekEvent),
-                new EventStruct(LSID.FEvt_6, GEDCOMTagName.MARS, PersonEventKind.ekEvent),
-                new EventStruct(LSID.FEvt_7, GEDCOMTagName.ANUL, PersonEventKind.ekEvent),
-                new EventStruct(LSID.FEvt_8, GEDCOMTagName.DIVF, PersonEventKind.ekEvent),
-                new EventStruct(LSID.FEvt_9, GEDCOMTagName.DIV, PersonEventKind.ekEvent),
+                new PredefinedEvent(LSID.Baptism, GEDCOMTagName.BAPM, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.BarMitzvah, GEDCOMTagName.BARM, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.BatMitzvah, GEDCOMTagName.BASM, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Blessing, GEDCOMTagName.BLES, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.AdultChristening, GEDCOMTagName.CHRA, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Confirmation, GEDCOMTagName.CONF, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.FirstCommunion, GEDCOMTagName.FCOM, EventKind.ekEvent, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Ordination, GEDCOMTagName.ORDN, EventKind.ekEvent, EventTarget.etIndividual),
+
+                new PredefinedEvent(LSID.FEvt_1, GEDCOMTagName.ENGA, EventKind.ekEvent, EventTarget.etFamily),
+                new PredefinedEvent(LSID.FEvt_2, GEDCOMTagName.MARR, EventKind.ekEvent, EventTarget.etFamily),
+                new PredefinedEvent(LSID.FEvt_3, GEDCOMTagName.MARB, EventKind.ekEvent, EventTarget.etFamily),
+                new PredefinedEvent(LSID.FEvt_4, GEDCOMTagName.MARC, EventKind.ekEvent, EventTarget.etFamily),
+                new PredefinedEvent(LSID.FEvt_5, GEDCOMTagName.MARL, EventKind.ekEvent, EventTarget.etFamily),
+                new PredefinedEvent(LSID.FEvt_6, GEDCOMTagName.MARS, EventKind.ekEvent, EventTarget.etFamily),
+                new PredefinedEvent(LSID.FEvt_7, GEDCOMTagName.ANUL, EventKind.ekEvent, EventTarget.etFamily),
+                new PredefinedEvent(LSID.FEvt_8, GEDCOMTagName.DIVF, EventKind.ekEvent, EventTarget.etFamily),
+                new PredefinedEvent(LSID.FEvt_9, GEDCOMTagName.DIV, EventKind.ekEvent, EventTarget.etFamily),
             };
 
             MarriageStatus = new MarStatusStruct[] {

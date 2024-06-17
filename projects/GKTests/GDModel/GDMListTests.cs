@@ -44,7 +44,7 @@ namespace GDModel
 
             using (var list = new GDMList<GDMTag>()) {
                 // internal list is null (all routines instant returned)
-                list.Delete(null);
+                list.Remove(null);
                 list.Exchange(0, 1);
                 Assert.IsNull(list.Extract(0));
                 Assert.IsNull(list.Extract(null));
@@ -60,7 +60,7 @@ namespace GDModel
                     Assert.AreEqual(2, list2.Count);
                 }
 
-                list.Delete(obj1);
+                list.Remove(obj1);
                 Assert.AreEqual(-1, list.IndexOf(obj1));
                 Assert.AreEqual(0, list.IndexOf(obj2));
 

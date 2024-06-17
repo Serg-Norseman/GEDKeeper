@@ -185,7 +185,7 @@ namespace GDModel
             GDMTag tag = FindTag(tagName, 0);
             while (tag != null) {
                 int idx = fTags.IndexOf(tag);
-                fTags.DeleteAt(idx);
+                fTags.RemoveAt(idx);
 
                 tag = FindTag(tagName, idx);
             }

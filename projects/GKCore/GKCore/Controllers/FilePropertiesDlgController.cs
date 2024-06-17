@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -126,8 +126,9 @@ namespace GKCore.Controllers
             GetControl<ITabPage>("pageOther").Text = LangMan.LS(LSID.Other);
             GetControl<ILabel>("lblLanguage").Text = LangMan.LS(LSID.Language);
 
+            fView.RecordStats.ClearColumns();
             fView.RecordStats.AddColumn(LangMan.LS(LSID.RM_Records), 300, false);
-            fView.RecordStats.AddColumn("Count", 100, false /*, HorizontalAlignment.Right*/);
+            fView.RecordStats.AddColumn(LangMan.LS(LSID.Count), 100, false, BSDTypes.HorizontalAlignment.Right);
         }
     }
 }

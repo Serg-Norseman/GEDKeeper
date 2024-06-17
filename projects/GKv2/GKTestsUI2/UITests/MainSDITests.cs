@@ -451,7 +451,7 @@ namespace GKUI.Forms
         public async Task Test_ShowLanguageSelectDlg()
         {
             ModalFormHandler = LanguageSelectDlgTests.LanguageSelectDlg_Accept_Handler;
-            await AppHost.Instance.LoadLanguage(0);
+            await AppHost.Instance.LoadLanguage(0, false);
         }
 
         [Test]

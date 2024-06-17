@@ -120,7 +120,7 @@ namespace GDModel.Providers.GEDCOM
                     TransformNote(note);
                 } else {
                     var noteRec = fTree.GetPtrValue<GDMNoteRecord>(note);
-                    if (noteRec == null) tag.Notes.DeleteAt(i);
+                    if (noteRec == null) tag.Notes.RemoveAt(i);
                 }
             }
         }
@@ -135,7 +135,7 @@ namespace GDModel.Providers.GEDCOM
                     TransformSourceCitation(sourCit);
                 } else {
                     var sourRec = fTree.GetPtrValue<GDMSourceRecord>(sourCit);
-                    if (sourRec == null) tag.SourceCitations.DeleteAt(i);
+                    if (sourRec == null) tag.SourceCitations.RemoveAt(i);
                 }
             }
         }
@@ -150,7 +150,7 @@ namespace GDModel.Providers.GEDCOM
                     TransformMultimediaLink(mmLink);
                 } else {
                     var mmRec = fTree.GetPtrValue<GDMMultimediaRecord>(mmLink);
-                    if (mmRec == null) tag.MultimediaLinks.DeleteAt(i);
+                    if (mmRec == null) tag.MultimediaLinks.RemoveAt(i);
                 }
             }
         }
@@ -222,7 +222,8 @@ namespace GDModel.Providers.GEDCOM
                 CheckEventPlace(evt.Place, evt);
             }
 
-            fBaseContext.EventStats.Increment(evt.GetTagName());
+            string key = evt.GetTagName() + ":" + evt.Classification;
+            fBaseContext.EventStats.Increment(key);
         }
 
         private void CheckUserRef(GDMRecord rec, GDMUserReference userRef)
@@ -256,7 +257,7 @@ namespace GDModel.Providers.GEDCOM
             for (int i = iRec.ChildToFamilyLinks.Count - 1; i >= 0; i--) {
                 var cfl = iRec.ChildToFamilyLinks[i];
                 if (fTree.GetPtrValue(cfl) == null) {
-                    iRec.ChildToFamilyLinks.DeleteAt(i);
+                    iRec.ChildToFamilyLinks.RemoveAt(i);
                 } else {
                     CheckPointerWithNotes(cfl);
                 }
@@ -265,7 +266,7 @@ namespace GDModel.Providers.GEDCOM
             for (int i = iRec.SpouseToFamilyLinks.Count - 1; i >= 0; i--) {
                 var sfl = iRec.SpouseToFamilyLinks[i];
                 if (fTree.GetPtrValue(sfl) == null) {
-                    iRec.SpouseToFamilyLinks.DeleteAt(i);
+                    iRec.SpouseToFamilyLinks.RemoveAt(i);
                 } else {
                     CheckPointerWithNotes(sfl);
                 }
@@ -296,7 +297,7 @@ namespace GDModel.Providers.GEDCOM
             GDMIndividualLink childLink = fam.Children[index];
             var childRec = fTree.GetPtrValue<GDMIndividualRecord>(childLink);
             if (childRec == null) {
-                fam.Children.DeleteAt(index);
+                fam.Children.RemoveAt(index);
                 return;
             }
 
@@ -350,10 +351,10 @@ namespace GDModel.Providers.GEDCOM
             for (int i = group.Members.Count - 1; i >= 0; i--) {
                 GDMIndividualRecord mbr = fTree.GetPtrValue(group.Members[i]);
                 if (mbr == null) {
-                    group.Members.DeleteAt(i);
+                    group.Members.RemoveAt(i);
                 } else {
                     if (mbr.IndexOfGroup(group) < 0) {
-                        group.Members.DeleteAt(i);
+                        group.Members.RemoveAt(i);
                     }
                 }
             }
@@ -364,7 +365,7 @@ namespace GDModel.Providers.GEDCOM
             for (int i = src.RepositoryCitations.Count - 1; i >= 0; i--) {
                 GDMRecord val = fTree.GetPtrValue<GDMRecord>(src.RepositoryCitations[i]);
                 if (val == null) {
-                    src.RepositoryCitations.DeleteAt(i);
+                    src.RepositoryCitations.RemoveAt(i);
                 }
             }
         }

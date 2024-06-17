@@ -123,7 +123,7 @@ namespace GKCore.Lists
     /// 
     /// </summary>
     public abstract class SheetModel<T> : ListSource<T>, ISheetModel
-        where T : GDMTag
+        where T : class, IGDMObject
     {
         private EnumSet<RecordAction> fAllowedActions;
         protected ISheetList fSheetList;
@@ -131,7 +131,7 @@ namespace GKCore.Lists
         protected readonly ChangeTracker fUndoman;
         protected IGDMObject fDataOwner;
         protected IView fOwner;
-        protected GDMList<T> fStructList;
+        protected IGDMList<T> fStructList;
 
 
         public EnumSet<RecordAction> AllowedActions
@@ -166,7 +166,7 @@ namespace GKCore.Lists
 
 
         protected SheetModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) :
-            base(baseWin.Context, new ListColumns<T>())
+            base((baseWin != null ? baseWin.Context : null), new ListColumns<T>())
         {
             fAllowedActions = new EnumSet<RecordAction>();
             fBaseWin = baseWin;
@@ -174,7 +174,7 @@ namespace GKCore.Lists
             fUndoman = undoman;
         }
 
-        protected void UpdateStructList(GDMList<T> structList)
+        protected void UpdateStructList(IGDMList<T> structList)
         {
             fStructList = structList;
 
@@ -200,7 +200,8 @@ namespace GKCore.Lists
 
         public void ShowDetails(object itemData)
         {
-            BaseController.ViewRecordInfo(fOwner, fBaseWin, GetReferenceRecord(itemData));
+            if (fBaseWin != null)
+                BaseController.ViewRecordInfo(fOwner, fBaseWin, GetReferenceRecord(itemData));
         }
     }
 }

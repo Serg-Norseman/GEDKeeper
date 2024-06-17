@@ -330,13 +330,13 @@ namespace GDModel
         public void Delete(int index)
         {
             XRefIndex_DeleteRecord(fRecords[index]);
-            fRecords.DeleteAt(index);
+            fRecords.RemoveAt(index);
         }
 
         public void DeleteRecord(GDMRecord record)
         {
             XRefIndex_DeleteRecord(record);
-            fRecords.Delete(record);
+            fRecords.Remove(record);
         }
 
         public GDMRecord Extract(int index)
@@ -574,7 +574,7 @@ namespace GDModel
 
                 for (int j = rec.MultimediaLinks.Count - 1; j >= 0; j--) {
                     if (rec.MultimediaLinks[j].XRef == mRec.XRef) {
-                        rec.MultimediaLinks.DeleteAt(j);
+                        rec.MultimediaLinks.RemoveAt(j);
                     }
                 }
             }
@@ -592,7 +592,7 @@ namespace GDModel
                 GDMRecord rec = fRecords[i];
                 for (int j = rec.Notes.Count - 1; j >= 0; j--) {
                     if (rec.Notes[j].XRef == nRec.XRef)
-                        rec.Notes.DeleteAt(j);
+                        rec.Notes.RemoveAt(j);
                 }
             }
 
@@ -611,7 +611,7 @@ namespace GDModel
                     GDMSourceRecord srcRec = (GDMSourceRecord)rec;
                     for (int j = srcRec.RepositoryCitations.Count - 1; j >= 0; j--) {
                         if (srcRec.RepositoryCitations[j].XRef == repRec.XRef) {
-                            srcRec.RepositoryCitations.DeleteAt(j);
+                            srcRec.RepositoryCitations.RemoveAt(j);
                         }
                     }
                 }
@@ -640,7 +640,7 @@ namespace GDModel
 
                 for (int j = rec.SourceCitations.Count - 1; j >= 0; j--) {
                     if (rec.SourceCitations[j].XRef == srcRec.XRef) {
-                        rec.SourceCitations.DeleteAt(j);
+                        rec.SourceCitations.RemoveAt(j);
                     }
                 }
             }
@@ -660,7 +660,7 @@ namespace GDModel
                     GDMResearchRecord resRec = (GDMResearchRecord)rec;
                     for (int j = resRec.Tasks.Count - 1; j >= 0; j--) {
                         if (resRec.Tasks[j].XRef == taskRec.XRef) {
-                            resRec.Tasks.DeleteAt(j);
+                            resRec.Tasks.RemoveAt(j);
                         }
                     }
                 }
@@ -681,7 +681,7 @@ namespace GDModel
                     GDMResearchRecord resRec = (GDMResearchRecord)rec;
                     for (int j = resRec.Communications.Count - 1; j >= 0; j--) {
                         if (resRec.Communications[j].XRef == commRec.XRef) {
-                            resRec.Communications.DeleteAt(j);
+                            resRec.Communications.RemoveAt(j);
                         }
                     }
                 }
@@ -724,7 +724,7 @@ namespace GDModel
                             for (int j = lRec.TopLevels.Count - 1; j >= 0; j--) {
                                 var topLev = lRec.TopLevels[j];
                                 if (topLev.XRef == locRec.XRef) {
-                                    lRec.TopLevels.DeleteAt(j);
+                                    lRec.TopLevels.RemoveAt(j);
                                 }
                             }
                         }

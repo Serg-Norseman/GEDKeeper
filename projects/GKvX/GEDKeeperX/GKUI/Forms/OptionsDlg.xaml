@@ -410,6 +410,10 @@
                     </StackLayout>
                 </xp:TabItem>
 
+                <xp:TabItem x:Name="pageEventTypes">
+                    <comcom:GKSheetList x:Name="slEventTypes" />
+                </xp:TabItem>
+
             </xp:TabViewControl.ItemSource>
         </xp:TabViewControl>
 

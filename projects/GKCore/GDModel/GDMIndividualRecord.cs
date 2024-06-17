@@ -260,7 +260,7 @@ namespace GDModel
             int num = fSpouseToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
                 if (fSpouseToFamilyLinks[i].XRef == familyRec.XRef) {
-                    fSpouseToFamilyLinks.DeleteAt(i);
+                    fSpouseToFamilyLinks.RemoveAt(i);
                     break;
                 }
             }
@@ -273,7 +273,7 @@ namespace GDModel
             int num = fChildToFamilyLinks.Count;
             for (int i = 0; i < num; i++) {
                 if (fChildToFamilyLinks[i].XRef == familyRec.XRef) {
-                    fChildToFamilyLinks.DeleteAt(i);
+                    fChildToFamilyLinks.RemoveAt(i);
                     break;
                 }
             }

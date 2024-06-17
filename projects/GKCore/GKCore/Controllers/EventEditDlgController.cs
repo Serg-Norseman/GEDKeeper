@@ -27,7 +27,6 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Controllers
@@ -47,6 +46,7 @@ namespace GKCore.Controllers
             set {
                 if (fEvent != value) {
                     fEvent = value;
+                    AppHost.EventDefinitions.Collect(fEvent);
                     UpdateView();
                 }
             }
@@ -82,13 +82,11 @@ namespace GKCore.Controllers
                     throw ex;
                 }
 
-                int eventType = fView.EventType.GetSelectedTag<int>();
-                var eventProps = (fEvent is GDMFamilyEvent) ? GKData.FamilyEvents[eventType] : GKData.PersonEvents[eventType];
-
-                if (eventProps.Kind == PersonEventKind.ekFact) {
+                var eventDef = fView.EventType.GetSelectedTag<EventDef>();
+                if (eventDef.Kind == EventKind.ekFact) {
                     var attrValue = fView.Attribute.Text;
 
-                    if (string.IsNullOrEmpty(attrValue) && !eventProps.AcceptableEmpty) {
+                    if (string.IsNullOrEmpty(attrValue) && !eventDef.AcceptableEmpty) {
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FactValueIsInvalid));
                         throw new Exception();
                     }
@@ -98,17 +96,18 @@ namespace GKCore.Controllers
                     fEvent.StringValue = string.Empty;
                 }
 
+                fEvent.SetName(eventDef.Tag);
+                fEvent.Classification = eventDef.Type;
+
+                string key = eventDef.Tag + ":" + eventDef.Type;
+                fBase.Context.EventStats.Increment(key);
+
                 fEvent.Place.StringValue = fView.Place.Text;
                 fBase.Context.Tree.SetPtrValue(fEvent.Place.Location, fTempLocation);
-                fEvent.Classification = fView.EventName.Text;
                 fEvent.Cause = fView.Cause.Text;
                 fEvent.Agency = fView.Agency.Text;
 
-                string tagName = eventProps.Sign;
-                fEvent.SetName(tagName);
-                fBase.Context.EventStats.Increment(tagName);
-
-                if (fEvent is GDMIndividualEvent && eventProps.Kind == PersonEventKind.ekFact) {
+                if (fEvent is GDMIndividualEvent && eventDef.Kind == EventKind.ekFact) {
                     var attr = new GDMIndividualAttribute();
                     attr.Assign(fEvent);
                     fEvent = attr;
@@ -123,17 +122,24 @@ namespace GKCore.Controllers
             }
         }
 
-        private void SetEventTypes(GKData.EventStruct[] eventTypes)
+        private void SetEventTypes(EventTarget target)
         {
-            var freqList = new List<FreqItem<int>>();
-
+            var freqList = new List<FreqItem<EventDef>>();
             var eventStats = fBase.Context.EventStats;
-            for (int i = 0; i < eventTypes.Length; i++) {
-                int stat = eventStats.GetValue(eventTypes[i].Sign);
-                freqList.Add(new FreqItem<int>(i, LangMan.LS(eventTypes[i].Name), stat));
+
+            var eventDefs = AppHost.EventDefinitions.List;
+            for (int i = 0; i < eventDefs.Count; i++) {
+                var evDef = eventDefs[i];
+
+                if ((evDef.Target == target || evDef.Target == EventTarget.etAny) && evDef.Enabled) {
+                    string key = evDef.Tag + ":" + evDef.Type;
+                    int stat = eventStats.GetValue(key);
+
+                    freqList.Add(new FreqItem<EventDef>(evDef, evDef.DisplayName, stat));
+                }
             }
 
-            FreqCollection<string>.PopulateCombo(fView.EventType, freqList, -1);
+            FreqCollection<string>.PopulateCombo(fView.EventType, freqList, null);
         }
 
         public override void UpdateView()
@@ -142,27 +148,18 @@ namespace GKCore.Controllers
             fView.MediaList.ListModel.DataOwner = fEvent;
             fView.SourcesList.ListModel.DataOwner = fEvent;
 
-            var evtName = fEvent.GetTagName();
-            if (fEvent is GDMFamilyEvent) {
-                SetEventTypes(GKData.FamilyEvents);
-                int idx = GKUtils.GetFamilyEventIndex(evtName);
-                if (idx < 0) idx = 0;
-                fView.EventType.SetSelectedTag(idx);
-            } else {
-                SetEventTypes(GKData.PersonEvents);
-                int idx = GKUtils.GetPersonEventIndex(evtName);
-                if (idx < 0) idx = 0;
-                fView.EventType.SetSelectedTag(idx);
+            EventTarget evtTarget = fEvent is GDMFamilyEvent ? EventTarget.etFamily : EventTarget.etIndividual;
+            SetEventTypes(evtTarget);
 
-                if (idx >= 0 && GKData.PersonEvents[idx].Kind == PersonEventKind.ekFact) {
-                    fView.Attribute.Text = fEvent.StringValue;
-                }
+            var evDef = AppHost.EventDefinitions.Find(fEvent);
+            fView.EventType.SetSelectedTag(evDef);
+            if (evDef != null && evDef.Kind == EventKind.ekFact) {
+                fView.Attribute.Text = fEvent.StringValue;
             }
 
             ChangeEventType();
 
             fView.Date.Date = fEvent.Date.Value;
-            fView.EventName.Text = fEvent.Classification;
             fView.Cause.Text = fEvent.Cause;
             fView.Agency.Text = fEvent.Agency;
 
@@ -231,35 +228,26 @@ namespace GKCore.Controllers
 
         public void ChangeEventType()
         {
-            int idx = fView.EventType.GetSelectedTag<int>();
-            if (idx < 0) {
-                idx = 0;
-                fView.EventType.SetSelectedTag(idx);
+            var evDef = fView.EventType.GetSelectedTag<EventDef>();
+            if (evDef == null) {
+                evDef = AppHost.EventDefinitions.Find(GEDCOMTagName.EVEN, "");
+                fView.EventType.SetSelectedTag(evDef);
             }
 
-            string evName;
-
-            if (fEvent is GDMFamilyEvent) {
-                evName = GKData.FamilyEvents[idx].Sign;
-
-                SetAttributeMode(false);
-            } else {
-                evName = GKData.PersonEvents[idx].Sign;
-
-                bool isFact = (GKData.PersonEvents[idx].Kind == PersonEventKind.ekFact);
-                SetAttributeMode(isFact);
-            }
+            string evTag = evDef.Tag;
+            bool isFact = (evDef.Kind == EventKind.ekFact);
+            SetAttributeMode(isFact);
 
             // TODO: It is necessary to provide the registrable list of values for different tag types.
             string[] vals;
             bool canbeSorted, fixedList;
 
-            if (evName == GEDCOMTagName._BGRO) {
+            if (evTag == GEDCOMTagName._BGRO) {
                 vals = GKData.BloodGroups.Split('|');
                 canbeSorted = false;
                 fixedList = true;
             } else {
-                vals = fBase.Context.ValuesCollection.GetValues(evName);
+                vals = fBase.Context.ValuesCollection.GetValues(evTag);
                 canbeSorted = true;
                 fixedList = false;
             }

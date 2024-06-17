@@ -65,6 +65,9 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCore\Controllers\EventDefEditDlgController.cs" />
+    <Compile Include="GKCore\Design\Views\IEventDefEditDlg.cs" />
+    <Compile Include="GKCore\Lists\EventDefsListModel.cs" />
     <Compile Include="GKCore\Design\Views\ILocationLinkEditDlg.cs" />
     <Compile Include="GKCore\Controllers\LocationLinkEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\LocationNameEditDlgController.cs" />
@@ -411,7 +414,7 @@
     <Compile Include="GKCore\Types\NamePartsRet.cs" />
     <Compile Include="GKCore\Types\PatriarchObj.cs" />
     <Compile Include="GKCore\Types\PedigreeFormat.cs" />
-    <Compile Include="GKCore\Types\PersonEventKind.cs" />
+    <Compile Include="GKCore\Types\PredefinedEvent.cs" />
     <Compile Include="GKCore\Types\PGNode.cs" />
     <Compile Include="GKCore\Types\PGNodeType.cs" />
     <Compile Include="GKCore\Types\RecordAction.cs" />
@@ -534,6 +537,7 @@
     <Compile Include="GKCore\Lists\LocationNamesListModel.cs" />
     <Compile Include="GKCore\Lists\LocationLinksListModel.cs" />
     <Compile Include="GKCore\Interfaces\IScrollableContainer.cs" />
+    <Compile Include="GKCore\EventDefinitions.cs" />
   </ItemGroup>
   <Import Project="GKCore.props" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -14,7 +14,6 @@
               <Label x:Name="lblEvent" />
               <StackLayout Orientation="Horizontal" Spacing="4">
                 <ComboBox x:Name="cmbEventType" Width="180" ReadOnly="True" SelectedIndexChanged="EditEventType_SelectedIndexChanged" />
-                <TextBox x:Name="txtEventName" Width="200" />
               </StackLayout>
             </TableRow>
 

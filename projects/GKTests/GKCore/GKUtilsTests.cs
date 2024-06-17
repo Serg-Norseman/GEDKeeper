@@ -57,13 +57,6 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_GetXIndex()
-        {
-            Assert.AreEqual(1, GKUtils.GetPersonEventIndex(GEDCOMTagName.BIRT));
-            Assert.AreEqual(2, GKUtils.GetFamilyEventIndex(GEDCOMTagName.MARR));
-        }
-
-        [Test]
         public void Test_GetAttributeValue()
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;

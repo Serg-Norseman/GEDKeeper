@@ -216,7 +216,7 @@ namespace GDModel
         {
             if (taskRecord == null) return;
 
-            fTasks.DeleteAt(IndexOfTask(taskRecord));
+            fTasks.RemoveAt(IndexOfTask(taskRecord));
         }
 
         public int IndexOfTask(GDMTaskRecord taskRec)
@@ -254,7 +254,7 @@ namespace GDModel
         {
             if (groupRecord == null) return;
 
-            fGroups.DeleteAt(IndexOfGroup(groupRecord));
+            fGroups.RemoveAt(IndexOfGroup(groupRecord));
         }
 
         public int IndexOfGroup(GDMGroupRecord groupRec)
@@ -292,7 +292,7 @@ namespace GDModel
         {
             if (commRecord == null) return;
 
-            fCommunications.DeleteAt(IndexOfCommunication(commRecord));
+            fCommunications.RemoveAt(IndexOfCommunication(commRecord));
         }
 
         public int IndexOfCommunication(GDMCommunicationRecord commRec)

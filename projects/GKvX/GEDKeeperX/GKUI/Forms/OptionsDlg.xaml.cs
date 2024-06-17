@@ -22,6 +22,7 @@ using System;
 using GKCore.Controllers;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Options;
 using GKUI.Components;
 using Xamarin.Forms;
@@ -30,6 +31,16 @@ namespace GKUI.Forms
 {
     public sealed partial class OptionsDlg : CommonDialog<IOptionsDlg, OptionsDlgController>, ILocalizable, IOptionsDlg
     {
+        #region View Interface
+
+        ISheetList IOptionsDlg.EventTypesList
+        {
+            get { return slEventTypes; }
+        }
+
+        #endregion
+
+
         public OptionsDlg(IHost host)
         {
             InitializeComponent();

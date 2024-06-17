@@ -638,41 +638,21 @@ namespace GKCore
 
         public static bool IsAttribute(GDMCustomEvent evt)
         {
-            return (evt != null && GetPersonEventKindBySign(evt.GetTagName()) == PersonEventKind.ekFact);
+            var eventDef = AppHost.EventDefinitions.Find(evt);
+            return (eventDef != null && eventDef.Kind == EventKind.ekFact);
         }
 
-        public static PersonEventKind GetPersonEventKindBySign(string sign)
+        public static EventKind GetPredefinedEventKind(string tag)
         {
-            int idx = GetPersonEventIndex(sign);
-            return (idx < 0) ? PersonEventKind.ekFact : GKData.PersonEvents[idx].Kind;
-        }
-
-        public static int GetPersonEventIndex(string sign)
-        {
-            int res = -1;
-
-            for (int i = 0; i < GKData.PersonEvents.Length; i++) {
-                if (GKData.PersonEvents[i].Sign == sign) {
-                    res = i;
-                    break;
+            var predefEvents = GKData.PredefinedEvents;
+            for (int i = 0; i < predefEvents.Length; i++) {
+                var predefEvt = predefEvents[i];
+                if (predefEvt.Tag == tag) {
+                    return predefEvt.Kind;
                 }
             }
 
-            return res;
-        }
-
-        public static int GetFamilyEventIndex(string sign)
-        {
-            int res = -1;
-
-            for (int i = 0; i < GKData.FamilyEvents.Length; i++) {
-                if (GKData.FamilyEvents[i].Sign == sign) {
-                    res = i;
-                    break;
-                }
-            }
-
-            return res;
+            return EventKind.ekFact;
         }
 
         /// <summary>
@@ -691,25 +671,8 @@ namespace GKCore
             if (evt == null)
                 throw new ArgumentNullException("evt");
 
-            string result = "";
-
-            var evtName = evt.GetTagName();
-            if (evt is GDMIndividualEvent || evt is GDMIndividualAttribute) {
-                int ev = GetPersonEventIndex(evtName);
-                if (evtName == GEDCOMTagName.EVEN || evtName == GEDCOMTagName.FACT) {
-                    result = !string.IsNullOrEmpty(evt.Classification) ? evt.Classification : LangMan.LS(GKData.PersonEvents[ev].Name);
-                } else {
-                    result = (ev > 0) ? LangMan.LS(GKData.PersonEvents[ev].Name) : evtName;
-                }
-            } else if (evt is GDMFamilyEvent) {
-                int ev = GetFamilyEventIndex(evtName);
-                if (ev == 0) {
-                    result = !string.IsNullOrEmpty(evt.Classification) ? evt.Classification : LangMan.LS(GKData.FamilyEvents[ev].Name);
-                } else {
-                    result = (ev > 0) ? LangMan.LS(GKData.FamilyEvents[ev].Name) : evtName;
-                }
-            }
-
+            var eventDef = AppHost.EventDefinitions.Find(evt);
+            string result = (eventDef != null) ? eventDef.DisplayName : evt.GetTagName();
             return result;
         }
 

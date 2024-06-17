@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 using GDModel.Providers.GEDCOM;
 
@@ -35,6 +36,26 @@ namespace GDModel
         GDMList<GDMTag> SubTags { get; }
 
         bool IsEmpty();
+    }
+
+
+    public interface IGDMList<T> : IDisposable, IEnumerable<T>
+        where T : class, IGDMObject
+    {
+        int Count { get; }
+
+        T this[int index] { get; }
+
+
+        T Add(T item);
+
+        void Clear();
+
+        void Remove(T item);
+
+        void RemoveAt(int index);
+
+        int IndexOf(T item);
     }
 
 

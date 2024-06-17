@@ -381,7 +381,7 @@ namespace GKCore.Operations
                     fOldVal = notes;
                 } else {
                     GDMNotes notes = fOldVal as GDMNotes;
-                    swl.Notes.Delete(notes);
+                    swl.Notes.Remove(notes);
                 }
             }
             return result;
@@ -415,7 +415,7 @@ namespace GKCore.Operations
                     fOldVal = mmLink;
                 } else {
                     GDMMultimediaLink mmLink = fOldVal as GDMMultimediaLink;
-                    swl.MultimediaLinks.Delete(mmLink);
+                    swl.MultimediaLinks.Remove(mmLink);
                 }
             }
             return result;

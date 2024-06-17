@@ -166,13 +166,13 @@ namespace GKCore.Tools
             for (int i = iRec.ChildToFamilyLinks.Count - 1; i >= 0; i--) {
                 var cfl = iRec.ChildToFamilyLinks[i];
                 if (cfl == null) {
-                    iRec.ChildToFamilyLinks.DeleteAt(i);
+                    iRec.ChildToFamilyLinks.RemoveAt(i);
                     continue;
                 }
 
                 GDMFamilyRecord family = tree.GetPtrValue(cfl);
                 if (family == null) {
-                    iRec.ChildToFamilyLinks.DeleteAt(i);
+                    iRec.ChildToFamilyLinks.RemoveAt(i);
                     continue;
                 }
 
@@ -192,13 +192,13 @@ namespace GKCore.Tools
             for (int i = iRec.SpouseToFamilyLinks.Count - 1; i >= 0; i--) {
                 var sfl = iRec.SpouseToFamilyLinks[i];
                 if (sfl == null) {
-                    iRec.SpouseToFamilyLinks.DeleteAt(i);
+                    iRec.SpouseToFamilyLinks.RemoveAt(i);
                     continue;
                 }
 
                 GDMFamilyRecord family = tree.GetPtrValue(sfl);
                 if (family == null) {
-                    iRec.SpouseToFamilyLinks.DeleteAt(i);
+                    iRec.SpouseToFamilyLinks.RemoveAt(i);
                     continue;
                 }
 
@@ -235,13 +235,13 @@ namespace GKCore.Tools
             for (int j = fRec.Children.Count - 1; j >= 0; j--) {
                 var cl = fRec.Children[j];
                 if (cl == null) {
-                    fRec.Children.DeleteAt(j);
+                    fRec.Children.RemoveAt(j);
                     continue;
                 }
 
                 GDMIndividualRecord child = tree.GetPtrValue(cl);
                 if (child == null) {
-                    fRec.Children.DeleteAt(j);
+                    fRec.Children.RemoveAt(j);
                     continue;
                 }
 
@@ -570,6 +570,8 @@ namespace GKCore.Tools
 
             Censuses.Instance.Load(GKUtils.GetExternalsPath() + "censuses\\Russia.yaml");
 
+            bool checkLinks = (options != null && options.CheckLinks);
+
             try {
                 GDMTree tree = baseWin.Context.Tree;
                 progress.Begin(LangMan.LS(LSID.TreeCheck), tree.RecordsCount);
@@ -593,11 +595,11 @@ namespace GKCore.Tools
                             break;
 
                         case GDMRecordType.rtNote:
-                            if (options.CheckLinks) CheckNoteRecord(baseWin.Context, rec as GDMNoteRecord, checksList);
+                            if (checkLinks) CheckNoteRecord(baseWin.Context, rec as GDMNoteRecord, checksList);
                             break;
 
                         case GDMRecordType.rtSource:
-                            if (options.CheckLinks) CheckSourceRecord(baseWin.Context, rec as GDMSourceRecord, checksList);
+                            if (checkLinks) CheckSourceRecord(baseWin.Context, rec as GDMSourceRecord, checksList);
                             break;
                     }
                 }

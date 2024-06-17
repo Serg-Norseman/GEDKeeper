@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Threading.Tasks;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
@@ -52,6 +53,8 @@ namespace GKCore.Controllers
             fTempColumns = IndividualListModel.CreateIndividualListColumns();
 
             FillGeoSearchCountries();
+
+            fView.EventTypesList.ListModel = new EventDefsListModel(fView, null, null);
         }
 
         private void FillGeoSearchCountries()
@@ -180,6 +183,14 @@ namespace GKCore.Controllers
             GetControl<IComboBox>("cmbCertaintyAlgorithm").SetSelectedTag(fOptions.CertaintyAlgorithm);
         }
 
+        public async Task AcceptLanguage()
+        {
+            var item = GetControl<IComboBox>("cmbLanguages").SelectedItem as ComboItem<int>;
+            if (item != null) {
+                await AppHost.Instance.LoadLanguage(item.Tag, false);
+            }
+        }
+
         public async void AcceptOtherOptions()
         {
             fOptions.ShowTips = GetControl<ICheckBox>("chkShowOnStart").Checked;
@@ -191,10 +202,7 @@ namespace GKCore.Controllers
             fOptions.Geocoder = GetControl<IComboBox>("cmbGeocoder").Text;
             fOptions.GeoSearchCountry = GetControl<IComboBox>("cmbGeoSearchCountry").Text;
 
-            var item = GetControl<IComboBox>("cmbLanguages").SelectedItem as ComboItem<int>;
-            if (item != null) {
-                await AppHost.Instance.LoadLanguage(item.Tag);
-            }
+            await AcceptLanguage();
 
             fOptions.CertaintyAlgorithm = GetControl<IComboBox>("cmbCertaintyAlgorithm").GetSelectedTag<CertaintyAlgorithm>();
         }
@@ -480,6 +488,11 @@ namespace GKCore.Controllers
             fOptions.ShowNumberOfSubstructures = GetControl<ICheckBox>("chkShowNumberOfSubstructures").Checked;
         }
 
+        private void UpdateEventTypes()
+        {
+            fView.EventTypesList.ListModel.DataOwner = AppHost.EventDefinitions;
+        }
+
         public void UpdatePlugins()
         {
             var listView = GetControl<IListView>("lvPlugins");
@@ -753,6 +766,9 @@ namespace GKCore.Controllers
             // specials
             UpdateSpecials();
 
+            // event types
+            UpdateEventTypes();
+
             // plugins
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 UpdatePlugins();
@@ -994,6 +1010,9 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkELAbbreviatedNames").Text = LangMan.LS(LSID.EL_AbbreviatedNames);
             GetControl<ICheckBox>("chkReversePlacesOrder").Text = LangMan.LS(LSID.ReversePlacesOrder);
             GetControl<ICheckBox>("chkShowNumberOfSubstructures").Text = LangMan.LS(LSID.ShowNumberOfSubstructures);
+
+            // event types
+            GetControl<ITabPage>("pageEventTypes").Text = LangMan.LS(LSID.EventTypes);
 
             // Plugins
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {

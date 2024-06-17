@@ -970,13 +970,13 @@
 960=Source without links
 961=Check links
 
-962=<?>
-963=<?>
-964=<?>
-965=<?>
-966=<?>
-967=<?>
-968=<?>
+962=Event types
+963=Count
+964=Enabled
+965=Tag
+966=Description
+967=For custom events and facts, the type must be entered
+968=Event Definition
 969=<?>
 970=<?>
 

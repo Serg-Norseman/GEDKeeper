@@ -40,7 +40,7 @@ namespace GKCore.Lists
     ///
     /// </summary>
     public abstract class ListSource<T> : IListSource
-        where T : GDMTag
+        where T : class, IGDMObject
     {
         private readonly ExtObservableList<ContentItem> fContentList;
         private SGCulture fSysCulture;
@@ -130,7 +130,7 @@ namespace GKCore.Lists
             fExternalFilter = null;
             fFilter.Clear();
 
-            fFetchedRec = null;
+            fFetchedRec = default(T);
 
             fColumnsMap.Clear();
             fListColumns.Clear();
@@ -744,7 +744,7 @@ namespace GKCore.Lists
         public void SortContents(int sortColumn, bool sortAscending)
         {
             try {
-                fSysCulture = CulturesPool.GetSystemCulture(fBaseContext.Culture);
+                fSysCulture = (fBaseContext != null) ? CulturesPool.GetSystemCulture(fBaseContext.Culture) : SGCulture.CurrentCulture;
 
                 fContentList.BeginUpdate();
 

@@ -43,7 +43,7 @@ namespace GKCore
             Assert.AreEqual(2, valsCol.Count);
 
             string[] values = valsCol.GetValues("xxxxx");
-            Assert.AreEqual(null, values);
+            Assert.AreEqual(0, values.Length);
 
             values = valsCol.GetValues("red");
             Assert.AreEqual("rojo", values[0]);

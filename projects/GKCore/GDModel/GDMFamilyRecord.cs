@@ -133,7 +133,7 @@ namespace GDModel
 
             for (int i = fChildren.Count - 1; i >= 0; i--) {
                 if (fChildren[i].XRef == childRec.XRef) {
-                    fChildren.DeleteAt(i);
+                    fChildren.RemoveAt(i);
                     break;
                 }
             }
@@ -145,7 +145,7 @@ namespace GDModel
 
             for (int i = fChildren.Count - 1; i >= 0; i--) {
                 if (fChildren[i].XRef == childPtr.XRef) {
-                    fChildren.DeleteAt(i);
+                    fChildren.RemoveAt(i);
                     break;
                 }
             }

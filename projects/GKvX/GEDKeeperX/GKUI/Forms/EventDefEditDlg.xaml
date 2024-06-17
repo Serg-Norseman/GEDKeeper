@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms:CommonDialog
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:comcom="clr-namespace:GKUI.Components"
+    xmlns:forms="clr-namespace:GKUI.Forms"
+    xmlns:contr="clr-namespace:GKCore.Controllers;assembly=GKCore"
+    xmlns:mvp="clr-namespace:GKCore.Design.Views;assembly=GKCore"
+    xmlns:plat="clr-namespace:GKUI.Platform"
+    xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+    x:Class="GKUI.Forms.EventDefEditDlg"
+    x:TypeArguments="mvp:IEventDefEditDlg, contr:EventDefEditDlgController">
+
+    <StackLayout Style="{StaticResource paddedDlg88}">
+
+        <Grid ColumnSpacing="4" RowSpacing="4" VerticalOptions="Start" HorizontalOptions="FillAndExpand">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Label x:Name="lblName" Grid.Column="0" Grid.Row="0" />
+            <Entry x:Name="txtName" WidthRequest="260" Grid.Column="1" Grid.Row="0" />
+
+            <Label x:Name="lblTag" Grid.Column="0" Grid.Row="1" />
+            <comcom:GKComboBox x:Name="cmbTag" ReadOnly="True" Grid.Column="1" Grid.Row="1" />
+
+            <Label x:Name="lblType" Grid.Column="0" Grid.Row="2" />
+            <Entry x:Name="txtType" WidthRequest="260" Grid.Column="1" Grid.Row="2" />
+
+            <input:CheckBox x:Name="chkEnabled" Grid.Column="0" Grid.Row="3" />
+
+            <Label x:Name="lblDesc" Grid.Column="0" Grid.Row="4" />
+            <Entry x:Name="txtDesc" WidthRequest="260" Grid.Column="1" Grid.Row="4" />
+
+        </Grid>
+
+        <StackLayout Style="{StaticResource dlgFooter}">
+            <Label HorizontalOptions="FillAndExpand" />
+            <Button x:Name="btnAccept" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_accept.gif}" Clicked="AcceptClickHandler" />
+            <Button x:Name="btnCancel" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_cancel.gif}" Clicked="CancelClickHandler" />
+        </StackLayout>
+
+    </StackLayout>
+
+</forms:CommonDialog>

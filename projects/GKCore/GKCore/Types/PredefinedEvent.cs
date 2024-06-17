@@ -18,18 +18,38 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Interfaces;
-using GKCore.Lists;
-using GKCore.Options;
-
-namespace GKCore.Design.Views
+namespace GKCore.Types
 {
-    public interface IOptionsDlg : ICommonDialog
+    public enum EventKind
     {
-        ISheetList EventTypesList { get; }
+        ekEvent,
+        ekFact
+    }
 
-        void AcceptCircleChartsOptions();
-        void UpdateCircleChartsOptions();
-        void SetPage(OptionsPage page);
+
+    public enum EventTarget
+    {
+        etIndividual,
+        etFamily,
+        etAny
+    }
+
+
+    public sealed class PredefinedEvent
+    {
+        public LSID Name;
+        public string Tag;
+        public EventKind Kind;
+        public EventTarget Target;
+        public bool AcceptableEmpty;
+
+        public PredefinedEvent(LSID name, string tag, EventKind kind, EventTarget target, bool acceptableEmpty = false)
+        {
+            Name = name;
+            Tag = tag;
+            Kind = kind;
+            Target = target;
+            AcceptableEmpty = acceptableEmpty;
+        }
     }
 }

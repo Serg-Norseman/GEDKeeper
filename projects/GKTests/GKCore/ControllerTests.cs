@@ -253,7 +253,6 @@ namespace GKCore.Controllers
             view.Date.Returns(Substitute.For<IDateControl>());
             view.Attribute.Returns(Substitute.For<IComboBox>());
             view.Place.Returns(Substitute.For<ITextBox>());
-            view.EventName.Returns(Substitute.For<ITextBox>());
             view.Cause.Returns(Substitute.For<ITextBox>());
             view.Agency.Returns(Substitute.For<ITextBox>());
             view.NotesList.Returns(Substitute.For<ISheetList>());
@@ -755,6 +754,7 @@ namespace GKCore.Controllers
             SubstituteControl<ITabPage>(view, "pageOptions");
             SubstituteControl<ICheckBox>(view, "chkCheckPersonPlaces");
             SubstituteControl<ICheckBox>(view, "chkCheckCensuses");
+            SubstituteControl<ICheckBox>(view, "chkCheckLinks");
 
             view.ChecksList.Returns(Substitute.For<IListView>());
 

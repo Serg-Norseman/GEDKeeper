@@ -559,6 +559,37 @@ namespace GKCore.Controllers
             return result;
         }
 
+        public static async Task<ModificationResult<EventDef>> ModifyEventDef(IView owner, EventDefList list, EventDef eventDef)
+        {
+            var result = new ModificationResult<EventDef>();
+
+            try {
+                bool exists = eventDef != null;
+                if (!exists) {
+                    eventDef = new EventDef();
+                }
+
+                using (var dlg = AppHost.ResolveDialog<IEventDefEditDlg>()) {
+                    dlg.EventDef = eventDef;
+                    result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
+                }
+
+                if (!exists) {
+                    if (result.Result) {
+                        list.Add(eventDef);
+                        result.Result = true;
+                    } else {
+                        eventDef = null;
+                    }
+                }
+
+                result.Record = eventDef;
+            } finally {
+            }
+
+            return result;
+        }
+
         private static async Task PostProcessPerson(IBaseWindow baseWin, GDMIndividualRecord indivRec)
         {
             baseWin.Context.ImportNames(indivRec);

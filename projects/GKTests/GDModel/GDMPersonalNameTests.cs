@@ -207,7 +207,7 @@ namespace GDModel
                                 "2 _RELN ReligiousName\r\n"+
                                 "2 _CENN CensusName\r\n", buf2);
 
-                iRec.PersonalNames.Delete(nameCopy);
+                iRec.PersonalNames.Remove(nameCopy);
             }
 
             using (GDMPersonalName name1 = new GDMPersonalName()) {

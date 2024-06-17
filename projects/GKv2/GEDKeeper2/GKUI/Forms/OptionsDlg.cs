@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,6 +26,7 @@ using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Options;
 using GKUI.Components;
 using GKUI.Platform.Handlers;
@@ -34,9 +35,21 @@ namespace GKUI.Forms
 {
     public sealed partial class OptionsDlg : CommonDialog<IOptionsDlg, OptionsDlgController>, ILocalizable, IOptionsDlg
     {
+        #region View Interface
+
+        ISheetList IOptionsDlg.EventTypesList
+        {
+            get { return slEventTypes; }
+        }
+
+        #endregion
+
+
         public OptionsDlg(IHost host)
         {
             InitializeComponent();
+
+            PageControl1.SelectedIndexChanged += PageControl_SelectedIndexChanged;
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
@@ -54,6 +67,17 @@ namespace GKUI.Forms
             fController.UpdateView();
 
             chkSeparateDepth_CheckedChanged(null, null);
+        }
+
+        private void PageControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (PageControl1.SelectedTab == pageEventTypes) {
+                fController.AcceptLanguage();
+                fController.SetLocale();
+                fController.UpdateView();
+            }
+
+            btnResetDefaults.Enabled = PageControl1.SelectedIndex < 6;
         }
 
         void IOptionsDlg.UpdateCircleChartsOptions()
@@ -154,6 +178,10 @@ namespace GKUI.Forms
                     break;
 
                 case 6:
+                    // event types
+                    break;
+
+                case 7:
                     // plugins
                     break;
             }

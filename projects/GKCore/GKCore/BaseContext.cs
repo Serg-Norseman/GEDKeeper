@@ -214,19 +214,19 @@ namespace GKCore
             AppHost.NamesTable.ImportNames(this, iRec);
         }
 
-        public GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evSign, GDMCustomDate evDate, string evPlace)
+        public GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evTag, GDMCustomDate evDate, string evPlace)
         {
-            return CreateEventEx(aRec, evSign, evDate.StringValue, evPlace);
+            return CreateEventEx(aRec, evTag, evDate.StringValue, evPlace);
         }
 
-        public GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evSign, string evDate, string evPlace)
+        public GDMCustomEvent CreateEventEx(GDMRecordWithEvents aRec, string evTag, string evDate, string evPlace)
         {
             if (aRec == null) return null;
 
             GDMCustomEvent result;
 
             if (aRec is GDMIndividualRecord) {
-                if (GKUtils.GetPersonEventKindBySign(evSign) == PersonEventKind.ekEvent) {
+                if (GKUtils.GetPredefinedEventKind(evTag) == EventKind.ekEvent) {
                     result = new GDMIndividualEvent();
                 } else {
                     result = new GDMIndividualAttribute();
@@ -239,7 +239,7 @@ namespace GKCore
 
             aRec.AddEvent(result);
 
-            result.SetName(evSign);
+            result.SetName(evTag);
 
             if (evDate != "") {
                 result.Date.ParseString(evDate);

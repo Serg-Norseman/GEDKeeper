@@ -369,7 +369,7 @@ namespace GKCore
             GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             if (iRec == null || !iRec.HasAssociations) return;
 
-            iRec.Associations.DeleteAt(idx);
+            iRec.Associations.RemoveAt(idx);
         }
 
         public int get_individual_events_count(object recPtr)
@@ -397,7 +397,7 @@ namespace GKCore
             GDMIndividualRecord iRec = recPtr as GDMIndividualRecord;
             if (iRec == null) return;
 
-            iRec.Events.DeleteAt(idx);
+            iRec.Events.RemoveAt(idx);
         }
 
         public string get_event_date(object evPtr)

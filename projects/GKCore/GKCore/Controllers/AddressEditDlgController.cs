@@ -121,7 +121,7 @@ namespace GKCore.Controllers
                     break;
 
                 case RecordAction.raDelete:
-                    fAddress.PhoneNumbers.Delete(itemTag);
+                    fAddress.PhoneNumbers.Remove(itemTag);
                     break;
             }
             UpdateLists();
@@ -146,7 +146,7 @@ namespace GKCore.Controllers
                     break;
 
                 case RecordAction.raDelete:
-                    fAddress.EmailAddresses.Delete(itemTag);
+                    fAddress.EmailAddresses.Remove(itemTag);
                     break;
             }
             UpdateLists();
@@ -171,7 +171,7 @@ namespace GKCore.Controllers
                     break;
 
                 case RecordAction.raDelete:
-                    fAddress.WebPages.Delete(itemTag);
+                    fAddress.WebPages.Remove(itemTag);
                     break;
             }
             UpdateLists();

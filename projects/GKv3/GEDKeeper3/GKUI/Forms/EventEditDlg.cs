@@ -52,7 +52,6 @@ namespace GKUI.Forms
         private Label lblOrg;
         private Label lblAttrValue;
         private ComboBox cmbEventType;
-        private TextBox txtEventName;
         private TextBox txtEventPlace;
         private TextBox txtEventCause;
         private TextBox txtEventOrg;
@@ -108,11 +107,6 @@ namespace GKUI.Forms
         ITextBox IEventEditDlg.Place
         {
             get { return GetControlHandler<ITextBox>(txtEventPlace); }
-        }
-
-        ITextBox IEventEditDlg.EventName
-        {
-            get { return  GetControlHandler<ITextBox>(txtEventName); }
         }
 
         ITextBox IEventEditDlg.Cause

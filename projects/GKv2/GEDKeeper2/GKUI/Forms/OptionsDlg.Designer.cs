@@ -188,6 +188,8 @@
         private System.Windows.Forms.CheckBox chkELAbbreviatedNames;
         private System.Windows.Forms.CheckBox chkReversePlacesOrder;
         private System.Windows.Forms.CheckBox chkShowNumberOfSubstructures;
+        private System.Windows.Forms.TabPage pageEventTypes;
+        private GKUI.Components.GKSheetList slEventTypes;
 
         private void InitializeComponent()
         {
@@ -377,6 +379,8 @@
             this.chkELAbbreviatedNames = new System.Windows.Forms.CheckBox();
             this.chkReversePlacesOrder = new System.Windows.Forms.CheckBox();
             this.chkShowNumberOfSubstructures = new System.Windows.Forms.CheckBox();
+            this.pageEventTypes = new System.Windows.Forms.TabPage();
+            this.slEventTypes = new GKUI.Components.GKSheetList();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -420,6 +424,7 @@
             this.grpPedigreeFormat.SuspendLayout();
             this.pagePlugins.SuspendLayout();
             this.pageSpecials.SuspendLayout();
+            this.pageEventTypes.SuspendLayout();
             this.SuspendLayout();
             // 
             // PageControl1
@@ -430,6 +435,7 @@
             this.PageControl1.Controls.Add(this.pageUIView);
             this.PageControl1.Controls.Add(this.pagePedigree);
             this.PageControl1.Controls.Add(this.pageSpecials);
+            this.PageControl1.Controls.Add(this.pageEventTypes);
             this.PageControl1.Controls.Add(this.pagePlugins);
             this.PageControl1.Dock = System.Windows.Forms.DockStyle.Top;
             this.PageControl1.Location = new System.Drawing.Point(0, 0);
@@ -2184,7 +2190,7 @@
             this.btnResetDefaults.Location = new System.Drawing.Point(14, 702);
             this.btnResetDefaults.Margin = new System.Windows.Forms.Padding(10);
             this.btnResetDefaults.Name = "btnResetDefaults";
-            this.btnResetDefaults.Size = new System.Drawing.Size(192, 30);
+            this.btnResetDefaults.Size = new System.Drawing.Size(212, 30);
             this.btnResetDefaults.TabIndex = 1;
             this.btnResetDefaults.Text = "btnResetDefaults";
             this.btnResetDefaults.Click += new System.EventHandler(this.btnResetDefaults_Click);
@@ -2459,6 +2465,27 @@
             this.chkShowNumberOfSubstructures.TabIndex = 20;
             this.chkShowNumberOfSubstructures.Text = "chkShowNumberOfSubstructures";
             // 
+            // pageEventTypes
+            // 
+            this.pageEventTypes.BackColor = System.Drawing.SystemColors.Control;
+            this.pageEventTypes.Controls.Add(this.slEventTypes);
+            this.pageEventTypes.Location = new System.Drawing.Point(4, 26);
+            this.pageEventTypes.Margin = new System.Windows.Forms.Padding(0);
+            this.pageEventTypes.Name = "pageEventTypes";
+            this.pageEventTypes.Padding = new System.Windows.Forms.Padding(10);
+            this.pageEventTypes.Size = new System.Drawing.Size(741, 762);
+            this.pageEventTypes.TabIndex = 6;
+            this.pageEventTypes.Text = "pageEventTypes";
+            // 
+            // slEventTypes
+            // 
+            this.slEventTypes.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.slEventTypes.Location = new System.Drawing.Point(10, 10);
+            this.slEventTypes.Margin = new System.Windows.Forms.Padding(2);
+            this.slEventTypes.Name = "slEventTypes";
+            this.slEventTypes.Size = new System.Drawing.Size(721, 742);
+            this.slEventTypes.TabIndex = 0;
+            // 
             // pagePlugins
             // 
             this.pagePlugins.BackColor = System.Drawing.SystemColors.Control;
@@ -2647,6 +2674,7 @@
             this.grpPedigree.ResumeLayout(false);
             this.grpPedigreeFormat.ResumeLayout(false);
             this.pageSpecials.ResumeLayout(false);
+            this.pageEventTypes.ResumeLayout(false);
             this.pagePlugins.ResumeLayout(false);
             this.ResumeLayout(false);
         }

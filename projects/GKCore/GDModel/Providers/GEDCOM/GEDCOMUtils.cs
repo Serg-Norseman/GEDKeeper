@@ -1653,7 +1653,7 @@ namespace GDModel.Providers.GEDCOM
                 var tagType = subtag.GetTagType();
 
                 if (tagType == GEDCOMTagType.CONT || tagType == GEDCOMTagType.CONC) {
-                    subTags.DeleteAt(i);
+                    subTags.RemoveAt(i);
                 }
             }
 

@@ -20,11 +20,10 @@
 
 using System;
 using GDModel;
-using GKCore.Design.Controls;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Names;
-using GKCore.Types;
 
 namespace GKCore.Controllers
 {

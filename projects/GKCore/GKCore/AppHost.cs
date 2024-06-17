@@ -142,7 +142,7 @@ namespace GKCore
         public virtual async Task Init(string[] args, bool isMDI)
         {
             GKUtils.InitGEDCOM();
-            await LoadLanguage(AppHost.Options.InterfaceLang);
+            await LoadLanguage(AppHost.Options.InterfaceLang, true);
             SetArgs(args);
             StartupWork();
         }
@@ -980,14 +980,19 @@ namespace GKCore
             return LangMan.LS_DEF_CODE;
         }
 
-        public async Task LoadLanguage(int langCode)
+        public async Task LoadLanguage(int langCode, bool startup)
         {
             try {
                 if (langCode <= 0) {
                     langCode = await RequestLanguage();
                 }
 
+                if (!startup) DoneEventDefs();
+
                 AppHost.Options.LoadLanguage(langCode);
+
+                InitEventDefs();
+
                 AppHost.Plugins.OnLanguageChange();
 
                 UpdateLang();
@@ -1194,6 +1199,7 @@ namespace GKCore
 
         private static readonly IocContainer fIocContainer;
 
+        private static EventDefinitions fEventDefinitions;
         private static ExtResources fExtResources;
         private static IGraphicsProvider fGfxProvider;
         private static INamesTable fNamesTable;
@@ -1206,6 +1212,16 @@ namespace GKCore
         public static IocContainer Container
         {
             get { return fIocContainer; }
+        }
+
+        public static EventDefinitions EventDefinitions
+        {
+            get {
+                if (fEventDefinitions == null) {
+                    fEventDefinitions = new EventDefinitions();
+                }
+                return fEventDefinitions;
+            }
         }
 
         public static ExtResources ExtResources
@@ -1346,6 +1362,8 @@ namespace GKCore
         {
             NamesTable.SaveToFile(GetAppDataPathStatic() + "GEDKeeper2.nms");
 
+            DoneEventDefs();
+
             var options = GlobalOptions.Instance;
             options.SaveToFile(GetAppDataPathStatic() + "GEDKeeper2.ini");
 
@@ -1354,6 +1372,23 @@ namespace GKCore
                 options.Dispose();
                 Plugins.Unload();
             }
+        }
+
+        private static string GetEventDefsFileName()
+        {
+            string lang_sign = GlobalOptions.Instance.GetLanguageSign();
+            string result = string.Format(GetAppDataPathStatic() + "event_defs_{0}.yaml", lang_sign);
+            return result;
+        }
+
+        private static void InitEventDefs()
+        {
+            EventDefinitions.Load(GetEventDefsFileName());
+        }
+
+        private static void DoneEventDefs()
+        {
+            EventDefinitions.Save(GetEventDefsFileName());
         }
 
         public static void ForceGC()

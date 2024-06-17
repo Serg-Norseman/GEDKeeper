@@ -488,6 +488,10 @@
           </StackLayout>
         </TabPage>
 
+        <TabPage x:Name="pageEventTypes" Padding="8">
+          <comcom:GKSheetList x:Name="slEventTypes" Height="300" />
+        </TabPage>
+
         <TabPage x:Name="pagePlugins" Padding="8">
           <comcom:GKListView x:Name="lvPlugins" />
         </TabPage>

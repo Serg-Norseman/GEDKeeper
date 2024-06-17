@@ -141,8 +141,8 @@ namespace GDModel
         {
             if (member == null) return false;
 
-            fMembers.DeleteAt(IndexOfMember(member));
-            member.Groups.DeleteAt(member.IndexOfGroup(this));
+            fMembers.RemoveAt(IndexOfMember(member));
+            member.Groups.RemoveAt(member.IndexOfGroup(this));
 
             return true;
         }

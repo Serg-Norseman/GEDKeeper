@@ -1021,8 +1021,8 @@ namespace GKCore.Charts
                 }
             }
 
-            fImageHeight = fTreeBounds.GetHeight() + fMargins * 2;
-            fImageWidth = fTreeBounds.GetWidth() + fMargins * 2;
+            fImageHeight = Math.Max(fTreeBounds.GetHeight(), 0) + fMargins * 2;
+            fImageWidth = Math.Max(fTreeBounds.GetWidth(), 0) + fMargins * 2;
         }
 
         public void RecalcChart()

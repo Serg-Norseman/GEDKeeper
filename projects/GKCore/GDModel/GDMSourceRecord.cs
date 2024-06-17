@@ -259,7 +259,7 @@ namespace GDModel
 
             foreach (GDMRepositoryCitation repCit in fRepositoryCitations) {
                 if (repCit.XRef == repRec.XRef) {
-                    fRepositoryCitations.Delete(repCit);
+                    fRepositoryCitations.Remove(repCit);
                     break;
                 }
             }

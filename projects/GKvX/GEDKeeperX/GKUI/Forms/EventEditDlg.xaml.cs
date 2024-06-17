@@ -74,11 +74,6 @@ namespace GKUI.Forms
             get { return GetControlHandler<ITextBox>(txtEventPlace); }
         }
 
-        ITextBox IEventEditDlg.EventName
-        {
-            get { return  GetControlHandler<ITextBox>(txtEventName); }
-        }
-
         ITextBox IEventEditDlg.Cause
         {
             get { return  GetControlHandler<ITextBox>(txtEventCause); }
