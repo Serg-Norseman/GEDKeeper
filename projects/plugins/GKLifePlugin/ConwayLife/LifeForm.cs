@@ -16,10 +16,6 @@ namespace GKLifePlugin.ConwayLife
 {
     public partial class LifeForm : Form, ILocalizable
     {
-        private static string PatternStabilisedTitle = "Стабильность образца";
-        private static string RepeatingPattern = "Образец повторяется через каждые {0} поколений!";
-        private static string StaticPattern = "Образец статичен!";
-
         private bool fIsMinimised;
         private ILangMan fLangMan;
 
@@ -74,8 +70,8 @@ namespace GKLifePlugin.ConwayLife
 
         private void cmpLife_Change(object sender)
         {
-            stlGeneration.Text = "Поколений: " + cmpLife.Generation.ToString();
-            stlLivingCells.Text = "Живых клеток: " + cmpLife.LiveCellCount.ToString();
+            stlGeneration.Text = string.Format(fLangMan.LS(PLS.Generation), cmpLife.Generation);
+            stlLivingCells.Text = string.Format(fLangMan.LS(PLS.LivingCells), cmpLife.LiveCellCount);
         }
 
         private void UpdateMenusAndButtons()
@@ -86,11 +82,9 @@ namespace GKLifePlugin.ConwayLife
             if (tbStart.Checked) {
                 cmpLife.OnChange += cmpLife_Change;
                 tbStart.Text = fLangMan.LS(PLS.Stop);
-                tbStart.ToolTipText = "Остановка хода поколений";
             } else {
                 cmpLife.OnChange -= cmpLife_Change;
                 tbStart.Text = fLangMan.LS(PLS.Start);
-                tbStart.ToolTipText = "Автоматическое прохождение поколений";
             }
 
             btnSetCells.Enabled = !tbStart.Checked;
@@ -101,8 +95,8 @@ namespace GKLifePlugin.ConwayLife
 
         private void PatternStabilised(int periodicity)
         {
-            string msg = (periodicity == 1) ? StaticPattern : string.Format(RepeatingPattern, periodicity);
-            MessageBox.Show(msg, PatternStabilisedTitle, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            string msg = (periodicity == 1) ? fLangMan.LS(PLS.StaticPattern) : string.Format(fLangMan.LS(PLS.RepeatingPattern), periodicity);
+            MessageBox.Show(msg, fLangMan.LS(PLS.PatternStabilisedTitle), MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
         private void tbStep_Click(object sender, EventArgs e)

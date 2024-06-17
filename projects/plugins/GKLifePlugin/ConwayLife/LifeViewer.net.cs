@@ -116,35 +116,21 @@ namespace GKLifePlugin.ConwayLife
 
         protected Point CellAtPos(int X, int Y)
         {
-            int ClientWidth = Width;
-            int ClientHeight = Height;
+            int clientWidth = Width;
+            int clientHeight = Height;
 
-            if ((X < 0) || (X >= ClientWidth))
+            if (X < 0 || X >= clientWidth)
                 throw new IndexOutOfRangeException("X coordinate is outside the control's bounds");
-            if ((Y < 0) || (Y >= ClientHeight))
+            if (Y < 0 || Y >= clientHeight)
                 throw new IndexOutOfRangeException("Y coordinate is outside the control's bounds");
 
-            Point result = new Point();
+            int cellWidth = clientWidth / GridWidth;
+            int offsetX = (clientWidth % GridWidth) / 2;
 
-            int cellWidth = ClientWidth / GridWidth;
-            int offsetX = (ClientWidth % GridWidth) / 2;
+            int cellHeight = clientHeight / GridHeight;
+            int offsetY = (clientHeight % GridHeight) / 2;
 
-            if (X <= offsetX * (cellWidth + 1)) {
-                result.X = X / (cellWidth + 1);
-            } else {
-                result.X = offsetX + (X - offsetX * (cellWidth + 1)) / cellWidth;
-            }
-
-            int cellHeight = ClientHeight / GridHeight;
-            int offsetY = (ClientHeight % GridHeight) / 2;
-
-            if (Y <= offsetY * (cellHeight + 1)) {
-                result.Y = Y / (cellHeight + 1);
-            } else {
-                result.Y = offsetY + (Y - offsetY * (cellHeight + 1)) / cellHeight;
-            }
-
-            return result;
+            return new Point((X - offsetX) / cellWidth, (Y - offsetY) / cellHeight);
         }
 
         private int CellEdge(int coordinate, int fieldSize, int divisions)
@@ -185,7 +171,7 @@ namespace GKLifePlugin.ConwayLife
             if (fOnChange != null) fOnChange(this);
         }
 
-        protected override void OnMouseUp(MouseEventArgs e)
+        protected override void OnMouseMove(MouseEventArgs e)
         {
             if (AcceptMouseClicks && (e.Buttons == MouseButtons.Primary)) {
                 Point pt = CellAtPos((int)e.Location.X, (int)e.Location.Y);
@@ -193,7 +179,7 @@ namespace GKLifePlugin.ConwayLife
                 this[pt.X, pt.Y] = (byte)((val > 0) ? 0 : 1);
             }
 
-            base.OnMouseUp(e);
+            base.OnMouseMove(e);
         }
 
         private void DrawGridLines(Graphics gfx, Pen pen)

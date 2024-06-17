@@ -7,3 +7,8 @@
 06=Clear
 07=Random
 08=Options
+09=Pattern stability
+10=The pattern repeats itself every {0} generations!
+11=The pattern is static!
+12=Generation: {0}
+13=Living cells: {0}

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,7 +29,7 @@ using GKLifePlugin.ConwayLife;
 [assembly: AssemblyTitle("GKLifePlugin")]
 [assembly: AssemblyDescription("GEDKeeper Conway's Game of Life plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2011-2023 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2011-2024 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
 
@@ -51,6 +51,11 @@ namespace GKLifePlugin
         Clear,
         Random,
         Options,
+        PatternStabilisedTitle,
+        RepeatingPattern,
+        StaticPattern,
+        Generation,
+        LivingCells,
     }
 
     public class Plugin : OrdinaryPlugin
