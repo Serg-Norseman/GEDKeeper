@@ -179,6 +179,7 @@
                                                 <input:CheckBox x:Name="chkSameCardsWidth" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                 <input:CheckBox x:Name="chkUseInlineImagesInSvg" />
                                                 <input:CheckBox x:Name="chkExtendedTree" />
+                                                <input:CheckBox x:Name="chkFullNameOnOneLine" CheckChanged="chkTreeChartOption_CheckedChanged" />
 
                                                 <Label VerticalOptions="FillAndExpand" />
 

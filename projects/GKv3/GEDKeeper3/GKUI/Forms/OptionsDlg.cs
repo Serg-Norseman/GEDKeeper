@@ -207,6 +207,7 @@ namespace GKUI.Forms
         private CheckBox chkReversePlacesOrder;
         private TabPage pageEventTypes;
         private GKSheetList slEventTypes;
+        private CheckBox chkFullNameOnOneLine;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion

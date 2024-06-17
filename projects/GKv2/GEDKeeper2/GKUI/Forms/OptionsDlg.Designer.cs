@@ -190,6 +190,7 @@
         private System.Windows.Forms.CheckBox chkShowNumberOfSubstructures;
         private System.Windows.Forms.TabPage pageEventTypes;
         private GKUI.Components.GKSheetList slEventTypes;
+        private System.Windows.Forms.CheckBox chkFullNameOnOneLine;
 
         private void InitializeComponent()
         {
@@ -381,6 +382,7 @@
             this.chkShowNumberOfSubstructures = new System.Windows.Forms.CheckBox();
             this.pageEventTypes = new System.Windows.Forms.TabPage();
             this.slEventTypes = new GKUI.Components.GKSheetList();
+            this.chkFullNameOnOneLine = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -1280,6 +1282,7 @@
             this.panTreePersons.Controls.Add(this.chkMinimizingWidth);
             this.panTreePersons.Controls.Add(this.chkURNotesVisible);
             this.panTreePersons.Controls.Add(this.chkSameCardsWidth);
+            this.panTreePersons.Controls.Add(this.chkFullNameOnOneLine);
             this.panTreePersons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panTreePersons.Location = new System.Drawing.Point(0, 0);
             this.panTreePersons.Margin = new System.Windows.Forms.Padding(10);
@@ -1609,6 +1612,17 @@
             this.chkSameCardsWidth.TabIndex = 27;
             this.chkSameCardsWidth.Text = "chkSameCardsWidth";
             this.chkSameCardsWidth.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
+            // 
+            // chkFullNameOnOneLine
+            // 
+            this.chkFullNameOnOneLine.AutoSize = true;
+            this.chkFullNameOnOneLine.Location = new System.Drawing.Point(6, 740);
+            this.chkFullNameOnOneLine.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkFullNameOnOneLine.Name = "chkFullNameOnOneLine";
+            this.chkFullNameOnOneLine.Size = new System.Drawing.Size(349, 21);
+            this.chkFullNameOnOneLine.TabIndex = 28;
+            this.chkFullNameOnOneLine.Text = "chkFullNameOnOneLine";
+            this.chkFullNameOnOneLine.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
             // 
             // grpTreeDecor
             // 

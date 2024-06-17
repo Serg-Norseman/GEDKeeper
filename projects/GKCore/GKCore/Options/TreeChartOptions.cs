@@ -78,6 +78,7 @@ namespace GKCore.Options
         public bool HideDescSpouses; // without option's load/save
         public bool TrackSelectedLines;
         public bool TrackMatchedSources;
+        public bool FullNameOnOneLine;
 
         public IColor MaleColor;
         public IColor FemaleColor;
@@ -150,6 +151,7 @@ namespace GKCore.Options
             HideDescSpouses = false;
             TrackSelectedLines = true;
             TrackMatchedSources = false;
+            FullNameOnOneLine = false;
 
             MaleColor = ChartRenderer.GetColor(MALE_COLOR);
             FemaleColor = ChartRenderer.GetColor(FEMALE_COLOR);
@@ -228,6 +230,7 @@ namespace GKCore.Options
             HideDescSpouses = srcOptions.HideDescSpouses;
             TrackSelectedLines = srcOptions.TrackSelectedLines;
             TrackMatchedSources = srcOptions.TrackMatchedSources;
+            FullNameOnOneLine = srcOptions.FullNameOnOneLine;
 
             BranchDistance = srcOptions.BranchDistance;
             LevelDistance = srcOptions.LevelDistance;
@@ -306,6 +309,7 @@ namespace GKCore.Options
             XRefVisible = iniFile.ReadBool("Chart", "XRefVisible", false);
             TrackSelectedLines = iniFile.ReadBool("Chart", "TrackSelectedLines", true);
             TrackMatchedSources = iniFile.ReadBool("Chart", "TrackMatchedSources", false);
+            FullNameOnOneLine = iniFile.ReadBool("Chart", "FullNameOnOneLine", false);
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -375,6 +379,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "XRefVisible", XRefVisible);
             iniFile.WriteBool("Chart", "TrackSelectedLines", TrackSelectedLines);
             iniFile.WriteBool("Chart", "TrackMatchedSources", TrackMatchedSources);
+            iniFile.WriteBool("Chart", "FullNameOnOneLine", FullNameOnOneLine);
         }
     }
 }

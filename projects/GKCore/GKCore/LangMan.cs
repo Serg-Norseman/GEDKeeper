@@ -1041,7 +1041,7 @@ namespace GKCore
         /* 966 */ Description,
         /* 967 */ TagTypeWarning,
         /* 968 */ EventDefinition,
-        /* 969 */ Reserved_969,
+        /* 969 */ FullNameOnOneLine,
         /* 970 */ Reserved_970,
 
         /* 971 */ TBS_Single,
@@ -2052,7 +2052,7 @@ namespace GKCore
             /* 966 */ "Description",
             /* 967 */ "For custom events and facts, the type must be entered",
             /* 968 */ "Event Definition",
-            /* 969 */ "<?>",
+            /* 969 */ "Full name on one line",
             /* 970 */ "<?>",
 
             /* 971 */ "Single",

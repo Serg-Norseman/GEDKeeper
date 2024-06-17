@@ -629,6 +629,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkURNotesVisible").Checked = fOptions.TreeChartOptions.URNotesVisible;
             GetControl<ICheckBox>("chkShortenDateRanges").Checked = fOptions.TreeChartOptions.ShortenDateRanges;
             GetControl<ICheckBox>("chkSameCardsWidth").Checked = fOptions.TreeChartOptions.SameCardsWidth;
+            GetControl<ICheckBox>("chkFullNameOnOneLine").Checked = fOptions.TreeChartOptions.FullNameOnOneLine;
 
             GetControl<ILabel>("lblMaleColor").BackColor = fOptions.TreeChartOptions.MaleColor;
             GetControl<ILabel>("lblFemaleColor").BackColor = fOptions.TreeChartOptions.FemaleColor;
@@ -680,6 +681,12 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkOnlyYears").Enabled = GetControl<ICheckBox>("chkBirthDate").Checked && GetControl<ICheckBox>("chkDeathDate").Checked;
 
             GetControl<ICheckBox>("chkShowAge").Enabled = GetControl<ICheckBox>("chkOnlyYears").Checked && !GetControl<ICheckBox>("chkShowPlaces").Checked;
+
+            bool fullNameOnOneLine = GetControl<ICheckBox>("chkFullNameOnOneLine").Checked;
+            GetControl<ICheckBox>("chkSurname").Enabled = !fullNameOnOneLine;
+            GetControl<ICheckBox>("chkName").Enabled = !fullNameOnOneLine;
+            GetControl<ICheckBox>("chkPatronymic").Enabled = !fullNameOnOneLine;
+            GetControl<ICheckBox>("chkDiffLines").Enabled = !fullNameOnOneLine;
         }
 
         public void AcceptTreeChartsOptions()
@@ -713,6 +720,7 @@ namespace GKCore.Controllers
             fOptions.TreeChartOptions.URNotesVisible = GetControl<ICheckBox>("chkURNotesVisible").Checked;
             fOptions.TreeChartOptions.ShortenDateRanges = GetControl<ICheckBox>("chkShortenDateRanges").Checked;
             fOptions.TreeChartOptions.SameCardsWidth = GetControl<ICheckBox>("chkSameCardsWidth").Checked;
+            fOptions.TreeChartOptions.FullNameOnOneLine = GetControl<ICheckBox>("chkFullNameOnOneLine").Checked;
 
             fOptions.TreeChartOptions.MaleColor = GetControl<ILabel>("lblMaleColor").BackColor;
             fOptions.TreeChartOptions.FemaleColor = GetControl<ILabel>("lblFemaleColor").BackColor;
@@ -909,6 +917,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkURNotesVisible").Text = LangMan.LS(LSID.ShowTreeNotes);
             GetControl<ICheckBox>("chkShortenDateRanges").Text = LangMan.LS(LSID.ShortenDateRanges);
             GetControl<ICheckBox>("chkSameCardsWidth").Text = LangMan.LS(LSID.SameCardsWidth);
+            GetControl<ICheckBox>("chkFullNameOnOneLine").Text = LangMan.LS(LSID.FullNameOnOneLine);
 
             GetControl<IGroupBox>("grpTreeDecor").Text = LangMan.LS(LSID.Decor);
             GetControl<ILabel>("lblMaleColor").Text = LangMan.LS(LSID.Man);

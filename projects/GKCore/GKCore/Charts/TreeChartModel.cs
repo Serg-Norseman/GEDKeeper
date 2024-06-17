@@ -889,49 +889,6 @@ namespace GKCore.Charts
             }
         }
 
-        private int InitInfoSize()
-        {
-            int lines = 0;
-
-            if (fOptions.FamilyVisible) {
-                lines++;
-            }
-
-            if (!fOptions.DiffLines) {
-                lines++;
-            } else {
-                lines++;
-                lines++;
-            }
-
-            if (fOptions.OnlyYears && !fOptions.ShowPlaces) {
-                lines++;
-            } else {
-                if (fOptions.BirthDateVisible) {
-                    lines++;
-                    if (fOptions.SeparateDatesAndPlacesLines) {
-                        lines++;
-                    }
-                }
-                if (fOptions.DeathDateVisible) {
-                    lines++;
-                    if (fOptions.SeparateDatesAndPlacesLines) {
-                        lines++;
-                    }
-                }
-            }
-
-            if (fOptions.Kinship) {
-                lines++;
-            }
-
-            if (fOptions.URNotesVisible) {
-                lines++;
-            }
-
-            return lines;
-        }
-
         private void Predef()
         {
             fPicScale = (fScale < 1.0f) ? fScale : 1.0f;
@@ -961,7 +918,7 @@ namespace GKCore.Charts
                 fGraph.SetTreeRoot(fKinRoot.Rec);
             }
 
-            int lines = InitInfoSize();
+            int lines = TreeChartPerson.InitInfoSize(fOptions);
 
             int maxWidth = 0;
             int num = fPersons.Count;

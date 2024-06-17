@@ -202,6 +202,7 @@
                         <CheckBox x:Name="chkSameCardsWidth" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkUseInlineImagesInSvg" />
                         <CheckBox x:Name="chkExtendedTree" />
+                        <CheckBox x:Name="chkFullNameOnOneLine" CheckedChanged="chkTreeChartOption_CheckedChanged" />
 
                         <StackLayoutItem />
 

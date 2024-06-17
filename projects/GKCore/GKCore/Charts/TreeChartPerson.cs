@@ -413,6 +413,53 @@ namespace GKCore.Charts
             }
         }
 
+        internal static int InitInfoSize(TreeChartOptions options)
+        {
+            int lines = 0;
+
+            if (options.FullNameOnOneLine) {
+                lines += 3;
+            } else {
+                if (options.FamilyVisible) {
+                    lines++;
+                }
+
+                if (!options.DiffLines) {
+                    lines++;
+                } else {
+                    lines++;
+                    lines++;
+                }
+            }
+
+            if (options.OnlyYears && !options.ShowPlaces) {
+                lines++;
+            } else {
+                if (options.BirthDateVisible) {
+                    lines++;
+                    if (options.SeparateDatesAndPlacesLines) {
+                        lines++;
+                    }
+                }
+                if (options.DeathDateVisible) {
+                    lines++;
+                    if (options.SeparateDatesAndPlacesLines) {
+                        lines++;
+                    }
+                }
+            }
+
+            if (options.Kinship) {
+                lines++;
+            }
+
+            if (options.URNotesVisible) {
+                lines++;
+            }
+
+            return lines;
+        }
+
         private void InitInfo(int lines)
         {
             Lines = new string[lines];
@@ -431,45 +478,61 @@ namespace GKCore.Charts
                 // create lines
                 int idx = 0;
 
-                if (options.SurnameFirstInOrder) {
-                    if (options.FamilyVisible) {
-                        Lines[idx] = fSurname;
+                if (options.FullNameOnOneLine) {
+                    if (options.SurnameFirstInOrder) {
                         NameLines++;
                         idx++;
-                    }
-
-                    if (!options.DiffLines) {
-                        Lines[idx] = nameLine + " " + fPatronymic; // attention: "Name" is combined property
-                        NameLines++;
-                        idx++;
+                        Lines[idx] = fSurname + " " + nameLine;
+                        NameLines += 2;
+                        idx += 2;
                     } else {
-                        Lines[idx] = nameLine;
                         NameLines++;
                         idx++;
-
-                        Lines[idx] = fPatronymic;
-                        NameLines++;
-                        idx++;
+                        Lines[idx] = nameLine + " " + fSurname;
+                        NameLines += 2;
+                        idx += 2;
                     }
                 } else {
-                    if (!options.DiffLines) {
-                        Lines[idx] = nameLine + " " + fPatronymic; // attention: "Name" is combined property
-                        NameLines++;
-                        idx++;
+                    if (options.SurnameFirstInOrder) {
+                        if (options.FamilyVisible) {
+                            Lines[idx] = fSurname;
+                            NameLines++;
+                            idx++;
+                        }
+
+                        if (!options.DiffLines) {
+                            Lines[idx] = nameLine + " " + fPatronymic; // attention: "Name" is combined property
+                            NameLines++;
+                            idx++;
+                        } else {
+                            Lines[idx] = nameLine;
+                            NameLines++;
+                            idx++;
+
+                            Lines[idx] = fPatronymic;
+                            NameLines++;
+                            idx++;
+                        }
                     } else {
-                        Lines[idx] = nameLine;
-                        NameLines++;
-                        idx++;
+                        if (!options.DiffLines) {
+                            Lines[idx] = nameLine + " " + fPatronymic; // attention: "Name" is combined property
+                            NameLines++;
+                            idx++;
+                        } else {
+                            Lines[idx] = nameLine;
+                            NameLines++;
+                            idx++;
 
-                        Lines[idx] = fPatronymic;
-                        NameLines++;
-                        idx++;
-                    }
+                            Lines[idx] = fPatronymic;
+                            NameLines++;
+                            idx++;
+                        }
 
-                    if (options.FamilyVisible) {
-                        Lines[idx] = fSurname;
-                        NameLines++;
-                        idx++;
+                        if (options.FamilyVisible) {
+                            Lines[idx] = fSurname;
+                            NameLines++;
+                            idx++;
+                        }
                     }
                 }
 
