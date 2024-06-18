@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -153,8 +153,6 @@ namespace GKUI.Components
             return new ImageHandler(image);
         }
 
-        /* TODO(zsv): Need to find an appropriate icon in the general style
-         * for the main toolbar - screenshot capture for windows with charts. */
         public void SaveSnapshot(string fileName)
         {
             string ext = FileHelper.GetFileExtension(fileName);

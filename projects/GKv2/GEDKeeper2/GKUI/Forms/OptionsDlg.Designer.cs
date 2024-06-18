@@ -471,7 +471,7 @@
             // lblCertaintyAlgorithm
             // 
             this.lblCertaintyAlgorithm.AutoSize = true;
-            this.lblCertaintyAlgorithm.Location = new System.Drawing.Point(319, 595);
+            this.lblCertaintyAlgorithm.Location = new System.Drawing.Point(290, 595);
             this.lblCertaintyAlgorithm.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCertaintyAlgorithm.Name = "lblCertaintyAlgorithm";
             this.lblCertaintyAlgorithm.Size = new System.Drawing.Size(125, 17);
@@ -624,7 +624,7 @@
             // lblGeoSearchCountry
             // 
             this.lblGeoSearchCountry.AutoSize = true;
-            this.lblGeoSearchCountry.Location = new System.Drawing.Point(319, 548);
+            this.lblGeoSearchCountry.Location = new System.Drawing.Point(290, 548);
             this.lblGeoSearchCountry.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblGeoSearchCountry.Name = "lblGeoSearchCountry";
             this.lblGeoSearchCountry.Size = new System.Drawing.Size(216, 17);
@@ -2345,7 +2345,7 @@
             // 
             // chkUseExtendedNotes
             // 
-            this.chkUseExtendedNotes.Location = new System.Drawing.Point(20, 61);
+            this.chkUseExtendedNotes.Location = new System.Drawing.Point(20, 51);
             this.chkUseExtendedNotes.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkUseExtendedNotes.Name = "chkUseExtendedNotes";
             this.chkUseExtendedNotes.Size = new System.Drawing.Size(600, 22);
@@ -2354,7 +2354,7 @@
             // 
             // chkKeepRichNames
             // 
-            this.chkKeepRichNames.Location = new System.Drawing.Point(20, 102);
+            this.chkKeepRichNames.Location = new System.Drawing.Point(20, 82);
             this.chkKeepRichNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkKeepRichNames.Name = "chkKeepRichNames";
             this.chkKeepRichNames.Size = new System.Drawing.Size(600, 22);
@@ -2363,7 +2363,7 @@
             // 
             // lblChartWindowsShowMode
             // 
-            this.lblChartWindowsShowMode.Location = new System.Drawing.Point(20, 143);
+            this.lblChartWindowsShowMode.Location = new System.Drawing.Point(20, 113);
             this.lblChartWindowsShowMode.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.lblChartWindowsShowMode.Name = "lblChartWindowsShowMode";
             this.lblChartWindowsShowMode.Size = new System.Drawing.Size(300, 22);
@@ -2373,7 +2373,7 @@
             // cmbChartWindowsShowMode
             //
             this.cmbChartWindowsShowMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbChartWindowsShowMode.Location = new System.Drawing.Point(320, 143);
+            this.cmbChartWindowsShowMode.Location = new System.Drawing.Point(320, 113);
             this.cmbChartWindowsShowMode.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.cmbChartWindowsShowMode.Name = "cmbChartWindowsShowMode";
             this.cmbChartWindowsShowMode.Size = new System.Drawing.Size(220, 22);
@@ -2382,7 +2382,7 @@
             // 
             // chkExtendedTree
             // 
-            this.chkExtendedTree.Location = new System.Drawing.Point(20, 184);
+            this.chkExtendedTree.Location = new System.Drawing.Point(20, 144);
             this.chkExtendedTree.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkExtendedTree.Name = "chkExtendedTree";
             this.chkExtendedTree.Size = new System.Drawing.Size(600, 22);
@@ -2391,7 +2391,7 @@
             // 
             // chkUseExtraControls
             // 
-            this.chkUseExtraControls.Location = new System.Drawing.Point(20, 225);
+            this.chkUseExtraControls.Location = new System.Drawing.Point(20, 175);
             this.chkUseExtraControls.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkUseExtraControls.Name = "chkUseExtraControls";
             this.chkUseExtraControls.Size = new System.Drawing.Size(600, 22);
@@ -2400,7 +2400,7 @@
             // 
             // chkSAFByAllNames
             // 
-            this.chkSAFByAllNames.Location = new System.Drawing.Point(20, 266);
+            this.chkSAFByAllNames.Location = new System.Drawing.Point(20, 206);
             this.chkSAFByAllNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkSAFByAllNames.Name = "chkSAFByAllNames";
             this.chkSAFByAllNames.Size = new System.Drawing.Size(600, 22);
@@ -2409,7 +2409,7 @@
             // 
             // chkShortenDateRanges
             // 
-            this.chkShortenDateRanges.Location = new System.Drawing.Point(20, 307);
+            this.chkShortenDateRanges.Location = new System.Drawing.Point(20, 237);
             this.chkShortenDateRanges.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkShortenDateRanges.Name = "chkShortenDateRanges";
             this.chkShortenDateRanges.Size = new System.Drawing.Size(600, 22);
@@ -2418,7 +2418,7 @@
             // 
             // chkKeepInfoPansOverallSize
             // 
-            this.chkKeepInfoPansOverallSize.Location = new System.Drawing.Point(20, 348);
+            this.chkKeepInfoPansOverallSize.Location = new System.Drawing.Point(20, 268);
             this.chkKeepInfoPansOverallSize.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkKeepInfoPansOverallSize.Name = "chkKeepInfoPansOverallSize";
             this.chkKeepInfoPansOverallSize.Size = new System.Drawing.Size(600, 22);
@@ -2427,7 +2427,7 @@
             // 
             // chkFilesOverwriteWarn
             // 
-            this.chkFilesOverwriteWarn.Location = new System.Drawing.Point(20, 389);
+            this.chkFilesOverwriteWarn.Location = new System.Drawing.Point(20, 299);
             this.chkFilesOverwriteWarn.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkFilesOverwriteWarn.Name = "chkFilesOverwriteWarn";
             this.chkFilesOverwriteWarn.Size = new System.Drawing.Size(600, 22);
@@ -2436,7 +2436,7 @@
             // 
             // chkExtendedKinships
             // 
-            this.chkExtendedKinships.Location = new System.Drawing.Point(20, 430);
+            this.chkExtendedKinships.Location = new System.Drawing.Point(20, 330);
             this.chkExtendedKinships.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkExtendedKinships.Name = "chkExtendedKinships";
             this.chkExtendedKinships.Size = new System.Drawing.Size(600, 22);
@@ -2445,7 +2445,7 @@
             // 
             // chkExtendedLocations
             // 
-            this.chkExtendedLocations.Location = new System.Drawing.Point(20, 471);
+            this.chkExtendedLocations.Location = new System.Drawing.Point(20, 361);
             this.chkExtendedLocations.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkExtendedLocations.Name = "chkExtendedLocations";
             this.chkExtendedLocations.Size = new System.Drawing.Size(600, 22);
@@ -2454,7 +2454,7 @@
             // 
             // chkELAbbreviatedNames
             // 
-            this.chkELAbbreviatedNames.Location = new System.Drawing.Point(50, 512);
+            this.chkELAbbreviatedNames.Location = new System.Drawing.Point(50, 392);
             this.chkELAbbreviatedNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkELAbbreviatedNames.Name = "chkELAbbreviatedNames";
             this.chkELAbbreviatedNames.Size = new System.Drawing.Size(600, 22);
@@ -2463,7 +2463,7 @@
             // 
             // chkReversePlacesOrder
             // 
-            this.chkReversePlacesOrder.Location = new System.Drawing.Point(20, 553);
+            this.chkReversePlacesOrder.Location = new System.Drawing.Point(20, 423);
             this.chkReversePlacesOrder.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkReversePlacesOrder.Name = "chkReversePlacesOrder";
             this.chkReversePlacesOrder.Size = new System.Drawing.Size(600, 22);
@@ -2472,7 +2472,7 @@
             // 
             // chkShowNumberOfSubstructures
             // 
-            this.chkShowNumberOfSubstructures.Location = new System.Drawing.Point(20, 594);
+            this.chkShowNumberOfSubstructures.Location = new System.Drawing.Point(20, 454);
             this.chkShowNumberOfSubstructures.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkShowNumberOfSubstructures.Name = "chkShowNumberOfSubstructures";
             this.chkShowNumberOfSubstructures.Size = new System.Drawing.Size(600, 22);

@@ -27,6 +27,7 @@ using System.IO;
 using BSLib;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
+using GKCore.Types;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using it = iTextSharp.text;
@@ -104,6 +105,7 @@ namespace GKCore.Export
         private Document fDocument;
         private bool fMulticolumns;
         private PdfWriter fPdfWriter;
+        private GKPageSize fPredefPage;
         private itTable fTable;
         private Stack<ITextElementArray> fStack;
 
@@ -116,6 +118,12 @@ namespace GKCore.Export
             Stream fontStream = GetType().Assembly.GetManifestResourceStream("Resources.fonts.FreeSans.ttf");
             var fontBytes = FileHelper.ReadByteArray(fontStream);
             fBaseFont = BaseFont.CreateFont("FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, BaseFont.CACHED, fontBytes, null);
+        }
+
+        public PDFWriter(GKPageSize predefPage, bool albumPage) : this()
+        {
+            fPredefPage = predefPage;
+            fAlbumPage = albumPage;
         }
 
         protected override void Dispose(bool disposing)
@@ -154,9 +162,36 @@ namespace GKCore.Export
 
         public override void BeginWrite()
         {
-            itRectangle pageSize = !fAlbumPage ? PageSize.A4 : PageSize.A4.Rotate();
+            itRectangle pageSize;
+            if (fPredefPage == GKPageSize.None) {
+                pageSize = PageSize.A4;
+            } else {
+                switch (fPredefPage) {
+                    case GKPageSize.A0:
+                        pageSize = PageSize.A0;
+                        break;
+                    case GKPageSize.A1:
+                        pageSize = PageSize.A1;
+                        break;
+                    case GKPageSize.A2:
+                        pageSize = PageSize.A2;
+                        break;
+                    case GKPageSize.A3:
+                        pageSize = PageSize.A3;
+                        break;
+                    case GKPageSize.A4:
+                    default:
+                        pageSize = PageSize.A4;
+                        break;
+                    case GKPageSize.A5:
+                        pageSize = PageSize.A5;
+                        break;
+                }
+            }
 
-            fDocument = new Document(pageSize, fMargins.Left, fMargins.Right, fMargins.Top, fMargins.Bottom);
+            itRectangle pageRect = !fAlbumPage ? pageSize : pageSize.Rotate();
+
+            fDocument = new Document(pageRect, fMargins.Left, fMargins.Right, fMargins.Top, fMargins.Bottom);
             fPdfWriter = PdfWriter.GetInstance(fDocument, new FileStream(fFileName, FileMode.Create, FileAccess.Write));
 
             fDocument.AddTitle(fDocumentTitle);

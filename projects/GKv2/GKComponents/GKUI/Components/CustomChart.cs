@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,6 +26,8 @@ using BSLib;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
+using GKCore.Export;
+using GKCore.Types;
 using GKUI.Platform.Handlers;
 
 namespace GKUI.Components
@@ -37,6 +39,11 @@ namespace GKUI.Components
 
 
         public event EventHandler NavRefresh;
+
+        public new virtual float Scale
+        {
+            get { return 0; }
+        }
 
 
         protected CustomChart()
@@ -50,6 +57,10 @@ namespace GKUI.Components
             UpdateStyles();
 
             fNavman = new NavigationStack<object>();
+        }
+
+        public virtual void SetScale(float value)
+        {
         }
 
         protected override bool IsInputKey(Keys keyData)
@@ -216,8 +227,6 @@ namespace GKUI.Components
             return new ImageHandler(image);
         }
 
-        /* TODO(zsv): Need to find an appropriate icon in the general style
-         * for the main toolbar - screenshot capture for windows with charts. */
         public void SaveSnapshot(string fileName)
         {
             string ext = FileHelper.GetFileExtension(fileName);
@@ -237,6 +246,34 @@ namespace GKUI.Components
                 } finally {
                     fRenderer.EndDrawing();
                     SetRenderer(prevRenderer);
+                }
+
+                return;
+            } else if (ext == ".pdf") {
+                var prevRenderer = fRenderer;
+
+                var pdfWriter = new PDFWriter(GKPageSize.A4, true);
+                pdfWriter.SetFileName(fileName);
+                pdfWriter.BeginWrite();
+
+                var renderer = pdfWriter.GetPageRenderer();
+                SetRenderer(renderer);
+
+                var pageSize = pdfWriter.GetPageSize();
+                var sf = GfxHelper.ZoomToFit(imageSize.Width, imageSize.Height, pageSize.GetWidth(), pageSize.GetHeight());
+                var prevScale = this.Scale;
+                if (sf < 1.0f) this.SetScale(sf);
+
+                renderer.BeginDrawing();
+                try {
+                    //GenChart(indi.IRec, indi.TreeKind, false);
+                    RenderImage(RenderTarget.Printer);
+                } finally {
+                    renderer.EndDrawing();
+                    pdfWriter.EndWrite();
+
+                    SetRenderer(prevRenderer);
+                    this.SetScale(prevScale);
                 }
 
                 return;

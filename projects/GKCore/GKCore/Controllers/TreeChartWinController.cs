@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -17,6 +17,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+//#define PDF_RENDER
 
 using System.IO;
 using GDModel;
@@ -277,6 +279,10 @@ namespace GKCore.Controllers
         public async void SaveSnapshot()
         {
             string filters = GKUtils.GetImageFilter(true);
+#if PDF_RENDER
+            filters += "|" + LangMan.LS(LSID.PDFFilter);
+#endif
+
             string fileName = await AppHost.StdDialogs.GetSaveFile("", GlobalOptions.Instance.ImageExportLastDir, filters, 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName)) {
                 GlobalOptions.Instance.ImageExportLastDir = Path.GetDirectoryName(fileName);

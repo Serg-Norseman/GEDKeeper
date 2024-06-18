@@ -128,7 +128,7 @@ namespace GKUI.Components
             }
         }
 
-        public new float Scale
+        public override float Scale
         {
             get { return fModel.Scale; }
         }
@@ -204,7 +204,7 @@ namespace GKUI.Components
             fModel.SetRenderer(renderer);
         }
 
-        public void SetScale(float value)
+        public override void SetScale(float value)
         {
             fModel.Scale = value;
 

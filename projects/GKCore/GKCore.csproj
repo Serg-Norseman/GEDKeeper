@@ -538,6 +538,7 @@
     <Compile Include="GKCore\Lists\LocationLinksListModel.cs" />
     <Compile Include="GKCore\Interfaces\IScrollableContainer.cs" />
     <Compile Include="GKCore\EventDefinitions.cs" />
+    <Compile Include="GKCore\Types\GKPageSize.cs" />
   </ItemGroup>
   <Import Project="GKCore.props" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
