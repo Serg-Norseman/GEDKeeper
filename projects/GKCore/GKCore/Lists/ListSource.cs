@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define REGEX_MASKS
-
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -36,6 +34,12 @@ using SGCulture = System.Globalization.CultureInfo;
 
 namespace GKCore.Lists
 {
+    public enum MatchPatternMethod
+    {
+        RegEx, FastIgnoreCase, Fast
+    }
+
+
     /// <summary>
     ///
     /// </summary>
@@ -55,6 +59,7 @@ namespace GKCore.Lists
         protected ExternalFilterHandler fExternalFilter;
         protected T fFetchedRec;
         protected ListFilter fFilter;
+        protected MatchPatternMethod fFilterMethod;
 
         protected readonly IBaseContext fBaseContext;
         protected readonly List<MapColumnRec> fColumnsMap;
@@ -238,40 +243,45 @@ namespace GKCore.Lists
 
         #region Mask processing
 
+        /// <summary>
+        /// Tests on working database, filtering 691 from 12174 records, pattern `*xxxx*xxx*`.
+        ///     RegEx -> 394.4 ms -> x1
+        ///     FastIgnoreCase -> 142.9 ms -> x2.8
+        ///     Fast -> 37.9 ms -> x10.4
+        /// </summary>
         protected bool IsMatchesMask(string str, string mask)
         {
-#if !REGEX_MASKS
+            if (fFilterMethod != MatchPatternMethod.RegEx) {
+                bool ignoreCase = (fFilterMethod == MatchPatternMethod.FastIgnoreCase);
 
-            // This method of processing name matching with a pattern mask compared to using RegEx:
-            //   4.6 times faster if without unsafe operations (601 -> 129 ms)
-            //   and 11.5 times faster if with unsafe operations (601 -> 52 ms).
-            return SysUtils.MatchPattern(mask, str);
+                // This method of processing name matching with a pattern mask compared to using RegEx:
+                //   4.6 times faster if without unsafe operations (601 -> 129 ms)
+                //   and 11.5 times faster if with unsafe operations (601 -> 52 ms).
+                return SysUtils.MatchPattern(mask, str, ignoreCase);
+            } else {
+                bool any = false;
+                if (string.IsNullOrEmpty(mask) || (any = mask.Equals("*"))) {
+                    return true;
+                }
 
-#else
+                if (string.IsNullOrEmpty(str)) {
+                    return any;
+                }
 
-            bool any = false;
-            if (string.IsNullOrEmpty(mask) || (any = mask.Equals("*"))) {
-                return true;
-            }
+                if (fMask != mask) {
+                    fMask = mask;
+                    fSimpleMask = GetSimpleMask(fMask);
+                    if (fSimpleMask == null) {
+                        fRegexMask = new Regex(GKUtils.PrepareMask(fMask), GKUtils.RegexOpts);
+                    }
+                }
 
-            if (string.IsNullOrEmpty(str)) {
-                return any;
-            }
-
-            if (fMask != mask) {
-                fMask = mask;
-                fSimpleMask = GetSimpleMask(fMask);
-                if (fSimpleMask == null) {
-                    fRegexMask = new Regex(GKUtils.PrepareMask(fMask), GKUtils.RegexOpts);
+                if (fSimpleMask != null) {
+                    return str.IndexOf(fSimpleMask, StringComparison.OrdinalIgnoreCase) >= 0;
+                } else {
+                    return fRegexMask.IsMatch(str, 0);
                 }
             }
-
-            if (fSimpleMask != null) {
-                return str.IndexOf(fSimpleMask, StringComparison.OrdinalIgnoreCase) >= 0;
-            } else {
-                return fRegexMask.IsMatch(str, 0);
-            }
-#endif
         }
 
         protected bool IsMatchesMask(GDMLines strList, string mask)
@@ -337,6 +347,7 @@ namespace GKCore.Lists
 
         public virtual void PrepareFilter()
         {
+            fFilterMethod = GlobalOptions.Instance.MatchPatternMethod;
         }
 
         public virtual bool CheckFilter()

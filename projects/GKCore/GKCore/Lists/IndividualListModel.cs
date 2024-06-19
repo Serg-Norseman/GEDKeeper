@@ -560,6 +560,8 @@ namespace GKCore.Lists
 
         public override void PrepareFilter()
         {
+            base.PrepareFilter();
+
             IndividualListFilter iFilter = (IndividualListFilter)fFilter;
 
             filter_abd = GDMDate.GetUDNByFormattedStr(iFilter.AliveBeforeDate, GDMCalendar.dcGregorian);

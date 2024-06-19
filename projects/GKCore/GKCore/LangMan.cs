@@ -1042,7 +1042,7 @@ namespace GKCore
         /* 967 */ TagTypeWarning,
         /* 968 */ EventDefinition,
         /* 969 */ FullNameOnOneLine,
-        /* 970 */ Reserved_970,
+        /* 970 */ MatchPatternMethod,
 
         /* 971 */ TBS_Single,
         /* 972 */ TBS_Double,
@@ -2053,7 +2053,7 @@ namespace GKCore
             /* 967 */ "For custom events and facts, the type must be entered",
             /* 968 */ "Event Definition",
             /* 969 */ "Full name on one line",
-            /* 970 */ "<?>",
+            /* 970 */ "Match pattern method",
 
             /* 971 */ "Single",
             /* 972 */ "Double",

@@ -191,6 +191,8 @@
         private System.Windows.Forms.TabPage pageEventTypes;
         private GKUI.Components.GKSheetList slEventTypes;
         private System.Windows.Forms.CheckBox chkFullNameOnOneLine;
+        private System.Windows.Forms.Label lblMatchPatternMethod;
+        private System.Windows.Forms.ComboBox cmbMatchPatternMethod;
 
         private void InitializeComponent()
         {
@@ -383,6 +385,8 @@
             this.pageEventTypes = new System.Windows.Forms.TabPage();
             this.slEventTypes = new GKUI.Components.GKSheetList();
             this.chkFullNameOnOneLine = new System.Windows.Forms.CheckBox();
+            this.lblMatchPatternMethod = new System.Windows.Forms.Label();
+            this.cmbMatchPatternMethod = new System.Windows.Forms.ComboBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -1855,6 +1859,8 @@
             this.pageViewCommon.Controls.Add(this.chkHighlightUnmarried);
             this.pageViewCommon.Controls.Add(this.chkUseSurnamesInPSF);
             this.pageViewCommon.Controls.Add(this.chkUseBirthDatesInPSF);
+            this.pageViewCommon.Controls.Add(this.lblMatchPatternMethod);
+            this.pageViewCommon.Controls.Add(this.cmbMatchPatternMethod);
             this.pageViewCommon.Location = new System.Drawing.Point(4, 26);
             this.pageViewCommon.Margin = new System.Windows.Forms.Padding(2);
             this.pageViewCommon.Name = "pageViewCommon";
@@ -2139,6 +2145,25 @@
             this.chkUseBirthDatesInPSF.Size = new System.Drawing.Size(500, 21);
             this.chkUseBirthDatesInPSF.TabIndex = 4;
             this.chkUseBirthDatesInPSF.Text = "chkUseBirthDatesInPSF";
+            // 
+            // lblMatchPatternMethod
+            // 
+            this.lblMatchPatternMethod.AutoSize = true;
+            this.lblMatchPatternMethod.Location = new System.Drawing.Point(11, 526);
+            this.lblMatchPatternMethod.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblMatchPatternMethod.Name = "lblMatchPatternMethod";
+            this.lblMatchPatternMethod.Size = new System.Drawing.Size(175, 21);
+            this.lblMatchPatternMethod.TabIndex = 7;
+            this.lblMatchPatternMethod.Text = "lblMatchPatternMethod";
+            // 
+            // cmbMatchPatternMethod
+            // 
+            this.cmbMatchPatternMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMatchPatternMethod.Location = new System.Drawing.Point(233, 523);
+            this.cmbMatchPatternMethod.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbMatchPatternMethod.Name = "cmbMatchPatternMethod";
+            this.cmbMatchPatternMethod.Size = new System.Drawing.Size(230, 25);
+            this.cmbMatchPatternMethod.TabIndex = 8;
             // 
             // pageViewPersons
             // 

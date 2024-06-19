@@ -196,6 +196,8 @@ namespace GKCore.Options
 
         public ChartWindowsShowMode ChartWindowsShowMode { get; set; }
 
+        public MatchPatternMethod MatchPatternMethod { get; set; }
+
         public MediaStoreType MediaStoreDefault { get; set; }
 
         public List<MRUFile> MRUFiles
@@ -409,6 +411,7 @@ namespace GKCore.Options
             UseBirthDatesInPersonSelectionFilter = false;
             ShowIndiAssociations = false;
             ShowIndiNamesakes = true;
+            MatchPatternMethod = MatchPatternMethod.RegEx;
         }
 
         public void ResetDefaults_Specials()
@@ -844,6 +847,7 @@ namespace GKCore.Options
             ShowIndiAssociations = ini.ReadBool("Common", "ShowIndiAssociations", false);
             ShowIndiNamesakes = ini.ReadBool("Common", "ShowIndiNamesakes", false);
             ShowNumberOfSubstructures = ini.ReadBool("Common", "ShowNumberOfSubstructures", false);
+            MatchPatternMethod = (MatchPatternMethod)ini.ReadInteger("Common", "MatchPatternMethod", 0);
 
             Theme = ini.ReadString("Common", "Theme", "");
 
@@ -994,6 +998,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "ShowIndiAssociations", ShowIndiAssociations);
             ini.WriteBool("Common", "ShowIndiNamesakes", ShowIndiNamesakes);
             ini.WriteBool("Common", "ShowNumberOfSubstructures", ShowNumberOfSubstructures);
+            ini.WriteInteger("Common", "MatchPatternMethod", (int)MatchPatternMethod);
 
             ini.WriteString("Common", "Theme", Theme);
 

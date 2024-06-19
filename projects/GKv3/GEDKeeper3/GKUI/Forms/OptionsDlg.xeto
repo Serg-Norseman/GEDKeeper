@@ -397,6 +397,13 @@
                     <CheckBox x:Name="chkUseSurnamesInPSF" />
                     <CheckBox x:Name="chkUseBirthDatesInPSF" />
 
+                    <TableLayout Spacing="4,4">
+                      <TableRow>
+                        <Label x:Name="lblMatchPatternMethod" />
+                        <ComboBox x:Name="cmbMatchPatternMethod" ReadOnly="True" />
+                      </TableRow>
+                    </TableLayout>
+
                   </StackLayout>
 
                 </TableRow>

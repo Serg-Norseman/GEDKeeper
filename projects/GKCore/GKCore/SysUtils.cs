@@ -553,8 +553,10 @@ namespace GKCore
         /// <param name="expression">Supplies the input expression to check against.</param>
         /// <param name="name">Supplies the input name to check for.</param>
         /// <returns>True if Name is an element in the set of strings denoted by the input Expression and False otherwise.</returns>
-        public static unsafe bool MatchPattern(string expression, string name)
+        public static unsafe bool MatchPattern(string expression, string name, bool ignoreCase = false)
         {
+            var textInfo = CultureInfo.InvariantCulture.TextInfo;
+
             const int MATCHES_ARRAY_SIZE = 16;
 
             //  Special case by far the most common wild card search of *
@@ -570,6 +572,8 @@ namespace GKCore
             int exprLen = expression.Length;
             int starPos = expression.IndexOf('*', 1);
 
+            StringComparison stringComparison = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+
             //  Also special case expressions of the form *X.  With this and the prior
             //  case we have covered virtually all normal queries.
             if (expression[0] == '*' && starPos == -1) {
@@ -577,7 +581,7 @@ namespace GKCore
                 // if name is shorter that the stuff to the right of * in expression, we don't
                 // need to do the string compare, otherwise we compare rightlength characters
                 // and the end of both strings.
-                if (name.Length >= rightLength && string.Compare(expression, 1, name, name.Length - rightLength, rightLength, StringComparison.Ordinal) == 0) {
+                if (name.Length >= rightLength && string.Compare(expression, 1, name, name.Length - rightLength, rightLength, stringComparison) == 0) {
                     return true;
                 }
             }
@@ -589,7 +593,7 @@ namespace GKCore
                 // if name is shorter that the stuff to the right of * in expression, we don't
                 // need to do the string compare, otherwise we compare rightlength characters
                 // and the end of both strings.
-                if (name.Length >= leftLength && string.Compare(expression, 0, name, 0, leftLength, StringComparison.Ordinal) == 0) {
+                if (name.Length >= leftLength && string.Compare(expression, 0, name, 0, leftLength, stringComparison) == 0) {
                     return true;
                 }
             }
@@ -656,6 +660,7 @@ namespace GKCore
                 while (!nameFinished) {
                     if (nameOffset < name.Length) {
                         nameChar = ptr_name[nameOffset++];
+                        if (ignoreCase) nameChar = textInfo.ToUpper(nameChar);
                     } else {
                         nameFinished = true;
 
@@ -698,6 +703,8 @@ namespace GKCore
                             }
 
                             char exprChar = ptr_expr[exprStart + exprOffset];
+                            if (ignoreCase) exprChar = textInfo.ToUpper(exprChar);
+
                             length = 1;
 
                             //  Before we get started, we have to check for something

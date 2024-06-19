@@ -375,6 +375,13 @@ namespace GKCore.Controllers
 
             GetControl<ICheckBox>("chkUseSurnamesInPSF").Checked = fOptions.UseSurnamesInPersonSelectionFilter;
             GetControl<ICheckBox>("chkUseBirthDatesInPSF").Checked = fOptions.UseBirthDatesInPersonSelectionFilter;
+
+            var combo = GetControl<IComboBox>("cmbMatchPatternMethod");
+            combo.Clear();
+            for (MatchPatternMethod itm = MatchPatternMethod.RegEx; itm <= MatchPatternMethod.Fast; itm++) {
+                combo.AddItem(itm.ToString(), itm);
+            }
+            combo.SetSelectedTag(fOptions.MatchPatternMethod);
         }
 
         public NameFormat GetSelectedNameFormat()
@@ -425,6 +432,8 @@ namespace GKCore.Controllers
 
             fOptions.UseSurnamesInPersonSelectionFilter = GetControl<ICheckBox>("chkUseSurnamesInPSF").Checked;
             fOptions.UseBirthDatesInPersonSelectionFilter = GetControl<ICheckBox>("chkUseBirthDatesInPSF").Checked;
+
+            fOptions.MatchPatternMethod = GetControl<IComboBox>("cmbMatchPatternMethod").GetSelectedTag<MatchPatternMethod>();
         }
 
         public void ResetSpecialsOptions()
@@ -980,6 +989,8 @@ namespace GKCore.Controllers
 
             GetControl<ITabPage>("pageViewPersons").Text = LangMan.LS(LSID.ListPersons);
             GetControl<IButton>("btnResetDefaults").Text = LangMan.LS(LSID.DefList);
+
+            GetControl<ILabel>("lblMatchPatternMethod").Text = LangMan.LS(LSID.MatchPatternMethod);
 
             // Pedigree
             GetControl<ITabPage>("pagePedigree").Text = LangMan.LS(LSID.Pedigrees);
