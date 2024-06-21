@@ -53,8 +53,8 @@ namespace GKUI.Forms
         private Label lblAttrValue;
         private ComboBox cmbEventType;
         private TextBox txtEventPlace;
-        private TextBox txtEventCause;
-        private TextBox txtEventOrg;
+        private ComboBox txtEventCause;
+        private ComboBox txtEventOrg;
         private ComboBox txtAttribute;
         private Button btnPlaceAdd;
         private Button btnPlaceDelete;
@@ -109,14 +109,14 @@ namespace GKUI.Forms
             get { return GetControlHandler<ITextBox>(txtEventPlace); }
         }
 
-        ITextBox IEventEditDlg.Cause
+        IComboBox IEventEditDlg.Cause
         {
-            get { return  GetControlHandler<ITextBox>(txtEventCause); }
+            get { return  GetControlHandler<IComboBox>(txtEventCause); }
         }
 
-        ITextBox IEventEditDlg.Agency
+        IComboBox IEventEditDlg.Agency
         {
-            get { return  GetControlHandler<ITextBox>(txtEventOrg); }
+            get { return  GetControlHandler<IComboBox>(txtEventOrg); }
         }
 
         #endregion

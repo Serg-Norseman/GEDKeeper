@@ -35,8 +35,8 @@ namespace GKCore.Design.Views
 
         IComboBox Attribute { get; }
         ITextBox Place { get; }
-        ITextBox Cause { get; }
-        ITextBox Agency { get; }
+        IComboBox Cause { get; }
+        IComboBox Agency { get; }
 
         ISheetList NotesList { get; }
         ISheetList MediaList { get; }

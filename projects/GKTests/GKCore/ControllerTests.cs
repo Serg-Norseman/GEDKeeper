@@ -253,8 +253,8 @@ namespace GKCore.Controllers
             view.Date.Returns(Substitute.For<IDateControl>());
             view.Attribute.Returns(Substitute.For<IComboBox>());
             view.Place.Returns(Substitute.For<ITextBox>());
-            view.Cause.Returns(Substitute.For<ITextBox>());
-            view.Agency.Returns(Substitute.For<ITextBox>());
+            view.Cause.Returns(Substitute.For<IComboBox>());
+            view.Agency.Returns(Substitute.For<IComboBox>());
             view.NotesList.Returns(Substitute.For<ISheetList>());
             view.MediaList.Returns(Substitute.For<ISheetList>());
             view.SourcesList.Returns(Substitute.For<ISheetList>());

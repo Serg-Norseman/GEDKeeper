@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,9 +18,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GDModel;
+using GDModel.Providers.GEDCOM;
+
 namespace GKCore
 {
     public static class GKExtensions
     {
+        public static string GetEventKey(this GDMCustomEvent customEvent)
+        {
+            return (customEvent == null) ? string.Empty : customEvent.GetTagName() + ":" + customEvent.Classification;
+        }
     }
 }

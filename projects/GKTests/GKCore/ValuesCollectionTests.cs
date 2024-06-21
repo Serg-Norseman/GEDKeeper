@@ -32,10 +32,10 @@ namespace GKCore
 
             valsCol.Add("red", "rojo");
             valsCol.Add("green", "verde");
-            valsCol.Add("blue", "azul", true);
+            valsCol.Add("blue", "azul");
             valsCol.Add("red", "rouge");
             valsCol.Add("red", null);
-            valsCol.Add("red", "rouge", true);
+            valsCol.Add("red", "rouge");
 
             Assert.AreEqual(3, valsCol.Count);
 

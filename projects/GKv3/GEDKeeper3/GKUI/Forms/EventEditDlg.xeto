@@ -40,12 +40,12 @@
 
             <TableRow>
               <Label x:Name="lblCause" />
-              <TextBox x:Name="txtEventCause" />
+              <ComboBox x:Name="txtEventCause" />
             </TableRow>
 
             <TableRow>
               <Label x:Name="lblOrg" />
-              <TextBox x:Name="txtEventOrg" />
+              <ComboBox x:Name="txtEventOrg" />
             </TableRow>
 
             <TableRow ScaleHeight="True" />

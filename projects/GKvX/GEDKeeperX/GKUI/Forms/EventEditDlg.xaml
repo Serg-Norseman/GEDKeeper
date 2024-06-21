@@ -51,10 +51,10 @@
                             <comcom:GKDateControl x:Name="dateCtl" Grid.Column="1" Grid.Row="3" />
 
                             <Label x:Name="lblCause" Grid.Column="0" Grid.Row="4" />
-                            <Entry x:Name="txtEventCause" Grid.Column="1" Grid.Row="4" />
+                            <comcom:GKComboBox x:Name="txtEventCause" Grid.Column="1" Grid.Row="4" />
 
                             <Label x:Name="lblOrg" Grid.Column="0" Grid.Row="5" />
-                            <Entry x:Name="txtEventOrg" Grid.Column="1" Grid.Row="5" />
+                            <comcom:GKComboBox x:Name="txtEventOrg" Grid.Column="1" Grid.Row="5" />
                         </Grid>
 
                         <Label VerticalOptions="FillAndExpand" />

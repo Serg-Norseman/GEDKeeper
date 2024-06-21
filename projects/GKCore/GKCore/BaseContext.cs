@@ -192,10 +192,18 @@ namespace GKCore
         {
             if (evt == null) return;
 
-            string evName = evt.GetTagName();
+            string evKey = evt.GetEventKey();
             string evVal = evt.StringValue;
-            if (!string.IsNullOrEmpty(evName) && !string.IsNullOrEmpty(evVal)) {
-                fValuesCollection.Add(evName, evVal, true);
+            if (!string.IsNullOrEmpty(evKey) && !string.IsNullOrEmpty(evVal)) {
+                fValuesCollection.Add(evKey, evVal);
+            }
+
+            if (!string.IsNullOrEmpty(evt.Cause)) {
+                fValuesCollection.Add(GEDCOMTagName.CAUS, evt.Cause);
+            }
+
+            if (!string.IsNullOrEmpty(evt.Agency)) {
+                fValuesCollection.Add(GEDCOMTagName.AGNC, evt.Agency);
             }
         }
 

@@ -18,8 +18,8 @@
 		private System.Windows.Forms.Label lblAttrValue;
 		private System.Windows.Forms.ComboBox cmbEventType;
 		private System.Windows.Forms.TextBox txtEventPlace;
-		private System.Windows.Forms.TextBox txtEventCause;
-		private System.Windows.Forms.TextBox txtEventOrg;
+		private System.Windows.Forms.ComboBox txtEventCause;
+		private System.Windows.Forms.ComboBox txtEventOrg;
 		private System.Windows.Forms.ComboBox txtAttribute;
 		private System.Windows.Forms.Button btnPlaceAdd;
 		private System.Windows.Forms.Button btnPlaceDelete;
@@ -42,8 +42,8 @@
 		    this.btnPlaceDelete = new System.Windows.Forms.Button();
 		    this.cmbEventType = new System.Windows.Forms.ComboBox();
 		    this.txtEventPlace = new System.Windows.Forms.TextBox();
-		    this.txtEventCause = new System.Windows.Forms.TextBox();
-		    this.txtEventOrg = new System.Windows.Forms.TextBox();
+		    this.txtEventCause = new System.Windows.Forms.ComboBox();
+		    this.txtEventOrg = new System.Windows.Forms.ComboBox();
 		    this.txtAttribute = new System.Windows.Forms.ComboBox();
 		    this.pageNotes = new System.Windows.Forms.TabPage();
 		    this.pageMultimedia = new System.Windows.Forms.TabPage();

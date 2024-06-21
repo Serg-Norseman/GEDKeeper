@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,7 +24,7 @@ namespace GKCore
 {
     public sealed class ValuesCollection
     {
-        private readonly Dictionary<string, List<string>> fValues;
+        private readonly Dictionary<string, SortedSet<string>> fValues;
 
         public int Count
         {
@@ -33,7 +33,7 @@ namespace GKCore
 
         public ValuesCollection()
         {
-            fValues = new Dictionary<string, List<string>>();
+            fValues = new Dictionary<string, SortedSet<string>>();
         }
 
         public void Clear()
@@ -41,21 +41,16 @@ namespace GKCore
             fValues.Clear();
         }
 
-        public void Add(string name, string value, bool excludeDuplicates = false)
+        public void Add(string name, string value)
         {
-            List<string> arrayList;
-            if (!fValues.TryGetValue(name, out arrayList)) {
-                arrayList = new List<string>(1);
-                fValues.Add(name, arrayList);
+            SortedSet<string> set;
+            if (!fValues.TryGetValue(name, out set)) {
+                set = new SortedSet<string>();
+                fValues.Add(name, set);
             }
 
-            if (value == null) return;
-
-            if (!excludeDuplicates) {
-                arrayList.Add(value);
-            } else {
-                if (!arrayList.Contains(value)) arrayList.Add(value);
-            }
+            if (!string.IsNullOrEmpty(value))
+                set.Add(value);
         }
 
         public void Remove(string name)
@@ -65,15 +60,14 @@ namespace GKCore
 
         public string[] GetValues(string name)
         {
-            List<string> list;
-            if (!fValues.TryGetValue(name, out list)) {
+            SortedSet<string> set;
+            if (!fValues.TryGetValue(name, out set)) {
                 return new string[0];
             }
 
-            int num = list.Count;
+            int num = set.Count;
             string[] array = new string[num];
-            list.CopyTo(0, array, 0, num);
-
+            set.CopyTo(array, 0, num);
             return array;
         }
     }

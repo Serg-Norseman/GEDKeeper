@@ -160,8 +160,12 @@ namespace GKCore.Controllers
             ChangeEventType();
 
             fView.Date.Date = fEvent.Date.Value;
-            fView.Cause.Text = fEvent.Cause;
-            fView.Agency.Text = fEvent.Agency;
+
+            var causVals = fBase.Context.ValuesCollection.GetValues(GEDCOMTagName.CAUS);
+            UpdateCombo(fView.Cause, true, false, causVals, fEvent.Cause);
+
+            var agncVals = fBase.Context.ValuesCollection.GetValues(GEDCOMTagName.AGNC);
+            UpdateCombo(fView.Agency, true, false, agncVals, fEvent.Agency);
 
             fTempLocation = fBase.Context.Tree.GetPtrValue<GDMLocationRecord>(fEvent.Place.Location);
             UpdatePlace(true);
@@ -238,27 +242,29 @@ namespace GKCore.Controllers
             bool isFact = (evDef.Kind == EventKind.ekFact);
             SetAttributeMode(isFact);
 
-            // TODO: It is necessary to provide the registrable list of values for different tag types.
             string[] vals;
             bool canbeSorted, fixedList;
-
             if (evTag == GEDCOMTagName._BGRO) {
                 vals = GKData.BloodGroups.Split('|');
                 canbeSorted = false;
                 fixedList = true;
             } else {
-                vals = fBase.Context.ValuesCollection.GetValues(evTag);
+                string evKey = evDef.Tag + ":" + evDef.Type;
+                vals = fBase.Context.ValuesCollection.GetValues(evKey);
                 canbeSorted = true;
                 fixedList = false;
             }
+            UpdateCombo(fView.Attribute, canbeSorted, fixedList, vals, fView.Attribute.Text);
+        }
 
-            if (vals != null) {
-                string tmp = fView.Attribute.Text;
-                fView.Attribute.Clear();
-                fView.Attribute.AddRange(vals, canbeSorted);
-                fView.Attribute.Text = tmp;
-                fView.Attribute.ReadOnly = fixedList;
+        private void UpdateCombo(IComboBox combo, bool canbeSorted, bool readOnly, string[] values, string current)
+        {
+            combo.Clear();
+            if (values != null) {
+                combo.AddRange(values, canbeSorted);
             }
+            combo.Text = current;
+            combo.ReadOnly = readOnly;
         }
 
         public void SendData(string signature, string data)
