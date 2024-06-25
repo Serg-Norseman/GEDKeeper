@@ -53,6 +53,12 @@ namespace GDModel
             fDate = new GDMDateValue();
         }
 
+        public GDMLocationName(string strValue, GDMCustomDate date) : this()
+        {
+            StringValue = strValue;
+            fDate.SetRawData(date);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
@@ -96,12 +102,6 @@ namespace GDModel
         {
             base.ReplaceXRefs(map);
             fDate.ReplaceXRefs(map);
-        }
-
-        internal void SetRawData(string strValue, GDMCustomDate date)
-        {
-            StringValue = strValue;
-            Date.SetRawData(date);
         }
     }
 }

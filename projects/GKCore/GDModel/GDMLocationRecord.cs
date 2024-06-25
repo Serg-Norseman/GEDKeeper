@@ -182,7 +182,8 @@ namespace GDModel
             } else {
                 result = new GDMList<GDMLocationName>();
 
-                var buffer = new List<GDMLocationName>();
+                // search of intersections of links to top levels and top names
+                var topBuffer = new List<GDMLocationName>();
                 for (int j = 0; j < fTopLevels.Count; j++) {
                     var topLevel = fTopLevels[j];
                     var topLoc = tree.GetPtrValue<GDMLocationRecord>(topLevel);
@@ -196,39 +197,37 @@ namespace GDModel
                         var interDate = GDMCustomDate.GetIntersection(topLevel.Date.Value, topName.Date.Value);
                         if (!interDate.IsEmpty()) {
                             string tnVal = (abbreviations && !string.IsNullOrEmpty(topName.Abbreviation)) ? topName.Abbreviation : topName.StringValue;
-
-                            var newLocName = new GDMLocationName();
-                            newLocName.SetRawData(tnVal, interDate);
-                            buffer.Add(newLocName);
+                            topBuffer.Add(new GDMLocationName(tnVal, interDate));
                             wasJoin = true;
                         }
                     }
 
                     if (!wasJoin && topNames.Count > 0) {
-                        var newLocName = new GDMLocationName();
-                        newLocName.SetRawData(topNames[topNames.Count - 1].StringValue, topLevel.Date.Value);
-                        buffer.Add(newLocName);
+                        topBuffer.Add(new GDMLocationName(topNames[topNames.Count - 1].StringValue, topLevel.Date.Value));
                     }
                 }
 
-                for (int j = 0; j < buffer.Count; j++) {
-                    var topLocName = buffer[j];
-                    var topName = topLocName.StringValue;
-                    var topDate = topLocName.Date.Value;
+                // search of intersections of location names and intersections of top levels/names
+                for (int i = 0; i < fNames.Count; i++) {
+                    var locName = fNames[i];
+                    string nVal = (abbreviations && !string.IsNullOrEmpty(locName.Abbreviation)) ? locName.Abbreviation : locName.StringValue;
 
-                    for (int i = 0; i < fNames.Count; i++) {
-                        var locName = fNames[i];
+                    bool wasJoin = false;
+                    for (int j = 0; j < topBuffer.Count; j++) {
+                        var topLocName = topBuffer[j];
+                        var topName = topLocName.StringValue;
+                        var topDate = topLocName.Date.Value;
 
                         var interDate = GDMCustomDate.GetIntersection(topDate, locName.Date.Value);
                         if (!interDate.IsEmpty()) {
-                            string nVal = (abbreviations && !string.IsNullOrEmpty(locName.Abbreviation)) ? locName.Abbreviation : locName.StringValue;
-
                             string newName = (atdEnum == ATDEnumeration.fLtS) ? topName + ", " + nVal : nVal + ", " + topName;
-
-                            var newLocName = new GDMLocationName();
-                            newLocName.SetRawData(newName, interDate);
-                            result.Add(newLocName);
+                            result.Add(new GDMLocationName(newName, interDate));
+                            wasJoin = true;
                         }
+                    }
+
+                    if (!wasJoin) {
+                        result.Add(new GDMLocationName(nVal, locName.Date.Value));
                     }
                 }
             }
