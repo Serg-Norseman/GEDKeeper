@@ -196,7 +196,7 @@ namespace GDModel
             GDMDate smallestEnd = r1end.IsEmpty() ? r2end : (r2end.IsEmpty() ? r1end : (r1end.CompareTo(r2end) < 0) ? r1end : r2end);
 
             // no intersection
-            if (greatestStart.CompareTo(smallestEnd) > 0) {
+            if (greatestStart.CompareTo(smallestEnd) > 0 && !greatestStart.IsEmpty() && !smallestEnd.IsEmpty()) {
                 return GDMDatePeriod.Empty;
             }
 
