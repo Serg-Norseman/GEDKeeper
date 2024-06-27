@@ -135,7 +135,7 @@ namespace GDModel
         }
 
         /// <summary>
-        /// This function is intended only for checking the completeness of parts of the date 
+        /// This function is intended only for checking the completeness of parts of the date
         /// (year, month and day are defined, are not unknown).
         /// </summary>
         public bool IsValidDate()
@@ -587,6 +587,116 @@ namespace GDModel
         {
             dateStart = this;
             dateEnd = this;
+        }
+
+        public static GDMDate Increment(GDMDate date)
+        {
+            if (date.IsEmpty()) {
+                return Empty;
+            }
+
+            var calendar = date.fCalendar;
+            var day = date.fDay;
+            var month = date.fMonth;
+            var year = date.fYear;
+            var yearBc = date.fYearBC;
+
+            Increment(ref day, ref month, ref year, ref yearBc, calendar);
+
+            var result = new GDMDate();
+            result.SetRawData(date.fApproximated, calendar, year, yearBc, date.fYearModifier, month, day);
+            return result;
+        }
+
+        private static void Increment(ref byte day, ref byte month, ref short year, ref bool yearBC,
+            GDMCalendar calendar)
+        {
+            if (day > 0) {
+                if (day < DaysInMonth(yearBC, year, month, calendar)) {
+                    day++;
+                    return;
+                }
+
+                day = 1;
+            }
+
+            if (month > 0) {
+                if (month < 12) {
+                    month++;
+                    return;
+                }
+
+                month = 1;
+            }
+
+            if (year == 1 && yearBC) {
+                yearBC = false;
+            } else {
+                year++;
+            }
+        }
+
+        public static GDMDate Decrement(GDMDate date)
+        {
+            if (date.IsEmpty()) {
+                return Empty;
+            }
+
+            var calendar = date.fCalendar;
+            var day = date.fDay;
+            var month = date.fMonth;
+            var year = date.fYear;
+            var yearBc = date.fYearBC;
+
+            Decrement(ref yearBc, ref year, ref month, ref day, calendar);
+
+            var result = new GDMDate();
+            result.SetRawData(date.fApproximated, calendar, year, yearBc, date.fYearModifier, month, day);
+            return result;
+        }
+
+        private static void Decrement(ref bool yearBc, ref short year, ref byte month, ref byte day,
+            GDMCalendar calendar)
+        {
+            if (day > 1) {
+                day--;
+                return;
+            }
+
+            var monthDecremented = month > 1;
+            if (monthDecremented) {
+                month--;
+            } else if (month > 0) {
+                month = 12;
+            }
+
+            if (day > 0) {
+                day = DaysInMonth(yearBc, year, month, calendar);
+            }
+
+            if (monthDecremented) return;
+
+            if (year == 1 && !yearBc) {
+                yearBc = true;
+            } else {
+                year--;
+            }
+        }
+
+        private static byte DaysInMonth(bool yearBC, short year, byte month, GDMCalendar calendar)
+        {
+            if (yearBC) {
+                year -= 1;
+                if (year == 0) {
+                    year = 4; // DateTime.DaysInMonth does not support year 0
+                }
+            }
+
+            if (calendar == GDMCalendar.dcJulian && month == 2 && year % 4 == 0) {
+                return 29;
+            }
+
+            return (byte)DateTime.DaysInMonth(year, month);
         }
     }
 }
