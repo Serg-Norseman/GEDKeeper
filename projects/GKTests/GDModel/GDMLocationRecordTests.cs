@@ -406,6 +406,10 @@ namespace GDModel
 
             Assert.AreEqual("FROM 1782 TO 1834", GDMCustomDate.GetIntersection(GetRange("FROM 1782"), GetRange("TO 1834")).StringValue);
             Assert.AreEqual("FROM 1782 TO 1834", GDMCustomDate.GetIntersection(GetRange("TO 1834"), GetRange("FROM 1782")).StringValue);
+            Assert.AreEqual("FROM 1782", GDMCustomDate.GetIntersection(GetRange("FROM 1782"), GetRange("FROM 1782")).StringValue);
+            Assert.AreEqual("FROM 1834", GDMCustomDate.GetIntersection(GetRange("FROM 1782"), GetRange("FROM 1834")).StringValue);
+            Assert.AreEqual("TO 1782", GDMCustomDate.GetIntersection(GetRange("TO 1782"), GetRange("TO 1782")).StringValue);
+            Assert.AreEqual("TO 1782", GDMCustomDate.GetIntersection(GetRange("TO 1782"), GetRange("TO 1834")).StringValue);
 
             Assert.AreEqual("", GDMCustomDate.GetIntersection(GetRange("FROM 1858"), GetRange("TO 1834")).StringValue); // no intersects
             Assert.AreEqual("", GDMCustomDate.GetIntersection(GetRange("TO 1834"), GetRange("FROM 1858")).StringValue); // no intersects
