@@ -676,6 +676,17 @@ namespace GKCore
             return result;
         }
 
+        public static string GetEventPlaceAndAttributeValues(GDMCustomEvent evt)
+        {
+            string st = evt.HasPlace ? evt.Place.StringValue : string.Empty;
+
+            if (evt.StringValue != "") {
+                st = st + " [" + evt.StringValue + "]";
+            }
+
+            return st;
+        }
+
         public static string GetAttributeStr(GDMIndividualAttribute iAttr)
         {
             if (iAttr == null)

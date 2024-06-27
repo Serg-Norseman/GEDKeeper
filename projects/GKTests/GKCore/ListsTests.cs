@@ -164,7 +164,7 @@ namespace GKCore
             IListFilter filter = listManager.Filter;
             IListColumns listColumns = listManager.ListColumns;
 
-            var copyColumns = GroupListModel.CreateGroupListColumns();
+            var copyColumns = GroupListModel.CreateListColumns();
             listColumns.CopyTo(copyColumns);
 
             Assert.Throws(typeof(ArgumentNullException), () => { listColumns.CopyTo(null); });

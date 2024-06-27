@@ -34,31 +34,32 @@ namespace GKCore.Lists
     public sealed class EventsListModel : SheetModel<GDMCustomEvent>
     {
         private readonly GlobalOptions fOptions;
-        private readonly bool fPersonsMode;
 
-        public EventsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman, bool personsMode) : base(owner, baseWin, undoman)
+        public EventsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
-            fPersonsMode = personsMode;
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveUp, RecordAction.raMoveDown,
                 RecordAction.raCopy, RecordAction.raPaste);
 
-            fListColumns.AddColumn(LSID.NumberSym, 25, false);
-            fListColumns.AddColumn(LSID.Event, 90, false);
-            fListColumns.AddColumn(LSID.Date, 90, false);
-            if (!fPersonsMode) {
-                fListColumns.AddColumn(LSID.Place, 200, false);
-            } else {
-                fListColumns.AddColumn(LSID.PlaceAndAttribute, 200, false);
-            }
-            fListColumns.AddColumn(LSID.Cause, 130, false);
-            fListColumns.AddColumn(LSID.RPSources, 32, false);
-            fListColumns.AddColumn(LSID.RPNotes, 32, false);
-            fListColumns.AddColumn(LSID.RPMultimedia, 32, false);
-            fListColumns.ResetDefaults();
-
             fOptions = GlobalOptions.Instance;
+        }
+
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.stEvents);
+
+            result.AddColumn(LSID.NumberSym, 25, false);
+            result.AddColumn(LSID.Event, 90, false);
+            result.AddColumn(LSID.Date, 90, false);
+            result.AddColumn(LSID.PlaceAndAttribute, 200, false);
+            result.AddColumn(LSID.Cause, 130, false);
+            result.AddColumn(LSID.RPSources, 32, false);
+            result.AddColumn(LSID.RPNotes, 32, false);
+            result.AddColumn(LSID.RPMultimedia, 32, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -75,15 +76,7 @@ namespace GKCore.Lists
                     result = new GDMDateItem(fFetchedRec.Date.Value);
                     break;
                 case 3:
-                    if (fPersonsMode) {
-                        string st = fFetchedRec.Place.StringValue;
-                        if (fFetchedRec.StringValue != "") {
-                            st = st + " [" + fFetchedRec.StringValue + "]";
-                        }
-                        result = st;
-                    } else {
-                        result = fFetchedRec.Place.StringValue;
-                    }
+                    result = GKUtils.GetEventPlaceAndAttributeValues(fFetchedRec);
                     break;
                 case 4:
                     result = GKUtils.GetEventCause(fFetchedRec);

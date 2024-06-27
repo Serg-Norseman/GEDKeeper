@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using GDModel;
 using GKCore.Interfaces;
+using GKCore.Options;
 
 namespace GKCore.Lists
 {
@@ -40,13 +41,13 @@ namespace GKCore.Lists
 
 
         public TaskListModel(IBaseContext baseContext) :
-            base(baseContext, CreateTaskListColumns(), GDMRecordType.rtTask)
+            base(baseContext, CreateListColumns(), GDMRecordType.rtTask)
         {
         }
 
-        public static ListColumns<GDMTaskRecord> CreateTaskListColumns()
+        public static ListColumns CreateListColumns()
         {
-            var result = new ListColumns<GDMTaskRecord>();
+            var result = new ListColumns(GKListType.rtTask);
 
             result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.Goal, DataType.dtString, 300, true, true);

@@ -116,7 +116,7 @@ namespace GKCore
                 globalOptions.ListHighlightUnparentedPersons = true;
                 Assert.AreEqual(true, globalOptions.ListHighlightUnparentedPersons);
 
-                Assert.IsNotNull(globalOptions.IndividualListColumns);
+                Assert.IsNotNull(globalOptions.ListOptions[GDMRecordType.rtIndividual].Columns);
 
                 globalOptions.ShowDatesCalendar = true;
                 Assert.AreEqual(true, globalOptions.ShowDatesCalendar);

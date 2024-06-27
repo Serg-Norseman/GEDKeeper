@@ -62,6 +62,13 @@ namespace GKCore.Controllers
             fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
         }
 
+        public override void Done()
+        {
+            fView.RepositoriesList.ListModel.SaveSettings();
+            fView.NotesList.ListModel.SaveSettings();
+            fView.MediaList.ListModel.SaveSettings();
+        }
+
         public override bool Accept()
         {
             try {

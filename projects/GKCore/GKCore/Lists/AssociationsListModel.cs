@@ -26,6 +26,7 @@ using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Operations;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Lists
@@ -37,16 +38,23 @@ namespace GKCore.Lists
     {
         private GDMIndividualRecord fRelIndi;
 
-        public AssociationsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
+        public AssociationsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raJump,
                 RecordAction.raCopy, RecordAction.raPaste, RecordAction.raDetails);
+        }
 
-            fListColumns.AddColumn(LSID.Relation, 300, false);
-            fListColumns.AddColumn(LSID.Person, 200, false);
-            fListColumns.ResetDefaults();
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.stIndividualAssociations);
+
+            result.AddColumn(LSID.Relation, 300, false);
+            result.AddColumn(LSID.Person, 200, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         protected override GDMRecord GetReferenceRecord(object itemData)

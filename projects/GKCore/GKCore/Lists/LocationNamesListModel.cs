@@ -26,21 +26,29 @@ using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Operations;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Lists
 {
     public sealed class LocationNamesListModel : SheetModel<GDMLocationName>
     {
-        public LocationNamesListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
+        public LocationNamesListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
             AllowedActions = EnumSet<RecordAction>.Create(RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
+        }
 
-            fListColumns.AddColumn(LSID.NumberSym, 25, false);
-            fListColumns.AddColumn(LSID.Name, 300, false);
-            fListColumns.AddColumn(LSID.ShortTitle, 80, false);
-            fListColumns.AddColumn(LSID.Date, 160, false);
-            fListColumns.ResetDefaults();
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.stLocationNames);
+
+            result.AddColumn(LSID.NumberSym, 25, false);
+            result.AddColumn(LSID.Name, 300, false);
+            result.AddColumn(LSID.ShortTitle, 80, false);
+            result.AddColumn(LSID.Date, 160, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

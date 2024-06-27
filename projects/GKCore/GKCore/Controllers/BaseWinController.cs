@@ -619,10 +619,9 @@ namespace GKCore.Controllers
             for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
                 IListView rView = fTabParts[(int)rt].ListView;
                 if (rView != null) {
-                    rView.SetSortColumn(globOptions.ListOptions[rt].SortColumn, false);
-                    if (rt == GDMRecordType.rtIndividual) {
-                        globOptions.IndividualListColumns.CopyTo(rView.ListMan.ListColumns);
-                    }
+                    var columnOpts = globOptions.ListOptions[rt];
+                    rView.SetSortColumn(columnOpts.SortColumn, false);
+                    columnOpts.Columns.CopyTo(rView.ListMan.ListColumns);
                 }
             }
         }
@@ -633,10 +632,9 @@ namespace GKCore.Controllers
             for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
                 IListView rView = fTabParts[(int)rt].ListView;
                 if (rView != null) {
-                    globOptions.ListOptions[rt].SortColumn = rView.SortColumn;
-                    if (rt == GDMRecordType.rtIndividual) {
-                        rView.ListMan.ListColumns.CopyTo(globOptions.IndividualListColumns);
-                    }
+                    var columnOpts = globOptions.ListOptions[rt];
+                    columnOpts.SortColumn = rView.SortColumn;
+                    rView.ListMan.ListColumns.CopyTo(columnOpts.Columns);
                 }
             }
         }

@@ -47,7 +47,7 @@ namespace GKCore.Lists
             set { fSimpleList = value; }
         }
 
-        protected RecordsListModel(IBaseContext baseContext, ListColumns<T> defaultListColumns, GDMRecordType recordType) :
+        protected RecordsListModel(IBaseContext baseContext, ListColumns defaultListColumns, GDMRecordType recordType) :
             base(baseContext, defaultListColumns)
         {
             fRecordType = recordType;

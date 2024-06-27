@@ -69,7 +69,7 @@ namespace GKUI.Forms
 
             await appHost.Init(null, false);
 
-            var indiCols = GlobalOptions.Instance.IndividualListColumns;
+            var indiCols = GlobalOptions.Instance.ListOptions[GDMRecordType.rtIndividual].Columns;
             for (int i = 0; i < indiCols.Count; i++) {
                 var colProps = indiCols[i];
                 colProps.CurActive = true;

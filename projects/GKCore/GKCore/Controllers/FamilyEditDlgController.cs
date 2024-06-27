@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -65,10 +65,19 @@ namespace GKCore.Controllers
             base.Init(baseWin);
 
             fView.ChildrenList.ListModel = new FamilyChildrenListModel(fView, baseWin, fLocalUndoman);
-            fView.EventsList.ListModel = new EventsListModel(fView, baseWin, fLocalUndoman, false);
+            fView.EventsList.ListModel = new EventsListModel(fView, baseWin, fLocalUndoman);
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
             fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
             fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
+        }
+
+        public override void Done()
+        {
+            fView.ChildrenList.ListModel.SaveSettings();
+            fView.EventsList.ListModel.SaveSettings();
+            fView.NotesList.ListModel.SaveSettings();
+            fView.MediaList.ListModel.SaveSettings();
+            fView.SourcesList.ListModel.SaveSettings();
         }
 
         public void SetTarget(TargetMode targetType, GDMIndividualRecord target)

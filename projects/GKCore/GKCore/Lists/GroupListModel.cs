@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,6 +25,7 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Operations;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Lists
@@ -43,13 +44,13 @@ namespace GKCore.Lists
 
 
         public GroupListModel(IBaseContext baseContext) :
-            base(baseContext, CreateGroupListColumns(), GDMRecordType.rtGroup)
+            base(baseContext, CreateListColumns(), GDMRecordType.rtGroup)
         {
         }
 
-        public static ListColumns<GDMGroupRecord> CreateGroupListColumns()
+        public static ListColumns CreateListColumns()
         {
-            var result = new ListColumns<GDMGroupRecord>();
+            var result = new ListColumns(GKListType.rtGroup);
 
             result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.Group, DataType.dtString, 400, true, true);
@@ -96,13 +97,20 @@ namespace GKCore.Lists
     {
         private GDMIndividualRecord fMember;
 
-        public GroupMembersListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
+        public GroupMembersListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raDelete /*, RecordAction.raJump*/);
+        }
 
-            fListColumns.AddColumn(LSID.Name, 300, false);
-            fListColumns.ResetDefaults();
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.stGroupMembers);
+
+            result.AddColumn(LSID.Name, 300, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         public override void Fetch(GDMIndividualLink aRec)

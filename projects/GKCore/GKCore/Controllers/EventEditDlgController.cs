@@ -69,6 +69,13 @@ namespace GKCore.Controllers
             fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
         }
 
+        public override void Done()
+        {
+            fView.NotesList.ListModel.SaveSettings();
+            fView.MediaList.ListModel.SaveSettings();
+            fView.SourcesList.ListModel.SaveSettings();
+        }
+
         public override bool Accept()
         {
             try {

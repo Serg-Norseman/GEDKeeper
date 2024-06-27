@@ -25,6 +25,7 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Operations;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Lists
@@ -48,13 +49,13 @@ namespace GKCore.Lists
 
 
         public SourceListModel(IBaseContext baseContext) :
-            base(baseContext, CreateSourceListColumns(), GDMRecordType.rtSource)
+            base(baseContext, CreateListColumns(), GDMRecordType.rtSource)
         {
         }
 
-        public static ListColumns<GDMSourceRecord> CreateSourceListColumns()
+        public static ListColumns CreateListColumns()
         {
-            var result = new ListColumns<GDMSourceRecord>();
+            var result = new ListColumns(GKListType.rtSource);
 
             result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.ShortTitle, DataType.dtString, 120, true, true);
@@ -126,14 +127,21 @@ namespace GKCore.Lists
     {
         private GDMRepositoryRecord fRepoRec;
 
-        public SourceRepositoriesListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
+        public SourceRepositoriesListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump,
                 RecordAction.raCopy, RecordAction.raPaste);
+        }
 
-            fListColumns.AddColumn(LSID.Repository, 300, false);
-            fListColumns.ResetDefaults();
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.stSourceRepositories);
+
+            result.AddColumn(LSID.Repository, 300, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         public override void Fetch(GDMRepositoryCitation aRec)

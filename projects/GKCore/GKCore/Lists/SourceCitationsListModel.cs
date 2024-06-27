@@ -26,6 +26,7 @@ using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Operations;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Lists
@@ -34,19 +35,26 @@ namespace GKCore.Lists
     {
         private GDMSourceRecord fSourceRec;
 
-        public SourceCitationsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
+        public SourceCitationsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveUp, RecordAction.raMoveDown,
                 RecordAction.raCopy, RecordAction.raPaste, RecordAction.raDetails);
+        }
 
-            fListColumns.AddColumn(LSID.NumberSym, 25, false);
-            fListColumns.AddColumn(LSID.Title, 260, false);
-            fListColumns.AddColumn(LSID.Page, 90, false);
-            fListColumns.AddColumn(LSID.Certainty, 220, false);
-            fListColumns.AddColumn(LSID.Author, 70, false);
-            fListColumns.ResetDefaults();
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.stSourceCitations);
+
+            result.AddColumn(LSID.NumberSym, 25, false);
+            result.AddColumn(LSID.Title, 260, false);
+            result.AddColumn(LSID.Page, 90, false);
+            result.AddColumn(LSID.Certainty, 220, false);
+            result.AddColumn(LSID.Author, 70, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         protected override GDMRecord GetReferenceRecord(object itemData)

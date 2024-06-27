@@ -42,7 +42,7 @@ namespace GKCore.Options
     /// </summary>
     public sealed class GlobalOptions : BaseObject, IOptions
     {
-        public const int OPTS_VERSION = 2;
+        public const int OPTS_VERSION = 3;
 
         private static GlobalOptions fInstance = null;
 
@@ -50,7 +50,6 @@ namespace GKCore.Options
         private readonly StringList fEventFilters;
         private readonly StringList fFARPatterns;
         private readonly StringList fFARReplacements;
-        private readonly IListColumns fIndividualListColumns;
         private readonly List<LangRecord> fLanguages;
         private readonly StringList fLastBases;
         private readonly ListOptionsCollection fListOptions;
@@ -151,11 +150,6 @@ namespace GKCore.Options
         public string Geocoder { get; set; }
 
         public string GeoSearchCountry { get; set; }
-
-        public IListColumns IndividualListColumns
-        {
-            get { return fIndividualListColumns; }
-        }
 
         public int InterfaceLang { get; set; }
 
@@ -313,8 +307,6 @@ namespace GKCore.Options
             fProxy = new ProxyOptions();
             fRelations = new StringList();
             fCircleChartOptions = new CircleChartOptions();
-            fIndividualListColumns = IndividualListModel.CreateIndividualListColumns();
-            fIndividualListColumns.ResetDefaults();
             fLanguages = new List<LangRecord>();
             fLastBases = new StringList();
             fListOptions = new ListOptionsCollection();
@@ -800,7 +792,9 @@ namespace GKCore.Options
 
             LoadStringList(ini, fRelations, "Relations", "Relation_");
 
-            fIndividualListColumns.LoadFromFile(ini, "PersonsColumns", optsVersion);
+            if (optsVersion <= 2) {
+                fListOptions[GDMRecordType.rtIndividual].Columns.LoadFromFile(ini, "PersonsColumns", optsVersion);
+            }
 
             ListHighlightUnmarriedPersons = ini.ReadBool("ListPersons", "HighlightUnmarried", false);
             ListHighlightUnparentedPersons = ini.ReadBool("ListPersons", "HighlightUnparented", false);
@@ -815,7 +809,7 @@ namespace GKCore.Options
 
             fCircleChartOptions.LoadFromFile(ini);
 
-            fListOptions.LoadFromFile(ini);
+            fListOptions.LoadFromFile(ini, optsVersion);
 
             ReversePlaceEntitiesOrder = ini.ReadBool("Common", "ReversePlaceEntitiesOrder", false);
             CertaintyAlgorithm = (CertaintyAlgorithm)ini.ReadInteger("Common", "CertaintyAlgorithm", 0);
@@ -940,7 +934,8 @@ namespace GKCore.Options
 
             SaveStringList(ini, fRelations, "Relations", "Relation_");
 
-            fIndividualListColumns.SaveToFile(ini, "PersonsColumns");
+            // obsolete at OPTS_VERSION = 3
+            //fIndividualListColumns.SaveToFile(ini, "PersonsColumns", OPTS_VERSION);
 
             ini.WriteBool("ListPersons", "HighlightUnmarried", ListHighlightUnmarriedPersons);
             ini.WriteBool("ListPersons", "HighlightUnparented", ListHighlightUnparentedPersons);
@@ -966,7 +961,7 @@ namespace GKCore.Options
 
             fCircleChartOptions.SaveToFile(ini);
 
-            fListOptions.SaveToFile(ini);
+            fListOptions.SaveToFile(ini, OPTS_VERSION);
 
             ini.WriteBool("Common", "ReversePlaceEntitiesOrder", ReversePlaceEntitiesOrder);
             ini.WriteInteger("Common", "CertaintyAlgorithm", (int)CertaintyAlgorithm);

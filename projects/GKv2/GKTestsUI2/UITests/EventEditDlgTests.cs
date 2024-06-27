@@ -172,8 +172,8 @@ namespace GKUI.Forms
             SelectCombo("cmbDate1Calendar", form, 1); // Julian
             SelectCombo("cmbDate2Calendar", form, 1); // Julian*/
 
-            EnterText("txtEventCause", form, "test cause");
-            EnterText("txtEventOrg", form, "test agency");
+            EnterCombo("txtEventCause", form, "test cause");
+            EnterCombo("txtEventOrg", form, "test agency");
 
             SetModalFormHandler(fFormTest, AddressEditDlgTests.AddressEditDlg_btnAccept_Handler);
             ClickButton("btnAddress", form);

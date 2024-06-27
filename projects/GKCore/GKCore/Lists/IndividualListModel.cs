@@ -196,13 +196,13 @@ namespace GKCore.Lists
 
 
         public IndividualListModel(IBaseContext baseContext) :
-            base(baseContext, CreateIndividualListColumns(), GDMRecordType.rtIndividual)
+            base(baseContext, CreateListColumns(), GDMRecordType.rtIndividual)
         {
         }
 
-        public static ListColumns<GDMIndividualRecord> CreateIndividualListColumns()
+        public static ListColumns CreateListColumns()
         {
-            var result = new ListColumns<GDMIndividualRecord>();
+            var result = new ListColumns(GKListType.rtIndividual);
 
             result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.Patriarch, DataType.dtString, 25, true);
@@ -707,13 +707,19 @@ namespace GKCore.Lists
     {
         private GDMGroupRecord fGroupRec;
 
-        public IndiGroupsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
+        public IndiGroupsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
-            AllowedActions = EnumSet<RecordAction>.Create(
-                RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump);
+            AllowedActions = EnumSet<RecordAction>.Create(RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump);
+        }
 
-            fListColumns.AddColumn(LSID.Group, 350, false);
-            fListColumns.ResetDefaults();
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.stIndividualGroups);
+
+            result.AddColumn(LSID.Group, 350, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         public override void Fetch(GDMPointer aRec)
@@ -782,17 +788,24 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class IndiNamesListModel : SheetModel<GDMPersonalName>
     {
-        public IndiNamesListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
+        public IndiNamesListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveDown, RecordAction.raMoveUp);
+        }
 
-            fListColumns.AddColumn(LSID.NumberSym, 25, false);
-            fListColumns.AddColumn(LSID.Name, 350, false);
-            fListColumns.AddColumn(LSID.Type, 100, false);
-            fListColumns.AddColumn(LSID.Language, 150, false);
-            fListColumns.ResetDefaults();
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.stIndividualNames);
+
+            result.AddColumn(LSID.NumberSym, 25, false);
+            result.AddColumn(LSID.Name, 350, false);
+            result.AddColumn(LSID.Type, 100, false);
+            result.AddColumn(LSID.Language, 150, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -902,16 +915,23 @@ namespace GKCore.Lists
     {
         private GDMFamilyRecord fFamRec;
 
-        public IndiParentsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
+        public IndiParentsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveDown, RecordAction.raMoveUp, RecordAction.raDetails);
+        }
 
-            fListColumns.AddColumn(LSID.NumberSym, 25, false);
-            fListColumns.AddColumn(LSID.Name, 350, false);
-            fListColumns.AddColumn(LSID.Type, 100, false);
-            fListColumns.ResetDefaults();
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.stIndividualParents);
+
+            result.AddColumn(LSID.NumberSym, 25, false);
+            result.AddColumn(LSID.Name, 350, false);
+            result.AddColumn(LSID.Type, 100, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         protected override GDMRecord GetReferenceRecord(object itemData)
@@ -1021,16 +1041,23 @@ namespace GKCore.Lists
         private GDMFamilyRecord fFamilyRec;
         private string fRelName;
 
-        public IndiSpousesListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
+        public IndiSpousesListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raJump, RecordAction.raMoveUp, RecordAction.raMoveDown, RecordAction.raDetails);
+        }
 
-            fListColumns.AddColumn(LSID.NumberSym, 25, false);
-            fListColumns.AddColumn(LSID.Spouse, 300, false);
-            fListColumns.AddColumn(LSID.MarriageDate, 100, false);
-            fListColumns.ResetDefaults();
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.stIndividualSpouses);
+
+            result.AddColumn(LSID.NumberSym, 25, false);
+            result.AddColumn(LSID.Spouse, 300, false);
+            result.AddColumn(LSID.MarriageDate, 100, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         protected override GDMRecord GetReferenceRecord(object itemData)
@@ -1158,14 +1185,20 @@ namespace GKCore.Lists
     /// </summary>
     public sealed class URefsListModel : SheetModel<GDMUserReference>
     {
-        public URefsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
+        public URefsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
-            AllowedActions = EnumSet<RecordAction>.Create(
-                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
+            AllowedActions = EnumSet<RecordAction>.Create(RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
+        }
 
-            fListColumns.AddColumn(LSID.Reference, 300, false);
-            fListColumns.AddColumn(LSID.Type, 200, false);
-            fListColumns.ResetDefaults();
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.stUserRefs);
+
+            result.AddColumn(LSID.Reference, 300, false);
+            result.AddColumn(LSID.Type, 200, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

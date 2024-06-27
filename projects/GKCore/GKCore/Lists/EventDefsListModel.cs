@@ -25,20 +25,28 @@ using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Operations;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Lists
 {
     public sealed class EventDefsListModel : SheetModel<EventDef>
     {
-        public EventDefsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
+        public EventDefsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
             AllowedActions = EnumSet<RecordAction>.Create(RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
+        }
 
-            fListColumns.AddColumn(LSID.Name, 300, false);
-            fListColumns.AddColumn(LSID.Enabled, 100, false);
-            fListColumns.AddColumn(LSID.Record, 300, false);
-            fListColumns.ResetDefaults();
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.stEventDefs);
+
+            result.AddColumn(LSID.Name, 300, false);
+            result.AddColumn(LSID.Enabled, 100, false);
+            result.AddColumn(LSID.Record, 300, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         private static string GetTargetStr(EventTarget target)

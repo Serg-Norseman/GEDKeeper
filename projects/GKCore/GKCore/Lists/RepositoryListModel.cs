@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using GDModel;
 using GKCore.Interfaces;
+using GKCore.Options;
 
 namespace GKCore.Lists
 {
@@ -37,13 +38,13 @@ namespace GKCore.Lists
 
 
         public RepositoryListModel(IBaseContext baseContext) :
-            base(baseContext, CreateRepositoryListColumns(), GDMRecordType.rtRepository)
+            base(baseContext, CreateListColumns(), GDMRecordType.rtRepository)
         {
         }
 
-        public static ListColumns<GDMRepositoryRecord> CreateRepositoryListColumns()
+        public static ListColumns CreateListColumns()
         {
-            var result = new ListColumns<GDMRepositoryRecord>();
+            var result = new ListColumns(GKListType.rtRepository);
 
             result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.Repository, DataType.dtString, 400, true, true);

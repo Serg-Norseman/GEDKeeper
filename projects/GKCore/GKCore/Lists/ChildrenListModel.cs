@@ -26,6 +26,7 @@ using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Operations;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Lists
@@ -34,15 +35,22 @@ namespace GKCore.Lists
     {
         private GDMIndividualRecord fChildRec;
 
-        protected ChildrenListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
+        protected ChildrenListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump, RecordAction.raDetails);
+        }
 
-            fListColumns.AddColumn(LSID.NumberSym, 25, false);
-            fListColumns.AddColumn(LSID.Name, 300, false);
-            fListColumns.AddColumn(LSID.BirthDate, 100, false);
-            fListColumns.ResetDefaults();
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.stChildren);
+
+            result.AddColumn(LSID.NumberSym, 25, false);
+            result.AddColumn(LSID.Name, 300, false);
+            result.AddColumn(LSID.BirthDate, 100, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         protected override GDMRecord GetReferenceRecord(object itemData)

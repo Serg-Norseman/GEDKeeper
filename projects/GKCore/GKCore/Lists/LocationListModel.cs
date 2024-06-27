@@ -22,6 +22,7 @@ using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Interfaces;
+using GKCore.Options;
 
 namespace GKCore.Lists
 {
@@ -42,13 +43,13 @@ namespace GKCore.Lists
 
 
         public LocationListModel(IBaseContext baseContext) :
-            base(baseContext, CreateLocationListColumns(), GDMRecordType.rtLocation)
+            base(baseContext, CreateListColumns(), GDMRecordType.rtLocation)
         {
         }
 
-        public static ListColumns<GDMLocationRecord> CreateLocationListColumns()
+        public static ListColumns CreateListColumns()
         {
-            var result = new ListColumns<GDMLocationRecord>();
+            var result = new ListColumns(GKListType.rtLocation);
 
             result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.Title, DataType.dtString, 300, true, true);

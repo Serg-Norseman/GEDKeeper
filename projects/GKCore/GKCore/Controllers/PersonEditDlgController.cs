@@ -93,7 +93,7 @@ namespace GKCore.Controllers
         {
             base.Init(baseWin);
 
-            fView.EventsList.ListModel = new EventsListModel(fView, baseWin, fLocalUndoman, true);
+            fView.EventsList.ListModel = new EventsListModel(fView, baseWin, fLocalUndoman);
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
             fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
             fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
@@ -103,6 +103,20 @@ namespace GKCore.Controllers
             fView.SpousesList.ListModel = new IndiSpousesListModel(fView, baseWin, fLocalUndoman);
             fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
             fView.ParentsList.ListModel = new IndiParentsListModel(fView, baseWin, fLocalUndoman);
+        }
+
+        public override void Done()
+        {
+            fView.EventsList.ListModel.SaveSettings();
+            fView.NotesList.ListModel.SaveSettings();
+            fView.MediaList.ListModel.SaveSettings();
+            fView.SourcesList.ListModel.SaveSettings();
+            fView.AssociationsList.ListModel.SaveSettings();
+            fView.GroupsList.ListModel.SaveSettings();
+            fView.NamesList.ListModel.SaveSettings();
+            fView.SpousesList.ListModel.SaveSettings();
+            fView.UserRefList.ListModel.SaveSettings();
+            fView.ParentsList.ListModel.SaveSettings();
         }
 
         private bool IsExtendedWomanSurname()

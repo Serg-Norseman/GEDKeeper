@@ -19,6 +19,7 @@
  */
 
 using System.Threading.Tasks;
+using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
@@ -50,7 +51,7 @@ namespace GKCore.Controllers
         public OptionsDlgController(IOptionsDlg view) : base(view)
         {
             fOptions = GlobalOptions.Instance;
-            fTempColumns = IndividualListModel.CreateIndividualListColumns();
+            fTempColumns = IndividualListModel.CreateListColumns();
 
             FillGeoSearchCountries();
 
@@ -120,7 +121,7 @@ namespace GKCore.Controllers
                 fTempColumns.OrderedColumns[i].CurActive = listView.Items[i].Checked;
             }
 
-            fTempColumns.CopyTo(fOptions.IndividualListColumns);
+            fTempColumns.CopyTo(fOptions.ListOptions[GDMRecordType.rtIndividual].Columns);
         }
 
         public void UpdateProxyOptions()
@@ -774,7 +775,7 @@ namespace GKCore.Controllers
             UpdateInterfaceOptions();
             UpdateWomanSurnameFormat();
 
-            fOptions.IndividualListColumns.CopyTo(fTempColumns);
+            fOptions.ListOptions[GDMRecordType.rtIndividual].Columns.CopyTo(fTempColumns);
             UpdateColumnsList();
 
             // pedigrees

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,6 +26,7 @@ using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Operations;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Lists
@@ -49,13 +50,13 @@ namespace GKCore.Lists
 
 
         public ResearchListModel(IBaseContext baseContext) :
-            base(baseContext, CreateResearchListColumns(), GDMRecordType.rtResearch)
+            base(baseContext, CreateListColumns(), GDMRecordType.rtResearch)
         {
         }
 
-        public static ListColumns<GDMResearchRecord> CreateResearchListColumns()
+        public static ListColumns CreateListColumns()
         {
-            var result = new ListColumns<GDMResearchRecord>();
+            var result = new ListColumns(GKListType.rtResearch);
 
             result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.Title, DataType.dtString, 300, true, true);
@@ -127,16 +128,23 @@ namespace GKCore.Lists
     {
         private GDMTaskRecord fTaskRec;
 
-        public ResTasksListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
+        public ResTasksListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
+        }
 
-            fListColumns.AddColumn(LSID.Goal, 250, false);
-            fListColumns.AddColumn(LSID.Priority, 90, false);
-            fListColumns.AddColumn(LSID.StartDate, 90, false);
-            fListColumns.AddColumn(LSID.StopDate, 90, false);
-            fListColumns.ResetDefaults();
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.stResearchTasks);
+
+            result.AddColumn(LSID.Goal, 250, false);
+            result.AddColumn(LSID.Priority, 90, false);
+            result.AddColumn(LSID.StartDate, 90, false);
+            result.AddColumn(LSID.StopDate, 90, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         public override void Fetch(GDMPointer aRec)
@@ -223,16 +231,23 @@ namespace GKCore.Lists
     {
         private GDMCommunicationRecord fCommRec;
 
-        public ResCommunicationsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
+        public ResCommunicationsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
+        }
 
-            fListColumns.AddColumn(LSID.Theme, 150, false);
-            fListColumns.AddColumn(LSID.Corresponder, 150, false);
-            fListColumns.AddColumn(LSID.Type, 90, false);
-            fListColumns.AddColumn(LSID.Date, 90, false);
-            fListColumns.ResetDefaults();
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.stResearchCommunications);
+
+            result.AddColumn(LSID.Theme, 150, false);
+            result.AddColumn(LSID.Corresponder, 150, false);
+            result.AddColumn(LSID.Type, 90, false);
+            result.AddColumn(LSID.Date, 90, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         public override void Fetch(GDMPointer aRec)
@@ -319,13 +334,20 @@ namespace GKCore.Lists
     {
         private GDMGroupRecord fGroupRec;
 
-        public ResGroupsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman)
+        public ResGroupsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raJump);
+        }
 
-            fListColumns.AddColumn(LSID.Group, 350, false);
-            fListColumns.ResetDefaults();
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.stResearchGroups);
+
+            result.AddColumn(LSID.Group, 350, false);
+
+            result.ResetDefaults();
+            return result;
         }
 
         public override void Fetch(GDMPointer aRec)

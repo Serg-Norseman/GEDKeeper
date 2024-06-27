@@ -70,6 +70,14 @@ namespace GKCore.Controllers
             fView.NamesList.OnModify += ModifyNamesSheet;
         }
 
+        public override void Done()
+        {
+            fView.NamesList.ListModel.SaveSettings();
+            fView.LinksList.ListModel.SaveSettings();
+            fView.NotesList.ListModel.SaveSettings();
+            fView.MediaList.ListModel.SaveSettings();
+        }
+
         private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
         {
             fView.Name.Text = fLocationRecord.LocationName;

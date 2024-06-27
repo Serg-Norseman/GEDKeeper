@@ -63,12 +63,18 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public class ListColumns<T> : IListColumns
+    public class ListColumns : IListColumns
     {
         private readonly List<ListColumn> fColumns;
         private readonly List<ListColumn> fOrderedColumns;
         private sbyte fLastId;
+        private GKListType fListType;
 
+
+        public GKListType ListType
+        {
+            get { return fListType; }
+        }
 
         public int Count
         {
@@ -86,11 +92,12 @@ namespace GKCore.Lists
         }
 
 
-        public ListColumns()
+        public ListColumns(GKListType listType)
         {
             fLastId = -1;
             fColumns = new List<ListColumn>();
             fOrderedColumns = new List<ListColumn>();
+            fListType = listType;
 
             ResetDefaults();
         }
@@ -143,7 +150,7 @@ namespace GKCore.Lists
 
         public void CopyTo(IListColumns target)
         {
-            ListColumns<T> targetColumns = target as ListColumns<T>;
+            ListColumns targetColumns = target as ListColumns;
             if (targetColumns == null)
                 throw new ArgumentNullException("target");
 
@@ -195,7 +202,7 @@ namespace GKCore.Lists
             }
         }
 
-        public void SaveToFile(IniFile iniFile, string section)
+        public void SaveToFile(IniFile iniFile, string section, int optsVersion)
         {
             if (iniFile == null) return;
 

@@ -27,6 +27,7 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Interfaces;
 using GKCore.Operations;
+using GKCore.Options;
 using GKCore.Types;
 
 namespace GKCore.Lists
@@ -166,7 +167,12 @@ namespace GKCore.Lists
 
 
         protected SheetModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) :
-            base((baseWin != null ? baseWin.Context : null), new ListColumns<T>())
+            this(owner, baseWin, undoman, new ListColumns(GKListType.ltNone))
+        {
+        }
+
+        protected SheetModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman, ListColumns defaultListColumns) :
+            base((baseWin != null ? baseWin.Context : null), defaultListColumns)
         {
             fAllowedActions = new EnumSet<RecordAction>();
             fBaseWin = baseWin;

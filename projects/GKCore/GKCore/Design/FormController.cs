@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -48,6 +48,10 @@ namespace GKCore.Design
         public virtual void Init(IBaseWindow baseWin)
         {
             fBase = baseWin;
+        }
+
+        public virtual void Done()
+        {
         }
 
         protected T GetControl<T>(string controlName) where T : class, IControl

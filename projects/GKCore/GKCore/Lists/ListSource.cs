@@ -63,7 +63,7 @@ namespace GKCore.Lists
 
         protected readonly IBaseContext fBaseContext;
         protected readonly List<MapColumnRec> fColumnsMap;
-        protected readonly ListColumns<T> fListColumns;
+        protected readonly ListColumns fListColumns;
 
 
         public IBaseContext BaseContext
@@ -113,13 +113,15 @@ namespace GKCore.Lists
         }
 
 
-        protected ListSource(IBaseContext baseContext, ListColumns<T> defaultListColumns)
+        protected ListSource(IBaseContext baseContext, ListColumns defaultListColumns)
         {
             fBaseContext = baseContext;
             fColumnsMap = new List<MapColumnRec>();
             fListColumns = defaultListColumns;
             fContentList = new ExtObservableList<ContentItem>();
             fQuickFilter = new QuickFilterParams();
+
+            RestoreSettings();
 
             CreateFilter();
         }
@@ -139,6 +141,20 @@ namespace GKCore.Lists
 
             fColumnsMap.Clear();
             fListColumns.Clear();
+        }
+
+        public void RestoreSettings()
+        {
+            var columnOpts = GlobalOptions.Instance.ListOptions[fListColumns.ListType];
+            //rView.SetSortColumn(columnOpts.SortColumn, false);
+            columnOpts.Columns.CopyTo(fListColumns);
+        }
+
+        public void SaveSettings()
+        {
+            var columnOpts = GlobalOptions.Instance.ListOptions[fListColumns.ListType];
+            //columnOpts.SortColumn = rView.SortColumn;
+            fListColumns.CopyTo(columnOpts.Columns);
         }
 
         #region Columns
@@ -461,7 +477,7 @@ namespace GKCore.Lists
 
         public string[] CreateFields()
         {
-            ListColumns<T> listColumns = (ListColumns<T>)ListColumns;
+            var listColumns = ListColumns;
             string[] fields = new string[listColumns.Count + 1]; // +empty item
             fields[0] = "";
 

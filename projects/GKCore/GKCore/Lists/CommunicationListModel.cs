@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using GDModel;
 using GKCore.Interfaces;
+using GKCore.Options;
 
 namespace GKCore.Lists
 {
@@ -40,13 +41,13 @@ namespace GKCore.Lists
 
 
         public CommunicationListModel(IBaseContext baseContext) :
-            base(baseContext, CreateCommunicationListColumns(), GDMRecordType.rtCommunication)
+            base(baseContext, CreateListColumns(), GDMRecordType.rtCommunication)
         {
         }
 
-        public static ListColumns<GDMCommunicationRecord> CreateCommunicationListColumns()
+        public static ListColumns CreateListColumns()
         {
-            var result = new ListColumns<GDMCommunicationRecord>();
+            var result = new ListColumns(GKListType.rtCommunication);
 
             // not to change the order of these lines in their changes
             result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);

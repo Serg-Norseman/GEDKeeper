@@ -139,6 +139,8 @@ namespace GKCore.Interfaces
         int IndexOfItem(object data);
         bool IsColumnAutosize(int colIndex);
         void OnItemSelected(int itemIndex, object rowData);
+        void RestoreSettings();
+        void SaveSettings();
         void SortContents(int sortColumn, bool sortAscending);
         void UpdateColumns(IListView listView);
         void UpdateContents();

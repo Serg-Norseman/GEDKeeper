@@ -88,6 +88,6 @@ namespace GKCore.Interfaces
         void UpdateOrders();
 
         void LoadFromFile(IniFile iniFile, string section, int optsVersion);
-        void SaveToFile(IniFile iniFile, string section);
+        void SaveToFile(IniFile iniFile, string section, int optsVersion);
     }
 }

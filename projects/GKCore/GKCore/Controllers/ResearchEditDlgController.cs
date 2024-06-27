@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -67,6 +67,14 @@ namespace GKCore.Controllers
             fView.CommunicationsList.ListModel = new ResCommunicationsListModel(fView, baseWin, fLocalUndoman);
             fView.GroupsList.ListModel = new ResGroupsListModel(fView, baseWin, fLocalUndoman);
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+        }
+
+        public override void Done()
+        {
+            fView.TasksList.ListModel.SaveSettings();
+            fView.CommunicationsList.ListModel.SaveSettings();
+            fView.GroupsList.ListModel.SaveSettings();
+            fView.NotesList.ListModel.SaveSettings();
         }
 
         public override bool Accept()
