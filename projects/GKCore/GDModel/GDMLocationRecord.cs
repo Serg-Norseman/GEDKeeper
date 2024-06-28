@@ -192,8 +192,10 @@ namespace GDModel
                     var topNames = topLoc.GetFullNames(tree, atdEnum, abbreviations);
                     for (int i = 0; i < topNames.Count; i++) {
                         var topName = topNames[i];
+                        var topNameDate = topName.Date.Value;
+                        var topLevelDate = topLevel.Date.Value;
 
-                        var interDate = GDMCustomDate.GetIntersection(topLevel.Date.Value, topName.Date.Value);
+                        var interDate = GDMCustomDate.GetIntersection(topLevelDate, topNameDate);
                         if (!interDate.IsEmpty()) {
                             string tnVal = (abbreviations && !string.IsNullOrEmpty(topName.Abbreviation)) ? topName.Abbreviation : topName.StringValue;
                             topBuffer.Add(new GDMLocationName(tnVal, interDate));
@@ -240,7 +242,7 @@ namespace GDModel
                         }
                     }
 
-                    if (!locDate.IsEmpty()) {
+                    if (topBuffer.Count == 0 || !locDate.IsEmpty()) {
                         result.Add(new GDMLocationName(nVal, locDate));
                     }
                 }
