@@ -189,7 +189,6 @@ namespace GDModel
                     var topLoc = tree.GetPtrValue<GDMLocationRecord>(topLevel);
                     if (topLoc == null) continue;
 
-                    bool wasJoin = false;
                     var topNames = topLoc.GetFullNames(tree, atdEnum, abbreviations);
                     for (int i = 0; i < topNames.Count; i++) {
                         var topName = topNames[i];
@@ -198,36 +197,51 @@ namespace GDModel
                         if (!interDate.IsEmpty()) {
                             string tnVal = (abbreviations && !string.IsNullOrEmpty(topName.Abbreviation)) ? topName.Abbreviation : topName.StringValue;
                             topBuffer.Add(new GDMLocationName(tnVal, interDate));
-                            wasJoin = true;
                         }
-                    }
-
-                    if (!wasJoin && topNames.Count > 0) {
-                        topBuffer.Add(new GDMLocationName(topNames[topNames.Count - 1].StringValue, topLevel.Date.Value));
                     }
                 }
 
                 // search of intersections of location names and intersections of top levels/names
                 for (int i = 0; i < fNames.Count; i++) {
                     var locName = fNames[i];
+                    var locDate = locName.Date.Value;
                     string nVal = (abbreviations && !string.IsNullOrEmpty(locName.Abbreviation)) ? locName.Abbreviation : locName.StringValue;
 
-                    bool wasJoin = false;
                     for (int j = 0; j < topBuffer.Count; j++) {
                         var topLocName = topBuffer[j];
                         var topName = topLocName.StringValue;
                         var topDate = topLocName.Date.Value;
 
-                        var interDate = GDMCustomDate.GetIntersection(topDate, locName.Date.Value);
+                        var interDate = GDMCustomDate.GetIntersection(topDate, locDate);
                         if (!interDate.IsEmpty()) {
                             string newName = (atdEnum == ATDEnumeration.fLtS) ? topName + ", " + nVal : nVal + ", " + topName;
+                            // Find relative complement of topDate in locDate (locDate \ topDate)
+                            // E.g. the periods that are in locDate, but not in topDate
+                            //
+                            // GetDifference returns two periods, one is that before topDate and one that is after
+                            //
+                            // Since both fNames and topBuffer lists are ordered we can assume that
+                            // if before is not empty, it would mean that this location did not have a top level element within this period
+                            // if after is not empty then we can try locating the next top level element within this period
+                            // if after is empty then we finished processing this locName
+
+                            var differences = GDMCustomDate.GetDifference(interDate, locDate);
+                            var before = differences[0];
+                            var after = differences[1];
+                            if (!before.IsEmpty()) {
+                                result.Add(new GDMLocationName(nVal, before));
+                            }
+
                             result.Add(new GDMLocationName(newName, interDate));
-                            wasJoin = true;
+                            locDate = after;
+                            if (after.IsEmpty()) {
+                                break;
+                            }
                         }
                     }
 
-                    if (!wasJoin) {
-                        result.Add(new GDMLocationName(nVal, locName.Date.Value));
+                    if (!locDate.IsEmpty()) {
+                        result.Add(new GDMLocationName(nVal, locDate));
                     }
                 }
             }

@@ -202,5 +202,29 @@ namespace GDModel
 
             return CreatePeriod(greatestStart, smallestEnd);
         }
+
+        public static GDMList<GDMDatePeriod> GetDifference(GDMCustomDate range1, GDMCustomDate range2)
+        {
+            GDMDate r1start, r1end, r2start, r2end, i2start, i2end;
+            range1.GetDateRange(out r1start, out r1end);
+            range2.GetDateRange(out r2start, out r2end);
+            range2.GetDateRange(out i2start, out i2end);
+
+            var smallestStart = r1start.IsEmpty() || !r2start.IsEmpty() && r1start.CompareTo(r2start) < 0 ? r1start : r2start;
+            var greatestStart = r1start.IsEmpty() || !r2start.IsEmpty() && r2start.CompareTo(r1start) > 0 ? r2start : r1start;
+            var smallestEnd = r1end.IsEmpty() || !r2end.IsEmpty() && r1end.CompareTo(r2end) > 0 ? r2end : r1end;
+            var greatestEnd = r1end.IsEmpty() || !r2end.IsEmpty() && r1end.CompareTo(r2end) > 0 ? r1end : r2end;
+
+            var result = new GDMList<GDMDatePeriod>();
+            result.Add(smallestStart.CompareTo(GDMDate.Decrement(greatestStart)) <= 0 || smallestStart.IsEmpty()
+                ? CreatePeriod(smallestStart, GDMDate.Decrement(greatestStart))
+                : GDMDatePeriod.Empty);
+
+            result.Add(GDMDate.Increment(smallestEnd).CompareTo(greatestEnd) <= 0 || greatestEnd.IsEmpty()
+                ? CreatePeriod(GDMDate.Increment(smallestEnd), greatestEnd)
+                : GDMDatePeriod.Empty);
+
+            return result;
+        }
     }
 }
