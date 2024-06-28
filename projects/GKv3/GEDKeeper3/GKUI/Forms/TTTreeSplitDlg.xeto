@@ -39,6 +39,9 @@
                 <StackLayoutItem HorizontalAlignment="Left">
                   <Button x:Name="btnSelectDescendants" Style="dlgBtn" Click="btnSelectDescendants_Click" />
                 </StackLayoutItem>
+                <StackLayoutItem HorizontalAlignment="Left">
+                  <Button x:Name="btnSelectList" Style="dlgBtn" Click="btnSelectList_Click" />
+                </StackLayoutItem>
                 <StackLayoutItem Expand="True" />
                 <StackLayoutItem HorizontalAlignment="Right">
                   <Button x:Name="btnSave" Style="dlgBtn" Click="btnSave_Click" />

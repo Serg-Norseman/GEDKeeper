@@ -1057,7 +1057,9 @@ namespace GKCore
         /* 981 */ TBS_DoubleBevels,
         /* 982 */ TBS_CrossCorners,
 
-        /* 000 */ Last = TBS_CrossCorners
+        /* 983 */ SelList,
+
+        /* 000 */ Last = SelList
     }
 
 
@@ -2067,6 +2069,8 @@ namespace GKCore
             /* 980 */ "Single Bevels",
             /* 981 */ "Double Bevels",
             /* 982 */ "Cross Corners",
+
+            /* 983 */ "Select list",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

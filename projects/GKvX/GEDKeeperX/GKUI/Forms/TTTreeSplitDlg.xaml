@@ -21,6 +21,7 @@
             <Button x:Name="btnSelectFamily" Style="{StaticResource dlgBtn}" Clicked="btnSelectFamily_Click" />
             <Button x:Name="btnSelectAncestors" Style="{StaticResource dlgBtn}" Clicked="btnSelectAncestors_Click" />
             <Button x:Name="btnSelectDescendants" Style="{StaticResource dlgBtn}" Clicked="btnSelectDescendants_Click" />
+            <Button x:Name="btnSelectList" Style="{StaticResource dlgBtn}" Clicked="btnSelectList_Click" />
             <Label HorizontalOptions="FillAndExpand" />
             <Button x:Name="btnSave" Style="{StaticResource dlgBtn}" Clicked="btnSave_Click" />
             <Button x:Name="btnDelete" Style="{StaticResource dlgBtn}" Clicked="btnDelete_Click" />

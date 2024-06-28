@@ -36,6 +36,7 @@ namespace GKCore.Controllers
     /// </summary>
     public class TreeSplitController : DialogController<ITreeSplitDlg>
     {
+        private bool fIndiMode;
         private readonly List<GDMRecord> fSplitList;
 
         public TreeSplitController(ITreeSplitDlg view) : base(view)
@@ -55,13 +56,21 @@ namespace GKCore.Controllers
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
                     GDMRecord rec = tree[i];
-                    if (rec is GDMIndividualRecord) {
+                    if (fIndiMode && rec is GDMIndividualRecord) {
                         cnt++;
                         GDMIndividualRecord iRec = rec as GDMIndividualRecord;
                         string st = iRec.XRef + " / " + GKUtils.GetNameString(iRec, false);
 
                         if (fSplitList.IndexOf(iRec) < 0) {
                             fView.SkippedList.AddItem(null, st);
+                        } else {
+                            fView.SelectedList.AddItem(null, st);
+                        }
+                    } else {
+                        string st = rec.XRef + " / " + GKUtils.GetRecordName(tree, rec, false);
+
+                        if (fSplitList.IndexOf(rec) < 0) {
+                            //fView.SkippedList.AddItem(null, st);
                         } else {
                             fView.SelectedList.AddItem(null, st);
                         }
@@ -76,6 +85,7 @@ namespace GKCore.Controllers
 
         public void Select(TreeTools.TreeWalkMode walkMode)
         {
+            fIndiMode = true;
             Select(fBase.GetSelectedPerson(), walkMode);
         }
 
@@ -88,6 +98,17 @@ namespace GKCore.Controllers
             } else {
                 TreeTools.WalkTree(fBase.Context.Tree, startPerson, walkMode, fSplitList);
             }
+
+            UpdateView();
+        }
+
+        public void SelectList()
+        {
+            fIndiMode = false;
+
+            fSplitList.Clear();
+            var baseList = fBase.GetContentList(fBase.GetSelectedRecordType());
+            fSplitList.AddRange(baseList);
 
             UpdateView();
         }
@@ -140,11 +161,12 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnSelectFamily").Text = LangMan.LS(LSID.SelFamily);
             GetControl<IButton>("btnSelectAncestors").Text = LangMan.LS(LSID.SelAncestors);
             GetControl<IButton>("btnSelectDescendants").Text = LangMan.LS(LSID.SelDescendants);
+            GetControl<IButton>("btnSelectList").Text = LangMan.LS(LSID.SelList);
             GetControl<IButton>("btnDelete").Text = LangMan.LS(LSID.DoDelete);
             GetControl<IButton>("btnSave").Text = LangMan.LS(LSID.MIFileSaveAs);
 
-            fView.SelectedList.AddColumn(LangMan.LS(LSID.Person), 300, false);
-            fView.SkippedList.AddColumn(LangMan.LS(LSID.Person), 300, false);
+            fView.SelectedList.AddColumn(LangMan.LS(LSID.Record), 300, false);
+            fView.SkippedList.AddColumn(LangMan.LS(LSID.Record), 300, false);
         }
     }
 }
