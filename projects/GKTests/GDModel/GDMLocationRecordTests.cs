@@ -503,6 +503,25 @@ namespace GDModel
         }
 
         [Test]
+        public void Test_LocationsWithoutDates()
+        {
+            var tree = new GDMTree();
+            var locRus = tree.CreateLocation();
+            locRus.LocationName = "Россия";
+
+            var locMoscow = tree.CreateLocation();
+            locMoscow.LocationName = "Москва";
+            locMoscow.TopLevels.Add(new GDMLocationLink { XRef = locRus.XRef });
+
+            var names = locMoscow.GetFullNames(tree, ATDEnumeration.fLtS);
+            var result = string.Join("\n", names.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
+
+            Assert.AreEqual(
+                "'': 'Москва'"
+                , result);
+        }
+
+        [Test]
         public void Test_DateIntersections()
         {
             var r1 = GetRange("FROM 1708 TO 1929");
