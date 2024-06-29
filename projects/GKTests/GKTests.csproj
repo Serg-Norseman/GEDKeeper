@@ -112,6 +112,7 @@
     <Compile Include="GKCore\KinshipsTests.cs" />
     <Compile Include="GKCore\ListsTests.cs" />
     <Compile Include="GKCore\NamesTests.cs" />
+    <Compile Include="GKCore\NetDiffTests.cs" />
     <Compile Include="GKCore\OptionsTests.cs" />
     <Compile Include="GKCore\PlacesLoaderTests.cs" />
     <Compile Include="GKCore\PluginTests.cs" />
