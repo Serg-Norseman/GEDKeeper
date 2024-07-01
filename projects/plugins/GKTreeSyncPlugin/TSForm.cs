@@ -19,10 +19,12 @@
  */
 
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.NetDiff;
 using GKCore.Tools;
 
 namespace GKTreeSyncPlugin
@@ -46,26 +48,16 @@ namespace GKTreeSyncPlugin
 
             fBase = curBase;
             fSyncTool = new SyncTool();
+
+            lvRecords.CheckBoxes = true;
+            lvRecords.AddColumn("XRef 1", 100);
+            lvRecords.AddColumn("XRef 2", 100);
+            lvRecords.AddColumn("Name 1", 400);
+            lvRecords.AddColumn("Name 2", 400);
         }
 
         public void SetLocale()
         {
-        }
-
-        private void TSForm_Load(object sender, EventArgs e)
-        {
-            ResizeSplitter();
-        }
-
-        private void ResizeSplitter()
-        {
-            var diff = splitContainer1.Panel1.Width - splitContainer1.Panel2.Width;
-            splitContainer1.SplitterDistance -= diff / 2;
-        }
-
-        private void TSForm_Resize(object sender, EventArgs e)
-        {
-            ResizeSplitter();
         }
 
         private async void btnSelectFile_ClickAsync(object sender, EventArgs e)
@@ -78,11 +70,73 @@ namespace GKTreeSyncPlugin
 
             txtFile.Text = fileName;
             fSyncTool.LoadOtherFile(fBase.Context.Tree, fileName);
+            fSyncTool.CompareRecords(GetRecordType());
+            UpdateLists();
         }
 
         private void rbSyncRecords_CheckedChanged(object sender, EventArgs e)
         {
             cmbRecordTypes.Enabled = !rbSyncAll.Checked;
+        }
+
+        private GDMRecordType GetRecordType()
+        {
+            if (rbSyncAll.Checked) {
+                return GDMRecordType.rtNone;
+            } else {
+                return (GDMRecordType)(cmbRecordTypes.SelectedIndex + 1);
+            }
+        }
+
+        private void UpdateLists()
+        {
+            bool onlyModified = chkOnlyModified.Checked;
+
+            lvRecords.BeginUpdate();
+            lvRecords.ClearItems();
+
+            var tree = fBase.Context.Tree;
+            for (int i = 0; i < fSyncTool.Results.Count; i++) {
+                var compRes = fSyncTool.Results[i];
+                if (onlyModified && compRes.Status == DiffStatus.Equal) continue;
+
+                string item1, item2;
+                char diffChar = DiffUtil.GetStatusChar(compRes.Status);
+                Color backColor;
+
+                switch (compRes.Status) {
+                    case DiffStatus.Equal:
+                    default:
+                        item1 = diffChar + " " + compRes.Obj1.XRef;
+                        item2 = diffChar + " " + compRes.Obj2.XRef;
+                        backColor = Color.White;
+                        break;
+
+                    case DiffStatus.Deleted:
+                        item1 = diffChar + " " + compRes.Obj1.XRef;
+                        item2 = " ";
+                        backColor = Color.Coral;
+                        break;
+
+                    case DiffStatus.Inserted:
+                        item1 = " ";
+                        item2 = diffChar + " " + compRes.Obj2.XRef;
+                        backColor = Color.LightBlue;
+                        break;
+
+                    case DiffStatus.Modified:
+                        item1 = diffChar + " " + compRes.Obj1.XRef;
+                        item2 = diffChar + " " + compRes.Obj2.XRef;
+                        backColor = Color.Yellow;
+                        break;
+                }
+
+                lvRecords.AddItem(compRes, false, backColor,
+                    item1, item2,
+                    GKUtils.GetRecordName(tree, compRes.Obj1, false), GKUtils.GetRecordName(tree, compRes.Obj2, false));
+            }
+
+            lvRecords.EndUpdate();
         }
     }
 }

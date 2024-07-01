@@ -11,11 +11,8 @@
         private System.Windows.Forms.ComboBox cmbRecordTypes;
         private System.Windows.Forms.RadioButton rbSyncSelected;
         private System.Windows.Forms.RadioButton rbSyncAll;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private GKUI.Components.GKListView gkListView1;
-        private GKUI.Components.GKListView gkListView2;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private GKUI.Components.GKListView lvRecords;
+        private System.Windows.Forms.CheckBox chkOnlyModified;
 
         protected override void Dispose(bool disposing)
         {
@@ -35,21 +32,15 @@
             this.cmbRecordTypes = new System.Windows.Forms.ComboBox();
             this.rbSyncSelected = new System.Windows.Forms.RadioButton();
             this.rbSyncAll = new System.Windows.Forms.RadioButton();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.gkListView1 = new GKUI.Components.GKListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.gkListView2 = new GKUI.Components.GKListView();
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lvRecords = new GKUI.Components.GKListView();
+            this.chkOnlyModified = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.chkOnlyModified);
             this.panel1.Controls.Add(this.btnSelectFile);
             this.panel1.Controls.Add(this.lblFile);
             this.panel1.Controls.Add(this.txtFile);
@@ -123,6 +114,7 @@
             // rbSyncAll
             // 
             this.rbSyncAll.AutoSize = true;
+            this.rbSyncAll.Checked = true;
             this.rbSyncAll.Location = new System.Drawing.Point(9, 19);
             this.rbSyncAll.Name = "rbSyncAll";
             this.rbSyncAll.Size = new System.Drawing.Size(36, 17);
@@ -132,90 +124,47 @@
             this.rbSyncAll.UseVisualStyleBackColor = true;
             this.rbSyncAll.CheckedChanged += new System.EventHandler(this.rbSyncRecords_CheckedChanged);
             // 
-            // splitContainer1
+            // lvRecords
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 92);
-            this.splitContainer1.Name = "splitContainer1";
+            this.lvRecords.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lvRecords.FullRowSelect = true;
+            this.lvRecords.HideSelection = false;
+            this.lvRecords.ListMan = null;
+            this.lvRecords.Location = new System.Drawing.Point(0, 92);
+            this.lvRecords.Name = "lvRecords";
+            this.lvRecords.OwnerDraw = true;
+            this.lvRecords.SelectedIndex = -1;
+            this.lvRecords.Size = new System.Drawing.Size(1047, 536);
+            this.lvRecords.SortColumn = 0;
+            this.lvRecords.SortOrder = GKCore.Design.BSDTypes.SortOrder.None;
+            this.lvRecords.TabIndex = 0;
+            this.lvRecords.UseCompatibleStateImageBehavior = false;
+            this.lvRecords.View = System.Windows.Forms.View.Details;
             // 
-            // splitContainer1.Panel1
+            // chkOnlyModified
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.gkListView1);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.gkListView2);
-            this.splitContainer1.Size = new System.Drawing.Size(1047, 536);
-            this.splitContainer1.SplitterDistance = 349;
-            this.splitContainer1.TabIndex = 1;
-            // 
-            // gkListView1
-            // 
-            this.gkListView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
-            this.gkListView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gkListView1.FullRowSelect = true;
-            this.gkListView1.HideSelection = false;
-            this.gkListView1.ListMan = null;
-            this.gkListView1.Location = new System.Drawing.Point(0, 0);
-            this.gkListView1.Name = "gkListView1";
-            this.gkListView1.OwnerDraw = true;
-            this.gkListView1.SelectedIndex = -1;
-            this.gkListView1.Size = new System.Drawing.Size(349, 536);
-            this.gkListView1.SortColumn = 0;
-            this.gkListView1.SortOrder = GKCore.Design.BSDTypes.SortOrder.None;
-            this.gkListView1.TabIndex = 0;
-            this.gkListView1.UseCompatibleStateImageBehavior = false;
-            this.gkListView1.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "Record";
-            this.columnHeader1.Width = 400;
-            // 
-            // gkListView2
-            // 
-            this.gkListView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader2});
-            this.gkListView2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gkListView2.FullRowSelect = true;
-            this.gkListView2.HideSelection = false;
-            this.gkListView2.ListMan = null;
-            this.gkListView2.Location = new System.Drawing.Point(0, 0);
-            this.gkListView2.Name = "gkListView2";
-            this.gkListView2.OwnerDraw = true;
-            this.gkListView2.SelectedIndex = -1;
-            this.gkListView2.Size = new System.Drawing.Size(694, 536);
-            this.gkListView2.SortColumn = 0;
-            this.gkListView2.SortOrder = GKCore.Design.BSDTypes.SortOrder.None;
-            this.gkListView2.TabIndex = 0;
-            this.gkListView2.UseCompatibleStateImageBehavior = false;
-            this.gkListView2.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Record";
-            this.columnHeader2.Width = 400;
+            this.chkOnlyModified.AutoSize = true;
+            this.chkOnlyModified.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkOnlyModified.Location = new System.Drawing.Point(381, 55);
+            this.chkOnlyModified.Name = "chkOnlyModified";
+            this.chkOnlyModified.Size = new System.Drawing.Size(89, 17);
+            this.chkOnlyModified.TabIndex = 4;
+            this.chkOnlyModified.Text = "Only modified";
+            this.chkOnlyModified.UseVisualStyleBackColor = true;
             // 
             // TSForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1047, 628);
-            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.lvRecords);
             this.Controls.Add(this.panel1);
             this.Name = "TSForm";
             this.Text = "TSForm";
-            this.Load += new System.EventHandler(this.TSForm_Load);
-            this.Resize += new System.EventHandler(this.TSForm_Resize);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
         }
     }

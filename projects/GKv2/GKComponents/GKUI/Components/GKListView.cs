@@ -681,6 +681,16 @@ namespace GKUI.Components
             Items.Clear();
         }
 
+        public BSDListItem AddItem(object rowData, bool isChecked, Color backColor, params object[] columnValues)
+        {
+            var item = AddItem(rowData, columnValues);
+            if (CheckBoxes) {
+                ((GKListItem)item).Checked = isChecked;
+            }
+            ((GKListItem)item).BackColor = backColor;
+            return item;
+        }
+
         public BSDListItem AddItem(object rowData, bool isChecked, params object[] columnValues)
         {
             var item = AddItem(rowData, columnValues);

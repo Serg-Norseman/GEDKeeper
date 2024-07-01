@@ -377,6 +377,7 @@
     <Compile Include="GKCore\Names\NameEntry.cs" />
     <Compile Include="GKCore\Names\NamesTable.cs" />
     <Compile Include="GKCore\NetDiff\DiffUtil.cs" />
+    <Compile Include="GKCore\HashCode.cs" />
     <Compile Include="GKCore\Options\ListOptions.cs" />
     <Compile Include="GKCore\Options\LocaleOptions.cs" />
     <Compile Include="GKCore\Plugins\OrdinaryPlugin.cs" />

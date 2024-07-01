@@ -25,7 +25,7 @@ namespace GKCore.NetDiff
     {
         public T Obj1 { get; private set; }
         public T Obj2 { get; private set; }
-        public DiffStatus Status { get; private set; }
+        public DiffStatus Status { get; set; }
 
         public DiffResult(T obj1, T obj2, DiffStatus status)
         {
@@ -182,14 +182,14 @@ namespace GKCore.NetDiff
                 throw new Exception();
         }
 
-        internal static char GetStatusChar(DiffStatus status)
+        public static char GetStatusChar(DiffStatus status)
         {
             switch (status)
             {
                 case DiffStatus.Equal: return '=';
                 case DiffStatus.Deleted: return '-';
                 case DiffStatus.Inserted: return '+';
-                case DiffStatus.Modified: return 'M';
+                case DiffStatus.Modified: return '≠';
             }
 
             throw new System.Exception();
@@ -209,7 +209,7 @@ namespace GKCore.NetDiff
             public int X { get; private set; }
             public int Y { get; private set; }
 
-            public Point(int x, int y)
+            public Point(int x, int y) : this()
             {
                 X = x;
                 Y = y;

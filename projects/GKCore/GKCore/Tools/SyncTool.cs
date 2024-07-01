@@ -19,26 +19,24 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.NetDiff;
 
 namespace GKCore.Tools
 {
-    public enum RecordStatus
-    {
-        Unknown,        // gray
-        Identical,      // white
-        Changed,        // yellow
-        Deleted,        // orange or red
-        Added,          // lightblue or cyan
-    }
-
-
     /// <summary>
     ///
     /// </summary>
     public class SyncTool
     {
+        private GDMTree fMainTree;
+        private GDMTree fOtherTree;
+
+        public List<DiffResult<GDMRecord>> Results;
+
         public void LoadOtherFile(GDMTree mainTree, string fileName)
         {
             if (mainTree == null)
@@ -47,11 +45,52 @@ namespace GKCore.Tools
             if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentNullException("fileName");
 
-            using (var extTree = new GDMTree()) {
-                var gedcomProvider = new GEDCOMProvider(extTree);
-                gedcomProvider.LoadFromFile(fileName);
+            fMainTree = mainTree;
 
-                //
+            fOtherTree = new GDMTree();
+            var gedcomProvider = new GEDCOMProvider(fOtherTree);
+            gedcomProvider.LoadFromFile(fileName);
+        }
+
+        public void CompareRecords(GDMRecordType recordType)
+        {
+            var records1 = fMainTree.GetRecords(recordType);
+            var records2 = fOtherTree.GetRecords(recordType);
+
+            var option = new DiffOption<GDMRecord>();
+            option.EqualityComparer = new Stage1Comparer();
+
+            Results = DiffUtil.Diff(records1, records2, option).ToList();
+            CheckModified();
+            CheckContents();
+        }
+
+        private void CheckModified()
+        {
+            foreach (var diffRes in Results) {
+                if (diffRes.Status != DiffStatus.Equal) continue;
+
+                if ((diffRes.Obj1.XRef != diffRes.Obj2.XRef) || (diffRes.Obj1.ChangeDate.ChangeDateTime != diffRes.Obj2.ChangeDate.ChangeDateTime)) {
+                    diffRes.Status = DiffStatus.Modified;
+                }
+            }
+        }
+
+        private void CheckContents()
+        {
+            // IEquatable<T> and GetHashCode() - on all records, structures and tags
+        }
+
+        internal class Stage1Comparer : IEqualityComparer<GDMRecord>
+        {
+            public bool Equals(GDMRecord x, GDMRecord y)
+            {
+                return x.UID == y.UID;
+            }
+
+            public int GetHashCode(GDMRecord obj)
+            {
+                return obj.GetHashCode();
             }
         }
     }

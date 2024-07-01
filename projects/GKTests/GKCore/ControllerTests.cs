@@ -821,6 +821,7 @@ namespace GKCore.Controllers
             SubstituteControl<IButton>(view, "btnSelectFamily");
             SubstituteControl<IButton>(view, "btnSelectAncestors");
             SubstituteControl<IButton>(view, "btnSelectDescendants");
+            SubstituteControl<IButton>(view, "btnSelectList");
             SubstituteControl<IButton>(view, "btnDelete");
             SubstituteControl<IButton>(view, "btnSave");
 

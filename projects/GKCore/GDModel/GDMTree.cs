@@ -302,6 +302,20 @@ namespace GDModel
             return result;
         }
 
+        public List<GDMRecord> GetRecords(GDMRecordType recType)
+        {
+            var result = new List<GDMRecord>();
+
+            for (int i = 0; i < fRecords.Count; i++) {
+                var rec = fRecords[i];
+                if (recType == GDMRecordType.rtNone || rec.RecordType == recType) {
+                    result.Add(rec);
+                }
+            }
+
+            return result;
+        }
+
         public IGDMTreeEnumerator GetEnumerator(GDMRecordType recType)
         {
             return new TreeEnumerator(this, recType);
