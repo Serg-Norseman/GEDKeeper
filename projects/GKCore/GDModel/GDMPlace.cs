@@ -131,5 +131,15 @@ namespace GDModel
             if (fMap != null) fMap.ReplaceXRefs(map);
             if (fNotes != null) fNotes.ReplaceXRefs(map);
         }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddObj(fForm);
+            hashCode.AddObj(fLocation);
+            hashCode.AddObj(fMap);
+            ProcessHashes(ref hashCode, fNotes);
+        }
     }
 }

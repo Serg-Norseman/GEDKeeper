@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -38,6 +39,13 @@ namespace GDModel
         public GDMIndividualAttribute(int tagId, string tagValue)
         {
             SetNameValue(tagId, tagValue);
+        }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            //hashCode.AddObj(PhysicalDescription); <- inner Tags
         }
     }
 }

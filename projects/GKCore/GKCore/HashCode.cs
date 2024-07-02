@@ -68,10 +68,12 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void Initialize(out uint v1, out uint v2, out uint v3, out uint v4)
         {
-            v1 = s_seed + Prime1 + Prime2;
-            v2 = s_seed + Prime2;
-            v3 = s_seed;
-            v4 = s_seed - Prime1;
+            unchecked {
+                v1 = s_seed + Prime1 + Prime2;
+                v2 = s_seed + Prime2;
+                v3 = s_seed;
+                v4 = s_seed - Prime1;
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -83,35 +85,45 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint Round(uint hash, uint input)
         {
-            return RotateLeft(hash + input * Prime2, 13) * Prime1;
+            unchecked {
+                return RotateLeft(hash + input * Prime2, 13) * Prime1;
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint QueueRound(uint hash, uint queuedValue)
         {
-            return RotateLeft(hash + queuedValue * Prime3, 17) * Prime4;
+            unchecked {
+                return RotateLeft(hash + queuedValue * Prime3, 17) * Prime4;
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint MixState(uint v1, uint v2, uint v3, uint v4)
         {
-            return RotateLeft(v1, 1) + RotateLeft(v2, 7) + RotateLeft(v3, 12) + RotateLeft(v4, 18);
+            unchecked {
+                return RotateLeft(v1, 1) + RotateLeft(v2, 7) + RotateLeft(v3, 12) + RotateLeft(v4, 18);
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint MixEmptyState()
         {
-            return s_seed + Prime5;
+            unchecked {
+                return s_seed + Prime5;
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint MixFinal(uint hash)
         {
-            hash ^= hash >> 15;
-            hash *= Prime2;
-            hash ^= hash >> 13;
-            hash *= Prime3;
-            hash ^= hash >> 16;
+            unchecked {
+                hash ^= hash >> 15;
+                hash *= Prime2;
+                hash ^= hash >> 13;
+                hash *= Prime3;
+                hash ^= hash >> 16;
+            }
             return hash;
         }
 
@@ -150,7 +162,7 @@ namespace System
             // To see what's really going on here, have a look at the Combine
             // methods.
 
-            uint val = (uint)value;
+            uint val = unchecked((uint)value);
 
             // Storing the value of _length locally shaves of quite a few bytes
             // in the resulting machine code.
@@ -213,7 +225,7 @@ namespace System
             }
 
             hash = MixFinal(hash);
-            return (int)hash;
+            return unchecked((int)hash);
         }
     }
 }

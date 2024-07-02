@@ -325,6 +325,15 @@ namespace GDModel
             UDN udn2 = cp2.Date.GetUDN();
             return udn1.CompareTo(udn2);
         }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddObj(fMap);
+            ProcessHashes(ref hashCode, fNames);
+            ProcessHashes(ref hashCode, fTopLevels);
+        }
     }
 
     public interface IGDMLocationElement

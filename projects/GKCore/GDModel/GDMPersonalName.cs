@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -382,6 +382,26 @@ namespace GDModel
             }
 
             return match;
+        }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddObj(fGiven);
+            hashCode.AddVal(fLanguage);
+            hashCode.AddObj(fNamePrefix);
+            hashCode.AddObj(fNameSuffix);
+            hashCode.AddVal(fNameType);
+            hashCode.AddObj(fNickname);
+            ProcessHashes(ref hashCode, fNotes);
+            ProcessHashes(ref hashCode, fSourceCitations);
+            hashCode.AddObj(fSurnamePrefix);
+            hashCode.AddObj(fSurname);
+            hashCode.AddObj(fPatronymicName);
+            hashCode.AddObj(fMarriedName);
+            hashCode.AddObj(fReligiousName);
+            hashCode.AddObj(fCensusName);
         }
     }
 }

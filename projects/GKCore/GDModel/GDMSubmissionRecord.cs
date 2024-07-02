@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -118,6 +119,18 @@ namespace GDModel
             base.ReplaceXRefs(map);
 
             fSubmitter.ReplaceXRefs(map);
+        }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddObj(fFamilyFileName);
+            hashCode.AddObj(fTempleCode);
+            hashCode.AddVal(fGenerationsOfAncestors);
+            hashCode.AddVal(fGenerationsOfDescendants);
+            hashCode.AddVal(fOrdinanceProcessFlag);
+            hashCode.AddObj(fSubmitter);
         }
     }
 }

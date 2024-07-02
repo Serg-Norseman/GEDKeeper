@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -81,6 +81,14 @@ namespace GDModel
 
             fChildLinkageStatus = srcCFL.fChildLinkageStatus;
             fPedigreeLinkageType = srcCFL.fPedigreeLinkageType;
+        }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddVal(fChildLinkageStatus);
+            hashCode.AddVal(fPedigreeLinkageType);
         }
     }
 }

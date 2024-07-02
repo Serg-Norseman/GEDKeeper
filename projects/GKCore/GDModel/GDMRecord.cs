@@ -317,5 +317,18 @@ namespace GDModel
         {
             return GEDCOMUtils.GetXRefNumber(XRef);
         }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddObj(fAutomatedRecordID);
+            // without fChangeDate and fUID!
+            hashCode.AddObj(fXRef);
+            ProcessHashes(ref hashCode, fMultimediaLinks);
+            ProcessHashes(ref hashCode, fNotes);
+            ProcessHashes(ref hashCode, fSourceCitations);
+            ProcessHashes(ref hashCode, fUserReferences);
+        }
     }
 }

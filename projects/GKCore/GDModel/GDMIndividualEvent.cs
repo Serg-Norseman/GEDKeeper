@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
+
 namespace GDModel
 {
     public sealed class GDMIndividualEvent : GDMCustomEvent
@@ -29,6 +31,11 @@ namespace GDModel
         public GDMIndividualEvent(int tagId, string tagValue)
         {
             SetNameValue(tagId, tagValue);
+        }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
         }
     }
 }

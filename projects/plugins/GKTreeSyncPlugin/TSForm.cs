@@ -125,9 +125,10 @@ namespace GKTreeSyncPlugin
                         break;
 
                     case DiffStatus.Modified:
+                    case DiffStatus.DeepModified:
                         item1 = diffChar + " " + compRes.Obj1.XRef;
                         item2 = diffChar + " " + compRes.Obj2.XRef;
-                        backColor = Color.Yellow;
+                        backColor = (compRes.Status == DiffStatus.Modified) ? Color.Yellow : Color.Orange;
                         break;
                 }
 

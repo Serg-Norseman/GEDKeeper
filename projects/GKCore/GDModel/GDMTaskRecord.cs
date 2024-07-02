@@ -120,5 +120,15 @@ namespace GDModel
                 fGoal = GEDCOMUtils.EncloseXRef(map.FindNewXRef(GEDCOMUtils.CleanXRef(fGoal)));
             }
         }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddObj(fGoal);
+            hashCode.AddVal(fPriority);
+            hashCode.AddObj(fStartDate);
+            hashCode.AddObj(fStopDate);
+        }
     }
 }

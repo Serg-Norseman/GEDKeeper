@@ -240,5 +240,25 @@ namespace GDModel
             fLines.Clear();
             fLines.AddRange(value);
         }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddHash(fLines.GetHashCode());
+
+            hashCode.AddObj(fAddressLine1);
+            hashCode.AddObj(fAddressLine2);
+            hashCode.AddObj(fAddressLine3);
+            hashCode.AddObj(fAddressCity);
+            hashCode.AddObj(fAddressState);
+            hashCode.AddObj(fAddressPostalCode);
+            hashCode.AddObj(fAddressCountry);
+
+            ProcessHashes(ref hashCode, fPhoneList);
+            ProcessHashes(ref hashCode, fEmailList);
+            ProcessHashes(ref hashCode, fFaxList);
+            ProcessHashes(ref hashCode, fWWWList);
+        }
     }
 }

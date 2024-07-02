@@ -283,6 +283,29 @@ namespace GDModel
         }
 
         #endregion
+
+        protected static void ProcessHashes<T>(ref HashCode hashCode, GDMList<T> tags) where T : GDMTag
+        {
+            if (tags == null) return;
+
+            for (int i = 0; i < tags.Count; i++) {
+                var tag = tags[i];
+                tag.ProcessHashes(ref hashCode);
+            }
+        }
+
+        protected virtual void ProcessHashes(ref HashCode hashCode)
+        {
+            hashCode.AddVal(fId);
+            ProcessHashes(ref hashCode, fTags);
+        }
+
+        public override int GetHashCode()
+        {
+            var result = new HashCode();
+            ProcessHashes(ref result);
+            return result.ToHashCode();
+        }
     }
 
 
@@ -325,6 +348,13 @@ namespace GDModel
         {
             fStringValue = strValue;
             return string.Empty;
+        }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddObj(fStringValue);
         }
     }
 }

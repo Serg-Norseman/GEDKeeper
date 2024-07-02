@@ -18,6 +18,7 @@ namespace GKCore.NetDiff
         Deleted,
         Inserted,
         Modified,
+        DeepModified,
     }
 
 
@@ -186,10 +187,15 @@ namespace GKCore.NetDiff
         {
             switch (status)
             {
-                case DiffStatus.Equal: return '=';
-                case DiffStatus.Deleted: return '-';
-                case DiffStatus.Inserted: return '+';
-                case DiffStatus.Modified: return '≠';
+                case DiffStatus.Equal:
+                    return '=';
+                case DiffStatus.Deleted:
+                    return '-';
+                case DiffStatus.Inserted:
+                    return '+';
+                case DiffStatus.Modified:
+                case DiffStatus.DeepModified:
+                    return '≠';
             }
 
             throw new System.Exception();

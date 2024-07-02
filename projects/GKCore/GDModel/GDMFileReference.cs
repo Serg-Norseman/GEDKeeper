@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -177,6 +177,14 @@ namespace GDModel
         {
             var strFmt = GetMultimediaExt(fileName);
             return string.IsNullOrEmpty(strFmt) ? GDMMultimediaFormat.mfUnknown : GEDCOMUtils.GetMultimediaFormatVal(strFmt);
+        }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddObj(fMultimediaFormat);
+            hashCode.AddVal(fMediaType);
         }
     }
 }

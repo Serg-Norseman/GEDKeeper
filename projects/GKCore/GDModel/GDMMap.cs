@@ -71,5 +71,13 @@ namespace GDModel
         {
             return base.IsEmpty() && (fLati == 0.0d && fLong == 0.0d);
         }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddVal(fLati);
+            hashCode.AddVal(fLong);
+        }
     }
 }

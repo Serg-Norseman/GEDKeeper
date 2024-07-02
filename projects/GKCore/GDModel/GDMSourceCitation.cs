@@ -233,5 +233,18 @@ namespace GDModel
             int val = fCertaintyAssessment;
             return (val >= 0 && val <= 3) ? val : 0;
         }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddVal(fCertaintyAssessment);
+            hashCode.AddObj(fData);
+            hashCode.AddObj(fPage);
+            hashCode.AddObj(fDescription);
+            ProcessHashes(ref hashCode, fMultimediaLinks);
+            ProcessHashes(ref hashCode, fNotes);
+            hashCode.AddObj(fText);
+        }
     }
 }

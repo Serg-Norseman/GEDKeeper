@@ -70,8 +70,15 @@ namespace GKCore.Tools
             foreach (var diffRes in Results) {
                 if (diffRes.Status != DiffStatus.Equal) continue;
 
-                if ((diffRes.Obj1.XRef != diffRes.Obj2.XRef) || (diffRes.Obj1.ChangeDate.ChangeDateTime != diffRes.Obj2.ChangeDate.ChangeDateTime)) {
+                var rec1 = diffRes.Obj1;
+                var rec2 = diffRes.Obj2;
+
+                if ((rec1.XRef != rec2.XRef) || (rec1.ChangeDate.ChangeDateTime != rec2.ChangeDate.ChangeDateTime)) {
                     diffRes.Status = DiffStatus.Modified;
+                }
+
+                if (rec1.GetHashCode() != rec2.GetHashCode()) {
+                    diffRes.Status = DiffStatus.DeepModified;
                 }
             }
         }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -114,6 +114,16 @@ namespace GDModel
             fMinutes = minutes;
             fSeconds = seconds;
             fFraction = fraction;
+        }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddVal(fHour);
+            hashCode.AddVal(fMinutes);
+            hashCode.AddVal(fSeconds);
+            hashCode.AddVal(fFraction);
         }
     }
 }

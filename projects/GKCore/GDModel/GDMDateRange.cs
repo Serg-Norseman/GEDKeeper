@@ -197,5 +197,13 @@ namespace GDModel
             dateStart = fDateAfter;
             dateEnd = fDateBefore;
         }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddObj(fDateAfter);
+            hashCode.AddObj(fDateBefore);
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -125,6 +125,16 @@ namespace GDModel
             fY1 = y1;
             fX2 = x2;
             fY2 = y2;
+        }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddVal(fX1);
+            hashCode.AddVal(fY1);
+            hashCode.AddVal(fX2);
+            hashCode.AddVal(fY2);
         }
     }
 }

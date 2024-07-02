@@ -103,5 +103,14 @@ namespace GDModel
             base.ReplaceXRefs(map);
             fDate.ReplaceXRefs(map);
         }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddObj(fAbbreviation);
+            hashCode.AddObj(fDate);
+            hashCode.AddVal(fLanguage);
+        }
     }
 }

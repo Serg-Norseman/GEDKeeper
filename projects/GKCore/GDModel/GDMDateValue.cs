@@ -179,5 +179,12 @@ namespace GDModel
                 fValue.GetDateRange(out dateStart, out dateEnd);
             }
         }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddObj(fValue);
+        }
     }
 }

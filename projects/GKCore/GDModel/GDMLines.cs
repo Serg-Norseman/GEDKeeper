@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -66,6 +67,17 @@ namespace GDModel
             for (int i = 0; i < list.Length; i++) {
                 ParseLine(list[i]);
             }
+        }
+
+        public override int GetHashCode()
+        {
+            var result = new HashCode();
+
+            for (int i = 0, num = base.Count; i < num; i++) {
+                result.AddObj(base[i]);
+            }
+
+            return result.ToHashCode();
         }
 
         public bool IsEmpty()

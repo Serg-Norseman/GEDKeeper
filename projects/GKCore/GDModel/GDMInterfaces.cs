@@ -36,6 +36,8 @@ namespace GDModel
         GDMList<GDMTag> SubTags { get; }
 
         bool IsEmpty();
+
+        int GetHashCode();
     }
 
 

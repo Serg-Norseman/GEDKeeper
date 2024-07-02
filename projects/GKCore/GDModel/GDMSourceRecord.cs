@@ -279,5 +279,19 @@ namespace GDModel
 
             return null;
         }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddObj(fData);
+            hashCode.AddObj(fDate);
+            hashCode.AddObj(fOriginator);
+            hashCode.AddObj(fPublication);
+            ProcessHashes(ref hashCode, fRepositoryCitations);
+            hashCode.AddObj(fShortTitle);
+            hashCode.AddObj(fText);
+            hashCode.AddObj(fTitle);
+        }
     }
 }

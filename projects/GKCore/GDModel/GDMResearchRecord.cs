@@ -311,5 +311,20 @@ namespace GDModel
 
             return result;
         }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddObj(fResearchName);
+            hashCode.AddVal(fPriority);
+            hashCode.AddVal(fStatus);
+            hashCode.AddObj(fStartDate);
+            hashCode.AddObj(fStopDate);
+            hashCode.AddVal(fPercent);
+            ProcessHashes(ref hashCode, fTasks);
+            ProcessHashes(ref hashCode, fCommunications);
+            ProcessHashes(ref hashCode, fGroups);
+        }
     }
 }

@@ -183,5 +183,12 @@ namespace GDModel
         {
             SetNameValue(tagId, tagValue);
         }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+
+            hashCode.AddVal(fValue);
+        }
     }
 }
