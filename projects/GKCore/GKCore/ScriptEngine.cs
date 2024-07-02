@@ -25,7 +25,6 @@ using System.Data;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -271,14 +270,14 @@ namespace GKCore
             fBase.RefreshLists(false);
         }
 
-        public async Task<string> select_file()
+        public string select_file()
         {
-            return await AppHost.StdDialogs.GetOpenFile("", "", "All files (*.*)|*.*", 0, "");
+            return AppHost.StdDialogs.GetOpenFile("", "", "All files (*.*)|*.*", 0, "").Result;
         }
 
-        public async Task<string> select_new_file()
+        public string select_new_file()
         {
-            return await AppHost.StdDialogs.GetSaveFile("", "", "All files (*.*)|*.*", 0, "", "", true);
+            return AppHost.StdDialogs.GetSaveFile("", "", "All files (*.*)|*.*", 0, "", "", true).Result;
         }
 
         #endregion
@@ -301,10 +300,10 @@ namespace GKCore
             return (rec == null) ? (int)GDMRecordType.rtNone : (int)rec.RecordType;
         }
 
-        public async Task<bool> delete_record(object recPtr)
+        public bool delete_record(object recPtr)
         {
             GDMRecord rec = recPtr as GDMRecord;
-            return await BaseController.DeleteRecord(fBase, rec, false);
+            return BaseController.DeleteRecord(fBase, rec, false).Result;
         }
 
         public string get_record_xref(object recPtr)
@@ -564,9 +563,9 @@ namespace GKCore
             fRec.AddChild(chRec);
         }
 
-        public async Task<string> define_sex(string name, string patr)
+        public string define_sex(string name, string patr)
         {
-            GDMSex sx = await fBase.Context.DefineSex(fView, name, patr);
+            GDMSex sx = fBase.Context.DefineSex(fView, name, patr).Result;
 
             return GKData.SexData[(int)sx].Sign;
         }
@@ -583,11 +582,11 @@ namespace GKCore
             return evt;
         }
 
-        public async Task<string> define_patronymic(string fatherName, string childSex, bool confirm)
+        public string define_patronymic(string fatherName, string childSex, bool confirm)
         {
             GDMSex sex = (childSex.Length == 1) ? GKUtils.GetSexBySign(childSex[0]) : GDMSex.svUnknown;
 
-            return await fBase.Context.DefinePatronymic(fView, fatherName, sex, confirm);
+            return fBase.Context.DefinePatronymic(fView, fatherName, sex, confirm).Result;
         }
 
         public object get_individual_parents_family(object recPtr)
