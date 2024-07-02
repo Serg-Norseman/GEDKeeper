@@ -238,13 +238,13 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddVal(fCertaintyAssessment);
-            hashCode.AddObj(fData);
-            hashCode.AddObj(fPage);
-            hashCode.AddObj(fDescription);
+            hashCode.Add(fCertaintyAssessment);
+            hashCode.Add(fData);
+            hashCode.Add(fPage);
+            hashCode.Add(fDescription);
             ProcessHashes(ref hashCode, fMultimediaLinks);
             ProcessHashes(ref hashCode, fNotes);
-            hashCode.AddObj(fText);
+            hashCode.Add(fText);
         }
     }
 }

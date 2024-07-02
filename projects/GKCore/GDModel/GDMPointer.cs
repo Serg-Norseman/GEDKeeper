@@ -89,7 +89,7 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fXRef);
+            hashCode.Add(fXRef);
         }
     }
 }

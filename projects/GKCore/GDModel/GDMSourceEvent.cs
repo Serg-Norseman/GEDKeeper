@@ -90,8 +90,8 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fDate);
-            hashCode.AddObj(fPlace);
+            hashCode.Add(fDate);
+            hashCode.Add(fPlace);
         }
     }
 }

@@ -93,8 +93,8 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fAbbreviation);
-            hashCode.AddObj(fDate);
+            hashCode.Add(fAbbreviation);
+            hashCode.Add(fDate);
         }
     }
 }

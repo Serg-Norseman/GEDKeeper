@@ -112,8 +112,8 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fAddress);
-            hashCode.AddObj(fRepositoryName);
+            hashCode.Add(fAddress);
+            hashCode.Add(fRepositoryName);
         }
     }
 }

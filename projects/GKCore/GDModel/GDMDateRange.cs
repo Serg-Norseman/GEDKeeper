@@ -202,8 +202,8 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fDateAfter);
-            hashCode.AddObj(fDateBefore);
+            hashCode.Add(fDateAfter);
+            hashCode.Add(fDateBefore);
         }
     }
 }

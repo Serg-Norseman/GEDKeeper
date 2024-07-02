@@ -184,7 +184,7 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fValue);
+            hashCode.Add(fValue);
         }
     }
 }

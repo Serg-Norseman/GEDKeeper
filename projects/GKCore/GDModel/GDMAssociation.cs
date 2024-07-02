@@ -107,7 +107,7 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fRelation);
+            hashCode.Add(fRelation);
 
             ProcessHashes(ref hashCode, fSourceCitations);
         }

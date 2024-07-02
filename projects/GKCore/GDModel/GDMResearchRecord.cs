@@ -316,12 +316,12 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fResearchName);
-            hashCode.AddVal(fPriority);
-            hashCode.AddVal(fStatus);
-            hashCode.AddObj(fStartDate);
-            hashCode.AddObj(fStopDate);
-            hashCode.AddVal(fPercent);
+            hashCode.Add(fResearchName);
+            hashCode.Add(fPriority);
+            hashCode.Add(fStatus);
+            hashCode.Add(fStartDate);
+            hashCode.Add(fStopDate);
+            hashCode.Add(fPercent);
             ProcessHashes(ref hashCode, fTasks);
             ProcessHashes(ref hashCode, fCommunications);
             ProcessHashes(ref hashCode, fGroups);

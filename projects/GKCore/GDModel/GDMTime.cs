@@ -120,10 +120,10 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddVal(fHour);
-            hashCode.AddVal(fMinutes);
-            hashCode.AddVal(fSeconds);
-            hashCode.AddVal(fFraction);
+            hashCode.Add(fHour);
+            hashCode.Add(fMinutes);
+            hashCode.Add(fSeconds);
+            hashCode.Add(fFraction);
         }
     }
 }

@@ -284,14 +284,14 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fData);
-            hashCode.AddObj(fDate);
-            hashCode.AddObj(fOriginator);
-            hashCode.AddObj(fPublication);
+            hashCode.Add(fData);
+            hashCode.Add(fDate);
+            hashCode.Add(fOriginator);
+            hashCode.Add(fPublication);
             ProcessHashes(ref hashCode, fRepositoryCitations);
-            hashCode.AddObj(fShortTitle);
-            hashCode.AddObj(fText);
-            hashCode.AddObj(fTitle);
+            hashCode.Add(fShortTitle);
+            hashCode.Add(fText);
+            hashCode.Add(fTitle);
         }
     }
 }

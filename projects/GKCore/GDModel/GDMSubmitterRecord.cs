@@ -124,10 +124,10 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fAddress);
+            hashCode.Add(fAddress);
             ProcessHashes(ref hashCode, fLanguages);
-            hashCode.AddObj(fName);
-            hashCode.AddObj(fRegisteredReference);
+            hashCode.Add(fName);
+            hashCode.Add(fRegisteredReference);
         }
     }
 }

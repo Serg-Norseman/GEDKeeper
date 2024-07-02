@@ -160,11 +160,11 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fCommName);
-            hashCode.AddVal(fCommunicationType);
-            hashCode.AddObj(fDate);
-            hashCode.AddVal(fCommDirection);
-            hashCode.AddObj(fCorresponder);
+            hashCode.Add(fCommName);
+            hashCode.Add(fCommunicationType);
+            hashCode.Add(fDate);
+            hashCode.Add(fCommDirection);
+            hashCode.Add(fCorresponder);
         }
     }
 }

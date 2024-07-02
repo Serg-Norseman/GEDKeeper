@@ -296,7 +296,7 @@ namespace GDModel
 
         protected virtual void ProcessHashes(ref HashCode hashCode)
         {
-            hashCode.AddVal(fId);
+            hashCode.Add(fId);
             ProcessHashes(ref hashCode, fTags);
         }
 
@@ -354,7 +354,7 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fStringValue);
+            hashCode.Add(fStringValue);
         }
     }
 }

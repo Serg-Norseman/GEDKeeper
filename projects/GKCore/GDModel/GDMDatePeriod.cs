@@ -190,8 +190,8 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fDateFrom);
-            hashCode.AddObj(fDateTo);
+            hashCode.Add(fDateFrom);
+            hashCode.Add(fDateTo);
         }
     }
 }

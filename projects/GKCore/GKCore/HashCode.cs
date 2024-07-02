@@ -129,18 +129,10 @@ namespace System
 
         #endregion
 
-        public void AddVal<T>(T value) where T : struct
+        public void Add<T>(T value)
         {
-            AddHash(value.GetHashCode());
-        }
+            int hashCode = value?.GetHashCode() ?? 0;
 
-        public void AddObj<T>(T value) where T : class
-        {
-            AddHash(value == null ? 0 : value.GetHashCode());
-        }
-
-        public void AddHash(int value)
-        {
             // The original xxHash works as follows:
             // 0. Initialize immediately. We can't do this in a struct (no
             //    default ctor).
@@ -162,7 +154,7 @@ namespace System
             // To see what's really going on here, have a look at the Combine
             // methods.
 
-            uint val = unchecked((uint)value);
+            uint val = unchecked((uint)hashCode);
 
             // Storing the value of _length locally shaves of quite a few bytes
             // in the resulting machine code.

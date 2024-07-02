@@ -87,8 +87,8 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddVal(fChildLinkageStatus);
-            hashCode.AddVal(fPedigreeLinkageType);
+            hashCode.Add(fChildLinkageStatus);
+            hashCode.Add(fPedigreeLinkageType);
         }
     }
 }

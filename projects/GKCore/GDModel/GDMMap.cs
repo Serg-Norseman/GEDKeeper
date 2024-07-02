@@ -76,8 +76,8 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddVal(fLati);
-            hashCode.AddVal(fLong);
+            hashCode.Add(fLati);
+            hashCode.Add(fLong);
         }
     }
 }

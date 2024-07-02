@@ -76,7 +76,7 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddVal(fChangeDateTime);
+            hashCode.Add(fChangeDateTime);
         }
     }
 }

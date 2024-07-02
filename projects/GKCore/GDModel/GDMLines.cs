@@ -74,7 +74,7 @@ namespace GDModel
             var result = new HashCode();
 
             for (int i = 0, num = base.Count; i < num; i++) {
-                result.AddObj(base[i]);
+                result.Add(base[i]);
             }
 
             return result.ToHashCode();

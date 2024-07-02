@@ -131,10 +131,10 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddVal(fX1);
-            hashCode.AddVal(fY1);
-            hashCode.AddVal(fX2);
-            hashCode.AddVal(fY2);
+            hashCode.Add(fX1);
+            hashCode.Add(fY1);
+            hashCode.Add(fX2);
+            hashCode.Add(fY2);
         }
     }
 }

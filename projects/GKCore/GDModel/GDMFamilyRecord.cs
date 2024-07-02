@@ -311,9 +311,9 @@ namespace GDModel
             base.ProcessHashes(ref hashCode);
 
             ProcessHashes(ref hashCode, fChildren);
-            hashCode.AddObj(fHusband);
-            hashCode.AddObj(fWife);
-            hashCode.AddVal(fStatus);
+            hashCode.Add(fHusband);
+            hashCode.Add(fWife);
+            hashCode.Add(fStatus);
         }
     }
 }

@@ -136,9 +136,9 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fForm);
-            hashCode.AddObj(fLocation);
-            hashCode.AddObj(fMap);
+            hashCode.Add(fForm);
+            hashCode.Add(fLocation);
+            hashCode.Add(fMap);
             ProcessHashes(ref hashCode, fNotes);
         }
     }

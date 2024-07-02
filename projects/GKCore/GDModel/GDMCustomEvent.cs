@@ -301,14 +301,14 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fAddress);
-            hashCode.AddObj(fAgency);
-            hashCode.AddObj(fCause);
-            hashCode.AddObj(fClassification);
-            hashCode.AddObj(fDate);
-            hashCode.AddObj(fPlace);
-            hashCode.AddObj(fReligiousAffilation);
-            hashCode.AddVal(fRestriction);
+            hashCode.Add(fAddress);
+            hashCode.Add(fAgency);
+            hashCode.Add(fCause);
+            hashCode.Add(fClassification);
+            hashCode.Add(fDate);
+            hashCode.Add(fPlace);
+            hashCode.Add(fReligiousAffilation);
+            hashCode.Add(fRestriction);
             ProcessHashes(ref hashCode, fNotes);
             ProcessHashes(ref hashCode, fSourceCitations);
             ProcessHashes(ref hashCode, fMultimediaLinks);

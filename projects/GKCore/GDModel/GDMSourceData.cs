@@ -107,7 +107,7 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fAgency);
+            hashCode.Add(fAgency);
             ProcessHashes(ref hashCode, fEvents);
             ProcessHashes(ref hashCode, fNotes);
         }

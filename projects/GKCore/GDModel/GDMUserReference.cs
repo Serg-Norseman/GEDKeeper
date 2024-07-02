@@ -65,7 +65,7 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fReferenceType);
+            hashCode.Add(fReferenceType);
         }
     }
 }

@@ -125,12 +125,12 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fFamilyFileName);
-            hashCode.AddObj(fTempleCode);
-            hashCode.AddVal(fGenerationsOfAncestors);
-            hashCode.AddVal(fGenerationsOfDescendants);
-            hashCode.AddVal(fOrdinanceProcessFlag);
-            hashCode.AddObj(fSubmitter);
+            hashCode.Add(fFamilyFileName);
+            hashCode.Add(fTempleCode);
+            hashCode.Add(fGenerationsOfAncestors);
+            hashCode.Add(fGenerationsOfDescendants);
+            hashCode.Add(fOrdinanceProcessFlag);
+            hashCode.Add(fSubmitter);
         }
     }
 }

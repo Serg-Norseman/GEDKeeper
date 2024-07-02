@@ -245,16 +245,14 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddHash(fLines.GetHashCode());
-
-            hashCode.AddObj(fAddressLine1);
-            hashCode.AddObj(fAddressLine2);
-            hashCode.AddObj(fAddressLine3);
-            hashCode.AddObj(fAddressCity);
-            hashCode.AddObj(fAddressState);
-            hashCode.AddObj(fAddressPostalCode);
-            hashCode.AddObj(fAddressCountry);
-
+            hashCode.Add(fLines);
+            hashCode.Add(fAddressLine1);
+            hashCode.Add(fAddressLine2);
+            hashCode.Add(fAddressLine3);
+            hashCode.Add(fAddressCity);
+            hashCode.Add(fAddressState);
+            hashCode.Add(fAddressPostalCode);
+            hashCode.Add(fAddressCountry);
             ProcessHashes(ref hashCode, fPhoneList);
             ProcessHashes(ref hashCode, fEmailList);
             ProcessHashes(ref hashCode, fFaxList);

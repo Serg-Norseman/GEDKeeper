@@ -388,20 +388,20 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fGiven);
-            hashCode.AddVal(fLanguage);
-            hashCode.AddObj(fNamePrefix);
-            hashCode.AddObj(fNameSuffix);
-            hashCode.AddVal(fNameType);
-            hashCode.AddObj(fNickname);
+            hashCode.Add(fGiven);
+            hashCode.Add(fLanguage);
+            hashCode.Add(fNamePrefix);
+            hashCode.Add(fNameSuffix);
+            hashCode.Add(fNameType);
+            hashCode.Add(fNickname);
             ProcessHashes(ref hashCode, fNotes);
             ProcessHashes(ref hashCode, fSourceCitations);
-            hashCode.AddObj(fSurnamePrefix);
-            hashCode.AddObj(fSurname);
-            hashCode.AddObj(fPatronymicName);
-            hashCode.AddObj(fMarriedName);
-            hashCode.AddObj(fReligiousName);
-            hashCode.AddObj(fCensusName);
+            hashCode.Add(fSurnamePrefix);
+            hashCode.Add(fSurname);
+            hashCode.Add(fPatronymicName);
+            hashCode.Add(fMarriedName);
+            hashCode.Add(fReligiousName);
+            hashCode.Add(fCensusName);
         }
     }
 }

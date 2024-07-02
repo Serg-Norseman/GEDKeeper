@@ -703,13 +703,13 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddVal(fApproximated);
-            hashCode.AddVal(fCalendar);
-            hashCode.AddVal(fDay);
-            hashCode.AddVal(fMonth);
-            hashCode.AddVal(fYear);
-            hashCode.AddVal(fYearBC);
-            hashCode.AddObj(fYearModifier);
+            hashCode.Add(fApproximated);
+            hashCode.Add(fCalendar);
+            hashCode.Add(fDay);
+            hashCode.Add(fMonth);
+            hashCode.Add(fYear);
+            hashCode.Add(fYearBC);
+            hashCode.Add(fYearModifier);
         }
     }
 }

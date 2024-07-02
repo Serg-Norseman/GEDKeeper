@@ -183,8 +183,8 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fMultimediaFormat);
-            hashCode.AddVal(fMediaType);
+            hashCode.Add(fMultimediaFormat);
+            hashCode.Add(fMediaType);
         }
     }
 }

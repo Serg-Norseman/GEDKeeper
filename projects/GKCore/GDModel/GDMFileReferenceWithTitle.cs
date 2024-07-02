@@ -59,7 +59,7 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fTitle);
+            hashCode.Add(fTitle);
         }
     }
 }

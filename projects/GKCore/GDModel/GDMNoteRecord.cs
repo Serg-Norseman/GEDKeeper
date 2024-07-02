@@ -136,7 +136,7 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fLines);
+            hashCode.Add(fLines);
         }
     }
 }

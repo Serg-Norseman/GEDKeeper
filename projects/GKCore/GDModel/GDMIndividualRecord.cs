@@ -575,7 +575,7 @@ namespace GDModel
             ProcessHashes(ref hashCode, fGroups);
             ProcessHashes(ref hashCode, fPersonalNames);
             ProcessHashes(ref hashCode, fSpouseToFamilyLinks);
-            hashCode.AddVal(fSex);
+            hashCode.Add(fSex);
         }
     }
 }

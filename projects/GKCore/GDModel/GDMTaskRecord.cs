@@ -125,10 +125,10 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fGoal);
-            hashCode.AddVal(fPriority);
-            hashCode.AddObj(fStartDate);
-            hashCode.AddObj(fStopDate);
+            hashCode.Add(fGoal);
+            hashCode.Add(fPriority);
+            hashCode.Add(fStartDate);
+            hashCode.Add(fStopDate);
         }
     }
 }

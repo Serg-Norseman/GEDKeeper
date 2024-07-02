@@ -169,11 +169,11 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fCutoutPosition);
+            hashCode.Add(fCutoutPosition);
             ProcessHashes(ref hashCode, fFileReferences);
-            hashCode.AddVal(fIsPrimary);
-            hashCode.AddVal(fIsPrimaryCutout);
-            hashCode.AddObj(fTitle);
+            hashCode.Add(fIsPrimary);
+            hashCode.Add(fIsPrimaryCutout);
+            hashCode.Add(fTitle);
         }
     }
 }

@@ -322,9 +322,9 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fAutomatedRecordID);
+            hashCode.Add(fAutomatedRecordID);
             // without fChangeDate and fUID!
-            hashCode.AddObj(fXRef);
+            hashCode.Add(fXRef);
             ProcessHashes(ref hashCode, fMultimediaLinks);
             ProcessHashes(ref hashCode, fNotes);
             ProcessHashes(ref hashCode, fSourceCitations);

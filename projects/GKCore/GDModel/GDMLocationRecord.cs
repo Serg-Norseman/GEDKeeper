@@ -330,7 +330,7 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fMap);
+            hashCode.Add(fMap);
             ProcessHashes(ref hashCode, fNames);
             ProcessHashes(ref hashCode, fTopLevels);
         }

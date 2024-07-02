@@ -208,7 +208,7 @@ namespace GDModel
             base.ProcessHashes(ref hashCode);
 
             ProcessHashes(ref hashCode, fEvents);
-            hashCode.AddVal(fRestriction);
+            hashCode.Add(fRestriction);
         }
     }
 }

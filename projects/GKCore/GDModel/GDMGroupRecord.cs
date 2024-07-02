@@ -165,7 +165,7 @@ namespace GDModel
         {
             base.ProcessHashes(ref hashCode);
 
-            hashCode.AddObj(fGroupName);
+            hashCode.Add(fGroupName);
             ProcessHashes(ref hashCode, fMembers);
         }
     }
