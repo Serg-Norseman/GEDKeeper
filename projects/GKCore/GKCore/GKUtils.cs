@@ -201,6 +201,28 @@ namespace GKCore
             return linksList;
         }
 
+        public static StringList GetLocationSubordinateLinks(GDMTree tree, GDMLocationRecord locRec)
+        {
+            var linksList = new StringList();
+            if (locRec == null) return linksList;
+
+            for (int i = 0, num = tree.RecordsCount; i < num; i++) {
+                var locTemp = tree[i] as GDMLocationRecord;
+                if (locTemp == null) continue;
+
+                for (int j = 0, num2 = locTemp.TopLevels.Count; j < num2; j++) {
+                    var topLink = locTemp.TopLevels[j];
+
+                    if (topLink.XRef == locRec.XRef) {
+                        linksList.AddObject(GetRecordName(tree, locTemp, false), locTemp);
+                        break;
+                    }
+                }
+            }
+
+            return linksList;
+        }
+
         public static string HyperLink(string xref, string text)
         {
             string result;
@@ -3005,7 +3027,7 @@ namespace GKCore
                                 var topLev = locRec.TopLevels[i];
                                 var topLoc = tree.GetPtrValue<GDMLocationRecord>(topLev);
 
-                                string st = HyperLink(topLev.XRef, topLoc.GetNameByDate(topLev.Date.Value, ATDEnumeration.fStL));
+                                string st = HyperLink(topLev.XRef, topLoc.GetNameByDate(topLev.Date.Value));
                                 if (!string.IsNullOrEmpty(st)) {
                                     summary.Add("    " + st);
                                 }
@@ -3037,7 +3059,6 @@ namespace GKCore
                         }
 
                         linkList = GetLocationLinks(tree, locRec);
-
                         if (linkList.Count > 0) {
                             linkList.Sort();
 
@@ -3053,6 +3074,19 @@ namespace GKCore
 
                         RecListNotesRefresh(baseContext, locRec, summary);
                         RecListMediaRefresh(baseContext, locRec, summary);
+
+                        var subLinks = GetLocationSubordinateLinks(tree, locRec);
+                        if (subLinks.Count > 0) {
+                            subLinks.Sort();
+
+                            summary.Add("");
+                            summary.Add(LangMan.LS(LSID.SubordinateLocationsLinks) + ":");
+
+                            for (int i = 0, num = subLinks.Count; i < num; i++) {
+                                GDMRecord rec = subLinks.GetObject(i) as GDMRecord;
+                                summary.Add("    " + HyperLink(rec.XRef, subLinks[i]));
+                            }
+                        }
                     }
                 } finally {
                     if (linkList != null) linkList.Dispose();

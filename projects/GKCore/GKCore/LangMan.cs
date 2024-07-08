@@ -1058,6 +1058,7 @@ namespace GKCore
         /* 982 */ TBS_CrossCorners,
 
         /* 983 */ SelList,
+        /* 984 */ SubordinateLocationsLinks,
 
         /* 000 */ Last = SelList
     }
@@ -2071,6 +2072,7 @@ namespace GKCore
             /* 982 */ "Cross Corners",
 
             /* 983 */ "Select list",
+            /* 984 */ "Links to subordinate locations",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -3,7 +3,16 @@
 set CONFIG_TYPE=Debug
 for %%a in (release Release RELEASE) do if (%%a)==(%1) SET CONFIG_TYPE=Release
 
-set MSBDIR=@%WINDIR%\Microsoft.NET\Framework\v4.0.30319
+set MSBDIR="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin"
+@if exist %MSBDIR%\msbuild.exe goto build
+
+set MSBDIR="C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin"
+@if exist %MSBDIR%\msbuild.exe goto build
+
+echo Build is not possible!
+goto quit
+
+:build
 %MSBDIR%\msbuild.exe projects\GKv2\GEDKeeper2.sln /p:Configuration=%CONFIG_TYPE% /p:Platform="x86" /t:Rebuild /p:TargetFrameworkVersion=v4.7.1
 
 set BUILD_STATUS=%ERRORLEVEL% 
@@ -21,3 +30,5 @@ set NUNIT="nunit_not_found"
 %NUNIT% projects\GKTests\bin\Debug\GKTests.dll
 pause 
 exit /b 0
+
+:quit

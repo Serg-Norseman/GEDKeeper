@@ -296,9 +296,11 @@ namespace GKUI.Forms
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
-            IListView recView = contextMenu.SourceControl as GKListView;
+            //IListView recView = contextMenu.SourceControl as GKListView;
+            // (recView == fController.GetRecordsViewByType(GDMRecordType.rtIndividual))
 
-            miContRecordDuplicate.Enabled = (recView == fController.GetRecordsViewByType(GDMRecordType.rtIndividual));
+            var selectedRecType = fController.GetSelectedRecordType();
+            miContRecordDuplicate.Enabled = (selectedRecType == GDMRecordType.rtIndividual || selectedRecType == GDMRecordType.rtLocation);
         }
 
         private void miRecordAdd_Click(object sender, EventArgs e)

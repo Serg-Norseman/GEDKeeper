@@ -210,6 +210,7 @@ namespace GKCore.Lists
 
             if (props != null) {
                 props.CurWidth = colWidth;
+                props.Autosize = false;
             }
         }
 

@@ -309,15 +309,24 @@ namespace GKCore.Controllers
         public void DuplicateRecord()
         {
             GDMRecord original = GetSelectedRecordEx();
-            if (original == null || original.RecordType != GDMRecordType.rtIndividual) return;
+            if (original == null) return;
+
+            if (original.RecordType != GDMRecordType.rtIndividual && original.RecordType != GDMRecordType.rtLocation) return;
 
             AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.DuplicateWarning));
 
-            GDMIndividualRecord target;
+            GDMRecord target;
             try {
                 fContext.BeginUpdate();
 
-                target = fContext.Tree.CreateIndividual();
+                if (original.RecordType == GDMRecordType.rtIndividual) {
+                    target = fContext.Tree.CreateIndividual();
+                } else if (original.RecordType == GDMRecordType.rtLocation) {
+                    target = fContext.Tree.CreateLocation();
+                } else {
+                    return;
+                }
+
                 target.Assign(original);
 
                 NotifyRecord(target, RecordAction.raAdd);

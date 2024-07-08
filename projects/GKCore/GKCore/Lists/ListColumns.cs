@@ -39,7 +39,8 @@ namespace GKCore.Lists
         public readonly bool DefActive;
         public readonly string Format;
         public readonly NumberFormatInfo NumFmt;
-        public readonly bool Autosize;
+
+        public bool Autosize;
 
         public int CurWidth;
         public bool CurActive;
