@@ -168,7 +168,7 @@ namespace GKLifePlugin.ConwayLife
         {
             Invalidate();
 
-            if (fOnChange != null) fOnChange(this);
+            fOnChange?.Invoke(this);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)

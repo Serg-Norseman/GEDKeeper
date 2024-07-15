@@ -137,7 +137,7 @@ namespace GKCore.Lists
             fExternalFilter = null;
             fFilter.Clear();
 
-            fFetchedRec = default(T);
+            fFetchedRec = default;
 
             fColumnsMap.Clear();
             fListColumns.Clear();

@@ -390,12 +390,12 @@ namespace GKCore
                 new PredefinedEvent(LSID.PersonalProperty, GEDCOMTagName.PROP, EventKind.ekFact, EventTarget.etIndividual),
                 new PredefinedEvent(LSID.NobilityTitle, GEDCOMTagName.TITL, EventKind.ekFact, EventTarget.etIndividual),
 
-                new PredefinedEvent(LSID.Travel, GEDCOMTagName._TRAVEL, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.Travel, GEDCOMTagName._TRAVEL, EventKind.ekFact, EventTarget.etIndividual, true),
                 new PredefinedEvent(LSID.Hobby, GEDCOMTagName._HOBBY, EventKind.ekFact, EventTarget.etIndividual),
                 new PredefinedEvent(LSID.Award, GEDCOMTagName._AWARD, EventKind.ekFact, EventTarget.etIndividual),
                 new PredefinedEvent(LSID.Mili, GEDCOMTagName._MILI, EventKind.ekFact, EventTarget.etIndividual),
-                new PredefinedEvent(LSID.MiliInd, GEDCOMTagName._MILI_IND, EventKind.ekFact, EventTarget.etIndividual),
-                new PredefinedEvent(LSID.MiliDis, GEDCOMTagName._MILI_DIS, EventKind.ekFact, EventTarget.etIndividual),
+                new PredefinedEvent(LSID.MiliInd, GEDCOMTagName._MILI_IND, EventKind.ekFact, EventTarget.etIndividual, true),
+                new PredefinedEvent(LSID.MiliDis, GEDCOMTagName._MILI_DIS, EventKind.ekFact, EventTarget.etIndividual, true),
                 new PredefinedEvent(LSID.MiliRank, GEDCOMTagName._MILI_RANK, EventKind.ekFact, EventTarget.etIndividual),
 
                 new PredefinedEvent(LSID.BloodGroup, GEDCOMTagName._BGRO, EventKind.ekFact, EventTarget.etIndividual),

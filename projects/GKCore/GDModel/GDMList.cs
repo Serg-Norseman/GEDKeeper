@@ -95,7 +95,7 @@ namespace GDModel
         public T this[int index]
         {
             get {
-                return (fDataList == null) ? default(T) : fDataList[index];
+                return (fDataList == null) ? default : fDataList[index];
             }
         }
         
@@ -204,7 +204,7 @@ namespace GDModel
 
         public T Extract(int index)
         {
-            if (fDataList == null) return default(T);
+            if (fDataList == null) return default;
 
             T result = fDataList[index];
             fDataList.RemoveAt(index);
@@ -213,14 +213,14 @@ namespace GDModel
 
         public T Extract(T item)
         {
-            if (fDataList == null) return default(T);
+            if (fDataList == null) return default;
 
             int index = fDataList.IndexOf(item);
             if (index >= 0) {
                 fDataList.RemoveAt(index);
                 return item;
             } else {
-                return default(T);
+                return default;
             }
         }
 

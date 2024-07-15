@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,13 +18,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable IDE1006 // Naming Styles
+
 #if !MOBILE
 
 using System;
 using System.Data;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -54,7 +56,7 @@ namespace GKCore
     public class ScriptEngine
     {
         private IBaseWindow fBase;
-        private IScriptConsole fView;
+        private readonly IScriptConsole fView;
 
         public ScriptEngine(IScriptConsole view)
         {
@@ -92,15 +94,15 @@ namespace GKCore
 
         private void lua_init(Lua lvm)
         {
-            lua_register(lvm, "print");
-            lua_register(lvm, "progress_init");
-            lua_register(lvm, "progress_done");
-            lua_register(lvm, "progress_step");
+            lua_register(lvm, nameof(print));
+            lua_register(lvm, nameof(progress_init));
+            lua_register(lvm, nameof(progress_done));
+            lua_register(lvm, nameof(progress_step));
 
-            lua_register(lvm, "strpos");
-            lua_register(lvm, "update_view");
-            lua_register(lvm, "select_file");
-            lua_register(lvm, "select_new_file");
+            lua_register(lvm, nameof(strpos));
+            lua_register(lvm, nameof(update_view));
+            lua_register(lvm, nameof(select_file));
+            lua_register(lvm, nameof(select_new_file));
 
             lvm["rtNone"] = (int)GDMRecordType.rtNone;
             lvm["rtIndividual"] = (int)GDMRecordType.rtIndividual;
@@ -118,114 +120,115 @@ namespace GKCore
             lvm["rtSubmitter"] = (int)GDMRecordType.rtSubmitter;
 
             // any records
-            lua_register(lvm, "get_records_count");
-            lua_register(lvm, "get_record");
-            lua_register(lvm, "get_record_type");
-            lua_register(lvm, "get_record_type_name");
-            lua_register(lvm, "get_record_xref");
-            lua_register(lvm, "get_record_uid");
-            lua_register(lvm, "delete_record");
-            lua_register(lvm, "record_is_filtered");
-            lua_register(lvm, "select_record");
+            lua_register(lvm, nameof(get_records_count));
+            lua_register(lvm, nameof(get_record));
+            lua_register(lvm, nameof(get_record_type));
+            lua_register(lvm, nameof(get_record_type_name));
+            lua_register(lvm, nameof(get_record_xref));
+            lua_register(lvm, nameof(get_record_uid));
+            lua_register(lvm, nameof(delete_record));
+            lua_register(lvm, nameof(record_is_filtered));
+            lua_register(lvm, nameof(select_record));
 
             // any record : notes
-            lua_register(lvm, "get_record_notes_count");
+            lua_register(lvm, nameof(get_record_notes_count));
 
             // any record : multimedia links
-            lua_register(lvm, "get_record_medialinks_count");
-            lua_register(lvm, "get_record_medialink");
-            lua_register(lvm, "set_medialink_primary");
+            lua_register(lvm, nameof(get_record_medialinks_count));
+            lua_register(lvm, nameof(get_record_medialink));
+            lua_register(lvm, nameof(set_medialink_primary));
 
             // any record : bind notes, sources, multimedia
-            lua_register(lvm, "bind_record_note");
-            lua_register(lvm, "bind_record_source");
+            lua_register(lvm, nameof(bind_record_note));
+            lua_register(lvm, nameof(bind_record_source));
 
             // individual records
-            lua_register(lvm, "create_individual");
-            lua_register(lvm, "get_individual_name");
-            lua_register(lvm, "define_sex");
-            lua_register(lvm, "get_individual_sex");
-            lua_register(lvm, "set_individual_sex");
-            lua_register(lvm, "define_patronymic");
-            lua_register(lvm, "get_individual_parents_family");
-            lua_register(lvm, "get_individual_spouses_count");
-            lua_register(lvm, "get_individual_spouse_family");
-            lua_register(lvm, "get_individual_primary_medialink");
+            lua_register(lvm, nameof(create_individual));
+            lua_register(lvm, nameof(get_individual_name));
+            lua_register(lvm, nameof(define_sex));
+            lua_register(lvm, nameof(get_individual_sex));
+            lua_register(lvm, nameof(set_individual_sex));
+            lua_register(lvm, nameof(define_patronymic));
+            lua_register(lvm, nameof(get_individual_parents_family));
+            lua_register(lvm, nameof(get_individual_spouses_count));
+            lua_register(lvm, nameof(get_individual_spouse_family));
+            lua_register(lvm, nameof(get_individual_primary_medialink));
 
             // individual records : associations
-            lua_register(lvm, "get_individual_associations_count");
-            lua_register(lvm, "get_individual_association");
-            lua_register(lvm, "delete_individual_association");
-            lua_register(lvm, "add_individual_association");
+            lua_register(lvm, nameof(get_individual_associations_count));
+            lua_register(lvm, nameof(get_individual_association));
+            lua_register(lvm, nameof(delete_individual_association));
+            lua_register(lvm, nameof(add_individual_association));
 
             // individual records : events
-            lua_register(lvm, "get_individual_events_count");
-            lua_register(lvm, "get_individual_event");
-            lua_register(lvm, "delete_individual_event");
-            lua_register(lvm, "get_individual_event_ex");
+            lua_register(lvm, nameof(get_individual_events_count));
+            lua_register(lvm, nameof(get_individual_event));
+            lua_register(lvm, nameof(delete_individual_event));
+            lua_register(lvm, nameof(get_individual_event_ex));
 
             // individual records : groups
-            lua_register(lvm, "get_individual_groups_count");
-            lua_register(lvm, "get_individual_group");
+            lua_register(lvm, nameof(get_individual_groups_count));
+            lua_register(lvm, nameof(get_individual_group));
 
             // family records
-            lua_register(lvm, "create_family");
-            lua_register(lvm, "bind_family_spouse");
-            lua_register(lvm, "bind_family_child");
-            lua_register(lvm, "get_family_husband");
-            lua_register(lvm, "get_family_wife");
-            lua_register(lvm, "get_family_childs_count");
-            lua_register(lvm, "get_family_child");
+            lua_register(lvm, nameof(create_family));
+            lua_register(lvm, nameof(bind_family_spouse));
+            lua_register(lvm, nameof(bind_family_child));
+            lua_register(lvm, nameof(get_family_husband));
+            lua_register(lvm, nameof(get_family_wife));
+            lua_register(lvm, nameof(get_family_childs_count));
+            lua_register(lvm, nameof(get_family_child));
 
             // note records
-            lua_register(lvm, "create_note");
-            lua_register(lvm, "add_note_text");
+            lua_register(lvm, nameof(create_note));
+            lua_register(lvm, nameof(add_note_text));
 
             // any record with events (individual / family)
-            lua_register(lvm, "create_event");
+            lua_register(lvm, nameof(create_event));
 
             // events
-            lua_register(lvm, "get_event_value");
-            lua_register(lvm, "get_event_place");
-            lua_register(lvm, "get_event_date");
-            lua_register(lvm, "get_event_name");
-            lua_register(lvm, "set_event_value");
-            lua_register(lvm, "set_event_place");
-            lua_register(lvm, "set_event_date");
-            lua_register(lvm, "get_event_year");
+            lua_register(lvm, nameof(get_event_value));
+            lua_register(lvm, nameof(get_event_place));
+            lua_register(lvm, nameof(get_event_date));
+            lua_register(lvm, nameof(get_event_name));
+            lua_register(lvm, nameof(set_event_value));
+            lua_register(lvm, nameof(set_event_place));
+            lua_register(lvm, nameof(set_event_date));
+            lua_register(lvm, nameof(get_event_year));
 
             // source records
-            lua_register(lvm, "create_source");
-            lua_register(lvm, "find_source");
+            lua_register(lvm, nameof(create_source));
+            lua_register(lvm, nameof(find_source));
 
             // group records
-            lua_register(lvm, "create_group");
-            lua_register(lvm, "bind_group_member");
-            lua_register(lvm, "get_group_name");
+            lua_register(lvm, nameof(create_group));
+            lua_register(lvm, nameof(bind_group_member));
+            lua_register(lvm, nameof(get_group_name));
 
             // location records
-            lua_register(lvm, "get_location_usages");
+            lua_register(lvm, nameof(create_location));
+            lua_register(lvm, nameof(get_location_usages));
 
             // csv
-            lua_register(lvm, "csv_load");
-            lua_register(lvm, "csv_close");
-            lua_register(lvm, "csv_get_cols");
-            lua_register(lvm, "csv_get_rows");
-            lua_register(lvm, "csv_get_cell");
-            lua_register(lvm, "csv_create");
-            lua_register(lvm, "csv_write_cell");
+            lua_register(lvm, nameof(csv_load));
+            lua_register(lvm, nameof(csv_close));
+            lua_register(lvm, nameof(csv_get_cols));
+            lua_register(lvm, nameof(csv_get_rows));
+            lua_register(lvm, nameof(csv_get_cell));
+            lua_register(lvm, nameof(csv_create));
+            lua_register(lvm, nameof(csv_write_cell));
 
             // experimental
-            lua_register(lvm, "ado_open");
-            lua_register(lvm, "ado_close");
-            lua_register(lvm, "ado_query_open");
-            lua_register(lvm, "ado_query_close");
-            lua_register(lvm, "ado_query_first");
-            lua_register(lvm, "ado_query_prev");
-            lua_register(lvm, "ado_query_next");
-            lua_register(lvm, "ado_query_last");
-            lua_register(lvm, "ado_get_query_field");
-            lua_register(lvm, "ado_dump");
+            lua_register(lvm, nameof(ado_open));
+            lua_register(lvm, nameof(ado_close));
+            lua_register(lvm, nameof(ado_query_open));
+            lua_register(lvm, nameof(ado_query_close));
+            lua_register(lvm, nameof(ado_query_first));
+            lua_register(lvm, nameof(ado_query_prev));
+            lua_register(lvm, nameof(ado_query_next));
+            lua_register(lvm, nameof(ado_query_last));
+            lua_register(lvm, nameof(ado_get_query_field));
+            lua_register(lvm, nameof(ado_dump));
         }
 
         #endregion
@@ -631,6 +634,17 @@ namespace GKCore
             return (fam == null) ? null : fBase.Context.Tree.GetPtrValue<GDMRecord>(fam.Children[childIndex]);
         }
 
+        public object create_location(string name, string date)
+        {
+            var loc = fBase.Context.Tree.CreateLocation();
+            var locName = new GDMLocationName() {
+                StringValue = name,
+                Date = { StringValue = date }
+            };
+            loc.Names.Add(locName);
+            return loc;
+        }
+
         public int get_location_usages(object recPtr)
         {
             GDMLocationRecord loc = recPtr as GDMLocationRecord;
@@ -725,7 +739,7 @@ namespace GKCore
 
         public bool csv_create(string fileName, int columnsCount, int rowsCount)
         {
-            bool result = false;
+            bool result;
 
             try {
                 fCSVWriter = new CSVWriter();

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -113,13 +113,13 @@ namespace GKStdReports
             }
         }
 
-        private Dictionary<string, ConsanguinityInfo> fConsanguinityCommonIndiMap = new Dictionary<string, ConsanguinityInfo>();
+        private readonly Dictionary<string, ConsanguinityInfo> fConsanguinityCommonIndiMap = new Dictionary<string, ConsanguinityInfo>();
         private double fConsanguinityFactor;
-        private List<GenerationInfo> fGenerations = new List<GenerationInfo>();
-        private Dictionary<string, GDMIndividualRecord> fImplexCommonIndiMap = new Dictionary<string, GDMIndividualRecord>();
+        private readonly List<GenerationInfo> fGenerations = new List<GenerationInfo>();
+        private readonly Dictionary<string, GDMIndividualRecord> fImplexCommonIndiMap = new Dictionary<string, GDMIndividualRecord>();
         private double fImplexFactor;
-        private HashSet<string> fIndiSet = new HashSet<string>();
-        private HashSet<string> fCommonAncestorSet = new HashSet<string>();
+        private readonly HashSet<string> fIndiSet = new HashSet<string>();
+        private readonly HashSet<string> fCommonAncestorSet = new HashSet<string>();
 
         private void ClearStats()
         {

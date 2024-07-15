@@ -242,7 +242,7 @@ namespace GDModel
                         }
                     }
 
-                    if (topBuffer.Count == 0 || !locDate.IsEmpty()) {
+                    if (topBuffer.Count == 0 || (locDate != null && !locDate.IsEmpty())) {
                         result.Add(new GDMLocationName(nVal, locDate));
                     }
                 }

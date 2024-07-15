@@ -40,6 +40,8 @@ namespace GKUI.Components
         private GDMDateType fFixedDateType;
 
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public GDMCustomDate Date
         {
             get { return GetDate(); }

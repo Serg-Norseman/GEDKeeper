@@ -132,8 +132,8 @@ namespace GKCore.NetDiff
             foreach (var pair in MakePairsWithNext(waypoints))
             {
                 var status = GetStatus(pair.Item1, pair.Item2);
-                T obj1 = default(T);
-                T obj2 = default(T);
+                T obj1 = default;
+                T obj2 = default;
                 switch (status)
                 {
                     case DiffStatus.Equal:
@@ -276,8 +276,7 @@ namespace GKCore.NetDiff
             private int offset;
             private bool isEnd;
 
-            public EditGraph(
-                IEnumerable<T> seq1, IEnumerable<T> seq2)
+            public EditGraph(IEnumerable<T> seq1, IEnumerable<T> seq2)
             {
                 this.seq1 = seq1.ToArray();
                 this.seq2 = seq2.ToArray();

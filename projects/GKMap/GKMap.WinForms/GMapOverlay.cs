@@ -34,27 +34,15 @@ namespace GKMap.WinForms
                 return;
 
             foreach (MapRoute r in Routes) {
-                if (r.IsVisible) {
-                    var renderable = r as IRenderable;
-                    if (renderable != null)
-                        renderable.OnRender(g);
-                }
+                if (r.IsVisible && r is IRenderable renderable) renderable.OnRender(g);
             }
 
             foreach (MapPolygon p in Polygons) {
-                if (p.IsVisible) {
-                    var renderable = p as IRenderable;
-                    if (renderable != null)
-                        renderable.OnRender(g);
-                }
+                if (p.IsVisible && p is IRenderable renderable) renderable.OnRender(g);
             }
 
             foreach (MapMarker m in Markers) {
-                if (m.IsVisible) {
-                    var renderable = m as IRenderable;
-                    if (renderable != null)
-                        renderable.OnRender(g);
-                }
+                if (m.IsVisible && m is IRenderable renderable) renderable.OnRender(g);
             }
 
             // tooltips above

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -199,14 +199,12 @@ namespace GKCalendarPlugin
 
         private void OnCalendarChanged()
         {
-            var eventHandler = CalendarChanged;
-            if (eventHandler != null) eventHandler(this, new EventArgs());
+            CalendarChanged?.Invoke(this, new EventArgs());
         }
 
         private void OnDateChanged()
         {
-            var eventHandler = DateChanged;
-            if (eventHandler != null) eventHandler(this, new EventArgs());
+            DateChanged?.Invoke(this, new EventArgs());
         }
 
         private void cmbCalendar_SelectedIndexChanged(object sender, EventArgs e)
