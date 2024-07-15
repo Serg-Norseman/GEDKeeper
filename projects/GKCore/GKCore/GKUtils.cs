@@ -1371,7 +1371,7 @@ namespace GKCore
             return (iRec == null) ? string.Empty : GetPlaceStr(iRec.FindEvent(GEDCOMTagType.RESI), includeAddress);
         }
 
-        private static readonly char[] PLACE_DELIMITERS = new char[] { ',' };
+        public static readonly char[] PLACE_DELIMITERS = new char[] { ',' };
 
         public static string GetPlaceStr(GDMCustomEvent evt, bool includeAddress, bool onlyLocality = false)
         {

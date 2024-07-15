@@ -447,7 +447,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static async Task<ModificationResult<GDMLocationRecord>> ModifyLocation(IView owner, IBaseWindow baseWin, GDMLocationRecord locRec)
+        public static async Task<ModificationResult<GDMLocationRecord>> ModifyLocation(IView owner, IBaseWindow baseWin, GDMLocationRecord locRec, string proposedName = "")
         {
             var result = new ModificationResult<GDMLocationRecord>();
 
@@ -458,6 +458,7 @@ namespace GKCore.Controllers
                 bool exists = locRec != null;
                 if (!exists) {
                     locRec = new GDMLocationRecord(tree);
+                    locRec.LocationName = proposedName;
                     tree.NewXRef(locRec);
                 }
 
@@ -525,7 +526,7 @@ namespace GKCore.Controllers
         }
 
         public static async Task<ModificationResult<GDMLocationLink>> ModifyLocationLink(IView owner, IBaseWindow baseWin, ChangeTracker undoman,
-                                                GDMLocationRecord locRec, GDMLocationLink locLink)
+                                                GDMLocationRecord locRec, GDMLocationLink locLink, GDMLocationRecord proposedTopLocation = null)
         {
             var result = new ModificationResult<GDMLocationLink>();
 
@@ -535,6 +536,9 @@ namespace GKCore.Controllers
                 bool exists = locLink != null;
                 if (!exists) {
                     locLink = new GDMLocationLink();
+                    if (proposedTopLocation != null) {
+                        locLink.XRef = proposedTopLocation.XRef;
+                    }
                 }
 
                 using (var dlg = AppHost.ResolveDialog<ILocationLinkEditDlg>(baseWin)) {
