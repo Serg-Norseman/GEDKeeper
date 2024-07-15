@@ -36,6 +36,9 @@ using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Options;
 using NLua;
+#if NETCORE
+using System.Text;
+#endif
 
 namespace GKCore
 {
