@@ -60,6 +60,24 @@ namespace GKCore.Controllers
             fPlaces.Dispose();
         }
 
+        public async void ShowLocExpert()
+        {
+            var placeObj = fView.PlacesList.GetSelectedData() as PlaceObj;
+            if (placeObj == null) return;
+
+            string placeName = placeObj.Name;
+
+            var eventDates = new SortedSet<GDMCustomDate>();
+            foreach (var evt in placeObj.Facts) {
+                if (!evt.Date.IsEmpty())
+                    eventDates.Add(evt.Date);
+            }
+
+            using (var dlg = AppHost.ResolveDialog<ILocExpertDlg>(fBase, eventDates, placeName)) {
+                await AppHost.Instance.ShowModalAsync(dlg, fView);
+            }
+        }
+
         public void ShowDetails()
         {
             var placeObj = fView.PlacesList.GetSelectedData() as PlaceObj;
@@ -110,7 +128,8 @@ namespace GKCore.Controllers
             PlaceObj pObj = placesList.Count > 0 ? (PlaceObj) placesList[0] : null;
             if (pObj == null) return;
 
-            if (pObj.Name.IndexOf("[*]") == 0) {
+            // for cases [*] and [**]
+            if (pObj.Name.Contains("*]")) {
                 AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.PlaceAlreadyInBook));
             } else {
                 GDMLocationRecord locRec = await fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
@@ -138,6 +157,7 @@ namespace GKCore.Controllers
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ITabPage>("pagePlaceManage").Text = LangMan.LS(LSID.PlacesManager);
                 GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+                GetControl<IButton>("btnLocExpert").Text = LangMan.LS(LSID.LocExpert);
             }
 
             GetControl<IButton>("btnIntoList").Text = LangMan.LS(LSID.InsertIntoBook);

@@ -1059,8 +1059,12 @@ namespace GKCore
 
         /* 983 */ SelList,
         /* 984 */ SubordinateLocationsLinks,
+        /* 985 */ LocExpert,
+        /* 986 */ EventDates,
+        /* 987 */ DoAdd,
+        /* 988 */ Entry,
 
-        /* 000 */ Last = SelList
+        /* 000 */ Last = Entry
     }
 
 
@@ -2073,6 +2077,9 @@ namespace GKCore
 
             /* 983 */ "Select list",
             /* 984 */ "Links to subordinate locations",
+            /* 985 */ "Location Expert",
+            /* 986 */ "Event dates",
+            /* 987 */ "Add",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

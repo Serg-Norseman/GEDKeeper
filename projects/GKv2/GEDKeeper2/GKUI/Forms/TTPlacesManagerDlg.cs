@@ -92,6 +92,11 @@ namespace GKUI.Forms
             fController.CheckPlaces();
         }
 
+        private void btnLocExpert_Click(object sender, EventArgs e)
+        {
+            fController.ShowLocExpert();
+        }
+
         private void btnIntoList_Click(object sender, EventArgs e)
         {
             fController.CreateLocationRecord(ListPlaces.GetSelectedItems());

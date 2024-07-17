@@ -22,6 +22,7 @@
                 <Label x:Name="lblFilter" />
                 <TextBox x:Name="txtFilter" Text="*" />
                 <StackLayoutItem Expand="True" />
+                <Button x:Name="btnLocExpert" Click="btnLocExpert_Click" />
                 <Button x:Name="btnIntoList" Click="btnIntoList_Click" />
               </StackLayout>
             </TableRow>

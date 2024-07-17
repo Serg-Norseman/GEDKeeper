@@ -145,6 +145,7 @@
     <Compile Include="GKUI\Platform\Handlers\GroupBoxHandler.cs" />
     <Compile Include="GKUI\Platform\Handlers\ImageHandler.cs" />
     <Compile Include="GKUI\Platform\Handlers\LabelHandler.cs" />
+    <Compile Include="GKUI\Platform\Handlers\LabelToolItemHandler.cs" />
     <Compile Include="GKUI\Platform\Handlers\ListViewHandler.cs" />
     <Compile Include="GKUI\Platform\Handlers\LogChartHandler.cs" />
     <Compile Include="GKUI\Platform\Handlers\MaskedTextBoxHandler.cs" />

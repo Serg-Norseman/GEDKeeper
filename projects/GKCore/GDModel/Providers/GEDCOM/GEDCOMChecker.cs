@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using BSLib;
 using GKCore;
 using GKCore.Interfaces;
@@ -553,6 +554,19 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
+        private struct LocPair
+        {
+            public GDMLocationRecord Location;
+            public GDMCustomDate Date;
+
+            public LocPair(GDMLocationRecord location, GDMCustomDate date)
+            {
+                Location = location;
+                Date = date;
+            }
+        }
+
+
         public static void SyncTreeLocations(IBaseContext baseContext, IProgressController pc)
         {
             if (baseContext == null)
@@ -566,22 +580,29 @@ namespace GDModel.Providers.GEDCOM
                 pc.Begin(LangMan.LS(LSID.FormatCheck), 100);
 
                 try {
+                    var cache = new Dictionary<LocPair, string>();
+
                     int progress = 0;
                     int num = tree.RecordsCount;
                     for (int i = 0; i < num; i++) {
                         GDMRecord rec = tree[i];
-                        if (rec.RecordType == GDMRecordType.rtIndividual || rec.RecordType == GDMRecordType.rtFamily) {
-                            var rwe = rec as GDMRecordWithEvents;
-                            if (rwe.HasEvents) {
-                                for (int k = 0, num2 = rwe.Events.Count; k < num2; k++) {
-                                    GDMCustomEvent evt = rwe.Events[k];
-                                    if (!evt.HasPlace) continue;
+                        if (rec.RecordType != GDMRecordType.rtIndividual && rec.RecordType != GDMRecordType.rtFamily) continue;
 
-                                    GDMLocationRecord locRec = tree.GetPtrValue<GDMLocationRecord>(evt.Place.Location);
-                                    if (locRec != null) {
-                                        evt.Place.StringValue = GKUtils.GetLocationNameExt(locRec, evt.Date.Value);
-                                    }
+                        var rwe = rec as GDMRecordWithEvents;
+                        if (!rwe.HasEvents) continue;
+
+                        for (int k = 0, num2 = rwe.Events.Count; k < num2; k++) {
+                            GDMCustomEvent evt = rwe.Events[k];
+                            if (!evt.HasPlace) continue;
+
+                            GDMLocationRecord locRec = tree.GetPtrValue<GDMLocationRecord>(evt.Place.Location);
+                            if (locRec != null) {
+                                var pair = new LocPair(locRec, evt.Date.Value);
+                                if (!cache.TryGetValue(pair, out string locName)) {
+                                    locName = GKUtils.GetLocationNameExt(locRec, evt.Date.Value);
+                                    cache.Add(pair, locName);
                                 }
+                                evt.Place.StringValue = locName;
                             }
                         }
 

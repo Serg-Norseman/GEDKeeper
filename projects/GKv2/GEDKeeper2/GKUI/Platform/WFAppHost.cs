@@ -516,6 +516,7 @@ namespace GKUI.Platform
             container.Register<IRecordInfoDlg, RecordInfoDlg>(LifeCycle.Transient);
             container.Register<IFARDlg, FindAndReplaceDlg>(LifeCycle.Transient);
             container.Register<IEventDefEditDlg, EventDefEditDlg>(LifeCycle.Transient);
+            container.Register<ILocExpertDlg, LocExpertDlg>(LifeCycle.Transient);
 
             container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
 
@@ -536,6 +537,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(TabPage), typeof(TabPageHandler));
             ControlsManager.RegisterHandlerType(typeof(GroupBox), typeof(GroupBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ToolStripButton), typeof(ButtonToolItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(ToolStripLabel), typeof(LabelToolItemHandler));
             ControlsManager.RegisterHandlerType(typeof(ToolStripDropDownButton), typeof(DropDownToolItemHandler));
             ControlsManager.RegisterHandlerType(typeof(Splitter), typeof(SplitterHandler));
 

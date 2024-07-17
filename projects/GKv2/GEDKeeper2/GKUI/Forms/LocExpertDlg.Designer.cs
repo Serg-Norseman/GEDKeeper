@@ -1,6 +1,6 @@
-﻿namespace GKLocExpertPlugin
+﻿namespace GKUI.Forms
 {
-    partial class LEForm
+    partial class LocExpertDlg
     {
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.GroupBox grpTestLoc;
@@ -24,6 +24,9 @@
         private System.Windows.Forms.ToolStripButton btnTopLinkEdit;
         private System.Windows.Forms.TextBox txtGeneratedName;
         private System.Windows.Forms.Label lblGeneratedName;
+        private System.Windows.Forms.ComboBox cmbEventDates;
+        private System.Windows.Forms.Label lblEventDates;
+        private System.Windows.Forms.Button btnClose;
 
         protected override void Dispose(bool disposing)
         {
@@ -36,6 +39,8 @@
         private void InitializeComponent()
         {
             this.grpTestLoc = new System.Windows.Forms.GroupBox();
+            this.cmbEventDates = new System.Windows.Forms.ComboBox();
+            this.lblEventDates = new System.Windows.Forms.Label();
             this.txtGeneratedName = new System.Windows.Forms.TextBox();
             this.lblGeneratedName = new System.Windows.Forms.Label();
             this.btnAnalysis = new System.Windows.Forms.Button();
@@ -56,6 +61,7 @@
             this.lblTopLink = new System.Windows.Forms.ToolStripLabel();
             this.btnTopLinkAdd = new System.Windows.Forms.ToolStripButton();
             this.btnTopLinkEdit = new System.Windows.Forms.ToolStripButton();
+            this.btnClose = new System.Windows.Forms.Button();
             this.grpTestLoc.SuspendLayout();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -63,6 +69,8 @@
             // 
             // grpTestLoc
             // 
+            this.grpTestLoc.Controls.Add(this.cmbEventDates);
+            this.grpTestLoc.Controls.Add(this.lblEventDates);
             this.grpTestLoc.Controls.Add(this.txtGeneratedName);
             this.grpTestLoc.Controls.Add(this.lblGeneratedName);
             this.grpTestLoc.Controls.Add(this.btnAnalysis);
@@ -73,22 +81,41 @@
             this.grpTestLoc.Controls.Add(this.lblDate);
             this.grpTestLoc.Location = new System.Drawing.Point(14, 12);
             this.grpTestLoc.Name = "grpTestLoc";
-            this.grpTestLoc.Size = new System.Drawing.Size(804, 209);
+            this.grpTestLoc.Size = new System.Drawing.Size(804, 205);
             this.grpTestLoc.TabIndex = 2;
             this.grpTestLoc.TabStop = false;
             // 
+            // cmbEventDates
+            // 
+            this.cmbEventDates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEventDates.FormattingEnabled = true;
+            this.cmbEventDates.Location = new System.Drawing.Point(140, 22);
+            this.cmbEventDates.Name = "cmbEventDates";
+            this.cmbEventDates.SelectedIndexChanged += cmbEventDates_SelectedIndexChanged;
+            this.cmbEventDates.Size = new System.Drawing.Size(210, 23);
+            this.cmbEventDates.TabIndex = 10;
+            // 
+            // lblEventDates
+            // 
+            this.lblEventDates.AutoSize = true;
+            this.lblEventDates.Location = new System.Drawing.Point(7, 25);
+            this.lblEventDates.Name = "lblEventDates";
+            this.lblEventDates.Size = new System.Drawing.Size(78, 15);
+            this.lblEventDates.TabIndex = 9;
+            this.lblEventDates.Text = "lblEventDates";
+            // 
             // txtGeneratedName
             // 
-            this.txtGeneratedName.Location = new System.Drawing.Point(198, 171);
+            this.txtGeneratedName.Location = new System.Drawing.Point(209, 167);
             this.txtGeneratedName.Name = "txtGeneratedName";
             this.txtGeneratedName.ReadOnly = true;
-            this.txtGeneratedName.Size = new System.Drawing.Size(600, 23);
+            this.txtGeneratedName.Size = new System.Drawing.Size(531, 23);
             this.txtGeneratedName.TabIndex = 8;
             // 
             // lblGeneratedName
             // 
             this.lblGeneratedName.AutoSize = true;
-            this.lblGeneratedName.Location = new System.Drawing.Point(7, 174);
+            this.lblGeneratedName.Location = new System.Drawing.Point(7, 170);
             this.lblGeneratedName.Name = "lblGeneratedName";
             this.lblGeneratedName.Size = new System.Drawing.Size(106, 15);
             this.lblGeneratedName.TabIndex = 7;
@@ -108,7 +135,7 @@
             // 
             this.chkReverseOrder.AutoSize = true;
             this.chkReverseOrder.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkReverseOrder.Location = new System.Drawing.Point(7, 132);
+            this.chkReverseOrder.Location = new System.Drawing.Point(7, 142);
             this.chkReverseOrder.Name = "chkReverseOrder";
             this.chkReverseOrder.Size = new System.Drawing.Size(115, 19);
             this.chkReverseOrder.TabIndex = 5;
@@ -117,7 +144,7 @@
             // 
             // txtPlace
             // 
-            this.txtPlace.Location = new System.Drawing.Point(82, 102);
+            this.txtPlace.Location = new System.Drawing.Point(82, 113);
             this.txtPlace.Name = "txtPlace";
             this.txtPlace.Size = new System.Drawing.Size(498, 23);
             this.txtPlace.TabIndex = 4;
@@ -125,7 +152,7 @@
             // lblPlace
             // 
             this.lblPlace.AutoSize = true;
-            this.lblPlace.Location = new System.Drawing.Point(7, 105);
+            this.lblPlace.Location = new System.Drawing.Point(6, 116);
             this.lblPlace.Name = "lblPlace";
             this.lblPlace.Size = new System.Drawing.Size(48, 15);
             this.lblPlace.TabIndex = 3;
@@ -135,7 +162,7 @@
             // 
             this.dtlPlaceDate.FixedDateType = GDModel.GDMDateType.None;
             this.dtlPlaceDate.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dtlPlaceDate.Location = new System.Drawing.Point(82, 21);
+            this.dtlPlaceDate.Location = new System.Drawing.Point(82, 50);
             this.dtlPlaceDate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dtlPlaceDate.Name = "dtlPlaceDate";
             this.dtlPlaceDate.Size = new System.Drawing.Size(441, 58);
@@ -145,7 +172,7 @@
             // lblDate
             // 
             this.lblDate.AutoSize = true;
-            this.lblDate.Location = new System.Drawing.Point(7, 28);
+            this.lblDate.Location = new System.Drawing.Point(7, 53);
             this.lblDate.Name = "lblDate";
             this.lblDate.Size = new System.Drawing.Size(44, 15);
             this.lblDate.TabIndex = 0;
@@ -156,9 +183,9 @@
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.lvEntries);
             this.panel1.Controls.Add(this.toolStrip1);
-            this.panel1.Location = new System.Drawing.Point(14, 227);
+            this.panel1.Location = new System.Drawing.Point(14, 223);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(804, 281);
+            this.panel1.Size = new System.Drawing.Size(804, 282);
             this.panel1.TabIndex = 4;
             // 
             // lvEntries
@@ -171,7 +198,7 @@
             this.lvEntries.Name = "lvEntries";
             this.lvEntries.OwnerDraw = true;
             this.lvEntries.SelectedIndex = -1;
-            this.lvEntries.Size = new System.Drawing.Size(800, 252);
+            this.lvEntries.Size = new System.Drawing.Size(800, 253);
             this.lvEntries.SortColumn = 0;
             this.lvEntries.SortOrder = GKCore.Design.BSDTypes.SortOrder.None;
             this.lvEntries.TabIndex = 6;
@@ -192,7 +219,7 @@
             this.lblTopLink,
             this.btnTopLinkAdd,
             this.btnTopLinkEdit});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 252);
+            this.toolStrip1.Location = new System.Drawing.Point(0, 253);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(800, 25);
             this.toolStrip1.TabIndex = 5;
@@ -262,16 +289,29 @@
             this.btnTopLinkEdit.Text = "btnTopLinkEdit";
             this.btnTopLinkEdit.Click += new System.EventHandler(this.btnTopLinkEdit_Click);
             // 
-            // LEForm
+            // btnClose
+            //
+            this.btnClose.Click += new System.EventHandler(AcceptClickHandler);
+            this.btnClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnClose.Location = new System.Drawing.Point(720, 518);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(98, 27);
+            this.btnClose.TabIndex = 7;
+            this.btnClose.Text = "btnClose";
+            this.btnClose.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnClose.UseVisualStyleBackColor = true;
+            // 
+            // LocExpertDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(829, 521);
+            this.ClientSize = new System.Drawing.Size(829, 561);
+            this.Controls.Add(this.btnClose);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.grpTestLoc);
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Name = "LEForm";
+            this.Name = "LocExpertDlg";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LEForm";
             this.grpTestLoc.ResumeLayout(false);
@@ -281,7 +321,6 @@
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
-
         }
     }
 }

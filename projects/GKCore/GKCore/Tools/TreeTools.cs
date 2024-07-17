@@ -918,7 +918,11 @@ namespace GKCore.Tools
             if (checkLocation) {
                 var locRec = tree.GetPtrValue<GDMLocationRecord>(evt.Place.Location);
                 if (locRec != null) {
-                    placeStr = "[*] " + placeStr;
+                    if (locRec.Names.Count > 1 || locRec.TopLevels.Count > 0) {
+                        placeStr = "[**] " + placeStr;
+                    } else {
+                        placeStr = "[*] " + placeStr;
+                    }
                 }
             }
 

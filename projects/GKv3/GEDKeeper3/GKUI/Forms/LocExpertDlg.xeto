@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.LocExpertDlg"
+  AbortButton="{x:Reference btnClose}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Vertical">
+        <StackLayout Spacing="4" Orientation="Horizontal">
+          <Label x:Name="lblEventDates" />
+          <ComboBox x:Name="cmbEventDates" SelectedIndexChanged="cmbEventDates_SelectedIndexChanged"/>
+          <StackLayoutItem Expand="True" />
+          <Button x:Name="btnAnalysis" Click="btnAnalysis_Click" />
+        </StackLayout>
+
+        <StackLayout Spacing="4" Orientation="Horizontal">
+          <Label x:Name="lblDate" />
+          <comcom:GKDateControl x:Name="dtlPlaceDate" DateChanged="dtlPlaceDate_DateChanged" />
+        </StackLayout>
+
+        <StackLayout Spacing="4" Orientation="Horizontal">
+          <Label x:Name="lblPlace" />
+          <TextBox x:Name="txtPlace" Width="320" />
+        </StackLayout>
+
+        <CheckBox x:Name="chkReverseOrder" />
+
+        <StackLayout Spacing="4" Orientation="Horizontal">
+          <Label x:Name="lblGeneratedName" />
+          <TextBox x:Name="txtGeneratedName" Width="320" />
+        </StackLayout>
+      </StackLayout>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Orientation="Vertical">
+        <comcom:GKListView x:Name="lvEntries" Sorting="False" SelectedItemsChanged="lvEntries_SelectedIndexChanged" />
+
+        <StackLayout x:Name="toolStrip1" Orientation="Horizontal" Spacing="4">
+          <Label x:Name="lblLocName" />
+          <ComboBox x:Name="cmbLocationSearch" Width="200" KeyUp="cmbLocationSearch_KeyUp" />
+          <Button x:Name="btnLocNameAdd" Click="btnLocNameAdd_Click" />
+          <Button x:Name="btnLocNameEdit" Click="btnLocNameEdit_Click" />
+          <Label x:Name="lblTopLink" />
+          <Button x:Name="btnTopLinkAdd" Click="btnTopLinkAdd_Click" />
+          <Button x:Name="btnTopLinkEdit" Click="btnTopLinkEdit_Click" />
+        </StackLayout>
+      </StackLayout>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <Button x:Name="btnClose" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

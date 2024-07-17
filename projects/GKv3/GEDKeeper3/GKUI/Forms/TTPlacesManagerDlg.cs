@@ -39,6 +39,7 @@ namespace GKUI.Forms
         private TabPage pagePlaceManage;
         private Panel panPlacesContainer;
         private Button btnAnalysePlaces;
+        private Button btnLocExpert;
         private Button btnIntoList;
         private GKListView ListPlaces;
         private Label lblFilter;
@@ -100,6 +101,11 @@ namespace GKUI.Forms
         private void btnAnalysePlaces_Click(object sender, EventArgs e)
         {
             fController.CheckPlaces();
+        }
+
+        private void btnLocExpert_Click(object sender, EventArgs e)
+        {
+            fController.ShowLocExpert();
         }
 
         private void btnIntoList_Click(object sender, EventArgs e)

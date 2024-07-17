@@ -65,7 +65,9 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCore\Design\Views\ILocExpertDlg.cs" />
     <Compile Include="GKCore\Controllers\EventDefEditDlgController.cs" />
+    <Compile Include="GKCore\Controllers\LocExpertDlgController.cs" />
     <Compile Include="GKCore\Design\Views\IEventDefEditDlg.cs" />
     <Compile Include="GKCore\Lists\EventDefsListModel.cs" />
     <Compile Include="GKCore\Design\Views\ILocationLinkEditDlg.cs" />
