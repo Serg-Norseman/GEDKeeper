@@ -232,6 +232,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkAttributes").Checked = fOptions.PedigreeOptions.IncludeAttributes;
             GetControl<ICheckBox>("chkNotes").Checked = fOptions.PedigreeOptions.IncludeNotes;
             GetControl<ICheckBox>("chkSources").Checked = fOptions.PedigreeOptions.IncludeSources;
+            GetControl<ICheckBox>("chkSourcePages").Checked = fOptions.PedigreeOptions.IncludeSourcePages;
             GetControl<ICheckBox>("chkGenerations").Checked = fOptions.PedigreeOptions.IncludeGenerations;
 
             switch (fOptions.PedigreeOptions.Format) {
@@ -252,6 +253,7 @@ namespace GKCore.Controllers
             fOptions.PedigreeOptions.IncludeAttributes = GetControl<ICheckBox>("chkAttributes").Checked;
             fOptions.PedigreeOptions.IncludeNotes = GetControl<ICheckBox>("chkNotes").Checked;
             fOptions.PedigreeOptions.IncludeSources = GetControl<ICheckBox>("chkSources").Checked;
+            fOptions.PedigreeOptions.IncludeSourcePages = GetControl<ICheckBox>("chkSourcePages").Checked;
             fOptions.PedigreeOptions.IncludeGenerations = GetControl<ICheckBox>("chkGenerations").Checked;
 
             if (GetControl<IRadioButton>("radExcess").Checked) {
@@ -1000,6 +1002,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkAttributes").Text = LangMan.LS(LSID.IncludeAttributes);
             GetControl<ICheckBox>("chkNotes").Text = LangMan.LS(LSID.IncludeNotes);
             GetControl<ICheckBox>("chkSources").Text = LangMan.LS(LSID.IncludeSources);
+            GetControl<ICheckBox>("chkSourcePages").Text = LangMan.LS(LSID.IncludeSourcePages);
             GetControl<ICheckBox>("chkGenerations").Text = LangMan.LS(LSID.IncludeGenerations);
 
             GetControl<IGroupBox>("grpPedigreeFormat").Text = LangMan.LS(LSID.PedigreeFormat);

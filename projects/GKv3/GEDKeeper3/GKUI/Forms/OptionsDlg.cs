@@ -210,6 +210,7 @@ namespace GKUI.Forms
         private CheckBox chkFullNameOnOneLine;
         private Label lblMatchPatternMethod;
         private ComboBox cmbMatchPatternMethod;
+        private CheckBox chkSourcePages;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion

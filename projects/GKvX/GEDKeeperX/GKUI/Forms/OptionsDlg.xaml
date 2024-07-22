@@ -372,6 +372,10 @@
                             <input:CheckBox x:Name="chkAttributes" />
                             <input:CheckBox x:Name="chkNotes" />
                             <input:CheckBox x:Name="chkSources" />
+                            <StackLayout Orientation="Horizontal" Spacing="20">
+                                <Label HorizontalOptions="Start" Text="" />
+                                <input:CheckBox x:Name="chkSourcePages" />
+                            </StackLayout>
                             <input:CheckBox x:Name="chkGenerations" />
 
                             <Grid ColumnSpacing="4" RowSpacing="4">

@@ -451,16 +451,20 @@
               <CheckBox x:Name="chkAttributes" />
               <CheckBox x:Name="chkNotes" />
               <CheckBox x:Name="chkSources" />
+              <StackLayout Orientation="Horizontal" Spacing="20">
+                <StackLayoutItem />
+                <CheckBox x:Name="chkSourcePages" />
+              </StackLayout>
               <CheckBox x:Name="chkGenerations" />
 
               <TableLayout Style="paddedTable8">
                 <TableRow>
                   <Label x:Name="lblAscendNumbering" />
-                  <ComboBox x:Name="cmbAscendNumbering" ReadOnly="True" />
+                  <ComboBox x:Name="cmbAscendNumbering" ReadOnly="True" Width="160" />
                 </TableRow>
                 <TableRow>
                   <Label x:Name="lblDescendNumbering" />
-                  <ComboBox x:Name="cmbDescendNumbering" ReadOnly="True" />
+                  <ComboBox x:Name="cmbDescendNumbering" ReadOnly="True" Width="160" />
                 </TableRow>
               </TableLayout>
             </StackLayout>

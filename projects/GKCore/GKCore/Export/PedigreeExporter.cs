@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -403,23 +403,20 @@ namespace GKCore.Export
         private void ProcessSourceCitations(IGDMStructWithSourceCitations swsc, List<string> sources)
         {
             if (fOptions.PedigreeOptions.IncludeSources && swsc != null && swsc.HasSourceCitations) {
-                int num = swsc.SourceCitations.Count;
-                for (int i = 0; i < num; i++) {
-                    var sourceRec = fTree.GetPtrValue<GDMSourceRecord>(swsc.SourceCitations[i]);
+                for (int i = 0, num = swsc.SourceCitations.Count; i < num; i++) {
+                    var srcCit = swsc.SourceCitations[i];
+                    var sourceRec = fTree.GetPtrValue<GDMSourceRecord>(srcCit);
                     if (sourceRec == null) continue;
 
-                    int srcIndex = fSourceList.IndexOfObject(sourceRec);
-                    if (srcIndex < 0) {
-                        string srcName = sourceRec.ShortTitle;
-                        string srcTitle = GKUtils.MergeStrings(sourceRec.Title.Lines);
-                        if (!string.IsNullOrEmpty(srcName) && !string.IsNullOrEmpty(srcTitle)) {
-                            srcName += "\n";
-                        }
-                        srcName += srcTitle;
-
-                        srcIndex = fSourceList.AddObject(srcName, sourceRec);
+                    string key = srcCit.XRef;
+                    if (fOptions.PedigreeOptions.IncludeSourcePages) {
+                        key += "@" + srcCit.Page;
                     }
 
+                    int srcIndex = fSourceList.IndexOf(key);
+                    if (srcIndex < 0) {
+                        srcIndex = fSourceList.AddObject(key, srcCit);
+                    }
                     sources.Add((srcIndex + 1).ToString());
                 }
             }
@@ -560,8 +557,26 @@ namespace GKCore.Export
 
                     int num2 = fSourceList.Count;
                     for (int j = 0; j < num2; j++) {
+                        var srcCit = fSourceList.GetObject(j) as GDMSourceCitation;
+                        var sourceRec = fTree.GetPtrValue<GDMSourceRecord>(srcCit);
+                        if (sourceRec == null) continue;
+
+                        string srcName = sourceRec.ShortTitle;
+                        if (fOptions.PedigreeOptions.IncludeSourcePages) {
+                            string srcPage = srcCit.Page;
+                            if (!string.IsNullOrEmpty(srcName) && !string.IsNullOrEmpty(srcPage)) {
+                                srcName += ", ";
+                            }
+                            srcName += srcPage;
+                        }
+                        string srcTitle = GKUtils.MergeStrings(sourceRec.Title.Lines);
+                        if (!string.IsNullOrEmpty(srcName) && !string.IsNullOrEmpty(srcTitle)) {
+                            srcName += "\n";
+                        }
+                        srcName += srcTitle;
+
                         string sn = (j + 1).ToString();
-                        string sst = sn + ". " + fSourceList[j];
+                        string sst = sn + ". " + srcName;
                         string sanc = "src_" + sn;
 
                         fWriter.AddParagraphAnchor(sst, fTextFont, sanc);

@@ -1063,8 +1063,9 @@ namespace GKCore
         /* 986 */ EventDates,
         /* 987 */ DoAdd,
         /* 988 */ Entry,
+        /* 989 */ IncludeSourcePages,
 
-        /* 000 */ Last = Entry
+        /* 000 */ Last = IncludeSourcePages
     }
 
 
@@ -2080,6 +2081,8 @@ namespace GKCore
             /* 985 */ "Location Expert",
             /* 986 */ "Event dates",
             /* 987 */ "Add",
+            /* 988 */ "Entry",
+            /* 989 */ "Include source pages"
         };
 
         private static readonly LangManager fLangMan = new LangManager();
