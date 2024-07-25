@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,6 +32,7 @@ namespace GKUI.Forms
     public sealed partial class RepositoryEditDlg : CommonDialog<IRepositoryEditDlg, RepositoryEditDlgController>, IRepositoryEditDlg
     {
         private readonly GKSheetList fNotesList;
+        private readonly GKSheetList fUserRefList;
 
         public GDMRepositoryRecord RepositoryRecord
         {
@@ -44,6 +45,11 @@ namespace GKUI.Forms
         ISheetList IRepositoryEditDlg.NotesList
         {
             get { return fNotesList; }
+        }
+
+        ISheetList IRepositoryEditDlg.UserRefList
+        {
+            get { return fUserRefList; }
         }
 
         ITextBox IRepositoryEditDlg.Name
@@ -63,6 +69,9 @@ namespace GKUI.Forms
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fNotesList = new GKSheetList(pageNotes);
+
+            fUserRefList = new GKSheetList(pageUserRefs);
+            fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
 
             fController = new RepositoryEditDlgController(this);
             fController.Init(baseWin);

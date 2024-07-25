@@ -67,12 +67,14 @@ namespace GKCore.Controllers
 
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
             fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
+            fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void Done()
         {
             fView.NotesList.ListModel.SaveSettings();
             fView.SourcesList.ListModel.SaveSettings();
+            fView.UserRefList.ListModel.SaveSettings();
         }
 
         public override bool Accept()
@@ -119,6 +121,7 @@ namespace GKCore.Controllers
         {
             fView.NotesList.ListModel.DataOwner = fMultimediaRecord;
             fView.SourcesList.ListModel.DataOwner = fMultimediaRecord;
+            fView.UserRefList.ListModel.DataOwner = fMultimediaRecord;
 
             UpdateControls();
         }
@@ -153,6 +156,7 @@ namespace GKCore.Controllers
 
             fView.NotesList.UpdateSheet();
             fView.SourcesList.UpdateSheet();
+            fView.UserRefList.UpdateSheet();
         }
 
         private void UpdateFileStore(bool isNew, MediaStoreType storeType)
@@ -244,6 +248,7 @@ namespace GKCore.Controllers
             GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Common);
             GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
             GetControl<ITabPage>("pageSources").Text = LangMan.LS(LSID.RPSources);
+            GetControl<ITabPage>("pageUserRefs").Text = LangMan.LS(LSID.UserRefs);
             GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Title);
             GetControl<ILabel>("lblType").Text = LangMan.LS(LSID.Type);
             GetControl<ILabel>("lblStoreType").Text = LangMan.LS(LSID.StoreType);

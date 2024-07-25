@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -65,6 +65,11 @@ namespace GKUI.Forms
             get { return fEventsList; }
         }
 
+        ISheetList IFamilyEditDlg.UserRefList
+        {
+            get { return fUserRefList; }
+        }
+
         IComboBox IFamilyEditDlg.MarriageStatus
         {
             get { return GetControlHandler<IComboBox>(cmbMarriageStatus); }
@@ -109,6 +114,7 @@ namespace GKUI.Forms
             fNotesList.ReadOnly = locked;
             fMediaList.ReadOnly = locked;
             fSourcesList.ReadOnly = locked;
+            fUserRefList.ReadOnly = locked;
         }
 
         public void SetHusband(string value)

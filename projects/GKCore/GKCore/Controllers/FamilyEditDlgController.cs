@@ -69,6 +69,7 @@ namespace GKCore.Controllers
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
             fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
             fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
+            fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void Done()
@@ -78,6 +79,7 @@ namespace GKCore.Controllers
             fView.NotesList.ListModel.SaveSettings();
             fView.MediaList.ListModel.SaveSettings();
             fView.SourcesList.ListModel.SaveSettings();
+            fView.UserRefList.ListModel.SaveSettings();
         }
 
         public void SetTarget(TargetMode targetType, GDMIndividualRecord target)
@@ -124,6 +126,7 @@ namespace GKCore.Controllers
                 fView.NotesList.ListModel.DataOwner = fFamilyRecord;
                 fView.MediaList.ListModel.DataOwner = fFamilyRecord;
                 fView.SourcesList.ListModel.DataOwner = fFamilyRecord;
+                fView.UserRefList.ListModel.DataOwner = fFamilyRecord;
 
                 if (fFamilyRecord == null) {
                     fView.MarriageStatus.Enabled = false;
@@ -164,6 +167,7 @@ namespace GKCore.Controllers
             fView.NotesList.UpdateSheet();
             fView.MediaList.UpdateSheet();
             fView.SourcesList.UpdateSheet();
+            fView.UserRefList.UpdateSheet();
         }
 
         public async void AddHusband()
@@ -219,6 +223,7 @@ namespace GKCore.Controllers
             GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
             GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.RPMultimedia);
             GetControl<ITabPage>("pageSources").Text = LangMan.LS(LSID.RPSources);
+            GetControl<ITabPage>("pageUserRefs").Text = LangMan.LS(LSID.UserRefs);
             GetControl<ILabel>("lblRestriction").Text = LangMan.LS(LSID.Restriction);
 
             SetToolTip("btnHusbandAdd", LangMan.LS(LSID.HusbandAddTip));

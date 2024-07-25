@@ -65,6 +65,8 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCore\Controllers\SourceCallNumberDlgController.cs" />
+    <Compile Include="GKCore\Design\Views\ISourceCallNumberEditDlg.cs" />
     <Compile Include="GKCore\Design\Views\ILocExpertDlg.cs" />
     <Compile Include="GKCore\Controllers\EventDefEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\LocExpertDlgController.cs" />
@@ -544,6 +546,7 @@
     <Compile Include="GKCore\Interfaces\IScrollableContainer.cs" />
     <Compile Include="GKCore\EventDefinitions.cs" />
     <Compile Include="GKCore\Types\GKPageSize.cs" />
+    <Compile Include="GKCore\Lists\URefsListModel.cs" />
   </ItemGroup>
   <Import Project="GKCore.props" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

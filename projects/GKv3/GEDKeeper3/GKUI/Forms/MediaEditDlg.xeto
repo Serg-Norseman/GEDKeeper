@@ -44,6 +44,9 @@
         <TabPage x:Name="pageSources">
           <comcom:GKSheetList x:Name="fSourcesList" />
         </TabPage>
+        <TabPage x:Name="pageUserRefs">
+          <comcom:GKSheetList x:Name="fUserRefList" />
+        </TabPage>
       </TabControl>
     </TableRow>
 

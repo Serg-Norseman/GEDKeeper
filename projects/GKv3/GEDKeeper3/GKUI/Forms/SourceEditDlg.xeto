@@ -46,6 +46,9 @@
         <TabPage x:Name="pageMultimedia">
           <comcom:GKSheetList x:Name="fMediaList" />
         </TabPage>
+        <TabPage x:Name="pageUserRefs">
+          <comcom:GKSheetList x:Name="fUserRefList" />
+        </TabPage>
       </TabControl>
     </TableRow>
 

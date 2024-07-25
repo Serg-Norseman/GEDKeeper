@@ -60,6 +60,7 @@ namespace GKUI.Forms
         private GKSheetList fRepositoriesList;
         private Label lblDate;
         private GKDateControl dateCtl;
+        private GKSheetList fUserRefList;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -85,6 +86,11 @@ namespace GKUI.Forms
         ISheetList ISourceEditDlg.RepositoriesList
         {
             get { return fRepositoriesList; }
+        }
+
+        ISheetList ISourceEditDlg.UserRefList
+        {
+            get { return fUserRefList; }
         }
 
         ITextBox ISourceEditDlg.ShortTitle

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -55,6 +55,7 @@ namespace GKUI.Forms
         private Button btnFileSelect;
         private GKSheetList fNotesList;
         private GKSheetList fSourcesList;
+        private GKSheetList fUserRefList;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -75,6 +76,11 @@ namespace GKUI.Forms
         ISheetList IMediaEditDlg.SourcesList
         {
             get { return fSourcesList; }
+        }
+
+        ISheetList IMediaEditDlg.UserRefList
+        {
+            get { return fUserRefList; }
         }
 
         IComboBox IMediaEditDlg.MediaType

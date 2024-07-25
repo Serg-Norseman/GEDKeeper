@@ -58,6 +58,10 @@
                 <xp:TabItem x:Name="pageMultimedia">
                     <comcom:GKSheetList x:Name="fMediaList" />
                 </xp:TabItem>
+
+                <xp:TabItem x:Name="pageUserRefs">
+                    <comcom:GKSheetList x:Name="fUserRefList" />
+                </xp:TabItem>
             </xp:TabViewControl.ItemSource>
         </xp:TabViewControl>
 

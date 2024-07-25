@@ -25,6 +25,10 @@
                 <xp:TabItem x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
                 </xp:TabItem>
+
+                <xp:TabItem x:Name="pageUserRefs">
+                    <comcom:GKSheetList x:Name="fUserRefList" />
+                </xp:TabItem>
             </xp:TabViewControl.ItemSource>
         </xp:TabViewControl>
 

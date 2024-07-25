@@ -25,8 +25,9 @@
 		private System.Windows.Forms.ComboBox cmbMarriageStatus;
 		private System.Windows.Forms.Label lblRestriction;
 		private System.Windows.Forms.ComboBox cmbRestriction;
+        private System.Windows.Forms.TabPage pageUserRefs;
 
-		private void InitializeComponent()
+        private void InitializeComponent()
 		{
 		    this.btnAccept = new System.Windows.Forms.Button();
 		    this.btnCancel = new System.Windows.Forms.Button();
@@ -51,7 +52,8 @@
 		    this.pageNotes = new System.Windows.Forms.TabPage();
 		    this.pageMultimedia = new System.Windows.Forms.TabPage();
 		    this.pageSources = new System.Windows.Forms.TabPage();
-		    this.GroupBox1.SuspendLayout();
+            this.pageUserRefs = new System.Windows.Forms.TabPage();
+            this.GroupBox1.SuspendLayout();
 		    this.tabsData.SuspendLayout();
 		    this.SuspendLayout();
 		    // 
@@ -248,7 +250,8 @@
 		    this.tabsData.Controls.Add(this.pageNotes);
 		    this.tabsData.Controls.Add(this.pageMultimedia);
 		    this.tabsData.Controls.Add(this.pageSources);
-		    this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tabsData.Controls.Add(this.pageUserRefs);
+            this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
 		    this.tabsData.Location = new System.Drawing.Point(0, 158);
 		    this.tabsData.Margin = new System.Windows.Forms.Padding(2);
 		    this.tabsData.Name = "tabsFamilyData";
@@ -300,10 +303,19 @@
 		    this.pageSources.Size = new System.Drawing.Size(700, 290);
 		    this.pageSources.TabIndex = 4;
 		    this.pageSources.Text = "pageSources";
-		    // 
-		    // FamilyEditDlg
-		    // 
-		    this.AcceptButton = this.btnAccept;
+            // 
+            // pageUserRefs
+            // 
+            this.pageUserRefs.Location = new System.Drawing.Point(4, 22);
+            this.pageUserRefs.Margin = new System.Windows.Forms.Padding(2);
+            this.pageUserRefs.Name = "pageUserRefs";
+            this.pageUserRefs.Size = new System.Drawing.Size(691, 230);
+            this.pageUserRefs.TabIndex = 5;
+            this.pageUserRefs.Text = "pageUserRefs";
+            // 
+            // FamilyEditDlg
+            // 
+            this.AcceptButton = this.btnAccept;
 		    this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
 		    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 		    this.CancelButton = this.btnCancel;

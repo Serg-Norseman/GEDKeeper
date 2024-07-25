@@ -21,6 +21,7 @@
 		private System.Windows.Forms.TextBox txtPublication;
         private System.Windows.Forms.Label lblDate;
         private Components.GKDateControl dateCtl;
+        private System.Windows.Forms.TabPage pageUserRefs;
 
         private void InitializeComponent()
 		{
@@ -43,6 +44,7 @@
 		    this.pageMultimedia = new System.Windows.Forms.TabPage();
             this.lblDate = new System.Windows.Forms.Label();
             this.dateCtl = new GKUI.Components.GKDateControl();
+            this.pageUserRefs = new System.Windows.Forms.TabPage();
             this.tabsData.SuspendLayout();
 		    this.pageCommon.SuspendLayout();
 		    this.pageText.SuspendLayout();
@@ -78,7 +80,8 @@
 		    this.tabsData.Controls.Add(this.pageRepositories);
 		    this.tabsData.Controls.Add(this.pageNotes);
 		    this.tabsData.Controls.Add(this.pageMultimedia);
-		    this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tabsData.Controls.Add(this.pageUserRefs);
+            this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
 		    this.tabsData.Location = new System.Drawing.Point(0, 0);
 		    this.tabsData.Name = "tabsData";
 		    this.tabsData.SelectedIndex = 0;
@@ -233,10 +236,19 @@
 		    this.pageMultimedia.Size = new System.Drawing.Size(744, 457);
 		    this.pageMultimedia.TabIndex = 4;
 		    this.pageMultimedia.Text = "pageMultimedia";
-		    // 
-		    // SourceEditDlg
-		    // 
-		    this.AcceptButton = this.btnAccept;
+            // 
+            // pageUserRefs
+            // 
+            this.pageUserRefs.Location = new System.Drawing.Point(4, 22);
+            this.pageUserRefs.Margin = new System.Windows.Forms.Padding(2);
+            this.pageUserRefs.Name = "pageUserRefs";
+            this.pageUserRefs.Size = new System.Drawing.Size(691, 230);
+            this.pageUserRefs.TabIndex = 5;
+            this.pageUserRefs.Text = "pageUserRefs";
+            // 
+            // SourceEditDlg
+            // 
+            this.AcceptButton = this.btnAccept;
 		    this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
 		    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 		    this.CancelButton = this.btnCancel;

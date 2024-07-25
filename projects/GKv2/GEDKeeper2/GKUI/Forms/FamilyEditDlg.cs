@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -38,6 +38,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fSourcesList;
+        private readonly GKSheetList fUserRefList;
 
         public GDMFamilyRecord FamilyRecord
         {
@@ -70,6 +71,11 @@ namespace GKUI.Forms
         ISheetList IFamilyEditDlg.EventsList
         {
             get { return fEventsList; }
+        }
+
+        ISheetList IFamilyEditDlg.UserRefList
+        {
+            get { return fUserRefList; }
         }
 
         IComboBox IFamilyEditDlg.MarriageStatus
@@ -129,6 +135,9 @@ namespace GKUI.Forms
             fSourcesList = new GKSheetList(pageSources);
             fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
 
+            fUserRefList = new GKSheetList(pageUserRefs);
+            fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
+
             fController = new FamilyEditDlgController(this);
             fController.Init(baseWin);
         }
@@ -147,6 +156,7 @@ namespace GKUI.Forms
             fNotesList.ReadOnly = locked;
             fMediaList.ReadOnly = locked;
             fSourcesList.ReadOnly = locked;
+            fUserRefList.ReadOnly = locked;
         }
 
         public void SetHusband(string value)

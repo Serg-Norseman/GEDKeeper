@@ -60,6 +60,9 @@
                 <xp:TabItem x:Name="pageSources">
                     <comcom:GKSheetList x:Name="fSourcesList" />
                 </xp:TabItem>
+                <xp:TabItem x:Name="pageUserRefs">
+                    <comcom:GKSheetList x:Name="fUserRefList" />
+                </xp:TabItem>
             </xp:TabViewControl.ItemSource>
         </xp:TabViewControl>
 

@@ -20,6 +20,9 @@
         <TabPage x:Name="pageNotes">
           <comcom:GKSheetList x:Name="fNotesList" />
         </TabPage>
+        <TabPage x:Name="pageUserRefs">
+          <comcom:GKSheetList x:Name="fUserRefList" />
+        </TabPage>
       </TabControl>
     </TableRow>
 

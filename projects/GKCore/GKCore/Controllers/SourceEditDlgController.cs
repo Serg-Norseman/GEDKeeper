@@ -60,6 +60,7 @@ namespace GKCore.Controllers
             fView.RepositoriesList.ListModel = new SourceRepositoriesListModel(fView, baseWin, fLocalUndoman);
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
             fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
+            fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void Done()
@@ -67,6 +68,7 @@ namespace GKCore.Controllers
             fView.RepositoriesList.ListModel.SaveSettings();
             fView.NotesList.ListModel.SaveSettings();
             fView.MediaList.ListModel.SaveSettings();
+            fView.UserRefList.ListModel.SaveSettings();
         }
 
         public override bool Accept()
@@ -116,6 +118,7 @@ namespace GKCore.Controllers
             fView.RepositoriesList.ListModel.DataOwner = fSourceRecord;
             fView.NotesList.ListModel.DataOwner = fSourceRecord;
             fView.MediaList.ListModel.DataOwner = fSourceRecord;
+            fView.UserRefList.ListModel.DataOwner = fSourceRecord;
         }
 
         public override void SetLocale()
@@ -134,6 +137,7 @@ namespace GKCore.Controllers
             GetControl<ITabPage>("pageRepositories").Text = LangMan.LS(LSID.RPRepositories);
             GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
             GetControl<ITabPage>("pageMultimedia").Text = LangMan.LS(LSID.RPMultimedia);
+            GetControl<ITabPage>("pageUserRefs").Text = LangMan.LS(LSID.UserRefs);
         }
     }
 }

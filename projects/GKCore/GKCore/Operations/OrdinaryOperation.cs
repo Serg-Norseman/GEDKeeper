@@ -191,7 +191,7 @@ namespace GKCore.Operations
 
                 case OperationType.otIndividualURefAdd:
                 case OperationType.otIndividualURefRemove:
-                    result = ProcessIndividualURef(redo);
+                    result = ProcessRecordURef(redo);
                     break;
 
                 case OperationType.otIndividualPortraitAttach:
@@ -517,9 +517,9 @@ namespace GKCore.Operations
             return true;
         }
 
-        private bool ProcessIndividualURef(bool redo)
+        private bool ProcessRecordURef(bool redo)
         {
-            GDMIndividualRecord iRec = fObj as GDMIndividualRecord;
+            GDMRecord iRec = fObj as GDMRecord;
             GDMUserReference uRef = fNewVal as GDMUserReference;
 
             if (iRec == null || uRef == null) {

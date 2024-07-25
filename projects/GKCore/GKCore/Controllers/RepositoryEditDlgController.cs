@@ -58,11 +58,13 @@ namespace GKCore.Controllers
             base.Init(baseWin);
 
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
+            fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void Done()
         {
             fView.NotesList.ListModel.SaveSettings();
+            fView.UserRefList.ListModel.SaveSettings();
         }
 
         public override bool Accept()
@@ -86,6 +88,7 @@ namespace GKCore.Controllers
             fView.Name.Text = fRepositoryRecord.RepositoryName;
 
             fView.NotesList.ListModel.DataOwner = fRepositoryRecord;
+            fView.UserRefList.ListModel.DataOwner = fRepositoryRecord;
         }
 
         public async void ModifyAddress()
@@ -100,6 +103,7 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
             GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Title);
             GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
+            GetControl<ITabPage>("pageUserRefs").Text = LangMan.LS(LSID.UserRefs);
             GetControl<IButton>("btnAddress").Text = LangMan.LS(LSID.Address) + @"...";
         }
     }

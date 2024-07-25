@@ -32,6 +32,7 @@ namespace GKCore.Design.Views
         ISheetList NotesList { get; }
         ISheetList MediaList { get; }
         ISheetList RepositoriesList { get; }
+        ISheetList UserRefList { get; }
 
         ITextBox ShortTitle { get; }
         ITextBox Author { get; }

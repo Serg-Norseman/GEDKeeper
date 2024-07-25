@@ -36,6 +36,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fMediaList;
         private readonly GKSheetList fRepositoriesList;
+        private readonly GKSheetList fUserRefList;
 
         public GDMSourceRecord SourceRecord
         {
@@ -58,6 +59,11 @@ namespace GKUI.Forms
         ISheetList ISourceEditDlg.RepositoriesList
         {
             get { return fRepositoriesList; }
+        }
+
+        ISheetList ISourceEditDlg.UserRefList
+        {
+            get { return fUserRefList; }
         }
 
         ITextBox ISourceEditDlg.ShortTitle
@@ -107,6 +113,9 @@ namespace GKUI.Forms
             fRepositoriesList = new GKSheetList(pageRepositories);
             fRepositoriesList.SetControlName("fRepositoriesList"); // for purpose of tests
             fRepositoriesList.OnModify += ModifyReposSheet;
+
+            fUserRefList = new GKSheetList(pageUserRefs);
+            fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
 
             fController = new SourceEditDlgController(this);
             fController.Init(baseWin);

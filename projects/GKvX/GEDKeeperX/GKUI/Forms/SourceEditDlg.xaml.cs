@@ -55,6 +55,11 @@ namespace GKUI.Forms
             get { return fRepositoriesList; }
         }
 
+        ISheetList ISourceEditDlg.UserRefList
+        {
+            get { return fUserRefList; }
+        }
+
         ITextBox ISourceEditDlg.ShortTitle
         {
             get { return GetControlHandler<ITextBox>(txtShortTitle); }

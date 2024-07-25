@@ -19,6 +19,7 @@
         private System.Windows.Forms.Label lblFile;
         private System.Windows.Forms.TextBox txtFile;
         private System.Windows.Forms.Button btnFileSelect;
+        private System.Windows.Forms.TabPage pageUserRefs;
 
         protected override void Dispose(bool disposing)
         {
@@ -48,6 +49,7 @@
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnView = new System.Windows.Forms.Button();
+            this.pageUserRefs = new System.Windows.Forms.TabPage();
             this.tabsData.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.SuspendLayout();
@@ -57,6 +59,7 @@
             this.tabsData.Controls.Add(this.pageCommon);
             this.tabsData.Controls.Add(this.pageNotes);
             this.tabsData.Controls.Add(this.pageSources);
+            this.tabsData.Controls.Add(this.pageUserRefs);
             this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabsData.Location = new System.Drawing.Point(0, 0);
             this.tabsData.Name = "tabsData";
@@ -178,6 +181,15 @@
             this.pageSources.Size = new System.Drawing.Size(720, 272);
             this.pageSources.TabIndex = 2;
             this.pageSources.Text = "pageSources";
+            // 
+            // pageUserRefs
+            // 
+            this.pageUserRefs.Location = new System.Drawing.Point(4, 22);
+            this.pageUserRefs.Margin = new System.Windows.Forms.Padding(2);
+            this.pageUserRefs.Name = "pageUserRefs";
+            this.pageUserRefs.Size = new System.Drawing.Size(691, 230);
+            this.pageUserRefs.TabIndex = 3;
+            this.pageUserRefs.Text = "pageUserRefs";
             // 
             // btnAccept
             // 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,6 +34,7 @@ namespace GKUI.Forms
     {
         private readonly GKSheetList fNotesList;
         private readonly GKSheetList fSourcesList;
+        private readonly GKSheetList fUserRefList;
 
         public GDMMultimediaRecord MultimediaRecord
         {
@@ -51,6 +52,11 @@ namespace GKUI.Forms
         ISheetList IMediaEditDlg.SourcesList
         {
             get { return fSourcesList; }
+        }
+
+        ISheetList IMediaEditDlg.UserRefList
+        {
+            get { return fUserRefList; }
         }
 
         IComboBox IMediaEditDlg.MediaType
@@ -91,6 +97,9 @@ namespace GKUI.Forms
 
             fNotesList = new GKSheetList(pageNotes);
             fSourcesList = new GKSheetList(pageSources);
+
+            fUserRefList = new GKSheetList(pageUserRefs);
+            fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
 
             fController = new MediaEditDlgController(this);
             fController.Init(baseWin);
