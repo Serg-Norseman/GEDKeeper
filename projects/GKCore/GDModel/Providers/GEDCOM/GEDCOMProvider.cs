@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma warning disable IDE0060 // Remove unused parameter
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -90,6 +92,8 @@ namespace GDModel.Providers.GEDCOM
         AddressTag,
         ChildToFamilyLinkTag,
         PersonalNameTag,
+        RepositoryCitationTag,
+        SourceCallNumberTag,
         SkipTag,
     }
 
@@ -840,6 +844,7 @@ namespace GDModel.Providers.GEDCOM
             if (tagType == GEDCOMTagType.REPO) {
                 curTag = sourRec.RepositoryCitations.Add(new GDMRepositoryCitation());
                 curTag.ParseString(tagValue);
+                addHandler = TagHandler.RepositoryCitationTag;
             } else if (tagType == GEDCOMTagType.DATA) {
                 curTag = sourRec.Data;
                 addHandler = TagHandler.SourceDataTag;
@@ -881,13 +886,76 @@ namespace GDModel.Providers.GEDCOM
             WriteText(stream, level, sourRec.Title);
             WriteText(stream, level, sourRec.Publication);
             WriteTagLine(stream, level, GEDCOMTagName.ABBR, sourRec.ShortTitle, true);
-            WriteList(stream, level, sourRec.RepositoryCitations, WriteBaseTag);
+            WriteList(stream, level, sourRec.RepositoryCitations, WriteRepositoryCitation);
 
             WriteSourceData(stream, level, sourRec.Data);
             WriteText(stream, level, sourRec.Originator);
             WriteText(stream, level, sourRec.Text);
 
             WriteBaseTag(stream, level, sourRec.Date);
+        }
+
+        //
+        private static StackTuple AddRepositoryCitationTag(GDMTree tree, GDMTag owner, int tagLevel, int tagId, StringSpan tagValue)
+        {
+            GDMRepositoryCitation repCit = (GDMRepositoryCitation)owner;
+            GDMTag curTag = null;
+            TagHandler addHandler = TagHandler.Null;
+
+            GEDCOMTagType tagType = (GEDCOMTagType)tagId;
+            if (tagType == GEDCOMTagType.NOTE) {
+                curTag = repCit.Notes.Add(new GDMNotes());
+                curTag.ParseString(tagValue);
+                addHandler = TagHandler.NoteTag;
+            } else if (tagType == GEDCOMTagType.CALN) {
+                curTag = repCit.CallNumbers.Add(new GDMSourceCallNumber());
+                curTag.ParseString(tagValue);
+                addHandler = TagHandler.SourceCallNumberTag;
+            } else {
+                return AddBaseTag(tree, owner, tagLevel, tagId, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static bool WriteRepositoryCitation(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMRepositoryCitation repCit = (GDMRepositoryCitation)tag;
+
+            if (!WriteBaseTag(stream, level, tag)) return false;
+
+            level += 1;
+            if (repCit.HasNotes) WriteList(stream, level, repCit.Notes, WriteNote);
+            if (repCit.HasCallNumbers) WriteList(stream, level, repCit.CallNumbers, WriteSourceCallNumber);
+            return true;
+        }
+
+
+        private static StackTuple AddSourceCallNumberTag(GDMTree tree, GDMTag owner, int tagLevel, int tagId, StringSpan tagValue)
+        {
+            GDMSourceCallNumber fileRef = (GDMSourceCallNumber)owner;
+            GDMTag curTag = null;
+            TagHandler addHandler = TagHandler.Null;
+
+            GEDCOMTagType tagType = (GEDCOMTagType)tagId;
+            if (tagType == GEDCOMTagType.MEDI) {
+                fileRef.MediaType = GEDCOMUtils.GetMediaTypeVal(tagValue);
+            } else {
+                return AddBaseTag(tree, owner, tagLevel, tagId, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static bool WriteSourceCallNumber(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMSourceCallNumber callNum = (GDMSourceCallNumber)tag;
+
+            if (!WriteBaseTag(stream, level, callNum)) return false;
+
+            level += 1;
+            GEDCOMProvider.WriteTagLine(stream, level, GEDCOMTagName.MEDI, GEDCOMUtils.GetMediaTypeStr(callNum.MediaType), true);
+            return true;
         }
 
 
@@ -2667,6 +2735,8 @@ namespace GDModel.Providers.GEDCOM
             AddAddressTag,              /* AddressTag */
             AddChildToFamilyLinkTag,    /* ChildToFamilyLinkTag */
             AddPersonalNameTag,         /* PersonalNameTag */
+            AddRepositoryCitationTag,   /* RepositoryCitationTag */
+            AddSourceCallNumberTag,     /* SourceCallNumberTag */
             SkipTag,                    /* SkipTag */
         };
 
@@ -2737,6 +2807,7 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.BIRT, GEDCOMTagName.BIRT);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.BLES, GEDCOMTagName.BLES);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.BURI, GEDCOMTagName.BURI);
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType.CALN, GEDCOMTagName.CALN);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.CAST, GEDCOMTagName.CAST);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.CAUS, GEDCOMTagName.CAUS, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.CENS, GEDCOMTagName.CENS, true);

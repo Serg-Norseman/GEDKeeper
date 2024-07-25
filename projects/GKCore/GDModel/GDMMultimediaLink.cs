@@ -28,7 +28,7 @@ namespace GDModel
     public sealed class GDMMultimediaLink : GDMPointer
     {
         private GDMCutoutPosition fCutoutPosition;
-        private GDMList<GDMFileReference> fFileReferences;
+        private readonly GDMList<GDMFileReference> fFileReferences;
         private bool fIsPrimary;
         private bool fIsPrimaryCutout;
         private string fTitle;

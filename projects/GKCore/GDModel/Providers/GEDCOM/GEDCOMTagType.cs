@@ -125,6 +125,7 @@ namespace GDModel.Providers.GEDCOM
         ASSO,
         AUTH,
         BAPL,
+        CALN,
         CAUS,
         CHAN,
         CHAR,
@@ -255,6 +256,7 @@ namespace GDModel.Providers.GEDCOM
         public const string BIRT = "BIRT";
         public const string BLES = "BLES";
         public const string BURI = "BURI";
+        public const string CALN = "CALN";
         public const string CAST = "CAST";
         public const string CAUS = "CAUS";
         public const string CENS = "CENS";
