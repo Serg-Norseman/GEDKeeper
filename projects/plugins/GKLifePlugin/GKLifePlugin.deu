@@ -7,3 +7,8 @@
 06=Löschen
 07=Zufall
 08=Einstellungen
+09=Muster-Stabilität
+10=Das Muster wiederholt sich alle {0} Generationen!
+11=Das Muster ist statisch!
+12=Generation: {0}
+13=Lebende Zellen: {0}

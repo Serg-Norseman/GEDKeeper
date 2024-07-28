@@ -34,8 +34,8 @@ namespace GKCore
 
         public const string APP_COPYRIGHT = "Copyright © 2009-2024 by Sergey V. Zhdanovskih";
 
-        public const string APP_VERSION_2X = "2.30.0.0";
-        public const string APP_VERSION_3X = "3.6.0.0";
+        public const string APP_VERSION_2X = "2.31.0.0";
+        public const string APP_VERSION_3X = "3.7.0.0";
 
 #if !GK3
         public const string UpdateURL = "https://sourceforge.net/projects/gedkeeper/files/gk_version.xml";

@@ -1,13 +1,13 @@
 ;1087,kaz,Қазақ (кириллица)
 001=Файл
 002=Түзету
-003=Pedigree
-004=Service
+003=Ата текі
+004=Қызмет
 005=Терезелер
 006=Анықтама
 007=Жаңа
 008=Ашу...
-009=Reopen
+009=Соңғысы ашу
 010=Сақтау
 011=Жабу
 012=Properties
@@ -995,3 +995,8 @@
 
 983=Select list
 984=Links to subordinate locations
+985=Location Expert
+986=Event dates
+987=Add
+988=Entry
+989=Include source pages

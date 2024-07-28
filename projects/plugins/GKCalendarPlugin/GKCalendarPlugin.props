@@ -29,7 +29,13 @@
         <None Include="GKCalendarPlugin.rus">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Include="GKCalendarPlugin.spa">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKCalendarPlugin.ukr">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKCalendarPlugin.zho">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <EmbeddedResource Include="Resources\icon_time.gif" />

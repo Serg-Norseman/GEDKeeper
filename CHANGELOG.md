@@ -1,3 +1,25 @@
+## 28.07.2024 [v2.31.0 &amp; v3.7.0]
+- Localizations updated: Dutch [Annelotte], German [ChakaDragon, Christian Bettinger], Chinese Simplified [Jeff Li], Kazakh [karatal], Hungarian [Kékesi Lajos], Japanese [mtsx68k].
+- Added the feature to enter user's references in family, media, source and repository records.
+- Added the option to include page numbers of sources in pedigrees.
+- Added place analyzer/constructor to locations management tool.
+- Added a section for links to subordinate locations in the location information panel.
+- Added function for duplicating location records.
+- The feature of selecting and exporting a separate list of records (notes, multimedia, locations) to a GEDCOM file has been added to the database splitting tool.
+- Added saving of column width settings for all lists.
+- Completed Spanish localization [Miguel Á. Pérez Valdenebro].
+- Added remembering and the feature to select from a list of causes and agencies of events.
+- Added an option to select list filtering methods (differences in speed).
+- Added an option to display the full name in one line in trees, for countries with a short form of the full name (hieroglyphs).
+- Added custom event types, the feature to turn off events and add custom ones.
+- Added localizable names for tree borders.
+- Fixed an issue where blood group fact values would get stuck after use and when a different fact type was subsequently selected.
+- Added data checking option: search for notes and sources without links.
+- Added a call to detailed information about sources and persons in the lists of citations to sources, children, parents and spouses (pop-up menu).
+- Added display of multimedia and notes on the info-panel for events.
+- Fixed multiple lines in the Author column of source citation lists (GKv3).
+- Improved output of portraits from photos with DPI > 100 (GKv3).
+
 ## 28.05.2024 [v2.30.0 &amp; v3.6.0]
 - Added options for displaying tree diagrams: highlighting lines of a selected person, tracking (highlighting) lines of persons with matching sources.
 - Localizations updated: Afrikaans [Steyn van der Walt], Dutch [Annelotte and Leo Krap], German [Christian Bettinger], Hungarian [Kékesi Lajos], Japanese [Takashi Namba], Polish [burtek].

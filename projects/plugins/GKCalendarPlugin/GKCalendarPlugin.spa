@@ -1,0 +1,31 @@
+;1034,spa,Español
+01=Calendario
+02=Fecha
+03=Gregoriano
+04=Juliano
+05=Hebreo
+06=Islámico
+07=Persa
+08=Indio
+09=Bahai
+10=Bahá|Jalál|Jamál|‘Aẓamat|Núr|Raḥmat|Kalimát|Kamál|Asmá’|‘Izzat|Mashíyyat|‘Ilm|Qudrat|Qawl|Masá’il|Sharaf|Sulṭán|Mulk|Ayyám-i-Há|‘Alá’ ; Bahai Months
+11=Jamál|Kamál|Fiḍál|‘Idál|Istijlál|Istiqlál|Jalál ; Bahai Weekdays
+12=Enero|Febrero|Marzo|Abril|Mayo|Julio|Julio|Agosto|Septiembre|Octubre|Noviembre|Diciembre ; Classic Months
+13=Lunes|Martes|Miércoles|Jueves|Viernes|Sábado|Domingo ; Classic Weekdays
+14=Nisán|Iyar|Siván|Tamuz|Av|Elul|Tishréi|Jeshván|Kislev|Teveth|Shevat|Adar|Ve-adar ; Hebrew Months
+15=Yom Rishon|Yom Sheni|Yom Shlishi|Yom Revii|Yom Jamishi|Yom Shishi|Shabat ; Hebrew Weekdays
+16=Chaita|Vaishâkha|Jetha|Âshârha|Shrâvana|Bhâdrapada|Âshvina|Kârttika|Âgrâhayana|Posha|Mâgha|Phalguna ; Indian Civil Months
+17=Ravi-var|Soma-var|Mangala-var|Budha-var|Guru-var|Sukra-var|Shani-var ; Indian Civil Weekdays
+18=Muharram|Safar|Rabi Al-Awwal|Rabi Al-Thani|Jumada Al-Awwal|Jumada Al-Thani|Rajab|Shaban|Ramadán|Shawwal|Dhul Qi`dah|Dhul Hijjah ; Islamic Months
+19=Al-ahad|Al-ithnáyn|Al-tlat|Al-arba`a'|Al-jmis|Al-yumua`a|Al-sabt ; Islamic Weekdays
+20=Farvardin|Ordibehesht|Jordad|Tir|Mordad|Shahrivar|Mehr|Abán|Azar|Dey|Bahmán|Esfand ; Persian Months
+21=Yekshambé|Doshambé|Seshambé|Chaharshambé|Panchshambé|Yom'é|Shambé ; Persian Weekdays
+22=Kull-i-Shay’ {0}, Vaḥid {1} ; Bahai Cycles
+23=Bizantino
+24=Ianuarius|Februarius|Martius|Aprilis|Maius|Iunius|Iulius|Augustus|Septembris|Octobris|Novembris|Decembris ; Byzantine Months
+25=Día
+26=Mes
+27=Año
+28=Fecha original
+29=Fecha convertida
+

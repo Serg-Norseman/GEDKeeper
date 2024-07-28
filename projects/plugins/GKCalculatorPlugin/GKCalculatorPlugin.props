@@ -29,7 +29,13 @@
         <None Include="GKCalculatorPlugin.rus">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Include="GKCalculatorPlugin.spa">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKCalculatorPlugin.ukr">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKCalculatorPlugin.zho">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <EmbeddedResource Include="Resources\icon_calc.gif" />

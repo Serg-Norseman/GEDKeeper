@@ -273,6 +273,7 @@ namespace GKCore.Controllers
             SubstituteControl<ITabPage>(view, "pageNotes");
             SubstituteControl<ITabPage>(view, "pageMultimedia");
             SubstituteControl<ITabPage>(view, "pageSources");
+            SubstituteControl<ITabPage>(view, "pageUserRefs");
             SubstituteControl<IGroupBox>(view, "GroupBox1");
             SubstituteControl<ILabel>(view, "lblHusband");
             SubstituteControl<ILabel>(view, "lblWife");
@@ -664,6 +665,7 @@ namespace GKCore.Controllers
             SubstituteControl<IButton>(view, "btnAccept");
             SubstituteControl<IButton>(view, "btnCancel");
             SubstituteControl<ITabPage>(view, "pageNotes");
+            SubstituteControl<ITabPage>(view, "pageUserRefs");
             SubstituteControl<IButton>(view, "btnAddress");
             SubstituteControl<ILabel>(view, "lblName");
 

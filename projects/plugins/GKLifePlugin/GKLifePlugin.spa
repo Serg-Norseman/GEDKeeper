@@ -1,0 +1,15 @@
+;1034,spa,Español
+01=Juego de la Vida de Conway
+02=Paso
+03=Iniciar
+04=Parar
+05=Configurar celdas
+06=Borrar
+07=Aleatorio
+08=Opciones
+09=Estabilidad del patrón
+10=¡El patrón se repite cada {0} generaciones!
+11=¡El patrón es estático!
+12=Generación: {0}
+13=Celdas vivas: {0}
+

@@ -1,0 +1,31 @@
+;2052,zho,中文
+01=日历
+02=日期
+03=公历
+04=儒略历
+05=犹太历
+06=伊斯兰历
+07=伊朗历
+08=印度历
+09=巴哈教
+10=Bahá|Jalál|Jamál|‘Aẓamat|Núr|Raḥmat|Kalimát|Kamál|Asmá’|‘Izzat|Mashíyyat|‘Ilm|Qudrat|Qawl|Masá’il|Sharaf|Sulṭán|Mulk|Ayyám-i-Há|‘Alá’ ; Bahai Months
+11=Jamál|Kamál|Fiḍál|‘Idál|Istijlál|Istiqlál|Jalál ; Bahai Weekdays
+12=1 月|2 月|3 月|4 月|5 月|6 月|7 月|8 月|9 月|10 月|11 月|12 月 ; Classic Months
+13=星期一|星期二|星期三|星期四|星期五|星期六|星期天 ; Classic Weekdays
+14=Nisan|Iyyar|Sivan|Tammuz|Av|Elul|Tishri|Heshvan|Kislev|Teveth|Shevat|Adar|Veadar ; Hebrew Months
+15=Alef|Bet|Gimel|Dalet|He|Vav|Zayin ; Hebrew Weekdays
+16=Caitra|Vaisakha|Jyaistha|Asadha|Sravana|Bhadra|Asvina|Kartika|Agrahayana|Pausa|Magha|Phalguna ; Indian Civil Months
+17=Ravivara|Somavara|Mangalavara|Budhavara|Brahaspativara|Sukravara|Sanivara ; Indian Civil Weekdays
+18=Muharram|Safar|Rabi`al-Awwal|Rabi`ath-Thani|Jumada l-Ula|Jumada t-Tania|Rajab|Sha`ban|Ramadan|Shawwal|Dhu l-Qa`da|Dhu l-Hijja ; Islamic Months
+19=Al-'ahad|Al-'ithnayn|Ath-thalatha'|Al-'arb`a'|Al-khamis|Al-jum`a|As-sabt ; Islamic Weekdays
+20=Farvardin|Ordibehesht|Khordad|Tir|Mordad|Shahrivar|Mehr|Aban|Azar|Dey|Bahman|Esfand ; Persian Months
+21=Yekshanbeh|Doshanbeh|Seshhanbeh|Chaharshanbeh|Panjshanbeh|Jomeh|Shanbeh ; Persian Weekdays
+22=Kull-i-Shay’ {0}, Váḥid {1} ; Bahai Cycles
+23=拜占庭历
+24=Ianuarius|Februarius|Martius|Aprilis|Maius|Iunius|Iulius|Augustus|September|October|November|December ; Byzantine Months
+25=天
+26=月
+27=年
+28=来源日期
+29=转换日期
+
