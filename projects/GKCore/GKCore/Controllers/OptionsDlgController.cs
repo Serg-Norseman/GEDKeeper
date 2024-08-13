@@ -937,7 +937,9 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblUnkSexColor").Text = LangMan.LS(LSID.UnkSex);
             GetControl<ILabel>("lblUnHusbandColor").Text = LangMan.LS(LSID.UnHusband);
             GetControl<ILabel>("lblUnWifeColor").Text = LangMan.LS(LSID.UnWife);
-            //lblFont.Text = LangMan.LS(LSID.Font);
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<ILabel>("lblFont").Text = LangMan.LS(LSID.Font);
+            }
 
             GetControl<IGroupBox>("grpSpacings").Text = LangMan.LS(LSID.Spacings);
             GetControl<ILabel>("lblMargins").Text = LangMan.LS(LSID.Margins);
@@ -994,6 +996,8 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnResetDefaults").Text = LangMan.LS(LSID.DefList);
 
             GetControl<ILabel>("lblMatchPatternMethod").Text = LangMan.LS(LSID.MatchPatternMethod);
+
+            GetControl<ITabPage>("pageNavigation").Text = LangMan.LS(LSID.Navigation);
 
             // Pedigree
             GetControl<ITabPage>("pagePedigree").Text = LangMan.LS(LSID.Pedigrees);

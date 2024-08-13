@@ -235,16 +235,40 @@ namespace GKCore.Lists
             return result;
         }
 
+        protected bool IsMatchesNames(GDMIndividualRecord iRec, string searchPattern, bool allNames)
+        {
+            if (!allNames) {
+                string recName = GKUtils.GetNameString(iRec, true, false);
+                if (IsMatchesMask(recName, searchPattern)) {
+                    return true;
+                }
+            } else {
+                for (int k = 0; k < iRec.PersonalNames.Count; k++) {
+                    var persName = iRec.PersonalNames[k];
+
+                    string recName = GKUtils.GetNameString(iRec, persName, true, false);
+                    if (IsMatchesMask(recName, searchPattern)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         public override IList<ISearchResult> FindAll(string searchPattern)
         {
             var result = new List<ISearchResult>();
-            var allNames = GlobalOptions.Instance.SearchAndFilterByAllNames;
-            Regex regex = GKUtils.InitMaskRegex(searchPattern);
 
-            int num = ContentList.Count;
-            for (int i = 0; i < num; i++) {
+            if (string.IsNullOrEmpty(searchPattern))
+                return result;
+
+            searchPattern = GKUtils.PrepareQSF(searchPattern);
+
+            var allNames = GlobalOptions.Instance.SearchAndFilterByAllNames;
+
+            for (int i = 0, num = ContentList.Count; i < num; i++) {
                 var iRec = (GDMIndividualRecord)ContentList[i].Record;
-                if (GKUtils.IsMatchesNames(iRec, regex, allNames)) {
+                if (IsMatchesNames(iRec, searchPattern, allNames)) {
                     result.Add(new SearchResult(iRec));
                 }
             }

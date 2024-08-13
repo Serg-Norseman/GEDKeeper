@@ -250,9 +250,12 @@
                         </TableRow>
 
                         <TableRow>
-                          <Scrollable x:Name="panDefFont" Border="Bezel">
-                            <Label x:Name="lblChartFont" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="panDefFont_Click" />
-                          </Scrollable>
+                          <StackLayout Orientation="Vertical">
+                            <Label x:Name="lblFont" />
+                            <Scrollable x:Name="panDefFont" Border="Bezel">
+                              <Label x:Name="lblChartFont" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="panDefFont_Click" />
+                            </Scrollable>
+                          </StackLayout>
                         </TableRow>
 
                         <TableRow ScaleHeight="True" />
@@ -394,26 +397,17 @@
                     <StackLayoutItem />
                     <CheckBox x:Name="chkShortKinshipForm" />
                     <StackLayoutItem />
-                    <CheckBox x:Name="chkUseSurnamesInPSF" />
-                    <CheckBox x:Name="chkUseBirthDatesInPSF" />
-
-                    <TableLayout Spacing="4,4">
-                      <TableRow>
-                        <Label x:Name="lblMatchPatternMethod" />
-                        <ComboBox x:Name="cmbMatchPatternMethod" ReadOnly="True" />
-                      </TableRow>
-                    </TableLayout>
 
                   </StackLayout>
 
                 </TableRow>
+
                 <TableRow ScaleHeight="True" />
               </TableLayout>
             </TabPage>
 
             <TabPage x:Name="pageViewPersons">
               <TableLayout Style="paddedTable8">
-
                 <TableRow>
 
                   <TableCell ScaleWidth="True">
@@ -429,8 +423,25 @@
                   </TableCell>
 
                 </TableRow>
-
               </TableLayout>
+            </TabPage>
+
+            <TabPage x:Name="pageNavigation">
+              <StackLayout Style="vertListStack">
+                <CheckBox x:Name="chkUseSurnamesInPSF" />
+                <CheckBox x:Name="chkUseBirthDatesInPSF" />
+
+                <TableLayout Spacing="4,4">
+                  <TableRow>
+                    <Label x:Name="lblMatchPatternMethod" />
+                    <ComboBox x:Name="cmbMatchPatternMethod" ReadOnly="True" />
+                  </TableRow>
+                </TableLayout>
+
+                <CheckBox x:Name="chkSAFByAllNames" />
+
+                <StackLayoutItem Expand="True" />
+              </StackLayout>
             </TabPage>
 
           </TabControl>
@@ -482,7 +493,6 @@
               <ComboBox x:Name="cmbChartWindowsShowMode" ReadOnly="True" />
             </StackLayout>
 
-            <CheckBox x:Name="chkSAFByAllNames" />
             <CheckBox x:Name="chkShortenDateRanges" />
             <CheckBox x:Name="chkKeepInfoPansOverallSize" />
             <CheckBox x:Name="chkFilesOverwriteWarn" />

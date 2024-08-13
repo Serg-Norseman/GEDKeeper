@@ -86,14 +86,16 @@ namespace GKCore.Lists
         {
             List<ISearchResult> result = new List<ISearchResult>();
 
-            Regex regex = GKUtils.InitMaskRegex(searchPattern);
+            if (string.IsNullOrEmpty(searchPattern))
+                return result;
 
-            int num = ContentList.Count;
-            for (int i = 0; i < num; i++) {
+            searchPattern = GKUtils.PrepareQSF(searchPattern);
+
+            for (int i = 0, num = ContentList.Count; i < num; i++) {
                 GDMRecord rec = (GDMRecord)ContentList[i].Record;
 
                 string recName = GKUtils.GetRecordName(fBaseContext.Tree, rec, false);
-                if (GKUtils.MatchesRegex(recName, regex)) {
+                if (IsMatchesMask(recName, searchPattern)) {
                     result.Add(new SearchResult(rec));
                 }
             }

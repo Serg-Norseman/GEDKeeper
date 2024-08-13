@@ -324,13 +324,6 @@
                                             <Label />
                                             <input:CheckBox x:Name="chkShortKinshipForm" />
                                             <Label />
-                                            <input:CheckBox x:Name="chkUseSurnamesInPSF" />
-                                            <input:CheckBox x:Name="chkUseBirthDatesInPSF" />
-
-                                            <StackLayout Orientation="Horizontal" Spacing="8">
-                                                <Label x:Name="lblMatchPatternMethod" />
-                                                <comcom:GKComboBox x:Name="cmbMatchPatternMethod" />
-                                            </StackLayout>
                                         </StackLayout>
 
                                     </Grid>
@@ -349,6 +342,22 @@
                                         <Button x:Name="btnColumnDown" Style="{StaticResource dlgBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_down.gif}" Clicked="btnColumnDown_Click" />
                                         <Label VerticalOptions="FillAndExpand" />
                                     </StackLayout>
+
+                                </StackLayout>
+                            </xp:TabItem>
+
+                            <xp:TabItem x:Name="pageNavigation">
+                                <StackLayout Orientation="Vertical" Spacing="8">
+
+                                    <input:CheckBox x:Name="chkUseSurnamesInPSF" />
+                                    <input:CheckBox x:Name="chkUseBirthDatesInPSF" />
+
+                                    <StackLayout Orientation="Horizontal" Spacing="8">
+                                        <Label x:Name="lblMatchPatternMethod" />
+                                        <comcom:GKComboBox x:Name="cmbMatchPatternMethod" />
+                                    </StackLayout>
+
+                                    <input:CheckBox x:Name="chkSAFByAllNames" />
 
                                 </StackLayout>
                             </xp:TabItem>
@@ -400,7 +409,6 @@
                             <comcom:GKComboBox x:Name="cmbChartWindowsShowMode" WidthRequest="200" />
                         </StackLayout>
 
-                        <input:CheckBox x:Name="chkSAFByAllNames" />
                         <input:CheckBox x:Name="chkShortenDateRanges" />
                         <input:CheckBox x:Name="chkKeepInfoPansOverallSize" />
                         <input:CheckBox x:Name="chkFilesOverwriteWarn" />

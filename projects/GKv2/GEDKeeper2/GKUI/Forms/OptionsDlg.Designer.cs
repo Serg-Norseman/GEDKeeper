@@ -194,6 +194,7 @@
         private System.Windows.Forms.Label lblMatchPatternMethod;
         private System.Windows.Forms.ComboBox cmbMatchPatternMethod;
         private System.Windows.Forms.CheckBox chkSourcePages;
+        private System.Windows.Forms.TabPage pageNavigation;
 
         private void InitializeComponent()
         {
@@ -389,6 +390,7 @@
             this.lblMatchPatternMethod = new System.Windows.Forms.Label();
             this.cmbMatchPatternMethod = new System.Windows.Forms.ComboBox();
             this.chkSourcePages = new System.Windows.Forms.CheckBox();
+            this.pageNavigation = new System.Windows.Forms.TabPage();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -433,6 +435,7 @@
             this.pagePlugins.SuspendLayout();
             this.pageSpecials.SuspendLayout();
             this.pageEventTypes.SuspendLayout();
+            this.pageNavigation.SuspendLayout();
             this.SuspendLayout();
             // 
             // PageControl1
@@ -1653,7 +1656,7 @@
             this.lblFont.Location = new System.Drawing.Point(12, 188);
             this.lblFont.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.lblFont.Name = "lblFont";
-            this.lblFont.Size = new System.Drawing.Size(70, 20);
+            this.lblFont.Size = new System.Drawing.Size(100, 20);
             this.lblFont.TabIndex = 0;
             this.lblFont.Text = "lblFont";
             // 
@@ -1834,6 +1837,7 @@
             // 
             this.PageControl2.Controls.Add(this.pageViewCommon);
             this.PageControl2.Controls.Add(this.pageViewPersons);
+            this.PageControl2.Controls.Add(this.pageNavigation);
             this.PageControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PageControl2.Location = new System.Drawing.Point(10, 10);
             this.PageControl2.Margin = new System.Windows.Forms.Padding(2);
@@ -1859,10 +1863,6 @@
             this.pageViewCommon.Controls.Add(this.chkShortKinshipForm);
             this.pageViewCommon.Controls.Add(this.chkAutoSortChildren);
             this.pageViewCommon.Controls.Add(this.chkHighlightUnmarried);
-            this.pageViewCommon.Controls.Add(this.chkUseSurnamesInPSF);
-            this.pageViewCommon.Controls.Add(this.chkUseBirthDatesInPSF);
-            this.pageViewCommon.Controls.Add(this.lblMatchPatternMethod);
-            this.pageViewCommon.Controls.Add(this.cmbMatchPatternMethod);
             this.pageViewCommon.Location = new System.Drawing.Point(4, 26);
             this.pageViewCommon.Margin = new System.Windows.Forms.Padding(2);
             this.pageViewCommon.Name = "pageViewCommon";
@@ -2130,43 +2130,6 @@
             this.chkShortKinshipForm.TabIndex = 4;
             this.chkShortKinshipForm.Text = "chkShortKinshipForm";
             // 
-            // chkUseSurnamesInPSF
-            // 
-            this.chkUseSurnamesInPSF.Location = new System.Drawing.Point(11, 466);
-            this.chkUseSurnamesInPSF.Margin = new System.Windows.Forms.Padding(2);
-            this.chkUseSurnamesInPSF.Name = "chkUseSurnamesInPSF";
-            this.chkUseSurnamesInPSF.Size = new System.Drawing.Size(500, 21);
-            this.chkUseSurnamesInPSF.TabIndex = 4;
-            this.chkUseSurnamesInPSF.Text = "chkUseSurnamesInPSF";
-            // 
-            // chkUseBirthDatesInPSF
-            // 
-            this.chkUseBirthDatesInPSF.Location = new System.Drawing.Point(11, 492);
-            this.chkUseBirthDatesInPSF.Margin = new System.Windows.Forms.Padding(2);
-            this.chkUseBirthDatesInPSF.Name = "chkUseBirthDatesInPSF";
-            this.chkUseBirthDatesInPSF.Size = new System.Drawing.Size(500, 21);
-            this.chkUseBirthDatesInPSF.TabIndex = 4;
-            this.chkUseBirthDatesInPSF.Text = "chkUseBirthDatesInPSF";
-            // 
-            // lblMatchPatternMethod
-            // 
-            this.lblMatchPatternMethod.AutoSize = true;
-            this.lblMatchPatternMethod.Location = new System.Drawing.Point(11, 526);
-            this.lblMatchPatternMethod.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblMatchPatternMethod.Name = "lblMatchPatternMethod";
-            this.lblMatchPatternMethod.Size = new System.Drawing.Size(175, 21);
-            this.lblMatchPatternMethod.TabIndex = 7;
-            this.lblMatchPatternMethod.Text = "lblMatchPatternMethod";
-            // 
-            // cmbMatchPatternMethod
-            // 
-            this.cmbMatchPatternMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbMatchPatternMethod.Location = new System.Drawing.Point(233, 523);
-            this.cmbMatchPatternMethod.Margin = new System.Windows.Forms.Padding(2);
-            this.cmbMatchPatternMethod.Name = "cmbMatchPatternMethod";
-            this.cmbMatchPatternMethod.Size = new System.Drawing.Size(230, 25);
-            this.cmbMatchPatternMethod.TabIndex = 8;
-            // 
             // pageViewPersons
             // 
             this.pageViewPersons.Controls.Add(this.panel1);
@@ -2178,6 +2141,66 @@
             this.pageViewPersons.Size = new System.Drawing.Size(713, 712);
             this.pageViewPersons.TabIndex = 1;
             this.pageViewPersons.Text = "pageViewPersons";
+            // 
+            // chkUseSurnamesInPSF
+            // 
+            this.chkUseSurnamesInPSF.Location = new System.Drawing.Point(11, 8);
+            this.chkUseSurnamesInPSF.Margin = new System.Windows.Forms.Padding(2);
+            this.chkUseSurnamesInPSF.Name = "chkUseSurnamesInPSF";
+            this.chkUseSurnamesInPSF.Size = new System.Drawing.Size(500, 21);
+            this.chkUseSurnamesInPSF.TabIndex = 4;
+            this.chkUseSurnamesInPSF.Text = "chkUseSurnamesInPSF";
+            // 
+            // chkUseBirthDatesInPSF
+            // 
+            this.chkUseBirthDatesInPSF.Location = new System.Drawing.Point(11, 34);
+            this.chkUseBirthDatesInPSF.Margin = new System.Windows.Forms.Padding(2);
+            this.chkUseBirthDatesInPSF.Name = "chkUseBirthDatesInPSF";
+            this.chkUseBirthDatesInPSF.Size = new System.Drawing.Size(500, 21);
+            this.chkUseBirthDatesInPSF.TabIndex = 4;
+            this.chkUseBirthDatesInPSF.Text = "chkUseBirthDatesInPSF";
+            // 
+            // lblMatchPatternMethod
+            // 
+            this.lblMatchPatternMethod.AutoSize = true;
+            this.lblMatchPatternMethod.Location = new System.Drawing.Point(11, 68);
+            this.lblMatchPatternMethod.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblMatchPatternMethod.Name = "lblMatchPatternMethod";
+            this.lblMatchPatternMethod.Size = new System.Drawing.Size(175, 21);
+            this.lblMatchPatternMethod.TabIndex = 7;
+            this.lblMatchPatternMethod.Text = "lblMatchPatternMethod";
+            // 
+            // cmbMatchPatternMethod
+            // 
+            this.cmbMatchPatternMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMatchPatternMethod.Location = new System.Drawing.Point(233, 66);
+            this.cmbMatchPatternMethod.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbMatchPatternMethod.Name = "cmbMatchPatternMethod";
+            this.cmbMatchPatternMethod.Size = new System.Drawing.Size(230, 25);
+            this.cmbMatchPatternMethod.TabIndex = 8;
+            // 
+            // chkSAFByAllNames
+            // 
+            this.chkSAFByAllNames.Location = new System.Drawing.Point(11, 102);
+            this.chkSAFByAllNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkSAFByAllNames.Name = "chkSAFByAllNames";
+            this.chkSAFByAllNames.Size = new System.Drawing.Size(600, 22);
+            this.chkSAFByAllNames.TabIndex = 9;
+            this.chkSAFByAllNames.Text = "chkSAFByAllNames";
+            // 
+            // pageNavigation
+            // 
+            this.pageNavigation.Controls.Add(this.chkUseSurnamesInPSF);
+            this.pageNavigation.Controls.Add(this.chkUseBirthDatesInPSF);
+            this.pageNavigation.Controls.Add(this.lblMatchPatternMethod);
+            this.pageNavigation.Controls.Add(this.cmbMatchPatternMethod);
+            this.pageNavigation.Controls.Add(this.chkSAFByAllNames);
+            this.pageNavigation.Location = new System.Drawing.Point(4, 26);
+            this.pageNavigation.Margin = new System.Windows.Forms.Padding(2);
+            this.pageNavigation.Name = "pageNavigation";
+            this.pageNavigation.Size = new System.Drawing.Size(713, 712);
+            this.pageNavigation.TabIndex = 1;
+            this.pageNavigation.Text = "pageNavigation";
             // 
             // panel1
             // 
@@ -2353,7 +2376,6 @@
             this.pageSpecials.Controls.Add(this.cmbChartWindowsShowMode);
             this.pageSpecials.Controls.Add(this.chkExtendedTree);
             this.pageSpecials.Controls.Add(this.chkUseExtraControls);
-            this.pageSpecials.Controls.Add(this.chkSAFByAllNames);
             this.pageSpecials.Controls.Add(this.chkShortenDateRanges);
             this.pageSpecials.Controls.Add(this.chkKeepInfoPansOverallSize);
             this.pageSpecials.Controls.Add(this.chkFilesOverwriteWarn);
@@ -2434,15 +2456,6 @@
             this.chkUseExtraControls.Size = new System.Drawing.Size(600, 22);
             this.chkUseExtraControls.TabIndex = 12;
             this.chkUseExtraControls.Text = "chkUseExtraControls";
-            // 
-            // chkSAFByAllNames
-            // 
-            this.chkSAFByAllNames.Location = new System.Drawing.Point(20, 206);
-            this.chkSAFByAllNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkSAFByAllNames.Name = "chkSAFByAllNames";
-            this.chkSAFByAllNames.Size = new System.Drawing.Size(600, 22);
-            this.chkSAFByAllNames.TabIndex = 13;
-            this.chkSAFByAllNames.Text = "chkSAFByAllNames";
             // 
             // chkShortenDateRanges
             // 
@@ -2727,6 +2740,7 @@
             this.pageSpecials.ResumeLayout(false);
             this.pageEventTypes.ResumeLayout(false);
             this.pagePlugins.ResumeLayout(false);
+            this.pageNavigation.ResumeLayout(false);
             this.ResumeLayout(false);
         }
     }

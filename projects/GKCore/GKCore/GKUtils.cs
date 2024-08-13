@@ -538,6 +538,22 @@ namespace GKCore
 
         #region Match functions
 
+        public static string PrepareQSF(string mask)
+        {
+            if (string.IsNullOrEmpty(mask))
+                return mask;
+
+            if (mask[0] != '*')
+                mask = '*' + mask;
+
+            if (mask[mask.Length - 1] != '*')
+                mask = mask + '*';
+
+            mask = mask.Replace(' ', '*');
+
+            return mask;
+        }
+
         private static readonly char[] MaskDelimiters = { '*', '?', '|' };
 
         public static string PrepareMask(string mask)
