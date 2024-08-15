@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -61,8 +61,16 @@ namespace GKUI.Platform.Handlers
 
         public byte[] GetBytes(string format)
         {
-            ImageFormat imgFormat = ImageFormat.Bmp;
+            using (var stream = GetStream(format)) {
+                return stream.ToArray();
+            }
+        }
+
+        public MemoryStream GetStream(string format)
+        {
+            ImageFormat imgFormat;
             switch (format) {
+                default:
                 case "bmp":
                     imgFormat = ImageFormat.Bmp;
                     break;
@@ -84,10 +92,9 @@ namespace GKUI.Platform.Handlers
                     break;
             }
 
-            using (var stream = new MemoryStream()) {
-                Handle.Save(stream, imgFormat);
-                return stream.ToArray();
-            }
+            var stream = new MemoryStream();
+            Handle.Save(stream, imgFormat);
+            return stream;
         }
 
         public IImage Resize(int newWidth, int newHeight)

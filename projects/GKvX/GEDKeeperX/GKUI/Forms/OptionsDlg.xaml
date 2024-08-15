@@ -386,6 +386,7 @@
                                 <input:CheckBox x:Name="chkSourcePages" />
                             </StackLayout>
                             <input:CheckBox x:Name="chkGenerations" />
+                            <input:CheckBox x:Name="chkPortraits" />
 
                             <Grid ColumnSpacing="4" RowSpacing="4">
                                 <Label x:Name="lblAscendNumbering" Grid.Column="0" Grid.Row="0" />

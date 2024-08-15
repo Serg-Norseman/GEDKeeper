@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -330,8 +330,8 @@ namespace GKCore.Export
             fWriter.AddParagraphChunk(GKUtils.GetPedigreeLifeStr(iRec, PedigreeFormat.Compact), fTextFont);
             fWriter.EndParagraph();
 
-            IImage image = fBase.Context.GetPrimaryBitmap(iRec, 0, 0, false);
-            fWriter.AddImage(image);
+            IImage image = fBase.Context.GetPrimaryBitmap(iRec, fDefImageWidth, fDefImageHeight, false);
+            fWriter.AddImage(image, TextAlignment.taRight);
 
             GDMIndividualRecord father, mother;
             fBase.Context.Tree.GetParents(iRec, out father, out mother);

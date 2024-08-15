@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -193,8 +194,34 @@ namespace GKCore.Export
             fStream.WriteLine("</a>");
         }
 
-        public override void AddImage(IImage image)
+        private readonly string[] iAlignments = { "left", "center", "right", "justify" };
+
+        private int fImagesIndex = 0;
+
+        public override void AddImage(IImage image, TextAlignment alignment)
         {
+            try {
+                if (image == null) return;
+
+                var bytes = image.GetBytes("png");
+
+                var imName = Path.DirectorySeparatorChar + string.Format("{0}.png", ++fImagesIndex);
+
+                string expFileName = Path.GetFileNameWithoutExtension(fFileName);
+                string imagesDir = Path.GetDirectoryName(fFileName) + Path.DirectorySeparatorChar + expFileName;
+                string imFilePath = imagesDir + imName;
+                string imFileRef = "." + Path.DirectorySeparatorChar + expFileName + imName;
+
+                if (!Directory.Exists(imagesDir)) {
+                    Directory.CreateDirectory(imagesDir);
+                }
+
+                File.WriteAllBytes(imFilePath, bytes);
+
+                fStream.WriteLine(string.Format("<img src=\"{0}\" align=\"{1}\" />", imFileRef, iAlignments[(int)alignment]));
+            } catch (Exception ex) {
+                Logger.WriteError("HTMLWriter.AddImage()", ex);
+            }
         }
 
         public override void BeginTable(int columnsCount, int rowsCount)

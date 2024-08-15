@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -120,28 +120,32 @@ namespace GKCore.Export
 
         #endregion
 
-        public static itImage ConvertImage(IImage image)
+        public static itImage ConvertImage(IImage image, string imName)
         {
-            //var img = itImage.GetInstance(sdImage, ImageFormat.Bmp);
-
-            byte[] bytes = image.GetBytes();
-            var img = itImage.GetInstance(bytes);
-            return img;
+            try {
+                byte[] bytes = image.GetBytes("png");
+                return itImage.GetInstance(bytes);
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("PDFRenderer.ConvertImage({0})", imName), ex);
+                return null;
+            }
         }
 
         public override void DrawImage(IImage image, float x, float y,
                                        float width, float height, string imName)
         {
             try {
-                if (fCanvas != null && image != null) {
-                    x = CheckVal(x, false);
-                    y = CheckVal(y, true, height);
-                    width = CheckVal(width);
-                    height = CheckVal(height);
+                if (fCanvas == null || image == null) return;
 
-                    var img = ConvertImage(image);
-                    fCanvas.AddImage(img, width, 0, 0, height, x, y);
-                }
+                x = CheckVal(x, false);
+                y = CheckVal(y, true, height);
+                width = CheckVal(width);
+                height = CheckVal(height);
+
+                var img = ConvertImage(image, imName);
+                if (img == null) return;
+
+                fCanvas.AddImage(img, width, 0, 0, height, x, y);
             } catch (Exception ex) {
                 Logger.WriteError(string.Format("PDFRenderer.DrawImage({0})", imName), ex);
             }

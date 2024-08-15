@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -141,7 +141,7 @@ namespace GKCore.Export
         public abstract void AddParagraphChunkLink(string text, IFont font, string link, bool sup = false);
         public abstract void EndParagraph();
 
-        public abstract void AddImage(IImage image);
+        public abstract void AddImage(IImage image, TextAlignment alignment);
 
         public abstract void BeginTable(int columnsCount, int rowsCount);
         public abstract void EndTable();

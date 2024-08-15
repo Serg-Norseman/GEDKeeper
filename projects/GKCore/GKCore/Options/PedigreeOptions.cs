@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -46,6 +46,7 @@ namespace GKCore.Options
         public bool IncludeSources;
         public bool IncludeSourcePages;
         public bool IncludeGenerations;
+        public bool IncludePortraits;
 
         public PedigreeNumbering AscendNumbering;
         public PedigreeNumbering DescendNumbering;
@@ -63,6 +64,7 @@ namespace GKCore.Options
             IncludeSources = true;
             IncludeSourcePages = false;
             IncludeGenerations = true;
+            IncludePortraits = false;
 
             AscendNumbering = PedigreeNumbering.Kobrin_Konovalov_A;
             DescendNumbering = PedigreeNumbering.Kobrin_Konovalov_D;
@@ -79,6 +81,7 @@ namespace GKCore.Options
             IncludeSources = srcOptions.IncludeSources;
             IncludeSourcePages = srcOptions.IncludeSourcePages;
             IncludeGenerations = srcOptions.IncludeGenerations;
+            IncludePortraits = srcOptions.IncludePortraits;
 
             AscendNumbering = srcOptions.AscendNumbering;
             DescendNumbering = srcOptions.DescendNumbering;
@@ -96,6 +99,7 @@ namespace GKCore.Options
                 IncludeSources = iniFile.ReadBool("Pedigree", "IncludeSources", true);
                 IncludeSourcePages = iniFile.ReadBool("Pedigree", "IncludeSourcePages", false);
                 IncludeGenerations = iniFile.ReadBool("Pedigree", "IncludeGenerations", true);
+                IncludePortraits = iniFile.ReadBool("Pedigree", "IncludePortraits", false);
 
                 AscendNumbering = (PedigreeNumbering)iniFile.ReadInteger("Pedigree", "AscendNumbering", (int)PedigreeNumbering.Kobrin_Konovalov_A);
                 DescendNumbering = (PedigreeNumbering)iniFile.ReadInteger("Pedigree", "DescendNumbering", (int)PedigreeNumbering.Kobrin_Konovalov_D);
@@ -115,6 +119,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Pedigree", "IncludeSources", IncludeSources);
             iniFile.WriteBool("Pedigree", "IncludeSourcePages", IncludeSourcePages);
             iniFile.WriteBool("Pedigree", "IncludeGenerations", IncludeGenerations);
+            iniFile.WriteBool("Pedigree", "IncludePortraits", IncludePortraits);
 
             iniFile.WriteInteger("Pedigree", "AscendNumbering", (int)AscendNumbering);
             iniFile.WriteInteger("Pedigree", "DescendNumbering", (int)DescendNumbering);

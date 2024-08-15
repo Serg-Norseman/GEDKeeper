@@ -138,28 +138,29 @@ namespace GKCore.Export
 
         private void WriteSourceCitations(List<string> sources)
         {
-            if (fOptions.PedigreeOptions.IncludeSources && sources.Count > 0) {
-                fWriter.AddParagraphChunk(" ", fTextFont);
+            if (!fOptions.PedigreeOptions.IncludeSources || sources.Count <= 0)
+                return;
 
-                int num = sources.Count;
-                for (int i = 0; i < num; i++) {
-                    string lnk = sources[i];
+            fWriter.AddParagraphChunk(" ", fTextFont);
 
-                    if (i > 0) {
-                        fWriter.AddParagraphChunkLink(", ", fTextFont, "", true);
-                    }
+            int num = sources.Count;
+            for (int i = 0; i < num; i++) {
+                string lnk = sources[i];
 
-                    fWriter.AddParagraphChunkLink(lnk, fSupText, "src_" + lnk, true);
+                if (i > 0) {
+                    fWriter.AddParagraphChunkLink(", ", fTextFont, "", true);
                 }
+
+                fWriter.AddParagraphChunkLink(lnk, fSupText, "src_" + lnk, true);
             }
         }
 
         private void WritePerson(PedigreePerson person)
         {
-            fWriter.BeginParagraph(TextAlignment.taJustify, 6f, 6f);
+            fWriter.BeginParagraph(TextAlignment.taJustify, 12f, 6f);
+
             fWriter.AddParagraphChunkAnchor(GetIdStr(person) + ". " + GKUtils.GetNameString(person.IRec, true, false), fPersonFont, person.Id);
             fWriter.AddParagraphChunk(GKUtils.GetPedigreeLifeStr(person.IRec, fOptions.PedigreeOptions.Format), fTextFont);
-
             WriteSourceCitations(person.Sources);
 
             fWriter.EndParagraph();
@@ -199,6 +200,12 @@ namespace GKCore.Export
 
         private void WriteExcessFmt(PedigreePerson person)
         {
+            if (fOptions.PedigreeOptions.IncludePortraits) {
+                float factor = (fWriter is PDFWriter) ? 0.6f : 1.0f;
+                IImage image = fBase.Context.GetPrimaryBitmap(person.IRec, (int)(fDefImageWidth * factor), (int)(fDefImageHeight * factor), false);
+                fWriter.AddImage(image, TextAlignment.taRight);
+            }
+
             fWriter.AddParagraph(LangMan.LS(LSID.Sex) + ": " + GKUtils.SexStr(person.IRec.Sex), fTextFont);
 
             string st = GKUtils.GetLifeExpectancyStr(person.IRec);
@@ -514,17 +521,17 @@ namespace GKCore.Export
             IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
             IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
 
-            fPersonFont = fWriter.CreateFont("", 12f/*10f*/, true, false, clrBlack);
-            fLinkFont = fWriter.CreateFont("", 10f/*8f*/, false, true, clrBlue);
-            fTextFont = fWriter.CreateFont("", 10f/*8f*/, false, false, clrBlack);
-            fSupText = fWriter.CreateFont("", (isRtf ? 12f : 5f) /*5f*/, false, false, clrBlue);
-            var chapFont = fWriter.CreateFont("", 14f/*16f*/, true, false, clrBlack);
+            fPersonFont = fWriter.CreateFont("", 14f, true, false, clrBlack);
+            fLinkFont = fWriter.CreateFont("", 10f, false, true, clrBlue);
+            fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
+            fSupText = fWriter.CreateFont("", (isRtf ? 12f : 5f), false, false, clrBlue);
+            var chapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
 
             fFormat = fOptions.PedigreeOptions.Format;
 
             bool includeGens = fOptions.PedigreeOptions.IncludeGenerations;
 
-            var titleFont = fWriter.CreateFont("", 16f/*20f*/, true, false, clrBlack);
+            var titleFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
             fWriter.AddParagraph(fTitle, titleFont, TextAlignment.taCenter);
 
             fPersonList = new List<PedigreePerson>();
@@ -542,7 +549,7 @@ namespace GKCore.Export
                         curLevel = person.Level;
                         string genTitle = LangMan.LS(LSID.Generation) + " " + ConvertHelper.GetRome(curLevel);
 
-                        fWriter.BeginParagraph(TextAlignment.taLeft, 12f, 6f);
+                        fWriter.BeginParagraph(TextAlignment.taLeft, 16f, 6f);
                         fWriter.AddParagraphChunk(genTitle, chapFont);
                         fWriter.EndParagraph();
                     }
@@ -551,7 +558,7 @@ namespace GKCore.Export
                 }
 
                 if (fSourceList.Count > 0) {
-                    fWriter.BeginParagraph(TextAlignment.taCenter, 12f, 6f);
+                    fWriter.BeginParagraph(TextAlignment.taCenter, 16f, 6f);
                     fWriter.AddParagraphChunk(LangMan.LS(LSID.RPSources), chapFont);
                     fWriter.EndParagraph();
 

@@ -234,6 +234,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkSources").Checked = fOptions.PedigreeOptions.IncludeSources;
             GetControl<ICheckBox>("chkSourcePages").Checked = fOptions.PedigreeOptions.IncludeSourcePages;
             GetControl<ICheckBox>("chkGenerations").Checked = fOptions.PedigreeOptions.IncludeGenerations;
+            GetControl<ICheckBox>("chkPortraits").Checked = fOptions.PedigreeOptions.IncludePortraits;
 
             switch (fOptions.PedigreeOptions.Format) {
                 case PedigreeFormat.Excess:
@@ -255,6 +256,7 @@ namespace GKCore.Controllers
             fOptions.PedigreeOptions.IncludeSources = GetControl<ICheckBox>("chkSources").Checked;
             fOptions.PedigreeOptions.IncludeSourcePages = GetControl<ICheckBox>("chkSourcePages").Checked;
             fOptions.PedigreeOptions.IncludeGenerations = GetControl<ICheckBox>("chkGenerations").Checked;
+            fOptions.PedigreeOptions.IncludePortraits = GetControl<ICheckBox>("chkPortraits").Checked;
 
             if (GetControl<IRadioButton>("radExcess").Checked) {
                 fOptions.PedigreeOptions.Format = PedigreeFormat.Excess;
@@ -1008,6 +1010,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkSources").Text = LangMan.LS(LSID.IncludeSources);
             GetControl<ICheckBox>("chkSourcePages").Text = LangMan.LS(LSID.IncludeSourcePages);
             GetControl<ICheckBox>("chkGenerations").Text = LangMan.LS(LSID.IncludeGenerations);
+            GetControl<ICheckBox>("chkPortraits").Text = LangMan.LS(LSID.IncludePortraits);
 
             GetControl<IGroupBox>("grpPedigreeFormat").Text = LangMan.LS(LSID.PedigreeFormat);
             GetControl<IRadioButton>("radExcess").Text = LangMan.LS(LSID.PF1);

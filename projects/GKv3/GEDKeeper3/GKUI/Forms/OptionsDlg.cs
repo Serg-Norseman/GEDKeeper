@@ -212,6 +212,7 @@ namespace GKUI.Forms
         private ComboBox cmbMatchPatternMethod;
         private CheckBox chkSourcePages;
         private TabPage pageNavigation;
+        private CheckBox chkPortraits;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion

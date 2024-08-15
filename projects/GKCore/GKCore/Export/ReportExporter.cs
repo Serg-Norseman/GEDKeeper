@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,10 +34,16 @@ namespace GKCore.Export
         protected string fTitle;
         private bool fAlbumPage;
 
+        protected int fDefImageHeight;
+        protected int fDefImageWidth;
+
         protected ReportExporter(IBaseWindow baseWin, bool albumPage)
             : base(baseWin)
         {
             fAlbumPage = albumPage;
+
+            fDefImageHeight = 320;
+            fDefImageWidth = 200;
         }
 
         protected abstract void InternalGenerate();

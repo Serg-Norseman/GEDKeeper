@@ -467,6 +467,7 @@
                 <CheckBox x:Name="chkSourcePages" />
               </StackLayout>
               <CheckBox x:Name="chkGenerations" />
+              <CheckBox x:Name="chkPortraits" />
 
               <TableLayout Style="paddedTable8">
                 <TableRow>

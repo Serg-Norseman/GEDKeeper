@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@
 #define UNOFF_ITS
 #endif
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using BSLib;
@@ -374,25 +375,30 @@ namespace GKCore.Export
             fDocument.Add(new Chunk(line1));
         }
 
-        public override void AddImage(IImage image)
+        public override void AddImage(IImage image, TextAlignment alignment)
         {
-            if (image != null) {
-                itImage img = PDFRenderer.ConvertImage(image);
+            try {
+                if (image == null) return;
 
-                float fitWidth = fColumnWidth * 0.5f;
-                img.ScaleToFit(fitWidth, fitWidth);
+                itImage img = PDFRenderer.ConvertImage(image, string.Empty);
+                if (img == null) return;
+
+                ///float fitWidth = fColumnWidth * 0.5f;
+                ///img.ScaleToFit(fitWidth, fitWidth);
 
                 // FIXME: the moving, if the page height is insufficient for the image height
 
-                //img.Alignment = Image.TEXTWRAP;
-                img.IndentationLeft = 5f;
-                img.SpacingBefore = 5f;
-                img.SpacingAfter = 5f;
+                img.Alignment = itImage.TEXTWRAP | iAlignments[(int)alignment];
+                img.IndentationLeft = 4f;
+                img.SpacingBefore = 4f;
+                img.SpacingAfter = 4f;
 
                 //Paragraph imgpar = new Paragraph(new Chunk(img, 0, 0, true));
                 //imgpar.KeepTogether = true;
 
                 AddElement(img);
+            } catch (Exception ex) {
+                Logger.WriteError("PDFWriter.AddImage()", ex);
             }
         }
 
