@@ -65,6 +65,7 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCore\Controllers\PartialViewController.cs" />
     <Compile Include="GKCore\Controllers\SourceCallNumberDlgController.cs" />
     <Compile Include="GKCore\Design\Views\ISourceCallNumberEditDlg.cs" />
     <Compile Include="GKCore\Design\Views\ILocExpertDlg.cs" />

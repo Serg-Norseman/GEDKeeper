@@ -95,6 +95,7 @@
         <EmbeddedResource Include="Resources\btn_circle.png" />
         <EmbeddedResource Include="Resources\btn_portrait.png" />
         <EmbeddedResource Include="Resources\tg_recruit.png" />
+        <EmbeddedResource Include="Resources\btn_chart.gif" />
     </ItemGroup>
 
 

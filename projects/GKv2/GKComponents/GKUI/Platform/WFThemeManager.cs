@@ -103,7 +103,7 @@ namespace GKUI.Themes
                 { ThemeElement.Glyph_TreeBoth, "Resources.btn_tree_both.gif" },
                 { ThemeElement.Glyph_Pedigree, "Resources.btn_scroll.gif" },
                 { ThemeElement.Glyph_Maps, "" },
-                { ThemeElement.Glyph_Stats, "Resources.btn_table.gif" },
+                { ThemeElement.Glyph_Stats, "Resources.btn_chart.gif" },
 
                 { ThemeElement.Glyph_Organizer, "Resources.btn_organizer.gif" },
                 { ThemeElement.Glyph_Slideshow, "Resources.btn_slideshow.png" },

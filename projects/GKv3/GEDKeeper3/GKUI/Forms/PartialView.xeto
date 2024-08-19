@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:complat="clr-namespace:GKUI.Platform;assembly=GKComponents"
+  x:Class="GKUI.Forms.PartialView"
+  Closing="Form_Closing" Closed="Form_Closed" Load="Form_Load" KeyDown="Form_KeyDown" 
+  Icon="{Resource Resources.icon_gedkeeper.png, GKCore}">
+
+  <Form.ToolBar>
+    <ToolBar TextAlign="Right" Style="tbsi">
+      <ButtonToolItem x:Name="tbFileSave" Image="{Resource Resources.btn_save.gif, GKCore}" Click="miFileSave_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbRecordAdd" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="miRecordAdd_Click" />
+      <ButtonToolItem x:Name="tbRecordEdit" Image="{Resource Resources.btn_rec_edit.gif, GKCore}" Click="miRecordEdit_Click" />
+      <ButtonToolItem x:Name="tbRecordDelete" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Click="miRecordDelete_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbFilter" Image="{Resource Resources.btn_filter.gif, GKCore}" Click="miFilter_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbTreeAncestors" Image="{Resource Resources.btn_tree_ancestry.gif, GKCore}" Click="miTreeAncestors_Click" />
+      <ButtonToolItem x:Name="tbTreeDescendants" Image="{Resource Resources.btn_tree_descendants.gif, GKCore}" Click="miTreeDescendants_Click" />
+      <ButtonToolItem x:Name="tbTreeBoth" Image="{Resource Resources.btn_tree_both.gif, GKCore}" Click="miTreeBoth_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbPrev" Image="{Resource Resources.btn_left.gif, GKCore}" Enabled="false" Click="tbPrev_Click" />
+      <ButtonToolItem x:Name="tbNext" Image="{Resource Resources.btn_right.gif, GKCore}" Enabled="false" Click="tbNext_Click" />
+    </ToolBar>
+  </Form.ToolBar>
+
+  <TableLayout>
+    <TableRow ScaleHeight="True">
+      <Panel x:Name="panel" Size="980, 460" />
+    </TableRow>
+    <TableRow>
+      <TableLayout x:Name="StatusBar">
+        <TableRow>
+
+          <TableCell ScaleWidth="True">
+            <Label x:Name="panStatusText" />
+          </TableCell>
+
+          <Label x:Name="panStatusDummy" Width="20" />
+
+        </TableRow>
+      </TableLayout>
+    </TableRow>
+  </TableLayout>
+
+</Form>

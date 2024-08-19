@@ -1066,8 +1066,9 @@ namespace GKCore
         /* 989 */ IncludeSourcePages,
         /* 990 */ Navigation,
         /* 991 */ IncludePortraits,
+        /* 992 */ PartialViewTip,
 
-        /* 000 */ Last = IncludePortraits
+        /* 000 */ Last = PartialViewTip
     }
 
 
@@ -2087,6 +2088,7 @@ namespace GKCore
             /* 989 */ "Include source pages",
             /* 990 */ "Navigation",
             /* 991 */ "Include portraits",
+            /* 992 */ "Partial view",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

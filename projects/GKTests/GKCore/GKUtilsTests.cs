@@ -176,6 +176,9 @@ namespace GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.SetNameParts(null, surname, name, patronymic); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNameParts(null, null); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetNameParts(null, null, true); });
+
+            var personalName = new GDMPersonalName();
+            Assert.DoesNotThrow(() => { GKUtils.SetNameParts(personalName, null, null, null); });
         }
 
         [Test]

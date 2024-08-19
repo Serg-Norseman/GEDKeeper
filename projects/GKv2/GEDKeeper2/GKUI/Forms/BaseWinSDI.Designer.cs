@@ -24,6 +24,7 @@
         private System.Windows.Forms.ToolStripButton tbPrev;
         private System.Windows.Forms.ToolStripButton tbNext;
         private System.Windows.Forms.ToolStripSeparator TBS8;
+        private System.Windows.Forms.ToolStripSeparator TBS9;
         private System.Windows.Forms.ToolStripButton tbSendMail;
         private System.Windows.Forms.MenuStrip MainMenu1;
         private System.Windows.Forms.ToolStripMenuItem miFile;
@@ -116,6 +117,7 @@
         private System.Windows.Forms.ToolStripMenuItem miCopyContent;
         private System.Windows.Forms.ToolStripMenuItem miPhotosBatchAdding;
         private System.Windows.Forms.ToolStripMenuItem miCleanImagesCache;
+        private System.Windows.Forms.ToolStripButton tbPartialView;
 
         private void InitializeComponent()
         {
@@ -233,6 +235,8 @@
             this.miCopyContent = new System.Windows.Forms.ToolStripMenuItem();
             this.miPhotosBatchAdding = new System.Windows.Forms.ToolStripMenuItem();
             this.miCleanImagesCache = new System.Windows.Forms.ToolStripMenuItem();
+            this.TBS9 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbPartialView = new System.Windows.Forms.ToolStripButton();
             this.StatusBar.SuspendLayout();
             this.ToolBar1.SuspendLayout();
             this.MenuPedigree.SuspendLayout();
@@ -308,7 +312,9 @@
                                     this.tbPrev,
                                     this.tbNext,
                                     this.TBS8,
-                                    this.tbSendMail});
+                                    this.tbSendMail,
+                                    this.TBS9,
+                                    this.tbPartialView});
             this.ToolBar1.Location = new System.Drawing.Point(0, 28);
             this.ToolBar1.Name = "ToolBar1";
             this.ToolBar1.Size = new System.Drawing.Size(976, 25);
@@ -478,6 +484,12 @@
             this.tbSendMail.Name = "tbSendMail";
             this.tbSendMail.Size = new System.Drawing.Size(23, 22);
             this.tbSendMail.Click += new System.EventHandler(this.tbSendMail_Click);
+            // 
+            // tbPartialView
+            // 
+            this.tbPartialView.Name = "tbPartialView";
+            this.tbPartialView.Size = new System.Drawing.Size(23, 22);
+            this.tbPartialView.Click += new System.EventHandler(this.tbPartialView_Click);
             // 
             // MainMenu1
             // 

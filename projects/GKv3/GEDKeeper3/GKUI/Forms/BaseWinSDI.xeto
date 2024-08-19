@@ -41,12 +41,14 @@
       </complat:GKDropDownToolItem>
 
       <SeparatorToolItem />
-      <ButtonToolItem x:Name="tbStats" Image="{Resource Resources.btn_table.gif, GKCore}" Click="miStats_Click" />
+      <ButtonToolItem x:Name="tbStats" Image="{Resource Resources.btn_chart.gif, GKCore}" Click="miStats_Click" />
       <SeparatorToolItem />
       <ButtonToolItem x:Name="tbPrev" Image="{Resource Resources.btn_left.gif, GKCore}" Enabled="false" Click="tbPrev_Click" />
       <ButtonToolItem x:Name="tbNext" Image="{Resource Resources.btn_right.gif, GKCore}" Enabled="false" Click="tbNext_Click" />
       <SeparatorToolItem />
       <ButtonToolItem x:Name="tbSendMail" Image="{Resource Resources.btn_mail.gif, GKCore}" Click="tbSendMail_Click" />
+      <SeparatorToolItem />
+      <ButtonToolItem x:Name="tbPartialView" Image="{Resource Resources.btn_table.gif, GKCore}" Click="tbPartialView_Click" />
     </ToolBar>
   </Form.ToolBar>
 
@@ -94,7 +96,7 @@
         <SeparatorMenuItem />
         <ButtonMenuItem x:Name="miMap" Shortcut="CommonModifier+M" Click="miMap_Click" />
         <SeparatorMenuItem />
-        <ButtonMenuItem x:Name="miStats" Shortcut="CommonModifier+T" Image="{Resource Resources.btn_table.gif, GKCore}" Click="miStats_Click" />
+        <ButtonMenuItem x:Name="miStats" Shortcut="CommonModifier+T" Image="{Resource Resources.btn_chart.gif, GKCore}" Click="miStats_Click" />
         <SeparatorMenuItem />
         <ButtonMenuItem x:Name="miRelationshipCalculator" Click="miRelationshipCalculator_Click" />
       </ButtonMenuItem>

@@ -104,7 +104,7 @@ namespace GKUI.Forms
                 new LaunchItem(LangMan.LS(LSID.MIPedigree), LangMan.LS(LSID.RelationshipCalculator), (item) => {
                     GetBaseWin()?.Controller.ShowRelationshipCalculator();
                 }),
-                new LaunchItem(LangMan.LS(LSID.MIPedigree), LangMan.LS(LSID.MIStats), UIHelper.LoadResourceImage("Resources.btn_table.gif"), (item) => {
+                new LaunchItem(LangMan.LS(LSID.MIPedigree), LangMan.LS(LSID.MIStats), UIHelper.LoadResourceImage("Resources.btn_chart.gif"), (item) => {
                     GetBaseWin()?.Controller.ShowStats();
                 }),
 

@@ -44,6 +44,7 @@
         <EmbeddedResource Include="Resources\btn_export@2x.png" />
         <EmbeddedResource Include="Resources\btn_exit@2x.png" />
         <EmbeddedResource Include="Resources\btn_search@2x.png" />
+        <EmbeddedResource Include="Resources\btn_chart@2x.png" />
     </ItemGroup>
 
 </Project>

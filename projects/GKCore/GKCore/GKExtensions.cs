@@ -25,6 +25,11 @@ namespace GKCore
 {
     public static class GKExtensions
     {
+        public static string SafeTrim(this string input)
+        {
+            return !string.IsNullOrEmpty(input) ? input.Trim() : string.Empty;
+        }
+
         public static string GetEventKey(this GDMCustomEvent customEvent)
         {
             return (customEvent == null) ? string.Empty : customEvent.GetTagName() + ":" + customEvent.Classification;

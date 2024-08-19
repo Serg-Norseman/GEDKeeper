@@ -31,7 +31,6 @@ using GKCore.Charts;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
@@ -104,10 +103,11 @@ namespace GKUI.Forms
             tbTreeDescendants.Image = UIHelper.LoadResourceImage("Resources.btn_tree_descendants.gif");
             tbTreeBoth.Image = UIHelper.LoadResourceImage("Resources.btn_tree_both.gif");
             tbPedigree.Image = UIHelper.LoadResourceImage("Resources.btn_scroll.gif");
-            tbStats.Image = UIHelper.LoadResourceImage("Resources.btn_table.gif");
+            tbStats.Image = UIHelper.LoadResourceImage("Resources.btn_chart.gif");
             tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
             tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
             tbSendMail.Image = UIHelper.LoadResourceImage("Resources.btn_mail.gif");
+            tbPartialView.Image = UIHelper.LoadResourceImage("Resources.btn_table.gif");
 
             UIHelper.FixToolStrip(ToolBar1);
 
@@ -296,11 +296,8 @@ namespace GKUI.Forms
 
         private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
-            //IListView recView = contextMenu.SourceControl as GKListView;
-            // (recView == fController.GetRecordsViewByType(GDMRecordType.rtIndividual))
-
-            var selectedRecType = fController.GetSelectedRecordType();
-            miContRecordDuplicate.Enabled = (selectedRecType == GDMRecordType.rtIndividual || selectedRecType == GDMRecordType.rtLocation);
+            var recType = GetSelectedRecordType();
+            miContRecordDuplicate.Enabled = (recType == GDMRecordType.rtIndividual || recType == GDMRecordType.rtLocation);
         }
 
         private void miRecordAdd_Click(object sender, EventArgs e)
@@ -325,7 +322,7 @@ namespace GKUI.Forms
 
         private void miRecordMerge_Click(object sender, EventArgs e)
         {
-            var recView = contextMenu.SourceControl as GKListView;
+            var recView = GetRecordsViewByType(GetSelectedRecordType()) as GKListView;
             if (recView != null) {
                 var items = recView.GetSelectedItems();
                 BaseController.ShowRecMerge(this, this,
@@ -356,8 +353,7 @@ namespace GKUI.Forms
 
         private void miCopyContent_Click(object sender, EventArgs e)
         {
-            var hyperView = summaryMenu.SourceControl as HyperView;
-            fController.CopyContent(hyperView);
+            fController.CopyContent();
         }
 
         #endregion
@@ -492,7 +488,7 @@ namespace GKUI.Forms
 
         public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal)
         {
-            fController.ShowMedia(mediaRec, modal);
+            BaseController.ShowMedia(this, mediaRec, modal);
         }
 
         #endregion
@@ -916,6 +912,11 @@ namespace GKUI.Forms
             fController.SendMail();
         }
 
+        private void tbPartialView_Click(object sender, EventArgs e)
+        {
+            fController.ShowPartialView();
+        }
+
         private void miMap_Click(object sender, EventArgs e)
         {
             fController.ShowMap();
@@ -968,12 +969,12 @@ namespace GKUI.Forms
 
         private void miAncestorsCircle_Click(object sender, EventArgs e)
         {
-            fController.ShowCircleChart(CircleChartType.Ancestors);
+            BaseController.ShowCircleChart(this, CircleChartType.Ancestors);
         }
 
         private void miDescendantsCircle_Click(object sender, EventArgs e)
         {
-            fController.ShowCircleChart(CircleChartType.Descendants);
+            BaseController.ShowCircleChart(this, CircleChartType.Descendants);
         }
 
         private void miLogSend_Click(object sender, EventArgs e)

@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
@@ -1020,6 +1021,66 @@ namespace GKCore.Controllers
             return result;
         }
 
+        public static GDMRecord DuplicateRecord(IBaseContext context, GDMRecord original)
+        {
+            if (original == null) return null;
+
+            if (original.RecordType != GDMRecordType.rtIndividual && original.RecordType != GDMRecordType.rtLocation) return null;
+
+            AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.DuplicateWarning));
+
+            try {
+                context.BeginUpdate();
+
+                GDMRecord result;
+
+                if (original.RecordType == GDMRecordType.rtIndividual) {
+                    result = context.Tree.CreateIndividual();
+                } else if (original.RecordType == GDMRecordType.rtLocation) {
+                    result = context.Tree.CreateLocation();
+                } else {
+                    return null;
+                }
+
+                result.Assign(original);
+
+                return result;
+            } finally {
+                context.EndUpdate();
+            }
+        }
+
+        public static void NotifyRecord(IBaseWindow baseWin, GDMRecord record, RecordAction action)
+        {
+            if (baseWin == null || record == null) return;
+
+            DateTime dtNow = DateTime.Now;
+
+            switch (action) {
+                case RecordAction.raAdd:
+                case RecordAction.raEdit:
+                    record.ChangeDate.ChangeDateTime = dtNow;
+                    break;
+
+                case RecordAction.raDelete:
+                    break;
+
+                case RecordAction.raJump:
+                    break;
+
+                case RecordAction.raMoveUp:
+                case RecordAction.raMoveDown:
+                    break;
+            }
+
+            if (action != RecordAction.raJump) {
+                baseWin.Context.Tree.Header.TransmissionDateTime = dtNow;
+                baseWin.Context.Modified = true;
+
+                AppHost.Instance.NotifyRecord(baseWin, record, action);
+            }
+        }
+
         public static async Task<bool> AddIndividualFather(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord person)
         {
             bool result = false;
@@ -1278,6 +1339,40 @@ namespace GKCore.Controllers
             }
         }
 
+        public static void ShowCircleChart(IBaseWindow baseWin, CircleChartType chartKind)
+        {
+            var selPerson = baseWin.GetSelectedPerson();
+            if (selPerson == null) return;
+
+            if (BaseController.DetectCycle(baseWin.Context.Tree, selPerson)) return;
+
+            var fmChart = AppHost.Container.Resolve<ICircleChartWin>(baseWin, selPerson, chartKind);
+            AppHost.Instance.ShowWindow(fmChart);
+        }
+
         #endregion
+
+        public static void ShowMedia(IBaseWindow baseWin, GDMMultimediaRecord mediaRec, bool modal)
+        {
+            if (mediaRec == null)
+                throw new ArgumentNullException("mediaRec");
+
+            GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
+            if (fileRef == null) return;
+
+            if (!GKUtils.UseEmbeddedViewer(fileRef.GetMultimediaFormat())) {
+                string targetFile = baseWin.Context.MediaLoad(fileRef);
+                GKUtils.LoadExtFile(targetFile);
+            } else {
+                var mediaViewer = AppHost.Container.Resolve<IMediaViewerWin>(baseWin);
+                try {
+                    mediaViewer.MultimediaRecord = mediaRec;
+                    mediaViewer.Show(true);
+                } catch (Exception ex) {
+                    if (mediaViewer != null) mediaViewer.Dispose();
+                    Logger.WriteError("BaseController.ShowMedia()", ex);
+                }
+            }
+        }
     }
 }

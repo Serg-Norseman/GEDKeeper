@@ -265,17 +265,13 @@ namespace GKCore.Controllers
         {
             if (record == null) return;
 
-            DateTime dtNow = DateTime.Now;
-
             switch (action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    record.ChangeDate.ChangeDateTime = dtNow;
                     CheckChangedRecord(record, true);
                     break;
 
-                case RecordAction.raDelete:
-                    {
+                case RecordAction.raDelete: {
                         CheckChangedRecord(record, false);
 
                         IListView rView = GetRecordsViewByType(record.RecordType);
@@ -298,44 +294,18 @@ namespace GKCore.Controllers
                     break;
             }
 
-            if (action != RecordAction.raJump) {
-                fContext.Tree.Header.TransmissionDateTime = dtNow;
-                fContext.Modified = true;
-
-                AppHost.Instance.NotifyRecord(fView, record, action);
-            }
+            BaseController.NotifyRecord(fView, record, action);
         }
 
         public void DuplicateRecord()
         {
             GDMRecord original = GetSelectedRecordEx();
-            if (original == null) return;
-
-            if (original.RecordType != GDMRecordType.rtIndividual && original.RecordType != GDMRecordType.rtLocation) return;
-
-            AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.DuplicateWarning));
-
-            GDMRecord target;
-            try {
-                fContext.BeginUpdate();
-
-                if (original.RecordType == GDMRecordType.rtIndividual) {
-                    target = fContext.Tree.CreateIndividual();
-                } else if (original.RecordType == GDMRecordType.rtLocation) {
-                    target = fContext.Tree.CreateLocation();
-                } else {
-                    return;
-                }
-
-                target.Assign(original);
-
+            GDMRecord target = BaseController.DuplicateRecord(fContext, original);
+            if (target != null) {
                 NotifyRecord(target, RecordAction.raAdd);
-            } finally {
-                fContext.EndUpdate();
+                RefreshLists(false);
+                SelectRecordByXRef(target.XRef);
             }
-
-            RefreshLists(false);
-            fView.SelectRecordByXRef(target.XRef);
         }
 
         public async void AddRecord()
@@ -378,7 +348,7 @@ namespace GKCore.Controllers
                     GKUtils.GetRecordContent(fContext, record, hyperView.Lines, RecordContentType.Full);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("BaseWinSDI.ShowRecordInfo()", ex);
+                Logger.WriteError("BaseWinController.ShowRecordInfo()", ex);
             }
         }
 
@@ -476,6 +446,12 @@ namespace GKCore.Controllers
         public void Redo()
         {
             fContext.DoRedo();
+        }
+
+        public void CopyContent()
+        {
+            var hyperView = GetHyperViewByType(GetSelectedRecordType());
+            CopyContent(hyperView);
         }
 
         public void CopyContent(IHyperView hyperView)
@@ -993,6 +969,7 @@ namespace GKCore.Controllers
                         SetToolTip("tbStats", LangMan.LS(LSID.StatsTip));
                         SetToolTip("tbPrev", LangMan.LS(LSID.PrevRec));
                         SetToolTip("tbNext", LangMan.LS(LSID.NextRec));
+                        SetToolTip("tbPartialView", LangMan.LS(LSID.PartialViewTip));
 
                         GetControl<IMenuItem>("miPedigreeAscend2").Text = LangMan.LS(LSID.MIPedigreeAscend);
                         GetControl<IMenuItem>("miPedigreeDescend2").Text = LangMan.LS(LSID.MIPedigreeDescend);
@@ -1027,7 +1004,7 @@ namespace GKCore.Controllers
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("BaseWinSDI.SetLocale()", ex);
+                Logger.WriteError("BaseWinController.SetLocale()", ex);
             }
         }
 
@@ -1369,40 +1346,6 @@ namespace GKCore.Controllers
             BaseController.ShowTreeChart(fView, GetSelectedPersonVar(), chartKind);
         }
 
-        public void ShowCircleChart(CircleChartType chartKind)
-        {
-            var selPerson = GetSelectedPerson();
-            if (selPerson == null) return;
-
-            if (BaseController.DetectCycle(fContext.Tree, selPerson)) return;
-
-            var fmChart = AppHost.Container.Resolve<ICircleChartWin>(fView, selPerson, chartKind);
-            AppHost.Instance.ShowWindow(fmChart);
-        }
-
-        public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal)
-        {
-            if (mediaRec == null)
-                throw new ArgumentNullException("mediaRec");
-
-            GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
-            if (fileRef == null) return;
-
-            if (!GKUtils.UseEmbeddedViewer(fileRef.GetMultimediaFormat())) {
-                string targetFile = fContext.MediaLoad(fileRef);
-                GKUtils.LoadExtFile(targetFile);
-            } else {
-                var mediaViewer = AppHost.Container.Resolve<IMediaViewerWin>(fView);
-                try {
-                    mediaViewer.MultimediaRecord = mediaRec;
-                    mediaViewer.Show(true);
-                } catch (Exception ex) {
-                    if (mediaViewer != null) mediaViewer.Dispose();
-                    Logger.WriteError("BaseWinController.ShowMedia()", ex);
-                }
-            }
-        }
-
         public void SendLog()
         {
             SysUtils.SendMail(GKData.APP_MAIL, "GEDKeeper: feedback", "This automatic notification of error.", AppHost.GetLogFilename());
@@ -1471,6 +1414,19 @@ namespace GKCore.Controllers
             }
 
             var win = AppHost.Container.Resolve<IFARDlg>(fView);
+            AppHost.Instance.ShowWindow(win);
+        }
+
+        public void ShowPartialView()
+        {
+            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                throw new NotImplementedException();
+            }
+
+            var recType = GetSelectedRecordType();
+            var listMan = GetRecordsListManByType(recType);
+
+            var win = AppHost.Container.Resolve<IPartialView>(fView, recType, listMan.Filter);
             AppHost.Instance.ShowWindow(win);
         }
 

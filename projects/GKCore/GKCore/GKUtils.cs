@@ -3660,9 +3660,9 @@ namespace GKCore
             if (personalName == null)
                 throw new ArgumentNullException("personalName");
 
-            personalName.Surname = surname.Trim();
-            personalName.Given = name.Trim();
-            personalName.PatronymicName = patronymic.Trim();
+            personalName.Surname = surname.SafeTrim();
+            personalName.Given = name.SafeTrim();
+            personalName.PatronymicName = patronymic.SafeTrim();
         }
 
         public static NamePartsRet GetNameParts(GDMTree tree, GDMIndividualRecord iRec, GDMPersonalName personalName, bool formatted = true)

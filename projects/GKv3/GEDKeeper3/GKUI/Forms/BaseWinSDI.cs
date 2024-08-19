@@ -141,7 +141,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miCopyContent;
         private ButtonMenuItem miPhotosBatchAdding;
         private ButtonMenuItem miCleanImagesCache;
-
+        private ButtonToolItem tbPartialView;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -385,9 +385,8 @@ namespace GKUI.Forms
 
         private void contextMenu_Opening(object sender, EventArgs e)
         {
-            IListView recView = GetRecordsViewByType(GetSelectedRecordType());
-
-            miContRecordDuplicate.Enabled = (recView == fController.GetRecordsViewByType(GDMRecordType.rtIndividual));
+            var recType = GetSelectedRecordType();
+            miContRecordDuplicate.Enabled = (recType == GDMRecordType.rtIndividual || recType == GDMRecordType.rtLocation);
         }
 
         private void miRecordAdd_Click(object sender, EventArgs e)
@@ -443,8 +442,7 @@ namespace GKUI.Forms
 
         private void miCopyContent_Click(object sender, EventArgs e)
         {
-            var hyperView = GetHyperViewByType(GetSelectedRecordType());
-            fController.CopyContent(hyperView);
+            fController.CopyContent();
         }
 
         #endregion
@@ -579,7 +577,7 @@ namespace GKUI.Forms
 
         public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal)
         {
-            fController.ShowMedia(mediaRec, modal);
+            BaseController.ShowMedia(this, mediaRec, modal);
         }
 
         #endregion
@@ -956,9 +954,9 @@ namespace GKUI.Forms
             fController.NewFile();
         }
 
-        private void miFileLoad_Click(object sender, EventArgs e)
+        private async void miFileLoad_Click(object sender, EventArgs e)
         {
-            fController.LoadFileEx();
+            await fController.LoadFileEx();
         }
 
         private void miFileSaveAs_Click(object sender, EventArgs e)
@@ -999,6 +997,11 @@ namespace GKUI.Forms
         private void tbSendMail_Click(object sender, EventArgs e)
         {
             fController.SendMail();
+        }
+
+        private void tbPartialView_Click(object sender, EventArgs e)
+        {
+            fController.ShowPartialView();
         }
 
         private void miMap_Click(object sender, EventArgs e)
@@ -1053,12 +1056,12 @@ namespace GKUI.Forms
 
         private void miAncestorsCircle_Click(object sender, EventArgs e)
         {
-            fController.ShowCircleChart(CircleChartType.Ancestors);
+            BaseController.ShowCircleChart(this, CircleChartType.Ancestors);
         }
 
         private void miDescendantsCircle_Click(object sender, EventArgs e)
         {
-            fController.ShowCircleChart(CircleChartType.Descendants);
+            BaseController.ShowCircleChart(this, CircleChartType.Descendants);
         }
 
         private void miLogSend_Click(object sender, EventArgs e)

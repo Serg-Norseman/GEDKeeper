@@ -233,6 +233,12 @@
     <Compile Include="GKUI\Forms\ParentsEditDlg.Designer.cs">
       <DependentUpon>ParentsEditDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Forms\PartialView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\PartialView.Designer.cs">
+      <DependentUpon>PartialView.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Forms\PatriarchsViewerWin.cs">
       <SubType>Form</SubType>
     </Compile>
