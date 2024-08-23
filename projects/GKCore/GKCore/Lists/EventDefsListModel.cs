@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Threading.Tasks;
 using BSLib;
 using GKCore.Controllers;
@@ -85,13 +84,8 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var dataOwner = fDataOwner as EventDefinitions;
-            if (dataOwner == null) return;
-
-            try {
+            if (dataOwner != null)
                 UpdateStructList(dataOwner.List);
-            } catch (Exception ex) {
-                Logger.WriteError("EventDefsListModel.UpdateContents()", ex);
-            }
         }
 
         public override void OnItemSelected(int itemIndex, object rowData)

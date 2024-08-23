@@ -40,10 +40,12 @@ using GKUI.Components;
 using GKUI.Forms;
 using GKUI.Platform.Handlers;
 using GKUI.Themes;
-using CommonDialog = GKUI.Forms.CommonDialog;
 
 namespace GKUI.Platform
 {
+    using CommonDialog = Forms.CommonDialog;
+
+
     /// <summary>
     /// The main implementation of the platform-specific application's host for
     /// WinForms.
@@ -518,6 +520,8 @@ namespace GKUI.Platform
             container.Register<IEventDefEditDlg, EventDefEditDlg>(LifeCycle.Transient);
             container.Register<ILocExpertDlg, LocExpertDlg>(LifeCycle.Transient);
             container.Register<IPartialView, PartialView>(LifeCycle.Transient);
+            container.Register<ISourceCallNumberEditDlg, SourceCallNumberEditDlg>(LifeCycle.Transient);
+            container.Register<IRepositoryCitEditDlg, RepositoryCitEditDlg>(LifeCycle.Transient);
 
             container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
 

@@ -438,7 +438,7 @@ namespace GKUI.Forms
 
         public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal)
         {
-            fController.ShowMedia(mediaRec, modal);
+            BaseController.ShowMedia(this, mediaRec, modal);
         }
 
         #endregion
@@ -675,12 +675,12 @@ namespace GKUI.Forms
 
         private void miAncestorsCircle_Click(object sender, EventArgs e)
         {
-            fController.ShowCircleChart(CircleChartType.Ancestors);
+            BaseController.ShowCircleChart(this, CircleChartType.Ancestors);
         }
 
         private void miDescendantsCircle_Click(object sender, EventArgs e)
         {
-            fController.ShowCircleChart(CircleChartType.Descendants);
+            BaseController.ShowCircleChart(this, CircleChartType.Descendants);
         }
 
         #endregion

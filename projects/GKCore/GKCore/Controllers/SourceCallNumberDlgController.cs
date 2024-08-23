@@ -60,7 +60,7 @@ namespace GKCore.Controllers
                 fCallNumber.MediaType = (GDMMediaType)fView.MediaTypeCombo.SelectedIndex;
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("UserRefEditDlgController.Accept()", ex);
+                Logger.WriteError("SourceCallNumberDlgController.Accept()", ex);
                 return false;
             }
         }
@@ -73,10 +73,10 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            //fView.Title = LangMan.LS(LSID.);
+            fView.Title = LangMan.LS(LSID.CallNumber);
             GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
             GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            //GetControl<ILabel>("lblCallNumber").Text = LangMan.LS(LSID.CallNumber);
+            GetControl<ILabel>("lblCallNumber").Text = LangMan.LS(LSID.CallNumber);
             GetControl<ILabel>("lblMediaType").Text = LangMan.LS(LSID.Type);
         }
     }

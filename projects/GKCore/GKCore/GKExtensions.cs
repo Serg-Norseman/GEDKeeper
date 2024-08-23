@@ -20,6 +20,7 @@
 
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Types;
 
 namespace GKCore
 {
@@ -33,6 +34,28 @@ namespace GKCore
         public static string GetEventKey(this GDMCustomEvent customEvent)
         {
             return (customEvent == null) ? string.Empty : customEvent.GetTagName() + ":" + customEvent.Classification;
+        }
+
+        public static bool Exchange<T>(this GDMList<T> list, T value, RecordAction recordAction) where T : GDMTag
+        {
+            bool result = false;
+
+            int idx = list.IndexOf(value);
+            if (idx < 0 || idx >= list.Count) return false;
+
+            switch (recordAction) {
+                case RecordAction.raMoveUp:
+                    list.Exchange(idx - 1, idx);
+                    result = true;
+                    break;
+
+                case RecordAction.raMoveDown:
+                    list.Exchange(idx, idx + 1);
+                    result = true;
+                    break;
+            }
+
+            return result;
         }
     }
 }

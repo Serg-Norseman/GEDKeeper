@@ -21,8 +21,8 @@
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
+using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Options;
@@ -33,24 +33,23 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public class AssociationsListModel : SheetModel<GDMAssociation>
+    public sealed class RepositoryCitationsListModel : SheetModel<GDMRepositoryCitation>
     {
-        private GDMIndividualRecord fRelIndi;
+        private GDMRepositoryRecord fRepoRec;
 
-        public AssociationsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
+        public RepositoryCitationsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
-                RecordAction.raJump,
-                RecordAction.raCopy, RecordAction.raPaste, RecordAction.raDetails);
+                RecordAction.raJump, RecordAction.raCopy, RecordAction.raPaste, RecordAction.raDetails);
         }
 
         public static ListColumns CreateListColumns()
         {
-            var result = new ListColumns(GKListType.stIndividualAssociations);
+            var result = new ListColumns(GKListType.stSourceRepositories);
 
-            result.AddColumn(LSID.Relation, 300, false);
-            result.AddColumn(LSID.Person, 200, false);
+            result.AddColumn(LSID.Repository, 280, false);
+            result.AddColumn(LSID.CallNumbers, 220, false);
 
             result.ResetDefaults();
             return result;
@@ -58,14 +57,14 @@ namespace GKCore.Lists
 
         protected override GDMRecord GetReferenceRecord(object itemData)
         {
-            var ast = itemData as GDMAssociation;
-            return (ast == null) ? null : fBaseContext.Tree.GetPtrValue<GDMIndividualRecord>(ast);
+            var repoCit = itemData as GDMRepositoryCitation;
+            return (repoCit == null) ? null : fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(repoCit);
         }
 
-        public override void Fetch(GDMAssociation aRec)
+        public override void Fetch(GDMRepositoryCitation aRec)
         {
             base.Fetch(aRec);
-            fRelIndi = fBaseContext.Tree.GetPtrValue(fFetchedRec);
+            fRepoRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(fFetchedRec);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -73,10 +72,11 @@ namespace GKCore.Lists
             object result = null;
             switch (colType) {
                 case 0:
-                    result = fFetchedRec.Relation;
+                    result = fRepoRec.RepositoryName;
                     break;
+
                 case 1:
-                    result = ((fRelIndi == null) ? string.Empty : GKUtils.GetNameString(fRelIndi, false));
+                    result = GKUtils.GetCallNumbersStr(fFetchedRec);
                     break;
             }
             return result;
@@ -84,68 +84,56 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var person = fDataOwner as GDMIndividualRecord;
-            if (person != null)
-                UpdateStructList(person.Associations);
+            var source = fDataOwner as GDMSourceRecord;
+            if (source != null)
+                UpdateStructList(source.RepositoryCitations);
         }
 
         public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
-            var person = fDataOwner as GDMIndividualRecord;
-            if (fBaseWin == null || person == null) return;
+            var source = fDataOwner as GDMSourceRecord;
+            if (fBaseWin == null || source == null) return;
+
+            var repoCit = eArgs.ItemData as GDMRepositoryCitation;
 
             bool result = false;
-
-            GDMAssociation ast = eArgs.ItemData as GDMAssociation;
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit: {
-                        bool exists = (ast != null);
-                        if (!exists) {
-                            ast = new GDMAssociation();
-                        }
-
-                        using (var dlg = AppHost.ResolveDialog<IAssociationEditDlg>(fBaseWin)) {
-                            dlg.Association = ast;
-                            result = await AppHost.Instance.ShowModalAsync(dlg, fOwner, false);
-                        }
-
-                        if (!exists) {
-                            if (result) {
-                                result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationAdd, person, ast);
-                            } else {
-                                ast.Dispose();
-                            }
-                        }
+                        var repoRecRes = await BaseController.ModifyRepositoryCitation(fOwner, fBaseWin, fUndoman, source, repoCit);
+                        repoCit = repoRecRes.Record;
+                        result = repoRecRes.Result;
                     }
                     break;
 
                 case RecordAction.raDelete:
-                    if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RemoveAssociationQuery))) {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationRemove, person, ast);
+                    if (repoCit != null && await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachRepositoryQuery))) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, source, repoCit);
                     }
                     break;
 
                 case RecordAction.raCopy:
-                    AppHost.Instance.SetClipboardObj<GDMAssociation>(ast);
+                    AppHost.Instance.SetClipboardObj<GDMRepositoryCitation>(repoCit);
                     break;
 
                 case RecordAction.raCut:
                     break;
 
                 case RecordAction.raPaste:
-                    ast = AppHost.Instance.GetClipboardObj<GDMAssociation>();
-                    if (ast != null) {
-                        ast = ast.Clone();
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualAssociationAdd, person, ast);
+                    repoCit = AppHost.Instance.GetClipboardObj<GDMRepositoryCitation>();
+                    if (repoCit != null) {
+                        var repoRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(repoCit);
+                        repoCit = new GDMRepositoryCitation();
+                        repoCit.XRef = repoRec.XRef;
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, source, repoCit);
                     }
                     break;
             }
 
             if (result) {
                 if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raPaste) {
-                    eArgs.ItemData = ast;
+                    eArgs.ItemData = repoCit;
                 }
 
                 fBaseWin.Context.Modified = true;

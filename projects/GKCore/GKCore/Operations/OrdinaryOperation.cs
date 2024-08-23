@@ -78,6 +78,9 @@ namespace GKCore.Operations
 
         otLocationLinkAdd,
         otLocationLinkRemove,
+
+        otCallNumberAdd,
+        otCallNumberRemove,
     }
 
     /// <summary>
@@ -221,6 +224,11 @@ namespace GKCore.Operations
                     result = ProcessLocationLink(redo);
                     break;
 
+                case OperationType.otCallNumberAdd:
+                case OperationType.otCallNumberRemove:
+                    result = ProcessCallNumber(redo);
+                    break;
+
                 default:
                     result = false;
                     break;
@@ -292,9 +300,9 @@ namespace GKCore.Operations
         private bool ProcessSourceRepositoryCitation(bool redo)
         {
             GDMSourceRecord srcRec = fObj as GDMSourceRecord;
-            GDMRepositoryRecord repRec = fNewVal as GDMRepositoryRecord;
+            var repCit = fNewVal as GDMRepositoryCitation;
 
-            if (srcRec == null || repRec == null) {
+            if (srcRec == null || repCit == null) {
                 return false;
             }
 
@@ -302,9 +310,9 @@ namespace GKCore.Operations
                 redo = !redo;
             }
             if (redo) {
-                srcRec.AddRepository(repRec);
+                srcRec.RepositoryCitations.Add(repCit);
             } else {
-                srcRec.RemoveRepository(repRec);
+                srcRec.RepositoryCitations.Extract(repCit);
             }
             return true;
         }
@@ -661,6 +669,26 @@ namespace GKCore.Operations
                 locRec.TopLevels.Add(locLink);
             } else {
                 locRec.TopLevels.Extract(locLink);
+            }
+            return true;
+        }
+
+        private bool ProcessCallNumber(bool redo)
+        {
+            GDMRepositoryCitation repoCit = fObj as GDMRepositoryCitation;
+            GDMSourceCallNumber callNum = fNewVal as GDMSourceCallNumber;
+
+            if (repoCit == null || callNum == null) {
+                return false;
+            }
+
+            if (fType == OperationType.otCallNumberRemove) {
+                redo = !redo;
+            }
+            if (redo) {
+                repoCit.CallNumbers.Add(callNum);
+            } else {
+                repoCit.CallNumbers.Extract(callNum);
             }
             return true;
         }

@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
@@ -766,13 +765,8 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var iRec = fDataOwner as GDMIndividualRecord;
-            if (iRec == null) return;
-
-            try {
+            if (iRec != null)
                 UpdateStructList(iRec.Groups);
-            } catch (Exception ex) {
-                Logger.WriteError("IndiGroupsListModel.UpdateContent()", ex);
-            }
         }
 
         public override async Task Modify(object sender, ModifyEventArgs eArgs)
@@ -855,13 +849,8 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var iRec = fDataOwner as GDMIndividualRecord;
-            if (iRec == null) return;
-
-            try {
+            if (iRec != null)
                 UpdateStructList(iRec.PersonalNames);
-            } catch (Exception ex) {
-                Logger.WriteError("IndiNamesListModel.UpdateContents()", ex);
-            }
         }
 
         public override async Task Modify(object sender, ModifyEventArgs eArgs)
@@ -910,17 +899,7 @@ namespace GKCore.Lists
 
                 case RecordAction.raMoveUp:
                 case RecordAction.raMoveDown:
-                    int idx = iRec.PersonalNames.IndexOf(persName);
-                    switch (eArgs.Action) {
-                        case RecordAction.raMoveUp:
-                            iRec.PersonalNames.Exchange(idx - 1, idx);
-                            break;
-
-                        case RecordAction.raMoveDown:
-                            iRec.PersonalNames.Exchange(idx, idx + 1);
-                            break;
-                    }
-                    result = true;
+                    result = iRec.PersonalNames.Exchange(persName, eArgs.Action);
                     break;
             }
 
@@ -990,13 +969,8 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var iRec = fDataOwner as GDMIndividualRecord;
-            if (iRec == null) return;
-
-            try {
+            if (iRec != null)
                 UpdateStructList(iRec.ChildToFamilyLinks);
-            } catch (Exception ex) {
-                Logger.WriteError("IndiParentsListModel.UpdateContents()", ex);
-            }
         }
 
         public override async Task Modify(object sender, ModifyEventArgs eArgs)
@@ -1035,17 +1009,7 @@ namespace GKCore.Lists
 
                 case RecordAction.raMoveUp:
                 case RecordAction.raMoveDown:
-                    int idx = iRec.ChildToFamilyLinks.IndexOf(cfLink);
-                    switch (eArgs.Action) {
-                        case RecordAction.raMoveUp:
-                            iRec.ChildToFamilyLinks.Exchange(idx - 1, idx);
-                            break;
-
-                        case RecordAction.raMoveDown:
-                            iRec.ChildToFamilyLinks.Exchange(idx, idx + 1);
-                            break;
-                    }
-                    result = true;
+                    result = iRec.ChildToFamilyLinks.Exchange(cfLink, eArgs.Action);
                     break;
             }
 
@@ -1137,13 +1101,8 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var iRec = fDataOwner as GDMIndividualRecord;
-            if (iRec == null) return;
-
-            try {
+            if (iRec != null)
                 UpdateStructList(iRec.SpouseToFamilyLinks);
-            } catch (Exception ex) {
-                Logger.WriteError("IndiSpousesListModel.UpdateContents()", ex);
-            }
         }
 
         public override async Task Modify(object sender, ModifyEventArgs eArgs)

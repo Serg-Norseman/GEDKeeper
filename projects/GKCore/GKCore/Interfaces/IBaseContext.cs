@@ -113,6 +113,7 @@ namespace GKCore.Interfaces
         GDMIndividualRecord FindIndividual(string searchName, Dictionary<string, string> facts);
         GDMSourceRecord FindSource(string sourceName);
         void GetSourcesList(StringList sources);
+        void GetRepositoriesList(StringList list);
 
         Task<string> DefinePatronymic(IView owner, string name, GDMSex sex, bool confirm);
         Task<GDMSex> DefineSex(IView owner, string iName, string iPatr);

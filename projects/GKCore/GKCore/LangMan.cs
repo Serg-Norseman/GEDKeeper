@@ -1067,8 +1067,12 @@ namespace GKCore
         /* 990 */ Navigation,
         /* 991 */ IncludePortraits,
         /* 992 */ PartialViewTip,
+        /* 993 */ CallNumber,
+        /* 994 */ CallNumbers,
+        /* 995 */ RemoveCallNumberQuery,
+        /* 996 */ RepositoryIsNotSpecified,
 
-        /* 000 */ Last = PartialViewTip
+        /* 000 */ Last = RepositoryIsNotSpecified
     }
 
 
@@ -2089,6 +2093,10 @@ namespace GKCore
             /* 990 */ "Navigation",
             /* 991 */ "Include portraits",
             /* 992 */ "Partial view",
+            /* 993 */ "Call number",
+            /* 994 */ "Call numbers",
+            /* 995 */ "Are you sure you want to remove call number \"{0}\"?",
+            /* 996 */ "Repository is not specified",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

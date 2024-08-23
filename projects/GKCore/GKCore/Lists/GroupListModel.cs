@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
@@ -133,13 +132,8 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var grp = fDataOwner as GDMGroupRecord;
-            if (grp == null) return;
-
-            try {
+            if (grp != null)
                 UpdateStructList(grp.Members);
-            } catch (Exception ex) {
-                Logger.WriteError("GroupMembersListModel.UpdateContents()", ex);
-            }
         }
 
         public override async Task Modify(object sender, ModifyEventArgs eArgs)

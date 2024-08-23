@@ -296,6 +296,12 @@
     <Compile Include="GKUI\Forms\RelationshipCalculatorDlg.Designer.cs">
       <DependentUpon>RelationshipCalculatorDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Forms\RepositoryCitEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\RepositoryCitEditDlg.Designer.cs">
+      <DependentUpon>RepositoryCitEditDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Forms\RepositoryEditDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -328,6 +334,12 @@
     </Compile>
     <Compile Include="GKUI\Forms\SlideshowWin.Designer.cs">
       <DependentUpon>SlideshowWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Forms\SourceCallNumberEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\SourceCallNumberEditDlg.Designer.cs">
+      <DependentUpon>SourceCallNumberEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="GKUI\Forms\SourceCitEditDlg.cs">
       <SubType>Form</SubType>

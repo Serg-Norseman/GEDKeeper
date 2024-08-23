@@ -463,6 +463,21 @@ namespace GKCore
             }
         }
 
+        public void GetRepositoriesList(StringList list)
+        {
+            if (list == null) return;
+
+            list.Clear();
+
+            int num = fTree.RecordsCount;
+            for (int i = 0; i < num; i++) {
+                var rec = fTree[i] as GDMRepositoryRecord;
+                if (rec != null) {
+                    list.AddObject(rec.RepositoryName, rec);
+                }
+            }
+        }
+
         #endregion
 
         #region Individual utils

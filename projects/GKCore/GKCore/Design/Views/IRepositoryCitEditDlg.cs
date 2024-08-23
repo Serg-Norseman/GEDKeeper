@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,29 +18,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCore.Interfaces
+using GDModel;
+using GKCore.Design.Controls;
+using GKCore.Interfaces;
+using GKCore.Lists;
+
+namespace GKCore.Design.Views
 {
-    public interface IOperation
+    public interface IRepositoryCitEditDlg : ICommonDialog, IBaseEditor
     {
-        bool Redo();
-        void Undo();
-    }
+        GDMRepositoryCitation RepositoryCitation { get; set; }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IUndoManager
-    {
-        void Clear();
-        bool DoOperation(IOperation operation);
+        IComboBox RepositoryCombo { get; }
 
-        void Undo();
-        void Redo();
-
-        bool CanUndo();
-        bool CanRedo();
-
-        void Commit();
-        void Rollback();
+        ISheetList CallNumbersList { get; }
     }
 }

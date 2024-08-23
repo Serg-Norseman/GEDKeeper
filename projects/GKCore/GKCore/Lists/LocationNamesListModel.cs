@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
@@ -74,13 +73,8 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var dataOwner = fDataOwner as GDMLocationRecord;
-            if (dataOwner == null) return;
-
-            try {
+            if (dataOwner != null)
                 UpdateStructList(dataOwner.Names);
-            } catch (Exception ex) {
-                Logger.WriteError("LocationNamesListModel.UpdateContents()", ex);
-            }
         }
 
         private void UpdateButtons()

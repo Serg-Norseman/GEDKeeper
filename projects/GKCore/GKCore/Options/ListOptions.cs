@@ -74,6 +74,9 @@ namespace GKCore.Options
         // rtSource
         stSourceRepositories,
 
+        // RepositoryCitation
+        stRepoCitCallNumbers,
+
         // rtGroup
         stGroupMembers,
 
@@ -138,6 +141,9 @@ namespace GKCore.Options
 
             // rtSource
             "SourceRepositories",
+
+            // RepositoryCitation
+            "RepoCitCallNumbers",
 
             // rtGroup
             "GroupMembers",
@@ -322,7 +328,10 @@ namespace GKCore.Options
                     return IndiSpousesListModel.CreateListColumns();
 
                 case GKListType.stSourceRepositories:
-                    return SourceRepositoriesListModel.CreateListColumns();
+                    return RepositoryCitationsListModel.CreateListColumns();
+
+                case GKListType.stRepoCitCallNumbers:
+                    return CallNumbersListModel.CreateListColumns();
 
                 case GKListType.stGroupMembers:
                     return GroupMembersListModel.CreateListColumns();

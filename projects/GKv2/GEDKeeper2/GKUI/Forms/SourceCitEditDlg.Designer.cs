@@ -154,7 +154,6 @@
 		    this.cmbSource.Size = new System.Drawing.Size(368, 25);
 		    this.cmbSource.Sorted = true;
 		    this.cmbSource.TabIndex = 1;
-		    this.cmbSource.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbSource_KeyDown);
 		    this.cmbSource.KeyUp += new System.Windows.Forms.KeyEventHandler(this.cbSource_KeyUp);
 		    // 
 		    // pageOther

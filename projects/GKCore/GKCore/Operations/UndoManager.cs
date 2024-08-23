@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System.Collections.Generic;
-using GKCore.Interfaces;
 
 namespace GKCore.Operations
 {
@@ -31,9 +30,18 @@ namespace GKCore.Operations
         taRollback
     }
 
+
     public delegate void TransactionEventHandler(object sender, TransactionType type);
 
-    public class UndoManager : IUndoManager
+
+    public interface IOperation
+    {
+        bool Redo();
+        void Undo();
+    }
+
+
+    public class UndoManager
     {
         private const CustomOperation TRANS_DELIMITER = null;
 

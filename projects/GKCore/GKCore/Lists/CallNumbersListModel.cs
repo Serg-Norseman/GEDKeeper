@@ -21,8 +21,8 @@
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
+using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Options;
@@ -33,18 +33,19 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class URefsListModel : SheetModel<GDMUserReference>
+    public sealed class CallNumbersListModel : SheetModel<GDMSourceCallNumber>
     {
-        public URefsListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
+        public CallNumbersListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
-            AllowedActions = EnumSet<RecordAction>.Create(RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
+            AllowedActions = EnumSet<RecordAction>.Create(
+                RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
         }
 
         public static ListColumns CreateListColumns()
         {
-            var result = new ListColumns(GKListType.stUserRefs);
+            var result = new ListColumns(GKListType.stRepoCitCallNumbers);
 
-            result.AddColumn(LSID.Reference, 300, false);
+            result.AddColumn(LSID.CallNumber, 280, false);
             result.AddColumn(LSID.Type, 200, false);
 
             result.ResetDefaults();
@@ -58,8 +59,9 @@ namespace GKCore.Lists
                 case 0:
                     result = fFetchedRec.StringValue;
                     break;
+
                 case 1:
-                    result = fFetchedRec.ReferenceType;
+                    result = LangMan.LS(GKData.MediaTypes[(int)fFetchedRec.MediaType]);
                     break;
             }
             return result;
@@ -67,54 +69,41 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var iRec = fDataOwner as GDMRecord;
-            if (iRec != null)
-                UpdateStructList(iRec.UserReferences);
+            var repoCit = fDataOwner as GDMRepositoryCitation;
+            if (repoCit != null)
+                UpdateStructList(repoCit.CallNumbers);
         }
 
         public override async Task Modify(object sender, ModifyEventArgs eArgs)
         {
-            var iRec = fDataOwner as GDMRecord;
-            if (fBaseWin == null || iRec == null) return;
+            var repoCit = fDataOwner as GDMRepositoryCitation;
+            if (fBaseWin == null || repoCit == null) return;
 
-            GDMUserReference userRef = eArgs.ItemData as GDMUserReference;
+            var callNum = eArgs.ItemData as GDMSourceCallNumber;
 
             bool result = false;
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit: {
-                        bool exists = (userRef != null);
-                        if (!exists) {
-                            userRef = new GDMUserReference();
-                        }
-
-                        using (var dlg = AppHost.ResolveDialog<IUserRefEditDlg>(fBaseWin)) {
-                            dlg.UserReference = userRef;
-                            result = await AppHost.Instance.ShowModalAsync(dlg, fOwner, false);
-                        }
-
-                        if (!exists) {
-                            if (result) {
-                                result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualURefAdd, iRec, userRef);
-                            } else {
-                                userRef.Dispose();
-                            }
-                        }
+                        var callNumRes = await BaseController.ModifyCallNumber(fOwner, fBaseWin, fUndoman, repoCit, callNum);
+                        callNum = callNumRes.Record;
+                        result = callNumRes.Result;
                     }
                     break;
 
-                case RecordAction.raDelete: {
-                        string confirmation = !string.IsNullOrEmpty(userRef.StringValue) ? userRef.StringValue : userRef.ReferenceType;
-                        if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RemoveUserRefQuery, confirmation))) {
-                            result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualURefRemove, iRec, userRef);
-                            fBaseWin.Context.Modified = true;
-                        }
-                        break;
+                case RecordAction.raDelete:
+                    if (await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RemoveCallNumberQuery, callNum.StringValue))) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otCallNumberRemove, repoCit, callNum);
                     }
+                    break;
             }
 
             if (result) {
+                if (eArgs.Action == RecordAction.raAdd) {
+                    eArgs.ItemData = callNum;
+                }
+
                 fBaseWin.Context.Modified = true;
                 eArgs.IsChanged = true;
             }

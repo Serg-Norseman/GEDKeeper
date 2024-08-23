@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
@@ -76,13 +75,8 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var dataOwner = fDataOwner as IGDMStructWithNotes;
-            if (dataOwner == null) return;
-
-            try {
+            if (dataOwner != null)
                 UpdateStructList(dataOwner.Notes);
-            } catch (Exception ex) {
-                Logger.WriteError("NoteLinksListModel.UpdateContents()", ex);
-            }
         }
 
         public override async Task Modify(object sender, ModifyEventArgs eArgs)
@@ -120,19 +114,7 @@ namespace GKCore.Lists
 
                 case RecordAction.raMoveUp:
                 case RecordAction.raMoveDown:
-                    {
-                        int idx = dataOwner.Notes.IndexOf(notes);
-                        switch (eArgs.Action) {
-                            case RecordAction.raMoveUp:
-                                dataOwner.Notes.Exchange(idx - 1, idx);
-                                break;
-
-                            case RecordAction.raMoveDown:
-                                dataOwner.Notes.Exchange(idx, idx + 1);
-                                break;
-                        }
-                        result = true;
-                    }
+                    result = dataOwner.Notes.Exchange(notes, eArgs.Action);
                     break;
             }
 

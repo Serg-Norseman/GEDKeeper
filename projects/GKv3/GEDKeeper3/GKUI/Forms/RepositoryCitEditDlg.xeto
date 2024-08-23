@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.RepositoryCitEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow>
+      <StackLayout Orientation="Horizontal" Spacing="4">
+        <Label x:Name="lblRepository" />
+        <StackLayoutItem Expand="True">
+          <ComboBox x:Name="cmbRepository" KeyUp="cmbRepository_KeyUp" Width="400" />
+        </StackLayoutItem>
+        <Button x:Name="btnRepositoryAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnRepositoryAdd_Click" />
+      </StackLayout>
+    </TableRow>
+
+    <TableRow ScaleHeight="True">
+      <TabControl Size="600, 260">
+        <TabPage x:Name="pageCallNumbers">
+          <comcom:GKSheetList x:Name="fCallNumbersList" />
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Spacing="8" Orientation="Horizontal">
+        <StackLayoutItem Expand="True" />
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
+        </StackLayoutItem>
+        <StackLayoutItem HorizontalAlignment="Right">
+          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        </StackLayoutItem>
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

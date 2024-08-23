@@ -1698,6 +1698,27 @@ namespace GKCore
             return result.ToString();
         }
 
+        public static string GetCallNumbersStr(GDMRepositoryCitation repCit)
+        {
+            var result = new StringBuilder();
+
+            if (repCit.HasCallNumbers) {
+                var list = repCit.CallNumbers;
+                int count = list.Count;
+                for (int idx = 0; idx < count; idx++) {
+                    var callNum = list[idx];
+                    if (!string.IsNullOrEmpty(callNum.StringValue)) {
+                        if (idx > 0)
+                            result.Append("; ");
+
+                        result.Append(callNum.StringValue);
+                    }
+                }
+            }
+
+            return result.ToString();
+        }
+
         private static readonly float[] CA_VALUES = new float[] { 0.25f, 0.5f, 0.75f, 1.0f };
 
         private static void GetCertaintyVars(IGDMStructWithSourceCitations str, CertaintyAlgorithm algorithm, ref float result, ref float wsum)

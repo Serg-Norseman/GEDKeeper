@@ -97,13 +97,8 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var dataOwner = fDataOwner as GDMRecordWithEvents;
-            if (dataOwner == null) return;
-
-            try {
+            if (dataOwner != null)
                 UpdateStructList(dataOwner.Events);
-            } catch (Exception ex) {
-                Logger.WriteError("EventsListModel.UpdateContents()", ex);
-            }
         }
 
         public override async Task Modify(object sender, ModifyEventArgs eArgs)
@@ -166,19 +161,8 @@ namespace GKCore.Lists
                         break;
 
                     case RecordAction.raMoveUp:
-                    case RecordAction.raMoveDown: {
-                            int idx = record.Events.IndexOf(evt);
-                            switch (eArgs.Action) {
-                                case RecordAction.raMoveUp:
-                                    record.Events.Exchange(idx - 1, idx);
-                                    break;
-
-                                case RecordAction.raMoveDown:
-                                    record.Events.Exchange(idx, idx + 1);
-                                    break;
-                            }
-                            result = true;
-                        }
+                    case RecordAction.raMoveDown: 
+                        result = record.Events.Exchange(evt, eArgs.Action);
                         break;
 
                     case RecordAction.raCopy:

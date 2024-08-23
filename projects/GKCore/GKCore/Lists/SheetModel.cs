@@ -182,17 +182,21 @@ namespace GKCore.Lists
 
         protected void UpdateStructList(IGDMList<T> structList)
         {
-            fStructList = structList;
+            try {
+                fStructList = structList;
 
-            int contentSize = fStructList.Count;
-            InitContent(contentSize);
+                int contentSize = fStructList.Count;
+                InitContent(contentSize);
 
-            for (int i = 0; i < contentSize; i++) {
-                T rec = fStructList[i];
-                AddFilteredContent(rec);
+                for (int i = 0; i < contentSize; i++) {
+                    T rec = fStructList[i];
+                    AddFilteredContent(rec);
+                }
+
+                DoneContent();
+            } catch (Exception ex) {
+                Logger.WriteError("SheetModel.UpdateStructList()", ex);
             }
-
-            DoneContent();
         }
 
         public virtual async Task Modify(object sender, ModifyEventArgs eArgs)

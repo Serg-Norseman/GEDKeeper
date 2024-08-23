@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
@@ -176,13 +175,8 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var research = fDataOwner as GDMResearchRecord;
-            if (research == null) return;
-
-            try {
+            if (research != null)
                 UpdateStructList(research.Tasks);
-            } catch (Exception ex) {
-                Logger.WriteError("ResTasksListModel.UpdateContents()", ex);
-            }
         }
 
         public override async Task Modify(object sender, ModifyEventArgs eArgs)
@@ -279,13 +273,8 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var research = fDataOwner as GDMResearchRecord;
-            if (research == null) return;
-
-            try {
+            if (research != null)
                 UpdateStructList(research.Communications);
-            } catch (Exception ex) {
-                Logger.WriteError("ResCommunicationsListModel.UpdateContents()", ex);
-            }
         }
 
         public override async Task Modify(object sender, ModifyEventArgs eArgs)
@@ -370,13 +359,8 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var research = fDataOwner as GDMResearchRecord;
-            if (research == null) return;
-
-            try {
+            if (research != null)
                 UpdateStructList(research.Groups);
-            } catch (Exception ex) {
-                Logger.WriteError("ResGroupsListModel.UpdateContents()", ex);
-            }
         }
 
         public override async Task Modify(object sender, ModifyEventArgs eArgs)

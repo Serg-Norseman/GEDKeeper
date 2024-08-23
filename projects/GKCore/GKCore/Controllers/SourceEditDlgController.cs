@@ -57,7 +57,7 @@ namespace GKCore.Controllers
         {
             base.Init(baseWin);
 
-            fView.RepositoriesList.ListModel = new SourceRepositoriesListModel(fView, baseWin, fLocalUndoman);
+            fView.RepositoriesList.ListModel = new RepositoryCitationsListModel(fView, baseWin, fLocalUndoman);
             fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
             fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
             fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);

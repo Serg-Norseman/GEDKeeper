@@ -96,13 +96,8 @@ namespace GKCore.Lists
         public override void UpdateContents()
         {
             var family = fDataOwner as GDMFamilyRecord;
-            if (family == null) return;
-
-            try {
+            if (family != null)
                 UpdateStructList(family.Children);
-            } catch (Exception ex) {
-                Logger.WriteError("FamilyChildrenListModel.UpdateContents()", ex);
-            }
         }
 
         public override async Task Modify(object sender, ModifyEventArgs eArgs)

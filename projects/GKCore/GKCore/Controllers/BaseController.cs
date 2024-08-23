@@ -238,6 +238,76 @@ namespace GKCore.Controllers
             return result;
         }
 
+        public static async Task<ModificationResult<GDMRepositoryCitation>> ModifyRepositoryCitation(IView owner, IBaseWindow baseWin, ChangeTracker undoman,
+                                                GDMSourceRecord _struct, GDMRepositoryCitation cit)
+        {
+            var result = new ModificationResult<GDMRepositoryCitation>();
+
+            try {
+                baseWin.Context.BeginUpdate();
+
+                bool exists = cit != null;
+                if (!exists) {
+                    cit = new GDMRepositoryCitation();
+                }
+
+                using (var dlg = AppHost.ResolveDialog<IRepositoryCitEditDlg>(baseWin)) {
+                    dlg.RepositoryCitation = cit;
+                    result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
+                }
+
+                if (!exists) {
+                    if (result.Result) {
+                        result.Result = undoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, _struct, cit);
+                    } else {
+                        cit.Dispose();
+                        cit = null;
+                    }
+                }
+
+                result.Record = cit;
+            } finally {
+                baseWin.Context.EndUpdate();
+            }
+
+            return result;
+        }
+
+        public static async Task<ModificationResult<GDMSourceCallNumber>> ModifyCallNumber(IView owner, IBaseWindow baseWin, ChangeTracker undoman,
+                                                GDMRepositoryCitation _struct, GDMSourceCallNumber callNum)
+        {
+            var result = new ModificationResult<GDMSourceCallNumber>();
+
+            try {
+                baseWin.Context.BeginUpdate();
+
+                bool exists = callNum != null;
+                if (!exists) {
+                    callNum = new GDMSourceCallNumber();
+                }
+
+                using (var dlg = AppHost.ResolveDialog<ISourceCallNumberEditDlg>(baseWin)) {
+                    dlg.CallNumber = callNum;
+                    result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
+                }
+
+                if (!exists) {
+                    if (result.Result) {
+                        result.Result = undoman.DoOrdinaryOperation(OperationType.otCallNumberAdd, _struct, callNum);
+                    } else {
+                        callNum.Dispose();
+                        callNum = null;
+                    }
+                }
+
+                result.Record = callNum;
+            } finally {
+                baseWin.Context.EndUpdate();
+            }
+
+            return result;
+        }
+
         public static async Task<ModificationResult<GDMRepositoryRecord>> ModifyRepository(IView owner, IBaseWindow baseWin, GDMRepositoryRecord repRec)
         {
             var result = new ModificationResult<GDMRepositoryRecord>();

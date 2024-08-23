@@ -25,68 +25,59 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class SourceCitEditDlg : CommonDialog<ISourceCitEditDlg, SourceCitEditDlgController>, ISourceCitEditDlg
+    public sealed partial class RepositoryCitEditDlg : CommonDialog<IRepositoryCitEditDlg, RepositoryCitDlgController>, IRepositoryCitEditDlg
     {
-        public GDMSourceCitation SourceCitation
+        private readonly GKSheetList fCallNumbersList;
+
+        public GDMRepositoryCitation RepositoryCitation
         {
-            get { return fController.SourceCitation; }
-            set { fController.SourceCitation = value; }
+            get { return fController.RepositoryCitation; }
+            set { fController.RepositoryCitation = value; }
         }
 
         #region View Interface
 
-        ITextBox ISourceCitEditDlg.Page
+        IComboBox IRepositoryCitEditDlg.RepositoryCombo
         {
-            get { return GetControlHandler<ITextBox>(txtPage); }
+            get { return GetControlHandler<IComboBox>(cmbRepository); }
         }
 
-        IComboBox ISourceCitEditDlg.Certainty
+        ISheetList IRepositoryCitEditDlg.CallNumbersList
         {
-            get { return GetControlHandler<IComboBox>(txtCertainty); }
-        }
-
-        IComboBox ISourceCitEditDlg.Source
-        {
-            get { return GetControlHandler<IComboBox>(cmbSource); }
-        }
-
-        IDateControl ISourceCitEditDlg.DataDate
-        {
-            get { return GetControlHandler<IDateControl>(dateCtl); }
-        }
-
-        ITextBox ISourceCitEditDlg.DataText
-        {
-            get { return GetControlHandler<ITextBox>(txtText); }
+            get { return fCallNumbersList; }
         }
 
         #endregion
 
-        public SourceCitEditDlg(IBaseWindow baseWin)
+        public RepositoryCitEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
             btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
             btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnSourceAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
+            btnRepositoryAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
 
-            fController = new SourceCitEditDlgController(this);
+            fCallNumbersList = new GKSheetList(pageCallNumbers);
+            fCallNumbersList.SetControlName("fCallNumbersList"); // for purpose of tests
+
+            fController = new RepositoryCitDlgController(this);
             fController.Init(baseWin);
         }
 
-        private void btnSourceAdd_Click(object sender, EventArgs e)
+        private void btnRepositoryAdd_Click(object sender, EventArgs e)
         {
-            fController.AddSource();
+            fController.AddRepository();
         }
 
-        private void cbSource_KeyUp(object sender, KeyEventArgs e)
+        private void cmbRepository_KeyUp(object sender, KeyEventArgs e)
         {
-            fController.RefreshSourcesList(cmbSource.Text);
-            cmbSource.SelectionStart = cmbSource.Text.Length;
+            fController.RefreshRepositoriesList(cmbRepository.Text);
+            cmbRepository.SelectionStart = cmbRepository.Text.Length;
         }
     }
 }

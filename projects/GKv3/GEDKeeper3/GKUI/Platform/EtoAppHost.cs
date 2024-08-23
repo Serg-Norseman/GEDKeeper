@@ -562,6 +562,8 @@ namespace GKUI.Platform
             container.Register<IEventDefEditDlg, EventDefEditDlg>(LifeCycle.Transient);
             container.Register<ILocExpertDlg, LocExpertDlg>(LifeCycle.Transient);
             container.Register<IPartialView, PartialView>(LifeCycle.Transient);
+            container.Register<ISourceCallNumberEditDlg, SourceCallNumberEditDlg>(LifeCycle.Transient);
+            container.Register<IRepositoryCitEditDlg, RepositoryCitEditDlg>(LifeCycle.Transient);
 
             container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
 

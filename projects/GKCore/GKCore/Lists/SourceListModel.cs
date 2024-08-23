@@ -18,15 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Threading.Tasks;
-using BSLib;
 using GDModel;
-using GKCore.Design;
 using GKCore.Interfaces;
-using GKCore.Operations;
 using GKCore.Options;
-using GKCore.Types;
 
 namespace GKCore.Lists
 {
@@ -116,112 +110,6 @@ namespace GKCore.Lists
                     break;
             }
             return result;
-        }
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class SourceRepositoriesListModel : SheetModel<GDMRepositoryCitation>
-    {
-        private GDMRepositoryRecord fRepoRec;
-
-        public SourceRepositoriesListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
-        {
-            AllowedActions = EnumSet<RecordAction>.Create(
-                RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump,
-                RecordAction.raCopy, RecordAction.raPaste);
-        }
-
-        public static ListColumns CreateListColumns()
-        {
-            var result = new ListColumns(GKListType.stSourceRepositories);
-
-            result.AddColumn(LSID.Repository, 300, false);
-
-            result.ResetDefaults();
-            return result;
-        }
-
-        public override void Fetch(GDMRepositoryCitation aRec)
-        {
-            base.Fetch(aRec);
-            fRepoRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(fFetchedRec);
-        }
-
-        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
-        {
-            object result = null;
-            switch (colType) {
-                case 0:
-                    result = fRepoRec.RepositoryName;
-                    break;
-            }
-            return result;
-        }
-
-        public override void UpdateContents()
-        {
-            var source = fDataOwner as GDMSourceRecord;
-            if (source == null) return;
-
-            try {
-                UpdateStructList(source.RepositoryCitations);
-            } catch (Exception ex) {
-                Logger.WriteError("SourceRepositoriesListModel.UpdateContents()", ex);
-            }
-        }
-
-        public override async Task Modify(object sender, ModifyEventArgs eArgs)
-        {
-            var source = fDataOwner as GDMSourceRecord;
-            if (fBaseWin == null || source == null) return;
-
-            var repoCit = eArgs.ItemData as GDMRepositoryCitation;
-            GDMRepositoryRecord repoRec = null;
-
-            bool result = false;
-
-            switch (eArgs.Action) {
-                case RecordAction.raAdd:
-                    repoRec = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtRepository, null) as GDMRepositoryRecord;
-                    if (repoRec != null) {
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, source, repoRec);
-                    }
-                    break;
-
-                case RecordAction.raDelete:
-                    if (repoCit != null && await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.DetachRepositoryQuery))) {
-                        repoRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(repoCit);
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationRemove, source, repoRec);
-                    }
-                    break;
-
-                case RecordAction.raCopy:
-                    AppHost.Instance.SetClipboardObj<GDMRepositoryCitation>(repoCit);
-                    break;
-
-                case RecordAction.raCut:
-                    break;
-
-                case RecordAction.raPaste:
-                    repoCit = AppHost.Instance.GetClipboardObj<GDMRepositoryCitation>();
-                    if (repoCit != null) {
-                        repoRec = fBaseContext.Tree.GetPtrValue<GDMRepositoryRecord>(repoCit);
-                        result = fUndoman.DoOrdinaryOperation(OperationType.otSourceRepositoryCitationAdd, source, repoRec);
-                    }
-                    break;
-            }
-
-            if (result) {
-                if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raPaste) {
-                    eArgs.ItemData = source.FindRepository(repoRec);
-                }
-
-                fBaseWin.Context.Modified = true;
-                eArgs.IsChanged = true;
-            }
         }
     }
 }
