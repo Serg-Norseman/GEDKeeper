@@ -384,7 +384,8 @@
             this.sgData.TabIndex = 4;
             // 
             // dataGridView1
-            // 
+            //
+            this.dataGridView1.AllowDrop = true;
             this.dataGridView1.AllowUserToResizeRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -393,7 +394,10 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(609, 177);
             this.dataGridView1.TabIndex = 0;
-            // 
+            this.dataGridView1.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridView_DragDrop);
+            this.dataGridView1.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridView_DragOver);
+            this.dataGridView1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridView_MouseMove);
+            //
             // cbPersonLink
             // 
             this.cbPersonLink.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
