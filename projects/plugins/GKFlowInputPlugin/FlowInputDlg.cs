@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BSLib;
@@ -311,6 +312,53 @@ namespace GKFlowInputPlugin
         private void rbX_CheckedChanged(object sender, EventArgs e)
         {
             gbMetrics.Enabled = (rbSK_Met.Checked);
+        }
+
+        private void dataGridView_MouseMove(object sender, MouseEventArgs e)
+        {
+            if ((e.Button & MouseButtons.Left) != MouseButtons.Left || dataGridView1.SelectedRows.Count == 0) {
+                return;
+            }
+
+            var rowToMove = dataGridView1.SelectedRows[0];
+            if (rowToMove.IsNewRow) {
+                return;
+            }
+
+            dataGridView1.DoDragDrop(rowToMove, DragDropEffects.Move);
+        }
+
+        private void dataGridView_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void dataGridView_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Effect != DragDropEffects.Move) {
+                return;
+            }
+
+            var clientPoint = dataGridView1.PointToClient(new Point(e.X, e.Y));
+            var hit = dataGridView1.HitTest(clientPoint.X, clientPoint.Y);
+            var rowIndexOfItemUnderMouseToDrop =
+                hit.Type != DataGridViewHitTestType.TopLeftHeader && hit.Type != DataGridViewHitTestType.ColumnHeader
+                    ? hit.RowIndex
+                    : 0;
+
+            var rowToMove = e.Data.GetData(typeof(DataGridViewRow)) as DataGridViewRow;
+            if (rowToMove == null) {
+                return;
+            }
+
+            dataGridView1.Rows.Remove(rowToMove);
+            if (rowIndexOfItemUnderMouseToDrop < dataGridView1.Rows.Count && rowIndexOfItemUnderMouseToDrop >= 0) {
+                dataGridView1.Rows.Insert(rowIndexOfItemUnderMouseToDrop, rowToMove);
+            } else {
+                dataGridView1.Rows.Add(rowToMove);
+            }
+
+            dataGridView1.CurrentCell = rowToMove.Cells[0];
         }
 
         #endregion
