@@ -25,6 +25,8 @@ using Eto.Forms;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
+using GKCore.Export;
+using GKCore.Types;
 using GKUI.Platform.Handlers;
 
 namespace GKUI.Components
@@ -39,12 +41,21 @@ namespace GKUI.Components
 
         public event EventHandler NavRefresh;
 
+        public new virtual float Scale
+        {
+            get { return 0; }
+        }
+
 
         protected CustomChart()
         {
             CenteredImage = true;
 
             fNavman = new NavigationStack<object>();
+        }
+
+        public virtual void SetScale(float value)
+        {
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -175,6 +186,9 @@ namespace GKUI.Components
                 }
 
                 return;
+            } else if (ext == ".pdf") {
+                RenderPDF(fileName);
+                return;
             }
 
             if ((ext == ".bmp" || ext == ".jpg") && imageSize.Width >= 65535) {
@@ -211,6 +225,39 @@ namespace GKUI.Components
                 } finally {
                     pic.Dispose();
                 }
+            }
+        }
+
+        private void RenderPDF(string fileName)
+        {
+            var prevRenderer = fRenderer;
+            var prevScale = this.Scale;
+
+            var pdfWriter = new PDFWriter(GKPageSize.A4, true);
+            pdfWriter.SetFileName(fileName);
+            pdfWriter.BeginWrite();
+
+            var renderer = pdfWriter.GetPageRenderer();
+            SetRenderer(renderer);
+
+            this.SetScale(1.0f);
+            var imageSize = GetImageSize();
+            pdfWriter.SetPageSize(imageSize);
+            ((PDFRenderer)renderer).SetPageSize(imageSize);
+
+            // It is necessary to recreate the document with new page parameters
+            // (the first one will not be saved by default, because it is empty).
+            pdfWriter.NewPage();
+
+            renderer.BeginDrawing();
+            try {
+                RenderImage(RenderTarget.Printer);
+            } finally {
+                renderer.EndDrawing();
+                pdfWriter.EndWrite();
+
+                SetRenderer(prevRenderer);
+                this.SetScale(prevScale);
             }
         }
 

@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define PDF_RENDER
-
 using System.IO;
 using GDModel;
 using GKCore.Charts;
@@ -279,9 +277,7 @@ namespace GKCore.Controllers
         public async void SaveSnapshot()
         {
             string filters = GKUtils.GetImageFilter(true);
-#if PDF_RENDER
             filters += "|" + LangMan.LS(LSID.PDFFilter);
-#endif
 
             string fileName = await AppHost.StdDialogs.GetSaveFile("", GlobalOptions.Instance.ImageExportLastDir, filters, 2, "jpg", "");
             if (!string.IsNullOrEmpty(fileName)) {

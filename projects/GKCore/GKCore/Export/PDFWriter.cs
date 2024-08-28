@@ -161,6 +161,14 @@ namespace GKCore.Export
             return ExtRectF.Create(fDocument.Left, fDocument.Bottom, fDocument.Right, fDocument.Top);
         }
 
+        public void SetPageSize(ExtSize size)
+        {
+            itRectangle pageRect = new itRectangle(0, 0, size.Height, size.Width);
+            pageRect = pageRect.Rotate();
+            fDocument.SetPageSize(pageRect);
+            fPdfWriter.SetPageSize(pageRect);
+        }
+
         public override void BeginWrite()
         {
             itRectangle pageSize;

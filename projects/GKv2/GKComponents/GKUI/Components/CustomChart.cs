@@ -250,32 +250,7 @@ namespace GKUI.Components
 
                 return;
             } else if (ext == ".pdf") {
-                var prevRenderer = fRenderer;
-
-                var pdfWriter = new PDFWriter(GKPageSize.A4, true);
-                pdfWriter.SetFileName(fileName);
-                pdfWriter.BeginWrite();
-
-                var renderer = pdfWriter.GetPageRenderer();
-                SetRenderer(renderer);
-
-                var pageSize = pdfWriter.GetPageSize();
-                var sf = GfxHelper.ZoomToFit(imageSize.Width, imageSize.Height, pageSize.GetWidth(), pageSize.GetHeight());
-                var prevScale = this.Scale;
-                if (sf < 1.0f) this.SetScale(sf);
-
-                renderer.BeginDrawing();
-                try {
-                    //GenChart(indi.IRec, indi.TreeKind, false);
-                    RenderImage(RenderTarget.Printer);
-                } finally {
-                    renderer.EndDrawing();
-                    pdfWriter.EndWrite();
-
-                    SetRenderer(prevRenderer);
-                    this.SetScale(prevScale);
-                }
-
+                RenderPDF(fileName);
                 return;
             }
 
@@ -319,6 +294,39 @@ namespace GKUI.Components
                 } finally {
                     pic.Dispose();
                 }
+            }
+        }
+
+        private void RenderPDF(string fileName)
+        {
+            var prevRenderer = fRenderer;
+            var prevScale = this.Scale;
+
+            var pdfWriter = new PDFWriter(GKPageSize.A4, true);
+            pdfWriter.SetFileName(fileName);
+            pdfWriter.BeginWrite();
+
+            var renderer = pdfWriter.GetPageRenderer();
+            SetRenderer(renderer);
+
+            this.SetScale(1.0f);
+            var imageSize = GetImageSize();
+            pdfWriter.SetPageSize(imageSize);
+            ((PDFRenderer)renderer).SetPageSize(imageSize);
+
+            // It is necessary to recreate the document with new page parameters
+            // (the first one will not be saved by default, because it is empty).
+            pdfWriter.NewPage();
+
+            renderer.BeginDrawing();
+            try {
+                RenderImage(RenderTarget.Printer);
+            } finally {
+                renderer.EndDrawing();
+                pdfWriter.EndWrite();
+
+                SetRenderer(prevRenderer);
+                this.SetScale(prevScale);
             }
         }
 

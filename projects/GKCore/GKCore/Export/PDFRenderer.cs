@@ -40,13 +40,19 @@ namespace GKCore.Export
     public sealed class PDFRenderer : ChartRenderer
     {
         private PdfContentByte fCanvas;
-        private readonly float fPageHeight;
-        private readonly float fPageWidth;
+        private float fPageHeight;
+        private float fPageWidth;
 
         public PDFRenderer(float pageWidth, float pageHeight)
         {
             fPageHeight = pageHeight;
             fPageWidth = pageWidth;
+        }
+
+        public void SetPageSize(ExtSize size)
+        {
+            fPageHeight = size.Height;
+            fPageWidth = size.Width;
         }
 
         public override void SetTarget(object target)
