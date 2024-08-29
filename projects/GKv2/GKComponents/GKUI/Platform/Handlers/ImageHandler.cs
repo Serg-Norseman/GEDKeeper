@@ -93,7 +93,11 @@ namespace GKUI.Platform.Handlers
             }
 
             var stream = new MemoryStream();
-            Handle.Save(stream, imgFormat);
+            // for fix bug: "A generic error occurred in GDI+"
+            using (var newBitmap = new Bitmap(Handle)) {
+                newBitmap.Save(stream, imgFormat);
+            }
+            //Handle.Save(stream, imgFormat);
             return stream;
         }
 

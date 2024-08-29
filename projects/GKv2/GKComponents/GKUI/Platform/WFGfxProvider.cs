@@ -242,7 +242,14 @@ namespace GKUI.Platform
             if (fileName == null)
                 throw new ArgumentNullException("fileName");
 
-            ((ImageHandler)image).Handle.Save(fileName, ImageFormat.Bmp);
+            // overwrite mode
+            using (FileStream stream = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
+                var oldBitmap = ((ImageHandler)image).Handle;
+                // for fix bug: "A generic error occurred in GDI+"
+                using (var newBitmap = new Bitmap(oldBitmap)) {
+                    newBitmap.Save(stream, ImageFormat.Bmp);
+                }
+            }
         }
 
         public IFont CreateFont(string fontName, float size, bool bold)
