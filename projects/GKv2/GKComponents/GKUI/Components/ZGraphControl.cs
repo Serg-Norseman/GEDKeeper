@@ -70,6 +70,8 @@ namespace GKUI.Components
                 gPane.XAxis.Title.Text = xAxis;
                 gPane.YAxis.Title.Text = yAxis;
 
+                gPane.IsFontsScaled = false;
+
                 if (style != ChartStyle.ClusterBar) {
                     PointPairList ppList = new PointPairList();
 

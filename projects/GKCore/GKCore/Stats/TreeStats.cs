@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -37,7 +37,7 @@ namespace GKCore.Stats
         private readonly IBaseContext fContext;
         private readonly GDMTree fTree;
         private readonly List<GDMRecord> fSelectedRecords;
-        
+
         public TreeStats(IBaseContext context, List<GDMRecord> selectedRecords)
         {
             fContext = context;
@@ -48,14 +48,13 @@ namespace GKCore.Stats
         public CommonStats GetCommonStats()
         {
             CommonStats stats = new CommonStats();
-            
+
             int num = fSelectedRecords.Count;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GDMRecord rec = fSelectedRecords[i];
                 if (rec.RecordType != GDMRecordType.rtIndividual) continue;
 
-                GDMIndividualRecord ind = (GDMIndividualRecord) rec;
+                GDMIndividualRecord ind = (GDMIndividualRecord)rec;
                 stats.persons++;
 
                 switch (ind.Sex) {
@@ -97,7 +96,7 @@ namespace GKCore.Stats
                 float vCI = GKUtils.GetCertaintyAssessment(ind);
                 stats.cIndex.TakeVal(vCI, ind.Sex, false);
             }
-            
+
             return stats;
         }
 
@@ -109,7 +108,7 @@ namespace GKCore.Stats
                 }
             }
 
-            int vIdx = valsList.FindIndex(delegate(StatsItem lv) { return (lv.Caption == val); });
+            int vIdx = valsList.FindIndex(delegate (StatsItem lv) { return (lv.Caption == val); });
 
             StatsItem lvi;
             if (vIdx == -1) {
@@ -118,7 +117,7 @@ namespace GKCore.Stats
             } else {
                 lvi = valsList[vIdx];
             }
-            
+
             switch (sex) {
                 case GDMSex.svFemale:
                     lvi.ValF = lvi.ValF + 1;
@@ -192,8 +191,7 @@ namespace GKCore.Stats
         {
             string iName = GKUtils.GetNameString(iRec, true, false);
 
-            switch (mode)
-            {
+            switch (mode) {
                 case StatsMode.smAncestors:
                     values.Add(new StatsItem(iName, GKUtils.GetAncestorsCount(fTree, iRec) - 1));
                     break;
@@ -314,11 +312,9 @@ namespace GKCore.Stats
                     }
                     break;
 
-                case StatsMode.smDemography:
-                    {
+                case StatsMode.smDemography: {
                         int lifeExp = GKUtils.GetLifeExpectancy(iRec);
-                        if (lifeExp > -1)
-                        {
+                        if (lifeExp > -1) {
                             string v = Convert.ToString(lifeExp / 5 * 5);
                             CheckVal(values, v, iRec.Sex);
                         }
@@ -336,63 +332,27 @@ namespace GKCore.Stats
             var xvals = new Dictionary<string, List<int>>();
 
             int num = fTree.RecordsCount;
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 GDMRecord rec = fTree[i];
 
-                if (rec.RecordType == GDMRecordType.rtIndividual && mode != StatsMode.smSpousesDiff && fSelectedRecords.Contains(rec))
-                {
+                if (rec.RecordType == GDMRecordType.rtIndividual && mode != StatsMode.smSpousesDiff && fSelectedRecords.Contains(rec)) {
                     GDMIndividualRecord iRec = rec as GDMIndividualRecord;
 
-                    if (mode != StatsMode.smAAF_1 && mode != StatsMode.smAAF_2)
-                    {
-                        GetSimplePersonStat(mode, values, iRec);
+                    switch (mode) {
+                        case StatsMode.smAAF_1:
+                        case StatsMode.smAAF_2:
+                            ProcessAAFBuffer(mode, xvals, iRec);
+                            break;
+
+                        case StatsMode.smParentsAge:
+                            ProcessParentsAgeStats(values, iRec);
+                            break;
+
+                        default:
+                            GetSimplePersonStat(mode, values, iRec);
+                            break;
                     }
-                    else
-                    {
-                        GDMIndividualRecord iChild = GKUtils.GetFirstborn(fTree, iRec);
-                        int fba = GKUtils.GetFirstbornAge(iRec, iChild);
-                        if (fba > 0 && iChild != null) {
-                            string key;
-                            List<int> valsList;
-
-                            switch (mode)
-                            {
-                                case StatsMode.smAAF_1:
-                                    int dty1 = iRec.GetChronologicalYear(GEDCOMTagName.BIRT);
-                                    if (dty1 != 0) {
-                                        key = MathHelper.Trunc(dty1 / 10 * 10).ToString();
-
-                                        if (!xvals.TryGetValue(key, out valsList))
-                                        {
-                                            valsList = new List<int>();
-                                            xvals.Add(key, valsList);
-                                        }
-                                        valsList.Add(fba);
-                                    }
-
-                                    break;
-
-                                case StatsMode.smAAF_2:
-                                    int dty2 = iChild.GetChronologicalYear(GEDCOMTagName.BIRT);
-                                    if (dty2 != 0) {
-                                        key = MathHelper.Trunc(dty2 / 10 * 10).ToString();
-
-                                        if (!xvals.TryGetValue(key, out valsList))
-                                        {
-                                            valsList = new List<int>();
-                                            xvals.Add(key, valsList);
-                                        }
-                                        valsList.Add(fba);
-                                    }
-
-                                    break;
-                            }
-                        }
-                    }
-                }
-                else if (rec.RecordType == GDMRecordType.rtFamily && mode == StatsMode.smSpousesDiff)
-                {
+                } else if (rec.RecordType == GDMRecordType.rtFamily && mode == StatsMode.smSpousesDiff) {
                     GDMFamilyRecord fRec = rec as GDMFamilyRecord;
 
                     int diff = GKUtils.GetSpousesDiff(fTree, fRec);
@@ -402,24 +362,102 @@ namespace GKCore.Stats
                 }
             }
 
-            if (mode == StatsMode.smAAF_1 || mode == StatsMode.smAAF_2)
-            {
-                foreach (KeyValuePair<string, List<int>> kvp in xvals)
-                {
-                    List<int> valsList = kvp.Value;
-                    int count = valsList.Count;
+            if (mode == StatsMode.smAAF_1 || mode == StatsMode.smAAF_2) {
+                CalcAAFResult(values, xvals);
+            }
+        }
 
-                    int avg;
-                    if (count == 0) {
-                        avg = 0;
-                    } else {
-                        double sum = 0;
-                        for (int i = 0; i < count; i++) sum += valsList[i];
-                        avg = (int)Math.Round(sum / count);
+        private void ProcessParentsAgeStats(List<StatsItem> values, GDMIndividualRecord iRec)
+        {
+            GDMCustomEvent evt = iRec.FindEvent(GEDCOMTagName.BIRT);
+            if (evt == null) return;
+
+            int parentYear = evt.GetChronologicalYear();
+            if (parentYear == 0) return;
+
+            int num = iRec.SpouseToFamilyLinks.Count;
+            for (int i = 0; i < num; i++) {
+                GDMFamilyRecord family = fTree.GetPtrValue(iRec.SpouseToFamilyLinks[i]);
+                if (family == null) continue;
+
+                int num2 = family.Children.Count;
+                for (int j = 0; j < num2; j++) {
+                    GDMIndividualRecord child = fTree.GetPtrValue(family.Children[j]);
+                    if (child == null) continue;
+
+                    evt = child.FindEvent(GEDCOMTagType.BIRT);
+                    if (evt == null) continue;
+
+                    int childYear = evt.GetChronologicalYear();
+
+                    if (parentYear != 0 && childYear != 0) {
+                        int age = (childYear - parentYear);
+
+                        // exclude errors
+                        if (age >= GKData.MIN_PARENT_AGE) {
+                            CheckVal(values, age.ToString(), iRec.Sex);
+                        }
                     }
-
-                    values.Add(new StatsItem(kvp.Key, avg));
                 }
+            }
+        }
+
+        private void ProcessAAFBuffer(StatsMode mode, Dictionary<string, List<int>> xvals, GDMIndividualRecord iRec)
+        {
+            GDMIndividualRecord iChild = GKUtils.GetFirstborn(fTree, iRec);
+            int fba = GKUtils.GetFirstbornAge(iRec, iChild);
+            if (fba > 0 && iChild != null) {
+                string key;
+                List<int> valsList;
+
+                switch (mode) {
+                    case StatsMode.smAAF_1:
+                        int dty1 = iRec.GetChronologicalYear(GEDCOMTagName.BIRT);
+                        if (dty1 != 0) {
+                            key = MathHelper.Trunc(dty1 / 10 * 10).ToString();
+
+                            if (!xvals.TryGetValue(key, out valsList)) {
+                                valsList = new List<int>();
+                                xvals.Add(key, valsList);
+                            }
+                            valsList.Add(fba);
+                        }
+
+                        break;
+
+                    case StatsMode.smAAF_2:
+                        int dty2 = iChild.GetChronologicalYear(GEDCOMTagName.BIRT);
+                        if (dty2 != 0) {
+                            key = MathHelper.Trunc(dty2 / 10 * 10).ToString();
+
+                            if (!xvals.TryGetValue(key, out valsList)) {
+                                valsList = new List<int>();
+                                xvals.Add(key, valsList);
+                            }
+                            valsList.Add(fba);
+                        }
+
+                        break;
+                }
+            }
+        }
+
+        private static void CalcAAFResult(List<StatsItem> values, Dictionary<string, List<int>> xvals)
+        {
+            foreach (KeyValuePair<string, List<int>> kvp in xvals) {
+                List<int> valsList = kvp.Value;
+                int count = valsList.Count;
+
+                int avg;
+                if (count == 0) {
+                    avg = 0;
+                } else {
+                    double sum = 0;
+                    for (int i = 0; i < count; i++) sum += valsList[i];
+                    avg = (int)Math.Round(sum / count);
+                }
+
+                values.Add(new StatsItem(kvp.Key, avg));
             }
         }
 

@@ -500,6 +500,7 @@ namespace GKCore
                 new StatsTitleStruct(LSID.CertaintyIndex, LSID.CertaintyIndex),
                 new StatsTitleStruct(LSID.BirthByMonth, LSID.BirthByMonth),
                 new StatsTitleStruct(LSID.Demography, LSID.Demography),
+                new StatsTitleStruct(LSID.ParentsAge, LSID.ParentsAge),
             };
 
             CheckSolveNames = new LSID[] {

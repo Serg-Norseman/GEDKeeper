@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -152,6 +152,12 @@ namespace GKCore.Controllers
 
                 case StatsMode.smDemography:
                     fChartXTitle = LangMan.LS(LSID.LifeExpectancy);
+                    fChartYTitle = LangMan.LS(LSID.People);
+                    fView.Graph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.ClusterBar, true, fCurrentValues);
+                    break;
+
+                case StatsMode.smParentsAge:
+                    fChartXTitle = LangMan.LS(LSID.ParentsAge);
                     fChartYTitle = LangMan.LS(LSID.People);
                     fView.Graph.PrepareArray(fChartTitle, fChartXTitle, fChartYTitle, ChartStyle.ClusterBar, true, fCurrentValues);
                     break;
