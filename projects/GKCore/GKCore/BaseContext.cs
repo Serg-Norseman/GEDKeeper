@@ -1539,9 +1539,26 @@ namespace GKCore
             }
         }
 
+        private static string CheckFileName(string fileName)
+        {
+            // Control of possible folder management problems in Windows
+            // if there is a space before the dot in the file name
+            // (the folder cannot be deleted, copied, renamed, moved).
+            string purePath = Path.GetDirectoryName(fileName);
+            string pureFileName = Path.GetFileNameWithoutExtension(fileName);
+            string ext = Path.GetExtension(fileName);
+            if (pureFileName.EndsWith(" ")) {
+                pureFileName = pureFileName.TrimEnd();
+                fileName = Path.Combine(purePath, Path.ChangeExtension(pureFileName, ext));
+            }
+            return fileName;
+        }
+
         private void FileSave(string fileName, string password)
         {
             string oldFileName = fFileName;
+
+            fileName = CheckFileName(fileName);
 
             switch (GlobalOptions.Instance.FileBackup) {
                 case FileBackup.fbNone:
