@@ -307,6 +307,8 @@
                                                 <input:RadioButton x:Name="radMarried_Maiden" />
                                                 <input:RadioButton x:Name="radMaiden" />
                                                 <input:RadioButton x:Name="radMarried" />
+                                                <Label />
+                                                <input:CheckBox x:Name="chkSimpleSingleSurnames" />
                                             </input:RadioButtonGroupView>
                                         </comcom:GroupBox>
 

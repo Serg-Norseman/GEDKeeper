@@ -378,6 +378,8 @@
                       <RadioButton x:Name="radMarried_Maiden" />
                       <RadioButton x:Name="radMaiden" />
                       <RadioButton x:Name="radMarried" />
+                      <StackLayoutItem />
+                      <CheckBox x:Name="chkSimpleSingleSurnames" />
 
                     </StackLayout>
                   </GroupBox>

@@ -196,6 +196,7 @@
         private System.Windows.Forms.CheckBox chkSourcePages;
         private System.Windows.Forms.TabPage pageNavigation;
         private System.Windows.Forms.CheckBox chkPortraits;
+        private System.Windows.Forms.CheckBox chkSimpleSingleSurnames;
 
         private void InitializeComponent()
         {
@@ -393,6 +394,7 @@
             this.chkSourcePages = new System.Windows.Forms.CheckBox();
             this.pageNavigation = new System.Windows.Forms.TabPage();
             this.chkPortraits = new System.Windows.Forms.CheckBox();
+            this.chkSimpleSingleSurnames = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -1889,11 +1891,12 @@
             this.grpAdvancedNames.Controls.Add(this.radMarried_Maiden);
             this.grpAdvancedNames.Controls.Add(this.radMaiden_Married);
             this.grpAdvancedNames.Controls.Add(this.chkExtendWomanSurnames);
+            this.grpAdvancedNames.Controls.Add(this.chkSimpleSingleSurnames);
             this.grpAdvancedNames.Location = new System.Drawing.Point(326, 201);
             this.grpAdvancedNames.Margin = new System.Windows.Forms.Padding(10);
             this.grpAdvancedNames.Name = "grpAdvancedNames";
             this.grpAdvancedNames.Padding = new System.Windows.Forms.Padding(2);
-            this.grpAdvancedNames.Size = new System.Drawing.Size(368, 198);
+            this.grpAdvancedNames.Size = new System.Drawing.Size(368, 230);
             this.grpAdvancedNames.TabIndex = 8;
             this.grpAdvancedNames.TabStop = false;
             this.grpAdvancedNames.Text = "AdvancedNames";
@@ -1901,7 +1904,7 @@
             // radMarried
             // 
             this.radMarried.AutoSize = true;
-            this.radMarried.Location = new System.Drawing.Point(26, 159);
+            this.radMarried.Location = new System.Drawing.Point(26, 157);
             this.radMarried.Margin = new System.Windows.Forms.Padding(10);
             this.radMarried.Name = "radMarried";
             this.radMarried.Size = new System.Drawing.Size(93, 21);
@@ -1913,7 +1916,7 @@
             // radMaiden
             // 
             this.radMaiden.AutoSize = true;
-            this.radMaiden.Location = new System.Drawing.Point(26, 125);
+            this.radMaiden.Location = new System.Drawing.Point(26, 124);
             this.radMaiden.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
             this.radMaiden.Name = "radMaiden";
             this.radMaiden.Size = new System.Drawing.Size(91, 21);
@@ -1957,6 +1960,17 @@
             this.chkExtendWomanSurnames.Text = "ExtendWomanSurnames";
             this.chkExtendWomanSurnames.UseVisualStyleBackColor = true;
             this.chkExtendWomanSurnames.CheckedChanged += new System.EventHandler(this.chkExtendWomanSurnames_CheckedChanged);
+            // 
+            // chkSimpleSingleSurnames
+            // 
+            this.chkSimpleSingleSurnames.AutoSize = true;
+            this.chkSimpleSingleSurnames.Location = new System.Drawing.Point(12, 190);
+            this.chkSimpleSingleSurnames.Margin = new System.Windows.Forms.Padding(2);
+            this.chkSimpleSingleSurnames.Name = "chkSimpleSingleSurnames";
+            this.chkSimpleSingleSurnames.Size = new System.Drawing.Size(184, 21);
+            this.chkSimpleSingleSurnames.TabIndex = 8;
+            this.chkSimpleSingleSurnames.Text = "chkSimpleSingleSurnames";
+            this.chkSimpleSingleSurnames.UseVisualStyleBackColor = true;
             // 
             // rgFNPFormat
             // 

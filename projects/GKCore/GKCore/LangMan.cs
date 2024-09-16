@@ -1072,8 +1072,9 @@ namespace GKCore
         /* 995 */ RemoveCallNumberQuery,
         /* 996 */ RepositoryIsNotSpecified,
         /* 997 */ ParentsAge,
+        /* 998 */ SimpleSingleSurnames,
 
-        /* 000 */ Last = ParentsAge
+        /* 000 */ Last = SimpleSingleSurnames
     }
 
 
@@ -2099,6 +2100,7 @@ namespace GKCore
             /* 995 */ "Are you sure you want to remove call number \"{0}\"?",
             /* 996 */ "Repository is not specified",
             /* 997 */ "Age of parents",
+            /* 998 */ "Simple form of single surnames",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

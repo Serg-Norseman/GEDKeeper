@@ -296,6 +296,9 @@ namespace GKCore.Controllers
                     GetControl<IRadioButton>("radMarried").Checked = true;
                     break;
             }
+
+            GetControl<ICheckBox>("chkSimpleSingleSurnames").Checked = isExtend && fOptions.SimpleSingleSurnames;
+            GetControl<ICheckBox>("chkSimpleSingleSurnames").Enabled = isExtend;
         }
 
         public void ChangeExtendWomanSurnames()
@@ -308,6 +311,7 @@ namespace GKCore.Controllers
                 GetControl<IRadioButton>("radMarried_Maiden").Enabled = true;
                 GetControl<IRadioButton>("radMaiden").Enabled = true;
                 GetControl<IRadioButton>("radMarried").Enabled = true;
+                GetControl<ICheckBox>("chkSimpleSingleSurnames").Enabled = true;
             }
         }
 
@@ -326,6 +330,7 @@ namespace GKCore.Controllers
                     fOptions.WomanSurnameFormat = WomanSurnameFormat.wsfMarried;
                 }
             }
+            fOptions.SimpleSingleSurnames = GetControl<ICheckBox>("chkSimpleSingleSurnames").Checked;
         }
 
         public void ResetInterfaceOptions()
@@ -993,6 +998,7 @@ namespace GKCore.Controllers
             GetControl<IRadioButton>("radMarried_Maiden").Text = LangMan.LS(LSID.WSF_Married_Maiden);
             GetControl<IRadioButton>("radMaiden").Text = LangMan.LS(LSID.WSF_Maiden);
             GetControl<IRadioButton>("radMarried").Text = LangMan.LS(LSID.WSF_Married);
+            GetControl<ICheckBox>("chkSimpleSingleSurnames").Text = LangMan.LS(LSID.SimpleSingleSurnames);
 
             GetControl<ITabPage>("pageViewPersons").Text = LangMan.LS(LSID.ListPersons);
             GetControl<IButton>("btnResetDefaults").Text = LangMan.LS(LSID.DefList);

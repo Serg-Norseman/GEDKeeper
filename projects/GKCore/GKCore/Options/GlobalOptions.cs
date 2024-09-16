@@ -243,8 +243,6 @@ namespace GKCore.Options
         }
 
         /// <summary>
-        /// Hidden option for non-standard order.
-        ///
         /// Initial implementation (now just default) for enumerating ATDs: from largest to smallest.
         /// Reverse order of places: from smallest to largest.
         ///
@@ -294,6 +292,8 @@ namespace GKCore.Options
         public bool UseBirthDatesInPersonSelectionFilter { get; set; }
 
         public WomanSurnameFormat WomanSurnameFormat { get; set; }
+
+        public bool SimpleSingleSurnames { get; set; }
 
 
         private GlobalOptions()
@@ -399,6 +399,7 @@ namespace GKCore.Options
             SurnameFirstInOrder = true;
             SurnameInCapitals = false;
             WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
+            SimpleSingleSurnames = false;
             UseSurnamesInPersonSelectionFilter = false;
             UseBirthDatesInPersonSelectionFilter = false;
             ShowIndiAssociations = false;
@@ -769,6 +770,7 @@ namespace GKCore.Options
             AutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
 
             WomanSurnameFormat = (WomanSurnameFormat)ini.ReadInteger("Common", "WomanSurnameFormat", 0);
+            SimpleSingleSurnames = ini.ReadBool("Common", "SimpleSingleSurnames", false);
 
             Geocoder = ini.ReadString("Common", "Geocoder", "Google");
             GeoSearchCountry = ini.ReadString("Common", "GeoSearchCountry", "");
@@ -908,6 +910,7 @@ namespace GKCore.Options
             ini.WriteInteger("Common", "AutosaveInterval", AutosaveInterval);
 
             ini.WriteInteger("Common", "WomanSurnameFormat", (int)WomanSurnameFormat);
+            ini.WriteBool("Common", "SimpleSingleSurnames", SimpleSingleSurnames);
 
             ini.WriteString("Common", "Geocoder", Geocoder);
             ini.WriteString("Common", "GeoSearchCountry", GeoSearchCountry);

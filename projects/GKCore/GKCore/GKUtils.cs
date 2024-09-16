@@ -3544,22 +3544,34 @@ namespace GKCore
             var globOpts = GlobalOptions.Instance;
 
             WomanSurnameFormat wsFmt = globOpts.WomanSurnameFormat;
+            bool simpleSingle = globOpts.SimpleSingleSurnames;
+
             if (iSex == GDMSex.svFemale && wsFmt != WomanSurnameFormat.wsfNotExtend) {
                 string marriedSurname = personalName.MarriedName;
                 switch (wsFmt) {
                     case WomanSurnameFormat.wsfMaiden_Married:
                         result = defSurname;
+                        simpleSingle = simpleSingle && string.IsNullOrEmpty(result);
                         if (marriedSurname.Length > 0) {
-                            string op = (result.Length > 0) ? " (" : "(";
-                            result = string.Concat(result, op, marriedSurname, ")");
+                            if (!simpleSingle) {
+                                string op = (result.Length > 0) ? " (" : "(";
+                                result = string.Concat(result, op, marriedSurname, ")");
+                            } else {
+                                result = marriedSurname;
+                            }
                         }
                         break;
 
                     case WomanSurnameFormat.wsfMarried_Maiden:
                         result = marriedSurname;
+                        simpleSingle = simpleSingle && string.IsNullOrEmpty(result);
                         if (defSurname.Length > 0) {
-                            string op = (result.Length > 0) ? " (" : "(";
-                            result = string.Concat(result, op, defSurname, ")");
+                            if (!simpleSingle) {
+                                string op = (result.Length > 0) ? " (" : "(";
+                                result = string.Concat(result, op, defSurname, ")");
+                            } else {
+                                result = defSurname;
+                            }
                         }
                         break;
 
