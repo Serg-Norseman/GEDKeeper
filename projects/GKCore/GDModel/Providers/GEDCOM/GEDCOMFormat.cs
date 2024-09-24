@@ -34,6 +34,7 @@ namespace GDModel.Providers.GEDCOM
         gf_EasyTree,
         gf_FamilyHistorian,
         gf_FamilyTreeMaker,
+        gf_FamyTale,
         gf_FTB,
         gf_gedcom4j,
         gf_GeneWeb,

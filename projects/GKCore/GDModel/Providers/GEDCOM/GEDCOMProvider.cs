@@ -2748,7 +2748,7 @@ namespace GDModel.Providers.GEDCOM
         {
             return
                 (format == GEDCOMFormat.gf_FTB || format == GEDCOMFormat.gf_WikiTree || format == GEDCOMFormat.gf_Geni ||
-                 format == GEDCOMFormat.gf_Ancestry || format == GEDCOMFormat.gf_PAF);
+                 format == GEDCOMFormat.gf_Ancestry || format == GEDCOMFormat.gf_PAF || format == GEDCOMFormat.gf_FamyTale);
         }
 
         static GEDCOMProvider()
@@ -2767,6 +2767,7 @@ namespace GDModel.Providers.GEDCOM
                 new GEDCOMAppFormat(GEDCOMFormat.gf_FamilyHistorian, "FAMILY_HISTORIAN", "Family Historian", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.gf_FamilyTreeMaker, "FTM", "Family Tree Maker", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.gf_FamilyTreeMaker, "FTW", "Family Tree Maker", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.gf_FamyTale, "FAMYTALE", "FamyTale", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.gf_FTB, "MYHERITAGE", "MyHeritage Family Tree Builder", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.gf_GENBOX, "GENBOX", "Genbox Family History", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.gf_gedcom4j, "gedcom4j", "gedcom4j", -1),
