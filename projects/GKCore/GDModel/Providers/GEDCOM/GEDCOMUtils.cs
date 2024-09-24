@@ -629,8 +629,8 @@ namespace GDModel.Providers.GEDCOM
 
             strTok.SkipWhitespaces();
 
-            GEDCOMFormat format = (owner == null) ? GEDCOMFormat.gf_Native : owner.Format;
-            bool isAhnDeviance = (format == GEDCOMFormat.gf_Ahnenblatt);
+            GEDCOMFormat format = (owner == null) ? GEDCOMFormat.Native : owner.Format;
+            bool isAhnDeviance = (format == GEDCOMFormat.Ahnenblatt);
 
             var token = strTok.CurrentToken;
             if (isAhnDeviance && token == GEDCOMToken.Symbol && strTok.GetSymbol() == '(') {

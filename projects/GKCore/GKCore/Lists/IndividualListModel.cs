@@ -234,7 +234,7 @@ namespace GKCore.Lists
             return result;
         }
 
-        protected bool IsMatchesNames(GDMIndividualRecord iRec, string searchPattern, bool allNames)
+        private bool IsMatchesNames(GDMIndividualRecord iRec, string searchPattern, bool allNames)
         {
             if (!allNames) {
                 string recName = GKUtils.GetNameString(iRec, true, false);

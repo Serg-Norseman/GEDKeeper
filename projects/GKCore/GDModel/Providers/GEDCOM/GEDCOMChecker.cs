@@ -41,7 +41,7 @@ namespace GDModel.Providers.GEDCOM
         {
             fBaseContext = baseContext;
             fTree = fBaseContext.Tree;
-            fFormat = GEDCOMProvider.GetGEDCOMFormat(fTree);
+            fFormat = GEDCOMProvider.GetGEDCOMFormat(fTree, out _);
             fProgress = progress;
         }
 
@@ -198,7 +198,7 @@ namespace GDModel.Providers.GEDCOM
 
             switch (fFormat) {
                 // Fix for Family Tree Maker 2008 which exports occupation as generic EVEN events
-                case GEDCOMFormat.gf_FamilyTreeMaker: {
+                case GEDCOMFormat.FamilyTreeMaker: {
                         string subtype = evt.Classification.ToLower();
                         if (tagType == GEDCOMTagType.EVEN && subtype == "occupation") {
                             evt.SetName(GEDCOMTagType.OCCU);
@@ -283,7 +283,7 @@ namespace GDModel.Providers.GEDCOM
 
             fBaseContext.ImportNames(iRec);
 
-            if (fFormat == GEDCOMFormat.gf_RootsMagic) {
+            if (fFormat == GEDCOMFormat.RootsMagic) {
                 // _FSFTID -> fsft
                 var fsftTag = FindSubTagValue(iRec, "_FSFTID");
                 if (!string.IsNullOrEmpty(fsftTag)) {
@@ -302,7 +302,7 @@ namespace GDModel.Providers.GEDCOM
                 return;
             }
 
-            if (fFormat == GEDCOMFormat.gf_AGES) {
+            if (fFormat == GEDCOMFormat.AGES) {
                 var frelTag = FindSubTagValue(childLink, "_FREL");
                 var mrelTag = FindSubTagValue(childLink, "_MREL");
                 if (frelTag == "ADOPTED" && mrelTag == "ADOPTED") {
@@ -382,7 +382,7 @@ namespace GDModel.Providers.GEDCOM
                     fileRef.MultimediaFormat = GDMFileReference.GetMultimediaExt(fileRef.StringValue);
                 }
 
-                if (fFormat == GEDCOMFormat.gf_Native && fileVer == 39) {
+                if (fFormat == GEDCOMFormat.Native && fileVer == 39) {
                     // the transition to normalized names after GKv39
                     // only for not direct references AND not relative references (platform specific paths)
 
@@ -484,7 +484,7 @@ namespace GDModel.Providers.GEDCOM
             try {
                 int fileVer;
                 // remove a deprecated features
-                if (fFormat == GEDCOMFormat.gf_Native) {
+                if (fFormat == GEDCOMFormat.Native) {
                     GDMHeader header = fTree.Header;
                     GDMTag tag;
 
@@ -504,7 +504,7 @@ namespace GDModel.Providers.GEDCOM
 
                 try {
                     bool xrefValid = true;
-                    bool isExtraneous = (fFormat != GEDCOMFormat.gf_Native);
+                    bool isExtraneous = (fFormat != GEDCOMFormat.Native);
 
                     int progress = 0;
                     int num = fTree.RecordsCount;

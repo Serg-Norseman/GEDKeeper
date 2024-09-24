@@ -35,13 +35,15 @@ namespace GDModel.Providers.GEDCOM
         public readonly string Sign;
         public readonly string Name;
         public readonly int PredefCharset;
+        public readonly bool BadLines;
 
-        public GEDCOMAppFormat(GEDCOMFormat format, string sign, string name, int predefCharset)
+        public GEDCOMAppFormat(GEDCOMFormat format, string sign, string name, int predefCharset, bool badLines = false)
         {
             Format = format;
             Sign = sign;
             Name = name;
             PredefCharset = predefCharset;
+            BadLines = badLines;
         }
     }
 
@@ -170,9 +172,9 @@ namespace GDModel.Providers.GEDCOM
                     break;
 
                 case GEDCOMCharacterSet.csUNICODE:
-                    if (format == GEDCOMFormat.gf_Geni) {
+                    if (format == GEDCOMFormat.Geni) {
                         SetEncoding(Encoding.UTF8);
-                    } else if (format == GEDCOMFormat.gf_GENJ) {
+                    } else if (format == GEDCOMFormat.GENJ) {
                         SetEncoding(Encoding.UTF8);
                     } else {
                         if (!SysUtils.IsUnicodeEncoding(reader.CurrentEncoding)) {
@@ -184,11 +186,11 @@ namespace GDModel.Providers.GEDCOM
                     break;
 
                 case GEDCOMCharacterSet.csANSEL:
-                    if (format == GEDCOMFormat.gf_ALTREE) {
+                    if (format == GEDCOMFormat.ALTREE) {
                         // Agelong Tree 4.0 with ANSEL is actually characteristic 
                         // for the Russian-language data export
                         SetEncoding(Encoding.GetEncoding(1251));
-                    } else if (format == GEDCOMFormat.gf_Geni) {
+                    } else if (format == GEDCOMFormat.Geni) {
                         SetEncoding(Encoding.UTF8);
                     } else {
                         SetEncoding(new AnselEncoding());
@@ -196,7 +198,7 @@ namespace GDModel.Providers.GEDCOM
                     break;
 
                 case GEDCOMCharacterSet.csASCII:
-                    if (format == GEDCOMFormat.gf_Native) {
+                    if (format == GEDCOMFormat.Native) {
                         // GEDKeeper native format (old) and ASCII charset
                         SetEncoding(Encoding.GetEncoding(1251));
                     } else {
@@ -367,9 +369,8 @@ namespace GDModel.Providers.GEDCOM
                         if (curRecord == header && fEncodingState == EncodingState.esUnchecked) {
                             // beginning recognition of the first is not header record
                             // to check for additional versions of the code page
-                            var format = GetGEDCOMFormat(fTree);
+                            var format = GetGEDCOMFormat(fTree, out ilb);
                             fTree.Format = format;
-                            ilb = CanBeIncorrectLineBreaks(format);
                             DefineEncoding(reader, format, streamCharset);
                         }
 
@@ -493,7 +494,7 @@ namespace GDModel.Providers.GEDCOM
                 curTag = tree.AddRecord(new GDMGroupRecord(tree));
                 addHandler = TagHandler.GroupRecordTag;
 
-            } else if ((tagType == GEDCOMTagType._GRP) && (tree.Format == GEDCOMFormat.gf_Genney)) {
+            } else if ((tagType == GEDCOMTagType._GRP) && (tree.Format == GEDCOMFormat.Genney)) {
                 curTag = tree.AddRecord(new GDMGroupRecord(tree));
                 addHandler = TagHandler.GroupRecordTag;
 
@@ -513,12 +514,12 @@ namespace GDModel.Providers.GEDCOM
                 curTag = tree.AddRecord(new GDMLocationRecord(tree));
                 addHandler = TagHandler.LocationRecordTag;
 
-            } else if ((tagType == GEDCOMTagType._PLAC) && (tree.Format == GEDCOMFormat.gf_FamilyHistorian)) {
+            } else if ((tagType == GEDCOMTagType._PLAC) && (tree.Format == GEDCOMFormat.FamilyHistorian)) {
                 curTag = tree.AddRecord(new GDMLocationRecord(tree));
                 ((GDMLocationRecord)curTag).LocationName = tagValue;
                 addHandler = TagHandler.LocationRecordTag;
 
-            } else if ((tagType == GEDCOMTagType._PLC) && (tree.Format == GEDCOMFormat.gf_Genney)) {
+            } else if ((tagType == GEDCOMTagType._PLC) && (tree.Format == GEDCOMFormat.Genney)) {
                 curTag = tree.AddRecord(new GDMLocationRecord(tree));
                 addHandler = TagHandler.LocationRecordTag;
 
@@ -2656,7 +2657,7 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        public static GEDCOMFormat GetGEDCOMFormat(GDMTree tree)
+        public static GEDCOMFormat GetGEDCOMFormat(GDMTree tree, out bool badLines)
         {
             if (tree != null) {
                 string sour = tree.Header.Source.StringValue.Trim();
@@ -2665,12 +2666,14 @@ namespace GDModel.Providers.GEDCOM
                 for (int i = 1; i < num; i++) {
                     var appFmt = GEDCOMProvider.GEDCOMFormats[i];
                     if (string.Equals(appFmt.Sign, sour, StringComparison.Ordinal)) {
+                        badLines = appFmt.BadLines;
                         return appFmt.Format;
                     }
                 }
             }
 
-            return GEDCOMFormat.gf_Unknown;
+            badLines = true;
+            return GEDCOMFormat.Unknown;
         }
 
         public static GEDCOMAppFormat GetGEDCOMFormatProps(GEDCOMFormat format)
@@ -2693,7 +2696,7 @@ namespace GDModel.Providers.GEDCOM
         /// <summary>
         /// Introduced to minimize memory allocation for parsing method delegates.
         /// </summary>
-        private static AddTagHandler[] HandlersIndex = new AddTagHandler[] {
+        private static readonly AddTagHandler[] HandlersIndex = new AddTagHandler[] {
             null,
             AddIndividualRecordTag,     /* IndividualRecordTag */
             AddFamilyRecordTag,         /* FamilyRecordTag */
@@ -2744,46 +2747,39 @@ namespace GDModel.Providers.GEDCOM
 
         #region Tag properties
 
-        private static bool CanBeIncorrectLineBreaks(GEDCOMFormat format)
-        {
-            return
-                (format == GEDCOMFormat.gf_FTB || format == GEDCOMFormat.gf_WikiTree || format == GEDCOMFormat.gf_Geni ||
-                 format == GEDCOMFormat.gf_Ancestry || format == GEDCOMFormat.gf_PAF || format == GEDCOMFormat.gf_FamyTale);
-        }
-
         static GEDCOMProvider()
         {
             GEDCOMFormats = new GEDCOMAppFormat[] {
-                new GEDCOMAppFormat(GEDCOMFormat.gf_Unknown, "", "", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_Native, "GEDKeeper", "", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_Genealogy_RusOld, "├σφσαδεπΦ", "Genealogy (Rus, old)", 1251), // signature in CP437
+                new GEDCOMAppFormat(GEDCOMFormat.Unknown, "", "", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.Native, "GEDKeeper", "", -1),
 
-                new GEDCOMAppFormat(GEDCOMFormat.gf_AGES, "AGES", "Ages!", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_ALTREE, "ALTREE", "Agelong Tree", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_Ahnenblatt, "AHN", "Ahnenblatt", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_AncestQuest, "AncestQuest", "Ancestral Quest", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_Ancestry, "Ancestry.com Family Trees", "WikiTree", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_EasyTree, "EasyTree", "EasyTree", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_FamilyHistorian, "FAMILY_HISTORIAN", "Family Historian", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_FamilyTreeMaker, "FTM", "Family Tree Maker", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_FamilyTreeMaker, "FTW", "Family Tree Maker", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_FamyTale, "FAMYTALE", "FamyTale", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_FTB, "MYHERITAGE", "MyHeritage Family Tree Builder", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_GENBOX, "GENBOX", "Genbox Family History", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_gedcom4j, "gedcom4j", "gedcom4j", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_GENJ, "GENJ", "GENJ", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_Geni, "Geni.com", "Geni", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_GeneWeb, "GeneWeb", "GeneWeb", 1252),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_Genney, "Genney", "Genney", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_GenoPro, "GenoPro", "GenoPro", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_Gramps, "Gramps", "Gramps", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_Heredis, "HEREDIS 12 PC", "Heredis", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_Legacy, "Legacy", "Legacy", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_Lifelines, "Lifelines", "Lifelines", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_PAF, "PAF", "Personal Ancestral File", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_Reunion, "Reunion", "Reunion", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_RootsMagic, "RootsMagic", "RootsMagic", -1),
-                new GEDCOMAppFormat(GEDCOMFormat.gf_WikiTree, "WikiTree.com", "WikiTree", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.AGES, "AGES", "Ages!", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.ALTREE, "ALTREE", "Agelong Tree", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.Ahnenblatt, "AHN", "Ahnenblatt", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.AncestQuest, "AncestQuest", "Ancestral Quest", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.Ancestry, "Ancestry.com Family Trees", "WikiTree", -1, true),
+                new GEDCOMAppFormat(GEDCOMFormat.EasyTree, "EasyTree", "EasyTree", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.FamilyHistorian, "FAMILY_HISTORIAN", "Family Historian", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.FamilyTreeMaker, "FTM", "Family Tree Maker", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.FamilyTreeMaker, "FTW", "Family Tree Maker", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.FamyTale, "FAMYTALE", "FamyTale", -1, true),
+                new GEDCOMAppFormat(GEDCOMFormat.FTB, "MYHERITAGE", "MyHeritage Family Tree Builder", -1, true),
+                new GEDCOMAppFormat(GEDCOMFormat.GENBOX, "GENBOX", "Genbox Family History", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.Genealogy_RusOld, "├σφσαδεπΦ", "Genealogy (Rus, old)", 1251), // signature in CP437
+                new GEDCOMAppFormat(GEDCOMFormat.gedcom4j, "gedcom4j", "gedcom4j", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.GENJ, "GENJ", "GENJ", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.Geni, "Geni.com", "Geni", -1, true),
+                new GEDCOMAppFormat(GEDCOMFormat.GeneWeb, "GeneWeb", "GeneWeb", 1252),
+                new GEDCOMAppFormat(GEDCOMFormat.Genney, "Genney", "Genney", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.GenoPro, "GenoPro", "GenoPro", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.Gramps, "Gramps", "Gramps", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.Heredis, "HEREDIS 12 PC", "Heredis", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.Legacy, "Legacy", "Legacy", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.Lifelines, "Lifelines", "Lifelines", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.PAF, "PAF", "Personal Ancestral File", -1, true),
+                new GEDCOMAppFormat(GEDCOMFormat.Reunion, "Reunion", "Reunion", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.RootsMagic, "RootsMagic", "RootsMagic", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.WikiTree, "WikiTree.com", "WikiTree", -1, true),
             };
 
 

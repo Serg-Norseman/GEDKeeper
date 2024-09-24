@@ -82,7 +82,7 @@ namespace GDModel.Providers
                     var gedcomProvider = new GEDCOMProvider(tree);
                     gedcomProvider.LoadFromStreamExt(inStream, inStream);
 
-                    Assert.AreEqual(GEDCOMFormat.gf_Unknown, tree.Format);
+                    Assert.AreEqual(GEDCOMFormat.Unknown, tree.Format);
 
                     GDMMultimediaRecord mmRec1 = tree.XRefIndex_Find("M1") as GDMMultimediaRecord;
                     Assert.IsNotNull(mmRec1);
@@ -120,7 +120,7 @@ namespace GDModel.Providers
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
 
-                    Assert.AreEqual(GEDCOMFormat.gf_Native, ctx.Tree.Format);
+                    Assert.AreEqual(GEDCOMFormat.Native, ctx.Tree.Format);
 
                     GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                     Assert.IsNotNull(iRec1);
@@ -142,7 +142,7 @@ namespace GDModel.Providers
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1, true);
 
-                    Assert.AreEqual(GEDCOMFormat.gf_gedcom4j, ctx.Tree.Format);
+                    Assert.AreEqual(GEDCOMFormat.gedcom4j, ctx.Tree.Format);
 
                     var iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                     Assert.IsNotNull(iRec1);
@@ -163,7 +163,7 @@ namespace GDModel.Providers
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
 
-                    Assert.AreEqual(GEDCOMFormat.gf_Ahnenblatt, ctx.Tree.Format);
+                    Assert.AreEqual(GEDCOMFormat.Ahnenblatt, ctx.Tree.Format);
 
                     GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                     Assert.IsNotNull(iRec1);
@@ -185,7 +185,7 @@ namespace GDModel.Providers
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
 
-                    Assert.AreEqual(GEDCOMFormat.gf_ALTREE, ctx.Tree.Format);
+                    Assert.AreEqual(GEDCOMFormat.ALTREE, ctx.Tree.Format);
 
                     GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                     Assert.IsNotNull(iRec1);
@@ -207,7 +207,7 @@ namespace GDModel.Providers
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
 
-                    Assert.AreEqual(GEDCOMFormat.gf_FTB, ctx.Tree.Format);
+                    Assert.AreEqual(GEDCOMFormat.FTB, ctx.Tree.Format);
 
                     GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                     Assert.IsNotNull(iRec1);
@@ -221,7 +221,7 @@ namespace GDModel.Providers
         public void Test_Notes_StdGEDCOM()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_notes_stdgedcom.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_Native, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.Native, ctx.Tree.Format);
 
                 GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec1);
@@ -237,7 +237,7 @@ namespace GDModel.Providers
         public void Test_Notes_LeadingSpaces()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_notes_leadspaces.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_Native, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.Native, ctx.Tree.Format);
 
                 GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec1);
@@ -258,7 +258,7 @@ namespace GDModel.Providers
                     Assert.AreEqual(null, charsetRes.Charset);
                     Assert.GreaterOrEqual(charsetRes.Confidence, 0.0f);
 
-                    Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
+                    Assert.AreEqual(GEDCOMFormat.Unknown, ctx.Tree.Format);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
@@ -270,7 +270,7 @@ namespace GDModel.Providers
         public void Test_FTB_BadLine()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ftb_badline.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_FTB, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.FTB, ctx.Tree.Format);
 
                 GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec1);
@@ -282,7 +282,7 @@ namespace GDModel.Providers
         public void Test_FTB_BadPosition()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ftb_badpos.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_FTB, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.FTB, ctx.Tree.Format);
 
                 //GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 //Assert.IsNotNull(noteRec1);
@@ -294,7 +294,7 @@ namespace GDModel.Providers
         public void Test_MinIndented()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_min_indented.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.Unknown, ctx.Tree.Format);
 
                 var subm = ctx.Tree.GetPtrValue<GDMSubmitterRecord>(ctx.Tree.Header.Submitter);
                 Assert.IsNotNull(subm);
@@ -306,7 +306,7 @@ namespace GDModel.Providers
         public void Test_EmptyLines()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_empty_lines.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.Unknown, ctx.Tree.Format);
 
                 GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I001") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
@@ -326,7 +326,7 @@ namespace GDModel.Providers
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_famhist.ged")) {
                 GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
 
-                Assert.AreEqual(GEDCOMFormat.gf_FamilyHistorian, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.FamilyHistorian, ctx.Tree.Format);
 
                 GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
@@ -342,7 +342,7 @@ namespace GDModel.Providers
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_famhist2.ged")) {
                 GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
 
-                Assert.AreEqual(GEDCOMFormat.gf_FamilyHistorian, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.FamilyHistorian, ctx.Tree.Format);
 
                 GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
@@ -361,7 +361,7 @@ namespace GDModel.Providers
 
             // actually need to find the real signature of version for FTM 2008 (wrong in the file)
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ftm2008.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_FamilyTreeMaker, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.FamilyTreeMaker, ctx.Tree.Format);
 
                 GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
 
@@ -380,7 +380,7 @@ namespace GDModel.Providers
         public void Test_NoteLongLine()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_longline.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_Unknown, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.Unknown, ctx.Tree.Format);
 
                 GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 Assert.IsNotNull(noteRec1);
@@ -394,7 +394,7 @@ namespace GDModel.Providers
         {
             // TODO: interest feature - use PLAC.FORM
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_heredis.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_Heredis, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.Heredis, ctx.Tree.Format);
             }
         }
 
@@ -402,7 +402,7 @@ namespace GDModel.Providers
         public void Test_AncestQuest()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_aq.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_AncestQuest, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.AncestQuest, ctx.Tree.Format);
             }
         }
 
@@ -410,7 +410,7 @@ namespace GDModel.Providers
         public void Test_Geni()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_geni.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_Geni, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.Geni, ctx.Tree.Format);
             }
         }
 
@@ -420,7 +420,7 @@ namespace GDModel.Providers
             var progress = Substitute.For<IProgressController>();
 
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_rootsmagic.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_RootsMagic, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.RootsMagic, ctx.Tree.Format);
 
                 GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
             }
@@ -430,7 +430,7 @@ namespace GDModel.Providers
         public void Test_Geni_Badlines()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_geni_badlines.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_Geni, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.Geni, ctx.Tree.Format);
 
                 var iRec1 = ctx.Tree.XRefIndex_Find("I500000006275123389") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
@@ -449,7 +449,7 @@ namespace GDModel.Providers
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_geni_srcit.ged")) {
                 GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
 
-                Assert.AreEqual(GEDCOMFormat.gf_Geni, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.Geni, ctx.Tree.Format);
 
                 var iRec1 = ctx.Tree.XRefIndex_Find("I6000000012345678912") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
@@ -519,7 +519,7 @@ namespace GDModel.Providers
         public void Test_Geni_NegativeYears()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_geni_neg_years.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_Geni, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.Geni, ctx.Tree.Format);
 
                 var iRec = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec);
@@ -541,7 +541,7 @@ namespace GDModel.Providers
         public void Test_Legacy()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_legacy.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_Legacy, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.Legacy, ctx.Tree.Format);
             }
         }
 
@@ -549,7 +549,7 @@ namespace GDModel.Providers
         public void Test_EasyTree()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_easytree.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_EasyTree, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.EasyTree, ctx.Tree.Format);
             }
         }
 
@@ -557,7 +557,7 @@ namespace GDModel.Providers
         public void Test_Genney()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_genney.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_Genney, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.Genney, ctx.Tree.Format);
             }
         }
 
@@ -567,7 +567,7 @@ namespace GDModel.Providers
             var progress = Substitute.For<IProgressController>();
 
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ages_adop.ged")) {
-                Assert.AreEqual(GEDCOMFormat.gf_AGES, ctx.Tree.Format);
+                Assert.AreEqual(GEDCOMFormat.AGES, ctx.Tree.Format);
                 GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
 
                 GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;

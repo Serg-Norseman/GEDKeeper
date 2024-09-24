@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,10 +30,11 @@ namespace GDModel.Providers.GEDCOM
         {
             GDMTree tree = new GDMTree();
 
+            bool badLines;
             // Tests of determine GEDCOM-format
-            Assert.AreEqual(GEDCOMFormat.gf_Unknown, GEDCOMProvider.GetGEDCOMFormat(tree));
+            Assert.AreEqual(GEDCOMFormat.Unknown, GEDCOMProvider.GetGEDCOMFormat(tree, out badLines));
             tree.Header.Source.StringValue = "GENBOX";
-            Assert.AreEqual(GEDCOMFormat.gf_GENBOX, GEDCOMProvider.GetGEDCOMFormat(tree));
+            Assert.AreEqual(GEDCOMFormat.GENBOX, GEDCOMProvider.GetGEDCOMFormat(tree, out badLines));
         }
 
         [Test]

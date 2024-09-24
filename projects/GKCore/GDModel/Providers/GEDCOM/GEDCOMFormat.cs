@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,36 +22,37 @@ namespace GDModel.Providers.GEDCOM
 {
     public enum GEDCOMFormat
     {
-        gf_Unknown,
-        gf_Native,
-        gf_Genealogy_RusOld,
+        Unknown,
 
-        gf_Ahnenblatt,
-        gf_AncestQuest,
-        gf_Ancestry,
-        gf_AGES,
-        gf_ALTREE,
-        gf_EasyTree,
-        gf_FamilyHistorian,
-        gf_FamilyTreeMaker,
-        gf_FamyTale,
-        gf_FTB,
-        gf_gedcom4j,
-        gf_GeneWeb,
-        gf_Geni,
-        gf_Genney,
-        gf_GenoPro,
-        gf_Gramps,
-        gf_GENBOX,
-        gf_GENJ,
-        gf_Heredis,
-        gf_Legacy,
-        gf_Lifelines,
-        gf_PAF,
-        gf_Reunion,
-        gf_RootsMagic,
-        gf_WikiTree,
+        Native,
 
-        gf_Last = gf_WikiTree
+        AGES,
+        Ahnenblatt,
+        ALTREE,
+        AncestQuest,
+        Ancestry,
+        EasyTree,
+        FamilyHistorian,
+        FamilyTreeMaker,
+        FamyTale,
+        FTB,
+        gedcom4j,
+        GENBOX,
+        Genealogy_RusOld,
+        GeneWeb,
+        Geni,
+        GENJ,
+        Genney,
+        GenoPro,
+        Gramps,
+        Heredis,
+        Legacy,
+        Lifelines,
+        PAF,
+        Reunion,
+        RootsMagic,
+        WikiTree,
+
+        Last = WikiTree
     }
 }
