@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -102,17 +102,17 @@ namespace GKUI.Forms
 
         IComboBox IPersonsFilterDlg.EventValCombo
         {
-            get { return  GetControlHandler<IComboBox>(cmbEventVal); }
+            get { return GetControlHandler<IComboBox>(cmbEventVal); }
         }
 
         IComboBox IPersonsFilterDlg.ResidenceCombo
         {
-            get { return  GetControlHandler<IComboBox>(cmbResidence); }
+            get { return GetControlHandler<IComboBox>(cmbResidence); }
         }
 
         IComboBox IPersonsFilterDlg.NameCombo
         {
-            get { return  GetControlHandler<IComboBox>(txtName); }
+            get { return GetControlHandler<IComboBox>(txtName); }
         }
 
         void IPersonsFilterDlg.SetLifeRadio(int lifeSel)
@@ -187,10 +187,10 @@ namespace GKUI.Forms
         public PersonsFilterDlg(IBaseWindow baseWin, IRecordsListModel listMan) : this()
         {
             if (baseWin == null)
-                throw new ArgumentNullException("baseWin");
+                throw new ArgumentNullException(nameof(baseWin));
 
             if (listMan == null)
-                throw new ArgumentNullException("listMan");
+                throw new ArgumentNullException(nameof(listMan));
 
             fBase = baseWin;
             fListMan = listMan;
@@ -223,6 +223,14 @@ namespace GKUI.Forms
             fListMan.Filter.Clear();
             fCommonController.UpdateView();
             fController.UpdateView();
+        }
+
+        private void cmbFilter_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Keys.Delete && e.Control) {
+                var combo = GetControlHandler<IComboBox>(sender);
+                fController.RemoveFilter(combo);
+            }
         }
     }
 }

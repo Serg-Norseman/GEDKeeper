@@ -297,7 +297,7 @@ namespace GKUI.Forms
 
         private void mPersonSummaryLink(object sender, string linkName)
         {
-            fController.SelectSummaryLink(linkName);
+            fController.SelectSummaryLink((IHyperView)sender, linkName);
         }
 
         private void miCopyContent_Click(object sender, EventArgs e)

@@ -41,17 +41,17 @@
               <TableLayout x:Name="masksPanel" Spacing="4,4">
                 <TableRow>
                   <Label x:Name="lblNameMask" />
-                  <ComboBox x:Name="txtName" />
+                  <ComboBox x:Name="txtName" KeyUp="cmbFilter_KeyUp" />
                 </TableRow>
 
                 <TableRow>
                   <Label x:Name="lblPlaceMask" />
-                  <ComboBox x:Name="cmbResidence" />
+                  <ComboBox x:Name="cmbResidence" KeyUp="cmbFilter_KeyUp" />
                 </TableRow>
 
                 <TableRow>
                   <Label x:Name="lblEventsMask" />
-                  <ComboBox x:Name="cmbEventVal" />
+                  <ComboBox x:Name="cmbEventVal" KeyUp="cmbFilter_KeyUp" />
                 </TableRow>
 
                 <TableRow>

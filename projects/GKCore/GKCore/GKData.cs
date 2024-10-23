@@ -80,12 +80,13 @@ namespace GKCore
         public const string INFO_HTTP_PREFIX = "http";
         public const string INFO_HREF_VIEW = "view_";
         public const string INFO_HREF_FILTER_INDI = "filter_indi_by_";
+        public const string INFO_HREF_EXPAND_ASSO = "expand_asso_";
 
-        #if OS_LINUX || OS_FREEBSD
+#if OS_LINUX || OS_FREEBSD
         public const string DEF_FONT = "Noto Sans";
-        #else
+#else
         public const string DEF_FONT = "Tahoma";
-        #endif
+#endif
 
         public const string CHECK_MARK = " ✔ ";
         public const string CROSS_MARK = " ❌ ";

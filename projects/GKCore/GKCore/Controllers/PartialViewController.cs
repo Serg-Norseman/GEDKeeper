@@ -172,7 +172,7 @@ namespace GKCore.Controllers
             ShowRecordInfo(rec);
         }
 
-        public void SelectSummaryLink(string linkName)
+        public void SelectSummaryLink(IHyperView sender, string linkName)
         {
             if (linkName.StartsWith(GKData.INFO_HTTP_PREFIX)) {
                 GKUtils.LoadExtFile(linkName);
@@ -195,6 +195,8 @@ namespace GKCore.Controllers
                     iFilter.SourceRef = rec.XRef;
                     ApplyFilter(GDMRecordType.rtIndividual, listMan);
                 }
+            } else if (linkName.StartsWith(GKData.INFO_HREF_EXPAND_ASSO)) {
+                GKUtils.ExpandExtInfo(fBase.Context, sender, linkName);
             } else {
                 SelectRecordByXRef(linkName);
             }

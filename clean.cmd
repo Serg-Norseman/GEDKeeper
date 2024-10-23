@@ -1,3 +1,4 @@
+@echo off
 
 del .\bin\* /s /q
 for /d %%p in (.\bin\*) do rd "%%p" /s /q

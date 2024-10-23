@@ -76,7 +76,7 @@ namespace GKCore.Cultures
                 char lastSym = res[res.Length - 1];
                 var end2 = Morpher.Right(res, 2);
 
-                if (!"иа их ых ко".Contains(end2)) {
+                if (!"иа их ых ко ич".Contains(end2)) {
                     if (CONSONANTS.IndexOf(lastSym) >= 0) {
                         res = res + "а";
                     } else if (res.EndsWith("кий")) {

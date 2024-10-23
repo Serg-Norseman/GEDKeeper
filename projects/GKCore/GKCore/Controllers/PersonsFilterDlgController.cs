@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib;
 using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
@@ -40,6 +41,30 @@ namespace GKCore.Controllers
         public PersonsFilterDlgController(IPersonsFilterDlg view, IRecordsListModel listMan) : base(view)
         {
             fListMan = (IndividualListModel)listMan;
+        }
+
+        public void RemoveFilter(IComboBox sender)
+        {
+            if (sender == null) return;
+
+            GlobalOptions options = GlobalOptions.Instance;
+
+            if (sender == fView.NameCombo) {
+                GKUtils.RemoveFilter(sender.Text, options.NameFilters);
+                UpdateFiltersCombo(sender, options.NameFilters);
+            }
+
+            if (sender == fView.ResidenceCombo) {
+                GKUtils.RemoveFilter(sender.Text, options.ResidenceFilters);
+                UpdateFiltersCombo(sender, options.ResidenceFilters);
+            }
+
+            if (sender == fView.EventValCombo) {
+                GKUtils.RemoveFilter(sender.Text, options.EventFilters);
+                UpdateFiltersCombo(sender, options.EventFilters);
+            }
+
+            sender.Text = "*";
         }
 
         public override bool Accept()
@@ -116,25 +141,22 @@ namespace GKCore.Controllers
             }
         }
 
+        private void UpdateFiltersCombo(IComboBox comboBox, StringList filters)
+        {
+            comboBox.Clear();
+            comboBox.Add("*");
+            comboBox.AddStrings(filters);
+            comboBox.ReadOnly = false;
+        }
+
         public override void UpdateView()
         {
             IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
             GlobalOptions options = GlobalOptions.Instance;
 
-            fView.NameCombo.Clear();
-            fView.NameCombo.Add("*");
-            fView.NameCombo.AddStrings(options.NameFilters);
-            fView.NameCombo.ReadOnly = false;
-
-            fView.ResidenceCombo.Clear();
-            fView.ResidenceCombo.Add("*");
-            fView.ResidenceCombo.AddStrings(options.ResidenceFilters);
-            fView.ResidenceCombo.ReadOnly = false;
-
-            fView.EventValCombo.Clear();
-            fView.EventValCombo.Add("*");
-            fView.EventValCombo.AddStrings(options.EventFilters);
-            fView.EventValCombo.ReadOnly = false;
+            UpdateFiltersCombo(fView.NameCombo, options.NameFilters);
+            UpdateFiltersCombo(fView.ResidenceCombo, options.ResidenceFilters);
+            UpdateFiltersCombo(fView.EventValCombo, options.EventFilters);
 
             int lifeSel;
             if (iFilter.FilterLifeMode != FilterLifeMode.lmTimeLocked) {

@@ -238,6 +238,7 @@
             this.txtName.Sorted = true;
             this.txtName.TabIndex = 20;
             this.txtName.Text = "*";
+            this.txtName.KeyUp += new System.Windows.Forms.KeyEventHandler(this.cmbFilter_KeyUp);
             // 
             // rgSex
             // 
@@ -301,6 +302,7 @@
             this.cmbResidence.Sorted = true;
             this.cmbResidence.TabIndex = 22;
             this.cmbResidence.Text = "*";
+            this.cmbResidence.KeyUp += new System.Windows.Forms.KeyEventHandler(this.cmbFilter_KeyUp);
             // 
             // cmbGroup
             // 
@@ -328,6 +330,7 @@
             this.cmbEventVal.Sorted = true;
             this.cmbEventVal.TabIndex = 24;
             this.cmbEventVal.Text = "*";
+            this.cmbEventVal.KeyUp += new System.Windows.Forms.KeyEventHandler(this.cmbFilter_KeyUp);
             // 
             // PersonsFilterDlg
             // 

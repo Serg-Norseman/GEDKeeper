@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Windows.Forms;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
@@ -54,17 +55,17 @@ namespace GKUI.Forms
 
         IComboBox IPersonsFilterDlg.EventValCombo
         {
-            get { return  GetControlHandler<IComboBox>(cmbEventVal); }
+            get { return GetControlHandler<IComboBox>(cmbEventVal); }
         }
 
         IComboBox IPersonsFilterDlg.ResidenceCombo
         {
-            get { return  GetControlHandler<IComboBox>(cmbResidence); }
+            get { return GetControlHandler<IComboBox>(cmbResidence); }
         }
 
         IComboBox IPersonsFilterDlg.NameCombo
         {
-            get { return  GetControlHandler<IComboBox>(txtName); }
+            get { return GetControlHandler<IComboBox>(txtName); }
         }
 
         void IPersonsFilterDlg.SetLifeRadio(int lifeSel)
@@ -136,9 +137,9 @@ namespace GKUI.Forms
             InitializeComponent();
 
             // platform: in Mono tsSpecificFilter has 0 index, somehow
-            #if MONO
+#if MONO
             tabsFilters.Controls.SetChildIndex(pageSpecificFilter, 1);
-            #endif
+#endif
             tabsFilters.SelectedIndex = 1;
 
             fPersonsFilterDlgController = new PersonsFilterDlgController(this, listMan);
@@ -160,6 +161,14 @@ namespace GKUI.Forms
         {
             base.Reset();
             fPersonsFilterDlgController.UpdateView();
+        }
+
+        private void cmbFilter_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete && e.Control) {
+                var combo = GetControlHandler<IComboBox>(sender);
+                fPersonsFilterDlgController.RemoveFilter(combo);
+            }
         }
     }
 }

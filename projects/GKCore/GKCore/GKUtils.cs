@@ -35,6 +35,7 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Calendar;
 using GKCore.Cultures;
+using GKCore.Design.Controls;
 using GKCore.Import;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -176,6 +177,14 @@ namespace GKCore
 
             flt = flt.Trim();
             if (flt != "" && flt != "*" && filters.IndexOf(flt) < 0) filters.Add(flt);
+        }
+
+        public static void RemoveFilter(string flt, StringList filters)
+        {
+            if (filters == null) return;
+
+            int idx = filters.IndexOf(flt);
+            if (idx >= 0) filters.Delete(idx);
         }
 
         public static StringList GetLocationLinks(GDMTree tree, GDMLocationRecord locRec)
@@ -2102,12 +2111,38 @@ namespace GKCore
             aToList.Add("    " + prefix + GenRecordLink(tree, aRec, true) + suffix);
         }
 
-        private static void ShowPersonExtInfo(GDMTree tree, GDMIndividualRecord iRec, StringList summary)
+        public static int FindLinkStr(StringList list, string link)
+        {
+            if (list != null) {
+                for (int i = 0, num = list.Count; i < num; i++) {
+                    if (list[i].Contains(link)) {
+                        return i;
+                    }
+                }
+            }
+            return -1;
+        }
+
+        public static void ExpandExtInfo(IBaseContext context, IHyperView sender, string linkName)
+        {
+            string xref = linkName.Remove(0, GKData.INFO_HREF_EXPAND_ASSO.Length);
+            var iRec = context.Tree.FindXRef<GDMIndividualRecord>(xref);
+            if (iRec is GDMIndividualRecord) {
+                int lineIdx = GKUtils.FindLinkStr(sender.Lines, linkName);
+                var strList = new StringList();
+                GKUtils.ShowPersonExtInfo(context.Tree, iRec, strList, false);
+                sender.Lines.AddStrings(strList);
+                sender.Lines.Delete(lineIdx);
+            }
+        }
+
+        public static void ShowPersonExtInfo(GDMTree tree, GDMIndividualRecord iRec, StringList summary, bool checkOpt = true)
         {
             if (tree == null || iRec == null || summary == null) return;
 
-            if (!GlobalOptions.Instance.ShowIndiAssociations) return;
+            if (checkOpt && !GlobalOptions.Instance.ShowIndiAssociations) return;
 
+            bool first = true;
             summary.Add("");
             int num = tree.RecordsCount;
             for (int i = 0; i < num; i++) {
@@ -2117,7 +2152,6 @@ namespace GKCore
                 GDMIndividualRecord ir = (GDMIndividualRecord)rec;
                 if (!ir.HasAssociations) continue;
 
-                bool first = true;
                 for (int k = 0, cnt = ir.Associations.Count; k < cnt; k++) {
                     GDMAssociation asso = ir.Associations[k];
 
@@ -2126,7 +2160,7 @@ namespace GKCore
                             summary.Add(LangMan.LS(LSID.Associations) + ":");
                             first = false;
                         }
-                        summary.Add("    " + HyperLink(ir.XRef, GetNameString(ir, true, false)));
+                        summary.Add("    " + asso.Relation + ", " + HyperLink(ir.XRef, GetNameString(ir, true, false)));
                     }
                 }
             }
@@ -2778,6 +2812,9 @@ namespace GKCore
                         ShowPersonExtInfo(tree, iRec, summary);
 
                         ShowRFN(iRec, summary);
+
+                        summary.Add("");
+                        summary.Add(HyperLink(GKData.INFO_HREF_EXPAND_ASSO + iRec.XRef, "[ + ] " + LangMan.LS(LSID.Associations)));
                     }
                 } finally {
                     summary.EndUpdate();
