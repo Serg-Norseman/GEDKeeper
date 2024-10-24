@@ -130,6 +130,7 @@ namespace GKCore.Charts
         private float fPicScale;
         private IImage[] fSignsPic;
         private IBrush fSolidBlack;
+        private IBrush fSolidF, fSolidM;
         private int fSpouseDistance;
         private ITimer fTimer;
         private GDMTree fTree;
@@ -420,6 +421,8 @@ namespace GKCore.Charts
             fScale = sourceModel.fScale;
             fSignsPic = sourceModel.fSignsPic;
             fSolidBlack = sourceModel.fSolidBlack;
+            fSolidF = sourceModel.fSolidF;
+            fSolidM = sourceModel.fSolidM;
             fSpouseDistance = sourceModel.fSpouseDistance;
             fTree = sourceModel.fTree;
         }
@@ -525,6 +528,8 @@ namespace GKCore.Charts
                         if (iMother != null && fContext.IsRecordAccess(iMother.Restriction)) {
                             personNode.Mother = VisitParent(personNode, iMother, personNode.Generation - 1, isDup, divorced, adopted, commonLaw);
                         }
+
+                        personNode.SetParents();
 
                         if (personNode.Father != null && personNode.Mother != null && fOptions.Kinship) {
                             fGraph.AddRelation(personNode.Father.Node, personNode.Mother.Node, RelationKind.rkSpouse, RelationKind.rkSpouse, (!commonLaw ? RelationExt.None : RelationExt.CommonLaw));
@@ -821,6 +826,7 @@ namespace GKCore.Charts
                             child.Father = ft;
                             child.Mother = mt;
                             child.SetFlag(descFlag);
+                            child.SetParents();
 
                             GDMChildToFamilyLink childLink = childRec.FindChildToFamilyLink(family);
                             var adopted = (childLink != null && (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted));
@@ -1633,6 +1639,8 @@ namespace GKCore.Charts
             fLineDottedDecorativePen = fRenderer.CreatePen(clrDecor, 1f, new float[] {4.0F, 2.0F});
             fLineDottedSelectedPen = fRenderer.CreatePen(clrLine, 2.4f, new float[] { 4.0F, 2.0F });
             fSolidBlack = fRenderer.CreateBrush(fClrBlack);
+            fSolidF = fRenderer.CreateBrush(ChartRenderer.GetColor(BSDColors.Red));
+            fSolidM = fRenderer.CreateBrush(ChartRenderer.GetColor(BSDColors.Blue));
 
             var clrGreen = ChartRenderer.GetColor(BSDColors.ForestGreen);
             fLineTMSYPen = fRenderer.CreatePen(clrGreen, 2.4f, new float[] { 4.0F, 2.0F });
@@ -1649,6 +1657,8 @@ namespace GKCore.Charts
             if (fLineDottedDecorativePen != null) fLineDottedDecorativePen.Dispose();
             if (fLineDottedSelectedPen != null) fLineDottedSelectedPen.Dispose();
             if (fSolidBlack != null) fSolidBlack.Dispose();
+            if (fSolidF != null) fSolidF.Dispose();
+            if (fSolidM != null) fSolidM.Dispose();
         }
 
         public ExtRect GetExpanderRect(ExtRect personRect)
@@ -1936,6 +1946,18 @@ namespace GKCore.Charts
             return (person != null && person.HasFlag(PersonFlag.pfAdopted) && fOptions.DottedLinesOfAdoptedChildren);
         }
 
+        private void DrawParentAges(TreeChartPerson person, int pY, int crY)
+        {
+            if (!fOptions.ParentAges || (string.IsNullOrEmpty(person.FatherAge) && string.IsNullOrEmpty(person.MotherAge)))
+                return;
+
+            var tH = (int)fRenderer.GetTextSize("0", fDrawFont).Height;
+            int aY = (!fOptions.InvertedTree) ? crY + (pY - crY - tH) / 2 : pY + (crY - pY - tH) / 2;
+
+            DrawText(person.FatherAge, person.PtX - 4, aY, 3, fSolidM);
+            DrawText(person.MotherAge, person.PtX + 4, aY, 2, fSolidF);
+        }
+
         private void DrawAncestors(TreeChartPerson person, ChartDrawMode drawMode, bool isTracked)
         {
             if (person.IsCollapsed || (person.Father == null && person.Mother == null)) {
@@ -1955,18 +1977,21 @@ namespace GKCore.Charts
             Draw(person.Father, TreeChartKind.ckAncestors, drawMode);
             Draw(person.Mother, TreeChartKind.ckAncestors, drawMode);
 
-            int crY, parY;
+            int crY, parY, pY;
             if (!fOptions.InvertedTree) {
+                pY = person.PtY;
                 crY = person.PtY - fLevelDistance / 2;
                 parY = (person.Father != null) ? person.Father.PtY + person.Father.Height : person.Mother.PtY + person.Mother.Height;
             } else {
+                pY = person.PtY + person.Height;
                 crY = person.PtY + person.Height + fLevelDistance / 2;
                 parY = (person.Father != null) ? person.Father.PtY : person.Mother.PtY;
             }
 
             bool dotted = IsDottedLines(person);
 
-            DrawLine(person.PtX, crY, person.PtX, person.PtY, dotted, isTrackedAncestors, isMatchedFather || isMatchedMother); // v
+            DrawLine(person.PtX, crY, person.PtX, pY, dotted, isTrackedAncestors, isMatchedFather || isMatchedMother); // v
+            DrawParentAges(person, pY, crY);
 
             string marrDate = null;
 
@@ -1996,6 +2021,11 @@ namespace GKCore.Charts
 
         private void DrawText(string text, float x, float y, int quad, bool offset = true)
         {
+            DrawText(text, x, y, quad, fSolidBlack, offset);
+        }
+
+        private void DrawText(string text, float x, float y, int quad, IBrush brush, bool offset = true)
+        {
             if (string.IsNullOrEmpty(text))
                 return;
 
@@ -2021,7 +2051,7 @@ namespace GKCore.Charts
                     break;
             }
 
-            fRenderer.DrawString(text, fDrawFont, fSolidBlack, x, y);
+            fRenderer.DrawString(text, fDrawFont, brush, x, y);
         }
 
         private void DrawDescendants(TreeChartPerson person, ChartDrawMode drawMode, bool isTracked)
@@ -2138,6 +2168,7 @@ namespace GKCore.Charts
                     }
 
                     DrawLine(child.PtX, chY, child.PtX, crY, dotted, isTrackedChild, isMatchedChild); // v
+                    DrawParentAges(child, chY, crY);
                 }
 
                 // vertical line from the horizontal junction of spouses to the horizontal junction of children

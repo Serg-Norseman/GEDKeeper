@@ -87,6 +87,7 @@ namespace GKUI.Forms
         private GKDropDownToolItem tbBorders;
         private ContextMenu MenuBorders;
         private CheckMenuItem miHideDescSpouses;
+        private CheckMenuItem miParentAges;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -151,6 +152,8 @@ namespace GKUI.Forms
 
             miTrackMatchedSources.Checked = fTreeBox.Options.TrackMatchedSources;
 
+            miParentAges.Checked = fTreeBox.Options.ParentAges;
+
             miTraceSelected.Checked = fTreeBox.Options.TraceSelected;
             fTreeBox.TraceSelected = fTreeBox.Options.TraceSelected;
 
@@ -208,6 +211,9 @@ namespace GKUI.Forms
             miTrackMatchedSources = new CheckMenuItem();
             miTrackMatchedSources.Click += miTrackMatchedSources_Click;
 
+            miParentAges = new CheckMenuItem();
+            miParentAges.Click += miParentAges_Click;
+
             miFillColor = new ButtonMenuItem();
             miFillColor.Click += miFillColor_Click;
 
@@ -227,6 +233,7 @@ namespace GKUI.Forms
                                          miXRefVisible,
                                          miTrackSelectedLines,
                                          miTrackMatchedSources,
+                                         miParentAges,
                                          new SeparatorMenuItem(),
                                          miFillColor,
                                          miFillImage,
@@ -580,6 +587,16 @@ namespace GKUI.Forms
         {
             fTreeBox.Options.TrackMatchedSources = miTrackMatchedSources.Checked;
             fTreeBox.Invalidate();
+        }
+
+        private void miParentAges_Click(object sender, EventArgs e)
+        {
+            fTreeBox.Options.ParentAges = miParentAges.Checked;
+            if (fTreeBox.Options.ParentAges) {
+                GenChart();
+            } else {
+                fTreeBox.Invalidate();
+            }
         }
 
         private void miFillColor_Click(object sender, EventArgs e)

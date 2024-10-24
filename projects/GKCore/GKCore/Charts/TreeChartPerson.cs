@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using BSLib;
 using BSLib.DataViz.SmartGraph;
 using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Design.Graphics;
 using GKCore.Import;
 using GKCore.Options;
@@ -92,6 +93,8 @@ namespace GKCore.Charts
         public float CertaintyAssessment;
         public TreeChartPerson Father;
         public TreeChartPerson Mother;
+        public string FatherAge;
+        public string MotherAge;
         public int Generation;
         public string Kinship;
         public string[] Lines;
@@ -410,6 +413,39 @@ namespace GKCore.Charts
             } catch (Exception ex) {
                 Logger.WriteError("TreeChartPerson.BuildBy()", ex);
                 throw;
+            }
+        }
+
+        public void SetParents()
+        {
+            if (!fModel.Options.ParentAges || fRec == null) return;
+
+            FatherAge = string.Empty;
+            MotherAge = string.Empty;
+
+            GDMCustomEvent evt = fRec.FindEvent(GEDCOMTagName.BIRT);
+            if (evt == null) return;
+            int childYear = evt.GetChronologicalYear();
+            if (childYear == 0) return;
+
+            if (Father != null && Father.Rec != null) {
+                evt = Father.Rec.FindEvent(GEDCOMTagName.BIRT);
+                if (evt != null) {
+                    int parentYear = evt.GetChronologicalYear();
+                    if (parentYear != 0) {
+                        FatherAge = (childYear - parentYear).ToString();
+                    }
+                }
+            }
+
+            if (Mother != null && Mother.Rec != null) {
+                evt = Mother.Rec.FindEvent(GEDCOMTagName.BIRT);
+                if (evt != null) {
+                    int parentYear = evt.GetChronologicalYear();
+                    if (parentYear != 0) {
+                        MotherAge = (childYear - parentYear).ToString();
+                    }
+                }
             }
         }
 

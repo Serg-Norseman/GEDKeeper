@@ -79,6 +79,7 @@ namespace GKCore.Options
         public bool TrackSelectedLines;
         public bool TrackMatchedSources;
         public bool FullNameOnOneLine;
+        public bool ParentAges;
 
         public IColor MaleColor;
         public IColor FemaleColor;
@@ -177,6 +178,7 @@ namespace GKCore.Options
             UseExtraControls = true;
             UseInlineImagesInSvg = true;
             ExtendedTree = false;
+            ParentAges = false;
         }
 
         public void Assign(IOptions source)
@@ -240,6 +242,7 @@ namespace GKCore.Options
             UseExtraControls = srcOptions.UseExtraControls;
             UseInlineImagesInSvg = srcOptions.UseInlineImagesInSvg;
             ExtendedTree = srcOptions.ExtendedTree;
+            ParentAges = srcOptions.ParentAges;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -310,6 +313,8 @@ namespace GKCore.Options
             TrackSelectedLines = iniFile.ReadBool("Chart", "TrackSelectedLines", true);
             TrackMatchedSources = iniFile.ReadBool("Chart", "TrackMatchedSources", false);
             FullNameOnOneLine = iniFile.ReadBool("Chart", "FullNameOnOneLine", false);
+
+            ParentAges = iniFile.ReadBool("Chart", "ParentAges", false);
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -380,6 +385,8 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "TrackSelectedLines", TrackSelectedLines);
             iniFile.WriteBool("Chart", "TrackMatchedSources", TrackMatchedSources);
             iniFile.WriteBool("Chart", "FullNameOnOneLine", FullNameOnOneLine);
+
+            iniFile.WriteBool("Chart", "ParentAges", ParentAges);
         }
     }
 }

@@ -111,6 +111,8 @@ namespace GKUI.Forms
 
             miTrackMatchedSources.Checked = fTreeBox.Options.TrackMatchedSources;
 
+            miParentAges.Checked = fTreeBox.Options.ParentAges;
+
             miTraceSelected.Checked = fTreeBox.Options.TraceSelected;
             fTreeBox.TraceSelected = fTreeBox.Options.TraceSelected;
 
@@ -420,6 +422,17 @@ namespace GKUI.Forms
             miTrackMatchedSources.Checked = !miTrackMatchedSources.Checked;
             fTreeBox.Options.TrackMatchedSources = miTrackMatchedSources.Checked;
             fTreeBox.Invalidate();
+        }
+
+        private void miParentAges_Click(object sender, EventArgs e)
+        {
+            miParentAges.Checked = !miParentAges.Checked;
+            fTreeBox.Options.ParentAges = miParentAges.Checked;
+            if (fTreeBox.Options.ParentAges) {
+                GenChart();
+            } else {
+                fTreeBox.Invalidate();
+            }
         }
 
         private void miFillColor_Click(object sender, EventArgs e)

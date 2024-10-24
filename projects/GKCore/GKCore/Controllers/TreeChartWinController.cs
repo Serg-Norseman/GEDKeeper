@@ -386,6 +386,7 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miTrackSelectedLines").Text = LangMan.LS(LSID.TrackSelectedLines);
             GetControl<IMenuItem>("miTrackMatchedSources").Text = LangMan.LS(LSID.TrackMatchedSources);
             GetControl<IMenuItem>("miHideDescSpouses").Text = LangMan.LS(LSID.HideDescSpouses);
+            GetControl<IMenuItem>("miParentAges").Text = LangMan.LS(LSID.ParentsAge);
 
             SetToolTip("tbModes", LangMan.LS(LSID.ModesTip));
             SetToolTip("tbImageSave", LangMan.LS(LSID.ImageSaveTip));

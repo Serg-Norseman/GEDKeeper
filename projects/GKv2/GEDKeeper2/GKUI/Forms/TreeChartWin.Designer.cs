@@ -61,9 +61,9 @@
         private System.Windows.Forms.ToolStripMenuItem miGoToPrimaryBranch;
         private System.Windows.Forms.ToolStripMenuItem miOpenInNewWindow;
         private System.Windows.Forms.ToolStripMenuItem miMergeDuplicates;
-
         private System.Windows.Forms.ToolStripSeparator N15;
         private System.Windows.Forms.ToolStripMenuItem miHideDescSpouses;
+        private System.Windows.Forms.ToolStripMenuItem miParentAges;
 
         private void InitializeComponent()
         {
@@ -128,6 +128,7 @@
             this.miMergeDuplicates = new System.Windows.Forms.ToolStripMenuItem();
             this.N15 = new System.Windows.Forms.ToolStripSeparator();
             this.miHideDescSpouses = new System.Windows.Forms.ToolStripMenuItem();
+            this.miParentAges = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolBar1.SuspendLayout();
             this.MenuModes.SuspendLayout();
             this.MenuPerson.SuspendLayout();
@@ -234,6 +235,7 @@
             this.miXRefVisible,
             this.miTrackSelectedLines,
             this.miTrackMatchedSources,
+            this.miParentAges,
             this.N8,
             this.miFillColor,
             this.miFillImage,
@@ -321,6 +323,13 @@
             this.miTrackMatchedSources.Size = new System.Drawing.Size(186, 22);
             this.miTrackMatchedSources.Text = "miTrackMatchedSources";
             this.miTrackMatchedSources.Click += new System.EventHandler(this.miTrackMatchedSources_Click);
+            // 
+            // miParentAges
+            // 
+            this.miParentAges.Name = "miParentAges";
+            this.miParentAges.Size = new System.Drawing.Size(186, 22);
+            this.miParentAges.Text = "miParentAges";
+            this.miParentAges.Click += new System.EventHandler(this.miParentAges_Click);
             // 
             // N8
             // 
