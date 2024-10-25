@@ -81,6 +81,8 @@ namespace GKCore
         public const string INFO_HREF_VIEW = "view_";
         public const string INFO_HREF_FILTER_INDI = "filter_indi_by_";
         public const string INFO_HREF_EXPAND_ASSO = "expand_asso_";
+        public const string INFO_HREF_LOC_SUB = "map_loc_sub_";
+        public const string INFO_HREF_LOC_INDI = "map_loc_indi_";
 
 #if OS_LINUX || OS_FREEBSD
         public const string DEF_FONT = "Noto Sans";

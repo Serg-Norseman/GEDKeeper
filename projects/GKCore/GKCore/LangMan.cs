@@ -1073,8 +1073,10 @@ namespace GKCore
         /* 996 */ RepositoryIsNotSpecified,
         /* 997 */ ParentsAge,
         /* 998 */ SimpleSingleSurnames,
+        /* 999 */ MapOfPlaces,
+        /* 1000 */ MapOfPersons,
 
-        /* 000 */ Last = SimpleSingleSurnames
+        /* 000 */ Last = MapOfPersons
     }
 
 
@@ -2101,6 +2103,8 @@ namespace GKCore
             /* 996 */ "Repository is not specified",
             /* 997 */ "Age of parents",
             /* 998 */ "Simple form of single surnames",
+            /* 999 */ "Map of places",
+            /* 1000 */ "Map of persons",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

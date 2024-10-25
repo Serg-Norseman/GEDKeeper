@@ -385,6 +385,14 @@ namespace GKCore.Controllers
                     ApplyFilter(GDMRecordType.rtIndividual, listMan);
                     fView.ShowRecordsTab(GDMRecordType.rtIndividual);
                 }
+            } else if (linkName.StartsWith(GKData.INFO_HREF_LOC_SUB)) {
+                string xref = linkName.Remove(0, GKData.INFO_HREF_LOC_SUB.Length);
+                var locRec = fContext.Tree.FindXRef<GDMLocationRecord>(xref);
+                if (locRec != null) BaseController.ShowMap_Sub(fView, locRec);
+            } else if (linkName.StartsWith(GKData.INFO_HREF_LOC_INDI)) {
+                string xref = linkName.Remove(0, GKData.INFO_HREF_LOC_INDI.Length);
+                var locRec = fContext.Tree.FindXRef<GDMLocationRecord>(xref);
+                if (locRec != null) BaseController.ShowMap_Indi(fView, locRec);
             } else if (linkName.StartsWith(GKData.INFO_HREF_EXPAND_ASSO)) {
                 GKUtils.ExpandExtInfo(fContext, sender, linkName);
             } else {
@@ -1277,8 +1285,7 @@ namespace GKCore.Controllers
 
         public void ShowMap()
         {
-            var mapsWin = AppHost.Container.Resolve<IMapsViewerWin>(fView);
-            AppHost.Instance.ShowWindow(mapsWin);
+            BaseController.ShowMap(fView);
         }
 
         public async void ShowOrganizer()

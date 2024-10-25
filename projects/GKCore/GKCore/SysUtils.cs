@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -833,6 +834,16 @@ namespace GKCore
             }
 
             return differences;
+        }
+
+        public static void RemoveDuplicates<T>(this List<T> list, IComparer<T> comparer)
+        {
+            list.Sort();
+            int numUnique = 0;
+            for (int i = 0; i < list.Count; i++)
+                if ((i == 0) || (comparer.Compare(list[numUnique - 1], list[i]) != 0))
+                    list[numUnique++] = list[i];
+            list.RemoveRange(numUnique, list.Count - numUnique);
         }
     }
 }

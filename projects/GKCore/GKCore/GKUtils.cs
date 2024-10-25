@@ -21,6 +21,7 @@
 #define CALENDAR_DIFFERENCE_YEARS
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -210,10 +211,9 @@ namespace GKCore
             return linksList;
         }
 
-        public static StringList GetLocationSubordinateLinks(GDMTree tree, GDMLocationRecord locRec)
+        public static void GetLocationSubordinateLinks(GDMTree tree, GDMLocationRecord locRec, List<GDMLocationRecord> linksList)
         {
-            var linksList = new StringList();
-            if (locRec == null) return linksList;
+            if (locRec == null || linksList == null) return;
 
             for (int i = 0, num = tree.RecordsCount; i < num; i++) {
                 var locTemp = tree[i] as GDMLocationRecord;
@@ -223,13 +223,55 @@ namespace GKCore
                     var topLink = locTemp.TopLevels[j];
 
                     if (topLink.XRef == locRec.XRef) {
-                        linksList.AddObject(GetRecordName(tree, locTemp, false), locTemp);
+                        linksList.Add(locTemp);
                         break;
                     }
                 }
             }
+        }
 
-            return linksList;
+        public static StringList GetLocationSubordinatesList(GDMTree tree, GDMLocationRecord locRec)
+        {
+            var linksList = new List<GDMLocationRecord>();
+            GetLocationSubordinateLinks(tree, locRec, linksList);
+
+            var result = new StringList();
+            for (int i = 0, num = linksList.Count; i < num; i++) {
+                var locTemp = linksList[i];
+                result.AddObject(GetRecordName(tree, locTemp, false), locTemp);
+            }
+            return result;
+        }
+
+        public static void GetLocationRecursiveSubordinateLinks(GDMTree tree, GDMLocationRecord locRec, HashSet<GDMLocationRecord> linksList, bool excludeEmpty = false)
+        {
+            if (!excludeEmpty || !locRec.Map.IsEmpty())
+                linksList.Add(locRec);
+
+            var tempList = new List<GDMLocationRecord>();
+            GetLocationSubordinateLinks(tree, locRec, tempList);
+            for (int i = 0, num = tempList.Count; i < num; i++) {
+                GetLocationRecursiveSubordinateLinks(tree, tempList[i], linksList, excludeEmpty);
+            }
+        }
+
+        public static void GetLocationIndividuals(GDMTree tree, GDMLocationRecord locRec, HashSet<GDMIndividualRecord> individualRecords)
+        {
+            if (locRec == null) return;
+
+            for (int i = 0, num = tree.RecordsCount; i < num; i++) {
+                var indiRec = tree[i] as GDMIndividualRecord;
+                if (indiRec == null || !indiRec.HasEvents) continue;
+
+                for (int j = 0, num2 = indiRec.Events.Count; j < num2; j++) {
+                    GDMCustomEvent evt = indiRec.Events[j];
+
+                    if (evt.HasPlace && evt.Place.Location.XRef == locRec.XRef) {
+                        individualRecords.Add(indiRec);
+                        break;
+                    }
+                }
+            }
         }
 
         public static string HyperLink(string xref, string text)
@@ -3067,101 +3109,108 @@ namespace GKCore
 
             try {
                 summary.BeginUpdate();
+                summary.Clear();
+
                 StringList linkList = null;
                 try {
-                    summary.Clear();
-                    if (locRec != null) {
+                    if (locRec == null) return;
+
+                    summary.Add("");
+
+                    GlobalOptions glob = GlobalOptions.Instance;
+                    for (int i = 0; i < locRec.Names.Count; i++) {
+                        var locName = locRec.Names[i];
+                        summary.Add("[u][b][size=+1]" + locName.StringValue + "[/size][/b][/u]");
+
+                        string st = locName.Abbreviation;
+                        if (!string.IsNullOrEmpty(st)) {
+                            summary.Add("    " + st);
+                        }
+
+                        st = locName.Date.GetDisplayStringExt(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
+                        if (!string.IsNullOrEmpty(st)) {
+                            summary.Add("    " + st);
+                        }
+
                         summary.Add("");
+                    }
 
-                        GlobalOptions glob = GlobalOptions.Instance;
-                        for (int i = 0; i < locRec.Names.Count; i++) {
-                            var locName = locRec.Names[i];
-                            summary.Add("[u][b][size=+1]" + locName.StringValue + "[/size][/b][/u]");
+                    GDMTree tree = baseContext.Tree;
 
-                            string st = locName.Abbreviation;
+                    if (locRec.TopLevels.Count > 0) {
+                        summary.Add("");
+                        summary.Add(LangMan.LS(LSID.TopLevelLinks) + ":");
+
+                        for (int i = 0; i < locRec.TopLevels.Count; i++) {
+                            var topLev = locRec.TopLevels[i];
+                            var topLoc = tree.GetPtrValue<GDMLocationRecord>(topLev);
+
+                            string st = HyperLink(topLev.XRef, topLoc.GetNameByDate(topLev.Date.Value));
                             if (!string.IsNullOrEmpty(st)) {
                                 summary.Add("    " + st);
                             }
 
-                            st = locName.Date.GetDisplayStringExt(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
+                            st = topLev.Date.GetDisplayStringExt(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
                             if (!string.IsNullOrEmpty(st)) {
                                 summary.Add("    " + st);
                             }
 
                             summary.Add("");
-                        }
-
-                        GDMTree tree = baseContext.Tree;
-
-                        if (locRec.TopLevels.Count > 0) {
-                            summary.Add("");
-                            summary.Add(LangMan.LS(LSID.TopLevelLinks) + ":");
-
-                            for (int i = 0; i < locRec.TopLevels.Count; i++) {
-                                var topLev = locRec.TopLevels[i];
-                                var topLoc = tree.GetPtrValue<GDMLocationRecord>(topLev);
-
-                                string st = HyperLink(topLev.XRef, topLoc.GetNameByDate(topLev.Date.Value));
-                                if (!string.IsNullOrEmpty(st)) {
-                                    summary.Add("    " + st);
-                                }
-
-                                st = topLev.Date.GetDisplayStringExt(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
-                                if (!string.IsNullOrEmpty(st)) {
-                                    summary.Add("    " + st);
-                                }
-
-                                summary.Add("");
-                            }
-                        }
-
-                        summary.Add(LangMan.LS(LSID.Latitude) + ": " + locRec.Map.Lati);
-                        summary.Add(LangMan.LS(LSID.Longitude) + ": " + locRec.Map.Long);
-
-                        var fullNames = locRec.GetFullNames(tree, ATDEnumeration.fStL, glob.EL_AbbreviatedNames);
-                        if (fullNames.Count > 0) {
-                            //linkList.Sort();
-
-                            summary.Add("");
-                            summary.Add(LangMan.LS(LSID.History) + ":");
-
-                            int num = fullNames.Count;
-                            for (int i = 0; i < num; i++) {
-                                var xName = fullNames[i];
-                                summary.Add("    " + string.Format("{0}: {1}", xName.Date.GetDisplayStringExt(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar, false), xName.StringValue));
-                            }
-                        }
-
-                        linkList = GetLocationLinks(tree, locRec);
-                        if (linkList.Count > 0) {
-                            linkList.Sort();
-
-                            summary.Add("");
-                            summary.Add(LangMan.LS(LSID.Links) + ":");
-
-                            int num = linkList.Count;
-                            for (int i = 0; i < num; i++) {
-                                GDMRecord rec = linkList.GetObject(i) as GDMRecord;
-                                summary.Add("    " + HyperLink(rec.XRef, linkList[i]));
-                            }
-                        }
-
-                        RecListNotesRefresh(baseContext, locRec, summary);
-                        RecListMediaRefresh(baseContext, locRec, summary);
-
-                        var subLinks = GetLocationSubordinateLinks(tree, locRec);
-                        if (subLinks.Count > 0) {
-                            subLinks.Sort();
-
-                            summary.Add("");
-                            summary.Add(LangMan.LS(LSID.SubordinateLocationsLinks) + ":");
-
-                            for (int i = 0, num = subLinks.Count; i < num; i++) {
-                                GDMRecord rec = subLinks.GetObject(i) as GDMRecord;
-                                summary.Add("    " + HyperLink(rec.XRef, subLinks[i]));
-                            }
                         }
                     }
+
+                    summary.Add(LangMan.LS(LSID.Latitude) + ": " + locRec.Map.Lati);
+                    summary.Add(LangMan.LS(LSID.Longitude) + ": " + locRec.Map.Long);
+
+                    var fullNames = locRec.GetFullNames(tree, ATDEnumeration.fStL, glob.EL_AbbreviatedNames);
+                    if (fullNames.Count > 0) {
+                        //linkList.Sort();
+
+                        summary.Add("");
+                        summary.Add(LangMan.LS(LSID.History) + ":");
+
+                        int num = fullNames.Count;
+                        for (int i = 0; i < num; i++) {
+                            var xName = fullNames[i];
+                            summary.Add("    " + string.Format("{0}: {1}", xName.Date.GetDisplayStringExt(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar, false), xName.StringValue));
+                        }
+                    }
+
+                    linkList = GetLocationLinks(tree, locRec);
+                    if (linkList.Count > 0) {
+                        linkList.Sort();
+
+                        summary.Add("");
+                        summary.Add(LangMan.LS(LSID.Links) + ":");
+
+                        int num = linkList.Count;
+                        for (int i = 0; i < num; i++) {
+                            GDMRecord rec = linkList.GetObject(i) as GDMRecord;
+                            summary.Add("    " + HyperLink(rec.XRef, linkList[i]));
+                        }
+                    }
+
+                    RecListNotesRefresh(baseContext, locRec, summary);
+                    RecListMediaRefresh(baseContext, locRec, summary);
+
+                    var subLinks = GetLocationSubordinatesList(tree, locRec);
+                    if (subLinks.Count > 0) {
+                        subLinks.Sort();
+
+                        summary.Add("");
+                        summary.Add(LangMan.LS(LSID.SubordinateLocationsLinks) + ":");
+
+                        for (int i = 0, num = subLinks.Count; i < num; i++) {
+                            GDMRecord rec = subLinks.GetObject(i) as GDMRecord;
+                            summary.Add("    " + HyperLink(rec.XRef, subLinks[i]));
+                        }
+                    }
+
+                    summary.Add("");
+                    summary.Add(HyperLink(GKData.INFO_HREF_LOC_SUB + locRec.XRef, $"[ {LangMan.LS(LSID.MapOfPlaces)} ] "));
+
+                    summary.Add("");
+                    summary.Add(HyperLink(GKData.INFO_HREF_LOC_INDI + locRec.XRef, $"[ {LangMan.LS(LSID.MapOfPersons)} ] "));
                 } finally {
                     if (linkList != null) linkList.Dispose();
                     summary.EndUpdate();

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,11 +23,11 @@ using System.Collections.Generic;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Maps;
-using GKCore.Design;
-using GKCore.Design.Views;
 
 namespace GKCore.Controllers
 {
@@ -52,6 +52,22 @@ namespace GKCore.Controllers
             fMapPoints = new List<GeoPoint>();
             fPlaces = new Dictionary<string, MapPlace>();
             fSelectedPersons = selectedPersons;
+        }
+
+        public void ShowFixedPoints(IEnumerable<GeoPoint> points)
+        {
+            var mapBrowser = fView.MapBrowser;
+            mapBrowser.ShowLines = false;
+            mapBrowser.BeginUpdate();
+            try {
+                mapBrowser.ClearPoints();
+                foreach (var pt in points) {
+                    mapBrowser.AddPoint(pt);
+                }
+            } finally {
+                mapBrowser.EndUpdate();
+            }
+            mapBrowser.ZoomToBounds();
         }
 
         public override void UpdateView()

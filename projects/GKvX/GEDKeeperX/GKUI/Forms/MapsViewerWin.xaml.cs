@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -116,6 +116,11 @@ namespace GKUI.Forms
                     trkZoom.Value = fMapBrowser.MapControl.Zoom * 100;
                 }
             }
+        }
+
+        public void ShowFixedPoints(IEnumerable<GeoPoint> points)
+        {
+            fController.ShowFixedPoints(points);
         }
 
         private void radTotal_Click(object sender, EventArgs e)

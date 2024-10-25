@@ -19,6 +19,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
@@ -28,6 +30,7 @@ using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Maps;
 using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
@@ -1443,6 +1446,59 @@ namespace GKCore.Controllers
                     Logger.WriteError("BaseController.ShowMedia()", ex);
                 }
             }
+        }
+
+        public static void ShowMap(IBaseWindow baseWin, List<GeoPoint> fixedPoints = null)
+        {
+            var mapsWin = AppHost.Container.Resolve<IMapsViewerWin>(baseWin);
+            if (fixedPoints != null) {
+                mapsWin.ShowFixedPoints(fixedPoints);
+            }
+            AppHost.Instance.ShowWindow(mapsWin);
+        }
+
+        public static void ShowMap_Sub(IBaseWindow baseWin, GDMLocationRecord locRec)
+        {
+            var tree = baseWin.Context.Tree;
+            var subLinks = new HashSet<GDMLocationRecord>();
+            GKUtils.GetLocationRecursiveSubordinateLinks(tree, locRec, subLinks, true);
+
+            var geoPoints = new List<GeoPoint>();
+            foreach (var location in subLinks) {
+                string locName = GKUtils.GetRecordName(tree, location, false);
+                var mapPt = location.Map;
+                geoPoints.Add(new GeoPoint(mapPt.Lati, mapPt.Long, locName));
+            }
+
+            ShowMap(baseWin, geoPoints);
+        }
+
+        public static void ShowMap_Indi(IBaseWindow baseWin, GDMLocationRecord locRec)
+        {
+            var tree = baseWin.Context.Tree;
+            var subLinks = new HashSet<GDMLocationRecord>();
+            GKUtils.GetLocationRecursiveSubordinateLinks(tree, locRec, subLinks, true);
+
+            var locName = new StringBuilder();
+
+            var geoPoints = new List<GeoPoint>();
+            foreach (var location in subLinks) {
+                var individualRecords = new HashSet<GDMIndividualRecord>();
+                GKUtils.GetLocationIndividuals(tree, location, individualRecords);
+
+                locName.AppendLine(GKUtils.GetRecordName(tree, location, false));
+                var mapPt = location.Map;
+
+                foreach (var iRec in individualRecords) {
+                    string iName = GKUtils.GetRecordName(tree, iRec, false);
+                    locName.AppendLine(iName);
+                }
+
+                geoPoints.Add(new GeoPoint(mapPt.Lati, mapPt.Long, locName.ToString()));
+                locName.Clear();
+            }
+
+            ShowMap(baseWin, geoPoints);
         }
     }
 }

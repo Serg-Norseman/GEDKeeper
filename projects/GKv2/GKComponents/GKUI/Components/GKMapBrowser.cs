@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -97,6 +97,16 @@ namespace GKUI.Components
         {
             BeginUpdate();
             GeoPoint pt = new GeoPoint(latitude, longitude, hint);
+            int res = fMapPoints.Count;
+            fMapPoints.Add(pt);
+            EndUpdate();
+
+            return res;
+        }
+
+        public int AddPoint(GeoPoint pt)
+        {
+            BeginUpdate();
             int res = fMapPoints.Count;
             fMapPoints.Add(pt);
             EndUpdate();

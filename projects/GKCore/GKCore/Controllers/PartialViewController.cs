@@ -195,6 +195,14 @@ namespace GKCore.Controllers
                     iFilter.SourceRef = rec.XRef;
                     ApplyFilter(GDMRecordType.rtIndividual, listMan);
                 }
+            } else if (linkName.StartsWith(GKData.INFO_HREF_LOC_SUB)) {
+                string xref = linkName.Remove(0, GKData.INFO_HREF_LOC_SUB.Length);
+                var locRec = fBase.Context.Tree.FindXRef<GDMLocationRecord>(xref);
+                if (locRec != null) BaseController.ShowMap_Sub(fBase, locRec);
+            } else if (linkName.StartsWith(GKData.INFO_HREF_LOC_INDI)) {
+                string xref = linkName.Remove(0, GKData.INFO_HREF_LOC_INDI.Length);
+                var locRec = fBase.Context.Tree.FindXRef<GDMLocationRecord>(xref);
+                if (locRec != null) BaseController.ShowMap_Indi(fBase, locRec);
             } else if (linkName.StartsWith(GKData.INFO_HREF_EXPAND_ASSO)) {
                 GKUtils.ExpandExtInfo(fBase.Context, sender, linkName);
             } else {
