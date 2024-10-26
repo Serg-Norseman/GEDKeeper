@@ -21,6 +21,7 @@
 #pragma warning disable CS0618
 
 using System;
+using System.Collections.Generic;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
@@ -29,6 +30,7 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
+using GKCore.Maps;
 using GKMap;
 using GKMap.EtoForms;
 using GKMap.MapProviders;

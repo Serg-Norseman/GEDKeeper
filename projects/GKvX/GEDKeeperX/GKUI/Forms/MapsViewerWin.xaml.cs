@@ -19,12 +19,14 @@
  */
 
 using System;
+using System.Collections.Generic;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
+using GKCore.Maps;
 using GKMap;
 using GKMap.MapProviders;
 using GKMap.Xamarin;
