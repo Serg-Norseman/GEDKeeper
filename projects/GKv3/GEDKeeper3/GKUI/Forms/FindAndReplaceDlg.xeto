@@ -46,20 +46,12 @@
     </TableRow>
 
     <TableRow>
-      <StackLayout Spacing="8" Orientation="Horizontal">
-        <StackLayoutItem HorizontalAlignment="Left">
-          <Button x:Name="btnPrev" Style="dlgBtn" Click="btnPrev_Click" />
-        </StackLayoutItem>
-        <StackLayoutItem HorizontalAlignment="Left">
-          <Button x:Name="btnNext" Style="dlgBtn" Click="btnNext_Click" />
-        </StackLayoutItem>
+      <StackLayout Style="dlgFooter">
+        <Button x:Name="btnPrev" Style="dlgBtn" Click="btnPrev_Click" />
+        <Button x:Name="btnNext" Style="dlgBtn" Click="btnNext_Click" />
         <StackLayoutItem Expand="True" />
-        <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnReplace" Style="dlgBtn" Click="btnReplace_Click" />
-        </StackLayoutItem>
-        <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnReplaceAll" Style="dlgBtn" Click="btnReplaceAll_Click" />
-        </StackLayoutItem>
+        <Button x:Name="btnReplace" Style="dlgBtn" Click="btnReplace_Click" />
+        <Button x:Name="btnReplaceAll" Style="dlgBtn" Click="btnReplaceAll_Click" />
       </StackLayout>
     </TableRow>
 

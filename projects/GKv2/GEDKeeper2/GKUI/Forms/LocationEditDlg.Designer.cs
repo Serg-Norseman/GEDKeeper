@@ -66,7 +66,7 @@
             // btnAccept
             // 
             this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAccept.Location = new System.Drawing.Point(538, 534);
+            this.btnAccept.Location = new System.Drawing.Point(598, 534);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(113, 31);
             this.btnAccept.TabIndex = 1;
@@ -78,7 +78,7 @@
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(661, 534);
+            this.btnCancel.Location = new System.Drawing.Point(721, 534);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(113, 31);
             this.btnCancel.TabIndex = 2;
@@ -95,7 +95,7 @@
             this.tabsData.Location = new System.Drawing.Point(0, 0);
             this.tabsData.Name = "tabsData";
             this.tabsData.SelectedIndex = 0;
-            this.tabsData.Size = new System.Drawing.Size(785, 516);
+            this.tabsData.Size = new System.Drawing.Size(844, 516);
             this.tabsData.TabIndex = 0;
             // 
             // pageCommon
@@ -173,7 +173,7 @@
             this.grpSearch.Controls.Add(this.panMap);
             this.grpSearch.Location = new System.Drawing.Point(0, 62);
             this.grpSearch.Name = "grpSearch";
-            this.grpSearch.Size = new System.Drawing.Size(774, 420);
+            this.grpSearch.Size = new System.Drawing.Size(834, 420);
             this.grpSearch.TabIndex = 7;
             this.grpSearch.TabStop = false;
             this.grpSearch.Text = "grpSearch";
@@ -187,7 +187,7 @@
             this.ListGeoCoords.FullRowSelect = true;
             this.ListGeoCoords.Location = new System.Drawing.Point(22, 19);
             this.ListGeoCoords.Name = "ListGeoCoords";
-            this.ListGeoCoords.Size = new System.Drawing.Size(563, 109);
+            this.ListGeoCoords.Size = new System.Drawing.Size(623, 109);
             this.ListGeoCoords.TabIndex = 1;
             this.ListGeoCoords.UseCompatibleStateImageBehavior = false;
             this.ListGeoCoords.View = System.Windows.Forms.View.Details;
@@ -210,7 +210,7 @@
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(601, 19);
+            this.btnSearch.Location = new System.Drawing.Point(661, 19);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(147, 31);
             this.btnSearch.TabIndex = 2;
@@ -219,7 +219,7 @@
             // 
             // btnSelect
             // 
-            this.btnSelect.Location = new System.Drawing.Point(601, 58);
+            this.btnSelect.Location = new System.Drawing.Point(661, 58);
             this.btnSelect.Name = "btnSelect";
             this.btnSelect.Size = new System.Drawing.Size(147, 31);
             this.btnSelect.TabIndex = 3;
@@ -228,7 +228,7 @@
             // 
             // btnSelectName
             // 
-            this.btnSelectName.Location = new System.Drawing.Point(601, 97);
+            this.btnSelectName.Location = new System.Drawing.Point(661, 97);
             this.btnSelectName.Name = "btnSelectName";
             this.btnSelectName.Size = new System.Drawing.Size(147, 31);
             this.btnSelectName.TabIndex = 4;
@@ -240,7 +240,7 @@
             this.panMap.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panMap.Location = new System.Drawing.Point(3, 135);
             this.panMap.Name = "panMap";
-            this.panMap.Size = new System.Drawing.Size(768, 283);
+            this.panMap.Size = new System.Drawing.Size(828, 283);
             this.panMap.TabIndex = 0;
             // 
             // btnShowOnMap
@@ -313,7 +313,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(784, 578);
+            this.ClientSize = new System.Drawing.Size(844, 578);
             this.Controls.Add(this.tabsData);
             this.Controls.Add(this.btnAccept);
             this.Controls.Add(this.btnCancel);

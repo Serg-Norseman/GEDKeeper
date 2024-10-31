@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BSLib;
@@ -1106,13 +1107,15 @@ namespace GKCore.Controllers
                 context.BeginUpdate();
 
                 GDMRecord result;
-
-                if (original.RecordType == GDMRecordType.rtIndividual) {
-                    result = context.Tree.CreateIndividual();
-                } else if (original.RecordType == GDMRecordType.rtLocation) {
-                    result = context.Tree.CreateLocation();
-                } else {
-                    return null;
+                switch (original.RecordType) {
+                    case GDMRecordType.rtIndividual:
+                        result = context.Tree.CreateIndividual();
+                        break;
+                    case GDMRecordType.rtLocation:
+                        result = context.Tree.CreateLocation();
+                        break;
+                    default:
+                        return null;
                 }
 
                 result.Assign(original);
@@ -1479,12 +1482,17 @@ namespace GKCore.Controllers
             var subLinks = new HashSet<GDMLocationRecord>();
             GKUtils.GetLocationRecursiveSubordinateLinks(tree, locRec, subLinks, true);
 
+            var selectedIndividuals = baseWin.GetContentList(GDMRecordType.rtIndividual).Cast<GDMIndividualRecord>();
+
             var locName = new StringBuilder();
 
             var geoPoints = new List<GeoPoint>();
             foreach (var location in subLinks) {
                 var individualRecords = new HashSet<GDMIndividualRecord>();
                 GKUtils.GetLocationIndividuals(tree, location, individualRecords);
+
+                individualRecords.IntersectWith(selectedIndividuals);
+                if (individualRecords.Count == 0) continue;
 
                 locName.AppendLine(GKUtils.GetRecordName(tree, location, false));
                 var mapPt = location.Map;

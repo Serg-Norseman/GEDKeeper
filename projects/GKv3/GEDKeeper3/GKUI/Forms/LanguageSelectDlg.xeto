@@ -11,14 +11,10 @@
     </TableRow>
 
     <TableRow>
-      <StackLayout Spacing="8" Orientation="Horizontal">
+      <StackLayout Style="dlgFooter">
         <StackLayoutItem Expand="True" />
-        <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler">Accept</Button>
-        </StackLayoutItem>
-        <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler">Cancel</Button>
-        </StackLayoutItem>
+        <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler">Accept</Button>
+        <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler">Cancel</Button>
       </StackLayout>
     </TableRow>
 

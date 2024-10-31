@@ -225,7 +225,8 @@ namespace GKCore.Controllers
 
             SetToolTip("btnShowOnMap", LangMan.LS(LSID.ShowOnMapTip));
 
-            fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.Title), 200, false);
+            fView.GeoCoordsList.ClearColumns();
+            fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.Title), 300, false);
             fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.Latitude), 80, false);
             fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.Longitude), 80, false);
 

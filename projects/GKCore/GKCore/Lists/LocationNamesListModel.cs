@@ -34,7 +34,7 @@ namespace GKCore.Lists
     {
         public LocationNamesListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
-            AllowedActions = EnumSet<RecordAction>.Create(RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
+            AllowedActions = EnumSet<RecordAction>.Create(RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raCopy, RecordAction.raPaste);
         }
 
         public static ListColumns CreateListColumns()
@@ -125,12 +125,27 @@ namespace GKCore.Lists
                         result = fUndoman.DoOrdinaryOperation(OperationType.otLocationNameRemove, dataOwner, locName);
                     }
                     break;
+
+                case RecordAction.raCopy:
+                    AppHost.Instance.SetClipboardObj<GDMLocationName>(locName);
+                    break;
+
+                case RecordAction.raCut:
+                    break;
+
+                case RecordAction.raPaste:
+                    locName = AppHost.Instance.GetClipboardObj<GDMLocationName>();
+                    if (locName != null) {
+                        locName = locName.Clone();
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otLocationNameAdd, dataOwner, locName);
+                    }
+                    break;
             }
 
             if (result) {
                 UpdateButtons();
 
-                if (eArgs.Action == RecordAction.raAdd) {
+                if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raPaste) {
                     eArgs.ItemData = locName;
                 }
 

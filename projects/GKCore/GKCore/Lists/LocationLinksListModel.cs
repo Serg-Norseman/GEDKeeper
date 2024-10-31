@@ -36,7 +36,7 @@ namespace GKCore.Lists
 
         public LocationLinksListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
-            AllowedActions = EnumSet<RecordAction>.Create(RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete);
+            AllowedActions = EnumSet<RecordAction>.Create(RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete, RecordAction.raCopy, RecordAction.raPaste);
         }
 
         public static ListColumns CreateListColumns()
@@ -111,10 +111,25 @@ namespace GKCore.Lists
                         result = fUndoman.DoOrdinaryOperation(OperationType.otLocationLinkRemove, dataOwner, locLink);
                     }
                     break;
+
+                case RecordAction.raCopy:
+                    AppHost.Instance.SetClipboardObj<GDMLocationLink>(locLink);
+                    break;
+
+                case RecordAction.raCut:
+                    break;
+
+                case RecordAction.raPaste:
+                    locLink = AppHost.Instance.GetClipboardObj<GDMLocationLink>();
+                    if (locLink != null) {
+                        locLink = locLink.Clone();
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otLocationLinkAdd, dataOwner, locLink);
+                    }
+                    break;
             }
 
             if (result) {
-                if (eArgs.Action == RecordAction.raAdd) {
+                if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raPaste) {
                     eArgs.ItemData = locLink;
                 }
 

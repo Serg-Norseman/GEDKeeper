@@ -78,20 +78,14 @@
     </TableRow>
 
     <TableRow>
-      <StackLayout Spacing="8" Orientation="Horizontal">
-        <StackLayoutItem HorizontalAlignment="Left">
-          <Button x:Name="btnReset" Style="dlgBtn" Click="btnReset_Click" />
-        </StackLayoutItem>
+      <StackLayout Style="dlgFooter">
+        <Button x:Name="btnReset" Style="dlgBtn" Click="btnReset_Click" />
         <StackLayoutItem Expand="True" />
-        <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="btnAccept_Click" />
-        </StackLayoutItem>
-        <StackLayoutItem HorizontalAlignment="Right">
-          <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
-        </StackLayoutItem>
+        <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="btnAccept_Click" />
+        <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
       </StackLayout>
     </TableRow>
 
   </TableLayout>
-  
+
 </Dialog>
