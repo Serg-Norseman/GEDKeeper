@@ -1075,8 +1075,10 @@ namespace GKCore
         /* 998 */ SimpleSingleSurnames,
         /* 999 */ MapOfPlaces,
         /* 1000 */ MapOfPersons,
+        /* 1001 */ SearchPlacesWithoutCoords,
+        /* 1002 */ LocationsAndMaps,
 
-        /* 000 */ Last = MapOfPersons
+        /* 000 */ Last = LocationsAndMaps
     }
 
 
@@ -2105,6 +2107,8 @@ namespace GKCore
             /* 998 */ "Simple form of single surnames",
             /* 999 */ "Map of places",
             /* 1000 */ "Map of persons",
+            /* 1001 */ "Search in geocoders for places without coordinates (maps)",
+            /* 1002 */ "Locations and Maps",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

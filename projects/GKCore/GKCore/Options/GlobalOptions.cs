@@ -254,6 +254,11 @@ namespace GKCore.Options
 
         public bool SearchAndFilterByAllNames { get; set; }
 
+        /// <summary>
+        /// Maps.
+        /// </summary>
+        public bool SearchPlacesWithoutCoords { get; set; }
+
         public bool ShortKinshipForm { get; set; }
 
         public bool ShowDatesCalendar { get; set; }
@@ -423,6 +428,9 @@ namespace GKCore.Options
             EL_AbbreviatedNames = true;
 
             ShowNumberOfSubstructures = false;
+
+            // maps?
+            SearchPlacesWithoutCoords = false;
         }
 
         public void Assign(IOptions source)
@@ -844,6 +852,7 @@ namespace GKCore.Options
             ShowIndiNamesakes = ini.ReadBool("Common", "ShowIndiNamesakes", false);
             ShowNumberOfSubstructures = ini.ReadBool("Common", "ShowNumberOfSubstructures", false);
             MatchPatternMethod = (MatchPatternMethod)ini.ReadInteger("Common", "MatchPatternMethod", 0);
+            SearchPlacesWithoutCoords = ini.ReadBool("Common", "SearchPlacesWithoutCoords", false);
 
             Theme = ini.ReadString("Common", "Theme", "");
 
@@ -997,6 +1006,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "ShowIndiNamesakes", ShowIndiNamesakes);
             ini.WriteBool("Common", "ShowNumberOfSubstructures", ShowNumberOfSubstructures);
             ini.WriteInteger("Common", "MatchPatternMethod", (int)MatchPatternMethod);
+            ini.WriteBool("Common", "SearchPlacesWithoutCoords", SearchPlacesWithoutCoords);
 
             ini.WriteString("Common", "Theme", Theme);
 

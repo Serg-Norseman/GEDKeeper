@@ -30,20 +30,6 @@
                     </TableRow>
 
                     <TableRow>
-                      <Label x:Name="lblGeocoder" />
-                      <ComboBox x:Name="cmbGeocoder" ReadOnly="True">
-                        <ListItem>Google</ListItem>
-                        <ListItem>Yandex</ListItem>
-                        <ListItem>OSM</ListItem>
-                      </ComboBox>
-                    </TableRow>
-
-                    <TableRow>
-                      <Label x:Name="lblGeoSearchCountry" />
-                      <ComboBox x:Name="cmbGeoSearchCountry" ReadOnly="True" />
-                    </TableRow>
-
-                    <TableRow>
                       <Label x:Name="lblCertaintyAlgorithm" />
                       <ComboBox x:Name="cmbCertaintyAlgorithm" ReadOnly="True" />
                     </TableRow>
@@ -446,6 +432,37 @@
               </StackLayout>
             </TabPage>
 
+            <TabPage x:Name="pageGeo">
+              <StackLayout Style="vertListStack">
+
+                <TableLayout Spacing="4, 4">
+                  <TableRow>
+                    <Label x:Name="lblGeocoder" />
+                    <ComboBox x:Name="cmbGeocoder" ReadOnly="True">
+                      <ListItem>Google</ListItem>
+                      <ListItem>Yandex</ListItem>
+                      <ListItem>OSM</ListItem>
+                    </ComboBox>
+                  </TableRow>
+
+                  <TableRow>
+                    <Label x:Name="lblGeoSearchCountry" />
+                    <ComboBox x:Name="cmbGeoSearchCountry" ReadOnly="True" />
+                  </TableRow>
+                </TableLayout>
+
+                <CheckBox x:Name="chkExtendedLocations" />
+                <StackLayout Orientation="Horizontal" Spacing="20">
+                  <StackLayoutItem />
+                  <CheckBox x:Name="chkELAbbreviatedNames" />
+                </StackLayout>
+                <CheckBox x:Name="chkReversePlacesOrder" />
+                <CheckBox x:Name="chkSearchPlacesWithoutCoords" />
+
+                <StackLayoutItem Expand="True" />
+              </StackLayout>
+            </TabPage>
+
           </TabControl>
 
         </TabPage>
@@ -500,15 +517,6 @@
             <CheckBox x:Name="chkKeepInfoPansOverallSize" />
             <CheckBox x:Name="chkFilesOverwriteWarn" />
             <CheckBox x:Name="chkExtendedKinships" />
-
-            <CheckBox x:Name="chkExtendedLocations" />
-            <StackLayout Orientation="Horizontal" Spacing="20">
-              <StackLayoutItem />
-              <CheckBox x:Name="chkELAbbreviatedNames" />
-            </StackLayout>
-
-            <CheckBox x:Name="chkReversePlacesOrder" />
-
             <CheckBox x:Name="chkShowNumberOfSubstructures" />
           </StackLayout>
         </TabPage>

@@ -58,6 +58,13 @@ namespace GKCore.Controllers
             fView.EventTypesList.ListModel = new EventDefsListModel(fView, null, null);
         }
 
+        public void ChangeTab()
+        {
+            AcceptLanguage();
+            SetLocale();
+            UpdateView();
+        }
+
         private void FillGeoSearchCountries()
         {
             var combo = GetControl<IComboBox>("cmbGeoSearchCountry");
@@ -482,6 +489,7 @@ namespace GKCore.Controllers
 
             GetControl<ICheckBox>("chkReversePlacesOrder").Checked = fOptions.ReversePlaceEntitiesOrder;
             GetControl<ICheckBox>("chkShowNumberOfSubstructures").Checked = fOptions.ShowNumberOfSubstructures;
+            GetControl<ICheckBox>("chkSearchPlacesWithoutCoords").Checked = fOptions.SearchPlacesWithoutCoords;
         }
 
         public void AcceptSpecials()
@@ -505,6 +513,7 @@ namespace GKCore.Controllers
 
             fOptions.ReversePlaceEntitiesOrder = GetControl<ICheckBox>("chkReversePlacesOrder").Checked;
             fOptions.ShowNumberOfSubstructures = GetControl<ICheckBox>("chkShowNumberOfSubstructures").Checked;
+            fOptions.SearchPlacesWithoutCoords = GetControl<ICheckBox>("chkSearchPlacesWithoutCoords").Checked;
         }
 
         private void UpdateEventTypes()
@@ -1007,6 +1016,8 @@ namespace GKCore.Controllers
 
             GetControl<ITabPage>("pageNavigation").Text = LangMan.LS(LSID.Navigation);
 
+            GetControl<ITabPage>("pageGeo").Text = LangMan.LS(LSID.LocationsAndMaps);
+
             // Pedigree
             GetControl<ITabPage>("pagePedigree").Text = LangMan.LS(LSID.Pedigrees);
 
@@ -1047,6 +1058,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkELAbbreviatedNames").Text = LangMan.LS(LSID.EL_AbbreviatedNames);
             GetControl<ICheckBox>("chkReversePlacesOrder").Text = LangMan.LS(LSID.ReversePlacesOrder);
             GetControl<ICheckBox>("chkShowNumberOfSubstructures").Text = LangMan.LS(LSID.ShowNumberOfSubstructures);
+            GetControl<ICheckBox>("chkSearchPlacesWithoutCoords").Text = LangMan.LS(LSID.SearchPlacesWithoutCoords);
 
             // event types
             GetControl<ITabPage>("pageEventTypes").Text = LangMan.LS(LSID.EventTypes);

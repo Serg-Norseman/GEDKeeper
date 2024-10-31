@@ -197,6 +197,8 @@
         private System.Windows.Forms.TabPage pageNavigation;
         private System.Windows.Forms.CheckBox chkPortraits;
         private System.Windows.Forms.CheckBox chkSimpleSingleSurnames;
+        private System.Windows.Forms.CheckBox chkSearchPlacesWithoutCoords;
+        private System.Windows.Forms.TabPage pageGeo;
 
         private void InitializeComponent()
         {
@@ -395,6 +397,8 @@
             this.pageNavigation = new System.Windows.Forms.TabPage();
             this.chkPortraits = new System.Windows.Forms.CheckBox();
             this.chkSimpleSingleSurnames = new System.Windows.Forms.CheckBox();
+            this.chkSearchPlacesWithoutCoords = new System.Windows.Forms.CheckBox();
+            this.pageGeo = new System.Windows.Forms.TabPage();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -440,6 +444,7 @@
             this.pageSpecials.SuspendLayout();
             this.pageEventTypes.SuspendLayout();
             this.pageNavigation.SuspendLayout();
+            this.pageGeo.SuspendLayout();
             this.SuspendLayout();
             // 
             // PageControl1
@@ -465,13 +470,9 @@
             this.pageCommon.Controls.Add(this.lblCertaintyAlgorithm);
             this.pageCommon.Controls.Add(this.cmbCertaintyAlgorithm);
             this.pageCommon.Controls.Add(this.groupBox1);
-            this.pageCommon.Controls.Add(this.lblGeoSearchCountry);
-            this.pageCommon.Controls.Add(this.lblGeocoder);
             this.pageCommon.Controls.Add(this.lblLanguage);
             this.pageCommon.Controls.Add(this.grpInternet);
             this.pageCommon.Controls.Add(this.grpOther);
-            this.pageCommon.Controls.Add(this.cmbGeoSearchCountry);
-            this.pageCommon.Controls.Add(this.cmbGeocoder);
             this.pageCommon.Controls.Add(this.cmbLanguages);
             this.pageCommon.Location = new System.Drawing.Point(4, 26);
             this.pageCommon.Margin = new System.Windows.Forms.Padding(2);
@@ -481,10 +482,29 @@
             this.pageCommon.TabIndex = 0;
             this.pageCommon.Text = "pageCommon";
             // 
+            // lblLanguage
+            // 
+            this.lblLanguage.AutoSize = true;
+            this.lblLanguage.Location = new System.Drawing.Point(11, 516);
+            this.lblLanguage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblLanguage.Name = "lblLanguage";
+            this.lblLanguage.Size = new System.Drawing.Size(80, 17);
+            this.lblLanguage.TabIndex = 0;
+            this.lblLanguage.Text = "lblLanguage";
+            // 
+            // cmbLanguages
+            // 
+            this.cmbLanguages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbLanguages.Location = new System.Drawing.Point(104, 512);
+            this.cmbLanguages.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbLanguages.Name = "cmbLanguages";
+            this.cmbLanguages.Size = new System.Drawing.Size(230, 25);
+            this.cmbLanguages.TabIndex = 4;
+            // 
             // lblCertaintyAlgorithm
             // 
             this.lblCertaintyAlgorithm.AutoSize = true;
-            this.lblCertaintyAlgorithm.Location = new System.Drawing.Point(290, 595);
+            this.lblCertaintyAlgorithm.Location = new System.Drawing.Point(11, 555);
             this.lblCertaintyAlgorithm.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCertaintyAlgorithm.Name = "lblCertaintyAlgorithm";
             this.lblCertaintyAlgorithm.Size = new System.Drawing.Size(125, 17);
@@ -494,7 +514,7 @@
             // cmbCertaintyAlgorithm
             // 
             this.cmbCertaintyAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbCertaintyAlgorithm.Location = new System.Drawing.Point(562, 591);
+            this.cmbCertaintyAlgorithm.Location = new System.Drawing.Point(300, 551);
             this.cmbCertaintyAlgorithm.Margin = new System.Windows.Forms.Padding(2);
             this.cmbCertaintyAlgorithm.Name = "cmbCertaintyAlgorithm";
             this.cmbCertaintyAlgorithm.Size = new System.Drawing.Size(138, 25);
@@ -633,36 +653,6 @@
             this.radFBNone.TabStop = true;
             this.radFBNone.Text = "radFBNone";
             this.radFBNone.UseVisualStyleBackColor = true;
-            // 
-            // lblGeoSearchCountry
-            // 
-            this.lblGeoSearchCountry.AutoSize = true;
-            this.lblGeoSearchCountry.Location = new System.Drawing.Point(290, 548);
-            this.lblGeoSearchCountry.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblGeoSearchCountry.Name = "lblGeoSearchCountry";
-            this.lblGeoSearchCountry.Size = new System.Drawing.Size(216, 17);
-            this.lblGeoSearchCountry.TabIndex = 0;
-            this.lblGeoSearchCountry.Text = "Restriction geo search by country";
-            // 
-            // lblGeocoder
-            // 
-            this.lblGeocoder.AutoSize = true;
-            this.lblGeocoder.Location = new System.Drawing.Point(359, 516);
-            this.lblGeocoder.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblGeocoder.Name = "lblGeocoder";
-            this.lblGeocoder.Size = new System.Drawing.Size(79, 17);
-            this.lblGeocoder.TabIndex = 0;
-            this.lblGeocoder.Text = "lblGeocoder";
-            // 
-            // lblLanguage
-            // 
-            this.lblLanguage.AutoSize = true;
-            this.lblLanguage.Location = new System.Drawing.Point(11, 516);
-            this.lblLanguage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblLanguage.Name = "lblLanguage";
-            this.lblLanguage.Size = new System.Drawing.Size(80, 17);
-            this.lblLanguage.TabIndex = 0;
-            this.lblLanguage.Text = "lblLanguage";
             // 
             // grpInternet
             // 
@@ -833,40 +823,6 @@
             this.chkShowOnStart.Size = new System.Drawing.Size(134, 21);
             this.chkShowOnStart.TabIndex = 0;
             this.chkShowOnStart.Text = "chkShowOnStart";
-            // 
-            // cmbGeoSearchCountry
-            // 
-            this.cmbGeoSearchCountry.Items.AddRange(new object[] {
-            "Google",
-            "Yandex",
-            "OSM"});
-            this.cmbGeoSearchCountry.Location = new System.Drawing.Point(562, 544);
-            this.cmbGeoSearchCountry.Margin = new System.Windows.Forms.Padding(2);
-            this.cmbGeoSearchCountry.Name = "cmbGeoSearchCountry";
-            this.cmbGeoSearchCountry.Size = new System.Drawing.Size(138, 25);
-            this.cmbGeoSearchCountry.TabIndex = 4;
-            // 
-            // cmbGeocoder
-            // 
-            this.cmbGeocoder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbGeocoder.Items.AddRange(new object[] {
-            "Google",
-            "Yandex",
-            "OSM"});
-            this.cmbGeocoder.Location = new System.Drawing.Point(470, 512);
-            this.cmbGeocoder.Margin = new System.Windows.Forms.Padding(2);
-            this.cmbGeocoder.Name = "cmbGeocoder";
-            this.cmbGeocoder.Size = new System.Drawing.Size(230, 25);
-            this.cmbGeocoder.TabIndex = 4;
-            // 
-            // cmbLanguages
-            // 
-            this.cmbLanguages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbLanguages.Location = new System.Drawing.Point(104, 512);
-            this.cmbLanguages.Margin = new System.Windows.Forms.Padding(2);
-            this.cmbLanguages.Name = "cmbLanguages";
-            this.cmbLanguages.Size = new System.Drawing.Size(230, 25);
-            this.cmbLanguages.TabIndex = 4;
             // 
             // pageMultimedia
             // 
@@ -1842,6 +1798,7 @@
             this.PageControl2.Controls.Add(this.pageViewCommon);
             this.PageControl2.Controls.Add(this.pageViewPersons);
             this.PageControl2.Controls.Add(this.pageNavigation);
+            this.PageControl2.Controls.Add(this.pageGeo);
             this.PageControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PageControl2.Location = new System.Drawing.Point(10, 10);
             this.PageControl2.Margin = new System.Windows.Forms.Padding(2);
@@ -2218,6 +2175,104 @@
             this.pageNavigation.TabIndex = 1;
             this.pageNavigation.Text = "pageNavigation";
             // 
+            // pageGeo
+            // 
+            this.pageGeo.Controls.Add(this.lblGeoSearchCountry);
+            this.pageGeo.Controls.Add(this.lblGeocoder);
+            this.pageGeo.Controls.Add(this.cmbGeoSearchCountry);
+            this.pageGeo.Controls.Add(this.cmbGeocoder);
+            this.pageGeo.Controls.Add(this.chkExtendedLocations);
+            this.pageGeo.Controls.Add(this.chkELAbbreviatedNames);
+            this.pageGeo.Controls.Add(this.chkReversePlacesOrder);
+            this.pageGeo.Controls.Add(this.chkSearchPlacesWithoutCoords);
+            this.pageGeo.Location = new System.Drawing.Point(4, 26);
+            this.pageGeo.Margin = new System.Windows.Forms.Padding(2);
+            this.pageGeo.Name = "pageGeo";
+            this.pageGeo.Size = new System.Drawing.Size(713, 712);
+            this.pageGeo.TabIndex = 1;
+            this.pageGeo.Text = "pageGeo";
+            // 
+            // lblGeocoder
+            // 
+            this.lblGeocoder.AutoSize = true;
+            this.lblGeocoder.Location = new System.Drawing.Point(11, 8);
+            this.lblGeocoder.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblGeocoder.Name = "lblGeocoder";
+            this.lblGeocoder.Size = new System.Drawing.Size(79, 17);
+            this.lblGeocoder.TabIndex = 0;
+            this.lblGeocoder.Text = "lblGeocoder";
+            // 
+            // cmbGeocoder
+            // 
+            this.cmbGeocoder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbGeocoder.Items.AddRange(new object[] {
+            "Google",
+            "Yandex",
+            "OSM"});
+            this.cmbGeocoder.Location = new System.Drawing.Point(300, 8);
+            this.cmbGeocoder.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbGeocoder.Name = "cmbGeocoder";
+            this.cmbGeocoder.Size = new System.Drawing.Size(230, 25);
+            this.cmbGeocoder.TabIndex = 4;
+            // 
+            // lblGeoSearchCountry
+            // 
+            this.lblGeoSearchCountry.AutoSize = true;
+            this.lblGeoSearchCountry.Location = new System.Drawing.Point(11, 34);
+            this.lblGeoSearchCountry.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblGeoSearchCountry.Name = "lblGeoSearchCountry";
+            this.lblGeoSearchCountry.Size = new System.Drawing.Size(216, 17);
+            this.lblGeoSearchCountry.TabIndex = 0;
+            this.lblGeoSearchCountry.Text = "Restriction geo search by country";
+            // 
+            // cmbGeoSearchCountry
+            // 
+            this.cmbGeoSearchCountry.Items.AddRange(new object[] {
+            "Google",
+            "Yandex",
+            "OSM"});
+            this.cmbGeoSearchCountry.Location = new System.Drawing.Point(300, 34);
+            this.cmbGeoSearchCountry.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbGeoSearchCountry.Name = "cmbGeoSearchCountry";
+            this.cmbGeoSearchCountry.Size = new System.Drawing.Size(138, 25);
+            this.cmbGeoSearchCountry.TabIndex = 4;
+            // 
+            // chkExtendedLocations
+            // 
+            this.chkExtendedLocations.Location = new System.Drawing.Point(11, 70);
+            this.chkExtendedLocations.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkExtendedLocations.Name = "chkExtendedLocations";
+            this.chkExtendedLocations.Size = new System.Drawing.Size(600, 22);
+            this.chkExtendedLocations.TabIndex = 18;
+            this.chkExtendedLocations.Text = "chkExtendedLocations";
+            // 
+            // chkELAbbreviatedNames
+            // 
+            this.chkELAbbreviatedNames.Location = new System.Drawing.Point(41, 96);
+            this.chkELAbbreviatedNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkELAbbreviatedNames.Name = "chkELAbbreviatedNames";
+            this.chkELAbbreviatedNames.Size = new System.Drawing.Size(600, 22);
+            this.chkELAbbreviatedNames.TabIndex = 18;
+            this.chkELAbbreviatedNames.Text = "chkELAbbreviatedNames";
+            // 
+            // chkReversePlacesOrder
+            // 
+            this.chkReversePlacesOrder.Location = new System.Drawing.Point(11, 122);
+            this.chkReversePlacesOrder.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkReversePlacesOrder.Name = "chkReversePlacesOrder";
+            this.chkReversePlacesOrder.Size = new System.Drawing.Size(600, 22);
+            this.chkReversePlacesOrder.TabIndex = 19;
+            this.chkReversePlacesOrder.Text = "chkReversePlacesOrder";
+            // 
+            // chkSearchPlacesWithoutCoords
+            // 
+            this.chkSearchPlacesWithoutCoords.Location = new System.Drawing.Point(11, 148);
+            this.chkSearchPlacesWithoutCoords.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkSearchPlacesWithoutCoords.Name = "chkSearchPlacesWithoutCoords";
+            this.chkSearchPlacesWithoutCoords.Size = new System.Drawing.Size(600, 22);
+            this.chkSearchPlacesWithoutCoords.TabIndex = 20;
+            this.chkSearchPlacesWithoutCoords.Text = "chkSearchPlacesWithoutCoords";
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.lstPersonColumns);
@@ -2406,9 +2461,6 @@
             this.pageSpecials.Controls.Add(this.chkKeepInfoPansOverallSize);
             this.pageSpecials.Controls.Add(this.chkFilesOverwriteWarn);
             this.pageSpecials.Controls.Add(this.chkExtendedKinships);
-            this.pageSpecials.Controls.Add(this.chkExtendedLocations);
-            this.pageSpecials.Controls.Add(this.chkELAbbreviatedNames);
-            this.pageSpecials.Controls.Add(this.chkReversePlacesOrder);
             this.pageSpecials.Controls.Add(this.chkShowNumberOfSubstructures);
             this.pageSpecials.BackColor = System.Drawing.SystemColors.Control;
             this.pageSpecials.Location = new System.Drawing.Point(4, 26);
@@ -2518,33 +2570,6 @@
             this.chkExtendedKinships.Size = new System.Drawing.Size(600, 22);
             this.chkExtendedKinships.TabIndex = 17;
             this.chkExtendedKinships.Text = "chkExtendedKinships";
-            // 
-            // chkExtendedLocations
-            // 
-            this.chkExtendedLocations.Location = new System.Drawing.Point(20, 361);
-            this.chkExtendedLocations.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkExtendedLocations.Name = "chkExtendedLocations";
-            this.chkExtendedLocations.Size = new System.Drawing.Size(600, 22);
-            this.chkExtendedLocations.TabIndex = 18;
-            this.chkExtendedLocations.Text = "chkExtendedLocations";
-            // 
-            // chkELAbbreviatedNames
-            // 
-            this.chkELAbbreviatedNames.Location = new System.Drawing.Point(50, 392);
-            this.chkELAbbreviatedNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkELAbbreviatedNames.Name = "chkELAbbreviatedNames";
-            this.chkELAbbreviatedNames.Size = new System.Drawing.Size(600, 22);
-            this.chkELAbbreviatedNames.TabIndex = 18;
-            this.chkELAbbreviatedNames.Text = "chkELAbbreviatedNames";
-            // 
-            // chkReversePlacesOrder
-            // 
-            this.chkReversePlacesOrder.Location = new System.Drawing.Point(20, 423);
-            this.chkReversePlacesOrder.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkReversePlacesOrder.Name = "chkReversePlacesOrder";
-            this.chkReversePlacesOrder.Size = new System.Drawing.Size(600, 22);
-            this.chkReversePlacesOrder.TabIndex = 19;
-            this.chkReversePlacesOrder.Text = "chkReversePlacesOrder";
             // 
             // chkShowNumberOfSubstructures
             // 
@@ -2714,6 +2739,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "OptionsDlg";
             this.Title = "OptionsDlg";
+            this.pageGeo.ResumeLayout(false);
+            this.pageGeo.PerformLayout();
             this.PageControl1.ResumeLayout(false);
             this.pageCommon.ResumeLayout(false);
             this.pageCommon.PerformLayout();

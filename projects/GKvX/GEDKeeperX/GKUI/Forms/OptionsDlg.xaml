@@ -34,12 +34,6 @@
                                     <Label x:Name="lblLanguage" Grid.Column="0" Grid.Row="0" />
                                     <comcom:GKComboBox x:Name="cmbLanguages" Grid.Column="1" Grid.Row="0" />
 
-                                    <Label x:Name="lblGeocoder" Grid.Column="0" Grid.Row="1" />
-                                    <comcom:GKComboBox x:Name="cmbGeocoder" Grid.Column="1" Grid.Row="1" />
-
-                                    <Label x:Name="lblGeoSearchCountry" Grid.Column="0" Grid.Row="2" />
-                                    <comcom:GKComboBox x:Name="cmbGeoSearchCountry" Grid.Column="1" Grid.Row="2" />
-
                                     <Label x:Name="lblCertaintyAlgorithm" Grid.Column="0" Grid.Row="3" />
                                     <comcom:GKComboBox x:Name="cmbCertaintyAlgorithm" Grid.Column="1" Grid.Row="3" />
 
@@ -364,6 +358,28 @@
                                 </StackLayout>
                             </xp:TabItem>
 
+                            <xp:TabItem x:Name="pageGeo">
+                                <StackLayout Orientation="Vertical" Spacing="8">
+
+                                    <Grid ColumnSpacing="4" RowSpacing="4">
+                                        <Label x:Name="lblGeocoder" Grid.Column="0" Grid.Row="1" />
+                                        <comcom:GKComboBox x:Name="cmbGeocoder" Grid.Column="1" Grid.Row="1" />
+
+                                        <Label x:Name="lblGeoSearchCountry" Grid.Column="0" Grid.Row="2" />
+                                        <comcom:GKComboBox x:Name="cmbGeoSearchCountry" Grid.Column="1" Grid.Row="2" />
+                                    </Grid>
+
+                                    <input:CheckBox x:Name="chkExtendedLocations" />
+                                    <StackLayout Orientation="Horizontal" Spacing="20">
+                                        <Label HorizontalOptions="Start" Text="" />
+                                        <input:CheckBox x:Name="chkELAbbreviatedNames" />
+                                    </StackLayout>
+                                    <input:CheckBox x:Name="chkReversePlacesOrder" />
+                                    <input:CheckBox x:Name="chkSearchPlacesWithoutCoords" />
+
+                                </StackLayout>
+                            </xp:TabItem>
+
                         </xp:TabViewControl.ItemSource>
                     </xp:TabViewControl>
 
@@ -416,14 +432,6 @@
                         <input:CheckBox x:Name="chkKeepInfoPansOverallSize" />
                         <input:CheckBox x:Name="chkFilesOverwriteWarn" />
                         <input:CheckBox x:Name="chkExtendedKinships" />
-
-                        <input:CheckBox x:Name="chkExtendedLocations" />
-                        <StackLayout Orientation="Horizontal" Spacing="20">
-                            <Label HorizontalOptions="Start" Text="" />
-                            <input:CheckBox x:Name="chkELAbbreviatedNames" />
-                        </StackLayout>
-
-                        <input:CheckBox x:Name="chkReversePlacesOrder" />
 
                         <input:CheckBox x:Name="chkShowNumberOfSubstructures" />
 

@@ -72,9 +72,7 @@ namespace GKUI.Forms
         private void PageControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (PageControl1.SelectedTab == pageEventTypes) {
-                fController.AcceptLanguage();
-                fController.SetLocale();
-                fController.UpdateView();
+                fController.ChangeTab();
             }
 
             btnResetDefaults.Enabled = PageControl1.SelectedIndex < 6;

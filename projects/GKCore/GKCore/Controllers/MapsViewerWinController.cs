@@ -28,6 +28,7 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Maps;
+using GKCore.Options;
 
 namespace GKCore.Controllers
 {
@@ -39,6 +40,7 @@ namespace GKCore.Controllers
         private readonly List<GeoPoint> fMapPoints;
         private readonly List<GDMRecord> fSelectedPersons;
         private readonly Dictionary<string, MapPlace> fPlaces;
+        private readonly bool fSearchPlacesWithoutCoords;
 
         private ITVNode fBaseRoot;
 
@@ -52,6 +54,7 @@ namespace GKCore.Controllers
             fMapPoints = new List<GeoPoint>();
             fPlaces = new Dictionary<string, MapPlace>();
             fSelectedPersons = selectedPersons;
+            fSearchPlacesWithoutCoords = GlobalOptions.Instance.SearchPlacesWithoutCoords;
         }
 
         public void ShowFixedPoints(IEnumerable<GeoPoint> points)
@@ -87,26 +90,21 @@ namespace GKCore.Controllers
             GDMTree tree = fBase.Context.Tree;
             progress.Begin(LangMan.LS(LSID.LoadingLocations), tree.RecordsCount);
             try {
-                int num = tree.RecordsCount;
-                for (int i = 0; i < num; i++) {
-                    GDMRecord rec = tree[i];
-                    bool res = rec is GDMIndividualRecord && IsSelected(rec);
+                for (int i = 0, num = tree.RecordsCount; i < num; i++) {
+                    GDMIndividualRecord iRec = tree[i] as GDMIndividualRecord;
 
-                    if (res) {
-                        GDMIndividualRecord ind = rec as GDMIndividualRecord;
+                    if (iRec != null && IsSelected(iRec) && iRec.HasEvents) {
                         int pCnt = 0;
 
-                        int num2 = ind.Events.Count;
-                        for (int j = 0; j < num2; j++) {
-                            GDMCustomEvent ev = ind.Events[j];
+                        for (int j = 0, num2 = iRec.Events.Count; j < num2; j++) {
+                            GDMCustomEvent ev = iRec.Events[j];
                             if (ev.HasPlace && !string.IsNullOrEmpty(ev.Place.StringValue)) {
-                                AddPlace(ev.Place, ind, ev);
-                                pCnt++;
+                                pCnt += AddPlace(iRec, ev);
                             }
                         }
 
                         if (pCnt > 0) {
-                            personValues.AddObject(GKUtils.GetNameString(ind, true, false) + " [" + pCnt.ToString() + "]", ind);
+                            personValues.AddObject(GKUtils.GetNameString(iRec, true, false) + " [" + pCnt.ToString() + "]", iRec);
                         }
                     }
 
@@ -163,33 +161,42 @@ namespace GKCore.Controllers
                 fView.PersonsCombo.EndUpdate();
                 PlacesCache.Instance.Save();
             } catch (Exception ex) {
-                Logger.WriteError("MapsViewerWin.PlacesLoad()", ex);
+                Logger.WriteError("MapsViewerWinController.LoadPlaces()", ex);
             }
         }
 
-        private void AddPlace(GDMPlace place, GDMRecord owner, GDMCustomEvent placeEvent)
+        private int AddPlace(GDMRecord owner, GDMCustomEvent placeEvent)
         {
+            int result = 0;
             try {
+                GDMPlace place = placeEvent.Place;
                 var locRec = fBase.Context.Tree.GetPtrValue<GDMLocationRecord>(place.Location);
                 string placeName = (locRec != null) ? locRec.LocationName : place.StringValue;
 
-                MapPlace mapPlace;
+                MapPlace mapPlace = null;
                 if (!fPlaces.TryGetValue(placeName, out mapPlace)) {
-                    mapPlace = new MapPlace();
-                    mapPlace.Name = placeName;
-                    fPlaces.Add(placeName, mapPlace);
+                    bool hasCoords = locRec != null && !locRec.Map.IsEmpty();
 
-                    if (locRec == null) {
-                        PlacesCache.Instance.GetPlacePoints(placeName, mapPlace.Points);
-                    } else {
+                    if (hasCoords || fSearchPlacesWithoutCoords) {
+                        mapPlace = new MapPlace(placeName);
+                        fPlaces.Add(placeName, mapPlace);
+                    }
+
+                    if (hasCoords) {
                         mapPlace.Points.Add(new GeoPoint(locRec.Map.Lati, locRec.Map.Long, placeName));
+                    } else if (fSearchPlacesWithoutCoords) {
+                        PlacesCache.Instance.GetPlacePoints(placeName, mapPlace.Points);
                     }
                 }
 
-                mapPlace.PlaceRefs.Add(new PlaceRef(owner, placeEvent));
+                if (mapPlace != null) {
+                    mapPlace.PlaceRefs.Add(new PlaceRef(owner, placeEvent));
+                    result = 1;
+                }
             } catch (Exception ex) {
-                Logger.WriteError("MapsViewerWin.AddPlace()", ex);
+                Logger.WriteError("MapsViewerWinController.AddPlace()", ex);
             }
+            return result;
         }
 
         public void SetCenter()
@@ -261,7 +268,7 @@ namespace GKCore.Controllers
                     fView.MapBrowser.SaveSnapshot(fileName);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("SaveSnapshot()", ex);
+                Logger.WriteError("MapsViewerWinController.SaveSnapshot()", ex);
                 AppHost.StdDialogs.ShowError("Image failed to save: " + ex.Message);
             }
         }
