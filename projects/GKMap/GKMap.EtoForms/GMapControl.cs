@@ -33,7 +33,7 @@ namespace GKMap.EtoForms
     /// <summary>
     /// GKMap control for Windows Forms
     /// </summary>   
-    public class GMapControl : Drawable, IMapControl
+    public class GMapControl : Drawable, IMapControlEx
     {
         public static readonly bool IsDesignerHosted = LicenseManager.UsageMode == LicenseUsageMode.Designtime;
 
@@ -76,7 +76,7 @@ namespace GKMap.EtoForms
             }
         }
 
-        MapCore IMapControl.Core { get { return fCore; } }
+        MapCore IMapControlEx.Core { get { return fCore; } }
 
         /// <summary>
         /// stops immediate marker/route/polygon invalidation;

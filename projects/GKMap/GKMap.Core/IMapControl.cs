@@ -25,11 +25,9 @@ namespace GKMap
     public delegate void RouteEnter(MapRoute item);
     public delegate void RouteLeave(MapRoute item);
 
-    internal interface IMapControl
+    public interface IMapControl
     {
         string CacheLocation { get; set; }
-
-        MapCore Core { get; }
 
         GMapProvider MapProvider { get; set; }
 
@@ -78,5 +76,11 @@ namespace GKMap
         void SetMousePositionToMapCenter();
 
         #endregion
+    }
+
+
+    internal interface IMapControlEx : IMapControl
+    {
+        MapCore Core { get; }
     }
 }

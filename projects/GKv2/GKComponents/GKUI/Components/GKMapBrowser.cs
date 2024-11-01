@@ -193,7 +193,7 @@ namespace GKUI.Components
         private GMapControl fMapControl;
         private MapMarker fTargetMarker;
 
-        public GMapControl MapControl
+        public IMapControl MapControl
         {
             get { return fMapControl; }
         }
@@ -206,6 +206,7 @@ namespace GKUI.Components
         public PointLatLng TargetPosition
         {
             get { return fTargetMarker.Position; }
+            set { fTargetMarker.Position = value; }
         }
 
         private void InitControl()
@@ -260,14 +261,6 @@ namespace GKUI.Components
                 fTargetMarker.IsHitTestVisible = false;
                 fTargetMarker.IsVisible = true;
                 fTopOverlay.Markers.Add(fTargetMarker);
-
-                // add start location
-                GeocoderStatusCode status;
-                PointLatLng? pos = GMapProviders.GoogleMap.GetPoint("Russia, Moscow", out status);
-                if (pos != null && status == GeocoderStatusCode.Success) {
-                    fTargetMarker.Position = pos.Value;
-                    fMapControl.ZoomAndCenterMarkers(null);
-                }
             }
         }
 

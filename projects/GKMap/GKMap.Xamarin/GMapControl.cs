@@ -31,7 +31,7 @@ namespace GKMap.Xamarin
     /// <summary>
     /// GKMap control for Windows Forms
     /// </summary>   
-    public class GMapControl : SKCanvasView, IMapControl
+    public class GMapControl : SKCanvasView, IMapControlEx
     {
         private MapCore fCore;
         private bool fIsMouseOverMarker;
@@ -66,7 +66,7 @@ namespace GKMap.Xamarin
             }
         }
 
-        MapCore IMapControl.Core { get { return fCore; } }
+        MapCore IMapControlEx.Core { get { return fCore; } }
 
         /// <summary>
         /// stops immediate marker/route/polygon invalidation;

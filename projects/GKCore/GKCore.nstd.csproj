@@ -43,6 +43,10 @@
 
 
     <ItemGroup>
+        <ProjectReference Include="..\GKMap\GKMap.Core\GKMap.Core.nstd.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
         <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
         <PackageReference Include="YamlDotNet" Version="12.0.0" />

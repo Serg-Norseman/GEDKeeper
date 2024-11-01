@@ -172,16 +172,15 @@ namespace GKMap.MapProviders
         /// </summary>
         public bool InvertedAxisY = false;
 
-        public static string LanguageStr
-        {
-            get {
-                return fLanguageStr;
-            }
-        }
-
         /// <summary>
         /// map language
         /// </summary>
+        public static string LanguageStr
+        {
+            get { return fLanguageStr; }
+            set { fLanguageStr = value; }
+        }
+
         public static LanguageType Language
         {
             get {

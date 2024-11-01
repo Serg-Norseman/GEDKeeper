@@ -551,6 +551,13 @@
     <Compile Include="GKCore\Lists\URefsListModel.cs" />
     <Compile Include="GKCore\Lists\RepositoryCitationsListModel.cs" />
     <Compile Include="GKCore\Lists\CallNumbersListModel.cs" />
+    <Compile Include="GKCore\LocalesCollection.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GKMap\GKMap.Core\GKMap.Core.csproj">
+      <Project>{D0C39D9D-BED0-418B-9A5E-713176CAF40C}</Project>
+      <Name>GKMap.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="GKCore.props" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

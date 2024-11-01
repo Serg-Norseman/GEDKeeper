@@ -80,6 +80,7 @@ namespace GKCore
         private ITimer fAutosaveTimer;
         private string[] fCommandArgs;
         private int fLoadingCount;
+        private LocalesCollection fLocalesCollection;
 
 
         public static AppHost Instance
@@ -93,6 +94,11 @@ namespace GKCore
             get { return fActiveWidgets; }
         }
 
+        public LocalesCollection LocalesCollection
+        {
+            get { return fLocalesCollection; }
+        }
+
 
         protected AppHost()
         {
@@ -102,6 +108,7 @@ namespace GKCore
             fInternalClipboard = new List<object>();
             fRunningForms = new List<IWindow>();
             fTips = new StringList();
+            fLocalesCollection = new LocalesCollection();
         }
 
         protected virtual void ApplicationExit()
@@ -168,6 +175,7 @@ namespace GKCore
 
                     ProcessHolidays();
                     ProcessTips();
+                    ProcessLocales();
 
                     await EndLoading();
                 } finally {
@@ -914,6 +922,15 @@ namespace GKCore
             }
 
             return result;
+        }
+
+        public void ProcessLocales()
+        {
+            try {
+                fLocalesCollection.Load(GKUtils.GetLangsPath() + "locales.yaml");
+            } catch (Exception ex) {
+                Logger.WriteError("AppHost.ProcessLocales()", ex);
+            }
         }
 
         public void ProcessHolidays()

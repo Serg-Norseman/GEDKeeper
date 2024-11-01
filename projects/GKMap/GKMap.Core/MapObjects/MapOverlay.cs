@@ -15,7 +15,7 @@ namespace GKMap.MapObjects
     /// </summary>
     public abstract class MapOverlay : IDisposable
     {
-        private IMapControl fControl;
+        private IMapControlEx fControl;
         private bool fDisposed;
         private bool fIsHitTestVisible = true;
         private bool fIsVisible = true;
@@ -97,7 +97,7 @@ namespace GKMap.MapObjects
         /// </summary>
         public ObservableCollectionThreadSafe<MapPolygon> Polygons { get; private set; }
 
-        internal IMapControl Control
+        internal IMapControlEx Control
         {
             get {
                 return fControl;

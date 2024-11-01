@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -29,6 +30,8 @@ using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Maps;
 using GKCore.Options;
+using GKMap;
+using GKMap.MapProviders;
 
 namespace GKCore.Controllers
 {
@@ -55,6 +58,38 @@ namespace GKCore.Controllers
             fPlaces = new Dictionary<string, MapPlace>();
             fSelectedPersons = selectedPersons;
             fSearchPlacesWithoutCoords = GlobalOptions.Instance.SearchPlacesWithoutCoords;
+        }
+
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            CultureInfo culture = CultureInfo.CurrentCulture;
+            string basePoint = AppHost.Instance.LocalesCollection.GetMapBasePoint(culture.Name);
+
+            // add start location
+            PointLatLng? pos = null;
+            GeocoderStatusCode status = GeocoderStatusCode.Unknown;
+
+            if (!string.IsNullOrEmpty(basePoint)) {
+                //GMapProvider.LanguageStr = culture.TwoLetterISOLanguageName;
+                //pos = GMapProviders.GoogleMap.GetPoint(basePoint, out status);
+
+                var pointsList = new List<GeoPoint>();
+                PlacesCache.Instance.GetPlacePoints(basePoint, pointsList);
+                if (pointsList.Count > 0) {
+                    var pt = pointsList[0];
+                    pos = new PointLatLng(pt.Latitude, pt.Longitude);
+                    status = GeocoderStatusCode.Success;
+                }
+            }
+
+            if (pos == null || status != GeocoderStatusCode.Success) {
+                pos = new PointLatLng(-15.950278, -5.683056);
+            }
+
+            fView.MapBrowser.TargetPosition = pos.Value;
+            fView.MapBrowser.MapControl.ZoomAndCenterMarkers(null);
         }
 
         public void ShowFixedPoints(IEnumerable<GeoPoint> points)

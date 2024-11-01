@@ -36,7 +36,7 @@ namespace GKMap.WinForms
     /// <summary>
     /// GKMap control for Windows Forms
     /// </summary>   
-    public class GMapControl : UserControl, IMapControl
+    public class GMapControl : UserControl, IMapControlEx
     {
         public static readonly bool IsDesignerHosted = LicenseManager.UsageMode == LicenseUsageMode.Designtime;
 
@@ -83,7 +83,7 @@ namespace GKMap.WinForms
             }
         }
 
-        MapCore IMapControl.Core { get { return fCore; } }
+        MapCore IMapControlEx.Core { get { return fCore; } }
 
         /// <summary>
         /// stops immediate marker/route/polygon invalidation;
