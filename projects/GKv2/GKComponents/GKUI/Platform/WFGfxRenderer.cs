@@ -119,6 +119,56 @@ namespace GKUI.Platform
             fCanvas.DrawString(text, sdFnt, sdBrush, x, y);
         }
 
+        private static float GetEmFontSize(Font fnt) =>
+            fnt.SizeInPoints * (fnt.FontFamily.GetCellAscent(fnt.Style) +
+            fnt.FontFamily.GetCellDescent(fnt.Style)) / fnt.FontFamily.GetEmHeight(fnt.Style);
+
+        private static void DrawGlowString(Graphics gfx, string text, Font font, Brush foreBrush, float x, float y, Color glowColor, float glowSize)
+        {
+            //gfx.SmoothingMode = SmoothingMode.AntiAlias;
+            //gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+            using (var strformat = new StringFormat())
+            using (var path = new GraphicsPath()) {
+                path.AddString(text, font.FontFamily, (int)font.Style, GetEmFontSize(font), new PointF(x, y), strformat);
+
+                int r = glowColor.R;
+                int g = glowColor.G;
+                int b = glowColor.B;
+
+                for (int i = 1; i < glowSize; ++i) {
+                    using (var pen = new Pen(Color.FromArgb(32, r, g, b), i)) {
+                        pen.LineJoin = LineJoin.Round;
+                        gfx.DrawPath(pen, path);
+                    }
+                }
+
+                gfx.FillPath(foreBrush, path);
+            }
+        }
+
+        public override void DrawString(string text, IFont font, IBrush brush, float x, float y, TextEffect effect = TextEffect.Simple)
+        {
+            Brush sdBrush = ((BrushHandler)brush).Handle;
+            Font sdFnt = ((FontHandler)font).Handle;
+
+            switch (effect) {
+                case TextEffect.Sunken:
+                    fCanvas.DrawString(text, sdFnt, Brushes.White, x + 1, y + 1);
+                    break;
+
+                case TextEffect.Raised:
+                    fCanvas.DrawString(text, sdFnt, Brushes.White, x - 1, y - 1);
+                    break;
+
+                case TextEffect.Glow:
+                    DrawGlowString(fCanvas, text, sdFnt, sdBrush, x, y, Color.Gold, 5);
+                    return;
+            }
+
+            fCanvas.DrawString(text, sdFnt, sdBrush, x, y);
+        }
+
         public override void DrawLine(IPen pen, float x1, float y1, float x2, float y2)
         {
             Pen sdPen = ((PenHandler)pen).Handle;

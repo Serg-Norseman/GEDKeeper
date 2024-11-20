@@ -91,6 +91,7 @@ namespace GKCore.Options
         public int DefFontSize;
         public IColor DefFontColor;
         public BSDTypes.FontStyle DefFontStyle;
+        public TextEffect TextEffect;
 
         public int BranchDistance;
         public int LevelDistance;
@@ -164,6 +165,7 @@ namespace GKCore.Options
             DefFontSize = (int)AppHost.GfxProvider.GetDefaultFontSize();
             DefFontColor = ChartRenderer.GetColor(BSDColors.Black);
             DefFontStyle = BSDTypes.FontStyle.None;
+            TextEffect = TextEffect.Simple;
 
             BranchDistance = TreeChartModel.DEF_BRANCH_DISTANCE;
             LevelDistance = TreeChartModel.DEF_LEVEL_DISTANCE;
@@ -203,15 +205,19 @@ namespace GKCore.Options
             TraceSelected = srcOptions.TraceSelected;
             ChildlessExclude = srcOptions.ChildlessExclude;
             Decorative = srcOptions.Decorative;
+
             MaleColor = srcOptions.MaleColor;
             FemaleColor = srcOptions.FemaleColor;
             UnkSexColor = srcOptions.UnkSexColor;
             UnHusbandColor = srcOptions.UnHusbandColor;
             UnWifeColor = srcOptions.UnWifeColor;
+
             DefFontName = srcOptions.DefFontName;
             DefFontSize = srcOptions.DefFontSize;
             DefFontColor = srcOptions.DefFontColor;
             DefFontStyle = srcOptions.DefFontStyle;
+            TextEffect = srcOptions.TextEffect;
+
             InvertedTree = srcOptions.InvertedTree;
             MarriagesDates = srcOptions.MarriagesDates;
             ShowPlaces = srcOptions.ShowPlaces;
@@ -295,6 +301,7 @@ namespace GKCore.Options
             DefFontSize = iniFile.ReadInteger("Chart", "FontSize", (int)AppHost.GfxProvider.GetDefaultFontSize());
             DefFontColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FontColor", BSDColors.Black));
             DefFontStyle = (BSDTypes.FontStyle)iniFile.ReadInteger("Chart", "FontStyle", 0);
+            TextEffect = (TextEffect)iniFile.ReadInteger("Chart", "TextEffect", 0);
 
             BranchDistance = iniFile.ReadInteger("Chart", "BranchDistance", TreeChartModel.DEF_BRANCH_DISTANCE);
             LevelDistance = iniFile.ReadInteger("Chart", "LevelDistance", TreeChartModel.DEF_LEVEL_DISTANCE);
@@ -367,6 +374,7 @@ namespace GKCore.Options
             iniFile.WriteInteger("Chart", "FontSize", DefFontSize);
             iniFile.WriteInteger("Chart", "FontColor", DefFontColor.ToArgb());
             iniFile.WriteInteger("Chart", "FontStyle", (byte)DefFontStyle);
+            iniFile.WriteInteger("Chart", "TextEffect", (byte)TextEffect);
 
             iniFile.WriteInteger("Chart", "BranchDistance", BranchDistance);
             iniFile.WriteInteger("Chart", "LevelDistance", LevelDistance);

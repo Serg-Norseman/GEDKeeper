@@ -20,6 +20,7 @@
 
 using System.Threading.Tasks;
 using GDModel;
+using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
@@ -681,6 +682,19 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkUseExtraControls").Visible = hasExtraControls;
 
             UpdateTreeChartFont();
+
+            var cmbTextEffect = GetControl<IComboBox>("cmbTextEffect");
+            cmbTextEffect.Clear();
+            for (TextEffect itm = TextEffect.First; itm <= TextEffect.Last; itm++) {
+                cmbTextEffect.AddItem(LangMan.LS(GKData.TextEffects[(int)itm]), itm);
+            }
+            cmbTextEffect.SetSelectedTag(fOptions.TreeChartOptions.TextEffect);
+
+#if NETCORE
+            cmbTextEffect.Enabled = false;
+#else
+            cmbTextEffect.Enabled = !AppHost.Instance.HasFeatureSupport(Feature.Mobile);
+#endif
         }
 
         public void UpdateTreeChartFont()
@@ -767,6 +781,8 @@ namespace GKCore.Controllers
             fOptions.TreeChartOptions.DepthLimitDescendants = (int)GetControl<INumericBox>("numDefaultDepthDescendants").Value;
 
             fOptions.TreeChartOptions.UseExtraControls = GetControl<ICheckBox>("chkUseExtraControls").Checked;
+
+            fOptions.TreeChartOptions.TextEffect = GetControl<IComboBox>("cmbTextEffect").GetSelectedTag<TextEffect>();
         }
 
         public void ResetCircleChartsOptions()
@@ -914,7 +930,9 @@ namespace GKCore.Controllers
             GetControl<ITabPage>("pageCharts").Text = LangMan.LS(LSID.Charts);
 
             GetControl<ITabPage>("pageTreeChart").Text = LangMan.LS(LSID.Trees);
-            GetControl<IGroupBox>("grpTreePersons").Text = LangMan.LS(LSID.ViewTree);
+
+            GetControl<ITabPage>("pageTreePersons").Text = LangMan.LS(LSID.ViewTree);
+            GetControl<ITabPage>("pageTreeDesign").Text = LangMan.LS(LSID.Decor);
 
             GetControl<ICheckBox>("chkSurname").Text = LangMan.LS(LSID.Surname);
             GetControl<ICheckBox>("chkName").Text = LangMan.LS(LSID.Name);
@@ -947,7 +965,6 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkSameCardsWidth").Text = LangMan.LS(LSID.SameCardsWidth);
             GetControl<ICheckBox>("chkFullNameOnOneLine").Text = LangMan.LS(LSID.FullNameOnOneLine);
 
-            GetControl<IGroupBox>("grpTreeDecor").Text = LangMan.LS(LSID.Decor);
             GetControl<ILabel>("lblMaleColor").Text = LangMan.LS(LSID.Man);
             GetControl<ILabel>("lblFemaleColor").Text = LangMan.LS(LSID.Woman);
             GetControl<ILabel>("lblUnkSexColor").Text = LangMan.LS(LSID.UnkSex);
@@ -969,6 +986,8 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblDefaultDepthDescendants").Text = LangMan.LS(LSID.DefaultDepth) + ": " + LangMan.LS(LSID.Descendants);
 
             GetControl<ICheckBox>("chkUseExtraControls").Text = LangMan.LS(LSID.UseExtraControls);
+
+            GetControl<ILabel>("lblTextEffect").Text = LangMan.LS(LSID.TextEffect);
 
             GetControl<ITabPage>("pageAncCircle").Text = LangMan.LS(LSID.AncestorsCircle);
 

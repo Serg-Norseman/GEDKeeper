@@ -232,6 +232,7 @@ namespace GKCore
         public static readonly FARPropertyStruct[] FARPropertyTypes;
         public static readonly LSID URTreeNoteType;
         public static readonly LSID[] ChartWindowsShowModes;
+        public static readonly LSID[] TextEffects;
 
 
         /// <summary>
@@ -554,6 +555,13 @@ namespace GKCore
                 LSID.CWSM_Maximize,
                 LSID.CWSM_LeftHalf,
                 LSID.CWSM_RightHalf,
+            };
+
+            TextEffects = new LSID[] {
+                LSID.TE_Simple,
+                LSID.TE_Sunken,
+                LSID.TE_Raised,
+                LSID.TE_Glow,
             };
         }
     }

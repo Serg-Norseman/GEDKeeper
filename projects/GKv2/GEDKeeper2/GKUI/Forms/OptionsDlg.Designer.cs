@@ -7,7 +7,6 @@
         private System.Windows.Forms.Button btnAccept;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.TabPage pageTreeChart;
-        private System.Windows.Forms.GroupBox grpTreePersons;
         private System.Windows.Forms.Panel panTreePersons;
         private System.Windows.Forms.CheckBox chkSurname;
         private System.Windows.Forms.CheckBox chkName;
@@ -199,6 +198,11 @@
         private System.Windows.Forms.CheckBox chkSimpleSingleSurnames;
         private System.Windows.Forms.CheckBox chkSearchPlacesWithoutCoords;
         private System.Windows.Forms.TabPage pageGeo;
+        private GKUI.Components.GKTabControl tabsTreeCharts;
+        private System.Windows.Forms.TabPage pageTreePersons;
+        private System.Windows.Forms.TabPage pageTreeDesign;
+        private System.Windows.Forms.Label lblTextEffect;
+        private System.Windows.Forms.ComboBox cmbTextEffect;
 
         private void InitializeComponent()
         {
@@ -267,7 +271,6 @@
             this.lblGenDist = new System.Windows.Forms.Label();
             this.lblBranchDist = new System.Windows.Forms.Label();
             this.lblMargins = new System.Windows.Forms.Label();
-            this.grpTreePersons = new System.Windows.Forms.GroupBox();
             this.panTreePersons = new System.Windows.Forms.Panel();
             this.chkSurname = new System.Windows.Forms.CheckBox();
             this.chkName = new System.Windows.Forms.CheckBox();
@@ -399,6 +402,11 @@
             this.chkSimpleSingleSurnames = new System.Windows.Forms.CheckBox();
             this.chkSearchPlacesWithoutCoords = new System.Windows.Forms.CheckBox();
             this.pageGeo = new System.Windows.Forms.TabPage();
+            this.tabsTreeCharts = new Components.GKTabControl();
+            this.pageTreePersons = new System.Windows.Forms.TabPage();
+            this.pageTreeDesign = new System.Windows.Forms.TabPage();
+            this.lblTextEffect = new System.Windows.Forms.Label();
+            this.cmbTextEffect = new System.Windows.Forms.ComboBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -420,7 +428,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numBranchDist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMargins)).BeginInit();
             this.panTreePersons.SuspendLayout();
-            this.grpTreePersons.SuspendLayout();
             this.grpTreeDecor.SuspendLayout();
             this.panMaleColor.SuspendLayout();
             this.panFemaleColor.SuspendLayout();
@@ -445,6 +452,9 @@
             this.pageEventTypes.SuspendLayout();
             this.pageNavigation.SuspendLayout();
             this.pageGeo.SuspendLayout();
+            this.tabsTreeCharts.SuspendLayout();
+            this.pageTreePersons.SuspendLayout();
+            this.pageTreeDesign.SuspendLayout();
             this.SuspendLayout();
             // 
             // PageControl1
@@ -969,19 +979,56 @@
             this.tabsCharts.Size = new System.Drawing.Size(721, 702);
             this.tabsCharts.TabIndex = 0;
             // 
+            // tabsTreeCharts
+            // 
+            this.tabsTreeCharts.Controls.Add(this.pageTreePersons);
+            this.tabsTreeCharts.Controls.Add(this.pageTreeDesign);
+            this.tabsTreeCharts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabsTreeCharts.Location = new System.Drawing.Point(10, 10);
+            this.tabsTreeCharts.Margin = new System.Windows.Forms.Padding(2);
+            this.tabsTreeCharts.Name = "tabsTreeCharts";
+            this.tabsTreeCharts.SelectedIndex = 0;
+            this.tabsTreeCharts.Size = new System.Drawing.Size(721, 702);
+            this.tabsTreeCharts.TabIndex = 0;
+            // 
+            // pageTreePersons
+            // 
+            this.pageTreePersons.BackColor = System.Drawing.SystemColors.Control;
+            this.pageTreePersons.Controls.Add(this.panTreePersons);
+            this.pageTreePersons.Location = new System.Drawing.Point(4, 26);
+            this.pageTreePersons.Margin = new System.Windows.Forms.Padding(2);
+            this.pageTreePersons.Name = "pageTreePersons";
+            this.pageTreePersons.Padding = new System.Windows.Forms.Padding(10);
+            this.pageTreePersons.Size = new System.Drawing.Size(713, 712);
+            this.pageTreePersons.TabIndex = 3;
+            this.pageTreePersons.Text = "pageTreePersons";
+            // 
+            // pageTreeDesign
+            // 
+            this.pageTreeDesign.BackColor = System.Drawing.SystemColors.Control;
+            this.pageTreeDesign.Controls.Add(this.chkSeparateDepth);
+            this.pageTreeDesign.Controls.Add(this.numDefaultDepth);
+            this.pageTreeDesign.Controls.Add(this.lblDefaultDepth);
+            this.pageTreeDesign.Controls.Add(this.numDefaultDepthAncestors);
+            this.pageTreeDesign.Controls.Add(this.lblDefaultDepthAncestors);
+            this.pageTreeDesign.Controls.Add(this.numDefaultDepthDescendants);
+            this.pageTreeDesign.Controls.Add(this.lblDefaultDepthDescendants);
+            this.pageTreeDesign.Controls.Add(this.grpSpacings);
+            this.pageTreeDesign.Controls.Add(this.grpTreeDecor);
+            this.pageTreeDesign.Controls.Add(this.lblTextEffect);
+            this.pageTreeDesign.Controls.Add(this.cmbTextEffect);
+            this.pageTreeDesign.Location = new System.Drawing.Point(4, 26);
+            this.pageTreeDesign.Margin = new System.Windows.Forms.Padding(2);
+            this.pageTreeDesign.Name = "pageTreeDesign";
+            this.pageTreeDesign.Padding = new System.Windows.Forms.Padding(10);
+            this.pageTreeDesign.Size = new System.Drawing.Size(713, 712);
+            this.pageTreeDesign.TabIndex = 3;
+            this.pageTreeDesign.Text = "pageTreeDesign";
+            // 
             // pageTreeChart
             // 
             this.pageTreeChart.BackColor = System.Drawing.SystemColors.Control;
-            this.pageTreeChart.Controls.Add(this.chkSeparateDepth);
-            this.pageTreeChart.Controls.Add(this.numDefaultDepth);
-            this.pageTreeChart.Controls.Add(this.lblDefaultDepth);
-            this.pageTreeChart.Controls.Add(this.numDefaultDepthAncestors);
-            this.pageTreeChart.Controls.Add(this.lblDefaultDepthAncestors);
-            this.pageTreeChart.Controls.Add(this.numDefaultDepthDescendants);
-            this.pageTreeChart.Controls.Add(this.lblDefaultDepthDescendants);
-            this.pageTreeChart.Controls.Add(this.grpSpacings);
-            this.pageTreeChart.Controls.Add(this.grpTreePersons);
-            this.pageTreeChart.Controls.Add(this.grpTreeDecor);
+            this.pageTreeChart.Controls.Add(this.tabsTreeCharts);
             this.pageTreeChart.Location = new System.Drawing.Point(4, 26);
             this.pageTreeChart.Margin = new System.Windows.Forms.Padding(2);
             this.pageTreeChart.Name = "pageTreeChart";
@@ -992,7 +1039,7 @@
             // 
             // chkSeparateDepth
             // 
-            this.chkSeparateDepth.Location = new System.Drawing.Point(434, 458);
+            this.chkSeparateDepth.Location = new System.Drawing.Point(334, 198);
             this.chkSeparateDepth.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkSeparateDepth.Name = "chkSeparateDepth";
             this.chkSeparateDepth.Size = new System.Drawing.Size(254, 22);
@@ -1002,7 +1049,7 @@
             // 
             // numDefaultDepth
             // 
-            this.numDefaultDepth.Location = new System.Drawing.Point(639, 489);
+            this.numDefaultDepth.Location = new System.Drawing.Point(610, 229);
             this.numDefaultDepth.Margin = new System.Windows.Forms.Padding(4);
             this.numDefaultDepth.Maximum = new decimal(new int[] {
             9,
@@ -1016,7 +1063,7 @@
             // lblDefaultDepth
             // 
             this.lblDefaultDepth.AutoSize = true;
-            this.lblDefaultDepth.Location = new System.Drawing.Point(434, 491);
+            this.lblDefaultDepth.Location = new System.Drawing.Point(334, 231);
             this.lblDefaultDepth.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.lblDefaultDepth.Name = "lblDefaultDepth";
             this.lblDefaultDepth.Size = new System.Drawing.Size(101, 17);
@@ -1025,7 +1072,7 @@
             // 
             // numDefaultDepthAncestors
             // 
-            this.numDefaultDepthAncestors.Location = new System.Drawing.Point(639, 522);
+            this.numDefaultDepthAncestors.Location = new System.Drawing.Point(610, 262);
             this.numDefaultDepthAncestors.Margin = new System.Windows.Forms.Padding(4);
             this.numDefaultDepthAncestors.Maximum = new decimal(new int[] {
             9,
@@ -1039,7 +1086,7 @@
             // lblDefaultDepthAncestors
             // 
             this.lblDefaultDepthAncestors.AutoSize = true;
-            this.lblDefaultDepthAncestors.Location = new System.Drawing.Point(434, 525);
+            this.lblDefaultDepthAncestors.Location = new System.Drawing.Point(334, 265);
             this.lblDefaultDepthAncestors.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.lblDefaultDepthAncestors.Name = "lblDefaultDepthAncestors";
             this.lblDefaultDepthAncestors.Size = new System.Drawing.Size(161, 17);
@@ -1048,7 +1095,7 @@
             // 
             // numDefaultDepthDescendants
             // 
-            this.numDefaultDepthDescendants.Location = new System.Drawing.Point(639, 556);
+            this.numDefaultDepthDescendants.Location = new System.Drawing.Point(610, 296);
             this.numDefaultDepthDescendants.Margin = new System.Windows.Forms.Padding(4);
             this.numDefaultDepthDescendants.Maximum = new decimal(new int[] {
             9,
@@ -1062,12 +1109,31 @@
             // lblDefaultDepthDescendants
             // 
             this.lblDefaultDepthDescendants.AutoSize = true;
-            this.lblDefaultDepthDescendants.Location = new System.Drawing.Point(434, 559);
+            this.lblDefaultDepthDescendants.Location = new System.Drawing.Point(334, 299);
             this.lblDefaultDepthDescendants.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.lblDefaultDepthDescendants.Name = "lblDefaultDepthDescendants";
             this.lblDefaultDepthDescendants.Size = new System.Drawing.Size(180, 17);
             this.lblDefaultDepthDescendants.TabIndex = 10;
             this.lblDefaultDepthDescendants.Text = "lblDefaultDepthDescendants";
+            // 
+            // lblTextEffect
+            // 
+            this.lblTextEffect.AutoSize = true;
+            this.lblTextEffect.Location = new System.Drawing.Point(11, 316);
+            this.lblTextEffect.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTextEffect.Name = "lblTextEffect";
+            this.lblTextEffect.Size = new System.Drawing.Size(80, 17);
+            this.lblTextEffect.TabIndex = 0;
+            this.lblTextEffect.Text = "lblTextEffect";
+            // 
+            // cmbTextEffect
+            // 
+            this.cmbTextEffect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTextEffect.Location = new System.Drawing.Point(11, 336);
+            this.cmbTextEffect.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbTextEffect.Name = "cmbTextEffect";
+            this.cmbTextEffect.Size = new System.Drawing.Size(230, 25);
+            this.cmbTextEffect.TabIndex = 4;
             // 
             // grpSpacings
             // 
@@ -1079,7 +1145,7 @@
             this.grpSpacings.Controls.Add(this.lblGenDist);
             this.grpSpacings.Controls.Add(this.lblBranchDist);
             this.grpSpacings.Controls.Add(this.lblMargins);
-            this.grpSpacings.Location = new System.Drawing.Point(414, 288);
+            this.grpSpacings.Location = new System.Drawing.Point(314, 12);
             this.grpSpacings.Margin = new System.Windows.Forms.Padding(2);
             this.grpSpacings.Name = "grpSpacings";
             this.grpSpacings.Padding = new System.Windows.Forms.Padding(10);
@@ -1261,18 +1327,6 @@
             this.panTreePersons.TabIndex = 0;
             this.panTreePersons.TabStop = false;
             this.panTreePersons.Text = "panTreePersons";
-            // 
-            // grpTreePersons
-            //
-            this.grpTreePersons.Controls.Add(this.panTreePersons);
-            this.grpTreePersons.Location = new System.Drawing.Point(11, 10);
-            this.grpTreePersons.Margin = new System.Windows.Forms.Padding(10);
-            this.grpTreePersons.Name = "grpTreePersons";
-            this.grpTreePersons.Padding = new System.Windows.Forms.Padding(10);
-            this.grpTreePersons.Size = new System.Drawing.Size(391, 580);
-            this.grpTreePersons.TabIndex = 0;
-            this.grpTreePersons.TabStop = false;
-            this.grpTreePersons.Text = "grpTreePersons";
             // 
             // chkSurname
             //
@@ -1602,14 +1656,14 @@
             this.grpTreeDecor.Controls.Add(this.panUnHusbandColor);
             this.grpTreeDecor.Controls.Add(this.panUnWifeColor);
             this.grpTreeDecor.Controls.Add(this.panDefFont);
-            this.grpTreeDecor.Location = new System.Drawing.Point(414, 12);
+            this.grpTreeDecor.Location = new System.Drawing.Point(14, 12);
             this.grpTreeDecor.Margin = new System.Windows.Forms.Padding(2);
             this.grpTreeDecor.Name = "grpTreeDecor";
             this.grpTreeDecor.Padding = new System.Windows.Forms.Padding(10);
             this.grpTreeDecor.Size = new System.Drawing.Size(245, 260);
             this.grpTreeDecor.TabIndex = 1;
             this.grpTreeDecor.TabStop = false;
-            this.grpTreeDecor.Text = "grpTreeDecor";
+            this.grpTreeDecor.Text = "";
             // 
             // lblFont
             // 
@@ -2768,8 +2822,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.numGenDist)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numBranchDist)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMargins)).EndInit();
+            this.pageTreePersons.ResumeLayout(false);
+            this.pageTreeDesign.ResumeLayout(false);
+            this.tabsTreeCharts.ResumeLayout(false);
             this.panTreePersons.ResumeLayout(false);
-            this.grpTreePersons.ResumeLayout(false);
             this.grpTreeDecor.ResumeLayout(false);
             this.panMaleColor.ResumeLayout(false);
             this.panFemaleColor.ResumeLayout(false);

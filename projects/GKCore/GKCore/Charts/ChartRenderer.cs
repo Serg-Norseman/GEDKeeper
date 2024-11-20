@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -47,6 +47,17 @@ namespace GKCore.Charts
         SVG
     }
 
+    public enum TextEffect
+    {
+        Simple,
+        Sunken,
+        Raised,
+        Glow,
+
+        First = Simple,
+        Last = Glow
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -63,10 +74,15 @@ namespace GKCore.Charts
 
         public virtual void SetViewport(int width, int height)
         {
-            // dummy
         }
 
-        public abstract void SetSmoothing(bool value);
+        public virtual void SetSmoothing(bool value)
+        {
+        }
+
+        public virtual void SetTranslucent(float value)
+        {
+        }
 
         public virtual void BeginDrawing()
         {
@@ -76,14 +92,13 @@ namespace GKCore.Charts
         {
         }
 
+        public abstract void SetTarget(object target);
+
 
         public static IColor GetColor(int argb)
         {
             return AppHost.GfxProvider.CreateColor(argb);
         }
-
-
-        public abstract void SetTarget(object target);
 
         /// <summary>
         /// A separate implementation only for those cases when different classes
@@ -138,6 +153,11 @@ namespace GKCore.Charts
 
         public abstract void DrawString(string text, IFont font, IBrush brush, float x, float y);
 
+        public virtual void DrawString(string text, IFont font, IBrush brush, float x, float y, TextEffect effect = TextEffect.Simple)
+        {
+            DrawString(text, font, brush, x, y);
+        }
+
         public virtual void DrawAnchor(string text, string anchor, IFont font, IBrush brush, float x, float y)
         {
             // Not applicable for most areas except exports
@@ -161,6 +181,11 @@ namespace GKCore.Charts
         public abstract void DrawRoundedRectangle(IPen pen, IColor fillColor, float x, float y,
                                                   float width, float height, float radius);
 
+        public virtual void DrawCoverGlass(float x, float y, float width, float height, float radius)
+        {
+            // dummy
+        }
+
         public abstract void DrawPath(IPen pen, IBrush brush, IGfxPath path);
 
         public virtual IFont CreateFont(string fontName, float size, bool bold)
@@ -179,8 +204,6 @@ namespace GKCore.Charts
 
         public abstract IGfxPath CreateCirclePath(float x, float y, float width, float height);
         public abstract IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle, float ang1, float ang2);
-
-        public abstract void SetTranslucent(float value);
 
         public abstract void ScaleTransform(float sx, float sy);
         public abstract void TranslateTransform(float dx, float dy);

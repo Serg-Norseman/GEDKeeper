@@ -132,11 +132,12 @@
           <TabControl x:Name="tabsCharts">
 
             <TabPage x:Name="pageTreeChart">
-              <TableLayout Style="paddedTable">
 
-                <TableRow>
+              <TabControl x:Name="tabsTreeCharts">
 
+                <TabPage x:Name="pageTreePersons">
                   <GroupBox x:Name="grpTreePersons" Height="300">
+
                     <Scrollable>
                       <StackLayout Style="vertListStack">
 
@@ -194,121 +195,144 @@
 
                       </StackLayout>
                     </Scrollable>
+
                   </GroupBox>
+                </TabPage>
 
-                  <StackLayout Spacing="4">
+                <TabPage x:Name="pageTreeDesign">
+                  <TableLayout Style="paddedTable">
 
-                    <GroupBox x:Name="grpTreeDecor">
-                      <TableLayout Style="paddedTable">
+                    <TableRow>
 
-                        <TableRow>
-                          <StackLayout Orientation="Horizontal" Spacing="4">
-                            <StackLayoutItem HorizontalAlignment="Left">
-                              <Scrollable x:Name="panMaleColor" Border="Bezel">
-                                <Label x:Name="lblMaleColor" Size="100, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="PanColor_Click" />
+                      <StackLayout Spacing="4">
+
+                        <GroupBox x:Name="grpTreeDecor">
+                          <TableLayout Style="paddedTable">
+
+                            <TableRow>
+                              <StackLayout Orientation="Horizontal" Spacing="4">
+                                <StackLayoutItem HorizontalAlignment="Left">
+                                  <Scrollable x:Name="panMaleColor" Border="Bezel">
+                                    <Label x:Name="lblMaleColor" Size="100, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="PanColor_Click" />
+                                  </Scrollable>
+                                </StackLayoutItem>
+                                <StackLayoutItem Expand="True" />
+                                <StackLayoutItem HorizontalAlignment="Right">
+                                  <Scrollable x:Name="panFemaleColor" Border="Bezel">
+                                    <Label x:Name="lblFemaleColor" Size="100, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="PanColor_Click" />
+                                  </Scrollable>
+                                </StackLayoutItem>
+                              </StackLayout>
+                            </TableRow>
+
+                            <TableRow>
+                              <Scrollable x:Name="panUnkSexColor" Border="Bezel">
+                                <Label x:Name="lblUnkSexColor" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="PanColor_Click" />
                               </Scrollable>
-                            </StackLayoutItem>
-                            <StackLayoutItem Expand="True" />
-                            <StackLayoutItem HorizontalAlignment="Right">
-                              <Scrollable x:Name="panFemaleColor" Border="Bezel">
-                                <Label x:Name="lblFemaleColor" Size="100, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="PanColor_Click" />
+                            </TableRow>
+
+                            <TableRow>
+                              <Scrollable x:Name="panUnHusbandColor" Border="Bezel">
+                                <Label x:Name="lblUnHusbandColor" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="PanColor_Click" />
                               </Scrollable>
-                            </StackLayoutItem>
-                          </StackLayout>
-                        </TableRow>
+                            </TableRow>
 
-                        <TableRow>
-                          <Scrollable x:Name="panUnkSexColor" Border="Bezel">
-                            <Label x:Name="lblUnkSexColor" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="PanColor_Click" />
-                          </Scrollable>
-                        </TableRow>
+                            <TableRow>
+                              <Scrollable x:Name="panUnWifeColor" Border="Bezel">
+                                <Label x:Name="lblUnWifeColor" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="PanColor_Click" />
+                              </Scrollable>
+                            </TableRow>
 
-                        <TableRow>
-                          <Scrollable x:Name="panUnHusbandColor" Border="Bezel">
-                            <Label x:Name="lblUnHusbandColor" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="PanColor_Click" />
-                          </Scrollable>
-                        </TableRow>
+                            <TableRow>
+                              <StackLayout Orientation="Vertical">
+                                <Label x:Name="lblFont" />
+                                <Scrollable x:Name="panDefFont" Border="Bezel">
+                                  <Label x:Name="lblChartFont" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="panDefFont_Click" />
+                                </Scrollable>
+                              </StackLayout>
+                            </TableRow>
 
-                        <TableRow>
-                          <Scrollable x:Name="panUnWifeColor" Border="Bezel">
-                            <Label x:Name="lblUnWifeColor" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="PanColor_Click" />
-                          </Scrollable>
-                        </TableRow>
+                            <TableRow ScaleHeight="True" />
 
-                        <TableRow>
-                          <StackLayout Orientation="Vertical">
-                            <Label x:Name="lblFont" />
-                            <Scrollable x:Name="panDefFont" Border="Bezel">
-                              <Label x:Name="lblChartFont" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="panDefFont_Click" />
-                            </Scrollable>
-                          </StackLayout>
-                        </TableRow>
+                          </TableLayout>
+                        </GroupBox>
 
-                        <TableRow ScaleHeight="True" />
+                      </StackLayout>
 
-                      </TableLayout>
-                    </GroupBox>
+                      <GroupBox x:Name="grpSpacings">
+                        <TableLayout Style="paddedTable">
 
-                    <GroupBox x:Name="grpSpacings">
-                      <TableLayout Style="paddedTable">
+                          <TableRow>
+                            <Label x:Name="lblMargins" />
+                            <NumericStepper x:Name="numMargins" MaxValue="120" MinValue="1" Width="60" Value="1" />
+                          </TableRow>
 
-                        <TableRow>
-                          <Label x:Name="lblMargins" />
-                          <NumericStepper x:Name="numMargins" MaxValue="120" MinValue="1" Width="60" Value="1" />
-                        </TableRow>
+                          <TableRow>
+                            <Label x:Name="lblBranchDist" />
+                            <NumericStepper x:Name="numBranchDist" MaxValue="120" MinValue="1" Width="60" Value="1" />
+                          </TableRow>
 
-                        <TableRow>
-                          <Label x:Name="lblBranchDist" />
-                          <NumericStepper x:Name="numBranchDist" MaxValue="120" MinValue="1" Width="60" Value="1" />
-                        </TableRow>
+                          <TableRow>
+                            <Label x:Name="lblGenDist" />
+                            <NumericStepper x:Name="numGenDist" MaxValue="120" MinValue="1" Width="60" Value="1" />
+                          </TableRow>
 
-                        <TableRow>
-                          <Label x:Name="lblGenDist" />
-                          <NumericStepper x:Name="numGenDist" MaxValue="120" MinValue="1" Width="60" Value="1" />
-                        </TableRow>
+                          <TableRow>
+                            <Label x:Name="lblSpouseDist" />
+                            <NumericStepper x:Name="numSpouseDist" MaxValue="120" MinValue="1" Width="60" Value="1" />
+                          </TableRow>
 
-                        <TableRow>
-                          <Label x:Name="lblSpouseDist" />
-                          <NumericStepper x:Name="numSpouseDist" MaxValue="120" MinValue="1" Width="60" Value="1" />
-                        </TableRow>
+                          <TableRow ScaleHeight="True" />
 
-                        <TableRow ScaleHeight="True" />
+                        </TableLayout>
+                      </GroupBox>
 
-                      </TableLayout>
-                    </GroupBox>
+                    </TableRow>
 
-                    <TableLayout Style="paddedTable">
+                    <TableRow>
+                      <StackLayout Spacing="4">
+                        <CheckBox x:Name="chkUseExtraControls" />
 
-                      <TableRow>
-                        <CheckBox x:Name="chkSeparateDepth" CheckedChanged="chkSeparateDepth_CheckedChanged" />
-                      </TableRow>
+                        <StackLayout Orientation="Horizontal" Spacing="4">
+                          <Label x:Name="lblTextEffect" />
+                          <ComboBox x:Name="cmbTextEffect" Width="200" ReadOnly="True" />
+                        </StackLayout>
+                      </StackLayout>
+                      
+                      <StackLayout Spacing="4">
+                        <TableLayout Style="paddedTable">
 
-                      <TableRow>
-                        <Label x:Name="lblDefaultDepth" />
-                        <NumericStepper x:Name="numDefaultDepth" MaxValue="9" MinValue="-1" Width="60" Value="-1" />
-                      </TableRow>
+                          <TableRow>
+                            <CheckBox x:Name="chkSeparateDepth" CheckedChanged="chkSeparateDepth_CheckedChanged" />
+                          </TableRow>
 
-                      <TableRow>
-                        <Label x:Name="lblDefaultDepthAncestors" />
-                        <NumericStepper x:Name="numDefaultDepthAncestors" MaxValue="9" MinValue="-1" Width="60" Value="-1" />
-                      </TableRow>
+                          <TableRow>
+                            <Label x:Name="lblDefaultDepth" />
+                            <NumericStepper x:Name="numDefaultDepth" MaxValue="9" MinValue="-1" Width="60" Value="-1" />
+                          </TableRow>
 
-                      <TableRow>
-                        <Label x:Name="lblDefaultDepthDescendants" />
-                        <NumericStepper x:Name="numDefaultDepthDescendants" MaxValue="9" MinValue="-1" Width="60" Value="-1" />
-                      </TableRow>
+                          <TableRow>
+                            <Label x:Name="lblDefaultDepthAncestors" />
+                            <NumericStepper x:Name="numDefaultDepthAncestors" MaxValue="9" MinValue="-1" Width="60" Value="-1" />
+                          </TableRow>
 
-                      <TableRow ScaleHeight="True" />
+                          <TableRow>
+                            <Label x:Name="lblDefaultDepthDescendants" />
+                            <NumericStepper x:Name="numDefaultDepthDescendants" MaxValue="9" MinValue="-1" Width="60" Value="-1" />
+                          </TableRow>
 
-                    </TableLayout>
+                          <TableRow ScaleHeight="True" />
 
-                    <CheckBox x:Name="chkUseExtraControls" />
+                        </TableLayout>
 
-                  </StackLayout>
+                      </StackLayout>
+                    </TableRow>
 
-                </TableRow>
+                  </TableLayout>
+                </TabPage>
 
-              </TableLayout>
+              </TabControl>
+
             </TabPage>
 
             <TabPage x:Name="pageAncCircle">

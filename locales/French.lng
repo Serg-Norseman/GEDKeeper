@@ -1013,3 +1013,8 @@
 1000=Map of persons
 1001=Search in geocoders for places without coordinates (maps)
 1002=Locations and Maps
+1003=Text effect
+1004=Simple
+1005=Sunken
+1006=Raised
+1007=Glow

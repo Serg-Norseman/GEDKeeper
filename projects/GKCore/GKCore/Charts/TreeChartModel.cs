@@ -1696,6 +1696,11 @@ namespace GKCore.Charts
             var rangeX = new Range<int>(fVisibleArea.Left, fVisibleArea.Right);
             var rangeY = new Range<int>(fVisibleArea.Top, fVisibleArea.Bottom);
 
+            return rangeX.IsOverlapped(new Range<int>(x1, x2)) && rangeY.IsOverlapped(new Range<int>(y1, y2));
+        }
+
+        private void DrawLine(int x1, int y1, int x2, int y2, bool isDotted, bool isTracked, bool isMatched)
+        {
             if (x2 < x1) {
                 int tmp = x1;
                 x1 = x2;
@@ -1708,11 +1713,6 @@ namespace GKCore.Charts
                 y2 = tmp;
             }
 
-            return rangeX.IsOverlapped(new Range<int>(x1, x2)) && rangeY.IsOverlapped(new Range<int>(y1, y2));
-        }
-
-        private void DrawLine(int x1, int y1, int x2, int y2, bool isDotted, bool isTracked, bool isMatched)
-        {
             if (!IsLineVisible(x1, y1, x2, y2)) return;
 
             IPen linePen, decorativeLinePen;
@@ -1765,6 +1765,8 @@ namespace GKCore.Charts
             }
         }
 
+        private const float RoundedRectRadius = 6.0f;
+
         private void DrawBorder(IPen xpen, ExtRect rt, bool dead, TreeChartPerson person)
         {
             IColor bColor = person.GetFillColor(dead);
@@ -1773,10 +1775,16 @@ namespace GKCore.Charts
             }
 
             if (person.Sex == GDMSex.svFemale) {
-                fRenderer.DrawRoundedRectangle(xpen, bColor, rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight(), 6);
+                fRenderer.DrawRoundedRectangle(xpen, bColor, rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight(), RoundedRectRadius);
             } else {
                 fRenderer.DrawRectangle(xpen, bColor, rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight());
             }
+        }
+
+        private void DrawCoverGlass(ExtRect rt, TreeChartPerson person)
+        {
+            float rad = (person.Sex == GDMSex.svFemale) ? RoundedRectRadius : 0.0f;
+            fRenderer.DrawCoverGlass(rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight(), rad);
         }
 
         private static string TruncString(string str, int threshold)
@@ -1851,10 +1859,12 @@ namespace GKCore.Charts
 
                     int rx = prt.Left + (prtWidth - stw) / 2;
 
-                    fRenderer.DrawString(line, font, fSolidBlack, rx, ry);
+                    fRenderer.DrawString(line, font, fSolidBlack, rx, ry, fOptions.TextEffect);
 
                     ry += lh;
                 }
+
+                DrawCoverGlass(brt, person);
 
                 if (fOptions.SignsVisible && !person.Signs.IsEmpty()) {
                     int i = 0;
@@ -2051,7 +2061,7 @@ namespace GKCore.Charts
                     break;
             }
 
-            fRenderer.DrawString(text, fDrawFont, brush, x, y);
+            fRenderer.DrawString(text, fDrawFont, brush, x, y, fOptions.TextEffect);
         }
 
         private void DrawDescendants(TreeChartPerson person, ChartDrawMode drawMode, bool isTracked)

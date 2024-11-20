@@ -1077,8 +1077,13 @@ namespace GKCore
         /* 1000 */ MapOfPersons,
         /* 1001 */ SearchPlacesWithoutCoords,
         /* 1002 */ LocationsAndMaps,
+        /* 1003 */ TextEffect,
+        /* 1004 */ TE_Simple,
+        /* 1005 */ TE_Sunken,
+        /* 1006 */ TE_Raised,
+        /* 1007 */ TE_Glow,
 
-        /* 000 */ Last = LocationsAndMaps
+        /* 000 */ Last = TE_Glow
     }
 
 
@@ -2109,6 +2114,11 @@ namespace GKCore
             /* 1000 */ "Map of persons",
             /* 1001 */ "Search in geocoders for places without coordinates (maps)",
             /* 1002 */ "Locations and Maps",
+            /* 1003 */ "Text effect",
+            /* 1004 */ "Simple",
+            /* 1005 */ "Sunken",
+            /* 1006 */ "Raised",
+            /* 1007 */ "Glow",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
