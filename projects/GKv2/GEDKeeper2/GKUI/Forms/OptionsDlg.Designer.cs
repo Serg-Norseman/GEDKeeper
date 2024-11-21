@@ -116,14 +116,16 @@
         private System.Windows.Forms.CheckBox chkShowPlaces;
         private System.Windows.Forms.CheckBox chkHideUnknownSpouses;
         private System.Windows.Forms.GroupBox grpSpacings;
-        private System.Windows.Forms.Label lblSpouseDist;
-        private System.Windows.Forms.Label lblGenDist;
-        private System.Windows.Forms.Label lblBranchDist;
         private System.Windows.Forms.Label lblMargins;
-        private System.Windows.Forms.NumericUpDown numSpouseDist;
-        private System.Windows.Forms.NumericUpDown numGenDist;
-        private System.Windows.Forms.NumericUpDown numBranchDist;
         private System.Windows.Forms.NumericUpDown numMargins;
+        private System.Windows.Forms.Label lblSpouseDist;
+        private System.Windows.Forms.NumericUpDown numSpouseDist;
+        private System.Windows.Forms.Label lblGenDist;
+        private System.Windows.Forms.NumericUpDown numGenDist;
+        private System.Windows.Forms.Label lblBranchDist;
+        private System.Windows.Forms.NumericUpDown numBranchDist;
+        private System.Windows.Forms.Label lblPadding;
+        private System.Windows.Forms.NumericUpDown numPadding;
         private System.Windows.Forms.CheckBox chkAutoSortSpouses;
         private System.Windows.Forms.CheckBox chkAutoSortChildren;
         private System.Windows.Forms.CheckBox chkCheckTreeSize;
@@ -203,6 +205,8 @@
         private System.Windows.Forms.TabPage pageTreeDesign;
         private System.Windows.Forms.Label lblTextEffect;
         private System.Windows.Forms.ComboBox cmbTextEffect;
+        private System.Windows.Forms.CheckBox chkDateDesignations;
+        private System.Windows.Forms.CheckBox chkMourningEdges;
 
         private void InitializeComponent()
         {
@@ -271,6 +275,8 @@
             this.lblGenDist = new System.Windows.Forms.Label();
             this.lblBranchDist = new System.Windows.Forms.Label();
             this.lblMargins = new System.Windows.Forms.Label();
+            this.lblPadding = new System.Windows.Forms.Label();
+            this.numPadding = new System.Windows.Forms.NumericUpDown();
             this.panTreePersons = new System.Windows.Forms.Panel();
             this.chkSurname = new System.Windows.Forms.CheckBox();
             this.chkName = new System.Windows.Forms.CheckBox();
@@ -407,6 +413,8 @@
             this.pageTreeDesign = new System.Windows.Forms.TabPage();
             this.lblTextEffect = new System.Windows.Forms.Label();
             this.cmbTextEffect = new System.Windows.Forms.ComboBox();
+            this.chkDateDesignations = new System.Windows.Forms.CheckBox();
+            this.chkMourningEdges = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -1039,7 +1047,7 @@
             // 
             // chkSeparateDepth
             // 
-            this.chkSeparateDepth.Location = new System.Drawing.Point(334, 198);
+            this.chkSeparateDepth.Location = new System.Drawing.Point(334, 228);
             this.chkSeparateDepth.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkSeparateDepth.Name = "chkSeparateDepth";
             this.chkSeparateDepth.Size = new System.Drawing.Size(254, 22);
@@ -1049,7 +1057,7 @@
             // 
             // numDefaultDepth
             // 
-            this.numDefaultDepth.Location = new System.Drawing.Point(610, 229);
+            this.numDefaultDepth.Location = new System.Drawing.Point(610, 259);
             this.numDefaultDepth.Margin = new System.Windows.Forms.Padding(4);
             this.numDefaultDepth.Maximum = new decimal(new int[] {
             9,
@@ -1063,7 +1071,7 @@
             // lblDefaultDepth
             // 
             this.lblDefaultDepth.AutoSize = true;
-            this.lblDefaultDepth.Location = new System.Drawing.Point(334, 231);
+            this.lblDefaultDepth.Location = new System.Drawing.Point(334, 261);
             this.lblDefaultDepth.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.lblDefaultDepth.Name = "lblDefaultDepth";
             this.lblDefaultDepth.Size = new System.Drawing.Size(101, 17);
@@ -1072,7 +1080,7 @@
             // 
             // numDefaultDepthAncestors
             // 
-            this.numDefaultDepthAncestors.Location = new System.Drawing.Point(610, 262);
+            this.numDefaultDepthAncestors.Location = new System.Drawing.Point(610, 292);
             this.numDefaultDepthAncestors.Margin = new System.Windows.Forms.Padding(4);
             this.numDefaultDepthAncestors.Maximum = new decimal(new int[] {
             9,
@@ -1086,7 +1094,7 @@
             // lblDefaultDepthAncestors
             // 
             this.lblDefaultDepthAncestors.AutoSize = true;
-            this.lblDefaultDepthAncestors.Location = new System.Drawing.Point(334, 265);
+            this.lblDefaultDepthAncestors.Location = new System.Drawing.Point(334, 295);
             this.lblDefaultDepthAncestors.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.lblDefaultDepthAncestors.Name = "lblDefaultDepthAncestors";
             this.lblDefaultDepthAncestors.Size = new System.Drawing.Size(161, 17);
@@ -1095,7 +1103,7 @@
             // 
             // numDefaultDepthDescendants
             // 
-            this.numDefaultDepthDescendants.Location = new System.Drawing.Point(610, 296);
+            this.numDefaultDepthDescendants.Location = new System.Drawing.Point(610, 326);
             this.numDefaultDepthDescendants.Margin = new System.Windows.Forms.Padding(4);
             this.numDefaultDepthDescendants.Maximum = new decimal(new int[] {
             9,
@@ -1109,7 +1117,7 @@
             // lblDefaultDepthDescendants
             // 
             this.lblDefaultDepthDescendants.AutoSize = true;
-            this.lblDefaultDepthDescendants.Location = new System.Drawing.Point(334, 299);
+            this.lblDefaultDepthDescendants.Location = new System.Drawing.Point(334, 329);
             this.lblDefaultDepthDescendants.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.lblDefaultDepthDescendants.Name = "lblDefaultDepthDescendants";
             this.lblDefaultDepthDescendants.Size = new System.Drawing.Size(180, 17);
@@ -1137,91 +1145,34 @@
             // 
             // grpSpacings
             // 
-            this.grpSpacings.Controls.Add(this.numSpouseDist);
-            this.grpSpacings.Controls.Add(this.numGenDist);
-            this.grpSpacings.Controls.Add(this.numBranchDist);
-            this.grpSpacings.Controls.Add(this.numMargins);
             this.grpSpacings.Controls.Add(this.lblSpouseDist);
+            this.grpSpacings.Controls.Add(this.numSpouseDist);
             this.grpSpacings.Controls.Add(this.lblGenDist);
+            this.grpSpacings.Controls.Add(this.numGenDist);
             this.grpSpacings.Controls.Add(this.lblBranchDist);
+            this.grpSpacings.Controls.Add(this.numBranchDist);
             this.grpSpacings.Controls.Add(this.lblMargins);
+            this.grpSpacings.Controls.Add(this.numMargins);
+            this.grpSpacings.Controls.Add(this.lblPadding);
+            this.grpSpacings.Controls.Add(this.numPadding);
             this.grpSpacings.Location = new System.Drawing.Point(314, 12);
             this.grpSpacings.Margin = new System.Windows.Forms.Padding(2);
             this.grpSpacings.Name = "grpSpacings";
             this.grpSpacings.Padding = new System.Windows.Forms.Padding(10);
-            this.grpSpacings.Size = new System.Drawing.Size(286, 160);
+            this.grpSpacings.Size = new System.Drawing.Size(286, 190);
             this.grpSpacings.TabIndex = 2;
             this.grpSpacings.TabStop = false;
             this.grpSpacings.Text = "grpSpacings";
             // 
-            // numSpouseDist
+            // lblMargins
             // 
-            this.numSpouseDist.Location = new System.Drawing.Point(225, 119);
-            this.numSpouseDist.Margin = new System.Windows.Forms.Padding(4);
-            this.numSpouseDist.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.numSpouseDist.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numSpouseDist.Name = "numSpouseDist";
-            this.numSpouseDist.Size = new System.Drawing.Size(49, 24);
-            this.numSpouseDist.TabIndex = 9;
-            this.numSpouseDist.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // numGenDist
-            // 
-            this.numGenDist.Location = new System.Drawing.Point(225, 88);
-            this.numGenDist.Margin = new System.Windows.Forms.Padding(4);
-            this.numGenDist.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.numGenDist.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numGenDist.Name = "numGenDist";
-            this.numGenDist.Size = new System.Drawing.Size(49, 24);
-            this.numGenDist.TabIndex = 9;
-            this.numGenDist.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // numBranchDist
-            // 
-            this.numBranchDist.Location = new System.Drawing.Point(225, 55);
-            this.numBranchDist.Margin = new System.Windows.Forms.Padding(4);
-            this.numBranchDist.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.numBranchDist.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numBranchDist.Name = "numBranchDist";
-            this.numBranchDist.Size = new System.Drawing.Size(49, 24);
-            this.numBranchDist.TabIndex = 9;
-            this.numBranchDist.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            this.lblMargins.AutoSize = true;
+            this.lblMargins.Location = new System.Drawing.Point(20, 28);
+            this.lblMargins.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.lblMargins.Name = "lblMargins";
+            this.lblMargins.Size = new System.Drawing.Size(66, 17);
+            this.lblMargins.TabIndex = 0;
+            this.lblMargins.Text = "lblMargins";
             // 
             // numMargins
             // 
@@ -1246,15 +1197,38 @@
             0,
             0});
             // 
-            // lblSpouseDist
+            // lblBranchDist
             // 
-            this.lblSpouseDist.AutoSize = true;
-            this.lblSpouseDist.Location = new System.Drawing.Point(20, 121);
-            this.lblSpouseDist.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.lblSpouseDist.Name = "lblSpouseDist";
-            this.lblSpouseDist.Size = new System.Drawing.Size(88, 17);
-            this.lblSpouseDist.TabIndex = 0;
-            this.lblSpouseDist.Text = "lblSpouseDist";
+            this.lblBranchDist.AutoSize = true;
+            this.lblBranchDist.Location = new System.Drawing.Point(20, 58);
+            this.lblBranchDist.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.lblBranchDist.Name = "lblBranchDist";
+            this.lblBranchDist.Size = new System.Drawing.Size(86, 17);
+            this.lblBranchDist.TabIndex = 0;
+            this.lblBranchDist.Text = "lblBranchDist";
+            // 
+            // numBranchDist
+            // 
+            this.numBranchDist.Location = new System.Drawing.Point(225, 55);
+            this.numBranchDist.Margin = new System.Windows.Forms.Padding(4);
+            this.numBranchDist.Maximum = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            this.numBranchDist.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numBranchDist.Name = "numBranchDist";
+            this.numBranchDist.Size = new System.Drawing.Size(49, 24);
+            this.numBranchDist.TabIndex = 9;
+            this.numBranchDist.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // lblGenDist
             // 
@@ -1266,25 +1240,70 @@
             this.lblGenDist.TabIndex = 0;
             this.lblGenDist.Text = "lblGenDist";
             // 
-            // lblBranchDist
+            // numGenDist
             // 
-            this.lblBranchDist.AutoSize = true;
-            this.lblBranchDist.Location = new System.Drawing.Point(20, 58);
-            this.lblBranchDist.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.lblBranchDist.Name = "lblBranchDist";
-            this.lblBranchDist.Size = new System.Drawing.Size(86, 17);
-            this.lblBranchDist.TabIndex = 0;
-            this.lblBranchDist.Text = "lblBranchDist";
+            this.numGenDist.Location = new System.Drawing.Point(225, 88);
+            this.numGenDist.Margin = new System.Windows.Forms.Padding(4);
+            this.numGenDist.Maximum = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            this.numGenDist.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numGenDist.Name = "numGenDist";
+            this.numGenDist.Size = new System.Drawing.Size(49, 24);
+            this.numGenDist.TabIndex = 9;
+            this.numGenDist.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
-            // lblMargins
+            // lblSpouseDist
             // 
-            this.lblMargins.AutoSize = true;
-            this.lblMargins.Location = new System.Drawing.Point(20, 28);
-            this.lblMargins.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.lblMargins.Name = "lblMargins";
-            this.lblMargins.Size = new System.Drawing.Size(66, 17);
-            this.lblMargins.TabIndex = 0;
-            this.lblMargins.Text = "lblMargins";
+            this.lblSpouseDist.AutoSize = true;
+            this.lblSpouseDist.Location = new System.Drawing.Point(20, 121);
+            this.lblSpouseDist.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.lblSpouseDist.Name = "lblSpouseDist";
+            this.lblSpouseDist.Size = new System.Drawing.Size(88, 17);
+            this.lblSpouseDist.TabIndex = 0;
+            this.lblSpouseDist.Text = "lblSpouseDist";
+            // 
+            // numSpouseDist
+            // 
+            this.numSpouseDist.Location = new System.Drawing.Point(225, 119);
+            this.numSpouseDist.Margin = new System.Windows.Forms.Padding(4);
+            this.numSpouseDist.Maximum = new decimal(new int[] { 120, 0, 0, 0});
+            this.numSpouseDist.Minimum = new decimal(new int[] { 1, 0, 0, 0});
+            this.numSpouseDist.Name = "numSpouseDist";
+            this.numSpouseDist.Size = new System.Drawing.Size(49, 24);
+            this.numSpouseDist.TabIndex = 9;
+            this.numSpouseDist.Value = new decimal(new int[] { 1, 0, 0, 0});
+            // 
+            // lblPadding
+            // 
+            this.lblPadding.AutoSize = true;
+            this.lblPadding.Location = new System.Drawing.Point(20, 153);
+            this.lblPadding.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.lblPadding.Name = "lblPadding";
+            this.lblPadding.Size = new System.Drawing.Size(88, 17);
+            this.lblPadding.TabIndex = 0;
+            this.lblPadding.Text = "lblPadding";
+            // 
+            // numPadding
+            // 
+            this.numPadding.Location = new System.Drawing.Point(225, 150);
+            this.numPadding.Margin = new System.Windows.Forms.Padding(4);
+            this.numPadding.Maximum = new decimal(new int[] { 20, 0, 0, 0 });
+            this.numPadding.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            this.numPadding.Name = "numPadding";
+            this.numPadding.Size = new System.Drawing.Size(49, 24);
+            this.numPadding.TabIndex = 10;
+            this.numPadding.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // panTreePersons
             // 
@@ -1318,6 +1337,8 @@
             this.panTreePersons.Controls.Add(this.chkURNotesVisible);
             this.panTreePersons.Controls.Add(this.chkSameCardsWidth);
             this.panTreePersons.Controls.Add(this.chkFullNameOnOneLine);
+            this.panTreePersons.Controls.Add(this.chkDateDesignations);
+            this.panTreePersons.Controls.Add(this.chkMourningEdges);
             this.panTreePersons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panTreePersons.Location = new System.Drawing.Point(0, 0);
             this.panTreePersons.Margin = new System.Windows.Forms.Padding(10);
@@ -1646,6 +1667,28 @@
             this.chkFullNameOnOneLine.TabIndex = 28;
             this.chkFullNameOnOneLine.Text = "chkFullNameOnOneLine";
             this.chkFullNameOnOneLine.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
+            // 
+            // chkDateDesignations
+            // 
+            this.chkDateDesignations.AutoSize = true;
+            this.chkDateDesignations.Location = new System.Drawing.Point(6, 767);
+            this.chkDateDesignations.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkDateDesignations.Name = "chkDateDesignations";
+            this.chkDateDesignations.Size = new System.Drawing.Size(349, 21);
+            this.chkDateDesignations.TabIndex = 28;
+            this.chkDateDesignations.Text = "chkDateDesignations";
+            this.chkDateDesignations.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
+            // 
+            // chkMourningEdges
+            // 
+            this.chkMourningEdges.AutoSize = true;
+            this.chkMourningEdges.Location = new System.Drawing.Point(6, 794);
+            this.chkMourningEdges.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkMourningEdges.Name = "chkMourningEdges";
+            this.chkMourningEdges.Size = new System.Drawing.Size(349, 21);
+            this.chkMourningEdges.TabIndex = 28;
+            this.chkMourningEdges.Text = "chkMourningEdges";
+            this.chkMourningEdges.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
             // 
             // grpTreeDecor
             // 

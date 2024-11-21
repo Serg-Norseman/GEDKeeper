@@ -659,6 +659,8 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkShortenDateRanges").Checked = fOptions.TreeChartOptions.ShortenDateRanges;
             GetControl<ICheckBox>("chkSameCardsWidth").Checked = fOptions.TreeChartOptions.SameCardsWidth;
             GetControl<ICheckBox>("chkFullNameOnOneLine").Checked = fOptions.TreeChartOptions.FullNameOnOneLine;
+            GetControl<ICheckBox>("chkDateDesignations").Checked = fOptions.TreeChartOptions.DateDesignations;
+            GetControl<ICheckBox>("chkMourningEdges").Checked = fOptions.TreeChartOptions.MourningEdges;
 
             GetControl<ILabel>("lblMaleColor").BackColor = fOptions.TreeChartOptions.MaleColor;
             GetControl<ILabel>("lblFemaleColor").BackColor = fOptions.TreeChartOptions.FemaleColor;
@@ -670,6 +672,7 @@ namespace GKCore.Controllers
             GetControl<INumericBox>("numBranchDist").Value = fOptions.TreeChartOptions.BranchDistance;
             GetControl<INumericBox>("numGenDist").Value = fOptions.TreeChartOptions.LevelDistance;
             GetControl<INumericBox>("numSpouseDist").Value = fOptions.TreeChartOptions.SpouseDistance;
+            GetControl<INumericBox>("numPadding").Value = fOptions.TreeChartOptions.Padding;
 
             GetControl<ICheckBox>("chkSeparateDepth").Checked = fOptions.TreeChartOptions.SeparateDepth;
 
@@ -763,6 +766,8 @@ namespace GKCore.Controllers
             fOptions.TreeChartOptions.ShortenDateRanges = GetControl<ICheckBox>("chkShortenDateRanges").Checked;
             fOptions.TreeChartOptions.SameCardsWidth = GetControl<ICheckBox>("chkSameCardsWidth").Checked;
             fOptions.TreeChartOptions.FullNameOnOneLine = GetControl<ICheckBox>("chkFullNameOnOneLine").Checked;
+            fOptions.TreeChartOptions.DateDesignations = GetControl<ICheckBox>("chkDateDesignations").Checked;
+            fOptions.TreeChartOptions.MourningEdges = GetControl<ICheckBox>("chkMourningEdges").Checked;
 
             fOptions.TreeChartOptions.MaleColor = GetControl<ILabel>("lblMaleColor").BackColor;
             fOptions.TreeChartOptions.FemaleColor = GetControl<ILabel>("lblFemaleColor").BackColor;
@@ -774,6 +779,7 @@ namespace GKCore.Controllers
             fOptions.TreeChartOptions.BranchDistance = (int)GetControl<INumericBox>("numBranchDist").Value;
             fOptions.TreeChartOptions.LevelDistance = (int)GetControl<INumericBox>("numGenDist").Value;
             fOptions.TreeChartOptions.SpouseDistance = (int)GetControl<INumericBox>("numSpouseDist").Value;
+            fOptions.TreeChartOptions.Padding = (int)GetControl<INumericBox>("numPadding").Value;
 
             fOptions.TreeChartOptions.SeparateDepth = GetControl<ICheckBox>("chkSeparateDepth").Checked;
             fOptions.TreeChartOptions.DepthLimit = (int)GetControl<INumericBox>("numDefaultDepth").Value;
@@ -964,6 +970,8 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkShortenDateRanges").Text = LangMan.LS(LSID.ShortenDateRanges);
             GetControl<ICheckBox>("chkSameCardsWidth").Text = LangMan.LS(LSID.SameCardsWidth);
             GetControl<ICheckBox>("chkFullNameOnOneLine").Text = LangMan.LS(LSID.FullNameOnOneLine);
+            GetControl<ICheckBox>("chkDateDesignations").Text = LangMan.LS(LSID.DateDesignations);
+            GetControl<ICheckBox>("chkMourningEdges").Text = LangMan.LS(LSID.MourningEdges);
 
             GetControl<ILabel>("lblMaleColor").Text = LangMan.LS(LSID.Man);
             GetControl<ILabel>("lblFemaleColor").Text = LangMan.LS(LSID.Woman);
@@ -979,6 +987,7 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblBranchDist").Text = LangMan.LS(LSID.BranchDist);
             GetControl<ILabel>("lblGenDist").Text = LangMan.LS(LSID.GenDist);
             GetControl<ILabel>("lblSpouseDist").Text = LangMan.LS(LSID.SpouseDist);
+            GetControl<ILabel>("lblPadding").Text = LangMan.LS(LSID.Padding);
 
             GetControl<ICheckBox>("chkSeparateDepth").Text = LangMan.LS(LSID.SeparateDepth);
             GetControl<ILabel>("lblDefaultDepth").Text = LangMan.LS(LSID.DefaultDepth);

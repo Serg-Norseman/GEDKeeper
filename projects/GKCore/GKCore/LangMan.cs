@@ -1082,8 +1082,11 @@ namespace GKCore
         /* 1005 */ TE_Sunken,
         /* 1006 */ TE_Raised,
         /* 1007 */ TE_Glow,
+        /* 1008 */ Padding,
+        /* 1009 */ DateDesignations,
+        /* 1010 */ MourningEdges,
 
-        /* 000 */ Last = TE_Glow
+        /* 000 */ Last = MourningEdges
     }
 
 
@@ -2119,6 +2122,9 @@ namespace GKCore
             /* 1005 */ "Sunken",
             /* 1006 */ "Raised",
             /* 1007 */ "Glow",
+            /* 1008 */ "Padding of text",
+            /* 1009 */ "Date designations",
+            /* 1010 */ "Mourning edges",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

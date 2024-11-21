@@ -177,6 +177,8 @@
                                                         <input:CheckBox x:Name="chkUseInlineImagesInSvg" />
                                                         <input:CheckBox x:Name="chkExtendedTree" />
                                                         <input:CheckBox x:Name="chkFullNameOnOneLine" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                        <input:CheckBox x:Name="chkDateDesignations" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                        <input:CheckBox x:Name="chkMourningEdges" CheckChanged="chkTreeChartOption_CheckedChanged" />
 
                                                         <Label VerticalOptions="FillAndExpand" />
 
@@ -233,6 +235,9 @@
 
                                                             <Label x:Name="lblSpouseDist" Grid.Column="0" Grid.Row="3" />
                                                             <comcom:NumericStepper x:Name="numSpouseDist" MaxValue="120" MinValue="1" WidthRequest="60" Value="1" Grid.Column="1" Grid.Row="3" />
+
+                                                            <Label x:Name="lblPadding" Grid.Column="0" Grid.Row="4" />
+                                                            <comcom:NumericStepper x:Name="numPadding" MaxValue="20" MinValue="1" WidthRequest="60" Value="1" Grid.Column="1" Grid.Row="4" />
 
                                                         </Grid>
                                                     </comcom:GroupBox>

@@ -332,10 +332,10 @@ namespace GKCore.Charts
                         fAge = "";
                     }
 
-                    if (!string.IsNullOrEmpty(fBirthDate)) {
+                    if (!string.IsNullOrEmpty(fBirthDate) && options.DateDesignations) {
                         fBirthDate = ImportUtils.STD_BIRTH_SIGN + " " + fBirthDate;
                     }
-                    if (!string.IsNullOrEmpty(fDeathDate)) {
+                    if (!string.IsNullOrEmpty(fDeathDate) && options.DateDesignations) {
                         fDeathDate = ImportUtils.STD_DEATH_SIGN + " " + fDeathDate;
                     }
 
@@ -573,7 +573,9 @@ namespace GKCore.Charts
                 }
 
                 if (options.OnlyYears && !options.ShowPlaces) {
-                    string lifeYears = "[ ";
+                    string lifeYears = string.Empty;
+                    if (options.DateDesignations) lifeYears = "[ ";
+
                     lifeYears += (fBirthDate == "") ? "?" : fBirthDate;
                     if (HasFlag(PersonFlag.pfIsDead)) {
                         lifeYears += (fDeathDate == "") ? " - ?" : " - " + fDeathDate;
@@ -581,7 +583,8 @@ namespace GKCore.Charts
                     if (!string.IsNullOrEmpty(fAge)) {
                         lifeYears += string.Concat(" (", fAge, ")");
                     }
-                    lifeYears += " ]";
+
+                    if (options.DateDesignations) lifeYears += " ]";
 
                     Lines[idx] = lifeYears;
                     idx++;

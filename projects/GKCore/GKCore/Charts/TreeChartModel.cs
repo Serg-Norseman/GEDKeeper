@@ -914,7 +914,7 @@ namespace GKCore.Charts
             fBranchDistance = (int)Math.Round(fOptions.BranchDistance * fScale);
             fLevelDistance = (int)Math.Round(fOptions.LevelDistance * fScale);
             fMargins = (int)Math.Round(fOptions.Margins * fScale);
-            fNodePadding = (int)(DEF_PERSON_NODE_PADDING * fScale);
+            fNodePadding = (int)(fOptions.Padding * fScale);
             fSpouseDistance = (int)Math.Round(fOptions.SpouseDistance * fScale);
         }
 
@@ -1803,7 +1803,7 @@ namespace GKCore.Charts
 
                 prt.Offset(fOffsetX, fOffsetY);
 
-                if (person.HasFlag(PersonFlag.pfIsDead)) {
+                if (person.HasFlag(PersonFlag.pfIsDead) && fOptions.MourningEdges) {
                     ExtRect dt = prt.GetOffset(-2, -2);
                     DrawBorder(null, dt, true, person);
                 }

@@ -80,6 +80,8 @@ namespace GKCore.Options
         public bool TrackMatchedSources;
         public bool FullNameOnOneLine;
         public bool ParentAges;
+        public bool DateDesignations;
+        public bool MourningEdges;
 
         public IColor MaleColor;
         public IColor FemaleColor;
@@ -97,6 +99,7 @@ namespace GKCore.Options
         public int LevelDistance;
         public int Margins;
         public int SpouseDistance;
+        public int Padding;
 
         public bool SeparateDepth { get; set; }
         public int DepthLimit { get; set; }
@@ -171,6 +174,7 @@ namespace GKCore.Options
             LevelDistance = TreeChartModel.DEF_LEVEL_DISTANCE;
             Margins = TreeChartModel.DEF_MARGINS;
             SpouseDistance = TreeChartModel.DEF_SPOUSE_DISTANCE;
+            Padding = TreeChartModel.DEF_PERSON_NODE_PADDING;
 
             SeparateDepth = false;
             DepthLimit = -1;
@@ -181,6 +185,8 @@ namespace GKCore.Options
             UseInlineImagesInSvg = true;
             ExtendedTree = false;
             ParentAges = false;
+            DateDesignations = true;
+            MourningEdges = true;
         }
 
         public void Assign(IOptions source)
@@ -244,11 +250,14 @@ namespace GKCore.Options
             LevelDistance = srcOptions.LevelDistance;
             Margins = srcOptions.Margins;
             SpouseDistance = srcOptions.SpouseDistance;
+            Padding = srcOptions.Padding;
 
             UseExtraControls = srcOptions.UseExtraControls;
             UseInlineImagesInSvg = srcOptions.UseInlineImagesInSvg;
             ExtendedTree = srcOptions.ExtendedTree;
             ParentAges = srcOptions.ParentAges;
+            DateDesignations = srcOptions.DateDesignations;
+            MourningEdges = srcOptions.MourningEdges;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -307,6 +316,7 @@ namespace GKCore.Options
             LevelDistance = iniFile.ReadInteger("Chart", "LevelDistance", TreeChartModel.DEF_LEVEL_DISTANCE);
             Margins = iniFile.ReadInteger("Chart", "Margins", TreeChartModel.DEF_MARGINS);
             SpouseDistance = iniFile.ReadInteger("Chart", "SpouseDistance", TreeChartModel.DEF_SPOUSE_DISTANCE);
+            Padding = iniFile.ReadInteger("Chart", "Padding", TreeChartModel.DEF_PERSON_NODE_PADDING);
 
             SeparateDepth = iniFile.ReadBool("Chart", "SeparateDepth", false);
             DepthLimit = iniFile.ReadInteger("Chart", "DepthLimit", -1);
@@ -322,6 +332,8 @@ namespace GKCore.Options
             FullNameOnOneLine = iniFile.ReadBool("Chart", "FullNameOnOneLine", false);
 
             ParentAges = iniFile.ReadBool("Chart", "ParentAges", false);
+            DateDesignations = iniFile.ReadBool("Chart", "DateDesignations", true);
+            MourningEdges = iniFile.ReadBool("Chart", "MourningEdges", true);
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -380,6 +392,7 @@ namespace GKCore.Options
             iniFile.WriteInteger("Chart", "LevelDistance", LevelDistance);
             iniFile.WriteInteger("Chart", "Margins", Margins);
             iniFile.WriteInteger("Chart", "SpouseDistance", SpouseDistance);
+            iniFile.WriteInteger("Chart", "Padding", Padding);
 
             iniFile.WriteBool("Chart", "SeparateDepth", SeparateDepth);
             iniFile.WriteInteger("Chart", "DepthLimit", DepthLimit);
@@ -395,6 +408,8 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "FullNameOnOneLine", FullNameOnOneLine);
 
             iniFile.WriteBool("Chart", "ParentAges", ParentAges);
+            iniFile.WriteBool("Chart", "DateDesignations", DateDesignations);
+            iniFile.WriteBool("Chart", "MourningEdges", MourningEdges);
         }
     }
 }

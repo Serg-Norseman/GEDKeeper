@@ -190,6 +190,8 @@
                         <CheckBox x:Name="chkUseInlineImagesInSvg" />
                         <CheckBox x:Name="chkExtendedTree" />
                         <CheckBox x:Name="chkFullNameOnOneLine" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkDateDesignations" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkMourningEdges" CheckedChanged="chkTreeChartOption_CheckedChanged" />
 
                         <StackLayoutItem />
 
@@ -280,6 +282,11 @@
                           <TableRow>
                             <Label x:Name="lblSpouseDist" />
                             <NumericStepper x:Name="numSpouseDist" MaxValue="120" MinValue="1" Width="60" Value="1" />
+                          </TableRow>
+
+                          <TableRow>
+                            <Label x:Name="lblPadding" />
+                            <NumericStepper x:Name="numPadding" MaxValue="20" MinValue="1" Width="60" Value="1" />
                           </TableRow>
 
                           <TableRow ScaleHeight="True" />
