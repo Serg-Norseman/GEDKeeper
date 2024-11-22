@@ -207,6 +207,7 @@
         private System.Windows.Forms.ComboBox cmbTextEffect;
         private System.Windows.Forms.CheckBox chkDateDesignations;
         private System.Windows.Forms.CheckBox chkMourningEdges;
+        private System.Windows.Forms.CheckBox chkUseAdditionalDates;
 
         private void InitializeComponent()
         {
@@ -415,6 +416,7 @@
             this.cmbTextEffect = new System.Windows.Forms.ComboBox();
             this.chkDateDesignations = new System.Windows.Forms.CheckBox();
             this.chkMourningEdges = new System.Windows.Forms.CheckBox();
+            this.chkUseAdditionalDates = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -1339,6 +1341,7 @@
             this.panTreePersons.Controls.Add(this.chkFullNameOnOneLine);
             this.panTreePersons.Controls.Add(this.chkDateDesignations);
             this.panTreePersons.Controls.Add(this.chkMourningEdges);
+            this.panTreePersons.Controls.Add(this.chkUseAdditionalDates);
             this.panTreePersons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panTreePersons.Location = new System.Drawing.Point(0, 0);
             this.panTreePersons.Margin = new System.Windows.Forms.Padding(10);
@@ -1675,7 +1678,7 @@
             this.chkDateDesignations.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkDateDesignations.Name = "chkDateDesignations";
             this.chkDateDesignations.Size = new System.Drawing.Size(349, 21);
-            this.chkDateDesignations.TabIndex = 28;
+            this.chkDateDesignations.TabIndex = 29;
             this.chkDateDesignations.Text = "chkDateDesignations";
             this.chkDateDesignations.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
             // 
@@ -1686,9 +1689,20 @@
             this.chkMourningEdges.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkMourningEdges.Name = "chkMourningEdges";
             this.chkMourningEdges.Size = new System.Drawing.Size(349, 21);
-            this.chkMourningEdges.TabIndex = 28;
+            this.chkMourningEdges.TabIndex = 30;
             this.chkMourningEdges.Text = "chkMourningEdges";
             this.chkMourningEdges.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
+            // 
+            // chkUseAdditionalDates
+            // 
+            this.chkUseAdditionalDates.AutoSize = true;
+            this.chkUseAdditionalDates.Location = new System.Drawing.Point(6, 821);
+            this.chkUseAdditionalDates.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkUseAdditionalDates.Name = "chkUseAdditionalDates";
+            this.chkUseAdditionalDates.Size = new System.Drawing.Size(349, 21);
+            this.chkUseAdditionalDates.TabIndex = 31;
+            this.chkUseAdditionalDates.Text = "chkUseAdditionalDates";
+            this.chkUseAdditionalDates.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
             // 
             // grpTreeDecor
             // 

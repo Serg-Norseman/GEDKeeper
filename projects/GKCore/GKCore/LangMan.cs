@@ -1085,8 +1085,9 @@ namespace GKCore
         /* 1008 */ Padding,
         /* 1009 */ DateDesignations,
         /* 1010 */ MourningEdges,
+        /* 1011 */ UseAdditionalDates,
 
-        /* 000 */ Last = MourningEdges
+        /* 000 */ Last = UseAdditionalDates
     }
 
 
@@ -2125,6 +2126,7 @@ namespace GKCore
             /* 1008 */ "Padding of text",
             /* 1009 */ "Date designations",
             /* 1010 */ "Mourning edges",
+            /* 1011 */ "Use additional dates",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

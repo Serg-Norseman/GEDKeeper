@@ -395,17 +395,24 @@ namespace GDModel
             public readonly GDMCustomEvent BirthEvent;
             public readonly GDMCustomEvent DeathEvent;
 
-            public LifeDatesRet(GDMCustomEvent birthEvent, GDMCustomEvent deathEvent)
+            public readonly GDMCustomEvent BaptismEvent;
+            public readonly GDMCustomEvent BurialEvent;
+
+            public LifeDatesRet(GDMCustomEvent birthEvent, GDMCustomEvent deathEvent, GDMCustomEvent baptismEvent, GDMCustomEvent burialEvent)
             {
                 BirthEvent = birthEvent;
                 DeathEvent = deathEvent;
+                BaptismEvent = baptismEvent;
+                BurialEvent = burialEvent;
             }
         }
 
-        public LifeDatesRet GetLifeDates()
+        public LifeDatesRet GetLifeDates(bool ext = false)
         {
             GDMCustomEvent birthEvent = null;
             GDMCustomEvent deathEvent = null;
+            GDMCustomEvent baptismEvent = null;
+            GDMCustomEvent burialEvent = null;
 
             int num = Events.Count;
             for (int i = 0; i < num; i++) {
@@ -416,10 +423,16 @@ namespace GDModel
                     birthEvent = evt;
                 } else if (evtType == GEDCOMTagType.DEAT && deathEvent == null) {
                     deathEvent = evt;
+                } else if (ext) {
+                    if (evtType == GEDCOMTagType.BAPM && baptismEvent == null) {
+                        baptismEvent = evt;
+                    } else if (evtType == GEDCOMTagType.BURI && burialEvent == null) {
+                        burialEvent = evt;
+                    }
                 }
             }
 
-            return new LifeDatesRet(birthEvent, deathEvent);
+            return new LifeDatesRet(birthEvent, deathEvent, baptismEvent, burialEvent);
         }
 
         public GDMPersonalName GetPrimaryPersonalName()

@@ -298,17 +298,32 @@ namespace GKCore.Charts
 
                     TreeChartOptions options = fModel.Options;
 
-                    var lifeDates = iRec.GetLifeDates();
+                    var lifeDates = iRec.GetLifeDates(true);
+                    GDMCustomEvent birthEvent = lifeDates.BirthEvent;
+                    GDMCustomEvent deathEvent = lifeDates.DeathEvent;
+                    string birthSign = ImportUtils.STD_BIRTH_SIGN;
+                    string deathSign = ImportUtils.STD_DEATH_SIGN;
+                    if (options.UseAdditionalDates) {
+                        if (birthEvent == null) {
+                            birthEvent = lifeDates.BaptismEvent;
+                            if (birthEvent != null) birthSign = ImportUtils.STD_BAPTISM_SIGN;
+                        }
+                        if (deathEvent == null) {
+                            deathEvent = lifeDates.BurialEvent;
+                            if (deathEvent != null) deathSign = ImportUtils.STD_BURIED_SIGN;
+                        }
+                    }
+
                     DateFormat dateFormat = (options.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
                     bool shortenDateRanges = options.ShortenDateRanges && options.OnlyYears;
 
-                    SetFlag(PersonFlag.pfIsDead, (lifeDates.DeathEvent != null));
+                    SetFlag(PersonFlag.pfIsDead, (deathEvent != null));
                     GlobalOptions glob = GlobalOptions.Instance;
-                    fBirthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, dateFormat, glob.ShowDatesSign, shortenDateRanges);
-                    fDeathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, dateFormat, glob.ShowDatesSign, shortenDateRanges);
+                    fBirthDate = GKUtils.GEDCOMEventToDateStr(birthEvent, dateFormat, glob.ShowDatesSign, shortenDateRanges);
+                    fDeathDate = GKUtils.GEDCOMEventToDateStr(deathEvent, dateFormat, glob.ShowDatesSign, shortenDateRanges);
 
                     if (options.ShowPlaces) {
-                        fBirthPlace = GKUtils.GetPlaceStr(lifeDates.BirthEvent, false, options.OnlyLocality);
+                        fBirthPlace = GKUtils.GetPlaceStr(birthEvent, false, options.OnlyLocality);
                         if (!string.IsNullOrEmpty(fBirthPlace) && !options.SeparateDatesAndPlacesLines) {
                             if (!string.IsNullOrEmpty(fBirthDate)) {
                                 fBirthDate += ", ";
@@ -316,7 +331,7 @@ namespace GKCore.Charts
                             fBirthDate += fBirthPlace;
                         }
 
-                        fDeathPlace = GKUtils.GetPlaceStr(lifeDates.DeathEvent, false, options.OnlyLocality);
+                        fDeathPlace = GKUtils.GetPlaceStr(deathEvent, false, options.OnlyLocality);
                         if (!string.IsNullOrEmpty(fDeathPlace) && !options.SeparateDatesAndPlacesLines) {
                             if (!string.IsNullOrEmpty(fDeathDate)) {
                                 fDeathDate += ", ";
@@ -333,10 +348,10 @@ namespace GKCore.Charts
                     }
 
                     if (!string.IsNullOrEmpty(fBirthDate) && options.DateDesignations) {
-                        fBirthDate = ImportUtils.STD_BIRTH_SIGN + " " + fBirthDate;
+                        fBirthDate = birthSign + " " + fBirthDate;
                     }
                     if (!string.IsNullOrEmpty(fDeathDate) && options.DateDesignations) {
-                        fDeathDate = ImportUtils.STD_DEATH_SIGN + " " + fDeathDate;
+                        fDeathDate = deathSign + " " + fDeathDate;
                     }
 
                     if ((options.SignsVisible || options.URNotesVisible) && fRec.HasUserReferences) {

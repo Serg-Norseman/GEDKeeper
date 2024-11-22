@@ -82,6 +82,7 @@ namespace GKCore.Options
         public bool ParentAges;
         public bool DateDesignations;
         public bool MourningEdges;
+        public bool UseAdditionalDates;
 
         public IColor MaleColor;
         public IColor FemaleColor;
@@ -187,6 +188,7 @@ namespace GKCore.Options
             ParentAges = false;
             DateDesignations = true;
             MourningEdges = true;
+            UseAdditionalDates = false;
         }
 
         public void Assign(IOptions source)
@@ -258,6 +260,7 @@ namespace GKCore.Options
             ParentAges = srcOptions.ParentAges;
             DateDesignations = srcOptions.DateDesignations;
             MourningEdges = srcOptions.MourningEdges;
+            UseAdditionalDates = srcOptions.UseAdditionalDates;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -334,6 +337,7 @@ namespace GKCore.Options
             ParentAges = iniFile.ReadBool("Chart", "ParentAges", false);
             DateDesignations = iniFile.ReadBool("Chart", "DateDesignations", true);
             MourningEdges = iniFile.ReadBool("Chart", "MourningEdges", true);
+            UseAdditionalDates = iniFile.ReadBool("Chart", "UseAdditionalDates", false);
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -410,6 +414,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "ParentAges", ParentAges);
             iniFile.WriteBool("Chart", "DateDesignations", DateDesignations);
             iniFile.WriteBool("Chart", "MourningEdges", MourningEdges);
+            iniFile.WriteBool("Chart", "UseAdditionalDates", UseAdditionalDates);
         }
     }
 }

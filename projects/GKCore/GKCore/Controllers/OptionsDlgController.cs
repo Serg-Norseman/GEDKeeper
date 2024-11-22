@@ -661,6 +661,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkFullNameOnOneLine").Checked = fOptions.TreeChartOptions.FullNameOnOneLine;
             GetControl<ICheckBox>("chkDateDesignations").Checked = fOptions.TreeChartOptions.DateDesignations;
             GetControl<ICheckBox>("chkMourningEdges").Checked = fOptions.TreeChartOptions.MourningEdges;
+            GetControl<ICheckBox>("chkUseAdditionalDates").Checked = fOptions.TreeChartOptions.UseAdditionalDates;
 
             GetControl<ILabel>("lblMaleColor").BackColor = fOptions.TreeChartOptions.MaleColor;
             GetControl<ILabel>("lblFemaleColor").BackColor = fOptions.TreeChartOptions.FemaleColor;
@@ -768,6 +769,7 @@ namespace GKCore.Controllers
             fOptions.TreeChartOptions.FullNameOnOneLine = GetControl<ICheckBox>("chkFullNameOnOneLine").Checked;
             fOptions.TreeChartOptions.DateDesignations = GetControl<ICheckBox>("chkDateDesignations").Checked;
             fOptions.TreeChartOptions.MourningEdges = GetControl<ICheckBox>("chkMourningEdges").Checked;
+            fOptions.TreeChartOptions.UseAdditionalDates = GetControl<ICheckBox>("chkUseAdditionalDates").Checked;
 
             fOptions.TreeChartOptions.MaleColor = GetControl<ILabel>("lblMaleColor").BackColor;
             fOptions.TreeChartOptions.FemaleColor = GetControl<ILabel>("lblFemaleColor").BackColor;
@@ -972,6 +974,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkFullNameOnOneLine").Text = LangMan.LS(LSID.FullNameOnOneLine);
             GetControl<ICheckBox>("chkDateDesignations").Text = LangMan.LS(LSID.DateDesignations);
             GetControl<ICheckBox>("chkMourningEdges").Text = LangMan.LS(LSID.MourningEdges);
+            GetControl<ICheckBox>("chkUseAdditionalDates").Text = LangMan.LS(LSID.UseAdditionalDates);
 
             GetControl<ILabel>("lblMaleColor").Text = LangMan.LS(LSID.Man);
             GetControl<ILabel>("lblFemaleColor").Text = LangMan.LS(LSID.Woman);

@@ -192,6 +192,7 @@
                         <CheckBox x:Name="chkFullNameOnOneLine" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkDateDesignations" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkMourningEdges" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkUseAdditionalDates" CheckedChanged="chkTreeChartOption_CheckedChanged" />
 
                         <StackLayoutItem />
 

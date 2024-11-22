@@ -179,6 +179,7 @@
                                                         <input:CheckBox x:Name="chkFullNameOnOneLine" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                         <input:CheckBox x:Name="chkDateDesignations" CheckChanged="chkTreeChartOption_CheckedChanged" />
                                                         <input:CheckBox x:Name="chkMourningEdges" CheckChanged="chkTreeChartOption_CheckedChanged" />
+                                                        <input:CheckBox x:Name="chkUseAdditionalDates" CheckChanged="chkTreeChartOption_CheckedChanged" />
 
                                                         <Label VerticalOptions="FillAndExpand" />
 
