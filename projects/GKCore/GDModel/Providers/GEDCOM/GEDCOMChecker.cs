@@ -32,6 +32,8 @@ namespace GDModel.Providers.GEDCOM
     /// </summary>
     public class GEDCOMChecker
     {
+        private const string EmptyRecordContent = "---";
+
         private readonly IBaseContext fBaseContext;
         private readonly GEDCOMFormat fFormat;
         private readonly IProgressController fProgress;
@@ -291,6 +293,14 @@ namespace GDModel.Providers.GEDCOM
                     iRec.DeleteTag("_FSFTID");
                 }
             }
+
+            // Empty records in files from other programs
+            if (iRec.PersonalNames.Count == 0) {
+                var name = new GDMPersonalName();
+                // when saving protection from skipping
+                name.Given = EmptyRecordContent;
+                iRec.PersonalNames.Add(name);
+            }
         }
 
         private void CheckChildLink(GDMFamilyRecord fam, int index)
@@ -393,6 +403,23 @@ namespace GDModel.Providers.GEDCOM
                     }
                 }
             }
+
+            // Empty records in files from other programs
+            if (mmRec.FileReferences.Count == 0) {
+                var fileRef = new GDMFileReferenceWithTitle();
+                // when saving protection from skipping
+                fileRef.Title = EmptyRecordContent;
+                mmRec.FileReferences.Add(fileRef);
+            }
+        }
+
+        private void CheckNoteRecord(GDMNoteRecord noteRec, int fileVer)
+        {
+            // Empty records in files from other programs
+            if (noteRec.Lines.Count == 0) {
+                // when saving protection from skipping
+                noteRec.Lines.Text = EmptyRecordContent;
+            }
         }
 
         private void CheckRecord(GDMRecord rec, int fileVer)
@@ -428,6 +455,10 @@ namespace GDModel.Providers.GEDCOM
 
                 case GDMRecordType.rtMultimedia:
                     CheckMultimediaRecord(rec as GDMMultimediaRecord, fileVer);
+                    break;
+
+                case GDMRecordType.rtNote:
+                    CheckNoteRecord(rec as GDMNoteRecord, fileVer);
                     break;
             }
         }

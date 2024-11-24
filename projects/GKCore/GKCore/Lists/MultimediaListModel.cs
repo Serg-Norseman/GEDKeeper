@@ -81,10 +81,6 @@ namespace GKCore.Lists
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
-            if (fFileRef == null) {
-                return null;
-            }
-
             object result = null;
             switch ((ColumnType)colType) {
                 case ColumnType.ctXRefNum:
