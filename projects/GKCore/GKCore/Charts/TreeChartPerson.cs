@@ -298,7 +298,7 @@ namespace GKCore.Charts
 
                     TreeChartOptions options = fModel.Options;
 
-                    var lifeDates = iRec.GetLifeDates(true);
+                    var lifeDates = iRec.GetLifeEvents(true);
                     GDMCustomEvent birthEvent = lifeDates.BirthEvent;
                     GDMCustomEvent deathEvent = lifeDates.DeathEvent;
                     string birthSign = ImportUtils.STD_BIRTH_SIGN;

@@ -390,7 +390,7 @@ namespace GDModel
             fSpouseToFamilyLinks.ReplaceXRefs(map);
         }
 
-        public sealed class LifeDatesRet
+        public sealed class LifeEvents
         {
             public readonly GDMCustomEvent BirthEvent;
             public readonly GDMCustomEvent DeathEvent;
@@ -398,7 +398,7 @@ namespace GDModel
             public readonly GDMCustomEvent BaptismEvent;
             public readonly GDMCustomEvent BurialEvent;
 
-            public LifeDatesRet(GDMCustomEvent birthEvent, GDMCustomEvent deathEvent, GDMCustomEvent baptismEvent, GDMCustomEvent burialEvent)
+            public LifeEvents(GDMCustomEvent birthEvent, GDMCustomEvent deathEvent, GDMCustomEvent baptismEvent, GDMCustomEvent burialEvent)
             {
                 BirthEvent = birthEvent;
                 DeathEvent = deathEvent;
@@ -407,7 +407,7 @@ namespace GDModel
             }
         }
 
-        public LifeDatesRet GetLifeDates(bool ext = false)
+        public LifeEvents GetLifeEvents(bool ext = false)
         {
             GDMCustomEvent birthEvent = null;
             GDMCustomEvent deathEvent = null;
@@ -432,7 +432,7 @@ namespace GDModel
                 }
             }
 
-            return new LifeDatesRet(birthEvent, deathEvent, baptismEvent, burialEvent);
+            return new LifeEvents(birthEvent, deathEvent, baptismEvent, burialEvent);
         }
 
         public GDMPersonalName GetPrimaryPersonalName()
@@ -500,8 +500,8 @@ namespace GDModel
             // 0% name match would be pointless checking other details
             if (nameMatch != 0.0f && matchParams.DatesCheck)
             {
-                var dates = GetLifeDates();
-                var indiDates = indi.GetLifeDates();
+                var dates = GetLifeEvents();
+                var indiDates = indi.GetLifeEvents();
 
                 if (dates.BirthEvent != null && indiDates.BirthEvent != null) {
                     birthMatch = dates.BirthEvent.IsMatch(indiDates.BirthEvent, matchParams);

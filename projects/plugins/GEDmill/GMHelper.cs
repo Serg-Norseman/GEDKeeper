@@ -348,7 +348,7 @@ namespace GEDmill
 
         public static string GetLifeDatesStr(GDMIndividualRecord record)
         {
-            var lifeDates = record.GetLifeDates();
+            var lifeDates = record.GetLifeEvents();
             string birthDate = GKUtils.GEDCOMEventToDateStr(lifeDates.BirthEvent, DateFormat.dfYYYY, false);
             string deathDate = GKUtils.GEDCOMEventToDateStr(lifeDates.DeathEvent, DateFormat.dfYYYY, false);
             return birthDate + " - " + deathDate;

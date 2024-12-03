@@ -47,7 +47,7 @@ namespace GKStdReports
 
         private Range<int> GetIndividualDates(GDMIndividualRecord iRec)
         {
-            var dates = iRec.GetLifeDates();
+            var dates = iRec.GetLifeEvents();
 
             int yBirth = (dates.BirthEvent == null) ? 0 : dates.BirthEvent.GetChronologicalYear();
             int yDeath = (dates.DeathEvent == null) ? 0 : dates.DeathEvent.GetChronologicalYear();

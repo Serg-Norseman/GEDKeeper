@@ -1228,7 +1228,7 @@ namespace GKCore
             if (iRec == null) return result;
 
             try {
-                var lifeDates = iRec.GetLifeDates();
+                var lifeDates = iRec.GetLifeEvents();
                 result = GetEventsYearsDiff(lifeDates.BirthEvent, lifeDates.DeathEvent, false);
             } catch (Exception ex) {
                 Logger.WriteError("GKUtils.GetLifeExpectancy()", ex);
@@ -1249,7 +1249,7 @@ namespace GKCore
             if (iRec == null) return result;
 
             try {
-                var lifeDates = iRec.GetLifeDates();
+                var lifeDates = iRec.GetLifeEvents();
                 result = GetAgeLD(lifeDates, toYear);
             } catch (Exception ex) {
                 Logger.WriteError("GKUtils.GetAge()", ex);
@@ -1258,7 +1258,7 @@ namespace GKCore
             return result;
         }
 
-        public static int GetAgeLD(GDMIndividualRecord.LifeDatesRet lifeDates, int toYear)
+        public static int GetAgeLD(GDMIndividualRecord.LifeEvents lifeDates, int toYear)
         {
             int result = -1;
             if (lifeDates == null) return result;

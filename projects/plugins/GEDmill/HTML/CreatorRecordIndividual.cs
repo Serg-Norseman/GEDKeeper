@@ -177,7 +177,7 @@ namespace GEDmill.HTML
 
             RemoveLoneOccupation();
 
-            var lifeDatesX = fIndiRec.GetLifeDates();
+            var lifeDatesX = fIndiRec.GetLifeEvents();
             fActualBirthday = (lifeDatesX.BirthEvent == null) ? null : lifeDatesX.BirthEvent.Date;
             fActualDeathday = (lifeDatesX.DeathEvent == null) ? null : lifeDatesX.DeathEvent.Date;
 

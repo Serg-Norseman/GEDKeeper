@@ -1347,7 +1347,7 @@ namespace GEDmill
             string surname, firstName;
             GMHelper.CapitaliseName(ir.GetPrimaryPersonalName(), out firstName, out surname);
 
-            var lifeDatesX = ir.GetLifeDates();
+            var lifeDatesX = ir.GetLifeEvents();
             var birthDate = (lifeDatesX.BirthEvent == null) ? 0 : lifeDatesX.BirthEvent.Date.GetChronologicalYear();
             var deathDate = (lifeDatesX.DeathEvent == null) ? 0 : lifeDatesX.DeathEvent.Date.GetChronologicalYear();
             string uref = (ir.HasUserReferences) ? ir.UserReferences[0].StringValue : "";
