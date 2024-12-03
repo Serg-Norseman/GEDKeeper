@@ -201,6 +201,13 @@ namespace GKTests
             Assert.IsNotNull(commRec, "commRec != null");
         }
 
+        public static GDMDate ParseGDT(string dtx)
+        {
+            GDMDate result = new GDMDate();
+            result.ParseString(dtx);
+            return result;
+        }
+
         public static DateTime ParseDT(string dtx)
         {
             return DateTime.ParseExact(dtx, "dd.MM.yyyy", CultureInfo.InvariantCulture);

@@ -43,16 +43,16 @@ namespace GDModel
 
         private struct TreeEnumerator : IGDMTreeEnumerator
         {
-            private readonly GDMTree fTree;
+            private readonly IList<GDMRecord> fTreeRecords;
             private readonly GDMRecordType fRecType;
             private readonly int fEndIndex;
             private int fIndex;
 
             public TreeEnumerator(GDMTree tree, GDMRecordType recType)
             {
-                fTree = tree;
+                fTreeRecords = tree.fRecords.GetList();
                 fIndex = -1;
-                fEndIndex = tree.RecordsCount - 1;
+                fEndIndex = ((fTreeRecords == null) ? 0 : fTreeRecords.Count) - 1;
                 fRecType = recType;
             }
 
@@ -61,13 +61,13 @@ namespace GDModel
                 if (fRecType == GDMRecordType.rtNone) {
                     if (fIndex < fEndIndex) {
                         fIndex++;
-                        current = fTree[fIndex];
+                        current = fTreeRecords[fIndex];
                         return true;
                     }
                 } else {
                     while (fIndex < fEndIndex) {
                         fIndex++;
-                        GDMRecord rec = fTree[fIndex];
+                        GDMRecord rec = fTreeRecords[fIndex];
                         if (rec.RecordType == fRecType) {
                             current = rec;
                             return true;
@@ -88,22 +88,22 @@ namespace GDModel
 
         private struct TreeEnumerator<T> : IGDMTreeEnumerator<T> where T : GDMRecord
         {
-            private readonly GDMTree fTree;
+            private readonly IList<GDMRecord> fTreeRecords;
             private readonly int fEndIndex;
             private int fIndex;
 
             public TreeEnumerator(GDMTree tree)
             {
-                fTree = tree;
+                fTreeRecords = tree.fRecords.GetList();
                 fIndex = -1;
-                fEndIndex = tree.RecordsCount - 1;
+                fEndIndex = ((fTreeRecords == null) ? 0 : fTreeRecords.Count) - 1;
             }
 
             public bool MoveNext(out T current)
             {
                 while (fIndex < fEndIndex) {
                     fIndex++;
-                    T rec = fTree[fIndex] as T;
+                    T rec = fTreeRecords[fIndex] as T;
                     if (rec != null) {
                         current = rec;
                         return true;
@@ -119,7 +119,7 @@ namespace GDModel
             {
                 while (fIndex < fEndIndex) {
                     fIndex++;
-                    var rec = fTree[fIndex];
+                    var rec = fTreeRecords[fIndex];
                     if (rec != null) {
                         current = rec;
                         return true;

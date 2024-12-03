@@ -592,61 +592,21 @@ namespace GKCore
 
             try {
                 bool firstTip = true;
-                int num = fTree.RecordsCount;
-                for (int i = 0; i < num; i++) {
-                    GDMRecord rec = fTree[i];
-                    if (rec.RecordType != GDMRecordType.rtIndividual) continue;
-
-                    GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
-
-                    int days = GKUtils.GetDaysForBirth(iRec);
-                    if (days >= 0 && days < 3) {
-                        if (firstTip) {
-                            tipsList.Add("#" + LangMan.LS(LSID.BirthDays));
-                            firstTip = false;
-                        }
-
-                        string nm = Culture.GetPossessiveName(iRec);
-
-                        string tip;
-                        switch (days) {
-                            case 0:
-                                tip = string.Format(LangMan.LS(LSID.BirthdayToday), nm);
-                                break;
-                            case 1:
-                                tip = string.Format(LangMan.LS(LSID.BirthdayTomorrow), nm);
-                                break;
-                            default:
-                                tip = string.Format(LangMan.LS(LSID.DaysRemained), nm, days);
-                                break;
-                        }
-                        tipsList.Add(tip);
-                    }
-
+                var indiEnum = fTree.GetEnumerator<GDMIndividualRecord>();
+                GDMIndividualRecord iRec;
+                while (indiEnum.MoveNext(out iRec)) {
                     int years;
-                    days = GKUtils.GetDaysForBirthAnniversary(iRec, out years);
-                    if (days >= 0 && days < 3) {
-                        if (firstTip) {
-                            tipsList.Add("#" + LangMan.LS(LSID.BirthDays));
-                            firstTip = false;
-                        }
+                    bool anniversary;
+                    int days = GKUtils.GetDaysForBirth(iRec, true, out years, out anniversary);
+                    if (days < 0 || days >= 3) continue;
 
-                        string nm = Culture.GetPossessiveName(iRec);
-
-                        string tip;
-                        switch (days) {
-                            case 0:
-                                tip = string.Format(LangMan.LS(LSID.AnniversaryToday), nm);
-                                break;
-                            case 1:
-                                tip = string.Format(LangMan.LS(LSID.AnniversaryTomorrow), nm);
-                                break;
-                            default:
-                                tip = string.Format(LangMan.LS(LSID.AnniversaryDaysRemained), nm, days);
-                                break;
-                        }
-                        tipsList.Add(tip);
+                    if (firstTip) {
+                        tipsList.Add("#" + LangMan.LS(LSID.BirthDays));
+                        firstTip = false;
                     }
+
+                    string tip = GKUtils.GetBirthTipMessage(Culture, iRec, days, years, anniversary);
+                    tipsList.Add(tip);
                 }
             } catch (Exception ex) {
                 Logger.WriteError("BaseContext.CollectTips()", ex);

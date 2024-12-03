@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -87,10 +87,9 @@ namespace GKCore.Controllers
 
         public void LoadList()
         {
-            GDMRecord record;
-            var enumerator = fBase.Context.Tree.GetEnumerator(GDMRecordType.rtMultimedia);
-            while (enumerator.MoveNext(out record)) {
-                GDMMultimediaRecord mediaRec = (GDMMultimediaRecord)record;
+            GDMMultimediaRecord mediaRec;
+            var enumerator = fBase.Context.Tree.GetEnumerator<GDMMultimediaRecord>();
+            while (enumerator.MoveNext(out mediaRec)) {
                 GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
 
                 MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.GetMultimediaFormat());

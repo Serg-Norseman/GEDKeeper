@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -303,10 +303,9 @@ namespace GDModel.Providers.FamilyShow
             string fatherXRef = (father == null) ? string.Empty : father.XRef;
             string motherXRef = (mother == null) ? string.Empty : mother.XRef;
 
-            var famEnum = fTree.GetEnumerator(GDMRecordType.rtFamily);
-            GDMRecord record;
-            while (famEnum.MoveNext(out record)) {
-                var famRec = record as GDMFamilyRecord;
+            var famEnum = fTree.GetEnumerator<GDMFamilyRecord>();
+            GDMFamilyRecord famRec;
+            while (famEnum.MoveNext(out famRec)) {
                 if (famRec.Husband.XRef == fatherXRef && famRec.Wife.XRef == motherXRef) {
                     result = famRec;
                     break;

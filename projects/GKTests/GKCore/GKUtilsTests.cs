@@ -291,7 +291,27 @@ namespace GKCore
         [Test]
         public void Test_GetDaysForBirth()
         {
-            Assert.AreEqual(-1, GKUtils.GetDaysForBirth(null));
+            GDMDate gdmDate = new GDMDate();
+            gdmDate.ParseString("20 DEC 1980");
+
+            int years;
+            bool anniversary;
+
+            Assert.AreEqual(-1, GKUtils.GetDaysForBirth(null, true, out years, out anniversary));
+
+            Assert.AreEqual(-1, GKUtils.GetDaysFor(gdmDate, DateTime.Parse("1982-12-25T00:00:00"), out years, out anniversary)); // curdate ahead
+
+            Assert.AreEqual(0, GKUtils.GetDaysFor(gdmDate, DateTime.Parse("1981-12-20T00:00:00"), out years, out anniversary)); // dates are equal, and 1 year
+            Assert.AreEqual(1, years);
+            Assert.AreEqual(false, anniversary);
+
+            Assert.AreEqual(2, GKUtils.GetDaysFor(gdmDate, DateTime.Parse("1981-12-18T00:00:00"), out years, out anniversary)); // 2 days left, and year *will be* 1
+            Assert.AreEqual(1, years);
+            Assert.AreEqual(false, anniversary);
+
+            Assert.AreEqual(1, GKUtils.GetDaysFor(gdmDate, DateTime.Parse("1990-12-19T00:00:00"), out years, out anniversary)); // 1 days left, and year *will be* 10
+            Assert.AreEqual(10, years);
+            Assert.AreEqual(true, anniversary);
         }
 
         [Test]

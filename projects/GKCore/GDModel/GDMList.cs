@@ -32,18 +32,15 @@ namespace GDModel
 
         private struct GEDCOMListEnumerator : IGDMListEnumerator<T>
         {
-            private readonly GDMList<T> fOwnList;
+            private readonly IList<T> fDataList;
             private int fIndex;
             private int fSize;
 
             public GEDCOMListEnumerator(GDMList<T> list)
             {
-                fOwnList = list;
-
+                fDataList = list.fDataList;
                 fIndex = -1;
-
-                List<T> dataList = list.fDataList;
-                fSize = ((dataList == null) ? 0 : dataList.Count);
+                fSize = (fDataList == null) ? 0 : fDataList.Count;
             }
 
             void IDisposable.Dispose()
@@ -54,9 +51,7 @@ namespace GDModel
             void IEnumerator.Reset()
             {
                 fIndex = -1;
-
-                List<T> dataList = fOwnList.fDataList;
-                fSize = ((dataList == null) ? 0 : dataList.Count);
+                fSize = (fDataList == null) ? 0 : fDataList.Count;
             }
 
             bool IEnumerator.MoveNext()
@@ -67,12 +62,12 @@ namespace GDModel
 
             object IEnumerator.Current
             {
-                get { return fOwnList.fDataList[fIndex]; }
+                get { return fDataList[fIndex]; }
             }
 
             T IEnumerator<T>.Current
             {
-                get { return fOwnList.fDataList[fIndex]; }
+                get { return fDataList[fIndex]; }
             }
         }
 

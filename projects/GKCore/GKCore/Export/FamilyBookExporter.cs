@@ -238,11 +238,9 @@ namespace GKCore.Export
             reliIndex = new StringList();
             sourcesIndex = new StringList();
             
-            GDMRecord rec;
-
-            var iEnum = fTree.GetEnumerator(GDMRecordType.rtIndividual);
-            while (iEnum.MoveNext(out rec)) {
-                GDMIndividualRecord iRec = (GDMIndividualRecord)rec;
+            var iEnum = fTree.GetEnumerator<GDMIndividualRecord>();
+            GDMIndividualRecord iRec;
+            while (iEnum.MoveNext(out iRec)) {
                 string text = GKUtils.GetNameString(iRec, true, false);
                 string st;
 

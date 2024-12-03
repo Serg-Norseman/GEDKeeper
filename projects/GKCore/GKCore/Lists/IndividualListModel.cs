@@ -521,7 +521,7 @@ namespace GKCore.Lists
                     break;
 
                 case ColumnType.ctDaysForBirth:
-                    int days = GKUtils.GetDaysForBirth(fFetchedRec);
+                    int days = GKUtils.GetDaysForBirth(fFetchedRec, true, out _, out _);
                     result = (days >= 0) ? (object)days : null;
                     break;
 

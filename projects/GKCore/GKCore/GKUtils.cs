@@ -1294,6 +1294,7 @@ namespace GKCore
             GDMCustomDate date = GetMarriageDate(fRec);
             return (date == null) ? string.Empty : date.GetDisplayStringExt(dateFormat, sign, false);
         }
+
         public static string GetMarriageDateStr(GDMFamilyRecord fRec, DateFormat dateFormat)
         {
             GDMCustomDate date = GetMarriageDate(fRec);
@@ -1308,102 +1309,102 @@ namespace GKCore
         /// <returns>Number of days remained until the birthday of
         /// the <paramref name="iRec" />. The caller must ignore this value if
         /// the method returns -1.</returns>
-        public static int GetDaysForBirth(GDMIndividualRecord iRec)
+        public static int GetDaysForBirth(GDMIndividualRecord iRec, bool onlyAlive, out int years, out bool anniversary)
         {
             int distance = -1;
+            years = 0;
+            anniversary = false;
 
-            if (iRec != null) {
-                int bdD, bdM, bdY;
+            if (iRec == null) return distance;
 
-                try {
-                    GDMCustomEvent evt = iRec.FindEvent(GEDCOMTagType.DEAT);
-                    if (evt == null) {
-                        evt = iRec.FindEvent(GEDCOMTagType.BIRT);
-                        if (evt != null) {
-                            var dt = evt.Date.Value as GDMDate;
-                            if (dt != null) {
-                                bdM = dt.Month;
-                                bdD = dt.Day;
+            GDMCustomEvent evt;
 
-                                if (bdM != 0 && bdD != 0) {
-                                    DateTime dtNow = DateTime.Now.Date;
-                                    int curY = dtNow.Year;
-                                    int curM = dtNow.Month;
-                                    int curD = dtNow.Day;
-                                    double bdN = curY + bdM / 12.0 + bdD / 12.0 / 31.0;
-                                    double curN = curY + curM / 12.0 + curD / 12.0 / 31.0;
-                                    bdY = (bdN < curN) ? (curY + 1) : curY;
+            if (onlyAlive) {
+                evt = iRec.FindEvent(GEDCOMTagType.DEAT);
+                if (evt != null) return distance;
+            }
 
-                                    // There are valid birthdays on February 29th in leap years.
-                                    // For other years, we need a correction for an acceptable day.
-                                    if (bdD == 29 && bdM == 2 && !DateTime.IsLeapYear(bdY)) {
-                                        bdD -= 1;
-                                    }
+            evt = iRec.FindEvent(GEDCOMTagType.BIRT);
+            if (evt == null) return distance;
 
-                                    distance = DateHelper.DaysBetween(dtNow, new DateTime(bdY, bdM, bdD));
-                                }
-                            }
+            var dt = evt.Date.Value as GDMDate;
+            if (dt == null || !dt.IsValidDate()) return distance;
+
+            distance = GetDaysFor(dt, DateTime.Now, out years, out anniversary);
+            return distance;
+        }
+
+        public static int GetDaysFor(GDMDate dt, DateTime dtNow, out int years, out bool anniversary)
+        {
+            int distance = -1;
+            years = 0;
+            anniversary = false;
+
+            try {
+                if (dt != null && dt.IsValidDate()) {
+                    int bdY = dt.Year;
+                    int bdM = dt.Month;
+                    int bdD = dt.Day;
+
+                    int curY = dtNow.Year;
+                    int curM = dtNow.Month;
+                    int curD = dtNow.Day;
+
+                    double bdN = bdM * 100 + bdD;
+                    double curN = curM * 100 + curD;
+
+                    if (bdN >= curN) {
+                        years = curY - bdY;
+                        anniversary = (years % 10 == 0) || (years % 25 == 0);
+
+                        bdY = (bdN < curN) ? (curY + 1) : curY;
+                        // There are valid birthdays on February 29th in leap years.
+                        // For other years, we need a correction for an acceptable day.
+                        if (bdD == 29 && bdM == 2 && !DateTime.IsLeapYear(bdY)) {
+                            bdD -= 1;
                         }
+
+                        distance = DateHelper.DaysBetween(dtNow, new DateTime(bdY, bdM, bdD));
                     }
-                } catch (Exception ex) {
-                    Logger.WriteError("GKUtils.GetDaysForBirth()", ex);
                 }
+            } catch (Exception ex) {
+                Logger.WriteError("GKUtils.GetDaysFor()", ex);
             }
 
             return distance;
         }
 
-        public static int GetDaysForBirthAnniversary(GDMIndividualRecord iRec, out int years)
+        public static string GetBirthTipMessage(ICulture culture, GDMIndividualRecord iRec, int days, int years, bool anniversary)
         {
-            int distance = -1;
-            years = 0;
+            string nm = culture.GetPossessiveName(iRec);
 
-            if (iRec != null) {
-                int bdD, bdM, bdY;
-
-                try {
-                    GDMCustomEvent evt = iRec.FindEvent(GEDCOMTagType.DEAT);
-                    if (evt == null) {
-                        evt = iRec.FindEvent(GEDCOMTagType.BIRT);
-                        if (evt != null) {
-                            var dt = evt.Date.Value as GDMDate;
-                            if (dt != null && dt.IsValidDate()) {
-                                bdY = dt.Year;
-                                bdM = dt.Month;
-                                bdD = dt.Day;
-
-                                DateTime dtNow = DateTime.Now.Date;
-                                int curY = dtNow.Year;
-                                int curM = dtNow.Month;
-                                int curD = dtNow.Day;
-
-                                double bdN = curY + bdM / 12.0 + bdD / 12.0 / 31.0;
-                                double curN = curY + curM / 12.0 + curD / 12.0 / 31.0;
-
-                                if (bdN > curN) {
-                                    years = curY - bdY;
-                                    bool anniversary = (years % 10 == 0) || (years % 25 == 0);
-                                    if (anniversary) {
-                                        bdY = (bdN < curN) ? (curY + 1) : curY;
-
-                                        // There are valid birthdays on February 29th in leap years.
-                                        // For other years, we need a correction for an acceptable day.
-                                        if (bdD == 29 && bdM == 2 && !DateTime.IsLeapYear(bdY)) {
-                                            bdD -= 1;
-                                        }
-
-                                        distance = DateHelper.DaysBetween(dtNow, new DateTime(bdY, bdM, bdD));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    Logger.WriteError("GKUtils.GetDaysForBirthAnniversary()", ex);
+            string tip;
+            if (!anniversary) {
+                switch (days) {
+                    case 0:
+                        tip = string.Format(LangMan.LS(LSID.BirthdayToday), nm);
+                        break;
+                    case 1:
+                        tip = string.Format(LangMan.LS(LSID.BirthdayTomorrow), nm);
+                        break;
+                    default:
+                        tip = string.Format(LangMan.LS(LSID.DaysRemained), nm, days);
+                        break;
+                }
+            } else {
+                switch (days) {
+                    case 0:
+                        tip = string.Format(LangMan.LS(LSID.AnniversaryToday), nm);
+                        break;
+                    case 1:
+                        tip = string.Format(LangMan.LS(LSID.AnniversaryTomorrow), nm);
+                        break;
+                    default:
+                        tip = string.Format(LangMan.LS(LSID.AnniversaryDaysRemained), nm, days);
+                        break;
                 }
             }
-
-            return distance;
+            return tip;
         }
 
         public static string GetCalendarSign(GDMCalendar calendar)
