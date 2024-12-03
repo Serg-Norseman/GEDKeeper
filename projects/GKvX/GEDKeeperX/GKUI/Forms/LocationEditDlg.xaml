@@ -36,6 +36,7 @@
                                         <Button x:Name="btnSearch" Style="{StaticResource funcBtn}" Clicked="btnSearch_Click" />
                                         <Button x:Name="btnSelect" Style="{StaticResource funcBtn}" Clicked="btnSelect_Click" />
                                         <Button x:Name="btnSelectName" Style="{StaticResource funcBtn}" Clicked="btnSelectName_Click" />
+                                        <Button x:Name="btnSelectCursor" Style="{StaticResource funcBtn}" Clicked="btnSelectCursor_Click" />
                                         <Button x:Name="btnShowOnMap" Style="{StaticResource funcBtn}" Clicked="btnShowOnMap_Click" />
                                     </StackLayout>
                                 </StackLayout>

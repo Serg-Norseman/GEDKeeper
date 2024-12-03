@@ -19,6 +19,7 @@
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Button btnSelect;
         private System.Windows.Forms.Button btnSelectName;
+        private System.Windows.Forms.Button btnSelectCursor;
         private System.Windows.Forms.Button btnShowOnMap;
         private System.Windows.Forms.Panel panMap;
         private System.Windows.Forms.ColumnHeader ColumnHeader1;
@@ -57,6 +58,7 @@
             this.tabsHistory = new System.Windows.Forms.TableLayoutPanel();
             this.pageHistNames = new System.Windows.Forms.GroupBox();
             this.pageHistLinks = new System.Windows.Forms.GroupBox();
+            this.btnSelectCursor = new System.Windows.Forms.Button();
             this.tabsData.SuspendLayout();
             this.tabsHistory.SuspendLayout();
             this.pageCommon.SuspendLayout();
@@ -66,7 +68,7 @@
             // btnAccept
             // 
             this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAccept.Location = new System.Drawing.Point(598, 534);
+            this.btnAccept.Location = new System.Drawing.Point(598, 574);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(113, 31);
             this.btnAccept.TabIndex = 1;
@@ -78,7 +80,7 @@
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(721, 534);
+            this.btnCancel.Location = new System.Drawing.Point(721, 574);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(113, 31);
             this.btnCancel.TabIndex = 2;
@@ -95,7 +97,7 @@
             this.tabsData.Location = new System.Drawing.Point(0, 0);
             this.tabsData.Name = "tabsData";
             this.tabsData.SelectedIndex = 0;
-            this.tabsData.Size = new System.Drawing.Size(844, 516);
+            this.tabsData.Size = new System.Drawing.Size(844, 556);
             this.tabsData.TabIndex = 0;
             // 
             // pageCommon
@@ -170,10 +172,11 @@
             this.grpSearch.Controls.Add(this.btnSearch);
             this.grpSearch.Controls.Add(this.btnSelect);
             this.grpSearch.Controls.Add(this.btnSelectName);
+            this.grpSearch.Controls.Add(this.btnSelectCursor);
             this.grpSearch.Controls.Add(this.panMap);
             this.grpSearch.Location = new System.Drawing.Point(0, 62);
             this.grpSearch.Name = "grpSearch";
-            this.grpSearch.Size = new System.Drawing.Size(834, 420);
+            this.grpSearch.Size = new System.Drawing.Size(834, 460);
             this.grpSearch.TabIndex = 7;
             this.grpSearch.TabStop = false;
             this.grpSearch.Text = "grpSearch";
@@ -187,7 +190,7 @@
             this.ListGeoCoords.FullRowSelect = true;
             this.ListGeoCoords.Location = new System.Drawing.Point(22, 19);
             this.ListGeoCoords.Name = "ListGeoCoords";
-            this.ListGeoCoords.Size = new System.Drawing.Size(623, 109);
+            this.ListGeoCoords.Size = new System.Drawing.Size(623, 149);
             this.ListGeoCoords.TabIndex = 1;
             this.ListGeoCoords.UseCompatibleStateImageBehavior = false;
             this.ListGeoCoords.View = System.Windows.Forms.View.Details;
@@ -212,7 +215,7 @@
             // 
             this.btnSearch.Location = new System.Drawing.Point(661, 19);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(147, 31);
+            this.btnSearch.Size = new System.Drawing.Size(157, 31);
             this.btnSearch.TabIndex = 2;
             this.btnSearch.Text = "btnSearch";
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
@@ -221,7 +224,7 @@
             // 
             this.btnSelect.Location = new System.Drawing.Point(661, 58);
             this.btnSelect.Name = "btnSelect";
-            this.btnSelect.Size = new System.Drawing.Size(147, 31);
+            this.btnSelect.Size = new System.Drawing.Size(157, 31);
             this.btnSelect.TabIndex = 3;
             this.btnSelect.Text = "btnSelect";
             this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
@@ -230,15 +233,24 @@
             // 
             this.btnSelectName.Location = new System.Drawing.Point(661, 97);
             this.btnSelectName.Name = "btnSelectName";
-            this.btnSelectName.Size = new System.Drawing.Size(147, 31);
+            this.btnSelectName.Size = new System.Drawing.Size(157, 31);
             this.btnSelectName.TabIndex = 4;
             this.btnSelectName.Text = "btnSelectName";
             this.btnSelectName.Click += new System.EventHandler(this.btnSelectName_Click);
             // 
+            // btnSelectCursor
+            // 
+            this.btnSelectCursor.Location = new System.Drawing.Point(661, 136);
+            this.btnSelectCursor.Name = "btnSelectCursor";
+            this.btnSelectCursor.Size = new System.Drawing.Size(157, 31);
+            this.btnSelectCursor.TabIndex = 5;
+            this.btnSelectCursor.Text = "btnSelectCursor";
+            this.btnSelectCursor.Click += new System.EventHandler(this.btnSelectCursor_Click);
+            // 
             // panMap
             // 
             this.panMap.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panMap.Location = new System.Drawing.Point(3, 135);
+            this.panMap.Location = new System.Drawing.Point(3, 175);
             this.panMap.Name = "panMap";
             this.panMap.Size = new System.Drawing.Size(828, 283);
             this.panMap.TabIndex = 0;
@@ -313,7 +325,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(844, 578);
+            this.ClientSize = new System.Drawing.Size(844, 618);
             this.Controls.Add(this.tabsData);
             this.Controls.Add(this.btnAccept);
             this.Controls.Add(this.btnCancel);

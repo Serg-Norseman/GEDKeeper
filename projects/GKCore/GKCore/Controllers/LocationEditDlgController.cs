@@ -198,6 +198,14 @@ namespace GKCore.Controllers
             fView.MapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
         }
 
+        public void SelectCursorCoords()
+        {
+            var pos = fView.MapBrowser.TargetPosition;
+
+            fView.Latitude.Text = GEDCOMUtils.CoordToStr(pos.Lat);
+            fView.Longitude.Text = GEDCOMUtils.CoordToStr(pos.Lng);
+        }
+
         public void ShowOnMap()
         {
             if (fView.Latitude.Text != "" && fView.Longitude.Text != "") {
@@ -222,6 +230,7 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnSearch").Text = LangMan.LS(LSID.Search);
             GetControl<IButton>("btnSelect").Text = LangMan.LS(LSID.SelectCoords);
             GetControl<IButton>("btnSelectName").Text = LangMan.LS(LSID.SelectName);
+            GetControl<IButton>("btnSelectCursor").Text = LangMan.LS(LSID.CursorCoords);
 
             SetToolTip("btnShowOnMap", LangMan.LS(LSID.ShowOnMapTip));
 

@@ -42,6 +42,7 @@
                           <Button x:Name="btnSearch" Style="funcBtn" Click="btnSearch_Click" />
                           <Button x:Name="btnSelect" Style="funcBtn" Click="btnSelect_Click" />
                           <Button x:Name="btnSelectName" Style="funcBtn" Click="btnSelectName_Click" />
+                          <Button x:Name="btnSelectCursor" Style="funcBtn" Click="btnSelectCursor_Click" />
                           <Button x:Name="btnShowOnMap" Style="funcBtn" Click="btnShowOnMap_Click" />
                         </StackLayout>
                       </TableRow>

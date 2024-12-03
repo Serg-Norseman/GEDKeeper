@@ -111,6 +111,11 @@ namespace GKUI.Forms
             fController.SelectName();
         }
 
+        private void btnSelectCursor_Click(object sender, EventArgs e)
+        {
+            fController.SelectCursorCoords();
+        }
+
         private void ListGeoCoords_Click(object sender, EventArgs e)
         {
             fController.SelectGeoPoint();

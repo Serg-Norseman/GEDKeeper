@@ -1086,8 +1086,9 @@ namespace GKCore
         /* 1009 */ DateDesignations,
         /* 1010 */ MourningEdges,
         /* 1011 */ UseAdditionalDates,
+        /* 1012 */ CursorCoords,
 
-        /* 000 */ Last = UseAdditionalDates
+        /* 000 */ Last = CursorCoords
     }
 
 
@@ -2127,6 +2128,7 @@ namespace GKCore
             /* 1009 */ "Date designations",
             /* 1010 */ "Mourning edges",
             /* 1011 */ "Use additional dates",
+            /* 1012 */ "Cursor coordinates",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
