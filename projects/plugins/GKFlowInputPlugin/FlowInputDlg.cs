@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using BSLib;
 using GDModel;
+using GKCore;
 using GKCore.Interfaces;
 using GKUI.Components;
 using GKUI.Forms;
@@ -41,6 +42,13 @@ namespace GKFlowInputPlugin
         public FlowInputDlg(IPlugin plugin, IBaseWindow baseWin)
         {
             InitializeComponent();
+
+            if (!AppHost.TEST_MODE) {
+                dataGridView1.AllowDrop = true;
+                dataGridView1.DragDrop += new DragEventHandler(dataGridView_DragDrop);
+                dataGridView1.DragOver += new DragEventHandler(dataGridView_DragOver);
+                dataGridView1.MouseMove += new MouseEventHandler(dataGridView_MouseMove);
+            }
 
             btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 

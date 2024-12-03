@@ -118,9 +118,6 @@ namespace GKFlowInputPlugin
         [Test]
         public void Test_Close()
         {
-            //var lblMail = new LabelTester("lblMail", fDialog);
-            //lblMail.FireEvent("Click", new EventArgs());
-
             ClickButton("btnClose", fDialog);
         }
 

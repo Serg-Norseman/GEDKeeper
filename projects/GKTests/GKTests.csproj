@@ -10,6 +10,8 @@
     <AssemblyName>GKTests</AssemblyName>
     <NoWin32Manifest>False</NoWin32Manifest>
     <DefineConstants>UNDIS_NUF</DefineConstants>
+    <RunSettingsFilePath>
+    </RunSettingsFilePath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>

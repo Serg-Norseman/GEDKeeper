@@ -79,6 +79,11 @@ namespace GKTreeSyncPlugin
             cmbRecordTypes.Enabled = !rbSyncAll.Checked;
         }
 
+        private void chkOnlyModified_CheckStateChanged(object sender, EventArgs e)
+        {
+            UpdateLists();
+        }
+
         private GDMRecordType GetRecordType()
         {
             if (rbSyncAll.Checked) {

@@ -151,6 +151,7 @@
             this.chkOnlyModified.TabIndex = 4;
             this.chkOnlyModified.Text = "Only modified";
             this.chkOnlyModified.UseVisualStyleBackColor = true;
+            this.chkOnlyModified.CheckStateChanged += chkOnlyModified_CheckStateChanged;
             // 
             // TSForm
             // 
