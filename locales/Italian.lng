@@ -429,7 +429,7 @@
 428=Cartolina
 429=Elettronico
 430=Scheda
-431=Film
+431=Pellicola
 432=Rivista
 433=Manoscritto
 434=Mappa
@@ -825,11 +825,11 @@
 822=Bold font of names
 
 823=Battesimo
-824=Bar mitzvah
-825=Bat mitzvah
-826=Blessing
+824=Bar Mitzvah
+825=Bat Mitzvah
+826=Benedizione
 827=Adult christening
-828=Confirmation
+828=Cresima
 829=Prima comunione
 830=Ordinazione
 831=Restriction geo search by country
@@ -998,7 +998,7 @@
 985=Location Expert
 986=Event dates
 987=Add
-988=Entry               ; entry/item/part of place string
+988=Entry
 989=Include source pages
 990=Navigation
 991=Include portraits

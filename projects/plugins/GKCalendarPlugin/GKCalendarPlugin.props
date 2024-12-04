@@ -17,6 +17,9 @@
         <None Include="GKCalendarPlugin.enu">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Include="GKCalendarPlugin.fra">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKCalendarPlugin.hun">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

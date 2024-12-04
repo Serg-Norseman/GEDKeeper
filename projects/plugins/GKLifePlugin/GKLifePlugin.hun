@@ -7,8 +7,8 @@
 06=Törlés
 07=Véletlen
 08=Beállítások
-09=Pattern stability
-10=The pattern repeats itself every {0} generations!
-11=The pattern is static!
-12=Generation: {0}
-13=Living cells: {0}
+09=Minta stabilitás
+10=A minta {0} generációnként ismétlődik!
+11=A minta statikus!
+12=Generáció: {0}
+13=Élő cellák: {0}

@@ -17,6 +17,9 @@
         <None Include="GKChroniclePlugin.enu">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Include="GKChroniclePlugin.fra">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKChroniclePlugin.hun">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

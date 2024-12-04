@@ -7,10 +7,10 @@
 06=Contemporains
 07=Sources
 08=Name
-09=Title
+09=Titre
 10=Repositories
 11=Address
-12=Places
+12=Lieux
 13=Repository
 14=Ancestor Statistics
 15=Root individual: {0}
@@ -24,7 +24,7 @@
 23=Cumul, %
 24=Diff
 25=Implex
-26=Common ancestors
+26=Ancêtres communs
 27=Consanguinity common ancestors
 28=Record card
 29=An record is not selected.

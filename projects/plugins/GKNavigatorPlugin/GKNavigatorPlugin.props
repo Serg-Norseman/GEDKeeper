@@ -19,6 +19,9 @@
         <None Include="GKNavigatorPlugin.enu">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Include="GKNavigatorPlugin.fra">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKNavigatorPlugin.hun">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

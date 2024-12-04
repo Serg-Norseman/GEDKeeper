@@ -17,6 +17,9 @@
         <None Include="GKBackupPlugin.enu">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Include="GKBackupPlugin.fra">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKBackupPlugin.hun">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

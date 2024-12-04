@@ -20,6 +20,9 @@
         <None Include="GKLifePlugin.enu">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Include="GKLifePlugin.fra">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKLifePlugin.hun">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

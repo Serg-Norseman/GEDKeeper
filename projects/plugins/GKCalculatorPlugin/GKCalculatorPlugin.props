@@ -17,6 +17,9 @@
         <None Include="GKCalculatorPlugin.enu">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Include="GKCalculatorPlugin.fra">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKCalculatorPlugin.hun">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

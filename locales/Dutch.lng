@@ -959,16 +959,16 @@
 950=Rechter helft
 
 951=RI:Recruit
-952=Reverse order of places
-953=Abbreviated location names
+952=Omgekeerde volgorde van plaatsen
+953=Verkorte locatienamen
 954=Dotted lines of common law spouses
 955=Show number of event substructures instead of checkmarks
-956=Clean images cache
-957=Highlight the lines of the selection
+956=Afbeeldingencache legen
+957=Markeer de lijnen van de selectie
 958=Track matching sources
-959=Note without links
-960=Source without links
-961=Check links
+959=Notitie zonder links
+960=Bron zonder koppelingen
+961=Links controleren
 
 962=Event types
 963=Aantal
@@ -997,12 +997,12 @@
 984=Links to subordinate locations
 985=Location Expert
 986=Event dates
-987=Add
-988=Entry
-989=Include source pages
-990=Navigation
-991=Include portraits
-992=Partial view
+987=Toevoegen
+988=Inzending
+989=Bronpagina's insluiten
+990=Navigatie
+991=Portreten opnemen
+992=Gedeeltelijke weergave
 993=Call number
 994=Call numbers
 995=Are you sure you want to remove call number "{0}"?

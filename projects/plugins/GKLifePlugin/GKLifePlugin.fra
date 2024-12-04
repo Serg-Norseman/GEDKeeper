@@ -1,0 +1,14 @@
+;1036,fra,Français
+01=Conway's Game of Life
+02=Step
+03=Start
+04=Stop
+05=SetCells
+06=Clear
+07=Aléatoire
+08=Options
+09=Pattern stability
+10=The pattern repeats itself every {0} generations!
+11=The pattern is static!
+12=Generation: {0}
+13=Living cells: {0}

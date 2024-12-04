@@ -46,6 +46,6 @@ Community group: [Google Groups: GEDKeeper (en)](https://groups.google.com/g/ged
 ## Supported languages
 
 Afrikaans, Belarusian, Chinese (simplified), Czech, Dutch, English, French, German, Hungarian, Icelandic, 
-Italian, Japanese, Kazakh (Cyrillic), Polish, Portuguese, Russian, Serbian (Latin), Spanish, Ukrainian.
+Italian, Japanese, Kazakh (Cyrillic), Polish, Portuguese, Russian, Serbian (Latin), Spanish, Turkish, Ukrainian.
 
 Platform for project localization: [Crowdin](https://crowdin.com/project/gedkeeper)

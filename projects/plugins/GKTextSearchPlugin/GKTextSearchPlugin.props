@@ -19,6 +19,9 @@
         <None Include="GKTextSearchPlugin.enu">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Include="GKTextSearchPlugin.fra">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="GKTextSearchPlugin.hun">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
