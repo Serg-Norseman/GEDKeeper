@@ -424,10 +424,18 @@ namespace GKCore.Lists
                         break;
 
                     case ConditionKind.ck_Contains:
-                        res = GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
+                        res = dataval.ToString().Contains(fcond.Value.ToString());
                         break;
 
                     case ConditionKind.ck_NotContains:
+                        res = !dataval.ToString().Contains(fcond.Value.ToString());
+                        break;
+
+                    case ConditionKind.ck_ContainsMask:
+                        res = GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
+                        break;
+
+                    case ConditionKind.ck_NotContainsMask:
                         res = !GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
                         break;
                 }
@@ -494,7 +502,7 @@ namespace GKCore.Lists
         {
             ConditionKind res = ConditionKind.ck_NotEq;
 
-            for (ConditionKind pl = ConditionKind.ck_NotEq; pl <= ConditionKind.ck_NotContains; pl++) {
+            for (ConditionKind pl = ConditionKind.ck_NotEq; pl <= ConditionKind.ck_Last; pl++) {
                 if (GKData.CondSigns[(int)pl] == condName) {
                     res = pl;
                     break;

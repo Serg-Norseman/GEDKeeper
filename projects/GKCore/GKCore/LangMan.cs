@@ -1087,8 +1087,10 @@ namespace GKCore
         /* 1010 */ MourningEdges,
         /* 1011 */ UseAdditionalDates,
         /* 1012 */ CursorCoords,
+        /* 1013 */ CondContainsMask,
+        /* 1014 */ CondNotContainsMask,
 
-        /* 000 */ Last = CursorCoords
+        /* 000 */ Last = CondNotContainsMask
     }
 
 
@@ -2129,6 +2131,8 @@ namespace GKCore
             /* 1010 */ "Mourning edges",
             /* 1011 */ "Use additional dates",
             /* 1012 */ "Cursor coordinates",
+            /* 1013 */ "contains mask",
+            /* 1014 */ "not contains mask",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

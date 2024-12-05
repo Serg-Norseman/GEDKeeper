@@ -76,8 +76,12 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            fView.Title = LangMan.LS(LSID.MIFilter);
+
             GKData.CondSigns[6] = LangMan.LS(LSID.CondContains);
             GKData.CondSigns[7] = LangMan.LS(LSID.CondNotContains);
+            GKData.CondSigns[8] = LangMan.LS(LSID.CondContainsMask);
+            GKData.CondSigns[9] = LangMan.LS(LSID.CondNotContainsMask);
 
             GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
             GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);

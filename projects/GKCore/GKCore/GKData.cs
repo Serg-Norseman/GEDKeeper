@@ -517,7 +517,7 @@ namespace GKCore
             };
 
             CondSigns = new string[] {
-                "!=", "<", "<=", "==", "=>", ">", "contains", "not contains"
+                "!=", "<", "<=", "==", "=>", ">", "contains", "not contains", "contains mask", "not contains mask"
             };
 
             NameTypes = new LSID[] {
