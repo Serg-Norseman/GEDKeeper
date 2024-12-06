@@ -44,11 +44,10 @@ namespace GKUI.Forms
         private Button btnAccept;
         private Button btnCancel;
         private Button btnRepositoryAdd;
+        private GKSheetList fCallNumbersList;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
-
-        private readonly GKSheetList fCallNumbersList;
 
         public GDMRepositoryCitation RepositoryCitation
         {

@@ -20,9 +20,11 @@
 
 //define DEBUG_PRINT
 
+using System;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
+using GKCore;
 using GKCore.Design.Graphics;
 using GKUI.Platform.Handlers;
 
@@ -108,8 +110,12 @@ namespace GKUI.Forms
         {
             InitCurDoc();
 
-            using (PrintDialog printDlg = new PrintDialog()) {
-                printDlg.ShowDialog(this, fPrintDoc);
+            try {
+                using (PrintDialog printDlg = new PrintDialog()) {
+                    printDlg.ShowDialog(this, fPrintDoc);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("PrintableForm.DoPrint()", ex);
             }
         }
 
@@ -117,8 +123,12 @@ namespace GKUI.Forms
         {
             InitCurDoc();
 
-            using (PrintPreviewDialog previewDlg = new PrintPreviewDialog(fPrintDoc)) {
-                previewDlg.ShowDialog(this);
+            try {
+                using (PrintPreviewDialog previewDlg = new PrintPreviewDialog(fPrintDoc)) {
+                    previewDlg.ShowDialog(this);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("PrintableForm.DoPrintPreview()", ex);
             }
         }
 

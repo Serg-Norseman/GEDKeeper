@@ -35,6 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{4AF8
 		..\..\locales\russian.lng = ..\..\locales\russian.lng
 		..\..\locales\Serbian (Latin).lng = ..\..\locales\Serbian (Latin).lng
 		..\..\locales\Spanish.lng = ..\..\locales\Spanish.lng
+		..\..\locales\Turkish.lng = ..\..\locales\Turkish.lng
 		..\..\locales\ukrainian.lng = ..\..\locales\ukrainian.lng
 	EndProjectSection
 EndProject

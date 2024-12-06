@@ -170,7 +170,7 @@ namespace GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { listColumns.CopyTo(null); });
 
             listManager.QuickFilter.Value = "*";
-            listManager.AddCondition((byte)GroupListModel.ColumnType.ctName, ConditionKind.ck_Contains, "*roup*");
+            listManager.AddCondition((byte)GroupListModel.ColumnType.ctName, ConditionKind.ck_ContainsMask, "*roup*");
             Assert.IsTrue(listManager.CheckFilter());
         }
 

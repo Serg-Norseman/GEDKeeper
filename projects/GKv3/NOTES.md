@@ -1,4 +1,11 @@
 
+# Fundamentals
+
+.NET 6,8-9 - only supports Windows >= 10 (7 SP1 and 8.1 also ended!)
+  https://github.com/dotnet/core/blob/main/release-notes/9.0/supported-os.md
+  https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md
+  https://github.com/dotnet/core/blob/main/release-notes/6.0/supported-os.md
+
 # Eto.Forms
 
 Eto.Forms v2.7.4 compatible with netfw462

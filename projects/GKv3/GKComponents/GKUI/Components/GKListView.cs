@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
@@ -305,21 +306,14 @@ namespace GKUI.Components
             base.OnColumnHeaderClick(e);
         }
 
-        // In Eto not exists
-        /*protected override void OnDrawColumnHeader(DrawListViewColumnHeaderEventArgs e)
-        {
-        }*/
-
         /*protected override void OnSelectionChanged(EventArgs e)
         {
             base.OnSelectionChanged(e);
 
             // FIXME: [Wpf]GridView.ReloadData(...) is very slow, Eto 2.7.0 #2245
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
-                return;
+                base.ReloadData(base.SelectedRow);
             }
-
-            base.ReloadData(base.SelectedRow);
         }*/
 
         private int fRowFormatting = -1;

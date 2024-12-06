@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup Condition=" !$(DefineConstants.Contains('MOBILE')) ">
-        <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
+        <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
     </ItemGroup>
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">

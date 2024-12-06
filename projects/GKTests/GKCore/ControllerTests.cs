@@ -448,6 +448,7 @@ namespace GKCore.Controllers
             SubstituteControl<IButton>(view, "btnSearch");
             SubstituteControl<IButton>(view, "btnSelect");
             SubstituteControl<IButton>(view, "btnSelectName");
+            SubstituteControl<IButton>(view, "btnSelectCursor");
             SubstituteControl<IGroupBox>(view, "pageHistNames");
             SubstituteControl<IGroupBox>(view, "pageHistLinks");
 
