@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -44,6 +44,13 @@ namespace GKUI
         [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
         public static void Main(string[] args)
         {
+#if OS_MSWIN
+            if (ShellLinkTool.HasArg(args)) {
+                ShellLinkTool.CreateShortcut();
+                return;
+            }
+#endif
+
             WFAppHost.Startup(args);
 
             using (var tracker = new SingleInstanceTracker(GKData.APP_TITLE, AppHost.GetSingleInstanceEnforcer)) {

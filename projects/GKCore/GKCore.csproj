@@ -393,6 +393,7 @@
     <Compile Include="GKCore\Search\FARPropertyType.cs" />
     <Compile Include="GKCore\Search\SearchResult.cs" />
     <Compile Include="GKCore\Search\SearchStrategy.cs" />
+    <Compile Include="GKCore\Shortcut.cs" />
     <Compile Include="GKCore\SingleInstance\MapiMailMessage.cs" />
     <Compile Include="GKCore\FreqCollection.cs" />
     <Compile Include="GKCore\SysUtils.cs" />

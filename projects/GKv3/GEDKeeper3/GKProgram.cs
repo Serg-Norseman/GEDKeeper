@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -48,6 +48,13 @@ namespace GEDKeeper3
         [STAThread]
         public static void Main(string[] args)
         {
+#if OS_MSWIN
+            if (ShellLinkTool.HasArg(args)) {
+                ShellLinkTool.CreateShortcut();
+                return;
+            }
+#endif
+
             EtoAppHost.Startup(args);
 
             var application = new Application();
