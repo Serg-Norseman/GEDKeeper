@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+<title>Translation guidelines and rules</title>
+</head>
+<body>
+
+<h1>Normas y directrices de traducción</h1>
+
+<p><ol>
+<li>Para permitir el uso de caracteres nacionales, cree archivos con codificación UTF-8.<ol>
+
+<li>Un buen ejemplo de un editor perfecto que admite la creación y modificación de archivos codificados en UTF-8 es el editor Notepad++ (disponible en <a href="https://notepad-plus-plus.org/" target="_blank">https://notepad-plus-plus.org/</a>). Notepad++ puede reconocer automáticamente la codificación del archivo de apertura. También recomendamos la herramienta WinMerge, que muestra la correspondencia estricta de las líneas de dos archivos con textos en dos idiomas diferentes. Por favor, no utilice nunca programas ofimáticos como Microsoft Word o Writer, ya que crean archivos sobrecargados.
+<li>Para obtener un buen conjunto de herramientas de traducción en Linux, puede utilizar programas como Meld o KDiff3 (en lugar de WinMerge) y GEdit.</ol>
+
+<li>El texto de referencia está almacenado en los archivos russian.lng y english.sample. Para iniciar la creación de un nuevo archivo de idioma, puede copiar cualquiera de los archivos de referencia al nuevo y luego traducir el contenido del nuevo archivo línea por línea comenzando desde la segunda línea. El traductor puede elegir cualquiera de los archivos que desee como fuente (russian.lng o english.sample). La selección depende de la experiencia y los conocimientos del traductor.<ol>
+
+<li>Para facilitar la traducción, algunos traductores hacen lo siguiente: cargan el contenido completo del archivo que han elegido en un servicio de traducción en línea, traducen el texto a la lengua de destino y almacenan el resultado en el archivo final. Después, el traductor procesa el archivo línea por línea, haciendo referencia al original. Esta técnica reduce drásticamente el tiempo de traducción.
+<li>Existe una técnica alternativa de traducción parcial. Se inserta el contenido del archivo original en el archivo final y luego se traduce este último gradualmente, línea a línea, partiendo de la traducción del texto más conocido (o fácil).</ol>
+
+<li>La primera línea en un archivo de idioma es el encabezado que contiene el código de idioma, la firma y el nombre. Tenga cuidado y evite dañar el encabezado. La línea del encabezado debe comenzar con el carácter &quot;;&quot;. Si ha comenzado una nueva traducción, pero tiene dudas o no sabe qué código de idioma y símbolos debe especificar, póngase en contacto con los desarrolladores.
+<li>Nunca debe cambiar el orden de las líneas en los archivos.
+<li>Usted debe mantener las líneas duplicadas existentes (si ha encontrado tales líneas, asegúrese - esto es por diseño).
+<li>No debe cambiar <i>marcadores de posición</i> como %s, %n, {0}, {1} -- son lugares para texto o números que faltan.
+<li>Debe mantener las etiqueta como &lt;reserved&gt;, &lt;?&gt; o &lt;-&gt; existentes -- tales líneas están reservadas.
+<li>Puede comprobar su traducción en cualquier momento. El programa carga un archivo de idioma cada vez que se cambia de idioma en el programa. Por lo tanto, puede actualizar su archivo mientras GEDKeeper se está ejecutando, y cambiar el idioma del programa para ver sus modificaciones en GEDKeeper sobre la marcha.
+<li>Si necesita aclarar el contexto de uso de una palabra o frase que está traduciendo, póngase en contacto con los desarrolladores.
+</ol></p>
+
+<p>Cada autor de una traducción obtiene un lugar en la historia del programa como autor de la traducción. Introduzca su nombre en la crónica del programa 😄</p>
+
+</body>
+</html>

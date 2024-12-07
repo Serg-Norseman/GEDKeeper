@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Aplicación portable</title>
+</head>
+<body>
+
+    <h1>Aplicación portable</h1>
+
+    <p>
+        Una aplicación portable es un programa diseñado para leer y 
+		escribir sus ajustes de configuración en una carpeta accesible del ordenador&#151; 
+		normalmente la carpeta donde se encuentra la aplicación portable. 
+		Esto facilita la transferencia del programa con las preferencias y 
+		datos del usuario entre distintos ordenadores. 
+    </p>
+
+    <p>
+		Primer método: para que GEDKeeper sea portable basta con crear una carpeta llamada `<samp>appdata</samp>` 
+		(para Windows) en el directorio donde se encuentra <samp>GEDKeeper3.exe</samp>. 
+    </p>
+
+    <p>	
+		Segundo método: GEDKeeper tiene la opción de línea de comandos `<samp>-homedir:path</samp>` que establece 
+		la ruta para almacenar los archivos de configuración de la aplicación. 
+		Puede definir un directorio relativo, si desea especificar "el directorio actual" 
+		(el actual para el entorno o para el binario de GEDKeeper, etc.). Si no se utiliza la opción,
+		el "directorio de inicio" será por defecto una ruta dependiente del sistema (como `<samp>%APPDATA%\GEDKeeper3</samp>`). 
+    </p>
+
+    <p>	
+		En el caso de que la subcarpeta `<samp>appdata</samp>` esté en la carpeta de inicio de los programas y 
+		se dé el argumento de línea de comandos `<samp>-homedir:path</samp>`, 
+		la prioridad es para el argumento de línea de comandos y la subcarpeta será ignorada. 
+    </p>
+
+</body>
+</html>

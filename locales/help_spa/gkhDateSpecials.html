@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Características especiales de las fechas</title>
+</head>
+<body>
+
+    <h1>Características especiales de las fechas</h1>
+
+    <p>Para modificar la fecha de un evento se utiliza la <a href="gkhRec_Event.html">ventana &quot;Editar eventos y hechos&quot;</a>.</p>
+
+    <p>GEDKeeper admite los siguientes subtipos de fecha:</p>
+    <p>
+        <ul>
+            <li>Los subtipos &quot;Antes&quot;, &quot;Después&quot;, &quot;Entre&quot;, &quot;Período antes&quot;, &quot;Período después&quot; y &quot;Período entre&quot; especifican un intervalo de fechas.</li>
+            <li>Los subtipos &quot;Sobre&quot;, &quot;Calculado&quot; y &quot;Estimado&quot; especifican fechas inexactas o relativas.</li>
+            <li>El subtipo &quot;Exacto&quot; especifica una fecha exacta (aunque la fecha puede estar incompleta).</li>
+        </ul>
+    </p>
+	
+    <p>	Las fechas pueden estar incompletas, es decir, pueden omitirse una o varias partes de la fecha. 
+		Es decir, se puede definir sólo el número de día, sólo el mes o sólo el año. 
+		Por supuesto, puede combinar estas partes.
+	</p>
+
+    <p>
+        Para una fecha introducida se puede especificar el tipo de calendario y dónde se calcula la fecha. 
+		GEDKeeper admite los calendarios gregoriano, juliano, judío (hebreo), francés y romano. 
+		También puede especificar una fecha como fecha del período Anno Domini (BC está desactivado)
+		o una fecha del período Antes de Cristo (BC está activado). 
+        Para convertir fechas de dos calendarios diferentes debe utilizar el plugin &quot;Calendario&quot;.
+    </p>
+
+    <p>
+        Hay tres operaciones en el programa para manejar fechas: almacenar, visualizar y procesar. 
+		Cada operación tiene su propósito específico y, por eso, todas estas operaciones 
+		fueron separadas unas de otras. Estos propósitos son: 
+    </p>
+
+    <p>
+        <ul>
+            <li><strong>Almacenamiento</strong>. Todas las fechas se almacenan utilizando un formato GEDCOM especial. Esto permite definir fechas incompletas de cualquier forma.</li>
+            <li>
+                <strong>Visualización</strong>. Cuando GEDKeeper necesita mostrarle una fecha, traduce esa fecha en forma interna a una vista de cadena.
+				Esto puede incluir símbolos especiales (si se activaron en la configuración del programa). Por ejemplo, la fecha &quot;Sobre 1701, Enero&quot; 
+				se visualizará como &quot;__.01.1701&quot; (cuando los símbolos especiales están desactivados) o como &quot;~ __.01.1701&quot; 
+				(cuando los símbolos especiales están activados) en columnas de listas generales. 
+				Un intervalo de fechas como &quot;Entre 01.01.1700 y 20.01.1700&quot; se mostrará como &quot;01.01.1700 - 20.01.1700&quot;.
+				Un &quot;Período anterior al 10.10.1800&quot; se mostrará como &quot;&lt; 10.10.1800&quot; (cuando los símbolos especiales están activados).
+            </li>
+            <li>
+                <strong>Procesado</strong>. Cuando GEDKeeper procesa fechas (por ejemplo, realiza operaciones aritméticas o compara fechas),
+				las traduce a una forma interna especial (&quot;<a href="https://en.wikipedia.org/wiki/Julian_day" target="_top">Día juliano</a>&quot;),
+                que permite comparar códigos y manejar fechas incompletas de distintos calendarios. 
+            </li>
+        </ul>
+    </p>
+
+    <p>
+        Cuando GEDKeeper muestra una fecha incompleta, sustituye las partes desconocidas por el símbolo del guión bajo (&quot;_&quot;). 
+		Algunos usuarios se han opuesto a ésto, pero estos símbolos permiten mostrar claramente qué partes de una fecha se han omitido. 
+		Esto también garantiza una presentación unificada de todas las fechas en todo el programa. 
+    </p>
+
+    <p>
+        También se permiten fechas incompletas en los filtros de personas para cumpleaños y obituarios. 
+		Por lo tanto, es posible seleccionar todas las personas nacidas entre 1700 y 1710, sin especificar días ni meses.
+    </p>
+
+    <p>
+        Para comprender el tratamiento específico de fechas y acontecimientos, es necesario introducir los dos temas&#151;como se manejan en el programa. 
+		La fecha de un acontecimiento no es más que una combinación de día, mes y año conocidos dentro de los límites de algún calendario. 
+		Una fecha puede estar vacía o incompleta, ser exacta, relativa o ser un intervalo. 
+		Una fecha no contiene ninguna otra información (distinta del calendario). 
+		Un acontecimiento es un registro de ciertos sucesos ocurridos en la vida de una persona. 
+		Un registro de este tipo incluye el tipo de acontecimiento, la fecha, el lugar, la descripción e información adicional. 
+		Una entrada de persona, por ejemplo, puede tener un registro sobre fallecimiento con una fecha vacía. 
+		Esto significa que esa persona murió pero no se sabe cuándo. 
+		Por lo tanto, GEDKeeper procesa de forma diferente a las personas con registros de defunción y a las que no los tienen. 
+    <p />
+
+    <p>
+        Otros programas informáticos no gestionan las defunciones y los nacimientos como lo hace GEDKeeper. 
+		Suelen utilizar un indicador &quot;Fallecido&quot; y campos que almacenan la fecha y el lugar del fallecimiento. 
+		Desde el punto de vista de GEDKeeper, todos los eventos son iguales. 
+		Por lo tanto, GEDKeeper los procesa de la misma manera y nunca limita el número de eventos almacenados. 
+		A efectos de la siguiente investigación, un único registro de persona puede almacenar varios eventos de defunción y nacimiento
+		(lo que permite almacenar varias versiones). Esto hace que GEDKeeper sea más flexible, 
+		ya que no es necesario escribir dichos eventos en las notas de texto, 
+		ni escribir los eventos de nacimiento y defunción como un intervalo de fechas.
+		Además, este enfoque permite adjuntar fuentes de información a cada acontecimiento y, 
+		posteriormente, ver todas las fuentes. Cuando un investigador obtiene información fiable, 
+		puede eliminar un acontecimiento incorrecto o marcarlo como erróneo. 
+		Esto último permite ver que una información, aunque sea errónea, se ha vuelto a comprobar y refutar. 
+    </p>
+
+    <p>El número de años en las columnas &quot;Edad&quot; y &quot;Duración de la vida&quot; se calcula como sigue:</p>
+
+    <p>
+        <ul>
+            <li>
+				La duración de la vida se calcula estrictamente como la diferencia entre la fecha de nacimiento y la del obituario. 
+				Por lo tanto, cuando falta una de estas fechas, no se hace nada. El resultado es indefinido.
+			</li>
+            <li>
+                El campo edad se calcula como las diferencias de fechas entre los eventos de nacimiento y defunción 
+				(cuando una persona murió si un evento de defunción tiene una fecha válida). 
+				La edad no se calcula cuando existe un evento de defunción pero no tiene fecha. 
+				La edad se calcula utilizando la fecha actual cuando no se ha registrado un evento de defunción (sólo el evento en sí, no su fecha). 
+				Por ejemplo, si una persona nació en 1700 y no tiene ningún acontecimiento de defunción, 
+				en 2015 GEDKeeper muestra su &quot;Edad&quot; como 315 años. Para evitar esto, para las personas que han muerto, 
+				aunque no sepa cuándo ocurrió, añada siempre un evento de defunción con una fecha vacía.
+            </li>
+        </ul>
+    </p>
+
+    <p>
+        Para facilitar el tratamiento de datos masivos (por ejemplo, de datos extraídos de un censo&#151;con muchos registros sin un obituario especificado) 
+		GEDKeeper ofrece un servicio de comprobación (accesible desde el menú &quot;Servicio&quot;Herramientas&quot;Comprobar base de datos&quot;).
+		Este servicio comprueba todos los registros de personas y cuando encuentra un registro que no tiene ningún evento de muerte, 
+		con una edad que excede los límites más conocidos y científicamente aprobados de una vida humana, 
+		el servicio sugiere una solución automática para el evento de muerte (debe seleccionar una sugerencia y hacer clic en el botón &quot;Corregir&quot;).
+		Para GEDKeeper el límite de una vida humana es de 122 años (ver 
+        &quot;<a href="https://en.wikipedia.org/wiki/List_of_the_verified_oldest_people" target="_top">Lista verificada de las personas más ancianas</a>&quot; página de Wikipedia).
+		Debe tenerse en cuenta que la función de comprobación no establece el obituario de una persona en el valor máximo&#151;sólo crea un evento de defunción vacío como indicación.
+    </p>
+
+    <hr />
+    <p>Ver también: <a href="gkhRec_Event.html">Eventos</a>.</p>
+
+</body>
+</html>

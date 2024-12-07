@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Herramientas: Búsqueda de patriarcas</title>
+</head>
+<body>
+    <h1>Herramientas: Búsqueda de patriarcas</h1>
+    <p>
+        Esta herramienta busca el antepasado más remoto en cada árbol genealógico investigado.
+		GEDKeeper busca en las distintas familias de la base de datos y 
+		elige un varón de cada familia que no tenga padres y
+		tenga un número especificado de generaciones descendientes. 
+		Cuando un antepasado tiene un año de nacimiento no especificado,
+		ese año se evalúa automáticamente basándose en el año de nacimiento del descendiente más cercano.
+		Estos cálculos aproximados se realizan únicamente a efectos de evaluación.
+		Para cada patriarca, GEDKeeper calcula el número de generaciones y el número de descendientes. 
+    </p>
+    <p>
+		Antes de empezar a trabajar con esta búsqueda,
+		debe definir la longitud de una rama familiar objetivo. 
+		Por ejemplo, si necesita todos los patriarcas que tengan al menos tres generaciones descendientes,
+		introduzca este número en el campo &quot;Generaciones no inferiores a&quot;. 
+		Pulse el botón &quot;Buscar&quot; y esta herramienta encontrará todos los patriarcas coincidentes. 
+    </p>
+    <p>
+		La opción  &quot;Ignorar fechas&quot; obliga a GEDKeeper a no calcular la fecha de nacimiento de un patriarca. 
+		En este caso, los patriarcas sin fecha de nacimiento definida tendrán  &quot;-1&quot; como año de nacimiento. 
+    </p>
+    <p>
+		Una persona con la &quot;etiqueta patriarca&quot; tiene un símbolo &quot;[*]&quot; delante de su nombre (ver <a href="gkhNav_Labels.html">Etiqueta de un registro individual</a>). 
+    </p>
+    <p>
+		Puede utilizar &quot;Establecer una marca&quot; para establecer la &quot;marca de patriarca&quot; y permanecer en la herramienta actual&#151;sin cambiar a la ventana del editor de personas. 
+    </p>
+    <p>	
+		El botón  &quot;Gráfico &quot; muestra un  &quot;Gráfico de interconexiones entre patriarcas &quot;. 
+		Para reducir el número de vértices del gráfico, 
+		se recomienda establecer un número suficientemente grande de generaciones
+		descendientes de patriarcas antes de ver el diagrama. 
+		Una vez construido y estabilizado el diagrama, 
+		puede ver los patriarcas en el diagrama como vértices de color azul oscuro, 
+		y las intersecciones de las ramas de sus descendientes como vértices de color lila.
+		La firma digital de un nodo es un identificador de familia. 
+		Al pasar el ratón por encima de un vértice se muestra el nombre de la familia en ese nodo.
+		Las flechas se dirigen de la familia de un antepasado a la de un descendiente,
+		donde se cruzan dos relaciones. 
+    </p>
+</body>
+</html>

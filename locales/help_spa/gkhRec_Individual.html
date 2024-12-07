@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Registro de personas</title>
+</head>
+<body>
+
+    <h1>Registro de personas</h1>
+
+    <p>
+        Un registro de persona es el tipo de registro más importante de una base de datos genealógica.
+		Un registro de este tipo contiene toda la información sobre una persona.
+		GEDKeeper permite almacenar el nombre completo, el apodo y el sexo en un registro de persona.
+		Puedes enumerar todos los acontecimientos y hechos relacionados con la vida de la persona.
+		Con GEDKeeper puedes investigar fácilmente las relaciones familiares y sociales de la persona
+		(asociaciones con otras personas). GEDKeeper nunca te restringe el número de familiares e hijos de una persona.
+		Además, puede dividir a las personas por diferentes grupos sociales, añadir indicadores adicionales
+		para mejorar la obviedad (referencias y notas a pie de página), añadir un número ilimitado de notas,
+		materiales multimedia y fuentes, y añadir el retrato de una persona para mostrarlo en los árboles. 
+ 
+    </p>
+
+    <p>Esta es la lista de pestañas de diálogo y las respectivas categorías de datos que puede modificar:</p>
+
+    <ul>
+        <li><a href="gkhRec_Event.html">Evento</a> representa un acontecimiento o hecho de la vida de una persona.</li>
+        <li>
+            <a href="gkhRec_Family.html">Familia</a> enumera los matrimonios de personas o relaciones familiares;
+			los hijos comunes se especifican en el diálogo dedicado. 
+        </li>
+        <li><a href="gkhRec_Asso.html">Asociación</a> enumera las relaciones sociales de una persona.</li>
+        <li>
+            <a href="gkhRec_Group.html">Grupo</a> es una forma de unir a las personas mediante relaciones sociales,
+			lo que hace que la navegación y la búsqueda sean más eficaces. 
+        </li>
+        <li><a href="gkhRec_Note.html">Nota</a> es un texto arbitrario sobre la persona.</li>
+        <li><a href="gkhRec_Media.html">Contenido multimedia</a> adjunta fotos, documentos escaneados y retratos.</li>
+        <li>
+            <a href="gkhRec_Source.html">Fuentes</a> representa documentos usados, correspondencia y 
+			otros tipos de fuentes de información sobre una persona.
+        </li>
+        <li>
+            <a href="gkhRec_UserRefs.html">Referencias&#47;notas al pie de página</a> es un indicador adicional 
+			para el propio GEDKeeper o una forma de crear a mano una clasificación. 
+        </li>
+    </ul>
+
+    <p align="center"><img src="images/dlgPersonEdit.gif" title="Diálogo del editor de personas" alt="diálogo del editor de personas"></p>
+
+    <h2><a name="person_edit">Modificación de los datos personales</a></h2>
+
+    <ul>
+        <li>
+            Para cambiar los padres de una persona se utiliza un panel especial con dos campos: 
+			el padre y la madre de la persona, y tres grupos de botones. A primera vista puede parecer demasiado complejo,
+			pero en la práctica permite una edición flexible de las propiedades de los objetos. 
+			El grupo de botones <img src="images/iRecNew.gif" title="Añadir nuevo registro" alt="añadir nuevo registro">,
+            <img src="images/iRecEdit.gif" title="Editar registro actual" alt="editar registro actual">, 
+			and <img src="images/iRecDelete.gif" title="Borrar registro actual" alt="borrar registro actual"> la derecha 
+			de los nombres de los padres modifica la familia de los padres como un objeto completo.
+			Es decir, puede utilizar el botón de añadir nuevo registro <img src="images/iRecNew.gif" title="Añadir nuevo registro" alt="añadir nuevo registro"> para adjuntar la persona afectada a una familia existente.
+			Utiliza el botón de edición del registro actual <img src="images/iRecEdit.gif" title="Editar registro actual" alt="editar registro actual"> 
+			para modificar las propiedades de una familia ya adjunta sin necesidad de cerrar la ventana de edición de personas abierta en ese momento.
+			Utiliza el botón borrar registro actual <img src="images/iRecDelete.gif" title="Borrar registro actual" alt="borrar registro actual"> 
+            situado a la derecha de los nombres de los padres para desvincular a una persona de la familia. 
+        </li>
+
+        <li>
+            Los mismos botones: <img src="images/iRecNew.gif" title="Añadir nuevo registro" alt="añadir nuevo registro">,
+            <img src="images/iRecDelete.gif" title="Borrar registro actual" alt="borrar registro actual">, y el botón <img src="images/iToMan.gif" title="Saltar al padre" alt="saltar al padre">
+			situados bajo el nombre de cada progenitor realizan otras funciones.
+			El botón <img src="images/iRecNew.gif" title="Añadir nuevo registro" alt="añadir nuevo registro"> añade 
+			una nueva familia si aún no se ha añadido ninguna y, a continuación, añade el progenitor concreto a esta
+			familia (padre o madre, en función de la sección seleccionada).
+			El botón <img src="images/iRecDelete.gif" title="Borrar registro actual" alt="borrar registro actual"> elimina un progenitor (padre o madre) de la familia de una persona.
+			Para saltar rápidamente al registro de persona de un progenitor, utilice el botón <img src="images/iToMan.gif" title="Saltar al padre" alt="saltar al padre">
+            button.
+        </li>
+
+        <li>
+            A la derecha del nombre completo y el sexo de la persona hay un cuadro de edición específico en el que puede introducir información adicional sobre el nombre de la persona:
+			apodo, seudónimo, estado, prefijo y sufijo del nombre. 
+        </li>
+
+        <li>
+            Para modificar un objeto de cualquier tipo relacionado con la persona afectada, se utiliza una pestaña específica y los siguientes botones estándar:
+			<img src="images/iRecNew.gif" title="Añadir nuevo registro" alt="añadir nuevo registro">,
+            <img src="images/iRecEdit.gif" title="Editar registro actual" alt="editar registro actual">, and <img src="images/iRecDelete.gif" title="Borrar registro actual" alt="borrar registro actual">.
+			Puede añadir a la persona afectada cualquier número de acontecimientos relacionados con su vida, diversos atributos, 
+			notas, fotos u otros contenidos multimedia, así como materiales fuente que mencionen a la persona, matrimonios y grupos.
+			Utilice la lista especial de asociaciones para añadir relaciones adicionales entre personas. 
+        </li>
+
+        <li>
+            Puede modificar la información sobre una pareja casada en la pestaña &quot;Cónyuges&quot; utilizando los botones
+            <img src="images/iRecNew.gif" title="Añadir nuevo registro" alt="añadir nuevo registro">, <img src="images/iRecEdit.gif" title="Editar registro actual" alt="editar registro actual">,
+            and <img src="images/iRecDelete.gif" title="Borrar registro actual" alt="borrar registro actual">. Cuando añadas o modifiques uno de los conjuntos, 
+			aparecerá la ventana del editor familiar. Usando esa ventana, podrás hacer lo que necesites: añadir un cónyuge, hijos o evento. 
+			Con los botones de flecha, puede cambiar el orden de los matrimonios de la persona seleccionada. 
+        </li>
+    </ul>
+
+
+    <p>
+        Existe una tabla unificadora en la pestaña &quot;Personas&quot; de la ventana principal de trabajo que incluye todas las personas disponibles en la base de datos.
+		A la derecha de la tabla, un resumen de personas muestra toda la información sobre la persona seleccionada y referencias a otros registros.
+    </p>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Cifrado de archivos</title>
+</head>
+<body>
+
+    <h1>Cifrado de archivos</h1>
+
+    <p>
+        GEDKeeper permite almacenar y cargar archivos GEDCOM cifrados. 
+		El estándar GEDCOM no admite el cifrado, por lo que GEDKeeper 
+		tiene su propia implementación de cifrado de archivos. 
+    </p>
+
+    <p>
+		Al guardar una base de datos, debe elegir &quot;Archivos GEDCOM encriptados de GEDKeeper (*.geds)&quot; como formato de archivo de destino.
+		Los archivos de este formato tienen una extensión &quot;<samp>.geds</samp>&quot;. 
+		Una vez seleccionado el formato de archivo e introducido un nombre de archivo, 
+		se le pedirá que introduzca una contraseña. Cuando cargue un archivo cifrado,
+		seleccione el formato de archivo cifrado e introduzca la contraseña cuando se le solicite. 
+		Nota: las contraseñas distinguen entre mayúsculas y minúsculas. 
+    </p>
+
+    <p>
+        Atención: GEDKeeper utiliza un método de encriptación criptográficamente seguro y, 
+		siguiendo las &quot;mejores prácticas de seguridad&quot;, no almacena la contraseña dentro de un archivo encriptado.
+		Por lo tanto, si olvida o pierde su contraseña, nadie (incluido el autor de GEDKeeper) podrá abrir su archivo de base de datos.
+		Ten cuidado e introduce tu contraseña con cautela. 
+		Cualquier símbolo añadido inadvertidamente puede ser causa de pérdida de tu archivo. 
+    </p>
+
+    <p>		
+		Actualmente, GEDKeeper utiliza el algoritmo &quot;<a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>&quot; para el cifrado
+		y &quot;<a href="https://en.wikipedia.org/wiki/SHA-1">SHA-1</a>&quot; para la firma. 
+    </p>
+
+    <p>
+        Las siguientes funciones se aplazan para un futuro desarrollo: elección del método de cifrado,
+		solicitud de la contraseña sólo una vez para el mismo archivo 
+		y adición de un campo de repetición de la contraseña cuando se guarda un archivo por primera vez (para evitar errores tipográficos en la contraseña). 
+    </p>
+
+</body>
+</html>

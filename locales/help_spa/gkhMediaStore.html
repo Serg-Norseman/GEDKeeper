@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Almacenamiento de archivos de contenido multimedia</title>
+</head>
+<body>
+    <h1>Almacenamiento de archivos de contenido multimedia</h1>
+    <p>
+        Existen tres formas de almacenar contenidos multimedia en GEDKeeper:
+        almacenar el archivo en su lugar original y utilizar una ruta absoluta como referencia,
+		utilizar un archivo &quot;<em>almacén</em>&quot; (un directorio), o utilizar un archivo
+        archivo (ZIP). Cada método tiene sus propias ventajas.
+    </p>
+    <ul>
+        <li>
+            &quot;Uso de nombres de ruta absolutos&quot;. Cuando se aplica este método, la base de datos
+            almacena sólo el nombre de la ruta. Así, cuando el sistema lee el archivo, se abre utilizando
+            ese nombre de ruta. El archivo es completamente independiente de la base de datos GEDKeeper
+            de GEDKeeper, por lo que, una vez trasladada la base de datos a otro sistema
+            necesario reasignar todos los nombres de ruta (en el caso de que ésta cambie).
+        </li>
+
+        <li>
+            &quot;Guardar en el almacén&quot;. En este caso, GEDKeeper crea un nuevo directorio
+            cerca de su archivo de base de datos (en el mismo directorio de la base de datos).
+			El nuevo directorio tiene el mismo nombre que el archivo de la base de datos.
+            Cuando se añade un archivo multimedia a la base de datos, éste se copia en este directorio.
+            De este modo, se obtiene un almacenamiento centralizado de archivos
+            vinculado a su base de datos, que es muy fácil de mover a otro
+            sistema&#151;basta con copiar el archivo de base de datos y su directorio hermano del mismo
+            nombre.
+        </li>
+
+        <!-- Asegúrese de que este elemento de la lista es el último, ya que hace referencia al nombre anterior. -->
+        <li>
+            &quot;Guardar en el archivo&quot;. GEDKeeper crea un archivo ZIP con el mismo nombre
+            nombre que su base de datos y que comparte el mismo directorio.
+            La mayoría de los archivos multimedia que haya añadido a la base de datos se copian en
+            en este archivo. Este método tiene varias ventajas. Una de ellas es
+            disponer de un único almacenamiento de datos para todos los archivos de la base de datos. También es
+            muy fácil trasladar una base de datos de este tipo a otro sistema. Basta con
+            la base de datos y el archivo ZIP del mismo nombre. No es posible
+            añadir archivos grandes (vídeo, música y fotos) a un archivo - GEDKeeper no lo permite.
+            Los archivos grandes que no son de texto (binarios) tienen tasas de compresión muy bajas,
+            por lo que no tiene sentido incluirlos en un archivo.
+            Estos ficheros se tratan en el método &quot;Guardar en el almacén&quot;.
+        </li>
+    </ul>
+    <p>Puedes utilizar cualquiera de estos métodos, o todos ellos, libremente.</p>
+</body>
+</html>

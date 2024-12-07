@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <title>Trucos y consejos avanzados</title>
+</head>
+<body>
+    <h1>Trucos y consejos avanzados</h1>
+    <h3>Introducción de datos</h3>
+    <p>
+        Si necesitas añadir a la base de datos un gran número de individuos procedentes de un censo o de un registro de nacimientos,
+		y estás seguro de que ninguno de los individuos añadidos existe ya en tu base de datos,
+		puedes crear primero un registro de origen y, a continuación, utilizar ese origen como filtro de personas. 
+		Después de completar estos pasos, puedes empezar a añadir nuevos datos.
+		Cada nueva persona obtendrá la fuente de datos automáticamente. Esto hace que para proporcionar una fuente de datos para una persona&#151;
+		todo lo que necesitas es añadir números de página y un índice de autenticidad para referenciar a la persona en esa fuente.
+		Si añades una persona que ya existe en su base de datos, tienes dos soluciones posibles:
+		no filtrar el contenido y utilizar la herramienta de <a href="gkhTools_DubsMerge.html">fusión de duplicados</a>
+        después de completar la entrada de datos.
+    </p>
+    <p>
+        GEDKeeper incluye un complemento especializado, &quot;Flujo de entrada&quot;, 
+		que permite añadir datos de censos y registros de nacimientos. 
+		Con este plugin se introducen los datos en un formato muy parecido al utilizado en las fuentes.
+		Por favor, recuerda que este plugin es actualmente un experimento; 
+		no está soportado y no está siendo desarrollado; NO garantizamos el funcionamiento estable de este plugin.
+    </p>
+    <p>
+		A partir de la versión 2.3, GEDKeeper cuenta con un complemento de visor de imágenes.
+		Resulta útil cuando se necesita trabajar simultáneamente con una foto o página escaneada de un documento y la base de datos.
+		Para trabajar de este modo, es necesario abrir una base de datos, abrir el complemento de visor de imágenes y
+		alinear verticalmente las dos ventanas.
+        El visor de imágenes  es un visor de imágenes muy simple, 
+		pero tiene suficiente funcionalidad para este modo de funcionamiento para este modo de operación. 
+		Puedes ampliar y desplazar la imagen. Hay una clara ventaja de este plugin sobre el software de 
+		visualización de imágenes software externo de visualización de imágenes: 
+		cuando se utiliza GEDKeeper en un monitor grande o en una configuración multimonitor,
+		no es necesario cambiar entre aplicaciones o tener cuidado de no pulsar una de las muchas teclas de acceso
+		rápido utilizadas en un software externo, que puede cambiar la apariencia actual de la imagen.
+    </p>
+    <p>
+        Cuando procesa una fuente y sabe que su gran base de datos ya tiene a la persona procesada,
+		puede utilizar el plugin <a href="gkhSvc_TimeLine.html">Línea de tiempo</a> para encontrar rápidamente a esa persona. 
+		Después de desplazar el &quot;control deslizante&quot; al año necesario,
+		obtendrá una lista de las personas que vivían en ese año. 
+		Si se combina esta técnica con filtros por ubicación o por nombre,
+		se puede acelerar notablemente el tratamiento de los datos.
+    </p>
+    <h3>Tratamiento de datos</h3>
+    <p>
+        Cuando procesas continuamente grandes bases de datos, puedes necesitar las herramientas de
+        <a href="gkhTools_FamiliesConnectivity.html">comprobación de conexión de familias</a> y
+		<a href="gkhTools_TreeCheck.html">comprobación de la base de datos</a>.
+        La primera descubre la fragmentación de los datos: muestra todos los grupos no relacionados de registros de personas.
+		A veces, esto revela errores cometidos en el momento del trabajo pesado, cuando una persona fue disociada de una familia,
+		pero no fue unida a otra. Por lo tanto, dicha persona permanece &quot;desconectada&quot;. 
+		La herramienta Comprobar base de datos descubre todos los errores lógicos y las incoherencias de la base de datos. 
+		Actualmente hay pocos criterios, pero, por ejemplo, esta herramienta revela los años de nacimiento erróneos en las familias
+		(cuando uno de los padres o sus descendientes tienen un año incorrecto y
+		las diferencias de edad son inferiores a un límite razonable). 
+		Otro ejemplo, un trabajo intenso con las fuentes puede acabar con registros familiares vacíos. 
+		GEDKeeper no elimina estos registros automáticamente, pero esta herramienta los encuentra y
+		puede eliminarlos de la base de datos a petición suya.
+    </p>
+    <h3>Consejos y trucos para facilitar el uso</h3>
+    <p>
+        Puedes utilizar el botón <img src="images/iCopy.gif"> de la ventana del editor de personas 
+		para copiar el nombre completo de una persona en el portapapeles.
+    </p>
+    <p>
+		La tecla de acceso rápido [<kbd>Ctrl + Down</kbd>] permite cambiar la primera letra del nombre a mayúsculas,
+		y eliminar los espacios iniciales y finales del nombre en la ventana de añadir individuos.
+    </p>
+</body>
+</html>
