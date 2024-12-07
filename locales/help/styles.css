@@ -1,4 +1,4 @@
-.ctx {
+﻿.ctx {
     margin-top: 0;
     margin-bottom: 0;
     margin-left: 0;
@@ -226,6 +226,7 @@ img {
     vertical-align: middle;
 }
 
+/* Use: for samples, examples, command lines, and references to executables. */
 samp {
     color: #cc9900;
     font-family: monospace;
