@@ -380,6 +380,14 @@ Section "$(gkreq)"
     SetOutPath "$INSTDIR\locales\cultures"
     File "..\locales\cultures\*.*"
 
+    ; common help files
+    CreateDirectory "$INSTDIR\locales\help"
+    SetOutPath "$INSTDIR\locales\help"
+    File "..\locales\help\*.*"
+    CreateDirectory "$INSTDIR\locales\help\images"
+    SetOutPath "$INSTDIR\locales\help\images"
+    File "..\locales\help\images\*.*"
+
     CreateDirectory "$INSTDIR\plugins"
     SetOutPath "$INSTDIR\plugins"
 
@@ -546,6 +554,14 @@ SectionGroup /e "$(gklang)"
     Section "Español"
         SetOutPath "$INSTDIR\locales"
         File "..\locales\Spanish.lng"
+
+        CreateDirectory "$INSTDIR\locales\help_spa"
+        SetOutPath "$INSTDIR\locales\help_spa"
+        File "..\locales\help_spa\*.*"
+
+        CreateDirectory "$INSTDIR\locales\help_spa\images"
+        SetOutPath "$INSTDIR\locales\help_spa\images"
+        File "..\locales\help_spa\images\*.*"
     SectionEnd
 
     Section "Nederlands"
@@ -654,15 +670,23 @@ Section "Uninstall"
 
     Delete "$INSTDIR\locales\help_rus\images\*.*"
     RMDir "$INSTDIR\locales\help_rus\images"
-
     Delete "$INSTDIR\locales\help_rus\*.*"
     RMDir "$INSTDIR\locales\help_rus"
 
     Delete "$INSTDIR\locales\help_enu\images\*.*"
     RMDir "$INSTDIR\locales\help_enu\images"
-
     Delete "$INSTDIR\locales\help_enu\*.*"
     RMDir "$INSTDIR\locales\help_enu"
+
+    Delete "$INSTDIR\locales\help_spa\images\*.*"
+    RMDir "$INSTDIR\locales\help_spa\images"
+    Delete "$INSTDIR\locales\help_spa\*.*"
+    RMDir "$INSTDIR\locales\help_spa"
+
+    Delete "$INSTDIR\locales\help\images\*.*"
+    RMDir "$INSTDIR\locales\help\images"
+    Delete "$INSTDIR\locales\help\*.*"
+    RMDir "$INSTDIR\locales\help"
 
     Delete "$INSTDIR\locales\cultures\*.*"
     RMDir "$INSTDIR\locales\cultures"

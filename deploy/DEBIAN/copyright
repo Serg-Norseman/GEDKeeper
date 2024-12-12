@@ -3,12 +3,12 @@ Upstream-Name: gedkeeper
 Source: https://github.com/serg-norseman/gedkeeper
 
 Files: *
-Copyright: 2009-2023 Sergey V. Zhdanovskih (aka Norseman) <gedkeeper@yandex.ru>
+Copyright: 2009-2024 Sergey V. Zhdanovskih (aka Norseman) <gedkeeper@yandex.ru>
            2016-2017 Ruslan Garipov
 License: GPL-3.0+
 
 Files: debian/*
-Copyright: 2016-2023 Sergey V. Zhdanovskih (aka Norseman) <gedkeeper@yandex.ru>
+Copyright: 2016-2024 Sergey V. Zhdanovskih (aka Norseman) <gedkeeper@yandex.ru>
 License: GPL-3.0+
 
 License: GPL-3.0+

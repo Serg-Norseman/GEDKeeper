@@ -1,3 +1,27 @@
+## 14.12.2024 [v2.32.0 &amp; v3.8.0]
+- The entire help is fully translated into Spanish [Miguel A. Pérez Valdenebro].
+- Added additional conditions for filtering records by fields: new "contains/not contains" filters without a mask (case-sensitive), old ones renamed to "contains/not contains mask".
+- Localizations updated: Afrikaans [Steyn van der Walt], Chinese Simplified [Jeff Li, learn1], Dutch [Annelotte], French [Guy Arbus], 
+  German [Christian Bettinger], Hungarian [Kékesi Lajos], Japanese [mtsx68k], Kazakh [karatal], Spanish [Miguel A. Pérez Valdenebro], Turkish [Emre Gecher].
+- Added a button to the location editing dialog for taking coordinates from the cursor on the map.
+- Added protection for empty records (individual, notes and multimedia) in files from other programs.
+- Added option in tree diagrams - use additional dates (baptism, burial) if the main ones (births, deaths) are missing.
+- Added options in tree diagrams: text paddings, date designations and mourning edges.
+- Added text effect options in tree diagrams (GKv2 only).
+- Added an option to disable the search for places without coordinates in geocoders (general maps).
+- Added the feature to display on maps all subordinate locations and persons of the selected hierarchy of locations.
+- Added mode for displaying parents' ages in tree diagrams.
+- Added an option to simplify the form of woman single surnames in extended mode (output without brackets if there are no other surnames).
+- Added protection against problems with folders in Windows if the file name has a space before the extension.
+- Added statistics type on parents' ages at child's birth.
+- Fixed a frequent error saving images to cache "A generic error occurred in GDI+".
+- Added the feature to save trees to PDF files.
+- Supplemented citations (links) to repositories to support source call numbers.
+- Added partial (local) views of record lists.
+- Added output of portraits to pedigrees.
+- Fixed clearing text in the source citation dropdown list [GKv3].
+- Filtering and quick search methods have been combined.
+
 ## 28.07.2024 [v2.31.0 &amp; v3.7.0]
 - Localizations updated: Dutch [Annelotte], German [ChakaDragon, Christian Bettinger], Chinese Simplified [Jeff Li], Kazakh [karatal], Hungarian [Kékesi Lajos], Japanese [mtsx68k].
 - Added the feature to enter user's references in family, media, source and repository records.
