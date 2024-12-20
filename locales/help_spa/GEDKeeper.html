@@ -1,13 +1,35 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" href="../help/styles.css" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>GEDKeeper</title>
+	<style>
+		body {
+			margin: 0px;
+			padding: 0px;
+			height: 100vh;
+			width: 100vw;
+			overflow: hidden;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+		}
+		.sidebar {
+			height: 100%;
+			width: 24%;
+			border: 1px solid gray;
+		}
+		.main {
+			height: 100%;
+			width: 76%;
+			border: 1px solid gray;
+		}
+	</style>
 </head>
-<frameset cols="25%,75%" frameborder="yes" border="5">
-    <frame src="gkhContents.html" name="contents_frame">
-    <frame src="gkhAbout.html" name="text_frame">
-</frameset>
+
+<body>
+	<iframe src="gkhContents.html" class="sidebar" name="contents_frame"></iframe>
+	<iframe src="gkhAbout.html" class="main" name="text_frame"></iframe>
+</body>
+
 </html>

@@ -1,10 +1,9 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Scripting</title>
-    <link rel="stylesheet" href="../help/styles.css" type="text/css" />
+    <link rel="stylesheet" href="../help/styles.css" type="text/css">
 </head>
 <body>
     <h1>Scripting</h1>
@@ -13,7 +12,7 @@
         <li><a href="#2">2 – Lua language description</a></li>
         <li><a href="#3">3 - Using Lua in GEDKeeper</a></li>
     </ul>
-    <h1><a name="1">1 - Introduction to Lua</a></h1>
+    <h1><a id="1">1 - Introduction to Lua</a></h1>
     <p>
         Lua is a typical procedural programming language, giving rich
         features for development. This is a powerful and simple language with
@@ -40,7 +39,7 @@
         that can be helpful for you: it is Roberto Ierusalimschy&#39;s
         <em>Programming in Lua, Second Edition</em>.
     </p>
-    <h1><a name="2">2 – Lua language description</a></h1>
+    <h1><a id="2">2 – Lua language description</a></h1>
     <p>
         This chapter describes language&#39;s constructions, how to use them
         and what they mean.
@@ -52,7 +51,7 @@
         text: <b>keyword</b>; all other terminal symbols are enclosed in single
         quotes: &#39;<b>=</b>&#39;.
     </p>
-    <h2><a name="2.1">2.1 – Lexical conventions</a></h2>
+    <h2><a id="2.1">2.1 – Lexical conventions</a></h2>
     <p>
         <em>Names</em> (<i>identifiers</i>) in Lua is a string of letters,
         digits and underline character. It cannot begin with a digit. This is a
@@ -157,7 +156,7 @@ abc
         Long comment is frequently used to temporary disable a part of
         code.
     </p>
-    <h2><a name="2.2">2.2 – Types and values</a></h2>
+    <h2><a id="2.2">2.2 – Types and values</a></h2>
     <p>
         Lua is a language with <i>dynamic type definition</i>. A variable in
         Lua may store value of any type. There is no way to declare
@@ -218,7 +217,7 @@ abc
         <em>type</em> library function returns a string, that contains type
         of value.
     </p>
-    <h3><a name="2.2.1">2.2.1 – Type cast</a></h3>
+    <h3><a id="2.2.1">2.2.1 – Type cast</a></h3>
     <p>
         Lua casts string and numeric types on the fly automatically. When
         you do an arithmetic operation with a string operand, the latter get
@@ -228,7 +227,7 @@ abc
         need to get some specific string representation of number, you should
         use <em>format</em> function from Lua string library (see <a href="#pdf-string.format">string.format</a>).
     </p>
-    <h2><a name="2.3">2.3 - Variables</a></h2>
+    <h2><a id="2.3">2.3 - Variables</a></h2>
     <p>
         Variables store values while a program is running. There are three
         types of variables in Lua: global variables, local variables and fields
@@ -292,13 +291,13 @@ abc
         function is unavailable in Lua code and mentioned here only as an
         example).
     </p>
-    <h2><a name="2.4">2.4 – Operators</a></h2>
+    <h2><a id="2.4">2.4 – Operators</a></h2>
     <p>
         Lua supports standard operator set, almost the same as one in Pascal
         and C. Lua has assignment operator, controlling flow of execution,
         function call and defining variables.
     </p>
-    <h3><a name="2.4.1">2.4.1 – Chunk</a></h3>
+    <h3><a id="2.4.1">2.4.1 – Chunk</a></h3>
     <p>
         <em>Chunk</em> is an execution unit in Lua. Chunk is a sequence of
         any Lua operators. Operators in a chunk are delimited by
@@ -322,7 +321,7 @@ abc
         bytecode (instructions for virtual machine). Intermediate bytecode then
         is executed on virtual machine.
     </p>
-    <h3><a name="2.4.2">2.4.2 – Blocks</a></h3>
+    <h3><a id="2.4.2">2.4.2 – Blocks</a></h3>
     <p>
         Block is an operator list; a block is syntactically equivalent to a
         chunk:
@@ -342,7 +341,7 @@ abc
         Compound operators is also used in loops and conditional operators (see
         <a href="#2.4.4">§2.4.4</a>).
     </p>
-    <h3><a name="2.4.3">2.4.3 – Assignment</a></h3>
+    <h3><a id="2.4.3">2.4.3 – Assignment</a></h3>
     <p>
         Lua supports parallel assignment. In the general case, assignment
         operator is variable list, `=` symbol and expression list. List entries
@@ -405,7 +404,7 @@ i, a[i] = i + 1, 20
         , where `_env` is environment of callee function (variable `_env` is
         unavailable in Lua code and mentioned here only as an example).
     </p>
-    <h3><a name="2.4.4">2.4.4 – Control structures</a></h3>
+    <h3><a id="2.4.4">2.4.4 – Control structures</a></h3>
     <p>
         <b>if</b>, <b>while</b> and <b>repeat</b> operators have usual
         meaning and familiar syntax:
@@ -455,7 +454,7 @@ stat ::= if exp then block {elseif exp then block} [else block] end</code></pre>
         need <b>return</b> or <b>break</b> inside a block, you should use
         compound operator, like `do return end` or `do break end`.
     </p>
-    <h3><a name="2.4.5">2.4.5 – For operator</a></h3>
+    <h3><a id="2.4.5">2.4.5 – For operator</a></h3>
     <p><b>for</b> operator has simple and extended notation.</p>
     <p>
         In simple notation <b>for</b> executes code while its loop variable,
@@ -482,7 +481,7 @@ stat ::= if exp then block {elseif exp then block} [else block] end</code></pre>
 
     if not (var and limit and step) then error() end
 
-    while (step > 0 and var <= limit) or (step <= 0 and var >= limit) do
+    while (step &gt; 0 and var &lt;= limit) or (step &lt;= 0 and var &gt;= limit) do
 
         local v = var
 
@@ -493,7 +492,7 @@ stat ::= if exp then block {elseif exp then block} [else block] end</code></pre>
 end</code></pre>
     </div>
     <p>It is worth noting that:</p>
-    <ul type="disc" class="contul">
+    <ul style="list-style-type:disc" class="contul">
         <li>
             All three expressions are evaluated once before loop execution.
             Result values must be numbers.
@@ -544,7 +543,7 @@ namelist ::= Name {&#39;, &#39;~ Name}</code></pre>
 end</code></pre>
     </div>
     <p>It is worth noting that:</p>
-    <ul type="disc" class="contul">
+    <ul style="list-style-type:disc" class="contul">
         <li>
             <em>explist</em> is evaluated only once. Its result is an
             <i>iterator</i> function, state table and initial value for the
@@ -561,7 +560,7 @@ end</code></pre>
             another variable before exit the loop.
         </li>
     </ul>
-    <h3><a name="2.4.6">2.4.6 – Function call</a></h3>
+    <h3><a id="2.4.6">2.4.6 – Function call</a></h3>
     <p>
         To create a side effect, it may be helpful to call functions, used
         as operators:
@@ -573,7 +572,7 @@ end</code></pre>
         In this case all return values are ignored. Function calls are
         discussed in <a href="#2.5.8">§2.5.8</a>.
     </p>
-    <h3><a name="2.4.7">2.4.7 – Local declaration</a></h3>
+    <h3><a id="2.4.7">2.4.7 – Local declaration</a></h3>
     <p>
         Local variables are declared anywhere inside a block. Declaration
         may include initialization:
@@ -594,7 +593,7 @@ end</code></pre>
     <p>
         The visibility rules for local variables are discussed in <a href="#2.6">§2.6</a>.
     </p>
-    <h2><a name="2.5">2.5 - Expressions</a></h2>
+    <h2><a id="2.5">2.5 - Expressions</a></h2>
     <p>The following constructions are Lua expressions:</p>
     <div class="contdiv">
 <pre><code class="lua">exp ::= prefixexp
@@ -672,7 +671,7 @@ return x,y,f()     -- return `x`, `y` and everything from f()
         several values. Value of `(f(x,y,z))` is the first value that `f`
         gives, or `nil` when `f` does not return value.
     </p>
-    <h3><a name="2.5.1">2.5.1 – Arithmetic operations</a></h3>
+    <h3><a id="2.5.1">2.5.1 – Arithmetic operations</a></h3>
     <p>
         Lua supports general arithmetic: binary + (addition), -
         (subtraction), * (multiplication), &#47; (division), % (remainder in
@@ -681,7 +680,7 @@ return x,y,f()     -- return `x`, `y` and everything from f()
         functions for any power exponent. For example, x^(-0.5) calculates
         reciprocal of square root of `x`.
     </p>
-    <h3><a name="2.5.2">2.5.2 – Comparison operations</a></h3>
+    <h3><a id="2.5.2">2.5.2 – Comparison operations</a></h3>
     <p>The following are Lua&#39;s comparison operations:</p>
     <div class="contdiv">
 <pre><code class="lua">==    ~=    &lt;     &gt;     &lt;=    &gt;=</code></pre>
@@ -713,7 +712,7 @@ return x,y,f()     -- return `x`, `y` and everything from f()
         other cases will cause call of metamehod (is not discussed in this
         manual).
     </p>
-    <h3><a name="2.5.3">2.5.3 – Logical operations</a></h3>
+    <h3><a id="2.5.3">2.5.3 – Logical operations</a></h3>
     <p>
         Lua supports the next logical operations: <strong>and</strong>,
         <strong>or</strong> and <strong>not</strong>. Just as control
@@ -733,24 +732,24 @@ return x,y,f()     -- return `x`, `y` and everything from f()
     </p>
     <p>Examples:</p>
     <div class="contdiv">
-<pre><code class="lua">10 or 20            --> 10
+<pre><code class="lua">10 or 20            --s&gt;> 10
 
-10 or error()       --> 10
+10 or error()       --s&gt;> 10
 
-nil or &quot;a&quot;          --> &quot;a&quot;
+nil or &quot;a&quot;          --s&gt;> &quot;a&quot;
 
-nil and 10          --> nil
+nil and 10          --s&gt;> nil
 
-false and error()   --> false
+false and error()   --s&gt;> false
 
-false and nil       --> false
+false and nil       --s&gt;> false
 
-false or nil        --> nil
+false or nil        --s&gt;> nil
 
-10 and 20           --> 20</code></pre>
+10 and 20           --s&gt;> 20</code></pre>
     </div>
     <p>(In this manual --&gt; shows evaluation result)</p>
-    <h3><a name="2.5.4">2.5.4 - Concatenation</a></h3>
+    <h3><a id="2.5.4">2.5.4 - Concatenation</a></h3>
     <p>
         Strings concatenation operator in Lua is two points: `..`. When both
         operands are numbers or strings, they will be converted to strings
@@ -758,7 +757,7 @@ false or nil        --> nil
         Otherwise -- metamehod is called (this is not discussed in this
         manual).
     </p>
-    <h3><a name="2.5.5">2.5.5 – Getting length</a></h3>
+    <h3><a id="2.5.5">2.5.5 – Getting length</a></h3>
     <p>
         Unary <b>#</b> is getting length operation. This operation returns
         number of bytes in a string (in the usual sense, this is the length of
@@ -772,7 +771,7 @@ false or nil        --> nil
         non-nil values), `#t` is index of an element, followed by nil value
         (therefore, any nil value is the end of array per se).
     </p>
-    <h3><a name="2.5.6">2.5.6 – Operator precedence</a></h3>
+    <h3><a id="2.5.6">2.5.6 – Operator precedence</a></h3>
     <p>
         The following table shows operator precedence in Lua. Powering has
         the most priority and then in descending order:
@@ -793,7 +792,7 @@ not   #     - (unary)
         right-associative operators. All other binary operators are
         left-associative.
     </p>
-    <h3><a name="2.5.7">2.5.7 – Table constructor</a></h3>
+    <h3><a id="2.5.7">2.5.7 – Table constructor</a></h3>
     <p>
         Table constructor is an expression. Any table constructor in code
         causes creation of a new table. The constructors can create either
@@ -853,7 +852,7 @@ end</code></pre>
         Field list may be terminated by delimiter. This makes
         computer-generated code more readable.
     </p>
-    <h3><a name="2.5.8">2.5.8 – Function call</a></h3>
+    <h3><a id="2.5.8">2.5.8 – Function call</a></h3>
     <p>Function call in Lua has the following syntax:</p>
     <div class="contdiv">
 <pre><code class="lua">functioncall ::= prefixexp args</code></pre>
@@ -927,7 +926,7 @@ f(x); return         -- call result is ignored
 
 return x or f(x)     -- result list get truncated</code></pre>
     </div>
-    <h3><a name="2.5.9">2.5.9 – Function declaration</a></h3>
+    <h3><a id="2.5.9">2.5.9 – Function declaration</a></h3>
     <p>This is the function declaration syntax:</p>
     <div class="contdiv">
 <pre><code class="lua">function ::= function funcbody
@@ -1055,7 +1054,7 @@ g(5, r())        a=5, b=1,   ... --&gt;  2  3</code></pre>
     <div class="contdiv">
 <pre><code class="lua">t.a.b.c.f = function (self, params) body end</code></pre>
     </div>
-    <h2><a name="2.6">2.6 – Scope</a></h2>
+    <h2><a id="2.6">2.6 – Scope</a></h2>
     <p>
         Lua is a language having lexical delimitation of scopes. A variable
         scope begins <i>after</i> the variable declaration and exists until end
@@ -1116,7 +1115,7 @@ end</code></pre>
         The loop creates ten instances of the function, which use different
         `y` variables and the same `x` variable.
     </p>
-    <h2><a name="2.7">2.7 – Error handling</a></h2>
+    <h2><a id="2.7">2.7 – Error handling</a></h2>
     <p>
         Lua is an extension language, therefore, Lua starts to work  when a
         hosting code has called <a href="#lua_pcall">lua_pcall</a> Lua library
@@ -1128,7 +1127,7 @@ end</code></pre>
         Lua program can generate an error explicitly, by calling <a href="#pdf-error">error</a> function. If you want to handle errors in
         Lua code itself, use <a href="#pdf-pcall">pcall</a> function.
     </p>
-    <h2><a name="2.8">2.8 – Garbage collector</a></h2>
+    <h2><a id="2.8">2.8 – Garbage collector</a></h2>
     <p>
         Lua manages memory resources automatically. This means that you do
         not have to worry about memory allocation when you create an object,
@@ -1138,13 +1137,13 @@ end</code></pre>
         Lua code anymore). The garbage collector processes all Lua objects:
         tables, userdata instances, functions, threads and strings.
     </p>
-    <h1><a name="3">3 - Using Lua in GEDKeeper</a></h1>
-    <h2><a name="3.1">3.1 - Naming convention</a></h2>
+    <h1><a id="3">3 - Using Lua in GEDKeeper</a></h1>
+    <h2><a id="3.1">3.1 - Naming convention</a></h2>
     <p>
-        Data types:<br />
-        `void` is an empty argument or function result;<br />
-        `int` is an integer argument or function result;<br />
-        `string` is a string argument or function result;<br />
+        Data types:<br>
+        `void` is an empty argument or function result;<br>
+        `int` is an integer argument or function result;<br>
+        `string` is a string argument or function result;<br>
         `boolean` is a boolean argument or function result.
     </p>
     <p>
@@ -1155,11 +1154,11 @@ end</code></pre>
 
     <div class="contdiv">
         <pre><code class="lua">
-for i = 0, get_records_count() - 1 do -- i.e. number of elements &quot;-1&quot
+for i = 0, get_records_count() - 1 do -- i.e. number of elements &quot;-1&quot;
 	...
 end</code></pre>
     </div>
-    <h2><a name="3.2">3.2 - Data structure</a></h2>
+    <h2><a id="3.2">3.2 - Data structure</a></h2>
     <p>
         Any database structure is handled via pointers. A pointer is a
         special variable, that stores (refers to) some memory location where a
@@ -1167,9 +1166,9 @@ end</code></pre>
     </p>
     <p>There are following available types of pointer to structures:</p>
     <ul>
-        <li>pointer (a general pointer)</li>
+        <li>pointer (a general pointer)
         <ul>
-            <li>record_pointer (pointer to a record)</li>
+            <li>record_pointer (pointer to a record)
             <ul>
                 <li>individual_pointer (pointer to a individual record)</li>
                 <li>family_pointer (pointer to a family record)</li>
@@ -1182,18 +1181,17 @@ end</code></pre>
                 <li>task_pointer (pointer to a task record)</li>
                 <li>commumication_pointer (pointer to a correspondence record)</li>
                 <li>location_pointer (pointer to a location record)</li>
-            </ul>
+	    </ul></li>
         </ul>
         <li>
             struct_pointer (pointer to a structure as an object embedded into a
             record)
-        </li>
         <ul>
             <li>association_pointer (pointer to an association)</li>
             <li>event_pointer (pointer to an event&#47;fact)</li>
-        </ul>
+	</ul></li>
     </ul>
-    <h2><a name="3.3">3.3 - API</a></h2>
+    <h2><a id="3.3">3.3 - API</a></h2>
     <dl>
         <dt>void print(string text)</dt>
         <dd>Outputs `text` string.</dd>
@@ -1225,7 +1223,7 @@ end</code></pre>
             type of a record.
         </dd>
         <dt>int get_record_type(record_ptr)</dt>
-        <dd>Gets type of the specified record. Possible return values:</dd>
+        <dd>Gets type of the specified record. Possible return values:
         <ul>
             <li>
                 rtNone - is is unable to determine type of the record or the record
@@ -1244,7 +1242,7 @@ end</code></pre>
             <li>rtLocation - location record,</li>
             <li>rtSubmission - [reserved for future use],</li>
             <li>rtSubmitter - database researcher.</li>
-        </ul>
+	</ul></dd>
         <dt>string get_record_type_name(int type)</dt>
         <dd>Converts record type from numeric view to string one.</dd>
         <dt>string get_record_xref(record_ptr)</dt>

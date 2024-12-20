@@ -1,9 +1,8 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="styles.css" type="text/css">
     <title>File Formats</title>
 </head>
 <body>
@@ -11,20 +10,22 @@
     <h1>File Formats</h1>
 
     <p>
-        Supported file formats include:<ul>
-            <li><a href="#gedcom">GEDCOM 5.5.1</a> - loading and saving, full format support;</li>
-            <li><a href="#gedml">GedML</a> - import;</li>
-            <li><a href="#famshow">Family.Show</a> (*.familyx) - partial import;</li>
-        </ul>
+        Supported file formats include:
     </p>
+    <ul>
+        <li><a href="#gedcom">GEDCOM 5.5.1</a> - loading and saving, full format support;</li>
+        <li><a href="#gedml">GedML</a> - import;</li>
+        <li><a href="#famshow">Family.Show</a> (*.familyx) - partial import;</li>
+    </ul>
 
     <p>
-        Planned:<ul>
-            <li><a href="#geniml">GeniML</a></li>
-        </ul>
+        Planned:
     </p>
+    <ul>
+        <li><a href="#geniml">GeniML</a></li>
+    </ul>
 
-    <h3><a name="gedcom">GEDCOM</a></h3>
+    <h3><a id="gedcom">GEDCOM</a></h3>
 
     <p>
         The Church of the Latter-day Saints' <a href="http://homepages.rootsweb.com/~pmcbride/gedcom/55gctoc.htm">[1]</a> GEDCOM 5.5 Standard provides a
@@ -40,9 +41,9 @@
         and that users still exchange their genealogical data using.
     </p>
 
-    <h3><a name="gedcom55el">GEDCOM 5.5EL</a> <a href="https://wiki-en.genealogy.net/Gedcom_5.5EL">[4]</a></h3>
+    <h3><a id="gedcom55el">GEDCOM 5.5EL</a> <a href="https://wiki-en.genealogy.net/Gedcom_5.5EL">[4]</a></h3>
 
-    <h3><a name="gedcom55xml">GEDCOM 5.5 XML</a></h3>
+    <h3><a id="gedcom55xml">GEDCOM 5.5 XML</a></h3>
 
     <p>
         XML proponents can console themselves with the fact that the GEDCOM 5.5 standard bares some resemblance to a XML markup language.
@@ -52,25 +53,25 @@
 
     <p>
         Given these similarities, it is easy to envision an one-to-one translation of GEDCOM 5.5 into a XML language.
-        GEDCOM 5.5 tags could be XML elements; XML's greater than '>' and less than '<' characters could surround the tags, converting them into elements.
+        GEDCOM 5.5 tags could be XML elements; XML's greater than '&gt;' and less than '&lt;' characters could surround the tags, converting them into elements.
         Open and closed elements could delimit genealogical data. To differentiate it from other proposals, such a XML markup language could be called "GEDCOM 5.5 XML."
     </p>
 
     <p>Two XML markup languages have come close to describing GEDCOM 5.5 XML: <a href="#gedml">GedML</a> and <a href="#geniml">GeniML</a>.</p>
 
 
-    <h3><a name="gedml">GedML</a></h3>
+    <h3><a id="gedml">GedML</a></h3>
 
     <p>
         In <a href="http://mailman.ic.ac.uk/pipermail/xml-dev/1998-April/003200.html">[5]</a> 1998,
         Michael H. Kay proposed <a href="http://xml.coverpages.org/GedML-Kay-Snapshot200212.html">[6]</a> GedML.
         A XML Schema, a DTD, for this proposal was <a href="http://xml.coverpages.org/gedml980821.html">[7]</a> released.
         In GedML's DTD, most of the GEDCOM 5.5 tags
-        have been translated into XML elements with the same name; e.g., INDI tags are simply <INDI>
+        have been translated into XML elements with the same name; e.g., INDI tags are simply &lt;INDI&gt;
         elements. Other tags, though, have been translated; e.g.,
-        SOUR tags are <Source> elements. GedML is also missing the <TRLR>
+        SOUR tags are &lt;Source&gt; elements. GedML is also missing the &lt;TRLR&gt;
         element which replicates the GEDCOM 5.5 TRLR tag. This tag indicates the end of a GEDCOM 5.5 file.
-        It is absent from GedML because the closed document root element, </GED>, performs the same function, rendering a <TRLR /> element superfluous. Considering these
+        It is absent from GedML because the closed document root element, &lt;/GED&gt;, performs the same function, rendering a &lt;TRLR&gt; element superfluous. Considering these
         differences, as far as the DTD is concerned, GedML is not an one-to-one translation of GEDCOM 5.5 into XML.
     </p>
 
@@ -82,18 +83,18 @@
         Given this flaw, this version of GedML also fails to be an one-to-one translation of GEDCOM 5.5 into XML.
     </p>
 
-    <h3><a name="geniml">GeniML</a></h3>
+    <h3><a id="geniml">GeniML</a></h3>
 
     <p>
         Jerry Fitzpatrick of Software Renovation Corporation developed GeniML. Like Kay, he released a Windows program to convert <a href="#gedcom">GEDCOM</a> 5.5 to XML.
         No schema for this markup language has been released. However, sample output included with the converter shows that GeniML appears to be an one-to-one translation
-        of GEDCOM 5.5 into XML. GeniML even includes the <TRLR>
-        element. There are, however, some differences; for example, GeniML delimits surname data using a <SURNAME>
+        of GEDCOM 5.5 into XML. GeniML even includes the &lt;TRLR&gt;
+        element. There are, however, some differences; for example, GeniML delimits surname data using a &lt;SURNAME&gt;
         element,
         when GEDCOM 5.5 uses a SURN tag for the same purpose. Considering this difference and many others, GeniML, like <a href="#gedml">GedML</a>, is not an one-to-one translation of GEDCOM 5.5 into XML markup.
     </p>
 
-    <h3><a name="famshow">Family.Show</a></h3>
+    <h3><a id="famshow">Family.Show</a></h3>
 
     <p>
         Family.Show <a href="https://en.wikipedia.org/wiki/Family.Show">[9]</a> is a free and open-source genealogy program written in C# and running on the .NET Framework.

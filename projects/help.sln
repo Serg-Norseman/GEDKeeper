@@ -81,7 +81,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "help_rus", "help_rus", "{93
 		..\locales\help_rus\gkhWorkNavigation.html = ..\locales\help_rus\gkhWorkNavigation.html
 		..\locales\help_rus\gkhWorkOperations.html = ..\locales\help_rus\gkhWorkOperations.html
 		..\locales\help_rus\gkhWorkToolbar.html = ..\locales\help_rus\gkhWorkToolbar.html
-		..\locales\help_rus\styles.css = ..\locales\help_rus\styles.css
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "help_enu", "help_enu", "{2CAC6FBC-93D7-4AC0-AFA5-D82387442EC1}"
@@ -157,7 +156,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "help_enu", "help_enu", "{2C
 		..\locales\help_enu\gkhWorkNavigation.html = ..\locales\help_enu\gkhWorkNavigation.html
 		..\locales\help_enu\gkhWorkOperations.html = ..\locales\help_enu\gkhWorkOperations.html
 		..\locales\help_enu\gkhWorkToolbar.html = ..\locales\help_enu\gkhWorkToolbar.html
-		..\locales\help_enu\styles.css = ..\locales\help_enu\styles.css
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dev", "dev", "{57AB86D2-7C75-47AE-9491-F958C0EA191F}"
@@ -166,6 +164,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dev", "dev", "{57AB86D2-7C7
 		..\locales\help\gkhDev_FileFormats.html = ..\locales\help\gkhDev_FileFormats.html
 		..\locales\help\gkhDev_Implementations.html = ..\locales\help\gkhDev_Implementations.html
 		..\locales\help\gkhDev_Releases.html = ..\locales\help\gkhDev_Releases.html
+		..\locales\help\styles.css = ..\locales\help\styles.css
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "help_spa", "help_spa", "{8B12CD28-ADDD-4D39-A014-1D2DC901CEA6}"

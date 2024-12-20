@@ -1,10 +1,9 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Scripting</title>
-    <link rel="stylesheet" href="../help/styles.css" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="../help/styles.css" type="text/css">
+    <title>Creación de scripts</title>
 </head>
 <body>
     <h1>Creación de scripts</h1>
@@ -13,7 +12,7 @@
         <li><a href="#2">2 – Descripción del lenguaje Lua</a></li>
         <li><a href="#3">3 - Uso de Lua en GEDKeeper</a></li>
     </ul>
-    <h1><a name="1">1 - Introducción a Lua</a></h1>
+    <h1><a id="1">1 - Introducción a Lua</a></h1>
     <p>
         Lua es un típico lenguaje de programación procedimental, 
 		que ofrece ricas características para el desarrollo. 
@@ -38,9 +37,9 @@
         Como muchos otros manuales, éste tiene un estilo formal.
 		Para obtener información técnica detallada sobre el uso del lenguaje 
 		debe consultar la documentación en el sitio oficial de Lua. 
-		ay un buen libro sobre Lua, que puede serle útil: se trata de <a href="https://www.lua.org/pil/" target=_blank">Programming in Lua</a>, ya en su cuarta edicion, de Roberto Ierusalimschy.
+		ay un buen libro sobre Lua, que puede serle útil: se trata de <a href="https://www.lua.org/pil/" target="_blank">Programming in Lua</a>, ya en su cuarta edicion, de Roberto Ierusalimschy.
     </p>
-    <h1><a name="2">2 – Descripción del lenguaje Lua</a></h1>
+    <h1><a id="2">2 – Descripción del lenguaje Lua</a></h1>
     <p>
         Este capítulo describe las construcciones lingüísticas, cómo utilizarlas y qué significan. 
     <p>
@@ -50,7 +49,7 @@
 		mientras que las palabras clave se resaltan con texto en negrita: <strong>palabra clave</strong>;
 		todos los demás símbolos terminales se encierran entre comillas simples: &#39;<strong>=</strong>&#39;. 
     </p>
-    <h2><a name="2.1">2.1 – Convenciones léxicas</a></h2>
+    <h2><a id="2.1">2.1 – Convenciones léxicas</a></h2>
     <p>
 		Los <em>nombres</em> (<i>identificadores</i>) en Lua son cadenas de letras, dígitos y caracteres de subrayado. 
 		No pueden comenzar con un dígito. Esta es una regla habitual en la mayoría de los lenguajes de programación.
@@ -153,7 +152,7 @@ abc
 		Continúa hasta un corchete largo de cierre. 
 		El comentario largo se utiliza frecuentemente para desactivar temporalmente una parte del código. 
     </p>
-    <h2><a name="2.2">2.2 – Tipos y valores</a></h2>
+    <h2><a id="2.2">2.2 – Tipos y valores</a></h2>
     <p>	
 		Lua es un lenguaje con <i>definición dinámica de tipos</i>. 
 		Una variable en Lua puede almacenar valores de cualquier tipo. 
@@ -213,7 +212,7 @@ abc
     <p>
         La función <em>type</em> devuelve una cadena que contiene el tipo de valor. 
     </p>
-    <h3><a name="2.2.1">2.2.1 – Conversión de tipos</a></h3>
+    <h3><a id="2.2.1">2.2.1 – Conversión de tipos</a></h3>
     <p>	
 		Lua convierte automáticamente los tipos de cadena y numéricos sobre la marcha. 
 		Cuando se realiza una operación aritmética con un operando de cadena, 
@@ -223,7 +222,7 @@ abc
 		Por lo tanto, cuando necesite obtener una representación de cadena específica de un número, 
 		debe utilizar la función <em>format</em> de la librería de cadenas de Lua (véase <a href="#pdf-string.format">string.format</a>). 
     </p>
-    <h2><a name="2.3">2.3 - Variables</a></h2>
+    <h2><a id="2.3">2.3 - Variables</a></h2>
     <p>
         Las variables almacenan valores mientras se ejecuta un programa. 
 		Existen tres tipos de variables en Lua: variables globales, 
@@ -282,12 +281,12 @@ abc
 		(La descripción completa de `gettable_event` está disponible en <a href="#2.8">§2.8</a>.) 
 		Esta función no está disponible en código Lua y se menciona aquí sólo como ejemplo). 
     </p>
-    <h2><a name="2.4">2.4 – Operadores</a></h2>
+    <h2><a id="2.4">2.4 – Operadores</a></h2>
     <p>
     Lua soporta el conjunto de operadores estándar, casi el mismo que lenguajes como Pascal y C. 
 	Lua dispone de operadores de asignación, control de flujo de ejecución, llamada a funciones y definición de variables. 
     </p>
-    <h3><a name="2.4.1">2.4.1 – Chunk</a></h3>
+    <h3><a id="2.4.1">2.4.1 – Chunk</a></h3>
     <p>
         <em>Chunk</em> es una unidad de ejecución en Lua. 
 		Un chunk es una secuencia de cualquier operador de Lua. 
@@ -309,7 +308,7 @@ abc
 		(instrucciones para la máquina virtual). A continuación, 
 		el bytecode intermedio se ejecuta en la máquina virtual. 
     </p>
-    <h3><a name="2.4.2">2.4.2 – Bloques</a></h3>
+    <h3><a id="2.4.2">2.4.2 – Bloques</a></h3>
     <p>
         Block es una lista de operadores; un bloque es sintácticamente equivalente a un chunk:
     </p>
@@ -327,7 +326,7 @@ abc
 		Los operadores compuestos también se utilizan en bucles y operadores condicionales
 		(ver <a href="#2.4.4">§2.4.4</a>). 
     </p>
-    <h3><a name="2.4.3">2.4.3 – Asignación</a></h3>
+    <h3><a id="2.4.3">2.4.3 – Asignación</a></h3>
     <p>
         Lua soporta la asignación paralela. En el caso general, el operador de asignación es la lista de variables,
 		el símbolo `=` y la lista de expresiones. Las entradas de la lista están delimitadas por comas: 
@@ -383,7 +382,7 @@ i, a[i] = i + 1, 20
         donde `_env` es el entorno de la función llamada (la variable `_env` 
 		no está disponible en el código Lua y se menciona aquí sólo como ejemplo). 
     </p>
-    <h3><a name="2.4.4">2.4.4 – Estructuras de Control</a></h3>
+    <h3><a id="2.4.4">2.4.4 – Estructuras de Control</a></h3>
     <p>
         Los operadores <b>if</b>, <b>while</b> y <b>repeat</b> tienen un significado y una sintaxis familiar :
     </p>
@@ -429,7 +428,7 @@ stat ::= if exp then block {elseif exp then block} [else block] end</code></pre>
 		Si necesita <b>return</b> o <b>break</b> dentro de un bloque, 
 		debe utilizar un operador compuesto, como `do return end` o `do break end`. 
     </p>
-    <h3><a name="2.4.5">2.4.5 – Operador for</a></h3>
+    <h3><a id="2.4.5">2.4.5 – Operador for</a></h3>
     <p>El operador <b>for</b> tiene una notación sencilla y otra ampliada.</p>
     <p>
         En su notación más simple, <b>for</b> ejecuta código mientras su variable de bucle,
@@ -455,7 +454,7 @@ stat ::= if exp then block {elseif exp then block} [else block] end</code></pre>
 
     if not (var and limit and step) then error() end
 
-    while (step > 0 and var <= limit) or (step <= 0 and var >= limit) do
+    while (step &gt; 0 and var &lt;= limit) or (step &lt;= 0 and var &gt;= limit) do
 
         local v = var
 
@@ -466,7 +465,7 @@ stat ::= if exp then block {elseif exp then block} [else block] end</code></pre>
 end</code></pre>
     </div>
     <p>Cabe señalar que:</p>
-    <ul type="disc" class="contul">
+    <ul style="list-style-type:disc" class="contul">
         <li>
             Las tres expresiones se evalúan una vez antes de la ejecución del bucle.
 			Los valores resultantes deben ser números. 
@@ -515,7 +514,7 @@ namelist ::= Name {&#39;, &#39;~ Name}</code></pre>
 end</code></pre>
     </div>
     <p>Conviene reseñar que:</p>
-    <ul type="disc" class="contul">
+    <ul  style="list-style-type:disc" class="contul">
         <li>
             <em>explist</em> sólo se evalua una vez.
 			Su resultado es una función de <i>iterador</i>,
@@ -532,7 +531,7 @@ end</code></pre>
 			Si necesitas este valor, simplemente asígnalo a otra variable antes de salir del bucle. 
         </li>
     </ul>
-    <h3><a name="2.4.6">2.4.6 – Llamada a función</a></h3>
+    <h3><a id="2.4.6">2.4.6 – Llamada a función</a></h3>
     <p>
         Para crear un efecto lateral, puede ser útil llamar a funciones, utilizadas como operadores: 
     </p>
@@ -543,7 +542,7 @@ end</code></pre>
 		En este caso se ignoran todos los valores de retorno. 
 		Las llamadas a funciones se tratan en <a href="#2.5.8">§2.5.8</a>. 
     </p>
-    <h3><a name="2.4.7">2.4.7 – Declaraciones locales</a></h3>
+    <h3><a id="2.4.7">2.4.7 – Declaraciones locales</a></h3>
     <p>
         Las variables locales se declaran en cualquier lugar dentro de un bloque.
 		La declaración puede incluir la inicialización: 
@@ -563,7 +562,7 @@ end</code></pre>
     <p>
 		Las reglas de visibilidad de las variables locales se tratan en <a href="#2.6">§2.6</a>.
     </p>
-    <h2><a name="2.5">2.5 - Expresiones</a></h2>
+    <h2><a id="2.5">2.5 - Expresiones</a></h2>
     <p>Las siguientes construcciones son expresiones Lua:</p>
     <div class="contdiv">
 <pre><code class="lua">exp ::= prefixexp
@@ -645,7 +644,7 @@ return x,y,f()     -- devuelve `x`, `y` y todos los resultados de f()
 		El valor de `(f(x,y,z))` es el primer valor que devuelve `f`, 
 		o `nil` cuando `f` no devuelve ningún valor. 
     </p>
-    <h3><a name="2.5.1">2.5.1 – Operaciones aritméticas</a></h3>
+    <h3><a id="2.5.1">2.5.1 – Operaciones aritméticas</a></h3>
     <p>
         Lua supports general arithmetic: binary + (addition), -
         (subtraction), * (multiplication), &#47; (division), % (remainder in
@@ -661,7 +660,7 @@ return x,y,f()     -- devuelve `x`, `y` y todos los resultados de f()
 		Funciones de potencia para cualquier exponente de potencia. 
 		Así, x^(-0.5) calcula el valor de la raíz cuadrada de `x`. 
     </p>
-    <h3><a name="2.5.2">2.5.2 – Operaciones de comparación</a></h3>
+    <h3><a id="2.5.2">2.5.2 – Operaciones de comparación</a></h3>
     <p>Las siguientes son las operaciones de comparación de Lua:</p>
     <div class="contdiv">
 <pre><code class="lua">==    ~=    &lt;     &gt;     &lt;=    &gt;=</code></pre>
@@ -686,7 +685,7 @@ return x,y,f()     -- devuelve `x`, `y` y todos los resultados de f()
         Los operadores menor o mayor funcionan de la siguiente manera. Los números se comparan como de costumbre.
 		Las cadenas se comparan en orden lexicográfico. Todos los demás casos provocarán la llamada del metamétodo (no se trata en este manual). 
     </p>
-    <h3><a name="2.5.3">2.5.3 – Operaciones lógicas</a></h3>
+    <h3><a id="2.5.3">2.5.3 – Operaciones lógicas</a></h3>
     <p>	
 		Lua soporta las siguientes operaciones lógicas: <strong>and</strong>, <strong>or</strong> y <strong>not</strong>. 
 		Al igual que las estructuras de control <a href="#2.4.4">§2.4.4</a>), 
@@ -720,14 +719,14 @@ false or nil        --> nil
 10 and 20           --> 20</code></pre>
     </div>
     <p>(En este manual --> muestra el resultado de la evaluación)</p>
-    <h3><a name="2.5.4">2.5.4 - Concatenación</a></h3>
+    <h3><a id="2.5.4">2.5.4 - Concatenación</a></h3>
     <p>		
 		El operador de concatenación de cadenas en Lua son dos puntos: `..`. 
 		Cuando ambos operandos son números o cadenas, 
 		se convertirán en cadenas según las reglas descritas en <a href="#2.2.1">§2.2.1</a>. 
 		En caso contrario se llama al metamétodo `.` (no se trata en este manual). 
     </p>
-    <h3><a name="2.5.5">2.5.5 – Obteniendo la longitud</a></h3>
+    <h3><a id="2.5.5">2.5.5 – Obteniendo la longitud</a></h3>
     <p>	
 		El operador unario <b>#</b> obtiene la longitud. Esta operación devuelve el número de bytes de una cadena (en el sentido habitual,
 		es la longitud de una cadena en la que cada carácter ocupa un byte). 
@@ -741,7 +740,7 @@ false or nil        --> nil
 		`#t` es el índice de un elemento, seguido del valor nulo (por tanto, 
 		cualquier valor nulo es el final de la matriz propiamente dicho). 
     </p>
-    <h3><a name="2.5.6">2.5.6 – Precedencia de los operadores</a></h3>
+    <h3><a id="2.5.6">2.5.6 – Precedencia de los operadores</a></h3>
     <p>
         La siguiente tabla muestra la precedencia de los operadores en Lua. 
 		La potenciación tiene la mayor prioridad y luego en orden descendente: 
@@ -766,7 +765,7 @@ not   #     - (unary)
 		La concatenación (&#39;..&#39;) y la potenciación (&#39;^&#39;) son operadores asociativos a la derecha. 
 		Todos los demás operadores binarios son asociativos a la izquierda. 
     </p>
-    <h3><a name="2.5.7">2.5.7 – Constructor de tablas</a></h3>
+    <h3><a id="2.5.7">2.5.7 – Constructor de tablas</a></h3>
     <p>
         El constructor de tabla es una expresión. 
 		Cualquier constructor de tabla en código provoca la creación de una nueva tabla. 
@@ -825,7 +824,7 @@ end</code></pre>
         La lista de campos puede terminar con un delimitador. 
 		Esto hace que el código generado sea más legible. 
 	</p>
-    <h3><a name="2.5.8">2.5.8 – Llamada a funciones</a></h3>
+    <h3><a id="2.5.8">2.5.8 – Llamada a funciones</a></h3>
     <p>La llamada a una función en Lua tiene la siguiente sintaxis:</p>
     <div class="contdiv">
 <pre><code class="lua">functioncall ::= prefixexp args</code></pre>
@@ -878,7 +877,6 @@ args ::= String</code></pre>
 		Si realmente necesita llamar a la función `f`, 
 		debe eliminar el salto de línea antes de `(g)`. 
     </p>
-    </p>
     <p>	
 		Una <em>llamada final</em> es cuando se llama a una función con `return <em>function call</em>`.
 		Lua soporta la <em>auto-llamada final</em> (o <em>llamada final recursiva</em>):
@@ -901,7 +899,7 @@ f(x); return         -- el resultado de la llamada se ignora
 
 return x or f(x)     -- result list get truncated</code></pre>
     </div>
-    <h3><a name="2.5.9">2.5.9 – Declaración de funciones</a></h3>
+    <h3><a id="2.5.9">2.5.9 – Declaración de funciones</a></h3>
     <p>Esta es la sintaxis de declaración de funciones:</p>
     <div class="contdiv">
 <pre><code class="lua">function ::= function funcbody
@@ -1026,7 +1024,7 @@ g(5, r())        a=5, b=1,   ... --&gt;  2  3</code></pre>
     <div class="contdiv">
 <pre><code class="lua">t.a.b.c.f = function (self, params) body end</code></pre>
     </div>
-    <h2><a name="2.6">2.6 – Ámbito</a></h2>
+    <h2><a id="2.6">2.6 – Ámbito</a></h2>
     <p>
 		Lua es un lenguaje con delimitación léxica de ámbitos.
 		El ámbito de una variable comienza <i>después</i> de la declaración de la variable y 
@@ -1085,7 +1083,7 @@ end</code></pre>
     <p>
         El bucle crea diez instancias de la función, que utilizan diferentes variables `y` y la misma variable `x`. 
     </p>
-    <h2><a name="2.7">2.7 – Tratamiento de errores</a></h2>
+    <h2><a id="2.7">2.7 – Tratamiento de errores</a></h2>
     <p>	
 		Lua es un lenguaje de extensión, por lo tanto,
 		Lua comienza a funcionar cuando un código anfitrión ha llamado a la función de la biblioteca de Lua <a href="#lua_pcall">lua_pcall</a>. 
@@ -1097,7 +1095,7 @@ end</code></pre>
 		El programa Lua puede generar un error explícitamente, llamando a la función <a href="#pdf-error">error</a>. 
 		Si desea manejar errores en el propio código Lua, utilice la función <a href="#pdf-pcall">pcall</a>. 
     </p>
-    <h2><a name="2.8">2.8 – Recolector de basura</a></h2>
+    <h2><a id="2.8">2.8 – Recolector de basura</a></h2>
     <p>		
 		Lua gestiona los recursos de memoria automáticamente.
 		Esto significa que no tienes que preocuparte de la asignación de memoria cuando creas un objeto, 
@@ -1108,13 +1106,13 @@ end</code></pre>
 		El recolector de basura procesa todos los objetos de Lua: 
 		tablas, instancias de datos de usuario, funciones, hilos y cadenas. 
     </p>
-    <h1><a name="3">3 - Uso de Lua en GEDKeeper</a></h1>
-    <h2><a name="3.1">3.1 - Convención de nombres</a></h2>
+    <h1><a id="3">3 - Uso de Lua en GEDKeeper</a></h1>
+    <h2><a id="3.1">3.1 - Convención de nombres</a></h2>
     <p>
-        Tipos de datos:<br />
-        `void` es un argumento o resultado de función vacío;<br />
-        `int` es un argumento entero o el resultado de una función;<br />
-        `string`  es un argumento de cadena o el resultado de una función;<br />
+        Tipos de datos:<br>
+        `void` es un argumento o resultado de función vacío;<br>
+        `int` es un argumento entero o el resultado de una función;<br>
+        `string`  es un argumento de cadena o el resultado de una función;<br>
         `boolean` es un argumento booleano o el resultado de una función. 
     </p>
     <p>
@@ -1125,11 +1123,11 @@ end</code></pre>
 
     <div class="contdiv">
         <pre><code class="lua">
-for i = 0, get_records_count() - 1 do -- i.e. número de elementos &quot;-1&quot
+for i = 0, get_records_count() - 1 do -- i.e. número de elementos &quot;-1&quot;
 	...
 end</code></pre>
     </div>
-    <h2><a name="3.2">3.2 - Estructura de datos</a></h2>
+    <h2><a id="3.2">3.2 - Estructura de datos</a></h2>
     <p>
         Cualquier estructura de base de datos se maneja mediante punteros. 
 		Un puntero es una variable especial, que almacena (se refiere a) 
@@ -1137,9 +1135,9 @@ end</code></pre>
     </p>
     <p>Existen los siguientes tipos de punteros a estructuras:</p>
     <ul>
-        <li>puntero (un puntero general)</li>
+        <li>puntero (un puntero general)
         <ul>
-            <li>record_pointer (puntero a un registro)</li>
+            <li>record_pointer (puntero a un registro)
             <ul>
                 <li>individual_pointer (puntero a un registro de persona)</li>
                 <li>family_pointer (puntero a un registro de familia)</li>
@@ -1153,16 +1151,17 @@ end</code></pre>
                 <li>commumication_pointer (puntero a un registro de correspondencia)</li>
                 <li>location_pointer (puntero a un registro de ubicación)</li>
             </ul>
-        </ul>
-        <li>
-            struct_pointer (puntero a una estructura como objeto incrustado en un registro)
-        </li>
+			</li>
+        </ul></li>	
+
+        <li>struct_pointer (puntero a una estructura como objeto incrustado en un registro)
         <ul>
             <li>association_pointer (puntero a una asociación)</li>
             <li>event_pointer (puntero a un evento&#47;hecho)</li>
-        </ul>
+        </ul></li>
     </ul>
-    <h2><a name="3.3">3.3 - API</a></h2>
+	
+    <h2><a id="3.3">3.3 - API</a></h2>
     <dl>
         <dt>void print(string text)</dt>
         <dd>Muestra la cadena de caracteres 'text'.</dd>
@@ -1194,7 +1193,7 @@ end</code></pre>
 			Por lo tanto, debe comprobar siempre el tipo de registro. 
         </dd>
         <dt>int get_record_type(record_ptr)</dt>
-        <dd>Obtiene el tipo del registro especificado. Los posibles valores de retorno son:</dd>
+        <dd>Obtiene el tipo del registro especificado. Los posibles valores de retorno son:
         <ul>
             <li>
                 rtNone - no se puede determinar el tipo de registro o el registro es de tipo desconocido, 
@@ -1212,7 +1211,7 @@ end</code></pre>
             <li>rtLocation - registro de ubicación,</li>
             <li>rtSubmission - [reservado para uso futuro],</li>
             <li>rtSubmitter - investigador de bases de datos.</li>
-        </ul>
+        </ul></dd>
         <dt>string get_record_type_name(int type)</dt>
         <dd>Convierte el tipo de registro de vista numérica a vista de cadena.</dd>
         <dt>string get_record_xref(record_ptr)</dt>
@@ -1345,10 +1344,6 @@ end</code></pre>
             bool confirm)
         </dt>
         <dd>
-            Defines patronymic name of a child that is `child_sex` and having
-            father with `father_name`, using internal dictionary. `confirm`
-            parameter defines must a confirmation be shown to user in arguable
-            cases.
 			Define el nombre patronímico de un niño que es `child_sex` y
 			tiene padre con `father_name`, usando el diccionario interno. 
 			El parámetro `confirm` define si se debe mostrar una confirmación al usuario en casos discutibles. 
