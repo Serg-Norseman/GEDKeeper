@@ -1130,12 +1130,10 @@ namespace GKCore.Controllers
         {
             if (baseWin == null || record == null) return;
 
-            DateTime dtNow = DateTime.Now;
-
             switch (action) {
                 case RecordAction.raAdd:
                 case RecordAction.raEdit:
-                    record.ChangeDate.ChangeDateTime = dtNow;
+                    record.ChangeDate.ChangeDateTime = DateTime.Now;
                     break;
 
                 case RecordAction.raDelete:
@@ -1150,9 +1148,7 @@ namespace GKCore.Controllers
             }
 
             if (action != RecordAction.raJump) {
-                baseWin.Context.Tree.Header.TransmissionDateTime = dtNow;
-                baseWin.Context.Modified = true;
-
+                baseWin.Context.SetModified();
                 AppHost.Instance.NotifyRecord(baseWin, record, action);
             }
         }

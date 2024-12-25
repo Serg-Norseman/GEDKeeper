@@ -386,7 +386,7 @@ namespace GDModel
 
         public T GetPtrValue<T>(GDMPointer ptr) where T : GDMRecord
         {
-            return (ptr == null || !ptr.IsPointer) ? default(T) : XRefIndex_Find(ptr.XRef) as T;
+            return (ptr == null || !ptr.IsPointer) ? default : XRefIndex_Find(ptr.XRef) as T;
         }
 
         public void SetPtrValue(GDMPointer ptr, GDMRecord record)

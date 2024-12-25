@@ -46,7 +46,7 @@ namespace GKCore.Controllers
 
             fView.UpdateBase.Text = fileName;
             TreeTools.MergeTreeFile(fBase.Context.Tree, fileName, fView.SyncLog, true);
-            fBase.Context.Modified = true;
+            fBase.Context.SetModified();
             fBase.RefreshLists(false);
         }
 

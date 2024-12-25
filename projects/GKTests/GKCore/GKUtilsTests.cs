@@ -312,6 +312,11 @@ namespace GKCore
             Assert.AreEqual(1, GKUtils.GetDaysFor(gdmDate, DateTime.Parse("1990-12-19T00:00:00"), out years, out anniversary)); // 1 days left, and year *will be* 10
             Assert.AreEqual(10, years);
             Assert.AreEqual(true, anniversary);
+
+            gdmDate.ParseString("22 DEC 1990");
+            Assert.AreEqual(1, GKUtils.GetDaysFor(gdmDate, DateTime.Parse("2024-12-21T21:00:00"), out years, out anniversary)); // 1 days left
+            Assert.AreEqual(34, years);
+            Assert.AreEqual(false, anniversary);
         }
 
         [Test]

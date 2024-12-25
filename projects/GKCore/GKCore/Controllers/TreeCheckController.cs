@@ -82,13 +82,19 @@ namespace GKCore.Controllers
         public async Task Repair()
         {
             try {
+                bool modified = false;
                 int num = fView.ChecksList.Items.Count;
                 for (int i = 0; i < num; i++) {
                     IListItem item = fView.ChecksList.Items[i];
                     if (item.Checked) {
                         var checkObj = item.Tag as TreeInspector.CheckObj;
                         await TreeInspector.RepairProblem(fView, fBase, checkObj);
+                        modified = true;
                     }
+                }
+
+                if (modified) {
+                    fBase.Context.SetModified();
                 }
             } finally {
                 fBase.RefreshLists(false);

@@ -331,8 +331,7 @@ namespace GKCore
             }
 
             if (result) {
-                fTree.Header.TransmissionDateTime = DateTime.Now;
-                Modified = true;
+                SetModified();
 
                 if (fViewer != null) {
                     fViewer.NotifyRecord(record, RecordAction.raDelete);
@@ -1770,6 +1769,12 @@ namespace GKCore
         #endregion
 
         #region Modify routines
+
+        public void SetModified()
+        {
+            fTree.Header.TransmissionDateTime = DateTime.Now;
+            Modified = true;
+        }
 
         /// <summary>
         /// This method performs a basic locking of the records for their

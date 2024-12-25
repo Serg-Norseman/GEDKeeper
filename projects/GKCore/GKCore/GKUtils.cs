@@ -367,12 +367,15 @@ namespace GKCore
             return result;
         }
 
-        public static Tuple<string, string> GenRecordLinkTuple(GDMTree tree, GDMRecord record, bool signed)
+        private class LinksList : List<Tuple<string, string>> { }
+
+        public static Tuple<string, string> GenRecordLinkTuple(GDMTree tree, GDMRecord record, bool signed, string prefix = "", string suffix = "")
         {
             if (record != null) {
                 string recName = GetRecordName(tree, record, signed);
-                string recLink = HyperLink(record.XRef, recName);
-                return new Tuple<string, string>(recName, recLink);
+                string recLink = prefix + HyperLink(record.XRef, recName) + suffix;
+                // prefix always sortable
+                return new Tuple<string, string>(prefix + recName, recLink);
             } else {
                 return new Tuple<string, string>(string.Empty, string.Empty);
             }
@@ -1364,7 +1367,7 @@ namespace GKCore
                             bdD -= 1;
                         }
 
-                        distance = DateHelper.DaysBetween(dtNow, new DateTime(bdY, bdM, bdD));
+                        distance = DateHelper.DaysBetween(dtNow.Date, new DateTime(bdY, bdM, bdD));
                     }
                 }
             } catch (Exception ex) {
@@ -2096,14 +2099,14 @@ namespace GKCore
             }
         }
 
-        private static void ShowEvent(GDMTree tree, GDMRecord subj, StringList aToList, GDMRecord aRec, GDMCustomEvent evt)
+        private static void ShowEvent(GDMTree tree, GDMRecord subject, LinksList linksList, GDMRecord record, GDMCustomEvent evt)
         {
-            switch (subj.RecordType) {
+            switch (subject.RecordType) {
                 case GDMRecordType.rtNote:
                     if (evt.HasNotes) {
                         for (int i = 0, num = evt.Notes.Count; i < num; i++) {
-                            if (evt.Notes[i].XRef == subj.XRef) {
-                                ShowLink(tree, subj, aToList, aRec, evt, null);
+                            if (evt.Notes[i].XRef == subject.XRef) {
+                                ShowLink(tree, subject, linksList, record, evt, null);
                             }
                         }
                     }
@@ -2112,8 +2115,8 @@ namespace GKCore
                 case GDMRecordType.rtMultimedia:
                     if (evt.HasMultimediaLinks) {
                         for (int i = 0, num = evt.MultimediaLinks.Count; i < num; i++) {
-                            if (evt.MultimediaLinks[i].XRef == subj.XRef) {
-                                ShowLink(tree, subj, aToList, aRec, evt, null);
+                            if (evt.MultimediaLinks[i].XRef == subject.XRef) {
+                                ShowLink(tree, subject, linksList, record, evt, null);
                             }
                         }
                     }
@@ -2122,8 +2125,9 @@ namespace GKCore
                 case GDMRecordType.rtSource:
                     if (evt.HasSourceCitations) {
                         for (int i = 0, num = evt.SourceCitations.Count; i < num; i++) {
-                            if (evt.SourceCitations[i].XRef == subj.XRef) {
-                                ShowLink(tree, subj, aToList, aRec, evt, evt.SourceCitations[i]);
+                            var sourCit = evt.SourceCitations[i];
+                            if (sourCit.XRef == subject.XRef) {
+                                ShowLink(tree, subject, linksList, record, evt, sourCit);
                             }
                         }
                     }
@@ -2131,27 +2135,23 @@ namespace GKCore
             }
         }
 
-        private static void ShowLink(GDMTree tree, GDMRecord aSubject, StringList aToList, GDMRecord aRec, GDMTag aTag, GDMPointer aExt)
+        private static void ShowLink(GDMTree tree, GDMRecord aSubject, LinksList linksList, GDMRecord record, GDMTag aTag, GDMPointer aExt)
         {
-            string prefix;
-            if (aSubject is GDMSourceRecord && aExt != null) {
-                GDMSourceCitation cit = (aExt as GDMSourceCitation);
-                if (cit != null && !string.IsNullOrEmpty(cit.Page)) {
-                    prefix = cit.Page + ": ";
-                } else {
-                    prefix = "";
+            string prefix = "    ";
+            if (aSubject is GDMSourceRecord && aExt is GDMSourceCitation cit) {
+                if (!string.IsNullOrEmpty(cit.Page)) {
+                    prefix += cit.Page + ": ";
                 }
-            } else {
-                prefix = "";
             }
 
             string suffix;
-            if (aTag is GDMCustomEvent) {
-                suffix = ", " + GetEventNameLd((GDMCustomEvent) aTag);
+            if (aTag is GDMCustomEvent evt) {
+                suffix = ", " + GetEventNameLd(evt);
             } else {
                 suffix = "";
             }
-            aToList.Add("    " + prefix + GenRecordLink(tree, aRec, true) + suffix);
+
+            linksList.Add(GenRecordLinkTuple(tree, record, true, prefix, suffix));
         }
 
         public static int FindLinkStr(StringList list, string link)
@@ -2246,50 +2246,62 @@ namespace GKCore
         private static void ShowSubjectLinks(GDMTree tree, GDMRecord subject, StringList summary, bool sort = false)
         {
             try {
-                StringList linkList = new StringList();
+                var subjectType = subject.RecordType;
+                var linksList = new LinksList();
 
                 for (int k = 0, num2 = tree.RecordsCount; k < num2; k++) {
                     GDMRecord record = tree[k];
 
-                    if (subject is GDMNoteRecord && record.HasNotes) {
-                        for (int i = 0, num = record.Notes.Count; i < num; i++) {
-                            if (record.Notes[i].XRef == subject.XRef) {
-                                ShowLink(tree, subject, linkList, record, null, null);
+                    switch (subjectType) {
+                        case GDMRecordType.rtNote:
+                            if (record.HasNotes) {
+                                for (int i = 0, num = record.Notes.Count; i < num; i++) {
+                                    if (record.Notes[i].XRef == subject.XRef) {
+                                        ShowLink(tree, subject, linksList, record, null, null);
+                                    }
+                                }
                             }
-                        }
-                    } else if (subject is GDMMultimediaRecord && record.HasMultimediaLinks) {
-                        for (int i = 0, num = record.MultimediaLinks.Count; i < num; i++) {
-                            if (record.MultimediaLinks[i].XRef == subject.XRef) {
-                                ShowLink(tree, subject, linkList, record, null, null);
+                            break;
+
+                        case GDMRecordType.rtMultimedia:
+                            if (record.HasMultimediaLinks) {
+                                for (int i = 0, num = record.MultimediaLinks.Count; i < num; i++) {
+                                    if (record.MultimediaLinks[i].XRef == subject.XRef) {
+                                        ShowLink(tree, subject, linksList, record, null, null);
+                                    }
+                                }
                             }
-                        }
-                    } else if (subject is GDMSourceRecord && record.HasSourceCitations) {
-                        for (int i = 0, num = record.SourceCitations.Count; i < num; i++) {
-                            var sourCit = record.SourceCitations[i];
-                            if (sourCit.XRef == subject.XRef) {
-                                ShowLink(tree, subject, linkList, record, null, sourCit);
+                            break;
+
+                        case GDMRecordType.rtSource:
+                            if (record.HasSourceCitations) {
+                                for (int i = 0, num = record.SourceCitations.Count; i < num; i++) {
+                                    var sourCit = record.SourceCitations[i];
+                                    if (sourCit.XRef == subject.XRef) {
+                                        ShowLink(tree, subject, linksList, record, null, sourCit);
+                                    }
+                                }
                             }
-                        }
+                            break;
                     }
 
-                    var evsRec = record as GDMRecordWithEvents;
-                    if (evsRec != null && evsRec.HasEvents) {
+                    if (record is GDMRecordWithEvents evsRec && evsRec.HasEvents) {
                         for (int i = 0, num = evsRec.Events.Count; i < num; i++) {
-                            ShowEvent(tree, subject, linkList, evsRec, evsRec.Events[i]);
+                            ShowEvent(tree, subject, linksList, evsRec, evsRec.Events[i]);
                         }
                     }
                 }
 
-                if (linkList.Count > 0) {
+                if (linksList.Count > 0) {
                     summary.Add("");
                     summary.Add(LangMan.LS(LSID.Links) + ":");
 
                     if (sort) {
-                        linkList.Sort();
+                        linksList.Sort();
                     }
 
-                    for (int j = 0, num3 = linkList.Count; j < num3; j++) {
-                        summary.Add(linkList[j]);
+                    for (int j = 0, num3 = linksList.Count; j < num3; j++) {
+                        summary.Add(linksList[j].Item2);
                     }
                 }
             } catch (Exception ex) {
@@ -2957,7 +2969,7 @@ namespace GKCore
                         summary.Add("");
                         summary.Add(LangMan.LS(LSID.RPSources) + ":");
 
-                        var sortedSources = new List<Tuple<string, string>>();
+                        var sortedSources = new LinksList();
                         GDMTree tree = baseContext.Tree;
                         int num = tree.RecordsCount;
                         for (int i = 0; i < num; i++) {

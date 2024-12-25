@@ -106,6 +106,11 @@ namespace GKCore.Interfaces
         void DoCommit();
         void DoRollback();
 
+        /// <summary>
+        /// Set the data modification flag and timestamp.
+        /// </summary>
+        void SetModified();
+
         void LockRecord(GDMRecord record);
         void UnlockRecord(GDMRecord record);
         bool IsAvailableRecord(GDMRecord record);

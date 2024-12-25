@@ -35,7 +35,7 @@ namespace GKCore
     [TestFixture]
     public class BaseContextTests
     {
-        private BaseContext fContext;
+        private readonly BaseContext fContext;
 
         public BaseContextTests()
         {

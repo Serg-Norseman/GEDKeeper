@@ -876,7 +876,7 @@ namespace GKCore.Tools
         private static string CheckCycle(GDMTree tree, GDMIndividualRecord iRec)
         {
             var stack = new Stack<GDMIndividualRecord>();
-            GDMIndividualRecord hasCycle = null;
+            GDMIndividualRecord hasCycle;
             var indiDCFlags = new GKVarCache<GDMIndividualRecord, int>();
 
             if (!HasIndiFlag(indiDCFlags, iRec, DCFlag.dcfAncWalk)) {
