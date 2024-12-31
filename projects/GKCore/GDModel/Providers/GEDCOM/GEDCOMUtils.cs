@@ -364,8 +364,6 @@ namespace GDModel.Providers.GEDCOM
                 strValue = strTok.GetRest();
             }
 
-            //time.SetRawData(hour, minutes, seconds, fraction);
-
             return strValue;
         }
 
@@ -937,20 +935,19 @@ namespace GDModel.Providers.GEDCOM
 
         public static string ParseDate(GDMTree owner, StringSpan strValue, out DateTime date)
         {
-            GDMApproximated approximated;
-            GDMCalendar calendar;
             short year;
-            bool yearBC;
-            string yearModifier;
-            byte month;
-            byte day;
+            byte month, day;
 
             var strTok = GEDCOMParser.Default;
             strTok.Reset(strValue);
-            string result = ParseDate(owner, strTok, out approximated, out calendar, out year, out yearBC,
-                                      out yearModifier, out month, out day);
+            string result = ParseDate(owner, strTok, out _, out _, out year, out _, out _, out month, out day);
 
-            date = new DateTime(year, month, day);
+            try {
+                date = new DateTime(year, month, day);
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("GEDCOMUtils.ParseDate({0}-{1}-{2}): ", year, month, day), ex);
+                date = DateTime.MinValue;
+            }
 
             return result;
         }
@@ -982,13 +979,17 @@ namespace GDModel.Providers.GEDCOM
 
         public static string ParseTime(StringSpan strValue, out TimeSpan time)
         {
-            byte hour;
-            byte minutes;
-            byte seconds;
+            byte hour, minutes, seconds;
             short fraction;
 
-            strValue = ParseTime(strValue, out hour, out minutes, out seconds, out fraction);
-            time = new TimeSpan(0, hour, minutes, seconds, (int)(100u * fraction));
+            try {
+                strValue = ParseTime(strValue, out hour, out minutes, out seconds, out fraction);
+                time = new TimeSpan(0, hour, minutes, seconds, (int)(100u * fraction));
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("GEDCOMUtils.ParseTime({0}): ", strValue), ex);
+                time = TimeSpan.Zero;
+            }
+
             return strValue;
         }
 

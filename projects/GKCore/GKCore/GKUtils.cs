@@ -322,7 +322,7 @@ namespace GKCore
                         st = ((GDMNoteRecord)record).Lines[0]; // TODO: bad solution?!
                         break;
                     case GDMRecordType.rtMultimedia:
-                        st = ((GDMMultimediaRecord)record).FileReferences[0].Title;
+                        st = ((GDMMultimediaRecord)record).GetFileTitle();
                         break;
                     case GDMRecordType.rtSource:
                         st = ((GDMSourceRecord)record).ShortTitle;
