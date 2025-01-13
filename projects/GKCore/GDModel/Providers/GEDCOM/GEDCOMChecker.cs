@@ -197,12 +197,12 @@ namespace GDModel.Providers.GEDCOM
             CheckStructWL(evt);
 
             var tagType = (GEDCOMTagType)evt.Id;
+            string evType = string.IsNullOrEmpty(evt.Classification) ? string.Empty : evt.Classification;
 
             switch (fFormat) {
                 // Fix for Family Tree Maker 2008 which exports occupation as generic EVEN events
                 case GEDCOMFormat.FamilyTreeMaker: {
-                        string subtype = evt.Classification.ToLower();
-                        if (tagType == GEDCOMTagType.EVEN && subtype == "occupation") {
+                        if (tagType == GEDCOMTagType.EVEN && evType.ToLower() == "occupation") {
                             evt.SetName(GEDCOMTagType.OCCU);
                             evt.Classification = string.Empty;
                         }
@@ -225,7 +225,7 @@ namespace GDModel.Providers.GEDCOM
                 CheckEventPlace(evt.Place, evt);
             }
 
-            string key = evt.GetTagName() + ":" + evt.Classification;
+            string key = evt.GetTagName() + ":" + evType;
             fBaseContext.EventStats.Increment(key);
         }
 

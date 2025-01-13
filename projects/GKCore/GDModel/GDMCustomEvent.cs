@@ -66,6 +66,9 @@ namespace GDModel
             set { fCause = value; }
         }
 
+        /// <summary>
+        /// Tag "TYPE" (GEDCOM 5.5.1 Specification).
+        /// </summary>
         public string Classification
         {
             get { return fClassification; }
