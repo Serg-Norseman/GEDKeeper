@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -3523,16 +3523,22 @@ namespace GKCore
             }
         }
 
-        public static Stream GetWebStream(string uri)
+        public static byte[] GetWebData(string uri)
         {
             InitSecurityProtocol();
 
             using (var webClient = new WebClient()) {
                 byte[] dataBytes = webClient.DownloadData(uri);
-                var ms = new MemoryStream();
-                ms.Write(dataBytes, 0, dataBytes.Length);
-                return ms;
+                return dataBytes;
             }
+        }
+
+        public static Stream GetWebStream(string uri)
+        {
+            byte[] dataBytes = GetWebData(uri);
+            var ms = new MemoryStream();
+            ms.Write(dataBytes, 0, dataBytes.Length);
+            return ms;
         }
 
         #endregion

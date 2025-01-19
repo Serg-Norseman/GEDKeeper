@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -298,6 +298,9 @@ namespace GKUI.Forms
         {
             var recType = GetSelectedRecordType();
             miContRecordDuplicate.Enabled = (recType == GDMRecordType.rtIndividual || recType == GDMRecordType.rtLocation);
+
+            miContMediaMoveFile.Visible = (recType == GDMRecordType.rtMultimedia);
+            miContMediaMoveFile2Abs.Enabled = false;
         }
 
         private void miRecordAdd_Click(object sender, EventArgs e)
@@ -329,6 +332,28 @@ namespace GKUI.Forms
                     items.Count > 0 ? items[0] as GDMRecord : null,
                     items.Count > 1 ? items[1] as GDMRecord : null
                 );
+            }
+        }
+
+        private void miContMediaMoveFile_Click(object sender, EventArgs e)
+        {
+            MediaStoreType storeType;
+            if (sender == miContMediaMoveFile2Abs) {
+                storeType = MediaStoreType.mstReference;
+            } else if (sender == miContMediaMoveFile2Rel) {
+                storeType = MediaStoreType.mstRelativeReference;
+            } else if (sender == miContMediaMoveFile2Arc) {
+                storeType = MediaStoreType.mstArchive;
+            } else if (sender == miContMediaMoveFile2Stg) {
+                storeType = MediaStoreType.mstStorage;
+            } else {
+                return;
+            }
+
+            var recView = GetRecordsViewByType(GetSelectedRecordType()) as GKListView;
+            if (recView != null) {
+                var items = recView.GetSelectedItems();
+                fController.MoveMediaFiles(items, storeType);
             }
         }
 

@@ -93,6 +93,11 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem miRelationshipCalculator;
         private GKUI.Components.GKTabControl tabsRecords;
+        private System.Windows.Forms.ToolStripMenuItem miContMediaMoveFile2Abs;
+        private System.Windows.Forms.ToolStripMenuItem miContMediaMoveFile2Rel;
+        private System.Windows.Forms.ToolStripMenuItem miContMediaMoveFile2Arc;
+        private System.Windows.Forms.ToolStripMenuItem miContMediaMoveFile2Stg;
+        private System.Windows.Forms.ToolStripMenuItem miContMediaMoveFile;
         private System.Windows.Forms.ToolStripMenuItem miContRecordDuplicate;
         private System.Windows.Forms.ToolStripMenuItem miContRecordMerge;
         private System.Windows.Forms.ToolStripMenuItem miContRecordDelete;
@@ -216,6 +221,11 @@
             this.miContRecordDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.miContRecordDuplicate = new System.Windows.Forms.ToolStripMenuItem();
             this.miContRecordMerge = new System.Windows.Forms.ToolStripMenuItem();
+            this.miContMediaMoveFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.miContMediaMoveFile2Abs = new System.Windows.Forms.ToolStripMenuItem();
+            this.miContMediaMoveFile2Rel = new System.Windows.Forms.ToolStripMenuItem();
+            this.miContMediaMoveFile2Arc = new System.Windows.Forms.ToolStripMenuItem();
+            this.miContMediaMoveFile2Stg = new System.Windows.Forms.ToolStripMenuItem();
             this.tabsRecords = new GKUI.Components.GKTabControl();
             this.miTreeCompare = new System.Windows.Forms.ToolStripMenuItem();
             this.miTreeMerge = new System.Windows.Forms.ToolStripMenuItem();
@@ -1073,7 +1083,8 @@
                                     this.miContRecordEdit,
                                     this.miContRecordDelete,
                                     this.miContRecordDuplicate,
-                                    this.miContRecordMerge,});
+                                    this.miContRecordMerge,
+                                    this.miContMediaMoveFile});
             this.contextMenu.Name = "contextMenu";
             this.contextMenu.Size = new System.Drawing.Size(218, 100);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
@@ -1106,12 +1117,47 @@
             this.miContRecordDuplicate.Text = "miContRecordDuplicate";
             this.miContRecordDuplicate.Click += new System.EventHandler(this.miRecordDuplicate_Click);
             // 
-            // miRecordDuplicate
+            // miContRecordMerge
             // 
             this.miContRecordMerge.Name = "miContRecordMerge";
             this.miContRecordMerge.Size = new System.Drawing.Size(217, 24);
             this.miContRecordMerge.Text = "miContRecordMerge";
             this.miContRecordMerge.Click += new System.EventHandler(this.miRecordMerge_Click);
+            // 
+            // miContMediaMoveFile
+            // 
+            this.miContMediaMoveFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                                    this.miContMediaMoveFile2Abs,
+                                    this.miContMediaMoveFile2Rel,
+                                    this.miContMediaMoveFile2Arc,
+                                    this.miContMediaMoveFile2Stg});
+            this.miContMediaMoveFile.Name = "miContMediaMoveFile";
+            this.miContMediaMoveFile.Size = new System.Drawing.Size(217, 24);
+            this.miContMediaMoveFile.Text = "miContMediaMoveFile";
+            // 
+            // miContMediaMoveFile2Abs
+            // 
+            this.miContMediaMoveFile2Abs.Name = "miContMediaMoveFile2Abs";
+            this.miContMediaMoveFile2Abs.Text = "miContMediaMoveFile2Abs";
+            this.miContMediaMoveFile2Abs.Click += new System.EventHandler(this.miContMediaMoveFile_Click);
+            // 
+            // miContMediaMoveFile2Rel
+            // 
+            this.miContMediaMoveFile2Rel.Name = "miContMediaMoveFile2Rel";
+            this.miContMediaMoveFile2Rel.Text = "miContMediaMoveFile2Rel";
+            this.miContMediaMoveFile2Rel.Click += new System.EventHandler(this.miContMediaMoveFile_Click);
+            // 
+            // miContMediaMoveFile2Arc
+            // 
+            this.miContMediaMoveFile2Arc.Name = "miContMediaMoveFile2Arc";
+            this.miContMediaMoveFile2Arc.Text = "miContMediaMoveFile2Arc";
+            this.miContMediaMoveFile2Arc.Click += new System.EventHandler(this.miContMediaMoveFile_Click);
+            // 
+            // miContMediaMoveFile2Stg
+            // 
+            this.miContMediaMoveFile2Stg.Name = "miContMediaMoveFile2Stg";
+            this.miContMediaMoveFile2Stg.Text = "miContMediaMoveFile2Stg";
+            this.miContMediaMoveFile2Stg.Click += new System.EventHandler(this.miContMediaMoveFile_Click);
             // 
             // tabsRecords
             // 

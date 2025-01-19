@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -121,6 +121,11 @@ namespace GKUI.Forms
         private ButtonMenuItem miContRecordDelete;
         private ButtonMenuItem miContRecordEdit;
         private ButtonMenuItem miContRecordMerge;
+        private ButtonMenuItem miContMediaMoveFile2Abs;
+        private ButtonMenuItem miContMediaMoveFile2Rel;
+        private ButtonMenuItem miContMediaMoveFile2Arc;
+        private ButtonMenuItem miContMediaMoveFile2Stg;
+        private ButtonMenuItem miContMediaMoveFile;
         private ContextMenu contextMenu;
         private ButtonMenuItem miContRecordAdd;
         private ButtonMenuItem miTreeCompare;
@@ -226,13 +231,20 @@ namespace GKUI.Forms
 
         private void InitializeComponent()
         {
+            miContMediaMoveFile2Abs = new ButtonMenuItem(miContMediaMoveFile_Click);
+            miContMediaMoveFile2Rel = new ButtonMenuItem(miContMediaMoveFile_Click);
+            miContMediaMoveFile2Arc = new ButtonMenuItem(miContMediaMoveFile_Click);
+            miContMediaMoveFile2Stg = new ButtonMenuItem(miContMediaMoveFile_Click);
+            miContMediaMoveFile = new ButtonMenuItem();
+            miContMediaMoveFile.Items.AddRange(new MenuItem[] { miContMediaMoveFile2Abs, miContMediaMoveFile2Rel, miContMediaMoveFile2Arc, miContMediaMoveFile2Stg });
+
             miContRecordAdd = new ButtonMenuItem(miRecordAdd_Click);
             miContRecordEdit = new ButtonMenuItem(miRecordEdit_Click);
             miContRecordDelete = new ButtonMenuItem(miRecordDelete_Click);
             miContRecordDuplicate = new ButtonMenuItem(miRecordDuplicate_Click);
             miContRecordMerge = new ButtonMenuItem(miRecordMerge_Click);
             contextMenu = new ContextMenu();
-            contextMenu.Items.AddRange(new MenuItem[] { miContRecordAdd, miContRecordEdit, miContRecordDelete, miContRecordDuplicate, miContRecordMerge });
+            contextMenu.Items.AddRange(new MenuItem[] { miContRecordAdd, miContRecordEdit, miContRecordDelete, miContRecordDuplicate, miContRecordMerge, miContMediaMoveFile });
             contextMenu.Opening += contextMenu_Opening;
 
             miCopyContent = new ButtonMenuItem(miCopyContent_Click);
@@ -387,6 +399,9 @@ namespace GKUI.Forms
         {
             var recType = GetSelectedRecordType();
             miContRecordDuplicate.Enabled = (recType == GDMRecordType.rtIndividual || recType == GDMRecordType.rtLocation);
+
+            miContMediaMoveFile.Visible = (recType == GDMRecordType.rtMultimedia);
+            miContMediaMoveFile2Abs.Enabled = false;
         }
 
         private void miRecordAdd_Click(object sender, EventArgs e)
@@ -418,6 +433,28 @@ namespace GKUI.Forms
                     items.Count > 0 ? items[0] as GDMRecord : null,
                     items.Count > 1 ? items[1] as GDMRecord : null
                 );
+            }
+        }
+
+        private void miContMediaMoveFile_Click(object sender, EventArgs e)
+        {
+            MediaStoreType storeType;
+            if (sender == miContMediaMoveFile2Abs) {
+                storeType = MediaStoreType.mstReference;
+            } else if (sender == miContMediaMoveFile2Rel) {
+                storeType = MediaStoreType.mstRelativeReference;
+            } else if (sender == miContMediaMoveFile2Arc) {
+                storeType = MediaStoreType.mstArchive;
+            } else if (sender == miContMediaMoveFile2Stg) {
+                storeType = MediaStoreType.mstStorage;
+            } else {
+                return;
+            }
+
+            var recView = GetRecordsViewByType(GetSelectedRecordType()) as GKListView;
+            if (recView != null) {
+                var items = recView.GetSelectedItems();
+                fController.MoveMediaFiles(items, storeType);
             }
         }
 

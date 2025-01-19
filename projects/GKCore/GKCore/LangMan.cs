@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -1089,8 +1089,9 @@ namespace GKCore
         /* 1012 */ CursorCoords,
         /* 1013 */ CondContainsMask,
         /* 1014 */ CondNotContainsMask,
+        /* 1015 */ MoveFiles,
 
-        /* 000 */ Last = CondNotContainsMask
+        /* 000 */ Last = MoveFiles
     }
 
 
@@ -2133,6 +2134,7 @@ namespace GKCore
             /* 1012 */ "Cursor coordinates",
             /* 1013 */ "contains mask",
             /* 1014 */ "not contains mask",
+            /* 1015 */ "Move files",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

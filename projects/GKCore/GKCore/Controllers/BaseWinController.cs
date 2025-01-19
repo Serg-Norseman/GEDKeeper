@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -295,6 +295,25 @@ namespace GKCore.Controllers
             }
 
             BaseController.NotifyRecord(fView, record, action);
+        }
+
+        public void MoveMediaFiles(IList<object> items, MediaStoreType storeType)
+        {
+            try {
+                fContext.BeginUpdate();
+
+                for (int i = 0; i < items.Count; i++) {
+                    var mmRec = items[i] as GDMMultimediaRecord;
+                    if (mmRec == null) continue;
+
+                    bool res = fContext.MoveMediaFile(mmRec, storeType);
+                    if (res) NotifyRecord(mmRec, RecordAction.raEdit);
+                }
+            } finally {
+                fContext.EndUpdate();
+
+                RefreshRecordsView(GDMRecordType.rtMultimedia);
+            }
         }
 
         public void DuplicateRecord()
@@ -990,6 +1009,12 @@ namespace GKCore.Controllers
                     GetControl<IMenuItem>("miContRecordDelete").Text = LangMan.LS(LSID.MIRecordDelete);
                     GetControl<IMenuItem>("miContRecordDuplicate").Text = LangMan.LS(LSID.RecordDuplicate);
                     GetControl<IMenuItem>("miContRecordMerge").Text = LangMan.LS(LSID.MergeDuplicates);
+
+                    GetControl<IMenuItem>("miContMediaMoveFile").Text = LangMan.LS(LSID.MoveFiles);
+                    GetControl<IMenuItem>("miContMediaMoveFile2Abs").Text = LangMan.LS(LSID.STRef);
+                    GetControl<IMenuItem>("miContMediaMoveFile2Rel").Text = LangMan.LS(LSID.STRel);
+                    GetControl<IMenuItem>("miContMediaMoveFile2Arc").Text = LangMan.LS(LSID.STArc);
+                    GetControl<IMenuItem>("miContMediaMoveFile2Stg").Text = LangMan.LS(LSID.STStg);
 
                     GetControl<IMenuItem>("miCopyContent").Text = LangMan.LS(LSID.Copy);
 

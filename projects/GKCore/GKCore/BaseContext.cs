@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -730,6 +730,12 @@ namespace GKCore
             return Path.GetDirectoryName(treeName) + Path.DirectorySeparatorChar;
         }
 
+        private string GetTreeRelativePath(string fileName)
+        {
+            string result = GKUtils.GetRelativePath(GetTreePath(fFileName), fileName);
+            return result;
+        }
+
         public string GetArcFileName()
         {
             string treeName = fFileName;
@@ -862,6 +868,55 @@ namespace GKCore
             return GKUtils.GetStoreType(fileReference);
         }
 
+        public bool MoveMediaFile(GDMMultimediaRecord mediaRec, MediaStoreType newStoreType)
+        {
+            bool result = false;
+
+            if (mediaRec == null || mediaRec.FileReferences.Count < 1) return result;
+
+            var fileRef = mediaRec.FileReferences[0];
+            var oldStoreType = GKUtils.GetStoreType(fileRef).StoreType;
+
+            if (oldStoreType == newStoreType) return result;
+
+            switch (newStoreType) {
+                case MediaStoreType.mstReference:
+                    // maybe it will be implemented in the future (if make a folder selection)
+                    break;
+
+                case MediaStoreType.mstRelativeReference:
+                    if (oldStoreType == MediaStoreType.mstReference) {
+                        string targetFile = GetTreeRelativePath(fileRef.StringValue);
+                        string refPath = GKData.GKStoreTypes[(int)newStoreType].Sign + targetFile;
+                        fileRef.StringValue = FileHelper.NormalizeFilename(refPath);
+                        result = true;
+                    } else {
+                        // maybe it will be implemented in the future (if make a folder selection)
+                    }
+                    break;
+
+                case MediaStoreType.mstStorage:
+                    if (oldStoreType != MediaStoreType.mstArchive) {
+                        string currentFileName = MediaLoad(fileRef);
+                        result = MediaSave(fileRef, currentFileName, newStoreType);
+                    }
+                    break;
+
+                case MediaStoreType.mstArchive:
+                    if (oldStoreType != MediaStoreType.mstStorage) {
+                        string currentFileName = MediaLoad(fileRef);
+                        result = MediaSave(fileRef, currentFileName, newStoreType);
+                    }
+                    break;
+
+                case MediaStoreType.mstURL:
+                    // impossible in this method
+                    break;
+            }
+
+            return result;
+        }
+
         public Stream MediaLoad(GDMFileReference fileReference, bool throwException)
         {
             Stream stream = null;
@@ -930,11 +985,12 @@ namespace GKCore
             if (fileReference == null) return string.Empty;
 
             try {
-                if (!VerifyMediaFileWM(fileReference)) {
+                MediaStore mediaStore = GetStoreType(fileReference);
+
+                if (mediaStore.StoreType != MediaStoreType.mstURL && !VerifyMediaFileWM(fileReference)) {
                     return string.Empty;
                 }
 
-                MediaStore mediaStore = GetStoreType(fileReference);
                 string targetFn = mediaStore.FileName;
 
                 switch (mediaStore.StoreType) {
@@ -942,18 +998,19 @@ namespace GKCore
                         fileName = GetStgFolder(false) + targetFn;
                         break;
 
-                    case MediaStoreType.mstArchive:
-                        fileName = GKUtils.GetTempDir() + Path.GetFileName(targetFn);
-                        FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-                        try {
-                            if (!File.Exists(GetArcFileName())) {
-                                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.MediaFileNotLoaded));
-                            } else {
-                                ArcFileLoad(targetFn, fs);
+                    case MediaStoreType.mstArchive: {
+                            fileName = GKUtils.GetTempDir() + Path.GetFileName(targetFn);
+                            FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
+                            try {
+                                if (!File.Exists(GetArcFileName())) {
+                                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.MediaFileNotLoaded));
+                                } else {
+                                    ArcFileLoad(targetFn, fs);
+                                }
+                            } finally {
+                                fs.Close();
+                                fs.Dispose();
                             }
-                        } finally {
-                            fs.Close();
-                            fs.Dispose();
                         }
                         break;
 
@@ -972,6 +1029,19 @@ namespace GKCore
                             }
                             break;
                         }
+
+                    case MediaStoreType.mstURL: {
+                            fileName = GKUtils.GetTempDir() + Path.GetFileName(targetFn);
+                            FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
+                            try {
+                                var dataBytes = GKUtils.GetWebData(targetFn);
+                                fs.Write(dataBytes, 0, dataBytes.Length);
+                            } finally {
+                                fs.Close();
+                                fs.Dispose();
+                            }
+                        }
+                        break;
                 }
             } catch (Exception ex) {
                 Logger.WriteError("BaseContext.MediaLoad_fn()", ex);
@@ -998,8 +1068,7 @@ namespace GKCore
                     break;
 
                 case MediaStoreType.mstRelativeReference:
-                    string treeName = fFileName;
-                    targetFile = GKUtils.GetRelativePath(GetTreePath(treeName), fileName);
+                    targetFile = GetTreeRelativePath(fileName);
                     refPath = GKData.GKStoreTypes[(int)storeType].Sign + targetFile;
                     break;
 
