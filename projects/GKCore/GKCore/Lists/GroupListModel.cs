@@ -149,6 +149,11 @@ namespace GKCore.Lists
                 case RecordAction.raAdd:
                     member = await fBaseWin.Context.SelectPerson(fOwner, null, TargetMode.tmNone, GDMSex.svUnknown);
                     if (member != null) {
+                        if (grp.IndexOfMember(member) >= 0) {
+                            AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                            return;
+                        }
+
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, grp, member);
                     }
                     break;

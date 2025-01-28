@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -619,6 +619,12 @@ namespace GKCore.Controllers
                 using (var dlg = AppHost.ResolveDialog<ILocationLinkEditDlg>(baseWin)) {
                     dlg.LocationLink = locLink;
                     result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
+                }
+
+                if (locRec.XRef == locLink.XRef) {
+                    AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                    result.Result = false;
+                    return result;
                 }
 
                 if (!exists) {
@@ -1246,6 +1252,11 @@ namespace GKCore.Controllers
             var wife = baseWin.Context.Tree.GetPtrValue(family.Wife);
             GDMIndividualRecord husband = await baseWin.Context.SelectPerson(owner, wife, TargetMode.tmSpouse, GDMSex.svMale);
             if (husband != null && family.Husband.IsEmpty()) {
+                if (family.HasChild(husband)) {
+                    AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.FatherAsChild));
+                    return result;
+                }
+
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, husband);
             }
 
@@ -1273,6 +1284,11 @@ namespace GKCore.Controllers
             var husband = baseWin.Context.Tree.GetPtrValue(family.Husband);
             GDMIndividualRecord wife = await baseWin.Context.SelectPerson(owner, husband, TargetMode.tmSpouse, GDMSex.svFemale);
             if (wife != null && family.Wife.IsEmpty()) {
+                if (family.HasChild(wife)) {
+                    AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.MotherAsChild));
+                    return result;
+                }
+
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, wife);
             }
 

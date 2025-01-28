@@ -782,6 +782,11 @@ namespace GKCore.Lists
                 case RecordAction.raAdd:
                     groupRec = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtGroup, null) as GDMGroupRecord;
                     if (groupRec != null) {
+                        if (groupRec.IndexOfMember(iRec) >= 0) {
+                            AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                            return;
+                        }
+
                         result = fUndoman.DoOrdinaryOperation(OperationType.otGroupMemberAttach, groupRec, iRec);
                     }
                     break;
@@ -985,7 +990,12 @@ namespace GKCore.Lists
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                     GDMFamilyRecord family = await fBaseWin.Context.SelectFamily(fOwner, iRec);
-                    if (family != null && family.IndexOfChild(iRec) < 0) {
+                    if (family != null) {
+                        if (family.HasMember(iRec)) {
+                            AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                            return;
+                        }
+
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, iRec, family);
                     }
                     break;

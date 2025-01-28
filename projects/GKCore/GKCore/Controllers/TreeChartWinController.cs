@@ -154,6 +154,11 @@ namespace GKCore.Controllers
                         fam.AddChild(p.Rec);
                     }
 
+                    if (fam.HasMember(parent)) {
+                        AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                        return;
+                    }
+
                     fam.AddSpouse(parent);
                     
                     UpdateChart();

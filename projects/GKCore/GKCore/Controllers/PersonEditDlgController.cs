@@ -435,7 +435,12 @@ namespace GKCore.Controllers
             AcceptTempData();
 
             GDMFamilyRecord family = await fBase.Context.SelectFamily(fView, fIndividualRecord);
-            if (family != null && family.IndexOfChild(fIndividualRecord) < 0) {
+            if (family != null) {
+                if (family.HasMember(fIndividualRecord)) {
+                    AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                    return;
+                }
+
                 fLocalUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, fIndividualRecord, family);
             }
             UpdateControls();

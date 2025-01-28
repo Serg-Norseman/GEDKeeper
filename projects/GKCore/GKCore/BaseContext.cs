@@ -2041,6 +2041,11 @@ namespace GKCore
                             }
                         }
 
+                        if (family.HasMember(child)) {
+                            AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                            return null;
+                        }
+
                         if (family.AddChild(child)) {
                             // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
                             // what to call AddChild () is no; all this is necessary in order to in the namebook were correct patronymics.

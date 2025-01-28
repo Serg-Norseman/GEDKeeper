@@ -275,6 +275,11 @@ namespace GDModel
             }
         }
 
+        public bool HasMember(GDMIndividualRecord member)
+        {
+            return HasSpouse(member) || HasChild(member);
+        }
+
         public bool HasSpouse(GDMIndividualRecord spouse)
         {
             return (spouse != null) && (fHusband.XRef == spouse.XRef || fWife.XRef == spouse.XRef);

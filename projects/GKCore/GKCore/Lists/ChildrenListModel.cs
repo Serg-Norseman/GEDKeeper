@@ -113,8 +113,13 @@ namespace GKCore.Lists
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
                     child = await fBaseWin.Context.SelectPerson(fOwner, tree.GetPtrValue(family.Husband), TargetMode.tmParent, GDMSex.svUnknown);
-                    result = (child != null && fBaseWin.Context.IsAvailableRecord(child) && !family.HasChild(child));
+                    result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
                     if (result) {
+                        if (family.HasMember(child)) {
+                            AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                            return;
+                        }
+
                         result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, family);
                     }
                     break;
@@ -191,6 +196,11 @@ namespace GKCore.Lists
                         child = await fBaseWin.Context.SelectPerson(fOwner, target, TargetMode.tmParent, GDMSex.svUnknown);
                         result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
                         if (result) {
+                            if (family.HasMember(child)) {
+                                AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                                return;
+                            }
+
                             result = fUndoman.DoOrdinaryOperation(OperationType.otIndividualParentsAttach, child, family);
                         }
                     }

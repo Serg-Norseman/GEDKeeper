@@ -1090,8 +1090,9 @@ namespace GKCore
         /* 1013 */ CondContainsMask,
         /* 1014 */ CondNotContainsMask,
         /* 1015 */ MoveFiles,
+        /* 1016 */ InvalidLink,
 
-        /* 000 */ Last = MoveFiles
+        /* 000 */ Last = InvalidLink
     }
 
 
@@ -2135,6 +2136,7 @@ namespace GKCore
             /* 1013 */ "contains mask",
             /* 1014 */ "not contains mask",
             /* 1015 */ "Move files",
+            /* 1016 */ "Invalid link: identical records!",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
