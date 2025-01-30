@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -529,10 +529,12 @@ namespace GKCore.Lists
 
         #region Cell values
 
+        private static readonly object UnknownUDNObject = (object)UDN.Unknown;
+
         protected static object GetDateValue(GDMCustomEvent evt, bool isVisible)
         {
             if (evt == null) {
-                return (isVisible) ? null : (object)UDN.CreateUnknown();
+                return (isVisible) ? null : UnknownUDNObject;
             }
 
             return GetDateValue(evt.Date.Value, isVisible);
@@ -543,7 +545,7 @@ namespace GKCore.Lists
             object result;
 
             if (date == null) {
-                result = (isVisible) ? null : (object)UDN.CreateUnknown();
+                result = (isVisible) ? null : UnknownUDNObject;
             } else {
                 if (isVisible) {
                     GlobalOptions glob = GlobalOptions.Instance;

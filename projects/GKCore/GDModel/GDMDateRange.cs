@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -148,7 +148,7 @@ namespace GDModel
             } else if (!befEmpty) {
                 result = UDN.CreateBefore(fDateBefore.GetUDN());
             } else {
-                result = UDN.CreateUnknown();
+                result = UDN.Unknown;
             }
 
             return result;

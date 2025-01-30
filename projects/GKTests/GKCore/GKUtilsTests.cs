@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -704,6 +704,8 @@ namespace GKCore
             Assert.AreEqual(19, GKUtils.GetDifferenceInYears(DateTime.Parse("1987-09-23T00:00:00"), DateTime.Parse("2007-06-15T00:00:00"))); // 3 monthes to 20
 
             Assert.AreEqual(45, GKUtils.GetDifferenceInYears(DateTime.Parse("1979-01-20T00:00:00"), DateTime.Parse("2024-05-05T00:00:00"))); // 45
+
+            Assert.AreEqual(37, GKUtils.GetDifferenceInYears(DateTime.Parse("1957-03-05T00:00:00"), DateTime.Parse("1995-02-15T00:00:00"))); // 37
         }
     }
 }

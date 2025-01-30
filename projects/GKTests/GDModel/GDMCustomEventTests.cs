@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -192,7 +192,7 @@ namespace GDModel
         [Test]
         public void Test_UDN()
         {
-            UDN emptyUDN = UDN.CreateEmpty();
+            UDN emptyUDN = UDN.Empty;
             Assert.IsTrue(emptyUDN.IsEmpty());
 
             // BIRT: "28 DEC 1990"

@@ -1199,11 +1199,11 @@ namespace GKCore
                     result = Math.Abs(dt2 - dt1);
                 }
 #else
-                var udn1 = (ev1 == null) ? UDN.CreateUnknown() : ev1.Date.GetUDN();
+                var udn1 = (ev1 == null) ? UDN.Unknown : ev1.Date.GetUDN();
                 if (udn1.HasKnownYear()) {
                     DateTime dt1 = udn1.GetGregorianDateTime();
 
-                    var udn2 = (ev2 == null) ? UDN.CreateUnknown() : ev2.Date.GetUDN();
+                    var udn2 = (ev2 == null) ? UDN.Unknown : ev2.Date.GetUDN();
                     DateTime dt2;
                     if (udn2.HasKnownYear()) {
                         dt2 = udn2.GetGregorianDateTime();

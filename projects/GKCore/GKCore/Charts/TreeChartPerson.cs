@@ -438,29 +438,19 @@ namespace GKCore.Charts
             FatherAge = string.Empty;
             MotherAge = string.Empty;
 
-            GDMCustomEvent evt = fRec.FindEvent(GEDCOMTagName.BIRT);
-            if (evt == null) return;
-            int childYear = evt.GetChronologicalYear();
-            if (childYear == 0) return;
+            GDMCustomEvent evtChild = fRec.FindEvent(GEDCOMTagName.BIRT);
+            if (evtChild == null || !evtChild.Date.GetUDN().HasKnownYear()) return;
 
             if (Father != null && Father.Rec != null) {
-                evt = Father.Rec.FindEvent(GEDCOMTagName.BIRT);
-                if (evt != null) {
-                    int parentYear = evt.GetChronologicalYear();
-                    if (parentYear != 0) {
-                        FatherAge = (childYear - parentYear).ToString();
-                    }
-                }
+                var evtFth = Father.Rec.FindEvent(GEDCOMTagName.BIRT);
+                var diff = GKUtils.GetEventsYearsDiff(evtFth, evtChild, false);
+                FatherAge = (diff != -1) ? diff.ToString() : string.Empty;
             }
 
             if (Mother != null && Mother.Rec != null) {
-                evt = Mother.Rec.FindEvent(GEDCOMTagName.BIRT);
-                if (evt != null) {
-                    int parentYear = evt.GetChronologicalYear();
-                    if (parentYear != 0) {
-                        MotherAge = (childYear - parentYear).ToString();
-                    }
-                }
+                var evtMth = Mother.Rec.FindEvent(GEDCOMTagName.BIRT);
+                var diff = GKUtils.GetEventsYearsDiff(evtMth, evtChild, false);
+                MotherAge = (diff != -1) ? diff.ToString() : string.Empty;
             }
         }
 

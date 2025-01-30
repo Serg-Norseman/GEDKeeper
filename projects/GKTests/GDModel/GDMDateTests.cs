@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -619,7 +619,7 @@ namespace GDModel
         [Test]
         public void Test_GetUDNByFormattedStr()
         {
-            UDN expResult = UDN.CreateUnknown();
+            UDN expResult = UDN.Unknown;
             UDN result = GDMDate.GetUDNByFormattedStr("", GDMCalendar.dcGregorian);
             Assert.AreEqual(expResult, result);
         }

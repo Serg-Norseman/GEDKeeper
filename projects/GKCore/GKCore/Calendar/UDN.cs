@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2016-2023 by Sergey V. Zhdanovskih, Ruslan Garipov.
+ *  Copyright (C) 2016-2025 by Sergey V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -33,6 +33,9 @@ namespace GKCore.Calendar
     /// </summary>
     public struct UDN : ICloneable<UDN>, IComparable, IComparable<UDN>, IEquatable<UDN>
     {
+        public static readonly UDN Empty = new UDN(0);
+        public static readonly UDN Unknown = new UDN(UDNCalendarType.ctGregorian, UnknownYear, UnknownMonth, UnknownDay);
+
         private const int IgnoreYear = 1 << 31;
         private const int IgnoreMonth = 1 << 30;
         private const int IgnoreDay = 1 << 29;
@@ -520,16 +523,6 @@ namespace GKCore.Calendar
                 (IgnoreDay & left.fValue) & (IgnoreDay & right.fValue) &
                 ~(ApproximateDate | DateBefore | DateAfter);
             return new UDN(value);
-        }
-
-        public static UDN CreateEmpty()
-        {
-            return new UDN(0);
-        }
-
-        public static UDN CreateUnknown()
-        {
-            return new UDN(UDNCalendarType.ctGregorian, UnknownYear, UnknownMonth, UnknownDay);
         }
 
         #endregion

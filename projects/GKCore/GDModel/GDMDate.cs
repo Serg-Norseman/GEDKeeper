@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -520,7 +520,7 @@ namespace GDModel
         public static UDN GetUDNByFormattedStr(string dateStr, GDMCalendar calendar, bool aException = false)
         {
             GDMDate dtx = GDMDate.CreateByFormattedStr(dateStr, calendar, aException);
-            return (dtx != null) ? dtx.GetUDN() : UDN.CreateUnknown();
+            return (dtx != null) ? dtx.GetUDN() : UDN.Unknown;
         }
 
         public string GetDisplayString(DateFormat format, bool includeBC = false, bool showCalendar = false)

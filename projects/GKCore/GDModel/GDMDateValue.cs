@@ -144,7 +144,7 @@ namespace GDModel
 
         public override UDN GetUDN()
         {
-            return (fValue == null) ? UDN.CreateUnknown() : fValue.GetUDN();
+            return (fValue == null) ? UDN.Unknown : fValue.GetUDN();
         }
 
         /// <summary>
