@@ -274,6 +274,19 @@ namespace GKCore
             }
         }
 
+        public static void GetIndividualLocations(GDMTree tree, GDMIndividualRecord indiRec, HashSet<GDMLocationRecord> locationRecords)
+        {
+            if (indiRec == null || !indiRec.HasEvents) return;
+
+            for (int j = 0, num2 = indiRec.Events.Count; j < num2; j++) {
+                GDMCustomEvent evt = indiRec.Events[j];
+                if (!evt.HasPlace) continue;
+
+                var locRec = tree.GetPtrValue<GDMLocationRecord>(evt.Place.Location);
+                if (locRec != null) locationRecords.Add(locRec);
+            }
+        }
+
         public static string HyperLink(string xref, string text)
         {
             string result;
@@ -1098,8 +1111,7 @@ namespace GKCore
             string result = "";
 
             switch (fmt) {
-                case PedigreeFormat.Excess:
-                    {
+                case PedigreeFormat.Excess: {
                         string ds = GetBirthDate(iRec, GlobalOptions.Instance.DefDateFormat, true);
                         if (ds == "") {
                             ds = "?";
@@ -1118,8 +1130,7 @@ namespace GKCore
                     }
                     break;
 
-                case PedigreeFormat.Compact:
-                    {
+                case PedigreeFormat.Compact: {
                         string ds, ps;
 
                         GetEventDatePlace(iRec, GEDCOMTagName.BIRT, GlobalOptions.Instance.DefDateFormat, true, true, out ds, out ps);
@@ -2013,7 +2024,7 @@ namespace GKCore
 
         public static string GetRelativePath(string fromFileName, string toFileName)
         {
-            var fromPath = Path.GetDirectoryName(fromFileName)+ Path.DirectorySeparatorChar;
+            var fromPath = Path.GetDirectoryName(fromFileName) + Path.DirectorySeparatorChar;
 
             var fromUri = new Uri(fromPath);
             var toUri = new Uri(toFileName);
@@ -2640,7 +2651,7 @@ namespace GKCore
                     summary.EndUpdate();
                 }
             } catch (Exception ex) {
-                Logger.WriteError("GKUtils.ShowFamilyInfo()" , ex);
+                Logger.WriteError("GKUtils.ShowFamilyInfo()", ex);
             }
         }
 
@@ -2976,7 +2987,7 @@ namespace GKCore
                             GDMRecord rec = tree[i];
 
                             if (rec.RecordType == GDMRecordType.rtSource) {
-                                GDMSourceRecord srcRec = (GDMSourceRecord) rec;
+                                GDMSourceRecord srcRec = (GDMSourceRecord)rec;
 
                                 int num2 = srcRec.RepositoryCitations.Count;
                                 for (int j = 0; j < num2; j++) {

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,13 +18,18 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using GDModel;
 using GKCore.Charts;
-using GKCore.Design.Controls;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Maps;
 using GKCore.Options;
+using GKCore.Tools;
 using GKCore.Types;
 
 namespace GKCore.Controllers
@@ -332,6 +337,35 @@ namespace GKCore.Controllers
             GetControl<IButtonToolItem>("tbGensDescendants").Visible = treeOptions.SeparateDepth;
         }
 
+        public void ShowMapAncestors()
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            if (p != null) {
+                var selectedIndividuals = fView.TreeBox.Model.GetAncestors(p);
+                BaseController.ShowMap_IndiList(fBase, selectedIndividuals);
+            }
+        }
+
+        public void ShowMapDescendants()
+        {
+            TreeChartPerson p = fView.TreeBox.Selected;
+            if (p != null) {
+                var selectedIndividuals = fView.TreeBox.Model.GetDescendants(p);
+                BaseController.ShowMap_IndiList(fBase, selectedIndividuals);
+            }
+        }
+
+        public void ShowMapAll()
+        {
+            var selectedIndividuals = new List<GDMIndividualRecord>();
+            var model = fView.TreeBox.Model;
+            for (int i = 0; i < model.Persons.Count; i++) {
+                GDMIndividualRecord indiRec = model.Persons[i].Rec;
+                if (indiRec != null) selectedIndividuals.Add(indiRec);
+            }
+            BaseController.ShowMap_IndiList(fBase, selectedIndividuals);
+        }
+
         public override void SetLocale()
         {
             GetControl<IButtonToolItem>("tbGensCommon").Text = LangMan.LS(LSID.Generations);
@@ -381,6 +415,11 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miRebuildTree").Text = LangMan.LS(LSID.RebuildTree);
             GetControl<IMenuItem>("miRebuildKinships").Text = LangMan.LS(LSID.RebuildKinships);
             GetControl<IMenuItem>("miSelectColor").Text = LangMan.LS(LSID.SelectColor);
+
+            GetControl<IMenuItem>("miMaps").Text = LangMan.LS(LSID.MIMap);
+            GetControl<IMenuItem>("miMapAncestors").Text = LangMan.LS(LSID.Ancestors);
+            GetControl<IMenuItem>("miMapDescendants").Text = LangMan.LS(LSID.Descendants);
+            GetControl<IMenuItem>("miMapAll").Text = LangMan.LS(LSID.TM_Both);
 
             GetControl<IMenuItem>("miFillColor").Text = LangMan.LS(LSID.FillColor);
             GetControl<IMenuItem>("miFillImage").Text = LangMan.LS(LSID.FillImage);

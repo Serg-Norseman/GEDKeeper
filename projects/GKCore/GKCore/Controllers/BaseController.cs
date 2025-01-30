@@ -1520,5 +1520,50 @@ namespace GKCore.Controllers
 
             ShowMap(baseWin, geoPoints);
         }
+
+        public static void ShowMap_IndiList(IBaseWindow baseWin, List<GDMIndividualRecord> indiList)
+        {
+            var tree = baseWin.Context.Tree;
+
+            var locations = new Dictionary<GDMLocationRecord, HashSet<GDMIndividualRecord>>();
+
+            for (int i = 0; i < indiList.Count; i++) {
+                var indiRec = indiList[i];
+
+                var locs = new HashSet<GDMLocationRecord>();
+                GKUtils.GetIndividualLocations(tree, indiRec, locs);
+
+                foreach (var locRec in locs) {
+                    if (locRec.Map.IsEmpty()) continue;
+
+                    HashSet<GDMIndividualRecord> indiSet = null;
+                    if (!locations.TryGetValue(locRec, out indiSet)) {
+                        indiSet = new HashSet<GDMIndividualRecord>();
+                        locations.Add(locRec, indiSet);
+                    }
+                    indiSet.Add(indiRec);
+                }
+            }
+
+            var locName = new StringBuilder();
+            var geoPoints = new List<GeoPoint>();
+            foreach (var location in locations) {
+                var locRec = location.Key;
+                var indiSet = location.Value;
+
+                locName.AppendLine(GKUtils.GetRecordName(tree, locRec, false));
+                var mapPt = locRec.Map;
+
+                foreach (var iRec in indiSet) {
+                    string iName = GKUtils.GetRecordName(tree, iRec, false);
+                    locName.AppendLine(iName);
+                }
+
+                geoPoints.Add(new GeoPoint(mapPt.Lati, mapPt.Long, locName.ToString()));
+                locName.Clear();
+            }
+
+            ShowMap(baseWin, geoPoints);
+        }
     }
 }

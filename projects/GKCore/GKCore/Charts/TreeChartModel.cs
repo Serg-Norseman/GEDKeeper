@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -2329,5 +2329,48 @@ namespace GKCore.Charts
 
             return result;
         }
+
+        #region Maps
+
+        public List<GDMIndividualRecord> GetAncestors(TreeChartPerson person)
+        {
+            var result = new HashSet<GDMIndividualRecord>();
+            GetAncestors(person, result);
+            return result.ToList();
+        }
+
+        private void GetAncestors(TreeChartPerson person, HashSet<GDMIndividualRecord> ancestors)
+        {
+            if (person == null || person.Rec == null) return;
+
+            ancestors.Add(person.Rec);
+
+            if (person.Father != null) GetAncestors(person.Father, ancestors);
+            if (person.Mother != null) GetAncestors(person.Mother, ancestors);
+        }
+
+        public List<GDMIndividualRecord> GetDescendants(TreeChartPerson person)
+        {
+            var result = new HashSet<GDMIndividualRecord>();
+            GetDescendants(person, result);
+            return result.ToList();
+        }
+
+        private void GetDescendants(TreeChartPerson person, HashSet<GDMIndividualRecord> descendants)
+        {
+            if (person == null || person.Rec == null) return;
+
+            int childrenCount = person.GetChildsCount();
+            for (int i = 0; i < childrenCount; i++) {
+                GetDescendants(person.GetChild(i), descendants);
+            }
+
+            int spousesCount = person.GetSpousesCount();
+            for (int i = 0; i < spousesCount; i++) {
+                GetDescendants(person.GetSpouse(i), descendants);
+            }
+        }
+
+        #endregion
     }
 }

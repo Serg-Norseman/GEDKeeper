@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -371,6 +371,21 @@ namespace GKUI.Forms
         private void miRebuildKinships_Click(object sender, EventArgs e)
         {
             fTreeBox.RebuildKinships();
+        }
+
+        private void miMapAncestors_Click(object sender, EventArgs e)
+        {
+            fController.ShowMapAncestors();
+        }
+
+        private void miMapDescendants_Click(object sender, EventArgs e)
+        {
+            fController.ShowMapDescendants();
+        }
+
+        private void miMapAll_Click(object sender, EventArgs e)
+        {
+            fController.ShowMapAll();
         }
 
         private void miTraceSelected_Click(object sender, EventArgs e)

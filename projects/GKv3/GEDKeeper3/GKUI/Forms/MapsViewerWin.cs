@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -44,6 +44,7 @@ namespace GKUI.Forms
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
+        private TabControl PageControl1;
         private TabPage pagePlaces;
         private TreeView tvPlaces;
         private GroupBox grpSelection;
@@ -162,8 +163,16 @@ namespace GKUI.Forms
             }
         }
 
+        private void SetControlsPanelVisible(bool visible)
+        {
+            this.tbLoadPlaces.Visible = visible;
+            this.PageControl1.Visible = visible;
+        }
+
         public void ShowFixedPoints(IEnumerable<GeoPoint> points)
         {
+            SetControlsPanelVisible(false);
+
             fController.ShowFixedPoints(points);
         }
 
@@ -251,6 +260,8 @@ namespace GKUI.Forms
 
         private void tbClear_Click(object sender, EventArgs e)
         {
+            SetControlsPanelVisible(true);
+
             fMapBrowser.Objects.Clear();
         }
 

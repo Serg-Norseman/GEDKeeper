@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -88,6 +88,10 @@ namespace GKUI.Forms
         private ContextMenu MenuBorders;
         private CheckMenuItem miHideDescSpouses;
         private CheckMenuItem miParentAges;
+        private ButtonMenuItem miMaps;
+        private ButtonMenuItem miMapAncestors;
+        private ButtonMenuItem miMapDescendants;
+        private ButtonMenuItem miMapAll;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -284,6 +288,18 @@ namespace GKUI.Forms
             miMergeDuplicates = new ButtonMenuItem();
             miMergeDuplicates.Click += miMergeDuplicates_Click;
 
+            miMapAncestors = new ButtonMenuItem();
+            miMapAncestors.Click += miMapAncestors_Click;
+
+            miMapDescendants = new ButtonMenuItem();
+            miMapDescendants.Click += miMapDescendants_Click;
+
+            miMapAll = new ButtonMenuItem();
+            miMapAll.Click += miMapAll_Click;
+
+            miMaps = new ButtonMenuItem();
+            miMaps.Items.AddRange(new MenuItem[] { miMapAncestors, miMapDescendants, miMapAll });
+
             MenuPerson = new ContextMenu();
             MenuPerson.Items.AddRange(new MenuItem[] {
                                           miEdit,
@@ -304,6 +320,8 @@ namespace GKUI.Forms
                                           new SeparatorMenuItem(),
                                           miRebuildTree,
                                           miRebuildKinships,
+                                          new SeparatorMenuItem(),
+                                          miMaps,
                                           new SeparatorMenuItem(),
                                           miSelectColor});
             MenuPerson.Opening += MenuPerson_Opening;
@@ -546,6 +564,21 @@ namespace GKUI.Forms
         private void miRebuildKinships_Click(object sender, EventArgs e)
         {
             fTreeBox.RebuildKinships();
+        }
+
+        private void miMapAncestors_Click(object sender, EventArgs e)
+        {
+            fController.ShowMapAncestors();
+        }
+
+        private void miMapDescendants_Click(object sender, EventArgs e)
+        {
+            fController.ShowMapDescendants();
+        }
+
+        private void miMapAll_Click(object sender, EventArgs e)
+        {
+            fController.ShowMapAll();
         }
 
         private void miTraceSelected_Click(object sender, EventArgs e)
