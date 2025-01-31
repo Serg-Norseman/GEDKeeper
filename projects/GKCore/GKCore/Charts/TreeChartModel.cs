@@ -2341,9 +2341,8 @@ namespace GKCore.Charts
 
         private void GetAncestors(TreeChartPerson person, HashSet<GDMIndividualRecord> ancestors)
         {
-            if (person == null || person.Rec == null) return;
-
-            ancestors.Add(person.Rec);
+            if (person == null) return;
+            if (person.Rec != null) ancestors.Add(person.Rec);
 
             if (person.Father != null) GetAncestors(person.Father, ancestors);
             if (person.Mother != null) GetAncestors(person.Mother, ancestors);
@@ -2358,7 +2357,8 @@ namespace GKCore.Charts
 
         private void GetDescendants(TreeChartPerson person, HashSet<GDMIndividualRecord> descendants)
         {
-            if (person == null || person.Rec == null) return;
+            if (person == null) return;
+            if (person.Rec != null) descendants.Add(person.Rec);
 
             int childrenCount = person.GetChildsCount();
             for (int i = 0; i < childrenCount; i++) {
