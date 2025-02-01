@@ -290,6 +290,8 @@ namespace GKCore.Options
             get { return fTreeChartOptions; }
         }
 
+        public bool UnrestrictedExtendedSurnames { get; set; }
+
         public bool UseExtendedNotes { get; set; }
 
         public bool UseSurnamesInPersonSelectionFilter { get; set; }
@@ -403,13 +405,15 @@ namespace GKCore.Options
             ShortKinshipForm = false;
             SurnameFirstInOrder = true;
             SurnameInCapitals = false;
-            WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
-            SimpleSingleSurnames = false;
             UseSurnamesInPersonSelectionFilter = false;
             UseBirthDatesInPersonSelectionFilter = false;
             ShowIndiAssociations = false;
             ShowIndiNamesakes = true;
             MatchPatternMethod = MatchPatternMethod.RegEx;
+
+            WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
+            SimpleSingleSurnames = false;
+            UnrestrictedExtendedSurnames = false;
         }
 
         public void ResetDefaults_Specials()
@@ -691,6 +695,14 @@ namespace GKCore.Options
 
         #endregion
 
+        #region Features
+
+        public bool CanExtendedSurname(GDMSex selectedSex)
+        {
+            bool result = (WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) && (UnrestrictedExtendedSurnames || (selectedSex == GDMSex.svFemale));
+            return result;
+        }
+
         #region Record Select Dialog Filters
 
         public StringList GetRSFilters(GDMRecordType rt)
@@ -737,6 +749,8 @@ namespace GKCore.Options
 
         #endregion
 
+        #endregion
+
         public void LoadFromFile(IniFile ini)
         {
             if (ini == null)
@@ -779,6 +793,7 @@ namespace GKCore.Options
 
             WomanSurnameFormat = (WomanSurnameFormat)ini.ReadInteger("Common", "WomanSurnameFormat", 0);
             SimpleSingleSurnames = ini.ReadBool("Common", "SimpleSingleSurnames", false);
+            UnrestrictedExtendedSurnames = ini.ReadBool("Common", "UnrestrictedExtendedSurnames", false);
 
             Geocoder = ini.ReadString("Common", "Geocoder", "Google");
             GeoSearchCountry = ini.ReadString("Common", "GeoSearchCountry", "");
@@ -920,6 +935,7 @@ namespace GKCore.Options
 
             ini.WriteInteger("Common", "WomanSurnameFormat", (int)WomanSurnameFormat);
             ini.WriteBool("Common", "SimpleSingleSurnames", SimpleSingleSurnames);
+            ini.WriteBool("Common", "UnrestrictedExtendedSurnames", UnrestrictedExtendedSurnames);
 
             ini.WriteString("Common", "Geocoder", Geocoder);
             ini.WriteString("Common", "GeoSearchCountry", GeoSearchCountry);

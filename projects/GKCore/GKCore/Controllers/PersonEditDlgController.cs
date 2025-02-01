@@ -122,9 +122,7 @@ namespace GKCore.Controllers
         private bool IsExtendedWomanSurname()
         {
             var selectedSex = fView.SexCombo.GetSelectedTag<GDMSex>();
-            bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
-                (selectedSex == GDMSex.svFemale);
-            return result;
+            return GlobalOptions.Instance.CanExtendedSurname(selectedSex);
         }
 
         public void ChangeSex()

@@ -88,9 +88,7 @@ namespace GKCore.Controllers
 
         private bool IsExtendedWomanSurname()
         {
-            bool result = (GlobalOptions.Instance.WomanSurnameFormat != WomanSurnameFormat.wsfNotExtend) &&
-                (fIndividualRecord.Sex == GDMSex.svFemale);
-            return result;
+            return GlobalOptions.Instance.CanExtendedSurname(fIndividualRecord.Sex);
         }
 
         public override void UpdateView()
