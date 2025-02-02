@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="../help/styles.css" type="text/css">
+    <title>Culturas lingüísticas de la base de datos</title>
+</head>
+<body>
+
+    <h1>Culturas lingüísticas de la base de datos</h1>
+
+    <p>
+        Según el estándar GEDCOM, las bases de datos genealógicas pueden tener contenidos en diferentes idiomas. 
+		Según la norma, la lista de idiomas es bastante amplia, pero finita, y no contiene todas las variantes posibles. 
+		Además, no están definidas las reglas sobre cómo los distintos idiomas pueden afectar a los datos.
+    </p>
+
+    <p>
+        El programa GEDKeeper amplía la norma en el sentido de que los registros personales pueden contener muchos nombres personales especificados en diferentes idiomas.
+		Además, para algunos idiomas, se definen parámetros para determinar cómo afecta el idioma al tratamiento del nombre. 
+		Estos ajustes se denominan culturas lingüísticas.
+    </p>
+
+    <p>
+        Las culturas lingüísticas determinan lo siguiente: la presencia de partes del patronímico y del apellido en los nombres personales completos,
+		así como un indicador de la cultura del sistema (locale), responsable de la correcta clasificación de los nombres en una lengua determinada.
+    </p>
+
+    <p>
+        Además de determinar la disponibilidad de los campos de entrada de apellidos y patronímicos en el diálogo de edición de registros personales,
+		las culturas lingüísticas para el idioma ruso establecen la capacidad de declinación de los apellidos.
+		Además, si el archivo de entrada no tenía una etiqueta GEDCOM para patronímicos, para las culturas lingüísticas con patronímicos,
+		se hace un intento automático de extraer el patronímico del nombre apartir de la segunda y siguientes palabras.
+    </p>
+
+    <hr>
+    <p>
+        En algunos casos, es necesario cambiar la configuración predefinida de las culturas lingüísticas - en los casos en que una norma estrictamente definida,
+		válida para un idioma determinado en un país determinado, entra en conflicto con diversas excepciones que se producen en la vida real.
+		El programa GEDKeeper no dispone de un editor integrado para modificar los archivos de configuración de las culturas lingüísticas.
+		
+        Por lo tanto, es necesario abrir la subcarpeta `locales\cultures` en la carpeta de instalación del programa,
+		encontrar el archivo del idioma deseado y cambiar la configuración directamente en él.
+		El parámetro `HasPatronymic` es responsable de la presencia de patronímicos en los nombres, 
+		`HasSurname` - apellidos, el parámetro `SysCulture` establece la configuración regional de ordenación del sistema.
+		
+        Los parámetros `HasPatronymic` y `HasSurname` pueden tomar los valores `true`/`false` (sí/no),
+		los posibles valores de `SysCulture` deben consultarse en libros de referencia especializados.
+    </p>
+
+    <p>
+        El programa sólo permite cargar las culturas lingüísticas que aparecen en la carpeta `locales\cultures`. Para habilitar otros, se requiere una solicitud al desarrollador.
+    </p>
+
+    <hr>
+    <p>Ver también: <a href="gkhRec_Name.html">Nombre personales</a>.</p>
+
+</body>
+</html>
