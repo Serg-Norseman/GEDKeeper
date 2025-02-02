@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -943,7 +943,7 @@ namespace GKCore.Controllers
             GetControl<ITabPage>("pageTreeDesign").Text = LangMan.LS(LSID.Decor);
 
             GetControl<ICheckBox>("chkSurname").Text = LangMan.LS(LSID.Surname);
-            GetControl<ICheckBox>("chkName").Text = LangMan.LS(LSID.Name);
+            GetControl<ICheckBox>("chkName").Text = LangMan.LS(LSID.GivenName);
             GetControl<ICheckBox>("chkPatronymic").Text = LangMan.LS(LSID.Patronymic);
             GetControl<ICheckBox>("chkDiffLines").Text = LangMan.LS(LSID.DiffLines);
             GetControl<ICheckBox>("chkBirthDate").Text = LangMan.LS(LSID.BirthDate);

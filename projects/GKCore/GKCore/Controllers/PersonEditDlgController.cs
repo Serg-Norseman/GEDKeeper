@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -551,7 +551,7 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
             GetControl<ILabel>("lblSurname").Text = LangMan.LS(LSID.Surname);
             GetControl<ILabel>("lblMarriedSurname").Text = LangMan.LS(LSID.MarriedSurname);
-            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Name);
+            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.GivenName);
             GetControl<ILabel>("lblPatronymic").Text = LangMan.LS(LSID.Patronymic);
             GetControl<ILabel>("lblSex").Text = LangMan.LS(LSID.Sex);
             GetControl<ILabel>("lblNickname").Text = LangMan.LS(LSID.Nickname);

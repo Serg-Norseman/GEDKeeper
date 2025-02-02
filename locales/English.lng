@@ -84,7 +84,7 @@
 083=Address
 084=Events
 085=Surname									; surname, last name
-086=Name									; first name
+086=Given name							; given name, first name
 087=Patronymic								; patronymic, middle/second name
 088=Sex
 089=Nickname
@@ -101,7 +101,7 @@
 100=Close									; dialogs: close button
 101=Select
 102=Add new
-103=New individual
+103=Name                  ; general purpose name/title of object or entity
 104=Edit individual
 105=Checking of sex
 106=Selecting a record

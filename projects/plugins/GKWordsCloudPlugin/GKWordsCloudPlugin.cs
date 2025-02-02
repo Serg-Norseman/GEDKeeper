@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -139,7 +139,7 @@ namespace GKWordsCloudPlugin
 
         internal static readonly CloudType[] CloudTypes = new CloudType[] {
             new CloudType(LSID.Surname, StatsMode.smSurnames),
-            new CloudType(LSID.Name, StatsMode.smNames),
+            new CloudType(LSID.GivenName, StatsMode.smNames),
             new CloudType(LSID.Occupation, StatsMode.smOccupation),
             new CloudType(LSID.Religion, StatsMode.smReligious),
             new CloudType(LSID.Nationality, StatsMode.smNational),

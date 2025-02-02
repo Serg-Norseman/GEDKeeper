@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -40,7 +40,7 @@ namespace GKCore.Lists
         {
             var result = new ListColumns(GKListType.stEventDefs);
 
-            result.AddColumn(LSID.Name, 300, false);
+            result.AddColumn(LSID.GeneralName, 300, false);
             result.AddColumn(LSID.Enabled, 100, false);
             result.AddColumn(LSID.Record, 300, false);
 

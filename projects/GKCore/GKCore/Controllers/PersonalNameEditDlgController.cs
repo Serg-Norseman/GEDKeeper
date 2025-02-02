@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -162,13 +162,13 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.Name);
+            fView.Title = LangMan.LS(LSID.GeneralName);
 
             GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
             GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
             GetControl<ILabel>("lblSurname").Text = LangMan.LS(LSID.Surname);
             GetControl<ILabel>("lblMarriedSurname").Text = LangMan.LS(LSID.MarriedSurname);
-            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Name);
+            GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.GivenName);
             GetControl<ILabel>("lblPatronymic").Text = LangMan.LS(LSID.Patronymic);
             GetControl<ILabel>("lblNickname").Text = LangMan.LS(LSID.Nickname);
             GetControl<ILabel>("lblSurnamePrefix").Text = LangMan.LS(LSID.SurnamePrefix);

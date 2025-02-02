@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -467,11 +467,11 @@ namespace GKCore
             };
 
             StatsTitles = new StatsTitleStruct[] {
-                new StatsTitleStruct(LSID.AncestorsCount, LSID.Name),
-                new StatsTitleStruct(LSID.DescendantsCount, LSID.Name),
-                new StatsTitleStruct(LSID.GenerationsCount, LSID.Name),
+                new StatsTitleStruct(LSID.AncestorsCount, LSID.GeneralName),
+                new StatsTitleStruct(LSID.DescendantsCount, LSID.GeneralName),
+                new StatsTitleStruct(LSID.GenerationsCount, LSID.GeneralName),
                 new StatsTitleStruct(LSID.Surname, LSID.Surname),
-                new StatsTitleStruct(LSID.Name, LSID.Name),
+                new StatsTitleStruct(LSID.GivenName, LSID.GivenName),
                 new StatsTitleStruct(LSID.Patronymic, LSID.Patronymic),
                 new StatsTitleStruct(LSID.Age, LSID.Age),
                 new StatsTitleStruct(LSID.LifeExpectancy, LSID.Age),
@@ -479,7 +479,7 @@ namespace GKCore
                 new StatsTitleStruct(LSID.BirthYearsDec, LSID.BirthYears),
                 new StatsTitleStruct(LSID.DeathYears, LSID.DeathYears),
                 new StatsTitleStruct(LSID.DeathYearsDec, LSID.DeathYears),
-                new StatsTitleStruct(LSID.ChildsCount, LSID.Name),
+                new StatsTitleStruct(LSID.ChildsCount, LSID.GeneralName),
                 new StatsTitleStruct(LSID.DistrChilds, LSID.ChildsCount),
                 new StatsTitleStruct(LSID.BirthPlace, LSID.BirthPlace),
                 new StatsTitleStruct(LSID.DeathPlace, LSID.DeathPlace),
@@ -489,9 +489,9 @@ namespace GKCore
                 new StatsTitleStruct(LSID.Nationality, LSID.Nationality),
                 new StatsTitleStruct(LSID.Education, LSID.Education),
                 new StatsTitleStruct(LSID.Caste, LSID.Caste),
-                new StatsTitleStruct(LSID.AgeFirstborn, LSID.Name),
-                new StatsTitleStruct(LSID.MarriagesCount, LSID.Name),
-                new StatsTitleStruct(LSID.MarriagesAge, LSID.Name),
+                new StatsTitleStruct(LSID.AgeFirstborn, LSID.GeneralName),
+                new StatsTitleStruct(LSID.MarriagesCount, LSID.GeneralName),
+                new StatsTitleStruct(LSID.MarriagesAge, LSID.GeneralName),
                 new StatsTitleStruct(LSID.DiffSpouses, LSID.Family),
                 new StatsTitleStruct(LSID.Hobby, LSID.Hobby),
                 new StatsTitleStruct(LSID.Award, LSID.Award),
@@ -540,7 +540,7 @@ namespace GKCore
             BloodGroups = "|(I) O+|(I) O-|(II) A+|(II) A-|(III) B+|(III) B-|(IV) AB+|(IV) AB-";
 
             FARPropertyTypes = new FARPropertyStruct[] {
-                new FARPropertyStruct(LSID.Name, true),
+                new FARPropertyStruct(LSID.GeneralName, true),
                 new FARPropertyStruct(LSID.Place, false),
                 new FARPropertyStruct(LSID.Address, false),
                 new FARPropertyStruct(LSID.Fact, true),

@@ -706,13 +706,13 @@ namespace GKCore.Lists
                     switch (defNameFormat) {
                         case NameFormat.nfF_N_P:
                             AddColumn(LangMan.LS(LSID.Surname), 150, asz, bColType, 0);
-                            AddColumn(LangMan.LS(LSID.Name), 100, asz, bColType, 1);
+                            AddColumn(LangMan.LS(LSID.GivenName), 100, asz, bColType, 1);
                             AddColumn(LangMan.LS(LSID.Patronymic), 150, asz, bColType, 2);
                             break;
 
                         case NameFormat.nfF_NP:
                             AddColumn(LangMan.LS(LSID.Surname), 150, asz, bColType, 0);
-                            AddColumn(LangMan.LS(LSID.Name) + "," + LangMan.LS(LSID.Patronymic), 150, asz, bColType, 1);
+                            AddColumn(LangMan.LS(LSID.GivenName) + "," + LangMan.LS(LSID.Patronymic), 150, asz, bColType, 1);
                             break;
                     }
                 } else {
@@ -823,7 +823,7 @@ namespace GKCore.Lists
             var result = new ListColumns(GKListType.stIndividualNames);
 
             result.AddColumn(LSID.NumberSym, 25, false);
-            result.AddColumn(LSID.Name, 350, false);
+            result.AddColumn(LSID.GeneralName, 350, false);
             result.AddColumn(LSID.Type, 100, false);
             result.AddColumn(LSID.Language, 150, false);
 
@@ -935,7 +935,7 @@ namespace GKCore.Lists
             var result = new ListColumns(GKListType.stIndividualParents);
 
             result.AddColumn(LSID.NumberSym, 25, false);
-            result.AddColumn(LSID.Name, 350, false);
+            result.AddColumn(LSID.GeneralName, 350, false);
             result.AddColumn(LSID.Type, 100, false);
 
             result.ResetDefaults();
