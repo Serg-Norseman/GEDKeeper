@@ -695,6 +695,7 @@ namespace GKCore.Controllers
             SetSummaryWidth(false);
             RestoreListsSettings();
             RefreshLists(true);
+            SetMainTitle();
         }
 
         public void NavAdd(GDMRecord aRec)
@@ -735,7 +736,8 @@ namespace GKCore.Controllers
 
         public void SetMainTitle()
         {
-            string caption = Path.GetFileName(fContext.FileName);
+            string caption = (GlobalOptions.Instance.DisplayFullFileName) ? fContext.FileName : Path.GetFileName(fContext.FileName);
+
             if (fContext.Modified) {
                 caption = @"* " + caption;
             }

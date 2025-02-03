@@ -1091,8 +1091,10 @@ namespace GKCore
         /* 1014 */ CondNotContainsMask,
         /* 1015 */ MoveFiles,
         /* 1016 */ InvalidLink,
+        /* 1017 */ DisplayFullFileName,
+        /* 1018 */ NoteMaxSizeExceeded,
 
-        /* 000 */ Last = InvalidLink
+        /* 000 */ Last = NoteMaxSizeExceeded
     }
 
 
@@ -2137,6 +2139,8 @@ namespace GKCore
             /* 1014 */ "not contains mask",
             /* 1015 */ "Move files",
             /* 1016 */ "Invalid link: identical records!",
+            /* 1017 */ "Display full file name in window title",
+            /* 1018 */ "The maximum size allowed for a GEDCOM note has been exceeded!",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

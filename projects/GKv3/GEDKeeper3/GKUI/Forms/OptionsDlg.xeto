@@ -21,6 +21,7 @@
                   <CheckBox x:Name="chkAutoCheckUpdates" />
                   <CheckBox x:Name="chkCharsetDetection" />
                   <CheckBox x:Name="chkDialogClosingWarn" />
+                  <CheckBox x:Name="chkDisplayFullFileName" />
 
                   <TableLayout Spacing="4, 4">
 

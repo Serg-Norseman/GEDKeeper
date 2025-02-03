@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -36,6 +36,7 @@ namespace GDModel.Providers.GEDCOM
         public const char PointerDelimiter = '@';
         public const string NewLine = "\r\n";
         public const int MaxLineLength = 248;
+        public const int MaxNoteSize = 32768;
 
         // deprecated
         //public const byte GEDCOMMaxPhoneNumbers = 3;

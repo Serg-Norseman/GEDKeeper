@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -115,6 +115,8 @@ namespace GKCore.Options
         public bool DeleteMediaFileWithoutConfirm { get; set; }
 
         public bool DialogClosingWarn { get; set; }
+
+        public bool DisplayFullFileName { get; set; }
 
         public bool EmbeddedMediaPlayer { get; set; }
 
@@ -364,6 +366,7 @@ namespace GKCore.Options
             Geocoder = "Google";
             GeoSearchCountry = string.Empty;
             CertaintyAlgorithm = CertaintyAlgorithm.WeightedAverage;
+            DisplayFullFileName = false;
 
             Theme = string.Empty;
 
@@ -787,6 +790,7 @@ namespace GKCore.Options
             SurnameFirstInOrder = ini.ReadBool("Common", "SurnameFirstInOrder", true);
             SurnameInCapitals = ini.ReadBool("Common", "SurnameInCapitals", false);
             UseExtendedNotes = ini.ReadBool("Common", "UseExtendedNotes", false);
+            DisplayFullFileName = ini.ReadBool("Common", "DisplayFullFileName", false);
 
             Autosave = ini.ReadBool("Common", "Autosave", false);
             AutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -927,6 +931,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "SurnameFirstInOrder", SurnameFirstInOrder);
             ini.WriteBool("Common", "SurnameInCapitals", SurnameInCapitals);
             ini.WriteBool("Common", "UseExtendedNotes", UseExtendedNotes);
+            ini.WriteBool("Common", "DisplayFullFileName", DisplayFullFileName);
 
             ini.WriteInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
 

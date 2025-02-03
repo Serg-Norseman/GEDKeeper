@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,11 +20,13 @@
 
 using System;
 using System.IO;
+using System.Text;
 using GDModel;
 using GKCore.Design.Controls;
 using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Types;
+using GDModel.Providers.GEDCOM;
 
 namespace GKCore.Controllers
 {
@@ -56,6 +58,12 @@ namespace GKCore.Controllers
             try {
                 string noteText = fView.Note.Text.Trim();
                 if (!string.IsNullOrEmpty(noteText)) {
+                    int size = Encoding.UTF8.GetByteCount(noteText);
+                    if (size > GEDCOMConsts.MaxNoteSize) {
+                        AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.NoteMaxSizeExceeded));
+                        return false;
+                    }
+
                     fNoteRecord.SetNoteText(noteText);
 
                     fBase.NotifyRecord(fNoteRecord, RecordAction.raEdit);

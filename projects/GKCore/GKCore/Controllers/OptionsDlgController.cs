@@ -176,6 +176,10 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkCharsetDetection").Checked = fOptions.CharsetDetection;
             GetControl<ICheckBox>("chkDialogClosingWarn").Checked = fOptions.DialogClosingWarn;
 
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<ICheckBox>("chkDisplayFullFileName").Checked = fOptions.DisplayFullFileName;
+            }
+
             GetControl<IComboBox>("cmbGeocoder").Text = fOptions.Geocoder;
             GetControl<IComboBox>("cmbGeoSearchCountry").Text = fOptions.GeoSearchCountry;
 
@@ -207,6 +211,10 @@ namespace GKCore.Controllers
             fOptions.AutoCheckUpdates = GetControl<ICheckBox>("chkAutoCheckUpdates").Checked;
             fOptions.CharsetDetection = GetControl<ICheckBox>("chkCharsetDetection").Checked;
             fOptions.DialogClosingWarn = GetControl<ICheckBox>("chkDialogClosingWarn").Checked;
+
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                fOptions.DisplayFullFileName = GetControl<ICheckBox>("chkDisplayFullFileName").Checked;
+            }
 
             fOptions.Geocoder = GetControl<IComboBox>("cmbGeocoder").Text;
             fOptions.GeoSearchCountry = GetControl<IComboBox>("cmbGeoSearchCountry").Text;
@@ -900,6 +908,10 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkAutoCheckUpdates").Text = LangMan.LS(LSID.AutoCheckUpdates);
             GetControl<ICheckBox>("chkCharsetDetection").Text = LangMan.LS(LSID.CharsetDetection);
             GetControl<ICheckBox>("chkDialogClosingWarn").Text = LangMan.LS(LSID.WarnForClosingDialog);
+
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<ICheckBox>("chkDisplayFullFileName").Text = LangMan.LS(LSID.DisplayFullFileName);
+            }
 
             GetControl<ILabel>("lblLanguage").Text = LangMan.LS(LSID.Language);
             GetControl<ILabel>("lblGeocoder").Text = LangMan.LS(LSID.Geocoder);

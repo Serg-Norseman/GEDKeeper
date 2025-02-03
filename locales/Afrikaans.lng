@@ -1027,3 +1027,5 @@
 1014=not contains mask
 1015=Move files
 1016=Invalid link: identical records!
+1017=Display full file name in window title
+1018=The maximum size allowed for a GEDCOM note has been exceeded!

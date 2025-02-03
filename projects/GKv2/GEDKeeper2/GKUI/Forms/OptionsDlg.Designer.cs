@@ -208,6 +208,7 @@
         private System.Windows.Forms.CheckBox chkDateDesignations;
         private System.Windows.Forms.CheckBox chkMourningEdges;
         private System.Windows.Forms.CheckBox chkUseAdditionalDates;
+        private System.Windows.Forms.CheckBox chkDisplayFullFileName;
 
         private void InitializeComponent()
         {
@@ -417,6 +418,7 @@
             this.chkDateDesignations = new System.Windows.Forms.CheckBox();
             this.chkMourningEdges = new System.Windows.Forms.CheckBox();
             this.chkUseAdditionalDates = new System.Windows.Forms.CheckBox();
+            this.chkDisplayFullFileName = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -505,7 +507,7 @@
             // lblLanguage
             // 
             this.lblLanguage.AutoSize = true;
-            this.lblLanguage.Location = new System.Drawing.Point(11, 516);
+            this.lblLanguage.Location = new System.Drawing.Point(11, 547);
             this.lblLanguage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblLanguage.Name = "lblLanguage";
             this.lblLanguage.Size = new System.Drawing.Size(80, 17);
@@ -515,7 +517,7 @@
             // cmbLanguages
             // 
             this.cmbLanguages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbLanguages.Location = new System.Drawing.Point(104, 512);
+            this.cmbLanguages.Location = new System.Drawing.Point(104, 543);
             this.cmbLanguages.Margin = new System.Windows.Forms.Padding(2);
             this.cmbLanguages.Name = "cmbLanguages";
             this.cmbLanguages.Size = new System.Drawing.Size(230, 25);
@@ -524,7 +526,7 @@
             // lblCertaintyAlgorithm
             // 
             this.lblCertaintyAlgorithm.AutoSize = true;
-            this.lblCertaintyAlgorithm.Location = new System.Drawing.Point(11, 555);
+            this.lblCertaintyAlgorithm.Location = new System.Drawing.Point(11, 586);
             this.lblCertaintyAlgorithm.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCertaintyAlgorithm.Name = "lblCertaintyAlgorithm";
             this.lblCertaintyAlgorithm.Size = new System.Drawing.Size(125, 17);
@@ -534,7 +536,7 @@
             // cmbCertaintyAlgorithm
             // 
             this.cmbCertaintyAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbCertaintyAlgorithm.Location = new System.Drawing.Point(300, 551);
+            this.cmbCertaintyAlgorithm.Location = new System.Drawing.Point(300, 582);
             this.cmbCertaintyAlgorithm.Margin = new System.Windows.Forms.Padding(2);
             this.cmbCertaintyAlgorithm.Name = "cmbCertaintyAlgorithm";
             this.cmbCertaintyAlgorithm.Size = new System.Drawing.Size(138, 25);
@@ -780,6 +782,7 @@
             // 
             // grpOther
             // 
+            this.grpOther.Controls.Add(this.chkDisplayFullFileName);
             this.grpOther.Controls.Add(this.chkDialogClosingWarn);
             this.grpOther.Controls.Add(this.chkCharsetDetection);
             this.grpOther.Controls.Add(this.chkAutoCheckUpdates);
@@ -789,10 +792,20 @@
             this.grpOther.Margin = new System.Windows.Forms.Padding(2);
             this.grpOther.Name = "grpOther";
             this.grpOther.Padding = new System.Windows.Forms.Padding(10);
-            this.grpOther.Size = new System.Drawing.Size(715, 202);
+            this.grpOther.Size = new System.Drawing.Size(715, 233);
             this.grpOther.TabIndex = 2;
             this.grpOther.TabStop = false;
             this.grpOther.Text = "grpOther";
+            // 
+            // chkDisplayFullFileName
+            // 
+            this.chkDisplayFullFileName.AutoSize = true;
+            this.chkDisplayFullFileName.Location = new System.Drawing.Point(20, 192);
+            this.chkDisplayFullFileName.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
+            this.chkDisplayFullFileName.Name = "chkDisplayFullFileName";
+            this.chkDisplayFullFileName.Size = new System.Drawing.Size(166, 21);
+            this.chkDisplayFullFileName.TabIndex = 9;
+            this.chkDisplayFullFileName.Text = "chkDisplayFullFileName";
             // 
             // chkDialogClosingWarn
             // 
