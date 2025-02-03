@@ -26,7 +26,7 @@
                 <li>
                     Three types of trees: ancestors, descendants, and combined. Other types are not yet implemented
                     currently but can be added later when number of requests increases. GEDKeeper can print trees itself, and you can
-                    export a tree to a JPG, WMF, or SVG graphics file then print such a file from an external application.
+                    export a tree to a JPG, BMP, GIF, PNG, WMF, SVG, PDF graphics file then print such a file from an external application.
                 </li>
 
                 <li>
@@ -96,6 +96,52 @@
             information about a person while you need to handle a large number of persons. You enter only some main information and put aside adding information about
             relationships and other secondary data.
         </dd>
+
+        <dt>9. How to mark a person whose existence or location on the tree is in doubt?</dt>
+        <dd>
+            There are two main options:
+            <ul>
+                <li>
+                    Bookmark the person (person edit dialog). But since this is just a bookmark, over time it may become unclear what exactly the bookmark meant.
+                </li>
+                <li>
+                    You can create several groups for different purposes: "In question", "Killed in WWII", "Special search", "Conflict".
+                    And include the person, if necessary, in one or more necessary groups. This will allow you to categorize the entire array of information by various criteria
+                    and quickly find the right people.
+                </li>
+            </ul>
+        </dd>
+
+        <dt>10. If there is a bilingual (multilingual) tree, is it possible to somehow quickly switch the display of names and surnames to another language (all at once)?</dt>
+        <dd>
+            If the names in the database were entered in several different languages, then quickly switching the display of all names in the list to another language
+            is possible in the "Languages" item of the Navigator plugin (menu Plugins\Navigator). If some person does not have a name in the required language, the one that is available will be displayed.
+        </dd>
+
+        <dt>11. How to specify godparents (godfathers), witnesses (guarantors)?</dt>
+        <dd>
+            For this kind of information, there is a special form of entries - "Associations" in the dialog for editing persons. When entering associations, you can specify 
+            the type and link to a specific person.
+        </dd>
+
+        <dt>12. What should be displayed in the drop-down list of patronymics when adding/editing a person? Expected the latest entered values, but the list is always empty.</dt>
+        <dd>
+            The drop-down list for patronymics does not show the latest entered values, but options when a new person is added from the parents' family - in this case, by the father's name, 
+            the female and male patronymics are automatically substituted - if the program has previously recorded a combination of the desired name and one of the patronymic forms (like self-training).
+            Adding a child from the parents' family works either in the family editing dialog, or when adding a son/daughter from one of the parents in the tree diagram by right-clicking.
+        </dd>
+
+        <dt>13. Is it possible to rearrange the numbers of records in a database loaded from a third-party source (numbers with large gaps, very large values, etc.)?</dt>
+        <dd>
+            The easiest way to rearrange all identifiers at the user level is to do the following:
+            <ol>
+                <li>Create a new empty database file, save it with a new name;</li>
+                <li>Perform the database merge operation (menu Service\Tools). That is, merge the current database with the identifiers you don't like into the new empty one. Not vice versa.</li>
+            </ol>
+            When merging, the entire data structure remains the same. The order of records, internal content, all relationships. Merging always only "adds" files.
+            No attempts are made to merge duplicate records together. This is the task of a separate function. The only thing that changes during merging is the numbers/identifiers from the merging database.
+        </dd>
+
     </dl>
     <hr>
     <p>Authors: Zhdanovskih Sergey Vladimirovich, Tarasova Oksana Vladimirovna.</p>
