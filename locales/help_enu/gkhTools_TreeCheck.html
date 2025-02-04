@@ -6,7 +6,9 @@
     <title>Tools: Check database</title>
 </head>
 <body>
+
     <h1>Tools: Check database</h1>
+
     <p>
         This tool checks information correctness in the database. It checks two
         types of records: family and person. Unlike typical database integrity
@@ -14,6 +16,7 @@
         the database structure, this tool handles logical errors and data
         inaccuracy.
     </p>
+
     <p>
         To pass the check, a family record must have assigned husband, wife,
         children, and events. When an empty family is found, the tool proposes
@@ -24,7 +27,9 @@
         may lose all relations. This is a likely situation when you actively
         process large amounts of information.
     </p>
+
     <!-- TODO: Turn the following long sentence into an unordered list -->
+
     <p>
         A person record is checked in the following way: the tool checks the
         death event, taking the maximal, scientifically confirmed age into
@@ -38,10 +43,12 @@
         the maximum one, the tool adds a death event without a specified date to the
         person record.
     </p>
+
     <p>
         GEDKeeper fixes the lack of a death event, lack of a sex declaration, and may
         remove empty family records. All other issues are shown only for your
         information.
     </p>
+
 </body>
 </html>

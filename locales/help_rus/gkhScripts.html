@@ -5,14 +5,13 @@
     <title>Справка GEDKeeper. Использование скриптов</title>
     <link rel="stylesheet" href="../help/styles.css" type="text/css">
 </head>
-
 <body>
 
     <h1>Оглавление</h1>
     <ul>
-	    <li><a href="#1">1 - Введение в Lua</a></li>
-	    <li><a href="#2">2 – Описание языка Lua</a></li>
-	    <li><a href="#3">3 - Использование Lua в программе GEDKeeper</a></li>
+        <li><a href="#1">1 - Введение в Lua</a></li>
+        <li><a href="#2">2 – Описание языка Lua</a></li>
+        <li><a href="#3">3 - Использование Lua в программе GEDKeeper</a></li>
     </ul>
 
     <h1><a id="1">1 - Введение в Lua</a></h1>
@@ -1338,249 +1337,249 @@ end
     <p>
         Указатели на структуры имеют следующие типы:
     </p>
-        <ul>
-            <li>
-                pointer (простой указатель)
-		<ul>
-                    <li>
-                        record_pointer (указатель на запись)
-			<ul>
-                            <li>individual_pointer (указатель на запись персоны)</li>
-                            <li>family_pointer (указатель на запись семьи)</li>
-                            <li>note_pointer (указатель на запись заметки)</li>
-                            <li>source_pointer (указатель на запись источника)</li>
-                            <li>repository_pointer (указатель на запись архив)</li>
-                            <li>multimedia_pointer (указатель на запись мультимедиа-объекта)</li>
-                            <li>group_pointer (указатель на запись группы)</li>
-                            <li>research_pointer (указатель на запись исследования)</li>
-                            <li>task_pointer (указатель на запись задачи)</li>
-                            <li>commumication_pointer (указатель на запись коммуникаций)</li>
-                            <li>location_pointer (указатель на запись места)</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                struct_pointer (указатель на структуру - вложенный объект записи)
-		<ul>
-                    <li>association_pointer (указатель на ассоциацию)</li>
-                    <li>event_pointer (указатель на событие/факт)</li>
-                </ul>
-            </li>
-        </ul>
+    <ul>
+        <li>
+            pointer (простой указатель)
+            <ul>
+                <li>
+                    record_pointer (указатель на запись)
+                    <ul>
+                        <li>individual_pointer (указатель на запись персоны)</li>
+                        <li>family_pointer (указатель на запись семьи)</li>
+                        <li>note_pointer (указатель на запись заметки)</li>
+                        <li>source_pointer (указатель на запись источника)</li>
+                        <li>repository_pointer (указатель на запись архив)</li>
+                        <li>multimedia_pointer (указатель на запись мультимедиа-объекта)</li>
+                        <li>group_pointer (указатель на запись группы)</li>
+                        <li>research_pointer (указатель на запись исследования)</li>
+                        <li>task_pointer (указатель на запись задачи)</li>
+                        <li>commumication_pointer (указатель на запись коммуникаций)</li>
+                        <li>location_pointer (указатель на запись места)</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li>
+            struct_pointer (указатель на структуру - вложенный объект записи)
+            <ul>
+                <li>association_pointer (указатель на ассоциацию)</li>
+                <li>event_pointer (указатель на событие/факт)</li>
+            </ul>
+        </li>
+    </ul>
 
     <h2><a id="3.3">3.3 - Функции (API)</a></h2>
 
-        <dl>
-            <dt>void print(string text)</dt>
-            <dd>вывод строки text;</dd>
+    <dl>
+        <dt>void print(string text)</dt>
+        <dd>вывод строки text;</dd>
 
-            <dt>void progress_init(int length, string title)</dt>
-            <dd>показывает окно прогрессии, где length - число этапов прогрессии, title - заголовок;</dd>
+        <dt>void progress_init(int length, string title)</dt>
+        <dd>показывает окно прогрессии, где length - число этапов прогрессии, title - заголовок;</dd>
 
-            <dt>void progress_done()</dt>
-            <dd>скрывает окно прогрессии;</dd>
+        <dt>void progress_done()</dt>
+        <dd>скрывает окно прогрессии;</dd>
 
-            <dt>void progress_step()</dt>
-            <dd>увеличивает число выполненных этапов прогрессии на один;</dd>
+        <dt>void progress_step()</dt>
+        <dd>увеличивает число выполненных этапов прогрессии на один;</dd>
 
-            <dt>int strpos(string substr, string str)</dt>
-            <dd>возвращает индекс первого вхождения подстроки substr в строке str;</dd>
+        <dt>int strpos(string substr, string str)</dt>
+        <dd>возвращает индекс первого вхождения подстроки substr в строке str;</dd>
 
-            <dt>void update_view()</dt>
-            <dd>полностью обновляет вид всех списков (бывает необходимо после массовой обработки данных);</dd>
+        <dt>void update_view()</dt>
+        <dd>полностью обновляет вид всех списков (бывает необходимо после массовой обработки данных);</dd>
 
-            <dt>string select_file()</dt>
-            <dd>открывает диалог выбора файла и возвращает строку с именем файла</dd>
+        <dt>string select_file()</dt>
+        <dd>открывает диалог выбора файла и возвращает строку с именем файла</dd>
 
 
-            <dt>int get_records_count()</dt>
-            <dd>возвращает число записей в БД;</dd>
+        <dt>int get_records_count()</dt>
+        <dd>возвращает число записей в БД;</dd>
 
-            <dt>record_ptr get_record(int index)</dt>
-            <dd>
-                возвращает запись базы данных по заданному индексу.
-                Внимание: записи различных типов располагаются в БД
-                в произвольном порядке - так, как они вводились. Для
-                обработки всех записей определенного типа, необходимо
-                проверять их тип.
-            </dd>
+        <dt>record_ptr get_record(int index)</dt>
+        <dd>
+            возвращает запись базы данных по заданному индексу.
+            Внимание: записи различных типов располагаются в БД
+            в произвольном порядке - так, как они вводились. Для
+            обработки всех записей определенного типа, необходимо
+            проверять их тип.
+        </dd>
 
-            <dt>int get_record_type(record_ptr)</dt>
-            <dd>
-                возвращает код - числовую константу, определяющую тип записи;
-                возможные варианты:<ul>
-                    <li>rtNone - тип не определяется либо неизвестен</li>
-                    <li>rtIndividual - персональная запись</li>
-                    <li>rtFamily - семья</li>
-                    <li>rtNote - заметка</li>
-                    <li>rtMultimedia - мультимедийная запись</li>
-                    <li>rtSource - запись источника</li>
-                    <li>rtRepository - архив или хранилище источников</li>
-                    <li>rtGroup - группа</li>
-                    <li>rtResearch - исследование</li>
-                    <li>rtTask - задача</li>
-                    <li>rtCommunication - коммуникации/переписка</li>
-                    <li>rtLocation - место</li>
-                    <li>rtSubmission - [зарезервировано (пока не используется)]</li>
-                    <li>rtSubmitter - исследователь базы данных</li>
-                </ul>
-            </dd>
+        <dt>int get_record_type(record_ptr)</dt>
+        <dd>
+            возвращает код - числовую константу, определяющую тип записи;
+            возможные варианты:<ul>
+                <li>rtNone - тип не определяется либо неизвестен</li>
+                <li>rtIndividual - персональная запись</li>
+                <li>rtFamily - семья</li>
+                <li>rtNote - заметка</li>
+                <li>rtMultimedia - мультимедийная запись</li>
+                <li>rtSource - запись источника</li>
+                <li>rtRepository - архив или хранилище источников</li>
+                <li>rtGroup - группа</li>
+                <li>rtResearch - исследование</li>
+                <li>rtTask - задача</li>
+                <li>rtCommunication - коммуникации/переписка</li>
+                <li>rtLocation - место</li>
+                <li>rtSubmission - [зарезервировано (пока не используется)]</li>
+                <li>rtSubmitter - исследователь базы данных</li>
+            </ul>
+        </dd>
 
-            <dt>string get_record_type_name(int type)</dt>
-            <dd>возвращает строку с идентификатором типа записи по его коду.</dd>
+        <dt>string get_record_type_name(int type)</dt>
+        <dd>возвращает строку с идентификатором типа записи по его коду.</dd>
 
-            <dt>string get_record_xref(record_ptr)</dt>
-            <dd>возвращает строку - идентификатор записи, обеспечивающий перекрестные ссылки между записями в базе</dd>
+        <dt>string get_record_xref(record_ptr)</dt>
+        <dd>возвращает строку - идентификатор записи, обеспечивающий перекрестные ссылки между записями в базе</dd>
 
-            <dt>string get_record_uid(record_ptr)</dt>
-            <dd>возвращает глобальный уникальный идентификатор записи в базе данных</dd>
+        <dt>string get_record_uid(record_ptr)</dt>
+        <dd>возвращает глобальный уникальный идентификатор записи в базе данных</dd>
 
-            <dt>delete_record(record)</dt>
-            <dd>удаляет запись из базы данных</dd>
+        <dt>delete_record(record)</dt>
+        <dd>удаляет запись из базы данных</dd>
 
-            <dt>boolean record_is_filtered(record_ptr)</dt>
-            <dd>возвращает логический признак, что данная запись отфильтрована и содержится в текущей отображаемой выборке</dd>
+        <dt>boolean record_is_filtered(record_ptr)</dt>
+        <dd>возвращает логический признак, что данная запись отфильтрована и содержится в текущей отображаемой выборке</dd>
 
 
-            <dt>string get_individual_name(record)</dt>
-            <dd>возвращает полное имя персоны.</dd>
+        <dt>string get_individual_name(record)</dt>
+        <dd>возвращает полное имя персоны.</dd>
 
 
-            <dt>int get_individual_associations_count(individual_ptr)</dt>
-            <dd>возвращает количество ассоциаций заданной персоны.</dd>
+        <dt>int get_individual_associations_count(individual_ptr)</dt>
+        <dd>возвращает количество ассоциаций заданной персоны.</dd>
 
-            <dt>ptr get_individual_association(individual_ptr, int index)</dt>
-            <dd>возвращает ассоциацию заданной персоны по индексу.</dd>
+        <dt>ptr get_individual_association(individual_ptr, int index)</dt>
+        <dd>возвращает ассоциацию заданной персоны по индексу.</dd>
 
-            <dt>delete_individual_association(individual_ptr, index)</dt>
-            <dd>удаляет ассоциацию персоны с заданным индексом.</dd>
+        <dt>delete_individual_association(individual_ptr, index)</dt>
+        <dd>удаляет ассоциацию персоны с заданным индексом.</dd>
 
 
-            <dt>int get_individual_events_count(individual_ptr)</dt>
-            <dd>возвращает количество фактов персоны.</dd>
+        <dt>int get_individual_events_count(individual_ptr)</dt>
+        <dd>возвращает количество фактов персоны.</dd>
 
-            <dt>event_ptr get_individual_event(individual_ptr, int index)</dt>
-            <dd>возвращает заданный индексом факт персоны.</dd>
+        <dt>event_ptr get_individual_event(individual_ptr, int index)</dt>
+        <dd>возвращает заданный индексом факт персоны.</dd>
 
-            <dt>delete_individual_event(individual_ptr, int index)</dt>
-            <dd>удаляет заданный индексом факт персоны.</dd>
+        <dt>delete_individual_event(individual_ptr, int index)</dt>
+        <dd>удаляет заданный индексом факт персоны.</dd>
 
 
-            <dt>string get_event_value(event_ptr)</dt>
-            <dd>возвращает строковое значение факта персоны.</dd>
+        <dt>string get_event_value(event_ptr)</dt>
+        <dd>возвращает строковое значение факта персоны.</dd>
 
-            <dt>string get_event_place(event_ptr)</dt>
-            <dd>возвращает строку места факта персоны.</dd>
+        <dt>string get_event_place(event_ptr)</dt>
+        <dd>возвращает строку места факта персоны.</dd>
 
-            <dt>string get_event_date(event_ptr)</dt>
-            <dd>возвращает строковое значение даты факта</dd>
+        <dt>string get_event_date(event_ptr)</dt>
+        <dd>возвращает строковое значение даты факта</dd>
 
-            <dt>string get_event_name(event_ptr)</dt>
-            <dd>возвращает строку с именем-идентификатором типа факта (внимание - это внутренние идентификаторы фактов, см. <a href="">Идентификаторы типа факта</a>)</dd>
+        <dt>string get_event_name(event_ptr)</dt>
+        <dd>возвращает строку с именем-идентификатором типа факта (внимание - это внутренние идентификаторы фактов, см. <a href="">Идентификаторы типа факта</a>)</dd>
 
 
-            <dt>individual_ptr create_individual(string name, string patronymic, string family, string sex)</dt>
-            <dd>создает новую персональную запись, где name-имя, patronymic-отчество, family-фамилия, sex-пол (варианты значений: "N"-не задан, "M"-мужской, "F"-женский, "U"-неопределенный)</dd>
+        <dt>individual_ptr create_individual(string name, string patronymic, string family, string sex)</dt>
+        <dd>создает новую персональную запись, где name-имя, patronymic-отчество, family-фамилия, sex-пол (варианты значений: "N"-не задан, "M"-мужской, "F"-женский, "U"-неопределенный)</dd>
 
-            <dt>family_ptr create_family()</dt>
-            <dd>создает новую запись семьи</dd>
+        <dt>family_ptr create_family()</dt>
+        <dd>создает новую запись семьи</dd>
 
-            <dt>bind_family_spouse(family_ptr family, individual_ptr spouse)</dt>
-            <dd>присоединяет супруга "spouse" к семье "family". Внимание: у записи супруга должен быть задан пол, т.к. по нему автоматически определяется роль в семье.</dd>
+        <dt>bind_family_spouse(family_ptr family, individual_ptr spouse)</dt>
+        <dd>присоединяет супруга "spouse" к семье "family". Внимание: у записи супруга должен быть задан пол, т.к. по нему автоматически определяется роль в семье.</dd>
 
 
-            <dt>bool csv_load(string filename, bool first_line_is_schema)</dt>
-            <dd>загрузить csv-таблицу, первый параметр определяет имя файла, второй - содержит ли первая строка файла заголовки колонок</dd>
+        <dt>bool csv_load(string filename, bool first_line_is_schema)</dt>
+        <dd>загрузить csv-таблицу, первый параметр определяет имя файла, второй - содержит ли первая строка файла заголовки колонок</dd>
 
-            <dt>bool csv_create(string fileName, int columnsCount, int rowsCount)</dt>
-            <dd>создать новую csv-таблицу с заданными именем файла, количеством столбцов и строк (обязательно)</dd>
+        <dt>bool csv_create(string fileName, int columnsCount, int rowsCount)</dt>
+        <dd>создать новую csv-таблицу с заданными именем файла, количеством столбцов и строк (обязательно)</dd>
 
-            <dt>csv_close()</dt>
-            <dd>закрыть csv-таблицу (чтение или запись)</dd>
+        <dt>csv_close()</dt>
+        <dd>закрыть csv-таблицу (чтение или запись)</dd>
 
-            <dt>int csv_get_cols()</dt>
-            <dd>получить количество столбцов в csv-таблице</dd>
+        <dt>int csv_get_cols()</dt>
+        <dd>получить количество столбцов в csv-таблице</dd>
 
-            <dt>int csv_get_rows()</dt>
-            <dd>получить количество строк в csv-таблице</dd>
+        <dt>int csv_get_rows()</dt>
+        <dd>получить количество строк в csv-таблице</dd>
 
-            <dt>string csv_get_cell(col, row)</dt>
-            <dd>получить содержимое ячейки в csv-таблице (столбцы и строки нумеруются от нуля)</dd>
+        <dt>string csv_get_cell(col, row)</dt>
+        <dd>получить содержимое ячейки в csv-таблице (столбцы и строки нумеруются от нуля)</dd>
 
-            <dt>void csv_write_cell(string content)</dt>
-            <dd>записать значение ячейки CSV-таблицы (переводы строк выполняются автоматически согласно заданному числу столбцов)</dd>
+        <dt>void csv_write_cell(string content)</dt>
+        <dd>записать значение ячейки CSV-таблицы (переводы строк выполняются автоматически согласно заданному числу столбцов)</dd>
 
 
-            <dt>note_ptr create_note()</dt>
-            <dd>создать новую запись заметки</dd>
+        <dt>note_ptr create_note()</dt>
+        <dd>создать новую запись заметки</dd>
 
-            <dt>bind_record_note(record_ptr, note_ptr)</dt>
-            <dd>присоединить к записи заметку</dd>
+        <dt>bind_record_note(record_ptr, note_ptr)</dt>
+        <dd>присоединить к записи заметку</dd>
 
-            <dt>add_note_text(note_ptr, string text)</dt>
-            <dd>добавляет в запись заметки текстовую строку</dd>
+        <dt>add_note_text(note_ptr, string text)</dt>
+        <dd>добавляет в запись заметки текстовую строку</dd>
 
-            <dt>record_ptr select_record(int record_type)</dt>
-            <dd>вызывает диалог выбора записи из имеющихся</dd>
+        <dt>record_ptr select_record(int record_type)</dt>
+        <dd>вызывает диалог выбора записи из имеющихся</dd>
 
-            <dt>bind_record_source(record_ptr, source_ptr, string page, int quality)</dt>
-            <dd>присоединяет к любой записи заданный источник, устанавливает страницу (page) и качество источника (quality, 0..3)</dd>
+        <dt>bind_record_source(record_ptr, source_ptr, string page, int quality)</dt>
+        <dd>присоединяет к любой записи заданный источник, устанавливает страницу (page) и качество источника (quality, 0..3)</dd>
 
-            <dt>string define_sex(string name, string patronymic)</dt>
-            <dd>возвращает идентификатор пола, определенный по имени и отчеству</dd>
+        <dt>string define_sex(string name, string patronymic)</dt>
+        <dd>возвращает идентификатор пола, определенный по имени и отчеству</dd>
 
-            <dt>set_event_place(event_ptr, string place)</dt>
-            <dd>установить факту свойство места</dd>
+        <dt>set_event_place(event_ptr, string place)</dt>
+        <dd>установить факту свойство места</dd>
 
-            <dt>source_record create_source(string name)</dt>
-            <dd>создает новый источник с заданным названием</dd>
+        <dt>source_record create_source(string name)</dt>
+        <dd>создает новый источник с заданным названием</dd>
 
-            <dt>source_record find_source(string name)</dt>
-            <dd>ищет в списке источник с требуемым названием</dd>
+        <dt>source_record find_source(string name)</dt>
+        <dd>ищет в списке источник с требуемым названием</dd>
 
-            <dt>event_ptr create_event(record_ptr, string sign)</dt>
-            <dd>создать новый факт в записях персон или семей, где sign - строковый тип факта</dd>
+        <dt>event_ptr create_event(record_ptr, string sign)</dt>
+        <dd>создать новый факт в записях персон или семей, где sign - строковый тип факта</dd>
 
-            <dt>set_event_date(event_ptr, string date)</dt>
-            <dd>установить факту дату</dd>
+        <dt>set_event_date(event_ptr, string date)</dt>
+        <dd>установить факту дату</dd>
 
-            <dt>bind_family_child(family_ptr, individual_ptr child)</dt>
-            <dd>присоединить к семье ребенка</dd>
+        <dt>bind_family_child(family_ptr, individual_ptr child)</dt>
+        <dd>присоединить к семье ребенка</dd>
 
-            <dt>association_ptr add_individual_association(individual_ptr, string relation, individual_ptr rel_individual)</dt>
-            <dd>
-                добавяет персоне individual_record, ссылку-ассоциацию на персону rel_individual.
-                Используется, к примеру, когда нужно сделать ссылки на крестных.
-            </dd>
+        <dt>association_ptr add_individual_association(individual_ptr, string relation, individual_ptr rel_individual)</dt>
+        <dd>
+            добавяет персоне individual_record, ссылку-ассоциацию на персону rel_individual.
+            Используется, к примеру, когда нужно сделать ссылки на крестных.
+        </dd>
 
-            <dt>string define_patronymic(string father_name, string child_sex, bool confirm)</dt>
-            <dd>
-                определяет при помощи встроенного словаря отчество ребенка с полом child_sex по имени отца father_name.
-                Параметр confirm(true|false) определяет - спрашивать ли пользователя в сомнительных случаях.
-            </dd>
+        <dt>string define_patronymic(string father_name, string child_sex, bool confirm)</dt>
+        <dd>
+            определяет при помощи встроенного словаря отчество ребенка с полом child_sex по имени отца father_name.
+            Параметр confirm(true|false) определяет - спрашивать ли пользователя в сомнительных случаях.
+        </dd>
 
-            <dt>family_record get_individual_parents_family(individual_ptr)</dt>
-            <dd>возвращает семью родителей данной персоны</dd>
+        <dt>family_record get_individual_parents_family(individual_ptr)</dt>
+        <dd>возвращает семью родителей данной персоны</dd>
 
-            <dt>int get_individual_spouses_count(individual_ptr)</dt>
-            <dd>возвращает число супругов данной персоны</dd>
+        <dt>int get_individual_spouses_count(individual_ptr)</dt>
+        <dd>возвращает число супругов данной персоны</dd>
 
-            <dt>family_ptr get_individual_spouse_family(individual_ptr, int index)</dt>
-            <dd>возвращает семью данной персоны и его(её) супруги, index - определяет номер брака</dd>
+        <dt>family_ptr get_individual_spouse_family(individual_ptr, int index)</dt>
+        <dd>возвращает семью данной персоны и его(её) супруги, index - определяет номер брака</dd>
 
-            <dt>individual_ptr get_family_husband(family_ptr)</dt>
-            <dd>возвращает персону мужа данной семьи</dd>
+        <dt>individual_ptr get_family_husband(family_ptr)</dt>
+        <dd>возвращает персону мужа данной семьи</dd>
 
-            <dt>individual_ptr get_family_wife(family_ptr)</dt>
-            <dd>возвращает персону жены данной семьи</dd>
+        <dt>individual_ptr get_family_wife(family_ptr)</dt>
+        <dd>возвращает персону жены данной семьи</dd>
 
-            <dt>int get_family_childs_count(family_ptr)</dt>
-            <dd>возвращает число детей в данной семье</dd>
+        <dt>int get_family_childs_count(family_ptr)</dt>
+        <dd>возвращает число детей в данной семье</dd>
 
-            <dt>individual_ptr get_family_child(family_ptr, int index)</dt>
-            <dd>возвращает персону ребенка заданной семьи по его номеру</dd>
-        </dl>
+        <dt>individual_ptr get_family_child(family_ptr, int index)</dt>
+        <dd>возвращает персону ребенка заданной семьи по его номеру</dd>
+    </dl>
 
 </body>
 </html>

@@ -1166,30 +1166,34 @@ end</code></pre>
     </p>
     <p>There are following available types of pointer to structures:</p>
     <ul>
-        <li>pointer (a general pointer)
-        <ul>
-            <li>record_pointer (pointer to a record)
+        <li>
+            pointer (a general pointer)
             <ul>
-                <li>individual_pointer (pointer to a individual record)</li>
-                <li>family_pointer (pointer to a family record)</li>
-                <li>note_pointer (pointer to a note record)</li>
-                <li>source_pointer (pointer to a source record)</li>
-                <li>repository_pointer (pointer to an archive record)</li>
-                <li>multimedia_pointer (pointer to a multimedia-object record)</li>
-                <li>group_pointer (pointer to a group record)</li>
-                <li>research_pointer (pointer to a research record)</li>
-                <li>task_pointer (pointer to a task record)</li>
-                <li>commumication_pointer (pointer to a correspondence record)</li>
-                <li>location_pointer (pointer to a location record)</li>
-	    </ul></li>
-        </ul>
+                <li>
+                    record_pointer (pointer to a record)
+                    <ul>
+                        <li>individual_pointer (pointer to a individual record)</li>
+                        <li>family_pointer (pointer to a family record)</li>
+                        <li>note_pointer (pointer to a note record)</li>
+                        <li>source_pointer (pointer to a source record)</li>
+                        <li>repository_pointer (pointer to an archive record)</li>
+                        <li>multimedia_pointer (pointer to a multimedia-object record)</li>
+                        <li>group_pointer (pointer to a group record)</li>
+                        <li>research_pointer (pointer to a research record)</li>
+                        <li>task_pointer (pointer to a task record)</li>
+                        <li>commumication_pointer (pointer to a correspondence record)</li>
+                        <li>location_pointer (pointer to a location record)</li>
+                    </ul>
+                </li>
+            </ul>
         <li>
             struct_pointer (pointer to a structure as an object embedded into a
             record)
-        <ul>
-            <li>association_pointer (pointer to an association)</li>
-            <li>event_pointer (pointer to an event&#47;fact)</li>
-	</ul></li>
+            <ul>
+                <li>association_pointer (pointer to an association)</li>
+                <li>event_pointer (pointer to an event&#47;fact)</li>
+            </ul>
+        </li>
     </ul>
     <h2><a id="3.3">3.3 - API</a></h2>
     <dl>
@@ -1223,26 +1227,28 @@ end</code></pre>
             type of a record.
         </dd>
         <dt>int get_record_type(record_ptr)</dt>
-        <dd>Gets type of the specified record. Possible return values:
-        <ul>
-            <li>
-                rtNone - is is unable to determine type of the record or the record
-                has unknown type,
-            </li>
-            <li>rtIndividual - individual record,</li>
-            <li>rtFamily - family record,</li>
-            <li>rtNote - note record,</li>
-            <li>rtMultimedia - multimedia content record,</li>
-            <li>rtSource - source record,</li>
-            <li>rtRepository - archive or storage of sources record,</li>
-            <li>rtGroup - group record,</li>
-            <li>rtResearch - research record,</li>
-            <li>rtTask - task record,</li>
-            <li>rtCommunication - correspondence record,</li>
-            <li>rtLocation - location record,</li>
-            <li>rtSubmission - [reserved for future use],</li>
-            <li>rtSubmitter - database researcher.</li>
-	</ul></dd>
+        <dd>
+            Gets type of the specified record. Possible return values:
+            <ul>
+                <li>
+                    rtNone - is is unable to determine type of the record or the record
+                    has unknown type,
+                </li>
+                <li>rtIndividual - individual record,</li>
+                <li>rtFamily - family record,</li>
+                <li>rtNote - note record,</li>
+                <li>rtMultimedia - multimedia content record,</li>
+                <li>rtSource - source record,</li>
+                <li>rtRepository - archive or storage of sources record,</li>
+                <li>rtGroup - group record,</li>
+                <li>rtResearch - research record,</li>
+                <li>rtTask - task record,</li>
+                <li>rtCommunication - correspondence record,</li>
+                <li>rtLocation - location record,</li>
+                <li>rtSubmission - [reserved for future use],</li>
+                <li>rtSubmitter - database researcher.</li>
+            </ul>
+        </dd>
         <dt>string get_record_type_name(int type)</dt>
         <dd>Converts record type from numeric view to string one.</dd>
         <dt>string get_record_xref(record_ptr)</dt>
@@ -1330,8 +1336,8 @@ end</code></pre>
             are numbered from zero).
         </dd>
 
-		<dt>void csv_write_cell(string content)</dt>
-		<dd>Write the value of a CSV table cell (the beginning of a new line is performed automatically according to the specified number of columns).</dd>
+        <dt>void csv_write_cell(string content)</dt>
+        <dd>Write the value of a CSV table cell (the beginning of a new line is performed automatically according to the specified number of columns).</dd>
 
         <dt>note_ptr create_note()</dt>
         <dd>Creates new note record.</dd>

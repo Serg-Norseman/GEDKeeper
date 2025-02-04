@@ -12,12 +12,16 @@
     <p>To modify the date of an event you use the <a href="gkhRec_Event.html">&quot;Edit events and facts&quot; dialog window</a>.</p>
 
     <p>GEDKeeper supports the following date subtypes:</p>
-        <ul>
-            <li>Subtypes &quot;Before&quot;, &quot;After&quot;, &quot;Between&quot;, &quot;Period before&quot;, &quot;Period after&quot;, and &quot;Period between&quot; specify a range of dates.</li>
-            <li>Subtypes &quot;About&quot;, &quot;Calculated&quot;, and &quot;Estimated&quot; specify inaccurate or relative dates.</li>
-            <li>Subtype &quot;Exact&quot; specifies an exact date (though the date may be incomplete).</li>
-        </ul>
-    <p>Dates can be incomplete, i.e. one or more parts of date may be skipped. That is, to the extent that you can define only day number, month only, or year only. Of course, you can combine these parts.</p>
+    <ul>
+        <li>Subtypes &quot;Before&quot;, &quot;After&quot;, &quot;Between&quot;, &quot;Period before&quot;, &quot;Period after&quot;, and &quot;Period between&quot; specify a range of dates.</li>
+        <li>Subtypes &quot;About&quot;, &quot;Calculated&quot;, and &quot;Estimated&quot; specify inaccurate or relative dates.</li>
+        <li>Subtype &quot;Exact&quot; specifies an exact date (though the date may be incomplete).</li>
+    </ul>
+
+    <p>
+        Dates can be incomplete, i.e. one or more parts of date may be skipped.
+        That is, to the extent that you can define only day number, month only, or year only. Of course, you can combine these parts.
+    </p>
 
     <p>
         For a date entered you can specify type of calendar and where the date is calculated. GEDKeeper supports Gregorian, Julian, Jewish (Hebrew), French, and Roman calendars.
@@ -29,21 +33,20 @@
         There are three operations in the program to handle dates: storing, showing, and processing. Each operation has its
         own specific purpose and that is why all these operations were separated from each other. These purposes are:
     </p>
-
-        <ul>
-            <li><strong>Storing</strong>. All dates are stored using a special GEDCOM format. This allows you to define incomplete dates in any form.</li>
-            <li>
-                <strong>Showing</strong>. When GEDKeeper needs to show you a date it translates that date in internal form to a string view. This may include special symbols
-                (if they were enabled in the program settings). For example, the date &quot;About 1701, January&quot; will be rendered as &quot;__.01.1701&quot; (when special
-                symbols are off) or as &quot;~ __.01.1701&quot; (when special symbols are on) in columns of general lists. Dates range like &quot;Between 01.01.1700 and 20.01.1700&quot;
-                will be shown as &quot;01.01.1700 - 20.01.1700&quot;. A &quot;Period before 10.10.1800&quot; date will be rendered as &quot;&lt; 10.10.1800&quot; (when special symbols are on).
-            </li>
-            <li>
-                <strong>Processing</strong>. When GEDKeeper processes dates (for example, makes arithmetical operations or
-                compares dates) it translates them into a special internal form (&quot;<a href="https://en.wikipedia.org/wiki/Julian_day" target="_top">Julian day</a>&quot;),
-                that allows code compares and handles incomplete dates of different calendars.
-            </li>
-        </ul>
+    <ul>
+        <li><strong>Storing</strong>. All dates are stored using a special GEDCOM format. This allows you to define incomplete dates in any form.</li>
+        <li>
+            <strong>Showing</strong>. When GEDKeeper needs to show you a date it translates that date in internal form to a string view. This may include special symbols
+            (if they were enabled in the program settings). For example, the date &quot;About 1701, January&quot; will be rendered as &quot;__.01.1701&quot; (when special
+            symbols are off) or as &quot;~ __.01.1701&quot; (when special symbols are on) in columns of general lists. Dates range like &quot;Between 01.01.1700 and 20.01.1700&quot;
+            will be shown as &quot;01.01.1700 - 20.01.1700&quot;. A &quot;Period before 10.10.1800&quot; date will be rendered as &quot;&lt; 10.10.1800&quot; (when special symbols are on).
+        </li>
+        <li>
+            <strong>Processing</strong>. When GEDKeeper processes dates (for example, makes arithmetical operations or
+            compares dates) it translates them into a special internal form (&quot;<a href="https://en.wikipedia.org/wiki/Julian_day" target="_top">Julian day</a>&quot;),
+            that allows code compares and handles incomplete dates of different calendars.
+        </li>
+    </ul>
 
     <p>
         When GEDKeeper shows an incomplete date it replaces unknown parts with the underscore (&quot;_&quot;) symbol. Some users argued against it, but such symbols allow to clearly show
@@ -61,7 +64,7 @@
         bear any other (non-calendar) information. An event is a record about certain occurrences which happened in a person's life. Such a record includes type of event, date, place,
         description, and additional information. A person entry, for example, can have a record about death with an empty date. This means that person died but no one knows when.
         Therefore, GEDKeeper processes differently persons with records about death and persons without such a record.
-    <p>
+    </p>
 
     <p>
         Some other software programs do not handle death and birth events like GEDKeeper does. They usually use a &quot;Died&quot; flag and fields that store date and
@@ -73,16 +76,15 @@
     </p>
 
     <p>Number of years in &quot;Age&quot; and &quot;Life span&quot; columns get calculated as follow:</p>
-
-        <ul>
-            <li>Life span is calculated strictly as the difference between birthday and obit. Therefore, when one of these dates is missing, nothing is done. The result is undefined.</li>
-            <li>
-                The age field is calculated as the differences of dates between birth and death events (when a person died if a death event has a valid date). Age is not calculated
-                when a death event exists but has no date. Age is calculated using the current date when a death event was not recorded (just the event itself, not its date). For example, for
-                if a person was born in 1700 and has no death event, in 2015 GEDKeeper shows its &quot;Age&quot; as 315 years. To avoid this, for people who have died,
-                even if you do not know when this happened, always add a death event with an empty date.
-            </li>
-        </ul>
+    <ul>
+        <li>Life span is calculated strictly as the difference between birthday and obit. Therefore, when one of these dates is missing, nothing is done. The result is undefined.</li>
+        <li>
+            The age field is calculated as the differences of dates between birth and death events (when a person died if a death event has a valid date). Age is not calculated
+            when a death event exists but has no date. Age is calculated using the current date when a death event was not recorded (just the event itself, not its date). For example, for
+            if a person was born in 1700 and has no death event, in 2015 GEDKeeper shows its &quot;Age&quot; as 315 years. To avoid this, for people who have died,
+            even if you do not know when this happened, always add a death event with an empty date.
+        </li>
+    </ul>
 
     <p>
         To make processing of bulk data more easy (for example, for data taken from a census&mdash;having many records without a specified obit) GEDKeeper offers a check
