@@ -142,6 +142,34 @@
             No attempts are made to merge duplicate records together. This is the task of a separate function. The only thing that changes during merging is the numbers/identifiers from the merging database.
         </dd>
 
+        <dt>14. What are the differences between versions 2.XX and 3.XX? Do I understand correctly that they have the same functionality, but are written for different OS?</dt>
+        <dd>
+            <p>Versions 2.XX are based on .NET Framework and can only run on Windows (7/8/8.1/10/11).</p>
+            <p>Versions 3.XX are implemented on the basis of .NET Core + EtoForms and <i>were planned as a complete replacement (cross-platform)</i> for Windows, Linux, MacOS, etc. - <i>with the complete cessation of development of 2.XX</i>Versions 3.XX are implemented on the basis of .NET Core + EtoForms and <i>were planned as a complete replacement (cross-platform)</i> for Windows, Linux, MacOS, etc. - <i>with the complete cessation of development of 2.XX</i>.</p>
+            <p>
+                But over time, it was discovered that .NET Core is constantly removing support for decommissioned OS versions, including Windows.
+                Because of this, there are numerous compatibility issues between GEDKeeper 3.XX and Win7/8/8.1.<ul>
+                    <li>dialogues are not centered correctly, they shift;</li>
+                    <li>print preview is very buggy;</li>
+                    <li>slightly slower than tree diagram graphics (but smoother and more accurate);</li>
+                    <li>data output is slower and data highlighting does not work in table views of the main window;</li>
+                    <li>interface themes are not possible;</li>
+                    <li>some graphic files (rare jpg, tif, bmp) are less supported;</li>
+                </ul>
+            </p>
+
+            <p>
+                Therefore, until the moment when (or if) there is nothing to choose from (restrictions, loss of the ability to use some option) - it was decided to develop both lines.
+                This is very labor-intensive. But if in Linux you can only use 3.XX, then in Windows it is inconvenient to use it - and this is on Win10/11.
+            </p>
+
+            <p>So for all versions of Windows I recommend using 2.XX - it is more stable and the interface is more efficient.</p>
+            <p>
+                All the differences concern only the interface. The core is completely identical, i.e. all the functionality is identical, not related to the appearance and interaction with the user.
+                And both lines of versions are compiled simultaneously from the same code base during releases.
+            </p>
+        </dd>
+
     </dl>
 
 </body>
