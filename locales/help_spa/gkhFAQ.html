@@ -57,7 +57,7 @@
                 </li>
 
                 <li>
-                    Crea mapas de Google con marcas de lugares de nacimiento, muerte y vida de todas las personas de la base de datos
+                    Crea mapas de Google con marcas de lugares de nacimiento, fallecimiento y residencia de todas las personas de la base de datos
                     o de una sola persona seleccionada. Es posible que en el futuro se implemente la impresión integrada.
                     Mientras tanto, puedes utilizar un programa o proceso de captura de pantalla (como [<kbd>PrtScr</kbd>] en Windows)
                     o la función de guardado de imágenes integrada (en un archivo JPEG) e imprimirla con un programa externo.
@@ -169,6 +169,32 @@
             Lo único que cambia durante la fusión son los números/identificadores de la base de datos de fusión.
         </dd>
 
+        <dt>14. ¿Cuáles son las diferencias entre las versiones 2.XX y 3.XX? Entiendo correctamente que tienen la misma funcionalidad, pero ¿están escritas para diferentes sistemas operativos?</dt>
+        <dd>
+            <p>Las versiones 2.XX se basan en .NET Framework y sólo pueden ejecutarse en Windows (7/8/8.1/10/11).</p>
+            <p>Las versiones 3.XX se implementan sobre la base de .NET Core + EtoForms y <i>se planearon como un reemplazo completo (multiplataforma) </i> para Windows, Linux, MacOS, etc. - <i>con el cese completo del desarrollo de 2.XX</i>.</p>
+            <p>
+                Pero con el tiempo, se descubrió que .NET Core está eliminando constantemente la compatibilidad con las versiones de SO dadas de baja, incluido Windows.
+                Debido a ello, existen numerosos problemas de compatibilidad entre GEDKeeper 3.XX y Win7/8/8.1.<ul>
+                    <li>los diálogos no están centrados correctamente, se desplazan;</li>
+                    <li>la vista previa de impresión es muy defectuosa;</li>
+                    <li>ligeramente más lento con los gráficos de diagrama de árbol (pero más suave y preciso);</li>
+                    <li>la salida de datos es más lenta y el resaltado de datos no funciona en las vistas de tabla de la ventana principal;</li>
+                    <li>no son posibles los temas de interfaz;</li>
+                    <li> algunos archivos gráficos (raros jpg, tif, bmp) son menos compatibles;</li>
+                </ul>
+            </p>
+
+            <p>
+                Por lo tanto, se decidió desarrollar ambas líneas. Esto requiere mucho trabajo. Pero si en Linux sólo se puede utilizar 3.XX, mientras que en Windows es inconveniente usarlo - y nos referimos a Win10/11.
+            </p>
+
+            <p>Así que para todas las versiones de Windows se recomienda usar 2.XX - es más estable y la interfaz es más eficiente.</p>
+            <p>
+                Todas las diferencias se refieren únicamente a la interfaz. El núcleo es completamente idéntico, es decir, toda la funcionalidad es idéntica, no relacionada con la apariencia y la interacción con el usuario.
+                Y ambas líneas de versiones se compilan simultáneamente a partir de la misma base de código durante los lanzamientos.
+            </p>
+        </dd>
     </dl>
 
 </body>
