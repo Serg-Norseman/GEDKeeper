@@ -3,37 +3,59 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="../help/styles.css" type="text/css">
-    <title>Authenticity Index</title>
+    <title>Certainty Index</title>
 </head>
 <body>
 
-    <h1>Authenticity Index</h1>
-
-    <p>The Authenticity Index is an attribute of data about a person as a special indicator that can be evaluated for a person entity only.</p>
-
-    <p>Each reference to a source in a person entity has a specific authenticity level of mention for that person in the source. Authenticity level can have the following values:</p>
-    <ul>
-        <li>Unreliable evidence or estimated data (authenticity is 25%).</li>
-        <li>Questionable reliability of evidence (authenticity is 50%).</li>
-        <li>Secondary evidence, data officially recorded sometime after event (authenticity is 75%).</li>
-        <li>Direct and primary evidences, or dominance of evidences (authenticity is 100%).</li>
-    </ul>
-
-    <p>While you are researching and viewing some information, the authenticity level shows you how much you can trust that information. It is better to set &quot;Questionable reliability of evidence&quot; if a source document had blots or was damaged and could not be read with confidence. This can prevent you from making false conclusions.</p>
-
-    <p>If a reference to a source has no authenticity level specified in the database, it is interpreted by the program as "Unreliable evidence or estimated data" when calculating the Authenticity Index.</p>
+    <h1>Certainty Index</h1>
 
     <p>
-        The Authenticity Index is evaluated automatically for each person based on authenticity level (as the weighted arithmetic mean). You can view the Authenticity Index
-        in a <a href="gkhStats.html">statistics</a> module for analysis of mean values or in <a href="gkhTreeChart.html">tree diagrams</a> for pictorial presentation. The index is evaluated using all references to sources, specified
-        in both person entity and all materials and events.
+        The Certainty Index is an attribute of data about a person as a special indicator
+        that can be evaluated for a <a href="gkhRec_Individual.html">person record</a> only.
     </p>
 
     <p>
+        Each <a href="gkhRec_SrcLink.html">reference to a source</a> in a person record
+        has a specific certainty level of mention for that person in the source.
+        Certainty level can have the following values:
+    </p>
+    <ul>
+        <li>Unreliable evidence or estimated data (certainty is 25%).</li>
+        <li>Questionable reliability of evidence (certainty is 50%).</li>
+        <li>Secondary evidence, data officially recorded sometime after event (certainty is 75%).</li>
+        <li>Direct and primary evidences, or dominance of evidences (certainty is 100%).</li>
+    </ul>
+
+    <p>
+        While you are researching and viewing some information, the certainty level shows you how much
+        you can trust that information. It is better to set &quot;Questionable reliability of evidence&quot;
+        if a source document had blots or was damaged and could not be read with confidence.
+        This can prevent you from making false conclusions.
+    </p>
+
+    <p>
+        If a reference to a source has no certainty level specified in the database,
+        it is interpreted by the program as "Unreliable evidence or estimated data" when calculating the Certainty Index.
+    </p>
+
+    <p>
+        The Certainty Index is evaluated automatically for each person based on certainty level (as the weighted arithmetic mean). You can view the Certainty Index
+        in a <a href="gkhStats.html">statistics</a> module for analysis of mean values
+        or in <a href="gkhTreeChart.html">tree diagrams</a> for pictorial presentation.
+        The index is evaluated using all references to sources, specified
+        in both person record and all materials and events.
+    </p>
+
+    <p>
+        In the settings dialog "Service\Options", on the "Common" tab,
+        there is a separate option "Certainty assessment algorithm", which allows you to change the calculation algorithm.
+        Possible options: weighted average, simple average, minimum, maximum.
     </p>
 
     <hr>
     <p>
+        See also: <a href="gkhRec_Individual.html">Personal records</a>, <a href="gkhRec_Source.html">Source records</a>,
+        <a href="gkhTreeChart.html">Trees</a>, <a href="gkhOptions.html">Options</a>.
     </p>
 
 </body>
