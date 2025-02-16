@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih, Ruslan Garipov.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih, Ruslan Garipov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,6 +32,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKUI.Platform.Handlers;
+using GKUI.Themes;
 
 namespace GKUI.Components
 {
@@ -415,6 +416,16 @@ namespace GKUI.Components
                 if (field != null)
                     field.SetValue(instance, value);
             }
+        }
+
+        public static void SetButtonThemeImage(Button button, ThemeElement themeElement)
+        {
+            if (button == null) return;
+
+            var themeImage = AppHost.ThemeManager.GetThemeImage(themeElement, true);
+            if (themeImage == null) return;
+
+            button.Image = ((ImageHandler)themeImage).Handle;
         }
     }
 }

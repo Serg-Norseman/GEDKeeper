@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,7 +25,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.Design;
-using GKCore.Design.Controls;
 using GKCore.Interfaces;
 using GKUI.Themes;
 
@@ -34,7 +33,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonForm : Form, IView, IThemedView
+    public class CommonForm : Form, IView, IThemedForm
     {
         private readonly IContainer fComponents;
         private readonly ToolTip fToolTip;

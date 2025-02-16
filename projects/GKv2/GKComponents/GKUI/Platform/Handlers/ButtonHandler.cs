@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,13 +20,26 @@
 
 using System.Windows.Forms;
 using GKCore.Design.Controls;
+using GKCore.Design.Graphics;
 
 namespace GKUI.Platform.Handlers
 {
     public sealed class ButtonHandler : BaseControlHandler<Button, ButtonHandler>, IButton
     {
+        private IImage fGlyph;
+
+
         public ButtonHandler(Button control) : base(control)
         {
+        }
+
+        public IImage Glyph
+        {
+            get { return fGlyph; }
+            set {
+                fGlyph = value;
+                Control.Image = fGlyph == null ? null : ((ImageHandler)fGlyph).Handle;
+            }
         }
 
         public string Text

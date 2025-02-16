@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,11 +21,14 @@
 using Eto.Forms;
 using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Design.Graphics;
 
 namespace GKUI.Platform.Handlers
 {
     public class ButtonToolItemHandler : ControlHandler<ToolItem, ButtonToolItemHandler>, IButtonToolItem
     {
+        private IImage fGlyph;
+
         public ButtonToolItemHandler(ToolItem control) : base(control)
         {
         }
@@ -34,6 +37,15 @@ namespace GKUI.Platform.Handlers
         {
             get { return Control.Enabled; }
             set { Control.Enabled = value; }
+        }
+
+        public IImage Glyph
+        {
+            get { return fGlyph; }
+            set {
+                fGlyph = value;
+                Control.Image = fGlyph == null ? null : ((ImageHandler)fGlyph).Handle;
+            }
         }
 
         public string Text

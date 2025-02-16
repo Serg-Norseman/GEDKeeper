@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,7 +34,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonForm : Form, IView, IThemedView
+    public class CommonForm : Form, IView, IThemedForm
     {
         private readonly ControlsManager fControlsManager;
 
@@ -154,7 +154,7 @@ namespace GKUI.Forms
     /// <summary>
     /// 
     /// </summary>
-    public class CommonDialog : Dialog<DialogResult>, ICommonDialog, IThemedView
+    public class CommonDialog : Dialog<DialogResult>, ICommonDialog, IThemedForm
     {
         private readonly ControlsManager fControlsManager;
         private readonly TaskCompletionSource<bool> fTaskSource;

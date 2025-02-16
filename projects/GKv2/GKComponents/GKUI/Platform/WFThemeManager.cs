@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -42,7 +42,7 @@ namespace GKUI.Themes
 
         public WFThemeManager()
         {
-            RegisterTheme("Default", new ThemeElementsDictionary() {
+            RegisterTheme(DefaultThemeName, new ThemeElementsDictionary() {
                 { ThemeElement.Font, "Tahoma" },                              // checked
                 { ThemeElement.FontSize, 8.25f },                             // checked
 
@@ -115,6 +115,20 @@ namespace GKUI.Themes
                 { ThemeElement.Glyph_Prev, "Resources.btn_left.gif" },
                 { ThemeElement.Glyph_Next, "Resources.btn_right.gif" },
                 { ThemeElement.Glyph_SendMail, "Resources.btn_mail.gif" },
+                { ThemeElement.Glyph_PartialView, "Resources.btn_table.gif" },
+
+                { ThemeElement.Glyph_Accept, "Resources.btn_accept.gif" },
+                { ThemeElement.Glyph_Cancel, "Resources.btn_cancel.gif" },
+
+                { ThemeElement.Glyph_ItemAdd, "Resources.btn_rec_new.gif" },
+                { ThemeElement.Glyph_ItemEdit, "Resources.btn_rec_edit.gif" },
+                { ThemeElement.Glyph_ItemDelete, "Resources.btn_rec_delete.gif" },
+                { ThemeElement.Glyph_LinkJump, "Resources.btn_jump.gif" },
+                { ThemeElement.Glyph_MoveUp, "Resources.btn_up.gif" },
+                { ThemeElement.Glyph_MoveDown, "Resources.btn_down.gif" },
+                { ThemeElement.Glyph_Copy, "Resources.btn_copy.gif" },
+                { ThemeElement.Glyph_Cut, "Resources.btn_cut.gif" },
+                { ThemeElement.Glyph_Paste, "Resources.btn_paste.gif" },
             }, true);
         }
 
@@ -164,8 +178,11 @@ namespace GKUI.Themes
 
         private static void ApplyTheme(IThemedView view, Component component, Theme theme)
         {
-            if (theme == null || view.SkipTheme(component))
-                return;
+            if (theme == null) return;
+
+            if (view is IThemedForm themedForm) {
+                if (themedForm.SkipTheme(component)) return;
+            }
 
             ThemeControlHandler handler = GetControlHandler(component);
             if (handler != null) {

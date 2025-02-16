@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,6 +29,7 @@ using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Lists
 {
@@ -94,7 +95,7 @@ namespace GKCore.Lists
     }
 
 
-    public interface ISheetList : IBaseControl
+    public interface ISheetList : IBaseControl, IThemedView
     {
         EnumSet<SheetButton> Buttons { get; set; }
         ISheetModel ListModel { get; set; }

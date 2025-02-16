@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,6 +30,8 @@ namespace GKUI.Themes
 {
     public abstract class BaseThemeManager : IThemeManager
     {
+        protected const string DefaultThemeName = "Default";
+
         protected static ThemeElementType[] fThemeElementTypes;
 
         protected static Theme fCurrentTheme;
@@ -116,6 +118,20 @@ namespace GKUI.Themes
                 ThemeElementType.Image, // ThemeElement.Glyph_Prev
                 ThemeElementType.Image, // ThemeElement.Glyph_Next
                 ThemeElementType.Image, // ThemeElement.Glyph_SendMail
+                ThemeElementType.Image, // ThemeElement.Glyph_PartialView
+
+                ThemeElementType.Image, // ThemeElement.Glyph_Accept
+                ThemeElementType.Image, // ThemeElement.Glyph_Cancel
+
+                ThemeElementType.Image, // ThemeElement.Glyph_ItemAdd,
+                ThemeElementType.Image, // ThemeElement.Glyph_ItemEdit,
+                ThemeElementType.Image, // ThemeElement.Glyph_ItemDelete,
+                ThemeElementType.Image, // ThemeElement.Glyph_LinkJump,
+                ThemeElementType.Image, // ThemeElement.Glyph_MoveUp,
+                ThemeElementType.Image, // ThemeElement.Glyph_MoveDown,
+                ThemeElementType.Image, // ThemeElement.Glyph_Copy,
+                ThemeElementType.Image, // ThemeElement.Glyph_Cut,
+                ThemeElementType.Image, // ThemeElement.Glyph_Paste,
             };
         }
 
@@ -196,7 +212,7 @@ namespace GKUI.Themes
                     try {
                         string imgName = telVal.ToString();
                         if (!string.IsNullOrEmpty(imgName)) {
-                            if (sysDefault) {
+                            if (sysDefault || imgName.StartsWith("Resources.")) {
                                 telVal = AppHost.GfxProvider.LoadResourceImage(imgName, ImageTarget.UI);
                             } else {
                                 telVal = AppHost.GfxProvider.LoadImage(GetThemesPath() + imgName);
@@ -232,13 +248,24 @@ namespace GKUI.Themes
 
         public abstract void ApplyTheme(IThemedView view, object component);
 
-        public IImage GetThemeImage(ThemeElement element)
+        private static IImage GetThemeImageInt(Theme theme, ThemeElement element)
         {
             object elemValue;
-            if (fCurrentTheme != null && fCurrentTheme.Elements.TryGetValue(element, out elemValue) && elemValue is IImage) {
+            if (theme != null && theme.Elements.TryGetValue(element, out elemValue) && elemValue is IImage) {
                 return (IImage)elemValue;
             }
             return null;
+        }
+
+        public IImage GetThemeImage(ThemeElement element, bool require = false)
+        {
+            IImage result = GetThemeImageInt(fCurrentTheme, element);
+
+            if (result == null && require && fThemes.TryGetValue(DefaultThemeName, out Theme defTheme)) {
+                result = GetThemeImageInt(defTheme, element);
+            }
+
+            return result;
         }
 
         protected static string GetThemeStr(Theme theme, ThemeElement element)

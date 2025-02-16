@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,6 +26,7 @@ using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Lists;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKUI.Components
 {
@@ -197,6 +198,19 @@ namespace GKUI.Components
         {
             UpdateButtons();
             fList.UpdateContents();
+        }
+
+        public void ApplyTheme()
+        {
+            UIHelper.SetButtonThemeImage(fBtnPaste, ThemeElement.Glyph_Paste);
+            UIHelper.SetButtonThemeImage(fBtnCut, ThemeElement.Glyph_Cut);
+            UIHelper.SetButtonThemeImage(fBtnCopy, ThemeElement.Glyph_Copy);
+            UIHelper.SetButtonThemeImage(fBtnMoveDown, ThemeElement.Glyph_MoveDown);
+            UIHelper.SetButtonThemeImage(fBtnMoveUp, ThemeElement.Glyph_MoveUp);
+            UIHelper.SetButtonThemeImage(fBtnLinkJump, ThemeElement.Glyph_LinkJump);
+            UIHelper.SetButtonThemeImage(fBtnDelete, ThemeElement.Glyph_ItemDelete);
+            UIHelper.SetButtonThemeImage(fBtnEdit, ThemeElement.Glyph_ItemEdit);
+            UIHelper.SetButtonThemeImage(fBtnAdd, ThemeElement.Glyph_ItemAdd);
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,6 +25,7 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -196,6 +197,18 @@ namespace GKCore.Controllers
             fView.PhonesList.ListView.AddColumn(LangMan.LS(LSID.Telephone), 350, false);
             fView.MailsList.ListView.AddColumn(LangMan.LS(LSID.Mail), 350, false);
             fView.WebsList.ListView.AddColumn(LangMan.LS(LSID.WebSite), 350, false);
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+
+            fView.PhonesList.ApplyTheme();
+            fView.MailsList.ApplyTheme();
+            fView.WebsList.ApplyTheme();
         }
     }
 }

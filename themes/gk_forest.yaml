@@ -71,4 +71,9 @@ Elements:
     Value: "#FFFFA1"
   - Element: HighlightInaccessibleFiles
     Value: "#FFCACA"
+
+  - Element: Glyph_Accept
+    Value: "Resources.btn_accept.gif"
+  - Element: Glyph_Cancel
+    Value: "Resources.btn_cancel.gif"
 ...

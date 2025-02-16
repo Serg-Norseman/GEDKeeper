@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,7 +29,7 @@ namespace GKUI.Themes
 
         void ApplyTheme(IThemedView view);
         void ApplyTheme(IThemedView view, object component);
-        IImage GetThemeImage(ThemeElement element);
+        IImage GetThemeImage(ThemeElement element, bool require = false);
         void LoadThemes();
         void SetTheme(string name);
     }
