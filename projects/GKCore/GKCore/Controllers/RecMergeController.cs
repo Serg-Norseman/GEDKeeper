@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -172,6 +172,11 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnRec2Select").Text = LangMan.LS(LSID.DlgSelect) + @"...";
             GetControl<IButton>("btnEditLeft").Text = LangMan.LS(LSID.DoEdit);
             GetControl<IButton>("btnEditRight").Text = LangMan.LS(LSID.DoEdit);
+        }
+
+        public override void ApplyTheme()
+        {
+            // dummy
         }
 
         public void ChangeOption()

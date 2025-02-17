@@ -129,6 +129,16 @@ namespace GKUI.Themes
                 { ThemeElement.Glyph_Copy, "Resources.btn_copy.gif" },
                 { ThemeElement.Glyph_Cut, "Resources.btn_cut.gif" },
                 { ThemeElement.Glyph_Paste, "Resources.btn_paste.gif" },
+
+                { ThemeElement.Glyph_ImageSave, "Resources.btn_save_image.gif" },
+                { ThemeElement.Glyph_DocPrint, "Resources.btn_print.gif" },
+                { ThemeElement.Glyph_DocPreview, "Resources.btn_preview.gif" },
+
+                { ThemeElement.Glyph_Start, "Resources.btn_start.gif" },
+                { ThemeElement.Glyph_Stop, "Resources.btn_stop.gif" },
+
+                { ThemeElement.Glyph_Undo, "Resources.btn_undo.gif" },
+                { ThemeElement.Glyph_Redo, "Resources.btn_redo.gif" },
             }, true);
         }
 

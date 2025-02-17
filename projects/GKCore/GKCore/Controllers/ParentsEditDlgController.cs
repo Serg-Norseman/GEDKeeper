@@ -24,6 +24,7 @@ using GKCore.Design.Controls;
 using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -193,6 +194,20 @@ namespace GKCore.Controllers
             SetToolTip("btnFatherDelete", LangMan.LS(LSID.FatherDeleteTip));
             SetToolTip("btnMotherAdd", LangMan.LS(LSID.MotherAddTip));
             SetToolTip("btnMotherDelete", LangMan.LS(LSID.MotherDeleteTip));
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+
+            GetControl<IButton>("btnParentsEdit").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemEdit, true);
+            GetControl<IButton>("btnFatherAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemAdd, true);
+            GetControl<IButton>("btnFatherDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemDelete, true);
+            GetControl<IButton>("btnMotherAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemAdd, true);
+            GetControl<IButton>("btnMotherDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemDelete, true);
         }
     }
 }

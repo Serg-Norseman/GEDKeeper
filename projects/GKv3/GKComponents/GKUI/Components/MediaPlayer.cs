@@ -64,9 +64,9 @@ namespace GKUI.Components
         {
             XamlReader.Load(this);
 
-            btnPause.Image = UIHelper.LoadResourceImage("Resources.btn_pause.png");
-            btnPlay.Image = UIHelper.LoadResourceImage("Resources.btn_play.png");
-            btnStop.Image = UIHelper.LoadResourceImage("Resources.btn_stop.png");
+            btnPause.Image = UIHelper.LoadResourceImage("Resources.btn_media_pause.png");
+            btnPlay.Image = UIHelper.LoadResourceImage("Resources.btn_media_play.png");
+            btnStop.Image = UIHelper.LoadResourceImage("Resources.btn_media_stop.png");
             btnMute.Image = UIHelper.LoadResourceImage("Resources.btn_volume_mute.png");
 
             InitVLC();

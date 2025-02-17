@@ -25,6 +25,7 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -129,6 +130,14 @@ namespace GKCore.Controllers
             fView.RecordStats.ClearColumns();
             fView.RecordStats.AddColumn(LangMan.LS(LSID.RM_Records), 300, false);
             fView.RecordStats.AddColumn(LangMan.LS(LSID.Count), 100, false, BSDTypes.HorizontalAlignment.Right);
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

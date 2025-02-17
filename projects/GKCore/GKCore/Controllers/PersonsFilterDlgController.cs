@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -229,6 +229,11 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblGroups").Text = LangMan.LS(LSID.RPGroups);
             GetControl<ILabel>("lblSources").Text = LangMan.LS(LSID.RPSources);
             GetControl<ICheckBox>("chkOnlyPatriarchs").Text = LangMan.LS(LSID.OnlyPatriarchs);
+        }
+
+        public override void ApplyTheme()
+        {
+            // dummy
         }
     }
 }

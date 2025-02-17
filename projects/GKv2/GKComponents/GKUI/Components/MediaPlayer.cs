@@ -53,11 +53,11 @@ namespace GKUI.Components
         {
             InitializeComponent();
 
-            this.btnMute.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_volume_mute.png");
-            this.btnPause.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_pause.png");
-            this.btnPlay.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_play.png");
-            this.btnStop.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_stop.png");
-            this.pnlVideo.BackgroundImage = UIHelper.LoadResourceImage("Resources.pnl_video.png");
+            btnPause.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_media_pause.png");
+            btnPlay.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_media_play.png");
+            btnStop.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_media_stop.png");
+            btnMute.BackgroundImage = UIHelper.LoadResourceImage("Resources.btn_volume_mute.png");
+            pnlVideo.BackgroundImage = UIHelper.LoadResourceImage("Resources.pnl_video.png");
 
             fFactory = new MediaPlayerFactory(FIND_LIBVLC);
             fPlayer = fFactory.CreatePlayer<IDiskPlayer>();

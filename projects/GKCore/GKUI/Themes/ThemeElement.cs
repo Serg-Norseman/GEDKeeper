@@ -111,6 +111,16 @@ namespace GKUI.Themes
         Glyph_Copy,
         Glyph_Cut,
         Glyph_Paste,
+
+        Glyph_ImageSave,
+        Glyph_DocPrint,
+        Glyph_DocPreview,
+
+        Glyph_Start,
+        Glyph_Stop,
+
+        Glyph_Undo, // not used yet
+        Glyph_Redo, // not used yet
     }
 
 

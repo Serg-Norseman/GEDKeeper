@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,6 +25,7 @@ using GKCore.Design.Views;
 using GKCore.Options;
 using System.IO;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -72,6 +73,18 @@ namespace GKCore.Controllers
             SetToolTip("tbPrev", LangMan.LS(LSID.PrevRec));
             SetToolTip("tbNext", LangMan.LS(LSID.NextRec));
             SetToolTip("tbOptions", LangMan.LS(LSID.MIOptions));
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IToolItem>("tbImageSave").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ImageSave, true);
+            GetControl<IToolItem>("tbDocPrint").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_DocPrint, true);
+            GetControl<IToolItem>("tbDocPreview").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_DocPreview, true);
+            GetControl<IToolItem>("tbPrev").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Prev, true);
+            GetControl<IToolItem>("tbNext").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Next, true);
+            GetControl<IToolItem>("tbOptions").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Settings, true);
         }
     }
 }

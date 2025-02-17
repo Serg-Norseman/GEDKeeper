@@ -24,6 +24,8 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Names;
+using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -94,6 +96,14 @@ namespace GKCore.Controllers
             GetControl<IGroupBox>("grpPatronymics").Text = LangMan.LS(LSID.Patronymic);
             GetControl<ILabel>("lblFemale").Text = LangMan.LS(LSID.PatFemale);
             GetControl<ILabel>("lblMale").Text = LangMan.LS(LSID.PatMale);
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

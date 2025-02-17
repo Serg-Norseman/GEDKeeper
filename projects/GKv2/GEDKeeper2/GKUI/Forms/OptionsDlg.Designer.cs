@@ -1038,6 +1038,7 @@
             this.pageTreeDesign.Controls.Add(this.lblDefaultDepthDescendants);
             this.pageTreeDesign.Controls.Add(this.grpSpacings);
             this.pageTreeDesign.Controls.Add(this.grpTreeDecor);
+            this.pageTreeDesign.Controls.Add(this.chkUseExtraControls);
             this.pageTreeDesign.Controls.Add(this.lblTextEffect);
             this.pageTreeDesign.Controls.Add(this.cmbTextEffect);
             this.pageTreeDesign.Location = new System.Drawing.Point(4, 26);
@@ -1138,6 +1139,15 @@
             this.lblDefaultDepthDescendants.Size = new System.Drawing.Size(180, 17);
             this.lblDefaultDepthDescendants.TabIndex = 10;
             this.lblDefaultDepthDescendants.Text = "lblDefaultDepthDescendants";
+            // 
+            // chkUseExtraControls
+            // 
+            this.chkUseExtraControls.Location = new System.Drawing.Point(11, 289);
+            this.chkUseExtraControls.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkUseExtraControls.Name = "chkUseExtraControls";
+            this.chkUseExtraControls.Size = new System.Drawing.Size(600, 22);
+            this.chkUseExtraControls.TabIndex = 12;
+            this.chkUseExtraControls.Text = "chkUseExtraControls";
             // 
             // lblTextEffect
             // 
@@ -1355,6 +1365,8 @@
             this.panTreePersons.Controls.Add(this.chkDateDesignations);
             this.panTreePersons.Controls.Add(this.chkMourningEdges);
             this.panTreePersons.Controls.Add(this.chkUseAdditionalDates);
+            this.panTreePersons.Controls.Add(this.chkExtendedTree);
+            this.panTreePersons.Controls.Add(this.chkUseInlineImagesInSvg);
             this.panTreePersons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panTreePersons.Location = new System.Drawing.Point(0, 0);
             this.panTreePersons.Margin = new System.Windows.Forms.Padding(10);
@@ -1716,6 +1728,24 @@
             this.chkUseAdditionalDates.TabIndex = 31;
             this.chkUseAdditionalDates.Text = "chkUseAdditionalDates";
             this.chkUseAdditionalDates.CheckedChanged += new System.EventHandler(this.chkTreeChartOption_CheckedChanged);
+            // 
+            // chkUseInlineImagesInSvg
+            // 
+            this.chkUseInlineImagesInSvg.Location = new System.Drawing.Point(6, 848);
+            this.chkUseInlineImagesInSvg.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkUseInlineImagesInSvg.Name = "chkUseInlineImagesInSvg";
+            this.chkUseInlineImagesInSvg.Size = new System.Drawing.Size(600, 22);
+            this.chkUseInlineImagesInSvg.TabIndex = 12;
+            this.chkUseInlineImagesInSvg.Text = "chkUseInlineImagesInSvg";
+            // 
+            // chkExtendedTree
+            // 
+            this.chkExtendedTree.Location = new System.Drawing.Point(6, 875);
+            this.chkExtendedTree.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkExtendedTree.Name = "chkExtendedTree";
+            this.chkExtendedTree.Size = new System.Drawing.Size(600, 22);
+            this.chkExtendedTree.TabIndex = 12;
+            this.chkExtendedTree.Text = "chkExtendedTree";
             // 
             // grpTreeDecor
             // 
@@ -2574,13 +2604,10 @@
             // 
             // pageSpecials
             // 
-            this.pageSpecials.Controls.Add(this.chkUseInlineImagesInSvg);
             this.pageSpecials.Controls.Add(this.chkUseExtendedNotes);
             this.pageSpecials.Controls.Add(this.chkKeepRichNames);
             this.pageSpecials.Controls.Add(this.lblChartWindowsShowMode);
             this.pageSpecials.Controls.Add(this.cmbChartWindowsShowMode);
-            this.pageSpecials.Controls.Add(this.chkExtendedTree);
-            this.pageSpecials.Controls.Add(this.chkUseExtraControls);
             this.pageSpecials.Controls.Add(this.chkShortenDateRanges);
             this.pageSpecials.Controls.Add(this.chkKeepInfoPansOverallSize);
             this.pageSpecials.Controls.Add(this.chkFilesOverwriteWarn);
@@ -2594,15 +2621,6 @@
             this.pageSpecials.Size = new System.Drawing.Size(741, 762);
             this.pageSpecials.TabIndex = 5;
             this.pageSpecials.Text = "pageSpecials";
-            // 
-            // chkUseInlineImagesInSvg
-            // 
-            this.chkUseInlineImagesInSvg.Location = new System.Drawing.Point(20, 20);
-            this.chkUseInlineImagesInSvg.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkUseInlineImagesInSvg.Name = "chkUseInlineImagesInSvg";
-            this.chkUseInlineImagesInSvg.Size = new System.Drawing.Size(600, 22);
-            this.chkUseInlineImagesInSvg.TabIndex = 12;
-            this.chkUseInlineImagesInSvg.Text = "chkUseInlineImagesInSvg";
             // 
             // chkUseExtendedNotes
             // 
@@ -2640,24 +2658,6 @@
             this.cmbChartWindowsShowMode.Size = new System.Drawing.Size(220, 22);
             this.cmbChartWindowsShowMode.TabIndex = 12;
             this.cmbChartWindowsShowMode.Text = "cmbChartWindowsShowMode";
-            // 
-            // chkExtendedTree
-            // 
-            this.chkExtendedTree.Location = new System.Drawing.Point(20, 144);
-            this.chkExtendedTree.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkExtendedTree.Name = "chkExtendedTree";
-            this.chkExtendedTree.Size = new System.Drawing.Size(600, 22);
-            this.chkExtendedTree.TabIndex = 12;
-            this.chkExtendedTree.Text = "chkExtendedTree";
-            // 
-            // chkUseExtraControls
-            // 
-            this.chkUseExtraControls.Location = new System.Drawing.Point(20, 175);
-            this.chkUseExtraControls.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkUseExtraControls.Name = "chkUseExtraControls";
-            this.chkUseExtraControls.Size = new System.Drawing.Size(600, 22);
-            this.chkUseExtraControls.TabIndex = 12;
-            this.chkUseExtraControls.Text = "chkUseExtraControls";
             // 
             // chkShortenDateRanges
             // 

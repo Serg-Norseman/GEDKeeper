@@ -47,10 +47,10 @@ namespace GKUI.Themes
                 { ThemeElement.Font, "Tahoma" },                              // ???
                 { ThemeElement.FontSize, 8.25f },                             // ???
 
-                { ThemeElement.Editor, SystemColors.ControlBackground },                 // ???
-                { ThemeElement.EditorText, SystemColors.ControlText },         // ???
+                { ThemeElement.Editor, SystemColors.ControlBackground },      // ???
+                { ThemeElement.EditorText, SystemColors.ControlText },        // ???
 
-                { ThemeElement.Control, Color.FromArgb(0x00000000) },               // default?! win+
+                { ThemeElement.Control, Color.FromArgb(0x00000000) },         // default?! win+
                 { ThemeElement.ControlText, SystemColors.ControlText },       // ???
 
                 { ThemeElement.Window, SystemColors.Control },                // ???
@@ -59,8 +59,8 @@ namespace GKUI.Themes
                 { ThemeElement.Dialog, SystemColors.Control },                // ???
                 { ThemeElement.DialogText, SystemColors.ControlText },        // ???
 
-                { ThemeElement.ButtonFace, Color.FromArgb(0xDDDDDD) },       // default?! win+
-                { ThemeElement.AccentButtonFace, Color.FromArgb(0xDDDDDD) }, // default?! win+
+                { ThemeElement.ButtonFace, Color.FromArgb(0xDDDDDD) },        // default?! win+
+                { ThemeElement.AccentButtonFace, Color.FromArgb(0xDDDDDD) },  // default?! win+
                 { ThemeElement.ButtonBorder, Colors.Black },                  // ???
                 { ThemeElement.ButtonText, SystemColors.ControlText },        // ???
 
@@ -72,13 +72,13 @@ namespace GKUI.Themes
                 { ThemeElement.Link, Colors.Blue },                            // ???
 
                 { ThemeElement.Grid, SystemColors.Control },                   // ???
-                { ThemeElement.GridHeader, SystemColors.WindowBackground },             // ???
-                { ThemeElement.GridHeaderText, SystemColors.WindowBackground },     // ???
+                { ThemeElement.GridHeader, SystemColors.WindowBackground },    // ???
+                { ThemeElement.GridHeaderText, SystemColors.WindowBackground },// ???
                 { ThemeElement.GridText, SystemColors.ControlText },           // ???
 
-                { ThemeElement.Tab, SystemColors.WindowBackground },                    // ???
-                { ThemeElement.TabHighlight, SystemColors.WindowBackground },           // ???
-                { ThemeElement.TabSelected, SystemColors.Control },           // ???
+                { ThemeElement.Tab, SystemColors.WindowBackground },           // ???
+                { ThemeElement.TabHighlight, SystemColors.WindowBackground },  // ???
+                { ThemeElement.TabSelected, SystemColors.Control },            // ???
 
                 { ThemeElement.HighlightReadabilityRows, Color.FromArgb(0xEFEFEF) },      // GK only
                 { ThemeElement.HighlightUnparentedIndi, Color.FromArgb(0xFFCACA) },       // GK only
@@ -130,6 +130,16 @@ namespace GKUI.Themes
                 { ThemeElement.Glyph_Copy, "Resources.btn_copy.gif" },
                 { ThemeElement.Glyph_Cut, "Resources.btn_cut.gif" },
                 { ThemeElement.Glyph_Paste, "Resources.btn_paste.gif" },
+
+                { ThemeElement.Glyph_ImageSave, "Resources.btn_save_image.gif" },
+                { ThemeElement.Glyph_DocPrint, "Resources.btn_print.gif" },
+                { ThemeElement.Glyph_DocPreview, "Resources.btn_preview.gif" },
+
+                { ThemeElement.Glyph_Start, "Resources.btn_start.gif" },
+                { ThemeElement.Glyph_Stop, "Resources.btn_stop.gif" },
+
+                { ThemeElement.Glyph_Undo, "Resources.btn_undo.gif" },
+                { ThemeElement.Glyph_Redo, "Resources.btn_redo.gif" },
             }, true);
         }
 

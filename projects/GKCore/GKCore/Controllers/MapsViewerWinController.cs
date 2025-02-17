@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,8 +30,10 @@ using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Maps;
 using GKCore.Options;
+using GKCore.Types;
 using GKMap;
 using GKMap.MapProviders;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -319,7 +321,6 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkDeath").Text = LangMan.LS(LSID.MSDeathPlaces);
             GetControl<ICheckBox>("chkResidence").Text = LangMan.LS(LSID.MSResiPlace);
             GetControl<IRadioButton>("radSelected").Text = LangMan.LS(LSID.MapSelOnSelected);
-            //btnSaveImage.Text = LangMan.LS(LSID.SaveImage);
             GetControl<IButton>("btnSelectPlaces").Text = LangMan.LS(LSID.Show);
             GetControl<ICheckBox>("chkLinesVisible").Text = LangMan.LS(LSID.LinesVisible);
             GetControl<IButtonToolItem>("tbLoadPlaces").Text = LangMan.LS(LSID.LoadPlaces);
@@ -329,6 +330,13 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnSearch").Text = LangMan.LS(LSID.Search);
 
             SetToolTip("tbSaveSnapshot", LangMan.LS(LSID.ImageSaveTip));
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IToolItem>("tbSaveSnapshot").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ImageSave, true);
         }
     }
 }

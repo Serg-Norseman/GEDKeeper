@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,6 +29,7 @@ using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -254,6 +255,18 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblStoreType").Text = LangMan.LS(LSID.StoreType);
             GetControl<ILabel>("lblFile").Text = LangMan.LS(LSID.File);
             GetControl<IButton>("btnView").Text = LangMan.LS(LSID.View) + @"...";
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+
+            fView.NotesList.ApplyTheme();
+            fView.SourcesList.ApplyTheme();
+            fView.UserRefList.ApplyTheme();
         }
     }
 }

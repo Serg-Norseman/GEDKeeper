@@ -23,6 +23,8 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -110,6 +112,14 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblType").Text = LangMan.LS(LSID.Type);
             GetControl<ICheckBox>("chkEnabled").Text = LangMan.LS(LSID.Enabled);
             GetControl<ILabel>("lblDesc").Text = LangMan.LS(LSID.Description);
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

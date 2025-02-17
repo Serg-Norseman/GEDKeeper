@@ -29,6 +29,7 @@ using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Plugins;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -1110,6 +1111,17 @@ namespace GKCore.Controllers
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ITabPage>("pagePlugins").Text = LangMan.LS(LSID.Plugins);
             }
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+
+            GetControl<IButton>("btnColumnUp").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_MoveUp, true);
+            GetControl<IButton>("btnColumnDown").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_MoveDown, true);
         }
     }
 }

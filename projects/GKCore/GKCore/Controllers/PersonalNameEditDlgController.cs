@@ -29,6 +29,7 @@ using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -176,6 +177,14 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblNameSuffix").Text = LangMan.LS(LSID.NameSuffix);
             GetControl<ILabel>("lblType").Text = LangMan.LS(LSID.Type);
             GetControl<ILabel>("lblLanguage").Text = LangMan.LS(LSID.Language);
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

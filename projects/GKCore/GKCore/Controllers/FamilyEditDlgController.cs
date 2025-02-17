@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,6 +27,7 @@ using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Operations;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -232,6 +233,29 @@ namespace GKCore.Controllers
             SetToolTip("btnWifeAdd", LangMan.LS(LSID.WifeAddTip));
             SetToolTip("btnWifeDelete", LangMan.LS(LSID.WifeDeleteTip));
             SetToolTip("btnWifeSel", LangMan.LS(LSID.WifeSelTip));
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+
+            GetControl<IButton>("btnHusbandAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemAdd, true);
+            GetControl<IButton>("btnHusbandDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemDelete, true);
+            GetControl<IButton>("btnHusbandSel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_LinkJump, true);
+
+            GetControl<IButton>("btnWifeAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemAdd, true);
+            GetControl<IButton>("btnWifeDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemDelete, true);
+            GetControl<IButton>("btnWifeSel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_LinkJump, true);
+
+            fView.ChildrenList.ApplyTheme();
+            fView.EventsList.ApplyTheme();
+            fView.NotesList.ApplyTheme();
+            fView.MediaList.ApplyTheme();
+            fView.SourcesList.ApplyTheme();
+            fView.UserRefList.ApplyTheme();
         }
     }
 }

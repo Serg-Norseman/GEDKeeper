@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,6 +26,7 @@ using GKCore.Lists;
 using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -150,6 +151,19 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblDate").Text = LangMan.LS(LSID.Date);
 
             SetToolTip("btnPersonAdd", LangMan.LS(LSID.PersonAttachTip));
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+
+            GetControl<IButton>("btnPersonAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemAdd, true);
+
+            fView.NotesList.ApplyTheme();
+            fView.MediaList.ApplyTheme();
         }
     }
 }

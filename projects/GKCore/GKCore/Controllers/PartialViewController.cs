@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,6 +31,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -532,19 +533,19 @@ namespace GKCore.Controllers
 
         public override void ApplyTheme()
         {
-            if (AppHost.Instance.HasFeatureSupport(Feature.Themes)) {
-                // toolbar
-                //GetControl<IMenuItem>("tbFileSave").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileSave);
-                //GetControl<IMenuItem>("tbRecordAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_RecordAdd);
-                //GetControl<IMenuItem>("tbRecordEdit").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_RecordEdit);
-                //GetControl<IMenuItem>("tbRecordDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_RecordDelete);
-                //GetControl<IMenuItem>("tbFilter").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Filter);
-                //GetControl<IMenuItem>("tbTreeAncestors").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_TreeAncestors);
-                //GetControl<IMenuItem>("tbTreeDescendants").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_TreeDescendants);
-                //GetControl<IMenuItem>("tbTreeBoth").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_TreeBoth);
-                //GetControl<IMenuItem>("tbPrev").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Prev);
-                //GetControl<IMenuItem>("tbNext").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Next);
-            }
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            // toolbar
+            GetControl<IToolItem>("tbFileSave").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileSave, true);
+            GetControl<IToolItem>("tbRecordAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_RecordAdd, true);
+            GetControl<IToolItem>("tbRecordEdit").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_RecordEdit, true);
+            GetControl<IToolItem>("tbRecordDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_RecordDelete, true);
+            GetControl<IToolItem>("tbFilter").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Filter, true);
+            GetControl<IToolItem>("tbTreeAncestors").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_TreeAncestors, true);
+            GetControl<IToolItem>("tbTreeDescendants").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_TreeDescendants, true);
+            GetControl<IToolItem>("tbTreeBoth").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_TreeBoth, true);
+            GetControl<IToolItem>("tbPrev").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Prev, true);
+            GetControl<IToolItem>("tbNext").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Next, true);
         }
 
         #region Dialogs

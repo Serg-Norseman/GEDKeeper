@@ -82,9 +82,9 @@
         <EmbeddedResource Include="Resources\sym_female.png" />
         <EmbeddedResource Include="Resources\sym_male.png" />
         <EmbeddedResource Include="Resources\btn_close.png" />
-        <EmbeddedResource Include="Resources\btn_pause.png" />
-        <EmbeddedResource Include="Resources\btn_play.png" />
-        <EmbeddedResource Include="Resources\btn_stop.png" />
+        <EmbeddedResource Include="Resources\btn_media_pause.png" />
+        <EmbeddedResource Include="Resources\btn_media_play.png" />
+        <EmbeddedResource Include="Resources\btn_media_stop.png" />
         <EmbeddedResource Include="Resources\btn_volume_max.png" />
         <EmbeddedResource Include="Resources\btn_volume_middle.png" />
         <EmbeddedResource Include="Resources\btn_volume_min.png" />

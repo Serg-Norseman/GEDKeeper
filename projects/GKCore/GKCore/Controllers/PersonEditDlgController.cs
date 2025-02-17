@@ -30,6 +30,7 @@ using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -310,7 +311,7 @@ namespace GKCore.Controllers
                 fView.MarriedSurname.Text = "";
             }
 
-            var locked = (fView.RestrictionCombo.SelectedIndex == (int) GDMRestriction.rnLocked);
+            var locked = (fView.RestrictionCombo.SelectedIndex == (int)GDMRestriction.rnLocked);
             fView.Patronymic.Enabled = !locked && culture.HasPatronymic;
             fView.Surname.Enabled = !locked && culture.HasSurname;
         }
@@ -582,6 +583,38 @@ namespace GKCore.Controllers
             SetToolTip("btnMotherDelete", LangMan.LS(LSID.MotherDeleteTip));
             SetToolTip("btnMotherSel", LangMan.LS(LSID.MotherSelTip));
             SetToolTip("btnNameCopy", LangMan.LS(LSID.NameCopyTip));
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+
+            GetControl<IButton>("btnPortraitAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemAdd, true);
+            GetControl<IButton>("btnPortraitDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemDelete, true);
+            GetControl<IButton>("btnParentsAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemAdd, true);
+            GetControl<IButton>("btnParentsEdit").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemEdit, true);
+            GetControl<IButton>("btnParentsDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemDelete, true);
+            GetControl<IButton>("btnFatherAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemAdd, true);
+            GetControl<IButton>("btnFatherDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemDelete, true);
+            GetControl<IButton>("btnFatherSel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_LinkJump, true);
+            GetControl<IButton>("btnMotherAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemAdd, true);
+            GetControl<IButton>("btnMotherDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemDelete, true);
+            GetControl<IButton>("btnMotherSel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_LinkJump, true);
+            GetControl<IButton>("btnNameCopy").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Copy, true);
+
+            fView.EventsList.ApplyTheme();
+            fView.NotesList.ApplyTheme();
+            fView.MediaList.ApplyTheme();
+            fView.SourcesList.ApplyTheme();
+            fView.AssociationsList.ApplyTheme();
+            fView.GroupsList.ApplyTheme();
+            fView.NamesList.ApplyTheme();
+            fView.SpousesList.ApplyTheme();
+            fView.UserRefList.ApplyTheme();
+            fView.ParentsList.ApplyTheme();
         }
     }
 }

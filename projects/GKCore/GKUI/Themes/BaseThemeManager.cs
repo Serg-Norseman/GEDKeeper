@@ -132,6 +132,16 @@ namespace GKUI.Themes
                 ThemeElementType.Image, // ThemeElement.Glyph_Copy,
                 ThemeElementType.Image, // ThemeElement.Glyph_Cut,
                 ThemeElementType.Image, // ThemeElement.Glyph_Paste,
+
+                ThemeElementType.Image, // ThemeElement.Glyph_ImageSave,
+                ThemeElementType.Image, // ThemeElement.Glyph_DocPrint,
+                ThemeElementType.Image, // ThemeElement.Glyph_DocPreview,
+
+                ThemeElementType.Image, // ThemeElement.Glyph_Start,
+                ThemeElementType.Image, // ThemeElement.Glyph_Stop,
+
+                ThemeElementType.Image, // ThemeElement.Glyph_Undo,
+                ThemeElementType.Image, // ThemeElement.Glyph_Redo,
             };
         }
 

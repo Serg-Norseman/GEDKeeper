@@ -20,17 +20,14 @@
 
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using GDModel;
 using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Maps;
 using GKCore.Options;
-using GKCore.Tools;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -440,6 +437,19 @@ namespace GKCore.Controllers
             SetToolTip("tbNext", LangMan.LS(LSID.NextRec));
             SetToolTip("tbFilter", LangMan.LS(LSID.MIFilter));
             SetToolTip("tbOptions", LangMan.LS(LSID.MIOptions));
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IToolItem>("tbImageSave").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ImageSave, true);
+            GetControl<IToolItem>("tbDocPrint").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_DocPrint, true);
+            GetControl<IToolItem>("tbDocPreview").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_DocPreview, true);
+            GetControl<IToolItem>("tbPrev").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Prev, true);
+            GetControl<IToolItem>("tbNext").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Next, true);
+            GetControl<IToolItem>("tbOptions").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Settings, true);
+            GetControl<IToolItem>("tbFilter").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Filter, true);
         }
     }
 }

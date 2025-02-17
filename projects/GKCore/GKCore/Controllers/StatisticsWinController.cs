@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,6 +27,7 @@ using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Stats;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -266,6 +267,13 @@ namespace GKCore.Controllers
             int oldIndex = fView.StatsType.SelectedIndex;
             UpdateStatsTypes();
             fView.StatsType.SelectedIndex = oldIndex;
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IButton>("tbExcelExport").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ExportTable);
         }
     }
 }

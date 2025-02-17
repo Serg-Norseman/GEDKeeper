@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,9 +19,12 @@
  */
 
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Search;
+using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -96,6 +99,14 @@ namespace GKCore.Controllers
             //txtSearchPattern.Text = LangMan.LS(LSID.NoMatchesFound);
             SetToolTip("btnPrev", LangMan.LS(LSID.FindPrevious));
             SetToolTip("btnNext", LangMan.LS(LSID.FindNext));
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IButton>("btnPrev").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Prev, true);
+            GetControl<IButton>("btnNext").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Next, true);
         }
     }
 }

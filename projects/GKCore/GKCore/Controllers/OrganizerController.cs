@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -117,6 +117,11 @@ namespace GKCore.Controllers
 
             fView.WebsList.ListView.AddColumn(LangMan.LS(LSID.Person), 350, false);
             fView.WebsList.ListView.AddColumn(LangMan.LS(LSID.WebSite), 100, false);
+        }
+
+        public override void ApplyTheme()
+        {
+            // dummy
         }
     }
 }
