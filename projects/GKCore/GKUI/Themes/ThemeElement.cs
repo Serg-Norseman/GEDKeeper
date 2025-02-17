@@ -121,6 +121,9 @@ namespace GKUI.Themes
 
         Glyph_Undo, // not used yet
         Glyph_Redo, // not used yet
+
+        Glyph_Attach,
+        Glyph_Detach,
     }
 
 

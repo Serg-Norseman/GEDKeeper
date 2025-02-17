@@ -139,6 +139,9 @@ namespace GKUI.Themes
 
                 { ThemeElement.Glyph_Undo, "Resources.btn_undo.gif" },
                 { ThemeElement.Glyph_Redo, "Resources.btn_redo.gif" },
+
+                { ThemeElement.Glyph_Attach, "Resources.btn_rec_new.gif" },
+                { ThemeElement.Glyph_Detach, "Resources.btn_rec_delete.gif" },
             }, true);
         }
 

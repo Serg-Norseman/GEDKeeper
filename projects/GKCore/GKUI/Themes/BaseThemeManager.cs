@@ -142,6 +142,9 @@ namespace GKUI.Themes
 
                 ThemeElementType.Image, // ThemeElement.Glyph_Undo,
                 ThemeElementType.Image, // ThemeElement.Glyph_Redo,
+
+                ThemeElementType.Image, // ThemeElement.Glyph_Attach,
+                ThemeElementType.Image, // ThemeElement.Glyph_Detach,
             };
         }
 

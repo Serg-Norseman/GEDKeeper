@@ -1991,11 +1991,11 @@ namespace GKCore.Charts
             if (!fOptions.InvertedTree) {
                 pY = person.PtY;
                 crY = person.PtY - fLevelDistance / 2;
-                parY = (person.Father != null) ? person.Father.PtY + person.Father.Height : person.Mother.PtY + person.Mother.Height;
+                parY = ((person.Father != null) ? person.Father.PtY + person.Father.Height : person.Mother.PtY + person.Mother.Height) + 1;
             } else {
                 pY = person.PtY + person.Height;
                 crY = person.PtY + person.Height + fLevelDistance / 2;
-                parY = (person.Father != null) ? person.Father.PtY : person.Mother.PtY;
+                parY = ((person.Father != null) ? person.Father.PtY : person.Mother.PtY) - 1;
             }
 
             bool dotted = IsDottedLines(person);

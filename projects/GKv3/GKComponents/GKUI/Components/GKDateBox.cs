@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -36,6 +36,16 @@ namespace GKUI.Components
 
         private bool fPopupShown;
 
+
+        public new Color BackgroundColor
+        {
+            get {
+                return txtMaskedDate.BackgroundColor;
+            }
+            set {
+                txtMaskedDate.BackgroundColor = value;
+            }
+        }
 
         public bool CalcMode
         {
@@ -73,6 +83,16 @@ namespace GKUI.Components
         {
             get { return txtMaskedDate.Text; }
             set { txtMaskedDate.Text = value; }
+        }
+
+        public Color TextColor
+        {
+            get {
+                return txtMaskedDate.TextColor;
+            }
+            set {
+                txtMaskedDate.TextColor = value;
+            }
         }
 
         public event EventHandler<EventArgs> TextChanged

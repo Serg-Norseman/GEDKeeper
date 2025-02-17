@@ -140,6 +140,9 @@ namespace GKUI.Themes
 
                 { ThemeElement.Glyph_Undo, "Resources.btn_undo.gif" },
                 { ThemeElement.Glyph_Redo, "Resources.btn_redo.gif" },
+
+                { ThemeElement.Glyph_Attach, "Resources.btn_rec_new.gif" },
+                { ThemeElement.Glyph_Detach, "Resources.btn_rec_delete.gif" },
             }, true);
         }
 
@@ -268,15 +271,12 @@ namespace GKUI.Themes
         private static void ThemeFormHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (Window)component;
-
-            if (!(ctl is Dialog)) {
-                // window
-                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Window);
-                //ctl.TextColor = GetThemeColor(theme, ThemeElement.WindowText);
-            } else {
+            if (ctl is Dialog) {
                 // dialog
                 ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Dialog);
-                //ctl.TextColor = GetThemeColor(theme, ThemeElement.DialogText);
+            } else {
+                // window
+                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Window);
             }
         }
 
@@ -381,18 +381,16 @@ namespace GKUI.Themes
 
         private static void ThemePanelHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (Panel)component;
+            var ctl = (Control)component;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
 
-            ThemeContextMenuStripHandler(view, component, theme);*/
+            ThemeContextMenuStripHandler(view, component, theme);
         }
 
         private static void ThemePictureBoxHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (Eto.Forms.ImageView)component;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
-            //ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
         private static void ThemeProgressBarHandler(IThemedView view, IDisposable component, Theme theme)
@@ -420,25 +418,15 @@ namespace GKUI.Themes
             ThemeContextMenuStripHandler(view, component, theme);
         }
 
-        private static void ThemeScrollBarHandler(IThemedView view, IDisposable component, Theme theme)
+        private static void ThemeDateBoxHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (ScrollBar)component;
-            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);*/
-        }
+            var ctl = (GKDateBox)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
 
-        private static void ThemeStatusBarHandler(IThemedView view, IDisposable component, Theme theme)
-        {
-            /*var ctl = (StatusBar)component;
-            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);*/
-        }
+            //ctl.BorderStyle = (!theme.SysDefault) ? BorderStyle.FixedSingle : BorderStyle.Fixed3D;
 
-        private static void ThemeStatusBarPanelHandler(IThemedView view, IDisposable component, Theme theme)
-        {
-            //var ctl = (StatusBarPanel)component;
-            //ctl.BackgroundColor = theme.Colors[ThemeColor.Control);
-            //ctl.TextColor = theme.Colors[ThemeColor.ControlText);
+            ThemeContextMenuStripHandler(view, component, theme);
         }
 
         private static void ThemeTabControlHandler(IThemedView view, IDisposable component, Theme theme)
@@ -474,15 +462,15 @@ namespace GKUI.Themes
 
         private static void ThemeContextMenuStripHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = component as Control;
-            if (ctl != null && ctl.ContextMenuStrip != null) {
-                ThemeToolStripHandler(view, ctl.ContextMenuStrip, theme);
-            }*/
+            var ctl = component as IContextMenuHost;
+            if (ctl != null && ctl.ContextMenu != null) {
+                ThemeToolStripHandler(view, ctl.ContextMenu, theme);
+            }
         }
 
         private static void ThemeToolStripHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (ToolStrip)component;
+            /*var ctl = (ToolBar)component;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Strip);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.ButtonText);
 
@@ -495,7 +483,7 @@ namespace GKUI.Themes
 
         private static void ThemeToolStripItemHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (ToolStripItem)component;
+            /*var ctl = (MenuItemEx)component;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Dropdown);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.ButtonText);
 
@@ -525,7 +513,6 @@ namespace GKUI.Themes
         {
             var ctl = (Panel)component;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
-            //ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
 
             ThemeContextMenuStripHandler(view, component, theme);
         }
@@ -534,66 +521,60 @@ namespace GKUI.Themes
         {
             var ctl = (Control)component;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
-            //ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
 
             ThemeContextMenuStripHandler(view, component, theme);
         }
 
         private static void RegisterControlHandlers()
         {
-            RegisterControlHandler(typeof(Button), ThemeButtonHandler);                 // ready +
-            RegisterControlHandler(typeof(CheckBox), ThemeCheckBoxHandler);             // ?
-            RegisterControlHandler(typeof(ComboBox), ThemeComboBoxHandler);             // ?
-            RegisterControlHandler(typeof(ContextMenu), ThemeToolStripHandler);    // ?
-            RegisterControlHandler(typeof(GridView), ThemeDataGridViewHandler);     // ?
-            RegisterControlHandler(typeof(Window), ThemeFormHandler);                     // ?
-            RegisterControlHandler(typeof(GroupBox), ThemeGroupBoxHandler);             // ?
-            RegisterControlHandler(typeof(Label), ThemeLabelHandler);                   // ready +
-            RegisterControlHandler(typeof(ListBox), ThemeListBoxHandler);               // ? (only plugins, not host)
-            //RegisterControlHandler(typeof(ListView), ThemeListViewHandler);             // ?
-            RegisterControlHandler(typeof(MaskedTextBox), ThemeTextBoxHandler);         // ?
-            RegisterControlHandler(typeof(MenuBar), ThemeToolStripHandler);           // ?
-            RegisterControlHandler(typeof(NumericStepper), ThemeNumericStepperHandler);   // ?
-            RegisterControlHandler(typeof(Panel), ThemePanelHandler);                   // ?
-            RegisterControlHandler(typeof(Eto.Forms.ImageView), ThemePictureBoxHandler);         // ?
-            RegisterControlHandler(typeof(ProgressBar), ThemeProgressBarHandler);       // ?
-            RegisterControlHandler(typeof(RadioButton), ThemeRadioButtonHandler);       // ?
-            RegisterControlHandler(typeof(RichTextArea), ThemeTextBoxHandler);           // ?
-            //RegisterControlHandler(typeof(ScrollBar), ThemeScrollBarHandler);           // ?
-            RegisterControlHandler(typeof(Splitter), ThemeBaseControlHandler);    // ?
-            //RegisterControlHandler(typeof(StatusBar), ThemeStatusBarHandler);           // ?
-            //RegisterControlHandler(typeof(StatusBarPanel), ThemeStatusBarPanelHandler); // ?
-            //RegisterControlHandler(typeof(StatusStrip), ThemeToolStripHandler);         // ?
-            RegisterControlHandler(typeof(TableLayout), ThemePanelHandler);        // ?
-            RegisterControlHandler(typeof(TabControl), ThemeTabControlHandler);         // ?
-            RegisterControlHandler(typeof(TabPage), ThemeTabPageHandler);               // ?
-            RegisterControlHandler(typeof(TextBox), ThemeTextBoxHandler);               // ?
-            RegisterControlHandler(typeof(ToolBar), ThemeToolStripHandler);           // ?
-            //RegisterControlHandler(typeof(ToolStripButton), ThemeToolStripItemHandler); // ?
-            //RegisterControlHandler(typeof(ToolStripComboBox), ThemeToolStripItemHandler);       // ?
-            //RegisterControlHandler(typeof(ToolStripDropDownButton), ThemeToolStripItemHandler); // ?
-            //RegisterControlHandler(typeof(ToolStripMenuItem), ThemeToolStripItemHandler);       // ?
-            //RegisterControlHandler(typeof(ToolStripSeparator), ThemeToolStripItemHandler);      // ?
-            //RegisterControlHandler(typeof(ToolStripStatusLabel), ThemeToolStripItemHandler);    // ?
-            RegisterControlHandler(typeof(Slider), ThemeBaseControlHandler);                  // ?
-            RegisterControlHandler(typeof(TreeView), ThemeTreeViewHandler);             // ?
+            RegisterControlHandler(typeof(Button), ThemeButtonHandler);
+            RegisterControlHandler(typeof(CheckBox), ThemeCheckBoxHandler);
+            RegisterControlHandler(typeof(ComboBox), ThemeComboBoxHandler);
+            RegisterControlHandler(typeof(ContextMenu), ThemeToolStripHandler);
+            RegisterControlHandler(typeof(GridView), ThemeDataGridViewHandler);
+            RegisterControlHandler(typeof(Window), ThemeFormHandler);
+            RegisterControlHandler(typeof(GroupBox), ThemeGroupBoxHandler);
+            RegisterControlHandler(typeof(Label), ThemeLabelHandler);
+            RegisterControlHandler(typeof(ListBox), ThemeListBoxHandler);
+            RegisterControlHandler(typeof(MaskedTextBox), ThemeTextBoxHandler);
+            RegisterControlHandler(typeof(MenuBar), ThemeToolStripHandler);
+            RegisterControlHandler(typeof(NumericStepper), ThemeNumericStepperHandler);
+            RegisterControlHandler(typeof(Panel), ThemePanelHandler);
+            RegisterControlHandler(typeof(Eto.Forms.ImageView), ThemePictureBoxHandler);
+            RegisterControlHandler(typeof(ProgressBar), ThemeProgressBarHandler);
+            RegisterControlHandler(typeof(RadioButton), ThemeRadioButtonHandler);
+            RegisterControlHandler(typeof(RichTextArea), ThemeTextBoxHandler);
+            RegisterControlHandler(typeof(Splitter), ThemeBaseControlHandler);
+            RegisterControlHandler(typeof(TableLayout), ThemePanelHandler);
+            RegisterControlHandler(typeof(TabControl), ThemeTabControlHandler);
+            RegisterControlHandler(typeof(TabPage), ThemeTabPageHandler);
+            RegisterControlHandler(typeof(TextBox), ThemeTextBoxHandler);
+            RegisterControlHandler(typeof(ToolBar), ThemeToolStripHandler);
+            //RegisterControlHandler(typeof(ToolStripButton), ThemeToolStripItemHandler);
+            //RegisterControlHandler(typeof(ToolStripComboBox), ThemeToolStripItemHandler);
+            //RegisterControlHandler(typeof(ToolStripDropDownButton), ThemeToolStripItemHandler);
+            //RegisterControlHandler(typeof(ToolStripMenuItem), ThemeToolStripItemHandler);
+            //RegisterControlHandler(typeof(ToolStripSeparator), ThemeToolStripItemHandler);
+            //RegisterControlHandler(typeof(ToolStripStatusLabel), ThemeToolStripItemHandler);
+            RegisterControlHandler(typeof(Slider), ThemeBaseControlHandler);
+            RegisterControlHandler(typeof(TreeView), ThemeTreeViewHandler);
 
-            RegisterControlHandler(typeof(MenuItemEx), ThemeToolStripItemHandler);      // ?
+            RegisterControlHandler(typeof(MenuItemEx), ThemeToolStripItemHandler);
 
-            RegisterControlHandler(typeof(ArborViewer), ThemeUserControlHandler);       // ?
-            RegisterControlHandler(typeof(FilterGridView), ThemeDataGridViewHandler);   // ?
-            RegisterControlHandler(typeof(GKTabControl), ThemeTabControlHandler);       // ready +
-            RegisterControlHandler(typeof(GKComboBox), ThemeComboBoxHandler);           // ?
-            RegisterControlHandler(typeof(GKDateBox), ThemeTextBoxHandler);             // ?
-            RegisterControlHandler(typeof(GKDateControl), ThemeUserControlHandler);     // ?
-            RegisterControlHandler(typeof(GKListView), ThemeListViewHandler);           // ?
-            RegisterControlHandler(typeof(GKPortrait), ThemeUserControlHandler);        // ?
-            //RegisterControlHandler(typeof(GKTextBox), ThemeTextBoxHandler);             // ?
-            RegisterControlHandler(typeof(HyperView), ThemeHyperViewHandler);           // ?
-            RegisterControlHandler(typeof(ImageBox), ThemePanelHandler);                // ?
-            RegisterControlHandler(typeof(GKUI.Components.ImageView), ThemeUserControlHandler);         // ?
-            RegisterControlHandler(typeof(LogChart), ThemePanelHandler);                // ?
-            RegisterControlHandler(typeof(CustomChart), ThemeCustomChartHandler);       // ?
+            RegisterControlHandler(typeof(ArborViewer), ThemeUserControlHandler);
+            RegisterControlHandler(typeof(FilterGridView), ThemeDataGridViewHandler);
+            RegisterControlHandler(typeof(GKTabControl), ThemeTabControlHandler);
+            RegisterControlHandler(typeof(GKComboBox), ThemeComboBoxHandler);
+            RegisterControlHandler(typeof(GKDateBox), ThemeDateBoxHandler);
+            RegisterControlHandler(typeof(GKDateControl), ThemeUserControlHandler);
+            RegisterControlHandler(typeof(GKListView), ThemeListViewHandler);
+            RegisterControlHandler(typeof(GKPortrait), ThemeUserControlHandler);
+            //RegisterControlHandler(typeof(GKTextBox), ThemeTextBoxHandler);
+            RegisterControlHandler(typeof(HyperView), ThemeHyperViewHandler);
+            RegisterControlHandler(typeof(ImageBox), ThemePanelHandler);
+            RegisterControlHandler(typeof(GKUI.Components.ImageView), ThemeUserControlHandler);
+            RegisterControlHandler(typeof(LogChart), ThemePanelHandler);
+            RegisterControlHandler(typeof(CustomChart), ThemeCustomChartHandler);
         }
 
         private static void RegisterControlHandler(Type controlType, ThemeControlHandler handler)
