@@ -9,7 +9,7 @@
         <DefineConstants>DIS_MONO</DefineConstants>
 
         <Configurations>Debug;Release</Configurations>
-        <Platforms>MSWin86;MSWin64;Linux;MacOS;FreeBSD;Android;iPhone</Platforms>
+        <Platforms>MSWin64;Linux;MacOS;FreeBSD;Android;iPhone</Platforms>
     </PropertyGroup>
 
     <Import Project="..\..\GKConfigurations3.targets" />

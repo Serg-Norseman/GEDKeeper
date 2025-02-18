@@ -32,7 +32,7 @@ namespace GKCore
         // because it including defines the path to the profile of the program.
         public const string APP_TITLE = "GEDKeeper";
 
-        public const string APP_COPYRIGHT = "Copyright © 2009-2024 by Sergey V. Zhdanovskih";
+        public const string APP_COPYRIGHT = "Copyright © 2009-2025 by Sergey V. Zhdanovskih";
 
         public const string APP_VERSION_2X = "2.32.0.0";
         public const string APP_VERSION_3X = "3.8.0.0";

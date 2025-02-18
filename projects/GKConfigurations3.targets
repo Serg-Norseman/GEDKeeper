@@ -25,14 +25,9 @@
     </PropertyGroup>
 
 
-    <!-- Platforms: AnyCPU, MSWin86, MSWin64, Linux, MacOS, FreeBSD, Android, iPhone, iPhoneSimulator -->
+    <!-- Platforms: AnyCPU, MSWin64, Linux, MacOS, FreeBSD, Android, iPhone, iPhoneSimulator -->
     <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Platform)' == 'MSWin86' ">
-        <PlatformTarget>x86</PlatformTarget>
-        <DefineConstants>$(DefineConstants);OS_MSWIN</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Platform)' == 'MSWin64' ">
@@ -74,9 +69,6 @@
     <!-- Available -->
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'" />
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'" />
-
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|MSWin86'" />
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|MSWin86'" />
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|MSWin64'" />
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|MSWin64'" />
