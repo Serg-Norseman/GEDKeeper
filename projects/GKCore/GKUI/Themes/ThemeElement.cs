@@ -124,6 +124,11 @@ namespace GKUI.Themes
 
         Glyph_Attach,
         Glyph_Detach,
+
+        Glyph_SizeToFit,
+        Glyph_ZoomIn,
+        Glyph_ZoomOut,
+        Glyph_SetPortrait,
     }
 
 

@@ -27,6 +27,7 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -136,7 +137,11 @@ namespace GKCore.Controllers
 
         public override void ApplyTheme()
         {
-            // dummy
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            if (fView.ViewControl is IThemedView themedView) {
+                themedView.ApplyTheme();
+            }
         }
     }
 }

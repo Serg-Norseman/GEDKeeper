@@ -145,6 +145,11 @@ namespace GKUI.Themes
 
                 ThemeElementType.Image, // ThemeElement.Glyph_Attach,
                 ThemeElementType.Image, // ThemeElement.Glyph_Detach,
+
+                ThemeElementType.Image, // ThemeElement.Glyph_SizeToFit,
+                ThemeElementType.Image, // ThemeElement.Glyph_ZoomIn,
+                ThemeElementType.Image, // ThemeElement.Glyph_ZoomOut,
+                ThemeElementType.Image, // ThemeElement.Glyph_SetPortrait,
             };
         }
 

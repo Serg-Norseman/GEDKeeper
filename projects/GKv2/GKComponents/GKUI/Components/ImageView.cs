@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,21 +32,14 @@ using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Platform.Handlers;
+using GKUI.Themes;
 
 namespace GKUI.Components
 {
-    public class ImageView : UserControl, ILocalizable, IImageView
+    public class ImageView : UserControl, IImageView
     {
         private GDMMultimediaRecord fMediaRecord;
         private MediaViewerController fController;
-
-        private ImageBox imageBox;
-        private ToolStrip toolStrip;
-        private ToolStripComboBox cbZoomLevels;
-        private ToolStripButton btnSizeToFit;
-        private ToolStripButton btnZoomIn;
-        private ToolStripButton btnZoomOut;
-        private ToolStripButton btnPortrait;
 
 
         public List<NamedRegion> NamedRegions
@@ -103,7 +96,23 @@ namespace GKUI.Components
             btnZoomOut.Text = LangMan.LS(LSID.ZoomOut);
         }
 
+        public void ApplyTheme()
+        {
+            UIHelper.SetButtonThemeImage(btnSizeToFit, ThemeElement.Glyph_SizeToFit);
+            UIHelper.SetButtonThemeImage(btnZoomIn, ThemeElement.Glyph_ZoomIn);
+            UIHelper.SetButtonThemeImage(btnZoomOut, ThemeElement.Glyph_ZoomOut);
+            UIHelper.SetButtonThemeImage(btnPortrait, ThemeElement.Glyph_SetPortrait);
+        }
+
         #region Component design
+
+        private ImageBox imageBox;
+        private ToolStrip toolStrip;
+        private ToolStripComboBox cbZoomLevels;
+        private ToolStripButton btnSizeToFit;
+        private ToolStripButton btnZoomIn;
+        private ToolStripButton btnZoomOut;
+        private ToolStripButton btnPortrait;
 
         private void InitializeComponent()
         {
@@ -111,29 +120,21 @@ namespace GKUI.Components
 
             btnSizeToFit = new ToolStripButton();
             btnSizeToFit.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            btnSizeToFit.Image = UIHelper.LoadResourceImage("Resources.btn_size_to_fit.png");
-            btnSizeToFit.ImageTransparentColor = Color.Magenta;
             btnSizeToFit.Name = "btnSizeToFit";
             btnSizeToFit.Click += btnSizeToFit_Click;
 
             btnZoomIn = new ToolStripButton();
             btnZoomIn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            btnZoomIn.Image = UIHelper.LoadResourceImage("Resources.btn_zoom_in.png");
-            btnZoomIn.ImageTransparentColor = Color.Magenta;
             btnZoomIn.Name = "btnZoomIn";
             btnZoomIn.Click += btnZoomIn_Click;
 
             btnZoomOut = new ToolStripButton();
             btnZoomOut.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            btnZoomOut.Image = UIHelper.LoadResourceImage("Resources.btn_zoom_out.png");
-            btnZoomOut.ImageTransparentColor = Color.Magenta;
             btnZoomOut.Name = "btnZoomOut";
             btnZoomOut.Click += btnZoomOut_Click;
 
             btnPortrait = new ToolStripButton();
             btnPortrait.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            btnPortrait.Image = UIHelper.LoadResourceImage("Resources.btn_portrait.png");
-            btnPortrait.ImageTransparentColor = Color.Magenta;
             btnPortrait.Name = "btnPortrait";
             btnPortrait.Click += btnPortrait_Click;
             btnPortrait.Visible = false;

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,21 +32,14 @@ using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Platform.Handlers;
+using GKUI.Themes;
 
 namespace GKUI.Components
 {
-    public class ImageView : Panel, ILocalizable, IImageView
+    public class ImageView : Panel, IImageView
     {
         private GDMMultimediaRecord fMediaRecord;
         private MediaViewerController fController;
-
-        private ImageBox imageBox;
-        private Panel toolStrip;
-        private ComboBox cbZoomLevels;
-        private Button btnSizeToFit;
-        private Button btnZoomIn;
-        private Button btnZoomOut;
-        private Button btnPortrait;
 
 
         public List<NamedRegion> NamedRegions
@@ -103,7 +96,23 @@ namespace GKUI.Components
             btnZoomOut.ToolTip = LangMan.LS(LSID.ZoomOut);
         }
 
+        public void ApplyTheme()
+        {
+            UIHelper.SetButtonThemeImage(btnSizeToFit, ThemeElement.Glyph_SizeToFit);
+            UIHelper.SetButtonThemeImage(btnZoomIn, ThemeElement.Glyph_ZoomIn);
+            UIHelper.SetButtonThemeImage(btnZoomOut, ThemeElement.Glyph_ZoomOut);
+            UIHelper.SetButtonThemeImage(btnPortrait, ThemeElement.Glyph_SetPortrait);
+        }
+
         #region Component design
+
+        private ImageBox imageBox;
+        private Panel toolStrip;
+        private ComboBox cbZoomLevels;
+        private Button btnSizeToFit;
+        private Button btnZoomIn;
+        private Button btnZoomOut;
+        private Button btnPortrait;
 
         private void InitializeComponent()
         {
@@ -111,22 +120,18 @@ namespace GKUI.Components
 
             btnSizeToFit = new Button();
             btnSizeToFit.Size = new Size(28, 28);
-            btnSizeToFit.Image = UIHelper.LoadResourceImage("Resources.btn_size_to_fit.png");
             btnSizeToFit.Click += btnSizeToFit_Click;
 
             btnZoomIn = new Button();
             btnZoomIn.Size = new Size(28, 28);
-            btnZoomIn.Image = UIHelper.LoadResourceImage("Resources.btn_zoom_in.png");
             btnZoomIn.Click += btnZoomIn_Click;
 
             btnZoomOut = new Button();
             btnZoomOut.Size = new Size(28, 28);
-            btnZoomOut.Image = UIHelper.LoadResourceImage("Resources.btn_zoom_out.png");
             btnZoomOut.Click += btnZoomOut_Click;
 
             btnPortrait = new Button();
             btnPortrait.Size = new Size(28, 28);
-            btnPortrait.Image = UIHelper.LoadResourceImage("Resources.btn_portrait.png");
             btnPortrait.Click += btnPortrait_Click;
             btnPortrait.Visible = false;
 

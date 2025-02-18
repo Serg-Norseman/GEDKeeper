@@ -143,6 +143,11 @@ namespace GKUI.Themes
 
                 { ThemeElement.Glyph_Attach, "Resources.btn_rec_new.gif" },
                 { ThemeElement.Glyph_Detach, "Resources.btn_rec_delete.gif" },
+
+                { ThemeElement.Glyph_SizeToFit, "Resources.btn_size_to_fit.png" },
+                { ThemeElement.Glyph_ZoomIn, "Resources.btn_zoom_in.png" },
+                { ThemeElement.Glyph_ZoomOut, "Resources.btn_zoom_out.png" },
+                { ThemeElement.Glyph_SetPortrait, "Resources.btn_portrait.png" },
             }, true);
         }
 
