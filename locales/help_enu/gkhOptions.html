@@ -8,298 +8,459 @@
 <body>
 
     <h1>Options</h1>
-    <a href="#Common">Common</a>,&nbsp;<a href="#Multimedia">Multimedia</a>,&nbsp;<a href="#Charts">Charts</a>,&nbsp;<a href="#Interface">Interface</a>,&nbsp;<a href="#Pedigrees">Pedigrees</a>,&nbsp;<a href="#Plugins">Plugins</a>
 
-    <h2 id="Common">Common</h2>
-    <img src="images/dlgOptions_Common.gif" alt="[Common options dialog]">
-    <ol>
-        <li>
-            Internet
-            <br>Set up these settings when you access the Internet via a proxy.
-            <ul>
-                <li>
-                    Use proxy
-                    <br>Check this if using a proxy to access the Internet.
-                </li>
-                <li>
-                    Server
-                    <br>This is the name of the server.
-                </li>
-                <li>
-                    Port
-                    <br>This is the port number to use.
-                </li>
-                <li>
-                    Login
-                    <br>This is the login name.
-                </li>
-                <li>
-                    Password
-                    <br>The password needed to access the proxy server.
-                </li>
-            </ul>
-        </li>
-        <li>
-            Files backup
-            <br>Controls if backups of the current database are performed.
-            <ul>
-                <li>
-                    not
-                    <br>If selected then no backups of the database is performed.
-                </li>
-                <li>
-                    only previous file
-                    <br>If selected then only a single backup is made each time the database is saved.
-                </li>
-                <li>
-                    backup each file revision
-                    <br>If selected then every time the database is saved a new backup is created.
-                </li>
-            </ul>
-        </li>
-        <li>
-            Autosave every
-            <br>If checked then the database is automatically saved every <i>N</i> minutes.
-        </li>
-        <li>
-            Other
-            <br>Here are miscellaneous options that control how the startup process is handled.
-            <ul>
-                <li>
-                    Show tips on startup
-                    <br>If checked then useful tips will be shown at startup such as birthday reminders.
-                </li>
-                <li>
-                    Load at startup recent opened files
-                    <br>If checked then the last file used is automatically opened.
-                </li>
-                <li>
-                    Automatically check for updates
-                    <br>If checked then GEDKeeper will check to see if a new version is available. If found, then a message is displayed.
-                </li>
-            </ul>
-        </li>
-        <li>
-            Language
-            <br>Controls which language will be used in the interface. Restarting is not required, but you must click &quot;Apply&quot; for this to take effect.
-        </li>
-        <li>
-            Geocoder
-            <br>Controls which mapping system is used for maps generated.
-        </li>
-    </ol>
-
-    <h2 id="Multimedia">Multimedia</h2>
-    <img src="images/dlgOptions_Multimedia.gif" alt="[Multimedia options dialog]">
-    <ol>
-        <li>
-            Warn when adding media files from removable media.
-            <br>If checked then a warning will be shown if a media file is on removable media such as a CD, DVD, or USB stick.
-        </li>
-        <li>
-            Use embedded MediaPlayer
-            <br>If checked then GEDKeeper's media player will be used. If unchecked, then the system default viewer for media is used.
-        </li>
-        <li>
-            Allow direct references to media files
-            <br>If checked then media files are not copied to the subdirectory where the database is kept. Instead a direct reference to where the media is located is used. Note: this could make transferring your database to another location more difficult.
-        </li>
-    </ol>
-
-    <h2 id="Charts">Charts</h2>
-    <h3>Trees</h3>
-    There are two setting groups for family tree generation: how persons are represented in the tree and how the tree appears on a render target.
-    <br><img src="images/dlgOptions_Charts_Trees.gif" alt="[Tree chart options dialog]">
-    <ol>
-        <li>
-            Show individuals in tree
-            <br>Here you define what data you will see in the tree: last name, first name and surname, birthday and obit, and what part of dates.
-            <ul>
-                <li>
-                    Surname
-                    <br>If checked then the surname, if available, will be rendered.
-                </li>
-                <li>
-                    Name
-                    <br>If checked then the first  name, if available, will be rendered.
-                </li>
-                <li>
-                    Patronymic
-                    <br>If checked then the patronymic, if available, will be rendered.
-                </li>
-                <li>
-                    Separate lines
-                    <br>If checked then the first name, and patronymic if any, are rendered on separate lines. Otherwise they are on a single line separated by a space.
-                </li>
-                <li>
-                    Birth date
-                    <br>If checked then the date of birth, if available, will be rendered.
-                </li>
-                <li>
-                    Death date
-                    <br>If checked then the date of death, if available, will be rendered. If checked then you can choose to only show the years.
-                </li>
-                <li>
-                    Date of marriages
-                    <br>If checked then any dates of marriage will be rendered.
-                </li>
-                <li>
-                    Kinship
-                    <br>When this option is on, every person has a visible relation degree&mdash;which is calculated on each tree rebuild relative to the central person in the tree.
-                </li>
-                <li>
-                    Additional symbols
-                    <br>This renders special symbols for some categories of people. There are special icons for veterans of the World War II, died, veterans of Labor, cavalier of Cross of St. George, and repressed. These categories are defined in the user-defined reference section in the person editor.
-                </li>
-                <li>
-                    Tree decorative
-                    <br>Controls some additional graphical elements and shadows.
-                </li>
-                <li>
-                    Show portraits
-                    <br>If checked then the person's portrait, if available, is shown. If checked, you can also choose to use a default portrait.
-                </li>
-                <li>
-                    Inverted tree
-                    <br>If checked then the top-level of the tree is located at the bottom.
-                </li>
-                <li>
-                    Hide died in childhood
-                    <br><p>This option becomes helpful when you handle several sources, because it can reduce the number of visible persons and make your task much simpler.
-                </li>
-                <li>
-                    Show places
-                    <br>If checked, and one or more places were provided, then they are rendered.
-                </li>
-                <li>
-                    Hide unknown spouses
-                    <br>If checked, and the spouse is not known, then the spouse placeholder is not rendered.
-                </li>
-                <li>
-                    Check tree size allowed
-                    <br>If checked, then the maximum number of persons in the tree and the maximum image resolution are checked. This is usually unchecked as GEDKeeper no longer has any such restrictions.
-                </li>
-            </ul>
-        </li>
-        <li>
-            Decor
-            <br>This setting group defines colors and the main font used in tree rendering.
-            <ul>
-                <li>
-                    Man
-                    <br>Click here to choose the color for a person identified as a man.
-                </li>
-                <li>
-                    Woman
-                    <br>Click here to choose the color for a person identified as a woman.
-                </li>
-                <li>
-                    Unknown sex
-                    <br>If a sex was not identified, then this color will be used.
-                </li>
-                <li>
-                    Divorcee husband
-                    <br>A divorced husband (man) will be shown with this color.
-                </li>
-                <li>
-                    Divorcee wife
-                    <br>If the person is a divorced wife (woman) then this color will be used.
-                </li>
-                <li>
-                    Font
-                    <br>Controls which font is used for generated charts. Click here and a list of all available fonts on your system is shown.
-                </li>
-            </ul>
-        </li>
-        <li>
-            Spacings
-            <br>Controls a set of spacings on the charts in points (dots).
-            <ul>
-                <li>
-                    Margins
-                    <br>Specifies the margins on each side of the chart.
-                </li>
-                <li>
-                    Branch distance
-                    <br>The distance between each branch on the chart.
-                </li>
-                <li>
-                    Generation distance
-                    <br>The vertical distance between each generation.
-                </li>
-                <li>
-                    Spouse distance
-                    <br>The horizontal spacing between the spouses.
-                </li>
-            </ul>
-        </li>
-    </ol>
-    <h3>Ancestors Circle</h3>
-    Controls visual characteristics of the Ancestors Circle chart.
-    <br><img src="images/dlgOptions_Charts_AncestorsCircle.gif" alt="[Ancesstors Circle chart options dialog]">
     <ul>
-        <li>
-            Circle 0
-            <br>Controls the color for the first (innermost) circle.
-        </li>
-        <li>
-            Circle 1
-            <br>Controls the color for the second circle.
-        </li>
-        <li>
-            Circle 2
-            <br>Controls the color for the third circle.
-        </li>
-        <li>
-            Circle 3
-            <br>Controls the color for the fourth circle.
-        </li>
-        <li>
-            Circle 4
-            <br>Controls the color for the fifth circle.
-        </li>
-        <li>
-            Circle 5
-            <br>Controls the color for the sixth circle.
-        </li>
-        <li>
-            Circle 6
-            <br>Controls the color for the seventh circle.
-        </li>
-        <li>
-            Circle 7
-            <br>Controls the color for the eighth circle.
-        </li>
-        <li>
-            Text color
-            <br>Specifies the color of the text. Be sure it is not the same as &quot;Back color&quot;.
-        </li>
-        <li>
-            Back color
-            <br>Specifies the background color for the text. Be sure it is not the same as &quot;Text color&quot;.
-        </li>
-        <li>
-            Lines color
-            <br>Sets the color for the lines between circle segments.
-        </li>
-        <li>
-            Hide empty segments
-            <br>Segments without data are not rendered.
-        </li>
-        <li>
-            Arc text
-            <br>If checked then the text is shown in an arc fashion to follow the curvature of a segment. Otherwise text is drawn completely horizontal or vertical.
-        </li>
+        <li><a href="#common">Common</a></li>
+        <li><a href="#multimedia">Multimedia</a></li>
+        <li><a href="#charts">Charts</a></li>
+        <li><a href="#interface">Interface</a></li>
+        <li><a href="#pedigree">Pedigrees</a></li>
+        <li><a href="#special">Specials</a></li>
+        <li><a href="#eventTypes">Event types</a></li>
+        <li><a href="#plugins">Plugins</a></li>
     </ul>
 
-    <h2 id="Interface">Interface</h2>
-    Controls characteristics of the user interface.
+    <hr>
+    <a id="common"><h2>Common</h2></a>
+
+    <p style="text-align:center"><img src="images/dlgOptions_Common.png"></p>
+
+    <h4>Internet</h4>
+
+    <dl>
+        <dt>Use proxy</dt>
+        <dd>
+            Check this if using a proxy to access the Internet for <a href="gkhMaps.html">Maps</a>.
+            This option is currently blocked and not used.
+        </dd>
+
+        <dt>Server, Port, Login, Password</dt>
+        <dd>Proxy server connection parameters.</dd>
+    </dl>
+
+    <h4>Files backup</h4>
+
+    <dl>
+        <dt>Controls if backups of the current database are performed.</dt>
+        <dd>
+            <ul>
+                <li>not - If selected then no backups of the database is performed.
+                <li>only previous file - If selected then only a single backup is made each time the database is saved (`*.ged.bak`).
+                <li>each file revision - If selected then every time the database is saved a new backup is created (to folder `__history`).
+            </ul>
+        </dd>
+
+        <dt>Autosave every N minutes</dt>
+        <dd>
+            If checked then the database is automatically saved every <i>N</i> minutes
+            (only if the file has been modified).
+        </dd>
+
+        <dt>Maximum number of backup N</dt>
+        <dd>This option defines the number of backup revisions stored in the `__history` folder. If exceeded, old files are deleted.</dd>
+    </dl>
+
+    <h4>Other</h4>
+
+    <dl>
+        <dt>Show tips on startup</dt>
+        <dd>
+            When this option is enabled, useful tips and recommendations
+            for working in the program will be shown when the program starts.
+            Also, after loading any database, reminders about upcoming birthdays and anniversaries will be shown.
+        </dd>
+
+        <dt>Load recently opened files at startup</dt>
+        <dd>
+            If checked then the last file used is automatically opened.
+            Currently, after changing the program architecture, this option is disabled.
+        </dd>
+
+        <dt>Automatically check for updates</dt>
+        <dd>
+            If checked then GEDKeeper will check to see if a new version is available.
+            If found, then a message is displayed.
+        </dd>
+
+        <dt>Detect Charset on load</dt>
+        <dd>
+            This option is useful if files from third-party sources with non-standard encodings can be loaded.
+            The option will allow you to determine the encoding and load files with the correct text.
+        </dd>
+
+        <dt>Warn for closing dialog with unsaved changes</dt>
+        <dd>
+            Useful to prevent loss of data entered in any editing dialog.
+            The user will be warned if there are changes and the dialog is closed without saving.
+        </dd>
+
+        <dt>Display full file name in window title</dt>
+        <dd>Enables display of the full name (including path) of the current file in the title of the main window.</dd>
+
+        <dt>Language</dt>
+        <dd>
+            Controls which <a href="gkhLangs.html">language</a> will be used in the interface.
+            Restarting is not required, but you must click &quot;Apply&quot; for this to take effect.
+        </dd>
+
+        <dt>Certainty assessment algorithm</dt>
+        <dd>
+            The option defines the algorithm by which the <a href="gkhCAIndex.html">data certainty index</a>
+            is calculated in <a href="gkhTreeChart.html">tree charts</a> and other program modules.
+        </dd>
+    </dl>
+
+    <hr>
+    <a id="multimedia"><h2>Multimedia</h2></a>
+
+    <p style="text-align:center"><img src="images/dlgOptions_Multimedia.png"></p>
+
+    <dl>
+        <dt>Warn when adding media files from removable media</dt>
+        <dd>
+            If checked then a warning will be shown if a media file
+            is on removable media such as a CD, DVD, or USB stick.
+        </dd>
+
+        <dt>Use embedded MediaPlayer</dt>
+        <dd>
+            If checked then GEDKeeper's media player will be used.
+            If unchecked, then the system default viewer for media is used.
+        </dd>
+
+        <dt>Allow direct references to media files</dt>
+        <dd>
+            If checked then media files are not copied to the subdirectory where the database is kept.
+            Instead a direct reference to where the media is located is used.
+            Note: this could make transferring your database to another location more difficult.
+        </dd>
+
+        <dt>Allow relative references to media files</dt>
+        <dd>If this option is enabled, the program will allow you to add media files with relative paths.</dd>
+
+        <dt>Default media storage type</dt>
+        <dd>
+            Defines the storage type of media files that will be offered by default in the dialog for adding
+            <a href="gkhRec_Media.html">multimedia records</a>.
+        </dd>
+
+        <dt>Allow delete media files from storage and archive</dt>
+        <dd>If this option is enabled, the program will allow you to delete media files from storage and archive.</dd>
+
+        <dt>Allow delete media files by direct and relative references</dt>
+        <dd>
+            If the option is enabled, the program will allow you to delete media files by direct (absolute)
+            and relative paths. Warning: such actions are associated with the risk of data loss,
+            check for duplicates of important files!
+        </dd>
+
+        <dt>Delete media files without confirm</dt>
+        <dd>
+            If this option is enabled, media files will be deleted without additional confirmation.
+            Warning: such actions are associated with the risk of data loss!
+        </dd>
+
+        <dt>Highlight inaccessible files</dt>
+        <dd>
+            When this option is enabled, the main list of multimedia records will be checked for the presence/availability
+            of the corresponding files and highlighted in light red if the file is not available.
+        </dd>
+    </dl>
+
+    <hr>
+    <a id="charts"><h2>Charts</h2></a>
+
+    <a id="tree"><h3>Trees</h3></a>
+
+    <p>
+        There are two setting groups for family tree generation: how persons are represented in the tree
+        and how the tree appears on a render target.
+    </p>
+
+    <h4>Show individuals in tree</h4>
+
+    <p style="text-align:center"><img src="images/dlgOptions_Charts_Trees_Persons.png"></p>
+
+    <p>
+        Here you define what data you will see in the tree:
+        last name, first name and surname, birthday and obit, and what part of dates.
+    </p>
+
+    <dl>
+        <dt>Surname</dt>
+        <dd>If checked then the surname, if available, will be rendered.</dd>
+
+        <dt>Surname first in order</dt>
+        <dd>
+            Determines the order in which parts of the name will be displayed in the person card:
+            "Surname First name Patronymic" or "First name Patronymic Surname".
+        </dd>
+
+        <dt>Given name</dt>
+        <dd>If checked then the first  name, if available, will be rendered.</dd>
+
+        <dt>Patronymic</dt>
+        <dd>If checked then the patronymic, if available, will be rendered.</dd>
+
+        <dt>Separate lines</dt>
+        <dd>If checked then the first name, and patronymic if any, are rendered on separate lines. Otherwise they are on a single line separated by a space.</dd>
+
+        <dt>Birth date</dt>
+        <dd>If checked then the date of birth, if available, will be rendered.</dd>
+
+        <dt>Death date</dt>
+        <dd>If checked then the date of death, if available, will be rendered. If checked then you can choose to only show the years.</dd>
+
+        <dt>Only years</dt>
+        <dd>If the option is disabled, dates are displayed in full, otherwise - only the year, without the day and month.</dd>
+
+        <dt>Show age</dt>
+        <dd>The option enables display of the estimated age according to the date of birth and date of death (if any).</dd>
+
+        <dt>Date of marriages</dt>
+        <dd>If checked then any dates of marriage will be rendered.</dd>
+
+        <dt>Kinship</dt>
+        <dd>When this option is on, every person has a visible relation degree&mdash;which is calculated on each tree rebuild relative to the central person in the tree.</dd>
+
+        <dt>Additional symbols</dt>
+        <dd>
+            This renders special symbols for some categories of people.
+            There are special icons for veterans of the World War II, died, veterans of Labor, cavalier of Cross of St. George, and repressed.
+            These categories are defined in the user-defined reference section in the person editor.
+        </dd>
+
+        <dt>Tree decorative</dt>
+        <dd>Controls some additional graphical elements and shadows.</dd>
+
+        <dt>Show portraits</dt>
+        <dd>If checked then the person's portrait, if available, is shown. If checked, you can also choose to use a default portrait.</dd>
+
+        <dt>Show default portraits</dt>
+        <dd>
+            If the option is enabled and a certain person does not have a specified portrait,
+            then a template image will be displayed, indicating a man or a woman.
+        </dd>
+
+        <dt>Inverted tree</dt>
+        <dd>If checked then the top-level of the tree is located at the bottom.</dd>
+
+        <dt>Hide died in childhood</dt>
+        <dd>
+            This option becomes helpful when you handle several sources,
+            because it can reduce the number of visible persons and make your task much simpler.
+        </dd>
+
+        <dt>Show places</dt>
+        <dd>If checked, and one or more places were provided, then they are rendered.</dd>
+
+        <dt>Separate dates and places lines</dt>
+        <dd>If the option is disabled, dates of birth/death and corresponding places are displayed in one line.</dd>
+
+        <dt>Only locality</dt>
+        <dd>
+            The enabled option reduces the location displayed in the person's card to only the locality,
+            hiding the other parts.
+            Note: location strings must be specified in the standard format - separator "," (comma).
+        </dd>
+
+        <dt>Hide unknown spouses</dt>
+        <dd>
+            If checked, and the spouse is not known, then the spouse placeholder is not rendered.
+        </dd>
+
+        <dt>Check tree size allowed</dt>
+        <dd>
+            If checked, then the maximum number of persons in the tree and the maximum image resolution are checked.
+            This is usually unchecked as GEDKeeper no longer has any such restrictions.
+        </dd>
+
+        <dt>Dotted lines of adopted children</dt>
+        <dd>
+            If this option is enabled and there are adopted persons in the tree,
+            the connecting lines from this person to others will be dotted
+            (see <a href="gkhRec_Individual.html">Personal records</a>).
+        </dd>
+
+        <dt>Dotted lines of common law spouses</dt>
+        <dd>
+            If this option is enabled, divorced spouses or partners in unregistered marriages
+            will be connected by dotted connecting lines.
+        </dd>
+
+        <dt>Bold font of names</dt>
+        <dd>If this option is enabled, the names of people in cards will be displayed in bold.</dd>
+
+        <dt>Minimizing width</dt>
+        <dd>
+            A special adjustment is made to save space on the tree image,
+            and the persons are displayed less sparsely.
+        </dd>
+
+        <dt>Show special notes</dt>
+        <dd>(см. <a href="gkhRec_UserRefs.html">Сноски</a>).</dd>
+
+        <dt>Same cards width</dt>
+        <dd>
+            This option enables a mode in which all person cards in the tree receive the same width,
+            equal to the width of the largest card in the tree.
+        </dd>
+
+        <dt>Full name on one line</dt>
+        <dd>
+            This option allows speakers of Eastern hieroglyphic languages ​​to display all parts of a name on one short line,
+            instead of spreading the hieroglyphs across different lines.
+        </dd>
+
+        <dt>Date designations</dt>
+        <dd>The option includes the traditional notations of birth dates "*" and death dates "+", as well as brackets around ("[" and "]").</dd>
+
+        <dt>Mourning edges</dt>
+        <dd>This option allows you to turn off the "mourning" frame - a wide black frame around dead people.</dd>
+
+        <dt>Use additional dates</dt>
+        <dd>This option allows you to display baptism or burial dates instead of missing dates of birth or death.</dd>
+
+        <dt>Use inline images in SVG</dt>
+        <dd>
+            The option determines the method of saving portrait thumbnails when saving tree images to an SVG file.
+            If the option is enabled, the portraits will be encoded in a special way and embedded in the SVG file;
+            if the option is not enabled, the portraits will be saved as separate files in a folder with the same name as the SVG file.
+        </dd>
+
+        <dt>Extended tree</dt>
+        <dd>
+            The option enables the display in tree diagrams (see <a href="gkhTreeChart.html">Family Trees</a>)
+            not only of the branches of the ancestors and descendants of the central person,
+            but also of the branches of the ancestors of the spouses of the central person.
+        </dd>
+    </dl>
+
+    <h4>Decor</h4>
+
+    <p style="text-align:center"><img src="images/dlgOptions_Charts_Trees_Design.png"></p>
+
+    <p>This setting group defines colors and the main font used in tree rendering.</p>
+
+    <dl>
+        <dt>Man</dt>
+        <dd>Choosing a color for men's cards.</dd>
+
+        <dt>Woman</dt>
+        <dd>Choosing a color for women's cards.</dd>
+
+        <dt>Unknown sex</dt>
+        <dd>Choosing a color for cards of persons without specified gender.</dd>
+
+        <dt>Divorcee husband</dt>
+        <dd>A divorced husband (man) will be shown with this color.</dd>
+
+        <dt>Divorcee wife</dt>
+        <dd>If the person is a divorced wife (woman) then this color will be used.</dd>
+
+        <dt>Font</dt>
+        <dd>
+            Controls which font is used for generated charts.
+            Click here and a list of all available fonts on your system is shown.
+        </dd>
+
+        <dt>Use extra controls</dt>
+        <dd>
+            The option includes the ability to manage tree diagrams (see <a href="gkhTreeChart.html">Family Trees</a>)
+            using additional pop-up controls.
+        </dd>
+    </dl>
+
+    <h4>Spacings</h4>
+
+    <p>Controls a set of spacings on the charts in points (dots).</p>
+
+    <dl>
+        <dt>Margins</dt>
+        <dd>Specifies the margins on each side of the chart.</dd>
+
+        <dt>Branch distance</dt>
+        <dd>
+            The horizontal distance between person cards belonging to <u>different descendant branches</u>.
+            Default value, may be wider if the diagramming requires
+            placing branches further apart.
+        </dd>
+
+        <dt>Generations distance</dt>
+        <dd>The vertical distance between each generation.</dd>
+
+        <dt>Spouse distance</dt>
+        <dd>The horizontal spacing between the spouses.</dd>
+
+        <dt>Padding of text</dt>
+        <dd>Margins from the edges of the person card to the text.</dd>
+    </dl>
+
+    <h4>Depth of generations</h4>
+    <dl>
+        <dt>Separate depth</dt>
+        <dd>
+            If this option is disabled, the default generations depth for both ancestors and descendants
+            will be enabled when the diagram is opened.
+        </dd>
+
+        <dt>Default depth</dt>
+        <dd>
+            This option specifies the default depth in both ancestor and descendant generations
+            when the user opens the tree diagram. A value of -1 means unlimited depth.
+        </dd>
+
+        <dt>Default depth: Ancestors</dt>
+        <dd>This option determines the default depth in ancestor generations when the user opens the tree diagram.</dd>
+
+        <dt>Default depth: Descendants</dt>
+        <dd>This option determines the default depth in descendant generations when the user opens the tree diagram.</dd>
+    </dl>
+
+    <a id="circle"><h3>Ancestors Circle</h3></a>
+
+    <p>Controls visual characteristics of the Ancestors Circle chart.</p>
+
+    <p style="text-align:center"><img src="images/dlgOptions_Charts_Circles.png"></p>
+
+    <dl>
+        <dt>Circles from 0 to 7</dt>
+        <dd>Controls the color for N circle.</dd>
+
+        <dt>Text color</dt>
+        <dd>Specifies the color of the text. Be sure it is not the same as &quot;Back color&quot;.</dd>
+
+        <dt>Back color</dt>
+        <dd>Specifies the background color for the text. Be sure it is not the same as &quot;Text color&quot;.</dd>
+
+        <dt>Lines color</dt>
+        <dd>Sets the color for the lines between circle segments.</dd>
+
+        <dt>Hide empty segments</dt>
+        <dd>Segments without data are not rendered.</dd>
+
+        <dt>Arc text</dt>
+        <dd>
+            If checked then the text is shown in an arc fashion to follow the curvature of a segment.
+            Otherwise text is drawn completely horizontal or vertical.
+        </dd>
+    </dl>
+
+    <hr>
+    <a id="interface"><h2>Interface</h2></a>
+
     <h3>All lists</h3>
-    Controls characteristics for every list that is shown.
-    <br><img src="images/dlgOptions_Interface_AllLists.gif" alt="[Interface All Lists options dialog]">
-    <ol>
-        <li>
-            Name format in lists
+
+    <p>Controls characteristics for every list that is shown.</p>
+
+    <p style="text-align:center"><img src="images/dlgOptions_Interface_Lists.png"></p>
+
+    <h4>Name format in lists</h4>
+
+    <dl>
+        <dt>Name format in lists</dt>
+        <dd>
+            The option determines the order in which names are displayed in the columns of the list of persons:
             <ul>
                 <li>
                     Surname_Name_Patronymic
@@ -314,10 +475,21 @@
                     <br>The surname, name, and patronymic are displayed in separate columns.
                 </li>
             </ul>
-        </li>
-        <li>
-            Date formats in lists
-            <ul>
+        </dd>
+
+        <dt>Surname first on order</dt>
+        <dd>
+            The option determines the order in which parts of the name are displayed in the list columns:
+            Surname-First Name-Patronymic or First Name-Patronymic-Surname.
+        </dd>
+    </dl>
+
+    <h4>Dates</h4>
+
+    <dl>
+        <dt>Date formats in lists: dd.mm.yyyy, yyyy.mm.dd</dt>
+        <dd>
+            Date formats<ul>
                 <li>
                     DD.MM.YYYY
                     <br>Dates will be shown in the following order: day, month, then year. Each segment is separated by a period.
@@ -327,110 +499,335 @@
                     <br>Dates will be shown in the following order: year, month, then day. Each segment is separated by a period.
                 </li>
             </ul>
-        </li>
-        <li>
-            Show calendar near dates
-            <br>Displays a calendar marker for the type of date being used: Gregorian, Jewish, or Julian.
-        </li>
-        <li>
-            Show date type
-            <br>Displays a symbol next to the date to indicate if it is relative, calculated (or evaluated), before, after, or a range.
-        </li>
-        <li>
-            Additional names
+        </dd>
+
+        <dt>Show calendar near dates</dt>
+        <dd>Displays a calendar marker for the type of date being used: Gregorian, Jewish, or Julian.</dd>
+
+        <dt>Show date type</dt>
+        <dd>Displays a symbol next to the date to indicate if it is relative, calculated (or evaluated), before, after, or a range.</dd>
+
+        <dt>Localized calendar signatures</dt>
+        <dd>
+            If this option is not enabled, the date calendar (if the option above is enabled) is indicated by one letter in Latin,
+            otherwise, national symbols are displayed in the selected interface language.
+        </dd>
+    </dl>
+
+    <h4>Additional names</h4>
+
+    <dl>
+        <dt>Extended women's surnames</dt>
+        <dd>
+            The GEDCOM standard for storing genealogical information does not define a way to differentiate
+            between maiden and married names for women. The GEDKeeper program
+            adds a method for entering married names to the standard, but only if this option is enabled.
+            In this case, a regular, always available surname is considered a maiden name.
+            It is assumed that if a woman had several married surnames,
+            then they will be entered in the corresponding field in a row, separated by commas.
+        </dd>
+
+        <dt>Format: Maiden surname (Married surname), Married surname (Maiden surname), Maiden surname, Married surname</dt>
+        <dd>
+            Controls how women's names are displayed if they are married,
+            if the option to support extended women's surnames is enabled.
+            As an example, we will use the name Jane whose maiden name is Smith and is now Johnson.
             <ul>
                 <li>
-                    Extended women's surnames
-                    <br>Controls how women's names are displayed if they are married. As an example, we will use the name Jane whose maiden name is Smith and is now Johnson.
-                    <ul>
-                        <li>
-                            Format &quot;Maiden (Married)&quot;
-                            <br>Example: Jane Smith (Johnson)
-                        </li>
-                        <li>
-                            Format &quot;Married (Maiden)&quot;
-                            <br>Example: Jane Johnson (Smith)
-                        </li>
-                        <li>
-                            Format &quot;Maiden&quot;
-                            <br>Example: Jane Smith
-                        </li>
-                        <li>
-                            Format &quot;Married&quot;
-                            <br>Example: Jane Johnson
-                        </li>
-                    </ul>
+                    Format &quot;Maiden (Married)&quot;
+                    <br>Example: Jane Smith (Johnson)
+                </li>
+                <li>
+                    Format &quot;Married (Maiden)&quot;
+                    <br>Example: Jane Johnson (Smith)
+                </li>
+                <li>
+                    Format &quot;Maiden&quot;
+                    <br>Example: Jane Smith
+                </li>
+                <li>
+                    Format &quot;Married&quot;
+                    <br>Example: Jane Johnson
                 </li>
             </ul>
-        </li>
-        <li>
-            Include address into place text
-            <br>If checked then the address of a place is shown (if available).
-        </li>
-        <li>
-            Highlight unparented
-            <br>Highlighting persons with no parents or family improves navigation through the list. The following color scheme is applied: a white background is used for persons with family and parents, flaxen background for persons without family, and light red for persons without parents. Background colors do not prevent getting information.
-        </li>
-        <li>
-            Highlight unmarried
-            <br>If checked then persons who are not married are highlighted.
-        </li>
-        <li>
-            Autosort children
-            <br>If checked then when children are shown they will be automatically sorted by birth date.
-        </li>
-        <li>
-            Autosort spouses
-            <br>If checked then spouses are automatically sorted by marriage date.
-        </li>
-    </ol>
+        </dd>
+
+        <dt>Simple form of single surnames</dt>
+        <dd>
+            If there is only a married name, and the format requires outputting only maiden names,
+            the existing surname will be used. Otherwise, nothing.
+        </dd>
+    </dl>
+
+    <h4>Прочее</h4>
+
+    <dl>
+        <dt>Include address into place text</dt>
+        <dd>If checked then the address of a place is shown (if available).</dd>
+
+        <dt>Highlight unparented</dt>
+        <dd>
+            Highlighting persons with no parents or family improves navigation through the list.
+            The following color scheme is applied: a white background is used for persons with family and parents,
+            flaxen background for persons without family, and light red for persons without parents.
+            Background colors do not prevent getting information.
+        </dd>
+
+        <dt>Highlight unmarried</dt>
+        <dd>
+            If checked then persons who are not married are highlighted.
+        </dd>
+
+        <dt>Autosort children</dt>
+        <dd>If checked then when children are shown they will be automatically sorted by birth date.</dd>
+
+        <dt>Autosort spouses</dt>
+        <dd>If checked then spouses are automatically sorted by marriage date.</dd>
+
+        <dt>First capital letter in names</dt>
+        <dd>
+            This option enables automatic formatting of first and last names in the Person and Personal Name
+            editing dialogs to a capital first and lowercase following letters
+            (see <a href="gkhRec_Individual.html">Personal Records</a> and <a href="gkhRec_Name.html">Personal Names</a>).
+        </dd>
+
+        <dt>Surname in capitals</dt>
+        <dd>
+            This option enables automatic formatting of surnames in the Person and Personal Name editing dialogs
+            to an all-caps representation (see <a href="gkhRec_Individual.html">Personal Records</a>
+            and <a href="gkhRec_Name.html">Personal Names</a>).
+        </dd>
+
+        <dt>Short kinship form</dt>
+        <dd>
+            This option enables the reduction of certain degrees of kinship "great-great-great...-"
+            to a single indication of "great" and a number of repetitions
+            (see <a href="gkhTreeChart.html">Family Trees</a> and <a href="gkhRelCalc.html">Kinship Calculator</a>).
+        </dd>
+    </dl>
+
     <h3>List of individuals</h3>
-    <br>Controls what person characteristics are shown and the order in which they are shown. To change the order, simply selected a characteristic and use the up and down arrows.
-    <br><img src="images/dlgOptions_Interface_ListOfIndividuals.gif" alt="[Interface List of Individuals options dialog]">
 
-    <h2 id="Pedigrees">Pedigrees</h2>
-    <img src="images/dlgOptions_Pedigrees.gif" alt="[Pedigree options dialog]">
-    <ol>
-        <li>
-            Pedigree generation
-            <ul>
-                <li>
-                    Include attributes of individuals
-                    <br>Checks if a person's life events will be included in the pedigree.
-                </li>
-                <li>
-                    Include notes
-                    <br>Checks if text notes from a person's biography will be included in the pedigree.
-                </li>
-                <li>
-                    Includes sources
-                    <br>Determines if the pedigree includes source numbers that reference a person&mdash;there is a source list at the bottom of the pedigree.
-                </li>
-                <li>
-                    Including number of generations
-                    <br>Sets whether to display additional subheadings of the type "Generation&nbsp;1", "Generation&nbsp;2", and so forth. Otherwise the generation's texts follow without a visual breakdown.
-                </li>
-                <li>
-                    Pedigree format
-                    <br>These control the level of details for a person description printed in the pedigree. Usually, you would use the Compact format, because the Excess one may contain too much unnecessary information.
-                    <ul>
-                        <li>
-                            Excess
-                            <br>If selected then the pedigrees will show verbose information.
-                        </li>
-                        <li>
-                            Compact
-                            <br>If selected then less information is shown.
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-    </ol>
+    <p>
+        Controls what person characteristics are shown and the order in which they are shown.
+        To change the order, simply selected a characteristic and use the up and down arrows.
+    </p>
 
-    <h2 id="Plugins">Plugins</h2>
-    This is a list of the plugins that are in use by GEDKeeper. This is for reference only.
-    <br><img src="images/dlgOptions_Plugins.gif" alt="[Plugins options dialog]">
+    <p style="text-align:center"><img src="images/dlgOptions_Interface_ListOfIndividuals.png"></p>
+
+    <h3>Navigation</h3>
+
+    <p style="text-align:center"><img src="images/dlgOptions_Interface_Navigation.png"></p>
+
+    <dl>
+        <dt>Use surnames in person selection filter</dt>
+        <dd>
+            This option enables automatic substitution of the child's surname in the <a href="gkhRecordSelect.html">select/add</a> dialog filter of the father or mother,
+            as well as substitution of the parent's surname in the <a href="gkhRecordSelect.html">select/add</a> dialog filter of the child.
+            The substitution of the surname can be adjusted manually.
+        </dd>
+
+        <dt>Use dates of birth in person selection filter</dt>
+        <dd>
+            This option enables the use of the child's birth date in the <a href="gkhRecordSelect.html">Select/Add</a> father or mother dialog,
+            and the use of the parent's birth date in the <a href="gkhRecordSelect.html">Select/Add</a> child dialog
+            (only persons born before the child's birth date or born after the parent's birth date are displayed).
+            To avoid false positives, the acceptable age of childbearing is not taken into account.
+            The absence of a birth date for any persons is considered an acceptable option.
+        </dd>
+
+        <dt>Match pattern method (RegEx, FastIgnoreCase, Fast)</dt>
+        <dd>
+            This option defines the algorithm that will be used for filtering and searching.
+            RegEx - reliable, but the slowest of the three (with a database of over 100-200 thousand people, small delays are possible).
+            FastIgnoreCase - a fast filtering algorithm, there are restrictions on supported mask combinations, compares with ignoring the character case.
+            Fast - the fastest filtering algorithm, there are restrictions on supported mask combinations, takes into account the character case.
+        </dd>
+
+        <dt>Search and filter by all names</dt>
+        <dd>
+            If there is more than one name in personal records - with the option enabled,
+            the search and filtering will be performed by all names.
+            If the option is disabled - only by the first names.
+        </dd>
+    </dl>
+
+    <h3>Locations and Maps</h3>
+
+    <p style="text-align:center"><img src="images/dlgOptions_Interface_PlacesAndMaps.png"></p>
+
+    <dl>
+        <dt>Geocoder</dt>
+        <dd>
+            The option specifies the service-provider that will be used to search for geographic coordinates of places by name
+            (see <a href="gkhRec_Place.html">Geographical place records</a> and <a href="gkhMaps.html">Maps</a>).
+        </dd>
+
+        <dt>Restriction geo search by country</dt>
+        <dd>
+            The option is used to limit the results of a geographic search for places
+            in a specific locale (language/country).
+        </dd>
+
+        <dt>Extended locations</dt>
+        <dd>
+            All location processing and substitution operations involving place records
+            will take into account the possible presence of historical information about the binding of place names
+            to dates, the possible presence of hierarchical relationships between places
+            (see <a href="gkhRec_Place.html">Geographic Place Records</a>).
+        </dd>
+
+        <dt>Abbreviated location names</dt>
+        <dd>
+            If there is an abbreviated name for a location records, that will be used first.
+        </dd>
+
+        <dt>Reverse order of places (from small to large)</dt>
+        <dd>
+            When forming a long historical name of a place according to the existing hierarchy of locations,
+            the reverse order of listing will be used - from smaller to larger.
+            If the option is disabled, the direct order will be used - from larger to smaller.
+        </dd>
+
+        <dt>Search in geocoders for places without coordinates (maps)</dt>
+        <dd>
+            When loading a list of places with reference to people and events in maps,
+            if the place does not have specified coordinates,
+            with this option enabled, the coordinates will be automatically requested via the geocoder
+            (this greatly slows down the process of preparing maps).
+        </dd>
+    </dl>
+
+    <hr>
+    <a id="pedigrees"><h2>Pedigrees</h2></a>
+
+    <p>
+        Here are the options for generating <a href="gkhPedigrees.html">pedigrees</a>.
+    </p>
+
+    <p style="text-align:center"><img src="images/dlgOptions_Pedigrees.png"></p>
+
+    <dl>
+        <dt>Include attributes of individuals</dt>
+        <dd>Checks if a person's life facts/attributes (not events) will be included in the pedigree.</dd>
+
+        <dt>Include notes</dt>
+        <dd>Checks if text notes from a person's biography will be included in the pedigree.</dd>
+
+        <dt>Includes sources</dt>
+        <dd>
+            Determines if the pedigree includes source numbers that reference a person&mdash;
+            there is a source list at the bottom of the pedigree.
+        </dd>
+
+        <dt>Include source pages</dt>
+        <dd>
+            Specifies whether to output page numbers from used sources.
+        </dd>
+
+        <dt>Including number of generations</dt>
+        <dd>
+            Sets whether to display additional subheadings of the type "Generation&nbsp;1", "Generation&nbsp;2", and so forth.
+            Otherwise the generation's texts follow without a visual breakdown.
+        </dd>
+
+        <dt>Include portraits</dt>
+        <dd>
+            The generated pedigrees will include portraits of individuals.
+        </dd>
+
+        <dt>Pedigree format (Excess / Compact)</dt>
+        <dd>
+            These control the level of details for a person description printed in the pedigree.
+            Usually, you would use the Compact format, because the Excess one may contain too much unnecessary information.
+        </dd>
+
+        <dt>Ascend and descend numbering</dt>
+        <dd>
+            These options allow you to specify the type of numbering of persons to facilitate searching for relationships between them in the text.
+            Different countries and regions have their own traditional systems.
+            GEDKeeper uses the Kobrin-Konovalov and Sosa-Stradonitz systems for numbering ascending pedigrees.
+            For descending pedigrees, the Kobrin-Konovalov and d'Aboville systems.
+        </dd>
+    </dl>
+
+    <hr>
+    <a id="special"><h2>Specials</h2></a>
+
+    <p>Rarely used, experimental, or highly specialized options.</p>
+
+    <p style="text-align:center"><img src="images/dlgOptions_Specials.png"></p>
+
+    <dl>
+        <dt>Use extended notes</dt>
+        <dd>
+            The option enables the ability to enter <a href="gkhRec_Note.html">notes</a> in the program,
+            which have additional formatting capabilities (non-standard format for storing design, BB-markup).
+        </dd>
+
+        <dt>Keep rich names (advanced users only)</dt>
+        <dd>
+            This option enables the mode in which the maximum redundant structures of personal names
+            (with duplication of information) are written to the database file when saving.
+            This makes the functionally same file larger in volume.
+        </dd>
+
+        <dt>Chart windows show mode (Default, Left half, Right half, Maximize)</dt>
+        <dd>
+            This option enables the ability to open the diagram window to full screen,
+            align the window to the left or right half when calling the diagram window.
+            Useful when using the program on wide screens in split mode
+            (main window with tables on the left, charts on the right, or vice versa).
+        </dd>
+
+        <dt>Shorten date ranges</dt>
+        <dd>
+            In tree diagrams and pedigree charts, date ranges that contain only years
+            (like "1890 - 1895") will be abbreviated to "1890/95".
+        </dd>
+
+        <dt>Keep overall size of info panels</dt>
+        <dd>
+            With this option, the record information panels (to the right of the tables in the main window tabs)
+            will have a constant size that is restored when you enter the program.
+        </dd>
+
+        <dt>Warn when overwritting files</dt>
+        <dd>When using the Save As operation to an existing file, a warning will be issued.</dd>
+
+        <dt>Extended definition of kinship</dt>
+        <dd>
+            In the kinship calculator and in trees with kinship display enabled,
+            such relationships as half-siblings, half-brothers and half-sisters,
+            adoptions, biological and step-parents, and civil marriages will be determined.
+        </dd>
+
+        <dt>Show number of substructures instead of check marks</dt>
+        <dd>
+            In the tables of events of persons or families, in the columns of presence of references to sources,
+            notes or multimedia (substructures), simple "check marks" are usually displayed.
+            When using this option, instead of a check mark, the number of substructures will be displayed.
+        </dd>
+    </dl>
+
+    <hr>
+    <a id="eventTypes"><h2>Event types</h2></a>
+
+    <p>A tool for customizing the use of standard and custom event types.</p>
+
+    <p style="text-align:center"><img src="images/dlgOptions_EventTypes.png"></p>
+
+    <hr>
+    <a id="plugins"><h2>Plugins</h2></a>
+
+    <p>
+        This is a list of the <a href="gkhPlugins.html">plugins</a> that are in use by GEDKeeper.
+        This is for reference only.
+    </p>
+
+    <p style="text-align:center"><img src="images/dlgOptions_Plugins.png"></p>
+
+    <hr>
 
 </body>
 </html>
