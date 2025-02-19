@@ -1,0 +1,229 @@
+﻿---
+Name: Modern (by kazerniel)
+Elements:
+  - Element: Font
+    Value: "Verdana"
+  - Element: FontSize
+    Value: "8.25"
+
+  - Element: Editor
+    Value: "#FFFFFF"
+  - Element: EditorText
+    Value: "#000000"
+
+  - Element: Control
+    Value: "#DFE4EB"
+  - Element: ControlText
+    Value: "#3F2756"
+
+  - Element: Window
+    Value: "#DFE4EB"
+  - Element: WindowText
+    Value: "#3F2756"
+
+  - Element: Dialog
+    Value: "#A1AABB"
+  - Element: DialogText
+    Value: "#FFFFFF"
+
+  - Element: ButtonFace
+    Value: "#5D67C7"
+  - Element: AccentButtonFace
+    Value: "#7046A6"
+  - Element: ButtonBorder
+    Value: "#3C339F"
+  - Element: ButtonText
+    Value: "#FFFFFF"
+
+  - Element: Strip
+    Value: "#7F8697"
+  - Element: Dropdown
+    Value: "#7F8697"
+  - Element: MenuBorder
+    Value: "#F7F7F7"
+  - Element: MenuItemSelected
+    Value: "#A1A7BC"
+
+  - Element: Link
+    Value: "#0000FF"
+
+  - Element: Grid
+    Value: "#CFD6E1"
+  - Element: GridHeader
+    Value: "#C4CBD8"
+  - Element: GridHeaderText
+    Value: "#1F308D"
+  - Element: GridText
+    Value: "#1F308D"
+
+  - Element: Tab
+    Value: "#DFE4EB"
+  - Element: TabHighlight
+    Value: "#DFE4EB"
+  - Element: TabSelected
+    Value: "#A1A7BC"
+
+  - Element: HighlightReadabilityRows
+    Value: "#ADB9CC"
+  - Element: HighlightUnparentedIndi
+    Value: "#FFA8A8"
+  - Element: HighlightUnmarriedIndi
+    Value: "#FFFFA1"
+  - Element: HighlightInaccessibleFiles
+    Value: "#FFCACA"
+
+
+  - Element: Glyph_FileNew
+    Value: "Modern/FileNew.png"
+
+  - Element: Glyph_FileLoad
+    Value: "Modern/FileLoad.png"
+
+  - Element: Glyph_FileSave
+    Value: "Modern/FileSave.png"
+
+  - Element: Glyph_FileProperties
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_Export
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_ExportTable
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_Exit
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_RecordAdd
+    Value: "Modern/RecordAdd.png"
+
+  - Element: Glyph_RecordEdit
+    Value: "Modern/RecordEdit.png"
+
+  - Element: Glyph_RecordDelete
+    Value: "Modern/RecordDelete.png"
+
+  - Element: Glyph_Search
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_Filter
+    Value: "Modern/Filter.png"
+
+  - Element: Glyph_TreeAncestors
+    Value: "Modern/TreeAncestors.png"
+
+  - Element: Glyph_TreeDescendants
+    Value: "Modern/TreeDescendants.png"
+
+  - Element: Glyph_TreeBoth
+    Value: "Modern/TreeBoth.png"
+
+  - Element: Glyph_Pedigree
+    Value: "Modern/Pedigree.png"
+
+  - Element: Glyph_Maps
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_Stats
+    Value: "Modern/Stats.png"
+
+  - Element: Glyph_Organizer
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_Slideshow
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_Settings
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_Help
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_About
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_Prev
+    Value: "Modern/Prev.png"
+
+  - Element: Glyph_Next
+    Value: "Modern/Next.png"
+
+  - Element: Glyph_SendMail
+    Value: "Modern/SendMail.png"
+
+  - Element: Glyph_PartialView
+    Value: "Modern/PartialView.png"
+
+  - Element: Glyph_Accept
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_Cancel
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_ItemAdd
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_ItemEdit
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_ItemDelete
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_LinkJump
+    Value: "Modern/LinkJump.png"
+
+  - Element: Glyph_MoveUp
+    Value: "Modern/MoveUp.png"
+
+  - Element: Glyph_MoveDown
+    Value: "Modern/MoveDown.png"
+
+  - Element: Glyph_Copy
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_Cut
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_Paste
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_ImageSave
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_DocPrint
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_DocPreview
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_Start
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_Stop
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_Undo
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_Redo
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_Attach
+    Value: "Modern/Attach.png"
+
+  - Element: Glyph_Detach
+    Value: "Modern/Detach.png"
+
+  - Element: Glyph_SizeToFit
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_ZoomIn
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_ZoomOut
+    Value: "Modern/stub.png"
+
+  - Element: Glyph_SetPortrait
+    Value: "Modern/stub.png"
+
+...

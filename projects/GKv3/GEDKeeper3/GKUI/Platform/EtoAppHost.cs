@@ -137,6 +137,7 @@ namespace GKUI.Platform
 #endif
 
 #if OS_MSWIN
+            //Eto.Wpf.Forms.ToolBar.ToolItemHandler.DefaultImageSize = new Size(24, 24);
             Eto.Wpf.Forms.ToolBar.ToolItemHandler.DefaultImageSize = new Size(20, 20);
 #endif
         }

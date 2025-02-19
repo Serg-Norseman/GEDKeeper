@@ -241,6 +241,7 @@ namespace GKUI.Themes
                         telVal = null;
                     }
                 } else if (telType == ThemeElementType.Color) {
+                    //Logger.WriteInfo(string.Format("{0} = {1}", telem, telVal));
                     telVal = PreProcessElement(telVal, telType);
                 }
 
