@@ -38,8 +38,8 @@ Community group: [Google Groups: GEDKeeper (en)](https://groups.google.com/g/ged
 
 ## Implementations
 
-- "GEDKeeper2", standard (NET4.7.1 & WinForms), only Windows 7 or later
-- "GEDKeeper3", cross-platform (NET6 & Eto.Forms), Windows and Linux, MacOS
+- "GEDKeeper2", standard (NET4.7.1 & WinForms, x86), only Windows 7 or later
+- "GEDKeeper3", cross-platform (NET6 & Eto.Forms, x64), Linux, MacOS and only Windows 10/11
 - "GEDKeeperX", mobile (NET Standard & Xamarin), Android
 
 

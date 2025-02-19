@@ -1,5 +1,5 @@
 ﻿; "GEDKeeper", the personal genealogical database editor.
-; Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+; Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
 ; This file is part of "GEDKeeper".
 
 Unicode true
@@ -8,8 +8,8 @@ Unicode true
 !define MUI_ICON "..\projects\GEDKeeper_48.ico"
 
 Name "GEDKeeper"
-OutFile "gedkeeper_3.8.0_win86.exe"
-InstallDir $PROGRAMFILES\GEDKeeper3
+OutFile "gedkeeper_3.8.0_win64.exe"
+InstallDir $PROGRAMFILES64\GEDKeeper3
 
 CRCCheck on
 SetCompress auto
