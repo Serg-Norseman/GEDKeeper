@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -65,7 +65,6 @@ namespace GKUI.Platform
         private void OnApplicationExit(object sender, EventArgs e)
         {
             ApplicationExit();
-            //AppHost.Instance.SaveLastBases();
         }
 
         public override async Task Init(string[] args, bool isMDI)
@@ -300,7 +299,7 @@ namespace GKUI.Platform
 
                 case Feature.RecentFilesLoad:
                     // In the SDI interface, it is not clear how to implement it correctly
-                    result = false;
+                    result = true;
                     break;
 
                 case Feature.Themes:

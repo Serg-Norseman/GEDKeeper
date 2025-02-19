@@ -113,6 +113,7 @@ namespace GKCore
 
         protected virtual void ApplicationExit()
         {
+            AppHost.Instance.SaveLastBases();
         }
 
         private void AutosaveTimer_Tick(object sender, EventArgs e)
@@ -325,10 +326,11 @@ namespace GKCore
         public void SaveLastBases()
         {
 #if !CI_MODE
-            AppHost.Options.LastBases.Clear();
+            var lastBases = AppHost.Options.LastBases;
 
+            lastBases.Clear();
             foreach (var baseWin in GetRunningForms<IBaseWindow>()) {
-                AppHost.Options.LastBases.Add(baseWin.Context.FileName);
+                lastBases.Add(baseWin.Context.FileName);
             }
 #endif
         }
@@ -908,9 +910,11 @@ namespace GKCore
             try {
                 BeginLoading();
 
-                int num = AppHost.Options.LastBases.Count;
+                var lastBases = AppHost.Options.LastBases;
+
+                int num = lastBases.Count;
                 for (int i = 0; i < num; i++) {
-                    string lb = AppHost.Options.LastBases[i];
+                    string lb = lastBases[i];
                     if (File.Exists(lb)) {
                         await AppHost.Instance.CreateBase(lb);
                         result += 1;

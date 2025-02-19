@@ -144,7 +144,6 @@ namespace GKUI.Platform
         private void OnApplicationExit(object sender, System.ComponentModel.CancelEventArgs e)
         {
             ApplicationExit();
-            //AppHost.Instance.SaveLastBases();
         }
 
         public override async Task Init(string[] args, bool isMDI)
@@ -345,7 +344,7 @@ namespace GKUI.Platform
 
                 case Feature.RecentFilesLoad:
                     // In the SDI interface, it is not clear how to implement it correctly
-                    result = false;
+                    result = true;
                     break;
 
                 case Feature.Themes:

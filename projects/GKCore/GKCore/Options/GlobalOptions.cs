@@ -359,7 +359,7 @@ namespace GKCore.Options
             FileBackupEachRevisionMaxCount = 0;
 
             ShowTips = true;
-            LoadRecentFiles = true;
+            LoadRecentFiles = false;
             AutoCheckUpdates = true;
             CharsetDetection = false;
             DialogClosingWarn = false;
@@ -772,7 +772,7 @@ namespace GKCore.Options
             ShowDatesCalendar = ini.ReadBool("Common", "ShowDatesCalendar", false);
             ShowDatesSign = ini.ReadBool("Common", "ShowDatesSigns", false);
             RemovableMediaWarning = ini.ReadBool("Common", "RemovableMediaWarning", true);
-            LoadRecentFiles = ini.ReadBool("Common", "LoadRecentFiles", true);
+            LoadRecentFiles = ini.ReadBool("Common", "LoadRecentFiles", false);
             EmbeddedMediaPlayer = ini.ReadBool("Common", "EmbeddedMediaPlayer", true);
             AllowMediaStoreReferences = ini.ReadBool("Common", "AllowMediaStoreReferences", false);
             AllowMediaStoreRelativeReferences = ini.ReadBool("Common", "AllowMediaStoreRelativeReferences", true); // only when AllowMediaStoreReferences is true
