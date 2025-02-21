@@ -31,8 +31,8 @@ using GKCore.Plugins;
 [assembly: AssemblyTitle("GKChroniclePlugin")]
 [assembly: AssemblyDescription("GEDKeeper Chronicle plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2017-2023 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyCopyright("Copyright © 2017-2025 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyVersion("1.1.0.0")]
 [assembly: AssemblyCulture("")]
 
 #if DEBUG
@@ -46,11 +46,7 @@ namespace GKChroniclePlugin
     public enum PLS
     {
         Chronicle = 1,
-        Date,
-        Event,
-        Place,
-        Cause,
-        Description
+        Subject
     }
 
     internal class EventRecord
