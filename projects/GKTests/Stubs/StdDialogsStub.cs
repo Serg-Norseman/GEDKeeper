@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -26,9 +26,17 @@ namespace GKTests.Stubs
 {
     public class StdDialogsStub : IStdDialogs
     {
+        private static string fStrResult = string.Empty;
+
+        public static void SetStrInputResult(string value)
+        {
+            fStrResult = value;
+        }
+
+
         public async Task<string> GetInput(object owner, string prompt, string value)
         {
-            return await Task.FromResult(string.Empty);
+            return await Task.FromResult(fStrResult);
         }
 
         public async Task<string> GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt)

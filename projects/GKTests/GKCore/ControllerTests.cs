@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Threading.Tasks;
 using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
@@ -44,6 +45,15 @@ namespace GKCore.Controllers
             fBaseWin = new BaseWindowStub(true);
         }
 
+        private static IBaseWindow GetBaseSubst()
+        {
+            var baseContext = Substitute.For<IBaseContext>();
+            baseContext.Tree.Returns(new GDMTree());
+            var baseWin = Substitute.For<IBaseWindow>();
+            baseWin.Context.Returns(baseContext);
+            return baseWin;
+        }
+
         private static void SubstituteControl<T>(IView dialog, string ctlName) where T : class, IControl
         {
             var substControl = Substitute.For<T>();
@@ -51,7 +61,7 @@ namespace GKCore.Controllers
         }
 
         [Test]
-        public void Test_AddressEditDlgController()
+        public async Task Test_AddressEditDlgController()
         {
             var view = Substitute.For<IAddressEditDlg>();
             SubstituteControl<IButton>(view, "btnAccept");
@@ -71,27 +81,69 @@ namespace GKCore.Controllers
             view.WebsList.Returns(Substitute.For<ISheetList>());
 
             var controller = new AddressEditDlgController(view);
+            controller.ApplyTheme();
 
             var addr = new GDMAddress();
 
             controller.Address = addr;
             Assert.AreEqual(addr, controller.Address);
 
-            view.Country.Text = "sample country";
-
-            controller.Accept();
+            // fields
+            addr.AddressCountry = "sample country";
+            addr.AddressState = "state";
+            addr.AddressCity = "city";
+            addr.AddressPostalCode = "0123456";
             controller.UpdateView();
+            Assert.AreEqual("sample country", view.Country.Text);
+            Assert.AreEqual("state", view.State.Text);
+            Assert.AreEqual("city", view.City.Text);
+            Assert.AreEqual("0123456", view.PostalCode.Text);
 
+            // phones
+            StdDialogsStub.SetStrInputResult("test phone");
+            await controller.DoPhonesAction(RecordAction.raAdd, null);
+            Assert.AreEqual(1, addr.PhoneNumbers.Count);
+            Assert.AreEqual("test phone", addr.PhoneNumbers[0].StringValue);
+
+            StdDialogsStub.SetStrInputResult("test phone 2");
+            await controller.DoPhonesAction(RecordAction.raEdit, addr.PhoneNumbers[0]);
+            Assert.AreEqual(1, addr.PhoneNumbers.Count);
+            Assert.AreEqual("test phone 2", addr.PhoneNumbers[0].StringValue);
+
+            await controller.DoPhonesAction(RecordAction.raDelete, addr.PhoneNumbers[0]);
+            Assert.AreEqual(0, addr.PhoneNumbers.Count);
+
+            // mails
+            StdDialogsStub.SetStrInputResult("test mail");
+            await controller.DoMailsAction(RecordAction.raAdd, null);
+            Assert.AreEqual(1, addr.EmailAddresses.Count);
+            Assert.AreEqual("test mail", addr.EmailAddresses[0].StringValue);
+
+            StdDialogsStub.SetStrInputResult("test mail 2");
+            await controller.DoMailsAction(RecordAction.raEdit, addr.EmailAddresses[0]);
+            Assert.AreEqual(1, addr.EmailAddresses.Count);
+            Assert.AreEqual("test mail 2", addr.EmailAddresses[0].StringValue);
+
+            await controller.DoMailsAction(RecordAction.raDelete, addr.EmailAddresses[0]);
+            Assert.AreEqual(0, addr.EmailAddresses.Count);
+
+            // web sites
+            StdDialogsStub.SetStrInputResult("test site");
+            await controller.DoWebsAction(RecordAction.raAdd, null);
+            Assert.AreEqual(1, addr.WebPages.Count);
+            Assert.AreEqual("test site", addr.WebPages[0].StringValue);
+
+            StdDialogsStub.SetStrInputResult("test site 2");
+            await controller.DoWebsAction(RecordAction.raEdit, addr.WebPages[0]);
+            Assert.AreEqual(1, addr.WebPages.Count);
+            Assert.AreEqual("test site 2", addr.WebPages[0].StringValue);
+
+            await controller.DoWebsAction(RecordAction.raDelete, addr.WebPages[0]);
+            Assert.AreEqual(0, addr.WebPages.Count);
+
+            // accept?
+            controller.Accept();
             Assert.AreEqual("sample country", addr.AddressCountry);
-        }
-
-        private static IBaseWindow GetBaseSubst()
-        {
-            var baseContext = Substitute.For<IBaseContext>();
-            baseContext.Tree.Returns(new GDMTree());
-            var baseWin = Substitute.For<IBaseWindow>();
-            baseWin.Context.Returns(baseContext);
-            return baseWin;
         }
 
         [Test]
@@ -115,6 +167,7 @@ namespace GKCore.Controllers
 
             var controller = new AssociationEditDlgController(view);
             Assert.IsNotNull(controller);
+            controller.ApplyTheme();
 
             controller.Init(baseWin);
             Assert.AreEqual(baseWin, controller.Base);
@@ -855,6 +908,8 @@ namespace GKCore.Controllers
             SubstituteControl<IComboBox>(view, "cmbRefType");
 
             var controller = new UserRefEditDlgController(view);
+            controller.ApplyTheme();
+
             var userRef = new GDMUserReference();
 
             controller.UserReference = userRef;

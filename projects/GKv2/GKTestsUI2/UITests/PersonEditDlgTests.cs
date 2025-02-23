@@ -178,7 +178,7 @@ namespace GKUI.Forms
             Assert.AreEqual(1, indiRecord.PersonalNames.Count);
 
             // associations
-            tabs.SelectTab(3);
+            /*tabs.SelectTab(3);
             Assert.AreEqual(0, indiRecord.Associations.Count);
             ModalFormHandler = AssociationEditDlgTests.AcceptModalHandler;
             ClickToolStripButton("fAssociationsList_ToolBar_btnAdd", fDialog);
@@ -186,7 +186,7 @@ namespace GKUI.Forms
             Assert.AreEqual("sample relation", indiRecord.Associations[0].Relation);
 
             TestDeleteSheetListItem("fAssociationsList", 0);
-            Assert.AreEqual(0, indiRecord.Associations.Count);
+            Assert.AreEqual(0, indiRecord.Associations.Count);*/
 
             // groups
             tabs.SelectTab(7);
@@ -201,7 +201,7 @@ namespace GKUI.Forms
             //Assert.AreEqual(0, indiRecord.Groups.Count);
 
             // userrefs
-            tabs.SelectTab(8);
+            /*tabs.SelectTab(8);
             Assert.AreEqual(0, indiRecord.UserReferences.Count);
             ModalFormHandler = UserRefEditDlgTests.AcceptHandler;
             ClickToolStripButton("fUserRefList_ToolBar_btnAdd", fDialog);
@@ -209,7 +209,7 @@ namespace GKUI.Forms
             Assert.AreEqual("sample reference", indiRecord.UserReferences[0].StringValue);
 
             TestDeleteSheetListItem("fUserRefList", 0);
-            Assert.AreEqual(0, indiRecord.UserReferences.Count);
+            Assert.AreEqual(0, indiRecord.UserReferences.Count);*/
 
             ClickButton("btnAccept", fDialog);
         }

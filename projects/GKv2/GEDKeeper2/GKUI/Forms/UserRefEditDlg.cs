@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,7 +23,6 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -52,9 +51,6 @@ namespace GKUI.Forms
         public UserRefEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new UserRefEditDlgController(this);
             fController.Init(baseWin);

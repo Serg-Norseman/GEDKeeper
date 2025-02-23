@@ -175,8 +175,8 @@ namespace GKUI.Forms
             EnterCombo("txtEventCause", form, "test cause");
             EnterCombo("txtEventOrg", form, "test agency");
 
-            SetModalFormHandler(fFormTest, AddressEditDlgTests.AddressEditDlg_btnAccept_Handler);
-            ClickButton("btnAddress", form);
+            //SetModalFormHandler(fFormTest, AddressEditDlgTests.AddressEditDlg_btnAccept_Handler);
+            //ClickButton("btnAddress", form);
 
             RecordSelectDlgTests.SetCreateItemHandler(fFormTest, LocationEditDlgTests.LocationAdd_Mini_Handler);
             ClickButton("btnPlaceAdd", form);

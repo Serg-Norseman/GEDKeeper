@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -87,20 +87,6 @@ namespace GKUI.Forms
 
             fController = new AddressEditDlgController(this);
             fController.Init(baseWin);
-        }
-
-        private async void ListModify(object sender, ModifyEventArgs eArgs)
-        {
-            GDMTag itemTag = eArgs.ItemData as GDMTag;
-            if ((eArgs.Action == RecordAction.raEdit || eArgs.Action == RecordAction.raDelete) && (itemTag == null)) return;
-
-            if (sender == fPhonesList) {
-                await fController.DoPhonesAction(eArgs.Action, itemTag);
-            } else if (sender == fMailsList) {
-                await fController.DoMailsAction(eArgs.Action, itemTag);
-            } else if (sender == fWebsList) {
-                await fController.DoWebsAction(eArgs.Action, itemTag);
-            }
         }
     }
 }
