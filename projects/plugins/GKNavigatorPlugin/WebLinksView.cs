@@ -55,14 +55,14 @@ namespace GKNavigatorPlugin
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
-        private readonly HistoryData fData;
+        private readonly WebLinksData fData;
 
 
         public WebLinksView()
         {
             InitializeComponent();
 
-            fData = new HistoryData();
+            fData = new WebLinksData();
 
             UpdateFiles();
 

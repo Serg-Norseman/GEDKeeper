@@ -3,7 +3,7 @@
 
     <ItemGroup>
         <Compile Include="NavigatorData.cs" />
-        <Compile Include="HistoryData.cs" />
+        <Compile Include="WebLinksData.cs" />
         <Compile Include="WebLinksView.cs" />
 
         <None Include="GKNavigatorPlugin.afr">

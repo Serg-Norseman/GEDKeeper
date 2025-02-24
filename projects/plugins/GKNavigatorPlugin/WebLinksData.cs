@@ -52,7 +52,7 @@ namespace GKNavigatorPlugin
     }
 
 
-    internal class HistoryData
+    internal class WebLinksData
     {
         private readonly List<LinkItem> fItems;
         private int fLinkColumn;
@@ -72,7 +72,7 @@ namespace GKNavigatorPlugin
         }
 
 
-        public HistoryData()
+        public WebLinksData()
         {
             fItems = new List<LinkItem>();
             LoadFiles();
