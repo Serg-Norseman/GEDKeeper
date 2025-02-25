@@ -137,8 +137,8 @@ namespace GKUI.Platform
 #endif
 
 #if OS_MSWIN
-            //Eto.Wpf.Forms.ToolBar.ToolItemHandler.DefaultImageSize = new Size(24, 24);
             Eto.Wpf.Forms.ToolBar.ToolItemHandler.DefaultImageSize = new Size(20, 20);
+            Eto.Wpf.Forms.Menu.MenuItemHandler.DefaultImageSize = new Size(20, 20);
 #endif
         }
 
@@ -149,6 +149,7 @@ namespace GKUI.Platform
 #if OS_MSWIN
             if (toolSize != 0) {
                 Eto.Wpf.Forms.ToolBar.ToolItemHandler.DefaultImageSize = new Size(toolSize, toolSize);
+                Eto.Wpf.Forms.Menu.MenuItemHandler.DefaultImageSize = new Size(toolSize, toolSize);
             }
 #endif
         }

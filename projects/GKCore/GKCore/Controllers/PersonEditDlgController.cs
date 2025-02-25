@@ -607,7 +607,7 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnMotherDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
             GetControl<IButton>("btnMotherSel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_LinkJump, true);
 
-            GetControl<IButton>("btnNameCopy").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Copy, true);
+            GetControl<IButton>("btnNameCopy").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_CopyName, true);
 
             fView.EventsList.ApplyTheme();
             fView.NotesList.ApplyTheme();

@@ -73,6 +73,10 @@ Elements:
     Value: "#FFCACA"
 
 
+  - Element: ToolItemsImageSize
+    Value: "24"
+
+
   - Element: Glyph_FileNew
     Value: "Modern/FileNew.png"
 
@@ -83,13 +87,13 @@ Elements:
     Value: "Modern/FileSave.png"
 
   - Element: Glyph_FileProperties
-    Value: "Modern/stub.png"
+    Value: "Modern/FileProperties.png"
 
   - Element: Glyph_Export
     Value: "Modern/stub.png"
 
   - Element: Glyph_ExportTable
-    Value: "Modern/stub.png"
+    Value: "Modern/ExportTable.png"
 
   - Element: Glyph_Exit
     Value: "Modern/stub.png"
@@ -104,7 +108,7 @@ Elements:
     Value: "Modern/RecordDelete.png"
 
   - Element: Glyph_Search
-    Value: "Modern/stub.png"
+    Value: "Modern/Search.png"
 
   - Element: Glyph_Filter
     Value: "Modern/Filter.png"
@@ -128,19 +132,19 @@ Elements:
     Value: "Modern/Stats.png"
 
   - Element: Glyph_Organizer
-    Value: "Modern/stub.png"
+    Value: "Modern/Organizer.png"
 
   - Element: Glyph_Slideshow
-    Value: "Modern/stub.png"
+    Value: "Modern/Slideshow.png"
 
   - Element: Glyph_Settings
-    Value: "Modern/stub.png"
+    Value: "Modern/Settings.png"
 
   - Element: Glyph_Help
-    Value: "Modern/stub.png"
+    Value: "Modern/Help.png"
 
   - Element: Glyph_About
-    Value: "Modern/stub.png"
+    Value: "Modern/About.png"
 
   - Element: Glyph_Prev
     Value: "Modern/Prev.png"
@@ -155,10 +159,10 @@ Elements:
     Value: "Modern/PartialView.png"
 
   - Element: Glyph_Accept
-    Value: "Modern/stub.png"
+    Value: "Modern/Accept.png"
 
   - Element: Glyph_Cancel
-    Value: "Modern/stub.png"
+    Value: "Modern/Cancel.png"
 
   - Element: Glyph_ItemAdd
     Value: "Modern/stub.png"
@@ -179,13 +183,13 @@ Elements:
     Value: "Modern/MoveDown.png"
 
   - Element: Glyph_Copy
-    Value: "Modern/stub.png"
+    Value: "Modern/Copy.png"
 
   - Element: Glyph_Cut
     Value: "Modern/stub.png"
 
   - Element: Glyph_Paste
-    Value: "Modern/stub.png"
+    Value: "Modern/Paste.png"
 
   - Element: Glyph_ImageSave
     Value: "Modern/stub.png"
@@ -225,5 +229,8 @@ Elements:
 
   - Element: Glyph_SetPortrait
     Value: "Modern/stub.png"
+
+  - Element: Glyph_CopyName
+    Value: "Modern/CopyName.png"
 
 ...

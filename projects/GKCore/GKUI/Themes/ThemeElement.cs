@@ -131,6 +131,7 @@ namespace GKUI.Themes
         Glyph_ZoomIn,
         Glyph_ZoomOut,
         Glyph_SetPortrait,
+        Glyph_CopyName,
     }
 
 

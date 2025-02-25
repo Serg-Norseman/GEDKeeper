@@ -152,6 +152,7 @@ namespace GKUI.Themes
                 ThemeElementType.Image, // ThemeElement.Glyph_ZoomIn
                 ThemeElementType.Image, // ThemeElement.Glyph_ZoomOut
                 ThemeElementType.Image, // ThemeElement.Glyph_SetPortrait
+                ThemeElementType.Image, // ThemeElement.Glyph_CopyName
             };
         }
 

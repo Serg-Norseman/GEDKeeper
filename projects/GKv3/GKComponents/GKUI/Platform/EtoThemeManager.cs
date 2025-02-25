@@ -150,6 +150,7 @@ namespace GKUI.Themes
                 { ThemeElement.Glyph_ZoomIn, "Resources.btn_zoom_in.png" },
                 { ThemeElement.Glyph_ZoomOut, "Resources.btn_zoom_out.png" },
                 { ThemeElement.Glyph_SetPortrait, "Resources.btn_portrait.png" },
+                { ThemeElement.Glyph_CopyName, "Resources.btn_copy.png" },
             }, true);
         }
 

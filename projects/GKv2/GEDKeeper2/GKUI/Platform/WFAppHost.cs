@@ -62,6 +62,10 @@ namespace GKUI.Platform
         {
         }
 
+        protected override void ApplyThemeProperties()
+        {
+        }
+
         private void OnApplicationExit(object sender, EventArgs e)
         {
             ApplicationExit();
