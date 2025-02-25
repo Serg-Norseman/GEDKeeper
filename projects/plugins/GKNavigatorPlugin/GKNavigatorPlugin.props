@@ -3,6 +3,8 @@
 
     <ItemGroup>
         <Compile Include="NavigatorData.cs" />
+        <Compile Include="WebLinksData.cs" />
+        <Compile Include="WebLinksView.cs" />
 
         <None Include="GKNavigatorPlugin.afr">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>

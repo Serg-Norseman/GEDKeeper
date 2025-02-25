@@ -34,13 +34,13 @@
         </TabPage>
 
         <TabPage x:Name="pagePhones">
-          <comcom:GKSheetList x:Name="fPhonesList" OnModify="ListModify" />
+          <comcom:GKSheetList x:Name="fPhonesList" />
         </TabPage>
         <TabPage x:Name="pageEmails">
-          <comcom:GKSheetList x:Name="fMailsList" OnModify="ListModify" />
+          <comcom:GKSheetList x:Name="fMailsList" />
         </TabPage>
         <TabPage x:Name="pageWebPages">
-          <comcom:GKSheetList x:Name="fWebsList" OnModify="ListModify" />
+          <comcom:GKSheetList x:Name="fWebsList" />
         </TabPage>
       </TabControl>
     </TableRow>
@@ -48,8 +48,8 @@
     <TableRow>
       <StackLayout Style="dlgFooter">
         <StackLayoutItem Expand="True" />
-        <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
-        <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+        <Button x:Name="btnAccept" Style="dlgBtn" Click="AcceptClickHandler" />
+        <Button x:Name="btnCancel" Style="dlgBtn" Click="CancelClickHandler" />
       </StackLayout>
     </TableRow>
 

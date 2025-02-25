@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="../help/styles.css" type="text/css">
+    <title>Relationship Calculator</title>
+</head>
+<body>
+
+    <h1>Relationship Calculator</h1>
+
+    <p>
+        This calculator is designed to calculate and display possible kinship ties between any two persons
+        in the database. To calculate, you need to select the first and second person using the buttons, after which the program
+        will immediately calculate the possible kinship option. If necessary, you can swap the persons - accordingly,
+        the kinship formulations may change significantly.
+    </p>
+
+    <p>
+        In some cases, it is impossible to establish an unbroken chain of kinship.
+        In such cases, one or more breaks are formed.
+    </p>
+
+    <p>
+        The mechanism on which this module is built is also used to determine relationships
+        in the tree diagram (when the <a href="gkhOptions.html#tree">option to display relationships</a>
+        in the tree is enabled).
+    </p>
+
+    <hr>
+    <p>
+        This module uses the method of searching for connections along a path in a graph.
+        That is, first a complete map of all connections between two persons is built - a graph.
+        Then, between them in the graph, a search is performed for the shortest path, which gives a chain of pairs of people.
+        Then, the program determines a simple kinship connection between each pair of people.
+        In the next step, each of the simple connections is combined with the previous one with an attempt to simplify
+        or reduce to a certain term.
+    </p>
+
+    <hr>
+    <p>
+        See also: <a href="gkhRec_Individual.html">Personal records</a>,
+        <a href="gkhRec_Family.html">Family records</a>, <a href="gkhRec_Event.html">Events</a>,
+        <a href="gkhRelations.html">Relationship terminology</a>.
+    </p>
+
+</body>
+</html>

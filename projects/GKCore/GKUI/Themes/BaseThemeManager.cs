@@ -87,13 +87,15 @@ namespace GKUI.Themes
                 ThemeElementType.Color, // ThemeElement.HighlightUnmarriedIndi
                 ThemeElementType.Color, // ThemeElement.HighlightInaccessibleFiles
 
+                ThemeElementType.Integer, // ThemeElement.ToolItemsImageSize
+
                 ThemeElementType.Image, // ThemeElement.Glyph_FileNew
                 ThemeElementType.Image, // ThemeElement.Glyph_FileLoad
                 ThemeElementType.Image, // ThemeElement.Glyph_FileSave
-                ThemeElementType.Image, // ThemeElement.Glyph_FileProperties,
-                ThemeElementType.Image, // ThemeElement.Glyph_Export,
-                ThemeElementType.Image, // ThemeElement.Glyph_ExportTable,
-                ThemeElementType.Image, // ThemeElement.Glyph_Exit,
+                ThemeElementType.Image, // ThemeElement.Glyph_FileProperties
+                ThemeElementType.Image, // ThemeElement.Glyph_Export
+                ThemeElementType.Image, // ThemeElement.Glyph_ExportTable
+                ThemeElementType.Image, // ThemeElement.Glyph_Exit
 
                 ThemeElementType.Image, // ThemeElement.Glyph_RecordAdd
                 ThemeElementType.Image, // ThemeElement.Glyph_RecordEdit
@@ -123,33 +125,33 @@ namespace GKUI.Themes
                 ThemeElementType.Image, // ThemeElement.Glyph_Accept
                 ThemeElementType.Image, // ThemeElement.Glyph_Cancel
 
-                ThemeElementType.Image, // ThemeElement.Glyph_ItemAdd,
-                ThemeElementType.Image, // ThemeElement.Glyph_ItemEdit,
-                ThemeElementType.Image, // ThemeElement.Glyph_ItemDelete,
-                ThemeElementType.Image, // ThemeElement.Glyph_LinkJump,
-                ThemeElementType.Image, // ThemeElement.Glyph_MoveUp,
-                ThemeElementType.Image, // ThemeElement.Glyph_MoveDown,
-                ThemeElementType.Image, // ThemeElement.Glyph_Copy,
-                ThemeElementType.Image, // ThemeElement.Glyph_Cut,
-                ThemeElementType.Image, // ThemeElement.Glyph_Paste,
+                ThemeElementType.Image, // ThemeElement.Glyph_ItemAdd
+                ThemeElementType.Image, // ThemeElement.Glyph_ItemEdit
+                ThemeElementType.Image, // ThemeElement.Glyph_ItemDelete
+                ThemeElementType.Image, // ThemeElement.Glyph_LinkJump
+                ThemeElementType.Image, // ThemeElement.Glyph_MoveUp
+                ThemeElementType.Image, // ThemeElement.Glyph_MoveDown
+                ThemeElementType.Image, // ThemeElement.Glyph_Copy
+                ThemeElementType.Image, // ThemeElement.Glyph_Cut
+                ThemeElementType.Image, // ThemeElement.Glyph_Paste
 
-                ThemeElementType.Image, // ThemeElement.Glyph_ImageSave,
-                ThemeElementType.Image, // ThemeElement.Glyph_DocPrint,
-                ThemeElementType.Image, // ThemeElement.Glyph_DocPreview,
+                ThemeElementType.Image, // ThemeElement.Glyph_ImageSave
+                ThemeElementType.Image, // ThemeElement.Glyph_DocPrint
+                ThemeElementType.Image, // ThemeElement.Glyph_DocPreview
 
-                ThemeElementType.Image, // ThemeElement.Glyph_Start,
-                ThemeElementType.Image, // ThemeElement.Glyph_Stop,
+                ThemeElementType.Image, // ThemeElement.Glyph_Start
+                ThemeElementType.Image, // ThemeElement.Glyph_Stop
 
-                ThemeElementType.Image, // ThemeElement.Glyph_Undo,
-                ThemeElementType.Image, // ThemeElement.Glyph_Redo,
+                ThemeElementType.Image, // ThemeElement.Glyph_Undo
+                ThemeElementType.Image, // ThemeElement.Glyph_Redo
 
-                ThemeElementType.Image, // ThemeElement.Glyph_Attach,
-                ThemeElementType.Image, // ThemeElement.Glyph_Detach,
+                ThemeElementType.Image, // ThemeElement.Glyph_Attach
+                ThemeElementType.Image, // ThemeElement.Glyph_Detach
 
-                ThemeElementType.Image, // ThemeElement.Glyph_SizeToFit,
-                ThemeElementType.Image, // ThemeElement.Glyph_ZoomIn,
-                ThemeElementType.Image, // ThemeElement.Glyph_ZoomOut,
-                ThemeElementType.Image, // ThemeElement.Glyph_SetPortrait,
+                ThemeElementType.Image, // ThemeElement.Glyph_SizeToFit
+                ThemeElementType.Image, // ThemeElement.Glyph_ZoomIn
+                ThemeElementType.Image, // ThemeElement.Glyph_ZoomOut
+                ThemeElementType.Image, // ThemeElement.Glyph_SetPortrait
             };
         }
 
@@ -194,6 +196,10 @@ namespace GKUI.Themes
                     switch (telType) {
                         case ThemeElementType.Float:
                             tcVal = (float)ConvertHelper.ParseFloat(tfc.Value, 8, true);
+                            break;
+
+                        case ThemeElementType.Integer:
+                            tcVal = ConvertHelper.ParseInt(tfc.Value, 0);
                             break;
 
                         case ThemeElementType.Color:
@@ -255,12 +261,14 @@ namespace GKUI.Themes
             fThemes.Add(name, new Theme(name, PreProcessElements(elements, sysDefault), sysDefault));
         }
 
-        public void SetTheme(string name)
+        public bool SetTheme(string name)
         {
             Theme theme;
             if (fThemes.TryGetValue(name, out theme)) {
                 fCurrentTheme = theme;
+                return true;
             }
+            return false;
         }
 
         public abstract void ApplyTheme(IThemedView view);
@@ -303,6 +311,20 @@ namespace GKUI.Themes
                 return (float)elemValue;
             }
             return 0.0f;
+        }
+
+        protected static int GetThemeInt(Theme theme, ThemeElement element)
+        {
+            object elemValue;
+            if (theme != null && theme.Elements.TryGetValue(element, out elemValue) && elemValue is int) {
+                return (int)elemValue;
+            }
+            return 0;
+        }
+
+        public static int GetThemeInt(ThemeElement element)
+        {
+            return GetThemeInt(fCurrentTheme, element);
         }
     }
 }

@@ -10,16 +10,51 @@
     <h1>Tools: Merge databases</h1>
 
     <p>
-        This tool merges a separate database into the one you are currently working with (the &quot;master&quot;).
-        All records are copied intact&mdash;no records are modified or merged.
+        This tool merges a separate database into the one you are currently working with
+        (the &quot;master&quot;). All records are copied intact&mdash;no records are modified or merged.
         Relations are not modified either.
     </p>
 
     <p>
-        It is a good practice to run the &quot;search duplicates&quot; tool after this
-        one. This is especially important when both databases have information about the same
-        persons.
+        When merging databases, the database that is being merged loses its original identifiers
+        because they can most often coincide with the identifiers in the one they are merging into.
+        Therefore, the one being merged is automatically completely renumbered - the records receive numbers
+        that are not used in the destination file.
     </p>
+
+    <p>
+        It is a good practice to run the &quot;search duplicates&quot; tool after this one.
+        This is especially important when both databases have information about the same persons.
+    </p>
+
+    <hr>
+    <p>
+        Attention: Before merging, it is important to save copies of both databases in a separate location -
+        for safety and to be able to roll back if you do not like the result of the merge
+        or there are other problems.
+    </p>
+
+    <hr>
+    <p>
+        Attention: if one of the files to be merged has not been previously edited in GEDKeeper,
+        but was taken from a third-party source, it is strongly recommended to open it in GEDKeeper
+        and save it under a new name (version), and only then merge.
+        This is necessary because when you first open files from third-party programs
+        and genealogical social networks, the structure of such a file is brought
+        to an optimal form for GEDKeeper.
+    </p>
+
+    <hr>
+    <p>
+        Attention: the merger is intended for files that do not have a common part.
+        Except for possibly matching few persons. If the merger was
+        performed with files, one of which is a partial modification of the other -
+        there will be a doubling of the common part of persons, which can lead to great difficulties
+        with cleaning and eliminating duplicates, to multiple errors.
+    </p>
+
+    <hr>
+    <p>See also: <a href="gkhTools_DubsMerge.html">Tools: Merge duplicate records</a>.</p>
 
 </body>
 </html>

@@ -73,6 +73,10 @@ Elements:
     Value: "#FFCACA"
 
 
+  - Element: ToolItemsImageSize
+    Value: "20"
+
+
   - Element: Glyph_Settings
     Value: "ext_images/settings.png"
   - Element: Glyph_Maps

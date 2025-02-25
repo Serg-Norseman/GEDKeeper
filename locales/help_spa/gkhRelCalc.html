@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="../help/styles.css" type="text/css">
+    <title>Calculadora de relaciones</title>
+</head>
+<body>
+
+    <h1>Calculadora de relaciones</h1>
+
+    <p>
+        Esta calculadora está diseñada para calcular y mostrar posibles lazos de parentesco entre dos personas cualesquiera
+        de la base de datos. Para calcular, es necesario seleccionar la primera y segunda persona utilizando los botones,
+        después de lo cual el programa calculará inmediatamente la posible opción de parentesco.
+        Si es necesario, puede intercambiar las personas - en consecuencia, las formulaciones de parentesco pueden cambiar
+        significativamente.
+    </p>
+
+    <p>
+        En algunos casos, es imposible establecer una cadena de parentesco ininterrumpida.
+        En tales casos, se forman una o varias rupturas.
+    </p>
+    <p>
+        El mecanismo sobre el que se construye este módulo también se utiliza para determinar las relaciones
+        en el diagrama de árbol (cuando la <a href="gkhOptions.html#tree">opción mostrar relacciones</a>
+        en el árbol está habilitada).
+    </p>
+
+    <hr>
+    <p>
+        Este módulo utiliza el método de búsqueda de conexiones a lo largo de un camino en un grafo.
+        Es decir, primero se construye un mapa completo de todas las conexiones entre dos personas: un grafo.
+        Luego, entre ellas en el grafo, se realiza una búsqueda del camino más corto, que da una cadena de pares de personas.
+        A continuación, el programa determina una conexión de parentesco simple entre cada par de personas.
+        En el siguiente paso, cada una de las conexiones simples se combina con la anterior con la intención de simplificarla
+        o reducirla a un término determinado.
+    </p>
+
+    <hr>
+    <p>
+        Ver también: <a href="gkhRec_Individual.html">Registro de personas</a>,
+        <a href="gkhRec_Family.html">Registro de familias</a>, <a href="gkhRec_Event.html">Eventos</a>,
+        <a href="gkhRelations.html">Terminología de relaciones</a>.
+    </p>
+
+</body>
+</html>
+

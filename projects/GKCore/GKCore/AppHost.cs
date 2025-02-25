@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -159,7 +159,7 @@ namespace GKCore
         {
             if (HasFeatureSupport(Feature.Themes)) {
                 ThemeManager.LoadThemes();
-                ThemeManager.SetTheme(GlobalOptions.Instance.Theme);
+                ApplyTheme(GlobalOptions.Instance.Theme);
             }
 
             try {
@@ -1140,13 +1140,18 @@ namespace GKCore
             }
         }
 
+        protected virtual void ApplyThemeProperties()
+        {
+            // dummy
+        }
+
         public void ApplyTheme(string name)
         {
-            if (!HasFeatureSupport(Feature.Themes))
-                return;
+            if (!HasFeatureSupport(Feature.Themes) || !ThemeManager.SetTheme(name)) return;
 
-            ThemeManager.SetTheme(name);
             GlobalOptions.Instance.Theme = name;
+
+            ApplyThemeProperties();
 
             foreach (var themedView in GetRunningForms<IThemedView>()) {
                 themedView.ApplyTheme();

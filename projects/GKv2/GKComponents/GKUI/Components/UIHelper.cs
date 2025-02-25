@@ -34,10 +34,6 @@ using GKUI.Themes;
 
 namespace GKUI.Components
 {
-#if !MONO
-    using Microsoft.Win32;
-#endif
-
     /// <summary>
     /// Static functions only for UI implementation.
     /// </summary>
@@ -302,44 +298,5 @@ namespace GKUI.Components
 
             button.Image = ((ImageHandler)themeImage).Handle;
         }
-
-        #region Application's autorun
-        #if !MONO
-
-        public static void RegisterStartup()
-        {
-            if (!IsStartupItem()) {
-                RegistryKey rkApp = GetRunKey();
-                if (rkApp != null) {
-                    string trayPath = GKUtils.GetAppPath() + "GKTray.exe";
-                    rkApp.SetValue(GKData.APP_TITLE, trayPath);
-                }
-            }
-        }
-
-        public static void UnregisterStartup()
-        {
-            if (IsStartupItem()) {
-                RegistryKey rkApp = GetRunKey();
-                if (rkApp != null) {
-                    rkApp.DeleteValue(GKData.APP_TITLE, false);
-                }
-            }
-        }
-
-        public static bool IsStartupItem()
-        {
-            RegistryKey rkApp = GetRunKey();
-            return (rkApp != null && rkApp.GetValue(GKData.APP_TITLE) != null);
-        }
-
-        private static RegistryKey GetRunKey()
-        {
-            RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            return rkApp;
-        }
-
-        #endif
-        #endregion
     }
 }

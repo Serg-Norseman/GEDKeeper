@@ -110,9 +110,6 @@ rmdir .\projects\plugins\GKChroniclePlugin\obj /s /q
 rmdir .\projects\plugins\GKFlowInputPlugin\bin /s /q
 rmdir .\projects\plugins\GKFlowInputPlugin\obj /s /q
 
-rmdir .\projects\plugins\GKHistoryDataPlugin\bin /s /q
-rmdir .\projects\plugins\GKHistoryDataPlugin\obj /s /q
-
 rmdir .\projects\plugins\GKLifePlugin\bin /s /q
 rmdir .\projects\plugins\GKLifePlugin\obj /s /q
 

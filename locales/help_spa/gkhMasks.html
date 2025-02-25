@@ -6,50 +6,61 @@
     <title>Máscaras de filtro</title>
 </head>
 <body>
+
     <h1>Máscaras de filtro</h1>
+
     <p>
-		Las máscaras se utilizan en GEDKeeper para seleccionar personas, eventos o lugares con un nombre específico.
-		El texto de una máscara consta de caracteres imprimibles generales, 
-		permitidos para los nombres de objetos, y dos símbolos especiales: &quot;<samp>*</samp>&quot; y &quot;<samp>?</samp>&quot;. 
+        Las máscaras se utilizan en GEDKeeper para seleccionar personas, eventos o lugares con un nombre específico.
+        El texto de una máscara consta de caracteres imprimibles generales,
+        permitidos para los nombres de objetos, y dos símbolos especiales: &quot;<samp>*</samp>&quot; y &quot;<samp>?</samp>&quot;.
     </p>
+
     <p>
-		El nombre <em>máscara</em> se utiliza porque los símbolos &quot;<samp>*</samp>&quot; y &quot;<samp>?</samp>&quot; enmascaran algunas partes arbitrarias de un valor. 
+        El nombre <em>máscara</em> se utiliza porque los símbolos &quot;<samp>*</samp>&quot; y &quot;<samp>?</samp>&quot; enmascaran algunas partes arbitrarias de un valor.
     </p>
+
     <ul>
         <li>&quot;<samp>*</samp>&quot; dentro de una máscara coincide con cualquier número de caracteres cualesquiera.</li>
         <li>&quot;<samp>?</samp>&quot; coincide con cualquier carácter.</li>
     </ul>
+
     <p>
-		 Si desea especificar varias máscaras diferentes, utilice el símbolo &quot;<samp>|</samp>&quot; para delimitar cada máscara. 
-		 Por ejemplo, para obtener todas las personas con los nombres Mitch y John puede utilizar la máscara &quot;<samp>*Mitch*|*John*</samp>&quot;. 
-		 El símbolo &quot;<samp>|</samp>&quot; actúa como una conjunción &quot;OR&quot;, por lo que cualquier persona cuyo nombre coincida con una de las máscaras, 
-		 coincide con toda la máscara &quot;<samp>Mitch*|John*</samp>&quot;.
+        Si desea especificar varias máscaras diferentes, utilice el símbolo &quot;<samp>|</samp>&quot; para delimitar cada máscara.
+        Por ejemplo, para obtener todas las personas con los nombres Mitch y John puede utilizar la máscara &quot;<samp>*Mitch*|*John*</samp>&quot;.
+        El símbolo &quot;<samp>|</samp>&quot; actúa como una conjunción &quot;OR&quot;, por lo que cualquier persona cuyo nombre coincida con una de las máscaras,
+        coincide con toda la máscara &quot;<samp>Mitch*|John*</samp>&quot;.
     </p>
+
     <p>
-		Cualquier nombre de persona, evento o lugar siempre coincide con la máscara &quot;<samp>*</samp>&quot;. 
-		Cuando utilices una máscara de este tipo en un filtro, mostrará todos los objetos. 
+        Cualquier nombre de persona, evento o lugar siempre coincide con la máscara &quot;<samp>*</samp>&quot;.
+        Cuando utilices una máscara de este tipo en un filtro, mostrará todos los objetos.
     </p>
+
     <p>
-		Cuando necesite obtener todas las personas con &quot;Johnson&quot; como apellido, utilice la máscara &quot;<samp>Johnson*</samp>&quot; en el filtro &quot;Máscara de nombre&quot;.
-		El símbolo &quot;<samp>*</samp>&quot; coincide con cualquier carácter después de la subcadena inicial &quot;Johnson&quot;. 
-		De esta forma obtendrá todas las personas cuyo apellido sea Johnson, Johnsons, etc. 
-		Si desea filtrar todas las personas con &quot;Joe&quot; como nombre de pila, utilizaría la máscara &quot;<samp>*Joe*</samp>&quot;; 
-		de este modo está enmascarando cualquier apellido y nombre de pila. 
-		Para obtener todas las personas con el apellido &quot;Smith&quot;, utilice &quot;<samp>*Smith*</samp>&quot;, 
-		ocultando cualquier nombre y apellido. 
+        Cuando necesite obtener todas las personas con &quot;Johnson&quot; como apellido, utilice la máscara &quot;<samp>Johnson*</samp>&quot; en el filtro &quot;Máscara de nombre&quot;.
+        El símbolo &quot;<samp>*</samp>&quot; coincide con cualquier carácter después de la subcadena inicial &quot;Johnson&quot;.
+        De esta forma obtendrá todas las personas cuyo apellido sea Johnson, Johnsons, etc.
+        Si desea filtrar todas las personas con &quot;Joe&quot; como nombre de pila, utilizaría la máscara &quot;<samp>*Joe*</samp>&quot;;
+        de este modo está enmascarando cualquier apellido y nombre de pila.
+        Para obtener todas las personas con el apellido &quot;Smith&quot;, utilice &quot;<samp>*Smith*</samp>&quot;,
+        ocultando cualquier nombre y apellido.
     </p>
 
     <p>Ejemplos:</p>
     <ul>
         <li>
-			Los nombres &quot;Mary Anne Johnson&quot; y &quot;Elizabeth Anne Johnson&quot; pueden filtrarse con la máscara &quot;<samp>*Anne Johnson</samp>&quot;. 
+            Los nombres &quot;Mary Anne Johnson&quot; y &quot;Elizabeth Anne Johnson&quot; pueden filtrarse con la máscara &quot;<samp>*Anne Johnson</samp>&quot;.
         </li>
         <li>
-			Cualquier persona con un nombre, apellido o nombre que contenga &quot;George&quot;, coincide con la máscara &quot;<samp>*George*</samp>&quot;. 
+            Cualquier persona con un nombre, apellido o nombre que contenga &quot;George&quot;, coincide con la máscara &quot;<samp>*George*</samp>&quot;.
         </li>
         <li>
-			Cualquier persona con los nombres &quot;Natal<strong>i</strong>a&quot; o &quot;Natal<strong>y</strong>a&quot; coincide con la máscara &quot;<samp>Natal?a*</samp>&quot;. 
+            Cualquier persona con los nombres &quot;Natal<strong>i</strong>a&quot; o &quot;Natal<strong>y</strong>a&quot; coincide con la máscara &quot;<samp>Natal?a*</samp>&quot;.
         </li>
     </ul>
+
+    <hr>
+    <p>Ver también: <a href="gkhOptions.html#navigation">Opciones de filtrado y navegación</a>.</p>
+
 </body>
 </html>

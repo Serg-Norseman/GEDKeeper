@@ -328,10 +328,6 @@ bin/gedkeeper
 %%DATADIR%%/plugins/GKFlowInputPlugin.pol
 %%DATADIR%%/plugins/GKFlowInputPlugin.rus
 %%DATADIR%%/plugins/GKFlowInputPlugin.ukr
-%%DATADIR%%/plugins/GKHistoryDataPlugin.dll
-%%DATADIR%%/plugins/GKHistoryDataPlugin.enu
-%%DATADIR%%/plugins/GKHistoryDataPlugin.pdb
-%%DATADIR%%/plugins/GKHistoryDataPlugin.rus
 %%DATADIR%%/plugins/GKLifePlugin.dll
 %%DATADIR%%/plugins/GKLifePlugin.enu
 %%DATADIR%%/plugins/GKLifePlugin.pdb

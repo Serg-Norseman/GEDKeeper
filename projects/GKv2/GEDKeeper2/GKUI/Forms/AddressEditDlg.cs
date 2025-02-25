@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,7 +24,6 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Types;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -90,37 +89,12 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
             fPhonesList = new GKSheetList(pagePhones);
-            fPhonesList.SetControlName("fPhonesList"); // for purpose of tests
-            fPhonesList.OnModify += ListModify;
-
             fMailsList = new GKSheetList(pageEmails);
-            fMailsList.SetControlName("fMailsList"); // for purpose of tests
-            fMailsList.OnModify += ListModify;
-
             fWebsList = new GKSheetList(pageWebPages);
-            fWebsList.SetControlName("fWebsList"); // for purpose of tests
-            fWebsList.OnModify += ListModify;
 
             fController = new AddressEditDlgController(this);
             fController.Init(baseWin);
-        }
-
-        private void ListModify(object sender, ModifyEventArgs eArgs)
-        {
-            GDMTag itemTag = eArgs.ItemData as GDMTag;
-            if ((eArgs.Action == RecordAction.raEdit || eArgs.Action == RecordAction.raDelete) && (itemTag == null)) return;
-
-            if (sender == fPhonesList) {
-                fController.DoPhonesAction(eArgs.Action, itemTag);
-            } else if (sender == fMailsList) {
-                fController.DoMailsAction(eArgs.Action, itemTag);
-            } else if (sender == fWebsList) {
-                fController.DoWebsAction(eArgs.Action, itemTag);
-            }
         }
     }
 }

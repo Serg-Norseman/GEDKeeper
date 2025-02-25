@@ -83,11 +83,11 @@ namespace GKChroniclePlugin
                 lvEvents.BeginUpdate();
 
                 lvEvents.Clear();
-                lvEvents.AddColumn(fPlugin.LangMan.LS(PLS.Date), 80, false);
-                lvEvents.AddColumn(fPlugin.LangMan.LS(PLS.Event), 90, false);
-                lvEvents.AddColumn(fPlugin.LangMan.LS(PLS.Description), 130, false);
-                lvEvents.AddColumn(fPlugin.LangMan.LS(PLS.Place), 200, false);
-                lvEvents.AddColumn(fPlugin.LangMan.LS(PLS.Cause), 130, false);
+                lvEvents.AddColumn(LangMan.LS(LSID.Date), 80, false);
+                lvEvents.AddColumn(LangMan.LS(LSID.Event), 90, false);
+                lvEvents.AddColumn(fPlugin.LangMan.LS(PLS.Subject), 130, false);
+                lvEvents.AddColumn(LangMan.LS(LSID.Place), 200, false);
+                lvEvents.AddColumn(LangMan.LS(LSID.Cause), 130, false);
 
                 for (int i = 0; i < fEvents.Count; i++) {
                     EventRecord eventRec = fEvents[i];

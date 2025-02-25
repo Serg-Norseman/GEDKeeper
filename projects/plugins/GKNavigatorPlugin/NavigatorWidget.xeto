@@ -2,15 +2,15 @@
 <Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
   x:Class="GKNavigatorPlugin.NavigatorWidget"
-  Closed="Form_Closed" Shown="Form_Shown" Maximizable="False" Minimizable="False" Resizable="False" ShowInTaskbar="False" Topmost="True">
+  Closed="Form_Closed" Shown="Form_Shown" Maximizable="False" Minimizable="False" Resizable="False" ShowInTaskbar="False" Topmost="True" Size="700, 500">
 
-  <Splitter Orientation="Horizontal" FixedPanel="Panel1" RelativePosition="330">
+  <Splitter x:Name="splitter1" Orientation="Horizontal" FixedPanel="Panel1" RelativePosition="200">
     <Splitter.Panel1>
-      <TreeView x:Name="treeView1" Width="330" SelectionChanged="TreeView1AfterSelect" />
+      <TreeView x:Name="treeView1" Width="200" SelectionChanged="TreeView1AfterSelect" />
     </Splitter.Panel1>
 
     <Splitter.Panel2>
-      <comcom:GKListView x:Name="lvData" Size="391, 498" MouseDown="lvData_SelectedIndexChanged" />
+      <Panel x:Name="placeholder" Width="500" />
     </Splitter.Panel2>
 
   </Splitter>

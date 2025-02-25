@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,8 +29,8 @@ using GKCore;
 using GKCore.Design.Graphics;
 using GKCore.IoC;
 using GKCore.Options;
-using GKUI.Components;
 using GKUI.Platform;
+using Microsoft.Win32;
 
 [assembly: AssemblyTitle("GKTray")]
 [assembly: AssemblyDescription("")]
@@ -45,7 +45,7 @@ namespace GKTray
     {
         public const string APP_TITLE = "GEDKeeper Tray";
 
-        #if !MONO
+#if !MONO
 
         private class TipInfo
         {
@@ -68,7 +68,7 @@ namespace GKTray
             fMRUFiles = new List<MRUFile>();
 
             fMenu = new ContextMenu(InitializeMenu());
-            fAutorunItem.Checked = UIHelper.IsStartupItem();
+            fAutorunItem.Checked = IsStartupItem();
 
             fNotifyIcon = new NotifyIcon();
             fNotifyIcon.DoubleClick += Icon_DoubleClick;
@@ -197,12 +197,12 @@ namespace GKTray
         private void miAutorun_Click(object sender, EventArgs e)
         {
             if (fAutorunItem.Checked) {
-                UIHelper.UnregisterStartup();
+                UnregisterStartup();
             } else {
-                UIHelper.RegisterStartup();
+                RegisterStartup();
             }
 
-            fAutorunItem.Checked = UIHelper.IsStartupItem();
+            fAutorunItem.Checked = IsStartupItem();
         }
 
         private void miAbout_Click(object sender, EventArgs e)
@@ -223,12 +223,49 @@ namespace GKTray
             GKUtils.LoadExtFile(appPath);
         }
 
-        #endif
+        #region Application's autorun
+
+        private static void RegisterStartup()
+        {
+            if (!IsStartupItem()) {
+                RegistryKey rkApp = GetRunKey();
+                if (rkApp != null) {
+                    string trayPath = GKUtils.GetAppPath() + "GKTray.exe";
+                    rkApp.SetValue(GKData.APP_TITLE, trayPath);
+                }
+            }
+        }
+
+        private static void UnregisterStartup()
+        {
+            if (IsStartupItem()) {
+                RegistryKey rkApp = GetRunKey();
+                if (rkApp != null) {
+                    rkApp.DeleteValue(GKData.APP_TITLE, false);
+                }
+            }
+        }
+
+        private static bool IsStartupItem()
+        {
+            RegistryKey rkApp = GetRunKey();
+            return (rkApp != null && rkApp.GetValue(GKData.APP_TITLE) != null);
+        }
+
+        private static RegistryKey GetRunKey()
+        {
+            RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            return rkApp;
+        }
+
+        #endregion
+
+#endif
 
         [STAThread]
         public static void Main(string[] args)
         {
-            #if !MONO
+#if !MONO
             AppHost.CheckPortable(args);
 
             Application.EnableVisualStyles();
@@ -243,7 +280,7 @@ namespace GKTray
                     notificationIcon.fNotifyIcon.Dispose();
                 }
             }
-            #endif
+#endif
         }
     }
 }

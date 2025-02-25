@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -40,6 +40,7 @@ namespace GKNavigatorPlugin
         Records,
         Languages,
         Associations,
+        WebLinks,
     }
 
 
@@ -196,10 +197,10 @@ namespace GKNavigatorPlugin
 
         public void ShowItem(IBaseWindow baseWin, object tag, IListView listView)
         {
-            if (tag is GDMRecordType) {
-                ShowData(baseWin, DataCategory.Records, (GDMRecordType)tag, listView);
-            } else if (tag is DataCategory) {
-                ShowData(baseWin, (DataCategory)tag, GDMRecordType.rtNone, listView);
+            if (tag is GDMRecordType recType) {
+                ShowData(baseWin, DataCategory.Records, recType, listView);
+            } else if (tag is DataCategory dataCat) {
+                ShowData(baseWin, dataCat, GDMRecordType.rtNone, listView);
             }
         }
 
@@ -236,6 +237,10 @@ namespace GKNavigatorPlugin
 
                 case DataCategory.Associations:
                     ShowAssociations(baseWin, listView);
+                    break;
+
+                case DataCategory.WebLinks:
+                    //ShowWebLinks(baseWin);
                     break;
             }
         }

@@ -24,6 +24,7 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Lists;
 using GKCore.Types;
 using GKUI.Themes;
 
@@ -50,6 +51,9 @@ namespace GKCore.Controllers
 
         public AddressEditDlgController(IAddressEditDlg view) : base(view)
         {
+            fView.PhonesList.OnModify += ListModify;
+            fView.MailsList.OnModify += ListModify;
+            fView.WebsList.OnModify += ListModify;
         }
 
         public override bool Accept()
@@ -97,6 +101,18 @@ namespace GKCore.Controllers
             }
         }
 
+        private async void ListModify(object sender, ModifyEventArgs eArgs)
+        {
+            GDMTag itemTag = eArgs.ItemData as GDMTag;
+            if (sender == fView.PhonesList) {
+                await DoPhonesAction(eArgs.Action, itemTag);
+            } else if (sender == fView.MailsList) {
+                await DoMailsAction(eArgs.Action, itemTag);
+            } else if (sender == fView.WebsList) {
+                await DoWebsAction(eArgs.Action, itemTag);
+            }
+        }
+
         private async Task<string> GetInput(string title, string val)
         {
             string strResult = await AppHost.StdDialogs.GetInput(fView, title, val);
@@ -105,6 +121,8 @@ namespace GKCore.Controllers
 
         public async Task DoPhonesAction(RecordAction action, GDMTag itemTag)
         {
+            if ((action == RecordAction.raEdit || action == RecordAction.raDelete) && (itemTag == null)) return;
+
             string val;
             switch (action) {
                 case RecordAction.raAdd:
@@ -130,6 +148,8 @@ namespace GKCore.Controllers
 
         public async Task DoMailsAction(RecordAction action, GDMTag itemTag)
         {
+            if ((action == RecordAction.raEdit || action == RecordAction.raDelete) && (itemTag == null)) return;
+
             string val;
             switch (action) {
                 case RecordAction.raAdd:
@@ -155,6 +175,8 @@ namespace GKCore.Controllers
 
         public async Task DoWebsAction(RecordAction action, GDMTag itemTag)
         {
+            if ((action == RecordAction.raEdit || action == RecordAction.raDelete) && (itemTag == null)) return;
+
             string val;
             switch (action) {
                 case RecordAction.raAdd:
