@@ -31,6 +31,6 @@ namespace GKUI.Themes
         void ApplyTheme(IThemedView view, object component);
         IImage GetThemeImage(ThemeElement element, bool require = false);
         void LoadThemes();
-        void SetTheme(string name);
+        bool SetTheme(string name);
     }
 }

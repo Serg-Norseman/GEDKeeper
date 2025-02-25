@@ -141,6 +141,17 @@ namespace GKUI.Platform
 #endif
         }
 
+        protected override void ApplyThemeProperties()
+        {
+            int toolSize = BaseThemeManager.GetThemeInt(ThemeElement.ToolItemsImageSize);
+
+#if OS_MSWIN
+            if (toolSize != 0) {
+                Eto.Wpf.Forms.ToolBar.ToolItemHandler.DefaultImageSize = new Size(toolSize, toolSize);
+            }
+#endif
+        }
+
         private void OnApplicationExit(object sender, System.ComponentModel.CancelEventArgs e)
         {
             ApplicationExit();

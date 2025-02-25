@@ -84,6 +84,8 @@ namespace GKUI.Themes
                 { ThemeElement.HighlightUnmarriedIndi, Color.FromArgb(0xFFFFA1) },        // GK only
                 { ThemeElement.HighlightInaccessibleFiles, Color.FromArgb(0xFFCACA) },    // GK only
 
+                { ThemeElement.ToolItemsImageSize, 20 },
+
                 { ThemeElement.Glyph_FileNew, "Resources.btn_create_new.gif" },
                 { ThemeElement.Glyph_FileLoad, "Resources.btn_load.gif" },
                 { ThemeElement.Glyph_FileSave, "Resources.btn_save.gif" },

@@ -72,6 +72,11 @@ Elements:
   - Element: HighlightInaccessibleFiles
     Value: "#5F0F0F"
 
+
+  - Element: ToolItemsImageSize
+    Value: "20"
+
+
   - Element: Glyph_Accept
     Value: "Resources.btn_accept.gif"
   - Element: Glyph_Cancel

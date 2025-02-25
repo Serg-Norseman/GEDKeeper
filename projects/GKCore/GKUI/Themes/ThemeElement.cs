@@ -64,6 +64,8 @@ namespace GKUI.Themes
         HighlightUnmarriedIndi,
         HighlightInaccessibleFiles,
 
+        ToolItemsImageSize,
+
         Glyph_FileNew,
         Glyph_FileLoad,
         Glyph_FileSave,
@@ -136,6 +138,7 @@ namespace GKUI.Themes
     {
         String,
         Float,
+        Integer,
         Color,
         Image
     }

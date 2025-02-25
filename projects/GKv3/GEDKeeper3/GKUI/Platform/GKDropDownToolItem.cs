@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -58,7 +58,7 @@ namespace GKUI.Platform
         public GKDropDownToolItemHandler()
         {
             Control = new swc.Button();
-            swcImage = new swc.Image { MaxHeight = 16, MaxWidth = 16 };
+            swcImage = new swc.Image();
             label = new swc.TextBlock();
             // Text="▼/▾"
             arrow = new sw.Shapes.Path { Data = swm.Geometry.Parse("M 0 0 L 3 4 L 6 0 Z"), VerticalAlignment = sw.VerticalAlignment.Center, Margin = new sw.Thickness(8, 2, 0, 0), Fill = swm.Brushes.Black };
@@ -97,7 +97,20 @@ namespace GKUI.Platform
             get { return image; }
             set {
                 image = value;
-                swcImage.Source = image.ToWpf(Screen.PrimaryScreen.LogicalPixelSize, swcImage.GetMaxSize().ToEtoSize());
+                if (swcImage != null) {
+                    OnImageSizeChanged();
+                    swcImage.Visibility = swcImage.Source == null ? sw.Visibility.Collapsed : sw.Visibility.Visible;
+                }
+            }
+        }
+
+        protected override void OnImageSizeChanged()
+        {
+            if (swcImage != null) {
+                var imageSize = ImageSize;
+                swcImage.MaxHeight = ((double?)imageSize?.Height) ?? double.PositiveInfinity;
+                swcImage.MaxWidth = ((double?)imageSize?.Width) ?? double.PositiveInfinity;
+                swcImage.Source = image.ToWpf(Screen.PrimaryScreen.LogicalPixelSize, imageSize);
             }
         }
 
