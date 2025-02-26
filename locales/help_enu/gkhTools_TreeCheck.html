@@ -10,8 +10,8 @@
     <h1>Tools: Check database</h1>
 
     <p>
-        This tool checks information correctness in the database. It checks two
-        types of records: family and person. Unlike typical database integrity
+        This tool checks information correctness in the database. It checks three
+        types of records: family, person and media. Unlike typical database integrity
         checking, which is run every time you open a database and which checks
         the database structure, this tool handles logical errors and data
         inaccuracy.
@@ -28,8 +28,6 @@
         process large amounts of information.
     </p>
 
-    <!-- TODO: Turn the following long sentence into an unordered list -->
-
     <p>
         A person record is checked in the following way: the tool checks the
         death event, taking the maximal, scientifically confirmed age into
@@ -37,17 +35,29 @@
         sex, notifies about incorrect lifetime dates (for example, death date
         is before birth date), notifies about persons that were married before
         or after reasonable limits, or that have children who were born out of
-        reasonable limits.
-        When a person has no sex, the tool marks the record as being
+        reasonable limits. When a person has no sex, the tool marks the record as being
         changed and opens the sex editor dialog. When a person&#39;s age exceeds
         the maximum one, the tool adds a death event without a specified date to the
         person record.
     </p>
 
     <p>
+        In addition to checking the correctness of data and relationships in family and personal records,
+        diagnostics of the presence of cyclic (ring) relationships are also performed.
+        This is when, during the process of researching and replenishing the database, an erroneous situation arose with
+        determining the required record by name and one of the ancestors
+        was mistakenly entered as a child in the family of his descendants (at any depth).
+        In this case, the tool will show the identifiers of the records that form a "cycle".
+    </p>
+
+    <p>
+        Multimedia records are checked for presence in the "archive" or "storage",
+        correctness of absolute and relative links.
+    </p>
+
+    <p>
         GEDKeeper fixes the lack of a death event, lack of a sex declaration, and may
-        remove empty family records. All other issues are shown only for your
-        information.
+        remove empty family records. All other issues are shown only for your information.
     </p>
 
 </body>

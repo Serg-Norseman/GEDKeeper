@@ -10,10 +10,10 @@
     <h1>Storing multimedia content files</h1>
 
     <p>
-        There are three ways to store multimedia content within GEDKeeper:
+        There are five ways to store multimedia content within GEDKeeper:
         store the file in its' original place and use an absolute pathname as a
-        reference, use file &quot;storage&quot; (a directory), or use a file
-        archive (ZIP). Each method has its own advantages.
+        reference, relative path, use file &quot;storage&quot; (a directory), or use a file
+        archive (ZIP), web link. Each method has its own advantages.
     </p>
 
     <ul>
@@ -26,17 +26,13 @@
         </li>
 
         <li>
-            &quot;Saving to the store&quot;. In this case, GEDKeeper creates a new
-            directory near your database file (in the same directory with the database
-            filename). The new directory has the same name as your database
-            filename. When you add a multimedia file to the database, this file is
-            copied into this directory. Thus, you got a centralized files storage
-            linked to your database, which is very easy to be moved to another
-            system&mdash;you just copy the database file and its sibling directory of the same
-            name.
+            Relative file reference (relative path). When using this method, the genealogical database
+            stores a short path to the file, relative to the current location of the database, not including the disk
+            and the common path to the database and the multimedia file. The advantage is that the file is completely
+            independent of the database, the disadvantage is that if you transfer the database to another computer,
+            the folder with the multimedia files must be located relative to the database in the same way as in the original case.
         </li>
 
-        <!-- Be sure this listitem goes last since it references the above. -->
         <li>
             &quot;Saving to the archive&quot;. GEDKeeper creates a ZIP archive having the same
             name as your database and sharing the same directory.
@@ -50,9 +46,75 @@
             that is why there is no sense to add such files into an archive.
             Such files are treated in the &quot;Saving to the store&quot; method.
         </li>
+
+        <li>
+            &quot;Saving to the store&quot;. In this case, GEDKeeper creates a new
+            directory near your database file (in the same directory with the database
+            filename). The new directory has the same name as your database
+            filename. When you add a multimedia file to the database, this file is
+            copied into this directory. Thus, you got a centralized files storage
+            linked to your database, which is very easy to be moved to another
+            system&mdash;you just copy the database file and its sibling directory of the same name.
+        </li>
+
+        <li>
+            Web address, Internet link (URL). This method is intended for cases when the file is published on the Internet
+            and a direct permanent link to it is known. It is enough to copy it from the web browser and paste
+            into the file path input field in the media editing dialog. The downside is that you do not control whether
+            the file will always exist where it is published, and whether the link to it will always be valid
+            (sometimes they can change).
+        </li>
     </ul>
 
     <p>You can use any or all these methods freely.</p>
+
+    <hr>
+    <p>
+        Use case that ensures file path reliability and independence from internal path
+        storage methods in GEDKeeper (archive, storage):
+    </p>
+    <ul>
+        <li>make a separate storage folder, your own, next to the database file or relatively close;</li>
+        <li>place, name and organize files there yourself as you like;</li>
+        <li>add multimedia to the database using relative paths.</li>
+    </ul>
+    <p>
+        Advantages: short path to the file in the database, storage can be located next to the file,
+        organization of files in the folder is as convenient.
+    </p>
+
+    <hr>
+    <p>
+        In case the user has a primary preferred method - in the program settings for such cases there
+        is a special option for the default method of storing multimedia. If you set it - in the dialog
+        for adding and editing multimedia records, the desired method is always automatically the first one.
+    </p>
+
+    <hr>
+    <p>
+        <b>Important</b>: It is recommended to always have a copy of the database and the entire array
+        of multimedia files in cloud storage.
+    </p>
+
+    <hr>
+    <p>
+        <b>Important</b>: GEDKeeper does not have the technical ability to track changes in file names
+        or their locations if they were added using direct or relative links.
+        Therefore, it is not recommended to change the name or location of a file after it has been added to the database.
+        It is also not recommended to attempt to reorganize files in the storage folder.
+    </p>
+
+    <hr>
+    <p>
+        <b>Important</b>: when using the GEDKeeper program on Windows 10/11 operating systems,
+        if there is a space at the end of the database file name (for example, "Database .ged"),
+        multimedia files saved in the <u>storage</u> may not open in the program due to the occurrence of
+        system errors accessing the storage folder with a space at the end of the name (the storage folder is always created
+        with exactly the same name as the database).
+    </p>
+
+    <hr>
+    <p>See also: <a href="gkhRec_Media.html">Media records</a>.</p>
 
 </body>
 </html>
