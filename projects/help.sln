@@ -234,6 +234,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "help_spa", "help_spa", "{8B
 		..\locales\help_spa\gkhSvc_Calendar.html = ..\locales\help_spa\gkhSvc_Calendar.html
 		..\locales\help_spa\gkhSvc_NamesBook.html = ..\locales\help_spa\gkhSvc_NamesBook.html
 		..\locales\help_spa\gkhSvc_Organizer.html = ..\locales\help_spa\gkhSvc_Organizer.html
+		..\locales\help_spa\gkhSvc_Slideshow.html = ..\locales\help_spa\gkhSvc_Slideshow.html
 		..\locales\help_spa\gkhSvc_TimeLine.html = ..\locales\help_spa\gkhSvc_TimeLine.html
 		..\locales\help_spa\gkhThemes.html = ..\locales\help_spa\gkhThemes.html
 		..\locales\help_spa\gkhTools_DubsMerge.html = ..\locales\help_spa\gkhTools_DubsMerge.html

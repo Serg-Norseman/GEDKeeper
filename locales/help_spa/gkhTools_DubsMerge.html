@@ -6,19 +6,46 @@
     <title>Herramientas: Fusión de registros</title>
 </head>
 <body>
+
     <h1>Herramientas: Fusión de registros</h1>
+
     <p>
-        Esta herramienta elimina los duplicados entre personas de la base de datos. 
-		La herramienta muestra una ventana en la que se debe seleccionar un registro
-		que se desea conservar y otro que se desea eliminar (o dar esta opción a GEDKeeper). 
-		Cuando la persona eliminada tiene vínculos, éstos pueden trasladarse a la persona restante. 
+        Esta herramienta elimina los duplicados entre personas de la base de datos.
+        La herramienta muestra una ventana en la que se debe seleccionar un registro
+        que se desea conservar y otro que se desea eliminar (o dar esta opción a GEDKeeper).
+        Cuando la persona eliminada tiene vínculos, éstos pueden trasladarse a la persona que permanece.
     </p>
+
     <p>
-        Esta herramienta también procesa notas, familias y fuentes. 
-	</p>
-    <p>
-		Se recomienda buscar duplicados con la opción &quot;Comprobar el año de nacimiento&quot; 
-		activada (en la pestaña &quot;Opciones&quot;). Así se reduce el número de operaciones falsas.  
+        Cuando dos registros se combinan en uno (fusión de registros),
+        todos los datos de las personas se combinan sin sustitución y sin distorsión: pura adición.
+        Esto significa que si cada persona tenía vínculos con los padres,
+        la persona combinada recibirá dos vínculos con las familias de los padres.
+        No se trata de una situación de error y es aceptable según la norma.
+        La razón es sencilla: una persona puede tener un vínculo con la familia de los padres biológicos,
+        un vínculo con la familia de los tutores, un vínculo con la familia de los padres adoptivos y otros subtipos.
+        En consecuencia, puede darse la situación de que la búsqueda haya llegado a una persona en la base de datos desde
+        dos lados diferentes y que la persona haya sido introducida dos veces: por ejemplo,
+        una vez como niño con sus padres biológicos, y la segunda vez como adulto,
+        con información sobre los padres adoptivos y su propia familia.
+        Al fusionar, un único registro recibirá toda esta información,
+        tras lo cual sólo habrá que comprobarla y ordenarla.
     </p>
+
+    <p>
+        La búsqueda de personas duplicadas puede realizarse con la opción de coincidencia indistinta de nombres
+        con una inexactitud especificada activada, lo que le permitirá encontrar distintas variantes con ligeras
+        diferencias en la ortografía del nombre.
+    </p>
+
+    <p>
+        Se recomienda buscar duplicados con la opción &quot;Comprobar el año de nacimiento&quot;
+        activada (en la pestaña &quot;Opciones&quot;). Así se reduce el número de operaciones falsas.
+    </p>
+
+    <p>
+        Esta herramienta también procesa notas, familias y fuentes.
+    </p>
+
 </body>
 </html>

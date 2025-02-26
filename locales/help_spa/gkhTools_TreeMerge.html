@@ -6,14 +6,51 @@
     <title>Herramientas: Fusión de bases de datos</title>
 </head>
 <body>
+
     <h1>Herramientas: Fusión de bases de datos</h1>
+
     <p>
-		Esta herramienta fusiona una base de datos externa con la que está trabajando actualmente (la &quot;maestra&quot;). 
-		Todos los registros se copian intactos: no se modifican ni se fusionan. Tampoco se modifican las relaciones. 
+        Esta herramienta fusiona una base de datos externa con la que estés trabajando actualmente (la &quot;maestra&quot;).
+        Todos los registros se copian intactos: no se modifican ni se fusionan. Tampoco se modifican las relaciones.
     </p>
+
     <p>
-		Es una buena práctica ejecutar la herramienta de "búsqueda de duplicados" después de ejecutar esta herramienta. 
-		Esto es especialmente importante cuando ambas bases de datos contienen información sobre las mismas personas. 
+        Al fusionar bases de datos, la que se fusiona pierde sus identificadores originales,
+        ya que la mayoría de las veces pueden coincidir con los identificadores de la que se fusiona.
+        Por lo tanto, la que se fusiona se renumera automáticamente por completo:
+        los registros reciben números que no se utilizan en el archivo de destino.
     </p>
+
+    <p>
+        Es una buena práctica ejecutar la herramienta de "búsqueda de duplicados" después de ejecutar esta herramienta.
+        Esto es especialmente importante cuando ambas bases de datos contienen información sobre las mismas personas.
+    </p>
+
+    <hr>
+    <p>
+        Atención: Antes de fusionar, es importante guardar copias de ambas bases de datos en un lugar distinto -
+        por seguridad y para poder volver atrás si no le gusta el resultado de la fusión o hay otros problemas.
+    </p>
+
+    <hr>
+    <p>
+        Atención: si uno de los archivos a fusionar no se ha editado previamente en GEDKeeper,
+        sino que se ha tomado de una fuente ajena, se recomienda encarecidamente abrirlo en GEDKeeper
+        y guardarlo con un nuevo nombre (versión), y sólo después fusionarlo.
+        Esto es necesario porque cuando se abren por primera vez archivos de programas de terceros
+        y redes sociales genealógicas, la estructura de dicho archivo se lleva a una forma óptima para GEDKeeper.
+    </p>
+
+    <hr>
+    <p>
+        Atención: la fusión está pensada para ficheros que no tienen una parte en común.
+        Excepto eventuales coincidencias de pocas personas. Si la fusión se realizó con archivos,
+        uno de los cuales es una modificación parcial de la otra - habrá una duplicación de la parte común de las personas,
+        lo que puede conducir a grandes dificultades con la limpieza y eliminación de duplicados, a múltiples errores.
+    </p>
+
+    <hr>
+    <p>Ver también: <a href="gkhTools_DubsMerge.html">Herramientas: Fusionar registros duplicados</a>.</p>
+
 </body>
 </html>
