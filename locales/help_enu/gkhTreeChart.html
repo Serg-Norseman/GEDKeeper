@@ -20,19 +20,27 @@
         To build a tree, you pick a person out in person list, then choose a tree type (ancestors, descendants, or complete)
         in the &quot;Pedigree&quot; menu. Alternatively, you can use the following buttons from the main window:
     </p>
-
     <ul>
         <li><img src="../help/images/iTreeAncestry.gif" alt="Tree of ancestors">&nbsp;Tree of ancestors</li>
         <li><img src="../help/images/iTreeDescendants.gif" alt="Tree of descendants">&nbsp;Tree of descendants</li>
         <li><img src="../help/images/iTreeBoth.gif" alt="Complete tree">&nbsp;Complete tree</li>
     </ul>
 
+    <hr>
+    <p>
+        Note: The trees built by GEDKeeper always contain only the descendants and/or ancestors
+        of the selected central person. Exception: with the "Extended tree" option, the ancestors
+        of all spouses of the central person will also be displayed.
+    </p>
+    <hr>
+
     <p>
         After a tree is created, you can use the <img src="../help/images/iSaveImage.gif" alt="save"> button to export the
-        tree in one of the following formats: raster format (BMP, GIF, JPEG, PNG) or vector (EMF, SVG). Not every family tree
-        may be saved as a raster file since they may not store more than 65k pixels per horizontal line. Vector files
-        do not have such restrictions. Therefore, a vector format can store trees of any size. Moreover, having a vector file may be better for
-        the next image processing in graphical applications and printing.
+        tree in one of the following formats: raster format (BMP, GIF, JPEG, PNG) or vector (EMF, SVG, PDF).
+        Not every family tree may be saved as a raster file since they may not store more than 65k pixels per horizontal line.
+        Vector files do not have such restrictions. Therefore, a vector format can store trees of any size.
+        Moreover, having a vector file may be better for the next image processing in graphical applications and printing.
+        Please note that the vector format "emf" is only available in Windows versions of the program.
     </p>
 
     <p>The following controls are available when you view a diagram:</p>
@@ -52,46 +60,200 @@
         <li>Click on a person to adjust it with the window&#39;s center.</li>
         <li>Pan the content while the mouse&#39;s right button is held.</li>
         <li>
-            click on the <img src="../help/images/iExpand.gif" alt="expand"> icon (&quot;there are additional hidden data&quot;) near
-            a person to rebuild the tree relative to that person (this icon is not exported to an image file).
+            click on the <img src="../help/images/iExpand.gif" alt="expand"> icon (&quot;there are additional hidden data&quot;)
+            near a person to rebuild the tree relative to that person (this icon is not exported to an image file).
         </li>
     </ul>
 
+    <hr>
     <p>
         The number of visible generations (of both ancestors and descendants) can be adjusted from one to nine (or unlimited)
         by the &quot;Generations&quot; button using the dropdown menu.
     </p>
 
+    <p>
+        With the "Separate depth" option it will be possible to use the selection of displayed generations
+        separately by ancestors and descendants.
+    </p>
+
+    <hr>
+    <p>
+        The colors of the person cards are configured in the settings section (the button on the toolbar
+        of the diagram window or the menu Service\Options). Also, for each person, for specific needs,
+        you can set a separate color (a pop-up menu by right-clicking on the person card). In some cases,
+        the person cards may be shown in gray (not configurable) - this means that this person has previously
+        been displayed in the tree in another branch. This happens, for example, in the case of ancestor reduction.
+    </p>
+
+    <p>
+        In the tree, it is possible to show not only the name, life dates, but also a one-line short comment.
+        To do this, a comment with the type "Tree note", you must enter in the tab "User references"
+        of the editing dialog <a href="gkhRec_Individual.html">persons</a> and
+        enable the option "Show special notes" in <a href="gkhOptions.html">Options</a>.
+    </p>
+
+    <p>
+        The tree diagram has a function for collapsing branches. You need to click on the line leading
+        from the person to the branch. Very close to the person. Then the person itself will remain,
+        and the branch will collapse and a small yellow triangle will appear there - an indicator
+        of the collapsed branch. Or press the [<kbd>F4</kbd>] key on this person.
+    </p>
+
     <p>You can also filter content with the <img src="../help/images/iFilter.gif" alt="filter"> button.</p>
 
     <p>
-        If you have used the [<kbd>F6</kbd>] key or the <img src="../help/images/iExpand.gif" alt="expand"> icon (set new person as the central one
-        for the tree), you can use the <img src="../help/images/iLeft1.gif" alt="left"> and <img src="../help/images/iRight1.gif" alt="right">
-        buttons to return to the previous or next person.
+        If you have used the [<kbd>F6</kbd>] key or the <img src="../help/images/iExpand.gif" alt="expand"> icon
+        (set new person as the central one for the tree), you can use the <img src="../help/images/iLeft1.gif" alt="left">
+        and <img src="../help/images/iRight1.gif" alt="right"> buttons to return to the previous or next person.
     </p>
 
-    <p><img src="../help/images/iTools.gif" alt="tools button"> shows the following tree options:</p>
-
+    <p>"Display modes" button shows the following tree options:</p>
     <ul>
         <li>All &mdash; show both ancestors and descendants for a specified person.</li>
         <li>Ancestors only &mdash; only ancestors of the selected person are visible.</li>
         <li>Descendants only &mdash; only descendants of the selected person are visible.</li>
-        <li>Trace root &mdash; turns off/on a mode when the center of the tree is smoothly adjusted with the selected person.</li>
+
+        <li>
+            Hide spouses of descendants- in some cases it is useful to derive a tree of descendants
+            without their spouses (to exclude people from other families).
+        </li>
+
+        <li>
+            Trace root &mdash; turns off/on a mode when the center of the tree is smoothly adjusted
+            with the selected person.
+        </li>
         <li>
             The certainty index &mdash; turns off/on the authenticity index visibility for each person in the tree (it is handy for visual
             valuation of development progress).
         </li>
+        <li>Identifiers (XRef) - display the identifier (XRef) of each person's record.</li>
+        <li>
+            Highlight the lines of the selection - the selected person will have all the lines connecting
+            them to other people highlighted.
+        </li>
+        <li>
+            Track matching sources - if there are links to the same sources in the person's records,
+            the connections between these persons will be highlighted with a running green dotted line,
+            if there are no common sources - with a running red dotted line.
+        </li>
+        <li>
+            Age of parents - display of the age of each parent at the time of the child's birth
+            on the lines leading from parents to children (control of sources and data accuracy).
+        </li>
+
         <li>Background color &mdash; changes the background color for the tree.</li>
         <li>Background image &mdash; changes the background image for the tree.</li>
     </ul>
 
-    <p>
-        Other hotkeys:
-    </p>
+    <p>Other hotkeys:</p>
     <ul>
         <li>The [<kbd>Ctrl + F</kbd>] key performs the quick person search by name.</li>
         <li>The [<kbd>Ctrl + S</kbd>] key performs the save current database.</li>
     </ul>
+
+    <hr>
+    <p>
+        If the "Additional symbols" display is set in the tree settings and specialized user references
+        were used when editing persons, symbols/indicators will be displayed in the tree to the right of the person cards.
+        Currently available symbols include: symbols for the main religions (Catholicism, Orthodoxy, Old Believers, Islam),
+        symbols for holders of awards of the Russian Empire, symbols for soldiers and those killed
+        in the WWII, symbols for home front workers, repressed persons,
+        and members of the CPSU.
+    </p>
+
+    <hr>
+    <p>Additional functions are available by right-clicking on any person:</p>
+    <ul>
+        <li>Edit - call the person editing dialog;</li>
+        <li>
+            Add father - adds a father to a person, if the parents' family is not defined - it is created and assigned
+            automatically; if the parents' family exists, the father can be added only if he is still defined;
+        </li>
+        <li>Add mother - the mother adds similarly;</li>
+        <li>
+            Add family - adds a family with an unspecified (unknown) spouse to the given person - this is useful
+            when processing sources; for example, when there is a record "married third time" and there is the name
+            of the third wife, but the names of the first two are unknown - it is necessary to perform the
+            "Add family" operation twice, and then call the "Add spouse" function; important: if the
+            "Hide unknown spouses" option is enabled, the added families with unspecified spouses may not
+            be displayed on the screen;
+        </li>
+        <li>
+            Add spouse - adds a new family with a request to join an existing one or create a new personal record
+            of the spouse;
+        </li>
+        <li>
+            Add son - adds a son to a person, automatically - if there is only one family; if there is no family
+            - it is also added automatically with an unknown spouse; if this person has several marriages and,
+            accordingly, several families - there will be a warning that this function must be called on one
+            of the spouses to determine exactly who the parents of the child being added are;
+        </li>
+        <li>Add daughter - the daughter adds similarly;</li>
+        <li>
+            Delete - deletes the current person (note: a person that is central to the current diagram
+            view cannot be deleted);
+        </li>
+        <li>
+            Go to person record - switches to the main program window and positions the selected person to record;
+        </li>
+        <li>
+            Go to primary branch - necessary if called on a "gray" person - i.e. on a duplicate (ancestor's reduction),
+            which is already present on the diagram in another branch; finds and performs a transition to the person's card
+            in the primary branch;
+        </li>
+        <li>Open in new window - creates an additional tree diagram window with the selected person as the central one;</li>
+        <li>
+            Merge records- necessary if there is a separate other record of the same person in the database;
+            useful for merging duplicates generated at different stages of source processing;
+        </li>
+        <li>Rebuild tree - updates the diagram using the selected person as the center;</li>
+        <li>
+            Rebuild kinships - rebuilds the diagram with the calculation of the type of relationship
+            if the corresponding option is enabled in the settings (display kinships);
+        </li>
+        <li>
+            Maps - call the map window for the persons of this tree with the following contents:<ul>
+                <li>Ancestors - display a map with event location marks for all ancestors of the currently selected person;</li>
+                <li>Descendants - display a map with event location marks for all descendants of the currently selected person;</li>
+                <li>All - display a map with event location marks for all persons on the current tree;</li>
+            </ul>
+        </li>
+        <li>
+            Select color - useful if for some purpose it is necessary to single out certain people from the total number.
+        </li>
+    </ul>
+
+    <hr>
+    <p>The following tree filtering options are available:</p>
+    <dl>
+        <dt>By year boundary</dt>
+        <dd>
+            When working with large trees, from 500-1000 people, it is useful to use the options to turn off children
+            in different branches, who died young and did not leave offspring. This is a general case, which
+            is not enough to increase the efficiency of the study. Therefore, there is this filter by year. The meaning
+            is the following - all branches, whose descendants were born after the specified year, will be filtered and
+            will be included in the tree. This is a way to remove from the image all intersected or broken branches
+            and leave only the longest ones. For example, if you select some ancestor, who lived in the 17th century,
+            and set the year to 1900, then only those branches that have survived to this time will remain on the tree.
+        </dd>
+
+        <dt>By specified persons</dt>
+        <dd>
+            This is a way to get a simplified tree for one or two or more persons, if it is necessary to clearly
+            display their relationship. That is, when building a tree from some ancestor and setting one or more
+            descendants in this filter - the tree will display <i>only</i> chains of people that unite the ancestor
+            with the selected descendants.
+        </dd>
+
+        <dt>Additionally - by sources</dt>
+        <dd>
+            Allows you to simplify working with the tree when processing some source. Only those persons
+            will remain in the tree, who have links to the specified source.
+        </dd>
+    </dl>
+
+    <hr>
+    <p>See also: <a href="gkhOptions.html">Options</a>.</p>
 
 </body>
 </html>

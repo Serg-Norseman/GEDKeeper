@@ -15,94 +15,210 @@
         facts that relate to the person&#39;s life. Using GEDKeeper you easily investigate family and social relations of
         the person (associations with other people). GEDKeeper never restricts you in the number of a person&#39;s families and
         children. Also, you can divide people by different social groups, add additional indicators to improve obviousness
-        (references and footnotes), add unlimited number of notes, multimedia materials and sources, and add a person&#39;s
+        (references), add unlimited number of notes, multimedia materials and sources, and add a person&#39;s
         portrait for displaying in trees.
     </p>
 
     <p>This is the list of dialog tabs and respective data categories you can change:</p>
     <ul>
-        <li><a href="gkhRec_Event.html">Event</a> represents an event or fact from person&#39;s life.</li>
+        <li><a href="gkhRec_Event.html">Events</a> represents an event or fact from person&#39;s life.</li>
         <li>
-            <a href="gkhRec_Family.html">Family</a> lists marriages of person or family relations; common children are specified
+            <a href="gkhRec_Family.html">Families</a> lists marriages of person or family relations; common children are specified
             in the dedicated dialog.
         </li>
-        <li><a href="gkhRec_Asso.html">Association</a> lists a person&#39;s social relations.</li>
         <li>
-            <a href="gkhRec_Group.html">Group</a> is a way to unite persons by social relations, which makes navigation and
+            <a href="gkhRec_Name.html">Names</a> - a list of all full names of a given person;
+            possible: in different languages ​​and different types (by birth, by marriage, by adoption, creative pseudonym).
+        </li>
+        <li><a href="gkhRec_Asso.html">Associations</a> lists a person&#39;s social relations.</li>
+        <li>
+            <a href="gkhRec_Group.html">Groups</a> is a way to unite persons by social relations, which makes navigation and
             search more effective.
         </li>
-        <li><a href="gkhRec_Note.html">Note</a> is arbitrary text about person.</li>
-        <li><a href="gkhRec_Media.html">Multimedia content</a> attaches photos, scanned documents, and portraits.</li>
+        <li><a href="gkhRec_Note.html">Notes</a> is arbitrary text about person.</li>
+        <li><a href="gkhRec_Media.html">Multimedia</a> attaches photos, scanned documents, and portraits.</li>
         <li>
-            <a href="gkhRec_Source.html">Source</a> represents used documents, correspondence, and other kinds of source of
+            <a href="gkhRec_Source.html">Sources</a> represents used documents, correspondence, and other kinds of source of
             information about a person.
         </li>
         <li>
-            <a href="gkhRec_UserRefs.html">Reference&#47;footnote</a> is an additional indicator for GEDKeeper itself or a way
+            <a href="gkhRec_UserRefs.html">User references</a> is an additional indicator for GEDKeeper itself or a way
             to create handy a classification.
         </li>
+        <li>
+            Parents - a list of links to the parents' families (in general - only one,
+            in cases of adoption, guardianship, etc. - there may be several).
+        </li>
+        <li>Children- a list of all children of a given person from all marriages/relationships.</li>
     </ul>
 
     <p style="text-align:center"><img src="images/dlgPersonEdit.gif" title="Person editor dialog" alt="person editor dialog"></p>
 
     <h2><a id="person_edit">Changing person information</a></h2>
 
-    <ul>
-        <li>
-            You change a person&#39;s parents using a special dedicated panel with two fields&mdash;for person&#39;s father and mother,
-            and three groups of buttons. At first glance this may look too complex, but in action this gives flexible editing of object
-            properties. The button group <img src="../help/images/iRecNew.gif" title="Add new record" alt="add new record">,
-            <img src="../help/images/iRecEdit.gif" title="Edit current record" alt="edit current record">, and <img src="../help/images/iRecDelete.gif" title="Delete current record" alt="delete current record"> to the right
-            of the parent names modifies the parents&#39; family as a whole object. That is, you can
-            use the <img src="../help/images/iRecNew.gif" title="Add new record" alt="add new record"> button to attach an affected person to an existing family. You use the
-            <img src="../help/images/iRecEdit.gif" title="Edit current record" alt="edit current record"> button to modify properties of an already attached family without the
-            necessity to close the currently opened person editing window. You use the <img src="../help/images/iRecDelete.gif" title="Delete current record" alt="delete current record"> button
-            to the right of parent names to detach a person from the family.
-        </li>
+    <dl>
+        <dt>Surname / Married surname / Name / Patronymic</dt>
+        <dd>
+            Fields for entering the main part of information about a person's name. There may be several full
+            <a href="gkhRec_Name.html">names</a> (in different languages, different subtypes),
+            so these fields change only parts of the first full name (see the "Names" tab).
+            <br>Features: <ul>
+                <li>
+                    Pressing the keys [ <kbd>Ctrl + Down</kbd> ] in the fields for entering the last name, married last name,
+                    first name and patronymic - leads to "unification" of the corresponding line,
+                    the first letters of the words become capital, the rest - lowercase.
+                </li>
+                <li>
+                    Warning: using the "/" symbol in the main name fields (last name, first name, patronymic) is prohibited,
+                    this may lead to errors in the database.
+                </li>
+                <li>
+                    If the person edit dialog was opened when adding a new child to a parent,
+                    then the drop-down list of patronymics will contain a list of patronymics according to the father's name.
+                </li>
+            </ul>
+        </dd>
 
-        <li>
-            The same buttons: <img src="../help/images/iRecNew.gif" title="Add new record" alt="add new record">,
-            <img src="../help/images/iRecDelete.gif" title="Delete current record" alt="delete current record">, and <img src="../help/images/iToMan.gif" title="Jump to parent" alt="jump to parent"> located under
-            the name of each parent perform other functions. The <img src="../help/images/iRecNew.gif" title="Add new record" alt="add new record"> button adds a new family
-            if one was not added already, and then adds the concrete parent to this family (father or mother, depending on the
-            selected section). The <img src="../help/images/iRecDelete.gif" alt="delete record"> button removes a parent (father or mother) from a
-            person&#39;s family. To quickly jump to a parent&#39;s person record you use the <img src="../help/images/iToMan.gif" title="Jump to parent" alt="jump to parent">
-            button.
-        </li>
+        <dt>Surname Prefix / Name Prefix / Name Suffix / Nickname</dt>
+        <dd>
+            Fields responsible for additional information about a person's name: all kinds of nicknames,
+            titles, prefixes and suffixes of the surname or name.
+        </dd>
 
-        <li>
-            There is a dedicated edit box to the right of the person&#39;s full name and sex, where you can enter additional
-            information about person name: nickname, pseudonym, status, name prefix, and suffix.
-        </li>
+        <dt>Portrait</dt>
+        <dd>
+            Portrait control buttons (assign/remove) appear when you hover the cursor over the portrait area.
+            When adding a person's photo, you can select the preferred region of the photo
+            (if the photo is too large or a group).
+        </dd>
 
-        <li>
-            To modify an object of any type that is related to the affected person, you use a specific tab and the following
-            standard buttons: <img src="../help/images/iRecNew.gif" title="Add new record" alt="add new record">,
-            <img src="../help/images/iRecEdit.gif" title="Edit current record" alt="edit current record">, and <img src="../help/images/iRecDelete.gif" title="Delete current record" alt="delete current record">.
-            You can add any number of events to the affected person, that are related to his/her life, various attributes, notes,
-            photos or other multimedia content, and source materials that mention the person, marriages, and groups. You use the special
-            list of associations to add additional relations between people.
-        </li>
+        <dt>Parents</dt>
+        <dd>
+            <ul>
+                <li>
+                    Editing a person's parents is done in the form of a special dedicated panel with two fields,
+                    where the father and mother of the person being edited are displayed, as well as three groups of buttons.
+                    This is done for maximum editing flexibility. The group of buttons
+                    <img src="../help/images/iRecNew.gif" alt="">, <img src="../help/images/iRecEdit.gif" alt="">
+                    and <img src="../help/images/iRecDelete.gif" alt=""> to the right of the parent name fields is intended to
+                    manage the link to the parents' family as a whole. That is, if the parents' family to which you need to
+                    attach this person already exists, you can attach it using the button
+                    <img src="../help/images/iRecNew.gif" alt="">. If you need to edit some data of an already attached family,
+                    you can do this using the button <img src="../help/images/iRecEdit.gif" alt="">, that is, edit the family
+                    without closing the current dialog of the person. Using the <img src="../help/images/iRecDelete.gif" alt="">
+                    button there, to the right of the parents' names, a person is disconnected from the parents' family.
+                </li>
 
-        <li>
-            You change information about a married couple on the &quot;Spouses&quot; tab using the
-            <img src="../help/images/iRecNew.gif" title="Add new record" alt="add new record">, <img src="../help/images/iRecEdit.gif" title="Edit current record" alt="edit current record">,
-            and <img src="../help/images/iRecDelete.gif" title="Delete current record" alt="delete current record"> buttons. When you add or change one of conjoints, the family editor
-            window appears. Using that window, you do what you need: add a spouse, children, or event. Using the arrow buttons, you can
-            change the order of marriages for the selected person.
-        </li>
-    </ul>
+                <li>
+                    The same buttons <img src="../help/images/iRecNew.gif" alt="">,
+                    <img src="../help/images/iRecDelete.gif" alt=""> and <img src="../help/images/iToMan.gif" alt="">
+                    under the name of each parent are responsible for something else: the button
+                    <img src="../help/images/iRecNew.gif" alt=""> - adds a new family, if none was connected before,
+                    and adds a specific parent (father or mother, depending on the selected section) to it, the button
+                    <img src="../help/images/iRecDelete.gif" alt=""> accordingly disconnects the selected parent
+                    (father&#47;mother) from the family connected to the person. It is also possible to quickly navigate
+                    to the parents' records using the buttons <img src="../help/images/iToMan.gif" alt="">.
+                </li>
+            </ul>
+        </dd>
 
+        <dt>Families</dt>
+        <dd>
+            Changing spouse data is performed on the corresponding tab using the buttons <img src="../help/images/iRecNew.gif" alt="">,
+            <img src="../help/images/iRecEdit.gif" alt=""> and <img src="../help/images/iRecDelete.gif" alt="">.
+            Calling the operations for adding and changing a spouse leads to opening the family editing window,
+            where all the required actions are performed - adding a spouse, adding events and children.
+            Using the arrow buttons, you can change the order of marriages for a given person.
+            <ul>
+                <li>
+                    Note: it is important to understand the following points. All relationships in the genealogical database
+                    are links from one record to another. A family is the same record (or object) with its own properties,
+                    facts and links, as a personal record. A family record is a specialized record
+                    for combining two parents, children and facts about a family into one.
+                </li>
+                <li>
+                    Therefore, the "Families" tab of the personal record editing dialog is not just a list of spouses
+                    of a given person, it is a list of links to the corresponding records of families in which this
+                    person is/was a member. That is why, when you click the <img src="../help/images/iToMan.gif" alt="">
+                    button on the "Families" tab, the dialog for editing the corresponding family record opens.
+                </li>
+                <li>
+                    Therefore, when you delete an item in this list, you actually disconnect the current person
+                    from the specified family. There should remain a record of a family with children and one unknown spouse,
+                    which was the current person.
+                </li>
+            </ul>
+        </dd>
+
+        <dt>Names</dt>
+        <dd>
+            <p>
+                Any person can have several "full names" - i.e. each such name can include parts of the last name,
+                first name, middle name, nickname, etc.
+            </p>
+            <p>
+                This is done for those cases when during a person's life, all or some parts have changed. For example,
+                if during adoption, a person changed all parts: last name, first name, middle name.
+                There are also cases (real example), when a child Shirokov Zenovey Efremovich was born, then the parents died,
+                was adopted by godparents and for several years was called Pugov Zenovey Efremovich,
+                and then the middle name changed according to the name of the adopter, the person became Pugov Zenovey Ivanovich.
+            </p>
+            <p>
+                In such cases, it is convenient to make three entries of full names in the person record,
+                where there will be a full indication of all parts and a note of the name type.
+            </p>
+            <p>
+                In other cases, a person may have several very different names in different languages - when not only
+                the transliteration of names differs, but the surname and first name have completely different spelling and pronunciation.
+            </p>
+            <p>
+                Note: the fields for entering parts of the name, located at the top of the person editing dialog - always
+                change the parts of the name that is listed first in the list of names. Any full name can be made first,
+                then it will be the main one for displaying everywhere.
+            </p>
+        </dd>
+
+        <dt>Events / Groups / Notes / Sources / User references</dt>
+        <dd>
+            All types of objects related to a specific person can be changed on the corresponding tabs using the standard
+            buttons <img src="../help/images/iRecNew.gif" alt="">, <img src="../help/images/iRecEdit.gif" alt="">
+            and <img src="../help/images/iRecDelete.gif" alt="">. For any person, you can specify any number of events
+            that happened to him, his various attributes, notes, photographs and other multimedia records,
+            sources in which he is mentioned, marriages and groups.
+        </dd>
+
+        <dt>Associations</dt>
+        <dd>
+            A special form of records is used to add additional relationships between people. For example,
+            to specify godparents (godfathers) and witnesses (guarantors). When adding associations, you can specify
+            the type and link to a specific person.
+        </dd>
+
+        <dt>Multimedia</dt>
+        <dd>
+            When adding a new or attaching an existing multimedia file (Photo type) to the person being edited,
+            a dialog for selecting the region of the portrait in the photo automatically appears. This is a standard photo viewing dialog
+            with scale buttons (reduce/increase), in which you can select the area of ​​the portrait of a specific person
+            (click and, without releasing the mouse button, drag). In one photo, if you add it from the multimedia list,
+            you can specify several areas of different people. In this case, when viewing a photo from the "Multimedia" tab
+            of the main working window - the portraits of all people will be highlighted, and when you hover over them - an
+            inscription with the name will appear.
+        </dd>
+    </dl>
 
     <hr>
     <p>
+        Note: Several tabs in this dialog have buttons for the functions
+        <img src="../help/images/iCopy.gif" alt=""> "Copy" and <img src="../help/images/iPaste.gif" alt=""> "Paste".
+        These functions are very useful when entering large amounts of information in bulk.
+        A detailed description of these functions is in the section <a href="gkhClipboard.html">Clipboard</a>.
     </p>
 
     <hr>
     <p>
         There is a uniting table on the &quot;Persons&quot; tab of the main working window which includes all persons
-        available in the database. A person summary to the right of the table shows all information about the selected person and
-        references to other records.
+        available in the database. A person summary to the right of the table shows all information about the selected
+        person and references to other records.
     </p>
 
 </body>
