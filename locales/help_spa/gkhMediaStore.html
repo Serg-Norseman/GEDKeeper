@@ -6,34 +6,34 @@
     <title>Almacenamiento de archivos de contenido multimedia</title>
 </head>
 <body>
+
     <h1>Almacenamiento de archivos de contenido multimedia</h1>
+
     <p>
-        Existen tres formas de almacenar contenidos multimedia en GEDKeeper:
+        Existen cinco formas de almacenar contenidos multimedia en GEDKeeper:
         almacenar el archivo en su lugar original y utilizar una ruta absoluta como referencia,
-		utilizar un archivo &quot;<em>almacén</em>&quot; (un directorio), o utilizar un archivo
-        archivo (ZIP). Cada método tiene sus propias ventajas.
+        utilizar una ruta relativa,  utilizar un archivo &quot;almacén&quot; (un directorio),
+        utilizar un archivo archivo (ZIP) o utilizar un enlace web. Cada método tiene sus propias ventajas.
     </p>
+
     <ul>
         <li>
             &quot;Uso de nombres de ruta absolutos&quot;. Cuando se aplica este método, la base de datos
             almacena sólo el nombre de la ruta. Así, cuando el sistema lee el archivo, se abre utilizando
-            ese nombre de ruta. El archivo es completamente independiente de la base de datos GEDKeeper
-            de GEDKeeper, por lo que, una vez trasladada la base de datos a otro sistema
+            ese nombre de ruta. El archivo es completamente independiente de la base de datos
+            de GEDKeeper, por lo que, una vez trasladada la base de datos a otro sistema es
             necesario reasignar todos los nombres de ruta (en el caso de que ésta cambie).
         </li>
 
         <li>
-            &quot;Guardar en el almacén&quot;. En este caso, GEDKeeper crea un nuevo directorio
-            cerca de su archivo de base de datos (en el mismo directorio de la base de datos).
-			El nuevo directorio tiene el mismo nombre que el archivo de la base de datos.
-            Cuando se añade un archivo multimedia a la base de datos, éste se copia en este directorio.
-            De este modo, se obtiene un almacenamiento centralizado de archivos
-            vinculado a su base de datos, que es muy fácil de mover a otro
-            sistema&mdash;basta con copiar el archivo de base de datos y su directorio hermano del mismo
-            nombre.
+            Referencia de archivo relativa (ruta relativa). Cuando se utiliza este método,
+            la base de datos genealógica almacena una ruta corta al archivo, relativa a la ubicación actual de la base de datos,
+            sin incluir el disco y la ruta común a la base de datos y al archivo multimedia.
+            La ventaja es que el archivo es completamente independiente de la base de datos; la desventaja es que,
+            si se transfiere la base de datos a otro ordenador, la carpeta con los archivos multimedia debe ubicarse
+            con respecto a la base de datos de la misma forma que en el caso original.
         </li>
 
-        <!-- Asegúrese de que este elemento de la lista es el último, ya que hace referencia al nombre anterior. -->
         <li>
             &quot;Guardar en el archivo&quot;. GEDKeeper crea un archivo ZIP con el mismo nombre
             nombre que su base de datos y que comparte el mismo directorio.
@@ -47,7 +47,76 @@
             por lo que no tiene sentido incluirlos en un archivo.
             Estos ficheros se tratan en el método &quot;Guardar en el almacén&quot;.
         </li>
+
+        <li>
+            &quot;Guardar en el almacén&quot;. En este caso, GEDKeeper crea un nuevo directorio
+            cerca de su archivo de base de datos (en el mismo directorio de la base de datos).
+            El nuevo directorio tiene el mismo nombre que el archivo de la base de datos.
+            Cuando se añade un archivo multimedia a la base de datos, éste se copia en este directorio.
+            De este modo, se obtiene un almacenamiento centralizado de archivos
+            vinculado a su base de datos, que es muy fácil de mover a otro
+            sistema&mdash;basta con copiar el archivo de base de datos y su directorio hermano del mismo
+            nombre.
+        </li>
+
+        <li>
+            Dirección web o enlace de Internet (URL). Este método está previsto para los casos en que el archivo está
+            publicado en Internet y se conoce un enlace directo permanente a él. Basta con copiarlo desde el navegador
+            web y pegarlo en el campo de entrada de la ruta del archivo del cuadro de diálogo de edición multimedia.
+            El inconveniente es que no se puede garantizar que el archivo exista siempre donde se publique ni que el
+            enlace al mismo sea siempre válido (a veces pueden cambiar).
+        </li>
     </ul>
+
     <p>Puedes utilizar cualquiera de estos métodos, o todos ellos, libremente.</p>
+
+    <hr>
+    <p>
+        Caso de uso que garantiza la fiabilidad de la ruta del archivo y la independencia de los métodos internos
+        de almacenamiento de rutas en GEDKeeper (archivo, almacenamiento):
+    </p>
+    <ul>
+        <li>crea una carpeta de almacenamiento independiente, propia, junto al archivo de base de datos o relativamente cerca;</li>
+        <li>coloca, nombra y organiza allí los archivos a tu gusto;</li>
+        <li>añade los archivos multimedia a la base de datos utilizando rutas relativas.</li>
+    </ul>
+    <p>
+        Ventajas: ruta corta al archivo en la base de datos, el almacenamiento puede estar junto al archivo y
+        la organización de los archivos en la carpeta es muy práctica.
+    </p>
+
+    <hr>
+    <p>
+        En caso de que el usuario tenga un método preferido primario - en la configuración del programa para tales casos
+        hay una opción especial para el método predeterminado de almacenamiento multimedia. Si se establece -
+        en el cuadro de diálogo para añadir y editar registros multimedia, el método deseado es siempre automáticamente el primero.
+    </p>
+
+    <hr>
+    <p>
+        <b>Importante</b>: Se recomienda tener siempre una copia de la base de datos y de todo el conjunto de
+        archivos multimedia en el almacenamiento en la nube.
+    </p>
+
+    <hr>
+    <p>
+        <b>Importante</b>: GEDKeeper no tiene la capacidad técnica de rastrear los cambios en los nombres de los archivos
+        o sus ubicaciones si se añadieron mediante enlaces directos o relativos. Por lo tanto, no se recomienda cambiar
+        el nombre o la ubicación de un archivo después de haberlo añadido a la base de datos. Tampoco se recomienda intentar
+        reorganizar los archivos en la carpeta de almacenamiento.
+    </p>
+
+    <hr>
+    <p>
+        <b>Importante</b>: al utilizar el programa GEDKeeper en sistemas operativos Windows 10/11, si hay un espacio
+        al final del nombre del archivo de la base de datos (por ejemplo, «Base de datos .ged»), es posible que los
+        archivos multimedia guardados en el <u>almacenamiento</u> no se abran en el programa debido a la aparición de
+        errores del sistema al acceder a la carpeta de almacenamiento con un espacio al final del nombre (la carpeta
+        de almacenamiento siempre se crea con exactamente el mismo nombre que la base de datos).
+    </p>
+
+    <hr>
+    <p>Ver también: <a href="gkhRec_Media.html">Registro de Medios</a>.</p>
+
 </body>
 </html>

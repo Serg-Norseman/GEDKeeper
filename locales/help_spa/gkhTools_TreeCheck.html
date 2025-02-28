@@ -6,40 +6,57 @@
     <title>Herramientas: Comprobación de la base de datos</title>
 </head>
 <body>
+
     <h1>Herramientas: Comprobación de la base de datos</h1>
+
     <p>
-        Esta herramienta comprueba si la información de la base de datos es correcta. 
-		Comprueba dos tipos de registros: familias y personas. 
-		A diferencia de la comprobación de integridad de bases de datos típica, 
-		que se ejecuta cada vez que se abre una base de datos y que comprueba la estructura de la base de datos, 
-		esta herramienta se ocupa de los errores lógicos y la inexactitud de los datos. 
+        Esta herramienta comprueba si la información de la base de datos es correcta.
+        Comprueba dos tipos de registros: familias y personas.
+        A diferencia de la comprobación de integridad de bases de datos típica,
+        que se ejecuta cada vez que se abre una base de datos y que comprueba la estructura de la base de datos,
+        esta herramienta se ocupa de los errores lógicos y la inexactitud de los datos.
     </p>
+
     <p>
         Para pasar la comprobación, un registro familiar debe tener asignados marido, mujer, hijos
-		y eventos. Cuando se encuentra una familia vacía, la herramienta propone eliminarla. 
-		En la práctica, es normal crear una familia a partir de personas que, más adelante,
-		puede descubrirse que pertenecen a familias diferentes y que fueron añadidas erróneamente. 
-		En estos casos, GEDKeeper puede mover personas de una familia a otra. 
-		Después de tales acciones, un registro familiar puede perder todas las relaciones.
-		Esta es una situación probable cuando se procesan activamente grandes cantidades de información. 
+        y eventos. Cuando se encuentra una familia vacía, la herramienta propone eliminarla.
+        En la práctica, es normal crear una familia a partir de personas que, más adelante,
+        puede descubrirse que pertenecen a familias diferentes y que fueron añadidas erróneamente.
+        En estos casos, GEDKeeper puede mover personas de una familia a otra.
+        Después de tales acciones, un registro familiar puede perder todas las relaciones.
+        Esta es una situación probable cuando se procesan activamente grandes cantidades de información.
     </p>
-    <!-- POR HACER: Conviertir la siguiente frase larga en una lista desordenada -->
+
     <p>
-        El registro de una persona se comprueba de la siguiente manera: 
-		la herramienta comprueba el suceso de defunción, teniendo en cuenta la edad máxima confirmada científicamente,
-		comprueba y notifica sobre personas sin un sexo definido explícitamente,
-		notifica sobre fechas de vida incorrectas (por ejemplo, la fecha de defunción es anterior a la fecha de nacimiento),
-		notifica sobre personas que se casaron antes o después de los límites razonables,
-		o que tienen hijos que nacieron fuera de los límites razonables. 
-		Cuando una persona no tiene sexo, la herramienta marca el registro como modificado y
-		abre el cuadro de diálogo del editor de sexo.
-		Cuando la edad de una persona supera el máximo, la herramienta añade un evento de muerte sin fecha especificada al registro de la persona. 
+        El registro de una persona se comprueba de la siguiente manera:
+        la herramienta comprueba el suceso de defunción, teniendo en cuenta la edad máxima confirmada científicamente,
+        comprueba y notifica sobre personas sin un sexo definido explícitamente,
+        notifica sobre fechas de vida incorrectas (por ejemplo, la fecha de defunción es anterior a la fecha de nacimiento),
+        notifica sobre personas que se casaron antes o después de los límites razonables,
+        o que tienen hijos que nacieron fuera de los límites razonables.
+        Cuando una persona no tiene sexo, la herramienta marca el registro como modificado y
+        abre el cuadro de diálogo del editor de sexo.
+        Cuando la edad de una persona supera el máximo, la herramienta añade un evento de muerte sin fecha especificada al registro de la persona.
     </p>
+
     <p>
-        GEDKeeper corrige la falta de un evento de defunción, 
-		la falta de una declaración de sexo y 
-		puede eliminar registros familiares vacíos.
-		Todos los demás problemas se muestran sólo para su información. 
+        Además de comprobar la corrección de los datos y las relaciones en los registros familiares y personales
+        también se realiza el diagnóstico de la presencia de relaciones cíclicas (anulares).
+        Esto ocurre cuando, durante el proceso de investigación y reposición de la base de datos,
+        se produce una situación errónea al determinar el registro requerido por nombre y uno de los antepasados se
+        introdujo por error como hijo en la familia de sus descendientes (a cualquier profundidad).
+        En este caso, la herramienta mostrará los identificadores de los registros que forman un «ciclo».
     </p>
+
+    <p>
+        En los registros multimedia se comprueba la presencia en el «archivo» o «almacenamiento»,
+        de la exactitud de los enlaces absolutos y relativos.
+    </p>
+
+    <p>
+        GEDKeeper corrige la falta de un evento de defunción, la falta de una declaración de sexo y
+        puede eliminar registros familiares vacíos. Todos los demás problemas se muestran sólo para su información.
+    </p>
+
 </body>
 </html>
