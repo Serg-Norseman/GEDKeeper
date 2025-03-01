@@ -126,7 +126,7 @@ Elements:
     Value: "Modern/Pedigree.png"
 
   - Element: Glyph_Maps
-    Value: "Modern/stub.png"
+    Value: "Modern/Maps.png"
 
   - Element: Glyph_Stats
     Value: "Modern/Stats.png"
@@ -165,13 +165,13 @@ Elements:
     Value: "Modern/Cancel.png"
 
   - Element: Glyph_ItemAdd
-    Value: "Modern/stub.png"
+    Value: "Modern/RecordAdd.png"
 
   - Element: Glyph_ItemEdit
-    Value: "Modern/stub.png"
+    Value: "Modern/RecordEdit.png"
 
   - Element: Glyph_ItemDelete
-    Value: "Modern/stub.png"
+    Value: "Modern/RecordDelete.png"
 
   - Element: Glyph_LinkJump
     Value: "Modern/LinkJump.png"
@@ -186,25 +186,25 @@ Elements:
     Value: "Modern/Copy.png"
 
   - Element: Glyph_Cut
-    Value: "Modern/stub.png"
+    Value: "Modern/Cut.png"
 
   - Element: Glyph_Paste
     Value: "Modern/Paste.png"
 
   - Element: Glyph_ImageSave
-    Value: "Modern/stub.png"
+    Value: "Modern/ImageSave.png"
 
   - Element: Glyph_DocPrint
-    Value: "Modern/stub.png"
+    Value: "Modern/DocPrint.png"
 
   - Element: Glyph_DocPreview
-    Value: "Modern/stub.png"
+    Value: "Modern/DocPreview.png"
 
   - Element: Glyph_Start
-    Value: "Modern/stub.png"
+    Value: "Modern/Start.png"
 
   - Element: Glyph_Stop
-    Value: "Modern/stub.png"
+    Value: "Modern/Stop.png"
 
   - Element: Glyph_Undo
     Value: "Modern/stub.png"
