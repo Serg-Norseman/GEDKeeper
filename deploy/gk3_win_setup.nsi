@@ -365,7 +365,6 @@ Section "$(gkreq)"
 
     CreateDirectory "$SMPROGRAMS\GEDKeeper3"
     SetOutPath "$INSTDIR\bin"
-    CreateShortCut "$SMPROGRAMS\GEDKeeper3\GKTray.lnk" "$INSTDIR\bin\GKTray.exe" "" "$INSTDIR\bin\GKTray.exe" 0
     CreateShortCut "$SMPROGRAMS\GEDKeeper3\GEDKeeper3.lnk" "$INSTDIR\bin\GEDKeeper3.exe" "" "$INSTDIR\bin\GEDKeeper3.exe" 0
     CreateShortCut "$DESKTOP\GEDKeeper3.lnk" "$INSTDIR\bin\GEDKeeper3.exe" "" "$INSTDIR\bin\GEDKeeper3.exe" 0
 

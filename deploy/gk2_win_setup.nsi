@@ -336,7 +336,6 @@ Section "$(gkreq)"
     File "..\bin\GEDKeeper2.exe.config"
     File "..\bin\GKComponents.dll"
     File "..\bin\GKCore.dll"
-    File "..\bin\GKTray.exe"
 
     File "..\bin\BSLib.dll"
     File "..\bin\BSLib.DataViz.Model.dll"
@@ -391,7 +390,6 @@ Section "$(gkreq)"
 
     CreateDirectory "$SMPROGRAMS\GEDKeeper2"
     SetOutPath "$INSTDIR\bin"
-    CreateShortCut "$SMPROGRAMS\GEDKeeper2\GKTray.lnk" "$INSTDIR\bin\GKTray.exe" "" "$INSTDIR\bin\GKTray.exe" 0
     CreateShortCut "$SMPROGRAMS\GEDKeeper2\GEDKeeper2.lnk" "$INSTDIR\bin\GEDKeeper2.exe" "" "$INSTDIR\bin\GEDKeeper2.exe" 0
     CreateShortCut "$DESKTOP\GEDKeeper2.lnk" "$INSTDIR\bin\GEDKeeper2.exe" "" "$INSTDIR\bin\GEDKeeper2.exe" 0
 
