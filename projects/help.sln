@@ -187,6 +187,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "help_spa", "help_spa", "{8B
 		..\locales\help_spa\gkhDateSpecials.html = ..\locales\help_spa\gkhDateSpecials.html
 		..\locales\help_spa\gkhExpandability.html = ..\locales\help_spa\gkhExpandability.html
 		..\locales\help_spa\gkhFAQ.html = ..\locales\help_spa\gkhFAQ.html
+		..\locales\help_spa\gkhFaR.html = ..\locales\help_spa\gkhFaR.html
 		..\locales\help_spa\gkhFeatures.html = ..\locales\help_spa\gkhFeatures.html
 		..\locales\help_spa\gkhGenRes.html = ..\locales\help_spa\gkhGenRes.html
 		..\locales\help_spa\gkhHistory.html = ..\locales\help_spa\gkhHistory.html

@@ -11,101 +11,229 @@
 
     <p>
         Un registro de persona es el tipo de registro más importante de una base de datos genealógica.
-		Un registro de este tipo contiene toda la información sobre una persona.
-		GEDKeeper permite almacenar el nombre completo, el apodo y el sexo en un registro de persona.
-		Puedes enumerar todos los acontecimientos y hechos relacionados con la vida de la persona.
-		Con GEDKeeper puedes investigar fácilmente las relaciones familiares y sociales de la persona
-		(asociaciones con otras personas). GEDKeeper nunca te restringe el número de familiares e hijos de una persona.
-		Además, puede dividir a las personas por diferentes grupos sociales, añadir indicadores adicionales
-		para mejorar la obviedad (referencias y notas a pie de página), añadir un número ilimitado de notas,
-		materiales multimedia y fuentes, y añadir el retrato de una persona para mostrarlo en los árboles. 
- 
+        Un registro de este tipo contiene toda la información sobre una persona.
+        GEDKeeper permite almacenar el nombre completo, el apodo y el sexo en un registro de persona.
+        Puedes enumerar todos los acontecimientos y hechos relacionados con la vida de la persona.
+        Con GEDKeeper puedes investigar fácilmente las relaciones familiares y sociales de la persona
+        (asociaciones con otras personas). GEDKeeper nunca te restringe el número de familiares e hijos de una persona.
+        Además, puede dividir a las personas por diferentes grupos sociales, añadir indicadores adicionales
+        para mejorar la obviedad (referencias ), añadir un número ilimitado de notas,
+        materiales multimedia y fuentes, y añadir el retrato de una persona para mostrarlo en los árboles.
+
     </p>
 
     <p>Esta es la lista de pestañas de diálogo y las respectivas categorías de datos que puede modificar:</p>
-
     <ul>
         <li><a href="gkhRec_Event.html">Evento</a> representa un acontecimiento o hecho de la vida de una persona.</li>
         <li>
             <a href="gkhRec_Family.html">Familia</a> enumera los matrimonios de personas o relaciones familiares;
-			los hijos comunes se especifican en el diálogo dedicado. 
+            los hijos comunes se especifican en el diálogo dedicado.
+        </li>
+        <li>
+            <a href="gkhRec_Name.html">Nombres</a> - lista de todos los nombres completos de una persona determinada;
+            posible: en distintas lenguas y distintos tipos (por nacimiento, por matrimonio, por adopción,
+            seudónimo creativo).
         </li>
         <li><a href="gkhRec_Asso.html">Asociación</a> enumera las relaciones sociales de una persona.</li>
         <li>
             <a href="gkhRec_Group.html">Grupo</a> es una forma de unir a las personas mediante relaciones sociales,
-			lo que hace que la navegación y la búsqueda sean más eficaces. 
+            lo que hace que la navegación y la búsqueda sean más eficaces.
         </li>
         <li><a href="gkhRec_Note.html">Nota</a> es un texto arbitrario sobre la persona.</li>
         <li><a href="gkhRec_Media.html">Contenido multimedia</a> adjunta fotos, documentos escaneados y retratos.</li>
         <li>
-            <a href="gkhRec_Source.html">Fuentes</a> representa documentos usados, correspondencia y 
-			otros tipos de fuentes de información sobre una persona.
+            <a href="gkhRec_Source.html">Fuentes</a> representa documentos usados, correspondencia y
+            otros tipos de fuentes de información sobre una persona.
         </li>
         <li>
-            <a href="gkhRec_UserRefs.html">Referencias&#47;notas al pie de página</a> es un indicador adicional 
-			para el propio GEDKeeper o una forma de crear a mano una clasificación. 
+            <a href="gkhRec_UserRefs.html">Referencias</a> es un indicador adicional para el propio GEDKeeper
+            o una forma de crear a mano una clasificación.
         </li>
+        <li>
+            Padres - una lista de enlaces a las familias de los padres (en general - sólo uno,
+            en casos de adopción, tutela, etc. - puede haber varios).
+        </li>
+        <li>Hijos- una lista de todos los hijos de una persona dada de todos los matrimonios/relaciones.</li>
     </ul>
-	<p style="text-align:center">
-		<img src="images/dlgPersonEdit.gif" title="Diálogo del editor de personas" alt="diálogo del editor de personas">
-	</p>
+
+    <p style="text-align:center">
+        <img src="images/dlgPersonEdit.gif" title="Diálogo del editor de personas" alt="diálogo del editor de personas">
+    </p>
 
     <h2><a id="person_edit">Modificación de los datos personales</a></h2>
 
-    <ul>
-        <li>
-            Para cambiar los padres de una persona se utiliza un panel especial con dos campos: 
-			el padre y la madre de la persona, y tres grupos de botones. A primera vista puede parecer demasiado complejo,
-			pero en la práctica permite una edición flexible de las propiedades de los objetos. 
-			El grupo de botones <img src="../help/images/iRecNew.gif" title="Añadir nuevo registro" alt="añadir nuevo registro">,
-            <img src="../help/images/iRecEdit.gif" title="Editar registro actual" alt="editar registro actual">, 
-			and <img src="../help/images/iRecDelete.gif" title="Borrar registro actual" alt="borrar registro actual"> la derecha 
-			de los nombres de los padres modifica la familia de los padres como un objeto completo.
-			Es decir, puede utilizar el botón de añadir nuevo registro <img src="../help/images/iRecNew.gif" title="Añadir nuevo registro" alt="añadir nuevo registro"> para adjuntar la persona afectada a una familia existente.
-			Utiliza el botón de edición del registro actual <img src="../help/images/iRecEdit.gif" title="Editar registro actual" alt="editar registro actual"> 
-			para modificar las propiedades de una familia ya adjunta sin necesidad de cerrar la ventana de edición de personas abierta en ese momento.
-			Utiliza el botón borrar registro actual <img src="../help/images/iRecDelete.gif" title="Borrar registro actual" alt="borrar registro actual"> 
-            situado a la derecha de los nombres de los padres para desvincular a una persona de la familia. 
-        </li>
+    <dl>
+        <dt>Apellido / Apellido de casada / Nombre / Patronímico</dt>
+        <dd>
+            Campos para introducir la parte principal de la información sobre el nombre de una persona.
+            Puede haber varios <a href="gkhRec_Name.html">nombres</a> completos (en diferentes idiomas,
+            diferentes subtipos), de modo que estos campos cambien sólo partes del primer nombre completo
+            (véase la pestaña «Nombres»).
+            <br>Características:
+            <ul>
+                <li>
+                    Pulsando las teclas [ <kbd>Ctrl + Abajo</kbd> ] en los campos para introducir el apellido,
+                    apellido de casada, nombre y patronímico - conduce a la «unificación» de la línea
+                    correspondiente: las primeras letras de las palabras se convierten en mayúsculas,
+                    el resto - minúsculas.
+                </li>
+                <li>
+                    Atención: está prohibido utilizar el símbolo «/» en los campos principales del nombre
+                    (apellido, nombre, patronímico), esto puede provocar errores en la base de datos.
+                </li>
+                <li>
+                    Si el diálogo de edición de persona se abrió al añadir un nuevo hijo a un padre,
+                    entonces la lista desplegable de patronímicos contendrá una lista de patronímicos según el
+                    nombre del padre.
+                </li>
+            </ul>
+        </dd>
 
-        <li>
-            Los mismos botones: <img src="../help/images/iRecNew.gif" title="Añadir nuevo registro" alt="añadir nuevo registro">,
-            <img src="../help/images/iRecDelete.gif" title="Borrar registro actual" alt="borrar registro actual">, y el botón <img src="../help/images/iToMan.gif" title="Saltar al padre" alt="saltar al padre">
-			situados bajo el nombre de cada progenitor realizan otras funciones.
-			El botón <img src="../help/images/iRecNew.gif" title="Añadir nuevo registro" alt="añadir nuevo registro"> añade 
-			una nueva familia si aún no se ha añadido ninguna y, a continuación, añade el progenitor concreto a esta
-			familia (padre o madre, en función de la sección seleccionada).
-			El botón <img src="../help/images/iRecDelete.gif" title="Borrar registro actual" alt="borrar registro actual"> elimina un progenitor (padre o madre) de la familia de una persona.
-			Para saltar rápidamente al registro de persona de un progenitor, utilice el botón <img src="../help/images/iToMan.gif" title="Saltar al padre" alt="saltar al padre">
-            button.
-        </li>
+        <dt>Prefijo del apellido / Prefijo del nombre / Sufijo del nombre / Apodo</dt>
+        <dd>
+            Campos responsables de la información adicional sobre el nombre de una persona:
+            todo tipo de apodos, títulos, prefijos y sufijos del apellido o nombre
+        </dd>
 
-        <li>
-            A la derecha del nombre completo y el sexo de la persona hay un cuadro de edición específico en el que puede introducir información adicional sobre el nombre de la persona:
-			apodo, seudónimo, estado, prefijo y sufijo del nombre. 
-        </li>
+        <dt>Retrato</dt>
+        <dd>
+            Los botones de control del retrato (asignar/eliminar) aparecen al situar el cursor sobre el área
+            del retrato. Al añadir la foto de una persona, puede seleccionar la región preferida de la foto
+            (si la foto es demasiado grande o pertenece a un grupo).
+        </dd>
 
-        <li>
-            Para modificar un objeto de cualquier tipo relacionado con la persona afectada, se utiliza una pestaña específica y los siguientes botones estándar:
-			<img src="../help/images/iRecNew.gif" title="Añadir nuevo registro" alt="añadir nuevo registro">,
-            <img src="../help/images/iRecEdit.gif" title="Editar registro actual" alt="editar registro actual">, and <img src="../help/images/iRecDelete.gif" title="Borrar registro actual" alt="borrar registro actual">.
-			Puede añadir a la persona afectada cualquier número de acontecimientos relacionados con su vida, diversos atributos, 
-			notas, fotos u otros contenidos multimedia, así como materiales fuente que mencionen a la persona, matrimonios y grupos.
-			Utilice la lista especial de asociaciones para añadir relaciones adicionales entre personas. 
-        </li>
+        <dt>Parents</dt>
+        <dd>
+            <ul>
+                <li>
+                    La edición de los padres de una persona se realiza en forma de un panel especial dedicado con dos campos,
+                    donde se muestran el padre y la madre de la persona que se está editando, así como tres grupos de botones.
+                    Esto se hace para obtener la máxima flexibilidad de edición. El grupo de botones
+                    <img src="../help/images/iRecNew.gif" alt="Añadir">, <img src="../help/images/iRecEdit.gif" alt="Modificar">
+                    y <img src="../help/images/iRecDelete.gif" alt="Borrar"> a la derecha de los campos de nombre de los padres
+                    tiene por objeto gestionar el vínculo con la familia de los padres en su conjunto.
+                    Es decir, si la familia de los padres a la que necesita  ya existe, puede adjuntarla con el botón
+                    <img src="../help/images/iRecNew.gif" alt="Añadir">. Si necesita editar algunos datos de una familia ya
+                    enlazada, puede hacerlo utilizando el botóni <img src="../help/images/iRecEdit.gif" alt="Modificar">,
+                    es decir, editar la familia sin cerrar el diálogo actual de la persona. Usando el botón
+                    <img src="../help/images/iRecDelete.gif" alt="Borrar"> a la derecha de los nombres de los padres,
+                    la persona se desconectada de la familia.
+                </li>
 
-        <li>
-            Puede modificar la información sobre una pareja casada en la pestaña &quot;Cónyuges&quot; utilizando los botones
-            <img src="../help/images/iRecNew.gif" title="Añadir nuevo registro" alt="añadir nuevo registro">, <img src="../help/images/iRecEdit.gif" title="Editar registro actual" alt="editar registro actual">,
-            and <img src="../help/images/iRecDelete.gif" title="Borrar registro actual" alt="borrar registro actual">. Cuando añadas o modifiques uno de los conjuntos, 
-			aparecerá la ventana del editor familiar. Usando esa ventana, podrás hacer lo que necesites: añadir un cónyuge, hijos o evento. 
-			Con los botones de flecha, puede cambiar el orden de los matrimonios de la persona seleccionada. 
-        </li>
-    </ul>
+                <li>
+                    Los mismos botones <img src="../help/images/iRecNew.gif" alt="Añadir">,
+                    <img src="../help/images/iRecDelete.gif" alt="Borrar"> y <img src="../help/images/iToMan.gif" alt="Modificar">
+                    bajo el nombre de cada progenitor, son responsables de otra cosa: el botón
+                    <img src="../help/images/iRecNew.gif" alt="Añadir"> - añade una nueva familia, si ninguna fue añadida antes,
+                    e incluye, un progenitor específico (padre o madre, dependiendo de la sección seleccionada),
+                    el botón <img src="../help/images/iRecDelete.gif" alt="Borrar"> correspondientei, desconecta al progenitor
+                    seleccionado (padre&#47;madre) de la familia conectada a la persona. También es posible navegar rápidamente
+                    a los registros de los padres utilizando los botones <img src="../help/images/iToMan.gif" alt="">.
+                </li>
+            </ul>
+        </dd>
 
+        <dt>Familias</dt>
+        <dd>
+            La modificación de los datos del cónyuge se realiza en la pestaña correspondiente mediante los botones
+            <img src="../help/images/iRecNew.gif" alt="Añadir">, <img src="../help/images/iRecEdit.gif" alt="Modificar"> y
+            <img src="../help/images/iRecDelete.gif" alt="Borrar">. Al llamar a las operaciones para añadir y cambiar un cónyuge
+            se abre la ventana de edición de la familia, donde se realizan todas las acciones necesarias: añadir un cónyuge,
+            añadir eventos e hijos. Utilizando los botones de flecha, puedes cambiar el orden de los matrimonios para una persona
+            determinada.
+            <ul>
+                <li>
+                    Nota: es importante comprender los siguientes puntos. Todas las relaciones en la base de datos genealógica
+                    son enlaces de un registro a otro. Una familia es el mismo registro (u objeto) con sus propias propiedades,
+                    hechos y enlaces, que un registro personal. Un registro de familia es un registro especializado para
+                    combinar dos padres, hijos y datos sobre una familia en uno solo.
+                </li>
+                <li>
+                    Por lo tanto, la pestaña «Familias» del cuadro de diálogo de edición de registros personales no es sólo una
+                    lista de cónyuges de una persona determinada, sino una lista de enlaces a los registros correspondientes de
+                    las familias en las que esta persona es o era miembro. Por eso, al hacer clic en el botón
+                    <img src="../help/images/iToMan.gif" alt=""> de la pestaña «Familias», se abre el cuadro de diálogo para
+                    editar el registro de familia correspondiente.
+                </li>
+                <li>
+                    Por lo tanto, al eliminar un elemento de esta lista, en realidad se desconecta a la persona actual de la
+                    familia especificada. Debe quedar un registro de una familia con hijos y un cónyuge desconocido, que era la
+                    persona actual.
+                </li>
+            </ul>
+        </dd>
+
+        <dt>Nombres</dt>
+        <dd>
+            <p>
+                Cualquier persona puede tener varios «nombres completos», es decir, cada uno de ellos puede incluir partes del
+                apellido, nombre, segundo nombre, apodo, etc.
+            </p>
+            <p>
+                Esto se hace para aquellos casos en los que, durante la vida de una persona, han cambiado todas o algunas de lass
+                partes de su nombre. Por ejemplo, si durante el proceso de adopción una persona cambia sus datos: apellidos,
+                nombre y/o segundo nombre. También hay casos reales, como el de un niño llamado Shirokov Zenovey Efremovich al
+                nacer, los padres murieron, fue adoptado por sus padrinos y durante varios años se llamó Pugov Zenovey Efremovich.
+                Con el tiempo, el segundo nombre cambió según el nombre del adoptante y la persona se convirtió en Pugov Zenovey
+                Ivanovich.
+            </p>
+            <p>
+                En tales casos, es conveniente hacer tres anotaciones de nombres completos en el registro de persona,
+                donde habrá una indicación completa de todas las partes y una nota del tipo de nombre.
+            </p>
+            <p>
+                En otros casos, una persona puede tener varios nombres muy diferentes en distintos idiomas - cuando no sólo la
+                transliteración de los nombres difiere, sino que el apellido y el nombre tienen una ortografía y pronunciación
+                completamente distintas.
+            </p>
+            <p>
+                Nota: los campos para introducir partes del nombre, situados en la parte superior del cuadro de diálogo de edición
+                de personas, siempre cambian las partes del nombre que aparece en primer lugar en la lista de nombres. Cualquier
+                nombre completo se puede situar primero, y entonces será el principal para mostrar en todas partes.
+            </p>
+        </dd>
+
+        <dt>Eventos / Grupos / Notas / Fuentes / Referencias de usuarios</dt>
+        <dd>
+            Todos los tipos de objetos relacionados con una persona concreta pueden modificarse en las fichas correspondientes
+            utilizando los botones estándar <img src="../help/images/iRecNew.gif" alt="Añadir">,
+            <img src="../help/images/iRecEdit.gif" alt="Modificar"> y <img src="../help/images/iRecDelete.gif" alt="Borrar">.
+            Para cualquier persona, puede especificar cualquier número de sucesos que le hayan ocurrido, sus diversos atributos,
+            notas, fotografías y otros registros multimedia, fuentes en las que se le mencione, matrimonios y grupos.
+        </dd>
+
+        <dt>Asociaciones</dt>
+        <dd>
+            Se utiliza una forma especial de registros para añadir relaciones adicionales entre personas. Por ejemplo,
+            para especificar padrinos (madrinas) y testigos (avalistas). Al añadir asociaciones, puede especificar el tipo y
+            el vínculo con una persona concreta.
+        </dd>
+
+        <dt>Multimedia</dt>
+        <dd>
+            Al añadir un nuevo archivo multimedia (tipo Foto) o adjuntar uno existente a la persona que se está editando,
+            aparece automáticamente un cuadro de diálogo para seleccionar la región del retrato en la foto. Se trata de un
+            cuadro de diálogo estándar de visualización de fotos con botones de escala (reducir/aumentar), en el que puede
+            seleccionar la zona del retrato de una persona concreta (haga clic y, sin soltar el botón del ratón, arrastre).
+            En una foto, si la añades desde la lista multimedia, puedes especificar varias zonas de diferentes personas.
+            En este caso, al ver una foto de la pestaña «Multimedia» de la ventana principal de trabajo - los retratos de todas
+            las personas se resaltarán, y cuando se pasa el ratón sobre ellos - aparecerá una inscripción con el nombre.
+        </dd>
+    </dl>
+
+    <hr>
     <p>
-        Existe una tabla unificadora en la pestaña &quot;Personas&quot; de la ventana principal de trabajo que incluye todas las personas disponibles en la base de datos.
-		A la derecha de la tabla, un resumen de personas muestra toda la información sobre la persona seleccionada y referencias a otros registros.
+        Nota: Varias pestañas de este cuadro de diálogo tienen botones para las funciones
+        <img src="../help/images/iCopy.gif" alt="Copiar"> "Copiar" y <img src="../help/images/iPaste.gif" alt="Pegar"> "Pegar".
+        Estas funciones son muy útiles cuando se introducen grandes cantidades de información en bloque.
+        Una descripción detallada de estas funciones se encuentra en la sección <a href="gkhClipboard.html">Portapapeles</a>.
+    </p>
+
+    <hr>
+    <p>
+        En la pestaña &quot;Personas&quot; de la ventana principal de trabajo hay una tabla unificadora que incluye todas las
+        personas disponibles en la base de datos. A la derecha de la tabla, un resumen muestra toda la información sobre la
+        persona seleccionada y las referencias a otros registros.
     </p>
 
 </body>

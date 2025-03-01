@@ -10,18 +10,19 @@
     <h1>Árbol genealógico</h1>
 
     <p>
-		Existen tres tipos de diagramas de árbol que GEDKeeper puede crear: 
-		árbol de ascendientes (árbol de relaciones ascendentes), 
-		árbol de descendientes (árbol de relaciones descendentes) 
-		y un árbol combinado (árbol de ascendientes y descendientes). 
-		Puede configurar la apariencia del diagrama desde el menú &quot;Servicio&quot; en el ítem &quot;Opciones&quot; en la pestaña &quot;Diagramas&quot;, subpestaña &quot;<a href="gkhOptions.html#tree">Árboles</a>&quot;. 
-		Puede cambiar qué información mostrar sobre las personas y cambiar los colores de los elementos del árbol. 
+        Existen tres tipos de diagramas de árbol que GEDKeeper puede crear:
+        árbol de ascendientes (árbol de relaciones ascendentes),
+        árbol de descendientes (árbol de relaciones descendentes)
+        y un árbol combinado (árbol de ascendientes y descendientes).
+        Puede configurar la apariencia del diagrama desde el menú &quot;Servicio&quot; en el ítem &quot;Opciones&quot;
+        en la pestaña &quot;Diagramas&quot;, subpestaña &quot;<a href="gkhOptions.html#tree">Árboles</a>&quot;.
+        Puede cambiar qué información mostrar sobre las personas y cambiar los colores de los elementos del árbol.
     </p>
 
     <p>
         Para construir un árbol, elija una persona de la lista de personas y, a continuación,
-		elija un tipo de árbol (antepasados, descendientes o completo) en el menú &quot;Genealogía&quot;. 
-		También puede utilizar los siguientes botones de la ventana principal: 
+        elija un tipo de árbol (antepasados, descendientes o completo) en el menú &quot;Genealogía&quot;.
+        También puede utilizar los siguientes botones de la ventana principal:
     </p>
 
     <ul>
@@ -30,15 +31,25 @@
         <li><img src="../help/images/iTreeBoth.gif" alt="Árbol combinado">&nbsp;Árbol combinado (árbol de ascendientes y descendientes).</li>
     </ul>
 
-    <p>	
-		Después de crear un árbol, puede utilizar el botón de guardar <img src="../help/images/iSaveImage.gif" alt="guardar"> para exportar el árbol en uno de los siguientes formatos:
-		formato rasterizado (BMP, GIF, JPEG, PNG) o vectorial (EMF, SVG). 
-		No todos los árboles genealógicos pueden guardarse como archivos rasterizados, 
-		ya que no pueden almacenar más de 65k píxeles por línea horizontal. 
-		Los archivos vectoriales no tienen esas restricciones. Por lo tanto, 
-		un formato vectorial puede almacenar árboles de cualquier tamaño. Además, 
-		tener un archivo vectorial puede ser mejor para el siguiente procesamiento 
-		de imágenes en aplicaciones gráficas y para la impresión. 
+    <hr>
+    <p>
+        Nota: Los árboles construidos por GEDKeeper siempre contienen sólo los descendientes y/o ascendientes de la
+        persona central seleccionada. Excepción: con la opción «Árbol ampliado», se mostrarán también los antepasados
+        de todos los cónyuges de la persona central.
+    </p>
+    <hr>
+
+    <p>
+        Después de crear un árbol, puede utilizar el botón de guardar
+        <img src="../help/images/iSaveImage.gif" alt="guardar"> para exportar el árbol en uno de los siguientes formatos:
+        formato rasterizado (BMP, GIF, JPEG, PNG) o vectorial (EMF, SVG, PDF).
+        No todos los árboles genealógicos pueden guardarse como archivos rasterizados,
+        ya que no pueden almacenar más de 65k píxeles por línea horizontal.
+        Los archivos vectoriales no tienen esas restricciones. Por lo tanto,
+        un formato vectorial puede almacenar árboles de cualquier tamaño. Además,
+        tener un archivo vectorial puede ser mejor para el siguiente procesamiento
+        de imágenes en aplicaciones gráficas y para la impresión.
+        Ten en cuenta que el formato vectorial «emf» sólo está disponible en las versiones Windows del programa.
     </p>
 
     <p>Los siguientes controles están disponibles cuando visualizas un diagrama:</p>
@@ -51,49 +62,228 @@
         <li>La tecla [<kbd>F5</kbd>] reconstruye el árbol.</li>
         <li>
             La tecla [<kbd>F6</kbd>] marca la persona seleccionada actualmente como punto de partida
-			y actualiza todos los antepasados y descendientes de ese punto de partida
+            y actualiza todos los antepasados y descendientes de ese punto de partida
         </li>
-        <li>La tecla [<kbd>F7</kbd>] recalcula los grados de parentesco (si están activados) de la persona actualmente seleccionada.</li>
+        <li>
+            La tecla [<kbd>F7</kbd>] recalcula los grados de parentesco (si están activados) de la persona actualmente
+            seleccionada.
+        </li>
         <li>Haga doble clic en una persona para acceder al modo de edición de esa persona.</li>
         <li>Haga clic en una persona para ajustarla con el centro de la ventana.</li>
         <li>Desplaza el contenido mientras se mantiene pulsado el botón derecho del ratón.</li>
         <li>
-            Haz clic en el icono <img src="../help/images/iExpand.gif" alt="datos ocultos"> (&quot;hay datos adicionales ocultos&quot;) cerca de una persona 
-			para reconstruir el árbol relativo a esa persona (este icono no se exporta a un archivo de imagen). 
+            Haz clic en el icono <img src="../help/images/iExpand.gif" alt="expandir"> (&quot;hay datos adicionales
+            ocultos&quot;) cerca de una persona para reconstruir el árbol relativo a esa persona (este icono no se
+            exporta a un archivo de imagen).
         </li>
     </ul>
 
+    <hr>
     <p>
-        El número de generaciones visibles (tanto de antepasados como de descendientes) 
-		puede ajustarse de una a nueve (o ilimitadas) mediante el botón &quot;Generaciones&quot; del menú desplegable. 
+        El número de generaciones visibles (tanto de antepasados como de descendientes)
+        puede ajustarse de una a nueve (o ilimitadas) mediante el botón &quot;Generaciones&quot; del menú desplegable.
+    </p>
+
+    <p>
+        Con la opción «Profundidad separada» será posible utilizar la selección de generaciones mostradas separadamente
+        por antepasados y descendientes.
+    </p>
+
+    <hr>
+    <p>
+        Los colores de las tarjetas de persona se configuran en la sección de ajustes (el botón de la barra de
+        herramientas de la ventana de diagrama o el menú Service\Options). Además, para cada persona, para necesidades
+        específicas, puede establecer un color independiente (un menú emergente haciendo clic con el botón derecho del
+        ratón en la tarjeta de persona). En algunos casos, las tarjetas de persona pueden mostrarse en gris (no
+        configurable) - esto significa que esta persona ha sido previamente en el árbol en otra rama. Esto sucede,
+        por ejemplo, en el caso de reducción de antepasados.
+    </p>
+
+    <p>
+        En el árbol, es posible mostrar no sólo el nombre, fechas de vida, sino también un breve comentario de una línea.
+        Para ello, debe introducir un comentario del tipo «Nota del árbol» en la pestaña «Referencias del usuario» del
+        cuadro de diálogo de edición de <a href="gkhRec_Individual.html">personas</a> y activar la opción «Mostrar notas
+        especiales» en <a href="gkhOptions.html">Opiones</a>.
+    </p>
+
+    <p>
+        El diagrama de árbol tiene una función para colapsar ramas. Tienes que hacer clic en la línea que va de la
+        persona a la rama. Muy cerca de la persona. Entonces la persona permanecerá, y la rama se colapsará y un pequeño
+        triángulo amarillo aparecerá allí - un indicador de la rama colapsada. O pulsa la tecla [<kbd>F4</kbd>] sobre
+        esta persona.
     </p>
 
     <p>También puedes filtrar contenidos con el botón <img src="../help/images/iFilter.gif" alt="filtrar contenido">.</p>
-
     <p>
-        Si ha utilizado la tecla [<kbd>F6</kbd>] key o el icono <img src="../help/images/iExpand.gif" alt="establecer persona central"> (establecer nueva persona como central del árbol),
-		puede utilizar los botones <img src="../help/images/iLeft1.gif" alt="izquierdo" title="Izquierdo"> y <img src="../help/images/iRight1.gif" alt="derecho" title="Derecho">
-        para volver a la persona anterior o siguiente, respectivamente. 
+        Si ha utilizado la tecla [<kbd>F6</kbd>] o el icono <img src="../help/images/iExpand.gif" alt="expandir">
+        (establecer nueva persona como central del árbol), puedes utilizar los botones
+        <img src="../help/images/iLeft1.gif" alt="izquierdo" title="Izquierdo"> y
+        <img src="../help/images/iRight1.gif" alt="derecho" title="Derecho"> para volver a la persona anterior o
+        siguiente, respectivamente.
     </p>
 
-    <p>La pestaña &quot;Modos de visualización&quot; muestra las siguientes opciones:</p>
+    <p>El botón &quot;Modos de visualización&quot; muestra las siguientes opciones:</p>
+
     <ul>
         <li>Todos &mdash; muestra tanto los antepasados como los descendientes de una persona determinada.</li>
         <li>Sólo antepasados &mdash; sólo son visibles los antepasados de la persona seleccionada.</li>
         <li>Sólo descendientes &mdash; sólo son visibles los descendientes de la persona seleccionada.</li>
-		<li>Raiz de rastreo &mdash; desactiva/activa un modo cuando el centro del árbol se ajusta suavemente con la persona seleccionada.</li>
         <li>
-            El índice de certeza &mdash; desactiva/activa la visibilidad del índice de autenticidad para 
-			cada persona en el árbol (es práctico para la valoración visual del progreso del desarrollo).
+            Ocultar cónyuges de descendientes: en algunos casos es útil obtener un árbol de descendientes sin sus
+            cónyuges (para excluir a personas de otras familias).
+        </li>
+        <li>
+            Raiz de rastreo &mdash; desactiva/activa un modo cuando el centro del árbol se ajusta suavemente con la
+            persona seleccionada.
+        </li>
+        <li>
+            El índice de certeza &mdash; desactiva/activa la visibilidad del índice de autenticidad para
+            cada persona en el árbol (es práctico para la valoración visual del progreso del desarrollo).
+        </li>
+        <li>Identificadores (XRef) - mostrar el identificador (XRef) del registro de cada persona.</li>
+        <li>
+            Resaltar las líneas de la selección: la persona seleccionada tendrá resaltadas todas las líneas que la
+            conectan con otras personas.
+        </li>
+        <li>
+            Seguimiento de las fuentes coincidentes: si hay enlaces a las mismas fuentes en los registros de la persona,
+            las conexiones entre estas personas se resaltarán con una línea de puntos verde continua; si no hay fuentes
+            comunes, con una línea de puntos roja continua.
+        </li>
+        <li>
+            Edad de los padres: visualización de la edad de cada uno de los padres en el momento del nacimiento del niño
+            en las líneas que van de los padres a los hijos (control de las fuentes y de la exactitud de los datos).
         </li>
         <li>Color de fondo &mdash; cambia el color de fondo del árbol.</li>
         <li>Imagen de fondo &mdash; cambia la imagen de fondo del árbol.</li>
     </ul>
 
     <p>Otras teclas de acceso rápido</p>
-	<ul>
-            <li>La tecla [<kbd>Ctrl + F</kbd>] realiza la búsqueda rápida de personas por nombre.</li>
-            <li>La tecla [<kbd>Ctrl + S</kbd>] realiza el guardado de la base de datos actual.</li>
+    <ul>
+        <li>La tecla [<kbd>Ctrl + F</kbd>] realiza la búsqueda rápida de personas por nombre.</li>
+        <li>La tecla [<kbd>Ctrl + S</kbd>] realiza el guardado de la base de datos actual.</li>
     </ul>
+
+    <hr>
+    <p>
+        Si la opción «Símbolos adicionales» está activada en la configuración del árbol y se han utilizado referencias
+        de usuario especializadas al editar personas, los símbolos/indicadores se mostrarán en el árbol a la derecha de
+        las fichas de persona. Los símbolos disponibles actualmente son: símbolos de las principales religiones
+        (catolicismo, ortodoxia, viejos creyentes, islam), símbolos de los titulares de condecoraciones del Imperio Ruso,
+        símbolos de los soldados y de los caídos en la Segunda Guerra Mundial, símbolos de los trabajadores del frente
+        interno, de los represaliados y de los miembros del PCUS.
+    </p>
+
+    <hr>
+    <p>
+        Las funciones adicionales que están disponibles haciendo clic con el botón derecho del ratón sobre cualquier
+        persona son:
+    </p>
+    <ul>
+        <li>Editar - llama al diálogo de edición de personas;</li>
+        <li>
+            Añadir padre - añade un padre a una persona, si la familia de los padres no está definida - se crea y se
+            asigna automáticamente; si la familia de los padres existe, el padre sólo se puede añadir si aún está
+            definido;
+        </li>
+        <li>Añadir madre - añade la madre de forma similar a la comentado en el punto anterior;</li>
+        <li>
+            Añadir familia - añade una familia con un cónyuge no especificado (desconocido) a la persona dada - esto es
+            útil cuando se procesan fuentes; por ejemplo, cuando hay un registro «casado por tercera vez» y existe el
+            nombre de la tercera esposa, pero los nombres de las dos primeras son desconocidos - es necesario realizar
+            la operación «Añadir familia» dos veces, y luego llamar a la función «Añadir cónyuge»; importante: si la
+            opción «Ocultar cónyuges desconocidos» está activada, las familias añadidas con cónyuges no especificados
+            pueden no mostrarse en pantalla;
+        </li>
+        <li>
+            Añadir cónyuge: añade una nueva familia con una solicitud para unirse a una existente o crear un nuevo
+            registro personal del cónyuge;$
+        </li>
+        <li>
+            Añadir hijo - añade un hijo a una persona, automáticamente - si sólo hay una familia; si no hay familia -
+            también se añade automáticamente con un cónyuge desconocido; si esta persona tiene varios matrimonios y, en
+            consecuencia, varias familias - habrá una advertencia de que esta función debe ser llamada en uno de los
+            cónyuges para determinar exactamente quiénes son los padres del hijo que se añade;
+        </li>
+        <li>Añadir hija - añade una hija a una persona de forma similar a la comentada en el punto anterior.</li>
+        <li>
+            Borrar - borra la persona actual (nota: una persona que es central en la vista actual del diagrama no puede ser borrada);
+        </li>
+        <li>
+            Ir al registro de persona - cambia a la ventana principal del programa y se posiciona a la persona seleccionada;
+        </li>
+        <li>
+            Ir a la rama primaria - necesario si se llama sobre una persona «gris» - es decir, sobre un duplicado
+            (reducción del antepasado), que ya está presente en el diagrama en otra rama; encuentra y realiza una
+            transición a la ficha de la persona en la rama primaria;
+        </li>
+        <li>
+            Abrir en ventana nueva: crea una ventana adicional de diagrama de árbol con la persona seleccionada como
+            central;
+        </li>
+        <li>
+            Fusionar registros: necesario si existe otro registro de la misma persona en la base de datos; útil para
+            fusionar duplicados generados en distintas fases del procesamiento de fuentes;
+        </li>
+        <li>Reconstruir árbol: actualiza el diagrama utilizando la persona seleccionada como centro;</li>
+        <li>
+            Reconstruir parentescos: reconstruye el diagrama con el cálculo del tipo de parentesco si la opción
+            correspondiente está activada en la configuración (mostrar parentescos);
+        </li>
+        <li>
+            Mapas - llama a la ventana de mapas para las personas de este árbol con los siguientes contenidos:i
+            <ul>
+                <li>
+                    Antepasados - muestra un mapa con marcas de localización de eventos para todos los antepasados de la
+                    persona actualmente seleccionada;
+                </li>
+                <li>
+                    Descendientes - muestra un mapa con marcas de localización de eventos para todos los descendientes
+                    de la persona actualmente seleccionada;
+                </li>
+                <li>
+                    Todos - mostrar un mapa con marcas de localización de eventos para todas las personas en el árbol
+                    actual;
+                </li>
+            </ul>
+        </li>
+        <li>
+            Seleccionar color - útil si para algún propósito es necesario distinguir a ciertas personas del número total.
+        </li>
+    </ul>
+
+    <hr>
+    <p>Están disponibles las siguientes opciones de filtrado del árbol:</p>
+    <dl>
+        <dt>Por límite anual</dt>
+        <dd>
+            Cuando se trabaja con árboles grandes, de 500-1000 personas, es útil utilizar las opciones para desactivar
+            los hijos en diferentes ramas, que murieron jóvenes y no dejaron descendencia. Este es un caso general, que
+            no es suficiente para aumentar la eficiencia del estudio. Por lo tanto, existe este filtro por año.
+            El significado es el siguiente - todas las ramas, cuyos descendientes nacieron después del año especificado,
+            se filtrarán y se incluirán en el árbol. Esta es una forma de eliminar de la imagen todas las ramas
+            intersectadas o rotas y dejar sólo las más largas. Por ejemplo, si selecciona un antepasado que vivió en el
+            siglo XVII y fija el año en 1900, sólo permanecerán en el árbol las ramas que hayan sobrevivido hasta esa
+            fecha.
+        </dd>
+
+        <dt>Por personas determinadas</dt>
+        <dd>
+            Esta es una forma de obtener un árbol simplificado para una, dos, o más personas, si es necesario mostrar
+            claramente su relación. Es decir, al construir un árbol a partir de algún antepasado y establecer uno o más
+            descendientes en este filtro - el árbol mostrará <i>sólo</i> las cadenas de personas que unen al antepasado
+            con los descendientes seleccionados.
+        </dd>
+
+        <dt>Además - por fuentes</dt>
+        <dd>
+            Permite simplificar el trabajo con el árbol al procesar alguna fuente. Sólo permanecerán en el árbol las
+            personas que tengan vínculos con la fuente especificada.
+        </dd>
+    </dl>
+
+    <hr>
+    <p>Ver también: <a href="gkhOptions.html">Opciones</a>.</p>
+
 </body>
 </html>
