@@ -149,7 +149,11 @@ namespace GKUI.Themes
                 { ThemeElement.Glyph_ZoomIn, "Resources.btn_zoom_in.png" },
                 { ThemeElement.Glyph_ZoomOut, "Resources.btn_zoom_out.png" },
                 { ThemeElement.Glyph_SetPortrait, "Resources.btn_portrait.png" },
-                { ThemeElement.Glyph_CopyName, "Resources.btn_copy.png" },
+                { ThemeElement.Glyph_CopyName, "Resources.btn_copy.gif" },
+
+                { ThemeElement.Glyph_GenderFemale, "Resources.sym_female.png" },
+                { ThemeElement.Glyph_GenderMale, "Resources.sym_male.png" },
+                { ThemeElement.Glyph_Info, "Resources.btn_info.gif" },
             }, true);
         }
 
@@ -562,59 +566,59 @@ namespace GKUI.Themes
 
         private static void RegisterControlHandlers()
         {
-            RegisterControlHandler(typeof(Button), ThemeButtonHandler);                 // ready +
-            RegisterControlHandler(typeof(CheckBox), ThemeCheckBoxHandler);             // ?
-            RegisterControlHandler(typeof(ComboBox), ThemeComboBoxHandler);             // ?
-            RegisterControlHandler(typeof(ContextMenuStrip), ThemeToolStripHandler);    // ?
-            RegisterControlHandler(typeof(DataGridView), ThemeDataGridViewHandler);     // ?
-            RegisterControlHandler(typeof(Form), ThemeFormHandler);                     // ?
-            RegisterControlHandler(typeof(GroupBox), ThemeGroupBoxHandler);             // ?
-            RegisterControlHandler(typeof(Label), ThemeLabelHandler);                   // ready +
-            RegisterControlHandler(typeof(ListBox), ThemeListBoxHandler);               // ? (only plugins, not host)
-            RegisterControlHandler(typeof(ListView), ThemeListViewHandler);             // ?
-            RegisterControlHandler(typeof(MaskedTextBox), ThemeTextBoxHandler);         // ?
-            RegisterControlHandler(typeof(MenuStrip), ThemeToolStripHandler);           // ?
-            RegisterControlHandler(typeof(NumericUpDown), ThemeNumericUpDownHandler);   // ?
-            RegisterControlHandler(typeof(Panel), ThemePanelHandler);                   // ?
-            RegisterControlHandler(typeof(PictureBox), ThemePictureBoxHandler);         // ?
-            RegisterControlHandler(typeof(ProgressBar), ThemeProgressBarHandler);       // ?
-            RegisterControlHandler(typeof(RadioButton), ThemeRadioButtonHandler);       // ?
-            RegisterControlHandler(typeof(RichTextBox), ThemeTextBoxHandler);           // ?
-            RegisterControlHandler(typeof(ScrollBar), ThemeScrollBarHandler);           // ?
-            RegisterControlHandler(typeof(SplitContainer), ThemeBaseControlHandler);    // ?
-            RegisterControlHandler(typeof(StatusBar), ThemeStatusBarHandler);           // ?
-            RegisterControlHandler(typeof(StatusBarPanel), ThemeStatusBarPanelHandler); // ?
-            RegisterControlHandler(typeof(StatusStrip), ThemeToolStripHandler);         // ?
-            RegisterControlHandler(typeof(TableLayoutPanel), ThemePanelHandler);        // ?
-            RegisterControlHandler(typeof(TabControl), ThemeTabControlHandler);         // ?
-            RegisterControlHandler(typeof(TabPage), ThemeTabPageHandler);               // ?
-            RegisterControlHandler(typeof(TextBox), ThemeTextBoxHandler);               // ?
-            RegisterControlHandler(typeof(ToolStrip), ThemeToolStripHandler);           // ?
-            RegisterControlHandler(typeof(ToolStripButton), ThemeToolStripItemHandler); // ?
-            RegisterControlHandler(typeof(ToolStripComboBox), ThemeToolStripItemHandler);       // ?
-            RegisterControlHandler(typeof(ToolStripDropDownButton), ThemeToolStripItemHandler); // ?
-            RegisterControlHandler(typeof(ToolStripMenuItem), ThemeToolStripItemHandler);       // ?
-            RegisterControlHandler(typeof(ToolStripSeparator), ThemeToolStripItemHandler);      // ?
-            RegisterControlHandler(typeof(ToolStripStatusLabel), ThemeToolStripItemHandler);    // ?
-            RegisterControlHandler(typeof(TrackBar), ThemeBaseControlHandler);                  // ?
-            RegisterControlHandler(typeof(TreeView), ThemeTreeViewHandler);             // ?
+            RegisterControlHandler(typeof(Button), ThemeButtonHandler);
+            RegisterControlHandler(typeof(CheckBox), ThemeCheckBoxHandler);
+            RegisterControlHandler(typeof(ComboBox), ThemeComboBoxHandler);
+            RegisterControlHandler(typeof(ContextMenuStrip), ThemeToolStripHandler);
+            RegisterControlHandler(typeof(DataGridView), ThemeDataGridViewHandler);
+            RegisterControlHandler(typeof(Form), ThemeFormHandler);
+            RegisterControlHandler(typeof(GroupBox), ThemeGroupBoxHandler);
+            RegisterControlHandler(typeof(Label), ThemeLabelHandler);
+            RegisterControlHandler(typeof(ListBox), ThemeListBoxHandler); // only plugins, not host
+            RegisterControlHandler(typeof(ListView), ThemeListViewHandler);
+            RegisterControlHandler(typeof(MaskedTextBox), ThemeTextBoxHandler);
+            RegisterControlHandler(typeof(MenuStrip), ThemeToolStripHandler);
+            RegisterControlHandler(typeof(NumericUpDown), ThemeNumericUpDownHandler);
+            RegisterControlHandler(typeof(Panel), ThemePanelHandler);
+            RegisterControlHandler(typeof(PictureBox), ThemePictureBoxHandler);
+            RegisterControlHandler(typeof(ProgressBar), ThemeProgressBarHandler);
+            RegisterControlHandler(typeof(RadioButton), ThemeRadioButtonHandler);
+            RegisterControlHandler(typeof(RichTextBox), ThemeTextBoxHandler);
+            RegisterControlHandler(typeof(ScrollBar), ThemeScrollBarHandler);
+            RegisterControlHandler(typeof(SplitContainer), ThemeBaseControlHandler);
+            RegisterControlHandler(typeof(StatusBar), ThemeStatusBarHandler);
+            RegisterControlHandler(typeof(StatusBarPanel), ThemeStatusBarPanelHandler);
+            RegisterControlHandler(typeof(StatusStrip), ThemeToolStripHandler);
+            RegisterControlHandler(typeof(TableLayoutPanel), ThemePanelHandler);
+            RegisterControlHandler(typeof(TabControl), ThemeTabControlHandler);
+            RegisterControlHandler(typeof(TabPage), ThemeTabPageHandler);
+            RegisterControlHandler(typeof(TextBox), ThemeTextBoxHandler);
+            RegisterControlHandler(typeof(ToolStrip), ThemeToolStripHandler);
+            RegisterControlHandler(typeof(ToolStripButton), ThemeToolStripItemHandler);
+            RegisterControlHandler(typeof(ToolStripComboBox), ThemeToolStripItemHandler);
+            RegisterControlHandler(typeof(ToolStripDropDownButton), ThemeToolStripItemHandler);
+            RegisterControlHandler(typeof(ToolStripMenuItem), ThemeToolStripItemHandler);
+            RegisterControlHandler(typeof(ToolStripSeparator), ThemeToolStripItemHandler);
+            RegisterControlHandler(typeof(ToolStripStatusLabel), ThemeToolStripItemHandler);
+            RegisterControlHandler(typeof(TrackBar), ThemeBaseControlHandler);
+            RegisterControlHandler(typeof(TreeView), ThemeTreeViewHandler);
 
-            RegisterControlHandler(typeof(MenuItemEx), ThemeToolStripItemHandler);      // ?
+            RegisterControlHandler(typeof(MenuItemEx), ThemeToolStripItemHandler);
 
-            RegisterControlHandler(typeof(ArborViewer), ThemeUserControlHandler);       // ?
-            RegisterControlHandler(typeof(FilterGridView), FilterGridViewHandler);      // ?
-            RegisterControlHandler(typeof(GKTabControl), ThemeTabControlHandler);       // ready +
-            RegisterControlHandler(typeof(GKComboBox), ThemeComboBoxHandler);           // ?
-            RegisterControlHandler(typeof(GKDateBox), ThemeTextBoxHandler);             // ?
-            RegisterControlHandler(typeof(GKDateControl), ThemeUserControlHandler);     // ?
-            RegisterControlHandler(typeof(GKListView), ThemeListViewHandler);           // ?
-            RegisterControlHandler(typeof(GKPortrait), ThemeUserControlHandler);        // ?
-            RegisterControlHandler(typeof(GKTextBox), ThemeTextBoxHandler);             // ?
-            RegisterControlHandler(typeof(HyperView), ThemeHyperViewHandler);           // ?
-            RegisterControlHandler(typeof(ImageBox), ThemePanelHandler);                // ?
-            RegisterControlHandler(typeof(ImageView), ThemeUserControlHandler);         // ?
-            RegisterControlHandler(typeof(LogChart), ThemePanelHandler);                // ?
-            RegisterControlHandler(typeof(CustomChart), ThemeCustomChartHandler);       // ?
+            RegisterControlHandler(typeof(ArborViewer), ThemeUserControlHandler);
+            RegisterControlHandler(typeof(FilterGridView), FilterGridViewHandler);
+            RegisterControlHandler(typeof(GKTabControl), ThemeTabControlHandler);
+            RegisterControlHandler(typeof(GKComboBox), ThemeComboBoxHandler);
+            RegisterControlHandler(typeof(GKDateBox), ThemeTextBoxHandler);
+            RegisterControlHandler(typeof(GKDateControl), ThemeUserControlHandler);
+            RegisterControlHandler(typeof(GKListView), ThemeListViewHandler);
+            RegisterControlHandler(typeof(GKPortrait), ThemeUserControlHandler);
+            RegisterControlHandler(typeof(GKTextBox), ThemeTextBoxHandler);
+            RegisterControlHandler(typeof(HyperView), ThemeHyperViewHandler);
+            RegisterControlHandler(typeof(ImageBox), ThemePanelHandler);
+            RegisterControlHandler(typeof(ImageView), ThemeUserControlHandler);
+            RegisterControlHandler(typeof(LogChart), ThemePanelHandler);
+            RegisterControlHandler(typeof(CustomChart), ThemeCustomChartHandler);
         }
 
         private static void RegisterControlHandler(Type controlType, ThemeControlHandler handler)
@@ -668,7 +672,7 @@ namespace GKUI.Themes
                 Color separatorDark = GetThemeColor(ThemeElement.MenuBorder);
                 Color separatorLight = GetThemeColor(ThemeElement.MenuBorder);
                 using (Pen pen = new Pen(separatorDark))
-                using (Pen pen2 = new Pen(separatorLight))  {
+                using (Pen pen2 = new Pen(separatorLight)) {
                     bool isSeparator = item is ToolStripSeparator;
                     bool isNotDropdown = false;
                     if (isSeparator) {

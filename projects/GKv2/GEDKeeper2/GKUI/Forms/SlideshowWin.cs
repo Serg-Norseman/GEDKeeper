@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -46,10 +46,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
-            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
-            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
-
             UIHelper.FixToolStrip(toolStrip1);
 
             SuspendLayout();
@@ -90,6 +86,12 @@ namespace GKUI.Forms
             fController.SetLocale();
         }
 
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
+        }
+
         public void SetImage(IImage image)
         {
             Image img = (image == null) ? null : ((ImageHandler)image).Handle;
@@ -99,13 +101,7 @@ namespace GKUI.Forms
 
         private void tsbStart_Click(object sender, EventArgs e)
         {
-            bool active = fController.SwitchActive();
-
-            if (active) {
-                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_stop.gif");
-            } else {
-                tbStart.Image = UIHelper.LoadResourceImage("Resources.btn_start.gif");
-            }
+            fController.SwitchActive();
         }
 
         private void tsbPrev_Click(object sender, EventArgs e)

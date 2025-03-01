@@ -153,6 +153,10 @@ namespace GKUI.Themes
                 ThemeElementType.Image, // ThemeElement.Glyph_ZoomOut
                 ThemeElementType.Image, // ThemeElement.Glyph_SetPortrait
                 ThemeElementType.Image, // ThemeElement.Glyph_CopyName
+
+                ThemeElementType.Image, // ThemeElement.Glyph_GenderFemale
+                ThemeElementType.Image, // ThemeElement.Glyph_GenderMale
+                ThemeElementType.Image, // ThemeElement.Glyph_Info
             };
         }
 

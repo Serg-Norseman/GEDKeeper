@@ -132,6 +132,10 @@ namespace GKUI.Themes
         Glyph_ZoomOut,
         Glyph_SetPortrait,
         Glyph_CopyName,
+
+        Glyph_GenderFemale,
+        Glyph_GenderMale,
+        Glyph_Info,
     }
 
 

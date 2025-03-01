@@ -27,13 +27,13 @@ Elements:
     Value: "#FFFFFF"
 
   - Element: ButtonFace
-    Value: "#5D67C7"
+    Value: "#D4D9EC"
   - Element: AccentButtonFace
-    Value: "#7046A6"
+    Value: "#D4D9EC"
   - Element: ButtonBorder
     Value: "#3C339F"
   - Element: ButtonText
-    Value: "#FFFFFF"
+    Value: "#3F2756"
 
   - Element: Strip
     Value: "#7F8697"
@@ -232,5 +232,14 @@ Elements:
 
   - Element: Glyph_CopyName
     Value: "Modern/CopyName.png"
+
+  - Element: Glyph_GenderFemale
+    Value: "Modern/GenderFemale.png"
+
+  - Element: Glyph_GenderMale
+    Value: "Modern/GenderMale.png"
+
+  - Element: Glyph_Info
+    Value: "Modern/Info.png"
 
 ...

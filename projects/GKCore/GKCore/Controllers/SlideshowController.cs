@@ -152,9 +152,11 @@ namespace GKCore.Controllers
         {
             if (!fActive) {
                 GetControl<IButtonToolItem>("tbStart").Text = LangMan.LS(LSID.Stop);
+                GetControl<IToolItem>("tbStart").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Stop, true);
                 fTimer.Start();
             } else {
                 GetControl<IButtonToolItem>("tbStart").Text = LangMan.LS(LSID.Start);
+                GetControl<IToolItem>("tbStart").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Start, true);
                 fTimer.Stop();
             }
 
