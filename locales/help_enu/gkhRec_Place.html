@@ -13,8 +13,8 @@
         Geographical location records are elements of the single location
         directory, where each location has its coordinates. When you
         define a location for <a href="gkhRec_Event.html">event&#47;fact</a> in
-        <a href="gkhRec_Individual.html">person</a> and <a href="gkhRec_Family.html">family</a> record, you can do this without
-        referring to the location directory. But if you want to be able to see
+        <a href="gkhRec_Individual.html">person</a> and <a href="gkhRec_Family.html">family</a> record,
+        you can do this without referring to the location directory. But if you want to be able to see
         the location on <a href="gkhMaps.html">geographical maps</a> in the
         future, you have to have to add a location record to the location
         directory&mdash;find a settlement on Google Maps and bind the
@@ -57,24 +57,75 @@
         </li>
     </ol>
 
-    <p>
-        The &quot;Show&quot; button opens Google Maps at the specified
-        location.
-    </p>
+    <p>The &quot;Show&quot; button opens mini-map at the specified location.</p>
 
     <p style="text-align:center"><img src="images/dlgPlaceEdit.gif" alt="geographical location record dialog"></p>
 
+    <hr>
     <p>
-        There is a uniting table on the &quot;Locations&quot; tab of the
-        main working window, which includes all locations available in the
-        database. A location summary to the right of the table shows all events,
-        connected to persons and families, that refer to the selected
-        location.
+        There is a uniting table on the &quot;Locations&quot; tab of the main working window,
+        which includes all locations available in the database. A location summary to the right of the table shows all events,
+        connected to persons and families, that refer to the selected location.
+    </p>
+
+    <hr>
+    <p style="text-align:center"><img src="images/dlgLocHistory.png" alt=""></p>
+    <p>
+        This dialog is designed to enter and manage historical information about a place: bindings of place names and links
+        to the top levels of the administrative-territorial division hierarchy to the period of action. That is,
+        if a certain pop. point has changed its name several times throughout history, you can enter all the names
+        in this dialog and indicate the time intervals in which they were active. If a certain village or city was part
+        of different districts in different periods, this can be entered in the lower section of the dialog -
+        "Top level links".
+    </p>
+    <p>
+        It is possible to use different approaches to maintaining a directory of places:
+    </p>
+    <ul>
+        <li>do not use historical name bindings and hierarchy;</li>
+        <li>
+            use only a single-level model: long full names are entered into the name list, from the lowest level
+            - to the highest (or vice versa), and their periods;
+        </li>
+        <li>
+            use a full multi-level model: only the immediate part is entered into the name (the name of the city or
+            district, or province, etc.), other parts are distributed among levels, each specific place receives
+            its own record, with its own names and links to the upper levels.
+        </li>
+    </ul>
+    <p>
+        Note: when you enable the option "Options \ Locations and Maps \ Extended Places" and connect hierarchically
+        organized places to dates in the event editing dialog, the places begin to automatically adjust
+        when the date changes (the full long name of the place on a specific date of the event is determined).
+        This mechanism will also work when using the place management tool and at the stage of verification of uploaded files.
+    </p>
+
+    <hr>
+    <p style="text-align:center"><img src="images/dlgLocName.png" alt=""></p>
+    <p>
+        The dialog is intended for editing the name of a place and its period of validity.
+        For example: "Serenìsima Repùblega Vèneta", the period of validity of the name from 697 to 12/05/1797.
+    </p>
+
+    <hr>
+    <p style="text-align:center"><img src="images/dlgLocLink.png" alt=""></p>
+    <p>
+        The dialog is intended for editing a link to a record of a higher-level place and period of subordination.
+        For example, "Venèsia" was part of "Serenìsima Repùblega Vèneta" from 697 to 12/05/1797 and
+        of "Kaiserthum Österreich" from 17/10/1797 to 15/03/1867.
     </p>
 
     <hr>
     <p>
-        See also: <a href="gkhRec_Event.html">Event&#47;fact</a>, <a href="gkhRec_Note.html">Note</a>, <a href="gkhRec_Media.html">Multimedia</a>, <a href="gkhMaps.html">Map</a>.
+        Example of a fully completed history:
+    </p>
+    <p style="text-align:center"><img src="images/dlgLocHistSample.png" alt=""></p>
+
+    <hr>
+    <p>
+        See also: <a href="gkhRec_Event.html">Event&#47;fact</a>,
+        <a href="gkhRec_Note.html">Note</a>, <a href="gkhRec_Media.html">Multimedia</a>,
+        <a href="gkhMaps.html">Map</a>.
     </p>
 
 </body>

@@ -9,19 +9,77 @@
 
     <h1>Maps</h1>
 
-    <p>GEDKeeper uses Google Maps (&copy; Google) to show maps.</p>
-
     <p>
         Using a map service allows GEDKeeper to show you locations of births, deaths,
-        and living, defined in database, right on a map. There are two modes
-        available: one shows births, deaths, or living location for all persons
-        in database; the other one shows all locations of any event for the selected
-        person.
+        and living, defined in database, right on a map.
     </p>
 
     <p>
+        A number of providers are used to display maps: Google, Yandex, OpenStreetMap, Bing, WikiMapia.
+        To change the provider, use the "Providers" button on the window toolbar.
+    </p>
+
+    <p>
+        Maps can be saved to a image file using the <img src="../help/images/iSaveImage.gif"> button on the toolbar.
+    </p>
+
+    <p>
+        To load places from database records, use the "Load places" button. This is the main mode,
+        when the map window is called from the "Pedigree" menu of the main application window.
+        Places are loaded according to the selected parameters on the left panel. It can be either the
+        output of the selected type of place of birth, death or residence of all persons;
+        or the output of places of any facts of a single selected person.
+    </p>
+
+    <p>
+        If in the options (menu Service\Options), on the tab "Interface\Locations and Maps", the option
+        "Search in geocoders of places without coordinates" is not enabled, then when loading places of various facts,
+        the presence of a place in the directory of location records will be checked and places without coordinates will be
+        skipped. If the option is enabled, then all places without coordinates will be checked by the selected geocoding
+        provider and the names of the found coordinate options will be compared. Loading places with coordinate search is a
+        slow process. It is recommended to use places entered in the directory of locations and with specified coordinates.
+    </p>
+
+    <hr>
+    <p>
+        The following modes assume that the locations is maintained in accordance with the GEDCOM 5.5 EL standard -
+        i.e. locations form a hierarchy in which historical names of locations are specified at each level
+        (City/District/Region/Country), with the period of validity of these names, and each location has a list of top-level
+        locations, also with the period of validity of subordination.
+    </p>
+    <ul>
+        <li>
+            When calling maps from the location records information panel, the specified location is selected
+            from the person facts, locations are filtered to exclude duplicates and exclude locations without coordinates.
+            Two submodes are available:
+            <ul>
+                <li>
+                    "Map of places " - all lower, subordinate places of the current place (District, Region or Country)
+                    are identified and displayed on the map.
+                </li>
+                <li>
+                    "Map of persons" - all subordinates are identified at the current location, then people are identified
+                    who have all detected locations indicated. All location marks with persons are displayed on the map.
+                </li>
+            </ul>
+        </li>
+        <li>
+            When calling maps from the person tree menu, all places are selected from the person tree facts,
+            the places are filtered to exclude duplicates and exclude places without coordinates. After that,
+            they are displayed on the map with a list of persons who were in the places on the map.
+        </li>
+    </ul>
+
+    <hr>
+    <p>
         Before calling the map service, you can filter persons
         using the general GEDKeeper filters.
+    </p>
+
+    <hr>
+    <p>
+        See also: <a href="gkhRec_Individual.html">Person</a>, <a href="gkhRec_Family.html">Family</a>,
+        <a href="gkhRec_Place.html">Location</a>.
     </p>
 
 </body>

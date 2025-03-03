@@ -6,18 +6,23 @@
     <link rel="stylesheet" href="../help/styles.css" type="text/css">
 </head>
 <body>
+
     <h1>Scripting</h1>
+
     <ul>
         <li><a href="#1">1 - Introduction to Lua</a></li>
         <li><a href="#2">2 – Lua language description</a></li>
         <li><a href="#3">3 - Using Lua in GEDKeeper</a></li>
     </ul>
+
     <h1><a id="1">1 - Introduction to Lua</a></h1>
+
     <p>
         Lua is a typical procedural programming language, giving rich
         features for development. This is a powerful and simple language with
         huge set of meaningful constructions.
     </p>
+
     <p>
         Being a language targeted to extent existing software, Lua
         doesn&#39;t use &quot;main program&quot; concept. Lua functions inside
@@ -26,12 +31,14 @@
         written in Lua. Because host can extents potential of Lua, the latter
         may solve wide range of tasks.
     </p>
+
     <p>
         Lua is a freely distributed software, and therefore it gives no
         guarantees when you use it according to Lua license. You can download
         <strong>Lua 5.1</strong> described on this page on Lua official site:
         <a href="http://www.lua.org" target="_blank">www.lua.org</a>.
     </p>
+
     <p>
         As many other manuals, this one has a formal style. To get detailed
         technical information about the language usage you should refer to
@@ -39,10 +46,11 @@
         that can be helpful for you: it is Roberto Ierusalimschy&#39;s
         <em>Programming in Lua, Second Edition</em>.
     </p>
+
     <h1><a id="2">2 – Lua language description</a></h1>
-    <p>
-        This chapter describes language&#39;s constructions, how to use them
-        and what they mean.
+
+    <p>This chapter describes language&#39;s constructions, how to use them and what they mean.</p>
+
     <p>
         A construction will be presented using extended BNF, where
         {<em>a</em>} stands for zero or more number of `<em>a</em>` elements,
@@ -51,23 +59,25 @@
         text: <b>keyword</b>; all other terminal symbols are enclosed in single
         quotes: &#39;<b>=</b>&#39;.
     </p>
+
     <h2><a id="2.1">2.1 – Lexical conventions</a></h2>
+
     <p>
         <em>Names</em> (<i>identifiers</i>) in Lua is a string of letters,
         digits and underline character. It cannot begin with a digit. This is a
         usual rule for most programming languages. You use identifiers to name
         variables and tables with values.
     </p>
-    <p>
-        The following <i>keywords</i> are reserved and cannot be used as
-        identifiers:
-    </p>
+
+    <p>The following <i>keywords</i> are reserved and cannot be used as identifiers:</p>
+
     <div class="contdiv">
 <pre><code class="lua">and      break    do     else       elseif
 end      false    for    function   if
 in       local    nil    not        or
 repeat   return   then   true       until   while</code></pre>
     </div>
+
     <p>
         Lua is a case-sensitive language: `and` is a keyword, while `And`
         and `AND` are two different valid identifiers. There is a convention,
@@ -75,13 +85,16 @@ repeat   return   then   true       until   while</code></pre>
         upper case (`_VERSION`, for example), are reserved to name Lua&#39;s
         internal global variables.
     </p>
+
     <p>These are another allowed symbols:</p>
+
     <div class="contdiv">
 <pre><code class="lua">+    *    &#47;    %    ^    #
 ==   ~=   &lt;=   &gt;=   &lt;    &gt;    =
 (    )    {    }    [    ]
 ;    :    ,    .    ..   ...</code></pre>
     </div>
+
     <p>
         <em>String literals</em> must be enclosed in single or double
         quotes, and may contain the following C-like escape sequences:
@@ -100,69 +113,41 @@ repeat   return   then   true       until   while</code></pre>
         contain any 8-byte value, including null character, that is written as
         &#39;\0&#39;.
     </p>
+
     <p>
         You have to use escape sequences when you need to add double quote
         character, new line character, backslash or null character to a string
         literal. Any other symbol may be written as is.
     </p>
-    <p>
-        You can also define string literals using long format, when a string
-        literal is enclosed in <em>long brackets</em>. <em>
-            Opening long bracket
-            of level n
-        </em> is defined as an initial square bracket, that follows
-        equal signs, repeated <em>n</em> times, that follow another initial
-        square bracket. Thus, opening long bracket of level&nbsp;0 is written
-        as `[[`, opening long bracket of level&nbsp;1 is written as `[=[`, and
-        so on. <em>Closing long bracket</em> is defined in the same way. For
-        example, closing long bracket of level&nbsp;4 is written as `]====]`.
-        Long strings begin with opening long bracket of any level, and end with
-        the first closing bracket of the respective level. Such literals may be
-        multiline literals; escape sequences inside it never get expanded; long
-        brackets of any other level are ignored. They may contain anything
-        except closing bracket of the respective level.
-    </p>
-    <p>
-        For convenience, when an opening long bracket is followed by new
-        line character, the latter is not added to the string literal. For
-        example, on a system, where character &#39;a&#39; is encoded
-        as&nbsp;97, new line -- as&nbsp;10 and &#39;1&#39; -- as&nbsp;49, the
-        following five literal declarations are the same:
-    </p>
-    <div class="contdiv">
-<pre>a = &#39;abc\n123&quot;&#39;</pre>
-<pre>a = &quot;abc\n123\&quot;&quot;</pre>
-<pre>a = &#39;\97bc\10\04923&quot;&#39;</pre>
-<pre>a = [[abc
-123&quot;]]</pre>
-<pre>a = [==[
-abc
-123&quot;]==]</pre>
-    </div>
+
     <p>
         <em>Number literal</em> can be written with optional decimal part
         and exponent. When you want to define a hexadecimal number, use `0x`
         prefix. The following is an example of valid number literals:
     </p>
+
     <div class="contdiv">
 <pre>3   3.0   3.1416   314.16e-2   0.31416E1   0xff   0x56</pre>
     </div>
+
     <p>
         Double hyphen (&#39;--&#39;), everywhere outside a string literal,
         begins a <em>comment</em>. When a comment begins with double hyphen, is
         not being followed by an opening long bracket [, then the comment is a
         <em>short</em> one. It continues until end of the line. Otherwise, this
         is a <em>long comment</em>. It continues until a closing long bracket.
-        Long comment is frequently used to temporary disable a part of
-        code.
+        Long comment is frequently used to temporary disable a part of code.
     </p>
+
     <h2><a id="2.2">2.2 – Types and values</a></h2>
+
     <p>
         Lua is a language with <i>dynamic type definition</i>. A variable in
         Lua may store value of any type. There is no way to declare
         user-defined type. Value in Lua may be stored as a variable, passed as
         a function argument and be a return value of function.
     </p>
+
     <p>
         There are eight main types in Lua: <em>nil (undefined)</em>,
         <em>boolean</em>, <em>number</em>, <em>string</em>, <em>function</em>,
@@ -177,10 +162,12 @@ abc
         contain any 8-byte character, including null character &#39;\0&#39;
         (see <a href="#2.1">§2.1</a>).
     </p>
+
     <p>
         Lua can use a function that was implemented as Lua code, or a
         function that was supplied by host (see <a href="#2.5.8">§2.5.8</a>).
     </p>
+
     <p>
         An <em>userdata (user-defined data)</em> instance stores any data
         owned by host. Value of such instance is reference to a memory block.
@@ -190,6 +177,7 @@ abc
         `userdata` type, only host can do that. This guarantees integrity of
         data, owned by host.
     </p>
+
     <p>
         <em>table</em> type defines associative arrays. Both numbers and
         other values, except <b>nil</b>, can be used as indices of such arrays.
@@ -200,12 +188,14 @@ abc
         Expression `a.name` is equivalent to `a[&quot;name&quot;]` expression.
         There are several ways in Lua to create tables (see <a href="#2.5.7">§2.5.7</a>).
     </p>
+
     <p>
         Table&#39;s indices and values can be of any type except <b>nil</b>.
         And because functions are also a Lua type, tables can contain
         functions. Therefore, tables are able to store <em>methods</em>
         (see <a href="#2.5.9">§2.5.9</a>).
     </p>
+
     <p>
         Variable of the following types: <i>table</i>, <i>function</i>,
         <i>thread</i> and <i>userdata</i>, never stores a value itself. Such
@@ -213,11 +203,11 @@ abc
         direct one, or passing argument to function, or returning function
         result) processes references and never creates object copies.
     </p>
-    <p>
-        <em>type</em> library function returns a string, that contains type
-        of value.
-    </p>
+
+    <p><em>type</em> library function returns a string, that contains type of value.</p>
+
     <h3><a id="2.2.1">2.2.1 – Type cast</a></h3>
+
     <p>
         Lua casts string and numeric types on the fly automatically. When
         you do an arithmetic operation with a string operand, the latter get
@@ -227,126 +217,105 @@ abc
         need to get some specific string representation of number, you should
         use <em>format</em> function from Lua string library (see <a href="#pdf-string.format">string.format</a>).
     </p>
+
     <h2><a id="2.3">2.3 - Variables</a></h2>
+
     <p>
         Variables store values while a program is running. There are three
-        types of variables in Lua: global variables, local variables and fields
-        of tables.
+        types of variables in Lua: global variables, local variables and fields of tables.
     </p>
+
     <p>
         An individual identifier declares a global or local variable (or
         function parameter, which is a particular case of local variable):
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">var ::= Name</code></pre>
     </div>
+
     <p>
         , where Name is an identifier defined according to <a href="#2.1">§2.1</a>.
     </p>
+
     <p>
         If a variable was not defined as local one explicitly, it is
         considered to be a global variable (see <a href="#2.4.7">§2.4.7</a>). A
         local variable exists in a lexical context: any function from this
         context can access the local variable. (see <a href="#2.6">§2.6</a>).
     </p>
+
     <p>All variables initialized with <b>nil</b> value by default.</p>
-    <p>
-        To access a table&#39;s element by its index, you use square
-        brackets:
-    </p>
+
+    <p>To access a table&#39;s element by its index, you use square brackets:</p>
+
     <div class="contdiv">
 <pre><code class="lua">var ::= prefixexp &#39;[&#39; exp &#39;]&#39;</code></pre>
     </div>
-    <p>
-        You can change access to global variables and fields of tables with
-        help of metatables. Expression `t[i]` is equivalent to call
-        `gettable_event(t, i)` (Complete description of `gettable_event`
-        function is available in <a href="#2.8">§2.8</a>. This function is
-        unavailable in Lua code and mentioned here only as an example).
-    </p>
-    <p>
-        `var.Name` expression is equivalent to `var[&quot;Name&quot;]`
-        expression:
-    </p>
+
+    <p>`var.Name` expression is equivalent to `var[&quot;Name&quot;]` expression:</p>
+
     <div class="contdiv">
 <pre><code class="lua">var ::= prefixexp &#39;.&#39; Name</code></pre>
     </div>
-    <p>
-        All global variables are fields of general Lua tables, called
-        environment tables or, shortly, environments (see <a href="#2.9">§2.9</a>). Each function has a reference to its own
-        environment, and all global variables inside this function refer to
-        this table. When a function get called, it inherits the environment of
-        caller function. You can use <a href="#pdf-getfenv">getfenv</a>
-        function to get a function&#39;s environment table, and <a href="#pdf-setfenv">setfenv</a> function to change the table (if you
-        want to change environment of C&nbsp;functions, you have to use debug
-        library (see <a href="#5.9">§5.9</a>)).
-    </p>
-    <p>Accessing global variable `x` is equivalent to `_env.x`, or also:</p>
-    <div class="contdiv">
-<pre><code class="lua">gettable_event(_env, &quot;x&quot;)</code></pre>
-    </div>
-    <p>
-        where `_env` is environment of callee function (Complete description
-        of `gettable_event` is available in <a href="#2.8">§2.8</a>. This
-        function is unavailable in Lua code and mentioned here only as an
-        example).
-    </p>
+
     <h2><a id="2.4">2.4 – Operators</a></h2>
+
     <p>
         Lua supports standard operator set, almost the same as one in Pascal
         and C. Lua has assignment operator, controlling flow of execution,
         function call and defining variables.
     </p>
+
     <h3><a id="2.4.1">2.4.1 – Chunk</a></h3>
+
     <p>
         <em>Chunk</em> is an execution unit in Lua. Chunk is a sequence of
-        any Lua operators. Operators in a chunk are delimited by
-        semicolons:
+        any Lua operators. Operators in a chunk are delimited by semicolons:
     </p>
+
     <div class="contdiv">
-<pre><code class="lua">chunk ::= {stat [&#39;;&#39;]}</code></pre>
+<pre><code class="lua">
+chunk ::= {stat [&#39;;&#39;]}
+</code></pre>
     </div>
-    <p>
-        Lua does not define &quot;no operator&quot;, therefore `;;`
-        expression is not allowed.
-    </p>
+
+    <p>Lua does not define &quot;no operator&quot;, therefore `;;` expression is not allowed.</p>
+
     <p>
         From Lua&#39;s perspective a chunk is an unnamed function with
         arbitrary parameter set (see <a href="#2.5.9">§2.5.9</a>). Chunk can
         define local variables and can return values.
     </p>
-    <p>
-        Chunk is stored in file or as a line in base program. When a chunk
-        is being dispatched to execution, it is compiled to intermediate
-        bytecode (instructions for virtual machine). Intermediate bytecode then
-        is executed on virtual machine.
-    </p>
+
     <h3><a id="2.4.2">2.4.2 – Blocks</a></h3>
-    <p>
-        Block is an operator list; a block is syntactically equivalent to a
-        chunk:
-    </p>
+
+    <p>Block is an operator list; a block is syntactically equivalent to a chunk:</p>
+
     <div class="contdiv">
 <pre><code class="lua">block ::= chunk</code></pre>
     </div>
-    <p>
-        Block can be defined explicitly, and, thus, defining compound
-        operator:
-    </p>
+
+    <p>Block can be defined explicitly, and, thus, defining compound operator:</p>
+
     <div class="contdiv">
 <pre><code class="lua">stat ::= do block end</code></pre>
     </div>
+
     <p>
         Using compound operators, you can limit a scope for local variables.
         Compound operators is also used in loops and conditional operators (see
         <a href="#2.4.4">§2.4.4</a>).
     </p>
+
     <h3><a id="2.4.3">2.4.3 – Assignment</a></h3>
+
     <p>
         Lua supports parallel assignment. In the general case, assignment
         operator is variable list, `=` symbol and expression list. List entries
         are delimited by comma:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">stat ::= varlist1 &#39;=&#39; explist1
 
@@ -354,7 +323,9 @@ varlist1 ::= var {&#39;,&#39; var}
 
 explist1 ::= exp {&#39;,&#39; exp}</code></pre>
     </div>
+
     <p>Expressions are discussed in <a href="#2.5">§2.5</a>.</p>
+
     <p>
         Before been assigned, variable list is adjusted with expression list
         by their length. If the list on the right side is longer than one on
@@ -364,51 +335,38 @@ explist1 ::= exp {&#39;,&#39; exp}</code></pre>
         added to the right list (except cases, when function call is enclosed
         in parentheses; see <a href="#2.5">§2.5</a>).
     </p>
-    <p>
-        All expressions are evaluated before assignment. In the following
-        code:
-    </p>
+
+    <p>All expressions are evaluated before assignment. In the following code:</p>
+
     <div class="contdiv">
 <pre><code class="lua">i = 3
 
 i, a[i] = i + 1, 20
 </code></pre>
     </div>
+
     <p>
         `a[3]` gets 20, because `i` in `a[i]` expression has the same value,
         as in `i + 1` expression, when it is being evaluated. Similarly, the
         following line
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">x, y = y, x</code></pre>
     </div>
+
     <p>
         simply swaps values of two variables (&quot;classic&quot; method
         requires a temporary variable).
     </p>
-    <p>
-        Metatables can override assignment operations for global variables
-        and fields of tables. Assigning to an indexed variable `t[i] = val` is
-        equivalent to `settable_event(t, i, val)` expression (Complete
-        description of `settable_event` function is available in <a href="#2.8">§2.8</a>. This function is unavailable in Lua code and
-        mentioned here only as an example).
-    </p>
-    <p>
-        Global variable assignment `x = val` is equivalent to `_env.x = val`
-        expression, or
-    </p>
-    <div class="contdiv">
-<pre><code class="lua">settable_event(_env, &quot;x&quot;, val)</code></pre>
-    </div>
-    <p>
-        , where `_env` is environment of callee function (variable `_env` is
-        unavailable in Lua code and mentioned here only as an example).
-    </p>
+
     <h3><a id="2.4.4">2.4.4 – Control structures</a></h3>
+
     <p>
         <b>if</b>, <b>while</b> and <b>repeat</b> operators have usual
         meaning and familiar syntax:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">stat ::= while exp do block end
 
@@ -416,65 +374,83 @@ stat ::= repeat block until exp
 
 stat ::= if exp then block {elseif exp then block} [else block] end</code></pre>
     </div>
+
     <p>
         There are two variants of <b>for</b> loop in Lua (see <a href="#2.4.5">§2.4.5</a>).
     </p>
+
     <p>
         A boolean expression in control structures can have any value.
         <b>false</b> and <b>nil</b> are false values. Everything else is true
         (including 0 and an empty string!).
     </p>
+
     <p>
         <b>repeat-until</b> loop ends on the condition that is followed
         <b>until</b> keyword. Therefore, the loop&#39;s condition can use local
         variables from loop&#39;s scope.
     </p>
+
     <p>
         <b>return</b> operator returns value from a function or chunk.
         Syntax of <b>return</b> operator allows to return multiple values from
         function or chunk:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">stat ::= return [explist1]</code></pre>
     </div>
+
     <p>
         <b>break</b> operator terminates <b>while</b>, <b>repeat</b> or
         <b>for</b> loop:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">stat ::= break</code></pre>
     </div>
+
     <p>
         <b>break</b> exits a loop, in which scope `break` is written; outer
         loops continue execution.
     </p>
+
     <p>
         <b>return</b> (or <b>break</b>) must be <i>the last</i> operator in
         a block (otherwise, all following operators will be ignored). If you do
         need <b>return</b> or <b>break</b> inside a block, you should use
         compound operator, like `do return end` or `do break end`.
     </p>
+
     <h3><a id="2.4.5">2.4.5 – For operator</a></h3>
+
     <p><b>for</b> operator has simple and extended notation.</p>
+
     <p>
         In simple notation <b>for</b> executes code while its loop variable,
         that is changed by an arithmetical progression, does not reach a
         defined limit.
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">stat ::= for Name &#39; = &#39; exp1 &#39;,&#39; exp2 [&#39;, &#39; exp3] do block end</code></pre>
     </div>
+
     <p>
         The loop repeatedly executes <em>block</em> for the <em>name</em>
         loop variable, that initially has <em>exp1</em> value, increments
         <em>name</em> by <em>exp3</em> on each iteration, while <em>exp2</em>
         is evaluated to true value.
     </p>
+
     <p>Thus, the following code</p>
+
     <div class="contdiv">
 <pre><code class="lua">for v = e1, e2, e3 do block end</code></pre>
     </div>
+
     <p>is equivalent to</p>
+
     <div class="contdiv">
 <pre><code class="lua">do
     local var, limit, step = tonumber(e1), tonumber(e2), tonumber(e3)
@@ -491,7 +467,9 @@ stat ::= if exp then block {elseif exp then block} [else block] end</code></pre>
     end
 end</code></pre>
     </div>
+
     <p>It is worth noting that:</p>
+
     <ul style="list-style-type:disc" class="contul">
         <li>
             All three expressions are evaluated once before loop execution.
@@ -510,6 +488,7 @@ end</code></pre>
             another variable before exit the loop.
         </li>
     </ul>
+
     <p>
         Extended notation of <b>for</b> operator uses <i>iterator</i>
         functions. On each loop iteration iterator is called to get new value
@@ -517,16 +496,21 @@ end</code></pre>
         returns <b>nil</b>. Syntax of extended notation of <b>for</b>
         operator:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">stat ::= for namelist in explist1 do block end
 
 namelist ::= Name {&#39;, &#39;~ Name}</code></pre>
     </div>
+
     <p>The following code</p>
+
     <div class="contdiv">
 <pre><code class="lua">for var_1, ···, var_n in explist do block end</code></pre>
     </div>
+
     <p>can be written as</p>
+
     <div class="contdiv">
 <pre><code class="lua">do
     local f, s, var = explist
@@ -542,59 +526,74 @@ namelist ::= Name {&#39;, &#39;~ Name}</code></pre>
     end
 end</code></pre>
     </div>
+
     <p>It is worth noting that:</p>
+
     <ul style="list-style-type:disc" class="contul">
         <li>
             <em>explist</em> is evaluated only once. Its result is an
-            <i>iterator</i> function, state table and initial value for the
-            index.
+            <i>iterator</i> function, state table and initial value for the index.
         </li>
+
         <li>
             <em>f</em>, <em>s</em> and <em>var</em> are implied variables; we
             give them names just for convenience, to illustrate loop logic.
         </li>
+
         <li>To exit from the loop ahead of schedule, use <b>break</b>.</li>
+
         <li>
             <i>var_i</i> variable is local for the loop. You cannot use its value
             after the <b>for</b> loop. If you do need this value, just assign it to
             another variable before exit the loop.
         </li>
     </ul>
+
     <h3><a id="2.4.6">2.4.6 – Function call</a></h3>
+
     <p>
         To create a side effect, it may be helpful to call functions, used
         as operators:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">stat ::= functioncall</code></pre>
     </div>
+
     <p>
         In this case all return values are ignored. Function calls are
         discussed in <a href="#2.5.8">§2.5.8</a>.
     </p>
+
     <h3><a id="2.4.7">2.4.7 – Local declaration</a></h3>
+
     <p>
         Local variables are declared anywhere inside a block. Declaration
         may include initialization:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">stat ::= local namelist [&#39;=&#39; explist1]</code></pre>
     </div>
+
     <p>
         Initialization has all properties of assignment operation (including
         parallelism), see <a href="#2.4.3">§2.4.3</a>. By default, any variable
         is initialized with <b>nil</b>.
     </p>
+
     <p>
         A chunk is a block (see <a href="#2.4.1">§2.4.1</a>), therefore a
         local variable can be declared outside any explicit block. Scope of
         such local variable is the chunk&#39;s bounds.
     </p>
-    <p>
-        The visibility rules for local variables are discussed in <a href="#2.6">§2.6</a>.
-    </p>
+
+    <p>The visibility rules for local variables are discussed in <a href="#2.6">§2.6</a>.</p>
+
     <h2><a id="2.5">2.5 - Expressions</a></h2>
+
     <p>The following constructions are Lua expressions:</p>
+
     <div class="contdiv">
 <pre><code class="lua">exp ::= prefixexp
 
@@ -616,11 +615,13 @@ exp ::= unop exp
 
 prefixexp ::= var | functioncall | &#39;(&#39; exp &#39;)&#39;</code></pre>
     </div>
+
     <p>
         Numbers and string are discussed in <a href="#2.1">§2.1</a>;
         variables -- in <a href="#2.3">§2.3</a>; function declaration -- in <a href="#2.5.9">§2.5.9</a>; function call -- in <a href="#2.5.8">§2.5.8</a>; table constructor -- in <a href="#2.5.7">§2.5.7</a>. Implicit arguments, that are defined as
         `...`, can be used only with the properly declared function; see <a href="#2.5.9">§2.5.9</a>.
     </p>
+
     <p>
         Binary operations (binop) include arithmetic (see <a href="#2.5.1">§2.5.1</a>), comparison (see <a href="#2.5.2">§2.5.2</a>), boolean (see <a href="#2.5.3">§2.5.3</a>)
         and concatenation (see <a href="#2.5.4">§2.5.4</a>) operations. Unary
@@ -628,6 +629,7 @@ prefixexp ::= var | functioncall | &#39;(&#39; exp &#39;)&#39;</code></pre>
         negation <b>not</b> (see <a href="#2.5.3">§2.5.3</a>) and length query
         <b>#</b> (see <a href="#2.5.5">§2.5.5</a>).
     </p>
+
     <p>
         Function call result and implicit parameters can contain several
         values. If they are used as operators (<a href="#2.4.6">§2.4.6</a>)
@@ -637,7 +639,9 @@ prefixexp ::= var | functioncall | &#39;(&#39; exp &#39;)&#39;</code></pre>
         return list to single element by throwing all values away except the
         first one.
     </p>
+
     <p>Here are some examples:</p>
+
     <div class="contdiv">
 <pre><code class="lua">f()                -- function result is ignored
 
@@ -665,13 +669,16 @@ return x,y,f()     -- return `x`, `y` and everything from f()
 
 {f(), nil}         -- single result from f()</code></pre>
     </div>
+
     <p>
         An expression enclosed in parentheses always returns single value.
         Thus, `(f(x,y,z))` always gives single value, even if `f` returns
         several values. Value of `(f(x,y,z))` is the first value that `f`
         gives, or `nil` when `f` does not return value.
     </p>
+
     <h3><a id="2.5.1">2.5.1 – Arithmetic operations</a></h3>
+
     <p>
         Lua supports general arithmetic: binary + (addition), -
         (subtraction), * (multiplication), &#47; (division), % (remainder in
@@ -680,15 +687,20 @@ return x,y,f()     -- return `x`, `y` and everything from f()
         functions for any power exponent. For example, x^(-0.5) calculates
         reciprocal of square root of `x`.
     </p>
+
     <h3><a id="2.5.2">2.5.2 – Comparison operations</a></h3>
+
     <p>The following are Lua&#39;s comparison operations:</p>
+
     <div class="contdiv">
 <pre><code class="lua">==    ~=    &lt;     &gt;     &lt;=    &gt;=</code></pre>
     </div>
+
     <p>
         Comparison operations always return <strong>false</strong> or
         <strong>true</strong>.
     </p>
+
     <p>
         Equality operator (`==`) compares operand types at first. When the
         types are different, the operator returns <strong>false</strong>.
@@ -696,23 +708,27 @@ return x,y,f()     -- return `x`, `y` and everything from f()
         are compared as usual. Objects (tables, used-defined datatypes, threads
         and functions) are compared by reference: two objects are equal when
         they are the same object. Newly created object (table, used-defined
-        datatype, thread or function) cannot be equal to already existing
-        object.
+        datatype, thread or function) cannot be equal to already existing object.
     </p>
+
     <p>
         Conversion rules from <a href="#2.2.1">§2.2.1</a> <em>do not</em>
         affect equality operators. For example, `&quot;0&quot;==0` gives
         <strong>false</strong>, while `t[0]` and `t[&quot;0&quot;]` are two
         different table record.
     </p>
+
     <p>`~=` operator is antithetic to equality operator `==`.</p>
+
     <p>
         Lesser or bigger operators works in the following way. Numbers are
         compared as usual. Strings are compared in lexicographical order. All
         other cases will cause call of metamehod (is not discussed in this
         manual).
     </p>
+
     <h3><a id="2.5.3">2.5.3 – Logical operations</a></h3>
+
     <p>
         Lua supports the next logical operations: <strong>and</strong>,
         <strong>or</strong> and <strong>not</strong>. Just as control
@@ -720,6 +736,7 @@ return x,y,f()     -- return `x`, `y` and everything from f()
         consider <strong>false</strong> and <strong>nil</strong> as false and
         everything else as true.
     </p>
+
     <p>
         Negation operation <b>not</b> always returns <b>false</b> or
         <b>true</b>. Conjunction operation <b>and</b> returns its first operand
@@ -730,7 +747,9 @@ return x,y,f()     -- return `x`, `y` and everything from f()
         argument. Both operators evaluate the second operand only if it is
         necessary.
     </p>
+
     <p>Examples:</p>
+
     <div class="contdiv">
 <pre><code class="lua">10 or 20            --s&gt;> 10
 
@@ -748,8 +767,11 @@ false or nil        --s&gt;> nil
 
 10 and 20           --s&gt;> 20</code></pre>
     </div>
+
     <p>(In this manual --&gt; shows evaluation result)</p>
+
     <h3><a id="2.5.4">2.5.4 - Concatenation</a></h3>
+
     <p>
         Strings concatenation operator in Lua is two points: `..`. When both
         operands are numbers or strings, they will be converted to strings
@@ -757,12 +779,15 @@ false or nil        --s&gt;> nil
         Otherwise -- metamehod is called (this is not discussed in this
         manual).
     </p>
+
     <h3><a id="2.5.5">2.5.5 – Getting length</a></h3>
+
     <p>
         Unary <b>#</b> is getting length operation. This operation returns
         number of bytes in a string (in the usual sense, this is the length of
         a string where each character occupies one byte).
     </p>
+
     <p>
         Any integral index `n` is the length of table `t`, when t[n] is not
         nil but t[n+1] is nil. Furthermore, `#t = 0` if t[1] is nil. For arrays
@@ -771,11 +796,14 @@ false or nil        --s&gt;> nil
         non-nil values), `#t` is index of an element, followed by nil value
         (therefore, any nil value is the end of array per se).
     </p>
+
     <h3><a id="2.5.6">2.5.6 – Operator precedence</a></h3>
+
     <p>
         The following table shows operator precedence in Lua. Powering has
         the most priority and then in descending order:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">or
 and
@@ -786,19 +814,23 @@ and
 not   #     - (unary)
 ^</code></pre>
     </div>
+
     <p>
         To change expression evaluation order you use parentheses.
         Concatenation (&#39;..&#39;) and powering (&#39;^&#39;) are
         right-associative operators. All other binary operators are
         left-associative.
     </p>
+
     <h3><a id="2.5.7">2.5.7 – Table constructor</a></h3>
+
     <p>
         Table constructor is an expression. Any table constructor in code
         causes creation of a new table. The constructors can create either
         empty or partially or fully initialized tables. This is table
         constructor syntax:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">tableconstructor ::= &#39;{&#39; [fieldlist] &#39;}&#39;
 
@@ -808,6 +840,7 @@ field ::= &#39;[&#39; exp &#39;]&#39; &#39;=&#39; exp | Name &#39;=&#39; exp | e
 
 fieldsep ::= &#39;,&#39; | &#39;;&#39;</code></pre>
     </div>
+
     <p>
         Each field, written as `[exp1] = exp2`, adds `exp2` value with
         `exp1` key into the table. `name = exp` field is equivalent to
@@ -816,10 +849,13 @@ fieldsep ::= &#39;,&#39; | &#39;;&#39;</code></pre>
         Fields that were defined in other formats, do not affect this counter.
         For example, the following definition:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">	a = { [f(1)] = g; &quot;x&quot;, &quot;y&quot;; x = 1, f(x), [30] = 23; 45 }</code></pre>
     </div>
+
     <p>is equivalent to</p>
+
     <div class="contdiv">
 <pre><code class="lua">do
 	local t = {}
@@ -841,6 +877,7 @@ fieldsep ::= &#39;,&#39; | &#39;;&#39;</code></pre>
 	a = t
 end</code></pre>
     </div>
+
     <p>
         If the last field in the definition list was declared as `exp`, and
         `exp` is a function call or undefined parameter list, then all values
@@ -848,31 +885,41 @@ end</code></pre>
         list (<a href="#2.5.8">§2.5.8</a>). To avoid this, enclose function
         call (or undefined parameter list) in parentheses (<a href="#2.5">§2.5</a>).
     </p>
+
     <p>
         Field list may be terminated by delimiter. This makes
         computer-generated code more readable.
     </p>
+
     <h3><a id="2.5.8">2.5.8 – Function call</a></h3>
+
     <p>Function call in Lua has the following syntax:</p>
+
     <div class="contdiv">
 <pre><code class="lua">functioncall ::= prefixexp args</code></pre>
     </div>
+
     <p>
         Prefix expression and arguments are evaluated first in a function
         call. When prefix expression has <em>function</em> type, the function
         is called with the supplied arguments. Otherwise metamehod is called
         (it is not discussed in this manual).
     </p>
+
     <p>The following notation</p>
+
     <div class="contdiv">
 <pre><code class="lua">functioncall ::= prefixexp &#39;:&#39; Name args</code></pre>
     </div>
+
     <p>
         can be used to call &quot;methods&quot; `v:name` expression (args)
         is a syntax analog of `v.name` (`v,args`), but `v` is evaluated only
         once.
     </p>
+
     <p>Here is definition on arguments:</p>
+
     <div class="contdiv">
 <pre><code class="lua">args ::= &#39;(&#39; [explist1] &#39;)&#39;
 
@@ -880,6 +927,7 @@ args ::= tableconstructor
 
 args ::= String</code></pre>
     </div>
+
     <p>
         All expressions are evaluated before call made. A call made by
         `f{fields}` expression is an analog of `f ({fields})` expression; thus,
@@ -888,22 +936,26 @@ args ::= String</code></pre>
         `f(&#39;string&#39;)`; but in this case a single string literal is a
         list of arguments
     </p>
+
     <p>
         Pretty loose Lua syntax has an exception: you cannot add a line
         break right before `(` when you call a function. This exception avoids
         ambiguity in Lua. If you wrote:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">a = f
 
 (g).x(a)</code></pre>
     </div>
+
     <p>
         Lua processes this as ` a = f(g).x(a)` expression. If you still need
         two expressions, you must add a semicolon between the expressions. If
         you actually need to call `f` function, you should remove line break
         before `(g)`.
     </p>
+
     <p>
         A <em>final call</em> is when you call a function with `return
         <em>function call</em>`. Lua supports <em>self final call</em> (or
@@ -915,6 +967,7 @@ args ::= String</code></pre>
         the same result, as the function gives. There is no valid final call in
         the following example:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">return (f(x))        -- result list get truncated
 
@@ -926,14 +979,19 @@ f(x); return         -- call result is ignored
 
 return x or f(x)     -- result list get truncated</code></pre>
     </div>
+
     <h3><a id="2.5.9">2.5.9 – Function declaration</a></h3>
+
     <p>This is the function declaration syntax:</p>
+
     <div class="contdiv">
 <pre><code class="lua">function ::= function funcbody
 
 funcbody ::= &#39;(&#39; [parlist1] &#39;)&#39; block end</code></pre>
     </div>
+
     <p>Or, more simplified version:</p>
+
     <div class="contdiv">
 <pre><code class="lua">stat ::= function funcname funcbody
 
@@ -941,38 +999,52 @@ stat ::= local function Name funcbody
 
 funcname ::= Name {&#39;.&#39; Name} [&#39;:&#39; Name]</code></pre>
     </div>
+
     <p>Expression</p>
+
     <div class="contdiv">
 <pre><code class="lua">function f () body end</code></pre>
     </div>
+
     <p>is evaluated as</p>
+
     <div class="contdiv">
 <pre><code class="lua">f = function () body end</code></pre>
     </div>
+
     <p>Expression</p>
+
     <div class="contdiv">
 <pre><code class="lua">function t.a.b.c.f () body end</code></pre>
     </div>
+
     <p>is evaluated as</p>
     <div class="contdiv">
 <pre><code class="lua">t.a.b.c.f = function () body end</code></pre>
     </div>
+
     <p>Expression</p>
+
     <div class="contdiv">
 <pre><code class="lua">local function f () body end</code></pre>
     </div>
+
     <p>is evaluated as</p>
+
     <div class="contdiv">
 <pre><code class="lua">local f; f = function () body end</code></pre>
     </div>
+
     <p><em>but not as</em></p>
     <div class="contdiv">
 <pre><code class="lua">local f = function () body end</code></pre>
     </div>
+
     <p>
         The difference will appear when function body uses the same function
         name, for example, on recursion call.
     </p>
+
     <p>
         Function declaration is an evaluated expression, its type is
         <em>function</em> type. When Lua is precompiling a chunk, all functions
@@ -983,27 +1055,31 @@ funcname ::= Name {&#39;.&#39; Name} [&#39;:&#39; Name]</code></pre>
         same function may refer different outer local variables and have
         different environment tables.
     </p>
+
     <p>
         Function&#39;s arguments are local variables per se; they are
         initialized with argument values:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">parlist1 ::= namelist [&#39;,&#39; &#39;...&#39;] | &#39;...&#39;</code></pre>
     </div>
+
     <p>
         When a function is called, length of passed argument list is
         adjusted according to declaration, if the function is not a
         <em>function</em> with variable argument list. There is no adjustment
         made for functions with variable argument list; all arguments are
         passed as multiple result of function. When <i>
-            an undefined
-            expression
+            an undefined expression
         </i> is used inside another expression or inside expression
         list, then its value list get truncated to one entry. When such
         expression is the last in expression list, truncation is not made (but
         only if the call is not enclosed in parentheses).
     </p>
+
     <p>Let&#39;s examine the following declarations:</p>
+
     <div class="contdiv">
 <pre><code class="lua">function f(a, b) end
 
@@ -1011,10 +1087,12 @@ function g(a, b, ...) end
 
 function r() return 1,2,3 end</code></pre>
     </div>
+
     <p>
         This is an example of how arguments are mapped to function
         parameters:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">CALL            PARAMETERS
 
@@ -1037,30 +1115,38 @@ g(3, 4, 5, 8)    a=3, b=4,   ... --&gt;  5  8
 
 g(5, r())        a=5, b=1,   ... --&gt;  2  3</code></pre>
     </div>
+
     <p>
         A function gives back its result with <b>return</b> operator (see <a href="#2.4.4">§2.4.4</a>). If you omitted <b>return</b> operator, and
         execution flow reaches end of the function, function completes but do
         not return any value.
     </p>
+
     <p>
         <em>Syntax with a colon (<b>`:`</b>)</em> is used when you need to
         define <em>methods</em>. Such functions get `self` as implicit first
         argument. Thus, expression:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">function t.a.b.c:f (params) body end</code></pre>
     </div>
+
     <p>is similar to:</p>
+
     <div class="contdiv">
 <pre><code class="lua">t.a.b.c.f = function (self, params) body end</code></pre>
     </div>
+
     <h2><a id="2.6">2.6 – Scope</a></h2>
+
     <p>
         Lua is a language having lexical delimitation of scopes. A variable
         scope begins <i>after</i> the variable declaration and exists until end
         of block, where the variable was declared. Let&#39;s examine the
         following example:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">x = 10                  -- a global variable
 
@@ -1082,11 +1168,13 @@ end
 
 print(x)                --&gt; 10  (global variable)</code></pre>
     </div>
+
     <p>
         It is worth noting that in the `local x = x` declaration, the local
         variable is declared in foreigner scope, therefore value of the
         external variable is assigned.
     </p>
+
     <p>
         According to the rules of lexical delimitation of scopes, local
         variables are accessible for functions, that were declared in
@@ -1094,10 +1182,12 @@ print(x)                --&gt; 10  (global variable)</code></pre>
         variable is called <em>outer local variable</em> (relative to a function
         declared in the variable&#39;s scope).
     </p>
+
     <p>
         Each <b>local</b> declaration creates new local variable. For
         example:
     </p>
+
     <div class="contdiv">
 <pre><code class="lua">a = {}
 
@@ -1111,11 +1201,14 @@ for i=1,10 do
 
 end</code></pre>
     </div>
+
     <p>
         The loop creates ten instances of the function, which use different
         `y` variables and the same `x` variable.
     </p>
+
     <h2><a id="2.7">2.7 – Error handling</a></h2>
+
     <p>
         Lua is an extension language, therefore, Lua starts to work  when a
         hosting code has called <a href="#lua_pcall">lua_pcall</a> Lua library
@@ -1123,11 +1216,14 @@ end</code></pre>
         run, host application gets execution control and performs error
         handling (it shows an error message, for example)
     </p>
+
     <p>
         Lua program can generate an error explicitly, by calling <a href="#pdf-error">error</a> function. If you want to handle errors in
         Lua code itself, use <a href="#pdf-pcall">pcall</a> function.
     </p>
+
     <h2><a id="2.8">2.8 – Garbage collector</a></h2>
+
     <p>
         Lua manages memory resources automatically. This means that you do
         not have to worry about memory allocation when you create an object,
@@ -1137,8 +1233,11 @@ end</code></pre>
         Lua code anymore). The garbage collector processes all Lua objects:
         tables, userdata instances, functions, threads and strings.
     </p>
+
     <h1><a id="3">3 - Using Lua in GEDKeeper</a></h1>
+
     <h2><a id="3.1">3.1 - Naming convention</a></h2>
+
     <p>
         Data types:<br>
         `void` is an empty argument or function result;<br>
@@ -1146,6 +1245,7 @@ end</code></pre>
         `string` is a string argument or function result;<br>
         `boolean` is a boolean argument or function result.
     </p>
+
     <p>
         Attention: the first entry in any database list has zero index.
         Therefore, to enumerate all database records, for example, you should
@@ -1158,13 +1258,17 @@ for i = 0, get_records_count() - 1 do -- i.e. number of elements &quot;-1&quot;
 	...
 end</code></pre>
     </div>
+
     <h2><a id="3.2">3.2 - Data structure</a></h2>
+
     <p>
         Any database structure is handled via pointers. A pointer is a
         special variable, that stores (refers to) some memory location where a
         structure is located.
     </p>
+
     <p>There are following available types of pointer to structures:</p>
+
     <ul>
         <li>
             pointer (a general pointer)
@@ -1186,54 +1290,58 @@ end</code></pre>
                     </ul>
                 </li>
             </ul>
+        </li>
         <li>
-            struct_pointer (pointer to a structure as an object embedded into a
-            record)
+            struct_pointer (pointer to a structure as an object embedded into a record)
             <ul>
                 <li>association_pointer (pointer to an association)</li>
                 <li>event_pointer (pointer to an event&#47;fact)</li>
             </ul>
         </li>
     </ul>
+
     <h2><a id="3.3">3.3 - API</a></h2>
+
     <dl>
         <dt>void print(string text)</dt>
         <dd>Outputs `text` string.</dd>
+
         <dt>void progress_init(int length, string title)</dt>
-        <dd>
-            Shows the window with a progress state, where `length` is number of
-            progress stages, `title` is a header.
-        </dd>
+        <dd>Shows the window with a progress state, where `length` is number of progress stages, `title` is a header.</dd>
+
         <dt>void progress_done()</dt>
         <dd>Hides the window with a progress state.</dd>
+
         <dt>void progress_step()</dt>
         <dd>Increases number of completed progress stages by one.</dd>
+
         <dt>int strpos(string substr, string str)</dt>
-        <dd>
-            Finds the first occurrence of `substr` in `str` and returns its
-            index.
-        </dd>
+        <dd>Finds the first occurrence of `substr` in `str` and returns its index.</dd>
+
         <dt>void update_view()</dt>
         <dd>Updates all lists (this is necessary after bulk update).</dd>
+
         <dt>string select_file()</dt>
         <dd>Shows &quot;Open file&quot; dialog and returns filename.</dd>
+
+        <dt>string select_new_file()</dt>
+        <dd>Shows &quot;Save file&quot; dialog and returns filename.</dd>
+
         <dt>int get_records_count()</dt>
         <dd>Returns number of records in database.</dd>
+
         <dt>record_ptr get_record(int index)</dt>
         <dd>
-            Gets a database record by its index. Attention: records of all type
-            are located randomly in database. They are stored in a sequence in
-            which they were added to database. Therefore, you should always check
+            Gets a database record by its index. Attention: records of all type are located randomly in database.
+            They are stored in a sequence in which they were added to database. Therefore, you should always check
             type of a record.
         </dd>
+
         <dt>int get_record_type(record_ptr)</dt>
         <dd>
             Gets type of the specified record. Possible return values:
             <ul>
-                <li>
-                    rtNone - is is unable to determine type of the record or the record
-                    has unknown type,
-                </li>
+                <li>rtNone - is is unable to determine type of the record or the record has unknown type,</li>
                 <li>rtIndividual - individual record,</li>
                 <li>rtFamily - family record,</li>
                 <li>rtNote - note record,</li>
@@ -1249,69 +1357,74 @@ end</code></pre>
                 <li>rtSubmitter - database researcher.</li>
             </ul>
         </dd>
+
         <dt>string get_record_type_name(int type)</dt>
         <dd>Converts record type from numeric view to string one.</dd>
+
         <dt>string get_record_xref(record_ptr)</dt>
-        <dd>
-            Returns record identifier, used for cross-reference links between
-            database records.
-        </dd>
+        <dd>Returns record identifier, used for cross-reference links between database records.</dd>
+
         <dt>string get_record_uid(record_ptr)</dt>
         <dd>Get global unique identifier of the specified record.</dd>
+
         <dt>delete_record(record)</dt>
         <dd>Removes the specified record from database.</dd>
+
         <dt>boolean record_is_filtered(record_ptr)</dt>
-        <dd>
-            Returns `true` when the specified record was filtered out and it is
-            visible on the current view.
-        </dd>
+        <dd>Returns `true` when the specified record was filtered out and it is visible on the current view.</dd>
+
         <dt>string get_individual_name(record)</dt>
         <dd>Gets full name of the specified individual.</dd>
+
         <dt>int get_individual_associations_count(individual_ptr)</dt>
         <dd>Gets number of associations for the specified individual.</dd>
+
         <dt>ptr get_individual_association(individual_ptr, int index)</dt>
         <dd>Gets an association for specified individual by the given index.</dd>
+
         <dt>delete_individual_association(individual_ptr, index)</dt>
         <dd>Removes the specified association from the specified individual.</dd>
+
         <dt>int get_individual_events_count(individual_ptr)</dt>
         <dd>Gets number of facts for the specified individual.</dd>
+
         <dt>event_ptr get_individual_event(individual_ptr, int index)</dt>
         <dd>Get a fact for the specified individual using the specified index.</dd>
+
         <dt>delete_individual_event(individual_ptr, int index)</dt>
         <dd>Removes the specified fact from the specified individual.</dd>
+
         <dt>string get_event_value(event_ptr)</dt>
         <dd>Converts the specified event to a string.</dd>
+
         <dt>string get_event_place(event_ptr)</dt>
         <dd>Gets location of the specified event.</dd>
+
         <dt>string get_event_date(event_ptr)</dt>
         <dd>Gets date of the specified event as a string.</dd>
+
         <dt>string get_event_name(event_ptr)</dt>
         <dd>
             Returns name - identifier of the specified event type (attention:
-            this is internal event identifier, see <a href="">
-                Identifiers of event
-                types
-            </a>).
+            this is internal event identifier, see <a href="">Identifiers of event types</a>).
         </dd>
-        <dt>
-            individual_ptr create_individual(string name, string patronymic, string
-            family, string sex)
-        </dt>
+
+        <dt>individual_ptr create_individual(string name, string patronymic, string family, string sex)</dt>
         <dd>
-            Creates new individual record: `name` is individual&#39;s first name,
-            `patronymic` is individual&#39;s patronymic name, `family` is individual&#39;s
-            last name, `sex` is individual sex (possible values: &quot;N&quot; -- not
-            defined, &quot;M&quot; -- male, &quot;F&quot; -- female, &quot;U&quot;
-            -- unknown).
+            Creates new individual record: `name` is individual&#39;s first name, `patronymic` is individual&#39;s
+            patronymic name, `family` is individual&#39;s last name, `sex` is individual sex (possible values: &quot;N&quot;
+            -- not defined, &quot;M&quot; -- male, &quot;F&quot; -- female, &quot;U&quot; -- unknown).
         </dd>
+
         <dt>family_ptr create_family()</dt>
         <dd>Creates new family record.</dd>
+
         <dt>bind_family_spouse(family_ptr family, individual_ptr spouse)</dt>
         <dd>
             Attaches `spouse` husband to `family`. Attention: `spouse` record
-            must have defined sex, because it is used on automatic detection of a
-            role in family.
+            must have defined sex, because it is used on automatic detection of a role in family.
         </dd>
+
         <dt>bool csv_load(string filename, bool first_line_is_schema)</dt>
         <dd>
             Loads CSV table from `filename` file. `first_line_is_schema`
@@ -1331,82 +1444,86 @@ end</code></pre>
         <dd>Returns number of rows in the CSV table.</dd>
 
         <dt>string csv_get_cell(col, row)</dt>
-        <dd>
-            Gets value of the specified cell in the CSV table (rows and columns
-            are numbered from zero).
-        </dd>
+        <dd>Gets value of the specified cell in the CSV table (rows and columns are numbered from zero).</dd>
 
         <dt>void csv_write_cell(string content)</dt>
         <dd>Write the value of a CSV table cell (the beginning of a new line is performed automatically according to the specified number of columns).</dd>
 
         <dt>note_ptr create_note()</dt>
         <dd>Creates new note record.</dd>
+
         <dt>bind_record_note(record_ptr, note_ptr)</dt>
         <dd>Attaches the note to the record.</dd>
+
         <dt>add_note_text(note_ptr, string text)</dt>
         <dd>Appends the specified note with the new `text`.</dd>
+
         <dt>record_ptr select_record(int record_type)</dt>
         <dd>Shows record selection dialog.</dd>
-        <dt>
-            bind_record_source(record_ptr, source_ptr, string page, int
-            quality)
-        </dt>
-        <dd>
-            Attaches the specified source to the specified record and sets
-            `page` and source `quality` (0..3).
-        </dd>
+
+        <dt>bind_record_source(record_ptr, source_ptr, string page, int quality)</dt>
+        <dd>Attaches the specified source to the specified record and sets `page` and source `quality` (0..3).</dd>
+
         <dt>string define_sex(string name, string patronymic)</dt>
         <dd>Returns sex identifier evaluated from `name` and `patronymic`.</dd>
+
         <dt>set_event_place(event_ptr, string place)</dt>
         <dd>Sets location in the specified event.</dd>
+
         <dt>source_record create_source(string name)</dt>
         <dd>Creates new source with the specified name.</dd>
+
         <dt>source_record find_source(string name)</dt>
         <dd>Search through list for a source with the specified name.</dd>
+
         <dt>event_ptr create_event(record_ptr, string sign)</dt>
-        <dd>
-            Creates new fact in individual or family record, where `sign` is type
-            of the fact given by string.
-        </dd>
+        <dd>Creates new fact in individual or family record, where `sign` is type of the fact given by string.</dd>
+
         <dt>set_event_date(event_ptr, string date)</dt>
         <dd>Sets `date` for the specified event.</dd>
+
         <dt>bind_family_child(family_ptr, individual_ptr child)</dt>
         <dd>Adds the specified child to the specified family.</dd>
-        <dt>
-            association_ptr add_individual_association(individual_ptr, string
-            relation, individual_ptr rel_individual)
-        </dt>
+
+        <dt>association_ptr add_individual_association(individual_ptr, string relation, individual_ptr rel_individual)</dt>
         <dd>
             Adds to `individual_record` new link-association to `rel_individual`. For
             example, this can be used when one creates a link with godparents.
         </dd>
-        <dt>
-            string define_patronymic(string father_name, string child_sex,
-            bool confirm)
-        </dt>
+
+        <dt>string define_patronymic(string father_name, string child_sex, bool confirm)</dt>
         <dd>
-            Defines patronymic name of a child that is `child_sex` and having
-            father with `father_name`, using internal dictionary. `confirm`
-            parameter defines must a confirmation be shown to user in arguable
-            cases.
+            Defines patronymic name of a child that is `child_sex` and having father with `father_name`,
+            using internal dictionary. `confirm` parameter defines must a confirmation be shown to user in arguable cases.
         </dd>
+
         <dt>family_record get_individual_parents_family(individual_ptr)</dt>
         <dd>Gets parent&#39;s family of the specified individual.</dd>
+
         <dt>int get_individual_spouses_count(individual_ptr)</dt>
         <dd>Gets number of spouses of the specified individual.</dd>
+
         <dt>family_ptr get_individual_spouse_family(individual_ptr, int index)</dt>
-        <dd>
-            Gets family of the specified individual and his wife or her husband,
-            `index` is a marriage number.
-        </dd>
+        <dd>Gets family of the specified individual and his wife or her husband, `index` is a marriage number.</dd>
+
         <dt>individual_ptr get_family_husband(family_ptr)</dt>
         <dd>Gets husband in the specified family.</dd>
+
         <dt>individual_ptr get_family_wife(family_ptr)</dt>
         <dd>Gets wife in the specified family.</dd>
+
         <dt>int get_family_childs_count(family_ptr)</dt>
         <dd>Gets number of children in the specified family.</dd>
+
         <dt>individual_ptr get_family_child(family_ptr, int index)</dt>
         <dd>Gets a child individual in the specified family by child number.</dd>
+
+        <dt>location_ptr create_location(string name, string date)</dt>
+        <dd>Creates new location record.</dd>
+
+        <dt>int get_location_usages(locationPtr)</dt>
+        <dd>Return the number of times a location has been used.</dd>
     </dl>
+
 </body>
 </html>
