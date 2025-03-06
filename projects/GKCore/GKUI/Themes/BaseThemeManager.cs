@@ -46,6 +46,8 @@ namespace GKUI.Themes
         public BaseThemeManager()
         {
             fThemeElementTypes = new ThemeElementType[] {
+                ThemeElementType.String, // ThemeElement.None
+
                 ThemeElementType.String, // ThemeElement.Font
                 ThemeElementType.Float,  // ThemeElement.FontSize
 
@@ -157,6 +159,9 @@ namespace GKUI.Themes
                 ThemeElementType.Image, // ThemeElement.Glyph_GenderFemale
                 ThemeElementType.Image, // ThemeElement.Glyph_GenderMale
                 ThemeElementType.Image, // ThemeElement.Glyph_Info
+                ThemeElementType.Image, // ThemeElement.Glyph_Bookmark
+                ThemeElementType.Image, // ThemeElement.Glyph_Expand
+                ThemeElementType.Image, // ThemeElement.Glyph_Expand2
             };
         }
 

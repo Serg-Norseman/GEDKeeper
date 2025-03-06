@@ -22,6 +22,8 @@ namespace GKUI.Themes
 {
     public enum ThemeElement
     {
+        None,
+
         Font,       // Form, Window, Dialog
         FontSize,
 
@@ -136,6 +138,9 @@ namespace GKUI.Themes
         Glyph_GenderFemale,
         Glyph_GenderMale,
         Glyph_Info,
+        Glyph_Bookmark,
+        Glyph_Expand,
+        Glyph_Expand2,
     }
 
 

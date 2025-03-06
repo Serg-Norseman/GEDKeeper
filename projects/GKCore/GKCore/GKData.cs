@@ -20,6 +20,7 @@
 
 using GDModel.Providers.GEDCOM;
 using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore
 {
@@ -99,13 +100,15 @@ namespace GKCore
             public string Sign;
             public string SymImage;
             public string DefPortraitImage;
+            public ThemeElement ThemeElement;
 
-            public SexStruct(LSID name, string sign, string symImage, string defPortraitImage)
+            public SexStruct(LSID name, string sign, string symImage, string defPortraitImage, ThemeElement themeElement)
             {
                 NameId = name;
                 Sign = sign;
                 SymImage = symImage;
                 DefPortraitImage = defPortraitImage;
+                ThemeElement = themeElement;
             }
         }
 
@@ -436,10 +439,10 @@ namespace GKCore
             };
 
             SexData = new SexStruct[] {
-                new SexStruct(LSID.SexU, "U", "", ""),
-                new SexStruct(LSID.SexM, "M", "Resources.sym_male.png", "Resources.pi_male_140.png"),
-                new SexStruct(LSID.SexF, "F", "Resources.sym_female.png", "Resources.pi_female_140.png"),
-                new SexStruct(LSID.SexX, "X", "", "")
+                new SexStruct(LSID.SexU, "U", "", "", ThemeElement.None),
+                new SexStruct(LSID.SexM, "M", "Resources.sym_male.png", "Resources.pi_male_140.png", ThemeElement.Glyph_GenderMale),
+                new SexStruct(LSID.SexF, "F", "Resources.sym_female.png", "Resources.pi_female_140.png", ThemeElement.Glyph_GenderFemale),
+                new SexStruct(LSID.SexX, "X", "", "", ThemeElement.None)
             };
 
             RecordTypes = new RecordTypeStruct[] {

@@ -77,8 +77,7 @@ namespace GKCore.Controllers
 
             for (GDMSex sx = GDMSex.svUnknown; sx <= GDMSex.svLast; sx++) {
                 string name = GKUtils.SexStr(sx);
-                string resImage = GKData.SexData[(int)sx].SymImage;
-                IImage image = AppHost.GfxProvider.LoadResourceImage(resImage, ImageTarget.UI, true);
+                IImage image = GetSexImage(sx);
                 fView.SexCombo.AddItem(name, sx, image);
             }
         }
@@ -88,6 +87,19 @@ namespace GKCore.Controllers
             if (disposing) {
             }
             base.Dispose(disposing);
+        }
+
+        private IImage GetSexImage(GDMSex sx)
+        {
+            IImage image;
+            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                string resImage = GKData.SexData[(int)sx].SymImage;
+                image = AppHost.GfxProvider.LoadResourceImage(resImage, ImageTarget.UI, true);
+            } else {
+                var themeSym = GKData.SexData[(int)sx].ThemeElement;
+                image = (themeSym == ThemeElement.None) ? null : AppHost.ThemeManager.GetThemeImage(themeSym, true);
+            }
+            return image;
         }
 
         public override void Init(IBaseWindow baseWin)

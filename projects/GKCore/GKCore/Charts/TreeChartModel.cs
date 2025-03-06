@@ -34,6 +34,7 @@ using GKCore.Kinships;
 using GKCore.Options;
 using GKCore.Search;
 using GKCore.Types;
+using GKUI.Themes;
 using BSDColors = GKCore.Design.BSDConsts.Colors;
 
 namespace GKCore.Charts
@@ -365,6 +366,17 @@ namespace GKCore.Charts
             }
         }
 
+        private IImage GetUIImage(ChartRenderer renderer, string resName, ThemeElement themeElement)
+        {
+            IImage image;
+            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                image = PrepareImage(renderer, resName, true);
+            } else {
+                image = AppHost.ThemeManager.GetThemeImage(themeElement, true);
+            }
+            return image;
+        }
+
         private void InitSigns(ChartRenderer renderer)
         {
             if (fSignsPic != null)
@@ -377,10 +389,10 @@ namespace GKCore.Charts
                     fSignsPic[i] = PrepareImage(renderer, GKData.SpecialUserRefs[i].ResName, false);
                 }
 
-                fExpPic = PrepareImage(renderer, "btn_expand.gif", true);
-                fPersExpPic = PrepareImage(renderer, "btn_expand2.gif", true);
-                fInfoPic = PrepareImage(renderer, "btn_info.gif", true);
-                fBookmarkPic = PrepareImage(renderer, "tg_bookmark.png", false);
+                fExpPic = GetUIImage(renderer, "btn_expand.gif", ThemeElement.Glyph_Expand);
+                fPersExpPic = GetUIImage(renderer, "btn_expand2.gif", ThemeElement.Glyph_Expand2);
+                fInfoPic = GetUIImage(renderer, "btn_info.gif", ThemeElement.Glyph_Info);
+                fBookmarkPic = GetUIImage(renderer, "tg_bookmark.png", ThemeElement.Glyph_Bookmark);
             } catch (Exception ex) {
                 Logger.WriteError("TreeChartModel.InitSigns()", ex);
             }

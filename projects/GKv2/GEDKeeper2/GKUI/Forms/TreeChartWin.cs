@@ -160,6 +160,7 @@ namespace GKUI.Forms
         public override void ApplyTheme()
         {
             base.ApplyTheme();
+            fController.ApplyTheme();
             AppHost.Instance.ApplyTheme(this, MenuPerson);
         }
 

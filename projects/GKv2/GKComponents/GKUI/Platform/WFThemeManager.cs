@@ -43,6 +43,8 @@ namespace GKUI.Themes
         public WFThemeManager()
         {
             RegisterTheme(DefaultThemeName, new ThemeElementsDictionary() {
+                { ThemeElement.None, "" },
+
                 { ThemeElement.Font, "Tahoma" },                              // checked
                 { ThemeElement.FontSize, 8.25f },                             // checked
 
@@ -154,6 +156,9 @@ namespace GKUI.Themes
                 { ThemeElement.Glyph_GenderFemale, "Resources.sym_female.png" },
                 { ThemeElement.Glyph_GenderMale, "Resources.sym_male.png" },
                 { ThemeElement.Glyph_Info, "Resources.btn_info.gif" },
+                { ThemeElement.Glyph_Bookmark, "Resources.tg_bookmark.png" },
+                { ThemeElement.Glyph_Expand, "Resources.btn_expand.gif" },
+                { ThemeElement.Glyph_Expand2, "Resources.btn_expand2.gif" },
             }, true);
         }
 

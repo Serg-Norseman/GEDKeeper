@@ -207,10 +207,10 @@ Elements:
     Value: "Modern/Stop.png"
 
   - Element: Glyph_Undo
-    Value: "Modern/stub.png"
+    Value: "Modern/Undo.png"
 
   - Element: Glyph_Redo
-    Value: "Modern/stub.png"
+    Value: "Modern/Redo.png"
 
   - Element: Glyph_Attach
     Value: "Modern/Attach.png"
@@ -219,16 +219,16 @@ Elements:
     Value: "Modern/Detach.png"
 
   - Element: Glyph_SizeToFit
-    Value: "Modern/stub.png"
+    Value: "Modern/SizeToFit.png"
 
   - Element: Glyph_ZoomIn
-    Value: "Modern/stub.png"
+    Value: "Modern/ZoomIn.png"
 
   - Element: Glyph_ZoomOut
-    Value: "Modern/stub.png"
+    Value: "Modern/ZoomOut.png"
 
   - Element: Glyph_SetPortrait
-    Value: "Modern/stub.png"
+    Value: "Modern/SetPortrait.png"
 
   - Element: Glyph_CopyName
     Value: "Modern/CopyName.png"
@@ -241,5 +241,14 @@ Elements:
 
   - Element: Glyph_Info
     Value: "Modern/Info.png"
+
+  - Element: Glyph_Bookmark
+    Value: "Modern/Bookmark.png"
+
+  - Element: Glyph_Expand
+    Value: "Modern/Expand.png"
+
+  - Element: Glyph_Expand2
+    Value: "Modern/Expand2.png"
 
 ...

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -165,6 +165,12 @@ namespace GKUI.Forms
         {
             fCircleChart.Model.FanMode = miFanMode.Checked;
             fCircleChart.Changed();
+        }
+
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
         }
 
         #region ILocalizable implementation
