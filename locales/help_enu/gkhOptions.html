@@ -73,7 +73,6 @@
         <dt>Load recently opened files at startup</dt>
         <dd>
             If checked then the last file used is automatically opened.
-            Currently, after changing the program architecture, this option is disabled.
         </dd>
 
         <dt>Automatically check for updates</dt>
@@ -95,7 +94,10 @@
         </dd>
 
         <dt>Display full file name in window title</dt>
-        <dd>Enables display of the full name (including path) of the current file in the title of the main window.</dd>
+        <dd>
+            Enables display of the full name (including path) of the current file in the title of the main window.
+            When this option is disabled, only the file name is displayed without the path.
+        </dd>
 
         <dt>Language</dt>
         <dd>
@@ -262,6 +264,9 @@
             The enabled option reduces the location displayed in the person's card to only the locality,
             hiding the other parts.
             Note: location strings must be specified in the standard format - separator "," (comma).
+            Note: the action depends on the option <a href="#reverse_places_order">Reverse order of places</a>,
+            i.e. if the order in the fact places lines is the same, and the option does not match - instead of a settlement,
+            a country may be displayed and vice versa.
         </dd>
 
         <dt>Hide unknown spouses</dt>
@@ -319,7 +324,10 @@
         <dd>This option allows you to turn off the "mourning" frame - a wide black frame around dead people.</dd>
 
         <dt>Use additional dates</dt>
-        <dd>This option allows you to display baptism or burial dates instead of missing dates of birth or death.</dd>
+        <dd>
+            This option allows you to display baptism or burial dates (if any) instead of missing dates
+            of birth or death.
+        </dd>
 
         <dt>Use inline images in SVG</dt>
         <dd>
@@ -682,7 +690,8 @@
             If there is an abbreviated name for a location records, that will be used first.
         </dd>
 
-        <dt>Reverse order of places (from small to large)</dt>
+        <a id="reverse_places_order">
+        <dt>Reverse order of places (from small to large)</dt></a>
         <dd>
             When forming a long historical name of a place according to the existing hierarchy of locations,
             the reverse order of listing will be used - from smaller to larger.
