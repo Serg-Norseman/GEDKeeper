@@ -220,6 +220,8 @@ namespace GKUI.Forms
             var providers = GMapProviders.List;
             RadioMenuItem controller = null;
             foreach (var prv in providers) {
+                if (prv == GMapProviders.EmptyProvider) continue;
+
                 var item = UIHelper.AddToolStripItem(MenuProviders, controller, prv.Name, prv, miProviderX_Click);
                 if (controller == null)
                     controller = item;

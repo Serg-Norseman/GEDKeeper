@@ -193,6 +193,8 @@ namespace GKUI.Forms
         {
             var providers = GMapProviders.List;
             foreach (var prv in providers) {
+                if (prv == GMapProviders.EmptyProvider) continue;
+
                 UIHelper.AddToolStripItem(MenuProviders, prv.Name, prv, miProviderX_Click);
             }
         }
