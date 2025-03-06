@@ -6,16 +6,85 @@
     <title>Mapas</title>
 </head>
 <body>
+
     <h1>Mapas</h1>
-    <p>GEDKeeper utiliza Google Maps (&copy; Google) para mostrar mapas.</p>
+
     <p>
-        El uso de un servicio de mapas permite a GEDKeeper mostrar en un mapa las ubicaciones de los nacimientos,
-		defunciones y residencias definidos en la base de datos. Hay dos modos disponibles: 
-		uno muestra la ubicación de los nacimientos, defunciones o residencias de todas las personas de la base de datos; 
-		el otro muestra todas las ubicaciones de cualquier evento de la persona seleccionada. 
+        El uso de un servicio de mapas permite a GEDKeeper mostrarle las ubicaciones de nacimientos, defunciones
+        y residencia, definidas en la base de datos, directamente en un mapa.
     </p>
+
     <p>
-        Antes de llamar al servicio de mapas, puedes filtrar personas utilizando los filtros generales de GEDKeeper. 
+        Se utilizan varios proveedores para mostrar mapas: Google, Yandex, OpenStreetMap, Bing, WikiMapia.
+        Para cambiar de proveedor, utilice el botón «Proveedores» de la barra de herramientas de la ventana.
     </p>
+
+    <p>
+        Los mapas pueden guardarse en un archivo de imagen mediante el botóns
+        <img src="../help/images/iSaveImage.gif" alt="Guardar imagen"> de la barra de herramientas.
+    </p>
+
+    <p>
+        Para cargar lugares a partir de registros de la base de datos, utilice el botón «Cargar ubicaciones». Este es
+        el modo principal, cuando se llama a la ventana del mapa desde el menú «Genealogía» de la ventana principal de
+        la aplicación. Los lugares se cargan según los parámetros seleccionados en el panel izquierdo. Puede seleccionar
+        el lugar de nacimiento, defunción o residencia de todas las personas para obtener la salida correspondiente;
+        o la salida de lugares de cualquier hecho de una sola persona seleccionada.
+    </p>
+
+    <p>
+        Si en las opciones (menú Service\Options), en la pestaña «Interface\Mapas y ubicaciones», no está activada la
+        opción «Buscar en geocodificadores de lugares sin coordenadas», entonces al cargar lugares de varios hechos,
+        se comprobará la presencia de un lugar en el directorio de registros de lugares y se omitirán los lugares sin
+        coordenadas. Si la opción está activada, entonces todos los lugares sin coordenadas serán comprobados por el
+        proveedor de geocodificación seleccionado y se compararán los nombres de las opciones de coordenadas encontradas.
+        La carga de lugares con búsqueda de coordenadas es un proceso lento. Se recomienda utilizar lugares introducidos
+        en el directorio de lugares y con coordenadas especificadas.
+    </p>
+
+    <hr>
+    <p>
+        Los siguientes modos suponen que las localizaciones se mantienen de acuerdo con el estándar GEDCOM 5.5 EL,
+        es decir, las localizaciones forman una jerarquía en la que se especifican los nombres históricos de las
+        localizaciones en cada nivel (Ciudad/Distrito/Región/País), con el periodo de validez de estos nombres, y cada
+        localización tiene una lista de localizaciones de nivel superior, también con el periodo de validez de
+        subordinación.
+    </p>
+
+    <ul>
+        <li>
+            Al llamar a los mapas desde el panel de información de registros de ubicación, la ubicación especificada se
+            selecciona a partir de los datos de la persona, las ubicaciones se filtran para excluir duplicados y excluir
+            ubicaciones sin coordenadas.$. Dos submodos están disponibles:
+            <ul>
+                <li>
+                    «Mapa de lugares": se identifican y muestran en el mapa todos los lugares subordinados del lugar
+                    actual (provincia, región o país).
+                </li>
+                <li>
+                    «Mapa de personas": se identifican todos los registros subordinados en la ubicación actual y,
+                    a continuación, se identifican las personas que tienen indicadas todas las ubicaciones detectadas.
+                    Todas las marcas de localización con personas se muestran en el mapa.
+                </li>
+            </ul>
+        </li>
+        <li>
+            Al llamar a los mapas desde el menú del árbol de personas, se seleccionan todos los lugares de los hechos
+            del árbol de personas, se filtran los lugares para excluir duplicados y excluir lugares sin coordenadas.
+            Después, se muestran en el mapa con una lista de las personas que estuvieron en los lugares del mapa.
+        </li>
+    </ul>
+
+    <hr>
+    <p>
+        Antes de llamar al servicio de mapas, puedes filtrar personas utilizando los filtros generales de GEDKeeper.
+    </p>
+
+    <hr>
+    <p>
+        Ver también: <a href="gkhRec_Individual.html">Personas</a>, <a href="gkhRec_Family.html">Familias</a>,
+        <a href="gkhRec_Place.html">Ubicaciones</a>.
+    </p>
+
 </body>
 </html>
