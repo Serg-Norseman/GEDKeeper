@@ -406,7 +406,7 @@ namespace GKCore.Controllers
             var combo = GetControl<IComboBox>("cmbMatchPatternMethod");
             combo.Clear();
             for (MatchPatternMethod itm = MatchPatternMethod.RegEx; itm <= MatchPatternMethod.Fast; itm++) {
-                combo.AddItem(itm.ToString(), itm);
+                combo.AddItem(LangMan.LS(GKData.MatchPatterns[(int)itm].Name), itm);
             }
             combo.SetSelectedTag(fOptions.MatchPatternMethod);
         }
@@ -922,7 +922,7 @@ namespace GKCore.Controllers
             var cmbCA = GetControl<IComboBox>("cmbCertaintyAlgorithm");
             cmbCA.Clear();
             for (var ca = CertaintyAlgorithm.WeightedAverage; ca <= CertaintyAlgorithm.Maximum; ca++) {
-                cmbCA.AddItem(ca.ToString(), ca);
+                cmbCA.AddItem(LangMan.LS(GKData.CertaintyAlgorithms[(int)ca].Name), ca);
             }
 
             // Multimedia
@@ -1040,6 +1040,8 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkUseSurnamesInPSF").Text = LangMan.LS(LSID.UseSurnamesInPersonSelectionFilter);
             GetControl<ICheckBox>("chkUseBirthDatesInPSF").Text = LangMan.LS(LSID.UseBirthDatesInPersonSelectionFilter);
 
+            GetControl<IRadioButton>("radDMY").Text = LangMan.LS(LSID.DF_DD_MM_YYYY);
+            GetControl<IRadioButton>("radYMD").Text = LangMan.LS(LSID.DF_YYYY_MM_DD);
             GetControl<IGroupBox>("grpDateFormat").Text = LangMan.LS(LSID.DateFormat);
             GetControl<ICheckBox>("chkShowDatesCalendar").Text = LangMan.LS(LSID.ShowDatesCalendar);
             GetControl<ICheckBox>("chkShowDatesSigns").Text = LangMan.LS(LSID.ShowDatesSigns);

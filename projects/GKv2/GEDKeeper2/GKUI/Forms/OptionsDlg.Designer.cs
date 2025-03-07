@@ -539,7 +539,7 @@
             this.cmbCertaintyAlgorithm.Location = new System.Drawing.Point(300, 582);
             this.cmbCertaintyAlgorithm.Margin = new System.Windows.Forms.Padding(2);
             this.cmbCertaintyAlgorithm.Name = "cmbCertaintyAlgorithm";
-            this.cmbCertaintyAlgorithm.Size = new System.Drawing.Size(138, 25);
+            this.cmbCertaintyAlgorithm.Size = new System.Drawing.Size(220, 25);
             this.cmbCertaintyAlgorithm.TabIndex = 8;
             // 
             // groupBox1
@@ -2303,7 +2303,7 @@
             this.cmbMatchPatternMethod.Location = new System.Drawing.Point(233, 66);
             this.cmbMatchPatternMethod.Margin = new System.Windows.Forms.Padding(2);
             this.cmbMatchPatternMethod.Name = "cmbMatchPatternMethod";
-            this.cmbMatchPatternMethod.Size = new System.Drawing.Size(230, 25);
+            this.cmbMatchPatternMethod.Size = new System.Drawing.Size(260, 25);
             this.cmbMatchPatternMethod.TabIndex = 8;
             // 
             // chkSAFByAllNames

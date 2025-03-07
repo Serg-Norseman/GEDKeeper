@@ -1029,3 +1029,12 @@
 1016=Invalid link: identical records!
 1017=Display full file name in window title
 1018=The maximum size allowed for a GEDCOM note has been exceeded!
+1019=Weighted average
+1020=Average
+1021=Minimum
+1022=Maximum
+1023=Regular expressions
+1024=Fast (ignore case)
+1025=Fast (case sensitive)
+1026=DD.MM.YYYY
+1027=YYYY.MM.DD

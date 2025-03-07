@@ -210,6 +210,26 @@ namespace GKCore
             }
         }
 
+        public sealed class CertaintyAlgorithmStruct
+        {
+            public LSID Name;
+
+            public CertaintyAlgorithmStruct(LSID name)
+            {
+                Name = name;
+            }
+        }
+
+        public sealed class MatchPatternStruct
+        {
+            public LSID Name;
+
+            public MatchPatternStruct(LSID name)
+            {
+                Name = name;
+            }
+        }
+
         public static readonly LSID[] Restrictions;
         public static readonly RecordTypeStruct[] RecordTypes;
         public static readonly SexStruct[] SexData;
@@ -236,6 +256,9 @@ namespace GKCore
         public static readonly LSID URTreeNoteType;
         public static readonly LSID[] ChartWindowsShowModes;
         public static readonly LSID[] TextEffects;
+
+        public static readonly CertaintyAlgorithmStruct[] CertaintyAlgorithms;
+        public static readonly MatchPatternStruct[] MatchPatterns;
 
 
         /// <summary>
@@ -565,6 +588,19 @@ namespace GKCore
                 LSID.TE_Sunken,
                 LSID.TE_Raised,
                 LSID.TE_Glow,
+            };
+
+            CertaintyAlgorithms = new CertaintyAlgorithmStruct[] {
+                new CertaintyAlgorithmStruct(LSID.CA_WeightedAverage),
+                new CertaintyAlgorithmStruct(LSID.CA_Average),
+                new CertaintyAlgorithmStruct(LSID.CA_Minimum),
+                new CertaintyAlgorithmStruct(LSID.CA_Maximum),
+            };
+
+            MatchPatterns = new MatchPatternStruct[] {
+                new MatchPatternStruct(LSID.MPM_RegEx),
+                new MatchPatternStruct(LSID.MPM_FastIgnoreCase),
+                new MatchPatternStruct(LSID.MPM_Fast),
             };
         }
     }

@@ -1094,7 +1094,19 @@ namespace GKCore
         /* 1017 */ DisplayFullFileName,
         /* 1018 */ NoteMaxSizeExceeded,
 
-        /* 000 */ Last = NoteMaxSizeExceeded
+        /* 1019 */ CA_WeightedAverage,
+        /* 1020 */ CA_Average,
+        /* 1021 */ CA_Minimum,
+        /* 1022 */ CA_Maximum,
+
+        /* 1023 */ MPM_RegEx,
+        /* 1024 */ MPM_FastIgnoreCase,
+        /* 1025 */ MPM_Fast,
+
+        /* 1026 */ DF_DD_MM_YYYY,
+        /* 1027 */ DF_YYYY_MM_DD,
+
+        /* 000 */ Last = DF_YYYY_MM_DD
     }
 
 
@@ -2141,6 +2153,18 @@ namespace GKCore
             /* 1016 */ "Invalid link: identical records!",
             /* 1017 */ "Display full file name in window title",
             /* 1018 */ "The maximum size allowed for a GEDCOM note has been exceeded!",
+
+            /* 1019 */ "Weighted average",
+            /* 1020 */ "Average",
+            /* 1021 */ "Minimum",
+            /* 1022 */ "Maximum",
+
+            /* 1023 */ "Regular expressions",
+            /* 1024 */ "Fast (ignore case)",
+            /* 1025 */ "Fast (case sensitive)",
+
+            /* 1026 */ "DD.MM.YYYY",
+            /* 1027 */ "YYYY.MM.DD",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
