@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -34,6 +34,7 @@ namespace GKUI.Components
     public abstract class CustomChart : ScrollablePanel, IPrintable
     {
         private readonly NavigationStack<object> fNavman;
+        protected IChartLayout fLayout;
         protected ChartRenderer fRenderer;
 
 
@@ -259,6 +260,11 @@ namespace GKUI.Components
                 SetRenderer(prevRenderer);
                 this.SetScale(prevScale);
             }
+        }
+
+        public virtual void SetLayout(IChartLayout layout)
+        {
+            fLayout = layout;
         }
 
         public virtual void SetRenderer(ChartRenderer renderer)

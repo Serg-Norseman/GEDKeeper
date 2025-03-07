@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,6 +31,7 @@ namespace GKCore.Charts
         protected int fImageWidth;
         protected int fOffsetX;
         protected int fOffsetY;
+        protected IChartLayout fLayout;
         protected ChartRenderer fRenderer;
 
         public int ImageHeight
@@ -48,6 +49,11 @@ namespace GKCore.Charts
             get { return new ExtSize(fImageWidth, fImageHeight); }
         }
 
+        public IChartLayout Layout
+        {
+            get { return fLayout; }
+        }
+
         public ChartRenderer Renderer
         {
             get { return fRenderer; }
@@ -55,6 +61,11 @@ namespace GKCore.Charts
 
         protected ChartModel()
         {
+        }
+
+        public virtual void SetLayout(IChartLayout layout)
+        {
+            fLayout = layout;
         }
 
         public virtual void SetRenderer(ChartRenderer renderer)

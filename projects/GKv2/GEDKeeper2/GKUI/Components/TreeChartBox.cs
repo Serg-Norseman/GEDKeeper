@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -196,6 +196,12 @@ namespace GKUI.Components
                 if (fTreeControls != null) fTreeControls.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public override void SetLayout(IChartLayout layout)
+        {
+            base.SetLayout(layout);
+            fModel.SetLayout(layout);
         }
 
         public override void SetRenderer(ChartRenderer renderer)

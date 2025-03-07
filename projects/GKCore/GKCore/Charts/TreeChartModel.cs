@@ -1620,6 +1620,11 @@ namespace GKCore.Charts
 
         #region Drawing routines
 
+        public override void SetLayout(IChartLayout layout)
+        {
+            base.SetLayout(layout);
+        }
+
         public override void SetRenderer(ChartRenderer renderer)
         {
             base.SetRenderer(renderer);
