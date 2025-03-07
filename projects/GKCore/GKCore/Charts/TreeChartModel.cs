@@ -476,6 +476,12 @@ namespace GKCore.Charts
 
         #region Tree walking
 
+        private string GetMarriageDate(GDMFamilyRecord family, bool strictYears)
+        {
+            DateFormat dateFormat = (strictYears || fOptions.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
+            return GKUtils.GetMarriageDateStr(family, dateFormat, GlobalOptions.Instance.ShowDatesSign);
+        }
+
         private bool RequireAncestors(TreeChartPerson person)
         {
             return ((fKind == TreeChartKind.ckAncestors || fKind == TreeChartKind.ckBoth) && (person.Rec == fRootRec || person.HasFlag(PersonFlag.pfRootSpouse)));
@@ -548,8 +554,7 @@ namespace GKCore.Charts
                         }
 
                         if (fOptions.MarriagesDates) {
-                            DateFormat dateFormat = (fOptions.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
-                            var marDate = GKUtils.GetMarriageDateStr(family, dateFormat, GlobalOptions.Instance.ShowDatesSign);
+                            var marDate = GetMarriageDate(family, false);
                             if (!string.IsNullOrEmpty(marDate)) {
                                 if (personNode.Father != null) {
                                     personNode.Father.MarriageDate = marDate;
@@ -799,15 +804,12 @@ namespace GKCore.Charts
                         resParent.BaseSpouse = result;
                         resParent.BaseFamily = family;
 
-                        if (resParent.Rec != null) {
-                            if (fOptions.MarriagesDates) {
-                                //DateFormat dateFormat = (fOptions.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
-                                DateFormat dateFormat = DateFormat.dfYYYY;
-                                GlobalOptions glob = GlobalOptions.Instance;
-                                var marDate = GKUtils.GetMarriageDateStr(family, dateFormat, glob.ShowDatesSign);
-                                resParent.MarriageDate = marDate;
-                            }
+                        if (fOptions.MarriagesDates) {
+                            var marDate = GetMarriageDate(family, true);
+                            resParent.MarriageDate = marDate;
+                        }
 
+                        if (resParent.Rec != null) {
                             if (resParent.Rec.ChildToFamilyLinks.Count > 0) {
                                 resParent.SetFlag(PersonFlag.pfHasInvAnc);
                             }
