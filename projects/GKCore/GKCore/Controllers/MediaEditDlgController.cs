@@ -140,10 +140,15 @@ namespace GKCore.Controllers
             MediaStoreType storeType;
 
             if (fIsNew) {
-                storeType = GlobalOptions.Instance.MediaStoreDefault;
-                RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, true,
-                                  GlobalOptions.Instance.AllowMediaStoreRelativeReferences,
-                                  storeType);
+                if (GlobalOptions.Instance.DisableNonStdFeatures) {
+                    storeType = MediaStoreType.mstReference;
+                    RefreshStoreTypes(true, false, false, storeType);
+                } else {
+                    storeType = GlobalOptions.Instance.MediaStoreDefault;
+                    RefreshStoreTypes(GlobalOptions.Instance.AllowMediaStoreReferences, true,
+                                      GlobalOptions.Instance.AllowMediaStoreRelativeReferences,
+                                      storeType);
+                }
             } else {
                 var mediaStore = fBase.Context.GetStoreType(fileRef);
                 storeType = mediaStore.StoreType;
@@ -170,36 +175,42 @@ namespace GKCore.Controllers
             fView.StoreType.Enabled = isNew;
         }
 
-        private void RefreshStoreTypes(bool allowRef, bool allowArc, bool allowRel, MediaStoreType selectType)
+        private void RefreshStoreTypes(bool allowAbsRef, bool allowArc, bool allowRelRef, MediaStoreType selectType)
         {
+            bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
+
             fView.StoreType.Clear();
 
-            // 0. Ref if allowed
+            // 0. AbsRef if allowed
             // 1. Stg
             // 2. Arc if allowed
             // 3. RelRef if allowed
             // 4. Url
 
-            if (allowRef) {
+            if (allowAbsRef) {
                 fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name),
                     MediaStoreType.mstReference);
             }
 
-            fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstStorage].Name),
-                MediaStoreType.mstStorage);
+            if (!disNoStd) {
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstStorage].Name),
+                    MediaStoreType.mstStorage);
+            }
 
             if (allowArc) {
                 fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name),
                     MediaStoreType.mstArchive);
             }
 
-            if (allowRel) {
+            if (allowRelRef) {
                 fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstRelativeReference].Name),
                     MediaStoreType.mstRelativeReference);
             }
 
-            fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstURL].Name),
-                MediaStoreType.mstURL);
+            if (!disNoStd) {
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstURL].Name),
+                    MediaStoreType.mstURL);
+            }
 
             fView.StoreType.SetSelectedTag<MediaStoreType>(selectType);
         }

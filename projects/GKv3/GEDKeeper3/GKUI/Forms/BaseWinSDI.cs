@@ -268,8 +268,10 @@ namespace GKUI.Forms
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
             recView.UpdateContents();
 
+            var strRecType = ((int)recType).ToString();
+
             var spl = new Splitter();
-            spl.ID = "splitter" + ((int)recType).ToString();
+            spl.ID = "splitter" + strRecType;
             spl.Panel1 = recView;
             spl.Panel2 = summary;
             spl.RelativePosition = 300;
@@ -278,6 +280,7 @@ namespace GKUI.Forms
             spl.PositionChanged += Spl_PositionChanged;
 
             var tabPage = new TabPage();
+            tabPage.ID = "tab" + strRecType;
             tabPage.Text = pageText;
             tabPage.Content = spl;
             tabsRecords.Pages.Add(tabPage);

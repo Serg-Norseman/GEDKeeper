@@ -28,6 +28,7 @@ using GKCore.Design.Views;
 using GKCore.Operations;
 using GKCore.Types;
 using GKUI.Themes;
+using GKCore.Options;
 
 namespace GKCore.Controllers
 {
@@ -122,6 +123,8 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             try {
+                bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
+
                 fView.ChildrenList.ListModel.DataOwner = fFamilyRecord;
                 fView.EventsList.ListModel.DataOwner = fFamilyRecord;
                 fView.NotesList.ListModel.DataOwner = fFamilyRecord;
@@ -134,7 +137,7 @@ namespace GKCore.Controllers
                     fView.MarriageStatus.SelectedIndex = 0;
                     fView.Restriction.SelectedIndex = 0;
                 } else {
-                    fView.MarriageStatus.Enabled = true;
+                    fView.MarriageStatus.Enabled = true && !disNoStd;
                     fView.MarriageStatus.SelectedIndex = (int)fFamilyRecord.Status;
                     fView.Restriction.SelectedIndex = (sbyte)fFamilyRecord.Restriction;
                 }

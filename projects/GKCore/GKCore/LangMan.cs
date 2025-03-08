@@ -1106,7 +1106,9 @@ namespace GKCore
         /* 1026 */ DF_DD_MM_YYYY,
         /* 1027 */ DF_YYYY_MM_DD,
 
-        /* 000 */ Last = DF_YYYY_MM_DD
+        /* 1028 */ DisableNonStdFeatures,
+
+        /* 000 */ Last = DisableNonStdFeatures
     }
 
 
@@ -2165,6 +2167,8 @@ namespace GKCore
 
             /* 1026 */ "DD.MM.YYYY",
             /* 1027 */ "YYYY.MM.DD",
+
+            /* 1028 */ "Disable non-standard features",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

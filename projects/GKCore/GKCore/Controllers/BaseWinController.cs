@@ -501,6 +501,15 @@ namespace GKCore.Controllers
             fTabParts[(int)recType] = new TabParts(listView, splitterName, summary);
         }
 
+        public void SetTabVisible(GDMRecordType recType, bool visible)
+        {
+            var strRecType = ((int)recType).ToString();
+
+            var tabs = GetControl<ITabControl>("tabsRecords");
+            var tabLocs = GetControl<ITabPage>("tab" + strRecType);
+            tabs.SetTabVisible(tabLocs, visible);
+        }
+
         /// <summary>
         /// Sets tab splitter positions in response to interface events.
         /// </summary>
@@ -693,6 +702,13 @@ namespace GKCore.Controllers
 
         public void UpdateSettings()
         {
+            bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
+            SetTabVisible(GDMRecordType.rtGroup, !disNoStd);
+            SetTabVisible(GDMRecordType.rtResearch, !disNoStd);
+            SetTabVisible(GDMRecordType.rtTask, !disNoStd);
+            SetTabVisible(GDMRecordType.rtCommunication, !disNoStd);
+            SetTabVisible(GDMRecordType.rtLocation, !disNoStd);
+
             SetSummaryWidth(false);
             RestoreListsSettings();
             RefreshLists(true);
@@ -903,6 +919,8 @@ namespace GKCore.Controllers
         public override void SetLocale()
         {
             try {
+                bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
+
                 var tabControl = GetControl<ITabControl>("tabsRecords");
                 if (tabControl.Pages.Count >= 11) {
                     tabControl.Pages[0].Text = LangMan.LS(LSID.RPIndividuals);
@@ -985,6 +1003,10 @@ namespace GKCore.Controllers
                     GetControl<IMenuItem>("miWinHTile").Text = LangMan.LS(LSID.MIWinHTile);
                     GetControl<IMenuItem>("miWinVTile").Text = LangMan.LS(LSID.MIWinVTile);
                     GetControl<IMenuItem>("miWinMinimize").Text = LangMan.LS(LSID.MIWinMinimize);
+
+                    GetControl<IMenuItem>("miMap").Enabled = !disNoStd;
+                    GetControl<IMenuItem>("miPatSearch").Enabled = !disNoStd;
+                    GetControl<IMenuItem>("miPlacesManager").Enabled = !disNoStd;
 
                     if (fHasToolbar) {
                         SetToolTip("tbFileNew", LangMan.LS(LSID.FileNewTip));

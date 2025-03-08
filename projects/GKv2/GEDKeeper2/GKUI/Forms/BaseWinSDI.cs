@@ -165,8 +165,10 @@ namespace GKUI.Forms
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
             recView.UpdateContents();
 
+            var strRecType = ((int)recType).ToString();
+
             var spl = new Splitter();
-            spl.Name = "splitter" + ((int)recType).ToString();
+            spl.Name = "splitter" + strRecType;
             spl.Dock = DockStyle.Right;
             spl.Size = new Size(4, 290);
             spl.MinExtra = 100;
@@ -174,6 +176,7 @@ namespace GKUI.Forms
             spl.SplitterMoved += Spl_SplitterMoved;
 
             var tabPage = new TabPage(pageText);
+            tabPage.Name = "tab" + strRecType;
             tabPage.Controls.Add(recView);
             tabPage.Controls.Add(summary);
             tabPage.Controls.Add(spl);

@@ -25,6 +25,7 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Options;
 using GKCore.Types;
 using GKUI.Themes;
 
@@ -115,6 +116,7 @@ namespace GKCore.Controllers
             fView.Text.Text = fSourceRecord.Text.Lines.Text.Trim();
 
             fView.Date.Date = fSourceRecord.Date.Value;
+            fView.Date.Enabled = !GlobalOptions.Instance.DisableNonStdFeatures;
 
             fView.RepositoriesList.ListModel.DataOwner = fSourceRecord;
             fView.NotesList.ListModel.DataOwner = fSourceRecord;

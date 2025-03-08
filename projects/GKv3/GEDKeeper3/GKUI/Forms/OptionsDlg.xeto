@@ -538,6 +538,8 @@
 
         <TabPage x:Name="pageSpecials" Padding="8">
           <StackLayout Style="vertListStack">
+            <CheckBox x:Name="chkDisableNonStdFeatures" />
+
             <CheckBox x:Name="chkUseExtendedNotes" />
             <CheckBox x:Name="chkKeepRichNames" />
 

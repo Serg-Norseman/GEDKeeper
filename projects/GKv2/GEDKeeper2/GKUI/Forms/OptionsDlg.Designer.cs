@@ -209,6 +209,7 @@
         private System.Windows.Forms.CheckBox chkMourningEdges;
         private System.Windows.Forms.CheckBox chkUseAdditionalDates;
         private System.Windows.Forms.CheckBox chkDisplayFullFileName;
+        private System.Windows.Forms.CheckBox chkDisableNonStdFeatures;
 
         private void InitializeComponent()
         {
@@ -419,6 +420,7 @@
             this.chkMourningEdges = new System.Windows.Forms.CheckBox();
             this.chkUseAdditionalDates = new System.Windows.Forms.CheckBox();
             this.chkDisplayFullFileName = new System.Windows.Forms.CheckBox();
+            this.chkDisableNonStdFeatures = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -2603,7 +2605,8 @@
             this.radCompact.Text = "radCompact";
             // 
             // pageSpecials
-            // 
+            //
+            this.pageSpecials.Controls.Add(this.chkDisableNonStdFeatures);
             this.pageSpecials.Controls.Add(this.chkUseExtendedNotes);
             this.pageSpecials.Controls.Add(this.chkKeepRichNames);
             this.pageSpecials.Controls.Add(this.lblChartWindowsShowMode);
@@ -2621,6 +2624,15 @@
             this.pageSpecials.Size = new System.Drawing.Size(741, 762);
             this.pageSpecials.TabIndex = 5;
             this.pageSpecials.Text = "pageSpecials";
+            // 
+            // chkDisableNonStdFeatures
+            // 
+            this.chkDisableNonStdFeatures.Location = new System.Drawing.Point(20, 20);
+            this.chkDisableNonStdFeatures.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkDisableNonStdFeatures.Name = "chkDisableNonStdFeatures";
+            this.chkDisableNonStdFeatures.Size = new System.Drawing.Size(600, 22);
+            this.chkDisableNonStdFeatures.TabIndex = 1;
+            this.chkDisableNonStdFeatures.Text = "chkDisableNonStdFeatures";
             // 
             // chkUseExtendedNotes
             // 

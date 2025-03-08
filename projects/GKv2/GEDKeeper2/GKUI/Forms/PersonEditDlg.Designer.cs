@@ -564,7 +564,7 @@
             this.btnNameCopy.TabIndex = 4;
             this.btnNameCopy.Click += new System.EventHandler(this.btnNameCopy_Click);
             // 
-            // tabsPersonData
+            // tabsData
             // 
             this.tabsData.Controls.Add(this.pageEvents);
             this.tabsData.Controls.Add(this.pageSpouses);
@@ -580,7 +580,7 @@
             this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabsData.Location = new System.Drawing.Point(0, 258);
             this.tabsData.Margin = new System.Windows.Forms.Padding(2);
-            this.tabsData.Name = "tabsPersonData";
+            this.tabsData.Name = "tabsData";
             this.tabsData.SelectedIndex = 0;
             this.tabsData.Size = new System.Drawing.Size(699, 256);
             this.tabsData.TabIndex = 1;

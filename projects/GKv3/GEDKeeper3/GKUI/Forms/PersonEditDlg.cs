@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -319,12 +319,6 @@ namespace GKUI.Forms
         {
             Image img = (portrait == null) ? null : ((ImageHandler)portrait).Handle;
             imgPortrait.Image = img;
-        }
-
-        public void SetPortraitAvl(bool avail, bool locked)
-        {
-            btnPortraitAdd.Enabled = !avail && !locked;
-            btnPortraitDelete.Enabled = avail && !locked;
         }
 
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)

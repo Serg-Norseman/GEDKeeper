@@ -133,7 +133,7 @@ namespace GKCore.Controllers
                 try {
                     baseWin.Context.LockRecord(noteRec);
 
-                    if (GlobalOptions.Instance.UseExtendedNotes) {
+                    if (GlobalOptions.Instance.UseExtendedNotes && !GlobalOptions.Instance.DisableNonStdFeatures) {
                         using (var dlg = AppHost.ResolveDialog<INoteEditDlgEx>(baseWin)) {
                             dlg.NoteRecord = noteRec;
                             result.Result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);

@@ -68,5 +68,18 @@ namespace GKUI.Platform.Handlers
         {
             get { return fItems; }
         }
+
+        public void SetTabVisible(ITabPage tabPage, bool visible)
+        {
+            if (tabPage == null) return;
+
+            var tabCtl = ((TabPageHandler)tabPage).Control;
+
+            if (visible) {
+                if (!Control.Pages.Contains(tabCtl)) Control.Pages.Add(tabCtl);
+            } else {
+                if (Control.Pages.Contains(tabCtl)) Control.Pages.Remove(tabCtl);
+            }
+        }
     }
 }

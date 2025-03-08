@@ -29,6 +29,7 @@ using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Options;
 using GKCore.Types;
 using GKUI.Components;
 using GKUI.Platform.Handlers;
@@ -319,12 +320,6 @@ namespace GKUI.Forms
         {
             Image img = (portrait == null) ? null : ((ImageHandler)portrait).Handle;
             imgPortrait.Image = img;
-        }
-
-        public void SetPortraitAvl(bool avail, bool locked)
-        {
-            btnPortraitAdd.Enabled = !avail && !locked;
-            btnPortraitDelete.Enabled = avail && !locked;
         }
 
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)

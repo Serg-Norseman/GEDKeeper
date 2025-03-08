@@ -116,6 +116,8 @@ namespace GKCore.Options
 
         public bool DialogClosingWarn { get; set; }
 
+        public bool DisableNonStdFeatures { get; set; }
+
         public bool DisplayFullFileName { get; set; }
 
         public bool EmbeddedMediaPlayer { get; set; }
@@ -367,6 +369,7 @@ namespace GKCore.Options
             GeoSearchCountry = string.Empty;
             CertaintyAlgorithm = CertaintyAlgorithm.WeightedAverage;
             DisplayFullFileName = false;
+            DisableNonStdFeatures = false;
 
             Theme = string.Empty;
 
@@ -791,6 +794,7 @@ namespace GKCore.Options
             SurnameInCapitals = ini.ReadBool("Common", "SurnameInCapitals", false);
             UseExtendedNotes = ini.ReadBool("Common", "UseExtendedNotes", false);
             DisplayFullFileName = ini.ReadBool("Common", "DisplayFullFileName", false);
+            DisableNonStdFeatures = ini.ReadBool("Common", "DisableNonStdFeatures", false);
 
             Autosave = ini.ReadBool("Common", "Autosave", false);
             AutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -932,6 +936,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "SurnameInCapitals", SurnameInCapitals);
             ini.WriteBool("Common", "UseExtendedNotes", UseExtendedNotes);
             ini.WriteBool("Common", "DisplayFullFileName", DisplayFullFileName);
+            ini.WriteBool("Common", "DisableNonStdFeatures", DisableNonStdFeatures);
 
             ini.WriteInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
 

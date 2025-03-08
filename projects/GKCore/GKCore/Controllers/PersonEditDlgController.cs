@@ -219,6 +219,14 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             try {
+                bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
+                var tabs = GetControl<ITabControl>("tabsData");
+                var tabGrp = GetControl<ITabPage>("pageGroups");
+                tabs.SetTabVisible(tabGrp, !disNoStd);
+
+                fView.Patriarch.Visible = !disNoStd;
+                fView.Bookmark.Visible = !disNoStd;
+
                 fView.SexCombo.SelectedIndex = (sbyte)fIndividualRecord.Sex;
                 fView.Patriarch.Checked = fIndividualRecord.Patriarch;
                 fView.Bookmark.Checked = fIndividualRecord.Bookmark;
@@ -353,7 +361,11 @@ namespace GKCore.Controllers
             fView.SetPortrait(img);
 
             bool locked = (fView.RestrictionCombo.SelectedIndex == (int)GDMRestriction.rnLocked);
-            fView.SetPortraitAvl((fPortraitImg != null), locked);
+            bool avail = (fPortraitImg != null);
+
+            bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
+            GetControl<IButton>("btnPortraitAdd").Enabled = !disNoStd && !avail && !locked;
+            GetControl<IButton>("btnPortraitDelete").Enabled = !disNoStd && avail && !locked;
         }
 
         private void SetTarget(GDMIndividualRecord value)

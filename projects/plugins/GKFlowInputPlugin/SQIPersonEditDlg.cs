@@ -290,12 +290,6 @@ namespace GKFlowInputPlugin
             imgPortrait.Image = img;
         }
 
-        public void SetPortraitAvl(bool avail, bool locked)
-        {
-            btnPortraitAdd.Enabled = !avail && !locked;
-            btnPortraitDelete.Enabled = avail && !locked;
-        }
-
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbRestriction.Focused) {

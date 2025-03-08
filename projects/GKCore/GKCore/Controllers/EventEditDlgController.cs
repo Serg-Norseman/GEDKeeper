@@ -27,6 +27,7 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Options;
 using GKCore.Types;
 using GKUI.Themes;
 
@@ -196,15 +197,15 @@ namespace GKCore.Controllers
 
         private void SetLocationMode(bool active)
         {
+            bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
+
             if (active) {
                 fView.Place.ReadOnly = true;
-                //txtEventPlace.BackColor = SystemColors.Control;
                 GetControl<IButton>("btnPlaceAdd").Enabled = false;
-                GetControl<IButton>("btnPlaceDelete").Enabled = true;
+                GetControl<IButton>("btnPlaceDelete").Enabled = true && !disNoStd;
             } else {
                 fView.Place.ReadOnly = false;
-                //txtEventPlace.BackColor = SystemColors.Window;
-                GetControl<IButton>("btnPlaceAdd").Enabled = true;
+                GetControl<IButton>("btnPlaceAdd").Enabled = true && !disNoStd;
                 GetControl<IButton>("btnPlaceDelete").Enabled = false;
             }
         }
