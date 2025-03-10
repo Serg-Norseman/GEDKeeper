@@ -24,6 +24,8 @@ namespace GKCore.Charts
 {
     public interface IChartLayout
     {
+        void SetModel(ChartModel model);
+
         void RecalcChart();
     }
 

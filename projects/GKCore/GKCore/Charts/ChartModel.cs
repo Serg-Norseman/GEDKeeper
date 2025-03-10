@@ -66,6 +66,7 @@ namespace GKCore.Charts
         public virtual void SetLayout(IChartLayout layout)
         {
             fLayout = layout;
+            layout.SetModel(this);
         }
 
         public virtual void SetRenderer(ChartRenderer renderer)

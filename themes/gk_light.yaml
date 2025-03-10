@@ -77,13 +77,6 @@ Elements:
     Value: "20"
 
 
-  - Element: Glyph_Settings
-    Value: "ext_images/settings.png"
   - Element: Glyph_Maps
     Value: "ext_images/maps.png"
-
-  - Element: Glyph_Accept
-    Value: "Resources.btn_accept.gif"
-  - Element: Glyph_Cancel
-    Value: "Resources.btn_cancel.gif"
 ...
