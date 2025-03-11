@@ -282,9 +282,6 @@ namespace GKUI.Components
 
         public static void FixToolStrip(ToolStrip toolStrip)
         {
-            int toolSize = BaseThemeManager.GetThemeInt(ThemeElement.ToolItemsImageSize);
-            toolStrip.ImageScalingSize = new Size(toolSize, toolSize);
-
 #if MONO
             // dirty hack: Mono ToolStrip does not support correct AutoSize
             toolStrip.AutoSize = false;

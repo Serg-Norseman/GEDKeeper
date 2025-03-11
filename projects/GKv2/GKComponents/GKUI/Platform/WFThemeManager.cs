@@ -518,6 +518,9 @@ namespace GKUI.Themes
 
             ctl.Renderer = (theme.SysDefault) ? new ToolStripProfessionalRenderer() : new TSRenderer(theme);
 
+            int toolSize = GetThemeInt(ThemeElement.ToolItemsImageSize);
+            ctl.ImageScalingSize = new Size(toolSize, toolSize);
+
             foreach (ToolStripItem item in ctl.Items) {
                 ApplyTheme(view, item, theme);
             }

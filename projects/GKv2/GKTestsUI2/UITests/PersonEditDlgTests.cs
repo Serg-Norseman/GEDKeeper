@@ -99,7 +99,7 @@ namespace GKUI.Forms
 
             SelectCombo("cmbSex", fDialog, 1); // male
 
-            var tabs = new TabControlTester("tabsPersonData", fDialog);
+            var tabs = new TabControlTester("tabsData", fDialog);
 
             var cmbRestriction = new ComboBoxTester("cmbRestriction", fDialog);
             cmbRestriction.Select(3);
