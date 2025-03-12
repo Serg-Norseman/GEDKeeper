@@ -1,6 +1,6 @@
-gedkeeper (3.8.0-1~rc1) unstable; urgency=low
+gedkeeper (3.9.0-1~rc1) unstable; urgency=low
 
   * Packaged release
   * See changelog.md for changes
 
- -- Sergey V. Zhdanovskih (aka Norseman) <gedkeeper@yandex.ru>  14 Dec 2024 00:00:00 +0300
+ -- Sergey V. Zhdanovskih (aka Norseman) <gedkeeper@yandex.ru>  14 Mar 2025 00:00:00 +0300

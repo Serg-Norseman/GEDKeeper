@@ -1,7 +1,7 @@
 # Maintainer: Sergey V. Zhdanovskih (aka Norseman) <gedkeeper@yandex.ru>
 
 pkgname=gedkeeper
-pkgver=3.8.0
+pkgver=3.9.0
 pkgrel=1
 pkgdesc="Personal genealogical database editor"
 arch=('x86_64')
