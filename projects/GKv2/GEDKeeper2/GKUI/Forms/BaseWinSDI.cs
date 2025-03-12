@@ -702,10 +702,13 @@ namespace GKUI.Forms
 
         private void UpdateShieldState()
         {
-            Bitmap img = (Bitmap)((ImageHandler)fController.GetShieldImage()).Handle;
-            if (img != null) {
-                StatusBarPanel2.Image = img;
-            }
+            var hImg = fController.GetShieldImage();
+            if (hImg == null) return;
+
+            Bitmap img = (Bitmap)((ImageHandler)hImg).Handle;
+            if (img == null) return;
+
+            StatusBarPanel2.Image = img;
         }
 
         private void StatusBar_PanelClick(object sender, EventArgs e)

@@ -96,7 +96,7 @@ Elements:
     Value: "Modern/ExportTable.png"
 
   - Element: Glyph_Exit
-    Value: "Modern/stub.png"
+    Value: "Modern/Cancel.png"
 
   - Element: Glyph_RecordAdd
     Value: "Modern/RecordAdd.png"
@@ -251,4 +251,12 @@ Elements:
   - Element: Glyph_Expand2
     Value: "Modern/Expand2.png"
 
+  - Element: Glyph_ShieldNone
+    Value: "Modern/ShieldNone.png"
+
+  - Element: Glyph_ShieldMid
+    Value: "Modern/ShieldMid.png"
+
+  - Element: Glyph_ShieldMax
+    Value: "Modern/ShieldMax.png"
 ...

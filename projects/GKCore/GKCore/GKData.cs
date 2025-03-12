@@ -230,6 +230,18 @@ namespace GKCore
             }
         }
 
+        public sealed class ShieldStateStruct
+        {
+            public string ResName;
+            public ThemeElement ThemeElement;
+
+            public ShieldStateStruct(string resName, ThemeElement themeElement)
+            {
+                ResName = resName;
+                ThemeElement = themeElement;
+            }
+        }
+
         public static readonly LSID[] Restrictions;
         public static readonly RecordTypeStruct[] RecordTypes;
         public static readonly SexStruct[] SexData;
@@ -259,6 +271,7 @@ namespace GKCore
 
         public static readonly CertaintyAlgorithmStruct[] CertaintyAlgorithms;
         public static readonly MatchPatternStruct[] MatchPatterns;
+        public static readonly ShieldStateStruct[] ShieldStates;
 
 
         /// <summary>
@@ -601,6 +614,12 @@ namespace GKCore
                 new MatchPatternStruct(LSID.MPM_RegEx),
                 new MatchPatternStruct(LSID.MPM_FastIgnoreCase),
                 new MatchPatternStruct(LSID.MPM_Fast),
+            };
+
+            ShieldStates = new ShieldStateStruct[] {
+                new ShieldStateStruct("Resources.rg_shield_max.gif", ThemeElement.Glyph_ShieldMax),
+                new ShieldStateStruct("Resources.rg_shield_mid.gif", ThemeElement.Glyph_ShieldMid),
+                new ShieldStateStruct("Resources.rg_shield_none.gif", ThemeElement.Glyph_ShieldNone),
             };
         }
     }

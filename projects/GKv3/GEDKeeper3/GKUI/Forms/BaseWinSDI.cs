@@ -798,10 +798,13 @@ namespace GKUI.Forms
 
         private void UpdateShieldState()
         {
-            Bitmap img = (Bitmap)((ImageHandler)fController.GetShieldImage()).Handle;
-            if (img != null) {
-                panStatusShieldImage.Image = img;
-            }
+            var hImg = fController.GetShieldImage();
+            if (hImg == null) return;
+
+            Bitmap img = (Bitmap)((ImageHandler)hImg).Handle;
+            if (img == null) return;
+
+            panStatusShieldImage.Image = img;
         }
 
         private void StatusBar_MouseDoubleClick(object sender, MouseEventArgs e)

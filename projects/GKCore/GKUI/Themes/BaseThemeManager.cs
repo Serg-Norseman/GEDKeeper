@@ -162,6 +162,10 @@ namespace GKUI.Themes
                 ThemeElementType.Image, // ThemeElement.Glyph_Bookmark
                 ThemeElementType.Image, // ThemeElement.Glyph_Expand
                 ThemeElementType.Image, // ThemeElement.Glyph_Expand2
+
+                ThemeElementType.Image, // ThemeElement.Glyph_ShieldNone
+                ThemeElementType.Image, // ThemeElement.Glyph_ShieldMid
+                ThemeElementType.Image, // ThemeElement.Glyph_ShieldMax
             };
         }
 

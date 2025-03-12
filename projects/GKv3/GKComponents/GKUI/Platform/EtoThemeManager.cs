@@ -160,6 +160,10 @@ namespace GKUI.Themes
                 { ThemeElement.Glyph_Bookmark, "Resources.tg_bookmark.png" },
                 { ThemeElement.Glyph_Expand, "Resources.btn_expand.gif" },
                 { ThemeElement.Glyph_Expand2, "Resources.btn_expand2.gif" },
+
+                { ThemeElement.Glyph_ShieldNone, "Resources.rg_shield_none.gif" },
+                { ThemeElement.Glyph_ShieldMid, "Resources.rg_shield_mid.gif" },
+                { ThemeElement.Glyph_ShieldMax, "Resources.rg_shield_max.gif" },
             }, true);
         }
 

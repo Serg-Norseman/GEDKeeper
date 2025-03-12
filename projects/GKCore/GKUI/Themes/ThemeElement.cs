@@ -141,6 +141,10 @@ namespace GKUI.Themes
         Glyph_Bookmark,
         Glyph_Expand,
         Glyph_Expand2,
+
+        Glyph_ShieldNone,
+        Glyph_ShieldMid,
+        Glyph_ShieldMax,
     }
 
 

@@ -806,18 +806,14 @@ namespace GKCore.Controllers
 
         public IImage GetShieldImage()
         {
-            IImage img = null;
-            var gfxProvider = AppHost.GfxProvider;
-            switch (fContext.ShieldState) {
-                case ShieldState.None:
-                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_none.gif", ImageTarget.UI, true);
-                    break;
-                case ShieldState.Middle:
-                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_mid.gif", ImageTarget.UI, true);
-                    break;
-                case ShieldState.Maximum:
-                    img = gfxProvider.LoadResourceImage("Resources.rg_shield_max.gif", ImageTarget.UI, true);
-                    break;
+            var ssStruct = GKData.ShieldStates[(int)fContext.ShieldState];
+
+            IImage img;
+            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                // old function
+                img = AppHost.GfxProvider.LoadResourceImage(ssStruct.ResName, ImageTarget.UI, true);
+            } else {
+                img = AppHost.ThemeManager.GetThemeImage(ssStruct.ThemeElement, true);
             }
             return img;
         }
