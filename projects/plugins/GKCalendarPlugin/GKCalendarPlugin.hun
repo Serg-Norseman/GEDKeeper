@@ -1,32 +1,30 @@
 ;1038,hun,Magyar
 01=Naptár
 02=Dátum
-03=Gregorián
+03=Gergely
 04=Julián
 05=Héber
 06=Iszlám
 07=Perzsa
 08=Indiai
-09=Bahai
-10=Január|Február|Március|Április|Május|Június|Július|Augusztus|Szeptember|Október|November|December ; Bahai Months
-11=Hétfő|Kedd|Szerda|Csütörtök|Péntek|Szombat|Vasárnap ; Bahai Weekdays
+09=Bahái
+10=Bahá|Dzsalál|Dzsamál|Azama|Núr|Rahma|Kalimát|Kamál|Aszmá|Izza|Masijja|Ilm|Kudra|Kaul|Maszáil|Saraf|Szultán|Mulk|Ajjám al-há|Alá ; Bahai Months
+11=Dzsamál|Kamál|Fidál|Idál|Isztidzslál|Isztiklál|Dzsalál ; Bahai Weekdays
 12=Január|Február|Március|Április|Május|Június|Július|Augusztus|Szeptember|Október|November|December ; Classic Months
 13=Hétfő|Kedd|Szerda|Csütörtök|Péntek|Szombat|Vasárnap ; Classic Weekdays
-14=Január|Február|Március|Április|Május|Június|Július|Augusztus|Szeptember|Október|November|December ; Hebrew Months
-15=Hétfő|Kedd|Szerda|Csütörtök|Péntek|Szombat|Vasárnap ; Hebrew Weekdays
-16=Január|Február|Március|Április|Május|Június|Július|Augusztus|Szeptember|Október|November|December ; Indian Civil Months
-17=Hétfő|Kedd|Szerda|Csütörtök|Péntek|Szombat|Vasárnap ; Indian Civil Weekdays
-18=Január|Február|Március|Április|Május|Június|Július|Augusztus|Szeptember|Október|November|December ; Islamic Months
-19=Hétfő|Kedd|Szerda|Csütörtök|Péntek|Szombat|Vasárnap ; Islamic Weekdays
-20=Január|Február|Március|Április|Május|Június|Július|Augusztus|Szeptember|Október|November|December ; Persian Months
-21=Hétfő|Kedd|Szerda|Csütörtök|Péntek|Szombat|Vasárnap ; Persian Weekdays
-22=Bahá'í naptár'{0}, Váhid {1} ; Bahai Cycles
+14=Niszán|Ijjár|Sziván|Tammuz|Áv|Elúl|Tisrí|Hesván|Kiszlév|Tévét|Svát|Ádár|Ádár séni ; Hebrew Months
+15=Álef|Bét|Gimel|Dálet|Hé|Váv|Zajin ; Hebrew Weekdays
+16=Csait|Vaiszákh|Dzséth|Ásárh|Szávan|Bhádó|Ásvin|Kárttik|Agahan|Pausz|Mágh|Phálgun ; Indian Civil Months
+17=Ravivár|Szómvár|Mangalvár|Budhvár|Guruvár|Sukravár|Sanivár ; Indian Civil Weekdays
+18=Muharram|Szafar|Rabí al-Avval|Rabí al-Áhir|Dzsumáda l-úla|Dzsumáda l-Áhir|Radzsab|Saabán|Ramadán|Savvál|Dzú l-Kaada|Dzú l-Hiddzsat ; Islamic Months
+19=Al-ahad|Al-ithnajn|Ath-thulaathaa’|Al-arbia’aa’|Al-khamisz|Al-dzsumu’a|Asz-szabt ; Islamic Weekdays
+20=Farvardin|Ordibehest|Hordád|Tir|Mordád|Sahrivar|Mehr|Ábán|Ázar|Dej|Bahman|Eszfand ; Persian Months
+21=Yekshambe|Doshambe|Seshambe|Chahârshambe|Panjshambe|Jom’e|Shambe ; Persian Weekdays
+22={0}. Kull-e Saj, {1}. Váhid ; Bahai Cycles
 23=Bizánci
-24=Január|Február|Március|Április|Május|Június|Július|Augusztus|Szeptember|Október|November|December ; Byzantine Months
+24=Ianuarius|Februarius|Martius|Aprilis|Maius|Iunius|Iulius|Augustus|September|October|November|December ; Byzantine Months
 25=Nap
 26=Hónap
 27=Év
 28=Forrás dátuma
-29=Dátum átváltása
-
-
+29=Átszámított dátum

@@ -101,7 +101,7 @@
 100=关闭
 101=选择
 102=添加新的
-103=Name
+103=姓名
 104=编辑成员
 105=核对性别
 106=选择一个条目
@@ -1025,8 +1025,8 @@
 1012=光标坐标
 1013=包含掩码
 1014=不包含掩码
-1015=Move files
-1016=Invalid link: identical records!
+1015=移动文件
+1016=无效链接：相同的记录！
 1017=Display full file name in window title
 1018=The maximum size allowed for a GEDCOM note has been exceeded!
 1019=Weighted average

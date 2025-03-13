@@ -1,21 +1,21 @@
 ;1038,hun,Magyar
-01=A nevek gyakorisága
+01=Nevek gyakorisága
 02=Személyes események
-03=Névek
-04=Vezetéknév
+03=Nevek
+04=Vezetéknevek
 05=Fonetika
 06=Kortársak
 07=Források
 08=Név
 09=Cím
-10=Adattár
+10=Adattárak
 11=Cím
 12=Helyek
 13=Adattár
-14=Ős statisztika
-15=Gyökér egyed: {0}
-16=Egyszerű tényező: {0}
-17=Rokonsági tényező: {0}
+14=Felmenő statisztikák
+15=Gyökér személy: {0}
+16=Ősazonossági tényező: {0}
+17=Vérrokonsági tényező: {0}
 18=Generáció
 19=Lehetséges
 20=Ismert
@@ -23,8 +23,9 @@
 22=Halmaz
 23=Halmaz, %
 24=Eltérés
-25=Egyszerű
-26=Közös ősök
+25=Ősazonosság
+26=Közös felmenők
 27=A rokonság közös ősei
-28=Nyilvántartási kártya
-29=Nincs rekord kiválasztva.
+28=Bejegyzés kártya
+29=Nincs kiválasztott bejegyzés.
+

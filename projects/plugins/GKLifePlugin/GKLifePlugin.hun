@@ -2,13 +2,14 @@
 01=Conway életjátéka
 02=Lépés
 03=Kezdés
-04=Megállít
-05=Cella értékbeállítás
+04=Megállítás
+05=Cellák értékének beállítása
 06=Törlés
-07=Véletlen
+07=Véletlenszerű
 08=Beállítások
 09=Minta stabilitás
 10=A minta {0} generációnként ismétlődik!
 11=A minta statikus!
 12=Generáció: {0}
 13=Élő cellák: {0}
+
