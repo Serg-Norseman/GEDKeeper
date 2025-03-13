@@ -26,7 +26,7 @@ exit /b %BUILD_STATUS%
 
 :installer
 rem cd .\deploy
-call gk_win_portable.cmd %APP_VER%
+call gk_win_portable.cmd %APP_VER% win86
 rem cd ..
 pause
 exit /b 0

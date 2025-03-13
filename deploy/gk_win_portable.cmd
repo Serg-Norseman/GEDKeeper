@@ -2,9 +2,10 @@
 cls
 
 set GKVER=%1
+set GKARCH=%2
 
 set lstfile=".\listfile.txt"
-set out_fn="gedkeeper_%GKVER%_win86_portable"
+set out_fn="gedkeeper_%GKVER%_%GKARCH%_portable"
 set zip_fn=".\%out_fn%.zip"
 set log_fn=".\%out_fn%.log"
 

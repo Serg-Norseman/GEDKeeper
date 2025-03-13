@@ -384,6 +384,10 @@ Section "$(gkreq)"
     SetOutPath "$INSTDIR\themes"
     File "..\themes\*.*"
 
+    CreateDirectory "$INSTDIR\themes\Modern"
+    SetOutPath "$INSTDIR\themes\Modern"
+    File "..\themes\Modern\*.*"
+
     CreateDirectory "$INSTDIR\externals"
     SetOutPath "$INSTDIR\externals"
     File "..\externals\resources.yaml"
@@ -684,6 +688,9 @@ Section "Uninstall"
 
     Delete "$INSTDIR\samples\*.*"
     RMDir "$INSTDIR\samples"
+
+    Delete "$INSTDIR\themes\Modern\*.*"
+    RMDir "$INSTDIR\themes\Modern"
 
     Delete "$INSTDIR\themes\*.*"
     RMDir "$INSTDIR\themes"
