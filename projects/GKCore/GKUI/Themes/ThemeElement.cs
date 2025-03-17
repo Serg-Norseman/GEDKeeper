@@ -145,6 +145,10 @@ namespace GKUI.Themes
         Glyph_ShieldNone,
         Glyph_ShieldMid,
         Glyph_ShieldMax,
+
+        Glyph_GEDNew,
+        Glyph_GEDLoad,
+        Glyph_GEDSave,
     }
 
 

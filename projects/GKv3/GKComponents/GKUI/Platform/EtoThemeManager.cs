@@ -164,6 +164,10 @@ namespace GKUI.Themes
                 { ThemeElement.Glyph_ShieldNone, "Resources.rg_shield_none.gif" },
                 { ThemeElement.Glyph_ShieldMid, "Resources.rg_shield_mid.gif" },
                 { ThemeElement.Glyph_ShieldMax, "Resources.rg_shield_max.gif" },
+
+                { ThemeElement.Glyph_GEDNew, "Resources.btn_create_new.gif" },
+                { ThemeElement.Glyph_GEDLoad, "Resources.btn_load.gif" },
+                { ThemeElement.Glyph_GEDSave, "Resources.btn_save.gif" },
             }, true);
         }
 

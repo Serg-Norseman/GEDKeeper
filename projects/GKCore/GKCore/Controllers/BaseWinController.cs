@@ -1069,9 +1069,9 @@ namespace GKCore.Controllers
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
             // menu
-            GetControl<IMenuItem>("miFileNew").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileNew);
-            GetControl<IMenuItem>("miFileLoad").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileLoad);
-            GetControl<IMenuItem>("miFileSave").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileSave);
+            GetControl<IMenuItem>("miFileNew").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_GEDNew);
+            GetControl<IMenuItem>("miFileLoad").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_GEDLoad);
+            GetControl<IMenuItem>("miFileSave").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_GEDSave);
             GetControl<IMenuItem>("miFileProperties").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileProperties);
             GetControl<IMenuItem>("miExport").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Export);
             GetControl<IMenuItem>("miExportTable").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ExportTable);
@@ -1099,9 +1099,9 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miAbout").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_About);
 
             // toolbar
-            GetControl<IToolItem>("tbFileNew").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileNew, true);
-            GetControl<IToolItem>("tbFileLoad").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileLoad, true);
-            GetControl<IToolItem>("tbFileSave").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_FileSave, true);
+            GetControl<IToolItem>("tbFileNew").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_GEDNew, true);
+            GetControl<IToolItem>("tbFileLoad").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_GEDLoad, true);
+            GetControl<IToolItem>("tbFileSave").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_GEDSave, true);
             GetControl<IToolItem>("tbRecordAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_RecordAdd, true);
             GetControl<IToolItem>("tbRecordEdit").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_RecordEdit, true);
             GetControl<IToolItem>("tbRecordDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_RecordDelete, true);

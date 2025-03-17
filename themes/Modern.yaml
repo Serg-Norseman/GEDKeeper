@@ -259,4 +259,13 @@ Elements:
 
   - Element: Glyph_ShieldMax
     Value: "Modern/ShieldMax.png"
+
+  - Element: Glyph_GEDNew
+    Value: "Modern/GEDNew.png"
+
+  - Element: Glyph_GEDLoad
+    Value: "Modern/GEDLoad.png"
+
+  - Element: Glyph_GEDSave
+    Value: "Modern/GEDSave.png"
 ...

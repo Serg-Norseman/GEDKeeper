@@ -166,6 +166,10 @@ namespace GKUI.Themes
                 ThemeElementType.Image, // ThemeElement.Glyph_ShieldNone
                 ThemeElementType.Image, // ThemeElement.Glyph_ShieldMid
                 ThemeElementType.Image, // ThemeElement.Glyph_ShieldMax
+
+                ThemeElementType.Image, // ThemeElement.Glyph_GEDNew
+                ThemeElementType.Image, // ThemeElement.Glyph_GEDLoad
+                ThemeElementType.Image, // ThemeElement.Glyph_GEDSave
             };
         }
 
