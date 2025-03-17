@@ -78,6 +78,10 @@ namespace GKCore.Controllers
                 fPersonalName.NameType = (GDMNameType)fView.NameType.SelectedIndex;
                 fPersonalName.Language = fView.Language.GetSelectedTag<GDMLanguageID>();
 
+                if (IsExtendedWomanSurname()) {
+                    fPersonalName.MarriedName = fView.MarriedSurname.Text;
+                }
+
                 fBase.Context.CollectNameLangs(fPersonalName);
 
                 return true;

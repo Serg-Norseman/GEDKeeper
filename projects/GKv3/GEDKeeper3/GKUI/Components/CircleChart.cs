@@ -251,6 +251,9 @@ namespace GKUI.Components
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            // blocking drawing while renderer switched to output to files
+            if (fPaintLock) return;
+
             fRenderer.SetTarget(e.Graphics);
             RenderImage(RenderTarget.Screen);
 

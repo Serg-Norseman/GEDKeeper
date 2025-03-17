@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -56,11 +56,10 @@ namespace GKUI.Platform
 
         public async Task<IFont> SelectFont(IFont font)
         {
-            Font sdFont = ((FontHandler)font).Handle;
+            Font selectedFont = ((FontHandler)font).Handle;
 
             using (FontDialog fontDlg = new FontDialog()) {
-                fontDlg.Font = sdFont;
-                Font selectedFont = null;
+                fontDlg.Font = selectedFont;
                 fontDlg.FontChanged += delegate {
                     // need to handle this event for OS X, where the dialog is a floating window
                     selectedFont = fontDlg.Font;
@@ -128,6 +127,9 @@ namespace GKUI.Platform
         public async Task<string> GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
                                               string suggestedFileName, bool overwritePrompt = true)
         {
+            // Bugfix where a missing folder would cause the app to crash completely
+            context = AppHost.Instance.GetUserFilesPath(context);
+
             using (SaveFileDialog sfd = CreateSaveFileDialog(title, context, filter, filterIndex, defaultExt, suggestedFileName)) {
                 // OverwritePrompt is not supported
                 string retStr;

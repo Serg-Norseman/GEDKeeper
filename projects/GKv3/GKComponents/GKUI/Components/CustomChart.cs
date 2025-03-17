@@ -35,6 +35,7 @@ namespace GKUI.Components
     {
         private readonly NavigationStack<object> fNavman;
         protected IChartLayout fLayout;
+        protected bool fPaintLock;
         protected ChartRenderer fRenderer;
 
 
@@ -231,6 +232,8 @@ namespace GKUI.Components
 
         private void RenderPDF(string fileName)
         {
+            fPaintLock = true;
+
             var prevRenderer = fRenderer;
             var prevScale = this.Scale;
 
@@ -259,6 +262,8 @@ namespace GKUI.Components
 
                 SetRenderer(prevRenderer);
                 this.SetScale(prevScale);
+
+                fPaintLock = false;
             }
         }
 
