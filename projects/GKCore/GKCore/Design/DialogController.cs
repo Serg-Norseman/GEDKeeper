@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,6 +24,7 @@ using GDModel;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Options;
+using GKCore.Validation;
 
 namespace GKCore.Design
 {
@@ -41,6 +42,18 @@ namespace GKCore.Design
 
         protected DialogController(TView view) : base(view)
         {
+        }
+
+        protected bool Validate<T>(T obj)
+        {
+            if (GlobalOptions.Instance.EnableStdValidation) {
+                var results = ValidationFactory.Validate(obj);
+                if (!results.Valid) {
+                    AppHost.StdDialogs.ShowError(results.Messages[0].Message);
+                    return false;
+                }
+            }
+            return true;
         }
 
         public virtual bool Accept()

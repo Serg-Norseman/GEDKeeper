@@ -60,6 +60,9 @@ namespace GKCore.Controllers
             try {
                 fCallNumber.StringValue = fView.CallNumberText.Text;
                 fCallNumber.MediaType = (GDMMediaType)fView.MediaTypeCombo.SelectedIndex;
+
+                if (!Validate(fCallNumber)) return false;
+
                 return true;
             } catch (Exception ex) {
                 Logger.WriteError("SourceCallNumberDlgController.Accept()", ex);

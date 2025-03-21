@@ -1107,8 +1107,9 @@ namespace GKCore
         /* 1027 */ DF_YYYY_MM_DD,
 
         /* 1028 */ DisableNonStdFeatures,
+        /* 1029 */ FieldIsLonger,
 
-        /* 000 */ Last = DisableNonStdFeatures
+        /* 000 */ Last = FieldIsLonger
     }
 
 
@@ -2169,6 +2170,7 @@ namespace GKCore
             /* 1027 */ "YYYY.MM.DD",
 
             /* 1028 */ "Disable non-standard features",
+            /* 1029 */ "The `{0}` field is longer than {1} characters",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

@@ -1039,3 +1039,4 @@
 1026=TT.MM.JJJJ
 1027=JJJJ.MM.TT
 1028=Nicht-standardisierte Funktionen deaktivieren
+1029=The `{0}` field is longer than {1} characters

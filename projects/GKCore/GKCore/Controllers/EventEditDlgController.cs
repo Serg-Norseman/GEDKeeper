@@ -122,6 +122,8 @@ namespace GKCore.Controllers
                     fEvent = attr;
                 }
 
+                if (!Validate(fEvent)) return false;
+
                 CommitChanges();
 
                 return true;

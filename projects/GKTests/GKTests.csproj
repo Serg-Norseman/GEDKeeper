@@ -124,6 +124,7 @@
     <Compile Include="GKCore\TreeChartTests.cs" />
     <Compile Include="GKCore\TreeToolsTests.cs" />
     <Compile Include="GKCore\UDNTests.cs" />
+    <Compile Include="GKCore\ValidationTests.cs" />
     <Compile Include="GKCore\ValuesCollectionTests.cs" />
     <Compile Include="GKCore\YamlHelperTests.cs" />
     <Compile Include="Stubs\BaseWindowStub.cs" />

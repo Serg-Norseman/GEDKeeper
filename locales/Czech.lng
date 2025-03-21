@@ -1039,3 +1039,4 @@
 1026=DD.MM.YYYY
 1027=YYYY.MM.DD
 1028=Disable non-standard features
+1029=The `{0}` field is longer than {1} characters

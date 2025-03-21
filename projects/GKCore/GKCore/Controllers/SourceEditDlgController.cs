@@ -96,6 +96,8 @@ namespace GKCore.Controllers
                     throw ex;
                 }
 
+                if (!Validate(fSourceRecord)) return false;
+
                 fLocalUndoman.Commit();
 
                 fBase.NotifyRecord(fSourceRecord, RecordAction.raEdit);

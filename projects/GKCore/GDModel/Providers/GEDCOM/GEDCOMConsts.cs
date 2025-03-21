@@ -38,6 +38,23 @@ namespace GDModel.Providers.GEDCOM
         public const int MaxLineLength = 248;
         public const int MaxNoteSize = 32768;
 
+        public const int Address_City_MaxLength = 60;
+        public const int Address_Country_MaxLength = 60;
+        public const int Address_Line_MaxLength = 60;
+        public const int Address_PostalCode_MaxLength = 10;
+        public const int Address_State_MaxLength = 60;
+
+        public const int Event_Agency_MaxLength = 120;
+        public const int Event_Cause_MaxLength = 90;
+
+        public const int Source_CallNumber_MaxLength = 120;
+        public const int Source_FiledByEntry_MaxLength = 60;
+
+        public const int Repo_Name_MaxLength = 90;
+
+        public const int URef_Number_MaxLength = 20;
+        public const int URef_Type_MaxLength = 40;
+
         // deprecated
         //public const byte GEDCOMMaxPhoneNumbers = 3;
         //public const byte GEDCOMMaxEmailAddresses = 3;

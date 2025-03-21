@@ -122,6 +122,8 @@ namespace GKCore.Options
 
         public bool EmbeddedMediaPlayer { get; set; }
 
+        public bool EnableStdValidation { get; set; }
+
         public StringList EventFilters
         {
             get { return fEventFilters; }
@@ -370,6 +372,7 @@ namespace GKCore.Options
             CertaintyAlgorithm = CertaintyAlgorithm.WeightedAverage;
             DisplayFullFileName = false;
             DisableNonStdFeatures = false;
+            EnableStdValidation = true;
 
             Theme = string.Empty;
 
@@ -795,6 +798,7 @@ namespace GKCore.Options
             UseExtendedNotes = ini.ReadBool("Common", "UseExtendedNotes", false);
             DisplayFullFileName = ini.ReadBool("Common", "DisplayFullFileName", false);
             DisableNonStdFeatures = ini.ReadBool("Common", "DisableNonStdFeatures", false);
+            EnableStdValidation = ini.ReadBool("Common", "EnableStdValidation", true);
 
             Autosave = ini.ReadBool("Common", "Autosave", false);
             AutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
@@ -937,6 +941,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "UseExtendedNotes", UseExtendedNotes);
             ini.WriteBool("Common", "DisplayFullFileName", DisplayFullFileName);
             ini.WriteBool("Common", "DisableNonStdFeatures", DisableNonStdFeatures);
+            ini.WriteBool("Common", "EnableStdValidation", EnableStdValidation);
 
             ini.WriteInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
 

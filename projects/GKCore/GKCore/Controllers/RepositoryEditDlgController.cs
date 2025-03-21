@@ -20,11 +20,11 @@
 
 using System;
 using GDModel;
+using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Design;
-using GKCore.Design.Views;
 using GKCore.Types;
 using GKUI.Themes;
 
@@ -72,6 +72,8 @@ namespace GKCore.Controllers
         {
             try {
                 fRepositoryRecord.RepositoryName = fView.Name.Text;
+
+                if (!Validate(fRepositoryRecord)) return false;
 
                 fBase.NotifyRecord(fRepositoryRecord, RecordAction.raEdit);
 

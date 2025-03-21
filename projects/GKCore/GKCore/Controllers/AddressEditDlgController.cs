@@ -65,6 +65,8 @@ namespace GKCore.Controllers
                 fAddress.AddressPostalCode = fView.PostalCode.Text;
                 fAddress.SetAddressText(fView.AddressLine.Text);
 
+                if (!Validate(fAddress)) return false;
+
                 return true;
             } catch (Exception ex) {
                 Logger.WriteError("AddressEditController.Accept()", ex);

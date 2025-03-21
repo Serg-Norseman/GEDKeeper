@@ -399,6 +399,16 @@
     <Compile Include="GKCore\FreqCollection.cs" />
     <Compile Include="GKCore\SysUtils.cs" />
     <Compile Include="GKCore\Tools\SyncTool.cs" />
+    <Compile Include="GKCore\Validation\BaseValidator.cs" />
+    <Compile Include="GKCore\Validation\Concrete\GDMAddressValidator.cs" />
+    <Compile Include="GKCore\Validation\Concrete\GDMEventValidator.cs" />
+    <Compile Include="GKCore\Validation\Concrete\GDMRepositoryRecordValidator.cs" />
+    <Compile Include="GKCore\Validation\Concrete\GDMSourceCallNumberValidator.cs" />
+    <Compile Include="GKCore\Validation\Concrete\GDMSourceRecordValidator.cs" />
+    <Compile Include="GKCore\Validation\IValidator.cs" />
+    <Compile Include="GKCore\Validation\ValidationFactory.cs" />
+    <Compile Include="GKCore\Validation\ValidationMessage.cs" />
+    <Compile Include="GKCore\Validation\ValidationResult.cs" />
     <Compile Include="GKUI\ImageBox.cs" />
     <Compile Include="GKUI\Themes\BaseThemeManager.cs" />
     <Compile Include="GKUI\Themes\IThemedView.cs" />
@@ -554,6 +564,7 @@
     <Compile Include="GKCore\Lists\RepositoryCitationsListModel.cs" />
     <Compile Include="GKCore\Lists\CallNumbersListModel.cs" />
     <Compile Include="GKCore\LocalesCollection.cs" />
+    <Compile Include="GKCore\Validation\Concrete\GDMUserReferenceValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GKMap\GKMap.Core\GKMap.Core.csproj">
@@ -561,6 +572,7 @@
       <Name>GKMap.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="GKCore.props" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

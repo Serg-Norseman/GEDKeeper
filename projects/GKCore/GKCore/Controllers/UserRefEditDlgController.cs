@@ -67,6 +67,8 @@ namespace GKCore.Controllers
                 fUserReference.StringValue = fView.Ref.Text;
                 fUserReference.ReferenceType = fView.RefType.Text;
 
+                if (!Validate(fUserReference)) return false;
+
                 return true;
             } catch (Exception ex) {
                 Logger.WriteError("UserRefEditDlgController.Accept()", ex);
