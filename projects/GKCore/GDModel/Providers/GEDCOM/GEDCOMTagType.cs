@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -118,6 +118,7 @@ namespace GDModel.Providers.GEDCOM
         ADR2,
         ADR3,
         AFN, // AncestralFileNumber
+        AGE,
         AGNC,
         ALIA,
         ANCE,
@@ -242,6 +243,7 @@ namespace GDModel.Providers.GEDCOM
         public const string ADR2 = "ADR2";
         public const string ADR3 = "ADR3";
         public const string AFN = "AFN"; // AncestralFileNumber
+        public const string AGE = "AGE";
         public const string AGNC = "AGNC";
         public const string ALIA = "ALIA";
         public const string ANCE = "ANCE";

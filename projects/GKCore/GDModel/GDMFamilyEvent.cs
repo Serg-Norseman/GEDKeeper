@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,6 +24,22 @@ namespace GDModel
 {
     public sealed class GDMFamilyEvent : GDMCustomEvent
     {
+        private string fHusbandAge;
+        private string fWifeAge;
+
+        public string HusbandAge
+        {
+            get { return fHusbandAge; }
+            set { fHusbandAge = value; }
+        }
+
+        public string WifeAge
+        {
+            get { return fWifeAge; }
+            set { fWifeAge = value; }
+        }
+
+
         public GDMFamilyEvent()
         {
         }
@@ -33,9 +49,34 @@ namespace GDModel
             SetNameValue(tagId, tagValue);
         }
 
+        public override void Assign(GDMTag source)
+        {
+            GDMFamilyEvent sourceObj = (source as GDMFamilyEvent);
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(sourceObj);
+            fHusbandAge = sourceObj.fHusbandAge;
+            fWifeAge = sourceObj.fWifeAge;
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+            fHusbandAge = string.Empty;
+            fWifeAge = string.Empty;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && string.IsNullOrEmpty(fHusbandAge) && string.IsNullOrEmpty(fWifeAge);
+        }
+
         protected override void ProcessHashes(ref HashCode hashCode)
         {
             base.ProcessHashes(ref hashCode);
+            hashCode.Add(fHusbandAge);
+            hashCode.Add(fWifeAge);
         }
     }
 }

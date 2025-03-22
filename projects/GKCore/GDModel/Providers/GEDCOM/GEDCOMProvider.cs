@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -1607,6 +1607,39 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
+        private static StackTuple AddIndividualEventTag(GDMTree tree, GDMTag owner, int tagLevel, int tagId, StringSpan tagValue)
+        {
+            GDMIndividualEvent indiEvent = (GDMIndividualEvent)owner;
+            GDMTag curTag = null;
+            TagHandler addHandler = TagHandler.Null;
+
+            GEDCOMTagType tagType = (GEDCOMTagType)tagId;
+            if (tagType == GEDCOMTagType.AGE) {
+                indiEvent.Age = tagValue;
+            } else {
+                return AddCustomEventTag(tree, owner, tagLevel, tagId, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static StackTuple AddFamilyEventTag(GDMTree tree, GDMTag owner, int tagLevel, int tagId, StringSpan tagValue)
+        {
+            GDMFamilyEvent famEvent = (GDMFamilyEvent)owner;
+            GDMTag curTag = null;
+            TagHandler addHandler = TagHandler.Null;
+
+            GEDCOMTagType tagType = (GEDCOMTagType)tagId;
+            if (tagType == GEDCOMTagType.AGE) {
+                //famEvent.HusbandAge = tagValue;
+                //famEvent.WifeAge = tagValue;
+            } else {
+                return AddCustomEventTag(tree, owner, tagLevel, tagId, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
         private static bool WriteCustomEvent(StreamWriter stream, int level, GDMTag tag)
         {
             GDMCustomEvent custEvent = (GDMCustomEvent)tag;
@@ -1628,6 +1661,38 @@ namespace GDModel.Providers.GEDCOM
             if (custEvent.HasNotes) WriteList(stream, level, custEvent.Notes, WriteNote);
             if (custEvent.HasSourceCitations) WriteList(stream, level, custEvent.SourceCitations, WriteSourceCitation);
             if (custEvent.HasMultimediaLinks) WriteList(stream, level, custEvent.MultimediaLinks, WriteMultimediaLink);
+
+            return true;
+        }
+
+        private static bool WriteIndividualEvent(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMIndividualEvent indiEvent = (GDMIndividualEvent)tag;
+
+            if (!WriteCustomEvent(stream, level, indiEvent)) return false;
+
+            WriteTagLine(stream, level, GEDCOMTagName.AGE, indiEvent.Age, true);
+
+            return true;
+        }
+
+        private static bool WriteFamilyEvent(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMFamilyEvent famEvent = (GDMFamilyEvent)tag;
+
+            if (!WriteCustomEvent(stream, level, famEvent)) return false;
+
+            var sublevel = level + 1;
+
+            if (!string.IsNullOrEmpty(famEvent.HusbandAge)) {
+                WriteTagLine(stream, level, GEDCOMTagName.HUSB, string.Empty);
+                WriteTagLine(stream, sublevel, GEDCOMTagName.AGE, famEvent.HusbandAge, true);
+            }
+
+            if (!string.IsNullOrEmpty(famEvent.WifeAge)) {
+                WriteTagLine(stream, level, GEDCOMTagName.WIFE, string.Empty);
+                WriteTagLine(stream, sublevel, GEDCOMTagName.AGE, famEvent.WifeAge, true);
+            }
 
             return true;
         }
@@ -2790,6 +2855,7 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.ADR2, GEDCOMTagName.ADR2);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.ADR3, GEDCOMTagName.ADR3);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.AFN, GEDCOMTagName.AFN);
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType.AGE, GEDCOMTagName.AGE, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.AGNC, GEDCOMTagName.AGNC, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.ALIA, GEDCOMTagName.ALIA, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.ANCE, GEDCOMTagName.ANCE);

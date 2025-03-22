@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,6 +24,15 @@ namespace GDModel
 {
     public sealed class GDMIndividualEvent : GDMCustomEvent
     {
+        private string fAge;
+
+        public string Age
+        {
+            get { return fAge; }
+            set { fAge = value; }
+        }
+
+
         public GDMIndividualEvent()
         {
         }
@@ -33,9 +42,31 @@ namespace GDModel
             SetNameValue(tagId, tagValue);
         }
 
+        public override void Assign(GDMTag source)
+        {
+            GDMIndividualEvent sourceObj = (source as GDMIndividualEvent);
+            if (sourceObj == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "source");
+
+            base.Assign(sourceObj);
+            fAge = sourceObj.fAge;
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+            fAge = string.Empty;
+        }
+
+        public override bool IsEmpty()
+        {
+            return base.IsEmpty() && string.IsNullOrEmpty(fAge);
+        }
+
         protected override void ProcessHashes(ref HashCode hashCode)
         {
             base.ProcessHashes(ref hashCode);
+            hashCode.Add(fAge);
         }
     }
 }
