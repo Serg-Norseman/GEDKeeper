@@ -28,7 +28,7 @@ namespace GKCore.Validation
 {
     public static class ValidationFactory
     {
-        static ValidationFactory()
+        public static void InitGDMValidators()
         {
             // FIXME: temp place, move
             IContainer container = AppHost.Container;

@@ -36,6 +36,7 @@ using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Options;
 using GKCore.Types;
+using GKCore.Validation;
 using GKUI.Components;
 using GKUI.Forms;
 using GKUI.Platform.Handlers;
@@ -457,6 +458,7 @@ namespace GKUI.Platform
                 throw new ArgumentNullException("container");
 
             container.Reset();
+            ValidationFactory.InitGDMValidators();
 
             // controls and other
             container.Register<IStdDialogs, WFStdDialogs>(LifeCycle.Singleton);

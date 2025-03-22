@@ -7,11 +7,11 @@ namespace GKCore.Validation
     public class ValidationTests
     {
         [Test]
-        public void InvalidEmployeeTest()
+        public void Test_InvalidEvent()
         {
             var indiEvent = new GDMIndividualEvent() { Cause = "91characters+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" };
 
-            var results = ValidationFactory.Validate(indiEvent);
+            var results = ValidationFactory.Validate(indiEvent as GDMCustomEvent);
 
             Assert.IsNotNull(results);
             Assert.IsFalse(results.Valid);

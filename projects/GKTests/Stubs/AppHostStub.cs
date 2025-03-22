@@ -28,6 +28,7 @@ using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Options;
+using GKCore.Validation;
 using NSubstitute;
 
 namespace GKTests.Stubs
@@ -147,6 +148,7 @@ namespace GKTests.Stubs
                 throw new ArgumentNullException("container");
 
             container.Reset();
+            ValidationFactory.InitGDMValidators();
 
             // controls and other
             container.Register<IStdDialogs, StdDialogsStub>(LifeCycle.Singleton);

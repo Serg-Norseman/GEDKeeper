@@ -34,6 +34,7 @@ namespace GKCore.Validation
         public ValidationResult()
         {
             Messages = new List<ValidationMessage>();
+            Valid = true;
         }
 
         /// <summary>
