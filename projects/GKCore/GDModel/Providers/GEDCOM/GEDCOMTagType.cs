@@ -83,6 +83,7 @@ namespace GDModel.Providers.GEDCOM
 
         _AWARD, // [???] INDI.ATTR
         _BGRO, // [MyFamilyTree] INDI.ATTR
+        _DNA,  // [GK]
         _ELEC, // Election [???] INDI.ATTR
         _EXCM, // Excommunication [FTM] INDI.ATTR
         _EYES, // [Gen] INDI.ATTR
@@ -90,6 +91,7 @@ namespace GDModel.Providers.GEDCOM
         _HOBBY, // Hobby [GK] INDI.ATTR
         _MDCL, // Medical condition [FTM, FTW] INDI.ATTR
         _MDNA, // [MyFamilyTree] INDI.ATTR
+        _MHAP, // [MyFamilyTree] INDI.ATTR
         _MILI, // [GK] INDI.ATTR
         _MILI_DIS, // [GK] INDI.ATTR
         _MILI_IND, // [GK] INDI.ATTR
@@ -99,6 +101,7 @@ namespace GDModel.Providers.GEDCOM
         _RACE, // Race [Gen, FTW, Reunion]
         _TRAVEL, // [GK] INDI.ATTR
         _YDNA, // [MyFamilyTree] INDI.ATTR
+        _YHAP, // [MyFamilyTree] INDI.ATTR
 
         // don't change the order of elements because it is used for bounds checks
         ANUL, // FAM.EVEN
@@ -381,6 +384,7 @@ namespace GDModel.Providers.GEDCOM
         public const string _BGRO = "_BGRO"; // [MyFamilyTree]
         public const string _CENN = "_CENN"; // Census Name [BKW6]
         public const string _DATE = "_DATE"; // Date value in non-standard use (source records) [GK]
+        public const string _DNA = "_DNA"; // [GK]
         public const string _ELEC = "_ELEC"; // Election [???]
         public const string _EXCM = "_EXCM"; // Excommunication [FTM]
         public const string _EYES = "_EYES"; // [Gen]
@@ -391,6 +395,7 @@ namespace GDModel.Providers.GEDCOM
         public const string _MARN = "_MARN"; // Married Surname [BKW6]
         public const string _MDCL = "_MDCL"; // Medical condition [FTM, FTW]
         public const string _MDNA = "_MDNA"; // [MyFamilyTree]
+        public const string _MHAP = "_MHAP"; // [MyFamilyTree]
         public const string _MILT = "_MILT"; // Military Services [FTM, PAF5]
         public const string _OBIT = "_OBIT"; // Obituary [???]
         public const string _PATN = "_PATN"; // Patronymic Name
@@ -406,6 +411,7 @@ namespace GDModel.Providers.GEDCOM
         public const string _TRAVEL = "_TRAVEL";
         public const string _UID = "_UID"; // 
         public const string _YDNA = "_YDNA"; // [MyFamilyTree]
+        public const string _YHAP = "_YHAP"; // [MyFamilyTree]
 
         // import only
         public const string _MARNM = "_MARNM"; // Married Surname [AQ3, PAF5, Geni]

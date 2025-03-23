@@ -65,6 +65,7 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GDModel\GDMDNATest.cs" />
     <Compile Include="GKCore\Charts\DefTreeLayout.cs" />
     <Compile Include="GKCore\Controllers\RepositoryCitDlgController.cs" />
     <Compile Include="GKCore\Design\Views\IRepositoryCitEditDlg.cs" />

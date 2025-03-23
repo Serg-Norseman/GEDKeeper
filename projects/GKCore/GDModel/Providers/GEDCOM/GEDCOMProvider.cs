@@ -2993,6 +2993,7 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._BGRO, GEDCOMTagName._BGRO, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._CENN, GEDCOMTagName._CENN, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._DATE, GEDCOMTagName._DATE, true);
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType._DNA, GEDCOMTagName._DNA, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._ELEC, GEDCOMTagName._ELEC, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._EXCM, GEDCOMTagName._EXCM, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._EYES, GEDCOMTagName._EYES, true);
@@ -3003,6 +3004,7 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._MARN, GEDCOMTagName._MARN, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._MDCL, GEDCOMTagName._MDCL, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._MDNA, GEDCOMTagName._MDNA, true);
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType._MHAP, GEDCOMTagName._MHAP, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._OBIT, GEDCOMTagName._OBIT, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._PATN, GEDCOMTagName._PATN, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._PLAC, GEDCOMTagName._PLAC);
@@ -3015,6 +3017,7 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._TRAVEL, GEDCOMTagName._TRAVEL, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._UID, GEDCOMTagName._UID);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._YDNA, GEDCOMTagName._YDNA, true);
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType._YHAP, GEDCOMTagName._YHAP, true);
 
             // import only
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._MARNM, GEDCOMTagName._MARNM);
