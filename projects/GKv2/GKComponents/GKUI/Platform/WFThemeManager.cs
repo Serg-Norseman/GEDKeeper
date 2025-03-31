@@ -292,11 +292,26 @@ namespace GKUI.Themes
             ThemeContextMenuStripHandler(view, component, theme);
         }
 
-        private static void FilterGridViewHandler(IThemedView view, Component component, Theme theme)
+        private static void ThemeFilterGridViewHandler(IThemedView view, Component component, Theme theme)
         {
-            var ctl = (ContainerControl)component;
+            var ctl = (FilterGridView)component;
             ctl.BackColor = GetThemeColor(theme, ThemeElement.Grid);
             ctl.ForeColor = GetThemeColor(theme, ThemeElement.GridText);
+
+            ctl.ApplyTheme();
+
+            foreach (Control item in ctl.Controls) {
+                ApplyTheme(view, item, theme);
+            }
+        }
+
+        private static void ThemeImageViewHandler(IThemedView view, Component component, Theme theme)
+        {
+            var ctl = (ImageView)component;
+            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
+
+            ctl.ApplyTheme();
 
             foreach (Control item in ctl.Controls) {
                 ApplyTheme(view, item, theme);
@@ -622,7 +637,7 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(MenuItemEx), ThemeToolStripItemHandler);
 
             RegisterControlHandler(typeof(ArborViewer), ThemeUserControlHandler);
-            RegisterControlHandler(typeof(FilterGridView), FilterGridViewHandler);
+            RegisterControlHandler(typeof(FilterGridView), ThemeFilterGridViewHandler);
             RegisterControlHandler(typeof(GKTabControl), ThemeTabControlHandler);
             RegisterControlHandler(typeof(GKComboBox), ThemeComboBoxHandler);
             RegisterControlHandler(typeof(GKDateBox), ThemeTextBoxHandler);
@@ -632,7 +647,7 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(GKTextBox), ThemeTextBoxHandler);
             RegisterControlHandler(typeof(HyperView), ThemeHyperViewHandler);
             RegisterControlHandler(typeof(ImageBox), ThemePanelHandler);
-            RegisterControlHandler(typeof(ImageView), ThemeUserControlHandler);
+            RegisterControlHandler(typeof(ImageView), ThemeImageViewHandler);
             RegisterControlHandler(typeof(LogChart), ThemePanelHandler);
             RegisterControlHandler(typeof(CustomChart), ThemeCustomChartHandler);
         }

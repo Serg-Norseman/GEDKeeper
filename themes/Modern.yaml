@@ -268,4 +268,10 @@ Elements:
 
   - Element: Glyph_GEDSave
     Value: "Modern/GEDSave.png"
+
+  - Element: Glyph_CircleAncestors
+    Value: "Modern/CircleAncestors.png"
+
+  - Element: Glyph_CircleDescendants
+    Value: "Modern/CircleDescendants.png"
 ...

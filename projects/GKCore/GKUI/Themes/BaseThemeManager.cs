@@ -170,6 +170,9 @@ namespace GKUI.Themes
                 ThemeElementType.Image, // ThemeElement.Glyph_GEDNew
                 ThemeElementType.Image, // ThemeElement.Glyph_GEDLoad
                 ThemeElementType.Image, // ThemeElement.Glyph_GEDSave
+
+                ThemeElementType.Image, // ThemeElement.Glyph_CircleAncestors
+                ThemeElementType.Image, // ThemeElement.Glyph_CircleDescendants
             };
         }
 
@@ -306,7 +309,7 @@ namespace GKUI.Themes
         {
             IImage result = GetThemeImageInt(fCurrentTheme, element);
 
-            if (result == null && require && fThemes.TryGetValue(DefaultThemeName, out Theme defTheme)) {
+            if (result == null /*&& require*/ && fThemes.TryGetValue(DefaultThemeName, out Theme defTheme)) {
                 result = GetThemeImageInt(defTheme, element);
             }
 

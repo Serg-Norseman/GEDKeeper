@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Interfaces;
+using GKUI.Themes;
 
 namespace GKUI.Components
 {
@@ -101,16 +102,6 @@ namespace GKUI.Components
             InitGrid();
         }
 
-        private ToolStripButton CreateButton(string name, Image image, string toolTip, EventHandler click)
-        {
-            var btn = new ToolStripButton();
-            btn.Name = name;
-            btn.Image = image;
-            btn.ToolTipText = toolTip;
-            btn.Click += click;
-            return btn;
-        }
-
         public void AddCondition(FilterCondition fcond)
         {
             int r = fGridView.Rows.Add();
@@ -123,11 +114,6 @@ namespace GKUI.Components
             row.Cells[2].Value = fcond.Value.ToString();
         }
 
-        public void Clear()
-        {
-            fGridView.Rows.Clear();
-        }
-
         public void RemoveCondition(int index)
         {
             if (index >= 0 && index < fGridView.Rows.Count) {
@@ -135,12 +121,35 @@ namespace GKUI.Components
             }
         }
 
+        public void Clear()
+        {
+            fGridView.Rows.Clear();
+        }
+
         public void Activate()
         {
             Select();
         }
 
+        public void ApplyTheme()
+        {
+            fGridView.BackgroundColor = this.BackColor;
+
+            UIHelper.SetButtonThemeImage(fBtnDelete, ThemeElement.Glyph_ItemDelete);
+            UIHelper.SetButtonThemeImage(fBtnAdd, ThemeElement.Glyph_ItemAdd);
+        }
+
         #region Private functions
+
+        private ToolStripButton CreateButton(string name, Image image, string toolTip, EventHandler click)
+        {
+            var btn = new ToolStripButton();
+            btn.Name = name;
+            btn.Image = image;
+            btn.ToolTipText = toolTip;
+            btn.Click += click;
+            return btn;
+        }
 
         private static DataGridViewColumn AddTextColumn(string colName, string headerText, int width)
         {

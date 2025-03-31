@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,6 +25,7 @@ using Eto.Forms;
 using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Interfaces;
+using GKUI.Themes;
 
 namespace GKUI.Components
 {
@@ -163,6 +164,14 @@ namespace GKUI.Components
         public void Activate()
         {
             Focus();
+        }
+
+        public void ApplyTheme()
+        {
+            fGridView.BackgroundColor = this.BackgroundColor;
+
+            UIHelper.SetButtonThemeImage(fBtnDelete, ThemeElement.Glyph_ItemDelete);
+            UIHelper.SetButtonThemeImage(fBtnAdd, ThemeElement.Glyph_ItemAdd);
         }
 
         #region Private functions

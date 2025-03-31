@@ -149,6 +149,9 @@ namespace GKUI.Themes
         Glyph_GEDNew,
         Glyph_GEDLoad,
         Glyph_GEDSave,
+
+        Glyph_CircleAncestors,
+        Glyph_CircleDescendants,
     }
 
 

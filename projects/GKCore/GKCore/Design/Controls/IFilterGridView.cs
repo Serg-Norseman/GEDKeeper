@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,10 +19,11 @@
  */
 
 using GKCore.Interfaces;
+using GKUI.Themes;
 
 namespace GKCore.Design.Controls
 {
-    public interface IFilterGridView : IBaseControl
+    public interface IFilterGridView : IBaseControl, IThemedView
     {
         int Count { get; }
         FilterCondition this[int index] { get; }

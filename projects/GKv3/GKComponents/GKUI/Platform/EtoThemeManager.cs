@@ -293,6 +293,34 @@ namespace GKUI.Themes
             ThemeContextMenuStripHandler(view, component, theme);
         }
 
+        private static void ThemeFilterGridViewHandler(IThemedView view, IDisposable component, Theme theme)
+        {
+            var ctl = (FilterGridView)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
+            //ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
+            //ctl.ColumnHeadersDefaultCellStyle.BackgroundColor = GetThemeColor(theme, ThemeElement.GridHeader);
+            //ctl.ColumnHeadersDefaultCellStyle.TextColor = GetThemeColor(theme, ThemeElement.GridHeaderText);
+            //ctl.EnableHeadersVisualStyles = (theme.SysDefault);
+
+            ctl.ApplyTheme();
+
+            ThemeContextMenuStripHandler(view, component, theme);
+        }
+
+        private static void ThemeImageViewHandler(IThemedView view, IDisposable component, Theme theme)
+        {
+            var ctl = (Components.ImageView)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
+            //ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
+            //ctl.ColumnHeadersDefaultCellStyle.BackgroundColor = GetThemeColor(theme, ThemeElement.GridHeader);
+            //ctl.ColumnHeadersDefaultCellStyle.TextColor = GetThemeColor(theme, ThemeElement.GridHeaderText);
+            //ctl.EnableHeadersVisualStyles = (theme.SysDefault);
+
+            ctl.ApplyTheme();
+
+            ThemeContextMenuStripHandler(view, component, theme);
+        }
+
         private static void ThemeFormHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (Window)component;
@@ -587,7 +615,7 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(MenuItemEx), ThemeToolStripItemHandler);
 
             RegisterControlHandler(typeof(ArborViewer), ThemeUserControlHandler);
-            RegisterControlHandler(typeof(FilterGridView), ThemeDataGridViewHandler);
+            RegisterControlHandler(typeof(FilterGridView), ThemeFilterGridViewHandler);
             RegisterControlHandler(typeof(GKTabControl), ThemeTabControlHandler);
             RegisterControlHandler(typeof(GKComboBox), ThemeComboBoxHandler);
             RegisterControlHandler(typeof(GKDateBox), ThemeDateBoxHandler);
@@ -597,7 +625,7 @@ namespace GKUI.Themes
             //RegisterControlHandler(typeof(GKTextBox), ThemeTextBoxHandler);
             RegisterControlHandler(typeof(HyperView), ThemeHyperViewHandler);
             RegisterControlHandler(typeof(ImageBox), ThemePanelHandler);
-            RegisterControlHandler(typeof(GKUI.Components.ImageView), ThemeUserControlHandler);
+            RegisterControlHandler(typeof(Components.ImageView), ThemeImageViewHandler);
             RegisterControlHandler(typeof(LogChart), ThemePanelHandler);
             RegisterControlHandler(typeof(CustomChart), ThemeCustomChartHandler);
         }

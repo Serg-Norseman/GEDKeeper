@@ -1091,6 +1091,9 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miMap").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Maps);
             GetControl<IMenuItem>("miStats").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Stats);
 
+            GetControl<IMenuItem>("miAncestorsCircle").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_CircleAncestors);
+            GetControl<IMenuItem>("miDescendantsCircle").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_CircleDescendants);
+
             GetControl<IMenuItem>("miOrganizer").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Organizer);
             GetControl<IMenuItem>("miSlideshow").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Slideshow);
             GetControl<IMenuItem>("miOptions").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Settings);
