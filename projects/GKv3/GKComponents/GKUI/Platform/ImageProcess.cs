@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,11 +18,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.IO;
-using Eto.Forms;
-using ExifLibrary;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Bmp;
+using SixLabors.ImageSharp.Metadata;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
@@ -30,9 +30,13 @@ namespace GKUI.Platform
 {
     public static class ImageProcess
     {
+        /// <summary>
+        /// To avoid having to perform additional checks for bad files in GfxProvider.LoadImage(),
+        /// this method should always load the stream, check the orientation, and return the prepared result.
+        /// </summary>
         public static Stream PrepareImage(Stream inputStream)
         {
-            bool isNeedOrient;
+            /*bool isNeedOrient;
             bool changeDPI = false;
 
             try {
@@ -62,26 +66,50 @@ namespace GKUI.Platform
 
             if (!isNeedOrient && !changeDPI) {
                 return inputStream;
-            } else {
+            } else*/ {
                 var outputStream = new MemoryStream();
                 using (var image = Image.Load<Bgr565>(inputStream)) {
-                    if (changeDPI) {
-                        var targetDPI = Screen.PrimaryScreen.DPI;
+                    var resolutionUnit = image.Metadata.ResolutionUnits;
+                    var horizontal = image.Metadata.HorizontalResolution;
+                    var vertical = image.Metadata.VerticalResolution;
 
-                        /*double currentDPI = image.Metadata.HorizontalResolution;
+                    // Check if image metadata is accurate already
+                    switch (resolutionUnit) {
+                        case PixelResolutionUnit.PixelsPerMeter:
+                            // Convert metadata of the resolution unit to pixel per inch to match the conversion below of 1 meter = 37.3701 inches
+                            image.Metadata.ResolutionUnits = PixelResolutionUnit.PixelsPerInch;
+                            image.Metadata.HorizontalResolution = Math.Ceiling(horizontal / 39.3701);
+                            image.Metadata.VerticalResolution = Math.Ceiling(vertical / 39.3701);
+                            break;
+                        case PixelResolutionUnit.PixelsPerCentimeter:
+                            // Convert metadata of the resolution unit to pixel per inch to match the conversion below of 1 inch = 2.54 centimeters
+                            image.Metadata.ResolutionUnits = PixelResolutionUnit.PixelsPerInch;
+                            image.Metadata.HorizontalResolution = Math.Ceiling(horizontal * 2.54);
+                            image.Metadata.VerticalResolution = Math.Ceiling(vertical * 2.54);
+                            break;
+                        default:
+                            // No changes required due to teh metadata are accurate already
+                            break;
+                    }
+
+                    /*double targetDPI = Screen.PrimaryScreen.DPI;
+                    double currentDPI = image.Metadata.HorizontalResolution;
+
+                    if (currentDPI > targetDPI) {
                         double resizeRatio = targetDPI / currentDPI;
                         if (resizeRatio < 0.1) { resizeRatio *= 10.0f; }
                         int targetWidth = (int)Math.Round(image.Width * resizeRatio);
                         int targetHeight = (int)Math.Round(image.Height * resizeRatio);
-                        image.Mutate(x => x.Resize(targetWidth, targetHeight));*/
+                        image.Mutate(x => x.Resize(targetWidth, targetHeight, KnownResamplers.Lanczos3));
 
+                        image.Metadata.ResolutionUnits = PixelResolutionUnit.PixelsPerInch;
                         image.Metadata.HorizontalResolution = targetDPI;
                         image.Metadata.VerticalResolution = targetDPI;
-                    }
+                    }*/
 
-                    if (isNeedOrient) {
+                    //if (isNeedOrient) {
                         image.Mutate(x => x.AutoOrient());
-                    }
+                    //}
 
                     var encoder = new BmpEncoder() { BitsPerPixel = BmpBitsPerPixel.Pixel16 };
                     image.SaveAsBmp(outputStream, encoder);
@@ -90,7 +118,7 @@ namespace GKUI.Platform
             }
         }
 
-        public static Stream LoadProblemImage(Stream inputStream, string outputFileName)
+        /*public static Stream LoadProblemImage(Stream inputStream, string outputFileName)
         {
             var outputStream = new FileStream(outputFileName, FileMode.Create);
             using (var image = Image.Load<Bgr565>(inputStream)) {
@@ -103,6 +131,6 @@ namespace GKUI.Platform
                 outputStream.Seek(0, SeekOrigin.Begin);
             }
             return outputStream;
-        }
+        }*/
     }
 }

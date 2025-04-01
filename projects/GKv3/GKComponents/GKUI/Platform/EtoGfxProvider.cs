@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -71,19 +71,7 @@ namespace GKUI.Platform
                 throw new ArgumentNullException("stream");
 
             try {
-                Bitmap bmp;
-                try {
-                    bmp = new Bitmap(stream);
-                } catch {
-                    try {
-                        stream = ImageProcess.LoadProblemImage(stream, cachedFile);
-                        bmp = new Bitmap(stream);
-                    } catch (Exception ex2) {
-                        Logger.WriteError("EtoGfxProvider.LoadImage()", ex2);
-                        return null;
-                    }
-                }
-
+                Bitmap bmp = new Bitmap(stream);
                 Bitmap result = null;
 
                 try {
@@ -105,9 +93,12 @@ namespace GKUI.Platform
                         imgHeight = (int)(imgHeight * ratio);
                     }
 
-                    if (cutoutIsEmpty && thumbIsEmpty) {
+                    /*if (cutoutIsEmpty && thumbIsEmpty) {
                         result = bmp;
-                    } else {
+                    } else*/ {
+                        // The image will always have to be copied here so that the output cached file is at the screen DPI,
+                        // but the original file remains unchanged (to avoid distortion of the coordinates of the cut-out areas
+                        // that were stored in GEDCOM relative to the original full image).
                         Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
                         using (Graphics graphic = new Graphics(newImage)) {
                             graphic.AntiAlias = true;

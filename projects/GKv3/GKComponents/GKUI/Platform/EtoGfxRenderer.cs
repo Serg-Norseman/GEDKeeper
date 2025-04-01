@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -48,6 +48,8 @@ namespace GKUI.Platform
                 throw new ArgumentException("target");
 
             fCanvas = gfx;
+            fCanvas.ImageInterpolation = ImageInterpolation.High;
+            fCanvas.PixelOffsetMode = PixelOffsetMode.Half;
         }
 
         public override void SetSmoothing(bool value)
