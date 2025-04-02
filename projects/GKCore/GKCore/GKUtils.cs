@@ -304,6 +304,20 @@ namespace GKCore
             return result;
         }
 
+        /// <summary>
+        /// Wraps all hyperlinks in the text with substrings A and B.
+        /// </summary>
+        public static string MakeLinks(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return text;
+
+            //const string pattern = @"(https?://[^""'\s]+)";
+            const string pattern = @"(?<!\]|\=|\])(https?://[^""'\s]+)(?!\[|\])";
+
+            return Regex.Replace(text, pattern, match => $"[url={match.Value}]{match.Value}[/url]");
+        }
+
         // TODO: greedy function, move to BaseContext
         public static string GetRecordName(GDMTree tree, GDMRecord record, bool signed)
         {
@@ -2097,7 +2111,7 @@ namespace GKCore
 
                 int num3 = address.WebPages.Count;
                 for (int i = 0; i < num3; i++) {
-                    summary.Add("    " + address.WebPages[i].StringValue);
+                    summary.Add("    " + MakeLinks(address.WebPages[i].StringValue));
                 }
             }
         }
@@ -2444,10 +2458,7 @@ namespace GKCore
                         }
 
                         GDMLines noteLines = baseContext.Tree.GetNoteLines(structWN.Notes[i]);
-                        int num2 = noteLines.Count;
-                        for (int k = 0; k < num2; k++) {
-                            summary.Add(indent + noteLines[k]);
-                        }
+                        summary.AddILines(noteLines, "    " + indent);
                     }
                 }
             } catch (Exception ex) {
@@ -2730,6 +2741,15 @@ namespace GKCore
             }
         }
 
+        private static void AddILines(this StringList summary, GDMLines lines, string indent = "")
+        {
+            if (lines == null) return;
+
+            for (int k = 0, num2 = lines.Count; k < num2; k++) {
+                summary.Add(indent + MakeLinks(lines[k]));
+            }
+        }
+
         public static void ShowNoteInfo(IBaseContext baseContext, GDMNoteRecord noteRec, StringList summary)
         {
             if (summary == null) return;
@@ -2740,7 +2760,7 @@ namespace GKCore
                     summary.Clear();
                     if (noteRec != null) {
                         summary.Add("");
-                        summary.AddStrings(noteRec.Lines.ToArray());
+                        summary.AddILines(noteRec.Lines, "");
 
                         ShowSubjectLinks(baseContext.Tree, noteRec, summary);
                     }
@@ -2912,6 +2932,16 @@ namespace GKCore
             summary.Add(HyperLink(fullURL, string.Format("{0}: {1}", res.Name, fullURL)));
         }
 
+        private static void AddQValue(this StringList summary, string name, string value)
+        {
+            if (value == null) return;
+
+            value = value.Trim();
+            if (string.IsNullOrEmpty(value)) return;
+
+            summary.AddMultiline(name + ": \"" + MakeLinks(value) + "\"");
+        }
+
         public static void ShowSourceInfo(IBaseContext baseContext, GDMSourceRecord sourceRec, StringList summary, RecordContentType contentType)
         {
             if (summary == null) return;
@@ -2924,10 +2954,10 @@ namespace GKCore
                         summary.Add("");
                         summary.Add("[u][b][size=+1]" + sourceRec.ShortTitle + "[/size][/b][/u]");
                         summary.Add("");
-                        summary.AddMultiline(LangMan.LS(LSID.Author) + ": " + sourceRec.Originator.Lines.Text.Trim());
-                        summary.AddMultiline(LangMan.LS(LSID.Title) + ": \"" + sourceRec.Title.Lines.Text.Trim() + "\"");
-                        summary.AddMultiline(LangMan.LS(LSID.Publication) + ": \"" + sourceRec.Publication.Lines.Text.Trim() + "\"");
-                        summary.AddMultiline(LangMan.LS(LSID.Text) + ": \"" + sourceRec.Text.Lines.Text.Trim() + "\"");
+                        summary.AddQValue(LangMan.LS(LSID.Author), sourceRec.Originator.Lines.Text);
+                        summary.AddQValue(LangMan.LS(LSID.Title), sourceRec.Title.Lines.Text);
+                        summary.AddQValue(LangMan.LS(LSID.Publication), sourceRec.Publication.Lines.Text);
+                        summary.AddQValue(LangMan.LS(LSID.Text), sourceRec.Text.Lines.Text);
 
                         if (sourceRec.RepositoryCitations.Count > 0) {
                             summary.Add("");
@@ -2971,7 +3001,7 @@ namespace GKCore
                     summary.Clear();
                     if (repositoryRec != null) {
                         summary.Add("");
-                        summary.Add("[u][b][size=+1]" + repositoryRec.RepositoryName.Trim() + "[/size][/b][/u]");
+                        summary.Add("[u][b][size=+1]" + MakeLinks(repositoryRec.RepositoryName.Trim()) + "[/size][/b][/u]");
                         summary.Add("");
 
                         if (repositoryRec.HasAddress)
