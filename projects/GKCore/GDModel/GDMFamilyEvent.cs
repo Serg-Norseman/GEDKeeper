@@ -24,19 +24,37 @@ namespace GDModel
 {
     public sealed class GDMFamilyEvent : GDMCustomEvent
     {
-        private string fHusbandAge;
-        private string fWifeAge;
+        private GDMAge fHusbandAge;
+        private GDMAge fWifeAge;
 
-        public string HusbandAge
+        public bool HasHusbandAge
         {
-            get { return fHusbandAge; }
-            set { fHusbandAge = value; }
+            get { return fHusbandAge != null && !fHusbandAge.IsEmpty(); }
         }
 
-        public string WifeAge
+        public GDMAge HusbandAge
         {
-            get { return fWifeAge; }
-            set { fWifeAge = value; }
+            get {
+                if (fHusbandAge == null) {
+                    fHusbandAge = new GDMAge();
+                }
+                return fHusbandAge;
+            }
+        }
+
+        public bool HasWifeAge
+        {
+            get { return fWifeAge != null && !fWifeAge.IsEmpty(); }
+        }
+
+        public GDMAge WifeAge
+        {
+            get {
+                if (fWifeAge == null) {
+                    fWifeAge = new GDMAge();
+                }
+                return fWifeAge;
+            }
         }
 
 
@@ -49,6 +67,15 @@ namespace GDModel
             SetNameValue(tagId, tagValue);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                if (fHusbandAge != null) fHusbandAge.Dispose();
+                if (fWifeAge != null) fWifeAge.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         public override void Assign(GDMTag source)
         {
             GDMFamilyEvent sourceObj = (source as GDMFamilyEvent);
@@ -56,25 +83,27 @@ namespace GDModel
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
             base.Assign(sourceObj);
-            fHusbandAge = sourceObj.fHusbandAge;
-            fWifeAge = sourceObj.fWifeAge;
+            if (sourceObj.fHusbandAge != null) HusbandAge.Assign(sourceObj.fHusbandAge);
+            if (sourceObj.fWifeAge != null) WifeAge.Assign(sourceObj.fWifeAge);
         }
 
         public override void Clear()
         {
             base.Clear();
-            fHusbandAge = string.Empty;
-            fWifeAge = string.Empty;
+
+            if (fHusbandAge != null) fHusbandAge.Clear();
+            if (fWifeAge != null) fWifeAge.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && string.IsNullOrEmpty(fHusbandAge) && string.IsNullOrEmpty(fWifeAge);
+            return base.IsEmpty() && (fHusbandAge == null || fHusbandAge.IsEmpty()) && (fWifeAge == null || fWifeAge.IsEmpty());
         }
 
         protected override void ProcessHashes(ref HashCode hashCode)
         {
             base.ProcessHashes(ref hashCode);
+
             hashCode.Add(fHusbandAge);
             hashCode.Add(fWifeAge);
         }

@@ -993,6 +993,90 @@ namespace GDModel.Providers.GEDCOM
             return strValue;
         }
 
+        public static string ParseAge(GDMAge age, string strValue)
+        {
+            if (string.Compare(strValue, "INFANT", true) == 0) {
+                age.Relative = -1;
+                age.Years = 1;
+                return string.Empty;
+            } else if (string.Compare(strValue, "CHILD", true) == 0) {
+                age.Relative = -1;
+                age.Years = 8;
+                return string.Empty;
+            } else if (string.Compare(strValue, "STILLBORN", true) == 0) {
+                age.Relative = 0;
+                age.Years = 0;
+                age.Months = 0;
+                age.Days = 0;
+                return string.Empty;
+            } else {
+                int relative = 0;
+                int years = -1;
+                int months = -1;
+                int days = -1;
+
+                int chIdx = 0;
+                if (strValue[0] == '<') {
+                    relative = -1;
+                    chIdx = 1;
+                } else if (strValue[0] == '>') {
+                    relative = 1;
+                    chIdx = 1;
+                }
+
+                bool valid = true;
+                int val = -1;
+                while (valid && (chIdx < strValue.Length)) {
+                    char c = strValue[chIdx];
+
+                    if (!char.IsWhiteSpace(c)) {
+                        bool isDigit = char.IsDigit(c);
+
+                        if (val == -1 && !isDigit) {
+                            valid = false;
+                        } else if (isDigit) {
+                            int digit = c - '0';
+                            val = (val == -1) ? digit : (val * 10 + digit);
+                        } else if (c == 'Y' || c == 'y') {
+                            if (years != -1) {
+                                valid = false;
+                            } else {
+                                years = val;
+                                val = -1;
+                            }
+                        } else if (c == 'M' || c == 'm') {
+                            if (months != -1) {
+                                valid = false;
+                            } else {
+                                months = val;
+                                val = -1;
+                            }
+                        } else if (c == 'D' || c == 'd') {
+                            if (days != -1) {
+                                valid = false;
+                            } else {
+                                days = val;
+                                val = -1;
+                            }
+                        } else {
+                            valid = false;
+                        }
+                    }
+
+                    chIdx++;
+                }
+
+                if (valid && (years != -1 || months != -1 || days != -1)) {
+                    age.Relative = relative;
+                    age.Years = years;
+                    age.Months = months;
+                    age.Days = days;
+                }
+
+                return strValue.Substring(chIdx);
+            }
+        }
+
         #endregion
 
         #region GEDCOM Enums Parse

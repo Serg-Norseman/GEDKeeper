@@ -24,12 +24,21 @@ namespace GDModel
 {
     public sealed class GDMIndividualEvent : GDMCustomEvent
     {
-        private string fAge;
+        private GDMAge fAge;
 
-        public string Age
+        public bool HasAge
         {
-            get { return fAge; }
-            set { fAge = value; }
+            get { return fAge != null && !fAge.IsEmpty(); }
+        }
+
+        public GDMAge Age
+        {
+            get {
+                if (fAge == null) {
+                    fAge = new GDMAge();
+                }
+                return fAge;
+            }
         }
 
 
@@ -42,6 +51,14 @@ namespace GDModel
             SetNameValue(tagId, tagValue);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                if (fAge != null) fAge.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         public override void Assign(GDMTag source)
         {
             GDMIndividualEvent sourceObj = (source as GDMIndividualEvent);
@@ -49,23 +66,26 @@ namespace GDModel
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
             base.Assign(sourceObj);
-            fAge = sourceObj.fAge;
+
+            if (sourceObj.fAge != null) Age.Assign(sourceObj.fAge);
         }
 
         public override void Clear()
         {
             base.Clear();
-            fAge = string.Empty;
+
+            if (fAge != null) fAge.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && string.IsNullOrEmpty(fAge);
+            return base.IsEmpty() && (fAge == null || fAge.IsEmpty());
         }
 
         protected override void ProcessHashes(ref HashCode hashCode)
         {
             base.ProcessHashes(ref hashCode);
+
             hashCode.Add(fAge);
         }
     }

@@ -97,6 +97,9 @@ namespace GDModel.Providers.GEDCOM
         RepositoryCitationTag,
         SourceCallNumberTag,
         SkipTag,
+        IndividualEventTag,
+        FamilyEventTag,
+        AgeTag,
     }
 
     public struct StackTuple
@@ -665,7 +668,7 @@ namespace GDModel.Providers.GEDCOM
                 indiRec.Sex = GEDCOMUtils.GetSexVal(tagValue);
             } else if (GEDCOMUtils.IsIndiEvent(tagType)) {
                 curTag = indiRec.AddEvent(new GDMIndividualEvent(tagId, tagValue));
-                addHandler = TagHandler.CustomEventTag;
+                addHandler = TagHandler.IndividualEventTag;
             } else if (GEDCOMUtils.IsIndiAttr(tagType)) {
                 curTag = indiRec.AddEvent(new GDMIndividualAttribute(tagId, tagValue));
                 addHandler = TagHandler.CustomEventTag;
@@ -701,7 +704,7 @@ namespace GDModel.Providers.GEDCOM
             WriteList(stream, level, indiRec.ChildToFamilyLinks, WriteChildToFamilyLink);
             WriteList(stream, level, indiRec.SpouseToFamilyLinks, WriteBaseTag);
 
-            if (indiRec.HasEvents) WriteList(stream, level, indiRec.Events, WriteCustomEvent);
+            if (indiRec.HasEvents) WriteList(stream, level, indiRec.Events, WriteIndividualEvent);
             if (indiRec.HasAssociations) WriteList(stream, level, indiRec.Associations, WriteAssociation);
             if (indiRec.HasGroups) WriteList(stream, level, indiRec.Groups, WriteBaseTag);
         }
@@ -726,7 +729,7 @@ namespace GDModel.Providers.GEDCOM
                 famRec.Status = GEDCOMUtils.GetMarriageStatusVal(tagValue);
             } else if (GEDCOMUtils.IsFamEvent(tagType)) {
                 curTag = famRec.AddEvent(new GDMFamilyEvent(tagId, tagValue));
-                addHandler = TagHandler.CustomEventTag;
+                addHandler = TagHandler.FamilyEventTag;
             } else {
                 return AddRecordWithEventsTag(tree, owner, tagLevel, tagId, tagValue);
             }
@@ -747,7 +750,7 @@ namespace GDModel.Providers.GEDCOM
 
             WriteList(stream, level, famRec.Children, WriteBaseTag);
 
-            if (famRec.HasEvents) WriteList(stream, level, famRec.Events, WriteCustomEvent);
+            if (famRec.HasEvents) WriteList(stream, level, famRec.Events, WriteFamilyEvent);
         }
 
 
@@ -1615,7 +1618,7 @@ namespace GDModel.Providers.GEDCOM
 
             GEDCOMTagType tagType = (GEDCOMTagType)tagId;
             if (tagType == GEDCOMTagType.AGE) {
-                indiEvent.Age = tagValue;
+                indiEvent.Age.ParseString(tagValue);
             } else {
                 return AddCustomEventTag(tree, owner, tagLevel, tagId, tagValue);
             }
@@ -1630,14 +1633,29 @@ namespace GDModel.Providers.GEDCOM
             TagHandler addHandler = TagHandler.Null;
 
             GEDCOMTagType tagType = (GEDCOMTagType)tagId;
-            if (tagType == GEDCOMTagType.AGE) {
-                //famEvent.HusbandAge = tagValue;
-                //famEvent.WifeAge = tagValue;
+            if (tagType == GEDCOMTagType.HUSB) {
+                curTag = famEvent.HusbandAge;
+                addHandler = TagHandler.AgeTag;
+            } else if (tagType == GEDCOMTagType.WIFE) {
+                curTag = famEvent.WifeAge;
+                addHandler = TagHandler.AgeTag;
             } else {
                 return AddCustomEventTag(tree, owner, tagLevel, tagId, tagValue);
             }
 
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static StackTuple AddAgeTag(GDMTree tree, GDMTag owner, int tagLevel, int tagId, StringSpan tagValue)
+        {
+            GEDCOMTagType tagType = (GEDCOMTagType)tagId;
+            if (tagType == GEDCOMTagType.AGE) {
+                ((GDMAge)owner).ParseString(tagValue);
+            } else {
+                return AddBaseTag(tree, owner, tagLevel, tagId, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, null, TagHandler.Null);
         }
 
         private static bool WriteCustomEvent(StreamWriter stream, int level, GDMTag tag)
@@ -1667,31 +1685,34 @@ namespace GDModel.Providers.GEDCOM
 
         private static bool WriteIndividualEvent(StreamWriter stream, int level, GDMTag tag)
         {
-            GDMIndividualEvent indiEvent = (GDMIndividualEvent)tag;
+            if (!WriteCustomEvent(stream, level, tag)) return false;
 
-            if (!WriteCustomEvent(stream, level, indiEvent)) return false;
-
-            WriteTagLine(stream, level, GEDCOMTagName.AGE, indiEvent.Age, true);
+            // GDMIndividualEvent | GDMIndividualAttribute
+            if (tag is GDMIndividualEvent indiEvent) {
+                level += 1;
+                if (indiEvent.HasAge) WriteTagLine(stream, level, GEDCOMTagName.AGE, indiEvent.Age.StringValue, true);
+            }
 
             return true;
         }
 
         private static bool WriteFamilyEvent(StreamWriter stream, int level, GDMTag tag)
         {
+            if (!WriteCustomEvent(stream, level, tag)) return false;
+
             GDMFamilyEvent famEvent = (GDMFamilyEvent)tag;
 
-            if (!WriteCustomEvent(stream, level, famEvent)) return false;
-
+            level += 1;
             var sublevel = level + 1;
 
-            if (!string.IsNullOrEmpty(famEvent.HusbandAge)) {
+            if (famEvent.HasHusbandAge) {
                 WriteTagLine(stream, level, GEDCOMTagName.HUSB, string.Empty);
-                WriteTagLine(stream, sublevel, GEDCOMTagName.AGE, famEvent.HusbandAge, true);
+                WriteTagLine(stream, sublevel, GEDCOMTagName.AGE, famEvent.HusbandAge.StringValue, true);
             }
 
-            if (!string.IsNullOrEmpty(famEvent.WifeAge)) {
+            if (famEvent.HasWifeAge) {
                 WriteTagLine(stream, level, GEDCOMTagName.WIFE, string.Empty);
-                WriteTagLine(stream, sublevel, GEDCOMTagName.AGE, famEvent.WifeAge, true);
+                WriteTagLine(stream, sublevel, GEDCOMTagName.AGE, famEvent.WifeAge.StringValue, true);
             }
 
             return true;
@@ -2806,6 +2827,9 @@ namespace GDModel.Providers.GEDCOM
             AddRepositoryCitationTag,   /* RepositoryCitationTag */
             AddSourceCallNumberTag,     /* SourceCallNumberTag */
             SkipTag,                    /* SkipTag */
+            AddIndividualEventTag,      /* IndividualEventTag */
+            AddFamilyEventTag,          /* FamilyEventTag */
+            AddAgeTag,                  /* AgeTag */
         };
 
         #endregion
@@ -3065,7 +3089,7 @@ namespace GDModel.Providers.GEDCOM
                     if (tag is GDMRecord) {
                         WriteRecordEx(fs, (GDMRecord)tag);
                     } else if (tag is GDMIndividualEvent) {
-                        WriteCustomEvent(fs, 1, tag);
+                        WriteIndividualEvent(fs, 1, tag);
                     } else if (tag is GDMPersonalName) {
                         WritePersonalName(fs, 1, tag);
                     } else if (tag is GDMMultimediaLink) {

@@ -89,6 +89,7 @@
         <EmbeddedResource Include="Resources\test_famhist2.ged" />
         <EmbeddedResource Include="Resources\test_gc4j_utf8.ged" />
         <EmbeddedResource Include="Resources\test_rootsmagic.ged" />
+        <EmbeddedResource Include="Resources\test_evtages.ged" />
     </ItemGroup>
 
 </Project>
