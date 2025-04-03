@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -206,30 +206,6 @@ namespace GDModel
         }
 
 
-        public void SetOriginatorArray(params string[] value)
-        {
-            fOriginator.Lines.Clear();
-            fOriginator.Lines.AddRange(value);
-        }
-
-        public void SetTitleArray(params string[] value)
-        {
-            fTitle.Lines.Clear();
-            fTitle.Lines.AddRange(value);
-        }
-
-        public void SetPublicationArray(params string[] value)
-        {
-            fPublication.Lines.Clear();
-            fPublication.Lines.AddRange(value);
-        }
-
-        public void SetTextArray(params string[] value)
-        {
-            fText.Lines.Clear();
-            fText.Lines.AddRange(value);
-        }
-
         public override float IsMatch(GDMTag tag, MatchParams matchParams)
         {
             GDMSourceRecord otherSource = tag as GDMSourceRecord;
@@ -268,8 +244,7 @@ namespace GDModel
         public GDMRepositoryCitation FindRepository(GDMRepositoryRecord repoRec)
         {
             if (repoRec != null) {
-                int num = fRepositoryCitations.Count;
-                for (int i = 0; i < num; i++) {
+                for (int i = 0, num = fRepositoryCitations.Count; i < num; i++) {
                     var repoCit = fRepositoryCitations[i];
                     if (repoCit.XRef == repoRec.XRef) {
                         return repoCit;

@@ -28,7 +28,7 @@
             </TableRow>
             <TableRow>
               <Label x:Name="lblAddress" />
-              <TextBox x:Name="txtAddress" />
+              <TextArea x:Name="txtAddress" AcceptsReturn="True" AcceptsTab="False" />
             </TableRow>
           </TableLayout>
         </TabPage>

@@ -77,14 +77,10 @@ namespace GKCore.Controllers
         {
             try {
                 fSourceRecord.ShortTitle = fView.ShortTitle.Text;
-                fSourceRecord.Originator.Clear();
-                fSourceRecord.SetOriginatorArray(fView.Author.Lines);
-                fSourceRecord.Title.Clear();
-                fSourceRecord.SetTitleArray(fView.DescTitle.Lines);
-                fSourceRecord.Publication.Clear();
-                fSourceRecord.SetPublicationArray(fView.Publication.Lines);
-                fSourceRecord.Text.Clear();
-                fSourceRecord.SetTextArray(fView.Text.Lines);
+                fSourceRecord.Originator.SetLines(fView.Author.Lines);
+                fSourceRecord.Title.SetLines(fView.DescTitle.Lines);
+                fSourceRecord.Publication.SetLines(fView.Publication.Lines);
+                fSourceRecord.Text.SetLines(fView.Text.Lines);
 
                 try {
                     GDMCustomDate dt = fView.Date.Date;

@@ -50,7 +50,7 @@ namespace GKUI.Forms
         private TextBox txtState;
         private TextBox txtCity;
         private TextBox txtPostalCode;
-        private TextBox txtAddress;
+        private TextArea txtAddress;
         private GKSheetList fPhonesList;
         private GKSheetList fMailsList;
         private GKSheetList fWebsList;

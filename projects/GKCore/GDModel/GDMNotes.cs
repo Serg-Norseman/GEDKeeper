@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -65,6 +65,12 @@ namespace GDModel
         {
             base.Clear();
             fLines.Clear();
+        }
+
+        public void SetLines(string[] value)
+        {
+            fLines.Clear();
+            fLines.AddRange(value);
         }
 
         public override bool IsEmpty()

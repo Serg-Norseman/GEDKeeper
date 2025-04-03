@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -194,16 +194,16 @@ namespace GDModel
             Assert.AreEqual("sample", sourRec.Text.Lines.Text);
 
             //
-            sourRec.SetOriginatorArray(new string[] {"author1", "author2", "author3", "author4"});
+            sourRec.Originator.SetLines(new string[] {"author1", "author2", "author3", "author4"});
             Assert.AreEqual("author1\r\nauthor2\r\nauthor3\r\nauthor4", sourRec.Originator.Lines.Text);
 
-            sourRec.SetTitleArray(new string[] {"title"});
+            sourRec.Title.SetLines(new string[] {"title"});
             Assert.AreEqual("title", sourRec.Title.Lines.Text);
 
-            sourRec.SetPublicationArray(new string[] {"publication"});
+            sourRec.Publication.SetLines(new string[] {"publication"});
             Assert.AreEqual("publication", sourRec.Publication.Lines.Text);
 
-            sourRec.SetTextArray(new string[] {"sample"});
+            sourRec.Text.SetLines(new string[] {"sample"});
             Assert.AreEqual("sample", sourRec.Text.Lines.Text);
 
             //
