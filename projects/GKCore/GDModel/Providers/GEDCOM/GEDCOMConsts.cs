@@ -40,9 +40,14 @@ namespace GDModel.Providers.GEDCOM
 
         public const int Address_City_MaxLength = 60;
         public const int Address_Country_MaxLength = 60;
-        public const int Address_Line_MaxLength = 60;
+        public const int Address_Line_MaxLength = 60; // unused yet
         public const int Address_PostalCode_MaxLength = 10;
         public const int Address_State_MaxLength = 60;
+
+        //public const int Address_EMail_MaxLength = 120;
+        //public const int Address_Fax_MaxLength = 60;
+        //public const int Address_WebPage_MaxLength = 120;
+        //public const int Address_PhoneNumber_MaxLength = 25;
 
         public const int Event_Agency_MaxLength = 120;
         public const int Event_Cause_MaxLength = 90;
