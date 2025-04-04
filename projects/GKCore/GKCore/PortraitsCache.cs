@@ -87,19 +87,11 @@ namespace GKCore
 
             // if cache doesn't contain the image, then load and save it to cache
             if (result == null) {
-                try {
-                    result = context.GetPrimaryBitmap(iRec, -1, -1, true);
+                result = context.GetPrimaryBitmap(iRec, -1, -1, true);
 
-                    // save image to cache
-                    if (result != null) {
-                        try {
-                            AppHost.GfxProvider.SaveImage(result, cachedFile);
-                        } catch (Exception ex) {
-                            Logger.WriteError(string.Format("PortraitsCache.GetImage()->SaveImage({0})", cachedFile), ex);
-                        }
-                    }
-                } catch (Exception ex) {
-                    Logger.WriteError(string.Format("PortraitsCache.GetImage()->GetPrimaryBitmap({0})", cachedFile), ex);
+                // save image to cache
+                if (result != null) {
+                    AppHost.GfxProvider.SaveImage(result, cachedFile);
                 }
             }
 

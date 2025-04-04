@@ -20,9 +20,9 @@
 
 using System;
 using System.IO;
+using GKCore;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Bmp;
-using SixLabors.ImageSharp.Metadata;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
@@ -33,104 +33,58 @@ namespace GKUI.Platform
         /// <summary>
         /// To avoid having to perform additional checks for bad files in GfxProvider.LoadImage(),
         /// this method should always load the stream, check the orientation, and return the prepared result.
+        /// For fast loading of cached files, only BMP format is used.
         /// </summary>
         public static Stream PrepareImage(Stream inputStream)
         {
-            /*bool isNeedOrient;
-            bool changeDPI = false;
+            var outputStream = new MemoryStream();
+            using (var image = Image.Load<Bgr565>(inputStream)) {
+                image.Mutate(x => x.AutoOrient());
 
-            try {
-                try {
-                    var file = ImageFile.FromStream(inputStream);
-                    var orientProp = file.Properties.Get<ExifEnumProperty<ExifLibrary.Orientation>>(ExifTag.Orientation);
-                    isNeedOrient = (orientProp != null && orientProp.Value != ExifLibrary.Orientation.Normal);
-
-                    var resX = file.Properties.Get<ExifURational>(ExifTag.XResolution);
-                    var resY = file.Properties.Get<ExifURational>(ExifTag.YResolution);
-                    if (resX != null && resY != null) {
-                        changeDPI = ((resX != null && (float)resX >= 100.0f) || (resY != null && (float)resY >= 100.0f));
-                    } else {
-                        var densX = file.Properties.Get<ExifUShort>(ExifTag.XDensity);
-                        var densY = file.Properties.Get<ExifUShort>(ExifTag.YDensity);
-                        if (densX != null && densY != null) {
-                            changeDPI = ((densX != null && (float)densX >= 100.0f) || (densY != null && (float)densY >= 100.0f));
-                        }
-                    }
-                } finally {
-                    inputStream.Seek(0, SeekOrigin.Begin);
-                }
-            } catch {
-                isNeedOrient = false;
-                changeDPI = false;
+                var encoder = new BmpEncoder() { BitsPerPixel = BmpBitsPerPixel.Pixel16 };
+                image.SaveAsBmp(outputStream, encoder);
             }
+            return outputStream;
+        }
 
-            if (!isNeedOrient && !changeDPI) {
-                return inputStream;
-            } else*/ {
-                var outputStream = new MemoryStream();
-                using (var image = Image.Load<Bgr565>(inputStream)) {
-                    var resolutionUnit = image.Metadata.ResolutionUnits;
-                    var horizontal = image.Metadata.HorizontalResolution;
-                    var vertical = image.Metadata.VerticalResolution;
+        /// <summary>
+        /// Fast and lightweight extracts DPI values ​​from the BMP file header.
+        /// To avoid using other classes and libraries.
+        /// </summary>
+        public static int GetBitmapDPI(Stream stream)
+        {
+            try {
+                stream.Seek(0, SeekOrigin.Begin);
 
-                    // Check if image metadata is accurate already
-                    switch (resolutionUnit) {
-                        case PixelResolutionUnit.PixelsPerMeter:
-                            // Convert metadata of the resolution unit to pixel per inch to match the conversion below of 1 meter = 37.3701 inches
-                            image.Metadata.ResolutionUnits = PixelResolutionUnit.PixelsPerInch;
-                            image.Metadata.HorizontalResolution = Math.Ceiling(horizontal / 39.3701);
-                            image.Metadata.VerticalResolution = Math.Ceiling(vertical / 39.3701);
-                            break;
-                        case PixelResolutionUnit.PixelsPerCentimeter:
-                            // Convert metadata of the resolution unit to pixel per inch to match the conversion below of 1 inch = 2.54 centimeters
-                            image.Metadata.ResolutionUnits = PixelResolutionUnit.PixelsPerInch;
-                            image.Metadata.HorizontalResolution = Math.Ceiling(horizontal * 2.54);
-                            image.Metadata.VerticalResolution = Math.Ceiling(vertical * 2.54);
-                            break;
-                        default:
-                            // No changes required due to teh metadata are accurate already
-                            break;
-                    }
+                var signature = new byte[2];
+                if (stream.Read(signature, 0, 2) != 2 || signature[0] != 'B' || signature[1] != 'M')
+                    throw new ArgumentException("The file is not a BMP file");
 
-                    /*double targetDPI = Screen.PrimaryScreen.DPI;
-                    double currentDPI = image.Metadata.HorizontalResolution;
+                stream.Seek(36, SeekOrigin.Current);
 
-                    if (currentDPI > targetDPI) {
-                        double resizeRatio = targetDPI / currentDPI;
-                        if (resizeRatio < 0.1) { resizeRatio *= 10.0f; }
-                        int targetWidth = (int)Math.Round(image.Width * resizeRatio);
-                        int targetHeight = (int)Math.Round(image.Height * resizeRatio);
-                        image.Mutate(x => x.Resize(targetWidth, targetHeight, KnownResamplers.Lanczos3));
+                int horizontalDpi = ReadInt32(stream);  // X pixels per meter
+                int verticalDpi = ReadInt32(stream);    // Y pixels per meter
 
-                        image.Metadata.ResolutionUnits = PixelResolutionUnit.PixelsPerInch;
-                        image.Metadata.HorizontalResolution = targetDPI;
-                        image.Metadata.VerticalResolution = targetDPI;
-                    }*/
+                // Convert metadata of the resolution unit to pixel per inch to match the conversion below of 1 meter = 39.3701 inches
+                horizontalDpi = (int)Math.Ceiling(horizontalDpi / 39.3701);
+                verticalDpi = (int)Math.Ceiling(verticalDpi / 39.3701);
 
-                    //if (isNeedOrient) {
-                        image.Mutate(x => x.AutoOrient());
-                    //}
+                stream.Seek(0, SeekOrigin.Begin);
 
-                    var encoder = new BmpEncoder() { BitsPerPixel = BmpBitsPerPixel.Pixel16 };
-                    image.SaveAsBmp(outputStream, encoder);
-                }
-                return outputStream;
+                return Math.Max(horizontalDpi, verticalDpi);
+            } catch (Exception ex) {
+                Logger.WriteError("ImageProcess.GetBitmapDPI()", ex);
+                return 0;
             }
         }
 
-        /*public static Stream LoadProblemImage(Stream inputStream, string outputFileName)
+        private static int ReadInt32(Stream stream)
         {
-            var outputStream = new FileStream(outputFileName, FileMode.Create);
-            using (var image = Image.Load<Bgr565>(inputStream)) {
-                image.Mutate(x => x.AutoOrient());
-                var encoder = new BmpEncoder() { BitsPerPixel = BmpBitsPerPixel.Pixel16 };
-                image.SaveAsBmp(outputStream, encoder);
-
-                inputStream.Close();
-
-                outputStream.Seek(0, SeekOrigin.Begin);
-            }
-            return outputStream;
-        }*/
+            var bytes = new byte[4];
+            int readBytes = stream.Read(bytes, 0, 4);
+            if (readBytes != 4)
+                throw new ArgumentException("Incorrect BMP file format");
+            return BitConverter.ToInt32(bytes, 0);
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -242,13 +242,17 @@ namespace GKUI.Platform
             if (fileName == null)
                 throw new ArgumentNullException("fileName");
 
-            // overwrite mode
-            using (FileStream stream = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
-                var oldBitmap = ((ImageHandler)image).Handle;
-                // for fix bug: "A generic error occurred in GDI+"
-                using (var newBitmap = new Bitmap(oldBitmap)) {
-                    newBitmap.Save(stream, ImageFormat.Bmp);
+            try {
+                // overwrite mode
+                using (FileStream stream = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
+                    var oldBitmap = ((ImageHandler)image).Handle;
+                    // for fix bug: "A generic error occurred in GDI+"
+                    using (var newBitmap = new Bitmap(oldBitmap)) {
+                        newBitmap.Save(stream, ImageFormat.Bmp);
+                    }
                 }
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("WFGfxProvider.SaveImage({0})", fileName), ex);
             }
         }
 

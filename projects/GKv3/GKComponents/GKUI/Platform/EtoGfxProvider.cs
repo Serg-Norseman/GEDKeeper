@@ -65,12 +65,15 @@ namespace GKUI.Platform
             return transformStream;
         }
 
+        private static readonly float TargetDPI = Screen.PrimaryScreen.DPI;
+
         public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea, string cachedFile)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
 
             try {
+                var bmpDPI = ImageProcess.GetBitmapDPI(stream);
                 Bitmap bmp = new Bitmap(stream);
                 Bitmap result = null;
 
@@ -86,6 +89,12 @@ namespace GKUI.Platform
                         imgHeight = cutoutArea.Height;
                     }
 
+                    if (bmpDPI != 0 && bmpDPI > TargetDPI) {
+                        float resizeRatio = TargetDPI / bmpDPI;
+                        imgWidth = (int)Math.Round(imgWidth * resizeRatio);
+                        imgHeight = (int)Math.Round(imgHeight * resizeRatio);
+                    }
+
                     bool thumbIsEmpty = (thumbWidth <= 0 && thumbHeight <= 0);
                     if (!thumbIsEmpty) {
                         float ratio = GfxHelper.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
@@ -93,29 +102,25 @@ namespace GKUI.Platform
                         imgHeight = (int)(imgHeight * ratio);
                     }
 
-                    /*if (cutoutIsEmpty && thumbIsEmpty) {
-                        result = bmp;
-                    } else*/ {
-                        // The image will always have to be copied here so that the output cached file is at the screen DPI,
-                        // but the original file remains unchanged (to avoid distortion of the coordinates of the cut-out areas
-                        // that were stored in GEDCOM relative to the original full image).
-                        Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
-                        using (Graphics graphic = new Graphics(newImage)) {
-                            graphic.AntiAlias = true;
-                            graphic.ImageInterpolation = ImageInterpolation.High;
-                            graphic.PixelOffsetMode = PixelOffsetMode.Half;
+                    // The image will always have to be copied here so that the output cached file is at the screen DPI,
+                    // but the original file remains unchanged (to avoid distortion of the coordinates of the cut-out areas
+                    // that were stored in GEDCOM relative to the original full image).
+                    Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
+                    using (Graphics graphic = new Graphics(newImage)) {
+                        graphic.AntiAlias = true;
+                        graphic.ImageInterpolation = ImageInterpolation.High;
+                        graphic.PixelOffsetMode = PixelOffsetMode.Half;
 
-                            if (cutoutIsEmpty) {
-                                graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
-                            } else {
-                                var sourRect = new RectangleF(cutoutArea.Left, cutoutArea.Top, cutoutArea.Width, cutoutArea.Height);
-                                var destRect = new RectangleF(0, 0, imgWidth, imgHeight);
+                        if (cutoutIsEmpty) {
+                            graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
+                        } else {
+                            var sourRect = new RectangleF(cutoutArea.Left, cutoutArea.Top, cutoutArea.Width, cutoutArea.Height);
+                            var destRect = new RectangleF(0, 0, imgWidth, imgHeight);
 
-                                graphic.DrawImage(bmp, sourRect, destRect);
-                            }
+                            graphic.DrawImage(bmp, sourRect, destRect);
                         }
-                        result = newImage;
                     }
+                    result = newImage;
                 } finally {
                     if (result != bmp)
                         bmp.Dispose();
@@ -181,7 +186,11 @@ namespace GKUI.Platform
             if (fileName == null)
                 throw new ArgumentNullException("fileName");
 
-            ((Bitmap)((ImageHandler)image).Handle).Save(fileName, ImageFormat.Bitmap);
+            try {
+                ((Bitmap)((ImageHandler)image).Handle).Save(fileName, ImageFormat.Bitmap);
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("EtoGfxProvider.SaveImage({0})", fileName), ex);
+            }
         }
 
         public IFont CreateFont(string fontName, float size, bool bold)
