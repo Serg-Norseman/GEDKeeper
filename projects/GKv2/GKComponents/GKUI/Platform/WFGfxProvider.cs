@@ -24,7 +24,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using BSLib;
-using ExifLib;
 using GKCore;
 using GKCore.Design.Graphics;
 using GKUI.Platform.Handlers;
@@ -97,35 +96,19 @@ namespace GKUI.Platform
 
         public Stream CheckOrientation(Stream inputStream)
         {
-            Stream transformStream;
+            inputStream.Seek(0, SeekOrigin.Begin);
 
-            ushort orientation;
-            try {
-                var file = new ExifReader(inputStream, true);
-                if (!file.GetTagValue(ExifTags.Orientation, out orientation)) {
-                    orientation = 1;
-                }
-            } catch {
-                orientation = 1;
-            }
-
-            if (orientation != 1) {
-                inputStream.Seek(0, SeekOrigin.Begin);
-
-                transformStream = new MemoryStream();
-                using (var bmp = new Bitmap(inputStream)) {
-                    NormalizeOrientation(bmp);
-                    bmp.Save(transformStream, ImageFormat.Bmp);
-                }
-            } else {
-                transformStream = inputStream;
+            var transformStream = new MemoryStream();
+            using (var bmp = new Bitmap(inputStream)) {
+                NormalizeOrientation(bmp);
+                bmp.Save(transformStream, ImageFormat.Bmp);
             }
 
             transformStream.Seek(0, SeekOrigin.Begin);
             return transformStream;
         }
 
-        public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea, string cachedFile)
+        public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool reduce)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
@@ -146,6 +129,17 @@ namespace GKUI.Platform
                         imgHeight = cutoutArea.Height;
                     }
 
+                    if (reduce) {
+                        float bmpDPI = Math.Max(bmp.HorizontalResolution, bmp.VerticalResolution);
+                        float targetDPI = 96.0f;
+
+                        if (bmpDPI != 0 && bmpDPI > targetDPI) {
+                            float resizeRatio = targetDPI / bmpDPI;
+                            imgWidth = (int)Math.Round(imgWidth * resizeRatio);
+                            imgHeight = (int)Math.Round(imgHeight * resizeRatio);
+                        }
+                    }
+
                     bool thumbIsEmpty = (thumbWidth <= 0 && thumbHeight <= 0);
                     if (!thumbIsEmpty) {
                         float ratio = GfxHelper.ZoomToFit(imgWidth, imgHeight, thumbWidth, thumbHeight);
@@ -153,29 +147,28 @@ namespace GKUI.Platform
                         imgHeight = (int)(imgHeight * ratio);
                     }
 
-                    if (cutoutIsEmpty && thumbIsEmpty) {
-                        result = bmp;
-                    } else {
-                        Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
-                        using (Graphics graphic = Graphics.FromImage(newImage)) {
-                            graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                            graphic.SmoothingMode = SmoothingMode.HighQuality;
-                            graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                            graphic.CompositingQuality = CompositingQuality.HighQuality;
+                    // The image will always have to be copied here so that the output cached file is at the screen DPI,
+                    // but the original file remains unchanged (to avoid distortion of the coordinates of the cut-out areas
+                    // that were stored in GEDCOM relative to the original full image).
+                    Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
+                    using (Graphics graphic = Graphics.FromImage(newImage)) {
+                        graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                        graphic.SmoothingMode = SmoothingMode.HighQuality;
+                        graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                        graphic.CompositingQuality = CompositingQuality.HighQuality;
 
-                            if (cutoutIsEmpty) {
-                                graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
-                            } else {
-                                //Rectangle srcRect = cutoutArea.ToRectangle();
-                                var destRect = new Rectangle(0, 0, imgWidth, imgHeight);
-                                graphic.DrawImage(bmp, destRect,
-                                                  cutoutArea.Left, cutoutArea.Top,
-                                                  cutoutArea.Width, cutoutArea.Height,
-                                                  GraphicsUnit.Pixel);
-                            }
+                        if (cutoutIsEmpty) {
+                            graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
+                        } else {
+                            //Rectangle srcRect = cutoutArea.ToRectangle();
+                            var destRect = new Rectangle(0, 0, imgWidth, imgHeight);
+                            graphic.DrawImage(bmp, destRect,
+                                              cutoutArea.Left, cutoutArea.Top,
+                                              cutoutArea.Width, cutoutArea.Height,
+                                              GraphicsUnit.Pixel);
                         }
-                        result = newImage;
                     }
+                    result = newImage;
                 } finally {
                     if (result != bmp)
                         bmp.Dispose();

@@ -54,7 +54,7 @@ namespace GKCore.Design.Graphics
         /// Loading an image from a file (already cached by other functions or service images/icons of application).
         /// That is, loading without any additional processing procedures.
         /// </summary>
-        IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea, string cachedFile);
+        IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool reduce);
 
         /// <summary>
         /// Loading an image from a file (already cached by other functions or service images/icons of application).

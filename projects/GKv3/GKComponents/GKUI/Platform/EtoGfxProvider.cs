@@ -65,9 +65,7 @@ namespace GKUI.Platform
             return transformStream;
         }
 
-        private static readonly float TargetDPI = Screen.PrimaryScreen.DPI;
-
-        public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea, string cachedFile)
+        public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool reduce)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
@@ -89,10 +87,14 @@ namespace GKUI.Platform
                         imgHeight = cutoutArea.Height;
                     }
 
-                    if (bmpDPI != 0 && bmpDPI > TargetDPI) {
-                        float resizeRatio = TargetDPI / bmpDPI;
-                        imgWidth = (int)Math.Round(imgWidth * resizeRatio);
-                        imgHeight = (int)Math.Round(imgHeight * resizeRatio);
+                    if (reduce) {
+                        float targetDPI = Screen.PrimaryScreen.DPI;
+
+                        if (bmpDPI != 0 && bmpDPI > targetDPI) {
+                            float resizeRatio = targetDPI / bmpDPI;
+                            imgWidth = (int)Math.Round(imgWidth * resizeRatio);
+                            imgHeight = (int)Math.Round(imgHeight * resizeRatio);
+                        }
                     }
 
                     bool thumbIsEmpty = (thumbWidth <= 0 && thumbHeight <= 0);

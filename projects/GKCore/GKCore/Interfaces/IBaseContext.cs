@@ -91,7 +91,7 @@ namespace GKCore.Interfaces
         /// <param name="cutoutArea"></param>
         /// <param name="throwException"></param>
         /// <returns></returns>
-        IImage LoadMediaImage(GDMMultimediaRecord mmRec, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException);
+        IImage LoadMediaImage(GDMMultimediaRecord mmRec, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool reduce, bool throwException);
 
         // Used in FamilyBookExporter, TreeChart and PersonEdit
         IImage GetPrimaryBitmap(GDMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException);

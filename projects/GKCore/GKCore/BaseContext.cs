@@ -1337,7 +1337,7 @@ namespace GKCore
             return result;
         }
 
-        public IImage LoadMediaImage(GDMMultimediaRecord mmRec, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool throwException)
+        public IImage LoadMediaImage(GDMMultimediaRecord mmRec, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool reduce, bool throwException)
         {
             if (mmRec == null || mmRec.FileReferences.Count < 1) return null;
 
@@ -1369,7 +1369,7 @@ namespace GKCore
                 }
 
                 if (inputStream != null && inputStream.Length != 0) {
-                    result = gfxProvider.LoadImage(inputStream, thumbWidth, thumbHeight, cutoutArea, cachedFile);
+                    result = gfxProvider.LoadImage(inputStream, thumbWidth, thumbHeight, cutoutArea, reduce);
                 }
             } catch (MediaFileNotFoundException) {
                 throw;
@@ -1397,7 +1397,7 @@ namespace GKCore
 
                 if (mmLink != null && mmRec != null) {
                     var cutoutArea = mmLink.IsPrimaryCutout ? mmLink.CutoutPosition.Value : ExtRect.CreateEmpty();
-                    result = LoadMediaImage(mmRec, thumbWidth, thumbHeight, cutoutArea, throwException);
+                    result = LoadMediaImage(mmRec, thumbWidth, thumbHeight, cutoutArea, true, throwException);
                 }
             } catch (MediaFileNotFoundException) {
                 throw;
