@@ -160,11 +160,7 @@ namespace GDModel
             if (StillBorn) {
                 parts[pIdx++] = "STILLBORN";
             } else {
-                if (fRelative < 0) {
-                    parts[pIdx++] = "<";
-                } else if (fRelative > 0) {
-                    parts[pIdx++] = ">";
-                }
+                parts[pIdx++] = GEDCOMConsts.AgeRelatives[fRelative + 1];
 
                 if (fYears != -1) {
                     parts[pIdx++] = string.Format("{0:00}y", fYears);

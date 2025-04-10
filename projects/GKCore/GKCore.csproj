@@ -68,7 +68,9 @@
     <Compile Include="GDModel\GDMAge.cs" />
     <Compile Include="GDModel\GDMDNATest.cs" />
     <Compile Include="GKCore\Charts\DefTreeLayout.cs" />
+    <Compile Include="GKCore\Controllers\AgeEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\RepositoryCitDlgController.cs" />
+    <Compile Include="GKCore\Design\Views\IAgeEditDlg.cs" />
     <Compile Include="GKCore\Design\Views\IRepositoryCitEditDlg.cs" />
     <Compile Include="GKCore\Controllers\PartialViewController.cs" />
     <Compile Include="GKCore\Controllers\SourceCallNumberDlgController.cs" />

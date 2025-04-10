@@ -38,6 +38,9 @@ namespace GDModel.Providers.GEDCOM
         public const int MaxLineLength = 248;
         public const int MaxNoteSize = 32768;
 
+        public const string AgeRelativeLess = "<";
+        public const string AgeRelativeGreater = ">";
+
         public const int Address_City_MaxLength = 60;
         public const int Address_Country_MaxLength = 60;
         public const int Address_Line_MaxLength = 60; // unused yet
@@ -78,6 +81,8 @@ namespace GDModel.Providers.GEDCOM
         internal static readonly string[] GEDCOMMonthSysArray;
 
         internal static readonly EnumTuple[] GEDCOMMonthValues;
+
+        internal static readonly string[] AgeRelatives;
 
         static GEDCOMConsts()
         {
@@ -203,6 +208,12 @@ namespace GDModel.Providers.GEDCOM
             };
             // BinarySearch requires a sorted array
             Array.Sort(GEDCOMMonthValues);
+
+            AgeRelatives = new string[] {
+                GEDCOMConsts.AgeRelativeLess,       // 0 :: -1 "<"
+                string.Empty,                       // 1 ::  0
+                GEDCOMConsts.AgeRelativeGreater,    // 2 :: +1 ">"
+            };
         }
     }
 }
