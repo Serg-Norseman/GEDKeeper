@@ -442,6 +442,15 @@ namespace GKUI.Platform
             Clipboard.SetDataObject(text);
         }
 
+        public override void SetClipboardImage(object image)
+        {
+            if (image == null)
+                throw new ArgumentNullException("image");
+
+            var sdImage = (Image)image;
+            Clipboard.SetImage(sdImage);
+        }
+
         #endregion
 
         #region Bootstrapper

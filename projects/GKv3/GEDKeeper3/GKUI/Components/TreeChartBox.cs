@@ -339,6 +339,9 @@ namespace GKUI.Components
                             }
                         }
                     } else {
+                        // FIXME: Find the location where 0x00000000 is assigned. Themes?
+                        if (BackgroundColor == Color.FromArgb(0, 0, 0, 0)) BackgroundColor = Colors.White;
+
                         fRenderer.DrawRectangle(null, UIHelper.ConvertColor(BackgroundColor), 0, 0, width, height);
                     }
                     break;

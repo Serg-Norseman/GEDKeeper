@@ -418,6 +418,12 @@ namespace GKUI.Forms
                         fController.Base.SaveFileEx(false);
                     }
                     break;
+
+                case Keys.P:
+                    if (e.Alt) {
+                        fController.CopySnapshot();
+                    }
+                    break;
             }
         }
 

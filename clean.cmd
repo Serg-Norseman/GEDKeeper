@@ -12,6 +12,7 @@ del .\deploy\*.exe /q
 for /d %%p in (.\appdata\*) do rd "%%p" /s /q
 del .\appdata\GEDKeeper2.log
 del .\appdata\GEDKeeper2.nms
+del .\appdata\*.tmp
 
 del .\TestResult.xml
 del .\coverageResults.txt

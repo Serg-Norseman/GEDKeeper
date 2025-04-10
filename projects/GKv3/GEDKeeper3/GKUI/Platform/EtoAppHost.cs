@@ -488,6 +488,17 @@ namespace GKUI.Platform
             }
         }
 
+        public override void SetClipboardImage(object image)
+        {
+            if (image == null)
+                throw new ArgumentNullException("image");
+
+            var etoImage = (Image)image;
+            using (var clipboard = new Clipboard()) {
+                clipboard.Image = etoImage;
+            }
+        }
+
         #endregion
 
         #region Bootstrapper

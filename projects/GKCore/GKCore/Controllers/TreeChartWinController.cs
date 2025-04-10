@@ -281,6 +281,11 @@ namespace GKCore.Controllers
             return (p != null && p.Rec != null);
         }
 
+        public async void CopySnapshot()
+        {
+            fView.TreeBox.CopySnapshot();
+        }
+
         public async void SaveSnapshot()
         {
             string filters = GKUtils.GetImageFilter(true);

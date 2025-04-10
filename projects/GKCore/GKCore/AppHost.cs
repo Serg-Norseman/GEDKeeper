@@ -369,6 +369,8 @@ namespace GKCore
 
         public abstract void SetClipboardText(string text);
 
+        public abstract void SetClipboardImage(object image);
+
         public void SetClipboardObj<T>(object obj) where T : class
         {
             /*string objName = obj.GetType().FullName;

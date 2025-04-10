@@ -228,6 +228,31 @@ namespace GKUI.Components
             return new ImageHandler(image);
         }
 
+        public void CopySnapshot()
+        {
+            ExtSize imageSize = GetImageSize();
+
+            Image pic;
+            try {
+                pic = new Bitmap(imageSize.Width, imageSize.Height, PixelFormat.Format24bppRgb);
+            } catch {
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.TooMuchWidth));
+                return;
+            }
+
+            try {
+                using (Graphics gfx = Graphics.FromImage(pic)) {
+                    fRenderer.SetTarget(gfx);
+                    RenderImage(RenderTarget.Screen);
+                }
+
+                AppHost.Instance.SetClipboardImage(pic);
+            } finally {
+                pic.Dispose();
+            }
+
+        }
+
         public void SaveSnapshot(string fileName)
         {
             string ext = FileHelper.GetFileExtension(fileName);

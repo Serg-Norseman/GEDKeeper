@@ -37,6 +37,7 @@ namespace GKCore.Charts
     {
         IBaseWindow Base { get; set; }
 
+        void CopySnapshot();
         void SaveSnapshot(string fileName);
     }
 }
