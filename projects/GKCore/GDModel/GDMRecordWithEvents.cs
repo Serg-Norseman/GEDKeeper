@@ -176,6 +176,35 @@ namespace GDModel
             return result;
         }
 
+        public GDMCustomEvent FindEventEx(GEDCOMTagType primaryEventType, GEDCOMTagType secondaryEventType)
+        {
+            GDMCustomEvent result = null;
+            if (fEvents == null) return result;
+
+            GDMCustomEvent primaryEvent = null;
+            GDMCustomEvent secondaryEvent = null;
+
+            int num = fEvents.Count;
+            for (int i = 0; i < num; i++) {
+                GDMCustomEvent evt = fEvents[i];
+                var evtType = (GEDCOMTagType)evt.Id;
+
+                if (evtType == primaryEventType && primaryEvent == null) {
+                    primaryEvent = evt;
+                } else if (evtType == secondaryEventType && secondaryEvent == null) {
+                    secondaryEvent = evt;
+                }
+            }
+
+            if (primaryEvent != null && !primaryEvent.IsEmpty()) {
+                result = primaryEvent;
+            } else if (secondaryEvent != null && !secondaryEvent.IsEmpty()) {
+                result = secondaryEvent;
+            }
+
+            return result;
+        }
+
         public abstract GDMCustomEvent AddEvent(GDMCustomEvent evt);
 
         public UDN GetUDN(string eventSign)
@@ -187,6 +216,12 @@ namespace GDModel
         public UDN GetUDN(GEDCOMTagType eventType)
         {
             GDMCustomEvent evt = FindEvent(eventType);
+            return (evt == null) ? UDN.Unknown : evt.Date.GetUDN();
+        }
+
+        public UDN GetUDNEx(GEDCOMTagType primaryEventType, GEDCOMTagType secondaryEventType)
+        {
+            GDMCustomEvent evt = FindEventEx(primaryEventType, secondaryEventType);
             return (evt == null) ? UDN.Unknown : evt.Date.GetUDN();
         }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -776,8 +776,8 @@ namespace GDModel
             var child1 = GetPtrValue<GDMIndividualRecord>(cp1);
             var child2 = GetPtrValue<GDMIndividualRecord>(cp2);
 
-            UDN udn1 = child1.GetUDN(GEDCOMTagType.BIRT);
-            UDN udn2 = child2.GetUDN(GEDCOMTagType.BIRT);
+            UDN udn1 = child1.GetUDNEx(GEDCOMTagType.BIRT, GEDCOMTagType.BAPM);
+            UDN udn2 = child2.GetUDNEx(GEDCOMTagType.BIRT, GEDCOMTagType.BAPM);
 
             return udn1.CompareTo(udn2);
         }
