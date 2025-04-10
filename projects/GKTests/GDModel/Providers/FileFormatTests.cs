@@ -53,7 +53,7 @@ namespace GDModel.Providers
                         inArray = inMem.ToArray();
                     }
 
-                    var gedcomProvider = new GEDCOMProvider(tree, true);
+                    var gedcomProvider = new GEDCOMProvider(tree, true, false);
                     gedcomProvider.LoadFromStreamExt(inStream, inStream);
 
                     using (MemoryStream outStream = new MemoryStream()) {

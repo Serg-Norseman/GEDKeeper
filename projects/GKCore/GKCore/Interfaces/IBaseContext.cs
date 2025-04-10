@@ -47,7 +47,7 @@ namespace GKCore.Interfaces
         bool IsUnknown();
         void Clear();
         Task<bool> FileLoad(string fileName, bool showProgress = true);
-        Task<bool> FileSave(string fileName);
+        Task<bool> FileSave(string fileName, bool strict = false);
         void SetFileName(string fileName);
         void CriticalSave();
 

@@ -1040,3 +1040,5 @@
 1027=JJJJ.MM.TT
 1028=Nicht-standardisierte Funktionen deaktivieren
 1029=The `{0}` field is longer than {1} characters
+1030=Strict GEDCOM files (*.ged)|*.ged
+1031=Export to strict GEDCOM...

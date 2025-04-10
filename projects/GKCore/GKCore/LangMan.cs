@@ -1108,8 +1108,10 @@ namespace GKCore
 
         /* 1028 */ DisableNonStdFeatures,
         /* 1029 */ FieldIsLonger,
+        /* 1030 */ StrictGEDCOMFilter,
+        /* 1031 */ ExportToStrictGEDCOM,
 
-        /* 000 */ Last = FieldIsLonger
+        /* 000 */ Last = ExportToStrictGEDCOM
     }
 
 
@@ -2171,6 +2173,8 @@ namespace GKCore
 
             /* 1028 */ "Disable non-standard features",
             /* 1029 */ "The `{0}` field is longer than {1} characters",
+            /* 1030 */ "Strict GEDCOM files (*.ged)|*.ged",
+            /* 1031 */ "Export to strict GEDCOM...",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

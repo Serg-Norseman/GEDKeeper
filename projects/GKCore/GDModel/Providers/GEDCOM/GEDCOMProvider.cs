@@ -129,6 +129,7 @@ namespace GDModel.Providers.GEDCOM
         public static readonly GEDCOMAppFormat[] GEDCOMFormats;
 
         public static bool KeepRichNames = true;
+        public static bool Strict = false;
 
 
         public GEDCOMProvider(GDMTree tree) : base(tree)
@@ -136,9 +137,10 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // TODO: transient implementation
-        public GEDCOMProvider(GDMTree tree, bool keepRichNames) : base(tree)
+        public GEDCOMProvider(GDMTree tree, bool keepRichNames, bool strict) : base(tree)
         {
             KeepRichNames = keepRichNames;
+            Strict = strict;
         }
 
         public override string GetFilesFilter()
@@ -570,8 +572,7 @@ namespace GDModel.Providers.GEDCOM
             WriteHeader(writer, 0, fTree.Header);
 
             if (list != null) {
-                int num = list.Count;
-                for (int i = 0; i < num; i++) {
+                for (int i = 0, num = list.Count; i < num; i++) {
                     GDMRecord record = list[i];
                     WriteRecordEx(writer, record);
                 }
@@ -609,23 +610,23 @@ namespace GDModel.Providers.GEDCOM
                     break;
 
                 case GDMRecordType.rtGroup:
-                    WriteGroupRecord(writer, 0, record);
+                    if (!Strict) WriteGroupRecord(writer, 0, record);
                     break;
 
                 case GDMRecordType.rtResearch:
-                    WriteResearchRecord(writer, 0, record);
+                    if (!Strict) WriteResearchRecord(writer, 0, record);
                     break;
 
                 case GDMRecordType.rtTask:
-                    WriteTaskRecord(writer, 0, record);
+                    if (!Strict) WriteTaskRecord(writer, 0, record);
                     break;
 
                 case GDMRecordType.rtCommunication:
-                    WriteCommunicationRecord(writer, 0, record);
+                    if (!Strict) WriteCommunicationRecord(writer, 0, record);
                     break;
 
                 case GDMRecordType.rtLocation:
-                    WriteLocationRecord(writer, 0, record);
+                    if (!Strict) WriteLocationRecord(writer, 0, record);
                     break;
 
                 case GDMRecordType.rtSubmission:
@@ -706,7 +707,7 @@ namespace GDModel.Providers.GEDCOM
 
             if (indiRec.HasEvents) WriteList(stream, level, indiRec.Events, WriteIndividualEvent);
             if (indiRec.HasAssociations) WriteList(stream, level, indiRec.Associations, WriteAssociation);
-            if (indiRec.HasGroups) WriteList(stream, level, indiRec.Groups, WriteBaseTag);
+            if (!Strict && indiRec.HasGroups) WriteList(stream, level, indiRec.Groups, WriteBaseTag);
         }
 
 
@@ -746,7 +747,7 @@ namespace GDModel.Providers.GEDCOM
             level += 1;
             WriteBaseTag(stream, level, famRec.Husband);
             WriteBaseTag(stream, level, famRec.Wife);
-            WriteTagLine(stream, level, GEDCOMTagName._STAT, GEDCOMUtils.GetMarriageStatusStr(famRec.Status), true);
+            if (!Strict) WriteTagLine(stream, level, GEDCOMTagName._STAT, GEDCOMUtils.GetMarriageStatusStr(famRec.Status), true);
 
             WriteList(stream, level, famRec.Children, WriteBaseTag);
 
@@ -896,7 +897,7 @@ namespace GDModel.Providers.GEDCOM
             WriteText(stream, level, sourRec.Originator);
             WriteText(stream, level, sourRec.Text);
 
-            WriteBaseTag(stream, level, sourRec.Date);
+            if (!Strict) WriteBaseTag(stream, level, sourRec.Date);
         }
 
         //
@@ -1291,7 +1292,7 @@ namespace GDModel.Providers.GEDCOM
 
             level += 1;
             if (!DebugWrite) {
-                WriteTagLine(stream, level, GEDCOMTagName._UID, record.UID, true);
+                if (!Strict) WriteTagLine(stream, level, GEDCOMTagName._UID, record.UID, true);
                 WriteChangeDate(stream, level, record.ChangeDate);
             }
             WriteSubTags(stream, level, tag);
@@ -1503,11 +1504,14 @@ namespace GDModel.Providers.GEDCOM
 
             if (!WriteBaseTag(stream, level, headerFile)) return false;
 
-            level += 1;
-            if (!DebugWrite) {
-                WriteTagLine(stream, level, GEDCOMTagName._UID, headerFile.UID, true);
+            if (!Strict) {
+                level += 1;
+                if (!DebugWrite) {
+                    WriteTagLine(stream, level, GEDCOMTagName._UID, headerFile.UID, true);
+                }
+                WriteTagLine(stream, level, GEDCOMTagName._REV, GEDCOMUtils.GetIntStr(headerFile.Revision), true);
             }
-            WriteTagLine(stream, level, GEDCOMTagName._REV, GEDCOMUtils.GetIntStr(headerFile.Revision), true);
+
             return true;
         }
 
@@ -2145,9 +2149,11 @@ namespace GDModel.Providers.GEDCOM
 
             if (place.HasNotes) WriteList(stream, level, place.Notes, WriteNote);
 
-            WriteBaseTag(stream, level, place.Location);
+            if (!Strict) WriteBaseTag(stream, level, place.Location);
+
             WriteMap(stream, level, place.Map);
             WriteTagLine(stream, level, GEDCOMTagName.FORM, place.Form, true);
+
             return true;
         }
 
@@ -2320,9 +2326,13 @@ namespace GDModel.Providers.GEDCOM
             level += 1;
             WriteList(stream, level, mmLink.FileReferences, WriteFileReference);
             WriteTagLine(stream, level, GEDCOMTagName.TITL, mmLink.Title, true);
-            if (mmLink.IsPrimary) WriteTagLine(stream, level, GEDCOMTagName._PRIM, GEDCOMUtils.GetBoolStr(mmLink.IsPrimary), true);
-            if (mmLink.IsPrimaryCutout) WriteTagLine(stream, level, GEDCOMTagName._PRIM_CUTOUT, GEDCOMUtils.GetBoolStr(mmLink.IsPrimaryCutout), true);
-            WriteBaseTag(stream, level, mmLink.CutoutPosition);
+
+            if (!Strict) {
+                if (mmLink.IsPrimary) WriteTagLine(stream, level, GEDCOMTagName._PRIM, GEDCOMUtils.GetBoolStr(mmLink.IsPrimary), true);
+                if (mmLink.IsPrimaryCutout) WriteTagLine(stream, level, GEDCOMTagName._PRIM_CUTOUT, GEDCOMUtils.GetBoolStr(mmLink.IsPrimaryCutout), true);
+                WriteBaseTag(stream, level, mmLink.CutoutPosition);
+            }
+
             return true;
         }
 
@@ -2622,7 +2632,7 @@ namespace GDModel.Providers.GEDCOM
             if (!WriteBaseTag(stream, level, persName)) return false;
 
             int lev = level + 1;
-            WriteTagLine(stream, lev, GEDCOMTagName.LANG, GEDCOMUtils.GetLanguageStr(persName.Language), true);
+            if (!Strict) WriteTagLine(stream, lev, GEDCOMTagName.LANG, GEDCOMUtils.GetLanguageStr(persName.Language), true);
             WriteTagLine(stream, lev, GEDCOMTagName.TYPE, GEDCOMUtils.GetNameTypeStr(persName.NameType), true);
 
             if (persName.HasNotes) WriteList(stream, lev, persName.Notes, WriteNote);
@@ -2672,7 +2682,8 @@ namespace GDModel.Providers.GEDCOM
                 !string.IsNullOrEmpty(persName.NamePrefix) || !string.IsNullOrEmpty(persName.SurnamePrefix) || !string.IsNullOrEmpty(persName.NameSuffix)) {
                 WriteTagLine(stream, level, GEDCOMTagName.SURN, persName.Surname, true);
                 WriteTagLine(stream, level, GEDCOMTagName.GIVN, persName.Given, true);
-                WriteTagLine(stream, level, GEDCOMTagName._PATN, persName.PatronymicName, true);
+
+                if (!Strict) WriteTagLine(stream, level, GEDCOMTagName._PATN, persName.PatronymicName, true);
             }
 
             // Name modifier tags that, by standard, can be included in the NAME string (other than nickname), but cannot be unambiguously extracted from it.
@@ -2683,9 +2694,11 @@ namespace GDModel.Providers.GEDCOM
             WriteTagLine(stream, level, GEDCOMTagName.NSFX, persName.NameSuffix, true);
 
             // Extended parts of the name, missing by the standard
-            WriteTagLine(stream, level, GEDCOMTagName._MARN, persName.MarriedName, true);
-            WriteTagLine(stream, level, GEDCOMTagName._RELN, persName.ReligiousName, true);
-            WriteTagLine(stream, level, GEDCOMTagName._CENN, persName.CensusName, true);
+            if (!Strict) {
+                WriteTagLine(stream, level, GEDCOMTagName._MARN, persName.MarriedName, true);
+                WriteTagLine(stream, level, GEDCOMTagName._RELN, persName.ReligiousName, true);
+                WriteTagLine(stream, level, GEDCOMTagName._CENN, persName.CensusName, true);
+            }
         }
 
         #endregion

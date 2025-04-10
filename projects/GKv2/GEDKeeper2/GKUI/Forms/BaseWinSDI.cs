@@ -823,6 +823,11 @@ namespace GKUI.Forms
             fController.ExportTable();
         }
 
+        private void miExportToStrictGEDCOM_Click(object sender, EventArgs e)
+        {
+            fController.ExportToStrictGEDCOM();
+        }
+
         private void miFileProperties_Click(object sender, EventArgs e)
         {
             fController.ShowFileProperties();

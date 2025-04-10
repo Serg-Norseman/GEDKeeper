@@ -123,6 +123,7 @@
         private System.Windows.Forms.ToolStripMenuItem miPhotosBatchAdding;
         private System.Windows.Forms.ToolStripMenuItem miCleanImagesCache;
         private System.Windows.Forms.ToolStripButton tbPartialView;
+        private System.Windows.Forms.ToolStripMenuItem miExportToStrictGEDCOM;
 
         private void InitializeComponent()
         {
@@ -247,6 +248,7 @@
             this.miCleanImagesCache = new System.Windows.Forms.ToolStripMenuItem();
             this.TBS9 = new System.Windows.Forms.ToolStripSeparator();
             this.tbPartialView = new System.Windows.Forms.ToolStripButton();
+            this.miExportToStrictGEDCOM = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusBar.SuspendLayout();
             this.ToolBar1.SuspendLayout();
             this.MenuPedigree.SuspendLayout();
@@ -603,7 +605,7 @@
             // miExport
             // 
             this.miExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                                    this.miExportTable});
+                                    this.miExportTable, this.miExportToStrictGEDCOM});
             this.miExport.Name = "miExport";
             this.miExport.Size = new System.Drawing.Size(204, 24);
             this.miExport.Text = "miExport";
@@ -614,6 +616,13 @@
             this.miExportTable.Size = new System.Drawing.Size(212, 24);
             this.miExportTable.Text = "miExportTable";
             this.miExportTable.Click += new System.EventHandler(this.miExportTable_Click);
+            // 
+            // miExportToStrictGEDCOM
+            // 
+            this.miExportToStrictGEDCOM.Name = "miExportToStrictGEDCOM";
+            this.miExportToStrictGEDCOM.Size = new System.Drawing.Size(212, 24);
+            this.miExportToStrictGEDCOM.Text = "miExportToStrictGEDCOM";
+            this.miExportToStrictGEDCOM.Click += new System.EventHandler(this.miExportToStrictGEDCOM_Click);
             // 
             // N3
             // 

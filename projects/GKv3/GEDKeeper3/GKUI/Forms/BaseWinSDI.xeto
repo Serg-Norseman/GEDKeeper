@@ -67,6 +67,7 @@
         <SeparatorMenuItem />
         <ButtonMenuItem x:Name="miExport" Image="{Resource Resources.btn_export.gif, GKCore}">
           <ButtonMenuItem x:Name="miExportTable" Image="{Resource Resources.btn_excel.gif, GKCore}" Click="miExportTable_Click" />
+          <ButtonMenuItem x:Name="miExportToStrictGEDCOM" Click="miExportToStrictGEDCOM_Click" />
         </ButtonMenuItem>
         <SeparatorMenuItem />
         <ButtonMenuItem x:Name="miExit" Shortcut="CommonModifier+X" Image="{Resource Resources.btn_exit.gif, GKCore}" Click="miExit_Click" />

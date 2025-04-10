@@ -204,31 +204,23 @@ namespace GKCore.Controllers
             }
         }
 
-        public async void SaveFileAsync(bool saveAs)
-        {
-            string oldFileName = fContext.FileName;
-            bool isUnknown = fContext.IsUnknown();
-
-            if (!isUnknown && !saveAs) {
-                SaveFile(oldFileName);
-            } else {
-                string homePath = AppHost.Instance.GetUserFilesPath(Path.GetDirectoryName(oldFileName));
-                string newFileName = await AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT, oldFileName, GlobalOptions.Instance.FilesOverwriteWarn);
-                if (!string.IsNullOrEmpty(newFileName)) {
-                    SaveFile(newFileName);
-                    if (!isUnknown && !string.Equals(oldFileName, newFileName)) {
-                        AppHost.Instance.BaseRenamed(fView, oldFileName, newFileName);
-                    }
-                }
-            }
-        }
-
         public void CheckAutosave()
         {
             // file is modified, isn't updated now, and isn't now created (exists)
             if (fContext.Modified && !fContext.IsUpdated() && !fContext.IsUnknown()) {
                 // TODO: if file is new and not exists - don't save it, but hint to user
                 SaveFile(fContext.FileName);
+            }
+        }
+
+        public async void ExportToStrictGEDCOM()
+        {
+            string oldFileName = fContext.FileName;
+            string homePath = AppHost.Instance.GetUserFilesPath(Path.GetDirectoryName(oldFileName));
+            string proposedFileName = Path.GetFileName(oldFileName);
+            string newFileName = await AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.StrictGEDCOMFilter), 1, GKData.GEDCOM_EXT, proposedFileName, GlobalOptions.Instance.FilesOverwriteWarn);
+            if (!string.IsNullOrEmpty(newFileName)) {
+                await fContext.FileSave(newFileName, true);
             }
         }
 
@@ -952,6 +944,7 @@ namespace GKCore.Controllers
                     GetControl<IMenuItem>("miExportToFamilyBook").Text = LangMan.LS(LSID.MIExportToFamilyBook);
                     GetControl<IMenuItem>("miExportToTreesAlbum").Text = LangMan.LS(LSID.TreesAlbum);
                     GetControl<IMenuItem>("miExportTable").Text = LangMan.LS(LSID.ExportTable);
+                    GetControl<IMenuItem>("miExportToStrictGEDCOM").Text = LangMan.LS(LSID.ExportToStrictGEDCOM);
                     GetControl<IMenuItem>("miExit").Text = LangMan.LS(LSID.MIExit);
 
                     GetControl<IMenuItem>("miRecordAdd").Text = LangMan.LS(LSID.MIRecordAdd);

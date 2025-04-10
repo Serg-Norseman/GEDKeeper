@@ -1530,22 +1530,25 @@ namespace GKCore
             fFileName = fileName;
         }
 
-        public async Task<bool> FileSave(string fileName)
+        public async Task<bool> FileSave(string fileName, bool strict = false)
         {
             bool result = false;
 
             try {
                 string pw = null;
-                string ext = FileHelper.GetFileExtension(fileName);
-                if (ext == ".geds") {
-                    pw = await AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password));
-                    if (string.IsNullOrEmpty(pw)) {
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
-                        return false;
+
+                if (!strict) {
+                    string ext = FileHelper.GetFileExtension(fileName);
+                    if (ext == ".geds") {
+                        pw = await AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password));
+                        if (string.IsNullOrEmpty(pw)) {
+                            AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
+                            return false;
+                        }
                     }
                 }
 
-                FileSave(fileName, pw);
+                FileSave(fileName, pw, strict);
                 result = true;
             } catch (UnauthorizedAccessException) {
                 AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.FileSaveError), new object[] { fileName, ": access denied" }));
@@ -1596,12 +1599,38 @@ namespace GKCore
             return fileName;
         }
 
-        private void FileSave(string fileName, string password)
+        private void FileSave(string fileName, string password, bool strict)
         {
-            string oldFileName = fFileName;
-
             fileName = CheckFileName(fileName);
 
+            if (!strict) {
+                string oldFileName = fFileName;
+
+                ProcessBackup(oldFileName, fileName);
+
+                // check for archive and storage, move them if the file changes location
+                MoveMediaContainers(oldFileName, fileName);
+
+                if (string.IsNullOrEmpty(password)) {
+                    GKUtils.PrepareHeader(fTree, fileName, GlobalOptions.Instance.DefCharacterSet, false);
+
+                    var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames, false);
+                    gedcomProvider.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet);
+                } else {
+                    SaveToSecFile(fileName, GlobalOptions.Instance.DefCharacterSet, password);
+                }
+
+                fFileName = fileName;
+            } else {
+                GKUtils.PrepareHeader(fTree, fileName, GlobalOptions.Instance.DefCharacterSet, false);
+
+                var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames, true);
+                gedcomProvider.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet);
+            }
+        }
+
+        private void ProcessBackup(string oldFileName, string fileName)
+        {
             switch (GlobalOptions.Instance.FileBackup) {
                 case FileBackup.fbNone:
                     break;
@@ -1630,20 +1659,6 @@ namespace GKCore
                     }
                     break;
             }
-
-            // check for archive and storage, move them if the file changes location
-            MoveMediaContainers(oldFileName, fileName);
-
-            if (string.IsNullOrEmpty(password)) {
-                GKUtils.PrepareHeader(fTree, fileName, GlobalOptions.Instance.DefCharacterSet, false);
-
-                var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames);
-                gedcomProvider.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet);
-            } else {
-                SaveToSecFile(fileName, GlobalOptions.Instance.DefCharacterSet, password);
-            }
-
-            fFileName = fileName;
         }
 
         public void CriticalSave()
@@ -1654,7 +1669,7 @@ namespace GKCore
                 GEDCOMCharacterSet charSet = GlobalOptions.Instance.DefCharacterSet;
                 GKUtils.PrepareHeader(fTree, rfn, charSet, false);
 
-                var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames);
+                var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames, false);
                 gedcomProvider.SaveToFile(rfn, charSet);
             } catch (Exception ex) {
                 Logger.WriteError("BaseContext.CriticalSave()", ex);
@@ -1751,7 +1766,7 @@ namespace GKCore
 
             using (var cryptic = CreateCSP(GS_MAJOR_VER, GS_MINOR_VER, password)) {
                 using (CryptoStream crStream = new CryptoStream(stream, cryptic.CreateEncryptor(), CryptoStreamMode.Write)) {
-                    var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames);
+                    var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames, false);
                     gedcomProvider.SaveToStreamExt(crStream, charSet);
                     crStream.Flush();
                 }

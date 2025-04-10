@@ -147,6 +147,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miPhotosBatchAdding;
         private ButtonMenuItem miCleanImagesCache;
         private ButtonToolItem tbPartialView;
+        private ButtonMenuItem miExportToStrictGEDCOM;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -920,6 +921,11 @@ namespace GKUI.Forms
         private void miExportTable_Click(object sender, EventArgs e)
         {
             fController.ExportTable();
+        }
+
+        private void miExportToStrictGEDCOM_Click(object sender, EventArgs e)
+        {
+            fController.ExportToStrictGEDCOM();
         }
 
         private void miFileProperties_Click(object sender, EventArgs e)
