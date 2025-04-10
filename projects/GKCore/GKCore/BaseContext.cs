@@ -1262,6 +1262,10 @@ namespace GKCore
                         break;
 
                     case MediaStoreType.mstReference:
+                    case MediaStoreType.mstRelativeReference:
+                        if (mediaStore.StoreType == MediaStoreType.mstRelativeReference) {
+                            fileName = GetTreePath(fFileName) + fileName;
+                        }
                         if (!File.Exists(fileName)) {
                             string xFileName = FileHelper.NormalizeFilename(fileName);
                             if (string.IsNullOrEmpty(xFileName)) {
