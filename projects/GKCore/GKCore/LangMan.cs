@@ -1110,8 +1110,10 @@ namespace GKCore
         /* 1029 */ FieldIsLonger,
         /* 1030 */ StrictGEDCOMFilter,
         /* 1031 */ ExportToStrictGEDCOM,
+        /* 1032 */ IncludeSourceCitations,
+        /* 1033 */ SourceCitations,
 
-        /* 000 */ Last = ExportToStrictGEDCOM
+        /* 000 */ Last = SourceCitations
     }
 
 
@@ -2175,6 +2177,8 @@ namespace GKCore
             /* 1029 */ "The `{0}` field is longer than {1} characters",
             /* 1030 */ "Strict GEDCOM files (*.ged)|*.ged",
             /* 1031 */ "Export to strict GEDCOM...",
+            /* 1032 */ "Include source citations",
+            /* 1033 */ "Source citations",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

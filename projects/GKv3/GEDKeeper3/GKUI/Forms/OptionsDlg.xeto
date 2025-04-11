@@ -518,6 +518,10 @@
                 <StackLayoutItem />
                 <CheckBox x:Name="chkSourcePages" />
               </StackLayout>
+              <StackLayout Orientation="Horizontal" Spacing="20">
+                <StackLayoutItem />
+                <CheckBox x:Name="chkSourceCitations" />
+              </StackLayout>
               <CheckBox x:Name="chkGenerations" />
               <CheckBox x:Name="chkPortraits" />
 

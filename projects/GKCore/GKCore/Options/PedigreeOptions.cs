@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -45,6 +45,7 @@ namespace GKCore.Options
         public bool IncludeNotes;
         public bool IncludeSources;
         public bool IncludeSourcePages;
+        public bool IncludeSourceCitations;
         public bool IncludeGenerations;
         public bool IncludePortraits;
 
@@ -63,6 +64,7 @@ namespace GKCore.Options
             IncludeNotes = true;
             IncludeSources = true;
             IncludeSourcePages = false;
+            IncludeSourceCitations = false;
             IncludeGenerations = true;
             IncludePortraits = false;
 
@@ -80,6 +82,7 @@ namespace GKCore.Options
             IncludeNotes = srcOptions.IncludeNotes;
             IncludeSources = srcOptions.IncludeSources;
             IncludeSourcePages = srcOptions.IncludeSourcePages;
+            IncludeSourceCitations = srcOptions.IncludeSourceCitations;
             IncludeGenerations = srcOptions.IncludeGenerations;
             IncludePortraits = srcOptions.IncludePortraits;
 
@@ -98,6 +101,7 @@ namespace GKCore.Options
                 IncludeNotes = iniFile.ReadBool("Pedigree", "IncludeNotes", true);
                 IncludeSources = iniFile.ReadBool("Pedigree", "IncludeSources", true);
                 IncludeSourcePages = iniFile.ReadBool("Pedigree", "IncludeSourcePages", false);
+                IncludeSourceCitations = iniFile.ReadBool("Pedigree", "IncludeSourceCitations", false);
                 IncludeGenerations = iniFile.ReadBool("Pedigree", "IncludeGenerations", true);
                 IncludePortraits = iniFile.ReadBool("Pedigree", "IncludePortraits", false);
 
@@ -118,6 +122,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Pedigree", "IncludeNotes", IncludeNotes);
             iniFile.WriteBool("Pedigree", "IncludeSources", IncludeSources);
             iniFile.WriteBool("Pedigree", "IncludeSourcePages", IncludeSourcePages);
+            iniFile.WriteBool("Pedigree", "IncludeSourceCitations", IncludeSourceCitations);
             iniFile.WriteBool("Pedigree", "IncludeGenerations", IncludeGenerations);
             iniFile.WriteBool("Pedigree", "IncludePortraits", IncludePortraits);
 

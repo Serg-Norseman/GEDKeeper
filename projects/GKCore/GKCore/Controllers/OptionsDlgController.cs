@@ -250,6 +250,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkNotes").Checked = fOptions.PedigreeOptions.IncludeNotes;
             GetControl<ICheckBox>("chkSources").Checked = fOptions.PedigreeOptions.IncludeSources;
             GetControl<ICheckBox>("chkSourcePages").Checked = fOptions.PedigreeOptions.IncludeSourcePages;
+            GetControl<ICheckBox>("chkSourceCitations").Checked = fOptions.PedigreeOptions.IncludeSourceCitations;
             GetControl<ICheckBox>("chkGenerations").Checked = fOptions.PedigreeOptions.IncludeGenerations;
             GetControl<ICheckBox>("chkPortraits").Checked = fOptions.PedigreeOptions.IncludePortraits;
 
@@ -272,6 +273,7 @@ namespace GKCore.Controllers
             fOptions.PedigreeOptions.IncludeNotes = GetControl<ICheckBox>("chkNotes").Checked;
             fOptions.PedigreeOptions.IncludeSources = GetControl<ICheckBox>("chkSources").Checked;
             fOptions.PedigreeOptions.IncludeSourcePages = GetControl<ICheckBox>("chkSourcePages").Checked;
+            fOptions.PedigreeOptions.IncludeSourceCitations = GetControl<ICheckBox>("chkSourceCitations").Checked;
             fOptions.PedigreeOptions.IncludeGenerations = GetControl<ICheckBox>("chkGenerations").Checked;
             fOptions.PedigreeOptions.IncludePortraits = GetControl<ICheckBox>("chkPortraits").Checked;
 
@@ -1076,6 +1078,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkNotes").Text = LangMan.LS(LSID.IncludeNotes);
             GetControl<ICheckBox>("chkSources").Text = LangMan.LS(LSID.IncludeSources);
             GetControl<ICheckBox>("chkSourcePages").Text = LangMan.LS(LSID.IncludeSourcePages);
+            GetControl<ICheckBox>("chkSourceCitations").Text = LangMan.LS(LSID.IncludeSourceCitations);
             GetControl<ICheckBox>("chkGenerations").Text = LangMan.LS(LSID.IncludeGenerations);
             GetControl<ICheckBox>("chkPortraits").Text = LangMan.LS(LSID.IncludePortraits);
 

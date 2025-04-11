@@ -41,13 +41,13 @@ namespace GKCore.Export
             public string Id;
             public GDMIndividualRecord IRec;
             public int Level;
-            public readonly List<string> Sources;
+            public readonly List<PedigreeSourCitation> Sources;
             public int FamilyOrder;
             public int ChildIdx;
 
             public PedigreePerson()
             {
-                Sources = new List<string>();
+                Sources = new List<PedigreeSourCitation>();
             }
 
             private string GetOrderStr()
@@ -68,14 +68,26 @@ namespace GKCore.Export
             public readonly GDMIndividualRecord IRec;
             public readonly GDMCustomEvent Event;
             public readonly UDN Date;
-            public readonly List<string> Sources;
+            public readonly List<PedigreeSourCitation> Sources;
 
             public PedigreeEvent(GDMIndividualRecord iRec, GDMCustomEvent evt)
             {
                 IRec = iRec;
                 Event = evt;
                 Date = (evt == null) ? UDN.Unknown : evt.Date.GetUDN();
-                Sources = new List<string>();
+                Sources = new List<PedigreeSourCitation>();
+            }
+        }
+
+        private class PedigreeSourCitation
+        {
+            public readonly string Index;
+            public readonly string Text;
+
+            public PedigreeSourCitation(string index, string text)
+            {
+                Index = index;
+                Text = text;
             }
         }
 
@@ -136,16 +148,16 @@ namespace GKCore.Export
             return res;
         }
 
-        private void WriteSourceCitations(List<string> sources)
+        private void WriteSourceLinks(List<PedigreeSourCitation> sources)
         {
             if (!fOptions.PedigreeOptions.IncludeSources || sources.Count <= 0)
                 return;
 
             fWriter.AddParagraphChunk(" ", fTextFont);
 
-            int num = sources.Count;
-            for (int i = 0; i < num; i++) {
-                string lnk = sources[i];
+            for (int i = 0, num = sources.Count; i < num; i++) {
+                var source = sources[i];
+                string lnk = source.Index;
 
                 if (i > 0) {
                     fWriter.AddParagraphChunkLink(", ", fTextFont, "", true);
@@ -155,13 +167,42 @@ namespace GKCore.Export
             }
         }
 
+        private void WriteSourceCitations(List<PedigreeSourCitation> sources)
+        {
+            if (!fOptions.PedigreeOptions.IncludeSourceCitations || sources.Count <= 0)
+                return;
+
+            bool hasCit = false;
+            for (int j = 0, num = sources.Count; j < num; j++) {
+                var srcCit = sources[j];
+                if (!string.IsNullOrEmpty(srcCit.Text)) {
+                    hasCit = true;
+                    break;
+                }
+            }
+
+            if (hasCit)
+                fWriter.AddParagraph(LangMan.LS(LSID.SourceCitations) + ":", fTextFont);
+
+            fWriter.BeginList();
+            for (int j = 0, num = sources.Count; j < num; j++) {
+                var srcCit = sources[j];
+                if (string.IsNullOrEmpty(srcCit.Text)) continue;
+
+                fWriter.BeginListItem();
+                fWriter.AddParagraph(string.Format("{0}. «{1}»", srcCit.Index, srcCit.Text), fTextFont);
+                fWriter.EndListItem();
+            }
+            fWriter.EndList();
+        }
+
         private void WritePerson(PedigreePerson person)
         {
             fWriter.BeginParagraph(TextAlignment.taJustify, 12f, 6f);
 
             fWriter.AddParagraphChunkAnchor(GetIdStr(person) + ". " + GKUtils.GetNameString(person.IRec, true, false), fPersonFont, person.Id);
             fWriter.AddParagraphChunk(GKUtils.GetPedigreeLifeStr(person.IRec, fOptions.PedigreeOptions.Format), fTextFont);
-            WriteSourceCitations(person.Sources);
+            WriteSourceLinks(person.Sources);
 
             fWriter.EndParagraph();
 
@@ -174,6 +215,8 @@ namespace GKCore.Export
                     WriteCompactFmt(person);
                     break;
             }
+
+            WriteSourceCitations(person.Sources);
         }
 
         private string idLink(GDMIndividualRecord iRec)
@@ -390,7 +433,7 @@ namespace GKCore.Export
                     fWriter.AddParagraphChunkLink(id, fLinkFont, id);
                 }
 
-                WriteSourceCitations(evObj.Sources);
+                WriteSourceLinks(evObj.Sources);
 
                 WriteNotes(evt, "\t");
 
@@ -407,7 +450,7 @@ namespace GKCore.Export
             list[index2] = f;
         }
 
-        private void ProcessSourceCitations(IGDMStructWithSourceCitations swsc, List<string> sources)
+        private void ProcessSourceCitations(IGDMStructWithSourceCitations swsc, List<PedigreeSourCitation> sources)
         {
             if (fOptions.PedigreeOptions.IncludeSources && swsc != null && swsc.HasSourceCitations) {
                 for (int i = 0, num = swsc.SourceCitations.Count; i < num; i++) {
@@ -420,11 +463,16 @@ namespace GKCore.Export
                         key += "@" + srcCit.Page;
                     }
 
+                    string scText = string.Empty;
+                    if (fOptions.PedigreeOptions.IncludeSourceCitations) {
+                        scText = srcCit.Data.Text.Lines.Text.Trim();
+                    }
+
                     int srcIndex = fSourceList.IndexOf(key);
                     if (srcIndex < 0) {
                         srcIndex = fSourceList.AddObject(key, srcCit);
                     }
-                    sources.Add((srcIndex + 1).ToString());
+                    sources.Add(new PedigreeSourCitation((srcIndex + 1).ToString(), scText));
                 }
             }
         }

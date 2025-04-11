@@ -210,6 +210,7 @@
         private System.Windows.Forms.CheckBox chkUseAdditionalDates;
         private System.Windows.Forms.CheckBox chkDisplayFullFileName;
         private System.Windows.Forms.CheckBox chkDisableNonStdFeatures;
+        private System.Windows.Forms.CheckBox chkSourceCitations;
 
         private void InitializeComponent()
         {
@@ -421,6 +422,7 @@
             this.chkUseAdditionalDates = new System.Windows.Forms.CheckBox();
             this.chkDisplayFullFileName = new System.Windows.Forms.CheckBox();
             this.chkDisableNonStdFeatures = new System.Windows.Forms.CheckBox();
+            this.chkSourceCitations = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -1304,12 +1306,12 @@
             // 
             this.numSpouseDist.Location = new System.Drawing.Point(225, 119);
             this.numSpouseDist.Margin = new System.Windows.Forms.Padding(4);
-            this.numSpouseDist.Maximum = new decimal(new int[] { 120, 0, 0, 0});
-            this.numSpouseDist.Minimum = new decimal(new int[] { 1, 0, 0, 0});
+            this.numSpouseDist.Maximum = new decimal(new int[] { 120, 0, 0, 0 });
+            this.numSpouseDist.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             this.numSpouseDist.Name = "numSpouseDist";
             this.numSpouseDist.Size = new System.Drawing.Size(49, 24);
             this.numSpouseDist.TabIndex = 9;
-            this.numSpouseDist.Value = new decimal(new int[] { 1, 0, 0, 0});
+            this.numSpouseDist.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // lblPadding
             // 
@@ -2508,13 +2510,14 @@
             this.grpPedigree.Controls.Add(this.chkGenerations);
             this.grpPedigree.Controls.Add(this.chkSources);
             this.grpPedigree.Controls.Add(this.chkSourcePages);
+            this.grpPedigree.Controls.Add(this.chkSourceCitations);
             this.grpPedigree.Controls.Add(this.chkPortraits);
             this.grpPedigree.Controls.Add(this.grpPedigreeFormat);
             this.grpPedigree.Location = new System.Drawing.Point(12, 12);
             this.grpPedigree.Margin = new System.Windows.Forms.Padding(2);
             this.grpPedigree.Name = "grpPedigree";
             this.grpPedigree.Padding = new System.Windows.Forms.Padding(10);
-            this.grpPedigree.Size = new System.Drawing.Size(480, 384);
+            this.grpPedigree.Size = new System.Drawing.Size(480, 408);
             this.grpPedigree.TabIndex = 0;
             this.grpPedigree.TabStop = false;
             this.grpPedigree.Text = "grpPedigree";
@@ -2539,7 +2542,7 @@
             // 
             // chkGenerations
             // 
-            this.chkGenerations.Location = new System.Drawing.Point(20, 124);
+            this.chkGenerations.Location = new System.Drawing.Point(20, 148);
             this.chkGenerations.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkGenerations.Name = "chkGenerations";
             this.chkGenerations.Size = new System.Drawing.Size(349, 21);
@@ -2548,7 +2551,7 @@
             // 
             // chkPortraits
             // 
-            this.chkPortraits.Location = new System.Drawing.Point(20, 148);
+            this.chkPortraits.Location = new System.Drawing.Point(20, 172);
             this.chkPortraits.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkPortraits.Name = "chkPortraits";
             this.chkPortraits.Size = new System.Drawing.Size(349, 21);
@@ -2573,11 +2576,20 @@
             this.chkSourcePages.TabIndex = 2;
             this.chkSourcePages.Text = "chkSourcePages";
             // 
+            // chkSourceCitations
+            // 
+            this.chkSourceCitations.Location = new System.Drawing.Point(40, 124);
+            this.chkSourceCitations.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkSourceCitations.Name = "chkSourceCitations";
+            this.chkSourceCitations.Size = new System.Drawing.Size(349, 21);
+            this.chkSourceCitations.TabIndex = 2;
+            this.chkSourceCitations.Text = "chkSourceCitations";
+            // 
             // grpPedigreeFormat
             // 
             this.grpPedigreeFormat.Controls.Add(this.radExcess);
             this.grpPedigreeFormat.Controls.Add(this.radCompact);
-            this.grpPedigreeFormat.Location = new System.Drawing.Point(20, 180);
+            this.grpPedigreeFormat.Location = new System.Drawing.Point(20, 204);
             this.grpPedigreeFormat.Margin = new System.Windows.Forms.Padding(2);
             this.grpPedigreeFormat.Name = "grpPedigreeFormat";
             this.grpPedigreeFormat.Padding = new System.Windows.Forms.Padding(10);
@@ -2603,6 +2615,44 @@
             this.radCompact.Size = new System.Drawing.Size(146, 29);
             this.radCompact.TabIndex = 2;
             this.radCompact.Text = "radCompact";
+            // 
+            // lblAscendNumbering
+            // 
+            this.lblAscendNumbering.AutoSize = true;
+            this.lblAscendNumbering.Location = new System.Drawing.Point(17, 337);
+            this.lblAscendNumbering.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblAscendNumbering.Name = "lblAscendNumbering";
+            this.lblAscendNumbering.Size = new System.Drawing.Size(164, 21);
+            this.lblAscendNumbering.TabIndex = 5;
+            this.lblAscendNumbering.Text = "lblAscendNumbering";
+            // 
+            // cmbAscendNumbering
+            // 
+            this.cmbAscendNumbering.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbAscendNumbering.Location = new System.Drawing.Point(233, 334);
+            this.cmbAscendNumbering.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbAscendNumbering.Name = "cmbAscendNumbering";
+            this.cmbAscendNumbering.Size = new System.Drawing.Size(230, 25);
+            this.cmbAscendNumbering.TabIndex = 6;
+            // 
+            // lblDescendNumbering
+            // 
+            this.lblDescendNumbering.AutoSize = true;
+            this.lblDescendNumbering.Location = new System.Drawing.Point(17, 366);
+            this.lblDescendNumbering.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblDescendNumbering.Name = "lblDescendNumbering";
+            this.lblDescendNumbering.Size = new System.Drawing.Size(175, 21);
+            this.lblDescendNumbering.TabIndex = 7;
+            this.lblDescendNumbering.Text = "lblDescendNumbering";
+            // 
+            // cmbDescendNumbering
+            // 
+            this.cmbDescendNumbering.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDescendNumbering.Location = new System.Drawing.Point(233, 363);
+            this.cmbDescendNumbering.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbDescendNumbering.Name = "cmbDescendNumbering";
+            this.cmbDescendNumbering.Size = new System.Drawing.Size(230, 25);
+            this.cmbDescendNumbering.TabIndex = 8;
             // 
             // pageSpecials
             //
@@ -2815,44 +2865,6 @@
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblAscendNumbering
-            // 
-            this.lblAscendNumbering.AutoSize = true;
-            this.lblAscendNumbering.Location = new System.Drawing.Point(17, 313);
-            this.lblAscendNumbering.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblAscendNumbering.Name = "lblAscendNumbering";
-            this.lblAscendNumbering.Size = new System.Drawing.Size(164, 21);
-            this.lblAscendNumbering.TabIndex = 5;
-            this.lblAscendNumbering.Text = "lblAscendNumbering";
-            // 
-            // cmbAscendNumbering
-            // 
-            this.cmbAscendNumbering.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbAscendNumbering.Location = new System.Drawing.Point(233, 310);
-            this.cmbAscendNumbering.Margin = new System.Windows.Forms.Padding(2);
-            this.cmbAscendNumbering.Name = "cmbAscendNumbering";
-            this.cmbAscendNumbering.Size = new System.Drawing.Size(230, 25);
-            this.cmbAscendNumbering.TabIndex = 6;
-            // 
-            // lblDescendNumbering
-            // 
-            this.lblDescendNumbering.AutoSize = true;
-            this.lblDescendNumbering.Location = new System.Drawing.Point(17, 342);
-            this.lblDescendNumbering.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblDescendNumbering.Name = "lblDescendNumbering";
-            this.lblDescendNumbering.Size = new System.Drawing.Size(175, 21);
-            this.lblDescendNumbering.TabIndex = 7;
-            this.lblDescendNumbering.Text = "lblDescendNumbering";
-            // 
-            // cmbDescendNumbering
-            // 
-            this.cmbDescendNumbering.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDescendNumbering.Location = new System.Drawing.Point(233, 339);
-            this.cmbDescendNumbering.Margin = new System.Windows.Forms.Padding(2);
-            this.cmbDescendNumbering.Name = "cmbDescendNumbering";
-            this.cmbDescendNumbering.Size = new System.Drawing.Size(230, 25);
-            this.cmbDescendNumbering.TabIndex = 8;
             // 
             // OptionsDlg
             // 
