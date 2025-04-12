@@ -177,7 +177,7 @@ namespace GKCore
         /* 128 */ WinGroupEdit,
         /* 129 */ DetachMemberQuery,
         /* 130 */ MediaView,
-        /* 131 */ Stage,
+        /* 131 */ Stage, // obsolete, need removed
         /* 132 */ Telephone,
         /* 133 */ Mail,
         /* 134 */ WebSite,
