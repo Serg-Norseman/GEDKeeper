@@ -1059,7 +1059,7 @@ namespace GKCore
             return geocoder;
         }
 
-        public void RequestGeoCoords(string searchValue, IList<GeoPoint> pointsList)
+        public void RequestGeoCoords(string searchValue, IList<GeoPoint> pointsList, short results = 1)
         {
             if (string.IsNullOrEmpty(searchValue))
                 throw new ArgumentNullException(@"searchValue");
@@ -1070,7 +1070,7 @@ namespace GKCore
             try {
                 IGeocoder geocoder = CreateGeocoder();
 
-                IEnumerable<GeoPoint> geoPoints = geocoder.Geocode(searchValue, 1);
+                IEnumerable<GeoPoint> geoPoints = geocoder.Geocode(searchValue, results);
                 foreach (GeoPoint pt in geoPoints) {
                     pointsList.Add(pt);
                 }

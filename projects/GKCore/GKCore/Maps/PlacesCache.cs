@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2018-2020 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -51,7 +51,7 @@ namespace GKCore.Maps
             return path;
         }
 
-        public void GetPlacePoints(string searchValue, List<GeoPoint> pointsList)
+        public void GetPlacePoints(string searchValue, List<GeoPoint> pointsList, short results = 1)
         {
             if (string.IsNullOrEmpty(searchValue))
                 throw new ArgumentNullException(@"searchValue");
@@ -62,13 +62,13 @@ namespace GKCore.Maps
             try {
                 List<GeoPoint> cachedPoints;
 
-                if (!fMemoryCache.TryGetValue(searchValue, out cachedPoints)) {
+                if (!fMemoryCache.TryGetValue(searchValue, out cachedPoints) || cachedPoints.Count != results) {
                     cachedPoints = new List<GeoPoint>();
 
-                    AppHost.Instance.RequestGeoCoords(searchValue, cachedPoints);
+                    AppHost.Instance.RequestGeoCoords(searchValue, cachedPoints, results);
 
                     if (cachedPoints.Count > 0) {
-                        fMemoryCache.Add(searchValue, cachedPoints);
+                        fMemoryCache[searchValue] = cachedPoints;
                     }
                 }
 

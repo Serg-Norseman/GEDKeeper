@@ -1556,6 +1556,24 @@ end
 
         <dt>int get_location_usages(locationPtr)</dt>
         <dd>возвращает количество использований локации</dd>
+
+        <dt></dt>
+        <dd></dd>
+
+        <dt>coordsList search_location_geopoints(string locName, int results = 1)</dt>
+        <dd>ищет список гео-точек по заданному имени (провайдер - заданный в опциях программы), results - задает максимальное количество результатов (сейчас не применимо)</dd>
+
+        <dt>int get_geopoints_count(coordsList)</dt>
+        <dd>возвращает количество гео-точек в списке</dd>
+
+        <dt>double get_geopoint_latitude(coordsList, int index)</dt>
+        <dd>возвращает широту гео-точки из списка</dd>
+
+        <dt>double get_geopoint_longitude(coordsList, int index)</dt>
+        <dd>возвращает долготу гео-точки из списка</dd>
+
+        <dt>string get_geopoint_name(coordsList, int index)</dt>
+        <dd>возвращает название гео-точки из списка</dd>
     </dl>
 
 </body>

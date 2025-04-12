@@ -1523,6 +1523,24 @@ end</code></pre>
 
         <dt>int get_location_usages(locationPtr)</dt>
         <dd>Return the number of times a location has been used.</dd>
+
+        <dt></dt>
+        <dd></dd>
+
+        <dt>coordsList search_location_geopoints(string locName, int results = 1)</dt>
+        <dd>searches for a list of geo-points by a given name (provider - specified in the program options), results - sets the maximum number of results (not applicable at the moment)</dd>
+
+        <dt>int get_geopoints_count(coordsList)</dt>
+        <dd>returns the number of geo-points in the list</dd>
+
+        <dt>double get_geopoint_latitude(coordsList, int index)</dt>
+        <dd>returns the latitude of a geo-point from the list</dd>
+
+        <dt>double get_geopoint_longitude(coordsList, int index)</dt>
+        <dd>returns the longitude of a geo-point from the list</dd>
+
+        <dt>string get_geopoint_name(coordsList, int index)</dt>
+        <dd>returns the name of the geo-point from the list</dd>
     </dl>
 
 </body>

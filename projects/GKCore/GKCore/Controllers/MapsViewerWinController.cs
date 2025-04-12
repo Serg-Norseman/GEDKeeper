@@ -32,7 +32,6 @@ using GKCore.Maps;
 using GKCore.Options;
 using GKCore.Types;
 using GKMap;
-using GKMap.MapProviders;
 using GKUI.Themes;
 
 namespace GKCore.Controllers

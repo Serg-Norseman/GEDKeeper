@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,6 +24,7 @@
 #if !MOBILE
 
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Reflection;
@@ -34,6 +35,7 @@ using GKCore.Controllers;
 using GKCore.Design.Views;
 using GKCore.Export;
 using GKCore.Interfaces;
+using GKCore.Maps;
 using GKCore.Options;
 using NLua;
 #if NETCORE
@@ -211,6 +213,12 @@ namespace GKCore
             // location records
             lua_register(lvm, nameof(create_location));
             lua_register(lvm, nameof(get_location_usages));
+
+            lua_register(lvm, nameof(search_location_geopoints));
+            lua_register(lvm, nameof(get_geopoints_count));
+            lua_register(lvm, nameof(get_geopoint_latitude));
+            lua_register(lvm, nameof(get_geopoint_longitude));
+            lua_register(lvm, nameof(get_geopoint_name));
 
             // csv
             lua_register(lvm, nameof(csv_load));
@@ -664,6 +672,37 @@ namespace GKCore
             }
 
             return usages;
+        }
+
+        public object search_location_geopoints(string locName, short results = 1)
+        {
+            var pointsList = new List<GeoPoint>();
+            PlacesCache.Instance.GetPlacePoints(locName, pointsList, results);
+            return pointsList;
+        }
+
+        public int get_geopoints_count(object coordsList)
+        {
+            var list = coordsList as List<GeoPoint>;
+            return (list == null) ? -1 : list.Count;
+        }
+
+        public double get_geopoint_latitude(object coordsList, int index)
+        {
+            var list = coordsList as List<GeoPoint>;
+            return (list == null) ? -1 : list[index].Latitude;
+        }
+
+        public double get_geopoint_longitude(object coordsList, int index)
+        {
+            var list = coordsList as List<GeoPoint>;
+            return (list == null) ? -1 : list[index].Longitude;
+        }
+
+        public string get_geopoint_name(object coordsList, int index)
+        {
+            var list = coordsList as List<GeoPoint>;
+            return (list == null) ? string.Empty : list[index].Hint;
         }
 
         public int get_record_notes_count(object recPtr)
