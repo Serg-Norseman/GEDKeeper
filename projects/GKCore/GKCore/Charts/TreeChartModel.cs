@@ -1520,11 +1520,13 @@ namespace GKCore.Charts
             DrawParentAges(person, pY, crY);
 
             string marrDate = null;
+            int fX = -1, mX = -1;
 
             if (person.Father != null) {
                 DrawLine(person.Father.PtX, crY, person.PtX, crY, dotted, isTrackedAncestors, isMatchedFather); // h
                 DrawLine(person.Father.PtX, parY, person.Father.PtX, crY, dotted, isTrackedAncestors, isMatchedFather); // v
 
+                fX = person.Father.PtX;
                 if (!string.IsNullOrEmpty(person.Father.MarriageDate) && marrDate == null) {
                     marrDate = person.Father.MarriageDate;
                 }
@@ -1534,6 +1536,7 @@ namespace GKCore.Charts
                 DrawLine(person.Mother.PtX, crY, person.PtX, crY, dotted, isTrackedAncestors, isMatchedMother); // h
                 DrawLine(person.Mother.PtX, parY, person.Mother.PtX, crY, dotted, isTrackedAncestors, isMatchedMother); // v
 
+                mX = person.Mother.PtX;
                 if (!string.IsNullOrEmpty(person.Mother.MarriageDate) && marrDate == null) {
                     marrDate = person.Mother.MarriageDate;
                 }
@@ -1541,7 +1544,12 @@ namespace GKCore.Charts
 
             if (!string.IsNullOrEmpty(marrDate)) {
                 int q = (!fOptions.InvertedTree) ? 1 : 2;
-                DrawText(marrDate, person.PtX, crY, q);
+
+                if (fX >= 0 && mX >= 0) {
+                    DrawTextCt(marrDate, fX, mX, crY, q);
+                } else {
+                    DrawText(marrDate, person.PtX, crY, q);
+                }
             }
         }
 
@@ -1578,6 +1586,38 @@ namespace GKCore.Charts
             }
 
             fRenderer.DrawString(text, fDrawFont, brush, x, y, fOptions.TextEffect);
+        }
+
+        private void DrawTextCt(string text, float x1, float x2, float y, int quad, bool offset = true)
+        {
+            if (string.IsNullOrEmpty(text))
+                return;
+
+            ExtSizeF tsz = fRenderer.GetTextSize(text, fDrawFont);
+            float x = x1 + (x2 - x1 - tsz.Width) / 2;
+
+            // quadrant clockwise from 00 hours
+            if (offset) {
+                x += fOffsetX;
+                y += fOffsetY;
+            }
+
+            switch (quad) {
+                case 1:
+                    y -= tsz.Height;
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    x -= tsz.Width;
+                    break;
+                case 4:
+                    x -= tsz.Width;
+                    y -= tsz.Height;
+                    break;
+            }
+
+            fRenderer.DrawString(text, fDrawFont, fSolidBlack, x, y, fOptions.TextEffect);
         }
 
         private void DrawDescendants(TreeChartPerson person, ChartDrawMode drawMode, bool isTracked)
