@@ -302,17 +302,17 @@ repeat   return   then   true       until   while</code></pre>
             La expresión `t[i]` es equivalente a llamar a `gettable_event(t, i)`
             (La descripción completa de la función `gettable_event` está disponible en <a href="#2.8">§2.8</a>.
             Esta función no está disponible en el código Lua y se menciona aquí sólo como ejemplo.
-        </p>
+        </p-->
 
-        <p>
-            La expresión `var.Nombre` es equivalente a la expresión `var["Nombre"]`:
-        </p>
+    <p>
+        La expresión `var.Nombre` es equivalente a la expresión `var["Nombre"]`:
+    </p>
 
-        <div class="contdiv">
-    <pre><code class="lua">var ::= prefixexp &#39;.&#39; Name</code></pre>
-        </div>
+    <div class="contdiv">
+        <pre><code class="lua">var ::= prefixexp &#39;.&#39; Name</code></pre>
+    </div>
 
-        <p>
+    <!--p>
             Todas las variables globales son campos de tablas generales de Lua,
             llamadas tablas de entorno o, abreviadamente, entornos (ver <a href="#2.9">§2.9</a>).
             Cada función tiene una referencia a su propio entorno, y todas las
@@ -1648,6 +1648,12 @@ end</code></pre>
 
         <dt>individual_ptr get_family_child(family_ptr, int index)</dt>
         <dd>Devuelve la persona hija de la familia especificada, referenciada por el número de hijo.</dd>
+
+        <dt>location_ptr create_location(string name, string date)</dt>
+        <dd>Crea un nuevo registro de ubicación.</dd>
+
+        <dt>int get_location_usages(locationPtr)</dt>
+        <dd>Devuelve el número de veces que se ha utilizado una ubicación.</dd>
     </dl>
 
 </body>
