@@ -368,6 +368,11 @@ namespace GKUI.Platform
                 case Feature.OverwritePrompt:
                     result = false;
                     break;
+
+                case Feature.PrintPreview:
+                    // Bug in .net 6 wpf!
+                    result = false;
+                    break;
             }
 
             return result;

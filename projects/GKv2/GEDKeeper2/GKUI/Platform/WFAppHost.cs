@@ -317,6 +317,10 @@ namespace GKUI.Platform
                 case Feature.OverwritePrompt:
                     result = true;
                     break;
+
+                case Feature.PrintPreview:
+                    result = true;
+                    break;
             }
 
             return result;

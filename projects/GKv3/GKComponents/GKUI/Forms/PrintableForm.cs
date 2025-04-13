@@ -26,6 +26,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Design.Graphics;
+using GKCore.Types;
 using GKUI.Platform.Handlers;
 
 namespace GKUI.Forms
@@ -121,6 +122,8 @@ namespace GKUI.Forms
 
         public void DoPrintPreview()
         {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.PrintPreview)) return;
+
             InitCurDoc();
 
             try {

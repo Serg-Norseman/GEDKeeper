@@ -37,6 +37,7 @@ namespace GKCore.Controllers
 
         public CircleChartWinController(ICircleChartWin view) : base(view)
         {
+            GetControl<IToolItem>("tbDocPreview").Enabled = AppHost.Instance.HasFeatureSupport(Feature.PrintPreview);
         }
 
         public override void UpdateView()

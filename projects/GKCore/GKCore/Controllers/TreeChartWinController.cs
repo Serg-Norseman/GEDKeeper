@@ -39,6 +39,7 @@ namespace GKCore.Controllers
 
         public TreeChartWinController(ITreeChartWin view) : base(view)
         {
+            GetControl<IToolItem>("tbDocPreview").Enabled = AppHost.Instance.HasFeatureSupport(Feature.PrintPreview);
         }
 
         public override void UpdateView()

@@ -30,5 +30,6 @@ namespace GKCore.Types
         OverwritePrompt,
         EmbeddedLocales,
         Mobile,             // -> SingleBase UI, AppData/Local instead of AppData/Roaming, no Plugins
+        PrintPreview,
     }
 }
