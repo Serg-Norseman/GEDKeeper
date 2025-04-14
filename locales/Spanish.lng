@@ -145,7 +145,7 @@
 144=Publicado
 145=Común
 146=¿Está seguro de que desea desvincular el repositorio?
-147=Tipo de repositorio
+147=Tipo de almacenamiento
 148=Archivo
 149=Ver
 150=Fragmento {0}: {1} individuos
@@ -161,7 +161,7 @@
 160=Islámico
 161=Persa
 162=Indio
-163=Bahai
+163=Bahaí
 164=Francés
 165=Romano
 166=Desconocido
@@ -169,7 +169,7 @@
 168=Otros
 169=Envío
 170=Emisor
-171=Lugar
+171=Ubicación
 172=Latitud
 173=Longitud
 174=Mostrar
@@ -203,7 +203,7 @@
 202=Sitios web
 203=Valor
 204=Evento
-205=Lugar
+205=Ubicación
 206=Causa
 207=Agencia
 208=Femenino
@@ -246,7 +246,7 @@
 245=¿Está seguro de querer suprimir la referencia "{0}"?
 246=Fallo en la carga del GEDCOM.
 247=Fallo al comprobar el formato del GEDCOM.
-248=Días de nacimiento
+248=Fecha de nacimiento
 249=Faltan {1} días para el cumpleaños de "{0}"
 250=Interfaz
 251=Árboles
@@ -385,10 +385,10 @@
 384=Anterior
 385=Siguiente
 386=Sabes que ...
-387=Cargando y buscando lugares
+387=Cargando y buscando ubicaciones
 388=(no seleccionado)
 389=Muestra
-390=Para todas las personas
+390=Para todos
 391=Lugares de nacimiento
 392=Lugares de fallecimiento
 393=Lugares de residencia
@@ -483,7 +483,7 @@
 482=Scripts (*.lua)|*.lua
 483=Archivos BMP (*.bmp)|*.bmp|Archivos JPEG (*.jpg)|*.jpg|Archivos PNG (*.png)|*.png|Archivos GIF (*.gif)|*.gif
 484=Causas de defunción
-485=Pedigrí
+485=Genealogía
 486=Parámetro
 487=Total
 488=Hombres
@@ -518,15 +518,15 @@
 517=Comprobar conexión de familias
 518=Comprobar base de datos
 519=Encontrar a los patriarcas
-520=Gestionar lugares
+520=Gestionar ubicaciones
 521=Emparejando...
 522=Comprobar conexión de familias
 523=todos
 524=solo vivos
-525=solo muertos
-526=Vivido antes
-527=solo hombres
-528=solo mujeres
+525=sólo fallecidos
+526=Vivos antes de
+527=sólo hombres
+528=sólo mujeres
 529=Máscara del nombre
 530=Máscara de residencia
 531=Máscara de los hechos
@@ -537,8 +537,8 @@
 536=Década
 537=Nacido
 538=Muerto
-539=Vivo
-540=Muerto
+539=Vivos
+540=Fallecidos
 541=Edad media
 542=Esperanza de vida
 543=Número medio de hijos
@@ -597,7 +597,7 @@
 596=Ficha familiar vacía
 597=de cada revisión del archivo
 598=Carga
-599=Error al guardar el fichero "{0}"{1}.
+599=Error al guardar el archivo "{0}"{1}.
 600=Color de fondo...
 601=Imagen de fondo...
 602=Personas en el árbol: {0}
@@ -661,7 +661,7 @@
 660=Mostrar el árbol de antepasados
 661=Mostrar el árbol de descendientes
 662=Mostrar el árbol completo
-663=Pedigrí
+663=Genealogía
 664=Numeración ascendente
 665=Numeración descendente
 666=Análisis estadístico de los datos
@@ -690,8 +690,8 @@
 689=Desconectar esposa
 690=Ir a la ficha de la esposa
 691=Seleccionar un individuo
-692=Seleccionar o añadir un lugar
-693=Eliminar el enlace al lugar
+692=Seleccione o añada una ubicación
+693=Eliminar el enlace a una ubicación
 694=Mostrar el mapa
 695=Seleccionar o añadir un registro de una fuente
 696=Seleccionar el registro de destino
@@ -738,7 +738,7 @@
 737=Formato "Casada (Soltera)"
 738=Formato "Soltera"
 739=Formato "Casada"
-740=H
+740=E
 741=M
 742=Geo codificador
 743=Añadir padre
@@ -763,7 +763,7 @@
 762=Buscar actualizaciones automáticamente
 763=Texto en arco
 764=Álbum de árboles
-765=Mostrar lugares
+765=Mostrar ubicaciones
 766=Ocultar cónyuges desconocidos
 767=Espaciado
 768=Márgenes
@@ -825,14 +825,14 @@
 822=Nombres en negrita
 
 823=Bautismo
-824=Bar mitzvah
-825=Bat mitzvah
+824=Bar mitzvá
+825=Bat mitzvá
 826=Bendición
 827=Bautismo adulto
 828=Confirmación
 829=Primera comunión
 830=Ordenación
-831=Restricción geo búsqueda por país
+831=Restricción geográfica búsqueda por país
 832=Profundidad separada
 833=Ancestros
 834=Coincidencias no encontradas
@@ -874,8 +874,8 @@
 870=Árbol ampliado
 871=Gráfico de abanico (solo antepasados)
 872=Abrir en una nueva ventana
-873=Lugar desconocido de la persona
-874=Comprobar ubicaciones de la persona
+873=Ubicación desconocida para la persona
+874=Comprobar ubicaciones para la persona
 875=Resaltar archivos inaccesibles
 876=La diferencia entre cónyuges es anormalmente alta `{0}`
 877=La diferencia entre hermanos es anormalmente alta `{0}`
@@ -959,8 +959,8 @@
 950=Mitad derecha
 
 951=RI:Reclutar
-952=Orden inverso de los lugares
-953=Nombres de lugares abreviados
+952=Ubicaciones en orden inverso
+953=Nombres de ubicación abreviados
 954=Líneas discontinuas de las parejas de hecho
 955=Mostrar número de subestructuras de eventos en lugar de marcas de verificación
 956=Borrar la caché de imágenes
@@ -983,8 +983,8 @@
 971=Simple
 972=Doble
 973=Triple
-974=Sunken 3D
-975=Raised 3D
+974=Hundido 3D
+975=Elevado 3D
 976=Simple, con esquinas cuadradas
 977=Doble, con esquinas cuadradas
 978=Simple, con esquinas redondeadas
@@ -1009,9 +1009,9 @@
 996=No se ha especificado el repositorio
 997=Edad de los padres
 998=Forma simple de apellidos únicos
-999=Mapa de lugares
+999=Mapa de ubicaciones
 1000=Mapa de personas
-1001=Buscar en geocodificadores lugares sin coordenadas (mapas)
+1001=Buscar en geocodificadores ubicaciones sin coordenadas (mapas)
 1002=Ubicaciones y mapas
 1003=Efecto de texto
 1004=Simple
@@ -1039,8 +1039,8 @@
 1026=DD.MM.AAAA
 1027=AAAA.MM.DD
 1028=Deshabilitar características no estándar
-1029=The `{0}` field is longer than {1} characters
-1030=Strict GEDCOM files (*.ged)|*.ged
-1031=Export to strict GEDCOM...
-1032=Include source citations
-1033=Source citations
+1029=El campo `{0}` es más largo de {1} caracteres
+1030=Archivos GEDCOM estrictos (*.ged)|*.ged
+1031=Exportar a formato GEDCOM estricto...
+1032=Incluir fuentes de las citas
+1033=Cita de la fuente

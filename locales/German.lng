@@ -105,7 +105,7 @@
 104=Person bearbeiten
 105=Geschlechterprüfung
 106=Datensatz auswählen
-107=Quelle
+107=Quellenangabe
 108=Benutzerreferenz
 109=Bemerkung
 110=Quelle
@@ -1042,5 +1042,5 @@
 1029=The `{0}` field is longer than {1} characters
 1030=Strict GEDCOM files (*.ged)|*.ged
 1031=Export to strict GEDCOM...
-1032=Include source citations
-1033=Source citations
+1032=Quellenangaben einfügen
+1033=Quellenangaben

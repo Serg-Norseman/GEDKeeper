@@ -1654,6 +1654,21 @@ end</code></pre>
 
         <dt>int get_location_usages(locationPtr)</dt>
         <dd>Devuelve el número de veces que se ha utilizado una ubicación.</dd>
+
+        <dt>coordsList search_location_geopoints(string locName, int results = 1)</dt>
+        <dd>busca una lista de puntos geográficos con un nombre determinado (proveedor - especificado en las opciones del programa), resultados - establece el número máximo de resultados (no aplicable por el momento)</dd>
+
+        <dt>int get_geopoints_count(coordsList)</dt>
+        <dd>devuelve el número de puntos geográficos de la lista</dd>
+
+        <dt>double get_geopoint_latitude(coordsList, int index)</dt>
+        <dd>devuelve la latitud de un punto geográfico de la lista</dd>
+
+        <dt>double get_geopoint_longitude(coordsList, int index)</dt>
+        <dd>devuelve la longitud de un punto geográfico de la lista</dd>
+
+        <dt>string get_geopoint_name(coordsList, int index)</dt>
+        <dd>devuelve el nombre del punto geográfico de la lista</dd>
     </dl>
 
 </body>

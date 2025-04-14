@@ -32,7 +32,7 @@
 031=Felmenői családfa
 032=d'Aboville
 033=Kobrin-Konovalov
-034=Sosa-Stradonitz
+034=Kekulé
 035=Szervező
 036=Parancsfájlok...
 037=<?>
@@ -808,7 +808,6 @@
 806=Vallása: iszlám
 807=Vallása: katolikus
 808=Vallása: ortodox
-
 809=Vallása: óhitű
 
 810=Relatív hivatkozás a fájlra
@@ -1040,8 +1039,8 @@
 1026=NN.HH.ÉÉÉÉ
 1027=ÉÉÉÉ.HH.NN
 1028=Nem szabványos funkciók kikapcsolása
-1029=The `{0}` field is longer than {1} characters
-1030=Strict GEDCOM files (*.ged)|*.ged
-1031=Export to strict GEDCOM...
-1032=Include source citations
-1033=Source citations
+1029=A(z) "{0}" mező {1} karakternél hosszabb
+1030=Szigorú GEDCOM fájlok (*.ged)|*.ged
+1031=Exportálás szigorú GEDCOM fájlba...
+1032=Tartalmazzon forráshivatkozásokat
+1033=Forráshivatkozások
