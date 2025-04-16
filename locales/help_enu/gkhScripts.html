@@ -1541,6 +1541,33 @@ end</code></pre>
 
         <dt>string get_geopoint_name(coordsList, int index)</dt>
         <dd>returns the name of the geo-point from the list</dd>
+
+        <dt></dt>
+        <dd></dd>
+
+        <dt>location_record_ptr get_event_location(eventPtr)</dt>
+        <dd>returns the location set for the event</dd>
+
+        <dt>void set_event_location(eventPtr, location_record_ptr)</dt>
+        <dd>sets the location for the event</dd>
+
+        <dt>string get_location_name(location_record_ptr)</dt>
+        <dd>returns the name of the location record</dd>
+
+        <dt>double get_location_latitude(location_record_ptr)</dt>
+        <dd>returns the latitude of the location record</dd>
+
+        <dt>double get_location_longitude(location_record_ptr)</dt>
+        <dd>returns the longitude of the record locations</dd>
+
+        <dt>object get_record_note(record_ptr, int index)</dt>
+        <dd>returns a pointer to the record's note</dd>
+
+        <dt>int get_record_sources_count(record_ptr)</dt>
+        <dd>returns the number of source citations in the record</dd>
+
+        <dt>object get_record_source(record_ptr, int index)</dt>
+        <dd>returns a reference to a source citation in the record</dd>
     </dl>
 
 </body>

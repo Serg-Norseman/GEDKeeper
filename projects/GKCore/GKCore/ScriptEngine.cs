@@ -137,15 +137,18 @@ namespace GKCore
 
             // any record : notes
             lua_register(lvm, nameof(get_record_notes_count));
+            lua_register(lvm, nameof(get_record_note));
+            lua_register(lvm, nameof(bind_record_note));
+
+            // any record : sources
+            lua_register(lvm, nameof(get_record_sources_count));
+            lua_register(lvm, nameof(get_record_source));
+            lua_register(lvm, nameof(bind_record_source));
 
             // any record : multimedia links
             lua_register(lvm, nameof(get_record_medialinks_count));
             lua_register(lvm, nameof(get_record_medialink));
             lua_register(lvm, nameof(set_medialink_primary));
-
-            // any record : bind notes, sources, multimedia
-            lua_register(lvm, nameof(bind_record_note));
-            lua_register(lvm, nameof(bind_record_source));
 
             // individual records
             lua_register(lvm, nameof(create_individual));
@@ -201,6 +204,9 @@ namespace GKCore
             lua_register(lvm, nameof(set_event_date));
             lua_register(lvm, nameof(get_event_year));
 
+            lua_register(lvm, nameof(get_event_location));
+            lua_register(lvm, nameof(set_event_location));
+
             // source records
             lua_register(lvm, nameof(create_source));
             lua_register(lvm, nameof(find_source));
@@ -213,6 +219,10 @@ namespace GKCore
             // location records
             lua_register(lvm, nameof(create_location));
             lua_register(lvm, nameof(get_location_usages));
+
+            lua_register(lvm, nameof(get_location_name));
+            lua_register(lvm, nameof(get_location_latitude));
+            lua_register(lvm, nameof(get_location_longitude));
 
             lua_register(lvm, nameof(search_location_geopoints));
             lua_register(lvm, nameof(get_geopoints_count));
@@ -447,6 +457,21 @@ namespace GKCore
             return (evt == null) ? string.Empty : evt.StringValue;
         }
 
+        public object get_event_location(object evPtr)
+        {
+            GDMCustomEvent evt = evPtr as GDMCustomEvent;
+            return (evt == null || !evt.HasPlace || !evt.Place.Location.IsPointer) ? null : fBase.Context.Tree.GetPtrValue<GDMLocationRecord>(evt.Place.Location);
+        }
+
+        public void set_event_location(object evPtr, GDMLocationRecord locRec)
+        {
+            GDMCustomEvent evt = evPtr as GDMCustomEvent;
+            if (evt == null || locRec == null) return;
+
+            evt.Place.StringValue = GKUtils.GetLocationNameExt(locRec, evt.Date.Value);
+            fBase.Context.Tree.SetPtrValue(evt.Place.Location, locRec);
+        }
+
         public string get_event_place(object evPtr)
         {
             GDMCustomEvent evt = evPtr as GDMCustomEvent;
@@ -656,6 +681,24 @@ namespace GKCore
             return loc;
         }
 
+        public string get_location_name(object recPtr)
+        {
+            GDMLocationRecord loc = recPtr as GDMLocationRecord;
+            return (loc == null) ? string.Empty : loc.LocationName;
+        }
+
+        public double get_location_latitude(object recPtr)
+        {
+            GDMLocationRecord loc = recPtr as GDMLocationRecord;
+            return (loc == null) ? 0.0 : loc.Map.Lati;
+        }
+
+        public double get_location_longitude(object recPtr)
+        {
+            GDMLocationRecord loc = recPtr as GDMLocationRecord;
+            return (loc == null) ? 0.0 : loc.Map.Long;
+        }
+
         public int get_location_usages(object recPtr)
         {
             GDMLocationRecord loc = recPtr as GDMLocationRecord;
@@ -709,6 +752,24 @@ namespace GKCore
         {
             GDMRecord rec = recPtr as GDMRecord;
             return (rec == null) ? -1 : rec.Notes.Count;
+        }
+
+        public object get_record_note(object recPtr, int index)
+        {
+            GDMRecord rec = recPtr as GDMRecord;
+            return (rec == null || !rec.HasNotes) ? null : rec.Notes[index];
+        }
+
+        public int get_record_sources_count(object recPtr)
+        {
+            GDMRecord rec = recPtr as GDMRecord;
+            return (rec == null) ? -1 : rec.SourceCitations.Count;
+        }
+
+        public object get_record_source(object recPtr, int index)
+        {
+            GDMRecord rec = recPtr as GDMRecord;
+            return (rec == null || !rec.HasSourceCitations) ? null : rec.SourceCitations[index];
         }
 
         public int get_record_medialinks_count(object recPtr)

@@ -1574,6 +1574,33 @@ end
 
         <dt>string get_geopoint_name(coordsList, int index)</dt>
         <dd>возвращает название гео-точки из списка</dd>
+
+        <dt></dt>
+        <dd></dd>
+
+        <dt>location_record_ptr get_event_location(eventPtr)</dt>
+        <dd>возвращает установленную событию локацию</dd>
+
+        <dt>void set_event_location(eventPtr, location_record_ptr)</dt>
+        <dd>задает событию локацию</dd>
+
+        <dt>string get_location_name(location_record_ptr)</dt>
+        <dd>возвращает название записи локации</dd>
+
+        <dt>double get_location_latitude(location_record_ptr)</dt>
+        <dd>возвращает широту записи локации</dd>
+
+        <dt>double get_location_longitude(location_record_ptr)</dt>
+        <dd>возвращает долготу записи локации</dd>
+
+        <dt>object get_record_note(record_ptr, int index)</dt>
+        <dd>возвращает указатель на заметку записи</dd>
+
+        <dt>int get_record_sources_count(record_ptr)</dt>
+        <dd>возвращает количество ссылок на источники в записи</dd>
+
+        <dt>object get_record_source(record_ptr, int index)</dt>
+        <dd>возвращает ссылку на источник в записи</dd>
     </dl>
 
 </body>
