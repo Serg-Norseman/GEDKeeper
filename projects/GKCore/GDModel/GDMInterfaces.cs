@@ -111,6 +111,12 @@ namespace GDModel
     }
 
 
+    public interface IGDMStructWithRestriction : IGDMObject
+    {
+        GDMRestriction Restriction { get; set; }
+    }
+
+
     public interface IGDMStructWithNotes : IGDMObject
     {
         bool HasNotes { get; }
@@ -144,14 +150,13 @@ namespace GDModel
     }
 
 
-    public interface IGDMEvent : IGDMStructWithLists, IGDMStructWithAddress, IGDMStructWithPlace
+    public interface IGDMEvent : IGDMStructWithLists, IGDMStructWithAddress, IGDMStructWithPlace, IGDMStructWithRestriction
     {
         string Agency { get; set; }
         string Cause { get; set; }
         string Classification { get; set; }
         GDMDateValue Date { get; }
         string ReligiousAffilation { get; set; }
-        GDMRestriction Restriction { get; set; }
     }
 
 
@@ -176,12 +181,10 @@ namespace GDModel
     }
 
 
-    public interface IGDMRecordWithEvents : IGDMRecord
+    public interface IGDMRecordWithEvents : IGDMRecord, IGDMStructWithRestriction
     {
         bool HasEvents { get; }
         GDMList<GDMCustomEvent> Events { get; }
-
-        GDMRestriction Restriction { get; set; }
         
         GDMCustomEvent AddEvent(GDMCustomEvent evt);
         GDMCustomEvent FindEvent(string eventName);

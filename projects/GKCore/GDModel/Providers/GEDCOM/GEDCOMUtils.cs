@@ -1611,6 +1611,20 @@ namespace GDModel.Providers.GEDCOM
             return GEDCOMUtils.Enum2Str(value, MarriageStatuses);
         }
 
+
+        public static readonly string[] DNAFileFormats = new string[] {
+            "", "SNP", "STR" };
+
+        public static GDMDNAFileFormat GetDNAFileFormatVal(string str)
+        {
+            return Str2Enum(str, DNAFileFormats, GDMDNAFileFormat.None);
+        }
+
+        public static string GetDNAFileFormatStr(GDMDNAFileFormat value)
+        {
+            return GEDCOMUtils.Enum2Str(value, DNAFileFormats);
+        }
+
         #endregion
 
         #region Aux functions

@@ -900,7 +900,7 @@ namespace GDModel.Providers.GEDCOM
             if (!Strict) WriteBaseTag(stream, level, sourRec.Date);
         }
 
-        //
+
         private static StackTuple AddRepositoryCitationTag(GDMTree tree, GDMTag owner, int tagLevel, int tagId, StringSpan tagValue)
         {
             GDMRepositoryCitation repCit = (GDMRepositoryCitation)owner;
@@ -2699,6 +2699,71 @@ namespace GDModel.Providers.GEDCOM
                 WriteTagLine(stream, level, GEDCOMTagName._RELN, persName.ReligiousName, true);
                 WriteTagLine(stream, level, GEDCOMTagName._CENN, persName.CensusName, true);
             }
+        }
+
+
+        private static StackTuple AddDNATestTag(GDMTree tree, GDMTag owner, int tagLevel, int tagId, StringSpan tagValue)
+        {
+            GDMDNATest dnaTest = (GDMDNATest)owner;
+            GDMTag curTag = null;
+            TagHandler addHandler = TagHandler.Null;
+
+            GEDCOMTagType tagType = (GEDCOMTagType)tagId;
+            if (tagType == GEDCOMTagType.NAME) {
+                dnaTest.TestName = tagValue;
+            } else if (tagType == GEDCOMTagType.DATE) {
+                curTag = dnaTest.Date;
+                GEDCOMUtils.ParseDateValue(tree, dnaTest.Date, tagValue);
+            } else if (tagType == GEDCOMTagType.FILE) {
+                dnaTest.FileReference = tagValue;
+                curTag = dnaTest;
+                //addHandler = TagHandler.AddDNATestTag;
+            } else if (tagType == GEDCOMTagType.FORM) {
+                dnaTest.FileFormat = GEDCOMUtils.GetDNAFileFormatVal(tagValue);
+            } else if (tagType == GEDCOMTagType._MHAP) {
+                dnaTest.MHaplogroup = tagValue;
+            } else if (tagType == GEDCOMTagType._YHAP) {
+                dnaTest.YHaplogroup = tagValue;
+            } else if (tagType == GEDCOMTagType.AGNC) {
+                dnaTest.Agency = tagValue;
+            } else if (tagType == GEDCOMTagType.NOTE) {
+                curTag = dnaTest.Notes.Add(new GDMNotes());
+                curTag.ParseString(tagValue);
+                addHandler = TagHandler.NoteTag;
+            } else if (tagType == GEDCOMTagType.OBJE) {
+                curTag = dnaTest.MultimediaLinks.Add(new GDMMultimediaLink());
+                curTag.ParseString(tagValue);
+                addHandler = TagHandler.MultimediaLinkTag;
+            } else if (tagType == GEDCOMTagType.RESN) {
+                dnaTest.Restriction = GEDCOMUtils.GetRestrictionVal(tagValue);
+            } else {
+                return AddBaseTag(tree, owner, tagLevel, tagId, tagValue);
+            }
+
+            return CreateReaderStackTuple(tagLevel, curTag, addHandler);
+        }
+
+        private static bool WriteDNATest(StreamWriter stream, int level, GDMTag tag)
+        {
+            GDMDNATest dnaTest = (GDMDNATest)tag;
+
+            if (!WriteBaseTag(stream, level, dnaTest)) return false;
+
+            level += 1;
+            WriteTagLine(stream, level, GEDCOMTagName.NAME, dnaTest.TestName, true);
+            WriteBaseTag(stream, level, dnaTest.Date);
+            WriteTagLine(stream, level, GEDCOMTagName.FILE, dnaTest.FileReference, true);
+            GEDCOMProvider.WriteTagLine(stream, (level + 1), GEDCOMTagName.FORM, GEDCOMUtils.GetDNAFileFormatStr(dnaTest.FileFormat), true);
+            WriteTagLine(stream, level, GEDCOMTagName._MHAP, dnaTest.MHaplogroup, true);
+            WriteTagLine(stream, level, GEDCOMTagName._YHAP, dnaTest.YHaplogroup, true);
+
+            WriteTagLine(stream, level, GEDCOMTagName.AGNC, dnaTest.Agency, true);
+            WriteTagLine(stream, level, GEDCOMTagName.RESN, GEDCOMUtils.GetRestrictionStr(dnaTest.Restriction), true);
+
+            if (dnaTest.HasNotes) WriteList(stream, level, dnaTest.Notes, WriteNote);
+            if (dnaTest.HasMultimediaLinks) WriteList(stream, level, dnaTest.MultimediaLinks, WriteMultimediaLink);
+
+            return true;
         }
 
         #endregion

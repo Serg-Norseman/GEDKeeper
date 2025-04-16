@@ -23,21 +23,41 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public enum GDMDNADataType
+    public interface IGDMStructWithDNA : IGDMObject
+    {
+        bool HasDNATests { get; }
+        GDMList<GDMDNATest> DNATests { get; }
+    }
+
+
+    public enum GDMDNAFileFormat
     {
         None = 0,
         SNP,
         STR
     }
 
+    /*public enum GDMDNATestType
+    {
+        None = 0,
+        AUTO,
+        MDNA,
+        XDNA,
+        YDNA
+    }*/
 
-    public class GDMDNATest : GDMValueTag, IGDMStructWithNotes, IGDMStructWithMultimediaLinks
+
+    /// <summary>
+    /// Data structure for describing DNA tests in GEDCOM format (GEDKeeper's extension).
+    /// Future tags: ETHNIC_PERCENTAGE, MATCHES, CONFIDENCE_LEVEL, ANALYSIS_STATUS (completed, in progress, pending).
+    /// </summary>
+    public class GDMDNATest : GDMValueTag, IGDMStructWithNotes, IGDMStructWithMultimediaLinks, IGDMStructWithRestriction
     {
         private string fAgency;
-        private GDMDNADataType fDataType;
+        private GDMDNAFileFormat fFileFormat;
         private readonly GDMDateValue fDate;
         private string fFileReference;
-        private string fPersonName;
+        private string fTestName;
         private string fMHaplogroup;
         private string fYHaplogroup;
         private GDMRestriction fRestriction;
@@ -45,12 +65,18 @@ namespace GDModel
         private GDMList<GDMMultimediaLink> fMultimediaLinks;
 
 
+        /// <summary>
+        /// Name of the laboratory, company (AGNC).
+        /// </summary>
         public string Agency
         {
             get { return fAgency; }
             set { fAgency = value; }
         }
 
+        /// <summary>
+        /// Date of the test (DATE).
+        /// </summary>
         public GDMDateValue Date
         {
             get { return fDate; }
@@ -59,43 +85,53 @@ namespace GDModel
         /// <summary>
         /// When ordering and performing a test, the following may be specified:
         /// full or partial name of the person, nickname.
-        /// The test may also have its own identifier.
+        /// The test may also have its own identifier (NAME).
         /// </summary>
-        public string PersonName
+        public string TestName
         {
-            get { return fPersonName; }
-            set { fPersonName = value; }
+            get { return fTestName; }
+            set { fTestName = value; }
         }
 
         /// <summary>
-        /// Description can be entered via regular notes.
+        /// Raw data file format (FORM).
         /// </summary>
-        //public string Description { get; set; }
-
-        public GDMDNADataType DataType
+        public GDMDNAFileFormat FileFormat
         {
-            get { return fDataType; }
-            set { fDataType = value; }
+            get { return fFileFormat; }
+            set { fFileFormat = value; }
         }
 
+        /// <summary>
+        /// Path to raw data file (FILE).
+        /// </summary>
         public string FileReference
         {
             get { return fFileReference; }
             set { fFileReference = value; }
         }
 
+        /// <summary>
+        /// mtDNA Haplogroup (_MHAP).
+        /// </summary>
         public string MHaplogroup
         {
             get { return fMHaplogroup; }
             set { fMHaplogroup = value; }
         }
 
+        /// <summary>
+        /// Y-DNA Haplogroup (_YHAP).
+        /// </summary>
         public string YHaplogroup
         {
             get { return fYHaplogroup; }
             set { fYHaplogroup = value; }
         }
 
+        /// <summary>
+        /// Restriction notice (RESN).
+        /// </summary>
         public GDMRestriction Restriction
         {
             get { return fRestriction; }
@@ -140,8 +176,6 @@ namespace GDModel
             SetName(GEDCOMTagType._DNA);
 
             fDate = new GDMDateValue();
-
-            // FileReference / FILE
         }
 
         protected override void Dispose(bool disposing)
@@ -177,8 +211,8 @@ namespace GDModel
             if (sourceObj.fNotes != null) AssignList(sourceObj.fNotes, Notes);
             if (sourceObj.fMultimediaLinks != null) AssignList(sourceObj.fMultimediaLinks, MultimediaLinks);
 
-            fPersonName = sourceObj.fPersonName;
-            fDataType = sourceObj.fDataType;
+            fTestName = sourceObj.fTestName;
+            fFileFormat = sourceObj.fFileFormat;
             fMHaplogroup = sourceObj.fMHaplogroup;
             fYHaplogroup = sourceObj.fYHaplogroup;
             fFileReference = sourceObj.fFileReference;
@@ -194,8 +228,8 @@ namespace GDModel
             if (fNotes != null) fNotes.Clear();
             if (fMultimediaLinks != null) fMultimediaLinks.Clear();
 
-            fPersonName = string.Empty;
-            fDataType = GDMDNADataType.None;
+            fTestName = string.Empty;
+            fFileFormat = GDMDNAFileFormat.None;
             fMHaplogroup = string.Empty;
             fYHaplogroup = string.Empty;
             fFileReference = string.Empty;
@@ -205,7 +239,7 @@ namespace GDModel
         {
             return base.IsEmpty()
                 && fDate.IsEmpty() && string.IsNullOrEmpty(fAgency) && (fRestriction == GDMRestriction.rnNone)
-                && string.IsNullOrEmpty(fPersonName) && (fDataType == GDMDNADataType.None) && string.IsNullOrEmpty(fFileReference)
+                && string.IsNullOrEmpty(fTestName) && (fFileFormat == GDMDNAFileFormat.None) && string.IsNullOrEmpty(fFileReference)
                 && string.IsNullOrEmpty(fMHaplogroup) && string.IsNullOrEmpty(fYHaplogroup)
                 && (fNotes == null || fNotes.Count == 0)
                 && (fMultimediaLinks == null || fMultimediaLinks.Count == 0);
@@ -230,8 +264,8 @@ namespace GDModel
             ProcessHashes(ref hashCode, fNotes);
             ProcessHashes(ref hashCode, fMultimediaLinks);
 
-            hashCode.Add(fPersonName);
-            hashCode.Add(fDataType);
+            hashCode.Add(fTestName);
+            hashCode.Add(fFileFormat);
             hashCode.Add(fMHaplogroup);
             hashCode.Add(fYHaplogroup);
             hashCode.Add(fFileReference);
