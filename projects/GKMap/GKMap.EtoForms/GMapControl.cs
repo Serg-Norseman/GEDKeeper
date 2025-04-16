@@ -13,7 +13,6 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using Eto.Drawing;
 using Eto.Forms;
 using GKMap.MapObjects;
@@ -37,11 +36,8 @@ namespace GKMap.EtoForms
     {
         public static readonly bool IsDesignerHosted = LicenseManager.UsageMode == LicenseUsageMode.Designtime;
 
-        private Bitmap fBackBuffer;
         private MapCore fCore;
         private Cursor fCursorBefore = Cursors.Default;
-        private bool fForceDoubleBuffer;
-        private Graphics fGxOff;
         private bool fIsMouseOverMarker;
         private bool fIsMouseOverPolygon;
         private bool fIsMouseOverRoute;
@@ -442,7 +438,6 @@ namespace GKMap.EtoForms
                 CopyrightFont.Dispose();
                 EmptyTileBorders.Dispose();
                 EmptyTileBrush.Dispose();
-                ClearBackBuffer();
             }
             base.Dispose(disposing);
         }
@@ -549,30 +544,14 @@ namespace GKMap.EtoForms
         {
             Bitmap ret;
 
-            bool r = fForceDoubleBuffer;
             try {
-                UpdateBackBuffer();
-
-                if (!r) {
-                    fForceDoubleBuffer = true;
+                var backBuffer = new Bitmap(Width, Height, PixelFormat.Format32bppRgb);
+                using (var backGfx = new Graphics(backBuffer)) {
+                    DrawGraphics(backGfx);
                 }
-
-                Refresh();
-                //Application.DoEvents();
-
-                using (MemoryStream ms = new MemoryStream()) {
-                    using (var frame = (fBackBuffer.Clone() as Bitmap)) {
-                        frame.Save(ms, ImageFormat.Png);
-                    }
-                    ret = new Bitmap(ms);
-                }
+                ret = backBuffer;
             } catch (Exception) {
                 throw;
-            } finally {
-                if (!r) {
-                    fForceDoubleBuffer = false;
-                    ClearBackBuffer();
-                }
             }
             return ret;
         }
@@ -632,14 +611,7 @@ namespace GKMap.EtoForms
             fStart = DateTime.Now;
 #endif
 
-            if (fForceDoubleBuffer) {
-                if (fGxOff != null) {
-                    DrawGraphics(fGxOff);
-                    e.Graphics.DrawImage(fBackBuffer, 0, 0);
-                }
-            } else {
-                DrawGraphics(e.Graphics);
-            }
+            DrawGraphics(e.Graphics);
 
             base.OnPaint(e);
 
@@ -717,10 +689,6 @@ namespace GKMap.EtoForms
             }
 
             if (!IsDesignerHosted) {
-                if (fForceDoubleBuffer) {
-                    UpdateBackBuffer();
-                }
-
                 fCore.OnMapSizeChanged(Width, Height);
 
                 if (Visible /*&& IsHandleCreated*/ && fCore.IsStarted) {
@@ -836,26 +804,6 @@ namespace GKMap.EtoForms
                 GMaps.Instance.CancelTileCaching();
             }
         }*/
-
-        private void UpdateBackBuffer()
-        {
-            ClearBackBuffer();
-
-            fBackBuffer = new Bitmap(Width, Height, PixelFormat.Format32bppRgb);
-            fGxOff = new Graphics(fBackBuffer);
-        }
-
-        private void ClearBackBuffer()
-        {
-            if (fBackBuffer != null) {
-                fBackBuffer.Dispose();
-                fBackBuffer = null;
-            }
-            if (fGxOff != null) {
-                fGxOff.Dispose();
-                fGxOff = null;
-            }
-        }
 
         private void Overlays_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {

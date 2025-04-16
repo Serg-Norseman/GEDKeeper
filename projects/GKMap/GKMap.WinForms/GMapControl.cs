@@ -16,7 +16,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using GKMap.MapObjects;
@@ -40,11 +39,8 @@ namespace GKMap.WinForms
     {
         public static readonly bool IsDesignerHosted = LicenseManager.UsageMode == LicenseUsageMode.Designtime;
 
-        private Bitmap fBackBuffer;
         private MapCore fCore;
         private Cursor fCursorBefore = Cursors.Default;
-        private bool fForceDoubleBuffer;
-        private Graphics fGxOff;
         private bool fIsMouseOverMarker;
         private bool fIsMouseOverPolygon;
         private bool fIsMouseOverRoute;
@@ -470,7 +466,6 @@ namespace GKMap.WinForms
                 CopyrightFont.Dispose();
                 EmptyTileBorders.Dispose();
                 EmptyTileBrush.Dispose();
-                ClearBackBuffer();
             }
             base.Dispose(disposing);
         }
@@ -577,30 +572,14 @@ namespace GKMap.WinForms
         {
             Image ret;
 
-            bool r = fForceDoubleBuffer;
             try {
-                UpdateBackBuffer();
-
-                if (!r) {
-                    fForceDoubleBuffer = true;
+                var backBuffer = new Bitmap(Width, Height);
+                using (var backGfx = Graphics.FromImage(backBuffer)) {
+                    DrawGraphics(backGfx);
                 }
-
-                Refresh();
-                Application.DoEvents();
-
-                using (MemoryStream ms = new MemoryStream()) {
-                    using (var frame = (fBackBuffer.Clone() as Bitmap)) {
-                        frame.Save(ms, ImageFormat.Png);
-                    }
-                    ret = Image.FromStream(ms);
-                }
+                ret = backBuffer;
             } catch (Exception) {
                 throw;
-            } finally {
-                if (!r) {
-                    fForceDoubleBuffer = false;
-                    ClearBackBuffer();
-                }
             }
             return ret;
         }
@@ -660,14 +639,7 @@ namespace GKMap.WinForms
             fStart = DateTime.Now;
 #endif
 
-            if (fForceDoubleBuffer) {
-                if (fGxOff != null) {
-                    DrawGraphics(fGxOff);
-                    e.Graphics.DrawImage(fBackBuffer, 0, 0);
-                }
-            } else {
-                DrawGraphics(e.Graphics);
-            }
+            DrawGraphics(e.Graphics);
 
             base.OnPaint(e);
 
@@ -738,10 +710,6 @@ namespace GKMap.WinForms
             }
 
             if (!IsDesignerHosted) {
-                if (fForceDoubleBuffer) {
-                    UpdateBackBuffer();
-                }
-
                 fCore.OnMapSizeChanged(Width, Height);
 
                 if (Visible && IsHandleCreated && fCore.IsStarted) {
@@ -845,26 +813,6 @@ namespace GKMap.WinForms
         {
             if (e.CloseReason == CloseReason.WindowsShutDown || e.CloseReason == CloseReason.TaskManagerClosing) {
                 GMaps.Instance.CancelTileCaching();
-            }
-        }
-
-        private void UpdateBackBuffer()
-        {
-            ClearBackBuffer();
-
-            fBackBuffer = new Bitmap(Width, Height);
-            fGxOff = Graphics.FromImage(fBackBuffer);
-        }
-
-        private void ClearBackBuffer()
-        {
-            if (fBackBuffer != null) {
-                fBackBuffer.Dispose();
-                fBackBuffer = null;
-            }
-            if (fGxOff != null) {
-                fGxOff.Dispose();
-                fGxOff = null;
             }
         }
 

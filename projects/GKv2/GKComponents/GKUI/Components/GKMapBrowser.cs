@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Net;
 using System.Windows.Forms;
 using GKCore.Design.Controls;
@@ -340,7 +341,7 @@ namespace GKUI.Components
             var tmpImage = fMapControl.ToImage();
             if (tmpImage != null) {
                 using (tmpImage) {
-                    tmpImage.Save(fileName);
+                    tmpImage.Save(fileName, ImageFormat.Jpeg);
                 }
             }
         }
