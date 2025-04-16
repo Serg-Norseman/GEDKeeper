@@ -60,6 +60,7 @@ namespace GKUI.Platform
 
         public Stream CheckOrientation(Stream inputStream)
         {
+            inputStream.Seek(0, SeekOrigin.Begin);
             Stream transformStream = ImageProcess.PrepareImage(inputStream);
             transformStream.Seek(0, SeekOrigin.Begin);
             return transformStream;

@@ -40,8 +40,10 @@ namespace GKCore
 
 #if !GK3
         public const string UpdateURL = "https://sourceforge.net/projects/gedkeeper/files/gk_version.xml";
+        public const string APP_VERSION = APP_VERSION_2X;
 #else
         public const string UpdateURL = "https://sourceforge.net/projects/gedkeeper/files/gk3_version.xml";
+        public const string APP_VERSION = APP_VERSION_3X;
 #endif
 
 

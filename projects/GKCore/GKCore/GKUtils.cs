@@ -3569,6 +3569,7 @@ namespace GKCore
             InitSecurityProtocol();
 
             using (var webClient = new WebClient()) {
+                webClient.Headers["User-Agent"] = string.Format("{0}/{1}", GKData.APP_TITLE, GKData.APP_VERSION);
                 byte[] dataBytes = webClient.DownloadData(uri);
                 return dataBytes;
             }
