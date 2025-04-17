@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -192,7 +192,7 @@ namespace GDModel
     }
 
 
-    public interface IGDMIndividualRecord : IGDMRecordWithEvents
+    public interface IGDMIndividualRecord : IGDMRecordWithEvents, IGDMStructWithDNA
     {
         bool HasAssociations { get; }
         GDMList<GDMAssociation> Associations { get; }

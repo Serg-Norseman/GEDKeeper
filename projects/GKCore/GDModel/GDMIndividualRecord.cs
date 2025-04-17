@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -41,6 +41,7 @@ namespace GDModel
     {
         private GDMList<GDMAssociation> fAssociations;
         private readonly GDMList<GDMChildToFamilyLink> fChildToFamilyLinks;
+        private GDMList<GDMDNATest> fDNATests;
         private GDMList<GDMPointer> fGroups;
         private readonly GDMList<GDMPersonalName> fPersonalNames;
         private readonly GDMList<GDMSpouseToFamilyLink> fSpouseToFamilyLinks;
@@ -82,6 +83,21 @@ namespace GDModel
         public GDMList<GDMChildToFamilyLink> ChildToFamilyLinks
         {
             get { return fChildToFamilyLinks; }
+        }
+
+        public bool HasDNATests
+        {
+            get { return fDNATests != null && fDNATests.Count != 0; }
+        }
+
+        public GDMList<GDMDNATest> DNATests
+        {
+            get {
+                if (fDNATests == null) {
+                    fDNATests = new GDMList<GDMDNATest>();
+                }
+                return fDNATests;
+            }
         }
 
         public bool HasGroups
@@ -147,6 +163,7 @@ namespace GDModel
             if (disposing) {
                 if (fAssociations != null) fAssociations.Dispose();
                 fChildToFamilyLinks.Dispose();
+                if (fDNATests != null) fDNATests.Dispose();
                 if (fGroups != null) fGroups.Dispose();
                 fPersonalNames.Dispose();
                 fSpouseToFamilyLinks.Dispose();
@@ -160,6 +177,7 @@ namespace GDModel
 
             if (fAssociations != null) fAssociations.TrimExcess();
             fChildToFamilyLinks.TrimExcess();
+            if (fDNATests != null) fDNATests.TrimExcess();
             if (fGroups != null) fGroups.TrimExcess();
             fPersonalNames.TrimExcess();
             fSpouseToFamilyLinks.TrimExcess();
@@ -214,6 +232,8 @@ namespace GDModel
 
             if (fAssociations != null) fAssociations.Clear();
 
+            if (fDNATests != null) fDNATests.Clear();
+
             fPersonalNames.Clear();
         }
 
@@ -222,6 +242,7 @@ namespace GDModel
             return base.IsEmpty() && (fSex == GDMSex.svUnknown) && (fPersonalNames.Count == 0)
                 && (fChildToFamilyLinks.Count == 0) && (fSpouseToFamilyLinks.Count == 0)
                 && (fAssociations == null || fAssociations.Count == 0)
+                && (fDNATests == null || fDNATests.Count == 0)
                 && (fGroups == null || fGroups.Count == 0);
         }
 
@@ -373,6 +394,11 @@ namespace GDModel
                 targetIndi.Associations.Add(obj);
             }
 
+            while (fDNATests != null && fDNATests.Count > 0) {
+                var obj = fDNATests.Extract(0);
+                targetIndi.DNATests.Add(obj);
+            }
+
             while (fGroups != null && fGroups.Count > 0) {
                 GDMPointer obj = fGroups.Extract(0);
                 targetIndi.Groups.Add(obj);
@@ -385,6 +411,7 @@ namespace GDModel
 
             if (fAssociations != null) fAssociations.ReplaceXRefs(map);
             fChildToFamilyLinks.ReplaceXRefs(map);
+            if (fDNATests != null) fDNATests.ReplaceXRefs(map);
             if (fGroups != null) fGroups.ReplaceXRefs(map);
             fPersonalNames.ReplaceXRefs(map);
             fSpouseToFamilyLinks.ReplaceXRefs(map);
@@ -585,6 +612,7 @@ namespace GDModel
 
             ProcessHashes(ref hashCode, fAssociations);
             ProcessHashes(ref hashCode, fChildToFamilyLinks);
+            ProcessHashes(ref hashCode, fDNATests);
             ProcessHashes(ref hashCode, fGroups);
             ProcessHashes(ref hashCode, fPersonalNames);
             ProcessHashes(ref hashCode, fSpouseToFamilyLinks);

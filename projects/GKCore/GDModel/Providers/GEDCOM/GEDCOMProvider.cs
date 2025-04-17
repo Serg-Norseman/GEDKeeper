@@ -100,6 +100,7 @@ namespace GDModel.Providers.GEDCOM
         IndividualEventTag,
         FamilyEventTag,
         AgeTag,
+        DNATestTag,
     }
 
     public struct StackTuple
@@ -685,6 +686,10 @@ namespace GDModel.Providers.GEDCOM
                 asso.Relation = "possible_duplicate";
                 curTag = indiRec.Associations.Add(asso);
                 addHandler = TagHandler.AssociationTag;
+            } else if (tagType == GEDCOMTagType._DNA) {
+                curTag = indiRec.DNATests.Add(new GDMDNATest());
+                curTag.ParseString(tagValue);
+                addHandler = TagHandler.DNATestTag;
             } else {
                 return AddRecordWithEventsTag(tree, owner, tagLevel, tagId, tagValue);
             }
@@ -707,7 +712,11 @@ namespace GDModel.Providers.GEDCOM
 
             if (indiRec.HasEvents) WriteList(stream, level, indiRec.Events, WriteIndividualEvent);
             if (indiRec.HasAssociations) WriteList(stream, level, indiRec.Associations, WriteAssociation);
-            if (!Strict && indiRec.HasGroups) WriteList(stream, level, indiRec.Groups, WriteBaseTag);
+
+            if (!Strict) {
+                if (indiRec.HasGroups) WriteList(stream, level, indiRec.Groups, WriteBaseTag);
+                if (indiRec.HasDNATests) WriteList(stream, level, indiRec.DNATests, WriteDNATest);
+            }
         }
 
 
@@ -2717,8 +2726,9 @@ namespace GDModel.Providers.GEDCOM
             } else if (tagType == GEDCOMTagType.FILE) {
                 dnaTest.FileReference = tagValue;
                 curTag = dnaTest;
-                //addHandler = TagHandler.AddDNATestTag;
+                addHandler = TagHandler.DNATestTag;
             } else if (tagType == GEDCOMTagType.FORM) {
+                // FILE/FORM
                 dnaTest.FileFormat = GEDCOMUtils.GetDNAFileFormatVal(tagValue);
             } else if (tagType == GEDCOMTagType._MHAP) {
                 dnaTest.MHaplogroup = tagValue;
@@ -2908,6 +2918,7 @@ namespace GDModel.Providers.GEDCOM
             AddIndividualEventTag,      /* IndividualEventTag */
             AddFamilyEventTag,          /* FamilyEventTag */
             AddAgeTag,                  /* AgeTag */
+            AddDNATestTag,              /* DNATestTag */
         };
 
         #endregion
