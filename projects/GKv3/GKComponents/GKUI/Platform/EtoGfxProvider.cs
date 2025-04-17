@@ -110,9 +110,9 @@ namespace GKUI.Platform
                     // that were stored in GEDCOM relative to the original full image).
                     Bitmap newImage = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
                     using (Graphics graphic = new Graphics(newImage)) {
-                        graphic.AntiAlias = true;
-                        graphic.ImageInterpolation = ImageInterpolation.High;
-                        graphic.PixelOffsetMode = PixelOffsetMode.Half;
+                        // Wpf: Low and High(=Default) - very bad quality!
+                        // Gtk: Medium and High - no differences.
+                        graphic.ImageInterpolation = ImageInterpolation.Medium;
 
                         if (cutoutIsEmpty) {
                             graphic.DrawImage(bmp, 0, 0, imgWidth, imgHeight);
