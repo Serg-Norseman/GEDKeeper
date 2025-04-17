@@ -443,8 +443,8 @@ namespace GKCore
         /* 392 */ MSDeathPlaces,
         /* 393 */ MSResiPlace,
         /* 394 */ MapSelOnSelected,
-        /* 395 */ SaveImage,
 
+        /* 395 */ SaveImage, // may be deprecated, not used
         /* 396 */ FormatUnsupported, // may be deprecated
         /* 397 */ DataLoadError, // may be deprecated
 
@@ -564,7 +564,7 @@ namespace GKCore
         /* 508 */ IncludedGroupFilter,
         /* 509 */ DuplicatesSearch,
         /* 510 */ ValueInvalid,
-        /* 511 */ Operation,
+        /* 511 */ Operation, // obsolete, not used, can be removed
         /* 512 */ TreeCompare,
         /* 513 */ TreeMerge,
         /* 514 */ TreeSplit,
@@ -1385,7 +1385,7 @@ namespace GKCore
             /* 258 */ "Use proxy",
             /* 259 */ "Server",
             /* 260 */ "Port",
-            /* 261 */ "Login",
+            /* 261 */ "User name",
             /* 262 */ "Password",
             /* 263 */ "The password is not specified",
             /* 264 */ "Show tips on startup",
@@ -1406,7 +1406,7 @@ namespace GKCore
             /* 279 */ "Only years",
             /* 280 */ "Kinship",
             /* 281 */ "Additional symbols",
-            /* 282 */ "Tree decorative",
+            /* 282 */ "Tree decorations",
             /* 283 */ "Show portraits",
             /* 284 */ "Hide died in childhood",
             /* 285 */ "Decor",
@@ -1750,7 +1750,7 @@ namespace GKCore
             /* 623 */ "Find previous",
             /* 624 */ "Find next",
             /* 625 */ "The certainty index",
-            /* 626 */ "Monthes of birth",
+            /* 626 */ "Months of birth",
             /* 627 */ "Month",
             /* 628 */ "Reset",
             /* 629 */ "Field",
@@ -1989,7 +1989,7 @@ namespace GKCore
             /* 859 */ "Family `{0}` has a half link of child to parents family `{1}`",
             /* 860 */ "Family `{0}` has garbled spouses",
             /* 861 */ "USSR:CPSU member",
-            /* 862 */ "Attention: when merging archive records, the name and address are not transferred! Proceed?",
+            /* 862 */ "Attention: when merging repository records, the name and address are not transferred! Proceed?",
             /* 863 */ "Use extra controls",
             /* 864 */ "Several families of parents `{0}`",
             /* 865 */ "Specials",
