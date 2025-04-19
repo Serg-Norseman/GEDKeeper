@@ -114,7 +114,8 @@ namespace GKCore.Controllers
 
         public GDMRecord GetSelectedRecord()
         {
-            return ((TreeInspector.CheckObj)fView.ChecksList.GetSelectedData()).Rec;
+            var selData = fView.ChecksList.GetSelectedData() as TreeInspector.CheckObj;
+            return (selData == null) ? null : selData.Rec;
         }
 
         public IList<GDMRecord> GetCheckedRecords()

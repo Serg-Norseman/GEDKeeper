@@ -225,6 +225,7 @@ namespace GKUI.Components
             fItems = new ObservableExtList<GKListItem>();
             fSortColumn = 0;
             fSortOrder = BSDSortOrder.None;
+            fSorting = true;
 
             AllowColumnReordering = false;
             AllowMultipleSelection = false;
