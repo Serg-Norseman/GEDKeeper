@@ -194,6 +194,7 @@
     <EmbeddedResource Include="Resources\test_gc4j_utf8.ged" />
     <EmbeddedResource Include="Resources\test_rootsmagic.ged" />
     <EmbeddedResource Include="Resources\test_evtages.ged" />
+    <EmbeddedResource Include="Resources\test_ftb_dmgutf8rus.ged" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

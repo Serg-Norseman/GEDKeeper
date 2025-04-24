@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,6 +21,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using BSLib;
 using GKCore;
@@ -1726,7 +1727,7 @@ namespace GDModel.Providers.GEDCOM
 
                     if (tagType == GEDCOMTagType.CONC) {
                         if (strings.Count > 0) {
-                            strings[strings.Count - 1] = strings[strings.Count - 1] + tag.StringValue;
+                            strings[strings.Count - 1] = string.Concat(strings[strings.Count - 1], tag.StringValue);
                         } else {
                             strings.Add(tag.StringValue);
                         }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -845,5 +845,31 @@ namespace GKCore
                     list[numUnique++] = list[i];
             list.RemoveRange(numUnique, list.Count - numUnique);
         }
+
+        #region UTF-8 strings
+
+        public static bool IsDamagedUtf8Sequence(byte b, bool isFirstByte)
+        {
+            if (isFirstByte) {
+                // is the byte the beginning of a sequence?
+                if ((b & START_BYTE_MASK) != START_BYTE_MASK) return false;
+
+                // is this a valid start byte?
+                if ((b & 0xF8) == 0xF0) return false; // sequence too long
+                if ((b & 0xE0) == 0xC0 && b == 0xC0) return false; // prohibited value
+                if ((b & 0xF0) == 0xF0 && b == 0xF0) return false; // prohibited value
+
+                return true;
+            } else {
+                // is a byte a continuation?
+                return (b & CONTINUATION_MASK) == CONTINUATION_PATTERN;
+            }
+        }
+
+        private const byte CONTINUATION_MASK = 0xC0;
+        private const byte START_BYTE_MASK = 0xC0;
+        private const byte CONTINUATION_PATTERN = 0x80;
+
+        #endregion
     }
 }

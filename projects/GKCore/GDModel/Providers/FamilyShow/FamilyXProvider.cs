@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml;
 using GDModel.Providers.GEDCOM;
 using GKCore;
@@ -57,17 +56,6 @@ namespace GDModel.Providers.FamilyShow
             return "Family.Show files (*.familyx)|*.familyx";
         }
 
-        protected override Encoding GetDefaultEncoding()
-        {
-            return Encoding.UTF8;
-        }
-
-        protected override string DetectCharset(Stream inputStream, bool charsetDetection)
-        {
-            string streamCharset = null;
-            return streamCharset;
-        }
-
         public override void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
         {
 #if !NETCORE
@@ -77,7 +65,7 @@ namespace GDModel.Providers.FamilyShow
                     OPCUtility.CopyStream(documentPart.GetStream(), memStream);
                     memStream.Position = 0;
 
-                    LoadFromReader(memStream, null, null);
+                    ReadStream(inputStream, memStream, charsetDetection);
                 }
             }
 #endif
@@ -104,7 +92,7 @@ namespace GDModel.Providers.FamilyShow
 
         private enum RelationshipType { None, Spouse, Child }
 
-        protected override void LoadFromReader(Stream fileStream, StreamReader reader, string streamCharset = null)
+        protected override void ReadStream(Stream fileStream, Stream inputStream, bool charsetDetection = false)
         {
             fTree.State = GDMTreeState.osLoading;
             try {
@@ -122,7 +110,7 @@ namespace GDModel.Providers.FamilyShow
 
                 XmlReaderSettings settings = new XmlReaderSettings();
                 settings.DtdProcessing = DtdProcessing.Ignore;
-                using (XmlReader xr = XmlReader.Create(fileStream, settings)) {
+                using (XmlReader xr = XmlReader.Create(inputStream, settings)) {
                     while (xr.Read()) {
                         if (xr.NodeType == XmlNodeType.Element && !xr.IsEmptyElement) {
                             string nodeType = xr.Name;

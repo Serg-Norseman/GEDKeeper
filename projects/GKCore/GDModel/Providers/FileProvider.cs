@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,6 @@
 
 using System.IO;
 using System.Text;
-using BSLib;
 
 namespace GDModel.Providers
 {
@@ -53,19 +52,17 @@ namespace GDModel.Providers
             }
         }
 
-        public virtual void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
+        protected virtual Encoding GetDefaultEncoding(Stream inputStream)
         {
-            using (StreamReader reader = FileHelper.OpenStreamReader(inputStream, GetDefaultEncoding())) {
-                fTree.Clear();
-                string streamCharset = DetectCharset(inputStream, charsetDetection);
-                LoadFromReader(fileStream, reader, streamCharset);
-            }
+            return Encoding.UTF8;
         }
 
-        protected abstract Encoding GetDefaultEncoding();
+        public virtual void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
+        {
+            fTree.Clear();
+            ReadStream(fileStream, inputStream, charsetDetection);
+        }
 
-        protected abstract string DetectCharset(Stream inputStream, bool charsetDetection);
-
-        protected abstract void LoadFromReader(Stream fileStream, StreamReader reader, string streamCharset = null);
+        protected abstract void ReadStream(Stream fileStream, Stream inputStream, bool charsetDetection = false);
     }
 }

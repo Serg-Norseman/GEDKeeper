@@ -47,9 +47,9 @@ namespace GDModel.Providers.GEDCOM
         }
     }
 
-    public delegate StackTuple AddTagHandler(GDMTree tree, GDMTag owner, int tagLevel, int tagId, StringSpan tagValue);
+    internal delegate StackTuple AddTagHandler(GDMTree tree, GDMTag owner, int tagLevel, int tagId, StringSpan tagValue);
 
-    public delegate bool SaveTagHandler(StreamWriter stream, int level, GDMTag tag);
+    internal delegate bool SaveTagHandler(StreamWriter stream, int level, GDMTag tag);
 
     public enum TagHandler
     {
@@ -137,7 +137,6 @@ namespace GDModel.Providers.GEDCOM
         {
         }
 
-        // TODO: transient implementation
         public GEDCOMProvider(GDMTree tree, bool keepRichNames, bool strict) : base(tree)
         {
             KeepRichNames = keepRichNames;
@@ -154,23 +153,22 @@ namespace GDModel.Providers.GEDCOM
         private enum EncodingState { esUnchecked, esUnchanged, esChanged }
 
         private const int DEF_CODEPAGE = 437;
-        private Encoding fDefaultEncoding;
-        private Encoding fSourceEncoding;
+        private Encoding fEncoding;
         private EncodingState fEncodingState;
 
         private void SetEncoding(Encoding encoding)
         {
-            fSourceEncoding = encoding;
-            fEncodingState = (fDefaultEncoding.Equals(fSourceEncoding)) ? EncodingState.esUnchanged : EncodingState.esChanged;
+            fEncodingState = fEncoding.Equals(encoding) ? EncodingState.esUnchanged : EncodingState.esChanged;
+            fEncoding = encoding;
         }
 
-        private void DefineEncoding(StreamReader reader, GEDCOMFormat format, string streamCharset)
+        private void DefineEncoding(Stream inputStream, GEDCOMFormat format, string streamCharset)
         {
             GEDCOMCharacterSet charSet = fTree.Header.CharacterSet.Value;
             switch (charSet)
             {
                 case GEDCOMCharacterSet.csUTF8:
-                    if (!SysUtils.IsUnicodeEncoding(reader.CurrentEncoding)) {
+                    if (!SysUtils.IsUnicodeEncoding(fEncoding)) {
                         SetEncoding(Encoding.UTF8); // file without BOM
                     } else {
                         fEncodingState = EncodingState.esUnchanged;
@@ -178,12 +176,10 @@ namespace GDModel.Providers.GEDCOM
                     break;
 
                 case GEDCOMCharacterSet.csUNICODE:
-                    if (format == GEDCOMFormat.Geni) {
-                        SetEncoding(Encoding.UTF8);
-                    } else if (format == GEDCOMFormat.GENJ) {
+                    if (format == GEDCOMFormat.Geni || format == GEDCOMFormat.GENJ) {
                         SetEncoding(Encoding.UTF8);
                     } else {
-                        if (!SysUtils.IsUnicodeEncoding(reader.CurrentEncoding)) {
+                        if (!SysUtils.IsUnicodeEncoding(fEncoding)) {
                             SetEncoding(Encoding.Unicode); // file without BOM
                         } else {
                             fEncodingState = EncodingState.esUnchanged;
@@ -233,14 +229,37 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        protected override Encoding GetDefaultEncoding()
+        protected override Encoding GetDefaultEncoding(Stream inputStream)
         {
-            // FIXME: dirty hack
-            var result = AppHost.Instance.HasFeatureSupport(GKCore.Types.Feature.Mobile) ? Encoding.UTF8 : Encoding.GetEncoding(DEF_CODEPAGE);
+            // Dirty code: external encodings are not supported on mobile (Xamarin)
+            if (AppHost.Instance.HasFeatureSupport(GKCore.Types.Feature.Mobile)) return Encoding.UTF8;
+
+            var result = Encoding.GetEncoding(DEF_CODEPAGE);
+            if (inputStream.CanSeek) {
+                byte[] array = new byte[4];
+                int num = inputStream.Read(array, 0, 4);
+                if (num >= 3 && array[0] == 239 && array[1] == 187 && array[2] == 191) {
+                    result = Encoding.UTF8;
+                    num -= 3;
+                } else if (num == 4 && array[0] == 0 && array[1] == 0 && array[2] == 254 && array[3] == byte.MaxValue) {
+                    result = Encoding.GetEncoding("utf-32");
+                    num -= 4;
+                } else if (num == 4 && array[0] == byte.MaxValue && array[1] == 254 && array[2] == 0 && array[3] == 0) {
+                    result = Encoding.GetEncoding("utf-32");
+                    num -= 4;
+                } else if (num >= 2 && array[0] == 254 && array[1] == byte.MaxValue) {
+                    result = Encoding.BigEndianUnicode;
+                    num -= 2;
+                } else if (num >= 2 && array[0] == byte.MaxValue && array[1] == 254) {
+                    result = Encoding.Unicode;
+                    num -= 2;
+                }
+                inputStream.Seek(-num, SeekOrigin.Current);
+            }
             return result;
         }
 
-        protected override string DetectCharset(Stream inputStream, bool charsetDetection)
+        private string DetectCharset(Stream inputStream, bool charsetDetection)
         {
             string streamCharset = null;
             if (charsetDetection) {
@@ -259,19 +278,22 @@ namespace GDModel.Providers.GEDCOM
         private const int SB_SIZE = 32 * 1024;
         private const int LB_SIZE = 32 * 1024; // Fix for files from WikiTree, with lines above 3000 chars!
 
-        private char[] fStreamBuffer, fLineBuffer;
+        private byte[] fStreamBuffer, fLineBuffer;
         private int fStmBufLen, fStmBufPos, fLineBufPos;
 
         private void InitBuffers()
         {
-            fStreamBuffer = new char[SB_SIZE];
-            fLineBuffer = new char[LB_SIZE];
+            fStreamBuffer = new byte[SB_SIZE];
+            fLineBuffer = new byte[LB_SIZE];
             fStmBufLen = 0;
             fStmBufPos = 0;
             fLineBufPos = 0;
         }
 
-        private int ReadLine(StreamReader reader)
+        private const byte LF = 0x0A; // \n
+        private const byte CR = 0x0D; // \r
+
+        private int ReadLine(Stream reader)
         {
             while (true) {
                 if (fStmBufPos >= fStmBufLen) {
@@ -283,18 +305,13 @@ namespace GDModel.Providers.GEDCOM
                 }
 
                 // here '\r' - it's replace for \0, to reduce checks
-                char ch = (fStmBufPos >= fStmBufLen) ? '\r' : fStreamBuffer[fStmBufPos];
+                byte ch = (fStmBufPos >= fStmBufLen) ? CR : fStreamBuffer[fStmBufPos];
                 fStmBufPos += 1;
 
-                if (ch == '\r' || ch == '\n') {
+                if (ch == CR || ch == LF) {
                     int linePos = fLineBufPos;
                     fLineBufPos = 0;
                     if (linePos > 0) {
-                        if (fEncodingState == EncodingState.esChanged) {
-                            byte[] src = fDefaultEncoding.GetBytes(fLineBuffer, 0, linePos);
-                            linePos = fSourceEncoding.GetChars(src, 0, src.Length, fLineBuffer, 0);
-                        }
-
                         return linePos;
                     }
                 } else {
@@ -308,21 +325,23 @@ namespace GDModel.Providers.GEDCOM
 
         #region Loading functions
 
-        protected override void LoadFromReader(Stream fileStream, StreamReader reader, string streamCharset = null)
+        protected override void ReadStream(Stream fileStream, Stream inputStream, bool charsetDetection = false)
         {
             fTree.State = GDMTreeState.osLoading;
             try {
-                var progressCallback = fTree.ProgressCallback;
-
-                fDefaultEncoding = GetDefaultEncoding();
-                fSourceEncoding = fDefaultEncoding;
+                // encoding variables
+                string streamCharset = DetectCharset(inputStream, charsetDetection);
+                fEncoding = GetDefaultEncoding(inputStream);
                 fEncodingState = EncodingState.esUnchecked;
 
+                // reading variables
+                var progressCallback = fTree.ProgressCallback;
                 long fileSize = fileStream.Length;
                 int progress = 0;
-                var invariantText = GEDCOMUtils.InvariantTextInfo;
-
                 InitBuffers();
+
+                // parsing variables
+                var invariantText = GEDCOMUtils.InvariantTextInfo;
                 var strTok = new GEDCOMParser(false);
                 GDMTag curRecord = null;
                 GDMTag curTag = null;
@@ -330,22 +349,54 @@ namespace GDModel.Providers.GEDCOM
                 var header = fTree.Header;
                 bool ilb = false;
 
-                int lineNum = 0;
-                int lineLen;
-                while ((lineLen = ReadLine(reader)) != -1) {
+                // check the integrity of utf8 the lines
+                bool checkLI = false;
+                byte dmgByte = 0, dmgBytePrev = 0;
+                byte[] dmgBuf = new byte[2];
+                char[] dmgChar = new char[2];
+
+                int lineNum = 0, lineLen;
+                char[] line = new char[LB_SIZE];
+                while ((lineLen = ReadLine(inputStream)) != -1) {
                     lineNum++;
 
-                    int tagLevel;
+                    int tagLevel, tagId;
                     string tagXRef, tagName;
                     StringSpan tagValue;
-                    int tagId;
 
                     try {
-                        strTok.Reset(fLineBuffer, 0, lineLen);
+                        // damaged utf8 characters (FTB)
+                        if (dmgByte != 0) {
+                            dmgBytePrev = dmgByte;
+                            dmgByte = 0;
+                        }
+                        if (lineLen > 0 && checkLI) {
+                            byte lb = fLineBuffer[lineLen - 1];
+                            if (SysUtils.IsDamagedUtf8Sequence(lb, true)) {
+                                dmgByte = lb;
+                                lineLen -= 1;
+                            }
+                        }
+
+                        int charsLen = fEncoding.GetChars(fLineBuffer, 0, lineLen, line, 0);
+                        strTok.Reset(line, 0, charsLen);
                         int lineRes = GEDCOMUtils.ParseTag(strTok, out tagLevel, out tagXRef, out tagName, out tagValue);
 
                         // empty line
                         if (lineRes == -2) continue;
+
+                        // damaged utf8 characters (FTB)
+                        if (dmgBytePrev != 0) {
+                            // only ASCII characters (1b) can be before tagValue,
+                            // so their length in characters is the same as their length in bytes
+                            int pos = tagValue.Pos;
+                            dmgBuf[0] = dmgBytePrev;
+                            dmgBuf[1] = fLineBuffer[pos];
+                            if (fEncoding.GetChars(dmgBuf, 0, 2, dmgChar, 0) > 0) {
+                                tagValue.Data[pos] = dmgChar[0];
+                            }
+                            dmgBytePrev = 0;
+                        }
 
                         // line with text but not in standard tag format
                         if (lineRes == -1) {
@@ -377,7 +428,8 @@ namespace GDModel.Providers.GEDCOM
                             // to check for additional versions of the code page
                             var format = GetGEDCOMFormat(fTree, out ilb);
                             fTree.Format = format;
-                            DefineEncoding(reader, format, streamCharset);
+                            DefineEncoding(inputStream, format, streamCharset);
+                            checkLI = (format == GEDCOMFormat.FTB && Encoding.UTF8.Equals(fEncoding));
                         }
 
                         StackTuple stackTuple = AddTreeTag(fTree, tagLevel, tagId, tagValue);
@@ -1838,7 +1890,7 @@ namespace GDModel.Providers.GEDCOM
             if (tagType == GEDCOMTagType.CONC) {
                 int strCount = strings.Count;
                 if (strCount > 0) {
-                    strings[strCount - 1] = strings[strCount - 1] + tagValue;
+                    strings[strCount - 1] = string.Concat(strings[strCount - 1], tagValue);
                 } else {
                     strings.Add(tagValue);
                 }
@@ -2814,7 +2866,7 @@ namespace GDModel.Providers.GEDCOM
                         var tagType = curTag.GetTagType();
 
                         if (tagType == GEDCOMTagType.CONT || tagType == GEDCOMTagType.CONC || tagType == GEDCOMTagType.NAME) {
-                            curTag.StringValue += str;
+                            curTag.StringValue = string.Concat(curTag.StringValue, str);
                         } else {
                             AddBaseTag(tree, curTag, 0, (int)GEDCOMTagType.NOTE, str);
                         }

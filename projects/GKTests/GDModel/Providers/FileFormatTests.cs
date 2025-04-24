@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -287,6 +287,34 @@ namespace GDModel.Providers
                 //GDMNoteRecord noteRec1 = ctx.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
                 //Assert.IsNotNull(noteRec1);
                 //Assert.AreEqual("Test1\r\ntest2\r\ntest3\r\nbadline badline badline badline", noteRec1.Lines.Text);
+            }
+        }
+
+        [Test]
+        public void Test_FTB_DamagedUtf8Lines()
+        {
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ftb_dmgutf8rus.ged")) {
+                Assert.AreEqual(GEDCOMFormat.FTB, ctx.Tree.Format);
+
+                GDMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec2);
+                Assert.AreEqual(2, iRec2.SourceCitations.Count);
+
+                var scText = iRec2.SourceCitations[0].Data.Text.Lines.Text;
+                Assert.AreEqual("Дети: Дмитрий, Андриян, Яков, Егор Алексеевич, Ефросинья, Ксения, Полина", scText);
+
+                scText = iRec2.SourceCitations[1].Data.Text.Lines.Text;
+                Assert.AreEqual("Евдокия ПоликарповнаФамилия после замужества: КуроваРодители: Поликарп, Екатерина", scText);
+
+                GDMIndividualRecord iRec7 = ctx.Tree.XRefIndex_Find("I7") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec7);
+                Assert.AreEqual(2, iRec7.SourceCitations.Count);
+
+                scText = iRec7.SourceCitations[0].Data.Text.Lines.Text;
+                Assert.AreEqual("Рождение: Титово, Дороховская волость, Богородский уезд, Московская губерния", scText);
+
+                scText = iRec7.SourceCitations[1].Data.Text.Lines.Text;
+                Assert.AreEqual("Родные брат/сестра: Григорий, Анастасия, Гавриил, Саввин, Яков Федорович", scText);
             }
         }
 

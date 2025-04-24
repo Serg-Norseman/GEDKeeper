@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,6 @@
  */
 
 using System.IO;
-using System.Text;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 
@@ -46,22 +45,11 @@ namespace GDModel.Providers.GEDZIP
             return "GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip";
         }
 
-        protected override Encoding GetDefaultEncoding()
-        {
-            return Encoding.UTF8;
-        }
-
-        protected override string DetectCharset(Stream inputStream, bool charsetDetection)
-        {
-            string streamCharset = null;
-            return streamCharset;
-        }
-
         public override void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
         {
         }
 
-        protected override void LoadFromReader(Stream fileStream, StreamReader reader, string streamCharset = null)
+        protected override void ReadStream(Stream fileStream, Stream inputStream, bool charsetDetection = false)
         {
         }
     }

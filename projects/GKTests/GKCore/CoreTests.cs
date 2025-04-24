@@ -397,5 +397,19 @@ namespace GKCore
         {
             Assert.AreEqual(target, GKUtils.MakeLinks(source));
         }
+
+        [Test]
+        public void Test_IsDamagedUtf8Sequence()
+        {
+            var bytes = new byte[] { 0xA4, 0xD0, 0xB0, 0xD0, 0xBC, 0x20, 0x20, 0x20, 0xD0 };
+
+            Assert.IsTrue(SysUtils.IsDamagedUtf8Sequence(bytes[0], false));
+            Assert.IsTrue(SysUtils.IsDamagedUtf8Sequence(bytes[bytes.Length-1], true));
+
+            bytes = new byte[] { 0xD0, 0xB0, 0xD0, 0xBC };
+
+            Assert.IsFalse(SysUtils.IsDamagedUtf8Sequence(bytes[0], false));
+            Assert.IsFalse(SysUtils.IsDamagedUtf8Sequence(bytes[bytes.Length - 1], true));
+        }
     }
 }

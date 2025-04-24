@@ -56,6 +56,11 @@ namespace GDModel.Providers.GEDCOM
         {
             return (string.IsNullOrEmpty(str)) ? StringSpan.Empty : new StringSpan(str.ToCharArray(), str.Length, 0);
         }
+
+        public override string ToString()
+        {
+            return (Data == null || Length == 0) ? string.Empty : new string(Data, Pos, Length - Pos);
+        }
     }
 
     public enum GEDCOMToken
