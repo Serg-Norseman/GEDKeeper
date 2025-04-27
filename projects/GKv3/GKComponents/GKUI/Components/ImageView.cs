@@ -40,6 +40,7 @@ namespace GKUI.Components
     {
         private GDMMultimediaRecord fMediaRecord;
         private MediaViewerController fController;
+        private IImage fImage;
 
 
         public List<NamedRegion> NamedRegions
@@ -82,6 +83,10 @@ namespace GKUI.Components
             InitializeComponent();
 
             FillZoomLevels();
+
+            // computer vision (is the plugin enabled or not)
+            var cvImpl = AppHost.Container.TryResolve<IComputerVision>();
+            btnDetectFaces.Visible = (cvImpl != null);
         }
 
         public void Activate()
@@ -113,6 +118,7 @@ namespace GKUI.Components
         private Button btnZoomIn;
         private Button btnZoomOut;
         private Button btnPortrait;
+        private Button btnDetectFaces;
 
         private void InitializeComponent()
         {
@@ -140,11 +146,16 @@ namespace GKUI.Components
             cbZoomLevels.Size = new Size(140, 28);
             cbZoomLevels.TextChanged += cbZoomLevels_SelectedIndexChanged;
 
+            btnDetectFaces = new Button();
+            btnDetectFaces.Click += btnDetectFaces_Click;
+            btnDetectFaces.Visible = true;
+            btnDetectFaces.Text = "Detect Faces";
+
             toolStrip = new Panel();
             toolStrip.Content = new StackLayout() {
                 Orientation = Orientation.Horizontal,
                 Spacing = 10,
-                Items = { btnSizeToFit, btnZoomIn, btnZoomOut, cbZoomLevels, btnPortrait }
+                Items = { btnSizeToFit, btnZoomIn, btnZoomOut, cbZoomLevels, btnPortrait, btnDetectFaces }
             };
 
             imageBox = new ImageBox();
@@ -169,6 +180,11 @@ namespace GKUI.Components
 
         #endregion
 
+        public void ClearNamedRegions()
+        {
+            imageBox.NamedRegions.Clear();
+        }
+
         public void AddNamedRegion(string name, ExtRect region)
         {
             imageBox.NamedRegions.Add(new NamedRegion(name, region));
@@ -181,6 +197,7 @@ namespace GKUI.Components
                 fMediaRecord = fController.MultimediaRecord;
             }
 
+            fImage = image;
             if (image != null) {
                 OpenImage(((ImageHandler)image).Handle);
             }
@@ -251,6 +268,11 @@ namespace GKUI.Components
                 if (fController != null)
                     fController.ProcessPortraits(this);
             }
+        }
+
+        private void btnDetectFaces_Click(object sender, EventArgs e)
+        {
+            BaseController.DetectFaces(fController.Base, fMediaRecord, fImage, this);
         }
 
         private void imageBox_SelectionRegionChanged(object sender, EventArgs e)

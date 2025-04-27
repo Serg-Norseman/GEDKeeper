@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -45,7 +45,9 @@ namespace GKCore.IoC
         void Register<TTypeToResolve, TConcrete>(LifeCycle lifeCycle, bool canReplace = false);
         void Reset();
         TTypeToResolve Resolve<TTypeToResolve>(params object[] parameters);
+        TTypeToResolve TryResolve<TTypeToResolve>(params object[] parameters);
         object Resolve(Type typeToResolve, params object[] parameters);
+        object TryResolve(Type typeToResolve, params object[] parameters);
     }
 
 
@@ -108,12 +110,26 @@ namespace GKCore.IoC
             return (TTypeToResolve) Resolve(typeof(TTypeToResolve), parameters);
         }
 
+        public TTypeToResolve TryResolve<TTypeToResolve>(params object[] parameters)
+        {
+            return (TTypeToResolve)TryResolve(typeof(TTypeToResolve), parameters);
+        }
+
         public object Resolve(Type typeToResolve, params object[] parameters)
         {
             RegisteredObject registeredObject;
             if (!fRegisteredObjects.TryGetValue(typeToResolve, out registeredObject)) {
                 throw new TypeNotRegisteredException(string.Format(
                     "The type {0} has not been registered", typeToResolve.Name));
+            }
+            return GetInstance(registeredObject, parameters);
+        }
+
+        public object TryResolve(Type typeToResolve, params object[] parameters)
+        {
+            RegisteredObject registeredObject;
+            if (!fRegisteredObjects.TryGetValue(typeToResolve, out registeredObject)) {
+                return null;
             }
             return GetInstance(registeredObject, parameters);
         }

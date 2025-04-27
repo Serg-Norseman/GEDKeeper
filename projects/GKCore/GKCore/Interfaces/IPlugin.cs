@@ -61,7 +61,12 @@ namespace GKCore.Interfaces
         /// <summary>
         /// 
         /// </summary>
-        DialogReplacement
+        DialogReplacement,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        Background,
     }
 
     public interface IPlugin

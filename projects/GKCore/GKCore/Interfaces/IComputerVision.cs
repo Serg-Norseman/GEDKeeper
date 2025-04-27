@@ -19,24 +19,21 @@
  */
 
 using BSLib;
-using GKCore.Controllers;
+using GDModel;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
-using GKUI.Themes;
 
-namespace GKCore.Design.Controls
+namespace GKCore.Interfaces
 {
-    /// <summary>
-    /// This control is used only in MediaViewerWin and PortraitSelectDlg.
-    /// </summary>
-    public interface IImageView : IBaseControl, ILocalizable, IThemedView
+    public interface IComputerVision
     {
-        ExtRect SelectionRegion { get; set; }
-        bool ShowNamedRegionTips { get; set; }
+        ExtRect[] DetectFaces(IImage image, bool portraitMode);
 
-        void ClearNamedRegions();
-        void AddNamedRegion(string name, ExtRect region);
-        void OpenImage(MediaViewerController controller, IImage image);
-        void Invalidate();
+        void TrainFace(IImage image, GDMIndividualRecord indiRec);
+
+        string PredictFace(IImage image);
+
+        void Save();
+
+        void Restore();
     }
 }

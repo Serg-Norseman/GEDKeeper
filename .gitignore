@@ -22,9 +22,11 @@ NUnitResults.xml
 opencover.xml
 /projects/GKTests/OpenCover/
 /projects/GKTests/PartCover/
-/projects/GKv3/packages/**/
 .idea/
 adb-copy.cmd
 
 GEDKeeper2Lux.sln
 /projects/plugins/GKLuxTree/
+
+/projects/GKv2/packages/**/
+/projects/GKv3/packages/**/

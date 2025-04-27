@@ -1437,7 +1437,7 @@ namespace GKCore.Controllers
                 for (int i = 0; i < num; i++) {
                     IPlugin plugin = AppHost.Plugins[i];
 
-                    if (plugin is IDialogReplacement || plugin.Category == PluginCategory.DialogReplacement) {
+                    if (plugin is IDialogReplacement || plugin.Category == PluginCategory.DialogReplacement || plugin.Category == PluginCategory.Background) {
                         continue;
                     }
 

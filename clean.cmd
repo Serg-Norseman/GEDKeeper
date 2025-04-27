@@ -13,6 +13,7 @@ for /d %%p in (.\appdata\*) do rd "%%p" /s /q
 del .\appdata\GEDKeeper2.log
 del .\appdata\GEDKeeper2.nms
 del .\appdata\*.tmp
+del .\appdata\ocv_model.yaml
 
 del .\TestResult.xml
 del .\coverageResults.txt
@@ -36,6 +37,8 @@ rmdir .\projects\GKTests\PartCover /s /q
 rmdir .\projects\GKTests\ProfilingSessions /s /q
 
 rmdir .\projects\GKv2\.vs /s /q
+for /d %%p in (.\projects\GKv2\packages\*) do rd "%%p" /s /q
+
 rmdir .\projects\GKv2\GEDKeeper2\bin /s /q
 rmdir .\projects\GKv2\GEDKeeper2\obj /s /q
 rmdir .\projects\GKv2\GEDKeeper2\ProfilingSessions /s /q

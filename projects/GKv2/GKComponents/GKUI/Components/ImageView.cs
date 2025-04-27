@@ -40,6 +40,7 @@ namespace GKUI.Components
     {
         private GDMMultimediaRecord fMediaRecord;
         private MediaViewerController fController;
+        private IImage fImage;
 
 
         public List<NamedRegion> NamedRegions
@@ -84,6 +85,10 @@ namespace GKUI.Components
             UIHelper.FixToolStrip(toolStrip);
 
             FillZoomLevels();
+
+            // computer vision (is the plugin enabled or not)
+            var cvImpl = AppHost.Container.TryResolve<IComputerVision>();
+            btnDetectFaces.Visible = (cvImpl != null);
         }
 
         public void Activate()
@@ -115,6 +120,7 @@ namespace GKUI.Components
         private ToolStripButton btnZoomIn;
         private ToolStripButton btnZoomOut;
         private ToolStripButton btnPortrait;
+        private ToolStripButton btnDetectFaces;
 
         private void InitializeComponent()
         {
@@ -147,6 +153,13 @@ namespace GKUI.Components
             cbZoomLevels.Size = new Size(140, 28);
             cbZoomLevels.SelectedIndexChanged += cbZoomLevels_SelectedIndexChanged;
 
+            btnDetectFaces = new ToolStripButton();
+            btnDetectFaces.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+            btnDetectFaces.Name = "btnDetectFaces";
+            btnDetectFaces.Click += btnDetectFaces_Click;
+            btnDetectFaces.Visible = true;
+            btnDetectFaces.Text = "Detect Faces";
+
             toolStrip = new ToolStrip();
             toolStrip.Items.AddRange(new ToolStripItem[] {
                                          btnSizeToFit,
@@ -156,7 +169,9 @@ namespace GKUI.Components
                                          cbZoomLevels,
                                          new ToolStripSeparator(),
                                          btnPortrait,
-                                         new ToolStripSeparator()});
+                                         new ToolStripSeparator(),
+                                         btnDetectFaces
+            });
 
             imageBox = new ImageBox();
             imageBox.SelectionMode = ImageBoxSelectionMode.Rectangle;
@@ -172,6 +187,11 @@ namespace GKUI.Components
 
         #endregion
 
+        public void ClearNamedRegions()
+        {
+            imageBox.NamedRegions.Clear();
+        }
+
         public void AddNamedRegion(string name, ExtRect region)
         {
             imageBox.NamedRegions.Add(new NamedRegion(name, region));
@@ -184,6 +204,7 @@ namespace GKUI.Components
                 fMediaRecord = fController.MultimediaRecord;
             }
 
+            fImage = image;
             if (image != null) {
                 OpenImage(((ImageHandler)image).Handle);
             }
@@ -249,6 +270,11 @@ namespace GKUI.Components
                 if (fController != null)
                     fController.ProcessPortraits(this);
             }
+        }
+
+        private void btnDetectFaces_Click(object sender, EventArgs e)
+        {
+            BaseController.DetectFaces(fController.Base, fMediaRecord, fImage, this);
         }
 
         private void imageBox_SelectionRegionChanged(object sender, EventArgs e)
