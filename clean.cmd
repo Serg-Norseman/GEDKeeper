@@ -134,3 +134,6 @@ rmdir .\projects\plugins\GKTimeLinePlugin\obj /s /q
 
 rmdir .\projects\plugins\GKWordsCloudPlugin\bin /s /q
 rmdir .\projects\plugins\GKWordsCloudPlugin\obj /s /q
+
+rmdir .\projects\plugins\GKVisionPlugin\bin /s /q
+rmdir .\projects\plugins\GKVisionPlugin\obj /s /q
