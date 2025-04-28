@@ -516,7 +516,7 @@
 515=Datensätze zusammenführen
 516=Suche nach Namensvettern ohne Verbindung
 517=Familiengruppen prüfen
-518=Datenbankeinträge prüfen
+518=Datenbank prüfen
 519=Familienoberhäupter suchen
 520=Orte erfassen
 521=Suche nach Übereinstimmungen...
@@ -640,7 +640,7 @@
 639=Namen
 640=Spitzname
 641=Geburtsname
-642=In Immigration
+642=Bei Immigration
 643=Mädchenname
 644=Ehename
 645=Einen Namen löschen?
@@ -682,7 +682,7 @@
 681=Mutter auswählen oder hinzufügen
 682=Mutter loslösen
 683=Zum Datensatz der Mutter springen
-684=Kopiere Name in die Zwischenablage
+684=Name in die Zwischenablage kopieren
 685=Ehemann auswählen oder hinzufügen
 686=Ehemann loslösen
 687=Zum Datensatz des Ehemanns springen
@@ -805,10 +805,10 @@
 803=UdSSR:WK2:Im Kampf getötet
 804=UdSSR:WK2:Arbeiter an der Heimatfront
 805=UdSSR:Unterdrückt
-806=Religion:Islam
-807=Religion:Katholizismus
-808=Religion:Orthodox
-809=Religion:Altorthodox
+806=Konfession:Islam
+807=Konfession:Katholizismus
+808=Konfession:Orthodoxie
+809=Konfession:Altorthodoxie
 
 810=Relativer Pfad auf Datei
 811=Maximale Anzahl von Sicherungskopien
@@ -821,7 +821,7 @@
 818=Web-Adresse
 819=Datumsangaben und Orte in separaten Zeilen
 820=Details
-821=Kopiere XRef-ID in die Zwischenablage
+821=Kopiere GEDCOM-ID in die Zwischenablage
 822=Namen fettgedruckt
 
 823=Taufe
@@ -906,7 +906,7 @@
 902=Quellenjahr
 903=Alter im Jahr
 904=Größe der Fensterbereiche beibehalten
-905=XRef-IDs
+905=GEDCOM-IDs
 906=Ehefrau des Vaters
 907=Ehemann der Mutter
 908=Tauschen
@@ -1021,7 +1021,7 @@
 1008=Textabstand
 1009=Datumszeichen
 1010=Trauerränder
-1011=Zusätzliche Daten verwenden
+1011=Zusätzliche Datumsangaben verwenden
 1012=Mauszeiger-Koordinaten
 1013=enthält Maske
 1014=enthält keine Maske
@@ -1039,8 +1039,8 @@
 1026=TT.MM.JJJJ
 1027=JJJJ.MM.TT
 1028=Nicht-standardisierte Funktionen deaktivieren
-1029=The `{0}` field is longer than {1} characters
-1030=Strict GEDCOM files (*.ged)|*.ged
-1031=Export to strict GEDCOM...
+1029=Das Feld `{0}` ist länger als {1} Zeichen
+1030=Strikte GEDCOM-Dateien (*.ged)|*.ged
+1031=In strikte GEDCOM-Datei exportieren...
 1032=Quellenangaben einfügen
 1033=Quellenangaben
