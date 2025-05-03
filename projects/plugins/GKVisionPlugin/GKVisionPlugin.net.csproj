@@ -32,6 +32,8 @@
         <PackageReference Include="Eto.Serialization.Xaml" Version="2.8.3" />
     </ItemGroup>
 
+    <Import Project="GKVisionPlugin.props" />
+
     <ItemGroup>
         <Compile Include="GKVisionPlugin.cs" />
     </ItemGroup>

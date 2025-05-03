@@ -13,7 +13,6 @@ for /d %%p in (.\appdata\*) do rd "%%p" /s /q
 del .\appdata\GEDKeeper2.log
 del .\appdata\GEDKeeper2.nms
 del .\appdata\*.tmp
-del .\appdata\ocv_model.yaml
 
 del .\TestResult.xml
 del .\coverageResults.txt
@@ -137,3 +136,5 @@ rmdir .\projects\plugins\GKWordsCloudPlugin\obj /s /q
 
 rmdir .\projects\plugins\GKVisionPlugin\bin /s /q
 rmdir .\projects\plugins\GKVisionPlugin\obj /s /q
+del .\appdata\cvmodel.yaml
+del .\appdata\cvhist.yaml

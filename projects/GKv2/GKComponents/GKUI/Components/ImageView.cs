@@ -274,7 +274,8 @@ namespace GKUI.Components
 
         private void btnDetectFaces_Click(object sender, EventArgs e)
         {
-            BaseController.DetectFaces(fController.Base, fMediaRecord, fImage, this);
+            if (fController != null)
+                BaseController.DetectFaces(fController.Base, fMediaRecord, fImage, this);
         }
 
         private void imageBox_SelectionRegionChanged(object sender, EventArgs e)

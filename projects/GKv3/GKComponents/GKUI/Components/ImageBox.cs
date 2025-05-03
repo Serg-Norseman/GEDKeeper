@@ -548,7 +548,7 @@ namespace GKUI.Components
                     break;
 
                 case MouseButtons.None:
-                    if (fShowNamedRegionTips) {
+                    {
                         string tip = "";
                         foreach (var region in fNamedRegions) {
                             RectangleF rect = GetOffsetRectangle(UIHelper.Rt2Rt(region.Region));

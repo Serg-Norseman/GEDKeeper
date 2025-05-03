@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.IO;
 using System.Reflection;
 using BSLib;
 using GKCore;
@@ -78,19 +77,11 @@ namespace GKVisionPlugin
         public override void OnLanguageChange()
         {
             try {
-                //fLangMan = Host.CreateLangMan(this);
-                //fDisplayName = fLangMan.LS(PLS.Title);
+                fLangMan = Host.CreateLangMan(this);
+                fDisplayName = fLangMan.LS(PLS.Title);
             } catch (Exception ex) {
                 Logger.WriteError("GKVisionPlugin.OnLanguageChange()", ex);
             }
-        }
-
-        protected string GetExecPath()
-        {
-            Assembly asm = this.GetType().Assembly;
-            Module[] mods = asm.GetModules();
-            string fn = mods[0].FullyQualifiedName;
-            return Path.GetDirectoryName(fn) + Path.DirectorySeparatorChar;
         }
 
         public override bool Startup(IHost host)
@@ -98,9 +89,8 @@ namespace GKVisionPlugin
             try {
                 AppHost.Container.Register<IComputerVision, GKComputerVision>(LifeCycle.Singleton);
                 var cvImpl = AppHost.Container.TryResolve<IComputerVision>();
-                cvImpl.Restore();
 
-                ((GKComputerVision)cvImpl).ExecPath = GetExecPath();
+                cvImpl.Restore();
 
                 return base.Startup(host);
             } catch (Exception ex) {
@@ -114,6 +104,7 @@ namespace GKVisionPlugin
             bool result = true;
             try {
                 var cvImpl = AppHost.Container.TryResolve<IComputerVision>();
+
                 cvImpl.Save();
             } catch (Exception ex) {
                 Logger.WriteError("GKVisionPlugin.Shutdown()", ex);

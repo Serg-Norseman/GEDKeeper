@@ -250,6 +250,9 @@ namespace GKCore
             lua_register(lvm, nameof(ado_query_last));
             lua_register(lvm, nameof(ado_get_query_field));
             lua_register(lvm, nameof(ado_dump));
+
+            // computer vision
+            lua_register(lvm, nameof(collect_faces));
         }
 
         #endregion
@@ -958,6 +961,11 @@ namespace GKCore
         }
 
         #endregion
+
+        public void collect_faces()
+        {
+            BaseController.CollectFaces(fBase);
+        }
     }
 }
 

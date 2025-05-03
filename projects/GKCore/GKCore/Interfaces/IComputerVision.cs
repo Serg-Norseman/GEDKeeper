@@ -19,21 +19,35 @@
  */
 
 using BSLib;
-using GDModel;
 using GKCore.Design.Graphics;
 
 namespace GKCore.Interfaces
 {
+    public sealed class CVSubject
+    {
+        public ExtRect Face;
+        public ExtRect Portrait;
+
+        public CVSubject(ExtRect face, ExtRect portrait)
+        {
+            Face = face;
+            Portrait = portrait;
+        }
+    }
+
+
     public interface IComputerVision
     {
-        ExtRect[] DetectFaces(IImage image, bool portraitMode);
+        bool HasSubject(string strInfo);
 
-        void TrainFace(IImage image, GDMIndividualRecord indiRec);
-
-        string PredictFace(IImage image);
+        CVSubject[] DetectSubjects(IImage image);
+        void TrainFace(IImage image, int label, string strInfo);
+        string PredictFace(IImage image, out float confidence);
 
         void Save();
-
         void Restore();
+
+        void AddMediaLink(string linkSign);
+        bool HasMediaLink(string linkSign);
     }
 }

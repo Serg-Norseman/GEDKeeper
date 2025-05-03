@@ -37,6 +37,6 @@ namespace GKCore.Design.Controls
         void ClearNamedRegions();
         void AddNamedRegion(string name, ExtRect region);
         void OpenImage(MediaViewerController controller, IImage image);
-        void Invalidate();
+        void Refresh();
     }
 }

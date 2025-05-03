@@ -756,6 +756,8 @@ namespace GKCore.Controllers
                 baseWin.Context.EndUpdate();
             }
 
+            SelectIndividualPortrait(baseWin, indivRec);
+
             return result;
         }
 
@@ -1323,37 +1325,86 @@ namespace GKCore.Controllers
 
             var baseContext = baseWin.Context;
 
-            var faces = cvImpl.DetectFaces(image, true);
+            var cvSubjects = cvImpl.DetectSubjects(image);
 
-            if (faces.Length > 0) {
+            if (cvSubjects.Length > 0) {
                 imageView.ClearNamedRegions();
 
-                for (int i = 0; i < faces.Length; i++) {
-                    ExtRect faceRect = faces[i];
+                for (int i = 0; i < cvSubjects.Length; i++) {
+                    var subject = cvSubjects[i];
 
-                    var portImage = baseContext.LoadMediaImage(mediaRec, -1, -1, faceRect, true, false);
-                    if (portImage == null) continue;
+                    var faceImage = baseContext.LoadMediaImage(mediaRec, -1, -1, subject.Face, true, false);
+                    if (faceImage == null) continue;
 
-                    string xref = cvImpl.PredictFace(portImage);
+                    string xref = cvImpl.PredictFace(faceImage, out float confidence);
+                    if (confidence < 0.35f) continue;
 
                     var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(xref);
                     string indiName = (indiRec != null) ? indiRec.GetPrimaryFullName() : "Unknown";
 
-                    imageView.AddNamedRegion(string.Format("{0} ({1})", indiName, xref), faceRect);
+                    imageView.AddNamedRegion(string.Format("{0} ({1}, {2:0.00})", indiName, xref, confidence), subject.Portrait);
                 }
 
-                imageView.Invalidate();
+                imageView.Refresh();
             }
         }
 
-        public static void SelectIndividualPortrait(IBaseWindow baseWin, GDMIndividualRecord iRec, GDMMultimediaRecord mediaRecord)
+        public static async Task SelectIndividualPortrait(IBaseWindow baseWin, GDMIndividualRecord iRec, GDMMultimediaLink mmLink)
         {
             // computer vision (is the plugin enabled or not)
             var cvImpl = AppHost.Container.TryResolve<IComputerVision>();
             if (cvImpl == null) return;
 
-            var image = baseWin.Context.LoadMediaImage(mediaRecord, -1, -1, ExtRect.Empty, true, false);
-            cvImpl.TrainFace(image, iRec);
+            await Task.Run(() => {
+                SelectIndividualPortraitInt(baseWin, iRec, mmLink, cvImpl);
+            });
+        }
+
+        private static void SelectIndividualPortraitInt(IBaseWindow baseWin, GDMIndividualRecord iRec, GDMMultimediaLink mmLink, IComputerVision cvImpl)
+        {
+            GDMMultimediaRecord mediaRecord = baseWin.Context.Tree.GetPtrValue<GDMMultimediaRecord>(mmLink);
+            if (!GKUtils.MayContainPortrait(mediaRecord)) return;
+
+            // protection against "retraining" - so that duplicates do not arrive indi-media
+            string linkSign = string.Concat(iRec.UID, ":", mediaRecord.UID);
+            if (cvImpl.HasMediaLink(linkSign)) return;
+
+            ExtRect region = mmLink.CutoutPosition.Value;
+            var image = baseWin.Context.LoadMediaImage(mediaRecord, -1, -1, region, true, false);
+            cvImpl.TrainFace(image, (int)iRec.GetId(), iRec.XRef);
+            cvImpl.AddMediaLink(linkSign);
+        }
+
+        public static async Task SelectIndividualPortrait(IBaseWindow baseWin, GDMIndividualRecord iRec)
+        {
+            if (iRec == null) return;
+            var mmLink = iRec.GetPrimaryMultimediaLink();
+            if (mmLink == null) return;
+
+            await SelectIndividualPortrait(baseWin, iRec, mmLink);
+        }
+
+        public static async Task CollectFaces(IBaseWindow baseWin)
+        {
+            var cvImpl = AppHost.Container.TryResolve<IComputerVision>();
+            if (cvImpl == null) return;
+
+            await Task.Run(async () => {
+                GDMTree tree = baseWin.Context.Tree;
+
+                for (int k = 0, num2 = tree.RecordsCount; k < num2; k++) {
+                    GDMRecord record = tree[k];
+                    if (record.RecordType != GDMRecordType.rtIndividual || !record.HasMultimediaLinks) continue;
+
+                    var iRec = (GDMIndividualRecord)record;
+                    for (int i = 0, num = record.MultimediaLinks.Count; i < num; i++) {
+                        var mmLink = record.MultimediaLinks[i];
+                        SelectIndividualPortraitInt(baseWin, iRec, mmLink, cvImpl);
+                    }
+                }
+
+                cvImpl.Save();
+            });
         }
 
         #endregion
@@ -1372,7 +1423,7 @@ namespace GKCore.Controllers
                 SetMultimediaLinkRegion(mmLink, region, false);
             }
 
-            SelectIndividualPortrait(baseWin, indiRec, mediaRecord);
+            SelectIndividualPortrait(baseWin, indiRec, mmLink);
 
             return true;
         }
@@ -1415,7 +1466,7 @@ namespace GKCore.Controllers
             if (result) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otIndividualPortraitAttach, iRec, mmLink);
                 if (result) {
-                    SelectIndividualPortrait(baseWin, iRec, mmRec);
+                    SelectIndividualPortrait(baseWin, iRec, mmLink);
                 }
             }
 
