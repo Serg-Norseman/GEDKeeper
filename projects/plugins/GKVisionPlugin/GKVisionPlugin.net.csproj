@@ -7,6 +7,7 @@
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <OutputPath>..\..\..\plugins\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <DefineConstants>GK3;NETCORE</DefineConstants>
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 
         <Configurations>Debug;Release</Configurations>
@@ -30,11 +31,19 @@
     <ItemGroup>
         <PackageReference Include="Eto.Forms" Version="2.8.3" />
         <PackageReference Include="Eto.Serialization.Xaml" Version="2.8.3" />
+
+        <PackageReference Include="OpenCvSharp4" Version="4.10.0.20241108" />
+        <PackageReference Include="OpenCvSharp4.Extensions" Version="4.10.0.20241108" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
+        <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.10.0.20241108" />
     </ItemGroup>
 
     <Import Project="GKVisionPlugin.props" />
 
     <ItemGroup>
+        <Compile Include="GKComputerVision.cs" />
         <Compile Include="GKVisionPlugin.cs" />
     </ItemGroup>
 

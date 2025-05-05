@@ -27,7 +27,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -39,6 +38,12 @@ using GKUI.Platform.Handlers;
 
 namespace GKVisionPlugin
 {
+#if !NETCORE
+    using System.Drawing;
+#else
+    using Eto.Drawing;
+#endif
+
 #if ACCORD_CV
     using Accord.Vision.Detection;
     using Accord.Vision.Detection.Cascades;

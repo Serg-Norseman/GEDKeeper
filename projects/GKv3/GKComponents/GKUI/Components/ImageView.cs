@@ -109,6 +109,11 @@ namespace GKUI.Components
             UIHelper.SetButtonThemeImage(btnPortrait, ThemeElement.Glyph_SetPortrait);
         }
 
+        public void Refresh()
+        {
+            base.Invalidate();
+        }
+
         #region Component design
 
         private ImageBox imageBox;

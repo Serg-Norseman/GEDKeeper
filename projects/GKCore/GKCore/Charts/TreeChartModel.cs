@@ -1180,14 +1180,14 @@ namespace GKCore.Charts
         public ExtRect GetExpanderRect(ExtRect personRect)
         {
             int psz = (int)(16 * fPicScale);
-            ExtRect expRt = ExtRect.Create(personRect.Left, personRect.Top - psz - 2, personRect.Left + psz - 1, personRect.Top - 2);
+            ExtRect expRt = new ExtRect(personRect.Left, personRect.Top - psz - 2, psz, psz);
             return expRt;
         }
 
         public ExtRect GetInfoRect(ExtRect personRect)
         {
             int psz = (int)(16 * fPicScale);
-            ExtRect expRt = ExtRect.Create(personRect.Right - psz, personRect.Top - psz - 2, personRect.Right, personRect.Top - 2);
+            ExtRect expRt = new ExtRect(personRect.Right - psz, personRect.Top - psz - 2, psz, psz);
             return expRt;
         }
 
