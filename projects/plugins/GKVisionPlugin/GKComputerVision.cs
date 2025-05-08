@@ -50,7 +50,9 @@ namespace GKVisionPlugin
 #elif OPEN_CV
     using System.IO.Compression;
     using OpenCvSharp;
+#if !NETCORE
     using OpenCvSharp.Extensions;
+#endif
     using OpenCvSharp.Face;
 #endif
 

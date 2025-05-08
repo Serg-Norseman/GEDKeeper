@@ -114,4 +114,9 @@
         <Copy SourceFiles="@(LocaleFiles)" DestinationFolder="$(OutputContents)\locales\%(RecursiveDir)" />
     </Target>
 
+    <Target Name="CleanAppTempBeforeRun" AfterTargets="Build">
+        <Exec Command="del $(OutputPath)\..\appdata\*.tmp" />
+        <Exec Command="del $(OutputPath)\..\appdata\*.log" />
+    </Target>
+
 </Project>

@@ -86,13 +86,15 @@ namespace GKVisionPlugin
 
         public override bool Startup(IHost host)
         {
+            bool result = base.Startup(host);
+
             try {
                 AppHost.Container.Register<IComputerVision, GKComputerVision>(LifeCycle.Singleton);
                 var cvImpl = AppHost.Container.TryResolve<IComputerVision>();
 
                 cvImpl.Restore();
 
-                return base.Startup(host);
+                return result;
             } catch (Exception ex) {
                 Logger.WriteError("GKVisionPlugin.Startup()", ex);
                 return false;
