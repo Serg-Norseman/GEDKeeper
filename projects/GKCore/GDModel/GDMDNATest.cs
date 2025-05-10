@@ -37,15 +37,6 @@ namespace GDModel
         STR
     }
 
-    /*public enum GDMDNATestType
-    {
-        None = 0,
-        AUTO,
-        MDNA,
-        XDNA,
-        YDNA
-    }*/
-
 
     /// <summary>
     /// Data structure for describing DNA tests in GEDCOM format (GEDKeeper's extension).
@@ -54,8 +45,8 @@ namespace GDModel
     public class GDMDNATest : GDMValueTag, IGDMStructWithNotes, IGDMStructWithMultimediaLinks, IGDMStructWithRestriction
     {
         private string fAgency;
+        private readonly GDMDate fDate;
         private GDMDNAFileFormat fFileFormat;
-        private readonly GDMDateValue fDate;
         private string fFileReference;
         private string fTestName;
         private string fMHaplogroup;
@@ -77,7 +68,7 @@ namespace GDModel
         /// <summary>
         /// Date of the test (DATE).
         /// </summary>
-        public GDMDateValue Date
+        public GDMDate Date
         {
             get { return fDate; }
         }
@@ -175,7 +166,7 @@ namespace GDModel
         {
             SetName(GEDCOMTagType._DNA);
 
-            fDate = new GDMDateValue();
+            fDate = new GDMDate();
         }
 
         protected override void Dispose(bool disposing)

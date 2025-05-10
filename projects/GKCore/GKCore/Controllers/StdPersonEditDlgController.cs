@@ -18,13 +18,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using GDModel;
 using GKCore.Design.Controls;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Design.Views;
+using GKCore.Options;
 using GKCore.Types;
-using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
@@ -39,6 +40,7 @@ namespace GKCore.Controllers
             base.Init(baseWin);
 
             fView.ChildrenList.ListModel = new IndividualChildrenListModel(fView, baseWin, fLocalUndoman);
+            fView.DNATestsList.ListModel = new DNATestsListModel(fView, baseWin, fLocalUndoman);
         }
 
         public override void Done()
@@ -46,6 +48,7 @@ namespace GKCore.Controllers
             base.Done();
 
             fView.ChildrenList.ListModel.SaveSettings();
+            fView.DNATestsList.ListModel.SaveSettings();
         }
 
         protected override void UpdateListModels(GDMIndividualRecord indiRec)
@@ -53,6 +56,7 @@ namespace GKCore.Controllers
             base.UpdateListModels(indiRec);
 
             fView.ChildrenList.ListModel.DataOwner = indiRec;
+            fView.DNATestsList.ListModel.DataOwner = indiRec;
         }
 
         protected override void UpdateLocked(bool locked)
@@ -64,6 +68,7 @@ namespace GKCore.Controllers
             fView.NameSuffix.Enabled = !locked;
 
             fView.ChildrenList.ReadOnly = locked;
+            fView.DNATestsList.ReadOnly = locked;
         }
 
         public override void UpdateNameControls(GDMPersonalName np)
@@ -99,6 +104,7 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblNameSuffix").Text = LangMan.LS(LSID.NameSuffix);
 
             GetControl<ITabPage>("pageChilds").Text = LangMan.LS(LSID.Childs);
+            GetControl<ITabPage>("pageDNATests").Text = LangMan.LS(LSID.DNATests);
         }
 
         public override void ApplyTheme()
@@ -108,6 +114,21 @@ namespace GKCore.Controllers
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
             fView.ChildrenList.ApplyTheme();
+            fView.DNATestsList.ApplyTheme();
+        }
+
+        public override void UpdateView()
+        {
+            base.UpdateView();
+
+            try {
+                bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
+                var tabs = GetControl<ITabControl>("tabsData");
+                var tabGrp = GetControl<ITabPage>("pageDNATests");
+                tabs.SetTabVisible(tabGrp, !disNoStd);
+            } catch (Exception ex) {
+                Logger.WriteError("StdPersonEditDlgController.UpdateView()", ex);
+            }
         }
     }
 }

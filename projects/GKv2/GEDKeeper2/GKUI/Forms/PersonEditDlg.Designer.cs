@@ -56,6 +56,7 @@
         private System.Windows.Forms.Label lblMarriedSurname;
         private System.Windows.Forms.TabPage pageParents;
         private System.Windows.Forms.TabPage pageChilds;
+        private System.Windows.Forms.TabPage pageDNATests;
 
         private void InitializeComponent()
         {
@@ -113,6 +114,7 @@
             this.pageUserRefs = new System.Windows.Forms.TabPage();
             this.pageParents = new System.Windows.Forms.TabPage();
             this.pageChilds = new System.Windows.Forms.TabPage();
+            this.pageDNATests = new System.Windows.Forms.TabPage();
             this.GroupBox1.SuspendLayout();
             this.panCtlParents.SuspendLayout();
             this.tabsData.SuspendLayout();
@@ -577,6 +579,7 @@
             this.tabsData.Controls.Add(this.pageUserRefs);
             this.tabsData.Controls.Add(this.pageParents);
             this.tabsData.Controls.Add(this.pageChilds);
+            this.tabsData.Controls.Add(this.pageDNATests);
             this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabsData.Location = new System.Drawing.Point(0, 258);
             this.tabsData.Margin = new System.Windows.Forms.Padding(2);
@@ -684,6 +687,15 @@
             this.pageChilds.Size = new System.Drawing.Size(700, 290);
             this.pageChilds.TabIndex = 10;
             this.pageChilds.Text = "pageChilds";
+            // 
+            // pageDNATests
+            // 
+            this.pageDNATests.Location = new System.Drawing.Point(4, 26);
+            this.pageDNATests.Margin = new System.Windows.Forms.Padding(2);
+            this.pageDNATests.Name = "pageDNATests";
+            this.pageDNATests.Size = new System.Drawing.Size(700, 290);
+            this.pageDNATests.TabIndex = 11;
+            this.pageDNATests.Text = "pageDNATests";
             // 
             // PersonEditDlg
             // 

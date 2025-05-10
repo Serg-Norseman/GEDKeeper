@@ -75,11 +75,13 @@ namespace GKCore.Interfaces
         string GetArcFileName();
         string GetStgFolder(bool create);
         bool CheckBasePath();
+        bool CheckNewMedia(string fileName, MediaStoreType storeType);
         MediaStore GetStoreType(GDMFileReference fileReference);
         bool MoveMediaFile(GDMMultimediaRecord mediaRec, MediaStoreType newStoreType);
         Stream MediaLoad(GDMFileReference fileReference, bool throwException);
         string MediaLoad(GDMFileReference fileReference);
         bool MediaSave(GDMFileReference fileReference, string fileName, MediaStoreType storeType);
+        bool MediaSave(out string refPath, string fileName, MediaStoreType storeType);
         MediaStoreStatus VerifyMediaFile(GDMFileReference fileReference, out string fileName);
 
         /// <summary>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.DNATestEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <TabControl x:Name="tabsData" Size="600, 360">
+        <TabPage x:Name="pageCommon">
+          <TableLayout Style="paddedTable">
+            <TableRow>
+              <Label x:Name="lblTestName" />
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <StackLayoutItem Expand="True">
+                  <TextBox x:Name="txtTestName" />
+                </StackLayoutItem>
+                <Label x:Name="lblDate" />
+                <comcom:GKDateBox x:Name="dateCtl" Width="100" />
+              </StackLayout>
+            </TableRow>
+
+            <TableRow>
+              <Label x:Name="lblAgency" />
+              <ComboBox x:Name="cmbAgency" />
+            </TableRow>
+
+            <TableRow>
+              <Label x:Name="lblFileRef" />
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <StackLayoutItem Expand="True">
+                  <TextBox x:Name="txtFileRef" ReadOnly="True" />
+                </StackLayoutItem>
+                <Button x:Name="btnFileSelect" Click="btnFileSelect_Click">...</Button>
+              </StackLayout>
+            </TableRow>
+
+            <TableRow>
+              <Label x:Name="lblStoreType" />
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <ComboBox x:Name="cmbStoreType" ReadOnly="True" Width="180" />
+                <Label x:Name="lblFileFormat" />
+                <StackLayoutItem Expand="True">
+                  <ComboBox x:Name="cmbFileFormat" ReadOnly="True" />
+                </StackLayoutItem>
+              </StackLayout>
+            </TableRow>
+
+            <TableRow>
+              <Label x:Name="lblMHaplogroup" />
+              <ComboBox x:Name="cmbMHaplogroup" />
+            </TableRow>
+
+            <TableRow>
+              <Label x:Name="lblYHaplogroup" />
+              <ComboBox x:Name="cmbYHaplogroup" />
+            </TableRow>
+
+            <TableRow ScaleHeight="True" />
+          </TableLayout>
+        </TabPage>
+
+        <TabPage x:Name="pageNotes">
+          <comcom:GKSheetList x:Name="fNotesList" />
+        </TabPage>
+        <TabPage x:Name="pageMultimedia">
+          <comcom:GKSheetList x:Name="fMediaList" />
+        </TabPage>
+      </TabControl>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Style="dlgFooter">
+        <Label x:Name="lblRestriction" />
+        <ComboBox x:Name="cmbRestriction" ReadOnly="True" SelectedIndexChanged="cbRestriction_SelectedIndexChanged" />
+        <StackLayoutItem Expand="True" />
+        <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
+        <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

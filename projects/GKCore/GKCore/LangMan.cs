@@ -1113,7 +1113,14 @@ namespace GKCore
         /* 1032 */ IncludeSourceCitations,
         /* 1033 */ SourceCitations,
 
-        /* 000 */ Last = SourceCitations
+        /* 1034 */ DNATests,
+        /* 1035 */ DNATest,
+        /* 1036 */ DNATestName,
+        /* 1037 */ DNALaboratory,
+        /* 1038 */ RemoveDNATestQuery,
+        /* 1039 */ DNAFileFormat,
+
+        /* 000 */ Last = DNAFileFormat
     }
 
 
@@ -2179,6 +2186,13 @@ namespace GKCore
             /* 1031 */ "Export to strict GEDCOM...",
             /* 1032 */ "Include source citations",
             /* 1033 */ "Source citations",
+
+            /* 1034 */ "DNA tests",
+            /* 1035 */ "DNA test",
+            /* 1036 */ "Test name",
+            /* 1037 */ "Laboratory, company",
+            /* 1038 */ "Are you sure you want to remove the DNA test?",
+            /* 1039 */ "File format",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

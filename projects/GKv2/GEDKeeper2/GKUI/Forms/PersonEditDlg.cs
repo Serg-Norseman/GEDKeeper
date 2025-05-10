@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,7 +29,6 @@ using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Options;
 using GKCore.Types;
 using GKUI.Components;
 using GKUI.Platform.Handlers;
@@ -49,6 +48,7 @@ namespace GKUI.Forms
         private readonly GKSheetList fNamesList;
         private readonly GKSheetList fParentsList;
         private readonly GKSheetList fChildrenList;
+        private readonly GKSheetList fDNATestsList;
 
         public GDMIndividualRecord IndividualRecord
         {
@@ -124,6 +124,11 @@ namespace GKUI.Forms
         ISheetList IStdPersonEditDlg.ChildrenList
         {
             get { return fChildrenList; }
+        }
+
+        ISheetList IStdPersonEditDlg.DNATestsList
+        {
+            get { return fDNATestsList; }
         }
 
         IPortraitControl IPersonEditDlg.Portrait
@@ -274,6 +279,8 @@ namespace GKUI.Forms
             fChildrenList.SetControlName("fChildsList"); // for purpose of tests
             fChildrenList.OnItemValidating += PersonEditDlg_ItemValidating;
             fChildrenList.OnModify += ModifyChildrenSheet;
+
+            fDNATestsList = new GKSheetList(pageDNATests);
 
             imgPortrait.AddButton(btnPortraitAdd);
             imgPortrait.AddButton(btnPortraitDelete);

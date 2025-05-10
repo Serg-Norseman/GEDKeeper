@@ -863,6 +863,20 @@ namespace GKCore
             return result;
         }
 
+        public bool CheckNewMedia(string fileName, MediaStoreType storeType)
+        {
+            if ((storeType == MediaStoreType.mstArchive || storeType == MediaStoreType.mstStorage) && !CheckBasePath()) {
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(fileName) || (storeType != MediaStoreType.mstURL && !File.Exists(fileName))) {
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.InvalidFileName));
+                return false;
+            }
+
+            return true;
+        }
+
         public MediaStore GetStoreType(GDMFileReference fileReference)
         {
             return GKUtils.GetStoreType(fileReference);
@@ -1055,10 +1069,19 @@ namespace GKCore
         {
             if (fileReference == null) return false;
 
+            bool result = MediaSave(out string refPath, fileName, storeType);
+            if (result) {
+                fileReference.LinkFile(refPath);
+            }
+            return result;
+        }
+
+        public bool MediaSave(out string refPath, string fileName, MediaStoreType storeType)
+        {
             string storeFile = Path.GetFileName(fileName);
             string storePath = GKUtils.GetStoreFolder(GKUtils.GetMultimediaKind(GDMFileReference.RecognizeFormat(fileName)));
 
-            string refPath = string.Empty;
+            refPath = string.Empty;
             string targetFile = string.Empty;
 
             // set paths and links
@@ -1120,10 +1143,6 @@ namespace GKCore
                         result = false;
                     }
                     break;
-            }
-
-            if (result) {
-                fileReference.LinkFile(refPath);
             }
 
             return result;

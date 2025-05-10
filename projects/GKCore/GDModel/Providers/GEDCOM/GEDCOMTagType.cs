@@ -83,7 +83,6 @@ namespace GDModel.Providers.GEDCOM
 
         _AWARD, // [???] INDI.ATTR
         _BGRO, // [MyFamilyTree] INDI.ATTR
-        _DNA,  // [GK]
         _ELEC, // Election [???] INDI.ATTR
         _EXCM, // Excommunication [FTM] INDI.ATTR
         _EYES, // [Gen] INDI.ATTR
@@ -91,7 +90,6 @@ namespace GDModel.Providers.GEDCOM
         _HOBBY, // Hobby [GK] INDI.ATTR
         _MDCL, // Medical condition [FTM, FTW] INDI.ATTR
         _MDNA, // [MyFamilyTree] INDI.ATTR
-        _MHAP, // [MyFamilyTree] INDI.ATTR
         _MILI, // [GK] INDI.ATTR
         _MILI_DIS, // [GK] INDI.ATTR
         _MILI_IND, // [GK] INDI.ATTR
@@ -101,7 +99,6 @@ namespace GDModel.Providers.GEDCOM
         _RACE, // Race [Gen, FTW, Reunion]
         _TRAVEL, // [GK] INDI.ATTR
         _YDNA, // [MyFamilyTree] INDI.ATTR
-        _YHAP, // [MyFamilyTree] INDI.ATTR
 
         // don't change the order of elements because it is used for bounds checks
         ANUL, // FAM.EVEN
@@ -205,6 +202,7 @@ namespace GDModel.Providers.GEDCOM
         _BOOKMARK, // [GK]
         _CENN, // Census Name [BKW6]
         _DATE, // Date value in non-standard use (source records) [GK]
+        _DNA,  // [GK]
         _FOLDER, // [GK]
         _GOAL, // [GK]
         _GRP, // Group record [Genney]
@@ -212,6 +210,7 @@ namespace GDModel.Providers.GEDCOM
         _MARN, // Married Surname [BKW6]
         _MARNM, // Married Surname [AQ3, PAF5, Geni]
         _MEMBER, // [GK]
+        _MHAP, // [MyFamilyTree]
         _MIDN, // Middle Name [WikiTree]
         _PATN, // Patronymic Name
         _PATRIARCH, // [GK]
@@ -230,6 +229,7 @@ namespace GDModel.Providers.GEDCOM
         _STATUS, // [GK]
         _STOPDATE, // [GK]
         _UID, // 
+        _YHAP, // [MyFamilyTree]
 
         // non-standard convertible tags
         _FREL, // [Ages, FTM/FTW, Legacy, Family Tree Maker]

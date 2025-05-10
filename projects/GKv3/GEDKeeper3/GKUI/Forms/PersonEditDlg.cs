@@ -106,6 +106,7 @@ namespace GKUI.Forms
         private GKSheetList fNamesList;
         private GKSheetList fParentsList;
         private GKSheetList fChildrenList;
+        private GKSheetList fDNATestsList;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -184,6 +185,11 @@ namespace GKUI.Forms
         ISheetList IStdPersonEditDlg.ChildrenList
         {
             get { return fChildrenList; }
+        }
+
+        ISheetList IStdPersonEditDlg.DNATestsList
+        {
+            get { return fDNATestsList; }
         }
 
         IPortraitControl IPersonEditDlg.Portrait

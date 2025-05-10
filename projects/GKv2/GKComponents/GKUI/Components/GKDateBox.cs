@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
 using GKCore;
@@ -32,11 +33,15 @@ namespace GKUI.Components
         private static readonly string fRegionalDatePattern;
 
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string RegionalDatePattern
         {
             get { return fRegionalDatePattern; }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string NormalizeDate
         {
             get { return GKUtils.GetNormalizeDate(Text, fRegionalDatePattern); }

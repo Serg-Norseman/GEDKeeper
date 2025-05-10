@@ -3446,21 +3446,18 @@ namespace GKCore
             }
         }
 
-        public static MediaStoreType GetStoreTypeEx(GDMFileReference fileReference)
+        public static MediaStoreType GetStoreTypeEx(string fileRef)
         {
-            if (fileReference == null)
+            if (fileRef == null)
                 throw new ArgumentNullException("fileReference");
 
-            string fileRef = fileReference.StringValue;
             MediaStoreType result = MediaStoreType.mstReference;
-
             for (int i = 1; i <= 4; i++) {
                 if (fileRef.StartsWith(GKData.GKStoreTypes[i].Sign, StringComparison.Ordinal)) {
                     result = (MediaStoreType)i;
                     break;
                 }
             }
-
             return result;
         }
 
@@ -3470,7 +3467,7 @@ namespace GKCore
                 throw new ArgumentNullException("fileReference");
 
             string fileName = fileReference.StringValue;
-            MediaStoreType storeType = GetStoreTypeEx(fileReference);
+            MediaStoreType storeType = GetStoreTypeEx(fileName);
 
             if (storeType != MediaStoreType.mstReference && storeType != MediaStoreType.mstURL) {
                 fileName = fileName.Remove(0, 4);

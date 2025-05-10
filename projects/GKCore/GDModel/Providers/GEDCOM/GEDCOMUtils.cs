@@ -1618,7 +1618,7 @@ namespace GDModel.Providers.GEDCOM
 
         public static GDMDNAFileFormat GetDNAFileFormatVal(string str)
         {
-            return Str2Enum(str, DNAFileFormats, GDMDNAFileFormat.None);
+            return Str2Enum(str, DNAFileFormats, GDMDNAFileFormat.None, false);
         }
 
         public static string GetDNAFileFormatStr(GDMDNAFileFormat value)

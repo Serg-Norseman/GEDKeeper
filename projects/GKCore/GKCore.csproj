@@ -69,8 +69,10 @@
     <Compile Include="GDModel\GDMDNATest.cs" />
     <Compile Include="GKCore\Charts\DefTreeLayout.cs" />
     <Compile Include="GKCore\Controllers\AgeEditDlgController.cs" />
+    <Compile Include="GKCore\Controllers\DNATestEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\RepositoryCitDlgController.cs" />
     <Compile Include="GKCore\Design\Views\IAgeEditDlg.cs" />
+    <Compile Include="GKCore\Design\Views\IDNATestEditDlg.cs" />
     <Compile Include="GKCore\Design\Views\IRepositoryCitEditDlg.cs" />
     <Compile Include="GKCore\Controllers\PartialViewController.cs" />
     <Compile Include="GKCore\Controllers\SourceCallNumberDlgController.cs" />
@@ -80,6 +82,7 @@
     <Compile Include="GKCore\Controllers\LocExpertDlgController.cs" />
     <Compile Include="GKCore\Design\Views\IEventDefEditDlg.cs" />
     <Compile Include="GKCore\Interfaces\IComputerVision.cs" />
+    <Compile Include="GKCore\Lists\DNATestsListModel.cs" />
     <Compile Include="GKCore\Lists\EventDefsListModel.cs" />
     <Compile Include="GKCore\Design\Views\ILocationLinkEditDlg.cs" />
     <Compile Include="GKCore\Controllers\LocationLinkEditDlgController.cs" />

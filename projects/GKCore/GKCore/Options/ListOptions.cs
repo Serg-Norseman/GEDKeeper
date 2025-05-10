@@ -68,6 +68,7 @@ namespace GKCore.Options
         stIndividualNames,
         stIndividualParents,
         stIndividualSpouses,
+        stIndividualDNATests,
 
         // rtFamily substructures
 
@@ -136,6 +137,7 @@ namespace GKCore.Options
             "IndividualNames",
             "IndividualParents",
             "IndividualSpouses",
+            "IndividualDNATests",
 
             // rtFamily substructures
 
@@ -326,6 +328,9 @@ namespace GKCore.Options
 
                 case GKListType.stIndividualSpouses:
                     return IndiSpousesListModel.CreateListColumns();
+
+                case GKListType.stIndividualDNATests:
+                    return DNATestsListModel.CreateListColumns();
 
                 case GKListType.stSourceRepositories:
                     return RepositoryCitationsListModel.CreateListColumns();

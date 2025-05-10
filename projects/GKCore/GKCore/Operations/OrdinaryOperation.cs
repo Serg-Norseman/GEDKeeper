@@ -81,6 +81,9 @@ namespace GKCore.Operations
 
         otCallNumberAdd,
         otCallNumberRemove,
+
+        otDNATestAdd,
+        otDNATestRemove,
     }
 
     /// <summary>
@@ -227,6 +230,11 @@ namespace GKCore.Operations
                 case OperationType.otCallNumberAdd:
                 case OperationType.otCallNumberRemove:
                     result = ProcessCallNumber(redo);
+                    break;
+
+                case OperationType.otDNATestAdd:
+                case OperationType.otDNATestRemove:
+                    result = ProcessDNATest(redo);
                     break;
 
                 default:
@@ -689,6 +697,26 @@ namespace GKCore.Operations
                 repoCit.CallNumbers.Add(callNum);
             } else {
                 repoCit.CallNumbers.Extract(callNum);
+            }
+            return true;
+        }
+
+        private bool ProcessDNATest(bool redo)
+        {
+            IGDMStructWithDNA indiRec = fObj as IGDMStructWithDNA;
+            GDMDNATest dnaTest = fNewVal as GDMDNATest;
+
+            if (indiRec == null || dnaTest == null) {
+                return false;
+            }
+
+            if (fType == OperationType.otDNATestRemove) {
+                redo = !redo;
+            }
+            if (redo) {
+                indiRec.DNATests.Add(dnaTest);
+            } else {
+                indiRec.DNATests.Extract(dnaTest);
             }
             return true;
         }

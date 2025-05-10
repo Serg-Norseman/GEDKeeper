@@ -18,18 +18,32 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GDModel;
 using GKCore.Design.Controls;
+using GKCore.Interfaces;
 using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
-    public interface IStdPersonEditDlg : IPersonEditDlg
+    public interface IDNATestEditDlg : ICommonDialog, IBaseEditor
     {
-        ITextBox NamePrefix { get; }
-        ITextBox SurnamePrefix { get; }
-        ITextBox NameSuffix { get; }
+        GDMDNATest DNATest { get; set; }
 
-        ISheetList ChildrenList { get; }
-        ISheetList DNATestsList { get; }
+        ITextBox TestName { get; }
+        IDateBox Date { get; }
+        IComboBox Agency { get; }
+
+        IComboBox MHaplogroup { get; }
+        IComboBox YHaplogroup { get; }
+
+        ISheetList NotesList { get; }
+        ISheetList MediaList { get; }
+
+        IComboBox StoreType { get; }
+        ITextBox File { get; }
+        IButton FileSelectButton { get; }
+        IComboBox FileFormat { get; }
+
+        IComboBox Restriction { get; }
     }
 }

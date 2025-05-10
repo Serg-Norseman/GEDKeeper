@@ -2774,7 +2774,7 @@ namespace GDModel.Providers.GEDCOM
                 dnaTest.TestName = tagValue;
             } else if (tagType == GEDCOMTagType.DATE) {
                 curTag = dnaTest.Date;
-                GEDCOMUtils.ParseDateValue(tree, dnaTest.Date, tagValue);
+                GEDCOMUtils.ParseDate(dnaTest.Date, tagValue);
             } else if (tagType == GEDCOMTagType.FILE) {
                 dnaTest.FileReference = tagValue;
                 curTag = dnaTest;

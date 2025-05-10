@@ -73,6 +73,18 @@ namespace GKCore.Controllers
             }
         }
 
+        public static void UpdateComboValues(IBaseWindow baseWin, IComboBox combo, bool canbeSorted, bool readOnly, string valuesKey, string current)
+        {
+            var values = baseWin.Context.ValuesCollection.GetValues(valuesKey);
+
+            combo.Clear();
+            if (values != null) {
+                combo.AddRange(values, canbeSorted);
+            }
+            combo.Text = current;
+            combo.ReadOnly = readOnly;
+        }
+
         #region Modify routines
 
         public static async Task<ModificationResult<GDMMultimediaRecord>> ModifyMedia(IView owner, IBaseWindow baseWin, GDMMultimediaRecord mediaRec)

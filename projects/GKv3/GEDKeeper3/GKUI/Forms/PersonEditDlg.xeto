@@ -188,6 +188,10 @@
         <TabPage x:Name="pageChilds">
           <comcom:GKSheetList x:Name="fChildrenList" OnModify="ModifyChildrenSheet" OnItemValidating="PersonEditDlg_ItemValidating" />
         </TabPage>
+
+        <TabPage x:Name="pageDNATests">
+          <comcom:GKSheetList x:Name="fDNATestsList" />
+        </TabPage>
       </TabControl>
     </TableRow>
 
