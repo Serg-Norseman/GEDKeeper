@@ -16,6 +16,7 @@
 Eto.xml
 *.log
 *.user
+.DS_Store
 
 gource-gk.cmd
 NUnitResults.xml
@@ -30,3 +31,4 @@ GEDKeeper2Lux.sln
 
 /projects/GKv2/packages/**/
 /projects/GKv3/packages/**/
+
