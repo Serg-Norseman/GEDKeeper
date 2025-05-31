@@ -17,7 +17,6 @@
 
     <Import Project="..\..\GKConfigurations3.targets" />
 
-
     <ItemGroup>
         <Compile Include="..\..\GlobalSuppressions.cs">
             <Link>GlobalSuppressions.cs</Link>
@@ -93,7 +92,9 @@
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_MACOS')) ">
         <TargetFramework>net6.0</TargetFramework>
         <OutputType>exe</OutputType>
-
+        <PublishTrimmed>false</PublishTrimmed>
+        <SelfContained>false</SelfContained>
+        <MacSelfContained>true</MacSelfContained>
         <RuntimeIdentifiers>osx-x64;osx-arm64</RuntimeIdentifiers>
     </PropertyGroup>
 
@@ -115,8 +116,8 @@
     </Target>
 
     <Target Name="CleanAppTempBeforeRun" AfterTargets="Build">
-        <Exec Command="del $(OutputPath)\..\appdata\*.tmp" />
-        <Exec Command="del $(OutputPath)\..\appdata\*.log" />
+        <Delete Files="$(OutputPath)\..\appdata\*.tmp" />
+        <Delete Files="$(OutputPath)\..\appdata\*.log" />
     </Target>
 
 </Project>
