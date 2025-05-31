@@ -1,3 +1,5 @@
+#if !NETSTANDARD2_1_OR_GREATER && !NETCOREAPP2_1_OR_GREATER
+
 /*
   The xxHash32 implementation is based on the code published by Yann Collet:
   https://raw.githubusercontent.com/Cyan4973/xxHash/5c174cfa4e45a42f94082dc0d4539b39696afea1/xxhash.c
@@ -221,3 +223,4 @@ namespace System
         }
     }
 }
+#endif
