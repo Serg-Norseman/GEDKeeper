@@ -336,7 +336,7 @@ namespace GKUI.Platform
 
             switch (feature) {
                 case Feature.GridCellFormat:
-#if OS_MSWIN
+#if OS_MSWIN || OS_MACOS
                     result = false;
 #else
                     result = true;
