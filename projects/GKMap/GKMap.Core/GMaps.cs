@@ -225,11 +225,6 @@ namespace GKMap
         public static void Initialize(PureImageProxy imageProxy)
         {
             TileImageProxy = imageProxy;
-
-#if !MOBILE
-            // triggers dynamic SQLite loading, call this before you use SQLite for other reasons than caching maps
-            SQLitePureImageCache.Ping();
-#endif
         }
 
         /// <summary>

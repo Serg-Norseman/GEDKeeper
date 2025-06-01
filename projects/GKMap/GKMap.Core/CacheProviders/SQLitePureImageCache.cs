@@ -8,62 +8,23 @@
 
 #if !MOBILE
 
-#if DIS_MONO
-#undef MONO
-#endif
-
-#if MONO
-#undef EMBED_LIBS
-#endif
-
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using GKMap.MapProviders;
-
-/*
-    <ItemGroup Condition=" $(DefineConstants.Contains('MONO')) ">
-        <Reference Include="Mono.Data.Sqlite">
-            <HintPath>..\libs\Mono.Data.Sqlite.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="Mono.Security">
-            <HintPath>..\libs\Mono.Security.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-    </ItemGroup>
-
-    <ItemGroup Condition=" !$(DefineConstants.Contains('MONO')) ">
-        <PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
-    </ItemGroup>
- */
+using SQLite;
 
 namespace GKMap.CacheProviders
 {
-#if !MONO
-    using System.Data.SQLite;
-#else
-    using SQLiteConnection = Mono.Data.Sqlite.SqliteConnection;
-    using SQLiteTransaction = Mono.Data.Sqlite.SqliteTransaction;
-    using SQLiteCommand = Mono.Data.Sqlite.SqliteCommand;
-    using SQLiteDataReader = Mono.Data.Sqlite.SqliteDataReader;
-    using SQLiteParameter = Mono.Data.Sqlite.SqliteParameter;
-#endif
-
     /// <summary>
-    /// Ultra fast SQLite cache system for tiles.
+    /// SQLite cache system for tiles.
     /// </summary>
     public class SQLitePureImageCache : IPureImageCache
     {
-        private static readonly string SingleSqlSelect = "SELECT Tile FROM main.TilesData WHERE id = (SELECT id FROM main.Tiles WHERE X={0} AND Y={1} AND Zoom={2} AND Type={3})";
-        private static readonly string SingleSqlInsert = "INSERT INTO main.Tiles(X, Y, Zoom, Type, CacheTime) VALUES(@p1, @p2, @p3, @p4, @p5)";
-        private static readonly string SingleSqlInsertLast = "INSERT INTO main.TilesData(id, Tile) VALUES((SELECT last_insert_rowid()), @p1)";
+        private const string SingleSqlSelect = "SELECT Id, Tile FROM main.TilesData WHERE id = (SELECT id FROM main.Tiles WHERE X={0} AND Y={1} AND Zoom={2} AND Type={3})";
 
         private readonly List<string> fAttachedCaches = new List<string>();
         private string fFinalSqlSelect = SingleSqlSelect;
@@ -72,78 +33,10 @@ namespace GKMap.CacheProviders
 
         private string fCache;
         private string fCachePath;
-        private string fConnectionString;
         private bool fCreated;
         private string fDir;
         private string fDb;
         private int fPreAllocationPing;
-
-#if EMBED_LIBS
-        static SQLitePureImageCache()
-        {
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-        }
-
-        static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            if (args.Name.StartsWith("System.Data.SQLite", StringComparison.OrdinalIgnoreCase)) {
-                string appDataDir = Stuff.GetApplicationDataFolderPath();
-                if (string.IsNullOrEmpty(appDataDir)) {
-                    return null;
-                }
-
-                string dllDir = appDataDir + "DllCache" + Path.DirectorySeparatorChar;
-                string dll = dllDir + "SQLite_v103_NET" + Environment.Version.Major + "_" + (IntPtr.Size == 8 ? "x64" : "x86") + Path.DirectorySeparatorChar + "System.Data.SQLite.DLL";
-                if (!File.Exists(dll)) {
-                    string dir = Path.GetDirectoryName(dll);
-                    if (!Directory.Exists(dir)) {
-                        Directory.CreateDirectory(dir);
-                    }
-
-                    Debug.WriteLine("Saving to DllCache: " + dll);
-
-                    if (Environment.Version.Major == 2) {
-                    } else if (Environment.Version.Major == 4) {
-                        string gzName = IntPtr.Size == 8
-                            ? "GKMap.Resources.System.Data.SQLite.x64.NET4.dll.gz"
-                            : "GKMap.Resources.System.Data.SQLite.x86.NET4.dll.gz";
-
-                        var resStream = Stuff.LoadResourceStream(gzName);
-                        using (var gs = new GZipStream(resStream, CompressionMode.Decompress)) {
-                            using (MemoryStream exctDll = new MemoryStream()) {
-                                byte[] tmp = new byte[1024 * 256];
-                                int r;
-                                while ((r = gs.Read(tmp, 0, tmp.Length)) > 0) {
-                                    exctDll.Write(tmp, 0, r);
-                                }
-
-                                File.WriteAllBytes(dll, exctDll.ToArray());
-                            }
-                        }
-                    }
-                }
-
-                Debug.WriteLine("Assembly.LoadFile: " + dll);
-
-                return Assembly.LoadFile(dll);
-            }
-            return null;
-        }
-
-        private static int fPing;
-#endif
-
-        /// <summary>
-        /// triggers dynamic SQLite loading
-        /// </summary>
-        public static void Ping()
-        {
-#if EMBED_LIBS
-            if (++fPing == 1) {
-                Trace.WriteLine("SQLiteVersion: " + SQLiteConnection.SQLiteVersion + " | " + SQLiteConnection.SQLiteSourceId + " | " + SQLiteConnection.DefineConstants);
-            }
-#endif
-        }
 
         /// <summary>
         /// local cache location
@@ -165,24 +58,14 @@ namespace GKMap.CacheProviders
                     Directory.CreateDirectory(fDir);
                 }
 
-#if !MONO
-                SQLiteConnection.ClearAllPools();
-#endif
                 // make empty db
                 fDb = fDir + "Data.gmdb";
                 fCreated = !File.Exists(fDb) ? CreateEmptyDB(fDb) : AlterDBAddTimeColumn(fDb);
 
                 CheckPreAllocation();
 
-#if !MONO
-                fConnectionString = string.Format("Data Source=\"{0}\";Page Size=32768;Pooling=True", fDb); //;Journal Mode=Wal
-#else
-                fConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=True,Page Size=32768,Pooling=True", fDb);
-#endif
-
                 // clear old attachments
                 fAttachedCaches.Clear();
-                RebuildFinalSelect();
 
                 // attach all databases from main cache location
                 var dbs = Directory.GetFiles(fDir, "*.gmdb", SearchOption.AllDirectories);
@@ -192,6 +75,12 @@ namespace GKMap.CacheProviders
                     }
                 }
             }
+        }
+
+        static SQLitePureImageCache() {
+#if !NETCORE && !NETSTANDARD
+            SQLiteLoader.Load();
+#endif
         }
 
         /// <summary>
@@ -273,37 +162,15 @@ namespace GKMap.CacheProviders
                     Directory.CreateDirectory(dir);
                 }
 
-                using (SQLiteConnection cn = new SQLiteConnection()) {
-#if !MONO
-                    cn.ConnectionString = string.Format("Data Source=\"{0}\";FailIfMissing=False;Page Size=32768", file);
-#else
-                    cn.ConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=False,Page Size=32768", file);
-#endif
-                    cn.Open();
-                    string strCreateTileDb = Stuff.LoadResourceString("GKMap.Resources.CreateTileDb.sql");
-
-                    using (DbTransaction tr = cn.BeginTransaction()) {
-                        try {
-                            using (DbCommand cmd = cn.CreateCommand()) {
-                                cmd.Transaction = tr;
-                                cmd.CommandText = strCreateTileDb;
-                                cmd.ExecuteNonQuery();
-                            }
-
-                            tr.Commit();
-                        } catch (Exception exx) {
-                            WriteDebugLine("CreateEmptyDB: " + exx);
-                            tr.Rollback();
-                            ret = false;
-                        }
-                    }
-
-                    cn.Close();
+                using (var db = new SQLiteConnection(file)) {
+                    db.CreateTable<TileRecord>();
+                    db.CreateTable<TileDataRecord>();
                 }
             } catch (Exception ex) {
                 WriteDebugLine("CreateEmptyDB: " + ex);
                 ret = false;
             }
+
             return ret;
         }
 
@@ -314,35 +181,15 @@ namespace GKMap.CacheProviders
             try {
                 Debug.WriteLine("PreAllocateDB: " + file + ", +" + addSizeInMBytes + "MB");
 
-                using (SQLiteConnection cn = new SQLiteConnection()) {
-#if !MONO
-                    cn.ConnectionString = string.Format("Data Source=\"{0}\";FailIfMissing=False;Page Size=32768", file);
-#else
-                    cn.ConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=False,Page Size=32768", file);
-#endif
-                    cn.Open();
-                    {
-                        using (DbTransaction tr = cn.BeginTransaction()) {
-                            try {
-                                using (DbCommand cmd = cn.CreateCommand()) {
-                                    cmd.Transaction = tr;
-                                    cmd.CommandText = string.Format("create table large (a); insert into large values (zeroblob({0})); drop table large;", addSizeInMBytes * 1024 * 1024);
-                                    cmd.ExecuteNonQuery();
-                                }
-                                tr.Commit();
-                            } catch (Exception exx) {
-                                WriteDebugLine("PreAllocateDB: " + exx);
-                                tr.Rollback();
-                                ret = false;
-                            }
-                        }
-                        cn.Close();
-                    }
+                using (var db = new SQLiteConnection(file)) {
+                    string sql = string.Format("create table large (a); insert into large values (zeroblob({0})); drop table large;", addSizeInMBytes * 1024 * 1024);
+                    db.Execute(sql);
                 }
             } catch (Exception ex) {
                 WriteDebugLine("PreAllocateDB: " + ex);
                 ret = false;
             }
+
             return ret;
         }
 
@@ -352,53 +199,15 @@ namespace GKMap.CacheProviders
 
             try {
                 if (File.Exists(file)) {
-                    using (SQLiteConnection cn = new SQLiteConnection()) {
-#if !MONO
-                        cn.ConnectionString = string.Format("Data Source=\"{0}\";FailIfMissing=False;Page Size=32768;Pooling=True", file);
-#else
-                        cn.ConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=False,Page Size=32768,Pooling=True", file);
-#endif
-                        cn.Open();
-                        {
-                            using (DbTransaction tr = cn.BeginTransaction()) {
-                                bool? NoCacheTimeColumn;
-
-                                try {
-                                    using (DbCommand cmd = new SQLiteCommand("SELECT CacheTime FROM Tiles", cn)) {
-                                        cmd.Transaction = tr;
-
-                                        using (DbDataReader rd = cmd.ExecuteReader()) {
-                                            rd.Close();
-                                        }
-                                        NoCacheTimeColumn = false;
-                                    }
-                                } catch (Exception ex) {
-                                    if (ex.Message.Contains("no such column: CacheTime")) {
-                                        NoCacheTimeColumn = true;
-                                    } else {
-                                        throw;
-                                    }
-                                }
-
-                                try {
-                                    if (NoCacheTimeColumn.HasValue && NoCacheTimeColumn.Value) {
-                                        using (DbCommand cmd = cn.CreateCommand()) {
-                                            cmd.Transaction = tr;
-
-                                            cmd.CommandText = "ALTER TABLE Tiles ADD CacheTime DATETIME";
-
-                                            cmd.ExecuteNonQuery();
-                                        }
-                                        tr.Commit();
-                                        NoCacheTimeColumn = false;
-                                    }
-                                } catch (Exception exx) {
-                                    WriteDebugLine("AlterDBAddTimeColumn: " + exx);
-                                    tr.Rollback();
-                                    ret = false;
-                                }
+                    using (var db = new SQLiteConnection(file)) {
+                        try {
+                            db.Query<TileRecord>("SELECT CacheTime FROM Tiles LIMIT 1");
+                        } catch (Exception ex) {
+                            if (ex.Message.Contains("no such column: CacheTime")) {
+                                db.Execute("ALTER TABLE Tiles ADD CacheTime DATETIME");
+                            } else {
+                                throw;
                             }
-                            cn.Close();
                         }
                     }
                 } else {
@@ -408,49 +217,21 @@ namespace GKMap.CacheProviders
                 WriteDebugLine("AlterDBAddTimeColumn: " + ex);
                 ret = false;
             }
+
             return ret;
         }
 
-        public static bool VacuumDb(string file)
-        {
-            bool ret = true;
-
-            try {
-                using (SQLiteConnection cn = new SQLiteConnection()) {
-#if !MONO
-                    cn.ConnectionString = string.Format("Data Source=\"{0}\";FailIfMissing=True;Page Size=32768", file);
-#else
-                    cn.ConnectionString = string.Format("Version=3,URI=file://{0},FailIfMissing=True,Page Size=32768", file);
-#endif
-                    cn.Open();
-                    using (DbCommand cmd = cn.CreateCommand()) {
-                        cmd.CommandText = "vacuum;";
-                        cmd.ExecuteNonQuery();
-                    }
-                    cn.Close();
-                }
-            } catch (Exception ex) {
-                WriteDebugLine("VacuumDb: " + ex);
-                ret = false;
-            }
-            return ret;
-        }
 #endregion
 
         private void RebuildFinalSelect()
         {
-            fFinalSqlSelect = null;
             fFinalSqlSelect = SingleSqlSelect;
-
-            fAttachSqlQuery = null;
             fAttachSqlQuery = string.Empty;
-
-            fDetachSqlQuery = null;
             fDetachSqlQuery = string.Empty;
 
             int i = 1;
             foreach (var c in fAttachedCaches) {
-                fFinalSqlSelect += string.Format("\nUNION SELECT Tile FROM db{0}.TilesData WHERE id = (SELECT id FROM db{0}.Tiles WHERE X={{0}} AND Y={{1}} AND Zoom={{2}} AND Type={{3}})", i);
+                fFinalSqlSelect += string.Format("\nUNION SELECT Id, Tile FROM db{0}.TilesData WHERE id = (SELECT id FROM db{0}.Tiles WHERE X={{0}} AND Y={{1}} AND Zoom={{2}} AND Type={{3}})", i);
                 fAttachSqlQuery += string.Format("\nATTACH '{0}' as db{1};", c, i);
                 fDetachSqlQuery += string.Format("\nDETACH DATABASE db{0};", i);
 
@@ -479,42 +260,19 @@ namespace GKMap.CacheProviders
             bool ret = true;
             if (fCreated) {
                 try {
-                    using (SQLiteConnection cn = new SQLiteConnection()) {
-                        cn.ConnectionString = fConnectionString;
-                        cn.Open();
-                        {
-                            using (DbTransaction tr = cn.BeginTransaction()) {
-                                try {
-                                    using (DbCommand cmd = cn.CreateCommand()) {
-                                        cmd.Transaction = tr;
-                                        cmd.CommandText = SingleSqlInsert;
-
-                                        cmd.Parameters.Add(new SQLiteParameter("@p1", pos.X));
-                                        cmd.Parameters.Add(new SQLiteParameter("@p2", pos.Y));
-                                        cmd.Parameters.Add(new SQLiteParameter("@p3", zoom));
-                                        cmd.Parameters.Add(new SQLiteParameter("@p4", type));
-                                        cmd.Parameters.Add(new SQLiteParameter("@p5", DateTime.Now));
-
-                                        cmd.ExecuteNonQuery();
-                                    }
-
-                                    using (DbCommand cmd = cn.CreateCommand()) {
-                                        cmd.Transaction = tr;
-
-                                        cmd.CommandText = SingleSqlInsertLast;
-                                        cmd.Parameters.Add(new SQLiteParameter("@p1", tile));
-
-                                        cmd.ExecuteNonQuery();
-                                    }
-                                    tr.Commit();
-                                } catch (Exception ex) {
-                                    WriteDebugLine("PutImageToCache: " + ex);
-                                    tr.Rollback();
-                                    ret = false;
-                                }
-                            }
-                        }
-                        cn.Close();
+                    using (var db = new SQLiteConnection(fDb)) {
+                        var r = new TileRecord {
+                            X = pos.X,
+                            Y = pos.Y,
+                            Zoom = zoom,
+                            Type = (uint)type,
+                            CacheTime = DateTime.Now
+                        };
+                        db.Insert(r);
+                        db.Insert(new TileDataRecord {
+                            Id = r.Id,
+                            Tile = tile
+                        });
                     }
 
                     if (Interlocked.Increment(ref fPreAllocationPing) % 22 == 0) {
@@ -525,6 +283,7 @@ namespace GKMap.CacheProviders
                     ret = false;
                 }
             }
+
             return ret;
         }
 
@@ -532,42 +291,24 @@ namespace GKMap.CacheProviders
         {
             PureImage ret = null;
             try {
-                using (SQLiteConnection cn = new SQLiteConnection()) {
-                    cn.ConnectionString = fConnectionString;
-                    cn.Open();
-
+                using (var db = new SQLiteConnection(fDb)) {
                     if (!string.IsNullOrEmpty(fAttachSqlQuery)) {
-                        using (DbCommand com = cn.CreateCommand()) {
-                            com.CommandText = fAttachSqlQuery;
-                            com.ExecuteNonQuery();
-                        }
+                        db.Execute(fAttachSqlQuery);
                     }
 
-                    using (DbCommand com = cn.CreateCommand()) {
-                        com.CommandText = string.Format(fFinalSqlSelect, pos.X, pos.Y, zoom, type);
+                    var query = string.Format(fFinalSqlSelect, pos.X, pos.Y, zoom, type);
+                    var tiles = db.Query<TileDataRecord>(query);
 
-                        using (DbDataReader rd = com.ExecuteReader(System.Data.CommandBehavior.SequentialAccess)) {
-                            if (rd.Read()) {
-                                long length = rd.GetBytes(0, 0, null, 0, 0);
-                                byte[] tile = new byte[length];
-                                rd.GetBytes(0, 0, tile, 0, tile.Length);
-                                if (GMaps.TileImageProxy != null) {
-                                    ret = GMaps.TileImageProxy.FromArray(tile);
-                                }
-                            }
-
-                            rd.Close();
+                    if (tiles.Count > 0) {
+                        byte[] tile = tiles[0].Tile;
+                        if (GMaps.TileImageProxy != null) {
+                            ret = GMaps.TileImageProxy.FromArray(tile);
                         }
                     }
 
                     if (!string.IsNullOrEmpty(fDetachSqlQuery)) {
-                        using (DbCommand com = cn.CreateCommand()) {
-                            com.CommandText = fDetachSqlQuery;
-                            com.ExecuteNonQuery();
-                        }
+                        db.Execute(fDetachSqlQuery);
                     }
-
-                    cn.Close();
                 }
             } catch (Exception ex) {
                 WriteDebugLine("GetImageFromCache: " + ex);
@@ -580,18 +321,14 @@ namespace GKMap.CacheProviders
         int IPureImageCache.DeleteOlderThan(DateTime date, int? type)
         {
             int affectedRows = 0;
-
             try {
-                using (SQLiteConnection cn = new SQLiteConnection()) {
-                    cn.ConnectionString = fConnectionString;
-                    cn.Open();
-                    using (DbCommand com = cn.CreateCommand()) {
-                        com.CommandText = string.Format("DELETE FROM Tiles WHERE CacheTime is not NULL and CacheTime < datetime('{0}')", date.ToString("s"));
-                        if (type.HasValue) {
-                            com.CommandText += " and Type = " + type;
-                        }
-
-                        affectedRows = com.ExecuteNonQuery();
+                using (var db = new SQLiteConnection(fDb)) {
+                    string sql = "DELETE FROM Tiles WHERE CacheTime is not NULL and CacheTime < datetime(?)";
+                    if (type.HasValue) {
+                        sql += " AND Type = ?";
+                        affectedRows = db.Execute(sql, date.ToString("s"), type.Value);
+                    } else {
+                        affectedRows = db.Execute(sql, date.ToString("s"));
                     }
                 }
             } catch (Exception ex) {
