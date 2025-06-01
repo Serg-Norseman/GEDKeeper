@@ -16,11 +16,7 @@
 
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
-    </ItemGroup>
-
-    <ItemGroup Condition=" !$(DefineConstants.Contains('MOBILE')) ">
-        <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
+        <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
     </ItemGroup>
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">

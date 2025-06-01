@@ -50,21 +50,9 @@
   <PropertyGroup Condition=" '$(MonoCS)' == 'true' ">
     <DefineConstants>$(DefineConstants);MONO;</DefineConstants>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(MonoCS)' == 'true' ">
-    <Reference Include="Mono.Data.Sqlite">
-      <HintPath>..\libs\Mono.Data.Sqlite.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Mono.Security">
-      <HintPath>..\libs\Mono.Security.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-  </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Data.SQLite">
-      <HintPath>..\libs\x86\System.Data.SQLite.DLL</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
+    <Reference Include="BSLib.SQLite">
+      <HintPath>..\..\libs\BSLib.SQLite.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheProviders\MemoryCache.cs" />
+    <Compile Include="CacheProviders\TileDataRecord.cs" />
+    <Compile Include="CacheProviders\TileRecord.cs" />
     <Compile Include="MapObjects\MapMarker.cs" />
     <Compile Include="MapObjects\MapFigure.cs" />
     <Compile Include="MapObjects\MapObject.cs" />
@@ -137,10 +127,6 @@
     <Compile Include="SizeLatLng.cs" />
     <Compile Include="Stuff.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(MonoCS)' != 'true' ">
-    <EmbeddedResource Include="Resources\System.Data.SQLite.x64.NET4.dll.gz" />
-    <EmbeddedResource Include="Resources\System.Data.SQLite.x86.NET4.dll.gz" />
   </ItemGroup>
   <Import Project="GKMap.Core.props" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
