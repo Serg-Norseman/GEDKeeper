@@ -114,6 +114,7 @@ namespace GKCore
         protected virtual void ApplicationExit()
         {
             AppHost.Instance.SaveLastBases();
+            AppHost.DoneSettings();
         }
 
         private void AutosaveTimer_Tick(object sender, EventArgs e)

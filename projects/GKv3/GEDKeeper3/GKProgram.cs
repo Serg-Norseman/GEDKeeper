@@ -66,14 +66,10 @@ namespace GEDKeeper3
             using (var tracker = new SingleInstanceTracker(GKData.APP_TITLE, AppHost.GetSingleInstanceEnforcer)) {
                 if (tracker.IsFirstInstance) {
                     AppHost.InitSettings();
-                    try {
-                        var appHost = (EtoAppHost)AppHost.Instance;
-                        appHost.Init(args, false);
+                    var appHost = (EtoAppHost)AppHost.Instance;
+                    appHost.Init(args, false);
 
-                        application.Run();
-                    } finally {
-                        AppHost.DoneSettings();
-                    }
+                    application.Run();
                 } else {
                     tracker.SendMessageToFirstInstance(args);
                 }
