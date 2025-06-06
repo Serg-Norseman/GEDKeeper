@@ -53,7 +53,7 @@
   </Form.ToolBar>
 
   <Form.Menu>
-    <MenuBar>
+    <MenuBar IncludeSystemItems="None">
 
       <ButtonMenuItem x:Name="miFile">
         <ButtonMenuItem x:Name="miFileNew" Shortcut="CommonModifier+N" Image="{Resource Resources.btn_create_new.gif, GKCore}" Click="miFileNew_Click" />
