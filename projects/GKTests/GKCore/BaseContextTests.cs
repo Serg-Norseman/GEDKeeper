@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -184,7 +184,15 @@ namespace GKCore
         [Test]
         public void Test_GetStoreType()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { fContext.GetStoreType(null); });
+            Assert.Throws(typeof(ArgumentNullException), () => {
+                string strFileRef = null;
+                fContext.GetStoreType(strFileRef);
+            });
+
+            Assert.Throws(typeof(ArgumentNullException), () => {
+                GDMFileReference fileRefX = null;
+                fContext.GetStoreType(fileRefX);
+            });
 
             var fileRef = new GDMFileReference();
             fileRef.ParseString("file.txt");
@@ -566,7 +574,15 @@ namespace GKCore
         public void Test_VerifyMediaFile()
         {
             string fileName;
-            Assert.Throws(typeof(ArgumentNullException), () => { fContext.VerifyMediaFile(null, out fileName); });
+            Assert.Throws(typeof(ArgumentNullException), () => {
+                string strFileRef = null;
+                fContext.VerifyMediaFile(strFileRef, out fileName);
+            });
+
+            Assert.Throws(typeof(ArgumentNullException), () => {
+                GDMFileReference fileRef = null;
+                fContext.VerifyMediaFile(fileRef, out fileName);
+            });
         }
 
         [Test]

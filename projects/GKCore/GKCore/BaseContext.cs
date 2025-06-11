@@ -73,8 +73,7 @@ namespace GKCore
 
         public ICulture Culture
         {
-            get
-            {
+            get {
                 GDMLanguageID langID = fTree.Header.Language;
                 if (fCulture == null || fCulture.Language != langID) {
                     fCulture = CulturesPool.DefineCulture(langID);
@@ -106,12 +105,10 @@ namespace GKCore
 
         public bool Modified
         {
-            get
-            {
+            get {
                 return fModified;
             }
-            set
-            {
+            set {
                 fModified = value;
 
                 var eventHandler = ModifiedChanged;
@@ -141,12 +138,10 @@ namespace GKCore
 
         public ShieldState ShieldState
         {
-            get
-            {
+            get {
                 return fShieldState;
             }
-            set
-            {
+            set {
                 if (fShieldState != value) {
                     fShieldState = value;
 
@@ -879,6 +874,14 @@ namespace GKCore
 
         public MediaStore GetStoreType(GDMFileReference fileReference)
         {
+            if (fileReference == null)
+                throw new ArgumentNullException("fileReference");
+
+            return GKUtils.GetStoreType(fileReference.StringValue);
+        }
+
+        public MediaStore GetStoreType(string fileReference)
+        {
             return GKUtils.GetStoreType(fileReference);
         }
 
@@ -889,7 +892,7 @@ namespace GKCore
             if (mediaRec == null || mediaRec.FileReferences.Count < 1) return result;
 
             var fileRef = mediaRec.FileReferences[0];
-            var oldStoreType = GKUtils.GetStoreType(fileRef).StoreType;
+            var oldStoreType = GKUtils.GetStoreType(fileRef.StringValue).StoreType;
 
             if (oldStoreType == newStoreType) return result;
 
@@ -995,8 +998,13 @@ namespace GKCore
 
         public string MediaLoad(GDMFileReference fileReference)
         {
+            return (fileReference == null) ? string.Empty : MediaLoad(fileReference.StringValue);
+        }
+
+        public string MediaLoad(string fileReference)
+        {
             string fileName = string.Empty;
-            if (fileReference == null) return string.Empty;
+            if (string.IsNullOrEmpty(fileReference)) return string.Empty;
 
             try {
                 MediaStore mediaStore = GetStoreType(fileReference);
@@ -1156,7 +1164,7 @@ namespace GKCore
                 MediaStore mediaStore = GetStoreType(fileReference);
                 string fileName = mediaStore.FileName;
 
-                MediaStoreStatus storeStatus = VerifyMediaFile(fileReference, out fileName);
+                MediaStoreStatus storeStatus = VerifyMediaFile(fileReference.StringValue, out fileName);
                 bool result = false;
 
                 switch (storeStatus) {
@@ -1216,7 +1224,7 @@ namespace GKCore
             }
         }
 
-        public bool VerifyMediaFileWM(GDMFileReference fileReference)
+        public bool VerifyMediaFileWM(string fileReference)
         {
             string fileName;
             MediaStoreStatus storeStatus = VerifyMediaFile(fileReference, out fileName);
@@ -1243,6 +1251,14 @@ namespace GKCore
         }
 
         public MediaStoreStatus VerifyMediaFile(GDMFileReference fileReference, out string fileName)
+        {
+            if (fileReference == null)
+                throw new ArgumentNullException("fileReference");
+
+            return VerifyMediaFile(fileReference.StringValue, out fileName);
+        }
+
+        public MediaStoreStatus VerifyMediaFile(string fileReference, out string fileName)
         {
             if (fileReference == null)
                 throw new ArgumentNullException("fileReference");
@@ -1717,8 +1733,7 @@ namespace GKCore
                 byte[] pwd = Encoding.Unicode.GetBytes(password);
 
                 switch (minorVer) {
-                    case 1:
-                        {
+                    case 1: {
                             byte[] salt = SCCrypt.CreateRandomSalt(7);
                             csp = new DESCryptoServiceProvider();
                             var pdb = new PasswordDeriveBytes(pwd, salt);
@@ -1732,8 +1747,7 @@ namespace GKCore
                         }
                         break;
 
-                    case 2:
-                        {
+                    case 2: {
                             var keyBytes = new byte[BlockSize / 8];
                             Array.Copy(pwd, keyBytes, Math.Min(keyBytes.Length, pwd.Length));
                             csp = new RijndaelManaged();

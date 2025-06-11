@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -396,7 +396,7 @@ namespace GDModel.Providers.GEDCOM
                     // the transition to normalized names after GKv39
                     // only for not direct references AND not relative references (platform specific paths)
 
-                    var mediaStore = GKUtils.GetStoreType(fileRef);
+                    var mediaStore = GKUtils.GetStoreType(fileRef.StringValue);
                     if (mediaStore.StoreType != MediaStoreType.mstReference
                         && mediaStore.StoreType != MediaStoreType.mstRelativeReference) {
                         fileRef.StringValue = FileHelper.NormalizeFilename(fileRef.StringValue);

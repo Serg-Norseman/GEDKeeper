@@ -80,6 +80,7 @@ namespace GKCore.Interfaces
         bool MoveMediaFile(GDMMultimediaRecord mediaRec, MediaStoreType newStoreType);
         Stream MediaLoad(GDMFileReference fileReference, bool throwException);
         string MediaLoad(GDMFileReference fileReference);
+        string MediaLoad(string fileReference);
         bool MediaSave(GDMFileReference fileReference, string fileName, MediaStoreType storeType);
         bool MediaSave(out string refPath, string fileName, MediaStoreType storeType);
         MediaStoreStatus VerifyMediaFile(GDMFileReference fileReference, out string fileName);

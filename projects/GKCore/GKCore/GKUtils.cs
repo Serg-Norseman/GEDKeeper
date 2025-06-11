@@ -21,7 +21,6 @@
 #define CALENDAR_DIFFERENCE_YEARS
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -3465,12 +3464,12 @@ namespace GKCore
             return result;
         }
 
-        public static MediaStore GetStoreType(GDMFileReference fileReference)
+        public static MediaStore GetStoreType(string fileReference)
         {
-            if (fileReference == null)
+            if (string.IsNullOrEmpty(fileReference))
                 throw new ArgumentNullException("fileReference");
 
-            string fileName = fileReference.StringValue;
+            string fileName = fileReference;
             MediaStoreType storeType = GetStoreTypeEx(fileName);
 
             if (storeType != MediaStoreType.mstReference && storeType != MediaStoreType.mstURL) {
