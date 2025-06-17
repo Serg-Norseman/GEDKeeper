@@ -64,7 +64,7 @@ namespace GKCore.Controllers
         {
             AcceptLanguage();
             SetLocale();
-            UpdateView();
+            UpdateEventTypes();
         }
 
         private void FillGeoSearchCountries()
