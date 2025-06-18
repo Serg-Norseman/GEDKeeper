@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:comp="clr-namespace:GKUI.Components;assembly=GKComponents"
   x:Class="GKPedigreeImporterPlugin.PedigreeImporterDlg"
   Maximizable="False" Minimizable="False" Resizable="False" ShowInTaskbar="False" Topmost="True">
 
   <TableLayout Style="paddedTable8">
 
     <TableRow ScaleHeight="True">
-      <TabControl x:Name="tabControl1" Size="633, 401">
-        <TabPage x:Name="pageSelect">
+      <comp:WizardPages x:Name="tabControl1">
+        <comp:WizardPage x:Name="pageSelect">
 
           <TableLayout Style="paddedTable8">
             <TableRow>
@@ -79,16 +80,17 @@
 
           </TableLayout>
 
-        </TabPage>
+        </comp:WizardPage>
 
-        <TabPage x:Name="pageResult">
+        <comp:WizardPage x:Name="pageResult">
           <TableLayout Style="paddedTable8">
             <TableRow>
               <ListBox x:Name="lbLog" Size="940, 480" />
             </TableRow>
           </TableLayout>
-        </TabPage>
-      </TabControl>
+        </comp:WizardPage>
+
+      </comp:WizardPages>
     </TableRow>
 
     <TableRow>

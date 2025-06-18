@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -46,7 +46,7 @@ namespace GKPedigreeImporterPlugin
         private ComboBox cbGenerationFormat;
         private Button btnClose;
         private ListBox lbLog;
-        private TabPage pageResult;
+        private WizardPage pageResult;
         private Label lblSurnameFormat;
         private ComboBox cbNameFormat;
         private Label lblPersonLineSeparator;
@@ -58,8 +58,8 @@ namespace GKPedigreeImporterPlugin
         private GroupBox grpPersonIdFormat;
         private Button btnBack;
         private Button btnNext;
-        private TabPage pageSelect;
-        private TabControl tabControl1;
+        private WizardPage pageSelect;
+        private WizardPages tabControl1;
         private Button btnImportFileChoose;
         private TextBox edImportFile;
         private Label lblFile;
@@ -126,6 +126,8 @@ namespace GKPedigreeImporterPlugin
 
             grpPersonLineSpecials.Text = fLangMan.LS(PLS.PersonLineSpecials);
             chkSpecial_1.Text = fLangMan.LS(PLS.Special_1);
+
+            tabControl1.SelectedPage = tabControl1.Pages[fCurrentStage];
         }
 
         private async void btnImportFileChoose_Click(object sender, EventArgs e)

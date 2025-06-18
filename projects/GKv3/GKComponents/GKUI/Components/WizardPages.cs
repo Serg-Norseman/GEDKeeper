@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,9 @@
  */
 
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using Eto;
 using Eto.Forms;
 
 namespace GKUI.Components
@@ -31,35 +34,77 @@ namespace GKUI.Components
     /// <summary>
     /// Analogue of TabControl (or Notebook component) with support for hiding tabs.
     /// </summary>
-    public class WizardPages : Container
+    [ContentProperty("Pages")]
+    public class WizardPages : Panel
     {
-        private readonly IList<WizardPage> fPages;
+        private class WizardPageCollection : Collection<WizardPage>
+        {
+            private readonly WizardPages control;
+
+            internal WizardPageCollection(WizardPages control)
+            {
+                this.control = control;
+            }
+        }
+
+
+        private int fCurrentPageIndex;
+        private WizardPageCollection fPages;
+        private Panel fPagePlaceholder;
 
 
         public override IEnumerable<Control> Controls
         {
             get {
-                return fPages;
+                IEnumerable<Control> enumerable = fPages;
+                return enumerable ?? Enumerable.Empty<Control>();
             }
         }
 
-        public IList<WizardPage> Pages
+        public Collection<WizardPage> Pages => fPages ?? (fPages = new WizardPageCollection(this));
+
+        public int SelectedIndex
         {
-            get { return fPages; }
+            get { return fCurrentPageIndex; }
+            set {
+                fCurrentPageIndex = value;
+                UpdateCurrentPage();
+            }
+        }
+
+        public WizardPage SelectedPage
+        {
+            get {
+                if (SelectedIndex >= 0) {
+                    return Pages[SelectedIndex];
+                }
+                return null;
+            }
+            set {
+                SelectedIndex = fPages.IndexOf(value);
+            }
         }
 
 
         public WizardPages()
         {
-            fPages = new List<WizardPage>();
-            // TODO: not implemented yet
+            fCurrentPageIndex = 0;
+            fPagePlaceholder = new Panel();
+            Content = fPagePlaceholder;
         }
 
         public override void Remove(Control child)
         {
-            var page = child as WizardPage;
-            if (page != null) {
-                fPages.Remove(page);
+            if (child is WizardPage item) {
+                Pages.Remove(item);
+            }
+        }
+
+        private void UpdateCurrentPage()
+        {
+            var page = fPages[fCurrentPageIndex];
+            if (fPagePlaceholder.Content != page) {
+                fPagePlaceholder.Content = page;
             }
         }
     }
