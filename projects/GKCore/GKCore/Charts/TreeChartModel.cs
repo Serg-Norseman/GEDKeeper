@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define DEBUG_RECALC
 //#define DESK_METHOD
 
 using System;
@@ -472,9 +471,9 @@ namespace GKCore.Charts
 
         #region Tree walking
 
-        private string GetMarriageDate(GDMFamilyRecord family, bool strictYears)
+        private string GetMarriageDate(GDMFamilyRecord family)
         {
-            DateFormat dateFormat = (strictYears || fOptions.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
+            DateFormat dateFormat = fOptions.OnlyYears ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
             return GKUtils.GetMarriageDateStr(family, dateFormat, GlobalOptions.Instance.ShowDatesSign);
         }
 
@@ -550,7 +549,7 @@ namespace GKCore.Charts
                         }
 
                         if (fOptions.MarriagesDates) {
-                            var marDate = GetMarriageDate(family, false);
+                            var marDate = GetMarriageDate(family);
                             if (!string.IsNullOrEmpty(marDate)) {
                                 if (personNode.Father != null) {
                                     personNode.Father.MarriageDate = marDate;
@@ -801,7 +800,7 @@ namespace GKCore.Charts
                         resParent.BaseFamily = family;
 
                         if (fOptions.MarriagesDates) {
-                            var marDate = GetMarriageDate(family, true);
+                            var marDate = GetMarriageDate(family);
                             resParent.MarriageDate = marDate;
                         }
 
@@ -949,6 +948,10 @@ namespace GKCore.Charts
                 p.CalcBounds(lines, fRenderer);
 
                 maxWidth = Math.Max(maxWidth, p.Width);
+
+                if (fOptions.MarriagesDates && !string.IsNullOrEmpty(p.MarriageDate)) {
+                    p.MarriageDateWidth = fRenderer.GetTextWidth(p.MarriageDate, fDrawFont);
+                }
             }
 
             if (fOptions.SameCardsWidth) {

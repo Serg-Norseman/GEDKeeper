@@ -80,6 +80,7 @@ namespace GKCore.Charts
         private List<TreeChartPerson> fSpouses;
         private IImage fPortrait;
         private int fPortraitWidth;
+        private ExtRect fRect;
 
         // for rendering
         private int fHeight;
@@ -101,6 +102,7 @@ namespace GKCore.Charts
         public Vertex Node;
         public ExtRect PortraitArea;
         public string MarriageDate;
+        public int MarriageDateWidth;
         public bool IsCollapsed;
         public bool IsVisible;
         public IColor UserColor;
@@ -141,13 +143,19 @@ namespace GKCore.Charts
         public int PtX
         {
             get { return fPtX; }
-            set { fPtX = value; }
+            set {
+                fPtX = value;
+                UpdateRect();
+            }
         }
 
         public int PtY
         {
             get { return fPtY; }
-            set { fPtY = value; }
+            set {
+                fPtY = value;
+                UpdateRect();
+            }
         }
 
         public GDMIndividualRecord Rec
@@ -157,14 +165,7 @@ namespace GKCore.Charts
 
         public ExtRect Rect
         {
-            get {
-                ExtRect result;
-                result.Left = fPtX - fWidth / 2;
-                result.Right = result.Left + fWidth - 1;
-                result.Top = fPtY;
-                result.Bottom = result.Top + fHeight - 1;
-                return result;
-            }
+            get { return fRect; }
         }
 
         public bool Selected
@@ -226,6 +227,23 @@ namespace GKCore.Charts
             } else {
                 fFlags.Exclude(flag);
             }
+        }
+
+        public void SetPt(int x, int y)
+        {
+            fPtX = x;
+            fPtY = y;
+            UpdateRect();
+        }
+
+        private void UpdateRect()
+        {
+            ExtRect result;
+            result.Left = fPtX - fWidth / 2;
+            result.Right = result.Left + fWidth - 1;
+            result.Top = fPtY;
+            result.Bottom = result.Top + fHeight - 1;
+            fRect = result;
         }
 
         public TreeChartPerson GetChild(int index)

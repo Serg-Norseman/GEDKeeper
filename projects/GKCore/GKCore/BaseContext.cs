@@ -1599,7 +1599,7 @@ namespace GKCore
             return result;
         }
 
-        private void RemoveOldestBackups(string fileName, string bakPath)
+        private static void RemoveOldestBackups(string fileName, string bakPath)
         {
             string backupFiles = Path.GetFileName(fileName) + ".*";
             DirectoryInfo bakPathInfo = new DirectoryInfo(bakPath);
