@@ -21,7 +21,6 @@
 using System;
 using System.Globalization;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Text;
 using BSLib;
 using GKCore;
@@ -49,6 +48,7 @@ namespace GDModel.Providers.GEDCOM
 
     public enum GEDCOMGeoCoord
     {
+        None,
         Lati,
         Long
     }
@@ -187,21 +187,25 @@ namespace GDModel.Providers.GEDCOM
             }
 
             int sign = 1;
-            char firstChr = value[0];
-            if ("NSWE".IndexOf(firstChr) >= 0) {
-                switch (firstChr) {
-                    case 'N':
-                    case 'E':
-                        sign = +1;
-                        break;
+            bool spec = false;
 
-                    case 'S':
-                    case 'W':
-                        sign = -1;
-                        break;
-                }
-                value = value.Substring(1);
+            char firstChr = value[0];
+            switch (firstChr) {
+                case 'N':
+                case 'E':
+                    sign = +1;
+                    spec = true;
+                    break;
+
+                case 'S':
+                case 'W':
+                    sign = -1;
+                    spec = true;
+                    break;
             }
+
+            if (spec)
+                value = value.Substring(1);
 
             double result = ConvertHelper.ParseFloat(value, 0.0);
             return result * sign;
@@ -211,9 +215,28 @@ namespace GDModel.Providers.GEDCOM
         public static readonly NumberFormatInfo CoordNumberFormatInfo = new NumberFormatInfo() { NumberDecimalSeparator = "." };
         public static readonly string CoordFormat = "0.000000";
 
-        public static string CoordToStr(double val)
+        public static string CoordToStr(double val, GEDCOMGeoCoord coordType = GEDCOMGeoCoord.None, bool spec = false)
         {
-            return val.ToString(CoordFormat, CoordNumberFormatInfo);
+            if (coordType == GEDCOMGeoCoord.None || !spec)
+                return val.ToString(CoordFormat, CoordNumberFormatInfo);
+
+            string prefix = string.Empty;
+
+            int sign = Math.Sign(val);
+            if (sign != 0) {
+                switch (coordType) {
+                    case GEDCOMGeoCoord.Lati:
+                        prefix = (sign == +1) ? "N" : "S";
+                        break;
+
+                    case GEDCOMGeoCoord.Long:
+                        prefix = (sign == +1) ? "E" : "W";
+                        break;
+                }
+                val = Math.Abs(val);
+            }
+
+            return string.Concat(prefix, val.ToString(CoordFormat, CoordNumberFormatInfo));
         }
 
         #endregion
@@ -604,7 +627,7 @@ namespace GDModel.Providers.GEDCOM
             byte month;
             byte day;
 
-            string result = ParseDate(owner, strTok, out approximated, out calendar, out year, out yearBC, 
+            string result = ParseDate(owner, strTok, out approximated, out calendar, out year, out yearBC,
                                       out yearModifier, out month, out day);
 
             date.SetRawData(approximated, calendar, year, yearBC, yearModifier, month, day);
@@ -955,7 +978,7 @@ namespace GDModel.Providers.GEDCOM
 
         public static string GetDateStr(DateTime date)
         {
-            var result = string.Format("{0:00} {1} {2:0000}", new object[] { date.Day, GEDCOMConsts.GEDCOMMonthArray[date.Month-1], date.Year });
+            var result = string.Format("{0:00} {1} {2:0000}", new object[] { date.Day, GEDCOMConsts.GEDCOMMonthArray[date.Month - 1], date.Year });
             return result;
         }
 
@@ -1084,11 +1107,11 @@ namespace GDModel.Providers.GEDCOM
 
         public static string Enum2Str(IConvertible enumVal, string[] values)
         {
-            #if PCL
+#if PCL
             int idx = (int)Convert.ChangeType(enumVal, typeof(int), null);
-            #else
+#else
             int idx = (int)enumVal;
-            #endif
+#endif
 
             return (idx < 0 || idx >= values.Length) ? string.Empty : values[idx];
         }
@@ -1112,11 +1135,11 @@ namespace GDModel.Providers.GEDCOM
 
             int idx = ArrayHelper.BinarySearch<string>(values, val, string.CompareOrdinal);
             if (idx >= 0) {
-                #if PCL
+#if PCL
                 return (T)Convert.ChangeType(idx, typeof(T), null);
-                #else
+#else
                 return (T)((IConvertible)idx);
-                #endif
+#endif
             } else {
                 return defVal;
             }
@@ -1202,7 +1225,7 @@ namespace GDModel.Providers.GEDCOM
 
             GDMRestriction res;
             str = str.Trim().ToLowerInvariant();
-            
+
             if (str == "confidential") {
                 res = GDMRestriction.rnConfidential;
             } else if (str == "locked") {
@@ -1279,7 +1302,7 @@ namespace GDModel.Providers.GEDCOM
 
             GDMMultimediaFormat result;
             str = str.Trim().ToLowerInvariant();
-            
+
             if (str == "bmp") {
                 result = GDMMultimediaFormat.mfBMP;
             } else if (str == "gif") {
@@ -1398,12 +1421,12 @@ namespace GDModel.Providers.GEDCOM
             "Icelandic", "Indonesian", "Italian",
             "Japanese",
             "Kannada", "Kazakh", "Khmer", "Konkani", "Korean",
-            "Lahnda", "Lao", "Latin", "Latvian", "Lithuanian", "Luwian", 
-            "Macedonian", "Maithili", "Malayalam", "Mandrin", "Manipuri", "Marathi", "Mewari", "Mitanni-Aryan", 
+            "Lahnda", "Lao", "Latin", "Latvian", "Lithuanian", "Luwian",
+            "Macedonian", "Maithili", "Malayalam", "Mandrin", "Manipuri", "Marathi", "Mewari", "Mitanni-Aryan",
             "Navaho", "Nepali", "Norwegian",
-            "Oriya", 
+            "Oriya",
             "Pahari", "Palaic", "Pali", "Panjabi", "Persian", "Polish", "Portuguese", "Prakrit", "Pusto",
-            "Rajasthani", "Romanian", "Russian", 
+            "Rajasthani", "Romanian", "Russian",
             "Sanskrit", "Serb", "Serbo_Croa", "Slovak", "Slovene", "Spanish", "Sumerian", "Swedish",
             "Tagalog", "Tamil", "Telugu", "Thai", "Tibetan", "Turkish",
             "Ukrainian", "Urdu",
@@ -1445,7 +1468,7 @@ namespace GDModel.Providers.GEDCOM
 
             GDMResearchStatus result;
             str = str.Trim().ToLowerInvariant();
-            
+
             if (str == "inprogress") {
                 result = GDMResearchStatus.rsInProgress;
             } else if (str == "onhold") {
@@ -1529,7 +1552,7 @@ namespace GDModel.Providers.GEDCOM
             } else {
                 result = GDMResearchPriority.rpNone;
             }
-            
+
             return result;
         }
 
@@ -1560,7 +1583,7 @@ namespace GDModel.Providers.GEDCOM
             } else {
                 result = GEDCOMCharacterSet.csASCII;
             }
-            
+
             return result;
         }
 
@@ -1635,8 +1658,7 @@ namespace GDModel.Providers.GEDCOM
             string result = string.Empty;
             if (record == null) return result;
 
-            switch (record.RecordType)
-            {
+            switch (record.RecordType) {
                 case GDMRecordType.rtIndividual:
                     result = "I"; // Std, p24
                     break;

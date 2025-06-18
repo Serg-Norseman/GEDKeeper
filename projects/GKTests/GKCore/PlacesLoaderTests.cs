@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,9 +20,8 @@
 
 using System;
 using System.Collections.Generic;
-using GDModel.Providers.GEDCOM;
-using GKCore.Maps;
 using GKCore.Design.Controls;
+using GKCore.Maps;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -149,13 +148,6 @@ namespace GKCore
             Assert.AreEqual(1.0d, coordsRect.MinLat);
             Assert.AreEqual(41.0d, coordsRect.MaxLon);
             Assert.AreEqual(41.0d, coordsRect.MaxLat);
-        }
-
-        [Test]
-        public void Test_CoordToStr()
-        {
-            string coord = GEDCOMUtils.CoordToStr(2.005216);
-            Assert.AreEqual("2.005216", coord);
         }
 
         [Test]

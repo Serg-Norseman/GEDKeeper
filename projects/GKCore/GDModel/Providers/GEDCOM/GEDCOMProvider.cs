@@ -2245,8 +2245,8 @@ namespace GDModel.Providers.GEDCOM
             WriteTagValue(stream, level, tag);
 
             level += 1;
-            WriteTagLine(stream, level, GEDCOMTagName.LATI, GEDCOMUtils.CoordToStr(map.Lati), true);
-            WriteTagLine(stream, level, GEDCOMTagName.LONG, GEDCOMUtils.CoordToStr(map.Long), true);
+            WriteTagLine(stream, level, GEDCOMTagName.LATI, GEDCOMUtils.CoordToStr(map.Lati, GEDCOMGeoCoord.Lati, Strict), true);
+            WriteTagLine(stream, level, GEDCOMTagName.LONG, GEDCOMUtils.CoordToStr(map.Long, GEDCOMGeoCoord.Long, Strict), true);
             return true;
         }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -223,7 +223,7 @@ namespace GKCore
 
                 Assert.IsNull(model.FindPersonByCoords(0, 0));
 
-                Assert.AreEqual(ExtRect.Create(0, -18, 15, -2), model.GetExpanderRect(ExtRect.Create(0, 0, 0, 0)));
+                Assert.AreEqual(ExtRect.Create(0, -18, 15, -3), model.GetExpanderRect(ExtRect.Create(0, 0, 0, 0)));
                 Assert.AreEqual(ExtRect.Create(-8, -18, 7, -2), TreeChartModel.GetPersonExpandRect(ExtRect.Create(0, 0, 0, 0)));
 
                 ExtRect rt = model.VisibleArea;

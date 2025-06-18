@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -571,11 +571,34 @@ namespace GDModel.Providers.GEDCOM
         public void Test_GetGeoCoord()
         {
             Assert.AreEqual(0.0, GEDCOMUtils.GetGeoCoord(null, GEDCOMGeoCoord.Lati));
+            Assert.AreEqual(0.0, GEDCOMUtils.GetGeoCoord("", GEDCOMGeoCoord.Lati));
+
+            Assert.AreEqual(0.0, GEDCOMUtils.GetGeoCoord("0.000000", GEDCOMGeoCoord.Lati));
 
             Assert.AreEqual(+0.005, GEDCOMUtils.GetGeoCoord("N0.005", GEDCOMGeoCoord.Lati));
             Assert.AreEqual(+0.005, GEDCOMUtils.GetGeoCoord("E0.005", GEDCOMGeoCoord.Lati));
             Assert.AreEqual(-0.005, GEDCOMUtils.GetGeoCoord("S0.005", GEDCOMGeoCoord.Lati));
             Assert.AreEqual(-0.005, GEDCOMUtils.GetGeoCoord("W0.005", GEDCOMGeoCoord.Lati));
+        }
+
+        [Test]
+        public void Test_CoordToStr()
+        {
+            Assert.AreEqual("2.005216", GEDCOMUtils.CoordToStr(2.005216, GEDCOMGeoCoord.None));
+        }
+
+        [Test]
+        public void Test_CoordToStr_Specification()
+        {
+            Assert.AreEqual("-22.564934", GEDCOMUtils.CoordToStr(-22.564934, GEDCOMGeoCoord.None, true));
+            Assert.AreEqual("-22.564934", GEDCOMUtils.CoordToStr(-22.564934, GEDCOMGeoCoord.Lati, false));
+            Assert.AreEqual("0.000000", GEDCOMUtils.CoordToStr(0.0, GEDCOMGeoCoord.Lati, true));
+
+            Assert.AreEqual("N18.150944", GEDCOMUtils.CoordToStr(18.150944, GEDCOMGeoCoord.Lati, true));
+            Assert.AreEqual("S22.564934", GEDCOMUtils.CoordToStr(-22.564934, GEDCOMGeoCoord.Lati, true));
+
+            Assert.AreEqual("E17.084215", GEDCOMUtils.CoordToStr(17.084215, GEDCOMGeoCoord.Long, true));
+            Assert.AreEqual("W168.150944", GEDCOMUtils.CoordToStr(-168.150944, GEDCOMGeoCoord.Long, true));
         }
     }
 }
