@@ -1051,3 +1051,8 @@
 1037=Laboratory, company
 1038=Are you sure you want to remove the DNA test?
 1039=File format
+
+1040=Husband's age
+1041=Wife's age
+1042=000 year(s) 00 month(s) 000 day(s)   ; age input mask
+1043=R ### y ## m ### d                   ; age display format (do not delete extra spaces!)

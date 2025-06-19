@@ -147,5 +147,10 @@ namespace GKUI.Forms
         {
             fController.SendData(signature, data);
         }
+
+        private void btnAge_Click(object sender, EventArgs e)
+        {
+            fController.ModifyAge();
+        }
     }
 }

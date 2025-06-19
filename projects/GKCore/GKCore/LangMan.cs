@@ -1120,7 +1120,12 @@ namespace GKCore
         /* 1038 */ RemoveDNATestQuery,
         /* 1039 */ DNAFileFormat,
 
-        /* 000 */ Last = DNAFileFormat
+        /* 1040 */ HusbandAge,
+        /* 1041 */ WifeAge,
+        /* 1042 */ AgeInputMask,
+        /* 1043 */ AgeDisplayFormat,
+
+        /* 0000 */ Last = AgeDisplayFormat
     }
 
 
@@ -2193,6 +2198,11 @@ namespace GKCore
             /* 1037 */ "Laboratory, company",
             /* 1038 */ "Are you sure you want to remove the DNA test?",
             /* 1039 */ "File format",
+
+            /* 1040 */ "Husband's age",
+            /* 1041 */ "Wife's age",
+            /* 1042 */ "000 year(s) 00 month(s) 000 day(s)",
+            /* 1043 */ "R ### y ## m ### d",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

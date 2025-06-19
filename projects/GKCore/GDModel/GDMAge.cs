@@ -163,7 +163,7 @@ namespace GDModel
                 parts[pIdx++] = GEDCOMConsts.AgeRelatives[fRelative + 1];
 
                 if (fYears != -1) {
-                    parts[pIdx++] = string.Format("{0:00}y", fYears);
+                    parts[pIdx++] = string.Format("{0:000}y", fYears);
                 }
                 if (fMonths != -1) {
                     parts[pIdx++] = string.Format("{0:00}m", fMonths);

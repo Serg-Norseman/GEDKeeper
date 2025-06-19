@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -52,6 +52,7 @@ namespace GKCore.Lists
             result.AddColumn(LSID.NumberSym, 25, false);
             result.AddColumn(LSID.Event, 90, false);
             result.AddColumn(LSID.Date, 90, false);
+            result.AddColumn(LSID.Age, 50, true);
             result.AddColumn(LSID.PlaceAndAttribute, 200, false);
             result.AddColumn(LSID.Cause, 130, false);
             result.AddColumn(LSID.RPSources, 32, false);
@@ -76,18 +77,21 @@ namespace GKCore.Lists
                     result = new GDMDateItem(fFetchedRec.Date.Value);
                     break;
                 case 3:
-                    result = GKUtils.GetEventPlaceAndAttributeValues(fFetchedRec);
+                    result = GKUtils.GetAgeDisplayStr(fFetchedRec);
                     break;
                 case 4:
-                    result = GKUtils.GetEventCause(fFetchedRec);
+                    result = GKUtils.GetEventPlaceAndAttributeValues(fFetchedRec);
                     break;
                 case 5:
-                    result = fFetchedRec.HasSourceCitations ? (fOptions.ShowNumberOfSubstructures ? fFetchedRec.SourceCitations.Count.ToString() : GKData.CHECK_MARK) : string.Empty;
+                    result = GKUtils.GetEventCause(fFetchedRec);
                     break;
                 case 6:
-                    result = fFetchedRec.HasNotes ? (fOptions.ShowNumberOfSubstructures ? fFetchedRec.Notes.Count.ToString() : GKData.CHECK_MARK) : string.Empty;
+                    result = fFetchedRec.HasSourceCitations ? (fOptions.ShowNumberOfSubstructures ? fFetchedRec.SourceCitations.Count.ToString() : GKData.CHECK_MARK) : string.Empty;
                     break;
                 case 7:
+                    result = fFetchedRec.HasNotes ? (fOptions.ShowNumberOfSubstructures ? fFetchedRec.Notes.Count.ToString() : GKData.CHECK_MARK) : string.Empty;
+                    break;
+                case 8:
                     result = fFetchedRec.HasMultimediaLinks ? (fOptions.ShowNumberOfSubstructures ? fFetchedRec.MultimediaLinks.Count.ToString() : GKData.CHECK_MARK) : string.Empty;
                     break;
             }

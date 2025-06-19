@@ -890,6 +890,63 @@ namespace GKCore
             return result;
         }
 
+        public static string GetAgeDisplayStr(GDMAge age)
+        {
+            if (age == null || age.IsEmpty())
+                return string.Empty;
+
+            //string displayFormat = "R ### y ## m ### d";
+            string displayFormat = LangMan.LS(LSID.AgeDisplayFormat);
+
+            var fmtParts = displayFormat.Split(' ');
+            var resParts = new string[fmtParts.Length];
+
+            int valIdx = 0;
+            bool hasVal = false;
+            int resIdx = 0;
+            for (int i = 0; i < fmtParts.Length; i++) {
+                var mp = fmtParts[i];
+
+                if (mp.StartsWith("R")) {
+                    resParts[resIdx++] = GEDCOMConsts.AgeRelatives[age.Relative + 1];
+                } else if (mp.StartsWith("#")) {
+                    int val = 0;
+                    switch (valIdx) {
+                        case 0: val = age.Years; break;
+                        case 1: val = age.Months; break;
+                        case 2: val = age.Days; break;
+                    }
+                    valIdx++;
+
+                    if (val > 0) {
+                        resParts[resIdx++] = val.ToString(mp);
+                        hasVal = true;
+                    }
+                } else {
+                    if (hasVal) {
+                        resParts[resIdx - 1] += mp;
+                        hasVal = false;
+                    }
+                }
+            }
+
+            var result = string.Join(" ", resParts, 0, resIdx);
+            return result;
+        }
+
+        public static string GetAgeDisplayStr(GDMCustomEvent evt)
+        {
+            if (evt is GDMIndividualEventDetail indiEvent && indiEvent.HasAge) {
+                return GetAgeDisplayStr(indiEvent.Age);
+            } else if (evt is GDMFamilyEvent famEvent && (famEvent.HasHusbandAge || famEvent.HasWifeAge)) {
+                var husbAgeStr = GetAgeDisplayStr(famEvent.HusbandAge);
+                var wifeAgeStr = GetAgeDisplayStr(famEvent.WifeAge);
+                return $"{LangMan.LS(LSID.Husband)}: {husbAgeStr}, {LangMan.LS(LSID.Wife)}: {wifeAgeStr}";
+            }
+
+            return string.Empty;
+        }
+
         #endregion
 
         #region Date functions

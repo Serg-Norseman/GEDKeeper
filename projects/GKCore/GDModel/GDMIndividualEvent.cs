@@ -22,7 +22,7 @@ using System;
 
 namespace GDModel
 {
-    public sealed class GDMIndividualEvent : GDMCustomEvent
+    public abstract class GDMIndividualEventDetail : GDMCustomEvent
     {
         private GDMAge fAge;
 
@@ -42,11 +42,11 @@ namespace GDModel
         }
 
 
-        public GDMIndividualEvent()
+        protected GDMIndividualEventDetail()
         {
         }
 
-        public GDMIndividualEvent(int tagId, string tagValue)
+        protected GDMIndividualEventDetail(int tagId, string tagValue)
         {
             SetNameValue(tagId, tagValue);
         }
@@ -61,7 +61,7 @@ namespace GDModel
 
         public override void Assign(GDMTag source)
         {
-            GDMIndividualEvent sourceObj = (source as GDMIndividualEvent);
+            var sourceObj = (source as GDMIndividualEventDetail);
             if (sourceObj == null)
                 throw new ArgumentException(@"Argument is null or wrong type", "source");
 
@@ -87,6 +87,19 @@ namespace GDModel
             base.ProcessHashes(ref hashCode);
 
             hashCode.Add(fAge);
+        }
+    }
+
+
+    public sealed class GDMIndividualEvent : GDMIndividualEventDetail
+    {
+        public GDMIndividualEvent()
+        {
+        }
+
+        public GDMIndividualEvent(int tagId, string tagValue)
+        {
+            SetNameValue(tagId, tagValue);
         }
     }
 }

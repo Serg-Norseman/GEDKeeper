@@ -847,6 +847,24 @@ namespace GKCore.Controllers
             return result;
         }
 
+        public static async Task<bool> ModifyAge(IView owner, IBaseWindow baseWin, GDMCustomEvent evt)
+        {
+            bool result;
+
+            try {
+                baseWin.Context.BeginUpdate();
+
+                using (var dlg = AppHost.ResolveDialog<IAgeEditDlg>(baseWin)) {
+                    dlg.Event = evt;
+                    result = await AppHost.Instance.ShowModalAsync(dlg, owner, false);
+                }
+            } finally {
+                baseWin.Context.EndUpdate();
+            }
+
+            return result;
+        }
+
         public static async Task<bool> ModifyName(IView owner, IBaseContext context, NameEntry nameEntry)
         {
             bool result;

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:forms="clr-namespace:GKUI.Forms" xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKUI.Forms.AgeEditDlg"
+  DefaultButton="{x:Reference btnAccept}" AbortButton="{x:Reference btnCancel}">
+
+  <TableLayout Style="paddedTable8">
+
+    <TableRow ScaleHeight="True">
+      <GroupBox x:Name="grpBox">
+        <TableLayout Style="paddedTable">
+          <TableRow>
+            <Label x:Name="lblAge1" />
+            <ComboBox x:Name="cmbRel1" Width="50" />
+            <MaskedTextBox x:Name="txtVal1" Width="200" />
+          </TableRow>
+
+          <TableRow>
+            <Label x:Name="lblAge2" />
+            <ComboBox x:Name="cmbRel2" Width="50" />
+            <MaskedTextBox x:Name="txtVal2" Width="200" />
+          </TableRow>
+        </TableLayout>
+      </GroupBox>
+    </TableRow>
+
+    <TableRow>
+      <StackLayout Style="dlgFooter">
+        <StackLayoutItem Expand="True" />
+        <Button x:Name="btnAccept" Style="dlgBtn" Image="{Resource Resources.btn_accept.gif, GKCore}" Click="AcceptClickHandler" />
+        <Button x:Name="btnCancel" Style="dlgBtn" Image="{Resource Resources.btn_cancel.gif, GKCore}" Click="CancelClickHandler" />
+      </StackLayout>
+    </TableRow>
+
+  </TableLayout>
+
+</Dialog>

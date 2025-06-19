@@ -238,7 +238,7 @@ namespace GKCore
 
             age = GKUtils.GetAgeStr(iRec, -1);
             Assert.AreEqual("20", age);
-            
+
             age = GKUtils.GetAgeStr(iRec, 2005);
             Assert.AreEqual("15", age);
         }
@@ -269,12 +269,12 @@ namespace GKCore
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
 
             Assert.AreEqual(" (*28.12.1990, Ivanovo +28.12.2010, Ivanovo)", GKUtils.GetPedigreeLifeStr(iRec, PedigreeFormat.Compact));
-            Assert.AreEqual(" (28.12.1990 - 28.12.2010)", GKUtils.GetPedigreeLifeStr(iRec, PedigreeFormat.Excess));            
+            Assert.AreEqual(" (28.12.1990 - 28.12.2010)", GKUtils.GetPedigreeLifeStr(iRec, PedigreeFormat.Excess));
 
             iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
 
             Assert.AreEqual(" (*11.02.2010, Ivanovo)", GKUtils.GetPedigreeLifeStr(iRec, PedigreeFormat.Compact));
-            Assert.AreEqual(" (11.02.2010)", GKUtils.GetPedigreeLifeStr(iRec, PedigreeFormat.Excess));            
+            Assert.AreEqual(" (11.02.2010)", GKUtils.GetPedigreeLifeStr(iRec, PedigreeFormat.Excess));
         }
 
         [Test]
@@ -500,7 +500,7 @@ namespace GKCore
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
 
             Assert.AreEqual("", GKUtils.GetDeathDate(null, DateFormat.dfDD_MM_YYYY, true));
-            
+
             Assert.AreEqual("28.12.2010", GKUtils.GetDeathDate(iRec, DateFormat.dfDD_MM_YYYY, true));
         }
 
@@ -542,10 +542,10 @@ namespace GKCore
         [Test]
         public void Test_GetContainerName()
         {
-            #if !MONO
+#if !MONO
             Assert.AreEqual("test.zip", GKUtils.GetContainerName("c:\\temp\\test.ged", true)); // archive
             Assert.AreEqual("test\\", GKUtils.GetContainerName("c:\\temp\\test.ged", false)); // storage
-            #endif
+#endif
         }
 
         [Test]
@@ -706,6 +706,18 @@ namespace GKCore
             Assert.AreEqual(45, GKUtils.GetDifferenceInYears(DateTime.Parse("1979-01-20T00:00:00"), DateTime.Parse("2024-05-05T00:00:00"))); // 45
 
             Assert.AreEqual(37, GKUtils.GetDifferenceInYears(DateTime.Parse("1957-03-05T00:00:00"), DateTime.Parse("1995-02-15T00:00:00"))); // 37
+        }
+
+        [Test]
+        public void Test_GetAgeDisplayStr()
+        {
+            var age = new GDMAge();
+
+            age.ParseString("> 18y 2m 13d");
+            Assert.AreEqual("> 18y 2m 13d", GKUtils.GetAgeDisplayStr(age));
+
+            age.ParseString("> 18y");
+            Assert.AreEqual("> 18y", GKUtils.GetAgeDisplayStr(age));
         }
     }
 }

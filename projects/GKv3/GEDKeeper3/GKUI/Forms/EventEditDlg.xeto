@@ -40,7 +40,12 @@
 
             <TableRow>
               <Label x:Name="lblCause" />
-              <ComboBox x:Name="txtEventCause" />
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <StackLayoutItem Expand="True">
+                  <ComboBox x:Name="txtEventCause" />
+                </StackLayoutItem>
+                <Button x:Name="btnAge" Click="btnAge_Click" />
+              </StackLayout>
             </TableRow>
 
             <TableRow>

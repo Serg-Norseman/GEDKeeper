@@ -44,14 +44,14 @@ namespace GDModel
                 Assert.AreEqual(1, age.Years);
                 Assert.AreEqual(-1, age.Months);
                 Assert.AreEqual(-1, age.Days);
-                Assert.AreEqual("< 01y", age.StringValue);
+                Assert.AreEqual("< 001y", age.StringValue);
 
                 Assert.AreEqual(string.Empty, age.ParseString("CHILD"));
                 Assert.AreEqual(-1, age.Relative);
                 Assert.AreEqual(8, age.Years);
                 Assert.AreEqual(-1, age.Months);
                 Assert.AreEqual(-1, age.Days);
-                Assert.AreEqual("< 08y", age.StringValue);
+                Assert.AreEqual("< 008y", age.StringValue);
 
                 Assert.AreEqual(string.Empty, age.ParseString("STILLBORN"));
                 Assert.AreEqual(0, age.Relative);
@@ -65,14 +65,14 @@ namespace GDModel
                 Assert.AreEqual(18, age.Years);
                 Assert.AreEqual(2, age.Months);
                 Assert.AreEqual(13, age.Days);
-                Assert.AreEqual("> 18y 02m 013d", age.StringValue);
+                Assert.AreEqual("> 018y 02m 013d", age.StringValue);
 
                 Assert.AreEqual(string.Empty, age.ParseString("> 18y2M 13D"));
                 Assert.AreEqual(+1, age.Relative);
                 Assert.AreEqual(18, age.Years);
                 Assert.AreEqual(2, age.Months);
                 Assert.AreEqual(13, age.Days);
-                Assert.AreEqual("> 18y 02m 013d", age.StringValue);
+                Assert.AreEqual("> 018y 02m 013d", age.StringValue);
 
                 using (var age2 = new GDMAge()) {
                     Assert.IsNotNull(age2, "age2 != null");
@@ -83,7 +83,7 @@ namespace GDModel
 
                     Assert.AreEqual("", age2.StringValue);
                     age2.Assign(age);
-                    Assert.AreEqual("> 18y 02m 013d", age2.StringValue);
+                    Assert.AreEqual("> 018y 02m 013d", age2.StringValue);
                 }
             }
         }
@@ -100,22 +100,22 @@ namespace GDModel
 
                 evt1 = iRec1.FindEvent("DEAT") as GDMIndividualEvent;
                 Assert.IsNotNull(evt1);
-                Assert.AreEqual("> 20y", evt1.Age.StringValue);
+                Assert.AreEqual("> 020y", evt1.Age.StringValue);
 
                 var iRec2 = ctx.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
                 Assert.IsNotNull(iRec1);
 
                 evt2 = iRec2.FindEvent("DEAT") as GDMIndividualEvent;
                 Assert.IsNotNull(evt2);
-                Assert.AreEqual("> 28y", evt2.Age.StringValue);
+                Assert.AreEqual("> 028y", evt2.Age.StringValue);
 
                 var famRec = ctx.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
                 Assert.IsNotNull(famRec);
 
                 evtF = famRec.FindEvent("MARR") as GDMFamilyEvent;
                 Assert.IsNotNull(evtF);
-                Assert.AreEqual("> 18y", evtF.HusbandAge.StringValue);
-                Assert.AreEqual("> 16y", evtF.WifeAge.StringValue);
+                Assert.AreEqual("> 018y", evtF.HusbandAge.StringValue);
+                Assert.AreEqual("> 016y", evtF.WifeAge.StringValue);
             }
         }
     }

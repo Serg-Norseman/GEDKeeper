@@ -229,6 +229,11 @@ namespace GKCore.Controllers
             await BaseController.ModifyAddress(fView, fBase, fEvent.Address);
         }
 
+        public async void ModifyAge()
+        {
+            await BaseController.ModifyAge(fView, fBase, fEvent);
+        }
+
         private void SetAttributeMode(bool active)
         {
             if (active) {
@@ -308,6 +313,7 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblDate").Text = LangMan.LS(LSID.Date);
             GetControl<ILabel>("lblCause").Text = LangMan.LS(LSID.Cause);
             GetControl<ILabel>("lblOrg").Text = LangMan.LS(LSID.Agency);
+            GetControl<IButton>("btnAge").Text = LangMan.LS(LSID.Age);
 
             SetToolTip("btnPlaceAdd", LangMan.LS(LSID.PlaceAddTip));
             SetToolTip("btnPlaceDelete", LangMan.LS(LSID.PlaceDeleteTip));

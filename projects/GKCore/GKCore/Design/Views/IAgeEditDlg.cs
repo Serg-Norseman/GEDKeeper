@@ -26,10 +26,14 @@ namespace GKCore.Design.Views
 {
     public interface IAgeEditDlg : ICommonDialog, IBaseEditor
     {
-        GDMAge Age { get; set; }
+        GDMCustomEvent Event { get; set; }
 
-        IComboBox RelativeCombo { get; }
+        IComboBox RelativeCombo1 { get; }
 
-        ITextBox ValueText { get; }
+        ITextBox ValueText1 { get; }
+
+        IComboBox RelativeCombo2 { get; }
+
+        ITextBox ValueText2 { get; }
     }
 }

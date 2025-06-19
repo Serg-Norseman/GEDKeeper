@@ -62,6 +62,7 @@ namespace GKUI.Forms
         private GKSheetList fNotesList;
         private GKSheetList fMediaList;
         private GKSheetList fSourcesList;
+        private Button btnAge;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -166,6 +167,11 @@ namespace GKUI.Forms
         public void SendData(string signature, string data)
         {
             fController.SendData(signature, data);
+        }
+
+        private void btnAge_Click(object sender, EventArgs e)
+        {
+            fController.ModifyAge();
         }
     }
 }
