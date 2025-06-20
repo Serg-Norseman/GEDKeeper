@@ -21,6 +21,7 @@
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
@@ -113,8 +114,18 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
+            txtAddress.KeyDown += txtAddress_KeyDown;
+
             fController = new AddressEditDlgController(this);
             fController.Init(baseWin);
+        }
+
+        private void txtAddress_KeyDown(object sender, KeyEventArgs e)
+        {
+            var lines = UIHelper.Convert(txtAddress.Text);
+            if (e.Key == Keys.Enter && lines.Length == GEDCOMConsts.Address_Lines_MaxCount) {
+                e.Handled = true;
+            }
         }
     }
 }

@@ -51,6 +51,7 @@ namespace GDModel.Providers.GEDCOM
         //public const int Address_Fax_MaxLength = 60;
         //public const int Address_WebPage_MaxLength = 120;
         //public const int Address_PhoneNumber_MaxLength = 25;
+        public const byte Address_Lines_MaxCount = 3;
 
         public const int Event_Agency_MaxLength = 120;
         public const int Event_Cause_MaxLength = 90;

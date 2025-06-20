@@ -418,6 +418,30 @@ namespace GDModel.Providers
         }
 
         [Test]
+        public void Test_Address_CONT()
+        {
+            var progress = Substitute.For<IProgressController>();
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_addr_cont.ged")) {
+                GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
+                var repoRec = ctx.Tree.XRefIndex_Find("R1") as GDMRepositoryRecord;
+                Assert.IsNotNull(repoRec);
+                Assert.AreEqual("line 1\r\nline 2\r\nline 3", repoRec.Address.Lines.Text);
+            }
+        }
+
+        [Test]
+        public void Test_Address_123()
+        {
+            var progress = Substitute.For<IProgressController>();
+            using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_addr123.ged")) {
+                GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
+                var repoRec = ctx.Tree.XRefIndex_Find("R1") as GDMRepositoryRecord;
+                Assert.IsNotNull(repoRec);
+                Assert.AreEqual("line 1\r\nline 2\r\nline 3", repoRec.Address.Lines.Text);
+            }
+        }
+
+        [Test]
         public void Test_Heredis()
         {
             // TODO: interest feature - use PLAC.FORM

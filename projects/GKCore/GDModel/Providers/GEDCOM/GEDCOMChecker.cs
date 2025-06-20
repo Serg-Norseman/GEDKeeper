@@ -221,6 +221,10 @@ namespace GDModel.Providers.GEDCOM
                     break;*/
             }
 
+            if (evt.HasAddress) {
+                CheckAddress(evt.Address);
+            }
+
             if (evt.HasPlace) {
                 CheckEventPlace(evt.Place, evt);
             }
@@ -422,6 +426,36 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
+        // compatibility issue #635
+        private static void CheckAddress(GDMAddress address)
+        {
+            var lines = address.Lines;
+
+            if (lines.Count == 0 || (lines.Count == 1 && string.IsNullOrEmpty(lines[0]))) {
+                if (!string.IsNullOrEmpty(address.AddressLine1)) {
+                    lines.Add(address.AddressLine1);
+                    address.AddressLine1 = string.Empty;
+                }
+
+                if (!string.IsNullOrEmpty(address.AddressLine2)) {
+                    lines.Add(address.AddressLine2);
+                    address.AddressLine2 = string.Empty;
+                }
+
+                if (!string.IsNullOrEmpty(address.AddressLine3)) {
+                    lines.Add(address.AddressLine3);
+                    address.AddressLine3 = string.Empty;
+                }
+            }
+        }
+
+        private void CheckRepositoryRecord(GDMRepositoryRecord repoRec, int fileVer)
+        {
+            if (repoRec.HasAddress) {
+                CheckAddress(repoRec.Address);
+            }
+        }
+
         private void CheckRecord(GDMRecord rec, int fileVer)
         {
             CheckStructWL(rec);
@@ -459,6 +493,10 @@ namespace GDModel.Providers.GEDCOM
 
                 case GDMRecordType.rtNote:
                     CheckNoteRecord(rec as GDMNoteRecord, fileVer);
+                    break;
+
+                case GDMRecordType.rtRepository:
+                    CheckRepositoryRecord(rec as GDMRepositoryRecord, fileVer);
                     break;
             }
         }

@@ -91,6 +91,8 @@
         <EmbeddedResource Include="Resources\test_rootsmagic.ged" />
         <EmbeddedResource Include="Resources\test_evtages.ged" />
         <EmbeddedResource Include="Resources\test_ftb_dmgutf8rus.ged" />
+        <EmbeddedResource Include="Resources\test_addr_cont.ged" />
+        <EmbeddedResource Include="Resources\test_addr123.ged" />
     </ItemGroup>
 
 </Project>

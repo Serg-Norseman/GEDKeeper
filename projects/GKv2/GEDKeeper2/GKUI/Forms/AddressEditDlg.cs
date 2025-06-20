@@ -18,7 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Windows.Forms;
 using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
@@ -89,12 +91,22 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            txtAddress.KeyDown += txtAddress_KeyDown;
+
             fPhonesList = new GKSheetList(pagePhones);
             fMailsList = new GKSheetList(pageEmails);
             fWebsList = new GKSheetList(pageWebPages);
 
             fController = new AddressEditDlgController(this);
             fController.Init(baseWin);
+        }
+
+        private void txtAddress_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Return && txtAddress.Lines.Length == GEDCOMConsts.Address_Lines_MaxCount) {
+                e.SuppressKeyPress = true;
+                e.Handled = true;
+            }
         }
     }
 }
