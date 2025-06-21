@@ -23,6 +23,7 @@
 #endif
 
 using System;
+using System.IO;
 using BSLib;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
@@ -79,6 +80,16 @@ namespace GKCore.Export
             return new FakeBrush(color);
         }
 
+        public static BaseFont GetResourceFont()
+        {
+            //fBaseFont = BaseFont.CreateFont(GKUtils.GetLangsPath() + "fonts/FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+
+            Stream fontStream = typeof(PDFRenderer).Assembly.GetManifestResourceStream("Resources.fonts.FreeSans.ttf");
+            var fontBytes = FileHelper.ReadByteArray(fontStream);
+            var baseFont = BaseFont.CreateFont("FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, BaseFont.CACHED, fontBytes, null);
+            return baseFont;
+        }
+
         #region Private methods
 
         private static BaseFont GetBaseFont(IFont font)
@@ -87,9 +98,18 @@ namespace GKCore.Export
                 return ((PDFWriter.FontHandler)font).BaseFont;
             }
 
-            string name = Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\" + font.FontFamilyName + ".ttf");
-            BaseFont baseFont = BaseFont.CreateFont(name, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-            return baseFont;
+#if OS_MSWIN
+            try {
+                string name = Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\" + font.FontFamilyName + ".ttf");
+                BaseFont baseFont = BaseFont.CreateFont(name, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                return baseFont;
+            } catch (Exception ex) {
+                Logger.WriteError("PDFRenderer.GetBaseFont()", ex);
+                return GetResourceFont();
+            }
+#else
+            return GetResourceFont();
+#endif
         }
 
         private void SetPen(IPen pen)

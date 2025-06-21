@@ -114,11 +114,7 @@ namespace GKCore.Export
         {
             fStack = new Stack<ITextElementArray>();
 
-            //fBaseFont = BaseFont.CreateFont(GKUtils.GetLangsPath() + "fonts/FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-
-            Stream fontStream = GetType().Assembly.GetManifestResourceStream("Resources.fonts.FreeSans.ttf");
-            var fontBytes = FileHelper.ReadByteArray(fontStream);
-            fBaseFont = BaseFont.CreateFont("FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, BaseFont.CACHED, fontBytes, null);
+            fBaseFont = PDFRenderer.GetResourceFont();
         }
 
         public PDFWriter(GKPageSize predefPage, bool albumPage) : this()
