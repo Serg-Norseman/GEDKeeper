@@ -291,6 +291,7 @@ namespace GKUI.Forms
         {
             if (disposing) {
                 fController.Dispose();
+                imgPortrait.Image = null;
             }
             base.Dispose(disposing);
         }
