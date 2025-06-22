@@ -1,7 +1,5 @@
 ﻿// This file is part of "Family.Show".
 
-#if !NETCORE
-
 using System;
 using System.IO;
 using System.IO.Packaging;
@@ -116,5 +114,3 @@ namespace GDModel.Providers.FamilyShow
         }
     }
 }
-
-#endif

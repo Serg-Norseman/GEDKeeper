@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Packaging;
 using System.Linq;
 using System.Xml;
 using GDModel.Providers.GEDCOM;
@@ -28,9 +29,6 @@ using GKCore;
 
 namespace GDModel.Providers.FamilyShow
 {
-#if !NETCORE
-    using System.IO.Packaging;
-#endif
 
     /// <summary>
     /// Processing the FamilyX format is one part of the Genealogical Data Model (GDM).
@@ -58,17 +56,15 @@ namespace GDModel.Providers.FamilyShow
 
         public override void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
         {
-#if !NETCORE
             using (Package package = Package.Open(inputStream, FileMode.Open, FileAccess.Read)) {
                 PackagePart documentPart = package.GetPart(new Uri(@"/" + OPCContentFileName, UriKind.Relative));
-                using (MemoryStream memStream = new MemoryStream()) {
-                    OPCUtility.CopyStream(documentPart.GetStream(), memStream);
-                    memStream.Position = 0;
-
-                    ReadStream(inputStream, memStream, charsetDetection);
-                }
+                var docPartStream = documentPart.GetStream();
+                //using (MemoryStream memStream = new MemoryStream()) {
+                //OPCUtility.CopyStream(docPartStream, memStream);
+                //memStream.Position = 0;
+                ReadStream(inputStream, docPartStream, charsetDetection);
+                //}
             }
-#endif
         }
 
         private enum FXTag
@@ -346,7 +342,7 @@ namespace GDModel.Providers.FamilyShow
             try {
                 evt.Date.SetDateTime(DateTime.ParseExact(dateValue, "yyyy-MM-ddTHH:mm:ss", null));
             } catch (Exception ex) {
-                Logger.WriteError("FamilyXProvider.SetEventDate("+dateValue+")", ex);
+                Logger.WriteError("FamilyXProvider.SetEventDate(" + dateValue + ")", ex);
             }
         }
 

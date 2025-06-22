@@ -670,6 +670,8 @@ namespace GDModel.Providers
                 using (GDMTree tree = new GDMTree()) {
                     var fxProvider = new FamilyXProvider(tree);
                     fxProvider.LoadFromStreamExt(inStream, inStream);
+
+                    Assert.AreEqual(118, tree.RecordsCount);
                 }
             }
         }
