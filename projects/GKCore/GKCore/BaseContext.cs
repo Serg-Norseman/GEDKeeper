@@ -1009,7 +1009,7 @@ namespace GKCore
             try {
                 MediaStore mediaStore = GetStoreType(fileReference);
 
-                if (mediaStore.StoreType != MediaStoreType.mstURL && !VerifyMediaFileWM(fileReference)) {
+                if (mediaStore.StoreType == MediaStoreType.mstURL && !VerifyMediaFileWM(fileReference)) {
                     return string.Empty;
                 }
 
