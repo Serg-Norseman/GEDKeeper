@@ -46,7 +46,10 @@
 --	HISTORY
 --
 --	17/04/2025	Miguel A. Pérez Valdenebro		Written.
---      28/04/2025      Sergey V. Zhdanovskikh                  Added Russian translation.
+--	28/04/2025	Sergey V. Zhdanovskikh			Added Russian translation.
+--	01/05/2025	Miguel A. Pérez Valdenebro		Ensure that the decimal separator in the html
+--												file is the dot regardless of the locale used.
+--												Shading parameters adjusted.
 --
 -----------------------------------------------------------------------------------------------
 
@@ -126,7 +129,7 @@ locales.ca = {
 
 -- Russian - ru
 --
-locales.en = {
+locales.ru = {
 ["In 0"]="Info: Сканирование дерева предков %s.",
 ["In 1"]="Info: Завершено!",
 ["In 2"]="Info: Запись html-вывода в %s...",
@@ -348,7 +351,7 @@ function do_ancestors(individual, level, colour)
 
 	local ind_name=get_individual_name(individual)
 	local ind_xref = get_record_xref(individual)
-	local colour_f = shade_colour( colour, 16, level )
+	local colour_f = shade_colour( colour, 20, level )
 	local colour_m = colour_f;
 
 	-- colours
@@ -497,13 +500,13 @@ function write_html_body( f , lt )
 	f:write("const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {\n")
 	f:write("  maxZoom: 19,\n  attribution: '&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a> | &copy <a href=\"https://gedkeeper.net/\"</a>GedKeeper</a>'\n");
 	f:write("}).addTo(map);\n")
-	
-		-- We go through the list of locations to generate the leaflet components needed to draw on the map.
-		while lt do
+
+	-- We go through the list of locations to generate the leaflet components needed to draw on the map.
+	while lt do
 		if ( lt.lat ~= nil and lt.long ~= nil ) then
 			local area = math.floor(300*math.sqrt( lt.people ));		
-			f:write("\nconst circle_"..ct.." = L.circle( ["..string.format("%f",lt.lat)..","..string.format("%f",lt.long).."], {\n  color: '#"..string.format("%06x",lt.colour).."',\n")
-			f:write("  weight: 2,\n  fillOpacity: 0.3,\n  radius: "..area.."\n}).addTo(map).bindPopup('"..lt.text.."');\n")
+			f:write("\nconst circle_"..ct.." = L.circle( ["..string.format("%03.6f",lt.lat)..","..string.format("%03.6f",lt.long).."], {\n  color: '#"..string.format("%06x",lt.colour).."',\n")
+			f:write("  weight: 2,\n  fillOpacity: 0.333,\n  radius: "..area.."\n}).addTo(map).bindPopup('"..lt.text.."');\n")
 		end
 		
 		lt = lt.next
@@ -533,6 +536,10 @@ function write_html_output( list, name )
 	-- Info: Writing html output ...
 	print( string.format( translate("In 2") , fn ) )
 	
+	-- Ensure that the decimal separator in the html file is the dot 
+	local sl = os.setlocale( nil )
+	os.setlocale( 'C' )
+
 	-- start the document
 	fd:write("<!DOCTYPE html>\n")
 	fd:write("<html lang=\""..locale.."\">\n")
@@ -548,6 +555,12 @@ function write_html_output( list, name )
 
 	-- close the file
 	fd:close()
+
+	-- restores the previous locale
+	if sl ~= nil then
+		os.setlocale( sl )
+	end
+
 end
 
 -- GLOBAL VARIABLES  ---------------------------------------------------------
