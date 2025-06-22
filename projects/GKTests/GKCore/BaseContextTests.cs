@@ -583,6 +583,9 @@ namespace GKCore
                 GDMFileReference fileRef = null;
                 fContext.VerifyMediaFile(fileRef, out fileName);
             });
+
+            Assert.AreEqual(MediaStoreStatus.mssFileNotFound, fContext.VerifyMediaFile("randomfile.jpg", out fileName));
+            Assert.AreEqual(MediaStoreStatus.mssFileNotFound, fContext.VerifyMediaFile("rel:randomfile.jpg", out fileName));
         }
 
         [Test]
