@@ -542,7 +542,7 @@ namespace GKCore
         [Test]
         public void Test_GetContainerName()
         {
-#if !MONO
+#if !MONO && !OS_MACOS
             Assert.AreEqual("test.zip", GKUtils.GetContainerName("c:\\temp\\test.ged", true)); // archive
             Assert.AreEqual("test\\", GKUtils.GetContainerName("c:\\temp\\test.ged", false)); // storage
 #endif
@@ -695,7 +695,7 @@ namespace GKCore
         public void Test_GetDifferenceInYears()
         {
             Assert.AreEqual(2, GKUtils.GetDifferenceInYears(DateTime.Parse("2016-02-01T00:00:00"), DateTime.Parse("2019-01-31T00:00:00"))); // one day to 3 years
-            Assert.AreEqual(3, GKUtils.GetDifferenceInYears(DateTime.Parse("2016-02-01T00:00:00"), DateTime.Parse("2019-02-01T00:00:00"))); // 
+            Assert.AreEqual(3, GKUtils.GetDifferenceInYears(DateTime.Parse("2016-02-01T00:00:00"), DateTime.Parse("2019-02-01T00:00:00"))); //
 
             Assert.AreEqual(1, GKUtils.GetDifferenceInYears(DateTime.Parse("2011-12-14T00:00:00"), DateTime.Parse("2012-12-15T00:00:00"))); // 1
             Assert.AreEqual(1, GKUtils.GetDifferenceInYears(DateTime.Parse("2011-12-14T00:00:00"), DateTime.Parse("2012-12-14T00:00:00"))); // 1

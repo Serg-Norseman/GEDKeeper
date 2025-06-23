@@ -1,0 +1,56 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_NOLOGO: true
+
+jobs:
+  test:
+    name: Test GKv3
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            platform: Linux
+          - os: windows-latest
+            platform: MSWin64
+          - os: macos-latest
+            platform: MacOS
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore projects/GKv3/GEDKeeper3.sln -p:Platform=${{ matrix.platform }}
+
+    - name: Build solution
+      run: dotnet build projects/GKv3/GEDKeeper3.sln -c Debug -p:Platform=${{ matrix.platform }} --no-restore
+
+    - name: Run tests
+      run: dotnet test projects/GKTests/GKTests.net.csproj -c Debug -p:Platform=${{ matrix.platform }} --no-build --verbosity normal --logger trx --results-directory TestResults
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results-net6-${{ matrix.os }}
+        path: TestResults/
