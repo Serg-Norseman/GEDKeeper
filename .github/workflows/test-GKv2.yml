@@ -1,0 +1,48 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_NOLOGO: true
+
+jobs:
+  test:
+    name: Test GKv2
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2
+
+    - name: Restore NuGet packages
+      run: nuget restore projects/GKv2/GEDKeeper2.sln
+
+    - name: Build solution
+      run: msbuild projects/GKv2/GEDKeeper2.sln /p:Configuration=Debug /p:Platform=x64
+
+    - name: Setup VSTest
+      uses: darenm/Setup-VSTest@v1
+
+    - name: Run tests
+      run: vstest.console.exe projects/GKTests/bin/Debug/GKTests.dll --logger:trx --ResultsDirectory:TestResults
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results-netframework
+        path: TestResults/
