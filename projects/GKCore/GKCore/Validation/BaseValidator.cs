@@ -36,12 +36,12 @@ namespace GKCore.Validation
             return !string.IsNullOrEmpty(value);
         }
 
-        protected static bool CheckInclusiveBetween<T>(T value, T min, T max) where T : IComparable<T>
+        protected static bool CheckInclusiveBetween<TValue>(TValue value, TValue min, TValue max) where TValue : IComparable<TValue>
         {
             return value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0;
         }
 
-        protected static bool CheckExclusiveBetween<T>(T value, T min, T max) where T : IComparable<T>
+        protected static bool CheckExclusiveBetween<TValue>(TValue value, TValue min, TValue max) where TValue : IComparable<TValue>
         {
             return value.CompareTo(min) > 0 && value.CompareTo(max) < 0;
         }
