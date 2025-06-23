@@ -122,7 +122,7 @@ namespace GDModel.Providers.GEDCOM
     /// Processing the GEDCOM format is one part of the Genealogical Data Model (GDM).
     /// </summary>
     /// <remarks>
-    /// This class has been heavily refactored under profiling. Any alterations must take into account the factor 
+    /// This class has been heavily refactored under profiling. Any alterations must take into account the factor
     /// of performance degradation when changing the approach, even in small things.
     /// </remarks>
     public class GEDCOMProvider : FileProvider
@@ -189,7 +189,7 @@ namespace GDModel.Providers.GEDCOM
 
                 case GEDCOMCharacterSet.csANSEL:
                     if (format == GEDCOMFormat.ALTREE) {
-                        // Agelong Tree 4.0 with ANSEL is actually characteristic 
+                        // Agelong Tree 4.0 with ANSEL is actually characteristic
                         // for the Russian-language data export
                         SetEncoding(Encoding.GetEncoding(1251));
                     } else if (format == GEDCOMFormat.Geni) {
@@ -600,11 +600,10 @@ namespace GDModel.Providers.GEDCOM
 
         #region Saving functions
 
-        public void SaveToFile(string fileName, GEDCOMCharacterSet charSet)
+        public virtual void SaveToFile(string fileName, GEDCOMCharacterSet charSet)
         {
             // Attention: processing of Header moved to BaseContext!
-
-            using (FileStream fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
+            using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
                 SaveToStreamExt(fileStream, charSet);
             }
         }
