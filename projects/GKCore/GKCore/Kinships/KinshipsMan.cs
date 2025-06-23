@@ -18,40 +18,30 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
-using BSLib;
+using System.IO;
 using GDModel;
+using GKCore.Options;
 
 namespace GKCore.Kinships
 {
-    using RelationSet = EnumSet<RelationKind>;
-
     /// <summary>
     /// 
     /// </summary>
     public static class KinshipsMan
     {
-        public sealed class RelationStruct
-        {
-            public LSID Name;
-            public bool HasExt;
-
-            public RelationStruct(LSID name, bool hasExt)
-            {
-                Name = name;
-                HasExt = hasExt;
-            }
-        }
-
         public static readonly LSID GreatPrefix;
-        public static readonly RelationStruct[] RelationKinds;
         public static readonly LSID[] KinDegrees;
         public static readonly LSID[] KinExts;
 
-        private static List<KinshipRec> fKinships;
+        private static KinshipsCulture fKinshipsCulture;
+
 
         static KinshipsMan()
         {
+            fKinshipsCulture = new KinshipsCulture();
+
             GreatPrefix = LSID.RK_GreatPrefix;
 
             KinDegrees = new LSID[] {
@@ -67,51 +57,6 @@ namespace GKCore.Kinships
                 LSID.KinshipDegree_10,
             };
 
-            RelationKinds = new RelationStruct[] {
-                /* 00 */ new RelationStruct(LSID.RK_Unk, false),
-                /* 01 */ new RelationStruct(LSID.RK_Unk, false),
-                /* 02 */ new RelationStruct(LSID.None, false),
-                /* 03 */ new RelationStruct(LSID.None, false),
-                /* 04 */ new RelationStruct(LSID.None, false),
-                /* 05 */ new RelationStruct(LSID.None, false),
-                /* 06 */ new RelationStruct(LSID.RK_Father, true),
-                /* 07 */ new RelationStruct(LSID.RK_Mother, true),
-                /* 08 */ new RelationStruct(LSID.RK_Husband, true),
-                /* 09 */ new RelationStruct(LSID.RK_Wife, true),
-                /* 10 */ new RelationStruct(LSID.RK_Son, true),
-                /* 11 */ new RelationStruct(LSID.RK_Daughter, true),
-                /* 12 */ new RelationStruct(LSID.RK_Grandfather, false),
-                /* 13 */ new RelationStruct(LSID.RK_Grandmother, false),
-                /* 14 */ new RelationStruct(LSID.RK_Grandson, false),
-                /* 15 */ new RelationStruct(LSID.RK_Granddaughter, false),
-                /* 16 */ new RelationStruct(LSID.RK_Brother, true),
-                /* 17 */ new RelationStruct(LSID.RK_Sister, true),
-                /* 18 */ new RelationStruct(LSID.RK_SonInLaw, false),
-                /* 19 */ new RelationStruct(LSID.RK_DaughterInLaw, false),
-                /* 20 */ new RelationStruct(LSID.RK_HusbandFather, false),
-                /* 21 */ new RelationStruct(LSID.RK_HusbandMother, false),
-                /* 22 */ new RelationStruct(LSID.RK_WifeFather, false),
-                /* 23 */ new RelationStruct(LSID.RK_WifeMother, false),
-                /* 24 */ new RelationStruct(LSID.RK_Uncle_FatherBrother, false),
-                /* 25 */ new RelationStruct(LSID.RK_Aunt_FatherSister, false),
-                /* 26 */ new RelationStruct(LSID.RK_Uncle_MotherBrother, false),
-                /* 27 */ new RelationStruct(LSID.RK_Aunt_MotherSister, false),
-                /* 28 */ new RelationStruct(LSID.RK_Nephew, false),
-                /* 29 */ new RelationStruct(LSID.RK_Niece, false),
-                /* 30 */ new RelationStruct(LSID.RK_CousinM, false),
-                /* 31 */ new RelationStruct(LSID.RK_CousinF, false),
-                /* 32 */ new RelationStruct(LSID.RK_BrotherInLaw_H, false),
-                /* 33 */ new RelationStruct(LSID.RK_SisterInLaw_H, false),
-                /* 34 */ new RelationStruct(LSID.RK_BrotherInLaw_W, false),
-                /* 35 */ new RelationStruct(LSID.RK_SisterInLaw_W, false),
-                /* 36 */ new RelationStruct(LSID.RK_Stepfather, false),
-                /* 37 */ new RelationStruct(LSID.RK_Stepmother, false),
-                /* 38 */ new RelationStruct(LSID.RK_FathersWife, false),
-                /* 39 */ new RelationStruct(LSID.RK_MothersHusband, false),
-                /* 40 */ new RelationStruct(LSID.RK_Uncle_AuntHusband, false),
-                /* 41 */ new RelationStruct(LSID.RK_Aunt_UncleWife, false),
-            };
-
             KinExts = new LSID[] {
                 LSID.None,
                 LSID.RE_Blood,
@@ -121,314 +66,56 @@ namespace GKCore.Kinships
                 LSID.RE_Adopted,
                 LSID.RE_CommonLaw,
             };
-
-            fKinships = new List<KinshipRec>();
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkNone),
-                RelationSet.Create(RelationKind.rkFather, RelationKind.rkMother, RelationKind.rkHusband, RelationKind.rkWife, RelationKind.rkSon, RelationKind.rkDaughter),
-                RelationKind.rkSame, 0, 0);
-
-            /*
-             *  __________         _____________
-             * |          |       |             |
-             * | wife (0) | ----> | husband (1) |
-             * |__________|       |_____________|
-             *                       |
-             *                       |
-             *               ________v_________
-             *              |                  |
-             *              | son/daughter (2) |
-             *              |__________________|
-             * 
-             * 1) prevRelation: none, curRelation: husband
-             * 2) prevRelation: husband, curRelation: son -> finRelation from (2) to (0) = same(son)
-             */
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkHusband, RelationKind.rkWife),
-                RelationSet.Create(RelationKind.rkSon, RelationKind.rkDaughter),
-                RelationKind.rkSame, 0, 0);
-
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkMother),
-                RelationSet.Create(RelationKind.rkHusband),
-                /*RelationKind.rkFather*/ RelationKind.rkMothersHusband, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkFather),
-                RelationSet.Create(RelationKind.rkWife),
-                /*RelationKind.rkMother*/ RelationKind.rkFathersWife, 0, 0);
-
-
-            RegisterKinship(
-                RelationSet.Create(RelationKind.rkFather),
-                RelationSet.Create(RelationKind.rkGrandfather, RelationKind.rkGrandmother),
-                RelationSet.Create(RelationKind.rkSon),
-                RelationKind.rkUncle_FatherBrother, -1, 0);
-
-            RegisterKinship(
-                RelationSet.Create(RelationKind.rkFather),
-                RelationSet.Create(RelationKind.rkGrandfather, RelationKind.rkGrandmother),
-                RelationSet.Create(RelationKind.rkDaughter),
-                RelationKind.rkAunt_FatherSister, -1, 0);
-
-            RegisterKinship(
-                RelationSet.Create(RelationKind.rkMother),
-                RelationSet.Create(RelationKind.rkGrandfather, RelationKind.rkGrandmother),
-                RelationSet.Create(RelationKind.rkSon),
-                RelationKind.rkUncle_MotherBrother, -1, 0);
-
-            RegisterKinship(
-                RelationSet.Create(RelationKind.rkMother),
-                RelationSet.Create(RelationKind.rkGrandfather, RelationKind.rkGrandmother),
-                RelationSet.Create(RelationKind.rkDaughter),
-                RelationKind.rkAunt_MotherSister, -1, 0);
-
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkAunt_FatherSister, RelationKind.rkAunt_MotherSister),
-                RelationSet.Create(RelationKind.rkHusband),
-                RelationKind.rkUncle_AuntHusband, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkUncle_FatherBrother, RelationKind.rkUncle_MotherBrother),
-                RelationSet.Create(RelationKind.rkWife),
-                RelationKind.rkAunt_UncleWife, 0, 0);
-
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkBrother, RelationKind.rkSister),
-                RelationSet.Create(RelationKind.rkSon),
-                RelationKind.rkNephew, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkBrother, RelationKind.rkSister),
-                RelationSet.Create(RelationKind.rkDaughter),
-                RelationKind.rkNiece, 0, 0);
-
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkSon, RelationKind.rkBrother),
-                RelationSet.Create(RelationKind.rkWife),
-                RelationKind.rkDaughterInLaw, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkDaughter, RelationKind.rkSister),
-                RelationSet.Create(RelationKind.rkHusband),
-                RelationKind.rkSonInLaw, 0, 0);
-
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkWife),
-                RelationSet.Create(RelationKind.rkFather),
-                RelationKind.rkWifeFather, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkWife),
-                RelationSet.Create(RelationKind.rkMother),
-                RelationKind.rkWifeMother, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkHusband),
-                RelationSet.Create(RelationKind.rkFather),
-                RelationKind.rkHusbandFather, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkHusband),
-                RelationSet.Create(RelationKind.rkMother),
-                RelationKind.rkHusbandMother, 0, 0);
-
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkFather, RelationKind.rkMother),
-                RelationSet.Create(RelationKind.rkFather),
-                RelationKind.rkGrandfather, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkFather, RelationKind.rkMother),
-                RelationSet.Create(RelationKind.rkMother),
-                RelationKind.rkGrandmother, 0, 0);
-
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkGrandfather, RelationKind.rkGrandmother),
-                RelationSet.Create(RelationKind.rkFather),
-                RelationKind.rkGrandfather, +1, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkGrandfather, RelationKind.rkGrandmother),
-                RelationSet.Create(RelationKind.rkMother),
-                RelationKind.rkGrandmother, +1, 0);
-
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkFather, RelationKind.rkMother),
-                RelationSet.Create(RelationKind.rkSon),
-                RelationKind.rkBrother, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkFather, RelationKind.rkMother),
-                RelationSet.Create(RelationKind.rkDaughter),
-                RelationKind.rkSister, 0, 0);
-
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkSon, RelationKind.rkDaughter, RelationKind.rkSonInLaw, RelationKind.rkDaughterInLaw),
-                RelationSet.Create(RelationKind.rkSon),
-                RelationKind.rkGrandson, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkSon, RelationKind.rkDaughter, RelationKind.rkSonInLaw, RelationKind.rkDaughterInLaw),
-                RelationSet.Create(RelationKind.rkDaughter),
-                RelationKind.rkGranddaughter, 0, 0);
-
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkGrandson, RelationKind.rkGranddaughter),
-                RelationSet.Create(RelationKind.rkSon),
-                RelationKind.rkGrandson, +1, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkGrandson, RelationKind.rkGranddaughter),
-                RelationSet.Create(RelationKind.rkDaughter),
-                RelationKind.rkGranddaughter, +1, 0);
-
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkUncle_FatherBrother, RelationKind.rkUncle_MotherBrother, RelationKind.rkUncle_AuntHusband,
-                                   RelationKind.rkAunt_FatherSister, RelationKind.rkAunt_MotherSister, RelationKind.rkAunt_UncleWife),
-                RelationSet.Create(RelationKind.rkSon),
-                RelationKind.rkBrother, 0, +1);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkUncle_FatherBrother, RelationKind.rkUncle_MotherBrother, RelationKind.rkUncle_AuntHusband,
-                                   RelationKind.rkAunt_FatherSister, RelationKind.rkAunt_MotherSister, RelationKind.rkAunt_UncleWife),
-                RelationSet.Create(RelationKind.rkDaughter),
-                RelationKind.rkSister, 0, +1);
-
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkNephew, RelationKind.rkNiece),
-                RelationSet.Create(RelationKind.rkSon),
-                RelationKind.rkGrandson, +1, +1);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkNephew, RelationKind.rkNiece),
-                RelationSet.Create(RelationKind.rkDaughter),
-                RelationKind.rkGranddaughter, +1, +1);
-
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkHusband),
-                RelationSet.Create(RelationKind.rkBrother),
-                RelationKind.rkBrotherInLaw_H, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkWife),
-                RelationSet.Create(RelationKind.rkBrother),
-                RelationKind.rkBrotherInLaw_W, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkHusbandFather, RelationKind.rkHusbandMother),
-                RelationSet.Create(RelationKind.rkSon),
-                RelationKind.rkBrotherInLaw_H, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkWifeFather, RelationKind.rkWifeMother),
-                RelationSet.Create(RelationKind.rkSon),
-                RelationKind.rkBrotherInLaw_W, 0, 0);
-
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkHusband),
-                RelationSet.Create(RelationKind.rkSister),
-                RelationKind.rkSisterInLaw_H, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkWife),
-                RelationSet.Create(RelationKind.rkSister),
-                RelationKind.rkSisterInLaw_W, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkHusbandFather, RelationKind.rkHusbandMother),
-                RelationSet.Create(RelationKind.rkDaughter),
-                RelationKind.rkSisterInLaw_H, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkWifeFather, RelationKind.rkWifeMother),
-                RelationSet.Create(RelationKind.rkDaughter),
-                RelationKind.rkSisterInLaw_W, 0, 0);
-
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkBrotherInLaw_H, RelationKind.rkBrotherInLaw_W, RelationKind.rkSisterInLaw_H, RelationKind.rkSisterInLaw_W),
-                RelationSet.Create(RelationKind.rkSon),
-                RelationKind.rkNephew, 0, 0);
-
-            RegisterKinship(
-                RelationSet.Create(),
-                RelationSet.Create(RelationKind.rkBrotherInLaw_H, RelationKind.rkBrotherInLaw_W, RelationKind.rkSisterInLaw_H, RelationKind.rkSisterInLaw_W),
-                RelationSet.Create(RelationKind.rkDaughter),
-                RelationKind.rkNiece, 0, 0);
         }
 
-        private static void RegisterKinship(RelationSet prevprevRels, RelationSet prevRels, RelationSet currRels, RelationKind finRel, sbyte great, sbyte degree)
+        public static void Load(string fileName)
         {
-            fKinships.Add(new KinshipRec(prevprevRels, prevRels, currRels, finRel, great, degree));
+            if (!File.Exists(fileName)) return;
+
+            try {
+                // loading file
+                using (var reader = new StreamReader(fileName)) {
+                    string content = reader.ReadToEnd();
+                    fKinshipsCulture = YamlHelper.Deserialize<KinshipsCulture>(content);
+                }
+
+                // processing
+                for (KinshipType kt = KinshipType.ktNone; kt < KinshipType.ktLast; kt++) {
+                    var sign = kt.ToString();
+                    var index = Array.FindIndex(fKinshipsCulture.Types, (kte) => kte.Sign == sign);
+                    var ktEntry = fKinshipsCulture.Types[index];
+                    ktEntry.Id = (int)kt;
+                    fKinshipsCulture.KinshipTypeIndexes[(int)kt] = index;
+                }
+
+                var indexes = new Dictionary<string, int>();
+                foreach (var kinType in fKinshipsCulture.Types) {
+                    indexes.Add(kinType.Sign, kinType.Id);
+                    kinType.Prepare();
+                }
+
+                foreach (var kinDef in fKinshipsCulture.Definitions) {
+                    kinDef.Prepare(indexes);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("KinshipsLoader.Load()", ex);
+            }
         }
 
-        public static RelationKind FindKinship(RelationKind prevprev, RelationKind prev, RelationKind cur, out int great, out int degree)
+        public static int FindKinship(int prevprev, int prev, int cur, out int great, out int degree)
         {
-            RelationKind finRel = RelationKind.rkUndefined;
+            int finRel = (int)KinshipType.ktUndefined;
             great = 0;
             degree = 0;
 
-            int num = fKinships.Count;
-            for (int i = 0; i < num; i++) {
-                KinshipRec kinship = fKinships[i];
+            var kinshipDefs = fKinshipsCulture.Definitions;
+            for (int i = 0, num = kinshipDefs.Length; i < num; i++) {
+                var kinDef = kinshipDefs[i];
 
-                if (kinship.PrevRels.Contains(prev) && kinship.CurrRels.Contains(cur) && (kinship.PrevPrevRels.IsEmpty() || kinship.PrevPrevRels.Contains(prevprev))) {
-                    great = kinship.Great;
-                    degree = kinship.Degree;
-                    finRel = (kinship.FinRel == RelationKind.rkSame) ? cur : kinship.FinRel;
+                if (kinDef.PrevRels.Contains(prev) && kinDef.CurrRels.Contains(cur) && (kinDef.PrevPrevRels.Count == 0 || kinDef.PrevPrevRels.Contains(prevprev))) {
+                    great = kinDef.Great;
+                    degree = kinDef.Degree;
+                    finRel = (kinDef.FinRel == (int)KinshipType.ktSame) ? cur : kinDef.FinRel;
                     break;
                 }
             }
@@ -436,40 +123,40 @@ namespace GKCore.Kinships
             return finRel;
         }
 
-        public static RelationKind FixLink(GDMSex targetSex, RelationKind rel)
+        public static KinshipType FixLink(GDMSex targetSex, KinshipType rel)
         {
-            RelationKind resRel = rel;
+            KinshipType resRel = rel;
 
             switch (rel) {
-                case RelationKind.rkParent:
+                case KinshipType.ktParent:
                     switch (targetSex) {
                         case GDMSex.svMale:
-                            resRel = RelationKind.rkFather;
+                            resRel = KinshipType.ktFather;
                             break;
                         case GDMSex.svFemale:
-                            resRel = RelationKind.rkMother;
+                            resRel = KinshipType.ktMother;
                             break;
                     }
                     break;
 
-                case RelationKind.rkSpouse:
+                case KinshipType.ktSpouse:
                     switch (targetSex) {
                         case GDMSex.svMale:
-                            resRel = RelationKind.rkHusband;
+                            resRel = KinshipType.ktHusband;
                             break;
                         case GDMSex.svFemale:
-                            resRel = RelationKind.rkWife;
+                            resRel = KinshipType.ktWife;
                             break;
                     }
                     break;
 
-                case RelationKind.rkChild:
+                case KinshipType.ktChild:
                     switch (targetSex) {
                         case GDMSex.svMale:
-                            resRel = RelationKind.rkSon;
+                            resRel = KinshipType.ktSon;
                             break;
                         case GDMSex.svFemale:
-                            resRel = RelationKind.rkDaughter;
+                            resRel = KinshipType.ktDaughter;
                             break;
                     }
                     break;
@@ -490,7 +177,7 @@ namespace GKCore.Kinships
 
         public static string GetDegree(int n, GDMSex sex)
         {
-            string result = (n == 0) ? string.Empty : (LangMan.LSS(KinDegrees[n], (int)sex-1) + " ");
+            string result = (n == 0) ? string.Empty : (LangMan.LSS(KinDegrees[n], (int)sex - 1) + " ");
             return result;
         }
 
@@ -510,6 +197,35 @@ namespace GKCore.Kinships
                 }
             }
             return result;
+        }
+
+        public static string GetRelationName(GDMIndividualRecord target, int rel, int great, int degree, bool shortForm, KinshipExt ext)
+        {
+            string tmp = string.Empty;
+
+            if (rel != (int)KinshipType.ktUndefined) {
+                if (degree == 1) {
+                    if (rel == (int)KinshipType.ktSister) {
+                        rel = (int)KinshipType.ktCousinF;
+                        degree = 0;
+                    }
+                    if (rel == (int)KinshipType.ktBrother) {
+                        rel = (int)KinshipType.ktCousinM;
+                        degree = 0;
+                    }
+                }
+
+                tmp = GetDegree(degree, target.Sex);
+                tmp += GetGreat(great, shortForm);
+            }
+
+            var kinTypeEntry = fKinshipsCulture.GetTypeEntry((int)rel);
+
+            if (GlobalOptions.Instance.ExtendedKinships && kinTypeEntry.HasExt) {
+                tmp = GetExt((int)ext, target.Sex) + tmp;
+            }
+
+            return tmp + kinTypeEntry.Name;
         }
     }
 }

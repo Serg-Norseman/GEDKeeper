@@ -545,7 +545,7 @@ namespace GKCore.Charts
                         personNode.SetParents();
 
                         if (personNode.Father != null && personNode.Mother != null && fOptions.Kinship) {
-                            fGraph.AddRelation(personNode.Father.Node, personNode.Mother.Node, RelationKind.rkSpouse, RelationKind.rkSpouse, (!commonLaw ? RelationExt.None : RelationExt.CommonLaw));
+                            fGraph.AddRelation(personNode.Father.Node, personNode.Mother.Node, KinshipType.ktSpouse, KinshipType.ktSpouse, (!commonLaw ? KinshipExt.None : KinshipExt.CommonLaw));
                         }
 
                         if (fOptions.MarriagesDates) {
@@ -596,7 +596,7 @@ namespace GKCore.Charts
                     result.AddChild(childNode);
 
                     if (fOptions.Kinship) {
-                        fGraph.AddRelation(childNode.Node, result.Node, RelationKind.rkParent, RelationKind.rkChild, (!adopted ? RelationExt.None : RelationExt.Adoption));
+                        fGraph.AddRelation(childNode.Node, result.Node, KinshipType.ktParent, KinshipType.ktChild, (!adopted ? KinshipExt.None : KinshipExt.Adoption));
                     }
                 }
 
@@ -792,7 +792,7 @@ namespace GKCore.Charts
 
                     if (resParent != null) {
                         if (fOptions.Kinship) {
-                            fGraph.AddRelation(result.Node, resParent.Node, RelationKind.rkSpouse, RelationKind.rkSpouse, (!commonLaw ? RelationExt.None : RelationExt.CommonLaw));
+                            fGraph.AddRelation(result.Node, resParent.Node, KinshipType.ktSpouse, KinshipType.ktSpouse, (!commonLaw ? KinshipExt.None : KinshipExt.CommonLaw));
                         }
 
                         result.AddSpouse(resParent);
@@ -842,8 +842,8 @@ namespace GKCore.Charts
                             child.SetFlag(PersonFlag.pfAdopted, adopted);
 
                             if (fOptions.Kinship) {
-                                if (ft != null) fGraph.AddRelation(child.Node, ft.Node, RelationKind.rkParent, RelationKind.rkChild, (!adopted ? RelationExt.None : RelationExt.Adoption));
-                                if (mt != null) fGraph.AddRelation(child.Node, mt.Node, RelationKind.rkParent, RelationKind.rkChild, (!adopted ? RelationExt.None : RelationExt.Adoption));
+                                if (ft != null) fGraph.AddRelation(child.Node, ft.Node, KinshipType.ktParent, KinshipType.ktChild, (!adopted ? KinshipExt.None : KinshipExt.Adoption));
+                                if (mt != null) fGraph.AddRelation(child.Node, mt.Node, KinshipType.ktParent, KinshipType.ktChild, (!adopted ? KinshipExt.None : KinshipExt.Adoption));
                             }
                         }
                     } else {

@@ -43,11 +43,11 @@ namespace GKCore
         public void Test_KinshipsMan()
         {
             int g, deg;
-            var finRel = KinshipsMan.FindKinship(RelationKind.rkNone, RelationKind.rkFather, RelationKind.rkSon, out g, out deg);
-            Assert.AreEqual(RelationKind.rkBrother, finRel);
+            var finRel = KinshipsMan.FindKinship((int)KinshipType.ktNone, (int)KinshipType.ktFather, (int)KinshipType.ktSon, out g, out deg);
+            Assert.AreEqual(KinshipType.ktBrother, finRel);
 
-            finRel = KinshipsMan.FindKinship(RelationKind.rkNone, RelationKind.rkNone, RelationKind.rkSon, out g, out deg);
-            Assert.AreEqual(RelationKind.rkSon, finRel);
+            finRel = KinshipsMan.FindKinship((int)KinshipType.ktNone, (int)KinshipType.ktNone, (int)KinshipType.ktSon, out g, out deg);
+            Assert.AreEqual(KinshipType.ktSon, finRel);
         }
 
         [Test]

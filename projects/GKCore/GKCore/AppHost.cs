@@ -1429,7 +1429,7 @@ namespace GKCore
             if (!File.Exists(fileName)) {
                 fileName = Path.Combine(GKUtils.GetExternalsPath(), $"kinships.yaml");
             }
-            KinshipsLoader.Load(fileName);
+            KinshipsMan.Load(fileName);
         }
 
         public static void ForceGC()

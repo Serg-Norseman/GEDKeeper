@@ -81,19 +81,19 @@ namespace GKCore.Kinships
         /// <param name="tsRel">target to source relation (if target is parent of source = Parent)</param>
         /// <param name="stRel">source to target relation (if target is parent of source = Child)</param>
         /// <returns></returns>
-        public bool AddRelation(Vertex source, Vertex target, RelationKind tsRel, RelationKind stRel, RelationExt ext)
+        public bool AddRelation(Vertex source, Vertex target, KinshipType tsRel, KinshipType stRel, KinshipExt ext)
         {
             if (source == null || target == null || source == target) {
                 return false;
             }
 
-            var tsExt = (ext != RelationExt.Adoption) ? ext : ((tsRel == RelationKind.rkParent) ? RelationExt.Adoptive : RelationExt.Adopted);
+            var tsExt = (ext != KinshipExt.Adoption) ? ext : ((tsRel == KinshipType.ktParent) ? KinshipExt.Adoptive : KinshipExt.Adopted);
             var irTgt = (GDMIndividualRecord)target.Value;
-            var tsProps = new RelationProps(KinshipsMan.FixLink(irTgt.Sex, tsRel), tsExt);
+            var tsProps = new KinshipProps(KinshipsMan.FixLink(irTgt.Sex, tsRel), tsExt);
 
-            var stExt = (ext != RelationExt.Adoption) ? ext : ((stRel == RelationKind.rkParent) ? RelationExt.Adoptive : RelationExt.Adopted);
+            var stExt = (ext != KinshipExt.Adoption) ? ext : ((stRel == KinshipType.ktParent) ? KinshipExt.Adoptive : KinshipExt.Adopted);
             var irSrc = (GDMIndividualRecord)source.Value;
-            var stProps = new RelationProps(KinshipsMan.FixLink(irSrc.Sex, stRel), stExt);
+            var stProps = new KinshipProps(KinshipsMan.FixLink(irSrc.Sex, stRel), stExt);
 
             return fGraph.AddUndirectedEdge(source, target, 1, tsProps, stProps);
         }
@@ -115,7 +115,7 @@ namespace GKCore.Kinships
 
             try {
                 GDMIndividualRecord src = null, tgt = null;
-                RelationProps relProps = null;
+                KinshipProps relProps = null;
 
                 var result = new StringBuilder();
 
@@ -134,12 +134,12 @@ namespace GKCore.Kinships
                 result.AppendLine("SOLVE:");
 #endif
 
-                RelationKind prevprevRel = RelationKind.rkNone;
-                RelationKind prevRel = RelationKind.rkNone;
-                RelationKind finRel = RelationKind.rkNone;
+                int prevprevRel = (int)KinshipType.ktNone;
+                int prevRel = (int)KinshipType.ktNone;
+                int finRel = (int)KinshipType.ktNone;
                 int great = 0;
                 int degree = 0;
-                RelationExt finExt = RelationExt.None;
+                KinshipExt finExt = KinshipExt.None;
                 GDMIndividualRecord prev_tgt = null;
                 GDMIndividualRecord starting = null;
                 Vertex vtxStarting = null, vtxTarget = null, vtxPrevTarget = null;
@@ -151,7 +151,7 @@ namespace GKCore.Kinships
 
                     src = (GDMIndividualRecord)edge.Source.Value;
                     tgt = (GDMIndividualRecord)edge.Target.Value;
-                    relProps = (RelationProps)edge.Value;
+                    relProps = (KinshipProps)edge.Value;
 
                     vtxTarget = edge.Target;
 
@@ -160,18 +160,18 @@ namespace GKCore.Kinships
                         vtxStarting = edge.Source;
                     }
 
-                    RelationKind curRel = relProps.Kind;
-                    RelationExt curExt = relProps.Ext;
+                    int curRel = (int)relProps.Type;
+                    KinshipExt curExt = relProps.Ext;
 
-                    if (prevRel != RelationKind.rkUndefined) {
+                    if (prevRel != (int)KinshipType.ktUndefined) {
                         int g, deg;
 
-                        if ((prevRel == RelationKind.rkGrandfather || prevRel == RelationKind.rkGrandmother) &&
-                            (curRel == RelationKind.rkSon || curRel == RelationKind.rkDaughter) && (great > 0)) {
-                            if (curRel == RelationKind.rkSon) {
-                                finRel = RelationKind.rkGrandfather;
-                            } else if (curRel == RelationKind.rkDaughter) {
-                                finRel = RelationKind.rkGrandmother;
+                        if ((prevRel == (int)KinshipType.ktGrandfather || prevRel == (int)KinshipType.ktGrandmother) &&
+                            (curRel == (int)KinshipType.ktSon || curRel == (int)KinshipType.ktDaughter) && (great > 0)) {
+                            if (curRel == (int)KinshipType.ktSon) {
+                                finRel = (int)KinshipType.ktGrandfather;
+                            } else if (curRel == (int)KinshipType.ktDaughter) {
+                                finRel = (int)KinshipType.ktGrandmother;
                             }
                             g = -1;
                             deg = +1;
@@ -191,7 +191,7 @@ namespace GKCore.Kinships
                         }
 #endif
 
-                        if (finRel == RelationKind.rkUndefined && fullFormat) {
+                        if (finRel == (int)KinshipType.ktUndefined && fullFormat) {
                             string relPart = GetRelationPart(starting, src, prevRel, great, degree, shortForm, finExt);
                             relPartsStack.Push(relPart);
 
@@ -202,7 +202,7 @@ namespace GKCore.Kinships
                             degree = 0;
 
                             prevprevRel = prevRel;
-                            prevRel = RelationKind.rkNone;
+                            prevRel = (int)KinshipType.ktNone;
 
                             finRel = KinshipsMan.FindKinship(prevprevRel, prevRel, curRel, out g, out deg);
                             finExt = FixExt(vtxStarting, edge.Target, finRel, curExt, deg);
@@ -221,7 +221,7 @@ namespace GKCore.Kinships
 #endif
 
                 if (!fullFormat) {
-                    string relRes = GetRelationName(targetRec, finRel, great, degree, shortForm, finExt);
+                    string relRes = KinshipsMan.GetRelationName(targetRec, finRel, great, degree, shortForm, finExt);
                     return relRes;
                 } else {
                     string relPart = GetRelationPart(starting, tgt, finRel, great, degree, shortForm, finExt);
@@ -242,7 +242,7 @@ namespace GKCore.Kinships
             }
         }
 
-        private string GetRelationPart(GDMIndividualRecord ind1, GDMIndividualRecord ind2, RelationKind xrel, int great, int degree, bool shortForm, RelationExt ext)
+        private string GetRelationPart(GDMIndividualRecord ind1, GDMIndividualRecord ind2, int xrel, int great, int degree, bool shortForm, KinshipExt ext)
         {
             if (ind1 == null || ind2 == null)
                 return "???";
@@ -251,7 +251,7 @@ namespace GKCore.Kinships
 #if DEBUG_KINSHIPS
             rel = string.Format("{0} [g={1}, d={2}]", xrel.ToString(), great, degree);
 #else
-            rel = GetRelationName(ind2, xrel, great, degree, shortForm, ext);
+            rel = KinshipsMan.GetRelationName(ind2, xrel, great, degree, shortForm, ext);
 #endif
             string name1 = fContext.Culture.GetPossessiveName(ind1);
             string name2 = GKUtils.GetNameString(ind2, true, false);
@@ -260,67 +260,36 @@ namespace GKCore.Kinships
             return rel;
         }
 
-        private static string GetRelationName(GDMIndividualRecord target, RelationKind rel, int great, int degree, bool shortForm, RelationExt ext)
-        {
-            string tmp = string.Empty;
-
-            if (rel != RelationKind.rkUndefined) {
-                if (degree == 1) {
-                    if (rel == RelationKind.rkSister) {
-                        rel = RelationKind.rkCousinF;
-                        degree = 0;
-                    }
-                    if (rel == RelationKind.rkBrother) {
-                        rel = RelationKind.rkCousinM;
-                        degree = 0;
-                    }
-                }
-
-                tmp = KinshipsMan.GetDegree(degree, target.Sex);
-                tmp += KinshipsMan.GetGreat(great, shortForm);
-            }
-
-            var relStruct = KinshipsMan.RelationKinds[(int)rel];
-
-            if (GlobalOptions.Instance.ExtendedKinships) {
-                if (relStruct.HasExt) {
-                    tmp = KinshipsMan.GetExt((int)ext, target.Sex) + tmp;
-                }
-            }
-
-            return tmp + LangMan.LS(relStruct.Name);
-        }
-
-        private static RelationExt FixExt(Vertex source, Vertex target, RelationKind finRel, RelationExt curExt, int degree)
+        private static KinshipExt FixExt(Vertex source, Vertex target, int finRel, KinshipExt curExt, int degree)
         {
             if (!GlobalOptions.Instance.ExtendedKinships)
                 return curExt;
 
-            if (curExt == RelationExt.None && (finRel == RelationKind.rkBrother || finRel == RelationKind.rkSister) && (degree == 0)) {
-                var srcFather = FindEdgeTargetByRelation(source, RelationKind.rkFather);
-                var srcMother = FindEdgeTargetByRelation(source, RelationKind.rkMother);
-                var tgtFather = FindEdgeTargetByRelation(target, RelationKind.rkFather);
-                var tgtMother = FindEdgeTargetByRelation(target, RelationKind.rkMother);
+            if (curExt == KinshipExt.None && (finRel == (int)KinshipType.ktBrother || finRel == (int)KinshipType.ktSister) && (degree == 0)) {
+                var srcFather = FindEdgeTargetByRelation(source, KinshipType.ktFather);
+                var srcMother = FindEdgeTargetByRelation(source, KinshipType.ktMother);
+                var tgtFather = FindEdgeTargetByRelation(target, KinshipType.ktFather);
+                var tgtMother = FindEdgeTargetByRelation(target, KinshipType.ktMother);
 
                 bool sameFather = (srcFather == tgtFather);
                 bool sameMother = (srcMother == tgtMother);
 
                 if (sameFather && sameMother) {
-                    curExt = RelationExt.None;
+                    curExt = KinshipExt.None;
                 } else if (sameFather) {
-                    curExt = RelationExt.Blood;
+                    curExt = KinshipExt.Blood;
                 } else if (sameMother) {
-                    curExt = RelationExt.Uterine;
+                    curExt = KinshipExt.Uterine;
                 }
             }
             return curExt;
         }
 
-        private static Vertex FindEdgeTargetByRelation(Vertex vertex, RelationKind relKind)
+        private static Vertex FindEdgeTargetByRelation(Vertex vertex, KinshipType relKind)
         {
             foreach (Edge edge in vertex.EdgesOut) {
-                var relProps = (RelationProps)edge.Value;
-                if (relProps.Kind == relKind) {
+                var relProps = (KinshipProps)edge.Value;
+                if (relProps.Type == relKind) {
                     return edge.Target;
                 }
             }
@@ -336,14 +305,14 @@ namespace GKCore.Kinships
 
             KinshipsGraph graph = new KinshipsGraph(context);
 
-            SearchKGInt(context, null, iRec, graph, RelationKind.rkUndefined, RelationKind.rkUndefined, RelationExt.None);
+            SearchKGInt(context, null, iRec, graph, KinshipType.ktUndefined, KinshipType.ktUndefined, KinshipExt.None);
 
             return graph;
         }
 
         private static void SearchKGInt(IBaseContext context, Vertex prevNode, GDMIndividualRecord iRec,
-                                        KinshipsGraph graph, RelationKind relation, RelationKind inverseRelation,
-                                        RelationExt ext)
+                                        KinshipsGraph graph, KinshipType relation, KinshipType inverseRelation,
+                                        KinshipExt ext)
         {
             if (iRec == null) return;
 
@@ -371,8 +340,8 @@ namespace GKCore.Kinships
                     GDMIndividualRecord father, mother;
                     context.Tree.GetSpouses(fam, out father, out mother);
 
-                    SearchKGInt(context, currNode, father, graph, RelationKind.rkParent, RelationKind.rkChild, (!adopted ? RelationExt.None : RelationExt.Adoption));
-                    SearchKGInt(context, currNode, mother, graph, RelationKind.rkParent, RelationKind.rkChild, (!adopted ? RelationExt.None : RelationExt.Adoption));
+                    SearchKGInt(context, currNode, father, graph, KinshipType.ktParent, KinshipType.ktChild, (!adopted ? KinshipExt.None : KinshipExt.Adoption));
+                    SearchKGInt(context, currNode, mother, graph, KinshipType.ktParent, KinshipType.ktChild, (!adopted ? KinshipExt.None : KinshipExt.Adoption));
                 }
             }
 
@@ -382,7 +351,7 @@ namespace GKCore.Kinships
                 GDMIndividualRecord spouse = (iRec.Sex == GDMSex.svMale) ? context.Tree.GetPtrValue(family.Wife) : context.Tree.GetPtrValue(family.Husband);
                 bool commonLaw = (family.Status == GDMMarriageStatus.MarrNotRegistered);
 
-                SearchKGInt(context, currNode, spouse, graph, RelationKind.rkSpouse, RelationKind.rkSpouse, (!commonLaw ? RelationExt.None : RelationExt.CommonLaw));
+                SearchKGInt(context, currNode, spouse, graph, KinshipType.ktSpouse, KinshipType.ktSpouse, (!commonLaw ? KinshipExt.None : KinshipExt.CommonLaw));
 
                 int num2 = family.Children.Count;
                 for (int j = 0; j < num2; j++) {
@@ -390,7 +359,7 @@ namespace GKCore.Kinships
                     GDMChildToFamilyLink childLink = child.FindChildToFamilyLink(family);
                     var adopted = (childLink != null && (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted));
 
-                    SearchKGInt(context, currNode, child, graph, RelationKind.rkChild, RelationKind.rkParent, (!adopted ? RelationExt.None : RelationExt.Adoption));
+                    SearchKGInt(context, currNode, child, graph, KinshipType.ktChild, KinshipType.ktParent, (!adopted ? KinshipExt.None : KinshipExt.Adoption));
                 }
             }
         }
