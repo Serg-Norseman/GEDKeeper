@@ -31,6 +31,7 @@ using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.IoC;
+using GKCore.Kinships;
 using GKCore.Maps;
 using GKCore.Names;
 using GKCore.Options;
@@ -1016,6 +1017,7 @@ namespace GKCore
                 AppHost.Options.LoadLanguage(langCode);
 
                 InitEventDefs();
+                InitKinships();
 
                 AppHost.Plugins.OnLanguageChange();
 
@@ -1418,6 +1420,16 @@ namespace GKCore
         private static void DoneEventDefs()
         {
             EventDefinitions.Save(GetEventDefsFileName());
+        }
+
+        private static void InitKinships()
+        {
+            string lang_sign = GlobalOptions.Instance.GetLanguageSign();
+            string fileName = Path.Combine(GKUtils.GetExternalsPath(), $"kinships.{lang_sign}.yaml");
+            if (!File.Exists(fileName)) {
+                fileName = Path.Combine(GKUtils.GetExternalsPath(), $"kinships.yaml");
+            }
+            KinshipsLoader.Load(fileName);
         }
 
         public static void ForceGC()

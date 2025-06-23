@@ -22,7 +22,7 @@ csharp_new_line_before_else = false
 csharp_new_line_before_catch = false
 csharp_new_line_before_finally = false
 
-[*.{xeto,md,yml,lng}]
+[*.{xeto,md,yml,yaml,lng}]
 indent_style = space
 indent_size = 2
 

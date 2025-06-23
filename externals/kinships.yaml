@@ -1,0 +1,423 @@
+﻿---
+
+Types:
+  - Sign: 'ktNone'
+    Name: '@347'
+    HasExt: false
+    Description: '?'
+  - Sign: 'ktUndefined'
+    Name: '@347'
+    HasExt: false
+    Description: '?'
+  - Sign: 'ktSame'
+    Name: '@0'
+    HasExt: false
+    Description: '?'
+  - Sign: 'ktParent'
+    Name: '@0'
+    HasExt: false
+    Description: '?'
+  - Sign: 'ktSpouse'
+    Name: '@0'
+    HasExt: false
+    Description: '?'
+  - Sign: 'ktChild'
+    Name: '@0'
+    HasExt: false
+    Description: '?'
+  - Sign: 'ktFather'
+    Name: '@348'
+    HasExt: true
+    Description: 'father'
+  - Sign: 'ktMother'
+    Name: '@349'
+    HasExt: true
+    Description: 'mother'
+  - Sign: 'ktHusband'
+    Name: '@350'
+    HasExt: true
+    Description: 'husband'
+  - Sign: 'ktWife'
+    Name: '@351'
+    HasExt: true
+    Description: 'wife'
+  - Sign: 'ktSon'
+    Name: '@352'
+    HasExt: true
+    Description: 'son'
+  - Sign: 'ktDaughter'
+    Name: '@353'
+    HasExt: true
+    Description: 'daughter'
+  - Sign: 'ktGrandfather'
+    Name: '@354'
+    HasExt: false
+    Description: 'grandfather'
+  - Sign: 'ktGrandmother'
+    Name: '@355'
+    HasExt: false
+    Description: 'grandmother'
+  - Sign: 'ktGrandson'
+    Name: '@356'
+    HasExt: false
+    Description: 'grandson'
+  - Sign: 'ktGranddaughter'
+    Name: '@357'
+    HasExt: false
+    Description: 'granddaughter'
+  - Sign: 'ktBrother'
+    Name: '@358'
+    HasExt: true
+    Description: 'brother'
+  - Sign: 'ktSister'
+    Name: '@359'
+    HasExt: true
+    Description: 'sister'
+  - Sign: 'ktSonInLaw'
+    Name: '@360'
+    HasExt: false
+    Description: 'son-in-law'
+  - Sign: 'ktDaughterInLaw'
+    Name: '@361'
+    HasExt: false
+    Description: 'daughter-in-law'
+  - Sign: 'ktHusbandFather'
+    Name: '@362'
+    HasExt: false
+    Description: 'father-in-law'
+  - Sign: 'ktHusbandMother'
+    Name: '@363'
+    HasExt: false
+    Description: 'mother-in-law'
+  - Sign: 'ktWifeFather'
+    Name: '@364'
+    HasExt: false
+    Description: 'father-in-law'
+  - Sign: 'ktWifeMother'
+    Name: '@365'
+    HasExt: false
+    Description: 'mother-in-law'
+  - Sign: 'ktUncle_FatherBrother'
+    Name: '@366'
+    HasExt: false
+    Description: 'uncle'
+  - Sign: 'ktAunt_FatherSister'
+    Name: '@367'
+    HasExt: false
+    Description: 'aunt'
+  - Sign: 'ktUncle_MotherBrother'
+    Name: '@377'
+    HasExt: false
+    Description: 'uncle'
+  - Sign: 'ktAunt_MotherSister'
+    Name: '@378'
+    HasExt: false
+    Description: 'aunt'
+  - Sign: 'ktNephew'
+    Name: '@368'
+    HasExt: false
+    Description: 'nephew'
+  - Sign: 'ktNiece'
+    Name: '@369'
+    HasExt: false
+    Description: 'niece'
+  - Sign: 'ktCousinM'
+    Name: '@370'
+    HasExt: false
+    Description: 'cousin'
+  - Sign: 'ktCousinF'
+    Name: '@371'
+    HasExt: false
+    Description: 'cousin'
+  - Sign: 'ktBrotherInLaw_H'
+    Name: '@372'
+    HasExt: false
+    Description: 'brother-in-law'
+  - Sign: 'ktSisterInLaw_H'
+    Name: '@373'
+    HasExt: false
+    Description: 'sister-in-law'
+  - Sign: 'ktBrotherInLaw_W'
+    Name: '@374'
+    HasExt: false
+    Description: 'brother-in-law'
+  - Sign: 'ktSisterInLaw_W'
+    Name: '@375'
+    HasExt: false
+    Description: 'sister-in-law'
+  - Sign: 'ktStepfather'
+    Name: '@379'
+    HasExt: false
+    Description: 'stepfather'
+  - Sign: 'ktStepmother'
+    Name: '@380'
+    HasExt: false
+    Description: 'stepmother'
+  - Sign: 'ktFathersWife'
+    Name: '@906'
+    HasExt: false
+    Description: 'father''s wife'
+  - Sign: 'ktMothersHusband'
+    Name: '@907'
+    HasExt: false
+    Description: 'mother''s husband'
+  - Sign: 'ktUncle_AuntHusband'
+    Name: '@911'
+    HasExt: false
+    Description: 'uncle'
+
+Definitions:
+  - PrevPrevious: []
+    Previous: [ 'ktNone' ]
+    Current: [ 'ktFather', 'ktMother', 'ktHusband', 'ktWife', 'ktSon', 'ktDaughter' ]
+    Result: 'ktSame'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktHusband', 'ktWife' ]
+    Current: [ 'ktSon', 'ktDaughter' ]
+    Result: 'ktSame'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktMother' ]
+    Current: [ 'ktHusband' ]
+    Result: 'ktMothersHusband'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktFather' ]
+    Current: [ 'ktWife' ]
+    Result: 'ktFathersWife'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: [ 'ktFather' ]
+    Previous: [ 'ktGrandfather', 'ktGrandmother' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktUncle_FatherBrother'
+    Great: -1
+    Degree: 0
+  - PrevPrevious: [ 'ktFather' ]
+    Previous: [ 'ktGrandfather', 'ktGrandmother' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktAunt_FatherSister'
+    Great: -1
+    Degree: 0
+  - PrevPrevious: [ 'ktMother' ]
+    Previous: [ 'ktGrandfather', 'ktGrandmother' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktUncle_MotherBrother'
+    Great: -1
+    Degree: 0
+  - PrevPrevious: [ 'ktMother' ]
+    Previous: [ 'ktGrandfather', 'ktGrandmother' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktAunt_MotherSister'
+    Great: -1
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktAunt_FatherSister', 'ktAunt_MotherSister' ]
+    Current: [ 'ktHusband' ]
+    Result: 'ktUncle_AuntHusband'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktUncle_FatherBrother', 'ktUncle_MotherBrother' ]
+    Current: [ 'ktWife' ]
+    Result: 'ktAunt_UncleWife'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktBrother', 'ktSister' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktNephew'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktBrother', 'ktSister' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktNiece'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktSon', 'ktBrother' ]
+    Current: [ 'ktWife' ]
+    Result: 'ktDaughterInLaw'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktDaughter', 'ktSister' ]
+    Current: [ 'ktHusband' ]
+    Result: 'ktSonInLaw'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktWife' ]
+    Current: [ 'ktFather' ]
+    Result: 'ktWifeFather'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktWife' ]
+    Current: [ 'ktMother' ]
+    Result: 'ktWifeMother'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktHusband' ]
+    Current: [ 'ktFather' ]
+    Result: 'ktHusbandFather'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktHusband' ]
+    Current: [ 'ktMother' ]
+    Result: 'ktHusbandMother'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktFather', 'ktMother' ]
+    Current: [ 'ktFather' ]
+    Result: 'ktGrandfather'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktFather', 'ktMother' ]
+    Current: [ 'ktMother' ]
+    Result: 'ktGrandmother'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktGrandfather', 'ktGrandmother' ]
+    Current: [ 'ktFather' ]
+    Result: 'ktGrandfather'
+    Great: 1
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktGrandfather', 'ktGrandmother' ]
+    Current: [ 'ktMother' ]
+    Result: 'ktGrandmother'
+    Great: 1
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktFather', 'ktMother' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktBrother'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktFather', 'ktMother' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktSister'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktSon', 'ktDaughter', 'ktSonInLaw', 'ktDaughterInLaw' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktGrandson'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktSon', 'ktDaughter', 'ktSonInLaw', 'ktDaughterInLaw' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktGranddaughter'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktGrandson', 'ktGranddaughter' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktGrandson'
+    Great: 1
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktGrandson', 'ktGranddaughter' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktGranddaughter'
+    Great: 1
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktUncle_FatherBrother', 'ktAunt_FatherSister', 'ktUncle_MotherBrother', 'ktAunt_MotherSister', 'ktUncle_AuntHusband' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktBrother'
+    Great: 0
+    Degree: 1
+  - PrevPrevious: []
+    Previous: [ 'ktUncle_FatherBrother', 'ktAunt_FatherSister', 'ktUncle_MotherBrother', 'ktAunt_MotherSister', 'ktUncle_AuntHusband' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktSister'
+    Great: 0
+    Degree: 1
+  - PrevPrevious: []
+    Previous: [ 'ktNephew', 'ktNiece' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktGrandson'
+    Great: 1
+    Degree: 1
+  - PrevPrevious: []
+    Previous: [ 'ktNephew', 'ktNiece' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktGranddaughter'
+    Great: 1
+    Degree: 1
+  - PrevPrevious: []
+    Previous: [ 'ktHusband' ]
+    Current: [ 'ktBrother' ]
+    Result: 'ktBrotherInLaw_H'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktWife' ]
+    Current: [ 'ktBrother' ]
+    Result: 'ktBrotherInLaw_W'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktHusbandFather', 'ktHusbandMother' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktBrotherInLaw_H'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktWifeFather', 'ktWifeMother' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktBrotherInLaw_W'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktHusband' ]
+    Current: [ 'ktSister' ]
+    Result: 'ktSisterInLaw_H'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktWife' ]
+    Current: [ 'ktSister' ]
+    Result: 'ktSisterInLaw_W'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktHusbandFather', 'ktHusbandMother' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktSisterInLaw_H'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktWifeFather', 'ktWifeMother' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktSisterInLaw_W'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktBrotherInLaw_H', 'ktSisterInLaw_H', 'ktBrotherInLaw_W', 'ktSisterInLaw_W' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktNephew'
+    Great: 0
+    Degree: 0
+  - PrevPrevious: []
+    Previous: [ 'ktBrotherInLaw_H', 'ktSisterInLaw_H', 'ktBrotherInLaw_W', 'ktSisterInLaw_W' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktNiece'
+    Great: 0
+    Degree: 0
+
+...
