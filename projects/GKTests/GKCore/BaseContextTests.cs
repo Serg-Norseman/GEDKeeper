@@ -26,6 +26,7 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Cultures;
 using GKCore.Operations;
+using GKCore.Options;
 using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
@@ -322,10 +323,14 @@ namespace GKCore
                     string tempFileName = TestUtils.GetTempFilePath("test.geds");
 
                     try {
-                        ctx.SaveToSecFile(tempFileName, GEDCOMCharacterSet.csASCII, "test");
+                        const string password = "test";
+                        var provider1 = new SecGEDCOMProvider(ctx.Tree, password, GlobalOptions.Instance.KeepRichNames, false);
+                        GKUtils.PrepareHeader(ctx.Tree, tempFileName, GEDCOMCharacterSet.csASCII, false);
+                        provider1.SaveToFile(tempFileName, GEDCOMCharacterSet.csASCII);
 
                         using (var ctx2 = new BaseContext(null)) {
-                            ctx2.LoadFromSecFile(tempFileName, "test");
+                            var provider2 = new SecGEDCOMProvider(ctx2.Tree, password);
+                            provider2.LoadFromFile(tempFileName);
                         }
                     } finally {
                         TestUtils.RemoveTestFile(tempFileName);
