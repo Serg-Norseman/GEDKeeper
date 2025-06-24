@@ -683,4 +683,25 @@ Definitions:
     Great: 0
     Degree: 0
 
+
+  - Index: 42
+    Enable: true
+    PrevPrevious: []
+    Previous: [ 'ktGrandfather', 'ktGrandmother' ]
+    Current: [ 'ktSon' ]
+    SpecConditions: 'G>0'
+    Result: 'ktGrandfather'
+    Great: -1
+    Degree: +1
+
+  - Index: 43
+    Enable: true
+    PrevPrevious: []
+    Previous: [ 'ktGrandfather', 'ktGrandmother' ]
+    Current: [ 'ktDaughter' ]
+    SpecConditions: 'G>0'
+    Result: 'ktGrandmother'
+    Great: -1
+    Degree: +1
+
 ...

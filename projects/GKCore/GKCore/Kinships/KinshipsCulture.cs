@@ -55,6 +55,7 @@ namespace GKCore.Kinships
         public string[] PrevPrevious;
         public string[] Previous;
         public string[] Current;
+        public string SpecConditions;
         public string Result;
 
         public short Great;

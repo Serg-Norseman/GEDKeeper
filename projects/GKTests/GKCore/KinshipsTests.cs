@@ -43,10 +43,10 @@ namespace GKCore
         public void Test_KinshipsMan()
         {
             int g, deg;
-            var finRel = KinshipsGraph.FindKinship((int)KinshipType.ktNone, (int)KinshipType.ktFather, (int)KinshipType.ktSon, out g, out deg);
+            var finRel = KinshipSolver.FindKinship((int)KinshipType.ktNone, (int)KinshipType.ktFather, (int)KinshipType.ktSon, out g, out deg);
             Assert.AreEqual(KinshipType.ktBrother, finRel);
 
-            finRel = KinshipsGraph.FindKinship((int)KinshipType.ktNone, (int)KinshipType.ktNone, (int)KinshipType.ktSon, out g, out deg);
+            finRel = KinshipSolver.FindKinship((int)KinshipType.ktNone, (int)KinshipType.ktNone, (int)KinshipType.ktSon, out g, out deg);
             Assert.AreEqual(KinshipType.ktSon, finRel);
         }
 
@@ -59,9 +59,9 @@ namespace GKCore
             GDMIndividualRecord wifeRec = fContext.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
             GDMIndividualRecord rec5 = fContext.Tree.XRefIndex_Find("I5") as GDMIndividualRecord;
 
-            Assert.Throws(typeof(ArgumentNullException), () => { KinshipsGraph.SearchGraph(fContext, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { KinshipSolver.SearchGraph(fContext, null); });
 
-            using (KinshipsGraph kinsGraph = KinshipsGraph.SearchGraph(fContext, indRec)) {
+            using (KinshipSolver kinsGraph = KinshipSolver.SearchGraph(fContext, indRec)) {
                 Assert.IsNull(kinsGraph.AddIndividual(null));
 
                 Assert.IsNotNull(kinsGraph.FindVertex(chldRec.XRef));

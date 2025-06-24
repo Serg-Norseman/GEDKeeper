@@ -79,7 +79,7 @@ namespace GKCore.Controllers
             fResult = "???";
 
             if (fRec1 != null && fRec2 != null) {
-                using (KinshipsGraph kinsGraph = KinshipsGraph.SearchGraph(fBase.Context, fRec1)) {
+                using (KinshipSolver kinsGraph = KinshipSolver.SearchGraph(fBase.Context, fRec1)) {
                     if (kinsGraph.IsEmpty()) {
                         fResult = "Empty graph.";
                     } else if (kinsGraph.FindVertex(fRec2.XRef) == null) {

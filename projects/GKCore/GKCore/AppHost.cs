@@ -31,7 +31,6 @@ using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.IoC;
-using GKCore.Kinships;
 using GKCore.Maps;
 using GKCore.Names;
 using GKCore.Options;
@@ -504,6 +503,23 @@ namespace GKCore
         {
             string path = GetAppDataPathStatic() + "GEDKeeper2.log";
             return path;
+        }
+
+        private static string GetEventDefsFileName()
+        {
+            string lang_sign = GlobalOptions.Instance.GetLanguageSign();
+            string result = string.Format(GetAppDataPathStatic() + "event_defs_{0}.yaml", lang_sign);
+            return result;
+        }
+
+        public static string GetKinshipsCultureFileName()
+        {
+            string lang_sign = GlobalOptions.Instance.GetLanguageSign();
+            string fileName = Path.Combine(GKUtils.GetExternalsPath(), $"kinships.{lang_sign}.yaml");
+            if (!File.Exists(fileName)) {
+                fileName = Path.Combine(GKUtils.GetExternalsPath(), $"kinships.yaml");
+            }
+            return fileName;
         }
 
         #endregion
@@ -1404,13 +1420,6 @@ namespace GKCore
             }
         }
 
-        private static string GetEventDefsFileName()
-        {
-            string lang_sign = GlobalOptions.Instance.GetLanguageSign();
-            string result = string.Format(GetAppDataPathStatic() + "event_defs_{0}.yaml", lang_sign);
-            return result;
-        }
-
         private static void InitEventDefs()
         {
             EventDefinitions.Load(GetEventDefsFileName());
@@ -1419,16 +1428,6 @@ namespace GKCore
         private static void DoneEventDefs()
         {
             EventDefinitions.Save(GetEventDefsFileName());
-        }
-
-        public static string GetKinshipsCultureFileName()
-        {
-            string lang_sign = GlobalOptions.Instance.GetLanguageSign();
-            string fileName = Path.Combine(GKUtils.GetExternalsPath(), $"kinships.{lang_sign}.yaml");
-            if (!File.Exists(fileName)) {
-                fileName = Path.Combine(GKUtils.GetExternalsPath(), $"kinships.yaml");
-            }
-            return fileName;
         }
 
         public static void ForceGC()

@@ -99,7 +99,7 @@ namespace GKCore.Charts
         private IImage fInfoPic;
         private IImage fPersExpPic;
         private GKVarCache<GDMIndividualRecord, bool> fFilterData;
-        private KinshipsGraph fGraph;
+        private KinshipSolver fGraph;
         private bool fHasMediaFail;
         private TreeChartPerson fHighlightedPerson;
         private long fHighlightedStart;
@@ -139,7 +139,7 @@ namespace GKCore.Charts
             set {
                 fBase = value;
                 fContext = fBase.Context;
-                fGraph = new KinshipsGraph(fContext);
+                fGraph = new KinshipSolver(fContext);
                 fTree = fContext.Tree;
             }
         }

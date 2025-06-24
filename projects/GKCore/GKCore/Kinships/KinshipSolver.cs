@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define DEBUG_KINSHIPS
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,12 +33,12 @@ namespace GKCore.Kinships
     /// <summary>
     /// 
     /// </summary>
-    public sealed class KinshipsGraph : BaseObject
+    public sealed class KinshipSolver : BaseObject
     {
         private readonly IBaseContext fContext;
         private readonly Graph fGraph;
 
-        public KinshipsGraph(IBaseContext context)
+        public KinshipSolver(IBaseContext context)
         {
             LoadCulture();
 
@@ -55,6 +53,8 @@ namespace GKCore.Kinships
             }
             base.Dispose(disposing);
         }
+
+        #region Filling the relationship graph
 
         public bool IsEmpty()
         {
@@ -77,7 +77,7 @@ namespace GKCore.Kinships
         }
 
         /// <summary>
-        /// 
+        /// Adds a bidirectional relationship (edge) between two persons (graph vertices).
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
@@ -101,6 +101,13 @@ namespace GKCore.Kinships
             return fGraph.AddUndirectedEdge(source, target, 1, tsProps, stProps);
         }
 
+        #endregion
+
+        #region Determination of the kinships
+
+        /// <summary>
+        /// Sets the person as the starting point for determining relationships in a tree diagram or calculator.
+        /// </summary>
         public void SetTreeRoot(GDMIndividualRecord rootRec)
         {
             if (rootRec == null) return;
@@ -120,22 +127,7 @@ namespace GKCore.Kinships
                 GDMIndividualRecord src = null, tgt = null;
                 KinshipProps relProps = null;
 
-                var result = new StringBuilder();
-
                 var edgesPath = fGraph.GetPath(target);
-
-#if DEBUG_KINSHIPS
-                result.AppendLine("PATH:");
-                foreach (Edge edge in edgesPath) {
-                    src = (GDMIndividualRecord)edge.Source.Value;
-                    tgt = (GDMIndividualRecord)edge.Target.Value;
-                    relProps = (RelationProps)edge.Value;
-                    RelationKind curRel = KinshipsMan.FixLink(tgt.Sex, relProps.Kind);
-                    result.AppendLine("  " + GetRelationPart(src, tgt, curRel, 0, 0, false, relProps.Ext));
-                }
-                result.AppendLine();
-                result.AppendLine("SOLVE:");
-#endif
 
                 int prevprevRel = (int)KinshipType.ktNone;
                 int prevRel = (int)KinshipType.ktNone;
@@ -169,30 +161,11 @@ namespace GKCore.Kinships
                     if (prevRel != (int)KinshipType.ktUndefined) {
                         int g, deg;
 
-                        if ((prevRel == (int)KinshipType.ktGrandfather || prevRel == (int)KinshipType.ktGrandmother) &&
-                            (curRel == (int)KinshipType.ktSon || curRel == (int)KinshipType.ktDaughter) && (great > 0)) {
-                            if (curRel == (int)KinshipType.ktSon) {
-                                finRel = (int)KinshipType.ktGrandfather;
-                            } else if (curRel == (int)KinshipType.ktDaughter) {
-                                finRel = (int)KinshipType.ktGrandmother;
-                            }
-                            g = -1;
-                            deg = +1;
-                        } else {
-                            finRel = FindKinship(prevprevRel, prevRel, curRel, out g, out deg);
-                            finExt = FixExt(vtxStarting, edge.Target, finRel, curExt, deg);
-                        }
+                        finRel = FindKinship(prevprevRel, prevRel, curRel, great, out g, out deg);
+                        finExt = FixExt(vtxStarting, edge.Target, finRel, curExt, deg);
 
                         great += g;
                         degree += deg;
-
-#if DEBUG_KINSHIPS
-                        result.AppendLine("  " + GetRelationPart(src, tgt, curRel, 0, 0, true, curExt) + " -> " + finRel.ToString() + " " + fContext.Culture.GetPossessiveName(starting));
-                        if (finRel == RelationKind.rkBrotherInLaw_H || finRel == RelationKind.rkBrotherInLaw_W) {
-                            // for breakpoint
-                            SysUtils.DoNotInline(finRel);
-                        }
-#endif
 
                         if (finRel == (int)KinshipType.ktUndefined && fullFormat) {
                             string relPart = GetRelationPart(starting, src, prevRel, great, degree, shortForm, finExt);
@@ -207,7 +180,7 @@ namespace GKCore.Kinships
                             prevprevRel = prevRel;
                             prevRel = (int)KinshipType.ktNone;
 
-                            finRel = FindKinship(prevprevRel, prevRel, curRel, out g, out deg);
+                            finRel = FindKinship(prevprevRel, prevRel, curRel, great, out g, out deg);
                             finExt = FixExt(vtxStarting, edge.Target, finRel, curExt, deg);
                             great += g;
                             degree += deg;
@@ -218,11 +191,6 @@ namespace GKCore.Kinships
                     }
                 }
 
-#if DEBUG_KINSHIPS
-                result.AppendLine();
-                result.AppendLine("RESULT:");
-#endif
-
                 if (!fullFormat) {
                     string relRes = GetRelationName(targetRec, finRel, great, degree, shortForm, finExt);
                     return relRes;
@@ -230,13 +198,13 @@ namespace GKCore.Kinships
                     string relPart = GetRelationPart(starting, tgt, finRel, great, degree, shortForm, finExt);
                     relPartsStack.Push(relPart);
 
+                    var result = new StringBuilder();
                     while (relPartsStack.Count > 0) {
                         result.Append(relPartsStack.Pop());
                         if (relPartsStack.Count != 0) {
                             result.Append(", ");
                         }
                     }
-
                     return result.ToString();
                 }
             } catch (Exception ex) {
@@ -251,11 +219,7 @@ namespace GKCore.Kinships
                 return "???";
 
             string rel;
-#if DEBUG_KINSHIPS
-            rel = string.Format("{0} [g={1}, d={2}]", xrel.ToString(), great, degree);
-#else
             rel = GetRelationName(ind2, xrel, great, degree, shortForm, ext);
-#endif
             string name1 = fContext.Culture.GetPossessiveName(ind1);
             string name2 = GKUtils.GetNameString(ind2, true, false);
 
@@ -345,77 +309,26 @@ namespace GKCore.Kinships
             return null;
         }
 
-        #region KinshipsMan
-
-        public static readonly LSID[] KinDegrees;
-        public static readonly LSID[] KinExts;
-
-        private static KinshipsCulture fKinshipsCulture;
-
-        static KinshipsGraph()
-        {
-            fKinshipsCulture = new KinshipsCulture();
-
-            KinDegrees = new LSID[] {
-                LSID.KinshipDegree_01,
-                LSID.KinshipDegree_02,
-                LSID.KinshipDegree_03,
-                LSID.KinshipDegree_04,
-                LSID.KinshipDegree_05,
-                LSID.KinshipDegree_06,
-                LSID.KinshipDegree_07,
-                LSID.KinshipDegree_08,
-                LSID.KinshipDegree_09,
-                LSID.KinshipDegree_10,
-            };
-
-            KinExts = new LSID[] {
-                LSID.None,
-                LSID.RE_Blood,
-                LSID.RE_Uterine,
-                LSID.None,
-                LSID.RE_Adoptive,
-                LSID.RE_Adopted,
-                LSID.RE_CommonLaw,
-            };
-        }
-
-        private static void LoadCulture()
-        {
-            string fileName = AppHost.GetKinshipsCultureFileName();
-
-            if (!File.Exists(fileName)) return;
-
-            try {
-                // loading file
-                using (var reader = new StreamReader(fileName)) {
-                    string content = reader.ReadToEnd();
-                    fKinshipsCulture = YamlHelper.Deserialize<KinshipsCulture>(content);
-                }
-
-                // processing
-                fKinshipsCulture.Prepare();
-            } catch (Exception ex) {
-                Logger.WriteError("KinshipsGraph.Load()", ex);
-            }
-        }
-
-        public static int FindKinship(int prevprev, int prev, int cur, out int great, out int degree)
+        public static int FindKinship(int prevprev, int prev, int cur, int great, out int dGreat, out int dDegree)
         {
             int finRel = (int)KinshipType.ktUndefined;
-            great = 0;
-            degree = 0;
+            dGreat = 0;
+            dDegree = 0;
 
             var kinshipDefs = fKinshipsCulture.Definitions;
             for (int i = 0, num = kinshipDefs.Length; i < num; i++) {
                 var kinDef = kinshipDefs[i];
                 if (!kinDef.Enable) continue;
 
-                if (kinDef.PrevRels.Contains(prev) && kinDef.CurrRels.Contains(cur) && (kinDef.PrevPrevRels.Count == 0 || kinDef.PrevPrevRels.Contains(prevprev))) {
-                    great = kinDef.Great;
-                    degree = kinDef.Degree;
-                    finRel = (kinDef.FinRel == (int)KinshipType.ktSame) ? cur : kinDef.FinRel;
-                    break;
+                bool baseCond = kinDef.PrevRels.Contains(prev) && kinDef.CurrRels.Contains(cur) && (kinDef.PrevPrevRels.Count == 0 || kinDef.PrevPrevRels.Contains(prevprev));
+                if (baseCond) {
+                    bool specCond = string.IsNullOrEmpty(kinDef.SpecConditions) || (kinDef.SpecConditions == "G>0" && great > 0);
+                    if (specCond) {
+                        dGreat = kinDef.Great;
+                        dDegree = kinDef.Degree;
+                        finRel = (kinDef.FinRel == (int)KinshipType.ktSame) ? cur : kinDef.FinRel;
+                        break;
+                    }
                 }
             }
 
@@ -483,14 +396,71 @@ namespace GKCore.Kinships
 
         #endregion
 
+        #region Kinships culture configuration
+
+        public static readonly LSID[] KinDegrees;
+        public static readonly LSID[] KinExts;
+
+        private static KinshipsCulture fKinshipsCulture;
+
+        static KinshipSolver()
+        {
+            fKinshipsCulture = new KinshipsCulture();
+
+            KinDegrees = new LSID[] {
+                LSID.KinshipDegree_01,
+                LSID.KinshipDegree_02,
+                LSID.KinshipDegree_03,
+                LSID.KinshipDegree_04,
+                LSID.KinshipDegree_05,
+                LSID.KinshipDegree_06,
+                LSID.KinshipDegree_07,
+                LSID.KinshipDegree_08,
+                LSID.KinshipDegree_09,
+                LSID.KinshipDegree_10,
+            };
+
+            KinExts = new LSID[] {
+                LSID.None,
+                LSID.RE_Blood,
+                LSID.RE_Uterine,
+                LSID.None,
+                LSID.RE_Adoptive,
+                LSID.RE_Adopted,
+                LSID.RE_CommonLaw,
+            };
+        }
+
+        private static void LoadCulture()
+        {
+            string fileName = AppHost.GetKinshipsCultureFileName();
+
+            if (!File.Exists(fileName)) return;
+
+            try {
+                // loading file
+                using (var reader = new StreamReader(fileName)) {
+                    string content = reader.ReadToEnd();
+                    fKinshipsCulture = YamlHelper.Deserialize<KinshipsCulture>(content);
+                }
+
+                // processing
+                fKinshipsCulture.Prepare();
+            } catch (Exception ex) {
+                Logger.WriteError("KinshipsGraph.Load()", ex);
+            }
+        }
+
+        #endregion
+
         #region Search graph
 
-        public static KinshipsGraph SearchGraph(IBaseContext context, GDMIndividualRecord iRec)
+        public static KinshipSolver SearchGraph(IBaseContext context, GDMIndividualRecord iRec)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");
 
-            KinshipsGraph graph = new KinshipsGraph(context);
+            KinshipSolver graph = new KinshipSolver(context);
 
             SearchKGInt(context, null, iRec, graph, KinshipType.ktUndefined, KinshipType.ktUndefined, KinshipExt.None);
 
@@ -498,7 +468,7 @@ namespace GKCore.Kinships
         }
 
         private static void SearchKGInt(IBaseContext context, Vertex prevNode, GDMIndividualRecord iRec,
-                                        KinshipsGraph graph, KinshipType relation, KinshipType inverseRelation,
+                                        KinshipSolver graph, KinshipType relation, KinshipType inverseRelation,
                                         KinshipExt ext)
         {
             if (iRec == null) return;
