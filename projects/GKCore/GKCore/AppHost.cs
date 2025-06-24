@@ -1017,7 +1017,6 @@ namespace GKCore
                 AppHost.Options.LoadLanguage(langCode);
 
                 InitEventDefs();
-                InitKinships();
 
                 AppHost.Plugins.OnLanguageChange();
 
@@ -1422,14 +1421,14 @@ namespace GKCore
             EventDefinitions.Save(GetEventDefsFileName());
         }
 
-        private static void InitKinships()
+        public static string GetKinshipsCultureFileName()
         {
             string lang_sign = GlobalOptions.Instance.GetLanguageSign();
             string fileName = Path.Combine(GKUtils.GetExternalsPath(), $"kinships.{lang_sign}.yaml");
             if (!File.Exists(fileName)) {
                 fileName = Path.Combine(GKUtils.GetExternalsPath(), $"kinships.yaml");
             }
-            KinshipsMan.Load(fileName);
+            return fileName;
         }
 
         public static void ForceGC()

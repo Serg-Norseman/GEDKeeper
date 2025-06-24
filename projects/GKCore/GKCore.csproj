@@ -487,7 +487,6 @@
     <Compile Include="GKCore\GKUtils.cs" />
     <Compile Include="GKCore\Holidays.cs" />
     <Compile Include="GKCore\Kinships\KinshipsGraph.cs" />
-    <Compile Include="GKCore\Kinships\KinshipsMan.cs" />
     <Compile Include="GKCore\LangMan.cs" />
     <Compile Include="GKCore\Lists\AssociationsListModel.cs" />
     <Compile Include="GKCore\Lists\CommunicationListModel.cs" />
