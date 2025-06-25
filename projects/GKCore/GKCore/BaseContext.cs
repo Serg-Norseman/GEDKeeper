@@ -1467,7 +1467,11 @@ namespace GKCore
 
         public bool IsUnknown()
         {
-            return string.IsNullOrEmpty(fFileName) || !File.Exists(fFileName);
+            var isNew = string.IsNullOrEmpty(fFileName) || !File.Exists(fFileName);
+            if (isNew) return true;
+
+            var ext = FileHelper.GetFileExtension(fFileName);
+            return ext != ".ged" && ext != ".geds";
         }
 
         public void SetFileName(string fileName)
@@ -1492,12 +1496,11 @@ namespace GKCore
 
             try {
                 FileProvider fileProvider;
-
-                string pw = null;
                 string ext = FileHelper.GetFileExtension(fileName);
                 if (ext == ".ged") {
                     fileProvider = new GEDCOMProvider(fTree);
                 } else if (ext == ".geds") {
+                    string pw;
                     if (loadSecure) {
                         pw = await AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password));
                         if (string.IsNullOrEmpty(pw)) {
@@ -1566,24 +1569,14 @@ namespace GKCore
 
         public async Task<bool> FileSave(string fileName, bool strict = false)
         {
-            bool result = false;
-
             try {
-                string pw = null;
-
-                if (!strict) {
-                    string ext = FileHelper.GetFileExtension(fileName);
-                    if (ext == ".geds") {
-                        pw = await AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password));
-                        if (string.IsNullOrEmpty(pw)) {
-                            AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
-                            return false;
-                        }
-                    }
+                var gedcomProvider = await CreateGedcomProvider(fileName, strict);
+                if (gedcomProvider == null) {
+                    return false;
                 }
 
-                FileSave(fileName, pw, strict);
-                result = true;
+                FileSave(gedcomProvider, fileName, strict);
+                return true;
             } catch (UnauthorizedAccessException) {
                 AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.FileSaveError), new object[] { fileName, ": access denied" }));
             } catch (Exception ex) {
@@ -1591,7 +1584,28 @@ namespace GKCore
                 Logger.WriteError("BaseContext.FileSave()", ex);
             }
 
-            return result;
+            return false;
+        }
+
+        private async Task<GEDCOMProvider> CreateGedcomProvider(string fileName, bool strict)
+        {
+            var ext = FileHelper.GetFileExtension(fileName);
+            if (ext == ".ged") {
+                return new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames, strict);
+            }
+
+            if (ext == ".geds" && !strict) {
+                var pw = await AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password));
+                if (string.IsNullOrEmpty(pw)) {
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
+                    return null;
+                }
+
+                return new SecGEDCOMProvider(fTree, pw, GlobalOptions.Instance.KeepRichNames, false);
+            }
+
+            AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FormatUnsupported));
+            return null;
         }
 
         private static void RemoveOldestBackups(string fileName, string bakPath)
@@ -1633,11 +1647,12 @@ namespace GKCore
             return fileName;
         }
 
-        private void FileSave(string fileName, string password, bool strict)
+        private void FileSave(GEDCOMProvider gedcomProvider, string fileName, bool strict)
         {
             fileName = CheckFileName(fileName);
 
             var defaultCharacterSet = GlobalOptions.Instance.DefCharacterSet;
+
             if (!strict) {
                 string oldFileName = fFileName;
 
@@ -1646,20 +1661,11 @@ namespace GKCore
                 // check for archive and storage, move them if the file changes location
                 MoveMediaContainers(oldFileName, fileName);
 
-                var gedcomProvider = string.IsNullOrEmpty(password)
-                    ? new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames, false)
-                    : new SecGEDCOMProvider(fTree, password, GlobalOptions.Instance.KeepRichNames, false);
-
-                GKUtils.PrepareHeader(fTree, fileName, defaultCharacterSet, false);
-                gedcomProvider.SaveToFile(fileName, defaultCharacterSet);
-
                 fFileName = fileName;
-            } else {
-                var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames, true);
-
-                GKUtils.PrepareHeader(fTree, fileName, defaultCharacterSet, false);
-                gedcomProvider.SaveToFile(fileName, defaultCharacterSet);
             }
+
+            GKUtils.PrepareHeader(fTree, fileName, defaultCharacterSet, false);
+            gedcomProvider.SaveToFile(fileName, defaultCharacterSet);
         }
 
         private void ProcessBackup(string oldFileName, string fileName)
