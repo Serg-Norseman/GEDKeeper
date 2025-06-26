@@ -26,7 +26,7 @@
 # The file name should be `kinships{.lang3L}.yaml` (folder `externals`), where `lang3L` is the three-letter language code from the localization file.
 
 GreatPrefix: '@376'
-GreatUsed: true
+GreatUsed: false
 
 # `Index` is essential for debugging this file and verifying it.
 # Kinship type `Signatures` are necessary for a readable and maintainable association of types with definitions (and built-in types).
@@ -295,6 +295,40 @@ Types:
     Name: '@912'
     HasExt: false
     Description: 'uncle'
+
+
+  - Index: 42
+    Sign: 'ktAbuelo0'
+    Name: 'abuelo'
+
+  - Index: 43
+    Sign: 'ktAbuela0'
+    Name: 'abuela'
+
+  - Index: 44
+    Sign: 'ktAbuelo1'
+    Name: 'bis abuelo'
+
+  - Index: 45
+    Sign: 'ktAbuela1'
+    Name: 'bis abuela'
+
+  - Index: 46
+    Sign: 'ktAbuelo2'
+    Name: 'tatara abuelo'
+
+  - Index: 47
+    Sign: 'ktAbuela2'
+    Name: 'tatara abuela'
+
+  - Index: 48
+    Sign: 'ktAbuelo3'
+    Name: 'trastara abuelo'
+
+  - Index: 49
+    Sign: 'ktAbuela3'
+    Name: 'trastara abuela'
+
 
 # `Index` is essential for debugging this file and verifying it.
 # `Enable` allows to turn off the rules for determining kinship types without deleting or commenting them out.
@@ -726,5 +760,54 @@ Substitutions:
     Result: 'ktCousinM'
     Great: 0
     Degree: -1
+
+
+  - Index: 2
+    Enable: true
+    Current: [ 'ktGrandfather' ]
+    SpecConditions: 'G=0'
+    Result: 'ktAbuelo0'
+    Great: 0
+    Degree: 0
+
+  - Index: 3
+    Enable: true
+    Current: [ 'ktGrandmother' ]
+    SpecConditions: 'G=0'
+    Result: 'ktAbuela0'
+    Great: 0
+    Degree: 0
+
+  - Index: 4
+    Enable: true
+    Current: [ 'ktGrandfather' ]
+    SpecConditions: 'G=1'
+    Result: 'ktAbuelo1'
+    Great: 0
+    Degree: 0
+
+  - Index: 5
+    Enable: true
+    Current: [ 'ktGrandmother' ]
+    SpecConditions: 'G=1'
+    Result: 'ktAbuela1'
+    Great: 0
+    Degree: 0
+
+  - Index: 6
+    Enable: true
+    Current: [ 'ktGrandfather' ]
+    SpecConditions: 'G=2'
+    Result: 'ktAbuelo2'
+    Great: 0
+    Degree: 0
+
+  - Index: 7
+    Enable: true
+    Current: [ 'ktGrandmother' ]
+    SpecConditions: 'G=2'
+    Result: 'ktAbuela2'
+    Great: 0
+    Degree: 0
 
 ...
