@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,12 +20,10 @@
 
 using System;
 using GDModel;
-using GKCore.Kinships;
-using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
 
-namespace GKCore
+namespace GKCore.Kinships
 {
     [TestFixture]
     public class KinshipsTests
@@ -38,17 +36,19 @@ namespace GKCore
 
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
+
+            KinshipsGraph.InitDefaults();
         }
 
         [Test]
         public void Test_KinshipsMan()
         {
-            int g, deg;
-            var finRel = KinshipsMan.FindKinship(RelationKind.rkNone, RelationKind.rkFather, RelationKind.rkSon, out g, out deg);
-            Assert.AreEqual(RelationKind.rkBrother, finRel);
+            int g = 0, deg = 0;
+            var finRel = KinshipsGraph.FindKinship((int)KinshipType.ktNone, (int)KinshipType.ktFather, (int)KinshipType.ktSon, ref g, ref deg);
+            Assert.AreEqual((int)KinshipType.ktBrother, finRel);
 
-            finRel = KinshipsMan.FindKinship(RelationKind.rkNone, RelationKind.rkNone, RelationKind.rkSon, out g, out deg);
-            Assert.AreEqual(RelationKind.rkSon, finRel);
+            finRel = KinshipsGraph.FindKinship((int)KinshipType.ktNone, (int)KinshipType.ktNone, (int)KinshipType.ktSon, ref g, ref deg);
+            Assert.AreEqual((int)KinshipType.ktSon, finRel);
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace GKCore
             using (KinshipsGraph kinsGraph = KinshipsGraph.SearchGraph(fContext, indRec)) {
                 Assert.IsNull(kinsGraph.AddIndividual(null));
 
-                Assert.IsNotNull(kinsGraph.FindVertex(chldRec.XRef));
+                Assert.IsNotNull(kinsGraph.FindIndividual(chldRec.XRef));
 
                 // check invalid args
                 kinsGraph.SetTreeRoot(null);
@@ -74,16 +74,16 @@ namespace GKCore
                 // valid individual
                 kinsGraph.SetTreeRoot(indRec);
 
-                Assert.AreEqual("???", kinsGraph.GetRelationship(null));
-                Assert.AreEqual("???", kinsGraph.GetRelationship(otherRec));
+                Assert.AreEqual("???", kinsGraph.DetermineKinship(null));
+                Assert.AreEqual("???", kinsGraph.DetermineKinship(otherRec));
 
-                string result = kinsGraph.GetRelationship(chldRec);
+                string result = kinsGraph.DetermineKinship(chldRec);
                 Assert.AreEqual("daughter", result);
 
-                result = kinsGraph.GetRelationship(wifeRec);
+                result = kinsGraph.DetermineKinship(wifeRec);
                 Assert.AreEqual("wife", result);
 
-                result = kinsGraph.GetRelationship(rec5);
+                result = kinsGraph.DetermineKinship(rec5);
                 Assert.AreEqual("granddaughter", result);
 
                 Assert.IsFalse(kinsGraph.IsEmpty());

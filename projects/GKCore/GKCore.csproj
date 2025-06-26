@@ -83,6 +83,7 @@
     <Compile Include="GKCore\Controllers\LocExpertDlgController.cs" />
     <Compile Include="GKCore\Design\Views\IEventDefEditDlg.cs" />
     <Compile Include="GKCore\Interfaces\IComputerVision.cs" />
+    <Compile Include="GKCore\Kinships\KinshipsCulture.cs" />
     <Compile Include="GKCore\Lists\DNATestsListModel.cs" />
     <Compile Include="GKCore\Lists\EventDefsListModel.cs" />
     <Compile Include="GKCore\Design\Views\ILocationLinkEditDlg.cs" />
@@ -448,7 +449,7 @@
     <Compile Include="GKCore\Types\PGNode.cs" />
     <Compile Include="GKCore\Types\PGNodeType.cs" />
     <Compile Include="GKCore\Types\RecordAction.cs" />
-    <Compile Include="GKCore\Types\RelationKind.cs" />
+    <Compile Include="GKCore\Kinships\KinshipType.cs" />
     <Compile Include="GKCore\Types\ShieldState.cs" />
     <Compile Include="GKCore\Types\SpecialUserRef.cs" />
     <Compile Include="GKCore\Types\Target.cs" />
@@ -486,9 +487,7 @@
     <Compile Include="GKCore\GKData.cs" />
     <Compile Include="GKCore\GKUtils.cs" />
     <Compile Include="GKCore\Holidays.cs" />
-    <Compile Include="GKCore\Kinships\KinshipRec.cs" />
     <Compile Include="GKCore\Kinships\KinshipsGraph.cs" />
-    <Compile Include="GKCore\Kinships\KinshipsMan.cs" />
     <Compile Include="GKCore\LangMan.cs" />
     <Compile Include="GKCore\Lists\AssociationsListModel.cs" />
     <Compile Include="GKCore\Lists\CommunicationListModel.cs" />

@@ -1,0 +1,730 @@
+﻿---
+
+# Brief description of the kinship determination algorithm:
+# - A graph (https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)) is built from nodes (persons)
+#   and bidirectional links between them (the simplest types of kinship);
+#   - A graph for determining kinships in a tree is built along the entire tree;
+#   - A graph for the kinship calculator is built from the first person until the second is found;
+# - Between two persons for whom the name of the type of kinship needs to be found - the shortest path
+#   (a chain of nodes and links) is built;
+# - Primary types of relations: Parent <-> Child, Spouse <-> Spouse.
+# - For all links from the shortest path, a secondary type is determined based on the primary type and sex of the nodes;
+# - Secondary types of relations: Father, Mother, Son, Daughter, Husband, Wife.
+# - A step-by-step analysis of the chain is launched, where the type of each link and the previous one is compared
+#   with a set of definitions (rules) from the file of the culture of kinship relations (this file);
+# - If a suitable definition is found, the type of the current link is replaced by the result of the definition;
+# - In the case when it is impossible to find a suitable definition, a "break" is performed at this step
+#   and the kinship determination continues from the current person further. That is, a complete definition of kinship
+#   can be composed of 2 or more parts.
+# - Only single-part kinship types can be displayed in the tree. Complex ones with several parts can be displayed only in the calculator.
+
+# Exceptions:
+# - There are a number of exceptions defined in the algorithm instead of this definition file (eg cousin types like 1st degree brother/sister).
+# - Grandfather/grandmother types (N-degree) in the previous step and son/daughter in the current one - the result will be grandfather/grandmother of degree N+1 and G-1.
+
+# The "kinship culture" file is reloaded every time the calculator or tree diagrams are run.
+# The file name should be `kinships{.lang3L}.yaml` (folder `externals`), where `lang3L` is the three-letter language code from the localization file.
+
+GreatPrefix: '@376'
+GreatUsed: true
+
+# `Index` is essential for debugging this file and verifying it.
+# Kinship type `Signatures` are necessary for a readable and maintainable association of types with definitions (and built-in types).
+# `Name` strings starting with `@` - denote codes for built-in program localization strings.
+# `Name` strings without code - can be set directly, bypassing the general localization of the program.
+# `HasExt` denotes kinship types that have an extended definition (consanguineous, adoption, common-law marriage).
+# `Description` is only needed to support and develop the content of this file.
+
+# Types:
+#   - `ktNone`, `ktUndefined`, `ktSame`,
+#   - `ktParent`, `ktSpouse`, `ktChild`,
+#   - `ktFather`, `ktMother`, `ktHusband`, `ktWife`, `ktSon`, `ktDaughter`
+# are important service (basic) types necessary for the algorithm to work.
+# It is forbidden to delete, move, change indexes and other parameters (except localization).
+
+Types:
+
+  - Index: 0
+    Sign: 'ktNone'
+    Name: '@347'
+    HasExt: false
+    Description: 'basic type, parameters cannot be changed'
+
+  - Index: 1
+    Sign: 'ktUndefined'
+    Name: '@347'
+    HasExt: false
+    Description: 'basic type, parameters cannot be changed'
+
+  - Index: 2
+    Sign: 'ktSame'
+    Name: '@0'
+    HasExt: false
+    Description: 'basic type, parameters cannot be changed'
+
+  - Index: 3
+    Sign: 'ktParent'
+    Name: '@0'
+    HasExt: false
+    Description: 'basic type of primary chain, parameters cannot be changed'
+
+  - Index: 4
+    Sign: 'ktSpouse'
+    Name: '@0'
+    HasExt: false
+    Description: 'basic type of primary chain, parameters cannot be changed'
+
+  - Index: 5
+    Sign: 'ktChild'
+    Name: '@0'
+    HasExt: false
+    Description: 'basic type of primary chain, parameters cannot be changed'
+
+  - Index: 6
+    Sign: 'ktFather'
+    Name: '@348'
+    HasExt: true
+    Description: 'father; basic type of secondary chain, parameters cannot be changed'
+
+  - Index: 7
+    Sign: 'ktMother'
+    Name: '@349'
+    HasExt: true
+    Description: 'mother; basic type of secondary chain, parameters cannot be changed'
+
+  - Index: 8
+    Sign: 'ktHusband'
+    Name: '@350'
+    HasExt: true
+    Description: 'husband; basic type of secondary chain, parameters cannot be changed'
+
+  - Index: 9
+    Sign: 'ktWife'
+    Name: '@351'
+    HasExt: true
+    Description: 'wife; basic type of secondary chain, parameters cannot be changed'
+
+  - Index: 10
+    Sign: 'ktSon'
+    Name: '@352'
+    HasExt: true
+    Description: 'son; basic type of secondary chain, parameters cannot be changed'
+
+  - Index: 11
+    Sign: 'ktDaughter'
+    Name: '@353'
+    HasExt: true
+    Description: 'daughter; basic type of secondary chain, parameters cannot be changed'
+
+  - Index: 12
+    Sign: 'ktGrandfather'
+    Name: '@354'
+    HasExt: false
+    Description: 'grandfather'
+
+  - Index: 13
+    Sign: 'ktGrandmother'
+    Name: '@355'
+    HasExt: false
+    Description: 'grandmother'
+
+  - Index: 14
+    Sign: 'ktGrandson'
+    Name: '@356'
+    HasExt: false
+    Description: 'grandson'
+
+  - Index: 15
+    Sign: 'ktGranddaughter'
+    Name: '@357'
+    HasExt: false
+    Description: 'granddaughter'
+
+  - Index: 16
+    Sign: 'ktBrother'
+    Name: '@358'
+    HasExt: true
+    Description: 'brother'
+
+  - Index: 17
+    Sign: 'ktSister'
+    Name: '@359'
+    HasExt: true
+    Description: 'sister'
+
+  - Index: 18
+    Sign: 'ktSonInLaw'
+    Name: '@360'
+    HasExt: false
+    Description: 'son-in-law'
+
+  - Index: 19
+    Sign: 'ktDaughterInLaw'
+    Name: '@361'
+    HasExt: false
+    Description: 'daughter-in-law'
+
+  - Index: 20
+    Sign: 'ktHusbandFather'
+    Name: '@362'
+    HasExt: false
+    Description: 'father-in-law'
+
+  - Index: 21
+    Sign: 'ktHusbandMother'
+    Name: '@363'
+    HasExt: false
+    Description: 'mother-in-law'
+
+  - Index: 22
+    Sign: 'ktWifeFather'
+    Name: '@364'
+    HasExt: false
+    Description: 'father-in-law'
+
+  - Index: 23
+    Sign: 'ktWifeMother'
+    Name: '@365'
+    HasExt: false
+    Description: 'mother-in-law'
+
+  - Index: 24
+    Sign: 'ktUncle_FatherBrother'
+    Name: '@366'
+    HasExt: false
+    Description: 'uncle'
+
+  - Index: 25
+    Sign: 'ktAunt_FatherSister'
+    Name: '@367'
+    HasExt: false
+    Description: 'aunt'
+
+  - Index: 26
+    Sign: 'ktUncle_MotherBrother'
+    Name: '@377'
+    HasExt: false
+    Description: 'uncle'
+
+  - Index: 27
+    Sign: 'ktAunt_MotherSister'
+    Name: '@378'
+    HasExt: false
+    Description: 'aunt'
+
+  - Index: 28
+    Sign: 'ktNephew'
+    Name: '@368'
+    HasExt: false
+    Description: 'nephew'
+
+  - Index: 29
+    Sign: 'ktNiece'
+    Name: '@369'
+    HasExt: false
+    Description: 'niece'
+
+  - Index: 30
+    Sign: 'ktCousinM'
+    Name: '@370'
+    HasExt: false
+    Description: 'cousin'
+
+  - Index: 31
+    Sign: 'ktCousinF'
+    Name: '@371'
+    HasExt: false
+    Description: 'cousin'
+
+  - Index: 32
+    Sign: 'ktBrotherInLaw_H'
+    Name: '@372'
+    HasExt: false
+    Description: 'brother-in-law'
+
+  - Index: 33
+    Sign: 'ktSisterInLaw_H'
+    Name: '@373'
+    HasExt: false
+    Description: 'sister-in-law'
+
+  - Index: 34
+    Sign: 'ktBrotherInLaw_W'
+    Name: '@374'
+    HasExt: false
+    Description: 'brother-in-law'
+
+  - Index: 35
+    Sign: 'ktSisterInLaw_W'
+    Name: '@375'
+    HasExt: false
+    Description: 'sister-in-law'
+
+  - Index: 36
+    Sign: 'ktStepfather'
+    Name: '@379'
+    HasExt: false
+    Description: 'stepfather'
+
+  - Index: 37
+    Sign: 'ktStepmother'
+    Name: '@380'
+    HasExt: false
+    Description: 'stepmother'
+
+  - Index: 38
+    Sign: 'ktFathersWife'
+    Name: '@906'
+    HasExt: false
+    Description: 'father''s wife'
+
+  - Index: 39
+    Sign: 'ktMothersHusband'
+    Name: '@907'
+    HasExt: false
+    Description: 'mother''s husband'
+
+  - Index: 40
+    Sign: 'ktUncle_AuntHusband'
+    Name: '@911'
+    HasExt: false
+    Description: 'uncle'
+
+  - Index: 41
+    Sign: 'ktAunt_UncleWife'
+    Name: '@912'
+    HasExt: false
+    Description: 'uncle'
+
+# `Index` is essential for debugging this file and verifying it.
+# `Enable` allows to turn off the rules for determining kinship types without deleting or commenting them out.
+# `PrePrevious`, `Previous` and `Current` are the relationship types at the pre-previous, previous and current step of the analysis chain.
+# `Result` is the result type of this definition.
+# If the match is successful, `Current` will be replaced by `Result` and will proceed to the next step of chain analysis as `Previous`.
+# `ktSame` is a utility type that does not change the type of the kinship of the analyzed chain step.
+# `Great` and `Degree` - define the delta value (-1, 0, +1) of these indicators on a given type (and chain's step).
+# SpecConditions supports checking only one parameter (G or D) and three conditions (<, =, >).
+
+Definitions:
+
+  - Index: 0
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktNone' ]
+    Current: [ 'ktFather', 'ktMother', 'ktHusband', 'ktWife', 'ktSon', 'ktDaughter' ]
+    Result: 'ktSame'
+    Great: 0
+    Degree: 0
+
+  - Index: 1
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktHusband', 'ktWife' ]
+    Current: [ 'ktSon', 'ktDaughter' ]
+    Result: 'ktSame'
+    Great: 0
+    Degree: 0
+
+  - Index: 2
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktMother' ]
+    Current: [ 'ktHusband' ]
+    Result: 'ktMothersHusband'
+    Great: 0
+    Degree: 0
+
+  - Index: 3
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktFather' ]
+    Current: [ 'ktWife' ]
+    Result: 'ktFathersWife'
+    Great: 0
+    Degree: 0
+
+  - Index: 4
+    Enable: true
+    PrePrevious: [ 'ktFather' ]
+    Previous: [ 'ktGrandfather', 'ktGrandmother' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktUncle_FatherBrother'
+    Great: -1
+    Degree: 0
+
+  - Index: 5
+    Enable: true
+    PrePrevious: [ 'ktFather' ]
+    Previous: [ 'ktGrandfather', 'ktGrandmother' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktAunt_FatherSister'
+    Great: -1
+    Degree: 0
+
+  - Index: 6
+    Enable: true
+    PrePrevious: [ 'ktMother' ]
+    Previous: [ 'ktGrandfather', 'ktGrandmother' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktUncle_MotherBrother'
+    Great: -1
+    Degree: 0
+
+  - Index: 7
+    Enable: true
+    PrePrevious: [ 'ktMother' ]
+    Previous: [ 'ktGrandfather', 'ktGrandmother' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktAunt_MotherSister'
+    Great: -1
+    Degree: 0
+
+  - Index: 8
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktAunt_FatherSister', 'ktAunt_MotherSister' ]
+    Current: [ 'ktHusband' ]
+    Result: 'ktUncle_AuntHusband'
+    Great: 0
+    Degree: 0
+
+  - Index: 9
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktUncle_FatherBrother', 'ktUncle_MotherBrother' ]
+    Current: [ 'ktWife' ]
+    Result: 'ktAunt_UncleWife'
+    Great: 0
+    Degree: 0
+
+  - Index: 10
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktBrother', 'ktSister' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktNephew'
+    Great: 0
+    Degree: 0
+
+  - Index: 11
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktBrother', 'ktSister' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktNiece'
+    Great: 0
+    Degree: 0
+
+  - Index: 12
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktSon', 'ktBrother' ]
+    Current: [ 'ktWife' ]
+    Result: 'ktDaughterInLaw'
+    Great: 0
+    Degree: 0
+
+  - Index: 13
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktDaughter', 'ktSister' ]
+    Current: [ 'ktHusband' ]
+    Result: 'ktSonInLaw'
+    Great: 0
+    Degree: 0
+
+  - Index: 14
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktWife' ]
+    Current: [ 'ktFather' ]
+    Result: 'ktWifeFather'
+    Great: 0
+    Degree: 0
+
+  - Index: 15
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktWife' ]
+    Current: [ 'ktMother' ]
+    Result: 'ktWifeMother'
+    Great: 0
+    Degree: 0
+
+  - Index: 16
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktHusband' ]
+    Current: [ 'ktFather' ]
+    Result: 'ktHusbandFather'
+    Great: 0
+    Degree: 0
+
+  - Index: 17
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktHusband' ]
+    Current: [ 'ktMother' ]
+    Result: 'ktHusbandMother'
+    Great: 0
+    Degree: 0
+
+  - Index: 18
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktFather', 'ktMother' ]
+    Current: [ 'ktFather' ]
+    Result: 'ktGrandfather'
+    Great: 0
+    Degree: 0
+
+  - Index: 19
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktFather', 'ktMother' ]
+    Current: [ 'ktMother' ]
+    Result: 'ktGrandmother'
+    Great: 0
+    Degree: 0
+
+  - Index: 20
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktGrandfather', 'ktGrandmother' ]
+    Current: [ 'ktFather' ]
+    Result: 'ktGrandfather'
+    Great: 1
+    Degree: 0
+
+  - Index: 21
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktGrandfather', 'ktGrandmother' ]
+    Current: [ 'ktMother' ]
+    Result: 'ktGrandmother'
+    Great: 1
+    Degree: 0
+
+  - Index: 22
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktFather', 'ktMother' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktBrother'
+    Great: 0
+    Degree: 0
+
+  - Index: 23
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktFather', 'ktMother' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktSister'
+    Great: 0
+    Degree: 0
+
+  - Index: 24
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktSon', 'ktDaughter', 'ktSonInLaw', 'ktDaughterInLaw' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktGrandson'
+    Great: 0
+    Degree: 0
+
+  - Index: 25
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktSon', 'ktDaughter', 'ktSonInLaw', 'ktDaughterInLaw' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktGranddaughter'
+    Great: 0
+    Degree: 0
+
+  - Index: 26
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktGrandson', 'ktGranddaughter' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktGrandson'
+    Great: 1
+    Degree: 0
+
+  - Index: 27
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktGrandson', 'ktGranddaughter' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktGranddaughter'
+    Great: 1
+    Degree: 0
+
+  - Index: 28
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktUncle_FatherBrother', 'ktAunt_FatherSister', 'ktUncle_MotherBrother', 'ktAunt_MotherSister', 'ktUncle_AuntHusband' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktBrother'
+    Great: 0
+    Degree: 1
+
+  - Index: 29
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktUncle_FatherBrother', 'ktAunt_FatherSister', 'ktUncle_MotherBrother', 'ktAunt_MotherSister', 'ktUncle_AuntHusband' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktSister'
+    Great: 0
+    Degree: 1
+
+  - Index: 30
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktNephew', 'ktNiece' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktGrandson'
+    Great: 1
+    Degree: 1
+
+  - Index: 31
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktNephew', 'ktNiece' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktGranddaughter'
+    Great: 1
+    Degree: 1
+
+  - Index: 32
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktHusband' ]
+    Current: [ 'ktBrother' ]
+    Result: 'ktBrotherInLaw_H'
+    Great: 0
+    Degree: 0
+
+  - Index: 33
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktWife' ]
+    Current: [ 'ktBrother' ]
+    Result: 'ktBrotherInLaw_W'
+    Great: 0
+    Degree: 0
+
+  - Index: 34
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktHusbandFather', 'ktHusbandMother' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktBrotherInLaw_H'
+    Great: 0
+    Degree: 0
+
+  - Index: 35
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktWifeFather', 'ktWifeMother' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktBrotherInLaw_W'
+    Great: 0
+    Degree: 0
+
+  - Index: 36
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktHusband' ]
+    Current: [ 'ktSister' ]
+    Result: 'ktSisterInLaw_H'
+    Great: 0
+    Degree: 0
+
+  - Index: 37
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktWife' ]
+    Current: [ 'ktSister' ]
+    Result: 'ktSisterInLaw_W'
+    Great: 0
+    Degree: 0
+
+  - Index: 38
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktHusbandFather', 'ktHusbandMother' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktSisterInLaw_H'
+    Great: 0
+    Degree: 0
+
+  - Index: 39
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktWifeFather', 'ktWifeMother' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktSisterInLaw_W'
+    Great: 0
+    Degree: 0
+
+  - Index: 40
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktBrotherInLaw_H', 'ktSisterInLaw_H', 'ktBrotherInLaw_W', 'ktSisterInLaw_W' ]
+    Current: [ 'ktSon' ]
+    Result: 'ktNephew'
+    Great: 0
+    Degree: 0
+
+  - Index: 41
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktBrotherInLaw_H', 'ktSisterInLaw_H', 'ktBrotherInLaw_W', 'ktSisterInLaw_W' ]
+    Current: [ 'ktDaughter' ]
+    Result: 'ktNiece'
+    Great: 0
+    Degree: 0
+
+
+  - Index: 42
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktGrandfather', 'ktGrandmother' ]
+    Current: [ 'ktSon' ]
+    SpecConditions: 'G>0'
+    Result: 'ktGrandfather'
+    Great: -1
+    Degree: +1
+
+  - Index: 43
+    Enable: true
+    PrePrevious: []
+    Previous: [ 'ktGrandfather', 'ktGrandmother' ]
+    Current: [ 'ktDaughter' ]
+    SpecConditions: 'G>0'
+    Result: 'ktGrandmother'
+    Great: -1
+    Degree: +1
+
+# Substitutions of already defined relationship types onto the final output types.
+# SpecConditions supports checking only one parameter (G or D) and three conditions (<, =, >).
+
+Substitutions:
+
+  - Index: 0
+    Enable: true
+    Current: [ 'ktSister' ]
+    SpecConditions: 'D=1'
+    Result: 'ktCousinF'
+    Great: 0
+    Degree: -1
+
+  - Index: 1
+    Enable: true
+    Current: [ 'ktBrother' ]
+    SpecConditions: 'D=1'
+    Result: 'ktCousinM'
+    Great: 0
+    Degree: -1
+
+...

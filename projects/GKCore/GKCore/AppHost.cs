@@ -505,6 +505,23 @@ namespace GKCore
             return path;
         }
 
+        private static string GetEventDefsFileName()
+        {
+            string lang_sign = GlobalOptions.Instance.GetLanguageSign();
+            string result = string.Format(GetAppDataPathStatic() + "event_defs_{0}.yaml", lang_sign);
+            return result;
+        }
+
+        public static string GetKinshipsCultureFileName()
+        {
+            string lang_sign = GlobalOptions.Instance.GetLanguageSign();
+            string fileName = Path.Combine(GKUtils.GetExternalsPath(), $"kinships.{lang_sign}.yaml");
+            if (!File.Exists(fileName)) {
+                fileName = Path.Combine(GKUtils.GetExternalsPath(), $"kinships.yaml");
+            }
+            return fileName;
+        }
+
         #endregion
 
         #region IHost implementation
@@ -1401,13 +1418,6 @@ namespace GKCore
                 options.Dispose();
                 Plugins.Unload();
             }
-        }
-
-        private static string GetEventDefsFileName()
-        {
-            string lang_sign = GlobalOptions.Instance.GetLanguageSign();
-            string result = string.Format(GetAppDataPathStatic() + "event_defs_{0}.yaml", lang_sign);
-            return result;
         }
 
         private static void InitEventDefs()
