@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -1468,7 +1467,11 @@ namespace GKCore
 
         public bool IsUnknown()
         {
-            return string.IsNullOrEmpty(fFileName) || !File.Exists(fFileName);
+            var isNew = string.IsNullOrEmpty(fFileName) || !File.Exists(fFileName);
+            if (isNew) return true;
+
+            var ext = FileHelper.GetFileExtension(fFileName);
+            return ext != ".ged" && ext != ".geds";
         }
 
         public void SetFileName(string fileName)
@@ -1493,14 +1496,11 @@ namespace GKCore
 
             try {
                 FileProvider fileProvider;
-
-                string pw = null;
                 string ext = FileHelper.GetFileExtension(fileName);
                 if (ext == ".ged") {
                     fileProvider = new GEDCOMProvider(fTree);
                 } else if (ext == ".geds") {
-                    fileProvider = new GEDCOMProvider(fTree);
-
+                    string pw;
                     if (loadSecure) {
                         pw = await AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password));
                         if (string.IsNullOrEmpty(pw)) {
@@ -1510,6 +1510,8 @@ namespace GKCore
                     } else {
                         return false;
                     }
+
+                    fileProvider = new SecGEDCOMProvider(fTree, pw);
                 } else if (ext == ".xml") {
                     fileProvider = new GedMLProvider(fTree);
                 } else if (ext == ".familyx") {
@@ -1522,11 +1524,11 @@ namespace GKCore
                 }
 
                 if (!showProgress) {
-                    FileLoad(fileProvider, fileName, pw, null);
+                    FileLoad(fileProvider, fileName, null);
                 } else {
                     AppHost.Instance.ExecuteWork((controller) => {
                         controller.Begin(LangMan.LS(LSID.Loading), 100);
-                        FileLoad(fileProvider, fileName, pw, controller);
+                        FileLoad(fileProvider, fileName, controller);
                         controller.End();
                     });
                 }
@@ -1554,15 +1556,11 @@ namespace GKCore
             return result;
         }
 
-        private void FileLoad(FileProvider fileProvider, string fileName, string password, IProgressController progress)
+        private void FileLoad(FileProvider fileProvider, string fileName, IProgressController progress)
         {
             fTree.ProgressCallback = progress;
 
-            if (string.IsNullOrEmpty(password)) {
-                fileProvider.LoadFromFile(fileName, GlobalOptions.Instance.CharsetDetection);
-            } else {
-                LoadFromSecFile(fileName, password, GlobalOptions.Instance.CharsetDetection);
-            }
+            fileProvider.LoadFromFile(fileName, GlobalOptions.Instance.CharsetDetection);
 
             fTree.ProgressCallback = null;
 
@@ -1571,24 +1569,14 @@ namespace GKCore
 
         public async Task<bool> FileSave(string fileName, bool strict = false)
         {
-            bool result = false;
-
             try {
-                string pw = null;
-
-                if (!strict) {
-                    string ext = FileHelper.GetFileExtension(fileName);
-                    if (ext == ".geds") {
-                        pw = await AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password));
-                        if (string.IsNullOrEmpty(pw)) {
-                            AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
-                            return false;
-                        }
-                    }
+                var gedcomProvider = await CreateGedcomProvider(fileName, strict);
+                if (gedcomProvider == null) {
+                    return false;
                 }
 
-                FileSave(fileName, pw, strict);
-                result = true;
+                FileSave(gedcomProvider, fileName, strict);
+                return true;
             } catch (UnauthorizedAccessException) {
                 AppHost.StdDialogs.ShowError(string.Format(LangMan.LS(LSID.FileSaveError), new object[] { fileName, ": access denied" }));
             } catch (Exception ex) {
@@ -1596,7 +1584,28 @@ namespace GKCore
                 Logger.WriteError("BaseContext.FileSave()", ex);
             }
 
-            return result;
+            return false;
+        }
+
+        private async Task<GEDCOMProvider> CreateGedcomProvider(string fileName, bool strict)
+        {
+            var ext = FileHelper.GetFileExtension(fileName);
+            if (ext == ".ged") {
+                return new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames, strict);
+            }
+
+            if (ext == ".geds" && !strict) {
+                var pw = await AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password));
+                if (string.IsNullOrEmpty(pw)) {
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
+                    return null;
+                }
+
+                return new SecGEDCOMProvider(fTree, pw, GlobalOptions.Instance.KeepRichNames, false);
+            }
+
+            AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FormatUnsupported));
+            return null;
         }
 
         private static void RemoveOldestBackups(string fileName, string bakPath)
@@ -1638,9 +1647,11 @@ namespace GKCore
             return fileName;
         }
 
-        private void FileSave(string fileName, string password, bool strict)
+        private void FileSave(GEDCOMProvider gedcomProvider, string fileName, bool strict)
         {
             fileName = CheckFileName(fileName);
+
+            var defaultCharacterSet = GlobalOptions.Instance.DefCharacterSet;
 
             if (!strict) {
                 string oldFileName = fFileName;
@@ -1650,22 +1661,11 @@ namespace GKCore
                 // check for archive and storage, move them if the file changes location
                 MoveMediaContainers(oldFileName, fileName);
 
-                if (string.IsNullOrEmpty(password)) {
-                    GKUtils.PrepareHeader(fTree, fileName, GlobalOptions.Instance.DefCharacterSet, false);
-
-                    var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames, false);
-                    gedcomProvider.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet);
-                } else {
-                    SaveToSecFile(fileName, GlobalOptions.Instance.DefCharacterSet, password);
-                }
-
                 fFileName = fileName;
-            } else {
-                GKUtils.PrepareHeader(fTree, fileName, GlobalOptions.Instance.DefCharacterSet, false);
-
-                var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames, true);
-                gedcomProvider.SaveToFile(fileName, GlobalOptions.Instance.DefCharacterSet);
             }
+
+            GKUtils.PrepareHeader(fTree, fileName, defaultCharacterSet, false);
+            gedcomProvider.SaveToFile(fileName, defaultCharacterSet);
         }
 
         private void ProcessBackup(string oldFileName, string fileName)
@@ -1712,117 +1712,6 @@ namespace GKCore
                 gedcomProvider.SaveToFile(rfn, charSet);
             } catch (Exception ex) {
                 Logger.WriteError("BaseContext.CriticalSave()", ex);
-            }
-        }
-
-        private const string GEDSEC_HEADER = "GEDSECAA";
-        private const byte GS_MAJOR_VER = 1;
-        private const byte GS_MINOR_VER = 2;
-
-        private static SymmetricAlgorithm CreateCSP(byte majorVer, byte minorVer, string password)
-        {
-#if NETCORE
-            const int BlockSize = 128;
-#else
-            const int BlockSize = 256;
-#endif
-
-            if (majorVer >= 1) {
-                SymmetricAlgorithm csp = null;
-
-                byte[] pwd = Encoding.Unicode.GetBytes(password);
-
-                switch (minorVer) {
-                    case 1: {
-                            byte[] salt = SCCrypt.CreateRandomSalt(7);
-                            csp = new DESCryptoServiceProvider();
-                            var pdb = new PasswordDeriveBytes(pwd, salt);
-                            try {
-                                csp.Key = pdb.CryptDeriveKey("DES", "SHA1", csp.KeySize, csp.IV);
-                                SCCrypt.ClearBytes(salt);
-                            } finally {
-                                var pdbDisp = pdb as IDisposable;
-                                if (pdbDisp != null) pdbDisp.Dispose();
-                            }
-                        }
-                        break;
-
-                    case 2: {
-                            var keyBytes = new byte[BlockSize / 8];
-                            Array.Copy(pwd, keyBytes, Math.Min(keyBytes.Length, pwd.Length));
-                            csp = new RijndaelManaged();
-                            csp.KeySize = BlockSize;
-                            csp.BlockSize = BlockSize;
-                            csp.Key = keyBytes;
-                            csp.IV = keyBytes;
-                            csp.Padding = PaddingMode.PKCS7;
-                            csp.Mode = CipherMode.CBC;
-                        }
-                        break;
-                }
-
-                SCCrypt.ClearBytes(pwd);
-
-                return csp;
-            }
-            return null;
-        }
-
-        public void LoadFromSecStream(Stream stream, string password, bool charsetDetection = false)
-        {
-            byte[] gsHeader = new byte[8];
-            stream.Read(gsHeader, 0, 8);
-            byte gsMajVer = gsHeader[6];
-            byte gsMinVer = gsHeader[7];
-            gsHeader[6] = 65;
-            gsHeader[7] = 65;
-            string gsh = Encoding.ASCII.GetString(gsHeader);
-
-            if (!string.Equals(gsh, GEDSEC_HEADER)) {
-                throw new GKException(LangMan.LS(LSID.ItsNotGEDSECCompatibleFile));
-            }
-
-            if (gsMajVer < GS_MAJOR_VER || gsMinVer < GS_MINOR_VER) {
-                // dummy for future
-            }
-
-            using (var cryptic = CreateCSP(gsMajVer, gsMinVer, password)) {
-                using (CryptoStream crStream = new CryptoStream(stream, cryptic.CreateDecryptor(), CryptoStreamMode.Read)) {
-                    var gedcomProvider = new GEDCOMProvider(fTree);
-                    gedcomProvider.LoadFromStreamExt(stream, crStream, charsetDetection);
-                }
-            }
-        }
-
-        public void SaveToSecStream(Stream stream, GEDCOMCharacterSet charSet, string password)
-        {
-            byte[] gsHeader = Encoding.ASCII.GetBytes(GEDSEC_HEADER);
-            gsHeader[6] = GS_MAJOR_VER;
-            gsHeader[7] = GS_MINOR_VER;
-            stream.Write(gsHeader, 0, 8);
-
-            using (var cryptic = CreateCSP(GS_MAJOR_VER, GS_MINOR_VER, password)) {
-                using (CryptoStream crStream = new CryptoStream(stream, cryptic.CreateEncryptor(), CryptoStreamMode.Write)) {
-                    var gedcomProvider = new GEDCOMProvider(fTree, GlobalOptions.Instance.KeepRichNames, false);
-                    gedcomProvider.SaveToStreamExt(crStream, charSet);
-                    crStream.Flush();
-                }
-            }
-        }
-
-        public void LoadFromSecFile(string fileName, string password, bool charsetDetection = false)
-        {
-            using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
-                LoadFromSecStream(fileStream, password, charsetDetection);
-            }
-        }
-
-        public void SaveToSecFile(string fileName, GEDCOMCharacterSet charSet, string password)
-        {
-            using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write)) {
-                GKUtils.PrepareHeader(fTree, fileName, charSet, false);
-
-                SaveToSecStream(fileStream, charSet, password);
             }
         }
 

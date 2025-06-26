@@ -67,6 +67,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GDModel\GDMAge.cs" />
     <Compile Include="GDModel\GDMDNATest.cs" />
+    <Compile Include="GDModel\Providers\GEDCOM\SecGEDCOMProvider.cs" />
     <Compile Include="GKCore\Charts\DefTreeLayout.cs" />
     <Compile Include="GKCore\Controllers\AgeEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\DNATestEditDlgController.cs" />

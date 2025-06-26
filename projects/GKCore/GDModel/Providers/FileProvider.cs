@@ -45,7 +45,7 @@ namespace GDModel.Providers
             }
         }
 
-        public void LoadFromFile(string fileName, bool charsetDetection = false)
+        public virtual void LoadFromFile(string fileName, bool charsetDetection = false)
         {
             using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
                 LoadFromStreamExt(fileStream, fileStream, charsetDetection);

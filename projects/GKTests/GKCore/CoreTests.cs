@@ -95,11 +95,13 @@ namespace GKCore
         [Test]
         public void Test_SysUtils()
         {
-            #if MONO
+            #if MONO || OS_LINUX || OS_MACOS
             Assert.IsTrue(SysUtils.IsUnix());
             Assert.AreEqual(PlatformID.Unix, SysUtils.GetPlatformID());
-            Assert.IsFalse(string.IsNullOrEmpty(SysUtils.GetMonoVersion()));
             Assert.AreNotEqual(DesktopType.Windows, SysUtils.GetDesktopType());
+            #if MONO && !NET6_0_OR_GREATER
+            Assert.IsFalse(string.IsNullOrEmpty(SysUtils.GetMonoVersion()));
+            #endif
             #else
             Assert.IsFalse(SysUtils.IsUnix());
             Assert.AreEqual(PlatformID.Win32NT, SysUtils.GetPlatformID());

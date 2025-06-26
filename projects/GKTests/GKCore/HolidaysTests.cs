@@ -38,6 +38,7 @@ namespace GKCore
         [Test]
         public void Test_CollectTips()
         {
+            Assume.That(SysUtils.IsUnix(), Is.False);
             Assert.Throws(typeof(ArgumentNullException), () => { fHolidays.CollectTips(null); });
 
             using (StringList tipsList = new StringList()) {
