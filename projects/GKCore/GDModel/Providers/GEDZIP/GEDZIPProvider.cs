@@ -19,6 +19,7 @@
  */
 
 using System.IO;
+using System.IO.Compression;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 
@@ -27,13 +28,15 @@ namespace GDModel.Providers.GEDZIP
     /// <summary>
     /// Processing the GEDZIP format is one part of the Genealogical Data Model (GDM).
     /// </summary>
-    public class GEDZIPProvider : FileProvider
+    public class GEDZIPProvider : GEDCOMProvider
     {
+        private const string GedcomEntry = "gedcom.ged";
+
         static GEDZIPProvider()
         {
-            // Static initialization of the GEDCOMProvider is needed, 
+            // Static initialization of the GEDCOMProvider is needed,
             // otherwise the standard tag identifiers are out of sync
-            SysUtils.DoNotInline(GEDCOMProvider.GEDCOMFormats);
+            SysUtils.DoNotInline(GEDCOMFormats);
         }
 
         public GEDZIPProvider(GDMTree tree) : base(tree)
@@ -45,12 +48,34 @@ namespace GDModel.Providers.GEDZIP
             return "GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip";
         }
 
-        public override void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
+        public override void LoadFromFile(string fileName, bool charsetDetection = false)
         {
+            using (var zip = ZipFile.Open(fileName, ZipArchiveMode.Read)) {
+                var entry = GetArchiveEntry(zip, GedcomEntry);
+                using (var stream = entry.Open())
+                using (var ms = new MemoryStream()) {
+                    // wrap to MemoryStream to support encoding detection
+                    stream.CopyTo(ms);
+                    ms.Position = 0;
+                    LoadFromStreamExt(ms, ms, charsetDetection);
+                }
+            }
         }
 
-        protected override void ReadStream(Stream fileStream, Stream inputStream, bool charsetDetection = false)
+        public override void SaveToFile(string fileName, GEDCOMCharacterSet charSet)
         {
+            using (var zip = ZipFile.Open(fileName, ZipArchiveMode.Update)) {
+                var entry = GetArchiveEntry(zip, GedcomEntry);
+                using (var stream = entry.Open()) {
+                    SaveToStreamExt(stream, charSet);
+                    stream.Flush();
+                }
+            }
+        }
+
+        private static ZipArchiveEntry GetArchiveEntry(ZipArchive zip, string fileName)
+        {
+            return zip.GetEntry(fileName) ?? zip.CreateEntry(fileName);
         }
     }
 }
