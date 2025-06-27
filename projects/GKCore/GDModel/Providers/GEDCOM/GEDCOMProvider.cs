@@ -229,37 +229,47 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        protected override Encoding GetDefaultEncoding(Stream inputStream)
+        private static Encoding GetDefaultEncoding(ref Stream stream)
         {
             // Dirty code: external encodings are not supported on mobile (Xamarin)
-            if (AppHost.Instance.HasFeatureSupport(GKCore.Types.Feature.Mobile)) return Encoding.UTF8;
+            if (AppHost.Instance.HasFeatureSupport(GKCore.Types.Feature.Mobile)) {
+                return Encoding.UTF8;
+            }
 
             var result = Encoding.GetEncoding(DEF_CODEPAGE);
-            if (inputStream.CanSeek) {
-                byte[] array = new byte[4];
-                int num = inputStream.Read(array, 0, 4);
-                if (num >= 3 && array[0] == 239 && array[1] == 187 && array[2] == 191) {
-                    result = Encoding.UTF8;
-                    num -= 3;
-                } else if (num == 4 && array[0] == 0 && array[1] == 0 && array[2] == 254 && array[3] == byte.MaxValue) {
-                    result = Encoding.GetEncoding("utf-32");
-                    num -= 4;
-                } else if (num == 4 && array[0] == byte.MaxValue && array[1] == 254 && array[2] == 0 && array[3] == 0) {
-                    result = Encoding.GetEncoding("utf-32");
-                    num -= 4;
-                } else if (num >= 2 && array[0] == 254 && array[1] == byte.MaxValue) {
-                    result = Encoding.BigEndianUnicode;
-                    num -= 2;
-                } else if (num >= 2 && array[0] == byte.MaxValue && array[1] == 254) {
-                    result = Encoding.Unicode;
-                    num -= 2;
-                }
-                inputStream.Seek(-num, SeekOrigin.Current);
+
+            byte[] array = new byte[4];
+            int read = stream.Read(array, 0, 4);
+            int num = read;
+            if (read >= 3 && array[0] == 239 && array[1] == 187 && array[2] == 191) {
+                result = Encoding.UTF8;
+                num -= 3;
+            } else if (read == 4 && array[0] == 0 && array[1] == 0 && array[2] == 254 && array[3] == byte.MaxValue) {
+                result = Encoding.GetEncoding("utf-32");
+                num -= 4;
+            } else if (read == 4 && array[0] == byte.MaxValue && array[1] == 254 && array[2] == 0 && array[3] == 0) {
+                result = Encoding.GetEncoding("utf-32");
+                num -= 4;
+            } else if (read >= 2 && array[0] == 254 && array[1] == byte.MaxValue) {
+                result = Encoding.BigEndianUnicode;
+                num -= 2;
+            } else if (read >= 2 && array[0] == byte.MaxValue && array[1] == 254) {
+                result = Encoding.Unicode;
+                num -= 2;
             }
+
+            if (stream.CanSeek) {
+                stream.Seek(-num, SeekOrigin.Current);
+            } else {
+                var prefix = new byte[num];
+                Array.Copy(array, read - num, prefix, 0, num);
+                stream = new GKPrependStream(prefix, stream);
+            }
+
             return result;
         }
 
-        private string DetectCharset(Stream inputStream, bool charsetDetection)
+        private static string DetectCharset(Stream inputStream, bool charsetDetection)
         {
             string streamCharset = null;
             if (charsetDetection) {
@@ -331,7 +341,7 @@ namespace GDModel.Providers.GEDCOM
             try {
                 // encoding variables
                 string streamCharset = DetectCharset(inputStream, charsetDetection);
-                fEncoding = GetDefaultEncoding(inputStream);
+                fEncoding = GetDefaultEncoding(ref inputStream);
                 fEncodingState = EncodingState.esUnchecked;
 
                 // reading variables

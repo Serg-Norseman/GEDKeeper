@@ -52,12 +52,8 @@ namespace GDModel.Providers.GEDZIP
         {
             using (var zip = new ZipArchive(inputStream, ZipArchiveMode.Read)) {
                 var entry = GetArchiveEntry(zip, GedcomEntry);
-                using (var stream = entry.Open())
-                using (var ms = new MemoryStream()) {
-                    // copy to MemoryStream to support encoding detection
-                    stream.CopyTo(ms);
-                    ms.Seek(0, SeekOrigin.Begin);
-                    base.LoadFromStreamExt(ms, charsetDetection);
+                using (var stream = entry.Open()) {
+                    base.LoadFromStreamExt(stream, charsetDetection);
                 }
             }
         }

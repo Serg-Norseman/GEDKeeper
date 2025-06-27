@@ -62,12 +62,8 @@ namespace GDModel.Providers.GEDCOM
             }
 
             using (var cryptic = CreateCSP(gsMajVer, gsMinVer))
-            using (var crStream = new CryptoStream(fileStream, cryptic.CreateDecryptor(), CryptoStreamMode.Read))
-            using (var ms = new MemoryStream()) {
-                // copy to MemoryStream to support encoding detection
-                crStream.CopyTo(ms);
-                ms.Seek(0, SeekOrigin.Begin);
-                base.LoadFromStreamExt(ms, charsetDetection);
+            using (var crStream = new CryptoStream(fileStream, cryptic.CreateDecryptor(), CryptoStreamMode.Read)) {
+                base.LoadFromStreamExt(crStream, charsetDetection);
             }
         }
 
