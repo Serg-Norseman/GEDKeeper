@@ -732,6 +732,10 @@ namespace GKCore
 
         public string GetArcFileName()
         {
+            if (IsGEDZIP()) {
+                return fFileName;
+            }
+
             string treeName = fFileName;
             string result = GetTreePath(treeName) + Path.GetFileNameWithoutExtension(treeName) + ".zip";
             return result;
@@ -940,9 +944,13 @@ namespace GKCore
 
             var mediaStore = GetStoreType(fileReference);
             string targetFn = mediaStore.FileName;
-            MediaStoreType gst = mediaStore.StoreType;
+            MediaStoreType mst = mediaStore.StoreType;
 
-            switch (gst) {
+            if (IsGEDZIP() && mediaStore.StoreType == MediaStoreType.mstReference) {
+                mst = MediaStoreType.mstArchive;
+            }
+
+            switch (mst) {
                 case MediaStoreType.mstStorage:
                     targetFn = GetStgFolder(false) + targetFn;
                     if (!File.Exists(targetFn)) {
@@ -973,7 +981,7 @@ namespace GKCore
 
                 case MediaStoreType.mstRelativeReference:
                 case MediaStoreType.mstReference:
-                    if (gst == MediaStoreType.mstRelativeReference) {
+                    if (mst == MediaStoreType.mstRelativeReference) {
                         string treeName = fFileName;
                         targetFn = GetTreePath(treeName) + targetFn;
                     }
@@ -1000,6 +1008,11 @@ namespace GKCore
             return (fileReference == null) ? string.Empty : MediaLoad(fileReference.StringValue);
         }
 
+        private bool IsGEDZIP()
+        {
+            return FileHelper.GetFileExtension(fFileName) == ".gdz";
+        }
+
         public string MediaLoad(string fileReference)
         {
             string fileName = string.Empty;
@@ -1008,13 +1021,18 @@ namespace GKCore
             try {
                 MediaStore mediaStore = GetStoreType(fileReference);
 
-                if (mediaStore.StoreType != MediaStoreType.mstURL && !VerifyMediaFileWM(fileReference)) {
+                var mst = mediaStore.StoreType;
+                if (mst != MediaStoreType.mstURL && !VerifyMediaFileWM(fileReference)) {
                     return string.Empty;
+                }
+
+                if (IsGEDZIP() && mst == MediaStoreType.mstReference) {
+                    mst = MediaStoreType.mstArchive;
                 }
 
                 string targetFn = mediaStore.FileName;
 
-                switch (mediaStore.StoreType) {
+                switch (mst) {
                     case MediaStoreType.mstStorage:
                         fileName = GetStgFolder(false) + targetFn;
                         break;
@@ -1659,7 +1677,7 @@ namespace GKCore
                 ProcessBackup(oldFileName, fileName);
 
                 // check for archive and storage, move them if the file changes location
-                MoveMediaContainers(oldFileName, fileName);
+                MoveMediaContainers(oldFileName, fileName, IsGEDZIP());
 
                 fFileName = fileName;
             }

@@ -20,7 +20,7 @@
 
 #define GEDML_SUPPORT
 #define FAMX_SUPPORT
-//#define GDZ_SUPPORT
+#define GDZ_SUPPORT
 
 using System;
 using System.Collections.Generic;
@@ -58,7 +58,7 @@ namespace GKCore.Controllers
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed class BaseWinController : FormController<IBaseWindowView>
     {
@@ -241,7 +241,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public void SetExternalFilter(ExternalFilterHandler filterHandler, 
+        public void SetExternalFilter(ExternalFilterHandler filterHandler,
                                       GDMRecordType recType = GDMRecordType.rtNone)
         {
             for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
