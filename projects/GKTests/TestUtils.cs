@@ -270,10 +270,9 @@ namespace GKTests
         public static IBaseContext LoadResourceGEDCOMFile(string resName)
         {
             BaseContext ctx = new BaseContext(null);
-
             using (Stream stream = TestUtils.LoadResourceStream(resName)) {
                 var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                gedcomProvider.LoadFromStreamExt(stream, stream);
+                gedcomProvider.LoadFromStreamExt(stream);
             }
 
             return ctx;

@@ -40,7 +40,7 @@ namespace GDModel.Providers.FamilyShow
 
         static FamilyXProvider()
         {
-            // Static initialization of the GEDCOMProvider is needed, 
+            // Static initialization of the GEDCOMProvider is needed,
             // otherwise the standard tag identifiers are out of sync
             SysUtils.DoNotInline(GEDCOMProvider.GEDCOMFormats);
         }
@@ -54,7 +54,7 @@ namespace GDModel.Providers.FamilyShow
             return "Family.Show files (*.familyx)|*.familyx";
         }
 
-        public override void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
+        public override void LoadFromStreamExt(Stream inputStream, bool charsetDetection = false)
         {
             using (Package package = Package.Open(inputStream, FileMode.Open, FileAccess.Read)) {
                 PackagePart documentPart = package.GetPart(new Uri(@"/" + OPCContentFileName, UriKind.Relative));
@@ -62,7 +62,7 @@ namespace GDModel.Providers.FamilyShow
                 //using (MemoryStream memStream = new MemoryStream()) {
                 //OPCUtility.CopyStream(docPartStream, memStream);
                 //memStream.Position = 0;
-                ReadStream(inputStream, docPartStream, charsetDetection);
+                ReadStream(docPartStream, charsetDetection);
                 //}
             }
         }
@@ -88,13 +88,10 @@ namespace GDModel.Providers.FamilyShow
 
         private enum RelationshipType { None, Spouse, Child }
 
-        protected override void ReadStream(Stream fileStream, Stream inputStream, bool charsetDetection = false)
+        protected override void ReadStream(Stream inputStream, bool charsetDetection = false)
         {
             fTree.State = GDMTreeState.osLoading;
             try {
-                var progressCallback = fTree.ProgressCallback;
-
-                long fileSize = fileStream.Length;
                 int progress = 0;
 
                 GDMIndividualRecord lastIndividual = null;
@@ -240,13 +237,7 @@ namespace GDModel.Providers.FamilyShow
                             }
                         }
 
-                        if (progressCallback != null) {
-                            int newProgress = (int)Math.Min(100, (fileStream.Position * 100.0f) / fileSize);
-                            if (progress != newProgress) {
-                                progress = newProgress;
-                                progressCallback.StepTo(progress);
-                            }
-                        }
+                        NotifyProgress(inputStream, ref progress);
                     }
                 }
 

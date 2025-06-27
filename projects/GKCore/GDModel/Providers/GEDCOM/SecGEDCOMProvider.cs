@@ -43,30 +43,31 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        public override void LoadFromFile(string fileName, bool charsetDetection = false)
+        public override void LoadFromStreamExt(Stream fileStream, bool charsetDetection = false)
         {
-            using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
-                byte[] gsHeader = new byte[8];
-                fileStream.Read(gsHeader, 0, 8);
-                byte gsMajVer = gsHeader[6];
-                byte gsMinVer = gsHeader[7];
-                gsHeader[6] = 65;
-                gsHeader[7] = 65;
-                var gsh = Encoding.ASCII.GetString(gsHeader);
+            byte[] gsHeader = new byte[8];
+            fileStream.Read(gsHeader, 0, 8);
+            byte gsMajVer = gsHeader[6];
+            byte gsMinVer = gsHeader[7];
+            gsHeader[6] = 65;
+            gsHeader[7] = 65;
+            var gsh = Encoding.ASCII.GetString(gsHeader);
 
-                if (!string.Equals(gsh, GEDSEC_HEADER)) {
-                    throw new GKException(LangMan.LS(LSID.ItsNotGEDSECCompatibleFile));
-                }
+            if (!string.Equals(gsh, GEDSEC_HEADER)) {
+                throw new GKException(LangMan.LS(LSID.ItsNotGEDSECCompatibleFile));
+            }
 
-                if (gsMajVer < GS_MAJOR_VER || gsMinVer < GS_MINOR_VER) {
-                    // dummy for future
-                }
+            if (gsMajVer < GS_MAJOR_VER || gsMinVer < GS_MINOR_VER) {
+                // dummy for future
+            }
 
-                using (var cryptic = CreateCSP(gsMajVer, gsMinVer)) {
-                    using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateDecryptor(), CryptoStreamMode.Read)) {
-                        LoadFromStreamExt(fileStream, crStream, charsetDetection);
-                    }
-                }
+            using (var cryptic = CreateCSP(gsMajVer, gsMinVer))
+            using (var crStream = new CryptoStream(fileStream, cryptic.CreateDecryptor(), CryptoStreamMode.Read))
+            using (var ms = new MemoryStream()) {
+                // copy to MemoryStream to support encoding detection
+                crStream.CopyTo(ms);
+                ms.Seek(0, SeekOrigin.Begin);
+                base.LoadFromStreamExt(ms, charsetDetection);
             }
         }
 

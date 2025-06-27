@@ -23,9 +23,11 @@ using System.Text;
 using GDModel.Providers.FamilyShow;
 using GDModel.Providers.GEDCOM;
 using GDModel.Providers.GedML;
+using GDModel.Providers.GEDZIP;
 using GKCore;
 using GKCore.Interfaces;
 using GKTests;
+using GKTests.Stubs;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -54,7 +56,7 @@ namespace GDModel.Providers
                     }
 
                     var gedcomProvider = new GEDCOMProvider(tree, true, false);
-                    gedcomProvider.LoadFromStreamExt(inStream, inStream);
+                    gedcomProvider.LoadFromStreamExt(inStream);
 
                     using (MemoryStream outStream = new MemoryStream()) {
                         gedcomProvider = new GEDCOMProvider(tree);
@@ -80,7 +82,7 @@ namespace GDModel.Providers
             using (Stream inStream = TestUtils.LoadResourceStream("TGC55CLF.GED")) {
                 using (GDMTree tree = new GDMTree()) {
                     var gedcomProvider = new GEDCOMProvider(tree);
-                    gedcomProvider.LoadFromStreamExt(inStream, inStream);
+                    gedcomProvider.LoadFromStreamExt(inStream);
 
                     Assert.AreEqual(GEDCOMFormat.Unknown, tree.Format);
 
@@ -118,7 +120,7 @@ namespace GDModel.Providers
                     Assert.AreEqual(1.0f, charsetRes.Confidence);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                    gedcomProvider.LoadFromStreamExt(stmGed1);
 
                     Assert.AreEqual(GEDCOMFormat.Native, ctx.Tree.Format);
 
@@ -140,7 +142,7 @@ namespace GDModel.Providers
                     Assert.AreEqual(1.0f, charsetRes.Confidence);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1, true);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, true);
 
                     Assert.AreEqual(GEDCOMFormat.gedcom4j, ctx.Tree.Format);
 
@@ -161,7 +163,7 @@ namespace GDModel.Providers
                     Assert.GreaterOrEqual(charsetRes.Confidence, 0.77f);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                    gedcomProvider.LoadFromStreamExt(stmGed1);
 
                     Assert.AreEqual(GEDCOMFormat.Ahnenblatt, ctx.Tree.Format);
 
@@ -183,7 +185,7 @@ namespace GDModel.Providers
                     Assert.GreaterOrEqual(charsetRes.Confidence, 0.46f);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                    gedcomProvider.LoadFromStreamExt(stmGed1);
 
                     Assert.AreEqual(GEDCOMFormat.ALTREE, ctx.Tree.Format);
 
@@ -205,7 +207,7 @@ namespace GDModel.Providers
                     Assert.GreaterOrEqual(charsetRes.Confidence, 0.69f);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                    gedcomProvider.LoadFromStreamExt(stmGed1);
 
                     Assert.AreEqual(GEDCOMFormat.FTB, ctx.Tree.Format);
 
@@ -261,7 +263,7 @@ namespace GDModel.Providers
                     Assert.AreEqual(GEDCOMFormat.Unknown, ctx.Tree.Format);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                    gedcomProvider.LoadFromStreamExt(stmGed1);
                 }
             }
         }
@@ -601,6 +603,7 @@ namespace GDModel.Providers
         public void Test_EasyTree()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_easytree.ged")) {
+                ctx.Tree.ProgressCallback = new ProgressStub();
                 Assert.AreEqual(GEDCOMFormat.EasyTree, ctx.Tree.Format);
             }
         }
@@ -609,6 +612,7 @@ namespace GDModel.Providers
         public void Test_Genney()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_genney.ged")) {
+                ctx.Tree.ProgressCallback = new ProgressStub();
                 Assert.AreEqual(GEDCOMFormat.Genney, ctx.Tree.Format);
             }
         }
@@ -619,6 +623,7 @@ namespace GDModel.Providers
             var progress = Substitute.For<IProgressController>();
 
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_ages_adop.ged")) {
+                ctx.Tree.ProgressCallback = new ProgressStub();
                 Assert.AreEqual(GEDCOMFormat.AGES, ctx.Tree.Format);
                 GEDCOMChecker.CheckGEDCOMFormat(ctx, progress);
 
@@ -648,9 +653,10 @@ namespace GDModel.Providers
         public void Test_GedML()
         {
             using (BaseContext ctx = new BaseContext(null)) {
+                ctx.Tree.ProgressCallback = new ProgressStub();
                 using (Stream stmGed1 = TestUtils.LoadResourceStream("test_gedml.xml")) {
                     var gedmlProvider = new GedMLProvider(ctx.Tree);
-                    gedmlProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                    gedmlProvider.LoadFromStreamExt(stmGed1);
                 }
 
                 GDMSubmitterRecord submRec = ctx.Tree.XRefIndex_Find("SUB1") as GDMSubmitterRecord;
@@ -668,11 +674,50 @@ namespace GDModel.Providers
         {
             using (Stream inStream = TestUtils.LoadResourceStream("test_windsor.familyx")) {
                 using (GDMTree tree = new GDMTree()) {
+                    tree.ProgressCallback = new ProgressStub();
                     var fxProvider = new FamilyXProvider(tree);
-                    fxProvider.LoadFromStreamExt(inStream, inStream);
+                    fxProvider.LoadFromStreamExt(inStream);
 
                     Assert.AreEqual(118, tree.RecordsCount);
                 }
+            }
+        }
+
+        [Test]
+        public void Test_GK_UTF8_GEDZIP()
+        {
+            using (var ctx = new BaseContext(null))
+            using (var stmGed1 = TestUtils.LoadResourceStream("test_gk_utf8.gdz")) {
+                ctx.Tree.ProgressCallback = new ProgressStub();
+
+                var gedcomProvider = new GEDZIPProvider(ctx.Tree);
+                gedcomProvider.LoadFromStreamExt(stmGed1);
+
+                Assert.AreEqual(GEDCOMFormat.Native, ctx.Tree.Format);
+
+                GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+
+                Assert.AreEqual("Иван Иванович Иванов", iRec1.GetPrimaryFullName());
+            }
+        }
+
+        [Test]
+        public void Test_GK_UTF8_Secure()
+        {
+            using (var ctx = new BaseContext(null))
+            using (var stmGed1 = TestUtils.LoadResourceStream("test_gk_utf8.geds")) {
+                ctx.Tree.ProgressCallback = new ProgressStub();
+
+                var gedcomProvider = new SecGEDCOMProvider(ctx.Tree, "test");
+                gedcomProvider.LoadFromStreamExt(stmGed1);
+
+                Assert.AreEqual(GEDCOMFormat.Native, ctx.Tree.Format);
+
+                GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+
+                Assert.AreEqual("Иван Иванович Иванов", iRec1.GetPrimaryFullName());
             }
         }
     }

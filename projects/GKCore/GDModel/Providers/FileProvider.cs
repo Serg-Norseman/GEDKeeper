@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.IO;
 using System.Text;
 
@@ -41,14 +42,14 @@ namespace GDModel.Providers
         public void LoadFromString(string strText, bool charsetDetection = false)
         {
             using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(strText))) {
-                LoadFromStreamExt(stream, stream, charsetDetection);
+                LoadFromStreamExt(stream, charsetDetection);
             }
         }
 
-        public virtual void LoadFromFile(string fileName, bool charsetDetection = false)
+        public void LoadFromFile(string fileName, bool charsetDetection = false)
         {
-            using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
-                LoadFromStreamExt(fileStream, fileStream, charsetDetection);
+            using (var fileStream = File.OpenRead(fileName)) {
+                LoadFromStreamExt(fileStream, charsetDetection);
             }
         }
 
@@ -57,12 +58,24 @@ namespace GDModel.Providers
             return Encoding.UTF8;
         }
 
-        public virtual void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
+        public virtual void LoadFromStreamExt(Stream inputStream, bool charsetDetection = false)
         {
             fTree.Clear();
-            ReadStream(fileStream, inputStream, charsetDetection);
+            ReadStream(inputStream, charsetDetection);
         }
 
-        protected abstract void ReadStream(Stream fileStream, Stream inputStream, bool charsetDetection = false);
+        protected abstract void ReadStream(Stream inputStream, bool charsetDetection = false);
+
+        protected void NotifyProgress(Stream stream, ref int progress)
+        {
+            var progressCallback = fTree.ProgressCallback;
+            if (progressCallback != null && stream.CanSeek) {
+                int newProgress = (int)Math.Min(100, stream.Position * 100.0f / stream.Length);
+                if (progress != newProgress) {
+                    progress = newProgress;
+                    progressCallback.StepTo(progress);
+                }
+            }
+        }
     }
 }

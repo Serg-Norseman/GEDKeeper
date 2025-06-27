@@ -325,7 +325,7 @@ namespace GDModel.Providers.GEDCOM
 
         #region Loading functions
 
-        protected override void ReadStream(Stream fileStream, Stream inputStream, bool charsetDetection = false)
+        protected override void ReadStream(Stream inputStream, bool charsetDetection = false)
         {
             fTree.State = GDMTreeState.osLoading;
             try {
@@ -335,8 +335,6 @@ namespace GDModel.Providers.GEDCOM
                 fEncodingState = EncodingState.esUnchecked;
 
                 // reading variables
-                var progressCallback = fTree.ProgressCallback;
-                long fileSize = fileStream.Length;
                 int progress = 0;
                 InitBuffers();
 
@@ -452,13 +450,7 @@ namespace GDModel.Providers.GEDCOM
                         }
                     }
 
-                    if (progressCallback != null) {
-                        int newProgress = (int)Math.Min(100, (fileStream.Position * 100.0f) / fileSize);
-                        if (progress != newProgress) {
-                            progress = newProgress;
-                            progressCallback.StepTo(progress);
-                        }
-                    }
+                    NotifyProgress(inputStream, ref progress);
                 }
 
                 stack.Clear();

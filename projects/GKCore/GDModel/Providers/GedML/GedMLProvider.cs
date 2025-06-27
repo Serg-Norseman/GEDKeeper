@@ -41,13 +41,13 @@ namespace GDModel.Providers.GedML
             return LangMan.LS(LSID.GedMLFilter);
         }
 
-        protected override void ReadStream(Stream fileStream, Stream inputStream, bool charsetDetection = false)
+        protected override void ReadStream(Stream inputStream, bool charsetDetection = false)
         {
             fTree.State = GDMTreeState.osLoading;
             try {
                 var progressCallback = fTree.ProgressCallback;
 
-                long fileSize = fileStream.Length;
+                long fileSize = inputStream.Length;
                 int progress = 0;
                 var invariantText = GEDCOMUtils.InvariantTextInfo;
 
@@ -93,7 +93,7 @@ namespace GDModel.Providers.GedML
                                 }
                             } else if (tagLevel > 0) {
                                 if (!string.IsNullOrEmpty(xrefPtr)) {
-                                    // since the default method of the GEDCOM provider is used, 
+                                    // since the default method of the GEDCOM provider is used,
                                     // a standard character `@` is expected
                                     curTag = GEDCOMProvider.ProcessTag(fTree, stack, tagLevel, tagId, "@" + xrefPtr + "@");
                                 } else {
@@ -109,7 +109,7 @@ namespace GDModel.Providers.GedML
                         }
 
                         if (progressCallback != null) {
-                            int newProgress = (int)Math.Min(100, (fileStream.Position * 100.0f) / fileSize);
+                            int newProgress = (int)Math.Min(100, (inputStream.Position * 100.0f) / fileSize);
                             if (progress != newProgress) {
                                 progress = newProgress;
                                 progressCallback.StepTo(progress);
