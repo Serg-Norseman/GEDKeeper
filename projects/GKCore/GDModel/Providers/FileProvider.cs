@@ -52,11 +52,6 @@ namespace GDModel.Providers
             }
         }
 
-        protected virtual Encoding GetDefaultEncoding(Stream inputStream)
-        {
-            return Encoding.UTF8;
-        }
-
         public virtual void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
         {
             fTree.Clear();

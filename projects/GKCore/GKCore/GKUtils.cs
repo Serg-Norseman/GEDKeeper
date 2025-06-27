@@ -569,13 +569,22 @@ namespace GKCore
 
         public static CharsetResult DetectCharset(Stream stream, int bufferSize = 32768)
         {
-            var result = new CharsetResult(null, 0.0f);
-
             byte[] buffer = new byte[bufferSize];
             int read = stream.Read(buffer, 0, buffer.Length);
             if (read > 0) {
-                var detRes = CharsetDetector.DetectFromBytes(buffer, 0, read);
                 stream.Seek(0, SeekOrigin.Begin);
+                return DetectCharset(buffer, read);
+            }
+
+            return new CharsetResult(null, 0.0f);
+        }
+
+        public static CharsetResult DetectCharset(byte[] buffer, int bufferSize)
+        {
+            var result = new CharsetResult(null, 0.0f);
+
+            if (bufferSize > 0) {
+                var detRes = CharsetDetector.DetectFromBytes(buffer, 0, bufferSize);
 
                 var cdet = detRes.Detected;
                 if (cdet != null) {
@@ -586,6 +595,7 @@ namespace GKCore
 
             return result;
         }
+
 
         public static Encoding DetectEncoding(string fileName)
         {

@@ -229,41 +229,45 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        protected override Encoding GetDefaultEncoding(Stream inputStream)
+        private static Encoding GetDefaultEncoding(byte[] buffer, int bufferSize, out int offset)
         {
             // Dirty code: external encodings are not supported on mobile (Xamarin)
-            if (AppHost.Instance.HasFeatureSupport(GKCore.Types.Feature.Mobile)) return Encoding.UTF8;
-
-            var result = Encoding.GetEncoding(DEF_CODEPAGE);
-            if (inputStream.CanSeek) {
-                byte[] array = new byte[4];
-                int num = inputStream.Read(array, 0, 4);
-                if (num >= 3 && array[0] == 239 && array[1] == 187 && array[2] == 191) {
-                    result = Encoding.UTF8;
-                    num -= 3;
-                } else if (num == 4 && array[0] == 0 && array[1] == 0 && array[2] == 254 && array[3] == byte.MaxValue) {
-                    result = Encoding.GetEncoding("utf-32");
-                    num -= 4;
-                } else if (num == 4 && array[0] == byte.MaxValue && array[1] == 254 && array[2] == 0 && array[3] == 0) {
-                    result = Encoding.GetEncoding("utf-32");
-                    num -= 4;
-                } else if (num >= 2 && array[0] == 254 && array[1] == byte.MaxValue) {
-                    result = Encoding.BigEndianUnicode;
-                    num -= 2;
-                } else if (num >= 2 && array[0] == byte.MaxValue && array[1] == 254) {
-                    result = Encoding.Unicode;
-                    num -= 2;
-                }
-                inputStream.Seek(-num, SeekOrigin.Current);
+            if (AppHost.Instance.HasFeatureSupport(GKCore.Types.Feature.Mobile)) {
+                offset = 3; // FIXME!
+                return Encoding.UTF8;
             }
+
+            Encoding result;
+
+            int read = Math.Min(bufferSize, 4);
+            if (read >= 3 && buffer[0] == 0xEF && buffer[1] == 0xBB && buffer[2] == 0xBF) {
+                result = Encoding.UTF8;
+                offset = 3;
+            } else if (read == 4 && buffer[0] == 0 && buffer[1] == 0 && buffer[2] == 0xFE && buffer[3] == 0xFF) {
+                result = Encoding.GetEncoding("utf-32");
+                offset = 4;
+            } else if (read == 4 && buffer[0] == 0xFF && buffer[1] == 0xFE && buffer[2] == 0 && buffer[3] == 0) {
+                result = Encoding.GetEncoding("utf-32");
+                offset = 4;
+            } else if (read >= 2 && buffer[0] == 0xFE && buffer[1] == 0xFF) {
+                result = Encoding.BigEndianUnicode;
+                offset = 2;
+            } else if (read >= 2 && buffer[0] == 0xFF && buffer[1] == 0xFE) {
+                result = Encoding.Unicode;
+                offset = 2;
+            } else {
+                result = Encoding.GetEncoding(DEF_CODEPAGE);
+                offset = 0;
+            }
+
             return result;
         }
 
-        private string DetectCharset(Stream inputStream, bool charsetDetection)
+        private static string DetectCharset(byte[] buffer, int bufferSize, bool charsetDetection)
         {
             string streamCharset = null;
             if (charsetDetection) {
-                var charsetRes = GKUtils.DetectCharset(inputStream);
+                var charsetRes = GKUtils.DetectCharset(buffer, bufferSize);
                 if (charsetRes.Confidence >= 0.7f) {
                     streamCharset = charsetRes.Charset;
                 }
@@ -281,13 +285,16 @@ namespace GDModel.Providers.GEDCOM
         private byte[] fStreamBuffer, fLineBuffer;
         private int fStmBufLen, fStmBufPos, fLineBufPos;
 
-        private void InitBuffers()
+        private void InitBuffers(Stream reader)
         {
             fStreamBuffer = new byte[SB_SIZE];
             fLineBuffer = new byte[LB_SIZE];
             fStmBufLen = 0;
             fStmBufPos = 0;
             fLineBufPos = 0;
+
+            // pre-reading
+            fStmBufLen = reader.Read(fStreamBuffer, 0, SB_SIZE);
         }
 
         private const byte LF = 0x0A; // \n
@@ -329,16 +336,17 @@ namespace GDModel.Providers.GEDCOM
         {
             fTree.State = GDMTreeState.osLoading;
             try {
-                // encoding variables
-                string streamCharset = DetectCharset(inputStream, charsetDetection);
-                fEncoding = GetDefaultEncoding(inputStream);
-                fEncodingState = EncodingState.esUnchecked;
-
                 // reading variables
                 var progressCallback = fTree.ProgressCallback;
                 long fileSize = fileStream.Length;
                 int progress = 0;
-                InitBuffers();
+                InitBuffers(inputStream);
+
+                // encoding variables
+                string streamCharset = DetectCharset(fStreamBuffer, fStmBufLen, charsetDetection);
+                fEncoding = GetDefaultEncoding(fStreamBuffer, fStmBufLen, out int prefixOffset);
+                fEncodingState = EncodingState.esUnchecked;
+                fStmBufPos += prefixOffset;
 
                 // parsing variables
                 var invariantText = GEDCOMUtils.InvariantTextInfo;
