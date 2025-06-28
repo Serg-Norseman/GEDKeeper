@@ -162,7 +162,7 @@ namespace GDModel.Providers.GEDCOM
             fEncoding = encoding;
         }
 
-        private void DefineEncoding(Stream inputStream, GEDCOMFormat format, string streamCharset)
+        private void DefineEncoding(GEDCOMFormat format, string streamCharset)
         {
             GEDCOMCharacterSet charSet = fTree.Header.CharacterSet.Value;
             switch (charSet)
@@ -229,6 +229,10 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
+        /// <summary>
+        /// Detect file encoding from byte buffer to avoid using streams without Seek support
+        /// (CryptoStream, DeflateStream).
+        /// </summary>
         private static Encoding GetDefaultEncoding(byte[] buffer, int bufferSize, out int offset)
         {
             // Dirty code: external encodings are not supported on mobile (Xamarin)
@@ -263,6 +267,10 @@ namespace GDModel.Providers.GEDCOM
             return result;
         }
 
+        /// <summary>
+        /// Detect file charset from byte buffer to avoid using streams without Seek support
+        /// (CryptoStream, DeflateStream).
+        /// </summary>
         private static string DetectCharset(byte[] buffer, int bufferSize, bool charsetDetection)
         {
             string streamCharset = null;
@@ -283,23 +291,29 @@ namespace GDModel.Providers.GEDCOM
         private const int LB_SIZE = 32 * 1024; // Fix for files from WikiTree, with lines above 3000 chars!
 
         private byte[] fStreamBuffer, fLineBuffer;
-        private int fStmBufLen, fStmBufPos, fLineBufPos;
+        private int fStmPos, fStmBufLen, fStmBufPos, fLineBufPos;
 
         private void InitBuffers(Stream reader)
         {
             fStreamBuffer = new byte[SB_SIZE];
             fLineBuffer = new byte[LB_SIZE];
+            fStmPos = 0;
             fStmBufLen = 0;
             fStmBufPos = 0;
             fLineBufPos = 0;
 
-            // pre-reading
+            // Pre-reading for the purpose of determining the base encoding (if files have BOM)
+            // or charset (if old files do not have BOM).
             fStmBufLen = reader.Read(fStreamBuffer, 0, SB_SIZE);
         }
 
         private const byte LF = 0x0A; // \n
         private const byte CR = 0x0D; // \r
 
+        /// <summary>
+        /// Manually optimized solution with a profiler - all allocations are removed,
+        /// the number of branches and calls to other functions is reduced to a minimum.
+        /// </summary>
         private int ReadLine(Stream reader)
         {
             while (true) {
@@ -316,6 +330,8 @@ namespace GDModel.Providers.GEDCOM
                 fStmBufPos += 1;
 
                 if (ch == CR || ch == LF) {
+                    fStmPos += fLineBufPos + 1; // global stream position
+
                     int linePos = fLineBufPos;
                     fLineBufPos = 0;
                     if (linePos > 0) {
@@ -332,14 +348,11 @@ namespace GDModel.Providers.GEDCOM
 
         #region Loading functions
 
-        protected override void ReadStream(Stream fileStream, Stream inputStream, bool charsetDetection = false)
+        protected override void ReadStream(Stream inputStream, bool charsetDetection = false)
         {
             fTree.State = GDMTreeState.osLoading;
             try {
                 // reading variables
-                var progressCallback = fTree.ProgressCallback;
-                long fileSize = fileStream.Length;
-                int progress = 0;
                 InitBuffers(inputStream);
 
                 // encoding variables
@@ -373,7 +386,8 @@ namespace GDModel.Providers.GEDCOM
                     StringSpan tagValue;
 
                     try {
-                        // damaged utf8 characters (FTB)
+                        // UTF8 files from FTB may contain strings cut into pieces according to the standard,
+                        // where strings are cut by bytes, not characters - bytes of one character may be in different strings (damaged).
                         if (dmgByte != 0) {
                             dmgBytePrev = dmgByte;
                             dmgByte = 0;
@@ -386,6 +400,8 @@ namespace GDModel.Providers.GEDCOM
                             }
                         }
 
+                        // To minimize string conversions, allocations and splitting into parts - the conversion of strings
+                        // from the file is performed only into an array of characters and the parser works only with the array.
                         int charsLen = fEncoding.GetChars(fLineBuffer, 0, lineLen, line, 0);
                         strTok.Reset(line, 0, charsLen);
                         int lineRes = GEDCOMUtils.ParseTag(strTok, out tagLevel, out tagXRef, out tagName, out tagValue);
@@ -436,7 +452,7 @@ namespace GDModel.Providers.GEDCOM
                             // to check for additional versions of the code page
                             var format = GetGEDCOMFormat(fTree, out ilb);
                             fTree.Format = format;
-                            DefineEncoding(inputStream, format, streamCharset);
+                            DefineEncoding(format, streamCharset);
                             checkLI = (format == GEDCOMFormat.FTB && Encoding.UTF8.Equals(fEncoding));
                         }
 
@@ -460,13 +476,7 @@ namespace GDModel.Providers.GEDCOM
                         }
                     }
 
-                    if (progressCallback != null) {
-                        int newProgress = (int)Math.Min(100, (fileStream.Position * 100.0f) / fileSize);
-                        if (progress != newProgress) {
-                            progress = newProgress;
-                            progressCallback.StepTo(progress);
-                        }
-                    }
+                    NotifyProgress(fStmPos);
                 }
 
                 stack.Clear();

@@ -54,16 +54,18 @@ namespace GDModel.Providers.FamilyShow
             return "Family.Show files (*.familyx)|*.familyx";
         }
 
-        public override void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
+        /// <summary>
+        /// This method could be replaced with a similar LoadFromFile() without losing functionality,
+        /// but then it would become impossible to apply a test with a file from ResourceStream.
+        /// </summary>
+        public override void LoadFromStreamExt(Stream inputStream, bool charsetDetection = false)
         {
             using (Package package = Package.Open(inputStream, FileMode.Open, FileAccess.Read)) {
                 PackagePart documentPart = package.GetPart(new Uri(@"/" + OPCContentFileName, UriKind.Relative));
                 var docPartStream = documentPart.GetStream();
-                //using (MemoryStream memStream = new MemoryStream()) {
-                //OPCUtility.CopyStream(docPartStream, memStream);
-                //memStream.Position = 0;
-                ReadStream(inputStream, docPartStream, charsetDetection);
-                //}
+                // PackagePart.GetStream() -> MS.Internal.IO.Zip.ZipIOModeEnforcingStream -> CanSeek = true
+                InitProgress(docPartStream.Length);
+                ReadStream(docPartStream, charsetDetection);
             }
         }
 
@@ -88,15 +90,10 @@ namespace GDModel.Providers.FamilyShow
 
         private enum RelationshipType { None, Spouse, Child }
 
-        protected override void ReadStream(Stream fileStream, Stream inputStream, bool charsetDetection = false)
+        protected override void ReadStream(Stream inputStream, bool charsetDetection = false)
         {
             fTree.State = GDMTreeState.osLoading;
             try {
-                var progressCallback = fTree.ProgressCallback;
-
-                long fileSize = fileStream.Length;
-                int progress = 0;
-
                 GDMIndividualRecord lastIndividual = null;
                 FXTag lastTagType = FXTag.Unknown;
                 RelationshipType relationshipType = RelationshipType.None;
@@ -240,13 +237,7 @@ namespace GDModel.Providers.FamilyShow
                             }
                         }
 
-                        if (progressCallback != null) {
-                            int newProgress = (int)Math.Min(100, (fileStream.Position * 100.0f) / fileSize);
-                            if (progress != newProgress) {
-                                progress = newProgress;
-                                progressCallback.StepTo(progress);
-                            }
-                        }
+                        NotifyProgress(inputStream.Position);
                     }
                 }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Alex Zaytsev, Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -50,14 +50,15 @@ namespace GDModel.Providers.GEDZIP
 
         public override void LoadFromFile(string fileName, bool charsetDetection = false)
         {
-            using (var zip = ZipFile.Open(fileName, ZipArchiveMode.Read)) {
-                var entry = GetArchiveEntry(zip, GedcomEntry);
-                using (var stream = entry.Open())
-                using (var ms = new MemoryStream()) {
-                    // wrap to MemoryStream to support encoding detection
-                    stream.CopyTo(ms);
-                    ms.Position = 0;
-                    LoadFromStreamExt(ms, ms, charsetDetection);
+            using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
+                using (var zip = new ZipArchive(fileStream, ZipArchiveMode.Read)) {
+                    var entry = GetArchiveEntry(zip, GedcomEntry);
+                    using (var entryStream = entry.Open()) {
+                        // System.IO.Compression.DeflateStream -> CanSeek = false
+                        // but ZipArchiveEntry has Length
+                        InitProgress(entry.Length);
+                        LoadFromStreamExt(entryStream, charsetDetection);
+                    }
                 }
             }
         }

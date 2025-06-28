@@ -1,3 +1,23 @@
+/*
+ *  "GEDKeeper", the personal genealogical database editor.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih, Alex Zaytsev.
+ *
+ *  This file is part of "GEDKeeper".
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 using System;
 using System.IO;
 using System.Security.Cryptography;
@@ -63,8 +83,13 @@ namespace GDModel.Providers.GEDCOM
                 }
 
                 using (var cryptic = CreateCSP(gsMajVer, gsMinVer)) {
-                    using (CryptoStream crStream = new CryptoStream(fileStream, cryptic.CreateDecryptor(), CryptoStreamMode.Read)) {
-                        LoadFromStreamExt(fileStream, crStream, charsetDetection);
+                    using (var cryptoStream = new CryptoStream(fileStream, cryptic.CreateDecryptor(), CryptoStreamMode.Read)) {
+                        // System.Security.Cryptography.CryptoStream -> CanSeek = false
+                        // fileStream.Length is incorrect to use, because it is the length of the already encrypted file, not the original one.
+                        // But it is impossible to implement saving the file size, because it is unknown until completion...
+                        // or when saving a file to a crypto-stream, then move to the beginning of the file stream and rewrite the header
+                        InitProgress(fileStream.Length);
+                        LoadFromStreamExt(cryptoStream, charsetDetection);
                     }
                 }
             }
@@ -73,7 +98,7 @@ namespace GDModel.Providers.GEDCOM
         private SymmetricAlgorithm CreateCSP(byte majorVer, byte minorVer)
         {
 #if NETCORE
-            const int BlockSize = 128;
+            const int BlockSize = 128; // .net6: BlockSize must be 128 in this implementation.
 #else
             const int BlockSize = 256;
 #endif
@@ -96,7 +121,7 @@ namespace GDModel.Providers.GEDCOM
                             if (pdbDisp != null) pdbDisp.Dispose();
                         }
                     }
-                        break;
+                    break;
 
                     case 2: {
                         var keyBytes = new byte[BlockSize / 8];
@@ -109,7 +134,7 @@ namespace GDModel.Providers.GEDCOM
                         csp.Padding = PaddingMode.PKCS7;
                         csp.Mode = CipherMode.CBC;
                     }
-                        break;
+                    break;
                 }
 
                 SCCrypt.ClearBytes(pwd);

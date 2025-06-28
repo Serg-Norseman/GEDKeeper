@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih, Alex Zaytsev.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.IO;
 using System.Text;
 
@@ -30,6 +31,10 @@ namespace GDModel.Providers
     {
         protected readonly GDMTree fTree;
 
+        private int fProgress;
+        private long fStreamLength;
+        private long fStreamPosition;
+
 
         protected FileProvider(GDMTree tree)
         {
@@ -40,24 +45,46 @@ namespace GDModel.Providers
 
         public void LoadFromString(string strText, bool charsetDetection = false)
         {
-            using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(strText))) {
-                LoadFromStreamExt(stream, stream, charsetDetection);
+            using (var memStream = new MemoryStream(Encoding.UTF8.GetBytes(strText))) {
+                InitProgress(memStream.Length);
+                LoadFromStreamExt(memStream, charsetDetection);
             }
         }
 
         public virtual void LoadFromFile(string fileName, bool charsetDetection = false)
         {
-            using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
-                LoadFromStreamExt(fileStream, fileStream, charsetDetection);
+            using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
+                InitProgress(fileStream.Length);
+                LoadFromStreamExt(fileStream, charsetDetection);
             }
         }
 
-        public virtual void LoadFromStreamExt(Stream fileStream, Stream inputStream, bool charsetDetection = false)
+        public virtual void LoadFromStreamExt(Stream inputStream, bool charsetDetection = false)
         {
             fTree.Clear();
-            ReadStream(fileStream, inputStream, charsetDetection);
+            ReadStream(inputStream, charsetDetection);
         }
 
-        protected abstract void ReadStream(Stream fileStream, Stream inputStream, bool charsetDetection = false);
+        protected abstract void ReadStream(Stream inputStream, bool charsetDetection = false);
+
+        protected void InitProgress(long streamLength)
+        {
+            fProgress = 0;
+            fStreamLength = streamLength;
+        }
+
+        protected void NotifyProgress(long streamPosition)
+        {
+            fStreamPosition = streamPosition;
+
+            var progressCallback = fTree.ProgressCallback;
+            if (progressCallback != null && fStreamLength != 0) {
+                int newProgress = (int)Math.Min(100, fStreamPosition * 100.0f / fStreamLength);
+                if (fProgress != newProgress) {
+                    fProgress = newProgress;
+                    progressCallback.StepTo(fProgress);
+                }
+            }
+        }
     }
 }

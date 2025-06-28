@@ -273,7 +273,7 @@ namespace GKTests
 
             using (Stream stream = TestUtils.LoadResourceStream(resName)) {
                 var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                gedcomProvider.LoadFromStreamExt(stream, stream);
+                gedcomProvider.LoadFromStreamExt(stream);
             }
 
             return ctx;

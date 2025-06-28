@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -41,16 +40,11 @@ namespace GDModel.Providers.GedML
             return LangMan.LS(LSID.GedMLFilter);
         }
 
-        protected override void ReadStream(Stream fileStream, Stream inputStream, bool charsetDetection = false)
+        protected override void ReadStream(Stream inputStream, bool charsetDetection = false)
         {
             fTree.State = GDMTreeState.osLoading;
             try {
-                var progressCallback = fTree.ProgressCallback;
-
-                long fileSize = fileStream.Length;
-                int progress = 0;
                 var invariantText = GEDCOMUtils.InvariantTextInfo;
-
                 GDMTag curRecord = null;
                 GDMTag curTag = null;
                 var stack = new Stack<StackTuple>(9);
@@ -108,13 +102,8 @@ namespace GDModel.Providers.GedML
                             }
                         }
 
-                        if (progressCallback != null) {
-                            int newProgress = (int)Math.Min(100, (fileStream.Position * 100.0f) / fileSize);
-                            if (progress != newProgress) {
-                                progress = newProgress;
-                                progressCallback.StepTo(progress);
-                            }
-                        }
+                        // Only non-container files are loaded (FileStream -> xml).
+                        NotifyProgress(inputStream.Position);
                     }
                 }
 

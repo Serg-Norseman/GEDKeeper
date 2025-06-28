@@ -54,7 +54,7 @@ namespace GDModel.Providers
                     }
 
                     var gedcomProvider = new GEDCOMProvider(tree, true, false);
-                    gedcomProvider.LoadFromStreamExt(inStream, inStream);
+                    gedcomProvider.LoadFromStreamExt(inStream);
 
                     using (MemoryStream outStream = new MemoryStream()) {
                         gedcomProvider = new GEDCOMProvider(tree);
@@ -80,7 +80,7 @@ namespace GDModel.Providers
             using (Stream inStream = TestUtils.LoadResourceStream("TGC55CLF.GED")) {
                 using (GDMTree tree = new GDMTree()) {
                     var gedcomProvider = new GEDCOMProvider(tree);
-                    gedcomProvider.LoadFromStreamExt(inStream, inStream);
+                    gedcomProvider.LoadFromStreamExt(inStream);
 
                     Assert.AreEqual(GEDCOMFormat.Unknown, tree.Format);
 
@@ -118,7 +118,7 @@ namespace GDModel.Providers
                     Assert.AreEqual(1.0f, charsetRes.Confidence);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                    gedcomProvider.LoadFromStreamExt(stmGed1);
 
                     Assert.AreEqual(GEDCOMFormat.Native, ctx.Tree.Format);
 
@@ -140,7 +140,7 @@ namespace GDModel.Providers
                     Assert.AreEqual(1.0f, charsetRes.Confidence);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1, true);
+                    gedcomProvider.LoadFromStreamExt(stmGed1, true);
 
                     Assert.AreEqual(GEDCOMFormat.gedcom4j, ctx.Tree.Format);
 
@@ -161,7 +161,7 @@ namespace GDModel.Providers
                     Assert.GreaterOrEqual(charsetRes.Confidence, 0.77f);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                    gedcomProvider.LoadFromStreamExt(stmGed1);
 
                     Assert.AreEqual(GEDCOMFormat.Ahnenblatt, ctx.Tree.Format);
 
@@ -183,7 +183,7 @@ namespace GDModel.Providers
                     Assert.GreaterOrEqual(charsetRes.Confidence, 0.46f);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                    gedcomProvider.LoadFromStreamExt(stmGed1);
 
                     Assert.AreEqual(GEDCOMFormat.ALTREE, ctx.Tree.Format);
 
@@ -205,7 +205,7 @@ namespace GDModel.Providers
                     Assert.GreaterOrEqual(charsetRes.Confidence, 0.69f);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                    gedcomProvider.LoadFromStreamExt(stmGed1);
 
                     Assert.AreEqual(GEDCOMFormat.FTB, ctx.Tree.Format);
 
@@ -261,7 +261,7 @@ namespace GDModel.Providers
                     Assert.AreEqual(GEDCOMFormat.Unknown, ctx.Tree.Format);
 
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
-                    gedcomProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                    gedcomProvider.LoadFromStreamExt(stmGed1);
                 }
             }
         }
@@ -650,7 +650,7 @@ namespace GDModel.Providers
             using (BaseContext ctx = new BaseContext(null)) {
                 using (Stream stmGed1 = TestUtils.LoadResourceStream("test_gedml.xml")) {
                     var gedmlProvider = new GedMLProvider(ctx.Tree);
-                    gedmlProvider.LoadFromStreamExt(stmGed1, stmGed1);
+                    gedmlProvider.LoadFromStreamExt(stmGed1);
                 }
 
                 GDMSubmitterRecord submRec = ctx.Tree.XRefIndex_Find("SUB1") as GDMSubmitterRecord;
@@ -669,7 +669,7 @@ namespace GDModel.Providers
             using (Stream inStream = TestUtils.LoadResourceStream("test_windsor.familyx")) {
                 using (GDMTree tree = new GDMTree()) {
                     var fxProvider = new FamilyXProvider(tree);
-                    fxProvider.LoadFromStreamExt(inStream, inStream);
+                    fxProvider.LoadFromStreamExt(inStream);
 
                     Assert.AreEqual(118, tree.RecordsCount);
                 }
