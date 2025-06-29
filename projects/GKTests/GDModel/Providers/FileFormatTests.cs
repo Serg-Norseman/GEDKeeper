@@ -23,9 +23,11 @@ using System.Text;
 using GDModel.Providers.FamilyShow;
 using GDModel.Providers.GEDCOM;
 using GDModel.Providers.GedML;
+using GDModel.Providers.GEDZIP;
 using GKCore;
 using GKCore.Interfaces;
 using GKTests;
+using GKTests.Stubs;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -673,6 +675,44 @@ namespace GDModel.Providers
 
                     Assert.AreEqual(118, tree.RecordsCount);
                 }
+            }
+        }
+
+        [Test]
+        public void Test_GK_UTF8_GEDZIP()
+        {
+            using (var ctx = new BaseContext(null))
+            using (var stmGed1 = TestUtils.LoadResourceStream("test_gk_utf8.gdz")) {
+                ctx.Tree.ProgressCallback = new ProgressStub();
+
+                var gedcomProvider = new GEDZIPProvider(ctx.Tree);
+                gedcomProvider.LoadFromStreamExt(stmGed1);
+
+                Assert.AreEqual(GEDCOMFormat.Native, ctx.Tree.Format);
+
+                GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+
+                Assert.AreEqual("Иван Иванович Иванов", iRec1.GetPrimaryFullName());
+            }
+        }
+
+        [Test]
+        public void Test_GK_UTF8_Secure()
+        {
+            using (var ctx = new BaseContext(null))
+            using (var stmGed1 = TestUtils.LoadResourceStream("test_gk_utf8.geds")) {
+                ctx.Tree.ProgressCallback = new ProgressStub();
+
+                var gedcomProvider = new SecGEDCOMProvider(ctx.Tree, "test");
+                gedcomProvider.LoadFromStreamExt(stmGed1);
+
+                Assert.AreEqual(GEDCOMFormat.Native, ctx.Tree.Format);
+
+                GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                Assert.IsNotNull(iRec1);
+
+                Assert.AreEqual("Иван Иванович Иванов", iRec1.GetPrimaryFullName());
             }
         }
     }

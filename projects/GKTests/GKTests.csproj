@@ -166,6 +166,8 @@
     <EmbeddedResource Include="Resources\test_names_02.ged" />
     <EmbeddedResource Include="Resources\test_ahn_ansi%28win1250%29.ged" />
     <EmbeddedResource Include="Resources\test_gk_utf8.ged" />
+    <EmbeddedResource Include="Resources\test_gk_utf8.geds" />
+    <EmbeddedResource Include="Resources\test_gk_utf8.gdz" />
     <EmbeddedResource Include="Resources\test_ftb_badline.ged" />
     <EmbeddedResource Include="Resources\test_min_indented.ged" />
     <EmbeddedResource Include="Resources\test_empty_lines.ged" />

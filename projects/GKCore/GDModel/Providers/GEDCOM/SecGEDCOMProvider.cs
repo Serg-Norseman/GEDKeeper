@@ -30,7 +30,7 @@ namespace GDModel.Providers.GEDCOM
     {
         private const string GEDSEC_HEADER = "GEDSECAA";
         private const byte GS_MAJOR_VER = 1;
-        private const byte GS_MINOR_VER = 2;
+        private const byte GS_MINOR_VER = 3;
 
         private readonly string fPassword;
 
@@ -63,44 +63,43 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        public override void LoadFromFile(string fileName, bool charsetDetection = false)
+        public override void LoadFromStreamExt(Stream inputStream, bool charsetDetection = false)
         {
-            using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
-                byte[] gsHeader = new byte[8];
-                fileStream.Read(gsHeader, 0, 8);
-                byte gsMajVer = gsHeader[6];
-                byte gsMinVer = gsHeader[7];
-                gsHeader[6] = 65;
-                gsHeader[7] = 65;
-                var gsh = Encoding.ASCII.GetString(gsHeader);
+            byte[] gsHeader = new byte[8];
+            inputStream.Read(gsHeader, 0, 8);
+            byte gsMajVer = gsHeader[6];
+            byte gsMinVer = gsHeader[7];
+            gsHeader[6] = 65;
+            gsHeader[7] = 65;
+            var gsh = Encoding.ASCII.GetString(gsHeader);
 
-                if (!string.Equals(gsh, GEDSEC_HEADER)) {
-                    throw new GKException(LangMan.LS(LSID.ItsNotGEDSECCompatibleFile));
-                }
+            if (!string.Equals(gsh, GEDSEC_HEADER)) {
+                throw new GKException(LangMan.LS(LSID.ItsNotGEDSECCompatibleFile));
+            }
 
-                if (gsMajVer < GS_MAJOR_VER || gsMinVer < GS_MINOR_VER) {
-                    // dummy for future
-                }
+            if (gsMajVer < GS_MAJOR_VER || gsMinVer < GS_MINOR_VER) {
+                // dummy for future
+            }
 
-                using (var cryptic = CreateCSP(gsMajVer, gsMinVer)) {
-                    using (var cryptoStream = new CryptoStream(fileStream, cryptic.CreateDecryptor(), CryptoStreamMode.Read)) {
-                        // System.Security.Cryptography.CryptoStream -> CanSeek = false
-                        // fileStream.Length is incorrect to use, because it is the length of the already encrypted file, not the original one.
-                        // But it is impossible to implement saving the file size, because it is unknown until completion...
-                        // or when saving a file to a crypto-stream, then move to the beginning of the file stream and rewrite the header
-                        InitProgress(fileStream.Length);
-                        LoadFromStreamExt(cryptoStream, charsetDetection);
-                    }
+            using (var cryptic = CreateCSP(gsMajVer, gsMinVer)) {
+                using (var cryptoStream = new CryptoStream(inputStream, cryptic.CreateDecryptor(), CryptoStreamMode.Read)) {
+                    // System.Security.Cryptography.CryptoStream -> CanSeek = false
+                    // fileStream.Length is incorrect to use, because it is the length of the already encrypted file, not the original one.
+                    // But it is impossible to implement saving the file size, because it is unknown until completion...
+                    // or when saving a file to a crypto-stream, then move to the beginning of the file stream and rewrite the header
+                    InitProgress(inputStream.Length);
+                    base.LoadFromStreamExt(cryptoStream, charsetDetection);
                 }
             }
         }
 
         private SymmetricAlgorithm CreateCSP(byte majorVer, byte minorVer)
         {
+            int blockSize;
 #if NETCORE
-            const int BlockSize = 128; // .net6: BlockSize must be 128 in this implementation.
+            blockSize = 128; // .net6: BlockSize must be 128 in this implementation.
 #else
-            const int BlockSize = 256;
+            blockSize = (minorVer == 2) ? 256 : 128;
 #endif
 
             if (majorVer >= 1) {
@@ -110,31 +109,33 @@ namespace GDModel.Providers.GEDCOM
 
                 switch (minorVer) {
                     case 1: {
-                        byte[] salt = SCCrypt.CreateRandomSalt(7);
-                        csp = new DESCryptoServiceProvider();
-                        var pdb = new PasswordDeriveBytes(pwd, salt);
-                        try {
-                            csp.Key = pdb.CryptDeriveKey("DES", "SHA1", csp.KeySize, csp.IV);
-                            SCCrypt.ClearBytes(salt);
-                        } finally {
-                            var pdbDisp = pdb as IDisposable;
-                            if (pdbDisp != null) pdbDisp.Dispose();
+                            byte[] salt = SCCrypt.CreateRandomSalt(7);
+                            csp = new DESCryptoServiceProvider();
+                            var pdb = new PasswordDeriveBytes(pwd, salt);
+                            try {
+                                csp.Key = pdb.CryptDeriveKey("DES", "SHA1", csp.KeySize, csp.IV);
+                                SCCrypt.ClearBytes(salt);
+                            } finally {
+                                var pdbDisp = pdb as IDisposable;
+                                if (pdbDisp != null) pdbDisp.Dispose();
+                            }
                         }
-                    }
-                    break;
+                        break;
 
-                    case 2: {
-                        var keyBytes = new byte[BlockSize / 8];
-                        Array.Copy(pwd, keyBytes, Math.Min(keyBytes.Length, pwd.Length));
-                        csp = new RijndaelManaged();
-                        csp.KeySize = BlockSize;
-                        csp.BlockSize = BlockSize;
-                        csp.Key = keyBytes;
-                        csp.IV = keyBytes;
-                        csp.Padding = PaddingMode.PKCS7;
-                        csp.Mode = CipherMode.CBC;
-                    }
-                    break;
+                    case 2:
+                    case 3:
+                        {
+                            var keyBytes = new byte[blockSize / 8];
+                            Array.Copy(pwd, keyBytes, Math.Min(keyBytes.Length, pwd.Length));
+                            csp = new RijndaelManaged();
+                            csp.KeySize = blockSize;
+                            csp.BlockSize = blockSize;
+                            csp.Key = keyBytes;
+                            csp.IV = keyBytes;
+                            csp.Padding = PaddingMode.PKCS7;
+                            csp.Mode = CipherMode.CBC;
+                        }
+                        break;
                 }
 
                 SCCrypt.ClearBytes(pwd);
