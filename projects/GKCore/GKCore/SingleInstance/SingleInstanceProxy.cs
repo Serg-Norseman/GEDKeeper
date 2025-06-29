@@ -39,6 +39,9 @@ namespace GKCore.SingleInstance
         /// </summary>
         /// <returns>An object of type System.Runtime.Remoting.Lifetime.ILease used to control the lifetime policy for this instance. This is the current lifetime service object for this instance if one exists; otherwise, a new lifetime service object initialized to the value of the System.Runtime.Remoting.Lifetime.LifetimeServices.LeaseManagerPollTime property.</returns>
         /// <exception cref="System.Security.SecurityException">The immediate caller does not have infrastructure permission.</exception>
+#if NET5_0_OR_GREATER
+        [Obsolete]
+#endif
         public override object InitializeLifetimeService()
         {
             return null;
