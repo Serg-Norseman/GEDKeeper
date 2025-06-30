@@ -393,9 +393,9 @@
 392=Halál helyek
 393=Lakóhelyek
 394=Csak kijelölt(ek)
-395=Kép mentése...
+395=Family.Show files (*.familyx)|*.familyx
 396=A fájl formátuma nem támogatott
-397=Hiba az adatok betöltésekor.
+397=GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip
 398=Nyomtatás
 399=Előnézet
 400=Generáció

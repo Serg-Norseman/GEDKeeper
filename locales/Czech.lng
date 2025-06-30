@@ -393,9 +393,9 @@
 392=Místa úmrtí
 393=Místa bydliště
 394=Je vybrán pouze
-395=Uložit obrázek...
+395=Family.Show files (*.familyx)|*.familyx
 396=Formát není podporován
-397=Chyba při načítání dat.
+397=GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip
 398=Tisk
 399=Náhled
 400=Generace

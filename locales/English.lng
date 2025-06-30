@@ -393,9 +393,9 @@
 392=Places of death             ; maps window and family book
 393=Places of residence         ; maps window
 394=Only selected               ; maps window
-395=Save image...
+395=Family.Show files (*.familyx)|*.familyx
 396=The format is not supported
-397=Error loading data.
+397=GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip
 398=Print
 399=Preview
 400=Generation

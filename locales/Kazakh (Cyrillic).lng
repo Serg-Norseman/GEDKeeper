@@ -393,9 +393,9 @@
 392=Places of death
 393=Places of residence
 394=Only selected
-395=Бейне сақтау...
+395=Family.Show files (*.familyx)|*.familyx
 396=The format is not supported
-397=Error loading data.
+397=GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip
 398=Баспаға шығару
 399=Алдын ала көру
 400=Ұрпақ

@@ -393,9 +393,9 @@
 392=Places of death
 393=Places of residence
 394=Only selected
-395=Vista mynd...
+395=Family.Show files (*.familyx)|*.familyx
 396=The format is not supported
-397=Error loading data.
+397=GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip
 398=Prenta
 399=Forskoða
 400=Generation

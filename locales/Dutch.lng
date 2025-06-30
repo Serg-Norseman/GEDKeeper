@@ -393,9 +393,9 @@
 392=Overlijdingsplaatsen
 393=Woonplaatsen
 394=Alleen geselecteerd
-395=Opslaan afbeelding...
+395=Family.Show files (*.familyx)|*.familyx
 396=Indeling niet ondersteund
-397=Laad fout.
+397=GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip
 398=Afdrukken
 399=Voorbeeld
 400=Generatie

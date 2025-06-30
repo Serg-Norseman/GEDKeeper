@@ -51,7 +51,7 @@ namespace GDModel.Providers.FamilyShow
 
         public override string GetFilesFilter()
         {
-            return "Family.Show files (*.familyx)|*.familyx";
+            return LangMan.LS(LSID.FamilyShowFilter);
         }
 
         /// <summary>

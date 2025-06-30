@@ -18,10 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define GEDML_SUPPORT
-#define FAMX_SUPPORT
-#define GDZ_SUPPORT
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -145,29 +141,15 @@ namespace GKCore.Controllers
             }
         }
 
-        private void PrepareLoadFile(out string homePath, out string filters)
-        {
-            homePath = AppHost.Instance.GetUserFilesPath("");
-
-            filters = LangMan.LS(LSID.GEDCOMFilter);
-
-#if GEDML_SUPPORT
-            filters += "|" + LangMan.LS(LSID.GedMLFilter);
-#endif
-
-#if FAMX_SUPPORT
-            filters += "|" + "Family.Show files (*.familyx)|*.familyx";
-#endif
-
-#if GDZ_SUPPORT
-            filters += "|" + "GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip";
-#endif
-        }
-
         public async Task LoadFileEx()
         {
-            string homePath, filters;
-            PrepareLoadFile(out homePath, out filters);
+            string homePath = AppHost.Instance.GetUserFilesPath("");
+            string filters = string.Join("|", new string[] {
+                LangMan.LS(LSID.GEDCOMFilter),
+                LangMan.LS(LSID.GedMLFilter),
+                LangMan.LS(LSID.FamilyShowFilter),
+                LangMan.LS(LSID.GEDZIPFilter)
+            });
 
             string fileName = await AppHost.StdDialogs.GetOpenFile("", homePath, filters, 1, GKData.GEDCOM_EXT);
             if (!string.IsNullOrEmpty(fileName)) {
@@ -193,8 +175,13 @@ namespace GKCore.Controllers
                 SaveFile(oldFileName);
             } else {
                 string homePath = AppHost.Instance.GetUserFilesPath(Path.GetDirectoryName(oldFileName));
+                string filters = string.Join("|", new string[] {
+                    LangMan.LS(LSID.GEDCOMFilter),
+                    LangMan.LS(LSID.GEDZIPFilter)
+                });
+
                 string proposedFileName = Path.GetFileName(oldFileName);
-                string newFileName = await AppHost.StdDialogs.GetSaveFile("", homePath, LangMan.LS(LSID.GEDCOMFilter), 1, GKData.GEDCOM_EXT, proposedFileName, GlobalOptions.Instance.FilesOverwriteWarn);
+                string newFileName = await AppHost.StdDialogs.GetSaveFile("", homePath, filters, 1, GKData.GEDCOM_EXT, proposedFileName, GlobalOptions.Instance.FilesOverwriteWarn);
                 if (!string.IsNullOrEmpty(newFileName)) {
                     SaveFile(newFileName);
                     if (!isUnknown && !string.Equals(oldFileName, newFileName)) {

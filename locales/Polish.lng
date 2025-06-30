@@ -393,9 +393,9 @@
 392=Miejsce śmierci
 393=Miejsca zamieszkania
 394=Tylko wybrane
-395=Zapisz obraz...
+395=Family.Show files (*.familyx)|*.familyx
 396=Format nie jest obsługiwany
-397=Błąd podczas ładowania danych.
+397=GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip
 398=Drukuj
 399=Podgląd
 400=Pokolenie

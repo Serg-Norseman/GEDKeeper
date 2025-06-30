@@ -393,9 +393,9 @@
 392=Ölüm yeri
 393=İkamet yeri
 394=Sadece seçilenler
-395=Resmi kaydet...
+395=Family.Show files (*.familyx)|*.familyx
 396=Desteklenmeyen format
-397=Yüklemede hata.
+397=GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip
 398=Yazdır
 399=Ön İzleme
 400=Nesil

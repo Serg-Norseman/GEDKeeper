@@ -447,9 +447,9 @@ namespace GKCore
         /* 393 */ MSResiPlace,
         /* 394 */ MapSelOnSelected,
 
-        /* 395 */ SaveImage, // may be deprecated, not used
-        /* 396 */ FormatUnsupported, // may be deprecated
-        /* 397 */ DataLoadError, // may be deprecated
+        /* 395 */ FamilyShowFilter,
+        /* 396 */ FormatUnsupported,
+        /* 397 */ GEDZIPFilter,
 
         /* 398 */ DocPrint,
         /* 399 */ DocPreview,
@@ -1540,9 +1540,9 @@ namespace GKCore
             /* 392 */ "Places of death",
             /* 393 */ "Places of residence",
             /* 394 */ "Only selected",
-            /* 395 */ "Save image...",
+            /* 395 */ "Family.Show files (*.familyx)|*.familyx",
             /* 396 */ "The format is not supported",
-            /* 397 */ "Error loading data.",
+            /* 397 */ "GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip",
             /* 398 */ "Print",
             /* 399 */ "Preview",
             /* 400 */ "Generation",

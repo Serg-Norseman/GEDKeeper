@@ -393,9 +393,9 @@
 392=Sterbeorte
 393=Wohnorte
 394=Nur Ausgewählte
-395=Bild speichern...
+395=Family.Show files (*.familyx)|*.familyx
 396=Dieses Format wird nicht unterstützt
-397=Fehler beim Laden der Daten.
+397=GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip
 398=Drucken
 399=Vorschau
 400=Generation

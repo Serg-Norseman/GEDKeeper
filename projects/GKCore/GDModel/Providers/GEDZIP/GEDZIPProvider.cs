@@ -45,7 +45,7 @@ namespace GDModel.Providers.GEDZIP
 
         public override string GetFilesFilter()
         {
-            return "GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip";
+            return LangMan.LS(LSID.GEDZIPFilter);
         }
 
         public override void LoadFromStream(Stream inputStream, bool charsetDetection = false)

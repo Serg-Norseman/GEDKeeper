@@ -393,9 +393,9 @@
 392=Sterfplekke
 393=Woonplekke
 394=Slegs gekose
-395=Bewaar prent...
+395=Family.Show files (*.familyx)|*.familyx
 396=Hierdie formaat word nie ondersteun nie
-397=Data laaifout.
+397=GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip
 398=Druk
 399=Voorskou
 400=Generasie
