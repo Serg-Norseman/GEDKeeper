@@ -46,7 +46,8 @@ using GKCore.Types;
 namespace GKCore
 {
     /// <summary>
-    ///
+    /// Database context that combines GEDCOM file data with the environment,
+    /// language, culture, processing and editing tools.
     /// </summary>
     public class BaseContext : BaseObject, IBaseContext
     {

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,6 +30,7 @@ namespace GKCore
         public string URL;
     }
 
+
     internal class ExtResourcesList
     {
         public ExtResource[] Resources { get; set; }
@@ -40,8 +41,10 @@ namespace GKCore
         }
     }
 
+
     /// <summary>
-    /// 
+    /// Directory of external resources (sites) that can be identified by
+    /// user references in GEDCOM data.
     /// </summary>
     public sealed class ExtResources
     {

@@ -48,8 +48,9 @@ namespace GKCore.Controllers
         public T Record;
     }
 
+
     /// <summary>
-    /// 
+    /// Static controller of basic functions for general use by all windows and editing dialogs.
     /// </summary>
     public static class BaseController
     {

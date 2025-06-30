@@ -63,7 +63,7 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        public override void LoadFromStreamExt(Stream inputStream, bool charsetDetection = false)
+        public override void LoadFromStream(Stream inputStream, bool charsetDetection = false)
         {
             byte[] gsHeader = new byte[8];
             inputStream.Read(gsHeader, 0, 8);
@@ -88,7 +88,7 @@ namespace GDModel.Providers.GEDCOM
                     // But it is impossible to implement saving the file size, because it is unknown until completion...
                     // or when saving a file to a crypto-stream, then move to the beginning of the file stream and rewrite the header
                     InitProgress(inputStream.Length);
-                    base.LoadFromStreamExt(cryptoStream, charsetDetection);
+                    base.LoadFromStream(cryptoStream, charsetDetection);
                 }
             }
         }

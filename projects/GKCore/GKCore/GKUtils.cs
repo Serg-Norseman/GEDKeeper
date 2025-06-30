@@ -46,7 +46,7 @@ using UtfUnknown;
 namespace GKCore
 {
     /// <summary>
-    ///
+    /// Global static "god" class (anti-pattern, yes) for all common application functions.
     /// </summary>
     public static class GKUtils
     {

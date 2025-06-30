@@ -72,13 +72,17 @@ namespace GKCore
         Windows11,
     }
 
+
+    /// <summary>
+    /// General-purpose functions that have no genealogical or other obvious relation to the application's specialization.
+    /// </summary>
     public static class SysUtils
     {
         #region FileSystem helpers
 
         public static bool IsUnicodeEncoding(Encoding encoding)
         {
-            return (encoding != null) && (encoding == Encoding.Unicode || encoding == Encoding.UTF7 || encoding == Encoding.UTF8 || encoding == Encoding.UTF32);
+            return (encoding != null) && (encoding == Encoding.Unicode || encoding == Encoding.BigEndianUnicode || encoding == Encoding.UTF8 || encoding == Encoding.UTF32);
         }
 
         #endregion

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,53 +19,58 @@
  */
 
 using System;
-using System.IO;
-using System.Net;
+using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace GKCore
 {
+    public sealed class DistributedPackage
+    {
+        public Version Version { get; set; }
+        public string URL { get; set; }
+
+        public DistributedPackage(Version version, string url)
+        {
+            Version = version;
+            URL = url;
+        }
+    }
+
+
     /// <summary>
-    /// 
+    /// Update check manager.
     /// </summary>
     public static class UpdateMan
     {
-        public static Version GetLastVersion(out string url)
+        public static async Task<DistributedPackage> GetLastPackage()
         {
-            Version newVersion = null;
-            url = "";
+            var result = new DistributedPackage(null, "");
 
-            XmlTextReader reader = null;
             try {
                 GKUtils.InitSecurityProtocol();
 
-                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(GKData.UpdateURL);
-                webRequest.ContentType = "text/xml; encoding='utf-8'";
-                webRequest.KeepAlive = false;
-                webRequest.Method = "GET";
+                using (var webRequest = new HttpClient())
+                using (var stream = await webRequest.GetStreamAsync(new Uri(GKData.UpdateURL)))
+                using (var reader = new XmlTextReader(stream)) {
+                    reader.MoveToContent();
 
-                using (WebResponse webResponse = webRequest.GetResponse()) {
-                    using (Stream stream = webResponse.GetResponseStream()) {
-                        reader = new XmlTextReader(stream);
-                        reader.MoveToContent();
+                    string nodeName = "";
+                    if ((reader.NodeType == XmlNodeType.Element) && (reader.Name == "gedkeeper")) {
+                        while (reader.Read()) {
+                            if (reader.NodeType == XmlNodeType.Element)
+                                nodeName = reader.Name;
+                            else {
+                                if ((reader.NodeType == XmlNodeType.Text) && (reader.HasValue)) {
+                                    switch (nodeName) {
+                                        case "version":
+                                            result.Version = new Version(reader.Value);
+                                            break;
 
-                        string nodeName = "";
-                        if ((reader.NodeType == XmlNodeType.Element) && (reader.Name == "gedkeeper")) {
-                            while (reader.Read()) {
-                                if (reader.NodeType == XmlNodeType.Element)
-                                    nodeName = reader.Name;
-                                else {
-                                    if ((reader.NodeType == XmlNodeType.Text) && (reader.HasValue)) {
-                                        switch (nodeName) {
-                                            case "version":
-                                                newVersion = new Version(reader.Value);
-                                                break;
-
-                                            case "url":
-                                                url = reader.Value;
-                                                break;
-                                        }
+                                        case "url":
+                                            result.URL = reader.Value;
+                                            break;
                                     }
                                 }
                             }
@@ -73,13 +78,10 @@ namespace GKCore
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("UpdateMan.GetLastVersion()", ex);
-            } finally {
-                if (reader != null)
-                    reader.Close();
+                Logger.WriteError("UpdateMan.GetLastPackage()", ex);
             }
 
-            return newVersion;
+            return result;
         }
 
         private static async void WorkerMethod()
@@ -88,15 +90,14 @@ namespace GKCore
                 Version curVersion = AppHost.GetAppVersion();
                 if (curVersion == null) return;
 
-                string url;
-                Version newVersion = GetLastVersion(out url);
-                if (newVersion == null) return;
+                var distrVersion = await GetLastPackage();
 
-                if (curVersion.CompareTo(newVersion) < 0) {
+                var newVersion = distrVersion.Version;
+                if (newVersion != null && curVersion.CompareTo(newVersion) < 0) {
 #if !CI_MODE
                     string question = LangMan.LS(LSID.UpdateToLatestVersion, curVersion, newVersion);
                     if (await AppHost.StdDialogs.ShowQuestion(question)) {
-                        GKUtils.LoadExtFile(url);
+                        GKUtils.LoadExtFile(distrVersion.URL);
                     }
 #endif
                 }

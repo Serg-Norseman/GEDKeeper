@@ -58,7 +58,7 @@ namespace GDModel.Providers.FamilyShow
         /// This method could be replaced with a similar LoadFromFile() without losing functionality,
         /// but then it would become impossible to apply a test with a file from ResourceStream.
         /// </summary>
-        public override void LoadFromStreamExt(Stream inputStream, bool charsetDetection = false)
+        public override void LoadFromStream(Stream inputStream, bool charsetDetection = false)
         {
             using (Package package = Package.Open(inputStream, FileMode.Open, FileAccess.Read)) {
                 PackagePart documentPart = package.GetPart(new Uri(@"/" + OPCContentFileName, UriKind.Relative));

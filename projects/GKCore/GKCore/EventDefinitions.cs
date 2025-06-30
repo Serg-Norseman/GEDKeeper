@@ -108,7 +108,7 @@ namespace GKCore
 
 
     /// <summary>
-    /// 
+    /// Configurable directory of custom event types.
     /// </summary>
     public sealed class EventDefinitions : IGDMObject
     {

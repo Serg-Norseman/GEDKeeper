@@ -47,7 +47,7 @@ namespace GDModel.Providers
         {
             using (var memStream = new MemoryStream(Encoding.UTF8.GetBytes(strText))) {
                 InitProgress(memStream.Length);
-                LoadFromStreamExt(memStream, charsetDetection);
+                LoadFromStream(memStream, charsetDetection);
             }
         }
 
@@ -55,11 +55,11 @@ namespace GDModel.Providers
         {
             using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
                 InitProgress(fileStream.Length);
-                LoadFromStreamExt(fileStream, charsetDetection);
+                LoadFromStream(fileStream, charsetDetection);
             }
         }
 
-        public virtual void LoadFromStreamExt(Stream inputStream, bool charsetDetection = false)
+        public virtual void LoadFromStream(Stream inputStream, bool charsetDetection = false)
         {
             fTree.Clear();
             ReadStream(inputStream, charsetDetection);

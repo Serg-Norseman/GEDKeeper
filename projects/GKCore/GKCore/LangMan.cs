@@ -28,6 +28,9 @@ using GKCore.Interfaces;
 
 namespace GKCore
 {
+    /// <summary>
+    /// Identifier of localizable strings.
+    /// </summary>
     public enum LSID
     {
         /* 000 */ None,
@@ -1129,12 +1132,18 @@ namespace GKCore
     }
 
 
+    /// <summary>
+    /// Global (static) manager of localizable strings.
+    /// </summary>
     public static class LangMan
     {
         public const int LS_DEF_CODE = 1033;
         public const string LS_DEF_SIGN = "enu";
         public const string LS_DEF_NAME = "English";
 
+        /// <summary>
+        /// Default values ​​for localizable strings.
+        /// </summary>
         private static readonly string[] LSDefList = new string[]
         {
             /* 001 */ "File",
@@ -2249,6 +2258,10 @@ namespace GKCore
         }
     }
 
+
+    /// <summary>
+    /// Instantiable manager of localizable strings.
+    /// </summary>
     public class LangManager : ILangMan
     {
         private readonly Dictionary<int, string> fList;
