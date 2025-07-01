@@ -182,7 +182,7 @@ namespace GKMap.CacheProviders
                 Debug.WriteLine("PreAllocateDB: " + file + ", +" + addSizeInMBytes + "MB");
 
                 using (var db = new SQLiteConnection(file)) {
-                    string sql = string.Format("create table large (a); insert into large values (zeroblob({0})); drop table large;", addSizeInMBytes * 1024 * 1024);
+                    string sql = string.Format("create table if not exists large (a); insert into large values (zeroblob({0})); drop table large;", addSizeInMBytes * 1024 * 1024);
                     db.Execute(sql);
                 }
             } catch (Exception ex) {

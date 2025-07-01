@@ -198,6 +198,7 @@ namespace GKCore.Kinships
             Types = new KSTypeEntry[0];
             Definitions = new KSDefinitionEntry[0];
             Substitutions = new KSSubstitutionEntry[0];
+            KinshipTypeIndexes = new Dictionary<int, int>((int)KinshipType.ktLast + 1);
         }
 
         public KSTypeEntry GetTypeEntry(int id)
@@ -210,7 +211,6 @@ namespace GKCore.Kinships
         {
             GreatPrefix = GetLocalizedString(GreatPrefix);
 
-            KinshipTypeIndexes = new Dictionary<int, int>((int)KinshipType.ktLast + 1);
             /*for (KinshipType kt = KinshipType.ktNone; kt < KinshipType.ktLast; kt++) {
                 var sign = kt.ToString();
                 var index = Array.FindIndex(Types, (kte) => kte.Sign == sign);
@@ -218,6 +218,7 @@ namespace GKCore.Kinships
                 KinshipTypeIndexes[(int)kt] = index;
             }*/
 
+            KinshipTypeIndexes.Clear();
             var indexes = new Dictionary<string, int>();
             for (int i = 0; i < Types.Length; i++) {
                 KSTypeEntry kinType = Types[i];

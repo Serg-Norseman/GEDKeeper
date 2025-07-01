@@ -521,7 +521,8 @@ namespace GKMap.WinForms
             }
 
             // FIXME
-            BeginInvoke(new Action(base.Refresh), null);
+            if (IsHandleCreated)
+                BeginInvoke(new Action(base.Refresh), null);
         }
 
         /// <summary>
