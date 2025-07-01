@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,10 +25,10 @@ using System.Reflection;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
-using GKCore.Design.Graphics;
-using GKCore.Design.Views;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKTests.Stubs;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace GKTests
@@ -294,6 +294,12 @@ namespace GKTests
             GDMIndividualRecord rec = tree[0] as GDMIndividualRecord;
             Assert.IsNotNull(rec);
             return rec;
+        }
+
+        public static void SubstituteControl<T>(IView dialog, string ctlName) where T : class, IControl
+        {
+            var substControl = Substitute.For<T>();
+            dialog.GetControl(ctlName).Returns(substControl);
         }
     }
 }

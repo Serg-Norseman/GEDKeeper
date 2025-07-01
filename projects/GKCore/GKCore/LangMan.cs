@@ -1128,7 +1128,12 @@ namespace GKCore
         /* 1042 */ AgeInputMask,
         /* 1043 */ AgeDisplayFormat,
 
-        /* 0000 */ Last = AgeDisplayFormat
+        /* 1044 */ WeddingAnniversaryToday,
+        /* 1045 */ WeddingAnniversaryTomorrow,
+        /* 1046 */ WeddingAnniversaryDaysRemained,
+        /* 1047 */ WeddingAnniversaries,
+
+        /* 0000 */ Last = WeddingAnniversaries
     }
 
 
@@ -2212,6 +2217,11 @@ namespace GKCore
             /* 1041 */ "Wife's age",
             /* 1042 */ "000 year(s) 00 month(s) 000 day(s)",
             /* 1043 */ "R ### y ## m ### d",
+
+            /* 1044 */ "Today is {2} wedding anniversary of {0} and {1}",
+            /* 1045 */ "Tomorrow is {2} wedding anniversary of {0} and {1}",
+            /* 1046 */ "{2} days remain before the {3} wedding anniversary of {0} and {1}",
+            /* 1047 */ "Wedding anniversaries",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

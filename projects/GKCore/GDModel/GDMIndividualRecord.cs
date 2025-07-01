@@ -321,7 +321,7 @@ namespace GDModel
 
         public bool IsLive()
         {
-            return FindEvent(GEDCOMTagType.DEAT) == null;
+            return FindEventEx(GEDCOMTagType.DEAT, GEDCOMTagType.BURI) == null;
         }
 
         public override void Assign(GDMTag source)

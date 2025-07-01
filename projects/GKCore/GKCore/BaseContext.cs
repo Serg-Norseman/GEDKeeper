@@ -579,48 +579,6 @@ namespace GKCore
             return 0;
         }
 
-        public void CollectTips(StringList tipsList)
-        {
-            if (tipsList == null)
-                throw new ArgumentNullException("tipsList");
-
-            try {
-                bool onlyAlive = true;
-                var dtNow = DateTime.Now;
-
-                bool firstTip = true;
-                var indiEnum = fTree.GetEnumerator<GDMIndividualRecord>();
-                GDMIndividualRecord iRec;
-                while (indiEnum.MoveNext(out iRec)) {
-                    var lifeEvents = iRec.GetLifeEvents(true);
-
-                    if (onlyAlive) {
-                        if (lifeEvents.DeathEvent != null || lifeEvents.BurialEvent != null) continue;
-                    }
-
-                    int years;
-                    bool anniversary;
-
-                    if (lifeEvents.BirthEvent == null) continue;
-                    var dt = lifeEvents.BirthEvent.Date.Value as GDMDate;
-                    if (dt == null || !dt.IsValidDate()) continue;
-
-                    int days = GKUtils.GetDaysFor(dt, dtNow, out years, out anniversary);
-                    if (days < 0 || days >= 3) continue;
-
-                    if (firstTip) {
-                        tipsList.Add("#" + LangMan.LS(LSID.BirthDays));
-                        firstTip = false;
-                    }
-
-                    string tip = GKUtils.GetBirthTipMessage(Culture, iRec, days, years, anniversary);
-                    tipsList.Add(tip);
-                }
-            } catch (Exception ex) {
-                Logger.WriteError("BaseContext.CollectTips()", ex);
-            }
-        }
-
         #endregion
 
         #region Name and sex functions

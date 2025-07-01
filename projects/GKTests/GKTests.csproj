@@ -99,6 +99,7 @@
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMUtilsTests.cs" />
     <Compile Include="GKCore\AppHostTests.cs" />
     <Compile Include="GKCore\BaseContextTests.cs" />
+    <Compile Include="GKCore\TipsCollectorTests.cs" />
     <Compile Include="GKCore\IocContainerTests.cs" />
     <Compile Include="GKCore\MorpherTests.cs" />
     <Compile Include="GKCore\BBTextParserTests.cs" />

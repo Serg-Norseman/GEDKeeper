@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -457,9 +457,6 @@ namespace GKUI.Forms
         [Test]
         public async Task Test_ShowDayTipsDlg()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { fCurBase.Context.CollectTips(null); });
-            fCurBase.Context.CollectTips(new StringList());
-
             // FIXME: don't show dialog because BirthDays is empty
             //ModalFormHandler = DayTipsDlgTests.CloseModalHandler;
             await AppHost.Instance.ShowTips();

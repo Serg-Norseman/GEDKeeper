@@ -18,30 +18,29 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore;
-using GKCore.Interfaces;
-using GKCore.Kinships;
-using GKTests.Stubs;
-using GKUI.Platform;
+using System;
+using GKTests;
+using NUnit.Framework;
 
-namespace GKTests
+namespace GKCore
 {
-    public class TestUtilsUI
+    [TestFixture]
+    public class TipsCollectorTests
     {
-        public static void InitUITest()
+        private readonly BaseContext fContext;
+
+        public TipsCollectorTests()
         {
-            TestUtils.InitGEDCOMProviderTest();
-            AppHost.TEST_MODE = true;
+            TestUtils.InitUITest();
 
-            // GlobalOptions -> IGraphicsProviderEx
-            WFAppHost.ConfigureBootstrap();
+            fContext = TestUtils.CreateContext();
+            TestUtils.FillContext(fContext);
+        }
 
-            LangMan.DefInit();
-            AppHost.EventDefinitions.InitPredefined();
-
-            KinshipsGraph.InitDefaults();
-
-            AppHost.Container.Register<IProgressDialog, ProgressStub>(GKCore.IoC.LifeCycle.Singleton, true);
+        [Test]
+        public void Test_Collect_Null()
+        {
+            Assert.Throws(typeof(ArgumentNullException), () => { TipsCollector.Collect(fContext, null); });
         }
     }
 }

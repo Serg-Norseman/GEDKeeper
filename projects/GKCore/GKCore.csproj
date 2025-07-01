@@ -85,6 +85,7 @@
     <Compile Include="GKCore\Controllers\EventDefEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\LocExpertDlgController.cs" />
     <Compile Include="GKCore\Design\Views\IEventDefEditDlg.cs" />
+    <Compile Include="GKCore\TipsCollector.cs" />
     <Compile Include="GKCore\Interfaces\IComputerVision.cs" />
     <Compile Include="GKCore\Kinships\KinshipsCulture.cs" />
     <Compile Include="GKCore\Lists\DNATestsListModel.cs" />

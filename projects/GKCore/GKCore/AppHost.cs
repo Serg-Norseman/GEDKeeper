@@ -336,6 +336,14 @@ namespace GKCore
 #endif
         }
 
+        /// <summary>
+        /// In the future - to be able to replace the current date/time in tests and other cases.
+        /// </summary>
+        public DateTime GetCurrentDateTime()
+        {
+            return DateTime.Now;
+        }
+
         public virtual int GetKeyLayout()
         {
             // May have a desktop-only implementation
@@ -789,7 +797,7 @@ namespace GKCore
         private void ProcessLoaded(IBaseContext context)
         {
             if (GlobalOptions.Instance.ShowTips) {
-                context.CollectTips(fTips);
+                TipsCollector.Collect(context, fTips);
             }
         }
 

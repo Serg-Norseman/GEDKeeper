@@ -67,7 +67,6 @@ namespace GKCore.Interfaces
         int FindDeathYear(GDMIndividualRecord iRec);
         void CollectEventValues(GDMCustomEvent evt);
         void CollectNameLangs(GDMPersonalName persName);
-        void CollectTips(StringList tipsList);
         void ImportNames(GDMIndividualRecord iRec);
         IList<ISearchResult> FindAll(GDMRecordType recordType, string searchPattern);
 

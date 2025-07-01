@@ -557,12 +557,6 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_CollectTips()
-        {
-            Assert.Throws(typeof(ArgumentNullException), () => { fContext.CollectTips(null); });
-        }
-
-        [Test]
         public void Test_CheckPersonSex()
         {
             Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await fContext.CheckPersonSex(null, null); });

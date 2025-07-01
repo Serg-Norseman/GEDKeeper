@@ -1468,39 +1468,6 @@ namespace GKCore
             return distance;
         }
 
-        public static string GetBirthTipMessage(ICulture culture, GDMIndividualRecord iRec, int days, int years, bool anniversary)
-        {
-            string nm = culture.GetPossessiveName(iRec);
-
-            string tip;
-            if (!anniversary) {
-                switch (days) {
-                    case 0:
-                        tip = string.Format(LangMan.LS(LSID.BirthdayToday), nm);
-                        break;
-                    case 1:
-                        tip = string.Format(LangMan.LS(LSID.BirthdayTomorrow), nm);
-                        break;
-                    default:
-                        tip = string.Format(LangMan.LS(LSID.DaysRemained), nm, days);
-                        break;
-                }
-            } else {
-                switch (days) {
-                    case 0:
-                        tip = string.Format(LangMan.LS(LSID.AnniversaryToday), nm);
-                        break;
-                    case 1:
-                        tip = string.Format(LangMan.LS(LSID.AnniversaryTomorrow), nm);
-                        break;
-                    default:
-                        tip = string.Format(LangMan.LS(LSID.AnniversaryDaysRemained), nm, days);
-                        break;
-                }
-            }
-            return tip;
-        }
-
         public static string GetCalendarSign(GDMCalendar calendar)
         {
             var globOptions = GlobalOptions.Instance;

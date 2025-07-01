@@ -19,6 +19,7 @@
  */
 
 using System.Threading.Tasks;
+using BSLib;
 using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
@@ -56,8 +57,7 @@ namespace GKCore.Controllers
 
         private static void SubstituteControl<T>(IView dialog, string ctlName) where T : class, IControl
         {
-            var substControl = Substitute.For<T>();
-            dialog.GetControl(ctlName).Returns(substControl);
+            TestUtils.SubstituteControl<T>(dialog, ctlName);
         }
 
         [Test]
@@ -275,7 +275,11 @@ namespace GKCore.Controllers
             view.TipText.Returns(Substitute.For<ITextContainer>());
             view.NextButton.Returns(Substitute.For<IButton>());
 
+            var tips = new StringList();
+            TipsCollector.Collect(fBaseWin.Context, tips);
+
             var controller = new DayTipsDlgController(view);
+            controller.InitTips("birth days", true, tips);
 
             controller.GetNextTip();
             controller.UpdateView();
