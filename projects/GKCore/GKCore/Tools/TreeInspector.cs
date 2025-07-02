@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -39,7 +39,8 @@ namespace GKCore.Tools
     }
 
     /// <summary>
-    ///
+    /// It is a tool for checking the logical integrity of data in a database.
+    /// The integrity of the GEDCOM format and data model is checked in the <see cref="GEDCOMChecker"/> class.
     /// </summary>
     public static class TreeInspector
     {

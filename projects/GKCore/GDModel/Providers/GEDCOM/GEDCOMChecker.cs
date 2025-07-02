@@ -28,7 +28,8 @@ using GKCore.Types;
 namespace GDModel.Providers.GEDCOM
 {
     /// <summary>
-    /// Class to check the GEDCOM format.
+    /// Class to check the GEDCOM format and data model.
+    /// The logical integrity of data in the database is checked in class <see cref="GKCore.Tools.TreeInspector"/>.
     /// </summary>
     public class GEDCOMChecker
     {
