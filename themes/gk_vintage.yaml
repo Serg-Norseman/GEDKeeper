@@ -1,0 +1,80 @@
+﻿---
+Name: GK Vintage
+Elements:
+  - Element: Font
+    Value: "Times New Roman"
+  - Element: FontSize
+    Value: "9.00"
+
+  - Element: Editor
+    Value: "#4A3D2A"
+  - Element: EditorText
+    Value: "#CD7F32"
+
+  - Element: Control
+    Value: "#4A3D2A"
+  - Element: ControlText
+    Value: "#CF8742"
+
+  - Element: Window
+    Value: "#6B4423"
+  - Element: WindowText
+    Value: "#DAA520"
+
+  - Element: Dialog
+    Value: "#3D2B1F"
+  - Element: DialogText
+    Value: "#B8860B"
+
+  - Element: ButtonFace
+    Value: "#8B4513"
+  - Element: AccentButtonFace
+    Value: "#CD7F32"
+  - Element: ButtonBorder
+    Value: "#B87333"
+  - Element: ButtonText
+    Value: "#DEB887"
+
+  - Element: Strip
+    Value: "#3D2B1F"
+  - Element: Dropdown
+    Value: "#3D2B1F"
+  - Element: MenuBorder
+    Value: "#8B4513"
+  - Element: MenuItemSelected
+    Value: "#B8860B"
+
+  - Element: Link
+    Value: "#DFB185"
+
+  - Element: Grid
+    Value: "#6B4423"
+  - Element: GridHeader
+    Value: "#8B4513"
+  - Element: GridHeaderText
+    Value: "#DAA520"
+  - Element: GridText
+    Value: "#DEB887"
+
+  - Element: Tab
+    Value: "#3D2B1F"
+  - Element: TabHighlight
+    Value: "#8B4513"
+  - Element: TabSelected
+    Value: "#5D4B3F"
+
+  - Element: HighlightReadabilityRows
+    Value: "#785537"
+  - Element: HighlightUnparentedIndi
+    Value: "#B87333"
+  - Element: HighlightUnmarriedIndi
+    Value: "#CD853F"
+  - Element: HighlightInaccessibleFiles
+    Value: "#8B4513"
+
+  - Element: ToolItemsImageSize
+    Value: "20"
+
+  - Element: Glyph_Maps
+    Value: "ext_images/maps.png"
+...

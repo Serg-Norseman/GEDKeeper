@@ -1,76 +1,77 @@
 ﻿---
-Name: GK Dark
+Name: Matrix Theme
+
 Elements:
   - Element: Font
-    Value: "Verdana"
+    Value: "Courier New"
   - Element: FontSize
-    Value: "8.25"
+    Value: "9.00"
 
   - Element: Editor
-    Value: "#FFFFFF"
-  - Element: EditorText
     Value: "#000000"
+  - Element: EditorText
+    Value: "#00FF00"
 
   - Element: Control
-    Value: "#2C2C2C"
+    Value: "#1A1A1A"
   - Element: ControlText
-    Value: "#FFFFFF"
+    Value: "#00FF00"
 
   - Element: Window
-    Value: "#2C2C2C"
+    Value: "#1A1A1A"
   - Element: WindowText
-    Value: "#FFFFFF"
+    Value: "#00FF00"
 
   - Element: Dialog
-    Value: "#2E3038"
+    Value: "#2A2A2A"
   - Element: DialogText
-    Value: "#FFFFFF"
+    Value: "#00FF00"
 
   - Element: ButtonFace
-    Value: "#5D67C7"
+    Value: "#2B2B2B"
   - Element: AccentButtonFace
-    Value: "#7046A6"
+    Value: "#3B3B3B"
   - Element: ButtonBorder
-    Value: "#3C339F"
+    Value: "#1A1A1A"
   - Element: ButtonText
-    Value: "#FFFFFF"
+    Value: "#00FF00"
 
   - Element: Strip
-    Value: "#202020"
+    Value: "#2A2A2A"
   - Element: Dropdown
-    Value: "#202020"
+    Value: "#2A2A2A"
   - Element: MenuBorder
-    Value: "#F7F7F7"
+    Value: "#1F641F"
   - Element: MenuItemSelected
-    Value: "#303443"
+    Value: "#1F641F"
 
   - Element: Link
-    Value: "#569BD3"
+    Value: "#00FFA2"
 
   - Element: Grid
-    Value: "#2C2C2C"
+    Value: "#2A2A2A"
   - Element: GridHeader
-    Value: "#3B3B3B"
+    Value: "#2B2B2B"
   - Element: GridHeaderText
-    Value: "#FFFFFF"
+    Value: "#00FF00"
   - Element: GridText
-    Value: "#FFFFFF"
+    Value: "#00FF00"
 
   - Element: Tab
-    Value: "#2C2C2C"
+    Value: "#2A2A2A"
   - Element: TabHighlight
-    Value: "#2C2C2C"
+    Value: "#2B2B2B"
   - Element: TabSelected
-    Value: "#4B5781"
+    Value: "#225122"
 
   - Element: HighlightReadabilityRows
-    Value: "#3E3E3E"
+    Value: "#1A1A1A"
   - Element: HighlightUnparentedIndi
-    Value: "#683922"
+    Value: "#FF0000"
   - Element: HighlightUnmarriedIndi
-    Value: "#464628"
+    Value: "#FFFF00"
   - Element: HighlightInaccessibleFiles
-    Value: "#683922"
+    Value: "#FF4444"
 
 
   - Element: ToolItemsImageSize

@@ -1,76 +1,76 @@
 ﻿---
-Name: GK Dark
+Name: GK Cyberpunk
 Elements:
   - Element: Font
-    Value: "Verdana"
+    Value: "Arial"
   - Element: FontSize
-    Value: "8.25"
+    Value: "9.00"
 
   - Element: Editor
-    Value: "#FFFFFF"
+    Value: "#1A1B26"
   - Element: EditorText
-    Value: "#000000"
+    Value: "#00FF9F"
 
   - Element: Control
-    Value: "#2C2C2C"
+    Value: "#2A2B3D"
   - Element: ControlText
-    Value: "#FFFFFF"
+    Value: "#FF00FF"
 
   - Element: Window
-    Value: "#2C2C2C"
+    Value: "#1A1B26"
   - Element: WindowText
-    Value: "#FFFFFF"
+    Value: "#00FFFF"
 
   - Element: Dialog
-    Value: "#2E3038"
+    Value: "#2A2B3D"
   - Element: DialogText
-    Value: "#FFFFFF"
+    Value: "#FF1493"
 
   - Element: ButtonFace
-    Value: "#5D67C7"
+    Value: "#4A4B6A"
   - Element: AccentButtonFace
-    Value: "#7046A6"
+    Value: "#8A2BE2"
   - Element: ButtonBorder
-    Value: "#3C339F"
+    Value: "#1E90FF"
   - Element: ButtonText
     Value: "#FFFFFF"
 
   - Element: Strip
-    Value: "#202020"
+    Value: "#4A4B6A"
   - Element: Dropdown
-    Value: "#202020"
+    Value: "#4A4B6A"
   - Element: MenuBorder
-    Value: "#F7F7F7"
+    Value: "#4169E1"
   - Element: MenuItemSelected
-    Value: "#303443"
+    Value: "#FF4500"
 
   - Element: Link
-    Value: "#569BD3"
+    Value: "#00FF00"
 
   - Element: Grid
-    Value: "#2C2C2C"
+    Value: "#2A2B3D"
   - Element: GridHeader
-    Value: "#3B3B3B"
+    Value: "#483D8B"
   - Element: GridHeaderText
-    Value: "#FFFFFF"
+    Value: "#FF1493"
   - Element: GridText
-    Value: "#FFFFFF"
+    Value: "#00FFFF"
 
   - Element: Tab
-    Value: "#2C2C2C"
+    Value: "#2A2B3D"
   - Element: TabHighlight
-    Value: "#2C2C2C"
+    Value: "#4A4B6A"
   - Element: TabSelected
-    Value: "#4B5781"
+    Value: "#6A6B8A"
 
   - Element: HighlightReadabilityRows
-    Value: "#3E3E3E"
+    Value: "#2A2B3D"
   - Element: HighlightUnparentedIndi
-    Value: "#683922"
+    Value: "#FF4500"
   - Element: HighlightUnmarriedIndi
-    Value: "#464628"
+    Value: "#FF1493"
   - Element: HighlightInaccessibleFiles
-    Value: "#683922"
+    Value: "#8B0000"
 
 
   - Element: ToolItemsImageSize

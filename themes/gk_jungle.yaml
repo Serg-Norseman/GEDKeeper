@@ -1,5 +1,5 @@
 ﻿---
-Name: GK Dark
+Name: GK Jungle
 Elements:
   - Element: Font
     Value: "Verdana"
@@ -7,70 +7,70 @@ Elements:
     Value: "8.25"
 
   - Element: Editor
-    Value: "#FFFFFF"
+    Value: "#2B4428"
   - Element: EditorText
-    Value: "#000000"
+    Value: "#87A878"
 
   - Element: Control
-    Value: "#2C2C2C"
+    Value: "#4A5645"
   - Element: ControlText
-    Value: "#FFFFFF"
+    Value: "#87A878"
 
   - Element: Window
-    Value: "#2C2C2C"
+    Value: "#2B4428"
   - Element: WindowText
-    Value: "#FFFFFF"
+    Value: "#87A878"
 
   - Element: Dialog
-    Value: "#2E3038"
+    Value: "#34495E"
   - Element: DialogText
-    Value: "#FFFFFF"
+    Value: "#87A878"
 
   - Element: ButtonFace
-    Value: "#5D67C7"
+    Value: "#34495E"
   - Element: AccentButtonFace
-    Value: "#7046A6"
+    Value: "#2C3E50"
   - Element: ButtonBorder
-    Value: "#3C339F"
+    Value: "#1A2634"
   - Element: ButtonText
-    Value: "#FFFFFF"
+    Value: "#87A878"
 
   - Element: Strip
-    Value: "#202020"
+    Value: "#34495E"
   - Element: Dropdown
-    Value: "#202020"
+    Value: "#34495E"
   - Element: MenuBorder
-    Value: "#F7F7F7"
+    Value: "#1A2634"
   - Element: MenuItemSelected
-    Value: "#303443"
+    Value: "#2C3E50"
 
   - Element: Link
-    Value: "#569BD3"
+    Value: "#FF4444"
 
   - Element: Grid
-    Value: "#2C2C2C"
+    Value: "#34495E"
   - Element: GridHeader
-    Value: "#3B3B3B"
+    Value: "#2C3E50"
   - Element: GridHeaderText
-    Value: "#FFFFFF"
+    Value: "#87A878"
   - Element: GridText
-    Value: "#FFFFFF"
+    Value: "#87A878"
 
   - Element: Tab
-    Value: "#2C2C2C"
+    Value: "#34495E"
   - Element: TabHighlight
-    Value: "#2C2C2C"
+    Value: "#2C3E50"
   - Element: TabSelected
-    Value: "#4B5781"
+    Value: "#1A2634"
 
   - Element: HighlightReadabilityRows
-    Value: "#3E3E3E"
+    Value: "#31474C"
   - Element: HighlightUnparentedIndi
-    Value: "#683922"
+    Value: "#984648"
   - Element: HighlightUnmarriedIndi
-    Value: "#464628"
+    Value: "#766633"
   - Element: HighlightInaccessibleFiles
-    Value: "#683922"
+    Value: "#666666"
 
 
   - Element: ToolItemsImageSize
