@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -456,17 +456,17 @@ namespace GKCore.Charts
             FatherAge = string.Empty;
             MotherAge = string.Empty;
 
-            GDMCustomEvent evtChild = fRec.FindEvent(GEDCOMTagName.BIRT);
+            GDMCustomEvent evtChild = fRec.FindEventEx(GEDCOMTagType.BIRT, GEDCOMTagType.BAPM);
             if (evtChild == null || !evtChild.Date.GetUDN().HasKnownYear()) return;
 
             if (Father != null && Father.Rec != null) {
-                var evtFth = Father.Rec.FindEvent(GEDCOMTagName.BIRT);
+                var evtFth = Father.Rec.FindEventEx(GEDCOMTagType.BIRT, GEDCOMTagType.BAPM);
                 var diff = GKUtils.GetEventsYearsDiff(evtFth, evtChild, false);
                 FatherAge = (diff != -1) ? diff.ToString() : string.Empty;
             }
 
             if (Mother != null && Mother.Rec != null) {
-                var evtMth = Mother.Rec.FindEvent(GEDCOMTagName.BIRT);
+                var evtMth = Mother.Rec.FindEventEx(GEDCOMTagType.BIRT, GEDCOMTagType.BAPM);
                 var diff = GKUtils.GetEventsYearsDiff(evtMth, evtChild, false);
                 MotherAge = (diff != -1) ? diff.ToString() : string.Empty;
             }

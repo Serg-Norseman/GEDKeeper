@@ -184,8 +184,7 @@ namespace GDModel
             GDMCustomEvent primaryEvent = null;
             GDMCustomEvent secondaryEvent = null;
 
-            int num = fEvents.Count;
-            for (int i = 0; i < num; i++) {
+            for (int i = 0, num = fEvents.Count; i < num; i++) {
                 GDMCustomEvent evt = fEvents[i];
                 var evtType = (GEDCOMTagType)evt.Id;
 
