@@ -86,9 +86,13 @@ namespace GKUI.Components
 
             FillZoomLevels();
 
-            // computer vision (is the plugin enabled or not)
-            var cvImpl = AppHost.Container.TryResolve<IComputerVision>();
-            btnDetectFaces.Visible = (cvImpl != null);
+            try {
+                // computer vision (is the plugin enabled or not)
+                var cvImpl = AppHost.Container.TryResolve<IComputerVision>();
+                btnDetectFaces.Visible = (cvImpl != null);
+            } catch (Exception ex) {
+                Logger.WriteError("ImageView.ctor()", ex);
+            }
         }
 
         public void Activate()

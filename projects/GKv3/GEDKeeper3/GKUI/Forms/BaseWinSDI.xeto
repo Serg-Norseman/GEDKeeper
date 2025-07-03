@@ -4,7 +4,7 @@
   x:Class="GKUI.Forms.BaseWinSDI"
   GotFocus="Form_Activated" LostFocus="Form_Deactivate" Closing="Form_Closing" Closed="Form_Closed"
   Load="Form_Load" KeyDown="Form_KeyDown" AllowDrop="true" DragDrop="Form_DragDrop" DragEnter="Form_DragEnter"
-  Icon="{Resource Resources.icon_gedkeeper.png, GKCore}">
+  Icon="{Resource Resources.icon_gedkeeper.png, GKCore}" Size="1076, 662">
 
   <Form.ToolBar>
     <ToolBar TextAlign="Right" Style="tbsi">
