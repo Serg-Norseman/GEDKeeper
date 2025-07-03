@@ -163,6 +163,11 @@ namespace GKUI.Platform
         public override async Task Init(string[] args, bool isMDI)
         {
             await base.Init(args, isMDI);
+
+            // EtoForms: Terminating is not called when the last or only one form is closed
+            // if MainForm is not set in the SDI interface (picoe/Eto#2794).
+            // That's why ApplicationExit() is called from CloseDependentWindows(),
+            // which is called from the Closed event of the form being closed.
             Application.Instance.Terminating += OnApplicationExit;
         }
 
@@ -295,6 +300,11 @@ namespace GKUI.Platform
                 if (wnd is IWindowDependent winDep && winDep.OwnerWindow == owner) {
                     wnd.Close();
                 }
+            }
+
+            // EtoForms workaround, see this.Init().
+            if (wndArr.Length == 1 && wndArr[0] == owner) {
+                ApplicationExit();
             }
         }
 
