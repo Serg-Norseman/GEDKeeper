@@ -292,7 +292,7 @@ namespace GKUI.Platform
         {
             var wndArr = Application.Instance.Windows.ToArray();
             foreach (var wnd in wndArr) {
-                if (wnd is IWindowDependent && ((IWindowDependent)wnd).OwnerWindow == owner) {
+                if (wnd is IWindowDependent winDep && winDep.OwnerWindow == owner) {
                     wnd.Close();
                 }
             }
@@ -336,7 +336,7 @@ namespace GKUI.Platform
 
             switch (feature) {
                 case Feature.GridCellFormat:
-#if OS_MSWIN || OS_MACOS
+#if OS_MACOS
                     result = false;
 #else
                     result = true;

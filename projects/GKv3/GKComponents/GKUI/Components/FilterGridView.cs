@@ -76,7 +76,7 @@ namespace GKUI.Components
 
         private readonly Button fBtnAdd;
         private readonly Button fBtnDelete;
-        private readonly GridView fGridView;
+        private readonly GKGridView fGridView;
 
         private IRecordsListModel fListMan;
         private ObservableCollection<FilterConditionRow> fCollection;
@@ -105,6 +105,8 @@ namespace GKUI.Components
             }
         }
 
+        public Color TextColor { get; set; }
+
 
         public FilterGridView()
         {
@@ -114,7 +116,7 @@ namespace GKUI.Components
             fBtnDelete = CreateButton("btnDelete", UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif"), LangMan.LS(LSID.MIRecordDelete), ItemDelete);
             fBtnAdd = CreateButton("btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.MIRecordAdd), ItemAdd);
 
-            fGridView = new GridView();
+            fGridView = new GKGridView();
 
             SuspendLayout();
             var toolbar = new StackLayout() {
@@ -169,6 +171,7 @@ namespace GKUI.Components
         public void ApplyTheme()
         {
             fGridView.BackgroundColor = this.BackgroundColor;
+            fGridView.TextColor = this.TextColor;
 
             UIHelper.SetButtonThemeImage(fBtnDelete, ThemeElement.Glyph_ItemDelete);
             UIHelper.SetButtonThemeImage(fBtnAdd, ThemeElement.Glyph_ItemAdd);

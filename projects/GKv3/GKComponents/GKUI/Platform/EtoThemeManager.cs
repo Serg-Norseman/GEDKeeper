@@ -286,9 +286,9 @@ namespace GKUI.Themes
             var ctl = (GridView)component;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
             //ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
-            //ctl.ColumnHeadersDefaultCellStyle.BackgroundColor = GetThemeColor(theme, ThemeElement.GridHeader);
-            //ctl.ColumnHeadersDefaultCellStyle.TextColor = GetThemeColor(theme, ThemeElement.GridHeaderText);
-            //ctl.EnableHeadersVisualStyles = (theme.SysDefault);
+
+            // Fix for update rows formatting
+            ctl.ReloadData(ctl.SelectedRows);
 
             ThemeContextMenuStripHandler(view, component, theme);
         }
@@ -297,10 +297,7 @@ namespace GKUI.Themes
         {
             var ctl = (FilterGridView)component;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
-            //ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
-            //ctl.ColumnHeadersDefaultCellStyle.BackgroundColor = GetThemeColor(theme, ThemeElement.GridHeader);
-            //ctl.ColumnHeadersDefaultCellStyle.TextColor = GetThemeColor(theme, ThemeElement.GridHeaderText);
-            //ctl.EnableHeadersVisualStyles = (theme.SysDefault);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
 
             ctl.ApplyTheme();
 
@@ -400,27 +397,12 @@ namespace GKUI.Themes
 
         private static void ThemeListViewHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            if (component is GKListView) {
-                // extended
-                var ctl = (GKListView)component;
-                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
-                //ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
+            var ctl = (GKListView)component;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
 
-                /*if (theme.SysDefault) {
-                    ctl.Appearance.Reset();
-                } else {
-                    ctl.Appearance.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
-                    ctl.Appearance.Header = GetThemeColor(theme, ThemeElement.GridHeader);
-                    ctl.Appearance.HeaderText = GetThemeColor(theme, ThemeElement.GridHeaderText);
-                }
-
-                ctl.ResetCache();*/
-            } else {
-                // standard
-                var ctl = (GridView)component;
-                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
-                //ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
-            }
+            // Fix for update rows formatting
+            ctl.ReloadData(ctl.SelectedRows);
 
             ThemeContextMenuStripHandler(view, component, theme);
         }

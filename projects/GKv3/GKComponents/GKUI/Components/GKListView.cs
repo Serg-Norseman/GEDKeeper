@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -128,10 +128,23 @@ namespace GKUI.Components
     public delegate void ItemCheckEventHandler(object sender, ItemCheckEventArgs e);
 
 
+    public class GKGridView : GridView
+    {
+        public Color TextColor { get; set; }
+
+        protected override void OnCellFormatting(GridCellFormatEventArgs e)
+        {
+            base.OnCellFormatting(e);
+
+            e.ForegroundColor = this.TextColor;
+        }
+    }
+
+
     /// <summary>
     ///
     /// </summary>
-    public class GKListView : GridView, IListView
+    public class GKListView : GKGridView, IListView
     {
         private readonly ObservableExtList<GKListItem> fItems;
 
@@ -307,43 +320,23 @@ namespace GKUI.Components
             base.OnColumnHeaderClick(e);
         }
 
-        /*protected override void OnSelectionChanged(EventArgs e)
-        {
-            base.OnSelectionChanged(e);
-
-            // FIXME: [Wpf]GridView.ReloadData(...) is very slow, Eto 2.7.0 #2245
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
-                base.ReloadData(base.SelectedRow);
-            }
-        }*/
-
         private int fRowFormatting = -1;
         private Color fRowBackColor = Colors.White;
 
-        protected override void OnCellFormatting(GridCellFormatEventArgs e)
+        protected override void OnRowFormatting(GridRowFormatEventArgs e)
         {
-            base.OnCellFormatting(e);
+            base.OnRowFormatting(e);
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.GridCellFormat)) {
                 return;
             }
-
-            // FIXME: doesn't work correctly because selection changes don't call this method (Eto <= 2.7.0)
-            // This method only works with OnSelectionChanged -> ReloadData(SelectedRow)
-            // In Gtk works correctly without this.
-            // In Wpf without this selected row has invalid background.
-            /*if (e.Row == base.SelectedRow) {
-                e.BackgroundColor = SystemColors.Selection;
-                e.ForegroundColor = SystemColors.SelectionText;
-                return;
-            }*/
 
             if (fIsVirtual) {
                 var item = e.Item as ContentItem;
                 if (item != null) {
                     if (fRowFormatting != e.Row) {
                         var backColor = fListMan.GetBackgroundColor(e.Row, item.Record);
-                        fRowBackColor = (backColor != null) ? ((ColorHandler)backColor).Handle : Colors.White;
+                        fRowBackColor = (backColor != null) ? ((ColorHandler)backColor).Handle : this.BackgroundColor;
                         fRowFormatting = e.Row;
                     }
                     e.BackgroundColor = fRowBackColor;
@@ -354,11 +347,10 @@ namespace GKUI.Components
                     if (item.BackColor != Colors.Transparent) {
                         e.BackgroundColor = item.BackColor;
                     } else {
-                        e.BackgroundColor = Colors.White;
+                        e.BackgroundColor = this.BackgroundColor;
                     }
                 }
             }
-            e.ForegroundColor = SystemColors.ControlText;
         }
 
         private int CompareItems(GKListItem item1, GKListItem item2)
