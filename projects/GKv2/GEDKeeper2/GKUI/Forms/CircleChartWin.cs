@@ -57,13 +57,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            tbImageSave.Image = UIHelper.LoadResourceImage("Resources.btn_save_image.gif");
-            tbDocPreview.Image = UIHelper.LoadResourceImage("Resources.btn_preview.gif");
-            tbDocPrint.Image = UIHelper.LoadResourceImage("Resources.btn_print.gif");
-            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
-            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
-            tbOptions.Image = UIHelper.LoadResourceImage("Resources.btn_tools.gif");
-
             ToolBar1.Visible = true;
 
             UIHelper.FixToolStrip(ToolBar1);

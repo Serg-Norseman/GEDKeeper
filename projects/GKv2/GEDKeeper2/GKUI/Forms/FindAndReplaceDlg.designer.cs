@@ -180,22 +180,26 @@
             // 
             // btnPrev
             // 
+            this.btnPrev.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnPrev.Location = new System.Drawing.Point(11, 170);
             this.btnPrev.Margin = new System.Windows.Forms.Padding(2);
             this.btnPrev.Name = "btnPrev";
-            this.btnPrev.Size = new System.Drawing.Size(112, 30);
+            this.btnPrev.Size = new System.Drawing.Size(142, 30);
             this.btnPrev.TabIndex = 12;
             this.btnPrev.Text = "btnPrev";
+            this.btnPrev.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
             // 
             // btnNext
             // 
-            this.btnNext.Location = new System.Drawing.Point(133, 170);
+            this.btnNext.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnNext.Location = new System.Drawing.Point(163, 170);
             this.btnNext.Margin = new System.Windows.Forms.Padding(2);
             this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(112, 30);
+            this.btnNext.Size = new System.Drawing.Size(142, 30);
             this.btnNext.TabIndex = 13;
             this.btnNext.Text = "btnNext";
+            this.btnNext.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
             // 
             // FindAndReplaceDlg

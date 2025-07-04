@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,7 +25,6 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -50,9 +49,6 @@ namespace GKUI.Forms
         public QuickSearchDlg(IWorkWindow workWindow)
         {
             InitializeComponent();
-
-            btnPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
-            btnNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
             fController = new QuickSearchDlgController(this, workWindow);
         }
@@ -99,6 +95,12 @@ namespace GKUI.Forms
         public void SetLocale()
         {
             fController.SetLocale();
+        }
+
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
         }
     }
 }

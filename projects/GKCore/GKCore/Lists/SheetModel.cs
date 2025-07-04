@@ -104,6 +104,10 @@ namespace GKCore.Lists
 
         event ModifyEventHandler OnModify;
 
+        event ItemValidatingEventHandler OnItemValidating;
+
+        event ModifyEventHandler OnBeforeChange;
+
         void UpdateButtons();
         void UpdateSheet();
     }

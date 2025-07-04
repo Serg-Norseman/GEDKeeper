@@ -15,10 +15,10 @@
       </StackLayout>
     </TableRow>
 
-    <TableRow ScaleHeight="True">
+    <TableRow>
       <TabControl Size="600, 260">
         <TabPage x:Name="pageMembers">
-          <comcom:GKSheetList x:Name="fMembersList" OnModify="ModifyMembersSheet" />
+          <comcom:GKSheetList x:Name="fMembersList" />
         </TabPage>
         <TabPage x:Name="pageNotes">
           <comcom:GKSheetList x:Name="fNotesList" />

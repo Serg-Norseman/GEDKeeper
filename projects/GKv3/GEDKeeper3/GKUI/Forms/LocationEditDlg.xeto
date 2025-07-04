@@ -11,7 +11,7 @@
         <TabPage x:Name="pageCommon">
           <TableLayout Style="paddedTable">
             <TableRow>
-              <TableLayout Spacing="2, 2">
+              <TableLayout Spacing="4, 2">
                 <TableRow>
                   <Label x:Name="lblName" />
                   <Label x:Name="lblLatitude" />
@@ -32,13 +32,13 @@
               <GroupBox x:Name="grpSearch">
                 <TableLayout Style="paddedTable">
                   <TableRow>
-                    <TableLayout>
+                    <TableLayout Spacing="4,4">
                       <TableRow>
                         <TableCell ScaleWidth="True">
                           <comcom:GKListView x:Name="ListGeoCoords" MouseDown="ListGeoCoords_Click" />
                         </TableCell>
 
-                        <StackLayout Style="vertListStack">
+                        <StackLayout Orientation="Vertical" Spacing="4">
                           <Button x:Name="btnSearch" Style="funcBtn" Click="btnSearch_Click" />
                           <Button x:Name="btnSelect" Style="funcBtn" Click="btnSelect_Click" />
                           <Button x:Name="btnSelectName" Style="funcBtn" Click="btnSelectName_Click" />

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -106,22 +106,11 @@ namespace GKUI.Forms
 
             tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnHusbandAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnHusbandDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnHusbandSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-            btnWifeAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnWifeDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnWifeSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-
             txtHusband.TextChanged += EditSpouse_TextChanged;
             txtWife.TextChanged += EditSpouse_TextChanged;
 
             fChildrenList = new GKSheetList(pageChilds);
             fChildrenList.SetControlName("fChildsList"); // for purpose of tests
-            fChildrenList.OnItemValidating += FamilyEditDlg_ItemValidating;
-            fChildrenList.OnModify += ModifyChildrenSheet;
 
             fEventsList = new GKSheetList(pageEvents);
             fEventsList.SetControlName("fEventsList"); // for purpose of tests
@@ -142,51 +131,9 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
-        public void LockEditor(bool locked)
-        {
-            btnHusbandAdd.Enabled = (btnHusbandAdd.Enabled && !locked);
-            btnHusbandDelete.Enabled = (btnHusbandDelete.Enabled && !locked);
-            btnWifeAdd.Enabled = (btnWifeAdd.Enabled && !locked);
-            btnWifeDelete.Enabled = (btnWifeDelete.Enabled && !locked);
-
-            cmbMarriageStatus.Enabled = (cmbMarriageStatus.Enabled && !locked);
-
-            fChildrenList.ReadOnly = locked;
-            fEventsList.ReadOnly = locked;
-            fNotesList.ReadOnly = locked;
-            fMediaList.ReadOnly = locked;
-            fSourcesList.ReadOnly = locked;
-            fUserRefList.ReadOnly = locked;
-        }
-
-        public void SetHusband(string value)
-        {
-            bool res = !string.IsNullOrEmpty(value);
-            txtHusband.Text = (res) ? value : LangMan.LS(LSID.UnkMale);
-            btnHusbandAdd.Enabled = (!res);
-            btnHusbandDelete.Enabled = (res);
-            btnHusbandSel.Enabled = (res);
-        }
-
-        public void SetWife(string value)
-        {
-            bool res = !string.IsNullOrEmpty(value);
-            txtWife.Text = (res) ? value : LangMan.LS(LSID.UnkFemale);
-            btnWifeAdd.Enabled = (!res);
-            btnWifeDelete.Enabled = (res);
-            btnWifeSel.Enabled = (res);
-        }
-
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LockEditor(cmbRestriction.SelectedIndex == (int)GDMRestriction.rnLocked);
-        }
-
-        private void ModifyChildrenSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMIndividualRecord);
-            }
+            fController.LockEditor(cmbRestriction.SelectedIndex == (int)GDMRestriction.rnLocked);
         }
 
         public void SetTarget(TargetMode targetType, GDMIndividualRecord target)
@@ -227,12 +174,6 @@ namespace GKUI.Forms
         private void EditSpouse_TextChanged(object sender, EventArgs e)
         {
             Title = string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.Family), txtHusband.Text, txtWife.Text);
-        }
-
-        private void FamilyEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)
-        {
-            var record = e.Item as GDMRecord;
-            e.IsAvailable = record == null || fController.Base.Context.IsAvailableRecord(record);
         }
     }
 }

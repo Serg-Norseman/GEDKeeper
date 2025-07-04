@@ -124,14 +124,24 @@
             this.cmbLinkageType.Size = new System.Drawing.Size(313, 25);
             this.cmbLinkageType.TabIndex = 13;
             // 
+            // txtFather
+            // 
+            this.txtFather.ForeColor = System.Drawing.SystemColors.Control;
+            this.txtFather.Location = new System.Drawing.Point(117, 100);
+            this.txtFather.Margin = new System.Windows.Forms.Padding(2);
+            this.txtFather.Name = "txtFather";
+            this.txtFather.ReadOnly = true;
+            this.txtFather.Size = new System.Drawing.Size(344, 24);
+            this.txtFather.TabIndex = 1;
+            // 
             // txtMother
             // 
             this.txtMother.ForeColor = System.Drawing.SystemColors.Control;
-            this.txtMother.Location = new System.Drawing.Point(443, 100);
+            this.txtMother.Location = new System.Drawing.Point(474, 100);
             this.txtMother.Margin = new System.Windows.Forms.Padding(2);
             this.txtMother.Name = "txtMother";
             this.txtMother.ReadOnly = true;
-            this.txtMother.Size = new System.Drawing.Size(314, 24);
+            this.txtMother.Size = new System.Drawing.Size(344, 24);
             this.txtMother.TabIndex = 2;
             // 
             // lblParents
@@ -146,7 +156,7 @@
             // 
             // btnParentsEdit
             // 
-            this.btnParentsEdit.Location = new System.Drawing.Point(827, 93);
+            this.btnParentsEdit.Location = new System.Drawing.Point(827, 95);
             this.btnParentsEdit.Margin = new System.Windows.Forms.Padding(2);
             this.btnParentsEdit.Name = "btnParentsEdit";
             this.btnParentsEdit.Size = new System.Drawing.Size(36, 36);
@@ -155,7 +165,7 @@
             // 
             // btnFatherAdd
             // 
-            this.btnFatherAdd.Location = new System.Drawing.Point(350, 128);
+            this.btnFatherAdd.Location = new System.Drawing.Point(382, 128);
             this.btnFatherAdd.Margin = new System.Windows.Forms.Padding(2);
             this.btnFatherAdd.Name = "btnFatherAdd";
             this.btnFatherAdd.Size = new System.Drawing.Size(36, 36);
@@ -164,7 +174,7 @@
             // 
             // btnFatherDelete
             // 
-            this.btnFatherDelete.Location = new System.Drawing.Point(394, 128);
+            this.btnFatherDelete.Location = new System.Drawing.Point(426, 128);
             this.btnFatherDelete.Margin = new System.Windows.Forms.Padding(2);
             this.btnFatherDelete.Name = "btnFatherDelete";
             this.btnFatherDelete.Size = new System.Drawing.Size(36, 36);
@@ -173,7 +183,7 @@
             // 
             // btnMotherAdd
             // 
-            this.btnMotherAdd.Location = new System.Drawing.Point(675, 128);
+            this.btnMotherAdd.Location = new System.Drawing.Point(736, 128);
             this.btnMotherAdd.Margin = new System.Windows.Forms.Padding(2);
             this.btnMotherAdd.Name = "btnMotherAdd";
             this.btnMotherAdd.Size = new System.Drawing.Size(36, 36);
@@ -182,22 +192,12 @@
             // 
             // btnMotherDelete
             // 
-            this.btnMotherDelete.Location = new System.Drawing.Point(721, 128);
+            this.btnMotherDelete.Location = new System.Drawing.Point(782, 128);
             this.btnMotherDelete.Margin = new System.Windows.Forms.Padding(2);
             this.btnMotherDelete.Name = "btnMotherDelete";
             this.btnMotherDelete.Size = new System.Drawing.Size(36, 36);
             this.btnMotherDelete.TabIndex = 10;
             this.btnMotherDelete.Click += new System.EventHandler(this.btnMotherDelete_Click);
-            // 
-            // txtFather
-            // 
-            this.txtFather.ForeColor = System.Drawing.SystemColors.Control;
-            this.txtFather.Location = new System.Drawing.Point(117, 100);
-            this.txtFather.Margin = new System.Windows.Forms.Padding(2);
-            this.txtFather.Name = "txtFather";
-            this.txtFather.ReadOnly = true;
-            this.txtFather.Size = new System.Drawing.Size(313, 24);
-            this.txtFather.TabIndex = 1;
             // 
             // ParentsEditDlg
             // 

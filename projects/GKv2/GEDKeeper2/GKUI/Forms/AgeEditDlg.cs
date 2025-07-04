@@ -19,7 +19,6 @@
  */
 
 using System.Globalization;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using GDModel;
 using GKCore;
@@ -27,7 +26,6 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -74,9 +72,6 @@ namespace GKUI.Forms
             txtVal2.Culture = CultureInfo.InvariantCulture;
             txtVal2.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
             txtVal2.Mask = LangMan.LS(LSID.AgeInputMask);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new AgeEditDlgController(this);
             fController.Init(baseWin);

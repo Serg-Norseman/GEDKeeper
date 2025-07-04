@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -33,10 +33,10 @@ namespace GKUI.Forms
 {
     public sealed partial class StatisticsWin : CommonWindow, IStatisticsWin
     {
-        private readonly StatisticsWinController fController;
-
         private readonly ZGraphControl fGraph;
         private readonly GKListView fListStats;
+
+        private readonly StatisticsWinController fController;
 
         #region View Interface
 
@@ -71,8 +71,6 @@ namespace GKUI.Forms
         public StatisticsWin(IBaseWindow baseWin, List<GDMRecord> selectedRecords)
         {
             InitializeComponent();
-
-            tbExcelExport.Image = UIHelper.LoadResourceImage("Resources.btn_excel.gif");
 
             fGraph = new ZGraphControl();
             fGraph.Dock = DockStyle.Right;
@@ -122,6 +120,12 @@ namespace GKUI.Forms
             fController.SetLocale();
 
             fController.UpdateCommonStats();
+        }
+
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
         }
 
         private void tbExcelExport_Click(object sender, EventArgs e)

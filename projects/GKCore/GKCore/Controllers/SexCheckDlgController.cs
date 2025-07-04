@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,13 +22,15 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Types;
+using GKUI.Themes;
 
 namespace GKCore.Controllers
 {
     /// <summary>
     /// 
     /// </summary>
-    public class SexCheckController : DialogController<ISexCheckDlg>
+    public sealed class SexCheckDlgController : DialogController<ISexCheckDlg>
     {
         public GDMSex Sex
         {
@@ -59,7 +61,8 @@ namespace GKCore.Controllers
             }
         }
 
-        public SexCheckController(ISexCheckDlg view) : base(view)
+
+        public SexCheckDlgController(ISexCheckDlg view) : base(view)
         {
         }
 
@@ -78,6 +81,14 @@ namespace GKCore.Controllers
             GetControl<IRadioButton>("rbNone").Text = " ? ";
             GetControl<IRadioButton>("rbMale").Text = LangMan.LS(LSID.SexM);
             GetControl<IRadioButton>("rbFemale").Text = LangMan.LS(LSID.SexF);
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }
 }

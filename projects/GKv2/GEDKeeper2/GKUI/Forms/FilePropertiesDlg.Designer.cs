@@ -98,7 +98,7 @@
 		    // btnLangEdit
 		    // 
 		    this.btnLangEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-		    this.btnLangEdit.Location = new System.Drawing.Point(545, 220);
+		    this.btnLangEdit.Location = new System.Drawing.Point(545, 223);
 		    this.btnLangEdit.Name = "btnLangEdit";
 		    this.btnLangEdit.Size = new System.Drawing.Size(39, 34);
 		    this.btnLangEdit.TabIndex = 6;

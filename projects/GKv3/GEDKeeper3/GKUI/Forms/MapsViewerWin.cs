@@ -239,6 +239,12 @@ namespace GKUI.Forms
             fController.SetLocale();
         }
 
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
+        }
+
         public ITVNode FindTreeNode(string place)
         {
             GKTreeNode rootNode = fController.TreeRoot as GKTreeNode;

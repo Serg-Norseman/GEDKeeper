@@ -47,7 +47,7 @@
             // btnLocationAdd
             // 
             this.btnLocationAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLocationAdd.Location = new System.Drawing.Point(592, 10);
+            this.btnLocationAdd.Location = new System.Drawing.Point(702, 8);
             this.btnLocationAdd.Name = "btnLocationAdd";
             this.btnLocationAdd.Size = new System.Drawing.Size(39, 34);
             this.btnLocationAdd.TabIndex = 2;
@@ -67,7 +67,7 @@
             this.txtTopLevel.Location = new System.Drawing.Point(157, 10);
             this.txtTopLevel.Name = "txtTopLevel";
             this.txtTopLevel.ReadOnly = true;
-            this.txtTopLevel.Size = new System.Drawing.Size(428, 127);
+            this.txtTopLevel.Size = new System.Drawing.Size(538, 127);
             this.txtTopLevel.TabIndex = 1;
             // 
             // lblDate

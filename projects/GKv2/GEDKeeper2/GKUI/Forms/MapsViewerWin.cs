@@ -106,8 +106,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            tbSaveSnapshot.Image = UIHelper.LoadResourceImage("Resources.btn_save_image.gif");
-
             UIHelper.FixToolStrip(ToolBar1);
 
             fMapBrowser = new GKMapBrowser();
@@ -208,6 +206,12 @@ namespace GKUI.Forms
         public override void SetLocale()
         {
             fController.SetLocale();
+        }
+
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
         }
 
         public ITVNode FindTreeNode(string place)

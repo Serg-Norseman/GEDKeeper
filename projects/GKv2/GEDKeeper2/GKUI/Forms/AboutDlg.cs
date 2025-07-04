@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,22 +21,23 @@
 using System;
 using System.Windows.Forms;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Design.Views;
 using GKCore.Options;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
     public sealed partial class AboutDlg : CommonDialog, IAboutDlg
     {
+        private readonly AboutDlgController fController;
+
         public AboutDlg()
         {
             InitializeComponent();
 
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
+            fController = new AboutDlgController(this);
+            fController.SetLocale();
 
-            Title = LangMan.LS(LSID.MIAbout);
-            btnClose.Text = LangMan.LS(LSID.DlgClose);
             lblProduct.Text = GKData.APP_TITLE;
             lblVersion.Text = @"Version " + AppHost.GetAppVersion();
             lblCopyright.Text = AppHost.GetAppCopyright();
@@ -48,6 +49,12 @@ namespace GKUI.Forms
                 lblForum.Text = GKData.APP_FORUM_EN;
                 lblChannel.Text = GKData.APP_CHANNEL_EN;
             }
+        }
+
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
         }
 
         private void LabelMail_Click(object sender, EventArgs e)

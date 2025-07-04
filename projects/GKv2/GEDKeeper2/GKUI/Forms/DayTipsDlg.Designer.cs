@@ -48,9 +48,9 @@
 		    // 
 		    // btnNextTip
 		    // 
-		    this.btnNextTip.Location = new System.Drawing.Point(302, 262);
+		    this.btnNextTip.Location = new System.Drawing.Point(292, 262);
 		    this.btnNextTip.Name = "btnNextTip";
-		    this.btnNextTip.Size = new System.Drawing.Size(105, 31);
+		    this.btnNextTip.Size = new System.Drawing.Size(115, 31);
 		    this.btnNextTip.TabIndex = 1;
 		    this.btnNextTip.Text = "btnNextTip";
 		    this.btnNextTip.Click += new System.EventHandler(this.btnNextTip_Click);
@@ -61,7 +61,7 @@
 		    this.btnClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 		    this.btnClose.Location = new System.Drawing.Point(414, 262);
 		    this.btnClose.Name = "btnClose";
-		    this.btnClose.Size = new System.Drawing.Size(105, 31);
+		    this.btnClose.Size = new System.Drawing.Size(115, 31);
 		    this.btnClose.TabIndex = 2;
 		    this.btnClose.Text = "btnClose";
 		    this.btnClose.TextAlign = System.Drawing.ContentAlignment.MiddleRight;

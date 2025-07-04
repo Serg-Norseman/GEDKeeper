@@ -6,8 +6,8 @@
 
   <TableLayout Style="paddedTable8">
 
-    <Panel>
-      <TableLayout Style="paddedTable">
+    <TableRow>
+      <TableLayout Spacing="4,4">
         <TableRow>
           <Label x:Name="lblLocation" />
           <StackLayout Orientation="Horizontal" Spacing="4">
@@ -17,12 +17,13 @@
             <Button x:Name="btnLocationAdd" Style="iconBtn" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="btnLocationAdd_Click" />
           </StackLayout>
         </TableRow>
+
         <TableRow>
           <Label x:Name="lblDate" />
           <comcom:GKDateControl x:Name="dateCtl" />
         </TableRow>
       </TableLayout>
-    </Panel>
+    </TableRow>
 
     <TableRow>
       <StackLayout Style="dlgFooter">

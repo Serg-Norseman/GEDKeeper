@@ -51,12 +51,23 @@ namespace GKCore.Controllers
 
         public ResearchEditDlgController(IResearchEditDlg view) : base(view)
         {
+            fView.TasksList.OnModify += ListJumpHandler;
+            fView.CommunicationsList.OnModify += ListJumpHandler;
+            fView.GroupsList.OnModify += ListJumpHandler;
+
             for (GDMResearchPriority rp = GDMResearchPriority.rpNone; rp <= GDMResearchPriority.rpTop; rp++) {
                 fView.Priority.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
             }
 
             for (GDMResearchStatus rs = GDMResearchStatus.rsDefined; rs <= GDMResearchStatus.rsWithdrawn; rs++) {
                 fView.Status.Add(LangMan.LS(GKData.StatusNames[(int)rs]));
+            }
+        }
+
+        private void ListJumpHandler(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raJump) {
+                JumpToRecord(eArgs.ItemData as GDMPointer);
             }
         }
 
@@ -147,11 +158,6 @@ namespace GKCore.Controllers
 
             GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
             GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
-
-            fView.TasksList.ApplyTheme();
-            fView.CommunicationsList.ApplyTheme();
-            fView.GroupsList.ApplyTheme();
-            fView.NotesList.ApplyTheme();
         }
     }
 }

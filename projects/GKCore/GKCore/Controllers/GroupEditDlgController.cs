@@ -51,6 +51,8 @@ namespace GKCore.Controllers
 
         public GroupEditDlgController(IGroupEditDlg view) : base(view)
         {
+            fView.MembersList.OnModify += ModifyMembersSheet;
+
             fView.Name.Activate();
         }
 
@@ -68,6 +70,13 @@ namespace GKCore.Controllers
             fView.MembersList.ListModel.SaveSettings();
             fView.NotesList.ListModel.SaveSettings();
             fView.MediaList.ListModel.SaveSettings();
+        }
+
+        private void ModifyMembersSheet(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raJump) {
+                JumpToRecord(eArgs.ItemData as GDMIndividualLink);
+            }
         }
 
         public override bool Accept()
@@ -112,10 +121,6 @@ namespace GKCore.Controllers
 
             GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
             GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
-
-            fView.MembersList.ApplyTheme();
-            fView.NotesList.ApplyTheme();
-            fView.MediaList.ApplyTheme();
         }
     }
 }

@@ -72,9 +72,11 @@
     <Compile Include="GDModel\GDMDNATest.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\SecGEDCOMProvider.cs" />
     <Compile Include="GKCore\Charts\DefTreeLayout.cs" />
+    <Compile Include="GKCore\Controllers\AboutDlgController.cs" />
     <Compile Include="GKCore\Controllers\AgeEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\DNATestEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\RepositoryCitDlgController.cs" />
+    <Compile Include="GKCore\Controllers\SexCheckDlgController.cs" />
     <Compile Include="GKCore\Design\Views\IAgeEditDlg.cs" />
     <Compile Include="GKCore\Design\Views\IDNATestEditDlg.cs" />
     <Compile Include="GKCore\Design\Views\IRepositoryCitEditDlg.cs" />

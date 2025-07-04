@@ -49,6 +49,13 @@ namespace GKCore.Controllers
         public TreeFilterDlgController(ITreeFilterDlg view) : base(view)
         {
             fView.PersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
+
+            fView.PersonsList.OnModify += ListModify;
+        }
+
+        private async void ListModify(object sender, ModifyEventArgs eArgs)
+        {
+            await ModifyPersons(eArgs.Action, eArgs.ItemData);
         }
 
         public override bool Accept()
@@ -210,8 +217,6 @@ namespace GKCore.Controllers
 
             GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
             GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
-
-            fView.PersonsList.ApplyTheme();
         }
     }
 }

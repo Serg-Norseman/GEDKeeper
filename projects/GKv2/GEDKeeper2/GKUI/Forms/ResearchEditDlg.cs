@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,7 +24,6 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Types;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -101,32 +100,19 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
             fTasksList = new GKSheetList(pageTasks);
-            fTasksList.OnModify += ListJumpHandler;
             fTasksList.SetControlName("fTasksList"); // for purpose of tests
 
             fCommunicationsList = new GKSheetList(pageCommunications);
-            fCommunicationsList.OnModify += ListJumpHandler;
             fCommunicationsList.SetControlName("fCommunicationsList"); // for purpose of tests
 
             fGroupsList = new GKSheetList(pageGroups);
-            fGroupsList.OnModify += ListJumpHandler;
             fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
 
             fNotesList = new GKSheetList(pageNotes);
 
             fController = new ResearchEditDlgController(this);
             fController.Init(baseWin);
-        }
-
-        private void ListJumpHandler(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMRecord);
-            }
         }
     }
 }

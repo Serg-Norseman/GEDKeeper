@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -66,13 +66,6 @@ namespace GKUI.Forms
 
             fController = new GroupEditDlgController(this);
             fController.Init(baseWin);
-        }
-
-        private void ModifyMembersSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMIndividualRecord);
-            }
         }
     }
 }

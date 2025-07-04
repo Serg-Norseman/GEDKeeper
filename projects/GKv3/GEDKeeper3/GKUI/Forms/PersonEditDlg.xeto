@@ -150,15 +150,15 @@
         </TabPage>
 
         <TabPage x:Name="pageSpouses">
-          <comcom:GKSheetList x:Name="fSpousesList" OnModify="ModifySpousesSheet" OnBeforeChange="BeforeChangeSpousesSheet" />
+          <comcom:GKSheetList x:Name="fSpousesList" />
         </TabPage>
 
         <TabPage x:Name="pageNames">
-          <comcom:GKSheetList x:Name="fNamesList" OnModify="ModifyNamesSheet" />
+          <comcom:GKSheetList x:Name="fNamesList" />
         </TabPage>
 
         <TabPage x:Name="pageAssociations">
-          <comcom:GKSheetList x:Name="fAssociationsList" OnModify="ModifyAssociationsSheet" />
+          <comcom:GKSheetList x:Name="fAssociationsList" />
         </TabPage>
 
         <TabPage x:Name="pageNotes">
@@ -174,7 +174,7 @@
         </TabPage>
 
         <TabPage x:Name="pageGroups">
-          <comcom:GKSheetList x:Name="fGroupsList" OnModify="ModifyGroupsSheet" />
+          <comcom:GKSheetList x:Name="fGroupsList" />
         </TabPage>
 
         <TabPage x:Name="pageUserRefs">
@@ -182,11 +182,11 @@
         </TabPage>
 
         <TabPage x:Name="pageParents">
-          <comcom:GKSheetList x:Name="fParentsList" OnModify="ModifyParentsSheet" />
+          <comcom:GKSheetList x:Name="fParentsList" />
         </TabPage>
 
         <TabPage x:Name="pageChilds">
-          <comcom:GKSheetList x:Name="fChildrenList" OnModify="ModifyChildrenSheet" OnItemValidating="PersonEditDlg_ItemValidating" />
+          <comcom:GKSheetList x:Name="fChildrenList" />
         </TabPage>
 
         <TabPage x:Name="pageDNATests">

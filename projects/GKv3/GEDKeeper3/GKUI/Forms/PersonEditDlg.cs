@@ -337,61 +337,6 @@ namespace GKUI.Forms
             }
         }
 
-        private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown || eArgs.Action == RecordAction.raEdit) {
-                fController.UpdateNameControls(fController.IndividualRecord.PersonalNames[0]);
-            }
-        }
-
-        private void ModifyAssociationsSheet(object sender, ModifyEventArgs eArgs)
-        {
-            GDMAssociation ast = eArgs.ItemData as GDMAssociation;
-            if (eArgs.Action == RecordAction.raJump && ast != null) {
-                fController.JumpToRecord(ast);
-            }
-        }
-
-        private void BeforeChangeSpousesSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raEdit) {
-                fController.AcceptTempData();
-            }
-        }
-
-        private void ModifySpousesSheet(object sender, ModifyEventArgs eArgs)
-        {
-            GDMFamilyRecord family = eArgs.ItemData as GDMFamilyRecord;
-            if (eArgs.Action == RecordAction.raJump && family != null) {
-                fController.JumpToPersonSpouse(family);
-            }
-        }
-
-        private void ModifyParentsSheet(object sender, ModifyEventArgs eArgs)
-        {
-            fController.UpdateParents();
-        }
-
-        private void ModifyGroupsSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMGroupRecord);
-            }
-        }
-
-        private void PersonEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)
-        {
-            var record = e.Item as GDMRecord;
-            e.IsAvailable = record == null || fController.Base.Context.IsAvailableRecord(record);
-        }
-
-        private void ModifyChildrenSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMIndividualRecord);
-            }
-        }
-
         private void Names_TextChanged(object sender, EventArgs e)
         {
             Title = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.Person), txtSurname.Text, txtName.Text,

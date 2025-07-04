@@ -107,7 +107,7 @@
             this.chkEnabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkEnabled.Location = new System.Drawing.Point(12, 101);
             this.chkEnabled.Name = "chkEnabled";
-            this.chkEnabled.Size = new System.Drawing.Size(288, 24);
+            this.chkEnabled.Size = new System.Drawing.Size(136, 24);
             this.chkEnabled.TabIndex = 9;
             this.chkEnabled.Text = "chkEnabled";
             this.chkEnabled.UseVisualStyleBackColor = true;

@@ -33,7 +33,7 @@ namespace GKUI.Themes
     {
         private delegate void ThemeControlHandler(IThemedView view, Component component, Theme theme);
 
-        private static Dictionary<Type, ThemeControlHandler> fControlHandlers = new Dictionary<Type, ThemeControlHandler>();
+        private static readonly Dictionary<Type, ThemeControlHandler> fControlHandlers = new Dictionary<Type, ThemeControlHandler>();
 
         static WFThemeManager()
         {
@@ -216,20 +216,19 @@ namespace GKUI.Themes
 
         private static void ApplyTheme(IThemedView view, Component component, Theme theme)
         {
-            if (theme == null) return;
-
-            if (view is IThemedForm themedForm) {
-                if (themedForm.SkipTheme(component)) return;
-            }
+            if (theme == null || (view is IThemedForm themedForm && themedForm.SkipTheme(component)))
+                return;
 
             ThemeControlHandler handler = GetControlHandler(component);
             if (handler != null) {
                 handler(view, component, theme);
             }
 
-            if (component is Control) {
-                Control ctl = (Control)component;
+            if (!(component is IThemedForm) && component is IThemedView themedView) {
+                themedView.ApplyTheme();
+            }
 
+            if (component is Control ctl) {
                 ctl.Font = ((Form)view).Font;
 
                 foreach (Control item in ctl.Controls) {
@@ -269,8 +268,12 @@ namespace GKUI.Themes
         private static void ThemeCheckBoxHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (CheckBox)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
+
+            Color backColor, foreColor;
+            GetParentDependentColors(ctl, theme, out backColor, out foreColor);
+
+            ctl.BackColor = backColor;
+            ctl.ForeColor = foreColor;
         }
 
         private static void ThemeComboBoxHandler(IThemedView view, Component component, Theme theme)

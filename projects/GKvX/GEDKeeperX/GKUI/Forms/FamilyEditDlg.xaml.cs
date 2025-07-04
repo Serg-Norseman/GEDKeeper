@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -100,51 +100,9 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
-        public void LockEditor(bool locked)
-        {
-            btnHusbandAdd.IsEnabled = (btnHusbandAdd.IsEnabled && !locked);
-            btnHusbandDelete.IsEnabled = (btnHusbandDelete.IsEnabled && !locked);
-            btnWifeAdd.IsEnabled = (btnWifeAdd.IsEnabled && !locked);
-            btnWifeDelete.IsEnabled = (btnWifeDelete.IsEnabled && !locked);
-
-            cmbMarriageStatus.IsEnabled = (cmbMarriageStatus.IsEnabled && !locked);
-
-            fChildrenList.ReadOnly = locked;
-            fEventsList.ReadOnly = locked;
-            fNotesList.ReadOnly = locked;
-            fMediaList.ReadOnly = locked;
-            fSourcesList.ReadOnly = locked;
-            fUserRefList.ReadOnly = locked;
-        }
-
-        public void SetHusband(string value)
-        {
-            bool res = !string.IsNullOrEmpty(value);
-            txtHusband.Text = (res) ? value : LangMan.LS(LSID.UnkMale);
-            btnHusbandAdd.IsEnabled = (!res);
-            btnHusbandDelete.IsEnabled = (res);
-            btnHusbandSel.IsEnabled = (res);
-        }
-
-        public void SetWife(string value)
-        {
-            bool res = !string.IsNullOrEmpty(value);
-            txtWife.Text = (res) ? value : LangMan.LS(LSID.UnkFemale);
-            btnWifeAdd.IsEnabled = (!res);
-            btnWifeDelete.IsEnabled = (res);
-            btnWifeSel.IsEnabled = (res);
-        }
-
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LockEditor(cmbRestriction.SelectedIndex == (int)GDMRestriction.rnLocked);
-        }
-
-        private void ModifyChildrenSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMIndividualRecord);
-            }
+            fController.LockEditor(cmbRestriction.SelectedIndex == (int)GDMRestriction.rnLocked);
         }
 
         public void SetTarget(TargetMode targetType, GDMIndividualRecord target)
@@ -185,12 +143,6 @@ namespace GKUI.Forms
         private void EditSpouse_TextChanged(object sender, EventArgs e)
         {
             Title = string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.Family), txtHusband.Text, txtWife.Text);
-        }
-
-        private void FamilyEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)
-        {
-            var record = e.Item as GDMRecord;
-            e.IsAvailable = record == null || fController.Base.Context.IsAvailableRecord(record);
         }
     }
 }

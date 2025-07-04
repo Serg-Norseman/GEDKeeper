@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -84,13 +84,6 @@ namespace GKUI.Forms
 
             fController = new TreeFilterDlgController(this);
             fController.Init(baseWin);
-        }
-
-        private void ListModify(object sender, ModifyEventArgs eArgs)
-        {
-            if (sender == fPersonsList) {
-                fController.ModifyPersons(eArgs.Action, eArgs.ItemData);
-            }
         }
 
         private void rbCutX_CheckedChanged(object sender, EventArgs e)

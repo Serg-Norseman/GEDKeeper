@@ -98,7 +98,7 @@
 		    // 
 		    // btnPersonAdd
 		    // 
-		    this.btnPersonAdd.Location = new System.Drawing.Point(627, 45);
+		    this.btnPersonAdd.Location = new System.Drawing.Point(625, 46);
 		    this.btnPersonAdd.Name = "btnPersonAdd";
 		    this.btnPersonAdd.Size = new System.Drawing.Size(37, 32);
 		    this.btnPersonAdd.TabIndex = 5;

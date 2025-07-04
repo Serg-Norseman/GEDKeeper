@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,7 +28,6 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Types;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -133,14 +132,6 @@ namespace GKUI.Forms
 
             fController = new SourceEditDlgController(this);
             fController.Init(baseWin);
-        }
-
-        private void ModifyReposSheet(object sender, ModifyEventArgs eArgs)
-        {
-            GDMRepositoryCitation cit = eArgs.ItemData as GDMRepositoryCitation;
-            if (eArgs.Action == RecordAction.raJump && cit != null) {
-                fController.JumpToRecord(cit);
-            }
         }
 
         private void EditShortTitle_TextChanged(object sender, EventArgs e)

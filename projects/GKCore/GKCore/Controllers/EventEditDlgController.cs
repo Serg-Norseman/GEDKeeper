@@ -180,10 +180,6 @@ namespace GKCore.Controllers
 
             fTempLocation = fBase.Context.Tree.GetPtrValue<GDMLocationRecord>(fEvent.Place.Location);
             UpdatePlace(true);
-
-            fView.NotesList.UpdateSheet();
-            fView.MediaList.UpdateSheet();
-            fView.SourcesList.UpdateSheet();
         }
 
         private void UpdatePlace(bool forced)
@@ -328,10 +324,6 @@ namespace GKCore.Controllers
 
             GetControl<IButton>("btnPlaceAdd").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Attach, true);
             GetControl<IButton>("btnPlaceDelete").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Detach, true);
-
-            fView.NotesList.ApplyTheme();
-            fView.MediaList.ApplyTheme();
-            fView.SourcesList.ApplyTheme();
         }
     }
 }

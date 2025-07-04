@@ -38,7 +38,7 @@
         </TabPage>
 
         <TabPage x:Name="pageRepositories">
-          <comcom:GKSheetList x:Name="fRepositoriesList" OnModify="ModifyReposSheet" />
+          <comcom:GKSheetList x:Name="fRepositoriesList" />
         </TabPage>
         <TabPage x:Name="pageNotes">
           <comcom:GKSheetList x:Name="fNotesList" />

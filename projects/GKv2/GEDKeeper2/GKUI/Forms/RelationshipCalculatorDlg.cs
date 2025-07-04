@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,7 +23,6 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -69,8 +68,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
             fController = new RelationshipCalculatorDlgController(this);
             fController.Init(baseWin);
 
@@ -91,6 +88,12 @@ namespace GKUI.Forms
         private void btnSwap_Click(object sender, EventArgs e)
         {
             fController.Swap();
+        }
+
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
         }
     }
 }

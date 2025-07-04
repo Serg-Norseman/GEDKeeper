@@ -224,35 +224,16 @@ namespace GKUI.Forms
             txtName.TextChanged += Names_TextChanged;
             cmbPatronymic.TextChanged += Names_TextChanged;
 
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnPortraitAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnPortraitDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnParentsAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnParentsEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            btnParentsDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnFatherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnFatherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnFatherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-            btnMotherAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            btnMotherDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            btnMotherSel.Image = UIHelper.LoadResourceImage("Resources.btn_jump.gif");
-            btnNameCopy.Image = UIHelper.LoadResourceImage("Resources.btn_copy.gif");
-
             fEventsList = new GKSheetList(pageEvents);
             fEventsList.SetControlName("fEventsList"); // for purpose of tests
 
             fSpousesList = new GKSheetList(pageSpouses);
             fSpousesList.SetControlName("fSpousesList"); // for purpose of tests
-            fSpousesList.OnModify += ModifySpousesSheet;
-            fSpousesList.OnBeforeChange += BeforeChangeSpousesSheet;
 
             fNamesList = new GKSheetList(pageNames);
-            fNamesList.OnModify += ModifyNamesSheet;
             fNamesList.SetControlName("fNamesList"); // for purpose of tests
 
             fAssociationsList = new GKSheetList(pageAssociations);
-            fAssociationsList.OnModify += ModifyAssociationsSheet;
             fAssociationsList.SetControlName("fAssociationsList"); // for purpose of tests
 
             fNotesList = new GKSheetList(pageNotes);
@@ -266,19 +247,15 @@ namespace GKUI.Forms
 
             fGroupsList = new GKSheetList(pageGroups);
             fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
-            fGroupsList.OnModify += ModifyGroupsSheet;
 
             fUserRefList = new GKSheetList(pageUserRefs);
             fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
 
             fParentsList = new GKSheetList(pageParents);
             fParentsList.SetControlName("fParentsList"); // for purpose of tests
-            fParentsList.OnModify += ModifyParentsSheet;
 
             fChildrenList = new GKSheetList(pageChilds);
             fChildrenList.SetControlName("fChildsList"); // for purpose of tests
-            fChildrenList.OnItemValidating += PersonEditDlg_ItemValidating;
-            fChildrenList.OnModify += ModifyChildrenSheet;
 
             fDNATestsList = new GKSheetList(pageDNATests);
 
@@ -335,61 +312,6 @@ namespace GKUI.Forms
                 fController.AcceptTempData();
 
                 fController.UpdateControls();
-            }
-        }
-
-        private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown || eArgs.Action == RecordAction.raEdit) {
-                fController.UpdateNameControls(fController.IndividualRecord.PersonalNames[0]);
-            }
-        }
-
-        private void ModifyAssociationsSheet(object sender, ModifyEventArgs eArgs)
-        {
-            GDMAssociation ast = eArgs.ItemData as GDMAssociation;
-            if (eArgs.Action == RecordAction.raJump && ast != null) {
-                fController.JumpToRecord(ast);
-            }
-        }
-
-        private void BeforeChangeSpousesSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raEdit) {
-                fController.AcceptTempData();
-            }
-        }
-
-        private void ModifySpousesSheet(object sender, ModifyEventArgs eArgs)
-        {
-            GDMFamilyRecord family = eArgs.ItemData as GDMFamilyRecord;
-            if (eArgs.Action == RecordAction.raJump && family != null) {
-                fController.JumpToPersonSpouse(family);
-            }
-        }
-
-        private void ModifyParentsSheet(object sender, ModifyEventArgs eArgs)
-        {
-            fController.UpdateParents();
-        }
-
-        private void ModifyGroupsSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMGroupRecord);
-            }
-        }
-
-        private void PersonEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)
-        {
-            var record = e.Item as GDMRecord;
-            e.IsAvailable = record == null || fController.Base.Context.IsAvailableRecord(record);
-        }
-
-        private void ModifyChildrenSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMIndividualRecord);
             }
         }
 

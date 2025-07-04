@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,7 +24,6 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Tools;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -47,8 +46,6 @@ namespace GKUI.Forms
         public TTTreeSplitDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
-
-            btnClose.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new TreeSplitController(this);
             fController.Init(baseWin);

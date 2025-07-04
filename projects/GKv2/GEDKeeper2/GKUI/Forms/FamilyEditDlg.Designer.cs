@@ -104,7 +104,7 @@
 		    this.GroupBox1.Size = new System.Drawing.Size(708, 158);
 		    this.GroupBox1.TabIndex = 0;
 		    this.GroupBox1.TabStop = false;
-		    this.GroupBox1.Text = "GroupBox1";
+		    this.GroupBox1.Text = "";
 		    // 
 		    // lblHusband
 		    // 
@@ -147,7 +147,7 @@
 		    // 
 		    // btnWifeSel
 		    // 
-		    this.btnWifeSel.Location = new System.Drawing.Point(664, 62);
+		    this.btnWifeSel.Location = new System.Drawing.Point(664, 64);
 		    this.btnWifeSel.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnWifeSel.Name = "btnWifeSel";
 		    this.btnWifeSel.Size = new System.Drawing.Size(39, 34);
@@ -157,7 +157,7 @@
 		    // btnWifeDelete
 		    // 
 		    this.btnWifeDelete.Enabled = false;
-		    this.btnWifeDelete.Location = new System.Drawing.Point(620, 62);
+		    this.btnWifeDelete.Location = new System.Drawing.Point(620, 64);
 		    this.btnWifeDelete.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnWifeDelete.Name = "btnWifeDelete";
 		    this.btnWifeDelete.Size = new System.Drawing.Size(39, 34);
@@ -167,7 +167,7 @@
 		    // btnWifeAdd
 		    // 
 		    this.btnWifeAdd.Enabled = false;
-		    this.btnWifeAdd.Location = new System.Drawing.Point(576, 62);
+		    this.btnWifeAdd.Location = new System.Drawing.Point(576, 64);
 		    this.btnWifeAdd.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnWifeAdd.Name = "btnWifeAdd";
 		    this.btnWifeAdd.Size = new System.Drawing.Size(39, 34);

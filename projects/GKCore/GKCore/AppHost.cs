@@ -72,6 +72,7 @@ namespace GKCore
 
         private readonly List<WidgetInfo> fActiveWidgets;
         private readonly List<object> fInternalClipboard;
+        private readonly LocalesCollection fLocalesCollection;
         private readonly StringList fTips;
 
         protected IBaseWindow fActiveBase;
@@ -80,7 +81,6 @@ namespace GKCore
         private ITimer fAutosaveTimer;
         private string[] fCommandArgs;
         private int fLoadingCount;
-        private LocalesCollection fLocalesCollection;
 
 
         public static AppHost Instance

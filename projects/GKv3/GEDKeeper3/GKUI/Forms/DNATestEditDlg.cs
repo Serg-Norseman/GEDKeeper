@@ -155,19 +155,7 @@ namespace GKUI.Forms
 
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LockEditor(cmbRestriction.SelectedIndex == (int)GDMRestriction.rnLocked);
-        }
-
-        public void LockEditor(bool locked)
-        {
-            txtTestName.Enabled = (txtTestName.Enabled && !locked);
-            dateCtl.Enabled = (dateCtl.Enabled && !locked);
-            cmbAgency.Enabled = (cmbAgency.Enabled && !locked);
-            cmbMHaplogroup.Enabled = (cmbMHaplogroup.Enabled && !locked);
-            cmbYHaplogroup.Enabled = (cmbYHaplogroup.Enabled && !locked);
-
-            fNotesList.ReadOnly = locked;
-            fMediaList.ReadOnly = locked;
+            fController.LockEditor(cmbRestriction.SelectedIndex == (int)GDMRestriction.rnLocked);
         }
     }
 }

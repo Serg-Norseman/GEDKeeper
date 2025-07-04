@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
@@ -136,7 +135,15 @@ namespace GKUI.Components
         {
             base.OnCellFormatting(e);
 
-            e.ForegroundColor = this.TextColor;
+            // FIXME: doesn't work correctly because selection changes don't call this method (Eto <= 2.8.3)
+            // This method only works with OnSelectionChanged -> ReloadData(SelectedRow)
+            // [Wpf]GridView.ReloadData(...) is very slow (Eto <= 2.8.3 #2245)
+            if (e.Row == base.SelectedRow) {
+                e.BackgroundColor = SystemColors.Selection;
+                e.ForegroundColor = SystemColors.SelectionText;
+            } else {
+                e.ForegroundColor = this.TextColor;
+            }
         }
     }
 

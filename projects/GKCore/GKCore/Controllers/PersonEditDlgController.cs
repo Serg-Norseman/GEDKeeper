@@ -71,6 +71,13 @@ namespace GKCore.Controllers
 
         public PersonEditDlgController(T view) : base(view)
         {
+            fView.NamesList.OnModify += ModifyNamesSheet;
+            fView.SpousesList.OnModify += ModifySpousesSheet;
+            fView.SpousesList.OnBeforeChange += BeforeChangeSpousesSheet;
+            fView.AssociationsList.OnModify += ModifyAssociationsSheet;
+            fView.GroupsList.OnModify += ModifyGroupsSheet;
+            fView.ParentsList.OnModify += ModifyParentsSheet;
+
             for (GDMRestriction res = GDMRestriction.rnNone; res <= GDMRestriction.rnPrivacy; res++) {
                 fView.RestrictionCombo.Add(LangMan.LS(GKData.Restrictions[(int)res]));
             }
@@ -87,6 +94,47 @@ namespace GKCore.Controllers
             if (disposing) {
             }
             base.Dispose(disposing);
+        }
+
+        private void ModifyNamesSheet(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raMoveUp || eArgs.Action == RecordAction.raMoveDown || eArgs.Action == RecordAction.raEdit) {
+                UpdateNameControls(fIndividualRecord.PersonalNames[0]);
+            }
+        }
+
+        private void BeforeChangeSpousesSheet(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raAdd || eArgs.Action == RecordAction.raEdit) {
+                AcceptTempData();
+            }
+        }
+
+        private void ModifySpousesSheet(object sender, ModifyEventArgs eArgs)
+        {
+            var family = fBase.Context.Tree.GetPtrValue<GDMFamilyRecord>(eArgs.ItemData as GDMSpouseToFamilyLink);
+            if (eArgs.Action == RecordAction.raJump && family != null) {
+                JumpToPersonSpouse(family);
+            }
+        }
+
+        private void ModifyAssociationsSheet(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raJump) {
+                JumpToRecord(eArgs.ItemData as GDMAssociation);
+            }
+        }
+
+        private void ModifyParentsSheet(object sender, ModifyEventArgs eArgs)
+        {
+            UpdateParents();
+        }
+
+        private void ModifyGroupsSheet(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raJump) {
+                JumpToRecord(eArgs.ItemData as GDMPointer);
+            }
         }
 
         private IImage GetSexImage(GDMSex sx)
@@ -535,17 +583,15 @@ namespace GKCore.Controllers
         public async void JumpToFather()
         {
             GDMFamilyRecord family = await fBase.Context.GetChildFamily(fIndividualRecord, false, null);
-            if (family == null) return;
-
-            JumpToRecord(family.Husband);
+            if (family != null)
+                JumpToRecord(family.Husband);
         }
 
         public async void JumpToMother()
         {
             GDMFamilyRecord family = await fBase.Context.GetChildFamily(fIndividualRecord, false, null);
-            if (family == null) return;
-
-            JumpToRecord(family.Wife);
+            if (family != null)
+                JumpToRecord(family.Wife);
         }
 
         public void JumpToPersonSpouse(GDMFamilyRecord family)
@@ -632,17 +678,6 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnMotherSel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_LinkJump, true);
 
             GetControl<IButton>("btnNameCopy").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_CopyName, true);
-
-            fView.EventsList.ApplyTheme();
-            fView.NotesList.ApplyTheme();
-            fView.MediaList.ApplyTheme();
-            fView.SourcesList.ApplyTheme();
-            fView.AssociationsList.ApplyTheme();
-            fView.GroupsList.ApplyTheme();
-            fView.NamesList.ApplyTheme();
-            fView.SpousesList.ApplyTheme();
-            fView.UserRefList.ApplyTheme();
-            fView.ParentsList.ApplyTheme();
         }
     }
 }

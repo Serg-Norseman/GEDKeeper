@@ -28,7 +28,6 @@ using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
-using GKUI.Components;
 using GKUI.Platform.Handlers;
 
 namespace GKUI.Forms
@@ -50,11 +49,6 @@ namespace GKUI.Forms
             InitializeComponent();
 
             PageControl1.SelectedIndexChanged += PageControl_SelectedIndexChanged;
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnColumnUp.Image = UIHelper.LoadResourceImage("Resources.btn_up.gif");
-            btnColumnDown.Image = UIHelper.LoadResourceImage("Resources.btn_down.gif");
 
             fController = new OptionsDlgController(this);
 

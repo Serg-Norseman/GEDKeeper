@@ -222,7 +222,8 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-            GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
+            GetControl<IButton>("btnCreate").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemAdd);
+            GetControl<IButton>("btnSelect").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
             GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
         }
     }

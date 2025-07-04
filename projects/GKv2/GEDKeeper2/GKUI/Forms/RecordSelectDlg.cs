@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,7 +23,6 @@ using System.Windows.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
-using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
@@ -75,9 +74,6 @@ namespace GKUI.Forms
 
             TabIndexChanged += Form_TabIndexChanged;
 
-            btnSelect.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
             fController = new RecordSelectDlgController(this);
             fController.Init(baseWin);
             fController.RecType = recType;
@@ -92,6 +88,12 @@ namespace GKUI.Forms
             contextMenu.Items.AddRange(new ToolStripItem[] { miDetails });
 
             UpdateRecordsView();
+        }
+
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
         }
 
         private void Form_TabIndexChanged(object sender, EventArgs e)

@@ -6,22 +6,24 @@
 
   <TableLayout Style="paddedTable8">
 
-    <Panel>
-      <TableLayout Style="paddedTable">
+    <TableRow>
+      <TableLayout Spacing="4,4">
         <TableRow>
           <Label x:Name="lblTitle" />
           <TextBox x:Name="txtTitle" />
         </TableRow>
+
         <TableRow>
           <Label x:Name="lblShortTitle" />
           <TextBox x:Name="txtShortTitle" />
         </TableRow>
+
         <TableRow>
           <Label x:Name="lblDate" />
           <comcom:GKDateControl x:Name="dateCtl" />
         </TableRow>
       </TableLayout>
-    </Panel>
+    </TableRow>
 
     <TableRow>
       <StackLayout Style="dlgFooter">

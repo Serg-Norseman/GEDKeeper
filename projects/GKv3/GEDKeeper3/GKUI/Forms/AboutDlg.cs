@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Design.Views;
 using GKCore.Options;
 
@@ -44,12 +45,15 @@ namespace GKUI.Forms
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
+        private readonly AboutDlgController fController;
+
         public AboutDlg()
         {
             XamlReader.Load(this);
 
-            Title = LangMan.LS(LSID.MIAbout);
-            btnClose.Text = LangMan.LS(LSID.DlgClose);
+            fController = new AboutDlgController(this);
+            fController.SetLocale();
+
             //lblProduct.Text = GKData.APP_TITLE;
             lblVersion.Text = @"Version " + AppHost.GetAppVersion();
             lblCopyright.Text = AppHost.GetAppCopyright();
@@ -61,6 +65,12 @@ namespace GKUI.Forms
                 lblForum.Text = GKData.APP_FORUM_EN;
                 lblChannel.Text = GKData.APP_CHANNEL_EN;
             }
+        }
+
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
         }
 
         private void LabelMail_Click(object sender, EventArgs e)

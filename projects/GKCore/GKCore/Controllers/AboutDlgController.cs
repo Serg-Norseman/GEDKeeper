@@ -18,31 +18,39 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel;
-using GKCore.Controllers;
+using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Types;
+using GKUI.Themes;
 
-namespace GKUI.Forms
+namespace GKCore.Controllers
 {
-    public sealed partial class SexCheckDlg : CommonDialog<ISexCheckDlg, SexCheckDlgController>, ISexCheckDlg
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class AboutDlgController : DialogController<IAboutDlg>
     {
-        public string IndividualName
+        public AboutDlgController(IAboutDlg view) : base(view)
         {
-            get { return txtName.Text; }
-            set { txtName.Text = value; }
         }
 
-        public GDMSex Sex
+        public override void UpdateView()
         {
-            get { return fController.Sex; }
-            set { fController.Sex = value; }
         }
 
-        public SexCheckDlg()
+        public override void SetLocale()
         {
-            InitializeComponent();
+            fView.Title = LangMan.LS(LSID.MIAbout);
 
-            fController = new SexCheckDlgController(this);
+            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+        }
+
+        public override void ApplyTheme()
+        {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
+
+            GetControl<IButton>("btnClose").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
         }
     }
 }

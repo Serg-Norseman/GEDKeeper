@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,7 +24,7 @@ using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {
-    public sealed partial class SexCheckDlg : CommonDialog<ISexCheckDlg, SexCheckController>, ISexCheckDlg
+    public sealed partial class SexCheckDlg : CommonDialog<ISexCheckDlg, SexCheckDlgController>, ISexCheckDlg
     {
         public string IndividualName
         {
@@ -42,7 +42,7 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            fController = new SexCheckController(this);
+            fController = new SexCheckDlgController(this);
         }
     }
 }

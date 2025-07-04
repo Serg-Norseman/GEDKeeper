@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -57,10 +57,6 @@ namespace GKUI.Forms
         public RepositoryCitEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-            btnRepositoryAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
 
             fCallNumbersList = new GKSheetList(pageCallNumbers);
             fCallNumbersList.SetControlName("fCallNumbersList"); // for purpose of tests

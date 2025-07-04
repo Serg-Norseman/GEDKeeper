@@ -134,14 +134,5 @@ namespace GKCore.Controllers
         public override void SetLocale()
         {
         }
-
-        public override void ApplyTheme()
-        {
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
-
-            if (fView.ViewControl is IThemedView themedView) {
-                themedView.ApplyTheme();
-            }
-        }
     }
 }

@@ -152,9 +152,6 @@ namespace GKCore.Controllers
             UpdateFileStore(fIsNew, storeType);
 
             fView.Restriction.SelectedIndex = (int)fDNATest.Restriction;
-
-            fView.NotesList.UpdateSheet();
-            fView.MediaList.UpdateSheet();
         }
 
         private void UpdateFileStore(bool isNew, MediaStoreType storeType)
@@ -166,6 +163,18 @@ namespace GKCore.Controllers
 
             fView.StoreType.Enabled = isNew;
             fView.StoreType.SetSelectedTag(storeType);
+        }
+
+        public void LockEditor(bool locked)
+        {
+            fView.TestName.Enabled = !locked;
+            fView.Date.Enabled = !locked;
+            fView.Agency.Enabled = !locked;
+            fView.MHaplogroup.Enabled = !locked;
+            fView.YHaplogroup.Enabled = !locked;
+
+            fView.NotesList.ReadOnly = locked;
+            fView.MediaList.ReadOnly = locked;
         }
 
         public async void SelectFile()
@@ -211,9 +220,6 @@ namespace GKCore.Controllers
 
             GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
             GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
-
-            fView.NotesList.ApplyTheme();
-            fView.MediaList.ApplyTheme();
         }
     }
 }

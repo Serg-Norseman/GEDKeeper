@@ -34,7 +34,7 @@ namespace GKUI.Themes
     {
         private delegate void ThemeControlHandler(IThemedView view, IDisposable component, Theme theme);
 
-        private static Dictionary<Type, ThemeControlHandler> fControlHandlers = new Dictionary<Type, ThemeControlHandler>();
+        private static readonly Dictionary<Type, ThemeControlHandler> fControlHandlers = new Dictionary<Type, ThemeControlHandler>();
 
         static EtoThemeManager()
         {
@@ -217,25 +217,22 @@ namespace GKUI.Themes
 
         private static void ApplyTheme(IThemedView view, IDisposable component, Theme theme)
         {
-            if (theme == null) return;
-
-            if (view is IThemedForm themedForm) {
-                if (themedForm.SkipTheme(component)) return;
-            }
+            if (theme == null || (view is IThemedForm themedForm && themedForm.SkipTheme(component)))
+                return;
 
             ThemeControlHandler handler = GetControlHandler(component);
             if (handler != null) {
                 handler(view, component, theme);
             }
 
-            if (component is Control) {
-                Control ctl = (Control)component;
+            if (component is not IThemedForm && component is IThemedView themedView) {
+                themedView.ApplyTheme();
+            }
 
+            if (component is Container ctl) {
                 //ctl.Font = ((Form)view).Font;
 
-                var container = ctl as Container;
-                if (container == null) return;
-                foreach (var item in container.Controls) {
+                foreach (var item in ctl.Controls) {
                     ApplyTheme(view, item, theme);
                 }
             }
@@ -365,7 +362,7 @@ namespace GKUI.Themes
             backgroundColor = ctlParent.BackgroundColor;
 
             if (ctlParent is Window) {
-                if (!(ctlParent is Dialog)) {
+                if (ctlParent is not Dialog) {
                     // window
                     textColor = GetThemeColor(theme, ThemeElement.WindowText);
                 } else {

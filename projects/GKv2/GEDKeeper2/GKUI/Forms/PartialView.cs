@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -54,16 +54,6 @@ namespace GKUI.Forms
             InitializeComponent();
 
             Icon = new Icon(GKUtils.LoadResourceStream("Resources.icon_gedkeeper.ico"));
-            tbFileSave.Image = UIHelper.LoadResourceImage("Resources.btn_save.gif");
-            tbRecordAdd.Image = UIHelper.LoadResourceImage("Resources.btn_rec_new.gif");
-            tbRecordEdit.Image = UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif");
-            tbRecordDelete.Image = UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif");
-            tbFilter.Image = UIHelper.LoadResourceImage("Resources.btn_filter.gif");
-            tbTreeAncestors.Image = UIHelper.LoadResourceImage("Resources.btn_tree_ancestry.gif");
-            tbTreeDescendants.Image = UIHelper.LoadResourceImage("Resources.btn_tree_descendants.gif");
-            tbTreeBoth.Image = UIHelper.LoadResourceImage("Resources.btn_tree_both.gif");
-            tbPrev.Image = UIHelper.LoadResourceImage("Resources.btn_left.gif");
-            tbNext.Image = UIHelper.LoadResourceImage("Resources.btn_right.gif");
 
             UIHelper.FixToolStrip(ToolBar1);
 

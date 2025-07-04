@@ -136,7 +136,7 @@
             this.Edit1.Location = new System.Drawing.Point(14, 33);
             this.Edit1.Name = "Edit1";
             this.Edit1.ReadOnly = true;
-            this.Edit1.Size = new System.Drawing.Size(366, 24);
+            this.Edit1.Size = new System.Drawing.Size(346, 24);
             this.Edit1.TabIndex = 10;
             // 
             // Edit2
@@ -144,23 +144,23 @@
             this.Edit2.Location = new System.Drawing.Point(482, 33);
             this.Edit2.Name = "Edit2";
             this.Edit2.ReadOnly = true;
-            this.Edit2.Size = new System.Drawing.Size(373, 24);
+            this.Edit2.Size = new System.Drawing.Size(353, 24);
             this.Edit2.TabIndex = 12;
             // 
             // btnRec1Select
             // 
-            this.btnRec1Select.Location = new System.Drawing.Point(386, 32);
+            this.btnRec1Select.Location = new System.Drawing.Point(366, 32);
             this.btnRec1Select.Name = "btnRec1Select";
-            this.btnRec1Select.Size = new System.Drawing.Size(81, 25);
+            this.btnRec1Select.Size = new System.Drawing.Size(101, 26);
             this.btnRec1Select.TabIndex = 13;
             this.btnRec1Select.Text = "btnRec1Select";
             this.btnRec1Select.Click += new System.EventHandler(this.btnRec1Select_Click);
             // 
             // btnRec2Select
             // 
-            this.btnRec2Select.Location = new System.Drawing.Point(861, 32);
+            this.btnRec2Select.Location = new System.Drawing.Point(841, 32);
             this.btnRec2Select.Name = "btnRec2Select";
-            this.btnRec2Select.Size = new System.Drawing.Size(81, 25);
+            this.btnRec2Select.Size = new System.Drawing.Size(101, 26);
             this.btnRec2Select.TabIndex = 14;
             this.btnRec2Select.Text = "btnRec2Select";
             this.btnRec2Select.Click += new System.EventHandler(this.btnRec2Select_Click);
@@ -170,7 +170,7 @@
             this.btnMergeToLeft.Enabled = false;
             this.btnMergeToLeft.Location = new System.Drawing.Point(386, 371);
             this.btnMergeToLeft.Name = "btnMergeToLeft";
-            this.btnMergeToLeft.Size = new System.Drawing.Size(81, 25);
+            this.btnMergeToLeft.Size = new System.Drawing.Size(81, 26);
             this.btnMergeToLeft.TabIndex = 15;
             this.btnMergeToLeft.Text = "<<<";
             this.btnMergeToLeft.Click += new System.EventHandler(this.btnMergeToLeft_Click);
@@ -180,7 +180,7 @@
             this.btnMergeToRight.Enabled = false;
             this.btnMergeToRight.Location = new System.Drawing.Point(482, 371);
             this.btnMergeToRight.Name = "btnMergeToRight";
-            this.btnMergeToRight.Size = new System.Drawing.Size(81, 25);
+            this.btnMergeToRight.Size = new System.Drawing.Size(81, 26);
             this.btnMergeToRight.TabIndex = 16;
             this.btnMergeToRight.Text = ">>>";
             this.btnMergeToRight.Click += new System.EventHandler(this.btnMergeToRight_Click);
@@ -190,7 +190,7 @@
             this.btnEditLeft.Enabled = false;
             this.btnEditLeft.Location = new System.Drawing.Point(14, 371);
             this.btnEditLeft.Name = "btnEditLeft";
-            this.btnEditLeft.Size = new System.Drawing.Size(120, 25);
+            this.btnEditLeft.Size = new System.Drawing.Size(140, 26);
             this.btnEditLeft.TabIndex = 15;
             this.btnEditLeft.Text = "Edit";
             this.btnEditLeft.Click += new System.EventHandler(this.btnEditLeft_Click);
@@ -198,9 +198,9 @@
             // btnEditRight
             // 
             this.btnEditRight.Enabled = false;
-            this.btnEditRight.Location = new System.Drawing.Point(822, 371);
+            this.btnEditRight.Location = new System.Drawing.Point(802, 371);
             this.btnEditRight.Name = "btnEditRight";
-            this.btnEditRight.Size = new System.Drawing.Size(120, 25);
+            this.btnEditRight.Size = new System.Drawing.Size(140, 26);
             this.btnEditRight.TabIndex = 16;
             this.btnEditRight.Text = "Edit";
             this.btnEditRight.Click += new System.EventHandler(this.btnEditRight_Click);

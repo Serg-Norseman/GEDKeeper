@@ -52,7 +52,16 @@ namespace GKCore.Controllers
 
         public SourceEditDlgController(ISourceEditDlg view) : base(view)
         {
+            fView.RepositoriesList.OnModify += ModifyReposSheet;
+
             fView.ShortTitle.Activate();
+        }
+
+        private void ModifyReposSheet(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raJump) {
+                JumpToRecord(eArgs.ItemData as GDMRepositoryCitation);
+            }
         }
 
         public override void Init(IBaseWindow baseWin)
@@ -147,11 +156,6 @@ namespace GKCore.Controllers
 
             GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
             GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
-
-            fView.RepositoriesList.ApplyTheme();
-            fView.NotesList.ApplyTheme();
-            fView.MediaList.ApplyTheme();
-            fView.UserRefList.ApplyTheme();
         }
     }
 }

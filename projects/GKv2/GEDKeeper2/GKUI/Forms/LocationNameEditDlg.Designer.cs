@@ -60,7 +60,7 @@
             this.txtTitle.Location = new System.Drawing.Point(157, 10);
             this.txtTitle.Name = "txtTitle";
             this.txtTitle.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtTitle.Size = new System.Drawing.Size(572, 127);
+            this.txtTitle.Size = new System.Drawing.Size(584, 127);
             this.txtTitle.TabIndex = 1;
             // 
             // lblShortTitle
@@ -76,7 +76,7 @@
             // 
             this.txtShortTitle.Location = new System.Drawing.Point(157, 40);
             this.txtShortTitle.Name = "txtShortTitle";
-            this.txtShortTitle.Size = new System.Drawing.Size(572, 24);
+            this.txtShortTitle.Size = new System.Drawing.Size(584, 24);
             this.txtShortTitle.TabIndex = 3;
             // 
             // lblDate

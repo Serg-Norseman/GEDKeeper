@@ -251,11 +251,6 @@ namespace GKCore.Controllers
 
             GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
             GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
-
-            fView.NamesList.ApplyTheme();
-            fView.LinksList.ApplyTheme();
-            fView.NotesList.ApplyTheme();
-            fView.MediaList.ApplyTheme();
         }
     }
 }

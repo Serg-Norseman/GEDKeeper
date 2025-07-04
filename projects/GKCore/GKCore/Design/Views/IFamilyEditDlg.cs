@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,9 +31,6 @@ namespace GKCore.Design.Views
         GDMFamilyRecord FamilyRecord { get; set; }
 
         void SetTarget(TargetMode targetType, GDMIndividualRecord target);
-        void LockEditor(bool locked);
-        void SetHusband(string value);
-        void SetWife(string value);
 
         ISheetList NotesList { get; }
         ISheetList MediaList { get; }

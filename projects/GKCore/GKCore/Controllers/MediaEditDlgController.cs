@@ -159,10 +159,6 @@ namespace GKCore.Controllers
             }
 
             UpdateFileStore(fIsNew, storeType);
-
-            fView.NotesList.UpdateSheet();
-            fView.SourcesList.UpdateSheet();
-            fView.UserRefList.UpdateSheet();
         }
 
         private void UpdateFileStore(bool isNew, MediaStoreType storeType)
@@ -274,10 +270,6 @@ namespace GKCore.Controllers
 
             GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
             GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
-
-            fView.NotesList.ApplyTheme();
-            fView.SourcesList.ApplyTheme();
-            fView.UserRefList.ApplyTheme();
         }
     }
 }

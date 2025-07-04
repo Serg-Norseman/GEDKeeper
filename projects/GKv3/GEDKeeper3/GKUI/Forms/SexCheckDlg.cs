@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,13 +21,13 @@
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
+using GKCore.Controllers;
 using GKCore.Design.Views;
 using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class SexCheckDlg : CommonDialog, ISexCheckDlg
+    public sealed partial class SexCheckDlg : CommonDialog<ISexCheckDlg, SexCheckDlgController>, ISexCheckDlg
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -43,22 +43,6 @@ namespace GKUI.Forms
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
-        public SexCheckDlg()
-        {
-            XamlReader.Load(this);
-
-            UIHelper.FixRadioButtons(this, grpSex);
-
-            // SetLocale()
-            btnAccept.Text = LangMan.LS(LSID.DlgAccept);
-            btnCancel.Text = LangMan.LS(LSID.DlgCancel);
-            Title = LangMan.LS(LSID.WinCheckSex);
-            grpSex.Text = LangMan.LS(LSID.Sex);
-            rbNone.Text = "?";
-            rbMale.Text = LangMan.LS(LSID.SexM);
-            rbFemale.Text = LangMan.LS(LSID.SexF);
-        }
-
         public string IndividualName
         {
             get { return txtName.Text; }
@@ -67,31 +51,17 @@ namespace GKUI.Forms
 
         public GDMSex Sex
         {
-            get {
-                if (rbMale.Checked) {
-                    return GDMSex.svMale;
-                }
-                if (rbFemale.Checked) {
-                    return GDMSex.svFemale;
-                }
-                return GDMSex.svUnknown;
-            }
-            set {
-                switch (value) {
-                    case GDMSex.svUnknown:
-                    case GDMSex.svIntersex:
-                        rbNone.Checked = true;
-                        break;
+            get { return fController.Sex; }
+            set { fController.Sex = value; }
+        }
 
-                    case GDMSex.svMale:
-                        rbMale.Checked = true;
-                        break;
+        public SexCheckDlg()
+        {
+            XamlReader.Load(this);
 
-                    case GDMSex.svFemale:
-                        rbFemale.Checked = true;
-                        break;
-                }
-            }
+            UIHelper.FixRadioButtons(this, grpSex);
+
+            fController = new SexCheckDlgController(this);
         }
     }
 }

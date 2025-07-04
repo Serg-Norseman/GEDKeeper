@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -88,6 +88,12 @@ namespace GKUI.Forms
         public void Init(string caption, bool showTipsChecked, StringList tips)
         {
             fController.InitTips(caption, showTipsChecked, tips);
+        }
+
+        public override void ApplyTheme()
+        {
+            base.ApplyTheme();
+            fController.ApplyTheme();
         }
 
         public override bool SkipTheme(IDisposable component)

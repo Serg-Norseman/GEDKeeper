@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,7 +24,6 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.Types;
 using GKUI.Components;
 
 namespace GKUI.Forms
@@ -69,25 +68,14 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
             fMembersList = new GKSheetList(pageMembers);
             fMembersList.SetControlName("fMembersList"); // for purpose of tests
-            fMembersList.OnModify += ModifyMembersSheet;
 
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
 
             fController = new GroupEditDlgController(this);
             fController.Init(baseWin);
-        }
-
-        private void ModifyMembersSheet(object sender, ModifyEventArgs eArgs)
-        {
-            if (eArgs.Action == RecordAction.raJump) {
-                fController.JumpToRecord(eArgs.ItemData as GDMIndividualRecord);
-            }
         }
     }
 }

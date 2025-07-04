@@ -33,6 +33,21 @@ namespace GKCore.Controllers
     {
         public StdPersonEditDlgController(IStdPersonEditDlg view) : base(view)
         {
+            fView.ChildrenList.OnModify += ModifyChildrenSheet;
+            fView.ChildrenList.OnItemValidating += PersonEditDlg_ItemValidating;
+        }
+
+        private void PersonEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)
+        {
+            var record = e.Item as GDMRecord;
+            e.IsAvailable = record == null || fBase.Context.IsAvailableRecord(record);
+        }
+
+        private void ModifyChildrenSheet(object sender, ModifyEventArgs eArgs)
+        {
+            if (eArgs.Action == RecordAction.raJump) {
+                JumpToRecord(eArgs.ItemData as GDMChildLink);
+            }
         }
 
         public override void Init(IBaseWindow baseWin)
@@ -110,11 +125,6 @@ namespace GKCore.Controllers
         public override void ApplyTheme()
         {
             base.ApplyTheme();
-
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
-
-            fView.ChildrenList.ApplyTheme();
-            fView.DNATestsList.ApplyTheme();
         }
 
         public override void UpdateView()

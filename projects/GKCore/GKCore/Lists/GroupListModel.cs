@@ -99,7 +99,7 @@ namespace GKCore.Lists
         public GroupMembersListModel(IView owner, IBaseWindow baseWin, ChangeTracker undoman) : base(owner, baseWin, undoman, CreateListColumns())
         {
             AllowedActions = EnumSet<RecordAction>.Create(
-                RecordAction.raAdd, RecordAction.raDelete /*, RecordAction.raJump*/);
+                RecordAction.raAdd, RecordAction.raDelete, RecordAction.raJump);
         }
 
         public static ListColumns CreateListColumns()
