@@ -1,4 +1,5 @@
 ﻿using GDModel;
+using GKTests;
 using NUnit.Framework;
 
 namespace GKCore.Validation
@@ -8,7 +9,7 @@ namespace GKCore.Validation
     {
         public ValidationTests()
         {
-            ValidationFactory.InitGDMValidators();
+            TestUtils.InitUITest();
         }
 
         [Test]
