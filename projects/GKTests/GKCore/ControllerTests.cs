@@ -338,6 +338,13 @@ namespace GKCore.Controllers
             SubstituteControl<ILabel>(view, "lblStatus");
             SubstituteControl<ILabel>(view, "lblRestriction");
 
+            SubstituteControl<IButton>(view, "btnHusbandAdd");
+            SubstituteControl<IButton>(view, "btnHusbandDelete");
+            SubstituteControl<IButton>(view, "btnHusbandSel");
+            SubstituteControl<IButton>(view, "btnWifeAdd");
+            SubstituteControl<IButton>(view, "btnWifeDelete");
+            SubstituteControl<IButton>(view, "btnWifeSel");
+
             view.NotesList.Returns(Substitute.For<ISheetList>());
             view.MediaList.Returns(Substitute.For<ISheetList>());
             view.SourcesList.Returns(Substitute.For<ISheetList>());

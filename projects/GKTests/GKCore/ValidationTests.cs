@@ -6,6 +6,11 @@ namespace GKCore.Validation
     [TestFixture]
     public class ValidationTests
     {
+        public ValidationTests()
+        {
+            ValidationFactory.InitGDMValidators();
+        }
+
         [Test]
         public void Test_InvalidEvent()
         {
