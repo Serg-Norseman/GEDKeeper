@@ -437,9 +437,17 @@ namespace GKUI.Themes
 
         private static void ThemePanelHandler(IThemedView view, Component component, Theme theme)
         {
-            var ctl = (Panel)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
+            if (component is TableLayoutPanel tbl) {
+                Color backColor, foreColor;
+                GetParentDependentColors(tbl, theme, out backColor, out foreColor);
+
+                tbl.BackColor = backColor;
+                tbl.ForeColor = foreColor;
+            } else {
+                var ctl = (Panel)component;
+                ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
+                ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
+            }
 
             ThemeContextMenuStripHandler(view, component, theme);
         }

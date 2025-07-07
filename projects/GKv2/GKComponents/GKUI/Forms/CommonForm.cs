@@ -42,6 +42,7 @@ namespace GKUI.Forms
 
         #region View Interface
 
+        [Browsable(false)]
         public string Title
         {
             get { return base.Text; }

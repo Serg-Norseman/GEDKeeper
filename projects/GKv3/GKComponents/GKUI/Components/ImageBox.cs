@@ -30,7 +30,7 @@ namespace GKUI.Components
     /// <summary>
     ///   Component for displaying images with support for scrolling and zooming.
     /// </summary>
-    public sealed class ImageBox : ScrollablePanel
+    public class ImageBox : ScrollablePanel
     {
         private readonly List<NamedRegion> fNamedRegions;
         private readonly List<int> fZoomLevels;
@@ -106,7 +106,7 @@ namespace GKUI.Components
             get { return fImage; }
             set {
                 if (fImage != value) {
-                    if (fImage != null) {
+                    if (fImage != null && !fImage.IsDisposed) {
                         fImage.Dispose();
                     }
 
@@ -438,7 +438,7 @@ namespace GKUI.Components
             if (clientSize.Height <= 0 || clientSize.Width <= 0)
                 return;
 
-            fImageSize = (fImage != null) ? fImage.Size : Size.Empty;
+            fImageSize = (fImage != null && !fImage.IsDisposed) ? fImage.Size : Size.Empty;
             fZoomFactor = fZoom / 100.0f;
 
             fScaledImageHeight = (int)(fImageSize.Height * fZoomFactor);
@@ -609,7 +609,7 @@ namespace GKUI.Components
             gfx.Clear(BackgroundColor);
 
             // draw the image
-            if (fImage != null) {
+            if (fImage != null && !fImage.IsDisposed) {
                 DrawImageBorder(gfx);
 
                 gfx.ImageInterpolation = ImageInterpolation.High;

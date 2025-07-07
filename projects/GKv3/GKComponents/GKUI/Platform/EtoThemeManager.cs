@@ -421,7 +421,7 @@ namespace GKUI.Themes
 
         private static void ThemePictureBoxHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            var ctl = (Eto.Forms.ImageView)component;
+            var ctl = (PictureBox)component;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
         }
 
@@ -572,7 +572,7 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(MenuBar), ThemeToolStripHandler);
             RegisterControlHandler(typeof(NumericStepper), ThemeNumericStepperHandler);
             RegisterControlHandler(typeof(Panel), ThemePanelHandler);
-            RegisterControlHandler(typeof(Eto.Forms.ImageView), ThemePictureBoxHandler);
+            RegisterControlHandler(typeof(PictureBox), ThemePictureBoxHandler);
             RegisterControlHandler(typeof(ProgressBar), ThemeProgressBarHandler);
             RegisterControlHandler(typeof(RadioButton), ThemeRadioButtonHandler);
             RegisterControlHandler(typeof(RichTextArea), ThemeTextBoxHandler);
@@ -600,7 +600,7 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(GKDateBox), ThemeDateBoxHandler);
             RegisterControlHandler(typeof(GKDateControl), ThemeUserControlHandler);
             RegisterControlHandler(typeof(GKListView), ThemeListViewHandler);
-            RegisterControlHandler(typeof(GKPortrait), ThemeUserControlHandler);
+            //RegisterControlHandler(typeof(GKPortrait), ThemeUserControlHandler);
             //RegisterControlHandler(typeof(GKTextBox), ThemeTextBoxHandler);
             RegisterControlHandler(typeof(HyperView), ThemeHyperViewHandler);
             RegisterControlHandler(typeof(ImageBox), ThemePanelHandler);

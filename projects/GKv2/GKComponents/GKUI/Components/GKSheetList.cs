@@ -111,15 +111,15 @@ namespace GKUI.Components
 
         public GKSheetList()
         {
-            fBtnPaste = CreateButton("btnPaste", UIHelper.LoadResourceImage("Resources.btn_paste.gif"), LangMan.LS(LSID.Paste), ItemPaste);
-            fBtnCut = CreateButton("btnCut", UIHelper.LoadResourceImage("Resources.btn_cut.gif"), LangMan.LS(LSID.Cut), ItemCut);
-            fBtnCopy = CreateButton("btnCopy", UIHelper.LoadResourceImage("Resources.btn_copy.gif"), LangMan.LS(LSID.Copy), ItemCopy);
-            fBtnMoveDown = CreateButton("btnDown", UIHelper.LoadResourceImage("Resources.btn_down.gif"), LangMan.LS(LSID.RecordMoveDown), ItemMoveDown);
-            fBtnMoveUp = CreateButton("btnUp", UIHelper.LoadResourceImage("Resources.btn_up.gif"), LangMan.LS(LSID.RecordMoveUp), ItemMoveUp);
-            fBtnLinkJump = CreateButton("btnJump",  UIHelper.LoadResourceImage("Resources.btn_jump.gif"), LangMan.LS(LSID.RecordGoto), ItemJump);
-            fBtnDelete = CreateButton("btnDelete", UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif"), LangMan.LS(LSID.MIRecordDelete), ItemDelete);
-            fBtnEdit = CreateButton("btnEdit", UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif"), LangMan.LS(LSID.MIRecordEdit), ItemEdit);
-            fBtnAdd = CreateButton( "btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.MIRecordAdd), ItemAdd);
+            fBtnPaste = CreateButton("btnPaste", LangMan.LS(LSID.Paste), ItemPaste);
+            fBtnCut = CreateButton("btnCut", LangMan.LS(LSID.Cut), ItemCut);
+            fBtnCopy = CreateButton("btnCopy", LangMan.LS(LSID.Copy), ItemCopy);
+            fBtnMoveDown = CreateButton("btnDown", LangMan.LS(LSID.RecordMoveDown), ItemMoveDown);
+            fBtnMoveUp = CreateButton("btnUp", LangMan.LS(LSID.RecordMoveUp), ItemMoveUp);
+            fBtnLinkJump = CreateButton("btnJump", LangMan.LS(LSID.RecordGoto), ItemJump);
+            fBtnDelete = CreateButton("btnDelete", LangMan.LS(LSID.MIRecordDelete), ItemDelete);
+            fBtnEdit = CreateButton("btnEdit", LangMan.LS(LSID.MIRecordEdit), ItemEdit);
+            fBtnAdd = CreateButton( "btnAdd", LangMan.LS(LSID.MIRecordAdd), ItemAdd);
 
             fToolBar = new ToolStrip();
             fToolBar.Name = "ToolBar";
@@ -234,11 +234,10 @@ namespace GKUI.Components
 
         #region Private methods
 
-        private ToolStripButton CreateButton(string name, Image image, string toolTip, EventHandler click)
+        private ToolStripButton CreateButton(string name, string toolTip, EventHandler click)
         {
             var btn = new ToolStripButton();
             btn.Name = name;
-            btn.Image = image;
             btn.ToolTipText = toolTip;
             btn.Click += click;
             return btn;

@@ -166,24 +166,9 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbPatronymic); }
         }
 
-        ITextBox IStdPersonEditDlg.NamePrefix
-        {
-            get { return GetControlHandler<ITextBox>(txtNamePrefix); }
-        }
-
         ITextBox IPersonEditDlg.Nickname
         {
             get { return GetControlHandler<ITextBox>(txtNickname); }
-        }
-
-        ITextBox IStdPersonEditDlg.SurnamePrefix
-        {
-            get { return GetControlHandler<ITextBox>(txtSurnamePrefix); }
-        }
-
-        ITextBox IStdPersonEditDlg.NameSuffix
-        {
-            get { return GetControlHandler<ITextBox>(txtNameSuffix); }
         }
 
         ITextBox IPersonEditDlg.MarriedSurname
@@ -213,10 +198,13 @@ namespace GKUI.Forms
 
         #endregion
 
-        public PersonEditDlg(IBaseWindow baseWin)
+        public PersonEditDlg()
         {
             InitializeComponent();
+        }
 
+        public PersonEditDlg(IBaseWindow baseWin) : this()
+        {
             tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
             txtMarriedSurname.TextChanged += Names_TextChanged;

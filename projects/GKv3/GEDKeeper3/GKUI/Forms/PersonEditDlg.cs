@@ -53,7 +53,6 @@ namespace GKUI.Forms
         private Button btnCancel;
         private Label lblRestriction;
         private ComboBox cmbRestriction;
-        private GroupBox GroupBox1;
         private Label lblSurname;
         private Label lblName;
         private Label lblPatronymic;
@@ -64,7 +63,6 @@ namespace GKUI.Forms
         public DropDown cmbSex;
         private CheckBox chkPatriarch;
         private TabPage pageUserRefs;
-        private Panel panCtlParents;
         private Label lblParents;
         private TextBox txtFather;
         private TextBox txtMother;
@@ -72,12 +70,6 @@ namespace GKUI.Forms
         private Button btnParentsEdit;
         private Button btnParentsDelete;
         private CheckBox chkBookmark;
-        private Label lblSurnamePrefix;
-        private TextBox txtSurnamePrefix;
-        private Label lblNamePrefix;
-        private TextBox txtNamePrefix;
-        private Label lblNameSuffix;
-        private TextBox txtNameSuffix;
         private Label lblNickname;
         private TextBox txtNickname;
         private GKPortrait imgPortrait;
@@ -227,24 +219,9 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbPatronymic); }
         }
 
-        ITextBox IStdPersonEditDlg.NamePrefix
-        {
-            get { return GetControlHandler<ITextBox>(txtNamePrefix); }
-        }
-
         ITextBox IPersonEditDlg.Nickname
         {
             get { return GetControlHandler<ITextBox>(txtNickname); }
-        }
-
-        ITextBox IStdPersonEditDlg.SurnamePrefix
-        {
-            get { return GetControlHandler<ITextBox>(txtSurnamePrefix); }
-        }
-
-        ITextBox IStdPersonEditDlg.NameSuffix
-        {
-            get { return GetControlHandler<ITextBox>(txtNameSuffix); }
         }
 
         ITextBox IPersonEditDlg.MarriedSurname

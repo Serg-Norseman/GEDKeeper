@@ -78,10 +78,6 @@ namespace GKCore.Controllers
         {
             base.UpdateLocked(locked);
 
-            fView.NamePrefix.Enabled = !locked;
-            fView.SurnamePrefix.Enabled = !locked;
-            fView.NameSuffix.Enabled = !locked;
-
             fView.ChildrenList.ReadOnly = locked;
             fView.DNATestsList.ReadOnly = locked;
         }
@@ -89,34 +85,16 @@ namespace GKCore.Controllers
         public override void UpdateNameControls(GDMPersonalName np)
         {
             base.UpdateNameControls(np);
-
-            if (np != null) {
-                fView.NamePrefix.Text = np.NamePrefix;
-                fView.SurnamePrefix.Text = np.SurnamePrefix;
-                fView.NameSuffix.Text = np.NameSuffix;
-            } else {
-                fView.NamePrefix.Text = "";
-                fView.SurnamePrefix.Text = "";
-                fView.NameSuffix.Text = "";
-            }
         }
 
         protected override void AcceptNameParts(GDMPersonalName persName)
         {
             base.AcceptNameParts(persName);
-
-            persName.NamePrefix = fView.NamePrefix.Text;
-            persName.SurnamePrefix = fView.SurnamePrefix.Text;
-            persName.NameSuffix = fView.NameSuffix.Text;
         }
 
         public override void SetLocale()
         {
             base.SetLocale();
-
-            GetControl<ILabel>("lblSurnamePrefix").Text = LangMan.LS(LSID.SurnamePrefix);
-            GetControl<ILabel>("lblNamePrefix").Text = LangMan.LS(LSID.NamePrefix);
-            GetControl<ILabel>("lblNameSuffix").Text = LangMan.LS(LSID.NameSuffix);
 
             GetControl<ITabPage>("pageChilds").Text = LangMan.LS(LSID.Childs);
             GetControl<ITabPage>("pageDNATests").Text = LangMan.LS(LSID.DNATests);
@@ -133,9 +111,9 @@ namespace GKCore.Controllers
 
             try {
                 bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
-                var tabs = GetControl<ITabControl>("tabsData");
-                var tabGrp = GetControl<ITabPage>("pageDNATests");
-                tabs.SetTabVisible(tabGrp, !disNoStd);
+                var tabs = GetControl<ITabControl>("tabsOther");
+                var tabDNA = GetControl<ITabPage>("pageDNATests");
+                tabs.SetTabVisible(tabDNA, !disNoStd);
             } catch (Exception ex) {
                 Logger.WriteError("StdPersonEditDlgController.UpdateView()", ex);
             }

@@ -34,14 +34,6 @@
     <Compile Include="FlowInputDlg.Designer.cs">
       <DependentUpon>FlowInputDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="SQIPersonEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SQIPersonEditDlg.Designer.cs">
-      <DependentUpon>SQIPersonEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SQIPersonEditDlgController.cs" />
-    <Compile Include="SQIPersonEditDlgPlugin.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GKCore\GKCore.csproj">

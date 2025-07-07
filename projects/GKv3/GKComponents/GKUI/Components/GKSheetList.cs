@@ -110,15 +110,15 @@ namespace GKUI.Components
 
         public GKSheetList()
         {
-            fBtnPaste = CreateButton("btnPaste", UIHelper.LoadResourceImage("Resources.btn_paste.gif"), LangMan.LS(LSID.Paste), ItemPaste);
-            fBtnCut = CreateButton("btnCut", UIHelper.LoadResourceImage("Resources.btn_cut.gif"), LangMan.LS(LSID.Cut), ItemCut);
-            fBtnCopy = CreateButton("btnCopy", UIHelper.LoadResourceImage("Resources.btn_copy.gif"), LangMan.LS(LSID.Copy), ItemCopy);
-            fBtnMoveDown = CreateButton("btnDown", UIHelper.LoadResourceImage("Resources.btn_down.gif"), LangMan.LS(LSID.RecordMoveDown), ItemMoveDown);
-            fBtnMoveUp = CreateButton("btnUp", UIHelper.LoadResourceImage("Resources.btn_up.gif"), LangMan.LS(LSID.RecordMoveUp), ItemMoveUp);
-            fBtnLinkJump = CreateButton("btnJump",  UIHelper.LoadResourceImage("Resources.btn_jump.gif"), LangMan.LS(LSID.RecordGoto), ItemJump);
-            fBtnDelete = CreateButton("btnDelete", UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif"), LangMan.LS(LSID.MIRecordDelete), ItemDelete);
-            fBtnEdit = CreateButton("btnEdit", UIHelper.LoadResourceImage("Resources.btn_rec_edit.gif"), LangMan.LS(LSID.MIRecordEdit), ItemEdit);
-            fBtnAdd = CreateButton( "btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.MIRecordAdd), ItemAdd);
+            fBtnPaste = CreateButton("btnPaste", LangMan.LS(LSID.Paste), ItemPaste);
+            fBtnCut = CreateButton("btnCut", LangMan.LS(LSID.Cut), ItemCut);
+            fBtnCopy = CreateButton("btnCopy", LangMan.LS(LSID.Copy), ItemCopy);
+            fBtnMoveDown = CreateButton("btnDown", LangMan.LS(LSID.RecordMoveDown), ItemMoveDown);
+            fBtnMoveUp = CreateButton("btnUp", LangMan.LS(LSID.RecordMoveUp), ItemMoveUp);
+            fBtnLinkJump = CreateButton("btnJump", LangMan.LS(LSID.RecordGoto), ItemJump);
+            fBtnDelete = CreateButton("btnDelete", LangMan.LS(LSID.MIRecordDelete), ItemDelete);
+            fBtnEdit = CreateButton("btnEdit", LangMan.LS(LSID.MIRecordEdit), ItemEdit);
+            fBtnAdd = CreateButton( "btnAdd", LangMan.LS(LSID.MIRecordAdd), ItemAdd);
 
             var miDetails = new ButtonMenuItem();
             miDetails.Text = LangMan.LS(LSID.Details);
@@ -132,16 +132,14 @@ namespace GKUI.Components
             fList.KeyDown += List_KeyDown;
             fList.SelectedItemsChanged += List_SelectedIndexChanged;
 
-            SuspendLayout();
-
             var toolbar = new StackLayout() {
                 Orientation = Orientation.Vertical,
-                Spacing = 4,
+                Spacing = 2,
                 Items = { fBtnAdd, fBtnEdit, fBtnDelete, fBtnLinkJump, fBtnMoveUp, fBtnMoveDown, fBtnCopy, fBtnCut, fBtnPaste }
             };
 
             Content = new TableLayout() {
-                Spacing = new Size(4, 4),
+                Spacing = new Size(2, 0),
                 Rows = {
                     new TableRow() {
                         Cells = {
@@ -151,8 +149,6 @@ namespace GKUI.Components
                     }
                 }
             };
-
-            ResumeLayout();
 
             Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
             fListModel = null;
@@ -201,11 +197,10 @@ namespace GKUI.Components
 
         #region Private methods
 
-        private Button CreateButton(string name, Image image, string toolTip, EventHandler<EventArgs> click)
+        private Button CreateButton(string name, string toolTip, EventHandler<EventArgs> click)
         {
             var btn = new Button();
             btn.Style = "iconBtn";
-            btn.Image = image;
             btn.ToolTip = toolTip;
             btn.Click += click;
             return btn;

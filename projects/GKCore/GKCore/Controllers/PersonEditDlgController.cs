@@ -268,7 +268,7 @@ namespace GKCore.Controllers
         {
             try {
                 bool disNoStd = GlobalOptions.Instance.DisableNonStdFeatures;
-                var tabs = GetControl<ITabControl>("tabsData");
+                var tabs = GetControl<ITabControl>("tabsOther");
                 var tabGrp = GetControl<ITabPage>("pageGroups");
                 tabs.SetTabVisible(tabGrp, !disNoStd);
 
@@ -630,7 +630,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkBookmark").Text = LangMan.LS(LSID.Bookmark);
             GetControl<ILabel>("lblParents").Text = LangMan.LS(LSID.Parents);
             GetControl<ITabPage>("pageEvents").Text = LangMan.LS(LSID.Events);
-            GetControl<ITabPage>("pageSpouses").Text = LangMan.LS(LSID.RPFamilies);
+            GetControl<ITabPage>("pageSpouses").Text = LangMan.LS(LSID.Spouses);
             GetControl<ITabPage>("pageAssociations").Text = LangMan.LS(LSID.Associations);
             GetControl<ITabPage>("pageGroups").Text = LangMan.LS(LSID.RPGroups);
             GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
@@ -640,6 +640,11 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblRestriction").Text = LangMan.LS(LSID.Restriction);
             GetControl<ITabPage>("pageNames").Text = LangMan.LS(LSID.Names);
             GetControl<ITabPage>("pageParents").Text = LangMan.LS(LSID.Parents);
+
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<ITabPage>("pageFamily").Text = LangMan.LS(LSID.Family);
+                GetControl<ITabPage>("pageOther").Text = LangMan.LS(LSID.Other);
+            }
 
             SetToolTip("btnPortraitAdd", LangMan.LS(LSID.PortraitAddTip));
             SetToolTip("btnPortraitDelete", LangMan.LS(LSID.PortraitDeleteTip));

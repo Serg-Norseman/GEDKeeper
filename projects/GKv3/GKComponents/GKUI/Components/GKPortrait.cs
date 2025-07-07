@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih, Igor Tyulyakov.
+ *  Copyright (C) 2017-2025 by Sergey V. Zhdanovskih, Igor Tyulyakov.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,44 +19,73 @@
  */
 
 using System;
-using System.Collections.Generic;
-using Eto.Drawing;
 using Eto.Forms;
 using GKCore.Design.Controls;
+using GKUI.Platform;
 
 namespace GKUI.Components
 {
-    using EFPictureBox = Eto.Forms.ImageView;
-
     /// <summary>
     /// Image with the pop-up panel.
     /// </summary>
-    public class GKPortrait : Panel, IPortraitControl
+    public class GKPortrait : PictureBox, IPortraitControl
     {
-        private readonly List<Button> fBtnsList;
+        //private readonly List<Button> fBtnsList;
         //private int fPixelSpeed;
+        //private EFPictureBox fImageBox;
+        //private PixelLayout fLayout;
+        //private Panel fSlidePanel;
+        //private ITimer fTimer;
 
 
-        public Image Image
+        /*public Image Image
         {
             get { return fImageBox.Image; }
             set {
-                if (fImageBox.Image != null) {
+                if (fImageBox.Image != null && !fImageBox.Image.IsDisposed) {
                     fImageBox.Image.Dispose();
                 }
                 fImageBox.Image = value;
             }
-        }
+        }*/
 
 
         public GKPortrait()
         {
-            InitializeComponent();
+            //Border = true;
 
-            fBtnsList = new List<Button>();
+            //SuspendLayout();
+            //fLayout = new PixelLayout();
+
+            //fImageBox = new EFPictureBox();
+            /*fImageBox = new ImageBox();
+            fImageBox.ImageBorderStyle = ImageBoxBorderStyle.None;
+            fImageBox.SelectionMode = ImageBoxSelectionMode.None;
+            fImageBox.AllowZoom = false;
+            //fImageBox.AutoPan = true;
+            fImageBox.SizeToFit = true;
+            fImageBox.ImagePadding = new Padding(0);*/
+
+            //fImageBox.MouseLeave += CheckCursorPosition;
+            //fImageBox.MouseMove += CheckCursorPosition;
+
+            //fSlidePanel = new Panel();
+            //fSlidePanel.BackgroundColor = SystemColors.ButtonShadow;
+            //fSlidePanel.Location = new Point(0, 152);
+            //fSlidePanel.MouseLeave += CheckCursorPosition;
+            //fSlidePanel.MouseMove += CheckCursorPosition;
+
+            //fLayout.Add(fImageBox, 0, 0);
+            //fLayout.Add(fSlidePanel, 0, Height);
+            //Content = TableLayout.AutoSized(fImageBox, null, true); //fLayout;
+            //Content = fImageBox;
+
+            //ResumeLayout();
+
+            //fBtnsList = new List<Button>();
 
             //fImageBox.SizeMode = PictureBoxSizeMode.CenterImage;
-            fImageBox.Cursor = Cursors.Arrow;
+            //fImageBox.Cursor = Cursors.Arrow;
 
             //fPixelSpeed = 5;
             //fSlidePanel.Height = 36;
@@ -75,8 +104,8 @@ namespace GKUI.Components
 
         public void AddButton(Button b)
         {
-            fBtnsList.Add(b);
-            RedrawButtons();
+            //fBtnsList.Add(b);
+            //RedrawButtons();
         }
 
         private void RedrawButtons()
@@ -137,47 +166,5 @@ namespace GKUI.Components
             base.OnShown(e);
             //fImageBox.SizeToFit();
         }
-
-        #region Design
-
-        private EFPictureBox fImageBox;
-        //private PixelLayout fLayout;
-        //private Panel fSlidePanel;
-        //private ITimer fTimer;
-
-        private void InitializeComponent()
-        {
-            //Border = BorderType.Bezel;
-            //ExpandContentHeight = false;
-            //ExpandContentWidth = false;
-
-            SuspendLayout();
-            //fLayout = new PixelLayout();
-
-            fImageBox = new EFPictureBox();
-            /*fImageBox = new ImageBox();
-            fImageBox.ImageBorderStyle = ImageBoxBorderStyle.None;
-            fImageBox.SelectionMode = ImageBoxSelectionMode.None;
-            fImageBox.AllowZoom = false;
-            //fImageBox.AutoPan = true;
-            fImageBox.SizeToFit = true;
-            fImageBox.ImagePadding = new Padding(0);*/
-
-            //fImageBox.MouseLeave += CheckCursorPosition;
-            //fImageBox.MouseMove += CheckCursorPosition;
-
-            //fSlidePanel = new Panel();
-            //fSlidePanel.BackgroundColor = SystemColors.ButtonShadow;
-            //fSlidePanel.Location = new Point(0, 152);
-            //fSlidePanel.MouseLeave += CheckCursorPosition;
-            //fSlidePanel.MouseMove += CheckCursorPosition;
-
-            //fLayout.Add(fImageBox, 0, 0);
-            //fLayout.Add(fSlidePanel, 0, Height);
-            Content = fImageBox; //fLayout;
-            ResumeLayout();
-        }
-
-        #endregion
     }
 }

@@ -78,7 +78,7 @@
             this.btnAccept.Margin = new System.Windows.Forms.Padding(2);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(114, 30);
-            this.btnAccept.TabIndex = 18;
+            this.btnAccept.TabIndex = 22;
             this.btnAccept.Text = "btnAccept";
             this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnAccept.Click += new System.EventHandler(this.AcceptClickHandler);
@@ -111,7 +111,7 @@
             this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(114, 30);
-            this.btnCancel.TabIndex = 19;
+            this.btnCancel.TabIndex = 23;
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnCancel.Click += new System.EventHandler(this.CancelClickHandler);
