@@ -62,6 +62,7 @@ namespace GKUI.Forms
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
+                fControlsManager.Clear();
                 if (fComponents != null) fComponents.Dispose();
             }
             base.Dispose(disposing);
@@ -70,10 +71,10 @@ namespace GKUI.Forms
         public void SetToolTip(object component, string toolTip)
         {
             if (component != null && !string.IsNullOrEmpty(toolTip)) {
-                if (component is Control) {
-                    fToolTip.SetToolTip((Control)component, toolTip);
-                } else if (component is ToolStripItem) {
-                    ((ToolStripItem)component).ToolTipText = toolTip;
+                if (component is Control control) {
+                    fToolTip.SetToolTip(control, toolTip);
+                } else if (component is ToolStripItem toolItem) {
+                    toolItem.ToolTipText = toolTip;
                 }
             }
         }
@@ -133,9 +134,7 @@ namespace GKUI.Forms
 
         protected override void OnLoad(EventArgs e)
         {
-            if (!DesignMode) {
-                AppHost.Instance.LoadWindow(this);
-            }
+            AppHost.Instance.LoadWindow(this);
             base.OnLoad(e);
         }
 
@@ -158,6 +157,14 @@ namespace GKUI.Forms
     {
         protected TController fController;
 
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                if (fController != null) fController.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
         public override void ApplyTheme()
         {
@@ -221,6 +228,14 @@ namespace GKUI.Forms
         where TController : DialogController<TView>
     {
         protected TController fController;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                if (fController != null) fController.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
         protected override void AcceptClickHandler(object sender, EventArgs e)
         {

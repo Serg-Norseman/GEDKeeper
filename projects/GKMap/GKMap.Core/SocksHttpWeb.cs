@@ -233,8 +233,7 @@ namespace GKMap
 
         private static IPAddress GetProxyIpAddress(Uri proxyUri)
         {
-            IPAddress ipAddress;
-            if (!IPAddress.TryParse(proxyUri.Host, out ipAddress)) {
+            if (!IPAddress.TryParse(proxyUri.Host, out IPAddress ipAddress)) {
                 try {
                     return Dns.GetHostEntry(proxyUri.Host).AddressList[0];
                 } catch (Exception e) {
@@ -291,8 +290,7 @@ namespace GKMap
                         break;
 
                     case "Content-Length": {
-                            long r;
-                            if (long.TryParse(headerEntry[1], out r)) {
+                            if (long.TryParse(headerEntry[1], out long r)) {
                                 ContentLength = r;
                             }
                         }

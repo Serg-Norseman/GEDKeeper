@@ -30,7 +30,7 @@ namespace GDModel
     [TestFixture]
     public class GDMCustomEventTests
     {
-        private BaseContext fContext;
+        private readonly BaseContext fContext;
 
         public GDMCustomEventTests()
         {

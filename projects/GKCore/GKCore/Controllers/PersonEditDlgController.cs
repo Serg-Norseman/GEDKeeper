@@ -92,6 +92,7 @@ namespace GKCore.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
+                if (fPortraitImg != null) fPortraitImg.Dispose();
             }
             base.Dispose(disposing);
         }

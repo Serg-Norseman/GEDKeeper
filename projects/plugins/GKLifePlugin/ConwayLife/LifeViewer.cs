@@ -133,7 +133,7 @@ namespace GKLifePlugin.ConwayLife
             return new Point((X - offsetX) / cellWidth, (Y - offsetY) / cellHeight);
         }
 
-        private int CellEdge(int coordinate, int fieldSize, int divisions)
+        private static int CellEdge(int coordinate, int fieldSize, int divisions)
         {
             int cellSize = fieldSize / divisions;
             int remainder = (fieldSize % divisions) / 2;

@@ -151,12 +151,12 @@ namespace GKVisionPlugin
 
         private HashSet<string> fTrainHistory = new HashSet<string>();
 
-        private string GetHistoryFileName()
+        private static string GetHistoryFileName()
         {
             return Path.Combine(AppHost.Instance.GetAppDataPath(), "cvhist.yaml");
         }
 
-        private string GetModelFileName()
+        private static string GetModelFileName()
         {
             return Path.Combine(AppHost.Instance.GetAppDataPath(), "cvmodel.yaml");
         }

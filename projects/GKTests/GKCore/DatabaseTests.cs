@@ -80,7 +80,7 @@ namespace GKCore.Database
 
         private static void CleanDB(GKDatabase db)
         {
-            string databaseName = db.GetBaseName();
+            string databaseName = GKDatabase.GetBaseName();
             try {
                 if (File.Exists(databaseName)) {
                     File.Delete(databaseName);

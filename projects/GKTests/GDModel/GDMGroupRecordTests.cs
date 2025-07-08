@@ -30,7 +30,7 @@ namespace GDModel
     [TestFixture]
     public class GDMGroupRecordTests
     {
-        private BaseContext fContext;
+        private readonly BaseContext fContext;
 
         public GDMGroupRecordTests()
         {

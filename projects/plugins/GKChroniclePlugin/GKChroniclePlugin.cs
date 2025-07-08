@@ -129,7 +129,7 @@ namespace GKChroniclePlugin
             }
         }
 
-        internal List<EventRecord> CollectData(IBaseWindow baseWin)
+        internal static List<EventRecord> CollectData(IBaseWindow baseWin)
         {
             List<EventRecord> result = new List<EventRecord>();
             if (baseWin == null)

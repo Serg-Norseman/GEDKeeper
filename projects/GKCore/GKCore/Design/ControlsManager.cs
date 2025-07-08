@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,13 +29,20 @@ namespace GKCore.Design
 
         private readonly Dictionary<object, IControl> fObjHandlers;
         private readonly Dictionary<string, IControl> fStrHandlers;
-        private readonly IView fView;
+        private IView fView;
 
         public ControlsManager(IView view)
         {
             fView = view;
             fObjHandlers = new Dictionary<object, IControl>();
             fStrHandlers = new Dictionary<string, IControl>();
+        }
+
+        public void Clear()
+        {
+            fObjHandlers.Clear();
+            fStrHandlers.Clear();
+            fView = null;
         }
 
         public T GetControl<T>(object control) where T : class, IControl
@@ -88,6 +95,11 @@ namespace GKCore.Design
                 fHandlerTypes.Remove(controlType);
             }
             fHandlerTypes.Add(controlType, handlerType);
+        }
+
+        public static void ClearHandlerTypes()
+        {
+            fHandlerTypes.Clear();
         }
     }
 }

@@ -87,8 +87,6 @@ namespace GKUI.Forms
 
             fController = new CircleChartWinController(this);
             fController.Init(baseWin);
-
-            AppHost.Instance.SetWindowBounds(this, GlobalOptions.Instance.ChartWindowsShowMode);
         }
 
         protected override void Dispose(bool disposing)
@@ -102,6 +100,9 @@ namespace GKUI.Forms
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            AppHost.Instance.SetWindowBounds(this, GlobalOptions.Instance.ChartWindowsShowMode);
+
             fCircleChart.Focus();
             UpdateControls();
         }

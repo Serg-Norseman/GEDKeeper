@@ -479,8 +479,7 @@ namespace GKPedigreeImporterPlugin
                 fPersonsList.Add(plRet.PersId, result);
 
                 if (!string.IsNullOrEmpty(plRet.ParentId)) {
-                    GDMIndividualRecord parent;
-                    if (fPersonsList.TryGetValue(plRet.ParentId, out parent)) {
+                    if (fPersonsList.TryGetValue(plRet.ParentId, out GDMIndividualRecord parent)) {
                         AddChild(parent, marrNum, result);
                     } else {
                         LogAdd(progress, ">>>> " + fLangMan.LS(PLS.ParseError_AncNotFound) + " \"" + plRet.ParentId + "\".");

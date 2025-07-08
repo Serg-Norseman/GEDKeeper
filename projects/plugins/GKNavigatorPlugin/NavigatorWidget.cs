@@ -140,7 +140,7 @@ namespace GKNavigatorPlugin
 
         private void Form_Closed(object sender, EventArgs e)
         {
-            fPlugin.Data.SelectLanguage(fBase, GDMLanguageID.Unknown);
+            NavigatorData.SelectLanguage(fBase, GDMLanguageID.Unknown);
             BaseChanged(null);
             fPlugin.Host.WidgetClose(fPlugin);
             fPlugin.CloseForm();
@@ -238,7 +238,7 @@ namespace GKNavigatorPlugin
         {
             object tag = treeView1.SelectedNode.Tag;
             var itemData = lvData.GetSelectedData();
-            fPlugin.Data.SelectItem(fBase, tag, itemData);
+            NavigatorData.SelectItem(fBase, tag, itemData);
         }
     }
 }

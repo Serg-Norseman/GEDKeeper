@@ -159,8 +159,7 @@ namespace GKNavigatorPlugin
         public BaseData this[string name]
         {
             get {
-                BaseData result;
-                if (!fBases.TryGetValue(name, out result)) {
+                if (!fBases.TryGetValue(name, out BaseData result)) {
                     result = new BaseData();
                     fBases.Add(name, result);
                 }
@@ -176,8 +175,7 @@ namespace GKNavigatorPlugin
 
         public void CloseBase(string name)
         {
-            BaseData b_data;
-            if (!fBases.TryGetValue(name, out b_data)) {
+            if (!fBases.TryGetValue(name, out BaseData b_data)) {
                 return; // base not exists
             }
 
@@ -186,8 +184,7 @@ namespace GKNavigatorPlugin
 
         public void RenameBase(string oldName, string newName)
         {
-            BaseData b_data;
-            if (!fBases.TryGetValue(oldName, out b_data)) {
+            if (!fBases.TryGetValue(oldName, out BaseData b_data)) {
                 return; // base not exists
             }
 
@@ -245,16 +242,14 @@ namespace GKNavigatorPlugin
             }
         }
 
-        public void SelectItem(IBaseWindow baseWin, object tag, object itemData)
+        public static void SelectItem(IBaseWindow baseWin, object tag, object itemData)
         {
             if (tag == null) return;
             if (itemData == null) return;
 
             if (tag is GDMRecordType) {
                 SelectRecordInfo(baseWin, (RecordInfo)itemData);
-            } else if (tag is DataCategory) {
-                var dataCat = (DataCategory)tag;
-
+            } else if (tag is DataCategory dataCat) {
                 switch (dataCat) {
                     case DataCategory.JumpHistory:
                         SelectRecord(baseWin, (GDMRecord)itemData);
@@ -279,7 +274,7 @@ namespace GKNavigatorPlugin
             }
         }
 
-        private void SelectRecord(IBaseWindow baseWin, GDMRecord iRec)
+        private static void SelectRecord(IBaseWindow baseWin, GDMRecord iRec)
         {
             baseWin.SelectByRec(iRec);
         }
@@ -326,7 +321,7 @@ namespace GKNavigatorPlugin
             }
         }
 
-        private void SelectRecordInfo(IBaseWindow baseWin, RecordInfo recInfo)
+        private static void SelectRecordInfo(IBaseWindow baseWin, RecordInfo recInfo)
         {
             if (recInfo.Action != RecordAction.raDelete)
                 SelectRecord(baseWin, recInfo.Record);
@@ -336,7 +331,7 @@ namespace GKNavigatorPlugin
 
         #region JumpHistory
 
-        private void ShowJumpHistory(IBaseWindow baseWin, IListView listView)
+        private static void ShowJumpHistory(IBaseWindow baseWin, IListView listView)
         {
             var tree = baseWin.Context.Tree;
             var navArray = baseWin.Navman.FullArray;
@@ -382,7 +377,7 @@ namespace GKNavigatorPlugin
             }
         }
 
-        private void SelectFilter(IBaseWindow baseWin, FilterInfo filterInfo)
+        private static void SelectFilter(IBaseWindow baseWin, FilterInfo filterInfo)
         {
             try {
                 baseWin.ShowRecordsTab(filterInfo.RecType);
@@ -397,11 +392,11 @@ namespace GKNavigatorPlugin
 
         #region Bookmarks
 
-        private void ShowBookmarks(IBaseWindow baseWin, IListView listView)
+        private static void ShowBookmarks(IBaseWindow baseWin, IListView listView)
         {
             baseWin.ShowRecordsTab(GDMRecordType.rtIndividual);
 
-            var bookmarks = fPlugin.Data.SearchBookmarks(baseWin.Context);
+            var bookmarks = SearchBookmarks(baseWin.Context);
 
             listView.BeginUpdate();
             try {
@@ -418,7 +413,7 @@ namespace GKNavigatorPlugin
             }
         }
 
-        public IList<GDMIndividualRecord> SearchBookmarks(IBaseContext baseContext)
+        public static IList<GDMIndividualRecord> SearchBookmarks(IBaseContext baseContext)
         {
             var result = new List<GDMIndividualRecord>();
 
@@ -452,7 +447,7 @@ namespace GKNavigatorPlugin
 
         #region Languages
 
-        private void ShowLanguages(IBaseWindow baseWin, IListView listView)
+        private static void ShowLanguages(IBaseWindow baseWin, IListView listView)
         {
             listView.BeginUpdate();
             try {
@@ -470,7 +465,7 @@ namespace GKNavigatorPlugin
             }
         }
 
-        public void SelectLanguage(IBaseWindow baseWin, GDMLanguageID lang)
+        public static void SelectLanguage(IBaseWindow baseWin, GDMLanguageID lang)
         {
             baseWin.Context.DefaultLanguage = lang;
             baseWin.ShowRecordsTab(GDMRecordType.rtIndividual);
@@ -481,7 +476,7 @@ namespace GKNavigatorPlugin
 
         #region Associations
 
-        private void ShowAssociations(IBaseWindow baseWin, IListView listView)
+        private static void ShowAssociations(IBaseWindow baseWin, IListView listView)
         {
             listView.BeginUpdate();
             try {

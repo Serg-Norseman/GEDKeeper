@@ -121,7 +121,7 @@ namespace GKTextSearchPlugin
         private const string FIELD_DB = "db";
         private const string FIELD_TEXT = "text";
 
-        private Document SetDocumentContext(IBaseWindow baseWin, GDMRecord rec)
+        private static Document SetDocumentContext(IBaseWindow baseWin, GDMRecord rec)
         {
             StringList ctx = baseWin.GetRecordContent(rec, RecordContentType.Quick);
             if (ctx == null) return null;

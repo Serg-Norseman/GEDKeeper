@@ -160,7 +160,6 @@ namespace GKUI.Forms
                 gfx.DrawRectangle(fDataMap.BorderPen, bounds.X, bounds.Y, bounds.W, bounds.H);
 
                 var rect = new RectangleF(bounds.X, bounds.Y, bounds.W, bounds.H);
-                //gfx.DrawString(simpleItem.Name, Font, fDataMap.HeaderBrush, rect);
                 gfx.DrawText(fDataMap.DrawFont, new SolidBrush(Colors.Black), rect, simpleItem.Name);
             }
         }

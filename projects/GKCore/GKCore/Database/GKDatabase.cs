@@ -84,7 +84,7 @@ namespace GKCore.Database
             fConnection.Execute("VACUUM;");
         }
 
-        public string GetBaseName()
+        public static string GetBaseName()
         {
             return Path.Combine(AppHost.Instance.GetAppDataPath(), "GEDKeeper.db3");
         }

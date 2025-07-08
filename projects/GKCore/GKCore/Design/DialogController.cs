@@ -44,6 +44,14 @@ namespace GKCore.Design
         {
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                if (fLocalUndoman != null) fLocalUndoman.Clear();
+            }
+            base.Dispose(disposing);
+        }
+
         protected bool Validate<T>(T obj)
         {
             if (GlobalOptions.Instance.EnableStdValidation) {

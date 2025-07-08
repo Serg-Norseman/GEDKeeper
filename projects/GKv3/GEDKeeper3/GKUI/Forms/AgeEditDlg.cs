@@ -27,7 +27,6 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -85,9 +84,6 @@ namespace GKUI.Forms
 
             txtVal1.Provider = new FixedMaskedTextProvider(LangMan.LS(LSID.AgeInputMask), CultureInfo.InvariantCulture);
             txtVal2.Provider = new FixedMaskedTextProvider(LangMan.LS(LSID.AgeInputMask), CultureInfo.InvariantCulture);
-
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             fController = new AgeEditDlgController(this);
             fController.Init(baseWin);

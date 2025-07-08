@@ -35,9 +35,14 @@ namespace GKUI.Forms
 {
     public partial class PatriarchsViewerWin : CommonWindow, IPatriarchsViewer
     {
+        #region Design components
+
+        private readonly ToolTip fTip;
+
+        #endregion
+
         private readonly IBaseWindow fBase;
         private readonly int fMinGens;
-        private readonly ToolTip fTip;
         private bool fTipShow;
 
         public IWindow OwnerWindow

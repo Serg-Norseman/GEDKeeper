@@ -27,7 +27,7 @@ namespace GDModel
     [TestFixture]
     public class GDMXRefReplacerTests
     {
-        private BaseContext fContext;
+        private readonly BaseContext fContext;
 
         public GDMXRefReplacerTests()
         {

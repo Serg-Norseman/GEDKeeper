@@ -27,7 +27,7 @@ namespace GDModel
     [TestFixture]
     public class GDMListTests
     {
-        private BaseContext fContext;
+        private readonly BaseContext fContext;
 
         public GDMListTests()
         {

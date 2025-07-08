@@ -56,14 +56,9 @@ namespace GKUI
             using (var tracker = new SingleInstanceTracker(GKData.APP_TITLE, AppHost.GetSingleInstanceEnforcer)) {
                 if (tracker.IsFirstInstance) {
                     AppHost.InitSettings();
-                    try {
-                        var appHost = (WFAppHost)AppHost.Instance;
-                        appHost.Init(args, false);
-
-                        Application.Run();
-                    } finally {
-                        AppHost.DoneSettings();
-                    }
+                    var appHost = (WFAppHost)AppHost.Instance;
+                    appHost.Init(args, false);
+                    Application.Run();
                 } else {
                     tracker.SendMessageToFirstInstance(args);
                 }

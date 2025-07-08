@@ -33,7 +33,7 @@ namespace GDModel
     [TestFixture]
     public class GDMPersonalNameTests
     {
-        private BaseContext fContext;
+        private readonly BaseContext fContext;
 
         public GDMPersonalNameTests()
         {

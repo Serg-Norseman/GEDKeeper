@@ -115,6 +115,8 @@ namespace GKCore
         {
             AppHost.Instance.SaveLastBases();
             AppHost.DoneSettings();
+
+            ControlsManager.ClearHandlerTypes();
         }
 
         private void AutosaveTimer_Tick(object sender, EventArgs e)

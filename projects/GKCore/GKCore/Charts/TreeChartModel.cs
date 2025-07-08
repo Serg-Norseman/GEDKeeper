@@ -67,8 +67,6 @@ namespace GKCore.Charts
     /// </summary>
     public class TreeChartModel : ChartModel
     {
-        private Dictionary<LineHandle, float> fLines = new Dictionary<LineHandle, float>();
-
         public const int DEF_MARGINS = 24;
         public const int DEF_SPOUSE_DISTANCE = 20;
         public const int DEF_BRANCH_DISTANCE = 40;
@@ -79,6 +77,8 @@ namespace GKCore.Charts
         public const int DEF_PERSON_NODE_PADDING = 10;
 
         private readonly ChartFilter fFilter;
+        private readonly GKVarCache<GDMIndividualRecord, bool> fFilterData;
+        private readonly Dictionary<LineHandle, float> fLines;
         private readonly List<TreeChartPerson> fPersons;
         private readonly HashSet<string> fPreparedFamilies;
         private readonly HashSet<string> fPreparedIndividuals;
@@ -98,7 +98,6 @@ namespace GKCore.Charts
         private IImage fExpPic;
         private IImage fInfoPic;
         private IImage fPersExpPic;
-        private GKVarCache<GDMIndividualRecord, bool> fFilterData;
         private KinshipsGraph fGraph;
         private bool fHasMediaFail;
         private TreeChartPerson fHighlightedPerson;
@@ -287,6 +286,7 @@ namespace GKCore.Charts
             fFilter = new ChartFilter();
             fFilterData = new GKVarCache<GDMIndividualRecord, bool>();
             fGraph = null;
+            fLines = new Dictionary<LineHandle, float>();
             fPersons = new List<TreeChartPerson>();
             fPreparedFamilies = new HashSet<string>();
             fPreparedIndividuals = new HashSet<string>();
@@ -366,7 +366,7 @@ namespace GKCore.Charts
             }
         }
 
-        private IImage GetUIImage(ChartRenderer renderer, string resName, ThemeElement themeElement)
+        private static IImage GetUIImage(ChartRenderer renderer, string resName, ThemeElement themeElement)
         {
             IImage image;
             if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
@@ -1018,7 +1018,7 @@ namespace GKCore.Charts
         public void DoFilter(GDMIndividualRecord root)
         {
             if (root == null)
-                throw new ArgumentNullException("root");
+                throw new ArgumentNullException(nameof(root));
 
             if (fFilter.BranchCut == ChartFilter.BranchCutType.None) return;
 
@@ -1036,11 +1036,11 @@ namespace GKCore.Charts
                 switch (fFilter.BranchCut) {
                     case ChartFilter.BranchCutType.Years:
                         int birthYear = person.GetChronologicalYear(GEDCOMTagName.BIRT);
-                        result = (birthYear != 0 && birthYear >= fFilter.BranchYear);
+                        result = birthYear != 0 && birthYear >= fFilter.BranchYear;
                         break;
 
                     case ChartFilter.BranchCutType.Persons:
-                        result = (fFilter.BranchPersons.IndexOf(person.XRef + ";") >= 0);
+                        result = fFilter.BranchPersons.IndexOf(person.XRef + ";") >= 0;
                         break;
                 }
 
@@ -1444,14 +1444,14 @@ namespace GKCore.Charts
 
         #region Tracking
 
-        private bool HasTrackedSources(TreeChartPerson person1, TreeChartPerson person2)
+        private static bool HasTrackedSources(TreeChartPerson person1, TreeChartPerson person2)
         {
             if (person1 == null || person2 == null) return false;
 
             return person1.IntersectSources(person2);
         }
 
-        private bool HasTrackedChild(TreeChartPerson person, ChartDrawMode drawMode)
+        private static bool HasTrackedChild(TreeChartPerson person, ChartDrawMode drawMode)
         {
             int childrenCount = person.GetChildsCount();
             for (int i = 0; i < childrenCount; i++) {
@@ -1463,7 +1463,7 @@ namespace GKCore.Charts
             return false;
         }
 
-        private bool HasTrackedLines(TreeChartPerson person, ChartDrawMode drawMode)
+        private static bool HasTrackedLines(TreeChartPerson person, ChartDrawMode drawMode)
         {
             return (drawMode == ChartDrawMode.dmInteractive && person != null && person.Selected);
         }
@@ -1898,7 +1898,7 @@ namespace GKCore.Charts
             return result.ToList();
         }
 
-        private void GetAncestors(TreeChartPerson person, HashSet<GDMIndividualRecord> ancestors)
+        private static void GetAncestors(TreeChartPerson person, HashSet<GDMIndividualRecord> ancestors)
         {
             if (person == null) return;
             if (person.Rec != null) ancestors.Add(person.Rec);
@@ -1914,7 +1914,7 @@ namespace GKCore.Charts
             return result.ToList();
         }
 
-        private void GetDescendants(TreeChartPerson person, HashSet<GDMIndividualRecord> descendants)
+        private static void GetDescendants(TreeChartPerson person, HashSet<GDMIndividualRecord> descendants)
         {
             if (person == null) return;
             if (person.Rec != null) descendants.Add(person.Rec);

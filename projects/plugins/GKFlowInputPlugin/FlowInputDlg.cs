@@ -118,8 +118,7 @@ namespace GKFlowInputPlugin
         // TODO: rollback changes when exception!
         private async Task ParseSource()
         {
-            int srcYear;
-            if (!int.TryParse(edSourceYear.Text, out srcYear)) {
+            if (!int.TryParse(edSourceYear.Text, out int srcYear)) {
                 fFlowInput.ShowError(fLangMan.LS(PLS.SourceYearInvalid));
                 return;
             }

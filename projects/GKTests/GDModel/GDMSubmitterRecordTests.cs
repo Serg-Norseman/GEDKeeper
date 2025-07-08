@@ -27,7 +27,7 @@ namespace GDModel
     [TestFixture]
     public class GDMSubmitterRecordTests
     {
-        private BaseContext fContext;
+        private readonly BaseContext fContext;
 
         public GDMSubmitterRecordTests()
         {

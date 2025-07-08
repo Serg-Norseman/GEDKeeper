@@ -29,7 +29,7 @@ namespace GDModel
     [TestFixture]
     public class GDMResearchRecordTests
     {
-        private BaseContext fContext;
+        private readonly BaseContext fContext;
 
         public GDMResearchRecordTests()
         {

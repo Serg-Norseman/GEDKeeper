@@ -35,10 +35,14 @@ namespace GKUI.Forms
     {
         public delegate void UpdateDelegate();
 
-        private readonly RecordSelectDlgController fController;
+        #region Design components
 
         private GKListView fListRecords;
         private ContextMenuStrip contextMenu;
+
+        #endregion
+
+        private readonly RecordSelectDlgController fController;
 
 
         public GDMRecord ResultRecord { get; set; }

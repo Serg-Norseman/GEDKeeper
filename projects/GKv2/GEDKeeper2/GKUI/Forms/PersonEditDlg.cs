@@ -37,18 +37,22 @@ namespace GKUI.Forms
 {
     public partial class PersonEditDlg : CommonDialog<IStdPersonEditDlg, StdPersonEditDlgController>, IStdPersonEditDlg
     {
-        private readonly GKSheetList fEventsList;
-        private readonly GKSheetList fSpousesList;
-        private readonly GKSheetList fAssociationsList;
-        private readonly GKSheetList fGroupsList;
-        private readonly GKSheetList fNotesList;
-        private readonly GKSheetList fMediaList;
-        private readonly GKSheetList fSourcesList;
-        private readonly GKSheetList fUserRefList;
-        private readonly GKSheetList fNamesList;
-        private readonly GKSheetList fParentsList;
-        private readonly GKSheetList fChildrenList;
-        private readonly GKSheetList fDNATestsList;
+        #region Design components
+
+        private GKSheetList fEventsList;
+        private GKSheetList fSpousesList;
+        private GKSheetList fAssociationsList;
+        private GKSheetList fGroupsList;
+        private GKSheetList fNotesList;
+        private GKSheetList fMediaList;
+        private GKSheetList fSourcesList;
+        private GKSheetList fUserRefList;
+        private GKSheetList fNamesList;
+        private GKSheetList fParentsList;
+        private GKSheetList fChildrenList;
+        private GKSheetList fDNATestsList;
+
+        #endregion
 
         public GDMIndividualRecord IndividualRecord
         {

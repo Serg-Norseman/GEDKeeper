@@ -31,10 +31,14 @@ namespace GKUI.Forms
 {
     public partial class CommonFilterDlg : CommonDialog<ICommonFilterDlg, CommonFilterDlgController>, ICommonFilterDlg
     {
-        private readonly IBaseWindow fBase;
-        private readonly IRecordsListModel fListMan;
+        #region Design components
 
         private FilterGridView filterView;
+
+        #endregion
+
+        private readonly IBaseWindow fBase;
+        private readonly IRecordsListModel fListMan;
 
         public IBaseWindow Base
         {

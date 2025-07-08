@@ -68,7 +68,6 @@ namespace GEDKeeper3
                     AppHost.InitSettings();
                     var appHost = (EtoAppHost)AppHost.Instance;
                     appHost.Init(args, false);
-
                     application.Run();
                 } else {
                     tracker.SendMessageToFirstInstance(args);

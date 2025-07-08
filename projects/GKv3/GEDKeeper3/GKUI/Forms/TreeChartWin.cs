@@ -93,18 +93,17 @@ namespace GKUI.Forms
         private ButtonMenuItem miMapDescendants;
         private ButtonMenuItem miMapAll;
 
+        private readonly TreeChartBox fTreeBox;
+        private RadioMenuItem miGensInfCommon;
+        private RadioMenuItem miGensInfAncestors;
+        private RadioMenuItem miGensInfDescendants;
+
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
 
         private readonly TreeChartWinController fController;
 
-        private readonly TreeChartBox fTreeBox;
-
         private GDMIndividualRecord fPerson;
-
-        private RadioMenuItem miGensInfCommon;
-        private RadioMenuItem miGensInfAncestors;
-        private RadioMenuItem miGensInfDescendants;
 
 
         public IWindow OwnerWindow
@@ -170,8 +169,6 @@ namespace GKUI.Forms
             fController.Init(baseWin);
 
             SetupDepth();
-
-            AppHost.Instance.SetWindowBounds(this, GlobalOptions.Instance.ChartWindowsShowMode);
         }
 
         protected override void Dispose(bool disposing)
@@ -330,6 +327,8 @@ namespace GKUI.Forms
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            AppHost.Instance.SetWindowBounds(this, GlobalOptions.Instance.ChartWindowsShowMode);
 
             fTreeBox.Focus();
             UpdateControls();

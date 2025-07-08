@@ -103,18 +103,14 @@ namespace GKCore.NetDiff
             var nextStatus = deleteFirst ? DiffStatus.Inserted : DiffStatus.Deleted;
 
             var queue = new Queue<DiffResult<T>>(diffResults);
-            while (queue.Any())
-            {
+            while (queue.Any()) {
                 var result = queue.Dequeue();
-                if (result.Status == currentStatus)
-                {
-                    if (queue.Any() && queue.Peek().Status == nextStatus)
-                    {
+                if (result.Status == currentStatus) {
+                    if (queue.Any() && queue.Peek().Status == nextStatus) {
                         var obj1 = deleteFirst ? result.Obj1 : queue.Dequeue().Obj1;
                         var obj2 = deleteFirst ? queue.Dequeue().Obj2 : result.Obj2;
                         yield return new DiffResult<T>(obj1, obj2, DiffStatus.Modified);
-                    }
-                    else
+                    } else
                         yield return result;
 
                     continue;
@@ -129,13 +125,11 @@ namespace GKCore.NetDiff
             var array1 = seq1.ToArray();
             var array2 = seq2.ToArray();
 
-            foreach (var pair in MakePairsWithNext(waypoints))
-            {
+            foreach (var pair in MakePairsWithNext(waypoints)) {
                 var status = GetStatus(pair.Item1, pair.Item2);
                 T obj1 = default;
                 T obj2 = default;
-                switch (status)
-                {
+                switch (status) {
                     case DiffStatus.Equal:
                         obj1 = array1[pair.Item2.X - 1];
                         obj2 = array2[pair.Item2.Y - 1];
@@ -154,13 +148,10 @@ namespace GKCore.NetDiff
 
         private static IEnumerable<Tuple<TSource, TSource>> MakePairsWithNext<TSource>(IEnumerable<TSource> source)
         {
-            using (var enumerator = source.GetEnumerator())
-            {
-                if (enumerator.MoveNext())
-                {
+            using (var enumerator = source.GetEnumerator()) {
+                if (enumerator.MoveNext()) {
                     var previous = enumerator.Current;
-                    while (enumerator.MoveNext())
-                    {
+                    while (enumerator.MoveNext()) {
                         var current = enumerator.Current;
 
                         yield return new Tuple<TSource, TSource>(previous, current);
@@ -185,8 +176,7 @@ namespace GKCore.NetDiff
 
         public static char GetStatusChar(DiffStatus status)
         {
-            switch (status)
-            {
+            switch (status) {
                 case DiffStatus.Equal:
                     return '=';
                 case DiffStatus.Deleted:
@@ -321,8 +311,7 @@ namespace GKCore.NetDiff
                 var wayponit = new List<Point>();
 
                 var current = heads.Where(h => h.Point.Equals(endpoint)).FirstOrDefault();
-                while (current != null)
-                {
+                while (current != null) {
                     wayponit.Add(current.Point);
 
                     current = current.Parent;
@@ -345,8 +334,7 @@ namespace GKCore.NetDiff
 
             private void UpdateHeads()
             {
-                if (option.Limit > 0 && heads.Count > option.Limit)
-                {
+                if (option.Limit > 0 && heads.Count > option.Limit) {
                     var tmp = heads.First();
                     heads.Clear();
 
@@ -355,17 +343,14 @@ namespace GKCore.NetDiff
 
                 var updated = new List<Node>();
 
-                foreach (var head in heads)
-                {
+                foreach (var head in heads) {
                     Node rightHead;
-                    if (TryCreateHead(head, Direction.Right, out rightHead))
-                    {
+                    if (TryCreateHead(head, Direction.Right, out rightHead)) {
                         updated.Add(rightHead);
                     }
 
                     Node bottomHead;
-                    if (TryCreateHead(head, Direction.Bottom, out bottomHead))
-                    {
+                    if (TryCreateHead(head, Direction.Bottom, out bottomHead)) {
                         updated.Add(bottomHead);
                     }
                 }
@@ -378,8 +363,7 @@ namespace GKCore.NetDiff
             private void Snake()
             {
                 var tmp = new List<Node>();
-                foreach (var h in heads)
-                {
+                foreach (var h in heads) {
                     var newHead = Snake(h);
 
                     if (newHead != null)
@@ -394,8 +378,7 @@ namespace GKCore.NetDiff
             private Node Snake(Node head)
             {
                 Node newHead = null;
-                while (true)
-                {
+                while (true) {
                     Node tmp;
                     if (TryCreateHead(newHead ?? head, Direction.Diagonal, out tmp))
                         newHead = tmp;
@@ -427,8 +410,7 @@ namespace GKCore.NetDiff
                 if (!InRange(nextPoint))
                     return false;
 
-                if (direction == Direction.Diagonal)
-                {
+                if (direction == Direction.Diagonal) {
                     var equal = option.EqualityComparer != null
                         ? option.EqualityComparer.Equals(seq1[nextPoint.X - 1], (seq2[nextPoint.Y - 1]))
                         : seq1[nextPoint.X - 1].Equals(seq2[nextPoint.Y - 1]);
@@ -440,10 +422,9 @@ namespace GKCore.NetDiff
                 return UpdateFarthestPoint(nextPoint);
             }
 
-            private Point GetPoint(Point currentPoint, Direction direction)
+            private static Point GetPoint(Point currentPoint, Direction direction)
             {
-                switch (direction)
-                {
+                switch (direction) {
                     case Direction.Right:
                         return new Point(currentPoint.X + 1, currentPoint.Y);
                     case Direction.Bottom:

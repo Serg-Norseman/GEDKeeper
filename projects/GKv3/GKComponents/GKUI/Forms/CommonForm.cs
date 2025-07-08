@@ -53,13 +53,21 @@ namespace GKUI.Forms
             fControlsManager = new ControlsManager(this);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                fControlsManager.Clear();
+            }
+            base.Dispose(disposing);
+        }
+
         public void SetToolTip(object component, string toolTip)
         {
             if (component != null && !string.IsNullOrEmpty(toolTip)) {
-                if (component is Control) {
-                    ((Control)component).ToolTip = toolTip;
-                } else if (component is ToolItem) {
-                    ((ToolItem)component).ToolTip = toolTip;
+                if (component is Control control) {
+                    control.ToolTip = toolTip;
+                } else if (component is ToolItem toolItem) {
+                    toolItem.ToolTip = toolTip;
                 }
             }
         }
@@ -143,6 +151,14 @@ namespace GKUI.Forms
         protected TController fController;
 
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                if (fController != null) fController.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         public override void ApplyTheme()
         {
             base.ApplyTheme();
@@ -210,13 +226,21 @@ namespace GKUI.Forms
             });*/
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                fControlsManager.Clear();
+            }
+            base.Dispose(disposing);
+        }
+
         public void SetToolTip(object component, string toolTip)
         {
             if (component != null && !string.IsNullOrEmpty(toolTip)) {
-                if (component is Control) {
-                    ((Control)component).ToolTip = toolTip;
-                } else if (component is ToolItem) {
-                    ((ToolItem)component).ToolTip = toolTip;
+                if (component is Control control) {
+                    control.ToolTip = toolTip;
+                } else if (component is ToolItem toolItem) {
+                    toolItem.ToolTip = toolTip;
                 }
             }
         }
@@ -311,6 +335,14 @@ namespace GKUI.Forms
         where TController : DialogController<TView>
     {
         protected TController fController;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                if (fController != null) fController.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
         protected override void AcceptClickHandler(object sender, EventArgs e)
         {

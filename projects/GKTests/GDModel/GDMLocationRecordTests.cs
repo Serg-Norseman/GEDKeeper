@@ -31,7 +31,7 @@ namespace GDModel
     [TestFixture]
     public class GDMLocationRecordTests
     {
-        private BaseContext fContext;
+        private readonly BaseContext fContext;
 
         public GDMLocationRecordTests()
         {

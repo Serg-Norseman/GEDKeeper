@@ -62,7 +62,7 @@ namespace GKChroniclePlugin
             if (fBase != baseWin) {
                 fBase = baseWin;
 
-                fEvents = fPlugin.CollectData(fBase);
+                fEvents = Plugin.CollectData(fBase);
                 UpdateControls();
             }
         }

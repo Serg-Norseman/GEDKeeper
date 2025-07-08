@@ -32,9 +32,13 @@ namespace GKUI.Forms
 {
     public partial class SlideshowWin : StatusForm, ISlideshowWin
     {
-        private readonly SlideshowController fController;
+        #region Design components
 
         private readonly ImageBox fImageCtl;
+
+        #endregion
+
+        private readonly SlideshowController fController;
 
         public IWindow OwnerWindow
         {

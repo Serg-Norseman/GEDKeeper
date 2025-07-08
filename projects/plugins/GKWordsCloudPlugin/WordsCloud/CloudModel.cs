@@ -43,8 +43,7 @@ namespace GKWordsCloudPlugin.WordsCloud
             foreach (Word word in words) {
                 var size = renderer.Measure(word.Text, word.Occurrences);
 
-                ExtRectF freeRectangle;
-                if (TryFindFreeRectangle(size, out freeRectangle)) {
+                if (TryFindFreeRectangle(size, out ExtRectF freeRectangle)) {
                     word.Rectangle = freeRectangle;
                     word.IsExposed = true;
                     fQuadTree.Insert(word);

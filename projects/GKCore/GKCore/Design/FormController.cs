@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -43,6 +43,14 @@ namespace GKCore.Design
         {
             fControlsManager = new ControlsManager(view);
             SetLocale();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                fControlsManager.Clear();
+            }
+            base.Dispose(disposing);
         }
 
         public virtual void Init(IBaseWindow baseWin)

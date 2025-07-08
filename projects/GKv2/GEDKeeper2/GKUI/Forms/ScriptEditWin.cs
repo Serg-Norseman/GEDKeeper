@@ -71,7 +71,7 @@ namespace GKUI.Forms
         {
             get { return GetControlHandler<ITextBox>(txtDebugOutput); }
         }
- 
+
         void IScriptConsole.print(string text)
         {
             MethodInvoker invoker = delegate () {

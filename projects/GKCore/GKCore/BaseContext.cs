@@ -1709,6 +1709,10 @@ namespace GKCore
         public void EndUpdate()
         {
             fTree.EndUpdate();
+
+            // Trying to deal with memory leaks in WinForms and WPF
+            // when displaying dialogs on the screen.
+            AppHost.ForceGC();
         }
 
         public void SwitchShieldState()
