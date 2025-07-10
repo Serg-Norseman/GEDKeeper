@@ -36,7 +36,7 @@ using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
 namespace GKUI.Components
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class ObservableExtList<T> : ExtObservableList<T>, IListViewItems where T : BSDListItem
     {
@@ -134,6 +134,10 @@ namespace GKUI.Components
         protected override void OnCellFormatting(GridCellFormatEventArgs e)
         {
             base.OnCellFormatting(e);
+
+            if (!AppHost.Instance.HasFeatureSupport(Feature.GridCellFormat)) {
+                return;
+            }
 
             // FIXME: doesn't work correctly because selection changes don't call this method (Eto <= 2.8.3)
             // This method only works with OnSelectionChanged -> ReloadData(SelectedRow)
