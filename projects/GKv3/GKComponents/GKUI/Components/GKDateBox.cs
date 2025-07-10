@@ -153,7 +153,9 @@ namespace GKUI.Components
         private void PopupButton_Click(object sender, EventArgs e)
         {
             if (!fPopupShown) {
+                txtSourceYear.TextChanged -= txtYear_TextChanged;
                 txtSourceYear.Text = fSourceYear;
+                txtSourceYear.TextChanged += txtYear_TextChanged;
 
                 frmPopup.Width = this.Width;
                 //fPopupForm.Height = 100;
@@ -194,7 +196,7 @@ namespace GKUI.Components
             SuspendLayout();
 
             txtSourceYear = new TextBox();
-            txtSourceYear.TextChanging += txtYear_TextChanged;
+            txtSourceYear.TextChanged += txtYear_TextChanged;
             txtSourceYear.MaxLength = 4;
             txtSourceYear.Width = 30;
 

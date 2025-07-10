@@ -20,6 +20,7 @@
 
 //define DEBUG_PRINT
 
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
@@ -152,13 +153,17 @@ namespace GKUI.Forms
         {
             InitCurDoc();
 
-            using (PrintDialog printDlg = new PrintDialog()) {
-                printDlg.Document = fPrintDoc;
+            try {
+                using (PrintDialog printDlg = new PrintDialog()) {
+                    printDlg.Document = fPrintDoc;
 
-                if (printDlg.ShowDialog() == DialogResult.OK) {
-                    fPrintDoc.PrinterSettings = printDlg.PrinterSettings;
-                    fPrintDoc.Print();
+                    if (printDlg.ShowDialog() == DialogResult.OK) {
+                        fPrintDoc.PrinterSettings = printDlg.PrinterSettings;
+                        fPrintDoc.Print();
+                    }
                 }
+            } catch (Exception ex) {
+                Logger.WriteError("PrintableForm.DoPrint()", ex);
             }
         }
 
@@ -166,10 +171,14 @@ namespace GKUI.Forms
         {
             InitCurDoc();
 
-            using (PrintPreviewDialog previewDlg = new PrintPreviewDialog()) {
-                previewDlg.WindowState = FormWindowState.Maximized;
-                previewDlg.Document = fPrintDoc;
-                previewDlg.ShowDialog();
+            try {
+                using (PrintPreviewDialog previewDlg = new PrintPreviewDialog()) {
+                    previewDlg.WindowState = FormWindowState.Maximized;
+                    previewDlg.Document = fPrintDoc;
+                    previewDlg.ShowDialog();
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("PrintableForm.DoPrintPreview()", ex);
             }
         }
 

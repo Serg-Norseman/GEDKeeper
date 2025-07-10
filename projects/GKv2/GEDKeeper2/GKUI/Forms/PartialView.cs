@@ -55,8 +55,6 @@ namespace GKUI.Forms
 
             Icon = new Icon(GKUtils.LoadResourceStream("Resources.icon_gedkeeper.ico"));
 
-            UIHelper.FixToolStrip(ToolBar1);
-
             fController = new PartialViewController(this, baseWin, recordType);
 
             CreatePage(baseWin, recordType);
@@ -123,9 +121,11 @@ namespace GKUI.Forms
         {
             base.WndProc(ref m);
 
-            if (m.Msg == WFAppHost.WM_KEEPMODELESS) {
+#if !MONO
+            if (m.Msg == Win32.WM_KEEPMODELESS) {
                 AppHost.Instance.WidgetsEnable();
             }
+#endif
         }
 
         private void Form_Load(object sender, EventArgs e)

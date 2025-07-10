@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih, Igor Tyulyakov.
+ *  Copyright (C) 2017-2025 by Sergey V. Zhdanovskih, Igor Tyulyakov.
  *
  *  This file is part of "GEDKeeper".
  *

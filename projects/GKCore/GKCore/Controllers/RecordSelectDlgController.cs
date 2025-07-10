@@ -118,6 +118,9 @@ namespace GKCore.Controllers
         // select child for parent
         private bool ChildSelectorHandler(GDMRecord record)
         {
+            // protection
+            if (record == fTarget.TargetIndividual) return false;
+
             var probableChild = (GDMIndividualRecord)record;
             bool result = (probableChild != null && probableChild.ChildToFamilyLinks.Count == 0);
 
@@ -132,9 +135,15 @@ namespace GKCore.Controllers
         // select parent for child
         private bool ParentSelectorHandler(GDMRecord record)
         {
-            var probableParent = (GDMIndividualRecord)record;
-            var child = fTarget.TargetIndividual;
-            return (probableParent.GetUDN(GEDCOMTagType.BIRT).CompareTo(child.GetUDN(GEDCOMTagType.BIRT)) < 0);
+            // protection
+            if (record == fTarget.TargetIndividual) return false;
+
+            if (GlobalOptions.Instance.UseBirthDatesInPersonSelectionFilter) {
+                var probableParent = (GDMIndividualRecord)record;
+                var child = fTarget.TargetIndividual;
+                return (probableParent.GetUDN(GEDCOMTagType.BIRT).CompareTo(child.GetUDN(GEDCOMTagType.BIRT)) < 0);
+            }
+            return true;
         }
 
         private bool SpouseSelectorHandler(GDMRecord record)
@@ -174,9 +183,7 @@ namespace GKCore.Controllers
                                 recordsList.ListMan.ExternalFilter = ChildSelectorHandler;
                                 break;
                             case TargetMode.tmChild:
-                                if (GlobalOptions.Instance.UseBirthDatesInPersonSelectionFilter) {
-                                    recordsList.ListMan.ExternalFilter = ParentSelectorHandler;
-                                }
+                                recordsList.ListMan.ExternalFilter = ParentSelectorHandler;
                                 break;
                             case TargetMode.tmSpouse:
                                 break;

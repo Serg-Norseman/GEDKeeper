@@ -1534,7 +1534,7 @@ namespace GEDmill
 
             var website = new Website(fBase.Context, outputFolder, fLangMan);
 
-            bool res = AppHost.Instance.ExecuteWorkExt(website.Create, fLangMan.LS(PLS.CreatingWebsite));
+            bool res = AppHost.Instance.ExecuteWork(website.Create, fLangMan.LS(PLS.CreatingWebsite));
 
             fLogger.WriteInfo("Website create done.");
 

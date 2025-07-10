@@ -26,6 +26,7 @@ using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Lists;
 using GKCore.Types;
+using GKUI.Platform;
 using GKUI.Themes;
 
 namespace GKUI.Components
@@ -134,7 +135,7 @@ namespace GKUI.Components
 
             var toolbar = new StackLayout() {
                 Orientation = Orientation.Vertical,
-                Spacing = 2,
+                Spacing = EtoAppConsts.ToolButtonSpacing,
                 Items = { fBtnAdd, fBtnEdit, fBtnDelete, fBtnLinkJump, fBtnMoveUp, fBtnMoveDown, fBtnCopy, fBtnCut, fBtnPaste }
             };
 

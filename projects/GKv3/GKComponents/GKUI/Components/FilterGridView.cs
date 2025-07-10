@@ -25,6 +25,7 @@ using Eto.Forms;
 using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Interfaces;
+using GKUI.Platform;
 using GKUI.Themes;
 
 namespace GKUI.Components
@@ -121,7 +122,7 @@ namespace GKUI.Components
             SuspendLayout();
             var toolbar = new StackLayout() {
                 Orientation = Orientation.Vertical,
-                Spacing = 4,
+                Spacing = EtoAppConsts.ToolButtonSpacing,
                 Items = { fBtnAdd, fBtnDelete }
             };
             Content = new TableLayout() {

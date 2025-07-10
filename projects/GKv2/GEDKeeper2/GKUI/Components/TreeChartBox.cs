@@ -506,9 +506,7 @@ namespace GKUI.Components
             if (ModifierKeys == Keys.Control) {
                 float newScale = (e.Delta > 0) ? fModel.Scale + 0.05f : fModel.Scale - 0.05f;
                 SetScale(newScale);
-            } else {
-                base.OnMouseWheel(e);
-            }
+            } else base.OnMouseWheel(e);
         }
 
         private MouseAction GetMouseAction(MouseEventArgs e, MouseEvent mouseEvent, out TreeChartPerson person)

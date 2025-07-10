@@ -27,7 +27,6 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -155,8 +154,6 @@ namespace GKUI.Forms
         public ScriptEditWin(IBaseWindow baseWin)
         {
             InitializeComponent();
-
-            UIHelper.FixToolStrip(ToolBar1);
 
             fController = new ScriptEditWinController(this);
             fController.Init(baseWin);

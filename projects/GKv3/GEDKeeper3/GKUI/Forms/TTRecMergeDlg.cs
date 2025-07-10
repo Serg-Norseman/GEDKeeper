@@ -65,6 +65,8 @@ namespace GKUI.Forms
         private Label Lab1;
         private HyperView fView1;
         private HyperView fView2;
+        private Panel pan1;
+        private Panel pan2;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -118,6 +120,14 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             UIHelper.FixRadioButtons(this, rgMode);
+
+            fView1 = new HyperView();
+            //pan1.Content = TableLayout.AutoSized(fView1);
+            pan1.Content = (fView1);
+
+            fView2 = new HyperView();
+            //pan2.Content = TableLayout.AutoSized(fView2);
+            pan2.Content = (fView2);
 
             fController = new RecMergeController(this);
             fController.Init(baseWin);

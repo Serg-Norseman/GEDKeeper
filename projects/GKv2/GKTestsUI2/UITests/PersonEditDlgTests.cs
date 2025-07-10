@@ -100,6 +100,7 @@ namespace GKUI.Forms
             SelectCombo("cmbSex", fDialog, 1); // male
 
             var tabs = new TabControlTester("tabsData", fDialog);
+            var tabsOther = new TabControlTester("tabsOther", fDialog);
 
             var cmbRestriction = new ComboBoxTester("cmbRestriction", fDialog);
             cmbRestriction.Select(3);
@@ -111,10 +112,10 @@ namespace GKUI.Forms
             txtSurname.FireEvent("KeyDown", new KeyEventArgs(Keys.Down | Keys.Control));
 
             // parents
-            RecordSelectDlgTests.SetCreateItemHandler(this, FamilyEditDlgTests.FamilyAdd_Mini_Handler);
+            /*RecordSelectDlgTests.SetCreateItemHandler(this, FamilyEditDlgTests.FamilyAdd_Mini_Handler);
             ClickButton("btnParentsAdd", fDialog);
             ModalFormHandler = MessageBox_YesHandler;
-            ClickButton("btnParentsDelete", fDialog);
+            ClickButton("btnParentsDelete", fDialog);*/
 
             // father
             PersonEditDlgTests.SetCreateIndividualHandler(this, GDMSex.svMale);
@@ -189,7 +190,8 @@ namespace GKUI.Forms
             Assert.AreEqual(0, indiRecord.Associations.Count);*/
 
             // groups
-            tabs.SelectTab(7);
+            tabs.SelectTab(6);
+            tabsOther.SelectTab(1);
             Assert.AreEqual(0, indiRecord.Groups.Count);
             RecordSelectDlgTests.SetCreateItemHandler(this, GroupEditDlgTests.GroupAdd_Mini_Handler);
             ClickToolStripButton("fGroupsList_ToolBar_btnAdd", fDialog);

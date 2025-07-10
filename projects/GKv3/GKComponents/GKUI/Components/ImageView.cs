@@ -31,6 +31,7 @@ using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Types;
+using GKUI.Platform;
 using GKUI.Platform.Handlers;
 using GKUI.Themes;
 
@@ -121,7 +122,7 @@ namespace GKUI.Components
         #region Component design
 
         private ImageBox imageBox;
-        private Panel toolStrip;
+        private StackLayout toolStrip;
         private ComboBox cbZoomLevels;
         private Button btnSizeToFit;
         private Button btnZoomIn;
@@ -160,10 +161,9 @@ namespace GKUI.Components
             btnDetectFaces.Visible = true;
             btnDetectFaces.Text = "Detect Faces";
 
-            toolStrip = new Panel();
-            toolStrip.Content = new StackLayout() {
+            toolStrip = new StackLayout() {
                 Orientation = Orientation.Horizontal,
-                Spacing = 10,
+                Spacing = EtoAppConsts.ToolButtonSpacing,
                 Items = { btnSizeToFit, btnZoomIn, btnZoomOut, cbZoomLevels, btnPortrait, btnDetectFaces }
             };
 

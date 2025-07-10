@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -164,6 +164,9 @@ namespace GKUI.Components
 
         private void trkVolume_Scroll(object sender, EventArgs e)
         {
+            if (fPlayer == null)
+                return;
+
             fPlayer.Mute = false;
             fPlayer.Volume = trkVolume.Value;
 
@@ -183,21 +186,33 @@ namespace GKUI.Components
 
         private void trkPosition_Scroll(object sender, EventArgs e)
         {
+            if (fPlayer == null)
+                return;
+
             fPlayer.Position = trkPosition.Value / 100.0f;
         }
 
         public void btnStop_Click(object sender, EventArgs e)
         {
+            if (fPlayer == null)
+                return;
+
             fPlayer.Stop();
         }
 
         private void btnPause_Click(object sender, EventArgs e)
         {
+            if (fPlayer == null)
+                return;
+
             fPlayer.Pause();
         }
 
         private void btnMute_Click(object sender, EventArgs e)
         {
+            if (fPlayer == null)
+                return;
+
             fPlayer.ToggleMute();
 
             if (fPlayer.Mute) {

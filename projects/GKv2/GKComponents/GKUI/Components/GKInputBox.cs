@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using GKCore;
+using GKUI.Themes;
 
 namespace GKUI.Components
 {
@@ -44,9 +45,6 @@ namespace GKUI.Components
         {
             InitializeComponent();
 
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
-
             Text = caption;
             label1.Text = prompt;
             Value = value;
@@ -61,6 +59,9 @@ namespace GKUI.Components
 
             btnAccept.Text = LangMan.LS(LSID.DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+
+            UIHelper.SetButtonThemeImage(btnAccept, ThemeElement.Glyph_Accept);
+            UIHelper.SetButtonThemeImage(btnCancel, ThemeElement.Glyph_Cancel);
         }
 
         protected override void Dispose(bool disposing)
@@ -78,10 +79,8 @@ namespace GKUI.Components
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            try
-            {
-                switch (fNumbersMode)
-                {
+            try {
+                switch (fNumbersMode) {
                     case NumbersMode.nmNone:
                         break;
 
@@ -95,9 +94,7 @@ namespace GKUI.Components
                 }
 
                 DialogResult = DialogResult.OK;
-            }
-            catch
-            {
+            } catch {
                 AppHost.StdDialogs.ShowError("Number format is invalid");
                 DialogResult = DialogResult.None;
             }
@@ -109,10 +106,8 @@ namespace GKUI.Components
             bool result = false;
             value = 0.0;
 
-            using (var inputBox = new GKInputBox(caption, prompt, value.ToString(), NumbersMode.nmFloat))
-            {
-                if (inputBox.ShowDialog() == DialogResult.OK)
-                {
+            using (var inputBox = new GKInputBox(caption, prompt, value.ToString(), NumbersMode.nmFloat)) {
+                if (inputBox.ShowDialog() == DialogResult.OK) {
                     result = double.TryParse(inputBox.Value, out value);
                 }
             }
@@ -125,10 +120,8 @@ namespace GKUI.Components
             bool result = false;
             value = 0;
 
-            using (var inputBox = new GKInputBox(caption, prompt, value.ToString(), NumbersMode.nmInt))
-            {
-                if (inputBox.ShowDialog() == DialogResult.OK)
-                {
+            using (var inputBox = new GKInputBox(caption, prompt, value.ToString(), NumbersMode.nmInt)) {
+                if (inputBox.ShowDialog() == DialogResult.OK) {
                     result = int.TryParse(inputBox.Value, out value);
                 }
             }
@@ -154,10 +147,8 @@ namespace GKUI.Components
         {
             bool result = false;
 
-            using (var inputBox = new GKInputBox(caption, prompt, value, NumbersMode.nmNone, true))
-            {
-                if (inputBox.ShowDialog() == DialogResult.OK)
-                {
+            using (var inputBox = new GKInputBox(caption, prompt, value, NumbersMode.nmNone, true)) {
+                if (inputBox.ShowDialog() == DialogResult.OK) {
                     value = inputBox.Value.Trim();
                     result = true;
                 }
@@ -193,9 +184,9 @@ namespace GKUI.Components
 
             btnAccept = new Button();
             btnAccept.ImageAlign = ContentAlignment.MiddleLeft;
-            btnAccept.Location = new Point(197, 61);
+            btnAccept.Location = new Point(177, 61);
             btnAccept.Name = "btnAccept";
-            btnAccept.Size = new Size(81, 25);
+            btnAccept.Size = new Size(91, 25);
             btnAccept.TabIndex = 4;
             btnAccept.Text = "btnAccept";
             btnAccept.TextAlign = ContentAlignment.MiddleRight;
@@ -204,9 +195,9 @@ namespace GKUI.Components
             btnCancel = new Button();
             btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.ImageAlign = ContentAlignment.MiddleLeft;
-            btnCancel.Location = new Point(285, 61);
+            btnCancel.Location = new Point(275, 61);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(81, 25);
+            btnCancel.Size = new Size(91, 25);
             btnCancel.TabIndex = 5;
             btnCancel.Text = "btnCancel";
             btnCancel.TextAlign = ContentAlignment.MiddleRight;

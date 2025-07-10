@@ -43,6 +43,13 @@ namespace GKUI.Forms
             InitPrintDoc();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+            }
+            base.Dispose(disposing);
+        }
+
         #region Internal print support
 
         private void InitPrintDoc()

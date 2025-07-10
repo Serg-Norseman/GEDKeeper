@@ -93,8 +93,6 @@ namespace GKUI.Forms
 
             Icon = new Icon(GKUtils.LoadResourceStream("Resources.icon_gedkeeper.ico"));
 
-            UIHelper.FixToolStrip(ToolBar1);
-
             fController = new BaseWinController(this, true);
             fContext = fController.Context;
             ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
@@ -178,9 +176,11 @@ namespace GKUI.Forms
         {
             base.WndProc(ref m);
 
-            if (m.Msg == WFAppHost.WM_KEEPMODELESS) {
+#if !MONO
+            if (m.Msg == Win32.WM_KEEPMODELESS) {
                 AppHost.Instance.WidgetsEnable();
             }
+#endif
         }
 
         #endregion

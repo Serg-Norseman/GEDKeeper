@@ -109,8 +109,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            UIHelper.FixToolStrip(ToolBar1);
-
             fMapBrowser = new GKMapBrowser();
             fMapBrowser.Dock = DockStyle.Fill;
             panClient.Controls.Add(this.fMapBrowser, 0, 0);

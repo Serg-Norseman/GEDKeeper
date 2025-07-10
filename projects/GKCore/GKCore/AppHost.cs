@@ -361,9 +361,7 @@ namespace GKCore
 
         public abstract void Quit();
 
-        public abstract void ExecuteWork(ProgressStart proc);
-
-        public abstract bool ExecuteWorkExt(ProgressStart proc, string title);
+        public abstract bool ExecuteWork(ProgressStart proc, string title = "");
 
         public virtual void LayoutWindows(WinLayout layout)
         {

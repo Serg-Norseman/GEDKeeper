@@ -69,8 +69,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            UIHelper.FixToolStrip(ToolBar1);
-
             miModeBoth.Tag = TreeChartKind.ckBoth;
             miModeAncestors.Tag = TreeChartKind.ckAncestors;
             miModeDescendants.Tag = TreeChartKind.ckDescendants;

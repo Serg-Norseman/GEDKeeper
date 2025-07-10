@@ -62,97 +62,17 @@ namespace GKUI.Platform
 
         public EtoAppHost()
         {
-            InitCommonStyles();
-            InitPlatformStyles();
+            EtoAppStyles.InitCommonStyles();
+            EtoAppStyles.InitPlatformStyles();
         }
 
-        private static void InitCommonStyles()
-        {
-            Eto.Style.Add<TableLayout>("paddedTable", table => {
-                table.Padding = new Padding(8);
-                table.Spacing = new Size(4, 4);
-            });
-
-            Eto.Style.Add<TableLayout>("paddedTable8", table => {
-                table.Padding = new Padding(8);
-                table.Spacing = new Size(8, 8);
-            });
-
-            Eto.Style.Add<StackLayout>("vertListStack", stack => {
-                stack.Orientation = Orientation.Vertical;
-                stack.Padding = new Padding(8);
-                stack.Spacing = 4;
-            });
-
-            Eto.Style.Add<StackLayout>("horzListStack", stack => {
-                stack.Orientation = Orientation.Horizontal;
-                stack.Padding = new Padding(8);
-                stack.Spacing = 4;
-            });
-
-            Eto.Style.Add<StackLayout>("dlgFooter", stack => {
-                stack.Orientation = Orientation.Horizontal;
-                stack.Padding = new Padding(0);
-                stack.Spacing = 8;
-            });
-
-            Eto.Style.Add<StackLayout>("labtexStack", stack => {
-                stack.Orientation = Orientation.Vertical;
-                stack.Padding = new Padding(0);
-                stack.Spacing = 2;
-            });
-
-            Eto.Style.Add<Button>("funcBtn", button => {
-                button.ImagePosition = ButtonImagePosition.Left;
-                button.Size = new Size(160, 26);
-            });
-
-            Eto.Style.Add<Button>("dlgBtn", button => {
-                button.ImagePosition = ButtonImagePosition.Left;
-                button.Size = new Size(120, 26);
-            });
-
-            Eto.Style.Add<Button>("iconBtn", button => {
-                button.ImagePosition = ButtonImagePosition.Overlay;
-                button.Size = new Size(26, 26);
-            });
-        }
-
-        private static void InitPlatformStyles()
-        {
-#if OS_LINUX
-            // FIXME: don't work
-            Eto.Style.Add<Eto.GtkSharp.Forms.ToolBar.ToolBarHandler>("tbsi", h => {
-                // executed but no result
-                h.Control.ToolbarStyle = Gtk.ToolbarStyle.BothHoriz;
-                //h.Control.ToolbarStyle = Gtk.ToolbarStyle.Icons;
-                h.Control.IconSize = Gtk.IconSize.SmallToolbar;
-            });
-
-            Eto.Style.Add<Eto.GtkSharp.Forms.Controls.GridColumnHandler>(null, h => {
-                Pango.FontDescription tpf = new Pango.FontDescription();
-                tpf.Weight = Pango.Weight.Normal;
-                h.Control.Button.ModifyFont(tpf);
-                h.Control.Button.ModifyFg(Gtk.StateType.Normal, new Gdk.Color(0, 0, 0));
-            });
-#endif
-
-#if OS_MSWIN
-            Eto.Wpf.Forms.ToolBar.ToolItemHandler.DefaultImageSize = new Size(20, 20);
-            Eto.Wpf.Forms.Menu.MenuItemHandler.DefaultImageSize = new Size(20, 20);
-#endif
-        }
-
+        /// <summary>
+        /// Framework-specific presentation settings.
+        /// For example, in GKv3, fixes to the appearance of WPF ToolBars.
+        /// </summary>
         protected override void ApplyThemeProperties()
         {
-            int toolSize = BaseThemeManager.GetThemeInt(ThemeElement.ToolItemsImageSize);
-
-#if OS_MSWIN
-            if (toolSize != 0) {
-                Eto.Wpf.Forms.ToolBar.ToolItemHandler.DefaultImageSize = new Size(toolSize, toolSize);
-                Eto.Wpf.Forms.Menu.MenuItemHandler.DefaultImageSize = new Size(toolSize, toolSize);
-            }
-#endif
+            EtoAppStyles.FixToolBar();
         }
 
         private void OnApplicationExit(object sender, System.ComponentModel.CancelEventArgs e)
@@ -269,28 +189,47 @@ namespace GKUI.Platform
             Application.Instance.Quit();
         }
 
-        public override void ExecuteWork(ProgressStart proc)
+        public override bool ExecuteWork(ProgressStart proc, string title = "")
         {
             var activeWnd = GetActiveWindow();
 
             using (var progressForm = ResolveDialog<IProgressDialog>()) {
+                var progForm = progressForm as CommonDialog;
+
+                if (!string.IsNullOrEmpty(title))
+                    progressForm.Title = title;
+
                 var workerThread = new Thread((obj) => {
                     proc((IProgressController)obj);
                 });
 
+                DialogResult dialogResult = DialogResult.Abort;
                 try {
                     workerThread.Start(progressForm);
 
-                    ((Dialog)progressForm).ShowModal(activeWnd as Control);
-                } catch (Exception ex) {
-                    Logger.WriteError("ExecuteWork()", ex);
+                    progForm.ShowModal(activeWnd as Control);
+                    dialogResult = progForm.Result;
+                } finally {
+                    workerThread.Join();
                 }
-            }
-        }
 
-        public override bool ExecuteWorkExt(ProgressStart proc, string title)
-        {
-            return false;
+                if (dialogResult == DialogResult.Abort) {
+                    if (progressForm.ThreadError.Message == "") {
+                        // Abort means there were file IO errors
+                        StdDialogs.ShowAlert("UnkProblem" /*fLangMan.LS(PLS.UnkProblem)*/);
+                    } else {
+                        // Abort means there were file IO errors
+                        StdDialogs.ShowAlert(progressForm.ThreadError.Message);
+                    }
+                }
+
+                // None / Ok
+                if (dialogResult > DialogResult.Ok) {
+                    return false;
+                }
+
+                return true;
+            }
         }
 
         public override void CloseDependentWindows(IWindow owner)
@@ -380,8 +319,12 @@ namespace GKUI.Platform
                     break;
 
                 case Feature.PrintPreview:
-                    // Bug in .net 6 wpf!
+#if OS_MSWIN
+                    // Bug in .net 6-8 wpf (System.Net.WebException in PresentationCore)
                     result = false;
+#else
+                    result = true;
+#endif
                     break;
             }
 

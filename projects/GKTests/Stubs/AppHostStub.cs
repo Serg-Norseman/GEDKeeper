@@ -19,7 +19,7 @@
  */
 
 using System;
-using System.Threading;
+using System.Diagnostics;
 using BSLib;
 using GKCore;
 using GKCore.Design;
@@ -42,6 +42,7 @@ namespace GKTests.Stubs
 
         public AppHostStub()
         {
+            Debug.WriteLine("AppHostStub.ctor()");
         }
 
         public override IWindow GetActiveWindow()
@@ -75,28 +76,13 @@ namespace GKTests.Stubs
         {
         }
 
-        public override void ExecuteWork(ProgressStart proc)
+        public override bool ExecuteWork(ProgressStart proc, string title = "")
         {
-            IView activeWnd = GetActiveWindow();
-
             using (var progressForm = ResolveDialog<IProgressDialog>()) {
-                var workerThread = new Thread((obj) => {
-                    proc((IProgressController)obj);
-                });
-
-                try {
-                    workerThread.Start(progressForm);
-
-                    //progressForm.ShowModalX(activeWnd);
-                } catch (Exception ex) {
-                    Logger.WriteError("ExecuteWork()", ex);
-                }
+                proc(progressForm);
+                Debug.WriteLine("AppHostStub.ExecuteWork()");
+                return true;
             }
-        }
-
-        public override bool ExecuteWorkExt(ProgressStart proc, string title)
-        {
-            return false;
         }
 
         public override ExtRect GetActiveScreenWorkingArea()

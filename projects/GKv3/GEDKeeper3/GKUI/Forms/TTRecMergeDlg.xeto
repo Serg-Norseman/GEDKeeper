@@ -32,11 +32,11 @@
 
                 <TableRow ScaleHeight="True">
                   <TableCell ScaleWidth="True">
-                    <comcom:HyperView x:Name="fView1" Width="420" />
+                    <Panel x:Name="pan1" Width="420" Height="300" />
                   </TableCell>
 
                   <TableCell ScaleWidth="True">
-                    <comcom:HyperView x:Name="fView2" Width="420" />
+                    <Panel x:Name="pan2" Width="420" Height="300" />
                   </TableCell>
                 </TableRow>
 
@@ -58,12 +58,8 @@
 
             <TableRow>
               <StackLayout Spacing="8" Orientation="Horizontal">
-                <StackLayoutItem HorizontalAlignment="Left">
-                  <Button x:Name="btnAutoSearch" Style="funcBtn" Click="btnSearch_Click" />
-                </StackLayoutItem>
-                <StackLayoutItem HorizontalAlignment="Left">
-                  <Button x:Name="btnSkip" Style="funcBtn" Click="btnSkip_Click" />
-                </StackLayoutItem>
+                <Button x:Name="btnAutoSearch" Style="funcBtn" Click="btnSearch_Click" />
+                <Button x:Name="btnSkip" Style="funcBtn" Click="btnSkip_Click" />
                 <StackLayoutItem Expand="True">
                   <ProgressBar x:Name="ProgressBar1" Height="26" />
                 </StackLayoutItem>
@@ -75,48 +71,42 @@
         </TabPage>
 
         <TabPage x:Name="pageMergeOptions">
-          <TableLayout Style="paddedTable">
-            <TableRow>
-              <GroupBox x:Name="rgMode">
-                <StackLayout Style="vertListStack">
-                  <RadioButton x:Name="radPersons" Checked="true" CheckedChanged="radMergeMode_Click" />
-                  <RadioButton x:Name="radFamilies" CheckedChanged="radMergeMode_Click" />
-                  <RadioButton x:Name="radNotes" CheckedChanged="radMergeMode_Click" />
-                  <RadioButton x:Name="radSources" CheckedChanged="radMergeMode_Click" />
-                </StackLayout>
-              </GroupBox>
+          <StackLayout Style="vertListStack">
+            <GroupBox x:Name="rgMode">
+              <StackLayout Style="vertListStack">
+                <RadioButton x:Name="radPersons" Checked="true" CheckedChanged="radMergeMode_Click" />
+                <RadioButton x:Name="radFamilies" CheckedChanged="radMergeMode_Click" />
+                <RadioButton x:Name="radNotes" CheckedChanged="radMergeMode_Click" />
+                <RadioButton x:Name="radSources" CheckedChanged="radMergeMode_Click" />
+              </StackLayout>
+            </GroupBox>
 
-              <GroupBox x:Name="grpSearchPersons">
-                <TableLayout Style="paddedTable">
-                  <TableRow>
-                    <CheckBox x:Name="chkIndistinctMatching" />
-                  </TableRow>
+            <GroupBox x:Name="grpSearchPersons">
+              <TableLayout Style="paddedTable">
+                <TableRow>
+                  <CheckBox x:Name="chkIndistinctMatching" />
+                </TableRow>
 
-                  <TableRow>
-                    <Label x:Name="lblNameAccuracy" />
-                    <NumericStepper x:Name="edNameAccuracy" Value="90" />
-                  </TableRow>
+                <TableRow>
+                  <Label x:Name="lblNameAccuracy" />
+                  <NumericStepper x:Name="edNameAccuracy" Value="90" />
+                </TableRow>
 
-                  <TableRow>
-                    <CheckBox x:Name="chkBirthYear" />
-                  </TableRow>
+                <TableRow>
+                  <CheckBox x:Name="chkBirthYear" />
+                </TableRow>
 
-                  <TableRow>
-                    <Label x:Name="lblYearInaccuracy" />
-                    <NumericStepper x:Name="edYearInaccuracy" Value="3" />
-                  </TableRow>
-                </TableLayout>
-              </GroupBox>
-            </TableRow>
+                <TableRow>
+                  <Label x:Name="lblYearInaccuracy" />
+                  <NumericStepper x:Name="edYearInaccuracy" Value="3" />
+                </TableRow>
+              </TableLayout>
+            </GroupBox>
 
-            <TableRow>
-              <GroupBox x:Name="grpMergeOther" Padding="8">
-                <CheckBox x:Name="chkBookmarkMerged" CheckedChanged="chkBookmarkMerged_CheckedChanged" />
-              </GroupBox>
-            </TableRow>
-
-            <TableRow ScaleHeight="True" />
-          </TableLayout>
+            <GroupBox x:Name="grpMergeOther" Padding="8">
+              <CheckBox x:Name="chkBookmarkMerged" CheckedChanged="chkBookmarkMerged_CheckedChanged" />
+            </GroupBox>
+          </StackLayout>
         </TabPage>
       </TabControl>
     </TableRow>

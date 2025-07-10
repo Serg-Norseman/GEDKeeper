@@ -63,6 +63,10 @@ namespace GKUI.Platform
         {
         }
 
+        /// <summary>
+        /// Framework-specific presentation settings.
+        /// For example, in GKv3, fixes to the appearance of WPF ToolBars.
+        /// </summary>
         protected override void ApplyThemeProperties()
         {
         }
@@ -126,7 +130,7 @@ namespace GKUI.Platform
                         IntPtr handle = ((Form)win).Handle;
 
 #if !MONO
-                        PostMessageExt(handle, WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
+                        Win32.PostMessage(handle, Win32.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
 #endif
                     }
                 }
@@ -145,7 +149,7 @@ namespace GKUI.Platform
 
             if (frm != null) {
 #if !MONO
-                EnableWindowExt(frm.Handle, value);
+                Win32.EnableWindow(frm.Handle, value);
 #endif
             }
         }
@@ -174,53 +178,34 @@ namespace GKUI.Platform
             Application.Exit();
         }
 
-        public override void ExecuteWork(ProgressStart proc)
+        public override bool ExecuteWork(ProgressStart proc, string title = "")
         {
-            var activeWnd = GetActiveWindow();
-
-            // FIXME: dirty hack
-            // In test mode, when a stub is substituted for the real form, 
-            // the modal show of the dialog does not block further code execution after ExecuteWork.
-            if (TEST_MODE) {
-                using (var progressForm = ResolveDialog<IProgressDialog>()) {
-                    proc(progressForm);
-                }
-                return;
-            }
+            var activeWnd = GetActiveWindow() as IWin32Window;
 
             using (var progressForm = ResolveDialog<IProgressDialog>()) {
-                var workerThread = new Thread((obj) => {
-                    proc((IProgressController)obj);
-                });
+                var progForm = progressForm as Form;
 
-                try {
-                    workerThread.Start(progressForm);
-
-                    ((Form)progressForm).ShowDialog(activeWnd as IWin32Window);
-                } catch (Exception ex) {
-                    Logger.WriteError("ExecuteWork()", ex);
+                // In test mode, when a stub is substituted for the real form, 
+                // the modal show of the dialog does not block further code execution after ExecuteWork.
+                if (TEST_MODE || progForm == null) {
+                    proc(progressForm);
+                    return true;
                 }
-            }
-        }
 
-        public override bool ExecuteWorkExt(ProgressStart proc, string title)
-        {
-            var activeWnd = GetActiveWindow() as Form;
+                if (!string.IsNullOrEmpty(title))
+                    progressForm.Title = title;
 
-            using (var progressForm = new ProgressDlg()) {
-                progressForm.Text = title;
-
-                var threadWorker = new Thread((obj) => {
+                var workerThread = new Thread((obj) => {
                     proc((IProgressController)obj);
                 });
 
                 DialogResult dialogResult = DialogResult.Abort;
                 try {
-                    threadWorker.Start(progressForm);
+                    workerThread.Start(progressForm);
 
-                    dialogResult = progressForm.ShowDialog(activeWnd);
+                    dialogResult = progForm.ShowDialog(activeWnd);
                 } finally {
-                    threadWorker.Join();
+                    workerThread.Join();
                 }
 
                 if (dialogResult == DialogResult.Abort) {
@@ -421,13 +406,13 @@ namespace GKUI.Platform
 
         public override int GetKeyLayout()
         {
-            #if MONO
+#if MONO
             // There is a bug in Mono: does not work this CurrentInputLanguage
             return CultureInfo.CurrentUICulture.KeyboardLayoutId;
-            #else
+#else
             InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
             return currentLang.Culture.KeyboardLayoutId;
-            #endif
+#endif
         }
 
         public override void SetKeyLayout(int layout)
@@ -573,27 +558,6 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(GKDateControl), typeof(DateControlHandler));
             ControlsManager.RegisterHandlerType(typeof(GKListView), typeof(ListViewHandler));
         }
-
-        #endregion
-
-        #region NativeMethods
-
-        public const uint WM_USER = 0x0400;
-        public const uint WM_KEEPMODELESS = WM_USER + 111;
-
-        #if !MONO
-
-        [SecurityCritical, SuppressUnmanagedCodeSecurity]
-        [DllImport("user32.dll", EntryPoint="PostMessage", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool PostMessageExt(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
-
-        [SecurityCritical, SuppressUnmanagedCodeSecurity]
-        [DllImport("user32.dll", EntryPoint="EnableWindow", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool EnableWindowExt(IntPtr hWnd, [MarshalAs(UnmanagedType.Bool)]bool bEnable);
-
-        #endif
 
         #endregion
 

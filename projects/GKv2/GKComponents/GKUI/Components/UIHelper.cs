@@ -62,7 +62,7 @@ namespace GKUI.Components
         public static ExtRect NormalizeFormRect(ExtRect winRect)
         {
             // Travis CI does not have access to UI and tests aren't performed.
-            #if !CI_MODE
+#if !CI_MODE
 
             //------------------------------------------------------------------
             // 2016-09-30 Ruslan Garipov <brigadir15@gmail.com>
@@ -88,7 +88,7 @@ namespace GKUI.Components
                 winRect.Bottom = winRect.Top + height - 1;
             }
 
-            #endif
+#endif
 
             return winRect;
         }
@@ -280,16 +280,17 @@ namespace GKUI.Components
             }
         }
 
-        public static void FixToolStrip(ToolStrip toolStrip)
+        public static void SetButtonThemeImage(ToolStripButton button, ThemeElement themeElement)
         {
-#if MONO
-            // dirty hack: Mono ToolStrip does not support correct AutoSize
-            toolStrip.AutoSize = false;
-            toolStrip.Height = 27;
-#endif
+            if (button == null) return;
+
+            var themeImage = AppHost.ThemeManager.GetThemeImage(themeElement, true);
+            if (themeImage == null) return;
+
+            button.Image = ((ImageHandler)themeImage).Handle;
         }
 
-        public static void SetButtonThemeImage(ToolStripButton button, ThemeElement themeElement)
+        public static void SetButtonThemeImage(Button button, ThemeElement themeElement)
         {
             if (button == null) return;
 

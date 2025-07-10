@@ -142,6 +142,7 @@
             this.btnAccept.TabIndex = 5;
             this.btnAccept.Text = "btnAccept";
             this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnAccept.Click += new System.EventHandler(this.AcceptClickHandler);
             // 
             // btnCancel
             // 
@@ -154,6 +155,7 @@
             this.btnCancel.TabIndex = 6;
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCancel.Click += new System.EventHandler(this.CancelClickHandler);
             // 
             // lblRestriction
             // 

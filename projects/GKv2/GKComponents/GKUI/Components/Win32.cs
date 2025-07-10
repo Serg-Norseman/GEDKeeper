@@ -4,11 +4,29 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Security;
 
 namespace GKUI.Components
 {
-    internal class Win32
+    public static class Win32
     {
+        #region For WinForms AppHost
+
+        public const uint WM_USER = 0x0400;
+        public const uint WM_KEEPMODELESS = WM_USER + 111;
+
+        [SecurityCritical, SuppressUnmanagedCodeSecurity]
+        [DllImport("user32.dll", EntryPoint = "PostMessage", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool PostMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+
+        [SecurityCritical, SuppressUnmanagedCodeSecurity]
+        [DllImport("user32.dll", EntryPoint = "EnableWindow", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool EnableWindow(IntPtr hWnd, [MarshalAs(UnmanagedType.Bool)] bool bEnable);
+
+        #endregion
+
         public const int GW_HWNDFIRST = 0;
         public const int GW_HWNDLAST = 1;
         public const int GW_HWNDNEXT = 2;
@@ -33,9 +51,6 @@ namespace GKUI.Components
         public const int WM_FONTCHANGE = 0x1d;
         public const int WM_ERASEBKGND = 0x0014;
 
-        public Win32()
-        {
-        }
 
         [DllImport("User32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr GetWindowDC(IntPtr handle);

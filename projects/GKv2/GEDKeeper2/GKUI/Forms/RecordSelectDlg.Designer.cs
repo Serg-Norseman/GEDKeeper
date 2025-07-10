@@ -35,11 +35,13 @@
             // 
             // btnCreate
             //
+            this.btnCreate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCreate.Location = new System.Drawing.Point(146, 466);
             this.btnCreate.Name = "btnCreate";
             this.btnCreate.Size = new System.Drawing.Size(113, 31);
             this.btnCreate.TabIndex = 3;
             this.btnCreate.Text = "btnCreate";
+            this.btnCreate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
             // 
             // btnCancel

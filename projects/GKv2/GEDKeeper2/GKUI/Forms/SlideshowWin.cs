@@ -50,8 +50,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            UIHelper.FixToolStrip(toolStrip1);
-
             SuspendLayout();
             fImageCtl = new ImageBox();
             fImageCtl.Dock = DockStyle.Fill;

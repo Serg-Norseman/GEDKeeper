@@ -57,10 +57,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            ToolBar1.Visible = true;
-
-            UIHelper.FixToolStrip(ToolBar1);
-
             fCircleChart = new CircleChart();
             fCircleChart.Base = baseWin;
             fCircleChart.ChartType = type;

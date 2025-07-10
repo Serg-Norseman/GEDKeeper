@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,6 +22,7 @@ using System;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
+using GKUI.Themes;
 
 namespace GKUI.Components
 {
@@ -57,6 +58,9 @@ namespace GKUI.Components
 
             btnAccept.Text = LangMan.LS(LSID.DlgAccept);
             btnCancel.Text = LangMan.LS(LSID.DlgCancel);
+
+            UIHelper.SetButtonThemeImage(btnAccept, ThemeElement.Glyph_Accept);
+            UIHelper.SetButtonThemeImage(btnCancel, ThemeElement.Glyph_Cancel);
         }
 
         protected override void Dispose(bool disposing)
@@ -175,13 +179,11 @@ namespace GKUI.Components
             btnAccept.ImagePosition = ButtonImagePosition.Left;
             btnAccept.Size = new Size(120, 26);
             btnAccept.Click += btnAccept_Click;
-            btnAccept.Image = UIHelper.LoadResourceImage("Resources.btn_accept.gif");
 
             btnCancel = new Button();
             btnCancel.ImagePosition = ButtonImagePosition.Left;
             btnCancel.Size = new Size(120, 26);
             btnCancel.Click += btnCancel_Click;
-            btnCancel.Image = UIHelper.LoadResourceImage("Resources.btn_cancel.gif");
 
             Content = new TableLayout {
                 Padding = 8,

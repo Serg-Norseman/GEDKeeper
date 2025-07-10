@@ -250,7 +250,6 @@ namespace GKUI.Components
             } finally {
                 pic.Dispose();
             }
-
         }
 
         public void SaveSnapshot(string fileName)

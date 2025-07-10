@@ -82,8 +82,6 @@ namespace GKUI.Components
         {
             InitializeComponent();
 
-            UIHelper.FixToolStrip(toolStrip);
-
             FillZoomLevels();
 
             try {

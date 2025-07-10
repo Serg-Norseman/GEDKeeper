@@ -118,5 +118,6 @@ namespace GKCore.Interfaces
     /// </summary>
     public interface IProgressDialog : IProgressController, ICommonDialog
     {
+        ThreadError ThreadError { get; set; }
     }
 }
