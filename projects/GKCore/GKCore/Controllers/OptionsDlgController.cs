@@ -474,6 +474,7 @@ namespace GKCore.Controllers
         public void UpdateSpecials()
         {
             GetControl<ICheckBox>("chkDisableNonStdFeatures").Checked = fOptions.DisableNonStdFeatures;
+            GetControl<ICheckBox>("chkEnableStdValidation").Checked = fOptions.EnableStdValidation;
 
             GetControl<ICheckBox>("chkUseInlineImagesInSvg").Checked = fOptions.TreeChartOptions.UseInlineImagesInSvg;
             GetControl<ICheckBox>("chkExtendedTree").Checked = fOptions.TreeChartOptions.ExtendedTree;
@@ -509,6 +510,7 @@ namespace GKCore.Controllers
         public void AcceptSpecials()
         {
             fOptions.DisableNonStdFeatures = GetControl<ICheckBox>("chkDisableNonStdFeatures").Checked;
+            fOptions.EnableStdValidation = GetControl<ICheckBox>("chkEnableStdValidation").Checked;
 
             fOptions.TreeChartOptions.UseInlineImagesInSvg = GetControl<ICheckBox>("chkUseInlineImagesInSvg").Checked;
             fOptions.TreeChartOptions.ExtendedTree = GetControl<ICheckBox>("chkExtendedTree").Checked;
@@ -1092,6 +1094,7 @@ namespace GKCore.Controllers
             // Specials
             GetControl<ITabPage>("pageSpecials").Text = LangMan.LS(LSID.Specials);
             GetControl<ICheckBox>("chkDisableNonStdFeatures").Text = LangMan.LS(LSID.DisableNonStdFeatures);
+            GetControl<ICheckBox>("chkEnableStdValidation").Text = LangMan.LS(LSID.GEDCOMValidation);
             GetControl<ICheckBox>("chkUseInlineImagesInSvg").Text = LangMan.LS(LSID.UseInlineImagesInSvg);
             GetControl<ICheckBox>("chkUseExtendedNotes").Text = LangMan.LS(LSID.UseExtendedNotes);
             GetControl<ICheckBox>("chkKeepRichNames").Text = LangMan.LS(LSID.KeepRichNames);

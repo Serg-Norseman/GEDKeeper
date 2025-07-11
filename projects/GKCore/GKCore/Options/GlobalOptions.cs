@@ -372,7 +372,7 @@ namespace GKCore.Options
             CertaintyAlgorithm = CertaintyAlgorithm.WeightedAverage;
             DisplayFullFileName = false;
             DisableNonStdFeatures = false;
-            EnableStdValidation = true;
+            EnableStdValidation = false;
 
             Theme = string.Empty;
 
@@ -798,7 +798,7 @@ namespace GKCore.Options
             UseExtendedNotes = ini.ReadBool("Common", "UseExtendedNotes", false);
             DisplayFullFileName = ini.ReadBool("Common", "DisplayFullFileName", false);
             DisableNonStdFeatures = ini.ReadBool("Common", "DisableNonStdFeatures", false);
-            EnableStdValidation = ini.ReadBool("Common", "EnableStdValidation", true);
+            EnableStdValidation = ini.ReadBool("Common", "EnableStdValidation", false);
 
             Autosave = ini.ReadBool("Common", "Autosave", false);
             AutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);

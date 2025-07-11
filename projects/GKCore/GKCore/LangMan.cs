@@ -567,7 +567,7 @@ namespace GKCore
         /* 508 */ IncludedGroupFilter,
         /* 509 */ DuplicatesSearch,
         /* 510 */ ValueInvalid,
-        /* 511 */ Operation, // obsolete, not used, can be removed
+        /* 511 */ GEDCOMValidation,
         /* 512 */ TreeCompare,
         /* 513 */ TreeMerge,
         /* 514 */ TreeSplit,
@@ -1661,7 +1661,7 @@ namespace GKCore
             /* 508 */ "There is a filter by a group. Do you want to add the group to a new individual?",
             /* 509 */ "Duplicates search",
             /* 510 */ "Invalid value",
-            /* 511 */ "Operation",
+            /* 511 */ "Validation of GEDCOM data constraints",
             /* 512 */ "Compare databases",
             /* 513 */ "Merge databases",
             /* 514 */ "Split database",

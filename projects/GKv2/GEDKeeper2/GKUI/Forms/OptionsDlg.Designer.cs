@@ -211,6 +211,7 @@
         private System.Windows.Forms.CheckBox chkDisplayFullFileName;
         private System.Windows.Forms.CheckBox chkDisableNonStdFeatures;
         private System.Windows.Forms.CheckBox chkSourceCitations;
+        private System.Windows.Forms.CheckBox chkEnableStdValidation;
 
         private void InitializeComponent()
         {
@@ -423,6 +424,7 @@
             this.chkDisplayFullFileName = new System.Windows.Forms.CheckBox();
             this.chkDisableNonStdFeatures = new System.Windows.Forms.CheckBox();
             this.chkSourceCitations = new System.Windows.Forms.CheckBox();
+            this.chkEnableStdValidation = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -2656,6 +2658,7 @@
             // 
             // pageSpecials
             //
+            this.pageSpecials.Controls.Add(this.chkEnableStdValidation);
             this.pageSpecials.Controls.Add(this.chkDisableNonStdFeatures);
             this.pageSpecials.Controls.Add(this.chkUseExtendedNotes);
             this.pageSpecials.Controls.Add(this.chkKeepRichNames);
@@ -2756,6 +2759,15 @@
             this.chkExtendedKinships.Size = new System.Drawing.Size(600, 22);
             this.chkExtendedKinships.TabIndex = 17;
             this.chkExtendedKinships.Text = "chkExtendedKinships";
+            // 
+            // chkEnableStdValidation
+            // 
+            this.chkEnableStdValidation.Location = new System.Drawing.Point(20, 361);
+            this.chkEnableStdValidation.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkEnableStdValidation.Name = "chkEnableStdValidation";
+            this.chkEnableStdValidation.Size = new System.Drawing.Size(600, 22);
+            this.chkEnableStdValidation.TabIndex = 18;
+            this.chkEnableStdValidation.Text = "chkEnableStdValidation";
             // 
             // chkShowNumberOfSubstructures
             // 
