@@ -221,9 +221,7 @@ namespace GKUI.Themes
                 return;
 
             ThemeControlHandler handler = GetControlHandler(component);
-            if (handler != null) {
-                handler(view, component, theme);
-            }
+            handler?.Invoke(view, component, theme);
 
             if (component is not IThemedForm && component is IThemedView themedView) {
                 themedView.ApplyTheme();

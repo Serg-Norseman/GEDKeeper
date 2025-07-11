@@ -535,8 +535,7 @@ namespace GEDmill.HTML
             if (!GMHelper.GetVisibility(ir) && !GMConfig.Instance.UseWithheldNames) {
                 name = GMConfig.Instance.ConcealedName;
             } else {
-                string dummy;
-                name = GMHelper.CapitaliseName(ir.GetPrimaryPersonalName(), out dummy, out dummy);
+                name = GMHelper.CapitaliseName(ir.GetPrimaryPersonalName(), out _, out _);
             }
             return MakeLink(ir, name);
         }

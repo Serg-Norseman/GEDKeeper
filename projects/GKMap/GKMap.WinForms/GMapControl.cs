@@ -913,23 +913,23 @@ namespace GKMap.WinForms
 
         void IMapControl.DoMouseClick(MapObject obj, EventArgs e)
         {
-            if (obj is MapMarker) {
-                OnMarkerClick?.Invoke(obj as MapMarker, (MouseEventArgs)e);
-            } else if (obj is MapRoute) {
-                OnRouteClick?.Invoke(obj as MapRoute, (MouseEventArgs)e);
-            } else if (obj is MapPolygon) {
-                OnPolygonClick?.Invoke(obj as MapPolygon, (MouseEventArgs)e);
+            if (obj is MapMarker marker) {
+                OnMarkerClick?.Invoke(marker, (MouseEventArgs)e);
+            } else if (obj is MapRoute route) {
+                OnRouteClick?.Invoke(route, (MouseEventArgs)e);
+            } else if (obj is MapPolygon polygon) {
+                OnPolygonClick?.Invoke(polygon, (MouseEventArgs)e);
             }
         }
 
         void IMapControl.DoMouseDoubleClick(MapObject obj, EventArgs e)
         {
-            if (obj is MapMarker) {
-                OnMarkerDoubleClick?.Invoke(obj as MapMarker, (MouseEventArgs)e);
-            } else if (obj is MapRoute) {
-                OnRouteDoubleClick?.Invoke(obj as MapRoute, (MouseEventArgs)e);
-            } else if (obj is MapPolygon) {
-                OnPolygonDoubleClick?.Invoke(obj as MapPolygon, (MouseEventArgs)e);
+            if (obj is MapMarker marker) {
+                OnMarkerDoubleClick?.Invoke(marker, (MouseEventArgs)e);
+            } else if (obj is MapRoute route) {
+                OnRouteDoubleClick?.Invoke(route, (MouseEventArgs)e);
+            } else if (obj is MapPolygon polygon) {
+                OnPolygonDoubleClick?.Invoke(polygon, (MouseEventArgs)e);
             }
         }
 

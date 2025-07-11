@@ -248,6 +248,7 @@ namespace GEDmill
         #endregion
 
         #region Event handlers
+#pragma warning disable IDE1006
 
         private void btnBack_Click(object sender, EventArgs e)
         {
@@ -309,21 +310,6 @@ namespace GEDmill
             btnSettings.Enabled = true;
 
             EnableCurrentPanel(true);
-        }
-
-        private async Task<bool> ShowQuestionYN(string msg, string title = GMConfig.SoftwareName)
-        {
-            return await AppHost.StdDialogs.ShowQuestion(msg, title);
-        }
-
-        private void ShowAlert(string msg, string title = GMConfig.SoftwareName)
-        {
-            AppHost.StdDialogs.ShowAlert(msg, title);
-        }
-
-        private void ShowMessage(string msg, string title = GMConfig.SoftwareName)
-        {
-            AppHost.StdDialogs.ShowMessage(msg, title);
         }
 
         private async void btnCancel_Click(object sender, EventArgs e)
@@ -404,8 +390,7 @@ namespace GEDmill
 
         private void btnSelectKeyDelete_Click(object sender, EventArgs e)
         {
-            NameXRefPair xrefPairName = lstKeyIndividuals.SelectedItem as NameXRefPair;
-            if (xrefPairName != null) {
+            if (lstKeyIndividuals.SelectedItem is NameXRefPair xrefPairName) {
                 string xref = xrefPairName.XRef;
                 if (!string.IsNullOrEmpty(xref)) {
                     GMConfig.Instance.KeyIndividuals.Remove(xref);
@@ -470,18 +455,6 @@ namespace GEDmill
                 txtConfigFrontImageEdit.Text = frontFile;
                 txtConfigFrontImageEdit.SelectAll();
             }
-        }
-
-        private bool IsSupportedFile(string fileName)
-        {
-            if (!string.IsNullOrEmpty(fileName)) {
-                string exten = Path.GetExtension(fileName).ToLower();
-                if (exten != ".jpg" && exten != ".jpeg" && exten != ".png" && exten != ".gif" && exten != ".bmp") {
-                    ShowAlert(fLangMan.LS(PLS.NotSupportedPictureType));
-                    return false;
-                }
-            }
-            return true;
         }
 
         private void chkConfigIncludeTreeDiagrams_Click(object sender, EventArgs e)
@@ -568,7 +541,7 @@ namespace GEDmill
             EnableWithheldConfig();
         }
 
-        private void miIndividualDetails_Click(Object sender, EventArgs e)
+        private void miIndividualDetails_Click(object sender, EventArgs e)
         {
             if (lvIndividuals.SelectedItems.Count == 1) {
                 var lvi = lvIndividuals.SelectedItems[0] as LVItem;
@@ -577,7 +550,7 @@ namespace GEDmill
             }
         }
 
-        private void miSourceDetails_Click(Object sender, EventArgs e)
+        private void miSourceDetails_Click(object sender, EventArgs e)
         {
             if (lvSources.SelectedItems.Count == 1) {
                 var lvi = lvSources.SelectedItems[0] as LVItem;
@@ -586,7 +559,7 @@ namespace GEDmill
             }
         }
 
-        private void miUnconnectedExclude_Click(Object sender, EventArgs e)
+        private void miUnconnectedExclude_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
@@ -598,9 +571,8 @@ namespace GEDmill
                 var marks = new List<GDMRecord>();
                 // exclude all individuals unless connected in any way to this person through non-excluded people
                 foreach (ListViewItem lvi in lvIndividuals.SelectedItems) {
-                    if (lvi is LVItem) {
-                        var ir = ((LVItem)lvi).Record as GDMIndividualRecord;
-                        if (ir != null) {
+                    if (lvi is LVItem item) {
+                        if (item.Record is GDMIndividualRecord ir) {
                             // First mark as visited all possible relations of irSubject, not following restricted people
                             // Adds to visited list
                             GMHelper.MarkConnected(fBase.Context.Tree, ir, marks);
@@ -622,7 +594,7 @@ namespace GEDmill
             ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.individuals));
         }
 
-        private void miIndiDescendantsExclude_Click(Object sender, EventArgs e)
+        private void miIndiDescendantsExclude_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
@@ -632,13 +604,9 @@ namespace GEDmill
 
             try {
                 // exclude all individuals descended from this person, including spouses and spouses ancestors. 
-                if (lvIndividuals.SelectedItems.Count == 1) {
-                    var lvi = lvIndividuals.SelectedItems[0] as LVItem;
-                    if (lvi != null) {
-                        GDMIndividualRecord ir = lvi.Record as GDMIndividualRecord;
-                        if (ir != null) {
-                            GMHelper.RestrictDescendants(fBase.Context.Tree, ir, false);
-                        }
+                if (lvIndividuals.SelectedItems.Count == 1 && lvIndividuals.SelectedItems[0] is LVItem lvi) {
+                    if (lvi.Record is GDMIndividualRecord ir) {
+                        GMHelper.RestrictDescendants(fBase.Context.Tree, ir, false);
                     }
                 }
             } catch (Exception ex) {
@@ -654,7 +622,7 @@ namespace GEDmill
             ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.individuals));
         }
 
-        private void miIndiDescendantsInclude_Click(Object sender, EventArgs e)
+        private void miIndiDescendantsInclude_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
@@ -664,13 +632,9 @@ namespace GEDmill
 
             try {
                 // exclude all individuals descended from this person, including spouses and spouses ancestors. 
-                if (lvIndividuals.SelectedItems.Count == 1) {
-                    var lvi = lvIndividuals.SelectedItems[0] as LVItem;
-                    if (lvi != null) {
-                        GDMIndividualRecord ir = lvi.Record as GDMIndividualRecord;
-                        if (ir != null) {
-                            GMHelper.RestrictDescendants(fBase.Context.Tree, ir, true);
-                        }
+                if (lvIndividuals.SelectedItems.Count == 1 && lvIndividuals.SelectedItems[0] is LVItem lvi) {
+                    if (lvi.Record is GDMIndividualRecord ir) {
+                        GMHelper.RestrictDescendants(fBase.Context.Tree, ir, true);
                     }
                 }
             } catch (Exception ex) {
@@ -686,7 +650,7 @@ namespace GEDmill
             ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.individuals));
         }
 
-        private void miIndiAncestorsExclude_Click(Object sender, EventArgs e)
+        private void miIndiAncestorsExclude_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
@@ -696,13 +660,9 @@ namespace GEDmill
 
             try {
                 // Exclude all individuals descended from this person, including spouses and spouses ancestors. 
-                if (lvIndividuals.SelectedItems.Count == 1) {
-                    var lvi = lvIndividuals.SelectedItems[0] as LVItem;
-                    if (lvi != null) {
-                        var ir = lvi.Record as GDMIndividualRecord;
-                        if (ir != null) {
-                            GMHelper.RestrictAncestors(fBase.Context.Tree, ir, false);
-                        }
+                if (lvIndividuals.SelectedItems.Count == 1 && lvIndividuals.SelectedItems[0] is LVItem lvi) {
+                    if (lvi.Record is GDMIndividualRecord ir) {
+                        GMHelper.RestrictAncestors(fBase.Context.Tree, ir, false);
                     }
                 }
             } catch (Exception ex) {
@@ -718,7 +678,7 @@ namespace GEDmill
             ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.individuals));
         }
 
-        private void miIndiAncestorsInclude_Click(Object sender, EventArgs e)
+        private void miIndiAncestorsInclude_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
@@ -728,13 +688,9 @@ namespace GEDmill
 
             try {
                 // Exclude all individuals descended from this person, including spouses and spouses ancestors. 
-                if (lvIndividuals.SelectedItems.Count == 1) {
-                    var lvi = lvIndividuals.SelectedItems[0] as LVItem;
-                    if (lvi != null) {
-                        var ir = lvi.Record as GDMIndividualRecord;
-                        if (ir != null) {
-                            GMHelper.RestrictAncestors(fBase.Context.Tree, ir, true);
-                        }
+                if (lvIndividuals.SelectedItems.Count == 1 && lvIndividuals.SelectedItems[0] is LVItem lvi) {
+                    if (lvi.Record is GDMIndividualRecord ir) {
+                        GMHelper.RestrictAncestors(fBase.Context.Tree, ir, true);
                     }
                 }
             } catch (Exception ex) {
@@ -750,15 +706,15 @@ namespace GEDmill
             ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.individuals));
         }
 
-        private void miIndividualsEveryoneInclude_Click(Object sender, EventArgs e)
+        private void miIndividualsEveryoneInclude_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
             int recordsIncluded = 0;
             foreach (ListViewItem lvi in lvIndividuals.Items) {
-                if (lvi is LVItem) {
-                    GDMIndividualRecord ir = (GDMIndividualRecord)((LVItem)lvi).Record;
+                if (lvi is LVItem item) {
+                    GDMIndividualRecord ir = (GDMIndividualRecord)item.Record;
                     if (!GMHelper.GetVisibility(ir)) {
                         ++recordsIncluded;
                         GMHelper.SetVisibility(ir, true);
@@ -776,20 +732,20 @@ namespace GEDmill
         }
 
         // Removes pictures from the selected source
-        private void miSourceRemovePics_Click(Object sender, EventArgs e)
+        private void miSourceRemovePics_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
 
             int nHidden = 0;
             foreach (ListViewItem lvi in lvSources.SelectedItems) {
-                if (lvi is LVItem) {
-                    GDMSourceRecord sr = (GDMSourceRecord)((LVItem)lvi).Record;
+                if (lvi is LVItem item) {
+                    GDMSourceRecord sr = (GDMSourceRecord)item.Record;
                     if (sr != null) {
                         int nHiddenThisTime = GMHelper.SetAllMFRsVisible(fBase.Context.Tree, sr, false);
                         nHidden += nHiddenThisTime;
                         if (nHiddenThisTime > 0) {
-                            SetSourceSubItems((LVItem)lvi, sr, true); // Updates list
+                            SetSourceSubItems(item, sr, true); // Updates list
                         }
                     }
                 }
@@ -805,7 +761,7 @@ namespace GEDmill
             EnablePrunePanelButtons();
         }
 
-        private void miIndividualsEveryoneExclude_Click(Object sender, EventArgs e)
+        private void miIndividualsEveryoneExclude_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
@@ -813,8 +769,8 @@ namespace GEDmill
             int recordsExcluded = 0;
 
             foreach (ListViewItem lvi in lvIndividuals.Items) {
-                if (lvi is LVItem) {
-                    GDMIndividualRecord ir = (GDMIndividualRecord)((LVItem)lvi).Record;
+                if (lvi is LVItem item) {
+                    GDMIndividualRecord ir = (GDMIndividualRecord)item.Record;
                     if (GMHelper.GetVisibility(ir)) {
                         recordsExcluded++;
                         GMHelper.SetVisibility(ir, false);
@@ -831,7 +787,7 @@ namespace GEDmill
             ShowRestrictsResult(recordsExcluded, 0, fLangMan.LS(PLS.individuals));
         }
 
-        private void miSourcesAllInclude_Click(Object sender, EventArgs e)
+        private void miSourcesAllInclude_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
@@ -839,11 +795,10 @@ namespace GEDmill
             int recordsIncluded = 0;
 
             foreach (ListViewItem lvi in lvSources.Items) {
-                if (lvi is LVItem) {
-                    var sr = ((LVItem)lvi).Record as GDMSourceRecord;
-                    if (!GMHelper.GetVisibility(sr)) {
+                if (lvi is LVItem item) {
+                    if (!GMHelper.GetVisibility(item.Record)) {
                         recordsIncluded++;
-                        GMHelper.SetVisibility(sr, true);
+                        GMHelper.SetVisibility(item.Record, true);
                     }
                 }
             }
@@ -857,7 +812,7 @@ namespace GEDmill
             ShowRestrictsResult(0, recordsIncluded, fLangMan.LS(PLS.sources));
         }
 
-        private void miSourcesAllExclude_Click(Object sender, EventArgs e)
+        private void miSourcesAllExclude_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
@@ -865,11 +820,10 @@ namespace GEDmill
             int recordsExcluded = 0;
 
             foreach (ListViewItem lvi in lvSources.Items) {
-                if (lvi is LVItem) {
-                    var sr = ((LVItem)lvi).Record as GDMSourceRecord;
-                    if (GMHelper.GetVisibility(sr)) {
+                if (lvi is LVItem item) {
+                    if (GMHelper.GetVisibility(item.Record)) {
                         recordsExcluded++;
-                        GMHelper.SetVisibility(sr, false);
+                        GMHelper.SetVisibility(item.Record, false);
                     }
                 }
             }
@@ -884,7 +838,7 @@ namespace GEDmill
         }
 
         // Excludes people who aren't dead, but leave people we're not sure about
-        private void miIndividualsAliveExclude_Click(Object sender, EventArgs e)
+        private void miIndividualsAliveExclude_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             Cursor.Show();
@@ -894,9 +848,8 @@ namespace GEDmill
 
             try {
                 foreach (ListViewItem lvi in lvIndividuals.Items) {
-                    if (lvi is LVItem) {
-                        var ir = ((LVItem)lvi).Record as GDMIndividualRecord;
-                        if (ir != null && ir.IsLive() && GMHelper.GetVisibility(ir)) {
+                    if (lvi is LVItem item) {
+                        if (item.Record is GDMIndividualRecord ir && ir.IsLive() && GMHelper.GetVisibility(ir)) {
                             recordsExcluded++;
                             GMHelper.SetVisibility(ir, false);
                         }
@@ -915,7 +868,7 @@ namespace GEDmill
             ShowRestrictsResult(recordsExcluded, recordsIncluded, fLangMan.LS(PLS.individuals));
         }
 
-        private void menuIndividuals_Popup(Object sender, EventArgs e)
+        private void menuIndividuals_Popup(object sender, EventArgs e)
         {
             int selectedCount = lvIndividuals.SelectedItems.Count;
             miUnconnectedExclude.Enabled = (selectedCount > 0);
@@ -932,7 +885,7 @@ namespace GEDmill
             miIndividualDetails.Enabled = (selectedCount == 1);
         }
 
-        private void menuSources_Popup(Object sender, EventArgs e)
+        private void menuSources_Popup(object sender, EventArgs e)
         {
             int selectedCount = lvSources.SelectedItems.Count;
             miSourceDetails.Enabled = (selectedCount == 1);
@@ -984,6 +937,7 @@ namespace GEDmill
             }
         }
 
+#pragma warning restore IDE1006
         #endregion
 
         /// <summary>
@@ -1243,7 +1197,7 @@ namespace GEDmill
                         GMConfig.Instance.OutputFolder = txtChooseOutput.Text;
                         string outputFolder = GMConfig.Instance.OutputFolder;
                         if (outputFolder != "") {
-                            outputFolder = outputFolder + '\\';
+                            outputFolder += '\\';
                         }
                         string imageFolder = string.Concat(outputFolder, GMConfig.Instance.ImageFolder);
 
@@ -1270,7 +1224,7 @@ namespace GEDmill
                             }
                         }
 
-                        if (await CreateWebsite(outputFolder, imageFolder)) {
+                        if (await CreateWebsite(outputFolder)) {
                             return true;
                         }
 
@@ -1344,15 +1298,13 @@ namespace GEDmill
         {
             // Save checkbox state because SubItems.Clear() clears item.Text and item.Checked as well, so replace old value after calling Clear().
             bool wasChecked = lvItem.Checked;
-            string surname, firstName;
-            GMHelper.CapitaliseName(ir.GetPrimaryPersonalName(), out firstName, out surname);
+            GMHelper.CapitaliseName(ir.GetPrimaryPersonalName(), out string firstName, out string surname);
 
             var lifeDatesX = ir.GetLifeEvents();
             var birthDate = (lifeDatesX.BirthEvent == null) ? 0 : lifeDatesX.BirthEvent.Date.GetChronologicalYear();
             var deathDate = (lifeDatesX.DeathEvent == null) ? 0 : lifeDatesX.DeathEvent.Date.GetChronologicalYear();
             string uref = (ir.HasUserReferences) ? ir.UserReferences[0].StringValue : "";
-            int nVisiblePics, nTotalPics;
-            GMHelper.CountMFRs(ir, out nTotalPics, out nVisiblePics);
+            GMHelper.CountMFRs(ir, out int nTotalPics, out int nVisiblePics);
 
             lvItem.SubItems.Clear();
             lvItem.Checked = wasChecked;
@@ -1500,8 +1452,7 @@ namespace GEDmill
             lvItem.SubItems.Add(nDeaths.ToString());
             lvItem.SubItems.Add(sr.XRef);
 
-            int nVisiblePics, nTotalPics;
-            GMHelper.CountMFRs(sr, out nTotalPics, out nVisiblePics);
+            GMHelper.CountMFRs(sr, out int nTotalPics, out int nVisiblePics);
 
             if (nVisiblePics != nTotalPics) {
                 lvItem.SubItems.Add(string.Format("{0}/{1}", nVisiblePics, nTotalPics));
@@ -1515,7 +1466,7 @@ namespace GEDmill
         /// <summary>
         /// Spawns the website creation thread, which calls CWebsite.Create to do the work.
         /// </summary>
-        private async Task<bool> CreateWebsite(string outputFolder, string imagesFolder)
+        private async Task<bool> CreateWebsite(string outputFolder)
         {
             fLogger.WriteInfo("Creating website");
 
@@ -1601,7 +1552,7 @@ namespace GEDmill
         /// </summary>
         private void ShowHidePicsResult(int hidden)
         {
-            string msg = "";
+            string msg;
             if (hidden == 0) {
                 msg = fLangMan.LS(PLS.NoMultimediaFilesHidden);
             } else {
@@ -1930,8 +1881,7 @@ namespace GEDmill
                 foreach (string xref in GMConfig.Instance.KeyIndividuals) {
                     GDMIndividualRecord indiRec = fBase.Context.Tree.FindXRef<GDMIndividualRecord>(xref);
                     if (indiRec != null && GMHelper.GetVisibility(indiRec)) {
-                        string firstName, surname;
-                        string fullName = GMHelper.CapitaliseName(indiRec.GetPrimaryPersonalName(), out firstName, out surname);
+                        string fullName = GMHelper.CapitaliseName(indiRec.GetPrimaryPersonalName(), out _, out _);
                         if (string.IsNullOrEmpty(fullName)) {
                             fullName = GMConfig.Instance.UnknownName;
                         }
@@ -2013,9 +1963,7 @@ namespace GEDmill
                 fLogger.WriteInfo("Folder exists(11) : " + outputFolder);
 
                 if (GMHelper.IsDesktop(outputFolder)) {
-                    dialogResult = MessageBox.Show(this, fLangMan.LS(PLS.WillNotAllowToCreateFilesDirectlyOnDesktop),
-                        fLangMan.LS(PLS.CreatingWebsite), MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    fLogger.WriteInfo("Desktop detected as output folder.");
+                    ShowAlert(fLangMan.LS(PLS.WillNotAllowToCreateFilesDirectlyOnDesktop));
                     return DialogResult.Cancel;
                 }
 
@@ -2251,6 +2199,33 @@ namespace GEDmill
         /// </summary>
         private void EnablePrunePanelButtons()
         {
+        }
+
+        private async Task<bool> ShowQuestionYN(string msg, string title = GMConfig.SoftwareName)
+        {
+            return await AppHost.StdDialogs.ShowQuestion(msg, title);
+        }
+
+        private void ShowAlert(string msg, string title = GMConfig.SoftwareName)
+        {
+            AppHost.StdDialogs.ShowAlert(msg, title);
+        }
+
+        private void ShowMessage(string msg, string title = GMConfig.SoftwareName)
+        {
+            AppHost.StdDialogs.ShowMessage(msg, title);
+        }
+
+        private bool IsSupportedFile(string fileName)
+        {
+            if (!string.IsNullOrEmpty(fileName)) {
+                string exten = Path.GetExtension(fileName).ToLower();
+                if (exten != ".jpg" && exten != ".jpeg" && exten != ".png" && exten != ".gif" && exten != ".bmp") {
+                    ShowAlert(fLangMan.LS(PLS.NotSupportedPictureType));
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

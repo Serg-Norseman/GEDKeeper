@@ -21,8 +21,6 @@
 using System;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
-using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -122,16 +120,13 @@ namespace GKUI.Platform
             var wfModal = dialog as CommonDialog;
             if (wfModal == null) return false;
 
-            IntPtr mainHandle = GetTopWindowHandle();
+            //IntPtr mainHandle = GetTopWindowHandle();
 
             if (keepModeless) {
                 foreach (IWindow win in fRunningForms) {
                     if (win is IBaseWindow) {
                         IntPtr handle = ((Form)win).Handle;
-
-#if !MONO
                         Win32.PostMessage(handle, Win32.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
-#endif
                     }
                 }
             }
@@ -145,12 +140,8 @@ namespace GKUI.Platform
 
         public override void EnableWindow(IWidgetForm form, bool value)
         {
-            Form frm = form as Form;
-
-            if (frm != null) {
-#if !MONO
+            if (form is Form frm) {
                 Win32.EnableWindow(frm.Handle, value);
-#endif
             }
         }
 
@@ -257,7 +248,7 @@ namespace GKUI.Platform
             var form = view as Form;
             if (form != null) {
                 var loc = WidgetLocate(UIHelper.Rt2Rt(form.Bounds), location);
-                form.Location = new System.Drawing.Point(loc.X, loc.Y);
+                form.Location = new Point(loc.X, loc.Y);
             }
         }
 
@@ -293,10 +284,7 @@ namespace GKUI.Platform
                     break;
 
                 case Feature.Themes:
-                    // since v2.23.0, only WinForms-based implementation, on Windows OS
-#if !MONO
                     result = true;
-#endif
                     break;
 
                 case Feature.OverwritePrompt:
@@ -406,13 +394,8 @@ namespace GKUI.Platform
 
         public override int GetKeyLayout()
         {
-#if MONO
-            // There is a bug in Mono: does not work this CurrentInputLanguage
-            return CultureInfo.CurrentUICulture.KeyboardLayoutId;
-#else
             InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
             return currentLang.Culture.KeyboardLayoutId;
-#endif
         }
 
         public override void SetKeyLayout(int layout)

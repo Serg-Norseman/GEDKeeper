@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -97,11 +97,8 @@ namespace GKPedigreeImporterPlugin
         private async void btnImportFileChoose_Click(object sender, EventArgs e)
         {
             string filter;
-#if !MONO
             filter = fLangMan.LS(PLS.AllFiltersW);
-#else
-            filter = fLangMan.LS(PLS.AllFiltersL);
-#endif
+            //filter = fLangMan.LS(PLS.AllFiltersL);
 
             string fileName = await AppHost.StdDialogs.GetOpenFile("", "", filter, 1, "");
             if (string.IsNullOrEmpty(fileName)) return;

@@ -105,11 +105,7 @@ namespace GKUI.Components
         public void Test_Font()
         {
             string fontName;
-            #if MONO
-            fontName = "DejaVu Sans"; // "Noto Sans";
-            #else
             fontName = "Verdana";
-            #endif
             var fnt = AppHost.GfxProvider.CreateFont(fontName, 10, true);
             Assert.AreEqual(fontName, fnt.FontFamilyName);
             Assert.AreEqual(fontName, fnt.Name);

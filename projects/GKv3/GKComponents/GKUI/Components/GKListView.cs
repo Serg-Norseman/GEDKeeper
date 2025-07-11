@@ -427,8 +427,7 @@ namespace GKUI.Components
 
         private void DoItemsUpdated()
         {
-            var eventHandler = ItemsUpdated;
-            if (eventHandler != null) eventHandler(this, new EventArgs());
+            ItemsUpdated?.Invoke(this, new EventArgs());
         }
 
         public void UpdateContents(bool columnsChanged = false)
@@ -668,9 +667,7 @@ namespace GKUI.Components
 
         private void DoItemCheck(int index, bool newValue)
         {
-            ItemCheckEventHandler handler = this.ItemCheck;
-            if (handler != null)
-                handler.Invoke(this, new ItemCheckEventArgs(index, newValue));
+            ItemCheck?.Invoke(this, new ItemCheckEventArgs(index, newValue));
         }
 
         #endregion

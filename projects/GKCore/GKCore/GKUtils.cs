@@ -3582,16 +3582,8 @@ namespace GKCore
         {
             try {
                 // SecurityProtocolType.Ssl3 is not supported
-#if MONO
-                // Mono v4.6 doesn't contain SecurityProtocolType.Tls11
-                const int Tls11 = 768;
-                const int Tls12 = 3072;
-                ServicePointManager.SecurityProtocol =
-                    ServicePointManager.SecurityProtocol | SecurityProtocolType.Tls | (SecurityProtocolType)Tls11 | (SecurityProtocolType)Tls12;
-#else
                 ServicePointManager.SecurityProtocol =
                     ServicePointManager.SecurityProtocol | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-#endif
             } catch (Exception ex) {
                 // crash on WinXP (.NET <= 4.0.3), TLS 1.2 not supported
                 Logger.WriteError("GKUtils.InitSecurityProtocol()", ex);

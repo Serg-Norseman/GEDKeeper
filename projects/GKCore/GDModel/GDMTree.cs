@@ -850,18 +850,14 @@ namespace GDModel
         private void Changed()
         {
             if (fUpdateCount == 0) {
-                var eventHandler = OnChange;
-                if (eventHandler != null)
-                    eventHandler(this, new EventArgs());
+                OnChange?.Invoke(this, new EventArgs());
             }
         }
 
         private void Changing()
         {
             if (fUpdateCount == 0) {
-                var eventHandler = OnChanging;
-                if (eventHandler != null)
-                    eventHandler(this, new EventArgs());
+                OnChanging?.Invoke(this, new EventArgs());
             }
         }
 

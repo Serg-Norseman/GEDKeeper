@@ -900,35 +900,23 @@ namespace GKMap.EtoForms
 
         void IMapControl.DoMouseClick(MapObject obj, EventArgs e)
         {
-            if (obj is MapMarker) {
-                if (OnMarkerClick != null) {
-                    OnMarkerClick(obj as MapMarker, (MouseEventArgs)e);
-                }
-            } else if (obj is MapRoute) {
-                if (OnRouteClick != null) {
-                    OnRouteClick(obj as MapRoute, (MouseEventArgs)e);
-                }
-            } else if (obj is MapPolygon) {
-                if (OnPolygonClick != null) {
-                    OnPolygonClick(obj as MapPolygon, (MouseEventArgs)e);
-                }
+            if (obj is MapMarker marker) {
+                OnMarkerClick?.Invoke(marker, (MouseEventArgs)e);
+            } else if (obj is MapRoute route) {
+                OnRouteClick?.Invoke(route, (MouseEventArgs)e);
+            } else if (obj is MapPolygon polygon) {
+                OnPolygonClick?.Invoke(polygon, (MouseEventArgs)e);
             }
         }
 
         void IMapControl.DoMouseDoubleClick(MapObject obj, EventArgs e)
         {
-            if (obj is MapMarker) {
-                if (OnMarkerDoubleClick != null) {
-                    OnMarkerDoubleClick(obj as MapMarker, (MouseEventArgs)e);
-                }
-            } else if (obj is MapRoute) {
-                if (OnRouteDoubleClick != null) {
-                    OnRouteDoubleClick(obj as MapRoute, (MouseEventArgs)e);
-                }
-            } else if (obj is MapPolygon) {
-                if (OnPolygonDoubleClick != null) {
-                    OnPolygonDoubleClick(obj as MapPolygon, (MouseEventArgs)e);
-                }
+            if (obj is MapMarker marker) {
+                OnMarkerDoubleClick?.Invoke(marker, (MouseEventArgs)e);
+            } else if (obj is MapRoute route) {
+                OnRouteDoubleClick?.Invoke(route, (MouseEventArgs)e);
+            } else if (obj is MapPolygon polygon) {
+                OnPolygonDoubleClick?.Invoke(polygon, (MouseEventArgs)e);
             }
         }
 

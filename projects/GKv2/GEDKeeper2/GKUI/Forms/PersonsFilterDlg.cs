@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -136,10 +136,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            // platform: in Mono tsSpecificFilter has 0 index, somehow
-#if MONO
-            tabsFilters.Controls.SetChildIndex(pageSpecificFilter, 1);
-#endif
             tabsFilters.SelectedIndex = 1;
 
             fPersonsFilterDlgController = new PersonsFilterDlgController(this, listMan);

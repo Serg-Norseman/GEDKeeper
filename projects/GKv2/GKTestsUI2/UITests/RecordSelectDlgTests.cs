@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,13 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !MONO && !DIS_NUF
+#if !DIS_NUF
 
 using System;
 using System.Windows.Forms;
 using GDModel;
 using GKCore.Interfaces;
-using GKCore.Types;
 using GKTests;
 using GKTests.ControlTesters;
 using GKTests.Stubs;

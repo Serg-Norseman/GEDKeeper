@@ -119,9 +119,7 @@ namespace GKUI.Forms
         {
             if (disposing) {
                 fController.Dispose();
-                #if !MONO
                 if (components != null) components.Dispose();
-                #endif
             }
             base.Dispose(disposing);
         }
@@ -176,11 +174,9 @@ namespace GKUI.Forms
         {
             base.WndProc(ref m);
 
-#if !MONO
             if (m.Msg == Win32.WM_KEEPMODELESS) {
                 AppHost.Instance.WidgetsEnable();
             }
-#endif
         }
 
         #endregion

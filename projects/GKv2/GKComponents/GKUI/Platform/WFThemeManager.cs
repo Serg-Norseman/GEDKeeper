@@ -220,9 +220,7 @@ namespace GKUI.Themes
                 return;
 
             ThemeControlHandler handler = GetControlHandler(component);
-            if (handler != null) {
-                handler(view, component, theme);
-            }
+            handler?.Invoke(view, component, theme);
 
             if (!(component is IThemedForm) && component is IThemedView themedView) {
                 themedView.ApplyTheme();
@@ -370,8 +368,8 @@ namespace GKUI.Themes
 
             backColor = ctlParent.BackColor;
 
-            if (ctlParent is Form) {
-                if (!((Form)ctlParent).Modal) {
+            if (ctlParent is Form frm) {
+                if (!frm.Modal) {
                     // window
                     foreColor = GetThemeColor(theme, ThemeElement.WindowText);
                 } else {
@@ -566,15 +564,13 @@ namespace GKUI.Themes
             ctl.BackColor = GetThemeColor(theme, ThemeElement.Dropdown);
             ctl.ForeColor = GetThemeColor(theme, ThemeElement.ButtonText);
 
-            if (ctl is ToolStripDropDownItem) {
-                var dropdownItem = (ToolStripDropDownItem)ctl;
+            if (ctl is ToolStripDropDownItem dropdownItem) {
                 ThemeToolStripHandler(view, dropdownItem.DropDown, theme);
             } else if (ctl is ToolStripSeparator) {
                 if (theme.SysDefault) {
                 } else {
                 }
-            } else if (ctl is ToolStripStatusLabel) {
-                var statusLabel = (ToolStripStatusLabel)ctl;
+            } else if (ctl is ToolStripStatusLabel statusLabel) {
                 statusLabel.BorderStyle = (theme.SysDefault) ? Border3DStyle.Sunken : Border3DStyle.Adjust; // Flat
             }
         }

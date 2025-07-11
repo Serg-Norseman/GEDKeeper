@@ -129,26 +129,22 @@ namespace GKMap.CacheProviders
 
         private static void Unlock(FileStream dbf, int position, int length)
         {
-#if !MONO
 #if NETSTANDARD || NETCOREAPP || NET5_0_OR_GREATER || NET471_OR_GREATER
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 #endif
             {
                 dbf.Unlock(position, length);
             }
-#endif
         }
 
         private static void Lock(FileStream dbf, int position, int length)
         {
-#if !MONO
 #if NETSTANDARD || NETCOREAPP || NET5_0_OR_GREATER || NET471_OR_GREATER
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 #endif
             {
                 dbf.Lock(position, length);
             }
-#endif
         }
 
 #region -- import / export --

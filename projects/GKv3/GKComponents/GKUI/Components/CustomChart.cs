@@ -307,8 +307,7 @@ namespace GKUI.Components
 
         private void DoNavRefresh()
         {
-            var eventHandler = NavRefresh;
-            if (eventHandler != null) eventHandler(this, null);
+            NavRefresh?.Invoke(this, null);
         }
 
         protected abstract void SetNavObject(object obj);

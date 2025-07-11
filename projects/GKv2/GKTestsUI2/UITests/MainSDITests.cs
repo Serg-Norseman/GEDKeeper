@@ -20,7 +20,7 @@
 
 #define MAIN_TEST
 
-#if !MONO && !DIS_NUF
+#if !DIS_NUF
 #if MAIN_TEST
 
 using System;
@@ -494,14 +494,12 @@ namespace GKUI.Forms
                 TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.rtf"));
             }
 
-#if !MONO
             try {
                 ModalFormHandler = SaveFilePDF_Handler;
                 ClickToolStripMenuItem(menuItem, fMainWin);
             } finally {
                 TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.pdf"));
             }
-#endif
         }
 
         [Test]

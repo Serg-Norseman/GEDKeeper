@@ -201,9 +201,7 @@ namespace GKUI.Components
                         ListViewItem.ListViewSubItem subitem1 = item1.SubItems[sortColumn];
                         ListViewItem.ListViewSubItem subitem2 = item2.SubItems[sortColumn];
 
-                        if (subitem1 is IComparable && subitem2 is IComparable) {
-                            IComparable sub1 = (IComparable)subitem1;
-                            IComparable sub2 = (IComparable)subitem2;
+                        if (subitem1 is IComparable sub1 && subitem2 is IComparable sub2) {
                             result = sub1.CompareTo(sub2);
                         } else {
                             result = GKUtils.StrCompareEx(subitem1.Text, subitem2.Text);
@@ -322,9 +320,7 @@ namespace GKUI.Components
         public new void BeginUpdate()
         {
             if (fUpdateCount == 0) {
-                #if !MONO
                 ListViewItemSorter = null;
-                #endif
                 base.BeginUpdate();
             }
             fUpdateCount++;
@@ -335,9 +331,7 @@ namespace GKUI.Components
             fUpdateCount--;
             if (fUpdateCount == 0) {
                 base.EndUpdate();
-                #if !MONO
                 ListViewItemSorter = fColumnSorter;
-                #endif
             }
         }
 
@@ -564,8 +558,7 @@ namespace GKUI.Components
 
         private void DoItemsUpdated()
         {
-            var eventHandler = ItemsUpdated;
-            if (eventHandler != null) eventHandler(this, new EventArgs());
+            ItemsUpdated?.Invoke(this, new EventArgs());
         }
 
         public void UpdateContents(bool columnsChanged = false)
@@ -583,12 +576,6 @@ namespace GKUI.Components
                     fListMan.UpdateContents();
                     SortContents(false);
                     VirtualListSize = fListMan.FilteredCount;
-
-                    #if MONO
-                    if (fListMan.FilteredCount != 0) {
-                        TopItem = Items[0];
-                    }
-                    #endif
 
                     ResizeColumns();
                 } finally {

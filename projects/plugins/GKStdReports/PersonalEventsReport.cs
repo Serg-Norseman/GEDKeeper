@@ -150,9 +150,7 @@ namespace GKStdReports
                 }
                 fWriter.AddListItem("   " + li, textFont);
 
-                if (evObj.Rec is GDMIndividualRecord) {
-                    GDMIndividualRecord iRec = (GDMIndividualRecord)evObj.Rec;
-
+                if (evObj.Rec is GDMIndividualRecord iRec) {
                     if (evt.GetTagType() == GEDCOMTagType.BIRT) {
                         if (evObj.Type == EventType.Personal) {
                             if (father != null) {
@@ -171,9 +169,7 @@ namespace GKStdReports
                             fWriter.AddListItem("   " + "   " + st, textFont);
                         }
                     }
-                } else if (evObj.Rec is GDMFamilyRecord) {
-                    GDMFamilyRecord famRec = (GDMFamilyRecord)evObj.Rec;
-
+                } else if (evObj.Rec is GDMFamilyRecord famRec) {
                     GDMIndividualRecord sp;
                     string unk;
                     if (fPerson.Sex == GDMSex.svMale) {

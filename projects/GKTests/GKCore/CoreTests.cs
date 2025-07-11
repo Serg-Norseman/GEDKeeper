@@ -24,6 +24,7 @@ using System.Reflection;
 using System.Text;
 using BSLib;
 using GDModel;
+using GKCore.Charts;
 using GKCore.Design.Controls;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -86,22 +87,17 @@ namespace GKCore
         [Test]
         public void Test_Tween()
         {
-            #if !MONO
-            var tween = new GKCore.Charts.TweenLibrary();
-            tween.StartTween(TweenHandler, 0, 0, 10, 10, GKCore.Charts.TweenAnimation.EaseInOutQuad, 20);
-            #endif
+            var tween = new TweenLibrary();
+            tween.StartTween(TweenHandler, 0, 0, 10, 10, TweenAnimation.EaseInOutQuad, 20);
         }
 
         [Test]
         public void Test_SysUtils()
         {
-            #if MONO || OS_LINUX || OS_MACOS
+            #if OS_LINUX || OS_MACOS
             Assert.IsTrue(SysUtils.IsUnix());
             Assert.AreEqual(PlatformID.Unix, SysUtils.GetPlatformID());
             Assert.AreNotEqual(DesktopType.Windows, SysUtils.GetDesktopType());
-            #if MONO && !NET6_0_OR_GREATER
-            Assert.IsFalse(string.IsNullOrEmpty(SysUtils.GetMonoVersion()));
-            #endif
             #else
             Assert.IsFalse(SysUtils.IsUnix());
             Assert.AreEqual(PlatformID.Win32NT, SysUtils.GetPlatformID());

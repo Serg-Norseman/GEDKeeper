@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -131,10 +131,7 @@ namespace GKUI.Components
                 fParams.IndistinctThreshold = ((float)numIndistinctThreshold.Value / 100.0f);
             }
 
-            var handler = ParamsChanged;
-            if (handler != null) {
-                handler(this, EventArgs.Empty);
-            }
+            ParamsChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public bool PreFilterMessage(ref Message m)

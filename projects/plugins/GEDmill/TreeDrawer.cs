@@ -40,18 +40,18 @@ namespace GEDmill
     {
         private static readonly GKL.ILogger fLogger = GKL.LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(TreeDrawer).Name);
 
-        private SolidBrush fBrushBg;
-        private SolidBrush fBrushBox;
-        private SolidBrush fBrushBoxHighlight;
-        private SolidBrush fBrushBoxConcealed;
-        private SolidBrush fBrushBoxShade;
-        private SolidBrush fBrushText;
-        private SolidBrush fBrushTextLink;
-        private SolidBrush fBrushTextConcealed;
-        private Pen fPenConnector;
-        private Pen fPenConnectorDotted;
-        private Pen fPenBox;
-        private Font fFont;
+        private readonly SolidBrush fBrushBg;
+        private readonly SolidBrush fBrushBox;
+        private readonly SolidBrush fBrushBoxHighlight;
+        private readonly SolidBrush fBrushBoxConcealed;
+        private readonly SolidBrush fBrushBoxShade;
+        private readonly SolidBrush fBrushText;
+        private readonly SolidBrush fBrushTextLink;
+        private readonly SolidBrush fBrushTextConcealed;
+        private readonly Pen fPenConnector;
+        private readonly Pen fPenConnectorDotted;
+        private readonly Pen fPenBox;
+        private readonly Font fFont;
         private TextureBrush fBrushFakeTransparency;
 
         private Bitmap fTempBmp;
@@ -155,8 +155,7 @@ namespace GEDmill
             }
 
             foreach (var obj in group.Members) {
-                if (obj is MTGroup) {
-                    var mtg = (MTGroup)obj;
+                if (obj is MTGroup mtg) {
                     if (mtg.LeftBox != null && mtg.RightBox != null) {
                         // Draw crossbar
                         float crossbarLeft = mtg.LeftBox.TeeRight;
@@ -184,8 +183,8 @@ namespace GEDmill
                             float individualY = 0f;
                             bool haveIndividuals = false;
                             foreach (MTObject groupObj in mtg.Members) {
-                                if (groupObj is MTIndividual) {
-                                    individualY = ((MTIndividual)groupObj).Top;
+                                if (groupObj is MTIndividual groupIndi) {
+                                    individualY = groupIndi.Top;
                                     haveIndividuals = true;
                                     break;
                                 }
@@ -214,9 +213,9 @@ namespace GEDmill
                     }
 
                     DrawGroup(mtg, map);
-                } else if (obj is MTIndividual) {
+                } else if (obj is MTIndividual indi) {
                     // Draw individual box
-                    DrawIndividual((MTIndividual)obj, map);
+                    DrawIndividual(indi, map);
                 }
             }
         }
@@ -291,7 +290,7 @@ namespace GEDmill
 
             string absFilename = string.Concat(folder, fileName);
 
-            Image image = null;
+            Image image;
             try {
                 image = Image.FromFile(absFilename);
             } catch (OutOfMemoryException) {

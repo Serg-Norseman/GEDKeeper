@@ -177,16 +177,12 @@ namespace GKUI.Components
 
         private void DoRootChanged(GDMIndividualRecord person)
         {
-            var eventHandler = RootChanged;
-            if (eventHandler != null)
-                eventHandler(this, person);
+            RootChanged?.Invoke(this, person);
         }
 
         private void DoZoomChanged()
         {
-            var eventHandler = ZoomChanged;
-            if (eventHandler != null)
-                eventHandler(this, new EventArgs());
+            ZoomChanged?.Invoke(this, new EventArgs());
         }
 
         /// <summary>

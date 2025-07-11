@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2018-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2018-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -846,8 +846,8 @@ namespace GKStdReports
             }
 
             string suffix;
-            if (aTag is GDMCustomEvent) {
-                suffix = ", " + GKUtils.GetEventNameLd((GDMCustomEvent)aTag);
+            if (aTag is GDMCustomEvent evt) {
+                suffix = ", " + GKUtils.GetEventNameLd(evt);
             } else {
                 suffix = "";
             }

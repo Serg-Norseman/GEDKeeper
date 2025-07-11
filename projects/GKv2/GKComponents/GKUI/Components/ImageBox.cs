@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -683,23 +683,17 @@ namespace GKUI.Components
 
         private void OnImageChanged(EventArgs e)
         {
-            EventHandler handler = ImageChanged;
-            if (handler != null)
-                handler(this, e);
+            ImageChanged?.Invoke(this, e);
         }
 
         private void OnSelectionRegionChanged(EventArgs e)
         {
-            EventHandler handler = SelectionRegionChanged;
-            if (handler != null)
-                handler(this, e);
+            SelectionRegionChanged?.Invoke(this, e);
         }
 
         private void OnZoomChanged(EventArgs e)
         {
-            EventHandler handler = ZoomChanged;
-            if (handler != null)
-                handler(this, e);
+            ZoomChanged?.Invoke(this, e);
         }
 
         private void ProcessPanning(MouseEventArgs e, ImageBoxSelectionMode selectionMode)

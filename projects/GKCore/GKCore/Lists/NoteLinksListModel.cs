@@ -38,7 +38,8 @@ namespace GKCore.Lists
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
-                RecordAction.raMoveUp, RecordAction.raMoveDown);
+                RecordAction.raMoveUp, RecordAction.raMoveDown,
+                RecordAction.raCopy, RecordAction.raPaste);
         }
 
         public static ListColumns CreateListColumns()
@@ -115,6 +116,18 @@ namespace GKCore.Lists
                 case RecordAction.raMoveUp:
                 case RecordAction.raMoveDown:
                     result = dataOwner.Notes.Exchange(notes, eArgs.Action);
+                    break;
+
+                case RecordAction.raCopy:
+                    noteRec = fBaseContext.Tree.GetPtrValue<GDMNoteRecord>(notes);
+                    AppHost.Instance.SetClipboardObj<GDMNoteRecord>(noteRec);
+                    break;
+
+                case RecordAction.raPaste:
+                    noteRec = AppHost.Instance.GetClipboardObj<GDMNoteRecord>();
+                    if (noteRec != null) {
+                        result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, fDataOwner, noteRec);
+                    }
                     break;
             }
 

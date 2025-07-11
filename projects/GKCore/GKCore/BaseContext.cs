@@ -111,8 +111,7 @@ namespace GKCore
             set {
                 fModified = value;
 
-                var eventHandler = ModifiedChanged;
-                if (eventHandler != null) eventHandler(this, null);
+                ModifiedChanged?.Invoke(this, null);
             }
         }
 

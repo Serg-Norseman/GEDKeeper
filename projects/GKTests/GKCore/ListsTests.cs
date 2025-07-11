@@ -130,7 +130,7 @@ namespace GKCore
 
             string yaml = YamlHelper.Serialize(filter);
             string expected = "Conditions:\r\n- ColumnIndex: 1\r\n  Condition: ck_Contains\r\n  Value: Kostrom\r\n";
-#if MONO || OS_MACOS
+#if OS_MACOS
             expected = expected.Replace("\r\n", "\n");
 #endif
             Assert.AreEqual(expected, yaml);

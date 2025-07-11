@@ -134,8 +134,7 @@ namespace GKMap
                         GoToCurrentPosition();
                     }
 
-                    if (OnCurrentPositionChanged != null)
-                        OnCurrentPositionChanged(fPosition);
+                    OnCurrentPositionChanged?.Invoke(fPosition);
                 }
             }
         }
@@ -181,9 +180,7 @@ namespace GKMap
                             ZoomToArea = false;
                         }
 
-                        if (OnMapTypeChanged != null) {
-                            OnMapTypeChanged(value);
-                        }
+                        OnMapTypeChanged?.Invoke(value);
                     }
                 }
             }
@@ -245,9 +242,7 @@ namespace GKMap
                         GoToCurrentPositionOnZoom();
                         UpdateBounds();
 
-                        if (OnMapZoomChanged != null) {
-                            OnMapZoomChanged();
-                        }
+                        OnMapZoomChanged?.Invoke();
                     }
                 }
             }
@@ -950,10 +945,7 @@ namespace GKMap
                             m.IsMouseOver = true;
                             fView.IsMouseOverMarker = true;
 
-                            var markerEnter = OnMarkerEnter;
-                            if (markerEnter != null) {
-                                markerEnter(m);
-                            }
+                            OnMarkerEnter?.Invoke(m);
 
                             fView.Refresh();
                         }
@@ -962,10 +954,7 @@ namespace GKMap
                         fView.IsMouseOverMarker = false;
                         fView.RestoreCursorOnLeave();
 
-                        var markerLeave = OnMarkerLeave;
-                        if (markerLeave != null) {
-                            markerLeave(m);
-                        }
+                        OnMarkerLeave?.Invoke(m);
 
                         fView.Refresh();
                     }
@@ -981,10 +970,7 @@ namespace GKMap
                             m.IsMouseOver = true;
                             fView.IsMouseOverRoute = true;
 
-                            var routeEnter = OnRouteEnter;
-                            if (routeEnter != null) {
-                                routeEnter(m);
-                            }
+                            OnRouteEnter?.Invoke(m);
 
                             fView.Refresh();
                         }
@@ -994,10 +980,7 @@ namespace GKMap
                             fView.IsMouseOverRoute = false;
                             fView.RestoreCursorOnLeave();
 
-                            var routeLeave = OnRouteLeave;
-                            if (routeLeave != null) {
-                                routeLeave(m);
-                            }
+                            OnRouteLeave?.Invoke(m);
 
                             fView.Refresh();
                         }
@@ -1014,10 +997,7 @@ namespace GKMap
                             m.IsMouseOver = true;
                             fView.IsMouseOverPolygon = true;
 
-                            var polygonEnter = OnPolygonEnter;
-                            if (polygonEnter != null) {
-                                polygonEnter(m);
-                            }
+                            OnPolygonEnter?.Invoke(m);
 
                             fView.Refresh();
                         }
@@ -1027,10 +1007,7 @@ namespace GKMap
                             fView.IsMouseOverPolygon = false;
                             fView.RestoreCursorOnLeave();
 
-                            var polygonLeave = OnPolygonLeave;
-                            if (polygonLeave != null) {
-                                polygonLeave(m);
-                            }
+                            OnPolygonLeave?.Invoke(m);
 
                             fView.Refresh();
                         }

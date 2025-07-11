@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -64,9 +64,7 @@ namespace GKCore.Operations
 
         private void Transaction(TransactionType type)
         {
-            var eventHandler = OnTransaction;
-            if (eventHandler != null)
-                eventHandler(this, type);
+            OnTransaction?.Invoke(this, type);
         }
 
         private IOperation PeekInternal()

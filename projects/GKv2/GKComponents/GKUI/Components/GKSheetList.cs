@@ -349,10 +349,7 @@ namespace GKUI.Components
 
         private void DoBeforeChange(ModifyEventArgs eArgs)
         {
-            var eventHandler = OnBeforeChange;
-            if (eventHandler != null) {
-                eventHandler(this, eArgs);
-            }
+            OnBeforeChange?.Invoke(this, eArgs);
         }
 
         private void DoModify(ModifyEventArgs eArgs)
@@ -367,10 +364,7 @@ namespace GKUI.Components
                 }
             }
 
-            var eventHandler = OnModify;
-            if (eventHandler != null) {
-                eventHandler(this, eArgs);
-            }
+            OnModify?.Invoke(this, eArgs);
         }
 
         private bool ValidateItem(object item)

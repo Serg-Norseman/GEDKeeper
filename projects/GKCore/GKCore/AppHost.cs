@@ -135,9 +135,6 @@ namespace GKCore
             try {
                 Logger.WriteInfo("OS Version: " + SysUtils.GetOSType().ToString());
 
-#if MONO
-                Logger.WriteInfo("Mono Version: " + SysUtils.GetMonoVersion());
-#endif
 #if OS_LINUX || OS_FREEBSD
                 Logger.WriteInfo("Desktop Type: " + SysUtils.GetDesktopType().ToString());
 #endif

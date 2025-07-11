@@ -282,8 +282,7 @@ namespace Org.Mentalis.Network.ProxySocket
                 this.Close();
             ToThrow = error;
             AsyncResult.Reset();
-            if (CallBack != null)
-                CallBack(AsyncResult);
+            CallBack?.Invoke(AsyncResult);
         }
 
         /// <summary>
