@@ -542,9 +542,14 @@ namespace GKCore
         [Test]
         public void Test_GetContainerName()
         {
-#if !OS_MACOS
+#if OS_MSWIN
             Assert.AreEqual("test.zip", GKUtils.GetContainerName("c:\\temp\\test.ged", true)); // archive
             Assert.AreEqual("test\\", GKUtils.GetContainerName("c:\\temp\\test.ged", false)); // storage
+#endif
+
+#if OS_LINUX
+            Assert.AreEqual("test.zip", GKUtils.GetContainerName("/home/test.ged", true)); // archive
+            Assert.AreEqual("test/", GKUtils.GetContainerName("/home/test.ged", false)); // storage
 #endif
         }
 
