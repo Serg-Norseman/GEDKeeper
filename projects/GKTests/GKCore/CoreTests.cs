@@ -409,5 +409,14 @@ namespace GKCore
             Assert.IsFalse(SysUtils.IsDamagedUtf8Sequence(bytes[0], false));
             Assert.IsFalse(SysUtils.IsDamagedUtf8Sequence(bytes[bytes.Length - 1], true));
         }
+
+        [Test]
+        public void Test_HasRangeIntersection()
+        {
+            Assert.IsTrue(SysUtils.HasRangeIntersection(1, 10, 5, 15));
+            Assert.IsTrue(SysUtils.HasRangeIntersection(1, 5, 1, 5));
+            Assert.IsFalse(SysUtils.HasRangeIntersection(1, 5, 6, 10));
+            Assert.IsTrue(SysUtils.HasRangeIntersection(1, 5, 5, 10));
+        }
     }
 }

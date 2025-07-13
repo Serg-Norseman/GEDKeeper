@@ -51,14 +51,33 @@ namespace GKCore.Charts
         ckBoth
     }
 
-    public struct LineHandle
+    public sealed class LineHandle
     {
         public int X1, Y1;
         public int X2, Y2;
+        public float Distance;
+        public float DashOffset;
 
-        public float Distance
+        public LineHandle(int x1, int y1, int x2, int y2)
         {
-            get { return (float)Math.Sqrt(X1 * X2 + Y1 * Y2); }
+            X1 = x1;
+            Y1 = y1;
+            X2 = x2;
+            Y2 = y2;
+            Distance = (float)Math.Sqrt(X1 * X2 + Y1 * Y2);
+            DashOffset = 0;
+        }
+
+        public static int GetHashCode(int x1, int y1, int x2, int y2)
+        {
+            int hash = x1;
+            hash = (hash << 5) + hash;
+            hash ^= y1;
+            hash = (hash << 5) + hash;
+            hash ^= x2;
+            hash = (hash << 5) + hash;
+            hash ^= y2;
+            return hash;
         }
     }
 
@@ -78,7 +97,7 @@ namespace GKCore.Charts
 
         private readonly ChartFilter fFilter;
         private readonly GKVarCache<GDMIndividualRecord, bool> fFilterData;
-        private readonly Dictionary<LineHandle, float> fLines;
+        private readonly Dictionary<int, LineHandle> fLines;
         private readonly List<TreeChartPerson> fPersons;
         private readonly HashSet<string> fPreparedFamilies;
         private readonly HashSet<string> fPreparedIndividuals;
@@ -286,7 +305,7 @@ namespace GKCore.Charts
             fFilter = new ChartFilter();
             fFilterData = new GKVarCache<GDMIndividualRecord, bool>();
             fGraph = null;
-            fLines = new Dictionary<LineHandle, float>();
+            fLines = new Dictionary<int, LineHandle>();
             fPersons = new List<TreeChartPerson>();
             fPreparedFamilies = new HashSet<string>();
             fPreparedIndividuals = new HashSet<string>();
@@ -327,6 +346,10 @@ namespace GKCore.Charts
 
         private void TickTimer(object sender, EventArgs e)
         {
+            if (fView == null) return;
+
+            bool reqInv = false;
+
             if (fHighlightedPerson != null) {
                 DateTime st = DateTime.FromBinary(fHighlightedStart);
                 DateTime cur = DateTime.Now;
@@ -335,22 +358,24 @@ namespace GKCore.Charts
                 if (d.TotalSeconds >= 1/* && !fPersonControl.Visible*/) {
                     fHighlightedPerson = null;
                     //fPersonControl.Visible = true;
-                    if (fView != null) fView.Invalidate();
+                    reqInv = true;
                 }
             }
 
             if (fOptions.TrackMatchedSources && fLines.Count > 0) {
-                foreach (var lineKey in fLines.Keys.ToList()) {
-                    var dashOffset = fLines[lineKey];
-                    if (dashOffset < lineKey.Distance) {
+                foreach (var line in fLines.Values) {
+                    var dashOffset = line.DashOffset;
+                    if (dashOffset < line.Distance) {
                         dashOffset += 1;
                     } else {
                         dashOffset = 0;
                     }
-                    fLines[lineKey] = dashOffset;
+                    line.DashOffset = dashOffset;
                 }
-                if (fView != null) fView.Invalidate();
+                reqInv = true;
             }
+
+            if (reqInv) fView.Invalidate();
         }
 
         private static IImage PrepareImage(ChartRenderer renderer, string name, bool makeTransp)
@@ -1212,10 +1237,8 @@ namespace GKCore.Charts
                 return false;
             }
 
-            var rangeX = new Range<int>(fVisibleArea.Left, fVisibleArea.Right);
-            var rangeY = new Range<int>(fVisibleArea.Top, fVisibleArea.Bottom);
-
-            return rangeX.IsOverlapped(new Range<int>(x1, x2)) && rangeY.IsOverlapped(new Range<int>(y1, y2));
+            return SysUtils.HasRangeIntersection(fVisibleArea.Left, fVisibleArea.Right, x1, x2)
+                && SysUtils.HasRangeIntersection(fVisibleArea.Top, fVisibleArea.Bottom, y1, y2);
         }
 
         private void DrawLine(int x1, int y1, int x2, int y2, bool isDotted, bool isTracked, bool isMatched)
@@ -1245,13 +1268,13 @@ namespace GKCore.Charts
                 linePen = isMatched ? fLineTMSYPen : fLineTMSNPen;
                 decorativeLinePen = null;
 
-                var lineHandle = new LineHandle() { X1 = x1, Y1 = y1, X2 = x2, Y2 = y2 };
-                float dashOffset;
-                if (!fLines.TryGetValue(lineHandle, out dashOffset)) {
-                    dashOffset = 0;
-                    fLines.Add(lineHandle, dashOffset);
+                LineHandle line;
+                int hash = LineHandle.GetHashCode(x1, y1, x2, y2);
+                if (!fLines.TryGetValue(hash, out line)) {
+                    line = new LineHandle(x1, y1, x2, y2);
+                    fLines.Add(hash, line);
                 }
-                linePen.DashOffset = dashOffset;
+                linePen.DashOffset = line.DashOffset;
             } else if (isTracked && fOptions.TrackSelectedLines) {
                 if (!isDotted) {
                     linePen = fLineSelectedPen;
