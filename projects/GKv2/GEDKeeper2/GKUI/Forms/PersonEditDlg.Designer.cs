@@ -59,6 +59,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.Label lblMother;
+        private System.Windows.Forms.Label lblFather;
 
         private void InitializeComponent()
         {
@@ -119,6 +121,8 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblFather = new System.Windows.Forms.Label();
+            this.lblMother = new System.Windows.Forms.Label();
             this.GroupBox1.SuspendLayout();
             this.panCtlParents.SuspendLayout();
             this.tabsData.SuspendLayout();
@@ -347,8 +351,7 @@
             // 
             // imgPortrait
             // 
-            this.imgPortrait.Dock = System.Windows.Forms.DockStyle.Top;
-            this.imgPortrait.Image = null;
+            this.imgPortrait.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imgPortrait.Location = new System.Drawing.Point(8, 8);
             this.imgPortrait.Name = "imgPortrait";
             this.imgPortrait.Size = new System.Drawing.Size(142, 199);
@@ -377,6 +380,8 @@
             // panCtlParents
             // 
             this.panCtlParents.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panCtlParents.Controls.Add(this.lblMother);
+            this.panCtlParents.Controls.Add(this.lblFather);
             this.panCtlParents.Controls.Add(this.txtMother);
             this.panCtlParents.Controls.Add(this.lblParents);
             this.panCtlParents.Controls.Add(this.btnParentsAdd);
@@ -403,22 +408,42 @@
             this.txtMother.Margin = new System.Windows.Forms.Padding(2);
             this.txtMother.Name = "txtMother";
             this.txtMother.ReadOnly = true;
-            this.txtMother.Size = new System.Drawing.Size(349, 21);
+            this.txtMother.Size = new System.Drawing.Size(379, 21);
             this.txtMother.TabIndex = 2;
             // 
             // lblParents
             // 
             this.lblParents.AutoSize = true;
-            this.lblParents.Location = new System.Drawing.Point(11, 25);
+            this.lblParents.Location = new System.Drawing.Point(6, 25);
             this.lblParents.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblParents.Name = "lblParents";
             this.lblParents.Size = new System.Drawing.Size(54, 13);
             this.lblParents.TabIndex = 0;
             this.lblParents.Text = "lblParents";
             // 
+            // lblMother
+            // 
+            this.lblMother.AutoSize = true;
+            this.lblMother.Location = new System.Drawing.Point(6, 59);
+            this.lblMother.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblMother.Name = "lblMother";
+            this.lblMother.Size = new System.Drawing.Size(54, 13);
+            this.lblMother.TabIndex = 0;
+            this.lblMother.Text = "lblMother";
+            // 
+            // lblFather
+            // 
+            this.lblFather.AutoSize = true;
+            this.lblFather.Location = new System.Drawing.Point(6, 92);
+            this.lblFather.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblFather.Name = "lblFather";
+            this.lblFather.Size = new System.Drawing.Size(54, 13);
+            this.lblFather.TabIndex = 0;
+            this.lblFather.Text = "lblFather";
+            // 
             // btnParentsAdd
             // 
-            this.btnParentsAdd.Location = new System.Drawing.Point(425, 17);
+            this.btnParentsAdd.Location = new System.Drawing.Point(455, 17);
             this.btnParentsAdd.Margin = new System.Windows.Forms.Padding(2);
             this.btnParentsAdd.Name = "btnParentsAdd";
             this.btnParentsAdd.Size = new System.Drawing.Size(29, 29);
@@ -427,7 +452,7 @@
             // 
             // btnParentsEdit
             // 
-            this.btnParentsEdit.Location = new System.Drawing.Point(460, 17);
+            this.btnParentsEdit.Location = new System.Drawing.Point(490, 17);
             this.btnParentsEdit.Margin = new System.Windows.Forms.Padding(2);
             this.btnParentsEdit.Name = "btnParentsEdit";
             this.btnParentsEdit.Size = new System.Drawing.Size(29, 29);
@@ -436,7 +461,7 @@
             // 
             // btnParentsDelete
             // 
-            this.btnParentsDelete.Location = new System.Drawing.Point(495, 17);
+            this.btnParentsDelete.Location = new System.Drawing.Point(525, 17);
             this.btnParentsDelete.Margin = new System.Windows.Forms.Padding(2);
             this.btnParentsDelete.Name = "btnParentsDelete";
             this.btnParentsDelete.Size = new System.Drawing.Size(29, 29);
@@ -445,7 +470,7 @@
             // 
             // btnFatherAdd
             // 
-            this.btnFatherAdd.Location = new System.Drawing.Point(425, 83);
+            this.btnFatherAdd.Location = new System.Drawing.Point(455, 83);
             this.btnFatherAdd.Margin = new System.Windows.Forms.Padding(2, 2, 4, 2);
             this.btnFatherAdd.Name = "btnFatherAdd";
             this.btnFatherAdd.Size = new System.Drawing.Size(29, 29);
@@ -454,7 +479,7 @@
             // 
             // btnFatherDelete
             // 
-            this.btnFatherDelete.Location = new System.Drawing.Point(460, 83);
+            this.btnFatherDelete.Location = new System.Drawing.Point(490, 83);
             this.btnFatherDelete.Margin = new System.Windows.Forms.Padding(2, 2, 4, 2);
             this.btnFatherDelete.Name = "btnFatherDelete";
             this.btnFatherDelete.Size = new System.Drawing.Size(29, 29);
@@ -463,7 +488,7 @@
             // 
             // btnFatherSel
             // 
-            this.btnFatherSel.Location = new System.Drawing.Point(495, 83);
+            this.btnFatherSel.Location = new System.Drawing.Point(525, 83);
             this.btnFatherSel.Margin = new System.Windows.Forms.Padding(2);
             this.btnFatherSel.Name = "btnFatherSel";
             this.btnFatherSel.Size = new System.Drawing.Size(29, 29);
@@ -472,7 +497,7 @@
             // 
             // btnMotherAdd
             // 
-            this.btnMotherAdd.Location = new System.Drawing.Point(425, 50);
+            this.btnMotherAdd.Location = new System.Drawing.Point(455, 50);
             this.btnMotherAdd.Margin = new System.Windows.Forms.Padding(2);
             this.btnMotherAdd.Name = "btnMotherAdd";
             this.btnMotherAdd.Size = new System.Drawing.Size(29, 29);
@@ -481,7 +506,7 @@
             // 
             // btnMotherDelete
             // 
-            this.btnMotherDelete.Location = new System.Drawing.Point(460, 50);
+            this.btnMotherDelete.Location = new System.Drawing.Point(490, 50);
             this.btnMotherDelete.Margin = new System.Windows.Forms.Padding(2);
             this.btnMotherDelete.Name = "btnMotherDelete";
             this.btnMotherDelete.Size = new System.Drawing.Size(29, 29);
@@ -490,7 +515,7 @@
             // 
             // btnMotherSel
             // 
-            this.btnMotherSel.Location = new System.Drawing.Point(495, 50);
+            this.btnMotherSel.Location = new System.Drawing.Point(525, 50);
             this.btnMotherSel.Margin = new System.Windows.Forms.Padding(2);
             this.btnMotherSel.Name = "btnMotherSel";
             this.btnMotherSel.Size = new System.Drawing.Size(29, 29);
@@ -504,7 +529,7 @@
             this.txtFather.Margin = new System.Windows.Forms.Padding(2);
             this.txtFather.Name = "txtFather";
             this.txtFather.ReadOnly = true;
-            this.txtFather.Size = new System.Drawing.Size(349, 21);
+            this.txtFather.Size = new System.Drawing.Size(379, 21);
             this.txtFather.TabIndex = 1;
             // 
             // btnNameCopy

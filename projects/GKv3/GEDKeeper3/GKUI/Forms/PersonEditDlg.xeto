@@ -68,7 +68,9 @@
                     </TableRow>
 
                     <TableRow>
-                      <TableCell />
+                      <TableCell>
+                        <Label x:Name="lblFather" />
+                      </TableCell>
 
                       <TableCell ScaleWidth="True">
                         <TextBox x:Name="txtFather" Enabled="False" />
@@ -84,7 +86,9 @@
                     </TableRow>
 
                     <TableRow>
-                      <TableCell />
+                      <TableCell>
+                        <Label x:Name="lblMother" />
+                      </TableCell>
 
                       <TableCell ScaleWidth="True">
                         <TextBox x:Name="txtMother" Enabled="False" />

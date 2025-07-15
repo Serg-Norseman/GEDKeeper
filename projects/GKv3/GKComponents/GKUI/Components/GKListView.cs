@@ -131,6 +131,11 @@ namespace GKUI.Components
     {
         public Color TextColor { get; set; }
 
+        public GKGridView()
+        {
+            TextColor = Colors.Black;
+        }
+
         protected override void OnCellFormatting(GridCellFormatEventArgs e)
         {
             base.OnCellFormatting(e);

@@ -79,8 +79,8 @@ namespace GDModel.Providers
 
             var progressCallback = fTree.ProgressCallback;
             if (progressCallback != null && fStreamLength != 0) {
-                int newProgress = (int)Math.Min(100, fStreamPosition * 100.0f / fStreamLength);
-                if (fProgress != newProgress) {
+                int newProgress = (int)(fStreamPosition * 100.0f / fStreamLength);
+                if (newProgress <= 100 && fProgress != newProgress) {
                     fProgress = newProgress;
                     progressCallback.StepTo(fProgress);
                 }

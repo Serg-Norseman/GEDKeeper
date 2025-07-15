@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using GKCore.Design.Controls;
@@ -31,10 +32,17 @@ namespace GKUI.Components
     /// </summary>
     public class GKPortrait : UserControl, IPortraitControl
     {
+        private IContainer components = null;
+        private PictureBox fImageBox;
+        private Panel fSlidePanel;
+        private Timer fTimer;
+
         private readonly List<Button> fBtnsList;
         private int fPixelSpeed;
 
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Image Image
         {
             get { return fImageBox.Image; }
@@ -49,20 +57,47 @@ namespace GKUI.Components
 
         public GKPortrait()
         {
-            InitializeComponent();
+            //BorderStyle = BorderStyle.FixedSingle;
 
-            fBtnsList = new List<Button>();
+            components = new Container();
+            fTimer = new Timer(components);
+            fTimer.Tick += MoveSlidePanel;
+            fTimer.Stop();
 
+            fImageBox = new PictureBox();
+            fImageBox.BackgroundImageLayout = ImageLayout.Center;
+            fImageBox.Dock = DockStyle.Fill;
+            fImageBox.MouseLeave += CheckCursorPosition;
+            fImageBox.MouseHover += CheckCursorPosition;
             fImageBox.SizeMode = PictureBoxSizeMode.Zoom;
             fImageBox.Cursor = Cursors.Arrow;
 
-            fPixelSpeed = 5;
-
+            fSlidePanel = new Panel();
+            fSlidePanel.BackColor = SystemColors.ButtonShadow;
+            fSlidePanel.Location = new Point(0, 152);
+            fSlidePanel.Size = new Size(178, 36);
+            fSlidePanel.MouseLeave += CheckCursorPosition;
+            fSlidePanel.MouseHover += CheckCursorPosition;
             fSlidePanel.Height = 36;
             fSlidePanel.Cursor = Cursors.Arrow;
             fSlidePanel.Top = Height;
 
-            fTimer.Stop();
+            SuspendLayout();
+            Controls.Add(fSlidePanel);
+            Controls.Add(fImageBox);
+            Name = "GKPortrait";
+            ResumeLayout(false);
+
+            fBtnsList = new List<Button>();
+            fPixelSpeed = 5;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                if (components != null) components.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         public void Activate()
@@ -126,56 +161,8 @@ namespace GKUI.Components
             base.OnResize(e);
 
             fSlidePanel.Width = Width;
+            fSlidePanel.Top = Height;
             CheckCursorPosition(this, e);
         }
-
-        #region Design
-
-        private System.ComponentModel.IContainer components = null;
-        private PictureBox fImageBox;
-        private Panel fSlidePanel;
-        private Timer fTimer;
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                if (components != null) {
-                    components.Dispose();
-                }
-            }
-            base.Dispose(disposing);
-        }
-
-        private void InitializeComponent()
-        {
-            components = new System.ComponentModel.Container();
-            fTimer = new Timer(components);
-            fTimer.Tick += MoveSlidePanel;
-
-            SuspendLayout();
-
-            fImageBox = new PictureBox();
-            fImageBox.BackgroundImageLayout = ImageLayout.Center;
-            fImageBox.Dock = DockStyle.Fill;
-            fImageBox.Location = new Point(0, 0);
-            fImageBox.Size = new Size(178, 188);
-            fImageBox.MouseLeave += CheckCursorPosition;
-            fImageBox.MouseHover += CheckCursorPosition;
-
-            fSlidePanel = new Panel();
-            fSlidePanel.BackColor = SystemColors.ButtonShadow;
-            fSlidePanel.Location = new Point(0, 152);
-            fSlidePanel.Size = new Size(178, 36);
-            fSlidePanel.MouseLeave += CheckCursorPosition;
-            fSlidePanel.MouseHover += CheckCursorPosition;
-
-            Controls.Add(fSlidePanel);
-            Controls.Add(fImageBox);
-            Name = "GKPortrait";
-            Size = new Size(178, 188);
-            ResumeLayout(false);
-        }
-
-        #endregion
     }
 }
