@@ -262,7 +262,7 @@ namespace GKUI.Forms
                 fController.ChangeTab();
             }
 
-            btnResetDefaults.Enabled = PageControl1.SelectedIndex < 6;
+            btnResetDefaults.Enabled = PageControl1.SelectedIndex < 7;
         }
 
         void IOptionsDlg.UpdateCircleChartsOptions()
@@ -358,15 +358,16 @@ namespace GKUI.Forms
                     break;
 
                 case 5:
-                    // specials
+                case 6:
+                    // specials and gedcom
                     fController.ResetSpecialsOptions();
                     break;
 
-                case 6:
+                case 7:
                     // event types
                     break;
 
-                case 7:
+                case 8:
                     // plugins
                     break;
             }

@@ -19,12 +19,18 @@
                   <CheckBox x:Name="chkLoadRecentFiles" />
                   <CheckBox x:Name="chkShowOnStart" />
                   <CheckBox x:Name="chkAutoCheckUpdates" />
-                  <CheckBox x:Name="chkCharsetDetection" />
                   <CheckBox x:Name="chkDialogClosingWarn" />
                   <CheckBox x:Name="chkDisplayFullFileName" />
 
-                  <TableLayout Spacing="4, 4">
+                  <StackLayoutItem />
+                  <StackLayout Orientation="Horizontal" Spacing="4">
+                    <Label x:Name="lblChartWindowsShowMode" />
+                    <ComboBox x:Name="cmbChartWindowsShowMode" ReadOnly="True" Width="160" />
+                  </StackLayout>
+                  <CheckBox x:Name="chkKeepInfoPansOverallSize" />
+                  <CheckBox x:Name="chkFilesOverwriteWarn" />
 
+                  <TableLayout Spacing="4, 4">
                     <TableRow>
                       <Label x:Name="lblLanguage" />
                       <ComboBox x:Name="cmbLanguages" ReadOnly="True" />
@@ -34,7 +40,6 @@
                       <Label x:Name="lblCertaintyAlgorithm" />
                       <ComboBox x:Name="cmbCertaintyAlgorithm" ReadOnly="True" />
                     </TableRow>
-
                   </TableLayout>
 
                   <StackLayoutItem Expand="True" />
@@ -368,6 +373,9 @@
                       <RadioButton x:Name="radSNP" CheckedChanged="rgFNPFormat_CheckedChanged" />
                       <StackLayoutItem />
                       <CheckBox x:Name="chkSurnameFirstInOrder" />
+                      <StackLayoutItem />
+                      <CheckBox x:Name="chkFirstCapitalLetterInNames" />
+                      <CheckBox x:Name="chkSurnameInCapitals" />
 
                     </StackLayout>
                   </GroupBox>
@@ -381,6 +389,7 @@
                       <CheckBox x:Name="chkShowDatesSigns" />
                       <CheckBox x:Name="chkShowDatesCalendar" />
                       <CheckBox x:Name="chkLocalizedCalendarSignatures" />
+                      <CheckBox x:Name="chkShortenDateRanges" />
 
                     </StackLayout>
                   </GroupBox>
@@ -413,11 +422,7 @@
                     <CheckBox x:Name="chkAutoSortChildren" />
                     <CheckBox x:Name="chkAutoSortSpouses" />
                     <StackLayoutItem />
-                    <CheckBox x:Name="chkFirstCapitalLetterInNames" />
-                    <CheckBox x:Name="chkSurnameInCapitals" />
-                    <StackLayoutItem />
-                    <CheckBox x:Name="chkShortKinshipForm" />
-                    <StackLayoutItem />
+                    <CheckBox x:Name="chkShowNumberOfSubstructures" />
 
                   </StackLayout>
 
@@ -455,7 +460,7 @@
                 <TableLayout Spacing="4,4">
                   <TableRow>
                     <Label x:Name="lblMatchPatternMethod" />
-                    <ComboBox x:Name="cmbMatchPatternMethod" ReadOnly="True" />
+                    <ComboBox x:Name="cmbMatchPatternMethod" ReadOnly="True" Width="200" />
                   </TableRow>
                 </TableLayout>
 
@@ -542,22 +547,19 @@
 
         <TabPage x:Name="pageSpecials" Padding="8">
           <StackLayout Style="vertListStack">
+            <StackLayoutItem />
+            <CheckBox x:Name="chkShortKinshipForm" />
+            <CheckBox x:Name="chkExtendedKinships" />
+          </StackLayout>
+        </TabPage>
+
+        <TabPage x:Name="pageGEDCOM" Padding="8" Text="GEDCOM">
+          <StackLayout Style="vertListStack">
+            <CheckBox x:Name="chkCharsetDetection" />
             <CheckBox x:Name="chkDisableNonStdFeatures" />
             <CheckBox x:Name="chkEnableStdValidation" />
-
             <CheckBox x:Name="chkUseExtendedNotes" />
             <CheckBox x:Name="chkKeepRichNames" />
-
-            <StackLayout Orientation="Horizontal" Spacing="4">
-              <Label x:Name="lblChartWindowsShowMode" />
-              <ComboBox x:Name="cmbChartWindowsShowMode" ReadOnly="True" />
-            </StackLayout>
-
-            <CheckBox x:Name="chkShortenDateRanges" />
-            <CheckBox x:Name="chkKeepInfoPansOverallSize" />
-            <CheckBox x:Name="chkFilesOverwriteWarn" />
-            <CheckBox x:Name="chkExtendedKinships" />
-            <CheckBox x:Name="chkShowNumberOfSubstructures" />
           </StackLayout>
         </TabPage>
 

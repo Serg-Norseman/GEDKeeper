@@ -16,6 +16,7 @@
         <li><a href="#interface">Interfaz</a></li>
         <li><a href="#pedigrees">Pedigrís</a></li>
         <li><a href="#special">Especiales</a></li>
+        <li><a href="#gedcom">GEDCOM</a></li>
         <li><a href="#eventTypes">Tipos de evento</a></li>
         <li><a href="#plugins">Plugins</a></li>
     </ul>
@@ -83,12 +84,6 @@
             Si está marcada, GEDKeeper comprobará si hay una nueva versión del programa disponible. Si se encuentra, se mostrará un mensaje.
         </dd>
 
-        <dt>Detectar el juego de caracteres en la carga</dt>
-        <dd>
-            Esta opción es útil si se pueden cargar archivos de fuentes de terceros con codificaciones no estándar.
-            La opción le permitirá determinar la codificación y cargar archivos con el texto correcto.
-        </dd>
-
         <dt>Advertencia de cierre de diálogo con cambios no guardados</dt>
         <dd>
             Útil para evitar la pérdida de los datos introducidos en cualquier diálogo de edición.
@@ -101,6 +96,24 @@
             Cuando esta opción está desactivada, sólo se muestra el nombre del archivo sin la ruta.
         </dd>
 
+        <dt>
+            Modo de visualización de las ventanas del gráfico (Predeterminado, Mitad izquierda, Mitad derecha,
+            Maximizar)
+        </dt>
+        <dd>
+            Esta opción permite abrir la ventana de diagrama a pantalla completa, alinear la ventana a la mitad
+            izquierda o derecha al llamar a la ventana de diagrama. Útil cuando se utiliza el programa en pantallas
+            anchas en modo dividido (ventana principal con tablas a la izquierda, diagramas a la derecha, o viceversa).
+        </dd>
+
+        <dt>Mantener el tamaño general de los paneles informativos</dt>
+        <dd>
+            Con esta opción, los paneles de información de los registros (a la derecha de las tablas en las pestañas
+            de la ventana principal) tendrán un tamaño constante que se restablece al entrar en el programa.
+        </dd>
+
+        <dt>Avisar al sobrescribir archivos</dt>
+        <dd>Al utilizar la operación Guardar Como en un archivo existente, se emitirá una advertencia.</dd>
 
         <dt>Idioma</dt>
         <dd>
@@ -495,6 +508,20 @@
             Esta opción determina el orden en que se muestran las partes del nombre en las columnas de la lista:$
             Apellido-Nombre-Patronímico o Nombre-Patronímico-Apellido.
         </dd>
+
+        <dt>Primera letra de los nombres en mayúsculas</dt>
+        <dd>
+            Esta opción permite formatear automáticamente los nombres y apellidos en los cuadros de diálogo
+            de edición Persona y Nombre personal a mayúscula el primero y minúsculas las letras siguientes$.
+            (ver <a href="gkhRec_Individual.html">Registros Personales</a> and <a href="gkhRec_Name.html">Nombres Personales</a>).
+        </dd>
+
+        <dt>Apellido en mayúsculas</dt>
+        <dd>
+            Esta opción permite formatear automáticamente los apellidos en los cuadros de diálogo de edición
+            de Personas y Nombres personales para que aparezcan en mayúsculas.
+            (ver <a href="gkhRec_Individual.html">Registros Personales</a> y <a href="gkhRec_Name.html">Nombres Personales</a>).
+        </dd>
     </dl>
 
     <h4>Fechas</h4>
@@ -532,6 +559,12 @@
             Si esta opción no está activada, el calendario de fechas (si la opción anterior está activada)
             se indica con una letra en latín, de lo contrario, se muestran los símbolos nacionales en el
             idioma de interfaz seleccionado.
+        </dd>
+
+        <dt>Acortar intervalos de fechas</dt>
+        <dd>
+            En los diagramas de árbol y los gráficos genealógicos, los intervalos de fechas que sólo contengan años
+            (como «1890 - 1895») se abreviarán como «1890/95».
         </dd>
     </dl>
 
@@ -597,28 +630,15 @@
 
         <dt>Autoordenar hijos</dt>
         <dd>Si está marcada, cuando se muestren los hijos se ordenarán automáticamente por fecha de nacimiento.</dd>
+
         <dt>Autoordenar cónyujes</dt>
         <dd>Si se marca, los cónyuges se ordenan automáticamente por fecha de matrimonio.</dd>
 
-        <dt>Primera letra de los nombres en mayúsculas</dt>
+        <dt>Mostrar el número de subestructuras en lugar de las marcas de verificación</dt>
         <dd>
-            Esta opción permite formatear automáticamente los nombres y apellidos en los cuadros de diálogo
-            de edición Persona y Nombre personal a mayúscula el primero y minúsculas las letras siguientes$.
-            (ver <a href="gkhRec_Individual.html">Registros Personales</a> and <a href="gkhRec_Name.html">Nombres Personales</a>).
-        </dd>
-
-        <dt>Apellido en mayúsculas</dt>
-        <dd>
-            Esta opción permite formatear automáticamente los apellidos en los cuadros de diálogo de edición
-            de Personas y Nombres personales para que aparezcan en mayúsculas.
-            (ver <a href="gkhRec_Individual.html">Registros Personales</a> y <a href="gkhRec_Name.html">Nombres Personales</a>).
-        </dd>
-
-        <dt>Formulario corto de parentesco</dt>
-        <dd>
-            Esta opción permite reducir ciertos grados de parentesco «tatara-tatara-tatara...-»
-            a una sola indicación de «tatara» y un número de repeticiones
-            (ver <a href="gkhTreeChart.html">Árbol Genealógico</a> and <a href="gkhRelCalc.html">Calculadora de Relaciones</a>).
+            En las tablas de eventos de personas o familias, en las columnas de presencia de referencias a fuentes,
+            notas o multimedia (subestructuras), se suelen mostrar simples «marcas de verificación». Al utilizar esta
+            opción, en lugar de una marca de verificación, se mostrará el número de subestructuras.
         </dd>
     </dl>
 
@@ -777,6 +797,31 @@
     <p style="text-align:center"><img src="images/dlgOptions_Specials.png" alt="Cuadro de dialogo de opciones especiales"></p>
 
     <dl>
+        <dt>Formulario corto de parentesco</dt>
+        <dd>
+            Esta opción permite reducir ciertos grados de parentesco «tatara-tatara-tatara...-»
+            a una sola indicación de «tatara» y un número de repeticiones
+            (ver <a href="gkhTreeChart.html">Árbol Genealógico</a> and <a href="gkhRelCalc.html">Calculadora de Relaciones</a>).
+        </dd>
+
+        <dt>Definición ampliada de parentesco</dt>
+        <dd>
+            En la calculadora de parentesco y en los árboles con la visualización de parentesco activada, se
+            determinarán relaciones como las de medio hermano, medio hermano y media hermana, adopciones,
+            padres biológicos y padrastros, y matrimonios civiles.
+        </dd>
+    </dl>
+
+    <hr>
+    <a id="gedcom"><h2>GEDCOM</h2></a>
+
+    <dl>
+        <dt>Detectar el juego de caracteres en la carga (antes de la versión 3.11 pestaña Común)</dt>
+        <dd>
+            Esta opción es útil si se pueden cargar archivos de fuentes de terceros con codificaciones no estándar.
+            La opción le permitirá determinar la codificación y cargar archivos con el texto correcto.
+        </dd>
+
         <dt>Deshabilitar funciones no estándar</dt>
         <dd>
             Esta opción desactiva todas las funciones de edición de datos incompatibles con el estándar (introducción de
@@ -784,6 +829,11 @@
             retratos de personas, notas ampliadas, tipos adicionales de almacenamiento multimedia, marcadores de personas,
             marcadores de patriarcas, etc. Nota: esta opción no inhabilita el almacenamiento de datos no estándar en
             archivos GEDCOM.
+        </dd>
+
+        <dt>Validation of GEDCOM data constraints</dt>
+        <dd>
+            The option includes checking of data input for compliance with the GEDCOM standard.
         </dd>
 
         <dt>Utilizar notas ampliadas</dt>
@@ -797,45 +847,6 @@
             Esta opción activa el modo en el que las estructuras redundantes máximas de nombres personales (con
             duplicación de información) se escriben en el archivo de base de datos al guardar. Esto hace que el archivo,
             funcionalmente igual, sea más grande en volumen.
-        </dd>
-
-        <dt>
-            Modo de visualización de las ventanas del gráfico (Predeterminado, Mitad izquierda, Mitad derecha,
-            Maximizar)
-        </dt>
-        <dd>
-            Esta opción permite abrir la ventana de diagrama a pantalla completa, alinear la ventana a la mitad
-            izquierda o derecha al llamar a la ventana de diagrama. Útil cuando se utiliza el programa en pantallas
-            anchas en modo dividido (ventana principal con tablas a la izquierda, diagramas a la derecha, o viceversa).
-        </dd>
-
-        <dt>Acortar intervalos de fechas</dt>
-        <dd>
-            En los diagramas de árbol y los gráficos genealógicos, los intervalos de fechas que sólo contengan años
-            (como «1890 - 1895») se abreviarán como «1890/95».
-        </dd>
-
-        <dt>Mantener el tamaño general de los paneles informativos</dt>
-        <dd>
-            Con esta opción, los paneles de información de los registros (a la derecha de las tablas en las pestañas
-            de la ventana principal) tendrán un tamaño constante que se restablece al entrar en el programa.
-        </dd>
-
-        <dt>Avisar al sobrescribir archivos</dt>
-        <dd>Al utilizar la operación Guardar Como en un archivo existente, se emitirá una advertencia.</dd>
-
-        <dt>Definición ampliada de parentesco</dt>
-        <dd>
-            En la calculadora de parentesco y en los árboles con la visualización de parentesco activada, se
-            determinarán relaciones como las de medio hermano, medio hermano y media hermana, adopciones,
-            padres biológicos y padrastros, y matrimonios civiles.
-        </dd>
-
-        <dt>Mostrar el número de subestructuras en lugar de las marcas de verificación</dt>
-        <dd>
-            En las tablas de eventos de personas o familias, en las columnas de presencia de referencias a fuentes,
-            notas o multimedia (subestructuras), se suelen mostrar simples «marcas de verificación». Al utilizar esta
-            opción, en lugar de una marca de verificación, se mostrará el número de subestructuras.
         </dd>
     </dl>
 

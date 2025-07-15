@@ -16,6 +16,7 @@
         <li><a href="#interface">Interface</a></li>
         <li><a href="#pedigree">Pedigrees</a></li>
         <li><a href="#special">Specials</a></li>
+        <li><a href="#gedcom">GEDCOM</a></li>
         <li><a href="#eventTypes">Event types</a></li>
         <li><a href="#plugins">Plugins</a></li>
     </ul>
@@ -81,12 +82,6 @@
             If found, then a message is displayed.
         </dd>
 
-        <dt>Detect Charset on load</dt>
-        <dd>
-            This option is useful if files from third-party sources with non-standard encodings can be loaded.
-            The option will allow you to determine the encoding and load files with the correct text.
-        </dd>
-
         <dt>Warn for closing dialog with unsaved changes</dt>
         <dd>
             Useful to prevent loss of data entered in any editing dialog.
@@ -98,6 +93,23 @@
             Enables display of the full name (including path) of the current file in the title of the main window.
             When this option is disabled, only the file name is displayed without the path.
         </dd>
+
+        <dt>Chart windows show mode (Default, Left half, Right half, Maximize)</dt>
+        <dd>
+            This option enables the ability to open the diagram window to full screen,
+            align the window to the left or right half when calling the diagram window.
+            Useful when using the program on wide screens in split mode
+            (main window with tables on the left, charts on the right, or vice versa).
+        </dd>
+
+        <dt>Keep overall size of info panels</dt>
+        <dd>
+            With this option, the record information panels (to the right of the tables in the main window tabs)
+            will have a constant size that is restored when you enter the program.
+        </dd>
+
+        <dt>Warn when overwritting files</dt>
+        <dd>When using the Save As operation to an existing file, a warning will be issued.</dd>
 
         <dt>Language</dt>
         <dd>
@@ -490,6 +502,20 @@
             The option determines the order in which parts of the name are displayed in the list columns:
             Surname-First Name-Patronymic or First Name-Patronymic-Surname.
         </dd>
+
+        <dt>First capital letter in names</dt>
+        <dd>
+            This option enables automatic formatting of first and last names in the Person and Personal Name
+            editing dialogs to a capital first and lowercase following letters
+            (see <a href="gkhRec_Individual.html">Personal Records</a> and <a href="gkhRec_Name.html">Personal Names</a>).
+        </dd>
+
+        <dt>Surname in capitals</dt>
+        <dd>
+            This option enables automatic formatting of surnames in the Person and Personal Name editing dialogs
+            to an all-caps representation (see <a href="gkhRec_Individual.html">Personal Records</a>
+            and <a href="gkhRec_Name.html">Personal Names</a>).
+        </dd>
     </dl>
 
     <h4>Dates</h4>
@@ -519,6 +545,12 @@
         <dd>
             If this option is not enabled, the date calendar (if the option above is enabled) is indicated by one letter in Latin,
             otherwise, national symbols are displayed in the selected interface language.
+        </dd>
+
+        <dt>Shorten date ranges</dt>
+        <dd>
+            In tree diagrams and pedigree charts, date ranges that contain only years
+            (like "1890 - 1895") will be abbreviated to "1890/95".
         </dd>
     </dl>
 
@@ -567,7 +599,7 @@
         </dd>
     </dl>
 
-    <h4>Прочее</h4>
+    <h4>Other</h4>
 
     <dl>
         <dt>Include address into place text</dt>
@@ -592,25 +624,11 @@
         <dt>Autosort spouses</dt>
         <dd>If checked then spouses are automatically sorted by marriage date.</dd>
 
-        <dt>First capital letter in names</dt>
+        <dt>Show number of substructures instead of check marks</dt>
         <dd>
-            This option enables automatic formatting of first and last names in the Person and Personal Name
-            editing dialogs to a capital first and lowercase following letters
-            (see <a href="gkhRec_Individual.html">Personal Records</a> and <a href="gkhRec_Name.html">Personal Names</a>).
-        </dd>
-
-        <dt>Surname in capitals</dt>
-        <dd>
-            This option enables automatic formatting of surnames in the Person and Personal Name editing dialogs
-            to an all-caps representation (see <a href="gkhRec_Individual.html">Personal Records</a>
-            and <a href="gkhRec_Name.html">Personal Names</a>).
-        </dd>
-
-        <dt>Short kinship form</dt>
-        <dd>
-            This option enables the reduction of certain degrees of kinship "great-great-great...-"
-            to a single indication of "great" and a number of repetitions
-            (see <a href="gkhTreeChart.html">Family Trees</a> and <a href="gkhRelCalc.html">Kinship Calculator</a>).
+            In the tables of events of persons or families, in the columns of presence of references to sources,
+            notes or multimedia (substructures), simple "check marks" are usually displayed.
+            When using this option, instead of a check mark, the number of substructures will be displayed.
         </dd>
     </dl>
 
@@ -767,6 +785,31 @@
     <p style="text-align:center"><img src="images/dlgOptions_Specials.png"></p>
 
     <dl>
+        <dt>Short kinship form</dt>
+        <dd>
+            This option enables the reduction of certain degrees of kinship "great-great-great...-"
+            to a single indication of "great" and a number of repetitions
+            (see <a href="gkhTreeChart.html">Family Trees</a> and <a href="gkhRelCalc.html">Kinship Calculator</a>).
+        </dd>
+
+        <dt>Extended definition of kinship</dt>
+        <dd>
+            In the kinship calculator and in trees with kinship display enabled,
+            such relationships as half-siblings, half-brothers and half-sisters,
+            adoptions, biological and step-parents, and civil marriages will be determined.
+        </dd>
+    </dl>
+
+    <hr>
+    <a id="gedcom"><h2>GEDCOM</h2></a>
+
+    <dl>
+        <dt>Detect Charset on load (before version 3.11 Common tab)</dt>
+        <dd>
+            This option is useful if files from third-party sources with non-standard encodings can be loaded.
+            The option will allow you to determine the encoding and load files with the correct text.
+        </dd>
+
         <dt>Disable non-standard features</dt>
         <dd>
             This option disables all data editing features that are incompatible with the standard
@@ -774,6 +817,11 @@
             fact locations, person portraits, extended notes, additional types of multimedia storage,
             person bookmarks, patriarchs bookmark, etc. Note: this option does not disable saving
             non-standard data to GEDCOM files.
+        </dd>
+
+        <dt>Validation of GEDCOM data constraints</dt>
+        <dd>
+            The option includes checking of data input for compliance with the GEDCOM standard.
         </dd>
 
         <dt>Use extended notes</dt>
@@ -787,43 +835,6 @@
             This option enables the mode in which the maximum redundant structures of personal names
             (with duplication of information) are written to the database file when saving.
             This makes the functionally same file larger in volume.
-        </dd>
-
-        <dt>Chart windows show mode (Default, Left half, Right half, Maximize)</dt>
-        <dd>
-            This option enables the ability to open the diagram window to full screen,
-            align the window to the left or right half when calling the diagram window.
-            Useful when using the program on wide screens in split mode
-            (main window with tables on the left, charts on the right, or vice versa).
-        </dd>
-
-        <dt>Shorten date ranges</dt>
-        <dd>
-            In tree diagrams and pedigree charts, date ranges that contain only years
-            (like "1890 - 1895") will be abbreviated to "1890/95".
-        </dd>
-
-        <dt>Keep overall size of info panels</dt>
-        <dd>
-            With this option, the record information panels (to the right of the tables in the main window tabs)
-            will have a constant size that is restored when you enter the program.
-        </dd>
-
-        <dt>Warn when overwritting files</dt>
-        <dd>When using the Save As operation to an existing file, a warning will be issued.</dd>
-
-        <dt>Extended definition of kinship</dt>
-        <dd>
-            In the kinship calculator and in trees with kinship display enabled,
-            such relationships as half-siblings, half-brothers and half-sisters,
-            adoptions, biological and step-parents, and civil marriages will be determined.
-        </dd>
-
-        <dt>Show number of substructures instead of check marks</dt>
-        <dd>
-            In the tables of events of persons or families, in the columns of presence of references to sources,
-            notes or multimedia (substructures), simple "check marks" are usually displayed.
-            When using this option, instead of a check mark, the number of substructures will be displayed.
         </dd>
     </dl>
 
