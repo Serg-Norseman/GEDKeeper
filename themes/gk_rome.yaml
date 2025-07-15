@@ -1,5 +1,5 @@
 ﻿---
-Name: GK Vintage (by AI)
+Name: GK Rome (by AI)
 Elements:
   - Element: Font
     Value: "Times New Roman"
@@ -7,73 +7,75 @@ Elements:
     Value: "9.00"
 
   - Element: Editor
-    Value: "#4A3D2A"
+    Value: "#E8DCC4"
   - Element: EditorText
-    Value: "#CD7F32"
+    Value: "#2C1810"
 
   - Element: Control
-    Value: "#4A3D2A"
+    Value: "#D4C5B9"
   - Element: ControlText
-    Value: "#CF8742"
+    Value: "#8B4513"
 
   - Element: Window
-    Value: "#6B4423"
+    Value: "#F5F0E8"
   - Element: WindowText
-    Value: "#DAA520"
+    Value: "#4A3728"
 
   - Element: Dialog
-    Value: "#3D2B1F"
+    Value: "#C4B99B"
   - Element: DialogText
-    Value: "#B8860B"
+    Value: "#2F241E"
 
   - Element: ButtonFace
-    Value: "#8B4513"
+    Value: "#CD853F"
   - Element: AccentButtonFace
-    Value: "#CD7F32"
+    Value: "#8B4513"
   - Element: ButtonBorder
-    Value: "#B87333"
+    Value: "#A0522D"
   - Element: ButtonText
-    Value: "#DEB887"
+    Value: "#FFEFD5"
 
   - Element: Strip
-    Value: "#3D2B1F"
+    Value: "#D89153"
   - Element: Dropdown
-    Value: "#3D2B1F"
+    Value: "#D89153"
   - Element: MenuBorder
-    Value: "#8B4513"
+    Value: "#F0E68C"
   - Element: MenuItemSelected
-    Value: "#B8860B"
+    Value: "#CD853F"
 
   - Element: Link
-    Value: "#DFB185"
+    Value: "#800000"
 
   - Element: Grid
-    Value: "#6B4423"
+    Value: "#FAEBD7"
   - Element: GridHeader
-    Value: "#8B4513"
-  - Element: GridHeaderText
-    Value: "#DAA520"
-  - Element: GridText
     Value: "#DEB887"
+  - Element: GridHeaderText
+    Value: "#8B4513"
+  - Element: GridText
+    Value: "#483D28"
 
   - Element: Tab
-    Value: "#3D2B1F"
+    Value: "#F5DEB3"
   - Element: TabHighlight
-    Value: "#8B4513"
+    Value: "#E6B886"
   - Element: TabSelected
-    Value: "#5D4B3F"
+    Value: "#CD853F"
 
   - Element: HighlightReadabilityRows
-    Value: "#785537"
+    Value: "#FAE3C1"
   - Element: HighlightUnparentedIndi
-    Value: "#B87333"
+    Value: "#FFD700"
   - Element: HighlightUnmarriedIndi
-    Value: "#CD853F"
+    Value: "#DDA0DD"
   - Element: HighlightInaccessibleFiles
-    Value: "#8B4513"
+    Value: "#CD7F32"
+
 
   - Element: ToolItemsImageSize
     Value: "20"
+
 
   - Element: Glyph_Maps
     Value: "ext_images/maps.png"

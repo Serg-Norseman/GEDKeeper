@@ -47,6 +47,7 @@ namespace GKUI.Components
         private readonly Button fBtnPaste;
         private readonly ContextMenu fContextMenu;
         private readonly GKListView fList;
+        private readonly StackLayout fToolbar;
 
         private EnumSet<SheetButton> fButtons;
         private ISheetModel fListModel;
@@ -133,7 +134,7 @@ namespace GKUI.Components
             fList.KeyDown += List_KeyDown;
             fList.SelectedItemsChanged += List_SelectedIndexChanged;
 
-            var toolbar = new StackLayout() {
+            fToolbar = new StackLayout() {
                 Orientation = Orientation.Vertical,
                 Spacing = EtoAppConsts.ToolButtonSpacing,
                 Items = { fBtnAdd, fBtnEdit, fBtnDelete, fBtnLinkJump, fBtnMoveUp, fBtnMoveDown, fBtnCopy, fBtnCut, fBtnPaste }
@@ -145,7 +146,7 @@ namespace GKUI.Components
                     new TableRow() {
                         Cells = {
                             new TableCell(fList, true),
-                            new TableCell(toolbar, false)
+                            new TableCell(fToolbar, false)
                         }
                     }
                 }
@@ -185,6 +186,10 @@ namespace GKUI.Components
 
         public void ApplyTheme()
         {
+            fToolbar.BackgroundColor = this.BackgroundColor;
+            for (int i = 0, num = fToolbar.Items.Count; i < num; i++)
+                fToolbar.Items[i].Control.BackgroundColor = this.BackgroundColor;
+
             UIHelper.SetButtonThemeImage(fBtnPaste, ThemeElement.Glyph_Paste);
             UIHelper.SetButtonThemeImage(fBtnCut, ThemeElement.Glyph_Cut);
             UIHelper.SetButtonThemeImage(fBtnCopy, ThemeElement.Glyph_Copy);

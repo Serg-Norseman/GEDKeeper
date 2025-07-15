@@ -171,6 +171,8 @@ namespace GKUI.Themes
             }, true);
         }
 
+        //private static Font fCachedFont = null;
+
         public override void ApplyTheme(IThemedView view)
         {
             if (view == null || fCurrentTheme == null) return;
@@ -182,17 +184,17 @@ namespace GKUI.Themes
 
             var form = view as Window;
             if (form != null) {
-                form.SuspendLayout();
-
-                var themeFont = GetThemeStr(fCurrentTheme, ThemeElement.Font);
+                /*var themeFont = GetThemeStr(fCurrentTheme, ThemeElement.Font);
                 var themeFontSize = GetThemeFloat(fCurrentTheme, ThemeElement.FontSize);
-                /*if (form.Font.Name != themeFont) {
-                    form.Font = new Font(themeFont, themeFontSize);
-                }*/
+                fCachedFont = new Font(themeFont, themeFontSize);*/
+
+                form.SuspendLayout();
 
                 ApplyTheme(view, form, fCurrentTheme);
 
                 form.ResumeLayout();
+
+                /*fCachedFont = null;*/
             }
         }
 
@@ -223,16 +225,20 @@ namespace GKUI.Themes
             ThemeControlHandler handler = GetControlHandler(component);
             handler?.Invoke(view, component, theme);
 
-            if (component is not IThemedForm && component is IThemedView themedView) {
-                themedView.ApplyTheme();
-            }
-
             if (component is Container ctl) {
-                //ctl.Font = ((Form)view).Font;
-
                 foreach (var item in ctl.Controls) {
                     ApplyTheme(view, item, theme);
                 }
+            }
+
+            /*
+            // Grid and TabControl have no font
+            if (component is CommonControl comCtl && fCachedFont != null) {
+                comCtl.Font = fCachedFont;
+            }*/
+
+            if (!(component is IThemedForm) && component is IThemedView themedView) {
+                themedView.ApplyTheme();
             }
         }
 

@@ -222,16 +222,16 @@ namespace GKUI.Themes
             ThemeControlHandler handler = GetControlHandler(component);
             handler?.Invoke(view, component, theme);
 
-            if (!(component is IThemedForm) && component is IThemedView themedView) {
-                themedView.ApplyTheme();
-            }
-
             if (component is Control ctl) {
                 ctl.Font = ((Form)view).Font;
 
                 foreach (Control item in ctl.Controls) {
                     ApplyTheme(view, item, theme);
                 }
+            }
+
+            if (!(component is IThemedForm) && component is IThemedView themedView) {
+                themedView.ApplyTheme();
             }
         }
 

@@ -82,11 +82,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "themes", "themes", "{E39F79
 		..\..\themes\gk_cyberpunk.yaml = ..\..\themes\gk_cyberpunk.yaml
 		..\..\themes\gk_dark.yaml = ..\..\themes\gk_dark.yaml
 		..\..\themes\gk_forest.yaml = ..\..\themes\gk_forest.yaml
-		..\..\themes\gk_light.yaml = ..\..\themes\gk_light.yaml
 		..\..\themes\gk_jungle.yaml = ..\..\themes\gk_jungle.yaml
+		..\..\themes\gk_light.yaml = ..\..\themes\gk_light.yaml
+		..\..\themes\gk_rome.yaml = ..\..\themes\gk_rome.yaml
 		..\..\themes\gk_matrix.yaml = ..\..\themes\gk_matrix.yaml
 		..\..\themes\gk_tron.yaml = ..\..\themes\gk_tron.yaml
 		..\..\themes\gk_vintage.yaml = ..\..\themes\gk_vintage.yaml
+		..\..\themes\Modern.yaml = ..\..\themes\Modern.yaml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKTestsUI2", "GKTestsUI2\GKTestsUI2.csproj", "{90BDD163-CEA0-4FCE-BA73-7591B71263CB}"
