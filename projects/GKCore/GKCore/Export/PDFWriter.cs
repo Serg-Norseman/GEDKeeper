@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -44,6 +44,8 @@ namespace GKCore.Export
     {
         internal sealed class FontHandler : TypeHandler<itFont>, IFont
         {
+            private float fHeight;
+
             public BaseFont BaseFont
             {
                 get { return Handle.BaseFont; }
@@ -52,6 +54,11 @@ namespace GKCore.Export
             public string FontFamilyName
             {
                 get { return Handle.Familyname; }
+            }
+
+            public float Height
+            {
+                get { return fHeight; }
             }
 
             public string Name
@@ -66,35 +73,16 @@ namespace GKCore.Export
 
             public FontHandler(itFont handle) : base(handle)
             {
-            }
-
-            public static int GetTextHeight(BaseFont baseFont, float fontSize)
-            {
-                float ascent = baseFont.GetAscentPoint(ChartRenderer.STR_HEIGHT_SAMPLE, fontSize);
-                float descent = baseFont.GetDescentPoint(ChartRenderer.STR_HEIGHT_SAMPLE, fontSize);
-                float height = (ascent - descent) * 1.33f; // Line spacing
-                return (int)(height);
+                var baseFont = handle.BaseFont;
+                float ascent = baseFont.GetAscentPoint(ChartRenderer.STR_HEIGHT_SAMPLE, handle.Size);
+                float descent = baseFont.GetDescentPoint(ChartRenderer.STR_HEIGHT_SAMPLE, handle.Size);
+                fHeight = (ascent - descent) * 1.33f; // Line spacing
             }
 
             public static int GetTextWidth(string text, BaseFont baseFont, float fontSize)
             {
                 float width = baseFont.GetWidthPoint(text, fontSize);
                 return (int)(width);
-            }
-
-            public int GetTextHeight()
-            {
-                return GetTextHeight(Handle.BaseFont, Handle.Size);
-            }
-
-            public int GetTextWidth(string text)
-            {
-                return GetTextWidth(text, Handle.BaseFont, Handle.Size);
-            }
-
-            public ExtSizeF GetTextSize(string text)
-            {
-                return new ExtSizeF(GetTextWidth(text), GetTextHeight());
             }
         }
 

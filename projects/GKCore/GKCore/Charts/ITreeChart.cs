@@ -39,7 +39,7 @@ namespace GKCore.Charts
         Drag,
         Properties,
         Highlight,
-        PersonExpand,
+        CollapseBranch,
         Info,
     }
 

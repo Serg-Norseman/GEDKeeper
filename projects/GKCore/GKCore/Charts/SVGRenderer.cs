@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -158,17 +158,27 @@ namespace GKCore.Charts
         }
 
         public override void DrawRectangle(IPen pen, IColor fillColor,
-                                           float x, float y, float width, float height)
+            float x, float y, float width, float height, int cornersRadius = 0)
         {
             if (fGfx != null) {
                 if (fillColor != null && !fillColor.IsTransparent()) {
                     fGfx.SetColor(fillColor);
-                    fGfx.FillRect(x, y, width, height);
+
+                    if (cornersRadius == 0) {
+                        fGfx.FillRect(x, y, width, height);
+                    } else {
+                        fGfx.FillRoundedRect(x, y, width, height, cornersRadius);
+                    }
                 }
 
                 if (pen != null) {
                     fGfx.SetColor(pen.Color);
-                    fGfx.DrawRect(x, y, width, height, pen.Width);
+
+                    if (cornersRadius == 0) {
+                        fGfx.DrawRect(x, y, width, height, pen.Width);
+                    } else {
+                        fGfx.DrawRoundedRect(x, y, width, height, cornersRadius, pen.Width);
+                    }
                 }
             }
         }
@@ -178,22 +188,6 @@ namespace GKCore.Charts
         {
             if (fGfx != null && brush != null) {
                 // TODO
-            }
-        }
-
-        public override void DrawRoundedRectangle(IPen pen, IColor fillColor, float x, float y,
-                                                  float width, float height, float radius)
-        {
-            if (fGfx != null) {
-                if (fillColor != null && !fillColor.IsTransparent()) {
-                    fGfx.SetColor(fillColor);
-                    fGfx.FillRoundedRect(x, y, width, height, radius);
-                }
-
-                if (pen != null) {
-                    fGfx.SetColor(pen.Color);
-                    fGfx.DrawRoundedRect(x, y, width, height, radius, pen.Width);
-                }
             }
         }
 

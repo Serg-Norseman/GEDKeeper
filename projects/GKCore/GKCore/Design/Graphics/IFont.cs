@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,6 +28,7 @@ namespace GKCore.Design.Graphics
     public interface IFont : IDisposable
     {
         string FontFamilyName { get; }
+        float Height { get; }
         string Name { get; }
         float Size { get; }
     }

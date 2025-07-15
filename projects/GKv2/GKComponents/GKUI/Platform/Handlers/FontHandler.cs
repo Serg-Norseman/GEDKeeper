@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,6 +29,8 @@ namespace GKUI.Platform.Handlers
     /// </summary>
     public sealed class FontHandler: TypeHandler<Font>, IFont
     {
+        private float fHeight;
+
         public string FontFamilyName
         {
             get { return Handle.FontFamily.Name; }
@@ -44,8 +46,14 @@ namespace GKUI.Platform.Handlers
             get { return Handle.Size; }
         }
 
+        public float Height
+        {
+            get { return fHeight; }
+        }
+
         public FontHandler(Font handle) : base(handle)
         {
+            fHeight = handle.GetHeight();
         }
 
         protected override void Dispose(bool disposing)

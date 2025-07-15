@@ -116,7 +116,7 @@ namespace GKCore.Charts
         private IImage fBookmarkPic;
         private IImage fExpPic;
         private IImage fInfoPic;
-        private IImage fPersExpPic;
+        private IImage fCollapsePic;
         private KinshipsGraph fGraph;
         private bool fHasMediaFail;
         private TreeChartPerson fHighlightedPerson;
@@ -178,6 +178,11 @@ namespace GKCore.Charts
         {
             get { return fCertaintyIndex; }
             set { fCertaintyIndex = value; }
+        }
+
+        internal int DefCharWidth
+        {
+            get { return fDefCharWidth; }
         }
 
         public int DepthLimitAncestors
@@ -415,7 +420,7 @@ namespace GKCore.Charts
                 }
 
                 fExpPic = GetUIImage(renderer, "btn_expand.gif", ThemeElement.Glyph_Expand);
-                fPersExpPic = GetUIImage(renderer, "btn_expand2.gif", ThemeElement.Glyph_Expand2);
+                fCollapsePic = GetUIImage(renderer, "btn_expand2.gif", ThemeElement.Glyph_Expand2);
                 fInfoPic = GetUIImage(renderer, "btn_info.gif", ThemeElement.Glyph_Info);
                 fBookmarkPic = GetUIImage(renderer, "tg_bookmark.png", ThemeElement.Glyph_Bookmark);
             } catch (Exception ex) {
@@ -440,7 +445,7 @@ namespace GKCore.Charts
             fDrawFont = sourceModel.fDrawFont;
             fBookmarkPic = sourceModel.fBookmarkPic;
             fExpPic = sourceModel.fExpPic;
-            fPersExpPic = sourceModel.fPersExpPic;
+            fCollapsePic = sourceModel.fCollapsePic;
             fInfoPic = sourceModel.fInfoPic;
             //fKind = sourceModel.fKind;
             //fKinRoot = sourceModel.fKinRoot;
@@ -1219,26 +1224,16 @@ namespace GKCore.Charts
             return expRt;
         }
 
-        public static ExtRect GetPersonExpandRect(ExtRect personRect)
+        public ExtRect GetCollapseRect(TreeChartPerson pers)
         {
-            int x = personRect.Left + (personRect.GetWidth() - 16) / 2;
-            ExtRect expRt = ExtRect.Create(x, personRect.Top - 18, x + 16 - 1, personRect.Top - 2);
-            return expRt;
-        }
-
-        private bool IsPersonVisible(ExtRect pnRect)
-        {
-            return fVisibleArea.IntersectsWith(pnRect);
-        }
-
-        private bool IsLineVisible(int x1, int y1, int x2, int y2)
-        {
-            if (fVisibleArea.GetWidth() <= 0 || fVisibleArea.GetHeight() <= 0) {
-                return false;
-            }
-
-            return SysUtils.HasRangeIntersection(fVisibleArea.Left, fVisibleArea.Right, x1, x2)
-                && SysUtils.HasRangeIntersection(fVisibleArea.Top, fVisibleArea.Bottom, y1, y2);
+            int psz = (int)(16 * fPicScale);
+            ExtRect collRt;
+            int x = pers.PtX - (psz / 2);
+            collRt.Left = x;
+            collRt.Top = pers.PtY - psz - 2;
+            collRt.Right = x + psz - 1;
+            collRt.Bottom = pers.PtY - 2;
+            return collRt;
         }
 
         private void DrawLine(int x1, int y1, int x2, int y2, bool isDotted, bool isTracked, bool isMatched)
@@ -1255,7 +1250,13 @@ namespace GKCore.Charts
                 y2 = tmp;
             }
 
-            if (!IsLineVisible(x1, y1, x2, y2)) return;
+            /*if (fVisibleArea.GetWidth() <= 0 || fVisibleArea.GetHeight() <= 0) {
+                return false;
+            }*/
+            bool isLineVisible = SysUtils.HasRangeIntersection(fVisibleArea.Left, fVisibleArea.Right, x1, x2)
+                && SysUtils.HasRangeIntersection(fVisibleArea.Top, fVisibleArea.Bottom, y1, y2);
+
+            if (!isLineVisible) return;
 
             IPen linePen, decorativeLinePen;
 
@@ -1307,7 +1308,7 @@ namespace GKCore.Charts
             }
         }
 
-        private const float RoundedRectRadius = 6.0f;
+        private const int RoundedRectRadius = 6;
 
         private void DrawBorder(IPen xpen, ExtRect rt, bool dead, TreeChartPerson person)
         {
@@ -1316,11 +1317,8 @@ namespace GKCore.Charts
                 bColor = bColor.Lighter(HIGHLIGHTED_VAL);
             }
 
-            if (person.Sex == GDMSex.svFemale) {
-                fRenderer.DrawRoundedRectangle(xpen, bColor, rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight(), RoundedRectRadius);
-            } else {
-                fRenderer.DrawRectangle(xpen, bColor, rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight());
-            }
+            int cornersRadius = (person.Sex == GDMSex.svFemale) ? RoundedRectRadius : 0;
+            fRenderer.DrawRectangle(xpen, bColor, rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight(), cornersRadius);
         }
 
         private void DrawCoverGlass(ExtRect rt, TreeChartPerson person)
@@ -1329,60 +1327,39 @@ namespace GKCore.Charts
             fRenderer.DrawCoverGlass(rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight(), rad);
         }
 
-        private static string TruncString(string str, int threshold)
-        {
-            if (str.Length > threshold)
-                return str.Substring(0, threshold) + "…";
-            return str;
-        }
-
         private void DrawPerson(TreeChartPerson person, ChartDrawMode drawMode, bool isSelected)
         {
             try {
-                ExtRect prt = person.Rect;
-                if (drawMode == ChartDrawMode.dmInteractive && !IsPersonVisible(prt))
+                ExtRect persRt = person.Rect;
+                if (drawMode == ChartDrawMode.dmInteractive && !fVisibleArea.IntersectsWith(persRt))
                     return;
 
-                prt.Offset(fOffsetX, fOffsetY);
+                persRt.Offset(fOffsetX, fOffsetY);
 
                 if (person.HasFlag(PersonFlag.pfIsDead) && fOptions.MourningEdges) {
-                    ExtRect dt = prt.GetOffset(-2, -2);
+                    ExtRect dt = persRt.GetOffset(-2, -2);
                     DrawBorder(null, dt, true, person);
                 }
 
-                IPen xpen = null;
-                try {
-                    if (isSelected) {
-                        IColor penColor = person.GetSelectedColor();
-                        xpen = fRenderer.CreatePen(penColor, 2.0f);
-                    } else {
-                        xpen = fRenderer.CreatePen(fClrBlack, 1.0f);
-                    }
-
-                    DrawBorder(xpen, prt, false, person);
-                } finally {
-                    if (xpen != null)
-                        xpen.Dispose();
+                IPen xpen = isSelected ? fRenderer.CreatePen(person.GetSelectedColor(), 2.0f) : fRenderer.CreatePen(fClrBlack, 1.0f);
+                using (xpen) {
+                    DrawBorder(xpen, persRt, false, person);
                 }
 
-                ExtRect brt = prt;
+                ExtRect bordRt = persRt;
                 if (person.Portrait != null) {
-                    ExtRect portRt = person.PortraitArea.GetOffset(prt.Left, prt.Top);
+                    ExtRect portRt = person.PortraitArea.GetOffset(persRt.Left, persRt.Top);
                     fRenderer.DrawImage(person.Portrait, portRt.Left, portRt.Top, portRt.GetWidth(), portRt.GetHeight(), person.Rec.XRef);
 
-                    prt.Left += person.PortraitWidth;
+                    persRt.Left += person.PortraitWidth;
                 }
 
-                int bh = fRenderer.GetTextHeight(fBoldFont);
-                int th = fRenderer.GetTextHeight(fDrawFont);
-                int ry = prt.Top + fNodePadding;
-                int prtWidth = (prt.Right - prt.Left + 1);
-                int maxLength = (prtWidth / fDefCharWidth);
+                int bh = (int)fBoldFont.Height;
+                int th = (int)fDrawFont.Height;
+                int ry = persRt.Top + fNodePadding;
+                int prtWidth = (persRt.Right - persRt.Left + 1);
 
-                int lines = person.Lines.Length;
-                for (int k = 0; k < lines; k++) {
-                    string line = person.Lines[k];
-
+                for (int k = 0, num = person.Lines.Length; k < num; k++) {
                     int lh;
                     IFont font;
                     if (fOptions.BoldNames && k < person.NameLines) {
@@ -1393,20 +1370,12 @@ namespace GKCore.Charts
                         font = fDrawFont;
                     }
 
-                    int stw = fRenderer.GetTextWidth(line, font);
-                    if (fOptions.URNotesVisible && line == person.Note && stw > prtWidth) {
-                        line = TruncString(line, maxLength);
-                        stw = fRenderer.GetTextWidth(line, font);
-                    }
-
-                    int rx = prt.Left + (prtWidth - stw) / 2;
-
-                    fRenderer.DrawString(line, font, fSolidBlack, rx, ry, fOptions.TextEffect);
-
+                    int rx = persRt.Left + (prtWidth - person.Widths[k]) / 2;
+                    fRenderer.DrawString(person.Lines[k], font, fSolidBlack, rx, ry, fOptions.TextEffect);
                     ry += lh;
                 }
 
-                DrawCoverGlass(brt, person);
+                DrawCoverGlass(bordRt, person);
 
                 if (fOptions.SignsVisible && !person.Signs.IsEmpty()) {
                     int i = 0;
@@ -1417,7 +1386,7 @@ namespace GKCore.Charts
                         IImage pic = fSignsPic[(int)cps];
                         int pW = (int)(pic.Width * fPicScale);
                         int pH = (int)(pic.Height * fPicScale);
-                        fRenderer.DrawImage(pic, brt.Right + 1, brt.Top - dy + i * pH, pW, pH, cps.ToString());
+                        fRenderer.DrawImage(pic, bordRt.Right + 1, bordRt.Top - dy + i * pH, pW, pH, cps.ToString());
                         i++;
                     }
                 }
@@ -1426,38 +1395,37 @@ namespace GKCore.Charts
                 if (person.Rec != null) {
                     // draw XRef
                     if (fXRefVisible) {
-                        DrawText(person.Rec.XRef, brt.Right, brt.Bottom, 3, false);
+                        DrawText(person.Rec.XRef, bordRt.Right, bordRt.Bottom, 3, false);
                     }
 
                     // draw CI
                     if (fCertaintyIndex) {
-                        string cas = string.Format("{0:0.00}", person.CertaintyAssessment);
-                        fRenderer.DrawString(cas, fDrawFont, fSolidBlack, brt.Left, brt.Bottom);
+                        fRenderer.DrawString(person.CertaintyAssessment, fDrawFont, fSolidBlack, bordRt.Left, bordRt.Bottom);
                     }
                 }
 
                 // only interactive mode
                 if (drawMode == ChartDrawMode.dmInteractive) {
                     if (person.HasFlag(PersonFlag.pfCanExpand)) {
-                        ExtRect expRt = GetExpanderRect(brt);
+                        ExtRect expRt = GetExpanderRect(bordRt);
                         fRenderer.DrawImage(fExpPic, expRt.Left, expRt.Top, expRt.Width, expRt.Height, string.Empty);
                     }
 
                     if (person.IsCollapsed) {
-                        ExtRect expRt = GetPersonExpandRect(brt);
-                        fRenderer.DrawImage(fPersExpPic, expRt.Left, expRt.Top, string.Empty);
+                        ExtRect expRt = GetCollapseRect(person);
+                        expRt.Offset(fOffsetX, fOffsetY);
+                        fRenderer.DrawImage(fCollapsePic, expRt.Left, expRt.Top, expRt.Width, expRt.Height, string.Empty);
                     }
 
-                    ExtRect infoRt = GetInfoRect(brt);
-
                     if (person.Selected) {
+                        ExtRect infoRt = GetInfoRect(bordRt);
                         fRenderer.DrawImage(fInfoPic, infoRt.Left, infoRt.Top, infoRt.Width, infoRt.Height, string.Empty);
                     }
 
                     if (person.HasFlag(PersonFlag.pfBookmark)) {
                         int pW = (int)(fBookmarkPic.Width * fPicScale);
                         int pH = (int)(fBookmarkPic.Height * fPicScale);
-                        fRenderer.DrawImage(fBookmarkPic, brt.Right - pW * 2, brt.Top - pH - 2, pW, pH, string.Empty);
+                        fRenderer.DrawImage(fBookmarkPic, bordRt.Right - pW * 2, bordRt.Top - pH - 2, pW, pH, string.Empty);
                     }
                 }
             } catch (Exception ex) {
@@ -1503,7 +1471,7 @@ namespace GKCore.Charts
             if (!fOptions.ParentAges || (string.IsNullOrEmpty(person.FatherAge) && string.IsNullOrEmpty(person.MotherAge)))
                 return;
 
-            var tH = (int)fRenderer.GetTextSize("0", fDrawFont).Height;
+            var tH = (int)fDrawFont.Height;
             int aY = (!fOptions.InvertedTree) ? crY + (pY - crY - tH) / 2 : pY + (crY - pY - tH) / 2;
 
             DrawText(person.FatherAge, person.PtX - 4, aY, 3, fSolidM);

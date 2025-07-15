@@ -91,7 +91,7 @@ namespace GKCore.Charts
         // without property controlling
         public GDMFamilyRecord BaseFamily;
         public TreeChartPerson BaseSpouse;
-        public float CertaintyAssessment;
+        public string CertaintyAssessment;
         public TreeChartPerson Father;
         public TreeChartPerson Mother;
         public string FatherAge;
@@ -99,6 +99,7 @@ namespace GKCore.Charts
         public int Generation;
         public string Kinship;
         public string[] Lines;
+        public int[] Widths;
         public Vertex Node;
         public ExtRect PortraitArea;
         public string MarriageDate;
@@ -300,6 +301,7 @@ namespace GKCore.Charts
 
                 fSigns = EnumSet<SpecialUserRef>.Create();
                 Note = string.Empty;
+                float cas;
 
                 if (iRec != null) {
                     if (!fModel.PreparedIndividuals.Contains(iRec.XRef)) {
@@ -388,10 +390,8 @@ namespace GKCore.Charts
                                 }
                             }
 
-                            if (options.URNotesVisible) {
-                                if (refType == LangMan.LS(GKData.URTreeNoteType)) {
-                                    Note = refVal;
-                                }
+                            if (options.URNotesVisible && refType == LangMan.LS(GKData.URTreeNoteType)) {
+                                Note = refVal;
                             }
                         }
                     }
@@ -414,7 +414,7 @@ namespace GKCore.Charts
 
                     SetFlag(PersonFlag.pfBookmark, iRec.Bookmark);
 
-                    CertaintyAssessment = GKUtils.GetCertaintyAssessment(iRec);
+                    cas = GKUtils.GetCertaintyAssessment(iRec);
 
                     if (options.TrackMatchedSources && fRec.HasSourceCitations) {
                         int num = fRec.SourceCitations.Count;
@@ -440,9 +440,11 @@ namespace GKCore.Charts
                     SetFlag(PersonFlag.pfIsDead, false);
                     fSex = GDMSex.svUnknown;
 
-                    CertaintyAssessment = 0.0f;
+                    cas = 0.0f;
                     Sources = new GDMSourceCitation[0];
                 }
+
+                CertaintyAssessment = string.Format("{0:0.00}", cas);
             } catch (Exception ex) {
                 Logger.WriteError("TreeChartPerson.BuildBy()", ex);
                 throw;
@@ -667,8 +669,10 @@ namespace GKCore.Charts
                 InitInfo(lines);
                 DefineExpands();
 
-                int bh = renderer.GetTextHeight(fModel.BoldFont);
-                int th = renderer.GetTextHeight(fModel.DrawFont);
+                Widths = new int[lines];
+
+                int bh = (int)fModel.BoldFont.Height;
+                int th = (int)fModel.DrawFont.Height;
 
                 int maxwid = 0;
                 int height = 0;
@@ -682,9 +686,21 @@ namespace GKCore.Charts
                         font = fModel.DrawFont;
                     }
 
-                    int wt = renderer.GetTextWidth(Lines[k], font);
-                    if (!options.URNotesVisible || Lines[k] != Note) {
+                    string ln = Lines[k];
+                    int wt = renderer.GetTextWidth(ln, font);
+                    Widths[k] = wt;
+                    if (!options.URNotesVisible || (k != lines - 1)) {
                         if (maxwid < wt) maxwid = wt;
+                    }
+                }
+
+                if (fModel.Options.URNotesVisible) {
+                    int ix = lines - 1;
+                    if (Widths[ix] >= maxwid) {
+                        int maxLength = maxwid / fModel.DefCharWidth;
+                        string line = TruncString(Lines[ix], maxLength);
+                        Lines[ix] = line;
+                        Widths[ix] = renderer.GetTextWidth(line, fModel.DrawFont);
                     }
                 }
 
@@ -712,6 +728,14 @@ namespace GKCore.Charts
             } catch (Exception ex) {
                 Logger.WriteError("TreeChartPerson.CalcBounds()", ex);
             }
+        }
+
+        private static string TruncString(string str, int maxLength)
+        {
+            // … is equivalent to 3 characters
+            if (str.Length > maxLength)
+                return str.Substring(0, maxLength + 3) + "…";
+            return str;
         }
 
         public IColor GetSelectedColor()

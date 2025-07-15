@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -139,11 +139,6 @@ namespace GKCore.Charts
         public abstract void DrawImage(IImage image, ExtRect destinationRect,
                                        ExtRect sourceRect);
 
-        public int GetTextHeight(IFont font)
-        {
-            return (int)GetTextSize(STR_HEIGHT_SAMPLE, font).Height;
-        }
-
         public int GetTextWidth(string text, IFont font)
         {
             return (int)GetTextSize(text, font).Width;
@@ -175,11 +170,10 @@ namespace GKCore.Charts
 
         public abstract void DrawLine(IPen pen, float x1, float y1, float x2, float y2);
 
-        public abstract void DrawRectangle(IPen pen, IColor fillColor, float x, float y,
-                                           float width, float height);
+        public abstract void DrawRectangle(IPen pen, IColor fillColor,
+            float x, float y, float width, float height, int cornersRadius = 0);
+
         public abstract void FillRectangle(IBrush brush, float x, float y, float width, float height);
-        public abstract void DrawRoundedRectangle(IPen pen, IColor fillColor, float x, float y,
-                                                  float width, float height, float radius);
 
         public virtual void DrawCoverGlass(float x, float y, float width, float height, float radius)
         {

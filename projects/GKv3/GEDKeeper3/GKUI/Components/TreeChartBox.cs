@@ -561,10 +561,10 @@ namespace GKUI.Components
                     break;
                 }
 
-                expRt = TreeChartModel.GetPersonExpandRect(persRt);
+                expRt = fModel.GetCollapseRect(p);
                 if ((e.Buttons == MouseButtons.Primary && mouseEvent == MouseEvent.meUp) && expRt.Contains(aX, aY)) {
                     person = p;
-                    result = MouseAction.PersonExpand;
+                    result = MouseAction.CollapseBranch;
                     break;
                 }
 
@@ -709,7 +709,7 @@ namespace GKUI.Components
                             DoRootChanged(mPers);
                             break;
 
-                        case MouseAction.PersonExpand:
+                        case MouseAction.CollapseBranch:
                             ToggleCollapse(mPers);
                             break;
 

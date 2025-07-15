@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -186,8 +186,7 @@ namespace GKCore.Export
         {
             BaseFont baseFont = GetBaseFont(font);
             var width = PDFWriter.FontHandler.GetTextWidth(text, baseFont, font.Size);
-            var height = PDFWriter.FontHandler.GetTextHeight(baseFont, font.Size);
-            return new ExtSizeF(width, height);
+            return new ExtSizeF(width, font.Height);
         }
 
         public override void DrawString(string text, IFont font, IBrush brush, float x, float y)
@@ -196,7 +195,7 @@ namespace GKCore.Export
                 SetFillColor(brush.Color);
             }
 
-            int h = GetTextHeight(font);
+            var h = font.Height;
             x = CheckVal(x, false);
             y = CheckVal(y, true, h);
 
@@ -218,7 +217,7 @@ namespace GKCore.Export
                 SetFillColor(brush.Color);
             }
 
-            int h = GetTextHeight(font);
+            var h = font.Height;
             int w = GetTextWidth(text, font);
 
             // FIXME: temp hack
@@ -240,7 +239,7 @@ namespace GKCore.Export
                 SetFillColor(brush.Color);
             }
 
-            int h = GetTextHeight(font);
+            var h = font.Height;
             int w = GetTextWidth(text, font);
 
             // FIXME: temp hack
@@ -272,15 +271,19 @@ namespace GKCore.Export
             fCanvas.Stroke();
         }
 
-        public override void DrawRectangle(IPen pen, IColor fillColor, float x, float y,
-                                           float width, float height)
+        public override void DrawRectangle(IPen pen, IColor fillColor,
+            float x, float y, float width, float height, int cornersRadius = 0)
         {
             x = CheckVal(x, false);
             y = CheckVal(y, true, height);
             width = CheckVal(width);
             height = CheckVal(height);
 
-            fCanvas.Rectangle(x, y, width, height);
+            if (cornersRadius == 0) {
+                fCanvas.Rectangle(x, y, width, height);
+            } else {
+                fCanvas.RoundRectangle(x, y, width, height, cornersRadius);
+            }
 
             if (pen != null && (fillColor != null && !fillColor.IsTransparent())) {
                 SetPen(pen);
@@ -300,29 +303,6 @@ namespace GKCore.Export
         {
             if (brush != null) {
                 // TODO
-            }
-        }
-
-        public override void DrawRoundedRectangle(IPen pen, IColor fillColor, float x, float y,
-                                                  float width, float height, float radius)
-        {
-            x = CheckVal(x, false);
-            y = CheckVal(y, true, height);
-            width = CheckVal(width);
-            height = CheckVal(height);
-
-            fCanvas.RoundRectangle(x, y, width, height, radius);
-
-            if (pen != null && (fillColor != null && !fillColor.IsTransparent())) {
-                SetPen(pen);
-                SetFillColor(fillColor);
-                fCanvas.ClosePathFillStroke();
-            } else if (pen != null) {
-                SetPen(pen);
-                fCanvas.ClosePathStroke();
-            } else if (fillColor != null && !fillColor.IsTransparent()) {
-                SetFillColor(fillColor);
-                fCanvas.Fill();
             }
         }
 

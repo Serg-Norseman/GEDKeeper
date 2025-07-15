@@ -194,15 +194,17 @@ namespace GKUI.Platform
         }
 
         public override void DrawRectangle(IPen pen, IColor fillColor,
-                                           float x, float y, float width, float height)
+            float x, float y, float width, float height, int cornersRadius)
         {
-            Color sdFillColor = (fillColor == null) ? Color.Transparent : ((ColorHandler)fillColor).Handle;
+            GraphicsPath path = (cornersRadius == 0) ? CreateRectangle(x, y, width, height) : CreateRoundedRectangle(x, y, width, height, cornersRadius);
 
-            using (GraphicsPath path = CreateRectangle(x, y, width, height)) {
-                if (sdFillColor != Color.Transparent) {
+            using (path) {
+                if (fillColor != null) {
+                    Color sdFillColor = ((ColorHandler)fillColor).Handle;
                     sdFillColor = PrepareColor(sdFillColor);
 
-                    fCanvas.FillPath(new SolidBrush(sdFillColor), path);
+                    using (var brush = new SolidBrush(sdFillColor))
+                        fCanvas.FillPath(brush, path);
                 }
 
                 if (pen != null) {
@@ -247,25 +249,6 @@ namespace GKUI.Platform
 
             p.CloseFigure();
             return p;
-        }
-
-        public override void DrawRoundedRectangle(IPen pen, IColor fillColor, float x, float y,
-                                                  float width, float height, float radius)
-        {
-            Color sdFillColor = ((ColorHandler)fillColor).Handle;
-
-            using (GraphicsPath path = CreateRoundedRectangle(x, y, width, height, radius)) {
-                if (sdFillColor != Color.Transparent) {
-                    sdFillColor = PrepareColor(sdFillColor);
-
-                    fCanvas.FillPath(new SolidBrush(sdFillColor), path);
-                }
-
-                if (pen != null) {
-                    Pen sdPen = ((PenHandler)pen).Handle;
-                    fCanvas.DrawPath(sdPen, path);
-                }
-            }
         }
 
         public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)

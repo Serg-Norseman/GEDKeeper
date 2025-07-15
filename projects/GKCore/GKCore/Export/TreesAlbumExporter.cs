@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -70,7 +70,7 @@ namespace GKCore.Export
                 fPageSize = fWriter.GetPageSize();
                 float pageHeight = fPageSize.GetHeight();
                 float pageWidth = fPageSize.GetWidth();
-                float halfpage = (pageHeight - (((PDFWriter.FontHandler)titleFont).GetTextHeight())) / 2f;
+                float halfpage = (pageHeight - titleFont.Height) / 2f;
                 fWriter.NewLine(0.0f, halfpage);
                 fWriter.AddParagraph(fTitle, titleFont, TextAlignment.taCenter);
 
