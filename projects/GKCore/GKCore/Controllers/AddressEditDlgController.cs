@@ -102,13 +102,13 @@ namespace GKCore.Controllers
 
         public void UpdateLists()
         {
-            ((SimpleListModel<GDMTag>)fView.PhonesList.ListView.ListMan).DataSource = fAddress.PhoneNumbers.GetList();
+            ((TagsListModel)fView.PhonesList.ListView.ListMan).DataSource = fAddress.PhoneNumbers.GetList();
             fView.PhonesList.ListView.UpdateContents();
 
-            ((SimpleListModel<GDMTag>)fView.MailsList.ListView.ListMan).DataSource = fAddress.EmailAddresses.GetList();
+            ((TagsListModel)fView.MailsList.ListView.ListMan).DataSource = fAddress.EmailAddresses.GetList();
             fView.MailsList.ListView.UpdateContents();
 
-            ((SimpleListModel<GDMTag>)fView.WebsList.ListView.ListMan).DataSource = fAddress.WebPages.GetList();
+            ((TagsListModel)fView.WebsList.ListView.ListMan).DataSource = fAddress.WebPages.GetList();
             fView.WebsList.ListView.UpdateContents();
         }
 
