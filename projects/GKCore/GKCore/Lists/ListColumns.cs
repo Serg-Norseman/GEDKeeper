@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -59,6 +59,11 @@ namespace GKCore.Lists
             NumFmt = numFmt;
             Autosize = autosize;
         }
+
+        public override string ToString()
+        {
+            return string.Join(" / ", Id, ColName, DataType, DefWidth, DefActive, Order);
+        }
     }
 
     /// <summary>
@@ -99,8 +104,6 @@ namespace GKCore.Lists
             fColumns = new List<ListColumn>();
             fOrderedColumns = new List<ListColumn>();
             fListType = listType;
-
-            ResetDefaults();
         }
 
         public void Clear()
@@ -109,36 +112,9 @@ namespace GKCore.Lists
             fOrderedColumns.Clear();
         }
 
-        public void AddColumn(LSID colName, int defWidth, bool autosize = false)
-        {
-            AddColumn(LangMan.LS(colName), DataType.dtString, defWidth, true, autosize, null, null);
-        }
-
-        public void AddColumn(LSID colName, DataType dataType, int defWidth, bool defActive, bool autosize = false)
-        {
-            AddColumn(LangMan.LS(colName), dataType, defWidth, defActive, autosize, null, null);
-        }
-
-        public void AddColumn(string colName, DataType dataType, int defWidth, bool defActive, bool autosize = false)
-        {
-            AddColumn(colName, dataType, defWidth, defActive, autosize, null, null);
-        }
-
-        public void AddColumn(LSID colName, DataType dataType, int defWidth, bool defActive, bool autosize, string format, NumberFormatInfo nfi)
-        {
-            AddColumn(LangMan.LS(colName), dataType, defWidth, defActive, autosize, format, nfi);
-        }
-
-        public void AddColumn(string colName, DataType dataType, int defWidth, bool defActive, bool autosize, string format, NumberFormatInfo nfi)
-        {
-            fLastId += 1;
-            fColumns.Add(new ListColumn((byte)fLastId, colName, dataType, defWidth, defActive, autosize, format, nfi));
-        }
-
         public void ResetDefaults()
         {
-            int num = fColumns.Count;
-            for (int i = 0; i < num; i++) {
+            for (int i = 0, num = fColumns.Count; i < num; i++) {
                 var cs = fColumns[i];
 
                 cs.Order = i;
@@ -147,6 +123,46 @@ namespace GKCore.Lists
             }
 
             UpdateOrders();
+        }
+
+        private static int CompareItems(ListColumn item1, ListColumn item2)
+        {
+            return item1.Order.CompareTo(item2.Order);
+        }
+
+        private void UpdateOrders()
+        {
+            fOrderedColumns.Clear();
+            if (fColumns.Count > 0) {
+                foreach (var column in fColumns) fOrderedColumns.Add(column);
+                SortHelper.MergeSort(fOrderedColumns, CompareItems);
+            }
+        }
+
+        public void AddColumn(LSID colName, int defWidth, bool autosize = false)
+        {
+            AddColumn(LangMan.LS(colName), DataType.dtString, defWidth, autosize, null, null);
+        }
+
+        public void AddColumn(string colName, int defWidth, bool autosize = false)
+        {
+            AddColumn(colName, DataType.dtString, defWidth, autosize, null, null);
+        }
+
+        public void AddColumn(LSID colName, DataType dataType, int defWidth, bool autosize = false)
+        {
+            AddColumn(LangMan.LS(colName), dataType, defWidth, autosize, null, null);
+        }
+
+        public void AddColumn(string colName, DataType dataType, int defWidth, bool autosize = false)
+        {
+            AddColumn(colName, dataType, defWidth, autosize, null, null);
+        }
+
+        public void AddColumn(string colName, DataType dataType, int defWidth, bool autosize, string format, NumberFormatInfo nfi)
+        {
+            fLastId += 1;
+            fColumns.Add(new ListColumn((byte)fLastId, colName, dataType, defWidth, true, autosize, format, nfi));
         }
 
         public void CopyTo(IListColumns target)
@@ -217,20 +233,6 @@ namespace GKCore.Lists
                 }
             } catch (Exception ex) {
                 Logger.WriteError("ListColumns.SaveToFile()", ex);
-            }
-        }
-
-        private static int CompareItems(ListColumn item1, ListColumn item2)
-        {
-            return item1.Order.CompareTo(item2.Order);
-        }
-
-        public void UpdateOrders()
-        {
-            fOrderedColumns.Clear();
-            if (fColumns.Count > 0) {
-                foreach (var column in fColumns) fOrderedColumns.Add(column);
-                SortHelper.MergeSort(fOrderedColumns, CompareItems);
             }
         }
 

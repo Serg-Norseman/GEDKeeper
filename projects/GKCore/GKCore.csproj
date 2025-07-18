@@ -87,6 +87,9 @@
     <Compile Include="GKCore\Controllers\EventDefEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\LocExpertDlgController.cs" />
     <Compile Include="GKCore\Design\Views\IEventDefEditDlg.cs" />
+    <Compile Include="GKCore\Lists\FlatListModel.cs" />
+    <Compile Include="GKCore\Lists\RecsListModel.cs" />
+    <Compile Include="GKCore\Lists\TagsListModel.cs" />
     <Compile Include="GKCore\TipsCollector.cs" />
     <Compile Include="GKCore\Interfaces\IComputerVision.cs" />
     <Compile Include="GKCore\Kinships\KinshipsCulture.cs" />
@@ -579,6 +582,7 @@
     <Compile Include="GKCore\Lists\CallNumbersListModel.cs" />
     <Compile Include="GKCore\LocalesCollection.cs" />
     <Compile Include="GKCore\Validation\Concrete\GDMUserReferenceValidator.cs" />
+    <Compile Include="GKCore\Lists\ColumnsListModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GKMap\GKMap.Core\GKMap.Core.csproj">

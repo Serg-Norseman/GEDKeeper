@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -327,6 +327,8 @@ namespace GKCore.Stats
         {
             if (values == null)
                 throw new ArgumentNullException("values");
+
+            values.Clear();
 
             // special buffers for difficult calculations with averaged ages
             var xvals = new Dictionary<string, List<int>>();

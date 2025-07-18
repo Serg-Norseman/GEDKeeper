@@ -25,6 +25,8 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Themes;
@@ -36,12 +38,26 @@ namespace GKCore.Controllers
     /// </summary>
     public class PlacesManagerController : DialogController<IPlacesManagerDlg>
     {
+        private readonly FlatListModel fPlacesModel;
         private readonly StringList fPlaces;
 
         public PlacesManagerController(IPlacesManagerDlg view) : base(view)
         {
             fPlaces = new StringList();
             fPlaces.Sorted = true;
+
+            fPlacesModel = new FlatListModel();
+            fView.PlacesList.ListMan = fPlacesModel;
+        }
+
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fPlacesModel.ListColumns.Clear();
+            fPlacesModel.ListColumns.AddColumn(LangMan.LS(LSID.Place), DataType.dtString, 400, false);
+            fPlacesModel.ListColumns.AddColumn(LangMan.LS(LSID.LinksCount), DataType.dtInteger, 100, false);
+            fPlacesModel.ListColumns.ResetDefaults();
         }
 
         public override void UpdateView()
@@ -63,7 +79,7 @@ namespace GKCore.Controllers
 
         public async void ShowLocExpert()
         {
-            var placeObj = fView.PlacesList.GetSelectedData() as PlaceObj;
+            var placeObj = GetSelectedPlace();
             if (placeObj == null) return;
 
             string placeName = placeObj.Name;
@@ -79,9 +95,20 @@ namespace GKCore.Controllers
             }
         }
 
+        private PlaceObj GetSelectedPlace()
+        {
+            var selObj = fView.PlacesList.GetSelectedData() as FlatItem;
+            if (selObj == null) return null;
+
+            var placeObj = selObj.Tag as PlaceObj;
+            if (placeObj == null) return null;
+
+            return placeObj;
+        }
+
         public void ShowDetails()
         {
-            var placeObj = fView.PlacesList.GetSelectedData() as PlaceObj;
+            var placeObj = GetSelectedPlace();
             if (placeObj == null) return;
 
             var strList = new StringList();
@@ -104,23 +131,19 @@ namespace GKCore.Controllers
 
         public void CheckPlaces()
         {
-            fView.PlacesList.BeginUpdate();
             try {
                 string fltText = fView.FilterBox.Text;
                 AppHost.Instance.ExecuteWork((controller) => {
                     TreeTools.SearchPlaces(fBase.Context.Tree, fPlaces, controller, fltText);
                 });
 
-                fView.PlacesList.ClearItems();
-
-                int num4 = fPlaces.Count;
-                for (int i = 0; i < num4; i++) {
+                fPlacesModel.Clear();
+                for (int i = 0, num = fPlaces.Count; i < num; i++) {
                     PlaceObj placeObj = (PlaceObj)fPlaces.GetObject(i);
-
-                    fView.PlacesList.AddItem(placeObj, new object[] { fPlaces[i], placeObj.Facts.Count });
+                    fPlacesModel.AddItem(placeObj, new object[] { fPlaces[i], placeObj.Facts.Count });
                 }
             } finally {
-                fView.PlacesList.EndUpdate();
+                fView.PlacesList.UpdateContents();
             }
         }
 
@@ -164,9 +187,6 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnIntoList").Text = LangMan.LS(LSID.InsertIntoBook);
             GetControl<IButton>("btnAnalysePlaces").Text = LangMan.LS(LSID.Analyze);
             GetControl<ILabel>("lblFilter").Text = LangMan.LS(LSID.MIFilter);
-
-            fView.PlacesList.AddColumn(LangMan.LS(LSID.Place), 400, false);
-            fView.PlacesList.AddColumn(LangMan.LS(LSID.LinksCount), 100, false);
         }
 
         public override void ApplyTheme()

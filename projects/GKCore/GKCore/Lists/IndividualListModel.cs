@@ -202,7 +202,6 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.rtIndividual);
-
             result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
             result.AddColumn(LSID.Patriarch, DataType.dtString, 25, true);
             result.AddColumn(LSID.FullName, DataType.dtString, 300, true);
@@ -229,8 +228,6 @@ namespace GKCore.Lists
             result.AddColumn(LSID.Changed, DataType.dtDateTime, 150, true);
             result.AddColumn(LSID.Bookmark, DataType.dtString, 25, true);
             result.AddColumn(LSID.NobilityTitle, DataType.dtString, 200, false);
-
-            result.ResetDefaults();
             return result;
         }
 
@@ -738,10 +735,7 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.stIndividualGroups);
-
             result.AddColumn(LSID.Group, 350, false);
-
-            result.ResetDefaults();
             return result;
         }
 
@@ -821,13 +815,10 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.stIndividualNames);
-
             result.AddColumn(LSID.NumberSym, 25, false);
             result.AddColumn(LSID.GeneralName, 350, false);
             result.AddColumn(LSID.Type, 100, false);
             result.AddColumn(LSID.Language, 150, false);
-
-            result.ResetDefaults();
             return result;
         }
 
@@ -933,12 +924,9 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.stIndividualParents);
-
             result.AddColumn(LSID.NumberSym, 25, false);
             result.AddColumn(LSID.GeneralName, 350, false);
             result.AddColumn(LSID.Type, 100, false);
-
-            result.ResetDefaults();
             return result;
         }
 
@@ -1049,12 +1037,9 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.stIndividualSpouses);
-
             result.AddColumn(LSID.NumberSym, 25, false);
             result.AddColumn(LSID.Spouse, 300, false);
             result.AddColumn(LSID.MarriageDate, 100, false);
-
-            result.ResetDefaults();
             return result;
         }
 

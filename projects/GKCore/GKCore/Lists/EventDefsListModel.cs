@@ -39,12 +39,9 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.stEventDefs);
-
             result.AddColumn(LSID.GeneralName, 300, false);
             result.AddColumn(LSID.Enabled, 100, false);
             result.AddColumn(LSID.Record, 300, false);
-
-            result.ResetDefaults();
             return result;
         }
 

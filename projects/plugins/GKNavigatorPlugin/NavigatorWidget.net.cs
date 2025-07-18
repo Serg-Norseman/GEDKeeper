@@ -59,17 +59,6 @@ namespace GKNavigatorPlugin
         private GKTreeNode tnFilters;
         private GKTreeNode tnBookmarks;
         private GKTreeNode tnRecords;
-        private GKTreeNode tnRecsIndividual;
-        private GKTreeNode tnRecsFamily;
-        private GKTreeNode tnRecsNote;
-        private GKTreeNode tnRecsMultimedia;
-        private GKTreeNode tnRecsSource;
-        private GKTreeNode tnRecsRepository;
-        private GKTreeNode tnRecsGroup;
-        private GKTreeNode tnRecsResearch;
-        private GKTreeNode tnRecsTask;
-        private GKTreeNode tnRecsCommunication;
-        private GKTreeNode tnRecsLocation;
         private GKTreeNode tnLanguages;
         private GKTreeNode tnAssociations;
         private GKTreeNode tnWebLinks;
@@ -93,29 +82,15 @@ namespace GKNavigatorPlugin
             treeView1.DataStore = tnHiddenRoot;
 
             tnRoot = CreateNode(tnHiddenRoot, "root", null);
-
             tnRecAct = CreateNode(tnRoot, "Recent Activity", DataCategory.RecentActivity);
             tnJumpHist = CreateNode(tnRecAct, "Jump history", DataCategory.JumpHistory);
             tnProblems = CreateNode(tnRecAct, "Potencial problems", DataCategory.PotencialProblems);
             tnFilters = CreateNode(tnRecAct, "Filters", DataCategory.Filters);
-
             tnBookmarks = CreateNode(tnRoot, "Bookmarks", DataCategory.Bookmarks);
             tnLanguages = CreateNode(tnRoot, "Languages", DataCategory.Languages);
             tnAssociations = CreateNode(tnRoot, "Associations", DataCategory.Associations);
             tnWebLinks = CreateNode(tnRoot, "WebLinks", DataCategory.WebLinks);
-
-            tnRecords = CreateNode(tnRoot, "Records", null);
-            tnRecsIndividual = CreateNode(tnRecords, "Individuals", GDMRecordType.rtIndividual);
-            tnRecsFamily = CreateNode(tnRecords, "Families", GDMRecordType.rtFamily);
-            tnRecsNote = CreateNode(tnRecords, "Notes", GDMRecordType.rtNote);
-            tnRecsMultimedia = CreateNode(tnRecords, "Multimedia", GDMRecordType.rtMultimedia);
-            tnRecsSource = CreateNode(tnRecords, "Sources", GDMRecordType.rtSource);
-            tnRecsRepository = CreateNode(tnRecords, "Repositories", GDMRecordType.rtRepository);
-            tnRecsGroup = CreateNode(tnRecords, "Groups", GDMRecordType.rtGroup);
-            tnRecsResearch = CreateNode(tnRecords, "Researches", GDMRecordType.rtResearch);
-            tnRecsTask = CreateNode(tnRecords, "Tasks", GDMRecordType.rtTask);
-            tnRecsCommunication = CreateNode(tnRecords, "Communications", GDMRecordType.rtCommunication);
-            tnRecsLocation = CreateNode(tnRecords, "Locations", GDMRecordType.rtLocation);
+            tnRecords = CreateNode(tnRoot, "Records", DataCategory.Records);
 
             lvData = new GKListView();
             lvData.Size = new Size(391, 498);
@@ -183,31 +158,20 @@ namespace GKNavigatorPlugin
         {
             try {
                 string dbName;
-                int[] stats;
-
+                int changedRecs = 0;
                 if (fBase == null) {
                     dbName = "";
-                    stats = new int[((int)GDMRecordType.rtLast)];
                 } else {
                     dbName = fDatabaseName;
-                    stats = fBase.Context.Tree.GetRecordStats();
+
+                    BaseData baseData = fPlugin.Data[fBase.Context.FileName];
+                    if (baseData != null) changedRecs = baseData.ChangedRecords.Count;
                 }
 
                 try {
                     //treeView1.BeginUpdate();
-
                     tnRoot.Text = dbName;
-                    tnRecsIndividual.Text = FmtTitle(LangMan.LS(LSID.RPIndividuals), stats[(int)GDMRecordType.rtIndividual]);
-                    tnRecsFamily.Text = FmtTitle(LangMan.LS(LSID.RPFamilies), stats[(int)GDMRecordType.rtFamily]);
-                    tnRecsNote.Text = FmtTitle(LangMan.LS(LSID.RPNotes), stats[(int)GDMRecordType.rtNote]);
-                    tnRecsMultimedia.Text = FmtTitle(LangMan.LS(LSID.RPMultimedia), stats[(int)GDMRecordType.rtMultimedia]);
-                    tnRecsSource.Text = FmtTitle(LangMan.LS(LSID.RPSources), stats[(int)GDMRecordType.rtSource]);
-                    tnRecsRepository.Text = FmtTitle(LangMan.LS(LSID.RPRepositories), stats[(int)GDMRecordType.rtRepository]);
-                    tnRecsGroup.Text = FmtTitle(LangMan.LS(LSID.RPGroups), stats[(int)GDMRecordType.rtGroup]);
-                    tnRecsResearch.Text = FmtTitle(LangMan.LS(LSID.RPResearches), stats[(int)GDMRecordType.rtResearch]);
-                    tnRecsTask.Text = FmtTitle(LangMan.LS(LSID.RPTasks), stats[(int)GDMRecordType.rtTask]);
-                    tnRecsCommunication.Text = FmtTitle(LangMan.LS(LSID.RPCommunications), stats[(int)GDMRecordType.rtCommunication]);
-                    tnRecsLocation.Text = FmtTitle(LangMan.LS(LSID.RPLocations), stats[(int)GDMRecordType.rtLocation]);
+                    tnRecords.Text = FmtTitle(fLangMan.LS(PLS.Records), changedRecs);
 
                     tnHiddenRoot.Expanded = true;
                     tnRoot.Expanded = true;

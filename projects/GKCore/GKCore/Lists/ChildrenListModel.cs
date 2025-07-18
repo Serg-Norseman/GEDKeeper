@@ -44,12 +44,9 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.stChildren);
-
             result.AddColumn(LSID.NumberSym, 25, false);
             result.AddColumn(LSID.GeneralName, 300, false);
             result.AddColumn(LSID.BirthDate, 100, false);
-
-            result.ResetDefaults();
             return result;
         }
 

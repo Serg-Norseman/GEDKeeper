@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -41,14 +41,17 @@ namespace GKCore.Design
             public const int Ivory = 0xFFFFF0;
             public const int Khaki = 0xF0E68C;
             public const int LawnGreen = 0x7CFC00;
+            public const int LightBlue = 0xADD8E6;
             public const int LightGray = 0xDFDFDF; // 223, 223, 223
             public const int MediumSeaGreen = 0x3CB371;
             public const int Moccasin = 0xFFE4B5;
+            public const int Orange = 0xFFA500;
             public const int PaleGreen = 0x98FB98;
             public const int Red = 0xFF0000;
             public const int Silver = 0xC0C0C0; // 192, 192, 192
             public const int Snow = 0xFFFAFA;
             public const int White = 0xFFFFFF;
+            public const int Yellow = 0xFFFF00;
 
             public const int ControlDark = 0xACA899;
             public const int ControlDarkDark = 0x716F64;

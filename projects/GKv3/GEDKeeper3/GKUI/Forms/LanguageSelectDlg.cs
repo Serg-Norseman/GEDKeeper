@@ -58,8 +58,6 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            lstLanguages.AddColumn(@"Language", 300);
-
             fController = new LanguageSelectDlgController(this);
         }
     }

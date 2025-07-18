@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -48,11 +48,8 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.stIndividualAssociations);
-
             result.AddColumn(LSID.Relation, 300, false);
             result.AddColumn(LSID.Person, 200, false);
-
-            result.ResetDefaults();
             return result;
         }
 

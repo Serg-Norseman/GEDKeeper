@@ -20,6 +20,7 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Windows.Forms;
 using BSLib;
 using GDModel;
@@ -298,6 +299,40 @@ namespace GKUI.Components
             if (themeImage == null) return;
 
             button.Image = ((ImageHandler)themeImage).Handle;
+        }
+
+        public static void DrawSortArrow(Graphics gfx, Font ctlFont, Rectangle rt, string arrow)
+        {
+            using (var fnt = new Font(ctlFont.FontFamily, ctlFont.SizeInPoints * 0.6f, FontStyle.Regular)) {
+                float aw = gfx.MeasureString(arrow, fnt).Width;
+                float x = rt.Left + (rt.Width - aw) / 2.0f;
+                gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
+                gfx.DrawString(arrow, fnt, Brushes.Black, x, rt.Top);
+            }
+        }
+
+        public static void DrawHeaderBackground(Graphics g, Color backColor, Rectangle bounds, bool classic3d = false)
+        {
+            using (Brush brush = new SolidBrush(backColor)) {
+                g.FillRectangle(brush, bounds);
+            }
+
+            Rectangle rect = bounds;
+            if (classic3d) {
+                rect.Width--;
+                rect.Height--;
+                g.DrawRectangle(SystemPens.ControlDarkDark, rect);
+                rect.Width--;
+                rect.Height--;
+                g.DrawLine(SystemPens.ControlLightLight, rect.X, rect.Y, rect.Right, rect.Y);
+                g.DrawLine(SystemPens.ControlLightLight, rect.X, rect.Y, rect.X, rect.Bottom);
+                g.DrawLine(SystemPens.ControlDark, rect.X + 1, rect.Bottom, rect.Right, rect.Bottom);
+                g.DrawLine(SystemPens.ControlDark, rect.Right, rect.Y + 1, rect.Right, rect.Bottom);
+            } else {
+                rect.Width--;
+                rect.Height--;
+                g.DrawLine(SystemPens.ControlDark, rect.Right, rect.Y + 1, rect.Right, rect.Bottom - 1);
+            }
         }
     }
 }

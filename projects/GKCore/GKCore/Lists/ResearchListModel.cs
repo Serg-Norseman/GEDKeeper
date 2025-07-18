@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -56,17 +56,14 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.rtResearch);
-
             result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.Title, DataType.dtString, 300, true, true);
+            result.AddColumn(LSID.Title, DataType.dtString, 300, true);
             result.AddColumn(LSID.Priority, DataType.dtString, 90, true);
             result.AddColumn(LSID.Status, DataType.dtString, 90, true);
             result.AddColumn(LSID.StartDate, DataType.dtString, 90, true);
             result.AddColumn(LSID.StopDate, DataType.dtString, 90, true);
             result.AddColumn(LSID.Percent, DataType.dtInteger, 90, true);
             result.AddColumn(LSID.Changed, DataType.dtDateTime, 150, true);
-
-            result.ResetDefaults();
             return result;
         }
 
@@ -136,13 +133,10 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.stResearchTasks);
-
             result.AddColumn(LSID.Goal, 250, false);
             result.AddColumn(LSID.Priority, 90, false);
             result.AddColumn(LSID.StartDate, 90, false);
             result.AddColumn(LSID.StopDate, 90, false);
-
-            result.ResetDefaults();
             return result;
         }
 
@@ -234,13 +228,10 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.stResearchCommunications);
-
             result.AddColumn(LSID.Theme, 150, false);
             result.AddColumn(LSID.Corresponder, 150, false);
             result.AddColumn(LSID.Type, 90, false);
             result.AddColumn(LSID.Date, 90, false);
-
-            result.ResetDefaults();
             return result;
         }
 
@@ -332,10 +323,7 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.stResearchGroups);
-
             result.AddColumn(LSID.Group, 350, false);
-
-            result.ResetDefaults();
             return result;
         }
 

@@ -18,65 +18,48 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel;
 using GKCore.Interfaces;
 using GKCore.Options;
 
 namespace GKCore.Lists
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class RepositoryListModel : RecordsListModel<GDMRepositoryRecord>
+    public sealed class ColumnsListModel : SimpleListModel<ListColumn>
     {
-        public enum ColumnType
-        {
-            ctXRefNum,
-            ctName,
-            ctChangeDate
-        }
-
-
-        public RepositoryListModel(IBaseContext baseContext) :
-            base(baseContext, CreateListColumns(), GDMRecordType.rtRepository)
+        public ColumnsListModel() :
+            base(null, CreateListColumns())
         {
         }
 
         public static ListColumns CreateListColumns()
         {
-            var result = new ListColumns(GKListType.rtRepository);
-            result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.Repository, DataType.dtString, 400, true);
-            result.AddColumn(LSID.Changed, DataType.dtDateTime, 150, true);
+            var result = new ListColumns(GKListType.ltNone);
+            result.AddColumn(LSID.Enabled, DataType.dtBool, 40, true);
+            result.AddColumn(LSID.NumberSym, DataType.dtString, 50, true);
+            result.AddColumn(LSID.Title, DataType.dtString, 175, true);
             return result;
-        }
-
-        public override bool CheckFilter()
-        {
-            bool res = CheckQuickFilter(fFetchedRec.RepositoryName);
-
-            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
-
-            return res;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object result = null;
-            switch ((ColumnType)colType) {
-                case ColumnType.ctXRefNum:
-                    result = fFetchedRec.GetId();
+            switch (colType) {
+                case 0:
+                    result = fFetchedRec.CurActive;
                     break;
-
-                case ColumnType.ctName:
-                    result = fFetchedRec.RepositoryName;
+                case 1:
+                    result = fFetchedRec.Order;
                     break;
-
-                case ColumnType.ctChangeDate:
-                    result = fFetchedRec.ChangeDate.ChangeDateTime;
+                case 2:
+                    result = fFetchedRec.ColName;
                     break;
             }
             return result;
+        }
+
+        protected override void SetColumnValueEx(ListColumn item, int colIndex, object value)
+        {
+            if (item != null && colIndex == 0 && value is bool chk)
+                item.CurActive = chk;
         }
     }
 }

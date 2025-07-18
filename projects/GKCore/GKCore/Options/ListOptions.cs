@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -261,107 +261,146 @@ namespace GKCore.Options
 
         private ListColumns GetListColumns(GKListType listType)
         {
+            ListColumns result;
+
             switch (listType) {
                 case GKListType.rtIndividual:
-                    return IndividualListModel.CreateListColumns();
+                    result = IndividualListModel.CreateListColumns();
+                    break;
 
                 case GKListType.rtFamily:
-                    return FamilyListModel.CreateListColumns();
+                    result = FamilyListModel.CreateListColumns();
+                    break;
 
                 case GKListType.rtNote:
-                    return NoteListModel.CreateListColumns();
+                    result = NoteListModel.CreateListColumns();
+                    break;
 
                 case GKListType.rtMultimedia:
-                    return MultimediaListModel.CreateListColumns();
+                    result = MultimediaListModel.CreateListColumns();
+                    break;
 
                 case GKListType.rtSource:
-                    return SourceListModel.CreateListColumns();
+                    result = SourceListModel.CreateListColumns();
+                    break;
 
                 case GKListType.rtRepository:
-                    return RepositoryListModel.CreateListColumns();
+                    result = RepositoryListModel.CreateListColumns();
+                    break;
 
                 case GKListType.rtGroup:
-                    return GroupListModel.CreateListColumns();
+                    result = GroupListModel.CreateListColumns();
+                    break;
 
                 case GKListType.rtResearch:
-                    return ResearchListModel.CreateListColumns();
+                    result = ResearchListModel.CreateListColumns();
+                    break;
 
                 case GKListType.rtTask:
-                    return TaskListModel.CreateListColumns();
+                    result = TaskListModel.CreateListColumns();
+                    break;
 
                 case GKListType.rtCommunication:
-                    return CommunicationListModel.CreateListColumns();
+                    result = CommunicationListModel.CreateListColumns();
+                    break;
 
                 case GKListType.rtLocation:
-                    return LocationListModel.CreateListColumns();
+                    result = LocationListModel.CreateListColumns();
+                    break;
 
 
                 case GKListType.stMediaLinks:
-                    return MediaLinksListModel.CreateListColumns();
+                    result = MediaLinksListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stNoteLinks:
-                    return NoteLinksListModel.CreateListColumns();
+                    result = NoteLinksListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stSourceCitations:
-                    return SourceCitationsListModel.CreateListColumns();
+                    result = SourceCitationsListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stUserRefs:
-                    return URefsListModel.CreateListColumns();
+                    result = URefsListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stEvents:
-                    return EventsListModel.CreateListColumns();
+                    result = EventsListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stChildren:
-                    return ChildrenListModel.CreateListColumns();
+                    result = ChildrenListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stIndividualAssociations:
-                    return AssociationsListModel.CreateListColumns();
+                    result = AssociationsListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stIndividualGroups:
-                    return IndiGroupsListModel.CreateListColumns();
+                    result = IndiGroupsListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stIndividualNames:
-                    return IndiNamesListModel.CreateListColumns();
+                    result = IndiNamesListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stIndividualParents:
-                    return IndiParentsListModel.CreateListColumns();
+                    result = IndiParentsListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stIndividualSpouses:
-                    return IndiSpousesListModel.CreateListColumns();
+                    result = IndiSpousesListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stIndividualDNATests:
-                    return DNATestsListModel.CreateListColumns();
+                    result = DNATestsListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stSourceRepositories:
-                    return RepositoryCitationsListModel.CreateListColumns();
+                    result = RepositoryCitationsListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stRepoCitCallNumbers:
-                    return CallNumbersListModel.CreateListColumns();
+                    result = CallNumbersListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stGroupMembers:
-                    return GroupMembersListModel.CreateListColumns();
+                    result = GroupMembersListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stResearchTasks:
-                    return ResTasksListModel.CreateListColumns();
+                    result = ResTasksListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stResearchCommunications:
-                    return ResCommunicationsListModel.CreateListColumns();
+                    result = ResCommunicationsListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stResearchGroups:
-                    return ResGroupsListModel.CreateListColumns();
+                    result = ResGroupsListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stLocationLinks:
-                    return LocationLinksListModel.CreateListColumns();
+                    result = LocationLinksListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stLocationNames:
-                    return LocationNamesListModel.CreateListColumns();
+                    result = LocationNamesListModel.CreateListColumns();
+                    break;
 
                 case GKListType.stEventDefs:
-                    return EventDefsListModel.CreateListColumns();
+                    result = EventDefsListModel.CreateListColumns();
+                    break;
 
                 default:
-                    return new ListColumns(GKListType.ltNone);
+                    result = new ListColumns(GKListType.ltNone);
+                    break;
             }
+
+            result.ResetDefaults();
+
+            return result;
         }
 
         public void LoadFromFile(IniFile iniFile, int optsVersion)

@@ -25,7 +25,9 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Lists;
 using GKCore.Operations;
+using GKCore.Options;
 using GKCore.Types;
 using GKUI.Themes;
 
@@ -65,13 +67,19 @@ namespace GKCore.Controllers
         private const float FIND_LOC_THRESHOLD = 0.85f;
         private const float FILTER_LOC_THRESHOLD = 0.85f;
 
-
+        private LocEntriesListModel fEntriesListModel;
         private List<LocEntry> fEntries;
 
 
         public LocExpertDlgController(ILocExpertDlg view) : base(view)
         {
             fEntries = new List<LocEntry>();
+            fEntriesListModel = new LocEntriesListModel();
+            fEntriesListModel.DataSource = fEntries;
+
+            var lvEntries = GetControl<IListView>("lvEntries");
+            lvEntries.ListMan = fEntriesListModel;
+            lvEntries.UpdateContents();
         }
 
         public override void SetLocale()
@@ -98,13 +106,6 @@ namespace GKCore.Controllers
             GetControl<IButtonToolItem>("btnTopLinkAdd").Text = LangMan.LS(LSID.DoAdd);
             GetControl<IButtonToolItem>("btnTopLinkEdit").Text = LangMan.LS(LSID.DoEdit);
 #endif
-
-            var lvEntries = GetControl<IListView>("lvEntries");
-            lvEntries.AddColumn(LangMan.LS(LSID.Entry), 180, false);
-            lvEntries.AddColumn("LocName", 180, false); // Запись места?
-            lvEntries.AddColumn("LocName date intersects", 120, false); // Пересечение/Перекрытие даты места?
-            lvEntries.AddColumn("Has TopLink", 120, false); // Ссылка верхний уровень?
-            lvEntries.AddColumn("TopLink date instersects", 120, false); // Пересечение/Перекрытие даты ссылки?
         }
 
         public override void ApplyTheme()
@@ -130,10 +131,17 @@ namespace GKCore.Controllers
             var entry = GetSelectedEntry();
             if (entry == null) return;
 
+#if NETCORE
+            GetControl<IButton>("btnLocNameAdd").Enabled = entry.Pair == null;
+            GetControl<IButton>("btnLocNameEdit").Enabled = entry.Pair != null;
+            GetControl<IButton>("btnTopLinkAdd").Enabled = entry.Pair != null && entry.TopLevelLink == null;
+            GetControl<IButton>("btnTopLinkEdit").Enabled = entry.Pair != null && entry.TopLevelLink != null;
+#else
             GetControl<IButtonToolItem>("btnLocNameAdd").Enabled = entry.Pair == null;
             GetControl<IButtonToolItem>("btnLocNameEdit").Enabled = entry.Pair != null;
             GetControl<IButtonToolItem>("btnTopLinkAdd").Enabled = entry.Pair != null && entry.TopLevelLink == null;
             GetControl<IButtonToolItem>("btnTopLinkEdit").Enabled = entry.Pair != null && entry.TopLevelLink != null;
+#endif
         }
 
         public void Analyze()
@@ -295,27 +303,16 @@ namespace GKCore.Controllers
             var date = GetControl<IDateControl>("dtlPlaceDate").Date;
 
             GDMLocationRecord targetLoc = null;
-
-            lvEntries.BeginUpdate();
-            lvEntries.ClearItems();
-
             for (int i = 0; i < fEntries.Count; i++) {
                 var entry = fEntries[i];
-                var entryPair = entry.Pair;
-
-                var locNameStr = (entryPair != null) ? entry.Pair.Name.StringValue : GKData.CROSS_MARK;
-                var hasNameDateIntersects = entry.HasDateIntersects ? GKData.CHECK_MARK : GKData.CROSS_MARK;
-                var hasTopLink = (entry.TopLevelLink != null) ? GKData.CHECK_MARK : GKData.CROSS_MARK;
-                var hasTopLevelDateIntersects = entry.TopLevelIntersects ? GKData.CHECK_MARK : GKData.CROSS_MARK;
-
-                lvEntries.AddItem(entry, entry.Text, locNameStr, hasNameDateIntersects, hasTopLink, hasTopLevelDateIntersects);
-
-                if (targetLoc == null && entryPair != null) {
-                    targetLoc = entryPair.Location;
+                if (targetLoc == null && entry.Pair != null) {
+                    targetLoc = entry.Pair.Location;
                 }
             }
 
-            lvEntries.EndUpdate();
+            fEntriesListModel.DataSource = fEntries;
+            lvEntries.SortOrder = BSDTypes.SortOrder.None;
+            lvEntries.UpdateContents();
 
             if (targetLoc != null) {
                 txtGeneratedName.Text = targetLoc.GetNameByDate(date, true);
@@ -410,6 +407,48 @@ namespace GKCore.Controllers
             if (entry == null || entry.Pair == null || entry.TopLevelLink == null) return;
 
             ModifyLocationLink(entry.Pair.Location, entry.TopLevelLink, null);
+        }
+
+
+        private sealed class LocEntriesListModel : SimpleListModel<LocEntry>
+        {
+            public LocEntriesListModel() : base(null, CreateListColumns())
+            {
+            }
+
+            public static ListColumns CreateListColumns()
+            {
+                var result = new ListColumns(GKListType.ltNone);
+                result.AddColumn(LangMan.LS(LSID.Entry), 180, false);
+                result.AddColumn("LocName", 180, false); // Запись места?
+                result.AddColumn("LocName date intersects", 120, false); // Пересечение/Перекрытие даты места?
+                result.AddColumn("Has TopLink", 120, false); // Ссылка верхний уровень?
+                result.AddColumn("TopLink date instersects", 120, false); // Пересечение/Перекрытие даты ссылки?
+                return result;
+            }
+
+            protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+            {
+                object result = null;
+                switch (colType) {
+                    case 0:
+                        result = fFetchedRec.Text;
+                        break;
+                    case 1:
+                        result = (fFetchedRec.Pair != null) ? fFetchedRec.Pair.Name.StringValue : GKData.CROSS_MARK;
+                        break;
+                    case 2:
+                        result = fFetchedRec.HasDateIntersects ? GKData.CHECK_MARK : GKData.CROSS_MARK;
+                        break;
+                    case 3:
+                        result = (fFetchedRec.TopLevelLink != null) ? GKData.CHECK_MARK : GKData.CROSS_MARK;
+                        break;
+                    case 4:
+                        result = fFetchedRec.TopLevelIntersects ? GKData.CHECK_MARK : GKData.CROSS_MARK;
+                        break;
+                }
+                return result;
+            }
         }
     }
 }

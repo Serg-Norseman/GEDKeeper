@@ -44,7 +44,7 @@ namespace GKCore.Lists
     ///
     /// </summary>
     public abstract class ListSource<T> : IListSource
-        where T : class, IGDMObject
+        where T : class
     {
         private readonly ExtObservableList<ContentItem> fContentList;
         private SGCulture fSysCulture;
@@ -113,20 +113,37 @@ namespace GKCore.Lists
         }
 
 
-        protected ListSource(IBaseContext baseContext, ListColumns defaultListColumns)
+        protected ListSource()
         {
-            fBaseContext = baseContext;
+            fBaseContext = null;
             fColumnsMap = new List<MapColumnRec>();
-            fListColumns = defaultListColumns;
             fContentList = new ExtObservableList<ContentItem>();
             fQuickFilter = new QuickFilterParams();
-
-            RestoreSettings();
+            fListColumns = new ListColumns(GKListType.ltNone);
 
             CreateFilter();
         }
 
-        public void Clear()
+        protected ListSource(IBaseContext baseContext, ListColumns defaultListColumns)
+        {
+            fBaseContext = baseContext;
+            fColumnsMap = new List<MapColumnRec>();
+            fContentList = new ExtObservableList<ContentItem>();
+            fQuickFilter = new QuickFilterParams();
+
+            if (defaultListColumns != null) {
+                fListColumns = defaultListColumns;
+                fListColumns.ResetDefaults();
+
+                RestoreSettings();
+            } else {
+                fListColumns = new ListColumns(GKListType.ltNone);
+            }
+
+            CreateFilter();
+        }
+
+        public virtual void Clear()
         {
             fContentList.Clear();
             fTotalCount = 0;
@@ -145,14 +162,20 @@ namespace GKCore.Lists
 
         public void RestoreSettings()
         {
-            var columnOpts = GlobalOptions.Instance.ListOptions[fListColumns.ListType];
+            var listType = fListColumns.ListType;
+            if (listType == GKListType.ltNone) return;
+
+            var columnOpts = GlobalOptions.Instance.ListOptions[listType];
             //rView.SetSortColumn(columnOpts.SortColumn, false);
             columnOpts.Columns.CopyTo(fListColumns);
         }
 
         public void SaveSettings()
         {
-            var columnOpts = GlobalOptions.Instance.ListOptions[fListColumns.ListType];
+            var listType = fListColumns.ListType;
+            if (listType == GKListType.ltNone) return;
+
+            var columnOpts = GlobalOptions.Instance.ListOptions[listType];
             //columnOpts.SortColumn = rView.SortColumn;
             fListColumns.CopyTo(columnOpts.Columns);
         }
@@ -166,13 +189,13 @@ namespace GKCore.Lists
             int num = fListColumns.Count;
             for (int i = 0; i < num; i++) {
                 ListColumn cs = fListColumns.OrderedColumns[i];
-                AddColumn(cs.ColName, cs.CurWidth, false, cs.Id, 0);
+                AddColumn(cs.ColName, cs.CurWidth, false, cs.Id, 0, cs.DataType);
             }
         }
 
-        protected void AddColumn(string caption, int width, bool autoSize, byte colType, byte colSubtype)
+        protected void AddColumn(string caption, int width, bool autoSize, byte colType, byte colSubtype, DataType dataType = DataType.dtString)
         {
-            fColumnsMap.Add(new MapColumnRec(caption, width, autoSize, colType, colSubtype));
+            fColumnsMap.Add(new MapColumnRec(caption, width, autoSize, colType, colSubtype, dataType));
         }
 
         public void UpdateColumns(IListView listView)
@@ -185,7 +208,11 @@ namespace GKCore.Lists
                 int num = fColumnsMap.Count;
                 for (int i = 0; i < num; i++) {
                     var cm = fColumnsMap[i];
-                    listView.AddColumn(cm.Caption, cm.Width, cm.AutoSize);
+                    if (cm.DataType == DataType.dtBool) {
+                        listView.AddCheckedColumn(cm.Caption, cm.Width, cm.AutoSize);
+                    } else {
+                        listView.AddColumn(cm.Caption, cm.Width, cm.AutoSize);
+                    }
                 }
             }
         }
@@ -558,7 +585,7 @@ namespace GKCore.Lists
             return result;
         }
 
-        protected static string ConvertColumnValue(object val, ListColumn cs)
+        protected static object ConvertColumnValue(object val, ListColumn cs)
         {
             if (val == null)
                 return string.Empty;
@@ -579,6 +606,9 @@ namespace GKCore.Lists
 
                 case DataType.dtGEDCOMDate:
                     return val.ToString();
+
+                case DataType.dtBool:
+                    return val;
 
                 default:
                     return val.ToString();
@@ -602,6 +632,9 @@ namespace GKCore.Lists
 
                 case DataType.dtGEDCOMDate:
                     return GDMDate.GetUDNByFormattedStr(val, GDMCalendar.dcGregorian);
+
+                case DataType.dtBool:
+                    return bool.Parse(val);
             }
 
             return val;
@@ -638,6 +671,25 @@ namespace GKCore.Lists
             return null;
         }
 
+        /// <summary>
+        /// Set a new column value. Currently only applicable for column 0 for lists in virtual mode (Checked flag items).
+        /// </summary>
+        /// <param name="rowIndex">rowIndex comes in the current sort order of the virtual list</param>
+        /// <param name="colIndex"></param>
+        /// <param name="value"></param>
+        public virtual void SetColumnValue(int rowIndex, int colIndex, object value)
+        {
+            if (rowIndex >= 0 && rowIndex < fContentList.Count) {
+                var item = fContentList[rowIndex].Record;
+                SetColumnValueEx(item as T, colIndex, value);
+            }
+        }
+
+        protected virtual void SetColumnValueEx(T item, int colIndex, object value)
+        {
+            // dummy
+        }
+
         #endregion
 
         #region Items and content processing
@@ -645,18 +697,19 @@ namespace GKCore.Lists
         private object[] fItemData;
         private ContentItem fVirtualFetchedItem;
 
-        public string GetColumnExternalValue(ContentItem contentItem, int colIndex)
+        public object GetColumnExternalValue(ContentItem contentItem, int colIndex)
         {
-            var queryRec = (T)contentItem.Record;
-
             // "super fetch"
             if (fVirtualFetchedItem != contentItem) {
-                fItemData = GetItemData(queryRec);
+                fItemData = GetItemData(contentItem.Record);
                 fVirtualFetchedItem = contentItem;
             }
 
-            return (fItemData == null) ? string.Empty : (string)fItemData[colIndex];
+            return (fItemData == null || colIndex >= fItemData.Length) ? null : fItemData[colIndex];
         }
+
+        // Minimizing memory allocations
+        private object[] fDataBuffer;
 
         public object[] GetItemData(object rowData)
         {
@@ -667,12 +720,15 @@ namespace GKCore.Lists
             Fetch(rec);
 
             int num = fColumnsMap.Count;
-            object[] result = new object[num];
+
+            if (fDataBuffer == null || fDataBuffer.Length != num)
+                fDataBuffer = new object[num];
+
             for (int i = 0; i < num; i++) {
-                result[i] = GetColumnValue(i, true);
+                fDataBuffer[i] = GetColumnValue(i, true);
             }
 
-            return result;
+            return fDataBuffer;
         }
 
         public virtual IColor GetBackgroundColor(int itemIndex, object rowData)
@@ -727,8 +783,7 @@ namespace GKCore.Lists
         {
             int result = -1;
 
-            int num = fContentList.Count;
-            for (int i = 0; i < num; i++) {
+            for (int i = 0, num = fContentList.Count; i < num; i++) {
                 if (fContentList[i].Record == data) {
                     result = i;
                     break;
@@ -803,5 +858,45 @@ namespace GKCore.Lists
         }
 
         #endregion
+    }
+
+
+    public abstract class SimpleListModel<T> : ListSource<T>
+        where T : class
+    {
+        private IList<T> fDataSource;
+
+
+        public IList<T> DataSource
+        {
+            get { return fDataSource; }
+            set { fDataSource = value; }
+        }
+
+
+        protected SimpleListModel() : base()
+        {
+        }
+
+        protected SimpleListModel(IBaseContext baseContext, ListColumns defaultListColumns) :
+            base(baseContext, defaultListColumns)
+        {
+        }
+
+        public override void UpdateContents()
+        {
+            if (fDataSource == null) return;
+
+            try {
+                int contentSize = fDataSource.Count;
+                InitContent(contentSize);
+                for (int i = 0; i < contentSize; i++) {
+                    AddFilteredContent(fDataSource[i]);
+                }
+                DoneContent();
+            } catch (Exception ex) {
+                Logger.WriteError("SimpleListModel.UpdateContents()", ex);
+            }
+        }
     }
 }

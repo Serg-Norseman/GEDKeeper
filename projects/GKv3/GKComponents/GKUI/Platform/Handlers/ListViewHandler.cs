@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,24 +18,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections.Generic;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Interfaces;
 using GKUI.Components;
+using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
 
 namespace GKUI.Platform.Handlers
 {
-    using BSDListItem = GKCore.Design.Controls.IListItem;
-
     public sealed class ListViewHandler : BaseControlHandler<GKListView, ListViewHandler>, IListView
     {
         public ListViewHandler(GKListView control) : base(control)
         {
         }
 
-        public IListViewItems Items
+        public IListSource ListMan
         {
-            get { return ((IListView)Control).Items; }
+            get { return Control.ListMan; }
+            set { Control.ListMan = value; }
         }
 
         public int SelectedIndex
@@ -50,40 +51,20 @@ namespace GKUI.Platform.Handlers
             set { Control.SortColumn = value; }
         }
 
-        public IListSource ListMan
+        public BSDSortOrder SortOrder
         {
-            get { return Control.ListMan; }
-            set { Control.ListMan = value; }
+            get { return Control.SortOrder; }
+            set { Control.SortOrder = value; }
         }
 
         public void AddCheckedColumn(string caption, int width, bool autoSize = false)
         {
-            Control.AddColumn(caption, width, autoSize);
+            Control.AddCheckedColumn(caption, width, autoSize);
         }
 
-        public void AddColumn(string caption, int width, bool autoSize)
-        {
-            Control.AddColumn(caption, width, autoSize);
-        }
-
-        public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign)
+        public void AddColumn(string caption, int width, bool autoSize = false, BSDTypes.HorizontalAlignment textAlign = BSDTypes.HorizontalAlignment.Left)
         {
             Control.AddColumn(caption, width, autoSize, textAlign);
-        }
-
-        public BSDListItem AddItem(object rowData, bool isChecked, params object[] columnValues)
-        {
-            return Control.AddItem(rowData, isChecked, columnValues);
-        }
-
-        public BSDListItem AddItem(object rowData, params object[] columnValues)
-        {
-            return Control.AddItem(rowData, columnValues);
-        }
-
-        public void BeginUpdate()
-        {
-            Control.BeginUpdate();
         }
 
         public void Clear()
@@ -96,24 +77,19 @@ namespace GKUI.Platform.Handlers
             Control.ClearColumns();
         }
 
-        public void ClearItems()
-        {
-            Control.ClearItems();
-        }
-
         public void DeleteRecord(object data)
         {
             Control.DeleteRecord(data);
         }
 
-        public void EndUpdate()
-        {
-            Control.EndUpdate();
-        }
-
         public object GetSelectedData()
         {
             return Control.GetSelectedData();
+        }
+
+        public IList<object> GetSelectedItems()
+        {
+            return Control.GetSelectedItems();
         }
 
         public void ResizeColumn(int columnIndex)
@@ -144,11 +120,6 @@ namespace GKUI.Platform.Handlers
         public void SetSortColumn(int sortColumn, bool checkOrder = true)
         {
             Control.SetSortColumn(sortColumn, checkOrder);
-        }
-
-        public void Sort(int sortColumn, BSDTypes.SortOrder sortOrder)
-        {
-            Control.Sort(sortColumn, sortOrder);
         }
 
         public void SortModelColumn(int columnId)

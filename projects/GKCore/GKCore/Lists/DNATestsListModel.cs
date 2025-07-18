@@ -46,7 +46,6 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.stIndividualDNATests);
-
             result.AddColumn(LSID.Date, 90, false);
             result.AddColumn(LSID.DNATestName, 90, false);
             result.AddColumn(LSID.DNALaboratory, 200, false);
@@ -56,8 +55,6 @@ namespace GKCore.Lists
             result.AddColumn(LSID.YDNAHaplogroup, 90, false);
             result.AddColumn(LSID.RPNotes, 32, false);
             result.AddColumn(LSID.RPMultimedia, 32, false);
-
-            result.ResetDefaults();
             return result;
         }
 

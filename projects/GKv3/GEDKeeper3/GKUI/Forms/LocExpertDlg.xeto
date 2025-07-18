@@ -36,7 +36,7 @@
 
     <TableRow>
       <StackLayout Orientation="Vertical">
-        <comcom:GKListView x:Name="lvEntries" Sorting="False" SelectedItemsChanged="lvEntries_SelectedIndexChanged" />
+        <comcom:GKListView x:Name="lvEntries" SelectedItemsChanged="lvEntries_SelectedIndexChanged" />
 
         <StackLayout x:Name="toolStrip1" Orientation="Horizontal" Spacing="4">
           <Label x:Name="lblLocName" />

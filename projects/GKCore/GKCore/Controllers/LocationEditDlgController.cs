@@ -29,6 +29,7 @@ using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Maps;
+using GKCore.Options;
 using GKCore.Types;
 using GKUI.Themes;
 
@@ -40,6 +41,7 @@ namespace GKCore.Controllers
     public sealed class LocationEditDlgController : DialogController<ILocationEditDlg>
     {
         private GDMLocationRecord fLocationRecord;
+        private GPListModel fPointsModel;
 
         public GDMLocationRecord LocationRecord
         {
@@ -69,6 +71,10 @@ namespace GKCore.Controllers
             fView.MediaList.ListModel = new MediaLinksListModel(fView, baseWin, fLocalUndoman);
 
             fView.NamesList.OnModify += ModifyNamesSheet;
+
+            fPointsModel = new GPListModel();
+            fView.GeoCoordsList.ListMan = fPointsModel;
+            fView.GeoCoordsList.UpdateContents();
         }
 
         public override void Done()
@@ -146,21 +152,15 @@ namespace GKCore.Controllers
                 return;
             }
 
-            fView.GeoCoordsList.BeginUpdate();
             fView.MapBrowser.BeginUpdate();
             try {
                 var searchPoints = new List<GeoPoint>();
 
                 AppHost.Instance.RequestGeoCoords(location, searchPoints);
-                fView.GeoCoordsList.ClearItems();
                 fView.MapBrowser.ClearPoints();
 
-                int num = searchPoints.Count;
-                for (int i = 0; i < num; i++) {
+                for (int i = 0, num = searchPoints.Count; i < num; i++) {
                     GeoPoint pt = searchPoints[i];
-
-                    fView.GeoCoordsList.AddItem(pt, pt.Hint,
-                        GEDCOMUtils.CoordToStr(pt.Latitude), GEDCOMUtils.CoordToStr(pt.Longitude));
 
                     fView.MapBrowser.AddPoint(pt.Latitude, pt.Longitude, pt.Hint);
 
@@ -168,9 +168,11 @@ namespace GKCore.Controllers
                         fView.MapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
                     }
                 }
+
+                fPointsModel.DataSource = searchPoints;
+                fView.GeoCoordsList.UpdateContents();
             } finally {
                 fView.MapBrowser.EndUpdate();
-                fView.GeoCoordsList.EndUpdate();
             }
         }
 
@@ -235,11 +237,6 @@ namespace GKCore.Controllers
 
             SetToolTip("btnShowOnMap", LangMan.LS(LSID.ShowOnMapTip));
 
-            fView.GeoCoordsList.ClearColumns();
-            fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.Title), 300, false);
-            fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.Latitude), 80, false);
-            fView.GeoCoordsList.AddColumn(LangMan.LS(LSID.Longitude), 80, false);
-
             GetControl<ITabPage>("pageHistory").Text = LangMan.LS(LSID.History);
             GetControl<IGroupBox>("pageHistNames").Text = LangMan.LS(LSID.Names);
             GetControl<IGroupBox>("pageHistLinks").Text = LangMan.LS(LSID.TopLevelLinks);
@@ -251,6 +248,40 @@ namespace GKCore.Controllers
 
             GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
             GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+        }
+
+
+        private sealed class GPListModel : SimpleListModel<GeoPoint>
+        {
+            public GPListModel() : base(null, CreateListColumns())
+            {
+            }
+
+            public static ListColumns CreateListColumns()
+            {
+                var result = new ListColumns(GKListType.ltNone);
+                result.AddColumn(LangMan.LS(LSID.Title), 300, false);
+                result.AddColumn(LangMan.LS(LSID.Latitude), 80, false);
+                result.AddColumn(LangMan.LS(LSID.Longitude), 80, false);
+                return result;
+            }
+
+            protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+            {
+                object result = null;
+                switch (colType) {
+                    case 0:
+                        result = fFetchedRec.Hint;
+                        break;
+                    case 1:
+                        result = GEDCOMUtils.CoordToStr(fFetchedRec.Latitude);
+                        break;
+                    case 2:
+                        result = GEDCOMUtils.CoordToStr(fFetchedRec.Longitude);
+                        break;
+                }
+                return result;
+            }
         }
     }
 }

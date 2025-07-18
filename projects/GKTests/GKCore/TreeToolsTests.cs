@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -247,7 +247,7 @@ namespace GKCore
         {
             var progress = Substitute.For<IProgressController>();
 
-            List<TreeInspector.CheckObj> checksList = new List<TreeInspector.CheckObj>();
+            List<CheckObj> checksList = new List<CheckObj>();
             Assert.Throws(typeof(ArgumentNullException), () => { TreeInspector.CheckBase(null, checksList, progress); });
             Assert.Throws(typeof(ArgumentNullException), () => { TreeInspector.CheckBase(fBaseWin, null, progress); });
 
@@ -255,9 +255,9 @@ namespace GKCore
             TreeInspector.CheckBase(fBaseWin, checksList, progress);
             Assert.AreEqual(4, checksList.Count);
 
-            Assert.AreEqual(TreeInspector.CheckDiag.cdStrangeSpouse, checksList[0].Diag);
-            Assert.AreEqual(TreeInspector.CheckDiag.cdStrangeSpouse, checksList[1].Diag);
-            Assert.AreEqual(TreeInspector.CheckDiag.cdPersonLonglived, checksList[2].Diag);
+            Assert.AreEqual(CheckDiag.cdStrangeSpouse, checksList[0].Diag);
+            Assert.AreEqual(CheckDiag.cdStrangeSpouse, checksList[1].Diag);
+            Assert.AreEqual(CheckDiag.cdPersonLonglived, checksList[2].Diag);
 
             Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await TreeInspector.RepairProblem(null, null, null); });
             Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await TreeInspector.RepairProblem(null, fBaseWin, null); });

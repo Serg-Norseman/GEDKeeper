@@ -19,9 +19,12 @@
  */
 
 using System;
+using System.Collections.Generic;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;
 using GKUI.Themes;
@@ -33,6 +36,7 @@ namespace GKCore.Controllers
     /// </summary>
     public class LanguageSelectDlgController : DialogController<ILanguageSelectDlg>
     {
+        private LangsListModel fLangsModel;
         private int fSelectedLanguage;
 
         public int SelectedLanguage
@@ -49,20 +53,22 @@ namespace GKCore.Controllers
 
         public LanguageSelectDlgController(ILanguageSelectDlg view) : base(view)
         {
-            fView.LanguagesList.ClearItems();
+            fLangsModel = new LangsListModel();
+            fView.LanguagesList.ListMan = fLangsModel;
 
             LangRecord defLang;
             if (GlobalOptions.Instance.Languages.Count > 0) {
-                foreach (LangRecord lngRec in GlobalOptions.Instance.Languages) {
-                    fView.LanguagesList.AddItem(lngRec, lngRec.Name);
-                }
+                fLangsModel.DataSource = GlobalOptions.Instance.Languages;
                 defLang = GlobalOptions.Instance.GetLangByCode(LangMan.LS_DEF_CODE);
             } else {
+                var langs = new List<LangRecord>();
                 // unit-testing and some other cases
                 defLang = new LangRecord(LangMan.LS_DEF_CODE, LangMan.LS_DEF_SIGN, LangMan.LS_DEF_NAME, "English.lng", null);
-                fView.LanguagesList.AddItem(defLang, defLang.Name);
+                langs.Add(defLang);
+                fLangsModel.DataSource = langs;
             }
 
+            fView.LanguagesList.UpdateContents();
             fView.LanguagesList.Activate();
             fView.LanguagesList.SelectItem(defLang);
         }
@@ -80,20 +86,27 @@ namespace GKCore.Controllers
             }
         }
 
-        public override void UpdateView()
-        {
-        }
-
-        public override void SetLocale()
-        {
-        }
-
         public override void ApplyTheme()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
             GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
             GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+        }
+
+
+        private sealed class LangsListModel : SimpleListModel<LangRecord>
+        {
+            public LangsListModel() : base()
+            {
+                ListColumns.AddColumn("Language", DataType.dtString, 260, false);
+                ListColumns.ResetDefaults();
+            }
+
+            protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+            {
+                return fFetchedRec.Name;
+            }
         }
     }
 }

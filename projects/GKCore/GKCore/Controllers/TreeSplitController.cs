@@ -25,6 +25,8 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
@@ -40,47 +42,62 @@ namespace GKCore.Controllers
         private bool fIndiMode;
         private readonly List<GDMRecord> fSplitList;
 
+        private List<GDMRecord> fSelectedRecList;
+        private List<GDMRecord> fSkippedRecList;
+
+
         public TreeSplitController(ITreeSplitDlg view) : base(view)
         {
             fSplitList = new List<GDMRecord>();
         }
 
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fSelectedRecList = new List<GDMRecord>();
+            var listModel = new RecsListModel(baseWin.Context, LangMan.LS(LSID.Record));
+            listModel.DataSource = fSelectedRecList;
+            fView.SelectedList.ListMan = listModel;
+            fView.SelectedList.UpdateContents();
+
+            fSkippedRecList = new List<GDMRecord>();
+            listModel = new RecsListModel(baseWin.Context, LangMan.LS(LSID.Record));
+            listModel.DataSource = fSkippedRecList;
+            fView.SkippedList.ListMan = listModel;
+            fView.SkippedList.UpdateContents();
+        }
+
         public override void UpdateView()
         {
-            fView.SelectedList.BeginUpdate();
-            fView.SelectedList.ClearItems();
-            fView.SkippedList.BeginUpdate();
-            fView.SkippedList.ClearItems();
             try {
+                fSelectedRecList.Clear();
+                fSkippedRecList.Clear();
+
                 var tree = fBase.Context.Tree;
                 int cnt = 0;
-                int num = tree.RecordsCount;
-                for (int i = 0; i < num; i++) {
+                for (int i = 0, num = tree.RecordsCount; i < num; i++) {
                     GDMRecord rec = tree[i];
-                    if (fIndiMode && rec is GDMIndividualRecord) {
-                        cnt++;
-                        GDMIndividualRecord iRec = rec as GDMIndividualRecord;
-                        string st = iRec.XRef + " / " + GKUtils.GetNameString(iRec, false);
 
-                        if (fSplitList.IndexOf(iRec) < 0) {
-                            fView.SkippedList.AddItem(null, st);
+                    if (fIndiMode && rec is GDMIndividualRecord iRec) {
+                        cnt++;
+                        if (fSplitList.IndexOf(iRec) >= 0) {
+                            fSelectedRecList.Add(iRec);
                         } else {
-                            fView.SelectedList.AddItem(null, st);
+                            fSkippedRecList.Add(iRec);
                         }
                     } else {
-                        string st = rec.XRef + " / " + GKUtils.GetRecordName(tree, rec, false);
-
-                        if (fSplitList.IndexOf(rec) < 0) {
-                            //fView.SkippedList.AddItem(null, st);
-                        } else {
-                            fView.SelectedList.AddItem(null, st);
+                        cnt++;
+                        if (fSplitList.IndexOf(rec) >= 0) {
+                            fSelectedRecList.Add(rec);
                         }
                     }
                 }
-                fView.Title = fSplitList.Count.ToString() + @" / " + cnt.ToString();
+
+                fView.Title = $@"{fSelectedRecList.Count} / {cnt}";
             } finally {
-                fView.SelectedList.EndUpdate();
-                fView.SkippedList.EndUpdate();
+                fView.SelectedList.UpdateContents();
+                fView.SkippedList.UpdateContents();
             }
         }
 
@@ -122,8 +139,8 @@ namespace GKCore.Controllers
             for (int i = 0; i < num; i++) {
                 object obj = fSplitList[i];
 
-                if (obj is GDMIndividualRecord) {
-                    await BaseController.DeleteRecord(fBase, obj as GDMIndividualRecord, false);
+                if (obj is GDMIndividualRecord iRec) {
+                    await BaseController.DeleteRecord(fBase, iRec, false);
                 }
             }
 
@@ -165,9 +182,6 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnSelectList").Text = LangMan.LS(LSID.SelList);
             GetControl<IButton>("btnDelete").Text = LangMan.LS(LSID.DoDelete);
             GetControl<IButton>("btnSave").Text = LangMan.LS(LSID.MIFileSaveAs);
-
-            fView.SelectedList.AddColumn(LangMan.LS(LSID.Record), 300, false);
-            fView.SkippedList.AddColumn(LangMan.LS(LSID.Record), 300, false);
         }
 
         public override void ApplyTheme()

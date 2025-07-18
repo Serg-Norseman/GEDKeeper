@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,12 +19,16 @@
  */
 
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 using GDModel;
 using GKCore;
+using GKCore.Charts;
+using GKCore.Design;
+using GKCore.Design.Graphics;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.NetDiff;
+using GKCore.Options;
 using GKCore.Tools;
 
 namespace GKTreeSyncPlugin
@@ -33,6 +37,7 @@ namespace GKTreeSyncPlugin
     {
         private readonly IBaseWindow fBase;
         private readonly SyncTool fSyncTool;
+        private DiffListModel fListModel;
 
         public TSForm()
         {
@@ -50,10 +55,8 @@ namespace GKTreeSyncPlugin
             fSyncTool = new SyncTool();
 
             lvRecords.CheckBoxes = true;
-            lvRecords.AddColumn("XRef 1", 100);
-            lvRecords.AddColumn("XRef 2", 100);
-            lvRecords.AddColumn("Name 1", 400);
-            lvRecords.AddColumn("Name 2", 400);
+            fListModel = new DiffListModel(fBase.Context);
+            lvRecords.ListMan = fListModel;
         }
 
         public void SetLocale()
@@ -86,63 +89,117 @@ namespace GKTreeSyncPlugin
 
         private GDMRecordType GetRecordType()
         {
-            if (rbSyncAll.Checked) {
-                return GDMRecordType.rtNone;
-            } else {
-                return (GDMRecordType)(cmbRecordTypes.SelectedIndex + 1);
-            }
+            return rbSyncAll.Checked ? GDMRecordType.rtNone : (GDMRecordType)(cmbRecordTypes.SelectedIndex + 1);
         }
 
         private void UpdateLists()
         {
-            bool onlyModified = chkOnlyModified.Checked;
+            fListModel.ShowOnlyModified = chkOnlyModified.Checked;
+            fListModel.DataSource = fSyncTool.Results;
+            lvRecords.UpdateContents();
+        }
+    }
 
-            lvRecords.BeginUpdate();
-            lvRecords.ClearItems();
 
-            var tree = fBase.Context.Tree;
-            for (int i = 0; i < fSyncTool.Results.Count; i++) {
-                var compRes = fSyncTool.Results[i];
-                if (onlyModified && compRes.Status == DiffStatus.Equal) continue;
+    public sealed class DiffListModel : SimpleListModel<DiffRecord>
+    {
+        public bool ShowOnlyModified { get; set; }
 
-                string item1, item2;
-                char diffChar = DiffUtil.GetStatusChar(compRes.Status);
-                Color backColor;
 
-                switch (compRes.Status) {
-                    case DiffStatus.Equal:
-                    default:
-                        item1 = diffChar + " " + compRes.Obj1.XRef;
-                        item2 = diffChar + " " + compRes.Obj2.XRef;
-                        backColor = Color.White;
-                        break;
+        public DiffListModel(IBaseContext baseContext) :
+            base(baseContext, CreateListColumns())
+        {
+        }
 
-                    case DiffStatus.Deleted:
-                        item1 = diffChar + " " + compRes.Obj1.XRef;
-                        item2 = " ";
-                        backColor = Color.Coral;
-                        break;
+        public static ListColumns CreateListColumns()
+        {
+            var result = new ListColumns(GKListType.ltNone);
+            result.AddColumn("Sync", DataType.dtBool, 40, true);
+            result.AddColumn("XRef 1", DataType.dtString, 100, true);
+            result.AddColumn("XRef 2", DataType.dtString, 100, true);
+            result.AddColumn("Name 1", DataType.dtString, 400, true);
+            result.AddColumn("Name 2", DataType.dtString, 400, true);
+            return result;
+        }
 
-                    case DiffStatus.Inserted:
-                        item1 = " ";
-                        item2 = diffChar + " " + compRes.Obj2.XRef;
-                        backColor = Color.LightBlue;
-                        break;
+        public override bool CheckFilter()
+        {
+            bool res = (!ShowOnlyModified || fFetchedRec.Status != DiffStatus.Equal);
+            return res;
+        }
 
-                    case DiffStatus.Modified:
-                    case DiffStatus.DeepModified:
-                        item1 = diffChar + " " + compRes.Obj1.XRef;
-                        item2 = diffChar + " " + compRes.Obj2.XRef;
-                        backColor = (compRes.Status == DiffStatus.Modified) ? Color.Yellow : Color.Orange;
-                        break;
-                }
+        // fetched data
+        private string item1, item2;
+        private char diffChar;
+        private int backColor;
 
-                lvRecords.AddItem(compRes, false, backColor,
-                    item1, item2,
-                    GKUtils.GetRecordName(tree, compRes.Obj1, false), GKUtils.GetRecordName(tree, compRes.Obj2, false));
+        public override void Fetch(DiffRecord aRec)
+        {
+            base.Fetch(aRec);
+
+            diffChar = DiffUtil.GetStatusChar(fFetchedRec.Status);
+
+            switch (fFetchedRec.Status) {
+                case DiffStatus.Equal:
+                default:
+                    item1 = diffChar + " " + fFetchedRec.Obj1.XRef;
+                    item2 = diffChar + " " + fFetchedRec.Obj2.XRef;
+                    backColor = BSDConsts.Colors.White;
+                    break;
+
+                case DiffStatus.Deleted:
+                    item1 = diffChar + " " + fFetchedRec.Obj1.XRef;
+                    item2 = " ";
+                    backColor = BSDConsts.Colors.Coral;
+                    break;
+
+                case DiffStatus.Inserted:
+                    item1 = " ";
+                    item2 = diffChar + " " + fFetchedRec.Obj2.XRef;
+                    backColor = BSDConsts.Colors.LightBlue;
+                    break;
+
+                case DiffStatus.Modified:
+                case DiffStatus.DeepModified:
+                    item1 = diffChar + " " + fFetchedRec.Obj1.XRef;
+                    item2 = diffChar + " " + fFetchedRec.Obj2.XRef;
+                    backColor = (fFetchedRec.Status == DiffStatus.Modified) ? BSDConsts.Colors.Yellow : BSDConsts.Colors.Orange;
+                    break;
             }
+        }
 
-            lvRecords.EndUpdate();
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = fFetchedRec.Checked;
+                    break;
+                case 1:
+                    result = item1;
+                    break;
+                case 2:
+                    result = item2;
+                    break;
+                case 3:
+                    result = GKUtils.GetRecordName(fBaseContext.Tree, fFetchedRec.Obj1, false);
+                    break;
+                case 4:
+                    result = GKUtils.GetRecordName(fBaseContext.Tree, fFetchedRec.Obj2, false);
+                    break;
+            }
+            return result;
+        }
+
+        public override IColor GetBackgroundColor(int itemIndex, object rowData)
+        {
+            return ChartRenderer.GetColor(backColor);
+        }
+
+        protected override void SetColumnValueEx(DiffRecord item, int colIndex, object value)
+        {
+            if (item != null && colIndex == 0 && value is bool chk)
+                item.Checked = chk;
         }
     }
 }

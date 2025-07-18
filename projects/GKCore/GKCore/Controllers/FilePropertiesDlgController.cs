@@ -24,6 +24,8 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Types;
 using GKUI.Themes;
 
@@ -34,15 +36,29 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class FilePropertiesDlgController : DialogController<IFilePropertiesDlg>
     {
+        private readonly FlatListModel fListModel;
 
         public FilePropertiesDlgController(IFilePropertiesDlg view) : base(view)
         {
+            fListModel = new FlatListModel();
+            fView.RecordStats.ListMan = fListModel;
+
             if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 var mobileView = view as IMobileFilePropertiesDlg;
                 for (var lid = GDMLanguageID.Unknown; lid < GDMLanguageID.Yiddish; lid++) {
                     mobileView.LanguageCombo.AddItem(GEDCOMUtils.GetLanguageStr(lid), lid);
                 }
             }
+        }
+
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fListModel.ListColumns.Clear();
+            fListModel.ListColumns.AddColumn(LangMan.LS(LSID.RM_Records), DataType.dtString, 300, false);
+            fListModel.ListColumns.AddColumn(LangMan.LS(LSID.Count), DataType.dtInteger, 100, false);
+            fListModel.ListColumns.ResetDefaults();
         }
 
         public override bool Accept()
@@ -93,10 +109,10 @@ namespace GKCore.Controllers
 
             // update stats
             int[] stats = fBase.Context.Tree.GetRecordStats();
-            fView.RecordStats.ClearItems();
             for (int i = 1; i < stats.Length; i++) {
-                fView.RecordStats.AddItem(null, LangMan.LS(GKData.RecordTypes[i].Name), stats[i].ToString());
+                fListModel.AddItem(null, LangMan.LS(GKData.RecordTypes[i].Name), stats[i].ToString());
             }
+            fView.RecordStats.UpdateContents();
         }
 
         public async void ChangeLanguage()
@@ -126,10 +142,6 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblTelephone").Text = LangMan.LS(LSID.Telephone);
             GetControl<ITabPage>("pageOther").Text = LangMan.LS(LSID.Other);
             GetControl<ILabel>("lblLanguage").Text = LangMan.LS(LSID.Language);
-
-            fView.RecordStats.ClearColumns();
-            fView.RecordStats.AddColumn(LangMan.LS(LSID.RM_Records), 300, false);
-            fView.RecordStats.AddColumn(LangMan.LS(LSID.Count), 100, false, BSDTypes.HorizontalAlignment.Right);
         }
 
         public override void ApplyTheme()

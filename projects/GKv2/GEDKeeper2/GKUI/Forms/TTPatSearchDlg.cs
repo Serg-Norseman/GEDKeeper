@@ -56,6 +56,7 @@ namespace GKUI.Forms
 
             ListPatriarchs = UIHelper.CreateListView(Panel3);
             ListPatriarchs.DoubleClick += ListPatriarchs_DblClick;
+            ListPatriarchs.CheckBoxes = true;
 
             fController = new PatriarchsSearchController(this);
             fController.Init(baseWin);

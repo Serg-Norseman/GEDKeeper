@@ -58,11 +58,21 @@ namespace GKCore.Controllers
             FillGeoSearchCountries();
 
             fView.EventTypesList.ListModel = new EventDefsListModel(fView, null, null);
+
+            var listView = GetControl<IListView>("lstPersonColumns");
+            var columnsModel = new ColumnsListModel();
+            listView.ListMan = columnsModel;
+            columnsModel.DataSource = fTempColumns.OrderedColumns;
+
+            listView = GetControl<IListView>("lvPlugins");
+            var pluginsModel = new PluginsListModel();
+            pluginsModel.DataSource = AppHost.Plugins.List;
+            listView.ListMan = pluginsModel;
         }
 
-        public void ChangeTab()
+        public async void ChangeTab()
         {
-            AcceptLanguage();
+            await AcceptLanguage();
             SetLocale();
             UpdateEventTypes();
         }
@@ -80,19 +90,9 @@ namespace GKCore.Controllers
         public void UpdateColumnsList()
         {
             var listView = GetControl<IListView>("lstPersonColumns");
-
-            listView.BeginUpdate();
-            try {
-                listView.ClearItems();
-
-                int num = fTempColumns.Count;
-                for (int i = 0; i < num; i++) {
-                    ListColumn column = fTempColumns.OrderedColumns[i];
-                    listView.AddItem(null, column.CurActive, column.ColName);
-                }
-            } finally {
-                listView.EndUpdate();
-            }
+            listView.SortColumn = 1;
+            listView.SortOrder = BSDTypes.SortOrder.Ascending;
+            listView.UpdateContents();
         }
 
         public void ResetColumnsList()
@@ -104,32 +104,21 @@ namespace GKCore.Controllers
         public void MoveColumnUp()
         {
             var listView = GetControl<IListView>("lstPersonColumns");
-
-            int idx = listView.SelectedIndex;
-            if (fTempColumns.MoveColumn(idx, true)) {
+            if (fTempColumns.MoveColumn(listView.SelectedIndex, true)) {
                 UpdateColumnsList();
-                listView.SelectedIndex = idx - 1;
             }
         }
 
         public void MoveColumnDown()
         {
             var listView = GetControl<IListView>("lstPersonColumns");
-
-            int idx = listView.SelectedIndex;
-            if (fTempColumns.MoveColumn(idx, false)) {
+            if (fTempColumns.MoveColumn(listView.SelectedIndex, false)) {
                 UpdateColumnsList();
-                listView.SelectedIndex = idx + 1;
             }
         }
 
         public void AcceptColumnsList()
         {
-            var listView = GetControl<IListView>("lstPersonColumns");
-            for (int i = 0; i < fTempColumns.Count; i++) {
-                fTempColumns.OrderedColumns[i].CurActive = listView.Items[i].Checked;
-            }
-
             fTempColumns.CopyTo(fOptions.ListOptions[GDMRecordType.rtIndividual].Columns);
         }
 
@@ -542,15 +531,7 @@ namespace GKCore.Controllers
         public void UpdatePlugins()
         {
             var listView = GetControl<IListView>("lvPlugins");
-
-            listView.ClearItems();
-            int num = AppHost.Plugins.Count;
-            for (int i = 0; i < num; i++) {
-                IPlugin plugin = AppHost.Plugins[i];
-                PluginInfo pInfo = PluginInfo.GetPluginInfo(plugin);
-
-                listView.AddItem(null, pInfo.Title, pInfo.Version, pInfo.Copyright, pInfo.Description);
-            }
+            listView.UpdateContents();
         }
 
         public void AcceptPlugins()
@@ -1135,6 +1116,54 @@ namespace GKCore.Controllers
 
             GetControl<IButton>("btnColumnUp").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_MoveUp, true);
             GetControl<IButton>("btnColumnDown").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_MoveDown, true);
+        }
+
+
+
+        private sealed class PluginsListModel : SimpleListModel<IPlugin>
+        {
+            private PluginInfo pInfo;
+
+            public PluginsListModel() :
+                base(null, CreateListColumns())
+            {
+            }
+
+            public static ListColumns CreateListColumns()
+            {
+                var result = new ListColumns(GKListType.ltNone);
+                result.AddColumn("Title", 75);
+                result.AddColumn("Version", 100);
+                result.AddColumn("Copyright", 125);
+                result.AddColumn("Description", 250);
+                return result;
+            }
+
+            public override void Fetch(IPlugin aRec)
+            {
+                base.Fetch(aRec);
+                pInfo = PluginInfo.GetPluginInfo(fFetchedRec);
+            }
+
+            protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+            {
+                object result = null;
+                switch (colType) {
+                    case 0:
+                        result = pInfo.Title;
+                        break;
+                    case 1:
+                        result = pInfo.Version;
+                        break;
+                    case 2:
+                        result = pInfo.Copyright;
+                        break;
+                    case 3:
+                        result = pInfo.Description;
+                        break;
+                }
+                return result;
+            }
         }
     }
 }

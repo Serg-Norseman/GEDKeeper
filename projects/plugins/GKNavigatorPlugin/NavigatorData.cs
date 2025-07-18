@@ -25,6 +25,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Types;
 
 namespace GKNavigatorPlugin
@@ -194,14 +195,12 @@ namespace GKNavigatorPlugin
 
         public void ShowItem(IBaseWindow baseWin, object tag, IListView listView)
         {
-            if (tag is GDMRecordType recType) {
-                ShowData(baseWin, DataCategory.Records, recType, listView);
-            } else if (tag is DataCategory dataCat) {
-                ShowData(baseWin, dataCat, GDMRecordType.rtNone, listView);
+            if (tag is DataCategory dataCat) {
+                ShowData(baseWin, dataCat, listView);
             }
         }
 
-        public void ShowData(IBaseWindow baseWin, DataCategory category, GDMRecordType recordType, IListView listView)
+        public void ShowData(IBaseWindow baseWin, DataCategory category, IListView listView)
         {
             switch (category) {
                 case DataCategory.RecentActivity:
@@ -225,7 +224,7 @@ namespace GKNavigatorPlugin
                     break;
 
                 case DataCategory.Records:
-                    ShowRecordsData(baseWin, recordType, listView);
+                    ShowRecordsData(baseWin, listView);
                     break;
 
                 case DataCategory.Languages:
@@ -281,24 +280,23 @@ namespace GKNavigatorPlugin
 
         #region Records Data
 
-        private void ShowRecordsData(IBaseWindow baseWin, GDMRecordType recordType, IListView listView)
+        private void ShowRecordsData(IBaseWindow baseWin, IListView listView)
         {
-            baseWin.ShowRecordsTab(recordType);
+            //baseWin.ShowRecordsTab(recordType);
 
-            listView.BeginUpdate();
+            var listModel = new FlatListModel();
             try {
-                listView.Clear();
-                listView.AddColumn(fPlugin.LangMan.LS(PLS.Action), 20, true);
-                listView.AddColumn("XRef", 20, true);
-                listView.AddColumn(fPlugin.LangMan.LS(PLS.Name), 20, true);
-                listView.AddColumn(fPlugin.LangMan.LS(PLS.Time), 20, true);
+                listModel.ListColumns.Clear();
+                listModel.ListColumns.AddColumn(fPlugin.LangMan.LS(PLS.Action), DataType.dtString, 20, true);
+                listModel.ListColumns.AddColumn("XRef", DataType.dtString, 20, true);
+                listModel.ListColumns.AddColumn(fPlugin.LangMan.LS(PLS.Name), DataType.dtString, 20, true);
+                listModel.ListColumns.AddColumn(fPlugin.LangMan.LS(PLS.Time), DataType.dtString, 20, true);
+                listModel.ListColumns.ResetDefaults();
 
                 BaseData baseData = fPlugin.Data[baseWin.Context.FileName];
                 if (baseData == null) return;
 
                 foreach (var recordInfo in baseData.ChangedRecords) {
-                    if (recordInfo.Type != recordType) continue;
-
                     string act = "";
                     switch (recordInfo.Action) {
                         case RecordAction.raAdd:
@@ -312,12 +310,11 @@ namespace GKNavigatorPlugin
                             break;
                     }
 
-                    listView.AddItem(recordInfo, new object[] { act, recordInfo.XRef, recordInfo.Name, recordInfo.Time.ToString() });
+                    listModel.AddItem(recordInfo, new object[] { act, recordInfo.XRef, recordInfo.Name, recordInfo.Time.ToString() });
                 }
-
-                listView.ResizeColumns();
             } finally {
-                listView.EndUpdate();
+                listView.ListMan = listModel;
+                listView.UpdateContents();
             }
         }
 
@@ -336,18 +333,18 @@ namespace GKNavigatorPlugin
             var tree = baseWin.Context.Tree;
             var navArray = baseWin.Navman.FullArray;
 
-            listView.BeginUpdate();
+            var listModel = new FlatListModel();
             try {
-                listView.Clear();
-                listView.AddColumn(LangMan.LS(LSID.Record), 400, true);
+                listModel.ListColumns.Clear();
+                listModel.ListColumns.AddColumn(LangMan.LS(LSID.Record), DataType.dtString, 400, true);
+                listModel.ListColumns.ResetDefaults();
 
                 foreach (var rec in navArray) {
-                    listView.AddItem(rec, new object[] { GKUtils.GetRecordName(tree, rec, true) });
+                    listModel.AddItem(rec, new object[] { GKUtils.GetRecordName(tree, rec, true) });
                 }
-
-                listView.ResizeColumn(0);
             } finally {
-                listView.EndUpdate();
+                listView.ListMan = listModel;
+                listView.UpdateContents();
             }
         }
 
@@ -359,21 +356,21 @@ namespace GKNavigatorPlugin
         {
             baseWin.ShowRecordsTab(GDMRecordType.rtIndividual);
 
-            listView.BeginUpdate();
+            var listModel = new FlatListModel();
             try {
-                listView.Clear();
-                listView.AddColumn(LangMan.LS(LSID.MIFilter), 400, true);
+                listModel.ListColumns.Clear();
+                listModel.ListColumns.AddColumn(LangMan.LS(LSID.MIFilter), DataType.dtString, 400, true);
+                listModel.ListColumns.ResetDefaults();
 
                 BaseData baseData = fPlugin.Data[baseWin.Context.FileName];
                 if (baseData == null) return;
 
                 foreach (var filterInfo in baseData.ChangedFilters) {
-                    listView.AddItem(filterInfo, new object[] { filterInfo.FilterView });
+                    listModel.AddItem(filterInfo, new object[] { filterInfo.FilterView });
                 }
-
-                listView.ResizeColumn(0);
             } finally {
-                listView.EndUpdate();
+                listView.ListMan = listModel;
+                listView.UpdateContents();
             }
         }
 
@@ -398,18 +395,18 @@ namespace GKNavigatorPlugin
 
             var bookmarks = SearchBookmarks(baseWin.Context);
 
-            listView.BeginUpdate();
+            var listModel = new FlatListModel();
             try {
-                listView.Clear();
-                listView.AddColumn(LangMan.LS(LSID.Person), 400, true);
+                listModel.ListColumns.Clear();
+                listModel.ListColumns.AddColumn(LangMan.LS(LSID.Person), DataType.dtString, 400, true);
+                listModel.ListColumns.ResetDefaults();
 
                 foreach (var iRec in bookmarks) {
-                    listView.AddItem(iRec, new object[] { GKUtils.GetNameString(iRec, false) });
+                    listModel.AddItem(iRec, new object[] { GKUtils.GetNameString(iRec, false) });
                 }
-
-                listView.ResizeColumn(0);
             } finally {
-                listView.EndUpdate();
+                listView.ListMan = listModel;
+                listView.UpdateContents();
             }
         }
 
@@ -449,19 +446,19 @@ namespace GKNavigatorPlugin
 
         private static void ShowLanguages(IBaseWindow baseWin, IListView listView)
         {
-            listView.BeginUpdate();
+            var listModel = new FlatListModel();
             try {
-                listView.Clear();
-                listView.AddColumn(LangMan.LS(LSID.Language), 200, true);
+                listModel.ListColumns.Clear();
+                listModel.ListColumns.AddColumn(LangMan.LS(LSID.Language), DataType.dtString, 200, true);
+                listModel.ListColumns.ResetDefaults();
 
                 var langsList = baseWin.Context.LangStats.ToList();
                 foreach (var lang in langsList) {
-                    listView.AddItem(lang, new object[] { GEDCOMUtils.GetLanguageStr(lang) });
+                    listModel.AddItem(lang, new object[] { GEDCOMUtils.GetLanguageStr(lang) });
                 }
-
-                listView.ResizeColumn(0);
             } finally {
-                listView.EndUpdate();
+                listView.ListMan = listModel;
+                listView.UpdateContents();
             }
         }
 
@@ -478,11 +475,12 @@ namespace GKNavigatorPlugin
 
         private static void ShowAssociations(IBaseWindow baseWin, IListView listView)
         {
-            listView.BeginUpdate();
+            var listModel = new FlatListModel();
             try {
-                listView.Clear();
-                listView.AddColumn(LangMan.LS(LSID.Person), 400, false);
-                listView.AddColumn(LangMan.LS(LSID.Relation), 400, false);
+                listModel.ListColumns.Clear();
+                listModel.ListColumns.AddColumn(LangMan.LS(LSID.Person), DataType.dtString, 400, false);
+                listModel.ListColumns.AddColumn(LangMan.LS(LSID.Relation), DataType.dtString, 400, false);
+                listModel.ListColumns.ResetDefaults();
 
                 var tree = baseWin.Context.Tree;
                 int num = tree.RecordsCount;
@@ -497,15 +495,14 @@ namespace GKNavigatorPlugin
                                 GDMAssociation ast = iRec.Associations[k];
                                 var relIndi = tree.GetPtrValue(ast);
                                 string rnm = ((relIndi == null) ? string.Empty : GKUtils.GetNameString(relIndi, false));
-                                listView.AddItem(iRec, new object[] { pnm, ast.Relation + " " + rnm });
+                                listModel.AddItem(iRec, new object[] { pnm, ast.Relation + " " + rnm });
                             }
                         }
                     }
                 }
-
-                listView.ResizeColumn(0);
             } finally {
-                listView.EndUpdate();
+                listView.ListMan = listModel;
+                listView.UpdateContents();
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -44,6 +44,11 @@ namespace GKCore.Plugins
         public IPlugin this[int index]
         {
             get { return fPlugins[index]; }
+        }
+
+        public IList<IPlugin> List
+        {
+            get { return fPlugins; }
         }
 
         public PluginsMan()

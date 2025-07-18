@@ -28,6 +28,8 @@ namespace GKCore.Stats
     /// </summary>
     public sealed class CompositeItem
     {
+        public string Name;
+
         private float CommonSum;
         private float MaleSum;
         private float FemaleSum;

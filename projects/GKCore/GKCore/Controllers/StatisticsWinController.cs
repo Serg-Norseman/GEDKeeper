@@ -25,6 +25,8 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Export;
 using GKCore.Interfaces;
+using GKCore.Lists;
+using GKCore.Options;
 using GKCore.Stats;
 using GKCore.Types;
 using GKUI.Themes;
@@ -43,6 +45,7 @@ namespace GKCore.Controllers
         private string fChartYTitle;
         private StatsMode fCurrentMode;
         private List<StatsItem> fCurrentValues;
+        private List<SummaryItem> fSummaryValues;
         private TreeStats fTreeStats;
 
         public TreeStats TreeStats
@@ -53,6 +56,18 @@ namespace GKCore.Controllers
         public StatisticsWinController(IStatisticsWin view, List<GDMRecord> selectedRecords) : base(view)
         {
             fSelectedRecords = selectedRecords;
+
+            fCurrentValues = new List<StatsItem>();
+            var listModel = new StatItemsListModel("-");
+            listModel.DataSource = fCurrentValues;
+            fView.ListStats.ListMan = listModel;
+            fView.ListStats.UpdateContents();
+
+            fSummaryValues = new List<SummaryItem>();
+            var sumModel = new SummaryListModel();
+            sumModel.DataSource = fSummaryValues;
+            fView.Summary.ListMan = sumModel;
+            fView.Summary.UpdateContents();
         }
 
         public override void Init(IBaseWindow baseWin)
@@ -69,21 +84,10 @@ namespace GKCore.Controllers
         {
             fCurrentMode = fView.StatsType.GetSelectedTag<StatsMode>();
 
+            fTreeStats.GetSpecStats(fCurrentMode, fCurrentValues);
+
             fView.ListStats.SetColumnCaption(0, LangMan.LS(GKData.StatsTitles[(int)fCurrentMode].Cap));
-            fView.ListStats.SetColumnCaption(1, LangMan.LS(LSID.Value));
-
-            fView.ListStats.BeginUpdate();
-            fView.ListStats.ClearItems();
-            try {
-                fCurrentValues = new List<StatsItem>();
-                fTreeStats.GetSpecStats(fCurrentMode, fCurrentValues);
-
-                foreach (StatsItem lv in fCurrentValues) {
-                    fView.ListStats.AddItem(null, lv.Caption, lv.GetDisplayString());
-                }
-            } finally {
-                fView.ListStats.EndUpdate();
-            }
+            fView.ListStats.UpdateContents();
 
             fChartTitle = LangMan.LS(GKData.StatsTitles[(int)fCurrentMode].Title);
 
@@ -103,8 +107,7 @@ namespace GKCore.Controllers
                 case StatsMode.smBirthYears:
                 case StatsMode.smBirthTenYears:
                 case StatsMode.smDeathYears:
-                case StatsMode.smDeathTenYears:
-                    {
+                case StatsMode.smDeathTenYears: {
                         switch (fCurrentMode) {
                             case StatsMode.smBirthYears:
                             case StatsMode.smDeathYears:
@@ -194,43 +197,42 @@ namespace GKCore.Controllers
         {
             CommonStats stats = fTreeStats.GetCommonStats();
 
-            fView.Summary.BeginUpdate();
+            fSummaryValues.Clear();
             try {
-                fView.Summary.ClearItems();
-
-                fView.Summary.AddItem(null, LangMan.LS(LSID.People),
+                fSummaryValues.Add(new SummaryItem(LangMan.LS(LSID.People),
                     stats.persons.ToString(),
                     stats.persons_m.ToString() + GetPercent(stats.persons_m, stats.persons),
-                    stats.persons_f.ToString() + GetPercent(stats.persons_f, stats.persons));
+                    stats.persons_f.ToString() + GetPercent(stats.persons_f, stats.persons)));
 
-                fView.Summary.AddItem(null, LangMan.LS(LSID.Living),
+                fSummaryValues.Add(new SummaryItem(LangMan.LS(LSID.Living),
                     stats.lives.ToString(),
                     stats.lives_m.ToString(),
-                    stats.lives_f.ToString());
+                    stats.lives_f.ToString()));
 
-                fView.Summary.AddItem(null, LangMan.LS(LSID.Deads),
+                fSummaryValues.Add(new SummaryItem(LangMan.LS(LSID.Deads),
                     (stats.persons - stats.lives).ToString(),
                     (stats.persons_m - stats.lives_m).ToString(),
-                    (stats.persons_f - stats.lives_f).ToString());
+                    (stats.persons_f - stats.lives_f).ToString()));
 
-                AddCompositeItem(LSID.AvgAge, stats.age);
-                AddCompositeItem(LSID.AvgLife, stats.life);
-                AddCompositeItem(LSID.AvgChilds, stats.childs);
-                AddCompositeItem(LSID.AvgBorn, stats.fba);
-                AddCompositeItem(LSID.AvgMarriagesCount, stats.marr);
-                AddCompositeItem(LSID.AvgMarriagesAge, stats.mage);
-                AddCompositeItem(LSID.CertaintyIndex, stats.cIndex);
+                AddSummaryItem(LSID.AvgAge, stats.age);
+                AddSummaryItem(LSID.AvgLife, stats.life);
+                AddSummaryItem(LSID.AvgChilds, stats.childs);
+                AddSummaryItem(LSID.AvgBorn, stats.fba);
+                AddSummaryItem(LSID.AvgMarriagesCount, stats.marr);
+                AddSummaryItem(LSID.AvgMarriagesAge, stats.mage);
+                AddSummaryItem(LSID.CertaintyIndex, stats.cIndex);
             } finally {
-                fView.Summary.EndUpdate();
+                fView.Summary.SortOrder = BSDTypes.SortOrder.None;
+                fView.Summary.UpdateContents();
             }
         }
 
-        private void AddCompositeItem(LSID name, CompositeItem item)
+        private void AddSummaryItem(LSID name, CompositeItem item)
         {
-            fView.Summary.AddItem(null, LangMan.LS(name),
+            fSummaryValues.Add(new SummaryItem(LangMan.LS(name),
                 string.Format("{0:0.00}", item.CommonVal),
                 string.Format("{0:0.00}", item.MaleVal),
-                string.Format("{0:0.00}", item.FemaleVal));
+                string.Format("{0:0.00}", item.FemaleVal)));
         }
 
         public async void ExportToExcel()
@@ -255,13 +257,6 @@ namespace GKCore.Controllers
                 GetControl<IGroupBox>("grpSummary").Text = LangMan.LS(LSID.Summary);
             }
 
-            var lvSummary = fView.Summary;
-            lvSummary.ClearColumns();
-            lvSummary.AddColumn(LangMan.LS(LSID.Parameter), 300, false);
-            lvSummary.AddColumn(LangMan.LS(LSID.Total), 100, false);
-            lvSummary.AddColumn(LangMan.LS(LSID.ManSum), 100, false);
-            lvSummary.AddColumn(LangMan.LS(LSID.WomanSum), 100, false);
-
             SetToolTip("tbExcelExport", LangMan.LS(LSID.ExportTable));
 
             int oldIndex = fView.StatsType.SelectedIndex;
@@ -278,6 +273,92 @@ namespace GKCore.Controllers
 #else
             GetControl<IButtonToolItem>("tbExcelExport").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ExportTable);
 #endif
+        }
+
+
+        private sealed class StatItemsListModel : SimpleListModel<StatsItem>
+        {
+            public StatItemsListModel(string title) :
+                base(null, CreateListColumns(title))
+            {
+            }
+
+            public static ListColumns CreateListColumns(string title)
+            {
+                var result = new ListColumns(GKListType.ltNone);
+                result.AddColumn(title, DataType.dtString, 250, true);
+                result.AddColumn(LangMan.LS(LSID.Value), DataType.dtString, 150, true);
+                return result;
+            }
+
+            protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+            {
+                object result = null;
+                switch (colType) {
+                    case 0:
+                        result = fFetchedRec.Caption;
+                        break;
+                    case 1:
+                        result = fFetchedRec.GetDisplayString();
+                        break;
+                }
+                return result;
+            }
+        }
+
+
+        public sealed class SummaryItem
+        {
+            public string Name;
+            public string CommonVal;
+            public string MaleVal;
+            public string FemaleVal;
+
+            public SummaryItem(string name, string commonVal, string maleVal, string femaleVal)
+            {
+                Name = name;
+                CommonVal = commonVal;
+                MaleVal = maleVal;
+                FemaleVal = femaleVal;
+            }
+        }
+
+        private sealed class SummaryListModel : SimpleListModel<SummaryItem>
+        {
+            public SummaryListModel() :
+                base(null, CreateListColumns())
+            {
+            }
+
+            public static ListColumns CreateListColumns()
+            {
+                var result = new ListColumns(GKListType.ltNone);
+                result.AddColumn(LangMan.LS(LSID.Parameter), DataType.dtString, 300, false);
+                result.AddColumn(LangMan.LS(LSID.Total), DataType.dtString, 100, false); // , false, "0.00", null
+                result.AddColumn(LangMan.LS(LSID.ManSum), DataType.dtString, 100, false); // , false, "0.00", null
+                result.AddColumn(LangMan.LS(LSID.WomanSum), DataType.dtString, 100, false); // , false, "0.00", null
+                return result;
+            }
+
+            protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+            {
+                object result = null;
+                switch (colType) {
+                    case 0:
+                        result = fFetchedRec.Name;
+                        break;
+                    case 1:
+                        result = fFetchedRec.CommonVal;
+                        break;
+                    case 2:
+                        result = fFetchedRec.MaleVal;
+                        break;
+                    case 3:
+                        result = fFetchedRec.FemaleVal;
+                        break;
+                }
+                return result;
+            }
         }
     }
 }

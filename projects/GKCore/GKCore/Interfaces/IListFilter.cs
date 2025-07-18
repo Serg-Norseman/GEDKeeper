@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,7 +31,8 @@ namespace GKCore.Interfaces
         dtInteger,
         dtFloat,
         dtDateTime,
-        dtGEDCOMDate
+        dtGEDCOMDate,
+        dtBool
     }
 
 
@@ -89,9 +90,10 @@ namespace GKCore.Interfaces
         void CopyTo(IListColumns target);
         bool MoveColumn(int idx, bool up);
         void ResetDefaults();
-        void UpdateOrders();
 
         void LoadFromFile(IniFile iniFile, string section, int optsVersion);
         void SaveToFile(IniFile iniFile, string section, int optsVersion);
+
+        void AddColumn(string colName, DataType dataType, int defWidth, bool autosize = false);
     }
 }

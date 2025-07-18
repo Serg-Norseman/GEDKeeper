@@ -58,9 +58,9 @@ namespace GKUI.Forms
             fController.CheckBase();
         }
 
-        private void btnBaseRepair_Click(object sender, EventArgs e)
+        private async void btnBaseRepair_Click(object sender, EventArgs e)
         {
-            fController.Repair();
+            await fController.Repair();
         }
 
         private void ListChecks_DblClick(object sender, EventArgs e)
@@ -85,8 +85,7 @@ namespace GKUI.Forms
 
         public void miCopyXRef_Click(object sender, EventArgs e)
         {
-            var list = ListChecks.GetSelectedItems();
-            fController.CopySelectedXRefs(list);
+            fController.CopySelectedXRefs();
         }
     }
 }

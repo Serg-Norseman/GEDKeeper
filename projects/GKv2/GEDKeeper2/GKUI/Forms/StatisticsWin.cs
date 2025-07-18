@@ -85,8 +85,6 @@ namespace GKUI.Forms
             Panel1.Controls.Add(spl);
 
             fListStats = UIHelper.CreateListView(Panel1);
-            fListStats.AddColumn("-", 250, false);
-            fListStats.AddColumn("-", 150, false);
 
             Panel1.Controls.SetChildIndex(fListStats, 0);
             Panel1.Controls.SetChildIndex(spl, 2);
@@ -105,9 +103,6 @@ namespace GKUI.Forms
         private void cbType_SelectedIndexChanged(object sender, EventArgs e)
         {
             fController.CalcStats();
-
-            fListStats.SortColumn = -1;
-            fListStats.Sorting = SortOrder.None;
         }
 
         private void StatisticsWin_Load(object sender, EventArgs e)

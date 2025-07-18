@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,8 +24,12 @@ using System.Reflection;
 using GDModel;
 using GKCore;
 using GKCore.Calendar;
+using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
+using GKCore.Lists;
+using GKCore.Options;
 using GKCore.Plugins;
 
 [assembly: AssemblyTitle("GKChroniclePlugin")]
@@ -49,6 +53,8 @@ namespace GKChroniclePlugin
         Subject
     }
 
+    #region Internals
+
     internal class EventRecord
     {
         public readonly GDMCustomEvent Event;
@@ -60,6 +66,52 @@ namespace GKChroniclePlugin
             Record = record;
         }
     }
+
+    internal sealed class EventsListModel : SimpleListModel<EventRecord>
+    {
+        public EventsListModel(IBaseContext baseContext, ILangMan langMan) : base(baseContext, CreateListColumns(langMan))
+        {
+        }
+
+        public static ListColumns CreateListColumns(ILangMan langMan)
+        {
+            var result = new ListColumns(GKListType.ltNone);
+            result.AddColumn(LangMan.LS(LSID.Date), 80, false);
+            result.AddColumn(LangMan.LS(LSID.Event), 90, false);
+            result.AddColumn(langMan.LS(PLS.Subject), 130, true);
+            result.AddColumn(LangMan.LS(LSID.Place), 200, false);
+            result.AddColumn(LangMan.LS(LSID.Cause), 130, false);
+            return result;
+        }
+
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            GDMCustomEvent evt = fFetchedRec.Event;
+
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = new GDMDateItem(evt.Date.Value);
+                    break;
+                case 1:
+                    result = GKUtils.GetEventName(evt);
+                    break;
+                case 2:
+                    result = GKUtils.GetRecordName(fBaseContext.Tree, fFetchedRec.Record, false);
+                    break;
+                case 3:
+                    string strPlace = (!evt.HasPlace) ? string.Empty : evt.Place.StringValue;
+                    result = strPlace;
+                    break;
+                case 4:
+                    result = GKUtils.GetEventCause(evt);
+                    break;
+            }
+            return result;
+        }
+    }
+
+    #endregion
 
     public sealed class Plugin : WidgetPlugin
     {
@@ -129,7 +181,7 @@ namespace GKChroniclePlugin
             }
         }
 
-        internal static List<EventRecord> CollectData(IBaseWindow baseWin)
+        private static List<EventRecord> CollectData(IBaseWindow baseWin)
         {
             List<EventRecord> result = new List<EventRecord>();
             if (baseWin == null)
@@ -151,6 +203,21 @@ namespace GKChroniclePlugin
             }
 
             return result;
+        }
+
+        internal void SetLVBase(IListView listView, IBaseWindow baseWin)
+        {
+            if (baseWin != null) {
+                var eventsModel = new EventsListModel(baseWin.Context, fLangMan);
+                listView.ListMan = eventsModel;
+                eventsModel.DataSource = Plugin.CollectData(baseWin);
+                listView.SortColumn = 0;
+                listView.SortOrder = BSDTypes.SortOrder.Ascending;
+                listView.UpdateContents();
+            } else {
+                listView.ListMan.Clear();
+                listView.UpdateContents();
+            }
         }
 
         public override void BaseClosed(IBaseWindow baseWin)

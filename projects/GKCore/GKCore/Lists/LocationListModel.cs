@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -50,15 +50,12 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.rtLocation);
-
             result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.Title, DataType.dtString, 300, true, true);
-            result.AddColumn("Ext", DataType.dtString, 60, true, false);
-            result.AddColumn(LSID.Latitude, DataType.dtFloat, 120, true, false, GEDCOMUtils.CoordFormat, GEDCOMUtils.CoordNumberFormatInfo);
-            result.AddColumn(LSID.Longitude, DataType.dtFloat, 120, true, false, GEDCOMUtils.CoordFormat, GEDCOMUtils.CoordNumberFormatInfo);
+            result.AddColumn(LSID.Title, DataType.dtString, 300, true);
+            result.AddColumn("Ext", DataType.dtString, 60, false);
+            result.AddColumn(LangMan.LS(LSID.Latitude), DataType.dtFloat, 120, false, GEDCOMUtils.CoordFormat, GEDCOMUtils.CoordNumberFormatInfo);
+            result.AddColumn(LangMan.LS(LSID.Longitude), DataType.dtFloat, 120, false, GEDCOMUtils.CoordFormat, GEDCOMUtils.CoordNumberFormatInfo);
             result.AddColumn(LSID.Changed, DataType.dtDateTime, 150, true);
-
-            result.ResetDefaults();
             return result;
         }
 

@@ -2449,15 +2449,12 @@
             this.lstPersonColumns.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstPersonColumns.FullRowSelect = true;
             this.lstPersonColumns.HideSelection = false;
-            this.lstPersonColumns.ListMan = null;
             this.lstPersonColumns.Location = new System.Drawing.Point(10, 10);
             this.lstPersonColumns.Margin = new System.Windows.Forms.Padding(2);
             this.lstPersonColumns.Name = "lstPersonColumns";
             this.lstPersonColumns.OwnerDraw = true;
             this.lstPersonColumns.SelectedIndex = -1;
             this.lstPersonColumns.Size = new System.Drawing.Size(468, 692);
-            this.lstPersonColumns.SortColumn = 0;
-            this.lstPersonColumns.SortOrder = GKCore.Design.BSDTypes.SortOrder.None;
             this.lstPersonColumns.TabIndex = 1;
             this.lstPersonColumns.UseCompatibleStateImageBehavior = false;
             this.lstPersonColumns.View = System.Windows.Forms.View.Details;

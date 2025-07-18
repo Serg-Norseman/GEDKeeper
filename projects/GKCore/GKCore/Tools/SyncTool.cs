@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,13 +20,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.NetDiff;
 
 namespace GKCore.Tools
 {
+    public sealed class DiffRecord : DiffResult<GDMRecord>
+    {
+        public bool Checked { get; set; }
+
+        public DiffRecord(GDMRecord obj1, GDMRecord obj2, DiffStatus status) : base(obj1, obj2, status)
+        {
+        }
+    }
+
+
     /// <summary>
     ///
     /// </summary>
@@ -35,7 +44,7 @@ namespace GKCore.Tools
         private GDMTree fMainTree;
         private GDMTree fOtherTree;
 
-        public List<DiffResult<GDMRecord>> Results;
+        public List<DiffRecord> Results;
 
         public void LoadOtherFile(GDMTree mainTree, string fileName)
         {
@@ -60,7 +69,14 @@ namespace GKCore.Tools
             var option = new DiffOption<GDMRecord>();
             option.EqualityComparer = new Stage1Comparer();
 
-            Results = DiffUtil.Diff(records1, records2, option).ToList();
+            Results = new List<DiffRecord>();
+
+            var diffResults = DiffUtil.Diff(records1, records2, option);
+            foreach (var diff in diffResults) {
+                var diffRec = new DiffRecord(diff.Obj1, diff.Obj2, diff.Status);
+                Results.Add(diffRec);
+            }
+
             CheckModified();
             CheckContents();
         }

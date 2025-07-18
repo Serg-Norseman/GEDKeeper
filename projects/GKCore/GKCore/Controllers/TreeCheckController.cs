@@ -25,6 +25,9 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
+using GKCore.Lists;
+using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Themes;
@@ -36,19 +39,25 @@ namespace GKCore.Controllers
     /// </summary>
     public class TreeCheckController : DialogController<ITreeCheckDlg>
     {
-        private readonly List<TreeInspector.CheckObj> fChecksList;
+        private readonly List<CheckObj> fChecksList;
         private readonly TreeInspectionOptions fOptions;
 
         public TreeCheckController(ITreeCheckDlg view) : base(view)
         {
-            fChecksList = new List<TreeInspector.CheckObj>();
+            fChecksList = new List<CheckObj>();
 
             fOptions = new TreeInspectionOptions();
             fOptions.CheckIndividualPlaces = false;
         }
 
-        public override void UpdateView()
+        public override void Init(IBaseWindow baseWin)
         {
+            base.Init(baseWin);
+
+            var listModel = new ProblemsListModel(fBase.Context);
+            listModel.DataSource = fChecksList;
+            fView.ChecksList.ListMan = listModel;
+            fView.ChecksList.UpdateContents();
         }
 
         public void CheckBase()
@@ -61,34 +70,16 @@ namespace GKCore.Controllers
                 TreeInspector.CheckBase(fBase, fChecksList, controller, fOptions);
             });
 
-            fView.ChecksList.BeginUpdate();
-            try {
-                fView.ChecksList.ClearItems();
-
-                foreach (TreeInspector.CheckObj checkObj in fChecksList) {
-                    fView.ChecksList.AddItem(checkObj, new object[] {
-                        checkObj.GetRecordName(fBase.Context.Tree),
-                        checkObj.Comment,
-                        LangMan.LS(GKData.CheckSolveNames[(int)checkObj.Solve])
-                    });
-                }
-
-                // TODO
-                //fView.ChecksList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            } finally {
-                fView.ChecksList.EndUpdate();
-            }
+            fView.ChecksList.UpdateContents();
         }
 
         public async Task Repair()
         {
             try {
                 bool modified = false;
-                int num = fView.ChecksList.Items.Count;
-                for (int i = 0; i < num; i++) {
-                    IListItem item = fView.ChecksList.Items[i];
-                    if (item.Checked) {
-                        var checkObj = item.Tag as TreeInspector.CheckObj;
+                for (int i = 0, num = fChecksList.Count; i < num; i++) {
+                    var checkObj = fChecksList[i];
+                    if (checkObj.Marked) {
                         await TreeInspector.RepairProblem(fView, fBase, checkObj);
                         modified = true;
                     }
@@ -114,39 +105,24 @@ namespace GKCore.Controllers
 
         public GDMRecord GetSelectedRecord()
         {
-            var selData = fView.ChecksList.GetSelectedData() as TreeInspector.CheckObj;
+            var selData = fView.ChecksList.GetSelectedData() as CheckObj;
             return (selData == null) ? null : selData.Rec;
-        }
-
-        public IList<GDMRecord> GetCheckedRecords()
-        {
-            var result = new List<GDMRecord>();
-
-            int num = fView.ChecksList.Items.Count;
-            for (int i = 0; i < num; i++) {
-                IListItem item = fView.ChecksList.Items[i];
-                if (item.Checked) {
-                    var checkObj = item.Tag as TreeInspector.CheckObj;
-                    result.Add(checkObj.Rec);
-                }
-            }
-
-            return result;
         }
 
         public void ShowDetails()
         {
             GDMRecord rec = GetSelectedRecord();
-            if (rec == null) return;
-
-            BaseController.ViewRecordInfo(fView, fBase, rec);
+            if (rec != null)
+                BaseController.ViewRecordInfo(fView, fBase, rec);
         }
 
-        public void CopySelectedXRefs(IList<object> list)
+        public void CopySelectedXRefs()
         {
+            var list = fView.ChecksList.GetSelectedItems();
+
             var text = new StringBuilder();
             foreach (var item in list) {
-                var checkObj = (TreeInspector.CheckObj)item;
+                var checkObj = (CheckObj)item;
                 text.Append(checkObj.Rec.XRef);
                 text.Append("\r\n");
             }
@@ -180,10 +156,6 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkCheckPersonPlaces").Text = LangMan.LS(LSID.CheckPersonPlaces);
             GetControl<ICheckBox>("chkCheckCensuses").Text = LangMan.LS(LSID.CensusAnalysis);
             GetControl<ICheckBox>("chkCheckLinks").Text = LangMan.LS(LSID.CheckLinks);
-
-            fView.ChecksList.AddColumn(LangMan.LS(LSID.Record), 400, false);
-            fView.ChecksList.AddColumn(LangMan.LS(LSID.Problem), 200, false);
-            fView.ChecksList.AddColumn(LangMan.LS(LSID.Solve), 200, false);
         }
 
         public override void ApplyTheme()
@@ -191,6 +163,51 @@ namespace GKCore.Controllers
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
             GetControl<IButton>("btnClose").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+        }
+
+
+        private sealed class ProblemsListModel : SimpleListModel<CheckObj>
+        {
+            public ProblemsListModel(IBaseContext baseContext) :
+                base(baseContext, CreateListColumns())
+            {
+            }
+
+            public static ListColumns CreateListColumns()
+            {
+                var result = new ListColumns(GKListType.ltNone);
+                result.AddColumn(LangMan.LS(LSID.Enabled), DataType.dtBool, 40, false);
+                result.AddColumn(LangMan.LS(LSID.Record), DataType.dtString, 400, false);
+                result.AddColumn(LangMan.LS(LSID.Problem), DataType.dtString, 200, false);
+                result.AddColumn(LangMan.LS(LSID.Solve), DataType.dtString, 200, false);
+                return result;
+            }
+
+            protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+            {
+                object result = null;
+                switch (colType) {
+                    case 0:
+                        result = fFetchedRec.Marked;
+                        break;
+                    case 1:
+                        result = fFetchedRec.GetRecordName(fBaseContext.Tree);
+                        break;
+                    case 2:
+                        result = fFetchedRec.Comment;
+                        break;
+                    case 3:
+                        result = LangMan.LS(GKData.CheckSolveNames[(int)fFetchedRec.Solve]);
+                        break;
+                }
+                return result;
+            }
+
+            protected override void SetColumnValueEx(CheckObj item, int colIndex, object value)
+            {
+                if (item != null && colIndex == 0 && value is bool chk)
+                    item.Marked = chk;
+            }
         }
     }
 }

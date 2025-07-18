@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
@@ -26,6 +27,7 @@ using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 using GKUI.Themes;
@@ -38,6 +40,7 @@ namespace GKCore.Controllers
     public sealed class TreeFilterDlgController : DialogController<ITreeFilterDlg>
     {
         private ChartFilter fFilter;
+        private RecsListModel fPersonModel;
         private string fTemp;
 
         public ChartFilter Filter
@@ -49,8 +52,15 @@ namespace GKCore.Controllers
         public TreeFilterDlgController(ITreeFilterDlg view) : base(view)
         {
             fView.PersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
-
             fView.PersonsList.OnModify += ListModify;
+        }
+
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fPersonModel = new RecsListModel(baseWin.Context, LangMan.LS(LSID.RPIndividuals), false);
+            fView.PersonsList.ListView.ListMan = fPersonModel;
         }
 
         private async void ListModify(object sender, ModifyEventArgs eArgs)
@@ -119,17 +129,17 @@ namespace GKCore.Controllers
             fView.YearNum.Enabled = (fFilter.BranchCut == ChartFilter.BranchCutType.Years);
             fView.PersonsList.Enabled = (fFilter.BranchCut == ChartFilter.BranchCutType.Persons);
             fView.YearNum.Text = fFilter.BranchYear.ToString();
-            fView.PersonsList.ListView.ClearItems();
 
+            var persList = new List<GDMRecord>();
             if (!string.IsNullOrEmpty(fTemp)) {
                 string[] tmpRefs = fTemp.Split(';');
-
-                int num = tmpRefs.Length;
-                for (int i = 0; i < num; i++) {
+                for (int i = 0; i < tmpRefs.Length; i++) {
                     var p = fBase.Context.Tree.FindXRef<GDMIndividualRecord>(tmpRefs[i]);
-                    if (p != null) fView.PersonsList.ListView.AddItem(p, GKUtils.GetNameString(p, false));
+                    if (p != null) persList.Add(p);
                 }
             }
+            fPersonModel.DataSource = persList;
+            fView.PersonsList.ListView.UpdateContents();
 
             if (fFilter.SourceMode != FilterGroupMode.Selected) {
                 fView.SourceCombo.SelectedIndex = (sbyte)fFilter.SourceMode;
@@ -207,8 +217,6 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblYear").Text = LangMan.LS(LSID.Year);
             GetControl<IRadioButton>("rbCutPersons").Text = LangMan.LS(LSID.BCut_Persons);
             GetControl<ILabel>("lblRPSources").Text = LangMan.LS(LSID.RPSources);
-
-            fView.PersonsList.ListView.AddColumn(LangMan.LS(LSID.RPIndividuals), 350, false);
         }
 
         public override void ApplyTheme()

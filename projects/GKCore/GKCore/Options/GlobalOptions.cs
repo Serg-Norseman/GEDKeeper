@@ -374,7 +374,7 @@ namespace GKCore.Options
             DisableNonStdFeatures = false;
             EnableStdValidation = false;
 
-            Theme = string.Empty;
+            Theme = "Default";
 
             // hidden
             ReadabilityHighlightRows = true;
@@ -881,7 +881,7 @@ namespace GKCore.Options
             MatchPatternMethod = (MatchPatternMethod)ini.ReadInteger("Common", "MatchPatternMethod", 0);
             SearchPlacesWithoutCoords = ini.ReadBool("Common", "SearchPlacesWithoutCoords", false);
 
-            Theme = ini.ReadString("Common", "Theme", "");
+            Theme = ini.ReadString("Common", "Theme", "Default");
 
             LoadPluginsFromFile(ini);
         }

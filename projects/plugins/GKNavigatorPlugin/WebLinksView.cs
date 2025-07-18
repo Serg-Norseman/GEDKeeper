@@ -21,6 +21,8 @@
 using System;
 using System.IO;
 using GKCore;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKUI.Components;
 
 namespace GKNavigatorPlugin
@@ -176,17 +178,10 @@ namespace GKNavigatorPlugin
 
         private void lvData_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-#if !GK3
-            GKListItem item = lvData.GetSelectedItem();
-            if (item != null && fData.LinkColumn != -1) {
-                GKUtils.LoadExtFile(item.SubItems[fData.LinkColumn].Text);
-            }
-#else
             var item = lvData.GetSelectedData() as LinkItem;
             if (item != null && fData.LinkColumn != -1) {
-                GKUtils.LoadExtFile(item.Data[fData.LinkColumn].ToString());
+                GKUtils.LoadExtFile((string)item.Data[fData.LinkColumn]);
             }
-#endif
         }
 
         private void btnCheck_Click(object sender, EventArgs e)
@@ -197,20 +192,23 @@ namespace GKNavigatorPlugin
 
         private void RefreshList()
         {
-            lvData.Clear();
+            var listModel = new FlatListModel();
 
             for (int i = 0; i < fData.Headers.Length; i++) {
                 bool autoSize = (i == 0);
-                lvData.AddColumn(fData.Headers[i].ToString(), 200, autoSize);
+                listModel.ListColumns.AddColumn(fData.Headers[i].ToString(), DataType.dtString, 200, autoSize);
             }
+            listModel.ListColumns.ResetDefaults();
 
             for (int i = 0; i < fData.Items.Count; i++) {
                 var item = fData.Items[i];
-#if !GK3
-                item.Item = lvData.AddItem(null, item.Data);
-                var listItem = item.Item as GKListItem;
 
-                switch (item.State) {
+                listModel.AddItem(item, item.Data);
+
+#if !GK3
+                //var listItem = item.Item as GKListItem;
+
+                /*switch (item.State) {
                     case LinkState.Normal:
                         listItem.BackColor = Color.PaleGreen;
                         break;
@@ -220,10 +218,9 @@ namespace GKNavigatorPlugin
                     case LinkState.Duplicate:
                         listItem.BackColor = Color.Orange;
                         break;
-                }
+                }*/
 #else
-                item.Item = lvData.AddItem(item, item.Data);
-                var listItem = item.Item as GKListItem;
+                /*var listItem = item.Item as GKListItem;
 
                 switch (item.State) {
                     case LinkState.Normal:
@@ -235,9 +232,12 @@ namespace GKNavigatorPlugin
                     case LinkState.Duplicate:
                         listItem.BackColor = Colors.Orange;
                         break;
-                }
+                }*/
 #endif
             }
+
+            lvData.ListMan = listModel;
+            lvData.UpdateContents();
         }
 
         private void btnLoadFile_Click(object sender, EventArgs e)

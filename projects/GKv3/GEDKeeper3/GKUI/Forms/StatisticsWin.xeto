@@ -7,13 +7,13 @@
   <TableLayout>
     <TableRow>
       <GroupBox x:Name="grpSummary">
-        <comcom:GKListView x:Name="lvSummary" Height="280" />
+        <comcom:GKListView x:Name="lvSummary" Height="240" />
       </GroupBox>
     </TableRow>
 
     <TableRow>
       <StackLayout x:Name="ToolBar1" Orientation="Horizontal" Spacing="4">
-        <ComboBox x:Name="cbType" Width="200" ReadOnly="true" SelectedIndexChanged="cbType_SelectedIndexChanged" />
+        <ComboBox x:Name="cbType" Width="300" ReadOnly="true" SelectedIndexChanged="cbType_SelectedIndexChanged" />
         <Button x:Name="tbExcelExport" Style="iconBtn" Image="{Resource Resources.btn_excel.gif, GKCore}" Click="tbExcelExport_Click" />
       </StackLayout>
     </TableRow>

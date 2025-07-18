@@ -50,14 +50,12 @@ namespace GKUI.Forms
 
             PageControl1.SelectedIndexChanged += PageControl_SelectedIndexChanged;
 
-            fController = new OptionsDlgController(this);
-
-            lstPersonColumns.AddCheckedColumn("Title", 175);
-
+            lstPersonColumns.CheckBoxes = true;
             numDefaultDepth.Minimum = -1;
             numDefaultDepthAncestors.Minimum = -1;
             numDefaultDepthDescendants.Minimum = -1;
 
+            fController = new OptionsDlgController(this);
             fController.UpdateView();
 
             chkSeparateDepth_CheckedChanged(null, null);

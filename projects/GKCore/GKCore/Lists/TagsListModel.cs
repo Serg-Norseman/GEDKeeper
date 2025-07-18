@@ -18,25 +18,35 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Collections.Generic;
 using GDModel;
+using GKCore.Interfaces;
+using GKCore.Options;
 
-namespace GKCore.Types
+namespace GKCore.Lists
 {
-    public sealed class PatriarchObj
+    public sealed class TagsListModel : SimpleListModel<GDMTag>
     {
-        public bool Mark;
-
-        public GDMIndividualRecord IRec;
-        public int BirthYear;
-        public int DescendantsCount;
-        public int DescGenerations;
-        public readonly List<PatriarchObj> Links;
-        public bool HasLinks;
-
-        public PatriarchObj()
+        public TagsListModel(IBaseContext baseContext, string title) :
+            base(baseContext, CreateListColumns(title))
         {
-            Links = new List<PatriarchObj>();
+        }
+
+        public static ListColumns CreateListColumns(string title)
+        {
+            var result = new ListColumns(GKListType.ltNone);
+            result.AddColumn(title, DataType.dtString, 350, false);
+            return result;
+        }
+
+        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+        {
+            object result = null;
+            switch (colType) {
+                case 0:
+                    result = fFetchedRec.StringValue;
+                    break;
+            }
+            return result;
         }
     }
 }

@@ -18,12 +18,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.Collections.Generic;
 using BSLib;
 using GDModel;
-using GKCore.Design.Controls;
-using GKCore.Lists;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
+using GKCore.Lists;
+using GKCore.Options;
 
 namespace GKCore.Controllers
 {
@@ -32,21 +35,43 @@ namespace GKCore.Controllers
     /// </summary>
     public class OrganizerController : DialogController<IOrganizerWin>
     {
+        private readonly List<OrgItem> fAdrList;
+        private readonly List<OrgItem> fPhonesList;
+        private readonly List<OrgItem> fMailsList;
+        private readonly List<OrgItem> fWebsList;
+
         public OrganizerController(IOrganizerWin view) : base(view)
         {
+            fAdrList = new List<OrgItem>();
+            fPhonesList = new List<OrgItem>();
+            fMailsList = new List<OrgItem>();
+            fWebsList = new List<OrgItem>();
+
             fView.AdrList.Buttons = EnumSet<SheetButton>.Create();
             fView.PhonesList.Buttons = EnumSet<SheetButton>.Create();
             fView.MailsList.Buttons = EnumSet<SheetButton>.Create();
             fView.WebsList.Buttons = EnumSet<SheetButton>.Create();
         }
 
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fView.AdrList.ListView.ListMan = new ItemsListModel(LangMan.LS(LSID.Address));
+            fView.AdrList.ListView.UpdateContents();
+
+            fView.PhonesList.ListView.ListMan = new ItemsListModel(LangMan.LS(LSID.Telephone));
+            fView.PhonesList.ListView.UpdateContents();
+
+            fView.MailsList.ListView.ListMan = new ItemsListModel(LangMan.LS(LSID.Mail));
+            fView.MailsList.ListView.UpdateContents();
+
+            fView.WebsList.ListView.ListMan = new ItemsListModel(LangMan.LS(LSID.WebSite));
+            fView.WebsList.ListView.UpdateContents();
+        }
+
         public override void UpdateView()
         {
-            fView.AdrList.ListView.ClearItems();
-            fView.PhonesList.ListView.ClearItems();
-            fView.MailsList.ListView.ClearItems();
-            fView.WebsList.ListView.ClearItems();
-
             int num = fBase.Context.Tree.RecordsCount;
             for (int i = 0; i < num; i++) {
                 GDMRecord rec = fBase.Context.Tree[i];
@@ -60,14 +85,17 @@ namespace GKCore.Controllers
                 }
             }
 
-            fView.AdrList.ListView.ResizeColumn(0);
-            fView.AdrList.ListView.ResizeColumn(1);
-            fView.PhonesList.ListView.ResizeColumn(0);
-            fView.PhonesList.ListView.ResizeColumn(1);
-            fView.MailsList.ListView.ResizeColumn(0);
-            fView.MailsList.ListView.ResizeColumn(1);
-            fView.WebsList.ListView.ResizeColumn(0);
-            fView.WebsList.ListView.ResizeColumn(1);
+            ((ItemsListModel)fView.AdrList.ListView.ListMan).DataSource = fAdrList;
+            fView.AdrList.ListView.UpdateContents();
+
+            ((ItemsListModel)fView.PhonesList.ListView.ListMan).DataSource = fPhonesList;
+            fView.PhonesList.ListView.UpdateContents();
+
+            ((ItemsListModel)fView.MailsList.ListView.ListMan).DataSource = fMailsList;
+            fView.MailsList.ListView.UpdateContents();
+
+            ((ItemsListModel)fView.WebsList.ListView.ListMan).DataSource = fWebsList;
+            fView.WebsList.ListView.UpdateContents();
         }
 
         private void PrepareEvent(string iName, IGDMStructWithAddress ev)
@@ -81,19 +109,19 @@ namespace GKCore.Controllers
                 if (city != "") {
                     addrStr = city + ", " + addrStr;
                 }
-                fView.AdrList.ListView.AddItem(null, iName, addrStr);
+                fAdrList.Add(new OrgItem(iName, addrStr));
             }
 
             foreach (GDMTag tag in addr.PhoneNumbers) {
-                fView.PhonesList.ListView.AddItem(null, iName, tag.StringValue);
+                fPhonesList.Add(new OrgItem(iName, tag.StringValue));
             }
 
             foreach (GDMTag tag in addr.EmailAddresses) {
-                fView.MailsList.ListView.AddItem(null, iName, tag.StringValue);
+                fMailsList.Add(new OrgItem(iName, tag.StringValue));
             }
 
             foreach (GDMTag tag in addr.WebPages) {
-                fView.WebsList.ListView.AddItem(null, iName, tag.StringValue);
+                fWebsList.Add(new OrgItem(iName, tag.StringValue));
             }
         }
 
@@ -105,23 +133,55 @@ namespace GKCore.Controllers
             GetControl<ITabPage>("pageTelephones").Text = LangMan.LS(LSID.Telephones);
             GetControl<ITabPage>("pageMails").Text = LangMan.LS(LSID.Mails);
             GetControl<ITabPage>("pageWebs").Text = LangMan.LS(LSID.Webs);
-
-            fView.AdrList.ListView.AddColumn(LangMan.LS(LSID.Person), 350, false);
-            fView.AdrList.ListView.AddColumn(LangMan.LS(LSID.Address), 100, false);
-
-            fView.PhonesList.ListView.AddColumn(LangMan.LS(LSID.Person), 350, false);
-            fView.PhonesList.ListView.AddColumn(LangMan.LS(LSID.Telephone), 100, false);
-
-            fView.MailsList.ListView.AddColumn(LangMan.LS(LSID.Person), 350, false);
-            fView.MailsList.ListView.AddColumn(LangMan.LS(LSID.Mail), 100, false);
-
-            fView.WebsList.ListView.AddColumn(LangMan.LS(LSID.Person), 350, false);
-            fView.WebsList.ListView.AddColumn(LangMan.LS(LSID.WebSite), 100, false);
         }
 
         public override void ApplyTheme()
         {
             // dummy
+        }
+
+
+        private sealed class OrgItem
+        {
+            public string Individual;
+            public string Value;
+
+            public OrgItem(string individual, string value)
+            {
+                Individual = individual;
+                Value = value;
+            }
+        }
+
+
+        private sealed class ItemsListModel : SimpleListModel<OrgItem>
+        {
+            public ItemsListModel(string title) :
+                base(null, CreateListColumns(title))
+            {
+            }
+
+            public static ListColumns CreateListColumns(string title)
+            {
+                var result = new ListColumns(GKListType.ltNone);
+                result.AddColumn(LangMan.LS(LSID.Person), DataType.dtString, 350, true);
+                result.AddColumn(title, DataType.dtString, 100, true);
+                return result;
+            }
+
+            protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+            {
+                object result = null;
+                switch (colType) {
+                    case 0:
+                        result = fFetchedRec.Individual;
+                        break;
+                    case 1:
+                        result = fFetchedRec.Value;
+                        break;
+                }
+                return result;
+            }
         }
     }
 }

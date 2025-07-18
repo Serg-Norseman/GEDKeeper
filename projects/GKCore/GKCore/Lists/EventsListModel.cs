@@ -48,7 +48,6 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.stEvents);
-
             result.AddColumn(LSID.NumberSym, 25, false);
             result.AddColumn(LSID.Event, 90, false);
             result.AddColumn(LSID.Date, 90, false);
@@ -58,8 +57,6 @@ namespace GKCore.Lists
             result.AddColumn(LSID.RPSources, 32, false);
             result.AddColumn(LSID.RPNotes, 32, false);
             result.AddColumn(LSID.RPMultimedia, 32, false);
-
-            result.ResetDefaults();
             return result;
         }
 

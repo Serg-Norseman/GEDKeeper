@@ -24,6 +24,7 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 using GKUI.Themes;
@@ -54,6 +55,20 @@ namespace GKCore.Controllers
             fView.PhonesList.OnModify += ListModify;
             fView.MailsList.OnModify += ListModify;
             fView.WebsList.OnModify += ListModify;
+        }
+
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fView.PhonesList.ListView.ListMan = new TagsListModel(fBase.Context, LangMan.LS(LSID.Telephone));
+            fView.PhonesList.ListView.UpdateContents();
+
+            fView.MailsList.ListView.ListMan = new TagsListModel(fBase.Context, LangMan.LS(LSID.Mail));
+            fView.MailsList.ListView.UpdateContents();
+
+            fView.WebsList.ListView.ListMan = new TagsListModel(fBase.Context, LangMan.LS(LSID.WebSite));
+            fView.WebsList.ListView.UpdateContents();
         }
 
         public override bool Accept()
@@ -87,20 +102,14 @@ namespace GKCore.Controllers
 
         public void UpdateLists()
         {
-            fView.PhonesList.ListView.ClearItems();
-            foreach (GDMTag tag in fAddress.PhoneNumbers) {
-                fView.PhonesList.ListView.AddItem(tag, tag.StringValue);
-            }
+            ((SimpleListModel<GDMTag>)fView.PhonesList.ListView.ListMan).DataSource = fAddress.PhoneNumbers.GetList();
+            fView.PhonesList.ListView.UpdateContents();
 
-            fView.MailsList.ListView.ClearItems();
-            foreach (GDMTag tag in fAddress.EmailAddresses) {
-                fView.MailsList.ListView.AddItem(tag, tag.StringValue);
-            }
+            ((SimpleListModel<GDMTag>)fView.MailsList.ListView.ListMan).DataSource = fAddress.EmailAddresses.GetList();
+            fView.MailsList.ListView.UpdateContents();
 
-            fView.WebsList.ListView.ClearItems();
-            foreach (GDMTag tag in fAddress.WebPages) {
-                fView.WebsList.ListView.AddItem(tag, tag.StringValue);
-            }
+            ((SimpleListModel<GDMTag>)fView.WebsList.ListView.ListMan).DataSource = fAddress.WebPages.GetList();
+            fView.WebsList.ListView.UpdateContents();
         }
 
         private async void ListModify(object sender, ModifyEventArgs eArgs)
@@ -217,10 +226,6 @@ namespace GKCore.Controllers
             GetControl<ITabPage>("pagePhones").Text = LangMan.LS(LSID.Telephones);
             GetControl<ITabPage>("pageEmails").Text = LangMan.LS(LSID.EMails);
             GetControl<ITabPage>("pageWebPages").Text = LangMan.LS(LSID.WebSites);
-
-            fView.PhonesList.ListView.AddColumn(LangMan.LS(LSID.Telephone), 350, false);
-            fView.MailsList.ListView.AddColumn(LangMan.LS(LSID.Mail), 350, false);
-            fView.WebsList.ListView.AddColumn(LangMan.LS(LSID.WebSite), 350, false);
         }
 
         public override void ApplyTheme()

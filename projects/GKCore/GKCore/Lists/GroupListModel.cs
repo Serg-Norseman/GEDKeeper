@@ -50,12 +50,9 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.rtGroup);
-
             result.AddColumn(LSID.NumberSym, DataType.dtInteger, 50, true);
-            result.AddColumn(LSID.Group, DataType.dtString, 400, true, true);
+            result.AddColumn(LSID.Group, DataType.dtString, 400, true);
             result.AddColumn(LSID.Changed, DataType.dtDateTime, 150, true);
-
-            result.ResetDefaults();
             return result;
         }
 
@@ -105,10 +102,7 @@ namespace GKCore.Lists
         public static ListColumns CreateListColumns()
         {
             var result = new ListColumns(GKListType.stGroupMembers);
-
             result.AddColumn(LSID.GeneralName, 300, false);
-
-            result.ResetDefaults();
             return result;
         }
 

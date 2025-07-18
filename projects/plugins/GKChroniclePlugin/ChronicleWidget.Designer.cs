@@ -38,8 +38,8 @@
 		    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 		    this.Text = "ChronicleWidget";
 		    this.TopMost = true;
-		    this.Closed += new System.EventHandler(this.CalcWidget_Closed);
-		    this.Load += new System.EventHandler(this.CalcWidget_Load);
+		    this.Closed += new System.EventHandler(this.WidgetForm_Closed);
+		    this.Load += new System.EventHandler(this.WidgetForm_Load);
 		    this.ResumeLayout(false);
 		}
 	}

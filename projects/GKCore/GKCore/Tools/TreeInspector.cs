@@ -38,6 +38,106 @@ namespace GKCore.Tools
         public bool CheckLinks;
     }
 
+
+    public enum CheckDiag
+    {
+        cdPersonLonglived,
+        cdPersonSexless,
+        cdLiveYearsInvalid,
+        cdStrangeSpouse,
+        cdStrangeParent,
+        cdEmptyFamily,
+        cdFatherAsChild,
+        cdMotherAsChild,
+        cdDuplicateChildren,
+        csDateInvalid,
+        csCycle,
+        cdChildWithoutParents,
+        cdFamilyRecordWithoutFamily,
+        cdMediaRecordWithoutFiles,
+        cdStgNotFound,
+        cdArcNotFound,
+        cdFileNotFound,
+        cdHalfSpsFamLink,
+        cdHalfChdFamLink,
+        cdHalfFamHusbLink,
+        cdHalfFamWifeLink,
+        cdHalfFamChldLink,
+        cdGarbledSpouses,
+        cdSeveralParents,
+        cdUnknownPlaceOfPerson,
+        cdHighSpousesDifference,
+        cdHighSiblingsDifference,
+        cdMatchedCensus,
+        cdNoteWithoutLinks,
+        cdSourceWithoutLinks,
+    }
+
+
+    public enum CheckSolve
+    {
+        csSkip,
+        csSetIsDead,
+        csDefineSex,
+        csRemove,
+        csEdit,
+        csRepair,
+    }
+
+
+    public sealed class CheckObj
+    {
+        public bool Marked;
+        public string Comment;
+        public CheckDiag Diag;
+        public GDMRecord Rec;
+        public CheckSolve Solve;
+        public GDMRecord Target;
+
+        public CheckObj(GDMRecord rec, CheckDiag diag, CheckSolve solve)
+        {
+            Rec = rec;
+            Diag = diag;
+            Solve = solve;
+        }
+
+        public CheckObj(GDMRecord rec, GDMRecord target, CheckDiag diag, CheckSolve solve)
+        {
+            Rec = rec;
+            Diag = diag;
+            Solve = solve;
+            Target = target;
+        }
+
+        public string GetRecordName(GDMTree tree)
+        {
+            string result = string.Empty;
+
+            switch (Rec.RecordType) {
+                case GDMRecordType.rtIndividual:
+                    result = GKUtils.GetNameString(((GDMIndividualRecord)Rec), false);
+                    break;
+
+                case GDMRecordType.rtFamily:
+                    result = GKUtils.GetFamilyString(tree, (GDMFamilyRecord)Rec);
+                    break;
+
+                case GDMRecordType.rtNote:
+                    result = ((GDMNoteRecord)Rec).Lines[0]; // TODO: bad solution?!
+                    break;
+
+                case GDMRecordType.rtSource:
+                    result = ((GDMSourceRecord)Rec).ShortTitle;
+                    break;
+            }
+
+            result = string.Concat(result, " [ ", Rec.XRef, " ]");
+
+            return result;
+        }
+    }
+
+
     /// <summary>
     /// It is a tool for checking the logical integrity of data in a database.
     /// The integrity of the GEDCOM format and data model is checked in the <see cref="GEDCOMChecker"/> class.
@@ -45,101 +145,6 @@ namespace GKCore.Tools
     public static class TreeInspector
     {
         #region Base Checks
-
-        public enum CheckDiag
-        {
-            cdPersonLonglived,
-            cdPersonSexless,
-            cdLiveYearsInvalid,
-            cdStrangeSpouse,
-            cdStrangeParent,
-            cdEmptyFamily,
-            cdFatherAsChild,
-            cdMotherAsChild,
-            cdDuplicateChildren,
-            csDateInvalid,
-            csCycle,
-            cdChildWithoutParents,
-            cdFamilyRecordWithoutFamily,
-            cdMediaRecordWithoutFiles,
-            cdStgNotFound,
-            cdArcNotFound,
-            cdFileNotFound,
-            cdHalfSpsFamLink,
-            cdHalfChdFamLink,
-            cdHalfFamHusbLink,
-            cdHalfFamWifeLink,
-            cdHalfFamChldLink,
-            cdGarbledSpouses,
-            cdSeveralParents,
-            cdUnknownPlaceOfPerson,
-            cdHighSpousesDifference,
-            cdHighSiblingsDifference,
-            cdMatchedCensus,
-            cdNoteWithoutLinks,
-            cdSourceWithoutLinks,
-        }
-
-        public enum CheckSolve
-        {
-            csSkip,
-            csSetIsDead,
-            csDefineSex,
-            csRemove,
-            csEdit,
-            csRepair,
-        }
-
-        public sealed class CheckObj
-        {
-            public string Comment;
-            public CheckDiag Diag;
-            public GDMRecord Rec;
-            public CheckSolve Solve;
-            public GDMRecord Target;
-
-            public CheckObj(GDMRecord rec, CheckDiag diag, CheckSolve solve)
-            {
-                Rec = rec;
-                Diag = diag;
-                Solve = solve;
-            }
-
-            public CheckObj(GDMRecord rec, GDMRecord target, CheckDiag diag, CheckSolve solve)
-            {
-                Rec = rec;
-                Diag = diag;
-                Solve = solve;
-                Target = target;
-            }
-
-            public string GetRecordName(GDMTree tree)
-            {
-                string result = string.Empty;
-
-                switch (Rec.RecordType) {
-                    case GDMRecordType.rtIndividual:
-                        result = GKUtils.GetNameString(((GDMIndividualRecord)Rec), false);
-                        break;
-
-                    case GDMRecordType.rtFamily:
-                        result = GKUtils.GetFamilyString(tree, (GDMFamilyRecord)Rec);
-                        break;
-
-                    case GDMRecordType.rtNote:
-                        result = ((GDMNoteRecord)Rec).Lines[0]; // TODO: bad solution?!
-                        break;
-
-                    case GDMRecordType.rtSource:
-                        result = ((GDMSourceRecord)Rec).ShortTitle;
-                        break;
-                }
-
-                result = string.Concat(result, " [ ", Rec.XRef, " ]");
-
-                return result;
-            }
-        }
 
         private static void CheckRecordWithEvents(GDMRecordWithEvents rec, List<CheckObj> checksList)
         {

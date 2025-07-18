@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,39 +19,29 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
-using GDModel;
-using GKCore;
 using GKCore.Interfaces;
-using GKCore.Lists;
 
 namespace GKChroniclePlugin
 {
     public partial class ChronicleWidget : Form, ILocalizable
     {
         private readonly Plugin fPlugin;
-        private IBaseWindow fBase;
-        private List<EventRecord> fEvents;
 
         public ChronicleWidget(Plugin plugin)
         {
             InitializeComponent();
-
             fPlugin = plugin;
-            fEvents = new List<EventRecord>();
-            lvEvents.Clear();
-
             SetLocale();
         }
 
-        private void CalcWidget_Load(object sender, EventArgs e)
+        private void WidgetForm_Load(object sender, EventArgs e)
         {
             fPlugin.Host.WidgetShow(fPlugin);
             BaseChanged(fPlugin.Host.GetCurrentFile());
         }
 
-        private void CalcWidget_Closed(object sender, EventArgs e)
+        private void WidgetForm_Closed(object sender, EventArgs e)
         {
             BaseChanged(null);
             fPlugin.Host.WidgetClose(fPlugin);
@@ -59,44 +49,7 @@ namespace GKChroniclePlugin
 
         public void BaseChanged(IBaseWindow baseWin)
         {
-            if (fBase != baseWin) {
-                fBase = baseWin;
-
-                fEvents = Plugin.CollectData(fBase);
-                UpdateControls();
-            }
-        }
-
-        private void UpdateControls()
-        {
-            try {
-                lvEvents.BeginUpdate();
-
-                lvEvents.Clear();
-                lvEvents.AddColumn(LangMan.LS(LSID.Date), 80, false);
-                lvEvents.AddColumn(LangMan.LS(LSID.Event), 90, false);
-                lvEvents.AddColumn(fPlugin.LangMan.LS(PLS.Subject), 130, false);
-                lvEvents.AddColumn(LangMan.LS(LSID.Place), 200, false);
-                lvEvents.AddColumn(LangMan.LS(LSID.Cause), 130, false);
-
-                for (int i = 0; i < fEvents.Count; i++) {
-                    EventRecord eventRec = fEvents[i];
-                    GDMCustomEvent evt = eventRec.Event;
-                    string strPlace = (!evt.HasPlace) ? string.Empty : evt.Place.StringValue;
-
-                    lvEvents.AddItem(eventRec, new object[] {
-                        new GDMDateItem(evt.Date.Value),
-                        GKUtils.GetEventName(evt),
-                        GKUtils.GetRecordName(fBase.Context.Tree, eventRec.Record, false),
-                        strPlace,
-                        GKUtils.GetEventCause(evt)
-                    });
-                }
-
-                lvEvents.ResizeColumn(0);
-            } finally {
-                lvEvents.EndUpdate();
-            }
+            fPlugin.SetLVBase(lvEvents, baseWin);
         }
 
         public void SetLocale()

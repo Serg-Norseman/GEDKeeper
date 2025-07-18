@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -58,14 +58,16 @@ namespace GKCore.Interfaces
         public bool AutoSize;
         public byte ColType;
         public byte ColSubtype;
+        public DataType DataType;
 
-        public MapColumnRec(string caption, int width, bool autoSize, byte colType, byte colSubtype)
+        public MapColumnRec(string caption, int width, bool autoSize, byte colType, byte colSubtype, DataType dataType)
         {
             Caption = caption;
             Width = width;
             AutoSize = autoSize;
             ColType = colType;
             ColSubtype = colSubtype;
+            DataType = dataType;
         }
     }
 
@@ -120,6 +122,14 @@ namespace GKCore.Interfaces
         /// <returns></returns>
         object GetColumnValue(int colIndex, bool isVisible);
 
+        /// <summary>
+        /// Set a new column value. Currently only applicable for column 0 for lists in virtual mode (Checked flag items).
+        /// </summary>
+        /// <param name="rowIndex">rowIndex comes in the current sort order of the virtual list</param>
+        /// <param name="colIndex"></param>
+        /// <param name="value"></param>
+        void SetColumnValue(int rowIndex, int colIndex, object value);
+
         object[] GetItemData(object rowData);
 
         /// <summary>
@@ -128,7 +138,7 @@ namespace GKCore.Interfaces
         /// <param name="contentItem">Internal intermediate item of list</param>
         /// <param name="colIndex">Column index</param>
         /// <returns></returns>
-        string GetColumnExternalValue(ContentItem contentItem, int colIndex);
+        object GetColumnExternalValue(ContentItem contentItem, int colIndex);
 
         IColor GetBackgroundColor(int itemIndex, object rowData);
 

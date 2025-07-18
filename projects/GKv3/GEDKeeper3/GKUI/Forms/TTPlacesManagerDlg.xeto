@@ -13,7 +13,7 @@
           <TableLayout Style="paddedTable8">
 
             <TableRow ScaleHeight="True">
-              <comcom:GKListView x:Name="ListPlaces" Size="800, 360" Sorting="True" AllowMultipleSelection="True" MouseDoubleClick="ListPlaces_DblClick" />
+              <comcom:GKListView x:Name="ListPlaces" Size="800, 360" AllowMultipleSelection="True" MouseDoubleClick="ListPlaces_DblClick" />
             </TableRow>
 
             <TableRow>

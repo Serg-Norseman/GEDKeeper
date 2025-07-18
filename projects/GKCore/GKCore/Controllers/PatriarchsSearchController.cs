@@ -21,9 +21,12 @@
 using System.Collections.Generic;
 using BSLib;
 using GDModel;
-using GKCore.Design.Controls;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
+using GKCore.Lists;
+using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Themes;
@@ -35,8 +38,19 @@ namespace GKCore.Controllers
     /// </summary>
     public class PatriarchsSearchController : DialogController<IPatriarchsSearchDlg>
     {
+        private IList<PatriarchObj> fPatriarches;
+
         public PatriarchsSearchController(IPatriarchsSearchDlg view) : base(view)
         {
+        }
+
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            var listModel = new PatriarchsListModel(fBase.Context);
+            fView.PatriarchsList.ListMan = listModel;
+            fView.PatriarchsList.UpdateContents();
         }
 
         public override void UpdateView()
@@ -59,39 +73,28 @@ namespace GKCore.Controllers
 
         public void Search()
         {
-            fView.PatriarchsList.BeginUpdate();
-            IList<PatriarchObj> lst = null;
+            fPatriarches = null;
             try {
-                fView.PatriarchsList.ClearItems();
-
                 var minGens = (int)fView.MinGensNum.Value;
                 var withoutDates = !fView.WithoutDatesCheck.Checked;
                 AppHost.Instance.ExecuteWork((controller) => {
-                    lst = PatriarchsMan.GetPatriarchsList(fBase.Context, minGens, withoutDates, controller, true);
+                    fPatriarches = PatriarchsMan.GetPatriarchsList(fBase.Context, minGens, withoutDates, controller, true);
                 });
 
-                SortHelper.QuickSort(lst, PatriarchsCompare);
+                SortHelper.QuickSort(fPatriarches, PatriarchsCompare);
 
-                int num = lst.Count;
-                for (int i = 0; i < num; i++) {
-                    PatriarchObj pObj = lst[i];
-                    string pSign = ((pObj.IRec.Patriarch) ? "[*] " : "");
-
-                    fView.PatriarchsList.AddItem(pObj.IRec, new object[] { pSign + GKUtils.GetNameString(pObj.IRec, true, false),
-                        pObj.BirthYear, pObj.DescendantsCount, pObj.DescGenerations
-                    });
-                }
+                ((PatriarchsListModel)fView.PatriarchsList.ListMan).DataSource = fPatriarches;
             } finally {
-                fView.PatriarchsList.EndUpdate();
+                fView.PatriarchsList.UpdateContents();
             }
         }
 
         public void SetPatriarch()
         {
             try {
-                var iRec = fView.PatriarchsList.GetSelectedData() as GDMIndividualRecord;
-                if (iRec != null) {
-                    iRec.Patriarch = true;
+                for (int i = 0; i < fPatriarches.Count; i++) {
+                    var pObj = fPatriarches[i];
+                    if (pObj.Mark) pObj.IRec.Patriarch = true;
                 }
 
                 fBase.RefreshLists(false);
@@ -120,11 +123,6 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnPatSearch").Text = LangMan.LS(LSID.Search);
             GetControl<ICheckBox>("chkWithoutDates").Text = LangMan.LS(LSID.WithoutDates);
             GetControl<IButton>("btnPatriarchsDiagram").Text = LangMan.LS(LSID.PatriarchsDiagram);
-
-            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.Patriarch), 400, false);
-            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.Birth), 90, false);
-            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.Descendants), 90, false);
-            fView.PatriarchsList.AddColumn(LangMan.LS(LSID.Generations), 90, false);
         }
 
         public override void ApplyTheme()
@@ -132,6 +130,56 @@ namespace GKCore.Controllers
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
             GetControl<IButton>("btnClose").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
+        }
+
+
+        private sealed class PatriarchsListModel : SimpleListModel<PatriarchObj>
+        {
+            public PatriarchsListModel(IBaseContext baseContext) :
+                base(baseContext, CreateListColumns())
+            {
+            }
+
+            public static ListColumns CreateListColumns()
+            {
+                var result = new ListColumns(GKListType.ltNone);
+                result.AddColumn(LangMan.LS(LSID.Enabled), DataType.dtBool, 40, false);
+                result.AddColumn(LangMan.LS(LSID.Patriarch), 400, false);
+                result.AddColumn(LangMan.LS(LSID.Birth), 90, false);
+                result.AddColumn(LangMan.LS(LSID.Descendants), 90, false);
+                result.AddColumn(LangMan.LS(LSID.Generations), 90, false);
+                return result;
+            }
+
+            protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
+            {
+                object result = null;
+                switch (colType) {
+                    case 0:
+                        result = fFetchedRec.Mark;
+                        break;
+                    case 1:
+                        string pSign = ((fFetchedRec.IRec.Patriarch) ? "[*] " : "");
+                        result = pSign + GKUtils.GetNameString(fFetchedRec.IRec, true, false);
+                        break;
+                    case 2:
+                        result = fFetchedRec.BirthYear;
+                        break;
+                    case 3:
+                        result = fFetchedRec.DescendantsCount;
+                        break;
+                    case 4:
+                        result = fFetchedRec.DescGenerations;
+                        break;
+                }
+                return result;
+            }
+
+            protected override void SetColumnValueEx(PatriarchObj item, int colIndex, object value)
+            {
+                if (item != null && colIndex == 0 && value is bool chk)
+                    item.Mark = chk;
+            }
         }
     }
 }
