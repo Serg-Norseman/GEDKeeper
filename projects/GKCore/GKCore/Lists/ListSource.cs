@@ -66,11 +66,6 @@ namespace GKCore.Lists
         protected readonly ListColumns fListColumns;
 
 
-        public IBaseContext BaseContext
-        {
-            get { return fBaseContext; }
-        }
-
         public List<MapColumnRec> ColumnsMap
         {
             get { return fColumnsMap; }
@@ -229,8 +224,7 @@ namespace GKCore.Lists
 
         public virtual void ChangeColumnWidth(int colIndex, int colWidth)
         {
-            if (colIndex < 0)
-                return;
+            if (colIndex < 0 || colIndex >= fColumnsMap.Count) return;
 
             MapColumnRec colrec = fColumnsMap[colIndex];
             ListColumn props = FindColumnProps(colrec.ColType);

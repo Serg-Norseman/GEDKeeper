@@ -96,7 +96,6 @@ namespace GKCore.Interfaces
 
     public interface IListSource
     {
-        IBaseContext BaseContext { get; }
         List<MapColumnRec> ColumnsMap { get; }
         ExtObservableList<ContentItem> ContentList { get; }
         ExternalFilterHandler ExternalFilter { get; set; }

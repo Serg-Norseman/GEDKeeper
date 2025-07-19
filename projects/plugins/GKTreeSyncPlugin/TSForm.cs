@@ -37,7 +37,7 @@ namespace GKTreeSyncPlugin
     {
         private readonly IBaseWindow fBase;
         private readonly SyncTool fSyncTool;
-        private DiffListModel fListModel;
+        private readonly DiffListModel fListModel;
 
         public TSForm()
         {

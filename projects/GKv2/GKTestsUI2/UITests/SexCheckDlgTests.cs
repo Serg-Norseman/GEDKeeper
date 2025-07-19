@@ -38,6 +38,8 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
+            TestUtilsUI.InitUITest();
+
             fDialog = new SexCheckDlg();
             fDialog.Show();
         }

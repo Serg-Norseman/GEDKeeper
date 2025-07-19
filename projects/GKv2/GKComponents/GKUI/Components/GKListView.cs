@@ -517,6 +517,7 @@ namespace GKUI.Components
             if (item == null) return;
 
             SelectedIndices.Clear();
+            SelectedIndices.Add(index);
             item.Selected = true;
             EnsureVisible(index);
         }

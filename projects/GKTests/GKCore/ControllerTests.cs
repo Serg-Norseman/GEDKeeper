@@ -37,7 +37,7 @@ namespace GKCore.Controllers
     [TestFixture]
     public class ControllerTests
     {
-        private IBaseWindow fBaseWin;
+        private readonly IBaseWindow fBaseWin;
 
         public ControllerTests()
         {
@@ -77,8 +77,16 @@ namespace GKCore.Controllers
             SubstituteControl<ITabPage>(view, "pageWebPages");
 
             view.PhonesList.Returns(Substitute.For<ISheetList>());
+            view.PhonesList.ListView.Returns(Substitute.For<IListView>());
+            view.PhonesList.ListView.ListMan.Returns(new TagsListModel(fBaseWin.Context, "phones"));
+
             view.MailsList.Returns(Substitute.For<ISheetList>());
+            view.MailsList.ListView.Returns(Substitute.For<IListView>());
+            view.MailsList.ListView.ListMan.Returns(new TagsListModel(fBaseWin.Context, "mails"));
+
             view.WebsList.Returns(Substitute.For<ISheetList>());
+            view.WebsList.ListView.Returns(Substitute.For<IListView>());
+            view.WebsList.ListView.ListMan.Returns(new TagsListModel(fBaseWin.Context, "webs"));
 
             var controller = new AddressEditDlgController(view);
             controller.ApplyTheme();

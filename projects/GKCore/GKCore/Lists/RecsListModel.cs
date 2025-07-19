@@ -26,7 +26,7 @@ namespace GKCore.Lists
 {
     public sealed class RecsListModel : SimpleListModel<GDMRecord>
     {
-        private bool fShowXRefs;
+        private readonly bool fShowXRefs;
 
         public RecsListModel(IBaseContext baseContext, string title, bool showXRefs = true) :
             base(baseContext, CreateListColumns(title))

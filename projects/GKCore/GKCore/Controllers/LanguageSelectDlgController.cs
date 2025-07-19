@@ -36,7 +36,8 @@ namespace GKCore.Controllers
     /// </summary>
     public class LanguageSelectDlgController : DialogController<ILanguageSelectDlg>
     {
-        private LangsListModel fLangsModel;
+        private readonly LangRecord fDefLang;
+        private readonly LangsListModel fLangsModel;
         private int fSelectedLanguage;
 
         public int SelectedLanguage
@@ -56,28 +57,27 @@ namespace GKCore.Controllers
             fLangsModel = new LangsListModel();
             fView.LanguagesList.ListMan = fLangsModel;
 
-            LangRecord defLang;
             if (GlobalOptions.Instance.Languages.Count > 0) {
                 fLangsModel.DataSource = GlobalOptions.Instance.Languages;
-                defLang = GlobalOptions.Instance.GetLangByCode(LangMan.LS_DEF_CODE);
+                fDefLang = GlobalOptions.Instance.GetLangByCode(LangMan.LS_DEF_CODE);
             } else {
                 var langs = new List<LangRecord>();
                 // unit-testing and some other cases
-                defLang = new LangRecord(LangMan.LS_DEF_CODE, LangMan.LS_DEF_SIGN, LangMan.LS_DEF_NAME, "English.lng", null);
-                langs.Add(defLang);
+                fDefLang = new LangRecord(LangMan.LS_DEF_CODE, LangMan.LS_DEF_SIGN, LangMan.LS_DEF_NAME, "English.lng", null);
+                langs.Add(fDefLang);
                 fLangsModel.DataSource = langs;
             }
 
             fView.LanguagesList.UpdateContents();
             fView.LanguagesList.Activate();
-            fView.LanguagesList.SelectItem(defLang);
+            fView.LanguagesList.SelectItem(fDefLang);
         }
 
         public override bool Accept()
         {
             try {
-                LangRecord lngRec = fView.LanguagesList.GetSelectedData() as LangRecord;
-                fSelectedLanguage = lngRec.Code;
+                var lngRec = fView.LanguagesList.GetSelectedData() as LangRecord;
+                fSelectedLanguage = (lngRec != null) ? lngRec.Code : fDefLang.Code;
 
                 return true;
             } catch (Exception ex) {
