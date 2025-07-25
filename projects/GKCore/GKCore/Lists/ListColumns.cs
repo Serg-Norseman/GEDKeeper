@@ -74,7 +74,7 @@ namespace GKCore.Lists
         private readonly List<ListColumn> fColumns;
         private readonly List<ListColumn> fOrderedColumns;
         private sbyte fLastId;
-        private GKListType fListType;
+        private readonly GKListType fListType;
 
 
         public GKListType ListType

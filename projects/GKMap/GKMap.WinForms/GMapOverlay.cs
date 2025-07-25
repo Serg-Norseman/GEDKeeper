@@ -49,8 +49,7 @@ namespace GKMap.WinForms
             foreach (var m in Markers) {
                 if (m.ToolTip != null && m.IsVisible) {
                     if (!string.IsNullOrEmpty(m.ToolTipText) && (m.ToolTipMode == MarkerTooltipMode.Always || m.IsMouseOver)) {
-                        var renderable = m.ToolTip as IRenderable;
-                        if (renderable != null) renderable.OnRender(g);
+                        if (m.ToolTip is IRenderable renderable) renderable.OnRender(g);
                     }
                 }
             }

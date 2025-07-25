@@ -38,7 +38,7 @@ namespace GKCore.Maps
             }
         }
 
-        private Dictionary<string, List<GeoPoint>> fMemoryCache;
+        private readonly Dictionary<string, List<GeoPoint>> fMemoryCache;
 
         private PlacesCache()
         {

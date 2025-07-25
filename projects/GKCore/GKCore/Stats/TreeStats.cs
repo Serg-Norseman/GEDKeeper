@@ -120,16 +120,16 @@ namespace GKCore.Stats
 
             switch (sex) {
                 case GDMSex.svFemale:
-                    lvi.ValF = lvi.ValF + 1;
+                    lvi.ValF++;
                     break;
 
                 case GDMSex.svMale:
-                    lvi.ValM = lvi.ValM + 1;
+                    lvi.ValM++;
                     break;
 
                 case GDMSex.svUnknown:
                 case GDMSex.svIntersex:
-                    lvi.Value = lvi.Value + 1;
+                    lvi.Value++;
                     break;
             }
         }

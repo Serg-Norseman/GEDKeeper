@@ -1,4 +1,4 @@
-﻿#if NETCORE
+﻿#if NETCOREAPP
 
 using System;
 using Eto.Drawing;

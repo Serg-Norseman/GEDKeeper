@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if NETCORE
+#if NETCOREAPP
 #define UNOFF_ITS
 #endif
 

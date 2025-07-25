@@ -8,7 +8,6 @@
         <OutputPath>..\..\..\plugins\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-        <DefineConstants>ETO</DefineConstants>
 
         <Configurations>Debug;Release</Configurations>
         <Platforms>MSWin64;Linux;MacOS;FreeBSD</Platforms>

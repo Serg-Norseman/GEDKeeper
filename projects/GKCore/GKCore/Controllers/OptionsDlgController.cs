@@ -692,7 +692,7 @@ namespace GKCore.Controllers
             }
             cmbTextEffect.SetSelectedTag(fOptions.TreeChartOptions.TextEffect);
 
-#if NETCORE
+#if NETCOREAPP
             cmbTextEffect.Enabled = false;
 #else
             cmbTextEffect.Enabled = !AppHost.Instance.HasFeatureSupport(Feature.Mobile);

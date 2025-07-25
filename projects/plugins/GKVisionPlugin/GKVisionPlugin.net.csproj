@@ -7,7 +7,6 @@
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <OutputPath>..\..\..\plugins\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <DefineConstants>GK3;NETCORE</DefineConstants>
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

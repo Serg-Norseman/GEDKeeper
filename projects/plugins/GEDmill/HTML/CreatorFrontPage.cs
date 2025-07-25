@@ -94,8 +94,7 @@ namespace GEDmill.HTML
                     var censoredKeyIndividuals = new List<string>(GMConfig.Instance.KeyIndividuals.Count);
 
                     foreach (string keyXref in GMConfig.Instance.KeyIndividuals) {
-                        GDMIndividualRecord air = fTree.XRefIndex_Find(keyXref) as GDMIndividualRecord;
-                        if (air != null) {
+                        if (fTree.XRefIndex_Find(keyXref) is GDMIndividualRecord air) {
                             censoredKeyIndividuals.Add(MakeLink(air));
                         }
                     }

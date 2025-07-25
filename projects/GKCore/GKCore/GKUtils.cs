@@ -2090,7 +2090,7 @@ namespace GKCore
         {
             string filter = LangMan.LS(LSID.TreeImagesFilter);
 
-#if !NETCORE
+#if !NETCOREAPP
             // Emf is not supported by Eto.Drawing
             filter += LangMan.LS(LSID.EmfFilter);
 #endif

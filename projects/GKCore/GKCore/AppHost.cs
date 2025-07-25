@@ -748,7 +748,7 @@ namespace GKCore
 
         public virtual async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
-            return false;
+            return await Task.FromResult(false);
         }
 
         public void ShowHelpTopic(string topic)

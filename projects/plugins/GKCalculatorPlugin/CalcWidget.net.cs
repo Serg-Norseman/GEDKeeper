@@ -83,8 +83,7 @@ namespace GKCalculatorPlugin
 
                     if (chkEventsYearCalculation.Checked.Value) {
                         fPlugin.Host.Activate();
-                        var dataReceiver = fPlugin.Host.GetActiveForm() as IDataReceiver;
-                        if (dataReceiver != null) {
+                        if (fPlugin.Host.GetActiveForm() is IDataReceiver dataReceiver) {
                             dataReceiver.SendData("event_year", res);
                         }
                     }

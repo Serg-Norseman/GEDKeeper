@@ -294,6 +294,10 @@ namespace GKUI.Platform
                 case Feature.PrintPreview:
                     result = true;
                     break;
+
+                case Feature.Graphics:
+                    result = true;
+                    break;
             }
 
             return result;

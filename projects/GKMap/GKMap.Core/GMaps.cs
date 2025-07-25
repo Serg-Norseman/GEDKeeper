@@ -61,8 +61,7 @@ namespace GKMap
                 fImageCacheLocation = value;
 
 #if !MOBILE
-                var cache = ImageCache as SQLitePureImageCache;
-                if (cache != null) {
+                if (ImageCache is SQLitePureImageCache cache) {
                     cache.CacheLocation = value;
                 }
 #endif

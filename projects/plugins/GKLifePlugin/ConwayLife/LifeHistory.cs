@@ -37,8 +37,7 @@ namespace GKLifePlugin.ConwayLife
 
         public LifeHistory(int maxLevels)
         {
-            fList = new List<LifeGrid>();
-            fList.Capacity = maxLevels;
+            fList = new List<LifeGrid>(maxLevels);
         }
 
         public void Dispose()

@@ -5,7 +5,7 @@
 
 #define IPC_SUPPORTS
 
-#if NETCORE
+#if NETCOREAPP
 #undef IPC_SUPPORTS
 #endif
 

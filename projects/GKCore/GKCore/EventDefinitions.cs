@@ -112,8 +112,8 @@ namespace GKCore
     /// </summary>
     public sealed class EventDefinitions : IGDMObject
     {
-        private EventDefList fEventDefs;
-        private Dictionary<string, EventDef> fIndex;
+        private readonly EventDefList fEventDefs;
+        private readonly Dictionary<string, EventDef> fIndex;
 
         internal EventDefList List
         {

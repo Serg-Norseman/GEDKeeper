@@ -38,14 +38,14 @@ namespace GKCore.Controllers
     /// </summary>
     public sealed class StatisticsWinController : FormController<IStatisticsWin>
     {
+        private readonly List<StatsItem> fCurrentValues;
         private readonly List<GDMRecord> fSelectedRecords;
+        private readonly List<SummaryItem> fSummaryValues;
 
         private string fChartTitle;
         private string fChartXTitle;
         private string fChartYTitle;
         private StatsMode fCurrentMode;
-        private List<StatsItem> fCurrentValues;
-        private List<SummaryItem> fSummaryValues;
         private TreeStats fTreeStats;
 
         public TreeStats TreeStats
@@ -268,7 +268,7 @@ namespace GKCore.Controllers
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) return;
 
-#if NETCORE
+#if NETCOREAPP
             GetControl<IButton>("tbExcelExport").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ExportTable);
 #else
             GetControl<IButtonToolItem>("tbExcelExport").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ExportTable);

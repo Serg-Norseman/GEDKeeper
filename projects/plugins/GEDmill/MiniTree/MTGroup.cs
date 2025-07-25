@@ -180,11 +180,11 @@ namespace GEDmill.MiniTree
 
             foreach (var obj in fMembers) {
                 ExtSizeF size;
-                if (obj is MTIndividual) {
-                    size = ((MTIndividual)obj).CalculateSize();
-                } else if (obj is MTGroup) {
+                if (obj is MTIndividual indi) {
+                    size = indi.CalculateSize();
+                } else if (obj is MTGroup group) {
                     // Let group calculate its size for later
-                    ((MTGroup)obj).CalculateSize();
+                    group.CalculateSize();
 
                     // Size here is only size of tee
                     size = new ExtSizeF(TEE_WIDTH, TEE_HEIGHT);
@@ -215,8 +215,7 @@ namespace GEDmill.MiniTree
             if (fMembers != null) {
                 bool first = true;
                 foreach (MTObject obj in fMembers) {
-                    if (obj is MTIndividual) {
-                        var mtIndi = (MTIndividual)obj;
+                    if (obj is MTIndividual mtIndi) {
                         float individualTop = mtIndi.Top;
                         float individualBottom = mtIndi.Bottom;
                         float individualLeft = mtIndi.Left;
@@ -234,9 +233,9 @@ namespace GEDmill.MiniTree
                             right = individualRight;
                         }
                         first = false;
-                    } else if (obj is MTGroup) {
-                        if (((MTGroup)obj).fMembers != null) {
-                            ExtRectF rectSubGroup = ((MTGroup)obj).GetExtent();
+                    } else if (obj is MTGroup group) {
+                        if (group.fMembers != null) {
+                            ExtRectF rectSubGroup = group.GetExtent();
 
                             if (first || rectSubGroup.Top < top) {
                                 top = rectSubGroup.Top;
@@ -283,14 +282,14 @@ namespace GEDmill.MiniTree
             }
 
             foreach (var obj in fMembers) {
-                if (obj is MTGroup) {
-                    ExtSizeF size = ((MTGroup)obj).CalculateLayout(x, y + fSize.Height);
+                if (obj is MTGroup group) {
+                    ExtSizeF size = group.CalculateLayout(x, y + fSize.Height);
                     x += size.Width;
                     if (heightChild < size.Height) {
                         heightChild = size.Height;
                     }
-                } else if (obj is MTIndividual) {
-                    ExtSizeF size = ((MTIndividual)obj).CalculateLayout(x, y);
+                } else if (obj is MTIndividual indi) {
+                    ExtSizeF size = indi.CalculateLayout(x, y);
                     x += size.Width;
                     if (height < size.Height) {
                         height = size.Height;
@@ -312,8 +311,7 @@ namespace GEDmill.MiniTree
             }
 
             foreach (MTObject obj in fMembers) {
-                var mtGroup = obj as MTGroup;
-                if (mtGroup != null) {
+                if (obj is MTGroup mtGroup) {
                     // Propagate the compression.
                     mtGroup.Compress();
                 }
@@ -355,8 +353,7 @@ namespace GEDmill.MiniTree
                 float max = 0;
                 bool first = true;
                 foreach (MTObject obj in fMembers) {
-                    var mtIndi = obj as MTIndividual;
-                    if (mtIndi != null) {
+                    if (obj is MTIndividual mtIndi) {
                         if (first || mtIndi.Left > max) {
                             max = mtIndi.Left;
                             mtiRightmost = mtIndi;
@@ -391,8 +388,7 @@ namespace GEDmill.MiniTree
                 float min = 0;
                 bool first = true;
                 foreach (MTObject obj in fMembers) {
-                    var mtIndi = obj as MTIndividual;
-                    if (mtIndi != null) {
+                    if (obj is MTIndividual mtIndi) {
                         if (first || mtIndi.Right < min) {
                             min = mtIndi.Right;
                             mtiLeftmost = mtIndi;
@@ -439,8 +435,7 @@ namespace GEDmill.MiniTree
                 float max = 0f;
                 bool first = true;
                 foreach (MTObject obj in fMembers) {
-                    var mtIndi = obj as MTIndividual;
-                    if (mtIndi != null && mtIndi.HasStalk) {
+                    if (obj is MTIndividual mtIndi && mtIndi.HasStalk) {
                         float fStalk = mtIndi.Stalk;
                         if (first || fStalk < min) {
                             min = fStalk;
@@ -462,8 +457,7 @@ namespace GEDmill.MiniTree
         // They must not collide with other boxes.
         private void PullLeftStuffRight(float centre)
         {
-            var mtoLeft = LeftObject as MTIndividual;
-            if (mtoLeft != null) {
+            if (LeftObject is MTIndividual mtoLeft) {
                 mtoLeft.PullRight(centre - mtoLeft.Right);
             }
         }
@@ -471,8 +465,7 @@ namespace GEDmill.MiniTree
         // Pulls right box as close as can be, to compress group.
         private void PullRightStuffLeft(float centre)
         {
-            var mtoRight = RightObject as MTIndividual;
-            if (mtoRight != null) {
+            if (RightObject is MTIndividual mtoRight) {
                 mtoRight.PullLeft(mtoRight.Left - centre);
             }
         }

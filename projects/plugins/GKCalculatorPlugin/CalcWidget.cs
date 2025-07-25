@@ -48,7 +48,6 @@ namespace GKCalculatorPlugin
         private void CalcWidget_Load(object sender, EventArgs e)
         {
             AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VBottom);
-
             fPlugin.Host.WidgetShow(fPlugin);
         }
 
@@ -70,8 +69,7 @@ namespace GKCalculatorPlugin
 
                     if (chkEventsYearCalculation.Checked) {
                         fPlugin.Host.Activate();
-                        var dataReceiver = fPlugin.Host.GetActiveForm() as IDataReceiver;
-                        if (dataReceiver != null) {
+                        if (fPlugin.Host.GetActiveForm() is IDataReceiver dataReceiver) {
                             dataReceiver.SendData("event_year", res);
                         }
                     }

@@ -911,6 +911,8 @@ namespace GKCore.Controllers
                     tabControl.Pages[10].Text = LangMan.LS(LSID.RPLocations);
                 }
 
+                bool hasGfx = AppHost.Instance.HasFeatureSupport(Feature.Graphics);
+
                 if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                     GetControl<IMenuItem>("miFile").Text = LangMan.LS(LSID.MIFile);
                     GetControl<IMenuItem>("miEdit").Text = LangMan.LS(LSID.MIEdit);
@@ -946,14 +948,12 @@ namespace GKCore.Controllers
                     GetControl<IMenuItem>("miTreeBoth").Text = LangMan.LS(LSID.MITreeBoth);
                     GetControl<IMenuItem>("miPedigreeAscend").Text = LangMan.LS(LSID.MIPedigreeAscend);
                     GetControl<IMenuItem>("miPedigreeDescend").Text = LangMan.LS(LSID.MIPedigreeDescend);
-                    GetControl<IMenuItem>("miMap").Text = LangMan.LS(LSID.MIMap) + @"...";
                     GetControl<IMenuItem>("miStats").Text = LangMan.LS(LSID.MIStats) + @"...";
                     GetControl<IMenuItem>("miAncestorsCircle").Text = LangMan.LS(LSID.AncestorsCircle);
                     GetControl<IMenuItem>("miDescendantsCircle").Text = LangMan.LS(LSID.DescendantsCircle);
                     GetControl<IMenuItem>("miRelationshipCalculator").Text = LangMan.LS(LSID.RelationshipCalculator);
 
                     GetControl<IMenuItem>("miOrganizer").Text = LangMan.LS(LSID.MIOrganizer) + @"...";
-                    GetControl<IMenuItem>("miSlideshow").Text = LangMan.LS(LSID.Slideshow) + @"...";
                     GetControl<IMenuItem>("miScripts").Text = LangMan.LS(LSID.MIScripts);
                     GetControl<IMenuItem>("miTreeTools").Text = LangMan.LS(LSID.MITreeTools);
                     GetControl<IMenuItem>("miOptions").Text = LangMan.LS(LSID.MIOptions) + @"...";
@@ -964,25 +964,31 @@ namespace GKCore.Controllers
                     GetControl<IMenuItem>("miRecMerge").Text = LangMan.LS(LSID.MergeDuplicates);
                     GetControl<IMenuItem>("miFamilyGroups").Text = LangMan.LS(LSID.FragmentSearch);
                     GetControl<IMenuItem>("miTreeCheck").Text = LangMan.LS(LSID.TreeCheck);
+
                     GetControl<IMenuItem>("miPatSearch").Text = LangMan.LS(LSID.PatriarchsSearch);
+                    GetControl<IMenuItem>("miPatSearch").Enabled = !disNoStd;
                     GetControl<IMenuItem>("miPlacesManager").Text = LangMan.LS(LSID.PlacesManager);
-                    GetControl<IMenuItem>("miPhotosBatchAdding").Text = LangMan.LS(LSID.PhotosBatchAdding);
-                    GetControl<IMenuItem>("miCleanImagesCache").Text = LangMan.LS(LSID.CleanImagesCache);
+                    GetControl<IMenuItem>("miPlacesManager").Enabled = !disNoStd;
 
                     GetControl<IMenuItem>("miContext").Text = LangMan.LS(LSID.MIContext);
                     GetControl<IMenuItem>("miAbout").Text = LangMan.LS(LSID.MIAbout) + @"...";
                     GetControl<IMenuItem>("miLogSend").Text = LangMan.LS(LSID.LogSend);
                     GetControl<IMenuItem>("miLogView").Text = LangMan.LS(LSID.LogView);
 
-                    GetControl<IMenuItem>("miWindow").Text = LangMan.LS(LSID.MIWindow);
-                    GetControl<IMenuItem>("miWinCascade").Text = LangMan.LS(LSID.MIWinCascade);
-                    GetControl<IMenuItem>("miWinHTile").Text = LangMan.LS(LSID.MIWinHTile);
-                    GetControl<IMenuItem>("miWinVTile").Text = LangMan.LS(LSID.MIWinVTile);
-                    GetControl<IMenuItem>("miWinMinimize").Text = LangMan.LS(LSID.MIWinMinimize);
+                    if (hasGfx) {
+                        GetControl<IMenuItem>("miMap").Text = LangMan.LS(LSID.MIMap) + @"...";
+                        GetControl<IMenuItem>("miMap").Enabled = !disNoStd;
 
-                    GetControl<IMenuItem>("miMap").Enabled = !disNoStd;
-                    GetControl<IMenuItem>("miPatSearch").Enabled = !disNoStd;
-                    GetControl<IMenuItem>("miPlacesManager").Enabled = !disNoStd;
+                        GetControl<IMenuItem>("miSlideshow").Text = LangMan.LS(LSID.Slideshow) + @"...";
+                        GetControl<IMenuItem>("miPhotosBatchAdding").Text = LangMan.LS(LSID.PhotosBatchAdding);
+                        GetControl<IMenuItem>("miCleanImagesCache").Text = LangMan.LS(LSID.CleanImagesCache);
+
+                        GetControl<IMenuItem>("miWindow").Text = LangMan.LS(LSID.MIWindow);
+                        GetControl<IMenuItem>("miWinCascade").Text = LangMan.LS(LSID.MIWinCascade);
+                        GetControl<IMenuItem>("miWinHTile").Text = LangMan.LS(LSID.MIWinHTile);
+                        GetControl<IMenuItem>("miWinVTile").Text = LangMan.LS(LSID.MIWinVTile);
+                        GetControl<IMenuItem>("miWinMinimize").Text = LangMan.LS(LSID.MIWinMinimize);
+                    }
 
                     if (fHasToolbar) {
                         SetToolTip("tbFileNew", LangMan.LS(LSID.FileNewTip));

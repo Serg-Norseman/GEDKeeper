@@ -120,10 +120,10 @@ namespace GKCore.Maps
             result.MaxLat = pt.Latitude;
 
             if (mapPoints.Count == 1) {
-                result.MinLon = (result.MinLon - 20.0);
-                result.MaxLon = (result.MaxLon + 20.0);
-                result.MinLat = (result.MinLat - 20.0);
-                result.MaxLat = (result.MaxLat + 20.0);
+                result.MinLon -= 20.0;
+                result.MaxLon += 20.0;
+                result.MinLat -= 20.0;
+                result.MaxLat += 20.0;
             } else {
                 int num = mapPoints.Count;
                 for (int i = 0; i < num; i++) {

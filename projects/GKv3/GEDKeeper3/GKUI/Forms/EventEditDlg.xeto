@@ -39,13 +39,18 @@
             </TableRow>
 
             <TableRow>
-              <Label x:Name="lblCause" />
+              <Label x:Name="lblAge" />
               <StackLayout Orientation="Horizontal" Spacing="4">
                 <StackLayoutItem Expand="True">
-                  <ComboBox x:Name="txtEventCause" />
+                  <TextBox x:Name="txtAge" />
                 </StackLayoutItem>
                 <Button x:Name="btnAge" Click="btnAge_Click" />
               </StackLayout>
+            </TableRow>
+
+            <TableRow>
+              <Label x:Name="lblCause" />
+              <ComboBox x:Name="txtEventCause" />
             </TableRow>
 
             <TableRow>

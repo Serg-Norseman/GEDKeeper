@@ -784,8 +784,7 @@ namespace GKStdReports
                         }
                     }
 
-                    var evsRec = record as GDMRecordWithEvents;
-                    if (evsRec != null && evsRec.HasEvents) {
+                    if (record is GDMRecordWithEvents evsRec && evsRec.HasEvents) {
                         for (int i = 0; i < evsRec.Events.Count; i++) {
                             ShowEvent(subject, evsRec, evsRec.Events[i], indent);
                         }

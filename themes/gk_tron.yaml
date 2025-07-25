@@ -60,9 +60,9 @@ Elements:
   - Element: Tab
     Value: "#2A2A2A"
   - Element: TabHighlight
-    Value: "#2B2B2B"
+    Value: "#256E6E"
   - Element: TabSelected
-    Value: "#2C5151"
+    Value: "#2B2B2B"
 
   - Element: HighlightReadabilityRows
     Value: "#1A1A1A"

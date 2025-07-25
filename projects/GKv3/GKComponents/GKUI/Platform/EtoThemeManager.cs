@@ -46,46 +46,46 @@ namespace GKUI.Themes
             RegisterTheme(DefaultThemeName, new ThemeElementsDictionary() {
                 { ThemeElement.None, "" },
 
-                { ThemeElement.Font, "Tahoma" },                              // ???
-                { ThemeElement.FontSize, 8.25f },                             // ???
+                { ThemeElement.Font, "Tahoma" },
+                { ThemeElement.FontSize, 8.25f },
 
-                { ThemeElement.Editor, SystemColors.ControlBackground },      // ???
-                { ThemeElement.EditorText, SystemColors.ControlText },        // ???
+                { ThemeElement.Editor, SystemColors.ControlBackground },
+                { ThemeElement.EditorText, SystemColors.ControlText },
 
-                { ThemeElement.Control, Color.FromArgb(0x00000000) },         // default?! win+
-                { ThemeElement.ControlText, SystemColors.ControlText },       // ???
+                { ThemeElement.Control, SystemColors.Control },
+                { ThemeElement.ControlText, SystemColors.ControlText },
 
-                { ThemeElement.Window, SystemColors.Control },                // ???
-                { ThemeElement.WindowText, SystemColors.ControlText },        // ???
+                { ThemeElement.Window, SystemColors.WindowBackground },
+                { ThemeElement.WindowText, SystemColors.ControlText },
 
-                { ThemeElement.Dialog, SystemColors.Control },                // ???
-                { ThemeElement.DialogText, SystemColors.ControlText },        // ???
+                { ThemeElement.Dialog, SystemColors.WindowBackground },
+                { ThemeElement.DialogText, SystemColors.ControlText },
 
-                { ThemeElement.ButtonFace, Color.FromArgb(0xDDDDDD) },        // default?! win+
-                { ThemeElement.AccentButtonFace, Color.FromArgb(0xDDDDDD) },  // default?! win+
-                { ThemeElement.ButtonBorder, Colors.Black },                  // ???
-                { ThemeElement.ButtonText, SystemColors.ControlText },        // ???
+                { ThemeElement.ButtonFace, Color.FromArgb(0xDDDDDD) },
+                { ThemeElement.AccentButtonFace, Color.FromArgb(0xDDDDDD) },
+                { ThemeElement.ButtonBorder, Colors.Black },
+                { ThemeElement.ButtonText, SystemColors.ControlText },
 
-                { ThemeElement.Strip, SystemColors.Control },                 // ???
-                { ThemeElement.Dropdown, SystemColors.Control },              // ???
-                { ThemeElement.MenuBorder, SystemColors.Control },            // ???
-                { ThemeElement.MenuItemSelected, SystemColors.Control },      // ???
+                { ThemeElement.Strip, SystemColors.Control },
+                { ThemeElement.Dropdown, SystemColors.Control },
+                { ThemeElement.MenuBorder, SystemColors.Control },
+                { ThemeElement.MenuItemSelected, SystemColors.Control },
 
-                { ThemeElement.Link, Colors.Blue },                            // ???
+                { ThemeElement.Link, Colors.Blue },
 
-                { ThemeElement.Grid, SystemColors.Control },                   // ???
-                { ThemeElement.GridHeader, SystemColors.WindowBackground },    // ???
-                { ThemeElement.GridHeaderText, SystemColors.WindowBackground },// ???
-                { ThemeElement.GridText, SystemColors.ControlText },           // ???
+                { ThemeElement.Grid, SystemColors.ControlBackground },
+                { ThemeElement.GridHeader, SystemColors.WindowBackground },
+                { ThemeElement.GridHeaderText, SystemColors.WindowBackground },
+                { ThemeElement.GridText, SystemColors.ControlText },
 
-                { ThemeElement.Tab, SystemColors.WindowBackground },           // ???
-                { ThemeElement.TabHighlight, SystemColors.WindowBackground },  // ???
-                { ThemeElement.TabSelected, SystemColors.Control },            // ???
+                { ThemeElement.Tab, SystemColors.WindowBackground },
+                { ThemeElement.TabHighlight, SystemColors.WindowBackground },
+                { ThemeElement.TabSelected, SystemColors.Control },
 
-                { ThemeElement.HighlightReadabilityRows, Color.FromArgb(0xEFEFEF) },      // GK only
-                { ThemeElement.HighlightUnparentedIndi, Color.FromArgb(0xFFCACA) },       // GK only
-                { ThemeElement.HighlightUnmarriedIndi, Color.FromArgb(0xFFFFA1) },        // GK only
-                { ThemeElement.HighlightInaccessibleFiles, Color.FromArgb(0xFFCACA) },    // GK only
+                { ThemeElement.HighlightReadabilityRows, Color.FromArgb(0xEFEFEF) },
+                { ThemeElement.HighlightUnparentedIndi, Color.FromArgb(0xFFCACA) },
+                { ThemeElement.HighlightUnmarriedIndi, Color.FromArgb(0xFFFFA1) },
+                { ThemeElement.HighlightInaccessibleFiles, Color.FromArgb(0xFFCACA) },
 
                 { ThemeElement.ToolItemsImageSize, 20 },
 
@@ -300,8 +300,6 @@ namespace GKUI.Themes
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
 
-            ctl.ApplyTheme();
-
             ThemeContextMenuStripHandler(view, component, theme);
         }
 
@@ -313,8 +311,6 @@ namespace GKUI.Themes
             //ctl.ColumnHeadersDefaultCellStyle.BackgroundColor = GetThemeColor(theme, ThemeElement.GridHeader);
             //ctl.ColumnHeadersDefaultCellStyle.TextColor = GetThemeColor(theme, ThemeElement.GridHeaderText);
             //ctl.EnableHeadersVisualStyles = (theme.SysDefault);
-
-            ctl.ApplyTheme();
 
             ThemeContextMenuStripHandler(view, component, theme);
         }
@@ -344,7 +340,6 @@ namespace GKUI.Themes
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
             ctl.LinkColor = GetThemeColor(theme, ThemeElement.Link);
-            //ctl.BorderStyle = (theme.SysDefault) ? BorderStyle.Fixed3D : BorderStyle.FixedSingle;
 
             ThemeContextMenuStripHandler(view, component, theme);
         }
@@ -354,7 +349,6 @@ namespace GKUI.Themes
             var ctl = (CustomChart)component;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
-            //ctl.BorderStyle = (theme.SysDefault) ? BorderStyle.Fixed3D : BorderStyle.FixedSingle;
 
             ThemeContextMenuStripHandler(view, component, theme);
         }
@@ -449,8 +443,6 @@ namespace GKUI.Themes
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
 
-            //ctl.BorderStyle = (!theme.SysDefault) ? BorderStyle.FixedSingle : BorderStyle.Fixed3D;
-
             ThemeContextMenuStripHandler(view, component, theme);
         }
 
@@ -460,13 +452,13 @@ namespace GKUI.Themes
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
 
-            //ctl.BorderStyle = (!theme.SysDefault) ? BorderStyle.FixedSingle : BorderStyle.Fixed3D;
-
             ThemeContextMenuStripHandler(view, component, theme);
         }
 
         private static void ThemeTabControlHandler(IThemedView view, IDisposable component, Theme theme)
         {
+            // In Eto, TabControl's BackgroundColor - its color of border around of tabPage!
+
             if (component is GKTabControl) {
                 // extended
                 var ctl = (GKTabControl)component;
@@ -491,8 +483,10 @@ namespace GKUI.Themes
 
         private static void ThemeTabPageHandler(IThemedView view, IDisposable component, Theme theme)
         {
+            // In Eto, TabPage's BackgroundColor - its color of unselected Tabs!
+
             var ctl = (TabPage)component;
-            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.TabHighlight);
             //ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
@@ -604,7 +598,7 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(GKDateBox), ThemeDateBoxHandler);
             RegisterControlHandler(typeof(GKDateControl), ThemeUserControlHandler);
             RegisterControlHandler(typeof(GKListView), ThemeListViewHandler);
-            //RegisterControlHandler(typeof(GKPortrait), ThemeUserControlHandler);
+            RegisterControlHandler(typeof(GKPortrait), ThemeUserControlHandler);
             //RegisterControlHandler(typeof(GKTextBox), ThemeTextBoxHandler);
             RegisterControlHandler(typeof(HyperView), ThemeHyperViewHandler);
             RegisterControlHandler(typeof(ImageBox), ThemePanelHandler);

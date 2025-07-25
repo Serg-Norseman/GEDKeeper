@@ -50,10 +50,11 @@ namespace GKCore.Controllers
         }
 
         private readonly List<ImageRef> fFileRefs;
+        private readonly ITimer fTimer;
+
         private bool fActive;
         private int fCurrentIndex;
         private string fCurrentText;
-        private ITimer fTimer;
 
         /*public List<ImageRef> FileRefs
         {

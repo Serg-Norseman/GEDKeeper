@@ -127,7 +127,7 @@ namespace GKUI.Components
             double sum = 0.0;
             for (int i = 0; i < count; i++) {
                 frag = fList[i];
-                sum = sum + frag.Val;
+                sum += frag.Val;
             }
 
             // the calculation of the logarithm of the fragment and the sum of the logarithms
@@ -136,7 +136,7 @@ namespace GKUI.Components
                 frag = fList[i];
                 frag.Log = Math.Log(frag.Val, sum);
 
-                logSum = logSum + frag.Log;
+                logSum += frag.Log;
             }
 
             // calculate visual width of the fragments and their sum

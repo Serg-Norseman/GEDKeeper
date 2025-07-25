@@ -27,7 +27,7 @@ using GKUI.Components;
 
 namespace GKNavigatorPlugin
 {
-#if !GK3
+#if !NETCOREAPP
     using System.Drawing;
     using System.Windows.Forms;
 #else
@@ -40,7 +40,7 @@ namespace GKNavigatorPlugin
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
-#if !GK3
+#if !NETCOREAPP
         private ToolStrip toolStrip1;
         private ToolStripButton btnCheck;
         private GKListView lvData;
@@ -73,7 +73,7 @@ namespace GKNavigatorPlugin
 
         private void InitializeComponent()
         {
-#if !GK3
+#if !NETCOREAPP
             btnCheck = new ToolStripButton();
             btnCheck.DisplayStyle = ToolStripItemDisplayStyle.Text;
             btnCheck.Size = new Size(52, 25);
@@ -161,7 +161,7 @@ namespace GKNavigatorPlugin
 
         public void SetLocale()
         {
-#if !GK3
+#if !NETCOREAPP
             //Text = fPlugin.LangMan.LS(PLS.HistoryData);
 #else
             //Title = fPlugin.LangMan.LS(PLS.HistoryData);
@@ -205,7 +205,7 @@ namespace GKNavigatorPlugin
 
                 listModel.AddItem(item, item.Data);
 
-#if !GK3
+#if !NETCOREAPP
                 //var listItem = item.Item as GKListItem;
 
                 /*switch (item.State) {

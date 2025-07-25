@@ -249,8 +249,7 @@ namespace GEDmill
                         }
                     }
 
-                    var evsRec = inRecord as GDMRecordWithEvents;
-                    if (evsRec != null && evsRec.HasEvents) {
+                    if (inRecord is GDMRecordWithEvents evsRec && evsRec.HasEvents) {
                         num = evsRec.Events.Count;
                         for (int i = 0; i < num; i++) {
                             var evt = evsRec.Events[i];

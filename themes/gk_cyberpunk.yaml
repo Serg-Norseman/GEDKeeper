@@ -59,12 +59,12 @@ Elements:
   - Element: Tab
     Value: "#2A2B3D"
   - Element: TabHighlight
-    Value: "#4A4B6A"
-  - Element: TabSelected
     Value: "#6A6B8A"
+  - Element: TabSelected
+    Value: "#4A4B6A"
 
   - Element: HighlightReadabilityRows
-    Value: "#2A2B3D"
+    Value: "#3F4050"
   - Element: HighlightUnparentedIndi
     Value: "#FF4500"
   - Element: HighlightUnmarriedIndi

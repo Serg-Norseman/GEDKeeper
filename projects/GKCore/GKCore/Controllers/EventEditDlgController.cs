@@ -180,6 +180,8 @@ namespace GKCore.Controllers
 
             fTempLocation = fBase.Context.Tree.GetPtrValue<GDMLocationRecord>(fEvent.Place.Location);
             UpdatePlace(true);
+
+            UpdateAge();
         }
 
         private void UpdatePlace(bool forced)
@@ -225,9 +227,18 @@ namespace GKCore.Controllers
             await BaseController.ModifyAddress(fView, fBase, fEvent.Address);
         }
 
+        private void UpdateAge()
+        {
+            GetControl<ITextBox>("txtAge").Enabled = false;
+            GetControl<ITextBox>("txtAge").Text = GKUtils.GetAgeDisplayStr(fEvent);
+        }
+
         public async void ModifyAge()
         {
-            await BaseController.ModifyAge(fView, fBase, fEvent);
+            var result = await BaseController.ModifyAge(fView, fBase, fEvent);
+            if (result) {
+                UpdateAge();
+            }
         }
 
         private void SetAttributeMode(bool active)
@@ -310,6 +321,7 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblCause").Text = LangMan.LS(LSID.Cause);
             GetControl<ILabel>("lblOrg").Text = LangMan.LS(LSID.Agency);
             GetControl<IButton>("btnAge").Text = LangMan.LS(LSID.Age);
+            GetControl<ILabel>("lblAge").Text = LangMan.LS(LSID.Age);
 
             SetToolTip("btnPlaceAdd", LangMan.LS(LSID.PlaceAddTip));
             SetToolTip("btnPlaceDelete", LangMan.LS(LSID.PlaceDeleteTip));

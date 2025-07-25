@@ -15,7 +15,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <DefineConstants>OS_MSWIN</DefineConstants>
+    <DefineConstants>GK2;OS_MSWIN</DefineConstants>
   </PropertyGroup>
 
   <!-- Conditional -->

@@ -308,9 +308,9 @@ namespace GEDmill.MiniTree
             if (LeftObject != null) {
                 amount = LeftObject.PushLeft(amount);
             } else if (LeftObjectAlien != null) {
-                if (LeftObjectAlien is MTIndividual) {
+                if (LeftObjectAlien is MTIndividual mtIndi) {
                     // Push left until hit alien object
-                    float distance = Left - ((MTIndividual)LeftObjectAlien).Right;
+                    float distance = Left - mtIndi.Right;
                     if (distance < amount) {
                         amount = distance;
                     }
@@ -334,9 +334,9 @@ namespace GEDmill.MiniTree
             if (RightObject != null) {
                 amount = RightObject.PushRight(amount);
             } else if (RightObjectAlien != null) {
-                if (RightObjectAlien is MTIndividual) {
+                if (RightObjectAlien is MTIndividual mtIndi) {
                     // Push right until hit alien object
-                    float distance = ((MTIndividual)RightObjectAlien).Left - Right;
+                    float distance = mtIndi.Left - Right;
                     if (distance < amount) {
                         amount = distance;
                     }

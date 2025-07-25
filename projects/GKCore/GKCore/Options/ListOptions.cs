@@ -233,7 +233,7 @@ namespace GKCore.Options
 
     public sealed class ListOptionsCollection
     {
-        private ListOptions[] fOptions;
+        private readonly ListOptions[] fOptions;
 
         public ListOptions this[GDMRecordType rt]
         {

@@ -95,7 +95,7 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblLocName").Text = "Location name:";
             GetControl<ILabel>("lblTopLink").Text = "Top link:";
 
-#if NETCORE
+#if NETCOREAPP
             GetControl<IButton>("btnLocNameAdd").Text = LangMan.LS(LSID.DoAdd);
             GetControl<IButton>("btnLocNameEdit").Text = LangMan.LS(LSID.DoEdit);
             GetControl<IButton>("btnTopLinkAdd").Text = LangMan.LS(LSID.DoAdd);
@@ -131,7 +131,7 @@ namespace GKCore.Controllers
             var entry = GetSelectedEntry();
             if (entry == null) return;
 
-#if NETCORE
+#if NETCOREAPP
             GetControl<IButton>("btnLocNameAdd").Enabled = entry.Pair == null;
             GetControl<IButton>("btnLocNameEdit").Enabled = entry.Pair != null;
             GetControl<IButton>("btnTopLinkAdd").Enabled = entry.Pair != null && entry.TopLevelLink == null;

@@ -6,7 +6,6 @@
         <RootNamespace />
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <DefineConstants>GK3;NETCORE</DefineConstants>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
         <Configurations>Debug;Release</Configurations>

@@ -38,7 +38,7 @@ using GKUI.Platform.Handlers;
 
 namespace GKVisionPlugin
 {
-#if !NETCORE
+#if !NETCOREAPP
     using System.Drawing;
 #else
     using Eto.Drawing;
@@ -50,7 +50,7 @@ namespace GKVisionPlugin
 #elif OPEN_CV
     using System.IO.Compression;
     using OpenCvSharp;
-#if !NETCORE
+#if !NETCOREAPP
     using OpenCvSharp.Extensions;
 #endif
     using OpenCvSharp.Face;
@@ -66,6 +66,8 @@ namespace GKVisionPlugin
             Module[] mods = asm.GetModules();
             string fn = mods[0].FullyQualifiedName;
             ExecPath = Path.GetDirectoryName(fn) + Path.DirectorySeparatorChar;
+
+            InitExt();
         }
 
         public bool HasSubject(string strInfo)
@@ -174,8 +176,17 @@ namespace GKVisionPlugin
         #region OpenCV internals
 #if OPEN_CV
         private const string HaarCascadeFileName = "haarcascade_frontalface_default.xml";
-        private FaceRecognizer fFaceRecognizer = LBPHFaceRecognizer.Create();
+        private FaceRecognizer fFaceRecognizer;
         private CascadeClassifier fCascadeClassifier;
+
+        private void InitExt()
+        {
+            try {
+                fFaceRecognizer = LBPHFaceRecognizer.Create();
+            } catch (Exception ex) {
+                Logger.WriteError("GKComputerVision.InitExt()", ex);
+            }
+        }
 
         private void CheckHaarCascadeData()
         {
@@ -208,7 +219,7 @@ namespace GKVisionPlugin
 
         private bool HasSubjectInt(string strInfo)
         {
-            if (fFaceRecognizer.Empty) return false;
+            if (fFaceRecognizer == null || fFaceRecognizer.Empty) return false;
 
             int[] labels = fFaceRecognizer.GetLabelsByString(strInfo);
             return (labels != null && labels.Length > 0);
@@ -245,6 +256,8 @@ namespace GKVisionPlugin
 
         private void TrainFaceInt(Bitmap image, int label, string strInfo)
         {
+            if (fFaceRecognizer == null) return;
+
             CheckClassifier();
 
             using (Mat frameMat = BitmapConverter.ToMat(image)) {
@@ -267,7 +280,7 @@ namespace GKVisionPlugin
 
         private string PredictFaceInt(Bitmap image, out float confidence)
         {
-            if (fFaceRecognizer.Empty) {
+            if (fFaceRecognizer == null || fFaceRecognizer.Empty) {
                 confidence = 0.0f;
                 return null;
             }
@@ -283,12 +296,16 @@ namespace GKVisionPlugin
 
         private void SaveModelInt()
         {
+            if (fFaceRecognizer == null) return;
+
             string fileName = GetModelFileName();
             fFaceRecognizer.Write(fileName);
         }
 
         private void RestoreModelInt()
         {
+            if (fFaceRecognizer == null) return;
+
             string fileName = GetModelFileName();
             if (File.Exists(fileName))
                 fFaceRecognizer.Read(fileName);
@@ -298,6 +315,10 @@ namespace GKVisionPlugin
 
         #region Accord.NET internals
 #if ACCORD_CV
+
+        private void InitExt()
+        {
+        }
 
         private ExtRect[] DetectFacesInt(Bitmap image, bool portraitMode)
         {

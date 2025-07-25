@@ -13,18 +13,20 @@
         private System.Windows.Forms.Label lblEvent;
         private System.Windows.Forms.Label lblPlace;
         private System.Windows.Forms.Label lblDate;
-        private System.Windows.Forms.Label lblCause;
-        private System.Windows.Forms.Label lblOrg;
         private System.Windows.Forms.Label lblAttrValue;
         private System.Windows.Forms.ComboBox cmbEventType;
         private System.Windows.Forms.TextBox txtEventPlace;
+        private System.Windows.Forms.Label lblCause;
         private System.Windows.Forms.ComboBox txtEventCause;
+        private System.Windows.Forms.Label lblOrg;
         private System.Windows.Forms.ComboBox txtEventOrg;
         private System.Windows.Forms.ComboBox txtAttribute;
         private System.Windows.Forms.Button btnPlaceAdd;
         private System.Windows.Forms.Button btnPlaceDelete;
         private System.Windows.Forms.Button btnAge;
         private Components.GKDateControl dateCtl;
+        private System.Windows.Forms.Label lblAge;
+        private System.Windows.Forms.TextBox txtAge;
 
         private void InitializeComponent()
         {
@@ -51,6 +53,8 @@
             this.pageSources = new System.Windows.Forms.TabPage();
             this.btnAddress = new System.Windows.Forms.Button();
             this.btnAge = new System.Windows.Forms.Button();
+            this.lblAge = new System.Windows.Forms.Label();
+            this.txtAge = new System.Windows.Forms.TextBox();
             this.tabsData.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.SuspendLayout();
@@ -58,7 +62,7 @@
             // btnAccept
             // 
             this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAccept.Location = new System.Drawing.Point(371, 448);
+            this.btnAccept.Location = new System.Drawing.Point(371, 508);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(112, 30);
             this.btnAccept.TabIndex = 2;
@@ -70,7 +74,7 @@
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(494, 448);
+            this.btnCancel.Location = new System.Drawing.Point(494, 508);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(112, 30);
             this.btnCancel.TabIndex = 3;
@@ -88,7 +92,7 @@
             this.tabsData.Location = new System.Drawing.Point(0, 0);
             this.tabsData.Name = "tabsData";
             this.tabsData.SelectedIndex = 0;
-            this.tabsData.Size = new System.Drawing.Size(620, 429);
+            this.tabsData.Size = new System.Drawing.Size(620, 490);
             this.tabsData.TabIndex = 0;
             // 
             // pageCommon
@@ -108,6 +112,8 @@
             this.pageCommon.Controls.Add(this.txtEventOrg);
             this.pageCommon.Controls.Add(this.txtAttribute);
             this.pageCommon.Controls.Add(this.btnAge);
+            this.pageCommon.Controls.Add(this.lblAge);
+            this.pageCommon.Controls.Add(this.txtAge);
             this.pageCommon.Location = new System.Drawing.Point(4, 26);
             this.pageCommon.Name = "pageCommon";
             this.pageCommon.Size = new System.Drawing.Size(612, 399);
@@ -148,24 +154,6 @@
             this.lblDate.Size = new System.Drawing.Size(49, 17);
             this.lblDate.TabIndex = 10;
             this.lblDate.Text = "lblDate";
-            // 
-            // lblCause
-            // 
-            this.lblCause.AutoSize = true;
-            this.lblCause.Location = new System.Drawing.Point(11, 282);
-            this.lblCause.Name = "lblCause";
-            this.lblCause.Size = new System.Drawing.Size(57, 17);
-            this.lblCause.TabIndex = 18;
-            this.lblCause.Text = "lblCause";
-            // 
-            // lblOrg
-            // 
-            this.lblOrg.AutoSize = true;
-            this.lblOrg.Location = new System.Drawing.Point(11, 340);
-            this.lblOrg.Name = "lblOrg";
-            this.lblOrg.Size = new System.Drawing.Size(43, 17);
-            this.lblOrg.TabIndex = 20;
-            this.lblOrg.Text = "lblOrg";
             // 
             // lblAttrValue
             // 
@@ -211,16 +199,50 @@
             this.txtEventPlace.TabIndex = 6;
             this.txtEventPlace.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EditEventPlace_KeyDown);
             // 
+            // lblAge
+            // 
+            this.lblAge.AutoSize = true;
+            this.lblAge.Location = new System.Drawing.Point(11, 282);
+            this.lblAge.Name = "lblAge";
+            this.lblAge.Size = new System.Drawing.Size(57, 17);
+            this.lblAge.TabIndex = 18;
+            this.lblAge.Text = "lblAge";
+            // 
+            // txtAge
+            // 
+            this.txtAge.Location = new System.Drawing.Point(11, 301);
+            this.txtAge.Name = "txtAge";
+            this.txtAge.Size = new System.Drawing.Size(485, 24);
+            this.txtAge.TabIndex = 19;
+            // 
+            // lblCause
+            // 
+            this.lblCause.AutoSize = true;
+            this.lblCause.Location = new System.Drawing.Point(11, 340);
+            this.lblCause.Name = "lblCause";
+            this.lblCause.Size = new System.Drawing.Size(57, 17);
+            this.lblCause.TabIndex = 18;
+            this.lblCause.Text = "lblCause";
+            // 
             // txtEventCause
             // 
-            this.txtEventCause.Location = new System.Drawing.Point(11, 301);
+            this.txtEventCause.Location = new System.Drawing.Point(11, 359);
             this.txtEventCause.Name = "txtEventCause";
-            this.txtEventCause.Size = new System.Drawing.Size(485, 24);
+            this.txtEventCause.Size = new System.Drawing.Size(585, 24);
             this.txtEventCause.TabIndex = 19;
+            // 
+            // lblOrg
+            // 
+            this.lblOrg.AutoSize = true;
+            this.lblOrg.Location = new System.Drawing.Point(11, 398);
+            this.lblOrg.Name = "lblOrg";
+            this.lblOrg.Size = new System.Drawing.Size(43, 17);
+            this.lblOrg.TabIndex = 20;
+            this.lblOrg.Text = "lblOrg";
             // 
             // txtEventOrg
             // 
-            this.txtEventOrg.Location = new System.Drawing.Point(11, 359);
+            this.txtEventOrg.Location = new System.Drawing.Point(11, 417);
             this.txtEventOrg.Name = "txtEventOrg";
             this.txtEventOrg.Size = new System.Drawing.Size(585, 24);
             this.txtEventOrg.TabIndex = 21;
@@ -280,7 +302,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(620, 492);
+            this.ClientSize = new System.Drawing.Size(620, 550);
             this.Controls.Add(this.btnAccept);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.tabsData);

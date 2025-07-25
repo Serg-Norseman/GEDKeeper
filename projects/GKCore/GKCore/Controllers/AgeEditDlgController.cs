@@ -73,7 +73,7 @@ namespace GKCore.Controllers
                 var mX = mask[i];
                 switch (mX) {
                     case '0':
-                        if (strAge[i] != '_') {
+                        if (char.IsDigit(strAge[i])) {
                             tempRes.Append(strAge[i]);
                             afterVal = true;
                         }

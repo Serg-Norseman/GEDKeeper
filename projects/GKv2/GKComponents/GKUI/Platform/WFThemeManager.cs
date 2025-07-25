@@ -45,46 +45,46 @@ namespace GKUI.Themes
             RegisterTheme(DefaultThemeName, new ThemeElementsDictionary() {
                 { ThemeElement.None, "" },
 
-                { ThemeElement.Font, "Tahoma" },                              // checked
-                { ThemeElement.FontSize, 8.25f },                             // checked
+                { ThemeElement.Font, "Tahoma" },
+                { ThemeElement.FontSize, 8.25f },
 
-                { ThemeElement.Editor, SystemColors.Window },                 // checked
-                { ThemeElement.EditorText, SystemColors.WindowText },         // checked
+                { ThemeElement.Editor, SystemColors.Window },
+                { ThemeElement.EditorText, SystemColors.WindowText },
 
-                { ThemeElement.Control, SystemColors.Control },               // checked
-                { ThemeElement.ControlText, SystemColors.ControlText },       // checked
+                { ThemeElement.Control, SystemColors.Control },
+                { ThemeElement.ControlText, SystemColors.ControlText },
 
-                { ThemeElement.Window, SystemColors.Control },                // checked
-                { ThemeElement.WindowText, SystemColors.ControlText },        // checked
+                { ThemeElement.Window, SystemColors.Control },
+                { ThemeElement.WindowText, SystemColors.ControlText },
 
-                { ThemeElement.Dialog, SystemColors.Control },                // checked
-                { ThemeElement.DialogText, SystemColors.ControlText },        // checked
+                { ThemeElement.Dialog, SystemColors.Control },
+                { ThemeElement.DialogText, SystemColors.ControlText },
 
-                { ThemeElement.ButtonFace, SystemColors.ControlLight },       // checked
-                { ThemeElement.AccentButtonFace, SystemColors.ControlLight }, // checked
-                { ThemeElement.ButtonBorder, Color.Black },                   // checked
-                { ThemeElement.ButtonText, SystemColors.ControlText },        // checked
+                { ThemeElement.ButtonFace, SystemColors.ControlLight },
+                { ThemeElement.AccentButtonFace, SystemColors.ControlLight },
+                { ThemeElement.ButtonBorder, Color.Black },
+                { ThemeElement.ButtonText, SystemColors.ControlText },
 
-                { ThemeElement.Strip, SystemColors.Control },                 // <- ProfessionalColorTable
-                { ThemeElement.Dropdown, SystemColors.Control },              // <- ProfessionalColorTable
-                { ThemeElement.MenuBorder, SystemColors.Control },            // <- ProfessionalColorTable
-                { ThemeElement.MenuItemSelected, SystemColors.Control },      // <- ProfessionalColorTable
+                { ThemeElement.Strip, SystemColors.Control },
+                { ThemeElement.Dropdown, SystemColors.Control },
+                { ThemeElement.MenuBorder, SystemColors.Control },
+                { ThemeElement.MenuItemSelected, SystemColors.Control },
 
-                { ThemeElement.Link, Color.Blue },                            // checked
+                { ThemeElement.Link, Color.Blue },
 
-                { ThemeElement.Grid, SystemColors.Window },                   // checked
-                { ThemeElement.GridHeader, SystemColors.Window },             // checked
-                { ThemeElement.GridHeaderText, SystemColors.WindowText },     // checked
-                { ThemeElement.GridText, SystemColors.WindowText },           // checked
+                { ThemeElement.Grid, SystemColors.Window },
+                { ThemeElement.GridHeader, SystemColors.Window },
+                { ThemeElement.GridHeaderText, SystemColors.WindowText },
+                { ThemeElement.GridText, SystemColors.WindowText },
 
-                { ThemeElement.Tab, SystemColors.Window },                    // checked
-                { ThemeElement.TabHighlight, SystemColors.Window },           // checked
-                { ThemeElement.TabSelected, SystemColors.Control },           // checked
+                { ThemeElement.Tab, SystemColors.Window },
+                { ThemeElement.TabHighlight, SystemColors.Window },
+                { ThemeElement.TabSelected, SystemColors.Control },
 
-                { ThemeElement.HighlightReadabilityRows, Color.FromArgb(0xEFEFEF) },      // GK only
-                { ThemeElement.HighlightUnparentedIndi, Color.FromArgb(0xFFCACA) },       // GK only
-                { ThemeElement.HighlightUnmarriedIndi, Color.FromArgb(0xFFFFA1) },        // GK only
-                { ThemeElement.HighlightInaccessibleFiles, Color.FromArgb(0xFFCACA) },    // GK only
+                { ThemeElement.HighlightReadabilityRows, Color.FromArgb(0xEFEFEF) },
+                { ThemeElement.HighlightUnparentedIndi, Color.FromArgb(0xFFCACA) },
+                { ThemeElement.HighlightUnmarriedIndi, Color.FromArgb(0xFFFFA1) },
+                { ThemeElement.HighlightInaccessibleFiles, Color.FromArgb(0xFFCACA) },
 
                 { ThemeElement.ToolItemsImageSize, 20 },
 
@@ -505,6 +505,8 @@ namespace GKUI.Themes
 
         private static void ThemeTabControlHandler(IThemedView view, Component component, Theme theme)
         {
+            // In WinForms's TabControl Tab.BackColor (Appearance) - its color of Tab!
+
             if (component is GKTabControl) {
                 // extended
                 var ctl = (GKTabControl)component;
@@ -529,6 +531,8 @@ namespace GKUI.Themes
 
         private static void ThemeTabPageHandler(IThemedView view, Component component, Theme theme)
         {
+            // In WinForms's TabPage BackColor - its background of Page, not Tab!
+
             var ctl = (TabPage)component;
             ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
             ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);

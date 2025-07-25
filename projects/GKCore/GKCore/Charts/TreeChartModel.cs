@@ -938,7 +938,7 @@ namespace GKCore.Charts
         {
             fPicScale = (fScale < 1.0f) ? fScale : 1.0f;
             float fsz = (float)Math.Round(fOptions.DefFontSize * fScale, 2);
-#if NETCORE && OS_MSWIN
+#if NETCOREAPP && OS_MSWIN
             // Eto.Forms [WPF] <= 2.7.4
             // https://social.msdn.microsoft.com/Forums/en-US/98717e53-89f7-4d5f-823b-7184781a7b85/wpf-formattedtext-randomly-disappears-in-high-resolution-images
             fsz = Math.Max(fsz, 5.0f);

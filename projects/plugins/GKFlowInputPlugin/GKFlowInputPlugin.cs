@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -100,7 +100,7 @@ namespace GKFlowInputPlugin
             IBaseWindow curBase = Host.GetCurrentFile();
             if (curBase == null) return;
 
-#if !ETO
+#if !NETCOREAPP
             using (FlowInputDlg frm = new FlowInputDlg(this, curBase)) {
                 frm.ShowDialog();
             }

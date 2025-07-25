@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -274,7 +274,7 @@ namespace GKPedigreeImporterPlugin
                 int bd_pos = tmp.IndexOf(ImportUtils.STD_BIRTH_SIGN);
                 int dd_pos = tmp.IndexOf(ImportUtils.STD_DEATH_SIGN);
 
-                int datesPos = -1;
+                int datesPos;
                 if (bd_pos >= 0 && (dd_pos < 0 || dd_pos > bd_pos)) {
                     datesPos = bd_pos;
                 } else {
@@ -1260,9 +1260,6 @@ namespace GKPedigreeImporterPlugin
                     if (fFileName.EndsWith("docx")) {
                         doc = new XWPFDocument(stream);
                     } else {
-#if NETCORE
-#else
-#endif
                         return false;
                     }
                 }

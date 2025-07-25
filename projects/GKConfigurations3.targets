@@ -13,7 +13,7 @@
         <DebugType>Portable</DebugType>
         <Optimize>False</Optimize>
         <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-        <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
+        <DefineConstants>$(DefineConstants);GK3;TRACE;DEBUG</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -21,7 +21,7 @@
         <DebugType>None</DebugType>
         <Optimize>True</Optimize>
         <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-        <DefineConstants>$(DefineConstants);TRACE;RELEASE</DefineConstants>
+        <DefineConstants>$(DefineConstants);GK3;TRACE;RELEASE</DefineConstants>
     </PropertyGroup>
 
 

@@ -19,7 +19,6 @@
  */
 
 #pragma warning disable IDE0060 // Remove unused parameter
-#pragma warning disable IDE1006 // Naming Styles
 
 #if !MOBILE
 
@@ -38,7 +37,7 @@ using GKCore.Interfaces;
 using GKCore.Maps;
 using GKCore.Options;
 using NLua;
-#if NETCORE
+#if NETCOREAPP
 using System.Text;
 #endif
 
@@ -74,7 +73,7 @@ namespace GKCore
 
             using (Lua lvm = new Lua()) {
                 try {
-#if NETCORE
+#if NETCOREAPP
                     lvm.State.Encoding = Encoding.UTF8;
 #endif
                     lua_init(lvm);

@@ -8,7 +8,6 @@
         <OutputPath>..\..\..\plugins\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-        <DefineConstants>ETO;NETCORE</DefineConstants>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
         <Configurations>Debug;Release</Configurations>

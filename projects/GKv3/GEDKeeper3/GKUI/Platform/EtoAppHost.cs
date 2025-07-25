@@ -326,6 +326,10 @@ namespace GKUI.Platform
                     result = true;
 #endif
                     break;
+
+                case Feature.Graphics:
+                    result = true;
+                    break;
             }
 
             return result;

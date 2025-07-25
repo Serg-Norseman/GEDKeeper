@@ -59,7 +59,7 @@ Elements:
   - Element: Tab
     Value: "#34495E"
   - Element: TabHighlight
-    Value: "#2C3E50"
+    Value: "#7C888E"
   - Element: TabSelected
     Value: "#1A2634"
 

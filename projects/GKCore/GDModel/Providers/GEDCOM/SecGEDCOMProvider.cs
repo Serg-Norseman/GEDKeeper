@@ -96,7 +96,7 @@ namespace GDModel.Providers.GEDCOM
         private SymmetricAlgorithm CreateCSP(byte majorVer, byte minorVer)
         {
             int blockSize;
-#if NETCORE
+#if NETCOREAPP
             blockSize = 128; // .net6: BlockSize must be 128 in this implementation.
 #else
             blockSize = (minorVer == 2) ? 256 : 128;

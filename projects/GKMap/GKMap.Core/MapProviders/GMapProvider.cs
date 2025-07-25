@@ -338,8 +338,8 @@ namespace GKMap.MapProviders
 
         public override bool Equals(object obj)
         {
-            if (obj is GMapProvider) {
-                return Id.Equals(((GMapProvider) obj).Id);
+            if (obj is GMapProvider provider) {
+                return Id.Equals(provider.Id);
             }
             return false;
         }

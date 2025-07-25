@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -90,7 +90,7 @@ namespace GKCore.Export
         public static async Task<string> GetTableFile()
         {
             string availableFormats = "CSV files (*.csv)|*.csv";
-#if !NETCORE
+#if !NETCOREAPP
             availableFormats += "|" + "Excel files (*.xls)|*.xls";
 #else
             availableFormats += "|" + "Excel files (*.xlsx)|*.xlsx";

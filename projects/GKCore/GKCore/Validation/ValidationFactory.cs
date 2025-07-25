@@ -45,7 +45,7 @@ namespace GKCore.Validation
             try {
                 var validator = AppHost.Container.Resolve<IValidator<T>>();
                 return validator.Validate(obj);
-            } catch (TypeNotRegisteredException ex) {
+            } catch (TypeNotRegisteredException) {
                 return ValidationResult.Empty;
             } catch (Exception ex) {
                 var messages = new List<ValidationMessage> { new ValidationMessage { Message = string.Format("Error validating {0}", obj) } };
