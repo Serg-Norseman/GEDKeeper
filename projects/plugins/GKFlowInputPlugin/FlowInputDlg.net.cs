@@ -103,11 +103,11 @@ namespace GKFlowInputPlugin
 
             /*
             this.dataGridView1.AllowUserToResizeRows = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.MultiSelect = false;
 
-            this.cbPersonLink.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbPersonLink.Size = new System.Drawing.Size(145, 21);
+            this.cbPersonLink.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.cbPersonLink.Size = new Size(145, 21);
             this.cbPersonLink.Visible = false;
              */
             /*for (PersonLink pl = PersonLink.plPerson; pl <= PersonLink.plChild; pl++) {

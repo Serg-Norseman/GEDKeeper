@@ -63,9 +63,9 @@ namespace GKCore.Controllers
                     if (dt == null) throw new ArgumentNullException("dt");
 
                     fLocationName.Date.ParseString(dt.StringValue);
-                } catch (Exception ex) {
+                } catch (Exception) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.DateInvalid));
-                    throw ex;
+                    throw;
                 }
 
                 fLocalUndoman.Commit();

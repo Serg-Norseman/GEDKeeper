@@ -283,7 +283,7 @@ namespace GKMap
 
                     // Walk thru invocation list
                     foreach (var handler in delegates) {
-                        var dispatcherObject = handler.Target as ISynchronizeInvoke /*System.Windows.Forms.Control*/;
+                        var dispatcherObject = handler.Target as ISynchronizeInvoke /*SysWinForms.Control*/;
 
                         // If the subscriber is a DispatcherObject and different thread
                         if (dispatcherObject != null && dispatcherObject.InvokeRequired) {

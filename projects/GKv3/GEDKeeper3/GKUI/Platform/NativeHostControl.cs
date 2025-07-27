@@ -1,4 +1,8 @@
-﻿using System;
+﻿#if !DIS_VLC
+
+#pragma warning disable CA1416
+
+using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
@@ -133,3 +137,5 @@ namespace GKUI.Platform
 #endif
 
 }
+
+#endif

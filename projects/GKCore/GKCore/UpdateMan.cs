@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma warning disable CA1416
+
 using System;
 using System.Net.Http;
 using System.Threading;
@@ -121,7 +123,9 @@ namespace GKCore
 #endif
 
                 Thread worker = new Thread(WorkerMethod);
+#if OS_MSWIN
                 worker.SetApartmentState(ApartmentState.STA);
+#endif
                 worker.IsBackground = true;
                 worker.Start();
             } catch (Exception ex) {

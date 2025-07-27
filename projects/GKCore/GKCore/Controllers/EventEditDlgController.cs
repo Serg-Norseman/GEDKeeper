@@ -86,9 +86,9 @@ namespace GKCore.Controllers
                     if (dt == null) throw new ArgumentNullException("dt");
 
                     fEvent.Date.ParseString(dt.StringValue);
-                } catch (Exception ex) {
+                } catch (Exception) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.DateInvalid));
-                    throw ex;
+                    throw;
                 }
 
                 var eventDef = fView.EventType.GetSelectedTag<EventDef>();
@@ -280,7 +280,7 @@ namespace GKCore.Controllers
             UpdateCombo(fView.Attribute, canbeSorted, fixedList, vals, fView.Attribute.Text);
         }
 
-        private void UpdateCombo(IComboBox combo, bool canbeSorted, bool readOnly, string[] values, string current)
+        private static void UpdateCombo(IComboBox combo, bool canbeSorted, bool readOnly, string[] values, string current)
         {
             combo.Clear();
             if (values != null) {

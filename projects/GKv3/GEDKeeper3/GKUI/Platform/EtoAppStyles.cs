@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma warning disable CA1416
+
 using Eto.Drawing;
 using Eto.Forms;
 using GKUI.Themes;

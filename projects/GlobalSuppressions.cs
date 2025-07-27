@@ -17,6 +17,7 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Style", "IDE0056:Indexing can be simplified")]
 [assembly: SuppressMessage("Style", "IDE0057:Use range operator")]
 [assembly: SuppressMessage("Style", "IDE0063:'using' statement can be simplified")]
+[assembly: SuppressMessage("Style", "IDE0079:Remove unnecessary suppression")]
 [assembly: SuppressMessage("Style", "IDE0090:'new' expression can be simplified")]
 [assembly: SuppressMessage("Style", "IDE0251:Member can be made 'readonly'")]
 [assembly: SuppressMessage("Style", "IDE0180:Use tuple to swap values")]

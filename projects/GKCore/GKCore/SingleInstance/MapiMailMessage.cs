@@ -1,5 +1,7 @@
 ﻿#if OS_MSWIN
 
+#pragma warning disable CA1416
+
 using System;
 using System.Collections;
 using System.Collections.Generic;

@@ -149,7 +149,7 @@ namespace GKCore
         public static T GetAssemblyAttribute<T>(Assembly assembly) where T : Attribute
         {
             if (assembly == null)
-                throw new ArgumentNullException("assembly");
+                throw new ArgumentNullException(nameof(assembly));
 
             object[] attributes = assembly.GetCustomAttributes(typeof(T), false);
             T result;
@@ -381,7 +381,7 @@ namespace GKCore
             // Check inputs.
             if (str == null) {
                 // Same as original .NET C# string.Replace behavior.
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
             }
             if (str.Length == 0) {
                 // Same as original .NET C# string.Replace behavior.
@@ -389,7 +389,7 @@ namespace GKCore
             }
             if (oldValue == null) {
                 // Same as original .NET C# string.Replace behavior.
-                throw new ArgumentNullException("oldValue");
+                throw new ArgumentNullException(nameof(oldValue));
             }
             if (oldValue.Length == 0) {
                 // Same as original .NET C# string.Replace behavior.
@@ -547,7 +547,7 @@ namespace GKCore
                 return result;
             } catch (Exception ex) {
                 Logger.WriteError("SysUtils.GetWordForm(): " + ex.Message);
-                throw ex;
+                throw;
             }
         }
 

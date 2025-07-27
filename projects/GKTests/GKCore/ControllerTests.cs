@@ -313,6 +313,9 @@ namespace GKCore.Controllers
             SubstituteControl<ILabel>(view, "lblDate");
             SubstituteControl<ILabel>(view, "lblCause");
             SubstituteControl<ILabel>(view, "lblOrg");
+
+            SubstituteControl<ILabel>(view, "lblAge");
+            SubstituteControl<ITextBox>(view, "txtAge");
             SubstituteControl<IButton>(view, "btnAge");
 
             view.EventType.Returns(Substitute.For<IComboBox>());

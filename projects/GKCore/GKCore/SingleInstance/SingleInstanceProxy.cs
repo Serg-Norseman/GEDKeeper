@@ -29,7 +29,7 @@ namespace GKCore.SingleInstance
         public SingleInstanceProxy(ISingleInstanceEnforcer enforcer)
         {
             if (enforcer == null)
-                throw new ArgumentNullException("enforcer", @"enforcer cannot be null.");
+                throw new ArgumentNullException(nameof(enforcer), @"enforcer cannot be null.");
 
             fEnforcer = enforcer;
         }

@@ -61,7 +61,10 @@ namespace GEDKeeper3
 
             application.Platform.Add<GKButtonToolItem.IHandler>(() => new GKButtonToolItemHandler());
             application.Platform.Add<GKDropDownToolItem.IHandler>(() => new GKDropDownToolItemHandler());
+
+#if !DIS_VLC
             application.Platform.Add<NativeHostControl.IHandler>(() => new NativeHostControlHandler());
+#endif
 
             using (var tracker = new SingleInstanceTracker(GKData.APP_TITLE, AppHost.GetSingleInstanceEnforcer)) {
                 if (tracker.IsFirstInstance) {
