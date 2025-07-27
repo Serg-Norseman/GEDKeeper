@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,14 @@
 
 namespace GKCore.Types
 {
+    public enum PGNodeType
+    {
+        Default,
+        Patriarch,
+        Intersection
+    }
+
+
     /// <summary>
     /// PGNode - it's node class for Patriarchs Graph.
     /// </summary>

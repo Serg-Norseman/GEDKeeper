@@ -24,7 +24,7 @@ using System.Linq;
 using BSLib;
 using GDModel;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Design;
 using SIODirectory = System.IO.Directory;
 
 namespace GKTextSearchPlugin

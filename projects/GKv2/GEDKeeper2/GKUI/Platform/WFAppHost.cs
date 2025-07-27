@@ -33,6 +33,7 @@ using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Options;
+using GKCore.Plugins;
 using GKCore.Types;
 using GKCore.Validation;
 using GKUI.Components;

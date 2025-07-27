@@ -20,6 +20,7 @@
 
 using System;
 using System.Windows.Forms;
+using GKCore.Design;
 using GKCore.Interfaces;
 
 namespace GKChroniclePlugin

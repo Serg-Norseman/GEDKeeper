@@ -19,7 +19,7 @@
  */
 
 using System.Collections.Generic;
-using GKCore.Interfaces;
+using GKCore.Lists;
 using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
 
 namespace GKCore.Design.Controls

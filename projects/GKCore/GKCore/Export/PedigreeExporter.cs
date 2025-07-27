@@ -23,8 +23,8 @@ using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Calendar;
+using GKCore.Design;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 

@@ -18,14 +18,38 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Design;
+using System.Collections.Generic;
+using GDModel;
+using GKCore.Interfaces;
+using GKCore.Search;
 
-namespace GKCore.Interfaces
+namespace GKCore.Design
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface ICommonDialog : IForm
+    public interface IWindow : IForm, ILocalizable
     {
+        void Show(bool showInTaskbar);
+    }
+
+    public interface IWorkWindow : IWindow
+    {
+        void UpdateControls();
+
+        /// <summary>
+        /// Is called after changing the settings of the user interface.
+        /// </summary>
+        void UpdateSettings();
+
+        bool NavCanBackward();
+        bool NavCanForward();
+        void NavNext();
+        void NavPrev();
+
+        bool AllowQuickSearch();
+        IList<ISearchResult> FindAll(string searchPattern);
+        void QuickSearch();
+        void SelectByRec(GDMRecord record);
+
+        bool AllowFilter();
+        void SetFilter();
     }
 }

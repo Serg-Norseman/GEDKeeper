@@ -33,7 +33,10 @@ using GKCore.Design.Views;
 using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Media;
 using GKCore.Options;
+using GKCore.Plugins;
+using GKCore.Search;
 using GKCore.Types;
 using GKUI.Themes;
 

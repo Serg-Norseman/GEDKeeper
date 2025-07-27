@@ -22,9 +22,9 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKUI.Components;
 using GKUI.Platform.Handlers;
 

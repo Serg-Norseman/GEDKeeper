@@ -21,6 +21,7 @@
 #if !DIS_NUF
 
 using GDModel;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;

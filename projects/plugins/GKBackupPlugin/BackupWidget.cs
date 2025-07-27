@@ -21,7 +21,7 @@
 using System;
 using System.Windows.Forms;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Plugins;
 
 namespace GKBackupPlugin
 {

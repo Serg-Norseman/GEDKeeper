@@ -23,6 +23,7 @@
 using System;
 using System.Windows.Forms;
 using GKCore.Charts;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;

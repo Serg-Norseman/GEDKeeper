@@ -18,19 +18,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
+using GDModel;
+using GKCore.Design;
+using GKCore.Lists;
+using GKCore.Types;
 
-namespace GKCore.Interfaces
+namespace GKCore.Plugins
 {
     /// <summary>
-    /// 
+    /// Interface for a widgets with support of notifications about records changes.
     /// </summary>
-    public interface IDialogReplacement : IPlugin
+    public interface ISubscriber
     {
-        bool Enabled { get; set; }
-
-        Type GetDialogType();
-
-        ICommonDialog CreateDialog(params object[] parameters);
+        void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action);
+        void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter);
     }
 }

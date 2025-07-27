@@ -19,6 +19,7 @@
  */
 
 using GKCore.Interfaces;
+using GKCore.Plugins;
 
 namespace GKCore.Design.Views
 {

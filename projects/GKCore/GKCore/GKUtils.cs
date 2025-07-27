@@ -35,10 +35,13 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Calendar;
 using GKCore.Cultures;
+using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Export;
 using GKCore.Import;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Media;
 using GKCore.Options;
 using GKCore.Types;
 using UtfUnknown;
@@ -135,7 +138,7 @@ namespace GKCore
         public static string MergeStrings(GDMLines strings, int maxLength = -1)
         {
             if (strings == null)
-                throw new ArgumentNullException("strings");
+                throw new ArgumentNullException(nameof(strings));
 
             StringBuilder result = new StringBuilder();
 
@@ -339,7 +342,7 @@ namespace GKCore
                 string st;
                 switch (record.RecordType) {
                     case GDMRecordType.rtIndividual:
-                        st = GetNameString(((GDMIndividualRecord)record), false);
+                        st = GetNameString((GDMIndividualRecord)record, false);
                         break;
                     case GDMRecordType.rtFamily:
                         st = GetFamilyString(tree, (GDMFamilyRecord)record);
@@ -410,10 +413,10 @@ namespace GKCore
         public static string GetCorresponderStr(GDMTree tree, GDMCommunicationRecord commRec, bool aLink)
         {
             if (tree == null)
-                throw new ArgumentNullException("tree");
+                throw new ArgumentNullException(nameof(tree));
 
             if (commRec == null)
-                throw new ArgumentNullException("commRec");
+                throw new ArgumentNullException(nameof(commRec));
 
             string result = "";
             var corr = tree.GetPtrValue(commRec.Corresponder);
@@ -504,7 +507,7 @@ namespace GKCore
 
             switch (gt) {
                 case GDMGoalType.gtIndividual:
-                    return GetNameString(((GDMIndividualRecord)tempRec), false);
+                    return GetNameString((GDMIndividualRecord)tempRec, false);
 
                 case GDMGoalType.gtFamily:
                     return GetFamilyString(tree, tempRec as GDMFamilyRecord);
@@ -637,7 +640,7 @@ namespace GKCore
                 mask = '*' + mask;
 
             if (mask[mask.Length - 1] != '*')
-                mask = mask + '*';
+                mask += '*';
 
             mask = mask.Replace(' ', '*');
 
@@ -797,7 +800,7 @@ namespace GKCore
         public static string GetEventName(GDMCustomEvent evt)
         {
             if (evt == null)
-                throw new ArgumentNullException("evt");
+                throw new ArgumentNullException(nameof(evt));
 
             var eventDef = AppHost.EventDefinitions.Find(evt);
             string result = (eventDef != null) ? eventDef.DisplayName : evt.GetTagName();
@@ -818,7 +821,7 @@ namespace GKCore
         public static string GetAttributeStr(GDMIndividualAttribute iAttr)
         {
             if (iAttr == null)
-                throw new ArgumentNullException("iAttr");
+                throw new ArgumentNullException(nameof(iAttr));
 
             string st = GetEventName(iAttr);
 
@@ -849,7 +852,7 @@ namespace GKCore
         public static string GetEventDesc(GDMTree tree, GDMCustomEvent evt, bool hyperLink = true)
         {
             if (evt == null)
-                throw new ArgumentNullException("evt");
+                throw new ArgumentNullException(nameof(evt));
 
             var globOpts = GlobalOptions.Instance;
             string dt = GEDCOMEventToDateStr(evt, globOpts.DefDateFormat, globOpts.ShowDatesSign);
@@ -886,7 +889,7 @@ namespace GKCore
         public static string GetEventCause(GDMCustomEvent evt)
         {
             if (evt == null)
-                throw new ArgumentNullException("evt");
+                throw new ArgumentNullException(nameof(evt));
 
             string result = evt.Cause;
 
@@ -1186,7 +1189,7 @@ namespace GKCore
         public static string GetPedigreeLifeStr(GDMIndividualRecord iRec, PedigreeFormat fmt)
         {
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             string result = "";
 
@@ -2232,10 +2235,10 @@ namespace GKCore
         {
             string xref = linkName.Remove(0, GKData.INFO_HREF_EXPAND_ASSO.Length);
             var iRec = context.Tree.FindXRef<GDMIndividualRecord>(xref);
-            if (iRec is GDMIndividualRecord) {
-                int lineIdx = GKUtils.FindLinkStr(sender.Lines, linkName);
+            if (iRec != null) {
+                int lineIdx = FindLinkStr(sender.Lines, linkName);
                 var strList = new StringList();
-                GKUtils.ShowPersonExtInfo(context.Tree, iRec, strList, false);
+                ShowPersonExtInfo(context.Tree, iRec, strList, false);
                 sender.Lines.AddStrings(strList);
                 sender.Lines.Delete(lineIdx);
             }
@@ -3486,7 +3489,7 @@ namespace GKCore
         public static MediaStoreType GetStoreTypeEx(string fileRef)
         {
             if (fileRef == null)
-                throw new ArgumentNullException("fileReference");
+                throw new ArgumentNullException(nameof(fileRef));
 
             MediaStoreType result = MediaStoreType.mstReference;
             for (int i = 1; i <= 4; i++) {
@@ -3501,7 +3504,7 @@ namespace GKCore
         public static MediaStore GetStoreType(string fileReference)
         {
             if (string.IsNullOrEmpty(fileReference))
-                throw new ArgumentNullException("fileReference");
+                throw new ArgumentNullException(nameof(fileReference));
 
             string fileName = fileReference;
             MediaStoreType storeType = GetStoreTypeEx(fileName);
@@ -3666,7 +3669,7 @@ namespace GKCore
         public static string GetFamilyString(GDMTree tree, GDMFamilyRecord family)
         {
             if (family == null)
-                throw new ArgumentNullException("family");
+                throw new ArgumentNullException(nameof(family));
 
             return GetFamilyString(tree, family, LangMan.LS(LSID.UnkMale), LangMan.LS(LSID.UnkFemale));
         }
@@ -3674,10 +3677,10 @@ namespace GKCore
         public static string GetFamilyString(GDMTree tree, GDMFamilyRecord family, string unkHusband, string unkWife)
         {
             if (tree == null)
-                throw new ArgumentNullException("tree");
+                throw new ArgumentNullException(nameof(tree));
 
             if (family == null)
-                throw new ArgumentNullException("family");
+                throw new ArgumentNullException(nameof(family));
 
             string husband, wife;
 
@@ -3701,7 +3704,7 @@ namespace GKCore
         public static string GetNickString(GDMIndividualRecord iRec)
         {
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             string result = (iRec.PersonalNames.Count > 0) ? iRec.PersonalNames[0].Nickname : string.Empty;
             return result;
@@ -3710,7 +3713,7 @@ namespace GKCore
         public static string GetFmtSurname(GDMSex iSex, GDMPersonalName personalName, string defSurname)
         {
             if (personalName == null)
-                throw new ArgumentNullException("personalName");
+                throw new ArgumentNullException(nameof(personalName));
 
             string result;
 
@@ -3774,10 +3777,10 @@ namespace GKCore
         public static string GetNameString(GDMIndividualRecord iRec, GDMPersonalName np, bool firstSurname, bool includePieces)
         {
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             if (np == null)
-                throw new ArgumentNullException("np");
+                throw new ArgumentNullException(nameof(np));
 
             string result;
 
@@ -3829,7 +3832,7 @@ namespace GKCore
         public static string GetNameString(GDMIndividualRecord iRec, bool includePieces, GDMLanguageID defLang = GDMLanguageID.Unknown)
         {
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             GDMPersonalName pn = GetPersonalNameByLang(iRec, defLang);
             string result = (pn == null) ? string.Empty : GetNameString(iRec, pn, GlobalOptions.Instance.SurnameFirstInOrder, includePieces);
@@ -3839,7 +3842,7 @@ namespace GKCore
         public static string GetNameString(GDMIndividualRecord iRec, bool firstSurname, bool includePieces, GDMLanguageID defLang = GDMLanguageID.Unknown)
         {
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             GDMPersonalName pn = GetPersonalNameByLang(iRec, defLang);
             string result = (pn == null) ? string.Empty : GetNameString(iRec, pn, firstSurname, includePieces);
@@ -3849,7 +3852,7 @@ namespace GKCore
         public static void SetMarriedSurname(GDMIndividualRecord iRec, string marriedSurname)
         {
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             GDMPersonalName personalName;
             if (iRec.PersonalNames.Count <= 0) {
@@ -3864,7 +3867,7 @@ namespace GKCore
         public static void SetNameParts(GDMPersonalName personalName, string surname, string name, string patronymic)
         {
             if (personalName == null)
-                throw new ArgumentNullException("personalName");
+                throw new ArgumentNullException(nameof(personalName));
 
             personalName.Surname = surname.SafeTrim();
             personalName.Given = name.SafeTrim();
@@ -3874,7 +3877,7 @@ namespace GKCore
         public static NamePartsRet GetNameParts(GDMTree tree, GDMIndividualRecord iRec, GDMPersonalName personalName, bool formatted = true)
         {
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             ICulture culture = DefineCulture(tree, personalName);
 
@@ -3890,7 +3893,7 @@ namespace GKCore
         public static NamePartsRet GetNameParts(GDMTree tree, GDMIndividualRecord iRec, bool formatted = true, GDMLanguageID defLang = GDMLanguageID.Unknown)
         {
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             GDMPersonalName pn = GetPersonalNameByLang(iRec, defLang);
             return (pn == null) ? NamePartsRet.Empty : GetNameParts(tree, iRec, pn, formatted);

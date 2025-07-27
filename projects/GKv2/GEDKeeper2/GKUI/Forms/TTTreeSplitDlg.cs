@@ -20,9 +20,9 @@
 
 using System;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Tools;
 
 namespace GKUI.Forms

@@ -22,9 +22,8 @@ using System;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Design;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
-using GKCore.Types;
 
 namespace GKCore.Export
 {

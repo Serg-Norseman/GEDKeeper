@@ -22,7 +22,8 @@ using System;
 using System.Windows.Forms;
 using GDModel;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Design;
+using GKCore.Plugins;
 using GKCore.Types;
 
 namespace GKTimeLinePlugin

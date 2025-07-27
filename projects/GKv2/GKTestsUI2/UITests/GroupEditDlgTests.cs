@@ -23,7 +23,7 @@
 using System;
 using System.Windows.Forms;
 using GDModel;
-using GKCore.Interfaces;
+using GKCore.Design;
 using GKTests;
 using GKTests.ControlTesters;
 using GKTests.Stubs;

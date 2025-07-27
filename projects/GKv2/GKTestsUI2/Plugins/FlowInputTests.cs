@@ -23,6 +23,7 @@
 using System;
 using System.Reflection;
 using GDModel;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKTests;
 using GKTests.ControlTesters;

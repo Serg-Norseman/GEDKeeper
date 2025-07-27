@@ -24,7 +24,9 @@ using System.IO;
 using System.Windows.Forms;
 using GDModel;
 using GKCore;
+using GKCore.Design;
 using GKCore.Interfaces;
+using GKCore.Plugins;
 using GKUI.Components;
 
 namespace GKNavigatorPlugin

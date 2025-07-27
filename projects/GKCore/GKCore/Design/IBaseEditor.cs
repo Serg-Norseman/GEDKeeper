@@ -18,36 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCore.Types
+namespace GKCore.Design
 {
-    /// <summary>
-    /// Types of store multimedia files.
-    /// </summary>
-    public enum MediaStoreType
+    public interface IBaseEditor
     {
-        /// <summary>
-        /// Direct absolute file reference.
-        /// </summary>
-        mstReference,
-
-        /// <summary>
-        /// Storage's folder next to the database file.
-        /// </summary>
-        mstStorage,
-
-        /// <summary>
-        /// The archive file (zip) next to the database file.
-        /// </summary>
-        mstArchive,
-
-        /// <summary>
-        /// File reference relative to the database file.
-        /// </summary>
-        mstRelativeReference,
-
-        /// <summary>
-        /// File reference relative to the web address of file.
-        /// </summary>
-        mstURL
     }
 }

@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using BSLib;
 using GDModel;
 using GKCore;
+using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Export;
 using GKCore.Interfaces;

@@ -21,6 +21,7 @@
 using System;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKUI.Components;
 

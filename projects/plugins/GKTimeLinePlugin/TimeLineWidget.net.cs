@@ -23,7 +23,8 @@ using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Design;
+using GKCore.Plugins;
 using GKCore.Types;
 
 namespace GKTimeLinePlugin

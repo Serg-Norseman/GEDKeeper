@@ -23,7 +23,7 @@ using GDModel;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 
-namespace GKCore.Interfaces
+namespace GKCore.Lists
 {
     public delegate bool ExternalFilterHandler(GDMRecord record);
 

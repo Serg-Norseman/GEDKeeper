@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GKCore.Design;
 using GKCore.Interfaces;
 
 namespace GKCore.Plugins

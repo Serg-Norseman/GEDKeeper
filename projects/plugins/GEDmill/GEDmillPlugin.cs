@@ -26,6 +26,8 @@ using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Plugins;
 using GKUI.Platform.Handlers;
+using GKCore.Design;
+
 
 #if !ETO
 using System.Drawing;

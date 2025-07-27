@@ -26,8 +26,11 @@ using System.Reflection;
 using System.Text;
 using BSLib;
 using GDModel;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Media;
+using GKCore.Plugins;
 using GKCore.Types;
 
 namespace GKCore.Options

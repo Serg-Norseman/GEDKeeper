@@ -22,9 +22,9 @@ using System;
 using System.Collections.Generic;
 using GDModel;
 using GKCore;
+using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Export;
-using GKCore.Interfaces;
 
 namespace GKStdReports
 {

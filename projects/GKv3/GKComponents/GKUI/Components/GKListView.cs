@@ -25,7 +25,7 @@ using Eto.Forms;
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
+using GKCore.Lists;
 using GKUI.Platform.Handlers;
 using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
 

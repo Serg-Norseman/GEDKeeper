@@ -20,7 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-using GKCore.Interfaces;
+using GKCore.Design;
 
 namespace GKCore.Search
 {

@@ -27,6 +27,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Interfaces;
+using GKCore.Media;
 using GKCore.Types;
 
 namespace GKCore.Tools

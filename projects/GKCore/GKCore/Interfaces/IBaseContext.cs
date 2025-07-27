@@ -26,6 +26,8 @@ using BSLib;
 using GDModel;
 using GKCore.Design;
 using GKCore.Design.Graphics;
+using GKCore.Media;
+using GKCore.Search;
 using GKCore.Types;
 
 namespace GKCore.Interfaces

@@ -20,8 +20,8 @@
 
 using System;
 using BSLib;
+using GKCore.Export;
 using GKCore.Interfaces;
-using GKCore.Types;
 
 namespace GKCore.Options
 {

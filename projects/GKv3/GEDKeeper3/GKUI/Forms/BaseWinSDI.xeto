@@ -149,7 +149,7 @@
 
   <TableLayout>
     <TableRow ScaleHeight="True">
-      <TabControl x:Name="tabsRecords" Size="980, 460" SelectedIndexChanged="tabsRecords_SelectedIndexChanged" />
+      <TabControl x:Name="tabsRecords" SelectedIndexChanged="tabsRecords_SelectedIndexChanged" />
     </TableRow>
     <TableRow>
       <TableLayout x:Name="StatusBar">

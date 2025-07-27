@@ -27,6 +27,7 @@ using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
+using GKCore.Media;
 using GKCore.Types;
 using GKUI.Themes;
 

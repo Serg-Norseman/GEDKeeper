@@ -22,7 +22,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCore.Interfaces;
+using GKCore.Design;
 using GKTests;
 using GKTests.Stubs;
 using NUnit.Framework;

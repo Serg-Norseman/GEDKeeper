@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Stats;
 using GKUI.Platform;

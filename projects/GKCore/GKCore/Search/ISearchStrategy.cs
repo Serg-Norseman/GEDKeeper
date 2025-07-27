@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,9 +18,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCore.Interfaces
+using System.Collections.Generic;
+
+namespace GKCore.Search
 {
-    public interface ICustomFilter
+    public interface ISearchResult
     {
+    }
+
+    public interface ISearchStrategy
+    {
+        ISearchResult CurResult { get; }
+
+        IList<ISearchResult> FindAll();
+        ISearchResult FindNext();
+        ISearchResult FindPrev();
+        bool HasResults();
     }
 }

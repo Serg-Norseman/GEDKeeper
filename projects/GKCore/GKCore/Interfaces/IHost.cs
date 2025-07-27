@@ -21,7 +21,9 @@
 using System.Threading.Tasks;
 using GDModel;
 using GKCore.Design;
+using GKCore.Lists;
 using GKCore.Options;
+using GKCore.Plugins;
 using GKCore.Types;
 
 namespace GKCore.Interfaces

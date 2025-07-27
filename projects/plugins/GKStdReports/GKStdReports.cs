@@ -21,6 +21,7 @@
 using System;
 using System.Reflection;
 using GKCore;
+using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Options;

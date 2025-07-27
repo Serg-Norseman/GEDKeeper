@@ -27,7 +27,7 @@ using Eto.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
-using GKCore.Interfaces;
+using GKCore.Design;
 using GKCore.Options;
 using GKUI.Platform;
 using GKUI.Platform.Handlers;

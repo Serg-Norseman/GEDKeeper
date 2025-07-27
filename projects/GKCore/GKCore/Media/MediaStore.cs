@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,17 +18,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel;
-using GKCore.Types;
-
-namespace GKCore.Interfaces
+namespace GKCore.Media
 {
     /// <summary>
-    /// Interface for a widgets with support of notifications about records changes.
+    /// 
     /// </summary>
-    public interface ISubscriber
+    public sealed class MediaStore
     {
-        void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action);
-        void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter);
+        public readonly MediaStoreType StoreType;
+        public readonly string FileName;
+        
+        public MediaStore(MediaStoreType storeType, string fileName)
+        {
+            StoreType = storeType;
+            FileName = fileName;
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,8 +32,8 @@ namespace GKCore.Tools
     /// </summary>
     public static class PatriarchsMan
     {
-        public static IList<PatriarchObj> GetPatriarchsList(IBaseContext context,
-                                                              int gensMin, bool datesCheck, IProgressController progress, bool progressDone)
+        public static IList<PatriarchObj> GetPatriarchsList(
+            IBaseContext context, int gensMin, bool datesCheck, IProgressController progress, bool progressDone)
         {
             var patList = new List<PatriarchObj>();
 
@@ -44,9 +44,7 @@ namespace GKCore.Tools
                 for (int i = 0; i < num; i++) {
                     GDMRecord rec = context.Tree[i];
 
-                    if (rec is GDMIndividualRecord) {
-                        GDMIndividualRecord iRec = rec as GDMIndividualRecord;
-
+                    if (rec is GDMIndividualRecord iRec) {
                         var parts = GKUtils.GetNameParts(context.Tree, iRec);
 
                         int birthDate = context.FindBirthYear(iRec);
@@ -81,9 +79,8 @@ namespace GKCore.Tools
             return patList;
         }
 
-        public static IList<PatriarchObj> GetPatriarchsLinks(IBaseContext context,
-                                                               int gensMin, bool datesCheck,
-                                                               bool loneSuppress, IProgressController progress)
+        public static IList<PatriarchObj> GetPatriarchsLinks(
+            IBaseContext context, int gensMin, bool datesCheck, bool loneSuppress, IProgressController progress)
         {
             var patList = GetPatriarchsList(context, gensMin, datesCheck, progress, false);
 
@@ -151,9 +148,8 @@ namespace GKCore.Tools
             }
         }
 
-        public static Graph GetPatriarchsGraph(IBaseContext context, int gensMin,
-                                               bool datesCheck, bool loneSuppress,
-                                               IProgressController progress)
+        public static Graph GetPatriarchsGraph(
+            IBaseContext context, int gensMin, bool datesCheck, bool loneSuppress, IProgressController progress)
         {
             Graph graph = new Graph();
 
@@ -168,8 +164,7 @@ namespace GKCore.Tools
                     PatriarchObj patNode = patList[i];
                     GDMIndividualRecord iRec = patNode.IRec;
 
-                    int count2 = iRec.SpouseToFamilyLinks.Count;
-                    for (int k = 0; k < count2; k++) {
+                    for (int k = 0, num2 = iRec.SpouseToFamilyLinks.Count; k < num2; k++) {
                         GDMFamilyRecord family = context.Tree.GetPtrValue(iRec.SpouseToFamilyLinks[k]);
                         pgNodes[family] = new PGNode(family.XRef, PGNodeType.Patriarch, patNode.DescGenerations);
                     }

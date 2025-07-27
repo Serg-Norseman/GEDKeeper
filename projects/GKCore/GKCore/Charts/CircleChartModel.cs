@@ -22,8 +22,8 @@ using System;
 using System.Collections.Generic;
 using BSLib;
 using GDModel;
+using GKCore.Design;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 using GKCore.Options;
 
 namespace GKCore.Charts

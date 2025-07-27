@@ -21,9 +21,11 @@
 using System.Collections.Generic;
 using BSLib;
 using GDModel;
+using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Types;
 
-namespace GKCore.Interfaces
+namespace GKCore.Design
 {
     public enum RecordContentType { Full, Quick }
 

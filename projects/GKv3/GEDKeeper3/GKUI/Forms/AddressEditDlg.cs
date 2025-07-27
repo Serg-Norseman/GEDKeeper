@@ -23,9 +23,9 @@ using Eto.Serialization.Xaml;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKUI.Components;
 

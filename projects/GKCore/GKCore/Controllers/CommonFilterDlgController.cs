@@ -19,10 +19,10 @@
  */
 
 using System;
-using GKCore.Design.Controls;
-using GKCore.Interfaces;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Lists;
 using GKCore.Types;
 using GKUI.Themes;
 

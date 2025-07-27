@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using GKCore;
+using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Interfaces;
 using GKCore.Stats;

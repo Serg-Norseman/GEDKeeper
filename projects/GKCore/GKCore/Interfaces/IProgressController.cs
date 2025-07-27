@@ -19,6 +19,7 @@
  */
 
 using System;
+using GKCore.Design;
 
 namespace GKCore.Interfaces
 {

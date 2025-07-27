@@ -1579,7 +1579,7 @@ namespace GKCore.Controllers
         public static void ShowMedia(IBaseWindow baseWin, GDMMultimediaRecord mediaRec, bool modal)
         {
             if (mediaRec == null)
-                throw new ArgumentNullException("mediaRec");
+                throw new ArgumentNullException(nameof(mediaRec));
 
             GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
             if (fileRef == null) return;

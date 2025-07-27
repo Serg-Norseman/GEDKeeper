@@ -23,8 +23,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using GDModel;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Options;
 using GKUI.Components;
 

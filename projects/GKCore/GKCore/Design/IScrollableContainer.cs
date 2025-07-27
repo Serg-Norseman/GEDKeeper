@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,24 +18,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Collections.Generic;
-using GDModel;
+using BSLib;
 
-namespace GKCore.Interfaces
+namespace GKCore.Design
 {
-    public interface IRecordsListModel : IListSource
+    public interface IScrollableContainer
     {
-        GDMRecordType RecordType { get; }
-        bool SimpleList { get; set; }
+        ExtRect ImageViewport { get; }
 
-        List<GDMRecord> GetRecordsList();
+        ExtRect Viewport { get; }
 
-        IList<ISearchResult> FindAll(string searchPattern);
-    }
-
-
-    public interface IRecordsListModel<T> : IRecordsListModel
-        where T : GDMRecord
-    {
+        /// <summary>
+        /// Virtual canvas - if the size of the drawing canvas is based on the client area of ​​the scrollable container.
+        /// </summary>
+        bool VirtualCanvas { get; }
     }
 }

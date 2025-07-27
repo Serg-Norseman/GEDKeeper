@@ -25,6 +25,7 @@ using System.Text;
 using BSLib;
 using GDModel;
 using GKCore.Charts;
+using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Interfaces;
 using GKCore.Lists;
@@ -41,7 +42,7 @@ namespace GKCore
     [TestFixture]
     public class CoreTests
     {
-        private BaseContext fContext;
+        private readonly BaseContext fContext;
 
         public CoreTests()
         {

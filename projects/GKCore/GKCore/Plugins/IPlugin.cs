@@ -21,8 +21,9 @@
 using System;
 using BSLib;
 using GKCore.Design.Graphics;
+using GKCore.Interfaces;
 
-namespace GKCore.Interfaces
+namespace GKCore.Plugins
 {
     public class HostClosingEventArgs : EventArgs
     {

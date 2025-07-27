@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,21 +18,22 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Collections.Generic;
+using GKCore.Design.Controls;
 
-namespace GKCore.Interfaces
+namespace GKCore.Plugins
 {
-    public interface ISearchResult
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class WidgetInfo
     {
-    }
+        public IWidget Widget;
+        public IMenuItem MenuItem;
 
-    public interface ISearchStrategy
-    {
-        ISearchResult CurResult { get; }
-
-        IList<ISearchResult> FindAll();
-        ISearchResult FindNext();
-        ISearchResult FindPrev();
-        bool HasResults();
+        public WidgetInfo(IWidget widget, IMenuItem menuItem)
+        {
+            Widget = widget;
+            MenuItem = menuItem;
+        }
     }
 }

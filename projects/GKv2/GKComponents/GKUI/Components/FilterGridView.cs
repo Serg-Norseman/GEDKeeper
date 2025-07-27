@@ -23,7 +23,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
+using GKCore.Lists;
 using GKUI.Themes;
 
 namespace GKUI.Components

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,23 +18,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Design.Controls;
-using GKCore.Interfaces;
+using System;
+using GKCore.Design;
 
-namespace GKCore.Types
+namespace GKCore.Plugins
 {
     /// <summary>
     /// 
     /// </summary>
-    public sealed class WidgetInfo
+    public interface IDialogReplacement : IPlugin
     {
-        public IWidget Widget;
-        public IMenuItem MenuItem;
+        bool Enabled { get; set; }
 
-        public WidgetInfo(IWidget widget, IMenuItem menuItem)
-        {
-            Widget = widget;
-            MenuItem = menuItem;
-        }
+        Type GetDialogType();
+
+        ICommonDialog CreateDialog(params object[] parameters);
     }
 }

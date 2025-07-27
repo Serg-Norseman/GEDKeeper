@@ -30,6 +30,7 @@ using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
+using GKCore.Search;
 using GKCore.Types;
 using GKUI.Themes;
 

@@ -22,8 +22,8 @@ using GDModel;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
+using GKCore.Media;
 using GKCore.Options;
-using GKCore.Types;
 
 namespace GKCore.Lists
 {

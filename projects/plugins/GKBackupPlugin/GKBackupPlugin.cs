@@ -22,8 +22,9 @@ using System;
 using System.IO;
 using System.Reflection;
 using BSLib;
-using GKCore.Design.Graphics;
 using GKCore;
+using GKCore.Design;
+using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Plugins;
 

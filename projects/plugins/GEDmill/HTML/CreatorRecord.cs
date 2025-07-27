@@ -23,7 +23,7 @@ using GDModel;
 using GEDmill.Model;
 using GKCore;
 using GKCore.Interfaces;
-using GKCore.Types;
+using GKCore.Media;
 
 namespace GEDmill.HTML
 {

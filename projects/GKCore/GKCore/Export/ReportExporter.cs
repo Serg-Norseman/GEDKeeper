@@ -21,7 +21,7 @@
 using System;
 using System.IO;
 using BSLib;
-using GKCore.Interfaces;
+using GKCore.Design;
 using GKCore.Options;
 
 namespace GKCore.Export

@@ -17,7 +17,7 @@
  */
 
 using System;
-using GKCore.Types;
+using GKCore.Media;
 
 namespace GEDmill.Model
 {

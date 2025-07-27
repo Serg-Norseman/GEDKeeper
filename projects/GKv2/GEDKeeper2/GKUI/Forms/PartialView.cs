@@ -28,13 +28,13 @@ using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
+using GKCore.Search;
 using GKUI.Components;
-using GKUI.Platform;
 
 namespace GKUI.Forms
 {

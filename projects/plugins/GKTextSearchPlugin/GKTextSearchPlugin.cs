@@ -22,8 +22,10 @@ using System;
 using System.Reflection;
 using GDModel;
 using GKCore;
+using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
+using GKCore.Lists;
 using GKCore.Plugins;
 using GKCore.Types;
 

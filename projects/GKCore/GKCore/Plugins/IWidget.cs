@@ -19,8 +19,10 @@
  */
 
 using System;
+using GKCore.Design;
+using GKCore.Interfaces;
 
-namespace GKCore.Interfaces
+namespace GKCore.Plugins
 {
     [Flags]
     public enum WidgetLocation : uint

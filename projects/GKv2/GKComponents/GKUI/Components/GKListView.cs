@@ -29,7 +29,7 @@ using GKCore.Design.Controls;
 using GKUI.Platform.Handlers;
 using BSDListItem = GKCore.Design.Controls.IListItem;
 using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
-using IListSource = GKCore.Interfaces.IListSource;
+using IListSource = GKCore.Lists.IListSource;
 
 namespace GKUI.Components
 {

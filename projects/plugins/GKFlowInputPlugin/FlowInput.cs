@@ -24,7 +24,9 @@ using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
+using GKCore.Design;
 using GKCore.Interfaces;
+using GKCore.Plugins;
 using GKCore.Types;
 
 namespace GKFlowInputPlugin

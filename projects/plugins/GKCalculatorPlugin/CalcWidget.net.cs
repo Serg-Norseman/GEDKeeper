@@ -23,8 +23,8 @@ using BSLib;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore;
-using GKCore.Interfaces;
-using GKUI.Components;
+using GKCore.Design;
+using GKCore.Plugins;
 
 namespace GKCalculatorPlugin
 {

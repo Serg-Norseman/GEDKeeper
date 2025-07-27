@@ -18,19 +18,26 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib;
-
-namespace GKCore.Interfaces
+namespace GKCore.Design
 {
-    public interface IScrollableContainer
+    public enum ChartWindowsShowMode
     {
-        ExtRect ImageViewport { get; }
+        Default,
+        Maximize,
+        LeftHalf,
+        RightHalf,
+    }
 
-        ExtRect Viewport { get; }
 
-        /// <summary>
-        /// Virtual canvas - if the size of the drawing canvas is based on the client area of ​​the scrollable container.
-        /// </summary>
-        bool VirtualCanvas { get; }
+    /// <summary>
+    /// Interface for windows of different charts with support
+    /// for working functions and localization, and printing.
+    /// </summary>
+    public interface IChartWindow : IWorkWindow, IWindowDependent
+    {
+        bool AllowPrint();
+        void DoPrint();
+        void DoPrintPreview();
+        void GenChart();
     }
 }

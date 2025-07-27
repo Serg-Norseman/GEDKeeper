@@ -21,7 +21,7 @@
 using System.Collections.Generic;
 using GKCore.Design;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
+using GKCore.Lists;
 using GKUI.Components;
 using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
 

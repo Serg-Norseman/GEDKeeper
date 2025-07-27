@@ -24,13 +24,14 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using GDModel;
-using GKCore.Interfaces;
+using GKCore.Charts;
+using GKCore.Design;
+using GKCore.Design.Views;
+using GKCore.Search;
 using GKTests;
 using GKUI.Components;
 using NUnit.Extensions.Forms;
 using NUnit.Framework;
-using GKCore.Charts;
-using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {

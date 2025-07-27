@@ -20,7 +20,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using GKCore.Interfaces;
 
 namespace GKCore.Search
 {

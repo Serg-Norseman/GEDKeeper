@@ -20,8 +20,8 @@
 
 using GDModel;
 using GKCore;
+using GKCore.Design;
 using GKCore.Export;
-using GKCore.Interfaces;
 
 namespace GKStdReports
 {

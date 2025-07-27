@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using GDModel;
 using GKCore;
+using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Plugins;

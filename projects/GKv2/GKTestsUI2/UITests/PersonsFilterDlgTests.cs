@@ -21,7 +21,7 @@
 #if !DIS_NUF
 
 using System.Windows.Forms;
-using GKCore.Interfaces;
+using GKCore.Design;
 using GKCore.Lists;
 using GKTests;
 using GKTests.Stubs;
@@ -88,8 +88,6 @@ namespace GKUI.Forms
 
         public static void PersonsFilterDlg_Handler(Form form)
         {
-            PersonsFilterDlg pfDlg = (PersonsFilterDlg)form;
-
             SelectTab("tabsFilters", form, 1);
 
             ClickRadioButton("rgLife.rbAliveBefore", form);

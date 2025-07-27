@@ -21,14 +21,13 @@
 //#define DEBUG_IMAGE
 
 using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
-using GKCore.Interfaces;
+using GKCore.Design;
 using GKCore.Options;
 using GKUI.Platform;
 using GKUI.Platform.Handlers;

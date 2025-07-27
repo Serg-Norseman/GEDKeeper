@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,26 +18,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCore.Interfaces
+namespace GKCore.Media
 {
-    public enum ChartWindowsShowMode
-    {
-        Default,
-        Maximize,
-        LeftHalf,
-        RightHalf,
-    }
-
-
     /// <summary>
-    /// Interface for windows of different charts with support
-    /// for working functions and localization, and printing.
+    /// The type of the media object when stored in a storage or archive
+    /// (specifies the structure of sub-folders).
     /// </summary>
-    public interface IChartWindow : IWorkWindow, IWindowDependent
+    public enum MultimediaKind
     {
-        bool AllowPrint();
-        void DoPrint();
-        void DoPrintPreview();
-        void GenChart();
+        mkNone,
+        mkImage,
+        mkVideo,
+        mkAudio,
+        mkText,
+        mkOffice,
+        mkArchive
     }
 }

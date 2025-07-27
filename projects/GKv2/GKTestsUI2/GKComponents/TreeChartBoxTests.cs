@@ -24,7 +24,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using GDModel;
 using GKCore.Charts;
-using GKCore.Interfaces;
+using GKCore.Design;
 using GKCore.Options;
 using GKTests;
 using GKTests.Stubs;

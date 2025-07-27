@@ -21,8 +21,8 @@
 using System;
 using System.Windows.Forms;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKUI.Components;
 

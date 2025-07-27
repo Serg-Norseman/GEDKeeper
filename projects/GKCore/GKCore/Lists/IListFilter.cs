@@ -20,10 +20,9 @@
 
 using System.Collections.Generic;
 using BSLib;
-using GKCore.Lists;
 using GKCore.Types;
 
-namespace GKCore.Interfaces
+namespace GKCore.Lists
 {
     public enum DataType
     {

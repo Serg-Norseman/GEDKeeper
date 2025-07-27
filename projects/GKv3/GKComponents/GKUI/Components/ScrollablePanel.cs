@@ -25,7 +25,7 @@ using System.Runtime.InteropServices;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCore.Interfaces;
+using GKCore.Design;
 
 namespace GKUI.Components
 {
@@ -37,7 +37,7 @@ namespace GKUI.Components
         public const int SmallChange = 1;
         public const int LargeChange = 10;
 
-        private Drawable fCanvas;
+        private readonly Drawable fCanvas;
         private bool fCenteredImage;
         private Font fFont;
         private bool fHasHScroll;

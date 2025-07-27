@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCore.Interfaces
+namespace GKCore.Design
 {
     public interface IDataReceiver
     {

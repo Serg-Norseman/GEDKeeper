@@ -27,7 +27,9 @@ using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
 using GKCore;
+using GKCore.Design;
 using GKCore.Interfaces;
+using GKCore.Plugins;
 using GKUI.Components;
 
 namespace GKNavigatorPlugin

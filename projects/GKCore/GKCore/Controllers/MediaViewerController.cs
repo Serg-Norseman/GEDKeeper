@@ -22,12 +22,11 @@ using System;
 using System.IO;
 using BSLib;
 using GDModel;
-using GKCore.Design.Graphics;
 using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Design.Graphics;
 using GKCore.Design.Views;
-using GKCore.Types;
-using GKUI.Themes;
+using GKCore.Media;
 
 namespace GKCore.Controllers
 {

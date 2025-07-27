@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,20 +18,36 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCore.Types
+namespace GKCore.Media
 {
     /// <summary>
-    /// 
+    /// Types of store multimedia files.
     /// </summary>
-    public sealed class MediaStore
+    public enum MediaStoreType
     {
-        public readonly MediaStoreType StoreType;
-        public readonly string FileName;
-        
-        public MediaStore(MediaStoreType storeType, string fileName)
-        {
-            StoreType = storeType;
-            FileName = fileName;
-        }
+        /// <summary>
+        /// Direct absolute file reference.
+        /// </summary>
+        mstReference,
+
+        /// <summary>
+        /// Storage's folder next to the database file.
+        /// </summary>
+        mstStorage,
+
+        /// <summary>
+        /// The archive file (zip) next to the database file.
+        /// </summary>
+        mstArchive,
+
+        /// <summary>
+        /// File reference relative to the database file.
+        /// </summary>
+        mstRelativeReference,
+
+        /// <summary>
+        /// File reference relative to the web address of file.
+        /// </summary>
+        mstURL
     }
 }
