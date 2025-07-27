@@ -30,8 +30,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Eto.Forms" Version="2.8.3" />
-        <PackageReference Include="Eto.Serialization.Xaml" Version="2.8.3" />
+        <PackageReference Include="Eto.Forms" Version="2.9.0" />
+        <PackageReference Include="Eto.Serialization.Xaml" Version="2.9.0" />
         <PackageReference Include="Lucene.Net" Version="4.8.0-beta00017" />
         <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-beta00017" />
         <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00017" />
