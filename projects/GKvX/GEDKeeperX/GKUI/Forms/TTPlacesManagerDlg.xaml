@@ -11,7 +11,7 @@
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 
-        <comcom:GKListView x:Name="ListPlaces" Sorting="True" AllowMultipleSelection="True" MouseDoubleClick="ListPlaces_DblClick" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+        <comcom:GKListView x:Name="ListPlaces" AllowMultipleSelection="True" MouseDoubleClick="ListPlaces_DblClick" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
 
         <StackLayout Style="{StaticResource dlgFooter}">
             <Button x:Name="btnAnalysePlaces" Clicked="btnAnalysePlaces_Click" />

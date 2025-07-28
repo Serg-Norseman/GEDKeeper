@@ -46,7 +46,7 @@
         <xp:TabViewControl x:Name="tabsData" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <xp:TabViewControl.ItemSource>
                 <xp:TabItem x:Name="pageChilds">
-                    <comcom:GKSheetList x:Name="fChildrenList" OnItemValidating="FamilyEditDlg_ItemValidating" OnModify="ModifyChildrenSheet" />
+                    <comcom:GKSheetList x:Name="fChildrenList" />
                 </xp:TabItem>
                 <xp:TabItem x:Name="pageEvents">
                     <comcom:GKSheetList x:Name="fEventsList" />

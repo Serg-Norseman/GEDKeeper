@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,6 +25,7 @@ using BSLib;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
+using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Options;
 using GKUI.Platform;
@@ -420,37 +421,27 @@ namespace GKUI.Components
 
         private void DoPersonModify(PersonModifyEventArgs eArgs)
         {
-            var eventHandler = PersonModify;
-            if (eventHandler != null)
-                eventHandler(this, eArgs);
+            PersonModify?.Invoke(this, eArgs);
         }
 
         private void DoRootChanged(TreeChartPerson person)
         {
-            var eventHandler = RootChanged;
-            if (eventHandler != null)
-                eventHandler(this, person);
+            RootChanged?.Invoke(this, person);
         }
 
         private void DoInfoRequest(TreeChartPerson person)
         {
-            var eventHandler = InfoRequest;
-            if (eventHandler != null)
-                eventHandler(this, person);
+            InfoRequest?.Invoke(this, person);
         }
 
         private void DoPersonProperties(EventArgs eArgs)
         {
-            var eventHandler = PersonProperties;
-            if (eventHandler != null)
-                eventHandler(this, eArgs);
+            PersonProperties?.Invoke(this, eArgs);
         }
 
         private void DoZoomChanged()
         {
-            var eventHandler = ZoomChanged;
-            if (eventHandler != null)
-                eventHandler(this, new EventArgs());
+            ZoomChanged?.Invoke(this, new EventArgs());
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -540,10 +531,10 @@ namespace GKUI.Components
                     break;
                 }
 
-                expRt = TreeChartModel.GetPersonExpandRect(persRt);
+                expRt = fModel.GetCollapseRect(p);
                 if (e.Buttons == SKMouseButton.Left && mouseEvent == MouseEvent.meUp && expRt.Contains(aX, aY)) {
                     person = p;
-                    result = MouseAction.PersonExpand;
+                    result = MouseAction.CollapseBranch;
                     break;
                 }
 
@@ -653,7 +644,7 @@ namespace GKUI.Components
                             DoRootChanged(mPers);
                             break;
 
-                        case MouseAction.PersonExpand:
+                        case MouseAction.CollapseBranch:
                             ToggleCollapse(mPers);
                             break;
 

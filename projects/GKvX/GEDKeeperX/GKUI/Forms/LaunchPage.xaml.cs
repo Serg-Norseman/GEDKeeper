@@ -179,9 +179,13 @@ namespace GKUI.Forms
 
         private void lv_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var item = e.SelectedItem as LaunchItem;
-            ((ListView)sender).SelectedItem = null;
-            item?.Action?.Invoke(item);
+            try {
+                var item = e.SelectedItem as LaunchItem;
+                ((ListView)sender).SelectedItem = null;
+                item?.Action?.Invoke(item);
+            } catch (Exception ex) {
+                AppHost.StdDialogs.ShowError(ex.Message);
+            }
         }
 
         private static ObservableCollection<Grouping<string, LaunchItem>> PrepareItems(List<LaunchItem> items)

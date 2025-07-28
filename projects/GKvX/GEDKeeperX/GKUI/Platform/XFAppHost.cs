@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,6 +32,7 @@ using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Types;
+using GKCore.Validation;
 using GKUI.Components;
 using GKUI.Forms;
 using GKUI.Platform.Handlers;
@@ -165,7 +166,7 @@ namespace GKUI.Platform
             //return Container.Resolve<IProgressController>();
         }
 
-        public override void ExecuteWork(ProgressStart proc)
+        public override bool ExecuteWork(ProgressStart proc, string title = "")
         {
             try {
                 var progressForm = GetProgressController();
@@ -176,14 +177,12 @@ namespace GKUI.Platform
 
                 workerThread.Start(progressForm);
                 workerThread.Join();
+
+                return true;
             } catch (Exception ex) {
                 Logger.WriteError("ExecuteWork()", ex);
+                return false;
             }
-        }
-
-        public override bool ExecuteWorkExt(ProgressStart proc, string title)
-        {
-            return false;
         }
 
         public override string GetExternalStorageDirectory()
@@ -208,37 +207,54 @@ namespace GKUI.Platform
 
         public override bool HasFeatureSupport(Feature feature)
         {
+            bool result = false;
+
             switch (feature) {
                 case Feature.GridCellFormat:
-                    return true; // [Q?]
+                    result = true; // [Q?]
+                    break;
 
                 case Feature.InternetProxy:
-                    return false; // [Accepted]
+                    result = false; // [Accepted]
+                    break;
 
                 case Feature.MediaPlayer:
-                    return false; // [Accepted]
+                    result = false; // [Accepted]
+                    break;
 
                 case Feature.RecentFilesLoad:
-                    return false; // [Q?]
+                    result = false; // [Q?]
+                    break;
 
                 case Feature.Themes:
-                    return false; // [Accepted]
+                    result = false; // [Accepted]
+                    break;
 
                 case Feature.OverwritePrompt:
-                    return false; // [Q?]
+                    result = false; // [Q?]
+                    break;
 
                 case Feature.EmbeddedLocales:
                 case Feature.Mobile:
-                    return true; // [Accepted]
+                    result = true; // [Accepted]
+                    break;
 
-                default:
-                    return false;
+                case Feature.Graphics:
+                    result = true;
+                    break;
             }
+
+            return result;
         }
 
         public override void SetClipboardText(string text)
         {
             Clipboard.SetTextAsync(text);
+        }
+
+        public override void SetClipboardImage(object image)
+        {
+            // not supported
         }
 
         #region Bootstrapper
@@ -258,6 +274,7 @@ namespace GKUI.Platform
                 throw new ArgumentNullException("container");
 
             container.Reset();
+            ValidationFactory.InitGDMValidators();
 
             // controls and other
             container.Register<IStdDialogs, XFStdDialogs>(LifeCycle.Singleton);
@@ -323,23 +340,24 @@ namespace GKUI.Platform
             container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
+            ControlsManager.RegisterHandlerType(typeof(XFIKCheckBox), typeof(CheckBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(Editor), typeof(TextAreaHandler));
             ControlsManager.RegisterHandlerType(typeof(Entry), typeof(TextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
-            ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(PickerHandler));
+            ControlsManager.RegisterHandlerType(typeof(NumericStepper), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(XFIKRadioButton), typeof(RadioButtonHandler));
-            ControlsManager.RegisterHandlerType(typeof(XFIKCheckBox), typeof(CheckBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TabItem), typeof(TabPageHandler));
             ControlsManager.RegisterHandlerType(typeof(TabViewControl), typeof(TabControlHandler));
-            ControlsManager.RegisterHandlerType(typeof(ToolbarItem), typeof(ToolbarItemHandler));
-            ControlsManager.RegisterHandlerType(typeof(GroupBox), typeof(GroupBoxHandler));
-
-            ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
-            ControlsManager.RegisterHandlerType(typeof(NumericStepper), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(GKTreeView), typeof(TreeViewHandler));
             ControlsManager.RegisterHandlerType(typeof(MenuItem), typeof(MenuItemHandler));
+
+            ControlsManager.RegisterHandlerType(typeof(GroupBox), typeof(GroupBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(ToolbarItem), typeof(ToolbarItemHandler));
+
+            ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(PickerHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
         }
 
         #endregion

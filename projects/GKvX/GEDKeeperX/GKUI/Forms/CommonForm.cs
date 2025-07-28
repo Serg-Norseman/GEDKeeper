@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,6 @@ using System;
 using System.Threading.Tasks;
 using GKCore;
 using GKCore.Design;
-using GKCore.Interfaces;
 using GKUI.Platform;
 using GKUI.Themes;
 using Xamarin.Forms;
@@ -42,6 +41,12 @@ namespace GKUI.Forms
         {
             get { return base.IsEnabled; }
             set { base.IsEnabled = value; }
+        }
+
+        public bool Visible
+        {
+            get { return base.IsVisible; }
+            set { base.IsVisible = value; }
         }
 
         #endregion

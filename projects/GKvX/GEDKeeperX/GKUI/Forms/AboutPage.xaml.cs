@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,20 +20,22 @@
 
 using System;
 using GKCore;
+using GKCore.Controllers;
 using GKCore.Design.Views;
 using GKCore.Options;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace GKUI.Forms
 {
-    public partial class AboutPage : CommonDialog, IAboutDlg
+    public partial class AboutPage : CommonDialog<IAboutDlg, AboutDlgController>, IAboutDlg
     {
         public AboutPage()
         {
             InitializeComponent();
 
-            Title = LangMan.LS(LSID.MIAbout);
+            fController = new AboutDlgController(this);
+            fController.SetLocale();
+
             lblVersion.Text = @"Version " + AppHost.GetAppVersion();
             lblCopyright.Text = AppHost.GetAppCopyright();
 

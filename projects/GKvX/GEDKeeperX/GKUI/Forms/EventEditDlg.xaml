@@ -50,11 +50,17 @@
                             <Label x:Name="lblDate" Grid.Column="0" Grid.Row="3" />
                             <comcom:GKDateControl x:Name="dateCtl" Grid.Column="1" Grid.Row="3" />
 
-                            <Label x:Name="lblCause" Grid.Column="0" Grid.Row="4" />
-                            <comcom:GKComboBox x:Name="txtEventCause" Grid.Column="1" Grid.Row="4" />
+                            <Label x:Name="lblAge" Grid.Column="0" Grid.Row="4" />
+                            <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="1" Grid.Row="4">
+                                <Entry x:Name="txtAge" HorizontalOptions="FillAndExpand" />
+                                <Button x:Name="btnAge" IsVisible="False" Clicked="btnAge_Click" />
+                            </StackLayout>
 
-                            <Label x:Name="lblOrg" Grid.Column="0" Grid.Row="5" />
-                            <comcom:GKComboBox x:Name="txtEventOrg" Grid.Column="1" Grid.Row="5" />
+                            <Label x:Name="lblCause" Grid.Column="0" Grid.Row="5" />
+                            <comcom:GKComboBox x:Name="txtEventCause" Grid.Column="1" Grid.Row="5" />
+
+                            <Label x:Name="lblOrg" Grid.Column="0" Grid.Row="6" />
+                            <comcom:GKComboBox x:Name="txtEventOrg" Grid.Column="1" Grid.Row="6" />
                         </Grid>
 
                         <Label VerticalOptions="FillAndExpand" />

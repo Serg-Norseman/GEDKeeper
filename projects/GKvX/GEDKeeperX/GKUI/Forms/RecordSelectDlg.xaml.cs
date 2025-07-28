@@ -22,9 +22,9 @@ using System;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Types;
 using GKUI.Components;
 
@@ -32,9 +32,10 @@ namespace GKUI.Forms
 {
     public sealed partial class RecordSelectDlg : CommonDialog, IRecordSelectDialog
     {
-        private readonly RecordSelectDlgController fController;
+
 
         private GKListView fListRecords;
+        private readonly RecordSelectDlgController fController;
 
 
         public GDMRecord ResultRecord { get; set; }

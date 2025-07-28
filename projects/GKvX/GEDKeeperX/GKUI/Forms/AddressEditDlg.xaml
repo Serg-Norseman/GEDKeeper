@@ -44,13 +44,13 @@
                 </xp:TabItem>
 
                 <xp:TabItem x:Name="pagePhones">
-                    <comcom:GKSheetList x:Name="fPhonesList" OnModify="ListModify" />
+                    <comcom:GKSheetList x:Name="fPhonesList" />
                 </xp:TabItem>
                 <xp:TabItem x:Name="pageEmails">
-                    <comcom:GKSheetList x:Name="fMailsList" OnModify="ListModify" />
+                    <comcom:GKSheetList x:Name="fMailsList" />
                 </xp:TabItem>
                 <xp:TabItem x:Name="pageWebPages">
-                    <comcom:GKSheetList x:Name="fWebsList" OnModify="ListModify" />
+                    <comcom:GKSheetList x:Name="fWebsList" />
                 </xp:TabItem>
             </xp:TabViewControl.ItemSource>
         </xp:TabViewControl>

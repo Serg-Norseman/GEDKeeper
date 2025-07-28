@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -66,6 +66,11 @@ namespace GKUI.Components
         public IImage GetPrintableImage()
         {
             return null;
+        }
+
+        public void CopySnapshot()
+        {
+            // not supported
         }
 
         public void SaveSnapshot(string fileName)

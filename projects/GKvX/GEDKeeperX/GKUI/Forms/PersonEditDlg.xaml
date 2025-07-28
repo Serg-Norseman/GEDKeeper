@@ -51,6 +51,8 @@
                 <Entry x:Name="txtFather" IsEnabled="False" WidthRequest="100" Grid.Column="1" Grid.Row="0" />
                 <Entry x:Name="txtMother" IsEnabled="False" WidthRequest="100" Grid.Column="2" Grid.Row="0" />
                 <StackLayout Orientation="Horizontal" Spacing="4" Grid.Column="3" Grid.Row="0">
+                    <Label x:Name="lblFather" IsVisible="False" />
+                    <Label x:Name="lblMother" IsVisible="False" />
                     <Button x:Name="btnParentsAdd" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_new.gif}" Clicked="btnParentsAdd_Click" />
                     <Button x:Name="btnParentsEdit" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_edit.gif}" Clicked="btnParentsEdit_Click" />
                     <Button x:Name="btnParentsDelete" Style="{StaticResource iconBtn}" ImageSource="{plat:ImageResourceExt Resources.btn_rec_delete.gif}" Clicked="btnParentsDelete_Click" />
@@ -76,15 +78,15 @@
                 </xp:TabItem>
 
                 <xp:TabItem x:Name="pageSpouses">
-                    <comcom:GKSheetList x:Name="fSpousesList" OnModify="ModifySpousesSheet" OnBeforeChange="BeforeChangeSpousesSheet" />
+                    <comcom:GKSheetList x:Name="fSpousesList" />
                 </xp:TabItem>
 
                 <xp:TabItem x:Name="pageNames">
-                    <comcom:GKSheetList x:Name="fNamesList" OnModify="ModifyNamesSheet" />
+                    <comcom:GKSheetList x:Name="fNamesList" />
                 </xp:TabItem>
 
                 <xp:TabItem x:Name="pageAssociations">
-                    <comcom:GKSheetList x:Name="fAssociationsList" OnModify="ModifyAssociationsSheet" />
+                    <comcom:GKSheetList x:Name="fAssociationsList" />
                 </xp:TabItem>
 
                 <xp:TabItem x:Name="pageNotes">
@@ -99,16 +101,22 @@
                     <comcom:GKSheetList x:Name="fSourcesList" />
                 </xp:TabItem>
 
-                <xp:TabItem x:Name="pageGroups">
-                    <comcom:GKSheetList x:Name="fGroupsList" OnModify="ModifyGroupsSheet" />
-                </xp:TabItem>
-
-                <xp:TabItem x:Name="pageUserRefs">
-                    <comcom:GKSheetList x:Name="fUserRefList" />
-                </xp:TabItem>
-
                 <xp:TabItem x:Name="pageParents">
-                    <comcom:GKSheetList x:Name="fParentsList" OnModify="ModifyParentsSheet" />
+                    <comcom:GKSheetList x:Name="fParentsList" />
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageOther">
+                    <xp:TabViewControl x:Name="tabsOther" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                        <xp:TabViewControl.ItemSource>
+                            <xp:TabItem x:Name="pageUserRefs">
+                                <comcom:GKSheetList x:Name="fUserRefList" />
+                            </xp:TabItem>
+
+                            <xp:TabItem x:Name="pageGroups">
+                                <comcom:GKSheetList x:Name="fGroupsList" />
+                            </xp:TabItem>
+                        </xp:TabViewControl.ItemSource>
+                    </xp:TabViewControl>
                 </xp:TabItem>
 
                 <xp:TabItem x:Name="pagePortrait">

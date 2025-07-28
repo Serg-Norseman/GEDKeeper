@@ -9,7 +9,7 @@
     xmlns:plat="clr-namespace:GKUI.Platform"
     xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
     x:Class="GKUI.Forms.SexCheckDlg"
-    x:TypeArguments="mvp:ISexCheckDlg, contr:SexCheckController">
+    x:TypeArguments="mvp:ISexCheckDlg, contr:SexCheckDlgController">
 
     <StackLayout Style="{StaticResource paddedDlg88}">
 

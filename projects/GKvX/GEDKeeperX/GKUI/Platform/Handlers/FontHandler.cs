@@ -44,6 +44,11 @@ namespace GKUI.Components
             get { return Handle.TextSize; }
         }
 
+        public float Height
+        {
+            get { return Handle.TextSize /* pixels! */; }
+        }
+
         public FontHandler(SKPaint handle) : base(handle)
         {
         }

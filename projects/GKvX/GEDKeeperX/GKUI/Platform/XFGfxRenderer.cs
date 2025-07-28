@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -149,18 +149,28 @@ namespace GKUI.Platform
         }
 
         public override void DrawRectangle(IPen pen, IColor fillColor,
-                                           float x, float y, float width, float height)
+            float x, float y, float width, float height, int cornersRadius = 0)
         {
             if (fillColor != null) {
                 var skPaint = new SKPaint();
                 skPaint.Color = ((ColorHandler)fillColor).Handle.ToSKColor();
                 skPaint.Style = SKPaintStyle.Fill;
-                fCanvas.DrawRect(x, y, width, height, skPaint);
+
+                if (cornersRadius == 0) {
+                    fCanvas.DrawRect(x, y, width, height, skPaint);
+                } else {
+                    fCanvas.DrawRoundRect(x, y, width, height, cornersRadius, cornersRadius, skPaint);
+                }
             }
 
             if (pen != null) {
                 var skPaint = ((PenHandler)pen).Handle;
-                fCanvas.DrawRect(x, y, width, height, skPaint);
+
+                if (cornersRadius == 0) {
+                    fCanvas.DrawRect(x, y, width, height, skPaint);
+                } else {
+                    fCanvas.DrawRoundRect(x, y, width, height, cornersRadius, cornersRadius, skPaint);
+                }
             }
         }
 
@@ -171,22 +181,6 @@ namespace GKUI.Platform
                 var skPaint = ((BrushHandler)brush).Handle;
                 skPaint.Style = SKPaintStyle.Fill;
                 fCanvas.DrawRect(x, y, width, height, skPaint);
-            }
-        }
-
-        public override void DrawRoundedRectangle(IPen pen, IColor fillColor, float x, float y,
-                                                  float width, float height, float radius)
-        {
-            if (fillColor != null) {
-                var skPaint = new SKPaint();
-                skPaint.Color = ((ColorHandler)fillColor).Handle.ToSKColor();
-                skPaint.Style = SKPaintStyle.Fill;
-                fCanvas.DrawRoundRect(x, y, width, height, radius, radius, skPaint);
-            }
-
-            if (pen != null) {
-                var skPaint = ((PenHandler)pen).Handle;
-                fCanvas.DrawRoundRect(x, y, width, height, radius, radius, skPaint);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2011-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2011-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -37,7 +37,7 @@ namespace GKUI.Components
     public partial class HyperView : ScrollView, IHyperView
     {
         private readonly StringList fLines;
-        private ICommand fNavigationCommand;
+        private readonly ICommand fNavigationCommand;
 
         private Color fLinkColor;
         private bool fWordWrap;
@@ -48,6 +48,12 @@ namespace GKUI.Components
         {
             get { return base.IsEnabled; }
             set { base.IsEnabled = value; }
+        }
+
+        public bool Visible
+        {
+            get { return base.IsVisible; }
+            set { base.IsVisible = value; }
         }
 
         public StringList Lines

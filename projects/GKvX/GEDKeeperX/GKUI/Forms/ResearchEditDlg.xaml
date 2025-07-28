@@ -35,13 +35,13 @@
         <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <xp:TabViewControl.ItemSource>
                 <xp:TabItem x:Name="pageTasks">
-                    <comcom:GKSheetList x:Name="fTasksList" OnModify="ListJumpHandler" />
+                    <comcom:GKSheetList x:Name="fTasksList" />
                 </xp:TabItem>
                 <xp:TabItem x:Name="pageCommunications">
-                    <comcom:GKSheetList x:Name="fCommunicationsList" OnModify="ListJumpHandler" />
+                    <comcom:GKSheetList x:Name="fCommunicationsList" />
                 </xp:TabItem>
                 <xp:TabItem x:Name="pageGroups">
-                    <comcom:GKSheetList x:Name="fGroupsList" OnModify="ListJumpHandler" />
+                    <comcom:GKSheetList x:Name="fGroupsList" />
                 </xp:TabItem>
                 <xp:TabItem x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" />

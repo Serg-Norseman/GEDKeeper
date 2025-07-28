@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -42,12 +42,6 @@ namespace GKUI.Platform
         {
             get { return Control.Text; }
             set { Control.Text = value; }
-        }
-
-        public bool Visible
-        {
-            get { return Control.IsVisible; }
-            set { Control.IsVisible = value; }
         }
     }
 }

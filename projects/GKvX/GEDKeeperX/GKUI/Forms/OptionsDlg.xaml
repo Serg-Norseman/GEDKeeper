@@ -26,7 +26,6 @@
                                 <input:CheckBox x:Name="chkLoadRecentFiles" />
                                 <input:CheckBox x:Name="chkShowOnStart" />
                                 <input:CheckBox x:Name="chkAutoCheckUpdates" />
-                                <input:CheckBox x:Name="chkCharsetDetection" />
                                 <input:CheckBox x:Name="chkDialogClosingWarn" />
 
                                 <Grid ColumnSpacing="4" RowSpacing="4">
@@ -428,6 +427,10 @@
                                 <Label HorizontalOptions="Start" Text="" />
                                 <input:CheckBox x:Name="chkSourcePages" />
                             </StackLayout>
+                            <StackLayout Orientation="Horizontal" Spacing="20">
+                                <Label HorizontalOptions="Start" Text="" />
+                                <input:CheckBox x:Name="chkSourceCitations" />
+                            </StackLayout>
                             <input:CheckBox x:Name="chkGenerations" />
                             <input:CheckBox x:Name="chkPortraits" />
 
@@ -445,9 +448,6 @@
 
                 <xp:TabItem x:Name="pageSpecials">
                     <StackLayout Orientation="Vertical" Padding="4" Spacing="4">
-                        <input:CheckBox x:Name="chkUseExtendedNotes" />
-                        <input:CheckBox x:Name="chkKeepRichNames" />
-
                         <StackLayout Orientation="Horizontal" Spacing="4">
                             <Label x:Name="lblChartWindowsShowMode" />
                             <comcom:GKComboBox x:Name="cmbChartWindowsShowMode" WidthRequest="200" />
@@ -461,6 +461,16 @@
                         <input:CheckBox x:Name="chkShowNumberOfSubstructures" />
 
                         <Label VerticalOptions="FillAndExpand" />
+                    </StackLayout>
+                </xp:TabItem>
+
+                <xp:TabItem x:Name="pageGEDCOM" HeaderText="GEDCOM">
+                    <StackLayout Orientation="Vertical" Padding="4" Spacing="4">
+                        <input:CheckBox x:Name="chkCharsetDetection" />
+                        <input:CheckBox x:Name="chkDisableNonStdFeatures" />
+                        <input:CheckBox x:Name="chkEnableStdValidation" />
+                        <input:CheckBox x:Name="chkUseExtendedNotes" />
+                        <input:CheckBox x:Name="chkKeepRichNames" />
                     </StackLayout>
                 </xp:TabItem>
 

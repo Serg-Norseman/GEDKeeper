@@ -23,7 +23,7 @@
         <xp:TabViewControl VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <xp:TabViewControl.ItemSource>
                 <xp:TabItem x:Name="pageMembers">
-                    <comcom:GKSheetList x:Name="fMembersList" OnModify="ModifyMembersSheet" />
+                    <comcom:GKSheetList x:Name="fMembersList" />
                 </xp:TabItem>
                 <xp:TabItem x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" />

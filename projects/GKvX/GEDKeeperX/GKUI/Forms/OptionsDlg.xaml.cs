@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -62,11 +62,6 @@ namespace GKUI.Forms
             cmbGeocoder.AddItem("OSM");
 
             fController = new OptionsDlgController(this);
-
-            lstPersonColumns.Sorting = false;
-            lstPersonColumns.AddCheckedColumn("x", 75);
-            lstPersonColumns.AddColumn("Title", 100);
-
             fController.UpdateView();
 
             chkSeparateDepth_CheckedChanged(null, null);
@@ -147,7 +142,8 @@ namespace GKUI.Forms
 
                 case 4: // pedigrees
                 case 5: // specials
-                case 6: // plugins
+                case 6: // gedcom
+                case 7: // event types
                     break;
             }
         }
@@ -204,7 +200,11 @@ namespace GKUI.Forms
                     break;
 
                 case 6:
-                    // plugins
+                    // gedcom
+                    break;
+
+                case 7:
+                    // event types
                     break;
             }
         }

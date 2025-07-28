@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2018-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,7 +23,7 @@ using BSLib;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
-using GKCore.Interfaces;
+using GKCore.Design;
 using GKCore.Options;
 using GKUI.Platform;
 using SkiaSharp.Views.Forms;
@@ -183,16 +183,12 @@ namespace GKUI.Components
 
         private void DoRootChanged(GDMIndividualRecord person)
         {
-            var eventHandler = RootChanged;
-            if (eventHandler != null)
-                eventHandler(this, person);
+            RootChanged?.Invoke(this, person);
         }
 
         private void DoZoomChanged()
         {
-            var eventHandler = ZoomChanged;
-            if (eventHandler != null)
-                eventHandler(this, new EventArgs());
+            ZoomChanged?.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -345,6 +341,7 @@ namespace GKUI.Components
             }
 
             fRenderer.SaveTransform();
+
             fRenderer.TranslateTransform((float)center.X, (float)center.Y);
 
             if (target == RenderTarget.Screen) {

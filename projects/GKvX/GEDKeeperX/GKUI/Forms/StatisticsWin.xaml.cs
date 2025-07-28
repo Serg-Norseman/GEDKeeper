@@ -67,9 +67,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            fListStats.AddColumn("-", 250, false);
-            fListStats.AddColumn("-", 150, false);
-
             fController = new StatisticsWinController(this, selectedRecords);
             fController.Init(baseWin);
         }
@@ -77,10 +74,6 @@ namespace GKUI.Forms
         private void cbType_SelectedIndexChanged(object sender, EventArgs e)
         {
             fController.CalcStats();
-
-            fListStats.SortOrder = BSDTypes.SortOrder.None;
-            fListStats.SortColumn = -1;
-            fListStats.Sorting = true;
         }
 
         private void StatisticsWin_Load(object sender, EventArgs e)

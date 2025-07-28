@@ -32,7 +32,7 @@
                     <input:RadioButton x:Name="rbCutPersons" Checked="rbCutX_CheckedChanged" />
                 </input:RadioButtonGroupView>
 
-                <comcom:GKSheetList x:Name="fPersonsList" OnModify="ListModify" />
+                <comcom:GKSheetList x:Name="fPersonsList" />
             </StackLayout>
         </comcom:GroupBox>
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -80,7 +80,17 @@ namespace GKUI.Components
         }
 
 
-        public bool Enabled { get; set; }
+        public bool Enabled
+        {
+            get { return base.IsEnabled; }
+            set { base.IsEnabled = value; }
+        }
+
+        public bool Visible
+        {
+            get { return base.IsVisible; }
+            set { base.IsVisible = value; }
+        }
 
 
         public ImageView()
@@ -98,6 +108,11 @@ namespace GKUI.Components
         public void SetLocale()
         {
             // not used
+        }
+
+        public void ApplyTheme()
+        {
+            // not supported
         }
 
         #region Component design
@@ -139,6 +154,16 @@ namespace GKUI.Components
         }
 
         #endregion
+
+        public void ClearNamedRegions()
+        {
+            imageBox.NamedRegions.Clear();
+        }
+
+        public void Refresh()
+        {
+            imageBox.Invalidate();
+        }
 
         public void AddNamedRegion(string name, ExtRect region)
         {

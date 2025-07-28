@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,10 +25,13 @@ using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Export;
 using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Search;
 using GKCore.Types;
 using GKUI.Components;
 using GKUI.Platform;
@@ -302,8 +305,7 @@ namespace GKUI.Forms
 
         private void miCopyContent_Click(object sender, EventArgs e)
         {
-            var hyperView = GetHyperViewByType(GetSelectedRecordType());
-            fController.CopyContent(hyperView);
+            fController.CopyContent();
         }
 
         #endregion
@@ -358,7 +360,7 @@ namespace GKUI.Forms
 
         public void SaveFileEx(bool saveAs)
         {
-            fController.SaveFileAsync(saveAs);
+            fController.SaveFileEx(saveAs);
         }
 
         public void CheckAutosave()

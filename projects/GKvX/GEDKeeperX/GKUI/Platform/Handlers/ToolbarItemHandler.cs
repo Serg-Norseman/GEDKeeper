@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Design.Graphics;
 using Xamarin.Forms;
 
 namespace GKUI.Platform
@@ -35,6 +36,8 @@ namespace GKUI.Platform
             get { return Control.IsEnabled; }
             set { Control.IsEnabled = value; }
         }
+
+        public IImage Glyph { get; set; }
 
         public string Text
         {

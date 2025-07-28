@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Collections.Generic;
 using GKCore.Design.Controls;
 using SkiaSharp.Views.Forms;
@@ -30,9 +29,17 @@ namespace GKUI.Components
     {
         private readonly List<Button> fBtnsList;
 
-        public bool Enabled { get; set; }
-        int IPortraitControl.Height { get; set; }
-        int IPortraitControl.Width { get; set; }
+        public bool Enabled
+        {
+            get { return base.IsEnabled; }
+            set { base.IsEnabled = value; }
+        }
+
+        public bool Visible
+        {
+            get { return base.IsVisible; }
+            set { base.IsVisible = value; }
+        }
 
 
         public SKImageImageSource Image

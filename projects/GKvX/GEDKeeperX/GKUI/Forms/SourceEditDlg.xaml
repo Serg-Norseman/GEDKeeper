@@ -48,7 +48,7 @@
                 </xp:TabItem>
 
                 <xp:TabItem x:Name="pageRepositories">
-                    <comcom:GKSheetList x:Name="fRepositoriesList" OnModify="ModifyReposSheet" />
+                    <comcom:GKSheetList x:Name="fRepositoriesList" />
                 </xp:TabItem>
 
                 <xp:TabItem x:Name="pageNotes">

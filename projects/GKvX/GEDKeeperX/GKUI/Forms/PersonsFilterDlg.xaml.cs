@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,9 +20,10 @@
 
 using System;
 using GKCore.Controllers;
+using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
+using GKCore.Lists;
 using Xamarin.CommunityToolkit.Behaviors;
 
 namespace GKUI.Forms
@@ -64,17 +65,17 @@ namespace GKUI.Forms
 
         IComboBox IPersonsFilterDlg.EventValCombo
         {
-            get { return  GetControlHandler<IComboBox>(cmbEventVal); }
+            get { return GetControlHandler<IComboBox>(cmbEventVal); }
         }
 
         IComboBox IPersonsFilterDlg.ResidenceCombo
         {
-            get { return  GetControlHandler<IComboBox>(cmbResidence); }
+            get { return GetControlHandler<IComboBox>(cmbResidence); }
         }
 
         IComboBox IPersonsFilterDlg.NameCombo
         {
-            get { return  GetControlHandler<IComboBox>(txtName); }
+            get { return GetControlHandler<IComboBox>(txtName); }
         }
 
         void IPersonsFilterDlg.SetLifeRadio(int lifeSel)
