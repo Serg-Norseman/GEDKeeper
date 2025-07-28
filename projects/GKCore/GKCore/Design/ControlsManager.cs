@@ -75,7 +75,7 @@ namespace GKCore.Design
                 var ctlObj = fView.GetControl(controlName);
 
                 if (ctlObj == null)
-                    throw new ArgumentException("Field not found");
+                    throw new ArgumentException($"Field `{controlName}` not found");
 
                 control = GetControl<T>(ctlObj);
                 fStrHandlers.Add(controlName, control);

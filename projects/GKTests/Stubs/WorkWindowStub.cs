@@ -30,6 +30,7 @@ namespace GKTests.Stubs
     {
         public string Title { get; set; }
         public bool Enabled { get; set; }
+        public bool Visible { get; set; }
 
         public void Activate() {}
         public void Close() {}

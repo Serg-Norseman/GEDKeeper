@@ -43,7 +43,9 @@ namespace GKCore.Controllers
         {
             fView.Title = LangMan.LS(LSID.MIAbout);
 
-            GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            }
         }
 
         public override void ApplyTheme()

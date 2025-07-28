@@ -42,12 +42,6 @@ namespace GKUI.Components
         private BSDSortOrder fSortOrder;
 
 
-        public bool CheckBoxes
-        {
-            get { return fCheckBoxes; }
-            set { fCheckBoxes = value; }
-        }
-
         public IListSource ListMan
         {
             get {
@@ -58,12 +52,10 @@ namespace GKUI.Components
                     fListMan = value;
 
                     if (fListMan != null) {
-                        VirtualMode = true;
                         fSortColumn = 0;
                         fSortOrder = BSDSortOrder.Ascending;
                         DataStore = fListMan.ContentList;
                     } else {
-                        VirtualMode = false;
                         DataStore = null;
                     }
                 }
@@ -73,7 +65,7 @@ namespace GKUI.Components
         public int SelectedIndex
         {
             get {
-                return VirtualMode ? fListMan.ContentList.IndexOf(SelectedItem as ContentItem) : base.SelectedRow;
+                return (fListMan == null) ? base.SelectedRow : fListMan.ContentList.IndexOf(SelectedItem as ContentItem);
             }
             set {
                 SelectItem(value);
@@ -95,13 +87,12 @@ namespace GKUI.Components
 
         public GKListView()
         {
-            fCheckBoxes = false;
-            VirtualMode = false;
             AllowColumnReordering = false;
             AllowMultipleSelection = false;
             // [Gtk] Selection of the last (or only) row does not work on left click; EtoForms issue #2443
             AllowEmptySelection = false;
 
+            fCheckBoxes = false;
             fSortColumn = 0;
             fSortOrder = BSDSortOrder.None;
             fListMan = null;
@@ -171,7 +162,7 @@ namespace GKUI.Components
         {
             base.OnRowFormatting(e);
 
-            if (VirtualMode && HasGridCellFormat && e.Item is ContentItem item) {
+            if (fListMan != null && HasGridCellFormat && e.Item is ContentItem item) {
                 if (fRowFormatting != e.Row) {
                     var backColor = fListMan.GetBackgroundColor(e.Row, item.Record);
                     fRowBackColor = (backColor is ColorHandler colorHandler) ? colorHandler.Handle : this.BackgroundColor;
@@ -248,7 +239,7 @@ namespace GKUI.Components
             int colIndex = Columns.Count;
             var cell = new TextBoxCell(colIndex);
 
-            if (VirtualMode) {
+            if (fListMan != null) {
                 cell.Binding = Binding.Property<ContentItem, string>(r => (string)fListMan.GetColumnExternalValue(r, colIndex));
             }
 
@@ -266,7 +257,7 @@ namespace GKUI.Components
             int colIndex = Columns.Count;
             var cell = new CheckBoxCell(colIndex);
 
-            if (VirtualMode) {
+            if (fListMan != null) {
                 cell.Binding = Binding.Property<ContentItem, bool?>(r => (bool?)fListMan.GetColumnExternalValue(r, colIndex));
             }
 
@@ -331,7 +322,7 @@ namespace GKUI.Components
             if (SelectedRow < 0) return null;
 
             try {
-                return (VirtualMode && SelectedItem is ContentItem item) ? item.Record : base.SelectedItem;
+                return (fListMan != null && SelectedItem is ContentItem item) ? item.Record : base.SelectedItem;
             } catch (Exception ex) {
                 Logger.WriteError("GKListView.GetSelectedData()", ex);
                 return null;

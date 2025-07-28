@@ -25,7 +25,6 @@ using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;

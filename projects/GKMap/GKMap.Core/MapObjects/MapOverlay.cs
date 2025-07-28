@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Collections.Specialized;
 
 namespace GKMap.MapObjects
 {

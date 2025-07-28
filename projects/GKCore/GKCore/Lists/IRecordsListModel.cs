@@ -33,10 +33,4 @@ namespace GKCore.Lists
 
         IList<ISearchResult> FindAll(string searchPattern);
     }
-
-
-    public interface IRecordsListModel<T> : IRecordsListModel
-        where T : GDMRecord
-    {
-    }
 }

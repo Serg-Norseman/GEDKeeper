@@ -27,6 +27,7 @@ namespace GKTests.Stubs
     internal class ProgressStub : IProgressDialog
     {
         public bool Enabled { get; set; }
+        public bool Visible { get; set; }
         public void Activate() { }
         public void Close() { }
         public string Title { get; set; }

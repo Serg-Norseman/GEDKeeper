@@ -10,6 +10,7 @@
 //#define DEBUG_CENTER
 
 using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using GKMap.MapObjects;

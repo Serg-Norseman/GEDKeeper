@@ -274,7 +274,7 @@ namespace GKCore.Export
 
         public override void AddImage(IImage image, TextAlignment alignment)
         {
-#if !NETCOREAPP
+#if !NETCOREAPP && !NETSTANDARD2_0
             try {
                 if (image == null) return;
 

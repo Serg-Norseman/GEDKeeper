@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -28,7 +28,7 @@ namespace GKCore.Lists
     /// <summary>
     ///
     /// </summary>
-    public abstract class RecordsListModel<T> : ListSource<T>, IRecordsListModel<T>
+    public abstract class RecordsListModel<T> : ListSource<T>, IRecordsListModel
         where T : GDMRecord
     {
         private readonly GDMRecordType fRecordType;

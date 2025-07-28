@@ -240,8 +240,6 @@ namespace GKUI.Forms
             UIHelper.FixRadioButtons(this, grpAdvancedNames);
             UIHelper.FixRadioButtons(this, grpPedigreeFormat);
 
-            lstPersonColumns.CheckBoxes = true;
-
             fController = new OptionsDlgController(this);
             fController.UpdateView();
 

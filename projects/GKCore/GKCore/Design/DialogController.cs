@@ -21,7 +21,6 @@
 using System;
 using System.Threading.Tasks;
 using GDModel;
-using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Validation;

@@ -25,8 +25,6 @@ namespace GKCore.Design.Controls
     public interface ITextContainer : IBaseControl
     {
         string Text { get; set; }
-
-        bool Visible { get; set; }
     }
 
     public interface ILabel : ITextContainer

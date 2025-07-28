@@ -643,10 +643,10 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblRestriction").Text = LangMan.LS(LSID.Restriction);
             GetControl<ITabPage>("pageNames").Text = LangMan.LS(LSID.Names);
             GetControl<ITabPage>("pageParents").Text = LangMan.LS(LSID.Parents);
+            GetControl<ITabPage>("pageOther").Text = LangMan.LS(LSID.Other);
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ITabPage>("pageFamily").Text = LangMan.LS(LSID.Family);
-                GetControl<ITabPage>("pageOther").Text = LangMan.LS(LSID.Other);
             }
 
             SetToolTip("btnPortraitAdd", LangMan.LS(LSID.PortraitAddTip));

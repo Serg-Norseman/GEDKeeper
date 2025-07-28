@@ -68,12 +68,6 @@ namespace GKUI.Platform.Handlers
             set { Control.Text = value; }
         }
 
-        public bool Visible
-        {
-            get { return Control.Visible; }
-            set { Control.Visible = value; }
-        }
-
         public void AppendText(string text)
         {
             //Control.Append(text, true);

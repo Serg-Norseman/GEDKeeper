@@ -30,7 +30,6 @@ namespace GKUI.Components
         protected static readonly bool HasGridCellFormat = AppHost.Instance.HasFeatureSupport(Feature.GridCellFormat);
 
         public Color TextColor { get; set; }
-        public bool VirtualMode { get; set; }
 
         public GKGridView()
         {

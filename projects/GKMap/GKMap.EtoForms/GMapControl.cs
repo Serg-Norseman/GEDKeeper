@@ -11,6 +11,7 @@
 //#define DEBUG_RENDER
 
 using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using Eto.Drawing;

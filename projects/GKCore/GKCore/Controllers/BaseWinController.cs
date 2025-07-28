@@ -809,7 +809,7 @@ namespace GKCore.Controllers
         public void UpdateNavControls()
         {
             try {
-                if (fHasToolbar) {
+                if (fHasToolbar && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                     GetControl<IToolItem>("tbPrev").Enabled = NavCanBackward();
                     GetControl<IToolItem>("tbNext").Enabled = NavCanForward();
                 }

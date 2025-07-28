@@ -65,10 +65,12 @@ namespace GKCore.Controllers
             listView.ListMan = columnsModel;
             columnsModel.DataSource = fTempColumns.OrderedColumns;
 
-            listView = GetControl<IListView>("lvPlugins");
-            var pluginsModel = new PluginsListModel();
-            pluginsModel.DataSource = AppHost.Plugins.List;
-            listView.ListMan = pluginsModel;
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                listView = GetControl<IListView>("lvPlugins");
+                var pluginsModel = new PluginsListModel();
+                pluginsModel.DataSource = AppHost.Plugins.List;
+                listView.ListMan = pluginsModel;
+            }
         }
 
         public async void ChangeTab()
@@ -531,8 +533,10 @@ namespace GKCore.Controllers
 
         public void UpdatePlugins()
         {
-            var listView = GetControl<IListView>("lvPlugins");
-            listView.UpdateContents();
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                var listView = GetControl<IListView>("lvPlugins");
+                listView.UpdateContents();
+            }
         }
 
         public void AcceptPlugins()
@@ -829,9 +833,7 @@ namespace GKCore.Controllers
             UpdateEventTypes();
 
             // plugins
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                UpdatePlugins();
-            }
+            UpdatePlugins();
         }
 
         public override bool Accept()

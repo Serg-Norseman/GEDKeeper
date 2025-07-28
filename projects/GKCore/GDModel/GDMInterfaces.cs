@@ -217,4 +217,10 @@ namespace GDModel
         GDMIndividualLink Wife { get; }
         GDMMarriageStatus Status { get; set; }
     }
+
+
+    public interface IGDMLocationElement
+    {
+        GDMDateValue Date { get; }
+    }
 }
