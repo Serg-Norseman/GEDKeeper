@@ -311,7 +311,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.MIMap);
+            fView.SetTitle(LangMan.LS(LSID.MIMap));
 
             GetControl<ITabPage>("pagePlaces").Text = LangMan.LS(LSID.RPLocations);
             GetControl<IGroupBox>("grpSelection").Text = LangMan.LS(LSID.MapSelection);

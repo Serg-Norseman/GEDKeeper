@@ -24,7 +24,6 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Export;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Stats;
@@ -251,7 +250,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.MIStats);
+            fView.SetTitle(LangMan.LS(LSID.MIStats));
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<IGroupBox>("grpSummary").Text = LangMan.LS(LSID.Summary);

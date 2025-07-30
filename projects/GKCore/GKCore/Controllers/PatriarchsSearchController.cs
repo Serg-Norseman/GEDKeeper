@@ -111,7 +111,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.PatriarchsSearch);
+            fView.SetTitle(LangMan.LS(LSID.PatriarchsSearch));
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ITabPage>("pagePatSearch").Text = LangMan.LS(LSID.PatriarchsSearch);

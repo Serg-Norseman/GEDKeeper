@@ -19,7 +19,6 @@
  */
 
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
 using GKCore.Names;
 
 namespace GKCore.Design.Views

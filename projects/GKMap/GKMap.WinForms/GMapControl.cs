@@ -656,16 +656,9 @@ namespace GKMap.WinForms
             // render white background
             g.Clear(EmptyMapBackground);
             g.TranslateTransform(fCore.RenderOffset.X, fCore.RenderOffset.Y);
-            fCore.DrawMap(g);
-            OnPaintOverlays(g);
-        }
 
-        /// <summary>
-        /// override, to render something more
-        /// </summary>
-        /// <param name="g"></param>
-        protected virtual void OnPaintOverlays(Graphics g)
-        {
+            fCore.DrawMap(g);
+
             g.SmoothingMode = SmoothingMode.HighQuality;
             foreach (GMapOverlay o in Overlays) {
                 if (o.IsVisible) {
@@ -970,10 +963,8 @@ namespace GKMap.WinForms
 
         void IMapControl.SetMousePositionToMapCenter()
         {
-            if (!fCore.IsRunningOnMono) {
-                Point p = PointToScreen(new Point(Width / 2, Height / 2));
-                SetCursorPos(p.X, p.Y);
-            }
+            Point p = PointToScreen(new Point(Width / 2, Height / 2));
+            SetCursorPos(p.X, p.Y);
         }
 
         [DllImport("user32.dll", EntryPoint = "SetCursorPos")]

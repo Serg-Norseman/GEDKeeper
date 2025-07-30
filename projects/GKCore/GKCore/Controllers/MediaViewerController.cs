@@ -58,7 +58,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Title = fFileReference.Title;
+            fView.SetTitle(fFileReference.Title);
 
             MultimediaKind mmKind = GKUtils.GetMultimediaKind(fFileReference.GetMultimediaFormat());
 

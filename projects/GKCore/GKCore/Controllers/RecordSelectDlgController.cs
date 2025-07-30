@@ -216,7 +216,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.WinRecordSelect);
+            fView.SetTitle(LangMan.LS(LSID.WinRecordSelect));
 
             GetControl<IButton>("btnCreate").Text = LangMan.LS(LSID.DlgAppend);
             GetControl<IButton>("btnSelect").Text = LangMan.LS(LSID.DlgSelect);

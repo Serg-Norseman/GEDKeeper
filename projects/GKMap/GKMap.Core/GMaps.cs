@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -62,7 +61,7 @@ namespace GKMap
 
 #if !MOBILE
                 if (ImageCache is SQLitePureImageCache cache) {
-                    cache.CacheLocation = value;
+                    cache.SetCacheLocation(value);
                 }
 #endif
 
@@ -117,27 +116,22 @@ namespace GKMap
         {
 #if !MOBILE
             ImageCache = new SQLitePureImageCache();
-
-            string newCache = CacheLocation;
-            string oldCache = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + "GKMap" + Path.DirectorySeparatorChar;
-
-            // move database to non-roaming user directory
-            if (Directory.Exists(oldCache)) {
-                try {
-                    if (Directory.Exists(newCache)) {
-                        Directory.Delete(oldCache, true);
-                    } else {
-                        Directory.Move(oldCache, newCache);
-                    }
-                    ImageCacheLocation = newCache;
-                } catch (Exception ex) {
-                    ImageCacheLocation = oldCache;
-                    Trace.WriteLine("SQLitePureImageCache, moving data: " + ex);
-                }
-            } else {
-                ImageCacheLocation = newCache;
-            }
+            ImageCacheLocation = CacheLocation;
 #endif
+        }
+
+        private static void ResetCacheLocation()
+        {
+            string appDataLocation = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            if (!string.IsNullOrEmpty(appDataLocation)) {
+                appDataLocation += Path.DirectorySeparatorChar + "GKMap" + Path.DirectorySeparatorChar;
+            }
+
+            if (string.IsNullOrEmpty(appDataLocation)) {
+                Instance.fCacheExists = false;
+            } else {
+                CacheLocation = appDataLocation;
+            }
         }
 
         private static readonly SHA1 HashProvider = SHA1.Create();
@@ -206,17 +200,6 @@ namespace GKMap
         public string GetContent(string url, CacheType type)
         {
             return GetContent(url, type, TimeSpan.FromDays(88));
-        }
-
-        private static void ResetCacheLocation()
-        {
-            string appDataLocation = Stuff.GetApplicationDataFolderPath();
-
-            if (string.IsNullOrEmpty(appDataLocation)) {
-                Instance.fCacheExists = false;
-            } else {
-                CacheLocation = appDataLocation;
-            }
         }
 
         /// <summary>
@@ -371,9 +354,9 @@ namespace GKMap
                     ret = provider.GetTileImage(pos, zoom);
                     // Enqueue Cache
                     if (ret != null) {
-                        MemoryCache.AddTileToMemoryCache(rawTile, ret.Data.GetBuffer());
-
-                        EnqueueCacheTask(new CacheQueueItem(rawTile, ret.Data.GetBuffer()));
+                        byte[] dataBuf = ret.Data.GetBuffer();
+                        MemoryCache.AddTileToMemoryCache(rawTile, dataBuf);
+                        EnqueueCacheTask(new CacheQueueItem(rawTile, dataBuf));
                     }
                 }
             } catch (Exception ex) {
@@ -383,25 +366,6 @@ namespace GKMap
             }
 
             return ret;
-        }
-
-        public static bool PingNetwork(string hostNameOrAddress)
-        {
-            bool pingStatus;
-
-            using (Ping p = new Ping()) {
-                byte[] buffer = Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-                int timeout = 4444; // 4s
-
-                try {
-                    PingReply reply = p.Send(hostNameOrAddress, timeout, buffer);
-                    pingStatus = (reply != null && reply.Status == IPStatus.Success);
-                } catch (Exception) {
-                    pingStatus = false;
-                }
-            }
-
-            return pingStatus;
         }
     }
 }

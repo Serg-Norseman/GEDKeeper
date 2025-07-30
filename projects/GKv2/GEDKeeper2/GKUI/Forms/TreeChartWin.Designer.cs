@@ -651,7 +651,6 @@
             this.Name = "TreeChartWin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TreeChartWin";
-            this.Title = "TreeChartWin";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TreeChartWin_KeyDown);
             this.Controls.SetChildIndex(this.ToolBar1, 0);
             this.ToolBar1.ResumeLayout(false);

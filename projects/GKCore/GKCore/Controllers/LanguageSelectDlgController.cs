@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Types;

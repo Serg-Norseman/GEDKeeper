@@ -24,7 +24,6 @@ namespace GKMap
     internal class MapCore : IDisposable
     {
         private BackgroundWorker fInvalidator;
-        private bool? fIsRunningOnMono;
         private DateTime fLastTileLoadStart = DateTime.Now;
         private DateTime fLastTileLoadEnd = DateTime.Now;
         private bool fLazyEvents = true;
@@ -62,26 +61,6 @@ namespace GKMap
         /// is user dragging map
         /// </summary>
         public bool IsDragging { get; set; }
-
-        /// <summary>
-        /// return true if running on mono
-        /// </summary>
-        /// <returns></returns>
-        public bool IsRunningOnMono
-        {
-            get {
-                if (!fIsRunningOnMono.HasValue) {
-                    try {
-                        fIsRunningOnMono = (Type.GetType("Mono.Runtime") != null);
-                        return fIsRunningOnMono.Value;
-                    } catch {
-                    }
-                } else {
-                    return fIsRunningOnMono.Value;
-                }
-                return false;
-            }
-        }
 
         public TileMatrix Matrix { get; private set; }
 

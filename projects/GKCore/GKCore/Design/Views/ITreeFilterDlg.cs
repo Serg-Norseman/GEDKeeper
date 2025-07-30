@@ -20,7 +20,6 @@
 
 using GKCore.Charts;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
 using GKCore.Lists;
 
 namespace GKCore.Design.Views

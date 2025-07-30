@@ -67,7 +67,6 @@
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "NoteEditDlg";
-			this.Title = "NoteEditDlg";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		

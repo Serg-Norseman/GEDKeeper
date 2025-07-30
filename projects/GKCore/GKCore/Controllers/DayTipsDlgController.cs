@@ -19,8 +19,8 @@
  */
 
 using BSLib;
-using GKCore.Design.Controls;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Types;
 using GKUI.Themes;
@@ -61,7 +61,7 @@ namespace GKCore.Controllers
 
         public void InitTips(string caption, bool showTipsChecked, StringList tips)
         {
-            fView.Title = caption;
+            fView.SetTitle(caption);
 
             GetControl<ICheckBox>("chkShow").Checked = showTipsChecked;
             GetControl<ILabel>("lblTitle").Text = caption;

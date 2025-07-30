@@ -20,10 +20,10 @@
 
 using System.Collections.Generic;
 using GDModel;
-using GKCore.Design.Controls;
-using GKCore.Interfaces;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
 using GKCore.Tools;
 using GKCore.Types;
 using GKUI.Themes;
@@ -127,7 +127,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.TreeCompare);
+            fView.SetTitle(LangMan.LS(LSID.TreeCompare));
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ITabPage>("pageTreeCompare").Text = LangMan.LS(LSID.TreeCompare);

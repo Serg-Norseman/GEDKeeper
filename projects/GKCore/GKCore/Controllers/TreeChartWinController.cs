@@ -70,7 +70,7 @@ namespace GKCore.Controllers
                     break;
             }
 
-            fView.Title = string.Format("{0} \"{1}\"", kindName, Path.GetFileName(fBase.Context.FileName));
+            fView.SetTitle(string.Format("{0} \"{1}\"", kindName, Path.GetFileName(fBase.Context.FileName)));
         }
 
         public void UpdateChart()

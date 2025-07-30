@@ -25,7 +25,6 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Tools;
@@ -94,7 +93,7 @@ namespace GKCore.Controllers
                     }
                 }
 
-                fView.Title = $@"{fSelectedRecList.Count} / {cnt}";
+                fView.SetTitle($@"{fSelectedRecList.Count} / {cnt}");
             } finally {
                 fView.SelectedList.UpdateContents();
                 fView.SkippedList.UpdateContents();
@@ -169,7 +168,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.TreeSplit);
+            fView.SetTitle(LangMan.LS(LSID.TreeSplit));
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ITabPage>("pageTreeSplit").Text = LangMan.LS(LSID.TreeSplit);

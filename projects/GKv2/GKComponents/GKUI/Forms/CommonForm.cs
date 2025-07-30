@@ -40,17 +40,6 @@ namespace GKUI.Forms
 
         private readonly ControlsManager fControlsManager;
 
-        #region View Interface
-
-        [Browsable(false)]
-        public string Title
-        {
-            get { return base.Text; }
-            set { base.Text = value; }
-        }
-
-        #endregion
-
         public CommonForm()
         {
             fComponents = new Container();
@@ -68,6 +57,11 @@ namespace GKUI.Forms
             base.Dispose(disposing);
         }
 
+        public void SetTitle(string value)
+        {
+            base.Text = value;
+        }
+
         public void SetToolTip(object component, string toolTip)
         {
             if (component != null && !string.IsNullOrEmpty(toolTip)) {
@@ -81,7 +75,7 @@ namespace GKUI.Forms
 
         protected T GetControlHandler<T>(object control) where T : class, IControl
         {
-            return fControlsManager.GetControl<T>(control);
+            return fControlsManager.GetControlHandler<T>(control);
         }
 
         public object GetControl(string controlName)
@@ -93,6 +87,11 @@ namespace GKUI.Forms
                 result = (controls != null && controls.Length > 0) ? controls[0] : null;
             }
             return result;
+        }
+
+        public T GetCoreControl<T>(string controlName) where T : class, IControl
+        {
+            return fControlsManager.GetCoreControl<T>(controlName);
         }
 
         protected override void OnLoad(EventArgs e)

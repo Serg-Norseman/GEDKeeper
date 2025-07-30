@@ -78,7 +78,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.MIFilter);
+            fView.SetTitle(LangMan.LS(LSID.MIFilter));
 
             GKData.CondSigns[6] = LangMan.LS(LSID.CondContains);
             GKData.CondSigns[7] = LangMan.LS(LSID.CondNotContains);

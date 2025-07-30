@@ -24,7 +24,6 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 using GKUI.Themes;
@@ -132,7 +131,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.MIFileProperties);
+            fView.SetTitle(LangMan.LS(LSID.MIFileProperties));
 
             GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
             GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);

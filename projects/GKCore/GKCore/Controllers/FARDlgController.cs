@@ -46,7 +46,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.FindAndReplace);
+            fView.SetTitle(LangMan.LS(LSID.FindAndReplace));
 
             GetControl<ILabel>("lblPattern").Text = LangMan.LS(LSID.Find);
             GetControl<ILabel>("lblReplacement").Text = LangMan.LS(LSID.ReplaceWith);

@@ -174,7 +174,7 @@ namespace GKUI.Forms
 
         private void EditName_TextChanged(object sender, EventArgs e)
         {
-            Title = string.Format("{0} \"{1}\"", LangMan.LS(LSID.Location), txtName.Text);
+            SetTitle(string.Format("{0} \"{1}\"", LangMan.LS(LSID.Location), txtName.Text));
         }
 
         private void btnShowOnMap_Click(object sender, EventArgs e)

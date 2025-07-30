@@ -84,7 +84,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.LocExpert);
+            fView.SetTitle(LangMan.LS(LSID.LocExpert));
             GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
             GetControl<ILabel>("lblEventDates").Text = LangMan.LS(LSID.EventDates);
             GetControl<ILabel>("lblDate").Text = LangMan.LS(LSID.Date);

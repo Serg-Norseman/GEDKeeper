@@ -30,10 +30,10 @@ namespace GKTests.Stubs
         public bool Visible { get; set; }
         public void Activate() { }
         public void Close() { }
-        public string Title { get; set; }
         public void Dispose() { }
         public void SetToolTip(object component, string toolTip) { }
         public object GetControl(string controlName) { return null; }
+        T IView.GetCoreControl<T>(string controlName) { return default(T); }
         public bool ShowModalX(IView owner) { return true; }
 
 
@@ -49,5 +49,6 @@ namespace GKTests.Stubs
         public void Increment(int val) { }
         public void StepTo(int val) { }
         public void InvokeEx(Action action) { }
+        public void SetTitle(string value) { }
     }
 }

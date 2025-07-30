@@ -736,11 +736,10 @@ namespace GKCore.Controllers
         public void SetMainTitle()
         {
             string caption = (GlobalOptions.Instance.DisplayFullFileName) ? fContext.FileName : Path.GetFileName(fContext.FileName);
-
             if (fContext.Modified) {
                 caption = @"* " + caption;
             }
-            fView.Title = caption;
+            fView.SetTitle(caption);
         }
 
         public void ChangeFileName()

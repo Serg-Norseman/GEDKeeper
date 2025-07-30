@@ -21,7 +21,6 @@
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Search;
 using GKCore.Types;
 using GKUI.Themes;
@@ -95,7 +94,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.Search);
+            fView.SetTitle(LangMan.LS(LSID.Search));
             //txtSearchPattern.Text = LangMan.LS(LSID.NoMatchesFound);
             SetToolTip("btnPrev", LangMan.LS(LSID.FindPrevious));
             SetToolTip("btnNext", LangMan.LS(LSID.FindNext));

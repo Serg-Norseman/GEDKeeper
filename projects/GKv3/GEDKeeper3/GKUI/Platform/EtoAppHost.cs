@@ -198,7 +198,7 @@ namespace GKUI.Platform
                 var progForm = progressForm as CommonDialog;
 
                 if (!string.IsNullOrEmpty(title))
-                    progressForm.Title = title;
+                    progressForm.SetTitle(title);
 
                 var workerThread = new Thread((obj) => {
                     proc((IProgressController)obj);

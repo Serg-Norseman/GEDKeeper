@@ -151,7 +151,6 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "AboutDlg";
-            this.Title = "AboutDlg";
             this.ResumeLayout(false);
             this.PerformLayout();
         }

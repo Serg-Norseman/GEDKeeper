@@ -169,7 +169,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.Slideshow);
+            fView.SetTitle(LangMan.LS(LSID.Slideshow));
 
             GetControl<IButtonToolItem>("tbStart").Text = LangMan.LS(LSID.Start);
 

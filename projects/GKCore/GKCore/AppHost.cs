@@ -528,6 +528,13 @@ namespace GKCore
             return fileName;
         }
 
+        public static string GetMapsCachePath()
+        {
+            string path = GetAppDataPathStatic() + "maps" + Path.DirectorySeparatorChar;
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            return path;
+        }
+
         #endregion
 
         #region IHost implementation

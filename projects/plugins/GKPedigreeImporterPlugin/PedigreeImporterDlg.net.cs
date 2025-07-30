@@ -103,7 +103,7 @@ namespace GKPedigreeImporterPlugin
             cbDateSeparator.SelectedIndex = 0;
 
             // SetLocale()
-            Title = fLangMan.LS(PLS.PedigreeImporter);
+            SetTitle(fLangMan.LS(PLS.PedigreeImporter));
             lblFile.Text = fLangMan.LS(PLS.File);
             btnImportFileChoose.Text = fLangMan.LS(PLS.DlgSelect) + @"...";
 

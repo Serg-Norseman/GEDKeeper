@@ -66,7 +66,7 @@ namespace GKUI.Forms
             fBeginEvent = new ManualResetEvent(false);
             fCancelEvent = new ManualResetEvent(false);
 
-            Title = LangMan.LS(LSID.Progress);
+            SetTitle(LangMan.LS(LSID.Progress));
             lblTimePassed.Text = LangMan.LS(LSID.TimePassed);
             lblTimeRemain.Text = LangMan.LS(LSID.TimeRemain);
             lblTimeTotal.Text = LangMan.LS(LSID.TimeTotal);

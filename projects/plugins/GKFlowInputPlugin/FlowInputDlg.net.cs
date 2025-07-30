@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -123,7 +123,7 @@ namespace GKFlowInputPlugin
         {
             btnParse.Text = fLangMan.LS(PLS.DlgAppend);
             btnClose.Text = fLangMan.LS(PLS.DlgClose);
-            Title = fLangMan.LS(PLS.FlowInput);
+            SetTitle(fLangMan.LS(PLS.FlowInput));
             tsSimpleInput.Text = fLangMan.LS(PLS.InputSimple);
             btnMale.Text = new string(fLangMan.LS(PLS.SexM)[0], 1);
             //this.btnFemale.Text = new string(LangMan.LS(PLS.67][0], 1);

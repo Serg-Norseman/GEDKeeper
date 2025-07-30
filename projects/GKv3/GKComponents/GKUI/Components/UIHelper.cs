@@ -427,5 +427,57 @@ namespace GKUI.Components
 
             button.Image = ((ImageHandler)themeImage).Handle;
         }
+
+
+        /*private static void IndexMenuInt(ISubmenu menu, ControlsManager controlsManager)
+        {
+            if (menu is Widget ctl && !string.IsNullOrEmpty(ctl.ID))
+                controlsManager.IndexControl(ctl.ID, menu);
+
+            foreach (MenuItem child in menu.Items) {
+                IndexControlsInt(child, controlsManager);
+            }
+        }
+
+        private static void IndexToolBarInt(ToolBar toolbar, ControlsManager controlsManager)
+        {
+            if (!string.IsNullOrEmpty(toolbar.ID))
+                controlsManager.IndexControl(toolbar.ID, toolbar);
+
+            foreach (ToolItem child in toolbar.Items) {
+                IndexControlsInt(child, controlsManager);
+            }
+        }
+
+        private static void IndexControlsInt(Widget ctl, ControlsManager controlsManager)
+        {
+            if (!string.IsNullOrEmpty(ctl.ID))
+                controlsManager.IndexControl(ctl.ID, ctl);
+
+            if (ctl is Container container) {
+                foreach (Control child in container.Controls) {
+                    IndexControlsInt(child, controlsManager);
+                }
+            }
+
+            if (ctl is IContextMenuHost cmHost) {
+                IndexMenuInt(cmHost.ContextMenu, controlsManager);
+            }
+
+            if (ctl is ISubmenu submenu) {
+                IndexMenuInt(submenu, controlsManager);
+            }
+        }
+
+        public static void IndexControls(Window window, ControlsManager controlsManager)
+        {
+            IndexControlsInt(window, controlsManager);
+
+            if (window.Menu != null)
+                IndexMenuInt(window.Menu, controlsManager);
+
+            if (window.ToolBar != null)
+                IndexToolBarInt(window.ToolBar, controlsManager);
+        }*/
     }
 }

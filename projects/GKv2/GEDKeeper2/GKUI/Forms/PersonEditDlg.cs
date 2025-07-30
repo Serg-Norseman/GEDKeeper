@@ -309,8 +309,8 @@ namespace GKUI.Forms
 
         private void Names_TextChanged(object sender, EventArgs e)
         {
-            Title = string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.Person), txtSurname.Text, txtName.Text,
-                                  cmbPatronymic.Text, fController.IndividualRecord.GetXRefNum());
+            SetTitle(string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.Person), txtSurname.Text, txtName.Text,
+                                  cmbPatronymic.Text, fController.IndividualRecord.GetXRefNum()));
         }
 
         private void btnFatherAdd_Click(object sender, EventArgs e)

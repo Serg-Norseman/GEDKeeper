@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Net;
 using Eto.Drawing;
 using Eto.Forms;
+using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Maps;
 using GKCore.Options;
@@ -222,6 +223,8 @@ namespace GKUI.Components
             Content = fMapControl;
 
             if (!GMapControl.IsDesignerHosted) {
+                fMapControl.CacheLocation = AppHost.GetMapsCachePath();
+
                 var proxy = GlobalOptions.Instance.Proxy;
                 if (proxy.UseProxy) {
                     GMapProvider.IsSocksProxy = true;

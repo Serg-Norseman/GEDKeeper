@@ -125,10 +125,11 @@ namespace GKUI.Forms
 
         private void SetTitle()
         {
-            Title = Path.GetFileName(fFileName);
+            string title = Path.GetFileName(fFileName);
             if (fModified) {
-                Title = @"* " + Title;
+                title = @"* " + title;
             }
+            SetTitle(title);
         }
 
         private void tbNewScript_Click(object sender, EventArgs e)

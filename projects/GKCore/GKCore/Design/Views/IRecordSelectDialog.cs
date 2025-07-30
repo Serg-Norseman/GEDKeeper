@@ -20,7 +20,6 @@
 
 using GDModel;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
 using GKCore.Types;
 
 namespace GKCore.Design.Views

@@ -18,12 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.IO;
 using GKCore.Charts;
-using GKCore.Design.Controls;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Options;
-using System.IO;
 using GKCore.Types;
 using GKUI.Themes;
 
@@ -58,9 +58,9 @@ namespace GKCore.Controllers
         public override void SetLocale()
         {
             if (fView.CircleChart.ChartType == CircleChartType.Ancestors) {
-                fView.Title = LangMan.LS(LSID.AncestorsCircle);
+                fView.SetTitle(LangMan.LS(LSID.AncestorsCircle));
             } else {
-                fView.Title = LangMan.LS(LSID.DescendantsCircle);
+                fView.SetTitle(LangMan.LS(LSID.DescendantsCircle));
             }
 
             if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) return;

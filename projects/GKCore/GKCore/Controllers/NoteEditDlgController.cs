@@ -22,11 +22,11 @@ using System;
 using System.IO;
 using System.Text;
 using GDModel;
-using GKCore.Design.Controls;
+using GDModel.Providers.GEDCOM;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Types;
-using GDModel.Providers.GEDCOM;
 using GKUI.Themes;
 
 namespace GKCore.Controllers
@@ -144,7 +144,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.Note);
+            fView.SetTitle(LangMan.LS(LSID.Note));
 
             GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
             GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);

@@ -2895,7 +2895,6 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "OptionsDlg";
-            this.Title = "OptionsDlg";
             this.pageGeo.ResumeLayout(false);
             this.pageGeo.PerformLayout();
             this.PageControl1.ResumeLayout(false);

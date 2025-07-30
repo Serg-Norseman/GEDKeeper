@@ -132,7 +132,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.FragmentSearch);
+            fView.SetTitle(LangMan.LS(LSID.FragmentSearch));
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.Details);

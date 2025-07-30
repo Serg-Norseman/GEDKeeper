@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Interfaces;
-
 namespace GKCore.Design.Views
 {
     public interface ILocExpertDlg : ICommonDialog, IBaseEditor

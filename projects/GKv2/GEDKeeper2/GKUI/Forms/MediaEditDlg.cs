@@ -118,7 +118,7 @@ namespace GKUI.Forms
 
         private void edName_TextChanged(object sender, EventArgs e)
         {
-            Title = string.Format("{0} \"{1}\"", LangMan.LS(LSID.RPMultimedia), txtName.Text);
+            SetTitle(string.Format("{0} \"{1}\"", LangMan.LS(LSID.RPMultimedia), txtName.Text));
         }
 
         private void cmbStoreType_SelectedIndexChanged(object sender, EventArgs e)

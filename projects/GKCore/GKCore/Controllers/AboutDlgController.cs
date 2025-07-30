@@ -41,7 +41,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.MIAbout);
+            fView.SetTitle(LangMan.LS(LSID.MIAbout));
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);

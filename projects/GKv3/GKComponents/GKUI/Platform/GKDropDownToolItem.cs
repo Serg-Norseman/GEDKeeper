@@ -4,7 +4,7 @@ using Eto.Forms;
 namespace GKUI.Platform
 {
     [Handler(typeof(GKDropDownToolItem.IHandler))]
-    public class GKDropDownToolItem : ToolItem
+    public class GKDropDownToolItem : ToolItem, IContextMenuHost
     {
         new IHandler Handler { get { return (IHandler)base.Handler; } }
 

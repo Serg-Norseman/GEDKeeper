@@ -20,15 +20,14 @@
 
 using System;
 using GDModel;
-using GKCore.Design.Controls;
-using GKCore.Interfaces;
-using GKCore.Lists;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Lists;
 using GKCore.Operations;
+using GKCore.Options;
 using GKCore.Types;
 using GKUI.Themes;
-using GKCore.Options;
 
 namespace GKCore.Controllers
 {

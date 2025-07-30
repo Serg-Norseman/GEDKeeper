@@ -24,7 +24,6 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 
@@ -127,7 +126,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.MIOrganizer);
+            fView.SetTitle(LangMan.LS(LSID.MIOrganizer));
 
             GetControl<ITabPage>("pageAddresses").Text = LangMan.LS(LSID.Addresses);
             GetControl<ITabPage>("pageTelephones").Text = LangMan.LS(LSID.Telephones);

@@ -439,7 +439,6 @@
             this.Name = "MapsViewerWin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MapsViewerWin";
-            this.Title = "MapsViewerWin";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MapsViewerWin_KeyDown);
             this.ToolBar1.ResumeLayout(false);
             this.ToolBar1.PerformLayout();

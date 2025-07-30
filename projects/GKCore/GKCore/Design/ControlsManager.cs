@@ -45,7 +45,7 @@ namespace GKCore.Design
             fView = null;
         }
 
-        public T GetControl<T>(object control) where T : class, IControl
+        public T GetControlHandler<T>(object control) where T : class, IControl
         {
             IControl handler;
             if (control is T) {
@@ -65,7 +65,7 @@ namespace GKCore.Design
             return (T)handler;
         }
 
-        public T GetControl<T>(string controlName) where T : class, IControl
+        public T GetCoreControl<T>(string controlName) where T : class, IControl
         {
             IControl control;
             if (!fStrHandlers.TryGetValue(controlName, out control)) {
@@ -77,16 +77,10 @@ namespace GKCore.Design
                 if (ctlObj == null)
                     throw new ArgumentException($"Field `{controlName}` not found");
 
-                control = GetControl<T>(ctlObj);
+                control = GetControlHandler<T>(ctlObj);
                 fStrHandlers.Add(controlName, control);
             }
             return (T)control;
-        }
-
-        public static Type GetControlHandlerType<T>(Type controlType) where T : class
-        {
-            Type handlerType;
-            return fHandlerTypes.TryGetValue(controlType, out handlerType) ? handlerType : null;
         }
 
         public static void RegisterHandlerType(Type controlType, Type handlerType)

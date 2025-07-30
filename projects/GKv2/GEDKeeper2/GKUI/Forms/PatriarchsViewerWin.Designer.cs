@@ -44,7 +44,6 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "PatriarchsViewerWin";
             this.Text = "PatriarchsViewer";
-            this.Title = "PatriarchsViewer";
             this.Load += new System.EventHandler(this.Form_Load);
             this.ResumeLayout(false);
         }

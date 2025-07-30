@@ -627,22 +627,12 @@ namespace GKMap.EtoForms
             // render white background
             g.Clear(EmptyMapBackground);
 
-            // for Eto
             g.SaveTransform();
-
             g.TranslateTransform(fCore.RenderOffset.X, fCore.RenderOffset.Y);
-            fCore.DrawMap(g);
-            OnPaintOverlays(g);
-        }
 
-        /// <summary>
-        /// override, to render something more
-        /// </summary>
-        /// <param name="g"></param>
-        protected virtual void OnPaintOverlays(Graphics g)
-        {
+            fCore.DrawMap(g);
+
             g.AntiAlias = true;
-            //g.SmoothingMode = SmoothingMode.HighQuality;
             foreach (GMapOverlay o in Overlays) {
                 if (o.IsVisible) {
                     o.OnRender(g);
@@ -656,9 +646,7 @@ namespace GKMap.EtoForms
             g.DrawString("debug: virtual space center", CopyrightFont, Brushes.Blue, 2, CopyrightFont.Height);
 #endif
 
-            // for Eto
             g.RestoreTransform();
-            //g.ResetTransform();
 
             // copyright
             if (!string.IsNullOrEmpty(fCore.Provider.Copyright)) {

@@ -117,7 +117,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.RelationshipCalculator);
+            fView.SetTitle(LangMan.LS(LSID.RelationshipCalculator));
 
             GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
             GetControl<IButton>("btnRec1Select").Text = LangMan.LS(LSID.DlgSelect) + @"...";

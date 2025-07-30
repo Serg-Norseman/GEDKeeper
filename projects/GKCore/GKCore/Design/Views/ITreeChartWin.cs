@@ -20,7 +20,6 @@
 
 using GDModel;
 using GKCore.Charts;
-using GKCore.Interfaces;
 
 namespace GKCore.Design.Views
 {

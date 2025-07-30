@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -24,16 +24,10 @@ namespace GKCore.Design
 {
     public interface IView : IBaseControl, IDisposable
     {
-        string Title { get; set; }
-
         void Close();
         object GetControl(string controlName);
+        T GetCoreControl<T>(string controlName) where T : class, IControl;
+        void SetTitle(string value);
         void SetToolTip(object component, string toolTip);
-    }
-
-
-    public interface IView<TModel, TThis> : IView where TThis : IView<TModel, TThis>
-    {
-        TModel Model { get; set; }
     }
 }

@@ -19,7 +19,6 @@
  */
 
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 
 namespace GKCore.Design.Views
 {

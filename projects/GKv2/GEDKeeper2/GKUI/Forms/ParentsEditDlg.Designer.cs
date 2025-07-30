@@ -205,7 +205,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
-            this.Title = "ParentsEditDlg";
             this.ClientSize = new System.Drawing.Size(874, 239);
             this.Controls.Add(this.btnAccept);
             this.Controls.Add(this.btnCancel);

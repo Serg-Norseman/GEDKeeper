@@ -173,7 +173,7 @@ namespace GKUI.Forms
 
         private void EditSpouse_TextChanged(object sender, EventArgs e)
         {
-            Title = string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.Family), txtHusband.Text, txtWife.Text);
+            SetTitle(string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.Family), txtHusband.Text, txtWife.Text));
         }
     }
 }

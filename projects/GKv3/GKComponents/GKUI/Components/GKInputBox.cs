@@ -48,7 +48,7 @@ namespace GKUI.Components
 
             InitializeComponent();
 
-            Title = caption;
+            SetTitle(caption);
             label1.Text = prompt;
             Value = value;
             fNumbersMode = numbersMode;

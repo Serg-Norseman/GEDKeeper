@@ -25,7 +25,6 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Tools;
 using GKCore.Types;
 
@@ -149,7 +148,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.MergeDuplicates);
+            fView.SetTitle(LangMan.LS(LSID.MergeDuplicates));
 
             GetControl<IGroupBox>("grpSearchPersons").Text = LangMan.LS(LSID.RM_SearchPersons);
             GetControl<IGroupBox>("grpMergeOther").Text = LangMan.LS(LSID.Other);

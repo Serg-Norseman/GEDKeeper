@@ -19,12 +19,12 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using GDModel;
 using GDModel.Providers.GEDCOM;
-using GKCore.Design.Controls;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using System.Threading.Tasks;
 using GKCore.Types;
 using GKUI.Themes;
 
@@ -78,7 +78,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.Language);
+            fView.SetTitle(LangMan.LS(LSID.Language));
 
             GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
             GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);

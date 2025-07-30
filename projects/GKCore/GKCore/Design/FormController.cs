@@ -18,8 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Interfaces;
-
 namespace GKCore.Design
 {
     /// <summary>
@@ -29,10 +27,7 @@ namespace GKCore.Design
     {
         protected IBaseWindow fBase;
 
-        private readonly ControlsManager fControlsManager;
 
-
-        // TODO: change IBaseWindow to IBaseContext, everywhere!
         public IBaseWindow Base
         {
             get { return fBase; }
@@ -41,16 +36,7 @@ namespace GKCore.Design
 
         protected FormController(TView view) : base(view)
         {
-            fControlsManager = new ControlsManager(view);
             SetLocale();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                fControlsManager.Clear();
-            }
-            base.Dispose(disposing);
         }
 
         public virtual void Init(IBaseWindow baseWin)
@@ -64,7 +50,7 @@ namespace GKCore.Design
 
         protected T GetControl<T>(string controlName) where T : class, IControl
         {
-            return fControlsManager.GetControl<T>(controlName);
+            return fView.GetCoreControl<T>(controlName);
         }
 
         public virtual void SetLocale()

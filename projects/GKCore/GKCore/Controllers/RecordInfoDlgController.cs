@@ -21,7 +21,6 @@
 using GDModel;
 using GKCore.Design;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 
 namespace GKCore.Controllers
 {
@@ -74,7 +73,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.MIFileProperties);
+            fView.SetTitle(LangMan.LS(LSID.MIFileProperties));
         }
 
         public override void ApplyTheme()

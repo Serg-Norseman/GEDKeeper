@@ -432,7 +432,6 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "TreeToolsWin";
-            this.Title = "TreeToolsWin";
             this.PageControl1.ResumeLayout(false);
             this.pageMerge.ResumeLayout(false);
             this.pageMerge.PerformLayout();

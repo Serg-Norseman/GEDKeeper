@@ -206,7 +206,6 @@
 		    this.ShowInTaskbar = false;
 		    this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 		    this.Text = "SourceCitEditDlg";
-		    this.Title = "SourceCitEditDlg";
 		    this.tabsData.ResumeLayout(false);
 		    this.pageCommon.ResumeLayout(false);
 		    this.pageCommon.PerformLayout();

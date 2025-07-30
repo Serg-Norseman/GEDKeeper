@@ -25,7 +25,6 @@ using System.Threading.Tasks;
 using Eto.Forms;
 using GKCore;
 using GKCore.Design;
-using GKCore.Interfaces;
 using GKUI.Components;
 using GKUI.Themes;
 
@@ -38,16 +37,6 @@ namespace GKUI.Forms
     {
         private readonly ControlsManager fControlsManager;
 
-        #region View Interface
-
-        public new string Title
-        {
-            get { return base.Title; }
-            set { base.Title = value; }
-        }
-
-        #endregion
-
         public CommonForm()
         {
             fControlsManager = new ControlsManager(this);
@@ -59,6 +48,11 @@ namespace GKUI.Forms
                 fControlsManager.Clear();
             }
             base.Dispose(disposing);
+        }
+
+        public void SetTitle(string value)
+        {
+            base.Title = value;
         }
 
         public void SetToolTip(object component, string toolTip)
@@ -79,7 +73,7 @@ namespace GKUI.Forms
 
         protected T GetControlHandler<T>(object control) where T : class, IControl
         {
-            return fControlsManager.GetControl<T>(control);
+            return fControlsManager.GetControlHandler<T>(control);
         }
 
         public object GetControl(string controlName)
@@ -90,6 +84,11 @@ namespace GKUI.Forms
                 result = this.FindChild(controlName);
             }
             return result;
+        }
+
+        public T GetCoreControl<T>(string controlName) where T : class, IControl
+        {
+            return fControlsManager.GetCoreControl<T>(controlName);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -180,16 +179,6 @@ namespace GKUI.Forms
             get { return fTaskSource.Task; }
         }
 
-        #region View Interface
-
-        public new string Title
-        {
-            get { return base.Title; }
-            set { base.Title = value; }
-        }
-
-        #endregion
-
         public DialogResult DialogResult
         {
             get { return base.Result; }
@@ -232,6 +221,11 @@ namespace GKUI.Forms
                 fControlsManager.Clear();
             }
             base.Dispose(disposing);
+        }
+
+        public void SetTitle(string value)
+        {
+            base.Title = value;
         }
 
         public void SetToolTip(object component, string toolTip)
@@ -279,7 +273,7 @@ namespace GKUI.Forms
 
         protected T GetControlHandler<T>(object control) where T : class, IControl
         {
-            return fControlsManager.GetControl<T>(control);
+            return fControlsManager.GetControlHandler<T>(control);
         }
 
         public object GetControl(string controlName)
@@ -290,6 +284,11 @@ namespace GKUI.Forms
                 result = this.FindChild(controlName);
             }
             return result;
+        }
+
+        public T GetCoreControl<T>(string controlName) where T : class, IControl
+        {
+            return fControlsManager.GetCoreControl<T>(controlName);
         }
 
         protected override void OnLoad(EventArgs e)

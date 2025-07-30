@@ -21,7 +21,6 @@
 using GDModel;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 

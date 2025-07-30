@@ -185,7 +185,7 @@ namespace GKUI.Platform
                 }
 
                 if (!string.IsNullOrEmpty(title))
-                    progressForm.Title = title;
+                    progressForm.SetTitle(title);
 
                 var workerThread = new Thread((obj) => {
                     proc((IProgressController)obj);

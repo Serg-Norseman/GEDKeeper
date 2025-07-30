@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Net;
 using System.Windows.Forms;
+using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Maps;
 using GKCore.Options;
@@ -223,6 +224,8 @@ namespace GKUI.Components
             Controls.Add(fMapControl);
 
             if (!GMapControl.IsDesignerHosted) {
+                fMapControl.CacheLocation = AppHost.GetMapsCachePath();
+
                 var proxy = GlobalOptions.Instance.Proxy;
                 if (proxy.UseProxy) {
                     GMapProvider.IsSocksProxy = true;

@@ -25,7 +25,6 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Tools;
 using GKCore.Types;
@@ -176,7 +175,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.PlacesManager);
+            fView.SetTitle(LangMan.LS(LSID.PlacesManager));
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ITabPage>("pagePlaceManage").Text = LangMan.LS(LSID.PlacesManager);

@@ -18,8 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Design.Controls;
 using GKCore.Design;
+using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Tools;
 using GKCore.Types;
@@ -53,7 +53,7 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            fView.Title = LangMan.LS(LSID.TreeMerge);
+            fView.SetTitle(LangMan.LS(LSID.TreeMerge));
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ITabPage>("pageTreeMerge").Text = LangMan.LS(LSID.TreeMerge);
                 GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);

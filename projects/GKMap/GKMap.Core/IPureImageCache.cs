@@ -6,8 +6,6 @@
  *  This program is licensed under the FLAT EARTH License.
  */
 
-using System;
-
 namespace GKMap
 {
     /// <summary>
@@ -33,13 +31,5 @@ namespace GKMap
         /// <param name="zoom"></param>
         /// <returns></returns>
         PureImage GetImageFromCache(int type, GPoint pos, int zoom);
-
-        /// <summary>
-        /// delete old tiles beyond a supplied date
-        /// </summary>
-        /// <param name="date">Tiles older than this will be deleted.</param>
-        /// <param name="type">Provider dbid or null to use all providers</param>
-        /// <returns>The number of deleted tiles.</returns>
-        int DeleteOlderThan(DateTime date, int? type);
     }
 }

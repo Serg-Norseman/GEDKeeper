@@ -56,6 +56,11 @@ namespace GKUI.Forms
             fControlsManager = new ControlsManager(this);
         }
 
+        public void SetTitle(string value)
+        {
+            base.Title = value;
+        }
+
         public void SetToolTip(object component, string toolTip)
         {
             // not supported
@@ -68,12 +73,17 @@ namespace GKUI.Forms
 
         protected T GetControlHandler<T>(object control) where T : class, IControl
         {
-            return fControlsManager.GetControl<T>(control);
+            return fControlsManager.GetControlHandler<T>(control);
         }
 
         public object GetControl(string controlName)
         {
             return FindByName(controlName);
+        }
+
+        public T GetCoreControl<T>(string controlName) where T : class, IControl
+        {
+            return fControlsManager.GetCoreControl<T>(controlName);
         }
 
         public virtual void Close()

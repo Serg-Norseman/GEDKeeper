@@ -20,7 +20,6 @@
 
 using BSLib;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
 
 namespace GKCore.Design.Views
 {
