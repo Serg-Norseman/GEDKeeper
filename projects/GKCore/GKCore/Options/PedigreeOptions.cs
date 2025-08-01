@@ -21,7 +21,6 @@
 using System;
 using BSLib;
 using GKCore.Export;
-using GKCore.Interfaces;
 
 namespace GKCore.Options
 {

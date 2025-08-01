@@ -25,6 +25,7 @@ using System.Reflection;
 using System.Text;
 using BSLib;
 using GKCore.Interfaces;
+using GKCore.Utilities;
 
 namespace GKCore
 {

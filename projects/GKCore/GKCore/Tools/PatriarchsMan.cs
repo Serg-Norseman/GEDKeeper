@@ -23,10 +23,54 @@ using System.Collections.Generic;
 using BSLib.DataViz.SmartGraph;
 using GDModel;
 using GKCore.Interfaces;
-using GKCore.Types;
+using GKCore.Utilities;
 
 namespace GKCore.Tools
 {
+    public enum PGNodeType
+    {
+        Default,
+        Patriarch,
+        Intersection
+    }
+
+
+    /// <summary>
+    /// PGNode - it's node class for Patriarchs Graph.
+    /// </summary>
+    public sealed class PGNode
+    {
+        public string FamilyXRef;
+        public PGNodeType Type;
+        public int Size;
+
+        public PGNode(string label, PGNodeType type, int size = 1)
+        {
+            FamilyXRef = label;
+            Type = type;
+            Size = size;
+        }
+    }
+
+
+    public sealed class PatriarchObj
+    {
+        public bool Mark;
+
+        public GDMIndividualRecord IRec;
+        public int BirthYear;
+        public int DescendantsCount;
+        public int DescGenerations;
+        public readonly List<PatriarchObj> Links;
+        public bool HasLinks;
+
+        public PatriarchObj()
+        {
+            Links = new List<PatriarchObj>();
+        }
+    }
+
+
     /// <summary>
     ///
     /// </summary>

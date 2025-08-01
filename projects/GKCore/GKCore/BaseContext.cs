@@ -36,6 +36,7 @@ using GKCore.Cultures;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
+using GKCore.Events;
 using GKCore.Interfaces;
 using GKCore.Media;
 using GKCore.Names;
@@ -43,6 +44,7 @@ using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Search;
 using GKCore.Types;
+using GKCore.Utilities;
 
 namespace GKCore
 {

@@ -31,9 +31,11 @@ using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Kinships;
+using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Search;
 using GKCore.Types;
+using GKCore.Utilities;
 using GKUI.Themes;
 using BSDColors = GKCore.Design.BSDConsts.Colors;
 

@@ -23,9 +23,9 @@ using System.Collections.Generic;
 using System.IO;
 using GDModel;
 using GDModel.Providers.GEDCOM;
-using GKCore.Types;
+using GKCore.Utilities;
 
-namespace GKCore
+namespace GKCore.Events
 {
     /// <summary>
     /// Event Definition.

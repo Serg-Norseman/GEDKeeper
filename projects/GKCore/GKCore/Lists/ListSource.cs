@@ -30,6 +30,7 @@ using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKCore.Utilities;
 using SGCulture = System.Globalization.CultureInfo;
 
 namespace GKCore.Lists
@@ -852,45 +853,5 @@ namespace GKCore.Lists
         }
 
         #endregion
-    }
-
-
-    public abstract class SimpleListModel<T> : ListSource<T>
-        where T : class
-    {
-        private IList<T> fDataSource;
-
-
-        public IList<T> DataSource
-        {
-            get { return fDataSource; }
-            set { fDataSource = value; }
-        }
-
-
-        protected SimpleListModel() : base()
-        {
-        }
-
-        protected SimpleListModel(IBaseContext baseContext, ListColumns defaultListColumns) :
-            base(baseContext, defaultListColumns)
-        {
-        }
-
-        public override void UpdateContents()
-        {
-            if (fDataSource == null) return;
-
-            try {
-                int contentSize = fDataSource.Count;
-                InitContent(contentSize);
-                for (int i = 0; i < contentSize; i++) {
-                    AddFilteredContent(fDataSource[i]);
-                }
-                DoneContent();
-            } catch (Exception ex) {
-                Logger.WriteError("SimpleListModel.UpdateContents()", ex);
-            }
-        }
     }
 }

@@ -28,7 +28,6 @@ using System.IO;
 using BSLib;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
-using GKCore.Types;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using it = iTextSharp.text;
@@ -94,7 +93,7 @@ namespace GKCore.Export
         private Document fDocument;
         private bool fMulticolumns;
         private PdfWriter fPdfWriter;
-        private GKPageSize fPredefPage;
+        private PDFPageSize fPredefPage;
         private itTable fTable;
         private Stack<ITextElementArray> fStack;
 
@@ -105,7 +104,7 @@ namespace GKCore.Export
             fBaseFont = PDFRenderer.GetResourceFont();
         }
 
-        public PDFWriter(GKPageSize predefPage, bool albumPage) : this()
+        public PDFWriter(PDFPageSize predefPage, bool albumPage) : this()
         {
             fPredefPage = predefPage;
             fAlbumPage = albumPage;
@@ -156,27 +155,27 @@ namespace GKCore.Export
         public override void BeginWrite()
         {
             itRectangle pageSize;
-            if (fPredefPage == GKPageSize.None) {
+            if (fPredefPage == PDFPageSize.None) {
                 pageSize = PageSize.A4;
             } else {
                 switch (fPredefPage) {
-                    case GKPageSize.A0:
+                    case PDFPageSize.A0:
                         pageSize = PageSize.A0;
                         break;
-                    case GKPageSize.A1:
+                    case PDFPageSize.A1:
                         pageSize = PageSize.A1;
                         break;
-                    case GKPageSize.A2:
+                    case PDFPageSize.A2:
                         pageSize = PageSize.A2;
                         break;
-                    case GKPageSize.A3:
+                    case PDFPageSize.A3:
                         pageSize = PageSize.A3;
                         break;
-                    case GKPageSize.A4:
+                    case PDFPageSize.A4:
                     default:
                         pageSize = PageSize.A4;
                         break;
-                    case GKPageSize.A5:
+                    case PDFPageSize.A5:
                         pageSize = PageSize.A5;
                         break;
                 }

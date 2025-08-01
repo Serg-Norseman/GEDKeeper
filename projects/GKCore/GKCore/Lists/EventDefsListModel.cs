@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 using BSLib;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Interfaces;
+using GKCore.Events;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -21,10 +21,48 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using GKCore.Interfaces;
+using GKCore.Utilities;
 
 namespace GKCore.Lists
 {
+    public enum ConditionKind : int
+    {
+        ck_NotEq, ck_LT, ck_LET, ck_Eq, ck_GET, ck_GT,
+        ck_Contains, ck_NotContains,
+        ck_ContainsMask, ck_NotContainsMask,
+
+        ck_Last = ck_NotContainsMask
+    }
+
+
+    public class FilterCondition
+    {
+        public int ColumnIndex;
+        public ConditionKind Condition;
+        public object Value;
+
+        public FilterCondition(int columnIndex, ConditionKind condition, object value)
+        {
+            ColumnIndex = columnIndex;
+            Condition = condition;
+            Value = value;
+        }
+    }
+
+
+    public interface IListFilter
+    {
+        List<FilterCondition> Conditions { get; }
+
+        void Assign(IListFilter other);
+        void Clear();
+        string ToString(IListSource listSource);
+
+        void Deserialize(string value);
+        string Serialize();
+    }
+
+
     /// <summary>
     /// 
     /// </summary>

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,10 +20,32 @@
 
 using GDModel;
 using GKCore.Design.Controls;
-using GKCore.Types;
 
 namespace GKCore.Design.Views
 {
+    public enum TargetMode
+    {
+        tmNone,
+        tmParent,       // select child for parent
+        tmChild,        // select parent for child
+        tmSpouse,       // select spouse for indi
+        tmFamilyChild,  // select family for child
+        tmFamilySpouse, // select family with spouse for indi
+    }
+
+
+    public sealed class Target
+    {
+        public GDMIndividualRecord TargetIndividual;
+        public TargetMode TargetMode;
+        public GDMSex NeedSex;
+
+        public Target()
+        {
+        }
+    }
+
+
     /// <summary>
     /// 
     /// </summary>

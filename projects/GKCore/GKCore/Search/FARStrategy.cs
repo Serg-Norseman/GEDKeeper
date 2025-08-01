@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using GDModel;
 using GKCore.Design;
+using GKCore.Utilities;
 
 namespace GKCore.Search
 {

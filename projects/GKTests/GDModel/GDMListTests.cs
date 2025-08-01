@@ -19,6 +19,7 @@
  */
 
 using GKCore;
+using GKCore.Utilities;
 using GKTests;
 using NUnit.Framework;
 

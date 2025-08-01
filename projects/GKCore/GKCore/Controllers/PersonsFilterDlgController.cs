@@ -26,7 +26,6 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Lists;
 using GKCore.Options;
-using GKCore.Types;
 
 namespace GKCore.Controllers
 {

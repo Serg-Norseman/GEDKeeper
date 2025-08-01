@@ -25,6 +25,17 @@ using GKCore.Search;
 
 namespace GKCore.Lists
 {
+    public interface IRecordsListModel : IListSource
+    {
+        GDMRecordType RecordType { get; }
+        bool SimpleList { get; set; }
+
+        List<GDMRecord> GetRecordsList();
+
+        IList<ISearchResult> FindAll(string searchPattern);
+    }
+
+
     /// <summary>
     ///
     /// </summary>

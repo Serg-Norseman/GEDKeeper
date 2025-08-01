@@ -26,7 +26,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Design.Graphics;
-using GKCore.Types;
+using GKCore.Interfaces;
 using GKUI.Platform.Handlers;
 
 namespace GKUI.Forms

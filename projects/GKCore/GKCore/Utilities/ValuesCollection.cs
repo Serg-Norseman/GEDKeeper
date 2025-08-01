@@ -20,7 +20,7 @@
 
 using System.Collections.Generic;
 
-namespace GKCore
+namespace GKCore.Utilities
 {
     public sealed class ValuesCollection
     {

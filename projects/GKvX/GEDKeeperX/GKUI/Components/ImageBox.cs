@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using BSLib;
-using GKCore.Types;
+using GKCore.Media;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;

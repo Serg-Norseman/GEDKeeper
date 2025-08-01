@@ -18,29 +18,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GDModel;
-
-namespace GKCore.Types
+namespace GKCore.Options
 {
-    public enum TargetMode
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IOptions
     {
-        tmNone,
-        tmParent,       // select child for parent
-        tmChild,        // select parent for child
-        tmSpouse,       // select spouse for indi
-        tmFamilyChild,  // select family for child
-        tmFamilySpouse, // select family with spouse for indi
-    }
-
-
-    public sealed class Target
-    {
-        public GDMIndividualRecord TargetIndividual;
-        public TargetMode TargetMode;
-        public GDMSex NeedSex;
-
-        public Target()
-        {
-        }
+        void Assign(IOptions source);
+        void ResetDefaults();
     }
 }

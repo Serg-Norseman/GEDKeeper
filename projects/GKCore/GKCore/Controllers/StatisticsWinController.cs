@@ -24,10 +24,10 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Export;
+using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKCore.Stats;
-using GKCore.Types;
 using GKUI.Themes;
 
 namespace GKCore.Controllers

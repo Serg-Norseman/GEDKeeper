@@ -24,6 +24,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
 using GKUI.Themes;

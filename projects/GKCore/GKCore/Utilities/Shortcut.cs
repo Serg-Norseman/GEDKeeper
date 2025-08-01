@@ -25,9 +25,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
-using GKCore;
 
-namespace GKUI.Platform
+namespace GKCore.Utilities
 {
     /// <summary>
     /// For portable distributions.

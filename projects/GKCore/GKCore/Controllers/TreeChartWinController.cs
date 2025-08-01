@@ -25,6 +25,7 @@ using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using GKUI.Themes;

@@ -25,9 +25,11 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Events;
+using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
-using GKCore.Types;
+using GKCore.Utilities;
 using GKUI.Themes;
 
 namespace GKCore.Controllers

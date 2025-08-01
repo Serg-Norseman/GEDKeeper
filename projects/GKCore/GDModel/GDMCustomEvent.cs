@@ -20,7 +20,6 @@
 
 using System;
 using GDModel.Providers.GEDCOM;
-using GKCore.Types;
 
 namespace GDModel
 {

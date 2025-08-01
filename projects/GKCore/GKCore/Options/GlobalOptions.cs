@@ -30,6 +30,7 @@ using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Media;
+using GKCore.Names;
 using GKCore.Plugins;
 using GKCore.Types;
 

@@ -22,9 +22,9 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Options;
-using GKCore.Types;
 using GKUI.Themes;
 
 namespace GKCore.Controllers

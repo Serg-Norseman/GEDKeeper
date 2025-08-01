@@ -28,6 +28,7 @@ using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Plugins;
 using GKCore.Types;
+using GKCore.Utilities;
 
 [assembly: AssemblyTitle("GKTextSearchPlugin")]
 [assembly: AssemblyDescription("GEDKeeper TextSearch plugin")]

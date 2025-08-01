@@ -19,7 +19,6 @@
  */
 
 using GDModel;
-using GDModel.Providers.GEDCOM;
 using GKCore.Types;
 
 namespace GKCore
@@ -29,11 +28,6 @@ namespace GKCore
         public static string SafeTrim(this string input)
         {
             return !string.IsNullOrEmpty(input) ? input.Trim() : string.Empty;
-        }
-
-        public static string GetEventKey(this GDMCustomEvent customEvent)
-        {
-            return (customEvent == null) ? string.Empty : customEvent.GetTagName() + ":" + customEvent.Classification;
         }
 
         public static bool Exchange<T>(this GDMList<T> list, T value, RecordAction recordAction) where T : GDMTag

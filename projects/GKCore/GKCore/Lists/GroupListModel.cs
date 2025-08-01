@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Design;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Options;

@@ -23,6 +23,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using GKCore;
+using GKCore.Utilities;
 
 namespace GDModel.Providers.GEDCOM
 {

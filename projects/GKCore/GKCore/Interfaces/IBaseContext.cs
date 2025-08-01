@@ -24,14 +24,27 @@ using System.IO;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
+using GKCore.Cultures;
 using GKCore.Design;
 using GKCore.Design.Graphics;
+using GKCore.Design.Views;
 using GKCore.Media;
 using GKCore.Search;
-using GKCore.Types;
+using GKCore.Utilities;
 
 namespace GKCore.Interfaces
 {
+    /// <summary>
+    /// Status display the protected information in lists, pedigrees and graphs.
+    /// </summary>
+    public enum ShieldState
+    {
+        Maximum,
+        Middle,
+        None
+    }
+
+
     public interface IBaseContext : IDisposable
     {
         ICulture Culture { get; }

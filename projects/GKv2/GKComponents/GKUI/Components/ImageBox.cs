@@ -24,7 +24,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using BSLib;
-using GKCore.Types;
+using GKCore.Media;
 
 namespace GKUI.Components
 {

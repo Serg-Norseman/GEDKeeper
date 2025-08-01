@@ -20,6 +20,7 @@
 
 using System;
 using GDModel;
+using GKCore.Cultures;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;

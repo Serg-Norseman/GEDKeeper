@@ -28,7 +28,7 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Options;
-using GKCore.Types;
+using GKCore.Utilities;
 using GKUI.Themes;
 
 namespace GKCore.Controllers

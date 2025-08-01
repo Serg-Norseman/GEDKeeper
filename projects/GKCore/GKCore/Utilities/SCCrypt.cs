@@ -22,7 +22,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace GKCore
+namespace GKCore.Utilities
 {
     /// <summary>
     /// 

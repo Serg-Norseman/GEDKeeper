@@ -25,6 +25,7 @@ using GKCore;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 using GKCore.IoC;
+using GKCore.Media;
 using GKCore.Plugins;
 
 [assembly: AssemblyTitle("GKVisionPlugin")]

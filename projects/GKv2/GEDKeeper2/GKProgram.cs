@@ -24,6 +24,7 @@ using System.Security.Permissions;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.SingleInstance;
+using GKCore.Utilities;
 using GKUI.Platform;
 
 [assembly: AssemblyTitle("GEDKeeper")]

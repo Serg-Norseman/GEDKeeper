@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using BSLib;
 using GKCore;
 using GKCore.Interfaces;
+using GKCore.Utilities;
 using GKCL = GKCore.Logging;
 
 namespace GEDmill

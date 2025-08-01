@@ -25,6 +25,7 @@ using System.Linq;
 using BSLib;
 using GKCore;
 using GKCore.Design.Graphics;
+using GKCore.Utilities;
 
 namespace GKUI.Themes
 {

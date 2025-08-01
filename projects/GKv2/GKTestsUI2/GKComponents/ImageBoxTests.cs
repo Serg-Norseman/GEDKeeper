@@ -24,7 +24,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
-using GKCore.Types;
+using GKCore.Media;
 using GKTests;
 using NUnit.Framework;
 

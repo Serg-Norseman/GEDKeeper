@@ -32,13 +32,40 @@ using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Interfaces;
+using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Search;
 using GKCore.Types;
+using GKCore.Utilities;
 
 namespace GKCore.Lists
 {
+    public enum FilterGroupMode
+    {
+        All,
+        None,
+        Any,
+        Selected
+    }
+
+
+    public enum FilterLifeMode
+    {
+        lmAll,
+        lmOnlyAlive,
+        lmOnlyDead,
+        lmAliveBefore,
+        lmTimeLocked
+    }
+
+
+    public interface IIndividualListFilter : IListFilter
+    {
+        FilterLifeMode FilterLifeMode { get; set; }
+    }
+
+
     /// <summary>
     /// 
     /// </summary>

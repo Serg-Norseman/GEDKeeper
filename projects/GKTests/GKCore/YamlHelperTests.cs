@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using GKCore.Utilities;
 using NUnit.Framework;
 
 namespace GKCore

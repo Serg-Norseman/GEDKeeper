@@ -26,6 +26,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Export;
 using GKCore.Media;
+using GKCore.Names;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests;

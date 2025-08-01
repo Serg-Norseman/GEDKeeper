@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GDModel;
+using GKCore.Names;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests;

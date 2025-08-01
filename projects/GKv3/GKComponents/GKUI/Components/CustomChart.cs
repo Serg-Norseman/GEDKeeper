@@ -26,7 +26,6 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
 using GKCore.Export;
-using GKCore.Types;
 using GKUI.Platform.Handlers;
 
 namespace GKUI.Components
@@ -261,7 +260,7 @@ namespace GKUI.Components
             var prevRenderer = fRenderer;
             var prevScale = this.Scale;
 
-            var pdfWriter = new PDFWriter(GKPageSize.A4, true);
+            var pdfWriter = new PDFWriter(PDFPageSize.A4, true);
             pdfWriter.SetFileName(fileName);
             pdfWriter.BeginWrite();
 

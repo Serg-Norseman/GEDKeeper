@@ -26,7 +26,7 @@ using GDModel;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
 
-namespace GKCore
+namespace GKCore.Media
 {
     /// <summary>
     /// 

@@ -21,6 +21,7 @@
 using System;
 using GDModel;
 using GKCore.Export;
+using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Types;
 using GKTests;

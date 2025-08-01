@@ -25,6 +25,7 @@ using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Cultures;
+using GKCore.Interfaces;
 using GKCore.Media;
 using GKCore.Operations;
 using GKCore.Options;

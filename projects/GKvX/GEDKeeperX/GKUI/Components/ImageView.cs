@@ -26,7 +26,7 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Interfaces;
-using GKCore.Types;
+using GKCore.Media;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 

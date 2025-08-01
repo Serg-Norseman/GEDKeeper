@@ -21,11 +21,11 @@
 using System.Collections.Generic;
 using BSLib;
 using GDModel;
-using GKCore;
 using GKCore.Design;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Types;
+using GKCore.Utilities;
 using NSubstitute;
 
 namespace GKTests.Stubs

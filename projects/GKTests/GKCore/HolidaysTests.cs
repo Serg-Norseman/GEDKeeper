@@ -20,6 +20,7 @@
 
 using System;
 using BSLib;
+using GKCore.Utilities;
 using GKTests;
 using NUnit.Framework;
 

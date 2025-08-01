@@ -18,11 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
-namespace GKCore
+namespace GKCore.Utilities
 {
     /// <summary>
     /// This class is a helper for serializing/deserializing data in yaml format.

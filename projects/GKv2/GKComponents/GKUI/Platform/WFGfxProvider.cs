@@ -26,6 +26,7 @@ using System.IO;
 using BSLib;
 using GKCore;
 using GKCore.Design.Graphics;
+using GKCore.Utilities;
 using GKUI.Platform.Handlers;
 
 namespace GKUI.Platform

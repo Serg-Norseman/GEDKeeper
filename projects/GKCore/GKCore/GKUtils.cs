@@ -37,13 +37,16 @@ using GKCore.Calendar;
 using GKCore.Cultures;
 using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Events;
 using GKCore.Export;
 using GKCore.Import;
 using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Media;
+using GKCore.Names;
 using GKCore.Options;
 using GKCore.Types;
+using GKCore.Utilities;
 using UtfUnknown;
 
 namespace GKCore

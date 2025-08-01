@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,19 +18,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCore.Types
+using GKCore.Design.Graphics;
+
+namespace GKCore.Options
 {
-    public enum Feature
+    public interface IOptionsSection
     {
-        GridCellFormat,
-        InternetProxy,
-        MediaPlayer,
-        RecentFilesLoad,
-        Themes,
-        OverwritePrompt,
-        EmbeddedLocales,
-        Mobile,             // -> SingleBase UI, AppData/Local instead of AppData/Roaming, no Plugins
-        PrintPreview,
-        Graphics,
+        void Accept();
+        void Cancel();
+        bool HasValidationErrors();
+        string DisplayName { get; }
+        string TreePosition { get; }
+        IImage MenuIcon { get; }
     }
 }

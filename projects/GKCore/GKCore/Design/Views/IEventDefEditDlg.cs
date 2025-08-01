@@ -19,6 +19,7 @@
  */
 
 using GKCore.Design.Controls;
+using GKCore.Events;
 
 namespace GKCore.Design.Views
 {

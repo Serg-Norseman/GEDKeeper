@@ -29,7 +29,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using BSLib;
 
-namespace GKCore
+namespace GKCore.Utilities
 {
 #if OS_MSWIN
     using GKCore.MapiMail;

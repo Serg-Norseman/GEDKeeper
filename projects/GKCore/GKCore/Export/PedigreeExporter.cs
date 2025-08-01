@@ -25,8 +25,8 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Calendar;
 using GKCore.Design;
 using GKCore.Design.Graphics;
+using GKCore.Interfaces;
 using GKCore.Options;
-using GKCore.Types;
 
 namespace GKCore.Export
 {

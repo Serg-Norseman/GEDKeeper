@@ -28,6 +28,7 @@ using GEDmill.Model;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Design;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Logging;
 using GKCore.Types;

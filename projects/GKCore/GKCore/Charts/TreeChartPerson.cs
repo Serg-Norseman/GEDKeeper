@@ -26,6 +26,7 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Design.Graphics;
 using GKCore.Import;
+using GKCore.Media;
 using GKCore.Options;
 using GKCore.Types;
 using BSDColors = GKCore.Design.BSDConsts.Colors;

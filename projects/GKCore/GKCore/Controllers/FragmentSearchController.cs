@@ -25,9 +25,9 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Tools;
-using GKCore.Types;
 
 namespace GKCore.Controllers
 {

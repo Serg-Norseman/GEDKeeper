@@ -23,7 +23,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
-namespace GKCore
+namespace GKCore.Utilities
 {
     public static class JsonHelper
     {

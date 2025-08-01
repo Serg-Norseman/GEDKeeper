@@ -22,7 +22,6 @@ using System;
 using BSLib;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 using BSDColors = GKCore.Design.BSDConsts.Colors;
 
 namespace GKCore.Options

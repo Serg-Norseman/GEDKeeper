@@ -24,6 +24,7 @@ using BSLib;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
+using GKCore.Design.Views;
 using GKCore.Interfaces;
 using GKCore.Operations;
 using GKCore.Options;

@@ -19,8 +19,8 @@
  */
 
 using System;
+using GKCore.Design.Views;
 using GKCore.Plugins;
-using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
 

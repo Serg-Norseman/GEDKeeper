@@ -19,6 +19,7 @@
  */
 
 using System;
+using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
@@ -209,6 +210,11 @@ namespace GDModel
             T result = (T)Activator.CreateInstance(obj.GetType());
             result.Assign(obj);
             return result;
+        }
+
+        public static string GetEventKey(this GDMCustomEvent customEvent)
+        {
+            return (customEvent == null) ? string.Empty : customEvent.GetTagName() + ":" + customEvent.Classification;
         }
     }
 }

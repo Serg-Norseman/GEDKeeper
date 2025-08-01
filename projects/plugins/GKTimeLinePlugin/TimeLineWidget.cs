@@ -23,8 +23,8 @@ using System.Windows.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Design;
+using GKCore.Lists;
 using GKCore.Plugins;
-using GKCore.Types;
 
 namespace GKTimeLinePlugin
 {

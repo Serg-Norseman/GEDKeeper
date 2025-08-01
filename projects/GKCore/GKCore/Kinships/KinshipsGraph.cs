@@ -27,6 +27,7 @@ using BSLib.DataViz.SmartGraph;
 using GDModel;
 using GKCore.Interfaces;
 using GKCore.Options;
+using GKCore.Utilities;
 
 namespace GKCore.Kinships
 {

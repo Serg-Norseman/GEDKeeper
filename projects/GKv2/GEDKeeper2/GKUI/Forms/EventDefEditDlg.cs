@@ -19,10 +19,10 @@
  */
 
 using System.Windows.Forms;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Events;
 
 namespace GKUI.Forms
 {

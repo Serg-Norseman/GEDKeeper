@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using GDModel.Providers.GEDCOM;
 using GKCore.Calendar;
 using GKCore.Options;
-using GKCore.Types;
 
 namespace GDModel
 {

@@ -34,7 +34,7 @@ using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Options;
 using GKCore.Plugins;
-using GKCore.Types;
+using GKCore.Utilities;
 using GKCore.Validation;
 using GKUI.Components;
 using GKUI.Forms;

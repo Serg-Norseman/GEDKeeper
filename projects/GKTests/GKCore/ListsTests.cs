@@ -21,12 +21,11 @@
 using System;
 using GDModel;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Names;
 using GKCore.Options;
-using GKCore.Types;
+using GKCore.Utilities;
 using GKTests;
-using GKTests.Stubs;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -35,7 +34,7 @@ namespace GKCore
     [TestFixture]
     public class ListsTests
     {
-        private BaseContext fContext;
+        private readonly BaseContext fContext;
 
         public ListsTests()
         {

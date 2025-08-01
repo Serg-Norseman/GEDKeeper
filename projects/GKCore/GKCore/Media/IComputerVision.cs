@@ -18,25 +18,36 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.Collections.Generic;
-using GDModel;
+using BSLib;
+using GKCore.Design.Graphics;
 
-namespace GKCore.Types
+namespace GKCore.Media
 {
-    public sealed class PatriarchObj
+    public sealed class CVSubject
     {
-        public bool Mark;
+        public ExtRect Face;
+        public ExtRect Portrait;
 
-        public GDMIndividualRecord IRec;
-        public int BirthYear;
-        public int DescendantsCount;
-        public int DescGenerations;
-        public readonly List<PatriarchObj> Links;
-        public bool HasLinks;
-
-        public PatriarchObj()
+        public CVSubject(ExtRect face, ExtRect portrait)
         {
-            Links = new List<PatriarchObj>();
+            Face = face;
+            Portrait = portrait;
         }
+    }
+
+
+    public interface IComputerVision
+    {
+        bool HasSubject(string strInfo);
+
+        CVSubject[] DetectSubjects(IImage image);
+        void TrainFace(IImage image, int label, string strInfo);
+        string PredictFace(IImage image, out float confidence);
+
+        void Save();
+        void Restore();
+
+        void AddMediaLink(string linkSign);
+        bool HasMediaLink(string linkSign);
     }
 }

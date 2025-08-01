@@ -22,12 +22,12 @@ using System;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Lists;
+using GKCore.Utilities;
 using GKUI.Components;
 
 namespace GKUI.Forms

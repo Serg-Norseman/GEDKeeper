@@ -21,7 +21,7 @@
 using System.Collections.Generic;
 using GKCore.Design.Controls;
 
-namespace GKCore
+namespace GKCore.Utilities
 {
     public sealed class FreqItem<X>
     {

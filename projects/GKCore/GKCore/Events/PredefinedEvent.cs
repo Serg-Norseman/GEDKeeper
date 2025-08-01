@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,14 +18,38 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCore.Types
+namespace GKCore.Events
 {
-    public enum FilterLifeMode
+    public enum EventKind
     {
-        lmAll,
-        lmOnlyAlive,
-        lmOnlyDead,
-        lmAliveBefore,
-        lmTimeLocked
+        ekEvent,
+        ekFact
+    }
+
+
+    public enum EventTarget
+    {
+        etIndividual,
+        etFamily,
+        etAny
+    }
+
+
+    public sealed class PredefinedEvent
+    {
+        public LSID Name;
+        public string Tag;
+        public EventKind Kind;
+        public EventTarget Target;
+        public bool AcceptableEmpty;
+
+        public PredefinedEvent(LSID name, string tag, EventKind kind, EventTarget target, bool acceptableEmpty = false)
+        {
+            Name = name;
+            Tag = tag;
+            Kind = kind;
+            Target = target;
+            AcceptableEmpty = acceptableEmpty;
+        }
     }
 }

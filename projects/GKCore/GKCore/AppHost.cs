@@ -29,6 +29,7 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
+using GKCore.Events;
 using GKCore.Interfaces;
 using GKCore.IoC;
 using GKCore.Lists;
@@ -38,6 +39,7 @@ using GKCore.Options;
 using GKCore.Plugins;
 using GKCore.SingleInstance;
 using GKCore.Types;
+using GKCore.Utilities;
 using GKUI.Themes;
 
 namespace GKCore

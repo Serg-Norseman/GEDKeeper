@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GDModel;
+using GKCore.Cultures;
 using GKCore.Interfaces;
 
 namespace GKCore

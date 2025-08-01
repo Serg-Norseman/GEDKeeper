@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using GKCore.Utilities;
 using NUnit.Framework;
 
 namespace GKCore
@@ -28,7 +29,7 @@ namespace GKCore
         [Test]
         public void Test_Common()
         {
-            ValuesCollection valsCol = new ValuesCollection();
+            var valsCol = new ValuesCollection();
 
             valsCol.Add("red", "rojo");
             valsCol.Add("green", "verde");

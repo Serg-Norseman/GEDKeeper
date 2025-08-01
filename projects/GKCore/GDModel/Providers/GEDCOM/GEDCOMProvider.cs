@@ -26,6 +26,8 @@ using System.IO;
 using System.Text;
 using BSLib;
 using GKCore;
+using GKCore.Interfaces;
+using GKCore.Utilities;
 
 namespace GDModel.Providers.GEDCOM
 {
@@ -236,7 +238,7 @@ namespace GDModel.Providers.GEDCOM
         private static Encoding GetDefaultEncoding(byte[] buffer, int bufferSize, out int offset)
         {
             // Dirty code: external encodings are not supported on mobile (Xamarin)
-            if (AppHost.Instance.HasFeatureSupport(GKCore.Types.Feature.Mobile)) {
+            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 offset = 3; // FIXME!
                 return Encoding.UTF8;
             }

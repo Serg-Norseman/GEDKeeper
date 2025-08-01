@@ -22,11 +22,21 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using BSLib;
-using GKCore.Interfaces;
 using GKCore.Options;
 
 namespace GKCore.Lists
 {
+    public enum DataType
+    {
+        dtString,
+        dtInteger,
+        dtFloat,
+        dtDateTime,
+        dtGEDCOMDate,
+        dtBool
+    }
+
+
     /// <summary>
     /// 
     /// </summary>
@@ -65,6 +75,24 @@ namespace GKCore.Lists
             return string.Join(" / ", Id, ColName, DataType, DefWidth, DefActive, Order);
         }
     }
+
+    public interface IListColumns
+    {
+        int Count { get; }
+        ListColumn this[int index] { get; }
+        IList<ListColumn> OrderedColumns { get; }
+
+        void Clear();
+        void CopyTo(IListColumns target);
+        bool MoveColumn(int idx, bool up);
+        void ResetDefaults();
+
+        void LoadFromFile(IniFile iniFile, string section, int optsVersion);
+        void SaveToFile(IniFile iniFile, string section, int optsVersion);
+
+        void AddColumn(string colName, DataType dataType, int defWidth, bool autosize = false);
+    }
+
 
     /// <summary>
     /// 

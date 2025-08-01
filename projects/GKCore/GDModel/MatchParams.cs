@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,36 +18,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using BSLib;
-using GKCore.Design.Graphics;
-
-namespace GKCore.Interfaces
+namespace GDModel
 {
-    public sealed class CVSubject
+    public struct MatchParams
     {
-        public ExtRect Face;
-        public ExtRect Portrait;
+        public float NamesIndistinctThreshold;
 
-        public CVSubject(ExtRect face, ExtRect portrait)
-        {
-            Face = face;
-            Portrait = portrait;
-        }
-    }
+        public bool DatesCheck;
+        public int YearsInaccuracy;
 
-
-    public interface IComputerVision
-    {
-        bool HasSubject(string strInfo);
-
-        CVSubject[] DetectSubjects(IImage image);
-        void TrainFace(IImage image, int label, string strInfo);
-        string PredictFace(IImage image, out float confidence);
-
-        void Save();
-        void Restore();
-
-        void AddMediaLink(string linkSign);
-        bool HasMediaLink(string linkSign);
+        public bool CheckEventPlaces; // not yet used
     }
 }

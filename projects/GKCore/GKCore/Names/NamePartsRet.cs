@@ -18,9 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Interfaces;
+using GKCore.Cultures;
 
-namespace GKCore.Types
+namespace GKCore.Names
 {
     public sealed class NamePartsRet
     {

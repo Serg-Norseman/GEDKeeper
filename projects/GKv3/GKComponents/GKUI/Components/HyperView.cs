@@ -28,6 +28,7 @@ using GKCore;
 using GKCore.BBText;
 using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Utilities;
 using GKUI.Platform.Handlers;
 
 namespace GKUI.Components

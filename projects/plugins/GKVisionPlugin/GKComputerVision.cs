@@ -33,7 +33,8 @@ using System.Reflection;
 using BSLib;
 using GKCore;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
+using GKCore.Media;
+using GKCore.Utilities;
 using GKUI.Platform.Handlers;
 
 namespace GKVisionPlugin

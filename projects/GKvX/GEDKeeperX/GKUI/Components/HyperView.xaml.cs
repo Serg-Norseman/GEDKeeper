@@ -25,6 +25,7 @@ using GKCore;
 using GKCore.BBText;
 using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Utilities;
 using Xamarin.Forms;
 
 namespace GKUI.Components

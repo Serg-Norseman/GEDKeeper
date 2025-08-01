@@ -19,8 +19,7 @@
  */
 
 using BSLib;
-using GKCore.Interfaces;
-using GKCore.Types;
+using GKCore.Lists;
 
 namespace GKCore.Charts
 {

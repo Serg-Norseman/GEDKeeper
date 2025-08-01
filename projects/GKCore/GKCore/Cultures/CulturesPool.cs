@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using GDModel;
-using GKCore.Interfaces;
+using GKCore.Utilities;
 using SGCulture = System.Globalization.CultureInfo;
 
 namespace GKCore.Cultures

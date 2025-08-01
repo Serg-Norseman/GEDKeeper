@@ -21,7 +21,6 @@
 using System;
 using BSLib;
 using GDModel;
-using GKCore.Interfaces;
 using GKCore.Lists;
 
 namespace GKCore.Options

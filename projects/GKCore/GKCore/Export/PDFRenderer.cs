@@ -32,7 +32,6 @@ using iTextSharp.text.pdf;
 
 namespace GKCore.Export
 {
-    using itFont = iTextSharp.text.Font;
     using itImage = iTextSharp.text.Image;
 
     /// <summary>

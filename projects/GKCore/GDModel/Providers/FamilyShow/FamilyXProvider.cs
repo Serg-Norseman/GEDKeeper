@@ -26,6 +26,7 @@ using System.Linq;
 using System.Xml;
 using GDModel.Providers.GEDCOM;
 using GKCore;
+using GKCore.Utilities;
 
 namespace GDModel.Providers.FamilyShow
 {

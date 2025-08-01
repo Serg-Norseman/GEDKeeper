@@ -22,7 +22,6 @@ using System;
 using System.Collections.Generic;
 using BSLib;
 using GDModel.Providers.GEDCOM;
-using GKCore.Types;
 
 namespace GDModel
 {

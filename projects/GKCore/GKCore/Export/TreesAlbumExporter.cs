@@ -27,7 +27,7 @@ using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Options;
 using GKCore.Tools;
-using GKCore.Types;
+using GKCore.Utilities;
 
 namespace GKCore.Export
 {

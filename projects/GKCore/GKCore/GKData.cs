@@ -19,7 +19,7 @@
  */
 
 using GDModel.Providers.GEDCOM;
-using GKCore.Types;
+using GKCore.Events;
 using GKUI.Themes;
 
 namespace GKCore
