@@ -25,7 +25,7 @@ using GDModel.Providers.GEDCOM;
 using GDModel.Providers.GedML;
 using GDModel.Providers.GEDZIP;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Design;
 using GKTests;
 using GKTests.Stubs;
 using NSubstitute;

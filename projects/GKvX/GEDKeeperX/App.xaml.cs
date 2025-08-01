@@ -19,6 +19,7 @@
  */
 
 using GKCore;
+using GKCore.Locales;
 using GKUI.Forms;
 using GKUI.Platform;
 using Xamarin.Essentials;

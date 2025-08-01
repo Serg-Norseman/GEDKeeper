@@ -23,7 +23,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using GKCore.Design;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKUI.Components;
 
 namespace GKTextSearchPlugin

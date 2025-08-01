@@ -26,10 +26,10 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Design.Graphics;
 using GKCore.Import;
+using GKCore.Locales;
 using GKCore.Media;
 using GKCore.Options;
 using GKCore.Types;
-using BSDColors = GKCore.Design.BSDConsts.Colors;
 
 namespace GKCore.Charts
 {
@@ -745,15 +745,15 @@ namespace GKCore.Charts
 
             switch (fSex) {
                 case GDMSex.svMale:
-                    result = BSDColors.Blue;
+                    result = GKColors.Blue;
                     break;
 
                 case GDMSex.svFemale:
-                    result = BSDColors.Red;
+                    result = GKColors.Red;
                     break;
 
                 default:
-                    result = BSDColors.Black;
+                    result = GKColors.Black;
                     break;
             }
 
@@ -763,15 +763,15 @@ namespace GKCore.Charts
         public IColor GetFillColor(bool dead)
         {
             if (fFlags.Contains(PersonFlag.pfSpecialMark)) {
-                return ChartRenderer.GetColor(BSDColors.Khaki);
+                return ChartRenderer.GetColor(GKColors.Khaki);
             }
 
             if (dead) {
-                return ChartRenderer.GetColor(BSDColors.Black);
+                return ChartRenderer.GetColor(GKColors.Black);
             }
 
             if (IsDup) {
-                return ChartRenderer.GetColor(BSDColors.Silver);
+                return ChartRenderer.GetColor(GKColors.Silver);
             }
 
             if (UserColor != null) {

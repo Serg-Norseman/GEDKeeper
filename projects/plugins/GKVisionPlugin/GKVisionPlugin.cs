@@ -23,10 +23,10 @@ using System.Reflection;
 using BSLib;
 using GKCore;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
-using GKCore.IoC;
+using GKCore.Locales;
 using GKCore.Media;
 using GKCore.Plugins;
+using GKCore.Utilities;
 
 [assembly: AssemblyTitle("GKVisionPlugin")]
 [assembly: AssemblyDescription("GEDKeeper ComputerVision plugin")]

@@ -28,7 +28,6 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKUI.Platform.Handlers;
 using BSDListItem = GKCore.Design.Controls.IListItem;
-using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
 using IListSource = GKCore.Lists.IListSource;
 
 namespace GKUI.Components
@@ -57,7 +56,7 @@ namespace GKUI.Components
         private int fCacheFirstItem;
         private IListSource fListMan;
         private int fSortColumn;
-        private BSDSortOrder fSortOrder;
+        private GKSortOrder fSortOrder;
 
 
         [Browsable(false)]
@@ -81,7 +80,7 @@ namespace GKUI.Components
                     if (fListMan != null) {
                         VirtualMode = true;
                         fSortColumn = 0;
-                        fSortOrder = BSDSortOrder.Ascending;
+                        fSortOrder = GKSortOrder.Ascending;
                     } else {
                         VirtualMode = false;
                     }
@@ -109,7 +108,7 @@ namespace GKUI.Components
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public BSDSortOrder SortOrder
+        public GKSortOrder SortOrder
         {
             get { return fSortOrder; }
             set { fSortOrder = value; }
@@ -134,7 +133,7 @@ namespace GKUI.Components
             View = View.Details;
 
             fSortColumn = 0;
-            fSortOrder = BSDSortOrder.None;
+            fSortOrder = GKSortOrder.None;
             fListMan = null;
         }
 
@@ -143,9 +142,9 @@ namespace GKUI.Components
             Select();
         }
 
-        protected BSDSortOrder GetColumnSortOrder(int columnIndex)
+        protected GKSortOrder GetColumnSortOrder(int columnIndex)
         {
-            return (fSortColumn == columnIndex) ? fSortOrder : BSDSortOrder.None;
+            return (fSortColumn == columnIndex) ? fSortOrder : GKSortOrder.None;
         }
 
         public void SetSortColumn(int sortColumn, bool checkOrder = true)
@@ -153,9 +152,9 @@ namespace GKUI.Components
             int prevColumn = fSortColumn;
             if (prevColumn == sortColumn && checkOrder) {
                 var prevOrder = GetColumnSortOrder(sortColumn);
-                fSortOrder = (prevOrder == BSDSortOrder.Ascending) ? BSDSortOrder.Descending : BSDSortOrder.Ascending;
+                fSortOrder = (prevOrder == GKSortOrder.Ascending) ? GKSortOrder.Descending : GKSortOrder.Ascending;
             } else {
-                fSortOrder = BSDSortOrder.Ascending;
+                fSortOrder = GKSortOrder.Ascending;
             }
 
             fSortColumn = sortColumn;
@@ -164,11 +163,11 @@ namespace GKUI.Components
 
         private void SortContents(bool restoreSelected)
         {
-            if (fListMan == null || fSortOrder == BSDSortOrder.None) return;
+            if (fListMan == null || fSortOrder == GKSortOrder.None) return;
 
             object rec = (restoreSelected) ? GetSelectedData() : null;
 
-            fListMan.SortContents(fSortColumn, fSortOrder == BSDSortOrder.Ascending);
+            fListMan.SortContents(fSortColumn, fSortOrder == GKSortOrder.Ascending);
             ResetCache();
 
             if (rec != null) SelectItem(rec);
@@ -232,10 +231,10 @@ namespace GKUI.Components
                 }
 
                 switch (GetColumnSortOrder(e.ColumnIndex)) {
-                    case BSDSortOrder.Ascending:
+                    case GKSortOrder.Ascending:
                         UIHelper.DrawSortArrow(gfx, this.Font, rt, "▲");
                         break;
-                    case BSDSortOrder.Descending:
+                    case GKSortOrder.Descending:
                         UIHelper.DrawSortArrow(gfx, this.Font, rt, "▼");
                         break;
                 }
@@ -415,7 +414,7 @@ namespace GKUI.Components
             Columns.Clear();
         }
 
-        public void AddColumn(string caption, int width, bool autoSize = false, BSDTypes.HorizontalAlignment textAlign = BSDTypes.HorizontalAlignment.Left)
+        public void AddColumn(string caption, int width, bool autoSize = false, GKHorizontalAlignment textAlign = GKHorizontalAlignment.Left)
         {
             if (autoSize) width = -1;
             Columns.Add(caption, width, (HorizontalAlignment)textAlign);

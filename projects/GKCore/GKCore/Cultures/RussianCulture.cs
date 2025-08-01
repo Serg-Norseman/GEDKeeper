@@ -22,6 +22,7 @@ using System;
 using System.Threading.Tasks;
 using GDModel;
 using GKCore.Linguistics;
+using GKCore.Locales;
 
 namespace GKCore.Cultures
 {

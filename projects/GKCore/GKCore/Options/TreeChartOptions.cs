@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,7 +23,6 @@ using BSLib;
 using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Graphics;
-using BSDColors = GKCore.Design.BSDConsts.Colors;
 
 namespace GKCore.Options
 {
@@ -92,7 +91,7 @@ namespace GKCore.Options
         public string DefFontName;
         public int DefFontSize;
         public IColor DefFontColor;
-        public BSDTypes.FontStyle DefFontStyle;
+        public GKFontStyle DefFontStyle;
         public TextEffect TextEffect;
 
         public int BranchDistance;
@@ -166,8 +165,8 @@ namespace GKCore.Options
 
             DefFontName = AppHost.GfxProvider.GetDefaultFontName();
             DefFontSize = (int)AppHost.GfxProvider.GetDefaultFontSize();
-            DefFontColor = ChartRenderer.GetColor(BSDColors.Black);
-            DefFontStyle = BSDTypes.FontStyle.None;
+            DefFontColor = ChartRenderer.GetColor(GKColors.Black);
+            DefFontStyle = GKFontStyle.None;
             TextEffect = TextEffect.Simple;
 
             BranchDistance = TreeChartModel.DEF_BRANCH_DISTANCE;
@@ -310,8 +309,8 @@ namespace GKCore.Options
 
             DefFontName = iniFile.ReadString("Chart", "FontName", AppHost.GfxProvider.GetDefaultFontName());
             DefFontSize = iniFile.ReadInteger("Chart", "FontSize", (int)AppHost.GfxProvider.GetDefaultFontSize());
-            DefFontColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FontColor", BSDColors.Black));
-            DefFontStyle = (BSDTypes.FontStyle)iniFile.ReadInteger("Chart", "FontStyle", 0);
+            DefFontColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "FontColor", GKColors.Black));
+            DefFontStyle = (GKFontStyle)iniFile.ReadInteger("Chart", "FontStyle", 0);
             TextEffect = (TextEffect)iniFile.ReadInteger("Chart", "TextEffect", 0);
 
             BranchDistance = iniFile.ReadInteger("Chart", "BranchDistance", TreeChartModel.DEF_BRANCH_DISTANCE);

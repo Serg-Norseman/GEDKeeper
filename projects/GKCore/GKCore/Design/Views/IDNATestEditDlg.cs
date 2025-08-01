@@ -24,7 +24,7 @@ using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
-    public interface IDNATestEditDlg : ICommonDialog, IBaseEditor
+    public interface IDNATestEditDlg : ICommonDialog
     {
         GDMDNATest DNATest { get; set; }
 

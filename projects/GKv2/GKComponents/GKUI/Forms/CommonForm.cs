@@ -25,7 +25,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.Design;
-using GKCore.Interfaces;
 using GKUI.Themes;
 
 namespace GKUI.Forms

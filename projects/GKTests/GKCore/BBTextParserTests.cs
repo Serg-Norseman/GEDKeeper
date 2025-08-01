@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,6 +20,7 @@
 
 using System.Collections.Generic;
 using GKCore.BBText;
+using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKTests;
 using NSubstitute;
@@ -38,7 +39,7 @@ namespace GKCore
         [Test]
         public void Test_BBTextChunk()
         {
-            var instance = new BBTextChunk(1, 10.0f, GKCore.Design.BSDTypes.FontStyle.Bold, null);
+            var instance = new BBTextChunk(1, 10.0f, GKFontStyle.Bold, null);
             Assert.IsNotNull(instance);
             instance.Text = "Test chunk";
 

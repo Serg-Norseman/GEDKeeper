@@ -21,7 +21,7 @@
 using System.IO;
 using System.IO.Compression;
 using GDModel.Providers.GEDCOM;
-using GKCore;
+using GKCore.Locales;
 using GKCore.Utilities;
 
 namespace GDModel.Providers.GEDZIP

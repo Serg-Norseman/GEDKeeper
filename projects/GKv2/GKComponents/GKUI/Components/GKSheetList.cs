@@ -22,9 +22,9 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using BSLib;
-using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Lists;
+using GKCore.Locales;
 using GKCore.Types;
 using GKUI.Themes;
 

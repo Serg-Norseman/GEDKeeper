@@ -28,7 +28,6 @@ using GKCore.Charts;
 using GKCore.Cultures;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 using GKCore.Options;
 using GKCore.Utilities;
 using SGCulture = System.Globalization.CultureInfo;

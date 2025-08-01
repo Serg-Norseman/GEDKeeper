@@ -25,10 +25,9 @@ using GKCore;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
-using GKCore.IoC;
 using GKCore.Options;
 using GKCore.Plugins;
+using GKCore.Utilities;
 using GKCore.Validation;
 using NSubstitute;
 

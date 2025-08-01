@@ -23,7 +23,7 @@ using BSLib;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;

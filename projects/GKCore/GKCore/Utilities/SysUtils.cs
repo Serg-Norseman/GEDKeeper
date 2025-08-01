@@ -31,10 +31,6 @@ using BSLib;
 
 namespace GKCore.Utilities
 {
-#if OS_MSWIN
-    using GKCore.MapiMail;
-#endif
-
     public enum DesktopType
     {
         None = 0,

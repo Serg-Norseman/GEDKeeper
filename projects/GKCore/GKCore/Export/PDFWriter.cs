@@ -28,6 +28,7 @@ using System.IO;
 using BSLib;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
+using GKCore.Locales;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using it = iTextSharp.text;

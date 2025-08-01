@@ -23,7 +23,7 @@ using System.Reflection;
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Options;
 using GKCore.Plugins;
 
@@ -142,7 +142,7 @@ namespace GKStdReports
 
             var selPerson = curBase.GetSelectedPerson();
             if (selPerson == null) {
-                AppHost.StdDialogs.ShowError(GKCore.LangMan.LS(LSID.NotSelectedPerson));
+                AppHost.StdDialogs.ShowError(GKCore.Locales.LangMan.LS(LSID.NotSelectedPerson));
                 return;
             }
 
@@ -180,7 +180,7 @@ namespace GKStdReports
 
             var selPerson = curBase.GetSelectedPerson();
             if (selPerson == null) {
-                AppHost.StdDialogs.ShowError(GKCore.LangMan.LS(LSID.NotSelectedPerson));
+                AppHost.StdDialogs.ShowError(GKCore.Locales.LangMan.LS(LSID.NotSelectedPerson));
                 return;
             }
 
@@ -250,7 +250,7 @@ namespace GKStdReports
 
             var selPerson = curBase.GetSelectedPerson();
             if (selPerson == null) {
-                AppHost.StdDialogs.ShowError(GKCore.LangMan.LS(LSID.NotSelectedPerson));
+                AppHost.StdDialogs.ShowError(GKCore.Locales.LangMan.LS(LSID.NotSelectedPerson));
                 return;
             }
 

@@ -24,8 +24,8 @@ using System.IO;
 using System.Reflection;
 using GDModel;
 using GKCore.Design;
-using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Locales;
 using GKCore.Options;
 using GKCore.Types;
 

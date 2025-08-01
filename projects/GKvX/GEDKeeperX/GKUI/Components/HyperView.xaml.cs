@@ -134,14 +134,14 @@ namespace GKUI.Components
                         span.FontSize = chunk.Size;
 
                         var chunkStyle = chunk.Style;
-                        if (chunkStyle.HasFlag(BSDTypes.FontStyle.Bold)) {
+                        if (chunkStyle.HasFlag(GKFontStyle.Bold)) {
                             span.FontAttributes = FontAttributes.Bold;
-                        } else if (chunkStyle.HasFlag(BSDTypes.FontStyle.Italic)) {
+                        } else if (chunkStyle.HasFlag(GKFontStyle.Italic)) {
                             span.FontAttributes = FontAttributes.Italic;
                         }
-                        if (chunkStyle.HasFlag(BSDTypes.FontStyle.Strikeout)) {
+                        if (chunkStyle.HasFlag(GKFontStyle.Strikeout)) {
                             span.TextDecorations = TextDecorations.Strikethrough;
-                        } else if (chunkStyle.HasFlag(BSDTypes.FontStyle.Underline)) {
+                        } else if (chunkStyle.HasFlag(GKFontStyle.Underline)) {
                             span.TextDecorations = TextDecorations.Underline;
                         }
 

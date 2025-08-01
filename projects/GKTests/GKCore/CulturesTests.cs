@@ -22,7 +22,6 @@ using System;
 using System.Threading.Tasks;
 using GDModel;
 using GKCore.Cultures;
-using GKCore.Interfaces;
 using GKTests;
 using NUnit.Framework;
 

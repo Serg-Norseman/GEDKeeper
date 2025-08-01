@@ -24,7 +24,7 @@ using BSLib;
 using GDModel;
 using GKCore;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Types;
 using Xamarin.Forms;
 using XFIKCheckBox = Plugin.InputKit.Shared.Controls.CheckBox;

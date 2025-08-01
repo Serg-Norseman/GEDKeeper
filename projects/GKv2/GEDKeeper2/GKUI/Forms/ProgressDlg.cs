@@ -22,8 +22,8 @@ using System;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
-using GKCore;
-using GKCore.Interfaces;
+using GKCore.Design;
+using GKCore.Locales;
 
 namespace GKUI.Forms
 {

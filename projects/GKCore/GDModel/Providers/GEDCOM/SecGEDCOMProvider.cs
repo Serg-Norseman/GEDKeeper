@@ -22,7 +22,7 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using GKCore;
+using GKCore.Locales;
 using GKCore.Utilities;
 
 namespace GDModel.Providers.GEDCOM
@@ -75,7 +75,7 @@ namespace GDModel.Providers.GEDCOM
             var gsh = Encoding.ASCII.GetString(gsHeader);
 
             if (!string.Equals(gsh, GEDSEC_HEADER)) {
-                throw new GKException(LangMan.LS(LSID.ItsNotGEDSECCompatibleFile));
+                throw new GDMException(LangMan.LS(LSID.ItsNotGEDSECCompatibleFile));
             }
 
             if (gsMajVer < GS_MAJOR_VER || gsMinVer < GS_MINOR_VER) {

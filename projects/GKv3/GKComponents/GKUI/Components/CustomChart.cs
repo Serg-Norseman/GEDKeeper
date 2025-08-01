@@ -26,6 +26,7 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
 using GKCore.Export;
+using GKCore.Locales;
 using GKUI.Platform.Handlers;
 
 namespace GKUI.Components

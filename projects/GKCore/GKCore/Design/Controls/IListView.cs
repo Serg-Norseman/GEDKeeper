@@ -20,7 +20,6 @@
 
 using System.Collections.Generic;
 using GKCore.Lists;
-using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
 
 namespace GKCore.Design.Controls
 {
@@ -42,9 +41,9 @@ namespace GKCore.Design.Controls
         IListSource ListMan { get; set; }
         int SelectedIndex { get; set; }
         int SortColumn { get; set; }
-        BSDSortOrder SortOrder { get; set; }
+        GKSortOrder SortOrder { get; set; }
 
-        void AddColumn(string caption, int width, bool autoSize = false, BSDTypes.HorizontalAlignment textAlign = BSDTypes.HorizontalAlignment.Left);
+        void AddColumn(string caption, int width, bool autoSize = false, GKHorizontalAlignment textAlign = GKHorizontalAlignment.Left);
         void AddCheckedColumn(string caption, int width, bool autoSize = false);
         void Clear();
         void ClearColumns();

@@ -21,7 +21,7 @@
 using System;
 using BSLib;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
+using GKCore.Locales;
 
 namespace GKCore.Plugins
 {

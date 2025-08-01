@@ -29,15 +29,14 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 using GKCore.Kinships;
 using GKCore.Lists;
+using GKCore.Locales;
 using GKCore.Options;
 using GKCore.Search;
 using GKCore.Types;
 using GKCore.Utilities;
 using GKUI.Themes;
-using BSDColors = GKCore.Design.BSDConsts.Colors;
 
 namespace GKCore.Charts
 {
@@ -1172,16 +1171,16 @@ namespace GKCore.Charts
         {
             DoneGraphics();
 
-            fClrBlack = ChartRenderer.GetColor(BSDColors.Black);
+            fClrBlack = ChartRenderer.GetColor(GKColors.Black);
 
             // Anti-aliasing works differently in EtoForms and WinForms.
             IColor clrLine, clrDecor;
 #if GK3
-            clrLine = ChartRenderer.GetColor(BSDColors.DimGray);
-            clrDecor = ChartRenderer.GetColor(BSDColors.DarkGray);
+            clrLine = ChartRenderer.GetColor(GKColors.DimGray);
+            clrDecor = ChartRenderer.GetColor(GKColors.DarkGray);
 #else
-            clrLine = ChartRenderer.GetColor(BSDColors.Black);
-            clrDecor = ChartRenderer.GetColor(BSDColors.DimGray);
+            clrLine = ChartRenderer.GetColor(GKColors.Black);
+            clrDecor = ChartRenderer.GetColor(GKColors.DimGray);
 #endif
 
             fLinePen = fRenderer.CreatePen(clrLine, 1f);
@@ -1191,12 +1190,12 @@ namespace GKCore.Charts
             fLineDottedDecorativePen = fRenderer.CreatePen(clrDecor, 1f, new float[] {4.0F, 2.0F});
             fLineDottedSelectedPen = fRenderer.CreatePen(clrLine, 2.4f, new float[] { 4.0F, 2.0F });
             fSolidBlack = fRenderer.CreateBrush(fClrBlack);
-            fSolidF = fRenderer.CreateBrush(ChartRenderer.GetColor(BSDColors.Red));
-            fSolidM = fRenderer.CreateBrush(ChartRenderer.GetColor(BSDColors.Blue));
+            fSolidF = fRenderer.CreateBrush(ChartRenderer.GetColor(GKColors.Red));
+            fSolidM = fRenderer.CreateBrush(ChartRenderer.GetColor(GKColors.Blue));
 
-            var clrGreen = ChartRenderer.GetColor(BSDColors.ForestGreen);
+            var clrGreen = ChartRenderer.GetColor(GKColors.ForestGreen);
             fLineTMSYPen = fRenderer.CreatePen(clrGreen, 2.4f, new float[] { 4.0F, 2.0F });
-            var clrCrimson = ChartRenderer.GetColor(BSDColors.Crimson);
+            var clrCrimson = ChartRenderer.GetColor(GKColors.Crimson);
             fLineTMSNPen = fRenderer.CreatePen(clrCrimson, 2.4f, new float[] { 4.0F, 2.0F });
         }
 

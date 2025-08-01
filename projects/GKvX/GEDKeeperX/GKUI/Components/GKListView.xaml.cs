@@ -23,11 +23,9 @@ using System.Collections.Generic;
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using Xamarin.Forms;
 using Xamarin.Forms.DataGrid;
-using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
 
 namespace GKUI.Components
 {
@@ -55,7 +53,7 @@ namespace GKUI.Components
         private bool fCheckBoxes;
         private IListSource fListMan;
         private int fSortColumn;
-        private BSDSortOrder fSortOrder;
+        private GKSortOrder fSortOrder;
 
         public event EventHandler MouseDoubleClick;
 
@@ -84,7 +82,7 @@ namespace GKUI.Components
 
                     if (fListMan != null) {
                         fSortColumn = 0;
-                        fSortOrder = BSDSortOrder.Ascending;
+                        fSortOrder = GKSortOrder.Ascending;
                         ItemsSource = fListMan.ContentList;
                     } else {
                         ItemsSource = null;
@@ -109,7 +107,7 @@ namespace GKUI.Components
             set { fSortColumn = value; }
         }
 
-        public BSDSortOrder SortOrder
+        public GKSortOrder SortOrder
         {
             get { return fSortOrder; }
             set { fSortOrder = value; }
@@ -125,7 +123,7 @@ namespace GKUI.Components
 
             fCheckBoxes = false;
             fSortColumn = 0;
-            fSortOrder = BSDSortOrder.None;
+            fSortOrder = GKSortOrder.None;
             fListMan = null;
         }
 
@@ -134,9 +132,9 @@ namespace GKUI.Components
             Focus();
         }
 
-        protected BSDSortOrder GetColumnSortOrder(int columnIndex)
+        protected GKSortOrder GetColumnSortOrder(int columnIndex)
         {
-            return (fSortColumn == columnIndex) ? fSortOrder : BSDSortOrder.None;
+            return (fSortColumn == columnIndex) ? fSortOrder : GKSortOrder.None;
         }
 
         public void SetSortColumn(int sortColumn, bool checkOrder = true)
@@ -144,9 +142,9 @@ namespace GKUI.Components
             int prevColumn = fSortColumn;
             if (prevColumn == sortColumn && checkOrder) {
                 var prevOrder = GetColumnSortOrder(sortColumn);
-                fSortOrder = (prevOrder == BSDSortOrder.Ascending) ? BSDSortOrder.Descending : BSDSortOrder.Ascending;
+                fSortOrder = (prevOrder == GKSortOrder.Ascending) ? GKSortOrder.Descending : GKSortOrder.Ascending;
             } else {
-                fSortOrder = BSDSortOrder.Ascending;
+                fSortOrder = GKSortOrder.Ascending;
             }
 
             fSortColumn = sortColumn;
@@ -155,11 +153,11 @@ namespace GKUI.Components
 
         private void SortContents(bool restoreSelected)
         {
-            if (fListMan == null || fSortOrder == BSDSortOrder.None) return;
+            if (fListMan == null || fSortOrder == GKSortOrder.None) return;
 
             object rec = (restoreSelected) ? GetSelectedData() : null;
 
-            fListMan.SortContents(fSortColumn, fSortOrder == BSDSortOrder.Ascending);
+            fListMan.SortContents(fSortColumn, fSortOrder == GKSortOrder.Ascending);
 
             if (rec != null) SelectItem(rec);
         }
@@ -237,29 +235,29 @@ namespace GKUI.Components
 
         public void AddColumn(string caption, int width, bool autoSize = false)
         {
-            AddColumn(caption, width, autoSize, BSDTypes.HorizontalAlignment.Left);
+            AddColumn(caption, width, autoSize, GKHorizontalAlignment.Left);
         }
 
         public void AddCheckedColumn(string caption, int width, bool autoSize = false)
         {
             fCheckBoxes = true;
-            AddColumn(caption, width, autoSize, BSDTypes.HorizontalAlignment.Center);
+            AddColumn(caption, width, autoSize, GKHorizontalAlignment.Center);
         }
 
-        public void AddColumn(string caption, int width, bool autoSize, BSDTypes.HorizontalAlignment textAlign)
+        public void AddColumn(string caption, int width, bool autoSize, GKHorizontalAlignment textAlign)
         {
             int index = Columns.Count;
             var binding = string.Format("Values[{0}]", index);
 
             LayoutOptions hca = LayoutOptions.Start;
             switch (textAlign) {
-                case BSDTypes.HorizontalAlignment.Left:
+                case GKHorizontalAlignment.Left:
                     hca = LayoutOptions.Start;
                     break;
-                case BSDTypes.HorizontalAlignment.Right:
+                case GKHorizontalAlignment.Right:
                     hca = LayoutOptions.End;
                     break;
-                case BSDTypes.HorizontalAlignment.Center:
+                case GKHorizontalAlignment.Center:
                     hca = LayoutOptions.Center;
                     break;
             }

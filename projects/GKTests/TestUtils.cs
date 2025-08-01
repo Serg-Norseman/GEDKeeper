@@ -26,7 +26,7 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Design;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKTests.Stubs;
 using NSubstitute;
 using NUnit.Framework;
@@ -61,7 +61,7 @@ namespace GKTests
 
             LangMan.DefInit();
 
-            AppHost.Container.Register<IProgressDialog, ProgressStub>(GKCore.IoC.LifeCycle.Singleton, true);
+            AppHost.Container.Register<IProgressDialog, ProgressStub>(GKCore.Utilities.LifeCycle.Singleton, true);
         }
 
         public static BaseContext CreateContext(IBaseWindow baseWin = null)

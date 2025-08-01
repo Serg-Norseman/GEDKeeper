@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Lists;
+using GKCore.Locales;
 using GKUI.Themes;
 
 namespace GKUI.Components

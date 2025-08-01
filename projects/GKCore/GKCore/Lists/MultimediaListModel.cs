@@ -21,7 +21,7 @@
 using GDModel;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Media;
 using GKCore.Options;
 

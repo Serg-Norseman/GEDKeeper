@@ -23,14 +23,13 @@ using Eto.Drawing;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GDModel;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Lists;
-using GKCore.Types;
+using GKCore.Locales;
 using GKUI.Components;
 using GKUI.Platform.Handlers;
 

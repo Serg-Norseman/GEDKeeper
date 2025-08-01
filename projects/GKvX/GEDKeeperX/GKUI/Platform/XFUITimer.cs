@@ -20,7 +20,7 @@
 
 using System;
 using BSLib;
-using GKCore.Interfaces;
+using GKCore;
 using Xamarin.Forms;
 
 namespace GKUI.Platform

@@ -22,7 +22,7 @@ using System;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace GKCore.SingleInstance
+namespace GKCore.Utilities
 {
     [TestFixture]
     public class SingleInstanceTrackerTests

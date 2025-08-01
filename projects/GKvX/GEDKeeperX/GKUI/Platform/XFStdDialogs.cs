@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using GKCore;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
+using GKCore.Locales;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 

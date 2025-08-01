@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 
-namespace GKCore.NetDiff
+namespace GKCore.Utilities
 {
     [TestFixture]
     public class NetDiffTests

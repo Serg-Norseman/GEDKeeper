@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using GDModel;
 using GDModel.Providers.GEDCOM;
-using GKCore.NetDiff;
+using GKCore.Utilities;
 
 namespace GKCore.Tools
 {

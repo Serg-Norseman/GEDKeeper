@@ -22,6 +22,7 @@ using System;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
+using GKCore.Locales;
 using GKUI.Themes;
 
 namespace GKUI.Components

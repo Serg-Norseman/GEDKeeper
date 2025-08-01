@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,6 @@ using System;
 using BSLib;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
-using BSDColors = GKCore.Design.BSDConsts.Colors;
 
 namespace GKCore.Options
 {
@@ -34,18 +33,18 @@ namespace GKCore.Options
         public const int MAX_BRUSHES = 12;
 
         private static int[] DefBrushColor = new int[] {
-            /* 00 */ BSDColors.Coral,
-            /* 01 */ BSDColors.CadetBlue,
-            /* 02 */ BSDColors.DarkGray,
-            /* 03 */ BSDColors.Khaki,
-            /* 04 */ BSDColors.LawnGreen,
-            /* 05 */ BSDColors.Khaki,
-            /* 06 */ BSDColors.HotPink,
-            /* 07 */ BSDColors.Ivory,
-            /* 08 */ BSDColors.Black, // text
-            /* 09 */ BSDColors.Moccasin, // background and central
-            /* 10 */ BSDColors.Black, // lines
-            /* 11 */ BSDColors.PaleGreen // lines?
+            /* 00 */ GKColors.Coral,
+            /* 01 */ GKColors.CadetBlue,
+            /* 02 */ GKColors.DarkGray,
+            /* 03 */ GKColors.Khaki,
+            /* 04 */ GKColors.LawnGreen,
+            /* 05 */ GKColors.Khaki,
+            /* 06 */ GKColors.HotPink,
+            /* 07 */ GKColors.Ivory,
+            /* 08 */ GKColors.Black, // text
+            /* 09 */ GKColors.Moccasin, // background and central
+            /* 10 */ GKColors.Black, // lines
+            /* 11 */ GKColors.PaleGreen // lines?
         };
 
         public bool ArcText;

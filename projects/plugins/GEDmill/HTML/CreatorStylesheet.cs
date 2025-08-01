@@ -18,7 +18,8 @@
 
 using System;
 using System.IO;
-using GKCore.Interfaces;
+using GKCore;
+using GKCore.Locales;
 using GKCore.Logging;
 
 namespace GEDmill.HTML

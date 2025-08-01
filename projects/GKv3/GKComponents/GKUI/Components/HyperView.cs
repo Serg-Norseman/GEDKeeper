@@ -366,26 +366,26 @@ namespace GKUI.Components
             return result;
         }
 
-        private static FontDecoration GetFontDecoration(BSDTypes.FontStyle style)
+        private static FontDecoration GetFontDecoration(GKFontStyle style)
         {
-            if ((style & BSDTypes.FontStyle.Underline) == BSDTypes.FontStyle.Underline) {
+            if ((style & GKFontStyle.Underline) == GKFontStyle.Underline) {
                 return FontDecoration.Underline;
             }
 
-            if ((style & BSDTypes.FontStyle.Strikeout) == BSDTypes.FontStyle.Strikeout) {
+            if ((style & GKFontStyle.Strikeout) == GKFontStyle.Strikeout) {
                 return FontDecoration.Strikethrough;
             }
 
             return FontDecoration.None;
         }
 
-        private static FontStyle GetFontStyle(BSDTypes.FontStyle style)
+        private static FontStyle GetFontStyle(GKFontStyle style)
         {
-            if ((style & BSDTypes.FontStyle.Bold) == BSDTypes.FontStyle.Bold) {
+            if ((style & GKFontStyle.Bold) == GKFontStyle.Bold) {
                 return FontStyle.Bold;
             }
 
-            if ((style & BSDTypes.FontStyle.Italic) == BSDTypes.FontStyle.Italic) {
+            if ((style & GKFontStyle.Italic) == GKFontStyle.Italic) {
                 return FontStyle.Italic;
             }
 

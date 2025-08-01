@@ -70,10 +70,6 @@
         private System.Windows.Forms.RadioButton radCompact;
         private System.Windows.Forms.CheckBox chkShowDatesSigns;
         private System.Windows.Forms.CheckBox chkShowDatesCalendar;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
         private GKUI.Components.GKListView lvPlugins;
         private System.Windows.Forms.TabPage pagePlugins;
         private System.Windows.Forms.Label lblChartFont;
@@ -369,10 +365,6 @@
             this.radCompact = new System.Windows.Forms.RadioButton();
             this.pagePlugins = new System.Windows.Forms.TabPage();
             this.lvPlugins = new GKUI.Components.GKListView();
-            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.chkUseExtraControls = new System.Windows.Forms.CheckBox();
@@ -2810,15 +2802,9 @@
             // 
             // lvPlugins
             // 
-            this.lvPlugins.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3,
-            this.columnHeader4});
             this.lvPlugins.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvPlugins.FullRowSelect = true;
             this.lvPlugins.HideSelection = false;
-            this.lvPlugins.ListMan = null;
             this.lvPlugins.Location = new System.Drawing.Point(10, 10);
             this.lvPlugins.Margin = new System.Windows.Forms.Padding(2);
             this.lvPlugins.MultiSelect = false;
@@ -2826,30 +2812,9 @@
             this.lvPlugins.OwnerDraw = true;
             this.lvPlugins.SelectedIndex = -1;
             this.lvPlugins.Size = new System.Drawing.Size(721, 742);
-            this.lvPlugins.SortColumn = 0;
-            this.lvPlugins.SortOrder = GKCore.Design.BSDTypes.SortOrder.None;
             this.lvPlugins.TabIndex = 0;
             this.lvPlugins.UseCompatibleStateImageBehavior = false;
             this.lvPlugins.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "Title";
-            this.columnHeader1.Width = 75;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Version";
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "Copyright";
-            this.columnHeader3.Width = 125;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Description";
-            this.columnHeader4.Width = 250;
             // 
             // btnAccept
             // 

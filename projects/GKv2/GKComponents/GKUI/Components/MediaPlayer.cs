@@ -22,7 +22,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using nVLC;
 using nVLC.Events;
 using nVLC.Media;

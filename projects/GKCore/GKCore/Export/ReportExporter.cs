@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using BSLib;
 using GKCore.Design;
+using GKCore.Locales;
 using GKCore.Options;
 
 namespace GKCore.Export

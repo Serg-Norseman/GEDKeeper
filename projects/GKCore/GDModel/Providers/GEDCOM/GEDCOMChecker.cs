@@ -22,7 +22,8 @@ using System;
 using System.Collections.Generic;
 using BSLib;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Design;
+using GKCore.Locales;
 using GKCore.Media;
 
 namespace GDModel.Providers.GEDCOM

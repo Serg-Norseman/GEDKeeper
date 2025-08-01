@@ -25,8 +25,8 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Locales;
 using GKCore.Options;
 using GKUI.Platform.Handlers;
 

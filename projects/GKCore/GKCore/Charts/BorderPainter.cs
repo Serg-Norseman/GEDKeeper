@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,7 +19,8 @@
  */
 
 using BSLib;
-using BSDColors = GKCore.Design.BSDConsts.Colors;
+using GKCore.Design.Graphics;
+using GKCore.Locales;
 
 namespace GKCore.Charts
 {
@@ -133,11 +134,11 @@ namespace GKCore.Charts
             bool sunken = (borderStyle == GfxBorderStyle.Sunken3D);
             if (sunken) {
                 colors = new int[] {
-                    BSDColors.ControlDark, BSDColors.ControlDarkDark, BSDColors.ControlLightLight, BSDColors.ControlLight
+                    GKColors.ControlDark, GKColors.ControlDarkDark, GKColors.ControlLightLight, GKColors.ControlLight
                 };
             } else {
                 colors = new int[] {
-                    BSDColors.ControlLightLight, BSDColors.ControlLight, BSDColors.ControlDark, BSDColors.ControlDarkDark
+                    GKColors.ControlLightLight, GKColors.ControlLight, GKColors.ControlDark, GKColors.ControlDarkDark
                 };
             }
 
@@ -161,14 +162,14 @@ namespace GKCore.Charts
 
         private static void DrawSingleRect(ChartRenderer renderer, int rL, int rT, int rW, int rH, float pw)
         {
-            using (var pen = renderer.CreatePen(BSDColors.Black, pw)) {
+            using (var pen = renderer.CreatePen(GKColors.Black, pw)) {
                 renderer.DrawRectangle(pen, null, rL, rT, rW, rH);
             }
         }
 
         private static void DrawDoubleRect(ChartRenderer renderer, int rL, int rT, int rW, int rH, int streak, float pw)
         {
-            using (var pen = renderer.CreatePen(BSDColors.Black, pw)) {
+            using (var pen = renderer.CreatePen(GKColors.Black, pw)) {
                 renderer.DrawRectangle(pen, null, rL, rT, rW, rH);
                 rL += streak;
                 rT += streak;
@@ -180,7 +181,7 @@ namespace GKCore.Charts
 
         private static void DrawTripleRect(ChartRenderer renderer, int rL, int rT, int rW, int rH, int streak, float pw)
         {
-            using (var pen = renderer.CreatePen(BSDColors.Black, pw)) {
+            using (var pen = renderer.CreatePen(GKColors.Black, pw)) {
                 renderer.DrawRectangle(pen, null, rL, rT, rW, rH);
                 rL += streak;
                 rT += streak;
@@ -207,7 +208,7 @@ namespace GKCore.Charts
 
         private static void DrawSingleSquareCuts(ChartRenderer renderer, int rL, int rT, int rR, int rB, float gap, float pw)
         {
-            using (var p = renderer.CreatePen(BSDColors.Black, pw)) {
+            using (var p = renderer.CreatePen(GKColors.Black, pw)) {
                 renderer.DrawLine(p, rL, rB - gap, rL, rT + gap); // L
                 renderer.DrawLine(p, rL + gap, rT, rR - gap, rT); // T
                 renderer.DrawLine(p, rL + gap, rB, rR - gap, rB); // B
@@ -243,7 +244,7 @@ namespace GKCore.Charts
 
         private static void DrawSingleBevels(ChartRenderer renderer, int rL, int rT, int rR, int rB, float gap, float pw)
         {
-            using (var p = renderer.CreatePen(BSDColors.Black, pw)) {
+            using (var p = renderer.CreatePen(GKColors.Black, pw)) {
                 renderer.DrawLine(p, rL, rB - gap, rL, rT + gap); // L
                 renderer.DrawLine(p, rL + gap, rT, rR - gap, rT); // T
                 renderer.DrawLine(p, rL + gap, rB, rR - gap, rB); // B
@@ -275,7 +276,7 @@ namespace GKCore.Charts
 
         private static void DrawSingleRoundCuts(ChartRenderer renderer, int rL, int rT, int rR, int rB, float gap, float pw)
         {
-            using (var p = renderer.CreatePen(BSDColors.Black, pw)) {
+            using (var p = renderer.CreatePen(GKColors.Black, pw)) {
                 renderer.DrawLine(p, rL, rB - gap, rL, rT + gap); // L
                 renderer.DrawLine(p, rL + gap, rT, rR - gap, rT); // T
                 renderer.DrawLine(p, rL + gap, rB, rR - gap, rB); // B
@@ -307,7 +308,7 @@ namespace GKCore.Charts
             rR -= xgap;
             rB -= xgap;
 
-            using (var pen = renderer.CreatePen(BSDColors.Silver, DefaultStreak)) {
+            using (var pen = renderer.CreatePen(GKColors.Silver, DefaultStreak)) {
                 renderer.DrawLine(pen, rL, rB, rL, rT); // L
                 renderer.DrawLine(pen, rL, rT, rR, rT); // T
                 renderer.DrawLine(pen, rL, rB, rR, rB); // B

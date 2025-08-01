@@ -21,7 +21,7 @@
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Options;
 
 namespace GKCore.Lists

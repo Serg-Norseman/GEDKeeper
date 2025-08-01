@@ -20,7 +20,7 @@
 
 #if !DIS_NUF
 
-using GKCore.Interfaces;
+using GKCore.Design;
 using GKTests;
 using NUnit.Framework;
 

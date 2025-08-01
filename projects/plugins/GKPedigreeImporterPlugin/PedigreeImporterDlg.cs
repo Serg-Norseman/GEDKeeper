@@ -22,7 +22,7 @@ using System;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.Design;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Plugins;
 using GKCore.Types;
 using GKUI.Forms;

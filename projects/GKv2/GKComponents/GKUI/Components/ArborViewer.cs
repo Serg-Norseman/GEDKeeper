@@ -24,7 +24,6 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using BSLib.DataViz.ArborGVT;
 using GKCore;
-using GKCore.Interfaces;
 using GKUI.Platform;
 
 namespace GKUI.Components

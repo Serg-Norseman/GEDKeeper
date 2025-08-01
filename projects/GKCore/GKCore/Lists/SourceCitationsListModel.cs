@@ -23,7 +23,7 @@ using BSLib;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
@@ -121,7 +121,7 @@ namespace GKCore.Lists
 
                 case RecordAction.raMoveUp:
                 case RecordAction.raMoveDown:
-                    result = dataOwner.SourceCitations.Exchange(srcCit, eArgs.Action);
+                    result = Exchange(dataOwner.SourceCitations, srcCit, eArgs.Action);
                     break;
 
                 case RecordAction.raCopy:

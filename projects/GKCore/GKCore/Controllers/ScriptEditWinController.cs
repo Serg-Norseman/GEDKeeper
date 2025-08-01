@@ -26,7 +26,7 @@ using System.Text;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Options;
 using GKUI.Themes;
 

@@ -27,7 +27,7 @@ using GKCore.Calendar;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Export;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Options;
 
 namespace GKStdReports

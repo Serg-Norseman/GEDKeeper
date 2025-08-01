@@ -23,8 +23,8 @@ using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Locales;
 
 namespace GKUI.Components
 {

@@ -21,9 +21,9 @@
 using System;
 using System.Threading.Tasks;
 using BSLib;
-using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Lists;
+using GKCore.Locales;
 using GKCore.Types;
 using Xamarin.Forms;
 

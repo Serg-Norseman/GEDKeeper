@@ -20,7 +20,7 @@
 
 using System;
 using GKCore.Design;
-using GKCore.Interfaces;
+using GKCore.Locales;
 
 namespace GKCore.Plugins
 {

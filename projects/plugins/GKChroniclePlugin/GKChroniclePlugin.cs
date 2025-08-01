@@ -27,8 +27,8 @@ using GKCore.Calendar;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Locales;
 using GKCore.Options;
 using GKCore.Plugins;
 
@@ -212,7 +212,7 @@ namespace GKChroniclePlugin
                 listView.ListMan = eventsModel;
                 eventsModel.DataSource = Plugin.CollectData(baseWin);
                 listView.SortColumn = 0;
-                listView.SortOrder = BSDTypes.SortOrder.Ascending;
+                listView.SortOrder = GKSortOrder.Ascending;
                 listView.UpdateContents();
             } else {
                 listView.ListMan.Clear();

@@ -193,14 +193,11 @@
             this.lvEntries.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvEntries.FullRowSelect = true;
             this.lvEntries.HideSelection = false;
-            this.lvEntries.ListMan = null;
             this.lvEntries.Location = new System.Drawing.Point(0, 0);
             this.lvEntries.Name = "lvEntries";
             this.lvEntries.OwnerDraw = true;
             this.lvEntries.SelectedIndex = -1;
             this.lvEntries.Size = new System.Drawing.Size(800, 253);
-            this.lvEntries.SortColumn = 0;
-            this.lvEntries.SortOrder = GKCore.Design.BSDTypes.SortOrder.None;
             this.lvEntries.TabIndex = 6;
             this.lvEntries.UseCompatibleStateImageBehavior = false;
             this.lvEntries.View = System.Windows.Forms.View.Details;

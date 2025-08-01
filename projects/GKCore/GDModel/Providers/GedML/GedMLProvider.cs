@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using GDModel.Providers.GEDCOM;
-using GKCore;
+using GKCore.Locales;
 
 namespace GDModel.Providers.GedML
 {

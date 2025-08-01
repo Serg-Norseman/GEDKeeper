@@ -25,7 +25,7 @@ using System.Text;
 using BSLib;
 using BSLib.DataViz.SmartGraph;
 using GDModel;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Options;
 using GKCore.Utilities;
 

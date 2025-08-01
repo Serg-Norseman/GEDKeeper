@@ -24,7 +24,7 @@ using BSLib;
 using GDModel;
 using GKCore.Design;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;

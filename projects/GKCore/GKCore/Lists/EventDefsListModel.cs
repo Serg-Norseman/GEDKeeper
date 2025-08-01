@@ -23,6 +23,7 @@ using BSLib;
 using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Events;
+using GKCore.Locales;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;

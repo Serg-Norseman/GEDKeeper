@@ -217,5 +217,27 @@ namespace GKCore.Lists
             if (fBaseWin != null)
                 BaseController.ViewRecordInfo(fOwner, fBaseWin, GetReferenceRecord(itemData));
         }
+
+        protected static bool Exchange<X>(GDMList<X> list, X value, RecordAction recordAction) where X : GDMTag
+        {
+            bool result = false;
+
+            int idx = list.IndexOf(value);
+            if (idx < 0 || idx >= list.Count) return false;
+
+            switch (recordAction) {
+                case RecordAction.raMoveUp:
+                    list.Exchange(idx - 1, idx);
+                    result = true;
+                    break;
+
+                case RecordAction.raMoveDown:
+                    list.Exchange(idx, idx + 1);
+                    result = true;
+                    break;
+            }
+
+            return result;
+        }
     }
 }

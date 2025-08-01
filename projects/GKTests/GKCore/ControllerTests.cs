@@ -24,7 +24,7 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
+using GKCore.ExtData;
 using GKCore.Lists;
 using GKCore.Types;
 using GKTests;

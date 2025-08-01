@@ -20,7 +20,6 @@
 
 using System;
 using System.Reflection;
-using GKCore.Interfaces;
 using GKCore.Plugins;
 using GKCore.Types;
 using GKTests;

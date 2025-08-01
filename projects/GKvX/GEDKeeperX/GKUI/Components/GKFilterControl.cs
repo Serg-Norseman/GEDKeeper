@@ -20,8 +20,8 @@
 
 using System;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Locales;
 using Xamarin.Forms;
 
 namespace GKUI.Components

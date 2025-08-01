@@ -25,7 +25,7 @@ using GDModel.Providers.GEDCOM;
 using GEDmill.MiniTree;
 using GEDmill.Model;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Types;
 using GKL = GKCore.Logging;
 

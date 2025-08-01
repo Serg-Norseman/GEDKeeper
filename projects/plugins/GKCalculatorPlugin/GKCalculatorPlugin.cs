@@ -22,7 +22,7 @@ using System;
 using System.Reflection;
 using GKCore;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Plugins;
 
 [assembly: AssemblyTitle("GKCalculatorPlugin")]

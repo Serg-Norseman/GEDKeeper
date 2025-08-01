@@ -24,7 +24,7 @@ using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
-    public interface IAddressEditDlg : ICommonDialog, IBaseEditor
+    public interface IAddressEditDlg : ICommonDialog
     {
         GDMAddress Address { get; set; }
 

@@ -22,7 +22,8 @@ using System;
 using System.Collections.Generic;
 using BSLib.DataViz.SmartGraph;
 using GDModel;
-using GKCore.Interfaces;
+using GKCore.Design;
+using GKCore.Locales;
 using GKCore.Utilities;
 
 namespace GKCore.Tools

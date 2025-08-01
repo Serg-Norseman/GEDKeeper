@@ -22,6 +22,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using GKCore;
+using GKCore.Locales;
 using GKUI.Themes;
 
 namespace GKUI.Components

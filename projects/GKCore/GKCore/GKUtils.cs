@@ -40,8 +40,8 @@ using GKCore.Design.Controls;
 using GKCore.Events;
 using GKCore.Export;
 using GKCore.Import;
-using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Locales;
 using GKCore.Media;
 using GKCore.Names;
 using GKCore.Options;
@@ -57,6 +57,11 @@ namespace GKCore
     public static class GKUtils
     {
         #region Aux functions
+
+        public static string SafeTrim(this string input)
+        {
+            return !string.IsNullOrEmpty(input) ? input.Trim() : string.Empty;
+        }
 
         /// <summary>
         /// Forced call of GEDCOMProvider static constructor.

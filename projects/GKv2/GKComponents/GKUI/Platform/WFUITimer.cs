@@ -21,7 +21,7 @@
 using System;
 using System.Windows.Forms;
 using BSLib;
-using GKCore.Interfaces;
+using GKCore;
 
 namespace GKUI.Platform
 {

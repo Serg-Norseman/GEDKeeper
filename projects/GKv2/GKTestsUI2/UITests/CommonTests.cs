@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,7 +23,7 @@ using System.Drawing;
 using BSLib;
 using GDModel;
 using GKCore;
-using GKCore.Design;
+using GKCore.Design.Graphics;
 using GKTests;
 using GKUI.Platform.Handlers;
 using NUnit.Framework;
@@ -68,7 +68,7 @@ namespace GKUI.Components
             var chk_res = AppHost.GfxProvider.CreateColor(0x323232);
             Assert.AreEqual(((ColorHandler)chk_res).Handle, ((ColorHandler)color.Darker(0.5f)).Handle);
 
-            color = AppHost.GfxProvider.CreateColor(BSDConsts.Colors.Silver);
+            color = AppHost.GfxProvider.CreateColor(GKColors.Silver);
             Assert.AreEqual("ffc0c0c0", color.GetName());
 
             color = AppHost.GfxProvider.CreateColor(0x323232);

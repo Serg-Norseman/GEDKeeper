@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -23,7 +23,7 @@ using System.Globalization;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore.Calendar;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Plugins;
 using GKUI.Components;
 
@@ -42,7 +42,7 @@ namespace GKCalendarPlugin
 
     public class HistoryDateBox : Panel
     {
-        private static PLS[] fCalendarNames = new PLS[] {
+        private static readonly PLS[] fCalendarNames = new PLS[] {
             PLS.Cal_Gregorian, PLS.Cal_Julian, PLS.Cal_Byzantine,
             PLS.Cal_Hebrew, PLS.Cal_Islamic,
             PLS.Cal_Persian, PLS.Cal_Indian,
@@ -201,14 +201,12 @@ namespace GKCalendarPlugin
 
         private void OnCalendarChanged()
         {
-            var eventHandler = CalendarChanged;
-            if (eventHandler != null) eventHandler(this, new EventArgs());
+            CalendarChanged?.Invoke(this, new EventArgs());
         }
 
         private void OnDateChanged()
         {
-            var eventHandler = DateChanged;
-            if (eventHandler != null) eventHandler(this, new EventArgs());
+            DateChanged?.Invoke(this, new EventArgs());
         }
 
         private void cmbCalendar_SelectedIndexChanged(object sender, EventArgs e)

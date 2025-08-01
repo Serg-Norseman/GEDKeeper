@@ -19,7 +19,6 @@
  */
 
 using GDModel;
-using GKCore.Interfaces;
 
 namespace GKCore.Names
 {

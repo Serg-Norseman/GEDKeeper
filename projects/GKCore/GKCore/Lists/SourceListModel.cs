@@ -19,7 +19,7 @@
  */
 
 using GDModel;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Options;
 
 namespace GKCore.Lists

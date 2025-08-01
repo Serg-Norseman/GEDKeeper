@@ -20,7 +20,6 @@
 
 using System;
 using GKCore.Design;
-using GKCore.Interfaces;
 
 namespace GKTests.Stubs
 {

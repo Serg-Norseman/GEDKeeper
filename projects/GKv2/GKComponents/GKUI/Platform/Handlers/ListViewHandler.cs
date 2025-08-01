@@ -23,7 +23,6 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Lists;
 using GKUI.Components;
-using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
 
 namespace GKUI.Platform.Handlers
 {
@@ -51,7 +50,7 @@ namespace GKUI.Platform.Handlers
             set { Control.SortColumn = value; }
         }
 
-        public BSDSortOrder SortOrder
+        public GKSortOrder SortOrder
         {
             get { return Control.SortOrder; }
             set { Control.SortOrder = value; }
@@ -62,7 +61,7 @@ namespace GKUI.Platform.Handlers
             Control.AddCheckedColumn(caption, width, autoSize);
         }
 
-        public void AddColumn(string caption, int width, bool autoSize = false, BSDTypes.HorizontalAlignment textAlign = BSDTypes.HorizontalAlignment.Left)
+        public void AddColumn(string caption, int width, bool autoSize = false, GKHorizontalAlignment textAlign = GKHorizontalAlignment.Left)
         {
             Control.AddColumn(caption, width, autoSize, textAlign);
         }

@@ -129,14 +129,11 @@
             this.lvRecords.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvRecords.FullRowSelect = true;
             this.lvRecords.HideSelection = false;
-            this.lvRecords.ListMan = null;
             this.lvRecords.Location = new System.Drawing.Point(0, 92);
             this.lvRecords.Name = "lvRecords";
             this.lvRecords.OwnerDraw = true;
             this.lvRecords.SelectedIndex = -1;
             this.lvRecords.Size = new System.Drawing.Size(1047, 536);
-            this.lvRecords.SortColumn = 0;
-            this.lvRecords.SortOrder = GKCore.Design.BSDTypes.SortOrder.None;
             this.lvRecords.TabIndex = 0;
             this.lvRecords.UseCompatibleStateImageBehavior = false;
             this.lvRecords.View = System.Windows.Forms.View.Details;

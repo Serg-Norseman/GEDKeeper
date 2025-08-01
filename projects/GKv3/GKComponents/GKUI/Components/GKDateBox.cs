@@ -23,6 +23,7 @@ using System.Globalization;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
+using GKCore.Locales;
 
 namespace GKUI.Components
 {

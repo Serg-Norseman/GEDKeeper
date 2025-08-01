@@ -24,7 +24,6 @@ using System.IO;
 using BSLib;
 using GDModel;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 
 namespace GKCore.Media
 {

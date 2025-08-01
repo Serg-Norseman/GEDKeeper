@@ -21,7 +21,7 @@
 using System;
 using BSLib;
 using Eto.Forms;
-using GKCore.Interfaces;
+using GKCore;
 
 namespace GKUI.Platform
 {

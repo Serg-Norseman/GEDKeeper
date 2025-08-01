@@ -23,8 +23,8 @@ using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Design;
-using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Locales;
 using GKCore.Options;
 
 namespace GKCore.Export

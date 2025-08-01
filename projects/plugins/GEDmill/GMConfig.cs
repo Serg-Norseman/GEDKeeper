@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using BSLib;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Utilities;
 using GKCL = GKCore.Logging;
 

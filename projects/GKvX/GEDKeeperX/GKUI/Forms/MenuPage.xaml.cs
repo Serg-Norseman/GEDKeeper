@@ -20,7 +20,7 @@
 
 using System.Collections.ObjectModel;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKUI.Platform;
 using Xamarin.Forms;
 

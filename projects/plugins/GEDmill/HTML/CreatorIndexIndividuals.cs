@@ -21,7 +21,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using GEDmill.Model;
-using GKCore.Interfaces;
+using GKCore;
+using GKCore.Locales;
 using GKCore.Logging;
 
 namespace GEDmill.HTML

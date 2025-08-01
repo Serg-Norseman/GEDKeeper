@@ -21,7 +21,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKUI.Platform;
 using Xamarin.Essentials;
 using Xamarin.Forms;

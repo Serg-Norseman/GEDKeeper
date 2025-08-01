@@ -21,6 +21,7 @@
 using System;
 using GKCore;
 using GKCore.Design;
+using GKCore.Locales;
 using GKCore.Search;
 using Xamarin.Forms;
 

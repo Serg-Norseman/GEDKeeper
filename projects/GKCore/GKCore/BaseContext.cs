@@ -37,7 +37,7 @@ using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Events;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Media;
 using GKCore.Names;
 using GKCore.Operations;

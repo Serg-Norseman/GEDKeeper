@@ -24,7 +24,7 @@ using System.Windows.Forms;
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Stats;
 using GKWordsCloudPlugin.WordsCloud;
 

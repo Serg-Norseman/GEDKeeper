@@ -25,7 +25,6 @@ using System.Windows.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Design;
-using GKCore.Interfaces;
 using GKTests;
 using GKTests.Stubs;
 using NUnit.Extensions.Forms;

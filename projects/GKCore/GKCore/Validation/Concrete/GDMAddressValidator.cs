@@ -21,6 +21,7 @@
 using System;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Locales;
 
 namespace GKCore.Validation.Concrete
 {

@@ -19,6 +19,7 @@
  */
 
 using System;
+using GKCore.ExtData;
 using GKTests;
 using NUnit.Framework;
 

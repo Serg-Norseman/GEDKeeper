@@ -23,7 +23,7 @@ using GKCore.Design.Controls;
 
 namespace GKCore.Design.Views
 {
-    public interface IAgeEditDlg : ICommonDialog, IBaseEditor
+    public interface IAgeEditDlg : ICommonDialog
     {
         GDMCustomEvent Event { get; set; }
 

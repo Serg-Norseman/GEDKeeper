@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using GDModel;
-using GKCore.IoC;
+using GKCore.Utilities;
 using GKCore.Validation.Concrete;
 
 namespace GKCore.Validation

@@ -25,11 +25,11 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 using GKCore.Lists;
-using GKCore.NetDiff;
+using GKCore.Locales;
 using GKCore.Options;
 using GKCore.Tools;
+using GKCore.Utilities;
 
 namespace GKTreeSyncPlugin
 {
@@ -144,26 +144,26 @@ namespace GKTreeSyncPlugin
                 default:
                     item1 = diffChar + " " + fFetchedRec.Obj1.XRef;
                     item2 = diffChar + " " + fFetchedRec.Obj2.XRef;
-                    backColor = BSDConsts.Colors.White;
+                    backColor = GKColors.White;
                     break;
 
                 case DiffStatus.Deleted:
                     item1 = diffChar + " " + fFetchedRec.Obj1.XRef;
                     item2 = " ";
-                    backColor = BSDConsts.Colors.Coral;
+                    backColor = GKColors.Coral;
                     break;
 
                 case DiffStatus.Inserted:
                     item1 = " ";
                     item2 = diffChar + " " + fFetchedRec.Obj2.XRef;
-                    backColor = BSDConsts.Colors.LightBlue;
+                    backColor = GKColors.LightBlue;
                     break;
 
                 case DiffStatus.Modified:
                 case DiffStatus.DeepModified:
                     item1 = diffChar + " " + fFetchedRec.Obj1.XRef;
                     item2 = diffChar + " " + fFetchedRec.Obj2.XRef;
-                    backColor = (fFetchedRec.Status == DiffStatus.Modified) ? BSDConsts.Colors.Yellow : BSDConsts.Colors.Orange;
+                    backColor = (fFetchedRec.Status == DiffStatus.Modified) ? GKColors.Yellow : GKColors.Orange;
                     break;
             }
         }

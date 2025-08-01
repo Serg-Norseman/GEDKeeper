@@ -24,8 +24,8 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Export;
-using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Locales;
 using GKCore.Options;
 using GKCore.Stats;
 using GKUI.Themes;
@@ -221,7 +221,7 @@ namespace GKCore.Controllers
                 AddSummaryItem(LSID.AvgMarriagesAge, stats.mage);
                 AddSummaryItem(LSID.CertaintyIndex, stats.cIndex);
             } finally {
-                fView.Summary.SortOrder = BSDTypes.SortOrder.None;
+                fView.Summary.SortOrder = GKSortOrder.None;
                 fView.Summary.UpdateContents();
             }
         }

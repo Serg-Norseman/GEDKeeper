@@ -19,10 +19,11 @@
  */
 
 using System;
+using GKCore;
 using GKCore.Controllers;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Locales;
 using GKCore.Options;
 using GKUI.Components;
 using Xamarin.Forms;

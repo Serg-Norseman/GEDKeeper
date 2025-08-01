@@ -19,7 +19,7 @@
 using System;
 using System.IO;
 using System.Text;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Logging;
 
 namespace GEDmill.HTML

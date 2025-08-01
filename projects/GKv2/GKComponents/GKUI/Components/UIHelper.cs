@@ -27,7 +27,6 @@ using GDModel;
 using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKCore.Options;
 using GKUI.Platform.Handlers;

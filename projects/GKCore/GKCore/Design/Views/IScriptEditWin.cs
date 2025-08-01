@@ -19,7 +19,7 @@
  */
 
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
+using GKCore.Locales;
 
 namespace GKCore.Design.Views
 {

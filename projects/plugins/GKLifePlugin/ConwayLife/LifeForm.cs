@@ -10,7 +10,7 @@
 
 using System;
 using System.Windows.Forms;
-using GKCore.Interfaces;
+using GKCore.Locales;
 
 namespace GKLifePlugin.ConwayLife
 {

@@ -25,6 +25,7 @@ using Eto.Forms;
 using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Lists;
+using GKCore.Locales;
 using GKUI.Platform;
 using GKUI.Themes;
 

@@ -25,11 +25,11 @@ using BSLib.DataViz.TreeMap;
 using Eto.Drawing;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
-using GKCore;
 using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Locales;
 using GKUI.Components;
 
 namespace GKUI.Forms

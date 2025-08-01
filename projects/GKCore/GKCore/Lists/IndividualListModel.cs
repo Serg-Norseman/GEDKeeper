@@ -31,7 +31,7 @@ using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
@@ -922,7 +922,7 @@ namespace GKCore.Lists
 
                 case RecordAction.raMoveUp:
                 case RecordAction.raMoveDown:
-                    result = iRec.PersonalNames.Exchange(persName, eArgs.Action);
+                    result = Exchange(iRec.PersonalNames, persName, eArgs.Action);
                     break;
             }
 
@@ -1034,7 +1034,7 @@ namespace GKCore.Lists
 
                 case RecordAction.raMoveUp:
                 case RecordAction.raMoveDown:
-                    result = iRec.ChildToFamilyLinks.Exchange(cfLink, eArgs.Action);
+                    result = Exchange(iRec.ChildToFamilyLinks, cfLink, eArgs.Action);
                     break;
             }
 

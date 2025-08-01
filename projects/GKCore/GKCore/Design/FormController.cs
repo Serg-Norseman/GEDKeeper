@@ -18,14 +18,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib;
+
 namespace GKCore.Design
 {
     /// <summary>
     /// 
     /// </summary>
-    public abstract class FormController<TView> : Controller<TView> where TView : IView
+    public abstract class FormController<TView> : BaseObject where TView : IView
     {
         protected IBaseWindow fBase;
+        protected readonly TView fView;
 
 
         public IBaseWindow Base
@@ -34,8 +37,9 @@ namespace GKCore.Design
         }
 
 
-        protected FormController(TView view) : base(view)
+        protected FormController(TView view)
         {
+            fView = view;
             SetLocale();
         }
 
@@ -51,6 +55,11 @@ namespace GKCore.Design
         protected T GetControl<T>(string controlName) where T : class, IControl
         {
             return fView.GetCoreControl<T>(controlName);
+        }
+
+        public virtual void UpdateView()
+        {
+            // dummy
         }
 
         public virtual void SetLocale()

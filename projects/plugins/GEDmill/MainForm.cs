@@ -29,9 +29,8 @@ using GKCore;
 using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Logging;
-using GKCore.Types;
 using GKUI.Forms;
 
 namespace GEDmill

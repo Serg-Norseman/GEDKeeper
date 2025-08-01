@@ -21,11 +21,10 @@
 using GDModel;
 using GKCore.Design.Controls;
 using GKCore.Lists;
-using GKCore.Types;
 
 namespace GKCore.Design.Views
 {
-    public interface IFamilyEditDlg : ICommonDialog, IBaseEditor
+    public interface IFamilyEditDlg : ICommonDialog
     {
         GDMFamilyRecord FamilyRecord { get; set; }
 

@@ -21,7 +21,7 @@
 using System;
 using GKCore;
 using GKCore.Design;
-using GKCore.Interfaces;
+using GKCore.Locales;
 
 namespace GKUI.Forms
 {

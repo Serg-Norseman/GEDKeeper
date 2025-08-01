@@ -23,8 +23,9 @@ using System.Collections.Generic;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Design;
 using GKCore.Export;
-using GKCore.Interfaces;
+using GKCore.Locales;
 
 namespace GKCore.Stats
 {

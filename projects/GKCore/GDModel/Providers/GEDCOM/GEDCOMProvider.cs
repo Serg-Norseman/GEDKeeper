@@ -26,7 +26,7 @@ using System.IO;
 using System.Text;
 using BSLib;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Utilities;
 
 namespace GDModel.Providers.GEDCOM

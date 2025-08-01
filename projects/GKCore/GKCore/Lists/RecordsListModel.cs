@@ -20,7 +20,6 @@
 
 using System.Collections.Generic;
 using GDModel;
-using GKCore.Interfaces;
 using GKCore.Search;
 
 namespace GKCore.Lists

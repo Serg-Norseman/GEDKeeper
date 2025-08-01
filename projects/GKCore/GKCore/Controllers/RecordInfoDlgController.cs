@@ -21,6 +21,7 @@
 using GDModel;
 using GKCore.Design;
 using GKCore.Design.Views;
+using GKCore.Locales;
 
 namespace GKCore.Controllers
 {

@@ -12,7 +12,7 @@ using System;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Locales;
 
 namespace GKLifePlugin.ConwayLife
 {

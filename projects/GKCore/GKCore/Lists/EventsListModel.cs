@@ -24,7 +24,7 @@ using BSLib;
 using GDModel;
 using GKCore.Design;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
@@ -163,7 +163,7 @@ namespace GKCore.Lists
 
                     case RecordAction.raMoveUp:
                     case RecordAction.raMoveDown: 
-                        result = record.Events.Exchange(evt, eArgs.Action);
+                        result = Exchange(record.Events, evt, eArgs.Action);
                         break;
 
                     case RecordAction.raCopy:

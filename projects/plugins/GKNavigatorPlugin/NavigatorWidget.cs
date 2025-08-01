@@ -25,7 +25,7 @@ using System.Windows.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Design;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Plugins;
 using GKUI.Components;
 

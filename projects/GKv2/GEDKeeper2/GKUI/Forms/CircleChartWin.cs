@@ -28,6 +28,7 @@ using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
+using GKCore.Locales;
 using GKCore.Options;
 using GKCore.Search;
 using GKUI.Components;

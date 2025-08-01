@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using BSLib;
+using GKCore.Locales;
 using GKCore.Options;
 
 namespace GKCore.Lists

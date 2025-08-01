@@ -20,6 +20,7 @@
 
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Locales;
 
 namespace GKCore.Controllers
 {

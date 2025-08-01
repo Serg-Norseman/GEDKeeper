@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
 
-namespace GKCore.IoC
+namespace GKCore.Utilities
 {
     [TestFixture]
     public class IocContainerTests

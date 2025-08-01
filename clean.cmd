@@ -138,3 +138,6 @@ rmdir .\projects\plugins\GKVisionPlugin\bin /s /q
 rmdir .\projects\plugins\GKVisionPlugin\obj /s /q
 del .\appdata\cvmodel.yaml
 del .\appdata\cvhist.yaml
+
+rmdir .\projects\plugins\GKGenetixPlugin\bin /s /q
+rmdir .\projects\plugins\GKGenetixPlugin\obj /s /q

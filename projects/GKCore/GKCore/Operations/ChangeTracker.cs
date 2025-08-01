@@ -20,7 +20,6 @@
 
 using System;
 using GDModel;
-using GKCore.Interfaces;
 
 namespace GKCore.Operations
 {

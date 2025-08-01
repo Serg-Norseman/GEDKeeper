@@ -20,7 +20,6 @@
 
 using System;
 using BSLib;
-using GKCore.Interfaces;
 
 namespace GKCore.Charts
 {

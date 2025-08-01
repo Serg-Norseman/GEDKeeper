@@ -19,7 +19,7 @@
  */
 
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Plugins;
 using NSubstitute;
 

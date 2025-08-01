@@ -24,7 +24,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using GKCore;
 using GKCore.Controllers;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKUI.Components;
 using GKUI.Platform;
 using Xamarin.Essentials;

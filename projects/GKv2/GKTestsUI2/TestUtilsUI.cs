@@ -19,8 +19,10 @@
  */
 
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Design;
 using GKCore.Kinships;
+using GKCore.Locales;
+using GKCore.Utilities;
 using GKTests.Stubs;
 using GKUI.Platform;
 
@@ -41,7 +43,7 @@ namespace GKTests
 
             KinshipsGraph.InitDefaults();
 
-            AppHost.Container.Register<IProgressDialog, ProgressStub>(GKCore.IoC.LifeCycle.Singleton, true);
+            AppHost.Container.Register<IProgressDialog, ProgressStub>(LifeCycle.Singleton, true);
         }
     }
 }

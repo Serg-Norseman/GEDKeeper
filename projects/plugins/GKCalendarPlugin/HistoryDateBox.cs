@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,7 +22,7 @@ using System;
 using System.Windows.Forms;
 using GKCore.Calendar;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Plugins;
 
 namespace GKCalendarPlugin
@@ -40,7 +40,7 @@ namespace GKCalendarPlugin
 
     public class HistoryDateBox : UserControl
     {
-        private static PLS[] fCalendarNames = new PLS[] {
+        private static readonly PLS[] fCalendarNames = new PLS[] {
             PLS.Cal_Gregorian, PLS.Cal_Julian, PLS.Cal_Byzantine,
             PLS.Cal_Hebrew, PLS.Cal_Islamic,
             PLS.Cal_Persian, PLS.Cal_Indian,

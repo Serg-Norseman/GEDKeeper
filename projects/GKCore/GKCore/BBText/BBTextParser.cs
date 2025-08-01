@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -73,13 +73,13 @@ namespace GKCore.BBText
         private BBTextChunk SetChunkColor(int tokenLine, BBTextChunk chunk, IColor color)
         {
             float fntSize;
-            BSDTypes.FontStyle fntStyle;
+            GKFontStyle fntStyle;
             if (chunk != null) {
                 fntSize = chunk.Size;
                 fntStyle = chunk.Style;
             } else {
                 fntSize = fDefaultFontSize;
-                fntStyle = BSDTypes.FontStyle.None;
+                fntStyle = GKFontStyle.None;
             }
 
             if (chunk == null || chunk.Text.Length != 0) {
@@ -94,7 +94,7 @@ namespace GKCore.BBText
 
         private BBTextChunk SetChunkFontSize(int tokenLine, BBTextChunk chunk, float newSize)
         {
-            BSDTypes.FontStyle fntStyle = (chunk != null) ? chunk.Style : BSDTypes.FontStyle.None;
+            GKFontStyle fntStyle = (chunk != null) ? chunk.Style : GKFontStyle.None;
 
             if (chunk == null || chunk.Text.Length != 0) {
                 chunk = new BBTextChunk(tokenLine, newSize, fntStyle, fTextColor);
@@ -106,16 +106,16 @@ namespace GKCore.BBText
             return chunk;
         }
 
-        private BBTextChunk SetChunkFontStyle(int tokenLine, BBTextChunk chunk, BSDTypes.FontStyle style, bool active)
+        private BBTextChunk SetChunkFontStyle(int tokenLine, BBTextChunk chunk, GKFontStyle style, bool active)
         {
             float fntSize;
-            BSDTypes.FontStyle fntStyle;
+            GKFontStyle fntStyle;
             if (chunk != null) {
                 fntSize = chunk.Size;
                 fntStyle = chunk.Style;
             } else {
                 fntSize = fDefaultFontSize;
-                fntStyle = BSDTypes.FontStyle.None;
+                fntStyle = GKFontStyle.None;
             }
 
             if (active) {
@@ -137,13 +137,13 @@ namespace GKCore.BBText
         private BBTextChunk SetChunkText(int tokenLine, BBTextChunk chunk, string text)
         {
             float fntSize;
-            BSDTypes.FontStyle fntStyle;
+            GKFontStyle fntStyle;
             if (chunk != null) {
                 fntSize = chunk.Size;
                 fntStyle = chunk.Style;
             } else {
                 fntSize = fDefaultFontSize;
-                fntStyle = BSDTypes.FontStyle.None;
+                fntStyle = GKFontStyle.None;
             }
 
             if (chunk == null) {
@@ -251,19 +251,19 @@ namespace GKCore.BBText
                         }
                         else if (tag == "b") {
                             // [b][/b]
-                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, BSDTypes.FontStyle.Bold, !closedTag);
+                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, GKFontStyle.Bold, !closedTag);
                         }
                         else if (tag == "i") {
                             // [i][/i]
-                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, BSDTypes.FontStyle.Italic, !closedTag);
+                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, GKFontStyle.Italic, !closedTag);
                         }
                         else if (tag == "s") {
                             // [s][/s]
-                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, BSDTypes.FontStyle.Strikeout, !closedTag);
+                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, GKFontStyle.Strikeout, !closedTag);
                         }
                         else if (tag == "u") {
                             // [u][/u]
-                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, BSDTypes.FontStyle.Underline, !closedTag);
+                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, GKFontStyle.Underline, !closedTag);
                         }
                         else if (tag == "url") {
                             // bad implementation
@@ -281,7 +281,7 @@ namespace GKCore.BBText
                                 //
                             }
 
-                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, BSDTypes.FontStyle.Underline, !closedTag);
+                            lastChunk = SetChunkFontStyle(tok.Line, lastChunk, GKFontStyle.Underline, !closedTag);
                             IColor color = (closedTag) ? fTextColor : fLinkColor;
                             lastChunk = SetChunkColor(tok.Line, lastChunk, color);
                             if (!closedTag) {

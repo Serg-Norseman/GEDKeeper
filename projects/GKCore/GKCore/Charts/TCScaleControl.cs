@@ -21,6 +21,7 @@
 using System;
 using BSLib;
 using GKCore.Design.Graphics;
+using GKCore.Locales;
 
 namespace GKCore.Charts
 {

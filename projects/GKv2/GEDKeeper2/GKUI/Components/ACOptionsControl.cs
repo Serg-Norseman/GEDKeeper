@@ -20,7 +20,7 @@
 
 using System.Windows.Forms;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Options;
 
 namespace GKUI.Components

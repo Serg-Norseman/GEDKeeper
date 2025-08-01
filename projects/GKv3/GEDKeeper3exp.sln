@@ -80,7 +80,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKFlowInputPlugin.net", "..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKPedigreeImporterPlugin.net", "..\plugins\GKPedigreeImporterPlugin\GKPedigreeImporterPlugin.net.csproj", "{FDC23700-4CEE-4984-85CE-2BC73AEF1FF5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKGenetixPlugin.net", "..\GKGenetix\GKGenetixPlugin\GKGenetixPlugin.net.csproj", "{D2BCF181-9B1A-4A37-B197-9CB39359BE18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKGenetixPlugin.net", "..\plugins\GKGenetixPlugin\GKGenetixPlugin.net.csproj", "{D2BCF181-9B1A-4A37-B197-9CB39359BE18}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKTests.net", "..\GKTests\GKTests.net.csproj", "{32521FE6-112C-4095-B0A8-755C5C94D00A}"
 EndProject

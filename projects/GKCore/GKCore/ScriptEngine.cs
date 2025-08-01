@@ -34,6 +34,7 @@ using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Export;
+using GKCore.Locales;
 using GKCore.Maps;
 using GKCore.Options;
 using NLua;

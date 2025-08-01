@@ -21,7 +21,6 @@
 using System;
 using System.IO;
 using GKCore;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKUI.Components;
 
@@ -97,13 +96,10 @@ namespace GKNavigatorPlugin
             lvData.Dock = DockStyle.Fill;
             lvData.FullRowSelect = true;
             lvData.HideSelection = false;
-            lvData.ListMan = null;
             lvData.Location = new Point(0, 28);
             lvData.Name = "lvData";
-            lvData.SortOrder = GKCore.Design.BSDTypes.SortOrder.None;
             lvData.OwnerDraw = true;
             lvData.Size = new Size(694, 369);
-            lvData.SortColumn = 0;
             lvData.TabIndex = 1;
             lvData.UseCompatibleStateImageBehavior = false;
             lvData.View = View.Details;

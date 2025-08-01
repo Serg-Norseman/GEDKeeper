@@ -24,7 +24,7 @@ using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Design;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Stats;
 using GKUI.Platform;
 using GKWordsCloudPlugin.WordsCloud;

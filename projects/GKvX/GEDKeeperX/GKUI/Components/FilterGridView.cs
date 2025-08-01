@@ -23,6 +23,7 @@ using System.Collections.ObjectModel;
 using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Lists;
+using GKCore.Locales;
 using Xamarin.Forms;
 
 namespace GKUI.Components

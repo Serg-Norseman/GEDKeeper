@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Locales;
 using GKCore.Utilities;
 
 namespace GKCore.Events

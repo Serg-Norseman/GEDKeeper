@@ -25,8 +25,8 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Export;
-using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Locales;
 using GKCore.Media;
 using GKCore.Names;
 using GKCore.Options;
@@ -96,7 +96,7 @@ namespace GKCore.Controllers
         {
             var listView = GetControl<IListView>("lstPersonColumns");
             listView.SortColumn = 1;
-            listView.SortOrder = BSDTypes.SortOrder.Ascending;
+            listView.SortOrder = GKSortOrder.Ascending;
             listView.UpdateContents();
         }
 

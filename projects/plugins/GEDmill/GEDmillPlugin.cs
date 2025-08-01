@@ -23,10 +23,11 @@ using System.Reflection;
 using GEDmill;
 using GKCore;
 using GKCore.Design.Graphics;
-using GKCore.Interfaces;
 using GKCore.Plugins;
 using GKUI.Platform.Handlers;
 using GKCore.Design;
+using GKCore.Locales;
+
 
 
 #if !ETO

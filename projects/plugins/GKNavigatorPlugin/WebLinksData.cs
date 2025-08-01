@@ -29,6 +29,7 @@ using System.Text;
 using System.Threading;
 using BSLib;
 using GKCore;
+using GKCore.Locales;
 using BSDListItem = GKCore.Design.Controls.IListItem;
 
 namespace GKNavigatorPlugin

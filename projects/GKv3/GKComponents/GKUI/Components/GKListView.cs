@@ -27,7 +27,6 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Lists;
 using GKUI.Platform.Handlers;
-using BSDSortOrder = GKCore.Design.BSDTypes.SortOrder;
 
 namespace GKUI.Components
 {
@@ -39,7 +38,7 @@ namespace GKUI.Components
         private bool fCheckBoxes;
         private IListSource fListMan;
         private int fSortColumn;
-        private BSDSortOrder fSortOrder;
+        private GKSortOrder fSortOrder;
 
 
         public IListSource ListMan
@@ -53,7 +52,7 @@ namespace GKUI.Components
 
                     if (fListMan != null) {
                         fSortColumn = 0;
-                        fSortOrder = BSDSortOrder.Ascending;
+                        fSortOrder = GKSortOrder.Ascending;
                         DataStore = fListMan.ContentList;
                     } else {
                         DataStore = null;
@@ -78,7 +77,7 @@ namespace GKUI.Components
             set { fSortColumn = value; }
         }
 
-        public BSDSortOrder SortOrder
+        public GKSortOrder SortOrder
         {
             get { return fSortOrder; }
             set { fSortOrder = value; }
@@ -94,7 +93,7 @@ namespace GKUI.Components
 
             fCheckBoxes = false;
             fSortColumn = 0;
-            fSortOrder = BSDSortOrder.None;
+            fSortOrder = GKSortOrder.None;
             fListMan = null;
         }
 
@@ -107,9 +106,9 @@ namespace GKUI.Components
             }
         }
 
-        protected BSDSortOrder GetColumnSortOrder(int columnIndex)
+        protected GKSortOrder GetColumnSortOrder(int columnIndex)
         {
-            return (fSortColumn == columnIndex) ? fSortOrder : BSDSortOrder.None;
+            return (fSortColumn == columnIndex) ? fSortOrder : GKSortOrder.None;
         }
 
         public void SetSortColumn(int sortColumn, bool checkOrder = true)
@@ -117,9 +116,9 @@ namespace GKUI.Components
             int prevColumn = fSortColumn;
             if (prevColumn == sortColumn && checkOrder) {
                 var prevOrder = GetColumnSortOrder(sortColumn);
-                fSortOrder = (prevOrder == BSDSortOrder.Ascending) ? BSDSortOrder.Descending : BSDSortOrder.Ascending;
+                fSortOrder = (prevOrder == GKSortOrder.Ascending) ? GKSortOrder.Descending : GKSortOrder.Ascending;
             } else {
-                fSortOrder = BSDSortOrder.Ascending;
+                fSortOrder = GKSortOrder.Ascending;
             }
 
             fSortColumn = sortColumn;
@@ -128,11 +127,11 @@ namespace GKUI.Components
 
         private void SortContents(bool restoreSelected)
         {
-            if (fListMan == null || fSortOrder == BSDSortOrder.None) return;
+            if (fListMan == null || fSortOrder == GKSortOrder.None) return;
 
             object rec = (restoreSelected) ? GetSelectedData() : null;
 
-            fListMan.SortContents(fSortColumn, fSortOrder == BSDSortOrder.Ascending);
+            fListMan.SortContents(fSortColumn, fSortOrder == GKSortOrder.Ascending);
 
             if (rec != null) SelectItem(rec);
         }
@@ -234,7 +233,7 @@ namespace GKUI.Components
             Columns.Clear();
         }
 
-        public void AddColumn(string caption, int width, bool autoSize = false, BSDTypes.HorizontalAlignment textAlign = BSDTypes.HorizontalAlignment.Left)
+        public void AddColumn(string caption, int width, bool autoSize = false, GKHorizontalAlignment textAlign = GKHorizontalAlignment.Left)
         {
             int colIndex = Columns.Count;
             var cell = new TextBoxCell(colIndex);

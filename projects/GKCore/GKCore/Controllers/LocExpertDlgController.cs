@@ -25,8 +25,8 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Locales;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Types;
@@ -313,7 +313,7 @@ namespace GKCore.Controllers
             }
 
             fEntriesListModel.DataSource = fEntries;
-            lvEntries.SortOrder = BSDTypes.SortOrder.None;
+            lvEntries.SortOrder = GKSortOrder.None;
             lvEntries.UpdateContents();
 
             if (targetLoc != null) {

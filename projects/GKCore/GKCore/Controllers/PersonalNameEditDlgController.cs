@@ -26,7 +26,7 @@ using GKCore.Cultures;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Options;
 using GKCore.Utilities;
 using GKUI.Themes;

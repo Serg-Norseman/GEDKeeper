@@ -22,11 +22,10 @@ using GDModel;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Lists;
-using GKCore.Types;
 
 namespace GKCore.Design.Views
 {
-    public interface IPersonEditDlg : ICommonDialog, IBaseEditor
+    public interface IPersonEditDlg : ICommonDialog
     {
         GDMIndividualRecord IndividualRecord { get; set; }
         GDMIndividualRecord Target { get; set; }

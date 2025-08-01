@@ -49,7 +49,7 @@ namespace GKCore.Design.Views
     /// <summary>
     /// 
     /// </summary>
-    public interface IRecordSelectDialog : ICommonDialog, IBaseEditor
+    public interface IRecordSelectDialog : ICommonDialog
     {
         GDMRecord ResultRecord { get; set; }
 

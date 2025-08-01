@@ -23,9 +23,9 @@ using System.Text;
 using BSLib;
 using GDModel;
 using GEDmill.Model;
-using GKCore.Interfaces;
+using GKCore;
+using GKCore.Locales;
 using GKCore.Media;
-using GKCore.Types;
 using GKL = GKCore.Logging;
 
 namespace GEDmill.HTML

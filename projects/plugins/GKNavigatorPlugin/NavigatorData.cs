@@ -25,8 +25,8 @@ using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
 using GKCore.Lists;
+using GKCore.Locales;
 using GKCore.Types;
 
 namespace GKNavigatorPlugin

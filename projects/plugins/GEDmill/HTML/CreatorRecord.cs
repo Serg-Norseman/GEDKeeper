@@ -22,7 +22,7 @@ using BSLib;
 using GDModel;
 using GEDmill.Model;
 using GKCore;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Media;
 
 namespace GEDmill.HTML

@@ -22,7 +22,7 @@ using BSLib;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKUI.Themes;
 
 namespace GKCore.Controllers

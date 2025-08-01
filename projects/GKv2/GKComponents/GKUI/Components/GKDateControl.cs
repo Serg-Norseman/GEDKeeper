@@ -25,7 +25,7 @@ using BSLib;
 using GDModel;
 using GKCore;
 using GKCore.Design.Controls;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Types;
 
 namespace GKUI.Components

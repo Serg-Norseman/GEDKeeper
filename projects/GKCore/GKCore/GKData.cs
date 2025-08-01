@@ -20,6 +20,7 @@
 
 using GDModel.Providers.GEDCOM;
 using GKCore.Events;
+using GKCore.Locales;
 using GKUI.Themes;
 
 namespace GKCore

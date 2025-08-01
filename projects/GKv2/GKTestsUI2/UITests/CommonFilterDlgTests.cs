@@ -22,8 +22,8 @@
 
 using System;
 using System.Windows.Forms;
+using GKCore;
 using GKCore.Design;
-using GKCore.Interfaces;
 using GKCore.Lists;
 using GKTests;
 using GKTests.ControlTesters;

@@ -27,10 +27,9 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Interfaces;
+using GKCore.Locales;
 using GKCore.Maps;
 using GKCore.Options;
-using GKCore.Types;
 using GKMap;
 using GKUI.Themes;
 

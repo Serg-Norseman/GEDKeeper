@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using GKCore.Interfaces;
 
 namespace GKCore.Lists
 {

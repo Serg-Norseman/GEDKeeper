@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -20,7 +20,6 @@
 
 using BSLib;
 using GKCore.Design.Graphics;
-using BSDColors = GKCore.Design.BSDConsts.Colors;
 
 namespace GKCore.Charts
 {
@@ -89,8 +88,8 @@ namespace GKCore.Charts
         {
             if (gfx == null) return;
 
-            if (fCtlPen == null) fCtlPen = gfx.CreatePen(ChartRenderer.GetColor(BSDColors.Black), 2.0f);
-            if (fCtlBrush == null) fCtlBrush = gfx.CreateBrush(ChartRenderer.GetColor(BSDColors.Gray));
+            if (fCtlPen == null) fCtlPen = gfx.CreatePen(ChartRenderer.GetColor(GKColors.Black), 2.0f);
+            if (fCtlBrush == null) fCtlBrush = gfx.CreateBrush(ChartRenderer.GetColor(GKColors.Gray));
 
             //gfx.FillRectangle(fCtlBrush, fDestRect);
             //gfx.DrawRectangle(fCtlPen, fDestRect);

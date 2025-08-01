@@ -22,7 +22,9 @@ using BSLib;
 using GDModel;
 using GEDmill.MiniTree;
 using GEDmill.Model;
-using GKCore.Interfaces;
+using GKCore;
+using GKCore.Design;
+using GKCore.Locales;
 using GKL = GKCore.Logging;
 
 namespace GEDmill.HTML

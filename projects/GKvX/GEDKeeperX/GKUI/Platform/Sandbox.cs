@@ -24,7 +24,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using GKCore.Interfaces;
+using GKCore.Design;
 using Xamarin.Essentials;
 
 namespace GKUI.Platform

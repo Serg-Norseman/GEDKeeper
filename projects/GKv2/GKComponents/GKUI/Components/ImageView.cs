@@ -30,8 +30,8 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
+using GKCore.Locales;
 using GKCore.Media;
-using GKCore.Types;
 using GKUI.Platform.Handlers;
 using GKUI.Themes;
 
