@@ -29,6 +29,10 @@ using GKCore.Locales;
 
 namespace GKCore
 {
+#if OS_LINUX
+using GKCore.Utilities;
+#endif
+
     public sealed class DistributedPackage
     {
         public Version Version { get; set; }
