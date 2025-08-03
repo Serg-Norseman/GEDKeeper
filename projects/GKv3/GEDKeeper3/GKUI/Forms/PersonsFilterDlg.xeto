@@ -15,59 +15,61 @@
         <TabPage x:Name="pageSpecificFilter">
           <TableLayout Style="paddedTable8">
             <TableRow>
-              <GroupBox x:Name="rgSex">
-                <StackLayout Style="vertListStack">
-                  <RadioButton x:Name="rbSexAll" />
-                  <RadioButton x:Name="rbSexMale" />
-                  <RadioButton x:Name="rbSexFemale" />
-                </StackLayout>
-              </GroupBox>
+              <TableCell ScaleWidth="True">
+                <TableLayout x:Name="masksPanel" Spacing="4,4">
+                  <TableRow>
+                    <Label x:Name="lblNameMask" />
+                    <ComboBox x:Name="txtName" KeyUp="cmbFilter_KeyUp" />
+                  </TableRow>
 
-              <GroupBox x:Name="rgLife">
-                <StackLayout Style="vertListStack">
-                  <RadioButton x:Name="rbAll" CheckedChanged="rgLife_CheckedChanged" />
-                  <RadioButton x:Name="rbOnlyLive" CheckedChanged="rgLife_CheckedChanged" />
-                  <RadioButton x:Name="rbOnlyDead" CheckedChanged="rgLife_CheckedChanged" />
-                  <RadioButton x:Name="rbAliveBefore" CheckedChanged="rgLife_CheckedChanged" />
-                  <StackLayout Orientation="Horizontal" Spacing="4">
-                    <Label x:Name="lblAliveBefore" />
-                    <MaskedTextBox x:Name="txtAliveBeforeDate" Enabled="False" />
+                  <TableRow>
+                    <Label x:Name="lblPlaceMask" />
+                    <ComboBox x:Name="cmbResidence" KeyUp="cmbFilter_KeyUp" />
+                  </TableRow>
+
+                  <TableRow>
+                    <Label x:Name="lblEventsMask" />
+                    <ComboBox x:Name="cmbEventVal" KeyUp="cmbFilter_KeyUp" />
+                  </TableRow>
+
+                  <TableRow>
+                    <Label x:Name="lblGroups" />
+                    <ComboBox x:Name="cmbGroup" ReadOnly="True" />
+                  </TableRow>
+
+                  <TableRow>
+                    <Label x:Name="lblSources" />
+                    <ComboBox x:Name="cmbSource" ReadOnly="True" />
+                  </TableRow>
+
+                  <TableRow ScaleHeight="True" />
+                </TableLayout>
+              </TableCell>
+
+              <StackLayout Style="vertListStack">
+                <GroupBox x:Name="rgSex">
+                  <StackLayout Style="vertListStack">
+                    <RadioButton x:Name="rbSexAll" />
+                    <RadioButton x:Name="rbSexMale" />
+                    <RadioButton x:Name="rbSexFemale" />
                   </StackLayout>
-                </StackLayout>
-              </GroupBox>
-            </TableRow>
+                </GroupBox>
 
-            <TableRow>
-              <TableLayout x:Name="masksPanel" Spacing="4,4">
-                <TableRow>
-                  <Label x:Name="lblNameMask" />
-                  <ComboBox x:Name="txtName" KeyUp="cmbFilter_KeyUp" />
-                </TableRow>
+                <GroupBox x:Name="rgLife">
+                  <StackLayout Style="vertListStack">
+                    <RadioButton x:Name="rbAll" CheckedChanged="rgLife_CheckedChanged" />
+                    <RadioButton x:Name="rbOnlyLive" CheckedChanged="rgLife_CheckedChanged" />
+                    <RadioButton x:Name="rbOnlyDead" CheckedChanged="rgLife_CheckedChanged" />
+                    <RadioButton x:Name="rbAliveBefore" CheckedChanged="rgLife_CheckedChanged" />
+                    <StackLayout Orientation="Horizontal" Spacing="4">
+                      <Label x:Name="lblAliveBefore" />
+                      <MaskedTextBox x:Name="txtAliveBeforeDate" Enabled="False" />
+                    </StackLayout>
+                  </StackLayout>
+                </GroupBox>
 
-                <TableRow>
-                  <Label x:Name="lblPlaceMask" />
-                  <ComboBox x:Name="cmbResidence" KeyUp="cmbFilter_KeyUp" />
-                </TableRow>
-
-                <TableRow>
-                  <Label x:Name="lblEventsMask" />
-                  <ComboBox x:Name="cmbEventVal" KeyUp="cmbFilter_KeyUp" />
-                </TableRow>
-
-                <TableRow>
-                  <Label x:Name="lblGroups" />
-                  <ComboBox x:Name="cmbGroup" ReadOnly="True" />
-                </TableRow>
-
-                <TableRow>
-                  <Label x:Name="lblSources" />
-                  <ComboBox x:Name="cmbSource" ReadOnly="True" />
-                </TableRow>
-
-                <TableRow>
-                  <CheckBox x:Name="chkOnlyPatriarchs" />
-                </TableRow>
-              </TableLayout>
+                <CheckBox x:Name="chkOnlyPatriarchs" />
+              </StackLayout>
             </TableRow>
 
             <TableRow ScaleHeight="True" />

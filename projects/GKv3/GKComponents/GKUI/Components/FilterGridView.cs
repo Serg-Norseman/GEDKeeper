@@ -115,8 +115,8 @@ namespace GKUI.Components
             GKData.CondSigns[6] = LangMan.LS(LSID.CondContains);
             GKData.CondSigns[7] = LangMan.LS(LSID.CondNotContains);
 
-            fBtnDelete = CreateButton("btnDelete", UIHelper.LoadResourceImage("Resources.btn_rec_delete.gif"), LangMan.LS(LSID.MIRecordDelete), ItemDelete);
-            fBtnAdd = CreateButton("btnAdd", UIHelper.LoadResourceImage("Resources.btn_rec_new.gif"), LangMan.LS(LSID.MIRecordAdd), ItemAdd);
+            fBtnDelete = CreateButton("btnDelete", LangMan.LS(LSID.MIRecordDelete), ItemDelete);
+            fBtnAdd = CreateButton("btnAdd", LangMan.LS(LSID.MIRecordAdd), ItemAdd);
 
             fGridView = new GKGridView();
 
@@ -181,11 +181,10 @@ namespace GKUI.Components
 
         #region Private functions
 
-        private Button CreateButton(string name, Image image, string toolTip, EventHandler<EventArgs> click)
+        private Button CreateButton(string name, string toolTip, EventHandler<EventArgs> click)
         {
             var btn = new Button();
             btn.Style = "iconBtn";
-            btn.Image = image;
             btn.ToolTip = toolTip;
             btn.Click += click;
             return btn;
@@ -194,6 +193,8 @@ namespace GKUI.Components
         private void InitGrid()
         {
             fGridView.Columns.Clear();
+            // https://github.com/picoe/Eto/issues/2546
+            // WPF ComboBoxCell: only elements within the rows bounding box can be selected
             fGridView.AddComboColumn<FilterConditionRow>(LangMan.LS(LSID.Field), fFields, r => r.ColumnText, 200, false, true);
             fGridView.AddComboColumn<FilterConditionRow>(LangMan.LS(LSID.Condition), GKData.CondSigns, r => r.ConditionText, 150, false, true);
             fGridView.AddTextColumn<FilterConditionRow>(LangMan.LS(LSID.Value), r => r.ValueText, 300, false, true);

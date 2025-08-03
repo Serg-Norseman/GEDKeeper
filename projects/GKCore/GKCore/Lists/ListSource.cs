@@ -636,21 +636,20 @@ namespace GKCore.Lists
 
         public object GetColumnValue(int colIndex, bool isVisible)
         {
-            MapColumnRec colrec = fColumnsMap[colIndex];
             object val;
             try {
+                MapColumnRec colrec = fColumnsMap[colIndex];
                 val = GetColumnValueEx(colrec.ColType, colrec.ColSubtype, isVisible);
+
+                if (isVisible) {
+                    ListColumn cs = fListColumns[colrec.ColType];
+                    val = ConvertColumnValue(val, cs);
+                }
             } catch (Exception ex) {
                 Logger.WriteError("ListSource.GetColumnValue()", ex);
                 val = "#"; // error sign!
             }
-
-            if (isVisible) {
-                ListColumn cs = fListColumns[colrec.ColType];
-                return ConvertColumnValue(val, cs);
-            } else {
-                return val;
-            }
+            return val;
         }
 
         /// <summary>
@@ -707,22 +706,22 @@ namespace GKCore.Lists
 
         public object[] GetItemData(object rowData)
         {
-            T rec = rowData as T;
-            if (rec == null)
+            if (rowData is T rec) {
+                Fetch(rec);
+
+                int num = fColumnsMap.Count;
+
+                if (fDataBuffer == null || fDataBuffer.Length != num)
+                    fDataBuffer = new object[num];
+
+                for (int i = 0; i < num; i++) {
+                    fDataBuffer[i] = GetColumnValue(i, true);
+                }
+
+                return fDataBuffer;
+            } else {
                 return null;
-
-            Fetch(rec);
-
-            int num = fColumnsMap.Count;
-
-            if (fDataBuffer == null || fDataBuffer.Length != num)
-                fDataBuffer = new object[num];
-
-            for (int i = 0; i < num; i++) {
-                fDataBuffer[i] = GetColumnValue(i, true);
             }
-
-            return fDataBuffer;
         }
 
         public virtual IColor GetBackgroundColor(int itemIndex, object rowData)

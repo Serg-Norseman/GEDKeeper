@@ -37,6 +37,11 @@ Eto.Forms v2.7.4 compatible with netfw462
 9. Eto.Forms 2.7.4 [WPF+, Gtk?]
   - Pen.Color setter don't works, also Pen.Brush.Color.
 
+# Known bugs
+
+1. WPF ComboBoxCell: only elements within the rows bounding box can be selected #1658, 2546
+2. WPF PrintPreview: full application's crash
+
 # Other
 
 LibVLCSharp.GTK
