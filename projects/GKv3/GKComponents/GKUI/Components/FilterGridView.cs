@@ -24,6 +24,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Design.Controls;
+using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKUI.Platform;
@@ -53,7 +54,7 @@ namespace GKUI.Components
                     return GKData.CondSigns[(int)Condition];
                 }
                 set {
-                    Condition = fGrid.fListMan.GetCondByName(value.ToString());
+                    Condition = ListFilter.GetCondByName(value.ToString());
                 }
             }
 
@@ -202,7 +203,7 @@ namespace GKUI.Components
 
         private void ItemAdd(object sender, EventArgs e)
         {
-            FilterCondition fcond = new FilterCondition(0, ConditionKind.ck_Contains, "");
+            FilterCondition fcond = new FilterCondition(0, ConditionOperator.Contains, "");
             AddCondition(fcond);
         }
 

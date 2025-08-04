@@ -28,18 +28,13 @@ using GKCore.Charts;
 using GKCore.Cultures;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
+using GKCore.Filters;
 using GKCore.Options;
 using GKCore.Utilities;
 using SGCulture = System.Globalization.CultureInfo;
 
 namespace GKCore.Lists
 {
-    public enum MatchPatternMethod
-    {
-        RegEx, FastIgnoreCase, Fast
-    }
-
-
     /// <summary>
     ///
     /// </summary>
@@ -398,74 +393,12 @@ namespace GKCore.Lists
             fFilter = new ListFilter();
         }
 
-        public void AddCondition(byte columnId, ConditionKind condition, string value)
+        public void AddCondition(byte columnId, ConditionOperator condition, string value)
         {
             object condValue = ConvertColumnStr(value, GetColumnDataType(columnId));
 
             FilterCondition fltCond = new FilterCondition(columnId, condition, condValue);
             fFilter.Conditions.Add(fltCond);
-        }
-
-        protected bool CheckCondition(FilterCondition fcond, object dataval)
-        {
-            bool res = true;
-
-            try {
-                if (dataval == null)
-                    return true;
-
-                int compRes = 0;
-                if (fcond.Condition < ConditionKind.ck_Contains) {
-                    compRes = ((IComparable)dataval).CompareTo(fcond.Value);
-                }
-
-                switch (fcond.Condition) {
-                    case ConditionKind.ck_NotEq:
-                        res = compRes != 0;
-                        break;
-
-                    case ConditionKind.ck_LT:
-                        res = compRes < 0;
-                        break;
-
-                    case ConditionKind.ck_LET:
-                        res = compRes <= 0;
-                        break;
-
-                    case ConditionKind.ck_Eq:
-                        res = compRes == 0;
-                        break;
-
-                    case ConditionKind.ck_GET:
-                        res = compRes >= 0;
-                        break;
-
-                    case ConditionKind.ck_GT:
-                        res = compRes > 0;
-                        break;
-
-                    case ConditionKind.ck_Contains:
-                        res = dataval.ToString().Contains(fcond.Value.ToString());
-                        break;
-
-                    case ConditionKind.ck_NotContains:
-                        res = !dataval.ToString().Contains(fcond.Value.ToString());
-                        break;
-
-                    case ConditionKind.ck_ContainsMask:
-                        res = GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
-                        break;
-
-                    case ConditionKind.ck_NotContainsMask:
-                        res = !GKUtils.MatchesMask(dataval.ToString(), "*" + fcond.Value + "*");
-                        break;
-                }
-            } catch (Exception ex) {
-                Logger.WriteError("ListSource.CheckCondition()", ex);
-                res = true;
-            }
-
-            return res;
         }
 
         protected virtual bool CheckCommonCondition(FilterCondition fcond)
@@ -478,12 +411,14 @@ namespace GKCore.Lists
                 dataval = null;
             }
 
-            return CheckCondition(fcond, dataval);
+            return ListFilter.CheckCondition(fcond, dataval);
         }
 
-        protected bool CheckCommonFilter()
+        protected bool CheckCommonFilter(GDMRecord rec)
         {
-            bool res = true;
+            // check external filter
+            bool res = (fExternalFilter == null || fExternalFilter(rec));
+            if (!res) return false;
 
             try {
                 var conditions = fFilter.Conditions;
@@ -500,11 +435,6 @@ namespace GKCore.Lists
             return res;
         }
 
-        protected bool CheckExternalFilter(GDMRecord rec)
-        {
-            return (fExternalFilter == null || fExternalFilter(rec));
-        }
-
         public string[] CreateFields()
         {
             var listColumns = ListColumns;
@@ -517,20 +447,6 @@ namespace GKCore.Lists
             }
 
             return fields;
-        }
-
-        public ConditionKind GetCondByName(string condName)
-        {
-            ConditionKind res = ConditionKind.ck_NotEq;
-
-            for (ConditionKind pl = ConditionKind.ck_NotEq; pl <= ConditionKind.ck_Last; pl++) {
-                if (GKData.CondSigns[(int)pl] == condName) {
-                    res = pl;
-                    break;
-                }
-            }
-
-            return res;
         }
 
         public int GetFieldColumnId(string[] fields, string fieldName)
@@ -811,8 +727,8 @@ namespace GKCore.Lists
             object cv2 = item2.SortValue;
 
             if (cv1 != null && cv2 != null) {
-                if (cv1 is string && cv2 is string) {
-                    compRes = string.Compare((string)cv1, (string)cv2, false, fSysCulture);
+                if (cv1 is string cv1str && cv2 is string cv2str) {
+                    compRes = string.Compare(cv1str, cv2str, false, fSysCulture);
                 } else {
                     compRes = ((IComparable)cv1).CompareTo(cv2);
                 }

@@ -29,6 +29,7 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Export;
+using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Search;

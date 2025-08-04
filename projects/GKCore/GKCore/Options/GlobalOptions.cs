@@ -27,7 +27,7 @@ using System.Text;
 using BSLib;
 using GDModel;
 using GKCore.Design;
-using GKCore.Lists;
+using GKCore.Filters;
 using GKCore.Locales;
 using GKCore.Media;
 using GKCore.Names;

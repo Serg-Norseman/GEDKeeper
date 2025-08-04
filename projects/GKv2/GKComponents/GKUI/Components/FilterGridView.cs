@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.Design.Controls;
+using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKUI.Themes;
@@ -59,7 +60,7 @@ namespace GKUI.Components
                 if (!string.IsNullOrEmpty(fld)) {
                     int colId = fListMan.GetFieldColumnId(fFields, fld);
                     if (colId != -1) {
-                        ConditionKind cond = fListMan.GetCondByName(cnd);
+                        ConditionOperator cond = ListFilter.GetCondByName(cnd);
                         fcond = new FilterCondition((byte)colId, cond, val);
                     }
                 }

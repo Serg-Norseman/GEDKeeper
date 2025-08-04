@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Lists;
+using GKCore.Filters;
 using GKUI.Themes;
 
 namespace GKCore.Design.Controls

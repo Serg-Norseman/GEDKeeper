@@ -24,6 +24,7 @@ using GDModel;
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Graphics;
+using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Plugins;

@@ -22,9 +22,8 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using GKCore;
 using GKCore.Design.Controls;
-using GKCore.Lists;
+using GKCore.Filters;
 using GKCore.Locales;
 
 namespace GKUI.Components

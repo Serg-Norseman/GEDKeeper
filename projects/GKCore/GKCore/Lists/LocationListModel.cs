@@ -21,6 +21,7 @@
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Filters;
 using GKCore.Locales;
 using GKCore.Options;
 
@@ -61,20 +62,10 @@ namespace GKCore.Lists
 
         private bool CheckQuickFilter()
         {
-            var quickFilter = base.QuickFilter;
-
             var names = fFetchedRec.Names;
             for (int i = 0; i < names.Count; i++) {
                 var locName = names[i].StringValue;
-
-                bool res;
-                if (quickFilter.Type == MatchType.Indistinct) {
-                    res = (IndistinctMatching.GetSimilarity(locName, quickFilter.Value) >= quickFilter.IndistinctThreshold);
-                } else {
-                    res = IsMatchesMask(locName, quickFilter.Value);
-                }
-
-                if (res) {
+                if (CheckQuickFilter(locName)) {
                     return true;
                 }
             }
@@ -86,7 +77,7 @@ namespace GKCore.Lists
         {
             bool res = CheckQuickFilter();
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
+            res = res && CheckCommonFilter(fFetchedRec);
 
             return res;
         }
@@ -96,7 +87,7 @@ namespace GKCore.Lists
             if ((ColumnType)fcond.ColumnIndex == ColumnType.ctName) {
                 var names = fFetchedRec.Names;
                 for (int i = 0; i < names.Count; i++) {
-                    if (CheckCondition(fcond, names[i].StringValue)) {
+                    if (ListFilter.CheckCondition(fcond, names[i].StringValue)) {
                         return true;
                     }
                 }

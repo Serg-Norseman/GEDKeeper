@@ -34,6 +34,7 @@ using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Design;
+using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Options;
@@ -193,7 +194,7 @@ namespace GKUI.Forms
                 //ClickToolStripButton("tbRecordEdit", fMainWin);
 
                 IRecordsListModel listMan = fCurBase.GetRecordsListManByType(rt);
-                listMan.AddCondition((byte)IndividualListModel.ColumnType.ctPatriarch, ConditionKind.ck_Contains, "test"); // any first column
+                listMan.AddCondition((byte)IndividualListModel.ColumnType.ctPatriarch, ConditionOperator.Contains, "test"); // any first column
 
                 ModalFormHandler = CommonFilterDlgTests.CommonFilterDlg_btnAccept_Handler;
                 ClickToolStripButton("tbFilter", fMainWin);

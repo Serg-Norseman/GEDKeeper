@@ -21,6 +21,7 @@
 using System.Collections.Generic;
 using BSLib;
 using GDModel;
+using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Types;
 

@@ -39,6 +39,7 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Events;
 using GKCore.Export;
+using GKCore.Filters;
 using GKCore.Import;
 using GKCore.Lists;
 using GKCore.Locales;
@@ -736,6 +737,7 @@ namespace GKCore
             return Regex.IsMatch(str, PrepareMask(mask), RegexOpts);
         }
 
+        // ZGraphControl(v3/vX)
         public static int StrCompareEx(string str1, string str2)
         {
             double val1, val2;

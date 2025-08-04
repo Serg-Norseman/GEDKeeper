@@ -21,9 +21,8 @@
 using System;
 using Eto.Drawing;
 using Eto.Forms;
-using GKCore;
 using GKCore.Design.Controls;
-using GKCore.Lists;
+using GKCore.Filters;
 using GKCore.Locales;
 
 namespace GKUI.Components

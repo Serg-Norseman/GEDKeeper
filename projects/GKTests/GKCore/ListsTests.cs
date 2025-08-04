@@ -21,6 +21,7 @@
 using System;
 using GDModel;
 using GKCore.Design.Controls;
+using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Names;
 using GKCore.Options;
@@ -125,10 +126,10 @@ namespace GKCore
         public void Test_ListFilter_Yaml()
         {
             var filter = new ListFilter();
-            filter.Conditions.Add(new FilterCondition(1, ConditionKind.ck_Contains, "Kostrom"));
+            filter.Conditions.Add(new FilterCondition(1, ConditionOperator.Contains, "Kostrom"));
 
             string yaml = YamlHelper.Serialize(filter);
-            string expected = "Conditions:\r\n- ColumnIndex: 1\r\n  Condition: ck_Contains\r\n  Value: Kostrom\r\n";
+            string expected = "Conditions:\r\n- ColumnIndex: 1\r\n  Condition: Contains\r\n  Value: Kostrom\r\n";
 #if OS_MACOS || OS_LINUX
             expected = expected.Replace("\r\n", "\n");
 #endif
@@ -169,7 +170,7 @@ namespace GKCore
             Assert.Throws(typeof(ArgumentNullException), () => { listColumns.CopyTo(null); });
 
             listManager.QuickFilter.Value = "*";
-            listManager.AddCondition((byte)GroupListModel.ColumnType.ctName, ConditionKind.ck_ContainsMask, "*roup*");
+            listManager.AddCondition((byte)GroupListModel.ColumnType.ctName, ConditionOperator.ContainsMask, "*roup*");
             Assert.IsTrue(listManager.CheckFilter());
         }
 

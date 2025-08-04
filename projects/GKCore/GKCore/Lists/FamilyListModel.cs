@@ -57,7 +57,7 @@ namespace GKCore.Lists
         {
             bool res = fBaseContext.IsRecordAccess(fFetchedRec.Restriction) && CheckQuickFilter(GKUtils.GetFamilyString(fBaseContext.Tree, fFetchedRec));
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
+            res = res && CheckCommonFilter(fFetchedRec);
 
             return res;
         }

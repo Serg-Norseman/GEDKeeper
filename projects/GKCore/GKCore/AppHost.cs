@@ -31,6 +31,7 @@ using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Events;
 using GKCore.ExtData;
+using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Maps;

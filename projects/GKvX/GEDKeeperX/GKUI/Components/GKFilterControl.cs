@@ -20,7 +20,7 @@
 
 using System;
 using GKCore.Design.Controls;
-using GKCore.Lists;
+using GKCore.Filters;
 using GKCore.Locales;
 using Xamarin.Forms;
 

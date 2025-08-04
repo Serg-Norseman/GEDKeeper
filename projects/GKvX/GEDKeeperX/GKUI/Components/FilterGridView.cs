@@ -22,6 +22,7 @@ using System;
 using System.Collections.ObjectModel;
 using GKCore;
 using GKCore.Design.Controls;
+using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
 using Xamarin.Forms;
@@ -50,7 +51,7 @@ namespace GKUI.Components
                     return GKData.CondSigns[(int)Condition];
                 }
                 set {
-                    Condition = fGrid.fListMan.GetCondByName(value.ToString());
+                    Condition = ListFilter.GetCondByName(value.ToString());
                 }
             }
 
@@ -233,7 +234,7 @@ namespace GKUI.Components
         private void ItemAdd(object sender, EventArgs e)
         {
             var columnId = fListMan.GetFieldColumnId(fFields, fFieldCombo.Text);
-            var condition = fListMan.GetCondByName(fConditionCombo.Text);
+            var condition = ListFilter.GetCondByName(fConditionCombo.Text);
             var value = fValueText.Text;
 
             AddCondition(new FilterCondition(columnId, condition, value));

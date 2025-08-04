@@ -19,16 +19,13 @@
  */
 
 using System.Collections.Generic;
-using GDModel;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
+using GKCore.Filters;
 using GKCore.Utilities;
 
 namespace GKCore.Lists
 {
-    public delegate bool ExternalFilterHandler(GDMRecord record);
-
-
     public sealed class ContentItem
     {
         private readonly IListSource ListSource;
@@ -73,28 +70,6 @@ namespace GKCore.Lists
     }
 
 
-    public enum MatchType : int
-    {
-        REMask,
-        Indistinct
-    }
-
-
-    public class QuickFilterParams
-    {
-        public string Value;
-        public MatchType Type;
-        public float IndistinctThreshold;
-
-        public QuickFilterParams()
-        {
-            Value = "*";
-            Type = MatchType.REMask;
-            IndistinctThreshold = 1.00f;
-        }
-    }
-
-
     public interface IListSource
     {
         List<MapColumnRec> ColumnsMap { get; }
@@ -107,7 +82,7 @@ namespace GKCore.Lists
         QuickFilterParams QuickFilter { get; }
 
         void Clear();
-        void AddCondition(byte columnId, ConditionKind condition, string value);
+        void AddCondition(byte columnId, ConditionOperator condition, string value);
         void ChangeColumnWidth(int colIndex, int colWidth);
         string[] CreateFields();
         bool DeleteItem(object data);
@@ -143,7 +118,6 @@ namespace GKCore.Lists
         IColor GetBackgroundColor(int itemIndex, object rowData);
 
         int GetColumnIndex(int columnId);
-        ConditionKind GetCondByName(string condName);
         object GetContentItem(int itemIndex);
         int GetFieldColumnId(string[] fields, string fieldName);
         int IndexOfItem(object data);

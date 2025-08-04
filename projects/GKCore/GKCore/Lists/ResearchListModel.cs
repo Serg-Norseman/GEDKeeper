@@ -71,7 +71,7 @@ namespace GKCore.Lists
         {
             bool res = CheckQuickFilter(fFetchedRec.ResearchName);
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
+            res = res && CheckCommonFilter(fFetchedRec);
 
             return res;
         }

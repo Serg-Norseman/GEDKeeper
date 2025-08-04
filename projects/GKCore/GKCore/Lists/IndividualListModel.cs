@@ -31,6 +31,7 @@ using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
+using GKCore.Filters;
 using GKCore.Locales;
 using GKCore.Names;
 using GKCore.Operations;
@@ -435,7 +436,7 @@ namespace GKCore.Lists
         {
             bool res = fBaseContext.IsRecordAccess(fFetchedRec.Restriction) && CheckQuickFilter(buf_fullname);
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec) && CheckSpecificFilter();
+            res = res && CheckCommonFilter(fFetchedRec) && CheckSpecificFilter();
 
             return res;
         }
@@ -660,6 +661,7 @@ namespace GKCore.Lists
             buf_mili_dis = "";
             buf_mili_rank = "";
             buf_title = "";
+            if (!fFetchedRec.HasEvents) return;
 
             GlobalOptions gOptions = GlobalOptions.Instance;
 

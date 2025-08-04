@@ -21,6 +21,7 @@
 using System.Threading.Tasks;
 using GDModel;
 using GKCore.Design;
+using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Options;

@@ -58,7 +58,7 @@ namespace GKCore.Lists
         {
             bool res = IsMatchesMask(fFetchedLines, QuickFilter.Value);
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
+            res = res && CheckCommonFilter(fFetchedRec);
 
             return res;
         }

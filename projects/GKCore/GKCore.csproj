@@ -87,6 +87,8 @@
     <Compile Include="GKCore\Controllers\EventDefEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\LocExpertDlgController.cs" />
     <Compile Include="GKCore\Design\Views\IEventDefEditDlg.cs" />
+    <Compile Include="GKCore\Filters\FilterExpression.cs" />
+    <Compile Include="GKCore\Filters\ListFilter.cs" />
     <Compile Include="GKCore\Lists\FlatListModel.cs" />
     <Compile Include="GKCore\Lists\RecsListModel.cs" />
     <Compile Include="GKCore\Lists\TagsListModel.cs" />
@@ -493,7 +495,6 @@
     <Compile Include="GKCore\Lists\GroupListModel.cs" />
     <Compile Include="GKCore\Lists\IndividualListModel.cs" />
     <Compile Include="GKCore\Lists\ListColumns.cs" />
-    <Compile Include="GKCore\Lists\ListFilter.cs" />
     <Compile Include="GKCore\Lists\RecordsListModel.cs" />
     <Compile Include="GKCore\Lists\LocationListModel.cs" />
     <Compile Include="GKCore\Lists\MultimediaListModel.cs" />

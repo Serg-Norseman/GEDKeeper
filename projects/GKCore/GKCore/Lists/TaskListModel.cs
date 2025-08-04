@@ -61,7 +61,7 @@ namespace GKCore.Lists
         {
             bool res = CheckQuickFilter(GKUtils.GetTaskGoalStr(fBaseContext.Tree, fFetchedRec));
 
-            res = res && CheckCommonFilter() && CheckExternalFilter(fFetchedRec);
+            res = res && CheckCommonFilter(fFetchedRec);
 
             return res;
         }

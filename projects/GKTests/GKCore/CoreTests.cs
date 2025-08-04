@@ -27,6 +27,7 @@ using GDModel;
 using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Names;
@@ -76,7 +77,7 @@ namespace GKCore
         [Test]
         public void Test_FiltersIntf()
         {
-            FilterCondition cond = new FilterCondition(0, ConditionKind.ck_Contains, null);
+            FilterCondition cond = new FilterCondition(0, ConditionOperator.Contains, null);
             Assert.IsNotNull(cond);
 
             ExternalFilterHandler handler = TestExternalFilterHandler;
