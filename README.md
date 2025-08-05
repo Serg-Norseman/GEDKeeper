@@ -38,14 +38,15 @@ Community group: [Google Groups: GEDKeeper (en)](https://groups.google.com/g/ged
 
 ## Implementations
 
-- "GEDKeeper2", standard (NET4.7.1 & WinForms, x86), only Windows 7 or later
+- "GEDKeeper2", legacy (NET4.7.1 & WinForms, x86), only Windows 7 or later
 - "GEDKeeper3", cross-platform (NET6 & Eto.Forms, x64), Linux, MacOS and only Windows 10/11
-- "GEDKeeperX", mobile (NET Standard & Xamarin), Android
+- "GEDKeeperX", mobile (Xamarin), Android
 
 
 ## Supported languages
 
-Afrikaans, Belarusian, Chinese (simplified), Czech, Dutch, English, French, German, Hungarian, Icelandic, 
-Italian, Japanese, Kazakh (Cyrillic), Polish, Portuguese, Russian, Serbian (Latin), Spanish, Turkish, Ukrainian, Vietnamese.
+Afrikaans (94%), Belarusian (3%), Chinese (96%), Czech (87%), Dutch (87%), English (100%), French (73%), German (99%), Hungarian (99%), Icelandic (16%), 
+Italian (63%), Japanese (96%), Kazakh (10%), Polish (87%), Portuguese (65%), Russian (100%), Serbian (7%), Spanish (100%), Turkish (81%), Ukrainian (79%),
+Vietnamese (12%).
 
 Platform for project localization: [Crowdin](https://crowdin.com/project/gedkeeper)
