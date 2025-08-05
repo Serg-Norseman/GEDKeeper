@@ -263,7 +263,7 @@ namespace GKCore.Charts
                 }
 
                 // the woman's spouses align to her left
-                if (fRoot.Sex == GDMSex.svFemale) {
+                if (fRoot.Sex != GDMSex.svMale) {
                     RecalcAnc(fRoot, fMargins, fMargins);
                 }
             } else {

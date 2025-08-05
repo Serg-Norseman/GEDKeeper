@@ -887,7 +887,7 @@ namespace GKCore.Charts
                 }
 
                 // the man's spouses align to his right
-                if (result.Sex == GDMSex.svFemale && RequireAncestors(result)) {
+                if (result.Sex != GDMSex.svMale && RequireAncestors(result)) {
                     VisitAncestors(result, false);
                 }
 
@@ -1319,13 +1319,13 @@ namespace GKCore.Charts
                 bColor = bColor.Lighter(HIGHLIGHTED_VAL);
             }
 
-            int cornersRadius = (person.Sex == GDMSex.svFemale) ? RoundedRectRadius : 0;
+            int cornersRadius = (person.Sex != GDMSex.svMale) ? RoundedRectRadius : 0;
             fRenderer.DrawRectangle(xpen, bColor, rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight(), cornersRadius);
         }
 
         private void DrawCoverGlass(ExtRect rt, TreeChartPerson person)
         {
-            float rad = (person.Sex == GDMSex.svFemale) ? RoundedRectRadius : 0.0f;
+            float rad = (person.Sex != GDMSex.svMale) ? RoundedRectRadius : 0.0f;
             fRenderer.DrawCoverGlass(rt.Left, rt.Top, rt.GetWidth(), rt.GetHeight(), rad);
         }
 
@@ -1771,7 +1771,7 @@ namespace GKCore.Charts
                 }
 
                 // the woman's spouses align to her left
-                if (fRoot.Sex == GDMSex.svFemale) {
+                if (fRoot.Sex != GDMSex.svMale) {
                     Draw(fRoot, fKind, drawMode);
                 }
             } else {
