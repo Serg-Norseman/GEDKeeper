@@ -122,6 +122,14 @@ namespace GKUI.Components
             txtMaskedDate.Provider = new FixedMaskedTextProvider(mask, CultureInfo.InvariantCulture);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                if (frmPopup != null && !frmPopup.IsDisposed) frmPopup.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         private void txtYear_TextChanged(object sender, EventArgs e)
         {
             int sourceYear, ageAtYear;

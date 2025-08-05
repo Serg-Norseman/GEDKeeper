@@ -182,57 +182,56 @@ namespace GKUI.Components
 
                         string chunkStr = chunk.Text;
                         if (!string.IsNullOrEmpty(chunkStr)) {
+                            using (var font = new Font(defFont.FamilyName, chunk.Size, GetFontStyle(chunk.Style), GetFontDecoration(chunk.Style))) {
+                                SizeF strSize = font.MeasureString(chunkStr);
 
-                            var font = new Font(defFont.FamilyName, chunk.Size, GetFontStyle(chunk.Style), GetFontDecoration(chunk.Style));
+                                if (fWordWrap && xPos + strSize.Width > maxWidth) {
+                                    int lastPos = 0, prevPos = 0;
+                                    string tempStr, prevStr = string.Empty;
+                                    int sliceType = -1;
+                                    while (true) {
+                                        tempStr = GetSlice(chunkStr, ref lastPos, ref sliceType);
+                                        strSize = font.MeasureString(tempStr);
+                                        if (xPos + strSize.Width <= maxWidth) {
+                                            prevStr = tempStr;
+                                            prevPos = lastPos;
+                                        } else {
+                                            if (sliceType == 0) {
+                                                // first word
+                                                if (xPos == 0) {
+                                                    string tail = chunkStr.Substring(lastPos);
+                                                    SplitChunk(chunk, k, tempStr, tail, ref chunksCount);
+                                                } else {
+                                                    ShiftChunks(k, chunksCount);
+                                                    recalcChunk = true;
+                                                }
 
-                            SizeF strSize = font.MeasureString(chunkStr);
-
-                            if (fWordWrap && xPos + strSize.Width > maxWidth) {
-                                int lastPos = 0, prevPos = 0;
-                                string tempStr, prevStr = string.Empty;
-                                int sliceType = -1;
-                                while (true) {
-                                    tempStr = GetSlice(chunkStr, ref lastPos, ref sliceType);
-                                    strSize = font.MeasureString(tempStr);
-                                    if (xPos + strSize.Width <= maxWidth) {
-                                        prevStr = tempStr;
-                                        prevPos = lastPos;
-                                    } else {
-                                        if (sliceType == 0) {
-                                            // first word
-                                            if (xPos == 0) {
-                                                string tail = chunkStr.Substring(lastPos);
-                                                SplitChunk(chunk, k, tempStr, tail, ref chunksCount);
-                                            } else {
-                                                ShiftChunks(k, chunksCount);
-                                                recalcChunk = true;
+                                                break;
+                                            } else if (sliceType == 1 || sliceType == 2) {
+                                                // middle or tail word
+                                                string tail = chunkStr.Substring(prevPos);
+                                                SplitChunk(chunk, k, prevStr, tail, ref chunksCount);
+                                                break;
+                                            } else if (sliceType == 3) {
+                                                // one first and last word, nothing to do
+                                                break;
                                             }
-
-                                            break;
-                                        } else if (sliceType == 1 || sliceType == 2) {
-                                            // middle or tail word
-                                            string tail = chunkStr.Substring(prevPos);
-                                            SplitChunk(chunk, k, prevStr, tail, ref chunksCount);
-                                            break;
-                                        } else if (sliceType == 3) {
-                                            // one first and last word, nothing to do
-                                            break;
                                         }
                                     }
                                 }
-                            }
 
-                            strSize = font.MeasureString(chunk.Text);
-                            chunk.Width = (int)strSize.Width;
+                                strSize = font.MeasureString(chunk.Text);
+                                chunk.Width = (int)strSize.Width;
 
-                            xPos += chunk.Width;
-                            if (xMax < xPos) xMax = xPos;
+                                xPos += chunk.Width;
+                                if (xMax < xPos) xMax = xPos;
 
-                            int h = (int)strSize.Height;
-                            if (lineHeight < h) lineHeight = h;
+                                int h = (int)strSize.Height;
+                                if (lineHeight < h) lineHeight = h;
 
-                            if (!string.IsNullOrEmpty(chunk.URL)) {
-                                chunk.LinkRect = ExtRect.CreateBounds(prevX, prevY, xPos - prevX, lineHeight);
+                                if (!string.IsNullOrEmpty(chunk.URL)) {
+                                    chunk.LinkRect = ExtRect.CreateBounds(prevX, prevY, xPos - prevX, lineHeight);
+                                }
                             }
                         }
 
@@ -305,7 +304,7 @@ namespace GKUI.Components
                 SolidBrush brush = new SolidBrush(this.TextColor);
                 Font font = null;
                 try {
-                    gfx.FillRectangle(new SolidBrush(BackgroundColor), UIHelper.Rt2Rt(Viewport));
+                    gfx.FillRectangle(BackgroundColor, UIHelper.Rt2Rt(Viewport));
 
                     var scrollPos = ImageViewport;
                     int xOffset = fBorderWidth + scrollPos.Left;
@@ -342,6 +341,7 @@ namespace GKUI.Components
                     }
                 } finally {
                     fAcceptFontChange = true;
+                    if (font != null && !font.IsDisposed) font.Dispose();
                     if (brush != null) brush.Dispose();
                 }
             } catch (Exception ex) {

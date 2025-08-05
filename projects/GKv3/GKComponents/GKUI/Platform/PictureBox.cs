@@ -54,6 +54,16 @@ namespace GKUI.Platform
         {
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                if (fImage != null && !fImage.IsDisposed) {
+                    fImage.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics gfx = e.Graphics;

@@ -159,7 +159,11 @@ namespace GKUI.Components
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
+                fList.ContextMenu = null;
+                fContextMenu.Dispose();
+
                 fList.Dispose();
+                fToolbar.Dispose();
                 fBtnPaste.Dispose();
                 fBtnCut.Dispose();
                 fBtnCopy.Dispose();

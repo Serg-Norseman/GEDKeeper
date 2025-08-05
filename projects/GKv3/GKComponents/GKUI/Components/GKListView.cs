@@ -97,6 +97,14 @@ namespace GKUI.Components
             fListMan = null;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                ListMan = null;
+            }
+            base.Dispose(disposing);
+        }
+
         public void Activate()
         {
             try {

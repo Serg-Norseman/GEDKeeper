@@ -61,6 +61,13 @@ namespace GKUI.Components
             SetLocale();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+            }
+            base.Dispose(disposing);
+        }
+
         private void DoDateChanged()
         {
             DateChanged?.Invoke(this, new EventArgs());
