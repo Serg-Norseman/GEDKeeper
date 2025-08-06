@@ -346,12 +346,11 @@ namespace GKCore.Lists
             var allNames = GlobalOptions.Instance.SearchAndFilterByAllNames;
 
             if (!allNames) {
-                return IsMatchesMask(buf_fullname, fltName);
+                return IsMatchesMask(fQuickFilterBuffer, fltName);
             } else {
-                for (int k = 0; k < fFetchedRec.PersonalNames.Count; k++) {
-                    var persName = fFetchedRec.PersonalNames[k];
-
-                    string recName = GKUtils.GetNameString(fFetchedRec, persName, true, false);
+                var persNames = fFetchedRec.PersonalNames;
+                for (int k = 0, num = persNames.Count; k < num; k++) {
+                    string recName = GKUtils.GetNameString(fFetchedRec, persNames[k], true, false);
                     if (IsMatchesMask(recName, fltName)) {
                         return true;
                     }
@@ -360,85 +359,85 @@ namespace GKCore.Lists
             }
         }
 
-        private bool CheckSpecificFilter()
+        public override bool CheckFilter()
         {
-            bool result = false;
+            bool res = base.CheckFilter();
+            if (!res) return false;
 
             IndividualListFilter iFilter = (IndividualListFilter)fFilter;
 
-            if ((iFilter.Sex == GDMSex.svUnknown || fFetchedRec.Sex == iFilter.Sex)
-                && (IsMatchesNames(iFilter.Name))
-                && (IsMatchesPlace(iFilter.Residence))
-                && (IsMatchesEventVal(iFilter.EventVal))
-                && (!iFilter.PatriarchOnly || fFetchedRec.Patriarch)) {
-                bool isLive = (buf_dd == null);
+            if (iFilter.Sex != GDMSex.svUnknown && fFetchedRec.Sex != iFilter.Sex) return false;
+            if (!IsMatchesNames(iFilter.Name)) return false;
+            if (!IsMatchesPlace(iFilter.Residence)) return false;
+            if (!IsMatchesEventVal(iFilter.EventVal)) return false;
+            if (iFilter.PatriarchOnly && !fFetchedRec.Patriarch) return false;
 
-                switch (iFilter.FilterLifeMode) {
-                    case FilterLifeMode.lmOnlyAlive:
-                        if (!isLive) return false;
-                        break;
+            bool isLive = (buf_dd == null);
 
-                    case FilterLifeMode.lmOnlyDead:
-                        if (isLive) return false;
-                        break;
+            switch (iFilter.FilterLifeMode) {
+                case FilterLifeMode.lmOnlyAlive:
+                    if (!isLive) return false;
+                    break;
 
-                    case FilterLifeMode.lmAliveBefore:
-                        UDN bdt = (buf_bd == null) ? UDN.Unknown : buf_bd.Date.GetUDN();
-                        UDN ddt = (buf_dd == null) ? UDN.Unknown : buf_dd.Date.GetUDN();
-                        if ((bdt.CompareTo(filter_abd) > 0) || (ddt.CompareTo(filter_abd) < 0)) return false;
-                        break;
+                case FilterLifeMode.lmOnlyDead:
+                    if (isLive) return false;
+                    break;
 
-                    case FilterLifeMode.lmTimeLocked:
-                        break;
-                }
+                case FilterLifeMode.lmAliveBefore:
+                    UDN bdt = (buf_bd == null) ? UDN.Unknown : buf_bd.Date.GetUDN();
+                    UDN ddt = (buf_dd == null) ? UDN.Unknown : buf_dd.Date.GetUDN();
+                    if ((bdt.CompareTo(filter_abd) > 0) || (ddt.CompareTo(filter_abd) < 0)) return false;
+                    break;
 
-                switch (iFilter.FilterGroupMode) {
-                    case FilterGroupMode.All:
-                        break;
-
-                    case FilterGroupMode.None:
-                        if (fFetchedRec.HasGroups) return false;
-                        break;
-
-                    case FilterGroupMode.Any:
-                        if (!fFetchedRec.HasGroups) return false;
-                        break;
-
-                    case FilterGroupMode.Selected:
-                        if (fFetchedRec.IndexOfGroup(filter_grp) < 0) return false;
-                        break;
-                }
-
-                switch (iFilter.SourceMode) {
-                    case FilterGroupMode.All:
-                        break;
-
-                    case FilterGroupMode.None:
-                        if (fFetchedRec.HasSourceCitations) return false;
-                        break;
-
-                    case FilterGroupMode.Any:
-                        if (!fFetchedRec.HasSourceCitations) return false;
-                        break;
-
-                    case FilterGroupMode.Selected:
-                        if (fFetchedRec.IndexOfSource(filter_source) < 0) return false;
-                        break;
-                }
-
-                result = true;
+                case FilterLifeMode.lmTimeLocked:
+                    break;
             }
 
-            return result;
+            switch (iFilter.FilterGroupMode) {
+                case FilterGroupMode.All:
+                    break;
+
+                case FilterGroupMode.None:
+                    if (fFetchedRec.HasGroups) return false;
+                    break;
+
+                case FilterGroupMode.Any:
+                    if (!fFetchedRec.HasGroups) return false;
+                    break;
+
+                case FilterGroupMode.Selected:
+                    if (fFetchedRec.IndexOfGroup(filter_grp) < 0) return false;
+                    break;
+            }
+
+            switch (iFilter.SourceMode) {
+                case FilterGroupMode.All:
+                    break;
+
+                case FilterGroupMode.None:
+                    if (fFetchedRec.HasSourceCitations) return false;
+                    break;
+
+                case FilterGroupMode.Any:
+                    if (!fFetchedRec.HasSourceCitations) return false;
+                    break;
+
+                case FilterGroupMode.Selected:
+                    if (fFetchedRec.IndexOfSource(filter_source) < 0) return false;
+                    break;
+            }
+
+            return true;
         }
 
-        public override bool CheckFilter()
+        public override void PrepareFilter()
         {
-            bool res = fBaseContext.IsRecordAccess(fFetchedRec.Restriction) && CheckQuickFilter(buf_fullname);
+            base.PrepareFilter();
 
-            res = res && CheckCommonFilter(fFetchedRec) && CheckSpecificFilter();
-
-            return res;
+            IndividualListFilter iFilter = (IndividualListFilter)fFilter;
+            filter_abd = GDMDate.GetUDNByFormattedStr(iFilter.AliveBeforeDate, GDMCalendar.dcGregorian);
+            filter_grp = (iFilter.GroupRef == "") ? null : fBaseContext.Tree.FindXRef<GDMGroupRecord>(iFilter.GroupRef);
+            filter_source = (iFilter.SourceRef == "") ? null : fBaseContext.Tree.FindXRef<GDMSourceRecord>(iFilter.SourceRef);
         }
 
         private object GetNameValueEx(int colSubtype)
@@ -606,31 +605,8 @@ namespace GKCore.Lists
             return result;
         }
 
-        public override void PrepareFilter()
-        {
-            base.PrepareFilter();
-
-            IndividualListFilter iFilter = (IndividualListFilter)fFilter;
-
-            filter_abd = GDMDate.GetUDNByFormattedStr(iFilter.AliveBeforeDate, GDMCalendar.dcGregorian);
-
-            if (iFilter.GroupRef == "") {
-                filter_grp = null;
-            } else {
-                filter_grp = fBaseContext.Tree.XRefIndex_Find(iFilter.GroupRef) as GDMGroupRecord;
-            }
-
-            if (iFilter.SourceRef == "") {
-                filter_source = null;
-            } else {
-                filter_source = fBaseContext.Tree.XRefIndex_Find(iFilter.SourceRef) as GDMSourceRecord;
-            }
-        }
-
         private GDMCustomEvent buf_bd;
         private GDMCustomEvent buf_dd;
-
-        private string buf_fullname;
         private string buf_residence;
         private string buf_religion;
         private string buf_nationality;
@@ -646,8 +622,8 @@ namespace GKCore.Lists
         public override void Fetch(GDMIndividualRecord aRec)
         {
             base.Fetch(aRec);
+            fQuickFilterBuffer = GKUtils.GetNameString(fFetchedRec, true, false);
 
-            buf_fullname = GKUtils.GetNameString(fFetchedRec, true, false);
             buf_bd = null;
             buf_dd = null;
             buf_residence = "";

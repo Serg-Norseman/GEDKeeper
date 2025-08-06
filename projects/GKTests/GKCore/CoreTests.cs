@@ -77,7 +77,7 @@ namespace GKCore
         [Test]
         public void Test_FiltersIntf()
         {
-            FilterCondition cond = new FilterCondition(0, ConditionOperator.Contains, null);
+            ColumnConditionExpression cond = new ColumnConditionExpression(0, ConditionOperator.Contains, null);
             Assert.IsNotNull(cond);
 
             ExternalFilterHandler handler = TestExternalFilterHandler;

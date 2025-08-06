@@ -53,13 +53,10 @@ namespace GKCore.Lists
             return result;
         }
 
-        public override bool CheckFilter()
+        public override void Fetch(GDMFamilyRecord aRec)
         {
-            bool res = fBaseContext.IsRecordAccess(fFetchedRec.Restriction) && CheckQuickFilter(GKUtils.GetFamilyString(fBaseContext.Tree, fFetchedRec));
-
-            res = res && CheckCommonFilter(fFetchedRec);
-
-            return res;
+            base.Fetch(aRec);
+            fQuickFilterBuffer = GKUtils.GetFamilyString(fBaseContext.Tree, fFetchedRec);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -71,7 +68,7 @@ namespace GKCore.Lists
                     break;
 
                 case ColumnType.ctFamilyStr:
-                    result = GKUtils.GetFamilyString(fBaseContext.Tree, fFetchedRec);
+                    result = fQuickFilterBuffer;
                     break;
 
                 case ColumnType.ctMarriageDate:

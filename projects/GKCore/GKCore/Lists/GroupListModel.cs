@@ -57,13 +57,10 @@ namespace GKCore.Lists
             return result;
         }
 
-        public override bool CheckFilter()
+        public override void Fetch(GDMGroupRecord aRec)
         {
-            bool res = CheckQuickFilter(fFetchedRec.GroupName);
-
-            res = res && CheckCommonFilter(fFetchedRec);
-
-            return res;
+            base.Fetch(aRec);
+            fQuickFilterBuffer = fFetchedRec.GroupName;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

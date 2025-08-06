@@ -48,9 +48,9 @@ namespace GKCore.Controllers
 
                 int num = fView.FilterGrid.Count;
                 for (int r = 0; r < num; r++) {
-                    FilterCondition fcond = fView.FilterGrid[r];
+                    ColumnConditionExpression fcond = fView.FilterGrid[r];
                     if (fcond != null) {
-                        fListMan.AddCondition((byte)fcond.ColumnIndex, fcond.Condition, fcond.Value.ToString());
+                        fListMan.AddCondition((byte)fcond.ColumnIndex, fcond.Operator, fcond.Value.ToString());
                     }
                 }
 
@@ -66,7 +66,7 @@ namespace GKCore.Controllers
             fView.FilterGrid.Clear();
             int num = fListMan.Filter.Conditions.Count;
             for (int i = 0; i < num; i++) {
-                FilterCondition fcond = fListMan.Filter.Conditions[i];
+                ColumnConditionExpression fcond = fListMan.Filter.Conditions[i];
                 fView.FilterGrid.AddCondition(fcond);
             }
         }

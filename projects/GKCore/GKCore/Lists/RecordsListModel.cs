@@ -19,7 +19,9 @@
  */
 
 using System.Collections.Generic;
+using BSLib;
 using GDModel;
+using GKCore.Filters;
 using GKCore.Search;
 
 namespace GKCore.Lists
@@ -28,6 +30,7 @@ namespace GKCore.Lists
     {
         GDMRecordType RecordType { get; }
         bool SimpleList { get; set; }
+        QuickFilterParams QuickFilter { get; }
 
         List<GDMRecord> GetRecordsList();
 
@@ -43,6 +46,8 @@ namespace GKCore.Lists
     {
         private readonly GDMRecordType fRecordType;
         private bool fSimpleList;
+        private readonly QuickFilterParams fQuickFilter;
+        protected string fQuickFilterBuffer;
 
 
         public GDMRecordType RecordType
@@ -56,10 +61,17 @@ namespace GKCore.Lists
             set { fSimpleList = value; }
         }
 
+        public QuickFilterParams QuickFilter
+        {
+            get { return fQuickFilter; }
+        }
+
+
         protected RecordsListModel(IBaseContext baseContext, ListColumns defaultListColumns, GDMRecordType recordType) :
             base(baseContext, defaultListColumns)
         {
             fRecordType = recordType;
+            fQuickFilter = new QuickFilterParams();
         }
 
         public override void UpdateContents()
@@ -77,6 +89,27 @@ namespace GKCore.Lists
             }
 
             DoneContent();
+        }
+
+        protected virtual bool CheckQuickFilter()
+        {
+            return CheckQuickFilter(fQuickFilterBuffer);
+        }
+
+        protected bool CheckQuickFilter(string str)
+        {
+            if (fQuickFilter.Type == MatchType.Indistinct) {
+                return (IndistinctMatching.GetSimilarity(str, fQuickFilter.Value) >= fQuickFilter.IndistinctThreshold);
+            } else {
+                return IsMatchesMask(str, fQuickFilter.Value);
+            }
+        }
+
+        public override bool CheckFilter()
+        {
+            bool hasAccess = (fFetchedRec is IGDMStructWithRestriction swr) ? fBaseContext.IsRecordAccess(swr.Restriction) : true;
+            bool res = hasAccess && CheckQuickFilter() && CheckCommonFilter(fFetchedRec);
+            return res;
         }
 
         public List<GDMRecord> GetRecordsList()

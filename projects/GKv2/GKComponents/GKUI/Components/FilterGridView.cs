@@ -46,7 +46,7 @@ namespace GKUI.Components
             get { return fGridView.Rows.Count; }
         }
 
-        public FilterCondition this[int index]
+        public ColumnConditionExpression this[int index]
         {
             get {
                 DataGridViewRow row = fGridView.Rows[index];
@@ -56,12 +56,12 @@ namespace GKUI.Components
                 string cnd = (string)row.Cells[1].Value;
                 string val = (string)row.Cells[2].Value;
 
-                FilterCondition fcond = null;
+                ColumnConditionExpression fcond = null;
                 if (!string.IsNullOrEmpty(fld)) {
                     int colId = fListMan.GetFieldColumnId(fFields, fld);
                     if (colId != -1) {
                         ConditionOperator cond = ListFilter.GetCondByName(cnd);
-                        fcond = new FilterCondition((byte)colId, cond, val);
+                        fcond = new ColumnConditionExpression((byte)colId, cond, val);
                     }
                 }
                 return fcond;
@@ -104,12 +104,12 @@ namespace GKUI.Components
             InitGrid();
         }
 
-        public void AddCondition(FilterCondition fcond)
+        public void AddCondition(ColumnConditionExpression fcond)
         {
             int r = fGridView.Rows.Add();
             DataGridViewRow row = fGridView.Rows[r];
 
-            int condIndex = ((IConvertible)fcond.Condition).ToByte(null);
+            int condIndex = ((IConvertible)fcond.Operator).ToByte(null);
 
             row.Cells[0].Value = fFields[fcond.ColumnIndex + 1];
             row.Cells[1].Value = GKData.CondSigns[condIndex];

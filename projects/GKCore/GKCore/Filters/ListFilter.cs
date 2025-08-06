@@ -36,7 +36,7 @@ namespace GKCore.Filters
     }
 
 
-    public enum MatchType : int
+    public enum MatchType
     {
         REMask,
         Indistinct
@@ -58,34 +58,9 @@ namespace GKCore.Filters
     }
 
 
-    public class FilterCondition
-    {
-        public int ColumnIndex;
-        public ConditionOperator Condition;
-        public object Value;
-
-        public FilterCondition(int columnIndex, ConditionOperator condition, object value)
-        {
-            ColumnIndex = columnIndex;
-            Condition = condition;
-
-            if (condition >= ConditionOperator.ContainsMask) {
-                string strValue = value.ToString();
-                if (!string.IsNullOrEmpty(strValue)) {
-                    if (strValue[0] != '*') strValue = "*" + strValue;
-                    if (strValue[strValue.Length - 1] != '*') strValue = strValue + "*";
-                    Value = strValue;
-                }
-            } else {
-                Value = value;
-            }
-        }
-    }
-
-
     public interface IListFilter
     {
-        List<FilterCondition> Conditions { get; }
+        List<ColumnConditionExpression> Conditions { get; }
 
         void Assign(IListFilter other);
         void Clear();
@@ -101,16 +76,16 @@ namespace GKCore.Filters
     /// </summary>
     public class ListFilter : IListFilter
     {
-        private readonly List<FilterCondition> fConditions;
+        private readonly List<ColumnConditionExpression> fConditions;
 
-        public List<FilterCondition> Conditions
+        public List<ColumnConditionExpression> Conditions
         {
             get { return fConditions; }
         }
 
         public ListFilter()
         {
-            fConditions = new List<FilterCondition>();
+            fConditions = new List<ColumnConditionExpression>();
         }
 
         public virtual void Clear()
@@ -129,7 +104,7 @@ namespace GKCore.Filters
             foreach (var cond in fConditions) {
                 if (sb.Length != 0) sb.Append(", ");
 
-                int condIndex = ((IConvertible)cond.Condition).ToByte(null);
+                int condIndex = ((IConvertible)cond.Operator).ToByte(null);
                 sb.Append(string.Format("{0} {1} `{2}`", fields[cond.ColumnIndex + 1], GKData.CondSigns[condIndex], cond.Value.ToString()));
             }
             return sb.ToString();
@@ -156,7 +131,7 @@ namespace GKCore.Filters
             return JsonHelper.Serialize(this);
         }
 
-        internal static bool CheckCondition(FilterCondition fcond, object dataval)
+        internal static bool CheckCondition(ColumnConditionExpression fcond, object dataval)
         {
             bool res = true;
 
@@ -165,11 +140,11 @@ namespace GKCore.Filters
                     return true;
 
                 int compRes = 0;
-                if (fcond.Condition < ConditionOperator.Contains) {
+                if (fcond.Operator < ConditionOperator.Contains) {
                     compRes = ((IComparable)dataval).CompareTo(fcond.Value);
                 }
 
-                switch (fcond.Condition) {
+                switch (fcond.Operator) {
                     case ConditionOperator.NotEqual:
                         res = compRes != 0;
                         break;

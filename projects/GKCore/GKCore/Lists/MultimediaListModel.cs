@@ -61,19 +61,11 @@ namespace GKCore.Lists
             return result;
         }
 
-        public override bool CheckFilter()
-        {
-            bool res = CheckQuickFilter(fFileRef.Title);
-
-            res = res && CheckCommonFilter(fFetchedRec);
-
-            return res;
-        }
-
         public override void Fetch(GDMMultimediaRecord aRec)
         {
             base.Fetch(aRec);
             fFileRef = fFetchedRec.FileReferences[0];
+            fQuickFilterBuffer = fFileRef.Title;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

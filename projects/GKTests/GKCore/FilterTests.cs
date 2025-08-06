@@ -41,9 +41,9 @@ namespace GKCore.Filters
             list.Add(new LItem() { id = 1, name = "Adam", value = "Paradise" });
             list.Add(new LItem() { id = 2, name = "Eve", value = "Earth" });
 
-            var conditions = new FilterExpression(LogicalOperator.And);
-            conditions.AddCondition(new ConditionExpression() { FieldName = "name", Operator = ConditionOperator.Contains, Value = "Ada" });
-            conditions.AddCondition(new ConditionExpression() { FieldName = "value", Operator = ConditionOperator.Contains, Value = "rad" });
+            var conditions = new FilterExpression(null, LogicalOperator.And);
+            conditions.AddCondition(new FieldConditionExpression() { FieldName = "name", Operator = ConditionOperator.Contains, Value = "Ada" });
+            conditions.AddCondition(new FieldConditionExpression() { FieldName = "value", Operator = ConditionOperator.Contains, Value = "rad" });
 
             var filterExpr = conditions.GenerateFilterExpression<LItem>();
 
@@ -59,9 +59,9 @@ namespace GKCore.Filters
             list.Add(new LItem() { id = 1, name = "Adam", value = "Paradise" });
             list.Add(new LItem() { id = 2, name = "Eve", value = "Earth" });
 
-            var conditions = new FilterExpression(LogicalOperator.And);
-            conditions.AddCondition(new ConditionExpression() { FieldName = "name", Operator = ConditionOperator.ContainsMask, Value = "*Ada*" });
-            conditions.AddCondition(new ConditionExpression() { FieldName = "value", Operator = ConditionOperator.ContainsMask, Value = "*rad*" });
+            var conditions = new FilterExpression(null, LogicalOperator.And);
+            conditions.AddCondition(new FieldConditionExpression() { FieldName = "name", Operator = ConditionOperator.ContainsMask, Value = "*Ada*" });
+            conditions.AddCondition(new FieldConditionExpression() { FieldName = "value", Operator = ConditionOperator.ContainsMask, Value = "*rad*" });
 
             var filterExpr = conditions.GenerateFilterExpression<LItem>();
 

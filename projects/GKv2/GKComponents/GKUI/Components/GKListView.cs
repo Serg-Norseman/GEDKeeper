@@ -485,7 +485,7 @@ namespace GKUI.Components
 
         public GKListItem GetSelectedItem()
         {
-            GKListItem result = (SelectedItems.Count <= 0) ? null : SelectedItems[0] as GKListItem;
+            GKListItem result = (VirtualMode || SelectedItems.Count <= 0) ? null : SelectedItems[0] as GKListItem;
             return result;
         }
 

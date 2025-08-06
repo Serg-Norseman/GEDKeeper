@@ -60,29 +60,18 @@ namespace GKCore.Lists
             return result;
         }
 
-        private bool CheckQuickFilter()
+        protected override bool CheckQuickFilter()
         {
             var names = fFetchedRec.Names;
-            for (int i = 0; i < names.Count; i++) {
-                var locName = names[i].StringValue;
-                if (CheckQuickFilter(locName)) {
+            for (int i = 0, num = names.Count; i < num; i++) {
+                if (CheckQuickFilter(names[i].StringValue)) {
                     return true;
                 }
             }
-
             return false;
         }
 
-        public override bool CheckFilter()
-        {
-            bool res = CheckQuickFilter();
-
-            res = res && CheckCommonFilter(fFetchedRec);
-
-            return res;
-        }
-
-        protected override bool CheckCommonCondition(FilterCondition fcond)
+        protected override bool CheckCommonCondition(ColumnConditionExpression fcond)
         {
             if ((ColumnType)fcond.ColumnIndex == ColumnType.ctName) {
                 var names = fFetchedRec.Names;

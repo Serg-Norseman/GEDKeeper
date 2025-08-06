@@ -126,10 +126,10 @@ namespace GKCore
         public void Test_ListFilter_Yaml()
         {
             var filter = new ListFilter();
-            filter.Conditions.Add(new FilterCondition(1, ConditionOperator.Contains, "Kostrom"));
+            filter.Conditions.Add(new ColumnConditionExpression(1, ConditionOperator.Contains, "Kostrom"));
 
             string yaml = YamlHelper.Serialize(filter);
-            string expected = "Conditions:\r\n- ColumnIndex: 1\r\n  Condition: Contains\r\n  Value: Kostrom\r\n";
+            string expected = "Conditions:\r\n- ColumnIndex: 1\r\n  Value: Kostrom\r\n  Operator: Contains\r\n";
 #if OS_MACOS || OS_LINUX
             expected = expected.Replace("\r\n", "\n");
 #endif

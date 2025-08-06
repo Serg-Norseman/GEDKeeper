@@ -44,7 +44,6 @@ namespace GKCore.Lists
         private readonly ExtObservableList<ContentItem> fContentList;
         private SGCulture fSysCulture;
         private int fTotalCount;
-        private readonly QuickFilterParams fQuickFilter;
         private int fXSortFactor;
 
         private string fMask;
@@ -97,18 +96,12 @@ namespace GKCore.Lists
             get { return fTotalCount; }
         }
 
-        public QuickFilterParams QuickFilter
-        {
-            get { return fQuickFilter; }
-        }
-
 
         protected ListSource()
         {
             fBaseContext = null;
             fColumnsMap = new List<MapColumnRec>();
             fContentList = new ExtObservableList<ContentItem>();
-            fQuickFilter = new QuickFilterParams();
             fListColumns = new ListColumns(GKListType.ltNone);
 
             CreateFilter();
@@ -119,7 +112,6 @@ namespace GKCore.Lists
             fBaseContext = baseContext;
             fColumnsMap = new List<MapColumnRec>();
             fContentList = new ExtObservableList<ContentItem>();
-            fQuickFilter = new QuickFilterParams();
 
             if (defaultListColumns != null) {
                 fListColumns = defaultListColumns;
@@ -369,18 +361,19 @@ namespace GKCore.Lists
 
         #region Filters
 
-        protected bool CheckQuickFilter(string str)
-        {
-            if (fQuickFilter.Type == MatchType.Indistinct) {
-                return (IndistinctMatching.GetSimilarity(str, fQuickFilter.Value) >= fQuickFilter.IndistinctThreshold);
-            } else {
-                return IsMatchesMask(str, fQuickFilter.Value);
-            }
-        }
+        private Func<T, bool> fFilterFunc;
 
         public virtual void PrepareFilter()
         {
             fFilterMethod = GlobalOptions.Instance.MatchPatternMethod;
+
+            var filterExpression = new FilterExpression(this, LogicalOperator.And);
+            if (fFilter.Conditions.Count > 0) {
+                filterExpression.Conditions.AddRange(fFilter.Conditions);
+                fFilterFunc = filterExpression.GenerateFilterExpression<T>();
+            } else {
+                fFilterFunc = null;
+            }
         }
 
         public virtual bool CheckFilter()
@@ -397,11 +390,11 @@ namespace GKCore.Lists
         {
             object condValue = ConvertColumnStr(value, GetColumnDataType(columnId));
 
-            FilterCondition fltCond = new FilterCondition(columnId, condition, condValue);
+            ColumnConditionExpression fltCond = new ColumnConditionExpression(columnId, condition, condValue);
             fFilter.Conditions.Add(fltCond);
         }
 
-        protected virtual bool CheckCommonCondition(FilterCondition fcond)
+        protected virtual bool CheckCommonCondition(ColumnConditionExpression fcond)
         {
             object dataval;
             try {
@@ -416,22 +409,24 @@ namespace GKCore.Lists
 
         protected bool CheckCommonFilter(GDMRecord rec)
         {
-            // check external filter
-            bool res = (fExternalFilter == null || fExternalFilter(rec));
-            if (!res) return false;
-
+            bool res;
             try {
-                var conditions = fFilter.Conditions;
+                // check external filter
+                res = (fExternalFilter == null || fExternalFilter(rec));
+
+                // check user conditions
+                res = res && (fFilterFunc == null || fFilterFunc(rec as T));
+
+                /*var conditions = fFilter.Conditions;
                 for (int i = 0, num = conditions.Count; i < num; i++) {
-                    FilterCondition fcond = conditions[i];
+                    ColumnConditionExpression fcond = conditions[i];
                     res = res && CheckCommonCondition(fcond);
                     if (!res) break;
-                }
+                }*/
             } catch (Exception ex) {
                 Logger.WriteError("ListSource.CheckCommonFilter()", ex);
                 res = true;
             }
-
             return res;
         }
 

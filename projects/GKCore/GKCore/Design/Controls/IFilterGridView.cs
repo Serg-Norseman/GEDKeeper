@@ -26,9 +26,9 @@ namespace GKCore.Design.Controls
     public interface IFilterGridView : IBaseControl, IThemedView
     {
         int Count { get; }
-        FilterCondition this[int index] { get; }
+        ColumnConditionExpression this[int index] { get; }
 
-        void AddCondition(FilterCondition fcond);
+        void AddCondition(ColumnConditionExpression fcond);
         void Clear();
         void RemoveCondition(int index);
     }

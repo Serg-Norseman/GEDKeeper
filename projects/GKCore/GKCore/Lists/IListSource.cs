@@ -79,7 +79,6 @@ namespace GKCore.Lists
         int FilteredCount { get; }
         IListColumns ListColumns { get; }
         int TotalCount { get; }
-        QuickFilterParams QuickFilter { get; }
 
         void Clear();
         void AddCondition(byte columnId, ConditionOperator condition, string value);
