@@ -31,7 +31,7 @@ namespace GKUI.Components
 {
     public class FilterGridView : ContentView, IFilterGridView
     {
-        private class FilterConditionRow : FilterCondition
+        private class FilterConditionRow : ColumnConditionExpression
         {
             private readonly FilterGridView fGrid;
 
@@ -48,10 +48,10 @@ namespace GKUI.Components
             public object ConditionText
             {
                 get {
-                    return GKData.CondSigns[(int)Condition];
+                    return GKData.CondSigns[(int)Operator];
                 }
                 set {
-                    Condition = ListFilter.GetCondByName(value.ToString());
+                    Operator = ListFilter.GetCondByName(value.ToString());
                 }
             }
 
@@ -73,8 +73,8 @@ namespace GKUI.Components
             }
 
 
-            public FilterConditionRow(FilterGridView grid, FilterCondition filterCondition)
-                : base(filterCondition.ColumnIndex, filterCondition.Condition, filterCondition.Value)
+            public FilterConditionRow(FilterGridView grid, ColumnConditionExpression filterCondition)
+                : base(filterCondition.ColumnIndex, filterCondition.Operator, filterCondition.Value)
             {
                 fGrid = grid;
             }
@@ -98,7 +98,7 @@ namespace GKUI.Components
             get { return fCollection.Count; }
         }
 
-        public FilterCondition this[int index]
+        public ColumnConditionExpression this[int index]
         {
             get { return fCollection[index]; }
         }
@@ -180,7 +180,7 @@ namespace GKUI.Components
             }
         }
 
-        public void AddCondition(FilterCondition fcond)
+        public void AddCondition(ColumnConditionExpression fcond)
         {
             fCollection.Add(new FilterConditionRow(this, fcond));
         }
@@ -237,7 +237,7 @@ namespace GKUI.Components
             var condition = ListFilter.GetCondByName(fConditionCombo.Text);
             var value = fValueText.Text;
 
-            AddCondition(new FilterCondition(columnId, condition, value));
+            AddCondition(new ColumnConditionExpression(columnId, condition, value));
         }
 
         private void ItemDelete(object sender, EventArgs e)
