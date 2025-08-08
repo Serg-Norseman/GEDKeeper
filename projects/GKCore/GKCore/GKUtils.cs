@@ -46,7 +46,6 @@ using GKCore.Locales;
 using GKCore.Media;
 using GKCore.Names;
 using GKCore.Options;
-using GKCore.Types;
 using GKCore.Utilities;
 using UtfUnknown;
 

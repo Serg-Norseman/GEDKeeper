@@ -27,7 +27,6 @@ using GKCore.Design.Views;
 using GKCore.Locales;
 using GKCore.Operations;
 using GKCore.Options;
-using GKCore.Types;
 
 namespace GKCore.Lists
 {

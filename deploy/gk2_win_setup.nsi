@@ -353,7 +353,6 @@ Section "$(gkreq)"
     File "..\bin\nVLC.dll"
     File "..\bin\UtfUnknown.dll"
     File "..\bin\YamlDotNet.dll"
-    File "..\bin\Newtonsoft.Json.dll"
     File "..\bin\ZedGraph.dll"
 
     File "..\LICENSE"

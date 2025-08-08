@@ -21,7 +21,6 @@
 using System;
 using BSLib;
 using GKCore;
-using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
 

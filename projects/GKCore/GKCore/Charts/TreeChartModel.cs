@@ -34,7 +34,6 @@ using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Options;
 using GKCore.Search;
-using GKCore.Types;
 using GKCore.Utilities;
 using GKUI.Themes;
 
@@ -103,6 +102,8 @@ namespace GKCore.Charts
         private readonly List<TreeChartPerson> fPersons;
         private readonly HashSet<string> fPreparedFamilies;
         private readonly HashSet<string> fPreparedIndividuals;
+        private readonly ITimer fTimer;
+        private readonly ITreeChart fView;
 
         private IColor fClrBlack;
 
@@ -145,10 +146,8 @@ namespace GKCore.Charts
         private IBrush fSolidBlack;
         private IBrush fSolidF, fSolidM;
         private int fSpouseDistance;
-        private ITimer fTimer;
         private GDMTree fTree;
         private ExtRect fTreeBounds;
-        private ITreeChart fView;
         private ExtRect fVisibleArea;
         private bool fXRefVisible;
 

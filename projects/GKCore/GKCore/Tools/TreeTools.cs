@@ -28,8 +28,8 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Lists;
 using GKCore.Locales;
-using GKCore.Types;
 
 namespace GKCore.Tools
 {

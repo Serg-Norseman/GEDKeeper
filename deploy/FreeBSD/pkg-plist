@@ -382,7 +382,6 @@ bin/gedkeeper
 %%DATADIR%%/plugins/UtfUnknown.dll
 %%DATADIR%%/plugins/XapianCSharp.dll
 %%DATADIR%%/plugins/YamlDotNet.dll
-%%DATADIR%%/plugins/Newtonsoft.Json.dll
 %%DATADIR%%/plugins/ZedGraph.dll
 %%DATADIR%%/plugins/_XapianSharp.dll
 %%DATADIR%%/plugins/itextsharp.dll

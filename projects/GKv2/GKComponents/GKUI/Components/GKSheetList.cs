@@ -25,7 +25,6 @@ using BSLib;
 using GKCore.Design.Controls;
 using GKCore.Lists;
 using GKCore.Locales;
-using GKCore.Types;
 using GKUI.Themes;
 
 namespace GKUI.Components

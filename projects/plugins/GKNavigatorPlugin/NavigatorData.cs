@@ -25,10 +25,8 @@ using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Controls;
-using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
-using GKCore.Types;
 
 namespace GKNavigatorPlugin
 {
@@ -38,7 +36,6 @@ namespace GKNavigatorPlugin
         RecentActivity,
         JumpHistory,
         PotencialProblems,
-        Filters,
         Bookmarks,
         Records,
         Languages,
@@ -68,32 +65,9 @@ namespace GKNavigatorPlugin
     }
 
 
-    public sealed class FilterInfo
-    {
-        public readonly GDMRecordType RecType;
-        public readonly IListSource ListSource;
-        public readonly string FilterContent;
-        public readonly string FilterView;
-
-        public FilterInfo(GDMRecordType recType, IListSource listSource, IListFilter filter)
-        {
-            RecType = recType;
-            ListSource = listSource;
-            FilterContent = filter.Serialize();
-            FilterView = filter.ToString(listSource);
-        }
-    }
-
-
     public sealed class BaseData
     {
-        private readonly List<FilterInfo> fChangedFilters;
         private readonly List<RecordInfo> fChangedRecords;
-
-        public List<FilterInfo> ChangedFilters
-        {
-            get { return fChangedFilters; }
-        }
 
         public List<RecordInfo> ChangedRecords
         {
@@ -102,7 +76,6 @@ namespace GKNavigatorPlugin
 
         public BaseData()
         {
-            fChangedFilters = new List<FilterInfo>();
             fChangedRecords = new List<RecordInfo>();
         }
 
@@ -143,13 +116,6 @@ namespace GKNavigatorPlugin
                 }
             }
             return -1;
-        }
-
-        public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter)
-        {
-            if (listSource == null || filter == null) return;
-
-            fChangedFilters.Add(new FilterInfo(recType, listSource, filter));
         }
     }
 
@@ -217,10 +183,6 @@ namespace GKNavigatorPlugin
                     listView.Clear();
                     break;
 
-                case DataCategory.Filters:
-                    ShowFilters(baseWin, listView);
-                    break;
-
                 case DataCategory.Bookmarks:
                     ShowBookmarks(baseWin, listView);
                     break;
@@ -254,10 +216,6 @@ namespace GKNavigatorPlugin
                 switch (dataCat) {
                     case DataCategory.JumpHistory:
                         SelectRecord(baseWin, (GDMRecord)itemData);
-                        break;
-
-                    case DataCategory.Filters:
-                        SelectFilter(baseWin, (FilterInfo)itemData);
                         break;
 
                     case DataCategory.Bookmarks:
@@ -347,43 +305,6 @@ namespace GKNavigatorPlugin
             } finally {
                 listView.ListMan = listModel;
                 listView.UpdateContents();
-            }
-        }
-
-        #endregion
-
-        #region Filters
-
-        private void ShowFilters(IBaseWindow baseWin, IListView listView)
-        {
-            baseWin.ShowRecordsTab(GDMRecordType.rtIndividual);
-
-            var listModel = new FlatListModel();
-            try {
-                listModel.ListColumns.Clear();
-                listModel.ListColumns.AddColumn(LangMan.LS(LSID.MIFilter), DataType.dtString, 400, true);
-                listModel.ListColumns.ResetDefaults();
-
-                BaseData baseData = fPlugin.Data[baseWin.Context.FileName];
-                if (baseData == null) return;
-
-                foreach (var filterInfo in baseData.ChangedFilters) {
-                    listModel.AddItem(filterInfo, new object[] { filterInfo.FilterView });
-                }
-            } finally {
-                listView.ListMan = listModel;
-                listView.UpdateContents();
-            }
-        }
-
-        private static void SelectFilter(IBaseWindow baseWin, FilterInfo filterInfo)
-        {
-            try {
-                baseWin.ShowRecordsTab(filterInfo.RecType);
-                filterInfo.ListSource.Filter.Deserialize(filterInfo.FilterContent);
-                baseWin.ApplyFilter(filterInfo.RecType);
-            } catch (Exception ex) {
-                Console.WriteLine(ex.Message);
             }
         }
 

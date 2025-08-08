@@ -20,6 +20,7 @@
 
 using System.Threading.Tasks;
 using GDModel;
+using GKCore.Backups;
 using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Controls;
@@ -32,7 +33,6 @@ using GKCore.Media;
 using GKCore.Names;
 using GKCore.Options;
 using GKCore.Plugins;
-using GKCore.Types;
 using GKUI.Themes;
 
 namespace GKCore.Controllers

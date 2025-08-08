@@ -125,7 +125,7 @@ namespace GKGenetixPlugin
 
         private class PTestProvider : ITestProvider
         {
-            private IHost fHost;
+            private readonly IHost fHost;
 
             public PTestProvider(IHost host)
             {
@@ -141,12 +141,11 @@ namespace GKGenetixPlugin
                     var tree = baseWindow.Context.Tree;
 
                     for (int i = 0; i < tree.RecordsCount; i++) {
-                        var indiRec = tree[i] as GDMIndividualRecord;
-                        if (indiRec != null && indiRec.HasDNATests) {
+                        if (tree[i] is GDMIndividualRecord indiRec && indiRec.HasDNATests) {
                             for (int j = 0; j < indiRec.DNATests.Count; j++) {
                                 var dnaTest = indiRec.DNATests[j];
 
-                                string strDate = dnaTest.Date.GetDisplayString(GKCore.Types.DateFormat.dfDD_MM_YYYY);
+                                string strDate = dnaTest.Date.GetDisplayString(DateFormat.dfDD_MM_YYYY);
                                 string strSex = indiRec.Sex.ToString();
                                 string fileRefPath = baseWindow.Context.MediaLoad(dnaTest.FileReference);
 

@@ -187,9 +187,10 @@ namespace GKChroniclePlugin
             if (baseWin == null)
                 return result;
 
-            int num = baseWin.Context.Tree.RecordsCount;
+            var tree = baseWin.Context.Tree;
+            int num = tree.RecordsCount;
             for (int i = 0; i < num; i++) {
-                var rec = baseWin.Context.Tree[i] as GDMRecordWithEvents;
+                var rec = tree[i] as GDMRecordWithEvents;
                 if (rec == null || !rec.HasEvents) continue;
 
                 int eventsCount = rec.Events.Count;

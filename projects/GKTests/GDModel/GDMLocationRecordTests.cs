@@ -22,7 +22,6 @@ using System;
 using System.Linq;
 using GDModel.Providers.GEDCOM;
 using GKCore;
-using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
 

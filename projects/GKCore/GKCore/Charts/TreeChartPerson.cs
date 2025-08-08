@@ -29,7 +29,6 @@ using GKCore.Import;
 using GKCore.Locales;
 using GKCore.Media;
 using GKCore.Options;
-using GKCore.Types;
 
 namespace GKCore.Charts
 {

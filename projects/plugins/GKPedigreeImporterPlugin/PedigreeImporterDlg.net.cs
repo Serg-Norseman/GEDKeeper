@@ -21,11 +21,11 @@
 using System;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
+using GDModel;
 using GKCore;
 using GKCore.Design;
 using GKCore.Locales;
 using GKCore.Plugins;
-using GKCore.Types;
 using GKUI.Components;
 using GKUI.Forms;
 

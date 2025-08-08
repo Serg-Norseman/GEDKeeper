@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,22 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCore.Types
+namespace GDModel
 {
-    /// <summary>
-    /// Typical operations available on the records in the lists.
-    /// </summary>
-    public enum RecordAction
+    public enum DateFormat
     {
-        raAdd,
-        raEdit,
-        raDelete,
-        raJump,
-        raMoveUp,
-        raMoveDown,
-        raCopy,
-        raCut,
-        raPaste,
-        raDetails,
+        dfDD_MM_YYYY,
+        dfYYYY_MM_DD,
+        dfYYYY
     }
 }

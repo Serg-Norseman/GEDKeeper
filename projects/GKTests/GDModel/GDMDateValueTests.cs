@@ -19,7 +19,6 @@
  */
 
 using System;
-using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
 

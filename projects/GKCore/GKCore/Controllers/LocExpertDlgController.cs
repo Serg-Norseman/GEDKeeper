@@ -29,7 +29,6 @@ using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Operations;
 using GKCore.Options;
-using GKCore.Types;
 using GKCore.Utilities;
 using GKUI.Themes;
 
@@ -69,7 +68,7 @@ namespace GKCore.Controllers
         private const float FIND_LOC_THRESHOLD = 0.85f;
         private const float FILTER_LOC_THRESHOLD = 0.85f;
 
-        private LocEntriesListModel fEntriesListModel;
+        private readonly LocEntriesListModel fEntriesListModel;
         private List<LocEntry> fEntries;
 
 
@@ -158,7 +157,7 @@ namespace GKCore.Controllers
             for (int i = 0; i < fEntries.Count; i++) {
                 var entry = fEntries[i];
                 entry.Pair = FindLocation(entry.Text, true);
-                entry.HasDateIntersects = (entry.Pair == null || entry.Pair.Name == null) ? false : !GDMCustomDate.GetIntersection(date, entry.Pair.Name.Date).IsEmpty();
+                entry.HasDateIntersects = entry.Pair != null && entry.Pair.Name != null && !GDMCustomDate.GetIntersection(date, entry.Pair.Name.Date).IsEmpty();
             }
 
             // second pass, check links to top levels

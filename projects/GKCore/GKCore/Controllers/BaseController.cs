@@ -40,7 +40,6 @@ using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Tools;
-using GKCore.Types;
 
 namespace GKCore.Controllers
 {

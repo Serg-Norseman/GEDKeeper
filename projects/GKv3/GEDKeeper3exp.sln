@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{89782CA9-48D0-451A-AEB1-4E1771CEAC47}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\.editorconfig = ..\..\.editorconfig
+		..\GKConfigurations3.targets = ..\GKConfigurations3.targets
 		..\..\locales\help_enu\gkhHistory.html = ..\..\locales\help_enu\gkhHistory.html
 		..\..\locales\help_rus\gkhHistory.html = ..\..\locales\help_rus\gkhHistory.html
 		NOTES.md = NOTES.md
@@ -84,7 +85,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKGenetixPlugin.net", "..\p
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKTests.net", "..\GKTests\GKTests.net.csproj", "{32521FE6-112C-4095-B0A8-755C5C94D00A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKVisionPlugin.net", "..\plugins\GKVisionPlugin\GKVisionPlugin.net.csproj", "{9C574C30-C083-4B59-ACD4-FDFA42D3BA17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKVisionPlugin.net", "..\plugins\GKVisionPlugin\GKVisionPlugin.net.csproj", "{9C574C30-C083-4B59-ACD4-FDFA42D3BA17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

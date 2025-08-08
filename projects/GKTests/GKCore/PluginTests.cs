@@ -20,8 +20,8 @@
 
 using System;
 using System.Reflection;
+using GKCore.Lists;
 using GKCore.Plugins;
-using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
 using NSubstitute;

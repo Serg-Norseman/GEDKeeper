@@ -26,7 +26,6 @@ using GEDmill.MiniTree;
 using GEDmill.Model;
 using GKCore;
 using GKCore.Locales;
-using GKCore.Types;
 using GKL = GKCore.Logging;
 
 namespace GEDmill.HTML

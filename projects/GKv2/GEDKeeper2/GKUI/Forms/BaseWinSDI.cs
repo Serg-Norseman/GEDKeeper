@@ -39,7 +39,6 @@ using GKCore.Locales;
 using GKCore.Media;
 using GKCore.Options;
 using GKCore.Search;
-using GKCore.Types;
 using GKUI.Components;
 using GKUI.Platform;
 using GKUI.Platform.Handlers;

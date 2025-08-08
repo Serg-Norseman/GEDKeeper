@@ -29,7 +29,6 @@ using GKCore;
 using GKCore.Design;
 using GKCore.Import;
 using GKCore.Locales;
-using GKCore.Types;
 
 namespace GKPedigreeImporterPlugin
 {

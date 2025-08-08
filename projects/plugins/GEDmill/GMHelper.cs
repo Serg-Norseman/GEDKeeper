@@ -27,7 +27,6 @@ using GDModel.Providers.GEDCOM;
 using GEDmill.Model;
 using GKCore;
 using GKCore.Tools;
-using GKCore.Types;
 using GKL = GKCore.Logging;
 
 namespace GEDmill

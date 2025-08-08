@@ -39,7 +39,6 @@ using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Options;
 using GKCore.Search;
-using GKCore.Types;
 using GKTests;
 using GKUI.Platform;
 using NUnit.Framework;

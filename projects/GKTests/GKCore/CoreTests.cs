@@ -34,7 +34,6 @@ using GKCore.Names;
 using GKCore.Search;
 using GKCore.Stats;
 using GKCore.Tools;
-using GKCore.Types;
 using GKCore.Utilities;
 using GKTests;
 using NSubstitute;

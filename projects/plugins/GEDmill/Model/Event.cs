@@ -18,7 +18,6 @@
 
 using System;
 using GDModel;
-using GKCore.Types;
 
 namespace GEDmill.Model
 {

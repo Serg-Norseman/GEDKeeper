@@ -21,9 +21,9 @@
 using System;
 using BSLib;
 using GDModel;
+using GKCore.Backups;
 using GKCore.Names;
 using GKCore.Options;
-using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
 

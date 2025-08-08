@@ -25,7 +25,6 @@ using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Types;
 using GKUI.Components;
 
 namespace GKUI.Forms

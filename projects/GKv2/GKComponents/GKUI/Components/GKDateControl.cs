@@ -26,7 +26,6 @@ using GDModel;
 using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Locales;
-using GKCore.Types;
 
 namespace GKUI.Components
 {

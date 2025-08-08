@@ -22,7 +22,6 @@ using System;
 using System.Globalization;
 using GDModel.Providers.GEDCOM;
 using GKCore.Calendar;
-using GKCore.Types;
 using GKTests;
 using NUnit.Framework;
 

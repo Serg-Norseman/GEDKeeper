@@ -25,7 +25,6 @@ using GKCore;
 using GKCore.Design;
 using GKCore.Filters;
 using GKCore.Lists;
-using GKCore.Types;
 using GKCore.Utilities;
 using NSubstitute;
 
@@ -33,7 +32,7 @@ namespace GKTests.Stubs
 {
     internal class BaseWindowStub : WorkWindowStub, IBaseWindow
     {
-        private static IHost fHost = Substitute.For<IHost>();
+        private static readonly IHost fHost = Substitute.For<IHost>();
 
         private readonly IBaseContext fContext;
         private readonly GDMTree fTree;

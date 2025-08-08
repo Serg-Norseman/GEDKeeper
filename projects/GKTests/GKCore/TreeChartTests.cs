@@ -26,7 +26,6 @@ using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Options;
-using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
 using NSubstitute;
@@ -37,7 +36,7 @@ namespace GKCore
     [TestFixture]
     public class TreeChartTests
     {
-        private IBaseWindow fBase;
+        private readonly IBaseWindow fBase;
 
         public TreeChartTests()
         {

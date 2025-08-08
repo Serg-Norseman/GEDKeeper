@@ -21,7 +21,6 @@
 using System;
 using GDModel.Providers.GEDCOM;
 using GKCore.Calendar;
-using GKCore.Types;
 
 namespace GDModel
 {

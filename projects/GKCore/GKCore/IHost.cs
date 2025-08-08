@@ -26,7 +26,6 @@ using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Options;
 using GKCore.Plugins;
-using GKCore.Types;
 
 namespace GKCore
 {

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,13 +18,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCore.Types
+namespace GKCore.Charts
 {
-    public enum CertaintyAlgorithm
+    public enum SpecialUserRef
     {
-        WeightedAverage,
-        Average,
-        Minimum,
-        Maximum
+        urRI_StGeorgeCross,
+
+        urUSSR_Soldier,
+        urUSSR_FallInBattle,
+        urUSSR_RearVeteran,
+        urUSSR_Repression,
+        urUSSR_CPSUMember,
+
+        urRelig_IslamSym,
+        urRelig_LatinCross,
+        urRelig_OrthodoxCross,
+        urRelig_OldRitualCross,
+
+        urLast = urRelig_OldRitualCross
     }
 }

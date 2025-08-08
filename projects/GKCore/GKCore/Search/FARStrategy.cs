@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using GDModel;
 using GKCore.Design;
+using GKCore.Lists;
 using GKCore.Utilities;
 
 namespace GKCore.Search
@@ -209,7 +210,7 @@ namespace GKCore.Search
             if (res != null) {
                 var farResult = (FARSearchResult)res;
                 farResult.Replacer(farResult.Property);
-                fBaseWindow.NotifyRecord(farResult.Record, Types.RecordAction.raEdit);
+                fBaseWindow.NotifyRecord(farResult.Record, RecordAction.raEdit);
                 fBaseWindow.UpdateChangedRecords(farResult.Record);
                 // TODO: remove item from result's list
             }

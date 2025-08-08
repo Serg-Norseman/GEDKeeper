@@ -50,7 +50,6 @@ namespace GKNavigatorPlugin
         private TreeNode tnRecAct;
         private TreeNode tnJumpHist;
         private TreeNode tnProblems;
-        private TreeNode tnFilters;
         private TreeNode tnBookmarks;
         private TreeNode tnRecords;
         private TreeNode tnLanguages;
@@ -77,12 +76,11 @@ namespace GKNavigatorPlugin
             tnRecAct = CreateNode(tnRoot, "Recent Activity", DataCategory.RecentActivity);
             tnJumpHist = CreateNode(tnRecAct, "Jump history", DataCategory.JumpHistory);
             tnProblems = CreateNode(tnRecAct, "Potencial problems", DataCategory.PotencialProblems);
-            tnFilters = CreateNode(tnRecAct, "Filters", DataCategory.Filters);
             tnBookmarks = CreateNode(tnRoot, "Bookmarks", DataCategory.Bookmarks);
             tnLanguages = CreateNode(tnRoot, "Languages", DataCategory.Languages);
             tnAssociations = CreateNode(tnRoot, "Associations", DataCategory.Associations);
             tnWebLinks = CreateNode(tnRoot, "WebLinks", DataCategory.WebLinks);
-            tnRecords = CreateNode(tnRoot, "Records", DataCategory.Records);
+            tnRecords = CreateNode(tnRecAct, "Records", DataCategory.Records);
 
             lvData = new GKListView();
             lvData.Dock = DockStyle.Fill;
@@ -101,7 +99,6 @@ namespace GKNavigatorPlugin
             tnRecAct.Text = fLangMan.LS(PLS.RecentActivity);
             tnJumpHist.Text = fLangMan.LS(PLS.JumpHistory);
             tnProblems.Text = fLangMan.LS(PLS.PotencialProblems);
-            tnFilters.Text = fLangMan.LS(PLS.Filters);
             tnBookmarks.Text = fLangMan.LS(PLS.Bookmarks);
             tnLanguages.Text = fLangMan.LS(PLS.Languages);
             tnAssociations.Text = LangMan.LS(LSID.Associations);

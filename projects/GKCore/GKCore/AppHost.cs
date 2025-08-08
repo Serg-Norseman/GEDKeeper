@@ -38,7 +38,6 @@ using GKCore.Maps;
 using GKCore.Names;
 using GKCore.Options;
 using GKCore.Plugins;
-using GKCore.Types;
 using GKCore.Utilities;
 using GKUI.Themes;
 

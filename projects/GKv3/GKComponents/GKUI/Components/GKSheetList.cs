@@ -25,7 +25,6 @@ using Eto.Forms;
 using GKCore.Design.Controls;
 using GKCore.Lists;
 using GKCore.Locales;
-using GKCore.Types;
 using GKUI.Platform;
 using GKUI.Themes;
 
@@ -207,7 +206,7 @@ namespace GKUI.Components
 
         #region Private methods
 
-        private Button CreateButton(string name, string toolTip, EventHandler<EventArgs> click)
+        private static Button CreateButton(string name, string toolTip, EventHandler<EventArgs> click)
         {
             var btn = new Button();
             btn.Style = "iconBtn";

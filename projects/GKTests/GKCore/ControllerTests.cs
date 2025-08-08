@@ -26,7 +26,6 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.ExtData;
 using GKCore.Lists;
-using GKCore.Types;
 using GKTests;
 using GKTests.Stubs;
 using NSubstitute;

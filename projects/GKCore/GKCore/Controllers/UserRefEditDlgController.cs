@@ -20,11 +20,11 @@
 
 using System;
 using GDModel;
+using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Locales;
-using GKCore.Types;
 using GKUI.Themes;
 
 namespace GKCore.Controllers

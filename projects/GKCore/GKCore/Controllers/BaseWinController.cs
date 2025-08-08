@@ -38,7 +38,6 @@ using GKCore.Media;
 using GKCore.Options;
 using GKCore.Plugins;
 using GKCore.Search;
-using GKCore.Types;
 using GKCore.Utilities;
 using GKUI.Themes;
 

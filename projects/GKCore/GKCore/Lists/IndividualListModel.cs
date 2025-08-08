@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
@@ -37,8 +36,6 @@ using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Search;
-using GKCore.Types;
-using GKCore.Utilities;
 
 namespace GKCore.Lists
 {
@@ -111,50 +108,6 @@ namespace GKCore.Lists
             TimeLineYear = -1;
         }
 
-        public override string ToString(IListSource listSource)
-        {
-            if (listSource == null)
-                return string.Empty;
-
-            var sb = new StringBuilder();
-
-            if (Sex != GDMSex.svUnknown)
-                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.Sex), GKUtils.SexStr(Sex)));
-
-            if (Name != "*")
-                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.NameMask), Name));
-
-            if (Residence != "*")
-                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.PlaceMask), Residence));
-
-            if (EventVal != "*")
-                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.EventMask), EventVal));
-
-            if (PatriarchOnly)
-                AddCSChunk(sb, string.Format("{0}", LangMan.LS(LSID.OnlyPatriarchs)));
-
-            if (FilterGroupMode != FilterGroupMode.All)
-                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.RPGroups), GroupRef));
-
-            if (SourceMode != FilterGroupMode.All)
-                AddCSChunk(sb, string.Format("{0} = `{1}`", LangMan.LS(LSID.RPSources), SourceRef));
-
-            AddCSChunk(sb, base.ToString(listSource));
-
-            return sb.ToString();
-        }
-
-        private static void AddCSChunk(StringBuilder sb, string chunk)
-        {
-            if (string.IsNullOrEmpty(chunk))
-                return;
-
-            if (sb.Length != 0)
-                sb.Append(", ");
-
-            sb.Append(chunk);
-        }
-
         public override void Assign(IListFilter other)
         {
             var otherFilter = other as IndividualListFilter;
@@ -174,12 +127,6 @@ namespace GKCore.Lists
             SourceRef = otherFilter.SourceRef;
             EventVal = otherFilter.EventVal;
             TimeLineYear = otherFilter.TimeLineYear;
-        }
-
-        public override void Deserialize(string value)
-        {
-            var instance = JsonHelper.Deserialize<IndividualListFilter>(value);
-            Assign(instance);
         }
     }
 

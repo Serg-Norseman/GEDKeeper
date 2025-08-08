@@ -20,10 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using GDModel;
-using GKCore.Lists;
-using GKCore.Utilities;
 
 namespace GKCore.Filters
 {
@@ -64,10 +61,6 @@ namespace GKCore.Filters
 
         void Assign(IListFilter other);
         void Clear();
-        string ToString(IListSource listSource);
-
-        void Deserialize(string value);
-        string Serialize();
     }
 
 
@@ -93,23 +86,6 @@ namespace GKCore.Filters
             fConditions.Clear();
         }
 
-        public virtual string ToString(IListSource listSource)
-        {
-            if (listSource == null)
-                return string.Empty;
-
-            var fields = listSource.CreateFields();
-
-            var sb = new StringBuilder();
-            foreach (var cond in fConditions) {
-                if (sb.Length != 0) sb.Append(", ");
-
-                int condIndex = ((IConvertible)cond.Operator).ToByte(null);
-                sb.Append(string.Format("{0} {1} `{2}`", fields[cond.ColumnIndex + 1], GKData.CondSigns[condIndex], cond.Value.ToString()));
-            }
-            return sb.ToString();
-        }
-
         public virtual void Assign(IListFilter other)
         {
             var otherFilter = other as ListFilter;
@@ -118,17 +94,6 @@ namespace GKCore.Filters
 
             fConditions.Clear();
             fConditions.AddRange(otherFilter.fConditions);
-        }
-
-        public virtual void Deserialize(string value)
-        {
-            var instance = JsonHelper.Deserialize<ListFilter>(value);
-            Assign(instance);
-        }
-
-        public string Serialize()
-        {
-            return JsonHelper.Serialize(this);
         }
 
         internal static bool CheckCondition(ColumnConditionExpression fcond, object dataval)

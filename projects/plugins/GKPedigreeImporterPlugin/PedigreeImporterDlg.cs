@@ -20,11 +20,11 @@
 
 using System;
 using System.Windows.Forms;
+using GDModel;
 using GKCore;
 using GKCore.Design;
 using GKCore.Locales;
 using GKCore.Plugins;
-using GKCore.Types;
 using GKUI.Forms;
 
 namespace GKPedigreeImporterPlugin

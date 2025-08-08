@@ -24,7 +24,6 @@ using BSLib;
 using GKCore.Design.Controls;
 using GKCore.Lists;
 using GKCore.Locales;
-using GKCore.Types;
 using Xamarin.Forms;
 
 namespace GKUI.Components

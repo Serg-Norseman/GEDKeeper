@@ -27,9 +27,9 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.ExtData;
+using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Media;
-using GKCore.Types;
 using GKCore.Utilities;
 
 namespace GKCore.Tools

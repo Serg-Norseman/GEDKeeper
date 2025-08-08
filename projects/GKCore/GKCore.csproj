@@ -59,15 +59,13 @@
     <Reference Include="YamlDotNet">
       <HintPath>..\libs\YamlDotNet.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\libs\Newtonsoft.Json.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalSuppressions.cs">
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCore\Backups\BackupTool.cs" />
     <Compile Include="GDModel\GDMAge.cs" />
     <Compile Include="GDModel\GDMDNATest.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\SecGEDCOMProvider.cs" />
@@ -375,7 +373,6 @@
     <Compile Include="GKCore\Plugins\IWidget.cs" />
     <Compile Include="GKCore\Design\IWorkWindow.cs" />
     <Compile Include="GKCore\Utilities\IocContainer.cs" />
-    <Compile Include="GKCore\Utilities\JsonHelper.cs" />
     <Compile Include="GKCore\Linguistics\DoubleMetaphone.cs" />
     <Compile Include="GKCore\Linguistics\Morpher.cs" />
     <Compile Include="GKCore\Linguistics\ShortDoubleMetaphone.cs" />
@@ -430,10 +427,10 @@
     <Compile Include="GKCore\ExtData\Tips.cs" />
     <Compile Include="GKCore\Tools\PatriarchsMan.cs" />
     <Compile Include="GKCore\Tools\TreeInspector.cs" />
-    <Compile Include="GKCore\Types\CertaintyAlgorithm.cs" />
-    <Compile Include="GKCore\Types\CharsetResult.cs" />
-    <Compile Include="GKCore\Types\DateFormat.cs" />
-    <Compile Include="GKCore\Types\FileBackup.cs" />
+    <Compile Include="GKCore\CertaintyAlgorithm.cs" />
+    <Compile Include="GKCore\CharsetResult.cs" />
+    <Compile Include="GDModel\DateFormat.cs" />
+    <Compile Include="GKCore\Backups\FileBackup.cs" />
     <Compile Include="GDModel\MatchParams.cs" />
     <Compile Include="GKCore\Media\MediaStore.cs" />
     <Compile Include="GKCore\Media\MediaStoreStatus.cs" />
@@ -444,9 +441,8 @@
     <Compile Include="GKCore\Names\NamePartsRet.cs" />
     <Compile Include="GKCore\Export\PedigreeFormat.cs" />
     <Compile Include="GKCore\Events\PredefinedEvent.cs" />
-    <Compile Include="GKCore\Types\RecordAction.cs" />
     <Compile Include="GKCore\Kinships\KinshipType.cs" />
-    <Compile Include="GKCore\Types\SpecialUserRef.cs" />
+    <Compile Include="GKCore\Charts\SpecialUserRef.cs" />
     <Compile Include="GKCore\Plugins\WidgetInfo.cs" />
     <Compile Include="GKCore\Names\WomanSurnameFormat.cs" />
     <Compile Include="GKCore\AppHost.cs" />

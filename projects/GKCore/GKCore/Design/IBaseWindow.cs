@@ -23,7 +23,6 @@ using BSLib;
 using GDModel;
 using GKCore.Filters;
 using GKCore.Lists;
-using GKCore.Types;
 
 namespace GKCore.Design
 {

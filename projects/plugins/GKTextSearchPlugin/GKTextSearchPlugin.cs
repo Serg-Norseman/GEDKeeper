@@ -28,7 +28,6 @@ using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Plugins;
-using GKCore.Types;
 using GKCore.Utilities;
 
 [assembly: AssemblyTitle("GKTextSearchPlugin")]

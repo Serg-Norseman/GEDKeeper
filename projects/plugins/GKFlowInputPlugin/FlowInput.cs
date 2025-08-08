@@ -25,9 +25,9 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Design;
+using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Plugins;
-using GKCore.Types;
 
 namespace GKFlowInputPlugin
 {

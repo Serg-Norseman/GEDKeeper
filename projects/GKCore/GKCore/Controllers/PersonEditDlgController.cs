@@ -30,7 +30,6 @@ using GKCore.Locales;
 using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
-using GKCore.Types;
 using GKUI.Themes;
 
 namespace GKCore.Controllers

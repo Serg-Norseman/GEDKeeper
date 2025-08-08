@@ -31,19 +31,20 @@ using GDModel.Providers.FamilyShow;
 using GDModel.Providers.GEDCOM;
 using GDModel.Providers.GedML;
 using GDModel.Providers.GEDZIP;
+using GKCore.Backups;
 using GKCore.Controllers;
 using GKCore.Cultures;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Events;
+using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Media;
 using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Search;
-using GKCore.Types;
 using GKCore.Utilities;
 
 namespace GKCore
@@ -1587,30 +1588,6 @@ namespace GKCore
             return null;
         }
 
-        private static void RemoveOldestBackups(string fileName, string bakPath)
-        {
-            string backupFiles = Path.GetFileName(fileName) + ".*";
-            DirectoryInfo bakPathInfo = new DirectoryInfo(bakPath);
-            FileInfo[] bakFiles = bakPathInfo.GetFiles(backupFiles);
-            if (bakFiles.Length > GlobalOptions.Instance.FileBackupEachRevisionMaxCount) {
-                List<Tuple<string, int>> tuples = new List<Tuple<string, int>>();
-                foreach (var bak in bakFiles) {
-                    try {
-                        int bakVersion = Convert.ToInt32(bak.Extension.Substring(1));
-                        tuples.Add(new Tuple<string, int>(bak.FullName, bakVersion));
-                    } catch (Exception) {
-                    }
-                }
-                tuples.Sort((a, b) => b.Item2.CompareTo(a.Item2));
-                for (int i = GlobalOptions.Instance.FileBackupEachRevisionMaxCount; i < tuples.Count; i++) {
-                    try {
-                        File.Delete(tuples[i].Item1);
-                    } catch (Exception) {
-                    }
-                }
-            }
-        }
-
         private static string CheckFileName(string fileName)
         {
             // Control of possible folder management problems in Windows
@@ -1635,7 +1612,7 @@ namespace GKCore
             if (!strict) {
                 string oldFileName = fFileName;
 
-                ProcessBackup(oldFileName, fileName);
+                BackupTool.ProcessBackup(fTree, oldFileName, fileName);
 
                 // check for archive and storage, move them if the file changes location
                 MoveMediaContainers(oldFileName, fileName, IsGEDZIP());
@@ -1645,38 +1622,6 @@ namespace GKCore
 
             GKUtils.PrepareHeader(fTree, fileName, defaultCharacterSet, false);
             gedcomProvider.SaveToFile(fileName, defaultCharacterSet);
-        }
-
-        private void ProcessBackup(string oldFileName, string fileName)
-        {
-            switch (GlobalOptions.Instance.FileBackup) {
-                case FileBackup.fbNone:
-                    break;
-
-                case FileBackup.fbOnlyPrev:
-                    if (string.Equals(oldFileName, fileName) && File.Exists(oldFileName)) {
-                        string bakFile = fileName + ".bak";
-                        if (File.Exists(bakFile)) {
-                            File.Delete(bakFile);
-                        }
-
-                        File.Move(oldFileName, bakFile);
-                    }
-                    break;
-
-                case FileBackup.fbEachRevision:
-                    if (File.Exists(fileName)) {
-                        int rev = fTree.Header.File.Revision;
-                        string bakPath = Path.GetDirectoryName(fileName) + Path.DirectorySeparatorChar + "__history" + Path.DirectorySeparatorChar;
-                        string bakFile = Path.GetFileName(fileName) + "." + ConvertHelper.AdjustNumber(rev, 3);
-
-                        if (!Directory.Exists(bakPath)) Directory.CreateDirectory(bakPath);
-                        File.Move(fileName, bakPath + bakFile);
-
-                        if (GlobalOptions.Instance.FileBackupEachRevisionMaxCount > 0) RemoveOldestBackups(fileName, bakPath);
-                    }
-                    break;
-            }
         }
 
         public void CriticalSave()

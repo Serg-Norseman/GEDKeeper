@@ -18,23 +18,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCore.Types
+namespace GKCore.Backups
 {
-    public enum SpecialUserRef
+    public enum FileBackup
     {
-        urRI_StGeorgeCross,
-
-        urUSSR_Soldier,
-        urUSSR_FallInBattle,
-        urUSSR_RearVeteran,
-        urUSSR_Repression,
-        urUSSR_CPSUMember,
-
-        urRelig_IslamSym,
-        urRelig_LatinCross,
-        urRelig_OrthodoxCross,
-        urRelig_OldRitualCross,
-
-        urLast = urRelig_OldRitualCross
+        fbNone,
+        fbOnlyPrev,
+        fbEachRevision
     }
 }

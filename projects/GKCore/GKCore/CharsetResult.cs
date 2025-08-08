@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2019 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,12 +18,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace GKCore.Types
+namespace GKCore
 {
-    public enum FileBackup
+    /// <summary>
+    /// 
+    /// </summary>
+    public struct CharsetResult
     {
-        fbNone,
-        fbOnlyPrev,
-        fbEachRevision
+        public string Charset;
+        public float Confidence;
+
+        public CharsetResult(string charset, float confidence)
+        {
+            Charset = charset;
+            Confidence = confidence;
+        }
     }
 }

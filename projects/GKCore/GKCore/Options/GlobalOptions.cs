@@ -26,13 +26,13 @@ using System.Reflection;
 using System.Text;
 using BSLib;
 using GDModel;
+using GKCore.Backups;
 using GKCore.Design;
 using GKCore.Filters;
 using GKCore.Locales;
 using GKCore.Media;
 using GKCore.Names;
 using GKCore.Plugins;
-using GKCore.Types;
 
 namespace GKCore.Options
 {

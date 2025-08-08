@@ -28,7 +28,6 @@ using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Options;
-using GKCore.Types;
 
 namespace GKCore.Plugins
 {

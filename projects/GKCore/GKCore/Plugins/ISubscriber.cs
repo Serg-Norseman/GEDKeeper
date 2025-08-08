@@ -22,7 +22,6 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Filters;
 using GKCore.Lists;
-using GKCore.Types;
 
 namespace GKCore.Plugins
 {

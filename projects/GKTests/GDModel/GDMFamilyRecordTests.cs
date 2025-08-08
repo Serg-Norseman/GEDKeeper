@@ -21,7 +21,6 @@
 using System;
 using GDModel.Providers.GEDCOM;
 using GKCore;
-using GKCore.Types;
 using NUnit.Framework;
 
 namespace GDModel

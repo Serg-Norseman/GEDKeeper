@@ -28,7 +28,6 @@ using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Plugins;
-using GKCore.Types;
 
 [assembly: AssemblyTitle("GKNavigatorPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Navigator plugin")]
@@ -166,10 +165,6 @@ namespace GKNavigatorPlugin
 
         public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter)
         {
-            if (baseWin == null || filter == null) return;
-
-            string baseName = baseWin.Context.FileName;
-            fData[baseName].NotifyFilter(baseWin, recType, listSource, filter);
         }
     }
 }

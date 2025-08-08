@@ -29,7 +29,6 @@ using GKCore;
 using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Tools;
-using GKCore.Types;
 using GKUI.Components;
 
 namespace GKUI.Forms

@@ -27,13 +27,31 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Operations;
 using GKCore.Options;
-using GKCore.Types;
 using GKUI.Themes;
 
 namespace GKCore.Lists
 {
     public delegate void ModifyEventHandler(object sender, ModifyEventArgs eArgs);
     public delegate void ItemValidatingEventHandler(object sender, ItemValidatingEventArgs e);
+
+
+    /// <summary>
+    /// Typical operations available on the records in the lists.
+    /// </summary>
+    public enum RecordAction
+    {
+        raAdd,
+        raEdit,
+        raDelete,
+        raJump,
+        raMoveUp,
+        raMoveDown,
+        raCopy,
+        raCut,
+        raPaste,
+        raDetails,
+    }
+
 
     /// <summary>
     /// 
@@ -51,6 +69,7 @@ namespace GKCore.Lists
             IsChanged = false;
         }
     }
+
 
     public class ItemValidatingEventArgs : EventArgs
     {
