@@ -148,7 +148,7 @@ namespace GKCore.Controllers
             fIsNew = string.IsNullOrEmpty(fileRef);
             fView.File.Text = fileRef;
 
-            var storeType = fIsNew ? GlobalOptions.Instance.MediaStoreDefault : GKUtils.GetStoreTypeEx(fileRef);
+            var storeType = fIsNew ? GlobalOptions.Instance.MediaStoreDefault : MediaStore.GetStoreTypeEx(fileRef);
             UpdateFileStore(fIsNew, storeType);
 
             fView.Restriction.SelectedIndex = (int)fDNATest.Restriction;

@@ -150,8 +150,7 @@ namespace GKCore.Controllers
                                       storeType);
                 }
             } else {
-                var mediaStore = fBase.Context.GetStoreType(fileRef);
-                storeType = mediaStore.StoreType;
+                storeType = MediaStore.GetStoreTypeEx(fileRef.StringValue);
                 RefreshStoreTypes((storeType == MediaStoreType.mstReference),
                                   (storeType == MediaStoreType.mstArchive),
                                   (storeType == MediaStoreType.mstRelativeReference),

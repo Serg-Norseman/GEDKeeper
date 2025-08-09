@@ -3495,36 +3495,6 @@ namespace GKCore
             }
         }
 
-        public static MediaStoreType GetStoreTypeEx(string fileRef)
-        {
-            if (fileRef == null)
-                throw new ArgumentNullException(nameof(fileRef));
-
-            MediaStoreType result = MediaStoreType.mstReference;
-            for (int i = 1; i <= 4; i++) {
-                if (fileRef.StartsWith(GKData.GKStoreTypes[i].Sign, StringComparison.Ordinal)) {
-                    result = (MediaStoreType)i;
-                    break;
-                }
-            }
-            return result;
-        }
-
-        public static MediaStore GetStoreType(string fileReference)
-        {
-            if (string.IsNullOrEmpty(fileReference))
-                throw new ArgumentNullException(nameof(fileReference));
-
-            string fileName = fileReference;
-            MediaStoreType storeType = GetStoreTypeEx(fileName);
-
-            if (storeType != MediaStoreType.mstReference && storeType != MediaStoreType.mstURL) {
-                fileName = fileName.Remove(0, 4);
-            }
-
-            return new MediaStore(storeType, fileName);
-        }
-
         public static bool UseEmbeddedViewer(GDMMultimediaFormat format)
         {
             MultimediaKind mmKind = GetMultimediaKind(format);

@@ -469,12 +469,6 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_GetStoreType()
-        {
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetStoreType(null); });
-        }
-
-        [Test]
         public void Test_GetBirthDateD()
         {
             GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;

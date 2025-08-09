@@ -187,30 +187,25 @@ namespace GKCore
         {
             Assert.Throws(typeof(ArgumentNullException), () => {
                 string strFileRef = null;
-                fContext.GetStoreType(strFileRef);
-            });
-
-            Assert.Throws(typeof(ArgumentNullException), () => {
-                GDMFileReference fileRefX = null;
-                fContext.GetStoreType(fileRefX);
+                MediaStore.GetStoreTypeEx(strFileRef);
             });
 
             var fileRef = new GDMFileReference();
             fileRef.ParseString("file.txt");
-            var mediaStore = fContext.GetStoreType(fileRef);
-            Assert.AreEqual(MediaStoreType.mstReference, mediaStore.StoreType);
+            var storeType = MediaStore.GetStoreTypeEx(fileRef.StringValue);
+            Assert.AreEqual(MediaStoreType.mstReference, storeType);
 
             fileRef.ParseString("stg:file.txt");
-            mediaStore = fContext.GetStoreType(fileRef);
-            Assert.AreEqual(MediaStoreType.mstStorage, mediaStore.StoreType);
+            storeType = MediaStore.GetStoreTypeEx(fileRef.StringValue);
+            Assert.AreEqual(MediaStoreType.mstStorage, storeType);
 
             fileRef.ParseString("arc:file.txt");
-            mediaStore = fContext.GetStoreType(fileRef);
-            Assert.AreEqual(MediaStoreType.mstArchive, mediaStore.StoreType);
+            storeType = MediaStore.GetStoreTypeEx(fileRef.StringValue);
+            Assert.AreEqual(MediaStoreType.mstArchive, storeType);
 
             fileRef.ParseString("rel:file.txt");
-            mediaStore = fContext.GetStoreType(fileRef);
-            Assert.AreEqual(MediaStoreType.mstRelativeReference, mediaStore.StoreType);
+            storeType = MediaStore.GetStoreTypeEx(fileRef.StringValue);
+            Assert.AreEqual(MediaStoreType.mstRelativeReference, storeType);
         }
 
         [Test]
@@ -576,11 +571,6 @@ namespace GKCore
             Assert.Throws(typeof(ArgumentNullException), () => {
                 string strFileRef = null;
                 fContext.VerifyMediaFile(strFileRef, out fileName);
-            });
-
-            Assert.Throws(typeof(ArgumentNullException), () => {
-                GDMFileReference fileRef = null;
-                fContext.VerifyMediaFile(fileRef, out fileName);
             });
 
             Assert.AreEqual(MediaStoreStatus.mssFileNotFound, fContext.VerifyMediaFile("randomfile.jpg", out fileName));

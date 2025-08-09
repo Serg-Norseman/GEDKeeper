@@ -457,7 +457,7 @@ namespace GKCore.Tools
             }
 
             string fileName;
-            MediaStoreStatus storeStatus = baseContext.VerifyMediaFile(mmRec.FileReferences[0], out fileName);
+            MediaStoreStatus storeStatus = baseContext.VerifyMediaFile(mmRec.FileReferences[0].StringValue, out fileName);
 
             switch (storeStatus) {
                 case MediaStoreStatus.mssExists:

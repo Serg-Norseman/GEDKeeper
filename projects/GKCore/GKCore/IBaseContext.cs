@@ -86,18 +86,19 @@ namespace GKCore
         IList<ISearchResult> FindAll(GDMRecordType recordType, string searchPattern);
 
         // Multimedia support
+        string GetTreePath(string treeName);
+        bool IsGEDZIP();
         string GetArcFileName();
         string GetStgFolder(bool create);
         bool CheckBasePath();
         bool CheckNewMedia(string fileName, MediaStoreType storeType);
-        MediaStore GetStoreType(GDMFileReference fileReference);
         bool MoveMediaFile(GDMMultimediaRecord mediaRec, MediaStoreType newStoreType);
         Stream MediaLoad(GDMFileReference fileReference, bool throwException);
         string MediaLoad(GDMFileReference fileReference);
         string MediaLoad(string fileReference);
         bool MediaSave(GDMFileReference fileReference, string fileName, MediaStoreType storeType);
         bool MediaSave(out string refPath, string fileName, MediaStoreType storeType);
-        MediaStoreStatus VerifyMediaFile(GDMFileReference fileReference, out string fileName);
+        MediaStoreStatus VerifyMediaFile(string fileReference, out string fileName);
 
         /// <summary>
         /// Loading an image from a multimedia link with the features to get a thumbnail for the trees and cut out a part from the whole.
