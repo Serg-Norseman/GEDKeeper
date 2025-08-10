@@ -679,16 +679,16 @@ namespace GKCore
 
         #endregion
 
-        #region Private media support
+        #region Media support
 
-        public string GetTreePath(string treeName)
+        public string GetTreePath()
         {
-            return Path.GetDirectoryName(treeName) + Path.DirectorySeparatorChar;
+            return Path.GetDirectoryName(fFileName) + Path.DirectorySeparatorChar;
         }
 
         private string GetTreeRelativePath(string fileName)
         {
-            string result = GKUtils.GetRelativePath(GetTreePath(fFileName), fileName);
+            string result = GKUtils.GetRelativePath(GetTreePath(), fileName);
             return result;
         }
 
@@ -698,15 +698,13 @@ namespace GKCore
                 return fFileName;
             }
 
-            string treeName = fFileName;
-            string result = GetTreePath(treeName) + Path.GetFileNameWithoutExtension(treeName) + ".zip";
+            string result = GetTreePath() + Path.GetFileNameWithoutExtension(fFileName) + ".zip";
             return result;
         }
 
         public string GetStgFolder(bool create)
         {
-            string treeName = fFileName;
-            string result = GetTreePath(treeName) + Path.GetFileNameWithoutExtension(treeName) + Path.DirectorySeparatorChar;
+            string result = GetTreePath() + Path.GetFileNameWithoutExtension(fFileName) + Path.DirectorySeparatorChar;
             if (!Directory.Exists(result) && create) Directory.CreateDirectory(result);
             return result;
         }
@@ -741,10 +739,6 @@ namespace GKCore
                 }
             }
         }
-
-        #endregion
-
-        #region Public media support
 
         /// <summary>
         /// Check the status of the tree's file saving to define
@@ -783,7 +777,7 @@ namespace GKCore
             if (mediaRec == null || mediaRec.FileReferences.Count < 1) return result;
 
             var fileRef = mediaRec.FileReferences[0];
-            var oldStoreType = MediaStore.GetStoreTypeEx(fileRef.StringValue);
+            var oldStoreType = MediaStore.GetStoreType(fileRef.StringValue);
 
             if (oldStoreType == newStoreType) return result;
 
@@ -833,7 +827,7 @@ namespace GKCore
         public Stream MediaLoad(GDMFileReference fileReference, bool throwException)
         {
             if (fileReference == null) return null;
-            var mediaStore = MediaStore.GetStoreType(this, fileReference.StringValue);
+            var mediaStore = MediaStore.GetMediaStore(this, fileReference.StringValue);
             return mediaStore.MediaLoad(throwException);
         }
 
@@ -845,7 +839,7 @@ namespace GKCore
         public string MediaLoad(string fileReference)
         {
             if (string.IsNullOrEmpty(fileReference)) return string.Empty;
-            MediaStore mediaStore = MediaStore.GetStoreType(this, fileReference);
+            MediaStore mediaStore = MediaStore.GetMediaStore(this, fileReference);
             return mediaStore.MediaLoad();
         }
 
@@ -910,7 +904,7 @@ namespace GKCore
             // save a copy to archive or storage
             switch (storeType) {
                 case MediaStoreType.mstArchive:
-                    MediaStore.ArcFileSave(this, fileName, targetFile);
+                    ArchiveMediaStore.ArcFileSave(this, fileName, targetFile);
                     break;
 
                 case MediaStoreType.mstStorage:
@@ -935,7 +929,7 @@ namespace GKCore
         public async Task<bool> MediaDelete(GDMFileReference fileReference)
         {
             if (fileReference == null) return false;
-            MediaStore mediaStore = MediaStore.GetStoreType(this, fileReference.StringValue);
+            MediaStore mediaStore = MediaStore.GetMediaStore(this, fileReference.StringValue);
             return await mediaStore.MediaDelete();
         }
 
@@ -944,7 +938,7 @@ namespace GKCore
             if (fileReference == null)
                 throw new ArgumentNullException("fileReference");
 
-            MediaStore mediaStore = MediaStore.GetStoreType(this, fileReference);
+            MediaStore mediaStore = MediaStore.GetMediaStore(this, fileReference);
             return mediaStore.VerifyMediaFile(out fileName);
         }
 

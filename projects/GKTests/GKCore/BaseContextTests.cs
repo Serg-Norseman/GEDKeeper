@@ -187,24 +187,24 @@ namespace GKCore
         {
             Assert.Throws(typeof(ArgumentNullException), () => {
                 string strFileRef = null;
-                MediaStore.GetStoreTypeEx(strFileRef);
+                MediaStore.GetStoreType(strFileRef);
             });
 
             var fileRef = new GDMFileReference();
             fileRef.ParseString("file.txt");
-            var storeType = MediaStore.GetStoreTypeEx(fileRef.StringValue);
+            var storeType = MediaStore.GetStoreType(fileRef.StringValue);
             Assert.AreEqual(MediaStoreType.mstReference, storeType);
 
             fileRef.ParseString("stg:file.txt");
-            storeType = MediaStore.GetStoreTypeEx(fileRef.StringValue);
+            storeType = MediaStore.GetStoreType(fileRef.StringValue);
             Assert.AreEqual(MediaStoreType.mstStorage, storeType);
 
             fileRef.ParseString("arc:file.txt");
-            storeType = MediaStore.GetStoreTypeEx(fileRef.StringValue);
+            storeType = MediaStore.GetStoreType(fileRef.StringValue);
             Assert.AreEqual(MediaStoreType.mstArchive, storeType);
 
             fileRef.ParseString("rel:file.txt");
-            storeType = MediaStore.GetStoreTypeEx(fileRef.StringValue);
+            storeType = MediaStore.GetStoreType(fileRef.StringValue);
             Assert.AreEqual(MediaStoreType.mstRelativeReference, storeType);
         }
 

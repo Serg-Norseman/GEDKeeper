@@ -563,6 +563,12 @@
     <Compile Include="GKCore\Validation\Concrete\GDMUserReferenceValidator.cs" />
     <Compile Include="GKCore\Lists\ColumnsListModel.cs" />
     <Compile Include="GKCore\Lists\SimpleListModel.cs" />
+    <Compile Include="GKCore\Media\MediaStores\ArchiveMediaStore.cs" />
+    <Compile Include="GKCore\Media\MediaStores\PlainMediaStore.cs" />
+    <Compile Include="GKCore\Media\MediaStores\AbsolutePathMediaStore.cs" />
+    <Compile Include="GKCore\Media\MediaStores\RelativePathMediaStore.cs" />
+    <Compile Include="GKCore\Media\MediaStores\StorageMediaStore.cs" />
+    <Compile Include="GKCore\Media\MediaStores\URLMediaStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GKMap\GKMap.Core\GKMap.Core.csproj">

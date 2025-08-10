@@ -86,7 +86,7 @@ namespace GKCore
         IList<ISearchResult> FindAll(GDMRecordType recordType, string searchPattern);
 
         // Multimedia support
-        string GetTreePath(string treeName);
+        string GetTreePath();
         bool IsGEDZIP();
         string GetArcFileName();
         string GetStgFolder(bool create);

@@ -402,7 +402,7 @@ namespace GDModel.Providers.GEDCOM
                     // the transition to normalized names after GKv39
                     // only for not direct references AND not relative references (platform specific paths)
 
-                    var storeType = MediaStore.GetStoreTypeEx(fileRef.StringValue);
+                    var storeType = MediaStore.GetStoreType(fileRef.StringValue);
                     if (storeType != MediaStoreType.mstReference && storeType != MediaStoreType.mstRelativeReference) {
                         fileRef.StringValue = FileHelper.NormalizeFilename(fileRef.StringValue);
                     }
