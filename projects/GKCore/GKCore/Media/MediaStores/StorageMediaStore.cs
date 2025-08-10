@@ -28,29 +28,26 @@ namespace GKCore.Media
     {
         public StorageMediaStore(IBaseContext baseContext, MediaStoreType storeType, string fileName) : base(baseContext, storeType, fileName)
         {
+            fAbsoluteFileName = baseContext.GetStgFolder(false) + fileName;
         }
 
-        public override MediaStoreStatus VerifyMediaFile(out string fileName)
+        public override MediaStoreStatus VerifyMediaFile(out string displayFileName)
         {
-            MediaStoreStatus result = MediaStoreStatus.mssBadData;
+            MediaStoreStatus result;
 
             try {
-                fileName = this.FileName;
-
                 string stgPath = fBaseContext.GetStgFolder(false);
                 if (!Directory.Exists(stgPath)) {
+                    displayFileName = this.FileName;
                     result = MediaStoreStatus.mssStgNotFound;
                 } else {
-                    fileName = stgPath + fileName;
-                    if (!File.Exists(fileName)) {
-                        result = MediaStoreStatus.mssFileNotFound;
-                    } else {
-                        result = MediaStoreStatus.mssExists;
-                    }
+                    displayFileName = fAbsoluteFileName;
+                    result = !File.Exists(displayFileName) ? MediaStoreStatus.mssFileNotFound : MediaStoreStatus.mssExists;
                 }
             } catch (Exception ex) {
                 Logger.WriteError("StorageMediaStore.VerifyMediaFile()", ex);
-                fileName = string.Empty;
+                displayFileName = this.FileName;
+                result = MediaStoreStatus.mssBadData;
             }
 
             return result;
@@ -58,17 +55,15 @@ namespace GKCore.Media
 
         protected override Stream LoadMediaStream(bool throwException)
         {
-            string targetFn = fBaseContext.GetStgFolder(false) + this.FileName;
-
             Stream resultStream = null;
 
-            if (!File.Exists(targetFn)) {
+            if (!File.Exists(fAbsoluteFileName)) {
                 if (throwException) {
-                    throw new MediaFileNotFoundException(targetFn);
+                    throw new MediaFileNotFoundException(fAbsoluteFileName);
                 }
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.MediaFileNotLoaded));
             } else {
-                resultStream = new FileStream(targetFn, FileMode.Open, FileAccess.Read);
+                resultStream = new FileStream(fAbsoluteFileName, FileMode.Open, FileAccess.Read);
             }
 
             return resultStream;
@@ -76,8 +71,7 @@ namespace GKCore.Media
 
         protected override string LoadMediaFile()
         {
-            string resultFileName = fBaseContext.GetStgFolder(false) + this.FileName;
-            return resultFileName;
+            return fAbsoluteFileName;
         }
     }
 }

@@ -567,14 +567,13 @@ namespace GKCore
         [Test]
         public void Test_VerifyMediaFile()
         {
-            string fileName;
             Assert.Throws(typeof(ArgumentNullException), () => {
                 string strFileRef = null;
-                fContext.VerifyMediaFile(strFileRef, out fileName);
+                fContext.VerifyMediaFile(strFileRef, out _);
             });
 
-            Assert.AreEqual(MediaStoreStatus.mssFileNotFound, fContext.VerifyMediaFile("randomfile.jpg", out fileName));
-            Assert.AreEqual(MediaStoreStatus.mssFileNotFound, fContext.VerifyMediaFile("rel:randomfile.jpg", out fileName));
+            Assert.AreEqual(MediaStoreStatus.mssFileNotFound, fContext.VerifyMediaFile("randomfile.jpg", out _));
+            Assert.AreEqual(MediaStoreStatus.mssFileNotFound, fContext.VerifyMediaFile("rel:randomfile.jpg", out _));
         }
 
         [Test]

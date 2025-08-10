@@ -82,14 +82,14 @@ namespace GKCore.Media
                         return new AbsolutePathMediaStore(baseContext, storeType, fileName);
                     }
 
+                case MediaStoreType.mstRelativeReference:
+                    return new RelativePathMediaStore(baseContext, storeType, fileName);
+
                 case MediaStoreType.mstStorage:
                     return new StorageMediaStore(baseContext, storeType, fileName);
 
                 case MediaStoreType.mstArchive:
                     return new ArchiveMediaStore(baseContext, storeType, fileName);
-
-                case MediaStoreType.mstRelativeReference:
-                    return new RelativePathMediaStore(baseContext, storeType, fileName);
 
                 case MediaStoreType.mstURL:
                     return new URLMediaStore(baseContext, storeType, fileName);
@@ -100,7 +100,7 @@ namespace GKCore.Media
         }
 
 
-        public abstract MediaStoreStatus VerifyMediaFile(out string fileName);
+        public abstract MediaStoreStatus VerifyMediaFile(out string displayFileName);
 
         protected abstract Stream LoadMediaStream(bool throwException);
 
@@ -132,12 +132,11 @@ namespace GKCore.Media
 
         public bool VerifyMediaFileWM()
         {
-            string fileName;
-            MediaStoreStatus storeStatus = VerifyMediaFile(out fileName);
+            MediaStoreStatus storeStatus = VerifyMediaFile(out string displayFileName);
             if (storeStatus != MediaStoreStatus.mssExists) {
                 switch (storeStatus) {
                     case MediaStoreStatus.mssFileNotFound:
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FileNotFound, fileName));
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FileNotFound, displayFileName));
                         break;
 
                     case MediaStoreStatus.mssStgNotFound:
@@ -156,13 +155,12 @@ namespace GKCore.Media
             return true;
         }
 
-        protected abstract void DeleteFile(string fileName);
+        protected abstract void DeleteFile();
 
         public async Task<bool> MediaDelete()
         {
             try {
-                string fileName = this.FileName;
-                MediaStoreStatus storeStatus = VerifyMediaFile(out fileName);
+                MediaStoreStatus storeStatus = VerifyMediaFile(out string displayFileName);
                 bool result = false;
 
                 switch (storeStatus) {
@@ -188,13 +186,13 @@ namespace GKCore.Media
                                 }
                             }
 
-                            DeleteFile(fileName);
+                            DeleteFile();
                             result = true;
                         }
                         break;
 
                     case MediaStoreStatus.mssFileNotFound:
-                        result = await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.ContinueQuestion, LangMan.LS(LSID.FileNotFound, fileName)));
+                        result = await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.ContinueQuestion, LangMan.LS(LSID.FileNotFound, displayFileName)));
                         break;
 
                     case MediaStoreStatus.mssStgNotFound:

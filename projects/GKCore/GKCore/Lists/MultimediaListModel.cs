@@ -98,8 +98,7 @@ namespace GKCore.Lists
         public override IColor GetBackgroundColor(int itemIndex, object rowData)
         {
             GlobalOptions gOptions = GlobalOptions.Instance;
-            string fileName;
-            if (gOptions.HighlightInaccessibleFiles && fBaseContext.VerifyMediaFile(fFileRef.StringValue, out fileName) != MediaStoreStatus.mssExists) {
+            if (gOptions.HighlightInaccessibleFiles && fBaseContext.VerifyMediaFile(fFileRef.StringValue, out _) != MediaStoreStatus.mssExists) {
                 return ChartRenderer.GetColor(GKData.HighlightInaccessibleFiles);
             } else {
                 return base.GetBackgroundColor(itemIndex, rowData);

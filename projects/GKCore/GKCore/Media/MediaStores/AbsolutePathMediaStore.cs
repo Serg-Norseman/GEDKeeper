@@ -18,31 +18,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System.IO;
-using BSLib;
-
 namespace GKCore.Media
 {
     public sealed class AbsolutePathMediaStore : PlainMediaStore
     {
         public AbsolutePathMediaStore(IBaseContext baseContext, MediaStoreType storeType, string fileName) : base(baseContext, storeType, fileName)
         {
-        }
-
-        protected override string LoadMediaFile()
-        {
-            string targetFn = this.FileName;
-
-            string resultFileName = targetFn;
-
-            if (!File.Exists(resultFileName)) {
-                string newPath = FileHelper.NormalizeFilename(resultFileName);
-                if (!string.IsNullOrEmpty(newPath)) {
-                    resultFileName = newPath;
-                }
-            }
-
-            return resultFileName;
+            fAbsoluteFileName = fileName;
         }
     }
 }

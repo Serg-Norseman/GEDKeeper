@@ -933,13 +933,13 @@ namespace GKCore
             return await mediaStore.MediaDelete();
         }
 
-        public MediaStoreStatus VerifyMediaFile(string fileReference, out string fileName)
+        public MediaStoreStatus VerifyMediaFile(string fileReference, out string displayFileName)
         {
             if (fileReference == null)
                 throw new ArgumentNullException("fileReference");
 
             MediaStore mediaStore = MediaStore.GetMediaStore(this, fileReference);
-            return mediaStore.VerifyMediaFile(out fileName);
+            return mediaStore.VerifyMediaFile(out displayFileName);
         }
 
         public bool MediaExists(string refPath)

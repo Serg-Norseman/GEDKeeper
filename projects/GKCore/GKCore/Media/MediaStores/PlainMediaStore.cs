@@ -27,35 +27,23 @@ namespace GKCore.Media
 {
     public abstract class PlainMediaStore : MediaStore
     {
+        protected string fAbsoluteFileName;
+
         protected PlainMediaStore(IBaseContext baseContext, MediaStoreType storeType, string fileName) : base(baseContext, storeType, fileName)
         {
         }
 
-        public override MediaStoreStatus VerifyMediaFile(out string fileName)
+        public override MediaStoreStatus VerifyMediaFile(out string displayFileName)
         {
-            MediaStoreStatus result = MediaStoreStatus.mssBadData;
+            MediaStoreStatus result;
 
             try {
-                fileName = this.FileName;
-
-                if (StoreType == MediaStoreType.mstRelativeReference) {
-                    fileName = fBaseContext.GetTreePath() + fileName;
-                }
-
-                if (!File.Exists(fileName)) {
-                    string xFileName = FileHelper.NormalizeFilename(fileName);
-                    if (!File.Exists(xFileName)) {
-                        result = MediaStoreStatus.mssFileNotFound;
-                    } else {
-                        result = MediaStoreStatus.mssExists;
-                        fileName = xFileName;
-                    }
-                } else {
-                    result = MediaStoreStatus.mssExists;
-                }
+                displayFileName = LoadMediaFile();
+                result = !File.Exists(displayFileName) ? MediaStoreStatus.mssFileNotFound : MediaStoreStatus.mssExists;
             } catch (Exception ex) {
-                Logger.WriteError("FSMediaStore.VerifyMediaFile()", ex);
-                fileName = string.Empty;
+                Logger.WriteError("PlainMediaStore.VerifyMediaFile()", ex);
+                displayFileName = this.FileName;
+                result = MediaStoreStatus.mssBadData;
             }
 
             return result;
@@ -63,28 +51,39 @@ namespace GKCore.Media
 
         protected override Stream LoadMediaStream(bool throwException)
         {
-            string targetFn = this.FileName;
+            string fileName = LoadMediaFile();
 
             Stream resultStream = null;
 
-            if (this.StoreType == MediaStoreType.mstRelativeReference) {
-                targetFn = fBaseContext.GetTreePath() + targetFn;
-            }
-
-            if (!File.Exists(targetFn)) {
+            if (!File.Exists(fileName)) {
                 if (throwException) {
-                    throw new MediaFileNotFoundException(targetFn);
+                    throw new MediaFileNotFoundException(fileName);
                 }
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FileNotFound, targetFn));
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FileNotFound, fileName));
             } else {
-                resultStream = new FileStream(targetFn, FileMode.Open, FileAccess.Read);
+                resultStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             }
 
             return resultStream;
         }
 
-        protected override void DeleteFile(string fileName)
+        protected override string LoadMediaFile()
         {
+            string resultFileName = fAbsoluteFileName;
+
+            if (!File.Exists(resultFileName)) {
+                string newPath = FileHelper.NormalizeFilename(resultFileName);
+                if (!string.IsNullOrEmpty(newPath) && File.Exists(newPath)) {
+                    resultFileName = newPath;
+                }
+            }
+
+            return resultFileName;
+        }
+
+        protected override void DeleteFile()
+        {
+            var fileName = LoadMediaFile();
             File.Delete(fileName);
         }
     }

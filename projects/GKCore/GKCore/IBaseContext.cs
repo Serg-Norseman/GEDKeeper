@@ -98,7 +98,7 @@ namespace GKCore
         string MediaLoad(string fileReference);
         bool MediaSave(GDMFileReference fileReference, string fileName, MediaStoreType storeType);
         bool MediaSave(out string refPath, string fileName, MediaStoreType storeType);
-        MediaStoreStatus VerifyMediaFile(string fileReference, out string fileName);
+        MediaStoreStatus VerifyMediaFile(string fileReference, out string displayFileName);
 
         /// <summary>
         /// Loading an image from a multimedia link with the features to get a thumbnail for the trees and cut out a part from the whole.

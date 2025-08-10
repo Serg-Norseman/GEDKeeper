@@ -24,14 +24,7 @@ namespace GKCore.Media
     {
         public RelativePathMediaStore(IBaseContext baseContext, MediaStoreType storeType, string fileName) : base(baseContext, storeType, fileName)
         {
-        }
-
-        protected override string LoadMediaFile()
-        {
-            string targetFn = this.FileName;
-
-            string resultFileName = fBaseContext.GetTreePath() + targetFn;
-            return resultFileName;
+            fAbsoluteFileName = baseContext.GetTreePath() + fileName;
         }
     }
 }

@@ -28,9 +28,9 @@ namespace GKCore.Media
         {
         }
 
-        public override MediaStoreStatus VerifyMediaFile(out string fileName)
+        public override MediaStoreStatus VerifyMediaFile(out string displayFileName)
         {
-            fileName = base.FileName;
+            displayFileName = base.FileName;
             return MediaStoreStatus.mssExists;
         }
 
@@ -53,7 +53,7 @@ namespace GKCore.Media
             return fileName;
         }
 
-        protected override void DeleteFile(string fileName)
+        protected override void DeleteFile()
         {
             // not supported
         }
