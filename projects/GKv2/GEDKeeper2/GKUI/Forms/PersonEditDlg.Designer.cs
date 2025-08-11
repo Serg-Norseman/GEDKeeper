@@ -401,16 +401,6 @@
             this.panCtlParents.Size = new System.Drawing.Size(564, 127);
             this.panCtlParents.TabIndex = 21;
             // 
-            // txtMother
-            // 
-            this.txtMother.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtMother.Location = new System.Drawing.Point(70, 55);
-            this.txtMother.Margin = new System.Windows.Forms.Padding(2);
-            this.txtMother.Name = "txtMother";
-            this.txtMother.ReadOnly = true;
-            this.txtMother.Size = new System.Drawing.Size(379, 21);
-            this.txtMother.TabIndex = 2;
-            // 
             // lblParents
             // 
             this.lblParents.AutoSize = true;
@@ -421,33 +411,13 @@
             this.lblParents.TabIndex = 0;
             this.lblParents.Text = "lblParents";
             // 
-            // lblMother
-            // 
-            this.lblMother.AutoSize = true;
-            this.lblMother.Location = new System.Drawing.Point(6, 59);
-            this.lblMother.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblMother.Name = "lblMother";
-            this.lblMother.Size = new System.Drawing.Size(54, 13);
-            this.lblMother.TabIndex = 0;
-            this.lblMother.Text = "lblMother";
-            // 
-            // lblFather
-            // 
-            this.lblFather.AutoSize = true;
-            this.lblFather.Location = new System.Drawing.Point(6, 92);
-            this.lblFather.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblFather.Name = "lblFather";
-            this.lblFather.Size = new System.Drawing.Size(54, 13);
-            this.lblFather.TabIndex = 0;
-            this.lblFather.Text = "lblFather";
-            // 
             // btnParentsAdd
             // 
             this.btnParentsAdd.Location = new System.Drawing.Point(455, 17);
             this.btnParentsAdd.Margin = new System.Windows.Forms.Padding(2);
             this.btnParentsAdd.Name = "btnParentsAdd";
             this.btnParentsAdd.Size = new System.Drawing.Size(29, 29);
-            this.btnParentsAdd.TabIndex = 3;
+            this.btnParentsAdd.TabIndex = 1;
             this.btnParentsAdd.Click += new System.EventHandler(this.btnParentsAdd_Click);
             // 
             // btnParentsEdit
@@ -456,7 +426,7 @@
             this.btnParentsEdit.Margin = new System.Windows.Forms.Padding(2);
             this.btnParentsEdit.Name = "btnParentsEdit";
             this.btnParentsEdit.Size = new System.Drawing.Size(29, 29);
-            this.btnParentsEdit.TabIndex = 4;
+            this.btnParentsEdit.TabIndex = 2;
             this.btnParentsEdit.Click += new System.EventHandler(this.btnParentsEdit_Click);
             // 
             // btnParentsDelete
@@ -465,12 +435,32 @@
             this.btnParentsDelete.Margin = new System.Windows.Forms.Padding(2);
             this.btnParentsDelete.Name = "btnParentsDelete";
             this.btnParentsDelete.Size = new System.Drawing.Size(29, 29);
-            this.btnParentsDelete.TabIndex = 5;
+            this.btnParentsDelete.TabIndex = 3;
             this.btnParentsDelete.Click += new System.EventHandler(this.btnParentsDelete_Click);
+            // 
+            // lblFather
+            // 
+            this.lblFather.AutoSize = true;
+            this.lblFather.Location = new System.Drawing.Point(6, 59);
+            this.lblFather.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblFather.Name = "lblFather";
+            this.lblFather.Size = new System.Drawing.Size(54, 13);
+            this.lblFather.TabIndex = 4;
+            this.lblFather.Text = "lblFather";
+            // 
+            // txtFather
+            // 
+            this.txtFather.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.txtFather.Location = new System.Drawing.Point(70, 55);
+            this.txtFather.Margin = new System.Windows.Forms.Padding(2);
+            this.txtFather.Name = "txtFather";
+            this.txtFather.ReadOnly = true;
+            this.txtFather.Size = new System.Drawing.Size(379, 21);
+            this.txtFather.TabIndex = 5;
             // 
             // btnFatherAdd
             // 
-            this.btnFatherAdd.Location = new System.Drawing.Point(455, 83);
+            this.btnFatherAdd.Location = new System.Drawing.Point(455, 50);
             this.btnFatherAdd.Margin = new System.Windows.Forms.Padding(2, 2, 4, 2);
             this.btnFatherAdd.Name = "btnFatherAdd";
             this.btnFatherAdd.Size = new System.Drawing.Size(29, 29);
@@ -479,7 +469,7 @@
             // 
             // btnFatherDelete
             // 
-            this.btnFatherDelete.Location = new System.Drawing.Point(490, 83);
+            this.btnFatherDelete.Location = new System.Drawing.Point(490, 50);
             this.btnFatherDelete.Margin = new System.Windows.Forms.Padding(2, 2, 4, 2);
             this.btnFatherDelete.Name = "btnFatherDelete";
             this.btnFatherDelete.Size = new System.Drawing.Size(29, 29);
@@ -488,49 +478,59 @@
             // 
             // btnFatherSel
             // 
-            this.btnFatherSel.Location = new System.Drawing.Point(525, 83);
+            this.btnFatherSel.Location = new System.Drawing.Point(525, 50);
             this.btnFatherSel.Margin = new System.Windows.Forms.Padding(2);
             this.btnFatherSel.Name = "btnFatherSel";
             this.btnFatherSel.Size = new System.Drawing.Size(29, 29);
             this.btnFatherSel.TabIndex = 8;
             this.btnFatherSel.Click += new System.EventHandler(this.btnFatherSel_Click);
             // 
+            // lblMother
+            // 
+            this.lblMother.AutoSize = true;
+            this.lblMother.Location = new System.Drawing.Point(6, 92);
+            this.lblMother.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblMother.Name = "lblMother";
+            this.lblMother.Size = new System.Drawing.Size(54, 13);
+            this.lblMother.TabIndex = 9;
+            this.lblMother.Text = "lblMother";
+            // 
+            // txtMother
+            // 
+            this.txtMother.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.txtMother.Location = new System.Drawing.Point(70, 88);
+            this.txtMother.Margin = new System.Windows.Forms.Padding(2);
+            this.txtMother.Name = "txtMother";
+            this.txtMother.ReadOnly = true;
+            this.txtMother.Size = new System.Drawing.Size(379, 21);
+            this.txtMother.TabIndex = 10;
+            // 
             // btnMotherAdd
             // 
-            this.btnMotherAdd.Location = new System.Drawing.Point(455, 50);
+            this.btnMotherAdd.Location = new System.Drawing.Point(455, 83);
             this.btnMotherAdd.Margin = new System.Windows.Forms.Padding(2);
             this.btnMotherAdd.Name = "btnMotherAdd";
             this.btnMotherAdd.Size = new System.Drawing.Size(29, 29);
-            this.btnMotherAdd.TabIndex = 9;
+            this.btnMotherAdd.TabIndex = 11;
             this.btnMotherAdd.Click += new System.EventHandler(this.btnMotherAdd_Click);
             // 
             // btnMotherDelete
             // 
-            this.btnMotherDelete.Location = new System.Drawing.Point(490, 50);
+            this.btnMotherDelete.Location = new System.Drawing.Point(490, 83);
             this.btnMotherDelete.Margin = new System.Windows.Forms.Padding(2);
             this.btnMotherDelete.Name = "btnMotherDelete";
             this.btnMotherDelete.Size = new System.Drawing.Size(29, 29);
-            this.btnMotherDelete.TabIndex = 10;
+            this.btnMotherDelete.TabIndex = 12;
             this.btnMotherDelete.Click += new System.EventHandler(this.btnMotherDelete_Click);
             // 
             // btnMotherSel
             // 
-            this.btnMotherSel.Location = new System.Drawing.Point(525, 50);
+            this.btnMotherSel.Location = new System.Drawing.Point(525, 83);
             this.btnMotherSel.Margin = new System.Windows.Forms.Padding(2);
             this.btnMotherSel.Name = "btnMotherSel";
             this.btnMotherSel.Size = new System.Drawing.Size(29, 29);
-            this.btnMotherSel.TabIndex = 11;
+            this.btnMotherSel.TabIndex = 13;
             this.btnMotherSel.Click += new System.EventHandler(this.btnMotherSel_Click);
-            // 
-            // txtFather
-            // 
-            this.txtFather.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtFather.Location = new System.Drawing.Point(70, 88);
-            this.txtFather.Margin = new System.Windows.Forms.Padding(2);
-            this.txtFather.Name = "txtFather";
-            this.txtFather.ReadOnly = true;
-            this.txtFather.Size = new System.Drawing.Size(379, 21);
-            this.txtFather.TabIndex = 1;
             // 
             // btnNameCopy
             // 
