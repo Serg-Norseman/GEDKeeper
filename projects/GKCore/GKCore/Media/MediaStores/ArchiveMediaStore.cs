@@ -32,7 +32,14 @@ namespace GKCore.Media
         private readonly string fArchiveFileName;
         private readonly string fCompressedFileName;
 
-        public ArchiveMediaStore(IBaseContext baseContext, MediaStoreType storeType, string fileName) : base(baseContext, storeType, fileName)
+        public override MediaStoreType StoreType { get { return MediaStoreType.mstArchive; } }
+
+
+        public ArchiveMediaStore(IBaseContext baseContext) : base(baseContext)
+        {
+        }
+
+        public ArchiveMediaStore(IBaseContext baseContext, string fileName) : base(baseContext, fileName)
         {
             fArchiveFileName = fBaseContext.GetArcFileName();
             fCompressedFileName = FileHelper.NormalizeFilename(this.FileName);
@@ -115,21 +122,28 @@ namespace GKCore.Media
             }
         }
 
-        public static void ArcFileSave(IBaseContext baseContext, string sourceFileName, string compressedFileName)
+        protected override bool SaveCopy(string sourceFileName, string targetFileName)
         {
-            string arcFn = baseContext.GetArcFileName();
-            ZipStorer zip = null;
-
+            bool result;
             try {
-                if (File.Exists(arcFn)) {
-                    zip = ZipStorer.Open(arcFn, FileAccess.ReadWrite, GetZipEncoding());
-                } else {
-                    zip = ZipStorer.Create(arcFn, "");
+                ZipStorer zip = null;
+                try {
+                    string arcFn = fBaseContext.GetArcFileName();
+                    if (File.Exists(arcFn)) {
+                        zip = ZipStorer.Open(arcFn, FileAccess.ReadWrite, GetZipEncoding());
+                    } else {
+                        zip = ZipStorer.Create(arcFn, "");
+                    }
+                    zip.AddFile(ZipStorer.Compression.Deflate, sourceFileName, targetFileName, null);
+                } finally {
+                    if (zip != null) zip.Dispose();
                 }
-                zip.AddFile(ZipStorer.Compression.Deflate, sourceFileName, compressedFileName, null);
-            } finally {
-                if (zip != null) zip.Dispose();
+                result = true;
+            } catch (IOException ex) {
+                Logger.WriteError(string.Format("ArchiveMediaStore.SaveCopy({0}, {1})", sourceFileName, targetFileName), ex);
+                result = false;
             }
+            return result;
         }
 
         protected override void DeleteFile()

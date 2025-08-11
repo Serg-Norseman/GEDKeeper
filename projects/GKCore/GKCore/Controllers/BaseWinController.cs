@@ -184,6 +184,9 @@ namespace GKCore.Controllers
                     LangMan.LS(LSID.GEDZIPFilter)
                 });
 
+                // bug fix for save dialog filters
+                filters = filters.Replace(",*.zip", "");
+
                 string proposedFileName = Path.GetFileName(oldFileName);
                 string newFileName = await AppHost.StdDialogs.GetSaveFile("", homePath, filters, 1, GKData.GEDCOM_EXT, proposedFileName, GlobalOptions.Instance.FilesOverwriteWarn);
                 if (!string.IsNullOrEmpty(newFileName)) {

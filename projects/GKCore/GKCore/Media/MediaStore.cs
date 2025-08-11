@@ -21,6 +21,8 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using BSLib;
+using GDModel;
 using GKCore.Locales;
 using GKCore.Options;
 
@@ -33,14 +35,19 @@ namespace GKCore.Media
     {
         protected readonly IBaseContext fBaseContext;
 
-        public MediaStoreType StoreType { get; private set; }
+        public abstract MediaStoreType StoreType { get; }
         public string FileName { get; private set; }
 
 
-        protected MediaStore(IBaseContext baseContext, MediaStoreType storeType, string fileName)
+        protected MediaStore(IBaseContext baseContext)
         {
             fBaseContext = baseContext;
-            StoreType = storeType;
+            FileName = string.Empty;
+        }
+
+        protected MediaStore(IBaseContext baseContext, string fileName)
+        {
+            fBaseContext = baseContext;
             FileName = fileName;
         }
 
@@ -77,22 +84,45 @@ namespace GKCore.Media
                     // TODO: check for absolute/relative path and redirection to archive
                     // for relative paths from third-party programs (without prefix) is required
                     if (baseContext.IsGEDZIP()) {
-                        return new ArchiveMediaStore(baseContext, storeType, fileName);
+                        return new ArchiveMediaStore(baseContext, fileName);
                     } else {
-                        return new AbsolutePathMediaStore(baseContext, storeType, fileName);
+                        return new AbsolutePathMediaStore(baseContext, fileName);
                     }
 
                 case MediaStoreType.mstRelativeReference:
-                    return new RelativePathMediaStore(baseContext, storeType, fileName);
+                    return new RelativePathMediaStore(baseContext, fileName);
 
                 case MediaStoreType.mstStorage:
-                    return new StorageMediaStore(baseContext, storeType, fileName);
+                    return new StorageMediaStore(baseContext, fileName);
 
                 case MediaStoreType.mstArchive:
-                    return new ArchiveMediaStore(baseContext, storeType, fileName);
+                    return new ArchiveMediaStore(baseContext, fileName);
 
                 case MediaStoreType.mstURL:
-                    return new URLMediaStore(baseContext, storeType, fileName);
+                    return new URLMediaStore(baseContext, fileName);
+
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        public static MediaStore CreateMediaStore(IBaseContext baseContext, MediaStoreType storeType)
+        {
+            switch (storeType) {
+                case MediaStoreType.mstReference:
+                    return new AbsolutePathMediaStore(baseContext);
+
+                case MediaStoreType.mstRelativeReference:
+                    return new RelativePathMediaStore(baseContext);
+
+                case MediaStoreType.mstStorage:
+                    return new StorageMediaStore(baseContext);
+
+                case MediaStoreType.mstArchive:
+                    return new ArchiveMediaStore(baseContext);
+
+                case MediaStoreType.mstURL:
+                    return new URLMediaStore(baseContext);
 
                 default:
                     throw new NotSupportedException();
@@ -152,6 +182,60 @@ namespace GKCore.Media
                 }
                 return false;
             }
+            return true;
+        }
+
+        public bool MediaSave(string fileName, out string refPath)
+        {
+            string storeFile = Path.GetFileName(fileName);
+            string storePath = GKUtils.GetStoreFolder(GKUtils.GetMultimediaKind(GDMFileReference.RecognizeFormat(fileName)));
+
+            refPath = string.Empty;
+            string targetFile = string.Empty;
+
+            // set paths and links
+            switch (StoreType) {
+                case MediaStoreType.mstReference:
+                    refPath = fileName;
+                    break;
+
+                case MediaStoreType.mstRelativeReference:
+                    targetFile = fBaseContext.GetTreeRelativePath(fileName);
+                    refPath = GKData.GKStoreTypes[(int)StoreType].Sign + targetFile;
+                    break;
+
+                case MediaStoreType.mstArchive:
+                    targetFile = storePath + storeFile;
+                    refPath = GKData.GKStoreTypes[(int)StoreType].Sign + targetFile;
+                    break;
+
+                case MediaStoreType.mstStorage:
+                    targetFile = storePath + storeFile;
+                    refPath = GKData.GKStoreTypes[(int)StoreType].Sign + targetFile;
+                    break;
+
+                case MediaStoreType.mstURL:
+                    refPath = fileName;
+                    break;
+            }
+
+            if (StoreType != MediaStoreType.mstURL) {
+                refPath = FileHelper.NormalizeFilename(refPath);
+            }
+
+            // verify existence
+            if (fBaseContext.MediaExists(refPath)) {
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FileWithSameNameAlreadyExists));
+                return false;
+            }
+
+            // save a copy to archive or storage
+            bool result = SaveCopy(fileName, targetFile);
+            return result;
+        }
+
+        protected virtual bool SaveCopy(string sourceFileName, string targetFileName)
+        {
             return true;
         }
 

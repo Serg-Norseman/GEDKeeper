@@ -26,9 +26,16 @@ namespace GKCore.Media
 {
     public sealed class StorageMediaStore : PlainMediaStore
     {
-        public StorageMediaStore(IBaseContext baseContext, MediaStoreType storeType, string fileName) : base(baseContext, storeType, fileName)
+        public override MediaStoreType StoreType { get { return MediaStoreType.mstStorage; } }
+
+
+        public StorageMediaStore(IBaseContext baseContext) : base(baseContext)
         {
-            fAbsoluteFileName = baseContext.GetStgFolder(false) + fileName;
+        }
+
+        public StorageMediaStore(IBaseContext baseContext, string fileName) : base(baseContext, fileName)
+        {
+            fAbsoluteFileName = baseContext.GetStgFolder() + fileName;
         }
 
         public override MediaStoreStatus VerifyMediaFile(out string displayFileName)
@@ -36,7 +43,7 @@ namespace GKCore.Media
             MediaStoreStatus result;
 
             try {
-                string stgPath = fBaseContext.GetStgFolder(false);
+                string stgPath = fBaseContext.GetStgFolder();
                 if (!Directory.Exists(stgPath)) {
                     displayFileName = this.FileName;
                     result = MediaStoreStatus.mssStgNotFound;
@@ -72,6 +79,23 @@ namespace GKCore.Media
         protected override string LoadMediaFile()
         {
             return fAbsoluteFileName;
+        }
+
+        protected override bool SaveCopy(string sourceFileName, string targetFileName)
+        {
+            bool result;
+            targetFileName = fBaseContext.GetStgFolder() + targetFileName;
+            try {
+                string targetDir = Path.GetDirectoryName(targetFileName);
+                if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
+
+                result = fBaseContext.CopyFile(sourceFileName, targetFileName, !AppHost.TEST_MODE);
+            } catch (IOException ex) {
+                Logger.WriteError(string.Format("StorageMediaStore.SaveCopy({0}, {1})", sourceFileName, targetFileName), ex);
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FileWithSameNameAlreadyExists));
+                result = false;
+            }
+            return result;
         }
     }
 }

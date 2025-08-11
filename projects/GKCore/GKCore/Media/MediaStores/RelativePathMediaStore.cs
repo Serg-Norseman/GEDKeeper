@@ -22,7 +22,14 @@ namespace GKCore.Media
 {
     public sealed class RelativePathMediaStore : PlainMediaStore
     {
-        public RelativePathMediaStore(IBaseContext baseContext, MediaStoreType storeType, string fileName) : base(baseContext, storeType, fileName)
+        public override MediaStoreType StoreType { get { return MediaStoreType.mstRelativeReference; } }
+
+
+        public RelativePathMediaStore(IBaseContext baseContext) : base(baseContext)
+        {
+        }
+
+        public RelativePathMediaStore(IBaseContext baseContext, string fileName) : base(baseContext, fileName)
         {
             fAbsoluteFileName = baseContext.GetTreePath() + fileName;
         }

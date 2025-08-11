@@ -22,7 +22,14 @@ namespace GKCore.Media
 {
     public sealed class AbsolutePathMediaStore : PlainMediaStore
     {
-        public AbsolutePathMediaStore(IBaseContext baseContext, MediaStoreType storeType, string fileName) : base(baseContext, storeType, fileName)
+        public override MediaStoreType StoreType { get { return MediaStoreType.mstReference; } }
+
+
+        public AbsolutePathMediaStore(IBaseContext baseContext) : base(baseContext)
+        {
+        }
+
+        public AbsolutePathMediaStore(IBaseContext baseContext, string fileName) : base(baseContext, fileName)
         {
             fAbsoluteFileName = fileName;
         }

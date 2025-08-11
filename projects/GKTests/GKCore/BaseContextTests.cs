@@ -291,7 +291,7 @@ namespace GKCore
                     Assert.AreEqual(true, ctx.MediaSave(mmRecS.FileReferences[0], sourFile, MediaStoreType.mstStorage));
                     Assert.IsNotNull(ctx.LoadMediaImage(mmRecS, -1, -1, ExtRect.Empty, false, false));
                     Assert.IsNotNull(ctx.MediaLoad(mmRecS.FileReferences[0]));
-                    stgDirectory = ctx.GetStgFolder(false);
+                    stgDirectory = ctx.GetStgFolder();
 
                     var mmRecRl = new GDMMultimediaRecord(ctx.Tree);
                     mmRecRl.FileReferences.Add(new GDMFileReferenceWithTitle());

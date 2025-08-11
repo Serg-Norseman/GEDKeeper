@@ -29,7 +29,11 @@ namespace GKCore.Media
     {
         protected string fAbsoluteFileName;
 
-        protected PlainMediaStore(IBaseContext baseContext, MediaStoreType storeType, string fileName) : base(baseContext, storeType, fileName)
+        protected PlainMediaStore(IBaseContext baseContext) : base(baseContext)
+        {
+        }
+
+        protected PlainMediaStore(IBaseContext baseContext, string fileName) : base(baseContext, fileName)
         {
         }
 

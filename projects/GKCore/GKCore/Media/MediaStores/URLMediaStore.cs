@@ -24,7 +24,14 @@ namespace GKCore.Media
 {
     public sealed class URLMediaStore : MediaStore
     {
-        public URLMediaStore(IBaseContext baseContext, MediaStoreType storeType, string fileName) : base(baseContext, storeType, fileName)
+        public override MediaStoreType StoreType { get { return MediaStoreType.mstURL; } }
+
+
+        public URLMediaStore(IBaseContext baseContext) : base(baseContext)
+        {
+        }
+
+        public URLMediaStore(IBaseContext baseContext, string fileName) : base(baseContext, fileName)
         {
         }
 

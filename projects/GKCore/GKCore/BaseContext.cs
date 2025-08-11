@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BSLib;
@@ -686,7 +685,7 @@ namespace GKCore
             return Path.GetDirectoryName(fFileName) + Path.DirectorySeparatorChar;
         }
 
-        private string GetTreeRelativePath(string fileName)
+        public string GetTreeRelativePath(string fileName)
         {
             string result = GKUtils.GetRelativePath(GetTreePath(), fileName);
             return result;
@@ -702,10 +701,9 @@ namespace GKCore
             return result;
         }
 
-        public string GetStgFolder(bool create)
+        public string GetStgFolder()
         {
             string result = GetTreePath() + Path.GetFileNameWithoutExtension(fFileName) + Path.DirectorySeparatorChar;
-            if (!Directory.Exists(result) && create) Directory.CreateDirectory(result);
             return result;
         }
 
@@ -715,7 +713,7 @@ namespace GKCore
             if (string.IsNullOrEmpty(oldFileName) || string.Equals(oldFileName, newFileName)) return;
 
             bool hasArc = File.Exists(GetArcFileName());
-            bool hasStg = Directory.Exists(GetStgFolder(false));
+            bool hasStg = Directory.Exists(GetStgFolder());
 
             string newPath = Path.GetDirectoryName(newFileName);
             string newName = Path.GetFileName(newFileName);
@@ -733,7 +731,7 @@ namespace GKCore
             if (hasStg) {
                 string newStg = newPath + Path.DirectorySeparatorChar + GKUtils.GetContainerName(newName, false);
                 if (!createCopy) {
-                    Directory.Move(GetStgFolder(false), newStg);
+                    Directory.Move(GetStgFolder(), newStg);
                 } else {
                     // TODO!
                 }
@@ -839,7 +837,7 @@ namespace GKCore
         public string MediaLoad(string fileReference)
         {
             if (string.IsNullOrEmpty(fileReference)) return string.Empty;
-            MediaStore mediaStore = MediaStore.GetMediaStore(this, fileReference);
+            var mediaStore = MediaStore.GetMediaStore(this, fileReference);
             return mediaStore.MediaLoad();
         }
 
@@ -856,80 +854,14 @@ namespace GKCore
 
         public bool MediaSave(out string refPath, string fileName, MediaStoreType storeType)
         {
-            string storeFile = Path.GetFileName(fileName);
-            string storePath = GKUtils.GetStoreFolder(GKUtils.GetMultimediaKind(GDMFileReference.RecognizeFormat(fileName)));
-
-            refPath = string.Empty;
-            string targetFile = string.Empty;
-
-            // set paths and links
-            switch (storeType) {
-                case MediaStoreType.mstReference:
-                    refPath = fileName;
-                    break;
-
-                case MediaStoreType.mstRelativeReference:
-                    targetFile = GetTreeRelativePath(fileName);
-                    refPath = GKData.GKStoreTypes[(int)storeType].Sign + targetFile;
-                    break;
-
-                case MediaStoreType.mstArchive:
-                    targetFile = storePath + storeFile;
-                    refPath = GKData.GKStoreTypes[(int)storeType].Sign + targetFile;
-                    break;
-
-                case MediaStoreType.mstStorage:
-                    targetFile = storePath + storeFile;
-                    refPath = GKData.GKStoreTypes[(int)storeType].Sign + targetFile;
-                    break;
-
-                case MediaStoreType.mstURL:
-                    refPath = fileName;
-                    break;
-            }
-
-            if (storeType != MediaStoreType.mstURL) {
-                refPath = FileHelper.NormalizeFilename(refPath);
-            }
-
-            // verify existence
-            bool alreadyExists = MediaExists(refPath);
-            if (alreadyExists) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FileWithSameNameAlreadyExists));
-                return false;
-            }
-
-            bool result = true;
-
-            // save a copy to archive or storage
-            switch (storeType) {
-                case MediaStoreType.mstArchive:
-                    ArchiveMediaStore.ArcFileSave(this, fileName, targetFile);
-                    break;
-
-                case MediaStoreType.mstStorage:
-                    string targetFn = string.Empty;
-                    try {
-                        string targetDir = GetStgFolder(true) + storePath;
-                        if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
-
-                        targetFn = targetDir + storeFile;
-                        result = CopyFile(fileName, targetFn, !AppHost.TEST_MODE);
-                    } catch (IOException ex) {
-                        Logger.WriteError(string.Format("BaseContext.MediaSave({0}, {1})", fileName, targetFn), ex);
-                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FileWithSameNameAlreadyExists));
-                        result = false;
-                    }
-                    break;
-            }
-
-            return result;
+            var mediaStore = MediaStore.CreateMediaStore(this, storeType);
+            return mediaStore.MediaSave(fileName, out refPath);
         }
 
         public async Task<bool> MediaDelete(GDMFileReference fileReference)
         {
             if (fileReference == null) return false;
-            MediaStore mediaStore = MediaStore.GetMediaStore(this, fileReference.StringValue);
+            var mediaStore = MediaStore.GetMediaStore(this, fileReference.StringValue);
             return await mediaStore.MediaDelete();
         }
 
@@ -938,7 +870,7 @@ namespace GKCore
             if (fileReference == null)
                 throw new ArgumentNullException("fileReference");
 
-            MediaStore mediaStore = MediaStore.GetMediaStore(this, fileReference);
+            var mediaStore = MediaStore.GetMediaStore(this, fileReference);
             return mediaStore.VerifyMediaFile(out displayFileName);
         }
 
@@ -1222,6 +1154,10 @@ namespace GKCore
 
                 return new SecGEDCOMProvider(fTree, pw, GlobalOptions.Instance.KeepRichNames, false);
             }
+
+            /*if (ext == ".gdz") {
+                return new GEDZIPProvider(fTree);
+            }*/
 
             AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FormatUnsupported));
             return null;
