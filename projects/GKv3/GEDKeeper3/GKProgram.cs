@@ -58,6 +58,11 @@ namespace GEDKeeper3
             EtoAppHost.Startup(args);
 
             var application = new Application();
+            application.UnhandledException += (_, eventArgs) => {
+                var ex = eventArgs.ExceptionObject as Exception ??
+                          new Exception(eventArgs.ExceptionObject?.ToString());
+                Logger.WriteError(string.Format("Unhandled exception (IsTerminating={0}):", eventArgs.IsTerminating), ex);
+            };
 
             application.Platform.Add<GKButtonToolItem.IHandler>(() => new GKButtonToolItemHandler());
             application.Platform.Add<GKDropDownToolItem.IHandler>(() => new GKDropDownToolItemHandler());
