@@ -290,6 +290,8 @@ namespace GKCore.Lists
 
         private bool IsMatchesNames(string fltName)
         {
+            if (fltName == "*") return true;
+
             var allNames = GlobalOptions.Instance.SearchAndFilterByAllNames;
 
             if (!allNames) {
@@ -319,15 +321,13 @@ namespace GKCore.Lists
             if (!IsMatchesEventVal(iFilter.EventVal)) return false;
             if (iFilter.PatriarchOnly && !fFetchedRec.Patriarch) return false;
 
-            bool isLive = (buf_dd == null);
-
             switch (iFilter.FilterLifeMode) {
                 case FilterLifeMode.lmOnlyAlive:
-                    if (!isLive) return false;
+                    if (buf_dd != null) return false;
                     break;
 
                 case FilterLifeMode.lmOnlyDead:
-                    if (isLive) return false;
+                    if (buf_dd == null) return false;
                     break;
 
                 case FilterLifeMode.lmAliveBefore:
@@ -336,6 +336,7 @@ namespace GKCore.Lists
                     if ((bdt.CompareTo(filter_abd) > 0) || (ddt.CompareTo(filter_abd) < 0)) return false;
                     break;
 
+                case FilterLifeMode.lmAll:
                 case FilterLifeMode.lmTimeLocked:
                     break;
             }

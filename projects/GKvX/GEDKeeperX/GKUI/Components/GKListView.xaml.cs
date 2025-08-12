@@ -52,8 +52,6 @@ namespace GKUI.Components
     {
         private bool fCheckBoxes;
         private IListSource fListMan;
-        private int fSortColumn;
-        private GKSortOrder fSortOrder;
 
         public event EventHandler MouseDoubleClick;
 
@@ -81,8 +79,6 @@ namespace GKUI.Components
                     fListMan = value;
 
                     if (fListMan != null) {
-                        fSortColumn = 0;
-                        fSortOrder = GKSortOrder.Ascending;
                         ItemsSource = fListMan.ContentList;
                     } else {
                         ItemsSource = null;
@@ -103,14 +99,14 @@ namespace GKUI.Components
 
         public int SortColumn
         {
-            get { return fSortColumn; }
-            set { fSortColumn = value; }
+            get { return (fListMan != null) ? fListMan.SortColumn : 0; }
+            set { if (fListMan != null) fListMan.SortColumn = value; }
         }
 
         public GKSortOrder SortOrder
         {
-            get { return fSortOrder; }
-            set { fSortOrder = value; }
+            get { return (fListMan != null) ? fListMan.SortOrder : GKSortOrder.None; }
+            set { if (fListMan != null) fListMan.SortOrder = value; }
         }
 
 
@@ -122,8 +118,6 @@ namespace GKUI.Components
             RowHeight = 26;
 
             fCheckBoxes = false;
-            fSortColumn = 0;
-            fSortOrder = GKSortOrder.None;
             fListMan = null;
         }
 
@@ -134,30 +128,30 @@ namespace GKUI.Components
 
         protected GKSortOrder GetColumnSortOrder(int columnIndex)
         {
-            return (fSortColumn == columnIndex) ? fSortOrder : GKSortOrder.None;
+            return (fListMan != null && fListMan.SortColumn == columnIndex) ? fListMan.SortOrder : GKSortOrder.None;
         }
 
         public void SetSortColumn(int sortColumn, bool checkOrder = true)
         {
-            int prevColumn = fSortColumn;
+            int prevColumn = fListMan.SortColumn;
             if (prevColumn == sortColumn && checkOrder) {
                 var prevOrder = GetColumnSortOrder(sortColumn);
-                fSortOrder = (prevOrder == GKSortOrder.Ascending) ? GKSortOrder.Descending : GKSortOrder.Ascending;
+                fListMan.SortOrder = (prevOrder == GKSortOrder.Ascending) ? GKSortOrder.Descending : GKSortOrder.Ascending;
             } else {
-                fSortOrder = GKSortOrder.Ascending;
+                fListMan.SortOrder = GKSortOrder.Ascending;
             }
 
-            fSortColumn = sortColumn;
+            fListMan.SortColumn = sortColumn;
             SortContents(true);
         }
 
         private void SortContents(bool restoreSelected)
         {
-            if (fListMan == null || fSortOrder == GKSortOrder.None) return;
+            if (fListMan == null || fListMan.SortOrder == GKSortOrder.None) return;
 
             object rec = (restoreSelected) ? GetSelectedData() : null;
 
-            fListMan.SortContents(fSortColumn, fSortOrder == GKSortOrder.Ascending);
+            fListMan.SortContents(fListMan.SortColumn, fListMan.SortOrder == GKSortOrder.Ascending, restoreSelected);
 
             if (rec != null) SelectItem(rec);
         }

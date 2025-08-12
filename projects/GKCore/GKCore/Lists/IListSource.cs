@@ -19,6 +19,7 @@
  */
 
 using System.Collections.Generic;
+using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Filters;
@@ -78,6 +79,8 @@ namespace GKCore.Lists
         IListFilter Filter { get; }
         int FilteredCount { get; }
         IListColumns ListColumns { get; }
+        int SortColumn { get; set; }
+        GKSortOrder SortOrder { get; set; }
         int TotalCount { get; }
 
         void Clear();
@@ -124,7 +127,7 @@ namespace GKCore.Lists
         void OnItemSelected(int itemIndex, object rowData);
         void RestoreSettings();
         void SaveSettings();
-        void SortContents(int sortColumn, bool sortAscending);
+        void SortContents(int sortColumn, bool sortAscending, bool uiChange);
         void UpdateColumns(IListView listView);
         void UpdateContents();
     }

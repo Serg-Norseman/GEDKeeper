@@ -504,11 +504,6 @@ namespace GKUI.Forms
             return fController.GetRecordsViewByType(recType);
         }
 
-        public IHyperView GetHyperViewByType(GDMRecordType recType)
-        {
-            return fController.GetHyperViewByType(recType);
-        }
-
         public IRecordsListModel GetRecordsListManByType(GDMRecordType recType)
         {
             return fController.GetRecordsListManByType(recType);
@@ -568,11 +563,6 @@ namespace GKUI.Forms
             }
 
             return result;
-        }
-
-        public void Clear()
-        {
-            fController.Clear();
         }
 
         public void CreateNewFile()

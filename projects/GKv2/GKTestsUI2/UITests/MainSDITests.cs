@@ -176,8 +176,6 @@ namespace GKUI.Forms
         {
             // calls to the different Editors
             for (GDMRecordType rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
-                Assert.IsNotNull(((BaseWinSDI)fCurBase).GetHyperViewByType(rt));
-
                 fCurBase.ShowRecordsTab(rt);
 
                 ModalFormHandler = Dialog_Cancel_Handler;

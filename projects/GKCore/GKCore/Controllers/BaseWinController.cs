@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BSLib;
@@ -320,27 +321,24 @@ namespace GKCore.Controllers
 
             GDMRecord record = await BaseController.AddRecord(fView, fView, rt, null);
             if (record != null) {
-                RefreshLists(false);
+                UpdateChangedRecords(record);
             }
-
-            UpdateChangedRecords(record);
         }
 
         public async void EditRecord()
         {
             GDMRecord record = GetSelectedRecordEx();
             if (record != null && await BaseController.EditRecord(fView, fView, record)) {
-                RefreshLists(false);
+                UpdateChangedRecords(null);
             }
-
-            UpdateChangedRecords(record);
         }
 
         public async void DeleteRecord()
         {
+            GDMRecordType rt = GetSelectedRecordType();
             GDMRecord record = GetSelectedRecordEx();
             if (record != null && await BaseController.DeleteRecord(fView, record, true)) {
-                RefreshLists(false);
+                RefreshRecordsView(rt);
             }
         }
 
@@ -649,27 +647,30 @@ namespace GKCore.Controllers
             }
         }
 
-        public void RefreshRecordsView(GDMRecordType recType)
+        public void RefreshRecordsView(GDMRecordType recType, bool updateControls = true)
         {
             IListView rView = GetRecordsViewByType(recType);
             if (rView != null) {
                 rView.UpdateContents();
 
-                AppHost.Instance.UpdateControls(false);
+                if (updateControls)
+                    AppHost.Instance.UpdateControls(false);
             }
         }
 
         public void UpdateChangedRecords(GDMRecord select = null)
         {
-            for (int i = fChangedRecords.Count - 1; i >= 0; i--) {
-                var record = fChangedRecords[i];
-
-                RefreshRecordsView(record.RecordType);
+            var recTypes = fChangedRecords.Select(o => o.RecordType).Distinct();
+            foreach (var rt in recTypes) {
+                RefreshRecordsView(rt, false);
             }
+            fChangedRecords.Clear();
 
             if (select != null) {
                 fView.SelectRecordByXRef(select.XRef);
             }
+
+            AppHost.Instance.UpdateControls(false);
         }
 
         public void CheckChangedRecord(GDMRecord record, bool active)

@@ -42,13 +42,17 @@ namespace GKCore.Filters
 
     public class QuickFilterParams
     {
+        private const string AnyPattern = "*";
+
         public string Value;
         public MatchType Type;
         public float IndistinctThreshold;
 
+        public bool IsEmpty { get { return string.Equals(Value, AnyPattern); } }
+
         public QuickFilterParams()
         {
-            Value = "*";
+            Value = AnyPattern;
             Type = MatchType.REMask;
             IndistinctThreshold = 1.00f;
         }

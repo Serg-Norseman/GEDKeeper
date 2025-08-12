@@ -207,8 +207,7 @@ namespace GKCore.Search
 
         private void Replace(ISearchResult res)
         {
-            if (res != null) {
-                var farResult = (FARSearchResult)res;
+            if (res is FARSearchResult farResult) {
                 farResult.Replacer(farResult.Property);
                 fBaseWindow.NotifyRecord(farResult.Record, RecordAction.raEdit);
                 fBaseWindow.UpdateChangedRecords(farResult.Record);

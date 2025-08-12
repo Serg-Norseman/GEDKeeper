@@ -26,6 +26,7 @@ using GDModel;
 using GKCore.Calendar;
 using GKCore.Charts;
 using GKCore.Cultures;
+using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Filters;
@@ -59,6 +60,9 @@ namespace GKCore.Lists
         protected readonly List<MapColumnRec> fColumnsMap;
         protected readonly ListColumns fListColumns;
 
+        private int fSortColumn;
+        private GKSortOrder fSortOrder;
+
 
         public List<MapColumnRec> ColumnsMap
         {
@@ -91,6 +95,18 @@ namespace GKCore.Lists
             get { return fListColumns; }
         }
 
+        public int SortColumn
+        {
+            get { return fSortColumn; }
+            set { fSortColumn = value; }
+        }
+
+        public GKSortOrder SortOrder
+        {
+            get { return fSortOrder; }
+            set { fSortOrder = value; }
+        }
+
         public int TotalCount
         {
             get { return fTotalCount; }
@@ -103,6 +119,9 @@ namespace GKCore.Lists
             fColumnsMap = new List<MapColumnRec>();
             fContentList = new ExtObservableList<ContentItem>();
             fListColumns = new ListColumns(GKListType.ltNone);
+
+            fSortColumn = 0;
+            fSortOrder = GKSortOrder.Ascending;
 
             CreateFilter();
         }
@@ -672,7 +691,11 @@ namespace GKCore.Lists
             Fetch(rec);
 
             if (CheckFilter()) {
-                fContentList.Add(new ContentItem(this, rec));
+                ContentItem contentItem = new ContentItem(this, rec);
+
+                fContentList.Add(contentItem);
+
+                contentItem.SortValue = GetColumnValue(fSortColumn, false);
             }
         }
 
@@ -738,18 +761,20 @@ namespace GKCore.Lists
             return compRes * fXSortFactor;
         }
 
-        public void SortContents(int sortColumn, bool sortAscending)
+        public void SortContents(int sortColumn, bool sortAscending, bool uiChange)
         {
             try {
                 fSysCulture = (fBaseContext != null) ? CulturesPool.GetSystemCulture(fBaseContext.Culture) : SGCulture.CurrentCulture;
 
                 fContentList.BeginUpdate();
 
-                int num = fContentList.Count;
-                for (int i = 0; i < num; i++) {
-                    ContentItem valItem = fContentList[i];
-                    Fetch((T)valItem.Record);
-                    valItem.SortValue = GetColumnValue(sortColumn, false);
+                if (uiChange) {
+                    int num = fContentList.Count;
+                    for (int i = 0; i < num; i++) {
+                        ContentItem valItem = fContentList[i];
+                        Fetch((T)valItem.Record);
+                        valItem.SortValue = GetColumnValue(sortColumn, false);
+                    }
                 }
 
                 fXSortFactor = (sortAscending ? 1 : -1);

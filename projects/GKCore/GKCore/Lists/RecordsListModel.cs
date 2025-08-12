@@ -98,10 +98,14 @@ namespace GKCore.Lists
 
         protected bool CheckQuickFilter(string str)
         {
-            if (fQuickFilter.Type == MatchType.Indistinct) {
-                return (IndistinctMatching.GetSimilarity(str, fQuickFilter.Value) >= fQuickFilter.IndistinctThreshold);
+            if (fQuickFilter.IsEmpty) {
+                return true;
             } else {
-                return IsMatchesMask(str, fQuickFilter.Value);
+                if (fQuickFilter.Type == MatchType.Indistinct) {
+                    return (IndistinctMatching.GetSimilarity(str, fQuickFilter.Value) >= fQuickFilter.IndistinctThreshold);
+                } else {
+                    return IsMatchesMask(str, fQuickFilter.Value);
+                }
             }
         }
 
