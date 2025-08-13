@@ -643,11 +643,10 @@ namespace GKCore.Lists
             fColumnsMap.Clear();
 
             NameFormat defNameFormat = (SimpleList) ? NameFormat.nfFNP : GlobalOptions.Instance.DefNameFormat;
-            IListColumns columns = this.ListColumns;
 
-            int num = columns.Count;
+            int num = fListColumns.Count;
             for (int i = 0; i < num; i++) {
-                ListColumn columnProps = columns.OrderedColumns[i];
+                ListColumn columnProps = fListColumns.OrderedColumns[i];
                 if (!columnProps.CurActive) continue;
 
                 const bool asz = false;

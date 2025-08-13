@@ -2455,7 +2455,7 @@ namespace GKCore
                     for (int k = 0; k < num2; k++) {
                         var mmLink = iRec.MultimediaLinks[k];
                         if (mmLink.XRef == mmRec.XRef /*&& mmLink.IsPrimary*/) {
-                            string indiName = GKUtils.GetNameString(iRec, false);
+                            string indiName = GetNameString(iRec, false);
                             ExtRect region = mmLink.CutoutPosition.Value;
                             result.AddObject(indiName, region);
                         }
@@ -3325,56 +3325,52 @@ namespace GKCore
 
         public static void GetRecordContent(IBaseContext baseContext, GDMRecord record, StringList ctx, RecordContentType contentType)
         {
-            if (record != null && ctx != null) {
-                try {
-                    switch (record.RecordType) {
-                        case GDMRecordType.rtIndividual:
-                            GKUtils.ShowPersonInfo(baseContext, record as GDMIndividualRecord, ctx);
-                            break;
+            if (record == null || ctx == null) return;
 
-                        case GDMRecordType.rtFamily:
-                            GKUtils.ShowFamilyInfo(baseContext, record as GDMFamilyRecord, ctx);
-                            break;
+            switch (record.RecordType) {
+                case GDMRecordType.rtIndividual:
+                    ShowPersonInfo(baseContext, record as GDMIndividualRecord, ctx);
+                    break;
 
-                        case GDMRecordType.rtNote:
-                            GKUtils.ShowNoteInfo(baseContext, record as GDMNoteRecord, ctx);
-                            break;
+                case GDMRecordType.rtFamily:
+                    ShowFamilyInfo(baseContext, record as GDMFamilyRecord, ctx);
+                    break;
 
-                        case GDMRecordType.rtMultimedia:
-                            GKUtils.ShowMultimediaInfo(baseContext, record as GDMMultimediaRecord, ctx);
-                            break;
+                case GDMRecordType.rtNote:
+                    ShowNoteInfo(baseContext, record as GDMNoteRecord, ctx);
+                    break;
 
-                        case GDMRecordType.rtSource:
-                            GKUtils.ShowSourceInfo(baseContext, record as GDMSourceRecord, ctx, contentType);
-                            break;
+                case GDMRecordType.rtMultimedia:
+                    ShowMultimediaInfo(baseContext, record as GDMMultimediaRecord, ctx);
+                    break;
 
-                        case GDMRecordType.rtRepository:
-                            GKUtils.ShowRepositoryInfo(baseContext, record as GDMRepositoryRecord, ctx);
-                            break;
+                case GDMRecordType.rtSource:
+                    ShowSourceInfo(baseContext, record as GDMSourceRecord, ctx, contentType);
+                    break;
 
-                        case GDMRecordType.rtGroup:
-                            GKUtils.ShowGroupInfo(baseContext, record as GDMGroupRecord, ctx);
-                            break;
+                case GDMRecordType.rtRepository:
+                    ShowRepositoryInfo(baseContext, record as GDMRepositoryRecord, ctx);
+                    break;
 
-                        case GDMRecordType.rtResearch:
-                            GKUtils.ShowResearchInfo(baseContext, record as GDMResearchRecord, ctx);
-                            break;
+                case GDMRecordType.rtGroup:
+                    ShowGroupInfo(baseContext, record as GDMGroupRecord, ctx);
+                    break;
 
-                        case GDMRecordType.rtTask:
-                            GKUtils.ShowTaskInfo(baseContext, record as GDMTaskRecord, ctx);
-                            break;
+                case GDMRecordType.rtResearch:
+                    ShowResearchInfo(baseContext, record as GDMResearchRecord, ctx);
+                    break;
 
-                        case GDMRecordType.rtCommunication:
-                            GKUtils.ShowCommunicationInfo(baseContext, record as GDMCommunicationRecord, ctx);
-                            break;
+                case GDMRecordType.rtTask:
+                    ShowTaskInfo(baseContext, record as GDMTaskRecord, ctx);
+                    break;
 
-                        case GDMRecordType.rtLocation:
-                            GKUtils.ShowLocationInfo(baseContext, record as GDMLocationRecord, ctx);
-                            break;
-                    }
-                } catch (Exception ex) {
-                    Logger.WriteError("GKUtils.GetRecordContext()", ex);
-                }
+                case GDMRecordType.rtCommunication:
+                    ShowCommunicationInfo(baseContext, record as GDMCommunicationRecord, ctx);
+                    break;
+
+                case GDMRecordType.rtLocation:
+                    ShowLocationInfo(baseContext, record as GDMLocationRecord, ctx);
+                    break;
             }
         }
 
@@ -3699,9 +3695,9 @@ namespace GKCore
             var globOpts = GlobalOptions.Instance;
 
             WomanSurnameFormat wsFmt = globOpts.WomanSurnameFormat;
-            bool simpleSingle = globOpts.SimpleSingleSurnames;
 
             if (iSex == GDMSex.svFemale && wsFmt != WomanSurnameFormat.wsfNotExtend) {
+                bool simpleSingle = globOpts.SimpleSingleSurnames;
                 string marriedSurname = personalName.MarriedName;
                 switch (wsFmt) {
                     case WomanSurnameFormat.wsfMaiden_Married:
@@ -3761,7 +3757,8 @@ namespace GKCore
             if (np == null)
                 throw new ArgumentNullException(nameof(np));
 
-            string result;
+            var parts = new string[6];
+            int pIdx = 0;
 
             string firstPart = np.FirstPart;
             string surname = np.Surname;
@@ -3769,17 +3766,26 @@ namespace GKCore
             surname = GetFmtSurname(iRec.Sex, np, surname);
 
             if (firstSurname) {
-                result = string.Concat(surname, " ", firstPart);
+                parts[pIdx++] = surname;
+                parts[pIdx++] = " ";
+                parts[pIdx++] = firstPart;
             } else {
-                result = string.Concat(firstPart, " ", surname);
+                parts[pIdx++] = firstPart;
+                parts[pIdx++] = " ";
+                parts[pIdx++] = surname;
             }
 
             if (includePieces) {
                 string nick = np.Nickname;
-                if (!string.IsNullOrEmpty(nick)) result = string.Concat(result, " [", nick, "]");
+                if (!string.IsNullOrEmpty(nick)) {
+                    parts[pIdx++] = " [";
+                    parts[pIdx++] = nick;
+                    parts[pIdx++] = "]";
+                }
             }
 
-            return result.Trim();
+            // used to speed up work, 2x faster than with multiple Concat
+            return string.Join("", parts, 0, pIdx);
         }
 
         private static GDMPersonalName GetPersonalNameByLang(GDMIndividualRecord iRec, GDMLanguageID defLang)

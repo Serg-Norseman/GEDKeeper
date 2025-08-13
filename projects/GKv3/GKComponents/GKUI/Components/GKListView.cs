@@ -108,32 +108,13 @@ namespace GKUI.Components
             }
         }
 
-        protected GKSortOrder GetColumnSortOrder(int columnIndex)
-        {
-            return (fListMan != null && fListMan.SortColumn == columnIndex) ? fListMan.SortOrder : GKSortOrder.None;
-        }
-
         public void SetSortColumn(int sortColumn, bool checkOrder = true)
         {
-            int prevColumn = fListMan.SortColumn;
-            if (prevColumn == sortColumn && checkOrder) {
-                var prevOrder = GetColumnSortOrder(sortColumn);
-                fListMan.SortOrder = (prevOrder == GKSortOrder.Ascending) ? GKSortOrder.Descending : GKSortOrder.Ascending;
-            } else {
-                fListMan.SortOrder = GKSortOrder.Ascending;
-            }
+            if (fListMan == null) return;
 
-            fListMan.SortColumn = sortColumn;
-            SortContents(true);
-        }
+            object rec = GetSelectedData();
 
-        private void SortContents(bool restoreSelected)
-        {
-            if (fListMan == null || fListMan.SortOrder == GKSortOrder.None) return;
-
-            object rec = (restoreSelected) ? GetSelectedData() : null;
-
-            fListMan.SortContents(fListMan.SortColumn, fListMan.SortOrder == GKSortOrder.Ascending, restoreSelected);
+            fListMan.SetSortColumn(sortColumn, checkOrder);
 
             if (rec != null) SelectItem(rec);
         }
@@ -204,7 +185,7 @@ namespace GKUI.Components
                     }
 
                     fListMan.UpdateContents();
-                    SortContents(false);
+                    fListMan.SortContents(false);
 
                     ResizeColumns();
                 } finally {
@@ -339,8 +320,8 @@ namespace GKUI.Components
             }
 
             if (index >= 0 && index < fListMan.ContentList.Count) {
-                ScrollToRow(index);
                 UnselectAll();
+                ScrollToRow(index);
                 SelectRow(index);
             }
         }

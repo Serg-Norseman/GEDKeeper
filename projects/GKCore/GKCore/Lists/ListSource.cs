@@ -42,6 +42,9 @@ namespace GKCore.Lists
     public abstract class ListSource<T> : IListSource
         where T : class
     {
+        public const string ErrorValue = "#";
+
+
         private readonly ExtObservableList<ContentItem> fContentList;
         private SGCulture fSysCulture;
         private int fTotalCount;
@@ -90,7 +93,7 @@ namespace GKCore.Lists
             get { return fContentList.Count; }
         }
 
-        public IListColumns ListColumns
+        public ListColumns ListColumns
         {
             get { return fListColumns; }
         }
@@ -577,7 +580,7 @@ namespace GKCore.Lists
                 }
             } catch (Exception ex) {
                 Logger.WriteError("ListSource.GetColumnValue()", ex);
-                val = "#"; // error sign!
+                val = ErrorValue;
             }
             return val;
         }
@@ -761,7 +764,7 @@ namespace GKCore.Lists
             return compRes * fXSortFactor;
         }
 
-        public void SortContents(int sortColumn, bool sortAscending, bool uiChange)
+        public void SortContents(bool uiChange)
         {
             try {
                 fSysCulture = (fBaseContext != null) ? CulturesPool.GetSystemCulture(fBaseContext.Culture) : SGCulture.CurrentCulture;
@@ -773,17 +776,33 @@ namespace GKCore.Lists
                     for (int i = 0; i < num; i++) {
                         ContentItem valItem = fContentList[i];
                         Fetch((T)valItem.Record);
-                        valItem.SortValue = GetColumnValue(sortColumn, false);
+                        valItem.SortValue = GetColumnValue(fSortColumn, false);
                     }
                 }
 
-                fXSortFactor = (sortAscending ? 1 : -1);
+                fXSortFactor = (fSortOrder == GKSortOrder.Ascending ? 1 : -1);
                 ListTimSort<ContentItem>.Sort(fContentList, CompareItems);
 
                 fContentList.EndUpdate();
             } catch (Exception ex) {
                 Logger.WriteError("ListSource.SortContents()", ex);
             }
+        }
+
+        public void SetSortColumn(int sortColumn, bool checkOrder = true)
+        {
+            int prevColumn = fSortColumn;
+            if (prevColumn == sortColumn && checkOrder) {
+                var prevOrder = (fSortColumn == sortColumn) ? fSortOrder : GKSortOrder.None;
+                fSortOrder = (prevOrder == GKSortOrder.Ascending) ? GKSortOrder.Descending : GKSortOrder.Ascending;
+            } else {
+                fSortOrder = GKSortOrder.Ascending;
+            }
+
+            fSortColumn = sortColumn;
+
+            if (fSortOrder != GKSortOrder.None)
+                SortContents(true);
         }
 
         #endregion

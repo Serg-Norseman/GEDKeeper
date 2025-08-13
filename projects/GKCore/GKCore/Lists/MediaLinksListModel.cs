@@ -65,10 +65,10 @@ namespace GKCore.Lists
                     result = fStructList.IndexOf(fFetchedRec) + 1;
                     break;
                 case 1:
-                    result = fFileRef.Title;
+                    result = (fFileRef == null) ? ErrorValue : fFileRef.Title;
                     break;
                 case 2:
-                    result = LangMan.LS(GKData.MediaTypes[(int)fFileRef.MediaType]);
+                    result = (fFileRef == null) ? ErrorValue : LangMan.LS(GKData.MediaTypes[(int)fFileRef.MediaType]);
                     break;
             }
             return result;

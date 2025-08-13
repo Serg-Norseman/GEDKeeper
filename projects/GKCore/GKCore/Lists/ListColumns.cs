@@ -77,28 +77,11 @@ namespace GKCore.Lists
         }
     }
 
-    public interface IListColumns
-    {
-        int Count { get; }
-        ListColumn this[int index] { get; }
-        IList<ListColumn> OrderedColumns { get; }
-
-        void Clear();
-        void CopyTo(IListColumns target);
-        bool MoveColumn(int idx, bool up);
-        void ResetDefaults();
-
-        void LoadFromFile(IniFile iniFile, string section, int optsVersion);
-        void SaveToFile(IniFile iniFile, string section, int optsVersion);
-
-        void AddColumn(string colName, DataType dataType, int defWidth, bool autosize = false);
-    }
-
 
     /// <summary>
     /// 
     /// </summary>
-    public class ListColumns : IListColumns
+    public class ListColumns
     {
         private readonly List<ListColumn> fColumns;
         private readonly List<ListColumn> fOrderedColumns;
@@ -194,23 +177,22 @@ namespace GKCore.Lists
             fColumns.Add(new ListColumn((byte)fLastId, colName, dataType, defWidth, true, autosize, format, nfi));
         }
 
-        public void CopyTo(IListColumns target)
+        public void CopyTo(ListColumns target)
         {
-            ListColumns targetColumns = target as ListColumns;
-            if (targetColumns == null)
+            if (target == null)
                 throw new ArgumentNullException("target");
 
             int num = fColumns.Count;
             for (int i = 0; i < num; i++) {
                 var srcCol = fColumns[i];
-                var tgtCol = targetColumns.fColumns[i];
+                var tgtCol = target.fColumns[i];
 
                 tgtCol.Order = srcCol.Order;
                 tgtCol.CurActive = srcCol.CurActive;
                 tgtCol.CurWidth = srcCol.CurWidth;
             }
 
-            targetColumns.UpdateOrders();
+            target.UpdateOrders();
         }
 
         public void LoadFromFile(IniFile iniFile, string section, int optsVersion)

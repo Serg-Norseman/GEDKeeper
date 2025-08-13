@@ -119,7 +119,7 @@ namespace GKUI.Components
             fBtnLinkJump = CreateButton("btnJump", LangMan.LS(LSID.RecordGoto), ItemJump);
             fBtnDelete = CreateButton("btnDelete", LangMan.LS(LSID.MIRecordDelete), ItemDelete);
             fBtnEdit = CreateButton("btnEdit", LangMan.LS(LSID.MIRecordEdit), ItemEdit);
-            fBtnAdd = CreateButton( "btnAdd", LangMan.LS(LSID.MIRecordAdd), ItemAdd);
+            fBtnAdd = CreateButton("btnAdd", LangMan.LS(LSID.MIRecordAdd), ItemAdd);
 
             var miDetails = new ButtonMenuItem();
             miDetails.Text = LangMan.LS(LSID.Details);
@@ -158,11 +158,15 @@ namespace GKUI.Components
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
+                if (fListModel != null) {
+                    fListModel.SheetList = null;
+                    fListModel = null;
+                }
+
                 fList.ContextMenu = null;
                 fContextMenu.Dispose();
 
                 fList.Dispose();
-                fToolbar.Dispose();
                 fBtnPaste.Dispose();
                 fBtnCut.Dispose();
                 fBtnCopy.Dispose();
@@ -172,6 +176,7 @@ namespace GKUI.Components
                 fBtnDelete.Dispose();
                 fBtnEdit.Dispose();
                 fBtnAdd.Dispose();
+                fToolbar.Dispose();
             }
             base.Dispose(disposing);
         }

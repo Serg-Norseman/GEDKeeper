@@ -162,10 +162,10 @@ namespace GKCore.Options
             "EventDefs",
         };
 
-        private readonly IListColumns fColumns;
+        private readonly ListColumns fColumns;
         private readonly string fName;
 
-        public IListColumns Columns
+        public ListColumns Columns
         {
             get { return fColumns; }
         }

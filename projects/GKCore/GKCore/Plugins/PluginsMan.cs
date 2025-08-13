@@ -140,8 +140,7 @@ namespace GKCore.Plugins
 
             for (int i = 0, count = fPlugins.Count; i < count; i++) {
                 try {
-                    ISubscriber subscriber = (fPlugins[i] as ISubscriber);
-                    if (subscriber != null) {
+                    if (fPlugins[i] is ISubscriber subscriber) {
                         subscriber.NotifyRecord(baseWin, record, action);
                     }
                 } catch (Exception ex) {

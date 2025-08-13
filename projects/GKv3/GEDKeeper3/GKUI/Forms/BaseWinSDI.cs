@@ -468,8 +468,8 @@ namespace GKUI.Forms
 
         private void List_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (sender != null) {
-                fController.ChangeListItem((IListView)sender);
+            if (sender is IListView listView) {
+                fController.ChangeListItem(listView);
                 AppHost.Instance.SelectedIndexChanged(this);
             }
         }

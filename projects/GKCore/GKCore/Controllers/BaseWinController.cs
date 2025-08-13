@@ -342,27 +342,21 @@ namespace GKCore.Controllers
             }
         }
 
-        public void ShowRecordInfo(GDMRecord record)
+        public void ChangeListItem(IListView sender)
         {
+            GDMRecord record = sender.GetSelectedData() as GDMRecord;
             if (record == null) return;
 
             try {
-                IHyperView hyperView = GetHyperViewByType(record.RecordType);
+                NavAdd(record);
+
+                var hyperView = GetHyperViewByType(record.RecordType);
                 if (hyperView != null) {
                     GKUtils.GetRecordContent(fContext, record, hyperView.Lines, RecordContentType.Full);
                 }
             } catch (Exception ex) {
-                Logger.WriteError("BaseWinController.ShowRecordInfo()", ex);
+                Logger.WriteError("BaseWinController.ChangeListItem()", ex);
             }
-        }
-
-        public void ChangeListItem(IListView sender)
-        {
-            GDMRecord rec = sender.GetSelectedData() as GDMRecord;
-            if (rec != null) {
-                NavAdd(rec);
-            }
-            ShowRecordInfo(rec);
         }
 
         public void SelectSummaryLink(IHyperView sender, string linkName)

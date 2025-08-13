@@ -173,6 +173,11 @@ namespace GKUI.Components
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
+                if (fListModel != null) {
+                    fListModel.SheetList = null;
+                    fListModel = null;
+                }
+
                 fList.Dispose();
                 fBtnPaste.Dispose();
                 fBtnCut.Dispose();

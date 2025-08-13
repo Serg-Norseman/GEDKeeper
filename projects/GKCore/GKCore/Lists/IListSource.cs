@@ -78,7 +78,7 @@ namespace GKCore.Lists
         ExternalFilterHandler ExternalFilter { get; set; }
         IListFilter Filter { get; }
         int FilteredCount { get; }
-        IListColumns ListColumns { get; }
+        ListColumns ListColumns { get; }
         int SortColumn { get; set; }
         GKSortOrder SortOrder { get; set; }
         int TotalCount { get; }
@@ -127,7 +127,8 @@ namespace GKCore.Lists
         void OnItemSelected(int itemIndex, object rowData);
         void RestoreSettings();
         void SaveSettings();
-        void SortContents(int sortColumn, bool sortAscending, bool uiChange);
+        void SetSortColumn(int sortColumn, bool checkOrder = true);
+        void SortContents(bool uiChange);
         void UpdateColumns(IListView listView);
         void UpdateContents();
     }

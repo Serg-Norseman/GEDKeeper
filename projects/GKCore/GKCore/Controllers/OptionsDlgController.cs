@@ -40,17 +40,12 @@ namespace GKCore.Controllers
     public class OptionsDlgController : DialogController<IOptionsDlg>
     {
         private readonly GlobalOptions fOptions;
-        private readonly IListColumns fTempColumns;
+        private readonly ListColumns fTempColumns;
 
 
         public GlobalOptions Options
         {
             get { return fOptions; }
-        }
-
-        public IListColumns TempColumns
-        {
-            get { return fTempColumns; }
         }
 
 

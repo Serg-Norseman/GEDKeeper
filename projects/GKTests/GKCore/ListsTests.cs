@@ -161,8 +161,8 @@ namespace GKCore
             Assert.IsNotNull(colVal);
 
             //
-            IListFilter filter = listManager.Filter;
-            IListColumns listColumns = listManager.ListColumns;
+            var filter = listManager.Filter;
+            var listColumns = listManager.ListColumns;
 
             var copyColumns = GroupListModel.CreateListColumns();
             listColumns.CopyTo(copyColumns);

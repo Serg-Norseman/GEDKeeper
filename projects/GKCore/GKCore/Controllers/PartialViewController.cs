@@ -153,24 +153,18 @@ namespace GKCore.Controllers
             }
         }
 
-        public void ShowRecordInfo(GDMRecord record)
+        public void ChangeListItem(IListView sender)
         {
+            GDMRecord record = sender.GetSelectedData() as GDMRecord;
             if (record == null) return;
 
             try {
+                NavAdd(record);
+
                 GKUtils.GetRecordContent(fBase.Context, record, fSummary.Lines, RecordContentType.Full);
             } catch (Exception ex) {
-                Logger.WriteError("PartialViewController.ShowRecordInfo()", ex);
+                Logger.WriteError("PartialViewController.ChangeListItem()", ex);
             }
-        }
-
-        public void ChangeListItem(IListView sender)
-        {
-            GDMRecord rec = sender.GetSelectedData() as GDMRecord;
-            if (rec != null) {
-                NavAdd(rec);
-            }
-            ShowRecordInfo(rec);
         }
 
         public void SelectSummaryLink(IHyperView sender, string linkName)

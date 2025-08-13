@@ -48,6 +48,9 @@
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <StartupObject>GEDKeeper3.GKProgram</StartupObject>
         <ApplicationIcon>..\..\GEDKeeper_48.ico</ApplicationIcon>
+
+        <!--PublishSingleFile>true</PublishSingleFile-->
+        <!--PublishTrimmed>true</PublishTrimmed-->
     </PropertyGroup>
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">

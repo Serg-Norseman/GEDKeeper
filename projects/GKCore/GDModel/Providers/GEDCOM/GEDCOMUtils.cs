@@ -156,7 +156,7 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        public static long GetXRefNumber(string str)
+        public static unsafe long GetXRefNumber(string str)
         {
             if (string.IsNullOrEmpty(str)) {
                 return -1;
@@ -165,10 +165,12 @@ namespace GDModel.Providers.GEDCOM
             long result = 0;
 
             int strLen = str.Length;
-            for (int i = 0; i < strLen; i++) {
-                char ch = str[i];
-                if (ch >= '0' && ch <= '9') {
-                    result = (result * 10 + ((int)ch - 48));
+            fixed (char* ch_ptr = str) {
+                for (int i = 0; i < strLen; i++) {
+                    char ch = ch_ptr[i];
+                    if (ch >= '0' && ch <= '9') {
+                        result = (result * 10 + ((int)ch - 48));
+                    }
                 }
             }
 
