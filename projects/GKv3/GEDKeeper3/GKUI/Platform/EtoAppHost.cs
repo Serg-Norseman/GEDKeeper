@@ -475,7 +475,7 @@ namespace GKUI.Platform
 #endif
 
             var appHost = new EtoAppHost();
-            IContainer container = AppHost.Container;
+            var container = AppHost.Container;
 
             if (container == null)
                 throw new ArgumentNullException("container");

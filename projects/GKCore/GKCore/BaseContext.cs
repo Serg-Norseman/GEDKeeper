@@ -49,10 +49,21 @@ using GKCore.Utilities;
 namespace GKCore
 {
     /// <summary>
+    /// Status display the protected information in lists, pedigrees and graphs.
+    /// </summary>
+    public enum ShieldState
+    {
+        Maximum,
+        Middle,
+        None
+    }
+
+
+    /// <summary>
     /// Database context that combines GEDCOM file data with the environment,
     /// language, culture, processing and editing tools.
     /// </summary>
-    public class BaseContext : BaseObject, IBaseContext
+    public class BaseContext : BaseObject, IDisposable
     {
         #region Private fields
 
@@ -592,7 +603,7 @@ namespace GKCore
 
             string result = "";
 
-            INamesTable namesTable = AppHost.NamesTable;
+            var namesTable = AppHost.NamesTable;
 
             NameEntry n = namesTable.FindName(name);
             if (n == null) {
@@ -636,7 +647,7 @@ namespace GKCore
 
         public async Task<GDMSex> DefineSex(IView owner, string iName, string iPatr)
         {
-            INamesTable namesTable = AppHost.NamesTable;
+            var namesTable = AppHost.NamesTable;
 
             GDMSex result = namesTable.GetSexByName(iName);
 
@@ -926,6 +937,15 @@ namespace GKCore
             return result;
         }
 
+        /// <summary>
+        /// Loading an image from a multimedia link with the features to get a thumbnail for the trees and cut out a part from the whole.
+        /// </summary>
+        /// <param name="mmRec"></param>
+        /// <param name="thumbWidth">thumbnail width, if <= 0 - then the image width is unchanged</param>
+        /// <param name="thumbHeight">thumbnail height, if <= 0 - then the image height is unchanged</param>
+        /// <param name="cutoutArea"></param>
+        /// <param name="throwException"></param>
+        /// <returns></returns>
         public IImage LoadMediaImage(GDMMultimediaRecord mmRec, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool reduce, bool throwException)
         {
             if (mmRec == null || mmRec.FileReferences.Count < 1) return null;
@@ -975,6 +995,7 @@ namespace GKCore
             return AppHost.GetCachePath() + imageUID + ".bmp";
         }
 
+        // Used in FamilyBookExporter, TreeChart and PersonEdit
         public IImage GetPrimaryBitmap(GDMIndividualRecord iRec, int thumbWidth, int thumbHeight, bool throwException)
         {
             if (iRec == null) return null;
@@ -1283,6 +1304,9 @@ namespace GKCore
 
         #region Modify routines
 
+        /// <summary>
+        /// Set the data modification flag and timestamp.
+        /// </summary>
         public void SetModified()
         {
             fTree.Header.TransmissionDateTime = DateTime.Now;
@@ -1317,77 +1341,6 @@ namespace GKCore
             if (!result) {
                 // message, for exclude of duplication
                 AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.RecordIsLocked));
-            }
-
-            return result;
-        }
-
-        #endregion
-
-        #region UI control functions
-
-        public async Task<GDMFamilyRecord> SelectFamily(IView owner, GDMIndividualRecord target, TargetMode targetMode = TargetMode.tmFamilyChild)
-        {
-            GDMFamilyRecord result;
-
-            try {
-                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtFamily)) {
-                    dlg.SetTarget(targetMode, target, GDMSex.svUnknown);
-
-                    if (await AppHost.Instance.ShowModalAsync(dlg, owner, false)) {
-                        result = dlg.ResultRecord as GDMFamilyRecord;
-                    } else {
-                        result = null;
-                    }
-                }
-            } catch (Exception ex) {
-                Logger.WriteError("BaseContext.SelectFamily()", ex);
-                result = null;
-            }
-
-            return result;
-        }
-
-        public async Task<GDMIndividualRecord> SelectPerson(IView owner, GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex)
-        {
-            GDMIndividualRecord result;
-
-            try {
-                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, GDMRecordType.rtIndividual)) {
-                    dlg.SetTarget(targetMode, target, needSex);
-
-                    if (await AppHost.Instance.ShowModalAsync(dlg, owner, false)) {
-                        result = dlg.ResultRecord as GDMIndividualRecord;
-                    } else {
-                        result = null;
-                    }
-                }
-            } catch (Exception ex) {
-                Logger.WriteError("BaseContext.SelectPerson()", ex);
-                result = null;
-            }
-
-            return result;
-        }
-
-        public async Task<GDMRecord> SelectRecord(IView owner, GDMRecordType mode, params object[] args)
-        {
-            GDMRecord result;
-
-            try {
-                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(fViewer, mode)) {
-                    var flt = (args != null && args.Length > 0) ? (args[0] as string) : "*";
-                    dlg.SetTarget(TargetMode.tmNone, null, GDMSex.svUnknown, flt);
-
-                    if (await AppHost.Instance.ShowModalAsync(dlg, owner, false)) {
-                        result = dlg.ResultRecord;
-                    } else {
-                        result = null;
-                    }
-                }
-            } catch (Exception ex) {
-                Logger.WriteError("BaseContext.SelectRecord()", ex);
-                result = null;
             }
 
             return result;
@@ -1459,74 +1412,6 @@ namespace GKCore
             GDMFamilyRecord family = fTree.CreateFamily();
             family.AddSpouse(spouse);
             return family;
-        }
-
-        public async Task<GDMIndividualRecord> AddChildForParent(IView owner, GDMIndividualRecord parent, GDMSex needSex)
-        {
-            GDMIndividualRecord resultChild = null;
-
-            if (parent != null) {
-                if (parent.SpouseToFamilyLinks.Count > 1) {
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.ThisPersonHasSeveralFamilies));
-                } else {
-                    GDMFamilyRecord family = (parent.SpouseToFamilyLinks.Count == 0) ? null : fTree.GetPtrValue(parent.SpouseToFamilyLinks[0]);
-                    GDMIndividualRecord father = (family == null) ? null : fTree.GetPtrValue(family.Husband);
-                    if (father == null && parent.Sex == GDMSex.svMale) {
-                        father = parent;
-                    }
-
-                    GDMIndividualRecord child = await SelectPerson(owner, father, TargetMode.tmParent, needSex);
-
-                    if (child != null) {
-                        if (family == null) {
-                            family = AddFamilyForSpouse(parent);
-                            if (family == null) {
-                                return null;
-                            }
-                        }
-
-                        if (family.HasMember(child)) {
-                            AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
-                            return null;
-                        }
-
-                        if (family.AddChild(child)) {
-                            // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
-                            // what to call AddChild () is no; all this is necessary in order to in the namebook were correct patronymics.
-                            ImportNames(child);
-
-                            ProcessIndividual(child);
-
-                            resultChild = child;
-                        }
-                    }
-                }
-            }
-
-            return resultChild;
-        }
-
-        public async Task<GDMIndividualRecord> SelectSpouseFor(IView owner, GDMIndividualRecord iRec)
-        {
-            if (iRec == null)
-                throw new ArgumentNullException(@"iRec");
-
-            GDMSex needSex;
-            switch (iRec.Sex) {
-                case GDMSex.svMale:
-                    needSex = GDMSex.svFemale;
-                    break;
-
-                case GDMSex.svFemale:
-                    needSex = GDMSex.svMale;
-                    break;
-
-                default:
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.IsNotDefinedSex));
-                    return null;
-            }
-
-            return await SelectPerson(owner, iRec, TargetMode.tmSpouse, needSex);
         }
 
         public void ProcessFamily(GDMFamilyRecord famRec)

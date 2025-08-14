@@ -31,7 +31,7 @@ namespace GKCore.ExtData
     /// </summary>
     public static class TipsCollector
     {
-        public static void Collect(IBaseContext context, StringList tipsList, bool onlyAlive = true)
+        public static void Collect(BaseContext context, StringList tipsList, bool onlyAlive = true)
         {
             if (tipsList == null)
                 throw new ArgumentNullException("tipsList");

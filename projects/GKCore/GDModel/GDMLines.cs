@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -27,7 +27,7 @@ namespace GDModel
     /// <summary>
     /// Container for a list of strings with some additional features.
     /// </summary>
-    public sealed class GDMLines : List<string>, IGDMLines
+    public sealed class GDMLines : List<string>
     {
         private const string LINE_BREAK = "\r\n";
 

@@ -77,7 +77,7 @@ namespace GKUI.Forms
         public static void FilePropertiesDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
         {
             FilePropertiesDlg dlg = (FilePropertiesDlg)form;
-            IBaseContext baseContext = dlg.Base.Context;
+            var baseContext = dlg.Base.Context;
 
             EnterText("txtName", form, "sample text");
 

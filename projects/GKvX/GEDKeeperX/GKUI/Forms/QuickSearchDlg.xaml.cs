@@ -30,7 +30,7 @@ namespace GKUI.Forms
     public sealed partial class QuickSearchDlg : ContentView
     {
         private readonly IWorkWindow fWorkWindow;
-        private ISearchStrategy fStrategy;
+        private SearchStrategy fStrategy;
 
 
         public QuickSearchDlg(IWorkWindow workWindow)
@@ -58,7 +58,7 @@ namespace GKUI.Forms
 
         private void ChangeText()
         {
-            fStrategy = new SearchStrategy(fWorkWindow, txtSearchPattern.Text);
+            fStrategy = new WorkSearchStrategy(fWorkWindow, txtSearchPattern.Text);
         }
 
         private void SelectResult(SearchResult result)

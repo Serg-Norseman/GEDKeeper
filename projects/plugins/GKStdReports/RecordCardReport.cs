@@ -60,7 +60,7 @@ namespace GKStdReports
             fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
             fLinkFont = fWriter.CreateFont("", 10f, false, true, clrBlue);
 
-            IBaseContext baseContext = fBase.Context;
+            var baseContext = fBase.Context;
 
             AddParagraph(fRecord.XRef, fTextFont, TextAlignment.taRight);
 
@@ -111,7 +111,7 @@ namespace GKStdReports
             }
         }
 
-        private void GenIndividualCard(IBaseContext baseContext, GDMIndividualRecord iRec)
+        private void GenIndividualCard(BaseContext baseContext, GDMIndividualRecord iRec)
         {
             if (iRec == null) return;
 
@@ -179,7 +179,7 @@ namespace GKStdReports
             }
         }
 
-        private void ShowSpousesInfo(IBaseContext baseContext, GDMIndividualRecord iRec)
+        private void ShowSpousesInfo(BaseContext baseContext, GDMIndividualRecord iRec)
         {
             try {
                 for (int i = 0; i < iRec.SpouseToFamilyLinks.Count; i++) {

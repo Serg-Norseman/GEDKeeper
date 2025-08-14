@@ -123,7 +123,7 @@ namespace GKCore.Operations
                 }
 
                 while (PeekInternal() != TRANS_DELIMITER) {
-                    IOperation cmd = fList[fCurrentIndex];
+                    var cmd = fList[fCurrentIndex];
                     fCurrentIndex--;
                     cmd.Undo();
                 }
@@ -140,7 +140,7 @@ namespace GKCore.Operations
                 }
 
                 while (PeekInternal() != TRANS_DELIMITER) {
-                    IOperation cmd = fList[fCurrentIndex];
+                    var cmd = fList[fCurrentIndex];
                     fCurrentIndex++;
 
                     if (!cmd.Redo()) {
@@ -179,7 +179,7 @@ namespace GKCore.Operations
         public void Rollback()
         {
             while (PeekInternal() != TRANS_DELIMITER) {
-                IOperation cmd = fList[fCurrentIndex];
+                var cmd = fList[fCurrentIndex];
                 fCurrentIndex--;
                 cmd.Undo();
             }

@@ -25,7 +25,7 @@ namespace GKCore.Lists
 {
     public sealed class TagsListModel : SimpleListModel<GDMTag>
     {
-        public TagsListModel(IBaseContext baseContext, string title) :
+        public TagsListModel(BaseContext baseContext, string title) :
             base(baseContext, CreateListColumns(title))
         {
         }

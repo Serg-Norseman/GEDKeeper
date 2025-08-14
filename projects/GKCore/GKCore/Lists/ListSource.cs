@@ -59,7 +59,7 @@ namespace GKCore.Lists
         protected ListFilter fFilter;
         protected MatchPatternMethod fFilterMethod;
 
-        protected readonly IBaseContext fBaseContext;
+        protected readonly BaseContext fBaseContext;
         protected readonly List<MapColumnRec> fColumnsMap;
         protected readonly ListColumns fListColumns;
 
@@ -83,7 +83,7 @@ namespace GKCore.Lists
             set { fExternalFilter = value; }
         }
 
-        public IListFilter Filter
+        public ListFilter Filter
         {
             get { return fFilter; }
         }
@@ -129,7 +129,7 @@ namespace GKCore.Lists
             CreateFilter();
         }
 
-        protected ListSource(IBaseContext baseContext, ListColumns defaultListColumns)
+        protected ListSource(BaseContext baseContext, ListColumns defaultListColumns)
         {
             fBaseContext = baseContext;
             fColumnsMap = new List<MapColumnRec>();
@@ -143,6 +143,9 @@ namespace GKCore.Lists
             } else {
                 fListColumns = new ListColumns(GKListType.ltNone);
             }
+
+            fSortColumn = 0;
+            fSortOrder = GKSortOrder.Ascending;
 
             CreateFilter();
         }

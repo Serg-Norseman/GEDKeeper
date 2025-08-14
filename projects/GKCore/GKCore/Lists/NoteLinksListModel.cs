@@ -88,7 +88,7 @@ namespace GKCore.Lists
             GDMNoteRecord noteRec;
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    noteRec = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtNote, null) as GDMNoteRecord;
+                    noteRec = await BaseController.SelectRecord(fOwner, fBaseWin, GDMRecordType.rtNote, null) as GDMNoteRecord;
                     if (noteRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordNoteAdd, (GDMObject)dataOwner, noteRec);
                         notes = dataOwner.FindNotes(noteRec);

@@ -71,10 +71,11 @@ namespace GKCore.Controllers
             try {
                 IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
 
-                GKUtils.SaveFilter(fView.NameCombo.Text, GlobalOptions.Instance.NameFilters);
-                GKUtils.SaveFilter(fView.ResidenceCombo.Text, GlobalOptions.Instance.ResidenceFilters);
-                GKUtils.SaveFilter(fView.EventValCombo.Text, GlobalOptions.Instance.EventFilters);
+                iFilter.Name = GKUtils.SaveFilter(fView.NameCombo.Text, GlobalOptions.Instance.NameFilters);
+                iFilter.Residence = GKUtils.SaveFilter(fView.ResidenceCombo.Text, GlobalOptions.Instance.ResidenceFilters);
+                iFilter.EventVal = GKUtils.SaveFilter(fView.EventValCombo.Text, GlobalOptions.Instance.EventFilters);
 
+                iFilter.Sex = (GDMSex)fView.GetSexRadio();
                 iFilter.PatriarchOnly = fView.OnlyPatriarchsCheck.Checked;
 
                 int lifeSel = fView.GetLifeRadio();
@@ -92,20 +93,9 @@ namespace GKCore.Controllers
                     }
                 }
 
-                iFilter.Sex = (GDMSex)fView.GetSexRadio();
-
-                if (fView.NameCombo.Text == "") fView.NameCombo.Text = @"*";
-                iFilter.Name = fView.NameCombo.Text;
-
-                if (fView.ResidenceCombo.Text == "") fView.ResidenceCombo.Text = @"*";
-                iFilter.Residence = fView.ResidenceCombo.Text;
-
-                if (fView.EventValCombo.Text == "") fView.EventValCombo.Text = @"*";
-                iFilter.EventVal = fView.EventValCombo.Text;
-
                 int selectedIndex = fView.GroupCombo.SelectedIndex;
                 if (selectedIndex >= 0 && selectedIndex < 3) {
-                    iFilter.FilterGroupMode = (FilterGroupMode)fView.GroupCombo.SelectedIndex;
+                    iFilter.FilterGroupMode = (FilterGroupMode)selectedIndex;
                     iFilter.GroupRef = "";
                 } else {
                     GDMRecord rec = fView.GroupCombo.GetSelectedTag<GDMRecord>();
@@ -120,7 +110,7 @@ namespace GKCore.Controllers
 
                 selectedIndex = fView.SourceCombo.SelectedIndex;
                 if (selectedIndex >= 0 && selectedIndex < 3) {
-                    iFilter.SourceMode = (FilterGroupMode)fView.SourceCombo.SelectedIndex;
+                    iFilter.SourceMode = (FilterGroupMode)selectedIndex;
                     iFilter.SourceRef = "";
                 } else {
                     GDMRecord rec = fView.SourceCombo.GetSelectedTag<GDMRecord>();

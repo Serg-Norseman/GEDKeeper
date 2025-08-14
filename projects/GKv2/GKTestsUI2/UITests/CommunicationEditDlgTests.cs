@@ -37,7 +37,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class CommunicationEditDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
+        private BaseContext fContext;
         private GDMCommunicationRecord fCommunicationRecord;
         private IBaseWindow fBase;
         private CommunicationEditDlg fDialog;

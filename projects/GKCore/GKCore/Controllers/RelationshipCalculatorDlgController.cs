@@ -44,13 +44,13 @@ namespace GKCore.Controllers
 
         public async void SelectRec1()
         {
-            GDMIndividualRecord iRec = await fBase.Context.SelectRecord(fView, GDMRecordType.rtIndividual, null) as GDMIndividualRecord;
+            GDMIndividualRecord iRec = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtIndividual, null) as GDMIndividualRecord;
             if (iRec != null) SetRec1(iRec);
         }
 
         public async void SelectRec2()
         {
-            GDMIndividualRecord iRec = await fBase.Context.SelectRecord(fView, GDMRecordType.rtIndividual, null) as GDMIndividualRecord;
+            GDMIndividualRecord iRec = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtIndividual, null) as GDMIndividualRecord;
             if (iRec != null) SetRec2(iRec);
         }
 

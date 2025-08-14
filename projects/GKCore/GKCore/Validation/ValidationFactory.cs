@@ -31,7 +31,7 @@ namespace GKCore.Validation
         public static void InitGDMValidators()
         {
             // FIXME: temp place, move
-            IContainer container = AppHost.Container;
+            var container = AppHost.Container;
             container.Register<IValidator<GDMAddress>, GDMAddressValidator>(LifeCycle.Singleton);
             container.Register<IValidator<GDMCustomEvent>, GDMEventValidator>(LifeCycle.Singleton);
             container.Register<IValidator<GDMRepositoryRecord>, GDMRepositoryRecordValidator>(LifeCycle.Singleton);

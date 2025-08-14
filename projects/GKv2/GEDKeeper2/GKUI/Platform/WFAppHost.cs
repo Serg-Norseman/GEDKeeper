@@ -436,7 +436,7 @@ namespace GKUI.Platform
         public static void ConfigureBootstrap()
         {
             var appHost = new WFAppHost();
-            IContainer container = AppHost.Container;
+            var container = AppHost.Container;
 
             if (container == null)
                 throw new ArgumentNullException("container");

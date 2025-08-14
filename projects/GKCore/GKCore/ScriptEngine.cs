@@ -358,7 +358,7 @@ namespace GKCore
 
         public object select_record(int recType)
         {
-            return fBase.Context.SelectRecord(fView, (GDMRecordType)recType, null).Result;
+            return BaseController.SelectRecord(fView, fBase, (GDMRecordType)recType, null).Result;
         }
 
         public string get_individual_name(object recPtr)

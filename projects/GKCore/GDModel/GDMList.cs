@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -30,7 +30,7 @@ namespace GDModel
     {
         #region ListEnumerator
 
-        private struct GEDCOMListEnumerator : IGDMListEnumerator<T>
+        private struct GEDCOMListEnumerator : IEnumerator<T>
         {
             private readonly IList<T> fDataList;
             private int fIndex;
@@ -113,7 +113,7 @@ namespace GDModel
             return fDataList;
         }
 
-        public IGDMListEnumerator<T> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             return new GEDCOMListEnumerator(this);
         }

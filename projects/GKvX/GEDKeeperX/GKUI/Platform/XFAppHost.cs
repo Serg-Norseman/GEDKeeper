@@ -266,7 +266,7 @@ namespace GKUI.Platform
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             var appHost = new XFAppHost();
-            IContainer container = AppHost.Container;
+            var container = AppHost.Container;
 
             if (container == null)
                 throw new ArgumentNullException("container");

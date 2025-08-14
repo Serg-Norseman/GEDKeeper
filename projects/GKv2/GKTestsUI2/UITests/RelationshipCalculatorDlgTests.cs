@@ -67,7 +67,7 @@ namespace GKUI.Forms
         public static void RelationshipCalculatorDlg_Handler(string name, IntPtr ptr, Form form)
         {
             RelationshipCalculatorDlg dlg = (RelationshipCalculatorDlg)form;
-            IBaseContext baseContext = dlg.Base.Context;
+            var baseContext = dlg.Base.Context;
 
             Assert.IsTrue(baseContext.Tree.RecordsCount > 1);
 

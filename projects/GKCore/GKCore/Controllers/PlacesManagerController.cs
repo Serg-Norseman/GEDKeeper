@@ -155,7 +155,7 @@ namespace GKCore.Controllers
             if (pObj.Name.Contains("*]")) {
                 AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.PlaceAlreadyInBook));
             } else {
-                GDMLocationRecord locRec = await fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
+                GDMLocationRecord locRec = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
                 if (locRec == null) return;
 
                 for (var pi = 0; pi < placesList.Count; pi++) {

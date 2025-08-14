@@ -31,6 +31,6 @@ namespace GKCore.Plugins
     public interface ISubscriber
     {
         void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action);
-        void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter);
+        void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, ListFilter filter);
     }
 }

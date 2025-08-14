@@ -21,6 +21,7 @@
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
+using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Locales;
@@ -42,7 +43,7 @@ namespace GKCore.Lists
         }
 
 
-        public GroupListModel(IBaseContext baseContext) :
+        public GroupListModel(BaseContext baseContext) :
             base(baseContext, CreateListColumns(), GDMRecordType.rtGroup)
         {
         }
@@ -138,7 +139,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    member = await fBaseWin.Context.SelectPerson(fOwner, null, TargetMode.tmNone, GDMSex.svUnknown);
+                    member = await BaseController.SelectPerson(fOwner, fBaseWin, null, TargetMode.tmNone, GDMSex.svUnknown);
                     if (member != null) {
                         if (grp.IndexOfMember(member) >= 0) {
                             AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));

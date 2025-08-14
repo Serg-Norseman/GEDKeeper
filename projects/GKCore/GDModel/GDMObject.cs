@@ -27,7 +27,7 @@ namespace GDModel
     /// 
     /// Because descendants of this class will never interact with unmanaged objects
     /// and to save memory (these objects have a very large number of instances)
-    /// support for the IDisposable interface has been cut. But to eliminate possible
+    /// support for the IDisposable has been cut. But to eliminate possible
     /// collisions in the future, it was left in a commented out form.
     /// </summary>
     public class GDMObject : IDisposable, IGDMObject

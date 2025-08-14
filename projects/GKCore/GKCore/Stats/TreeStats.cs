@@ -35,11 +35,11 @@ namespace GKCore.Stats
     /// </summary>
     public sealed class TreeStats
     {
-        private readonly IBaseContext fContext;
+        private readonly BaseContext fContext;
         private readonly GDMTree fTree;
         private readonly List<GDMRecord> fSelectedRecords;
 
-        public TreeStats(IBaseContext context, List<GDMRecord> selectedRecords)
+        public TreeStats(BaseContext context, List<GDMRecord> selectedRecords)
         {
             fContext = context;
             fTree = context.Tree;

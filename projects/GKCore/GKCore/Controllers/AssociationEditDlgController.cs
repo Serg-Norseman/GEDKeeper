@@ -82,7 +82,7 @@ namespace GKCore.Controllers
 
         public async void SetPerson()
         {
-            fTempPerson = await fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
+            fTempPerson = await BaseController.SelectPerson(fView, fBase, null, TargetMode.tmNone, GDMSex.svUnknown);
             fView.Person.Text = (fTempPerson == null) ? "" : GKUtils.GetNameString(fTempPerson, false);
         }
 

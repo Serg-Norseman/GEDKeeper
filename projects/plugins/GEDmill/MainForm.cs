@@ -378,7 +378,7 @@ namespace GEDmill
         private async void btnSelectKeyAdd_Click(object sender, EventArgs e)
         {
             // Use a dialog box to let them choose an individual
-            GDMIndividualRecord indiRec = await fBase.Context.SelectPerson(this, null, TargetMode.tmNone, GDMSex.svUnknown);
+            GDMIndividualRecord indiRec = await BaseController.SelectPerson(this, fBase, null, TargetMode.tmNone, GDMSex.svUnknown);
             if (indiRec == null) return;
 
             // Ensure they are only added once

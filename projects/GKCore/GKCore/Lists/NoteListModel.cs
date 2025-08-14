@@ -40,7 +40,7 @@ namespace GKCore.Lists
         private GDMLines fFetchedLines;
 
 
-        public NoteListModel(IBaseContext baseContext) :
+        public NoteListModel(BaseContext baseContext) :
             base(baseContext, CreateListColumns(), GDMRecordType.rtNote)
         {
         }

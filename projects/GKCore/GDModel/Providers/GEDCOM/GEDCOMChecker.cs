@@ -36,12 +36,12 @@ namespace GDModel.Providers.GEDCOM
     {
         private const string EmptyRecordContent = "---";
 
-        private readonly IBaseContext fBaseContext;
+        private readonly BaseContext fBaseContext;
         private readonly GEDCOMFormat fFormat;
         private readonly IProgressController fProgress;
         private readonly GDMTree fTree;
 
-        private GEDCOMChecker(IBaseContext baseContext, IProgressController progress)
+        private GEDCOMChecker(BaseContext baseContext, IProgressController progress)
         {
             fBaseContext = baseContext;
             fTree = fBaseContext.Tree;
@@ -614,7 +614,7 @@ namespace GDModel.Providers.GEDCOM
             return result;
         }
 
-        public static bool CheckGEDCOMFormat(IBaseContext baseContext, IProgressController pc)
+        public static bool CheckGEDCOMFormat(BaseContext baseContext, IProgressController pc)
         {
             if (baseContext == null)
                 throw new ArgumentNullException("baseContext");
@@ -637,7 +637,7 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public static void SyncTreeLocations(IBaseContext baseContext, IProgressController pc)
+        public static void SyncTreeLocations(BaseContext baseContext, IProgressController pc)
         {
             if (baseContext == null)
                 throw new ArgumentNullException("baseContext");

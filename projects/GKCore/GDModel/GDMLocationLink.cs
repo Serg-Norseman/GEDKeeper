@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -29,7 +29,7 @@ namespace GDModel
     }
 
 
-    public sealed class GDMLocationLink : GDMPointer, IGDMLocationElement
+    public sealed class GDMLocationLink : GDMPointer, IGDMStructWithDate
     {
         private readonly GDMDateValue fDate;
         private GDMLocationRelationship fRelationship;

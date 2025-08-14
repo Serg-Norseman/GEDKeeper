@@ -29,11 +29,11 @@ namespace GKCore.Media
         public override MediaStoreType StoreType { get { return MediaStoreType.mstStorage; } }
 
 
-        public StorageMediaStore(IBaseContext baseContext) : base(baseContext)
+        public StorageMediaStore(BaseContext baseContext) : base(baseContext)
         {
         }
 
-        public StorageMediaStore(IBaseContext baseContext, string fileName) : base(baseContext, fileName)
+        public StorageMediaStore(BaseContext baseContext, string fileName) : base(baseContext, fileName)
         {
             fAbsoluteFileName = baseContext.GetStgFolder() + fileName;
         }

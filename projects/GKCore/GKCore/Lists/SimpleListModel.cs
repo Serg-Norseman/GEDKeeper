@@ -40,7 +40,7 @@ namespace GKCore.Lists
         {
         }
 
-        protected SimpleListModel(IBaseContext baseContext, ListColumns defaultListColumns) :
+        protected SimpleListModel(BaseContext baseContext, ListColumns defaultListColumns) :
             base(baseContext, defaultListColumns)
         {
         }

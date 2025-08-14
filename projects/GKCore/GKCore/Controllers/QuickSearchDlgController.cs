@@ -33,7 +33,7 @@ namespace GKCore.Controllers
     public sealed class QuickSearchDlgController : FormController<IQuickSearchDlg>
     {
         private readonly IWorkWindow fWorkWindow;
-        private ISearchStrategy fStrategy;
+        private SearchStrategy fStrategy;
 
         public IWorkWindow WorkWindow
         {
@@ -52,7 +52,7 @@ namespace GKCore.Controllers
 
         public void ChangeText()
         {
-            fStrategy = new SearchStrategy(fWorkWindow, fView.SearchPattern.Text);
+            fStrategy = new WorkSearchStrategy(fWorkWindow, fView.SearchPattern.Text);
         }
 
         private void SelectResult(SearchResult result)

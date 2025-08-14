@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2021 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -31,7 +31,7 @@ namespace GKCore.Names
     /// <summary>
     ///
     /// </summary>
-    public sealed class NamesTable : INamesTable
+    public sealed class NamesTable
     {
         private readonly Dictionary<string, NameEntry> fNames;
 
@@ -218,7 +218,7 @@ namespace GKCore.Names
             }
         }
 
-        public void ImportNames(IBaseContext context, GDMIndividualRecord iRec)
+        public void ImportNames(BaseContext context, GDMIndividualRecord iRec)
         {
             if (context == null || iRec == null) return;
 

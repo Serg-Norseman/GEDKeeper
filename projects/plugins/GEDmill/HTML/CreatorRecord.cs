@@ -36,7 +36,7 @@ namespace GEDmill.HTML
         protected List<Multimedia> fMultimediaList;
 
 
-        protected CreatorRecord(IBaseContext context, ILangMan langMan) : base(context, langMan)
+        protected CreatorRecord(BaseContext context, ILangMan langMan) : base(context, langMan)
         {
             fMultimediaList = new List<Multimedia>();
         }

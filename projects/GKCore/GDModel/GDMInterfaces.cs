@@ -29,18 +29,6 @@ namespace GDModel
     }
 
 
-    public interface IGDMTag : IGDMObject
-    {
-        int Id { get; }
-        string StringValue { get; set; }
-        GDMList<GDMTag> SubTags { get; }
-
-        bool IsEmpty();
-
-        int GetHashCode();
-    }
-
-
     public interface IGDMList<T> : IDisposable, IEnumerable<T>
         where T : class, IGDMObject
     {
@@ -61,26 +49,11 @@ namespace GDModel
     }
 
 
-    public interface IGDMLines
-    {
-        string this[int index] { get; set; }
-        int Count { get; }
-        string Text { get; set; }
-
-        void Clear();
-        bool IsEmpty();
-        void TrimExcess();
-    }
-
-
-    public interface IGDMTextObject : IGDMTag
+    public interface IGDMTextObject
     {
         GDMLines Lines { get; }
-    }
 
-
-    public interface IGDMListEnumerator<out T> : IEnumerator<T>
-    {
+        bool IsEmpty();
     }
 
 
@@ -150,12 +123,17 @@ namespace GDModel
     }
 
 
-    public interface IGDMEvent : IGDMStructWithLists, IGDMStructWithAddress, IGDMStructWithPlace, IGDMStructWithRestriction
+    public interface IGDMStructWithDate
+    {
+        GDMDateValue Date { get; }
+    }
+
+
+    public interface IGDMEvent : IGDMStructWithLists, IGDMStructWithAddress, IGDMStructWithPlace, IGDMStructWithRestriction, IGDMStructWithDate
     {
         string Agency { get; set; }
         string Cause { get; set; }
         string Classification { get; set; }
-        GDMDateValue Date { get; }
         string ReligiousAffilation { get; set; }
     }
 
@@ -166,18 +144,13 @@ namespace GDModel
     }
 
 
-    public interface IGDMUIDHolder
-    {
-        string UID { get; }
-    }
-
-
-    public interface IGDMRecord : IGDMPointerHost, IGDMUIDHolder, IGDMStructWithLists, IGDMStructWithUserReferences
+    public interface IGDMRecord : IGDMPointerHost, IGDMStructWithLists, IGDMStructWithUserReferences
     {
         string AutomatedRecordID { get; }
         GDMChangeDate ChangeDate { get; }
         GDMRecordType RecordType { get; }
         GDMTree Tree { get; }
+        string UID { get; }
     }
 
 
@@ -189,38 +162,5 @@ namespace GDModel
         GDMCustomEvent AddEvent(GDMCustomEvent evt);
         GDMCustomEvent FindEvent(string eventName);
         GDMCustomEvent FindEvent(GEDCOMTagType eventType);
-    }
-
-
-    public interface IGDMIndividualRecord : IGDMRecordWithEvents, IGDMStructWithDNA
-    {
-        bool HasAssociations { get; }
-        GDMList<GDMAssociation> Associations { get; }
-
-        bool Bookmark { get; set; }
-        GDMList<GDMChildToFamilyLink> ChildToFamilyLinks { get; }
-
-        bool HasGroups { get; }
-        GDMList<GDMPointer> Groups { get; }
-
-        bool Patriarch { get; set; }
-        GDMList<GDMPersonalName> PersonalNames { get; }
-        GDMSex Sex { get; set; }
-        GDMList<GDMSpouseToFamilyLink> SpouseToFamilyLinks { get; }
-    }
-
-
-    public interface IGDMFamilyRecord : IGDMRecordWithEvents
-    {
-        GDMList<GDMChildLink> Children { get; }
-        GDMIndividualLink Husband { get; }
-        GDMIndividualLink Wife { get; }
-        GDMMarriageStatus Status { get; set; }
-    }
-
-
-    public interface IGDMLocationElement
-    {
-        GDMDateValue Date { get; }
     }
 }

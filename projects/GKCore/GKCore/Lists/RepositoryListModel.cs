@@ -37,7 +37,7 @@ namespace GKCore.Lists
         }
 
 
-        public RepositoryListModel(IBaseContext baseContext) :
+        public RepositoryListModel(BaseContext baseContext) :
             base(baseContext, CreateListColumns(), GDMRecordType.rtRepository)
         {
         }

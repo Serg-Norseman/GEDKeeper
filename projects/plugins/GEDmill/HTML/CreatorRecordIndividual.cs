@@ -121,7 +121,7 @@ namespace GEDmill.HTML
         private CreatorIndexIndividuals fIndiIndexCreator;
 
 
-        public CreatorRecordIndividual(IBaseContext context, ILangMan langMan, GDMIndividualRecord ir, CreatorIndexIndividuals indiIndexCreator) : base(context, langMan)
+        public CreatorRecordIndividual(BaseContext context, ILangMan langMan, GDMIndividualRecord ir, CreatorIndexIndividuals indiIndexCreator) : base(context, langMan)
         {
             fIndiRec = ir;
             fIndiIndexCreator = indiIndexCreator;

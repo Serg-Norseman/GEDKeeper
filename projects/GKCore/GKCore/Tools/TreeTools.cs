@@ -762,7 +762,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void CompareTree(IBaseContext context, string fileName, ITextBox logBox)
+        public static void CompareTree(BaseContext context, string fileName, ITextBox logBox)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -778,7 +778,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void CompareTree(IBaseContext context, GDMTree tempTree, ITextBox logBox)
+        public static void CompareTree(BaseContext context, GDMTree tempTree, ITextBox logBox)
         {
             if (context == null)
                 throw new ArgumentNullException("context");

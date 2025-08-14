@@ -28,14 +28,14 @@ namespace GKCore.Operations
     /// </summary>
     public sealed class ChangeTracker : UndoManager
     {
-        private readonly IBaseContext fBaseContext;
+        private readonly BaseContext fBaseContext;
 
-        public IBaseContext Context
+        public BaseContext Context
         {
             get { return fBaseContext; }
         }
 
-        public ChangeTracker(IBaseContext baseContext)
+        public ChangeTracker(BaseContext baseContext)
         {
             fBaseContext = baseContext;
         }

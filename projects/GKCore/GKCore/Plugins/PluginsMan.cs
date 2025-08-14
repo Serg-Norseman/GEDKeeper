@@ -71,7 +71,7 @@ namespace GKCore.Plugins
                 if (type.IsInterface || type.IsAbstract) continue;
                 if (type.GetInterface(pluginType.FullName) == null) continue;
 
-                IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+                var plugin = (IPlugin)Activator.CreateInstance(type);
                 plugin.Startup(host);
                 fPlugins.Add(plugin);
             }
@@ -114,7 +114,7 @@ namespace GKCore.Plugins
         {
             try {
                 for (int i = 0, count = fPlugins.Count; i < count; i++) {
-                    IPlugin plugin = fPlugins[i];
+                    var plugin = fPlugins[i];
                     plugin.Shutdown();
                 }
             } catch (Exception ex) {
@@ -126,7 +126,7 @@ namespace GKCore.Plugins
         {
             try {
                 for (int i = 0, count = fPlugins.Count; i < count; i++) {
-                    IPlugin plugin = fPlugins[i];
+                    var plugin = fPlugins[i];
                     plugin.OnLanguageChange();
                 }
             } catch (Exception ex) {
@@ -149,7 +149,7 @@ namespace GKCore.Plugins
             }
         }
 
-        public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter)
+        public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, ListFilter filter)
         {
             if (baseWin == null || filter == null) return;
 

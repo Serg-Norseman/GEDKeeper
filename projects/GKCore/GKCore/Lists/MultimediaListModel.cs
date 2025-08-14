@@ -45,7 +45,7 @@ namespace GKCore.Lists
         private GDMFileReferenceWithTitle fFileRef;
 
 
-        public MultimediaListModel(IBaseContext baseContext) :
+        public MultimediaListModel(BaseContext baseContext) :
             base(baseContext, CreateListColumns(), GDMRecordType.rtMultimedia)
         {
         }

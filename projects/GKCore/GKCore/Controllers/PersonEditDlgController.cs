@@ -423,7 +423,7 @@ namespace GKCore.Controllers
                 fTarget = value;
 
                 if (fTarget != null) {
-                    INamesTable namesTable = AppHost.NamesTable;
+                    var namesTable = AppHost.NamesTable;
 
                     var parts = GKUtils.GetNameParts(fBase.Context.Tree, fTarget, false);
                     ICulture culture = parts.Culture;
@@ -506,7 +506,7 @@ namespace GKCore.Controllers
         {
             AcceptTempData();
 
-            GDMFamilyRecord family = await fBase.Context.SelectFamily(fView, fIndividualRecord);
+            GDMFamilyRecord family = await BaseController.SelectFamily(fBase, fView, fIndividualRecord);
             if (family != null) {
                 if (family.HasMember(fIndividualRecord)) {
                     AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));

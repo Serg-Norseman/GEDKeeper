@@ -58,16 +58,10 @@ namespace GKCore.Lists
     }
 
 
-    public interface IIndividualListFilter : IListFilter
-    {
-        FilterLifeMode FilterLifeMode { get; set; }
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
-    public sealed class IndividualListFilter : ListFilter, IIndividualListFilter
+    public sealed class IndividualListFilter : ListFilter
     {
         public string AliveBeforeDate;
         public FilterGroupMode FilterGroupMode;
@@ -108,7 +102,7 @@ namespace GKCore.Lists
             TimeLineYear = -1;
         }
 
-        public override void Assign(IListFilter other)
+        public override void Assign(ListFilter other)
         {
             var otherFilter = other as IndividualListFilter;
             if (otherFilter == null)
@@ -167,11 +161,13 @@ namespace GKCore.Lists
         private GDMGroupRecord filter_grp;
         private UDN filter_abd;
         private GDMSourceRecord filter_source;
+        private GlobalOptions fOptions;
 
 
-        public IndividualListModel(IBaseContext baseContext) :
+        public IndividualListModel(BaseContext baseContext) :
             base(baseContext, CreateListColumns(), GDMRecordType.rtIndividual)
         {
+            fOptions = GlobalOptions.Instance;
         }
 
         public static ListColumns CreateListColumns()
@@ -235,7 +231,7 @@ namespace GKCore.Lists
 
             searchPattern = GKUtils.PrepareQSF(searchPattern);
 
-            var allNames = GlobalOptions.Instance.SearchAndFilterByAllNames;
+            var allNames = fOptions.SearchAndFilterByAllNames;
 
             for (int i = 0, num = ContentList.Count; i < num; i++) {
                 var iRec = (GDMIndividualRecord)ContentList[i].Record;
@@ -254,12 +250,10 @@ namespace GKCore.Lists
 
         private bool IsMatchesPlace(string fltResidence)
         {
-            if (fltResidence == "*") return true;
-
             bool result = false;
 
             if (fFetchedRec.HasEvents) {
-                bool includeAddr = GlobalOptions.Instance.PlacesWithAddress;
+                bool includeAddr = fOptions.PlacesWithAddress;
                 var events = fFetchedRec.Events;
                 for (int i = 0, num = events.Count; i < num; i++) {
                     string place = GKUtils.GetPlaceStr(events[i], includeAddr);
@@ -273,8 +267,6 @@ namespace GKCore.Lists
 
         private bool IsMatchesEventVal(string fltEventVal)
         {
-            if (fltEventVal == "*") return true;
-
             bool result = false;
 
             if (fFetchedRec.HasEvents) {
@@ -290,9 +282,7 @@ namespace GKCore.Lists
 
         private bool IsMatchesNames(string fltName)
         {
-            if (fltName == "*") return true;
-
-            var allNames = GlobalOptions.Instance.SearchAndFilterByAllNames;
+            var allNames = fOptions.SearchAndFilterByAllNames;
 
             if (!allNames) {
                 return IsMatchesMask(fQuickFilterBuffer, fltName);
@@ -316,9 +306,9 @@ namespace GKCore.Lists
             IndividualListFilter iFilter = (IndividualListFilter)fFilter;
 
             if (iFilter.Sex != GDMSex.svUnknown && fFetchedRec.Sex != iFilter.Sex) return false;
-            if (!IsMatchesNames(iFilter.Name)) return false;
-            if (!IsMatchesPlace(iFilter.Residence)) return false;
-            if (!IsMatchesEventVal(iFilter.EventVal)) return false;
+            if (iFilter.Name != "*" && !IsMatchesNames(iFilter.Name)) return false;
+            if (iFilter.Residence != "*" && !IsMatchesPlace(iFilter.Residence)) return false;
+            if (iFilter.EventVal != "*" && !IsMatchesEventVal(iFilter.EventVal)) return false;
             if (iFilter.PatriarchOnly && !fFetchedRec.Patriarch) return false;
 
             switch (iFilter.FilterLifeMode) {
@@ -395,15 +385,13 @@ namespace GKCore.Lists
             if (colSubtype == -1) {
                 result = GKUtils.GetNameString(fFetchedRec, false);
             } else {
-                var globOpts = GlobalOptions.Instance;
-
-                NameFormat defNameFormat = (SimpleList) ? NameFormat.nfFNP : globOpts.DefNameFormat;
+                NameFormat defNameFormat = (SimpleList) ? NameFormat.nfFNP : fOptions.DefNameFormat;
                 NamePartsRet parts;
                 GDMLanguageID defLang = fBaseContext.DefaultLanguage;
 
                 switch (defNameFormat) {
                     case NameFormat.nfFNP:
-                        result = GKUtils.GetNameString(fFetchedRec, globOpts.SurnameFirstInOrder, false, defLang);
+                        result = GKUtils.GetNameString(fFetchedRec, fOptions.SurnameFirstInOrder, false, defLang);
                         break;
 
                     case NameFormat.nfF_NP:
@@ -587,8 +575,6 @@ namespace GKCore.Lists
             buf_title = "";
             if (!fFetchedRec.HasEvents) return;
 
-            GlobalOptions gOptions = GlobalOptions.Instance;
-
             int num = fFetchedRec.Events.Count;
             for (int i = 0; i < num; i++) {
                 GDMCustomEvent ev = fFetchedRec.Events[i];
@@ -599,7 +585,7 @@ namespace GKCore.Lists
                 } else if (evtType == GEDCOMTagType.DEAT && buf_dd == null) {
                     buf_dd = ev;
                 } else if (evtType == GEDCOMTagType.RESI && buf_residence == "") {
-                    buf_residence = GKUtils.GetPlaceStr(ev, gOptions.PlacesWithAddress);
+                    buf_residence = GKUtils.GetPlaceStr(ev, fOptions.PlacesWithAddress);
                 } else if (evtType == GEDCOMTagType.RELI && buf_religion == "") {
                     buf_religion = ev.StringValue;
                 } else if (evtType == GEDCOMTagType.NATI && buf_nationality == "") {
@@ -628,10 +614,9 @@ namespace GKCore.Lists
         {
             var indiRec = (GDMIndividualRecord)rowData;
 
-            GlobalOptions gOptions = GlobalOptions.Instance;
-            if (gOptions.ListHighlightUnparentedPersons && (indiRec.ChildToFamilyLinks.Count == 0)) {
+            if (fOptions.ListHighlightUnparentedPersons && (indiRec.ChildToFamilyLinks.Count == 0)) {
                 return ChartRenderer.GetColor(GKData.HighlightUnparentedColor);
-            } else if (gOptions.ListHighlightUnmarriedPersons && (indiRec.SpouseToFamilyLinks.Count == 0)) {
+            } else if (fOptions.ListHighlightUnmarriedPersons && (indiRec.SpouseToFamilyLinks.Count == 0)) {
                 return ChartRenderer.GetColor(GKData.HighlightUnmarriedColor);
             } else {
                 return base.GetBackgroundColor(itemIndex, rowData);
@@ -642,7 +627,7 @@ namespace GKCore.Lists
         {
             fColumnsMap.Clear();
 
-            NameFormat defNameFormat = (SimpleList) ? NameFormat.nfFNP : GlobalOptions.Instance.DefNameFormat;
+            NameFormat defNameFormat = (SimpleList) ? NameFormat.nfFNP : fOptions.DefNameFormat;
 
             int num = fListColumns.Count;
             for (int i = 0; i < num; i++) {
@@ -726,7 +711,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    groupRec = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtGroup, null) as GDMGroupRecord;
+                    groupRec = await BaseController.SelectRecord(fOwner, fBaseWin, GDMRecordType.rtGroup, null) as GDMGroupRecord;
                     if (groupRec != null) {
                         if (groupRec.IndexOfMember(iRec) >= 0) {
                             AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
@@ -929,7 +914,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    GDMFamilyRecord family = await fBaseWin.Context.SelectFamily(fOwner, iRec);
+                    GDMFamilyRecord family = await BaseController.SelectFamily(fBaseWin, fOwner, iRec);
                     if (family != null) {
                         if (family.HasMember(iRec)) {
                             AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));

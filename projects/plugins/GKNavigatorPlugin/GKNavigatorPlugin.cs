@@ -163,7 +163,7 @@ namespace GKNavigatorPlugin
             fData[baseName].NotifyRecord(baseWin, record, action);
         }
 
-        public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter)
+        public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, ListFilter filter)
         {
         }
     }

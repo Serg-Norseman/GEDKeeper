@@ -59,19 +59,10 @@ namespace GKCore.Filters
     }
 
 
-    public interface IListFilter
-    {
-        List<ColumnConditionExpression> Conditions { get; }
-
-        void Assign(IListFilter other);
-        void Clear();
-    }
-
-
     /// <summary>
     /// 
     /// </summary>
-    public class ListFilter : IListFilter
+    public class ListFilter
     {
         private readonly List<ColumnConditionExpression> fConditions;
 
@@ -90,14 +81,13 @@ namespace GKCore.Filters
             fConditions.Clear();
         }
 
-        public virtual void Assign(IListFilter other)
+        public virtual void Assign(ListFilter other)
         {
-            var otherFilter = other as ListFilter;
-            if (otherFilter == null)
+            if (other == null)
                 throw new ArgumentNullException("other");
 
             fConditions.Clear();
-            fConditions.AddRange(otherFilter.fConditions);
+            fConditions.AddRange(other.fConditions);
         }
 
         internal static bool CheckCondition(ColumnConditionExpression fcond, object dataval)

@@ -35,11 +35,11 @@ namespace GKCore.Media
         public override MediaStoreType StoreType { get { return MediaStoreType.mstArchive; } }
 
 
-        public ArchiveMediaStore(IBaseContext baseContext) : base(baseContext)
+        public ArchiveMediaStore(BaseContext baseContext) : base(baseContext)
         {
         }
 
-        public ArchiveMediaStore(IBaseContext baseContext, string fileName) : base(baseContext, fileName)
+        public ArchiveMediaStore(BaseContext baseContext, string fileName) : base(baseContext, fileName)
         {
             fArchiveFileName = fBaseContext.GetArcFileName();
             fCompressedFileName = FileHelper.NormalizeFilename(this.FileName);

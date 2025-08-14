@@ -56,7 +56,7 @@ namespace GKCore.Search
     }
 
 
-    public class FARStrategy : BaseSearchStrategy
+    public class FARStrategy : SearchStrategy
     {
         private readonly IBaseWindow fBaseWindow;
         private FARParameters fParameters;

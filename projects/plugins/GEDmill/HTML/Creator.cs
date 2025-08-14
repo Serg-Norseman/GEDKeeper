@@ -41,7 +41,7 @@ namespace GEDmill.HTML
 
         protected readonly ILangMan fLangMan;
 
-        protected IBaseContext fContext;
+        protected BaseContext fContext;
 
         // The raw data that we are turning into a website.
         protected GDMTree fTree;
@@ -51,7 +51,7 @@ namespace GEDmill.HTML
         private static Dictionary<string, FilenameAndSize> fCopiedFiles = new Dictionary<string, FilenameAndSize>();
 
 
-        protected Creator(IBaseContext context, ILangMan langMan)
+        protected Creator(BaseContext context, ILangMan langMan)
         {
             fContext = context;
             fTree = fContext.Tree;

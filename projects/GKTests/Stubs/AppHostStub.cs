@@ -132,7 +132,7 @@ namespace GKTests.Stubs
         public static void ConfigureBootstrap()
         {
             var appHost = new AppHostStub();
-            IContainer container = AppHost.Container;
+            var container = AppHost.Container;
 
             if (container == null)
                 throw new ArgumentNullException("container");

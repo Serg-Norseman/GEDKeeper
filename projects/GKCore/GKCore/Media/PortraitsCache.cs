@@ -59,7 +59,7 @@ namespace GKCore.Media
             base.Dispose(disposing);
         }
 
-        public IImage GetImage(IBaseContext context, GDMIndividualRecord iRec)
+        public IImage GetImage(BaseContext context, GDMIndividualRecord iRec)
         {
             if (context == null || iRec == null) return null;
 

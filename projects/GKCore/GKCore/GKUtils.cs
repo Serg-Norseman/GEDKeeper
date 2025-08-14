@@ -182,12 +182,16 @@ namespace GKCore
             return s;
         }
 
-        public static void SaveFilter(string flt, StringList filters)
+        public static string SaveFilter(string flt, StringList filters)
         {
-            if (filters == null) return;
-
             flt = flt.Trim();
-            if (flt != "" && flt != "*" && filters.IndexOf(flt) < 0) filters.Add(flt);
+            if (string.IsNullOrEmpty(flt))
+                flt = @"*";
+
+            if (filters != null && flt != "" && flt != "*" && filters.IndexOf(flt) < 0)
+                filters.Add(flt);
+
+            return flt;
         }
 
         public static void RemoveFilter(string flt, StringList filters)
@@ -1873,8 +1877,10 @@ namespace GKCore
             }
         }
 
-        public static float GetCertaintyAssessment(IGDMRecordWithEvents record, CertaintyAlgorithm algorithm)
+        public static float GetCertaintyAssessment(IGDMRecordWithEvents record)
         {
+            CertaintyAlgorithm algorithm = GlobalOptions.Instance.CertaintyAlgorithm;
+
             // variables initialization
             float result = 0;
             float wsum = 0;
@@ -1924,11 +1930,6 @@ namespace GKCore
             }
 
             return result;
-        }
-
-        public static float GetCertaintyAssessment(IGDMRecordWithEvents record)
-        {
-            return GetCertaintyAssessment(record, GlobalOptions.Instance.CertaintyAlgorithm);
         }
 
         #endregion
@@ -2240,7 +2241,7 @@ namespace GKCore
             return -1;
         }
 
-        public static void ExpandExtInfo(IBaseContext context, IHyperView sender, string linkName)
+        public static void ExpandExtInfo(BaseContext context, IHyperView sender, string linkName)
         {
             string xref = linkName.Remove(0, GKData.INFO_HREF_EXPAND_ASSO.Length);
             var iRec = context.Tree.FindXRef<GDMIndividualRecord>(xref);
@@ -2466,7 +2467,7 @@ namespace GKCore
             return result;
         }
 
-        private static void RecListMediaRefresh(IBaseContext baseContext, IGDMStructWithMultimediaLinks structWML, StringList summary, string indent = "")
+        private static void RecListMediaRefresh(BaseContext baseContext, IGDMStructWithMultimediaLinks structWML, StringList summary, string indent = "")
         {
             if (structWML == null || summary == null) return;
 
@@ -2491,7 +2492,7 @@ namespace GKCore
             }
         }
 
-        private static void RecListNotesRefresh(IBaseContext baseContext, IGDMStructWithNotes structWN, StringList summary, string indent = "")
+        private static void RecListNotesRefresh(BaseContext baseContext, IGDMStructWithNotes structWN, StringList summary, string indent = "")
         {
             if (structWN == null || summary == null) return;
 
@@ -2515,7 +2516,7 @@ namespace GKCore
             }
         }
 
-        private static void RecListSourcesRefresh(IBaseContext baseContext, IGDMStructWithSourceCitations structWSC, StringList summary, string indent = "")
+        private static void RecListSourcesRefresh(BaseContext baseContext, IGDMStructWithSourceCitations structWSC, StringList summary, string indent = "")
         {
             if (structWSC == null || summary == null) return;
 
@@ -2550,7 +2551,7 @@ namespace GKCore
             }
         }
 
-        private static void RecListAssociationsRefresh(IBaseContext baseContext, GDMIndividualRecord record, StringList summary)
+        private static void RecListAssociationsRefresh(BaseContext baseContext, GDMIndividualRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -2575,7 +2576,7 @@ namespace GKCore
             }
         }
 
-        private static void RecListIndividualEventsRefresh(IBaseContext baseContext, GDMIndividualRecord record, StringList summary)
+        private static void RecListIndividualEventsRefresh(BaseContext baseContext, GDMIndividualRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -2621,7 +2622,7 @@ namespace GKCore
             return result;
         }
 
-        private static void RecListFamilyEventsRefresh(IBaseContext baseContext, GDMFamilyRecord record, StringList summary)
+        private static void RecListFamilyEventsRefresh(BaseContext baseContext, GDMFamilyRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -2648,7 +2649,7 @@ namespace GKCore
             }
         }
 
-        private static void RecListGroupsRefresh(IBaseContext baseContext, GDMIndividualRecord record, StringList summary)
+        private static void RecListGroupsRefresh(BaseContext baseContext, GDMIndividualRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
 
@@ -2671,7 +2672,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowFamilyInfo(IBaseContext baseContext, GDMFamilyRecord familyRec, StringList summary)
+        public static void ShowFamilyInfo(BaseContext baseContext, GDMFamilyRecord familyRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2715,7 +2716,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowGroupInfo(IBaseContext baseContext, GDMGroupRecord groupRec, StringList summary)
+        public static void ShowGroupInfo(BaseContext baseContext, GDMGroupRecord groupRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2758,7 +2759,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowMultimediaInfo(IBaseContext baseContext, GDMMultimediaRecord mediaRec, StringList summary)
+        public static void ShowMultimediaInfo(BaseContext baseContext, GDMMultimediaRecord mediaRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2799,7 +2800,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowNoteInfo(IBaseContext baseContext, GDMNoteRecord noteRec, StringList summary)
+        public static void ShowNoteInfo(BaseContext baseContext, GDMNoteRecord noteRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2856,7 +2857,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowSpousesInfo(IBaseContext baseContext, GDMTree tree, GDMIndividualRecord iRec, StringList summary)
+        public static void ShowSpousesInfo(BaseContext baseContext, GDMTree tree, GDMIndividualRecord iRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2912,7 +2913,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowPersonInfo(IBaseContext baseContext, GDMIndividualRecord iRec, StringList summary)
+        public static void ShowPersonInfo(BaseContext baseContext, GDMIndividualRecord iRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -2991,7 +2992,7 @@ namespace GKCore
             summary.AddMultiline(name + ": \"" + MakeLinks(value) + "\"");
         }
 
-        public static void ShowSourceInfo(IBaseContext baseContext, GDMSourceRecord sourceRec, StringList summary, RecordContentType contentType)
+        public static void ShowSourceInfo(BaseContext baseContext, GDMSourceRecord sourceRec, StringList summary, RecordContentType contentType)
         {
             if (summary == null) return;
 
@@ -3040,7 +3041,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowRepositoryInfo(IBaseContext baseContext, GDMRepositoryRecord repositoryRec, StringList summary)
+        public static void ShowRepositoryInfo(BaseContext baseContext, GDMRepositoryRecord repositoryRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -3091,7 +3092,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowResearchInfo(IBaseContext baseContext, GDMResearchRecord researchRec, StringList summary)
+        public static void ShowResearchInfo(BaseContext baseContext, GDMResearchRecord researchRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -3151,7 +3152,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowTaskInfo(IBaseContext baseContext, GDMTaskRecord taskRec, StringList summary)
+        public static void ShowTaskInfo(BaseContext baseContext, GDMTaskRecord taskRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -3177,7 +3178,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowCommunicationInfo(IBaseContext baseContext, GDMCommunicationRecord commRec, StringList summary)
+        public static void ShowCommunicationInfo(BaseContext baseContext, GDMCommunicationRecord commRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -3206,7 +3207,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowLocationInfo(IBaseContext baseContext, GDMLocationRecord locRec, StringList summary)
+        public static void ShowLocationInfo(BaseContext baseContext, GDMLocationRecord locRec, StringList summary)
         {
             if (summary == null) return;
 
@@ -3323,7 +3324,7 @@ namespace GKCore
             }
         }
 
-        public static void GetRecordContent(IBaseContext baseContext, GDMRecord record, StringList ctx, RecordContentType contentType)
+        public static void GetRecordContent(BaseContext baseContext, GDMRecord record, StringList ctx, RecordContentType contentType)
         {
             if (record == null || ctx == null) return;
 
@@ -3927,7 +3928,7 @@ namespace GKCore
                 IRecordsListModel listMan = baseWindow.GetRecordsListManByType(GDMRecordType.rtIndividual);
                 if (listMan != null) {
                     listMan.ExternalFilter = filterHandler;
-                    ((IIndividualListFilter)listMan.Filter).FilterLifeMode = mode;
+                    ((IndividualListFilter)listMan.Filter).FilterLifeMode = mode;
                 }
                 baseWindow.ApplyFilter(GDMRecordType.rtIndividual);
             }

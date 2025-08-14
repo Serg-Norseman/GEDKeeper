@@ -259,7 +259,7 @@ namespace GKCore.Controllers
         }
 
         /// <summary>
-        /// Sets tab splitter positions in response to interface events.
+        /// Sets tab splitter positions in response to UI events.
         /// </summary>
         /// <param name="userChange">true - if user change event (SplitterMoved), false - settings change event</param>
         public void SetSummaryWidth(bool userChange)

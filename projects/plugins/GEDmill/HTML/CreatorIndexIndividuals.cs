@@ -39,7 +39,7 @@ namespace GEDmill.HTML
         private List<StringTuple> fIndividualIndex;
 
 
-        public CreatorIndexIndividuals(IBaseContext context, ILangMan langMan) : base(context, langMan)
+        public CreatorIndexIndividuals(BaseContext context, ILangMan langMan) : base(context, langMan)
         {
             fIndividualIndex = new List<StringTuple>();
         }

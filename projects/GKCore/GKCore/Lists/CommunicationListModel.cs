@@ -40,7 +40,7 @@ namespace GKCore.Lists
         }
 
 
-        public CommunicationListModel(IBaseContext baseContext) :
+        public CommunicationListModel(BaseContext baseContext) :
             base(baseContext, CreateListColumns(), GDMRecordType.rtCommunication)
         {
         }

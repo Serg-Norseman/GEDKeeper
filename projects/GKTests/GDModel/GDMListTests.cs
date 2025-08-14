@@ -98,7 +98,7 @@ namespace GDModel
             Assert.IsNotNull(iRec);
 
             int hash;
-            IGDMListEnumerator<GDMCustomEvent> enumer = iRec.Events.GetEnumerator();
+            var enumer = iRec.Events.GetEnumerator();
             enumer.Reset();
             while (enumer.MoveNext()) {
                 GDMCustomEvent evt1 = enumer.Current;

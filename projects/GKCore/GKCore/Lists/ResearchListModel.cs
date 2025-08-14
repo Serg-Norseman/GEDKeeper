@@ -47,7 +47,7 @@ namespace GKCore.Lists
         }
 
 
-        public ResearchListModel(IBaseContext baseContext) :
+        public ResearchListModel(BaseContext baseContext) :
             base(baseContext, CreateListColumns(), GDMRecordType.rtResearch)
         {
         }
@@ -180,7 +180,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    task = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtTask, null) as GDMTaskRecord;
+                    task = await BaseController.SelectRecord(fOwner, fBaseWin, GDMRecordType.rtTask, null) as GDMTaskRecord;
                     if (task != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchTaskAdd, research, task);
                     }
@@ -275,7 +275,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    comm = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtCommunication, null) as GDMCommunicationRecord;
+                    comm = await BaseController.SelectRecord(fOwner, fBaseWin, GDMRecordType.rtCommunication, null) as GDMCommunicationRecord;
                     if (comm != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchCommunicationAdd, research, comm);
                     }
@@ -358,7 +358,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    group = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtGroup, null) as GDMGroupRecord;
+                    group = await BaseController.SelectRecord(fOwner, fBaseWin, GDMRecordType.rtGroup, null) as GDMGroupRecord;
                     if (group != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otResearchGroupAdd, research, group);
                     }

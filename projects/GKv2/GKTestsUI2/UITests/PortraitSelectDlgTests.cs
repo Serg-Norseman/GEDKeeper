@@ -35,7 +35,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class PortraitSelectDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
+        private BaseContext fContext;
         private GDMMultimediaLink fMultimediaLink;
         private IBaseWindow fBase;
         private PortraitSelectDlg fDialog;

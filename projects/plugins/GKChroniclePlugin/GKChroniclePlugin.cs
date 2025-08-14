@@ -69,7 +69,7 @@ namespace GKChroniclePlugin
 
     internal sealed class EventsListModel : SimpleListModel<EventRecord>
     {
-        public EventsListModel(IBaseContext baseContext, ILangMan langMan) : base(baseContext, CreateListColumns(langMan))
+        public EventsListModel(BaseContext baseContext, ILangMan langMan) : base(baseContext, CreateListColumns(langMan))
         {
         }
 

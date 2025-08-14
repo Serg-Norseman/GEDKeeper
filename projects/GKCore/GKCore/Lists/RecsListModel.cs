@@ -27,7 +27,7 @@ namespace GKCore.Lists
     {
         private readonly bool fShowXRefs;
 
-        public RecsListModel(IBaseContext baseContext, string title, bool showXRefs = true) :
+        public RecsListModel(BaseContext baseContext, string title, bool showXRefs = true) :
             base(baseContext, CreateListColumns(title))
         {
             fShowXRefs = showXRefs;

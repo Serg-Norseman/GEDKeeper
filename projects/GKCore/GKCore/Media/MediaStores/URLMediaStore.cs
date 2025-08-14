@@ -27,11 +27,11 @@ namespace GKCore.Media
         public override MediaStoreType StoreType { get { return MediaStoreType.mstURL; } }
 
 
-        public URLMediaStore(IBaseContext baseContext) : base(baseContext)
+        public URLMediaStore(BaseContext baseContext) : base(baseContext)
         {
         }
 
-        public URLMediaStore(IBaseContext baseContext, string fileName) : base(baseContext, fileName)
+        public URLMediaStore(BaseContext baseContext, string fileName) : base(baseContext, fileName)
         {
         }
 

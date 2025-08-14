@@ -36,7 +36,7 @@ namespace GDModel
     }
 
 
-    public sealed class GDMIndividualRecord : GDMRecordWithEvents, IGDMIndividualRecord
+    public sealed class GDMIndividualRecord : GDMRecordWithEvents, IGDMStructWithDNA
     {
         private GDMList<GDMAssociation> fAssociations;
         private readonly GDMList<GDMChildToFamilyLink> fChildToFamilyLinks;

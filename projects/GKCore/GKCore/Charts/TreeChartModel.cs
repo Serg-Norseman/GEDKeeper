@@ -107,7 +107,7 @@ namespace GKCore.Charts
 
         private IColor fClrBlack;
 
-        private IBaseContext fContext;
+        private BaseContext fContext;
         private IBaseWindow fBase;
         private IFont fBoldFont;
         private int fBranchDistance;

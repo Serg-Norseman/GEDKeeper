@@ -25,11 +25,11 @@ namespace GKCore.Media
         public override MediaStoreType StoreType { get { return MediaStoreType.mstRelativeReference; } }
 
 
-        public RelativePathMediaStore(IBaseContext baseContext) : base(baseContext)
+        public RelativePathMediaStore(BaseContext baseContext) : base(baseContext)
         {
         }
 
-        public RelativePathMediaStore(IBaseContext baseContext, string fileName) : base(baseContext, fileName)
+        public RelativePathMediaStore(BaseContext baseContext, string fileName) : base(baseContext, fileName)
         {
             fAbsoluteFileName = baseContext.GetTreePath() + fileName;
         }

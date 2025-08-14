@@ -33,19 +33,19 @@ namespace GKCore.Media
     /// </summary>
     public abstract class MediaStore
     {
-        protected readonly IBaseContext fBaseContext;
+        protected readonly BaseContext fBaseContext;
 
         public abstract MediaStoreType StoreType { get; }
         public string FileName { get; private set; }
 
 
-        protected MediaStore(IBaseContext baseContext)
+        protected MediaStore(BaseContext baseContext)
         {
             fBaseContext = baseContext;
             FileName = string.Empty;
         }
 
-        protected MediaStore(IBaseContext baseContext, string fileName)
+        protected MediaStore(BaseContext baseContext, string fileName)
         {
             fBaseContext = baseContext;
             FileName = fileName;
@@ -67,7 +67,7 @@ namespace GKCore.Media
             return result;
         }
 
-        public static MediaStore GetMediaStore(IBaseContext baseContext, string fileReference)
+        public static MediaStore GetMediaStore(BaseContext baseContext, string fileReference)
         {
             if (string.IsNullOrEmpty(fileReference))
                 throw new ArgumentNullException(nameof(fileReference));
@@ -106,7 +106,7 @@ namespace GKCore.Media
             }
         }
 
-        public static MediaStore CreateMediaStore(IBaseContext baseContext, MediaStoreType storeType)
+        public static MediaStore CreateMediaStore(BaseContext baseContext, MediaStoreType storeType)
         {
             switch (storeType) {
                 case MediaStoreType.mstReference:

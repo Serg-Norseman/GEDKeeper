@@ -36,10 +36,10 @@ namespace GKCore.Kinships
     /// </summary>
     public sealed class KinshipsGraph : BaseObject
     {
-        private readonly IBaseContext fContext;
+        private readonly BaseContext fContext;
         private readonly Graph fGraph;
 
-        public KinshipsGraph(IBaseContext context)
+        public KinshipsGraph(BaseContext context)
         {
             LoadCulture();
 
@@ -472,7 +472,7 @@ namespace GKCore.Kinships
 
         #region Search graph
 
-        public static KinshipsGraph SearchGraph(IBaseContext context, GDMIndividualRecord iRec)
+        public static KinshipsGraph SearchGraph(BaseContext context, GDMIndividualRecord iRec)
         {
             if (iRec == null)
                 throw new ArgumentNullException("iRec");

@@ -78,7 +78,7 @@ namespace GKCore.Tools
     public static class PatriarchsMan
     {
         public static IList<PatriarchObj> GetPatriarchsList(
-            IBaseContext context, int gensMin, bool datesCheck, IProgressController progress, bool progressDone)
+            BaseContext context, int gensMin, bool datesCheck, IProgressController progress, bool progressDone)
         {
             var patList = new List<PatriarchObj>();
 
@@ -125,7 +125,7 @@ namespace GKCore.Tools
         }
 
         public static IList<PatriarchObj> GetPatriarchsLinks(
-            IBaseContext context, int gensMin, bool datesCheck, bool loneSuppress, IProgressController progress)
+            BaseContext context, int gensMin, bool datesCheck, bool loneSuppress, IProgressController progress)
         {
             var patList = GetPatriarchsList(context, gensMin, datesCheck, progress, false);
 
@@ -194,7 +194,7 @@ namespace GKCore.Tools
         }
 
         public static Graph GetPatriarchsGraph(
-            IBaseContext context, int gensMin, bool datesCheck, bool loneSuppress, IProgressController progress)
+            BaseContext context, int gensMin, bool datesCheck, bool loneSuppress, IProgressController progress)
         {
             Graph graph = new Graph();
 

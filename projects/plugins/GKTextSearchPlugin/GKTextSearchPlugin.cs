@@ -150,7 +150,7 @@ namespace GKTextSearchPlugin
             }
         }
 
-        public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter)
+        public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, ListFilter filter)
         {
             // dummy
         }

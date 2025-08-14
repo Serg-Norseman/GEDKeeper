@@ -76,7 +76,7 @@ namespace GKCore.Lists
         List<MapColumnRec> ColumnsMap { get; }
         ExtObservableList<ContentItem> ContentList { get; }
         ExternalFilterHandler ExternalFilter { get; set; }
-        IListFilter Filter { get; }
+        ListFilter Filter { get; }
         int FilteredCount { get; }
         ListColumns ListColumns { get; }
         int SortColumn { get; set; }

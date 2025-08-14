@@ -447,7 +447,7 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckMultimediaRecord(IBaseContext baseContext, GDMMultimediaRecord mmRec, List<CheckObj> checksList)
+        private static void CheckMultimediaRecord(BaseContext baseContext, GDMMultimediaRecord mmRec, List<CheckObj> checksList)
         {
             if (mmRec.FileReferences.Count <= 0) {
                 CheckObj checkObj = new CheckObj(mmRec, CheckDiag.cdMediaRecordWithoutFiles, CheckSolve.csRemove);
@@ -528,7 +528,7 @@ namespace GKCore.Tools
             return false;
         }
 
-        private static bool CheckRecordLinks(IBaseContext baseContext, GDMRecord subject)
+        private static bool CheckRecordLinks(BaseContext baseContext, GDMRecord subject)
         {
             var tree = baseContext.Tree;
             for (int k = 0, num2 = tree.RecordsCount; k < num2; k++) {
@@ -549,7 +549,7 @@ namespace GKCore.Tools
             return false;
         }
 
-        private static void CheckNoteRecord(IBaseContext baseContext, GDMNoteRecord noteRec, List<CheckObj> checksList)
+        private static void CheckNoteRecord(BaseContext baseContext, GDMNoteRecord noteRec, List<CheckObj> checksList)
         {
             if (!CheckRecordLinks(baseContext, noteRec)) {
                 CheckObj checkObj = new CheckObj(noteRec, CheckDiag.cdNoteWithoutLinks, CheckSolve.csRemove);
@@ -559,7 +559,7 @@ namespace GKCore.Tools
             }
         }
 
-        private static void CheckSourceRecord(IBaseContext baseContext, GDMSourceRecord sourRec, List<CheckObj> checksList)
+        private static void CheckSourceRecord(BaseContext baseContext, GDMSourceRecord sourRec, List<CheckObj> checksList)
         {
             if (!CheckRecordLinks(baseContext, sourRec)) {
                 CheckObj checkObj = new CheckObj(sourRec, CheckDiag.cdSourceWithoutLinks, CheckSolve.csRemove);

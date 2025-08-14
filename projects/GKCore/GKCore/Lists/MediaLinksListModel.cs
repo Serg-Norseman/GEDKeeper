@@ -93,7 +93,7 @@ namespace GKCore.Lists
             GDMMultimediaRecord mmRec;
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    mmRec = await fBaseWin.Context.SelectRecord(fOwner, GDMRecordType.rtMultimedia, new object[0]) as GDMMultimediaRecord;
+                    mmRec = await BaseController.SelectRecord(fOwner, fBaseWin, GDMRecordType.rtMultimedia, new object[0]) as GDMMultimediaRecord;
                     if (mmRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaAdd, (GDMObject)dataOwner, mmRec);
                         mmLink = dataOwner.FindMultimediaLink(mmRec);

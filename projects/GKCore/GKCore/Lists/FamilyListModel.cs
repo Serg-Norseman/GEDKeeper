@@ -38,7 +38,7 @@ namespace GKCore.Lists
         }
 
 
-        public FamilyListModel(IBaseContext baseContext) :
+        public FamilyListModel(BaseContext baseContext) :
             base(baseContext, CreateListColumns(), GDMRecordType.rtFamily)
         {
         }

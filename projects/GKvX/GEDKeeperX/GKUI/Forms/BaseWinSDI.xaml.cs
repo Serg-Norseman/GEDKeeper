@@ -47,7 +47,7 @@ namespace GKUI.Forms
 
         private readonly BaseWinController fController;
 
-        private readonly IBaseContext fContext;
+        private readonly BaseContext fContext;
 
         private readonly QuickSearchDlg fQuickSearch;
         private readonly ContentView[] fQSPlaceholders;
@@ -56,7 +56,7 @@ namespace GKUI.Forms
 
         #region Public properties
 
-        public IBaseContext Context
+        public BaseContext Context
         {
             get { return fContext; }
         }

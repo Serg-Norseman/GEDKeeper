@@ -132,7 +132,7 @@ namespace GKCore
         {
             Assert.IsTrue(SysUtils.ImplementsInterface(typeof(LangManager), typeof(ILangMan)));
 
-            Assert.IsFalse(SysUtils.ImplementsInterface(typeof(LangManager), typeof(INamesTable)));
+            Assert.IsFalse(SysUtils.ImplementsInterface(typeof(LangManager), typeof(ILocalizable)));
         }
 
         [Test]
@@ -141,10 +141,10 @@ namespace GKCore
             SearchResult searchResult = new SearchResult(null);
             Assert.IsNotNull(searchResult);
 
-            Assert.Throws(typeof(ArgumentNullException), () => { new SearchStrategy(null, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { new WorkSearchStrategy(null, null); });
 
             var workWindow = Substitute.For<IWorkWindow>();
-            SearchStrategy strat = new SearchStrategy(workWindow, "");
+            WorkSearchStrategy strat = new WorkSearchStrategy(workWindow, "");
             Assert.IsNotNull(strat);
 
             IList<ISearchResult> res = strat.FindAll();
@@ -199,7 +199,7 @@ namespace GKCore
         public void Test_Stats()
         {
             List<GDMRecord> selectedRecords = new List<GDMRecord>();
-            IGDMTreeEnumerator iEnum = fContext.Tree.GetEnumerator(GDMRecordType.rtIndividual);
+            var iEnum = fContext.Tree.GetEnumerator(GDMRecordType.rtIndividual);
             GDMRecord current;
             while (iEnum.MoveNext(out current)) {
                 selectedRecords.Add(current);

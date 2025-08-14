@@ -40,7 +40,7 @@ namespace GKCore.Lists
         }
 
 
-        public TaskListModel(IBaseContext baseContext) :
+        public TaskListModel(BaseContext baseContext) :
             base(baseContext, CreateListColumns(), GDMRecordType.rtTask)
         {
         }

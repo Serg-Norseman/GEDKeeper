@@ -318,7 +318,7 @@ namespace GDModel
             fTopLevels.Sort(ElementsCompare);
         }
 
-        private static int ElementsCompare(IGDMLocationElement cp1, IGDMLocationElement cp2)
+        private static int ElementsCompare(IGDMStructWithDate cp1, IGDMStructWithDate cp2)
         {
             UDN udn1 = cp1.Date.GetUDN();
             UDN udn2 = cp2.Date.GetUDN();

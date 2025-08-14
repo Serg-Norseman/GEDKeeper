@@ -43,7 +43,7 @@ namespace GKCore.Lists
         }
 
 
-        public LocationListModel(IBaseContext baseContext) :
+        public LocationListModel(BaseContext baseContext) :
             base(baseContext, CreateListColumns(), GDMRecordType.rtLocation)
         {
         }

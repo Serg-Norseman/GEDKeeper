@@ -352,7 +352,6 @@
     <Compile Include="GKCore\Utilities\GKVarCache.cs" />
     <Compile Include="GKCore\GKException.cs" />
     <Compile Include="GKCore\Import\ImportUtils.cs" />
-    <Compile Include="GKCore\IBaseContext.cs" />
     <Compile Include="GKCore\Design\IBaseWindow.cs" />
     <Compile Include="GKCore\Design\IChartWindow.cs" />
     <Compile Include="GKCore\Design\ICommonDialog.cs" />
@@ -367,7 +366,6 @@
     <Compile Include="GKCore\Options\IOptionsSection.cs" />
     <Compile Include="GKCore\Plugins\IPlugin.cs" />
     <Compile Include="GKCore\Design\IProgressController.cs" />
-    <Compile Include="GKCore\Search\ISearchStrategy.cs" />
     <Compile Include="GKCore\Plugins\ISubscriber.cs" />
     <Compile Include="GKCore\ITimer.cs" />
     <Compile Include="GKCore\Plugins\IWidget.cs" />
@@ -389,7 +387,6 @@
     <Compile Include="GKCore\Design\DialogController.cs" />
     <Compile Include="GKCore\Design\Views\IStatusForm.cs" />
     <Compile Include="GKCore\Design\Views\IStdDialogs.cs" />
-    <Compile Include="GKCore\Names\INamesTable.cs" />
     <Compile Include="GKCore\Names\NameEntry.cs" />
     <Compile Include="GKCore\Names\NamesTable.cs" />
     <Compile Include="GKCore\Utilities\DiffUtil.cs" />
@@ -399,10 +396,10 @@
     <Compile Include="GKCore\Plugins\OrdinaryPlugin.cs" />
     <Compile Include="GKCore\Plugins\WidgetPlugin.cs" />
     <Compile Include="GKCore\ExtData\ExtResources.cs" />
-    <Compile Include="GKCore\Search\BaseSearchStrategy.cs" />
+    <Compile Include="GKCore\Search\SearchStrategy.cs" />
     <Compile Include="GKCore\Search\FARPropertyType.cs" />
     <Compile Include="GKCore\Search\SearchResult.cs" />
-    <Compile Include="GKCore\Search\SearchStrategy.cs" />
+    <Compile Include="GKCore\Search\WorkSearchStrategy.cs" />
     <Compile Include="GKCore\Utilities\Shortcut.cs" />
     <Compile Include="GKCore\Utilities\MapiMailMessage.cs" />
     <Compile Include="GKCore\Utilities\FreqCollection.cs" />

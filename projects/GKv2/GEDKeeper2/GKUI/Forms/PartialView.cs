@@ -51,7 +51,7 @@ namespace GKUI.Forms
         }
 
 
-        public PartialView(IBaseWindow baseWin, GDMRecordType recordType, IListFilter filter)
+        public PartialView(IBaseWindow baseWin, GDMRecordType recordType, ListFilter filter)
         {
             InitializeComponent();
 

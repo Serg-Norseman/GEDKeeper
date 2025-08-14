@@ -31,7 +31,7 @@ namespace GKCore.Design
 
     public interface IBaseWindow : IWorkWindow
     {
-        IBaseContext Context { get; }
+        BaseContext Context { get; }
 
         NavigationStack<GDMRecord> Navman { get; }
 

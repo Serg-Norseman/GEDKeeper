@@ -867,7 +867,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static async Task<bool> ModifyName(IView owner, IBaseContext context, NameEntry nameEntry)
+        public static async Task<bool> ModifyName(IView owner, BaseContext context, NameEntry nameEntry)
         {
             bool result;
 
@@ -1137,7 +1137,7 @@ namespace GKCore.Controllers
             return result;
         }
 
-        public static GDMRecord DuplicateRecord(IBaseContext context, GDMRecord original)
+        public static GDMRecord DuplicateRecord(BaseContext context, GDMRecord original)
         {
             if (original == null) return null;
 
@@ -1199,7 +1199,7 @@ namespace GKCore.Controllers
         {
             bool result = false;
 
-            GDMIndividualRecord father = await baseWin.Context.SelectPerson(owner, person, TargetMode.tmChild, GDMSex.svMale);
+            GDMIndividualRecord father = await SelectPerson(owner, baseWin, person, TargetMode.tmChild, GDMSex.svMale);
             if (father == null) return result;
 
             if (father == person) {
@@ -1242,7 +1242,7 @@ namespace GKCore.Controllers
         {
             bool result = false;
 
-            GDMIndividualRecord mother = await baseWin.Context.SelectPerson(owner, person, TargetMode.tmChild, GDMSex.svFemale);
+            GDMIndividualRecord mother = await SelectPerson(owner, baseWin, person, TargetMode.tmChild, GDMSex.svFemale);
             if (mother == null) return result;
 
             if (mother == person) {
@@ -1286,7 +1286,7 @@ namespace GKCore.Controllers
             bool result = false;
 
             var wife = baseWin.Context.Tree.GetPtrValue(family.Wife);
-            GDMIndividualRecord husband = await baseWin.Context.SelectPerson(owner, wife, TargetMode.tmSpouse, GDMSex.svMale);
+            GDMIndividualRecord husband = await SelectPerson(owner, baseWin, wife, TargetMode.tmSpouse, GDMSex.svMale);
             if (husband != null && family.Husband.IsEmpty()) {
                 if (family.HasChild(husband)) {
                     AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.FatherAsChild));
@@ -1318,7 +1318,7 @@ namespace GKCore.Controllers
             bool result = false;
 
             var husband = baseWin.Context.Tree.GetPtrValue(family.Husband);
-            GDMIndividualRecord wife = await baseWin.Context.SelectPerson(owner, husband, TargetMode.tmSpouse, GDMSex.svFemale);
+            GDMIndividualRecord wife = await SelectPerson(owner, baseWin, husband, TargetMode.tmSpouse, GDMSex.svFemale);
             if (wife != null && family.Wife.IsEmpty()) {
                 if (family.HasChild(wife)) {
                     AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.MotherAsChild));
@@ -1443,7 +1443,7 @@ namespace GKCore.Controllers
 
         public static async Task<bool> SelectPhotoRegion(IView owner, IBaseWindow baseWin, GDMMultimediaRecord mediaRecord, ExtRect region)
         {
-            var indiRec = await baseWin.Context.SelectPerson(owner, null, TargetMode.tmNone, GDMSex.svUnknown);
+            var indiRec = await SelectPerson(owner, baseWin, null, TargetMode.tmNone, GDMSex.svUnknown);
             if (indiRec == null) return false;
 
             GDMMultimediaLink mmLink = indiRec.GetPrimaryMultimediaLink();
@@ -1480,7 +1480,7 @@ namespace GKCore.Controllers
 
         public static async Task<bool> AddIndividualPortrait(IView owner, IBaseWindow baseWin, ChangeTracker localUndoman, GDMIndividualRecord iRec)
         {
-            GDMMultimediaRecord mmRec = await baseWin.Context.SelectRecord(owner, GDMRecordType.rtMultimedia, null) as GDMMultimediaRecord;
+            GDMMultimediaRecord mmRec = await SelectRecord(owner, baseWin, GDMRecordType.rtMultimedia, null) as GDMMultimediaRecord;
             if (mmRec == null) return false;
 
             // remove previous portrait link
@@ -1526,6 +1526,141 @@ namespace GKCore.Controllers
             } finally {
                 baseWin.Context.EndUpdate();
             }
+        }
+
+        public static async Task<GDMFamilyRecord> SelectFamily(IBaseWindow baseWin, IView owner, GDMIndividualRecord target, TargetMode targetMode = TargetMode.tmFamilyChild)
+        {
+            GDMFamilyRecord result;
+
+            try {
+                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(baseWin, GDMRecordType.rtFamily)) {
+                    dlg.SetTarget(targetMode, target, GDMSex.svUnknown);
+
+                    if (await AppHost.Instance.ShowModalAsync(dlg, owner, false)) {
+                        result = dlg.ResultRecord as GDMFamilyRecord;
+                    } else {
+                        result = null;
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseController.SelectFamily()", ex);
+                result = null;
+            }
+
+            return result;
+        }
+
+        public static async Task<GDMIndividualRecord> SelectPerson(IView owner, IBaseWindow baseWin, GDMIndividualRecord target, TargetMode targetMode, GDMSex needSex)
+        {
+            GDMIndividualRecord result;
+
+            try {
+                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(baseWin, GDMRecordType.rtIndividual)) {
+                    dlg.SetTarget(targetMode, target, needSex);
+
+                    if (await AppHost.Instance.ShowModalAsync(dlg, owner, false)) {
+                        result = dlg.ResultRecord as GDMIndividualRecord;
+                    } else {
+                        result = null;
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseController.SelectPerson()", ex);
+                result = null;
+            }
+
+            return result;
+        }
+
+        public static async Task<GDMRecord> SelectRecord(IView owner, IBaseWindow baseWin, GDMRecordType mode, params object[] args)
+        {
+            GDMRecord result;
+
+            try {
+                using (var dlg = AppHost.ResolveDialog<IRecordSelectDialog>(baseWin, mode)) {
+                    var flt = (args != null && args.Length > 0) ? (args[0] as string) : "*";
+                    dlg.SetTarget(TargetMode.tmNone, null, GDMSex.svUnknown, flt);
+
+                    if (await AppHost.Instance.ShowModalAsync(dlg, owner, false)) {
+                        result = dlg.ResultRecord;
+                    } else {
+                        result = null;
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseController.SelectRecord()", ex);
+                result = null;
+            }
+
+            return result;
+        }
+
+        public static async Task<GDMIndividualRecord> AddChildForParent(IView owner, IBaseWindow baseWin, GDMIndividualRecord parent, GDMSex needSex)
+        {
+            GDMIndividualRecord resultChild = null;
+            if (parent == null) return resultChild;
+
+            var baseContext = baseWin.Context;
+            if (parent.SpouseToFamilyLinks.Count > 1) {
+                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.ThisPersonHasSeveralFamilies));
+            } else {
+                GDMFamilyRecord family = (parent.SpouseToFamilyLinks.Count == 0) ? null : baseContext.Tree.GetPtrValue(parent.SpouseToFamilyLinks[0]);
+                GDMIndividualRecord father = (family == null) ? null : baseContext.Tree.GetPtrValue(family.Husband);
+                if (father == null && parent.Sex == GDMSex.svMale) {
+                    father = parent;
+                }
+
+                GDMIndividualRecord child = await SelectPerson(owner, baseWin, father, TargetMode.tmParent, needSex);
+
+                if (child != null) {
+                    if (family == null) {
+                        family = baseContext.AddFamilyForSpouse(parent);
+                        if (family == null) {
+                            return null;
+                        }
+                    }
+
+                    if (family.HasMember(child)) {
+                        AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                        return null;
+                    }
+
+                    if (family.AddChild(child)) {
+                        // this repetition necessary, because the call of CreatePersonDialog only works if person already has a father,
+                        // what to call AddChild () is no; all this is necessary in order to in the namebook were correct patronymics.
+                        baseContext.ImportNames(child);
+
+                        baseContext.ProcessIndividual(child);
+
+                        resultChild = child;
+                    }
+                }
+            }
+
+            return resultChild;
+        }
+
+        public static async Task<GDMIndividualRecord> SelectSpouseFor(IView owner, IBaseWindow baseWin, GDMIndividualRecord iRec)
+        {
+            if (iRec == null)
+                throw new ArgumentNullException(@"iRec");
+
+            GDMSex needSex;
+            switch (iRec.Sex) {
+                case GDMSex.svMale:
+                    needSex = GDMSex.svFemale;
+                    break;
+
+                case GDMSex.svFemale:
+                    needSex = GDMSex.svMale;
+                    break;
+
+                default:
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.IsNotDefinedSex));
+                    return null;
+            }
+
+            return await SelectPerson(owner, baseWin, iRec, TargetMode.tmSpouse, needSex);
         }
 
         #endregion

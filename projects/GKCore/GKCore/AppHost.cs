@@ -576,7 +576,7 @@ namespace GKCore
             Plugins.NotifyRecord(baseWin, record, action);
         }
 
-        public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, IListFilter filter)
+        public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, ListFilter filter)
         {
             Plugins.NotifyFilter(baseWin, recType, listSource, filter);
         }
@@ -757,7 +757,7 @@ namespace GKCore
 
         public virtual async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
-            return await Task.FromResult(false);
+            return await Task.FromResult(TEST_MODE);
         }
 
         public void ShowHelpTopic(string topic)
@@ -800,7 +800,7 @@ namespace GKCore
             return ufPath;
         }
 
-        private void ProcessLoaded(IBaseContext context)
+        private void ProcessLoaded(BaseContext context)
         {
             if (GlobalOptions.Instance.ShowTips) {
                 TipsCollector.Collect(context, fTips);
@@ -1262,7 +1262,7 @@ namespace GKCore
         private static EventDefinitions fEventDefinitions;
         private static ExtResources fExtResources;
         private static IGraphicsProvider fGfxProvider;
-        private static INamesTable fNamesTable;
+        private static NamesTable fNamesTable;
         private static GlobalOptions fOptions;
         private static PluginsMan fPlugins;
         private static IStdDialogs fStdDialogs;
@@ -1304,7 +1304,7 @@ namespace GKCore
             }
         }
 
-        public static INamesTable NamesTable
+        public static NamesTable NamesTable
         {
             get {
                 if (fNamesTable == null) {

@@ -34,7 +34,7 @@ namespace GKTests.Stubs
     {
         private static readonly IHost fHost = Substitute.For<IHost>();
 
-        private readonly IBaseContext fContext;
+        private readonly BaseContext fContext;
         private readonly GDMTree fTree;
 
         public BaseWindowStub(bool fill = true)
@@ -46,13 +46,13 @@ namespace GKTests.Stubs
             fTree = fContext.Tree;
         }
 
-        public BaseWindowStub(IBaseContext context)
+        public BaseWindowStub(BaseContext context)
         {
             fContext = context;
             fTree = fContext.Tree;
         }
 
-        public IBaseContext Context { get { return fContext; } }
+        public BaseContext Context { get { return fContext; } }
         public NavigationStack<GDMRecord> Navman { get { return null; } }
         public IHost Host { get { return fHost; } }
         public bool Modified { get { return false; } set {} }

@@ -38,7 +38,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class CommonFilterDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
+        private BaseContext fContext;
         private IRecordsListModel fListMan;
         private IBaseWindow fBase;
         private CommonFilterDlg fDialog;

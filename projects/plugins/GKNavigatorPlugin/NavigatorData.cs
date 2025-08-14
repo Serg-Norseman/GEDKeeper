@@ -333,7 +333,7 @@ namespace GKNavigatorPlugin
             }
         }
 
-        public static IList<GDMIndividualRecord> SearchBookmarks(IBaseContext baseContext)
+        public static IList<GDMIndividualRecord> SearchBookmarks(BaseContext baseContext)
         {
             var result = new List<GDMIndividualRecord>();
 

@@ -151,17 +151,17 @@ namespace GKCore.Controllers
             GDMGoalType gt = (GDMGoalType)fView.GoalType.SelectedIndex;
             switch (gt) {
                 case GDMGoalType.gtIndividual:
-                    fTempRec = await fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
+                    fTempRec = await BaseController.SelectPerson(fView, fBase, null, TargetMode.tmNone, GDMSex.svUnknown);
                     fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 
                 case GDMGoalType.gtFamily:
-                    fTempRec = await fBase.Context.SelectRecord(fView, GDMRecordType.rtFamily, new object[0]);
+                    fTempRec = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtFamily, new object[0]);
                     fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 
                 case GDMGoalType.gtSource:
-                    fTempRec = await fBase.Context.SelectRecord(fView, GDMRecordType.rtSource, new object[0]);
+                    fTempRec = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtSource, new object[0]);
                     fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 

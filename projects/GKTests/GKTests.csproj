@@ -133,6 +133,7 @@
     <Compile Include="Stubs\BaseWindowStub.cs" />
     <Compile Include="Stubs\GfxProviderStub.cs" />
     <Compile Include="Stubs\ProgressStub.cs" />
+    <Compile Include="Stubs\RecordSelectDialogStub.cs" />
     <Compile Include="Stubs\StdDialogsStub.cs" />
     <Compile Include="Stubs\TestPlugin.cs" />
     <Compile Include="Stubs\AppHostStub.cs" />

@@ -213,7 +213,7 @@ namespace GKCore.Controllers
 
         public async void AddPlace()
         {
-            fTempLocation = await fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, new object[] { fView.Place.Text }) as GDMLocationRecord;
+            fTempLocation = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtLocation, new object[] { fView.Place.Text }) as GDMLocationRecord;
             UpdatePlace(true);
         }
 

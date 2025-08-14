@@ -105,7 +105,7 @@ namespace GKCore.Controllers
 
         public async void AddRepository()
         {
-            GDMRepositoryRecord repo = await fBase.Context.SelectRecord(fView, GDMRecordType.rtRepository, null) as GDMRepositoryRecord;
+            GDMRepositoryRecord repo = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtRepository, null) as GDMRepositoryRecord;
             if (repo == null) return;
 
             fBase.Context.GetRepositoriesList(fRepositoriesList);

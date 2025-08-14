@@ -64,13 +64,13 @@ namespace GKCore.Controllers
     public sealed class BaseWinController : FormController<IBaseWindowView>
     {
         private readonly List<GDMRecord> fChangedRecords;
-        private readonly IBaseContext fContext;
+        private readonly BaseContext fContext;
         private GDMRecord fDelayedTransitionRecord;
         private bool fHasToolbar;
         private readonly NavigationStack<GDMRecord> fNavman;
         private readonly TabParts[] fTabParts;
 
-        public IBaseContext Context
+        public BaseContext Context
         {
             get { return fContext; }
         }
@@ -489,7 +489,7 @@ namespace GKCore.Controllers
         }
 
         /// <summary>
-        /// Sets tab splitter positions in response to interface events.
+        /// Sets tab splitter positions in response to UI events.
         /// </summary>
         /// <param name="userChange">true - if user change event (SplitterMoved), false - settings change event</param>
         public void SetSummaryWidth(bool userChange)
@@ -1029,14 +1029,14 @@ namespace GKCore.Controllers
                     var miPlugins = GetControl<IMenuItem>("miPlugins");
                     for (int i = 0, num = miPlugins.SubItems.Count; i < num; i++) {
                         var mi = miPlugins.SubItems[i];
-                        IPlugin plugin = (IPlugin)mi.Tag;
+                        var plugin = (IPlugin)mi.Tag;
                         mi.Text = plugin.DisplayName;
                     }
 
                     var miReports = GetControl<IMenuItem>("miReports");
                     for (int i = 0, num = miReports.SubItems.Count; i < num; i++) {
                         var mi = miReports.SubItems[i];
-                        IPlugin plugin = (IPlugin)mi.Tag;
+                        var plugin = (IPlugin)mi.Tag;
                         mi.Text = plugin.DisplayName;
                     }
 
@@ -1411,12 +1411,8 @@ namespace GKCore.Controllers
 
         private static void Plugin_Click(IMenuItem sender)
         {
-            if (sender == null) return;
-
-            IPlugin plugin = sender.Tag as IPlugin;
-            if (plugin == null) return;
-
-            plugin.Execute();
+            if (sender != null && sender.Tag is IPlugin plugin)
+                plugin.Execute();
         }
 
         public void UpdatePluginsItems()
@@ -1429,7 +1425,7 @@ namespace GKCore.Controllers
 
                 int num = AppHost.Plugins.Count;
                 for (int i = 0; i < num; i++) {
-                    IPlugin plugin = AppHost.Plugins[i];
+                    var plugin = AppHost.Plugins[i];
 
                     if (plugin is IDialogReplacement || plugin.Category == PluginCategory.DialogReplacement || plugin.Category == PluginCategory.Background) {
                         continue;

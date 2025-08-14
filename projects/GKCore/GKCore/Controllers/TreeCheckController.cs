@@ -167,7 +167,7 @@ namespace GKCore.Controllers
 
         private sealed class ProblemsListModel : SimpleListModel<CheckObj>
         {
-            public ProblemsListModel(IBaseContext baseContext) :
+            public ProblemsListModel(BaseContext baseContext) :
                 base(baseContext, CreateListColumns())
             {
             }

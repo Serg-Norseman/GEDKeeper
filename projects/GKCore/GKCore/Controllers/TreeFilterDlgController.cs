@@ -154,7 +154,7 @@ namespace GKCore.Controllers
 
             switch (action) {
                 case RecordAction.raAdd:
-                    iRec = await fBase.Context.SelectPerson(fView, null, TargetMode.tmNone, GDMSex.svUnknown);
+                    iRec = await BaseController.SelectPerson(fView, fBase, null, TargetMode.tmNone, GDMSex.svUnknown);
                     if (iRec != null) {
                         fTemp = fTemp + iRec.XRef + ";";
                     }

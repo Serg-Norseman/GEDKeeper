@@ -95,7 +95,7 @@ namespace GKStdReports
             fWriter.AddParagraph(GKUtils.GetNameString(fPerson, true, false), titleFont, TextAlignment.taLeft);
             fWriter.NewLine();
 
-            IBaseContext baseContext = fBase.Context;
+            var baseContext = fBase.Context;
 
             var evList = new List<PersonalEvent>();
 

@@ -134,7 +134,7 @@ namespace GKCore.Controllers
 
         private sealed class PatriarchsListModel : SimpleListModel<PatriarchObj>
         {
-            public PatriarchsListModel(IBaseContext baseContext) :
+            public PatriarchsListModel(BaseContext baseContext) :
                 base(baseContext, CreateListColumns())
             {
             }

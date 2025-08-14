@@ -52,13 +52,13 @@ namespace GKUI.Forms
 
         private readonly BaseWinController fController;
 
-        private readonly IBaseContext fContext;
+        private readonly BaseContext fContext;
 
         #endregion
 
         #region Public properties
 
-        public IBaseContext Context
+        public BaseContext Context
         {
             get { return fContext; }
         }

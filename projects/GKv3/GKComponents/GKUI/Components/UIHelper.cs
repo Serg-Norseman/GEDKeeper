@@ -220,7 +220,7 @@ namespace GKUI.Components
             }
         }
 
-        public static GKListView CreateRecordsView(Panel parent, IBaseContext baseContext, GDMRecordType recType, bool simpleList)
+        public static GKListView CreateRecordsView(Panel parent, BaseContext baseContext, GDMRecordType recType, bool simpleList)
         {
             if (parent == null)
                 throw new ArgumentNullException("parent");

@@ -106,7 +106,7 @@ namespace GKTreeSyncPlugin
         public bool ShowOnlyModified { get; set; }
 
 
-        public DiffListModel(IBaseContext baseContext) :
+        public DiffListModel(BaseContext baseContext) :
             base(baseContext, CreateListColumns())
         {
         }

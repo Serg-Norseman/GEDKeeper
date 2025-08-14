@@ -37,7 +37,7 @@ namespace GKUI.Forms
     [TestFixture]
     public class TreeFilterDlgTests : CustomWindowTest
     {
-        private IBaseContext fContext;
+        private BaseContext fContext;
         private ChartFilter fChartFilter;
         private IBaseWindow fBase;
         private TreeFilterDlg fDialog;

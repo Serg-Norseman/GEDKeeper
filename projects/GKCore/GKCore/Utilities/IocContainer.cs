@@ -39,18 +39,6 @@ namespace GKCore.Utilities
     }
 
 
-    public interface IContainer
-    {
-        void Register<TTypeToResolve, TConcrete>();
-        void Register<TTypeToResolve, TConcrete>(LifeCycle lifeCycle, bool canReplace = false);
-        void Reset();
-        TTypeToResolve Resolve<TTypeToResolve>(params object[] parameters);
-        TTypeToResolve TryResolve<TTypeToResolve>(params object[] parameters);
-        object Resolve(Type typeToResolve, params object[] parameters);
-        object TryResolve(Type typeToResolve, params object[] parameters);
-    }
-
-
     internal class RegisteredObject
     {
         public Type TypeToResolve { get; private set; }
@@ -75,7 +63,7 @@ namespace GKCore.Utilities
     }
 
 
-    public class IocContainer : IContainer
+    public sealed class IocContainer
     {
         private readonly IDictionary<Type, RegisteredObject> fRegisteredObjects = new Dictionary<Type, RegisteredObject>();
 

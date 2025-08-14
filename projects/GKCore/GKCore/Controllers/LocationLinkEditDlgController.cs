@@ -89,7 +89,7 @@ namespace GKCore.Controllers
 
         public async void SetLocation()
         {
-            fTempLocation = await fBase.Context.SelectRecord(fView, GDMRecordType.rtLocation, null) as GDMLocationRecord;
+            fTempLocation = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtLocation, null) as GDMLocationRecord;
             UpdateLocationName();
         }
 

@@ -42,7 +42,7 @@ namespace GKCore.Lists
         }
 
 
-        public SourceListModel(IBaseContext baseContext) :
+        public SourceListModel(BaseContext baseContext) :
             base(baseContext, CreateListColumns(), GDMRecordType.rtSource)
         {
         }

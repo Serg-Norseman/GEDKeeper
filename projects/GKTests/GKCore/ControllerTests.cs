@@ -47,9 +47,8 @@ namespace GKCore.Controllers
 
         private static IBaseWindow GetBaseSubst()
         {
-            var baseContext = Substitute.For<IBaseContext>();
-            baseContext.Tree.Returns(new GDMTree());
             var baseWin = Substitute.For<IBaseWindow>();
+            var baseContext = new BaseContext(baseWin);
             baseWin.Context.Returns(baseContext);
             return baseWin;
         }
@@ -192,7 +191,7 @@ namespace GKCore.Controllers
             var relValue = "test relation";
             view.Relation.Text.Returns(relValue);
             var relPerson = baseWin.Context.Tree.CreateIndividual();
-            baseWin.Context.SelectPerson(view, null, TargetMode.tmNone, GDMSex.svUnknown).Returns(relPerson);
+            RecordSelectDialogStub.SetTestResult(relPerson);
 
             controller.SetPerson();
 
@@ -373,13 +372,13 @@ namespace GKCore.Controllers
 
             var relHusband = baseWin.Context.Tree.CreateIndividual();
             relHusband.Sex = GDMSex.svMale;
-            baseWin.Context.SelectPerson(view, null, TargetMode.tmSpouse, GDMSex.svMale).Returns(relHusband);
+            RecordSelectDialogStub.SetTestResult(relHusband);
 
             controller.AddHusband();
 
             var relWife = baseWin.Context.Tree.CreateIndividual();
             relWife.Sex = GDMSex.svFemale;
-            baseWin.Context.SelectPerson(view, relHusband, TargetMode.tmSpouse, GDMSex.svFemale).Returns(relWife);
+            RecordSelectDialogStub.SetTestResult(relWife);
 
             controller.AddWife();
 
@@ -721,11 +720,11 @@ namespace GKCore.Controllers
             controller.SetRec2(null);
 
             var relRec1 = baseWin.Context.Tree.CreateIndividual();
-            baseWin.Context.SelectRecord(view, GDMRecordType.rtIndividual, null).Returns(relRec1);
+            RecordSelectDialogStub.SetTestResult(relRec1);
             controller.SelectRec1();
 
             var relRec2 = baseWin.Context.Tree.CreateIndividual();
-            baseWin.Context.SelectRecord(view, GDMRecordType.rtIndividual, null).Returns(relRec2);
+            RecordSelectDialogStub.SetTestResult(relRec2);
             controller.SelectRec2();
 
             controller.UpdateView();

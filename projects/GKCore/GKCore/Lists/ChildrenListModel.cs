@@ -109,7 +109,7 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    child = await fBaseWin.Context.SelectPerson(fOwner, tree.GetPtrValue(family.Husband), TargetMode.tmParent, GDMSex.svUnknown);
+                    child = await BaseController.SelectPerson(fOwner, fBaseWin, tree.GetPtrValue(family.Husband), TargetMode.tmParent, GDMSex.svUnknown);
                     result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
                     if (result) {
                         if (family.HasMember(child)) {
@@ -187,10 +187,10 @@ namespace GKCore.Lists
 
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    GDMFamilyRecord family = await fBaseWin.Context.SelectFamily(fOwner, indiRec, TargetMode.tmFamilySpouse);
+                    GDMFamilyRecord family = await BaseController.SelectFamily(fBaseWin, fOwner, indiRec, TargetMode.tmFamilySpouse);
                     if (family != null && fBaseWin.Context.IsAvailableRecord(family)) {
                         GDMIndividualRecord target = (indiRec.Sex == GDMSex.svMale) ? indiRec : null;
-                        child = await fBaseWin.Context.SelectPerson(fOwner, target, TargetMode.tmParent, GDMSex.svUnknown);
+                        child = await BaseController.SelectPerson(fOwner, fBaseWin, target, TargetMode.tmParent, GDMSex.svUnknown);
                         result = (child != null && fBaseWin.Context.IsAvailableRecord(child));
                         if (result) {
                             if (family.HasMember(child)) {

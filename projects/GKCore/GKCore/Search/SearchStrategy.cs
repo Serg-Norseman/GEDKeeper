@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,30 +18,63 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Collections.Generic;
-using GKCore.Design;
+using System.Linq;
 
 namespace GKCore.Search
 {
-    public class SearchStrategy : BaseSearchStrategy, ISearchStrategy
+    public interface ISearchResult
     {
-        private readonly string fSearchPattern;
-        private readonly IWorkWindow fWorkWindow;
+    }
 
-        public SearchStrategy(IWorkWindow workWindow, string searchPattern)
+
+    public abstract class SearchStrategy
+    {
+        protected IList<ISearchResult> fCurrentResults;
+        private ISearchResult fCurResult;
+
+
+        public ISearchResult CurResult
         {
-            if (searchPattern == null)
-                throw new ArgumentNullException("searchPattern");
-
-            fSearchPattern = searchPattern;
-            fWorkWindow = workWindow;
-            fCurrentResults = FindAll();
+            get { return fCurResult; }
         }
 
-        public override IList<ISearchResult> FindAll()
+
+        public abstract IList<ISearchResult> FindAll();
+
+        public ISearchResult FindNext()
         {
-            return fWorkWindow.FindAll(fSearchPattern);
+            if (fCurResult == null) {
+                if (fCurrentResults == null) fCurrentResults = FindAll();
+
+                fCurResult = fCurrentResults.FirstOrDefault();
+            } else {
+                int idx = fCurrentResults.IndexOf(fCurResult) + 1;
+
+                fCurResult = (idx < fCurrentResults.Count) ? fCurrentResults[idx] : null;
+            }
+
+            return fCurResult;
+        }
+
+        public ISearchResult FindPrev()
+        {
+            if (fCurResult == null) {
+                if (fCurrentResults == null) fCurrentResults = FindAll();
+
+                fCurResult = fCurrentResults.LastOrDefault();
+            } else {
+                int idx = fCurrentResults.IndexOf(fCurResult) - 1;
+
+                fCurResult = (idx >= 0) ? fCurrentResults[idx] : null;
+            }
+
+            return fCurResult;
+        }
+
+        public bool HasResults()
+        {
+            return (fCurrentResults != null && fCurrentResults.Count > 0);
         }
     }
 }

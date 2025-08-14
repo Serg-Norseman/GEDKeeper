@@ -98,7 +98,7 @@ namespace GKCore.Controllers
             TreeChartPerson p = fView.TreeBox.Selected;
             if (p == null || p.Rec == null) return;
 
-            GDMIndividualRecord child = await fBase.Context.AddChildForParent(fView, p.Rec, needSex);
+            GDMIndividualRecord child = await BaseController.AddChildForParent(fView, fBase, p.Rec, needSex);
             if (child == null) return;
 
             UpdateChart();
@@ -120,7 +120,7 @@ namespace GKCore.Controllers
             if (p == null || p.Rec == null) return;
 
             GDMIndividualRecord iRec = p.Rec;
-            GDMIndividualRecord iSpouse = await fBase.Context.SelectSpouseFor(fView, iRec);
+            GDMIndividualRecord iSpouse = await BaseController.SelectSpouseFor(fView, fBase, iRec);
             if (iSpouse == null) return;
 
             GDMFamilyRecord fam = fBase.Context.Tree.CreateFamily();
@@ -150,7 +150,7 @@ namespace GKCore.Controllers
             }
 
             if (needParent) {
-                GDMIndividualRecord parent = await fBase.Context.SelectPerson(fView, p.Rec, TargetMode.tmChild, needSex);
+                GDMIndividualRecord parent = await BaseController.SelectPerson(fView, fBase, p.Rec, TargetMode.tmChild, needSex);
                 if (parent != null) {
                     if (!familyExist) {
                         fam = fBase.Context.Tree.CreateFamily();
@@ -215,7 +215,7 @@ namespace GKCore.Controllers
                 GDMFamilyRecord baseFamily = person.BaseFamily;
 
                 if (baseSpouse != null && baseFamily != null) {
-                    GDMIndividualRecord iSpouse = await fBase.Context.SelectSpouseFor(fView, person.BaseSpouse.Rec);
+                    GDMIndividualRecord iSpouse = await BaseController.SelectSpouseFor(fView, fBase, person.BaseSpouse.Rec);
 
                     if (iSpouse != null) {
                         modified = baseFamily.AddSpouse(iSpouse);

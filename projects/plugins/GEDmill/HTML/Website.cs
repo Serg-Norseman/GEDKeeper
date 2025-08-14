@@ -38,13 +38,13 @@ namespace GEDmill.HTML
     {
         private static readonly GKL.ILogger fLogger = GKL.LogManager.GetLogger(GMConfig.LOG_FILE, GMConfig.LOG_LEVEL, typeof(Website).Name);
 
-        private readonly IBaseContext fContext;
+        private readonly BaseContext fContext;
         private readonly ILangMan fLangMan;
         private readonly string fOutputFolder;
         private readonly GDMTree fTree;
 
 
-        public Website(IBaseContext context, string outputFolder, ILangMan langMan)
+        public Website(BaseContext context, string outputFolder, ILangMan langMan)
         {
             fContext = context;
             fTree = fContext.Tree;

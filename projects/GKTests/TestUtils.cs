@@ -26,6 +26,7 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Design;
+using GKCore.Design.Views;
 using GKCore.Locales;
 using GKTests.Stubs;
 using NSubstitute;
@@ -62,6 +63,7 @@ namespace GKTests
             LangMan.DefInit();
 
             AppHost.Container.Register<IProgressDialog, ProgressStub>(GKCore.Utilities.LifeCycle.Singleton, true);
+            AppHost.Container.Register<IRecordSelectDialog, RecordSelectDialogStub>(GKCore.Utilities.LifeCycle.Singleton, true);
         }
 
         public static BaseContext CreateContext(IBaseWindow baseWin = null)
@@ -75,7 +77,7 @@ namespace GKTests
         /// <summary>
         /// Generating a basic set of test data.
         /// </summary>
-        public static void FillContext(IBaseContext context)
+        public static void FillContext(BaseContext context)
         {
             // a null result if the record is not defined
             GDMCustomEvent evt = context.CreateEventEx(null, GEDCOMTagName.BIRT, "xxxxx", "xxxxx");
@@ -267,7 +269,7 @@ namespace GKTests
             return assembly.GetManifestResourceStream("GKTests.Resources." + resName);
         }
 
-        public static IBaseContext LoadResourceGEDCOMFile(string resName)
+        public static BaseContext LoadResourceGEDCOMFile(string resName)
         {
             BaseContext ctx = new BaseContext(null);
 

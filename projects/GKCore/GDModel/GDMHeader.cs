@@ -127,7 +127,7 @@ namespace GDModel
     }
 
 
-    public sealed class GDMHeaderFile : GDMValueTag, IGDMUIDHolder
+    public sealed class GDMHeaderFile : GDMValueTag
     {
         private string fUID;
 

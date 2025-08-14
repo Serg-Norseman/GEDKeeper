@@ -67,7 +67,7 @@ namespace GKCore.Lists
         }
 
 
-        protected RecordsListModel(IBaseContext baseContext, ListColumns defaultListColumns, GDMRecordType recordType) :
+        protected RecordsListModel(BaseContext baseContext, ListColumns defaultListColumns, GDMRecordType recordType) :
             base(baseContext, defaultListColumns)
         {
             fRecordType = recordType;
@@ -149,7 +149,7 @@ namespace GKCore.Lists
             return result;
         }
 
-        public static IRecordsListModel Create(IBaseContext baseContext, GDMRecordType recType, bool simpleList)
+        public static IRecordsListModel Create(BaseContext baseContext, GDMRecordType recType, bool simpleList)
         {
             IRecordsListModel result = null;
 
