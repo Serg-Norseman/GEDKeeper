@@ -89,8 +89,7 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var dataOwner = fDataOwner as IGDMStructWithSourceCitations;
-            if (dataOwner != null)
+            if (fDataOwner is IGDMStructWithSourceCitations dataOwner)
                 UpdateStructList(dataOwner.SourceCitations);
         }
 

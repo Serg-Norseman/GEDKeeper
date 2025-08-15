@@ -27,6 +27,7 @@ using GKCore.Design.Controls;
 using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
+using GKCore.Utilities;
 using GKUI.Platform;
 using GKUI.Themes;
 
@@ -79,10 +80,14 @@ namespace GKUI.Components
 
         private readonly Button fBtnAdd;
         private readonly Button fBtnDelete;
+        private readonly Button fBtnAccept;
         private readonly GKGridView fGridView;
+        private readonly ComboBox fFieldCombo;
+        private readonly ComboBox fConditionCombo;
+        private readonly TextBox fValueText;
 
         private IRecordsListModel fListMan;
-        private ObservableCollection<FilterConditionRow> fCollection;
+        private ExtObservableList<FilterConditionRow> fCollection;
         private string[] fFields;
 
 
@@ -118,8 +123,20 @@ namespace GKUI.Components
 
             fBtnDelete = CreateButton("btnDelete", LangMan.LS(LSID.MIRecordDelete), ItemDelete);
             fBtnAdd = CreateButton("btnAdd", LangMan.LS(LSID.MIRecordAdd), ItemAdd);
+            fBtnAccept = CreateButton("btnAccept", "", ItemAccept);
 
             fGridView = new GKGridView();
+            fGridView.SelectedItemsChanged += GridView_ItemSelected;
+
+            fFieldCombo = new ComboBox() { Width = 180, ReadOnly = true };
+            fConditionCombo = new ComboBox() { Width = 150, ReadOnly = true };
+            fValueText = new TextBox() { Width = 200 };
+
+            var editPanel = new StackLayout() {
+                Orientation = Orientation.Horizontal,
+                Spacing = 4,
+                Items = { fFieldCombo, fConditionCombo, fValueText, fBtnAccept },
+            };
 
             SuspendLayout();
             var toolbar = new StackLayout() {
@@ -134,13 +151,19 @@ namespace GKUI.Components
                         Cells = {
                             new TableCell(fGridView, true),
                             new TableCell(toolbar, false)
+                        },
+                        ScaleHeight = true
+                    },
+                    new TableRow() {
+                        Cells = {
+                            editPanel
                         }
                     }
                 }
             };
             ResumeLayout();
 
-            fCollection = new ObservableCollection<FilterConditionRow>();
+            fCollection = new ExtObservableList<FilterConditionRow>();
             fGridView.DataStore = fCollection;
 
             fGridView.AllowColumnReordering = false;
@@ -178,6 +201,8 @@ namespace GKUI.Components
 
             UIHelper.SetButtonThemeImage(fBtnDelete, ThemeElement.Glyph_ItemDelete);
             UIHelper.SetButtonThemeImage(fBtnAdd, ThemeElement.Glyph_ItemAdd);
+
+            UIHelper.SetButtonThemeImage(fBtnAccept, ThemeElement.Glyph_Accept);
         }
 
         #region Private functions
@@ -193,6 +218,9 @@ namespace GKUI.Components
 
         private void InitGrid()
         {
+            fFieldCombo.Items.AddRange(fFields);
+            fConditionCombo.Items.AddRange(GKData.CondSigns);
+
             fGridView.Columns.Clear();
             // https://github.com/picoe/Eto/issues/2546
             // WPF ComboBoxCell: only elements within the rows bounding box can be selected
@@ -203,13 +231,30 @@ namespace GKUI.Components
 
         private void ItemAdd(object sender, EventArgs e)
         {
-            var fcond = new ColumnConditionExpression(0, ConditionOperator.Contains, "");
-            AddCondition(fcond);
+            //var fcond = new ColumnConditionExpression(0, ConditionOperator.Contains, "");
+            //AddCondition(fcond);
+
+            var columnId = fListMan.GetFieldColumnId(fFields, fFieldCombo.Text);
+            var condition = ListFilter.GetCondByName(fConditionCombo.Text);
+            var value = fValueText.Text;
+            AddCondition(new ColumnConditionExpression(columnId, condition, value));
         }
 
         private void ItemDelete(object sender, EventArgs e)
         {
             RemoveCondition(fGridView.SelectedRow);
+        }
+
+        private void ItemAccept(object sender, EventArgs e)
+        {
+            var index = fGridView.SelectedRow;
+            if (index >= 0 && index < fCollection.Count) {
+                var cond = fCollection[index];
+                cond.ColumnText = fFieldCombo.Text;
+                cond.ConditionText = fConditionCombo.Text;
+                cond.ValueText = fValueText.Text;
+                fCollection.Reset();
+            }
         }
 
         #endregion
@@ -247,6 +292,16 @@ namespace GKUI.Components
                 default:
                     base.OnKeyDown(e);
                     break;
+            }
+        }
+
+        private void GridView_ItemSelected(object sender, EventArgs e)
+        {
+            var item = fGridView.SelectedItem;
+            if (item is FilterConditionRow row) {
+                fFieldCombo.Text = row.ColumnText.ToString();
+                fConditionCombo.Text = row.ConditionText.ToString();
+                fValueText.Text = row.ValueText;
             }
         }
     }

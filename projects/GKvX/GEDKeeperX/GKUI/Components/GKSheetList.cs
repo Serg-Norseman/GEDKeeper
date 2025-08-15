@@ -96,8 +96,6 @@ namespace GKUI.Components
                         fListModel.SheetList = this;
                     }
                 }
-
-                UpdateSheet();
             }
         }
 

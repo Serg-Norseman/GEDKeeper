@@ -71,8 +71,7 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var dataOwner = fDataOwner as IGDMStructWithNotes;
-            if (dataOwner != null)
+            if (fDataOwner is IGDMStructWithNotes dataOwner)
                 UpdateStructList(dataOwner.Notes);
         }
 

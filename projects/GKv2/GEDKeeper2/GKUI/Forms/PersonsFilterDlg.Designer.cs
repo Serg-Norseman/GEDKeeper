@@ -20,10 +20,8 @@
         private System.Windows.Forms.RadioButton rbAliveBefore;
         private System.Windows.Forms.GroupBox rgLife;
         private System.Windows.Forms.Label lblEventsMask;
-        private System.Windows.Forms.Label lblAliveBefore;
         private System.Windows.Forms.Label lblSources;
         private System.Windows.Forms.CheckBox chkOnlyPatriarchs;
-        private System.Windows.Forms.GroupBox GroupBox1;
         private System.Windows.Forms.Label lblGroups;
         private System.Windows.Forms.Label lblPlaceMask;
         private System.Windows.Forms.Label lblNameMask;
@@ -42,10 +40,8 @@
             this.lblNameMask = new System.Windows.Forms.Label();
             this.lblPlaceMask = new System.Windows.Forms.Label();
             this.lblGroups = new System.Windows.Forms.Label();
-            this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.chkOnlyPatriarchs = new System.Windows.Forms.CheckBox();
             this.lblSources = new System.Windows.Forms.Label();
-            this.lblAliveBefore = new System.Windows.Forms.Label();
             this.lblEventsMask = new System.Windows.Forms.Label();
             this.rgLife = new System.Windows.Forms.GroupBox();
             this.rbAliveBefore = new System.Windows.Forms.RadioButton();
@@ -64,7 +60,6 @@
             this.cmbEventVal = new System.Windows.Forms.ComboBox();
             this.tabsFilters.SuspendLayout();
             this.pageSpecificFilter.SuspendLayout();
-            this.GroupBox1.SuspendLayout();
             this.rgLife.SuspendLayout();
             this.rgSex.SuspendLayout();
             this.SuspendLayout();
@@ -78,20 +73,17 @@
             // pageSpecificFilter
             // 
             this.pageSpecificFilter.Controls.Add(this.lblNameMask);
-            this.pageSpecificFilter.Controls.Add(this.lblPlaceMask);
-            this.pageSpecificFilter.Controls.Add(this.lblGroups);
-            this.pageSpecificFilter.Controls.Add(this.GroupBox1);
-            this.pageSpecificFilter.Controls.Add(this.lblSources);
-            this.pageSpecificFilter.Controls.Add(this.lblAliveBefore);
-            this.pageSpecificFilter.Controls.Add(this.lblEventsMask);
-            this.pageSpecificFilter.Controls.Add(this.rgLife);
             this.pageSpecificFilter.Controls.Add(this.txtName);
-            this.pageSpecificFilter.Controls.Add(this.rgSex);
-            this.pageSpecificFilter.Controls.Add(this.txtAliveBeforeDate);
+            this.pageSpecificFilter.Controls.Add(this.lblPlaceMask);
             this.pageSpecificFilter.Controls.Add(this.cmbResidence);
-            this.pageSpecificFilter.Controls.Add(this.cmbGroup);
-            this.pageSpecificFilter.Controls.Add(this.cmbSource);
+            this.pageSpecificFilter.Controls.Add(this.lblEventsMask);
             this.pageSpecificFilter.Controls.Add(this.cmbEventVal);
+            this.pageSpecificFilter.Controls.Add(this.rgLife);
+            this.pageSpecificFilter.Controls.Add(this.rgSex);
+            this.pageSpecificFilter.Controls.Add(this.lblGroups);
+            this.pageSpecificFilter.Controls.Add(this.cmbGroup);
+            this.pageSpecificFilter.Controls.Add(this.lblSources);
+            this.pageSpecificFilter.Controls.Add(this.cmbSource);
             this.pageSpecificFilter.Location = new System.Drawing.Point(4, 26);
             this.pageSpecificFilter.Margin = new System.Windows.Forms.Padding(0);
             this.pageSpecificFilter.Name = "pageSpecificFilter";
@@ -127,24 +119,6 @@
             this.lblGroups.TabIndex = 25;
             this.lblGroups.Text = "lblGroups";
             // 
-            // GroupBox1
-            // 
-            this.GroupBox1.Controls.Add(this.chkOnlyPatriarchs);
-            this.GroupBox1.Location = new System.Drawing.Point(411, 73);
-            this.GroupBox1.Name = "GroupBox1";
-            this.GroupBox1.Size = new System.Drawing.Size(234, 41);
-            this.GroupBox1.TabIndex = 29;
-            this.GroupBox1.TabStop = false;
-            // 
-            // chkOnlyPatriarchs
-            // 
-            this.chkOnlyPatriarchs.AutoSize = true;
-            this.chkOnlyPatriarchs.Location = new System.Drawing.Point(8, 16);
-            this.chkOnlyPatriarchs.Name = "chkOnlyPatriarchs";
-            this.chkOnlyPatriarchs.Size = new System.Drawing.Size(140, 21);
-            this.chkOnlyPatriarchs.TabIndex = 0;
-            this.chkOnlyPatriarchs.Text = "chkOnlyPatriarchs";
-            // 
             // lblSources
             // 
             this.lblSources.AutoSize = true;
@@ -153,15 +127,6 @@
             this.lblSources.Size = new System.Drawing.Size(69, 17);
             this.lblSources.TabIndex = 27;
             this.lblSources.Text = "lblSources";
-            // 
-            // lblAliveBefore
-            // 
-            this.lblAliveBefore.AutoSize = true;
-            this.lblAliveBefore.Location = new System.Drawing.Point(411, 15);
-            this.lblAliveBefore.Name = "lblAliveBefore";
-            this.lblAliveBefore.Size = new System.Drawing.Size(86, 17);
-            this.lblAliveBefore.TabIndex = 17;
-            this.lblAliveBefore.Text = "lblAliveBefore";
             // 
             // lblEventsMask
             // 
@@ -174,16 +139,27 @@
             // 
             // rgLife
             // 
+            this.rgLife.Controls.Add(this.txtAliveBeforeDate);
             this.rgLife.Controls.Add(this.rbAliveBefore);
             this.rgLife.Controls.Add(this.rbOnlyDead);
             this.rgLife.Controls.Add(this.rbOnlyLive);
             this.rgLife.Controls.Add(this.rbAll);
-            this.rgLife.Location = new System.Drawing.Point(197, 15);
+            this.rgLife.Location = new System.Drawing.Point(257, 15);
             this.rgLife.Name = "rgLife";
             this.rgLife.Padding = new System.Windows.Forms.Padding(10);
-            this.rgLife.Size = new System.Drawing.Size(193, 159);
+            this.rgLife.Size = new System.Drawing.Size(293, 159);
             this.rgLife.TabIndex = 15;
             this.rgLife.TabStop = false;
+            // 
+            // txtAliveBeforeDate
+            // 
+            this.txtAliveBeforeDate.Enabled = false;
+            this.txtAliveBeforeDate.Location = new System.Drawing.Point(148, 118);
+            this.txtAliveBeforeDate.Mask = "00/00/0000";
+            this.txtAliveBeforeDate.Name = "txtAliveBeforeDate";
+            this.txtAliveBeforeDate.Size = new System.Drawing.Size(128, 24);
+            this.txtAliveBeforeDate.TabIndex = 18;
+            this.txtAliveBeforeDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             // 
             // rbAliveBefore
             // 
@@ -242,6 +218,7 @@
             // 
             // rgSex
             // 
+            this.rgSex.Controls.Add(this.chkOnlyPatriarchs);
             this.rgSex.Controls.Add(this.rbSexFemale);
             this.rgSex.Controls.Add(this.rbSexAll);
             this.rgSex.Controls.Add(this.rbSexMale);
@@ -249,9 +226,18 @@
             this.rgSex.Margin = new System.Windows.Forms.Padding(10);
             this.rgSex.Name = "rgSex";
             this.rgSex.Padding = new System.Windows.Forms.Padding(10);
-            this.rgSex.Size = new System.Drawing.Size(166, 130);
+            this.rgSex.Size = new System.Drawing.Size(226, 159);
             this.rgSex.TabIndex = 16;
             this.rgSex.TabStop = false;
+            // 
+            // chkOnlyPatriarchs
+            // 
+            this.chkOnlyPatriarchs.AutoSize = true;
+            this.chkOnlyPatriarchs.Location = new System.Drawing.Point(10, 130);
+            this.chkOnlyPatriarchs.Name = "chkOnlyPatriarchs";
+            this.chkOnlyPatriarchs.Size = new System.Drawing.Size(140, 21);
+            this.chkOnlyPatriarchs.TabIndex = 29;
+            this.chkOnlyPatriarchs.Text = "chkOnlyPatriarchs";
             // 
             // rbSexFemale
             // 
@@ -282,16 +268,6 @@
             this.rbSexMale.Size = new System.Drawing.Size(91, 21);
             this.rbSexMale.TabIndex = 1;
             this.rbSexMale.Text = "rbSexMale";
-            // 
-            // txtAliveBeforeDate
-            // 
-            this.txtAliveBeforeDate.Enabled = false;
-            this.txtAliveBeforeDate.Location = new System.Drawing.Point(411, 35);
-            this.txtAliveBeforeDate.Mask = "00/00/0000";
-            this.txtAliveBeforeDate.Name = "txtAliveBeforeDate";
-            this.txtAliveBeforeDate.Size = new System.Drawing.Size(148, 24);
-            this.txtAliveBeforeDate.TabIndex = 18;
-            this.txtAliveBeforeDate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             // 
             // cmbResidence
             // 
@@ -341,8 +317,6 @@
             this.tabsFilters.ResumeLayout(false);
             this.pageSpecificFilter.ResumeLayout(false);
             this.pageSpecificFilter.PerformLayout();
-            this.GroupBox1.ResumeLayout(false);
-            this.GroupBox1.PerformLayout();
             this.rgLife.ResumeLayout(false);
             this.rgLife.PerformLayout();
             this.rgSex.ResumeLayout(false);

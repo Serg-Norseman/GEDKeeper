@@ -91,8 +91,6 @@ namespace GKUI.Components
                         }
                     }
                 }
-
-                UpdateSheet();
             }
         }
 
@@ -118,7 +116,7 @@ namespace GKUI.Components
             fBtnLinkJump = CreateButton("btnJump", LangMan.LS(LSID.RecordGoto), ItemJump);
             fBtnDelete = CreateButton("btnDelete", LangMan.LS(LSID.MIRecordDelete), ItemDelete);
             fBtnEdit = CreateButton("btnEdit", LangMan.LS(LSID.MIRecordEdit), ItemEdit);
-            fBtnAdd = CreateButton( "btnAdd", LangMan.LS(LSID.MIRecordAdd), ItemAdd);
+            fBtnAdd = CreateButton("btnAdd", LangMan.LS(LSID.MIRecordAdd), ItemAdd);
 
             fToolBar = new ToolStrip();
             fToolBar.Name = "ToolBar";

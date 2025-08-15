@@ -15,6 +15,34 @@
         <TabPage x:Name="pageSpecificFilter">
           <TableLayout Style="paddedTable8">
             <TableRow>
+              <TableLayout Spacing="4,4">
+                <TableRow>
+                  <GroupBox x:Name="rgSex">
+                    <StackLayout Style="vertListStack">
+                      <RadioButton x:Name="rbSexAll" />
+                      <RadioButton x:Name="rbSexMale" />
+                      <RadioButton x:Name="rbSexFemale" />
+                      <StackLayoutItem Expand="True" />
+                      <CheckBox x:Name="chkOnlyPatriarchs" />
+                    </StackLayout>
+                  </GroupBox>
+
+                  <GroupBox x:Name="rgLife">
+                    <StackLayout Style="vertListStack">
+                      <RadioButton x:Name="rbAll" CheckedChanged="rgLife_CheckedChanged" />
+                      <RadioButton x:Name="rbOnlyLive" CheckedChanged="rgLife_CheckedChanged" />
+                      <RadioButton x:Name="rbOnlyDead" CheckedChanged="rgLife_CheckedChanged" />
+                      <StackLayout Orientation="Horizontal" Spacing="8">
+                        <RadioButton x:Name="rbAliveBefore" CheckedChanged="rgLife_CheckedChanged" />
+                        <MaskedTextBox x:Name="txtAliveBeforeDate" Enabled="False" />
+                      </StackLayout>
+                    </StackLayout>
+                  </GroupBox>
+                </TableRow>
+              </TableLayout>
+            </TableRow>
+
+            <TableRow ScaleHeight="True">
               <TableCell ScaleWidth="True">
                 <TableLayout x:Name="masksPanel" Spacing="4,4">
                   <TableRow>
@@ -45,31 +73,6 @@
                   <TableRow ScaleHeight="True" />
                 </TableLayout>
               </TableCell>
-
-              <StackLayout Style="vertListStack">
-                <GroupBox x:Name="rgSex">
-                  <StackLayout Style="vertListStack">
-                    <RadioButton x:Name="rbSexAll" />
-                    <RadioButton x:Name="rbSexMale" />
-                    <RadioButton x:Name="rbSexFemale" />
-                  </StackLayout>
-                </GroupBox>
-
-                <GroupBox x:Name="rgLife">
-                  <StackLayout Style="vertListStack">
-                    <RadioButton x:Name="rbAll" CheckedChanged="rgLife_CheckedChanged" />
-                    <RadioButton x:Name="rbOnlyLive" CheckedChanged="rgLife_CheckedChanged" />
-                    <RadioButton x:Name="rbOnlyDead" CheckedChanged="rgLife_CheckedChanged" />
-                    <RadioButton x:Name="rbAliveBefore" CheckedChanged="rgLife_CheckedChanged" />
-                    <StackLayout Orientation="Horizontal" Spacing="4">
-                      <Label x:Name="lblAliveBefore" />
-                      <MaskedTextBox x:Name="txtAliveBeforeDate" Enabled="False" />
-                    </StackLayout>
-                  </StackLayout>
-                </GroupBox>
-
-                <CheckBox x:Name="chkOnlyPatriarchs" />
-              </StackLayout>
             </TableRow>
 
             <TableRow ScaleHeight="True" />

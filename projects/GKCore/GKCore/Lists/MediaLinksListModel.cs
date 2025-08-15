@@ -76,8 +76,7 @@ namespace GKCore.Lists
 
         public override void UpdateContents()
         {
-            var dataOwner = fDataOwner as IGDMStructWithMultimediaLinks;
-            if (dataOwner != null)
+            if (fDataOwner is IGDMStructWithMultimediaLinks dataOwner)
                 UpdateStructList(dataOwner.MultimediaLinks);
         }
 

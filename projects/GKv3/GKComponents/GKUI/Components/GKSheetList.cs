@@ -92,8 +92,6 @@ namespace GKUI.Components
                         }
                     }
                 }
-
-                UpdateSheet();
             }
         }
 

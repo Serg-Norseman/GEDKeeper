@@ -170,13 +170,6 @@ namespace GDModel.Providers.GEDCOM
             CheckTagWithNotes(ptr);
         }
 
-        private void CheckStructWL(IGDMStructWithLists swl)
-        {
-            CheckTagWithNotes(swl);
-            CheckTagWithMultimediaLinks(swl);
-            CheckTagWithSourceCitations(swl);
-        }
-
         private void CheckEventPlace(GDMPlace place, GDMCustomEvent evt)
         {
             GDMPointer placeLocation = place.Location;
@@ -196,7 +189,9 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckEvent(GDMCustomEvent evt)
         {
-            CheckStructWL(evt);
+            CheckTagWithNotes(evt);
+            CheckTagWithMultimediaLinks(evt);
+            CheckTagWithSourceCitations(evt);
 
             var tagType = (GEDCOMTagType)evt.Id;
             string evType = string.IsNullOrEmpty(evt.Classification) ? string.Empty : evt.Classification;
@@ -459,7 +454,9 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckRecord(GDMRecord rec, int fileVer)
         {
-            CheckStructWL(rec);
+            CheckTagWithNotes(rec);
+            CheckTagWithMultimediaLinks(rec);
+            CheckTagWithSourceCitations(rec);
 
             if (rec.HasUserReferences) {
                 for (int i = 0, num = rec.UserReferences.Count; i < num; i++) {

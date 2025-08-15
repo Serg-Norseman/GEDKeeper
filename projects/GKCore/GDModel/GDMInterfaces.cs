@@ -70,48 +70,48 @@ namespace GDModel
     }
 
 
-    public interface IGDMStructWithAddress : IGDMObject
+    public interface IGDMStructWithAddress
     {
         bool HasAddress { get; }
         GDMAddress Address { get; }
     }
 
 
-    public interface IGDMStructWithPlace : IGDMObject
+    public interface IGDMStructWithPlace
     {
         bool HasPlace { get; }
         GDMPlace Place { get; }
     }
 
 
-    public interface IGDMStructWithRestriction : IGDMObject
+    public interface IGDMStructWithRestriction
     {
         GDMRestriction Restriction { get; set; }
     }
 
 
-    public interface IGDMStructWithNotes : IGDMObject
+    public interface IGDMStructWithNotes
     {
         bool HasNotes { get; }
         GDMList<GDMNotes> Notes { get; }
     }
 
 
-    public interface IGDMStructWithSourceCitations : IGDMObject
+    public interface IGDMStructWithSourceCitations
     {
         bool HasSourceCitations { get; }
         GDMList<GDMSourceCitation> SourceCitations { get; }
     }
 
 
-    public interface IGDMStructWithMultimediaLinks : IGDMObject
+    public interface IGDMStructWithMultimediaLinks
     {
         bool HasMultimediaLinks { get; }
         GDMList<GDMMultimediaLink> MultimediaLinks { get; }
     }
 
 
-    public interface IGDMStructWithUserReferences : IGDMObject
+    public interface IGDMStructWithUserReferences
     {
         bool HasUserReferences { get; }
         GDMList<GDMUserReference> UserReferences { get; }

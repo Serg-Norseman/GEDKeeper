@@ -211,7 +211,7 @@ namespace GKCore.Controllers
             GetControl<IRadioButton>("rbSexAll").Text = LangMan.LS(LSID.All);
             GetControl<IRadioButton>("rbSexMale").Text = LangMan.LS(LSID.OnlyMans);
             GetControl<IRadioButton>("rbSexFemale").Text = LangMan.LS(LSID.OnlyWomans);
-            GetControl<ILabel>("lblAliveBefore").Text = LangMan.LS(LSID.AliveBefore) + ":";
+            //GetControl<ILabel>("lblAliveBefore").Text = LangMan.LS(LSID.AliveBefore) + ":";
             GetControl<ILabel>("lblNameMask").Text = LangMan.LS(LSID.NameMask);
             GetControl<ILabel>("lblPlaceMask").Text = LangMan.LS(LSID.PlaceMask);
             GetControl<ILabel>("lblEventsMask").Text = LangMan.LS(LSID.EventMask);

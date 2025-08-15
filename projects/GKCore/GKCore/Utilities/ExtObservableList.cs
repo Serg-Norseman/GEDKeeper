@@ -50,19 +50,22 @@ namespace GKCore.Utilities
         public new void Clear()
         {
             base.Clear();
-            ChangeReset();
+
+            if (fUpdateCount == 0) ChangeReset();
         }
 
         public new void Add(T item)
         {
             base.Add(item);
-            ChangeAdded(item, this.Count - 1);
+
+            if (fUpdateCount == 0) ChangeAdded(item, this.Count - 1);
         }
 
         public new void Insert(int index, T item)
         {
             base.Insert(index, item);
-            ChangeAdded(item, index);
+
+            if (fUpdateCount == 0) ChangeAdded(item, index);
         }
 
         public new bool Remove(T item)
@@ -70,7 +73,9 @@ namespace GKCore.Utilities
             int index = IndexOf(item);
             if (index >= 0) {
                 RemoveAt(index);
-                ChangeRemoved(item, index);
+
+                if (fUpdateCount == 0) ChangeRemoved(item, index);
+
                 return true;
             }
             return false;
@@ -80,29 +85,24 @@ namespace GKCore.Utilities
         {
             T item = base[index];
             base.RemoveAt(index);
-            ChangeRemoved(item, index);
+
+            if (fUpdateCount == 0) ChangeRemoved(item, index);
         }
 
         public void Replace(T item, int index)
         {
-            ChangeReplaced(item, index);
+            if (fUpdateCount == 0) ChangeReplaced(item, index);
         }
 
         public void BeginUpdate()
         {
-            if (fUpdateCount == 0) {
-            }
-
             fUpdateCount++;
         }
 
         public void EndUpdate()
         {
             fUpdateCount--;
-
-            if (fUpdateCount == 0) {
-                ChangeReset();
-            }
+            if (fUpdateCount == 0) ChangeReset();
         }
 
         public void Reset()
@@ -111,13 +111,6 @@ namespace GKCore.Utilities
         }
 
         #region Private methods
-
-        private void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
-        {
-            var handler = CollectionChanged;
-            if (handler != null && fUpdateCount == 0)
-                handler(this, args);
-        }
 
         private void ChangeReset()
         {
@@ -150,6 +143,11 @@ namespace GKCore.Utilities
         {
             OnPropertyChanged(IndexerProp);
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item, item, index));
+        }
+
+        private void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
+        {
+            CollectionChanged?.Invoke(this, args);
         }
 
         private void OnPropertyChanged(string propertyName)
