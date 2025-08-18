@@ -52,25 +52,23 @@ namespace GKCore.Lists
 
         public int CompareTo(object obj)
         {
-            GDMDateItem otherItem = obj as GDMDateItem;
-            if (otherItem == null) {
-                return -1;
-            }
+            if (obj is GDMDateItem otherItem) {
+                var cv1 = fDate;
+                var cv2 = otherItem.fDate;
 
-            IComparable cv1 = fDate;
-            IComparable cv2 = otherItem.fDate;
-
-            int compRes;
-            if (cv1 != null && cv2 != null) {
-                compRes = cv1.CompareTo(cv2);
-            } else if (cv1 != null) {
-                compRes = -1;
-            } else if (cv2 != null) {
-                compRes = 1;
-            } else {
-                compRes = 0;
+                int compRes;
+                if (cv1 != null && cv2 != null) {
+                    compRes = cv1.CompareTo(cv2);
+                } else if (cv1 != null) {
+                    compRes = -1;
+                } else if (cv2 != null) {
+                    compRes = 1;
+                } else {
+                    compRes = 0;
+                }
+                return compRes;
             }
-            return compRes;
+            return -1;
         }
 
         #region IConvertible implementation (this is necessary for EtoFw)

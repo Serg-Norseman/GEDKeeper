@@ -370,6 +370,7 @@ namespace GKUI.Components
                     fListMan.UpdateContents();
                     fListMan.SortContents(false);
                     VirtualListSize = fListMan.FilteredCount;
+                    ResetCache();
 
                     ResizeColumns();
                 } finally {

@@ -522,49 +522,70 @@ namespace GDModel
             return (dtx != null) ? dtx.GetUDN() : UDN.Unknown;
         }
 
+        // Left as a reminder.
+        // In all cases, 20-23% slower than int.ToString().PadLeft(...)!
+        // A complete failure in the attempt at optimization. Respect to MS :)
+        /*private static unsafe string xI2S(int number, int totalWidth)
+        {
+            char paddingChar = (totalWidth > 2 || number == 0) ? '_' : '0';
+            var result = new string(paddingChar, totalWidth);
+            fixed (char* ch_ptr = result) {
+                while (number > 0) {
+                    ch_ptr[--totalWidth] = (char)(48 + number % 10);
+                    number /= 10;
+                }
+            }
+            return result;
+        }*/
+
         public string GetDisplayString(DateFormat format, bool includeBC = false, bool showCalendar = false)
         {
-            var parts = new string[5];
-            int pIdx = 0;
+            if (fYear <= 0 && fMonth <= 0 && fDay <= 0)
+                return string.Empty;
 
             int year = fYear;
             int month = fMonth;
             int day = fDay;
             bool ybc = fYearBC;
 
-            if (year > 0 || month > 0 || day > 0) {
-                switch (format) {
-                    case DateFormat.dfDD_MM_YYYY:
-                        parts[pIdx++] = day > 0 ? day.ToString("D2", null) + "." : "__.";
-                        parts[pIdx++] = month > 0 ? month.ToString("D2", null) + "." : "__.";
-                        parts[pIdx++] = year > 0 ? year.ToString().PadLeft(4, '_') : "____";
-                        if (includeBC && ybc) {
-                            parts[pIdx++] = " BC";
-                        }
-                        break;
+            var parts = new string[7];
+            int pIdx = 0;
 
-                    case DateFormat.dfYYYY_MM_DD:
+            switch (format) {
+                case DateFormat.dfDD_MM_YYYY:
+                    parts[pIdx++] = day > 0 ? day.ToString("D2", null) : "__";
+                    parts[pIdx++] = ".";
+                    parts[pIdx++] = month > 0 ? month.ToString("D2", null) : "__";
+                    parts[pIdx++] = ".";
+                    parts[pIdx++] = year > 0 ? year.ToString().PadLeft(4, '_') : "____";
+                    if (includeBC && ybc) {
+                        parts[pIdx++] = " BC";
+                    }
+                    break;
+
+                case DateFormat.dfYYYY_MM_DD:
+                    if (includeBC && ybc) {
+                        parts[pIdx++] = "BC ";
+                    }
+                    parts[pIdx++] = year > 0 ? year.ToString().PadLeft(4, '_') : "____";
+                    parts[pIdx++] = ".";
+                    parts[pIdx++] = month > 0 ? month.ToString("D2", null) : "__";
+                    parts[pIdx++] = ".";
+                    parts[pIdx++] = day > 0 ? day.ToString("D2", null) : "__";
+                    break;
+
+                case DateFormat.dfYYYY:
+                    if (year > 0) {
                         if (includeBC && ybc) {
                             parts[pIdx++] = "BC ";
                         }
-                        parts[pIdx++] = year > 0 ? year.ToString().PadLeft(4, '_') + "." : "____.";
-                        parts[pIdx++] = month > 0 ? month.ToString("D2", null) + "." : "__.";
-                        parts[pIdx++] = day > 0 ? day.ToString("D2", null) : "__";
-                        break;
+                        parts[pIdx++] = year.ToString().PadLeft(4, '_');
+                    }
+                    break;
+            }
 
-                    case DateFormat.dfYYYY:
-                        if (year > 0) {
-                            if (includeBC && ybc) {
-                                parts[pIdx++] = "BC ";
-                            }
-                            parts[pIdx++] = year.ToString().PadLeft(4, '_');
-                        }
-                        break;
-                }
-
-                if (showCalendar) {
-                    parts[pIdx] = GKUtils.GetCalendarSign(fCalendar);
-                }
+            if (showCalendar) {
+                parts[pIdx] = GKUtils.GetCalendarSign(fCalendar);
             }
 
             return string.Concat(parts);
