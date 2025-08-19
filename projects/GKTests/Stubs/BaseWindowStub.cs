@@ -80,7 +80,7 @@ namespace GKTests.Stubs
         public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal) { }
 
         public List<GDMRecord> GetContentList(GDMRecordType recType) { return null; }
-        public StringList GetRecordContent(GDMRecord record, RecordContentType contentType) { return null; }
+        public StringList GetRecordContent(GDMRecord record, RecordContentType contentType) { return new StringList(); }
         public string GetRecordName(GDMRecord record, bool signed) { return string.Empty; }
         public IRecordsListModel GetRecordsListManByType(GDMRecordType recType) { return null; }
         public GDMIndividualRecord GetSelectedPerson() { return null; }

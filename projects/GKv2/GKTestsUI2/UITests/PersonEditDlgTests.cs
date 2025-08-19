@@ -45,7 +45,7 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            TestUtilsUI.InitUITest();
+            CommonTests.InitUITest();
 
             fBase = new BaseWindowStub();
             fIndividualRecord = fBase.Context.CreatePersonEx("Ivan", "", "Smith", GDMSex.svMale, true);
@@ -164,13 +164,13 @@ namespace GKUI.Forms
             // names
             tabs.SelectTab(2);
             Assert.AreEqual(1, indiRecord.PersonalNames.Count);
-            ModalFormHandler = PersonalNameEditDlgTests.NameEditAdd_Handler;
+            ModalFormHandler = CustomWindowTest.PersonalNameEditAdd_Handler;
             ClickToolStripButton("fNamesList_ToolBar_btnAdd", fDialog);
             Assert.AreEqual(2, indiRecord.PersonalNames.Count);
             Assert.AreEqual("sample surname", indiRecord.PersonalNames[1].Surname);
 
             SelectSheetListItem("fNamesList", fDialog, 1);
-            ModalFormHandler = PersonalNameEditDlgTests.NameEditEdit_Handler;
+            ModalFormHandler = CustomWindowTest.PersonalNameEditEdit_Handler;
             ClickToolStripButton("fNamesList_ToolBar_btnEdit", fDialog);
             Assert.AreEqual(2, indiRecord.PersonalNames.Count);
             Assert.AreEqual("sample surname2", indiRecord.PersonalNames[1].Surname);
@@ -193,7 +193,7 @@ namespace GKUI.Forms
             tabs.SelectTab(6);
             tabsOther.SelectTab(1);
             Assert.AreEqual(0, indiRecord.Groups.Count);
-            RecordSelectDlgTests.SetCreateItemHandler(this, GroupEditDlgTests.GroupAdd_Mini_Handler);
+            RecordSelectDlgTests.SetCreateItemHandler(this, CustomWindowTest.GroupAdd_Mini_Handler);
             ClickToolStripButton("fGroupsList_ToolBar_btnAdd", fDialog);
             Assert.AreEqual(1, indiRecord.Groups.Count);
             Assert.AreEqual("sample group", fBase.Context.Tree.GetPtrValue<GDMGroupRecord>(indiRecord.Groups[0]).GroupName);

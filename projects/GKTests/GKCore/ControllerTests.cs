@@ -26,6 +26,7 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.ExtData;
 using GKCore.Lists;
+using GKCore.Names;
 using GKTests;
 using GKTests.Stubs;
 using NSubstitute;
@@ -56,6 +57,22 @@ namespace GKCore.Controllers
         private static void SubstituteControl<T>(IView dialog, string ctlName) where T : class, IControl
         {
             TestUtils.SubstituteControl<T>(dialog, ctlName);
+        }
+
+        [Test]
+        public async Task Test_AboutDlgController()
+        {
+            var view = Substitute.For<IAboutDlg>();
+            SubstituteControl<ILabel>(view, "btnClose");
+            SubstituteControl<ILabel>(view, "lblProduct");
+            SubstituteControl<ILabel>(view, "lblVersion");
+            SubstituteControl<ILabel>(view, "lblCopyright");
+            SubstituteControl<ILabel>(view, "lblForum");
+            SubstituteControl<ILabel>(view, "lblChannel");
+
+            var controller = new AboutDlgController(view);
+            controller.SetLocale();
+            controller.UpdateView();
         }
 
         [Test]
@@ -271,7 +288,6 @@ namespace GKCore.Controllers
         public void Test_DayTipsDlgController()
         {
             var view = Substitute.For<IDayTipsDlg>();
-
             SubstituteControl<IButton>(view, "btnClose");
             SubstituteControl<IButton>(view, "btnNextTip");
             SubstituteControl<ICheckBox>(view, "chkShow");
@@ -420,7 +436,13 @@ namespace GKCore.Controllers
             controller.Init(baseWin);
 
             controller.UpdateView();
+
+            view.Name.Text = "sample text";
+
             controller.Accept();
+
+            GDMSubmitterRecord submitter = baseWin.Context.Tree.GetPtrValue<GDMSubmitterRecord>(baseWin.Context.Tree.Header.Submitter);
+            Assert.AreEqual("sample text", submitter.Name);
         }
 
         [Test]
@@ -431,7 +453,7 @@ namespace GKCore.Controllers
         }
 
         [Test]
-        public void Test_GroupEditDlgController()
+        public async Task Test_GroupEditDlgController()
         {
             var view = Substitute.For<IGroupEditDlg>();
             SubstituteControl<IButton>(view, "btnAccept");
@@ -454,6 +476,16 @@ namespace GKCore.Controllers
             Assert.AreEqual(group, controller.GroupRecord);
 
             view.Name.Text = "sample group";
+
+            // add member
+            var iRec1 = fBaseWin.Context.Tree.CreateIndividual();
+            RecordSelectDialogStub.SetTestResult(iRec1);
+            await ((GroupMembersListModel)view.MembersList.ListModel).Modify(view.MembersList, new ModifyEventArgs(RecordAction.raAdd, null));
+            Assert.AreEqual(1, group.Members.Count);
+            // delete member
+            StdDialogsStub.SetQuestionResult(true);
+            await ((GroupMembersListModel)view.MembersList.ListModel).Modify(view.MembersList, new ModifyEventArgs(RecordAction.raDelete, group.Members[0]));
+            Assert.AreEqual(0, group.Members.Count);
 
             controller.Accept();
             controller.UpdateView();
@@ -587,14 +619,60 @@ namespace GKCore.Controllers
         public void Test_NameEditDlgController()
         {
             var view = Substitute.For<INameEditDlg>();
-            //var controller = new NameEditDlgController(view);
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<ILabel>(view, "lblName");
+            SubstituteControl<ILabel>(view, "lblSex");
+            SubstituteControl<IGroupBox>(view, "grpPatronymics");
+            SubstituteControl<ILabel>(view, "lblFemale");
+            SubstituteControl<ILabel>(view, "lblMale");
+
+            view.Name.Returns(Substitute.For<ITextBox>());
+            view.FPatr.Returns(Substitute.For<ITextBox>());
+            view.MPatr.Returns(Substitute.For<ITextBox>());
+            view.SexCombo.Returns(Substitute.For<IComboBox>());
+
+            var controller = new NameEditDlgController(view);
+            controller.Init(fBaseWin);
+
+            var nameEntry = new NameEntry();
+            controller.NameEntry = nameEntry;
+
+            view.SexCombo.SelectedIndex = 1; // male
+            view.Name.Text = "Ivan";
+            view.FPatr.Text = "Ivanovna";
+            view.MPatr.Text = "Ivanovich";
+
+            controller.Accept();
+            controller.UpdateView();
+
+            Assert.AreEqual("Ivan", nameEntry.Name);
+            Assert.AreEqual("Ivanovich", nameEntry.M_Patronymic);
+            Assert.AreEqual("Ivanovna", nameEntry.F_Patronymic);
+            Assert.AreEqual(GDMSex.svMale, nameEntry.Sex);
         }
 
         [Test]
         public void Test_NoteEditDlgController()
         {
             var view = Substitute.For<INoteEditDlg>();
-            //var controller = new NoteEditDlgController(view);
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+
+            view.Note.Returns(Substitute.For<ITextBox>());
+
+            var controller = new NoteEditDlgController(view);
+            controller.Init(fBaseWin);
+
+            var noteRecord = new GDMNoteRecord(fBaseWin.Context.Tree);
+            controller.NoteRecord = noteRecord;
+
+            view.Note.Text = "sample text";
+
+            controller.Accept();
+            controller.UpdateView();
+
+            Assert.AreEqual("sample text", noteRecord.Lines.Text);
         }
 
         [Test]
@@ -615,7 +693,43 @@ namespace GKCore.Controllers
         public void Test_ParentsEditDlgController()
         {
             var view = Substitute.For<IParentsEditDlg>();
-            //var controller = new ParentsEditDlgController(view);
+
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<ILabel>(view, "lblChildName");
+            SubstituteControl<ILabel>(view, "lblParents");
+            SubstituteControl<ILabel>(view, "lblLinkageType");
+            SubstituteControl<IButton>(view, "btnParentsEdit");
+            SubstituteControl<IButton>(view, "btnFatherAdd");
+            SubstituteControl<IButton>(view, "btnFatherDelete");
+            SubstituteControl<IButton>(view, "btnMotherAdd");
+            SubstituteControl<IButton>(view, "btnMotherDelete");
+
+            view.Father.Returns(Substitute.For<ITextBox>());
+            view.Mother.Returns(Substitute.For<ITextBox>());
+            view.ChildName.Returns(Substitute.For<ITextBox>());
+            view.LinkageTypeCombo.Returns(Substitute.For<IComboBox>());
+
+            var controller = new ParentsEditDlgController(view);
+            controller.Init(fBaseWin);
+
+            var individual = new GDMIndividualRecord(null);
+            var childLink = new GDMChildToFamilyLink();
+
+            controller.IndividualRecord = individual;
+            controller.ChildLink = childLink;
+
+            var relRec1 = fBaseWin.Context.Tree.CreateIndividual();
+            RecordSelectDialogStub.SetTestResult(relRec1);
+            controller.AddFather();
+
+            var relRec2 = fBaseWin.Context.Tree.CreateIndividual();
+            RecordSelectDialogStub.SetTestResult(relRec2);
+            controller.AddMother();
+
+            controller.Accept();
+
+            controller.UpdateView();
         }
 
         [Test]
@@ -629,7 +743,47 @@ namespace GKCore.Controllers
         public void Test_PersonalNameEditDlgController()
         {
             var view = Substitute.For<IPersonalNameEditDlg>();
-            //var controller = new PersonalNameEditDlgController(view);
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<ILabel>(view, "lblSurname");
+            SubstituteControl<ILabel>(view, "lblMarriedSurname");
+            SubstituteControl<ILabel>(view, "lblName");
+            SubstituteControl<ILabel>(view, "lblPatronymic");
+            SubstituteControl<ILabel>(view, "lblNickname");
+            SubstituteControl<ILabel>(view, "lblSurnamePrefix");
+            SubstituteControl<ILabel>(view, "lblNamePrefix");
+            SubstituteControl<ILabel>(view, "lblNameSuffix");
+            SubstituteControl<ILabel>(view, "lblType");
+            SubstituteControl<ILabel>(view, "lblLanguage");
+
+            view.SurnameLabel.Returns(Substitute.For<ILabel>());
+            view.Surname.Returns(Substitute.For<ITextBox>());
+            view.Name.Returns(Substitute.For<ITextBox>());
+            view.Patronymic.Returns(Substitute.For<ITextBox>());
+            view.NameType.Returns(Substitute.For<IComboBox>());
+            view.NamePrefix.Returns(Substitute.For<ITextBox>());
+            view.Nickname.Returns(Substitute.For<ITextBox>());
+            view.SurnamePrefix.Returns(Substitute.For<ITextBox>());
+            view.NameSuffix.Returns(Substitute.For<ITextBox>());
+            view.MarriedSurname.Returns(Substitute.For<ITextBox>());
+            view.Language.Returns(Substitute.For<IComboBox>());
+
+            var controller = new PersonalNameEditDlgController(view);
+            controller.Init(fBaseWin);
+
+            var person = new GDMIndividualRecord(fBaseWin.Context.Tree);
+            var personalName = new GDMPersonalName();
+
+            controller.IndividualRecord = person;
+            controller.PersonalName = personalName;
+
+            view.Surname.Text = "sample text";
+
+            controller.Accept();
+
+            Assert.AreEqual("sample text", personalName.Surname);
+
+            controller.UpdateView();
         }
 
         [Test]
@@ -690,7 +844,17 @@ namespace GKCore.Controllers
         public void Test_RecordInfoDlgController()
         {
             var view = Substitute.For<IRecordInfoDlg>();
-            //var controller = new RecordInfoDlgController(view);
+            SubstituteControl<IHyperView>(view, "HyperView");
+
+            view.HyperView.Lines.Returns(new StringList());
+
+            var controller = new RecordInfoDlgController(view);
+            controller.Init(fBaseWin);
+
+            var iRec = fBaseWin.Context.Tree.CreateIndividual();
+            controller.Record = iRec;
+
+            controller.UpdateView();
         }
 
         [Test]
@@ -745,6 +909,8 @@ namespace GKCore.Controllers
             SubstituteControl<ILabel>(view, "lblName");
 
             view.NotesList.Returns(Substitute.For<ISheetList>());
+            view.UserRefList.Returns(Substitute.For<ISheetList>());
+            view.Name.Returns(Substitute.For<ITextBox>());
 
             var controller = new RepositoryEditDlgController(view);
 
@@ -756,8 +922,14 @@ namespace GKCore.Controllers
             controller.RepositoryRecord = rep;
             Assert.AreEqual(rep, controller.RepositoryRecord);
 
-            controller.UpdateView();
+            view.Name.Text = "test repo";
+
             controller.Accept();
+            controller.UpdateView();
+
+            Assert.AreEqual("test repo", rep.RepositoryName);
+
+            // TODO: btnAddress, NotesList, UserRefList
         }
 
         [Test]
@@ -775,6 +947,30 @@ namespace GKCore.Controllers
         }
 
         [Test]
+        public void Test_SexCheckDlgController()
+        {
+            var view = Substitute.For<ISexCheckDlg>();
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<IGroupBox>(view, "grpSex");
+            SubstituteControl<IRadioButton>(view, "rbNone");
+            SubstituteControl<IRadioButton>(view, "rbMale");
+            SubstituteControl<IRadioButton>(view, "rbFemale");
+            SubstituteControl<ITextBox>(view, "txtName");
+
+            var controller = new SexCheckDlgController(view);
+            controller.Init(fBaseWin);
+
+            //controller.indi = "test indi";
+            controller.Sex = GDMSex.svMale;
+
+            controller.Accept();
+            controller.UpdateView();
+
+            Assert.AreEqual(GDMSex.svMale, controller.Sex);
+        }
+
+        [Test]
         public void Test_SlideshowController()
         {
             var view = Substitute.For<ISlideshowWin>();
@@ -785,14 +981,90 @@ namespace GKCore.Controllers
         public void Test_SourceCitEditDlgController()
         {
             var view = Substitute.For<ISourceCitEditDlg>();
-            //var controller = new SourceCitEditDlgController(view);
+
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<ITabPage>(view, "pageCommon");
+            SubstituteControl<ITabPage>(view, "pageOther");
+            SubstituteControl<ILabel>(view, "lblSource");
+            SubstituteControl<ILabel>(view, "lblPage");
+            SubstituteControl<ILabel>(view, "lblCertainty");
+            SubstituteControl<IButton>(view, "btnSourceAdd");
+
+            view.Page.Returns(Substitute.For<ITextBox>());
+            view.Certainty.Returns(Substitute.For<IComboBox>());
+            view.Source.Returns(Substitute.For<IComboBox>());
+            view.DataDate.Returns(Substitute.For<IDateControl>());
+            view.DataText.Returns(Substitute.For<ITextBox>());
+
+            var controller = new SourceCitEditDlgController(view);
+            controller.Init(fBaseWin);
+
+            var sourceCitation = new GDMSourceCitation();
+            controller.SourceCitation = sourceCitation;
+
+            controller.Accept();
+
+            controller.UpdateView();
         }
 
         [Test]
-        public void Test_SourceEditDlgController()
+        public async Task Test_SourceEditDlgController()
         {
             var view = Substitute.For<ISourceEditDlg>();
-            //var controller = new SourceEditDlgController(view);
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+
+            SubstituteControl<ILabel>(view, "lblShortTitle");
+            SubstituteControl<ILabel>(view, "lblAuthor");
+            SubstituteControl<ILabel>(view, "lblTitle");
+            SubstituteControl<ILabel>(view, "lblPublication");
+            SubstituteControl<ILabel>(view, "lblDate");
+
+            SubstituteControl<ITabPage>(view, "pageCommon");
+            SubstituteControl<ITabPage>(view, "pageText");
+            SubstituteControl<ITabPage>(view, "pageRepositories");
+            SubstituteControl<ITabPage>(view, "pageNotes");
+            SubstituteControl<ITabPage>(view, "pageMultimedia");
+            SubstituteControl<ITabPage>(view, "pageUserRefs");
+
+            view.NotesList.Returns(Substitute.For<ISheetList>());
+            view.MediaList.Returns(Substitute.For<ISheetList>());
+            view.RepositoriesList.Returns(Substitute.For<ISheetList>());
+            view.UserRefList.Returns(Substitute.For<ISheetList>());
+            view.ShortTitle.Returns(Substitute.For<ITextBox>());
+            view.Author.Returns(Substitute.For<ITextBox>());
+            view.DescTitle.Returns(Substitute.For<ITextBox>());
+            view.Publication.Returns(Substitute.For<ITextBox>());
+            view.Text.Returns(Substitute.For<ITextBox>());
+            view.Date.Returns(Substitute.For<IDateControl>());
+
+            var controller = new SourceEditDlgController(view);
+            controller.Init(fBaseWin);
+
+            var src = fBaseWin.Context.Tree.CreateSource();
+            controller.SourceRecord = src;
+            Assert.AreEqual(src, controller.SourceRecord);
+
+            // add repository
+            /*var repRec = fBaseWin.Context.Tree.CreateRepository();
+            RecordSelectDialogStub.SetTestResult(repRec);
+            await((RepositoryCitationsListModel)view.RepositoriesList.ListModel).Modify(view.RepositoriesList, new ModifyEventArgs(RecordAction.raAdd, null));
+            Assert.AreEqual(1, src.RepositoryCitations.Count);
+            // delete repository
+            StdDialogsStub.SetQuestionResult(true);
+            await((RepositoryCitationsListModel)view.RepositoriesList.ListModel).Modify(view.RepositoriesList, new ModifyEventArgs(RecordAction.raDelete, src.RepositoryCitations[0]));
+            Assert.AreEqual(0, src.RepositoryCitations.Count);*/
+
+            view.ShortTitle.Text = "sample text";
+            view.Author.Lines = new string[] { "sample text" };
+
+            controller.Accept();
+
+            Assert.AreEqual("sample text", src.ShortTitle);
+            Assert.AreEqual("sample text", src.Originator.Lines.Text);
+
+            controller.UpdateView();
         }
 
         [Test]

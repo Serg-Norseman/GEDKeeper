@@ -101,7 +101,7 @@ namespace GKFlowInputPlugin
 
         public override void Setup()
         {
-            TestUtilsUI.InitUITest();
+            CommonTests.InitUITest();
 
             fBase = new BaseWindowStub(false);
 
@@ -114,12 +114,6 @@ namespace GKFlowInputPlugin
         public override void TearDown()
         {
             fDialog.Dispose();
-        }
-
-        [Test]
-        public void Test_Close()
-        {
-            ClickButton("btnClose", fDialog);
         }
 
         [Test]
@@ -184,7 +178,7 @@ namespace GKFlowInputPlugin
             EnterText("edPage", fDialog, "12");
             EnterText("edPlace", fDialog, "Сосновка");
 
-            ModalFormHandler = SexCheckDlgTests.SexCheckDlgTests_AcceptM_Handler; // NamesTable not available
+            ModalFormHandler = CustomWindowTest.SexCheckDlgTests_AcceptM_Handler; // NamesTable not available
 
             ClickButton("btnParse", fDialog);
 
@@ -216,7 +210,7 @@ namespace GKFlowInputPlugin
             EnterText("edPage", fDialog, "12");
             EnterText("edPlace", fDialog, "Сосновка");
 
-            ModalFormHandler = SexCheckDlgTests.SexCheckDlgTests_AcceptF_Handler; // NamesTable not available
+            ModalFormHandler = CustomWindowTest.SexCheckDlgTests_AcceptF_Handler; // NamesTable not available
 
             ClickButton("btnParse", fDialog);
 
@@ -313,7 +307,7 @@ namespace GKFlowInputPlugin
             EnterText("edPage", fDialog, "12");
             EnterText("edPlace", fDialog, "Сосновка");
 
-            ModalFormHandler = SexCheckDlgTests.SexCheckDlgTests_AcceptM_Handler; // NamesTable not available
+            ModalFormHandler = CustomWindowTest.SexCheckDlgTests_AcceptM_Handler; // NamesTable not available
             ClickButton("btnParse", fDialog);
 
             Assert.AreEqual(10, fBase.Context.Tree.RecordsCount);

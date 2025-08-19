@@ -69,8 +69,6 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fMembersList = new GKSheetList(pageMembers);
-            fMembersList.SetControlName("fMembersList"); // for purpose of tests
-
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
 

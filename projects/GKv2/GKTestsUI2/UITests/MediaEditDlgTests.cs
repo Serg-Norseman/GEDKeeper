@@ -47,7 +47,7 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            TestUtilsUI.InitUITest();
+            CommonTests.InitUITest();
             LangMan.DefInit();
 
             GlobalOptions.Instance.AllowMediaStoreReferences = true;

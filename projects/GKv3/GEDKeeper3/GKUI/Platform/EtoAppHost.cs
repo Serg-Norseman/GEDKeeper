@@ -560,6 +560,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(ComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(DropDown), typeof(DropDownHandler));
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
+            ControlsManager.RegisterHandlerType(typeof(LinkButton), typeof(LinkButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(MaskedTextBox), typeof(MaskedTextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(NumericStepper), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));

@@ -34,7 +34,7 @@ namespace GKUI.Forms
     {
         public override void Setup()
         {
-            TestUtilsUI.InitUITest();
+            CommonTests.InitUITest();
         }
 
         public override void TearDown()

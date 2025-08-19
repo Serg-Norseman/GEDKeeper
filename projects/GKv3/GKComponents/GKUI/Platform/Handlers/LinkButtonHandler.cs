@@ -18,50 +18,28 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !DIS_NUF
+using Eto.Forms;
+using GKCore.Design.Graphics;
+using GKCore.Design.Controls;
 
-using GDModel;
-using GKCore.Design;
-using GKTests;
-using GKTests.Stubs;
-using NUnit.Framework;
-
-namespace GKUI.Forms
+namespace GKUI.Platform.Handlers
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    [TestFixture]
-    public class RecordInfoDlgTests : CustomWindowTest
+    public sealed class LinkButtonHandler : BaseControlHandler<LinkButton, LinkButtonHandler>, ILabel
     {
-        private GDMIndividualRecord fIndividual;
-        private IBaseWindow fBase;
-        private RecordInfoDlg fDialog;
-
-        public override void Setup()
+        public LinkButtonHandler(LinkButton control) : base(control)
         {
-            TestUtilsUI.InitUITest();
-
-            fBase = new BaseWindowStub();
-            fIndividual = new GDMIndividualRecord(null);
-
-            fDialog = new RecordInfoDlg(fBase);
-            fDialog.Record = fIndividual;
-            fDialog.Show();
         }
 
-        public override void TearDown()
+        public IColor BackColor
         {
-            fDialog.Dispose();
-            fIndividual.Dispose();
+            get { return new ColorHandler(Control.BackgroundColor); }
+            set { Control.BackgroundColor = ((ColorHandler)value).Handle; }
         }
 
-        [Test]
-        public void Test_Common()
+        public string Text
         {
-            Assert.AreEqual(fIndividual, fDialog.Record);
+            get { return Control.Text; }
+            set { Control.Text = value; }
         }
     }
 }
-
-#endif

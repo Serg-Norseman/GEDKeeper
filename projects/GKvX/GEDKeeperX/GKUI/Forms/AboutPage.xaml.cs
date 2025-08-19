@@ -22,7 +22,6 @@ using System;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Design.Views;
-using GKCore.Options;
 using Xamarin.Forms;
 
 namespace GKUI.Forms
@@ -35,25 +34,13 @@ namespace GKUI.Forms
 
             fController = new AboutDlgController(this);
             fController.SetLocale();
-
-            lblVersion.Text = @"Version " + AppHost.GetAppVersion();
-            lblCopyright.Text = AppHost.GetAppCopyright();
-
-            if (GlobalOptions.Instance.GetLanguageSign() == "rus") {
-                lblForum.Text = GKData.APP_FORUM_RU;
-                lblChannel.Text = GKData.APP_CHANNEL_RU;
-            } else {
-                lblForum.Text = GKData.APP_FORUM_EN;
-                lblChannel.Text = GKData.APP_CHANNEL_EN;
-            }
+            fController.UpdateView();
         }
 
         private async void lblURL_Clicked(object sender, EventArgs e)
         {
-            var btn = sender as Button;
-            if (btn != null) {
+            if (sender is Button btn)
                 AppHost.Instance.OpenURL(btn.Text);
-            }
         }
     }
 }

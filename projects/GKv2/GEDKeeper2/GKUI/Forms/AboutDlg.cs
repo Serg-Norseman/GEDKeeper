@@ -23,7 +23,6 @@ using System.Windows.Forms;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Design.Views;
-using GKCore.Options;
 
 namespace GKUI.Forms
 {
@@ -37,18 +36,7 @@ namespace GKUI.Forms
 
             fController = new AboutDlgController(this);
             fController.SetLocale();
-
-            lblProduct.Text = GKData.APP_TITLE;
-            lblVersion.Text = @"Version " + AppHost.GetAppVersion();
-            lblCopyright.Text = AppHost.GetAppCopyright();
-
-            if (GlobalOptions.Instance.GetLanguageSign() == "rus") {
-                lblForum.Text = GKData.APP_FORUM_RU;
-                lblChannel.Text = GKData.APP_CHANNEL_RU;
-            } else {
-                lblForum.Text = GKData.APP_FORUM_EN;
-                lblChannel.Text = GKData.APP_CHANNEL_EN;
-            }
+            fController.UpdateView();
         }
 
         public override void ApplyTheme()
@@ -59,10 +47,8 @@ namespace GKUI.Forms
 
         private void LabelMail_Click(object sender, EventArgs e)
         {
-            var lbl = sender as Label;
-            if (lbl != null) {
+            if (sender is Label lbl)
                 GKUtils.LoadExtFile(lbl.Text);
-            }
         }
 
         public override bool SkipTheme(IDisposable component)

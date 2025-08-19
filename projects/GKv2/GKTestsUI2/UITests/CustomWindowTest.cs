@@ -23,6 +23,7 @@
 using System;
 using System.Windows.Forms;
 using GDModel;
+using GKCore;
 using GKTests.ControlTesters;
 using GKUI.Forms;
 using NUnit.Extensions.Forms;
@@ -308,12 +309,12 @@ namespace GKTests
         protected void NotesSheet_Handler(GDMRecordWithEvents record, Form dlg)
         {
             Assert.AreEqual(0, record.Notes.Count);
-            RecordSelectDlgTests.SetCreateItemHandler(this, NoteEditDlgTests.NoteAdd_Mini_Handler);
+            RecordSelectDlgTests.SetCreateItemHandler(this, CustomWindowTest.NoteAdd_Mini_Handler);
             ClickToolStripButton("fNotesList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, record.Notes.Count);
 
             SelectSheetListItem("fNotesList", dlg, 0);
-            ModalFormHandler = NoteEditDlgTests.NoteAdd_Mini_Handler;
+            ModalFormHandler = CustomWindowTest.NoteAdd_Mini_Handler;
             ClickToolStripButton("fNotesList_ToolBar_btnEdit", dlg);
             Assert.AreEqual(1, record.Notes.Count);
 
@@ -348,12 +349,12 @@ namespace GKTests
         protected void SourceCitSheet_Handler(GDMRecordWithEvents record, Form dlg)
         {
             Assert.AreEqual(0, record.SourceCitations.Count);
-            ModalFormHandler = SourceCitEditDlgTests.AcceptModalHandler;
+            ModalFormHandler = CustomWindowTest.SourceCitEditDlg_AcceptModalHandler;
             ClickToolStripButton("fSourcesList_ToolBar_btnAdd", dlg);
             Assert.AreEqual(1, record.SourceCitations.Count);
 
             SelectSheetListItem("fSourcesList", dlg, 0);
-            ModalFormHandler = SourceCitEditDlgTests.AcceptModalHandler;
+            ModalFormHandler = CustomWindowTest.SourceCitEditDlg_AcceptModalHandler;
             ClickToolStripButton("fSourcesList_ToolBar_btnEdit", dlg);
             Assert.AreEqual(1, record.SourceCitations.Count);
 
@@ -362,6 +363,159 @@ namespace GKTests
             ClickToolStripButton("fSourcesList_ToolBar_btnDelete", dlg);
             Assert.AreEqual(0, record.SourceCitations.Count);
         }
+
+        #region Temporary handlers for transfer UI tests from NUnitForms to controller's tests
+
+        public static void GroupAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("edName", form, "sample group");
+
+            ClickButton("btnAccept", form);
+        }
+
+        public static void LanguageEditDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnAccept", form);
+        }
+
+        public static void FilePropertiesDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            FilePropertiesDlg dlg = (FilePropertiesDlg)form;
+            var baseContext = dlg.Base.Context;
+
+            EnterText("txtName", form, "sample text");
+
+            SetModalFormHandler(fFormTest, CustomWindowTest.LanguageEditDlg_Handler);
+            ClickButton("btnLangEdit", form);
+
+            ClickButton("btnAccept", form);
+
+            GDMSubmitterRecord submitter = baseContext.Tree.GetPtrValue<GDMSubmitterRecord>(baseContext.Tree.Header.Submitter);
+            Assert.AreEqual("sample text", submitter.Name);
+        }
+
+        public static void NoteAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterRichText("txtNote", form, "sample text");
+            //Assert.AreEqual("sample text", txtNote.Text);
+
+            ClickButton("btnAccept", form);
+        }
+
+        public static void SexCheckDlgTests_AcceptM_Handler(string name, IntPtr ptr, Form form)
+        {
+            CheckRadioButton("rbMale", form, true);
+            ClickButton("btnAccept", form);
+        }
+
+        public static void SexCheckDlgTests_AcceptF_Handler(string name, IntPtr ptr, Form form)
+        {
+            CheckRadioButton("rbFemale", form, true);
+            ClickButton("btnAccept", form);
+        }
+
+        public static void LanguageSelectDlg_Accept_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnAccept", form);
+        }
+
+        public static void AboutDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnClose", form);
+        }
+
+        public static void CloseModalHandler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnClose", form);
+        }
+
+        public static void LocationAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("txtName", form, "sample location");
+
+            ClickButton("btnAccept", form);
+        }
+
+        public static void QuickSearch_Test(NUnitFormTest formTest, Form mainWin)
+        {
+            ClickToolStripMenuItem("miSearch", mainWin);
+
+            var searchPanel = new FormTester("QuickSearchDlg");
+            var frm = (QuickSearchDlg)searchPanel.Properties;
+
+            // handlers for empty text
+            ClickButton("btnPrev", frm);
+            ClickButton("btnNext", frm);
+
+            EnterText("txtSearchPattern", frm, "John");
+            // handlers for entered text? - msgbox processing
+
+            // NoMatchesFound error msg
+            SetModalFormHandler(formTest, MessageBox_OkHandler);
+            KeyDownForm(frm.Name, Keys.Enter);
+
+            SetModalFormHandler(formTest, MessageBox_OkHandler);
+            KeyDownForm(frm.Name, Keys.Enter | Keys.Shift);
+
+            KeyDownForm(frm.Name, Keys.Escape);
+        }
+
+        public static void RelationshipCalculatorDlg_Handler(string name, IntPtr ptr, Form form)
+        {
+            RelationshipCalculatorDlg dlg = (RelationshipCalculatorDlg)form;
+            var baseContext = dlg.Base.Context;
+
+            Assert.IsTrue(baseContext.Tree.RecordsCount > 1);
+
+            GDMIndividualRecord iRec1 = baseContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            Assert.IsNotNull(iRec1);
+            Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetRecordName(baseContext.Tree, iRec1, false));
+            GDMIndividualRecord iRec2 = baseContext.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
+            Assert.IsNotNull(iRec2);
+            Assert.AreEqual("Ivanova Maria Petrovna", GKUtils.GetRecordName(baseContext.Tree, iRec2, false));
+
+            AppHost.TEST_MODE = true; // FIXME: dirty hack
+
+            RecordSelectDlgTests.SetSelectItemHandler(0);
+            ClickButton("btnRec1Select", form);
+            RecordSelectDlgTests.SetSelectItemHandler(1);
+            ClickButton("btnRec2Select", form);
+
+            var txtResult = new TextBoxTester("txtResult", form);
+            // default is not Russian culture
+            Assert.AreEqual("Ivanov Ivan Ivanovich is husband of Ivanova Maria Petrovna", txtResult.Text); // :D
+
+            ClickButton("btnClose", form);
+        }
+
+        public static void SourceAdd_Mini_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("txtShortTitle", form, "sample text");
+
+            ClickButton("btnAccept", form);
+        }
+
+        public static void SourceCitEditDlg_AcceptModalHandler(string name, IntPtr ptr, Form form)
+        {
+            SelectCombo("cmbSource", form, 0);
+            ClickButton("btnAccept", form);
+        }
+
+        public static void PersonalNameEditAdd_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("txtSurname", form, "sample surname");
+
+            ClickButton("btnAccept", form);
+        }
+
+        public static void PersonalNameEditEdit_Handler(string name, IntPtr ptr, Form form)
+        {
+            EnterText("txtSurname", form, "sample surname2");
+
+            ClickButton("btnAccept", form);
+        }
+
+        #endregion
     }
 }
 

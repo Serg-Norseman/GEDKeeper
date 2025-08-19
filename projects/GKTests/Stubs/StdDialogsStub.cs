@@ -93,7 +93,14 @@ namespace GKTests.Stubs
 
         public async Task<bool> ShowQuestion(string msg, string title = "")
         {
-            return await Task.FromResult(false);
+            return await Task.FromResult(fQuestionResult);
+        }
+
+        private static bool fQuestionResult;
+
+        public static void SetQuestionResult(bool value)
+        {
+            fQuestionResult = value;
         }
 
         public void ShowWarning(string msg, string title = "")

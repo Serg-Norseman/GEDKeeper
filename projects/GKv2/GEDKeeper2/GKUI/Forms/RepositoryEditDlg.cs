@@ -66,9 +66,7 @@ namespace GKUI.Forms
             tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
             fNotesList = new GKSheetList(pageNotes);
-
             fUserRefList = new GKSheetList(pageUserRefs);
-            fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
 
             fController = new RepositoryEditDlgController(this);
             fController.Init(baseWin);

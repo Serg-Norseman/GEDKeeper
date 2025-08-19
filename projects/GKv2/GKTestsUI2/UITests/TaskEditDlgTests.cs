@@ -42,7 +42,7 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            TestUtilsUI.InitUITest();
+            CommonTests.InitUITest();
 
             fBase = new BaseWindowStub();
             fTaskRecord = new GDMTaskRecord(fBase.Context.Tree);

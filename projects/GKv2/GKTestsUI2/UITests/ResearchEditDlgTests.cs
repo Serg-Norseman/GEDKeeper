@@ -41,7 +41,7 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            TestUtilsUI.InitUITest();
+            CommonTests.InitUITest();
 
             fBase = new BaseWindowStub();
             fResearchRecord = new GDMResearchRecord(fBase.Context.Tree);
@@ -130,13 +130,13 @@ namespace GKUI.Forms
             // groups
             SelectTab("tabsData", fDialog, 2);
             Assert.AreEqual(0, resRecord.Groups.Count);
-            RecordSelectDlgTests.SetCreateItemHandler(this, GroupEditDlgTests.GroupAdd_Mini_Handler);
+            RecordSelectDlgTests.SetCreateItemHandler(this, CustomWindowTest.GroupAdd_Mini_Handler);
             ClickToolStripButton("fGroupsList_ToolBar_btnAdd", fDialog);
             Assert.AreEqual(1, resRecord.Groups.Count);
             Assert.AreEqual("sample group", fBase.Context.Tree.GetPtrValue<GDMGroupRecord>(resRecord.Groups[0]).GroupName);
 
             SelectSheetListItem("fGroupsList", fDialog, 0);
-            SetModalFormHandler(this, GroupEditDlgTests.GroupAdd_Mini_Handler);
+            SetModalFormHandler(this, CustomWindowTest.GroupAdd_Mini_Handler);
             ClickToolStripButton("fGroupsList_ToolBar_btnEdit", fDialog);
             Assert.AreEqual(1, resRecord.Groups.Count);
 

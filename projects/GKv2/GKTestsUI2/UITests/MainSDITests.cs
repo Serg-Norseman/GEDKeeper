@@ -62,7 +62,7 @@ namespace GKUI.Forms
 
         public override async void Setup()
         {
-            TestUtilsUI.InitUITest();
+            CommonTests.InitUITest();
 
             var appHost = new WFAppHost();
 
@@ -244,7 +244,7 @@ namespace GKUI.Forms
         {
             ModalFormHandler = Dialog_Cancel_Handler;
             ClickToolStripMenuItem("miFileProperties", fMainWin);
-            SetModalFormHandler(this, FilePropertiesDlgTests.FilePropertiesDlg_btnAccept_Handler);
+            SetModalFormHandler(this, CustomWindowTest.FilePropertiesDlg_btnAccept_Handler);
             ClickToolStripMenuItem("miFileProperties", fMainWin);
         }
 
@@ -324,7 +324,7 @@ namespace GKUI.Forms
         public void Test_ShowQuickSearchDlg()
         {
             ((BaseWinSDI)fCurBase).ShowRecordsTab(GDMRecordType.rtIndividual);
-            QuickSearchDlgTests.QuickSearch_Test(this, fMainWin);
+            CustomWindowTest.QuickSearch_Test(this, fMainWin);
         }
 
         [Test]
@@ -436,7 +436,7 @@ namespace GKUI.Forms
         [Test]
         public void Test_ShowRelationshipCalculatorDlg()
         {
-            SetModalFormHandler(this, RelationshipCalculatorDlgTests.RelationshipCalculatorDlg_Handler);
+            SetModalFormHandler(this, CustomWindowTest.RelationshipCalculatorDlg_Handler);
             ClickToolStripMenuItem("miRelationshipCalculator", fMainWin);
         }
 
@@ -450,7 +450,7 @@ namespace GKUI.Forms
         [Test]
         public async Task Test_ShowLanguageSelectDlg()
         {
-            ModalFormHandler = LanguageSelectDlgTests.LanguageSelectDlg_Accept_Handler;
+            ModalFormHandler = CustomWindowTest.LanguageSelectDlg_Accept_Handler;
             await AppHost.Instance.LoadLanguage(0, false);
         }
 

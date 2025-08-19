@@ -23,19 +23,41 @@ using System.Drawing;
 using BSLib;
 using GDModel;
 using GKCore;
+using GKCore.Design;
 using GKCore.Design.Graphics;
+using GKCore.Kinships;
+using GKCore.Locales;
 using GKTests;
+using GKTests.Stubs;
+using GKUI.Components;
+using GKUI.Platform;
 using GKUI.Platform.Handlers;
 using NUnit.Framework;
 
-namespace GKUI.Components
+namespace GKUI.Forms
 {
     [TestFixture]
     public class CommonTests
     {
+        public static void InitUITest()
+        {
+            TestUtils.InitGEDCOMProviderTest();
+            AppHost.TEST_MODE = true;
+
+            // GlobalOptions -> IGraphicsProviderEx
+            WFAppHost.ConfigureBootstrap();
+
+            LangMan.DefInit();
+            AppHost.EventDefinitions.InitPredefined();
+
+            KinshipsGraph.InitDefaults();
+
+            AppHost.Container.Register<IProgressDialog, ProgressStub>(GKCore.Utilities.LifeCycle.Singleton, true);
+        }
+
         public CommonTests()
         {
-            TestUtilsUI.InitUITest();
+            CommonTests.InitUITest();
         }
 
         [Test]

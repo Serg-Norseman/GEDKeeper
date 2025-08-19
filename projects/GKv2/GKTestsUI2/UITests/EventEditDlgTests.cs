@@ -40,7 +40,7 @@ namespace GKUI.Forms
 
         public override void Setup()
         {
-            TestUtilsUI.InitUITest();
+            CommonTests.InitUITest();
 
             fBase = new BaseWindowStub();
             fEvent = new GDMIndividualEvent();
@@ -178,7 +178,7 @@ namespace GKUI.Forms
             //SetModalFormHandler(fFormTest, AddressEditDlgTests.AddressEditDlg_btnAccept_Handler);
             //ClickButton("btnAddress", form);
 
-            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, LocationEditDlgTests.LocationAdd_Mini_Handler);
+            RecordSelectDlgTests.SetCreateItemHandler(fFormTest, CustomWindowTest.LocationAdd_Mini_Handler);
             ClickButton("btnPlaceAdd", form);
 
             ClickButton("btnPlaceDelete", form);

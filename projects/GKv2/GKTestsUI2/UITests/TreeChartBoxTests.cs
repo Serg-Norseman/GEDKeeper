@@ -28,6 +28,7 @@ using GKCore.Design;
 using GKCore.Options;
 using GKTests;
 using GKTests.Stubs;
+using GKUI.Forms;
 using GKUI.Platform;
 using GKUI.Platform.Handlers;
 using NUnit.Framework;
@@ -43,7 +44,7 @@ namespace GKUI.Components
 
         public override void Setup()
         {
-            TestUtilsUI.InitUITest();
+            CommonTests.InitUITest();
 
             fBase = new BaseWindowStub();
 
