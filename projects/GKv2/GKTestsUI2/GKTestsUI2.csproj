@@ -37,9 +37,6 @@
     <Reference Include="BSLib">
       <HintPath>..\..\libs\BSLib.dll</HintPath>
     </Reference>
-    <Reference Include="BSLib.DataViz.Model">
-      <HintPath>..\..\libs\BSLib.DataViz.Model.dll</HintPath>
-    </Reference>
     <Reference Include="NSubstitute">
       <HintPath>..\..\libs\NSubstitute.dll</HintPath>
     </Reference>
@@ -47,57 +44,26 @@
       <HintPath>..\..\libs\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UtfUnknown">
-      <HintPath>..\..\libs\UtfUnknown.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\GlobalSuppressions.cs">
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="UITests\ImageBoxTests.cs" />
-    <Compile Include="UITests\ImageViewTests.cs" />
-    <Compile Include="UITests\TreeChartBoxTests.cs" />
-    <Compile Include="UITests\FlowInputTests.cs" />
     <Compile Include="ControlTesters\DataGridViewTester.cs" />
     <Compile Include="ControlTesters\GKRecordsViewTester.cs" />
     <Compile Include="ControlTesters\GKSheetListTester.cs" />
     <Compile Include="ControlTesters\MaskedTextBoxTester.cs" />
-    <Compile Include="ControlTesters\NumericUpDownTester.cs" />
-    <Compile Include="UITests\CircleChartWinTests.cs" />
-    <Compile Include="UITests\CommonFilterDlgTests.cs" />
     <Compile Include="UITests\CommonTests.cs" />
-    <Compile Include="UITests\CommunicationEditDlgTests.cs" />
     <Compile Include="UITests\CustomWindowTest.cs" />
-    <Compile Include="UITests\EventEditDlgTests.cs" />
     <Compile Include="UITests\FamilyEditDlgTests.cs" />
-    <Compile Include="UITests\InputBoxTests.cs" />
     <Compile Include="UITests\MainSDITests.cs" />
-    <Compile Include="UITests\MapsViewerWinTests.cs" />
-    <Compile Include="UITests\MediaEditDlgTests.cs" />
     <Compile Include="UITests\MediaViewerWinTests.cs" />
     <Compile Include="UITests\NoteEditDlgExTests.cs" />
-    <Compile Include="UITests\OptionsDlgTests.cs" />
-    <Compile Include="UITests\OrganizerWinTests.cs" />
     <Compile Include="UITests\PersonEditDlgTests.cs" />
-    <Compile Include="UITests\PersonsFilterDlgTests.cs" />
-    <Compile Include="UITests\PortraitSelectDlgTests.cs" />
-    <Compile Include="UITests\ProgressDlgTests.cs" />
-    <Compile Include="UITests\RecordSelectDlgTests.cs" />
-    <Compile Include="UITests\ResearchEditDlgTests.cs" />
     <Compile Include="UITests\ScriptEditWinTests.cs" />
-    <Compile Include="UITests\SlideshowWinTests.cs" />
-    <Compile Include="UITests\SourceEditDlgTests.cs" />
-    <Compile Include="UITests\StatisticsWinTests.cs" />
-    <Compile Include="UITests\TaskEditDlgTests.cs" />
-    <Compile Include="UITests\TreeChartWinTests.cs" />
-    <Compile Include="UITests\TreeFilterDlgTests.cs" />
-    <Compile Include="UITests\TreeToolsWinTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GKTests\GKTests.csproj">

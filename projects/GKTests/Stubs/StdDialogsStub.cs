@@ -39,9 +39,18 @@ namespace GKTests.Stubs
             return await Task.FromResult(fStrResult);
         }
 
+        private static string fOpenedFileName;
+
+        public static void SetOpenedFile(string fileName)
+        {
+            fOpenedFileName = fileName;
+        }
+
         public async Task<string> GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt)
         {
-            return await Task.FromResult(string.Empty);
+            string result = fOpenedFileName;
+            fOpenedFileName = string.Empty;
+            return await Task.FromResult(result);
         }
 
         public async Task<string[]> GetOpenFiles(string title, string context, string filter, int filterIndex, string defaultExt)

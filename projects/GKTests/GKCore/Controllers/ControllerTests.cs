@@ -21,12 +21,16 @@
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
+using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.ExtData;
 using GKCore.Lists;
+using GKCore.Locales;
 using GKCore.Names;
+using GKCore.Options;
+using GKCore.Stats;
 using GKTests;
 using GKTests.Stubs;
 using NSubstitute;
@@ -42,6 +46,9 @@ namespace GKCore.Controllers
         public ControllerTests()
         {
             TestUtils.InitUITest();
+
+            LangMan.DefInit();
+            GlobalOptions.Instance.AllowMediaStoreReferences = true;
 
             fBaseWin = new BaseWindowStub(true);
         }
@@ -265,23 +272,45 @@ namespace GKCore.Controllers
             SubstituteControl<ILabel>(view, "lblType");
             SubstituteControl<ILabel>(view, "lblDate");
 
+            view.Corresponder.Returns(Substitute.For<ITextBox>());
+            view.CorrType.Returns(Substitute.For<IComboBox>());
+            view.Date.Returns(Substitute.For<IDateBox>());
+            view.Dir.Returns(Substitute.For<IComboBox>());
+            view.Name.Returns(Substitute.For<ITextBox>());
             view.NotesList.Returns(Substitute.For<ISheetList>());
             view.MediaList.Returns(Substitute.For<ISheetList>());
 
             var controller = new CommunicationEditDlgController(view);
             controller.Init(fBaseWin);
 
-            var comm = fBaseWin.Context.Tree.CreateCommunication();
+            var commRec = fBaseWin.Context.Tree.CreateCommunication();
 
-            controller.CommunicationRecord = comm;
-            Assert.AreEqual(comm, controller.CommunicationRecord);
+            controller.CommunicationRecord = commRec;
+            Assert.AreEqual(commRec, controller.CommunicationRecord);
 
             view.Name.Text = "sample theme";
-
             controller.Accept();
-            controller.UpdateView();
+            Assert.AreEqual("sample theme", commRec.CommName);
 
-            Assert.AreEqual("sample theme", comm.CommName);
+            view.Name.Text = "sample text";
+            view.CorrType.SelectedIndex = 1;
+            controller.Accept();
+            Assert.AreEqual("sample text", commRec.CommName);
+            Assert.AreEqual(GDMCommunicationType.ctEMail, commRec.CommunicationType);
+            Assert.AreEqual("", commRec.Date.StringValue);
+
+            view.Name.Text = "sample text";
+            view.Date.NormalizeDate = "02.02.2000";
+            controller.Accept();
+            Assert.AreEqual("sample text", commRec.CommName);
+            Assert.AreEqual("02 FEB 2000", commRec.Date.StringValue);
+
+            var iRec1 = fBaseWin.Context.Tree.CreateIndividual();
+            RecordSelectDialogStub.SetTestResult(iRec1);
+            controller.SetPerson();
+            controller.Accept();
+
+            controller.UpdateView();
         }
 
         [Test]
@@ -343,6 +372,35 @@ namespace GKCore.Controllers
             view.SourcesList.Returns(Substitute.For<ISheetList>());
 
             var controller = new EventEditDlgController(view);
+            controller.Init(fBaseWin);
+
+            var evt = new GDMIndividualEvent();
+            controller.Event = evt;
+
+            view.EventType.SelectedIndex = 1; // Birth(indi) / ?(fam)
+            view.Place.Text = "test place";
+
+            // FIXME: create GKDateControl tests
+            /*SelectCombo("cmbEventDateType", form, 3); // Between
+            EnterMaskedText("txtEventDate1", form, "01.01.1900");
+            EnterMaskedText("txtEventDate2", form, "10.01.1900");
+            SelectCombo("cmbDate1Calendar", form, 1); // Julian
+            SelectCombo("cmbDate2Calendar", form, 1); // Julian*/
+
+            view.Cause.Text = "test cause";
+            view.Agency.Text = "test agency";
+
+            //SetModalFormHandler(fFormTest, AddressEditDlgTests.AddressEditDlg_btnAccept_Handler);
+            //ClickButton("btnAddress", form);
+
+            var loc = fBaseWin.Context.Tree.CreateLocation();
+            RecordSelectDialogStub.SetTestResult(loc);
+            controller.AddPlace();
+
+            controller.RemovePlace();
+
+            controller.Accept();
+            controller.UpdateView();
         }
 
         [Test]
@@ -449,7 +507,19 @@ namespace GKCore.Controllers
         public void Test_FragmentSearchController()
         {
             var view = Substitute.For<IFragmentSearchDlg>();
-            //var controller = new FragmentSearchController(view);
+            SubstituteControl<IMenuItem>(view, "miDetails");
+            SubstituteControl<IMenuItem>(view, "miGoToRecord");
+            SubstituteControl<IMenuItem>(view, "miCopyXRef");
+            SubstituteControl<IMenuItem>(view, "miDQRefresh");
+            SubstituteControl<IMenuItem>(view, "miDQResetFilter");
+            SubstituteControl<ITabPage>(view, "pageFamilyGroups");
+            SubstituteControl<IButton>(view, "btnAnalyseGroups");
+            SubstituteControl<ITabPage>(view, "pageDataQuality");
+
+            var controller = new FragmentSearchController(view);
+            controller.Init(fBaseWin);
+
+            controller.CheckGroups();
         }
 
         [Test]
@@ -533,7 +603,10 @@ namespace GKCore.Controllers
         public void Test_LanguageSelectDlgController()
         {
             var view = Substitute.For<ILanguageSelectDlg>();
-            //var controller = new LanguageSelectDlgController(view);
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+
+            var controller = new LanguageSelectDlgController(view);
         }
 
         [Test]
@@ -598,14 +671,85 @@ namespace GKCore.Controllers
         public void Test_MapsViewerWinController()
         {
             var view = Substitute.For<IMapsViewerWin>();
-            //var controller = new MapsViewerWinController(view);
+            SubstituteControl<ITabPage>(view, "pagePlaces");
+            SubstituteControl<IGroupBox>(view, "grpSelection");
+            SubstituteControl<IRadioButton>(view, "radTotal");
+            SubstituteControl<ICheckBox>(view, "chkBirth");
+            SubstituteControl<ICheckBox>(view, "chkDeath");
+            SubstituteControl<ICheckBox>(view, "chkResidence");
+            SubstituteControl<IRadioButton>(view, "radSelected");
+            SubstituteControl<IButton>(view, "btnSelectPlaces");
+            SubstituteControl<ICheckBox>(view, "chkLinesVisible");
+            SubstituteControl<IButtonToolItem>(view, "tbLoadPlaces");
+            SubstituteControl<IButtonToolItem>(view, "tbProviders");
+            SubstituteControl<ITabPage>(view, "pageCoordinates");
+            SubstituteControl<IButtonToolItem>(view, "tbClear");
+            SubstituteControl<IButton>(view, "btnSearch");
+            SubstituteControl<IToolItem>(view, "tbSaveSnapshot");
+
+            view.MapBrowser.Returns(Substitute.For<IMapBrowser>());
+            view.PersonsCombo.Returns(Substitute.For<IComboBox>());
+            view.PlacesTree.Returns(Substitute.For<ITreeView>());
+            view.SelectPlacesBtn.Returns(Substitute.For<IButton>());
+            view.BirthCheck.Returns(Substitute.For<ICheckBox>());
+            view.DeathCheck.Returns(Substitute.For<ICheckBox>());
+            view.ResidenceCheck.Returns(Substitute.For<ICheckBox>());
+            view.LinesVisibleCheck.Returns(Substitute.For<ICheckBox>());
+            view.TotalRadio.Returns(Substitute.For<IRadioButton>());
+            view.SelectedRadio.Returns(Substitute.For<IRadioButton>());
+
+            var controller = new MapsViewerWinController(view, null);
+            controller.Init(fBaseWin);
         }
 
         [Test]
-        public void Test_MediaEditDlgController()
+        public async Task Test_MediaEditDlgController()
         {
             var view = Substitute.For<IMediaEditDlg>();
-            //var controller = new MediaEditDlgController(view);
+
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<ITabPage>(view, "pageCommon");
+            SubstituteControl<ITabPage>(view, "pageNotes");
+            SubstituteControl<ITabPage>(view, "pageSources");
+            SubstituteControl<ITabPage>(view, "pageUserRefs");
+            SubstituteControl<ILabel>(view, "lblName");
+            SubstituteControl<ILabel>(view, "lblType");
+            SubstituteControl<ILabel>(view, "lblStoreType");
+            SubstituteControl<ILabel>(view, "lblFile");
+            SubstituteControl<IButton>(view, "btnView");
+
+            view.NotesList.Returns(Substitute.For<ISheetList>());
+            view.SourcesList.Returns(Substitute.For<ISheetList>());
+            view.UserRefList.Returns(Substitute.For<ISheetList>());
+            view.MediaType.Returns(Substitute.For<IComboBox>());
+            view.StoreType.Returns(Substitute.For<IComboBox>());
+            view.Name.Returns(Substitute.For<ITextBox>());
+            view.File.Returns(Substitute.For<ITextBox>());
+            view.FileSelectButton.Returns(Substitute.For<IButton>());
+
+            var controller = new MediaEditDlgController(view);
+            controller.Init(fBaseWin);
+
+            var multimediaRecord = new GDMMultimediaRecord(fBaseWin.Context.Tree);
+            multimediaRecord.FileReferences.Add(new GDMFileReferenceWithTitle());
+            controller.MultimediaRecord = multimediaRecord;
+
+            var mediaSampleFile = TestUtils.PrepareTestFile("shaytan_plant.jpg");
+            try {
+                view.Name.Text = "sample text";
+                view.MediaType.SelectedIndex = 1;
+                view.StoreType.SelectedIndex = 0; // Reference
+
+                StdDialogsStub.SetOpenedFile(mediaSampleFile);
+                await controller.SelectFile();
+
+                controller.Accept();
+
+                Assert.AreEqual("sample text", multimediaRecord.GetFileTitle());
+            } finally {
+                TestUtils.RemoveTestFile(mediaSampleFile);
+            }
         }
 
         [Test]
@@ -686,7 +830,20 @@ namespace GKCore.Controllers
         public void Test_OrganizerController()
         {
             var view = Substitute.For<IOrganizerWin>();
-            //var controller = new OrganizerController(view);
+            SubstituteControl<ITabPage>(view, "pageAddresses");
+            SubstituteControl<ITabPage>(view, "pageTelephones");
+            SubstituteControl<ITabPage>(view, "pageMails");
+            SubstituteControl<ITabPage>(view, "pageWebs");
+
+            view.AdrList.Returns(Substitute.For<ISheetList>());
+            view.PhonesList.Returns(Substitute.For<ISheetList>());
+            view.MailsList.Returns(Substitute.For<ISheetList>());
+            view.WebsList.Returns(Substitute.For<ISheetList>());
+
+            var controller = new OrganizerController(view);
+            controller.Init(fBaseWin);
+
+            controller.UpdateView();
         }
 
         [Test]
@@ -736,7 +893,28 @@ namespace GKCore.Controllers
         public void Test_PatriarchsSearchController()
         {
             var view = Substitute.For<IPatriarchsSearchDlg>();
-            //var controller = new PatriarchsSearchController(view);
+            SubstituteControl<ITabPage>(view, "pagePatSearch");
+            SubstituteControl<IButton>(view, "btnClose");
+            SubstituteControl<ILabel>(view, "lblMinGenerations");
+            SubstituteControl<IButton>(view, "btnSetPatriarch");
+            SubstituteControl<IButton>(view, "btnPatSearch");
+            SubstituteControl<ICheckBox>(view, "chkWithoutDates");
+            SubstituteControl<IButton>(view, "btnPatriarchsDiagram");
+
+            view.MinGensNum.Returns(Substitute.For<INumericBox>());
+            view.WithoutDatesCheck.Returns(Substitute.For<ICheckBox>());
+            view.PatriarchsList.Returns(Substitute.For<IListView>());
+
+            var controller = new PatriarchsSearchController(view);
+            controller.Init(fBaseWin);
+
+            view.MinGensNum.Value = 1;
+            controller.Search();
+            controller.SetPatriarch();
+
+            //ClickButton("btnPatriarchsDiagram", form);
+            //var pvWin = new FormTester("PatriarchsViewerWin");
+            //pvWin.Close();
         }
 
         [Test]
@@ -797,21 +975,81 @@ namespace GKCore.Controllers
         public void Test_PersonsFilterDlgController()
         {
             var view = Substitute.For<IPersonsFilterDlg>();
-            //var controller = new PersonsFilterDlgController(view);
+            SubstituteControl<ITabPage>(view, "pageSpecificFilter");
+            SubstituteControl<IRadioButton>(view, "rbAll");
+            SubstituteControl<IRadioButton>(view, "rbOnlyLive");
+            SubstituteControl<IRadioButton>(view, "rbOnlyDead");
+            SubstituteControl<IRadioButton>(view, "rbAliveBefore");
+            SubstituteControl<IRadioButton>(view, "rbSexAll");
+            SubstituteControl<IRadioButton>(view, "rbSexMale");
+            SubstituteControl<IRadioButton>(view, "rbSexFemale");
+            SubstituteControl<ILabel>(view, "lblNameMask");
+            SubstituteControl<ILabel>(view, "lblPlaceMask");
+            SubstituteControl<ILabel>(view, "lblEventsMask");
+            SubstituteControl<ILabel>(view, "lblGroups");
+            SubstituteControl<ILabel>(view, "lblSources");
+            SubstituteControl<ICheckBox>(view, "chkOnlyPatriarchs");
+
+            var controller = new PersonsFilterDlgController(view, RecordsListModel<GDMRecord>.Create(fBaseWin.Context, GDMRecordType.rtIndividual, false));
+            controller.Init(fBaseWin);
+            controller.UpdateView();
+
+            view.GetCoreControl<IRadioButton>("rbAliveBefore").Checked = true;
+            view.GetCoreControl<IRadioButton>("rbAll").Checked = true;
+
+            view.GetCoreControl<IRadioButton>("rbSexMale").Checked = true;
+            view.GetCoreControl<IRadioButton>("rbOnlyLive").Checked = true;
+
+            view.GetCoreControl<IComboBox>("txtName").Text = "*Ivan*";
+
+            view.GetCoreControl<IComboBox>("cmbResidence").Text = "*test place*";
+
+            view.GetCoreControl<IComboBox>("cmbEventVal").Text = "*test event*";
+
+            view.GetCoreControl<IComboBox>("cmbGroup").Text = "- any -";
+
+            view.GetCoreControl<IComboBox>("cmbSource").Text = "- any -";
+
+            controller.Accept();
         }
 
         [Test]
         public void Test_PlacesManagerController()
         {
             var view = Substitute.For<IPlacesManagerDlg>();
-            //var controller = new PlacesManagerController(view);
+            SubstituteControl<ITabPage>(view, "pagePlaceManage");
+            SubstituteControl<IButton>(view, "btnClose");
+            SubstituteControl<IButton>(view, "btnLocExpert");
+            SubstituteControl<IButton>(view, "btnIntoList");
+            SubstituteControl<IButton>(view, "btnAnalysePlaces");
+            SubstituteControl<ILabel>(view, "lblFilter");
+
+            view.FilterBox.Returns(Substitute.For<ITextBox>());
+            view.PlacesList.Returns(Substitute.For<IListView>());
+
+            var controller = new PlacesManagerController(view);
+            controller.Init(fBaseWin);
+
+            controller.CheckPlaces();
+            controller.CreateLocationRecord(view.PlacesList.GetSelectedItems());
         }
 
         [Test]
         public void Test_PortraitSelectDlgController()
         {
             var view = Substitute.For<IPortraitSelectDlg>();
-            //var controller = new PortraitSelectDlgController(view);
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+
+            view.ImageCtl.Returns(Substitute.For<IImageView>());
+
+            var controller = new PortraitSelectDlgController(view);
+            controller.Init(fBaseWin);
+
+            var multimediaLink = new GDMMultimediaLink();
+            controller.MultimediaLink = multimediaLink;
+
+            controller.UpdateView();
         }
 
         [Test]
@@ -837,7 +1075,57 @@ namespace GKCore.Controllers
         public void Test_RecMergeController()
         {
             var view = Substitute.For<IRecMergeDlg>();
-            //var controller = new RecMergeController(view);
+
+            SubstituteControl<IGroupBox>(view, "grpSearchPersons");
+            SubstituteControl<IGroupBox>(view, "grpMergeOther");
+            SubstituteControl<IGroupBox>(view, "rgMode");
+            SubstituteControl<ITabPage>(view, "pageMerge");
+            SubstituteControl<ITabPage>(view, "pageMergeOptions");
+            SubstituteControl<IButton>(view, "btnAutoSearch");
+            SubstituteControl<IButton>(view, "btnSkip");
+            SubstituteControl<IRadioButton>(view, "radPersons");
+            SubstituteControl<IRadioButton>(view, "radNotes");
+            SubstituteControl<IRadioButton>(view, "radFamilies");
+            SubstituteControl<IRadioButton>(view, "radSources");
+            SubstituteControl<ICheckBox>(view, "chkIndistinctMatching");
+            SubstituteControl<ICheckBox>(view, "chkBirthYear");
+            SubstituteControl<ILabel>(view, "lblNameAccuracy");
+            SubstituteControl<ILabel>(view, "lblYearInaccuracy");
+            SubstituteControl<ICheckBox>(view, "chkBookmarkMerged");
+            SubstituteControl<IButton>(view, "btnRec1Select");
+            SubstituteControl<IButton>(view, "btnRec2Select");
+            SubstituteControl<IButton>(view, "btnEditLeft");
+            SubstituteControl<IButton>(view, "btnEditRight");
+
+            view.View1.Returns(Substitute.For<IHyperView>());
+            view.View2.Returns(Substitute.For<IHyperView>());
+            view.SkipBtn.Returns(Substitute.For<IButton>());
+            view.ProgressBar.Returns(Substitute.For<IProgressBar>());
+            view.IndistinctMatchingChk.Returns(Substitute.For<ICheckBox>());
+            view.NameAccuracyNum.Returns(Substitute.For<INumericBox>());
+            view.BirthYearChk.Returns(Substitute.For<ICheckBox>());
+            view.YearInaccuracyNum.Returns(Substitute.For<INumericBox>());
+
+            view.View1.Lines.Returns(new StringList());
+            view.View2.Lines.Returns(new StringList());
+
+            var controller = new RecMergeController(view);
+            controller.Init(fBaseWin);
+
+            view.GetCoreControl<ICheckBox>("chkBookmarkMerged").Checked = true;
+            view.GetCoreControl<ICheckBox>("chkBookmarkMerged").Checked = false;
+
+            view.GetCoreControl<IRadioButton>("radPersons").Checked = true;
+
+            //CustomWindowTest.SetSelectItemHandler(0);
+            //ClickButton("btnRec1Select", form);
+
+            //CustomWindowTest.SetSelectItemHandler(1);
+            //ClickButton("btnRec2Select", form);
+
+            controller.SearchDuplicates();
+
+            controller.Skip();
         }
 
         [Test]
@@ -861,7 +1149,19 @@ namespace GKCore.Controllers
         public void Test_RecordSelectDlgController()
         {
             var view = Substitute.For<IRecordSelectDialog>();
-            //var controller = new RecordSelectDlgController(view);
+            SubstituteControl<IButton>(view, "btnCreate");
+            SubstituteControl<IButton>(view, "btnSelect");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<ITextBox>(view, "txtFastFilter");
+
+            view.FilterCombo.Returns(Substitute.For<IComboBox>());
+            view.FilterText.Returns(Substitute.For<ITextBox>());
+            view.FilterCtl.Returns(Substitute.For<IFilterControl>());
+            view.RecordsList.Returns(Substitute.For<IListView>());
+
+            var controller = new RecordSelectDlgController(view);
+            controller.Init(fBaseWin);
+            controller.RecType = GDMRecordType.rtIndividual;
         }
 
         [Test]
@@ -933,16 +1233,111 @@ namespace GKCore.Controllers
         }
 
         [Test]
-        public void Test_ResearchEditDlgController()
+        public async Task Test_ResearchEditDlgController()
         {
             var view = Substitute.For<IResearchEditDlg>();
-            //var controller = new ResearchEditDlgController(view);
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<ITabPage>(view, "pageTasks");
+            SubstituteControl<ITabPage>(view, "pageCommunications");
+            SubstituteControl<ITabPage>(view, "pageGroups");
+            SubstituteControl<ITabPage>(view, "pageNotes");
+            SubstituteControl<ILabel>(view, "lblName");
+            SubstituteControl<ILabel>(view, "lblPriority");
+            SubstituteControl<ILabel>(view, "lblStatus");
+            SubstituteControl<ILabel>(view, "lblPercent");
+            SubstituteControl<ILabel>(view, "lblStartDate");
+            SubstituteControl<ILabel>(view, "lblStopDate");
+
+            view.TasksList.Returns(Substitute.For<ISheetList>());
+            view.CommunicationsList.Returns(Substitute.For<ISheetList>());
+            view.GroupsList.Returns(Substitute.For<ISheetList>());
+            view.NotesList.Returns(Substitute.For<ISheetList>());
+            view.Name.Returns(Substitute.For<ITextBox>());
+            view.Priority.Returns(Substitute.For<IComboBox>());
+            view.Status.Returns(Substitute.For<IComboBox>());
+            view.StartDate.Returns(Substitute.For<IDateBox>());
+            view.StopDate.Returns(Substitute.For<IDateBox>());
+            view.Percent.Returns(Substitute.For<INumericBox>());
+
+            var controller = new ResearchEditDlgController(view);
+            controller.Init(fBaseWin);
+
+            var resRecord = new GDMResearchRecord(fBaseWin.Context.Tree);
+            controller.ResearchRecord = resRecord;
+
+            view.Name.Text = "sample text";
+            view.Priority.SelectedIndex = 1;
+            view.Status.SelectedIndex = 1;
+            view.Percent.Text = "11";
+            view.StartDate.NormalizeDate = "01.01.2000";
+            view.StopDate.NormalizeDate = "02.02.2000";
+            controller.Accept();
+            Assert.AreEqual("sample text", resRecord.ResearchName);
+            Assert.AreEqual(GDMResearchPriority.rpLow, resRecord.Priority);
+            Assert.AreEqual(GDMResearchStatus.rsInProgress, resRecord.Status);
+            Assert.AreEqual(11, resRecord.Percent);
+            Assert.AreEqual("01 JAN 2000", resRecord.StartDate.StringValue);
+            Assert.AreEqual("02 FEB 2000", resRecord.StopDate.StringValue);
+
+            // tasks
+            var taskModel = ((ResTasksListModel)view.TasksList.ListModel);
+            Assert.AreEqual(0, resRecord.Tasks.Count);
+            var task = fBaseWin.Context.Tree.CreateTask();
+            RecordSelectDialogStub.SetTestResult(task);
+            await taskModel.Modify(view.TasksList, new ModifyEventArgs(RecordAction.raAdd, null));
+            Assert.AreEqual(1, resRecord.Tasks.Count);
+
+            //await taskModel.Modify(view.TasksList, new ModifyEventArgs(RecordAction.raEdit, resRecord.Tasks[0]));
+            //Assert.AreEqual(1, resRecord.Tasks.Count);
+
+            StdDialogsStub.SetQuestionResult(true);
+            await taskModel.Modify(view.TasksList, new ModifyEventArgs(RecordAction.raDelete, resRecord.Tasks[0]));
+            Assert.AreEqual(0, resRecord.Tasks.Count);
+
+            // communications
+            var commModel = ((ResCommunicationsListModel)view.CommunicationsList.ListModel);
+            Assert.AreEqual(0, resRecord.Communications.Count);
+            var comm = fBaseWin.Context.Tree.CreateCommunication();
+            RecordSelectDialogStub.SetTestResult(comm);
+            await commModel.Modify(view.CommunicationsList, new ModifyEventArgs(RecordAction.raAdd, null));
+            Assert.AreEqual(1, resRecord.Communications.Count);
+
+            //await commModel.Modify(view.CommunicationsList, new ModifyEventArgs(RecordAction.raEdit, resRecord.Communications[0]));
+            //Assert.AreEqual(1, resRecord.Communications.Count);
+
+            StdDialogsStub.SetQuestionResult(true);
+            await commModel.Modify(view.CommunicationsList, new ModifyEventArgs(RecordAction.raDelete, resRecord.Communications[0]));
+            Assert.AreEqual(0, resRecord.Communications.Count);
+
+            // groups
+            var grpModel = ((ResGroupsListModel)view.GroupsList.ListModel);
+            Assert.AreEqual(0, resRecord.Groups.Count);
+            var grp = fBaseWin.Context.Tree.CreateGroup();
+            RecordSelectDialogStub.SetTestResult(grp);
+            await grpModel.Modify(view.GroupsList, new ModifyEventArgs(RecordAction.raAdd, null));
+            Assert.AreEqual(1, resRecord.Groups.Count);
+
+            //await grpModel.Modify(view.GroupsList, new ModifyEventArgs(RecordAction.raEdit, resRecord.Groups[0]));
+            //Assert.AreEqual(1, resRecord.Groups.Count);
+
+            StdDialogsStub.SetQuestionResult(true);
+            await grpModel.Modify(view.GroupsList, new ModifyEventArgs(RecordAction.raDelete, resRecord.Groups[0]));
+            Assert.AreEqual(0, resRecord.Groups.Count);
+
+            controller.Accept();
+            controller.UpdateView();
         }
 
         [Test]
         public void Test_ScriptEditWinController()
         {
             var view = Substitute.For<IScriptEditWin>();
+            SubstituteControl<IToolItem>(view, "tbNewScript");
+            SubstituteControl<IToolItem>(view, "tbLoadScript");
+            SubstituteControl<IToolItem>(view, "tbSaveScript");
+            SubstituteControl<IToolItem>(view, "tbRun");
+
             var controller = new ScriptEditWinController(view);
         }
 
@@ -974,7 +1369,14 @@ namespace GKCore.Controllers
         public void Test_SlideshowController()
         {
             var view = Substitute.For<ISlideshowWin>();
-            //var controller = new SlideshowController(view);
+            SubstituteControl<IButtonToolItem>(view, "tbStart");
+            SubstituteControl<IButtonToolItem>(view, "tbPrev");
+            SubstituteControl<IButtonToolItem>(view, "tbNext");
+
+            var controller = new SlideshowController(view);
+            controller.Init(fBaseWin);
+
+            controller.UpdateView();
         }
 
         [Test]
@@ -1068,28 +1470,112 @@ namespace GKCore.Controllers
         }
 
         [Test]
-        public void Test_StatisticsWinController()
+        public async Task Test_StatisticsWinController()
         {
             var view = Substitute.For<IStatisticsWin>();
-            //var controller = new StatisticsWinController(view);
+            SubstituteControl<IGroupBox>(view, "grpSummary");
+            SubstituteControl<IButton>(view, "tbExcelExport");
+
+            view.Graph.Returns(Substitute.For<IGraphControl>());
+            view.ListStats.Returns(Substitute.For<IListView>());
+            view.Summary.Returns(Substitute.For<IListView>());
+            view.StatsType.Returns(Substitute.For<IComboBox>());
+
+            var controller = new StatisticsWinController(view, null);
+            controller.Init(fBaseWin);
+            controller.UpdateStatsTypes();
+
+            for (StatsMode sm = StatsMode.smAncestors; sm <= StatsMode.smLast; sm++) {
+                view.StatsType.SelectedIndex = (int)sm;
+            }
+
+            controller.UpdateView();
+
+            view.StatsType.SelectedIndex = 0;
+            await controller.ExportToExcel();
         }
 
         [Test]
         public void Test_TaskEditDlgController()
         {
             var view = Substitute.For<ITaskEditDlg>();
-            //var controller = new TaskEditDlgController(view);
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<ITabPage>(view, "pageNotes");
+            SubstituteControl<ILabel>(view, "lblGoal");
+            SubstituteControl<ILabel>(view, "lblPriority");
+            SubstituteControl<ILabel>(view, "lblStartDate");
+            SubstituteControl<ILabel>(view, "lblStopDate");
+            SubstituteControl<IButton>(view, "btnGoalSelect");
+
+            view.NotesList.Returns(Substitute.For<ISheetList>());
+            view.Priority.Returns(Substitute.For<IComboBox>());
+            view.StartDate.Returns(Substitute.For<IDateBox>());
+            view.StopDate.Returns(Substitute.For<IDateBox>());
+            view.GoalType.Returns(Substitute.For<IComboBox>());
+            view.Goal.Returns(Substitute.For<ITextBox>());
+            view.GoalSelect.Returns(Substitute.For<IButton>());
+
+            var controller = new TaskEditDlgController(view);
+            controller.Init(fBaseWin);
+
+            var taskRecord = new GDMTaskRecord(fBaseWin.Context.Tree);
+            controller.TaskRecord = taskRecord;
+
+
+            view.Priority.SelectedIndex = 1;
+            for (GDMGoalType gt = GDMGoalType.gtIndividual; gt <= GDMGoalType.gtOther; gt++) {
+                view.GoalType.SelectedIndex = (int)gt;
+            }
+            controller.Accept();
+            Assert.AreEqual(GDMResearchPriority.rpLow, taskRecord.Priority);
+            Assert.AreEqual("", taskRecord.StartDate.StringValue);
+            Assert.AreEqual("", taskRecord.StopDate.StringValue);
+
+
+            view.Priority.SelectedIndex = 1;
+            view.StartDate.NormalizeDate = "01.01.2000";
+            view.StopDate.NormalizeDate = "02.02.2000";
+            for (GDMGoalType gt = GDMGoalType.gtIndividual; gt <= GDMGoalType.gtOther; gt++) {
+                view.GoalType.SelectedIndex = (int)gt;
+            }
+            controller.Accept();
+            Assert.AreEqual(GDMResearchPriority.rpLow, taskRecord.Priority);
+            Assert.AreEqual("01 JAN 2000", taskRecord.StartDate.StringValue);
+            Assert.AreEqual("02 FEB 2000", taskRecord.StopDate.StringValue);
+
+
+            view.GoalType.SelectedIndex = 3;
+            controller.SelectGoal();
+
+            view.GoalType.SelectedIndex = 2;
+            var src = fBaseWin.Context.Tree.CreateSource();
+            RecordSelectDialogStub.SetTestResult(src);
+            controller.SelectGoal();
+
+            view.GoalType.SelectedIndex = 1;
+            var fam = fBaseWin.Context.Tree.CreateFamily();
+            RecordSelectDialogStub.SetTestResult(fam);
+            controller.SelectGoal();
+
+            view.GoalType.SelectedIndex = 0;
+            var indi = fBaseWin.Context.Tree.CreateIndividual();
+            RecordSelectDialogStub.SetTestResult(indi);
+            controller.SelectGoal();
+
+            controller.Accept();
+            controller.UpdateView();
         }
 
         [Test]
         public void Test_TreeChartWinController()
         {
             var view = Substitute.For<ITreeChartWin>();
-            //var controller = new TreeChartWinController(view);
+            var controller = new TreeChartWinController(view);
         }
 
         [Test]
-        public void Test_TreeCheckController()
+        public async Task Test_TreeCheckController()
         {
             var view = Substitute.For<ITreeCheckDlg>();
             SubstituteControl<ITabPage>(view, "pageTreeCheck");
@@ -1111,6 +1597,9 @@ namespace GKCore.Controllers
             controller.Init(fBaseWin);
 
             controller.UpdateView();
+
+            controller.CheckBase();
+            await controller.Repair();
         }
 
         [Test]
@@ -1127,8 +1616,23 @@ namespace GKCore.Controllers
             SubstituteControl<IRadioButton>(view, "radAnalysis");
             SubstituteControl<IButton>(view, "btnMatch");
 
+            view.ExternalBase.Returns(Substitute.For<ITextBox>());
+            view.CompareOutput.Returns(Substitute.For<ITextBox>());
+
             var controller = new TreeCompareController(view);
             controller.Init(fBaseWin);
+
+            view.GetCoreControl<IRadioButton>("radMatchInternal").Checked = true;
+            controller.Match();
+
+            view.GetCoreControl<IRadioButton>("radAnalysis").Checked = true;
+            controller.Match();
+
+            view.GetCoreControl<IRadioButton>("radMathExternal").Checked = true;
+
+            //SetModalFormHandler(fFormTest, OpenFile_Cancel_Handler);
+            controller.SelectExternalFile();
+            //controller.Match();
 
             controller.UpdateView();
         }
@@ -1137,7 +1641,38 @@ namespace GKCore.Controllers
         public void Test_TreeFilterDlgController()
         {
             var view = Substitute.For<ITreeFilterDlg>();
-            //var controller = new TreeFilterDlgController(view);
+            SubstituteControl<IButton>(view, "btnAccept");
+            SubstituteControl<IButton>(view, "btnCancel");
+            SubstituteControl<IGroupBox>(view, "rgBranchCut");
+            SubstituteControl<IRadioButton>(view, "rbCutNone");
+            SubstituteControl<IRadioButton>(view, "rbCutYears");
+            SubstituteControl<ILabel>(view, "lblYear");
+            SubstituteControl<IRadioButton>(view, "rbCutPersons");
+            SubstituteControl<ILabel>(view, "lblRPSources");
+
+            view.PersonsList.Returns(Substitute.For<ISheetList>());
+            view.YearNum.Returns(Substitute.For<INumericBox>());
+            view.SourceCombo.Returns(Substitute.For<IComboBox>());
+
+            var controller = new TreeFilterDlgController(view);
+            controller.Init(fBaseWin);
+
+            var filter = new ChartFilter();
+            controller.Filter = filter;
+
+            controller.UpdateView();
+
+            view.GetCoreControl<IRadioButton>("rbCutNone").Checked = true;
+            controller.Accept();
+            Assert.AreEqual(ChartFilter.BranchCutType.None, filter.BranchCut);
+
+            view.GetCoreControl<IRadioButton>("rbCutYears").Checked = true;
+            controller.Accept();
+            Assert.AreEqual(ChartFilter.BranchCutType.Years, filter.BranchCut);
+
+            view.GetCoreControl<IRadioButton>("rbCutPersons").Checked = true;
+            controller.Accept();
+            Assert.AreEqual(ChartFilter.BranchCutType.Persons, filter.BranchCut);
         }
 
         [Test]
@@ -1156,6 +1691,9 @@ namespace GKCore.Controllers
 
             var controller = new TreeMergeController(view);
             controller.Init(fBaseWin);
+
+            //SetModalFormHandler(fFormTest, OpenFile_Cancel_Handler);
+            controller.Merge();
 
             controller.UpdateView();
         }
@@ -1183,6 +1721,22 @@ namespace GKCore.Controllers
             controller.UpdateView();
 
             controller.Select(iRec, Tools.TreeTools.TreeWalkMode.twmAll);
+
+            // FIXME
+            //ClickButton("btnSelectFamily", form);
+            //ClickButton("btnSelectAncestors", form);
+            //ClickButton("btnSelectDescendants", form);
+            //ClickButton("btnSelectAll", form);
+
+            /*SetModalFormHandler(fFormTest, SaveFile_Cancel_Handler);
+            ClickButton("btnSave", form);
+
+            try {
+                SetModalFormHandler(fFormTest, SaveFileGED_Handler);
+                ClickButton("btnSave", form);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.ged"));
+            }*/
 
             // FIXME
             //ModalFormHandler = MessageBox_OkHandler;

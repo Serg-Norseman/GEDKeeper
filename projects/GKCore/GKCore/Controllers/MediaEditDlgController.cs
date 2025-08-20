@@ -20,6 +20,7 @@
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Design;
@@ -210,7 +211,7 @@ namespace GKCore.Controllers
             fView.StoreType.SetSelectedTag<MediaStoreType>(selectType);
         }
 
-        public async void SelectFile()
+        public async Task SelectFile()
         {
             string fileName = await AppHost.StdDialogs.GetOpenFile("", "", LangMan.LS(LSID.AllFilter), 1, "");
             if (string.IsNullOrEmpty(fileName)) return;

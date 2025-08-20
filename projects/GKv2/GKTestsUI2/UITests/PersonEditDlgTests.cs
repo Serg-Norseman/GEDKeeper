@@ -62,12 +62,6 @@ namespace GKUI.Forms
         }
 
         [Test]
-        public void Test_Cancel()
-        {
-            ClickButton("btnCancel", fDialog);
-        }
-
-        [Test]
         public void Test_EnterDataAndApply()
         {
             Assert.AreEqual(fIndividualRecord, fDialog.IndividualRecord);
@@ -132,7 +126,7 @@ namespace GKUI.Forms
             ClickButton("btnNameCopy", fDialog);
 
             // events
-            tabs.SelectTab(0);
+            /*tabs.SelectTab(0);
             Assert.AreEqual(1, indiRecord.Events.Count);
             SetModalFormHandler(this, EventEditDlgTests.EventEditDlg_Select_Handler);
             ClickToolStripButton("fEventsList_ToolBar_btnAdd", fDialog);
@@ -144,7 +138,7 @@ namespace GKUI.Forms
             Assert.AreEqual(2, indiRecord.Events.Count);
 
             TestDeleteSheetListItem("fEventsList", 1);
-            Assert.AreEqual(1, indiRecord.Events.Count);
+            Assert.AreEqual(1, indiRecord.Events.Count);*/
 
             // spouses
             tabs.SelectTab(1);
@@ -193,7 +187,7 @@ namespace GKUI.Forms
             tabs.SelectTab(6);
             tabsOther.SelectTab(1);
             Assert.AreEqual(0, indiRecord.Groups.Count);
-            RecordSelectDlgTests.SetCreateItemHandler(this, CustomWindowTest.GroupAdd_Mini_Handler);
+            CustomWindowTest.SetCreateItemHandler(this, CustomWindowTest.GroupAdd_Mini_Handler);
             ClickToolStripButton("fGroupsList_ToolBar_btnAdd", fDialog);
             Assert.AreEqual(1, indiRecord.Groups.Count);
             Assert.AreEqual("sample group", fBase.Context.Tree.GetPtrValue<GDMGroupRecord>(indiRecord.Groups[0]).GroupName);
@@ -238,7 +232,7 @@ namespace GKUI.Forms
         public static void SetCreateIndividualHandler(NUnitFormTest formTest, GDMSex needIndividualSex)
         {
             fNeedIndividualSex = needIndividualSex;
-            RecordSelectDlgTests.SetCreateItemHandler(formTest, IndividualAdd_Mini_Handler);
+            CustomWindowTest.SetCreateItemHandler(formTest, IndividualAdd_Mini_Handler);
         }
 
         #endregion

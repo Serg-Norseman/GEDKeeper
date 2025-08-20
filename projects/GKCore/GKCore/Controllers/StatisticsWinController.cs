@@ -19,6 +19,7 @@
  */
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
@@ -234,7 +235,7 @@ namespace GKCore.Controllers
                 string.Format("{0:0.00}", item.FemaleVal)));
         }
 
-        public async void ExportToExcel()
+        public async Task ExportToExcel()
         {
             string fileName = await TableExporter.GetTableFile();
             var writer = TableExporter.GetTableWriter(fileName);

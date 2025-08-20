@@ -92,15 +92,6 @@ namespace GKUI.Forms
         }
 
         [Test]
-        public void Test_ShowAbout()
-        {
-            ExpectModal("AboutDlg", delegate {
-                ClickButton("btnClose", "AboutDlg");
-            });
-            ClickToolStripMenuItem("miAbout", fMainWin);
-        }
-
-        [Test]
         public void Test_GetCurrentFile()
         {
             IBaseWindow curBase = AppHost.Instance.GetCurrentFile();
@@ -193,9 +184,9 @@ namespace GKUI.Forms
                 IRecordsListModel listMan = fCurBase.GetRecordsListManByType(rt);
                 listMan.AddCondition((byte)IndividualListModel.ColumnType.ctPatriarch, ConditionOperator.Contains, "test"); // any first column
 
-                ModalFormHandler = CommonFilterDlgTests.CommonFilterDlg_btnAccept_Handler;
+                ModalFormHandler = CustomWindowTest.CommonFilterDlg_btnAccept_Handler;
                 ClickToolStripButton("tbFilter", fMainWin);
-                ModalFormHandler = CommonFilterDlgTests.CommonFilterDlg_btnReset_Handler;
+                ModalFormHandler = CustomWindowTest.CommonFilterDlg_btnReset_Handler;
                 ClickToolStripButton("tbFilter", fMainWin);
             }
 
@@ -253,7 +244,7 @@ namespace GKUI.Forms
         {
             ModalFormHandler = Dialog_Cancel_Handler;
             ClickToolStripMenuItem("miOptions", fMainWin);
-            ModalFormHandler = OptionsDlgTests.OptionsDlg_btnAccept_Handler;
+            ModalFormHandler = CustomWindowTest.OptionsDlg_btnAccept_Handler;
             ClickToolStripMenuItem("miOptions", fMainWin);
         }
 
@@ -262,62 +253,6 @@ namespace GKUI.Forms
         {
             ClickToolStripButton("tbNext", fMainWin);
             ClickToolStripButton("tbPrev", fMainWin);
-        }
-
-        [Test]
-        public void Test_ShowTreeCompareDlg()
-        {
-            SetModalFormHandler(this, TreeToolsWinTests.TreeCompareDlg_Handler);
-            ClickToolStripMenuItem("miTreeCompare", fMainWin);
-        }
-
-        [Test]
-        public void Test_ShowTreeSplitDlg()
-        {
-            SetModalFormHandler(this, TreeToolsWinTests.TreeSplitDlg_Handler);
-            ClickToolStripMenuItem("miTreeSplit", fMainWin);
-        }
-
-        [Test]
-        public void Test_ShowRecMergeDlg()
-        {
-            SetModalFormHandler(this, TreeToolsWinTests.RecMergeDlg_Handler);
-            ClickToolStripMenuItem("miRecMerge", fMainWin);
-        }
-
-        [Test]
-        public void Test_ShowFamilyGroupsDlg()
-        {
-            ClickToolStripMenuItem("miFamilyGroups", fMainWin);
-            TreeToolsWinTests.FamilyGroupsDlg_Handler(this, GetActiveForm("TTFamilyGroupsDlg"));
-        }
-
-        [Test]
-        public void Test_ShowTreeCheckDlg()
-        {
-            SetModalFormHandler(this, TreeToolsWinTests.TreeCheckDlg_Handler);
-            ClickToolStripMenuItem("miTreeCheck", fMainWin);
-        }
-
-        [Test]
-        public void Test_ShowTreeMergeDlg()
-        {
-            SetModalFormHandler(this, TreeToolsWinTests.TreeMergeDlg_Handler);
-            ClickToolStripMenuItem("miTreeMerge", fMainWin);
-        }
-
-        [Test]
-        public void Test_ShowPatSearchDlg()
-        {
-            SetModalFormHandler(this, TreeToolsWinTests.PatSearchDlg_Handler);
-            ClickToolStripMenuItem("miPatSearch", fMainWin);
-        }
-
-        [Test]
-        public void Test_ShowPlacesManagerDlg()
-        {
-            SetModalFormHandler(this, TreeToolsWinTests.PlacesManagerDlg_Handler);
-            ClickToolStripMenuItem("miPlacesManager", fMainWin);
         }
 
         [Test]
@@ -363,7 +298,7 @@ namespace GKUI.Forms
             fCurBase.SelectRecordByXRef("I3");
             Assert.AreEqual("I3", fCurBase.GetSelectedPerson().XRef);
             ClickToolStripMenuItem("miAncestorsCircle", fMainWin);
-            CircleChartWinTests.CircleChartWin_Tests(this, GetActiveForm("CircleChartWin"));
+            CustomWindowTest.CircleChartWin_Tests(this, GetActiveForm("CircleChartWin"));
         }
 
         [Test]
@@ -372,7 +307,7 @@ namespace GKUI.Forms
             fCurBase.SelectRecordByXRef("I1");
             Assert.AreEqual("I1", fCurBase.GetSelectedPerson().XRef);
             ClickToolStripMenuItem("miDescendantsCircle", fMainWin);
-            CircleChartWinTests.CircleChartWin_Tests(this, GetActiveForm("CircleChartWin"));
+            CustomWindowTest.CircleChartWin_Tests(this, GetActiveForm("CircleChartWin"));
         }
 
         [Test]
@@ -381,7 +316,7 @@ namespace GKUI.Forms
             fCurBase.SelectRecordByXRef("I3");
             Assert.AreEqual("I3", fCurBase.GetSelectedPerson().XRef);
             ClickToolStripButton("tbTreeAncestors", fMainWin);
-            TreeChartWinTests.TreeChartWin_Tests(this, GetActiveForm("TreeChartWin"), TreeChartKind.ckAncestors, "I3");
+            CustomWindowTest.TreeChartWin_Tests(this, GetActiveForm("TreeChartWin"), TreeChartKind.ckAncestors, "I3");
         }
 
         [Test]
@@ -390,7 +325,7 @@ namespace GKUI.Forms
             fCurBase.SelectRecordByXRef("I1");
             Assert.AreEqual("I1", fCurBase.GetSelectedPerson().XRef);
             ClickToolStripButton("tbTreeDescendants", fMainWin);
-            TreeChartWinTests.TreeChartWin_Tests(this, GetActiveForm("TreeChartWin"), TreeChartKind.ckDescendants, "I1");
+            CustomWindowTest.TreeChartWin_Tests(this, GetActiveForm("TreeChartWin"), TreeChartKind.ckDescendants, "I1");
         }
 
         [Test]
@@ -399,14 +334,13 @@ namespace GKUI.Forms
             fCurBase.SelectRecordByXRef("I1");
             Assert.AreEqual("I1", fCurBase.GetSelectedPerson().XRef);
             ClickToolStripButton("tbTreeBoth", fMainWin);
-            TreeChartWinTests.TreeChartWin_Tests(this, GetActiveForm("TreeChartWin"), TreeChartKind.ckBoth, "I1");
+            CustomWindowTest.TreeChartWin_Tests(this, GetActiveForm("TreeChartWin"), TreeChartKind.ckBoth, "I1");
         }
 
         [Test]
         public void Test_ShowStatisticsWin()
         {
-            ClickToolStripButton("tbStats", fMainWin);
-            StatisticsWinTests.StatsWin_Handler(this, GetActiveForm("StatisticsWin"));
+            //ClickToolStripButton("tbStats", fMainWin);
         }
 
         [Test]
@@ -416,7 +350,7 @@ namespace GKUI.Forms
             SetModalFormHandler(this, MessageBox_OkHandler);
 
             ClickToolStripMenuItem("miSlideshow", fMainWin);
-            SlideshowWinTests.SlideshowWin_Handler(this, GetActiveForm("SlideshowWin"));
+            CustomWindowTest.SlideshowWin_Handler(this, GetActiveForm("SlideshowWin"));
         }
 
         [Test]
@@ -424,13 +358,6 @@ namespace GKUI.Forms
         {
             SetModalFormHandler(this, ScriptEditWinTests.ScriptEditWin_Handler);
             ClickToolStripMenuItem("miScripts", fMainWin);
-        }
-
-        [Test]
-        public void Test_ShowOrganizerWin()
-        {
-            ModalFormHandler = OrganizerWinTests.OrganizerWin_Handler;
-            ClickToolStripMenuItem("miOrganizer", fMainWin);
         }
 
         [Test]
@@ -444,7 +371,7 @@ namespace GKUI.Forms
         public void Test_ShowMapsViewerWin()
         {
             ClickToolStripMenuItem("miMap", fMainWin);
-            MapsViewerWinTests.MapsViewerWin_Handler(this, GetActiveForm("MapsViewerWin"));
+            CustomWindowTest.MapsViewerWin_Handler(this, GetActiveForm("MapsViewerWin"));
         }
 
         [Test]

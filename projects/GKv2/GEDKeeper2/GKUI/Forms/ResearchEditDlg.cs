@@ -101,14 +101,8 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fTasksList = new GKSheetList(pageTasks);
-            fTasksList.SetControlName("fTasksList"); // for purpose of tests
-
             fCommunicationsList = new GKSheetList(pageCommunications);
-            fCommunicationsList.SetControlName("fCommunicationsList"); // for purpose of tests
-
             fGroupsList = new GKSheetList(pageGroups);
-            fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
-
             fNotesList = new GKSheetList(pageNotes);
 
             fController = new ResearchEditDlgController(this);

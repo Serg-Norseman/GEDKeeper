@@ -27,6 +27,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Views;
+using GKCore.Kinships;
 using GKCore.Locales;
 using GKTests.Stubs;
 using NSubstitute;
@@ -61,6 +62,8 @@ namespace GKTests
             AppHostStub.ConfigureBootstrap();
 
             LangMan.DefInit();
+            AppHost.EventDefinitions.InitPredefined();
+            KinshipsGraph.InitDefaults();
 
             AppHost.Container.Register<IProgressDialog, ProgressStub>(GKCore.Utilities.LifeCycle.Singleton, true);
             AppHost.Container.Register<IRecordSelectDialog, RecordSelectDialogStub>(GKCore.Utilities.LifeCycle.Singleton, true);
@@ -130,6 +133,10 @@ namespace GKTests
 
             evt = context.CreateEventEx(iRec4, GEDCOMTagName.RESI, "12 FEB", "Far Forest");
             Assert.IsNotNull(evt);
+            evt.Address.AddWebPage("test 2");
+            evt.Address.AddPhoneNumber("test 2");
+            evt.Address.AddEmailAddress("test 2");
+            evt.Address.AddFaxNumber("test 2");
 
             // fifth (I5)
             GDMIndividualRecord iRec5 = context.CreatePersonEx("Anna", "", "Jones", GDMSex.svFemale, false);
@@ -164,6 +171,10 @@ namespace GKTests
             GDMRepositoryRecord repoRec = context.Tree.CreateRepository();
             repoRec.RepositoryName = "Test repository";
             Assert.IsNotNull(repoRec, "repoRec != null");
+            repoRec.Address.AddWebPage("test");
+            repoRec.Address.AddPhoneNumber("test");
+            repoRec.Address.AddEmailAddress("test");
+            repoRec.Address.AddFaxNumber("test");
 
             // research for tests
             GDMResearchRecord resRec = context.Tree.CreateResearch();

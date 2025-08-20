@@ -57,12 +57,6 @@ namespace GKUI.Forms
         }
 
         [Test]
-        public void Test_Cancel()
-        {
-            ClickButton("btnCancel", fDialog);
-        }
-
-        [Test]
         public void Test_EnterDataAndApply()
         {
             Assert.AreEqual(fNoteRecord, fDialog.NoteRecord);

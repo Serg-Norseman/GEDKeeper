@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using BSLib;
+using GDModel;
 using GKTests;
 using NSubstitute;
 using NUnit.Framework;
@@ -111,6 +112,27 @@ namespace GKCore.Charts
             instance.MouseDown(10, 10);
             instance.MouseMove(10, 20);
             instance.MouseUp(10, 20);
+        }
+
+        [Test]
+        public void Test_TreeChartPerson_GetSelectedColor()
+        {
+            var tcPerson = new TreeChartPerson(null);
+            Assert.IsNotNull(tcPerson);
+
+            tcPerson.BuildBy(null);
+
+            tcPerson.Sex = GDMSex.svMale;
+            var color = tcPerson.GetSelectedColor();
+            //Assert.AreEqual(Color.FromArgb(255, Color.Blue), color);
+
+            tcPerson.Sex = GDMSex.svFemale;
+            color = tcPerson.GetSelectedColor();
+            //Assert.AreEqual(Color.FromArgb(255, Color.Red), color);
+
+            tcPerson.Sex = GDMSex.svUnknown;
+            color = tcPerson.GetSelectedColor();
+            //Assert.AreEqual(Color.FromArgb(255, Color.Black), color);
         }
     }
 }

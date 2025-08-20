@@ -98,9 +98,7 @@ namespace GKUI.Forms
 
             fNotesList = new GKSheetList(pageNotes);
             fSourcesList = new GKSheetList(pageSources);
-
             fUserRefList = new GKSheetList(pageUserRefs);
-            fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
 
             fController = new MediaEditDlgController(this);
             fController.Init(baseWin);

@@ -18,20 +18,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Drawing;
+using System.Windows.Forms;
 using BSLib;
-using GDModel;
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Kinships;
 using GKCore.Locales;
+using GKCore.Media;
 using GKTests;
 using GKTests.Stubs;
 using GKUI.Components;
 using GKUI.Platform;
 using GKUI.Platform.Handlers;
+using NUnit.Extensions.Forms;
 using NUnit.Framework;
 
 namespace GKUI.Forms
@@ -61,29 +62,6 @@ namespace GKUI.Forms
         }
 
         [Test]
-        public void Test_UIHelper()
-        {
-            Assert.Throws(typeof(ArgumentNullException), () => { UIHelper.CreateListView(null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { UIHelper.CreateRecordsView(null, null, GDMRecordType.rtIndividual, false); });
-        }
-
-        [Test]
-        public void Test_Other()
-        {
-            Rectangle rect1 = UIHelper.Rt2Rt(ExtRect.Empty);
-            Assert.AreEqual(0, rect1.Left);
-            Assert.AreEqual(0, rect1.Top);
-            Assert.AreEqual(0, rect1.Right);
-            Assert.AreEqual(0, rect1.Bottom);
-
-            RectangleF rect2 = UIHelper.Rt2Rt(ExtRectF.Empty);
-            Assert.AreEqual(0, rect2.Left);
-            Assert.AreEqual(0, rect2.Top);
-            Assert.AreEqual(0, rect2.Right);
-            Assert.AreEqual(0, rect2.Bottom);
-        }
-
-        [Test]
         public void Test_ColorLD()
         {
             var color = AppHost.GfxProvider.CreateColor(0x646464);
@@ -105,33 +83,114 @@ namespace GKUI.Forms
         }
 
         [Test]
-        public void Test_Brush()
+        public void TestNamedRegion()
         {
-            // FIXME
-            /*var color = AppHost.GfxProvider.CreateColor(0x323232);
-            var brush = AppHost.GfxProvider.CreateBrush(color);
-            Assert.AreEqual(((ColorHandler)color).Handle, ((ColorHandler)brush.Color).Handle);*/
+            var region = new NamedRegion("test", ExtRect.Empty);
+            Assert.AreEqual("test", region.Name);
         }
 
         [Test]
-        public void Test_Pen()
+        public void Test_ImageBox()
         {
-            // FIXME
-            /*var color = AppHost.GfxProvider.CreateColor(0x323232);
-            var pen = AppHost.GfxProvider.CreatePen(color, 1.0f);
-            Assert.AreEqual(((ColorHandler)color).Handle, ((ColorHandler)pen.Color).Handle);
-            Assert.AreEqual(1.0f, pen.Width);*/
+            var fForm = new Form();
+            fForm.ClientSize = new Size(383, 221);
+            fForm.Text = "ImageViewTests";
+
+            var fImageBox = new ImageBox();
+            fImageBox.Dock = DockStyle.Fill;
+
+            fForm.SuspendLayout();
+            fForm.Controls.Add(fImageBox);
+            fForm.ResumeLayout(false);
+            fForm.PerformLayout();
+
+            Bitmap img = new Bitmap(TestUtils.LoadResourceStream("shaytan_plant.jpg"));
+
+            fImageBox.BeginUpdate();
+            fImageBox.Image = null;
+            Assert.AreEqual(null, fImageBox.Image);
+            fImageBox.Image = img;
+            Assert.AreEqual(img, fImageBox.Image);
+            fImageBox.EndUpdate();
+
+            fImageBox.SelectionMode = ImageBoxSelectionMode.Rectangle;
+            Assert.AreEqual(ImageBoxSelectionMode.Rectangle, fImageBox.SelectionMode);
+
+            fImageBox.ZoomToFit();
+            fImageBox.ZoomIn();
+            fImageBox.ZoomOut();
+
+            fImageBox.Zoom = 200;
+            Assert.AreEqual(200, fImageBox.Zoom);
+
+            Assert.IsNotNull(fImageBox.ZoomLevels);
+
+            fImageBox.SizeToFit = true;
+            Assert.AreEqual(true, fImageBox.SizeToFit);
+
+            fImageBox.AllowZoom = true;
+            Assert.AreEqual(true, fImageBox.AllowZoom);
+
+            fImageBox.AutoPan = true;
+            Assert.AreEqual(true, fImageBox.AutoPan);
+
+            fImageBox.ShowNamedRegionTips = false;
+            Assert.AreEqual(false, fImageBox.ShowNamedRegionTips);
+            fImageBox.ShowNamedRegionTips = true;
+            Assert.AreEqual(true, fImageBox.ShowNamedRegionTips);
+
+            fImageBox.ActualSize();
+
+            fForm.Show();
+
+            fForm.Close();
+            fForm.Dispose();
         }
 
         [Test]
-        public void Test_Font()
+        public void Test_ImageView()
         {
-            string fontName;
-            fontName = "Verdana";
-            var fnt = AppHost.GfxProvider.CreateFont(fontName, 10, true);
-            Assert.AreEqual(fontName, fnt.FontFamilyName);
-            Assert.AreEqual(fontName, fnt.Name);
-            Assert.AreEqual(10.0f, fnt.Size);
+            var fForm = new Form();
+            fForm.ClientSize = new Size(383, 221);
+            fForm.Text = "ImageViewTests";
+
+            var fImageView = new ImageView();
+            fImageView.Dock = DockStyle.Fill;
+
+            fForm.SuspendLayout();
+            fForm.Controls.Add(fImageView);
+            fForm.ResumeLayout(false);
+            fForm.PerformLayout();
+
+            IImage image1 = null;
+            fImageView.OpenImage(null, image1); // return without exceptions
+
+            image1 = new ImageHandler(new Bitmap(TestUtils.LoadResourceStream("shaytan_plant.jpg")));
+            fImageView.OpenImage(null, image1);
+
+            fForm.Show();
+
+            fImageView.ShowToolbar = false;
+            Assert.IsFalse(fImageView.ShowToolbar);
+
+            fImageView.ShowToolbar = true;
+            Assert.IsTrue(fImageView.ShowToolbar);
+
+            fImageView.SelectionMode = ImageBoxSelectionMode.Zoom;
+            Assert.AreEqual(ImageBoxSelectionMode.Zoom, fImageView.SelectionMode);
+
+            fImageView.SelectionRegion = ExtRect.Empty;
+            Assert.AreEqual(ExtRect.Empty, fImageView.SelectionRegion);
+
+            CustomWindowTest.ClickToolStripButton("btnZoomIn", fForm);
+            CustomWindowTest.ClickToolStripButton("btnZoomOut", fForm);
+            CustomWindowTest.ClickToolStripButton("btnSizeToFit", fForm);
+
+            var tscbZoomLevels = new ToolStripComboBoxTester("zoomLevelsToolStripComboBox", fForm);
+            tscbZoomLevels.Enter("500");
+
+            fForm.Close();
+            fForm.Dispose();
         }
     }
 }
