@@ -20,20 +20,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 using BSLib;
 using GDModel;
-using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Controls;
-using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Names;
 using GKCore.Search;
 using GKCore.Stats;
-using GKCore.Tools;
 using GKCore.Utilities;
 using GKTests;
 using NSubstitute;
@@ -52,87 +47,6 @@ namespace GKCore
 
             fContext = TestUtils.CreateContext();
             TestUtils.FillContext(fContext);
-        }
-
-        [Test]
-        public void Test_PG()
-        {
-            PatriarchObj pObj = new PatriarchObj();
-            Assert.IsNotNull(pObj);
-            Assert.IsNotNull(pObj.Links);
-
-            PGNode pgNode = new PGNode("label", PGNodeType.Default);
-            Assert.IsNotNull(pgNode);
-
-            pgNode = new PGNode("label", PGNodeType.Default, 5);
-            Assert.IsNotNull(pgNode);
-        }
-
-        private bool TestExternalFilterHandler(GDMRecord record)
-        {
-            return false;
-        }
-
-        [Test]
-        public void Test_FiltersIntf()
-        {
-            ColumnConditionExpression cond = new ColumnConditionExpression(0, ConditionOperator.Contains, null);
-            Assert.IsNotNull(cond);
-
-            ExternalFilterHandler handler = TestExternalFilterHandler;
-            Assert.IsFalse(handler.Invoke(null));
-        }
-
-        private void TweenHandler(int newX, int newY)
-        {
-        }
-
-        [Test]
-        public void Test_Tween()
-        {
-            var tween = new TweenLibrary();
-            tween.StartTween(TweenHandler, 0, 0, 10, 10, TweenAnimation.EaseInOutQuad, 20);
-        }
-
-        [Test]
-        public void Test_SysUtils()
-        {
-            #if OS_LINUX || OS_MACOS
-            Assert.IsTrue(SysUtils.IsUnix());
-            Assert.AreEqual(PlatformID.Unix, SysUtils.GetPlatformID());
-            Assert.AreNotEqual(DesktopType.Windows, SysUtils.GetDesktopType());
-            #else
-            Assert.IsFalse(SysUtils.IsUnix());
-            Assert.AreEqual(PlatformID.Win32NT, SysUtils.GetPlatformID());
-            Assert.IsTrue(string.IsNullOrEmpty(SysUtils.GetMonoVersion()));
-            Assert.AreEqual(DesktopType.Windows, SysUtils.GetDesktopType());
-            #endif
-        }
-
-        [Test]
-        public void Test_SysUtils_IsUnicodeEncoding()
-        {
-            Assert.IsTrue(SysUtils.IsUnicodeEncoding(Encoding.UTF8));
-            Assert.IsFalse(SysUtils.IsUnicodeEncoding(Encoding.ASCII));
-        }
-
-        [Test]
-        public void Test_SysUtils_GetAssemblyAttribute()
-        {
-            Assembly asm = this.GetType().Assembly;
-            var attr1 = SysUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(asm);
-            Assert.IsNotNull(attr1);
-            Assert.AreEqual("GKTests", attr1.Title);
-
-            Assert.Throws(typeof(ArgumentNullException), () => { SysUtils.GetAssemblyAttribute<AssemblyTitleAttribute>(null); });
-        }
-
-        [Test]
-        public void Test_SysUtils_ImplementsInterface()
-        {
-            Assert.IsTrue(SysUtils.ImplementsInterface(typeof(LangManager), typeof(ILangMan)));
-
-            Assert.IsFalse(SysUtils.ImplementsInterface(typeof(LangManager), typeof(ILocalizable)));
         }
 
         [Test]
@@ -256,30 +170,6 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_NavStack()
-        {
-            var navStack = new NavigationStack<object>();
-            {
-                Assert.IsNotNull(navStack);
-                Assert.AreEqual(null, navStack.Current);
-                navStack.Clear();
-                Assert.AreEqual(null, navStack.Current);
-
-                Assert.AreEqual(false, navStack.CanBackward());
-                Assert.AreEqual(false, navStack.CanForward());
-
-                object test = new object();
-                object test2 = new object();
-
-                navStack.Current = test;
-                navStack.Current = test2;
-
-                Assert.AreEqual(test, navStack.Back());
-                Assert.AreEqual(test2, navStack.Next());
-            }
-        }
-
-        [Test]
         public void Test_NamesTable()
         {
             var namesTable = new NamesTable();
@@ -370,56 +260,6 @@ namespace GKCore
             Assert.IsNotNull(langMan);
 
             Assert.AreEqual("?", langMan.LS(LSID.First));
-        }
-
-        [Test]
-        [TestCase(true, "Silkin*", "Silkinova")]
-        [TestCase(true, "Si*kin", "Silkin")]
-        [TestCase(true, "Si?kin", "Silkin")]
-        [TestCase(false, "Si*kin", "Sunkin")]
-        [TestCase(true, "Iv*nov", "Ivanov")]
-        [TestCase(true, "Iv*nov|Sid*v", "Sidorov")]
-        [TestCase(true, "Sid*v|Pe*ov|Iv*nov", "Ivanov")]
-        [TestCase(true, "Sid*v|Iv*nov", "Sidorov")]
-        [Parallelizable(ParallelScope.All)]
-        public void Test_PatternMatcher(bool value, string expression, string name)
-        {
-            Assert.AreEqual(value, SysUtils.MatchPattern(expression, name));
-        }
-
-        [Test]
-        [TestCase("Simple: https://example.com", "Simple: [url=https://example.com]https://example.com[/url]")]
-        [TestCase("Multiple: http://site.com и https://another-site.org/path", "Multiple: [url=http://site.com]http://site.com[/url] и [url=https://another-site.org/path]https://another-site.org/path[/url]")]
-        [TestCase("Complex: https://subdomain.example.com/path/to/resource?param=value", "Complex: [url=https://subdomain.example.com/path/to/resource?param=value]https://subdomain.example.com/path/to/resource?param=value[/url]")]
-        [TestCase("simple text", "simple text")]
-        [TestCase("Exclude: [url=http://site.com]http://site.com[/url]", "Exclude: [url=http://site.com]http://site.com[/url]")]
-        [TestCase("", "")]
-        public void Test_MakeLinks(string source, string target)
-        {
-            Assert.AreEqual(target, GKUtils.MakeLinks(source));
-        }
-
-        [Test]
-        public void Test_IsDamagedUtf8Sequence()
-        {
-            var bytes = new byte[] { 0xA4, 0xD0, 0xB0, 0xD0, 0xBC, 0x20, 0x20, 0x20, 0xD0 };
-
-            Assert.IsTrue(SysUtils.IsDamagedUtf8Sequence(bytes[0], false));
-            Assert.IsTrue(SysUtils.IsDamagedUtf8Sequence(bytes[bytes.Length-1], true));
-
-            bytes = new byte[] { 0xD0, 0xB0, 0xD0, 0xBC };
-
-            Assert.IsFalse(SysUtils.IsDamagedUtf8Sequence(bytes[0], false));
-            Assert.IsFalse(SysUtils.IsDamagedUtf8Sequence(bytes[bytes.Length - 1], true));
-        }
-
-        [Test]
-        public void Test_HasRangeIntersection()
-        {
-            Assert.IsTrue(SysUtils.HasRangeIntersection(1, 10, 5, 15));
-            Assert.IsTrue(SysUtils.HasRangeIntersection(1, 5, 1, 5));
-            Assert.IsFalse(SysUtils.HasRangeIntersection(1, 5, 6, 10));
-            Assert.IsTrue(SysUtils.HasRangeIntersection(1, 5, 5, 10));
         }
     }
 }

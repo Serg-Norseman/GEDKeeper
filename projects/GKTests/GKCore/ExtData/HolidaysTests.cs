@@ -20,12 +20,11 @@
 
 using System;
 using BSLib;
-using GKCore.ExtData;
 using GKCore.Utilities;
 using GKTests;
 using NUnit.Framework;
 
-namespace GKCore
+namespace GKCore.ExtData
 {
     [TestFixture]
     public class HolidaysTests

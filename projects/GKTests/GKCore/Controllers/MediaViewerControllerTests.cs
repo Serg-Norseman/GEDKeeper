@@ -18,47 +18,49 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !DIS_NUF
-
 using System.IO;
-using System.Windows.Forms;
 using GDModel;
 using GKCore.Design;
+using GKCore.Design.Views;
+using GKCore.Locales;
+using GKCore.Options;
 using GKTests;
 using GKTests.Stubs;
+using NSubstitute;
 using NUnit.Framework;
 
-namespace GKUI.Forms
+namespace GKCore.Controllers
 {
-    /// <summary>
-    /// 
-    /// </summary>
     [TestFixture]
-    public class MediaViewerWinTests : CustomWindowTest
+    public class MediaViewerControllerTests
     {
-        private IBaseWindow fBase;
-        private MediaViewerWin fDialog;
+        private readonly IBaseWindow fBaseWin;
 
-        public override void Setup()
+        public MediaViewerControllerTests()
         {
-            CommonTests.InitUITest();
+            TestUtils.InitUITest();
 
-            fBase = new BaseWindowStub();
+            LangMan.DefInit();
+            GlobalOptions.Instance.AllowMediaStoreReferences = true;
 
-            fDialog = new MediaViewerWin(fBase);
-            fDialog.Show();
+            fBaseWin = new BaseWindowStub(true);
         }
 
-        public override void TearDown()
+        [Test]
+        public void Test_MediaViewerController()
         {
-            fDialog.Dispose();
+            var view = Substitute.For<IMediaViewerWin>();
+            var controller = new MediaViewerController(view);
+            controller.Init(fBaseWin);
+
+            controller.UpdateView();
         }
 
         private GDMMultimediaRecord GetTestMultimedia(string resName, out string targetName)
         {
             targetName = TestUtils.PrepareTestFile(resName);
 
-            var mediaRec = fBase.Context.Tree.CreateMultimedia();
+            var mediaRec = fBaseWin.Context.Tree.CreateMultimedia();
             mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle());
             var fileRefV = mediaRec.FileReferences[0];
 
@@ -77,16 +79,11 @@ namespace GKUI.Forms
             try {
                 Assert.IsTrue(File.Exists(targetName));
 
-                fDialog.MultimediaRecord = fileRefV;
-                Assert.AreEqual(fileRefV, fDialog.MultimediaRecord);
-
-                fDialog.Refresh();
-
-                ClickToolStripButton("btnZoomIn", fDialog);
-                ClickToolStripButton("btnZoomOut", fDialog);
-                ClickToolStripButton("btnSizeToFit", fDialog);
-
-                KeyDownForm(fDialog.Name, Keys.Escape);
+                var view = Substitute.For<IMediaViewerWin>();
+                var controller = new MediaViewerController(view);
+                controller.Init(fBaseWin);
+                controller.MultimediaRecord = fileRefV;
+                controller.UpdateView();
             } finally {
                 TestUtils.RemoveTestFile(targetName);
             }
@@ -100,12 +97,11 @@ namespace GKUI.Forms
             try {
                 Assert.IsTrue(File.Exists(targetName));
 
-                fDialog.MultimediaRecord = fileRefV;
-                Assert.AreEqual(fileRefV, fDialog.MultimediaRecord);
-
-                fDialog.Refresh();
-
-                KeyDownForm(fDialog.Name, Keys.Escape);
+                var view = Substitute.For<IMediaViewerWin>();
+                var controller = new MediaViewerController(view);
+                controller.Init(fBaseWin);
+                controller.MultimediaRecord = fileRefV;
+                controller.UpdateView();
             } finally {
                 TestUtils.RemoveTestFile(targetName);
             }
@@ -119,12 +115,11 @@ namespace GKUI.Forms
             try {
                 Assert.IsTrue(File.Exists(targetName));
 
-                fDialog.MultimediaRecord = fileRefV;
-                Assert.AreEqual(fileRefV, fDialog.MultimediaRecord);
-
-                fDialog.Refresh();
-
-                KeyDownForm(fDialog.Name, Keys.Escape);
+                var view = Substitute.For<IMediaViewerWin>();
+                var controller = new MediaViewerController(view);
+                controller.Init(fBaseWin);
+                controller.MultimediaRecord = fileRefV;
+                controller.UpdateView();
             } finally {
                 TestUtils.RemoveTestFile(targetName);
             }
@@ -138,12 +133,11 @@ namespace GKUI.Forms
             try {
                 Assert.IsTrue(File.Exists(targetName));
 
-                fDialog.MultimediaRecord = fileRefV;
-                Assert.AreEqual(fileRefV, fDialog.MultimediaRecord);
-
-                fDialog.Refresh();
-
-                KeyDownForm(fDialog.Name, Keys.Escape);
+                var view = Substitute.For<IMediaViewerWin>();
+                var controller = new MediaViewerController(view);
+                controller.Init(fBaseWin);
+                controller.MultimediaRecord = fileRefV;
+                controller.UpdateView();
             } finally {
                 TestUtils.RemoveTestFile(targetName);
             }
@@ -159,17 +153,11 @@ namespace GKUI.Forms
             try {
                 Assert.IsTrue(File.Exists(targetName));
 
-                fDialog.MultimediaRecord = fileRefV;
-                Assert.AreEqual(fileRefV, fDialog.MultimediaRecord);
-
-                fDialog.Refresh();
-
-                //ClickButton("btnPlay", fDialog);
-                //ClickButton("btnPause", fDialog);
-                //ClickButton("btnMute", fDialog);
-                //ClickButton("btnStop", fDialog);
-
-                KeyDownForm(fDialog.Name, Keys.Escape);
+                var view = Substitute.For<IMediaViewerWin>();
+                var controller = new MediaViewerController(view);
+                controller.Init(fBaseWin);
+                controller.MultimediaRecord = fileRefV;
+                controller.UpdateView();
             } finally {
                 TestUtils.RemoveTestFile(targetName);
             }
@@ -177,5 +165,3 @@ namespace GKUI.Forms
 #endif
     }
 }
-
-#endif

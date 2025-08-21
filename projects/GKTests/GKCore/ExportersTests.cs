@@ -20,14 +20,13 @@
 
 using System;
 using GDModel;
-using GKCore.Export;
 using GKCore.Options;
 using GKTests;
 using GKTests.Stubs;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace GKCore
+namespace GKCore.Export
 {
     [TestFixture]
     public class ExportersTests

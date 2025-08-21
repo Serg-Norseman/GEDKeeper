@@ -18,32 +18,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !DIS_NUF
+using BSLib;
+using NUnit.Framework;
 
-using System.Windows.Forms;
-using GKUI.Components;
-using NUnit.Extensions.Forms;
-
-namespace GKTests.ControlTesters
+namespace GKCore.Media
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class GKSheetListTester : ControlTester<GKSheetList, GKSheetListTester>
+    [TestFixture]
+    public class MediaTests
     {
-        public GKSheetListTester()
+        [Test]
+        public void TestNamedRegion()
         {
-        }
-
-        public GKSheetListTester(string name, Form form) : base(name, form)
-        {
-        }
-
-        public new GKSheetList Properties
-        {
-            get { return (GKSheetList) TheObject; }
+            var region = new NamedRegion("test", ExtRect.Empty);
+            Assert.AreEqual("test", region.Name);
         }
     }
 }
-
-#endif

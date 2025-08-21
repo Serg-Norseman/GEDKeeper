@@ -23,11 +23,10 @@ using BSLib;
 using GDModel;
 using GKCore.Backups;
 using GKCore.Names;
-using GKCore.Options;
 using GKTests;
 using NUnit.Framework;
 
-namespace GKCore
+namespace GKCore.Options
 {
     [TestFixture]
     public class OptionsTests

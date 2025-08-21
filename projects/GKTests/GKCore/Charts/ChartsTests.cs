@@ -34,6 +34,17 @@ namespace GKCore.Charts
             TestUtils.InitUITest();
         }
 
+        private void TweenHandler(int newX, int newY)
+        {
+        }
+
+        [Test]
+        public void Test_Tween()
+        {
+            var tween = new TweenLibrary();
+            tween.StartTween(TweenHandler, 0, 0, 10, 10, TweenAnimation.EaseInOutQuad, 20);
+        }
+
         [Test]
         public void Test_BorderPainter()
         {

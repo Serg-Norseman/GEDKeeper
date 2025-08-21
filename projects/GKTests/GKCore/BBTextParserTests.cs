@@ -19,14 +19,13 @@
  */
 
 using System.Collections.Generic;
-using GKCore.BBText;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKTests;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace GKCore
+namespace GKCore.BBText
 {
     [TestFixture]
     public class BBTextParserTests

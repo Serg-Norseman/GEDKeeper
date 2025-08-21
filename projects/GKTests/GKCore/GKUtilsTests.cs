@@ -720,5 +720,17 @@ namespace GKCore
             age.ParseString("> 18y");
             Assert.AreEqual("> 18y", GKUtils.GetAgeDisplayStr(age));
         }
+
+        [Test]
+        [TestCase("Simple: https://example.com", "Simple: [url=https://example.com]https://example.com[/url]")]
+        [TestCase("Multiple: http://site.com и https://another-site.org/path", "Multiple: [url=http://site.com]http://site.com[/url] и [url=https://another-site.org/path]https://another-site.org/path[/url]")]
+        [TestCase("Complex: https://subdomain.example.com/path/to/resource?param=value", "Complex: [url=https://subdomain.example.com/path/to/resource?param=value]https://subdomain.example.com/path/to/resource?param=value[/url]")]
+        [TestCase("simple text", "simple text")]
+        [TestCase("Exclude: [url=http://site.com]http://site.com[/url]", "Exclude: [url=http://site.com]http://site.com[/url]")]
+        [TestCase("", "")]
+        public void Test_MakeLinks(string source, string target)
+        {
+            Assert.AreEqual(target, GKUtils.MakeLinks(source));
+        }
     }
 }

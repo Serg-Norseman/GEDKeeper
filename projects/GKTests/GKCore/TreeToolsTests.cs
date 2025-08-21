@@ -27,13 +27,12 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Controls;
-using GKCore.Tools;
 using GKTests;
 using GKTests.Stubs;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace GKCore
+namespace GKCore.Tools
 {
     [TestFixture]
     public class TreeToolsTests
@@ -219,6 +218,20 @@ namespace GKCore
         }
 
         [Test]
+        public void Test_PG()
+        {
+            PatriarchObj pObj = new PatriarchObj();
+            Assert.IsNotNull(pObj);
+            Assert.IsNotNull(pObj.Links);
+
+            PGNode pgNode = new PGNode("label", PGNodeType.Default);
+            Assert.IsNotNull(pgNode);
+
+            pgNode = new PGNode("label", PGNodeType.Default, 5);
+            Assert.IsNotNull(pgNode);
+        }
+
+        [Test]
         public void Test_GenPatriarchsGraphviz()
         {
             var progress = Substitute.For<IProgressController>();
@@ -231,15 +244,6 @@ namespace GKCore
             } finally {
                 TestUtils.RemoveTestFile(filename);
             }
-        }
-
-        [Test]
-        public void Test_CheckGEDCOMFormat()
-        {
-            var progress = Substitute.For<IProgressController>();
-
-            Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(null, null); });
-            GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context, progress);
         }
 
         [Test]

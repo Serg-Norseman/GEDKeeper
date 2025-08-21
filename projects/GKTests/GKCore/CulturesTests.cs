@@ -21,11 +21,10 @@
 using System;
 using System.Threading.Tasks;
 using GDModel;
-using GKCore.Cultures;
 using GKTests;
 using NUnit.Framework;
 
-namespace GKCore
+namespace GKCore.Cultures
 {
     [TestFixture]
     public class CulturesTests

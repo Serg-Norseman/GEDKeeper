@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,28 +18,30 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !DIS_NUF
+using NUnit.Framework;
 
-using System.Windows.Forms;
-using NUnit.Extensions.Forms;
-
-namespace GKTests.ControlTesters
+namespace GKCore.Media
 {
-    public class MaskedTextBoxTester : ControlTester<MaskedTextBox, MaskedTextBoxTester>
+    [TestFixture]
+    public class PortraitsCacheTests
     {
-        public MaskedTextBoxTester()
+        public PortraitsCacheTests()
         {
         }
 
-        public MaskedTextBoxTester(string name, Form form) : base(name, form)
+        [Test]
+        public void Test_Instance()
         {
+            var inst = PortraitsCache.Instance;
+            Assert.IsNotNull(inst);
         }
 
-        public void Enter(string text)
+        [Test]
+        public void Test_Common()
         {
-            EnterText(text);
+            PortraitsCache cache = PortraitsCache.Instance;
+            Assert.IsNull(cache.GetImage(null, null));
+            cache.RemoveObsolete(null);
         }
     }
 }
-
-#endif

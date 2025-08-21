@@ -25,6 +25,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using BSLib;
@@ -894,6 +895,88 @@ namespace GKCore.Utilities
         public static bool HasRangeIntersection(int start1, int end1, int start2, int end2)
         {
             return (start1 <= end2 && start2 <= end1);
+        }
+
+        public static void LogSystemInfo()
+        {
+            try {
+                int frequency = 0;
+                long totalMemory = 0;
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                    var startInfo = new ProcessStartInfo("wmic", "cpu get CurrentClockSpeed") {
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+
+                    using (var process = Process.Start(startInfo)) {
+                        using (var reader = process.StandardOutput) {
+                            string[] res = reader.ReadToEnd().Replace("\r", "").Replace("\n", "").Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                            if (res.Length >= 2 && int.TryParse(res[1].Trim(), out frequency)) {
+                                frequency = Math.Max(0, frequency);
+                            }
+                        }
+                    }
+                } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+                    var startInfo = new ProcessStartInfo("sysctl", "-n machdep.cpu.freq") {
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+
+                    using (var process = Process.Start(startInfo)) {
+                        using (var reader = process.StandardOutput) {
+                            string line = reader.ReadLine();
+                            if (int.TryParse(line.Trim(), out frequency)) {
+                                frequency = Math.Max(0, frequency);
+                            }
+                        }
+                    }
+                }
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                    var startInfo = new ProcessStartInfo("wmic", "os get TotalVisibleMemorySize") {
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+
+                    using (var process = Process.Start(startInfo)) {
+                        using (var reader = process.StandardOutput) {
+                            string[] res = reader.ReadToEnd().Replace("\r", "").Replace("\n", "").Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                            if (res.Length >= 2 && long.TryParse(res[1].Trim(), out totalMemory)) {
+                                totalMemory = Math.Max(0, totalMemory);
+                            }
+                        }
+                    }
+                } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+                    var startInfo = new ProcessStartInfo("sysctl", "-n hw.memsize") {
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+
+                    using (var process = Process.Start(startInfo)) {
+                        using (var reader = process.StandardOutput) {
+                            string line = reader.ReadLine();
+                            if (long.TryParse(line.Trim(), out totalMemory)) {
+                                totalMemory = Math.Max(0, totalMemory);
+                            }
+                        }
+                    }
+                }
+
+                int coreCount = Environment.ProcessorCount;
+                Logger.WriteInfo($"CPU Cores: {coreCount}");
+                Logger.WriteInfo($"CPU Frequency: {frequency} MHz");
+                Logger.WriteInfo($"Memory: {(totalMemory / 1024.0f / 1024.0f):0.00} GB");
+
+                var curProcess = Process.GetCurrentProcess();
+                Logger.WriteInfo($"Process size: {curProcess.WorkingSet64 / 1024 / 1024} MB");
+            } catch (Exception ex) {
+                Logger.WriteError("SysUtils.LogSystemInfo()", ex);
+            }
         }
     }
 }

@@ -65,7 +65,7 @@ namespace GKCore.Charts
     {
         // Example of string to measurement the height, where there are chars
         // with the ascent and descent of elements.
-        protected internal const string STR_HEIGHT_SAMPLE = "AZqtypdfghjl|[]";
+        public const string STR_HEIGHT_SAMPLE = "AZqtypdfghjl|[]";
 
 
         protected ChartRenderer()

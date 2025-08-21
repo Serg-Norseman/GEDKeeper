@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,31 +18,34 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Media;
+using System;
+using GKCore.Design;
+using GKTests;
+using GKTests.Stubs;
+using NSubstitute;
 using NUnit.Framework;
 
-namespace GKCore
+namespace GDModel.Providers.GEDCOM
 {
     [TestFixture]
-    public class PortraitsCacheTests
+    public class GEDCOMCheckerTests
     {
-        public PortraitsCacheTests()
+        private readonly IBaseWindow fBaseWin;
+
+        public GEDCOMCheckerTests()
         {
+            TestUtils.InitUITest();
+
+            fBaseWin = new BaseWindowStub();
         }
 
         [Test]
-        public void Test_Instance()
+        public void Test_CheckGEDCOMFormat()
         {
-            var inst = PortraitsCache.Instance;
-            Assert.IsNotNull(inst);
-        }
+            var progress = Substitute.For<IProgressController>();
 
-        [Test]
-        public void Test_Common()
-        {
-            PortraitsCache cache = PortraitsCache.Instance;
-            Assert.IsNull(cache.GetImage(null, null));
-            cache.RemoveObsolete(null);
+            Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(null, null); });
+            GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context, progress);
         }
     }
 }

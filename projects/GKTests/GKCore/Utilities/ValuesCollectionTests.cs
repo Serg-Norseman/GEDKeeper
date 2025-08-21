@@ -18,10 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GKCore.Utilities;
 using NUnit.Framework;
 
-namespace GKCore
+namespace GKCore.Utilities
 {
     [TestFixture]
     public class ValuesCollectionTests

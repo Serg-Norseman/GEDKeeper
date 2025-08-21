@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using GKCore;
 
 [assembly: AssemblyTitle("GKCore")]
@@ -14,5 +13,3 @@ using GKCore;
 #elif RELEASE
 [assembly: AssemblyConfiguration("Release")]
 #endif
-
-[assembly: InternalsVisibleTo("GKComponents")]

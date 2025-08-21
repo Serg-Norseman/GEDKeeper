@@ -19,11 +19,11 @@
  */
 
 using System;
-using BSLib;
 using BSLib.DataViz.SmartGraph;
+using GKTests;
 using NUnit.Framework;
 
-namespace GKTests
+namespace BSLib
 {
     [TestFixture]
     public class ExternalsTests
@@ -37,6 +37,30 @@ namespace GKTests
 
             st = StringHelper.UniformName(null);
             Assert.AreEqual(null, st);
+        }
+
+        [Test]
+        public void Test_NavStack()
+        {
+            var navStack = new NavigationStack<object>();
+            {
+                Assert.IsNotNull(navStack);
+                Assert.AreEqual(null, navStack.Current);
+                navStack.Clear();
+                Assert.AreEqual(null, navStack.Current);
+
+                Assert.AreEqual(false, navStack.CanBackward());
+                Assert.AreEqual(false, navStack.CanForward());
+
+                object test = new object();
+                object test2 = new object();
+
+                navStack.Current = test;
+                navStack.Current = test2;
+
+                Assert.AreEqual(test, navStack.Back());
+                Assert.AreEqual(test2, navStack.Next());
+            }
         }
 
         [Test]

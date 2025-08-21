@@ -27,7 +27,6 @@ using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Lists;
 using GKCore.Locales;
-using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
 using GKUI.Themes;
@@ -146,7 +145,8 @@ namespace GKCore.Controllers
                 image = AppHost.GfxProvider.LoadResourceImage(resImage, ImageTarget.UI, true);
             } else {
                 var themeSym = GKData.SexData[(int)sx].ThemeElement;
-                image = (themeSym == ThemeElement.None) ? null : AppHost.ThemeManager.GetThemeImage(themeSym, true);
+                var themeMan = AppHost.ThemeManager;
+                image = (themeSym == ThemeElement.None || themeMan == null) ? null : themeMan.GetThemeImage(themeSym, true);
             }
             return image;
         }

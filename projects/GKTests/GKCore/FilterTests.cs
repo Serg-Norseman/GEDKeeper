@@ -20,6 +20,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using GDModel;
 using NUnit.Framework;
 
 namespace GKCore.Filters
@@ -32,6 +33,31 @@ namespace GKCore.Filters
             public int id { get; set; }
             public string name { get; set; }
             public string value { get; set; }
+        }
+
+        private bool TestExternalFilterHandler(GDMRecord record)
+        {
+            return false;
+        }
+
+        [Test]
+        public void Test_FiltersIntf()
+        {
+            ColumnConditionExpression cond = new ColumnConditionExpression(0, ConditionOperator.Contains, null);
+            Assert.IsNotNull(cond);
+
+            ExternalFilterHandler handler = TestExternalFilterHandler;
+            Assert.IsFalse(handler.Invoke(null));
+        }
+
+        [Test]
+        public void Test_ListFilter()
+        {
+            var listFilter = new ListFilter();
+            Assert.IsNotNull(listFilter);
+            Assert.AreEqual(0, listFilter.Conditions.Count);
+            listFilter.Clear();
+            Assert.AreEqual(0, listFilter.Conditions.Count);
         }
 
         [Test]

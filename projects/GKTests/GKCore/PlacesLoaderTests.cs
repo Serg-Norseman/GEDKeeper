@@ -21,11 +21,10 @@
 using System;
 using System.Collections.Generic;
 using GKCore.Design.Controls;
-using GKCore.Maps;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace GKCore
+namespace GKCore.Maps
 {
     [TestFixture]
     public class PlacesLoaderTests

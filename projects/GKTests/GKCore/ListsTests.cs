@@ -22,15 +22,13 @@ using System;
 using GDModel;
 using GKCore.Design.Controls;
 using GKCore.Filters;
-using GKCore.Lists;
 using GKCore.Names;
 using GKCore.Options;
-using GKCore.Utilities;
 using GKTests;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace GKCore
+namespace GKCore.Lists
 {
     [TestFixture]
     public class ListsTests
@@ -110,30 +108,6 @@ namespace GKCore
             Assert.AreEqual(0, colStatic.Order);
             Assert.AreEqual(false, colStatic.CurActive);
             Assert.AreEqual(0, colStatic.CurWidth);
-        }
-
-        [Test]
-        public void Test_ListFilter()
-        {
-            var listFilter = new ListFilter();
-            Assert.IsNotNull(listFilter);
-            Assert.AreEqual(0, listFilter.Conditions.Count);
-            listFilter.Clear();
-            Assert.AreEqual(0, listFilter.Conditions.Count);
-        }
-
-        [Test]
-        public void Test_ListFilter_Yaml()
-        {
-            var filter = new ListFilter();
-            filter.Conditions.Add(new ColumnConditionExpression(1, ConditionOperator.Contains, "Kostrom"));
-
-            string yaml = YamlHelper.Serialize(filter);
-            string expected = "Conditions:\r\n- ColumnIndex: 1\r\n  Value: Kostrom\r\n  Operator: Contains\r\n";
-#if OS_MACOS || OS_LINUX
-            expected = expected.Replace("\r\n", "\n");
-#endif
-            Assert.AreEqual(expected, yaml);
         }
 
         [Test]

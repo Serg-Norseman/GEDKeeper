@@ -184,12 +184,19 @@ namespace GKCore
                 } finally {
                 }
 
-                if (Options.AutoCheckUpdates) {
-                    UpdateMan.CheckUpdate();
-                }
+                FinalSteps();
             } catch (Exception ex) {
                 Logger.WriteError("AppHost.StartupWork()", ex);
             }
+        }
+
+        private void FinalSteps()
+        {
+            if (Options.AutoCheckUpdates) {
+                UpdateMan.CheckUpdate();
+            }
+
+            SysUtils.LogSystemInfo();
         }
 
         public void SetArgs(string[] args)
@@ -1348,7 +1355,7 @@ namespace GKCore
         {
             get {
                 if (fThemeManager == null) {
-                    fThemeManager = fIocContainer.Resolve<IThemeManager>();
+                    fThemeManager = fIocContainer.TryResolve<IThemeManager>();
                 }
                 return fThemeManager;
             }

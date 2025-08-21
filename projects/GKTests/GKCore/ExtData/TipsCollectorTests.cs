@@ -18,29 +18,29 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !DIS_NUF
+using System;
+using GKTests;
+using NUnit.Framework;
 
-using System.Windows.Forms;
-using GKUI.Components;
-using NUnit.Extensions.Forms;
-
-namespace GKTests.ControlTesters
+namespace GKCore.ExtData
 {
-    public class GKRecordsViewTester : ControlTester<GKListView, GKRecordsViewTester>
+    [TestFixture]
+    public class TipsCollectorTests
     {
-        public GKRecordsViewTester()
+        private readonly BaseContext fContext;
+
+        public TipsCollectorTests()
         {
+            TestUtils.InitUITest();
+
+            fContext = TestUtils.CreateContext();
+            TestUtils.FillContext(fContext);
         }
 
-        public GKRecordsViewTester(string name, Form form) : base(name, form)
+        [Test]
+        public void Test_Collect_Null()
         {
-        }
-
-        public new GKListView Properties
-        {
-            get { return (GKListView) TheObject; }
+            Assert.Throws(typeof(ArgumentNullException), () => { TipsCollector.Collect(fContext, null); });
         }
     }
 }
-
-#endif

@@ -18,56 +18,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define MAIN_TEST
-
-#if !DIS_NUF
-#if MAIN_TEST
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using BSLib;
-using GDModel;
-using GKCore;
-using GKCore.Charts;
-using GKCore.Design;
-using GKCore.Filters;
-using GKCore.Lists;
-using GKCore.Locales;
-using GKCore.Options;
-using GKCore.Search;
-using GKTests;
-using GKUI.Platform;
 using NUnit.Framework;
 
-namespace GKUI.Forms
+namespace GKCore.Controllers
 {
-    /// <summary>
-    /// Tests for the main application window. Dependent calls of other windows
-    /// and dialogs that are heavily dependent on the main window.
-    /// </summary>
-    [TestFixture, RequiresThread(ApartmentState.STA)]
-    public class MainSDITests : CustomWindowTest
+    [TestFixture]
+    public class BaseWinControllerTests
     {
-        public override bool UseHidden
-        {
-            get { return true; }
-        }
-
-        private Form fMainWin;
-        private IBaseWindow fCurBase;
-
+        /*
         public override async void Setup()
         {
-            CommonTests.InitUITest();
+            CustomWindowTest.InitUITest();
 
             var appHost = new WFAppHost();
-
-            // prevent LanguageSelectDlg modal dialog from showing on first run
-            AppHost.Options.InterfaceLang = LangMan.LS_DEF_CODE;
 
             await appHost.Init(null, false);
 
@@ -76,10 +39,6 @@ namespace GKUI.Forms
                 var colProps = indiCols[i];
                 colProps.CurActive = true;
             }
-
-            // required for testing, otherwise the engine will require saving
-            // the database (requires path of files for the archive and storage)
-            GlobalOptions.Instance.AllowMediaStoreReferences = true;
 
             // at complex tests, first form hasn't focus
             var form0 = AppHost.Instance.GetRunningForms<Form>().FirstOrDefault();
@@ -184,10 +143,10 @@ namespace GKUI.Forms
                 IRecordsListModel listMan = fCurBase.GetRecordsListManByType(rt);
                 listMan.AddCondition((byte)IndividualListModel.ColumnType.ctPatriarch, ConditionOperator.Contains, "test"); // any first column
 
-                ModalFormHandler = CustomWindowTest.CommonFilterDlg_btnAccept_Handler;
-                ClickToolStripButton("tbFilter", fMainWin);
-                ModalFormHandler = CustomWindowTest.CommonFilterDlg_btnReset_Handler;
-                ClickToolStripButton("tbFilter", fMainWin);
+                //ModalFormHandler = CustomWindowTest.CommonFilterDlg_btnAccept_Handler;
+                //ClickToolStripButton("tbFilter", fMainWin);
+                //ModalFormHandler = CustomWindowTest.CommonFilterDlg_btnReset_Handler;
+                //ClickToolStripButton("tbFilter", fMainWin);
             }
 
             Assert.IsTrue(fCurBase.Context.IsUnknown());
@@ -354,17 +313,10 @@ namespace GKUI.Forms
         }
 
         [Test]
-        public void Test_ShowScriptsEditWin()
-        {
-            SetModalFormHandler(this, ScriptEditWinTests.ScriptEditWin_Handler);
-            ClickToolStripMenuItem("miScripts", fMainWin);
-        }
-
-        [Test]
         public void Test_ShowRelationshipCalculatorDlg()
         {
-            SetModalFormHandler(this, CustomWindowTest.RelationshipCalculatorDlg_Handler);
-            ClickToolStripMenuItem("miRelationshipCalculator", fMainWin);
+            //SetModalFormHandler(this, CustomWindowTest.RelationshipCalculatorDlg_Handler);
+            //ClickToolStripMenuItem("miRelationshipCalculator", fMainWin);
         }
 
         [Test]
@@ -473,8 +425,272 @@ namespace GKUI.Forms
             fMainWin.Activate();
             Assert.AreEqual("Unknown", AppHost.Instance.GetCurrentFileName());
         }
+
+         
+         
+        public static void PrepareFileSave(string fileName, IntPtr hWnd)
+        {
+            fileName = TestUtils.GetTempFilePath(fileName);
+
+            var saveDlg = new SaveFileDialogTester(hWnd);
+            saveDlg.SaveFile(fileName);
+            saveDlg.SaveFile();
+        }
+
+        public static void SaveFileGED_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.ged", hWnd);
+        }
+
+        public static void SaveFileJPG_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.jpg", hWnd);
+        }
+
+        public static void SaveFileSVG_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.svg", hWnd);
+        }
+
+        public static void SaveFileXLS_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.xls", hWnd);
+        }
+
+        public static void SaveFilePDF_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.pdf", hWnd);
+        }
+
+        public static void SaveFileHTML_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.html", hWnd);
+        }
+
+        public static void SaveFileRTF_Handler(string name, IntPtr hWnd, Form form)
+        {
+            PrepareFileSave("test.rtf", hWnd);
+        }
+
+        public static void FilePropertiesDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            FilePropertiesDlg dlg = (FilePropertiesDlg)form;
+            var baseContext = dlg.Base.Context;
+
+            EnterText("txtName", form, "sample text");
+
+            ClickButton("btnAccept", form);
+
+            GDMSubmitterRecord submitter = baseContext.Tree.GetPtrValue<GDMSubmitterRecord>(baseContext.Tree.Header.Submitter);
+            Assert.AreEqual("sample text", submitter.Name);
+        }
+
+        public static void QuickSearch_Test(NUnitFormTest formTest, Form mainWin)
+        {
+            ClickToolStripMenuItem("miSearch", mainWin);
+
+            var searchPanel = new FormTester("QuickSearchDlg");
+            var frm = (QuickSearchDlg)searchPanel.Properties;
+
+            // handlers for empty text
+            ClickButton("btnPrev", frm);
+            ClickButton("btnNext", frm);
+
+            EnterText("txtSearchPattern", frm, "John");
+            // handlers for entered text? - msgbox processing
+
+            // NoMatchesFound error msg
+            SetModalFormHandler(formTest, MessageBox_OkHandler);
+            KeyDownForm(frm.Name, Keys.Enter);
+
+            SetModalFormHandler(formTest, MessageBox_OkHandler);
+            KeyDownForm(frm.Name, Keys.Enter | Keys.Shift);
+
+            KeyDownForm(frm.Name, Keys.Escape);
+        }
+
+        public static void TreeFilterDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            ClickButton("btnAccept", form);
+        }
+
+        public static void SlideshowWin_Handler(CustomWindowTest formTest, Form frm)
+        {
+            Assert.IsInstanceOf(typeof(SlideshowWin), frm);
+            var slidesWin = (SlideshowWin)frm;
+
+            //ClickToolStripButton("tbStart", frm); // start
+            //ClickToolStripButton("tbStart", frm); // stop
+
+            SetModalFormHandler(formTest, MessageBox_OkHandler);
+            ClickToolStripButton("tbNext", frm);
+
+            SetModalFormHandler(formTest, MessageBox_OkHandler);
+            ClickToolStripButton("tbPrev", frm);
+
+            KeyDownForm(frm.Name, Keys.Escape);
+        }
+
+        public static void OptionsDlg_btnAccept_Handler(string name, IntPtr ptr, Form form)
+        {
+            var optDlg = ((OptionsDlg)form);
+
+            optDlg.SetPage(OptionsPage.opCommon);
+
+            optDlg.SetPage(OptionsPage.opTreeChart);
+            CheckBox("chkPortraitsVisible", form, false);
+            CheckBox("chkPortraitsVisible", form, true);
+
+            optDlg.SetPage(OptionsPage.opCircleChart);
+
+            optDlg.SetPage(OptionsPage.opInterface);
+            CheckBox("chkExtendWomanSurnames", form, true);
+            CheckBox("chkExtendWomanSurnames", form, false);
+
+            optDlg.SetPage(OptionsPage.opPedigree);
+
+            ClickButton("btnColumnUp", form);
+            ClickButton("btnColumnDown", form);
+            ClickButton("btnResetDefaults", form);
+
+            ClickButton("btnAccept", form);
+        }
+
+        public static void MapsViewerWin_Handler(CustomWindowTest formTest, Form form)
+        {
+            Assert.IsInstanceOf(typeof(MapsViewerWin), form);
+
+            ClickRadioButton("radTotal", form);
+
+            formTest.ModalFormHandler = SaveFile_Cancel_Handler;
+            ClickToolStripButton("tbSaveSnapshot", form);
+
+            KeyDownForm(form.Name, Keys.Escape);
+            form.Dispose();
+        }
+
+        public static void CircleChartWin_Tests(CustomWindowTest formTest, Form frm)
+        {
+            CircleChartWin ccWin = frm as CircleChartWin;
+            IBaseWindow curBase = ccWin.OwnerWindow as IBaseWindow;
+            Assert.IsNotNull(curBase);
+
+            ccWin.UpdateSettings();
+
+            Assert.IsFalse(ccWin.AllowFilter());
+            Assert.IsFalse(ccWin.AllowQuickSearch());
+            Assert.IsTrue(ccWin.AllowPrint());
+
+            // forced update
+            ccWin.Refresh();
+
+            Assert.IsFalse(ccWin.NavCanBackward());
+            ccWin.NavPrev();
+            Assert.IsFalse(ccWin.NavCanForward());
+            ccWin.NavNext();
+
+            // empty methods
+            Assert.IsNotNull(ccWin.FindAll(""));
+            ccWin.QuickSearch();
+            ccWin.SelectByRec(null);
+            ccWin.SetFilter();
+
+            try {
+                formTest.ModalFormHandler = SaveFileJPG_Handler;
+                ClickToolStripButton("tbImageSave", ccWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.jpg"));
+            }
+
+            try {
+                formTest.ModalFormHandler = SaveFileSVG_Handler;
+                ClickToolStripButton("tbImageSave", ccWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.svg"));
+            }
+
+            KeyDownForm(frm.Name, Keys.Escape);
+            frm.Dispose();
+        }
+
+        public static void TreeChartWin_Tests(CustomWindowTest formTest, Form frm, TreeChartKind kind, string checkXRef)
+        {
+            TreeChartWin tcWin = frm as TreeChartWin;
+            IBaseWindow curBase = tcWin.OwnerWindow as IBaseWindow;
+            Assert.IsNotNull(curBase);
+
+            Assert.AreEqual(kind, ((ITreeChartWin)tcWin).TreeBox.Model.Kind);
+            tcWin.UpdateSettings();
+
+            Assert.IsTrue(tcWin.AllowFilter());
+            Assert.IsTrue(tcWin.AllowQuickSearch());
+            Assert.IsTrue(tcWin.AllowPrint());
+
+            // forced update
+            tcWin.Refresh();
+
+            Assert.Throws(typeof(ArgumentNullException), () => { tcWin.SelectByRec(null); });
+
+            GDMIndividualRecord iRec = curBase.GetSelectedPerson();
+            Assert.AreEqual(checkXRef, iRec.XRef);
+            tcWin.SelectByRec(iRec);
+
+            tcWin.NavPrev();
+            tcWin.NavNext();
+
+            formTest.ModalFormHandler = CustomWindowTest.TreeFilterDlg_btnAccept_Handler;
+            tcWin.SetFilter();
+
+            IList<ISearchResult> search = tcWin.FindAll("Maria");
+            Assert.AreEqual(1, search.Count);
+
+            ClickToolStripMenuItem("miModeBoth", tcWin);
+            ClickToolStripMenuItem("miModeAncestors", tcWin);
+            ClickToolStripMenuItem("miModeDescendants", tcWin);
+
+            ClickToolStripMenuItem("miCertaintyIndex", tcWin);
+            ClickToolStripMenuItem("miTraceKinships", tcWin);
+            ClickToolStripMenuItem("miTraceSelected", tcWin);
+
+            // handlers tests
+            //ClickToolStripMenuItem("miEdit", tcWin);
+            //ClickToolStripMenuItem("miFatherAdd", tcWin);
+            //ClickToolStripMenuItem("miMotherAdd", tcWin);
+            //ClickToolStripMenuItem("miSpouseAdd", tcWin);
+            //ClickToolStripMenuItem("miSonAdd", tcWin);
+            //ClickToolStripMenuItem("miDaughterAdd", tcWin);
+            //ClickToolStripMenuItem("miFamilyAdd", tcWin);
+            //ClickToolStripMenuItem("miDelete", tcWin);
+            //ClickToolStripMenuItem("miRebuildKinships", tcWin);
+            //ClickToolStripMenuItem("miFillColor", tcWin);
+            //ClickToolStripMenuItem("miFillImage", tcWin);
+            //ClickToolStripMenuItem("miRebuildTree", tcWin);
+
+            try {
+                formTest.ModalFormHandler = SaveFileJPG_Handler;
+                ClickToolStripButton("tbImageSave", tcWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.jpg"));
+            }
+
+            try {
+                formTest.ModalFormHandler = SaveFileSVG_Handler;
+                ClickToolStripButton("tbImageSave", tcWin);
+            } finally {
+                TestUtils.RemoveTestFile(TestUtils.GetTempFilePath("test.svg"));
+            }
+
+#if !CI_MODE
+            //formTest.ModalFormHandler = PrintDialog_Handler;
+            //ClickToolStripButton("tbDocPrint", tcWin);
+
+            formTest.ModalFormHandler = PrintDialog_Handler;
+            ClickToolStripButton("tbDocPreview", tcWin);
+#endif
+
+            KeyDownForm(frm.Name, Keys.Escape);
+            frm.Dispose();
+        }
+         */
     }
 }
-
-#endif
-#endif

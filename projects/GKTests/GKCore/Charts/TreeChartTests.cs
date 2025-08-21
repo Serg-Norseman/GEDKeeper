@@ -22,7 +22,6 @@ using System;
 using System.IO;
 using BSLib;
 using GDModel;
-using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Options;
@@ -31,7 +30,7 @@ using GKTests.Stubs;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace GKCore
+namespace GKCore.Charts
 {
     [TestFixture]
     public class TreeChartTests

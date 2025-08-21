@@ -21,13 +21,12 @@
 using System;
 using System.Reflection;
 using GKCore.Lists;
-using GKCore.Plugins;
 using GKTests;
 using GKTests.Stubs;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace GKCore
+namespace GKCore.Plugins
 {
     [TestFixture]
     public class PluginTests
@@ -114,9 +113,9 @@ namespace GKCore
 
             var pluginInfo = PluginInfo.GetPluginInfo(plugin);
             Assert.AreEqual("GKTests", pluginInfo.Title);
-            Assert.AreEqual("", pluginInfo.Description);
+            Assert.AreEqual("GKCore tests", pluginInfo.Description);
             Assert.AreEqual(GKData.APP_COPYRIGHT, pluginInfo.Copyright);
-            Assert.AreEqual("1.0.0.0", pluginInfo.Version);
+            Assert.AreEqual(GKData.APP_VERSION_3X, pluginInfo.Version);
         }
 
         [Test]
