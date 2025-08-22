@@ -215,25 +215,6 @@ namespace GKUI.Components
             UIHelper.SetButtonThemeImage(fBtnAdd, ThemeElement.Glyph_ItemAdd);
         }
 
-        /// <summary>
-        /// The library NUnitForms has a bug in the class Finder.
-        /// So we need unique names for hierarchical included components.
-        /// </summary>
-        /// <param name="name">name of component</param>
-        public void SetControlName(string name)
-        {
-            Name = name;
-            fToolBar.Name = name + "_ToolBar";
-            fBtnAdd.Name = fToolBar.Name + "_btnAdd";
-            fBtnEdit.Name = fToolBar.Name + "_btnEdit";
-            fBtnDelete.Name = fToolBar.Name + "_btnDelete";
-            fBtnMoveUp.Name = fToolBar.Name + "_btnMoveUp";
-            fBtnMoveDown.Name = fToolBar.Name + "_btnMoveDown";
-            fBtnCopy.Name = fToolBar.Name + "_btnCopy";
-            fBtnCut.Name = fToolBar.Name + "_btnCut";
-            fBtnPaste.Name = fToolBar.Name + "_btnPaste";
-        }
-
         #region Private methods
 
         private ToolStripButton CreateButton(string name, string toolTip, EventHandler click)

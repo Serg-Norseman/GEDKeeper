@@ -105,12 +105,8 @@ namespace GKUI.Forms
 
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
-
             fRepositoriesList = new GKSheetList(pageRepositories);
-            fRepositoriesList.SetControlName("fRepositoriesList"); // for purpose of tests
-
             fUserRefList = new GKSheetList(pageUserRefs);
-            fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
 
             fController = new SourceEditDlgController(this);
             fController.Init(baseWin);

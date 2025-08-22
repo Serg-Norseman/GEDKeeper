@@ -105,6 +105,7 @@
     <Compile Include="GDModel\Providers\GEDCOM\GEDCOMCheckerTests.cs" />
     <Compile Include="GKCore\Media\MediaTests.cs" />
     <Compile Include="GKCore\ExtData\TipsCollectorTests.cs" />
+    <Compile Include="GKCore\StatsTests.cs" />
     <Compile Include="GKCore\Utilities\SysUtilsTests.cs" />
     <Compile Include="GKCore\Utilities\IocContainerTests.cs" />
     <Compile Include="GKCore\MorpherTests.cs" />

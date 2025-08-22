@@ -109,22 +109,11 @@ namespace GKUI.Forms
             txtWife.TextChanged += EditSpouse_TextChanged;
 
             fChildrenList = new GKSheetList(pageChilds);
-            fChildrenList.SetControlName("fChildsList"); // for purpose of tests
-
             fEventsList = new GKSheetList(pageEvents);
-            fEventsList.SetControlName("fEventsList"); // for purpose of tests
-
             fNotesList = new GKSheetList(pageNotes);
-            fNotesList.SetControlName("fNotesList"); // for purpose of tests
-
             fMediaList = new GKSheetList(pageMultimedia);
-            fMediaList.SetControlName("fMediaList"); // for purpose of tests
-
             fSourcesList = new GKSheetList(pageSources);
-            fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
-
             fUserRefList = new GKSheetList(pageUserRefs);
-            fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
 
             fController = new FamilyEditDlgController(this);
             fController.Init(baseWin);

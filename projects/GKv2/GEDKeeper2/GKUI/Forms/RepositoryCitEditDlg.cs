@@ -59,7 +59,6 @@ namespace GKUI.Forms
             InitializeComponent();
 
             fCallNumbersList = new GKSheetList(pageCallNumbers);
-            fCallNumbersList.SetControlName("fCallNumbersList"); // for purpose of tests
 
             fController = new RepositoryCitDlgController(this);
             fController.Init(baseWin);

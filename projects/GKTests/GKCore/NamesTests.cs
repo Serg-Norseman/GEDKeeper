@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -22,14 +22,85 @@ using GDModel;
 using GKTests;
 using NUnit.Framework;
 
-namespace GKCore
+namespace GKCore.Names
 {
     [TestFixture]
     public class NamesTests
     {
+        private readonly BaseContext fContext;
+
         public NamesTests()
         {
             TestUtils.InitUITest();
+
+            fContext = TestUtils.CreateContext();
+            TestUtils.FillContext(fContext);
+        }
+
+        [Test]
+        public void Test_NamesTable()
+        {
+            var namesTable = new NamesTable();
+            Assert.IsNotNull(namesTable);
+
+            NameEntry nameEntry = namesTable.AddName("Ivan");
+            Assert.IsNotNull(nameEntry);
+            Assert.AreEqual("Ivan", nameEntry.Name);
+
+            nameEntry = namesTable.FindName("Ivan");
+            Assert.IsNotNull(nameEntry);
+
+            string pat = namesTable.GetPatronymicByName("Ivan", GDMSex.svMale);
+            Assert.IsNull(pat);
+
+            string name = namesTable.GetNameByPatronymic("Ivanovich");
+            Assert.AreEqual("", name);
+
+            GDMSex sex = namesTable.GetSexByName("Ivan");
+            Assert.AreEqual(GDMSex.svUnknown, sex);
+
+            namesTable.SetName("Ivan", "Ivanovich", GDMSex.svMale);
+            namesTable.SetName("Ivan", "Ivanovna", GDMSex.svFemale);
+
+            pat = namesTable.GetPatronymicByName("Ivan", GDMSex.svMale);
+            Assert.AreEqual("Ivanovich", pat);
+
+            pat = namesTable.GetPatronymicByName("Ivan", GDMSex.svFemale);
+            Assert.AreEqual("Ivanovna", pat);
+
+            name = namesTable.GetNameByPatronymic("Ivanovich");
+            Assert.AreEqual("Ivan", name);
+
+            name = namesTable.GetNameByPatronymic("Ivanovna");
+            Assert.AreEqual("Ivan", name);
+
+            namesTable.SetNameSex("Maria", GDMSex.svFemale);
+            sex = namesTable.GetSexByName("Maria");
+            Assert.AreEqual(GDMSex.svFemale, sex);
+
+            namesTable.SetName("", "", GDMSex.svUnknown);
+            namesTable.SetNameSex("", GDMSex.svUnknown);
+
+            namesTable.SetName("Anna", "Ivanovna", GDMSex.svFemale);
+            sex = namesTable.GetSexByName("Anna");
+            Assert.AreEqual(GDMSex.svFemale, sex);
+
+            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
+            Assert.IsNotNull(iRec);
+            namesTable.ImportNames(fContext, iRec);
+
+            namesTable.ImportNames(null, null);
+
+            sex = namesTable.GetSexByName("Anna");
+            Assert.AreEqual(GDMSex.svFemale, sex);
+
+            string namesFile = TestUtils.GetTempFilePath("names.txt");
+            try {
+                namesTable.SaveToFile(namesFile);
+                namesTable.LoadFromFile(namesFile);
+            } finally {
+                TestUtils.RemoveTestFile(namesFile);
+            }
         }
 
         [Test]

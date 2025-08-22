@@ -216,38 +216,16 @@ namespace GKUI.Forms
             cmbPatronymic.TextChanged += Names_TextChanged;
 
             fEventsList = new GKSheetList(pageEvents);
-            fEventsList.SetControlName("fEventsList"); // for purpose of tests
-
             fSpousesList = new GKSheetList(pageSpouses);
-            fSpousesList.SetControlName("fSpousesList"); // for purpose of tests
-
             fNamesList = new GKSheetList(pageNames);
-            fNamesList.SetControlName("fNamesList"); // for purpose of tests
-
             fAssociationsList = new GKSheetList(pageAssociations);
-            fAssociationsList.SetControlName("fAssociationsList"); // for purpose of tests
-
             fNotesList = new GKSheetList(pageNotes);
-            fNotesList.SetControlName("fNotesList"); // for purpose of tests
-
             fMediaList = new GKSheetList(pageMultimedia);
-            fMediaList.SetControlName("fMediaList"); // for purpose of tests
-
             fSourcesList = new GKSheetList(pageSources);
-            fSourcesList.SetControlName("fSourcesList"); // for purpose of tests
-
             fGroupsList = new GKSheetList(pageGroups);
-            fGroupsList.SetControlName("fGroupsList"); // for purpose of tests
-
             fUserRefList = new GKSheetList(pageUserRefs);
-            fUserRefList.SetControlName("fUserRefList"); // for purpose of tests
-
             fParentsList = new GKSheetList(pageParents);
-            fParentsList.SetControlName("fParentsList"); // for purpose of tests
-
             fChildrenList = new GKSheetList(pageChilds);
-            fChildrenList.SetControlName("fChildsList"); // for purpose of tests
-
             fDNATestsList = new GKSheetList(pageDNATests);
 
             imgPortrait.AddButton(btnPortraitAdd);
