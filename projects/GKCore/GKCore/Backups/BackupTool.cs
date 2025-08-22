@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Options;
@@ -31,10 +32,12 @@ namespace GKCore.Backups
     {
         private static void RemoveOldestBackups(string fileName, string bakPath)
         {
+            var backupOpts = GlobalOptions.Instance.Backups;
+
             string backupFiles = Path.GetFileName(fileName) + ".*";
             DirectoryInfo bakPathInfo = new DirectoryInfo(bakPath);
             FileInfo[] bakFiles = bakPathInfo.GetFiles(backupFiles);
-            if (bakFiles.Length > GlobalOptions.Instance.FileBackupEachRevisionMaxCount) {
+            if (bakFiles.Length > backupOpts.FileBackupEachRevisionMaxCount) {
                 List<Tuple<string, int>> tuples = new List<Tuple<string, int>>();
                 foreach (var bak in bakFiles) {
                     try {
@@ -44,7 +47,7 @@ namespace GKCore.Backups
                     }
                 }
                 tuples.Sort((a, b) => b.Item2.CompareTo(a.Item2));
-                for (int i = GlobalOptions.Instance.FileBackupEachRevisionMaxCount; i < tuples.Count; i++) {
+                for (int i = backupOpts.FileBackupEachRevisionMaxCount; i < tuples.Count; i++) {
                     try {
                         File.Delete(tuples[i].Item1);
                     } catch (Exception) {
@@ -55,9 +58,9 @@ namespace GKCore.Backups
 
         public static void ProcessBackup(GDMTree tree, string oldFileName, string fileName)
         {
-            var globOpts = GlobalOptions.Instance;
+            var backupOpts = GlobalOptions.Instance.Backups;
 
-            switch (globOpts.FileBackup) {
+            switch (backupOpts.FileBackup) {
                 case FileBackup.fbNone:
                     break;
 
@@ -81,10 +84,29 @@ namespace GKCore.Backups
                         if (!Directory.Exists(bakPath)) Directory.CreateDirectory(bakPath);
                         File.Move(fileName, bakPath + bakFile);
 
-                        if (globOpts.FileBackupEachRevisionMaxCount > 0) RemoveOldestBackups(fileName, bakPath);
+                        if (backupOpts.FileBackupEachRevisionMaxCount > 0) RemoveOldestBackups(fileName, bakPath);
                     }
                     break;
             }
+        }
+
+        public static async Task ExtendedBackup(BaseContext baseContext, string fileName)
+        {
+            await Task.Run(() => {
+                try {
+                    var backupOpts = GlobalOptions.Instance.Backups;
+
+                    if (backupOpts.ExtendedBackup) {
+                        string pureFileName = Path.GetFileName(fileName);
+                        string backupFileName = Path.Combine(backupOpts.ExtendedFolder, pureFileName);
+
+                        baseContext.CopyFile(fileName, backupFileName, true);
+                        baseContext.MoveMediaContainers(fileName, backupFileName, true);
+                    }
+                } catch (Exception ex) {
+                    Logger.WriteError("BackupTool.ExtendedBackup()", ex);
+                }
+            });
         }
     }
 }

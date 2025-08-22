@@ -50,6 +50,7 @@ namespace GKCore.Options
 
         private static GlobalOptions fInstance = null;
 
+        private readonly BackupOptions fBackups;
         private readonly CircleChartOptions fCircleChartOptions;
         private readonly StringList fEventFilters;
         private readonly StringList fFARPatterns;
@@ -88,13 +89,11 @@ namespace GKCore.Options
 
         public bool AutoCheckUpdates { get; set; }
 
-        public bool Autosave { get; set; }
-
-        public int AutosaveInterval { get; set; }
-
         public bool AutoSortChildren { get; set; }
 
         public bool AutoSortSpouses { get; set; }
+
+        public BackupOptions Backups { get { return fBackups; } }
 
         public CertaintyAlgorithm CertaintyAlgorithm { get; set; }
 
@@ -148,10 +147,6 @@ namespace GKCore.Options
         {
             get { return fFARReplacements; }
         }
-
-        public FileBackup FileBackup { get; set; }
-
-        public int FileBackupEachRevisionMaxCount { get; set; }
 
         public bool FilesOverwriteWarn { get; set; }
 
@@ -330,6 +325,7 @@ namespace GKCore.Options
             fFARPatterns = new StringList();
             fFARReplacements = new StringList();
             fRSFilters = new Dictionary<GDMRecordType, StringList>();
+            fBackups = new BackupOptions();
 
             ResetDefaults();
         }
@@ -361,10 +357,7 @@ namespace GKCore.Options
         public void ResetDefaults_Common()
         {
             fProxy.ResetDefaults();
-
-            Autosave = false;
-            AutosaveInterval = 10;
-            FileBackupEachRevisionMaxCount = 0;
+            fBackups.ResetDefaults();
 
             ShowTips = true;
             LoadRecentFiles = false;
@@ -777,8 +770,6 @@ namespace GKCore.Options
             PlacesWithAddress = ini.ReadBool("Common", "PlacesWithAddress", false);
             ShowTips = ini.ReadBool("Common", "ShowTips", true);
             InterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 0);
-            FileBackup = (FileBackup)ini.ReadInteger("Common", "FileBackup", 0);
-            FileBackupEachRevisionMaxCount = ini.ReadInteger("Common", "FileBackupEachRevisionMaxCount", 0);
             ShowDatesCalendar = ini.ReadBool("Common", "ShowDatesCalendar", false);
             ShowDatesSign = ini.ReadBool("Common", "ShowDatesSigns", false);
             RemovableMediaWarning = ini.ReadBool("Common", "RemovableMediaWarning", true);
@@ -804,8 +795,7 @@ namespace GKCore.Options
             DisableNonStdFeatures = ini.ReadBool("Common", "DisableNonStdFeatures", false);
             EnableStdValidation = ini.ReadBool("Common", "EnableStdValidation", false);
 
-            Autosave = ini.ReadBool("Common", "Autosave", false);
-            AutosaveInterval = ini.ReadInteger("Common", "AutosaveInterval", 10);
+            fBackups.LoadFromFile(ini);
 
             WomanSurnameFormat = (WomanSurnameFormat)ini.ReadInteger("Common", "WomanSurnameFormat", 0);
             SimpleSingleSurnames = ini.ReadBool("Common", "SimpleSingleSurnames", false);
@@ -920,8 +910,6 @@ namespace GKCore.Options
             ini.WriteBool("Common", "PlacesWithAddress", PlacesWithAddress);
             ini.WriteBool("Common", "ShowTips", ShowTips);
             ini.WriteInteger("Common", "InterfaceLang", InterfaceLang);
-            ini.WriteInteger("Common", "FileBackup", (int)FileBackup);
-            ini.WriteInteger("Common", "FileBackupEachRevisionMaxCount", FileBackupEachRevisionMaxCount);
             ini.WriteBool("Common", "ShowDatesCalendar", ShowDatesCalendar);
             ini.WriteBool("Common", "ShowDatesSigns", ShowDatesSign);
             ini.WriteBool("Common", "RemovableMediaWarning", RemovableMediaWarning);
@@ -949,8 +937,7 @@ namespace GKCore.Options
 
             ini.WriteInteger("Common", "KeyLayout", AppHost.Instance.GetKeyLayout());
 
-            ini.WriteBool("Common", "Autosave", Autosave);
-            ini.WriteInteger("Common", "AutosaveInterval", AutosaveInterval);
+            fBackups.SaveToFile(ini);
 
             ini.WriteInteger("Common", "WomanSurnameFormat", (int)WomanSurnameFormat);
             ini.WriteBool("Common", "SimpleSingleSurnames", SimpleSingleSurnames);

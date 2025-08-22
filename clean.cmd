@@ -89,9 +89,6 @@ rem <<< Plugins cleaning >>>
 rmdir .\projects\plugins\GEDmill\bin /s /q
 rmdir .\projects\plugins\GEDmill\obj /s /q
 
-rmdir .\projects\plugins\GKBackupPlugin\bin /s /q
-rmdir .\projects\plugins\GKBackupPlugin\obj /s /q
-
 rmdir .\projects\plugins\GKCalculatorPlugin\bin /s /q
 rmdir .\projects\plugins\GKCalculatorPlugin\obj /s /q
 

@@ -566,6 +566,7 @@
     <Compile Include="GKCore\Media\MediaStores\RelativePathMediaStore.cs" />
     <Compile Include="GKCore\Media\MediaStores\StorageMediaStore.cs" />
     <Compile Include="GKCore\Media\MediaStores\URLMediaStore.cs" />
+    <Compile Include="GKCore\Options\BackupOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GKMap\GKMap.Core\GKMap.Core.csproj">

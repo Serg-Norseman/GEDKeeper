@@ -583,7 +583,9 @@ namespace GKCore.Controllers
 
         public void UpdateBackupOptions()
         {
-            switch (fOptions.FileBackup) {
+            var backupOpts = fOptions.Backups;
+
+            switch (backupOpts.FileBackup) {
                 case FileBackup.fbNone:
                     GetControl<IRadioButton>("radFBNone").Checked = true;
                     break;
@@ -595,24 +597,26 @@ namespace GKCore.Controllers
                     break;
             }
 
-            GetControl<ICheckBox>("chkAutosave").Checked = fOptions.Autosave;
-            GetControl<INumericBox>("numASMin").Value = fOptions.AutosaveInterval;
-            GetControl<INumericBox>("numBackupRevisionsMaxCount").Value = fOptions.FileBackupEachRevisionMaxCount;
+            GetControl<ICheckBox>("chkAutosave").Checked = backupOpts.Autosave;
+            GetControl<INumericBox>("numASMin").Value = backupOpts.AutosaveInterval;
+            GetControl<INumericBox>("numBackupRevisionsMaxCount").Value = backupOpts.FileBackupEachRevisionMaxCount;
         }
 
         public void AcceptBackupOptions()
         {
+            var backupOpts = fOptions.Backups;
+
             if (GetControl<IRadioButton>("radFBNone").Checked) {
-                fOptions.FileBackup = FileBackup.fbNone;
+                backupOpts.FileBackup = FileBackup.fbNone;
             } else if (GetControl<IRadioButton>("radFBOnlyPrev").Checked) {
-                fOptions.FileBackup = FileBackup.fbOnlyPrev;
+                backupOpts.FileBackup = FileBackup.fbOnlyPrev;
             } else if (GetControl<IRadioButton>("radFBEachRevision").Checked) {
-                fOptions.FileBackup = FileBackup.fbEachRevision;
+                backupOpts.FileBackup = FileBackup.fbEachRevision;
             }
 
-            fOptions.Autosave = GetControl<ICheckBox>("chkAutosave").Checked;
-            fOptions.AutosaveInterval = (int)GetControl<INumericBox>("numASMin").Value;
-            fOptions.FileBackupEachRevisionMaxCount = (int)GetControl<INumericBox>("numBackupRevisionsMaxCount").Value;
+            backupOpts.Autosave = GetControl<ICheckBox>("chkAutosave").Checked;
+            backupOpts.AutosaveInterval = (int)GetControl<INumericBox>("numASMin").Value;
+            backupOpts.FileBackupEachRevisionMaxCount = (int)GetControl<INumericBox>("numBackupRevisionsMaxCount").Value;
         }
 
         public async void SelectLabColor(ILabel lbl)

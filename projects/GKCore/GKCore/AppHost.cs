@@ -1168,13 +1168,15 @@ namespace GKCore
 
         public virtual void ApplyOptions()
         {
-            double interval = AppHost.Options.AutosaveInterval /* min */ * 60 * 1000;
+            var backupOpts = GlobalOptions.Instance.Backups;
+
+            double interval = backupOpts.AutosaveInterval /* min */ * 60 * 1000;
             if (fAutosaveTimer == null) {
                 fAutosaveTimer = CreateTimer(interval, AutosaveTimer_Tick);
             } else {
                 fAutosaveTimer.Interval = interval;
             }
-            fAutosaveTimer.Enabled = AppHost.Options.Autosave;
+            fAutosaveTimer.Enabled = backupOpts.Autosave;
 
             foreach (var win in GetRunningForms<IWorkWindow>()) {
                 win.UpdateSettings();

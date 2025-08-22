@@ -104,8 +104,8 @@ namespace GKCore.Options
 
                 Assert.IsNotNull(globalOptions.ResidenceFilters);
 
-                globalOptions.FileBackup = FileBackup.fbOnlyPrev;
-                Assert.AreEqual(FileBackup.fbOnlyPrev, globalOptions.FileBackup);
+                globalOptions.Backups.FileBackup = FileBackup.fbOnlyPrev;
+                Assert.AreEqual(FileBackup.fbOnlyPrev, globalOptions.Backups.FileBackup);
 
                 globalOptions.ShowTips = true;
                 Assert.AreEqual(true, globalOptions.ShowTips);
@@ -121,11 +121,11 @@ namespace GKCore.Options
                 globalOptions.ShowDatesCalendar = true;
                 Assert.AreEqual(true, globalOptions.ShowDatesCalendar);
 
-                globalOptions.Autosave = true;
-                Assert.AreEqual(true, globalOptions.Autosave);
+                globalOptions.Backups.Autosave = true;
+                Assert.AreEqual(true, globalOptions.Backups.Autosave);
 
-                globalOptions.AutosaveInterval = 10;
-                Assert.AreEqual(10, globalOptions.AutosaveInterval);
+                globalOptions.Backups.AutosaveInterval = 10;
+                Assert.AreEqual(10, globalOptions.Backups.AutosaveInterval);
 
                 globalOptions.UseExtendedNotes = true;
                 Assert.AreEqual(true, globalOptions.UseExtendedNotes);

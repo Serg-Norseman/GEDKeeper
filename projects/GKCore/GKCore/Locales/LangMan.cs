@@ -1133,7 +1133,10 @@ namespace GKCore.Locales
         /* 1046 */ WeddingAnniversaryDaysRemained,
         /* 1047 */ WeddingAnniversaries,
 
-        /* 0000 */ Last = WeddingAnniversaries
+        /* 1048 */ ExtendedBackup,
+        /* 1049 */ Folder,
+
+        /* 0000 */ Last = Folder
     }
 
 
@@ -2222,6 +2225,9 @@ namespace GKCore.Locales
             /* 1045 */ "Tomorrow is {2} wedding anniversary of {0} and {1}",
             /* 1046 */ "{2} days remain before the {3} wedding anniversary of {0} and {1}",
             /* 1047 */ "Wedding anniversaries",
+
+            /* 1048 */ "Extended backup",
+            /* 1049 */ "Folder",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

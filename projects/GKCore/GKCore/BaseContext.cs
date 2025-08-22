@@ -1213,6 +1213,8 @@ namespace GKCore
                 // check for archive and storage, move them if the file changes location
                 MoveMediaContainers(oldFileName, fileName, IsGEDZIP());
 
+                BackupTool.ExtendedBackup(this, fileName);
+
                 fFileName = fileName;
             }
 
