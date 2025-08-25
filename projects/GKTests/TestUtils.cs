@@ -231,27 +231,34 @@ namespace GKTests
             return DateTime.ParseExact(dtx, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
         }
 
-        public static string GetTempFilePath(string fileName)
+        public static string GetTempFilePath(string fileName, out bool isLocked)
         {
             fileName = GKUtils.GetTempDir() + fileName;
+            isLocked = false;
 
-            if (File.Exists(fileName)) File.Delete(fileName); // for local tests!
+            try {
+                if (File.Exists(fileName)) File.Delete(fileName); // for local tests!
+            } catch {
+                isLocked = true;
+            }
 
             return fileName;
         }
 
         public static string PrepareTestFile(string resName)
         {
-            string fileName = GetTempFilePath(resName);
+            string fileName = GetTempFilePath(resName, out bool isLocked);
 
-            using (Stream inStream = TestUtils.LoadResourceStream(resName)) {
-                int size = (int)inStream.Length;
-                byte[] buffer = new byte[size];
-                int res = inStream.Read(buffer, 0, size);
-                if (res == size) {
-                    File.WriteAllBytes(fileName, buffer);
-                } else {
-                    throw new Exception("Resource stream not fully read");
+            if (!isLocked) {
+                using (Stream inStream = TestUtils.LoadResourceStream(resName)) {
+                    int size = (int)inStream.Length;
+                    byte[] buffer = new byte[size];
+                    int res = inStream.Read(buffer, 0, size);
+                    if (res == size) {
+                        File.WriteAllBytes(fileName, buffer);
+                    } else {
+                        throw new Exception("Resource stream not fully read");
+                    }
                 }
             }
 

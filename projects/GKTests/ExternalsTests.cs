@@ -166,7 +166,7 @@ namespace BSLib
                 Assert.AreEqual(true, res);
 
 
-                string fileName = TestUtils.GetTempFilePath("test.gvf");
+                string fileName = TestUtils.GetTempFilePath("test.gvf", out _);
                 string[] options = { "ratio=auto" };
                 var gvw = new GraphvizWriter("testGraph", options);
                 

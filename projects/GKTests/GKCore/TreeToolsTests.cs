@@ -238,7 +238,7 @@ namespace GKCore.Tools
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.GenPatriarchsGraphviz(null, "", 0, false, progress); });
 
-            string filename = TestUtils.GetTempFilePath("test.gvf");
+            string filename = TestUtils.GetTempFilePath("test.gvf", out _);
             try {
                 TreeTools.GenPatriarchsGraphviz(fBaseWin, filename, 0, false, progress);
             } finally {

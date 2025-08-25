@@ -94,7 +94,7 @@ namespace GKCore.Names
             sex = namesTable.GetSexByName("Anna");
             Assert.AreEqual(GDMSex.svFemale, sex);
 
-            string namesFile = TestUtils.GetTempFilePath("names.txt");
+            string namesFile = TestUtils.GetTempFilePath("names.txt", out _);
             try {
                 namesTable.SaveToFile(namesFile);
                 namesTable.LoadFromFile(namesFile);

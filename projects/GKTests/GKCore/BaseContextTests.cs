@@ -237,7 +237,7 @@ namespace GKCore
         public void Test_LoadAndSave()
         {
             string sourFile = TestUtils.PrepareTestFile("test1.ged");
-            string destFile = TestUtils.GetTempFilePath("test11.ged");
+            string destFile = TestUtils.GetTempFilePath("test11.ged", out _);
             string restoreFile = Path.ChangeExtension(destFile, ".restore");
 
             try {
@@ -257,7 +257,7 @@ namespace GKCore
         public void Test_MediaLoadSave()
         {
             string sourFile = TestUtils.PrepareTestFile("shaytan_plant.jpg");
-            string gedFile = TestUtils.GetTempFilePath("test_mm.ged");
+            string gedFile = TestUtils.GetTempFilePath("test_mm.ged", out _);
             string stgDirectory = string.Empty, arcFileName = string.Empty;
 
             try {
@@ -315,7 +315,7 @@ namespace GKCore
                     var gedcomProvider = new GEDCOMProvider(ctx.Tree);
                     gedcomProvider.LoadFromStream(stmGed1);
 
-                    string tempFileName = TestUtils.GetTempFilePath("test.geds");
+                    string tempFileName = TestUtils.GetTempFilePath("test.geds", out _);
 
                     try {
                         const string password = "test";

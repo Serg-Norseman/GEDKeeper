@@ -155,7 +155,7 @@ namespace GKCore.Options
                 Assert.Throws(typeof(ArgumentNullException), () => { globalOptions.SaveToFile(iniFN); });
                 Assert.Throws(typeof(ArgumentNullException), () => { globalOptions.LoadFromFile(iniFN); });
 
-                iniFN = TestUtils.GetTempFilePath("options.ini");
+                iniFN = TestUtils.GetTempFilePath("options.ini", out _);
                 try {
                     globalOptions.SaveToFile(iniFN);
                     globalOptions.LoadFromFile(iniFN);
