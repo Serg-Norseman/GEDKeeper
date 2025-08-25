@@ -66,16 +66,20 @@ namespace GKCore.Charts
     public sealed class SVGRenderer : ChartRenderer
     {
         private readonly string fFileName;
-        private readonly int fHeight, fWidth;
+        private int fHeight, fWidth;
 
         private SvgGraphics fGfx;
         private object fTarget;
         private float fTranslucent;
         private TextWriter fWriter;
 
-        public SVGRenderer(string svgFileName, int width, int height)
+        public SVGRenderer(string svgFileName)
         {
             fFileName = svgFileName;
+        }
+
+        public void SetViewBox(int width, int height)
+        {
             fWidth = width;
             fHeight = height;
         }
@@ -137,7 +141,14 @@ namespace GKCore.Charts
 
         public override ExtSizeF GetTextSize(string text, IFont font)
         {
-            return AppHost.GfxProvider.GetTextSize(text, font, fTarget);
+            var result = AppHost.GfxProvider.GetTextSize(text, font, fTarget);
+            // some very strange formulas
+#if !NETCOREAPP
+            result.Width += (text.Length * 0.42f + 0.5f);
+#else
+            result.Width += (text.Length * 0.72f);
+#endif
+            return result;
         }
 
         public override void DrawString(string text, IFont font, IBrush brush, float x, float y)

@@ -259,20 +259,7 @@ namespace GKUI.Components
             ExtSize imageSize = GetImageSize();
 
             if (ext == ".svg") {
-                var prevRenderer = fRenderer;
-                SetRenderer(new SVGRenderer(fileName, imageSize.Width, imageSize.Height));
-                fRenderer.BeginDrawing();
-                try {
-                    using (var gfx = CreateGraphics()) {
-                        fRenderer.SetTarget(gfx);
-
-                        RenderImage(RenderTarget.SVG);
-                    }
-                } finally {
-                    fRenderer.EndDrawing();
-                    SetRenderer(prevRenderer);
-                }
-
+                RenderSVG(fileName);
                 return;
             } else if (ext == ".pdf") {
                 RenderPDF(fileName);
@@ -318,6 +305,33 @@ namespace GKUI.Components
                     pic.Save(fileName, imFmt);
                 } finally {
                     pic.Dispose();
+                }
+            }
+        }
+
+        private void RenderSVG(string fileName)
+        {
+            var prevRenderer = fRenderer;
+            var prevScale = this.Scale;
+
+            using (var gfx = CreateGraphics()) {
+                var svgRenderer = new SVGRenderer(fileName);
+                SetRenderer(svgRenderer);
+
+                fRenderer.SetTarget(gfx);
+                this.SetScale(1.0f);
+
+                ExtSize imageSize = GetImageSize();
+                svgRenderer.SetViewBox(imageSize.Width, imageSize.Height);
+
+                fRenderer.BeginDrawing();
+                try {
+                    RenderImage(RenderTarget.SVG);
+                } finally {
+                    fRenderer.EndDrawing();
+
+                    SetRenderer(prevRenderer);
+                    this.SetScale(prevScale);
                 }
             }
         }

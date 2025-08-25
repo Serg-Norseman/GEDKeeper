@@ -439,7 +439,7 @@ namespace GKCore.Charts
             string transform = GetTransform();
 
             WriteLine("<text x=\"{0}\" y=\"{1}\" font-family=\"{2}\" font-size=\"{3}\" {4}>{5}</text>",
-                x, y + fLastFont.Size, fLastFont.FontFamilyName,
+                x, y + fLastFont.Height, fLastFont.FontFamilyName,
                 fLastFont.Size * 3 / 2,
                 transform,
                 s.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"));
