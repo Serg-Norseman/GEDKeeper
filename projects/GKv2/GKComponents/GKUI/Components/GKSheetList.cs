@@ -85,10 +85,7 @@ namespace GKUI.Components
                     if (fListModel != null) {
                         fList.ListMan = fListModel;
                         fListModel.SheetList = this;
-
-                        if (fListModel.AllowedActions.Contains(RecordAction.raDetails)) {
-                            fList.ContextMenuStrip = fContextMenu;
-                        }
+                        UpdateActions();
                     }
                 }
             }
@@ -252,6 +249,8 @@ namespace GKUI.Components
                 fBtnPaste.Visible = allowedActions.Contains(RecordAction.raPaste);
                 fToolBar.Visible = !allowedActions.IsEmpty();
             }
+
+            UpdateActions();
         }
 
         private void SetReadOnly(bool value)
@@ -452,6 +451,25 @@ namespace GKUI.Components
             var eArgs = new ModifyEventArgs(RecordAction.raPaste, null);
             DoModify(eArgs);
             RestoreSelected(eArgs.ItemData);
+        }
+
+        private void UpdateActions()
+        {
+            if (fListModel == null) return;
+
+            if (fListModel.CustomActions.Count > 0) {
+                fContextMenu.Items.Clear();
+                foreach (var custAct in fListModel.CustomActions) {
+                    var miAction = new ToolStripButton();
+                    miAction.Text = custAct.Name;
+                    miAction.Click += new EventHandler(custAct.Handler);
+                    fContextMenu.Items.Add(miAction);
+                }
+            }
+
+            if (fListModel.AllowedActions.Contains(RecordAction.raDetails) || fListModel.CustomActions.Count > 0) {
+                fList.ContextMenuStrip = fContextMenu;
+            }
         }
 
         #endregion

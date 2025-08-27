@@ -731,5 +731,80 @@ namespace GDModel
             hashCode.Add(fYearBC);
             hashCode.Add(fYearModifier);
         }
+
+        public static GDMDate Subtract(GDMDate date, GDMAge age)
+        {
+            if (date.IsEmpty() || age.IsEmpty()) {
+                return Empty;
+            }
+
+            int ageYears = age.Years;
+            int ageMonths = age.Months;
+            int ageDays = age.Days;
+
+            int resYear = date.Year;
+            int resMonth = date.Month;
+            int resDay = date.Day;
+
+            // years
+            if (ageYears > 0) {
+                if (date.Year == UNKNOWN_YEAR)
+                    return Empty;
+
+                resYear -= ageYears;
+                if (resYear < 1)
+                    return Empty;
+            }
+
+            // months
+            if (ageMonths > 0 && date.Month > 0) {
+                if (date.Year != UNKNOWN_YEAR) {
+                    int totalMonths = (resYear * 12 + date.Month) - ageMonths;
+                    if (totalMonths < 1)
+                        return Empty;
+
+                    resYear = (totalMonths - 1) / 12;
+                    resMonth = (totalMonths - 1) % 12 + 1;
+                } else {
+                    resMonth -= ageMonths;
+                    if (resMonth < 1)
+                        return Empty;
+                }
+            }
+
+            // days
+            if (ageDays > 0 && resDay > 0) {
+                while (ageDays > 0) {
+                    if (resDay > ageDays) {
+                        resDay -= ageDays;
+                        ageDays = 0;
+                    } else {
+                        if (date.Month == 0 || date.Year == UNKNOWN_YEAR) {
+                            return Empty;
+                        } else {
+                            ageDays = Math.Abs(resDay - ageDays);
+                            if (resMonth > 1) {
+                                resMonth -= 1;
+                            } else {
+                                resMonth = 12;
+                                resYear -= 1;
+                                if (resYear < 1)
+                                    return Empty;
+                            }
+                            resDay = DaysInMonth(date.fYearBC, (short)resYear, (byte)resMonth, date.fCalendar);
+                        }
+                    }
+                }
+            }
+
+            // check date parts
+            resYear = date.Year == UNKNOWN_YEAR ? UNKNOWN_YEAR : resYear;
+            resMonth = date.Month == 0 ? 0 : resMonth;
+            resDay = date.Day == 0 ? 0 : resDay;
+
+            var result = new GDMDate();
+            result.SetRawData(GDMApproximated.daCalculated, date.fCalendar, (short)resYear, date.fYearBC, date.fYearModifier, (byte)resMonth, (byte)resDay);
+            return result;
+        }
     }
 }

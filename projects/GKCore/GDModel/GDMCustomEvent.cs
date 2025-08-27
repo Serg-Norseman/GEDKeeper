@@ -213,6 +213,14 @@ namespace GDModel
             if (sourceObj.fMultimediaLinks != null) AssignList(sourceObj.fMultimediaLinks, MultimediaLinks);
         }
 
+        public void AssignDerivative(GDMCustomEvent source)
+        {
+            fAgency = source.fAgency;
+            if (source.fNotes != null) AssignList(source.fNotes, Notes);
+            if (source.fSourceCitations != null) AssignList(source.fSourceCitations, SourceCitations);
+            if (source.fMultimediaLinks != null) AssignList(source.fMultimediaLinks, MultimediaLinks);
+        }
+
         public override void Clear()
         {
             base.Clear();

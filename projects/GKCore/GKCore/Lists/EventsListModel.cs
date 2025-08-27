@@ -22,6 +22,7 @@ using System;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Views;
 using GKCore.Locales;
@@ -42,6 +43,14 @@ namespace GKCore.Lists
                 RecordAction.raCopy, RecordAction.raPaste);
 
             fOptions = GlobalOptions.Instance;
+        }
+
+        protected override void OnDataOwner()
+        {
+            if (fDataOwner is GDMIndividualRecord) {
+                AddCustomAction(LangMan.LS(LSID.CreateCalculatedBirthEvent), CreateCalculatedBirthEvent);
+            }
+            base.OnDataOwner();
         }
 
         public static ListColumns CreateListColumns()
@@ -198,6 +207,31 @@ namespace GKCore.Lists
 
                 fBaseWin.Context.Modified = true;
                 eArgs.IsChanged = true;
+            }
+        }
+
+        private void CreateCalculatedBirthEvent(object sender, EventArgs e)
+        {
+            object itemData = fSheetList.ListView.GetSelectedData();
+            if (itemData is GDMIndividualEventDetail evt && evt.Date.Value is GDMDate date) {
+                if (!evt.HasAge) {
+                    AppHost.StdDialogs.ShowWarning(LangMan.LS(LSID.NoAgeOnEventDate));
+                    return;
+                }
+
+                var newDate = GDMDate.Subtract(date, evt.Age);
+
+                if (!newDate.IsEmpty()) {
+                    var newEvent = new GDMIndividualEvent();
+                    newEvent.SetName(GEDCOMTagName.BIRT);
+                    newEvent.Date.ParseString(newDate.StringValue);
+                    newEvent.AssignDerivative(evt);
+
+                    var record = fDataOwner as GDMRecordWithEvents;
+                    record.Events.Add(newEvent);
+
+                    fSheetList.ListView.UpdateContents();
+                }
             }
         }
     }

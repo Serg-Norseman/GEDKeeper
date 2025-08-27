@@ -1136,7 +1136,10 @@ namespace GKCore.Locales
         /* 1048 */ ExtendedBackup,
         /* 1049 */ Folder,
 
-        /* 0000 */ Last = Folder
+        /* 1050 */ CreateCalculatedBirthEvent,
+        /* 1051 */ NoAgeOnEventDate,
+
+        /* 0000 */ Last = NoAgeOnEventDate
     }
 
 
@@ -2228,6 +2231,9 @@ namespace GKCore.Locales
 
             /* 1048 */ "Extended backup",
             /* 1049 */ "Folder",
+
+            /* 1050 */ "Create a calculated birth event",
+            /* 1051 */ "No age on event date",
         };
 
         private static readonly LangManager fLangMan = new LangManager();

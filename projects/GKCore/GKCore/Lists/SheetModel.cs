@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
@@ -134,12 +135,26 @@ namespace GKCore.Lists
     public interface ISheetModel : IListSource
     {
         EnumSet<RecordAction> AllowedActions { get; set; }
+        List<CustomAction> CustomActions { get; }
         IGDMObject DataOwner { get; set; }
         ISheetList SheetList { get; set; }
 
         Task Modify(object sender, ModifyEventArgs eArgs);
 
         void ShowDetails(object itemData);
+    }
+
+
+    public sealed class CustomAction
+    {
+        public string Name { get; set; }
+        public EventHandler<EventArgs> Handler { get; set; }
+
+        public CustomAction(string name, EventHandler<EventArgs> handler)
+        {
+            Name = name;
+            Handler = handler;
+        }
     }
 
 
@@ -156,6 +171,7 @@ namespace GKCore.Lists
         protected IGDMObject fDataOwner;
         protected IView fOwner;
         protected IGDMList<T> fStructList;
+        private List<CustomAction> fCustomActions;
 
 
         public EnumSet<RecordAction> AllowedActions
@@ -169,6 +185,11 @@ namespace GKCore.Lists
             }
         }
 
+        public List<CustomAction> CustomActions
+        {
+            get { return fCustomActions; }
+        }
+
         public IGDMObject DataOwner
         {
             get {
@@ -176,9 +197,7 @@ namespace GKCore.Lists
             }
             set {
                 fDataOwner = value;
-                if (fSheetList != null) {
-                    fSheetList.UpdateSheet();
-                }
+                OnDataOwner();
             }
         }
 
@@ -201,6 +220,14 @@ namespace GKCore.Lists
             fBaseWin = baseWin;
             fOwner = owner;
             fUndoman = undoman;
+            fCustomActions = new List<CustomAction>();
+        }
+
+        protected virtual void OnDataOwner()
+        {
+            if (fSheetList != null) {
+                fSheetList.UpdateSheet();
+            }
         }
 
         protected void UpdateStructList(IGDMList<T> structList)
@@ -257,6 +284,11 @@ namespace GKCore.Lists
             }
 
             return result;
+        }
+
+        protected void AddCustomAction(string name, EventHandler<EventArgs> handler)
+        {
+            fCustomActions.Add(new CustomAction(name, handler));
         }
     }
 }
