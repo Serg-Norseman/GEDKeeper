@@ -785,12 +785,15 @@ namespace GDModel
         [TestCase("2024", "1m", "CAL 2024")] // no date month, age ignored
         [TestCase("2024", "3y", "CAL 2021")]
         [TestCase("10 JAN", "3y", "")] // no date year
-        [TestCase("10 JUN", "3m", "CAL 10 MAR")]
+        //[TestCase("10 JUN", "3m", "CAL 10 MAR")]
+        [TestCase("10 JUN", "3m", "CAL MAR")]
         [TestCase("10 JUN", "7m", "")] // no date year for year-1
         [TestCase("10 JUN", "15d", "")] // no date year - unknown daysInMonth for month-1
-        [TestCase("1796", "14y 2m", "CAL 1782")] // no date month, age months ignored
+        //[TestCase("1796", "14y 2m", "CAL 1782")] // no date month, age months ignored
+        [TestCase("1796", "14y 2m", "CAL 1781")]
         [TestCase("JAN 1796", "4y 3m", "CAL OCT 1791")]
-        [TestCase("10 JAN 1796", "4y 3m", "CAL 10 OCT 1791")]
+        //[TestCase("10 JAN 1796", "4y 3m", "CAL 10 OCT 1791")]
+        [TestCase("10 JAN 1796", "4y 3m", "CAL OCT 1791")]
         [TestCase("10 JAN 1796", "4y 3m 1d", "CAL 09 OCT 1791")]
         [TestCase("15 JAN 1796", "5d", "CAL 10 JAN 1796")]
         [TestCase("15 JAN 1796", "15d", "CAL 31 DEC 1795")]
@@ -798,7 +801,8 @@ namespace GDModel
         [TestCase("15 JAN 1796", "2m 25d", "CAL 21 OCT 1795")]
         [TestCase("26 AUG 2025", "125d", "CAL 23 APR 2025")]
         [TestCase("26 FEB 2025", "125d", "CAL 24 OCT 2024")]
-        [TestCase("26 FEB 2025", "4m", "CAL 26 OCT 2024")]
+        //[TestCase("26 FEB 2025", "4m", "CAL 26 OCT 2024")]
+        [TestCase("26 FEB 2025", "4m", "CAL OCT 2024")]
         public void Test_SubtractAge(string strDate, string strAge, string expected)
         {
             var d = new GDMDate();
