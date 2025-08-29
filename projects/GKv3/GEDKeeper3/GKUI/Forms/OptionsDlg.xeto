@@ -10,106 +10,138 @@
       <TabControl x:Name="PageControl1">
 
         <TabPage x:Name="pageCommon">
-          <TableLayout Style="paddedTable">
-            <TableRow>
 
-              <GroupBox x:Name="grpOther">
-                <StackLayout Style="vertListStack">
+          <TabControl x:Name="tabsCommon">
+            <TabPage x:Name="pageComOther">
+              <TableLayout Style="paddedTable">
+                <TableRow>
 
-                  <CheckBox x:Name="chkLoadRecentFiles" />
-                  <CheckBox x:Name="chkShowOnStart" />
-                  <CheckBox x:Name="chkAutoCheckUpdates" />
-                  <CheckBox x:Name="chkDialogClosingWarn" />
-                  <CheckBox x:Name="chkDisplayFullFileName" />
-
-                  <StackLayoutItem />
-                  <StackLayout Orientation="Horizontal" Spacing="4">
-                    <Label x:Name="lblChartWindowsShowMode" />
-                    <ComboBox x:Name="cmbChartWindowsShowMode" ReadOnly="True" Width="160" />
-                  </StackLayout>
-                  <CheckBox x:Name="chkKeepInfoPansOverallSize" />
-                  <CheckBox x:Name="chkFilesOverwriteWarn" />
-
-                  <TableLayout Spacing="4, 4">
-                    <TableRow>
-                      <Label x:Name="lblLanguage" />
-                      <ComboBox x:Name="cmbLanguages" ReadOnly="True" />
-                    </TableRow>
-
-                    <TableRow>
-                      <Label x:Name="lblCertaintyAlgorithm" />
-                      <ComboBox x:Name="cmbCertaintyAlgorithm" ReadOnly="True" />
-                    </TableRow>
-                  </TableLayout>
-
-                  <StackLayoutItem Expand="True" />
-
-                </StackLayout>
-              </GroupBox>
-
-              <GroupBox x:Name="grpInternet">
-                <TableLayout Style="paddedTable">
-
-                  <TableRow>
-                    <CheckBox x:Name="chkUseProxy" />
-                  </TableRow>
-
-                  <TableRow>
-                    <Label x:Name="lblProxyServer" />
-                    <TextBox x:Name="txtProxyServer" />
-                  </TableRow>
-
-                  <TableRow>
-                    <Label x:Name="lblProxyPort" />
-                    <TextBox x:Name="txtProxyPort" />
-                  </TableRow>
-
-                  <TableRow>
-                    <Label x:Name="lblProxyLogin" />
-                    <TextBox x:Name="txtProxyLogin" />
-                  </TableRow>
-
-                  <TableRow>
-                    <Label x:Name="lblProxyPassword" />
-                    <PasswordBox x:Name="txtProxyPass" PasswordChar="*" />
-                  </TableRow>
-
-                  <TableRow ScaleHeight="True" />
-
-                </TableLayout>
-              </GroupBox>
-
-            </TableRow>
-            <TableRow>
-
-              <GroupBox x:Name="groupBox1">
-                <StackLayout Style="vertListStack">
-
-                  <GroupBox x:Name="grpFileBackup">
+                  <GroupBox x:Name="grpOther">
                     <StackLayout Style="vertListStack">
-                      <RadioButton x:Name="radFBNone" />
-                      <RadioButton x:Name="radFBOnlyPrev" />
-                      <RadioButton x:Name="radFBEachRevision" />
+
+                      <CheckBox x:Name="chkLoadRecentFiles" />
+                      <CheckBox x:Name="chkShowOnStart" />
+                      <CheckBox x:Name="chkAutoCheckUpdates" />
+                      <CheckBox x:Name="chkDialogClosingWarn" />
+                      <CheckBox x:Name="chkDisplayFullFileName" />
+
+                      <StackLayoutItem />
+                      <StackLayout Orientation="Horizontal" Spacing="4">
+                        <Label x:Name="lblChartWindowsShowMode" />
+                        <ComboBox x:Name="cmbChartWindowsShowMode" ReadOnly="True" Width="160" />
+                      </StackLayout>
+                      <CheckBox x:Name="chkKeepInfoPansOverallSize" />
+                      <CheckBox x:Name="chkFilesOverwriteWarn" />
+
+                      <TableLayout Spacing="4, 4">
+                        <TableRow>
+                          <Label x:Name="lblLanguage" />
+                          <ComboBox x:Name="cmbLanguages" ReadOnly="True" />
+                        </TableRow>
+
+                        <TableRow>
+                          <Label x:Name="lblCertaintyAlgorithm" />
+                          <ComboBox x:Name="cmbCertaintyAlgorithm" ReadOnly="True" />
+                        </TableRow>
+                      </TableLayout>
+
+                      <StackLayoutItem Expand="True" />
+
                     </StackLayout>
                   </GroupBox>
 
-                  <StackLayout Orientation="Horizontal" Spacing="4">
-                    <CheckBox x:Name="chkAutosave" />
-                    <NumericStepper x:Name="numASMin" MaxValue="120" MinValue="1" Width="60" Value="1" />
-                    <Label x:Name="lblMinutes" />
-                  </StackLayout>
+                  <GroupBox x:Name="grpInternet">
+                    <TableLayout Style="paddedTable">
 
-                  <StackLayout Orientation="Horizontal" Spacing="4">
-                    <Label x:Name="lblBackupRevisionsMaxCount" />
-                    <NumericStepper x:Name="numBackupRevisionsMaxCount" MaxValue="1000" MinValue="0" Width="80" Value="0" />
-                  </StackLayout>
+                      <TableRow>
+                        <CheckBox x:Name="chkUseProxy" />
+                      </TableRow>
 
-                </StackLayout>
-              </GroupBox>
+                      <TableRow>
+                        <Label x:Name="lblProxyServer" />
+                        <TextBox x:Name="txtProxyServer" />
+                      </TableRow>
 
-            </TableRow>
-            <TableRow ScaleHeight="True" />
-          </TableLayout>
+                      <TableRow>
+                        <Label x:Name="lblProxyPort" />
+                        <TextBox x:Name="txtProxyPort" />
+                      </TableRow>
+
+                      <TableRow>
+                        <Label x:Name="lblProxyLogin" />
+                        <TextBox x:Name="txtProxyLogin" />
+                      </TableRow>
+
+                      <TableRow>
+                        <Label x:Name="lblProxyPassword" />
+                        <PasswordBox x:Name="txtProxyPass" PasswordChar="*" />
+                      </TableRow>
+
+                      <TableRow ScaleHeight="True" />
+
+                    </TableLayout>
+                  </GroupBox>
+
+                </TableRow>
+
+                <TableRow ScaleHeight="True" />
+              </TableLayout>
+            </TabPage>
+
+            <TabPage x:Name="pageComBackup">
+              <TableLayout Style="paddedTable">
+                <TableRow>
+                  <GroupBox x:Name="groupBox1">
+                    <StackLayout Style="vertListStack">
+
+                      <GroupBox x:Name="grpFileBackup">
+                        <StackLayout Style="vertListStack">
+                          <RadioButton x:Name="radFBNone" />
+                          <RadioButton x:Name="radFBOnlyPrev" />
+                          <RadioButton x:Name="radFBEachRevision" />
+                        </StackLayout>
+                      </GroupBox>
+
+                      <StackLayout Orientation="Horizontal" Spacing="4">
+                        <CheckBox x:Name="chkAutosave" />
+                        <NumericStepper x:Name="numASMin" MaxValue="120" MinValue="1" Width="60" Value="1" />
+                        <Label x:Name="lblMinutes" />
+                      </StackLayout>
+
+                      <StackLayout Orientation="Horizontal" Spacing="4">
+                        <Label x:Name="lblBackupRevisionsMaxCount" />
+                        <NumericStepper x:Name="numBackupRevisionsMaxCount" MaxValue="1000" MinValue="0" Width="80" Value="0" />
+                      </StackLayout>
+
+                      <StackLayout Orientation="Vertical" Padding="8" Spacing="8">
+                        <CheckBox x:Name="chkExtBackupEnabled" CheckedChanged="chkExtBackupEnabled_CheckedChanged" />
+
+                        <StackLayout Orientation="Horizontal" Spacing="8">
+                          <Label x:Name="lblExtBackupFolder" />
+                          <TextBox x:Name="txtExtBackupFolder" ReadOnly="true" Width="344" />
+                          <Button x:Name="btnExtBackupFolderChoose" Enabled="false" Click="btnExtBackupFolderChoose_Click" />
+                        </StackLayout>
+
+                      </StackLayout>
+
+                    </StackLayout>
+                  </GroupBox>
+                </TableRow>
+
+                <TableRow ScaleHeight="True" />
+              </TableLayout>
+            </TabPage>
+
+            <TabPage x:Name="pageGEDCOM" Padding="8" Text="GEDCOM">
+              <StackLayout Style="vertListStack">
+                <CheckBox x:Name="chkCharsetDetection" />
+                <CheckBox x:Name="chkDisableNonStdFeatures" />
+                <CheckBox x:Name="chkEnableStdValidation" />
+                <CheckBox x:Name="chkUseExtendedNotes" />
+                <CheckBox x:Name="chkKeepRichNames" />
+              </StackLayout>
+            </TabPage>
+          </TabControl>
         </TabPage>
 
         <TabPage x:Name="pageMultimedia">
@@ -550,16 +582,6 @@
             <StackLayoutItem />
             <CheckBox x:Name="chkShortKinshipForm" />
             <CheckBox x:Name="chkExtendedKinships" />
-          </StackLayout>
-        </TabPage>
-
-        <TabPage x:Name="pageGEDCOM" Padding="8" Text="GEDCOM">
-          <StackLayout Style="vertListStack">
-            <CheckBox x:Name="chkCharsetDetection" />
-            <CheckBox x:Name="chkDisableNonStdFeatures" />
-            <CheckBox x:Name="chkEnableStdValidation" />
-            <CheckBox x:Name="chkUseExtendedNotes" />
-            <CheckBox x:Name="chkKeepRichNames" />
           </StackLayout>
         </TabPage>
 

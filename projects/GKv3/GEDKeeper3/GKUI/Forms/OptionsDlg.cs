@@ -42,177 +42,26 @@ namespace GKUI.Forms
 
         private TabControl PageControl1;
         private TabPage pageCommon;
-        private Button btnAccept;
-        private Button btnCancel;
-        private TabPage pageTreeChart;
-        private GroupBox grpTreePersons;
-        private CheckBox chkSurname;
-        private CheckBox chkName;
-        private CheckBox chkPatronymic;
-        private CheckBox chkDiffLines;
-        private CheckBox chkBirthDate;
-        private CheckBox chkDeathDate;
-        private CheckBox chkKinship;
-        private GroupBox grpTreeDecor;
         private Scrollable panMaleColor;
         private Scrollable panFemaleColor;
         private Scrollable panUnkSexColor;
         private Scrollable panUnHusbandColor;
         private Scrollable panUnWifeColor;
-        private GroupBox grpInternet;
-        private Label lblProxyServer;
-        private Label lblProxyPort;
-        private Label lblProxyLogin;
-        private Label lblProxyPassword;
-        private CheckBox chkUseProxy;
-        private TextBox txtProxyServer;
-        private TextBox txtProxyPort;
-        private TextBox txtProxyLogin;
-        private PasswordBox txtProxyPass;
         private TabPage pageUIView;
         private TabControl PageControl2;
-        private TabPage pageViewCommon;
-        private TabPage pageViewPersons;
-        private GKListView lstPersonColumns;
-        private Button btnColumnUp;
-        private Button btnColumnDown;
         private Button btnResetDefaults;
         private GroupBox rgFNPFormat;
         private GroupBox grpDateFormat;
-        private CheckBox chkPlacesWithAddress;
-        private GroupBox grpOther;
-        private CheckBox chkShowOnStart;
-        private CheckBox chkHighlightUnparented;
-        private CheckBox chkHighlightUnmarried;
-        private CheckBox chkOnlyYears;
-        private CheckBox chkSignsVisible;
-        private CheckBox chkChildlessExclude;
-        private Scrollable panDefFont;
         private TabPage pagePedigree;
-        private GroupBox grpPedigree;
-        private CheckBox chkAttributes;
-        private CheckBox chkNotes;
-        private CheckBox chkSources;
         private GroupBox grpPedigreeFormat;
-        private Label lblLanguage;
-        private ComboBox cmbLanguages;
-        private CheckBox chkTreeDecorative;
-        private CheckBox chkPortraitsVisible;
-        private RadioButton radSNP;
-        private RadioButton radS_NP;
-        private RadioButton radS_N_P;
-        private RadioButton radDMY;
-        private RadioButton radYMD;
-        private RadioButton radExcess;
-        private RadioButton radCompact;
-        private CheckBox chkShowDatesSigns;
-        private CheckBox chkShowDatesCalendar;
-        private GKListView lvPlugins;
-        private TabPage pagePlugins;
-        private Label lblChartFont;
         private TabControl tabsCharts;
         private TabPage pageCharts;
-        private Label lblMaleColor;
-        private Label lblFemaleColor;
-        private Label lblUnkSexColor;
-        private Label lblUnHusbandColor;
-        private Label lblUnWifeColor;
-        private Panel panel1;
-        private RadioButton radFBNone;
-        private RadioButton radFBOnlyPrev;
-        private RadioButton radFBEachRevision;
         private GroupBox grpFileBackup;
-        private CheckBox chkAutosave;
-        private NumericStepper numASMin;
-        private Label lblMinutes;
-        private GroupBox groupBox1;
-        private CheckBox chkGenerations;
         private GKUI.Components.ACOptionsControl ancOptionsControl1;
-        private TabPage pageAncCircle;
-        private CheckBox chkExtendWomanSurnames;
-        private RadioButton radMaiden_Married;
-        private RadioButton radMarried_Maiden;
-        private RadioButton radMaiden;
-        private RadioButton radMarried;
         private GroupBox grpAdvancedNames;
-        private CheckBox chkAllowMediaDirectRefs;
-        private CheckBox chkAutoCheckUpdates;
         private TabPage pageMultimedia;
-        private CheckBox chkEmbeddedMediaPlayer;
-        private CheckBox chkLoadRecentFiles;
-        private CheckBox chkRemovableMediaWarning;
-        private CheckBox chkDefaultPortraits;
-        private CheckBox chkInvertedTree;
-        private CheckBox chkMarriagesDates;
-        private ComboBox cmbGeocoder;
-        private Label lblGeocoder;
-        private CheckBox chkShowPlaces;
-        private CheckBox chkHideUnknownSpouses;
-        private GroupBox grpSpacings;
-        private Label lblSpouseDist;
-        private Label lblGenDist;
-        private Label lblBranchDist;
-        private Label lblMargins;
-        private NumericStepper numSpouseDist;
-        private NumericStepper numGenDist;
-        private NumericStepper numBranchDist;
-        private NumericStepper numMargins;
-        private CheckBox chkAutoSortChildren;
-        private CheckBox chkAutoSortSpouses;
-        private CheckBox chkCheckTreeSize;
-        private CheckBox chkCharsetDetection;
-        private Label lblBackupRevisionsMaxCount;
-        private NumericStepper numBackupRevisionsMaxCount;
-        private CheckBox chkAllowMediaStoreRelativeReferences;
-        private Label lblMediaStoreDefault;
-        private ComboBox cmbMediaStoreDefault;
-        private CheckBox chkAllowDeleteMediaFileFromStgArc;
-        private CheckBox chkAllowDeleteMediaFileFromRefs;
-        private CheckBox chkDeleteMediaFileWithoutConfirm;
-        private CheckBox chkFirstCapitalLetterInNames;
-        private CheckBox chkDialogClosingWarn;
-        private Label lblGeoSearchCountry;
-        private ComboBox cmbGeoSearchCountry;
-        private CheckBox chkSeparateDAPLines;
-        private CheckBox chkDottedLinesOfAdoptedChildren;
-        private CheckBox chkBoldNames;
-        private CheckBox chkOnlyLocality;
-        private CheckBox chkMinimizingWidth;
-        private CheckBox chkShowAge;
-        private CheckBox chkShortKinshipForm;
-        private CheckBox chkSurnameFirstInOrder;
-        private CheckBox chkSurnameInCapitals;
-        private CheckBox chkSeparateDepth;
-        private Label lblDefaultDepth;
-        private NumericStepper numDefaultDepth;
-        private Label lblDefaultDepthAncestors;
-        private NumericStepper numDefaultDepthAncestors;
-        private Label lblDefaultDepthDescendants;
-        private NumericStepper numDefaultDepthDescendants;
-        private Label lblCertaintyAlgorithm;
-        private ComboBox cmbCertaintyAlgorithm;
-        private CheckBox chkTreeSurnameFirst;
-        private CheckBox chkURNotesVisible;
-        private CheckBox chkSAFByAllNames;
-        private CheckBox chkShortenDateRanges;
-        private CheckBox chkExtendedKinships;
-        private CheckBox chkUseSurnamesInPSF;
-        private CheckBox chkUseBirthDatesInPSF;
-        private Label lblDescendNumbering;
-        private ComboBox cmbDescendNumbering;
-        private Label lblAscendNumbering;
-        private ComboBox cmbAscendNumbering;
-        private CheckBox chkExtendedLocations;
-        private CheckBox chkELAbbreviatedNames;
-        private CheckBox chkReversePlacesOrder;
         private TabPage pageEventTypes;
         private GKSheetList slEventTypes;
-        private CheckBox chkFullNameOnOneLine;
-        private Label lblMatchPatternMethod;
-        private ComboBox cmbMatchPatternMethod;
-        private CheckBox chkSourcePages;
-        private TabPage pageNavigation;
-        private CheckBox chkPortraits;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -435,6 +284,19 @@ namespace GKUI.Forms
             }
 
             return false;
+        }
+
+        private void chkExtBackupEnabled_CheckedChanged(object sender, EventArgs e)
+        {
+            // prevent triggering on incomplete initialization
+            if (fController != null) {
+                fController.CheckExtBackup();
+            }
+        }
+
+        private void btnExtBackupFolderChoose_Click(object sender, EventArgs e)
+        {
+            fController.SelectExtBackupFolder();
         }
     }
 }

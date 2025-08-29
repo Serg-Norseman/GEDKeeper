@@ -600,6 +600,9 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkAutosave").Checked = backupOpts.Autosave;
             GetControl<INumericBox>("numASMin").Value = backupOpts.AutosaveInterval;
             GetControl<INumericBox>("numBackupRevisionsMaxCount").Value = backupOpts.FileBackupEachRevisionMaxCount;
+
+            GetControl<ICheckBox>("chkExtBackupEnabled").Checked = backupOpts.ExtendedBackup;
+            GetControl<ITextBox>("txtExtBackupFolder").Text = backupOpts.ExtendedFolder;
         }
 
         public void AcceptBackupOptions()
@@ -617,6 +620,24 @@ namespace GKCore.Controllers
             backupOpts.Autosave = GetControl<ICheckBox>("chkAutosave").Checked;
             backupOpts.AutosaveInterval = (int)GetControl<INumericBox>("numASMin").Value;
             backupOpts.FileBackupEachRevisionMaxCount = (int)GetControl<INumericBox>("numBackupRevisionsMaxCount").Value;
+
+            backupOpts.ExtendedBackup = GetControl<ICheckBox>("chkExtBackupEnabled").Checked;
+            backupOpts.ExtendedFolder = GetControl<ITextBox>("txtExtBackupFolder").Text;
+        }
+
+        public void CheckExtBackup()
+        {
+            var enable = GetControl<ICheckBox>("chkExtBackupEnabled").Checked;
+            GetControl<ITextBox>("txtExtBackupFolder").Enabled = enable;
+            GetControl<IButton>("btnExtBackupFolderChoose").Enabled = enable;
+        }
+
+        public void SelectExtBackupFolder()
+        {
+            var selectedFolder = AppHost.Instance.SelectFolder(fOptions.Backups.ExtendedFolder);
+            if (!string.IsNullOrEmpty(selectedFolder)) {
+                GetControl<ITextBox>("txtExtBackupFolder").Text = selectedFolder;
+            }
         }
 
         public async void SelectLabColor(ILabel lbl)
@@ -881,6 +902,15 @@ namespace GKCore.Controllers
             // Common
             GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Common);
 
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<ITabPage>("pageComOther").Text = LangMan.LS(LSID.Common);
+                GetControl<ITabPage>("pageComBackup").Text = LangMan.LS(LSID.FileBackup);
+
+                GetControl<ICheckBox>("chkExtBackupEnabled").Text = LangMan.LS(LSID.ExtendedBackup);
+                GetControl<ILabel>("lblExtBackupFolder").Text = LangMan.LS(LSID.Folder);
+                GetControl<IButton>("btnExtBackupFolderChoose").Text = LangMan.LS(LSID.DlgSelect);
+            }
+
             GetControl<IGroupBox>("grpInternet").Text = LangMan.LS(LSID.Internet);
             GetControl<ICheckBox>("chkUseProxy").Text = LangMan.LS(LSID.ProxyUse);
             GetControl<ILabel>("lblProxyServer").Text = LangMan.LS(LSID.ProxyServer);
@@ -888,7 +918,7 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblProxyLogin").Text = LangMan.LS(LSID.ProxyLogin);
             GetControl<ILabel>("lblProxyPassword").Text = LangMan.LS(LSID.Password);
 
-            GetControl<IGroupBox>("grpFileBackup").Text = LangMan.LS(LSID.FileBackup);
+            GetControl<IGroupBox>("grpFileBackup").Text = LangMan.LS(LSID.BackupOnSave);
             GetControl<IRadioButton>("radFBNone").Text = LangMan.LS(LSID.Not);
             GetControl<IRadioButton>("radFBOnlyPrev").Text = LangMan.LS(LSID.BackupOnlyPrev);
             GetControl<IRadioButton>("radFBEachRevision").Text = LangMan.LS(LSID.BackupEachRevision);

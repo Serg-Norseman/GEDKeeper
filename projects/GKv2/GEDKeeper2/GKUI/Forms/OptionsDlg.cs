@@ -250,5 +250,18 @@ namespace GKUI.Forms
 
             return false;
         }
+
+        private void chkExtBackupEnabled_CheckedChanged(object sender, EventArgs e)
+        {
+            // prevent triggering on incomplete initialization
+            if (fController != null) {
+                fController.CheckExtBackup();
+            }
+        }
+
+        private void btnExtBackupFolderChoose_Click(object sender, EventArgs e)
+        {
+            fController.SelectExtBackupFolder();
+        }
     }
 }

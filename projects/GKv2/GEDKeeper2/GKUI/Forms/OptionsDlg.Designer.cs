@@ -208,6 +208,14 @@
         private System.Windows.Forms.CheckBox chkDisableNonStdFeatures;
         private System.Windows.Forms.CheckBox chkSourceCitations;
         private System.Windows.Forms.CheckBox chkEnableStdValidation;
+        private GKUI.Components.GKTabControl tabsCommon;
+        private System.Windows.Forms.TabPage pageComOther;
+        private System.Windows.Forms.TabPage pageComBackup;
+        private System.Windows.Forms.CheckBox chkExtBackupEnabled;
+        private System.Windows.Forms.Label lblExtBackupFolder;
+        private System.Windows.Forms.TextBox txtExtBackupFolder;
+        private System.Windows.Forms.Button btnExtBackupFolderChoose;
+        private System.Windows.Forms.TabPage pageGEDCOM;
 
         private void InitializeComponent()
         {
@@ -417,6 +425,14 @@
             this.chkDisableNonStdFeatures = new System.Windows.Forms.CheckBox();
             this.chkSourceCitations = new System.Windows.Forms.CheckBox();
             this.chkEnableStdValidation = new System.Windows.Forms.CheckBox();
+            this.tabsCommon = new Components.GKTabControl();
+            this.pageComOther = new System.Windows.Forms.TabPage();
+            this.pageComBackup = new System.Windows.Forms.TabPage();
+            this.chkExtBackupEnabled = new System.Windows.Forms.CheckBox();
+            this.lblExtBackupFolder = new System.Windows.Forms.Label();
+            this.txtExtBackupFolder = new System.Windows.Forms.TextBox();
+            this.btnExtBackupFolderChoose = new System.Windows.Forms.Button();
+            this.pageGEDCOM = new System.Windows.Forms.TabPage();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -465,6 +481,10 @@
             this.tabsTreeCharts.SuspendLayout();
             this.pageTreePersons.SuspendLayout();
             this.pageTreeDesign.SuspendLayout();
+            this.tabsCommon.SuspendLayout();
+            this.pageComOther.SuspendLayout();
+            this.pageComBackup.SuspendLayout();
+            this.pageGEDCOM.SuspendLayout();
             this.SuspendLayout();
             // 
             // PageControl1
@@ -487,13 +507,7 @@
             // 
             // pageCommon
             // 
-            this.pageCommon.Controls.Add(this.lblCertaintyAlgorithm);
-            this.pageCommon.Controls.Add(this.cmbCertaintyAlgorithm);
-            this.pageCommon.Controls.Add(this.groupBox1);
-            this.pageCommon.Controls.Add(this.lblLanguage);
-            this.pageCommon.Controls.Add(this.grpInternet);
-            this.pageCommon.Controls.Add(this.grpOther);
-            this.pageCommon.Controls.Add(this.cmbLanguages);
+            this.pageCommon.Controls.Add(this.tabsCommon);
             this.pageCommon.Location = new System.Drawing.Point(4, 26);
             this.pageCommon.Margin = new System.Windows.Forms.Padding(2);
             this.pageCommon.Name = "pageCommon";
@@ -502,10 +516,111 @@
             this.pageCommon.TabIndex = 0;
             this.pageCommon.Text = "pageCommon";
             // 
+            // tabsCommon
+            // 
+            this.tabsCommon.Controls.Add(this.pageComOther);
+            this.tabsCommon.Controls.Add(this.pageComBackup);
+            this.tabsCommon.Controls.Add(this.pageGEDCOM);
+            this.tabsCommon.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabsCommon.Location = new System.Drawing.Point(10, 10);
+            this.tabsCommon.Margin = new System.Windows.Forms.Padding(2);
+            this.tabsCommon.Name = "tabsCommon";
+            this.tabsCommon.SelectedIndex = 0;
+            this.tabsCommon.Size = new System.Drawing.Size(721, 742);
+            this.tabsCommon.TabIndex = 0;
+            // 
+            // pageComOther
+            // 
+            this.pageComOther.Controls.Add(this.lblCertaintyAlgorithm);
+            this.pageComOther.Controls.Add(this.cmbCertaintyAlgorithm);
+            this.pageComOther.Controls.Add(this.lblLanguage);
+            this.pageComOther.Controls.Add(this.cmbLanguages);
+            this.pageComOther.Controls.Add(this.grpOther);
+            this.pageComOther.Controls.Add(this.grpInternet);
+            this.pageComOther.Location = new System.Drawing.Point(4, 26);
+            this.pageComOther.Margin = new System.Windows.Forms.Padding(2);
+            this.pageComOther.Name = "pageComOther";
+            this.pageComOther.Padding = new System.Windows.Forms.Padding(10);
+            this.pageComOther.Size = new System.Drawing.Size(741, 762);
+            this.pageComOther.TabIndex = 0;
+            this.pageComOther.Text = "pageComOther";
+            // 
+            // pageGEDCOM
+            // 
+            this.pageGEDCOM.Controls.Add(this.chkEnableStdValidation);
+            this.pageGEDCOM.Controls.Add(this.chkDisableNonStdFeatures);
+            this.pageGEDCOM.Controls.Add(this.chkUseExtendedNotes);
+            this.pageGEDCOM.Controls.Add(this.chkKeepRichNames);
+            this.pageGEDCOM.Controls.Add(this.chkCharsetDetection);
+            this.pageGEDCOM.Location = new System.Drawing.Point(4, 26);
+            this.pageGEDCOM.Margin = new System.Windows.Forms.Padding(2);
+            this.pageGEDCOM.Name = "pageGEDCOM";
+            this.pageGEDCOM.Padding = new System.Windows.Forms.Padding(10);
+            this.pageGEDCOM.Size = new System.Drawing.Size(741, 762);
+            this.pageGEDCOM.TabIndex = 0;
+            this.pageGEDCOM.Text = "GEDCOM";
+            // 
+            // chkCharsetDetection
+            // 
+            this.chkCharsetDetection.AutoSize = true;
+            this.chkCharsetDetection.Location = new System.Drawing.Point(20, 20);
+            this.chkCharsetDetection.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
+            this.chkCharsetDetection.Name = "chkCharsetDetection";
+            this.chkCharsetDetection.Size = new System.Drawing.Size(158, 21);
+            this.chkCharsetDetection.TabIndex = 9;
+            this.chkCharsetDetection.Text = "chkCharsetDetection";
+            // 
+            // chkEnableStdValidation
+            // 
+            this.chkEnableStdValidation.Location = new System.Drawing.Point(20, 82);
+            this.chkEnableStdValidation.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkEnableStdValidation.Name = "chkEnableStdValidation";
+            this.chkEnableStdValidation.Size = new System.Drawing.Size(600, 22);
+            this.chkEnableStdValidation.TabIndex = 18;
+            this.chkEnableStdValidation.Text = "chkEnableStdValidation";
+            // 
+            // chkDisableNonStdFeatures
+            // 
+            this.chkDisableNonStdFeatures.Location = new System.Drawing.Point(20, 51);
+            this.chkDisableNonStdFeatures.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkDisableNonStdFeatures.Name = "chkDisableNonStdFeatures";
+            this.chkDisableNonStdFeatures.Size = new System.Drawing.Size(600, 22);
+            this.chkDisableNonStdFeatures.TabIndex = 1;
+            this.chkDisableNonStdFeatures.Text = "chkDisableNonStdFeatures";
+            // 
+            // chkUseExtendedNotes
+            // 
+            this.chkUseExtendedNotes.Location = new System.Drawing.Point(20, 113);
+            this.chkUseExtendedNotes.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkUseExtendedNotes.Name = "chkUseExtendedNotes";
+            this.chkUseExtendedNotes.Size = new System.Drawing.Size(600, 22);
+            this.chkUseExtendedNotes.TabIndex = 12;
+            this.chkUseExtendedNotes.Text = "chkUseExtendedNotes";
+            // 
+            // chkKeepRichNames
+            // 
+            this.chkKeepRichNames.Location = new System.Drawing.Point(20, 144);
+            this.chkKeepRichNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkKeepRichNames.Name = "chkKeepRichNames";
+            this.chkKeepRichNames.Size = new System.Drawing.Size(600, 22);
+            this.chkKeepRichNames.TabIndex = 12;
+            this.chkKeepRichNames.Text = "chkKeepRichNames";
+            // 
+            // pageComBackup
+            // 
+            this.pageComBackup.Controls.Add(this.groupBox1);
+            this.pageComBackup.Location = new System.Drawing.Point(4, 26);
+            this.pageComBackup.Margin = new System.Windows.Forms.Padding(2);
+            this.pageComBackup.Name = "pageComBackup";
+            this.pageComBackup.Padding = new System.Windows.Forms.Padding(10);
+            this.pageComBackup.Size = new System.Drawing.Size(741, 762);
+            this.pageComBackup.TabIndex = 0;
+            this.pageComBackup.Text = "pageComBackup";
+            // 
             // lblLanguage
             // 
             this.lblLanguage.AutoSize = true;
-            this.lblLanguage.Location = new System.Drawing.Point(11, 547);
+            this.lblLanguage.Location = new System.Drawing.Point(11, 538);
             this.lblLanguage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblLanguage.Name = "lblLanguage";
             this.lblLanguage.Size = new System.Drawing.Size(80, 17);
@@ -515,7 +630,7 @@
             // cmbLanguages
             // 
             this.cmbLanguages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbLanguages.Location = new System.Drawing.Point(104, 543);
+            this.cmbLanguages.Location = new System.Drawing.Point(104, 534);
             this.cmbLanguages.Margin = new System.Windows.Forms.Padding(2);
             this.cmbLanguages.Name = "cmbLanguages";
             this.cmbLanguages.Size = new System.Drawing.Size(230, 25);
@@ -524,7 +639,7 @@
             // lblCertaintyAlgorithm
             // 
             this.lblCertaintyAlgorithm.AutoSize = true;
-            this.lblCertaintyAlgorithm.Location = new System.Drawing.Point(11, 586);
+            this.lblCertaintyAlgorithm.Location = new System.Drawing.Point(11, 577);
             this.lblCertaintyAlgorithm.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCertaintyAlgorithm.Name = "lblCertaintyAlgorithm";
             this.lblCertaintyAlgorithm.Size = new System.Drawing.Size(125, 17);
@@ -534,7 +649,7 @@
             // cmbCertaintyAlgorithm
             // 
             this.cmbCertaintyAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbCertaintyAlgorithm.Location = new System.Drawing.Point(300, 582);
+            this.cmbCertaintyAlgorithm.Location = new System.Drawing.Point(300, 573);
             this.cmbCertaintyAlgorithm.Margin = new System.Windows.Forms.Padding(2);
             this.cmbCertaintyAlgorithm.Name = "cmbCertaintyAlgorithm";
             this.cmbCertaintyAlgorithm.Size = new System.Drawing.Size(220, 25);
@@ -548,20 +663,62 @@
             this.groupBox1.Controls.Add(this.numASMin);
             this.groupBox1.Controls.Add(this.chkAutosave);
             this.groupBox1.Controls.Add(this.grpFileBackup);
-            this.groupBox1.Location = new System.Drawing.Point(348, 10);
+            this.groupBox1.Controls.Add(this.btnExtBackupFolderChoose);
+            this.groupBox1.Controls.Add(this.txtExtBackupFolder);
+            this.groupBox1.Controls.Add(this.lblExtBackupFolder);
+            this.groupBox1.Controls.Add(this.chkExtBackupEnabled);
+            this.groupBox1.Location = new System.Drawing.Point(10, 10);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(10);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(379, 260);
+            this.groupBox1.Size = new System.Drawing.Size(490, 360);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             // 
-            // lblBackupRevisionsMaxCount
+            // chkExtBackupEnabled
+            //
+            this.chkExtBackupEnabled.AutoSize = true;
+            this.chkExtBackupEnabled.Location = new System.Drawing.Point(12, 252);
+            this.chkExtBackupEnabled.Name = "chkExtBackupEnabled";
+            this.chkExtBackupEnabled.Size = new System.Drawing.Size(259, 30);
+            this.chkExtBackupEnabled.TabIndex = 3;
+            this.chkExtBackupEnabled.Text = "chkExtBackupEnabled";
+            this.chkExtBackupEnabled.CheckedChanged += new System.EventHandler(this.chkExtBackupEnabled_CheckedChanged);
             // 
+            // lblExtBackupFolder
+            // 
+            this.lblExtBackupFolder.AutoSize = true;
+            this.lblExtBackupFolder.Location = new System.Drawing.Point(12, 285);
+            this.lblExtBackupFolder.Name = "lblExtBackupFolder";
+            this.lblExtBackupFolder.Size = new System.Drawing.Size(57, 17);
+            this.lblExtBackupFolder.TabIndex = 7;
+            this.lblExtBackupFolder.Text = "lblExtBackupFolder";
+            // 
+            // txtExtBackupFolder
+            // 
+            this.txtExtBackupFolder.Location = new System.Drawing.Point(12, 305);
+            this.txtExtBackupFolder.Name = "txtExtBackupFolder";
+            this.txtExtBackupFolder.ReadOnly = true;
+            this.txtExtBackupFolder.Size = new System.Drawing.Size(344, 24);
+            this.txtExtBackupFolder.TabIndex = 8;
+            // 
+            // btnExtBackupFolderChoose
+            // 
+            this.btnExtBackupFolderChoose.Enabled = false;
+            this.btnExtBackupFolderChoose.Location = new System.Drawing.Point(366, 302);
+            this.btnExtBackupFolderChoose.Name = "btnExtBackupFolderChoose";
+            this.btnExtBackupFolderChoose.Size = new System.Drawing.Size(113, 30);
+            this.btnExtBackupFolderChoose.TabIndex = 9;
+            this.btnExtBackupFolderChoose.Text = "Folder choose...";
+            this.btnExtBackupFolderChoose.Click += new System.EventHandler(this.btnExtBackupFolderChoose_Click);
+            // 
+            // lblBackupRevisionsMaxCount
+            //
+            this.lblBackupRevisionsMaxCount.AutoSize = true;
             this.lblBackupRevisionsMaxCount.Location = new System.Drawing.Point(12, 215);
             this.lblBackupRevisionsMaxCount.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
             this.lblBackupRevisionsMaxCount.Name = "lblBackupRevisionsMaxCount";
-            this.lblBackupRevisionsMaxCount.Size = new System.Drawing.Size(270, 29);
+            this.lblBackupRevisionsMaxCount.Size = new System.Drawing.Size(320, 29);
             this.lblBackupRevisionsMaxCount.TabIndex = 10;
             this.lblBackupRevisionsMaxCount.Text = "BackupRevisionsMaxCount";
             // 
@@ -577,7 +734,7 @@
             // 
             // numBackupRevisionsMaxCount
             // 
-            this.numBackupRevisionsMaxCount.Location = new System.Drawing.Point(295, 212);
+            this.numBackupRevisionsMaxCount.Location = new System.Drawing.Point(335, 212);
             this.numBackupRevisionsMaxCount.Margin = new System.Windows.Forms.Padding(2);
             this.numBackupRevisionsMaxCount.Maximum = new decimal(new int[] {
             1000,
@@ -780,25 +937,65 @@
             // 
             // grpOther
             // 
+            this.grpOther.Controls.Add(this.chkKeepInfoPansOverallSize);
+            this.grpOther.Controls.Add(this.chkFilesOverwriteWarn);
+            this.grpOther.Controls.Add(this.lblChartWindowsShowMode);
+            this.grpOther.Controls.Add(this.cmbChartWindowsShowMode);
             this.grpOther.Controls.Add(this.chkDisplayFullFileName);
             this.grpOther.Controls.Add(this.chkDialogClosingWarn);
-            this.grpOther.Controls.Add(this.chkCharsetDetection);
             this.grpOther.Controls.Add(this.chkAutoCheckUpdates);
             this.grpOther.Controls.Add(this.chkLoadRecentFiles);
             this.grpOther.Controls.Add(this.chkShowOnStart);
-            this.grpOther.Location = new System.Drawing.Point(11, 282);
+            this.grpOther.Location = new System.Drawing.Point(11, 222);
             this.grpOther.Margin = new System.Windows.Forms.Padding(2);
             this.grpOther.Name = "grpOther";
             this.grpOther.Padding = new System.Windows.Forms.Padding(10);
-            this.grpOther.Size = new System.Drawing.Size(715, 233);
+            this.grpOther.Size = new System.Drawing.Size(685, 294);
             this.grpOther.TabIndex = 2;
             this.grpOther.TabStop = false;
             this.grpOther.Text = "grpOther";
             // 
+            // chkKeepInfoPansOverallSize
+            // 
+            this.chkKeepInfoPansOverallSize.Location = new System.Drawing.Point(20, 223);
+            this.chkKeepInfoPansOverallSize.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkKeepInfoPansOverallSize.Name = "chkKeepInfoPansOverallSize";
+            this.chkKeepInfoPansOverallSize.Size = new System.Drawing.Size(600, 22);
+            this.chkKeepInfoPansOverallSize.TabIndex = 15;
+            this.chkKeepInfoPansOverallSize.Text = "chkKeepInfoPansOverallSize";
+            // 
+            // chkFilesOverwriteWarn
+            // 
+            this.chkFilesOverwriteWarn.Location = new System.Drawing.Point(20, 254);
+            this.chkFilesOverwriteWarn.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkFilesOverwriteWarn.Name = "chkFilesOverwriteWarn";
+            this.chkFilesOverwriteWarn.Size = new System.Drawing.Size(600, 22);
+            this.chkFilesOverwriteWarn.TabIndex = 16;
+            this.chkFilesOverwriteWarn.Text = "chkFilesOverwriteWarn";
+            // 
+            // lblChartWindowsShowMode
+            // 
+            this.lblChartWindowsShowMode.Location = new System.Drawing.Point(20, 192);
+            this.lblChartWindowsShowMode.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.lblChartWindowsShowMode.Name = "lblChartWindowsShowMode";
+            this.lblChartWindowsShowMode.Size = new System.Drawing.Size(300, 22);
+            this.lblChartWindowsShowMode.TabIndex = 12;
+            this.lblChartWindowsShowMode.Text = "lblChartWindowsShowMode";
+            // 
+            // cmbChartWindowsShowMode
+            //
+            this.cmbChartWindowsShowMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbChartWindowsShowMode.Location = new System.Drawing.Point(300, 189);
+            this.cmbChartWindowsShowMode.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.cmbChartWindowsShowMode.Name = "cmbChartWindowsShowMode";
+            this.cmbChartWindowsShowMode.Size = new System.Drawing.Size(220, 22);
+            this.cmbChartWindowsShowMode.TabIndex = 12;
+            this.cmbChartWindowsShowMode.Text = "cmbChartWindowsShowMode";
+            // 
             // chkDisplayFullFileName
             // 
             this.chkDisplayFullFileName.AutoSize = true;
-            this.chkDisplayFullFileName.Location = new System.Drawing.Point(20, 192);
+            this.chkDisplayFullFileName.Location = new System.Drawing.Point(20, 161);
             this.chkDisplayFullFileName.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
             this.chkDisplayFullFileName.Name = "chkDisplayFullFileName";
             this.chkDisplayFullFileName.Size = new System.Drawing.Size(166, 21);
@@ -808,22 +1005,12 @@
             // chkDialogClosingWarn
             // 
             this.chkDialogClosingWarn.AutoSize = true;
-            this.chkDialogClosingWarn.Location = new System.Drawing.Point(20, 161);
+            this.chkDialogClosingWarn.Location = new System.Drawing.Point(20, 130);
             this.chkDialogClosingWarn.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
             this.chkDialogClosingWarn.Name = "chkDialogClosingWarn";
             this.chkDialogClosingWarn.Size = new System.Drawing.Size(166, 21);
             this.chkDialogClosingWarn.TabIndex = 9;
             this.chkDialogClosingWarn.Text = "chkDialogClosingWarn";
-            // 
-            // chkCharsetDetection
-            // 
-            this.chkCharsetDetection.AutoSize = true;
-            this.chkCharsetDetection.Location = new System.Drawing.Point(20, 130);
-            this.chkCharsetDetection.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
-            this.chkCharsetDetection.Name = "chkCharsetDetection";
-            this.chkCharsetDetection.Size = new System.Drawing.Size(158, 21);
-            this.chkCharsetDetection.TabIndex = 9;
-            this.chkCharsetDetection.Text = "chkCharsetDetection";
             // 
             // chkAutoCheckUpdates
             // 
@@ -838,7 +1025,7 @@
             // chkLoadRecentFiles
             // 
             this.chkLoadRecentFiles.AutoSize = true;
-            this.chkLoadRecentFiles.Location = new System.Drawing.Point(20, 68);
+            this.chkLoadRecentFiles.Location = new System.Drawing.Point(20, 38);
             this.chkLoadRecentFiles.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
             this.chkLoadRecentFiles.Name = "chkLoadRecentFiles";
             this.chkLoadRecentFiles.Size = new System.Drawing.Size(149, 21);
@@ -848,7 +1035,7 @@
             // chkShowOnStart
             // 
             this.chkShowOnStart.AutoSize = true;
-            this.chkShowOnStart.Location = new System.Drawing.Point(20, 38);
+            this.chkShowOnStart.Location = new System.Drawing.Point(20, 68);
             this.chkShowOnStart.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
             this.chkShowOnStart.Name = "chkShowOnStart";
             this.chkShowOnStart.Size = new System.Drawing.Size(134, 21);
@@ -1961,6 +2148,8 @@
             // 
             // pageViewCommon
             // 
+            this.pageViewCommon.Controls.Add(this.chkShowNumberOfSubstructures);
+            this.pageViewCommon.Controls.Add(this.chkShortenDateRanges);
             this.pageViewCommon.Controls.Add(this.chkSurnameFirstInOrder);
             this.pageViewCommon.Controls.Add(this.grpAdvancedNames);
             this.pageViewCommon.Controls.Add(this.rgFNPFormat);
@@ -1973,7 +2162,6 @@
             this.pageViewCommon.Controls.Add(this.chkSurnameInCapitals);
             this.pageViewCommon.Controls.Add(this.chkFirstCapitalLetterInNames);
             this.pageViewCommon.Controls.Add(this.chkAutoSortSpouses);
-            this.pageViewCommon.Controls.Add(this.chkShortKinshipForm);
             this.pageViewCommon.Controls.Add(this.chkAutoSortChildren);
             this.pageViewCommon.Controls.Add(this.chkHighlightUnmarried);
             this.pageViewCommon.Location = new System.Drawing.Point(4, 26);
@@ -1983,6 +2171,24 @@
             this.pageViewCommon.Size = new System.Drawing.Size(713, 712);
             this.pageViewCommon.TabIndex = 0;
             this.pageViewCommon.Text = "pageViewCommon";
+            // 
+            // chkShowNumberOfSubstructures
+            // 
+            this.chkShowNumberOfSubstructures.Location = new System.Drawing.Point(11, 474);
+            this.chkShowNumberOfSubstructures.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkShowNumberOfSubstructures.Name = "chkShowNumberOfSubstructures";
+            this.chkShowNumberOfSubstructures.Size = new System.Drawing.Size(600, 22);
+            this.chkShowNumberOfSubstructures.TabIndex = 20;
+            this.chkShowNumberOfSubstructures.Text = "chkShowNumberOfSubstructures";
+            // 
+            // chkShortenDateRanges
+            // 
+            this.chkShortenDateRanges.Location = new System.Drawing.Point(326, 184);
+            this.chkShortenDateRanges.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkShortenDateRanges.Name = "chkShortenDateRanges";
+            this.chkShortenDateRanges.Size = new System.Drawing.Size(600, 22);
+            this.chkShortenDateRanges.TabIndex = 14;
+            this.chkShortenDateRanges.Text = "chkShortenDateRanges";
             // 
             // chkSurnameFirstInOrder
             // 
@@ -2001,7 +2207,7 @@
             this.grpAdvancedNames.Controls.Add(this.radMaiden_Married);
             this.grpAdvancedNames.Controls.Add(this.chkExtendWomanSurnames);
             this.grpAdvancedNames.Controls.Add(this.chkSimpleSingleSurnames);
-            this.grpAdvancedNames.Location = new System.Drawing.Point(326, 201);
+            this.grpAdvancedNames.Location = new System.Drawing.Point(326, 232);
             this.grpAdvancedNames.Margin = new System.Windows.Forms.Padding(10);
             this.grpAdvancedNames.Name = "grpAdvancedNames";
             this.grpAdvancedNames.Padding = new System.Windows.Forms.Padding(2);
@@ -2245,15 +2451,6 @@
             this.chkSurnameInCapitals.Size = new System.Drawing.Size(302, 21);
             this.chkSurnameInCapitals.TabIndex = 4;
             this.chkSurnameInCapitals.Text = "chkSurnameInCapitals";
-            // 
-            // chkShortKinshipForm
-            // 
-            this.chkShortKinshipForm.Location = new System.Drawing.Point(11, 422);
-            this.chkShortKinshipForm.Margin = new System.Windows.Forms.Padding(2);
-            this.chkShortKinshipForm.Name = "chkShortKinshipForm";
-            this.chkShortKinshipForm.Size = new System.Drawing.Size(302, 21);
-            this.chkShortKinshipForm.TabIndex = 4;
-            this.chkShortKinshipForm.Text = "chkShortKinshipForm";
             // 
             // pageViewPersons
             // 
@@ -2647,17 +2844,8 @@
             // 
             // pageSpecials
             //
-            this.pageSpecials.Controls.Add(this.chkEnableStdValidation);
-            this.pageSpecials.Controls.Add(this.chkDisableNonStdFeatures);
-            this.pageSpecials.Controls.Add(this.chkUseExtendedNotes);
-            this.pageSpecials.Controls.Add(this.chkKeepRichNames);
-            this.pageSpecials.Controls.Add(this.lblChartWindowsShowMode);
-            this.pageSpecials.Controls.Add(this.cmbChartWindowsShowMode);
-            this.pageSpecials.Controls.Add(this.chkShortenDateRanges);
-            this.pageSpecials.Controls.Add(this.chkKeepInfoPansOverallSize);
-            this.pageSpecials.Controls.Add(this.chkFilesOverwriteWarn);
+            this.pageSpecials.Controls.Add(this.chkShortKinshipForm);
             this.pageSpecials.Controls.Add(this.chkExtendedKinships);
-            this.pageSpecials.Controls.Add(this.chkShowNumberOfSubstructures);
             this.pageSpecials.BackColor = System.Drawing.SystemColors.Control;
             this.pageSpecials.Location = new System.Drawing.Point(4, 26);
             this.pageSpecials.Margin = new System.Windows.Forms.Padding(0);
@@ -2667,105 +2855,23 @@
             this.pageSpecials.TabIndex = 5;
             this.pageSpecials.Text = "pageSpecials";
             // 
-            // chkDisableNonStdFeatures
+            // chkShortKinshipForm
             // 
-            this.chkDisableNonStdFeatures.Location = new System.Drawing.Point(20, 20);
-            this.chkDisableNonStdFeatures.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkDisableNonStdFeatures.Name = "chkDisableNonStdFeatures";
-            this.chkDisableNonStdFeatures.Size = new System.Drawing.Size(600, 22);
-            this.chkDisableNonStdFeatures.TabIndex = 1;
-            this.chkDisableNonStdFeatures.Text = "chkDisableNonStdFeatures";
-            // 
-            // chkUseExtendedNotes
-            // 
-            this.chkUseExtendedNotes.Location = new System.Drawing.Point(20, 51);
-            this.chkUseExtendedNotes.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkUseExtendedNotes.Name = "chkUseExtendedNotes";
-            this.chkUseExtendedNotes.Size = new System.Drawing.Size(600, 22);
-            this.chkUseExtendedNotes.TabIndex = 12;
-            this.chkUseExtendedNotes.Text = "chkUseExtendedNotes";
-            // 
-            // chkKeepRichNames
-            // 
-            this.chkKeepRichNames.Location = new System.Drawing.Point(20, 82);
-            this.chkKeepRichNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkKeepRichNames.Name = "chkKeepRichNames";
-            this.chkKeepRichNames.Size = new System.Drawing.Size(600, 22);
-            this.chkKeepRichNames.TabIndex = 12;
-            this.chkKeepRichNames.Text = "chkKeepRichNames";
-            // 
-            // lblChartWindowsShowMode
-            // 
-            this.lblChartWindowsShowMode.Location = new System.Drawing.Point(20, 113);
-            this.lblChartWindowsShowMode.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.lblChartWindowsShowMode.Name = "lblChartWindowsShowMode";
-            this.lblChartWindowsShowMode.Size = new System.Drawing.Size(300, 22);
-            this.lblChartWindowsShowMode.TabIndex = 12;
-            this.lblChartWindowsShowMode.Text = "lblChartWindowsShowMode";
-            // 
-            // cmbChartWindowsShowMode
-            //
-            this.cmbChartWindowsShowMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbChartWindowsShowMode.Location = new System.Drawing.Point(320, 113);
-            this.cmbChartWindowsShowMode.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.cmbChartWindowsShowMode.Name = "cmbChartWindowsShowMode";
-            this.cmbChartWindowsShowMode.Size = new System.Drawing.Size(220, 22);
-            this.cmbChartWindowsShowMode.TabIndex = 12;
-            this.cmbChartWindowsShowMode.Text = "cmbChartWindowsShowMode";
-            // 
-            // chkShortenDateRanges
-            // 
-            this.chkShortenDateRanges.Location = new System.Drawing.Point(20, 237);
-            this.chkShortenDateRanges.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkShortenDateRanges.Name = "chkShortenDateRanges";
-            this.chkShortenDateRanges.Size = new System.Drawing.Size(600, 22);
-            this.chkShortenDateRanges.TabIndex = 14;
-            this.chkShortenDateRanges.Text = "chkShortenDateRanges";
-            // 
-            // chkKeepInfoPansOverallSize
-            // 
-            this.chkKeepInfoPansOverallSize.Location = new System.Drawing.Point(20, 268);
-            this.chkKeepInfoPansOverallSize.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkKeepInfoPansOverallSize.Name = "chkKeepInfoPansOverallSize";
-            this.chkKeepInfoPansOverallSize.Size = new System.Drawing.Size(600, 22);
-            this.chkKeepInfoPansOverallSize.TabIndex = 15;
-            this.chkKeepInfoPansOverallSize.Text = "chkKeepInfoPansOverallSize";
-            // 
-            // chkFilesOverwriteWarn
-            // 
-            this.chkFilesOverwriteWarn.Location = new System.Drawing.Point(20, 299);
-            this.chkFilesOverwriteWarn.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkFilesOverwriteWarn.Name = "chkFilesOverwriteWarn";
-            this.chkFilesOverwriteWarn.Size = new System.Drawing.Size(600, 22);
-            this.chkFilesOverwriteWarn.TabIndex = 16;
-            this.chkFilesOverwriteWarn.Text = "chkFilesOverwriteWarn";
+            this.chkShortKinshipForm.Location = new System.Drawing.Point(20, 20);
+            this.chkShortKinshipForm.Margin = new System.Windows.Forms.Padding(2);
+            this.chkShortKinshipForm.Name = "chkShortKinshipForm";
+            this.chkShortKinshipForm.Size = new System.Drawing.Size(302, 21);
+            this.chkShortKinshipForm.TabIndex = 4;
+            this.chkShortKinshipForm.Text = "chkShortKinshipForm";
             // 
             // chkExtendedKinships
             // 
-            this.chkExtendedKinships.Location = new System.Drawing.Point(20, 330);
+            this.chkExtendedKinships.Location = new System.Drawing.Point(20, 51);
             this.chkExtendedKinships.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkExtendedKinships.Name = "chkExtendedKinships";
             this.chkExtendedKinships.Size = new System.Drawing.Size(600, 22);
             this.chkExtendedKinships.TabIndex = 17;
             this.chkExtendedKinships.Text = "chkExtendedKinships";
-            // 
-            // chkEnableStdValidation
-            // 
-            this.chkEnableStdValidation.Location = new System.Drawing.Point(20, 361);
-            this.chkEnableStdValidation.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkEnableStdValidation.Name = "chkEnableStdValidation";
-            this.chkEnableStdValidation.Size = new System.Drawing.Size(600, 22);
-            this.chkEnableStdValidation.TabIndex = 18;
-            this.chkEnableStdValidation.Text = "chkEnableStdValidation";
-            // 
-            // chkShowNumberOfSubstructures
-            // 
-            this.chkShowNumberOfSubstructures.Location = new System.Drawing.Point(20, 454);
-            this.chkShowNumberOfSubstructures.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.chkShowNumberOfSubstructures.Name = "chkShowNumberOfSubstructures";
-            this.chkShowNumberOfSubstructures.Size = new System.Drawing.Size(600, 22);
-            this.chkShowNumberOfSubstructures.TabIndex = 20;
-            this.chkShowNumberOfSubstructures.Text = "chkShowNumberOfSubstructures";
             // 
             // pageEventTypes
             // 
@@ -2860,6 +2966,14 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "OptionsDlg";
+            this.pageGEDCOM.ResumeLayout(false);
+            this.pageGEDCOM.PerformLayout();
+            this.tabsCommon.ResumeLayout(false);
+            this.tabsCommon.PerformLayout();
+            this.pageComOther.ResumeLayout(false);
+            this.pageComOther.PerformLayout();
+            this.pageComBackup.ResumeLayout(false);
+            this.pageComBackup.PerformLayout();
             this.pageGeo.ResumeLayout(false);
             this.pageGeo.PerformLayout();
             this.PageControl1.ResumeLayout(false);
