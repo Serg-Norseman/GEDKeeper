@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.34601.136
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GEDKeeper2", "GEDKeeper2\GEDKeeper2.csproj", "{19B7D80A-37FD-4E49-9F59-87FA41B677E2}"
 EndProject
@@ -82,6 +82,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "themes", "themes", "{E39F79
 		..\..\themes\gk_forest.yaml = ..\..\themes\gk_forest.yaml
 		..\..\themes\gk_jungle.yaml = ..\..\themes\gk_jungle.yaml
 		..\..\themes\gk_light.yaml = ..\..\themes\gk_light.yaml
+		..\..\themes\gk_light_clb.yaml = ..\..\themes\gk_light_clb.yaml
+		..\..\themes\gk_light_nsw.yaml = ..\..\themes\gk_light_nsw.yaml
+		..\..\themes\gk_light_sui.yaml = ..\..\themes\gk_light_sui.yaml
 		..\..\themes\gk_matrix.yaml = ..\..\themes\gk_matrix.yaml
 		..\..\themes\gk_rome.yaml = ..\..\themes\gk_rome.yaml
 		..\..\themes\gk_tron.yaml = ..\..\themes\gk_tron.yaml

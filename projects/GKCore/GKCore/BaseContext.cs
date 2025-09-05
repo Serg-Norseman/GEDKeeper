@@ -48,6 +48,13 @@ using GKCore.Utilities;
 
 namespace GKCore
 {
+    public class FileProps
+    {
+        public int Checksum;
+        public int LastBackupTime;
+    }
+
+
     /// <summary>
     /// Status display the protected information in lists, pedigrees and graphs.
     /// </summary>

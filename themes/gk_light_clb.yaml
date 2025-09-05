@@ -1,10 +1,10 @@
 ﻿---
-Name: GK Light (Verdana)
+Name: GK Light (Calibri)
 Elements:
   - Element: Font
-    Value: "Verdana"
+    Value: "Calibri"
   - Element: FontSize
-    Value: "8.5"
+    Value: "9.4"
 
   - Element: Editor
     Value: "#FFFFFF"

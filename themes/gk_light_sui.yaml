@@ -1,10 +1,10 @@
 ﻿---
-Name: GK Light (Verdana)
+Name: GK Light (Segoe UI)
 Elements:
   - Element: Font
-    Value: "Verdana"
+    Value: "Segoe UI"
   - Element: FontSize
-    Value: "8.5"
+    Value: "9.0"
 
   - Element: Editor
     Value: "#FFFFFF"

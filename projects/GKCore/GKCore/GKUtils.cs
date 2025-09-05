@@ -1848,7 +1848,13 @@ namespace GKCore
             return result.ToString();
         }
 
-        private static readonly float[] CA_VALUES = new float[] { 0.25f, 0.5f, 0.75f, 1.0f };
+        /*
+            0 – unreliable evidence
+            1 – questionable reliability of evidence
+            2 – secondary evidence
+            3 – primary evidence
+        */
+        private static readonly float[] CA_VALUES = new float[] { 0.40f, 0.60f, 0.80f, 1.0f };
 
         private static void GetCertaintyVars(IGDMStructWithSourceCitations str, CertaintyAlgorithm algorithm, ref float result, ref float wsum)
         {

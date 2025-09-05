@@ -572,6 +572,7 @@
             // 
             // chkEnableStdValidation
             // 
+            this.chkEnableStdValidation.AutoSize = true;
             this.chkEnableStdValidation.Location = new System.Drawing.Point(20, 82);
             this.chkEnableStdValidation.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkEnableStdValidation.Name = "chkEnableStdValidation";
@@ -581,6 +582,7 @@
             // 
             // chkDisableNonStdFeatures
             // 
+            this.chkDisableNonStdFeatures.AutoSize = true;
             this.chkDisableNonStdFeatures.Location = new System.Drawing.Point(20, 51);
             this.chkDisableNonStdFeatures.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkDisableNonStdFeatures.Name = "chkDisableNonStdFeatures";
@@ -590,6 +592,7 @@
             // 
             // chkUseExtendedNotes
             // 
+            this.chkUseExtendedNotes.AutoSize = true;
             this.chkUseExtendedNotes.Location = new System.Drawing.Point(20, 113);
             this.chkUseExtendedNotes.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkUseExtendedNotes.Name = "chkUseExtendedNotes";
@@ -599,6 +602,7 @@
             // 
             // chkKeepRichNames
             // 
+            this.chkKeepRichNames.AutoSize = true;
             this.chkKeepRichNames.Location = new System.Drawing.Point(20, 144);
             this.chkKeepRichNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkKeepRichNames.Name = "chkKeepRichNames";
@@ -800,6 +804,7 @@
             // 
             // radFBEachRevision
             // 
+            this.radFBEachRevision.AutoSize = true;
             this.radFBEachRevision.Location = new System.Drawing.Point(12, 98);
             this.radFBEachRevision.Margin = new System.Windows.Forms.Padding(10);
             this.radFBEachRevision.Name = "radFBEachRevision";
@@ -811,6 +816,7 @@
             // 
             // radFBOnlyPrev
             // 
+            this.radFBOnlyPrev.AutoSize = true;
             this.radFBOnlyPrev.Location = new System.Drawing.Point(12, 64);
             this.radFBOnlyPrev.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
             this.radFBOnlyPrev.Name = "radFBOnlyPrev";
@@ -822,6 +828,7 @@
             // 
             // radFBNone
             // 
+            this.radFBNone.AutoSize = true;
             this.radFBNone.Location = new System.Drawing.Point(12, 30);
             this.radFBNone.Margin = new System.Windows.Forms.Padding(10, 10, 10, 0);
             this.radFBNone.Name = "radFBNone";
@@ -957,6 +964,7 @@
             // 
             // chkKeepInfoPansOverallSize
             // 
+            this.chkKeepInfoPansOverallSize.AutoSize = true;
             this.chkKeepInfoPansOverallSize.Location = new System.Drawing.Point(20, 223);
             this.chkKeepInfoPansOverallSize.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkKeepInfoPansOverallSize.Name = "chkKeepInfoPansOverallSize";
@@ -966,6 +974,7 @@
             // 
             // chkFilesOverwriteWarn
             // 
+            this.chkFilesOverwriteWarn.AutoSize = true;
             this.chkFilesOverwriteWarn.Location = new System.Drawing.Point(20, 254);
             this.chkFilesOverwriteWarn.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkFilesOverwriteWarn.Name = "chkFilesOverwriteWarn";
@@ -975,6 +984,7 @@
             // 
             // lblChartWindowsShowMode
             // 
+            this.lblChartWindowsShowMode.AutoSize = true;
             this.lblChartWindowsShowMode.Location = new System.Drawing.Point(20, 192);
             this.lblChartWindowsShowMode.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.lblChartWindowsShowMode.Name = "lblChartWindowsShowMode";
@@ -1248,6 +1258,7 @@
             // 
             // chkSeparateDepth
             // 
+            this.chkSeparateDepth.AutoSize = true;
             this.chkSeparateDepth.Location = new System.Drawing.Point(334, 228);
             this.chkSeparateDepth.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkSeparateDepth.Name = "chkSeparateDepth";
@@ -1327,6 +1338,7 @@
             // 
             // chkUseExtraControls
             // 
+            this.chkUseExtraControls.AutoSize = true;
             this.chkUseExtraControls.Location = new System.Drawing.Point(11, 289);
             this.chkUseExtraControls.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkUseExtraControls.Name = "chkUseExtraControls";
@@ -1916,6 +1928,7 @@
             // 
             // chkUseInlineImagesInSvg
             // 
+            this.chkUseInlineImagesInSvg.AutoSize = true;
             this.chkUseInlineImagesInSvg.Location = new System.Drawing.Point(6, 848);
             this.chkUseInlineImagesInSvg.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkUseInlineImagesInSvg.Name = "chkUseInlineImagesInSvg";
@@ -1925,6 +1938,7 @@
             // 
             // chkExtendedTree
             // 
+            this.chkExtendedTree.AutoSize = true;
             this.chkExtendedTree.Location = new System.Drawing.Point(6, 875);
             this.chkExtendedTree.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkExtendedTree.Name = "chkExtendedTree";
@@ -1952,6 +1966,7 @@
             // 
             // lblFont
             // 
+            this.lblFont.AutoSize = true;
             this.lblFont.Location = new System.Drawing.Point(12, 188);
             this.lblFont.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.lblFont.Name = "lblFont";
@@ -2174,6 +2189,7 @@
             // 
             // chkShowNumberOfSubstructures
             // 
+            this.chkShowNumberOfSubstructures.AutoSize = true;
             this.chkShowNumberOfSubstructures.Location = new System.Drawing.Point(11, 474);
             this.chkShowNumberOfSubstructures.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkShowNumberOfSubstructures.Name = "chkShowNumberOfSubstructures";
@@ -2183,6 +2199,7 @@
             // 
             // chkShortenDateRanges
             // 
+            this.chkShortenDateRanges.AutoSize = true;
             this.chkShortenDateRanges.Location = new System.Drawing.Point(326, 184);
             this.chkShortenDateRanges.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkShortenDateRanges.Name = "chkShortenDateRanges";
@@ -2192,6 +2209,7 @@
             // 
             // chkSurnameFirstInOrder
             // 
+            this.chkSurnameFirstInOrder.AutoSize = true;
             this.chkSurnameFirstInOrder.Location = new System.Drawing.Point(11, 132);
             this.chkSurnameFirstInOrder.Margin = new System.Windows.Forms.Padding(2);
             this.chkSurnameFirstInOrder.Name = "chkSurnameFirstInOrder";
@@ -2303,6 +2321,7 @@
             // 
             // radS_N_P
             // 
+            this.radS_N_P.AutoSize = true;
             this.radS_N_P.Location = new System.Drawing.Point(11, 78);
             this.radS_N_P.Margin = new System.Windows.Forms.Padding(2);
             this.radS_N_P.Name = "radS_N_P";
@@ -2313,6 +2332,7 @@
             // 
             // radS_NP
             // 
+            this.radS_NP.AutoSize = true;
             this.radS_NP.Location = new System.Drawing.Point(11, 49);
             this.radS_NP.Margin = new System.Windows.Forms.Padding(2);
             this.radS_NP.Name = "radS_NP";
@@ -2323,6 +2343,7 @@
             // 
             // radSNP
             // 
+            this.radSNP.AutoSize = true;
             this.radSNP.Location = new System.Drawing.Point(11, 21);
             this.radSNP.Margin = new System.Windows.Forms.Padding(2);
             this.radSNP.Name = "radSNP";
@@ -2346,6 +2367,7 @@
             // 
             // radYMD
             // 
+            this.radYMD.AutoSize = true;
             this.radYMD.Location = new System.Drawing.Point(11, 49);
             this.radYMD.Margin = new System.Windows.Forms.Padding(2);
             this.radYMD.Name = "radYMD";
@@ -2355,6 +2377,7 @@
             // 
             // radDMY
             // 
+            this.radDMY.AutoSize = true;
             this.radDMY.Location = new System.Drawing.Point(11, 19);
             this.radDMY.Margin = new System.Windows.Forms.Padding(2);
             this.radDMY.Name = "radDMY";
@@ -2364,6 +2387,7 @@
             // 
             // chkPlacesWithAddress
             // 
+            this.chkPlacesWithAddress.AutoSize = true;
             this.chkPlacesWithAddress.Location = new System.Drawing.Point(11, 191);
             this.chkPlacesWithAddress.Margin = new System.Windows.Forms.Padding(2);
             this.chkPlacesWithAddress.Name = "chkPlacesWithAddress";
@@ -2373,6 +2397,7 @@
             // 
             // chkHighlightUnparented
             // 
+            this.chkHighlightUnparented.AutoSize = true;
             this.chkHighlightUnparented.Location = new System.Drawing.Point(11, 220);
             this.chkHighlightUnparented.Margin = new System.Windows.Forms.Padding(2);
             this.chkHighlightUnparented.Name = "chkHighlightUnparented";
@@ -2382,6 +2407,7 @@
             // 
             // chkLocalizedCalendarSignatures
             // 
+            this.chkLocalizedCalendarSignatures.AutoSize = true;
             this.chkLocalizedCalendarSignatures.Location = new System.Drawing.Point(326, 159);
             this.chkLocalizedCalendarSignatures.Margin = new System.Windows.Forms.Padding(2);
             this.chkLocalizedCalendarSignatures.Name = "chkLocalizedCalendarSignatures";
@@ -2391,6 +2417,7 @@
             // 
             // chkShowDatesSigns
             // 
+            this.chkShowDatesSigns.AutoSize = true;
             this.chkShowDatesSigns.Location = new System.Drawing.Point(326, 134);
             this.chkShowDatesSigns.Margin = new System.Windows.Forms.Padding(2);
             this.chkShowDatesSigns.Name = "chkShowDatesSigns";
@@ -2400,6 +2427,7 @@
             // 
             // chkShowDatesCalendar
             // 
+            this.chkShowDatesCalendar.AutoSize = true;
             this.chkShowDatesCalendar.Location = new System.Drawing.Point(326, 108);
             this.chkShowDatesCalendar.Margin = new System.Windows.Forms.Padding(2);
             this.chkShowDatesCalendar.Name = "chkShowDatesCalendar";
@@ -2409,6 +2437,7 @@
             // 
             // chkHighlightUnmarried
             // 
+            this.chkHighlightUnmarried.AutoSize = true;
             this.chkHighlightUnmarried.Location = new System.Drawing.Point(11, 249);
             this.chkHighlightUnmarried.Margin = new System.Windows.Forms.Padding(2);
             this.chkHighlightUnmarried.Name = "chkHighlightUnmarried";
@@ -2418,6 +2447,7 @@
             // 
             // chkAutoSortChildren
             // 
+            this.chkAutoSortChildren.AutoSize = true;
             this.chkAutoSortChildren.Location = new System.Drawing.Point(11, 300);
             this.chkAutoSortChildren.Margin = new System.Windows.Forms.Padding(2);
             this.chkAutoSortChildren.Name = "chkAutoSortChildren";
@@ -2427,6 +2457,7 @@
             // 
             // chkAutoSortSpouses
             // 
+            this.chkAutoSortSpouses.AutoSize = true;
             this.chkAutoSortSpouses.Location = new System.Drawing.Point(11, 326);
             this.chkAutoSortSpouses.Margin = new System.Windows.Forms.Padding(2);
             this.chkAutoSortSpouses.Name = "chkAutoSortSpouses";
@@ -2436,6 +2467,7 @@
             // 
             // chkFirstCapitalLetterInNames
             // 
+            this.chkFirstCapitalLetterInNames.AutoSize = true;
             this.chkFirstCapitalLetterInNames.Location = new System.Drawing.Point(11, 352);
             this.chkFirstCapitalLetterInNames.Margin = new System.Windows.Forms.Padding(2);
             this.chkFirstCapitalLetterInNames.Name = "chkFirstCapitalLetterInNames";
@@ -2445,6 +2477,7 @@
             // 
             // chkSurnameInCapitals
             // 
+            this.chkSurnameInCapitals.AutoSize = true;
             this.chkSurnameInCapitals.Location = new System.Drawing.Point(11, 378);
             this.chkSurnameInCapitals.Margin = new System.Windows.Forms.Padding(2);
             this.chkSurnameInCapitals.Name = "chkSurnameInCapitals";
@@ -2466,6 +2499,7 @@
             // 
             // chkUseSurnamesInPSF
             // 
+            this.chkUseSurnamesInPSF.AutoSize = true;
             this.chkUseSurnamesInPSF.Location = new System.Drawing.Point(11, 8);
             this.chkUseSurnamesInPSF.Margin = new System.Windows.Forms.Padding(2);
             this.chkUseSurnamesInPSF.Name = "chkUseSurnamesInPSF";
@@ -2475,6 +2509,7 @@
             // 
             // chkUseBirthDatesInPSF
             // 
+            this.chkUseBirthDatesInPSF.AutoSize = true;
             this.chkUseBirthDatesInPSF.Location = new System.Drawing.Point(11, 34);
             this.chkUseBirthDatesInPSF.Margin = new System.Windows.Forms.Padding(2);
             this.chkUseBirthDatesInPSF.Name = "chkUseBirthDatesInPSF";
@@ -2503,6 +2538,7 @@
             // 
             // chkSAFByAllNames
             // 
+            this.chkSAFByAllNames.AutoSize = true;
             this.chkSAFByAllNames.Location = new System.Drawing.Point(11, 102);
             this.chkSAFByAllNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkSAFByAllNames.Name = "chkSAFByAllNames";
@@ -2588,6 +2624,7 @@
             // 
             // chkExtendedLocations
             // 
+            this.chkExtendedLocations.AutoSize = true;
             this.chkExtendedLocations.Location = new System.Drawing.Point(11, 70);
             this.chkExtendedLocations.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkExtendedLocations.Name = "chkExtendedLocations";
@@ -2597,6 +2634,7 @@
             // 
             // chkELAbbreviatedNames
             // 
+            this.chkELAbbreviatedNames.AutoSize = true;
             this.chkELAbbreviatedNames.Location = new System.Drawing.Point(41, 96);
             this.chkELAbbreviatedNames.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkELAbbreviatedNames.Name = "chkELAbbreviatedNames";
@@ -2606,6 +2644,7 @@
             // 
             // chkReversePlacesOrder
             // 
+            this.chkReversePlacesOrder.AutoSize = true;
             this.chkReversePlacesOrder.Location = new System.Drawing.Point(11, 122);
             this.chkReversePlacesOrder.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkReversePlacesOrder.Name = "chkReversePlacesOrder";
@@ -2615,6 +2654,7 @@
             // 
             // chkSearchPlacesWithoutCoords
             // 
+            this.chkSearchPlacesWithoutCoords.AutoSize = true;
             this.chkSearchPlacesWithoutCoords.Location = new System.Drawing.Point(11, 148);
             this.chkSearchPlacesWithoutCoords.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkSearchPlacesWithoutCoords.Name = "chkSearchPlacesWithoutCoords";
@@ -2712,6 +2752,7 @@
             // 
             // chkAttributes
             // 
+            this.chkAttributes.AutoSize = true;
             this.chkAttributes.Location = new System.Drawing.Point(20, 28);
             this.chkAttributes.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkAttributes.Name = "chkAttributes";
@@ -2721,6 +2762,7 @@
             // 
             // chkNotes
             // 
+            this.chkNotes.AutoSize = true;
             this.chkNotes.Location = new System.Drawing.Point(20, 52);
             this.chkNotes.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkNotes.Name = "chkNotes";
@@ -2730,6 +2772,7 @@
             // 
             // chkGenerations
             // 
+            this.chkGenerations.AutoSize = true;
             this.chkGenerations.Location = new System.Drawing.Point(20, 148);
             this.chkGenerations.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkGenerations.Name = "chkGenerations";
@@ -2739,6 +2782,7 @@
             // 
             // chkPortraits
             // 
+            this.chkPortraits.AutoSize = true;
             this.chkPortraits.Location = new System.Drawing.Point(20, 172);
             this.chkPortraits.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkPortraits.Name = "chkPortraits";
@@ -2748,6 +2792,7 @@
             // 
             // chkSources
             // 
+            this.chkSources.AutoSize = true;
             this.chkSources.Location = new System.Drawing.Point(20, 76);
             this.chkSources.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkSources.Name = "chkSources";
@@ -2757,6 +2802,7 @@
             // 
             // chkSourcePages
             // 
+            this.chkSourcePages.AutoSize = true;
             this.chkSourcePages.Location = new System.Drawing.Point(40, 100);
             this.chkSourcePages.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkSourcePages.Name = "chkSourcePages";
@@ -2766,6 +2812,7 @@
             // 
             // chkSourceCitations
             // 
+            this.chkSourceCitations.AutoSize = true;
             this.chkSourceCitations.Location = new System.Drawing.Point(40, 124);
             this.chkSourceCitations.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkSourceCitations.Name = "chkSourceCitations";
@@ -2788,6 +2835,7 @@
             // 
             // radExcess
             // 
+            this.radExcess.AutoSize = true;
             this.radExcess.Location = new System.Drawing.Point(10, 28);
             this.radExcess.Margin = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.radExcess.Name = "radExcess";
@@ -2797,6 +2845,7 @@
             // 
             // radCompact
             // 
+            this.radCompact.AutoSize = true;
             this.radCompact.Location = new System.Drawing.Point(10, 62);
             this.radCompact.Margin = new System.Windows.Forms.Padding(0);
             this.radCompact.Name = "radCompact";
@@ -2857,6 +2906,7 @@
             // 
             // chkShortKinshipForm
             // 
+            this.chkShortKinshipForm.AutoSize = true;
             this.chkShortKinshipForm.Location = new System.Drawing.Point(20, 20);
             this.chkShortKinshipForm.Margin = new System.Windows.Forms.Padding(2);
             this.chkShortKinshipForm.Name = "chkShortKinshipForm";
@@ -2866,6 +2916,7 @@
             // 
             // chkExtendedKinships
             // 
+            this.chkExtendedKinships.AutoSize = true;
             this.chkExtendedKinships.Location = new System.Drawing.Point(20, 51);
             this.chkExtendedKinships.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkExtendedKinships.Name = "chkExtendedKinships";

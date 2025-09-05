@@ -348,6 +348,7 @@
     <Compile Include="GKCore\Database\GKDBNameEntry.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GDModel\Providers\FileProvider.cs" />
+    <Compile Include="GKCore\Utilities\ChecksumStream.cs" />
     <Compile Include="GKCore\Utilities\ExtObservableList.cs" />
     <Compile Include="GKCore\Utilities\GKVarCache.cs" />
     <Compile Include="GKCore\GKException.cs" />
