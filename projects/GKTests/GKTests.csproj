@@ -106,6 +106,7 @@
     <Compile Include="GKCore\Media\MediaTests.cs" />
     <Compile Include="GKCore\ExtData\TipsCollectorTests.cs" />
     <Compile Include="GKCore\StatsTests.cs" />
+    <Compile Include="GKCore\Utilities\ChecksumStreamTests.cs" />
     <Compile Include="GKCore\Utilities\SysUtilsTests.cs" />
     <Compile Include="GKCore\Utilities\IocContainerTests.cs" />
     <Compile Include="GKCore\MorpherTests.cs" />
@@ -208,6 +209,7 @@
     <EmbeddedResource Include="Resources\test_ftb_dmgutf8rus.ged" />
     <EmbeddedResource Include="Resources\test_addr_cont.ged" />
     <EmbeddedResource Include="Resources\test_addr123.ged" />
+    <EmbeddedResource Include="Resources\test_loadsave.ged" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />

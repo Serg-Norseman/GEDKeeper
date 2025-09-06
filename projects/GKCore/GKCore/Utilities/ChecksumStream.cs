@@ -24,6 +24,48 @@ using System.Security.Cryptography;
 
 namespace GKCore.Utilities
 {
+    internal class CRC64 : HashAlgorithm
+    {
+        private readonly ulong[] fTable;
+        private ulong fHash;
+
+        public CRC64()
+        {
+            HashSizeValue = 64;
+
+            fTable = new ulong[256];
+            for (int i = 0; i < 256; ++i) {
+                ulong crc = (ulong)i;
+                for (int j = 0; j < 8; ++j) {
+                    if ((crc & 1) == 1)
+                        crc = (crc >> 1) ^ 0xC96C5795D7870F42; // ECMA-182 polynomial
+                    else
+                        crc >>= 1;
+                }
+                fTable[i] = crc;
+            }
+        }
+
+        public override void Initialize()
+        {
+            fHash = 0xFFFFFFFFFFFFFFFF;
+        }
+
+        protected override void HashCore(byte[] array, int ibStart, int cbSize)
+        {
+            for (int i = ibStart; i < ibStart + cbSize; i++) {
+                var index = (byte)((fHash & 0xff) ^ array[i]);
+                fHash = (fHash >> 8) ^ fTable[index];
+            }
+        }
+
+        protected override byte[] HashFinal()
+        {
+            var result = BitConverter.GetBytes(~fHash);
+            return result;
+        }
+    }
+
     public class ChecksumStream : Stream
     {
         private readonly HashAlgorithm fHashAlgorithm;
@@ -34,6 +76,14 @@ namespace GKCore.Utilities
             get {
                 fHashAlgorithm.TransformFinalBlock(new byte[0], 0, 0);
                 return fHashAlgorithm.Hash;
+            }
+        }
+
+        public ulong Checksum64
+        {
+            get {
+                fHashAlgorithm.TransformFinalBlock(new byte[0], 0, 0);
+                return BitConverter.ToUInt64(fHashAlgorithm.Hash, 0);
             }
         }
 
@@ -66,7 +116,7 @@ namespace GKCore.Utilities
         public ChecksumStream(Stream targetStream, HashAlgorithm hashAlgorithm = null)
         {
             fTargetStream = targetStream ?? throw new ArgumentNullException(nameof(targetStream));
-            fHashAlgorithm = hashAlgorithm ?? SHA256.Create();
+            fHashAlgorithm = hashAlgorithm ?? new CRC64(); //SHA256.Create();
         }
 
         public override void Write(byte[] buffer, int offset, int count)

@@ -321,5 +321,16 @@ namespace GKTests
             var substControl = Substitute.For<T>();
             dialog.GetControl(ctlName).Returns(substControl);
         }
+
+        public static byte[] stm2array(Stream stream)
+        {
+            byte[] result;
+            using (MemoryStream inMem = new MemoryStream()) {
+                stream.CopyTo(inMem);
+                stream.Position = 0;
+                result = inMem.ToArray();
+            }
+            return result;
+        }
     }
 }
