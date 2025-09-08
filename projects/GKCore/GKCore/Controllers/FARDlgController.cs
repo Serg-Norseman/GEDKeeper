@@ -64,16 +64,8 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnReplaceAll").Text = LangMan.LS(LSID.ReplaceAll);
 
             var cmbRecord = GetControl<IComboBox>("cmbRecord");
-            for (var rt = GDMRecordType.rtIndividual; rt < GDMRecordType.rtFamily; rt++) {
+            for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtGroup; rt++) {
                 cmbRecord.AddItem(LangMan.LS(GKData.RecordTypes[(int)rt].Name), rt);
-            }
-
-            var cmbProperty = GetControl<IComboBox>("cmbProperty");
-            for (var pt = FARPropertyType.ptName; pt <= FARPropertyType.ptLast; pt++) {
-                var propStruct = GKData.FARPropertyTypes[(int)pt];
-                if (propStruct.Enabled) {
-                    cmbProperty.AddItem(LangMan.LS(propStruct.Name), pt);
-                }
             }
         }
 
@@ -103,10 +95,24 @@ namespace GKCore.Controllers
 
             GetControl<ICheckBox>("chkWholeWord").Enabled = false; // TODO: next version
 
-            GetControl<IComboBox>("cmbRecord").SetSelectedTag(GDMRecordType.rtIndividual);
-            GetControl<IComboBox>("cmbRecord").Enabled = false; // TODO: next version
+            var selectedRecType = fBase.GetSelectedRecordType();
+            GetControl<IComboBox>("cmbRecord").SetSelectedTag(selectedRecType);
+            GetControl<IComboBox>("cmbRecord").Enabled = false;
 
-            GetControl<IComboBox>("cmbProperty").SetSelectedTag(FARPropertyType.ptName);
+            FARPropertyType firstPropType = FARPropertyType.ptNone;
+
+            var cmbProperty = GetControl<IComboBox>("cmbProperty");
+            for (var pt = FARPropertyType.ptName; pt <= FARPropertyType.ptLast; pt++) {
+                var propStruct = GKData.FARPropertyTypes[(int)pt];
+                if (propStruct.Enabled && propStruct.RecTypes.Contains(selectedRecType)) {
+                    cmbProperty.AddItem(LangMan.LS(propStruct.Name), pt);
+
+                    if (firstPropType == FARPropertyType.ptNone) firstPropType = pt;
+                }
+            }
+
+            if (firstPropType != FARPropertyType.ptNone)
+                cmbProperty.SetSelectedTag(firstPropType);
         }
 
         private void GetParameters()
@@ -152,9 +158,8 @@ namespace GKCore.Controllers
 
         private void SelectResult(SearchResult result)
         {
-            if (result != null && result.Record != null) {
+            if (result != null && result.Record != null)
                 fBase.SelectByRec(result.Record);
-            }
         }
 
         private bool RequireResults()
@@ -172,8 +177,8 @@ namespace GKCore.Controllers
         public void Prev()
         {
             try {
-                if (!RequireResults()) return;
-                SelectResult(fStrategy.FindPrev() as SearchResult);
+                if (RequireResults())
+                    SelectResult(fStrategy.FindPrev() as SearchResult);
             } catch (Exception ex) {
                 Logger.WriteError("FARDlgController.Prev()", ex);
             }
@@ -182,8 +187,8 @@ namespace GKCore.Controllers
         public void Next()
         {
             try {
-                if (!RequireResults()) return;
-                SelectResult(fStrategy.FindNext() as SearchResult);
+                if (RequireResults())
+                    SelectResult(fStrategy.FindNext() as SearchResult);
             } catch (Exception ex) {
                 Logger.WriteError("FARDlgController.Next()", ex);
             }
@@ -192,8 +197,8 @@ namespace GKCore.Controllers
         public void Replace()
         {
             try {
-                if (!RequireResults()) return;
-                fStrategy.ReplaceCurrent();
+                if (RequireResults())
+                    fStrategy.ReplaceCurrent();
             } catch (Exception ex) {
                 Logger.WriteError("FARDlgController.Replace()", ex);
             }
@@ -202,8 +207,8 @@ namespace GKCore.Controllers
         public void ReplaceAll()
         {
             try {
-                if (!RequireResults()) return;
-                fStrategy.ReplaceAll();
+                if (RequireResults())
+                    fStrategy.ReplaceAll();
             } catch (Exception ex) {
                 Logger.WriteError("FARDlgController.ReplaceAll()", ex);
             }

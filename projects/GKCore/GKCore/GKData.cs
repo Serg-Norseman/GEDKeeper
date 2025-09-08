@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using BSLib;
+using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Events;
 using GKCore.Locales;
@@ -205,11 +207,13 @@ namespace GKCore
         {
             public LSID Name;
             public bool Enabled;
+            public EnumSet<GDMRecordType> RecTypes;
 
-            public FARPropertyStruct(LSID name, bool enabled)
+            public FARPropertyStruct(LSID name, bool enabled, EnumSet<GDMRecordType> recTypes)
             {
                 Name = name;
                 Enabled = enabled;
+                RecTypes = recTypes;
             }
         }
 
@@ -582,12 +586,14 @@ namespace GKCore
             BloodGroups = "|(I) O+|(I) O-|(II) A+|(II) A-|(III) B+|(III) B-|(IV) AB+|(IV) AB-";
 
             FARPropertyTypes = new FARPropertyStruct[] {
-                new FARPropertyStruct(LSID.GeneralName, true),
-                new FARPropertyStruct(LSID.Place, false),
-                new FARPropertyStruct(LSID.Address, false),
-                new FARPropertyStruct(LSID.Fact, true),
-                new FARPropertyStruct(LSID.Event, false),
-                new FARPropertyStruct(LSID.Association, true),
+                new FARPropertyStruct(LSID.None, false, EnumSet<GDMRecordType>.Create()),
+                new FARPropertyStruct(LSID.GeneralName, true, EnumSet<GDMRecordType>.Create(
+                    GDMRecordType.rtIndividual, GDMRecordType.rtMultimedia, GDMRecordType.rtSource, GDMRecordType.rtRepository, GDMRecordType.rtGroup)),
+                new FARPropertyStruct(LSID.Place, true, EnumSet<GDMRecordType>.Create(GDMRecordType.rtIndividual, GDMRecordType.rtFamily)),
+                new FARPropertyStruct(LSID.Address, false, EnumSet<GDMRecordType>.Create()),
+                new FARPropertyStruct(LSID.Fact, true, EnumSet<GDMRecordType>.Create(GDMRecordType.rtIndividual)),
+                new FARPropertyStruct(LSID.Event, false, EnumSet<GDMRecordType>.Create()),
+                new FARPropertyStruct(LSID.Association, true, EnumSet<GDMRecordType>.Create(GDMRecordType.rtIndividual)),
             };
 
             URTreeNoteType = LSID.URTreeNoteType;

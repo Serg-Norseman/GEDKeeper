@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -120,7 +120,11 @@ namespace GKCore.Search
                         var indiRec = rec as GDMIndividualRecord;
                         switch (fParameters.PropertyType) {
                             case FARPropertyType.ptName:
-                                FindNamePattern(result, indiRec);
+                                FindPersNamePattern(result, indiRec);
+                                break;
+
+                            case FARPropertyType.ptPlace:
+                                FindPlacePattern(result, indiRec);
                                 break;
 
                             case FARPropertyType.ptFact:
@@ -129,6 +133,51 @@ namespace GKCore.Search
 
                             case FARPropertyType.ptAssociation:
                                 FindAssociationPattern(result, indiRec);
+                                break;
+                        }
+                        break;
+
+                    case GDMRecordType.rtFamily:
+                        var famRec = rec as GDMFamilyRecord;
+                        switch (fParameters.PropertyType) {
+                            case FARPropertyType.ptPlace:
+                                FindPlacePattern(result, famRec);
+                                break;
+                        }
+                        break;
+
+                    case GDMRecordType.rtMultimedia:
+                        var mediaRec = rec as GDMMultimediaRecord;
+                        switch (fParameters.PropertyType) {
+                            case FARPropertyType.ptName:
+                                FindMediaNamePattern(result, mediaRec);
+                                break;
+                        }
+                        break;
+
+                    case GDMRecordType.rtSource:
+                        var sourRec = rec as GDMSourceRecord;
+                        switch (fParameters.PropertyType) {
+                            case FARPropertyType.ptName:
+                                FindSourceNamePattern(result, sourRec);
+                                break;
+                        }
+                        break;
+
+                    case GDMRecordType.rtRepository:
+                        var repoRec = rec as GDMRepositoryRecord;
+                        switch (fParameters.PropertyType) {
+                            case FARPropertyType.ptName:
+                                FindRepoNamePattern(result, repoRec);
+                                break;
+                        }
+                        break;
+
+                    case GDMRecordType.rtGroup:
+                        var groupRec = rec as GDMGroupRecord;
+                        switch (fParameters.PropertyType) {
+                            case FARPropertyType.ptName:
+                                FindGroupNamePattern(result, groupRec);
                                 break;
                         }
                         break;
@@ -143,7 +192,7 @@ namespace GKCore.Search
 
         #region Handlers
 
-        private void FindNamePattern(List<ISearchResult> result, GDMIndividualRecord indiRec)
+        private void FindPersNamePattern(List<ISearchResult> result, GDMIndividualRecord indiRec)
         {
             for (int k = 0; k < indiRec.PersonalNames.Count; k++) {
                 var persName = indiRec.PersonalNames[k];
@@ -201,6 +250,79 @@ namespace GKCore.Search
         {
             var evt = (GDMCustomEvent)prop;
             evt.StringValue = ReplacePattern(evt.StringValue);
+        }
+
+        private void FindPlacePattern(List<ISearchResult> result, GDMRecordWithEvents rwe)
+        {
+            if (!rwe.HasEvents) return;
+
+            for (int k = 0; k < rwe.Events.Count; k++) {
+                var evt = rwe.Events[k];
+                if (FindPattern(evt.Place.StringValue)) {
+                    result.Add(new FARSearchResult(rwe, evt, ReplacePlace));
+                }
+            }
+        }
+
+        private void ReplacePlace(IGDMObject prop)
+        {
+            var evt = (GDMCustomEvent)prop;
+            evt.Place.StringValue = ReplacePattern(evt.Place.StringValue);
+        }
+
+        private void FindMediaNamePattern(List<ISearchResult> result, GDMMultimediaRecord mediaRec)
+        {
+            for (int k = 0; k < mediaRec.FileReferences.Count; k++) {
+                var fileRef = mediaRec.FileReferences[k];
+                if (FindPattern(fileRef.Title)) {
+                    result.Add(new FARSearchResult(mediaRec, fileRef, ReplaceMediaName));
+                }
+            }
+        }
+
+        private void ReplaceMediaName(IGDMObject prop)
+        {
+            var fileRef = (GDMFileReferenceWithTitle)prop;
+            fileRef.Title = ReplacePattern(fileRef.Title);
+        }
+
+        private void FindGroupNamePattern(List<ISearchResult> result, GDMGroupRecord groupRec)
+        {
+            if (FindPattern(groupRec.GroupName)) {
+                result.Add(new FARSearchResult(groupRec, groupRec, ReplaceGroupName));
+            }
+        }
+
+        private void ReplaceGroupName(IGDMObject prop)
+        {
+            var groupRec = (GDMGroupRecord)prop;
+            groupRec.GroupName = ReplacePattern(groupRec.GroupName);
+        }
+
+        private void FindRepoNamePattern(List<ISearchResult> result, GDMRepositoryRecord repoRec)
+        {
+            if (FindPattern(repoRec.RepositoryName)) {
+                result.Add(new FARSearchResult(repoRec, repoRec, ReplaceRepoName));
+            }
+        }
+
+        private void ReplaceRepoName(IGDMObject prop)
+        {
+            var repoRec = (GDMRepositoryRecord)prop;
+            repoRec.RepositoryName = ReplacePattern(repoRec.RepositoryName);
+        }
+
+        private void FindSourceNamePattern(List<ISearchResult> result, GDMSourceRecord sourRec)
+        {
+            if (FindPattern(sourRec.ShortTitle)) {
+                result.Add(new FARSearchResult(sourRec, sourRec, ReplaceSourceName));
+            }
+        }
+
+        private void ReplaceSourceName(IGDMObject prop)
+        {
+            var sourRec = (GDMSourceRecord)prop;
+            sourRec.ShortTitle = ReplacePattern(sourRec.ShortTitle);
         }
 
         #endregion

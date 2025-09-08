@@ -95,6 +95,7 @@
         <EmbeddedResource Include="Resources\test_ftb_dmgutf8rus.ged" />
         <EmbeddedResource Include="Resources\test_addr_cont.ged" />
         <EmbeddedResource Include="Resources\test_addr123.ged" />
+        <EmbeddedResource Include="Resources\test_loadsave.ged" />
     </ItemGroup>
 
 </Project>
