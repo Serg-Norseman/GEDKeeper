@@ -113,8 +113,6 @@ namespace GKCore.Search
                 GDMRecord rec = tree[i];
                 if (rec.RecordType != fParameters.RecordType) continue;
 
-                // TODO: only individual names yet!
-
                 switch (rec.RecordType) {
                     case GDMRecordType.rtIndividual:
                         var indiRec = rec as GDMIndividualRecord;
@@ -142,6 +140,15 @@ namespace GKCore.Search
                         switch (fParameters.PropertyType) {
                             case FARPropertyType.ptPlace:
                                 FindPlacePattern(result, famRec);
+                                break;
+                        }
+                        break;
+
+                    case GDMRecordType.rtNote:
+                        var noteRec = rec as GDMNoteRecord;
+                        switch (fParameters.PropertyType) {
+                            case FARPropertyType.ptText:
+                                FindNoteTextPattern(result, noteRec);
                                 break;
                         }
                         break;
@@ -178,6 +185,42 @@ namespace GKCore.Search
                         switch (fParameters.PropertyType) {
                             case FARPropertyType.ptName:
                                 FindGroupNamePattern(result, groupRec);
+                                break;
+                        }
+                        break;
+
+                    case GDMRecordType.rtResearch:
+                        var resRec = rec as GDMResearchRecord;
+                        switch (fParameters.PropertyType) {
+                            case FARPropertyType.ptName:
+                                FindResearchNamePattern(result, resRec);
+                                break;
+                        }
+                        break;
+
+                    case GDMRecordType.rtTask:
+                        var taskRec = rec as GDMTaskRecord;
+                        switch (fParameters.PropertyType) {
+                            case FARPropertyType.ptGoal:
+                                FindTaskGoalPattern(result, taskRec);
+                                break;
+                        }
+                        break;
+
+                    case GDMRecordType.rtCommunication:
+                        var commRec = rec as GDMCommunicationRecord;
+                        switch (fParameters.PropertyType) {
+                            case FARPropertyType.ptTheme:
+                                FindCommThemePattern(result, commRec);
+                                break;
+                        }
+                        break;
+
+                    case GDMRecordType.rtLocation:
+                        var locRec = rec as GDMLocationRecord;
+                        switch (fParameters.PropertyType) {
+                            case FARPropertyType.ptName:
+                                FindLocationNamePattern(result, locRec);
                                 break;
                         }
                         break;
@@ -323,6 +366,74 @@ namespace GKCore.Search
         {
             var sourRec = (GDMSourceRecord)prop;
             sourRec.ShortTitle = ReplacePattern(sourRec.ShortTitle);
+        }
+
+        private void FindResearchNamePattern(List<ISearchResult> result, GDMResearchRecord resRec)
+        {
+            if (FindPattern(resRec.ResearchName)) {
+                result.Add(new FARSearchResult(resRec, resRec, ReplaceResearchName));
+            }
+        }
+
+        private void ReplaceResearchName(IGDMObject prop)
+        {
+            var resRec = (GDMResearchRecord)prop;
+            resRec.ResearchName = ReplacePattern(resRec.ResearchName);
+        }
+
+        private void FindLocationNamePattern(List<ISearchResult> result, GDMLocationRecord locRec)
+        {
+            for (int k = 0; k < locRec.Names.Count; k++) {
+                var locName = locRec.Names[k];
+                if (FindPattern(locName.StringValue)) {
+                    result.Add(new FARSearchResult(locRec, locName, ReplaceLocationName));
+                }
+            }
+        }
+
+        private void ReplaceLocationName(IGDMObject prop)
+        {
+            var locName = (GDMLocationName)prop;
+            locName.StringValue = ReplacePattern(locName.StringValue);
+        }
+
+        private void FindNoteTextPattern(List<ISearchResult> result, GDMNoteRecord noteRec)
+        {
+            if (FindPattern(noteRec.Lines.Text)) {
+                result.Add(new FARSearchResult(noteRec, noteRec, ReplaceNoteText));
+            }
+        }
+
+        private void ReplaceNoteText(IGDMObject prop)
+        {
+            var noteRec = (GDMNoteRecord)prop;
+            noteRec.Lines.Text = ReplacePattern(noteRec.Lines.Text);
+        }
+
+        private void FindTaskGoalPattern(List<ISearchResult> result, GDMTaskRecord taskRec)
+        {
+            if (FindPattern(taskRec.Goal)) {
+                result.Add(new FARSearchResult(taskRec, taskRec, ReplaceTaskGoal));
+            }
+        }
+
+        private void ReplaceTaskGoal(IGDMObject prop)
+        {
+            var taskRec = (GDMTaskRecord)prop;
+            taskRec.Goal = ReplacePattern(taskRec.Goal);
+        }
+
+        private void FindCommThemePattern(List<ISearchResult> result, GDMCommunicationRecord commRec)
+        {
+            if (FindPattern(commRec.CommName)) {
+                result.Add(new FARSearchResult(commRec, commRec, ReplaceCommTheme));
+            }
+        }
+
+        private void ReplaceCommTheme(IGDMObject prop)
+        {
+            var commRec = (GDMCommunicationRecord)prop;
+            commRec.CommName = ReplacePattern(commRec.CommName);
         }
 
         #endregion

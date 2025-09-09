@@ -588,12 +588,16 @@ namespace GKCore
             FARPropertyTypes = new FARPropertyStruct[] {
                 new FARPropertyStruct(LSID.None, false, EnumSet<GDMRecordType>.Create()),
                 new FARPropertyStruct(LSID.GeneralName, true, EnumSet<GDMRecordType>.Create(
-                    GDMRecordType.rtIndividual, GDMRecordType.rtMultimedia, GDMRecordType.rtSource, GDMRecordType.rtRepository, GDMRecordType.rtGroup)),
+                    GDMRecordType.rtIndividual, GDMRecordType.rtMultimedia, GDMRecordType.rtSource, GDMRecordType.rtRepository, GDMRecordType.rtGroup,
+                    GDMRecordType.rtResearch, GDMRecordType.rtLocation)),
                 new FARPropertyStruct(LSID.Place, true, EnumSet<GDMRecordType>.Create(GDMRecordType.rtIndividual, GDMRecordType.rtFamily)),
                 new FARPropertyStruct(LSID.Address, false, EnumSet<GDMRecordType>.Create()),
                 new FARPropertyStruct(LSID.Fact, true, EnumSet<GDMRecordType>.Create(GDMRecordType.rtIndividual)),
                 new FARPropertyStruct(LSID.Event, false, EnumSet<GDMRecordType>.Create()),
                 new FARPropertyStruct(LSID.Association, true, EnumSet<GDMRecordType>.Create(GDMRecordType.rtIndividual)),
+                new FARPropertyStruct(LSID.Text, true, EnumSet<GDMRecordType>.Create(GDMRecordType.rtNote)),
+                new FARPropertyStruct(LSID.Goal, true, EnumSet<GDMRecordType>.Create(GDMRecordType.rtTask)),
+                new FARPropertyStruct(LSID.Theme, true, EnumSet<GDMRecordType>.Create(GDMRecordType.rtCommunication)),
             };
 
             URTreeNoteType = LSID.URTreeNoteType;

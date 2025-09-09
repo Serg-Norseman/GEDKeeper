@@ -30,7 +30,10 @@ namespace GKCore.Search
         ptFact,
         ptEvent,
         ptAssociation,
+        ptText,
+        ptGoal,
+        ptTheme,
 
-        ptLast = ptAssociation
+        ptLast = ptTheme
     }
 }

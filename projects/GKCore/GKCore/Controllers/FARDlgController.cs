@@ -64,7 +64,7 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnReplaceAll").Text = LangMan.LS(LSID.ReplaceAll);
 
             var cmbRecord = GetControl<IComboBox>("cmbRecord");
-            for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtGroup; rt++) {
+            for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
                 cmbRecord.AddItem(LangMan.LS(GKData.RecordTypes[(int)rt].Name), rt);
             }
         }
