@@ -154,8 +154,8 @@ namespace GKWordsCloudPlugin
             words.Clear();
 
             if (baseWin != null) {
-                List<StatsItem> vals = new List<StatsItem>();
-                TreeStats treeStats = new TreeStats(baseWin.Context, baseWin.GetContentList(GDMRecordType.rtIndividual));
+                var vals = new List<StatsItem>();
+                var treeStats = new TreeStats(baseWin.Context, baseWin.GetContentList(GDMRecordType.rtIndividual));
                 treeStats.GetSpecStats(mode, vals);
 
                 words.Capacity = vals.Count;

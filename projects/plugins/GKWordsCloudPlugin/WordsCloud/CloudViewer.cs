@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
-using System.Linq;
 using System.Windows.Forms;
 using BSLib;
 using GKUI.Components;
@@ -42,85 +41,27 @@ namespace GKWordsCloudPlugin.WordsCloud
             Color.Red,
         };
 
-        private Color fBackColor;
-        private Word fItemUnderMouse;
-        private int fMaxFontSize;
-        private int fMinFontSize;
-        private int fMaxWordWeight;
-        private int fMinWordWeight;
         private CloudModel fModel;
-        private List<Word> fWords;
-
         private Font fCurrentFont;
         private Graphics fGraphics;
         private FontFamily fFontFamily;
-        private FontStyle fFontStyle;
-
-        public override Color BackColor
-        {
-            get {
-                return fBackColor;
-            }
-            set {
-                if (fBackColor == value) {
-                    return;
-                }
-                fBackColor = value;
-                Invalidate();
-            }
-        }
-
-        public int MaxFontSize
-        {
-            get { return fMaxFontSize; }
-            set {
-                fMaxFontSize = value;
-                BuildLayout();
-                Invalidate();
-            }
-        }
-
-        public int MinFontSize
-        {
-            get { return fMinFontSize; }
-            set {
-                fMinFontSize = value;
-                BuildLayout();
-                Invalidate();
-            }
-        }
-
-        public List<Word> WeightedWords
-        {
-            get { return fWords; }
-            set {
-                fWords = value;
-                if (value == null) {
-                    return;
-                }
-
-                Word first = fWords.FirstOrDefault();
-                if (first != null) {
-                    fMaxWordWeight = first.Occurrences;
-                    fMinWordWeight = fWords.Last().Occurrences;
-                }
-
-                BuildLayout();
-                Invalidate();
-            }
-        }
+        private float fCurrentSize;
 
         public CloudViewer()
         {
             BorderStyle = BorderStyle.FixedSingle;
             ResizeRedraw = true;
+            fFontFamily = Font.FontFamily;
+            fModel = new CloudModel();
+        }
 
-            fBackColor = Color.White;
-            fMinWordWeight = 0;
-            fMaxWordWeight = 0;
+        public void SetWeightedWords(List<Word> value)
+        {
+            if (value == null) return;
 
-            MaxFontSize = 68;
-            MinFontSize = 6;
+            fModel.SetWords(value);
+            BuildLayout();
+            Invalidate();
         }
 
         protected override void Dispose(bool disposing)
@@ -132,66 +73,51 @@ namespace GKWordsCloudPlugin.WordsCloud
             base.Dispose(disposing);
         }
 
-        private void InitRenderer(Graphics graphics, FontFamily fontFamily, FontStyle fontStyle)
+        private void InitRenderer(Graphics graphics)
         {
             fGraphics = graphics;
-            fFontFamily = fontFamily;
-            fFontStyle = fontStyle;
-            fCurrentFont = new Font(fFontFamily, fMaxFontSize, fFontStyle);
+            fCurrentFont = null;
+            fCurrentSize = 0;
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
 
-            if (fWords == null || fModel == null) {
-                return;
-            }
-
-            var rect = UIHelper.Rt2Rt(e.ClipRectangle);
-            IEnumerable<Word> wordsToRedraw = fModel.GetWordsInArea(rect);
-
             var gfx = e.Graphics;
             gfx.SmoothingMode = SmoothingMode.AntiAlias;
             gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
-            InitRenderer(gfx, Font.FontFamily, FontStyle.Regular);
-            foreach (Word word in wordsToRedraw) {
-                if (word.IsExposed) {
-                    Draw(word, (fItemUnderMouse == word));
-                }
-            }
+
+            var rect = UIHelper.Rt2Rt(e.ClipRectangle);
+            InitRenderer(gfx);
+            fModel.Render(this, rect);
+
             fGraphics = null;
         }
 
         private void BuildLayout()
         {
-            if (fWords == null) {
-                return;
-            }
-
-            using (Graphics graphics = CreateGraphics()) {
-                InitRenderer(graphics, Font.FontFamily, FontStyle.Regular);
-
+            using (var graphics = CreateGraphics()) {
+                InitRenderer(graphics);
                 var sz = Size;
-                fModel = new CloudModel(sz.Width, sz.Height);
-                fModel.Arrange(fWords, this);
+                fModel.Arrange(this, sz.Width, sz.Height);
             }
             fGraphics = null;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            Word nextItemUnderMouse = GetItemAtLocation(e.Location);
-            if (nextItemUnderMouse != fItemUnderMouse) {
+            Word nextItemUnderMouse = fModel.GetItemAtLocation(e.X, e.Y);
+            if (nextItemUnderMouse != fModel.ItemUnderMouse) {
                 if (nextItemUnderMouse != null) {
                     Rectangle newRectangleToInvalidate = RectangleGrow(nextItemUnderMouse.Rectangle, 6);
                     Invalidate(newRectangleToInvalidate);
                 }
-                if (fItemUnderMouse != null) {
-                    Rectangle prevRectangleToInvalidate = RectangleGrow(fItemUnderMouse.Rectangle, 6);
+                if (fModel.ItemUnderMouse != null) {
+                    Rectangle prevRectangleToInvalidate = RectangleGrow(fModel.ItemUnderMouse.Rectangle, 6);
                     Invalidate(prevRectangleToInvalidate);
                 }
-                fItemUnderMouse = nextItemUnderMouse;
+                fModel.ItemUnderMouse = nextItemUnderMouse;
             }
             base.OnMouseMove(e);
         }
@@ -204,29 +130,18 @@ namespace GKWordsCloudPlugin.WordsCloud
 
         private static Rectangle RectangleGrow(ExtRectF original, int growByPixels)
         {
-            return new Rectangle(
-                (int)(original.Left - growByPixels),
-                (int)(original.Top - growByPixels),
-                (int)(original.Width + growByPixels + 1),
-                (int)(original.Height + growByPixels + 1));
+            original.Inflate(-growByPixels, -growByPixels);
+            return new Rectangle((int)original.Left, (int)original.Top, (int)original.Width, (int)original.Height);
         }
 
-        public Word GetItemAtLocation(Point location)
-        {
-            var area = new ExtRectF(location.X, location.Y, 0, 0);
-            IEnumerable<Word> itemsInArea = (fModel == null) ? new Word[] { } : fModel.GetWordsInArea(area);
-            return itemsInArea.FirstOrDefault();
-        }
-
-        public ExtSizeF Measure(string text, int weight)
+        ExtSizeF ICloudRenderer.Measure(string text, int weight)
         {
             Font font = GetFont(weight);
-            Size proposedSize = new Size(int.MaxValue, int.MaxValue);
-            SizeF sz = fGraphics.MeasureString(text, font, proposedSize, StringFormat.GenericTypographic);
+            SizeF sz = fGraphics.MeasureString(text, font);
             return new ExtSizeF(sz.Width + 0.5f, sz.Height);
         }
 
-        public void Draw(Word word, bool highlight)
+        void ICloudRenderer.Draw(Word word, bool highlight)
         {
             Font font = GetFont(word.Occurrences);
             Color color = fPalette[word.Occurrences * word.Text.Length % fPalette.Length];
@@ -236,8 +151,8 @@ namespace GKWordsCloudPlugin.WordsCloud
                 color = UIHelper.Darker(color, 0.5f);
             }
 
-            Brush brush = new SolidBrush(color);
-            fGraphics.DrawString(word.Text, font, brush, itemRt, StringFormat.GenericTypographic);
+            using (var brush = new SolidBrush(color))
+                fGraphics.DrawString(word.Text, font, brush, itemRt);
 
 #if DEBUG_DRAW
             fGraphics.DrawRectangle(new Pen(color), Rectangle.Round(itemRt));
@@ -246,10 +161,10 @@ namespace GKWordsCloudPlugin.WordsCloud
 
         private Font GetFont(int weight)
         {
-            float fontSize = (float)(weight - fMinWordWeight) / (fMaxWordWeight - fMinWordWeight) * (fMaxFontSize - fMinFontSize) + fMinFontSize;
-            if (Math.Abs(fCurrentFont.Size - fontSize) > float.Epsilon) {
+            float fontSize = fModel.GetFontSize(weight);
+            if (Math.Abs(fCurrentSize - fontSize) > float.Epsilon) {
                 if (fCurrentFont != null) fCurrentFont.Dispose();
-                fCurrentFont = new Font(fFontFamily, fontSize, fFontStyle);
+                fCurrentFont = new Font(fFontFamily, fontSize, FontStyle.Regular);
             }
             return fCurrentFont;
         }

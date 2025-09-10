@@ -43,12 +43,9 @@
             this.cloudViewer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cloudViewer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cloudViewer.Location = new System.Drawing.Point(10, 35);
-            this.cloudViewer.MaxFontSize = 40;
-            this.cloudViewer.MinFontSize = 4;
             this.cloudViewer.Name = "cloudViewer";
             this.cloudViewer.Size = new System.Drawing.Size(780, 555);
             this.cloudViewer.TabIndex = 3;
-            this.cloudViewer.WeightedWords = null;
             // 
             // WordsCloudWidget
             // 

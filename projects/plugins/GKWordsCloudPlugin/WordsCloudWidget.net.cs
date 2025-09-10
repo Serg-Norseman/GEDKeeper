@@ -22,7 +22,6 @@ using System;
 using System.Collections.Generic;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
-using GKCore;
 using GKCore.Design;
 using GKCore.Locales;
 using GKCore.Stats;
@@ -46,14 +45,12 @@ namespace GKWordsCloudPlugin
         private readonly Plugin fPlugin;
         private IBaseWindow fBase;
         private StatsMode fMode;
-        private List<Word> fWords;
 
         public WordsCloudWidget(Plugin plugin)
         {
             XamlReader.Load(this);
 
             fPlugin = plugin;
-            fWords = new List<Word>();
             fMode = StatsMode.smNames;
 
             SetLocale();
@@ -90,8 +87,9 @@ namespace GKWordsCloudPlugin
         private void UpdateCloud()
         {
             try {
-                fPlugin.CollectData(fBase, fMode, fWords);
-                cloudViewer.WeightedWords = fWords;
+                var words = new List<Word>();
+                fPlugin.CollectData(fBase, fMode, words);
+                cloudViewer.SetWeightedWords(words);
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);
             }

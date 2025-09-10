@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BSLib;
 
 namespace GKWordsCloudPlugin.WordsCloud
@@ -23,24 +24,69 @@ namespace GKWordsCloudPlugin.WordsCloud
 
     public class CloudModel
     {
-        private readonly ExtPointF fCenter;
-        private readonly QuadTree<Word> fQuadTree;
-        private readonly ExtRectF fSurface;
+        private ExtPointF fCenter;
+        private QuadTree<Word> fQuadTree;
+        private ExtRectF fSurface;
+        private List<Word> fWords;
 
-        public CloudModel(float sizeWidth, float sizeHeight)
+        private int fMaxFontSize;
+        private int fMinFontSize;
+        private int fMaxWordWeight;
+        private int fMinWordWeight;
+
+        public Word ItemUnderMouse { get; set; }
+        public int MaxWordWeight { get { return fMaxWordWeight; } }
+        public int MinWordWeight { get { return fMinWordWeight; } }
+
+
+        public CloudModel()
         {
+            fMaxFontSize = 40;
+            fMinFontSize = 6;
+
+            fMinWordWeight = 0;
+            fMaxWordWeight = 0;
+        }
+
+        public float GetFontSize(int weight)
+        {
+            float fontSize = (float)(weight - fMinWordWeight) / (fMaxWordWeight - fMinWordWeight) * (fMaxFontSize - fMinFontSize) + fMinFontSize;
+            return fontSize;
+        }
+
+        public void Render(ICloudRenderer renderer, ExtRectF area)
+        {
+            var wordsToRedraw = GetWordsInArea(area);
+            foreach (Word word in wordsToRedraw) {
+                if (word.IsExposed) {
+                    renderer.Draw(word, (ItemUnderMouse == word));
+                }
+            }
+        }
+
+        public void SetWords(List<Word> words)
+        {
+            if (words == null)
+                throw new ArgumentNullException("words");
+
+            fWords = words;
+        }
+
+        public void Arrange(ICloudRenderer renderer, float sizeWidth, float sizeHeight)
+        {
+            if (fWords == null) return;
+
             fSurface = new ExtRectF(0, 0, sizeWidth, sizeHeight);
             fQuadTree = new QuadTree<Word>(fSurface);
             fCenter = new ExtPointF(fSurface.Left + sizeWidth / 2, fSurface.Top + sizeHeight / 2);
-        }
 
-        public void Arrange(List<Word> words, ICloudRenderer renderer)
-        {
-            if (words == null) {
-                throw new ArgumentNullException("words");
+            Word first = fWords.FirstOrDefault();
+            if (first != null) {
+                fMaxWordWeight = first.Occurrences;
+                fMinWordWeight = fWords.Last().Occurrences;
             }
 
-            foreach (Word word in words) {
+            foreach (Word word in fWords) {
                 var size = renderer.Measure(word.Text, word.Occurrences);
 
                 if (TryFindFreeRectangle(size, out ExtRectF freeRectangle)) {
@@ -53,7 +99,13 @@ namespace GKWordsCloudPlugin.WordsCloud
 
         public IEnumerable<Word> GetWordsInArea(ExtRectF area)
         {
-            return fQuadTree.Query(area);
+            return (fQuadTree == null) ? new List<Word>() : fQuadTree.Query(area);
+        }
+
+        public Word GetItemAtLocation(int locX, int locY)
+        {
+            var area = new ExtRectF(locX, locY, 0, 0);
+            return GetWordsInArea(area).FirstOrDefault();
         }
 
         private bool IsInsideSurface(ExtRectF target)

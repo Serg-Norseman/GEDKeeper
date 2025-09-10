@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using GKCore;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Locales;
@@ -35,14 +34,12 @@ namespace GKWordsCloudPlugin
         private readonly Plugin fPlugin;
         private IBaseWindow fBase;
         private StatsMode fMode;
-        private List<Word> fWords;
 
         public WordsCloudWidget(Plugin plugin)
         {
             InitializeComponent();
 
             fPlugin = plugin;
-            fWords = new List<Word>();
             fMode = StatsMode.smNames;
 
             SetLocale();
@@ -79,8 +76,9 @@ namespace GKWordsCloudPlugin
         private void UpdateCloud()
         {
             try {
-                fPlugin.CollectData(fBase, fMode, fWords);
-                cloudViewer.WeightedWords = fWords;
+                var words = new List<Word>();
+                fPlugin.CollectData(fBase, fMode, words);
+                cloudViewer.SetWeightedWords(words);
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);
             }
