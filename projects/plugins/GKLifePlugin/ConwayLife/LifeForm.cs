@@ -24,9 +24,6 @@ namespace GKLifePlugin.ConwayLife
             InitializeComponent();
 
             fLangMan = langMan;
-
-            cmpLife.AcceptMouseClicks = false;
-            cmpLife.ShowGridLines = false;
         }
 
         private void Form_Load(object sender, EventArgs e)
@@ -52,26 +49,26 @@ namespace GKLifePlugin.ConwayLife
 
         private void tbRandomise_Click(object sender, EventArgs e)
         {
-            cmpLife.RandomCells();
+            cmpLife.Model.RandomCells();
         }
 
         private void tmrNextGeneration_Tick(object sender, EventArgs e)
         {
             if (fIsMinimised) return;
 
-            int Periodicity = cmpLife.NextGeneration();
-            if (Periodicity > 0) {
+            int periodicity = cmpLife.Model.NextGeneration();
+            if (periodicity > 0) {
                 tmrNextGeneration.Enabled = false;
                 tbStart.Checked = false;
                 UpdateMenusAndButtons();
-                PatternStabilised(Periodicity);
+                PatternStabilised(periodicity);
             }
         }
 
         private void cmpLife_Change(object sender)
         {
-            stlGeneration.Text = string.Format(fLangMan.LS(PLS.Generation), cmpLife.Generation);
-            stlLivingCells.Text = string.Format(fLangMan.LS(PLS.LivingCells), cmpLife.LiveCellCount);
+            stlGeneration.Text = string.Format(fLangMan.LS(PLS.Generation), cmpLife.Model.Generation);
+            stlLivingCells.Text = string.Format(fLangMan.LS(PLS.LivingCells), cmpLife.Model.LiveCellCount);
         }
 
         private void UpdateMenusAndButtons()
@@ -80,17 +77,17 @@ namespace GKLifePlugin.ConwayLife
 
             tbStart.Enabled = !btnSetCells.Checked;
             if (tbStart.Checked) {
-                cmpLife.OnChange += cmpLife_Change;
+                cmpLife.Model.OnChange += cmpLife_Change;
                 tbStart.Text = fLangMan.LS(PLS.Stop);
             } else {
-                cmpLife.OnChange -= cmpLife_Change;
+                cmpLife.Model.OnChange -= cmpLife_Change;
                 tbStart.Text = fLangMan.LS(PLS.Start);
             }
 
             btnSetCells.Enabled = !tbStart.Checked;
             tbClear.Enabled = !tbStart.Checked;
             tbRandomise.Enabled = !tbStart.Checked;
-            cmpLife.Cursor = cmpLife.AcceptMouseClicks ? Cursors.Hand : Cursors.Default;
+            cmpLife.Cursor = cmpLife.Model.AcceptMouseClicks ? Cursors.Hand : Cursors.Default;
         }
 
         private void PatternStabilised(int periodicity)
@@ -101,8 +98,8 @@ namespace GKLifePlugin.ConwayLife
 
         private void tbStep_Click(object sender, EventArgs e)
         {
-            int Periodicity = cmpLife.NextGeneration();
-            if (Periodicity > 0) PatternStabilised(Periodicity);
+            int periodicity = cmpLife.Model.NextGeneration();
+            if (periodicity > 0) PatternStabilised(periodicity);
         }
 
         private void tbStart_Click(object sender, EventArgs e)
@@ -113,13 +110,13 @@ namespace GKLifePlugin.ConwayLife
 
         private void tbClear_Click(object sender, EventArgs e)
         {
-            cmpLife.ClearCells();
+            cmpLife.Model.ClearCells();
         }
 
         private void tbSetCells_Click(object sender, EventArgs e)
         {
-            cmpLife.AcceptMouseClicks = btnSetCells.Checked;
-            cmpLife.ShowGridLines = cmpLife.AcceptMouseClicks;
+            cmpLife.Model.AcceptMouseClicks = btnSetCells.Checked;
+            cmpLife.Model.ShowGridLines = cmpLife.Model.AcceptMouseClicks;
         }
     }
 }
