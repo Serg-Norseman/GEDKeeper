@@ -110,9 +110,6 @@ rmdir .\projects\plugins\GKNamesBookPlugin\obj /s /q
 rmdir .\projects\plugins\GKNavigatorPlugin\bin /s /q
 rmdir .\projects\plugins\GKNavigatorPlugin\obj /s /q
 
-rmdir .\projects\plugins\GKPedigreeImporterPlugin\bin /s /q
-rmdir .\projects\plugins\GKPedigreeImporterPlugin\obj /s /q
-
 rmdir .\projects\plugins\GKStdReports\bin /s /q
 rmdir .\projects\plugins\GKStdReports\obj /s /q
 

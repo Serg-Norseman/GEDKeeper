@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -245,9 +245,7 @@ namespace GDModel
                 && string.IsNullOrEmpty(fAgency) && (fRestriction == GDMRestriction.rnNone) && string.IsNullOrEmpty(fReligiousAffilation)
                 && (fPlace == null || fPlace.IsEmpty())
                 && (fAddress == null || fAddress.IsEmpty())
-                && (fNotes == null || fNotes.Count == 0)
-                && (fSourceCitations == null || fSourceCitations.Count == 0)
-                && (fMultimediaLinks == null || fMultimediaLinks.Count == 0);
+                && fNotes.IsEmpty() && fSourceCitations.IsEmpty() && fMultimediaLinks.IsEmpty();
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)

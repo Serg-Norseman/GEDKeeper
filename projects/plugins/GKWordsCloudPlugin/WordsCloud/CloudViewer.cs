@@ -41,18 +41,16 @@ namespace GKWordsCloudPlugin.WordsCloud
             Color.Red,
         };
 
-        private CloudModel fModel;
+        private readonly CloudModel fModel;
         private Font fCurrentFont;
         private Graphics fGraphics;
-        private FontFamily fFontFamily;
         private float fCurrentSize;
 
         public CloudViewer()
         {
             BorderStyle = BorderStyle.FixedSingle;
             ResizeRedraw = true;
-            fFontFamily = Font.FontFamily;
-            fModel = new CloudModel();
+            fModel = new CloudModel(this);
         }
 
         public void SetWeightedWords(List<Word> value)
@@ -68,7 +66,6 @@ namespace GKWordsCloudPlugin.WordsCloud
         {
             if (disposing) {
                 if (fCurrentFont != null) fCurrentFont.Dispose();
-                if (fGraphics != null) fGraphics.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -90,19 +87,16 @@ namespace GKWordsCloudPlugin.WordsCloud
 
             var rect = UIHelper.Rt2Rt(e.ClipRectangle);
             InitRenderer(gfx);
-            fModel.Render(this, rect);
-
-            fGraphics = null;
+            fModel.Render(rect);
         }
 
         private void BuildLayout()
         {
             using (var graphics = CreateGraphics()) {
                 InitRenderer(graphics);
-                var sz = Size;
-                fModel.Arrange(this, sz.Width, sz.Height);
+                var sz = ClientSize;
+                fModel.Arrange(sz.Width, sz.Height);
             }
-            fGraphics = null;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -163,8 +157,9 @@ namespace GKWordsCloudPlugin.WordsCloud
         {
             float fontSize = fModel.GetFontSize(weight);
             if (Math.Abs(fCurrentSize - fontSize) > float.Epsilon) {
+                fCurrentSize = fontSize;
                 if (fCurrentFont != null) fCurrentFont.Dispose();
-                fCurrentFont = new Font(fFontFamily, fontSize, FontStyle.Regular);
+                fCurrentFont = new Font(Font.FontFamily, fCurrentSize, FontStyle.Regular);
             }
             return fCurrentFont;
         }

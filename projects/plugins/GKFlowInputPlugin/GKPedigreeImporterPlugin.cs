@@ -19,31 +19,17 @@
  */
 
 using System;
-using System.Reflection;
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Locales;
 using GKCore.Plugins;
 
-[assembly: AssemblyTitle("GKPedigreeImporterPlugin")]
-[assembly: AssemblyDescription("GEDKeeper PedigreeImporter plugin")]
-[assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2014-2023 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyVersion("1.2.0.0")]
-[assembly: AssemblyCulture("")]
-
-#if DEBUG
-[assembly: AssemblyConfiguration("Debug")]
-#elif RELEASE
-[assembly: AssemblyConfiguration("Release")]
-#endif
-
 namespace GKPedigreeImporterPlugin
 {
     public enum PLS
     {
-        PedigreeImporter = 1,
+        PedigreeImporter = 42,
         File,
         DlgSelect,
         FormatUnsupported,

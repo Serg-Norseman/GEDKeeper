@@ -293,8 +293,6 @@ bin/gedkeeper
 %%DATADIR%%/locales/readme_eng.html
 %%DATADIR%%/locales/readme_rus.html
 %%DATADIR%%/locales/russian.lng
-%%DATADIR%%/locales/special/GKFlowInputPlugin_manual_ru.docx
-%%DATADIR%%/locales/special/GKPedigreeImporterPlugin_manual_ru.docx
 %%DATADIR%%/locales/ukrainian.lng
 %%DATADIR%%/nVLC.dll
 %%DATADIR%%/plugins/BSLib.DataViz.Model.dll
@@ -322,12 +320,6 @@ bin/gedkeeper
 %%DATADIR%%/plugins/GKChroniclePlugin.ukr
 %%DATADIR%%/plugins/GKComponents.dll
 %%DATADIR%%/plugins/GKCore.dll
-%%DATADIR%%/plugins/GKFlowInputPlugin.dll
-%%DATADIR%%/plugins/GKFlowInputPlugin.enu
-%%DATADIR%%/plugins/GKFlowInputPlugin.pdb
-%%DATADIR%%/plugins/GKFlowInputPlugin.pol
-%%DATADIR%%/plugins/GKFlowInputPlugin.rus
-%%DATADIR%%/plugins/GKFlowInputPlugin.ukr
 %%DATADIR%%/plugins/GKLifePlugin.dll
 %%DATADIR%%/plugins/GKLifePlugin.enu
 %%DATADIR%%/plugins/GKLifePlugin.pdb
@@ -345,12 +337,6 @@ bin/gedkeeper
 %%DATADIR%%/plugins/GKNavigatorPlugin.pdb
 %%DATADIR%%/plugins/GKNavigatorPlugin.rus
 %%DATADIR%%/plugins/GKNavigatorPlugin.ukr
-%%DATADIR%%/plugins/GKPedigreeImporterPlugin.dll
-%%DATADIR%%/plugins/GKPedigreeImporterPlugin.enu
-%%DATADIR%%/plugins/GKPedigreeImporterPlugin.pdb
-%%DATADIR%%/plugins/GKPedigreeImporterPlugin.pol
-%%DATADIR%%/plugins/GKPedigreeImporterPlugin.rus
-%%DATADIR%%/plugins/GKPedigreeImporterPlugin.ukr
 %%DATADIR%%/plugins/GKStdReports.deu
 %%DATADIR%%/plugins/GKStdReports.dll
 %%DATADIR%%/plugins/GKStdReports.enu

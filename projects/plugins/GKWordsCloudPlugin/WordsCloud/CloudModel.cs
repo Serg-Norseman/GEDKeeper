@@ -26,6 +26,7 @@ namespace GKWordsCloudPlugin.WordsCloud
     {
         private ExtPointF fCenter;
         private QuadTree<Word> fQuadTree;
+        private ICloudRenderer fRenderer;
         private ExtRectF fSurface;
         private List<Word> fWords;
 
@@ -39,8 +40,10 @@ namespace GKWordsCloudPlugin.WordsCloud
         public int MinWordWeight { get { return fMinWordWeight; } }
 
 
-        public CloudModel()
+        public CloudModel(ICloudRenderer renderer)
         {
+            fRenderer = renderer;
+
             fMaxFontSize = 40;
             fMinFontSize = 6;
 
@@ -54,12 +57,12 @@ namespace GKWordsCloudPlugin.WordsCloud
             return fontSize;
         }
 
-        public void Render(ICloudRenderer renderer, ExtRectF area)
+        public void Render(ExtRectF area)
         {
             var wordsToRedraw = GetWordsInArea(area);
             foreach (Word word in wordsToRedraw) {
                 if (word.IsExposed) {
-                    renderer.Draw(word, (ItemUnderMouse == word));
+                    fRenderer.Draw(word, (ItemUnderMouse == word));
                 }
             }
         }
@@ -72,7 +75,7 @@ namespace GKWordsCloudPlugin.WordsCloud
             fWords = words;
         }
 
-        public void Arrange(ICloudRenderer renderer, float sizeWidth, float sizeHeight)
+        public void Arrange(float sizeWidth, float sizeHeight)
         {
             if (fWords == null) return;
 
@@ -87,7 +90,7 @@ namespace GKWordsCloudPlugin.WordsCloud
             }
 
             foreach (Word word in fWords) {
-                var size = renderer.Measure(word.Text, word.Occurrences);
+                var size = fRenderer.Measure(word.Text, word.Occurrences);
 
                 if (TryFindFreeRectangle(size, out ExtRectF freeRectangle)) {
                     word.Rectangle = freeRectangle;

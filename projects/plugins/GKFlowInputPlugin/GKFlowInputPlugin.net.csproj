@@ -8,6 +8,7 @@
         <OutputPath>..\..\..\plugins\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
         <Configurations>Debug;Release</Configurations>
         <Platforms>MSWin64;Linux;MacOS;FreeBSD</Platforms>
@@ -30,6 +31,7 @@
     <ItemGroup>
         <PackageReference Include="Eto.Forms" Version="2.9.0" />
         <PackageReference Include="Eto.Serialization.Xaml" Version="2.9.0" />
+        <PackageReference Include="NPOI" Version="2.7.2" />
     </ItemGroup>
 
     <Import Project="GKFlowInputPlugin.props" />
@@ -38,6 +40,10 @@
         <Compile Include="GKFlowInputPlugin.cs" />
         <Compile Include="FlowInputDlg.net.cs" />
         <EmbeddedResource Include="FlowInputDlg.xeto" />
+
+        <Compile Include="GKPedigreeImporterPlugin.cs" />
+        <Compile Include="PedigreeImporterDlg.net.cs" />
+        <EmbeddedResource Include="PedigreeImporterDlg.xeto" />
     </ItemGroup>
 
 </Project>

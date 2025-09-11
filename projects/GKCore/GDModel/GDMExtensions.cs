@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2022 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Runtime.CompilerServices;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -28,6 +29,12 @@ namespace GDModel
     /// </summary>
     public static class GDMExtensions
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsEmpty<T>(this GDMList<T> source) where T : GDMTag
+        {
+            return source == null || source.Count == 0;
+        }
+
         public static GDMNotes AddNote(this IGDMStructWithNotes _struct, GDMNoteRecord noteRec)
         {
             GDMNotes note = null;

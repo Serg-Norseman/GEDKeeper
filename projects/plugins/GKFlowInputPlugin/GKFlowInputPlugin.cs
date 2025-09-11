@@ -27,7 +27,7 @@ using GKCore.Locales;
 using GKCore.Plugins;
 
 [assembly: AssemblyTitle("GKFlowInputPlugin")]
-[assembly: AssemblyDescription("GEDKeeper FlowInput plugin")]
+[assembly: AssemblyDescription("GEDKeeper FlowInput and PedigreeImporter plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
 [assembly: AssemblyCopyright("Copyright © 2014-2023 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.0.0.0")]

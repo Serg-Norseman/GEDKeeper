@@ -343,24 +343,6 @@ namespace GKCore.Utilities
             return source == null ? string.Empty : Regex.Replace(source, "<.*?>", string.Empty);
         }
 
-        public static void Shuffle<T>(this T[] array)
-        {
-            var rng = new Random();
-
-            int n = array.Length;
-            while (n > 1) {
-                int k = rng.Next(n--);
-                T temp = array[n];
-                array[n] = array[k];
-                array[k] = temp;
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
-        public static void DoNotInline(object obj)
-        {
-        }
-
         /// <summary>
         /// Returns a new string in which all occurrences of a specified string in the current instance are replaced with another 
         /// specified string according the type of search to use for the specified string.
@@ -837,16 +819,6 @@ namespace GKCore.Utilities
             return differences;
         }
 
-        public static void RemoveDuplicates<T>(this List<T> list, IComparer<T> comparer)
-        {
-            list.Sort();
-            int numUnique = 0;
-            for (int i = 0; i < list.Count; i++)
-                if ((i == 0) || (comparer.Compare(list[numUnique - 1], list[i]) != 0))
-                    list[numUnique++] = list[i];
-            list.RemoveRange(numUnique, list.Count - numUnique);
-        }
-
         #region UTF-8 strings
 
         public static bool IsDamagedUtf8Sequence(byte b, bool isFirstByte)
@@ -873,6 +845,32 @@ namespace GKCore.Utilities
 
         #endregion
 
+        #region Runtime
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsEmpty<T>(this T[] array)
+        {
+            return (array == null || array.Length == 0);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsEmpty<T>(this IList<T> source)
+        {
+            return (source == null || source.Count == 0);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsEmpty(this Array source)
+        {
+            return (source == null || source.Length == 0);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsNull<T>(this T obj) where T : class
+        {
+            return (obj == null);
+        }
+
         /// <summary>
         /// Converts the given <see cref="bool"/> value into a <see cref="byte"/>.
         /// </summary>
@@ -896,6 +894,38 @@ namespace GKCore.Utilities
         {
             return (start1 <= end2 && start2 <= end1);
         }
+
+        public static void Shuffle<T>(this T[] array)
+        {
+            var rng = new Random();
+
+            int n = array.Length;
+            while (n > 1) {
+                int k = rng.Next(n--);
+                T temp = array[n];
+                array[n] = array[k];
+                array[k] = temp;
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
+        public static void DoNotInline(object obj)
+        {
+        }
+
+        public static void RemoveDuplicates<T>(this List<T> list, IComparer<T> comparer)
+        {
+            list.Sort();
+            int numUnique = 0;
+            for (int i = 0; i < list.Count; i++)
+                if ((i == 0) || (comparer.Compare(list[numUnique - 1], list[i]) != 0))
+                    list[numUnique++] = list[i];
+            list.RemoveRange(numUnique, list.Count - numUnique);
+        }
+
+        #endregion
+
+        #region System Information
 
         public static void LogSystemInfo()
         {
@@ -978,5 +1008,7 @@ namespace GKCore.Utilities
                 Logger.WriteError("SysUtils.LogSystemInfo()", ex);
             }
         }
+
+        #endregion
     }
 }

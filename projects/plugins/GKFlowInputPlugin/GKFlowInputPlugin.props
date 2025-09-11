@@ -3,23 +3,12 @@
 
     <ItemGroup>
         <Compile Include="FlowInput.cs" />
+        <Compile Include="Importer.cs" />
 
-        <None Include="GKFlowInputPlugin.cze">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Include="GKFlowInputPlugin.dut">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Include="GKFlowInputPlugin.enu">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Include="GKFlowInputPlugin.pol">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Include="GKFlowInputPlugin.rus">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Include="GKFlowInputPlugin.ukr">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
