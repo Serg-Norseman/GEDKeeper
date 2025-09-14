@@ -5,7 +5,7 @@
   Size="1020, 760" ShowInTaskbar="true" KeyDown="CircleChartWin_KeyDown">
 
   <Form.ToolBar>
-    <ToolBar TextAlign="Right" Style="tbsi">
+    <complat:GKToolBar TextAlign="Right" Style="tbsi">
       <ButtonToolItem x:Name="tbImageSave" Image="{Resource Resources.btn_save_image.gif, GKCore}" Click="tbImageSave_Click" />
       <SeparatorToolItem />
       <ButtonToolItem x:Name="tbPrev" Image="{Resource Resources.btn_left.gif, GKCore}" Enabled="False" Click="ToolBar1_ButtonClick" />
@@ -16,13 +16,13 @@
       <SeparatorToolItem />
       <complat:GKDropDownToolItem x:Name="tbModes">
         <complat:GKDropDownToolItem.ContextMenu>
-          <ContextMenu x:Name="MenuModes">
+          <complat:GKContextMenu x:Name="MenuModes">
             <CheckMenuItem x:Name="miFanMode" Click="miFanMode_Click" />
-          </ContextMenu>
+          </complat:GKContextMenu>
         </complat:GKDropDownToolItem.ContextMenu>
       </complat:GKDropDownToolItem>
       <ButtonToolItem x:Name="tbOptions" Image="{Resource Resources.btn_tools.gif, GKCore}" Click="tbOptions_Click" />
-    </ToolBar>
+    </complat:GKToolBar>
   </Form.ToolBar>
 
 </Form>

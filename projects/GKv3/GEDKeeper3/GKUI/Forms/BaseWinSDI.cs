@@ -248,12 +248,14 @@ namespace GKUI.Forms
             miContRecordDelete = new ButtonMenuItem(miRecordDelete_Click);
             miContRecordDuplicate = new ButtonMenuItem(miRecordDuplicate_Click);
             miContRecordMerge = new ButtonMenuItem(miRecordMerge_Click);
-            contextMenu = new ContextMenu();
+
+            contextMenu = new GKContextMenu();
             contextMenu.Items.AddRange(new MenuItem[] { miContRecordAdd, miContRecordEdit, miContRecordDelete, miContRecordDuplicate, miContRecordMerge, miContMediaMoveFile });
             contextMenu.Opening += contextMenu_Opening;
 
             miCopyContent = new ButtonMenuItem(miCopyContent_Click);
-            summaryMenu = new ContextMenu();
+
+            summaryMenu = new GKContextMenu();
             summaryMenu.Items.AddRange(new MenuItem[] { miCopyContent });
         }
 
@@ -282,7 +284,10 @@ namespace GKUI.Forms
             spl.RelativePosition = 300;
             spl.Orientation = Orientation.Horizontal;
             spl.FixedPanel = SplitterFixedPanel.Panel2;
+            spl.Panel1MinimumSize = 200;
+            spl.Panel2MinimumSize = 300;
             spl.PositionChanged += Spl_PositionChanged;
+            // fix == SplitterFixedPanel.None ? (1 / X) : 50;
 
             var tabPage = new TabPage();
             tabPage.ID = "tab" + strRecType;

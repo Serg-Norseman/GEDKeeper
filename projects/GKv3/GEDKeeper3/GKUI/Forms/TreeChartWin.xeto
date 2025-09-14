@@ -5,28 +5,25 @@
   Size="1020, 760" ShowInTaskbar="true" KeyDown="TreeChartWin_KeyDown">
 
   <Form.ToolBar>
-    <ToolBar TextAlign="Right" Style="tbsi">
+    <complat:GKToolBar TextAlign="Right" Style="tbsi">
       <ButtonToolItem x:Name="tbImageSave" Image="{Resource Resources.btn_save_image.gif, GKCore}" Click="tbImageSave_Click" />
       <SeparatorToolItem />
 
       <complat:GKDropDownToolItem x:Name="tbGensCommon">
         <complat:GKDropDownToolItem.ContextMenu>
-          <ContextMenu x:Name="MenuGensCommon">
-          </ContextMenu>
+          <complat:GKContextMenu x:Name="MenuGensCommon" />
         </complat:GKDropDownToolItem.ContextMenu>
       </complat:GKDropDownToolItem>
 
       <complat:GKDropDownToolItem x:Name="tbGensAncestors">
         <complat:GKDropDownToolItem.ContextMenu>
-          <ContextMenu x:Name="MenuGensAncestors">
-          </ContextMenu>
+          <complat:GKContextMenu x:Name="MenuGensAncestors" />
         </complat:GKDropDownToolItem.ContextMenu>
       </complat:GKDropDownToolItem>
 
       <complat:GKDropDownToolItem x:Name="tbGensDescendants">
         <complat:GKDropDownToolItem.ContextMenu>
-          <ContextMenu x:Name="MenuGensDescendants">
-          </ContextMenu>
+          <complat:GKContextMenu x:Name="MenuGensDescendants" />
         </complat:GKDropDownToolItem.ContextMenu>
       </complat:GKDropDownToolItem>
 
@@ -34,8 +31,7 @@
 
       <complat:GKDropDownToolItem x:Name="tbModes">
         <complat:GKDropDownToolItem.ContextMenu>
-          <ContextMenu x:Name="MenuModes">
-          </ContextMenu>
+          <complat:GKContextMenu x:Name="MenuModes" />
         </complat:GKDropDownToolItem.ContextMenu>
       </complat:GKDropDownToolItem>
 
@@ -52,11 +48,10 @@
 
       <complat:GKDropDownToolItem x:Name="tbBorders">
         <complat:GKDropDownToolItem.ContextMenu>
-          <ContextMenu x:Name="MenuBorders">
-          </ContextMenu>
+          <complat:GKContextMenu x:Name="MenuBorders" />
         </complat:GKDropDownToolItem.ContextMenu>
       </complat:GKDropDownToolItem>
-    </ToolBar>
+    </complat:GKToolBar>
   </Form.ToolBar>
 
 </Form>

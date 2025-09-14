@@ -35,6 +35,7 @@ namespace GKUI.Components
     public class GKDateControl : Panel, IDateControl, ILocalizable
     {
         private GDMDateType fFixedDateType;
+        private Font fFont;
 
 
         public GDMCustomDate Date
@@ -49,6 +50,20 @@ namespace GKUI.Components
         {
             get { return fFixedDateType; }
             set { fFixedDateType = value; }
+        }
+
+        public Font Font
+        {
+            get { return fFont; }
+            set {
+                fFont = value;
+                txtDate1.Font = value;
+                txtDate2.Font = value;
+                cmbDate1Calendar.Font = value;
+                cmbDate2Calendar.Font = value;
+                chkBC1.Font = value;
+                chkBC2.Font = value;
+            }
         }
 
 

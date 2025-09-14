@@ -23,6 +23,7 @@
 #endif
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using BSLib;
 using GKCore.Charts;
@@ -79,17 +80,20 @@ namespace GKCore.Export
             return new FakeBrush(color);
         }
 
+        private const string DefFont = "FreeSans.ttf";
+
         public static BaseFont GetResourceFont()
         {
-            //fBaseFont = BaseFont.CreateFont(GKUtils.GetLangsPath() + "fonts/FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-
-            Stream fontStream = typeof(PDFRenderer).Assembly.GetManifestResourceStream("Resources.fonts.FreeSans.ttf");
+            string fontFile = DefFont;
+            Stream fontStream = typeof(PDFRenderer).Assembly.GetManifestResourceStream($"Resources.fonts.{fontFile}");
             var fontBytes = FileHelper.ReadByteArray(fontStream);
-            var baseFont = BaseFont.CreateFont("FreeSans.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, BaseFont.CACHED, fontBytes, null);
+            var baseFont = BaseFont.CreateFont(fontFile, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, BaseFont.CACHED, fontBytes, null);
             return baseFont;
         }
 
         #region Private methods
+
+        private static Dictionary<string, BaseFont> fFontsCache = new Dictionary<string, BaseFont>();
 
         private static BaseFont GetBaseFont(IFont font)
         {
@@ -97,18 +101,27 @@ namespace GKCore.Export
                 return ((PDFWriter.FontHandler)font).BaseFont;
             }
 
+            BaseFont result;
+            if (fFontsCache.TryGetValue(font.FontFamilyName, out result)) {
+                return result;
+            }
+
 #if OS_MSWIN
             try {
                 string name = Environment.ExpandEnvironmentVariables(@"%systemroot%\fonts\" + font.FontFamilyName + ".ttf");
                 BaseFont baseFont = BaseFont.CreateFont(name, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                return baseFont;
+                result = baseFont;
             } catch (Exception ex) {
                 Logger.WriteError("PDFRenderer.GetBaseFont()", ex);
-                return GetResourceFont();
+                result = GetResourceFont();
             }
 #else
-            return GetResourceFont();
+            result = GetResourceFont();
 #endif
+
+            fFontsCache.Add(font.FontFamilyName, result);
+
+            return result;
         }
 
         private void SetPen(IPen pen)

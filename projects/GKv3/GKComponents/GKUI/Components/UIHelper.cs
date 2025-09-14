@@ -21,6 +21,7 @@
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
@@ -427,6 +428,14 @@ namespace GKUI.Components
             button.Image = ((ImageHandler)themeImage).Handle;
         }
 
+        public static void FixControlBackground(Control control)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+                control.BackgroundColor = SystemColors.WindowBackground;
+            } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                control.BackgroundColor = SystemColors.Control;
+            }
+        }
 
         /*private static void IndexMenuInt(ISubmenu menu, ControlsManager controlsManager)
         {

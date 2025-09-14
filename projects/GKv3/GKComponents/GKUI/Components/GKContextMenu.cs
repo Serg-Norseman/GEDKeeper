@@ -24,8 +24,8 @@ using Eto.Forms;
 
 namespace GKUI.Platform
 {
-    [Handler(typeof(GKTabControl.IHandler))]
-    public class GKTabControl : TabControl
+    [Handler(typeof(GKContextMenu.IHandler))]
+    public class GKContextMenu : ContextMenu
     {
         public Font Font
         {
@@ -33,13 +33,13 @@ namespace GKUI.Platform
             set { Handler.Font = value; }
         }
 
-        public GKTabControl()
+        public GKContextMenu()
         {
         }
 
         new IHandler Handler { get { return (IHandler)base.Handler; } }
 
-        public new interface IHandler : TabControl.IHandler
+        public new interface IHandler : ContextMenu.IHandler
         {
             Font Font { get; set; }
         }

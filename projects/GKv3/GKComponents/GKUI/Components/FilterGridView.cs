@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Collections.ObjectModel;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
@@ -113,6 +112,8 @@ namespace GKUI.Components
             }
         }
 
+        public Font Font { get; set; }
+
         public Color TextColor { get; set; }
 
 
@@ -198,6 +199,7 @@ namespace GKUI.Components
         {
             fGridView.BackgroundColor = this.BackgroundColor;
             fGridView.TextColor = this.TextColor;
+            fGridView.Font = this.Font;
 
             UIHelper.SetButtonThemeImage(fBtnDelete, ThemeElement.Glyph_ItemDelete);
             UIHelper.SetButtonThemeImage(fBtnAdd, ThemeElement.Glyph_ItemAdd);

@@ -24,11 +24,13 @@ using GKCore;
 
 namespace GKUI.Components
 {
-    public class GKGridView : GridView
+    public class GKGridView : GridView, IContextMenuHost
     {
         protected static readonly bool HasGridCellFormat = AppHost.Instance.HasFeatureSupport(Feature.GridCellFormat);
 
         public Color TextColor { get; set; }
+
+        public Font Font { get; set; }
 
         public GKGridView()
         {
@@ -54,6 +56,7 @@ namespace GKUI.Components
                 e.ForegroundColor = this.TextColor;
             }*/
 
+            if (Font != null) e.Font = Font;
             e.ForegroundColor = this.TextColor;
         }
     }

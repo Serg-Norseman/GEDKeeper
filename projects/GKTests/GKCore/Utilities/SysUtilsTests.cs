@@ -21,6 +21,7 @@
 using System;
 using System.Reflection;
 using System.Text;
+using BSLib;
 using GKCore.Locales;
 using NUnit.Framework;
 
@@ -87,10 +88,10 @@ namespace GKCore.Utilities
         [Test]
         public void Test_HasRangeIntersection()
         {
-            Assert.IsTrue(SysUtils.HasRangeIntersection(1, 10, 5, 15));
-            Assert.IsTrue(SysUtils.HasRangeIntersection(1, 5, 1, 5));
-            Assert.IsFalse(SysUtils.HasRangeIntersection(1, 5, 6, 10));
-            Assert.IsTrue(SysUtils.HasRangeIntersection(1, 5, 5, 10));
+            Assert.IsTrue(MathHelper.HasRangeIntersection(1, 10, 5, 15));
+            Assert.IsTrue(MathHelper.HasRangeIntersection(1, 5, 1, 5));
+            Assert.IsFalse(MathHelper.HasRangeIntersection(1, 5, 6, 10));
+            Assert.IsTrue(MathHelper.HasRangeIntersection(1, 5, 5, 10));
         }
 
         [Test]

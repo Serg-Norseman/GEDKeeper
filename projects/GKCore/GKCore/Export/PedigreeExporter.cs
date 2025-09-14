@@ -572,7 +572,7 @@ namespace GKCore.Export
             fPersonFont = fWriter.CreateFont("", 14f, true, false, clrBlack);
             fLinkFont = fWriter.CreateFont("", 10f, false, true, clrBlue);
             fTextFont = fWriter.CreateFont("", 10f, false, false, clrBlack);
-            fSupText = fWriter.CreateFont("", (isRtf ? 12f : 5f), false, false, clrBlue);
+            fSupText = fWriter.CreateFont("", (isRtf ? 12f : 6f), false, false, clrBlue);
             var chapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
 
             fFormat = fOptions.PedigreeOptions.Format;

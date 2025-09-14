@@ -38,7 +38,7 @@ namespace GKUI.Components
     /// <summary>
     ///
     /// </summary>
-    public class HyperView : ScrollablePanel, IHyperView
+    public class HyperView : ScrollablePanel, IHyperView, IContextMenuHost
     {
         private readonly List<BBTextChunk> fChunks;
         private readonly List<int> fHeights;
@@ -89,13 +89,9 @@ namespace GKUI.Components
 
         public HyperView()
         {
-            CenteredImage = false;
+            UIHelper.FixControlBackground(this);
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
-                BackgroundColor = SystemColors.WindowBackground;
-            } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
-                BackgroundColor = SystemColors.Control;
-            }
+            CenteredImage = false;
 
             fAcceptFontChange = true;
             fChunks = new List<BBTextChunk>();

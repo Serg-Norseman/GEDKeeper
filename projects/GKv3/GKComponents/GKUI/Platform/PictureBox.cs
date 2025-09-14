@@ -21,6 +21,7 @@
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
+using GKUI.Components;
 
 namespace GKUI.Platform
 {
@@ -52,6 +53,7 @@ namespace GKUI.Platform
 
         public PictureBox()
         {
+            UIHelper.FixControlBackground(this);
         }
 
         protected override void Dispose(bool disposing)

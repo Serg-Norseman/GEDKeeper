@@ -299,7 +299,7 @@ namespace GKUI.Forms
             miMaps = new ButtonMenuItem();
             miMaps.Items.AddRange(new MenuItem[] { miMapAncestors, miMapDescendants, miMapAll });
 
-            MenuPerson = new ContextMenu();
+            MenuPerson = new GKContextMenu();
             MenuPerson.Items.AddRange(new MenuItem[] {
                                           miEdit,
                                           new SeparatorMenuItem(),

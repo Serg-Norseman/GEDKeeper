@@ -80,6 +80,20 @@ namespace GKUI.Platform
             });
         }
 
+        public static void InitPlatformHandlers(Application application)
+        {
+            application.Platform.Add<GKToolBar.IHandler>(() => new GKToolBarHandler());
+            application.Platform.Add<GKContextMenu.IHandler>(() => new GKContextMenuHandler());
+            application.Platform.Add<GKMenuBar.IHandler>(() => new GKMenuBarHandler());
+            application.Platform.Add<GKTabControl.IHandler>(() => new GKTabControlHandler());
+            application.Platform.Add<GKButtonToolItem.IHandler>(() => new GKButtonToolItemHandler());
+            application.Platform.Add<GKDropDownToolItem.IHandler>(() => new GKDropDownToolItemHandler());
+
+#if !DIS_VLC
+            application.Platform.Add<NativeHostControl.IHandler>(() => new NativeHostControlHandler());
+#endif
+        }
+
         public static void InitPlatformStyles()
         {
 #if OS_LINUX

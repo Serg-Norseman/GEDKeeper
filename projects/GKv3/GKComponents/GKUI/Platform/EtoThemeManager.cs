@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
@@ -47,7 +48,7 @@ namespace GKUI.Themes
                 { ThemeElement.None, "" },
 
                 { ThemeElement.Font, "Tahoma" },
-                { ThemeElement.FontSize, 8.25f },
+                { ThemeElement.FontSize, 9.0f },
 
                 { ThemeElement.Editor, SystemColors.ControlBackground },
                 { ThemeElement.EditorText, SystemColors.ControlText },
@@ -171,30 +172,45 @@ namespace GKUI.Themes
             }, true);
         }
 
-        //private static Font fCachedFont = null;
+        private static Font fCachedFont = null;
+
+        public override bool SetTheme(string name)
+        {
+            var result = base.SetTheme(name);
+
+            if (result) {
+                GKData.HighlightReadabilityRows = GetThemeColor(fCurrentTheme, ThemeElement.HighlightReadabilityRows).ToArgb();
+                GKData.HighlightUnparentedColor = GetThemeColor(fCurrentTheme, ThemeElement.HighlightUnparentedIndi).ToArgb();
+                GKData.HighlightUnmarriedColor = GetThemeColor(fCurrentTheme, ThemeElement.HighlightUnmarriedIndi).ToArgb();
+                GKData.HighlightInaccessibleFiles = GetThemeColor(fCurrentTheme, ThemeElement.HighlightInaccessibleFiles).ToArgb();
+
+                if (fCachedFont != null) {
+                    fCachedFont.Dispose();
+                    fCachedFont = null;
+                }
+
+                var themeFont = GetThemeStr(fCurrentTheme, ThemeElement.Font);
+                // FIXME: OS specifics
+                if (Application.Instance.Platform.IsGtk) {
+                    themeFont = "Sans";
+                }
+
+                var themeFontSize = GetThemeFloat(fCurrentTheme, ThemeElement.FontSize);
+                fCachedFont = new Font(themeFont, themeFontSize);
+            }
+
+            return result;
+        }
 
         public override void ApplyTheme(IThemedView view)
         {
             if (view == null || fCurrentTheme == null) return;
 
-            GKData.HighlightReadabilityRows = GetThemeColor(fCurrentTheme, ThemeElement.HighlightReadabilityRows).ToArgb();
-            GKData.HighlightUnparentedColor = GetThemeColor(fCurrentTheme, ThemeElement.HighlightUnparentedIndi).ToArgb();
-            GKData.HighlightUnmarriedColor = GetThemeColor(fCurrentTheme, ThemeElement.HighlightUnmarriedIndi).ToArgb();
-            GKData.HighlightInaccessibleFiles = GetThemeColor(fCurrentTheme, ThemeElement.HighlightInaccessibleFiles).ToArgb();
-
             var form = view as Window;
             if (form != null) {
-                /*var themeFont = GetThemeStr(fCurrentTheme, ThemeElement.Font);
-                var themeFontSize = GetThemeFloat(fCurrentTheme, ThemeElement.FontSize);
-                fCachedFont = new Font(themeFont, themeFontSize);*/
-
                 form.SuspendLayout();
-
                 ApplyTheme(view, form, fCurrentTheme);
-
                 form.ResumeLayout();
-
-                /*fCachedFont = null;*/
             }
         }
 
@@ -206,8 +222,8 @@ namespace GKUI.Themes
         protected override object PreProcessElement(object telVal, ThemeElementType telType)
         {
             if (telType == ThemeElementType.Color) {
-                if (telVal is int) {
-                    telVal = Color.FromArgb((int)telVal);
+                if (telVal is int intVal) {
+                    telVal = Color.FromArgb(intVal);
                 }
                 return telVal;
             } else {
@@ -231,12 +247,6 @@ namespace GKUI.Themes
                 }
             }
 
-            /*
-            // Grid and TabControl have no font
-            if (component is CommonControl comCtl && fCachedFont != null) {
-                comCtl.Font = fCachedFont;
-            }*/
-
             if (!(component is IThemedForm) && component is IThemedView themedView) {
                 themedView.ApplyTheme();
             }
@@ -245,15 +255,34 @@ namespace GKUI.Themes
         private static Color GetThemeColor(Theme theme, ThemeElement element)
         {
             object elemValue;
-            if (theme != null && theme.Elements.TryGetValue(element, out elemValue) && elemValue is Color) {
-                return (Color)elemValue;
+            if (theme != null && theme.Elements.TryGetValue(element, out elemValue) && elemValue is Color clrValue) {
+                return clrValue;
             }
             return Colors.Black;
+        }
+
+        private static void ThemeFormHandler(IThemedView view, IDisposable component, Theme theme)
+        {
+            var ctl = (Window)component;
+            if (ctl is Dialog) {
+                // dialog
+                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Dialog);
+            } else {
+                // window
+                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Window);
+            }
+
+            if (ctl.Menu != null)
+                ThemeMenuBarHandler(view, ctl.Menu, theme);
+
+            if (ctl.ToolBar != null)
+                ThemeToolBarHandler(view, ctl.ToolBar, theme);
         }
 
         private static void ThemeButtonHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (Button)component;
+            if (fCachedFont != null) ctl.Font = fCachedFont;
             ctl.TextColor = GetThemeColor(theme, ThemeElement.ButtonText);
 
             var dialog = ctl.ParentWindow as Dialog;
@@ -271,6 +300,7 @@ namespace GKUI.Themes
         private static void ThemeCheckBoxHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (CheckBox)component;
+            if (fCachedFont != null) ctl.Font = fCachedFont;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
@@ -278,79 +308,79 @@ namespace GKUI.Themes
         private static void ThemeComboBoxHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (ComboBox)component;
+            if (fCachedFont != null) ctl.Font = fCachedFont;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
         }
 
-        private static void ThemeDataGridViewHandler(IThemedView view, IDisposable component, Theme theme)
+        private static void ThemeGridViewHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (GridView)component;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
             //ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
+            //ctl.ColumnHeadersDefaultCellStyle.BackgroundColor = GetThemeColor(theme, ThemeElement.GridHeader);
+            //ctl.ColumnHeadersDefaultCellStyle.TextColor = GetThemeColor(theme, ThemeElement.GridHeaderText);
+
+            if (component is GKListView gkGrid) {
+                if (fCachedFont != null) gkGrid.Font = fCachedFont;
+                gkGrid.TextColor = GetThemeColor(theme, ThemeElement.GridText);
+            }
 
             // Fix for update rows formatting
             ctl.ReloadData(ctl.SelectedRows);
 
-            ThemeContextMenuStripHandler(view, component, theme);
+            ThemeContextMenuHostHandler(view, component, theme);
         }
 
         private static void ThemeFilterGridViewHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (FilterGridView)component;
+            if (fCachedFont != null) ctl.Font = fCachedFont;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
 
-            ThemeContextMenuStripHandler(view, component, theme);
+            ThemeContextMenuHostHandler(view, component, theme);
         }
 
-        private static void ThemeImageViewHandler(IThemedView view, IDisposable component, Theme theme)
+        private static void ThemeTreeViewHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            var ctl = (Components.ImageView)component;
-            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
-            //ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
-            //ctl.ColumnHeadersDefaultCellStyle.BackgroundColor = GetThemeColor(theme, ThemeElement.GridHeader);
-            //ctl.ColumnHeadersDefaultCellStyle.TextColor = GetThemeColor(theme, ThemeElement.GridHeaderText);
-            //ctl.EnableHeadersVisualStyles = (theme.SysDefault);
+            var ctl = (TreeView)component;
+            //if (fCachedFont != null) ctl.Font = fCachedFont;
+            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
 
-            ThemeContextMenuStripHandler(view, component, theme);
-        }
-
-        private static void ThemeFormHandler(IThemedView view, IDisposable component, Theme theme)
-        {
-            var ctl = (Window)component;
-            if (ctl is Dialog) {
-                // dialog
-                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Dialog);
-            } else {
-                // window
-                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Window);
-            }
+            ThemeContextMenuHostHandler(view, component, theme);
         }
 
         private static void ThemeGroupBoxHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            var ctl = (GroupBox)component;
-            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
+            try {
+                var ctl = (GroupBox)component;
+                if (fCachedFont != null) ctl.Font = fCachedFont;
+                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+                ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
+            } catch { }
         }
 
         private static void ThemeHyperViewHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (HyperView)component;
-            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            if (fCachedFont != null) ctl.Font = fCachedFont;
+            SpecOSControlBackground(ctl, theme);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
             ctl.LinkColor = GetThemeColor(theme, ThemeElement.Link);
 
-            ThemeContextMenuStripHandler(view, component, theme);
+            ThemeContextMenuHostHandler(view, component, theme);
         }
 
         private static void ThemeCustomChartHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (CustomChart)component;
+            if (fCachedFont != null) ctl.Font = fCachedFont;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
 
-            ThemeContextMenuStripHandler(view, component, theme);
+            ThemeContextMenuHostHandler(view, component, theme);
         }
 
         private static void GetParentDependentColors(Control control, Theme theme, out Color backgroundColor, out Color textColor)
@@ -375,6 +405,7 @@ namespace GKUI.Themes
         private static void ThemeLabelHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (Label)component;
+            if (fCachedFont != null) ctl.Font = fCachedFont;
 
             Color backgroundColor, textColor;
             GetParentDependentColors(ctl, theme, out backgroundColor, out textColor);
@@ -386,53 +417,23 @@ namespace GKUI.Themes
         private static void ThemeListBoxHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (ListBox)component;
+            if (fCachedFont != null) ctl.Font = fCachedFont;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
-        }
-
-        private static void ThemeListViewHandler(IThemedView view, IDisposable component, Theme theme)
-        {
-            var ctl = (GKListView)component;
-            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
-            ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
-
-            // Fix for update rows formatting
-            ctl.ReloadData(ctl.SelectedRows);
-
-            ThemeContextMenuStripHandler(view, component, theme);
         }
 
         private static void ThemeNumericStepperHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (NumericStepper)component;
+            if (fCachedFont != null) ctl.Font = fCachedFont;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
-        }
-
-        private static void ThemePanelHandler(IThemedView view, IDisposable component, Theme theme)
-        {
-            var ctl = (Control)component;
-            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
-
-            ThemeContextMenuStripHandler(view, component, theme);
-        }
-
-        private static void ThemePictureBoxHandler(IThemedView view, IDisposable component, Theme theme)
-        {
-            var ctl = (PictureBox)component;
-            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
-        }
-
-        private static void ThemeProgressBarHandler(IThemedView view, IDisposable component, Theme theme)
-        {
-            var ctl = (ProgressBar)component;
-            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
-            //ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
         private static void ThemeRadioButtonHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (RadioButton)component;
+            if (fCachedFont != null) ctl.Font = fCachedFont;
             ctl.BackgroundColor = ctl.Parent.BackgroundColor;
             ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
@@ -440,42 +441,43 @@ namespace GKUI.Themes
         private static void ThemeTextBoxHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (TextControl)component;
+            if (fCachedFont != null) ctl.Font = fCachedFont;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
 
-            ThemeContextMenuStripHandler(view, component, theme);
+            ThemeContextMenuHostHandler(view, component, theme);
         }
 
         private static void ThemeDateBoxHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (GKDateBox)component;
+            if (fCachedFont != null) ctl.Font = fCachedFont;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
             ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
 
-            ThemeContextMenuStripHandler(view, component, theme);
+            ThemeContextMenuHostHandler(view, component, theme);
         }
 
         private static void ThemeTabControlHandler(IThemedView view, IDisposable component, Theme theme)
         {
             // In Eto, TabControl's BackgroundColor - its color of border around of tabPage!
 
-            if (component is GKTabControl) {
+            if (component is GKTabControl gkTab) {
                 // extended
-                var ctl = (GKTabControl)component;
-                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+                if (fCachedFont != null) gkTab.Font = fCachedFont;
+                gkTab.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
                 //ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
 
-                /*if (theme.SysDefault) {
-                    ctl.Appearance.Reset();
-                } else {
+                /*
                     ctl.Appearance.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
                     ctl.Appearance.Tab = GetThemeColor(theme, ThemeElement.Tab);
                     ctl.Appearance.TabHighlight = GetThemeColor(theme, ThemeElement.TabHighlight);
                     ctl.Appearance.TabSelected = GetThemeColor(theme, ThemeElement.TabSelected);
-                }*/
+                */
             } else {
                 // standard
                 var ctl = (TabControl)component;
+                //if (fCachedFont != null) ctl.Font = fCachedFont;
                 ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
                 //ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
             }
@@ -486,73 +488,74 @@ namespace GKUI.Themes
             // In Eto, TabPage's BackgroundColor - its color of unselected Tabs!
 
             var ctl = (TabPage)component;
+            //if (fCachedFont != null) ctl.Font = fCachedFont;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.TabHighlight);
             //ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
         }
 
-        private static void ThemeContextMenuStripHandler(IThemedView view, IDisposable component, Theme theme)
+        private static void ThemeContextMenuHostHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            var ctl = component as IContextMenuHost;
-            if (ctl != null && ctl.ContextMenu != null) {
-                ThemeToolStripHandler(view, ctl.ContextMenu, theme);
+            if (component is IContextMenuHost ctl && ctl.ContextMenu != null)
+                ThemeContextMenuHandler(view, ctl.ContextMenu, theme);
+        }
+
+        private static void ThemeContextMenuHandler(IThemedView view, IDisposable component, Theme theme)
+        {
+            if (component is GKContextMenu gkMenu) {
+                if (fCachedFont != null) gkMenu.Font = fCachedFont;
             }
         }
 
-        private static void ThemeToolStripHandler(IThemedView view, IDisposable component, Theme theme)
+        private static void ThemeToolBarHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            /*var ctl = (ToolBar)component;
-            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Strip);
-            ctl.TextColor = GetThemeColor(theme, ThemeElement.ButtonText);
+            var ctl = (ToolBar)component;
 
-            ctl.Renderer = (theme.SysDefault) ? new ToolStripProfessionalRenderer() : new TSRenderer(theme);
+            if (component is GKToolBar gkToolBar) {
+                if (fCachedFont != null) gkToolBar.Font = fCachedFont;
+                //gkToolBar.BackgroundColor = GetThemeColor(theme, ThemeElement.Strip);
+                //gkToolBar.TextColor = GetThemeColor(theme, ThemeElement.ButtonText);
+            }
 
-            foreach (ToolStripItem item in ctl.Items) {
-                ApplyTheme(view, item, theme);
-            }*/
+            foreach (var item in ctl.Items) {
+                if (item is GKDropDownToolItem dropdownItem) {
+                    ThemeContextMenuHandler(view, dropdownItem.ContextMenu, theme);
+                }
+            }
         }
 
-        private static void ThemeToolStripItemHandler(IThemedView view, IDisposable component, Theme theme)
+        private static void ThemeMenuBarHandler(IThemedView view, IDisposable component, Theme theme)
+        {
+            if (component is GKMenuBar gkMenu) {
+                if (fCachedFont != null) gkMenu.Font = fCachedFont;
+                //gkMenu.BackgroundColor = GetThemeColor(theme, ThemeElement.Strip);
+                //gkMenu.TextColor = GetThemeColor(theme, ThemeElement.ButtonText);
+            }
+        }
+
+        private static void ThemeEmptyHandler(IThemedView view, IDisposable component, Theme theme)
         {
             /*var ctl = (MenuItemEx)component;
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Dropdown);
-            ctl.TextColor = GetThemeColor(theme, ThemeElement.ButtonText);
-
-            if (ctl is ToolStripDropDownItem) {
-                var dropdownItem = (ToolStripDropDownItem)ctl;
-                ThemeToolStripHandler(view, dropdownItem.DropDown, theme);
-            } else if (ctl is ToolStripSeparator) {
-                if (theme.SysDefault) {
-                } else {
-                }
-            } else if (ctl is ToolStripStatusLabel) {
-                var statusLabel = (ToolStripStatusLabel)ctl;
-                statusLabel.BorderStyle = (theme.SysDefault) ? Border3DStyle.Sunken : Border3DStyle.Adjust; // Flat
-            }*/
+            ctl.TextColor = GetThemeColor(theme, ThemeElement.ButtonText);*/
         }
 
-        private static void ThemeTreeViewHandler(IThemedView view, IDisposable component, Theme theme)
+        private static void SpecOSControlBackground(Control ctl, Theme theme)
         {
-            var ctl = (TreeView)component;
-            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
-            ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
-
-            ThemeContextMenuStripHandler(view, component, theme);
-        }
-
-        private static void ThemeUserControlHandler(IThemedView view, IDisposable component, Theme theme)
-        {
-            var ctl = (Panel)component;
-            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
-
-            ThemeContextMenuStripHandler(view, component, theme);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Window);
+            } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            }
         }
 
         private static void ThemeBaseControlHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (Control)component;
-            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Control);
+            //if (fCachedFont != null) ctl.Font = fCachedFont;
+            SpecOSControlBackground(ctl, theme);
+            //ctl.TextColor = GetThemeColor(theme, ThemeElement.ControlText);
 
-            ThemeContextMenuStripHandler(view, component, theme);
+            ThemeContextMenuHostHandler(view, component, theme);
         }
 
         private static void RegisterControlHandlers()
@@ -560,51 +563,48 @@ namespace GKUI.Themes
             RegisterControlHandler(typeof(Button), ThemeButtonHandler);
             RegisterControlHandler(typeof(CheckBox), ThemeCheckBoxHandler);
             RegisterControlHandler(typeof(ComboBox), ThemeComboBoxHandler);
-            RegisterControlHandler(typeof(ContextMenu), ThemeToolStripHandler);
-            RegisterControlHandler(typeof(GridView), ThemeDataGridViewHandler);
+            RegisterControlHandler(typeof(ContextMenu), ThemeContextMenuHandler);
+            RegisterControlHandler(typeof(GridView), ThemeGridViewHandler);
             RegisterControlHandler(typeof(Window), ThemeFormHandler);
             RegisterControlHandler(typeof(GroupBox), ThemeGroupBoxHandler);
             RegisterControlHandler(typeof(Label), ThemeLabelHandler);
             RegisterControlHandler(typeof(ListBox), ThemeListBoxHandler);
             RegisterControlHandler(typeof(MaskedTextBox), ThemeTextBoxHandler);
-            RegisterControlHandler(typeof(MenuBar), ThemeToolStripHandler);
+            RegisterControlHandler(typeof(MenuBar), ThemeMenuBarHandler);
             RegisterControlHandler(typeof(NumericStepper), ThemeNumericStepperHandler);
-            RegisterControlHandler(typeof(Panel), ThemePanelHandler);
-            RegisterControlHandler(typeof(PictureBox), ThemePictureBoxHandler);
-            RegisterControlHandler(typeof(ProgressBar), ThemeProgressBarHandler);
+            RegisterControlHandler(typeof(Panel), ThemeBaseControlHandler);
+            RegisterControlHandler(typeof(PictureBox), ThemeBaseControlHandler);
+            RegisterControlHandler(typeof(ProgressBar), ThemeBaseControlHandler);
             RegisterControlHandler(typeof(RadioButton), ThemeRadioButtonHandler);
             RegisterControlHandler(typeof(RichTextArea), ThemeTextBoxHandler);
             RegisterControlHandler(typeof(Splitter), ThemeBaseControlHandler);
-            RegisterControlHandler(typeof(TableLayout), ThemePanelHandler);
+            RegisterControlHandler(typeof(TableLayout), ThemeBaseControlHandler);
             RegisterControlHandler(typeof(TabControl), ThemeTabControlHandler);
             RegisterControlHandler(typeof(TabPage), ThemeTabPageHandler);
             RegisterControlHandler(typeof(TextBox), ThemeTextBoxHandler);
-            RegisterControlHandler(typeof(ToolBar), ThemeToolStripHandler);
-            //RegisterControlHandler(typeof(ToolStripButton), ThemeToolStripItemHandler);
-            //RegisterControlHandler(typeof(ToolStripComboBox), ThemeToolStripItemHandler);
-            //RegisterControlHandler(typeof(ToolStripDropDownButton), ThemeToolStripItemHandler);
-            //RegisterControlHandler(typeof(ToolStripMenuItem), ThemeToolStripItemHandler);
-            //RegisterControlHandler(typeof(ToolStripSeparator), ThemeToolStripItemHandler);
-            //RegisterControlHandler(typeof(ToolStripStatusLabel), ThemeToolStripItemHandler);
+            RegisterControlHandler(typeof(ToolBar), ThemeToolBarHandler);
             RegisterControlHandler(typeof(Slider), ThemeBaseControlHandler);
             RegisterControlHandler(typeof(TreeView), ThemeTreeViewHandler);
 
-            RegisterControlHandler(typeof(MenuItemEx), ThemeToolStripItemHandler);
-
-            RegisterControlHandler(typeof(ArborViewer), ThemeUserControlHandler);
+            RegisterControlHandler(typeof(MenuItemEx), ThemeEmptyHandler);
+            RegisterControlHandler(typeof(ArborViewer), ThemeBaseControlHandler);
             RegisterControlHandler(typeof(FilterGridView), ThemeFilterGridViewHandler);
             RegisterControlHandler(typeof(GKTabControl), ThemeTabControlHandler);
+            RegisterControlHandler(typeof(GKMenuBar), ThemeMenuBarHandler);
             RegisterControlHandler(typeof(GKComboBox), ThemeComboBoxHandler);
             RegisterControlHandler(typeof(GKDateBox), ThemeDateBoxHandler);
-            RegisterControlHandler(typeof(GKDateControl), ThemeUserControlHandler);
-            RegisterControlHandler(typeof(GKListView), ThemeListViewHandler);
-            RegisterControlHandler(typeof(GKPortrait), ThemeUserControlHandler);
+            RegisterControlHandler(typeof(GKDateControl), ThemeBaseControlHandler);
+            RegisterControlHandler(typeof(GKListView), ThemeGridViewHandler);
+            RegisterControlHandler(typeof(GKPortrait), ThemeBaseControlHandler);
             //RegisterControlHandler(typeof(GKTextBox), ThemeTextBoxHandler);
             RegisterControlHandler(typeof(HyperView), ThemeHyperViewHandler);
-            RegisterControlHandler(typeof(ImageBox), ThemePanelHandler);
-            RegisterControlHandler(typeof(Components.ImageView), ThemeImageViewHandler);
-            RegisterControlHandler(typeof(LogChart), ThemePanelHandler);
+            RegisterControlHandler(typeof(ImageBox), ThemeBaseControlHandler);
+            RegisterControlHandler(typeof(Components.ImageView), ThemeBaseControlHandler);
+            RegisterControlHandler(typeof(LogChart), ThemeBaseControlHandler);
+
             RegisterControlHandler(typeof(CustomChart), ThemeCustomChartHandler);
+            RegisterControlHandler(typeof(TreeChartBox), ThemeCustomChartHandler);
+            RegisterControlHandler(typeof(CircleChart), ThemeCustomChartHandler);
         }
 
         private static void RegisterControlHandler(Type controlType, ThemeControlHandler handler)

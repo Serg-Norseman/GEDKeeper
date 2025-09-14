@@ -203,8 +203,8 @@ namespace GKUI.Themes
         protected override object PreProcessElement(object telVal, ThemeElementType telType)
         {
             if (telType == ThemeElementType.Color) {
-                if (telVal is int) {
-                    telVal = Color.FromArgb((int)telVal);
+                if (telVal is int intVal) {
+                    telVal = Color.FromArgb(intVal);
                 }
                 return telVal;
             } else {
@@ -238,8 +238,8 @@ namespace GKUI.Themes
         private static Color GetThemeColor(Theme theme, ThemeElement element)
         {
             object elemValue;
-            if (theme != null && theme.Elements.TryGetValue(element, out elemValue) && elemValue is Color) {
-                return (Color)elemValue;
+            if (theme != null && theme.Elements.TryGetValue(element, out elemValue) && elemValue is Color clrValue) {
+                return clrValue;
             }
             return Color.Black;
         }
@@ -588,15 +588,6 @@ namespace GKUI.Themes
             ThemeContextMenuStripHandler(view, component, theme);
         }
 
-        private static void ThemeUserControlHandler(IThemedView view, Component component, Theme theme)
-        {
-            var ctl = (UserControl)component;
-            ctl.BackColor = GetThemeColor(theme, ThemeElement.Control);
-            ctl.ForeColor = GetThemeColor(theme, ThemeElement.ControlText);
-
-            ThemeContextMenuStripHandler(view, component, theme);
-        }
-
         private static void ThemeBaseControlHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (Control)component;
@@ -647,14 +638,14 @@ namespace GKUI.Themes
 
             RegisterControlHandler(typeof(MenuItemEx), ThemeToolStripItemHandler);
 
-            RegisterControlHandler(typeof(ArborViewer), ThemeUserControlHandler);
+            RegisterControlHandler(typeof(ArborViewer), ThemeBaseControlHandler);
             RegisterControlHandler(typeof(FilterGridView), ThemeFilterGridViewHandler);
             RegisterControlHandler(typeof(GKTabControl), ThemeTabControlHandler);
             RegisterControlHandler(typeof(GKComboBox), ThemeComboBoxHandler);
             RegisterControlHandler(typeof(GKDateBox), ThemeTextBoxHandler);
-            RegisterControlHandler(typeof(GKDateControl), ThemeUserControlHandler);
+            RegisterControlHandler(typeof(GKDateControl), ThemeBaseControlHandler);
             RegisterControlHandler(typeof(GKListView), ThemeListViewHandler);
-            RegisterControlHandler(typeof(GKPortrait), ThemeUserControlHandler);
+            RegisterControlHandler(typeof(GKPortrait), ThemeBaseControlHandler);
             RegisterControlHandler(typeof(GKTextBox), ThemeTextBoxHandler);
             RegisterControlHandler(typeof(HyperView), ThemeHyperViewHandler);
             RegisterControlHandler(typeof(ImageBox), ThemePanelHandler);

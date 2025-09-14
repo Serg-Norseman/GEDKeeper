@@ -48,6 +48,12 @@ namespace GKUI.Components
             }
         }
 
+        public Font Font
+        {
+            get { return txtMaskedDate.Font; }
+            set { txtMaskedDate.Font = value; }
+        }
+
         public bool CalcMode
         {
             get { return btnPopup.Visible; }

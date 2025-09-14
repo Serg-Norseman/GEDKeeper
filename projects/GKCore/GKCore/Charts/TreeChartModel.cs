@@ -1254,8 +1254,8 @@ namespace GKCore.Charts
             /*if (fVisibleArea.GetWidth() <= 0 || fVisibleArea.GetHeight() <= 0) {
                 return false;
             }*/
-            bool isLineVisible = SysUtils.HasRangeIntersection(fVisibleArea.Left, fVisibleArea.Right, x1, x2)
-                && SysUtils.HasRangeIntersection(fVisibleArea.Top, fVisibleArea.Bottom, y1, y2);
+            bool isLineVisible = MathHelper.HasRangeIntersection(fVisibleArea.Left, fVisibleArea.Right, x1, x2)
+                && MathHelper.HasRangeIntersection(fVisibleArea.Top, fVisibleArea.Bottom, y1, y2);
 
             if (!isLineVisible) return;
 

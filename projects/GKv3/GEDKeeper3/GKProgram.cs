@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -63,13 +63,7 @@ namespace GEDKeeper3
                           new Exception(eventArgs.ExceptionObject?.ToString());
                 Logger.WriteError(string.Format("Unhandled exception (IsTerminating={0}):", eventArgs.IsTerminating), ex);
             };
-
-            application.Platform.Add<GKButtonToolItem.IHandler>(() => new GKButtonToolItemHandler());
-            application.Platform.Add<GKDropDownToolItem.IHandler>(() => new GKDropDownToolItemHandler());
-
-#if !DIS_VLC
-            application.Platform.Add<NativeHostControl.IHandler>(() => new NativeHostControlHandler());
-#endif
+            EtoAppStyles.InitPlatformHandlers(application);
 
             using (var tracker = new SingleInstanceTracker(GKData.APP_TITLE, AppHost.GetSingleInstanceEnforcer)) {
                 if (tracker.IsFirstInstance) {

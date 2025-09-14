@@ -847,80 +847,9 @@ namespace GKCore.Utilities
 
         #region Runtime
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsEmpty<T>(this T[] array)
-        {
-            return (array == null || array.Length == 0);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsEmpty<T>(this IList<T> source)
-        {
-            return (source == null || source.Count == 0);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsEmpty(this Array source)
-        {
-            return (source == null || source.Length == 0);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNull<T>(this T obj) where T : class
-        {
-            return (obj == null);
-        }
-
-        /// <summary>
-        /// Converts the given <see cref="bool"/> value into a <see cref="byte"/>.
-        /// </summary>
-        /// <param name="value">The input value to convert.</param>
-        /// <returns>1 if <paramref name="flag"/> is <see langword="true"/>, 0 otherwise.</returns>
-        /// <remarks>This method does not contain branching instructions.</remarks>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe byte ToByte(bool value)
-        {
-            // Whenever we need to take the address of an argument, we make a local copy first.
-            // This will be removed by the JIT anyway, but it can help produce better codegen and
-            // remove unwanted stack spills if the caller is using constant arguments. This is
-            // because taking the address of an argument can interfere with some of the flow
-            // analysis executed by the JIT, which can in some cases block constant propagation.
-            bool copy = value;
-            return *(byte*)(&copy);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool HasRangeIntersection(int start1, int end1, int start2, int end2)
-        {
-            return (start1 <= end2 && start2 <= end1);
-        }
-
-        public static void Shuffle<T>(this T[] array)
-        {
-            var rng = new Random();
-
-            int n = array.Length;
-            while (n > 1) {
-                int k = rng.Next(n--);
-                T temp = array[n];
-                array[n] = array[k];
-                array[k] = temp;
-            }
-        }
-
         [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
         public static void DoNotInline(object obj)
         {
-        }
-
-        public static void RemoveDuplicates<T>(this List<T> list, IComparer<T> comparer)
-        {
-            list.Sort();
-            int numUnique = 0;
-            for (int i = 0; i < list.Count; i++)
-                if ((i == 0) || (comparer.Compare(list[numUnique - 1], list[i]) != 0))
-                    list[numUnique++] = list[i];
-            list.RemoveRange(numUnique, list.Count - numUnique);
         }
 
         #endregion
@@ -958,7 +887,7 @@ namespace GKCore.Utilities
                     using (var process = Process.Start(startInfo)) {
                         using (var reader = process.StandardOutput) {
                             string line = reader.ReadLine();
-                            if (int.TryParse(line.Trim(), out frequency)) {
+                            if (!string.IsNullOrEmpty(line) && int.TryParse(line.Trim(), out frequency)) {
                                 frequency = Math.Max(0, frequency);
                             }
                         }
@@ -990,7 +919,7 @@ namespace GKCore.Utilities
                     using (var process = Process.Start(startInfo)) {
                         using (var reader = process.StandardOutput) {
                             string line = reader.ReadLine();
-                            if (long.TryParse(line.Trim(), out totalMemory)) {
+                            if (!string.IsNullOrEmpty(line) && long.TryParse(line.Trim(), out totalMemory)) {
                                 totalMemory = Math.Max(0, totalMemory);
                             }
                         }

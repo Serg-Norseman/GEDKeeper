@@ -283,7 +283,7 @@ namespace GKUI.Themes
             fThemes.Add(name, new Theme(name, PreProcessElements(elements, sysDefault), sysDefault));
         }
 
-        public bool SetTheme(string name)
+        public virtual bool SetTheme(string name)
         {
             Theme theme;
             if (fThemes.TryGetValue(name, out theme)) {

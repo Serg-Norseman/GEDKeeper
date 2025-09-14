@@ -59,12 +59,6 @@
     <Compile Include="GKUI\Components\ACOptionsControl.Designer.cs">
       <DependentUpon>ACOptionsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Components\CircleChart.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GKUI\Components\TreeChartBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GKUI\Forms\AboutDlg.cs">
       <SubType>Form</SubType>
     </Compile>

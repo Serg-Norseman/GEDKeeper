@@ -7,14 +7,13 @@
   Icon="{Resource Resources.icon_gedkeeper.png, GKCore}" Size="1076, 662">
 
   <Form.ToolBar>
-    <ToolBar TextAlign="Right" Style="tbsi">
+    <complat:GKToolBar TextAlign="Right" Style="tbsi">
       <ButtonToolItem x:Name="tbFileNew" Image="{Resource Resources.btn_create_new.gif, GKCore}" Click="miFileNew_Click" />
       <ButtonToolItem x:Name="tbFileLoad" Image="{Resource Resources.btn_load.gif, GKCore}" Click="miFileLoad_Click" />
 
       <complat:GKDropDownToolItem x:Name="tbLoadMRU">
         <complat:GKDropDownToolItem.ContextMenu>
-          <ContextMenu x:Name="MenuMRU">
-          </ContextMenu>
+          <complat:GKContextMenu x:Name="MenuMRU" />
         </complat:GKDropDownToolItem.ContextMenu>
       </complat:GKDropDownToolItem>
 
@@ -33,10 +32,10 @@
 
       <complat:GKDropDownToolItem x:Name="tbPedigree" Image="{Resource Resources.btn_scroll.gif, GKCore}">
         <complat:GKDropDownToolItem.ContextMenu>
-          <ContextMenu x:Name="MenuPedigree">
+          <complat:GKContextMenu x:Name="MenuPedigree">
             <ButtonMenuItem x:Name="miPedigreeAscend2" Click="miPedigreeAscend_Click" />
             <ButtonMenuItem x:Name="miPedigreeDescend2" Click="miPedigreeDescend_Click" />
-          </ContextMenu>
+          </complat:GKContextMenu>
         </complat:GKDropDownToolItem.ContextMenu>
       </complat:GKDropDownToolItem>
 
@@ -49,11 +48,11 @@
       <ButtonToolItem x:Name="tbSendMail" Image="{Resource Resources.btn_mail.gif, GKCore}" Click="tbSendMail_Click" />
       <SeparatorToolItem />
       <ButtonToolItem x:Name="tbPartialView" Image="{Resource Resources.btn_table.gif, GKCore}" Click="tbPartialView_Click" />
-    </ToolBar>
+    </complat:GKToolBar>
   </Form.ToolBar>
 
   <Form.Menu>
-    <MenuBar IncludeSystemItems="None">
+    <complat:GKMenuBar IncludeSystemItems="None">
 
       <ButtonMenuItem x:Name="miFile">
         <ButtonMenuItem x:Name="miFileNew" Shortcut="CommonModifier+N" Image="{Resource Resources.btn_create_new.gif, GKCore}" Click="miFileNew_Click" />
@@ -144,12 +143,12 @@
         <ButtonMenuItem x:Name="miAbout" Image="{Resource Resources.btn_scroll.gif, GKCore}" Click="miAbout_Click" />
       </ButtonMenuItem>
 
-    </MenuBar>
+    </complat:GKMenuBar>
   </Form.Menu>
 
   <TableLayout>
     <TableRow ScaleHeight="True">
-      <TabControl x:Name="tabsRecords" SelectedIndexChanged="tabsRecords_SelectedIndexChanged" />
+      <complat:GKTabControl x:Name="tabsRecords" SelectedIndexChanged="tabsRecords_SelectedIndexChanged" />
     </TableRow>
     <TableRow>
       <TableLayout x:Name="StatusBar">

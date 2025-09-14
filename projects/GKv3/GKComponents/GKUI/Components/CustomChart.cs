@@ -31,7 +31,7 @@ using GKUI.Platform.Handlers;
 
 namespace GKUI.Components
 {
-    public abstract class CustomChart : ScrollablePanel, IPrintable
+    public abstract class CustomChart : ScrollablePanel, IPrintable, IContextMenuHost
     {
         private readonly NavigationStack<object> fNavman;
         protected IChartLayout fLayout;

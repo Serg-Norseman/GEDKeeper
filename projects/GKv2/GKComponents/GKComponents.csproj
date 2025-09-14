@@ -48,6 +48,9 @@
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GKUI\Components\ArborViewer.cs" />
+    <Compile Include="GKUI\Components\CircleChart.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GKUI\Components\CustomChart.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -106,6 +109,9 @@
     </Compile>
     <Compile Include="GKUI\Components\MediaPlayer.Designer.cs">
       <DependentUpon>MediaPlayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GKUI\Components\TreeChartBox.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="GKUI\Components\UIHelper.cs" />
     <Compile Include="GKUI\Components\Win32.cs" />
