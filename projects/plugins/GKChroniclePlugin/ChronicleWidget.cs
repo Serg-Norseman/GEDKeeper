@@ -20,12 +20,14 @@
 
 using System;
 using System.Windows.Forms;
+using GKCore;
 using GKCore.Design;
 using GKCore.Locales;
+using GKUI.Themes;
 
 namespace GKChroniclePlugin
 {
-    public partial class ChronicleWidget : Form, ILocalizable
+    public partial class ChronicleWidget : Form, ILocalizable, IThemedView
     {
         private readonly Plugin fPlugin;
 
@@ -39,6 +41,8 @@ namespace GKChroniclePlugin
         private void WidgetForm_Load(object sender, EventArgs e)
         {
             fPlugin.Host.WidgetShow(fPlugin);
+            if (!DesignMode && AppHost.Instance != null) AppHost.Instance.ApplyTheme(this);
+
             BaseChanged(fPlugin.Host.GetCurrentFile());
         }
 
@@ -46,6 +50,10 @@ namespace GKChroniclePlugin
         {
             BaseChanged(null);
             fPlugin.Host.WidgetClose(fPlugin);
+        }
+
+        public void ApplyTheme()
+        {
         }
 
         public void BaseChanged(IBaseWindow baseWin)

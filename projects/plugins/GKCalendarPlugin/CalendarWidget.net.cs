@@ -23,13 +23,14 @@ using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Plugins;
+using GKUI.Themes;
 
 namespace GKCalendarPlugin
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class CalendarWidget : Form, IWidgetForm
+    public partial class CalendarWidget : Form, IWidgetForm, IThemedView
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -60,14 +61,18 @@ namespace GKCalendarPlugin
 
         private void CalendarWidget_Shown(object sender, EventArgs e)
         {
-            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VTop);
-
             fPlugin.Host.WidgetShow(fPlugin);
+            if (AppHost.Instance != null) AppHost.Instance.ApplyTheme(this);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VTop);
         }
 
         private void CalendarWidget_Closed(object sender, EventArgs e)
         {
             fPlugin.Host.WidgetClose(fPlugin);
+        }
+
+        public void ApplyTheme()
+        {
         }
 
         private void hdb_DateChanged(object sender, EventArgs e)

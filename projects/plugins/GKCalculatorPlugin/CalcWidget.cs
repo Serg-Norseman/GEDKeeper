@@ -24,13 +24,14 @@ using BSLib;
 using GKCore;
 using GKCore.Design;
 using GKCore.Plugins;
+using GKUI.Themes;
 
 namespace GKCalculatorPlugin
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class CalcWidget : Form, IWidgetForm
+    public partial class CalcWidget : Form, IWidgetForm, IThemedView
     {
         private readonly Plugin fPlugin;
         private readonly ExpCalculator fCalc;
@@ -48,13 +49,18 @@ namespace GKCalculatorPlugin
 
         private void CalcWidget_Load(object sender, EventArgs e)
         {
-            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VBottom);
             fPlugin.Host.WidgetShow(fPlugin);
+            if (!DesignMode && AppHost.Instance != null) AppHost.Instance.ApplyTheme(this);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VBottom);
         }
 
         private void CalcWidget_Closed(object sender, EventArgs e)
         {
             fPlugin.Host.WidgetClose(fPlugin);
+        }
+
+        public void ApplyTheme()
+        {
         }
 
         private void edExpression_KeyDown(object sender, KeyEventArgs e)

@@ -21,15 +21,17 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using GKCore;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Locales;
 using GKCore.Stats;
+using GKUI.Themes;
 using GKWordsCloudPlugin.WordsCloud;
 
 namespace GKWordsCloudPlugin
 {
-    public partial class WordsCloudWidget : Form, ILocalizable
+    public partial class WordsCloudWidget : Form, ILocalizable, IThemedView
     {
         private readonly Plugin fPlugin;
         private IBaseWindow fBase;
@@ -56,6 +58,8 @@ namespace GKWordsCloudPlugin
         private void Form_Load(object sender, EventArgs e)
         {
             fPlugin.Host.WidgetShow(fPlugin);
+            if (!DesignMode && AppHost.Instance != null) AppHost.Instance.ApplyTheme(this);
+
             BaseChanged(fPlugin.Host.GetCurrentFile());
         }
 
@@ -63,6 +67,10 @@ namespace GKWordsCloudPlugin
         {
             BaseChanged(null);
             fPlugin.Host.WidgetClose(fPlugin);
+        }
+
+        public void ApplyTheme()
+        {
         }
 
         public void BaseChanged(IBaseWindow baseWin)

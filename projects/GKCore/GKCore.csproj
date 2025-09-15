@@ -369,7 +369,7 @@
     <Compile Include="GKCore\Design\IProgressController.cs" />
     <Compile Include="GKCore\Plugins\ISubscriber.cs" />
     <Compile Include="GKCore\ITimer.cs" />
-    <Compile Include="GKCore\Plugins\IWidget.cs" />
+    <Compile Include="GKCore\Plugins\IWidgetPlugin.cs" />
     <Compile Include="GKCore\Design\IWorkWindow.cs" />
     <Compile Include="GKCore\Utilities\IocContainer.cs" />
     <Compile Include="GKCore\Linguistics\DoubleMetaphone.cs" />

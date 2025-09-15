@@ -125,8 +125,10 @@ namespace GKUI.Components
 
             fList = new GKListView();
             fList.MouseDoubleClick += List_DoubleClick;
-            fList.KeyDown += List_KeyDown;
             fList.SelectedItemsChanged += List_SelectedIndexChanged;
+
+            // empty GridView does not always receive events
+            this.KeyDown += List_KeyDown;
 
             fToolbar = new StackLayout() {
                 Orientation = Orientation.Vertical,

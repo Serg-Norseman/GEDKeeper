@@ -216,10 +216,15 @@ namespace GKUI.Components
             Columns.Clear();
         }
 
+        private static TextAlignment[] AlignmentMap = new TextAlignment[] { TextAlignment.Left, TextAlignment.Right, TextAlignment.Center };
+
         public void AddColumn(string caption, int width, bool autoSize = false, GKHorizontalAlignment textAlign = GKHorizontalAlignment.Left)
         {
+            var efAlign = AlignmentMap[(int)textAlign];
+
             int colIndex = Columns.Count;
             var cell = new TextBoxCell(colIndex);
+            cell.TextAlignment = efAlign;
 
             if (fListMan != null) {
                 cell.Binding = Binding.Property<ContentItem, string>(r => (string)fListMan.GetColumnExternalValue(r, colIndex));
@@ -231,6 +236,7 @@ namespace GKUI.Components
             column.AutoSize = autoSize;
             column.Width = width;
             column.Sortable = true;
+            column.HeaderTextAlignment = efAlign;
             Columns.Add(column);
         }
 

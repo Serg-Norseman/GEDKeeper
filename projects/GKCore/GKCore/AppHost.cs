@@ -593,7 +593,7 @@ namespace GKCore
             return GetAppDataPathStatic();
         }
 
-        private WidgetInfo FindWidgetInfo(IWidget widget)
+        private WidgetInfo FindWidgetInfo(IWidgetPlugin widget)
         {
             foreach (WidgetInfo widgetInfo in fActiveWidgets) {
                 if (widgetInfo.Widget == widget) {
@@ -604,7 +604,7 @@ namespace GKCore
             return null;
         }
 
-        public void WidgetShow(IWidget widget)
+        public void WidgetShow(IWidgetPlugin widget)
         {
             WidgetInfo widInfo = FindWidgetInfo(widget);
             if (widInfo == null) return;
@@ -612,7 +612,7 @@ namespace GKCore
             if (widInfo.MenuItem != null) widInfo.MenuItem.Checked = true;
         }
 
-        public void WidgetClose(IWidget widget)
+        public void WidgetClose(IWidgetPlugin widget)
         {
             WidgetInfo widInfo = FindWidgetInfo(widget);
             if (widInfo == null) return;
@@ -687,7 +687,7 @@ namespace GKCore
             return new ExtPoint(screenWorkingArea.Left + locX, screenWorkingArea.Top + locY);
         }
 
-        public bool IsWidgetActive(IWidget widget)
+        public bool IsWidgetActive(IWidgetPlugin widget)
         {
             WidgetInfo widInfo = FindWidgetInfo(widget);
             if (widInfo == null || widInfo.MenuItem == null) {

@@ -58,7 +58,7 @@ namespace GKCore.Lists
             var result = new ListColumns(GKListType.stEvents);
             result.AddColumn(LSID.NumberSym, 25, false);
             result.AddColumn(LSID.Event, 90, false);
-            result.AddColumn(LSID.Date, 90, false);
+            result.AddColumn(LSID.Date, DataType.dtGEDCOMDate, 90, false);
             result.AddColumn(LSID.Age, 80, false);
             result.AddColumn(LSID.PlaceAndAttribute, 200, false);
             result.AddColumn(LSID.Cause, 130, false);

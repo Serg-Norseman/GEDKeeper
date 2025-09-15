@@ -90,7 +90,7 @@ Elements:
     Value: "Modern/FileProperties.png"
 
   - Element: Glyph_Export
-    Value: "Modern/stub.png"
+    Value: "Modern/Export.png"
 
   - Element: Glyph_ExportTable
     Value: "Modern/ExportTable.png"

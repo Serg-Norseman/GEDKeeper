@@ -27,10 +27,10 @@ namespace GKCore.Plugins
     /// </summary>
     public sealed class WidgetInfo
     {
-        public IWidget Widget;
+        public IWidgetPlugin Widget;
         public IMenuItem MenuItem;
 
-        public WidgetInfo(IWidget widget, IMenuItem menuItem)
+        public WidgetInfo(IWidgetPlugin widget, IMenuItem menuItem)
         {
             Widget = widget;
             MenuItem = menuItem;

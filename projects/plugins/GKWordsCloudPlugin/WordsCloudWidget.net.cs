@@ -22,15 +22,17 @@ using System;
 using System.Collections.Generic;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
+using GKCore;
 using GKCore.Design;
 using GKCore.Locales;
 using GKCore.Stats;
 using GKUI.Platform;
+using GKUI.Themes;
 using GKWordsCloudPlugin.WordsCloud;
 
 namespace GKWordsCloudPlugin
 {
-    public partial class WordsCloudWidget : Form, ILocalizable
+    public partial class WordsCloudWidget : Form, ILocalizable, IThemedView
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -67,6 +69,8 @@ namespace GKWordsCloudPlugin
         private void Form_Shown(object sender, EventArgs e)
         {
             fPlugin.Host.WidgetShow(fPlugin);
+            if (AppHost.Instance != null) AppHost.Instance.ApplyTheme(this);
+
             BaseChanged(fPlugin.Host.GetCurrentFile());
         }
 
@@ -74,6 +78,10 @@ namespace GKWordsCloudPlugin
         {
             BaseChanged(null);
             fPlugin.Host.WidgetClose(fPlugin);
+        }
+
+        public void ApplyTheme()
+        {
         }
 
         public void BaseChanged(IBaseWindow baseWin)

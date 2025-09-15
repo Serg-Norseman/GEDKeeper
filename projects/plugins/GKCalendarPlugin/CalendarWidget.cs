@@ -22,13 +22,14 @@ using System;
 using System.Windows.Forms;
 using GKCore;
 using GKCore.Plugins;
+using GKUI.Themes;
 
 namespace GKCalendarPlugin
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class CalendarWidget : Form, IWidgetForm
+    public partial class CalendarWidget : Form, IWidgetForm, IThemedView
     {
         private readonly Plugin fPlugin;
 
@@ -48,14 +49,18 @@ namespace GKCalendarPlugin
 
         private void CalendarWidget_Load(object sender, EventArgs e)
         {
-            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VTop);
-
             fPlugin.Host.WidgetShow(fPlugin);
+            if (!DesignMode && AppHost.Instance != null) AppHost.Instance.ApplyTheme(this);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VTop);
         }
 
         private void CalendarWidget_Closed(object sender, EventArgs e)
         {
             fPlugin.Host.WidgetClose(fPlugin);
+        }
+
+        public void ApplyTheme()
+        {
         }
 
         private void hdb_DateChanged(object sender, EventArgs e)

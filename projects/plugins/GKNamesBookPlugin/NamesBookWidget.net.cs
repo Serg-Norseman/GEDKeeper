@@ -24,10 +24,11 @@ using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Plugins;
 using GKUI.Components;
+using GKUI.Themes;
 
 namespace GKNamesBookPlugin
 {
-    public partial class NamesBookWidget : Form, IWidgetForm
+    public partial class NamesBookWidget : Form, IWidgetForm, IThemedView
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -60,13 +61,18 @@ namespace GKNamesBookPlugin
 
         private void Form_Shown(object sender, EventArgs e)
         {
-            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VCenter);
             fPlugin.Host.WidgetShow(fPlugin);
+            if (AppHost.Instance != null) AppHost.Instance.ApplyTheme(this);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VCenter);
         }
 
         private void Form_Closed(object sender, EventArgs e)
         {
             fPlugin.Host.WidgetClose(fPlugin);
+        }
+
+        public void ApplyTheme()
+        {
         }
 
         private void cbNames_SelectedIndexChanged(object sender, EventArgs e)

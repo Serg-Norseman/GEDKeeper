@@ -69,9 +69,9 @@ namespace GKCore
 
         void ApplyOptions();
 
-        bool IsWidgetActive(IWidget widget);
-        void WidgetShow(IWidget widget);
-        void WidgetClose(IWidget widget);
+        bool IsWidgetActive(IWidgetPlugin widget);
+        void WidgetShow(IWidgetPlugin widget);
+        void WidgetClose(IWidgetPlugin widget);
 
         void EnableWindow(IWidgetForm form, bool value);
         MRUFile GetMRUFile(IBaseWindow baseWin);

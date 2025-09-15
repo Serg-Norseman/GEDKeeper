@@ -344,12 +344,14 @@ namespace GKUI.Themes
 
         private static void ThemeTreeViewHandler(IThemedView view, IDisposable component, Theme theme)
         {
-            var ctl = (TreeView)component;
-            //if (fCachedFont != null) ctl.Font = fCachedFont;
-            ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
-            ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
+            try {
+                var ctl = (TreeView)component;
+                //if (fCachedFont != null) ctl.Font = fCachedFont;
+                ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Editor);
+                ctl.TextColor = GetThemeColor(theme, ThemeElement.EditorText);
 
-            ThemeContextMenuHostHandler(view, component, theme);
+                ThemeContextMenuHostHandler(view, component, theme);
+            } catch { }
         }
 
         private static void ThemeGroupBoxHandler(IThemedView view, IDisposable component, Theme theme)

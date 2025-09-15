@@ -22,13 +22,15 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using GKCore;
 using GKCore.Design;
 using GKCore.Locales;
 using GKUI.Components;
+using GKUI.Themes;
 
 namespace GKTextSearchPlugin
 {
-    public sealed partial class TextSearchWin : Form, ILocalizable
+    public sealed partial class TextSearchWin : Form, ILocalizable, IThemedView
     {
         private readonly Plugin fPlugin;
         private readonly IBaseWindow fBase;
@@ -62,12 +64,17 @@ namespace GKTextSearchPlugin
 
         private void Form_Load(object sender, EventArgs e)
         {
+            if (!DesignMode && AppHost.Instance != null) AppHost.Instance.ApplyTheme(this);
             fPlugin.SearchMan.ReindexBase(fBase);
         }
 
         private void Form_Closed(object sender, FormClosedEventArgs e)
         {
             fPlugin.fForm = null;
+        }
+
+        public void ApplyTheme()
+        {
         }
 
         private void mTextLink(object sender, string linkName)

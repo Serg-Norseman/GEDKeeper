@@ -209,16 +209,28 @@ namespace GKCore.Lists
         {
             UpdateColumnsMap();
 
+            var defDateFormat = GlobalOptions.Instance.DefDateFormat;
+
             if (listView != null) {
                 listView.ClearColumns();
 
                 int num = fColumnsMap.Count;
                 for (int i = 0; i < num; i++) {
                     var cm = fColumnsMap[i];
-                    if (cm.DataType == DataType.dtBool) {
-                        listView.AddCheckedColumn(cm.Caption, cm.Width, cm.AutoSize);
-                    } else {
-                        listView.AddColumn(cm.Caption, cm.Width, cm.AutoSize);
+
+                    switch (cm.DataType) {
+                        case DataType.dtBool:
+                            listView.AddCheckedColumn(cm.Caption, cm.Width, cm.AutoSize);
+                            break;
+
+                        case DataType.dtGEDCOMDate:
+                            var textAlign = (defDateFormat != DateFormat.dfDD_MM_YYYY) ? GKHorizontalAlignment.Left : GKHorizontalAlignment.Right;
+                            listView.AddColumn(cm.Caption, cm.Width, cm.AutoSize, textAlign);
+                            break;
+
+                        default:
+                            listView.AddColumn(cm.Caption, cm.Width, cm.AutoSize);
+                            break;
                     }
                 }
             }
@@ -574,6 +586,10 @@ namespace GKCore.Lists
         {
             object val;
             try {
+                if (colIndex < 0 || colIndex >= fColumnsMap.Count) {
+                    return ErrorValue;
+                }
+
                 MapColumnRec colrec = fColumnsMap[colIndex];
                 val = GetColumnValueEx(colrec.ColType, colrec.ColSubtype, isVisible);
 

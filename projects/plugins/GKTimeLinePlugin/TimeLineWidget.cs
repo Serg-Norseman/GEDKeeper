@@ -25,10 +25,11 @@ using GKCore;
 using GKCore.Design;
 using GKCore.Lists;
 using GKCore.Plugins;
+using GKUI.Themes;
 
 namespace GKTimeLinePlugin
 {
-    public partial class TimeLineWidget : Form, IWidgetForm
+    public partial class TimeLineWidget : Form, IWidgetForm, IThemedView
     {
         private readonly Plugin fPlugin;
         private IBaseWindow fBase;
@@ -51,8 +52,10 @@ namespace GKTimeLinePlugin
 
         private void TimeLineWidget_Load(object sender, EventArgs e)
         {
-            AppHost.Instance.WidgetLocate(this, WidgetLocation.HLeft | WidgetLocation.VBottom);
             fPlugin.Host.WidgetShow(fPlugin);
+            if (!DesignMode && AppHost.Instance != null) AppHost.Instance.ApplyTheme(this);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HLeft | WidgetLocation.VBottom);
+
             BaseChanged(fPlugin.Host.GetCurrentFile());
         }
 
@@ -60,6 +63,10 @@ namespace GKTimeLinePlugin
         {
             BaseChanged(null);
             fPlugin.Host.WidgetClose(fPlugin);
+        }
+
+        public void ApplyTheme()
+        {
         }
 
         private void UpdateStatus()

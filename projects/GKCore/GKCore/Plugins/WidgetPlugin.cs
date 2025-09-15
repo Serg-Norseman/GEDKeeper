@@ -25,7 +25,7 @@ namespace GKCore.Plugins
     /// <summary>
     /// 
     /// </summary>
-    public abstract class WidgetPlugin : OrdinaryPlugin, IWidget
+    public abstract class WidgetPlugin : OrdinaryPlugin, IWidgetPlugin
     {
         public virtual void WidgetInit(IHost host)
         {

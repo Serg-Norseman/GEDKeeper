@@ -25,13 +25,14 @@ using Eto.Serialization.Xaml;
 using GKCore;
 using GKCore.Design;
 using GKCore.Plugins;
+using GKUI.Themes;
 
 namespace GKCalculatorPlugin
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class CalcWidget : FloatingForm, IWidgetForm
+    public partial class CalcWidget : FloatingForm, IWidgetForm, IThemedView
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -61,13 +62,18 @@ namespace GKCalculatorPlugin
 
         private void CalcWidget_Shown(object sender, EventArgs e)
         {
-            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VBottom);
             fPlugin.Host.WidgetShow(fPlugin);
+            if (AppHost.Instance != null) AppHost.Instance.ApplyTheme(this);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VBottom);
         }
 
         private void CalcWidget_Closed(object sender, EventArgs e)
         {
             fPlugin.Host.WidgetClose(fPlugin);
+        }
+
+        public void ApplyTheme()
+        {
         }
 
         private void edExpression_KeyDown(object sender, KeyEventArgs e)

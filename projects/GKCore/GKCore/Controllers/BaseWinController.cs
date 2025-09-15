@@ -1434,7 +1434,7 @@ namespace GKCore.Controllers
                     IMenuItem ownerItem = (plugin.Category == PluginCategory.Report) ? fView.ReportsItem : fView.PluginsItem;
                     IMenuItem mi = ownerItem.AddItem(plugin.DisplayName, plugin, plugin.Icon, Plugin_Click);
 
-                    var widget = plugin as IWidget;
+                    var widget = plugin as IWidgetPlugin;
                     if (widget != null) {
                         var widInfo = new WidgetInfo(widget, mi);
                         AppHost.Instance.ActiveWidgets.Add(widInfo);

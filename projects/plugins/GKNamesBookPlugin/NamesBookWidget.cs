@@ -23,10 +23,11 @@ using System.Windows.Forms;
 using GKCore;
 using GKCore.Plugins;
 using GKUI.Components;
+using GKUI.Themes;
 
 namespace GKNamesBookPlugin
 {
-    public partial class NamesBookWidget : Form, IWidgetForm
+    public partial class NamesBookWidget : Form, IWidgetForm, IThemedView
     {
         private readonly Plugin fPlugin;
         private readonly NamesBook fNamesBook;
@@ -50,13 +51,18 @@ namespace GKNamesBookPlugin
 
         private void NamesBookWidget_Load(object sender, EventArgs e)
         {
-            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VCenter);
             fPlugin.Host.WidgetShow(fPlugin);
+            if (!DesignMode && AppHost.Instance != null) AppHost.Instance.ApplyTheme(this);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VCenter);
         }
 
         private void NamesBookWidget_Closed(object sender, EventArgs e)
         {
             fPlugin.Host.WidgetClose(fPlugin);
+        }
+
+        public void ApplyTheme()
+        {
         }
 
         private void cbNames_SelectedIndexChanged(object sender, EventArgs e)

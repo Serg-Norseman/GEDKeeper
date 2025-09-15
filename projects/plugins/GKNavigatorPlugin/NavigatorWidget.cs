@@ -28,10 +28,11 @@ using GKCore.Design;
 using GKCore.Locales;
 using GKCore.Plugins;
 using GKUI.Components;
+using GKUI.Themes;
 
 namespace GKNavigatorPlugin
 {
-    public partial class NavigatorWidget : Form, IWidgetForm
+    public partial class NavigatorWidget : Form, IWidgetForm, IThemedView
     {
         #region Design components
 
@@ -53,7 +54,6 @@ namespace GKNavigatorPlugin
         private TreeNode tnBookmarks;
         private TreeNode tnRecords;
         private TreeNode tnLanguages;
-        private TreeNode tnAssociations;
         private TreeNode tnWebLinks;
 
         public NavigatorWidget(Plugin plugin)
@@ -78,7 +78,6 @@ namespace GKNavigatorPlugin
             tnProblems = CreateNode(tnRecAct, "Potencial problems", DataCategory.PotencialProblems);
             tnBookmarks = CreateNode(tnRoot, "Bookmarks", DataCategory.Bookmarks);
             tnLanguages = CreateNode(tnRoot, "Languages", DataCategory.Languages);
-            tnAssociations = CreateNode(tnRoot, "Associations", DataCategory.Associations);
             tnWebLinks = CreateNode(tnRoot, "WebLinks", DataCategory.WebLinks);
             tnRecords = CreateNode(tnRecAct, "Records", DataCategory.Records);
 
@@ -101,15 +100,16 @@ namespace GKNavigatorPlugin
             tnProblems.Text = fLangMan.LS(PLS.PotencialProblems);
             tnBookmarks.Text = fLangMan.LS(PLS.Bookmarks);
             tnLanguages.Text = fLangMan.LS(PLS.Languages);
-            tnAssociations.Text = LangMan.LS(LSID.Associations);
             tnRecords.Text = fLangMan.LS(PLS.Records);
             tnWebLinks.Text = fLangMan.LS(PLS.WebLinks);
         }
 
         private void Form_Load(object sender, EventArgs e)
         {
-            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VBottom);
             fPlugin.Host.WidgetShow(fPlugin);
+            if (!DesignMode && AppHost.Instance != null) AppHost.Instance.ApplyTheme(this);
+            AppHost.Instance.WidgetLocate(this, WidgetLocation.HRight | WidgetLocation.VBottom);
+
             BaseChanged(fPlugin.Host.GetCurrentFile());
         }
 
@@ -119,6 +119,10 @@ namespace GKNavigatorPlugin
             BaseChanged(null);
             fPlugin.Host.WidgetClose(fPlugin);
             fPlugin.CloseForm();
+        }
+
+        public void ApplyTheme()
+        {
         }
 
         public void BaseChanged(IBaseWindow baseWin)

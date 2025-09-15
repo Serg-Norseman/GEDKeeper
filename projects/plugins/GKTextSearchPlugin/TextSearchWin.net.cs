@@ -22,13 +22,15 @@ using System;
 using System.IO;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
+using GKCore;
 using GKCore.Design;
 using GKCore.Locales;
 using GKUI.Components;
+using GKUI.Themes;
 
 namespace GKTextSearchPlugin
 {
-    public sealed partial class TextSearchWin : Form, ILocalizable
+    public sealed partial class TextSearchWin : Form, ILocalizable, IThemedView
     {
         #region Design components
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
@@ -61,12 +63,17 @@ namespace GKTextSearchPlugin
 
         private void Form_Shown(object sender, EventArgs e)
         {
+            if (AppHost.Instance != null) AppHost.Instance.ApplyTheme(this);
             fPlugin.SearchMan.ReindexBase(fBase);
         }
 
         private void Form_Closed(object sender, EventArgs e)
         {
             fPlugin.fForm = null;
+        }
+
+        public void ApplyTheme()
+        {
         }
 
         private void mTextLink(object sender, string linkName)

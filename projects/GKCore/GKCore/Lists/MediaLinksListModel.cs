@@ -18,6 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
@@ -38,6 +39,12 @@ namespace GKCore.Lists
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
                 RecordAction.raMoveUp, RecordAction.raMoveDown);
+        }
+
+        protected override void OnDataOwner()
+        {
+            AddCustomAction(LangMan.LS(LSID.View), ViewMedia);
+            base.OnDataOwner();
         }
 
         public static ListColumns CreateListColumns()
@@ -130,6 +137,17 @@ namespace GKCore.Lists
 
                 fBaseWin.Context.Modified = true;
                 eArgs.IsChanged = true;
+            }
+        }
+
+        private void ViewMedia(object sender, EventArgs e)
+        {
+            object itemData = fSheetList.ListView.GetSelectedData();
+            if (itemData is GDMMultimediaLink mediaLink) {
+                GDMMultimediaRecord mmRec = fBaseContext.Tree.GetPtrValue<GDMMultimediaRecord>(mediaLink);
+                if (mmRec != null) {
+                    fBaseWin.ShowMedia(mmRec, false);
+                }
             }
         }
     }
