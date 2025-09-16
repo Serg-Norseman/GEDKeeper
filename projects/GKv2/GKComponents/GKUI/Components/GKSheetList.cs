@@ -43,6 +43,7 @@ namespace GKUI.Components
         private readonly ToolStripButton fBtnCopy;
         private readonly ToolStripButton fBtnCut;
         private readonly ToolStripButton fBtnPaste;
+        private readonly ToolStripButton fBtnDetails;
         private readonly ToolStrip fToolBar;
         private readonly ContextMenuStrip fContextMenu;
         private readonly GKListView fList;
@@ -105,6 +106,7 @@ namespace GKUI.Components
 
         public GKSheetList()
         {
+            fBtnDetails = CreateButton("btnView", LangMan.LS(LSID.View), ItemDetails);
             fBtnPaste = CreateButton("btnPaste", LangMan.LS(LSID.Paste), ItemPaste);
             fBtnCut = CreateButton("btnCut", LangMan.LS(LSID.Cut), ItemCut);
             fBtnCopy = CreateButton("btnCopy", LangMan.LS(LSID.Copy), ItemCopy);
@@ -118,18 +120,14 @@ namespace GKUI.Components
             fToolBar = new ToolStrip();
             fToolBar.Name = "ToolBar";
             fToolBar.Dock = DockStyle.Right;
-            fToolBar.Items.AddRange(new ToolStripItem[] { fBtnAdd, fBtnEdit, fBtnDelete, fBtnLinkJump, fBtnMoveUp, fBtnMoveDown, fBtnCopy, fBtnCut, fBtnPaste });
+            fToolBar.Items.AddRange(new ToolStripItem[] { fBtnAdd, fBtnEdit, fBtnDelete, fBtnLinkJump, fBtnMoveUp, fBtnMoveDown, fBtnCopy, fBtnCut, fBtnPaste, fBtnDetails });
             fToolBar.GripStyle = ToolStripGripStyle.Hidden;
             fToolBar.ImageScalingSize = new Size(24, 20);
             fToolBar.AutoSize = true;
             fToolBar.ShowItemToolTips = true;
 
-            var miDetails = new ToolStripMenuItem();
-            miDetails.Text = LangMan.LS(LSID.Details);
-            miDetails.Click += miDetails_Click;
-
             fContextMenu = new ContextMenuStrip();
-            fContextMenu.Items.AddRange(new ToolStripItem[] { miDetails });
+            fContextMenu.Items.AddRange(new ToolStripItem[] { });
 
             fList = new GKListView();
             fList.Dock = DockStyle.Fill;
@@ -174,6 +172,7 @@ namespace GKUI.Components
                 }
 
                 fList.Dispose();
+                fBtnDetails.Dispose();
                 fBtnPaste.Dispose();
                 fBtnCut.Dispose();
                 fBtnCopy.Dispose();
@@ -201,6 +200,7 @@ namespace GKUI.Components
 
         public void ApplyTheme()
         {
+            UIHelper.SetButtonThemeImage(fBtnDetails, ThemeElement.Glyph_View);
             UIHelper.SetButtonThemeImage(fBtnPaste, ThemeElement.Glyph_Paste);
             UIHelper.SetButtonThemeImage(fBtnCut, ThemeElement.Glyph_Cut);
             UIHelper.SetButtonThemeImage(fBtnCopy, ThemeElement.Glyph_Copy);
@@ -235,6 +235,7 @@ namespace GKUI.Components
                 fBtnCopy.Visible = fButtons.Contains(SheetButton.lbCopy);
                 fBtnCut.Visible = fButtons.Contains(SheetButton.lbCut);
                 fBtnPaste.Visible = fButtons.Contains(SheetButton.lbPaste);
+                fBtnDetails.Visible = fButtons.Contains(SheetButton.lbDetails);
                 fToolBar.Visible = !fButtons.IsEmpty();
             } else {
                 EnumSet<RecordAction> allowedActions = fListModel.AllowedActions;
@@ -247,6 +248,7 @@ namespace GKUI.Components
                 fBtnCopy.Visible = allowedActions.Contains(RecordAction.raCopy);
                 fBtnCut.Visible = allowedActions.Contains(RecordAction.raCut);
                 fBtnPaste.Visible = allowedActions.Contains(RecordAction.raPaste);
+                fBtnDetails.Visible = allowedActions.Contains(RecordAction.raDetails);
                 fToolBar.Visible = !allowedActions.IsEmpty();
             }
 
@@ -276,16 +278,6 @@ namespace GKUI.Components
                 if (itemData == null) return;
 
                 fListModel.OnItemSelected(itemIndex, itemData);
-            }
-        }
-
-        private void miDetails_Click(object sender, EventArgs e)
-        {
-            if (fListModel != null) {
-                object itemData = fList.GetSelectedData();
-                if (itemData != null) {
-                    fListModel.ShowDetails(itemData);
-                }
             }
         }
 
@@ -453,6 +445,14 @@ namespace GKUI.Components
             RestoreSelected(eArgs.ItemData);
         }
 
+        private void ItemDetails(object sender, EventArgs e)
+        {
+            object itemData = fList.GetSelectedData();
+            if (fListModel != null && itemData != null) {
+                fListModel.ShowDetails(itemData);
+            }
+        }
+
         private void UpdateActions()
         {
             if (fListModel == null) return;
@@ -467,9 +467,7 @@ namespace GKUI.Components
                 }
             }
 
-            if (fListModel.AllowedActions.Contains(RecordAction.raDetails) || fListModel.CustomActions.Count > 0) {
-                fList.ContextMenuStrip = fContextMenu;
-            }
+            fList.ContextMenuStrip = (fListModel.CustomActions.Count > 0) ? fContextMenu : null;
         }
 
         #endregion

@@ -167,6 +167,10 @@ namespace GKUI.Themes
                 { ThemeElement.Glyph_GEDNew, "Resources.btn_create_new.gif" },
                 { ThemeElement.Glyph_GEDLoad, "Resources.btn_load.gif" },
                 { ThemeElement.Glyph_GEDSave, "Resources.btn_save.gif" },
+
+                { ThemeElement.Glyph_Scripts, "" },
+                { ThemeElement.Glyph_FindAndReplace, "" },
+                { ThemeElement.Glyph_View, "Resources.btn_view.png" },
             }, true);
         }
 

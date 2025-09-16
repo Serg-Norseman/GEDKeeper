@@ -152,6 +152,10 @@ namespace GKUI.Themes
 
         Glyph_CircleAncestors,
         Glyph_CircleDescendants,
+
+        Glyph_Scripts,
+        Glyph_FindAndReplace,
+        Glyph_View,
     }
 
 

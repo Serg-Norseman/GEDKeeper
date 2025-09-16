@@ -273,4 +273,13 @@ Elements:
 
   - Element: Glyph_CircleDescendants
     Value: "Modern/CircleDescendants.png"
+
+  - Element: Glyph_Scripts
+    Value: "Modern/Scripts.png"
+
+  - Element: Glyph_FindAndReplace
+    Value: "Modern/FindAndReplace.png"
+
+  - Element: Glyph_View
+    Value: "Modern/View.png"
 ...

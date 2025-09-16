@@ -174,6 +174,10 @@ namespace GKUI.Themes
 
                 ThemeElementType.Image, // ThemeElement.Glyph_CircleAncestors
                 ThemeElementType.Image, // ThemeElement.Glyph_CircleDescendants
+
+                ThemeElementType.Image, // ThemeElement.Glyph_Scripts
+                ThemeElementType.Image, // ThemeElement.Glyph_FindAndReplace
+                ThemeElementType.Image, // ThemeElement.Glyph_View
             };
         }
 

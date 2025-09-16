@@ -110,7 +110,8 @@ namespace GKCore.Lists
         lbMoveDown,
         lbCopy,
         lbCut,
-        lbPaste
+        lbPaste,
+        lbDetails,
     }
 
 
@@ -260,8 +261,14 @@ namespace GKCore.Lists
 
         public void ShowDetails(object itemData)
         {
-            if (fBaseWin != null)
-                BaseController.ViewRecordInfo(fOwner, fBaseWin, GetReferenceRecord(itemData));
+            if (fBaseWin != null) {
+                var refRec = GetReferenceRecord(itemData);
+                if (refRec is GDMMultimediaRecord mediaRec) {
+                    fBaseWin.ShowMedia(mediaRec, false);
+                } else {
+                    BaseController.ViewRecordInfo(fOwner, fBaseWin, refRec);
+                }
+            }
         }
 
         protected static bool Exchange<X>(GDMList<X> list, X value, RecordAction recordAction) where X : GDMTag

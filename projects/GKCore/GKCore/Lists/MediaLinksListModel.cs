@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
@@ -38,13 +37,7 @@ namespace GKCore.Lists
         {
             AllowedActions = EnumSet<RecordAction>.Create(
                 RecordAction.raAdd, RecordAction.raEdit, RecordAction.raDelete,
-                RecordAction.raMoveUp, RecordAction.raMoveDown);
-        }
-
-        protected override void OnDataOwner()
-        {
-            AddCustomAction(LangMan.LS(LSID.View), ViewMedia);
-            base.OnDataOwner();
+                RecordAction.raMoveUp, RecordAction.raMoveDown, RecordAction.raDetails);
         }
 
         public static ListColumns CreateListColumns()
@@ -54,6 +47,12 @@ namespace GKCore.Lists
             result.AddColumn(LSID.RPMultimedia, 300, false);
             result.AddColumn(LSID.Type, 300, false);
             return result;
+        }
+
+        protected override GDMRecord GetReferenceRecord(object itemData)
+        {
+            var mmLink = itemData as GDMMultimediaLink;
+            return (mmLink == null) ? null : fBaseContext.Tree.GetPtrValue<GDMMultimediaRecord>(mmLink);
         }
 
         public override void Fetch(GDMMultimediaLink aRec)
@@ -137,17 +136,6 @@ namespace GKCore.Lists
 
                 fBaseWin.Context.Modified = true;
                 eArgs.IsChanged = true;
-            }
-        }
-
-        private void ViewMedia(object sender, EventArgs e)
-        {
-            object itemData = fSheetList.ListView.GetSelectedData();
-            if (itemData is GDMMultimediaLink mediaLink) {
-                GDMMultimediaRecord mmRec = fBaseContext.Tree.GetPtrValue<GDMMultimediaRecord>(mediaLink);
-                if (mmRec != null) {
-                    fBaseWin.ShowMedia(mmRec, false);
-                }
             }
         }
     }
