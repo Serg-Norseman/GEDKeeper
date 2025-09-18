@@ -113,7 +113,7 @@ namespace GKUI.Themes
 
                 { ThemeElement.Glyph_Organizer, "Resources.btn_organizer.gif" },
                 { ThemeElement.Glyph_Slideshow, "Resources.btn_slideshow.png" },
-                { ThemeElement.Glyph_Settings, "Resources.btn_tools.gif" },
+                { ThemeElement.Glyph_Settings, "Resources.btn_settings.png" },
 
                 { ThemeElement.Glyph_Help, "Resources.btn_help.gif" },
                 { ThemeElement.Glyph_About, "Resources.btn_scroll.gif" },
@@ -173,6 +173,7 @@ namespace GKUI.Themes
                 { ThemeElement.Glyph_Scripts, "" },
                 { ThemeElement.Glyph_FindAndReplace, "" },
                 { ThemeElement.Glyph_View, "Resources.btn_view.png" },
+                { ThemeElement.Glyph_Tools, "Resources.btn_tools.gif" },
             }, true);
         }
 

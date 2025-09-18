@@ -87,7 +87,7 @@ namespace GKUI.Forms
 
             fController = new PartialViewController(this, baseWin, recordType);
 
-            CreatePage(baseWin, recordType);
+            CreatePage(recordType);
 
             fController.SetLocale();
 
@@ -120,7 +120,7 @@ namespace GKUI.Forms
             summaryMenu.Items.AddRange(new MenuItem[] { miCopyContent });
         }
 
-        private void CreatePage(IBaseWindow baseWin, GDMRecordType recType)
+        private void CreatePage(GDMRecordType recType)
         {
             var summary = new HyperView();
             summary.BorderWidth = 4;
@@ -188,12 +188,11 @@ namespace GKUI.Forms
 
                 case Keys.Home:
                 case Keys.End:
-                    if (sender is GKListView) {
-                        var listView = sender as GKListView;
+                    if (sender is GKListView listView) {
                         if (e.Key == Keys.Home) {
-                            listView.SelectedIndex = 0;
+                            listView.SelectItem(0);
                         } else {
-                            listView.SelectedIndex = -1;
+                            listView.SelectItem(-1);
                         }
                         e.Handled = true;
                     }

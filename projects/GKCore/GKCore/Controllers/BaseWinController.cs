@@ -401,7 +401,7 @@ namespace GKCore.Controllers
         public void SelectByRec(GDMRecord record)
         {
             if (record == null)
-                throw new ArgumentNullException("record");
+                throw new ArgumentNullException(nameof(record));
 
             fView.Activate();
             SelectRecordByXRef(record.XRef);
@@ -1086,6 +1086,7 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miSlideshow").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Slideshow);
             GetControl<IMenuItem>("miScripts").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Scripts);
             GetControl<IMenuItem>("miOptions").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Settings);
+            GetControl<IMenuItem>("miTreeTools").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Tools);
 
             GetControl<IMenuItem>("miContext").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Help);
             GetControl<IMenuItem>("miAbout").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_About);
@@ -1276,7 +1277,7 @@ namespace GKCore.Controllers
 
                     try {
                         string fName = Path.GetFileNameWithoutExtension(filePath);
-                        if (!string.IsNullOrEmpty(fName) && fName.Contains(",")) {
+                        if (!string.IsNullOrEmpty(fName) && fName.Contains(',')) {
                             string[] parts = fName.Split(',');
                             string indiName = parts[0].Trim();
                             string indiYear = parts[1].Trim();

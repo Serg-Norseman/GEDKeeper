@@ -156,6 +156,7 @@ namespace GKUI.Themes
         Glyph_Scripts,
         Glyph_FindAndReplace,
         Glyph_View,
+        Glyph_Tools,
     }
 
 

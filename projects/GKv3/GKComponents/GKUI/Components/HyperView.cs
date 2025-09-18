@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
@@ -329,7 +328,7 @@ namespace GKUI.Components
                             Color chunkColor = (chunk.Color == null) ? TextColor : ((ColorHandler)chunk.Color).Handle;
                             if (brush != null) brush.Dispose();
                             brush = new SolidBrush(chunkColor);
-                            font = ProcessFont(font, chunk.Size, GetFontStyle(chunk.Style), GetFontDecoration(chunk.Style));
+                            font = ProcessFont(font, chunk.Size, chunk.Style);
                             gfx.DrawText(font, brush, xOffset, yOffset, ct);
 
                             xOffset += chunk.Width;
@@ -345,8 +344,11 @@ namespace GKUI.Components
             }
         }
 
-        private Font ProcessFont(Font prevFont, float emSize, FontStyle style, FontDecoration decoration)
+        private Font ProcessFont(Font prevFont, float emSize, GKFontStyle fStyle)
         {
+            var style = GetFontStyle(fStyle);
+            var decoration = GetFontDecoration(fStyle);
+
             Font result;
             if (prevFont == null) {
                 var defFont = this.Font;

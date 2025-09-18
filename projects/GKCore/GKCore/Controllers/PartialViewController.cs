@@ -208,7 +208,7 @@ namespace GKCore.Controllers
         public void SelectByRec(GDMRecord record)
         {
             if (record == null)
-                throw new ArgumentNullException("record");
+                throw new ArgumentNullException(nameof(record));
 
             fView.Activate();
             SelectRecordByXRef(record.XRef);

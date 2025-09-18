@@ -85,6 +85,7 @@
         <EmbeddedResource Include="Resources\btn_portrait.png" />
         <EmbeddedResource Include="Resources\btn_chart.gif" />
         <EmbeddedResource Include="Resources\btn_view.png" />
+        <EmbeddedResource Include="Resources\btn_settings.png" />
 
         <EmbeddedResource Include="Resources\tg_barbed_wire.png" />
         <EmbeddedResource Include="Resources\tg_george_cross.gif" />

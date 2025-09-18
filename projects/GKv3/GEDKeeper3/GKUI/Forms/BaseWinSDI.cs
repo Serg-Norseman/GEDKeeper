@@ -386,12 +386,11 @@ namespace GKUI.Forms
 
                 case Keys.Home:
                 case Keys.End:
-                    if (sender is GKListView) {
-                        var listView = sender as GKListView;
+                    if (sender is GKListView listView) {
                         if (e.Key == Keys.Home) {
-                            listView.SelectedIndex = 0;
+                            listView.SelectItem(0);
                         } else {
-                            listView.SelectedIndex = -1;
+                            listView.SelectItem(-1);
                         }
                         e.Handled = true;
                     }

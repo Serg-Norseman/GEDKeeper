@@ -77,6 +77,7 @@ Elements:
   - Element: ToolItemsImageSize
     Value: "24"
 
+
   - Element: Glyph_FileNew
     Value: "Modern/FileNew.png"
 
@@ -283,4 +284,7 @@ Elements:
 
   - Element: Glyph_View
     Value: "Modern/View.png"
+
+  - Element: Glyph_Tools
+    Value: "Modern/Tools.png"
 ...
