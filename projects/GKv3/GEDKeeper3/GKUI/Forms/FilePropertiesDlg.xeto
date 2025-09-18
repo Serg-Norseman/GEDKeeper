@@ -24,12 +24,7 @@
             </TableRow>
             <TableRow>
               <Label x:Name="lblLanguage" />
-              <StackLayout Orientation="Horizontal" Spacing="4">
-                <StackLayoutItem Expand="True">
-                  <TextBox x:Name="txtLanguage" ReadOnly="True" />
-                </StackLayoutItem>
-                <Button x:Name="btnLangEdit" Style="iconBtn" Image="{Resource Resources.btn_rec_edit.gif, GKCore}" Click="btnLangEdit_Click" />
-              </StackLayout>
+              <ComboBox x:Name="txtLanguage" ReadOnly="True" />
             </TableRow>
           </TableLayout>
         </TabPage>

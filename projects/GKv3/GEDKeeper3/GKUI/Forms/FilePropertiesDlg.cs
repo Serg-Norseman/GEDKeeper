@@ -18,7 +18,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Controllers;
@@ -46,7 +45,7 @@ namespace GKUI.Forms
         private TabPage pageOther;
         private GKListView lvRecordStats;
         private Button btnLangEdit;
-        private TextBox txtLanguage;
+        private ComboBox txtLanguage;
         private Label lblLanguage;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
@@ -64,9 +63,9 @@ namespace GKUI.Forms
             get { return lvRecordStats; }
         }
 
-        ITextBox IFilePropertiesDlg.Language
+        IComboBox IFilePropertiesDlg.Language
         {
-            get { return GetControlHandler<ITextBox>(txtLanguage); }
+            get { return GetControlHandler<IComboBox>(txtLanguage); }
         }
 
         ITextBox IFilePropertiesDlg.Name
@@ -93,11 +92,6 @@ namespace GKUI.Forms
             fController = new FilePropertiesDlgController(this);
             fController.Init(baseWin);
             fController.UpdateView();
-        }
-
-        private void btnLangEdit_Click(object sender, EventArgs e)
-        {
-            fController.ChangeLanguage();
         }
     }
 }

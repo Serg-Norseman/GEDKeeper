@@ -149,12 +149,6 @@
     <Compile Include="GKUI\Forms\GroupEditDlg.Designer.cs">
       <DependentUpon>GroupEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="GKUI\Forms\LanguageEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GKUI\Forms\LanguageEditDlg.Designer.cs">
-      <DependentUpon>LanguageEditDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="GKUI\Forms\LanguageSelectDlg.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -121,7 +121,6 @@
     <Compile Include="GKCore\Design\Views\IFilePropertiesDlg.cs" />
     <Compile Include="GKCore\Design\Views\IFragmentSearchDlg.cs" />
     <Compile Include="GKCore\Design\Views\IGroupEditDlg.cs" />
-    <Compile Include="GKCore\Design\Views\ILanguageEditDlg.cs" />
     <Compile Include="GKCore\Design\Views\ILanguageSelectDlg.cs" />
     <Compile Include="GKCore\Design\Views\ILocationEditDlg.cs" />
     <Compile Include="GKCore\Design\Views\IMapsViewerWin.cs" />
@@ -306,7 +305,6 @@
     <Compile Include="GKCore\Controllers\FilePropertiesDlgController.cs" />
     <Compile Include="GKCore\Controllers\FragmentSearchController.cs" />
     <Compile Include="GKCore\Controllers\GroupEditDlgController.cs" />
-    <Compile Include="GKCore\Controllers\LanguageEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\LanguageSelectDlgController.cs" />
     <Compile Include="GKCore\Controllers\LocationEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\MapsViewerWinController.cs" />

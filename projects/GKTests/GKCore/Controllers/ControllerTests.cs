@@ -582,7 +582,7 @@ namespace GKCore.Controllers
             SubstituteControl<ILabel>(view, "lblLanguage");
 
             view.RecordStats.Returns(Substitute.For<IListView>());
-            view.Language.Returns(Substitute.For<ITextBox>());
+            view.Language.Returns(Substitute.For<IComboBox>());
             view.Name.Returns(Substitute.For<ITextBox>());
             view.Address.Returns(Substitute.For<ITextBox>());
             view.Tel.Returns(Substitute.For<ITextBox>());
@@ -595,6 +595,9 @@ namespace GKCore.Controllers
             controller.UpdateView();
 
             view.Name.Text = "sample text";
+
+            var langValue = GDMLanguageID.AngloSaxon;
+            view.Language.GetSelectedTag<GDMLanguageID>().Returns(langValue);
 
             controller.Accept();
 
@@ -663,39 +666,6 @@ namespace GKCore.Controllers
 
             controller.JumpToRecord(null); // nothing
             controller.JumpToRecord(group); // simulate jump to self
-        }
-
-        [Test]
-        public void Test_LanguageEditDlgController()
-        {
-            var view = Substitute.For<ILanguageEditDlg>();
-            SubstituteControl<IButton>(view, "btnAccept");
-            SubstituteControl<IButton>(view, "btnCancel");
-            SubstituteControl<ILabel>(view, "lblLanguage");
-            SubstituteControl<IComboBox>(view, "cmbLanguage");
-
-            Assert.AreEqual(GDMLanguageID.Unknown, view.LanguageID);
-
-            var baseWin = Substitute.For<IBaseWindow>();
-            var tree = new GDMTree();
-
-            var controller = new LanguageEditDlgController(view);
-            Assert.IsNotNull(controller);
-
-            controller.Init(baseWin);
-            Assert.AreEqual(baseWin, controller.Base);
-
-            controller.LanguageID = GDMLanguageID.Akkadian;
-            Assert.AreEqual(GDMLanguageID.Akkadian, controller.LanguageID);
-
-            var langValue = GDMLanguageID.AngloSaxon;
-
-            // substitutes of values
-            view.LanguageCombo.GetSelectedTag<GDMLanguageID>().Returns(langValue);
-
-            controller.UpdateView();
-            Assert.IsTrue(controller.Accept());
-            Assert.AreEqual(langValue, controller.LanguageID);
         }
 
         [Test]

@@ -464,7 +464,6 @@ namespace GKUI.Platform
             container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
             container.Register<IFragmentSearchDlg, TTFamilyGroupsDlg>(LifeCycle.Transient);
             container.Register<IGroupEditDlg, GroupEditDlg>(LifeCycle.Transient);
-            container.Register<ILanguageEditDlg, LanguageEditDlg>(LifeCycle.Transient);
             container.Register<ILanguageSelectDlg, LanguageSelectDlg>(LifeCycle.Transient);
             container.Register<ILocationEditDlg, LocationEditDlg>(LifeCycle.Transient);
             container.Register<ILocationNameEditDlg, LocationNameEditDlg>(LifeCycle.Transient);

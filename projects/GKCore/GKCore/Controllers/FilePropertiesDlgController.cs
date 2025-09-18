@@ -42,11 +42,8 @@ namespace GKCore.Controllers
             fListModel = new FlatListModel();
             fView.RecordStats.ListMan = fListModel;
 
-            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                var mobileView = view as IMobileFilePropertiesDlg;
-                for (var lid = GDMLanguageID.Unknown; lid < GDMLanguageID.Yiddish; lid++) {
-                    mobileView.LanguageCombo.AddItem(GEDCOMUtils.GetLanguageStr(lid), lid);
-                }
+            for (var lid = GDMLanguageID.Unknown; lid < GDMLanguageID.Yiddish; lid++) {
+                fView.Language.AddItem(GEDCOMUtils.GetLanguageStr(lid), lid);
             }
         }
 
@@ -63,12 +60,7 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                    fBase.Context.Tree.Header.Language = GEDCOMUtils.GetLanguageVal(fView.Language.Text);
-                } else {
-                    var mobileView = fView as IMobileFilePropertiesDlg;
-                    fBase.Context.Tree.Header.Language = mobileView.LanguageCombo.GetSelectedTag<GDMLanguageID>();
-                }
+                fBase.Context.Tree.Header.Language = fView.Language.GetSelectedTag<GDMLanguageID>();
 
                 GDMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
                 submitter.Name = fView.Name.Text;
@@ -91,12 +83,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                fView.Language.Text = GEDCOMUtils.GetLanguageStr(fBase.Context.Tree.Header.Language);
-            } else {
-                var mobileView = fView as IMobileFilePropertiesDlg;
-                mobileView.LanguageCombo.Text = GEDCOMUtils.GetLanguageStr(fBase.Context.Tree.Header.Language);
-            }
+            fView.Language.Text = GEDCOMUtils.GetLanguageStr(fBase.Context.Tree.Header.Language);
 
             GDMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
             fView.Name.Text = submitter.Name;
@@ -112,21 +99,6 @@ namespace GKCore.Controllers
                 fListModel.AddItem(null, LangMan.LS(GKData.RecordTypes[i].Name), stats[i].ToString());
             }
             fView.RecordStats.UpdateContents();
-        }
-
-        public async void ChangeLanguage()
-        {
-            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile))
-                return;
-
-            using (var dlg = AppHost.ResolveDialog<ILanguageEditDlg>()) {
-                dlg.LanguageID = fBase.Context.Tree.Header.Language;
-
-                if (await AppHost.Instance.ShowModalAsync(dlg, fView)) {
-                    // Assignment in control, instead of the header's property to work Cancel.
-                    fView.Language.Text = GEDCOMUtils.GetLanguageStr(dlg.LanguageID);
-                }
-            }
         }
 
         public override void SetLocale()
@@ -149,8 +121,6 @@ namespace GKCore.Controllers
 
             GetControl<IButton>("btnAccept").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Accept);
             GetControl<IButton>("btnCancel").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Cancel);
-
-            GetControl<IButton>("btnLangEdit").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ItemEdit);
         }
     }
 }

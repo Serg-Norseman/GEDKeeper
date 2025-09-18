@@ -26,20 +26,9 @@ namespace GKCore.Design.Views
     {
         IListView RecordStats { get; }
 
-        ITextBox Language { get; }
+        IComboBox Language { get; }
         ITextBox Name { get; }
         ITextBox Address { get; }
         ITextBox Tel { get; }
-    }
-
-
-    public interface IDesktopFilePropertiesDlg : IFilePropertiesDlg
-    {
-    }
-
-
-    public interface IMobileFilePropertiesDlg : IFilePropertiesDlg
-    {
-        IComboBox LanguageCombo { get; }
     }
 }
