@@ -84,8 +84,9 @@ namespace GKUI.Components
         {
             AllowColumnReordering = false;
             AllowMultipleSelection = false;
-            // [Gtk] Selection of the last (or only) row does not work on left click; EtoForms issue #2443
-            AllowEmptySelection = false;
+            // [Gtk] Selection of the last (or only) row does not work on left click; EtoForms issue #2443 (fixed)
+            // <true> is required for the correct operation of changing the selected row using SelectItem()
+            AllowEmptySelection = true;
 
             fCheckBoxes = false;
             fListMan = null;
@@ -216,7 +217,7 @@ namespace GKUI.Components
             Columns.Clear();
         }
 
-        private static TextAlignment[] AlignmentMap = new TextAlignment[] { TextAlignment.Left, TextAlignment.Right, TextAlignment.Center };
+        private static readonly TextAlignment[] AlignmentMap = new TextAlignment[] { TextAlignment.Left, TextAlignment.Right, TextAlignment.Center };
 
         public void AddColumn(string caption, int width, bool autoSize = false, GKHorizontalAlignment textAlign = GKHorizontalAlignment.Left)
         {
@@ -327,8 +328,8 @@ namespace GKUI.Components
 
             if (index >= 0 && index < fListMan.ContentList.Count) {
                 UnselectAll();
-                ScrollToRow(index);
                 SelectRow(index);
+                ScrollToRow(index);
             }
         }
 

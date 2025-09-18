@@ -20,6 +20,7 @@
 
 #pragma warning disable CA1416
 
+using System;
 using Eto.Drawing;
 using Eto.Forms;
 using GKUI.Themes;
@@ -110,6 +111,11 @@ namespace GKUI.Platform
                 tpf.Weight = Pango.Weight.Normal;
                 h.Control.Button.ModifyFont(tpf);
                 h.Control.Button.ModifyFg(Gtk.StateType.Normal, new Gdk.Color(0, 0, 0));
+            });
+
+            Eto.Style.Add<Eto.GtkSharp.Forms.Controls.GridViewHandler>(null, h => {
+                //h.ScrolledWindow.KineticScrolling = false;
+                //h.ScrolledWindow.OverlayScrolling = false;
             });
 #endif
 

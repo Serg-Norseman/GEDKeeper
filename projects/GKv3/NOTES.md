@@ -46,3 +46,6 @@ Eto.Forms v2.7.4 compatible with netfw462
 
 LibVLCSharp.GTK
   - all versions only for net47 and above
+
+Linux, Gtk, Gtk.TreeView -> EF.GridView, scrolling indicators
+  https://unix.stackexchange.com/questions/250880/how-to-disable-or-fix-gtk-scrolling-indicators
