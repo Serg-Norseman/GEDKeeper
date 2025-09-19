@@ -139,10 +139,10 @@
             // btnAccept
             // 
             this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAccept.Location = new System.Drawing.Point(544, 542);
+            this.btnAccept.Location = new System.Drawing.Point(588, 542);
             this.btnAccept.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.btnAccept.Name = "btnAccept";
-            this.btnAccept.Size = new System.Drawing.Size(90, 24);
+            this.btnAccept.Size = new System.Drawing.Size(98, 24);
             this.btnAccept.TabIndex = 5;
             this.btnAccept.Text = "btnAccept";
             this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -152,10 +152,10 @@
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(644, 542);
+            this.btnCancel.Location = new System.Drawing.Point(696, 542);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(90, 24);
+            this.btnCancel.Size = new System.Drawing.Size(98, 24);
             this.btnCancel.TabIndex = 6;
             this.btnCancel.Text = "btnCancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -534,7 +534,7 @@
             // 
             // btnNameCopy
             // 
-            this.btnNameCopy.Location = new System.Drawing.Point(489, 542);
+            this.btnNameCopy.Location = new System.Drawing.Point(534, 542);
             this.btnNameCopy.Margin = new System.Windows.Forms.Padding(2, 2, 16, 2);
             this.btnNameCopy.Name = "btnNameCopy";
             this.btnNameCopy.Size = new System.Drawing.Size(37, 24);
@@ -723,7 +723,7 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 220F));
             this.tableLayoutPanel1.Controls.Add(this.panel1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -731,7 +731,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(728, 253);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(788, 253);
             this.tableLayoutPanel1.TabIndex = 22;
             // 
             // panel1
@@ -776,7 +776,7 @@
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(728, 519);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(788, 519);
             this.tableLayoutPanel3.TabIndex = 23;
             // 
             // PersonEditDlg
@@ -785,7 +785,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(744, 577);
+            this.ClientSize = new System.Drawing.Size(804, 577);
             this.Controls.Add(this.tableLayoutPanel3);
             this.Controls.Add(this.lblRestriction);
             this.Controls.Add(this.btnNameCopy);
