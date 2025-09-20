@@ -279,12 +279,19 @@ namespace GKCore.Charts
                 return fScale;
             }
             set {
-                if (value < 0.5f) value = 0.5f;
-                if (value > 1.5f) value = 1.5f;
-
+                if (ScaleLimits) {
+                    if (value < 0.5f) value = 0.5f;
+                    if (value > 1.5f) value = 1.5f;
+                }
                 fScale = value;
             }
         }
+
+        /// <summary>
+        /// Controls scale limits for UI actions. This should be disabled if arbitrary scaling is required (Trees Album).
+        /// </summary>
+        public bool ScaleLimits { get; set; }
+
 
         internal int SpouseDistance
         {
@@ -306,6 +313,8 @@ namespace GKCore.Charts
 
         public TreeChartModel(ITreeChart view)
         {
+            ScaleLimits = true;
+
             fDepthLimitAncestors = -1;
             fDepthLimitDescendants = -1;
             fFilter = new ChartFilter();

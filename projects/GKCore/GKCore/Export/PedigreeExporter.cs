@@ -575,6 +575,8 @@ namespace GKCore.Export
             fSupText = fWriter.CreateFont("", (isRtf ? 12f : 6f), false, false, clrBlue);
             var chapFont = fWriter.CreateFont("", 16f, true, false, clrBlack);
 
+            fWriter.EnablePageNumbers();
+
             fFormat = fOptions.PedigreeOptions.Format;
 
             bool includeGens = fOptions.PedigreeOptions.IncludeGenerations;

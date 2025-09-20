@@ -1140,8 +1140,6 @@ namespace GKCore.Controllers
 
         public void ExportToTreesAlbum()
         {
-            AppHost.StdDialogs.ShowWarning(@"This function is experimental and not completed. Only for PDF!");
-
             using (TreesAlbumExporter ta = new TreesAlbumExporter(fView)) {
                 ta.Generate(true);
             }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -32,11 +32,12 @@ namespace GKCore.Export
     /// </summary>
     public abstract class ReportExporter : Exporter
     {
-        protected string fTitle;
         private bool fAlbumPage;
-
         protected int fDefImageHeight;
         protected int fDefImageWidth;
+        protected bool fPDFOnly;
+        protected string fTitle;
+
 
         protected ReportExporter(IBaseWindow baseWin, bool albumPage)
             : base(baseWin)
@@ -45,6 +46,8 @@ namespace GKCore.Export
 
             fDefImageHeight = 320;
             fDefImageWidth = 200;
+
+            fPDFOnly = false;
         }
 
         protected abstract void InternalGenerate();
@@ -75,8 +78,12 @@ namespace GKCore.Export
 
         public async override void Generate(bool show)
         {
-            string availableFormats = LangMan.LS(LSID.HTMLFilter) + "|" + LangMan.LS(LSID.RTFFilter);
-            availableFormats += "|" + LangMan.LS(LSID.PDFFilter);
+            string availableFormats = "";
+            if (!fPDFOnly) {
+                availableFormats = LangMan.LS(LSID.HTMLFilter) + "|" + LangMan.LS(LSID.RTFFilter);
+                availableFormats += "|";
+            }
+            availableFormats += LangMan.LS(LSID.PDFFilter);
 
             fPath = await AppHost.StdDialogs.GetSaveFile(GlobalOptions.Instance.ReportExportLastDir, availableFormats);
             if (string.IsNullOrEmpty(fPath)) return;
