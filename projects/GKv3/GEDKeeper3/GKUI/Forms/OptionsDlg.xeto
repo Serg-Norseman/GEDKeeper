@@ -344,7 +344,7 @@
                           <ComboBox x:Name="cmbTextEffect" Width="200" ReadOnly="True" />
                         </StackLayout>
                       </StackLayout>
-                      
+
                       <StackLayout Spacing="4">
                         <TableLayout Style="paddedTable">
 
@@ -394,74 +394,73 @@
           <TabControl x:Name="PageControl2">
 
             <TabPage x:Name="pageViewCommon">
-              <TableLayout Style="paddedTable">
-                <TableRow>
-
-                  <GroupBox x:Name="rgFNPFormat">
-                    <StackLayout Style="vertListStack">
-
-                      <RadioButton x:Name="radS_N_P" CheckedChanged="rgFNPFormat_CheckedChanged" />
-                      <RadioButton x:Name="radS_NP" CheckedChanged="rgFNPFormat_CheckedChanged" />
-                      <RadioButton x:Name="radSNP" CheckedChanged="rgFNPFormat_CheckedChanged" />
-                      <StackLayoutItem />
-                      <CheckBox x:Name="chkSurnameFirstInOrder" />
-                      <StackLayoutItem />
-                      <CheckBox x:Name="chkFirstCapitalLetterInNames" />
-                      <CheckBox x:Name="chkSurnameInCapitals" />
-
-                    </StackLayout>
-                  </GroupBox>
-
-                  <GroupBox x:Name="grpDateFormat">
-                    <StackLayout Style="vertListStack">
-
-                      <RadioButton x:Name="radDMY">DD.MM.YYYY</RadioButton>
-                      <RadioButton x:Name="radYMD">YYYY.MM.DD</RadioButton>
-                      <StackLayoutItem />
-                      <CheckBox x:Name="chkShowDatesSigns" />
-                      <CheckBox x:Name="chkShowDatesCalendar" />
-                      <CheckBox x:Name="chkLocalizedCalendarSignatures" />
-                      <CheckBox x:Name="chkShortenDateRanges" />
-
-                    </StackLayout>
-                  </GroupBox>
-
-                </TableRow>
-                <TableRow>
-
-                  <GroupBox x:Name="grpAdvancedNames">
-                    <StackLayout Style="vertListStack">
-
-                      <CheckBox x:Name="chkExtendWomanSurnames" CheckedChanged="chkExtendWomanSurnames_CheckedChanged" />
-                      <StackLayoutItem />
-                      <RadioButton x:Name="radMaiden_Married" />
-                      <RadioButton x:Name="radMarried_Maiden" />
-                      <RadioButton x:Name="radMaiden" />
-                      <RadioButton x:Name="radMarried" />
-                      <StackLayoutItem />
-                      <CheckBox x:Name="chkSimpleSingleSurnames" />
-
-                    </StackLayout>
-                  </GroupBox>
-
+              <StackLayout Style="vertListStack">
+                <GroupBox x:Name="grpDateFormat">
                   <StackLayout Style="vertListStack">
 
-                    <CheckBox x:Name="chkPlacesWithAddress" />
+                    <RadioButton x:Name="radDMY">DD.MM.YYYY</RadioButton>
+                    <RadioButton x:Name="radYMD">YYYY.MM.DD</RadioButton>
                     <StackLayoutItem />
-                    <CheckBox x:Name="chkHighlightUnparented" />
-                    <CheckBox x:Name="chkHighlightUnmarried" />
-                    <StackLayoutItem />
-                    <CheckBox x:Name="chkAutoSortChildren" />
-                    <CheckBox x:Name="chkAutoSortSpouses" />
-                    <StackLayoutItem />
-                    <CheckBox x:Name="chkShowNumberOfSubstructures" />
+                    <CheckBox x:Name="chkShowDatesSigns" />
+                    <CheckBox x:Name="chkShowDatesCalendar" />
+                    <CheckBox x:Name="chkLocalizedCalendarSignatures" />
+                    <CheckBox x:Name="chkShortenDateRanges" />
 
                   </StackLayout>
+                </GroupBox>
 
-                </TableRow>
+                <StackLayout Style="vertListStack">
 
-                <TableRow ScaleHeight="True" />
-              </TableLayout>
+                  <CheckBox x:Name="chkPlacesWithAddress" />
+                  <StackLayoutItem />
+                  <CheckBox x:Name="chkHighlightUnparented" />
+                  <CheckBox x:Name="chkHighlightUnmarried" />
+                  <StackLayoutItem />
+                  <CheckBox x:Name="chkAutoSortChildren" />
+                  <CheckBox x:Name="chkAutoSortSpouses" />
+                  <StackLayoutItem />
+                  <CheckBox x:Name="chkShowNumberOfSubstructures" />
+
+                </StackLayout>
+
+                <StackLayoutItem Expand="True" />
+              </StackLayout>
+            </TabPage>
+
+            <TabPage x:Name="pageNames">
+              <StackLayout Style="vertListStack">
+                <GroupBox x:Name="rgFNPFormat">
+                  <StackLayout Style="vertListStack">
+
+                    <RadioButton x:Name="radS_N_P" CheckedChanged="rgFNPFormat_CheckedChanged" />
+                    <RadioButton x:Name="radS_NP" CheckedChanged="rgFNPFormat_CheckedChanged" />
+                    <RadioButton x:Name="radSNP" CheckedChanged="rgFNPFormat_CheckedChanged" />
+                    <StackLayoutItem />
+                    <CheckBox x:Name="chkSurnameFirstInOrder" />
+                    <StackLayoutItem />
+                    <CheckBox x:Name="chkFirstCapitalLetterInNames" />
+                    <CheckBox x:Name="chkSurnameInCapitals" />
+
+                  </StackLayout>
+                </GroupBox>
+
+                <GroupBox x:Name="grpAdvancedNames">
+                  <StackLayout Style="vertListStack">
+
+                    <CheckBox x:Name="chkExtendWomanSurnames" CheckedChanged="chkExtendWomanSurnames_CheckedChanged" />
+                    <StackLayoutItem />
+                    <RadioButton x:Name="radMaiden_Married" />
+                    <RadioButton x:Name="radMarried_Maiden" />
+                    <RadioButton x:Name="radMaiden" />
+                    <RadioButton x:Name="radMarried" />
+                    <StackLayoutItem />
+                    <CheckBox x:Name="chkSimpleSingleSurnames" />
+
+                  </StackLayout>
+                </GroupBox>
+
+                <StackLayoutItem Expand="True" />
+              </StackLayout>
             </TabPage>
 
             <TabPage x:Name="pageViewPersons">

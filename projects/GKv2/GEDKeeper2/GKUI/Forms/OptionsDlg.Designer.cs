@@ -216,6 +216,7 @@
         private System.Windows.Forms.TextBox txtExtBackupFolder;
         private System.Windows.Forms.Button btnExtBackupFolderChoose;
         private System.Windows.Forms.TabPage pageGEDCOM;
+        private System.Windows.Forms.TabPage pageNames;
 
         private void InitializeComponent()
         {
@@ -433,6 +434,7 @@
             this.txtExtBackupFolder = new System.Windows.Forms.TextBox();
             this.btnExtBackupFolderChoose = new System.Windows.Forms.Button();
             this.pageGEDCOM = new System.Windows.Forms.TabPage();
+            this.pageNames = new System.Windows.Forms.TabPage();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -485,6 +487,7 @@
             this.pageComOther.SuspendLayout();
             this.pageComBackup.SuspendLayout();
             this.pageGEDCOM.SuspendLayout();
+            this.pageNames.SuspendLayout();
             this.SuspendLayout();
             // 
             // PageControl1
@@ -2150,6 +2153,7 @@
             // PageControl2
             // 
             this.PageControl2.Controls.Add(this.pageViewCommon);
+            this.PageControl2.Controls.Add(this.pageNames);
             this.PageControl2.Controls.Add(this.pageViewPersons);
             this.PageControl2.Controls.Add(this.pageNavigation);
             this.PageControl2.Controls.Add(this.pageGeo);
@@ -2161,21 +2165,31 @@
             this.PageControl2.Size = new System.Drawing.Size(721, 742);
             this.PageControl2.TabIndex = 0;
             // 
+            // pageNames
+            // 
+            this.pageNames.Controls.Add(this.chkSurnameFirstInOrder);
+            this.pageNames.Controls.Add(this.grpAdvancedNames);
+            this.pageNames.Controls.Add(this.rgFNPFormat);
+            this.pageNames.Controls.Add(this.chkSurnameInCapitals);
+            this.pageNames.Controls.Add(this.chkFirstCapitalLetterInNames);
+            this.pageNames.Location = new System.Drawing.Point(4, 26);
+            this.pageNames.Margin = new System.Windows.Forms.Padding(2);
+            this.pageNames.Name = "pageNames";
+            this.pageNames.Padding = new System.Windows.Forms.Padding(10);
+            this.pageNames.Size = new System.Drawing.Size(713, 712);
+            this.pageNames.TabIndex = 0;
+            this.pageNames.Text = "pageNames";
+            // 
             // pageViewCommon
             // 
             this.pageViewCommon.Controls.Add(this.chkShowNumberOfSubstructures);
             this.pageViewCommon.Controls.Add(this.chkShortenDateRanges);
-            this.pageViewCommon.Controls.Add(this.chkSurnameFirstInOrder);
-            this.pageViewCommon.Controls.Add(this.grpAdvancedNames);
-            this.pageViewCommon.Controls.Add(this.rgFNPFormat);
             this.pageViewCommon.Controls.Add(this.grpDateFormat);
             this.pageViewCommon.Controls.Add(this.chkPlacesWithAddress);
             this.pageViewCommon.Controls.Add(this.chkHighlightUnparented);
             this.pageViewCommon.Controls.Add(this.chkLocalizedCalendarSignatures);
             this.pageViewCommon.Controls.Add(this.chkShowDatesSigns);
             this.pageViewCommon.Controls.Add(this.chkShowDatesCalendar);
-            this.pageViewCommon.Controls.Add(this.chkSurnameInCapitals);
-            this.pageViewCommon.Controls.Add(this.chkFirstCapitalLetterInNames);
             this.pageViewCommon.Controls.Add(this.chkAutoSortSpouses);
             this.pageViewCommon.Controls.Add(this.chkAutoSortChildren);
             this.pageViewCommon.Controls.Add(this.chkHighlightUnmarried);
@@ -2190,7 +2204,7 @@
             // chkShowNumberOfSubstructures
             // 
             this.chkShowNumberOfSubstructures.AutoSize = true;
-            this.chkShowNumberOfSubstructures.Location = new System.Drawing.Point(11, 474);
+            this.chkShowNumberOfSubstructures.Location = new System.Drawing.Point(11, 372);
             this.chkShowNumberOfSubstructures.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkShowNumberOfSubstructures.Name = "chkShowNumberOfSubstructures";
             this.chkShowNumberOfSubstructures.Size = new System.Drawing.Size(600, 22);
@@ -2200,7 +2214,7 @@
             // chkShortenDateRanges
             // 
             this.chkShortenDateRanges.AutoSize = true;
-            this.chkShortenDateRanges.Location = new System.Drawing.Point(326, 184);
+            this.chkShortenDateRanges.Location = new System.Drawing.Point(11, 184);
             this.chkShortenDateRanges.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkShortenDateRanges.Name = "chkShortenDateRanges";
             this.chkShortenDateRanges.Size = new System.Drawing.Size(600, 22);
@@ -2225,11 +2239,11 @@
             this.grpAdvancedNames.Controls.Add(this.radMaiden_Married);
             this.grpAdvancedNames.Controls.Add(this.chkExtendWomanSurnames);
             this.grpAdvancedNames.Controls.Add(this.chkSimpleSingleSurnames);
-            this.grpAdvancedNames.Location = new System.Drawing.Point(326, 232);
+            this.grpAdvancedNames.Location = new System.Drawing.Point(11, 232);
             this.grpAdvancedNames.Margin = new System.Windows.Forms.Padding(10);
             this.grpAdvancedNames.Name = "grpAdvancedNames";
             this.grpAdvancedNames.Padding = new System.Windows.Forms.Padding(2);
-            this.grpAdvancedNames.Size = new System.Drawing.Size(368, 230);
+            this.grpAdvancedNames.Size = new System.Drawing.Size(428, 230);
             this.grpAdvancedNames.TabIndex = 8;
             this.grpAdvancedNames.TabStop = false;
             this.grpAdvancedNames.Text = "AdvancedNames";
@@ -2356,7 +2370,7 @@
             // 
             this.grpDateFormat.Controls.Add(this.radYMD);
             this.grpDateFormat.Controls.Add(this.radDMY);
-            this.grpDateFormat.Location = new System.Drawing.Point(326, 10);
+            this.grpDateFormat.Location = new System.Drawing.Point(11, 10);
             this.grpDateFormat.Margin = new System.Windows.Forms.Padding(2);
             this.grpDateFormat.Name = "grpDateFormat";
             this.grpDateFormat.Padding = new System.Windows.Forms.Padding(2);
@@ -2388,7 +2402,7 @@
             // chkPlacesWithAddress
             // 
             this.chkPlacesWithAddress.AutoSize = true;
-            this.chkPlacesWithAddress.Location = new System.Drawing.Point(11, 191);
+            this.chkPlacesWithAddress.Location = new System.Drawing.Point(11, 242);
             this.chkPlacesWithAddress.Margin = new System.Windows.Forms.Padding(2);
             this.chkPlacesWithAddress.Name = "chkPlacesWithAddress";
             this.chkPlacesWithAddress.Size = new System.Drawing.Size(302, 21);
@@ -2398,7 +2412,7 @@
             // chkHighlightUnparented
             // 
             this.chkHighlightUnparented.AutoSize = true;
-            this.chkHighlightUnparented.Location = new System.Drawing.Point(11, 220);
+            this.chkHighlightUnparented.Location = new System.Drawing.Point(11, 268);
             this.chkHighlightUnparented.Margin = new System.Windows.Forms.Padding(2);
             this.chkHighlightUnparented.Name = "chkHighlightUnparented";
             this.chkHighlightUnparented.Size = new System.Drawing.Size(302, 21);
@@ -2408,7 +2422,7 @@
             // chkLocalizedCalendarSignatures
             // 
             this.chkLocalizedCalendarSignatures.AutoSize = true;
-            this.chkLocalizedCalendarSignatures.Location = new System.Drawing.Point(326, 159);
+            this.chkLocalizedCalendarSignatures.Location = new System.Drawing.Point(11, 159);
             this.chkLocalizedCalendarSignatures.Margin = new System.Windows.Forms.Padding(2);
             this.chkLocalizedCalendarSignatures.Name = "chkLocalizedCalendarSignatures";
             this.chkLocalizedCalendarSignatures.Size = new System.Drawing.Size(338, 21);
@@ -2418,7 +2432,7 @@
             // chkShowDatesSigns
             // 
             this.chkShowDatesSigns.AutoSize = true;
-            this.chkShowDatesSigns.Location = new System.Drawing.Point(326, 134);
+            this.chkShowDatesSigns.Location = new System.Drawing.Point(11, 134);
             this.chkShowDatesSigns.Margin = new System.Windows.Forms.Padding(2);
             this.chkShowDatesSigns.Name = "chkShowDatesSigns";
             this.chkShowDatesSigns.Size = new System.Drawing.Size(338, 21);
@@ -2428,7 +2442,7 @@
             // chkShowDatesCalendar
             // 
             this.chkShowDatesCalendar.AutoSize = true;
-            this.chkShowDatesCalendar.Location = new System.Drawing.Point(326, 108);
+            this.chkShowDatesCalendar.Location = new System.Drawing.Point(11, 108);
             this.chkShowDatesCalendar.Margin = new System.Windows.Forms.Padding(2);
             this.chkShowDatesCalendar.Name = "chkShowDatesCalendar";
             this.chkShowDatesCalendar.Size = new System.Drawing.Size(338, 21);
@@ -2438,7 +2452,7 @@
             // chkHighlightUnmarried
             // 
             this.chkHighlightUnmarried.AutoSize = true;
-            this.chkHighlightUnmarried.Location = new System.Drawing.Point(11, 249);
+            this.chkHighlightUnmarried.Location = new System.Drawing.Point(11, 294);
             this.chkHighlightUnmarried.Margin = new System.Windows.Forms.Padding(2);
             this.chkHighlightUnmarried.Name = "chkHighlightUnmarried";
             this.chkHighlightUnmarried.Size = new System.Drawing.Size(302, 21);
@@ -2448,7 +2462,7 @@
             // chkAutoSortChildren
             // 
             this.chkAutoSortChildren.AutoSize = true;
-            this.chkAutoSortChildren.Location = new System.Drawing.Point(11, 300);
+            this.chkAutoSortChildren.Location = new System.Drawing.Point(11, 320);
             this.chkAutoSortChildren.Margin = new System.Windows.Forms.Padding(2);
             this.chkAutoSortChildren.Name = "chkAutoSortChildren";
             this.chkAutoSortChildren.Size = new System.Drawing.Size(302, 21);
@@ -2458,7 +2472,7 @@
             // chkAutoSortSpouses
             // 
             this.chkAutoSortSpouses.AutoSize = true;
-            this.chkAutoSortSpouses.Location = new System.Drawing.Point(11, 326);
+            this.chkAutoSortSpouses.Location = new System.Drawing.Point(11, 346);
             this.chkAutoSortSpouses.Margin = new System.Windows.Forms.Padding(2);
             this.chkAutoSortSpouses.Name = "chkAutoSortSpouses";
             this.chkAutoSortSpouses.Size = new System.Drawing.Size(302, 21);
@@ -2468,7 +2482,7 @@
             // chkFirstCapitalLetterInNames
             // 
             this.chkFirstCapitalLetterInNames.AutoSize = true;
-            this.chkFirstCapitalLetterInNames.Location = new System.Drawing.Point(11, 352);
+            this.chkFirstCapitalLetterInNames.Location = new System.Drawing.Point(11, 158);
             this.chkFirstCapitalLetterInNames.Margin = new System.Windows.Forms.Padding(2);
             this.chkFirstCapitalLetterInNames.Name = "chkFirstCapitalLetterInNames";
             this.chkFirstCapitalLetterInNames.Size = new System.Drawing.Size(302, 21);
@@ -2478,7 +2492,7 @@
             // chkSurnameInCapitals
             // 
             this.chkSurnameInCapitals.AutoSize = true;
-            this.chkSurnameInCapitals.Location = new System.Drawing.Point(11, 378);
+            this.chkSurnameInCapitals.Location = new System.Drawing.Point(11, 184);
             this.chkSurnameInCapitals.Margin = new System.Windows.Forms.Padding(2);
             this.chkSurnameInCapitals.Name = "chkSurnameInCapitals";
             this.chkSurnameInCapitals.Size = new System.Drawing.Size(302, 21);
@@ -3017,6 +3031,8 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "OptionsDlg";
+            this.pageNames.ResumeLayout(false);
+            this.pageNames.PerformLayout();
             this.pageGEDCOM.ResumeLayout(false);
             this.pageGEDCOM.PerformLayout();
             this.tabsCommon.ResumeLayout(false);

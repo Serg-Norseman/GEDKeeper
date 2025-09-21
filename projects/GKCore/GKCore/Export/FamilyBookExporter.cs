@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -33,6 +33,11 @@ namespace GKCore.Export
     /// </summary>
     public sealed class FamilyBookExporter : ReportExporter
     {
+        // It would be preferable to replace StringList with SortedList everywhere,
+        // since the second one is better designed and may be more efficient (?),
+        // but it does not support multiple inclusions of the same keys
+        // (there may be complete namesakes everywhere).
+
         private enum BookCatalog
         {
             Catalog_First = 0,
@@ -378,6 +383,8 @@ namespace GKCore.Export
             }
         }
 
+        private const float ChapterPartSpacingAfter = 6.0f;
+
         private void ExposeCatalog(CatalogProps catProps)
         {
             StringList index = catProps.Index;
@@ -392,7 +399,7 @@ namespace GKCore.Export
             index.Sort();
             int num = index.Count;
             for (int i = 0; i < num; i++) {
-                fWriter.BeginParagraph(TextAlignment.taLeft, 0, 20, 0);
+                fWriter.BeginParagraph(TextAlignment.taLeft, 0, ChapterPartSpacingAfter, 0);
                 fWriter.AddParagraphChunk(index[i], fSymFont);
                 fWriter.EndParagraph();
                 fWriter.NewLine();
@@ -409,7 +416,7 @@ namespace GKCore.Export
                     fWriter.EndParagraph();
                 }
 
-                fWriter.NewLine(0, 10f);
+                fWriter.NewLine(0, ChapterPartSpacingAfter);
             }
         }
 

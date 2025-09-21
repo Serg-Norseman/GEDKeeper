@@ -1044,6 +1044,7 @@ namespace GKCore.Controllers
             GetControl<ITabPage>("pageUIView").Text = LangMan.LS(LSID.Interface);
 
             GetControl<ITabPage>("pageViewCommon").Text = LangMan.LS(LSID.ListsAll);
+            GetControl<ITabPage>("pageNames").Text = LangMan.LS(LSID.Names);
 
             GetControl<IGroupBox>("rgFNPFormat").Text = LangMan.LS(LSID.NamesFormat);
             GetControl<IRadioButton>("radSNP").Text = LangMan.LS(LSID.NF1);
