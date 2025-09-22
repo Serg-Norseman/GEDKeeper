@@ -309,7 +309,7 @@ namespace GKUI.Platform
 
     public class GKMenuBarHandler : MenuBarHandler, GKMenuBar.IHandler
     {
-        public override Color BackgroundColor
+        public Color BackgroundColor
         {
             get { return base.BackgroundColor; }
             set {
@@ -320,7 +320,7 @@ namespace GKUI.Platform
             }
         }
 
-        public override Font Font
+        public Font Font
         {
             get { return base.Font; }
             set {
@@ -329,7 +329,7 @@ namespace GKUI.Platform
             }
         }
 
-        public override Color TextColor
+        public Color TextColor
         {
             get { return base.TextColor; }
             set {
