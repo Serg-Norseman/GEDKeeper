@@ -19,6 +19,8 @@ using Gtk;
 #endif
 
 #if OS_MACOS
+using Eto.Mac.Forms.Controls;
+using Eto.Mac.Forms.Menu;
 using Eto.Mac.Forms.ToolBar;
 #endif
 
@@ -274,9 +276,21 @@ namespace GKUI.Platform
 
     public class GKToolBarHandler : ToolBarHandler, GKToolBar.IHandler
     {
+        public Color BackgroundColor
+        {
+            get { return Colors.Transparent; }
+            set { }
+        }
+
         public Font Font
         {
             get { return null; }
+            set { }
+        }
+
+        public Color TextColor
+        {
+            get { return Colors.Transparent; }
             set { }
         }
     }
@@ -294,9 +308,21 @@ namespace GKUI.Platform
 
     public class GKMenuBarHandler : MenuBarHandler, GKMenuBar.IHandler
     {
+        public Color BackgroundColor
+        {
+            get { return Colors.Transparent; }
+            set { }
+        }
+
         public Font Font
         {
             get { return null; }
+            set { }
+        }
+
+        public Color TextColor
+        {
+            get { return Colors.Transparent; }
             set { }
         }
     }
