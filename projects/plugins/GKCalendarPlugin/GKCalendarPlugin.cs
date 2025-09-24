@@ -43,8 +43,10 @@ namespace GKCalendarPlugin
     public enum PLS
     {
         Calendar = 1,
-        Date,
-        Cal_Gregorian,
+
+        unused_1,
+
+        Cal_Gregorian = 3,
         Cal_Julian,
         Cal_Hebrew,
         Cal_Islamic,

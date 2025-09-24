@@ -932,6 +932,11 @@ namespace GKUI.Forms
             fController.ShowMap();
         }
 
+        private void miChronicle_Click(object sender, EventArgs e)
+        {
+            fController.ShowChronicle();
+        }
+
         private void miOrganizer_Click(object sender, EventArgs e)
         {
             fController.ShowOrganizer();

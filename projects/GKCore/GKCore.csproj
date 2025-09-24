@@ -65,6 +65,7 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GKCore\Design\Views\IChronicleWin.cs" />
     <Compile Include="GKCore\Backups\BackupTool.cs" />
     <Compile Include="GDModel\GDMAge.cs" />
     <Compile Include="GDModel\GDMDNATest.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="GKCore\Charts\DefTreeLayout.cs" />
     <Compile Include="GKCore\Controllers\AboutDlgController.cs" />
     <Compile Include="GKCore\Controllers\AgeEditDlgController.cs" />
+    <Compile Include="GKCore\Controllers\ChronicleController.cs" />
     <Compile Include="GKCore\Controllers\DNATestEditDlgController.cs" />
     <Compile Include="GKCore\Controllers\RepositoryCitDlgController.cs" />
     <Compile Include="GKCore\Controllers\SexCheckDlgController.cs" />

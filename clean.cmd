@@ -95,9 +95,6 @@ rmdir .\projects\plugins\GKCalculatorPlugin\obj /s /q
 rmdir .\projects\plugins\GKCalendarPlugin\bin /s /q
 rmdir .\projects\plugins\GKCalendarPlugin\obj /s /q
 
-rmdir .\projects\plugins\GKChroniclePlugin\bin /s /q
-rmdir .\projects\plugins\GKChroniclePlugin\obj /s /q
-
 rmdir .\projects\plugins\GKFlowInputPlugin\bin /s /q
 rmdir .\projects\plugins\GKFlowInputPlugin\obj /s /q
 

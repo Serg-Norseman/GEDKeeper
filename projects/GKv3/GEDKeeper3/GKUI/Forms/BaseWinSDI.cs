@@ -152,6 +152,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miCleanImagesCache;
         private ButtonToolItem tbPartialView;
         private ButtonMenuItem miExportToStrictGEDCOM;
+        private ButtonMenuItem miChronicle;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -1054,6 +1055,11 @@ namespace GKUI.Forms
         private void miMap_Click(object sender, EventArgs e)
         {
             fController.ShowMap();
+        }
+
+        private void miChronicle_Click(object sender, EventArgs e)
+        {
+            fController.ShowChronicle();
         }
 
         private void miOrganizer_Click(object sender, EventArgs e)

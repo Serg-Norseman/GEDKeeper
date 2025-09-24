@@ -124,6 +124,7 @@
         private System.Windows.Forms.ToolStripMenuItem miCleanImagesCache;
         private System.Windows.Forms.ToolStripButton tbPartialView;
         private System.Windows.Forms.ToolStripMenuItem miExportToStrictGEDCOM;
+        private System.Windows.Forms.ToolStripMenuItem miChronicle;
 
         private void InitializeComponent()
         {
@@ -249,6 +250,7 @@
             this.TBS9 = new System.Windows.Forms.ToolStripSeparator();
             this.tbPartialView = new System.Windows.Forms.ToolStripButton();
             this.miExportToStrictGEDCOM = new System.Windows.Forms.ToolStripMenuItem();
+            this.miChronicle = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusBar.SuspendLayout();
             this.ToolBar1.SuspendLayout();
             this.MenuPedigree.SuspendLayout();
@@ -838,6 +840,7 @@
             // miService
             // 
             this.miService.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                                    this.miChronicle,
                                     this.miOrganizer,
                                     this.miSlideshow,
                                     this.N9,
@@ -849,6 +852,13 @@
             this.miService.Name = "miService";
             this.miService.Size = new System.Drawing.Size(68, 24);
             this.miService.Text = "Service";
+            // 
+            // miChronicle
+            // 
+            this.miChronicle.Name = "miChronicle";
+            this.miChronicle.Size = new System.Drawing.Size(204, 24);
+            this.miChronicle.Text = "miChronicle";
+            this.miChronicle.Click += new System.EventHandler(this.miChronicle_Click);
             // 
             // miOrganizer
             // 

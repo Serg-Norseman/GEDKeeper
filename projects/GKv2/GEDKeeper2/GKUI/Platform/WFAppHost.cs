@@ -512,6 +512,7 @@ namespace GKUI.Platform
             container.Register<IRepositoryCitEditDlg, RepositoryCitEditDlg>(LifeCycle.Transient);
             container.Register<IDNATestEditDlg, DNATestEditDlg>(LifeCycle.Transient);
             container.Register<IAgeEditDlg, AgeEditDlg>(LifeCycle.Transient);
+            container.Register<IChronicleWin, ChronicleWin>(LifeCycle.Transient);
 
             container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
 

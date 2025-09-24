@@ -954,6 +954,7 @@ namespace GKCore.Controllers
                     GetControl<IMenuItem>("miDescendantsCircle").Text = LangMan.LS(LSID.DescendantsCircle);
                     GetControl<IMenuItem>("miRelationshipCalculator").Text = LangMan.LS(LSID.RelationshipCalculator);
 
+                    GetControl<IMenuItem>("miChronicle").Text = LangMan.LS(LSID.MIChronicle) + @"...";
                     GetControl<IMenuItem>("miOrganizer").Text = LangMan.LS(LSID.MIOrganizer) + @"...";
                     GetControl<IMenuItem>("miScripts").Text = LangMan.LS(LSID.MIScripts);
                     GetControl<IMenuItem>("miTreeTools").Text = LangMan.LS(LSID.MITreeTools);
@@ -1324,6 +1325,13 @@ namespace GKCore.Controllers
         public void ShowMap()
         {
             BaseController.ShowMap(fView);
+        }
+
+        public async void ShowChronicle()
+        {
+            using (var dlg = AppHost.Container.Resolve<IChronicleWin>(fView)) {
+                await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+            }
         }
 
         public async void ShowOrganizer()

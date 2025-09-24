@@ -89,6 +89,12 @@
     <Compile Include="GKUI\Forms\BaseWinSDI.Designer.cs">
       <DependentUpon>BaseWinSDI.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Forms\ChronicleWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\ChronicleWin.Designer.cs">
+      <DependentUpon>ChronicleWin.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Forms\CircleChartWin.cs">
       <SubType>Form</SubType>
     </Compile>

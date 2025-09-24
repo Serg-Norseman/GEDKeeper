@@ -102,6 +102,7 @@
       </ButtonMenuItem>
 
       <ButtonMenuItem x:Name="miService">
+        <ButtonMenuItem x:Name="miChronicle" Click="miChronicle_Click" />
         <ButtonMenuItem x:Name="miOrganizer" Image="{Resource Resources.btn_organizer.gif, GKCore}" Click="miOrganizer_Click" />
         <ButtonMenuItem x:Name="miSlideshow" Image="{Resource Resources.btn_slideshow.png, GKCore}" Click="miSlideshow_Click" />
         <SeparatorMenuItem />

@@ -35,7 +35,7 @@
 034=Sosa-Stradonitz
 035=Organizer								; main menu item, Service
 036=Scripts...								; main menu item, Service
-037=<?>
+037=Chronicle
 038=Tools...								; main menu item, Service
 039=Filter									; main menu item, Edit and etc
 040=Options									; main menu item, Service
@@ -1068,3 +1068,4 @@
 
 1051=Create a calculated birth event
 1052=No age on event date
+1053=Subject

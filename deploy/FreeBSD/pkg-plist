@@ -312,12 +312,6 @@ bin/gedkeeper
 %%DATADIR%%/plugins/GKCalendarPlugin.pol
 %%DATADIR%%/plugins/GKCalendarPlugin.rus
 %%DATADIR%%/plugins/GKCalendarPlugin.ukr
-%%DATADIR%%/plugins/GKChroniclePlugin.dll
-%%DATADIR%%/plugins/GKChroniclePlugin.enu
-%%DATADIR%%/plugins/GKChroniclePlugin.pdb
-%%DATADIR%%/plugins/GKChroniclePlugin.pol
-%%DATADIR%%/plugins/GKChroniclePlugin.rus
-%%DATADIR%%/plugins/GKChroniclePlugin.ukr
 %%DATADIR%%/plugins/GKComponents.dll
 %%DATADIR%%/plugins/GKCore.dll
 %%DATADIR%%/plugins/GKLifePlugin.dll

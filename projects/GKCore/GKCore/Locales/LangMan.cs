@@ -78,9 +78,7 @@ namespace GKCore.Locales
 
         /* 035 */ MIOrganizer,
         /* 036 */ MIScripts,
-
-        /* 037 */ Deprecated_037, // deprecated
-
+        /* 037 */ MIChronicle,
         /* 038 */ MITreeTools = 38,
         /* 039 */ MIFilter,
         /* 040 */ MIOptions,
@@ -1139,8 +1137,9 @@ namespace GKCore.Locales
 
         /* 1051 */ CreateCalculatedBirthEvent,
         /* 1052 */ NoAgeOnEventDate,
+        /* 1053 */ Subject,
 
-        /* 0000 */ Last = NoAgeOnEventDate
+        /* 0000 */ Last = Subject
     }
 
 
@@ -1194,7 +1193,7 @@ namespace GKCore.Locales
             /* 034 */ "Sosa-Stradonitz",
             /* 035 */ "Organizer",
             /* 036 */ "Scripts...",
-            /* 037 */ "<?>",
+            /* 037 */ "Chronicle",
             /* 038 */ "Tools...",
             /* 039 */ "Filter",
             /* 040 */ "Options",
@@ -2236,6 +2235,7 @@ namespace GKCore.Locales
 
             /* 1051 */ "Create a calculated birth event",
             /* 1052 */ "No age on event date",
+            /* 1053 */ "Subject",
         };
 
         private static readonly LangManager fLangMan = new LangManager();
