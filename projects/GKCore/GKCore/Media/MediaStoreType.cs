@@ -31,7 +31,7 @@ namespace GKCore.Media
         mstReference,
 
         /// <summary>
-        /// Storage's folder next to the database file.
+        /// Storage's folder next to the database file. Deprecated.
         /// </summary>
         mstStorage,
 

@@ -476,7 +476,7 @@ namespace GKCore.Locales
         /* 421 */ FEvt_9,
         /* 422 */ STRef,
         /* 423 */ STArc,
-        /* 424 */ STStg,
+        /* 424 */ STStg, // Deprecated
         /* 425 */ DefaultValue,
         /* 426 */ MT_02,
         /* 427 */ MT_03,
@@ -1580,7 +1580,7 @@ namespace GKCore.Locales
             /* 421 */ "Divorce",
             /* 422 */ "Link to file",
             /* 423 */ "Saving to the archive",
-            /* 424 */ "Saving to the store",
+            /* 424 */ "Saving to the store", // Deprecated
             /* 425 */ "-",
             /* 426 */ "Audio",
             /* 427 */ "Book",

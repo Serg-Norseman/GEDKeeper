@@ -29,7 +29,12 @@ using GKCore.Options;
 namespace GKCore.Media
 {
     /// <summary>
-    /// 
+    /// Absolute URI format: file:///file_path
+    /// Unix/Linux Absolute URI: file:///etc/fstab
+    /// MacOS Absolute URI: file:///var/log/system.log
+    /// Windows Absolute URI: file:///c:/WINDOWS/clock.avi
+    ///
+    /// Relative URI format: 'file:file_path' - RFC 3986, path-rootless definition (https://www.rfc-editor.org/rfc/rfc3986)
     /// </summary>
     public abstract class MediaStore
     {
@@ -192,6 +197,7 @@ namespace GKCore.Media
 
             refPath = string.Empty;
             string targetFile = string.Empty;
+            string refPrefix = GKData.GKStoreTypes[(int)StoreType].Sign;
 
             // set paths and links
             switch (StoreType) {
@@ -201,17 +207,17 @@ namespace GKCore.Media
 
                 case MediaStoreType.mstRelativeReference:
                     targetFile = fBaseContext.GetTreeRelativePath(fileName);
-                    refPath = GKData.GKStoreTypes[(int)StoreType].Sign + targetFile;
+                    refPath = refPrefix + targetFile;
                     break;
 
                 case MediaStoreType.mstArchive:
                     targetFile = storePath + storeFile;
-                    refPath = GKData.GKStoreTypes[(int)StoreType].Sign + targetFile;
+                    refPath = refPrefix + targetFile;
                     break;
 
                 case MediaStoreType.mstStorage:
                     targetFile = storePath + storeFile;
-                    refPath = GKData.GKStoreTypes[(int)StoreType].Sign + targetFile;
+                    refPath = refPrefix + targetFile;
                     break;
 
                 case MediaStoreType.mstURL:

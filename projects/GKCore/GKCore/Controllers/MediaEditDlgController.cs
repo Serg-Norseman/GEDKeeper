@@ -184,31 +184,27 @@ namespace GKCore.Controllers
             // 4. Url
 
             if (allowAbsRef) {
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name),
-                    MediaStoreType.mstReference);
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name), MediaStoreType.mstReference);
             }
 
-            if (!disNoStd) {
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstStorage].Name),
-                    MediaStoreType.mstStorage);
-            }
+            // Deprecated
+            /*if (!disNoStd) {
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstStorage].Name), MediaStoreType.mstStorage);
+            }*/
 
             if (allowArc) {
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name),
-                    MediaStoreType.mstArchive);
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name), MediaStoreType.mstArchive);
             }
 
             if (allowRelRef) {
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstRelativeReference].Name),
-                    MediaStoreType.mstRelativeReference);
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstRelativeReference].Name), MediaStoreType.mstRelativeReference);
             }
 
             if (!disNoStd) {
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstURL].Name),
-                    MediaStoreType.mstURL);
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstURL].Name), MediaStoreType.mstURL);
             }
 
-            fView.StoreType.SetSelectedTag<MediaStoreType>(selectType);
+            fView.StoreType.SetSelectedTag(selectType);
         }
 
         public async Task SelectFile()

@@ -64,7 +64,9 @@ namespace GKCore
         /*
          * 44 - v2.19.0
          * 45 - v2.27.0 / v3.3.0
-         * 46 - v2.29.0 / v3.5.0
+         * 46 - v2.29.0 / v3.5.0 --- v2.33.0 / v3.9.0 [14/03/2025]
+         * 47 - v2.34.0 / v3.10.0 [14/04/2025] --- v2.35.0 / v3.11.0 [28/04/2025]
+         * 48 - 2.36 / 3.12
          */
         public const int APP_FORMAT_CURVER = 47;
 
@@ -159,11 +161,13 @@ namespace GKCore
         {
             public LSID Name;
             public string Sign;
+            public bool Deprecated;
 
-            public StoreTypeRec(LSID name, string sign)
+            public StoreTypeRec(LSID name, string sign, bool deprecated)
             {
                 Name = name;
                 Sign = sign;
+                Deprecated = deprecated;
             }
         }
 
@@ -373,11 +377,11 @@ namespace GKCore
             };
 
             GKStoreTypes = new StoreTypeRec[] {
-                new StoreTypeRec(LSID.STRef, ""),
-                new StoreTypeRec(LSID.STStg, "stg:"),
-                new StoreTypeRec(LSID.STArc, "arc:"),
-                new StoreTypeRec(LSID.STRel, "rel:"),
-                new StoreTypeRec(LSID.STWeb, "http")
+                new StoreTypeRec(LSID.STRef, "", false),
+                new StoreTypeRec(LSID.STStg, "stg:", deprecated: true),
+                new StoreTypeRec(LSID.STArc, "arc:", false),
+                new StoreTypeRec(LSID.STRel, "rel:", false),
+                new StoreTypeRec(LSID.STWeb, "http", false)
             };
 
             // гр|юл|евр|фр|рим|исл(хид?)|?

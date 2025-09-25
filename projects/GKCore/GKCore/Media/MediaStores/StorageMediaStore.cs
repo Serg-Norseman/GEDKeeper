@@ -24,6 +24,9 @@ using GKCore.Locales;
 
 namespace GKCore.Media
 {
+    /// <summary>
+    /// Deprecated.
+    /// </summary>
     public sealed class StorageMediaStore : PlainMediaStore
     {
         public override MediaStoreType StoreType { get { return MediaStoreType.mstStorage; } }

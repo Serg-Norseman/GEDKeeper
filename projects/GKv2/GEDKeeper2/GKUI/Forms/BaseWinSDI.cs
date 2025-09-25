@@ -99,7 +99,7 @@ namespace GKUI.Forms
 
             fController = new BaseWinController(this, true);
             fContext = fController.Context;
-            ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
+            fContext.ModifiedChanged += BaseContext_ModifiedChanged;
 
             tabsRecords.SuspendLayout();
             CreatePage("Individuals", GDMRecordType.rtIndividual);
@@ -288,6 +288,7 @@ namespace GKUI.Forms
 
             miContMediaMoveFile.Visible = (recType == GDMRecordType.rtMultimedia);
             miContMediaMoveFile2Abs.Enabled = false;
+            miContMediaMoveFile2Stg.Visible = false;
         }
 
         private void miRecordAdd_Click(object sender, EventArgs e)
