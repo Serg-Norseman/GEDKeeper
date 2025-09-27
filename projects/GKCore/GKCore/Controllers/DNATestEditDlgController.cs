@@ -60,7 +60,7 @@ namespace GKCore.Controllers
             }
 
             for (var mst = MediaStoreType.mstReference; mst <= MediaStoreType.mstURL; mst++) {
-                if (mst == MediaStoreType.mstArchive || mst == MediaStoreType.mstStorage) continue;
+                if (mst == MediaStoreType.mstArchive) continue;
 
                 fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)mst].Name), mst);
             }

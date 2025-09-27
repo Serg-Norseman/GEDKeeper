@@ -26,14 +26,14 @@ namespace GKCore.Media
     public enum MediaStoreType
     {
         /// <summary>
-        /// Direct absolute file reference.
+        /// Direct absolute file path.
         /// </summary>
         mstReference,
 
         /// <summary>
-        /// Storage's folder next to the database file. Deprecated.
+        /// File path relative to the database file.
         /// </summary>
-        mstStorage,
+        mstRelativeReference,
 
         /// <summary>
         /// The archive file (zip) next to the database file.
@@ -41,13 +41,14 @@ namespace GKCore.Media
         mstArchive,
 
         /// <summary>
-        /// File reference relative to the database file.
-        /// </summary>
-        mstRelativeReference,
-
-        /// <summary>
         /// File reference relative to the web address of file.
         /// </summary>
-        mstURL
+        mstURL,
+
+        // Media path types for GK GEDCOM versions prior to 48.
+        mstReference_Old,
+        mstRelativeReference_Old,
+        mstArchive_Old,
+        mstStorage_Old,
     }
 }

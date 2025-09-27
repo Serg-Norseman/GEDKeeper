@@ -87,7 +87,7 @@ namespace GKCore.Controllers
                 if (fIsNew) {
                     MediaStoreType gst = fView.StoreType.GetSelectedTag<MediaStoreType>();
 
-                    if ((gst == MediaStoreType.mstArchive || gst == MediaStoreType.mstStorage) && !fBase.Context.CheckBasePath()) {
+                    if ((gst == MediaStoreType.mstArchive /*|| gst == MediaStoreType.mstStorage*/) && !fBase.Context.CheckBasePath()) {
                         return false;
                     }
 
@@ -187,6 +187,10 @@ namespace GKCore.Controllers
                 fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name), MediaStoreType.mstReference);
             }
 
+            if (allowRelRef) {
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstRelativeReference].Name), MediaStoreType.mstRelativeReference);
+            }
+
             // Deprecated
             /*if (!disNoStd) {
                 fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstStorage].Name), MediaStoreType.mstStorage);
@@ -194,10 +198,6 @@ namespace GKCore.Controllers
 
             if (allowArc) {
                 fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name), MediaStoreType.mstArchive);
-            }
-
-            if (allowRelRef) {
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstRelativeReference].Name), MediaStoreType.mstRelativeReference);
             }
 
             if (!disNoStd) {

@@ -964,8 +964,7 @@ namespace GKCore.Controllers
             combo.Clear();
             for (MediaStoreType mst = MediaStoreType.mstReference; mst <= MediaStoreType.mstURL; mst++) {
                 var storeType = GKData.GKStoreTypes[(int)mst];
-                if (!storeType.Deprecated)
-                    combo.AddItem(LangMan.LS(storeType.Name), mst);
+                combo.AddItem(LangMan.LS(storeType.Name), mst);
             }
 
             GetControl<ICheckBox>("chkAllowDeleteMediaFileFromStgArc").Text = LangMan.LS(LSID.AllowDeleteMediaFileFromStgArc);

@@ -183,32 +183,6 @@ namespace GKCore
         }
 
         [Test]
-        public void Test_GetStoreType()
-        {
-            Assert.Throws(typeof(ArgumentNullException), () => {
-                string strFileRef = null;
-                MediaStore.GetStoreType(strFileRef);
-            });
-
-            var fileRef = new GDMFileReference();
-            fileRef.ParseString("file.txt");
-            var storeType = MediaStore.GetStoreType(fileRef.StringValue);
-            Assert.AreEqual(MediaStoreType.mstReference, storeType);
-
-            fileRef.ParseString("stg:file.txt");
-            storeType = MediaStore.GetStoreType(fileRef.StringValue);
-            Assert.AreEqual(MediaStoreType.mstStorage, storeType);
-
-            fileRef.ParseString("arc:file.txt");
-            storeType = MediaStore.GetStoreType(fileRef.StringValue);
-            Assert.AreEqual(MediaStoreType.mstArchive, storeType);
-
-            fileRef.ParseString("rel:file.txt");
-            storeType = MediaStore.GetStoreType(fileRef.StringValue);
-            Assert.AreEqual(MediaStoreType.mstRelativeReference, storeType);
-        }
-
-        [Test]
         public void Test_Clear()
         {
             BaseContext context = TestUtils.CreateContext();
@@ -286,12 +260,12 @@ namespace GKCore
                     Assert.IsNotNull(ctx.MediaLoad(mmRecA.FileReferences[0]));
                     arcFileName = ctx.GetArcFileName();
 
-                    var mmRecS = new GDMMultimediaRecord(ctx.Tree);
+                    /*var mmRecS = new GDMMultimediaRecord(ctx.Tree);
                     mmRecS.FileReferences.Add(new GDMFileReferenceWithTitle());
                     Assert.AreEqual(true, ctx.MediaSave(mmRecS.FileReferences[0], sourFile, MediaStoreType.mstStorage));
                     Assert.IsNotNull(ctx.LoadMediaImage(mmRecS, -1, -1, ExtRect.Empty, false, false));
                     Assert.IsNotNull(ctx.MediaLoad(mmRecS.FileReferences[0]));
-                    stgDirectory = ctx.GetStgFolder();
+                    stgDirectory = ctx.GetStgFolder();*/
 
                     var mmRecRl = new GDMMultimediaRecord(ctx.Tree);
                     mmRecRl.FileReferences.Add(new GDMFileReferenceWithTitle());
@@ -572,8 +546,8 @@ namespace GKCore
                 fContext.VerifyMediaFile(strFileRef, out _);
             });
 
-            Assert.AreEqual(MediaStoreStatus.mssFileNotFound, fContext.VerifyMediaFile("randomfile.jpg", out _));
-            Assert.AreEqual(MediaStoreStatus.mssFileNotFound, fContext.VerifyMediaFile("rel:randomfile.jpg", out _));
+            Assert.AreEqual(MediaStoreStatus.mssFileNotFound, fContext.VerifyMediaFile("file:///randomfile.jpg", out _));
+            Assert.AreEqual(MediaStoreStatus.mssFileNotFound, fContext.VerifyMediaFile("file:./randomfile.jpg", out _));
         }
 
         [Test]

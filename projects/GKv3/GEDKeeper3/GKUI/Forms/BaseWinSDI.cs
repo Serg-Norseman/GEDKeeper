@@ -459,9 +459,9 @@ namespace GKUI.Forms
                 storeType = MediaStoreType.mstRelativeReference;
             } else if (sender == miContMediaMoveFile2Arc) {
                 storeType = MediaStoreType.mstArchive;
-            } else if (sender == miContMediaMoveFile2Stg) {
+            } /*else if (sender == miContMediaMoveFile2Stg) {
                 storeType = MediaStoreType.mstStorage;
-            } else {
+            }*/ else {
                 return;
             }
 

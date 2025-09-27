@@ -23,6 +23,7 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Events;
 using GKCore.Locales;
+using GKCore.Media;
 using GKUI.Themes;
 
 namespace GKCore
@@ -161,13 +162,23 @@ namespace GKCore
         {
             public LSID Name;
             public string Sign;
-            public bool Deprecated;
 
-            public StoreTypeRec(LSID name, string sign, bool deprecated)
+            public StoreTypeRec(LSID name, string sign)
             {
                 Name = name;
                 Sign = sign;
-                Deprecated = deprecated;
+            }
+        }
+
+        public sealed class StoreDefinition
+        {
+            public string Sign;
+            public MediaStoreType StoreType;
+
+            public StoreDefinition(string sign, MediaStoreType storeType)
+            {
+                Sign = sign;
+                StoreType = storeType;
             }
         }
 
@@ -261,6 +272,7 @@ namespace GKCore
         public static readonly DateKindStruct[] DateKinds;
         public static readonly CalendarStruct[] DateCalendars;
         public static readonly StoreTypeRec[] GKStoreTypes;
+        public static readonly StoreDefinition[] StoreDefinitions;
         public static readonly LSID[] MediaTypes;
         public static readonly LSID[] PriorityNames;
         public static readonly LSID[] StatusNames;
@@ -376,12 +388,41 @@ namespace GKCore
                 //LSID.MT_15 <Unknown removed to first position>
             };
 
+            /// Absolute URI format: file:///file_path
+            /// Unix/Linux Absolute URI: file:///etc/fstab
+            /// MacOS Absolute URI: file:///var/log/system.log
+            /// Windows Absolute URI: file:///c:/WINDOWS/clock.avi
+            /// Relative URI format: 'file:file_path' - RFC 3986, path-rootless definition (https://www.rfc-editor.org/rfc/rfc3986)
+
             GKStoreTypes = new StoreTypeRec[] {
-                new StoreTypeRec(LSID.STRef, "", false),
-                new StoreTypeRec(LSID.STStg, "stg:", deprecated: true),
-                new StoreTypeRec(LSID.STArc, "arc:", false),
-                new StoreTypeRec(LSID.STRel, "rel:", false),
-                new StoreTypeRec(LSID.STWeb, "http", false)
+                // Uniform Resource Identifier (URI): Generic Syntax [https://datatracker.ietf.org/doc/rfc3986/]
+                // The "file" URI Scheme [https://datatracker.ietf.org/doc/rfc8089/]
+                new StoreTypeRec(LSID.STRef, "file:///"),
+                new StoreTypeRec(LSID.STRel, "file:"),
+
+                // The Archive and Package (arcp) URI scheme [https://datatracker.ietf.org/doc/html/draft-soilandreyes-arcp-03]
+                // The Archive and Package (arcp) URI scheme [https://arxiv.org/pdf/1809.06935]
+                // Unaccepted draft. However, when exporting to "pure GEDCOM" (5.5.1 or 7),
+                // the scheme prefix can easily be removed from the path.
+                new StoreTypeRec(LSID.STArc, "arcp:///"),
+
+                // Hyper Text Transfer Protocol <Secure>
+                new StoreTypeRec(LSID.STWeb, "http"),
+            };
+
+            StoreDefinitions = new StoreDefinition[] {
+                new StoreDefinition("stg:", MediaStoreType.mstStorage_Old),
+                new StoreDefinition("rel:", MediaStoreType.mstRelativeReference_Old),
+                new StoreDefinition("arc:", MediaStoreType.mstArchive_Old),
+
+                new StoreDefinition("file:///", MediaStoreType.mstReference),
+                new StoreDefinition("file:", MediaStoreType.mstRelativeReference),
+                new StoreDefinition("arcp:///", MediaStoreType.mstArchive),
+
+                new StoreDefinition("http://", MediaStoreType.mstURL),
+                new StoreDefinition("https://", MediaStoreType.mstURL),
+
+                new StoreDefinition("", MediaStoreType.mstReference_Old),
             };
 
             // гр|юл|евр|фр|рим|исл(хид?)|?

@@ -29,12 +29,7 @@ using GKCore.Options;
 namespace GKCore.Media
 {
     /// <summary>
-    /// Absolute URI format: file:///file_path
-    /// Unix/Linux Absolute URI: file:///etc/fstab
-    /// MacOS Absolute URI: file:///var/log/system.log
-    /// Windows Absolute URI: file:///c:/WINDOWS/clock.avi
     ///
-    /// Relative URI format: 'file:file_path' - RFC 3986, path-rootless definition (https://www.rfc-editor.org/rfc/rfc3986)
     /// </summary>
     public abstract class MediaStore
     {
@@ -63,7 +58,7 @@ namespace GKCore.Media
                 throw new ArgumentNullException(nameof(fileReference));
 
             MediaStoreType result = MediaStoreType.mstReference;
-            for (int i = 1; i <= 4; i++) {
+            for (int i = 0; i < GKData.GKStoreTypes.Length; i++) {
                 if (fileReference.StartsWith(GKData.GKStoreTypes[i].Sign, StringComparison.Ordinal)) {
                     result = (MediaStoreType)i;
                     break;
@@ -72,39 +67,82 @@ namespace GKCore.Media
             return result;
         }
 
+        public static MediaStoreType GetStoreType(string fileReference, out string filePath)
+        {
+            if (fileReference == null)
+                throw new ArgumentNullException(nameof(fileReference));
+
+            filePath = fileReference;
+
+            MediaStoreType result;
+
+            for (int i = 0; i < GKData.StoreDefinitions.Length; i++) {
+                var storeDef = GKData.StoreDefinitions[i];
+
+                var sign = storeDef.Sign;
+                if (filePath.StartsWith(sign, StringComparison.Ordinal)) {
+                    result = storeDef.StoreType;
+                    if (result != MediaStoreType.mstURL) {
+                        filePath = filePath.Remove(0, sign.Length);
+                    }
+                    return result;
+                }
+            }
+
+            // no prefix signature (or URI scheme)
+            result = MediaStoreType.mstReference_Old;
+            return result;
+        }
+
+        public static string NormalizeRelativePath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return path;
+
+            path = path.TrimStart();
+            char chrZ = path.Length > 0 ? path[0] : (char)0;
+
+            // "." and ".." cases
+            if (chrZ != '.') {
+                path = (chrZ == '/') ? $".{path}" : $"./{path}";
+            }
+
+            return path;
+        }
+
         public static MediaStore GetMediaStore(BaseContext baseContext, string fileReference)
         {
             if (string.IsNullOrEmpty(fileReference))
                 throw new ArgumentNullException(nameof(fileReference));
 
-            string fileName = fileReference;
-            MediaStoreType storeType = GetStoreType(fileName);
+            string filePath;
+            MediaStoreType storeType = GetStoreType(fileReference, out filePath);
 
-            if (storeType != MediaStoreType.mstReference && storeType != MediaStoreType.mstURL) {
+            /*if (storeType != MediaStoreType.mstReference && storeType != MediaStoreType.mstURL) {
                 fileName = fileName.Remove(0, 4);
-            }
+            }*/
 
             switch (storeType) {
                 case MediaStoreType.mstReference:
                     // TODO: check for absolute/relative path and redirection to archive
                     // for relative paths from third-party programs (without prefix) is required
                     if (baseContext.IsGEDZIP()) {
-                        return new ArchiveMediaStore(baseContext, fileName);
+                        return new ArchiveMediaStore(baseContext, filePath);
                     } else {
-                        return new AbsolutePathMediaStore(baseContext, fileName);
+                        return new AbsolutePathMediaStore(baseContext, filePath);
                     }
 
                 case MediaStoreType.mstRelativeReference:
-                    return new RelativePathMediaStore(baseContext, fileName);
+                    return new RelativePathMediaStore(baseContext, filePath);
 
-                case MediaStoreType.mstStorage:
-                    return new StorageMediaStore(baseContext, fileName);
+                /*case MediaStoreType.mstStorage:
+                    return new StorageMediaStore(baseContext, fileName);*/
 
                 case MediaStoreType.mstArchive:
-                    return new ArchiveMediaStore(baseContext, fileName);
+                    return new ArchiveMediaStore(baseContext, filePath);
 
                 case MediaStoreType.mstURL:
-                    return new URLMediaStore(baseContext, fileName);
+                    return new URLMediaStore(baseContext, filePath);
 
                 default:
                     throw new NotSupportedException();
@@ -120,8 +158,8 @@ namespace GKCore.Media
                 case MediaStoreType.mstRelativeReference:
                     return new RelativePathMediaStore(baseContext);
 
-                case MediaStoreType.mstStorage:
-                    return new StorageMediaStore(baseContext);
+                /*case MediaStoreType.mstStorage:
+                    return new StorageMediaStore(baseContext);*/
 
                 case MediaStoreType.mstArchive:
                     return new ArchiveMediaStore(baseContext);
@@ -202,7 +240,7 @@ namespace GKCore.Media
             // set paths and links
             switch (StoreType) {
                 case MediaStoreType.mstReference:
-                    refPath = fileName;
+                    refPath = refPrefix + fileName;
                     break;
 
                 case MediaStoreType.mstRelativeReference:
@@ -215,10 +253,10 @@ namespace GKCore.Media
                     refPath = refPrefix + targetFile;
                     break;
 
-                case MediaStoreType.mstStorage:
+                /*case MediaStoreType.mstStorage:
                     targetFile = storePath + storeFile;
                     refPath = refPrefix + targetFile;
-                    break;
+                    break;*/
 
                 case MediaStoreType.mstURL:
                     refPath = fileName;
@@ -255,7 +293,7 @@ namespace GKCore.Media
 
                 switch (storeStatus) {
                     case MediaStoreStatus.mssExists: {
-                            if (this.StoreType == MediaStoreType.mstArchive || this.StoreType == MediaStoreType.mstStorage) {
+                            if (this.StoreType == MediaStoreType.mstArchive /*|| this.StoreType == MediaStoreType.mstStorage*/) {
                                 if (!GlobalOptions.Instance.AllowDeleteMediaFileFromStgArc) {
                                     return true;
                                 }

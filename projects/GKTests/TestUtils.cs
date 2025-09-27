@@ -204,7 +204,7 @@ namespace GKTests
             GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
 
             fileRef.Title = "Test multimedia";
-            fileRef.LinkFile("sample.png");
+            fileRef.LinkFile("file:///sample.png");
             Assert.IsNotNull(mediaRec, "mediaRec != null");
             iRec.AddMultimedia(mediaRec);
 

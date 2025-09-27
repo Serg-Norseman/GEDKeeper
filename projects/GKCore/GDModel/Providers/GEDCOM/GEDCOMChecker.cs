@@ -400,37 +400,7 @@ namespace GDModel.Providers.GEDCOM
                     fileRef.MultimediaFormat = GDMFileReference.GetMultimediaExt(fileRef.StringValue);
                 }
 
-                if (fFormat == GEDCOMFormat.Native) {
-                    var storeType = MediaStore.GetStoreType(fileRef.StringValue);
-
-                    if (fFileVer < 48) {
-                        // the transition to normalized names for all paths
-                        // https://en.wikipedia.org/wiki/File_URI_scheme
-
-                        if (storeType != MediaStoreType.mstURL) {
-                            fileRef.StringValue = FileHelper.NormalizeFilename(fileRef.StringValue);
-                        }
-
-                        // stg -> relative path
-                        if (storeType == MediaStoreType.mstStorage) {
-                            string filePath = fileRef.StringValue;
-                            filePath = filePath.Replace("stg:", $"rel:./{fMediaContainerName}/");
-                            fileRef.StringValue = filePath;
-                        }
-
-                        // TODO: rel -> file:./relative_path
-                        // TODO: abs -> file:///absolute_path
-                        // TODO: arc -> archive_relative_path
-                    } else if (fFileVer <= 39) {
-                        // obsolete
-                        // the transition to normalized names after GKv39
-                        // only for not direct references AND not relative references (platform specific paths)
-
-                        if (storeType != MediaStoreType.mstReference && storeType != MediaStoreType.mstRelativeReference) {
-                            fileRef.StringValue = FileHelper.NormalizeFilename(fileRef.StringValue);
-                        }
-                    }
-                }
+                CheckMediaStoreType(fileRef);
             }
 
             // Empty records in files from other programs
@@ -439,6 +409,54 @@ namespace GDModel.Providers.GEDCOM
                 // when saving protection from skipping
                 fileRef.Title = EmptyRecordContent;
                 mmRec.FileReferences.Add(fileRef);
+            }
+        }
+
+        private void CheckMediaStoreType(GDMFileReferenceWithTitle fileRef)
+        {
+            string filePath;
+            var storeType = MediaStore.GetStoreType(fileRef.StringValue, out filePath);
+
+            // for external files, the default path type should be defined as absolute
+
+            if (fFormat == GEDCOMFormat.Native) {
+                if (fFileVer < 48) {
+                    // the transition to normalized names for all paths
+                    // https://en.wikipedia.org/wiki/File_URI_scheme
+
+                    if (storeType != MediaStoreType.mstURL) {
+                        filePath = FileHelper.NormalizeFilename(filePath);
+                    }
+
+                    switch (storeType) {
+                        case MediaStoreType.mstReference_Old:
+                            fileRef.StringValue = $"file:///{filePath}";
+                            break;
+
+                        case MediaStoreType.mstRelativeReference_Old:
+                            filePath = MediaStore.NormalizeRelativePath(filePath);
+                            fileRef.StringValue = $"file:{filePath}";
+                            break;
+
+                        case MediaStoreType.mstArchive_Old:
+                            fileRef.StringValue = $"arcp:///{filePath}";
+                            break;
+
+                        case MediaStoreType.mstStorage_Old:
+                            fileRef.StringValue = $"file:./{fMediaContainerName}/{filePath}";
+                            break;
+                    }
+                } else if (fFileVer <= 39) {
+                    // obsolete
+                    // the transition to normalized names after GKv39
+                    // only for not direct references AND not relative references (platform specific paths)
+
+                    if (storeType != MediaStoreType.mstReference && storeType != MediaStoreType.mstRelativeReference) {
+                        fileRef.StringValue = FileHelper.NormalizeFilename(fileRef.StringValue);
+                    }
+                }
+            } else {
+
             }
         }
 
