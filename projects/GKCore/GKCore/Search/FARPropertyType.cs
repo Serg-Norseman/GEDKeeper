@@ -33,7 +33,8 @@ namespace GKCore.Search
         ptText,
         ptGoal,
         ptTheme,
+        ptFilePath,
 
-        ptLast = ptTheme
+        ptLast = ptFilePath
     }
 }

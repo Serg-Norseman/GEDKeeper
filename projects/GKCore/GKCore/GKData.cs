@@ -643,6 +643,7 @@ namespace GKCore
                 new FARPropertyStruct(LSID.Text, true, EnumSet<GDMRecordType>.Create(GDMRecordType.rtNote)),
                 new FARPropertyStruct(LSID.Goal, true, EnumSet<GDMRecordType>.Create(GDMRecordType.rtTask)),
                 new FARPropertyStruct(LSID.Theme, true, EnumSet<GDMRecordType>.Create(GDMRecordType.rtCommunication)),
+                new FARPropertyStruct(LSID.File, true, EnumSet<GDMRecordType>.Create(GDMRecordType.rtMultimedia)),
             };
 
             URTreeNoteType = LSID.URTreeNoteType;
