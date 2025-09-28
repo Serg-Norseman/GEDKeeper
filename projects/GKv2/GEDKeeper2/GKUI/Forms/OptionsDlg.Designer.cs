@@ -1083,7 +1083,7 @@
             this.cmbMediaStoreDefault.Location = new System.Drawing.Point(382, 181);
             this.cmbMediaStoreDefault.Margin = new System.Windows.Forms.Padding(2);
             this.cmbMediaStoreDefault.Name = "cmbMediaStoreDefault";
-            this.cmbMediaStoreDefault.Size = new System.Drawing.Size(218, 25);
+            this.cmbMediaStoreDefault.Size = new System.Drawing.Size(268, 25);
             this.cmbMediaStoreDefault.TabIndex = 12;
             // 
             // chkDeleteMediaFileWithoutConfirm

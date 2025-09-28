@@ -159,6 +159,10 @@ namespace GKCore.Search
                             case FARPropertyType.ptName:
                                 FindMediaNamePattern(result, mediaRec);
                                 break;
+
+                            case FARPropertyType.ptFilePath:
+                                FindMediaFilePathPattern(result, mediaRec);
+                                break;
                         }
                         break;
 
@@ -322,12 +326,27 @@ namespace GKCore.Search
                 }
             }
         }
-
         private void ReplaceMediaName(IGDMObject prop)
         {
             var fileRef = (GDMFileReferenceWithTitle)prop;
             fileRef.Title = ReplacePattern(fileRef.Title);
         }
+
+        private void FindMediaFilePathPattern(List<ISearchResult> result, GDMMultimediaRecord mediaRec)
+        {
+            for (int k = 0; k < mediaRec.FileReferences.Count; k++) {
+                var fileRef = mediaRec.FileReferences[k];
+                if (FindPattern(fileRef.StringValue)) {
+                    result.Add(new FARSearchResult(mediaRec, fileRef, ReplaceMediaFilePath));
+                }
+            }
+        }
+        private void ReplaceMediaFilePath(IGDMObject prop)
+        {
+            var fileRef = (GDMFileReferenceWithTitle)prop;
+            fileRef.StringValue = ReplacePattern(fileRef.StringValue);
+        }
+
 
         private void FindGroupNamePattern(List<ISearchResult> result, GDMGroupRecord groupRec)
         {
