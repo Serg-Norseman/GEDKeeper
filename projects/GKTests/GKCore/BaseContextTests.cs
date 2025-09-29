@@ -58,7 +58,7 @@ namespace GKCore
         {
             Assert.IsNull(fContext.Viewer);
 
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
             Assert.IsNotNull(iRec);
 
             Assert.AreEqual(1990, iRec.GetChronologicalYear(GEDCOMTagName.BIRT));
@@ -74,7 +74,7 @@ namespace GKCore
         [Test]
         public void Test_IsChildless()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
             Assert.IsNotNull(iRec);
 
             Assert.AreEqual(false, fContext.IsChildless(iRec));
@@ -83,7 +83,7 @@ namespace GKCore
         [Test]
         public void Test_LockRecord()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
             Assert.IsNotNull(iRec);
 
             fContext.LockRecord(iRec);
@@ -111,7 +111,7 @@ namespace GKCore
         [Test]
         public void Test_CreateEventEx()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             var evt = fContext.CreateEventEx(iRec, GEDCOMTagName.FACT, "17 JAN 2013", "Ivanovo");
             Assert.IsNotNull(evt);
@@ -135,7 +135,7 @@ namespace GKCore
         [Test]
         public void Test_CollectNameLangs()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             Assert.IsNotNull(fContext.LangStats);
             Assert.AreEqual(0, fContext.LangStats.Count);
@@ -450,7 +450,7 @@ namespace GKCore
 
             fContext.Undoman.Clear();
 
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
             Assert.IsNotNull(iRec);
 
             Assert.Throws(typeof(ArgumentNullException), () => {

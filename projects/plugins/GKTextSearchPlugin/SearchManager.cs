@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -301,7 +301,7 @@ namespace GKTextSearchPlugin
                 int num = searchResults.Count;
                 for (int i = 0; i < num; i++) {
                     var entry = searchResults[i];
-                    GDMRecord rec = baseWin.Context.Tree.XRefIndex_Find(entry.XRef);
+                    var rec = baseWin.Context.Tree.FindXRef<GDMRecord>(entry.XRef);
                     if (rec != null) {
                         strList.Add("__________________________________________________________________________________________");
                         strList.Add("");

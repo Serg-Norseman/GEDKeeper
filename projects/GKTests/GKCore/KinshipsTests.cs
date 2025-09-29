@@ -54,11 +54,11 @@ namespace GKCore.Kinships
         [Test]
         public void Test_KinshipsGraph()
         {
-            GDMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
-            GDMIndividualRecord chldRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
-            GDMIndividualRecord otherRec = fContext.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
-            GDMIndividualRecord wifeRec = fContext.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
-            GDMIndividualRecord rec5 = fContext.Tree.XRefIndex_Find("I5") as GDMIndividualRecord;
+            GDMIndividualRecord indRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
+            GDMIndividualRecord chldRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I3");
+            GDMIndividualRecord otherRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I4");
+            GDMIndividualRecord wifeRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I2");
+            GDMIndividualRecord rec5 = fContext.Tree.FindXRef<GDMIndividualRecord>("I5");
 
             Assert.Throws(typeof(ArgumentNullException), () => { KinshipsGraph.SearchGraph(fContext, null); });
 

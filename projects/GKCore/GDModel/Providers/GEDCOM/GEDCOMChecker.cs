@@ -503,9 +503,8 @@ namespace GDModel.Providers.GEDCOM
         {
             string stdSign = GEDCOMUtils.GetSignByRecord(record);
             string xrefNum = record.GetXRefNum();
-            string recXRef = record.XRef;
 
-            return ((recXRef == stdSign + xrefNum) && record.GetId() >= 0);
+            return ((record.XRef == stdSign + xrefNum) && record.GetId() >= 0);
         }
 
         private void ConvertIdentifiers()

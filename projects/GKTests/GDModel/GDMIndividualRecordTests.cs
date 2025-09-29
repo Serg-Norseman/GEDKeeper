@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -42,7 +42,7 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
             GDMCustomEvent evt, evtd;
 
             GEDCOMRecordTest(iRec);
@@ -55,14 +55,14 @@ namespace GDModel
 
             Assert.IsFalse(iRec.IsLive());
 
-            GDMIndividualRecord ind3 = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
+            GDMIndividualRecord ind3 = fContext.Tree.FindXRef<GDMIndividualRecord>("I3");
             Assert.IsNotNull(fContext.Tree.GetParentsFamily(ind3));
 
-            GDMIndividualRecord ind2 = fContext.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
+            GDMIndividualRecord ind2 = fContext.Tree.FindXRef<GDMIndividualRecord>("I2");
             Assert.IsNotNull(fContext.Tree.GetMarriageFamily(ind2));
 
             // TODO: transfer to BaseContext tests
-            GDMIndividualRecord indiRec = fContext.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
+            GDMIndividualRecord indiRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I4");
             Assert.IsNull(fContext.GetMarriageFamily(indiRec, false));
             Assert.IsNotNull(fContext.GetMarriageFamily(indiRec, true));
 
@@ -146,7 +146,7 @@ namespace GDModel
             Assert.AreEqual(-1, indiRec.IndexOfSpouse(null));
 
 
-            GDMIndividualRecord indi2 = fContext.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
+            GDMIndividualRecord indi2 = fContext.Tree.FindXRef<GDMIndividualRecord>("I2");
             GDMAssociation asso = indiRec.AddAssociation("test", indi2);
             Assert.IsNotNull(asso);
 
@@ -186,7 +186,7 @@ namespace GDModel
                 Assert.IsNotNull(fContext.GetParentsFamily(indi, true));
 
                 // MoveTo test
-                GDMIndividualRecord ind = fContext.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
+                GDMIndividualRecord ind = fContext.Tree.FindXRef<GDMIndividualRecord>("I2");
 
                 indi.AddAssociation("test", ind);
 

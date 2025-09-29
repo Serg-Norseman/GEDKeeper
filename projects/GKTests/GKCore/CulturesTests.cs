@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -42,7 +42,7 @@ namespace GKCore.Cultures
         [Test]
         public async Task Test_AncientCulture()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I3");
             Assert.IsNotNull(iRec);
 
             var culture = new AncientCulture();
@@ -65,7 +65,7 @@ namespace GKCore.Cultures
         [Test]
         public async Task Test_IcelandCulture()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I3");
             Assert.IsNotNull(iRec);
 
             var culture = new IcelandCulture();
@@ -86,7 +86,7 @@ namespace GKCore.Cultures
         [Test]
         public async Task Test_BritishCulture()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I3");
             Assert.IsNotNull(iRec);
 
             var culture = new BritishCulture();
@@ -107,7 +107,7 @@ namespace GKCore.Cultures
         [Test]
         public async Task Test_SwedishCulture()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I3");
             Assert.IsNotNull(iRec);
 
             var culture = new SwedishCulture();
@@ -128,7 +128,7 @@ namespace GKCore.Cultures
         [Test]
         public async Task Test_RussianCulture()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I3");
             Assert.IsNotNull(iRec);
 
             ICulture rusCulture = new RussianCulture();

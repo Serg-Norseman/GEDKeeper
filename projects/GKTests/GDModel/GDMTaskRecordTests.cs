@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -42,13 +42,13 @@ namespace GDModel
         [Test]
         public void Test_Common()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
             Assert.IsNotNull(iRec);
 
-            GDMFamilyRecord famRec = fContext.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
+            GDMFamilyRecord famRec = fContext.Tree.FindXRef<GDMFamilyRecord>("F1");
             Assert.IsNotNull(famRec);
 
-            GDMSourceRecord srcRec = fContext.Tree.XRefIndex_Find("S1") as GDMSourceRecord;
+            GDMSourceRecord srcRec = fContext.Tree.FindXRef<GDMSourceRecord>("S1");
             Assert.IsNotNull(srcRec);
 
             using (GDMTaskRecord taskRec = new GDMTaskRecord(fContext.Tree)) {

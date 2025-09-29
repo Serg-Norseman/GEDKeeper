@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -124,11 +124,6 @@ namespace GDModel
 
                 return fSourceCitations;
             }
-        }
-
-        public GDMTree Tree
-        {
-            get { return fTree; }
         }
 
         public string UID
@@ -286,10 +281,7 @@ namespace GDModel
         public override bool IsEmpty()
         {
             return base.IsEmpty() && string.IsNullOrEmpty(fAutomatedRecordID) && fChangeDate.IsEmpty() &&
-                (fNotes == null || fNotes.Count == 0) &&
-                (fSourceCitations == null || fSourceCitations.Count == 0) && 
-                (fMultimediaLinks == null || fMultimediaLinks.Count == 0) &&
-                (fUserReferences == null || fUserReferences.Count == 0);
+                fNotes.IsEmpty() && fSourceCitations.IsEmpty() && fMultimediaLinks.IsEmpty() && fUserReferences.IsEmpty();
         }
 
         public void SetXRef(GDMTree tree, string newXRef, bool removeOldXRef)

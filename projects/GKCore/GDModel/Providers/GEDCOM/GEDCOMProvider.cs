@@ -2910,7 +2910,7 @@ namespace GDModel.Providers.GEDCOM
                 int num = GEDCOMProvider.GEDCOMFormats.Length;
                 for (int i = 1; i < num; i++) {
                     var appFmt = GEDCOMProvider.GEDCOMFormats[i];
-                    if (string.Equals(appFmt.Sign, sour, StringComparison.Ordinal)) {
+                    if (string.Equals(appFmt.Sign, sour, StringComparison.OrdinalIgnoreCase)) {
                         badLines = appFmt.BadLines;
                         return appFmt.Format;
                     }

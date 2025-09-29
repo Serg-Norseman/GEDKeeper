@@ -243,14 +243,6 @@ namespace GDModel
             if (exists) fXRefIndex.Remove(record.XRef);
         }
 
-        public GDMRecord XRefIndex_Find(string xref)
-        {
-            if (string.IsNullOrEmpty(xref)) return null;
-
-            GDMRecord record;
-            return fXRefIndex.TryGetValue(xref, out record) ? record : null;
-        }
-
         private void ResetLastIDs()
         {
             fLastIDs = new int[(int)GDMRecordType.rtLast + 1];
@@ -386,7 +378,7 @@ namespace GDModel
 
         public T GetPtrValue<T>(GDMPointer ptr) where T : GDMRecord
         {
-            return (ptr == null || !ptr.IsPointer) ? default : XRefIndex_Find(ptr.XRef) as T;
+            return (ptr == null || !ptr.IsPointer) ? default : FindXRef<T>(ptr.XRef);
         }
 
         public void SetPtrValue(GDMPointer ptr, GDMRecord record)
@@ -405,7 +397,10 @@ namespace GDModel
 
         public T FindXRef<T>(string xref) where T : GDMRecord
         {
-            return XRefIndex_Find(xref) as T;
+            if (string.IsNullOrEmpty(xref)) return null;
+
+            GDMRecord record;
+            return fXRefIndex.TryGetValue(xref, out record) ? record as T : null;
         }
 
         #endregion

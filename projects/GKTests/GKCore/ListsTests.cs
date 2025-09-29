@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -116,7 +116,7 @@ namespace GKCore.Lists
             var listManager = new GroupListModel(fContext);
             Assert.IsNotNull(listManager);
 
-            var grpRec = fContext.Tree.XRefIndex_Find("G1") as GDMGroupRecord;
+            var grpRec = fContext.Tree.FindXRef<GDMGroupRecord>("G1");
             listManager.Fetch(grpRec);
 
             listManager.QuickFilter.Value = "*";
@@ -159,7 +159,7 @@ namespace GKCore.Lists
             listManager.ExternalFilter = null;
             Assert.IsNull(listManager.ExternalFilter);
 
-            var communicationRec = fContext.Tree.XRefIndex_Find("CM1") as GDMCommunicationRecord;
+            var communicationRec = fContext.Tree.FindXRef<GDMCommunicationRecord>("CM1");
             listManager.Fetch(communicationRec);
 
             listManager.QuickFilter.Value = "*";
@@ -180,7 +180,7 @@ namespace GKCore.Lists
             var listManager = new FamilyListModel(fContext);
             Assert.IsNotNull(listManager);
 
-            var familyRec = fContext.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
+            var familyRec = fContext.Tree.FindXRef<GDMFamilyRecord>("F1");
             listManager.Fetch(familyRec);
 
             listManager.QuickFilter.Value = "*";
@@ -206,7 +206,7 @@ namespace GKCore.Lists
             var listManager = new IndividualListModel(fContext);
             Assert.IsNotNull(listManager);
 
-            var individualRec = fContext.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
+            var individualRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I4");
             listManager.Fetch(individualRec);
 
             listManager.QuickFilter.Value = "*";
@@ -242,7 +242,7 @@ namespace GKCore.Lists
             var listManager = new LocationListModel(fContext);
             Assert.IsNotNull(listManager);
 
-            var locationRec = fContext.Tree.XRefIndex_Find("L1") as GDMLocationRecord;
+            var locationRec = fContext.Tree.FindXRef<GDMLocationRecord>("L1");
             listManager.Fetch(locationRec);
 
             listManager.QuickFilter.Value = "*";
@@ -263,7 +263,7 @@ namespace GKCore.Lists
             var listManager = new MultimediaListModel(fContext);
             Assert.IsNotNull(listManager);
 
-            var mediaRec = fContext.Tree.XRefIndex_Find("O1") as GDMMultimediaRecord;
+            var mediaRec = fContext.Tree.FindXRef<GDMMultimediaRecord>("O1");
             listManager.Fetch(mediaRec);
 
             listManager.QuickFilter.Value = "*";
@@ -308,7 +308,7 @@ namespace GKCore.Lists
             var listManager = new RepositoryListModel(fContext);
             Assert.IsNotNull(listManager);
 
-            var repositoryRec = fContext.Tree.XRefIndex_Find("R1") as GDMRepositoryRecord;
+            var repositoryRec = fContext.Tree.FindXRef<GDMRepositoryRecord>("R1");
             listManager.Fetch(repositoryRec);
 
             listManager.QuickFilter.Value = "*";
@@ -329,7 +329,7 @@ namespace GKCore.Lists
             var listManager = new ResearchListModel(fContext);
             Assert.IsNotNull(listManager);
 
-            var researchRec = fContext.Tree.XRefIndex_Find("RS1") as GDMResearchRecord;
+            var researchRec = fContext.Tree.FindXRef<GDMResearchRecord>("RS1");
             listManager.Fetch(researchRec);
 
             listManager.QuickFilter.Value = "*";
@@ -350,7 +350,7 @@ namespace GKCore.Lists
             var listManager = new SourceListModel(fContext);
             Assert.IsNotNull(listManager);
 
-            var sourceRec = fContext.Tree.XRefIndex_Find("S1") as GDMSourceRecord;
+            var sourceRec = fContext.Tree.FindXRef<GDMSourceRecord>("S1");
             listManager.Fetch(sourceRec);
 
             listManager.QuickFilter.Value = "*";
@@ -371,7 +371,7 @@ namespace GKCore.Lists
             var listManager = new TaskListModel(fContext);
             Assert.IsNotNull(listManager);
 
-            var taskRec = fContext.Tree.XRefIndex_Find("TK1") as GDMTaskRecord;
+            var taskRec = fContext.Tree.FindXRef<GDMTaskRecord>("TK1");
             listManager.Fetch(taskRec);
 
             listManager.QuickFilter.Value = "*";

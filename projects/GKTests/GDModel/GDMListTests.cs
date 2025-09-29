@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -81,7 +81,7 @@ namespace GDModel
         [Test]
         public void Test_ForeachEnum()
         {
-            var iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            var iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
             Assert.IsNotNull(iRec);
 
             int hash;
@@ -94,7 +94,7 @@ namespace GDModel
         [Test]
         public void Test_WhileEnum()
         {
-            var iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            var iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
             Assert.IsNotNull(iRec);
 
             int hash;
@@ -110,7 +110,7 @@ namespace GDModel
         [Test]
         public void Test_For()
         {
-            var iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            var iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
             Assert.IsNotNull(iRec);
 
             int hash;

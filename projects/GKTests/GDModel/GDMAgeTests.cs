@@ -95,21 +95,21 @@ namespace GDModel
                 GDMIndividualEvent evt1, evt2;
                 GDMFamilyEvent evtF;
 
-                var iRec1 = ctx.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
+                var iRec1 = ctx.Tree.FindXRef<GDMIndividualRecord>("I2");
                 Assert.IsNotNull(iRec1);
 
                 evt1 = iRec1.FindEvent("DEAT") as GDMIndividualEvent;
                 Assert.IsNotNull(evt1);
                 Assert.AreEqual("> 020y", evt1.Age.StringValue);
 
-                var iRec2 = ctx.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
+                var iRec2 = ctx.Tree.FindXRef<GDMIndividualRecord>("I3");
                 Assert.IsNotNull(iRec1);
 
                 evt2 = iRec2.FindEvent("DEAT") as GDMIndividualEvent;
                 Assert.IsNotNull(evt2);
                 Assert.AreEqual("> 028y", evt2.Age.StringValue);
 
-                var famRec = ctx.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
+                var famRec = ctx.Tree.FindXRef<GDMFamilyRecord>("F1");
                 Assert.IsNotNull(famRec);
 
                 evtF = famRec.FindEvent("MARR") as GDMFamilyEvent;

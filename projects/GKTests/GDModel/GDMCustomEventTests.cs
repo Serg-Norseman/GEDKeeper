@@ -196,7 +196,7 @@ namespace GDModel
             Assert.IsTrue(emptyUDN.IsEmpty());
 
             // BIRT: "28 DEC 1990"
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             UDN testUDN = iRec.GetUDN(GEDCOMTagName.BIRT);
             Assert.AreEqual("1990/12/28", testUDN.ToString());

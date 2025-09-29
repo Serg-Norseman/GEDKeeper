@@ -85,7 +85,7 @@ namespace GKCore.Names
             sex = namesTable.GetSexByName("Anna");
             Assert.AreEqual(GDMSex.svFemale, sex);
 
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I3");
             Assert.IsNotNull(iRec);
             namesTable.ImportNames(fContext, iRec);
 
@@ -107,7 +107,7 @@ namespace GKCore.Names
         public void Test_Names_01()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_names_01.ged")) {
-                GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                GDMIndividualRecord iRec1 = ctx.Tree.FindXRef<GDMIndividualRecord>("I1");
                 Assert.IsNotNull(iRec1);
 
                 // first stage, NAME reads: surname "Лазорева (Иванова)"
@@ -123,7 +123,7 @@ namespace GKCore.Names
                 Assert.AreEqual("Анна Мария", parts.Name);
                 Assert.AreEqual("Анатольевна", parts.Patronymic);
 
-                GDMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
+                GDMIndividualRecord iRec2 = ctx.Tree.FindXRef<GDMIndividualRecord>("I2");
                 Assert.IsNotNull(iRec2);
                 Assert.AreEqual("Петр Константинович Лазорев", iRec2.GetPrimaryFullName());
                 // std-surn exists, but sub-surn is not
@@ -139,7 +139,7 @@ namespace GKCore.Names
         public void Test_Names_02()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_names_02.ged")) {
-                GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                GDMIndividualRecord iRec1 = ctx.Tree.FindXRef<GDMIndividualRecord>("I1");
                 Assert.IsNotNull(iRec1);
                 Assert.AreEqual("Анна Сидоровна Иванова (Петрова)", iRec1.GetPrimaryFullName());
                 // std-surn exists and double, and sub-surn same
@@ -149,7 +149,7 @@ namespace GKCore.Names
                 Assert.AreEqual("Анна", parts.Name);
                 Assert.AreEqual("Сидоровна", parts.Patronymic);
 
-                GDMIndividualRecord iRec2 = ctx.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
+                GDMIndividualRecord iRec2 = ctx.Tree.FindXRef<GDMIndividualRecord>("I2");
                 Assert.IsNotNull(iRec2);
                 Assert.AreEqual("Аглая Федоровна Иванова", iRec2.GetPrimaryFullName());
                 // std-surn exists (maiden), and sub-surn same, and sub-marn exists (married)
@@ -166,7 +166,7 @@ namespace GKCore.Names
         public void Test_Names_03()
         {
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_names_03.ged")) {
-                GDMIndividualRecord iRec1 = ctx.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                GDMIndividualRecord iRec1 = ctx.Tree.FindXRef<GDMIndividualRecord>("I1");
                 Assert.IsNotNull(iRec1);
                 Assert.AreEqual("MaleName1 MaleName2 MaleSurname", iRec1.GetPrimaryFullName());
                 // std-surn exists and double, and sub-surn same

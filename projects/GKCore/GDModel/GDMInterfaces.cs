@@ -149,7 +149,6 @@ namespace GDModel
         string AutomatedRecordID { get; }
         GDMChangeDate ChangeDate { get; }
         GDMRecordType RecordType { get; }
-        GDMTree Tree { get; }
         string UID { get; }
     }
 

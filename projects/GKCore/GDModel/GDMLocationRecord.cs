@@ -172,7 +172,7 @@ namespace GDModel
             fTopLevels.ReplaceXRefs(map);
         }
 
-        public GDMList<GDMLocationName> GetFullNames(GDMTree tree, ATDEnumeration atdEnum, bool abbreviations = false)
+        public GDMList<GDMLocationName> GetFullNames(ATDEnumeration atdEnum, bool abbreviations = false)
         {
             GDMList<GDMLocationName> result;
 
@@ -185,10 +185,10 @@ namespace GDModel
                 var topBuffer = new List<GDMLocationName>();
                 for (int j = 0; j < fTopLevels.Count; j++) {
                     var topLevel = fTopLevels[j];
-                    var topLoc = tree.GetPtrValue<GDMLocationRecord>(topLevel);
+                    var topLoc = fTree.GetPtrValue<GDMLocationRecord>(topLevel);
                     if (topLoc == null) continue;
 
-                    var topNames = topLoc.GetFullNames(tree, atdEnum, abbreviations);
+                    var topNames = topLoc.GetFullNames(atdEnum, abbreviations);
                     for (int i = 0; i < topNames.Count; i++) {
                         var topName = topNames[i];
                         var topNameDate = topName.Date.Value;
@@ -252,7 +252,7 @@ namespace GDModel
 
         public string GetNameByDate(GDMCustomDate date, ATDEnumeration atdEnum, bool full = false)
         {
-            var namesList = (!full) ? fNames : GetFullNames(Tree, atdEnum, GlobalOptions.Instance.EL_AbbreviatedNames);
+            var namesList = (!full) ? fNames : GetFullNames(atdEnum, GlobalOptions.Instance.EL_AbbreviatedNames);
 
             if (date != null && !date.IsEmpty()) {
                 for (int i = 0; i < namesList.Count; i++) {

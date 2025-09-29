@@ -1,6 +1,6 @@
 /*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -78,7 +78,7 @@ namespace GDModel
         {
             fContext.Tree.Header.Language = GDMLanguageID.Russian;
 
-            var iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            var iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             GDMPersonalName pName = iRec.PersonalNames[0];
             Assert.AreEqual("Ivanov", pName.Surname);

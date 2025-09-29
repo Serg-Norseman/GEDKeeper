@@ -191,7 +191,7 @@ namespace GDModel
 
             var locRus = CreateRussia(tree);
 
-            var fullNames = locRus.GetFullNames(tree, ATDEnumeration.fStL);
+            var fullNames = locRus.GetFullNames(ATDEnumeration.fStL);
             string result = string.Join("\n", fullNames.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
             Assert.AreEqual("'__.__._862 [G] - __.__.1546 [G]': 'Россия'\n" +
                             "'__.__.1547 [G] - 21.10.1721 [G]': 'Российское царство'\n" +
@@ -208,7 +208,7 @@ namespace GDModel
             Assert.True(locSibGub.ValidateLinks());
             Assert.True(locSibGub.ValidateNames());
 
-            fullNames = locSibGub.GetFullNames(tree, ATDEnumeration.fStL);
+            fullNames = locSibGub.GetFullNames(ATDEnumeration.fStL);
             result = string.Join("\n", fullNames.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
             Assert.AreEqual("'18.12.1708 [G] - 21.10.1721 [G]': 'Сибирская губерния, Российское царство'\n" +
                             "'22.10.1721 [G] - 19.01.1782 [G]': 'Сибирская губерния, Российская империя'",
@@ -222,7 +222,7 @@ namespace GDModel
             Assert.True(locKazGub.ValidateLinks());
             Assert.True(locKazGub.ValidateNames());
 
-            fullNames = locKazGub.GetFullNames(tree, ATDEnumeration.fStL);
+            fullNames = locKazGub.GetFullNames(ATDEnumeration.fStL);
             result = string.Join("\n", fullNames.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
             Assert.AreEqual("'18.12.1708 [G] - 21.10.1721 [G]': 'Казанская губерния, Российское царство'\n" +
                             "'22.10.1721 [G] - 27.09.1781 [G]': 'Казанская губерния, Российская империя'\n" +
@@ -261,7 +261,7 @@ namespace GDModel
             Assert.True(locVyatGub.ValidateLinks());
             Assert.True(locVyatGub.ValidateNames());
 
-            fullNames = locVyatGub.GetFullNames(tree, ATDEnumeration.fStL);
+            fullNames = locVyatGub.GetFullNames(ATDEnumeration.fStL);
             result = string.Join("\n", fullNames.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
             Assert.AreEqual("'29.05.1719 [G] - 21.10.1721 [G]': 'Вятская провинция, Сибирская губерния, Российское царство'\n" +
                             "'22.10.1721 [G] - 28.04.1727 [G]': 'Вятская провинция, Сибирская губерния, Российская империя'\n" +
@@ -303,7 +303,7 @@ namespace GDModel
             Assert.True(locVerhkamRn.ValidateLinks());
             Assert.True(locVerhkamRn.ValidateNames());
 
-            fullNames = locSlobUezd.GetFullNames(tree, ATDEnumeration.fStL);
+            fullNames = locSlobUezd.GetFullNames(ATDEnumeration.fStL);
             result = string.Join("\n", fullNames.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
             Assert.AreEqual("'__.__.1646 [G] - __.__.1718 [G]': 'Слободской уезд, Российское царство'\n" +
                             "'__.__.1719 [G] - 28.05.1719 [G]': 'Слободской дистр.'\n" +
@@ -353,7 +353,7 @@ namespace GDModel
             Assert.True(locPrislon.ValidateLinks());
             Assert.True(locPrislon.ValidateNames());
 
-            fullNames = locPrislon.GetFullNames(tree, ATDEnumeration.fStL);
+            fullNames = locPrislon.GetFullNames(ATDEnumeration.fStL);
             result = string.Join("\n", fullNames.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
             Assert.AreEqual("'__.__.1678 [G] - __.__.1718 [G]': 'поч. Старое раменье, Слободской уезд, Российское царство'\n" +
                             "'__.__.1719 [G] - __.__.1719 [G]': 'поч. Старое раменье, Слободской дистр.'\n" +
@@ -420,7 +420,7 @@ namespace GDModel
             carbuna.AddLocLink(moldavianSsr, "FROM 2 AUG 1940 TO 27 AUG 1991");
             carbuna.AddLocLink(moldova, "FROM 28 AUG 1991");
 
-            var names = carbuna.GetFullNames(tree, ATDEnumeration.fLtS);
+            var names = carbuna.GetFullNames(ATDEnumeration.fLtS);
             var result = string.Join("\n", names.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
 
             Assert.AreEqual(
@@ -444,7 +444,7 @@ namespace GDModel
             carbuna.AddLocName("Кишинёв", "FROM 14 OCT 1436");
             carbuna.AddLocLink(moldova, "FROM 1812");
 
-            var names = carbuna.GetFullNames(tree, ATDEnumeration.fLtS);
+            var names = carbuna.GetFullNames(ATDEnumeration.fLtS);
             var result = string.Join("\n", names.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
 
             Assert.AreEqual(
@@ -455,7 +455,7 @@ namespace GDModel
 
             moldova.AddLocName("Молдова", "FROM 28 AUG 1991");
 
-            names = carbuna.GetFullNames(tree, ATDEnumeration.fLtS);
+            names = carbuna.GetFullNames(ATDEnumeration.fLtS);
             result = string.Join("\n", names.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
 
             Assert.AreEqual(
@@ -491,7 +491,7 @@ namespace GDModel
             Assert.True(locVyatGub.ValidateLinks());
             Assert.True(locVyatGub.ValidateNames());
 
-            var names = locVyatGub.GetFullNames(tree, ATDEnumeration.fLtS);
+            var names = locVyatGub.GetFullNames(ATDEnumeration.fLtS);
             var result = string.Join("\n", names.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
 
             Assert.AreEqual(
@@ -512,7 +512,7 @@ namespace GDModel
             locMoscow.LocationName = "Москва";
             locMoscow.TopLevels.Add(new GDMLocationLink { XRef = locRus.XRef });
 
-            var names = locMoscow.GetFullNames(tree, ATDEnumeration.fLtS);
+            var names = locMoscow.GetFullNames(ATDEnumeration.fLtS);
             var result = string.Join("\n", names.Select(x => string.Format("'{0}': '{1}'", x.Date.ToString(), x.StringValue)));
 
             Assert.AreEqual(

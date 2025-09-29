@@ -461,7 +461,7 @@ namespace GKCore
         public static TaskGoalRet GetTaskGoal(GDMTree tree, GDMTaskRecord taskRec)
         {
             string goalXRef = string.Empty;
-            GDMRecord goalRec = tree.XRefIndex_Find(GEDCOMUtils.CleanXRef(taskRec.Goal));
+            var goalRec = tree.FindXRef<GDMRecord>(GEDCOMUtils.CleanXRef(taskRec.Goal));
 
             GDMGoalType goalType;
             if (goalRec == null) {
@@ -3272,7 +3272,7 @@ namespace GKCore
                     summary.Add(LangMan.LS(LSID.Latitude) + ": " + locRec.Map.Lati);
                     summary.Add(LangMan.LS(LSID.Longitude) + ": " + locRec.Map.Long);
 
-                    var fullNames = locRec.GetFullNames(tree, ATDEnumeration.fStL, glob.EL_AbbreviatedNames);
+                    var fullNames = locRec.GetFullNames(ATDEnumeration.fStL, glob.EL_AbbreviatedNames);
                     if (fullNames.Count > 0) {
                         //linkList.Sort();
 

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -48,7 +48,7 @@ namespace GDModel
             }
 
             using (GDMGroupRecord groupRec = fContext.Tree.CreateGroup()) {
-                GDMIndividualRecord member = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                GDMIndividualRecord member = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
                 groupRec.GroupName = "Test Group";
                 Assert.AreEqual("Test Group", groupRec.GroupName);

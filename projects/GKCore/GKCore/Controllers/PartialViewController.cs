@@ -216,7 +216,7 @@ namespace GKCore.Controllers
 
         public void SelectRecordByXRef(string xref, bool delayedTransition = false)
         {
-            GDMRecord record = fBase.Context.Tree.XRefIndex_Find(xref);
+            var record = fBase.Context.Tree.FindXRef<GDMRecord>(xref);
 
             if (delayedTransition) {
                 fDelayedTransitionRecord = record;

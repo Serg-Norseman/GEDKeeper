@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -64,7 +64,7 @@ namespace GDModel
             Assert.IsNotNull(iRec, "CreateIndividual() != null");
 
             string xref = iRec.XRef;
-            rec = tree.XRefIndex_Find(xref);
+            rec = tree.FindXRef<GDMRecord>(xref);
             Assert.IsNotNull(rec);
             Assert.AreEqual(xref, rec.XRef);
 
@@ -147,7 +147,7 @@ namespace GDModel
                 Assert.IsNotNull(rec2);
 
                 string xref2 = rec2.XRef;
-                GDMRecord rec3 = tree.XRefIndex_Find(xref2);
+                GDMRecord rec3 = tree.FindXRef<GDMRecord>(xref2);
                 Assert.IsNotNull(rec3);
                 Assert.AreEqual(rec2, rec3);
 

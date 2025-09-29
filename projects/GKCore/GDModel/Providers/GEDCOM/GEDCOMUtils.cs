@@ -1662,22 +1662,22 @@ namespace GDModel.Providers.GEDCOM
 
             switch (record.RecordType) {
                 case GDMRecordType.rtIndividual:
-                    result = "I"; // Std, p24
+                    result = "I"; // Std (p.24)
                     break;
                 case GDMRecordType.rtFamily:
-                    result = "F"; // Std, p24
+                    result = "F"; // Std (p.24)
                     break;
                 case GDMRecordType.rtNote:
-                    result = "N";
+                    result = "N"; // Std=!T!
                     break;
                 case GDMRecordType.rtMultimedia:
-                    result = "O";
+                    result = "O"; // Std=!M!
                     break;
                 case GDMRecordType.rtSource:
-                    result = "S"; // Std, p24
+                    result = "S"; // Std (p.24)
                     break;
                 case GDMRecordType.rtRepository:
-                    result = "R"; // Std, p24
+                    result = "R"; // Std (p.24)
                     break;
                 case GDMRecordType.rtGroup:
                     result = "G";
@@ -1692,13 +1692,13 @@ namespace GDModel.Providers.GEDCOM
                     result = "CM";
                     break;
                 case GDMRecordType.rtLocation:
-                    result = "L";
+                    result = "L"; // GEDCOM 5.5 EL !P!
                     break;
                 case GDMRecordType.rtSubmission:
-                    result = "????"; // FIXME: to standard
+                    result = "????"; // FIXME: to standard !N!
                     break;
                 case GDMRecordType.rtSubmitter:
-                    result = "SUB";
+                    result = "SUB"; // Std=!U!
                     break;
             }
 

@@ -1443,10 +1443,10 @@ namespace GKCore.Controllers
             controller.SetRec1(null);
             controller.SetRec2(null);
 
-            GDMIndividualRecord iRec1 = fBaseWin.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec1 = fBaseWin.Context.Tree.FindXRef<GDMIndividualRecord>("I1");
             Assert.IsNotNull(iRec1);
             Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetRecordName(fBaseWin.Context.Tree, iRec1, false));
-            GDMIndividualRecord iRec2 = fBaseWin.Context.Tree.XRefIndex_Find("I2") as GDMIndividualRecord;
+            GDMIndividualRecord iRec2 = fBaseWin.Context.Tree.FindXRef<GDMIndividualRecord>("I2");
             Assert.IsNotNull(iRec2);
             Assert.AreEqual("Ivanova Maria Petrovna", GKUtils.GetRecordName(fBaseWin.Context.Tree, iRec2, false));
             AppHost.TEST_MODE = true; // FIXME: dirty hack
@@ -2086,7 +2086,7 @@ namespace GKCore.Controllers
             var controller = new TreeSplitController(view);
             controller.Init(fBaseWin);
 
-            GDMIndividualRecord iRec = fBaseWin.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fBaseWin.Context.Tree.FindXRef<GDMIndividualRecord>("I1");
             Assert.IsNotNull(iRec);
 
             controller.UpdateView();

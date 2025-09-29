@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2023 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -45,7 +45,7 @@ namespace GKCore.Export
         public void Test_PedigreeExporter()
         {
             BaseWindowStub baseWin = new BaseWindowStub();
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
             baseWin.Context.ShieldState = ShieldState.None;
 
             Assert.Throws(typeof(ArgumentNullException), () => { new PedigreeExporter(null, null); });

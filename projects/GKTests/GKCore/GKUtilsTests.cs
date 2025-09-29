@@ -61,7 +61,7 @@ namespace GKCore
         [Test]
         public void Test_GetAttributeValue()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             string st1 = GKUtils.GetAttributeValue(null, GEDCOMTagName.BIRT);
             Assert.AreEqual("", st1);
@@ -73,7 +73,7 @@ namespace GKCore
         [Test]
         public void Test_GEDCOMEventToDateStr()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             GDMCustomEvent evt = iRec.FindEvent(GEDCOMTagType.BIRT);
             Assert.IsNotNull(evt);
@@ -104,7 +104,7 @@ namespace GKCore
         [Test]
         public void Test_GetBirthPlace()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             string st3 = GKUtils.GetBirthPlace(null);
             Assert.AreEqual("", st3);
@@ -116,7 +116,7 @@ namespace GKCore
         [Test]
         public void Test_GetDeathPlace()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             string st3 = GKUtils.GetDeathPlace(null);
             Assert.AreEqual("", st3);
@@ -128,7 +128,7 @@ namespace GKCore
         [Test]
         public void Test_GetResidencePlace()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             string st3 = GKUtils.GetResidencePlace(null, false);
             Assert.AreEqual("", st3);
@@ -140,7 +140,7 @@ namespace GKCore
         [Test]
         public void Test_GetPlaceStr()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             GDMCustomEvent evt = iRec.FindEvent(GEDCOMTagType.BIRT);
             Assert.IsNotNull(evt);
@@ -186,37 +186,37 @@ namespace GKCore
         [Test]
         public void Test_GetRecordName()
         {
-            GDMRecord rec = fContext.Tree.XRefIndex_Find("I1");
+            GDMRecord rec = fContext.Tree.FindXRef<GDMRecord>("I1");
             Assert.AreEqual("Ivanov Ivan Ivanovich", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
-            rec = fContext.Tree.XRefIndex_Find("F1");
+            rec = fContext.Tree.FindXRef<GDMRecord>("F1");
             Assert.AreEqual("Ivanov Ivan Ivanovich - Ivanova Maria Petrovna", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
-            rec = fContext.Tree.XRefIndex_Find("G1");
+            rec = fContext.Tree.FindXRef<GDMRecord>("G1");
             Assert.AreEqual("GroupTest", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
-            rec = fContext.Tree.XRefIndex_Find("L1");
+            rec = fContext.Tree.FindXRef<GDMRecord>("L1");
             Assert.AreEqual("Test Location", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
-            rec = fContext.Tree.XRefIndex_Find("R1");
+            rec = fContext.Tree.FindXRef<GDMRecord>("R1");
             Assert.AreEqual("Test repository", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
-            rec = fContext.Tree.XRefIndex_Find("RS1");
+            rec = fContext.Tree.FindXRef<GDMRecord>("RS1");
             Assert.AreEqual("Test research", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
-            rec = fContext.Tree.XRefIndex_Find("S1");
+            rec = fContext.Tree.FindXRef<GDMRecord>("S1");
             Assert.AreEqual("Test source", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
-            rec = fContext.Tree.XRefIndex_Find("N1");
+            rec = fContext.Tree.FindXRef<GDMRecord>("N1");
             Assert.AreEqual("Test note", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
-            rec = fContext.Tree.XRefIndex_Find("TK1");
+            rec = fContext.Tree.FindXRef<GDMRecord>("TK1");
             Assert.AreEqual("Test task", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
-            rec = fContext.Tree.XRefIndex_Find("O1");
+            rec = fContext.Tree.FindXRef<GDMRecord>("O1");
             Assert.AreEqual("Test multimedia", GKUtils.GetRecordName(fContext.Tree, rec, false));
 
-            rec = fContext.Tree.XRefIndex_Find("CM1");
+            rec = fContext.Tree.FindXRef<GDMRecord>("CM1");
             Assert.AreEqual("Test communication", GKUtils.GetRecordName(fContext.Tree, rec, false));
         }
 
@@ -233,7 +233,7 @@ namespace GKCore
         [Test]
         public void Test_GetAgeStr()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             string age = GKUtils.GetAgeStr(null, 0);
             Assert.AreEqual("", age);
@@ -268,12 +268,12 @@ namespace GKCore
                 GKUtils.GetPedigreeLifeStr(null, PedigreeFormat.Compact);
             });
 
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             Assert.AreEqual(" (*28.12.1990, Ivanovo +28.12.2010, Ivanovo)", GKUtils.GetPedigreeLifeStr(iRec, PedigreeFormat.Compact));
             Assert.AreEqual(" (28.12.1990 - 28.12.2010)", GKUtils.GetPedigreeLifeStr(iRec, PedigreeFormat.Excess));
 
-            iRec = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
+            iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I3");
 
             Assert.AreEqual(" (*11.02.2010, Ivanovo)", GKUtils.GetPedigreeLifeStr(iRec, PedigreeFormat.Compact));
             Assert.AreEqual(" (11.02.2010)", GKUtils.GetPedigreeLifeStr(iRec, PedigreeFormat.Excess));
@@ -285,7 +285,7 @@ namespace GKCore
             Assert.AreEqual("", GKUtils.GetTaskGoalStr(null, null));
             Assert.AreEqual("", GKUtils.GetGoalStr(fContext.Tree, GDMGoalType.gtIndividual, null));
 
-            var rec = fContext.Tree.XRefIndex_Find("TK1") as GDMTaskRecord;
+            var rec = fContext.Tree.FindXRef<GDMTaskRecord>("TK1");
             Assert.IsNotNull(rec);
             Assert.AreEqual("Test task", GKUtils.GetTaskGoalStr(fContext.Tree, rec));
         }
@@ -324,14 +324,14 @@ namespace GKCore
         [Test]
         public void Test_GetCorresponderStr()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(null, fContext.Tree.XRefIndex_Find("CM1") as GDMCommunicationRecord, false); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(null, fContext.Tree.FindXRef<GDMCommunicationRecord>("CM1"), false); });
             Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(fContext.Tree, null, false); });
         }
 
         [Test]
         public void Test_GetAncestorsCount()
         {
-            GDMIndividualRecord iRec5 = fContext.Tree.XRefIndex_Find("I6") as GDMIndividualRecord;
+            GDMIndividualRecord iRec5 = fContext.Tree.FindXRef<GDMIndividualRecord>("I6");
 
             Assert.AreEqual(0, GKUtils.GetAncestorsCount(fContext.Tree, null));
             Assert.AreEqual(3, GKUtils.GetAncestorsCount(fContext.Tree, iRec5) - 1);
@@ -340,7 +340,7 @@ namespace GKCore
         [Test]
         public void Test_GetDescendantsCount()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             Assert.AreEqual(0, GKUtils.GetDescendantsCount(fContext.Tree, null));
             Assert.AreEqual(3, GKUtils.GetDescendantsCount(fContext.Tree, iRec) - 1);
@@ -349,7 +349,7 @@ namespace GKCore
         [Test]
         public void Test_GetDescGenerations()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             Assert.AreEqual(2, GKUtils.GetDescGenerations(fContext.Tree, iRec));
         }
@@ -357,7 +357,7 @@ namespace GKCore
         [Test]
         public void Test_GetMarriagesCount()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             Assert.AreEqual(1, GKUtils.GetMarriagesCount(iRec));
         }
@@ -365,7 +365,7 @@ namespace GKCore
         [Test]
         public void Test_GetSpousesDiff()
         {
-            GDMFamilyRecord famRec = fContext.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
+            GDMFamilyRecord famRec = fContext.Tree.FindXRef<GDMFamilyRecord>("F1");
 
             // I1: 28 DEC 1990
             // I2: 17 MAR 1991
@@ -375,8 +375,8 @@ namespace GKCore
         [Test]
         public void Test_GetFirstborn()
         {
-            GDMIndividualRecord iRec1 = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
-            GDMIndividualRecord iRec3 = fContext.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
+            GDMIndividualRecord iRec1 = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
+            GDMIndividualRecord iRec3 = fContext.Tree.FindXRef<GDMIndividualRecord>("I3");
 
             Assert.AreEqual(iRec3, GKUtils.GetFirstborn(fContext.Tree, iRec1));
             Assert.AreEqual(20, GKUtils.GetFirstbornAge(iRec1, iRec3));
@@ -385,7 +385,7 @@ namespace GKCore
         [Test]
         public void Test_GetMarriageAge()
         {
-            GDMIndividualRecord iRec1 = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec1 = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             // specially bad date also for CheckBase functions
             Assert.AreEqual(10, GKUtils.GetMarriageAge(fContext.Tree, iRec1));
@@ -471,7 +471,7 @@ namespace GKCore
         [Test]
         public void Test_GetBirthDateD()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             Assert.IsNull(GKUtils.GetBirthDate(null));
 
@@ -483,7 +483,7 @@ namespace GKCore
         [Test]
         public void Test_GetBirthDateS()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             Assert.AreEqual("", GKUtils.GetBirthDate(null, DateFormat.dfDD_MM_YYYY, true));
 
@@ -493,7 +493,7 @@ namespace GKCore
         [Test]
         public void Test_GetDeathDate()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             Assert.AreEqual("", GKUtils.GetDeathDate(null, DateFormat.dfDD_MM_YYYY, true));
 
@@ -503,7 +503,7 @@ namespace GKCore
         [Test]
         public void Test_GetLifeStr()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
 
             Assert.AreEqual("", GKUtils.GetLifeStr(null));
 
@@ -581,57 +581,57 @@ namespace GKCore
 
             summary.Clear();
             GKUtils.ShowFamilyInfo(fContext, null, null);
-            GDMFamilyRecord famRec = fContext.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
+            GDMFamilyRecord famRec = fContext.Tree.FindXRef<GDMFamilyRecord>("F1");
             GKUtils.ShowFamilyInfo(fContext, famRec, summary);
 
             summary.Clear();
             GKUtils.ShowGroupInfo(null, null, null);
-            GDMGroupRecord grpRec = fContext.Tree.XRefIndex_Find("G1") as GDMGroupRecord;
+            GDMGroupRecord grpRec = fContext.Tree.FindXRef<GDMGroupRecord>("G1");
             GKUtils.ShowGroupInfo(fContext, grpRec, summary);
 
             summary.Clear();
             GKUtils.ShowMultimediaInfo(null, null, null);
-            GDMMultimediaRecord mmRec = fContext.Tree.XRefIndex_Find("O1") as GDMMultimediaRecord;
+            GDMMultimediaRecord mmRec = fContext.Tree.FindXRef<GDMMultimediaRecord>("O1");
             GKUtils.ShowMultimediaInfo(fContext, mmRec, summary);
 
             summary.Clear();
             GKUtils.ShowNoteInfo(null, null, null);
-            GDMNoteRecord noteRec = fContext.Tree.XRefIndex_Find("N1") as GDMNoteRecord;
+            GDMNoteRecord noteRec = fContext.Tree.FindXRef<GDMNoteRecord>("N1");
             GKUtils.ShowNoteInfo(fContext, noteRec, summary);
 
             summary.Clear();
             GKUtils.ShowPersonInfo(fContext, null, null);
-            GDMIndividualRecord indRec = fContext.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord indRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
             GKUtils.ShowPersonInfo(fContext, indRec, summary);
 
             summary.Clear();
             GKUtils.ShowSourceInfo(null, null, null, RecordContentType.Quick);
-            GDMSourceRecord srcRec = fContext.Tree.XRefIndex_Find("S1") as GDMSourceRecord;
+            GDMSourceRecord srcRec = fContext.Tree.FindXRef<GDMSourceRecord>("S1");
             GKUtils.ShowSourceInfo(fContext, srcRec, summary, RecordContentType.Quick);
 
             summary.Clear();
             GKUtils.ShowRepositoryInfo(null, null, null);
-            GDMRepositoryRecord repRec = fContext.Tree.XRefIndex_Find("R1") as GDMRepositoryRecord;
+            GDMRepositoryRecord repRec = fContext.Tree.FindXRef<GDMRepositoryRecord>("R1");
             GKUtils.ShowRepositoryInfo(fContext, repRec, summary);
 
             summary.Clear();
             GKUtils.ShowResearchInfo(null, null, null);
-            GDMResearchRecord resRec = fContext.Tree.XRefIndex_Find("RS1") as GDMResearchRecord;
+            GDMResearchRecord resRec = fContext.Tree.FindXRef<GDMResearchRecord>("RS1");
             GKUtils.ShowResearchInfo(fContext, resRec, summary);
 
             summary.Clear();
             GKUtils.ShowTaskInfo(null, null, null);
-            GDMTaskRecord taskRec = fContext.Tree.XRefIndex_Find("TK1") as GDMTaskRecord;
+            GDMTaskRecord taskRec = fContext.Tree.FindXRef<GDMTaskRecord>("TK1");
             GKUtils.ShowTaskInfo(fContext, taskRec, summary);
 
             summary.Clear();
             GKUtils.ShowCommunicationInfo(null, null, null);
-            GDMCommunicationRecord commRec = fContext.Tree.XRefIndex_Find("CM1") as GDMCommunicationRecord;
+            GDMCommunicationRecord commRec = fContext.Tree.FindXRef<GDMCommunicationRecord>("CM1");
             GKUtils.ShowCommunicationInfo(fContext, commRec, summary);
 
             summary.Clear();
             GKUtils.ShowLocationInfo(null, null, null);
-            GDMLocationRecord locRec = fContext.Tree.XRefIndex_Find("L1") as GDMLocationRecord;
+            GDMLocationRecord locRec = fContext.Tree.FindXRef<GDMLocationRecord>("L1");
             GKUtils.ShowLocationInfo(fContext, locRec, summary);
         }
 
@@ -639,7 +639,7 @@ namespace GKCore
         public void Test_GetNameString_ExtendedWomanSurnames()
         {
             // Anna Jones
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I5") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I5");
 
             GlobalOptions.Instance.WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
             Assert.AreEqual("Jones Anna", GKUtils.GetNameString(iRec, true, false));
@@ -686,7 +686,7 @@ namespace GKCore
         [Test]
         public void Test_GetCertaintyAssessment()
         {
-            GDMIndividualRecord iRec = fContext.Tree.XRefIndex_Find("I5") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I5");
 
             float ca = GKUtils.GetCertaintyAssessment(iRec);
             Assert.AreEqual(0.0f, ca);

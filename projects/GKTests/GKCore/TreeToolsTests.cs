@@ -94,10 +94,10 @@ namespace GKCore.Tools
                     Assert.AreEqual(15, treeFragments[2].Count);
                     Assert.AreEqual(1, treeFragments[3].Count);
 
-                    GDMIndividualRecord iRec1 = ctx1.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                    GDMIndividualRecord iRec1 = ctx1.Tree.FindXRef<GDMIndividualRecord>("I1");
                     Assert.IsNotNull(iRec1);
 
-                    GDMIndividualRecord iRec2 = ctx1.Tree.XRefIndex_Find("I3") as GDMIndividualRecord;
+                    GDMIndividualRecord iRec2 = ctx1.Tree.FindXRef<GDMIndividualRecord>("I3");
                     Assert.IsNotNull(iRec2);
 
                     await TreeTools.MergeRecord(baseWin, iRec1, iRec2, true);
@@ -151,10 +151,10 @@ namespace GKCore.Tools
                     gedcomProvider.LoadFromStream(stmGed1);
                 }
 
-                GDMIndividualRecord iRec1 = ctx1.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+                GDMIndividualRecord iRec1 = ctx1.Tree.FindXRef<GDMIndividualRecord>("I1");
                 Assert.IsNotNull(iRec1);
 
-                GDMIndividualRecord iRec2 = ctx1.Tree.XRefIndex_Find("I4") as GDMIndividualRecord;
+                GDMIndividualRecord iRec2 = ctx1.Tree.FindXRef<GDMIndividualRecord>("I4");
                 Assert.IsNotNull(iRec2);
 
                 await TreeTools.MergeRecord(baseWin, iRec1, iRec2, true);
@@ -172,10 +172,10 @@ namespace GKCore.Tools
                     gedcomProvider.LoadFromStream(stmGed1);
                 }
 
-                GDMFamilyRecord famRec1 = ctx1.Tree.XRefIndex_Find("F1") as GDMFamilyRecord;
+                GDMFamilyRecord famRec1 = ctx1.Tree.FindXRef<GDMFamilyRecord>("F1");
                 Assert.IsNotNull(famRec1);
 
-                GDMFamilyRecord famRec2 = ctx1.Tree.XRefIndex_Find("F2") as GDMFamilyRecord;
+                GDMFamilyRecord famRec2 = ctx1.Tree.FindXRef<GDMFamilyRecord>("F2");
                 Assert.IsNotNull(famRec2);
 
                 await TreeTools.MergeRecord(baseWin, famRec1, famRec2, true);
@@ -199,7 +199,7 @@ namespace GKCore.Tools
         [Test]
         public void Test_WalkTree()
         {
-            GDMIndividualRecord iRec = fBaseWin.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fBaseWin.Context.Tree.FindXRef<GDMIndividualRecord>("I1");
             Assert.IsNotNull(iRec);
 
             var tree = fBaseWin.Context.Tree;
@@ -272,7 +272,7 @@ namespace GKCore.Tools
         [Test]
         public void Test_CheckRelations()
         {
-            GDMIndividualRecord iRec = fBaseWin.Context.Tree.XRefIndex_Find("I1") as GDMIndividualRecord;
+            GDMIndividualRecord iRec = fBaseWin.Context.Tree.FindXRef<GDMIndividualRecord>("I1");
             Assert.IsNotNull(iRec);
 
             Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.CheckRelations(null, null); });

@@ -104,7 +104,7 @@ namespace GKUI.Forms
             } else {
                 if (!fTipShow) {
                     string xref = resNode.Sign;
-                    GDMFamilyRecord famRec = fBase.Context.Tree.XRefIndex_Find(xref) as GDMFamilyRecord;
+                    GDMFamilyRecord famRec = fBase.Context.Tree.FindXRef<GDMFamilyRecord>(xref);
                     string txt = GKUtils.GetFamilyString(fBase.Context.Tree, famRec) + " [" + xref + "] "/* + resNode.Mass.ToString()*/;
 
                     fTip.Show(txt, arborViewer1, e.X + 24, e.Y);

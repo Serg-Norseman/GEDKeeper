@@ -240,9 +240,7 @@ namespace GDModel
         {
             return base.IsEmpty() && (fSex == GDMSex.svUnknown) && (fPersonalNames.Count == 0)
                 && (fChildToFamilyLinks.Count == 0) && (fSpouseToFamilyLinks.Count == 0)
-                && (fAssociations == null || fAssociations.Count == 0)
-                && (fDNATests == null || fDNATests.Count == 0)
-                && (fGroups == null || fGroups.Count == 0);
+                && fAssociations.IsEmpty() && fDNATests.IsEmpty() && fGroups.IsEmpty();
         }
 
         public int IndexOfGroup(GDMGroupRecord groupRec)

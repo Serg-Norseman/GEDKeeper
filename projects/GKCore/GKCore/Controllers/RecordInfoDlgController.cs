@@ -67,7 +67,7 @@ namespace GKCore.Controllers
                     fBase.ShowMedia(mmRec, false);
                 }
             } else {
-                GDMRecord record = Base.Context.Tree.XRefIndex_Find(linkName);
+                var record = Base.Context.Tree.FindXRef<GDMRecord>(linkName);
                 fView.HyperView.Lines.Assign(fBase.GetRecordContent(record, RecordContentType.Quick));
             }
         }
