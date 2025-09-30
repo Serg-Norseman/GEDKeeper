@@ -60,10 +60,10 @@
 		    // btnAccept
 		    // 
 		    this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-		    this.btnAccept.Location = new System.Drawing.Point(462, 491);
+		    this.btnAccept.Location = new System.Drawing.Point(444, 491);
 		    this.btnAccept.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnAccept.Name = "btnAccept";
-		    this.btnAccept.Size = new System.Drawing.Size(114, 31);
+		    this.btnAccept.Size = new System.Drawing.Size(120, 30);
 		    this.btnAccept.TabIndex = 4;
 		    this.btnAccept.Text = "btnAccept";
 		    this.btnAccept.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -73,10 +73,10 @@
 		    // 
 		    this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 		    this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-		    this.btnCancel.Location = new System.Drawing.Point(582, 491);
+		    this.btnCancel.Location = new System.Drawing.Point(576, 491);
 		    this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
 		    this.btnCancel.Name = "btnCancel";
-		    this.btnCancel.Size = new System.Drawing.Size(114, 31);
+		    this.btnCancel.Size = new System.Drawing.Size(120, 30);
 		    this.btnCancel.TabIndex = 5;
 		    this.btnCancel.Text = "btnCancel";
 		    this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -226,7 +226,7 @@
 		    // lblRestriction
 		    // 
 		    this.lblRestriction.AutoSize = true;
-		    this.lblRestriction.Location = new System.Drawing.Point(12, 498);
+		    this.lblRestriction.Location = new System.Drawing.Point(12, 494);
 		    this.lblRestriction.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
 		    this.lblRestriction.Name = "lblRestriction";
 		    this.lblRestriction.Size = new System.Drawing.Size(84, 17);
@@ -236,7 +236,7 @@
 		    // cmbRestriction
 		    // 
 		    this.cmbRestriction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-		    this.cmbRestriction.Location = new System.Drawing.Point(224, 495);
+		    this.cmbRestriction.Location = new System.Drawing.Point(224, 491);
 		    this.cmbRestriction.Margin = new System.Windows.Forms.Padding(2);
 		    this.cmbRestriction.Name = "cmbRestriction";
 		    this.cmbRestriction.Size = new System.Drawing.Size(203, 25);
