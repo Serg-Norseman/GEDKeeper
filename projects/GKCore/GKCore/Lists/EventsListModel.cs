@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
@@ -49,6 +50,8 @@ namespace GKCore.Lists
         {
             if (fDataOwner is GDMIndividualRecord) {
                 AddCustomAction(LangMan.LS(LSID.CreateCalculatedBirthEvent), CreateCalculatedBirthEvent);
+                //AddCustomAction("CreateEstimatedBirthEvent", CreateEstimatedBirthEvent);
+                //AddCustomAction("CreateEstimatedDeathEvent", CreateEstimatedDeathEvent);
             }
             base.OnDataOwner();
         }
@@ -170,7 +173,7 @@ namespace GKCore.Lists
                         break;
 
                     case RecordAction.raMoveUp:
-                    case RecordAction.raMoveDown: 
+                    case RecordAction.raMoveDown:
                         result = Exchange(record.Events, evt, eArgs.Action);
                         break;
 
@@ -222,14 +225,112 @@ namespace GKCore.Lists
                 var newDate = GDMDate.Subtract(date, evt.Age);
 
                 if (!newDate.IsEmpty()) {
-                    var newEvent = new GDMIndividualEvent();
-                    newEvent.SetName(GEDCOMTagName.BIRT);
-                    newEvent.Date.ParseString(newDate.StringValue);
+                    var newEvent = GKUtils.CreateIndividualEvent(fDataOwner as IGDMRecordWithEvents, newDate, GEDCOMTagName.BIRT);
                     newEvent.AssignDerivative(evt);
 
-                    var record = fDataOwner as GDMRecordWithEvents;
-                    record.Events.Add(newEvent);
+                    fSheetList.ListView.UpdateContents();
+                }
+            }
+        }
 
+        private static void ExtractEvents(IGDMRecordWithEvents record, GEDCOMTagType eventType, IList<GDMCustomDate> list, bool first, bool parent)
+        {
+            if (!record.HasEvents) return;
+
+            var subList = new List<GDMCustomDate>();
+
+            int evtType = (int)eventType;
+            int num = record.Events.Count;
+            for (int i = 0; i < num; i++) {
+                GDMCustomEvent evt = record.Events[i];
+                if (((!parent && evt.Id == evtType) || (parent && evt.Id != evtType)) && evt.GetChronologicalYear() != 0) {
+                    subList.Add(evt.Date.Value);
+                }
+            }
+
+            if (subList.Count > 0) {
+                subList.Sort();
+
+                // From the children's records we extract only one (first or last) births,
+                // from the parent's record - the first and last significant event
+                if (parent) {
+                    list.Add(subList[0]);
+                    list.Add(subList[subList.Count - 1]);
+                } else {
+                    var dtx = first ? subList[0] : subList[subList.Count - 1];
+                    list.Add(dtx);
+                }
+            }
+        }
+
+        private static IList<GDMCustomDate> GetIndiEvents(GDMTree tree, GDMIndividualRecord indiRec, GEDCOMTagType targetEventType)
+        {
+            var children = new List<GDMIndividualRecord>();
+            for (int j = 0, jNum = indiRec.SpouseToFamilyLinks.Count; j < jNum; j++) {
+                GDMFamilyRecord famRec = tree.GetPtrValue(indiRec.SpouseToFamilyLinks[j]);
+                for (int i = 0, iNum = famRec.Children.Count; i < iNum; i++) {
+                    GDMIndividualRecord child = tree.GetPtrValue(famRec.Children[i]);
+                    children.Add(child);
+                }
+            }
+
+            var events = new List<GDMCustomDate>();
+
+            for (int i = 0, iNum = children.Count; i < iNum; i++) {
+                var child = children[i];
+                bool last = (i != 0 && i == iNum - 1);
+                ExtractEvents(child, GEDCOMTagType.BIRT, events, !last, false);
+            }
+
+            ExtractEvents(indiRec, targetEventType, events, false, true);
+
+            events.Sort();
+
+            return events;
+        }
+
+        private void CreateEstimatedBirthEvent(object sender, EventArgs e)
+        {
+            if (fDataOwner is GDMIndividualRecord indiRec) {
+                var events = GetIndiEvents(fBaseContext.Tree, indiRec, GEDCOMTagType.BIRT);
+                if (events.Count < 1) return;
+
+                var firstEvt = events[0];
+
+                var age = new GDMAge();
+                age.ParseString("5y");
+                GDMCustomDate newDate = GDMDate.Subtract(firstEvt as GDMDate, age);
+
+                if (newDate != null) {
+                    newDate = GDMCustomDate.CreateRange(null, newDate as GDMDate); // before
+                    var newEvent = GKUtils.CreateIndividualEvent(indiRec, newDate, GEDCOMTagName.BIRT);
+                    newEvent.Agency = "Estimated using some other event dates";
+                    fSheetList.ListView.UpdateContents();
+                }
+            }
+        }
+
+        private void CreateEstimatedDeathEvent(object sender, EventArgs e)
+        {
+            if (fDataOwner is GDMIndividualRecord indiRec) {
+                var events = GetIndiEvents(fBaseContext.Tree, indiRec, GEDCOMTagType.DEAT);
+                if (events.Count < 1) return;
+
+                var lastEvt = events[events.Count - 1];
+
+                GDMCustomDate newDate = null;
+                if (indiRec.Sex == GDMSex.svMale) {
+                    var age = new GDMAge();
+                    age.ParseString("9m");
+                    newDate = GDMDate.Subtract(lastEvt as GDMDate, age);
+                } else if (indiRec.Sex == GDMSex.svFemale) {
+                    newDate = lastEvt;
+                }
+
+                if (newDate != null) {
+                    newDate = GDMCustomDate.CreateRange(newDate as GDMDate, null); // after
+                    var newEvent = GKUtils.CreateIndividualEvent(indiRec, newDate, GEDCOMTagName.DEAT);
+                    newEvent.Agency = "Estimated using some other event dates";
                     fSheetList.ListView.UpdateContents();
                 }
             }

@@ -973,6 +973,17 @@ namespace GKCore
             return string.Empty;
         }
 
+        public static GDMIndividualEvent CreateIndividualEvent(IGDMRecordWithEvents record, GDMCustomDate newDate, string eventType)
+        {
+            var newEvent = new GDMIndividualEvent();
+            newEvent.SetName(eventType);
+            newEvent.Date.ParseString(newDate.StringValue);
+
+            record.Events.Add(newEvent);
+
+            return newEvent;
+        }
+
         #endregion
 
         #region Date functions

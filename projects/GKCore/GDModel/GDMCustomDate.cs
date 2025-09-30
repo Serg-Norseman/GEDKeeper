@@ -58,8 +58,23 @@ namespace GDModel
     public enum GDMApproximated
     {
         daExact,
+
+        /// <summary>
+        /// About, meaning the date is not exact.
+        /// GEDCOM 5.5.1, p.45.
+        /// </summary>
         daAbout,
+
+        /// <summary>
+        /// Calculated mathematically, for example, from an event date and age.
+        /// GEDCOM 5.5.1, p.45.
+        /// </summary>
         daCalculated,
+
+        /// <summary>
+        /// Estimated based on an algorithm using some other event date.
+        /// GEDCOM 5.5.1, p.45.
+        /// </summary>
         daEstimated
     }
 
