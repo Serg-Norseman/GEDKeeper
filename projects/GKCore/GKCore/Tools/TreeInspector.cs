@@ -118,7 +118,7 @@ namespace GKCore.Tools
 
             switch (Rec.RecordType) {
                 case GDMRecordType.rtIndividual:
-                    result = GKUtils.GetNameString(((GDMIndividualRecord)Rec), false);
+                    result = GKUtils.GetNameString((GDMIndividualRecord)Rec, false);
                     break;
 
                 case GDMRecordType.rtFamily:
@@ -126,7 +126,7 @@ namespace GKCore.Tools
                     break;
 
                 case GDMRecordType.rtNote:
-                    result = ((GDMNoteRecord)Rec).Lines[0]; // TODO: bad solution?!
+                    result = ((GDMNoteRecord)Rec).Lines[0];
                     break;
 
                 case GDMRecordType.rtSource:

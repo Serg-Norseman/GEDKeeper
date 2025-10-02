@@ -332,7 +332,6 @@ namespace GKCore
             return Regex.Replace(text, pattern, match => $"[url={match.Value}]{match.Value}[/url]");
         }
 
-        // TODO: greedy function, move to BaseContext
         public static string GetRecordName(GDMTree tree, GDMRecord record, bool signed)
         {
             string result = "";
@@ -360,7 +359,7 @@ namespace GKCore
                         st = GetFamilyString(tree, (GDMFamilyRecord)record);
                         break;
                     case GDMRecordType.rtNote:
-                        st = ((GDMNoteRecord)record).Lines[0]; // TODO: bad solution?!
+                        st = ((GDMNoteRecord)record).Lines[0];
                         break;
                     case GDMRecordType.rtMultimedia:
                         st = ((GDMMultimediaRecord)record).GetFileTitle();
@@ -457,7 +456,6 @@ namespace GKCore
             }
         }
 
-        // TODO: greedy function, move to BaseContext
         public static TaskGoalRet GetTaskGoal(GDMTree tree, GDMTaskRecord taskRec)
         {
             string goalXRef = string.Empty;

@@ -96,7 +96,7 @@ namespace GKCore.Controllers
                 fResearchRecord.Status = (GDMResearchStatus)fView.Status.SelectedIndex;
                 fResearchRecord.StartDate.Assign(GDMDate.CreateByFormattedStr(fView.StartDate.NormalizeDate, true));
                 fResearchRecord.StopDate.Assign(GDMDate.CreateByFormattedStr(fView.StopDate.NormalizeDate, true));
-                fResearchRecord.Percent = int.Parse(fView.Percent.Text);
+                fResearchRecord.Percent = (int)fView.Percent.Value;
 
                 fLocalUndoman.Commit();
 

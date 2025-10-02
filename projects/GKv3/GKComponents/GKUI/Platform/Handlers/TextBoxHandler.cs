@@ -43,7 +43,6 @@ namespace GKUI.Platform.Handlers
         public string[] Lines
         {
             get { return UIHelper.Convert(Control.Text); }
-            set { /* TODO! */ }
         }
 
         public bool ReadOnly

@@ -232,8 +232,7 @@ namespace GDModel
                 && fDate.IsEmpty() && string.IsNullOrEmpty(fAgency) && (fRestriction == GDMRestriction.rnNone)
                 && string.IsNullOrEmpty(fTestName) && (fFileFormat == GDMDNAFileFormat.None) && string.IsNullOrEmpty(fFileReference)
                 && string.IsNullOrEmpty(fMHaplogroup) && string.IsNullOrEmpty(fYHaplogroup)
-                && (fNotes == null || fNotes.Count == 0)
-                && (fMultimediaLinks == null || fMultimediaLinks.Count == 0);
+                && fNotes.IsEmpty() && fMultimediaLinks.IsEmpty();
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)

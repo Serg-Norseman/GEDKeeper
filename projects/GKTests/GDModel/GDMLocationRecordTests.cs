@@ -52,7 +52,7 @@ namespace GDModel
 
                 using (GDMLocationRecord loc3 = fContext.Tree.CreateLocation()) {
                     var matchParams = new MatchParams();
-                    matchParams.NamesIndistinctThreshold = 100.0f;
+                    matchParams.IndistinctThreshold = 100.0f;
 
                     Assert.AreEqual(0.0f, locRec.IsMatch(null, matchParams));
 

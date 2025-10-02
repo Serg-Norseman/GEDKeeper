@@ -91,7 +91,6 @@ namespace GDModel
                 && (fAddress == null || fAddress.IsEmpty());
         }
 
-        // TODO: connect to use
         public override float IsMatch(GDMTag tag, MatchParams matchParams)
         {
             GDMRepositoryRecord otherRep = tag as GDMRepositoryRecord;

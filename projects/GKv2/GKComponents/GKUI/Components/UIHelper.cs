@@ -20,6 +20,7 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Windows.Forms;
 using BSLib;
@@ -332,6 +333,25 @@ namespace GKUI.Components
                 rect.Height--;
                 g.DrawLine(SystemPens.ControlDark, rect.Right, rect.Y + 1, rect.Right, rect.Bottom - 1);
             }
+        }
+
+        public static ImageFormat DetermineImageFormat(string ext, ImageFormat defaultFormat)
+        {
+            ImageFormat imFmt = defaultFormat;
+
+            if (ext == ".bmp") {
+                imFmt = ImageFormat.Bmp;
+            } else if (ext == ".png") {
+                imFmt = ImageFormat.Png;
+            } else if (ext == ".gif") {
+                imFmt = ImageFormat.Gif;
+            } else if (ext == ".jpg") {
+                imFmt = ImageFormat.Jpeg;
+            } else if (ext == ".emf") {
+                imFmt = ImageFormat.Emf;
+            }
+
+            return imFmt;
         }
     }
 }

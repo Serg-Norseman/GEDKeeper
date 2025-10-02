@@ -1628,7 +1628,7 @@ namespace GKCore.Locales
             /* 469 */ "Correspondence",
             /* 470 */ "Correcting IDs",
             /* 471 */ "Checking format",
-            /* 472 */ "Correction of identity records is required, continue?", // obsolete
+            /* 472 */ "|EMF files (*.emf)|*.emf",
             /* 473 */ "Number of objects in the master database: {0}",
             /* 474 */ "Synchronization is complete.",
             /* 475 */ "Identifying the patriarchs",
@@ -1639,7 +1639,7 @@ namespace GKCore.Locales
             /* 480 */ "All files (*.*)|*.*",
             /* 481 */ "Images (*.bmp,*.gif,*.png,*.jpg)|*.bmp,*.gif,*.png,*.jpg",
             /* 482 */ "Scripts (*.lua)|*.lua",
-            /* 483 */ "BMP files (*.bmp)|*.bmp|JPEG files (*.jpg)|*.jpg|EMF files (*.emf)|*.emf|PNG files (*.png)|*.png|GIF files (*.gif)|*.gif",
+            /* 483 */ "BMP files (*.bmp)|*.bmp|JPEG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|GIF files (*.gif)|*.gif",
             /* 484 */ "Death causes",
             /* 485 */ "Pedigree",
             /* 486 */ "Parameter",

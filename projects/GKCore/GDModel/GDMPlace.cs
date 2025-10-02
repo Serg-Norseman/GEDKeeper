@@ -120,8 +120,7 @@ namespace GDModel
         public override bool IsEmpty()
         {
             return base.IsEmpty() && string.IsNullOrEmpty(fForm) && fLocation.IsEmpty() && 
-                (fMap == null || fMap.IsEmpty()) &&
-                (fNotes == null || fNotes.Count == 0);
+                (fMap == null || fMap.IsEmpty()) && fNotes.IsEmpty();
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)

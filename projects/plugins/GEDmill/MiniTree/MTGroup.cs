@@ -413,14 +413,14 @@ namespace GEDmill.MiniTree
         // Pushes this object left and all objects to its left left, until one can't move.
         public override float PushLeft(float amount)
         {
-            // TODO: Not yet implemented - compression won't be optimal.
+            // Not yet implemented - compression won't be optimal.
             return amount;
         }
 
         // Pushes this object right and all objects to its right right, until one can't move.
         public override float PushRight(float amount)
         {
-            // TODO: Not yet implemented - compression won't be optimal.
+            // Not yet implemented - compression won't be optimal.
             return amount;
         }
 

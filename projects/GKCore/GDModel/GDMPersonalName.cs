@@ -302,8 +302,7 @@ namespace GDModel
         {
             return base.IsEmpty() && IsPiecesEmpty() &&
                 (fLanguage == GDMLanguageID.Unknown) && (fNameType == GDMNameType.ntNone)
-                && (fNotes == null || fNotes.Count == 0)
-                && (fSourceCitations == null || fSourceCitations.Count == 0);
+                && fNotes.IsEmpty() && fSourceCitations.IsEmpty();
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)

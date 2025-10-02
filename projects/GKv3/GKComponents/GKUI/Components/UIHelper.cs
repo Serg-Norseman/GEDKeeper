@@ -487,5 +487,24 @@ namespace GKUI.Components
             if (window.ToolBar != null)
                 IndexToolBarInt(window.ToolBar, controlsManager);
         }*/
+
+        public static ImageFormat DetermineImageFormat(string ext, ImageFormat defaultFormat)
+        {
+            ImageFormat imFmt = defaultFormat;
+
+            if (ext == ".bmp") {
+                imFmt = ImageFormat.Bitmap;
+            } else if (ext == ".png") {
+                imFmt = ImageFormat.Png;
+            } else if (ext == ".gif") {
+                imFmt = ImageFormat.Gif;
+            } else if (ext == ".jpg") {
+                imFmt = ImageFormat.Jpeg;
+            } else if (ext == ".emf") {
+                /* Emf is not supported */
+            }
+
+            return imFmt;
+        }
     }
 }

@@ -168,8 +168,7 @@ namespace GKCore.Charts
             }
         }
 
-        public override void DrawRectangle(IPen pen, IColor fillColor,
-            float x, float y, float width, float height, int cornersRadius = 0)
+        public override void DrawRectangle(IPen pen, IColor fillColor, float x, float y, float width, float height, int cornersRadius = 0)
         {
             if (fGfx != null) {
                 if (fillColor != null && !fillColor.IsTransparent()) {
@@ -194,12 +193,9 @@ namespace GKCore.Charts
             }
         }
 
-        public override void FillRectangle(IBrush brush,
-                                           float x, float y, float width, float height)
+        public override void FillRectangle(IBrush brush, float x, float y, float width, float height)
         {
-            if (fGfx != null && brush != null) {
-                // TODO
-            }
+            // not in demand
         }
 
         public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)

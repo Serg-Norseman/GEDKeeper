@@ -32,7 +32,6 @@ namespace GKUI.Platform.Handlers
         public string[] Lines
         {
             get { return Control.Lines; }
-            set { Control.Lines = value; }
         }
 
         public bool ReadOnly

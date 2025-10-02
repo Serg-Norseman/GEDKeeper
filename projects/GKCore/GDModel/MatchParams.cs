@@ -22,7 +22,7 @@ namespace GDModel
 {
     public struct MatchParams
     {
-        public float NamesIndistinctThreshold;
+        public float IndistinctThreshold;
 
         public bool DatesCheck;
         public int YearsInaccuracy;

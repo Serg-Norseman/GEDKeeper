@@ -117,7 +117,6 @@ namespace GKFlowInputPlugin
             InitSimpleControls();
         }
 
-        // TODO: rollback changes when exception!
         private async Task ParseSource()
         {
             if (!int.TryParse(edSourceYear.Text, out int srcYear)) {

@@ -103,12 +103,7 @@ namespace GDModel
             GDMNoteRecord note = tag as GDMNoteRecord;
             if (note == null) return 0.0f;
 
-            float match = 0.0f;
-
-            if (string.Compare(fLines.Text, note.Lines.Text, true) == 0) {
-                match = 100.0f;
-            }
-
+            float match = GetStrMatch(fLines.Text, note.Lines.Text, matchParams);
             return match;
         }
 

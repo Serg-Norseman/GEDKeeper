@@ -55,7 +55,7 @@ namespace GDModel
 
                 using (GDMGroupRecord group3 = fContext.Tree.CreateGroup()) {
                     var matchParams = new MatchParams();
-                    matchParams.NamesIndistinctThreshold = 100.0f;
+                    matchParams.IndistinctThreshold = 100.0f;
 
                     Assert.AreEqual(0.0f, groupRec.IsMatch(null, matchParams));
 

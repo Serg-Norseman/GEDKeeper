@@ -64,9 +64,10 @@ namespace GDModel
                     noteRec2.Clear();
                     Assert.IsTrue(noteRec2.IsEmpty());
 
-                    Assert.AreEqual(0.0f, noteRec.IsMatch(noteRec2, new MatchParams()), 0.01f);
+                    var matchParams = new MatchParams() { IndistinctThreshold = 0.9f };
+                    Assert.AreEqual(0.0f, noteRec.IsMatch(noteRec2, matchParams), 0.01f);
 
-                    Assert.AreEqual(0.0f, noteRec.IsMatch(null, new MatchParams()), 0.01f);
+                    Assert.AreEqual(0.0f, noteRec.IsMatch(null, matchParams), 0.01f);
                 }
 
                 Assert.Throws(typeof(ArgumentException), () => {
@@ -104,15 +105,16 @@ namespace GDModel
                     noteRec2.SetNoteText("Test text");
                     Assert.AreEqual("Test text", noteRec2.Lines.Text.Trim());
 
-                    Assert.AreEqual(100.0f, noteRec.IsMatch(noteRec2, new MatchParams()));
+                    var matchParams = new MatchParams() { IndistinctThreshold = 0.9f };
+                    Assert.AreEqual(100.0f, noteRec.IsMatch(noteRec2, matchParams));
 
                     Assert.IsFalse(noteRec2.IsEmpty());
                     noteRec2.Clear();
                     Assert.IsTrue(noteRec2.IsEmpty());
 
-                    Assert.AreEqual(0.0f, noteRec.IsMatch(noteRec2, new MatchParams()));
+                    Assert.AreEqual(0.0f, noteRec.IsMatch(noteRec2, matchParams));
 
-                    Assert.AreEqual(0.0f, noteRec.IsMatch(null, new MatchParams()));
+                    Assert.AreEqual(0.0f, noteRec.IsMatch(null, matchParams));
                 }
 
                 Assert.Throws(typeof(ArgumentException), () => { noteRec.MoveTo(null); });
@@ -254,7 +256,7 @@ namespace GDModel
             var matchParams = new MatchParams();
             GDMTag other = new GDMAddress();
             GDMNoteRecord instance = new GDMNoteRecord(null);
-            float result = instance.IsMatch(other, matchParams); // TODO matchParams is not used
+            float result = instance.IsMatch(other, matchParams);
             Assert.AreEqual(0.0F, result, 0.0);
         }
 
@@ -262,6 +264,7 @@ namespace GDModel
         public void Test_IsMatch2()
         {
             var matchParams = new MatchParams();
+            matchParams.IndistinctThreshold = 0.9f;
 
             GDMNoteRecord instance1 = new GDMNoteRecord(null);
             instance1.ParseString("This is a test");
@@ -269,7 +272,7 @@ namespace GDModel
             GDMNoteRecord instance2 = new GDMNoteRecord(null);
             instance2.ParseString("tHiS iS nOt A tEsT");
 
-            float result = instance1.IsMatch(instance2, matchParams); // TODO matchParams is not used
+            float result = instance1.IsMatch(instance2, matchParams);
             Assert.AreEqual(0.0F, result, 0.0);
         }
 
@@ -284,7 +287,7 @@ namespace GDModel
             GDMNoteRecord instance2 = new GDMNoteRecord(null);
             instance2.ParseString("This is a test");
 
-            float result = instance1.IsMatch(instance2, matchParams); // TODO matchParams is not used
+            float result = instance1.IsMatch(instance2, matchParams);
             Assert.AreEqual(100.0F, result, 0.0);
         }
         

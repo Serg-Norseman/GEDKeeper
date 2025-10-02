@@ -94,7 +94,6 @@ namespace GDModel
             fMembers.ReplaceXRefs(map);
         }
 
-        // TODO: connect to use
         public override float IsMatch(GDMTag tag, MatchParams matchParams)
         {
             GDMGroupRecord otherGroup = tag as GDMGroupRecord;

@@ -731,7 +731,7 @@ namespace GKCore.Tools
 
             MatchParams mParams;
             //mParams.IndistinctMatching = true;
-            mParams.NamesIndistinctThreshold = 90.0f / 100.0f;
+            mParams.IndistinctThreshold = 90.0f / 100.0f;
             mParams.DatesCheck = true;
             mParams.YearsInaccuracy = 3;
             mParams.CheckEventPlaces = false;

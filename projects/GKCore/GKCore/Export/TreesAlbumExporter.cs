@@ -66,7 +66,7 @@ namespace GKCore.Export
 
                 fRenderer = fWriter.GetPageRenderer();
                 if (fRenderer == null) {
-                    // TODO: warning
+                    Logger.WriteError("TreesAlbumExporter.InternalGenerate(): renderer is null");
                     return;
                 }
 

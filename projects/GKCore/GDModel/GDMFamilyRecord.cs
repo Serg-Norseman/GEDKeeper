@@ -213,13 +213,9 @@ namespace GDModel
         private string GetFamilyString()
         {
             string result = "";
-
-            GDMIndividualRecord spouse = fTree.GetPtrValue<GDMIndividualRecord>(fHusband);
-            result += (spouse == null) ? "?" : spouse.GetPrimaryFullName();
+            result += (!fHusband.IsPointer) ? "?" : fHusband.XRef;
             result += " - ";
-            spouse = fTree.GetPtrValue<GDMIndividualRecord>(fWife);
-            result += (spouse == null) ? "?" : spouse.GetPrimaryFullName();
-
+            result += (!fWife.IsPointer) ? "?" : fWife.XRef;
             return result;
         }
 

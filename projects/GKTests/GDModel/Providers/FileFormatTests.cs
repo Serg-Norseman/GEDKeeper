@@ -446,7 +446,6 @@ namespace GDModel.Providers
         [Test]
         public void Test_Heredis()
         {
-            // TODO: interest feature - use PLAC.FORM
             using (var ctx = TestUtils.LoadResourceGEDCOMFile("test_heredis.ged")) {
                 Assert.AreEqual(GEDCOMFormat.Heredis, ctx.Tree.Format);
             }

@@ -1098,7 +1098,7 @@ namespace GKCore
                 } else if (ext == ".gdz" || ext == ".zip") {
                     fileProvider = new GEDZIPProvider(fTree);
                 } else {
-                    // TODO: message?
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FormatUnsupported));
                     return false;
                 }
 

@@ -99,7 +99,7 @@ namespace GKCore.Controllers
 
             MatchParams mParams;
             //mParams.IndistinctNameMatching = fView.IndistinctMatchingCheck.Checked; // FIXME!
-            mParams.NamesIndistinctThreshold = ((float)fView.NameAccuracyNum.Value) / 100.0f;
+            mParams.IndistinctThreshold = ((float)fView.NameAccuracyNum.Value) / 100.0f;
             mParams.DatesCheck = fView.BirthYearChk.Checked;
             mParams.YearsInaccuracy = (int)fView.YearInaccuracyNum.Value;
             mParams.CheckEventPlaces = false;

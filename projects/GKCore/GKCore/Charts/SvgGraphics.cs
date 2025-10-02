@@ -281,7 +281,7 @@ namespace GKCore.Charts
 
         public void SetTranslucent(float value)
         {
-            // TODO: not implemented yet
+            // not implemented yet
         }
 
         public void DrawPolygon(ExtPointF[] poly, IPen pen, IBrush brush)

@@ -1540,7 +1540,7 @@ namespace GKCore.Controllers
             view.Name.Text = "sample text";
             view.Priority.SelectedIndex = 1;
             view.Status.SelectedIndex = 1;
-            view.Percent.Text = "11";
+            view.Percent.Value = 11;
             view.StartDate.NormalizeDate = "01.01.2000";
             view.StopDate.NormalizeDate = "02.02.2000";
             controller.Accept();
@@ -1830,7 +1830,7 @@ namespace GKCore.Controllers
             Assert.AreEqual(0, src.RepositoryCitations.Count);*/
 
             view.ShortTitle.Text = "sample text";
-            view.Author.Lines = new string[] { "sample text" };
+            view.Author.Lines.Returns(new string[] { "sample text" });
 
             controller.Accept();
 

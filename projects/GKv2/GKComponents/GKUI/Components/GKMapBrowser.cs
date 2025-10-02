@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Net;
 using System.Windows.Forms;
+using BSLib;
 using GKCore;
 using GKCore.Design.Controls;
 using GKCore.Maps;
@@ -344,7 +345,10 @@ namespace GKUI.Components
             var tmpImage = fMapControl.ToImage();
             if (tmpImage != null) {
                 using (tmpImage) {
-                    tmpImage.Save(fileName, ImageFormat.Jpeg);
+                    string ext = FileHelper.GetFileExtension(fileName);
+                    ImageFormat imFmt = UIHelper.DetermineImageFormat(ext, ImageFormat.Jpeg);
+
+                    tmpImage.Save(fileName, imFmt);
                 }
             }
         }

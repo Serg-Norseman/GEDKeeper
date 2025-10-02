@@ -76,7 +76,7 @@ namespace GDModel
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fNotes == null || fNotes.Count == 0);
+            return base.IsEmpty() && fNotes.IsEmpty();
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)

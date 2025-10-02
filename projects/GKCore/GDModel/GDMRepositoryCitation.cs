@@ -131,7 +131,7 @@ namespace GDModel
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fCallNumbers == null || fCallNumbers.Count == 0);
+            return base.IsEmpty() && fCallNumbers.IsEmpty();
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)

@@ -257,13 +257,13 @@ namespace GDModel
         {
             float match = 0.0f;
 
-            if (matchParams.NamesIndistinctThreshold >= 0.99f) {
+            if (matchParams.IndistinctThreshold >= 0.99f) {
                 if (string.Compare(str1, str2, true) == 0) {
                     match = 100.0f;
                 }
             } else {
                 double sim = IndistinctMatching.GetSimilarity(str1, str2);
-                if (sim >= matchParams.NamesIndistinctThreshold) {
+                if (sim >= matchParams.IndistinctThreshold) {
                     match = 100.0f;
                 }
             }

@@ -127,7 +127,7 @@ namespace GKCore.Controllers
             SetCutModeRadio(fFilter.BranchCut);
             fView.YearNum.Enabled = (fFilter.BranchCut == ChartFilter.BranchCutType.Years);
             fView.PersonsList.Enabled = (fFilter.BranchCut == ChartFilter.BranchCutType.Persons);
-            fView.YearNum.Text = fFilter.BranchYear.ToString();
+            fView.YearNum.Value = fFilter.BranchYear;
 
             var persList = new List<GDMRecord>();
             if (!string.IsNullOrEmpty(fTemp)) {

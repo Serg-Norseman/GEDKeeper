@@ -169,8 +169,7 @@ namespace GKCore.Export
             }
         }
 
-        public override void DrawImage(IImage image, float x, float y,
-                                       float width, float height, string imName)
+        public override void DrawImage(IImage image, float x, float y, float width, float height, string imName)
         {
             try {
                 if (fCanvas == null || image == null) return;
@@ -283,8 +282,7 @@ namespace GKCore.Export
             fCanvas.Stroke();
         }
 
-        public override void DrawRectangle(IPen pen, IColor fillColor,
-            float x, float y, float width, float height, int cornersRadius = 0)
+        public override void DrawRectangle(IPen pen, IColor fillColor, float x, float y, float width, float height, int cornersRadius = 0)
         {
             x = CheckVal(x, false);
             y = CheckVal(y, true, height);
@@ -310,12 +308,9 @@ namespace GKCore.Export
             }
         }
 
-        public override void FillRectangle(IBrush brush,
-                                           float x, float y, float width, float height)
+        public override void FillRectangle(IBrush brush, float x, float y, float width, float height)
         {
-            if (brush != null) {
-                // TODO
-            }
+            // not in demand
         }
 
         public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)

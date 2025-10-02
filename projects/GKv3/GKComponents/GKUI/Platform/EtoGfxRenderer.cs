@@ -64,14 +64,11 @@ namespace GKUI.Platform
             fCanvas.DrawArc(sdPen, x, y, width, height, startAngle, sweepAngle);
         }
 
-        public override void DrawImage(IImage image, float x, float y,
-                                       float width, float height, string imName)
+        public override void DrawImage(IImage image, float x, float y, float width, float height, string imName)
         {
             try {
                 if (fCanvas != null && image != null) {
                     var sdImage = ((ImageHandler)image).Handle;
-
-                    // TODO: implement output with transparency
                     fCanvas.DrawImage(sdImage, x, y, width, height);
                 }
             } catch (Exception ex) {
@@ -130,8 +127,7 @@ namespace GKUI.Platform
             return p;
         }
 
-        public override void DrawRectangle(IPen pen, IColor fillColor,
-            float x, float y, float width, float height, int cornersRadius = 0)
+        public override void DrawRectangle(IPen pen, IColor fillColor, float x, float y, float width, float height, int cornersRadius = 0)
         {
             GraphicsPath path = (cornersRadius == 0) ? CreateRectangle(x, y, width, height) : CreateRoundedRectangle(x, y, width, height, cornersRadius);
 
@@ -149,8 +145,7 @@ namespace GKUI.Platform
             }
         }
 
-        public override void FillRectangle(IBrush brush,
-                                           float x, float y, float width, float height)
+        public override void FillRectangle(IBrush brush, float x, float y, float width, float height)
         {
             if (brush != null) {
                 Brush sdBrush = ((BrushHandler)brush).Handle;

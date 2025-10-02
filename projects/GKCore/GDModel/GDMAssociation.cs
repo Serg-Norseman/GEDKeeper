@@ -81,8 +81,7 @@ namespace GDModel
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && string.IsNullOrEmpty(fRelation)
-                && (fSourceCitations == null || fSourceCitations.Count == 0);
+            return base.IsEmpty() && string.IsNullOrEmpty(fRelation) && fSourceCitations.IsEmpty();
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)

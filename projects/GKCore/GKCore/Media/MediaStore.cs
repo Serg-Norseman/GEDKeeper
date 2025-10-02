@@ -263,7 +263,6 @@ namespace GKCore.Media
 
                             if (!GlobalOptions.Instance.DeleteMediaFileWithoutConfirm) {
                                 string msg = string.Format(LangMan.LS(LSID.MediaFileDeleteQuery));
-                                // TODO: may be Yes/No/Cancel?
                                 var res = await AppHost.StdDialogs.ShowQuestion(msg);
                                 if (!res) {
                                     return false;

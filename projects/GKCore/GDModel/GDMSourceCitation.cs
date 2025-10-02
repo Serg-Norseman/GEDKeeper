@@ -184,9 +184,7 @@ namespace GDModel
         {
             bool result;
 
-            bool isCommonEmpty = string.IsNullOrEmpty(fPage)
-                && (fNotes == null || fNotes.Count == 0)
-                && (fMultimediaLinks == null || fMultimediaLinks.Count == 0);
+            bool isCommonEmpty = string.IsNullOrEmpty(fPage) && fNotes.IsEmpty() && fMultimediaLinks.IsEmpty();
 
             if (IsPointer) {
                 result = base.IsEmpty() && isCommonEmpty && (fData == null || fData.IsEmpty());

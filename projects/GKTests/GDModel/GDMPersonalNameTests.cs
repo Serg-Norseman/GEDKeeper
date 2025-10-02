@@ -318,7 +318,6 @@ namespace GDModel
         [Test]
         public void Test_ParseString()
         {
-            // TODO BUG return value from parsestring has no meaning (all codepaths return same)
             GDMPersonalName instance = new GDMPersonalName();
             Assert.AreEqual("", instance.ParseString(""));
         }

@@ -93,7 +93,7 @@ namespace GDModel
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fEvents.Count == 0) && string.IsNullOrEmpty(fAgency) && (fNotes == null || fNotes.Count == 0);
+            return base.IsEmpty() && (fEvents.Count == 0) && string.IsNullOrEmpty(fAgency) && fNotes.IsEmpty();
         }
 
         public override void ReplaceXRefs(GDMXRefReplacer map)

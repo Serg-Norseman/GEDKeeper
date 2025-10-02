@@ -269,21 +269,10 @@ namespace GKUI.Components
             if ((ext == ".bmp" || ext == ".jpg") && imageSize.Width >= 65535) {
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.TooMuchWidth));
             } else {
-                ImageFormat imFmt = ImageFormat.Png;
-                if (ext == ".bmp") {
-                    imFmt = ImageFormat.Bmp;
-                } else if (ext == ".png") {
-                    imFmt = ImageFormat.Png;
-                } else if (ext == ".gif") {
-                    imFmt = ImageFormat.Gif;
-                } else if (ext == ".jpg") {
-                    imFmt = ImageFormat.Jpeg;
-                } else if (ext == ".emf") {
-                    imFmt = ImageFormat.Emf;
-                }
+                ImageFormat imFmt = UIHelper.DetermineImageFormat(ext, ImageFormat.Png);
 
                 Image pic;
-                if (Equals(imFmt, ImageFormat.Emf)) {
+                if (imFmt == ImageFormat.Emf) {
                     using (var gfx = CreateGraphics()) {
                         pic = new Metafile(fileName, gfx.GetHdc());
                     }

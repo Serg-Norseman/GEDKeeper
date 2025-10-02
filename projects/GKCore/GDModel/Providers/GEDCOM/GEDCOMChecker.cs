@@ -464,10 +464,6 @@ namespace GDModel.Providers.GEDCOM
                 }
             }
 
-            // TODO
-            // INDI: remove AFN, RFN - discuss???
-            // INDI,FAM: remove SUBM - discuss???
-
             switch (rec.RecordType) {
                 case GDMRecordType.rtIndividual:
                     CheckIndividualRecord(rec as GDMIndividualRecord);

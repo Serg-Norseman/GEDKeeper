@@ -154,7 +154,6 @@ namespace GDModel
             return base.IsEmpty() && fMap.IsEmpty() && (fNames.Count == 0) && (fTopLevels.Count == 0);
         }
 
-        // TODO: connect to use
         public override float IsMatch(GDMTag tag, MatchParams matchParams)
         {
             GDMLocationRecord otherLoc = tag as GDMLocationRecord;

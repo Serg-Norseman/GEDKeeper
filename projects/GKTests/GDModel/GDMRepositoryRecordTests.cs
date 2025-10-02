@@ -62,7 +62,7 @@ namespace GDModel
                     tree.NewXRef(repo3);
 
                     var matchParams = new MatchParams();
-                    matchParams.NamesIndistinctThreshold = 100.0f;
+                    matchParams.IndistinctThreshold = 100.0f;
 
                     Assert.AreEqual(0.0f, repoRec.IsMatch(null, matchParams));
 

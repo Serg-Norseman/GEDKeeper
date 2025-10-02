@@ -22,6 +22,7 @@
 
 using System.Collections.Generic;
 using System.Net;
+using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
@@ -343,7 +344,10 @@ namespace GKUI.Components
             var tmpImage = fMapControl.ToImage();
             if (tmpImage != null) {
                 using (tmpImage) {
-                    tmpImage.Save(fileName, ImageFormat.Jpeg);
+                    string ext = FileHelper.GetFileExtension(fileName);
+                    ImageFormat imFmt = UIHelper.DetermineImageFormat(ext, ImageFormat.Jpeg);
+
+                    tmpImage.Save(fileName, imFmt);
                 }
             }
         }

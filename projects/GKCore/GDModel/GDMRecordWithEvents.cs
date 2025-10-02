@@ -94,7 +94,7 @@ namespace GDModel
         public override bool IsEmpty()
         {
             // Restrictions are not checked because they are not important if other fields are empty.
-            return base.IsEmpty() && (fEvents == null || fEvents.Count == 0);
+            return base.IsEmpty() && fEvents.IsEmpty();
         }
 
         public override void Assign(GDMTag source)

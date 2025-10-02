@@ -61,7 +61,6 @@ namespace GDModel
             GDMIndividualRecord ind2 = fContext.Tree.FindXRef<GDMIndividualRecord>("I2");
             Assert.IsNotNull(fContext.Tree.GetMarriageFamily(ind2));
 
-            // TODO: transfer to BaseContext tests
             GDMIndividualRecord indiRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I4");
             Assert.IsNull(fContext.GetMarriageFamily(indiRec, false));
             Assert.IsNotNull(fContext.GetMarriageFamily(indiRec, true));
@@ -182,10 +181,8 @@ namespace GDModel
 
                 Assert.IsNull(fContext.Tree.GetParentsFamily(indi));
 
-                // TODO: move to BaseContext tests
                 Assert.IsNotNull(fContext.GetParentsFamily(indi, true));
 
-                // MoveTo test
                 GDMIndividualRecord ind = fContext.Tree.FindXRef<GDMIndividualRecord>("I2");
 
                 indi.AddAssociation("test", ind);
@@ -255,7 +252,7 @@ namespace GDModel
 
             float res;
             MatchParams mParams;
-            mParams.NamesIndistinctThreshold = 1.0f;
+            mParams.IndistinctThreshold = 1.0f;
             mParams.DatesCheck = true;
             mParams.YearsInaccuracy = 0;
             mParams.CheckEventPlaces = false;
@@ -306,7 +303,7 @@ namespace GDModel
             Assert.AreEqual(0.0f, res);
 
             // Ivanov - Ivanov(ich) : 3 chars of difference -> 0.88
-            mParams.NamesIndistinctThreshold = 0.85f;
+            mParams.IndistinctThreshold = 0.85f;
             mParams.YearsInaccuracy = 4;
 
             res = ind1.IsMatch(ind2, mParams);

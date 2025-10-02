@@ -292,12 +292,10 @@ namespace GKCore.Controllers
             return (item1.Date == null || item2.Date == null) ? -1 : item1.Date.CompareTo(item2.Date);
         }
 
-        // TODO: localize?
         public async void SaveSnapshot()
         {
             try {
-                string filter1 = "Image files|*.jpg";
-
+                string filter1 = LangMan.LS(LSID.TreeImagesFilter);
                 string fileName = await AppHost.StdDialogs.GetSaveFile("", "", filter1, 2, "jpg", "");
                 if (!string.IsNullOrEmpty(fileName)) {
                     fView.MapBrowser.SaveSnapshot(fileName);

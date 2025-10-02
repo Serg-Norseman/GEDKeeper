@@ -355,7 +355,7 @@ namespace GKCore
             };
 
             MediaTypes = new LSID[] {
-                LSID.DefaultValue, // TODO: may be LSID.MT_15 (Unknown)?
+                LSID.DefaultValue,
                 LSID.MT_02,
                 LSID.MT_03,
                 LSID.MT_04,
