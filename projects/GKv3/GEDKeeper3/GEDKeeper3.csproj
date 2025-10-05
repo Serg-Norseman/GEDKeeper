@@ -72,7 +72,7 @@
         <StartupObject>GEDKeeper3.GKProgram</StartupObject>
         <PlatformTarget>x64</PlatformTarget>
 
-        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+        <RuntimeIdentifier>linux-x64;linux-arm64</RuntimeIdentifier>
     </PropertyGroup>
 
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_FREEBSD')) ">
