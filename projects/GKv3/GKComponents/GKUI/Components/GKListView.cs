@@ -155,6 +155,17 @@ namespace GKUI.Components
             }
         }
 
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            if (e.Key == Keys.Space && fListMan != null && fCheckBoxes) {
+                if (base.SelectedItem is ContentItem item && item.Values[0] is bool curValue) {
+                    fListMan.SetColumnValue(base.SelectedRow, 0, !curValue);
+                    base.ReloadData(base.SelectedRows);
+                }
+            }
+            base.OnKeyUp(e);
+        }
+
         protected override void OnCellEdited(GridViewCellEventArgs e)
         {
             if (fCheckBoxes && e.Item is ContentItem contItem) {

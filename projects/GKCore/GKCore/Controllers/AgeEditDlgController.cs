@@ -20,6 +20,7 @@
 
 using System;
 using System.Text;
+using System.Text.RegularExpressions;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Design;
@@ -69,25 +70,30 @@ namespace GKCore.Controllers
             var tempRes = new StringBuilder();
             int part = 0;
             bool afterVal = false;
+            bool hasVal = false;
             for (int i = 0; i < mask.Length; i++) {
                 var mX = mask[i];
                 switch (mX) {
                     case '0':
+                        afterVal = true;
                         if (char.IsDigit(strAge[i])) {
+                            hasVal = true;
                             tempRes.Append(strAge[i]);
-                            afterVal = true;
                         }
                         break;
                     case ' ':
                         if (afterVal) {
                             part += 1;
-                            switch (part) {
-                                case 1: tempRes.Append('y'); break;
-                                case 2: tempRes.Append('m'); break;
-                                case 3: tempRes.Append('d'); break;
+                            if (hasVal) {
+                                switch (part) {
+                                    case 1: tempRes.Append('y'); break;
+                                    case 2: tempRes.Append('m'); break;
+                                    case 3: tempRes.Append('d'); break;
+                                }
+                                tempRes.Append(' ');
                             }
-                            tempRes.Append(' ');
                             afterVal = false;
+                            hasVal = false;
                         }
                         break;
                     default:
@@ -118,13 +124,15 @@ namespace GKCore.Controllers
                     valIdx++;
                     if (val < 0) val = 0;
 
-                    resParts[i] = val.ToString(mp);
+                    var xs = val.ToString(mp);
+                    // replace 0 to _ only before numbers 1..9
+                    resParts[i] = Regex.Replace(xs, @"^0+", match => new string('_', match.Length));
                 } else {
                     resParts[i] = mp;
                 }
             }
 
-            var tempRes = string.Join(" ", resParts).Replace("0", "_");
+            var tempRes = string.Join(" ", resParts)/*.Replace("0", "_")*/;
             textBox.Text = tempRes;
         }
 

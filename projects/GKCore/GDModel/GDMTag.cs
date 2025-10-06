@@ -164,10 +164,15 @@ namespace GDModel
         {
             for (int i = 0, count = srcList.Count; i < count; i++) {
                 GDMTag sourceTag = srcList[i];
-                T copyTag = (T)Activator.CreateInstance(sourceTag.GetType());
-                copyTag.Assign(sourceTag);
-                destList.Add(copyTag);
+                AddTagCopy(destList, sourceTag);
             }
+        }
+
+        protected internal static void AddTagCopy<T>(GDMList<T> destList, GDMTag sourceTag) where T : GDMTag
+        {
+            T copyTag = (T)Activator.CreateInstance(sourceTag.GetType());
+            copyTag.Assign(sourceTag);
+            destList.Add(copyTag);
         }
 
         public virtual void Clear()

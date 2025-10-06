@@ -168,7 +168,7 @@
             this.lblRestriction.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblRestriction.Name = "lblRestriction";
             this.lblRestriction.Size = new System.Drawing.Size(68, 13);
-            this.lblRestriction.TabIndex = 2;
+            this.lblRestriction.TabIndex = 1;
             this.lblRestriction.Text = "lblRestriction";
             // 
             // cmbRestriction
@@ -178,7 +178,7 @@
             this.cmbRestriction.Margin = new System.Windows.Forms.Padding(2);
             this.cmbRestriction.Name = "cmbRestriction";
             this.cmbRestriction.Size = new System.Drawing.Size(163, 21);
-            this.cmbRestriction.TabIndex = 3;
+            this.cmbRestriction.TabIndex = 2;
             this.cmbRestriction.SelectedIndexChanged += new System.EventHandler(this.cbRestriction_SelectedIndexChanged);
             // 
             // GroupBox1
@@ -399,7 +399,7 @@
             this.panCtlParents.Margin = new System.Windows.Forms.Padding(0);
             this.panCtlParents.Name = "panCtlParents";
             this.panCtlParents.Size = new System.Drawing.Size(564, 127);
-            this.panCtlParents.TabIndex = 21;
+            this.panCtlParents.TabIndex = 1;
             // 
             // lblParents
             // 
@@ -732,7 +732,7 @@
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(788, 253);
-            this.tableLayoutPanel1.TabIndex = 22;
+            this.tableLayoutPanel1.TabIndex = 0;
             // 
             // panel1
             // 
@@ -746,7 +746,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(8);
             this.panel1.Size = new System.Drawing.Size(160, 253);
-            this.panel1.TabIndex = 0;
+            this.panel1.TabIndex = 1;
             // 
             // tableLayoutPanel2
             // 
@@ -762,7 +762,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(564, 253);
-            this.tableLayoutPanel2.TabIndex = 1;
+            this.tableLayoutPanel2.TabIndex = 0;
             // 
             // tableLayoutPanel3
             // 
@@ -777,7 +777,7 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(788, 519);
-            this.tableLayoutPanel3.TabIndex = 23;
+            this.tableLayoutPanel3.TabIndex = 0;
             // 
             // PersonEditDlg
             // 

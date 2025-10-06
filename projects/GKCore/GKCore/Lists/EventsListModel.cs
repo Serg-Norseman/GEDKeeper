@@ -225,7 +225,7 @@ namespace GKCore.Lists
                 var newDate = GDMDate.Subtract(date, evt.Age);
 
                 if (!newDate.IsEmpty()) {
-                    var newEvent = GKUtils.CreateIndividualEvent(fDataOwner as IGDMRecordWithEvents, newDate, GEDCOMTagName.BIRT);
+                    var newEvent = GKUtils.CreateIndividualEvent(fDataOwner as IGDMRecordWithEvents, newDate, GEDCOMTagName.BIRT, true);
                     newEvent.AssignDerivative(evt);
 
                     fSheetList.ListView.UpdateContents();

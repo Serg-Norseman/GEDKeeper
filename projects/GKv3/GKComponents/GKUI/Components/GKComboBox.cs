@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2017 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2017-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -18,7 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using Eto.Drawing;
+using System.Linq;
+using BSLib;
 using Eto.Forms;
 
 namespace GKUI.Components
@@ -28,14 +29,50 @@ namespace GKUI.Components
     /// </summary>
     public class GKComboBox : ComboBox
     {
+        public bool AutoSelect { get; set; }
+
+
         public GKComboBox()
         {
-            // Eto.Forms supports rendering an item image via IImageListItem 
+            // Eto.Forms supports rendering an item image via IImageListItem
         }
 
         /*protected override void OnDrawItem(DrawItemEventArgs e)
         {
-            // Eto.Forms supports rendering an item image via IImageListItem 
+            // Eto.Forms supports rendering an item image via IImageListItem
         }*/
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+
+            if (AutoSelect && !char.IsControl(e.KeyChar) && !e.Control && !e.Alt) {
+                var pressedChar = char.ToLower(e.KeyChar);
+
+                var itemsList = Items.Select((itm) => itm.Text).ToArray();
+
+                var newIndex = IndexOf(itemsList, pressedChar, SelectedIndex + 1);
+                if (newIndex < 0) {
+                    newIndex = IndexOf(itemsList, pressedChar, 0);
+                }
+
+                if (newIndex != -1) {
+                    SelectedIndex = newIndex;
+                }
+            }
+        }
+
+        private static int IndexOf(string[] array, char chr, int startIndex)
+        {
+            startIndex = Algorithms.CheckBounds(startIndex, 0, array.Length);
+
+            for (int i = startIndex; i < array.Length; i++) {
+                string item = array[i];
+                if (item != null && item.Length > 0 && char.ToLower(item[0]) == chr) {
+                    return i;
+                }
+            }
+            return -1;
+        }
     }
 }

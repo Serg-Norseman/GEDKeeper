@@ -254,17 +254,34 @@ namespace GKUI.Components
             base.OnItemCheck(e);
         }
 
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Space && base.VirtualMode && base.CheckBoxes) {
+                int selectedIndex = base.SelectedIndices.Count > 0 ? base.SelectedIndices[0] : -1;
+                if (selectedIndex != -1) {
+                    var args = new RetrieveVirtualItemEventArgs(selectedIndex);
+                    OnRetrieveVirtualItem(args);
+                    ListViewItem lvi = args.Item;
+
+                    if (lvi != null) {
+                        lvi.Checked = !lvi.Checked;
+                        fListMan.SetColumnValue(lvi.Index, 0, lvi.Checked);
+                        Invalidate(lvi.Bounds);
+                    }
+                }
+            }
+            base.OnKeyUp(e);
+        }
+
         protected override void OnMouseClick(MouseEventArgs e)
         {
             // Hack: for VirtualMode
             if (base.CheckBoxes) {
                 ListViewItem lvi = GetItemAt(e.X, e.Y);
-                if (lvi != null) {
-                    if (e.X < (lvi.Bounds.Left + 16)) {
-                        lvi.Checked = !lvi.Checked;
-                        fListMan.SetColumnValue(lvi.Index, 0, lvi.Checked);
-                        Invalidate(lvi.Bounds);
-                    }
+                if (lvi != null && e.X < (lvi.Bounds.Left + 16)) {
+                    lvi.Checked = !lvi.Checked;
+                    fListMan.SetColumnValue(lvi.Index, 0, lvi.Checked);
+                    Invalidate(lvi.Bounds);
                 }
             }
             base.OnMouseClick(e);

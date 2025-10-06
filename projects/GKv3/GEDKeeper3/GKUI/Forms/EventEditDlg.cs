@@ -51,7 +51,7 @@ namespace GKUI.Forms
         private Label lblCause;
         private Label lblOrg;
         private Label lblAttrValue;
-        private ComboBox cmbEventType;
+        private GKComboBox cmbEventType;
         private TextBox txtEventPlace;
         private ComboBox txtEventCause;
         private ComboBox txtEventOrg;

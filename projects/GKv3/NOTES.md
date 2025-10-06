@@ -41,6 +41,7 @@ Eto.Forms v2.7.4 compatible with netfw462
 
 1. WPF ComboBoxCell: only elements within the rows bounding box can be selected #1658, 2546
 2. WPF PrintPreview: full application's crash
+3. WPF EventEditDlg: cmbEventType dont works AutoComplete
 
 # Other
 

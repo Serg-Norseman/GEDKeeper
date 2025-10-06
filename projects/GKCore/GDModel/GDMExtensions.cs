@@ -35,6 +35,19 @@ namespace GDModel
             return source == null || source.Count == 0;
         }
 
+        public static int FindPointer<T>(this GDMList<T> list, string ptrXRef) where T : GDMTag, IGDMPointerHost
+        {
+            if (!string.IsNullOrEmpty(ptrXRef)) {
+                for (int i = 0, num = list.Count; i < num; i++) {
+                    var item = list[i];
+                    if (item.XRef == ptrXRef) {
+                        return i;
+                    }
+                }
+            }
+            return -1;
+        }
+
         public static GDMNotes AddNote(this IGDMStructWithNotes _struct, GDMNoteRecord noteRec)
         {
             GDMNotes note = null;

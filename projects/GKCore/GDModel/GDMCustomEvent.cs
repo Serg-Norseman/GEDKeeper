@@ -19,6 +19,7 @@
  */
 
 using System;
+using BSLib;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -216,9 +217,34 @@ namespace GDModel
         public void AssignDerivative(GDMCustomEvent source)
         {
             fAgency = source.fAgency;
-            if (source.fNotes != null) AssignList(source.fNotes, Notes);
-            if (source.fSourceCitations != null) AssignList(source.fSourceCitations, SourceCitations);
-            if (source.fMultimediaLinks != null) AssignList(source.fMultimediaLinks, MultimediaLinks);
+
+            if (source.HasNotes) {
+                for (int i = 0, num = source.fNotes.Count; i < num; i++) {
+                    var link = source.fNotes[i];
+                    if (Notes.FindPointer(link.XRef) < 0) {
+                        AddTagCopy(Notes, link);
+                    }
+                }
+            }
+
+            if (source.HasMultimediaLinks) {
+                for (int i = 0, num = source.fMultimediaLinks.Count; i < num; i++) {
+                    var link = source.fMultimediaLinks[i];
+                    if (MultimediaLinks.FindPointer(link.XRef) < 0) {
+                        AddTagCopy(MultimediaLinks, link);
+                    }
+                }
+            }
+
+            if (source.HasSourceCitations) {
+                for (int i = 0, num = source.fSourceCitations.Count; i < num; i++) {
+                    var link = source.fSourceCitations[i];
+                    var exIdx = SourceCitations.FindPointer(link.XRef);
+                    if (exIdx < 0 || SourceCitations[exIdx].Page != link.Page) {
+                        AddTagCopy(SourceCitations, link);
+                    }
+                }
+            }
         }
 
         public override void Clear()

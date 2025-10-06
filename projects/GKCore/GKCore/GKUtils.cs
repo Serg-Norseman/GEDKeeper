@@ -971,15 +971,35 @@ namespace GKCore
             return string.Empty;
         }
 
-        public static GDMIndividualEvent CreateIndividualEvent(IGDMRecordWithEvents record, GDMCustomDate newDate, string eventType)
+        public static GDMIndividualEvent CreateIndividualEvent(IGDMRecordWithEvents record, GDMCustomDate newDate, string eventType, bool findEmptyOrSame = false)
         {
-            var newEvent = new GDMIndividualEvent();
-            newEvent.SetName(eventType);
-            newEvent.Date.ParseString(newDate.StringValue);
+            GDMIndividualEvent resultEvent = null;
 
-            record.Events.Add(newEvent);
+            if (findEmptyOrSame) {
+                int sameYear = (newDate is GDMDate dtx) ? dtx.Year : -1;
 
-            return newEvent;
+                for (int i = 0, num = record.Events.Count; i < num; i++) {
+                    var evt = record.Events[i];
+                    if (evt.GetTagName() == eventType && evt is GDMIndividualEvent indiEvent) {
+                        if (evt.IsEmpty() || (evt.Date.Value is GDMDate evtDate && (evtDate.Year == sameYear && evtDate.Month == 0 && evtDate.Day == 0))) {
+                            resultEvent = indiEvent;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (resultEvent == null) {
+                resultEvent = new GDMIndividualEvent();
+                resultEvent.SetName(eventType);
+                record.Events.Add(resultEvent);
+
+                // TODO: position for event in list!
+            }
+
+            resultEvent.Date.ParseString(newDate.StringValue);
+
+            return resultEvent;
         }
 
         #endregion

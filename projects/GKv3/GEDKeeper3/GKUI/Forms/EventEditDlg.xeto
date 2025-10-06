@@ -13,7 +13,7 @@
             <TableRow>
               <Label x:Name="lblEvent" />
               <StackLayout Orientation="Horizontal" Spacing="4">
-                <ComboBox x:Name="cmbEventType" Width="180" ReadOnly="True" SelectedIndexChanged="EditEventType_SelectedIndexChanged" />
+                <comcom:GKComboBox x:Name="cmbEventType" AutoSelect="true" Width="280" ReadOnly="True" SelectedIndexChanged="EditEventType_SelectedIndexChanged" />
               </StackLayout>
             </TableRow>
 
