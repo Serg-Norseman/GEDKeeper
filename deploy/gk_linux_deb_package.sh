@@ -4,7 +4,7 @@ APP_VER="$1"
 DEV_PATH="/home/norseman/share/gkdev/GEDKeeper"
 PACK_PATH="gedkeeper-$APP_VER"
 
-rm -f ~/gedkeeper_$APP_VER-1_all.deb
+rm -f ~/gedkeeper_$APP_VER-1_amd64.deb
 
 sh ./gk_linux_image.sh $APP_VER
 

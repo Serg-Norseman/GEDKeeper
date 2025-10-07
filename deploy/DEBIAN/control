@@ -1,6 +1,6 @@
 Package: gedkeeper
 Version: 3.11.0-1
-Architecture: all
+Architecture: amd64
 Depends: sqlite3
 Maintainer: Sergey V. Zhdanovskih (aka Norseman) <gedkeeper@yandex.ru>
 Homepage: https://gedkeeper.github.io/
