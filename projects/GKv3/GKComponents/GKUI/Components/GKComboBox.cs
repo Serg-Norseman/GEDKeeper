@@ -64,7 +64,7 @@ namespace GKUI.Components
 
         private static int IndexOf(string[] array, char chr, int startIndex)
         {
-            startIndex = Algorithms.CheckBounds(startIndex, 0, array.Length);
+            startIndex = Algorithms.CheckBounds(startIndex, 0, array.Length - 1);
 
             for (int i = startIndex; i < array.Length; i++) {
                 string item = array[i];
