@@ -1268,50 +1268,78 @@ namespace GKCore.Controllers
                     return;
 
                 string[] fileNames = await AppHost.StdDialogs.GetOpenFiles("", string.Empty, LangMan.LS(LSID.ImagesFilter), 1, "");
-                if (fileNames == null || fileNames.Length == 0) return;
+                if (fileNames.IsEmpty()) return;
+
+                var defaultStoreType = GlobalOptions.Instance.MediaStoreDefault;
+                var timestamp = DateTime.Now;
 
                 int added = 0;
                 for (int i = 0; i < fileNames.Length; i++) {
                     var filePath = fileNames[i];
 
                     try {
-                        string fName = Path.GetFileNameWithoutExtension(filePath);
-                        if (!string.IsNullOrEmpty(fName) && fName.Contains(',')) {
-                            string[] parts = fName.Split(',');
-                            string indiName = parts[0].Trim();
-                            string indiYear = parts[1].Trim();
+                        string fileName = Path.GetFileNameWithoutExtension(filePath);
 
-                            Dictionary<string, string> facts = new Dictionary<string, string>();
-                            facts.Add("birth_year", indiYear);
+                        // optional search for a person by file name, like `John Doe, 1817.jpg`
+                        GDMIndividualRecord indiRec = null;
+                        if (!string.IsNullOrEmpty(fileName)) {
+                            string indiName;
+                            var facts = new Dictionary<string, string>();
 
-                            var indi = fContext.FindIndividual(indiName, facts);
-                            if (indi != null) {
-                                var mediaRec = new GDMMultimediaRecord(fContext.Tree);
-                                fContext.Tree.NewXRef(mediaRec);
-
-                                var fileRef = mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle());
-                                fileRef.MediaType = GDMMediaType.mtPhoto;
-                                fileRef.Title = fName;
-
-                                if (fContext.MediaSave(fileRef, filePath, GlobalOptions.Instance.MediaStoreDefault)) {
-                                    fContext.Tree.AddRecord(mediaRec);
-
-                                    var mmLink = indi.AddMultimedia(mediaRec);
-                                    added += 1;
+                            if (fileName.Contains(',')) {
+                                string[] parts = fileName.Split(',');
+                                indiName = parts[0].Trim();
+                                if (parts.Length > 1) {
+                                    string indiYear = parts[1].Trim();
+                                    facts.Add("birth_year", indiYear);
                                 }
+                            } else {
+                                indiName = fileName;
                             }
+
+                            indiRec = fContext.FindIndividual(indiName, facts);
                         }
+
+                        if (AddMediaFile(defaultStoreType, filePath, fileName, indiRec, timestamp))
+                            added += 1;
                     } catch (Exception ex) {
                         Logger.WriteError("BaseWinController.ShowPhotosBatchAdding().1", ex);
                     }
                 }
 
-                RefreshLists(false);
+                if (added > 0) {
+                    RefreshLists(false);
+                    fContext.SetModified();
+                }
 
                 AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.AddedNPhotos, added, fileNames.Length));
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinController.ShowPhotosBatchAdding().0", ex);
             }
+        }
+
+        private bool AddMediaFile(MediaStoreType storeType, string filePath, string fileName, GDMIndividualRecord indiRec, DateTime timestamp)
+        {
+            var mediaRec = new GDMMultimediaRecord(fContext.Tree);
+            mediaRec.ChangeDate.ChangeDateTime = timestamp;
+            fContext.Tree.NewXRef(mediaRec);
+
+            var fileRef = mediaRec.FileReferences.Add(new GDMFileReferenceWithTitle());
+            fileRef.MediaType = GDMMediaType.mtPhoto;
+            fileRef.Title = fileName;
+
+            if (fContext.MediaSave(fileRef, filePath, storeType)) {
+                fContext.Tree.AddRecord(mediaRec);
+
+                // optional!
+                if (indiRec != null) {
+                    indiRec.AddMultimedia(mediaRec);
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         public void SendMail()

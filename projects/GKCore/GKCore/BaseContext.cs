@@ -427,13 +427,16 @@ namespace GKCore
                 string indiName = GKUtils.GetNameString(rec, false);
                 if (indiName == searchName) {
                     var res = true;
-                    foreach (var pair in facts) {
-                        if (pair.Key == "birth_year") {
-                            int birthYear = rec.GetChronologicalYear(GEDCOMTagName.BIRT);
-                            res = res && (birthYear.ToString() == pair.Value);
-                        }
 
-                        if (!res) break;
+                    if (facts != null) {
+                        foreach (var pair in facts) {
+                            if (pair.Key == "birth_year") {
+                                int birthYear = rec.GetChronologicalYear(GEDCOMTagName.BIRT);
+                                res = res && (birthYear.ToString() == pair.Value);
+                            }
+
+                            if (!res) break;
+                        }
                     }
 
                     if (res) {
