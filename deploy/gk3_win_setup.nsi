@@ -323,7 +323,7 @@ Section "$(gkreq)"
 
     CreateDirectory "$INSTDIR\externals"
     SetOutPath "$INSTDIR\externals"
-    File "..\externals\resources.yaml"
+    File "..\externals\*.yaml"
 
     CreateDirectory "$SMPROGRAMS\GEDKeeper3"
     SetOutPath "$INSTDIR\bin"

@@ -447,7 +447,10 @@ namespace GKCore.Kinships
         {
             string fileName = AppHost.GetKinshipsCultureFileName();
 
-            if (!File.Exists(fileName)) return;
+            if (!File.Exists(fileName)) {
+                Logger.WriteInfo("Kinship determination culture file `{0}` not found.", fileName);
+                return;
+            }
 
             try {
                 // loading file
