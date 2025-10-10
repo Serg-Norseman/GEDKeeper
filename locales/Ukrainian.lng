@@ -35,7 +35,7 @@
 034=Sosa-Stradonitz
 035=Органайзер
 036=Скрипти...
-037=<?>
+037=Хроніка
 038=Інструменти...
 039=Фільтр
 040=Налаштування
@@ -863,7 +863,7 @@
 859=Family `{0}` has a half link of a child to parents family `{1}`
 860=Family `{0}` has garbled spouses
 861=СРСР:Член КПРС
-862=Attention: when merging archive records, the name and address are not transferred! Proceed?
+862=Attention: when merging repository records, the name and address are not transferred! Proceed?
 863=Use extra controls
 864=Several families of parents `{0}`
 865=Specials
@@ -1068,4 +1068,4 @@
 
 1051=Create a calculated birth event
 1052=No age on event date
-1053=Subject
+1053=Суб'єкт

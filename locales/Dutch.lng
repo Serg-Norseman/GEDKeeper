@@ -35,7 +35,7 @@
 034=Sosa-Stradonitz
 035=Organisatie
 036=Scripts...
-037=<?>
+037=Gebeurtenissen
 038=Gereedschap...
 039=Filteren
 040=Opties
@@ -259,7 +259,7 @@
 258=Gebruik proxy
 259=Server
 260=Poort
-261=Login
+261=User name
 262=Wachtwoord
 263=Wachtwoord onjuist
 264=Toon tips bij opstarten
@@ -1068,4 +1068,4 @@
 
 1051=Create a calculated birth event
 1052=No age on event date
-1053=Subject
+1053=Persoon

@@ -35,7 +35,7 @@
 034=Sosa-Stradonitz
 035=Organizador
 036=Scripts...
-037=<?>
+037=Crónica
 038=Herramientas...
 039=Filtro
 040=Opciones
@@ -393,9 +393,9 @@
 392=Lugares de fallecimiento
 393=Lugares de residencia
 394=Solo seleccionados
-395=Family.Show files (*.familyx)|*.familyx
+395=Archivos Family.Show (*.familyx)|*.familyx
 396=El formato no está soportado
-397=GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip
+397=Archivos GEDZIP (*.gdz,*.zip)|*.gdz,*.zip
 398=Impresión
 399=Vista previa
 400=Generación
@@ -509,7 +509,7 @@
 508=Hay un filtro por grupo. ¿Desea añadir el grupo a un nuevo individuo?
 509=Búsqueda de duplicados
 510=Valor no válido
-511=Validation of GEDCOM data constraints
+511=Validación de las restricciones de datos GEDCOM
 512=Comparar bases de datos
 513=Fusionar bases de datos
 514=Dividir base de datos
@@ -1045,27 +1045,27 @@
 1032=Incluir fuentes de las citas
 1033=Cita de la fuente
 
-1034=DNA tests
-1035=DNA test
-1036=Test name
-1037=Laboratory, company
-1038=Are you sure you want to remove the DNA test?
-1039=File format
+1034=Pruebas de ADN
+1035=Prueba de ADN
+1036=Nombre de la prueba
+1037=Laboratorio, empresa
+1038=¿Está seguro que desea eliminar la prueba de ADN?
+1039=Formato del archivo
 
-1040=Husband's age
-1041=Wife's age
-1042=000 year(s) 00 month(s) 000 day(s)
-1043=R ### y ## m ### d
+1040=Edad del esposo
+1041=Edad de la esposa
+1042=000 año(s) 00 mes(es) 000 día(s)
+1043=R ### a ## m ### d
 
-1044=Today is {2} wedding anniversary of {0} and {1}
-1045=Tomorrow is {2} wedding anniversary of {0} and {1}
-1046={2} days remain before the {3} wedding anniversary of {0} and {1}
-1047=Wedding anniversaries
+1044=Hoy es el {2} aniversario de boda de {0} y {1}
+1045=Mañana es el {2} aniversario de boda de {0} y {1}
+1046=Faltan {2} días para el {3} aniversario de boda de {0} y {1}
+1047=Aniversarios de Boda
 
 1048=Copia de seguridad extendida
 1049=Carpeta
-1050=Backup on save
+1050=Copia de seguridad al guardar
 
-1051=Create a calculated birth event
-1052=No age on event date
-1053=Subject
+1051=Crear un evento calculado de nacimiento
+1052=Fecha del evento no determinada
+1053=Asunto

@@ -35,7 +35,7 @@
 034=Sosa-Stradonitz
 035=Adressbuch
 036=Skripte...
-037=<?>
+037=Chronik
 038=Tools...
 039=Filter
 040=Einstellungen
@@ -393,9 +393,9 @@
 392=Sterbeorte
 393=Wohnorte
 394=Nur Ausgewählte
-395=Family.Show files (*.familyx)|*.familyx
+395=Family.Show-Dateien (*.familyx)|*.familyx
 396=Dieses Format wird nicht unterstützt
-397=GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip
+397=GEDZIP-Dateien (*.gdz,*.zip)|*.gdz,*.zip
 398=Drucken
 399=Vorschau
 400=Generation
@@ -509,7 +509,7 @@
 508=Aktuell wird nach einer Gruppe gefiltert. Soll diese Gruppe zu dem neuen Personendatensatz hinzugefügt werden?
 509=Duplikate suchen
 510=Ungültiger Wert
-511=Validation of GEDCOM data constraints
+511=Validierung der GEDCOM-Datenbeschränkungen
 512=Datenbanken vergleichen
 513=Datenbanken zusammenführen
 514=Datenbank aufteilen
@@ -1045,27 +1045,27 @@
 1032=Quellenangaben einfügen
 1033=Quellenangaben
 
-1034=DNA tests
-1035=DNA test
-1036=Test name
-1037=Laboratory, company
-1038=Are you sure you want to remove the DNA test?
-1039=File format
+1034=DNS-Tests
+1035=DNS-Test
+1036=Testname
+1037=Labor, Unternehmen
+1038=Sind Sie sicher, dass Sie den DNS-Test löschen wollen?
+1039=Dateiformat
 
-1040=Husband's age
-1041=Wife's age
-1042=000 year(s) 00 month(s) 000 day(s)
-1043=R ### y ## m ### d
+1040=Alter des Ehemanns
+1041=Alter der Ehefrau
+1042=000 Jahr(e) 00 Monat(e) 000 Tag(e)
+1043=R ### j ## m ### t
 
-1044=Today is {2} wedding anniversary of {0} and {1}
-1045=Tomorrow is {2} wedding anniversary of {0} and {1}
-1046={2} days remain before the {3} wedding anniversary of {0} and {1}
-1047=Wedding anniversaries
+1044=Heute ist der {2} Hochzeitstag von {0} und {1}
+1045=Morgen ist der {2} Hochzeitstag von {0} und {1}
+1046=Noch {2} Tage bis zum {3} Hochzeitstag von {0} und {1}
+1047=Hochzeitstage
 
-1048=Erweiterte Sicherung
+1048=Erweiterte Sicherungskopie
 1049=Ordner
-1050=Backup on save
+1050=Sicherungskopie beim Speichern erstellen
 
-1051=Create a calculated birth event
-1052=No age on event date
-1053=Subject
+1051=Berechnetes Geburtsereignis erstellen
+1052=Kein Alter am Ereignisdatum angegeben
+1053=Betreff

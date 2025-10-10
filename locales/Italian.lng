@@ -35,7 +35,7 @@
 034=Sosa-Stradonitz
 035=Organizer
 036=Scripts...
-037=<?>
+037=Chronicle
 038=Strumenti...
 039=Filtro
 040=Opzioni
@@ -259,7 +259,7 @@
 258=Utilizzare un server proxy
 259=Server
 260=Porta
-261=Login
+261=User name
 262=Password
 263=La password non è specificata
 264=Visiona i suggerimenti all’avvio
@@ -863,7 +863,7 @@
 859=Family `{0}` has a half link of a child to parents family `{1}`
 860=Family `{0}` has garbled spouses
 861=USSR:CPSU member
-862=Attention: when merging archive records, the name and address are not transferred! Proceed?
+862=Attention: when merging repository records, the name and address are not transferred! Proceed?
 863=Use extra controls
 864=Several families of parents `{0}`
 865=Specials

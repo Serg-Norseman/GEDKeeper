@@ -35,7 +35,7 @@
 034=Phương pháp Sosa-Stradonitz
 035=Trình tổ chức
 036=Tập lệnh…
-037=<?>
+037=Chronicle
 038=Công cụ…
 039=Bộ lọc
 040=Tùy chọn
@@ -393,9 +393,9 @@
 392=Places of death
 393=Places of residence
 394=Only selected
-395=Save image...
+395=Family.Show files (*.familyx)|*.familyx
 396=The format is not supported
-397=Error loading data.
+397=GEDZIP files (*.gdz,*.zip)|*.gdz,*.zip
 398=Print
 399=Preview
 400=Generation
@@ -509,7 +509,7 @@
 508=There is a filter by group. Do you want to add the group to a new individual?
 509=Duplicates search
 510=Invalid value
-511=Operation
+511=Validation of GEDCOM data constraints
 512=Compare databases
 513=Merge databases
 514=Split database
@@ -1054,8 +1054,18 @@
 
 1040=Husband's age
 1041=Wife's age
-1042=000 year(s) 00 month(s) 000 day(s)   ; age input mask
-1043=R ### y ## m ### d                   ; age display format (do not delete extra spaces!)
+1042=000 year(s) 00 month(s) 000 day(s)
+1043=R ### y ## m ### d
+
+1044=Today is {2} wedding anniversary of {0} and {1}
+1045=Tomorrow is {2} wedding anniversary of {0} and {1}
+1046={2} days remain before the {3} wedding anniversary of {0} and {1}
+1047=Wedding anniversaries
 
 1048=Extended backup
 1049=Folder
+1050=Backup on save
+
+1051=Create a calculated birth event
+1052=No age on event date
+1053=Subject
