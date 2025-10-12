@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using GDModel.Providers.GEDCOM;
 using GKCore.Calendar;
 using GKCore.Options;
@@ -187,15 +188,15 @@ namespace GDModel
                     var topLoc = fTree.GetPtrValue<GDMLocationRecord>(topLevel);
                     if (topLoc == null) continue;
 
+                    var topLevelDate = topLevel.Date.Value;
+
                     var topNames = topLoc.GetFullNames(atdEnum, abbreviations);
                     for (int i = 0; i < topNames.Count; i++) {
                         var topName = topNames[i];
-                        var topNameDate = topName.Date.Value;
-                        var topLevelDate = topLevel.Date.Value;
 
-                        var interDate = GDMCustomDate.GetIntersection(topLevelDate, topNameDate);
+                        var interDate = GDMCustomDate.GetIntersection(topLevelDate, topName.Date.Value);
                         if (!interDate.IsEmpty()) {
-                            string tnVal = (abbreviations && !string.IsNullOrEmpty(topName.Abbreviation)) ? topName.Abbreviation : topName.StringValue;
+                            string tnVal = GetEffectiveName(abbreviations, topName);
                             topBuffer.Add(new GDMLocationName(tnVal, interDate));
                         }
                     }
@@ -205,16 +206,17 @@ namespace GDModel
                 for (int i = 0; i < fNames.Count; i++) {
                     var locName = fNames[i];
                     var locDate = locName.Date.Value;
-                    string nVal = (abbreviations && !string.IsNullOrEmpty(locName.Abbreviation)) ? locName.Abbreviation : locName.StringValue;
+                    string nVal = GetEffectiveName(abbreviations, locName);
 
                     for (int j = 0; j < topBuffer.Count; j++) {
                         var topLocName = topBuffer[j];
-                        var topName = topLocName.StringValue;
                         var topDate = topLocName.Date.Value;
 
                         var interDate = GDMCustomDate.GetIntersection(topDate, locDate);
                         if (!interDate.IsEmpty()) {
+                            var topName = topLocName.StringValue;
                             string newName = (atdEnum == ATDEnumeration.fLtS) ? topName + ", " + nVal : nVal + ", " + topName;
+
                             // Find relative complement of topDate in locDate (locDate \ topDate)
                             // E.g. the periods that are in locDate, but not in topDate
                             //
@@ -249,12 +251,21 @@ namespace GDModel
             return result;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static string GetEffectiveName(bool abbreviations, GDMLocationName locName)
+        {
+            return (abbreviations && !string.IsNullOrEmpty(locName.Abbreviation)) ? locName.Abbreviation : locName.StringValue;
+        }
+
         public string GetNameByDate(GDMCustomDate date, ATDEnumeration atdEnum, bool full = false)
         {
             var namesList = (!full) ? fNames : GetFullNames(atdEnum, GlobalOptions.Instance.EL_AbbreviatedNames);
 
+            int namesCount = namesList.Count;
+            if (namesCount == 0) return string.Empty;
+
             if (date != null && !date.IsEmpty()) {
-                for (int i = 0; i < namesList.Count; i++) {
+                for (int i = 0; i < namesCount; i++) {
                     var locName = namesList[i];
 
                     var interDate = GDMCustomDate.GetIntersection(date, locName.Date.Value);
@@ -264,8 +275,7 @@ namespace GDModel
                 }
             }
 
-            int num = namesList.Count;
-            return (num == 0) ? string.Empty : namesList[num - 1].StringValue;
+            return namesList[namesCount - 1].StringValue;
         }
 
         public string GetNameByDate(GDMCustomDate date, bool full = false)

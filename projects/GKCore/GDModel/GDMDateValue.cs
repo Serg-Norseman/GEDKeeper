@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -25,6 +25,9 @@ using GKCore.Calendar;
 
 namespace GDModel
 {
+    /// <summary>
+    /// This class is an envelope/wrapper for different types of dates.
+    /// </summary>
     public class GDMDateValue : GDMCustomDate
     {
         private GDMCustomDate fValue;
@@ -50,8 +53,6 @@ namespace GDModel
 
         internal override void TrimExcess()
         {
-            base.TrimExcess();
-
             if (fValue != null) {
                 fValue.TrimExcess();
             }
@@ -59,13 +60,12 @@ namespace GDModel
 
         protected override string GetStringValue()
         {
-            return (fValue == null) ? "" : fValue.StringValue;
+            return (fValue == null) ? string.Empty : fValue.StringValue;
         }
 
         public override DateTime GetDateTime()
         {
-            DateTime result = (fValue == null) ? new DateTime(0) : fValue.GetDateTime();
-            return result;
+            return (fValue == null) ? new DateTime(0) : fValue.GetDateTime();
         }
 
         public override void SetDateTime(DateTime value)
@@ -80,14 +80,12 @@ namespace GDModel
 
         public override void Clear()
         {
-            base.Clear();
-
             if (fValue != null) fValue.Clear();
         }
 
         public override bool IsEmpty()
         {
-            return base.IsEmpty() && (fValue == null || fValue.IsEmpty());
+            return (fValue == null || fValue.IsEmpty());
         }
 
         public override string ParseString(string strValue)
@@ -160,8 +158,7 @@ namespace GDModel
 
         public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar, bool shorten = false)
         {
-            string result = (fValue == null) ? string.Empty : fValue.GetDisplayStringExt(format, sign, showCalendar, shorten);
-            return result;
+            return (fValue == null) ? string.Empty : fValue.GetDisplayStringExt(format, sign, showCalendar, shorten);
         }
 
         public override string ToString()
@@ -181,8 +178,6 @@ namespace GDModel
 
         protected override void ProcessHashes(ref HashCode hashCode)
         {
-            base.ProcessHashes(ref hashCode);
-
             hashCode.Add(fValue);
         }
     }

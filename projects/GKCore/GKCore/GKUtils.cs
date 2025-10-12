@@ -202,22 +202,25 @@ namespace GKCore
             if (idx >= 0) filters.Delete(idx);
         }
 
-        public static StringList GetLocationLinks(GDMTree tree, GDMLocationRecord locRec)
+        public static StringList GetLocationLinks(GDMTree tree, GDMLocationRecord locRec, bool includeEvents = true)
         {
             var linksList = new StringList();
             if (locRec == null) return linksList;
 
-            int num = tree.RecordsCount;
-            for (int i = 0; i < num; i++) {
+            for (int i = 0, num = tree.RecordsCount; i < num; i++) {
                 var evsRec = tree[i] as GDMRecordWithEvents;
                 if (evsRec == null || !evsRec.HasEvents) continue;
 
-                int num2 = evsRec.Events.Count;
-                for (int j = 0; j < num2; j++) {
+                for (int j = 0, num2 = evsRec.Events.Count; j < num2; j++) {
                     GDMCustomEvent evt = evsRec.Events[j];
 
                     if (evt.HasPlace && evt.Place.Location.XRef == locRec.XRef) {
-                        linksList.AddObject(GetRecordName(tree, evsRec, true) + ", " + GetEventNameLd(evt), evsRec);
+                        if (includeEvents) {
+                            linksList.AddObject(GetRecordName(tree, evsRec, true) + ", " + GetEventNameLd(evt), evsRec);
+                        } else {
+                            linksList.AddObject(GetRecordName(tree, evsRec, true), evsRec);
+                            break;
+                        }
                     }
                 }
             }
@@ -3315,7 +3318,7 @@ namespace GKCore
                         }
                     }
 
-                    linkList = GetLocationLinks(tree, locRec);
+                    linkList = GetLocationLinks(tree, locRec, false);
                     if (linkList.Count > 0) {
                         linkList.Sort();
 

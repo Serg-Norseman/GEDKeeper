@@ -307,27 +307,251 @@ Types:
 
   - Index: 44
     Sign: 'ktAbuelo1'
-    Name: 'bis abuelo'
+    Name: 'bisabuelo'
 
   - Index: 45
     Sign: 'ktAbuela1'
-    Name: 'bis abuela'
+    Name: 'bisabuela'
 
   - Index: 46
     Sign: 'ktAbuelo2'
-    Name: 'tatara abuelo'
+    Name: 'tatarabuelo'
 
   - Index: 47
     Sign: 'ktAbuela2'
-    Name: 'tatara abuela'
+    Name: 'tatarabuela'
 
   - Index: 48
     Sign: 'ktAbuelo3'
-    Name: 'trastara abuelo'
+    Name: 'trastatarabuelo'
 
   - Index: 49
     Sign: 'ktAbuela3'
-    Name: 'trastara abuela'
+    Name: 'trastatarabuela'
+
+  - Index: 50
+    Sign: 'ktAbuelo4'
+    Name: 'pentabuelo'
+
+  - Index: 51
+    Sign: 'ktAbuela4'
+    Name: 'pentabuela'
+
+  - Index: 52
+    Sign: 'ktAbuelo5'
+    Name: 'hexabuelo'
+
+  - Index: 53
+    Sign: 'ktAbuela5'
+    Name: 'hexabuela'
+
+  - Index: 54
+    Sign: 'ktAbuelo6'
+    Name: 'heptabuelo'
+
+  - Index: 55
+    Sign: 'ktAbuela6'
+    Name: 'heptabuela'
+
+  - Index: 56
+    Sign: 'ktAbuelo7'
+    Name: 'octabuelo'
+
+  - Index: 57
+    Sign: 'ktAbuela7'
+    Name: 'octabuela'
+
+  - Index: 58
+    Sign: 'ktAbuelo8'
+    Name: 'nonabuelo'
+
+  - Index: 59
+    Sign: 'ktAbuela8'
+    Name: 'nonabuela'
+
+  - Index: 60
+    Sign: 'ktAbuelo9'
+    Name: 'decabuelo'
+
+  - Index: 61
+    Sign: 'ktAbuela9'
+    Name: 'decabuela'
+
+  - Index: 62
+    Sign: 'ktAbuelo10'
+    Name: 'undecabuelo'
+
+  - Index: 63
+    Sign: 'ktAbuela10'
+    Name: 'undecabuela'
+
+  - Index: 64
+    Sign: 'ktAbuelo11'
+    Name: 'dodecabuelo'
+
+  - Index: 65
+    Sign: 'ktAbuela11'
+    Name: 'dodecabuela'
+
+  - Index: 66
+    Sign: 'ktAbuelo12'
+    Name: 'tridecabuelo'
+
+  - Index: 67
+    Sign: 'ktAbuela12'
+    Name: 'tridecabuela'
+
+  - Index: 68
+    Sign: 'ktAbuelo13'
+    Name: 'tetradecabuelo'
+
+  - Index: 69
+    Sign: 'ktAbuela13'
+    Name: 'tetradecabuela'
+
+  - Index: 70
+    Sign: 'ktAbuelo14'
+    Name: 'pentadecabuelo'
+
+  - Index: 71
+    Sign: 'ktAbuela14'
+    Name: 'pentadecabuela'
+
+  - Index: 72
+    Sign: 'ktAbuelo15'
+    Name: 'hexadecabuelo'
+
+  - Index: 73
+    Sign: 'ktAbuela15'
+    Name: 'hexadecabuela'
+
+  - Index: 74
+    Sign: 'ktNieto0'
+    Name: 'nieto'
+
+  - Index: 75
+    Sign: 'ktNieta0'
+    Name: 'nieta'
+
+  - Index: 76
+    Sign: 'ktNieto1'
+    Name: 'bisnieto'
+
+  - Index: 77
+    Sign: 'ktNieta1'
+    Name: 'bisnieta'
+
+  - Index: 78
+    Sign: 'ktNieto2'
+    Name: 'tataranieto'
+
+  - Index: 79
+    Sign: 'ktNieta2'
+    Name: 'tataranieta'
+
+  - Index: 80
+    Sign: 'ktNieto3'
+    Name: 'chozno'
+
+  - Index: 81
+    Sign: 'ktNieta3'
+    Name: 'chozna'
+
+  - Index: 82
+    Sign: 'ktNieto4'
+    Name: 'bichozno'
+
+  - Index: 83
+    Sign: 'ktNieta4'
+    Name: 'bichozna'
+
+  - Index: 84
+    Sign: 'ktNieto5'
+    Name: 'hexanieto'
+
+  - Index: 85
+    Sign: 'ktNieta5'
+    Name: 'hexanieta'
+
+  - Index: 86
+    Sign: 'ktNieto6'
+    Name: 'heptanieto'
+
+  - Index: 87
+    Sign: 'ktNieta6'
+    Name: 'heptanieta'
+
+  - Index: 88
+    Sign: 'ktNieto7'
+    Name: 'octanieto'
+
+  - Index: 89
+    Sign: 'ktNieta7'
+    Name: 'octanieta'
+
+  - Index: 90
+    Sign: 'ktNieto8'
+    Name: 'nonanieto'
+
+  - Index: 91
+    Sign: 'ktNieta8'
+    Name: 'nonanieta'
+
+  - Index: 92
+    Sign: 'ktNieto9'
+    Name: 'decanieto'
+
+  - Index: 93
+    Sign: 'ktNieta9'
+    Name: 'decanieta'
+
+  - Index: 94
+    Sign: 'ktNieto10'
+    Name: 'undecanieto'
+
+  - Index: 95
+    Sign: 'ktNieta10'
+    Name: 'undecanieta'
+
+  - Index: 96
+    Sign: 'ktNieto11'
+    Name: 'dodecanieto'
+
+  - Index: 97
+    Sign: 'ktNieta11'
+    Name: 'dodecanieta'
+
+  - Index: 98
+    Sign: 'ktNieto12'
+    Name: 'tridecanieto'
+
+  - Index: 99
+    Sign: 'ktNieta12'
+    Name: 'tridecanieta'
+
+  - Index: 100
+    Sign: 'ktNieto13'
+    Name: 'tetradecanieto'
+
+  - Index: 101
+    Sign: 'ktNieta13'
+    Name: 'tetradecanieta'
+
+  - Index: 102
+    Sign: 'ktNieto14'
+    Name: 'pentadecanieto'
+
+  - Index: 103
+    Sign: 'ktNieta14'
+    Name: 'pentadecanieta'
+
+  - Index: 104
+    Sign: 'ktNieto15'
+    Name: 'hexadecanieto'
+
+  - Index: 105
+    Sign: 'ktNieta15'
+    Name: 'hexadecanieta'
 
 
 # `Index` is essential for debugging this file and verifying it.
@@ -807,6 +1031,470 @@ Substitutions:
     Current: [ 'ktGrandmother' ]
     SpecConditions: 'G=2'
     Result: 'ktAbuela2'
+    Great: 0
+    Degree: 0
+
+  - Index: 8
+    Enable: true
+    Current: [ 'ktGrandfather' ]
+    SpecConditions: 'G=3'
+    Result: 'ktAbuelo3'
+    Great: 0
+    Degree: 0
+
+  - Index: 9
+    Enable: true
+    Current: [ 'ktGrandmother' ]
+    SpecConditions: 'G=3'
+    Result: 'ktAbuela3'
+    Great: 0
+    Degree: 0
+
+  - Index: 10
+    Enable: true
+    Current: [ 'ktGrandfather' ]
+    SpecConditions: 'G=4'
+    Result: 'ktAbuelo4'
+    Great: 0
+    Degree: 0
+
+  - Index: 11
+    Enable: true
+    Current: [ 'ktGrandmother' ]
+    SpecConditions: 'G=4'
+    Result: 'ktAbuela4'
+    Great: 0
+    Degree: 0
+
+  - Index: 12
+    Enable: true
+    Current: [ 'ktGrandfather' ]
+    SpecConditions: 'G=5'
+    Result: 'ktAbuelo5'
+    Great: 0
+    Degree: 0
+
+  - Index: 13
+    Enable: true
+    Current: [ 'ktGrandmother' ]
+    SpecConditions: 'G=5'
+    Result: 'ktAbuela5'
+    Great: 0
+    Degree: 0
+
+  - Index: 14
+    Enable: true
+    Current: [ 'ktGrandfather' ]
+    SpecConditions: 'G=6'
+    Result: 'ktAbuelo6'
+    Great: 0
+    Degree: 0
+
+  - Index: 16
+    Enable: true
+    Current: [ 'ktGrandmother' ]
+    SpecConditions: 'G=6'
+    Result: 'ktAbuela6'
+    Great: 0
+    Degree: 0
+
+  - Index: 17
+    Enable: true
+    Current: [ 'ktGrandfather' ]
+    SpecConditions: 'G=7'
+    Result: 'ktAbuelo7'
+    Great: 0
+    Degree: 0
+
+  - Index: 18
+    Enable: true
+    Current: [ 'ktGrandmother' ]
+    SpecConditions: 'G=7'
+    Result: 'ktAbuela7'
+    Great: 0
+    Degree: 0
+
+  - Index: 19
+    Enable: true
+    Current: [ 'ktGrandfather' ]
+    SpecConditions: 'G=8'
+    Result: 'ktAbuelo8'
+    Great: 0
+    Degree: 0
+
+  - Index: 20
+    Enable: true
+    Current: [ 'ktGrandmother' ]
+    SpecConditions: 'G=8'
+    Result: 'ktAbuela8'
+    Great: 0
+    Degree: 0
+
+  - Index: 21
+    Enable: true
+    Current: [ 'ktGrandfather' ]
+    SpecConditions: 'G=9'
+    Result: 'ktAbuelo9'
+    Great: 0
+    Degree: 0
+
+  - Index: 22
+    Enable: true
+    Current: [ 'ktGrandmother' ]
+    SpecConditions: 'G=9'
+    Result: 'ktAbuela9'
+    Great: 0
+    Degree: 0
+
+  - Index: 23
+    Enable: true
+    Current: [ 'ktGrandfather' ]
+    SpecConditions: 'G=10'
+    Result: 'ktAbuelo10'
+    Great: 0
+    Degree: 0
+
+  - Index: 24
+    Enable: true
+    Current: [ 'ktGrandmother' ]
+    SpecConditions: 'G=10'
+    Result: 'ktAbuela10'
+    Great: 0
+    Degree: 0
+
+  - Index: 25
+    Enable: true
+    Current: [ 'ktGrandfather' ]
+    SpecConditions: 'G=11'
+    Result: 'ktAbuelo11'
+    Great: 0
+    Degree: 0
+
+  - Index: 26
+    Enable: true
+    Current: [ 'ktGrandmother' ]
+    SpecConditions: 'G=11'
+    Result: 'ktAbuela11'
+    Great: 0
+    Degree: 0
+
+  - Index: 27
+    Enable: true
+    Current: [ 'ktGrandfather' ]
+    SpecConditions: 'G=12'
+    Result: 'ktAbuelo12'
+    Great: 0
+    Degree: 0
+
+  - Index: 28
+    Enable: true
+    Current: [ 'ktGrandmother' ]
+    SpecConditions: 'G=12'
+    Result: 'ktAbuela12'
+    Great: 0
+    Degree: 0
+
+  - Index: 29
+    Enable: true
+    Current: [ 'ktGrandfather' ]
+    SpecConditions: 'G=13'
+    Result: 'ktAbuelo13'
+    Great: 0
+    Degree: 0
+
+  - Index: 30
+    Enable: true
+    Current: [ 'ktGrandmother' ]
+    SpecConditions: 'G=13'
+    Result: 'ktAbuela13'
+    Great: 0
+    Degree: 0
+
+  - Index: 31
+    Enable: true
+    Current: [ 'ktGrandfather' ]
+    SpecConditions: 'G=14'
+    Result: 'ktAbuelo14'
+    Great: 0
+    Degree: 0
+
+  - Index: 32
+    Enable: true
+    Current: [ 'ktGrandmother' ]
+    SpecConditions: 'G=14'
+    Result: 'ktAbuela14'
+    Great: 0
+    Degree: 0
+
+  - Index: 33
+    Enable: true
+    Current: [ 'ktGrandson' ]
+    SpecConditions: 'G=0'
+    Result: 'ktNieto0'
+    Great: 0
+    Degree: 0
+
+  - Index: 34
+    Enable: true
+    Current: [ 'ktGranddaughter' ]
+    SpecConditions: 'G=0'
+    Result: 'ktNieta0'
+    Great: 0
+    Degree: 0
+
+  - Index: 35
+    Enable: true
+    Current: [ 'ktGrandson' ]
+    SpecConditions: 'G=1'
+    Result: 'ktNieto1'
+    Great: 0
+    Degree: 0
+
+  - Index: 36
+    Enable: true
+    Current: [ 'ktGranddaughter' ]
+    SpecConditions: 'G=1'
+    Result: 'ktNieta1'
+    Great: 0
+    Degree: 0
+
+  - Index: 37
+    Enable: true
+    Current: [ 'ktGrandson' ]
+    SpecConditions: 'G=2'
+    Result: 'ktNieto2'
+    Great: 0
+    Degree: 0
+
+  - Index: 38
+    Enable: true
+    Current: [ 'ktGranddaughter' ]
+    SpecConditions: 'G=2'
+    Result: 'ktNieta2'
+    Great: 0
+    Degree: 0
+
+  - Index: 39
+    Enable: true
+    Current: [ 'ktGrandson' ]
+    SpecConditions: 'G=3'
+    Result: 'ktNieto3'
+    Great: 0
+    Degree: 0
+
+  - Index: 40
+    Enable: true
+    Current: [ 'ktGranddaughter' ]
+    SpecConditions: 'G=3'
+    Result: 'ktNieta3'
+    Great: 0
+    Degree: 0
+
+  - Index: 41
+    Enable: true
+    Current: [ 'ktGrandson' ]
+    SpecConditions: 'G=4'
+    Result: 'ktNieto4'
+    Great: 0
+    Degree: 0
+
+  - Index: 42
+    Enable: true
+    Current: [ 'ktGranddaughter' ]
+    SpecConditions: 'G=4'
+    Result: 'ktNieta4'
+    Great: 0
+    Degree: 0
+
+  - Index: 43
+    Enable: true
+    Current: [ 'ktGrandson' ]
+    SpecConditions: 'G=5'
+    Result: 'ktNieto5'
+    Great: 0
+    Degree: 0
+
+  - Index: 44
+    Enable: true
+    Current: [ 'ktGranddaughter' ]
+    SpecConditions: 'G=5'
+    Result: 'ktNieta5'
+    Great: 0
+    Degree: 0
+
+  - Index: 45
+    Enable: true
+    Current: [ 'ktGrandson' ]
+    SpecConditions: 'G=6'
+    Result: 'ktNieto6'
+    Great: 0
+    Degree: 0
+
+  - Index: 46
+    Enable: true
+    Current: [ 'ktGranddaughter' ]
+    SpecConditions: 'G=6'
+    Result: 'ktNieta6'
+    Great: 0
+    Degree: 0
+
+  - Index: 47
+    Enable: true
+    Current: [ 'ktGrandson' ]
+    SpecConditions: 'G=7'
+    Result: 'ktNieto7'
+    Great: 0
+    Degree: 0
+
+  - Index: 48
+    Enable: true
+    Current: [ 'ktGranddaughter' ]
+    SpecConditions: 'G=7'
+    Result: 'ktNieta7'
+    Great: 0
+    Degree: 0
+
+  - Index: 49
+    Enable: true
+    Current: [ 'ktGrandson' ]
+    SpecConditions: 'G=8'
+    Result: 'ktNieto8'
+    Great: 0
+    Degree: 0
+
+  - Index: 50
+    Enable: true
+    Current: [ 'ktGranddaughter' ]
+    SpecConditions: 'G=8'
+    Result: 'ktNieta8'
+    Great: 0
+    Degree: 0
+
+  - Index: 51
+    Enable: true
+    Current: [ 'ktGrandson' ]
+    SpecConditions: 'G=9'
+    Result: 'ktNieto9'
+    Great: 0
+    Degree: 0
+
+  - Index: 52
+    Enable: true
+    Current: [ 'ktGranddaughter' ]
+    SpecConditions: 'G=9'
+    Result: 'ktNieta9'
+    Great: 0
+    Degree: 0
+
+  - Index: 53
+    Enable: true
+    Current: [ 'ktGrandson' ]
+    SpecConditions: 'G=10'
+    Result: 'ktNieto10'
+    Great: 0
+    Degree: 0
+
+  - Index: 54
+    Enable: true
+    Current: [ 'ktGranddaughter' ]
+    SpecConditions: 'G=10'
+    Result: 'ktNieta10'
+    Great: 0
+    Degree: 0
+
+  - Index: 55
+    Enable: true
+    Current: [ 'ktGrandson' ]
+    SpecConditions: 'G=11'
+    Result: 'ktNieto11'
+    Great: 0
+    Degree: 0
+
+  - Index: 56
+    Enable: true
+    Current: [ 'ktGranddaughter' ]
+    SpecConditions: 'G=11'
+    Result: 'ktNieta11'
+    Great: 0
+    Degree: 0
+
+  - Index: 57
+    Enable: true
+    Current: [ 'ktGrandson' ]
+    SpecConditions: 'G=12'
+    Result: 'ktNieto12'
+    Great: 0
+    Degree: 0
+
+  - Index: 58
+    Enable: true
+    Current: [ 'ktGranddaughter' ]
+    SpecConditions: 'G=12'
+    Result: 'ktNieta12'
+    Great: 0
+    Degree: 0
+
+  - Index: 59
+    Enable: true
+    Current: [ 'ktGrandson' ]
+    SpecConditions: 'G=13'
+    Result: 'ktNieto13'
+    Great: 0
+    Degree: 0
+
+  - Index: 60
+    Enable: true
+    Current: [ 'ktGranddaughter' ]
+    SpecConditions: 'G=13'
+    Result: 'ktNieta13'
+    Great: 0
+    Degree: 0
+
+  - Index: 61
+    Enable: true
+    Current: [ 'ktGrandson' ]
+    SpecConditions: 'G=14'
+    Result: 'ktNieto14'
+    Great: 0
+    Degree: 0
+
+  - Index: 62
+    Enable: true
+    Current: [ 'ktGranddaughter' ]
+    SpecConditions: 'G=14'
+    Result: 'ktNieta14'
+    Great: 0
+    Degree: 0
+
+  - Index: 63
+    Enable: true
+    Current: [ 'ktGrandson' ]
+    SpecConditions: 'G=15'
+    Result: 'ktNieto15'
+    Great: 0
+    Degree: 0
+
+  - Index: 64
+    Enable: true
+    Current: [ 'ktGranddaughter' ]
+    SpecConditions: 'G=15'
+    Result: 'ktNieta15'
+    Great: 0
+    Degree: 0
+
+  - Index: 65
+    Enable: true
+    Current: [ 'ktGrandfather' ]
+    SpecConditions: 'G=15'
+    Result: 'ktAbuelo15'
+    Great: 0
+    Degree: 0
+
+  - Index: 66
+    Enable: true
+    Current: [ 'ktGrandmother' ]
+    SpecConditions: 'G=15'
+    Result: 'ktAbuela15'
     Great: 0
     Degree: 0
 
