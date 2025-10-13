@@ -84,6 +84,9 @@ del .\projects\GKvX\GEDKeeperX.Android\*.csproj.user /s /q
 rmdir .\projects\GKvX\GEDKeeperX.iOS\bin /s /q
 rmdir .\projects\GKvX\GEDKeeperX.iOS\obj /s /q
 
+rmdir .\projects\GKvX\Adapt.Presentation.Controls\bin /s /q
+rmdir .\projects\GKvX\Adapt.Presentation.Controls\obj /s /q
+
 rem <<< Plugins cleaning >>>
 
 rmdir .\projects\plugins\GEDmill\bin /s /q
