@@ -2883,8 +2883,10 @@ namespace GDModel.Providers.GEDCOM
                         AddTextTag(tree, curTag, 0, (int)GEDCOMTagType.CONT, str);
                     } else {
                         var tagType = curTag.GetTagType();
+                        var tagProps = GEDCOMTagsTable.GetTagProps((int)tagType);
+                        bool isTextTag = (tagProps != null && tagProps.TagType == TagType.TextValue);
 
-                        if (tagType == GEDCOMTagType.CONT || tagType == GEDCOMTagType.CONC || tagType == GEDCOMTagType.NAME) {
+                        if (isTextTag) {
                             curTag.StringValue = string.Concat(curTag.StringValue, str);
                         } else {
                             AddBaseTag(tree, curTag, 0, (int)GEDCOMTagType.NOTE, str);
@@ -3026,7 +3028,7 @@ namespace GDModel.Providers.GEDCOM
                 new GEDCOMAppFormat(GEDCOMFormat.Legacy, "Legacy", "Legacy", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.Lifelines, "Lifelines", "Lifelines", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.PAF, "PAF", "Personal Ancestral File", -1, true),
-                new GEDCOMAppFormat(GEDCOMFormat.Reunion, "Reunion", "Reunion", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.Reunion, "Reunion", "Reunion", -1, true),
                 new GEDCOMAppFormat(GEDCOMFormat.RootsMagic, "RootsMagic", "RootsMagic", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.WikiTree, "WikiTree.com", "WikiTree", -1, true),
             };
@@ -3064,10 +3066,10 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.CHR, GEDCOMTagName.CHR);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.CHRA, GEDCOMTagName.CHRA);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.CITY, GEDCOMTagName.CITY, true);
-            GEDCOMTagsTable.RegisterTag(GEDCOMTagType.CONC, GEDCOMTagName.CONC);
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType.CONC, GEDCOMTagName.CONC, false, TagType.TextValue);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.CONF, GEDCOMTagName.CONF);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.CONL, GEDCOMTagName.CONL);
-            GEDCOMTagsTable.RegisterTag(GEDCOMTagType.CONT, GEDCOMTagName.CONT);
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType.CONT, GEDCOMTagName.CONT, false, TagType.TextValue);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.COPR, GEDCOMTagName.COPR);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.CORP, GEDCOMTagName.CORP);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.CREM, GEDCOMTagName.CREM);
@@ -3117,7 +3119,7 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.MARS, GEDCOMTagName.MARS);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.MARR, GEDCOMTagName.MARR);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.MEDI, GEDCOMTagName.MEDI);
-            GEDCOMTagsTable.RegisterTag(GEDCOMTagType.NAME, GEDCOMTagName.NAME);
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType.NAME, GEDCOMTagName.NAME, false, TagType.TextValue);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.NATI, GEDCOMTagName.NATI);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.NATU, GEDCOMTagName.NATU);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.NCHI, GEDCOMTagName.NCHI);
@@ -3133,7 +3135,7 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.PAGE, GEDCOMTagName.PAGE, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.PEDI, GEDCOMTagName.PEDI);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.PHON, GEDCOMTagName.PHON, true);
-            GEDCOMTagsTable.RegisterTag(GEDCOMTagType.PLAC, GEDCOMTagName.PLAC, true);
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType.PLAC, GEDCOMTagName.PLAC, true, TagType.TextValue);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.POST, GEDCOMTagName.POST, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.PROB, GEDCOMTagName.PROB);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType.PROP, GEDCOMTagName.PROP);

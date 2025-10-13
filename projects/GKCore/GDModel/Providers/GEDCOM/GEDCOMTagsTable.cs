@@ -27,14 +27,19 @@ namespace GDModel.Providers.GEDCOM
         public int TagId;
         public string TagName;
         public bool SkipEmpty;
+        public TagType TagType;
 
-        public GEDCOMTagProps(int tagId, string tagName, bool skipEmpty = false)
+        public GEDCOMTagProps(int tagId, string tagName, TagType tagType, bool skipEmpty = false)
         {
             TagId = tagId;
             TagName = tagName;
             SkipEmpty = skipEmpty;
+            TagType = tagType;
         }
     }
+
+
+    public enum TagType { Unknown, Record, Struct, EnumValue, IntValue, TextValue }
 
 
     /// <summary>
@@ -46,13 +51,13 @@ namespace GDModel.Providers.GEDCOM
         private static readonly Dictionary<int, GEDCOMTagProps> fList;
         private static int fLastId = 0;
 
-        public static GEDCOMTagProps RegisterTag(GEDCOMTagType tag, string tagName, bool skipEmpty = false)
+        public static GEDCOMTagProps RegisterTag(GEDCOMTagType tag, string tagName, bool skipEmpty = false, TagType tagType = TagType.Unknown)
         {
             GEDCOMTagProps tagProps;
 
             if (!fDictionary.TryGetValue(tagName, out tagProps)) {
                 int tagId = (int)tag;
-                tagProps = new GEDCOMTagProps(tagId, tagName, skipEmpty);
+                tagProps = new GEDCOMTagProps(tagId, tagName, tagType, skipEmpty);
 
                 fDictionary.Add(tagName, tagProps);
                 fList[tagId] = tagProps;
@@ -70,7 +75,7 @@ namespace GDModel.Providers.GEDCOM
                 fLastId += 1;
                 int tagId = (0x1 << 8) | fLastId;
 
-                tagProps = new GEDCOMTagProps(tagId, tagName);
+                tagProps = new GEDCOMTagProps(tagId, tagName, TagType.Unknown);
 
                 fDictionary.Add(tagName, tagProps);
                 fList[tagId] = tagProps;

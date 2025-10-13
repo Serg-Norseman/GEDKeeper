@@ -1074,7 +1074,7 @@ namespace GKCore
 
         public async Task<bool> FileLoad(string fileName, bool loadSecure, bool showProgress, bool checkValidation)
         {
-            bool result = false;
+            bool result = true;
 
             try {
                 FileProvider fileProvider;
@@ -1105,48 +1105,63 @@ namespace GKCore
                     return false;
                 }
 
+                bool isLoaded = false;
                 if (!showProgress) {
-                    FileLoad(fileProvider, fileName, null);
+                    isLoaded = FileLoad(fileProvider, fileName, null);
                 } else {
                     AppHost.Instance.ExecuteWork((controller) => {
                         controller.Begin(LangMan.LS(LSID.Loading), 100);
-                        FileLoad(fileProvider, fileName, controller);
+                        isLoaded = FileLoad(fileProvider, fileName, controller);
                         controller.End();
                     });
                 }
+                result = result && isLoaded;
 
-                AppHost.ForceGC();
+                bool isChecked = false;
+                if (result && checkValidation) {
+                    AppHost.ForceGC();
 
-                if (checkValidation) {
                     if (!showProgress) {
-                        GEDCOMChecker.CheckGEDCOMFormat(this, null);
+                        isChecked = GEDCOMChecker.CheckGEDCOMFormat(this, null);
                     } else {
                         AppHost.Instance.ExecuteWork((controller) => {
-                            GEDCOMChecker.CheckGEDCOMFormat(this, controller);
+                            isChecked = GEDCOMChecker.CheckGEDCOMFormat(this, controller);
                         });
                     }
+                }
+                result = result && isChecked;
 
-                    AppHost.ForceGC();
+                if (!result) {
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LoadGedComFailed));
+                    Clear();
                 }
 
-                result = true;
+                AppHost.ForceGC();
             } catch (Exception ex) {
-                Logger.WriteError("BaseContext.FileLoad()", ex);
+                Logger.WriteError("BaseContext.FileLoad.1()", ex);
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LoadGedComFailed));
+                result = false;
             }
 
             return result;
         }
 
-        private void FileLoad(FileProvider fileProvider, string fileName, IProgressController progress)
+        private bool FileLoad(FileProvider fileProvider, string fileName, IProgressController progress)
         {
-            fTree.ProgressCallback = progress;
+            try {
+                fTree.ProgressCallback = progress;
 
-            fileProvider.LoadFromFile(fileName, GlobalOptions.Instance.CharsetDetection);
+                fileProvider.LoadFromFile(fileName, GlobalOptions.Instance.CharsetDetection);
 
-            fTree.ProgressCallback = null;
+                fTree.ProgressCallback = null;
 
-            fFileName = fileName;
+                fFileName = fileName;
+
+                return true;
+            } catch (Exception ex) {
+                Logger.WriteError("BaseContext.FileLoad.0()", ex);
+                return false;
+            }
         }
 
         public async Task<bool> FileSave(string fileName, bool strict = false)
