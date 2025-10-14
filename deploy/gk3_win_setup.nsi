@@ -293,6 +293,7 @@ Section "$(gkreq)"
 
     CreateDirectory "$INSTDIR\locales"
     SetOutPath "$INSTDIR\locales"
+    File "..\locales\locales.yaml"
 
     CreateDirectory "$INSTDIR\locales\cultures"
     SetOutPath "$INSTDIR\locales\cultures"
@@ -390,6 +391,8 @@ SectionGroup /e "$(gklang)"
         SetOutPath "$INSTDIR\locales"
         File "..\locales\russian.lng"
         File "..\locales\readme_rus.html"
+        File "..\locales\holidays_rus.yaml"
+        File "..\locales\tips_rus.yaml"
 
         CreateDirectory "$INSTDIR\locales\help_rus"
         SetOutPath "$INSTDIR\locales\help_rus"
@@ -475,6 +478,7 @@ SectionGroup /e "$(gklang)"
     Section "Español"
         SetOutPath "$INSTDIR\locales"
         File "..\locales\Spanish.lng"
+        File "..\locales\readme_spa.html"
 
         CreateDirectory "$INSTDIR\locales\help_spa"
         SetOutPath "$INSTDIR\locales\help_spa"
@@ -488,11 +492,28 @@ SectionGroup /e "$(gklang)"
     Section "Nederlands"
         SetOutPath "$INSTDIR\locales"
         File "..\locales\Dutch.lng"
+        File "..\locales\readme_dut.html"
+        File "..\locales\tips_dut.yaml"
     SectionEnd
 
-    Section "日本語" (Nihongo)"
+    Section "日本語 (Nihongo)"
         SetOutPath "$INSTDIR\locales"
         File "..\locales\Japanese.lng"
+    SectionEnd
+
+    Section "Afrikaans"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Afrikaans.lng"
+    SectionEnd
+
+    Section "Türk dili"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Turkish.lng"
+    SectionEnd
+
+    Section "Tiếng Việt"
+        SetOutPath "$INSTDIR\locales"
+        File "..\locales\Vietnamese.lng"
     SectionEnd
 SectionGroupEnd
 
