@@ -1,0 +1,12 @@
+Package: gedkeeper
+Version: 3.11.0-1
+Architecture: arm64
+Depends: sqlite3
+Maintainer: Sergey V. Zhdanovskih (aka Norseman) <gedkeeper@yandex.ru>
+Homepage: https://gedkeeper.github.io/
+Origin: https://github.com/serg-norseman/gedkeeper
+Installed-Size: 156312
+Section: misc
+Priority: optional
+Description: GEDKeeper
+ Personal genealogical database editor.

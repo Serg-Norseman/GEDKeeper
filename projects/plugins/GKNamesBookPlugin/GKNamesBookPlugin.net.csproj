@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>net6.0</TargetFrameworks>
+        <RuntimeIdentifiers>linux-x64;linux-arm64</RuntimeIdentifiers>  
         <AssemblyName>GKNamesBookPlugin</AssemblyName>
         <RootNamespace>GKNamesBookPlugin</RootNamespace>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
