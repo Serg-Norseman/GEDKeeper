@@ -32,7 +32,7 @@
 
     <ItemGroup>
         <PackageReference Include="Eto.Forms" Version="2.10.0" />
-        <PackageReference Include="OpenCvSharp4" Version="4.10.0.20241108" />
+        <PackageReference Include="OpenCvSharp4" Version="4.10.0.20241108" PrivateAssets="All" />
     </ItemGroup>
 
     <ItemGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">

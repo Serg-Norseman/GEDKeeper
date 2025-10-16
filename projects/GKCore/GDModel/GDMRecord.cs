@@ -296,7 +296,7 @@ namespace GDModel
 
         public string GetXRefNum()
         {
-            string xref = XRef;
+            string xref = fXRef;
 
             int i = 0;
             int last = xref.Length;
@@ -307,7 +307,7 @@ namespace GDModel
 
         public long GetId()
         {
-            return GEDCOMUtils.GetXRefNumber(XRef);
+            return GEDCOMUtils.GetXRefNumber(fXRef);
         }
 
         protected override void ProcessHashes(ref HashCode hashCode)

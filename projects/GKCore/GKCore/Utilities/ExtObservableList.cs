@@ -51,7 +51,7 @@ namespace GKCore.Utilities
         {
             base.Clear();
 
-            if (fUpdateCount == 0) ChangeReset();
+            if (fUpdateCount == 0) Reset();
         }
 
         public new void Add(T item)
@@ -102,22 +102,17 @@ namespace GKCore.Utilities
         public void EndUpdate()
         {
             fUpdateCount--;
-            if (fUpdateCount == 0) ChangeReset();
+            if (fUpdateCount == 0) Reset();
         }
 
         public void Reset()
-        {
-            ChangeReset();
-        }
-
-        #region Private methods
-
-        private void ChangeReset()
         {
             OnPropertyChanged(CountProp);
             OnPropertyChanged(IndexerProp);
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
+
+        #region Private methods
 
         private void ChangeAdded(T item, int index)
         {

@@ -522,7 +522,7 @@ namespace GKCore.Locales
         /* 467 */ Research,
         /* 468 */ Task,
         /* 469 */ Communication,
-        /* 470 */ IDsCorrect,
+        /* 470 */ IDsCorrect, // obsolete
         /* 471 */ FormatCheck,
         /* 472 */ EmfFilter,
         /* 473 */ MainBaseSize,

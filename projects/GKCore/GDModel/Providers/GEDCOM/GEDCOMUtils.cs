@@ -158,13 +158,11 @@ namespace GDModel.Providers.GEDCOM
 
         public static unsafe long GetXRefNumber(string str)
         {
-            if (string.IsNullOrEmpty(str)) {
+            int strLen = (str == null) ? 0 : str.Length;
+            if (strLen == 0)
                 return -1;
-            }
 
             long result = 0;
-
-            int strLen = str.Length;
             fixed (char* ch_ptr = str) {
                 for (int i = 0; i < strLen; i++) {
                     char ch = ch_ptr[i];
@@ -173,7 +171,6 @@ namespace GDModel.Providers.GEDCOM
                     }
                 }
             }
-
             return result;
         }
 

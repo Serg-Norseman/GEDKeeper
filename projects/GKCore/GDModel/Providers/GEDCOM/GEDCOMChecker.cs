@@ -503,42 +503,6 @@ namespace GDModel.Providers.GEDCOM
             return ((record.XRef == stdSign + xrefNum) && record.GetId() >= 0);
         }
 
-        private void ConvertIdentifiers()
-        {
-            if (fProgress != null)
-                fProgress.Begin(LangMan.LS(LSID.IDsCorrect), fTree.RecordsCount * 2);
-
-            GDMXRefReplacer repMap = new GDMXRefReplacer();
-            try {
-                int recsCount = fTree.RecordsCount;
-                for (int i = 0; i < recsCount; i++) {
-                    GDMRecord rec = fTree[i];
-                    if (!CheckRecordXRef(rec)) {
-                        string oldXRef = rec.XRef;
-                        string newXRef = fTree.NewXRef(rec, true);
-                        repMap.AddXRef(rec, oldXRef, newXRef);
-                    }
-
-                    if (fProgress != null)
-                        fProgress.Increment();
-                }
-
-                fTree.Header.ReplaceXRefs(repMap);
-                for (int i = 0; i < recsCount; i++) {
-                    GDMRecord rec = fTree[i];
-                    rec.ReplaceXRefs(repMap);
-
-                    if (fProgress != null)
-                        fProgress.Increment();
-                }
-            } finally {
-                repMap.Dispose();
-
-                if (fProgress != null)
-                    fProgress.End();
-            }
-        }
-
         private bool CheckFormat()
         {
             bool result = false;
@@ -562,39 +526,56 @@ namespace GDModel.Providers.GEDCOM
                 }
 
                 if (fProgress != null)
-                    fProgress.Begin(LangMan.LS(LSID.FormatCheck), 100);
+                    fProgress.Begin(LangMan.LS(LSID.FormatCheck), 200);
 
+                GDMXRefReplacer repMap = new GDMXRefReplacer();
                 try {
-                    bool xrefValid = true;
                     bool isExtraneous = (fFormat != GEDCOMFormat.Native);
 
                     int progress = 0;
-                    int num = fTree.RecordsCount;
-                    for (int i = 0; i < num; i++) {
+                    int recsCount = fTree.RecordsCount;
+                    for (int i = 0; i < recsCount; i++) {
                         GDMRecord rec = fTree[i];
                         CheckRecord(rec, fileVer);
 
-                        if (isExtraneous && xrefValid && !CheckRecordXRef(rec)) {
-                            xrefValid = false;
+                        if (isExtraneous && !CheckRecordXRef(rec)) {
+                            string oldXRef = rec.XRef;
+                            string newXRef = fTree.NewXRef(rec, true);
+                            repMap.AddXRef(rec, oldXRef, newXRef);
                         }
 
-                        int newProgress = (int)Math.Min(100, ((i + 1) * 100.0f) / num);
-                        if (progress != newProgress) {
-                            progress = newProgress;
-
-                            if (fProgress != null)
+                        if (fProgress != null) {
+                            int newProgress = (int)Math.Min(100, ((i + 1) * 100.0f) / recsCount);
+                            if (progress != newProgress) {
+                                progress = newProgress;
                                 fProgress.StepTo(progress);
+                            }
                         }
                     }
 
-                    if (!xrefValid) {
-                        ConvertIdentifiers();
+                    // !xrefValid
+                    if (repMap.Count > 0) {
+                        fTree.Header.ReplaceXRefs(repMap);
+                        for (int i = 0; i < recsCount; i++) {
+                            GDMRecord rec = fTree[i];
+                            rec.ReplaceXRefs(repMap);
+
+                            if (fProgress != null) {
+                                int newProgress = (int)Math.Min(100, ((i + 1) * 100.0f) / recsCount);
+                                if (progress != newProgress) {
+                                    progress = newProgress;
+                                    fProgress.StepTo(100 + progress);
+                                }
+                            }
+                        }
                     }
 
                     fTree.TrimExcess();
 
                     result = true;
                 } finally {
+                    repMap.Dispose();
+
                     if (fProgress != null)
                         fProgress.End();
                 }

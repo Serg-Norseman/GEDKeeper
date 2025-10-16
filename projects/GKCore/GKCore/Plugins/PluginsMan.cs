@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore.Design;
 using GKCore.Filters;
@@ -134,19 +135,21 @@ namespace GKCore.Plugins
             }
         }
 
-        public void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
+        public async void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
         {
             if (baseWin == null || record == null) return;
 
-            for (int i = 0, count = fPlugins.Count; i < count; i++) {
-                try {
-                    if (fPlugins[i] is ISubscriber subscriber) {
-                        subscriber.NotifyRecord(baseWin, record, action);
+            await Task.Run(() => {
+                for (int i = 0, count = fPlugins.Count; i < count; i++) {
+                    try {
+                        if (fPlugins[i] is ISubscriber subscriber) {
+                            subscriber.NotifyRecord(baseWin, record, action);
+                        }
+                    } catch (Exception ex) {
+                        Logger.WriteError("PluginsMan.NotifyRecord()", ex);
                     }
-                } catch (Exception ex) {
-                    Logger.WriteError("PluginsMan.NotifyRecord()", ex);
                 }
-            }
+            });
         }
 
         public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, ListFilter filter)

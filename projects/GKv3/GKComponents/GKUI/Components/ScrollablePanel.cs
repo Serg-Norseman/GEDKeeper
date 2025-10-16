@@ -325,7 +325,7 @@ namespace GKUI.Components
         /// <param name="noRedraw">Flag of the need to redraw.</param>
         protected void SetImageSize(ExtSize imageSize, bool noRedraw = false)
         {
-            if (!imageSize.IsEmpty) {
+            if (!imageSize.IsEmpty && (fImageSize.Width != imageSize.Width || fImageSize.Height != imageSize.Height)) {
                 fImageSize = new Size(imageSize.Width, imageSize.Height);
 
                 var clientSize = fViewport;
