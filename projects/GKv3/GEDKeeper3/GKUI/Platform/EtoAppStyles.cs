@@ -117,6 +117,11 @@ namespace GKUI.Platform
                 //h.ScrolledWindow.KineticScrolling = false;
                 //h.ScrolledWindow.OverlayScrolling = false;
             });
+
+            Eto.Style.Add<Eto.GtkSharp.Forms.DialogHandler>(null, h => {
+                // don't work, why?
+                //h.Control.Window.SetShadowWidth(0, 0, 0, 0);
+            });
 #endif
 
 #if OS_MSWIN

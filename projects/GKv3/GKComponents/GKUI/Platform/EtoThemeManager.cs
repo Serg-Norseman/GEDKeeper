@@ -269,6 +269,8 @@ namespace GKUI.Themes
         private static void ThemeFormHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (Window)component;
+#if !OS_LINUX
+            // Gtk: border/margin around dialogs #677
             if (ctl is Dialog) {
                 // dialog
                 ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Dialog);
@@ -276,6 +278,7 @@ namespace GKUI.Themes
                 // window
                 ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Window);
             }
+#endif
 
             if (ctl.Menu != null)
                 ThemeMenuBarHandler(view, ctl.Menu, theme);
@@ -321,7 +324,11 @@ namespace GKUI.Themes
         private static void ThemeGridViewHandler(IThemedView view, IDisposable component, Theme theme)
         {
             var ctl = (GridView)component;
+#if !OS_LINUX
+            // GTK UI Glitches in new version #677 (scrolling indicators)
+            // https://unix.stackexchange.com/questions/250880/how-to-disable-or-fix-gtk-scrolling-indicators
             ctl.BackgroundColor = GetThemeColor(theme, ThemeElement.Grid);
+#endif
             //ctl.TextColor = GetThemeColor(theme, ThemeElement.GridText);
             //ctl.ColumnHeadersDefaultCellStyle.BackgroundColor = GetThemeColor(theme, ThemeElement.GridHeader);
             //ctl.ColumnHeadersDefaultCellStyle.TextColor = GetThemeColor(theme, ThemeElement.GridHeaderText);
