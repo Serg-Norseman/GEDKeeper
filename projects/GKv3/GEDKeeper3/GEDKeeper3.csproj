@@ -10,7 +10,7 @@
         <SelfContained>true</SelfContained>
 
         <Configurations>Debug;Release</Configurations>
-        <Platforms>MSWin64;Linux;MacOS;FreeBSD</Platforms>
+        <Platforms>MSWin64;Linux;Linux_ARM;MacOS;FreeBSD</Platforms>
 
         <NoWarn>$(NoWarn);NU1902;NU1903;NU1904</NoWarn>
     </PropertyGroup>
@@ -70,10 +70,18 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <StartupObject>GEDKeeper3.GKProgram</StartupObject>
-        <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
 
+    <PropertyGroup Condition=" $(DefineConstants.Contains('OS_LINUX_AMD64')) ">
+        <PlatformTarget>x64</PlatformTarget>
         <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
     </PropertyGroup>
+
+    <PropertyGroup Condition=" $(DefineConstants.Contains('OS_LINUX_ARM64')) ">
+        <PlatformTarget>arm64</PlatformTarget>
+        <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
+    </PropertyGroup>
+
 
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_FREEBSD')) ">
         <TargetFramework>net6.0</TargetFramework>

@@ -37,7 +37,12 @@
 
     <PropertyGroup Condition=" '$(Platform)' == 'Linux' ">
         <PlatformTarget>x64</PlatformTarget>
-        <DefineConstants>$(DefineConstants);OS_LINUX;MONO</DefineConstants>
+        <DefineConstants>$(DefineConstants);OS_LINUX;OS_LINUX_AMD64;MONO</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Platform)' == 'Linux_ARM' ">
+        <PlatformTarget>arm64</PlatformTarget>
+        <DefineConstants>$(DefineConstants);OS_LINUX;OS_LINUX_ARM64;MONO</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Platform)' == 'MacOS' ">
@@ -75,6 +80,9 @@
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Linux'" />
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Linux'" />
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Linux_ARM'" />
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Linux_ARM'" />
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|MacOS'" />
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|MacOS'" />

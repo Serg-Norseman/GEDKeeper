@@ -13,7 +13,7 @@
 
         <PlatformTarget>x64</PlatformTarget>
         <Configurations>Debug;Release</Configurations>
-        <Platforms>MSWin64;Linux;MacOS;FreeBSD</Platforms>
+        <Platforms>MSWin64;Linux;Linux_ARM;MacOS;FreeBSD</Platforms>
     </PropertyGroup>
 
     <Import Project="..\..\GKConfigurations3.targets" />
