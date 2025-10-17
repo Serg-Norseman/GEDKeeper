@@ -11,7 +11,7 @@
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
         <Configurations>Debug;Release</Configurations>
-        <Platforms>MSWin64;Linux;Linux_ARM;MacOS;FreeBSD</Platforms>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <Import Project="..\..\GKConfigurations3.targets" />

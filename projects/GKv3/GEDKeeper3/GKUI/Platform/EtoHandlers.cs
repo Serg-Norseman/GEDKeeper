@@ -1,4 +1,6 @@
-﻿using Eto.Drawing;
+﻿#pragma warning disable CA1416
+
+using Eto.Drawing;
 
 #if OS_MSWIN
 using Eto.Wpf;
