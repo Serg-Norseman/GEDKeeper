@@ -20,6 +20,7 @@
 
 using System;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using BSLib;
 using GKCore.Locales;
@@ -33,16 +34,16 @@ namespace GKCore.Utilities
         [Test]
         public void Test_SysUtils()
         {
-#if OS_LINUX || OS_MACOS
-            Assert.IsTrue(SysUtils.IsUnix());
-            Assert.AreEqual(PlatformID.Unix, SysUtils.GetPlatformID());
-            Assert.AreNotEqual(DesktopType.Windows, SysUtils.GetDesktopType());
-#else
-            Assert.IsFalse(SysUtils.IsUnix());
-            Assert.AreEqual(PlatformID.Win32NT, SysUtils.GetPlatformID());
-            Assert.IsTrue(string.IsNullOrEmpty(SysUtils.GetMonoVersion()));
-            Assert.AreEqual(DesktopType.Windows, SysUtils.GetDesktopType());
-#endif
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                Assert.IsTrue(SysUtils.IsUnix());
+                Assert.AreEqual(PlatformID.Unix, SysUtils.GetPlatformID());
+                Assert.AreNotEqual(DesktopType.Windows, SysUtils.GetDesktopType());
+            } else {
+                Assert.IsFalse(SysUtils.IsUnix());
+                Assert.AreEqual(PlatformID.Win32NT, SysUtils.GetPlatformID());
+                Assert.IsTrue(string.IsNullOrEmpty(SysUtils.GetMonoVersion()));
+                Assert.AreEqual(DesktopType.Windows, SysUtils.GetDesktopType());
+            }
         }
 
         [Test]

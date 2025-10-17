@@ -27,6 +27,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using BSLib;
 using GKCore;
 using GKCore.Locales;
@@ -155,44 +156,32 @@ namespace GKNavigatorPlugin
             }
         }
 
-        public void Check()
+        public async void Check()
         {
-            try {
-                Thread worker = new Thread(WorkerMethod);
-#if OS_MSWIN
-                worker.SetApartmentState(ApartmentState.STA);
-#endif
-                worker.IsBackground = true;
-                worker.Start();
-            } catch (Exception ex) {
-                Logger.WriteError("HistoryData.Check()", ex);
-            }
-        }
+            await Task.Run(() => {
+                try {
+                    int num = fItems.Count;
+                    for (int i = 0; i < num; i++) {
+                        var linkItem1 = fItems[i];
+                        string url1 = linkItem1.Data[fLinkColumn].ToString();
 
-        private void WorkerMethod()
-        {
-            try {
-                int num = fItems.Count;
-                for (int i = 0; i < num; i++) {
-                    var linkItem1 = fItems[i];
-                    string url1 = linkItem1.Data[fLinkColumn].ToString();
+                        for (int k = i + 1; k < num; k++) {
+                            var linkItem2 = fItems[i];
+                            string url2 = linkItem2.Data[fLinkColumn].ToString();
 
-                    for (int k = i + 1; k < num; k++) {
-                        var linkItem2 = fItems[i];
-                        string url2 = linkItem2.Data[fLinkColumn].ToString();
+                            if (string.Compare(url1, url2, true) == 0) {
+                                linkItem2.State = LinkState.Duplicate;
+                            }
+                        }
 
-                        if (string.Compare(url1, url2, true) == 0) {
-                            linkItem2.State = LinkState.Duplicate;
+                        if (!IsValidUrl(url1)) {
+                            linkItem1.State = LinkState.Invalid;
                         }
                     }
-
-                    if (!IsValidUrl(url1)) {
-                        linkItem1.State = LinkState.Invalid;
-                    }
+                } catch (Exception ex) {
+                    Logger.WriteError("HistoryData.Check()", ex);
                 }
-            } catch (Exception ex) {
-                Logger.WriteError("HistoryData.WorkerMethod()", ex);
-            }
+            });
         }
     }
 }

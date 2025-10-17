@@ -9,7 +9,7 @@
         <DefineConstants>DIS_MONO</DefineConstants>
 
         <Configurations>Debug;Release</Configurations>
-        <Platforms>MSWin64;Linux;Linux_ARM;MacOS;FreeBSD;Android;iPhone</Platforms>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <Import Project="..\..\GKConfigurations3.targets" />
@@ -17,10 +17,6 @@
 
     <ItemGroup>
         <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
-    </ItemGroup>
-
-    <ItemGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
-        <PackageReference Include="System.Security.Principal.Windows" Version="4.7.0" />
     </ItemGroup>
 
     <Import Project="GKMap.Core.props" />

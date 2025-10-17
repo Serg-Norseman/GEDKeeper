@@ -11,6 +11,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using GKMap.MapProviders;
 using SQLite;
 
@@ -145,11 +146,11 @@ namespace GKMap.CacheProviders
 
         private static void WriteDebugLine(string msg)
         {
-#if OS_MSWIN
-            Debug.WriteLine(msg);
-#else
-            Console.WriteLine(msg);
-#endif
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                Debug.WriteLine(msg);
+            } else {
+                Console.WriteLine(msg);
+            }
         }
     }
 }

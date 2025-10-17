@@ -20,6 +20,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -538,15 +539,13 @@ namespace GKCore
         [Test]
         public void Test_GetContainerName()
         {
-#if OS_MSWIN
-            Assert.AreEqual("test.zip", GKUtils.GetContainerName("c:\\temp\\test.ged", true)); // archive
-            Assert.AreEqual("test\\", GKUtils.GetContainerName("c:\\temp\\test.ged", false)); // storage
-#endif
-
-#if OS_LINUX
-            Assert.AreEqual("test.zip", GKUtils.GetContainerName("/home/test.ged", true)); // archive
-            Assert.AreEqual("test/", GKUtils.GetContainerName("/home/test.ged", false)); // storage
-#endif
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                Assert.AreEqual("test.zip", GKUtils.GetContainerName("c:\\temp\\test.ged", true)); // archive
+                Assert.AreEqual("test\\", GKUtils.GetContainerName("c:\\temp\\test.ged", false)); // storage
+            } else {
+                Assert.AreEqual("test.zip", GKUtils.GetContainerName("/home/test.ged", true)); // archive
+                Assert.AreEqual("test/", GKUtils.GetContainerName("/home/test.ged", false)); // storage
+            }
         }
 
         [Test]
