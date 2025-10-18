@@ -19,6 +19,8 @@ del .\coverageResults.txt
 del .\NUnitResults.xml
 del .\opencover.xml
 
+rem for /f "tokens=*" %%G in ('dir /b /ad /s .vs') do rmdir /s /q "%%G"
+
 rem <<< Main assemblies cleaning >>>
 
 rmdir .\locales\.vs /s /q
