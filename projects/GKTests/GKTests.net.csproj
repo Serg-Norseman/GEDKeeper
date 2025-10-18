@@ -9,6 +9,7 @@
 
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <OutputPath>bin\$(Configuration)</OutputPath>
     </PropertyGroup>
 
     <Import Project="..\GKConfigurations3.targets" />
