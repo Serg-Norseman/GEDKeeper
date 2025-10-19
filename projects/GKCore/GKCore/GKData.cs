@@ -90,7 +90,7 @@ namespace GKCore
         public const string INFO_HREF_LOC_SUB = "map_loc_sub_";
         public const string INFO_HREF_LOC_INDI = "map_loc_indi_";
 
-#if OS_LINUX || OS_FREEBSD
+#if !OS_MSWIN
         public const string DEF_FONT = "Noto Sans";
 #else
         public const string DEF_FONT = "Tahoma";

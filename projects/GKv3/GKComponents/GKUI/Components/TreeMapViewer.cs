@@ -208,7 +208,7 @@ namespace GKUI.Components
             fToolTip.ReshowDelay = 50;
             fToolTip.ShowAlways = true;*/
 
-#if !OS_LINUX
+#if OS_MSWIN
             fDrawFont = new Font("Calibri", 9);
 #else
             fDrawFont = new Font(FontFamilies.SansFamilyName, 9);

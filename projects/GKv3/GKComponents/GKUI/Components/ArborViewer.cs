@@ -118,7 +118,7 @@ namespace GKUI.Components
 
             fEnergyDebug = false;
 
-#if !OS_LINUX
+#if OS_MSWIN
             fDrawFont = new Font("Calibri", 9);
 #else
             fDrawFont = new Font(FontFamilies.SansFamilyName, 9);
