@@ -203,7 +203,9 @@ namespace GKUI.Platform
                 title = GKData.APP_TITLE;
             }
 
-            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Warning);
+            Application.Instance.Invoke(() => {
+                MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Warning);
+            });
         }
 
         public void ShowMessage(string msg, string title = "")
@@ -212,7 +214,9 @@ namespace GKUI.Platform
                 title = GKData.APP_TITLE;
             }
 
-            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Information);
+            Application.Instance.Invoke(() => {
+                MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Information);
+            });
         }
 
         public void ShowError(string msg, string title = "")
@@ -221,7 +225,9 @@ namespace GKUI.Platform
                 title = GKData.APP_TITLE;
             }
 
-            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Error);
+            Application.Instance.Invoke(() => {
+                MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Error);
+            });
         }
 
         public async Task<bool> ShowQuestion(string msg, string title = "")
@@ -230,8 +236,10 @@ namespace GKUI.Platform
                 title = GKData.APP_TITLE;
             }
 
-            bool retVal = MessageBox.Show(msg, title, MessageBoxButtons.YesNo, MessageBoxType.Question) == DialogResult.Yes;
-            return await Task.FromResult(retVal);
+            return await Application.Instance.InvokeAsync(() => {
+                var result = MessageBox.Show(msg, title, MessageBoxButtons.YesNo, MessageBoxType.Question);
+                return result == DialogResult.Yes;
+            });
         }
 
         public void ShowWarning(string msg, string title = "")
@@ -240,7 +248,9 @@ namespace GKUI.Platform
                 title = GKData.APP_TITLE;
             }
 
-            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Warning);
+            Application.Instance.Invoke(() => {
+                MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxType.Warning);
+            });
         }
 
         public async Task<string> GetInput(object owner, string prompt, string value)
