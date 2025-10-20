@@ -90,6 +90,10 @@ namespace GKUI.Platform
             application.Platform.Add<GKButtonToolItem.IHandler>(() => new GKButtonToolItemHandler());
             application.Platform.Add<GKDropDownToolItem.IHandler>(() => new GKDropDownToolItemHandler());
 
+#if OS_MACOS
+            application.Platform.Add<Font.IHandler>(() => new GKFontHandler());
+#endif
+
 #if !DIS_VLC
             application.Platform.Add<NativeHostControl.IHandler>(() => new NativeHostControlHandler());
 #endif

@@ -21,6 +21,7 @@ using Gtk;
 #endif
 
 #if OS_MACOS
+using Eto.Mac.Drawing;
 using Eto.Mac.Forms.Controls;
 using Eto.Mac.Forms.Menu;
 using Eto.Mac.Forms.ToolBar;
@@ -275,6 +276,18 @@ namespace GKUI.Platform
 #endif
 
 #if OS_MACOS
+
+    public class GKFontHandler : FontHandler, Font.IHandler
+    {
+        /// <remarks>
+        /// When Font is disposed it disposes underlying handler, which in turn disposes system NSFont.
+        /// This renders all fonts using the same font family to become unusable.
+        /// </remarks>
+        protected override bool DisposeControl
+        {
+            get { return false; }
+        }
+    }
 
     public class GKToolBarHandler : ToolBarHandler, GKToolBar.IHandler
     {
