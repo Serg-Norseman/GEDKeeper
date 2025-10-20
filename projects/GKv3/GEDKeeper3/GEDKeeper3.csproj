@@ -122,8 +122,14 @@
     <Target Name="MacBundleLocaleFiles" BeforeTargets="MacFinishBundle">
         <ItemGroup>
             <LocaleFiles Include="..\..\..\locales\**\*" />
+            <ThemeFiles Include="..\..\..\themes\**\*" />
+            <PluginFiles Include="..\..\..\plugins\**\*" Exclude="..\..\..\plugins\runtimes\**\*" />
+            <PluginRuntimeFiles Include="..\..\..\plugins\runtimes\osx*\**\*" />
         </ItemGroup>
         <Copy SourceFiles="@(LocaleFiles)" DestinationFolder="$(OutputContents)\locales\%(RecursiveDir)" />
+        <Copy SourceFiles="@(ThemeFiles)" DestinationFolder="$(OutputContents)\themes\%(RecursiveDir)" />
+        <Copy SourceFiles="@(PluginFiles)" DestinationFolder="$(OutputContents)\PlugIns\%(RecursiveDir)" />
+        <Copy SourceFiles="@(PluginRuntimeFiles)" DestinationFolder="$(OutputContents)\PlugIns\runtimes\%(RecursiveDir)" />
     </Target>
 
     <Target Name="CleanAppTempBeforeRun" AfterTargets="Build">
