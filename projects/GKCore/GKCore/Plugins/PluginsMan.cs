@@ -123,16 +123,18 @@ namespace GKCore.Plugins
             }
         }
 
-        public void OnLanguageChange()
+        public async void OnLanguageChange()
         {
-            try {
-                for (int i = 0, count = fPlugins.Count; i < count; i++) {
-                    var plugin = fPlugins[i];
-                    plugin.OnLanguageChange();
+            await Task.Run(() => {
+                try {
+                    for (int i = 0, count = fPlugins.Count; i < count; i++) {
+                        var plugin = fPlugins[i];
+                        plugin.OnLanguageChange();
+                    }
+                } catch (Exception ex) {
+                    Logger.WriteError("PluginsMan.OnLanguageChange()", ex);
                 }
-            } catch (Exception ex) {
-                Logger.WriteError("PluginsMan.OnLanguageChange()", ex);
-            }
+            });
         }
 
         public async void NotifyRecord(IBaseWindow baseWin, object record, RecordAction action)
@@ -152,20 +154,22 @@ namespace GKCore.Plugins
             });
         }
 
-        public void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, ListFilter filter)
+        public async void NotifyFilter(IBaseWindow baseWin, GDMRecordType recType, IListSource listSource, ListFilter filter)
         {
             if (baseWin == null || filter == null) return;
 
-            for (int i = 0, count = fPlugins.Count; i < count; i++) {
-                try {
-                    ISubscriber subscriber = (fPlugins[i] as ISubscriber);
-                    if (subscriber != null) {
-                        subscriber.NotifyFilter(baseWin, recType, listSource, filter);
+            await Task.Run(() => {
+                for (int i = 0, count = fPlugins.Count; i < count; i++) {
+                    try {
+                        ISubscriber subscriber = (fPlugins[i] as ISubscriber);
+                        if (subscriber != null) {
+                            subscriber.NotifyFilter(baseWin, recType, listSource, filter);
+                        }
+                    } catch (Exception ex) {
+                        Logger.WriteError("PluginsMan.NotifyFilter()", ex);
                     }
-                } catch (Exception ex) {
-                    Logger.WriteError("PluginsMan.NotifyFilter()", ex);
                 }
-            }
+            });
         }
 
         public ILangMan CreateLangMan(object sender)

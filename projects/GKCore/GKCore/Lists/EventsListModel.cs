@@ -298,6 +298,9 @@ namespace GKCore.Lists
                 var firstEvt = events[0];
 
                 var age = new GDMAge();
+                // If the source of the calculation is the child's date of birth, then that's correct,
+                // but what if the source is the date of another event in life?
+                //age.ParseString($"{GKData.MIN_PARENT_AGE}y");
                 age.ParseString("5y");
                 GDMCustomDate newDate = GDMDate.Subtract(firstEvt as GDMDate, age);
 

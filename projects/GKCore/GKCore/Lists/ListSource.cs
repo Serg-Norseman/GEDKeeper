@@ -766,14 +766,16 @@ namespace GKCore.Lists
             object cv1 = item1.SortValue;
             object cv2 = item2.SortValue;
 
-            if (cv1 != null && cv2 != null) {
-                if (cv1 is string cv1str && cv2 is string cv2str) {
-                    compRes = string.Compare(cv1str, cv2str, false, fSysCulture);
+            if (cv1 != null) {
+                if (cv2 != null) {
+                    if (cv1 is string cv1str && cv2 is string cv2str) {
+                        compRes = string.Compare(cv1str, cv2str, false, fSysCulture);
+                    } else {
+                        compRes = ((IComparable)cv1).CompareTo(cv2);
+                    }
                 } else {
-                    compRes = ((IComparable)cv1).CompareTo(cv2);
+                    compRes = -1;
                 }
-            } else if (cv1 != null) {
-                compRes = -1;
             } else if (cv2 != null) {
                 compRes = 1;
             } else {
@@ -785,14 +787,16 @@ namespace GKCore.Lists
 
         public void SortContents(bool uiChange)
         {
+            int recsCount = fContentList.Count;
+            if (recsCount == 0) return;
+
             try {
                 fSysCulture = (fBaseContext != null) ? CulturesPool.GetSystemCulture(fBaseContext.Culture) : SGCulture.CurrentCulture;
 
                 fContentList.BeginUpdate();
 
                 if (uiChange) {
-                    int num = fContentList.Count;
-                    for (int i = 0; i < num; i++) {
+                    for (int i = 0; i < recsCount; i++) {
                         ContentItem valItem = fContentList[i];
                         Fetch((T)valItem.Record);
                         valItem.SortValue = GetColumnValue(fSortColumn, false);

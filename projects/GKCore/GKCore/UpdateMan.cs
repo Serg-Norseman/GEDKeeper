@@ -22,7 +22,6 @@
 
 using System;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using GKCore.Locales;
@@ -51,7 +50,7 @@ using GKCore.Utilities;
     /// </summary>
     public static class UpdateMan
     {
-        public static async Task<DistributedPackage> GetLastPackage()
+        private static async Task<DistributedPackage> GetLastPackage()
         {
             var result = new DistributedPackage(null, "");
 
@@ -91,7 +90,7 @@ using GKCore.Utilities;
             return result;
         }
 
-        private static async void WorkerMethod()
+        public static async void CheckUpdate()
         {
             try {
                 Version curVersion = AppHost.GetAppVersion();
@@ -108,31 +107,6 @@ using GKCore.Utilities;
                     }
 #endif
                 }
-            } catch (Exception ex) {
-                Logger.WriteError("UpdateMan.WorkerMethod()", ex);
-            }
-        }
-
-        public static void CheckUpdate()
-        {
-            try {
-#if OS_LINUX
-                DesktopType desktopType = SysUtils.GetDesktopType();
-                if (desktopType == DesktopType.Unity) {
-                    // In Ubuntu 1604 LTS (Unity desktop), this method leads to a
-                    // complete crash of the program at the level of X11,
-                    // but in the same version of Ubuntu and Xfce, everything is fine
-                    Logger.WriteInfo("UpdateMan.CheckUpdate(): is not supported for Unity");
-                    return;
-                }
-#endif
-
-                Thread worker = new Thread(WorkerMethod);
-#if OS_MSWIN
-                worker.SetApartmentState(ApartmentState.STA);
-#endif
-                worker.IsBackground = true;
-                worker.Start();
             } catch (Exception ex) {
                 Logger.WriteError("UpdateMan.CheckUpdate()", ex);
             }

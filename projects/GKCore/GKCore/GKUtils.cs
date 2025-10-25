@@ -26,10 +26,12 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -3607,6 +3609,20 @@ namespace GKCore
             }
         }
 
+        public static byte[] GetWebDataHC(string uri)
+        {
+            InitSecurityProtocol();
+
+            using (var client = new HttpClient()) {
+                client.DefaultRequestHeaders.Add("User-Agent", string.Format("{0}/{1}", GKData.APP_TITLE, GKData.APP_VERSION));
+
+                var task = Task.Run(() => client.GetByteArrayAsync(uri));
+                task.Wait();
+                byte[] dataBytes = task.Result;
+                return dataBytes;
+            }
+        }
+
         public static byte[] GetWebData(string uri)
         {
             InitSecurityProtocol();
@@ -3732,17 +3748,15 @@ namespace GKCore
             string result;
 
             var globOpts = GlobalOptions.Instance;
-
             WomanSurnameFormat wsFmt = globOpts.WomanSurnameFormat;
 
             if (iSex == GDMSex.svFemale && wsFmt != WomanSurnameFormat.wsfNotExtend) {
-                bool simpleSingle = globOpts.SimpleSingleSurnames;
                 string marriedSurname = personalName.MarriedName;
                 switch (wsFmt) {
                     case WomanSurnameFormat.wsfMaiden_Married:
                         result = defSurname;
-                        simpleSingle = simpleSingle && string.IsNullOrEmpty(result);
                         if (marriedSurname.Length > 0) {
+                            bool simpleSingle = globOpts.SimpleSingleSurnames && string.IsNullOrEmpty(result);
                             if (!simpleSingle) {
                                 string op = (result.Length > 0) ? " (" : "(";
                                 result = string.Concat(result, op, marriedSurname, ")");
@@ -3754,8 +3768,8 @@ namespace GKCore
 
                     case WomanSurnameFormat.wsfMarried_Maiden:
                         result = marriedSurname;
-                        simpleSingle = simpleSingle && string.IsNullOrEmpty(result);
                         if (defSurname.Length > 0) {
+                            bool simpleSingle = globOpts.SimpleSingleSurnames && string.IsNullOrEmpty(result);
                             if (!simpleSingle) {
                                 string op = (result.Length > 0) ? " (" : "(";
                                 result = string.Concat(result, op, defSurname, ")");
@@ -3834,7 +3848,7 @@ namespace GKCore
             int count = iRec.PersonalNames.Count;
             if (count == 0) {
                 result = null;
-            } else if (defLang == GDMLanguageID.Unknown) {
+            } else if (count == 1 || defLang == GDMLanguageID.Unknown) {
                 result = iRec.PersonalNames[0];
             } else {
                 result = null;
