@@ -236,10 +236,16 @@ namespace GKUI.Platform
                 title = GKData.APP_TITLE;
             }
 
-            return await Application.Instance.InvokeAsync(() => {
+            /*return await Application.Instance.InvokeAsync(() => {
                 var result = MessageBox.Show(msg, title, MessageBoxButtons.YesNo, MessageBoxType.Question);
                 return result == DialogResult.Yes;
-            });
+            });*/
+            return await Task.FromResult(Application.Instance.Invoke(() => {
+                var result = MessageBox.Show(msg, title, MessageBoxButtons.YesNo, MessageBoxType.Question);
+                return result == DialogResult.Yes;
+            }));
+            //bool retVal = MessageBox.Show(msg, title, MessageBoxButtons.YesNo, MessageBoxType.Question) == DialogResult.Yes;
+            //return await Task.FromResult(retVal);
         }
 
         public void ShowWarning(string msg, string title = "")
