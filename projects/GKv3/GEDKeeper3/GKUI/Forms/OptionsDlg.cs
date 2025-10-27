@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using Eto.Drawing;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
@@ -125,19 +126,27 @@ namespace GKUI.Forms
             fController.SelectLabColor(GetControlHandler<ILabel>(sender as Label));
         }
 
-        private async void panDefFont_Click(object sender, EventArgs e)
+        private async void panChartFont_Click(object sender, EventArgs e)
         {
-            TreeChartOptions chartOptions = fController.Options.TreeChartOptions;
+            await ChangeFont(fController.Options.TreeChartOptions);
+            fController.UpdateTreeChartFont();
+        }
 
-            var sdFont = new Font(chartOptions.DefFontName, chartOptions.DefFontSize);
+        private async void panUIFont_Click(object sender, EventArgs e)
+        {
+            await ChangeFont(fController.Options);
+            fController.UpdateUIFont();
+        }
+
+        private async Task ChangeFont(IFontOptions opts)
+        {
+            var sdFont = new Font(opts.DefFontName, opts.DefFontSize);
             IFont font = new FontHandler(sdFont);
             font = await AppHost.StdDialogs.SelectFont(font);
             if (font != null) {
-                chartOptions.DefFontName = font.Name;
-                chartOptions.DefFontSize = (int)(Math.Round(font.Size));
+                opts.DefFontName = font.Name;
+                opts.DefFontSize = (int)(Math.Round(font.Size));
             }
-
-            fController.UpdateTreeChartFont();
         }
 
         private void btnColumnUp_Click(object sender, EventArgs e)

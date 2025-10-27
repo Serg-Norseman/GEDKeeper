@@ -1130,7 +1130,8 @@ namespace GKCore.Locales
         /* 1051 */ CreateCalculatedBirthEvent,
         /* 1052 */ NoAgeOnEventDate,
         /* 1053 */ Subject,
+        /* 1054 */ OverrideThemesFont,
 
-        /* 0000 */ Last = Subject
+        /* 0000 */ Last = OverrideThemesFont
     }
 }

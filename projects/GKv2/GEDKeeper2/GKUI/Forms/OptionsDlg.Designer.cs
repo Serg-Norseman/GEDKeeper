@@ -49,8 +49,6 @@
         private System.Windows.Forms.CheckBox chkOnlyYears;
         private System.Windows.Forms.CheckBox chkSignsVisible;
         private System.Windows.Forms.CheckBox chkChildlessExclude;
-        private System.Windows.Forms.Label lblFont;
-        private System.Windows.Forms.Panel panDefFont;
         private System.Windows.Forms.TabPage pagePedigree;
         private System.Windows.Forms.GroupBox grpPedigree;
         private System.Windows.Forms.CheckBox chkAttributes;
@@ -72,6 +70,8 @@
         private System.Windows.Forms.CheckBox chkShowDatesCalendar;
         private GKUI.Components.GKListView lvPlugins;
         private System.Windows.Forms.TabPage pagePlugins;
+        private System.Windows.Forms.Label lblChartFontTitle;
+        private System.Windows.Forms.Panel panChartFont;
         private System.Windows.Forms.Label lblChartFont;
         private GKUI.Components.GKTabControl tabsCharts;
         private System.Windows.Forms.TabPage pageCharts;
@@ -217,6 +217,10 @@
         private System.Windows.Forms.Button btnExtBackupFolderChoose;
         private System.Windows.Forms.TabPage pageGEDCOM;
         private System.Windows.Forms.TabPage pageNames;
+        private System.Windows.Forms.Label lblUIFontTitle;
+        private System.Windows.Forms.Panel panUIFont;
+        private System.Windows.Forms.Label lblUIFont;
+        private System.Windows.Forms.CheckBox chkOverrideThemesFont;
 
         private void InitializeComponent()
         {
@@ -314,7 +318,6 @@
             this.chkTreeDecorative = new System.Windows.Forms.CheckBox();
             this.chkPortraitsVisible = new System.Windows.Forms.CheckBox();
             this.grpTreeDecor = new System.Windows.Forms.GroupBox();
-            this.lblFont = new System.Windows.Forms.Label();
             this.panMaleColor = new System.Windows.Forms.Panel();
             this.lblMaleColor = new System.Windows.Forms.Label();
             this.panFemaleColor = new System.Windows.Forms.Panel();
@@ -325,7 +328,8 @@
             this.lblUnHusbandColor = new System.Windows.Forms.Label();
             this.panUnWifeColor = new System.Windows.Forms.Panel();
             this.lblUnWifeColor = new System.Windows.Forms.Label();
-            this.panDefFont = new System.Windows.Forms.Panel();
+            this.lblChartFontTitle = new System.Windows.Forms.Label();
+            this.panChartFont = new System.Windows.Forms.Panel();
             this.lblChartFont = new System.Windows.Forms.Label();
             this.pageAncCircle = new System.Windows.Forms.TabPage();
             this.ancOptionsControl1 = new GKUI.Components.ACOptionsControl();
@@ -435,6 +439,10 @@
             this.btnExtBackupFolderChoose = new System.Windows.Forms.Button();
             this.pageGEDCOM = new System.Windows.Forms.TabPage();
             this.pageNames = new System.Windows.Forms.TabPage();
+            this.lblUIFontTitle = new System.Windows.Forms.Label();
+            this.panUIFont = new System.Windows.Forms.Panel();
+            this.lblUIFont = new System.Windows.Forms.Label();
+            this.chkOverrideThemesFont = new System.Windows.Forms.CheckBox();
             this.PageControl1.SuspendLayout();
             this.pageCommon.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -462,7 +470,7 @@
             this.panUnkSexColor.SuspendLayout();
             this.panUnHusbandColor.SuspendLayout();
             this.panUnWifeColor.SuspendLayout();
-            this.panDefFont.SuspendLayout();
+            this.panChartFont.SuspendLayout();
             this.pageAncCircle.SuspendLayout();
             this.pageUIView.SuspendLayout();
             this.PageControl2.SuspendLayout();
@@ -1951,13 +1959,13 @@
             // 
             // grpTreeDecor
             // 
-            this.grpTreeDecor.Controls.Add(this.lblFont);
             this.grpTreeDecor.Controls.Add(this.panMaleColor);
             this.grpTreeDecor.Controls.Add(this.panFemaleColor);
             this.grpTreeDecor.Controls.Add(this.panUnkSexColor);
             this.grpTreeDecor.Controls.Add(this.panUnHusbandColor);
             this.grpTreeDecor.Controls.Add(this.panUnWifeColor);
-            this.grpTreeDecor.Controls.Add(this.panDefFont);
+            this.grpTreeDecor.Controls.Add(this.lblChartFontTitle);
+            this.grpTreeDecor.Controls.Add(this.panChartFont);
             this.grpTreeDecor.Location = new System.Drawing.Point(14, 12);
             this.grpTreeDecor.Margin = new System.Windows.Forms.Padding(2);
             this.grpTreeDecor.Name = "grpTreeDecor";
@@ -1966,16 +1974,6 @@
             this.grpTreeDecor.TabIndex = 1;
             this.grpTreeDecor.TabStop = false;
             this.grpTreeDecor.Text = "";
-            // 
-            // lblFont
-            // 
-            this.lblFont.AutoSize = true;
-            this.lblFont.Location = new System.Drawing.Point(12, 188);
-            this.lblFont.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.lblFont.Name = "lblFont";
-            this.lblFont.Size = new System.Drawing.Size(100, 20);
-            this.lblFont.TabIndex = 0;
-            this.lblFont.Text = "lblFont";
             // 
             // panMaleColor
             // 
@@ -2093,17 +2091,27 @@
             this.lblUnWifeColor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblUnWifeColor.Click += new System.EventHandler(this.PanColor_Click);
             // 
-            // panDefFont
+            // lblChartFontTitle
             // 
-            this.panDefFont.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panDefFont.Controls.Add(this.lblChartFont);
-            this.panDefFont.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.panDefFont.Location = new System.Drawing.Point(12, 212);
-            this.panDefFont.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
-            this.panDefFont.Name = "panDefFont";
-            this.panDefFont.Size = new System.Drawing.Size(215, 32);
-            this.panDefFont.TabIndex = 5;
-            this.panDefFont.Click += new System.EventHandler(this.panDefFont_Click);
+            this.lblChartFontTitle.AutoSize = true;
+            this.lblChartFontTitle.Location = new System.Drawing.Point(12, 188);
+            this.lblChartFontTitle.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.lblChartFontTitle.Name = "lblChartFontTitle";
+            this.lblChartFontTitle.Size = new System.Drawing.Size(100, 20);
+            this.lblChartFontTitle.TabIndex = 0;
+            this.lblChartFontTitle.Text = "lblChartFontTitle";
+            // 
+            // panChartFont
+            // 
+            this.panChartFont.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panChartFont.Controls.Add(this.lblChartFont);
+            this.panChartFont.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.panChartFont.Location = new System.Drawing.Point(12, 212);
+            this.panChartFont.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.panChartFont.Name = "panChartFont";
+            this.panChartFont.Size = new System.Drawing.Size(215, 32);
+            this.panChartFont.TabIndex = 5;
+            this.panChartFont.Click += new System.EventHandler(this.panChartFont_Click);
             // 
             // lblChartFont
             // 
@@ -2115,7 +2123,7 @@
             this.lblChartFont.TabIndex = 0;
             this.lblChartFont.Text = "lblChartFont";
             this.lblChartFont.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblChartFont.Click += new System.EventHandler(this.panDefFont_Click);
+            this.lblChartFont.Click += new System.EventHandler(this.panChartFont_Click);
             // 
             // pageAncCircle
             // 
@@ -2193,6 +2201,9 @@
             this.pageViewCommon.Controls.Add(this.chkAutoSortSpouses);
             this.pageViewCommon.Controls.Add(this.chkAutoSortChildren);
             this.pageViewCommon.Controls.Add(this.chkHighlightUnmarried);
+            this.pageViewCommon.Controls.Add(this.lblUIFontTitle);
+            this.pageViewCommon.Controls.Add(this.panUIFont);
+            this.pageViewCommon.Controls.Add(this.chkOverrideThemesFont);
             this.pageViewCommon.Location = new System.Drawing.Point(4, 26);
             this.pageViewCommon.Margin = new System.Windows.Forms.Padding(2);
             this.pageViewCommon.Name = "pageViewCommon";
@@ -2201,6 +2212,50 @@
             this.pageViewCommon.TabIndex = 0;
             this.pageViewCommon.Text = "pageViewCommon";
             // 
+            // lblUIFontTitle
+            // 
+            this.lblUIFontTitle.AutoSize = true;
+            this.lblUIFontTitle.Location = new System.Drawing.Point(11, 420);
+            this.lblUIFontTitle.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.lblUIFontTitle.Name = "lblUIFontTitle";
+            this.lblUIFontTitle.Size = new System.Drawing.Size(100, 20);
+            this.lblUIFontTitle.TabIndex = 0;
+            this.lblUIFontTitle.Text = "lblUIFontTitle";
+            // 
+            // panUIFont
+            // 
+            this.panUIFont.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panUIFont.Controls.Add(this.lblUIFont);
+            this.panUIFont.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.panUIFont.Location = new System.Drawing.Point(100, 414);
+            this.panUIFont.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.panUIFont.Name = "panUIFont";
+            this.panUIFont.Size = new System.Drawing.Size(215, 32);
+            this.panUIFont.TabIndex = 21;
+            this.panUIFont.Click += new System.EventHandler(this.panUIFont_Click);
+            // 
+            // lblUIFont
+            // 
+            this.lblUIFont.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblUIFont.Location = new System.Drawing.Point(0, 0);
+            this.lblUIFont.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblUIFont.Name = "lblUIFont";
+            this.lblUIFont.Size = new System.Drawing.Size(211, 28);
+            this.lblUIFont.TabIndex = 0;
+            this.lblUIFont.Text = "lblUIFont";
+            this.lblUIFont.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblUIFont.Click += new System.EventHandler(this.panUIFont_Click);
+            // 
+            // chkOverrideThemesFont
+            // 
+            this.chkOverrideThemesFont.AutoSize = true;
+            this.chkOverrideThemesFont.Location = new System.Drawing.Point(11, 450);
+            this.chkOverrideThemesFont.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
+            this.chkOverrideThemesFont.Name = "chkOverrideThemesFont";
+            this.chkOverrideThemesFont.Size = new System.Drawing.Size(600, 22);
+            this.chkOverrideThemesFont.TabIndex = 22;
+            this.chkOverrideThemesFont.Text = "chkOverrideThemesFont";
+            // 
             // chkShowNumberOfSubstructures
             // 
             this.chkShowNumberOfSubstructures.AutoSize = true;
@@ -2208,7 +2263,7 @@
             this.chkShowNumberOfSubstructures.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkShowNumberOfSubstructures.Name = "chkShowNumberOfSubstructures";
             this.chkShowNumberOfSubstructures.Size = new System.Drawing.Size(600, 22);
-            this.chkShowNumberOfSubstructures.TabIndex = 20;
+            this.chkShowNumberOfSubstructures.TabIndex = 10;
             this.chkShowNumberOfSubstructures.Text = "chkShowNumberOfSubstructures";
             // 
             // chkShortenDateRanges
@@ -2218,7 +2273,7 @@
             this.chkShortenDateRanges.Margin = new System.Windows.Forms.Padding(10, 0, 0, 5);
             this.chkShortenDateRanges.Name = "chkShortenDateRanges";
             this.chkShortenDateRanges.Size = new System.Drawing.Size(600, 22);
-            this.chkShortenDateRanges.TabIndex = 14;
+            this.chkShortenDateRanges.TabIndex = 4;
             this.chkShortenDateRanges.Text = "chkShortenDateRanges";
             // 
             // chkSurnameFirstInOrder
@@ -2375,7 +2430,7 @@
             this.grpDateFormat.Name = "grpDateFormat";
             this.grpDateFormat.Padding = new System.Windows.Forms.Padding(2);
             this.grpDateFormat.Size = new System.Drawing.Size(259, 88);
-            this.grpDateFormat.TabIndex = 1;
+            this.grpDateFormat.TabIndex = 0;
             this.grpDateFormat.TabStop = false;
             this.grpDateFormat.Text = "grpDateFormat";
             // 
@@ -2406,7 +2461,7 @@
             this.chkPlacesWithAddress.Margin = new System.Windows.Forms.Padding(2);
             this.chkPlacesWithAddress.Name = "chkPlacesWithAddress";
             this.chkPlacesWithAddress.Size = new System.Drawing.Size(302, 21);
-            this.chkPlacesWithAddress.TabIndex = 2;
+            this.chkPlacesWithAddress.TabIndex = 5;
             this.chkPlacesWithAddress.Text = "chkPlacesWithAddress";
             // 
             // chkHighlightUnparented
@@ -2416,7 +2471,7 @@
             this.chkHighlightUnparented.Margin = new System.Windows.Forms.Padding(2);
             this.chkHighlightUnparented.Name = "chkHighlightUnparented";
             this.chkHighlightUnparented.Size = new System.Drawing.Size(302, 21);
-            this.chkHighlightUnparented.TabIndex = 3;
+            this.chkHighlightUnparented.TabIndex = 6;
             this.chkHighlightUnparented.Text = "chkHighlightUnparented";
             // 
             // chkLocalizedCalendarSignatures
@@ -2426,7 +2481,7 @@
             this.chkLocalizedCalendarSignatures.Margin = new System.Windows.Forms.Padding(2);
             this.chkLocalizedCalendarSignatures.Name = "chkLocalizedCalendarSignatures";
             this.chkLocalizedCalendarSignatures.Size = new System.Drawing.Size(338, 21);
-            this.chkLocalizedCalendarSignatures.TabIndex = 4;
+            this.chkLocalizedCalendarSignatures.TabIndex = 3;
             this.chkLocalizedCalendarSignatures.Text = "chkLocalizedCalendarSignatures";
             // 
             // chkShowDatesSigns
@@ -2436,7 +2491,7 @@
             this.chkShowDatesSigns.Margin = new System.Windows.Forms.Padding(2);
             this.chkShowDatesSigns.Name = "chkShowDatesSigns";
             this.chkShowDatesSigns.Size = new System.Drawing.Size(338, 21);
-            this.chkShowDatesSigns.TabIndex = 4;
+            this.chkShowDatesSigns.TabIndex = 2;
             this.chkShowDatesSigns.Text = "chkShowDatesSigns";
             // 
             // chkShowDatesCalendar
@@ -2446,7 +2501,7 @@
             this.chkShowDatesCalendar.Margin = new System.Windows.Forms.Padding(2);
             this.chkShowDatesCalendar.Name = "chkShowDatesCalendar";
             this.chkShowDatesCalendar.Size = new System.Drawing.Size(338, 21);
-            this.chkShowDatesCalendar.TabIndex = 4;
+            this.chkShowDatesCalendar.TabIndex = 1;
             this.chkShowDatesCalendar.Text = "chkShowDatesCalendar";
             // 
             // chkHighlightUnmarried
@@ -2456,7 +2511,7 @@
             this.chkHighlightUnmarried.Margin = new System.Windows.Forms.Padding(2);
             this.chkHighlightUnmarried.Name = "chkHighlightUnmarried";
             this.chkHighlightUnmarried.Size = new System.Drawing.Size(302, 21);
-            this.chkHighlightUnmarried.TabIndex = 4;
+            this.chkHighlightUnmarried.TabIndex = 7;
             this.chkHighlightUnmarried.Text = "chkHighlightUnmarried";
             // 
             // chkAutoSortChildren
@@ -2466,7 +2521,7 @@
             this.chkAutoSortChildren.Margin = new System.Windows.Forms.Padding(2);
             this.chkAutoSortChildren.Name = "chkAutoSortChildren";
             this.chkAutoSortChildren.Size = new System.Drawing.Size(302, 21);
-            this.chkAutoSortChildren.TabIndex = 4;
+            this.chkAutoSortChildren.TabIndex = 8;
             this.chkAutoSortChildren.Text = "chkAutoSortChildren";
             // 
             // chkAutoSortSpouses
@@ -2476,7 +2531,7 @@
             this.chkAutoSortSpouses.Margin = new System.Windows.Forms.Padding(2);
             this.chkAutoSortSpouses.Name = "chkAutoSortSpouses";
             this.chkAutoSortSpouses.Size = new System.Drawing.Size(302, 21);
-            this.chkAutoSortSpouses.TabIndex = 4;
+            this.chkAutoSortSpouses.TabIndex = 9;
             this.chkAutoSortSpouses.Text = "chkAutoSortSpouses";
             // 
             // chkFirstCapitalLetterInNames
@@ -3080,7 +3135,7 @@
             this.panUnkSexColor.ResumeLayout(false);
             this.panUnHusbandColor.ResumeLayout(false);
             this.panUnWifeColor.ResumeLayout(false);
-            this.panDefFont.ResumeLayout(false);
+            this.panChartFont.ResumeLayout(false);
             this.pageAncCircle.ResumeLayout(false);
             this.pageUIView.ResumeLayout(false);
             this.PageControl2.ResumeLayout(false);

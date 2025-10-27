@@ -28,4 +28,11 @@ namespace GKCore.Options
         void Assign(IOptions source);
         void ResetDefaults();
     }
+
+
+    public interface IFontOptions
+    {
+        string DefFontName { get; set; }
+        int DefFontSize { get; set; }
+    }
 }

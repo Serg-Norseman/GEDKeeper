@@ -282,6 +282,10 @@ namespace GKUI.Platform
 
         public string GetDefaultFontName()
         {
+            // Tahoma - supplied with Win95, default for Win2000, WinXP
+            // Verdana - supplied with Win95
+            // Segoe UI - default for Vista, Win7, Win8/8.1, Win10, Win11
+
             string fontName;
             fontName = "Verdana";
             return fontName;

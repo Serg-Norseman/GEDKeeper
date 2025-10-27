@@ -1106,6 +1106,7 @@ namespace GKCore.Locales
             /* 1051 */ "Create a calculated birth event",
             /* 1052 */ "No age on event date",
             /* 1053 */ "Subject",
+            /* 1054 */ "Override themes font",
         };
     }
 }

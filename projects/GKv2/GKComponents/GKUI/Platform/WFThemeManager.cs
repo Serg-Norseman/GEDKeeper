@@ -188,8 +188,7 @@ namespace GKUI.Themes
             if (form != null) {
                 form.SuspendLayout();
 
-                var themeFont = GetThemeStr(fCurrentTheme, ThemeElement.Font);
-                var themeFontSize = GetThemeFloat(fCurrentTheme, ThemeElement.FontSize);
+                DefineFont(out string themeFont, out float themeFontSize);
                 if (form.Font.Name != themeFont) {
                     form.Font = new Font(themeFont, themeFontSize);
                 }

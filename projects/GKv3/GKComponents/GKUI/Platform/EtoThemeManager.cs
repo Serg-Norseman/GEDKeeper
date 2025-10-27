@@ -194,13 +194,11 @@ namespace GKUI.Themes
                     fCachedFont = null;
                 }
 
-                var themeFont = GetThemeStr(fCurrentTheme, ThemeElement.Font);
+                DefineFont(out string themeFont, out float themeFontSize);
                 // FIXME: OS specifics
                 if (Application.Instance.Platform.IsGtk) {
                     themeFont = "Sans";
                 }
-
-                var themeFontSize = GetThemeFloat(fCurrentTheme, ThemeElement.FontSize);
                 fCachedFont = new Font(themeFont, themeFontSize);
             }
 

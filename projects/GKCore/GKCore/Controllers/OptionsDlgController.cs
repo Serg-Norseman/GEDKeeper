@@ -401,6 +401,11 @@ namespace GKCore.Controllers
                 combo.AddItem(LangMan.LS(GKData.MatchPatterns[(int)itm].Name), itm);
             }
             combo.SetSelectedTag(fOptions.MatchPatternMethod);
+
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                UpdateUIFont();
+                GetControl<ICheckBox>("chkOverrideThemesFont").Checked = fOptions.OverrideThemesFont;
+            }
         }
 
         public NameFormat GetSelectedNameFormat()
@@ -453,6 +458,10 @@ namespace GKCore.Controllers
             fOptions.UseBirthDatesInPersonSelectionFilter = GetControl<ICheckBox>("chkUseBirthDatesInPSF").Checked;
 
             fOptions.MatchPatternMethod = GetControl<IComboBox>("cmbMatchPatternMethod").GetSelectedTag<MatchPatternMethod>();
+
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                fOptions.OverrideThemesFont = GetControl<ICheckBox>("chkOverrideThemesFont").Checked;
+            }
         }
 
         public void ResetSpecialsOptions()
@@ -729,7 +738,14 @@ namespace GKCore.Controllers
 
         public void UpdateTreeChartFont()
         {
-            GetControl<ILabel>("lblChartFont").Text = fOptions.TreeChartOptions.DefFontName + @", " + fOptions.TreeChartOptions.DefFontSize.ToString();
+            var opts = fOptions.TreeChartOptions;
+            GetControl<ILabel>("lblChartFont").Text = $"{opts.DefFontName}, {opts.DefFontSize}";
+        }
+
+        public void UpdateUIFont()
+        {
+            var opts = fOptions;
+            GetControl<ILabel>("lblUIFont").Text = $"{opts.DefFontName}, {opts.DefFontSize}";
         }
 
         public void ChangeSeparateDepth()
@@ -1019,7 +1035,7 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblUnHusbandColor").Text = LangMan.LS(LSID.UnHusband);
             GetControl<ILabel>("lblUnWifeColor").Text = LangMan.LS(LSID.UnWife);
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                GetControl<ILabel>("lblFont").Text = LangMan.LS(LSID.Font);
+                GetControl<ILabel>("lblChartFontTitle").Text = LangMan.LS(LSID.Font);
             }
 
             GetControl<IGroupBox>("grpSpacings").Text = LangMan.LS(LSID.Spacings);
@@ -1061,6 +1077,11 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkShortKinshipForm").Text = LangMan.LS(LSID.ShortKinshipForm);
             GetControl<ICheckBox>("chkSurnameFirstInOrder").Text = LangMan.LS(LSID.SurnameFirstInOrder);
             GetControl<ICheckBox>("chkSurnameInCapitals").Text = LangMan.LS(LSID.SurnameInCapitals);
+
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                GetControl<ILabel>("lblUIFontTitle").Text = LangMan.LS(LSID.Font);
+                GetControl<ICheckBox>("chkOverrideThemesFont").Text = LangMan.LS(LSID.OverrideThemesFont);
+            }
 
             GetControl<ICheckBox>("chkUseSurnamesInPSF").Text = LangMan.LS(LSID.UseSurnamesInPersonSelectionFilter);
             GetControl<ICheckBox>("chkUseBirthDatesInPSF").Text = LangMan.LS(LSID.UseBirthDatesInPersonSelectionFilter);

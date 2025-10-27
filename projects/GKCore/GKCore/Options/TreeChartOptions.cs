@@ -29,7 +29,7 @@ namespace GKCore.Options
     /// <summary>
     ///
     /// </summary>
-    public sealed class TreeChartOptions : IOptions
+    public sealed class TreeChartOptions : IOptions, IFontOptions
     {
         //public static readonly int MALE_COLOR = -3750145; // FFC6C6FF
         //public static readonly int FEMALE_COLOR = -14650; // FFFFC6C6
@@ -88,10 +88,12 @@ namespace GKCore.Options
         public IColor UnHusbandColor;
         public IColor UnWifeColor;
 
-        public string DefFontName;
-        public int DefFontSize;
+        public string DefFontName {  get; set; }
+        public int DefFontSize { get; set; }
+
         public IColor DefFontColor;
         public GKFontStyle DefFontStyle;
+
         public TextEffect TextEffect;
 
         public int BranchDistance;

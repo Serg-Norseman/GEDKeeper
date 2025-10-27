@@ -25,6 +25,7 @@ using System.Linq;
 using BSLib;
 using GKCore;
 using GKCore.Design.Graphics;
+using GKCore.Options;
 using GKCore.Utilities;
 
 namespace GKUI.Themes
@@ -301,6 +302,18 @@ namespace GKUI.Themes
         public abstract void ApplyTheme(IThemedView view);
 
         public abstract void ApplyTheme(IThemedView view, object component);
+
+        protected void DefineFont(out string fontName, out float fontSize)
+        {
+            var opts = GlobalOptions.Instance;
+            if (opts.OverrideThemesFont) {
+                fontName = opts.DefFontName;
+                fontSize = opts.DefFontSize;
+            } else {
+                fontName = GetThemeStr(fCurrentTheme, ThemeElement.Font);
+                fontSize = GetThemeFloat(fCurrentTheme, ThemeElement.FontSize);
+            }
+        }
 
         private static IImage GetThemeImageInt(Theme theme, ThemeElement element)
         {

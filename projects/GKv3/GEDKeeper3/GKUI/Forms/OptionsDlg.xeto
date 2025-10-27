@@ -286,9 +286,9 @@
 
                             <TableRow>
                               <StackLayout Orientation="Vertical">
-                                <Label x:Name="lblFont" />
-                                <Scrollable x:Name="panDefFont" Border="Bezel">
-                                  <Label x:Name="lblChartFont" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="panDefFont_Click" />
+                                <Label x:Name="lblChartFontTitle" />
+                                <Scrollable x:Name="panChartFont" Border="Bezel">
+                                  <Label x:Name="lblChartFont" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="panChartFont_Click" />
                                 </Scrollable>
                               </StackLayout>
                             </TableRow>
@@ -420,6 +420,14 @@
                   <CheckBox x:Name="chkAutoSortSpouses" />
                   <StackLayoutItem />
                   <CheckBox x:Name="chkShowNumberOfSubstructures" />
+
+                  <StackLayout Orientation="Vertical">
+                    <Label x:Name="lblUIFontTitle" />
+                    <Scrollable x:Name="panUIFont" Border="Bezel">
+                      <Label x:Name="lblUIFont" Size="210, 26" TextAlignment="Center" VerticalAlignment="Center" Cursor="{x:Static Cursors.Pointer}" MouseDown="panUIFont_Click" />
+                    </Scrollable>
+                    <CheckBox x:Name="chkOverrideThemesFont" />
+                  </StackLayout>
 
                 </StackLayout>
 

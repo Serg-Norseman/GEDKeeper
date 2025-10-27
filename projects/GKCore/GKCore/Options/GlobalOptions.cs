@@ -43,7 +43,7 @@ namespace GKCore.Options
     /// <summary>
     ///
     /// </summary>
-    public sealed class GlobalOptions : BaseObject, IOptions
+    public sealed class GlobalOptions : BaseObject, IOptions, IFontOptions
     {
         public const int OPTS_VERSION = 3;
 
@@ -113,6 +113,10 @@ namespace GKCore.Options
         public DateFormat DefDateFormat { get; set; }
 
         public NameFormat DefNameFormat { get; set; }
+
+        public string DefFontName { get; set; }
+        public int DefFontSize { get; set; }
+        public bool OverrideThemesFont { get; set; }
 
         public bool DeleteMediaFileWithoutConfirm { get; set; }
 
@@ -370,6 +374,9 @@ namespace GKCore.Options
             DisableNonStdFeatures = false;
             EnableStdValidation = false;
 
+            DefFontName = AppHost.GfxProvider.GetDefaultFontName();
+            DefFontSize = (int)AppHost.GfxProvider.GetDefaultFontSize();
+            OverrideThemesFont = false;
             Theme = "Default";
 
             // hidden
@@ -874,6 +881,9 @@ namespace GKCore.Options
             MatchPatternMethod = (MatchPatternMethod)ini.ReadInteger("Common", "MatchPatternMethod", 0);
             SearchPlacesWithoutCoords = ini.ReadBool("Common", "SearchPlacesWithoutCoords", false);
 
+            DefFontName = ini.ReadString("Common", "FontName", AppHost.GfxProvider.GetDefaultFontName());
+            DefFontSize = ini.ReadInteger("Common", "FontSize", (int)AppHost.GfxProvider.GetDefaultFontSize());
+            OverrideThemesFont = ini.ReadBool("Common", "OverrideThemesFont", false);
             Theme = ini.ReadString("Common", "Theme", "Default");
 
             LoadPluginsFromFile(ini);
@@ -1029,6 +1039,9 @@ namespace GKCore.Options
             ini.WriteInteger("Common", "MatchPatternMethod", (int)MatchPatternMethod);
             ini.WriteBool("Common", "SearchPlacesWithoutCoords", SearchPlacesWithoutCoords);
 
+            ini.WriteString("Common", "FontName", DefFontName);
+            ini.WriteInteger("Common", "FontSize", DefFontSize);
+            ini.WriteBool("Common", "OverrideThemesFont", OverrideThemesFont);
             ini.WriteString("Common", "Theme", Theme);
 
             SavePluginsToFile(ini);
