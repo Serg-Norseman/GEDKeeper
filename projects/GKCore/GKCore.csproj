@@ -94,6 +94,8 @@
     <Compile Include="GKCore\Lists\RecsListModel.cs" />
     <Compile Include="GKCore\Lists\TagsListModel.cs" />
     <Compile Include="GKCore\ExtData\TipsCollector.cs" />
+    <Compile Include="GKCore\Locales\LangMan.LSDefList.cs" />
+    <Compile Include="GKCore\Locales\LSID.cs" />
     <Compile Include="GKCore\Media\IComputerVision.cs" />
     <Compile Include="GKCore\Kinships\KinshipsCulture.cs" />
     <Compile Include="GKCore\Lists\DNATestsListModel.cs" />
