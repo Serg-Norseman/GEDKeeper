@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
+  x:Class="GKTreeSyncPlugin.TSForm"
+  Title="TSForm">
+
+  <TableLayout Style="paddedTable8">
+    <TableRow>
+      <Panel x:Name="panel1" Padding="4">
+        <StackLayout Orientation="Horizontal" Spacing="4">
+          <GroupBox x:Name="groupBox1" Text="Synchronize records" Padding="4">
+            <StackLayout Orientation="Vertical" Spacing="4">
+              <RadioButton x:Name="rbSyncAll" Text="All" Checked="True" CheckedChanged="rbSyncRecords_CheckedChanged" />
+              <StackLayout Orientation="Horizontal" Spacing="4">
+                <RadioButton x:Name="rbSyncSelected" Text="Selected" CheckedChanged="rbSyncRecords_CheckedChanged" />
+                <ComboBox x:Name="cmbRecordTypes" ReadOnly="True" Width="120" />
+              </StackLayout>
+            </StackLayout>
+          </GroupBox>
+
+          <StackLayout Orientation="Vertical" Spacing="4">
+            <StackLayout Orientation="Horizontal" Spacing="4">
+              <Label x:Name="lblFile" Text="File:" />
+              <TextBox x:Name="txtFile" ReadOnly="True" Width="449" />
+              <Button x:Name="btnSelectFile" Text="Select file..." Width="122" Click="btnSelectFile_ClickAsync" />
+            </StackLayout>
+
+            <CheckBox x:Name="chkOnlyModified" Text="Only modified" CheckedChanged="chkOnlyModified_CheckStateChanged" />
+          </StackLayout>
+        </StackLayout>
+      </Panel>
+    </TableRow>
+
+    <TableRow ScaleHeight="True">
+      <comcom:GKListView x:Name="lvRecords" Height="380" />
+    </TableRow>
+
+    <TableRow>
+      <TextArea x:Name="mSyncRes" ReadOnly="true" Height="160" />
+    </TableRow>
+  </TableLayout>
+
+</Form>

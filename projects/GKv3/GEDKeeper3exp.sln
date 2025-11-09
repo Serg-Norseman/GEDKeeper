@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.34601.136
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GEDKeeper3", "GEDKeeper3\GEDKeeper3.csproj", "{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}"
 EndProject
@@ -80,6 +80,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKTests.net", "..\GKTests\GKTests.net.csproj", "{32521FE6-112C-4095-B0A8-755C5C94D00A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKVisionPlugin.net", "..\plugins\GKVisionPlugin\GKVisionPlugin.net.csproj", "{9C574C30-C083-4B59-ACD4-FDFA42D3BA17}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKTreeSyncPlugin.net", "..\plugins\GKTreeSyncPlugin\GKTreeSyncPlugin.net.csproj", "{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -495,6 +497,26 @@ Global
 		{9C574C30-C083-4B59-ACD4-FDFA42D3BA17}.Release|MacOS.Build.0 = Release|Any CPU
 		{9C574C30-C083-4B59-ACD4-FDFA42D3BA17}.Release|MSWin64.ActiveCfg = Release|Any CPU
 		{9C574C30-C083-4B59-ACD4-FDFA42D3BA17}.Release|MSWin64.Build.0 = Release|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Debug|FreeBSD.ActiveCfg = Debug|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Debug|FreeBSD.Build.0 = Debug|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Debug|Linux.ActiveCfg = Debug|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Debug|Linux.Build.0 = Debug|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Debug|Linux_ARM.ActiveCfg = Debug|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Debug|Linux_ARM.Build.0 = Debug|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Debug|MacOS.ActiveCfg = Debug|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Debug|MacOS.Build.0 = Debug|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Debug|MSWin64.ActiveCfg = Debug|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Debug|MSWin64.Build.0 = Debug|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Release|FreeBSD.ActiveCfg = Release|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Release|FreeBSD.Build.0 = Release|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Release|Linux.ActiveCfg = Release|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Release|Linux.Build.0 = Release|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Release|Linux_ARM.ActiveCfg = Release|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Release|Linux_ARM.Build.0 = Release|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Release|MacOS.ActiveCfg = Release|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Release|MacOS.Build.0 = Release|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Release|MSWin64.ActiveCfg = Release|Any CPU
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}.Release|MSWin64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -516,6 +538,7 @@ Global
 		{85F58C6E-E702-4304-A4AA-EAE42D769BDD} = {B8B3F590-CF25-40FC-8454-D673B594DBF3}
 		{D2BCF181-9B1A-4A37-B197-9CB39359BE18} = {B8B3F590-CF25-40FC-8454-D673B594DBF3}
 		{9C574C30-C083-4B59-ACD4-FDFA42D3BA17} = {B8B3F590-CF25-40FC-8454-D673B594DBF3}
+		{3DD8ACF9-EC65-4996-A153-D671AB06A3B7} = {B8B3F590-CF25-40FC-8454-D673B594DBF3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C05CBCB7-0B24-41CC-8BDC-E5BB79045E5D}

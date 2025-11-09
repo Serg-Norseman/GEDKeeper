@@ -19,7 +19,6 @@
  */
 
 using System;
-using System.Windows.Forms;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
@@ -33,15 +32,43 @@ using GKCore.Utilities;
 
 namespace GKTreeSyncPlugin
 {
+#if !NETCOREAPP
+    using System.Drawing;
+    using System.Windows.Forms;
+#else
+    using Eto.Forms;
+    using Eto.Serialization.Xaml;
+    using GKUI.Components;
+#endif
+
     public partial class TSForm : Form, ILocalizable
     {
+#if NETCOREAPP
+        private Panel panel1;
+        private GroupBox groupBox1;
+        private Button btnSelectFile;
+        private Label lblFile;
+        private TextBox txtFile;
+        private ComboBox cmbRecordTypes;
+        private RadioButton rbSyncSelected;
+        private RadioButton rbSyncAll;
+        private CheckBox chkOnlyModified;
+        private GKListView lvRecords;
+        private TextArea mSyncRes;
+#endif
+
         private readonly IBaseWindow fBase;
         private readonly SyncTool fSyncTool;
         private readonly DiffListModel fListModel;
 
         public TSForm()
         {
+#if !NETCOREAPP
             InitializeComponent();
+#else
+            XamlReader.Load(this);
+            UIHelper.FixRadioButtons(this, groupBox1);
+#endif
         }
 
         public TSForm(Plugin plugin, IBaseWindow curBase) : this()
@@ -54,7 +81,9 @@ namespace GKTreeSyncPlugin
             fBase = curBase;
             fSyncTool = new SyncTool();
 
+#if !NETCOREAPP
             lvRecords.CheckBoxes = true;
+#endif
             fListModel = new DiffListModel(fBase.Context);
             lvRecords.ListMan = fListModel;
         }
@@ -79,7 +108,10 @@ namespace GKTreeSyncPlugin
 
         private void rbSyncRecords_CheckedChanged(object sender, EventArgs e)
         {
-            cmbRecordTypes.Enabled = !rbSyncAll.Checked;
+#if NETCOREAPP
+            if (sender is RadioButton radBtn && radBtn.HasFocus)
+#endif
+                cmbRecordTypes.Enabled = !rbSyncAll.Checked;
         }
 
         private void chkOnlyModified_CheckStateChanged(object sender, EventArgs e)
@@ -94,7 +126,11 @@ namespace GKTreeSyncPlugin
 
         private void UpdateLists()
         {
+#if !NETCOREAPP
             fListModel.ShowOnlyModified = chkOnlyModified.Checked;
+#else
+            fListModel.ShowOnlyModified = chkOnlyModified.Checked.Value;
+#endif
             fListModel.DataSource = fSyncTool.Results;
             lvRecords.UpdateContents();
         }
