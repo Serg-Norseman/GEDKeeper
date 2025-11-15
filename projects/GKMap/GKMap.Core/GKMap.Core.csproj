@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheProviders\MemoryCache.cs" />
+    <Compile Include="CacheProviders\SQLiteHelper.cs" />
     <Compile Include="CacheProviders\TileDataRecord.cs" />
     <Compile Include="CacheProviders\TileRecord.cs" />
     <Compile Include="MapObjects\MapMarker.cs" />

@@ -30,7 +30,7 @@ namespace GKMap.CacheProviders
         static SQLitePureImageCache()
         {
 #if !NETCOREAPP && !NETSTANDARD
-            SQLiteLoader.Load();
+            SQLiteHelper.Load();
 #endif
         }
 
