@@ -175,11 +175,7 @@ namespace GKCore.Controllers
             }
 
             if (linkName.StartsWith(GKData.INFO_HREF_VIEW)) {
-                string xref = linkName.Remove(0, GKData.INFO_HREF_VIEW.Length);
-                var mmRec = fBase.Context.Tree.FindXRef<GDMMultimediaRecord>(xref);
-                if (mmRec != null) {
-                    fBase.ShowMedia(mmRec, false);
-                }
+                fBase.ShowMedia(linkName, false);
             } else if (linkName.StartsWith(GKData.INFO_HREF_FILTER_INDI)) {
                 string xref = linkName.Remove(0, GKData.INFO_HREF_FILTER_INDI.Length);
                 var rec = fBase.Context.Tree.FindXRef<GDMRecord>(xref);

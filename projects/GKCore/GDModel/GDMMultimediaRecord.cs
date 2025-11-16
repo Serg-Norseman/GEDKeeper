@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -64,6 +64,24 @@ namespace GDModel
             base.Assign(sourceObj);
 
             AssignList(sourceObj.fFileReferences, fFileReferences);
+        }
+
+        /// <summary>
+        /// The MoveTo() merges records and their references, but does not change the text in the target.
+        /// </summary>
+        /// <param name="targetRecord"></param>
+        public override void MoveTo(GDMRecord targetRecord)
+        {
+            GDMMultimediaRecord targetMedia = (targetRecord as GDMMultimediaRecord);
+            if (targetMedia == null)
+                throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
+
+            base.MoveTo(targetRecord);
+
+            while (fFileReferences.Count > 0) {
+                var obj = fFileReferences.Extract(0);
+                targetMedia.FileReferences.Add(obj);
+            }
         }
 
         public override void Clear()

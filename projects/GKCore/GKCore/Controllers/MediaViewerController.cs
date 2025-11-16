@@ -43,11 +43,21 @@ namespace GKCore.Controllers
             get { return fMultimedia; }
             set {
                 fMultimedia = value;
-                GDMFileReferenceWithTitle fileRef = fMultimedia.FileReferences[0];
+                // FIXME
+                /*GDMFileReferenceWithTitle fileRef = fMultimedia.FileReferences[0];
                 if (fFileReference != fileRef) {
                     fFileReference = fileRef;
                     UpdateView();
-                }
+                }*/
+            }
+        }
+
+        public GDMFileReferenceWithTitle FileReference
+        {
+            get { return fFileReference; }
+            set {
+                fFileReference = value;
+                UpdateView();
             }
         }
 
@@ -68,7 +78,8 @@ namespace GKCore.Controllers
                 switch (mmKind) {
                     case MultimediaKind.mkImage:
                         {
-                            IImage img = fBase.Context.LoadMediaImage(fMultimedia, -1, -1, ExtRect.Empty, false, false);
+                            int fileNum = fMultimedia.FileReferences.IndexOf(fFileReference);
+                            IImage img = fBase.Context.LoadMediaImage(fMultimedia, fileNum, -1, -1, ExtRect.Empty, false, false);
                             if (img != null) {
                                 fView.SetViewImage(img);
                             }

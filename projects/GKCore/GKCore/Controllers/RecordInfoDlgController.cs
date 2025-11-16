@@ -61,11 +61,7 @@ namespace GKCore.Controllers
             }
 
             if (linkName.StartsWith(GKData.INFO_HREF_VIEW)) {
-                string xref = linkName.Remove(0, GKData.INFO_HREF_VIEW.Length);
-                var mmRec = fBase.Context.Tree.FindXRef<GDMMultimediaRecord>(xref);
-                if (mmRec != null) {
-                    fBase.ShowMedia(mmRec, false);
-                }
+                fBase.ShowMedia(linkName, false);
             } else {
                 var record = Base.Context.Tree.FindXRef<GDMRecord>(linkName);
                 fView.HyperView.Lines.Assign(fBase.GetRecordContent(record, RecordContentType.Quick));

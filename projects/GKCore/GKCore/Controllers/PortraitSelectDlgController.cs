@@ -74,7 +74,7 @@ namespace GKCore.Controllers
             GDMMultimediaRecord mmRec = fBase.Context.Tree.GetPtrValue<GDMMultimediaRecord>(fMultimediaLink);
             if (fMultimediaLink == null || mmRec == null) return;
 
-            IImage img = fBase.Context.LoadMediaImage(mmRec, -1, -1, ExtRect.Empty, false, false);
+            IImage img = fBase.Context.LoadMediaImage(mmRec, 0, -1, -1, ExtRect.Empty, false, false);
             if (img == null) return;
 
             fView.ImageCtl.OpenImage(null, img);

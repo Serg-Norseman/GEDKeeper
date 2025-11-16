@@ -77,7 +77,8 @@ namespace GKTests.Stubs
         public void SaveFileEx(bool saveAs) { }
         public void SelectRecordByXRef(string xref, bool delayedTransition = false) { }
         public void Show() { }
-        public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal) { }
+        public void ShowMedia(string link, bool modal) { }
+        public void ShowMedia(GDMMultimediaRecord mediaRec, int fileNum, bool modal) { }
 
         public List<GDMRecord> GetContentList(GDMRecordType recType) { return new List<GDMRecord>(); }
         public StringList GetRecordContent(GDMRecord record, RecordContentType contentType) { return new StringList(); }

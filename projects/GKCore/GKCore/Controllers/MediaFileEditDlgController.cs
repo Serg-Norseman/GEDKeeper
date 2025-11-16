@@ -26,7 +26,6 @@ using GDModel;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Media;
 using GKCore.Options;
@@ -37,24 +36,24 @@ namespace GKCore.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public sealed class MediaEditDlgController : DialogController<IMediaEditDlg>
+    public sealed class MediaFileEditDlgController : DialogController<IMediaFileEditDlg>
     {
-        private GDMMultimediaRecord fMultimediaRecord;
+        private GDMFileReferenceWithTitle fFileRef;
         private bool fIsNew;
 
-        public GDMMultimediaRecord MultimediaRecord
+        public GDMFileReferenceWithTitle FileRef
         {
-            get { return fMultimediaRecord; }
+            get { return fFileRef; }
             set {
-                if (fMultimediaRecord != value) {
-                    fMultimediaRecord = value;
+                if (fFileRef != value) {
+                    fFileRef = value;
                     UpdateView();
                 }
             }
         }
 
 
-        public MediaEditDlgController(IMediaEditDlg view) : base(view)
+        public MediaFileEditDlgController(IMediaFileEditDlg view) : base(view)
         {
             for (GDMMediaType mt = GDMMediaType.mtUnknown; mt <= GDMMediaType.mtLast; mt++) {
                 fView.MediaType.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
@@ -63,35 +62,10 @@ namespace GKCore.Controllers
             fView.Name.Activate();
         }
 
-        public override void Init(IBaseWindow baseWin)
-        {
-            base.Init(baseWin);
-
-            fView.FilesList.ListModel = new MediaFilesListModel(fView, baseWin, fLocalUndoman);
-            fView.NotesList.ListModel = new NoteLinksListModel(fView, baseWin, fLocalUndoman);
-            fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
-            fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
-
-            fView.FilesList.OnModify += ModifyFilesSheet;
-        }
-
-        public override void Done()
-        {
-            fView.FilesList.ListModel.SaveSettings();
-            fView.NotesList.ListModel.SaveSettings();
-            fView.SourcesList.ListModel.SaveSettings();
-            fView.UserRefList.ListModel.SaveSettings();
-        }
-
-        private void ModifyFilesSheet(object sender, ModifyEventArgs eArgs)
-        {
-            UpdateControls();
-        }
-
         public override bool Accept()
         {
             try {
-                GDMFileReferenceWithTitle fileRef = fMultimediaRecord.FileReferences[0];
+                GDMFileReferenceWithTitle fileRef = fFileRef;
 
                 if (fIsNew) {
                     MediaStoreType gst = fView.StoreType.GetSelectedTag<MediaStoreType>();
@@ -119,7 +93,7 @@ namespace GKCore.Controllers
                 UpdateControls();
 
                 fLocalUndoman.Commit();
-                fBase.NotifyRecord(fMultimediaRecord, RecordAction.raEdit);
+                //fBase.NotifyRecord(fMultimediaRecord, RecordAction.raEdit);
 
                 return true;
             } catch (Exception ex) {
@@ -130,17 +104,12 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.FilesList.ListModel.DataOwner = fMultimediaRecord;
-            fView.NotesList.ListModel.DataOwner = fMultimediaRecord;
-            fView.SourcesList.ListModel.DataOwner = fMultimediaRecord;
-            fView.UserRefList.ListModel.DataOwner = fMultimediaRecord;
-
             UpdateControls();
         }
 
         private void UpdateControls()
         {
-            GDMFileReferenceWithTitle fileRef = fMultimediaRecord.FileReferences[0];
+            GDMFileReferenceWithTitle fileRef = fFileRef;
 
             fIsNew = (fileRef.StringValue == "");
 
@@ -250,12 +219,11 @@ namespace GKCore.Controllers
 
         public void View()
         {
-            if (fIsNew) {
+            /*if (fIsNew) {
                 Accept();
             }
 
-            // Always a zero file
-            fBase.ShowMedia(fMultimediaRecord, 0, true);
+            fBase.ShowMedia(fMultimediaRecord, true);*/
         }
 
         public override void SetLocale()
@@ -264,11 +232,6 @@ namespace GKCore.Controllers
 
             GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
             GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
-            GetControl<ITabPage>("pageCommon").Text = LangMan.LS(LSID.Common);
-            GetControl<ITabPage>("pageFiles").Text = LangMan.LS(LSID.MediaFiles);
-            GetControl<ITabPage>("pageNotes").Text = LangMan.LS(LSID.RPNotes);
-            GetControl<ITabPage>("pageSources").Text = LangMan.LS(LSID.RPSources);
-            GetControl<ITabPage>("pageUserRefs").Text = LangMan.LS(LSID.UserRefs);
             GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Title);
             GetControl<ILabel>("lblType").Text = LangMan.LS(LSID.Type);
             GetControl<ILabel>("lblStoreType").Text = LangMan.LS(LSID.StoreType);

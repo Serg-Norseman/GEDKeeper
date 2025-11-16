@@ -264,7 +264,8 @@ namespace GKCore.Lists
             if (fBaseWin != null) {
                 var refRec = GetReferenceRecord(itemData);
                 if (refRec is GDMMultimediaRecord mediaRec) {
-                    fBaseWin.ShowMedia(mediaRec, false);
+                    // Always a zero file, because links from other records to a multimedia cannot contain a subitem.
+                    fBaseWin.ShowMedia(mediaRec, 0, false);
                 } else {
                     BaseController.ViewRecordInfo(fOwner, fBaseWin, refRec);
                 }

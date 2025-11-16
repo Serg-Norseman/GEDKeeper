@@ -615,9 +615,14 @@ namespace GKUI.Forms
             fController.SetFilter();
         }
 
-        public void ShowMedia(GDMMultimediaRecord mediaRec, bool modal)
+        public void ShowMedia(string link, bool modal)
         {
-            BaseController.ShowMedia(this, mediaRec, modal);
+            BaseController.ShowMedia(this, link, modal);
+        }
+
+        public void ShowMedia(GDMMultimediaRecord mediaRec, int fileNum, bool modal)
+        {
+            BaseController.ShowMedia(this, mediaRec, fileNum, modal);
         }
 
         #endregion

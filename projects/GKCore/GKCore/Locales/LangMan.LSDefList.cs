@@ -1107,6 +1107,7 @@ namespace GKCore.Locales
             /* 1052 */ "No age on event date",
             /* 1053 */ "Subject",
             /* 1054 */ "Override themes font",
+            /* 1055 */ "Files",
         };
     }
 }

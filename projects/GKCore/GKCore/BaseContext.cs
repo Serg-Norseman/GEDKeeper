@@ -956,7 +956,7 @@ namespace GKCore
         /// <param name="cutoutArea"></param>
         /// <param name="throwException"></param>
         /// <returns></returns>
-        public IImage LoadMediaImage(GDMMultimediaRecord mmRec, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool reduce, bool throwException)
+        public IImage LoadMediaImage(GDMMultimediaRecord mmRec, int fileNum, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool reduce, bool throwException)
         {
             if (mmRec == null || mmRec.FileReferences.Count < 1) return null;
 
@@ -967,12 +967,13 @@ namespace GKCore
 
                 Stream inputStream;
 
-                string cachedFile = GetCachedImageFilename(mmRec.UID);
+                string cachedFile = GetCachedImageFilename(mmRec.UID, fileNum);
                 if (File.Exists(cachedFile)) {
                     // if cached, then already transformed
                     inputStream = new FileStream(cachedFile, FileMode.Open, FileAccess.Read, FileShare.Read);
                 } else {
-                    inputStream = MediaLoad(mmRec.FileReferences[0], throwException);
+                    var fileRef = mmRec.FileReferences[fileNum];
+                    inputStream = MediaLoad(fileRef, throwException);
                     if (inputStream != null) {
                         var transformStream = gfxProvider.CheckOrientation(inputStream);
                         if (transformStream != inputStream) {
@@ -1000,9 +1001,9 @@ namespace GKCore
             return result;
         }
 
-        internal static string GetCachedImageFilename(string imageUID)
+        internal static string GetCachedImageFilename(string imageUID, int fileNum)
         {
-            return AppHost.GetCachePath() + imageUID + ".bmp";
+            return $"{AppHost.GetCachePath()}{imageUID}_{fileNum}.bmp";
         }
 
         // Used in FamilyBookExporter, TreeChart and PersonEdit
@@ -1017,7 +1018,7 @@ namespace GKCore
 
                 if (mmLink != null && mmRec != null) {
                     var cutoutArea = mmLink.IsPrimaryCutout ? mmLink.CutoutPosition.Value : ExtRect.CreateEmpty();
-                    result = LoadMediaImage(mmRec, thumbWidth, thumbHeight, cutoutArea, true, throwException);
+                    result = LoadMediaImage(mmRec, 0, thumbWidth, thumbHeight, cutoutArea, true, throwException);
                 }
             } catch (MediaFileNotFoundException) {
                 throw;

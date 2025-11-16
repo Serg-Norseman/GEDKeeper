@@ -53,6 +53,7 @@ namespace GKUI.Forms
         private Label lblFile;
         private TextBox txtFile;
         private Button btnFileSelect;
+        private GKSheetList fFilesList;
         private GKSheetList fNotesList;
         private GKSheetList fSourcesList;
         private GKSheetList fUserRefList;
@@ -67,6 +68,11 @@ namespace GKUI.Forms
         }
 
         #region View Interface
+
+        ISheetList IMediaEditDlg.FilesList
+        {
+            get { return fFilesList; }
+        }
 
         ISheetList IMediaEditDlg.NotesList
         {
@@ -120,9 +126,9 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
-        private void btnFileSelect_Click(object sender, EventArgs e)
+        private async void btnFileSelect_Click(object sender, EventArgs e)
         {
-            fController.SelectFile();
+            await fController.SelectFile();
         }
 
         private void btnView_Click(object sender, EventArgs e)

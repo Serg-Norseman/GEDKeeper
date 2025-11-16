@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -50,7 +50,8 @@ namespace GKCore.Design
         void SaveFile(string fileName);
         void SaveFileEx(bool saveAs);
         void SelectRecordByXRef(string xref, bool delayedTransition = false);
-        void ShowMedia(GDMMultimediaRecord mediaRec, bool modal);
+        void ShowMedia(string link, bool modal);
+        void ShowMedia(GDMMultimediaRecord mediaRec, int fileNum, bool modal);
         void ShowRecordsTab(GDMRecordType recType);
         void UpdateChangedRecords(GDMRecord select = null);
         void UpdateControls(bool forceDeactivate, bool blockDependent = false);

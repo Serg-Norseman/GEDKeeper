@@ -38,6 +38,9 @@
           </TableLayout>
         </TabPage>
 
+        <TabPage x:Name="pageFiles">
+          <comcom:GKSheetList x:Name="fFilesList" />
+        </TabPage>
         <TabPage x:Name="pageNotes">
           <comcom:GKSheetList x:Name="fNotesList" />
         </TabPage>

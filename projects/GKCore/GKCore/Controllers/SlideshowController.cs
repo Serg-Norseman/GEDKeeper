@@ -119,7 +119,7 @@ namespace GKCore.Controllers
 
             fCurrentText = imageRef.Title;
 
-            IImage img = fBase.Context.LoadMediaImage(imageRef.MediaRec, -1, -1, ExtRect.Empty, false, false);
+            IImage img = fBase.Context.LoadMediaImage(imageRef.MediaRec, 0, -1, -1, ExtRect.Empty, false, false);
             if (img != null) {
                 fView.SetImage(img);
             }

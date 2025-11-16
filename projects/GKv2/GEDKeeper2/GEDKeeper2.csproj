@@ -197,6 +197,12 @@
     <Compile Include="GKUI\Forms\MediaEditDlg.Designer.cs">
       <DependentUpon>MediaEditDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="GKUI\Forms\MediaFileEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GKUI\Forms\MediaFileEditDlg.Designer.cs">
+      <DependentUpon>MediaFileEditDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="GKUI\Forms\MediaViewerWin.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -1365,7 +1365,7 @@ namespace GKCore.Controllers
                 for (int i = 0; i < cvSubjects.Length; i++) {
                     var subject = cvSubjects[i];
 
-                    var faceImage = baseContext.LoadMediaImage(mediaRec, -1, -1, subject.Face, true, false);
+                    var faceImage = baseContext.LoadMediaImage(mediaRec, 0, -1, -1, subject.Face, true, false);
                     if (faceImage == null) continue;
 
                     string xref = cvImpl.PredictFace(faceImage, out float confidence);
@@ -1402,7 +1402,7 @@ namespace GKCore.Controllers
             if (cvImpl.HasMediaLink(linkSign)) return;
 
             ExtRect region = mmLink.CutoutPosition.Value;
-            var image = baseWin.Context.LoadMediaImage(mediaRecord, -1, -1, region, true, false);
+            var image = baseWin.Context.LoadMediaImage(mediaRecord, 0, -1, -1, region, true, false);
             cvImpl.TrainFace(image, (int)iRec.GetId(), iRec.XRef);
             cvImpl.AddMediaLink(linkSign);
         }
@@ -1712,12 +1712,25 @@ namespace GKCore.Controllers
 
         #endregion
 
-        public static void ShowMedia(IBaseWindow baseWin, GDMMultimediaRecord mediaRec, bool modal)
+        public static void ShowMedia(IBaseWindow baseWin, string link, bool modal)
+        {
+            string[] parts = link.Remove(0, GKData.INFO_HREF_VIEW.Length).Split('_');
+
+            string xref = parts[0];
+            int fileNum = (parts.Length > 1) ? int.Parse(parts[1]) : 0;
+
+            var mmRec = baseWin.Context.Tree.FindXRef<GDMMultimediaRecord>(xref);
+            if (mmRec != null) {
+                ShowMedia(baseWin, mmRec, fileNum, false);
+            }
+        }
+
+        public static void ShowMedia(IBaseWindow baseWin, GDMMultimediaRecord mediaRec, int fileNum, bool modal)
         {
             if (mediaRec == null)
                 throw new ArgumentNullException(nameof(mediaRec));
 
-            GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
+            GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[fileNum];
             if (fileRef == null) return;
 
             if (!GKUtils.UseEmbeddedViewer(fileRef.GetMultimediaFormat())) {
@@ -1727,6 +1740,8 @@ namespace GKCore.Controllers
                 var mediaViewer = AppHost.Container.Resolve<IMediaViewerWin>(baseWin);
                 try {
                     mediaViewer.MultimediaRecord = mediaRec;
+                    mediaViewer.FileReference = fileRef;
+
                     mediaViewer.Show(true);
                 } catch (Exception ex) {
                     if (mediaViewer != null) mediaViewer.Dispose();

@@ -2808,14 +2808,17 @@ namespace GKCore
                 try {
                     summary.Clear();
                     if (mediaRec != null) {
-                        GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
-                        string mediaTitle = (fileRef == null) ? LangMan.LS(LSID.Unknown) : fileRef.Title;
+                        for (int i = 0, num = mediaRec.FileReferences.Count; i < num; i++) {
+                            GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[i];
 
-                        summary.Add("");
-                        summary.Add("[u][b][size=+1]" + mediaTitle + "[/size][/b][/u]");
-                        summary.Add("");
-                        if (fileRef != null) {
-                            summary.Add("( " + HyperLink(GKData.INFO_HREF_VIEW + mediaRec.XRef, LangMan.LS(LSID.View)) + " )");
+                            string mediaTitle = (fileRef == null) ? LangMan.LS(LSID.Unknown) : fileRef.Title;
+
+                            summary.Add("");
+                            summary.Add("[u][b][size=+1]" + mediaTitle + "[/size][/b][/u]");
+                            summary.Add("");
+                            if (fileRef != null) {
+                                summary.Add("( " + HyperLink($"{GKData.INFO_HREF_VIEW}{mediaRec.XRef}_{i}", LangMan.LS(LSID.View)) + " )");
+                            }
                         }
 
                         ShowSubjectLinks(baseContext.Tree, mediaRec, summary);

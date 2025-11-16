@@ -71,7 +71,7 @@ namespace GKCore.Media
             // portrait doesn't define for individual
             if (string.IsNullOrEmpty(imageUID)) return null;
 
-            string cachedFile = BaseContext.GetCachedImageFilename(imageUID);
+            string cachedFile = BaseContext.GetCachedImageFilename(imageUID, 0);
 
             // check in-memory cache
             if (fMemoryCache.TryGetValue(cachedFile, out result)) {
@@ -108,7 +108,7 @@ namespace GKCore.Media
             if (string.IsNullOrEmpty(imageUID)) return;
 
             try {
-                string cachedFile = BaseContext.GetCachedImageFilename(imageUID);
+                string cachedFile = BaseContext.GetCachedImageFilename(imageUID, 0);
 
                 if (fMemoryCache.ContainsKey(cachedFile)) {
                     fMemoryCache.Remove(cachedFile);

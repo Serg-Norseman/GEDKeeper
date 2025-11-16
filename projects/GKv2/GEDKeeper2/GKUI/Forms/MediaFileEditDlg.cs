@@ -24,90 +24,56 @@ using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using GKCore.Lists;
 using GKCore.Locales;
-using GKUI.Components;
 
 namespace GKUI.Forms
 {
-    public sealed partial class MediaEditDlg : CommonDialog<IMediaEditDlg, MediaEditDlgController>, IMediaEditDlg
+    public sealed partial class MediaFileEditDlg : CommonDialog<IMediaFileEditDlg, MediaFileEditDlgController>, IMediaFileEditDlg
     {
         #region Design components
 
-        private GKSheetList fFilesList;
-        private GKSheetList fNotesList;
-        private GKSheetList fSourcesList;
-        private GKSheetList fUserRefList;
-
         #endregion
 
-        public GDMMultimediaRecord MultimediaRecord
+        public GDMFileReferenceWithTitle FileRef
         {
-            get { return fController.MultimediaRecord; }
-            set { fController.MultimediaRecord = value; }
+            get { return fController.FileRef; }
+            set { fController.FileRef = value; }
         }
 
         #region View Interface
 
-        ISheetList IMediaEditDlg.FilesList
-        {
-            get { return fFilesList; }
-        }
-
-        ISheetList IMediaEditDlg.NotesList
-        {
-            get { return fNotesList; }
-        }
-
-        ISheetList IMediaEditDlg.SourcesList
-        {
-            get { return fSourcesList; }
-        }
-
-        ISheetList IMediaEditDlg.UserRefList
-        {
-            get { return fUserRefList; }
-        }
-
-        IComboBox IMediaEditDlg.MediaType
+        IComboBox IMediaFileDlg.MediaType
         {
             get { return GetControlHandler<IComboBox>(cmbMediaType); }
         }
 
-        IComboBox IMediaEditDlg.StoreType
+        IComboBox IMediaFileDlg.StoreType
         {
             get { return GetControlHandler<IComboBox>(cmbStoreType); }
         }
 
-        ITextBox IMediaEditDlg.Name
+        ITextBox IMediaFileDlg.Name
         {
             get { return GetControlHandler<ITextBox>(txtName); }
         }
 
-        ITextBox IMediaEditDlg.File
+        ITextBox IMediaFileDlg.File
         {
             get { return GetControlHandler<ITextBox>(txtFile); }
         }
 
-        IButton IMediaEditDlg.FileSelectButton
+        IButton IMediaFileDlg.FileSelectButton
         {
             get { return GetControlHandler<IButton>(btnFileSelect); }
         }
 
         #endregion
 
-        public MediaEditDlg(IBaseWindow baseWin)
+        public MediaFileEditDlg(IBaseWindow baseWin)
         {
             InitializeComponent();
 
-            tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
-
-            fFilesList = new GKSheetList(pageFiles);
-            fNotesList = new GKSheetList(pageNotes);
-            fSourcesList = new GKSheetList(pageSources);
-            fUserRefList = new GKSheetList(pageUserRefs);
-
-            fController = new MediaEditDlgController(this);
+            fController = new MediaFileEditDlgController(this);
             fController.Init(baseWin);
         }
 

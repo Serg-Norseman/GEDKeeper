@@ -1,14 +1,10 @@
 ﻿namespace GKUI.Forms
 {
-    partial class MediaEditDlg
+    partial class MediaFileEditDlg
     {
-        private GKUI.Components.GKTabControl tabsData;
-        private System.Windows.Forms.TabPage pageNotes;
-        private System.Windows.Forms.TabPage pageSources;
         private System.Windows.Forms.Button btnAccept;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnView;
-        private System.Windows.Forms.TabPage pageCommon;
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Label lblType;
@@ -18,13 +14,9 @@
         private System.Windows.Forms.Label lblFile;
         private System.Windows.Forms.TextBox txtFile;
         private System.Windows.Forms.Button btnFileSelect;
-        private System.Windows.Forms.TabPage pageUserRefs;
-        private System.Windows.Forms.TabPage pageFiles;
 
         private void InitializeComponent()
         {
-            this.tabsData = new GKUI.Components.GKTabControl();
-            this.pageCommon = new System.Windows.Forms.TabPage();
             this.lblName = new System.Windows.Forms.Label();
             this.lblType = new System.Windows.Forms.Label();
             this.lblStoreType = new System.Windows.Forms.Label();
@@ -34,47 +26,10 @@
             this.cmbStoreType = new System.Windows.Forms.ComboBox();
             this.txtFile = new System.Windows.Forms.TextBox();
             this.btnFileSelect = new System.Windows.Forms.Button();
-            this.pageNotes = new System.Windows.Forms.TabPage();
-            this.pageSources = new System.Windows.Forms.TabPage();
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnView = new System.Windows.Forms.Button();
-            this.pageUserRefs = new System.Windows.Forms.TabPage();
-            this.pageFiles = new System.Windows.Forms.TabPage();
-            this.tabsData.SuspendLayout();
-            this.pageCommon.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tabsData
-            // 
-            this.tabsData.Controls.Add(this.pageCommon);
-            this.tabsData.Controls.Add(this.pageFiles);
-            this.tabsData.Controls.Add(this.pageNotes);
-            this.tabsData.Controls.Add(this.pageSources);
-            this.tabsData.Controls.Add(this.pageUserRefs);
-            this.tabsData.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tabsData.Location = new System.Drawing.Point(0, 0);
-            this.tabsData.Name = "tabsData";
-            this.tabsData.SelectedIndex = 0;
-            this.tabsData.Size = new System.Drawing.Size(728, 302);
-            this.tabsData.TabIndex = 0;
-            // 
-            // pageCommon
-            // 
-            this.pageCommon.Controls.Add(this.lblName);
-            this.pageCommon.Controls.Add(this.lblType);
-            this.pageCommon.Controls.Add(this.lblStoreType);
-            this.pageCommon.Controls.Add(this.lblFile);
-            this.pageCommon.Controls.Add(this.txtName);
-            this.pageCommon.Controls.Add(this.cmbMediaType);
-            this.pageCommon.Controls.Add(this.cmbStoreType);
-            this.pageCommon.Controls.Add(this.txtFile);
-            this.pageCommon.Controls.Add(this.btnFileSelect);
-            this.pageCommon.Location = new System.Drawing.Point(4, 26);
-            this.pageCommon.Name = "pageCommon";
-            this.pageCommon.Size = new System.Drawing.Size(720, 272);
-            this.pageCommon.TabIndex = 0;
-            this.pageCommon.Text = "pageCommon";
             // 
             // lblName
             // 
@@ -158,43 +113,10 @@
             this.btnFileSelect.Text = "...";
             this.btnFileSelect.Click += new System.EventHandler(this.btnFileSelect_Click);
             // 
-            // pageFiles
-            // 
-            this.pageFiles.Location = new System.Drawing.Point(4, 26);
-            this.pageFiles.Name = "pageFiles";
-            this.pageFiles.Size = new System.Drawing.Size(720, 272);
-            this.pageFiles.TabIndex = 1;
-            this.pageFiles.Text = "pageFiles";
-            // 
-            // pageNotes
-            // 
-            this.pageNotes.Location = new System.Drawing.Point(4, 26);
-            this.pageNotes.Name = "pageNotes";
-            this.pageNotes.Size = new System.Drawing.Size(720, 272);
-            this.pageNotes.TabIndex = 2;
-            this.pageNotes.Text = "pageNotes";
-            // 
-            // pageSources
-            // 
-            this.pageSources.Location = new System.Drawing.Point(4, 26);
-            this.pageSources.Name = "pageSources";
-            this.pageSources.Size = new System.Drawing.Size(720, 272);
-            this.pageSources.TabIndex = 3;
-            this.pageSources.Text = "pageSources";
-            // 
-            // pageUserRefs
-            // 
-            this.pageUserRefs.Location = new System.Drawing.Point(4, 22);
-            this.pageUserRefs.Margin = new System.Windows.Forms.Padding(2);
-            this.pageUserRefs.Name = "pageUserRefs";
-            this.pageUserRefs.Size = new System.Drawing.Size(691, 230);
-            this.pageUserRefs.TabIndex = 4;
-            this.pageUserRefs.Text = "pageUserRefs";
-            // 
             // btnAccept
             // 
             this.btnAccept.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAccept.Location = new System.Drawing.Point(482, 321);
+            this.btnAccept.Location = new System.Drawing.Point(482, 191);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(113, 30);
             this.btnAccept.TabIndex = 2;
@@ -206,7 +128,7 @@
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(605, 321);
+            this.btnCancel.Location = new System.Drawing.Point(605, 191);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(113, 30);
             this.btnCancel.TabIndex = 3;
@@ -216,7 +138,7 @@
             // 
             // btnView
             // 
-            this.btnView.Location = new System.Drawing.Point(11, 321);
+            this.btnView.Location = new System.Drawing.Point(11, 191);
             this.btnView.Name = "btnView";
             this.btnView.Size = new System.Drawing.Size(114, 30);
             this.btnView.TabIndex = 1;
@@ -229,8 +151,16 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(728, 365);
-            this.Controls.Add(this.tabsData);
+            this.ClientSize = new System.Drawing.Size(728, 235);
+            this.Controls.Add(this.lblName);
+            this.Controls.Add(this.lblType);
+            this.Controls.Add(this.lblStoreType);
+            this.Controls.Add(this.lblFile);
+            this.Controls.Add(this.txtName);
+            this.Controls.Add(this.cmbMediaType);
+            this.Controls.Add(this.cmbStoreType);
+            this.Controls.Add(this.txtFile);
+            this.Controls.Add(this.btnFileSelect);
             this.Controls.Add(this.btnAccept);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnView);
@@ -238,13 +168,10 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "MediaEditDlg";
+            this.Name = "MediaFileEditDlg";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "MediaEditDlg";
-            this.tabsData.ResumeLayout(false);
-            this.pageCommon.ResumeLayout(false);
-            this.pageCommon.PerformLayout();
+            this.Text = "MediaFileEditDlg";
             this.ResumeLayout(false);
         }
     }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -84,6 +84,9 @@ namespace GKCore.Operations
 
         otDNATestAdd,
         otDNATestRemove,
+
+        otMediaFileAdd,
+        otMediaFileRemove,
     }
 
     /// <summary>
@@ -235,6 +238,11 @@ namespace GKCore.Operations
                 case OperationType.otDNATestAdd:
                 case OperationType.otDNATestRemove:
                     result = ProcessDNATest(redo);
+                    break;
+
+                case OperationType.otMediaFileAdd:
+                case OperationType.otMediaFileRemove:
+                    result = ProcessMediaFile(redo);
                     break;
 
                 default:
@@ -717,6 +725,26 @@ namespace GKCore.Operations
                 indiRec.DNATests.Add(dnaTest);
             } else {
                 indiRec.DNATests.Extract(dnaTest);
+            }
+            return true;
+        }
+
+        private bool ProcessMediaFile(bool redo)
+        {
+            var mmRec = fObj as GDMMultimediaRecord;
+            var fileRef = fNewVal as GDMFileReferenceWithTitle;
+
+            if (mmRec == null || fileRef == null) {
+                return false;
+            }
+
+            if (fType == OperationType.otMediaFileRemove) {
+                redo = !redo;
+            }
+            if (redo) {
+                mmRec.FileReferences.Add(fileRef);
+            } else {
+                mmRec.FileReferences.Extract(fileRef);
             }
             return true;
         }

@@ -44,6 +44,12 @@ namespace GKUI.Forms
             set { fController.MultimediaRecord = value; }
         }
 
+        public GDMFileReferenceWithTitle FileReference
+        {
+            get { return fController.FileReference; }
+            set { fController.FileReference = value; }
+        }
+
         public IWindow OwnerWindow
         {
             get { return fController.Base; }

@@ -24,10 +24,27 @@ using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
+    public interface IMediaFileDlg : ICommonDialog
+    {
+        IComboBox MediaType { get; }
+        IComboBox StoreType { get; }
+        ITextBox Name { get; }
+        ITextBox File { get; }
+        IButton FileSelectButton { get; }
+    }
+
+
+    public interface IMediaFileEditDlg : IMediaFileDlg
+    {
+        GDMFileReferenceWithTitle FileRef { get; set; }
+    }
+
+
     public interface IMediaEditDlg : ICommonDialog
     {
         GDMMultimediaRecord MultimediaRecord { get; set; }
 
+        ISheetList FilesList { get; }
         ISheetList NotesList { get; }
         ISheetList SourcesList { get; }
         ISheetList UserRefList { get; }

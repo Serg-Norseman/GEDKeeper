@@ -32,6 +32,9 @@ namespace GKCore.Options
         }
     }
 
+    /// <summary>
+    /// New items can only be added to the end.
+    /// </summary>
     public enum GKListType
     {
         ltNone,
@@ -92,8 +95,11 @@ namespace GKCore.Options
         // services
         stEventDefs,
 
+        // rtMultimedia substructures
+        stMediaFiles,
+
         ltFirst = rtIndividual,
-        ltLast = stEventDefs,
+        ltLast = stMediaFiles,
     }
 
 
@@ -160,6 +166,9 @@ namespace GKCore.Options
 
             // services
             "EventDefs",
+
+            // rtMultimedia substructures
+            "MediaFiles",
         };
 
         private readonly ListColumns fColumns;
@@ -390,6 +399,10 @@ namespace GKCore.Options
 
                 case GKListType.stEventDefs:
                     result = EventDefsListModel.CreateListColumns();
+                    break;
+
+                case GKListType.stMediaFiles:
+                    result = MediaFilesListModel.CreateListColumns();
                     break;
 
                 default:
