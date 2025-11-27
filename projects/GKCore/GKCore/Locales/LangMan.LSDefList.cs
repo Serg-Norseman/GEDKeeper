@@ -450,7 +450,7 @@ namespace GKCore.Locales
             /* 421 */ "Divorce",
             /* 422 */ "Link to file",
             /* 423 */ "Saving to the archive",
-            /* 424 */ "Saving to the store",
+            /* 424 */ "Saving to the store", // Deprecated
             /* 425 */ "-",
             /* 426 */ "Audio",
             /* 427 */ "Book",

@@ -99,7 +99,7 @@ namespace GKUI.Forms
 
             fController = new BaseWinController(this, true);
             fContext = fController.Context;
-            ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
+            fContext.ModifiedChanged += BaseContext_ModifiedChanged;
 
             tabsRecords.SuspendLayout();
             CreatePage("Individuals", GDMRecordType.rtIndividual);
@@ -331,8 +331,6 @@ namespace GKUI.Forms
                 storeType = MediaStoreType.mstRelativeReference;
             } else if (sender == miContMediaMoveFile2Arc) {
                 storeType = MediaStoreType.mstArchive;
-            } else if (sender == miContMediaMoveFile2Stg) {
-                storeType = MediaStoreType.mstStorage;
             } else {
                 return;
             }

@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using BSLib;
 using GKCore;
 using GKCore.Design;
@@ -37,7 +38,9 @@ namespace GDModel.Providers.GEDCOM
         private const string EmptyRecordContent = "---";
 
         private readonly BaseContext fBaseContext;
+        private readonly int fFileVer;
         private readonly GEDCOMFormat fFormat;
+        private readonly string fMediaContainerName;
         private readonly IProgressController fProgress;
         private readonly GDMTree fTree;
 
@@ -45,8 +48,12 @@ namespace GDModel.Providers.GEDCOM
         {
             fBaseContext = baseContext;
             fTree = fBaseContext.Tree;
-            fFormat = GEDCOMProvider.GetGEDCOMFormat(fTree, out _);
             fProgress = progress;
+
+            fMediaContainerName = Path.GetFileNameWithoutExtension(fBaseContext.FileName);
+
+            fFormat = GEDCOMProvider.GetGEDCOMFormat(fTree, out _);
+            fFileVer = (fFormat == GEDCOMFormat.Native) ? ConvertHelper.ParseInt(fTree.Header.Source.Version, GKData.APP_FORMAT_DEFVER) : -1;
         }
 
         private void TransformNote(GDMNotes note)
@@ -382,26 +389,10 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        private void CheckMultimediaRecord(GDMMultimediaRecord mmRec, int fileVer)
+        private void CheckMultimediaRecord(GDMMultimediaRecord mmRec)
         {
             for (int i = 0; i < mmRec.FileReferences.Count; i++) {
-                GDMFileReferenceWithTitle fileRef = mmRec.FileReferences[i];
-
-                GDMMultimediaFormat mmFormat = fileRef.GetMultimediaFormat();
-                if (mmFormat == GDMMultimediaFormat.mfUnknown || mmFormat == GDMMultimediaFormat.mfNone) {
-                    // tag 'FORM' can be corrupted or GEDCOMCore in past not recognize format attempt recovery
-                    fileRef.MultimediaFormat = GDMFileReference.GetMultimediaExt(fileRef.StringValue);
-                }
-
-                if (fFormat == GEDCOMFormat.Native && fileVer == 39) {
-                    // the transition to normalized names after GKv39
-                    // only for not direct references AND not relative references (platform specific paths)
-
-                    var storeType = MediaStore.GetStoreType(fileRef.StringValue);
-                    if (storeType != MediaStoreType.mstReference && storeType != MediaStoreType.mstRelativeReference) {
-                        fileRef.StringValue = FileHelper.NormalizeFilename(fileRef.StringValue);
-                    }
-                }
+                CheckFileReference(mmRec.FileReferences[i]);
             }
 
             // Empty records in files from other programs
@@ -413,7 +404,50 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        private void CheckNoteRecord(GDMNoteRecord noteRec, int fileVer)
+        private void CheckFileReference(GDMFileReferenceWithTitle fileRef)
+        {
+            GDMMultimediaFormat mmFormat = fileRef.GetMultimediaFormat();
+            if (mmFormat == GDMMultimediaFormat.mfUnknown || mmFormat == GDMMultimediaFormat.mfNone) {
+                // tag 'FORM' can be corrupted or GEDCOMCore in past not recognize format attempt recovery
+                fileRef.MultimediaFormat = GDMFileReference.GetMultimediaExt(fileRef.StringValue);
+            }
+
+            var storeType = MediaStore.GetStoreType(fileRef.StringValue);
+
+            if (fFormat == GEDCOMFormat.Native) {
+                if (fFileVer < 48) {
+                    // the transition to normalized names for all paths
+                    // https://en.wikipedia.org/wiki/File_URI_scheme
+
+                    if (storeType != MediaStoreType.mstURL) {
+                        fileRef.StringValue = FileHelper.NormalizeFilename(fileRef.StringValue);
+                    }
+
+                    // stg -> relative path
+                    if (storeType == MediaStoreType.mstStorage_Old) {
+                        string filePath = fileRef.StringValue;
+                        filePath = filePath.Replace("stg:", $"rel:./{fMediaContainerName}/");
+                        fileRef.StringValue = filePath;
+                    }
+
+                    // TODO: rel -> file:./relative_path
+                    // TODO: abs -> file:///absolute_path
+                    // TODO: arc -> archive_relative_path
+                } else if (fFileVer <= 39) {
+                    // obsolete
+                    // the transition to normalized names after GKv39
+                    // only for not direct references AND not relative references (platform specific paths)
+
+                    if (storeType != MediaStoreType.mstReference && storeType != MediaStoreType.mstRelativeReference) {
+                        fileRef.StringValue = FileHelper.NormalizeFilename(fileRef.StringValue);
+                    }
+                }
+            } else {
+                // todo
+            }
+        }
+
+        private void CheckNoteRecord(GDMNoteRecord noteRec)
         {
             // Empty records in files from other programs
             if (noteRec.Lines.Count == 0) {
@@ -445,14 +479,14 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        private void CheckRepositoryRecord(GDMRepositoryRecord repoRec, int fileVer)
+        private void CheckRepositoryRecord(GDMRepositoryRecord repoRec)
         {
             if (repoRec.HasAddress) {
                 CheckAddress(repoRec.Address);
             }
         }
 
-        private void CheckRecord(GDMRecord rec, int fileVer)
+        private void CheckRecord(GDMRecord rec)
         {
             CheckTagWithNotes(rec);
             CheckTagWithMultimediaLinks(rec);
@@ -482,15 +516,15 @@ namespace GDModel.Providers.GEDCOM
                     break;
 
                 case GDMRecordType.rtMultimedia:
-                    CheckMultimediaRecord(rec as GDMMultimediaRecord, fileVer);
+                    CheckMultimediaRecord(rec as GDMMultimediaRecord);
                     break;
 
                 case GDMRecordType.rtNote:
-                    CheckNoteRecord(rec as GDMNoteRecord, fileVer);
+                    CheckNoteRecord(rec as GDMNoteRecord);
                     break;
 
                 case GDMRecordType.rtRepository:
-                    CheckRepositoryRecord(rec as GDMRepositoryRecord, fileVer);
+                    CheckRepositoryRecord(rec as GDMRepositoryRecord);
                     break;
             }
         }
@@ -508,7 +542,6 @@ namespace GDModel.Providers.GEDCOM
             bool result = false;
 
             try {
-                int fileVer;
                 // remove a deprecated features
                 if (fFormat == GEDCOMFormat.Native) {
                     GDMHeader header = fTree.Header;
@@ -519,10 +552,6 @@ namespace GDModel.Providers.GEDCOM
 
                     tag = header.FindTag("_EXT_NAME", 0);
                     if (tag != null) header.DeleteTag("_EXT_NAME");
-
-                    fileVer = ConvertHelper.ParseInt(header.Source.Version, GKData.APP_FORMAT_DEFVER);
-                } else {
-                    fileVer = -1;
                 }
 
                 if (fProgress != null)
@@ -536,7 +565,7 @@ namespace GDModel.Providers.GEDCOM
                     int recsCount = fTree.RecordsCount;
                     for (int i = 0; i < recsCount; i++) {
                         GDMRecord rec = fTree[i];
-                        CheckRecord(rec, fileVer);
+                        CheckRecord(rec);
 
                         if (isExtraneous && !CheckRecordXRef(rec)) {
                             string oldXRef = rec.XRef;

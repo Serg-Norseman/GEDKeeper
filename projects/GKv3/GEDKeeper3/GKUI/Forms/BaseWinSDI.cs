@@ -128,7 +128,6 @@ namespace GKUI.Forms
         private ButtonMenuItem miContMediaMoveFile2Abs;
         private ButtonMenuItem miContMediaMoveFile2Rel;
         private ButtonMenuItem miContMediaMoveFile2Arc;
-        private ButtonMenuItem miContMediaMoveFile2Stg;
         private ButtonMenuItem miContMediaMoveFile;
         private ContextMenu contextMenu;
         private ButtonMenuItem miContRecordAdd;
@@ -207,7 +206,7 @@ namespace GKUI.Forms
 
             fController = new BaseWinController(this, true);
             fContext = fController.Context;
-            ((BaseContext)fContext).ModifiedChanged += BaseContext_ModifiedChanged;
+            fContext.ModifiedChanged += BaseContext_ModifiedChanged;
 
             tabsRecords.SuspendLayout();
             CreatePage("Individuals", GDMRecordType.rtIndividual);
@@ -240,9 +239,8 @@ namespace GKUI.Forms
             miContMediaMoveFile2Abs = new ButtonMenuItem(miContMediaMoveFile_Click);
             miContMediaMoveFile2Rel = new ButtonMenuItem(miContMediaMoveFile_Click);
             miContMediaMoveFile2Arc = new ButtonMenuItem(miContMediaMoveFile_Click);
-            miContMediaMoveFile2Stg = new ButtonMenuItem(miContMediaMoveFile_Click);
             miContMediaMoveFile = new ButtonMenuItem();
-            miContMediaMoveFile.Items.AddRange(new MenuItem[] { miContMediaMoveFile2Abs, miContMediaMoveFile2Rel, miContMediaMoveFile2Arc, miContMediaMoveFile2Stg });
+            miContMediaMoveFile.Items.AddRange(new MenuItem[] { miContMediaMoveFile2Abs, miContMediaMoveFile2Rel, miContMediaMoveFile2Arc });
 
             miContRecordAdd = new ButtonMenuItem(miRecordAdd_Click);
             miContRecordEdit = new ButtonMenuItem(miRecordEdit_Click);
@@ -458,8 +456,6 @@ namespace GKUI.Forms
                 storeType = MediaStoreType.mstRelativeReference;
             } else if (sender == miContMediaMoveFile2Arc) {
                 storeType = MediaStoreType.mstArchive;
-            } else if (sender == miContMediaMoveFile2Stg) {
-                storeType = MediaStoreType.mstStorage;
             } else {
                 return;
             }

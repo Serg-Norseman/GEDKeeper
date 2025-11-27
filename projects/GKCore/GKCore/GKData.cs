@@ -64,9 +64,11 @@ namespace GKCore
         /*
          * 44 - v2.19.0
          * 45 - v2.27.0 / v3.3.0
-         * 46 - v2.29.0 / v3.5.0
+         * 46 - v2.29.0 / v3.5.0 --- v2.33.0 / v3.9.0 [14/03/2025]
+         * 47 - v2.34.0 / v3.10.0 [14/04/2025] --- v2.36.0 / v3.12.0 [14/10/2025]
+         * 48 - v2.37.0 / v3.13.0
          */
-        public const int APP_FORMAT_CURVER = 47;
+        public const int APP_FORMAT_CURVER = 48;
 
         public const string GEDCOM_EXT = "ged";
         public const string GEDCOM_SEC_EXT = "geds";
@@ -374,10 +376,10 @@ namespace GKCore
 
             GKStoreTypes = new StoreTypeRec[] {
                 new StoreTypeRec(LSID.STRef, ""),
-                new StoreTypeRec(LSID.STStg, "stg:"),
-                new StoreTypeRec(LSID.STArc, "arc:"),
                 new StoreTypeRec(LSID.STRel, "rel:"),
-                new StoreTypeRec(LSID.STWeb, "http")
+                new StoreTypeRec(LSID.STArc, "arc:"),
+                new StoreTypeRec(LSID.STWeb, "http"),
+                new StoreTypeRec(LSID.STStg, "stg:"),
             };
 
             // гр|юл|евр|фр|рим|исл(хид?)|?

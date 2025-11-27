@@ -197,7 +197,7 @@ namespace GKCore
 
             fileRef.ParseString("stg:file.txt");
             storeType = MediaStore.GetStoreType(fileRef.StringValue);
-            Assert.AreEqual(MediaStoreType.mstStorage, storeType);
+            Assert.AreEqual(MediaStoreType.mstStorage_Old, storeType);
 
             fileRef.ParseString("arc:file.txt");
             storeType = MediaStore.GetStoreType(fileRef.StringValue);
@@ -258,7 +258,7 @@ namespace GKCore
         {
             string sourFile = TestUtils.PrepareTestFile("shaytan_plant.jpg");
             string gedFile = TestUtils.GetTempFilePath("test_mm.ged", out _);
-            string stgDirectory = string.Empty, arcFileName = string.Empty;
+            string arcFileName = string.Empty;
 
             try {
                 using (BaseContext ctx = new BaseContext(null)) {
@@ -286,13 +286,6 @@ namespace GKCore
                     Assert.IsNotNull(ctx.MediaLoad(mmRecA.FileReferences[0]));
                     arcFileName = ctx.GetArcFileName();
 
-                    var mmRecS = new GDMMultimediaRecord(ctx.Tree);
-                    mmRecS.FileReferences.Add(new GDMFileReferenceWithTitle());
-                    Assert.AreEqual(true, ctx.MediaSave(mmRecS.FileReferences[0], sourFile, MediaStoreType.mstStorage));
-                    Assert.IsNotNull(ctx.LoadMediaImage(mmRecS, 0, -1, -1, ExtRect.Empty, false, false));
-                    Assert.IsNotNull(ctx.MediaLoad(mmRecS.FileReferences[0]));
-                    stgDirectory = ctx.GetStgFolder();
-
                     var mmRecRl = new GDMMultimediaRecord(ctx.Tree);
                     mmRecRl.FileReferences.Add(new GDMFileReferenceWithTitle());
                     Assert.AreEqual(true, ctx.MediaSave(mmRecRl.FileReferences[0], sourFile, MediaStoreType.mstRelativeReference));
@@ -303,7 +296,6 @@ namespace GKCore
                 TestUtils.RemoveTestFile(sourFile);
                 TestUtils.RemoveTestFile(gedFile);
                 TestUtils.RemoveTestFile(arcFileName);
-                TestUtils.RemoveTestDirectory(stgDirectory);
             }
         }
 

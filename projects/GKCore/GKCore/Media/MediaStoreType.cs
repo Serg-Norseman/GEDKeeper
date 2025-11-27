@@ -31,9 +31,9 @@ namespace GKCore.Media
         mstReference,
 
         /// <summary>
-        /// Storage's folder next to the database file.
+        /// File reference relative to the database file.
         /// </summary>
-        mstStorage,
+        mstRelativeReference,
 
         /// <summary>
         /// The archive file (zip) next to the database file.
@@ -41,13 +41,13 @@ namespace GKCore.Media
         mstArchive,
 
         /// <summary>
-        /// File reference relative to the database file.
-        /// </summary>
-        mstRelativeReference,
-
-        /// <summary>
         /// File reference relative to the web address of file.
         /// </summary>
-        mstURL
+        mstURL,
+
+        /// <summary>
+        /// Storage's folder next to the database file. Deprecated.
+        /// </summary>
+        mstStorage_Old,
     }
 }

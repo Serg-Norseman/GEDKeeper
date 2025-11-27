@@ -1019,7 +1019,6 @@ namespace GKCore.Controllers
                     GetControl<IMenuItem>("miContMediaMoveFile2Abs").Text = LangMan.LS(LSID.STRef);
                     GetControl<IMenuItem>("miContMediaMoveFile2Rel").Text = LangMan.LS(LSID.STRel);
                     GetControl<IMenuItem>("miContMediaMoveFile2Arc").Text = LangMan.LS(LSID.STArc);
-                    GetControl<IMenuItem>("miContMediaMoveFile2Stg").Text = LangMan.LS(LSID.STStg);
 
                     GetControl<IMenuItem>("miCopyContent").Text = LangMan.LS(LSID.Copy);
 

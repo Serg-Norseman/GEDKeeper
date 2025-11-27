@@ -96,7 +96,6 @@
         private System.Windows.Forms.ToolStripMenuItem miContMediaMoveFile2Abs;
         private System.Windows.Forms.ToolStripMenuItem miContMediaMoveFile2Rel;
         private System.Windows.Forms.ToolStripMenuItem miContMediaMoveFile2Arc;
-        private System.Windows.Forms.ToolStripMenuItem miContMediaMoveFile2Stg;
         private System.Windows.Forms.ToolStripMenuItem miContMediaMoveFile;
         private System.Windows.Forms.ToolStripMenuItem miContRecordDuplicate;
         private System.Windows.Forms.ToolStripMenuItem miContRecordMerge;
@@ -227,7 +226,6 @@
             this.miContMediaMoveFile2Abs = new System.Windows.Forms.ToolStripMenuItem();
             this.miContMediaMoveFile2Rel = new System.Windows.Forms.ToolStripMenuItem();
             this.miContMediaMoveFile2Arc = new System.Windows.Forms.ToolStripMenuItem();
-            this.miContMediaMoveFile2Stg = new System.Windows.Forms.ToolStripMenuItem();
             this.tabsRecords = new GKUI.Components.GKTabControl();
             this.miTreeCompare = new System.Windows.Forms.ToolStripMenuItem();
             this.miTreeMerge = new System.Windows.Forms.ToolStripMenuItem();
@@ -1148,8 +1146,7 @@
             this.miContMediaMoveFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
                                     this.miContMediaMoveFile2Abs,
                                     this.miContMediaMoveFile2Rel,
-                                    this.miContMediaMoveFile2Arc,
-                                    this.miContMediaMoveFile2Stg});
+                                    this.miContMediaMoveFile2Arc});
             this.miContMediaMoveFile.Name = "miContMediaMoveFile";
             this.miContMediaMoveFile.Size = new System.Drawing.Size(217, 24);
             this.miContMediaMoveFile.Text = "miContMediaMoveFile";
@@ -1171,12 +1168,6 @@
             this.miContMediaMoveFile2Arc.Name = "miContMediaMoveFile2Arc";
             this.miContMediaMoveFile2Arc.Text = "miContMediaMoveFile2Arc";
             this.miContMediaMoveFile2Arc.Click += new System.EventHandler(this.miContMediaMoveFile_Click);
-            // 
-            // miContMediaMoveFile2Stg
-            // 
-            this.miContMediaMoveFile2Stg.Name = "miContMediaMoveFile2Stg";
-            this.miContMediaMoveFile2Stg.Text = "miContMediaMoveFile2Stg";
-            this.miContMediaMoveFile2Stg.Click += new System.EventHandler(this.miContMediaMoveFile_Click);
             // 
             // tabsRecords
             // 

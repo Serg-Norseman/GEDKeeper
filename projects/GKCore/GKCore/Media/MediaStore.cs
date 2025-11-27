@@ -29,7 +29,12 @@ using GKCore.Options;
 namespace GKCore.Media
 {
     /// <summary>
-    /// 
+    /// Absolute URI format: file:///file_path
+    /// Unix/Linux Absolute URI: file:///etc/fstab
+    /// MacOS Absolute URI: file:///var/log/system.log
+    /// Windows Absolute URI: file:///c:/WINDOWS/clock.avi
+    ///
+    /// Relative URI format: 'file:file_path' - RFC 3986, path-rootless definition (https://www.rfc-editor.org/rfc/rfc3986)
     /// </summary>
     public abstract class MediaStore
     {
@@ -58,7 +63,7 @@ namespace GKCore.Media
                 throw new ArgumentNullException(nameof(fileReference));
 
             MediaStoreType result = MediaStoreType.mstReference;
-            for (int i = 1; i <= 4; i++) {
+            for (int i = 1; i < GKData.GKStoreTypes.Length; i++) {
                 if (fileReference.StartsWith(GKData.GKStoreTypes[i].Sign, StringComparison.Ordinal)) {
                     result = (MediaStoreType)i;
                     break;
@@ -92,9 +97,6 @@ namespace GKCore.Media
                 case MediaStoreType.mstRelativeReference:
                     return new RelativePathMediaStore(baseContext, fileName);
 
-                case MediaStoreType.mstStorage:
-                    return new StorageMediaStore(baseContext, fileName);
-
                 case MediaStoreType.mstArchive:
                     return new ArchiveMediaStore(baseContext, fileName);
 
@@ -114,9 +116,6 @@ namespace GKCore.Media
 
                 case MediaStoreType.mstRelativeReference:
                     return new RelativePathMediaStore(baseContext);
-
-                case MediaStoreType.mstStorage:
-                    return new StorageMediaStore(baseContext);
 
                 case MediaStoreType.mstArchive:
                     return new ArchiveMediaStore(baseContext);
@@ -192,6 +191,7 @@ namespace GKCore.Media
 
             refPath = string.Empty;
             string targetFile = string.Empty;
+            string refPrefix = GKData.GKStoreTypes[(int)StoreType].Sign;
 
             // set paths and links
             switch (StoreType) {
@@ -201,17 +201,12 @@ namespace GKCore.Media
 
                 case MediaStoreType.mstRelativeReference:
                     targetFile = fBaseContext.GetTreeRelativePath(fileName);
-                    refPath = GKData.GKStoreTypes[(int)StoreType].Sign + targetFile;
+                    refPath = refPrefix + targetFile;
                     break;
 
                 case MediaStoreType.mstArchive:
                     targetFile = storePath + storeFile;
-                    refPath = GKData.GKStoreTypes[(int)StoreType].Sign + targetFile;
-                    break;
-
-                case MediaStoreType.mstStorage:
-                    targetFile = storePath + storeFile;
-                    refPath = GKData.GKStoreTypes[(int)StoreType].Sign + targetFile;
+                    refPath = refPrefix + targetFile;
                     break;
 
                 case MediaStoreType.mstURL:
@@ -249,7 +244,7 @@ namespace GKCore.Media
 
                 switch (storeStatus) {
                     case MediaStoreStatus.mssExists: {
-                            if (this.StoreType == MediaStoreType.mstArchive || this.StoreType == MediaStoreType.mstStorage) {
+                            if (this.StoreType == MediaStoreType.mstArchive) {
                                 if (!GlobalOptions.Instance.AllowDeleteMediaFileFromStgArc) {
                                     return true;
                                 }

@@ -70,7 +70,7 @@ namespace GKCore.Controllers
                 if (fIsNew) {
                     MediaStoreType gst = fView.StoreType.GetSelectedTag<MediaStoreType>();
 
-                    if ((gst == MediaStoreType.mstArchive || gst == MediaStoreType.mstStorage) && !fBase.Context.CheckBasePath()) {
+                    if ((gst == MediaStoreType.mstArchive) && !fBase.Context.CheckBasePath()) {
                         return false;
                     }
 
@@ -156,38 +156,23 @@ namespace GKCore.Controllers
 
             fView.StoreType.Clear();
 
-            // 0. AbsRef if allowed
-            // 1. Stg
-            // 2. Arc if allowed
-            // 3. RelRef if allowed
-            // 4. Url
-
             if (allowAbsRef) {
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name),
-                    MediaStoreType.mstReference);
-            }
-
-            if (!disNoStd) {
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstStorage].Name),
-                    MediaStoreType.mstStorage);
-            }
-
-            if (allowArc) {
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name),
-                    MediaStoreType.mstArchive);
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstReference].Name), MediaStoreType.mstReference);
             }
 
             if (allowRelRef) {
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstRelativeReference].Name),
-                    MediaStoreType.mstRelativeReference);
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstRelativeReference].Name), MediaStoreType.mstRelativeReference);
+            }
+
+            if (allowArc) {
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstArchive].Name), MediaStoreType.mstArchive);
             }
 
             if (!disNoStd) {
-                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstURL].Name),
-                    MediaStoreType.mstURL);
+                fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)MediaStoreType.mstURL].Name), MediaStoreType.mstURL);
             }
 
-            fView.StoreType.SetSelectedTag<MediaStoreType>(selectType);
+            fView.StoreType.SetSelectedTag(selectType);
         }
 
         public async Task SelectFile()

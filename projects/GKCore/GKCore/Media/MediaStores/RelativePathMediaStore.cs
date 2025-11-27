@@ -18,6 +18,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using System.IO;
+
 namespace GKCore.Media
 {
     public sealed class RelativePathMediaStore : PlainMediaStore
@@ -31,7 +33,7 @@ namespace GKCore.Media
 
         public RelativePathMediaStore(BaseContext baseContext, string fileName) : base(baseContext, fileName)
         {
-            fAbsoluteFileName = baseContext.GetTreePath() + fileName;
+            fAbsoluteFileName = Path.GetFullPath(Path.Combine(baseContext.GetTreePath(), fileName));
         }
     }
 }

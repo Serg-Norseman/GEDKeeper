@@ -703,6 +703,9 @@ namespace GKCore
 
         public string GetTreePath()
         {
+            if (string.IsNullOrEmpty(fFileName))
+                return string.Empty;
+
             return Path.GetDirectoryName(fFileName) + Path.DirectorySeparatorChar;
         }
 
@@ -722,19 +725,12 @@ namespace GKCore
             return result;
         }
 
-        public string GetStgFolder()
-        {
-            string result = GetTreePath() + Path.GetFileNameWithoutExtension(fFileName) + Path.DirectorySeparatorChar;
-            return result;
-        }
-
         public void MoveMediaContainers(string oldFileName, string newFileName, bool createCopy = false)
         {
             // do nothing if file name is not changed
             if (string.IsNullOrEmpty(oldFileName) || string.Equals(oldFileName, newFileName)) return;
 
             bool hasArc = File.Exists(GetArcFileName());
-            bool hasStg = Directory.Exists(GetStgFolder());
 
             string newPath = Path.GetDirectoryName(newFileName);
             string newName = Path.GetFileName(newFileName);
@@ -746,15 +742,6 @@ namespace GKCore
                     File.Move(GetArcFileName(), newArc);
                 } else {
                     CopyFile(GetArcFileName(), newArc, true);
-                }
-            }
-
-            if (hasStg) {
-                string newStg = newPath + Path.DirectorySeparatorChar + GKUtils.GetContainerName(newName, false);
-                if (!createCopy) {
-                    Directory.Move(GetStgFolder(), newStg);
-                } else {
-                    // TODO!
                 }
             }
         }
@@ -777,7 +764,7 @@ namespace GKCore
 
         public bool CheckNewMedia(string fileName, MediaStoreType storeType)
         {
-            if ((storeType == MediaStoreType.mstArchive || storeType == MediaStoreType.mstStorage) && !CheckBasePath()) {
+            if ((storeType == MediaStoreType.mstArchive) && !CheckBasePath()) {
                 return false;
             }
 
@@ -816,15 +803,8 @@ namespace GKCore
                     }
                     break;
 
-                case MediaStoreType.mstStorage:
-                    if (oldStoreType != MediaStoreType.mstArchive) {
-                        string currentFileName = MediaLoad(fileRef);
-                        result = MediaSave(fileRef, currentFileName, newStoreType);
-                    }
-                    break;
-
                 case MediaStoreType.mstArchive:
-                    if (oldStoreType != MediaStoreType.mstStorage) {
+                    {
                         string currentFileName = MediaLoad(fileRef);
                         result = MediaSave(fileRef, currentFileName, newStoreType);
                     }
