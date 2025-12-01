@@ -1028,6 +1028,12 @@ namespace GKCore
 
         #region Files
 
+        public void GetFormatAndVersion(out GEDCOMFormat format, out int fileVer)
+        {
+            format = GEDCOMProvider.GetGEDCOMFormat(fTree, out _);
+            fileVer = (format == GEDCOMFormat.Native) ? ConvertHelper.ParseInt(fTree.Header.Source.Version, GKData.APP_FORMAT_DEFVER) : -1;
+        }
+
         public bool IsUnknown()
         {
             var isNew = string.IsNullOrEmpty(fFileName) || !File.Exists(fFileName);
@@ -1138,6 +1144,8 @@ namespace GKCore
 
                 fFileName = fileName;
 
+                CheckFileVersion(fileName);
+
                 return true;
             } catch (Exception ex) {
                 Logger.WriteError("BaseContext.FileLoad.0()", ex);
@@ -1188,6 +1196,24 @@ namespace GKCore
 
             AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FormatUnsupported));
             return null;
+        }
+
+        private void CheckFileVersion(string fileName)
+        {
+            try {
+                if (!AppHost.TEST_MODE && !IsGEDZIP()) {
+                    GetFormatAndVersion(out GEDCOMFormat format, out int fileVer);
+                    if (format != GEDCOMFormat.Native || fileVer < GKData.APP_FORMAT_CURVER) {
+                        var path = Path.GetDirectoryName(fileName) + Path.DirectorySeparatorChar;
+                        var pureFileName = Path.GetFileNameWithoutExtension(fileName);
+                        var ext = Path.GetExtension(fileName);
+                        var copyFileName = Path.Combine(path, pureFileName + "_prev_format" + ext);
+                        File.Copy(fFileName, copyFileName, true);
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseContext.CheckFileVersion()", ex);
+            }
         }
 
         private static string CheckFileName(string fileName)

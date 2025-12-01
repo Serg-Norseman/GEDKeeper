@@ -51,9 +51,7 @@ namespace GDModel.Providers.GEDCOM
             fProgress = progress;
 
             fMediaContainerName = Path.GetFileNameWithoutExtension(fBaseContext.FileName);
-
-            fFormat = GEDCOMProvider.GetGEDCOMFormat(fTree, out _);
-            fFileVer = (fFormat == GEDCOMFormat.Native) ? ConvertHelper.ParseInt(fTree.Header.Source.Version, GKData.APP_FORMAT_DEFVER) : -1;
+            fBaseContext.GetFormatAndVersion(out fFormat, out fFileVer);
         }
 
         private void TransformNote(GDMNotes note)
