@@ -48,8 +48,8 @@ namespace GKCore.Design
         public T GetControlHandler<T>(object control) where T : class, IControl
         {
             IControl handler;
-            if (control is T) {
-                handler = (T)control;
+            if (control is T ctlT) {
+                handler = ctlT;
             } else {
                 if (!fObjHandlers.TryGetValue(control, out handler)) {
                     Type controlType = control.GetType();

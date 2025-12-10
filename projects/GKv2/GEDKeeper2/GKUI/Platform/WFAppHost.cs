@@ -221,7 +221,7 @@ namespace GKUI.Platform
             var wndArr = Application.OpenForms;
             for (int i = wndArr.Count - 1; i >= 0; i--) {
                 Form wnd = wndArr[i];
-                if (wnd is IWindowDependent && ((IWindowDependent)wnd).OwnerWindow == owner) {
+                if (wnd is IWindowDependent winDep && winDep.OwnerWindow == owner) {
                     wnd.Close();
                 }
             }

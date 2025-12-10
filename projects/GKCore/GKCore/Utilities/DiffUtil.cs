@@ -213,10 +213,10 @@ namespace GKCore.Utilities
 
             public override bool Equals(object obj)
             {
-                if (!(obj is Point))
-                    return false;
+                if (obj is Point pt)
+                    return Equals(pt);
 
-                return Equals((Point)obj);
+                return false;
             }
 
             public override int GetHashCode()

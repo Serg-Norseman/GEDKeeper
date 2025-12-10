@@ -97,8 +97,8 @@ namespace GKCore.Export
 
         private static BaseFont GetBaseFont(IFont font)
         {
-            if (font is PDFWriter.FontHandler) {
-                return ((PDFWriter.FontHandler)font).BaseFont;
+            if (font is PDFWriter.FontHandler fntHndler) {
+                return fntHndler.BaseFont;
             }
 
             BaseFont result;

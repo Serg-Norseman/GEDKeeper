@@ -334,9 +334,7 @@ namespace GKUI.Components
 
         private static void FixRadioButtonsInt(Control instance, Control control, ref RadioButton controller)
         {
-            if (control is StackLayout) {
-                var stackLayout = (StackLayout)control;
-
+            if (control is StackLayout stackLayout) {
                 foreach (var item in stackLayout.Items) {
                     var radBtn = item.Control as RadioButton;
                     if (radBtn != null) {
@@ -345,9 +343,7 @@ namespace GKUI.Components
                         FixRadioButtonsInt(instance, item.Control, ref controller);
                     }
                 }
-            } else if (control is TableLayout) {
-                var tableLayout = (TableLayout)control;
-
+            } else if (control is TableLayout tableLayout) {
                 foreach (var row in tableLayout.Rows) {
                     foreach (var cell in row.Cells) {
                         var radBtn = cell.Control as RadioButton;
@@ -358,8 +354,7 @@ namespace GKUI.Components
                         }
                     }
                 }
-            } else if (control is Panel) {
-                var panel = (Panel)control;
+            } else if (control is Panel panel) {
                 FixRadioButtonsInt(instance, panel.Content, ref controller);
             }
         }

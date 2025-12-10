@@ -99,11 +99,11 @@ namespace GKMap
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Tile))
-                return false;
+            if (obj is Tile tile) {
+                return tile.Zoom == Zoom && tile.Pos == Pos;
+            }
 
-            Tile comp = (Tile)obj;
-            return comp.Zoom == Zoom && comp.Pos == Pos;
+            return false;
         }
 
         public override int GetHashCode()

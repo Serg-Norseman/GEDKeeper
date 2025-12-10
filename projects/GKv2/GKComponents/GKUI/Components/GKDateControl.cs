@@ -240,9 +240,7 @@ namespace GKUI.Components
 
         private void SetDate(GDMCustomDate date)
         {
-            if (date is GDMDateRange) {
-                GDMDateRange dtRange = date as GDMDateRange;
-
+            if (date is GDMDateRange dtRange) {
                 if (dtRange.After.StringValue == "" && dtRange.Before.StringValue != "") {
                     cmbDateType.SelectedIndex = 1; // BEF gcd2
                 } else if (dtRange.After.StringValue != "" && dtRange.Before.StringValue == "") {
@@ -253,9 +251,7 @@ namespace GKUI.Components
 
                 FillControls(1, dtRange.After);
                 FillControls(2, dtRange.Before);
-            } else if (date is GDMDatePeriod) {
-                GDMDatePeriod dtPeriod = date as GDMDatePeriod;
-
+            } else if (date is GDMDatePeriod dtPeriod) {
                 if (dtPeriod.DateFrom.StringValue == "" && dtPeriod.DateTo.StringValue != "") {
                     cmbDateType.SelectedIndex = 4; // TO gcd2
                 } else if (dtPeriod.DateFrom.StringValue != "" && dtPeriod.DateTo.StringValue == "") {
@@ -266,9 +262,7 @@ namespace GKUI.Components
 
                 FillControls(1, dtPeriod.DateFrom);
                 FillControls(2, dtPeriod.DateTo);
-            } else if (date is GDMDate) {
-                var dt = date as GDMDate;
-
+            } else if (date is GDMDate dt) {
                 switch (dt.Approximated) {
                     case GDMApproximated.daExact:
                         cmbDateType.SelectedIndex = 0;

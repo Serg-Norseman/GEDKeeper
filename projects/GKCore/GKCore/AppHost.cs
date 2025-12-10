@@ -555,19 +555,19 @@ namespace GKCore
         public IWorkWindow GetWorkWindow()
         {
             IWindow activeWnd = GetActiveWindow();
-            return (activeWnd is IWorkWindow) ? (IWorkWindow)activeWnd : null;
+            return (activeWnd is IWorkWindow workWin) ? workWin : null;
         }
 
         public virtual IBaseWindow GetCurrentFile(bool extMode = false)
         {
             IWindow activeWnd = GetActiveWindow();
-            IChartWindow curChart = (activeWnd is IChartWindow) ? (IChartWindow)activeWnd : null;
+            IChartWindow curChart = (activeWnd is IChartWindow chartWin) ? chartWin : null;
             IBaseWindow result;
 
             if (extMode && curChart != null) {
                 result = curChart.OwnerWindow as IBaseWindow;
             } else {
-                result = (activeWnd is IBaseWindow) ? (IBaseWindow)activeWnd : null;
+                result = (activeWnd is IBaseWindow baseWin) ? baseWin : null;
             }
 
             return result;

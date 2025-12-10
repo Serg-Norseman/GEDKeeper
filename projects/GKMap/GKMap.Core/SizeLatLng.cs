@@ -64,11 +64,10 @@ namespace GKMap
 
         public override bool Equals(object obj)
         {
-            if (!(obj is SizeLatLng)) {
-                return false;
+            if (obj is SizeLatLng ef) {
+                return (ef.WidthLng == WidthLng) && (ef.HeightLat == HeightLat);
             }
-            SizeLatLng ef = (SizeLatLng)obj;
-            return (((ef.WidthLng == WidthLng) && (ef.HeightLat == HeightLat)) && ef.GetType() == GetType());
+            return false;
         }
 
         public override int GetHashCode()

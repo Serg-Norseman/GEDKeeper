@@ -65,9 +65,9 @@ namespace GKUI.Platform.Handlers
         {
             get { return fGlyph; }
             set {
-                if (Control is ButtonMenuItem) {
+                if (Control is ButtonMenuItem btnItem) {
                     fGlyph = value;
-                    ((ButtonMenuItem)Control).Image = fGlyph == null ? null : ((ImageHandler)fGlyph).Handle;
+                    btnItem.Image = fGlyph == null ? null : ((ImageHandler)fGlyph).Handle;
                 }
             }
         }
@@ -92,9 +92,9 @@ namespace GKUI.Platform.Handlers
 
         public IMenuItem AddItem(string text, object tag, IImage image, ItemAction action)
         {
-            if (Control is ButtonMenuItem) {
+            if (Control is ButtonMenuItem btnItem) {
                 var item = new MenuItemEx(text, tag, image, action);
-                ((ButtonMenuItem)Control).Items.Add(item);
+                btnItem.Items.Add(item);
                 return item;
             } else {
                 return null;
@@ -103,8 +103,8 @@ namespace GKUI.Platform.Handlers
 
         public void ClearItems()
         {
-            if (Control is ButtonMenuItem) {
-                ((ButtonMenuItem)Control).Items.Clear();
+            if (Control is ButtonMenuItem btnItem) {
+                btnItem.Items.Clear();
             }
         }
     }

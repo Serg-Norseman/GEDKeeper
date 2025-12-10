@@ -453,30 +453,41 @@ namespace GDModel.Providers.GEDCOM
             var dateType = (idx < 0) ? GEDCOMDateType.SIMP : (GEDCOMDateType)idx;
 
             string result;
-            GDMCustomDate date;
+            GDMCustomDate custDate;
             switch (dateType) {
                 case GEDCOMDateType.AFT:
                 case GEDCOMDateType.BEF:
-                case GEDCOMDateType.BET:
-                    date = new GDMDateRange();
-                    result = GEDCOMUtils.ParseRangeDate(owner, (GDMDateRange)date, strTok);
+                case GEDCOMDateType.BET: {
+                        var dateRange = new GDMDateRange();
+                        result = ParseRangeDate(owner, dateRange, strTok);
+                        custDate = dateRange;
+                    }
                     break;
-                case GEDCOMDateType.INT:
-                    date = new GDMDateInterpreted();
-                    result = GEDCOMUtils.ParseIntDate(owner, (GDMDateInterpreted)date, strTok);
+
+                case GEDCOMDateType.INT: {
+                        var dateInt = new GDMDateInterpreted();
+                        result = ParseIntDate(owner, dateInt, strTok);
+                        custDate = dateInt;
+                    }
                     break;
+
                 case GEDCOMDateType.FROM:
-                case GEDCOMDateType.TO:
-                    date = new GDMDatePeriod();
-                    result = GEDCOMUtils.ParsePeriodDate(owner, (GDMDatePeriod)date, strTok);
+                case GEDCOMDateType.TO: {
+                        var datePeriod = new GDMDatePeriod();
+                        result = ParsePeriodDate(owner, datePeriod, strTok);
+                        custDate = datePeriod;
+                    }
                     break;
-                default:
-                    date = new GDMDate();
-                    result = GEDCOMUtils.ParseDate(owner, (GDMDate)date, strTok);
+
+                default: {
+                        var date = new GDMDate();
+                        result = ParseDate(owner, date, strTok);
+                        custDate = date;
+                    }
                     break;
             }
 
-            dateValue.SetRawData(date);
+            dateValue.SetRawData(custDate);
             return result;
         }
 

@@ -458,12 +458,12 @@ namespace GKUI.Components
 
                 case Keys.Delete:
                     if (fCurrentObj != null) {
-                        if (fCurrentObj is MapPolygon)
-                            fObjects.Polygons.Remove(fCurrentObj as MapPolygon);
-                        if (fCurrentObj is MapRoute)
-                            fObjects.Routes.Remove(fCurrentObj as MapRoute);
-                        if (fCurrentObj is MapMarker)
-                            fObjects.Markers.Remove(fCurrentObj as MapMarker);
+                        if (fCurrentObj is MapPolygon polygon)
+                            fObjects.Polygons.Remove(polygon);
+                        if (fCurrentObj is MapRoute route)
+                            fObjects.Routes.Remove(route);
+                        if (fCurrentObj is MapMarker marker)
+                            fObjects.Markers.Remove(marker);
                         fCurrentObj = null;
                     }
                     break;

@@ -66,10 +66,10 @@ namespace GKMap
 
         public override bool Equals(object obj)
         {
-            if (!(obj is GPoint))
-                return false;
-            GPoint comp = (GPoint)obj;
-            return comp.X == X && comp.Y == Y;
+            if (obj is GPoint comp) {
+                return comp.X == X && comp.Y == Y;
+            }
+            return false;
         }
 
         public override int GetHashCode()

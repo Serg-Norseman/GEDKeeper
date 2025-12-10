@@ -252,26 +252,23 @@ namespace GKMap.MapProviders
                 request.Headers.Set("Authorization", fAuthorization);
             }
 
-            if (request is HttpWebRequest) {
-                var r = request as HttpWebRequest;
-                r.UserAgent = UserAgent;
-                r.ReadWriteTimeout = TimeoutMs * 6;
-                r.Accept = RequestAccept;
-                r.Referer = RefererUrl;
-                r.Timeout = TimeoutMs;
-            } else if (request is SocksHttpWebRequest) {
-                var r = request as SocksHttpWebRequest;
-
+            if (request is HttpWebRequest hr) {
+                hr.UserAgent = UserAgent;
+                hr.ReadWriteTimeout = TimeoutMs * 6;
+                hr.Accept = RequestAccept;
+                hr.Referer = RefererUrl;
+                hr.Timeout = TimeoutMs;
+            } else if (request is SocksHttpWebRequest sr) {
                 if (!string.IsNullOrEmpty(UserAgent)) {
-                    r.Headers.Add("User-Agent", UserAgent);
+                    sr.Headers.Add("User-Agent", UserAgent);
                 }
 
                 if (!string.IsNullOrEmpty(RequestAccept)) {
-                    r.Headers.Add("Accept", RequestAccept);
+                    sr.Headers.Add("Accept", RequestAccept);
                 }
 
                 if (!string.IsNullOrEmpty(RefererUrl)) {
-                    r.Headers.Add("Referer", RefererUrl);
+                    sr.Headers.Add("Referer", RefererUrl);
                 }
             }
 

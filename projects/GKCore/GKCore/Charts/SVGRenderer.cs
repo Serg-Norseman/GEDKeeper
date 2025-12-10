@@ -201,11 +201,9 @@ namespace GKCore.Charts
         public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)
         {
             if (fGfx != null) {
-                if (path is IGfxCirclePath) {
-                    var circlePath = (IGfxCirclePath)path;
+                if (path is IGfxCirclePath circlePath) {
                     fGfx.DrawEllipse(circlePath.X, circlePath.Y, circlePath.Width, circlePath.Height, pen, brush);
-                } else if (path is IGfxCircleSegmentPath) {
-                    var segmPath = (IGfxCircleSegmentPath)path;
+                } else if (path is IGfxCircleSegmentPath segmPath) {
                     fGfx.DrawCircleSegment(0, 0, segmPath.InRad, segmPath.ExtRad, segmPath.Ang1, segmPath.Ang2, pen, brush);
                 }
             }

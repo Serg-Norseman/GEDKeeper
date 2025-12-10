@@ -74,11 +74,10 @@ namespace GKMap
 
         public override bool Equals(object obj)
         {
-            if (!(obj is PointLatLng)) {
-                return false;
+            if (obj is PointLatLng tf) {
+                return (tf.Lng == Lng) && (tf.Lat == Lat);
             }
-            PointLatLng tf = (PointLatLng)obj;
-            return (((tf.Lng == Lng) && (tf.Lat == Lat)) && tf.GetType() == GetType());
+            return false;
         }
 
         public void Offset(double lat, double lng)

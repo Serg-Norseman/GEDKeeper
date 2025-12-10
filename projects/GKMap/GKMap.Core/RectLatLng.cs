@@ -122,11 +122,10 @@ namespace GKMap
 
         public override bool Equals(object obj)
         {
-            if (!(obj is RectLatLng)) {
-                return false;
+            if (obj is RectLatLng ef) {
+                return (ef.Lng == Lng) && (ef.Lat == Lat) && (ef.WidthLng == WidthLng) && (ef.HeightLat == HeightLat);
             }
-            RectLatLng ef = (RectLatLng)obj;
-            return ((((ef.Lng == Lng) && (ef.Lat == Lat)) && (ef.WidthLng == WidthLng)) && (ef.HeightLat == HeightLat));
+            return false;
         }
 
         public static bool operator ==(RectLatLng left, RectLatLng right)

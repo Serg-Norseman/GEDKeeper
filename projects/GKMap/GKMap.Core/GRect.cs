@@ -107,12 +107,10 @@ namespace GKMap
 
         public override bool Equals(object obj)
         {
-            if (!(obj is GRect))
-                return false;
-
-            GRect comp = (GRect)obj;
-
-            return (comp.X == X) && (comp.Y == Y) && (comp.Width == Width) && (comp.Height == Height);
+            if (obj is GRect comp) {
+                return (comp.X == X) && (comp.Y == Y) && (comp.Width == Width) && (comp.Height == Height);
+            }
+            return false;
         }
 
         public static bool operator ==(GRect left, GRect right)

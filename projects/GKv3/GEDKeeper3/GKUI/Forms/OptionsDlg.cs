@@ -282,8 +282,7 @@ namespace GKUI.Forms
             }
 
             // FIXME: temporariry hack for AncCircleOptions control
-            if (component is Control) {
-                var control = (Control)component;
+            if (component is Control control) {
                 string compName = control.ID; // FIXME: change x:Name to ID for ACOptionsControl.xeto
                 if (compName == "acbLine" || compName == "acbBack" || compName == "acbText" || compName == "acb7" || compName == "acb6" ||
                     compName == "acb5" || compName == "acb4" || compName == "acb3" || compName == "acb2" || compName == "acb1" ||

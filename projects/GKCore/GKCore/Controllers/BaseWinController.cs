@@ -817,7 +817,7 @@ namespace GKCore.Controllers
             try {
                 IWorkWindow workWin = AppHost.Instance.GetWorkWindow();
                 IBaseWindow curBase = (forceDeactivate) ? null : AppHost.Instance.GetCurrentFile();
-                IChartWindow curChart = (workWin is IChartWindow) ? (IChartWindow)workWin : null;
+                IChartWindow curChart = (workWin is IChartWindow chartWin) ? chartWin : null;
 
                 GDMRecordType rt = (curBase == null) ? GDMRecordType.rtNone : curBase.GetSelectedRecordType();
                 bool baseEn = (rt != GDMRecordType.rtNone);
@@ -1406,8 +1406,7 @@ namespace GKCore.Controllers
         {
             var selRec = GetSelectedRecordEx();
 
-            if (selRec is GDMFamilyRecord) {
-                var famRec = (GDMFamilyRecord)selRec;
+            if (selRec is GDMFamilyRecord famRec) {
                 var tree = fContext.Tree;
 
                 selRec = tree.GetPtrValue(famRec.Husband);

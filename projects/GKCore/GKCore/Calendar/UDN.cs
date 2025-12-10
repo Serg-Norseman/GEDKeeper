@@ -137,8 +137,8 @@ namespace GKCore.Calendar
 
         public override bool Equals(object obj)
         {
-            if (obj is UDN) {
-                return (fValue == ((UDN)obj).fValue);
+            if (obj is UDN other) {
+                return (fValue == other.fValue);
             }
             return false;
         }
@@ -167,8 +167,8 @@ namespace GKCore.Calendar
         /// <returns></returns>
         public int CompareTo(object obj)
         {
-            if (obj is UDN) {
-                return CompareVal(fValue, ((UDN)obj).fValue);
+            if (obj is UDN other) {
+                return CompareVal(fValue, other.fValue);
             }
             return -1;
         }

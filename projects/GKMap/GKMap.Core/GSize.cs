@@ -63,13 +63,10 @@ namespace GKMap
 
         public override bool Equals(object obj)
         {
-            if (!(obj is GSize))
-                return false;
-
-            GSize comp = (GSize)obj;
-            // Note value types can't have derived classes, so we don't need to
-            //
-            return (comp.fWidth == fWidth) && (comp.fHeight == fHeight);
+            if (obj is GSize comp) {
+                return (comp.fWidth == fWidth) && (comp.fHeight == fHeight);
+            }
+            return false;
         }
 
         public override int GetHashCode()

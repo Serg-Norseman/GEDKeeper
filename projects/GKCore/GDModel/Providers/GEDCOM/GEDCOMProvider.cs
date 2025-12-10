@@ -3248,8 +3248,8 @@ namespace GDModel.Providers.GEDCOM
             string result;
             using (MemoryStream stm = new MemoryStream()) {
                 using (StreamWriter fs = new StreamWriter(stm)) {
-                    if (tag is GDMRecord) {
-                        WriteRecordEx(fs, (GDMRecord)tag);
+                    if (tag is GDMRecord rec) {
+                        WriteRecordEx(fs, rec);
                     } else if (tag is GDMIndividualEvent) {
                         WriteIndividualEvent(fs, 1, tag);
                     } else if (tag is GDMPersonalName) {

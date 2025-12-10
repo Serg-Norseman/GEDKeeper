@@ -186,12 +186,12 @@ namespace GKCore.Lists
                     case RecordAction.raPaste:
                         evt = AppHost.Instance.GetClipboardObj<GDMCustomEvent>();
                         if (evt != null) {
-                            if (evt is GDMIndividualEvent) {
-                                evt = (evt as GDMIndividualEvent).Clone();
-                            } else if (evt is GDMIndividualAttribute) {
-                                evt = (evt as GDMIndividualAttribute).Clone();
-                            } else if (evt is GDMFamilyEvent) {
-                                evt = (evt as GDMFamilyEvent).Clone();
+                            if (evt is GDMIndividualEvent indiEvt) {
+                                evt = indiEvt.Clone();
+                            } else if (evt is GDMIndividualAttribute indiAttr) {
+                                evt = indiAttr.Clone();
+                            } else if (evt is GDMFamilyEvent famEvt) {
+                                evt = famEvt.Clone();
                             }
                             result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventAdd, record, evt);
                         }
