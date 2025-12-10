@@ -1209,6 +1209,7 @@ namespace GKCore
                         var ext = Path.GetExtension(fileName);
                         var copyFileName = Path.Combine(path, pureFileName + "_prev_format" + ext);
                         File.Copy(fFileName, copyFileName, true);
+                        File.SetAttributes(copyFileName, FileAttributes.Archive | FileAttributes.ReadOnly);
                     }
                 }
             } catch (Exception ex) {
