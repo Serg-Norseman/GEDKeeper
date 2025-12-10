@@ -1011,6 +1011,42 @@ namespace GKCore
 
         #region Date functions
 
+        private static char[] ExtractSeparators(string pattern)
+        {
+            if (string.IsNullOrEmpty(pattern)) return new char[0];
+
+            string specifiersPattern = @"(d{1,4}|M{1,4}|y{1,5})";
+            string separatorsOnly = Regex.Replace(pattern, specifiersPattern, "");
+
+            //return separatorsOnly.Distinct().Where(s => !Char.IsWhiteSpace(s)).ToArray();
+
+            if (separatorsOnly.Length == 0) return new char[0];
+
+            char[] buffer = new char[separatorsOnly.Length];
+            int uniqueCount = 0;
+
+            for (int i = 0; i < separatorsOnly.Length; i++) {
+                char current = separatorsOnly[i];
+                if (char.IsWhiteSpace(current)) continue;
+
+                bool alreadyAdded = false;
+                for (int j = 0; j < uniqueCount; j++) {
+                    if (buffer[j] == current) {
+                        alreadyAdded = true;
+                        break;
+                    }
+                }
+
+                if (!alreadyAdded) {
+                    buffer[uniqueCount++] = current;
+                }
+            }
+
+            char[] result = new char[uniqueCount];
+            Array.Copy(buffer, result, uniqueCount);
+            return result;
+        }
+
         public static string GetDateMask(string regionalDatePattern)
         {
             // "00/00/0000"
@@ -1025,11 +1061,19 @@ namespace GKCore
             //var culture = new CultureInfo("hu-HU"); // debug
 
             var dtf = culture.DateTimeFormat;
-            var dateSeparators = dtf.DateSeparator.ToCharArray();
+
+            // Wow! If ShortDatePattern is set to "dd.MM.yyyy", then DateSeparator = ".",
+            // but if ShortDatePattern = "ddd dd.MM.yyyy", then the DateSeparator string = " "!
+            var dateSeparators = ExtractSeparators(dtf.ShortDatePattern); // dtf.DateSeparator.ToCharArray();
 
             // may contain a period, a dash, and a slash
             var result = dtf.ShortDatePattern.ToLowerInvariant();
             Logger.WriteInfo(string.Format("ShortDatePattern: {0}", result));
+
+            // for "ddd dd.MM.yyyy" format (with week day)
+            if (result.Contains("ddd ")) {
+                result = result.Replace("ddd ", "");
+            }
 
             // normalize
             string[] parts = result.Split(dateSeparators, StringSplitOptions.RemoveEmptyEntries);
