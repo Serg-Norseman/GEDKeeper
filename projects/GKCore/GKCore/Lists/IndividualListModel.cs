@@ -471,13 +471,17 @@ namespace GKCore.Lists
                     result = buf_residence;
                     break;
 
-                case ColumnType.ctAge:
-                    int tlYear = ((IndividualListFilter)fFilter).TimeLineYear;
-                    result = (isVisible) ? (object)GKUtils.GetAgeStr(fFetchedRec, tlYear) : GKUtils.GetAge(fFetchedRec, tlYear);
+                case ColumnType.ctAge: {
+                        int tlYear = ((IndividualListFilter)fFilter).TimeLineYear;
+                        int val = GKUtils.GetAge(fFetchedRec, tlYear);
+                        result = (val == -1) ? null : (object)val;
+                    }
                     break;
 
-                case ColumnType.ctLifeExpectancy:
-                    result = (isVisible) ? (object)GKUtils.GetLifeExpectancyStr(fFetchedRec) : GKUtils.GetLifeExpectancy(fFetchedRec);
+                case ColumnType.ctLifeExpectancy: {
+                        int val = GKUtils.GetLifeExpectancy(fFetchedRec);
+                        result = (val == -1) ? null : (object)val;
+                    }
                     break;
 
                 case ColumnType.ctDaysForBirth:

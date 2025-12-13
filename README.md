@@ -45,8 +45,8 @@ Community group: [Google Groups: GEDKeeper (en)](https://groups.google.com/g/ged
 
 ## Supported languages
 
-Afrikaans (93%), Belarusian (3%), Chinese (95%), Czech (86%), Dutch (85%), English (100%), French (71%), German (100%), Hungarian (100%), Icelandic (16%), 
-Italian (62%), Japanese (95%), Kazakh (9%), Polish (86%), Portuguese (64%), Russian (100%), Serbian (7%), Spanish (100%), Turkish (80%), Ukrainian (77%),
-Vietnamese (12%).
+Afrikaans, Belarusian, Chinese, Czech, Dutch, English, French, German, Hungarian, Icelandic,
+Italian, Japanese, Kazakh, Polish, Portuguese, Russian, Serbian, Spanish, Turkish, Ukrainian,
+Vietnamese.
 
 Platform for project localization: [Crowdin](https://crowdin.com/project/gedkeeper)

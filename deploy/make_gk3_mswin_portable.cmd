@@ -1,6 +1,6 @@
 @echo off
 
-set APP_VER=3.12.0
+set APP_VER=3.13.0
 
 call ..\clean.cmd
 
