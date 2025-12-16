@@ -90,8 +90,8 @@ Global
 		{775D3A08-83E0-4D23-99AA-77D0EF0D5E74}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{775D3A08-83E0-4D23-99AA-77D0EF0D5E74}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
 		{775D3A08-83E0-4D23-99AA-77D0EF0D5E74}.Release|iPhoneSimulator.Deploy.0 = Release|iPhoneSimulator
-		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Debug|Android.ActiveCfg = Debug|Android
-		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Debug|Android.Build.0 = Debug|Android
+		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Debug|Android.ActiveCfg = Debug|Any CPU
+		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Debug|Android.Build.0 = Debug|Any CPU
 		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Debug|iPhone.ActiveCfg = Debug|iPhone
 		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Debug|iPhone.Build.0 = Debug|iPhone
 		{393B70CD-E0C0-46D4-B16C-69F765034A55}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhone

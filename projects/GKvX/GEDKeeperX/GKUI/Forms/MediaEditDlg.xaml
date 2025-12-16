@@ -49,6 +49,10 @@
 
                 </xp:TabItem>
 
+                <xp:TabItem x:Name="pageFiles">
+                    <comcom:GKSheetList x:Name="fFilesList" />
+                </xp:TabItem>
+
                 <xp:TabItem x:Name="pageNotes">
                     <comcom:GKSheetList x:Name="fNotesList" />
                 </xp:TabItem>

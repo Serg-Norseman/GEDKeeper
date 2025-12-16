@@ -25,7 +25,7 @@ using GKCore.Design.Views;
 
 namespace GKUI.Forms
 {
-    public sealed partial class FilePropertiesDlg : CommonDialog<IFilePropertiesDlg, FilePropertiesDlgController>, IFilePropertiesDlg, IMobileFilePropertiesDlg
+    public sealed partial class FilePropertiesDlg : CommonDialog<IFilePropertiesDlg, FilePropertiesDlgController>, IFilePropertiesDlg
     {
         public IBaseWindow Base
         {
@@ -39,12 +39,7 @@ namespace GKUI.Forms
             get { return lvRecordStats; }
         }
 
-        ITextBox IFilePropertiesDlg.Language
-        {
-            get { return GetControlHandler<ITextBox>(txtLanguage); }
-        }
-
-        IComboBox IMobileFilePropertiesDlg.LanguageCombo
+        IComboBox IFilePropertiesDlg.Language
         {
             get { return GetControlHandler<IComboBox>(txtLanguage); }
         }
