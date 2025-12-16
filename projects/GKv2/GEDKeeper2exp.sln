@@ -97,6 +97,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\GKConfigurations.targets = ..\GKConfigurations.targets
 		..\..\locales\help_enu\gkhHistory.html = ..\..\locales\help_enu\gkhHistory.html
 		..\..\locales\help_rus\gkhHistory.html = ..\..\locales\help_rus\gkhHistory.html
+		NOTES.md = NOTES.md
 		..\..\README.md = ..\..\README.md
 	EndProjectSection
 EndProject

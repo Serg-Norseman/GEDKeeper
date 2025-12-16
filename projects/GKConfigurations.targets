@@ -1,7 +1,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <!-- Common -->
     <PropertyGroup>
-        <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <LangVersion>7.3</LangVersion>
         <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
         <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
@@ -53,6 +53,9 @@
     </PropertyGroup>
     <PropertyGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.7.1' ">
         <DefineConstants>$(DefineConstants);NET472</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.8' ">
+        <DefineConstants>$(DefineConstants);NET48</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition=" $(Configuration.Contains('Mono')) ">
