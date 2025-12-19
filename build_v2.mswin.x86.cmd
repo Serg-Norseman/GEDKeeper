@@ -13,7 +13,7 @@ echo Build is not possible!
 goto quit
 
 :build
-%MSBDIR%\msbuild.exe projects\GKv2\GEDKeeper2.sln /p:Configuration=%CONFIG_TYPE% /p:Platform="x86" /t:Rebuild /p:TargetFrameworkVersion=v4.7.1
+%MSBDIR%\msbuild.exe projects\GKv2\GEDKeeper2.sln /p:Configuration=%CONFIG_TYPE% /p:Platform="x86" /t:Rebuild /p:TargetFrameworkVersion=v4.8
 
 set BUILD_STATUS=%ERRORLEVEL% 
 if %BUILD_STATUS%==0 goto test 

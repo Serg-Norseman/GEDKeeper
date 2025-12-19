@@ -14,7 +14,7 @@ echo Build is not possible!
 goto quit
 
 :build
-%MSBDIR%\msbuild.exe ..\projects\GKv2\GEDKeeper2.sln /p:Configuration=Release /p:Platform="x86" /t:Rebuild /p:TargetFrameworkVersion=v4.7.1 /v:quiet
+%MSBDIR%\msbuild.exe ..\projects\GKv2\GEDKeeper2.sln /p:Configuration=Release /p:Platform="x86" /t:Rebuild /p:TargetFrameworkVersion=v4.8 /v:quiet
 
 set BUILD_STATUS=%ERRORLEVEL%
 if %BUILD_STATUS%==0 goto installer

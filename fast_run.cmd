@@ -19,7 +19,7 @@ rem Don't build with wf4.7.1 and lang7.3, only for 1-5
 rem set MSBDIR=@%WINDIR%\Microsoft.NET\Framework\v4.0.30319
 
 :build
-%MSBDIR%\msbuild.exe projects\GKv2\GEDKeeper2.sln /verbosity:quiet /p:Configuration="Debug" /p:Platform="x86" /t:Rebuild /p:TargetFrameworkVersion=v4.7.1
+%MSBDIR%\msbuild.exe projects\GKv2\GEDKeeper2.sln /verbosity:quiet /p:Configuration="Debug" /p:Platform="x86" /t:Rebuild /p:TargetFrameworkVersion=v4.8
 
 :start
 start .\bin\GEDKeeper2.exe
