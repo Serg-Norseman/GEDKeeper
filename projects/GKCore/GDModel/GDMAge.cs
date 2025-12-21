@@ -149,6 +149,18 @@ namespace GDModel
             return result;
         }
 
+        public override string ParseString(StringSpan strValue)
+        {
+            string result;
+            if (string.IsNullOrEmpty(strValue)) {
+                Clear();
+                result = string.Empty;
+            } else {
+                result = GEDCOMUtils.ParseAge(this, strValue);
+            }
+            return result;
+        }
+
         protected override string GetStringValue()
         {
             var parts = new string[4];

@@ -133,6 +133,13 @@ namespace GDModel
             return result;
         }
 
+        public override string ParseString(StringSpan strValue)
+        {
+            Clear();
+            string result = (strValue.IsEmptyOrEnd) ? string.Empty : GEDCOMUtils.ParsePeriodDate(this, strValue);
+            return result;
+        }
+
         public override UDN GetUDN()
         {
             UDN result;

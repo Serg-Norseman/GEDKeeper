@@ -41,6 +41,11 @@ namespace GDModel
             SetNameValue(tagId, tagValue);
         }
 
+        public GDMIndividualAttribute(int tagId, StringSpan tagValue)
+        {
+            SetNameValue(tagId, tagValue);
+        }
+
         protected override void ProcessHashes(ref HashCode hashCode)
         {
             base.ProcessHashes(ref hashCode);

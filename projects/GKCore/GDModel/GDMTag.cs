@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -42,6 +42,11 @@ namespace GDModel
 
         #region Public properties
 
+        /// <summary>
+        /// The GK architecture allows for reading, storing, and saving files with unknown tags.
+        /// These tags are stored in a special dictionary. Therefore, it's optimal to store a
+        /// numeric tag type identifier (not a string or enumeration) in this object.
+        /// </summary>
         public int Id
         {
             get { return fId; }
@@ -120,6 +125,13 @@ namespace GDModel
             if (!string.IsNullOrEmpty(tagValue)) {
                 ParseString(tagValue);
             }
+        }
+
+        protected void SetNameValue(int tagId, StringSpan tagValue)
+        {
+            fId = tagId;
+            if (!tagValue.IsEmptyOrEnd)
+                ParseString(tagValue);
         }
 
         public void SetName(int tagId)
@@ -286,6 +298,11 @@ namespace GDModel
             return string.Empty;
         }
 
+        public virtual string ParseString(StringSpan strValue)
+        {
+            return this.ParseString((string)strValue);
+        }
+
         #endregion
 
         protected static void ProcessHashes<T>(ref HashCode hashCode, GDMList<T> tags) where T : GDMTag
@@ -328,6 +345,11 @@ namespace GDModel
         }
 
         public GDMValueTag(int tagId, string tagValue)
+        {
+            SetNameValue(tagId, tagValue);
+        }
+
+        public GDMValueTag(int tagId, StringSpan tagValue)
         {
             SetNameValue(tagId, tagValue);
         }

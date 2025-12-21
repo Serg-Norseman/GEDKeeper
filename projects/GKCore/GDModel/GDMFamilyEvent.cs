@@ -19,6 +19,7 @@
  */
 
 using System;
+using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
@@ -63,6 +64,11 @@ namespace GDModel
         }
 
         public GDMFamilyEvent(int tagId, string tagValue)
+        {
+            SetNameValue(tagId, tagValue);
+        }
+
+        public GDMFamilyEvent(int tagId, StringSpan tagValue)
         {
             SetNameValue(tagId, tagValue);
         }

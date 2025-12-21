@@ -77,6 +77,19 @@ namespace GDModel
             return result;
         }
 
+        public override string ParseString(StringSpan strValue)
+        {
+            string result;
+            if (strValue.IsEmptyOrEnd) {
+                Clear();
+                fDatePhrase = string.Empty;
+                result = string.Empty;
+            } else {
+                result = GEDCOMUtils.ParseIntDate(this, strValue);
+            }
+            return result;
+        }
+
         protected override void ProcessHashes(ref HashCode hashCode)
         {
             base.ProcessHashes(ref hashCode);

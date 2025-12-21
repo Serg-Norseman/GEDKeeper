@@ -116,7 +116,12 @@ namespace GDModel
 
         public override string ParseString(string strValue)
         {
-            return GEDCOMUtils.ParseCutoutPosition(strValue, this);
+            return GEDCOMUtils.ParseCutoutPosition(this, strValue);
+        }
+
+        public override string ParseString(StringSpan strValue)
+        {
+            return GEDCOMUtils.ParseCutoutPosition(this, strValue);
         }
 
         internal void SetRawData(int x1, int y1, int x2, int y2)

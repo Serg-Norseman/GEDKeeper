@@ -725,7 +725,7 @@ namespace GDModel
 
                 Assert.Throws(typeof(GEDCOMIntDateException), () => { dtx1.ParseString("10 JAN 2013 (today)"); });
 
-                Assert.AreEqual(string.Empty, dtx1.ParseString(null));
+                Assert.AreEqual(string.Empty, dtx1.ParseString((string)null));
             }
         }
 

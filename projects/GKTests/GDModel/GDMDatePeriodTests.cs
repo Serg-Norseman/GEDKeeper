@@ -79,7 +79,7 @@ namespace GDModel
                     dtx1.SetDateTime(DateTime.Now);
                 });
 
-                Assert.AreEqual(string.Empty, dtx1.ParseString(null));
+                Assert.AreEqual(string.Empty, dtx1.ParseString((string)null));
             }
         }
     }

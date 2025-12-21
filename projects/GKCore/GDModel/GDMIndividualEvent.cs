@@ -19,6 +19,7 @@
  */
 
 using System;
+using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
@@ -44,11 +45,6 @@ namespace GDModel
 
         protected GDMIndividualEventDetail()
         {
-        }
-
-        protected GDMIndividualEventDetail(int tagId, string tagValue)
-        {
-            SetNameValue(tagId, tagValue);
         }
 
         protected override void Dispose(bool disposing)
@@ -98,6 +94,11 @@ namespace GDModel
         }
 
         public GDMIndividualEvent(int tagId, string tagValue)
+        {
+            SetNameValue(tagId, tagValue);
+        }
+
+        public GDMIndividualEvent(int tagId, StringSpan tagValue)
         {
             SetNameValue(tagId, tagValue);
         }

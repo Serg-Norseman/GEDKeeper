@@ -53,7 +53,7 @@ namespace GDModel
                 dtx1.ParseString("20 JAN 2013");
                 Assert.AreEqual("2013.01.20 [G]", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true));
 
-                Assert.AreEqual(string.Empty, dtx1.ParseString(null));
+                Assert.AreEqual(string.Empty, dtx1.ParseString((string)null));
             }
 
             using (GDMDateValue dtx1 = new GDMDateValue()) {

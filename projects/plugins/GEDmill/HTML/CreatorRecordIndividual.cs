@@ -1086,12 +1086,13 @@ namespace GEDmill.HTML
         /// </summary>
         private void ProcessEvent(GDMCustomEvent es, string linkToOtherParty)
         {
-            fLogger.WriteInfo(string.Format("ProcessEvent( {0}, {1} )", es.GetTagName(), es.StringValue));
-
-            if (es.GetTagName() == null) {
+            string utype = es.GetTagName();
+            fLogger.WriteInfo(string.Format("ProcessEvent( {0}, {1} )", utype, es.StringValue));
+            if (utype == null) {
                 return;
+            } else {
+                utype = utype.ToUpper();
             }
-            string utype = es.GetTagName().ToUpper();
             string subtype = es.StringValue;
 
             // Strip trailing _ that FTM seems sometimes to include
@@ -1126,7 +1127,7 @@ namespace GEDmill.HTML
             }
 
             string sourceRefs = "";
-            if (es.GetTagName() != "MARR" && es.GetTagName() != "TITL") {
+            if (utype != "MARR" && utype != "TITL") {
                 // Marriage handled separately later.
                 sourceRefs = AddSources(ref fReferenceList, es.SourceCitations);
             }

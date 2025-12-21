@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace GDModel.Providers.GEDCOM
 {
@@ -37,6 +38,11 @@ namespace GDModel.Providers.GEDCOM
         public bool IsEmpty
         {
             get { return (Data == null || Length == 0); }
+        }
+
+        public bool IsEmptyOrEnd
+        {
+            get { return (Data == null || Length == 0 || Pos >= Length); }
         }
 
         // :this() for compatibility with the old assembly chain
@@ -92,6 +98,7 @@ namespace GDModel.Providers.GEDCOM
         private bool fIgnoreWhitespace;
         private int fLength;
         private int fPos;
+        private bool fPureWords;
         private int fSavePos;
         private int fTokenEnd;
 
@@ -121,9 +128,10 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        public GEDCOMParser(bool ignoreWhitespace)
+        public GEDCOMParser(bool ignoreWhitespace, bool pureWords = false)
         {
             fIgnoreWhitespace = ignoreWhitespace;
+            fPureWords = pureWords;
         }
 
         public GEDCOMParser(string data, bool ignoreWhitespace)
@@ -175,7 +183,7 @@ namespace GDModel.Providers.GEDCOM
                     while (true) {
                         ch = (fPos >= fLength) ? EOL : fData[fPos];
                         ltr = (char)(ch | ' ');
-                        if ((ltr >= 'a' && ltr <= 'z') || ch == '_' || char.IsLetter(ch) || (ch >= '0' && ch <= '9')) {
+                        if ((ltr >= 'a' && ltr <= 'z') || ch == '_' || char.IsLetter(ch) || (!fPureWords && (ch >= '0' && ch <= '9'))) {
                             fPos++;
                         } else
                             break;
@@ -190,12 +198,12 @@ namespace GDModel.Providers.GEDCOM
                 if (ch >= '0' && ch <= '9') {
                     fSavePos = fPos;
                     fPos++;
-                    fIntValue = ((int)ch - 48);
+                    fIntValue = (ch - 48);
                     while (true) {
                         ch = (fPos >= fLength) ? EOL : fData[fPos];
                         if (ch >= '0' && ch <= '9') {
                             fPos++;
-                            fIntValue = (fIntValue * 10 + ((int)ch - 48));
+                            fIntValue = (fIntValue * 10 + (ch - 48));
                         } else
                             break;
                     }
@@ -263,30 +271,12 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SkipWhitespaces()
         {
             while (fCurrentToken <= GEDCOMToken.Whitespace) {
                 Next();
             }
-        }
-
-        public string GetWord()
-        {
-            if (fValueReset) {
-                fStrValue = new string(fData, fSavePos, fTokenEnd - fSavePos);
-                fValueReset = false;
-            }
-            return fStrValue;
-        }
-
-        public int GetNumber()
-        {
-            return fIntValue;
-        }
-
-        public char GetSymbol()
-        {
-            return fData[fSavePos];
         }
 
         public string GetRest()
@@ -309,32 +299,51 @@ namespace GDModel.Providers.GEDCOM
             return new StringSpan(fData, fLength, 0);
         }
 
-        public bool RequireToken(GEDCOMToken tokenKind)
+        public int GetNumber()
         {
-            return (fCurrentToken == tokenKind);
+            return fIntValue;
         }
 
-        public bool RequireWord(string token)
+        public char GetSymbol()
+        {
+            return fData[fSavePos];
+        }
+
+        public string GetWord()
+        {
+            if (fValueReset) {
+                fStrValue = new string(fData, fSavePos, fTokenEnd - fSavePos);
+                fValueReset = false;
+            }
+            return fStrValue;
+        }
+
+        public bool HasSymbol(char symbol)
+        {
+            return (fCurrentToken == GEDCOMToken.Symbol && fData[fSavePos] == symbol);
+        }
+
+        public bool HasWhitespace(char symbol)
+        {
+            return (fCurrentToken == GEDCOMToken.Whitespace && fData[fSavePos] == symbol);
+        }
+
+        public bool HasWord(string token)
         {
             return (fCurrentToken == GEDCOMToken.Word && GetWord() == token);
         }
 
-        public bool RequireSymbol(char symbol)
-        {
-            return (fCurrentToken == GEDCOMToken.Symbol && GetSymbol() == symbol);
-        }
-
         public void RequestSymbol(char symbol)
         {
-            if (fCurrentToken != GEDCOMToken.Symbol || GetSymbol() != symbol) {
+            if (!HasSymbol(symbol)) {
                 throw new GEDCOMParserException("Required symbol not found");
             }
         }
 
         public void RequestNextSymbol(char symbol)
         {
-            var token = Next();
-            if (token != GEDCOMToken.Symbol || GetSymbol() != symbol) {
+            Next();
+            if (!HasSymbol(symbol)) {
                 throw new GEDCOMParserException("Required symbol not found");
             }
         }
@@ -360,7 +369,7 @@ namespace GDModel.Providers.GEDCOM
         {
             var token = Next();
 
-            bool neg = (token == GEDCOMToken.Symbol && GetSymbol() == '-');
+            bool neg = HasSymbol('-');
             if (neg) {
                 token = Next();
             }
@@ -376,9 +385,11 @@ namespace GDModel.Providers.GEDCOM
             return number;
         }
 
-        public int TokenLength()
+        public bool HasNumber(int digits, out int number)
         {
-            return fTokenEnd - fSavePos;
+            bool result = (fCurrentToken == GEDCOMToken.Number && (fTokenEnd - fSavePos <= digits));
+            number = (!result) ? 0 : fIntValue;
+            return result;
         }
     }
 }

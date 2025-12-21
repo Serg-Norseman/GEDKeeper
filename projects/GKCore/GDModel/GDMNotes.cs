@@ -159,6 +159,19 @@ namespace GDModel
             return result;
         }
 
+        public override string ParseString(StringSpan strValue)
+        {
+            string result = base.ParseString(strValue);
+            if (!IsPointer) {
+                fLines.Clear();
+                if (!string.IsNullOrEmpty(result)) {
+                    fLines.Add(result);
+                }
+                result = string.Empty;
+            }
+            return result;
+        }
+
         protected override void ProcessHashes(ref HashCode hashCode)
         {
             base.ProcessHashes(ref hashCode);

@@ -51,7 +51,7 @@ namespace GDModel.Providers.GEDCOM
 
     internal delegate StackTuple AddTagHandler(GDMTree tree, GDMTag owner, int tagLevel, int tagId, StringSpan tagValue);
 
-    internal delegate bool SaveTagHandler(StreamWriter stream, int level, GDMTag tag);
+    internal delegate bool SaveTagHandler<T>(StreamWriter stream, int level, T tag) where T : GDMTag;
 
     public enum TagHandler
     {
@@ -762,7 +762,7 @@ namespace GDModel.Providers.GEDCOM
                 curTag.ParseString(tagValue);
                 addHandler = TagHandler.DNATestTag;
             } else {
-                return AddRecordWithEventsTag(tree, owner, tagLevel, tagId, tagValue);
+                return AddRecordWithEventsTag(tree, indiRec, tagLevel, tagId, tagValue);
             }
 
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
@@ -812,7 +812,7 @@ namespace GDModel.Providers.GEDCOM
                 curTag = famRec.AddEvent(new GDMFamilyEvent(tagId, tagValue));
                 addHandler = TagHandler.FamilyEventTag;
             } else {
-                return AddRecordWithEventsTag(tree, owner, tagLevel, tagId, tagValue);
+                return AddRecordWithEventsTag(tree, famRec, tagLevel, tagId, tagValue);
             }
 
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
@@ -835,9 +835,8 @@ namespace GDModel.Providers.GEDCOM
         }
 
 
-        private static StackTuple AddRecordWithEventsTag(GDMTree tree, GDMTag owner, int tagLevel, int tagId, StringSpan tagValue)
+        private static StackTuple AddRecordWithEventsTag(GDMTree tree, GDMRecordWithEvents evtRec, int tagLevel, int tagId, StringSpan tagValue)
         {
-            GDMRecordWithEvents evtRec = (GDMRecordWithEvents)owner;
             GDMTag curTag = null;
             TagHandler addHandler = TagHandler.Null;
 
@@ -845,16 +844,14 @@ namespace GDModel.Providers.GEDCOM
             if (tagType == GEDCOMTagType.RESN) {
                 evtRec.Restriction = GEDCOMUtils.GetRestrictionVal(tagValue);
             } else {
-                return AddRecordTag(tree, owner, tagLevel, tagId, tagValue);
+                return AddRecordTag(tree, evtRec, tagLevel, tagId, tagValue);
             }
 
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static void WriteRecordWithEvents(StreamWriter stream, int level, GDMTag tag)
+        private static void WriteRecordWithEvents(StreamWriter stream, int level, GDMRecordWithEvents recWE)
         {
-            GDMRecordWithEvents recWE = (GDMRecordWithEvents)tag;
-
             WriteRecord(stream, level, recWE);
 
             level += 1;
@@ -1003,11 +1000,9 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteRepositoryCitation(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteRepositoryCitation(StreamWriter stream, int level, GDMRepositoryCitation repCit)
         {
-            GDMRepositoryCitation repCit = (GDMRepositoryCitation)tag;
-
-            if (!WriteBaseTag(stream, level, tag)) return false;
+            if (!WriteBaseTag(stream, level, repCit)) return false;
 
             level += 1;
             if (repCit.HasNotes) WriteList(stream, level, repCit.Notes, WriteNote);
@@ -1032,10 +1027,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteSourceCallNumber(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteSourceCallNumber(StreamWriter stream, int level, GDMSourceCallNumber callNum)
         {
-            GDMSourceCallNumber callNum = (GDMSourceCallNumber)tag;
-
             if (!WriteBaseTag(stream, level, callNum)) return false;
 
             level += 1;
@@ -1364,10 +1357,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static void WriteRecord(StreamWriter stream, int level, GDMTag tag)
+        private static void WriteRecord(StreamWriter stream, int level, GDMRecord record)
         {
-            GDMRecord record = (GDMRecord)tag;
-
             WriteRecordValue(stream, level, record);
 
             level += 1;
@@ -1375,7 +1366,7 @@ namespace GDModel.Providers.GEDCOM
                 if (!Strict) WriteTagLine(stream, level, GEDCOMTagName._UID, record.UID, true);
                 WriteChangeDate(stream, level, record.ChangeDate);
             }
-            WriteSubTags(stream, level, tag);
+            WriteSubTags(stream, level, record);
 
             WriteTagLine(stream, level, GEDCOMTagName.RIN, record.AutomatedRecordID, true);
 
@@ -1447,10 +1438,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteHeader(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteHeader(StreamWriter stream, int level, GDMHeader header)
         {
-            GDMHeader header = (GDMHeader)tag;
-
             if (!WriteBaseTag(stream, level, header)) return false;
 
             level += 1;
@@ -1488,10 +1477,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteHeaderSource(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteHeaderSource(StreamWriter stream, int level, GDMHeaderSource headerSource)
         {
-            GDMHeaderSource headerSource = (GDMHeaderSource)tag;
-
             if (!WriteBaseTag(stream, level, headerSource)) return false;
 
             level += 1;
@@ -1519,10 +1506,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteHeaderGEDCOM(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteHeaderGEDCOM(StreamWriter stream, int level, GDMHeaderGEDCOM headerGEDCOM)
         {
-            GDMHeaderGEDCOM headerGEDCOM = (GDMHeaderGEDCOM)tag;
-
             if (!WriteBaseTag(stream, level, headerGEDCOM)) return false;
 
             level += 1;
@@ -1548,10 +1533,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteHeaderCharSet(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteHeaderCharSet(StreamWriter stream, int level, GDMHeaderCharSet headerCharSet)
         {
-            GDMHeaderCharSet headerCharSet = (GDMHeaderCharSet)tag;
-
             if (!WriteBaseTag(stream, level, headerCharSet)) return false;
 
             level += 1;
@@ -1578,10 +1561,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteHeaderFile(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteHeaderFile(StreamWriter stream, int level, GDMHeaderFile headerFile)
         {
-            GDMHeaderFile headerFile = (GDMHeaderFile)tag;
-
             if (!WriteBaseTag(stream, level, headerFile)) return false;
 
             if (!Strict) {
@@ -1625,10 +1606,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteChangeDate(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteChangeDate(StreamWriter stream, int level, GDMChangeDate changeDate)
         {
-            GDMChangeDate changeDate = (GDMChangeDate)tag;
-
             if (!WriteBaseTag(stream, level, changeDate)) return false;
 
             level += 1;
@@ -1742,10 +1721,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, null, TagHandler.Null);
         }
 
-        private static bool WriteCustomEvent(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteCustomEvent(StreamWriter stream, int level, GDMCustomEvent custEvent)
         {
-            GDMCustomEvent custEvent = (GDMCustomEvent)tag;
-
             if (!WriteBaseTag(stream, level, custEvent)) return false;
 
             level += 1;
@@ -1767,12 +1744,12 @@ namespace GDModel.Providers.GEDCOM
             return true;
         }
 
-        private static bool WriteIndividualEvent(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteIndividualEvent(StreamWriter stream, int level, GDMCustomEvent custEvent)
         {
-            if (!WriteCustomEvent(stream, level, tag)) return false;
+            if (!WriteCustomEvent(stream, level, custEvent)) return false;
 
             // GDMIndividualEvent | GDMIndividualAttribute
-            if (tag is GDMIndividualEvent indiEvent) {
+            if (custEvent is GDMIndividualEvent indiEvent) {
                 level += 1;
                 if (indiEvent.HasAge) WriteTagLine(stream, level, GEDCOMTagName.AGE, indiEvent.Age.StringValue, true);
             }
@@ -1780,11 +1757,11 @@ namespace GDModel.Providers.GEDCOM
             return true;
         }
 
-        private static bool WriteFamilyEvent(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteFamilyEvent(StreamWriter stream, int level, GDMCustomEvent custEvent)
         {
-            if (!WriteCustomEvent(stream, level, tag)) return false;
+            if (!WriteCustomEvent(stream, level, custEvent)) return false;
 
-            GDMFamilyEvent famEvent = (GDMFamilyEvent)tag;
+            GDMFamilyEvent famEvent = (GDMFamilyEvent)custEvent;
 
             level += 1;
             var sublevel = level + 1;
@@ -1827,11 +1804,9 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteSourceData(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteSourceData(StreamWriter stream, int level, GDMSourceData sourData)
         {
-            GDMSourceData sourData = (GDMSourceData)tag;
-
-            if (!WriteBaseTag(stream, level, tag)) return false;
+            if (!WriteBaseTag(stream, level, sourData)) return false;
 
             level += 1;
 
@@ -1864,10 +1839,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteSourceDataEvent(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteSourceDataEvent(StreamWriter stream, int level, GDMSourceEvent dataEvent)
         {
-            GDMSourceEvent dataEvent = (GDMSourceEvent)tag;
-
             if (!WriteBaseTag(stream, level, dataEvent)) return false;
 
             level += 1;
@@ -2059,7 +2032,7 @@ namespace GDModel.Providers.GEDCOM
             return (tagProps != null && tagProps.SkipEmpty);
         }
 
-        private static void WriteList<T>(StreamWriter stream, int level, GDMList<T> list, SaveTagHandler tagHandler) where T : GDMTag
+        private static void WriteList<T>(StreamWriter stream, int level, GDMList<T> list, SaveTagHandler<T> tagHandler) where T : GDMTag
         {
             IList<T> internalList = list.GetList();
             if (internalList == null) return;
@@ -2149,10 +2122,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteLocationName(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteLocationName(StreamWriter stream, int level, GDMLocationName locName)
         {
-            GDMLocationName locName = (GDMLocationName)tag;
-
             if (!WriteBaseTag(stream, level, locName)) return false;
 
             int lev = level + 1;
@@ -2181,10 +2152,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteLocationLink(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteLocationLink(StreamWriter stream, int level, GDMLocationLink locLink)
         {
-            GDMLocationLink locLink = (GDMLocationLink)tag;
-
             if (!WriteBaseTag(stream, level, locLink)) return false;
 
             level += 1;
@@ -2219,11 +2188,9 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WritePlace(StreamWriter stream, int level, GDMTag tag)
+        private static bool WritePlace(StreamWriter stream, int level, GDMPlace place)
         {
-            GDMPlace place = (GDMPlace)tag;
-
-            if (!WriteBaseTag(stream, level, tag)) return false;
+            if (!WriteBaseTag(stream, level, place)) return false;
 
             level += 1;
 
@@ -2256,12 +2223,11 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteMap(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteMap(StreamWriter stream, int level, GDMMap map)
         {
-            GDMMap map = (GDMMap)tag;
             if (map.IsEmpty() && GEDCOMProvider.SkipEmptyTag(map.Id)) return false;
 
-            WriteTagValue(stream, level, tag);
+            WriteTagValue(stream, level, map);
 
             level += 1;
             WriteTagLine(stream, level, GEDCOMTagName.LATI, GEDCOMUtils.CoordToStr(map.Lati, GEDCOMGeoCoord.Lati, Strict), true);
@@ -2286,10 +2252,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteUserReference(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteUserReference(StreamWriter stream, int level, GDMUserReference userRef)
         {
-            GDMUserReference userRef = (GDMUserReference)tag;
-
             if (!WriteBaseTag(stream, level, userRef)) return false;
 
             GEDCOMProvider.WriteTagLine(stream, ++level, GEDCOMTagName.TYPE, userRef.ReferenceType, true);
@@ -2321,10 +2285,8 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // Format: FORM\TYPE
-        private static bool WriteFileReferenceWithTitle(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteFileReferenceWithTitle(StreamWriter stream, int level, GDMFileReferenceWithTitle fileRef)
         {
-            GDMFileReferenceWithTitle fileRef = (GDMFileReferenceWithTitle)tag;
-
             if (!WriteBaseTag(stream, level, fileRef)) return false;
 
             level += 1;
@@ -2357,10 +2319,8 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // Format: FORM\MEDI
-        private static bool WriteFileReference(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteFileReference(StreamWriter stream, int level, GDMFileReference fileRef)
         {
-            GDMFileReference fileRef = (GDMFileReference)tag;
-
             if (!WriteBaseTag(stream, level, fileRef)) return false;
 
             level += 1;
@@ -2385,7 +2345,7 @@ namespace GDModel.Providers.GEDCOM
                 mmLink.IsPrimaryCutout = GEDCOMUtils.GetBoolVal(tagValue);
             } else if (tagType == GEDCOMTagType._POSITION) {
                 curTag = mmLink.CutoutPosition;
-                GEDCOMUtils.ParseCutoutPosition(tagValue, mmLink.CutoutPosition);
+                GEDCOMUtils.ParseCutoutPosition(mmLink.CutoutPosition, tagValue);
             } else if (tagType == GEDCOMTagType.FILE) {
                 curTag = mmLink.FileReferences.Add(new GDMFileReference());
                 curTag.ParseString(tagValue);
@@ -2397,10 +2357,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteMultimediaLink(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteMultimediaLink(StreamWriter stream, int level, GDMMultimediaLink mmLink)
         {
-            GDMMultimediaLink mmLink = (GDMMultimediaLink)tag;
-
             if (!WriteBaseTag(stream, level, mmLink)) return false;
 
             level += 1;
@@ -2480,11 +2438,10 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteSourceCitation(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteSourceCitation(StreamWriter stream, int level, GDMSourceCitation sourCit)
         {
-            if (tag.IsEmpty() && GEDCOMProvider.SkipEmptyTag(tag.Id)) return false;
+            if (sourCit.IsEmpty() && GEDCOMProvider.SkipEmptyTag(sourCit.Id)) return false;
 
-            GDMSourceCitation sourCit = (GDMSourceCitation)tag;
             if (sourCit.IsPointer) {
                 WriteTagValue(stream, level, sourCit);
             } else {
@@ -2529,10 +2486,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteSourceCitationData(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteSourceCitationData(StreamWriter stream, int level, GDMSourceCitationData srcitData)
         {
-            GDMSourceCitationData srcitData = (GDMSourceCitationData)tag;
-
             if (!WriteBaseTag(stream, level, srcitData)) return false;
 
             level += 1;
@@ -2562,10 +2517,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteAssociation(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteAssociation(StreamWriter stream, int level, GDMAssociation asso)
         {
-            GDMAssociation asso = (GDMAssociation)tag;
-
             if (!WriteBaseTag(stream, level, asso)) return false;
 
             level += 1;
@@ -2615,9 +2568,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteAddress(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteAddress(StreamWriter stream, int level, GDMAddress addr)
         {
-            GDMAddress addr = (GDMAddress)tag;
             if (addr.IsEmpty() && GEDCOMProvider.SkipEmptyTag(addr.Id)) return false;
 
             WriteTagValue(stream, level, addr);
@@ -2664,10 +2616,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteChildToFamilyLink(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteChildToFamilyLink(StreamWriter stream, int level, GDMChildToFamilyLink cfl)
         {
-            GDMChildToFamilyLink cfl = (GDMChildToFamilyLink)tag;
-
             if (!WriteBaseTag(stream, level, cfl)) return false;
 
             level += 1;
@@ -2705,10 +2655,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WritePersonalName(StreamWriter stream, int level, GDMTag tag)
+        private static bool WritePersonalName(StreamWriter stream, int level, GDMPersonalName persName)
         {
-            GDMPersonalName persName = (GDMPersonalName)tag;
-
             if (!WriteBaseTag(stream, level, persName)) return false;
 
             int lev = level + 1;
@@ -2824,10 +2772,8 @@ namespace GDModel.Providers.GEDCOM
             return CreateReaderStackTuple(tagLevel, curTag, addHandler);
         }
 
-        private static bool WriteDNATest(StreamWriter stream, int level, GDMTag tag)
+        private static bool WriteDNATest(StreamWriter stream, int level, GDMDNATest dnaTest)
         {
-            GDMDNATest dnaTest = (GDMDNATest)tag;
-
             if (!WriteBaseTag(stream, level, dnaTest)) return false;
 
             level += 1;
@@ -3250,16 +3196,16 @@ namespace GDModel.Providers.GEDCOM
                 using (StreamWriter fs = new StreamWriter(stm)) {
                     if (tag is GDMRecord rec) {
                         WriteRecordEx(fs, rec);
-                    } else if (tag is GDMIndividualEvent) {
-                        WriteIndividualEvent(fs, 1, tag);
-                    } else if (tag is GDMPersonalName) {
-                        WritePersonalName(fs, 1, tag);
-                    } else if (tag is GDMMultimediaLink) {
-                        WriteMultimediaLink(fs, 1, tag);
-                    } else if (tag is GDMSourceCitation) {
-                        WriteSourceCitation(fs, 1, tag);
-                    } else if (tag is GDMSourceData) {
-                        WriteSourceData(fs, 1, tag);
+                    } else if (tag is GDMIndividualEvent indiEvt) {
+                        WriteIndividualEvent(fs, 1, indiEvt);
+                    } else if (tag is GDMPersonalName persName) {
+                        WritePersonalName(fs, 1, persName);
+                    } else if (tag is GDMMultimediaLink mmLink) {
+                        WriteMultimediaLink(fs, 1, mmLink);
+                    } else if (tag is GDMSourceCitation sourCit) {
+                        WriteSourceCitation(fs, 1, sourCit);
+                    } else if (tag is GDMSourceData srcData) {
+                        WriteSourceData(fs, 1, srcData);
                     } else {
                         WriteBaseTag(fs, level, tag);
                     }

@@ -1,6 +1,6 @@
 ﻿/*
  *  "GEDKeeper", the personal genealogical database editor.
- *  Copyright (C) 2009-2024 by Sergey V. Zhdanovskih.
+ *  Copyright (C) 2009-2025 by Sergey V. Zhdanovskih.
  *
  *  This file is part of "GEDKeeper".
  *
@@ -50,7 +50,7 @@ namespace GDModel
             fXRef = string.Empty;
         }
 
-        public GDMPointer(int tagId, string tagValue)
+        public GDMPointer(int tagId, StringSpan tagValue)
         {
             SetNameValue(tagId, tagValue);
         }
@@ -72,6 +72,12 @@ namespace GDModel
         }
 
         public override string ParseString(string strValue)
+        {
+            // here XRef is a pure value without delimiters
+            return GEDCOMUtils.ParseXRefPointer(strValue, out fXRef);
+        }
+
+        public override string ParseString(StringSpan strValue)
         {
             // here XRef is a pure value without delimiters
             return GEDCOMUtils.ParseXRefPointer(strValue, out fXRef);

@@ -105,7 +105,12 @@ namespace GDModel
 
         public override string ParseString(string strValue)
         {
-            return GEDCOMUtils.ParseTime(strValue, this);
+            return GEDCOMUtils.ParseTime(this, strValue);
+        }
+
+        public override string ParseString(StringSpan strValue)
+        {
+            return GEDCOMUtils.ParseTime(this, strValue);
         }
 
         internal void SetRawData(byte hour, byte minutes, byte seconds, short fraction)

@@ -74,7 +74,7 @@ namespace GDModel
                     dtx1.ParseString("BET 04 JAN 2013 X 25 JAN 2013");
                 });
 
-                Assert.AreEqual(string.Empty, dtx1.ParseString(null));
+                Assert.AreEqual(string.Empty, dtx1.ParseString((string)null));
             }
         }
     }

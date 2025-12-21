@@ -20,7 +20,7 @@
 
 namespace GDModel.Providers.GEDCOM
 {
-    public enum GEDCOMTagType
+    public enum GEDCOMTagType : int
     {
         Unknown,
 
@@ -251,6 +251,7 @@ namespace GDModel.Providers.GEDCOM
         public const string ALIA = "ALIA";
         public const string ANCE = "ANCE";
         public const string ANCI = "ANCI";
+        public const string AND = "AND";
         public const string ANUL = "ANUL";
         public const string ASSO = "ASSO";
         public const string AUTH = "AUTH";

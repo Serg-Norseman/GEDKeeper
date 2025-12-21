@@ -222,6 +222,19 @@ namespace GDModel
             return result;
         }
 
+        public override string ParseString(StringSpan strValue)
+        {
+            string result = base.ParseString(strValue);
+            if (!IsPointer) {
+                fDescription.Clear();
+                if (!string.IsNullOrEmpty(result)) {
+                    fDescription.Add(result);
+                }
+                result = string.Empty;
+            }
+            return result;
+        }
+
         /// <summary>
         /// Strange values were found, possibly from other genealogical programs.
         /// </summary>

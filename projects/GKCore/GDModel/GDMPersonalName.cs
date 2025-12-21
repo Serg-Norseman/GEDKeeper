@@ -320,7 +320,12 @@ namespace GDModel
 
         public override string ParseString(string strValue)
         {
-            return GEDCOMUtils.ParseName(strValue, this);
+            return GEDCOMUtils.ParseName(this, strValue);
+        }
+
+        public override string ParseString(StringSpan strValue)
+        {
+            return GEDCOMUtils.ParseName(this, strValue);
         }
 
         private static bool IsUnknown(string str)

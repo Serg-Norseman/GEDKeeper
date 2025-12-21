@@ -195,6 +195,18 @@ namespace GDModel
             return result;
         }
 
+        public override string ParseString(StringSpan strValue)
+        {
+            string result;
+            if (strValue.IsEmptyOrEnd) {
+                Clear();
+                result = string.Empty;
+            } else {
+                result = GEDCOMUtils.ParseDate(this, strValue);
+            }
+            return result;
+        }
+
         /// <summary>
         /// Internal helper method for parser
         /// </summary>
