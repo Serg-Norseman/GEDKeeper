@@ -156,7 +156,7 @@ namespace GKUI.Components
         public GKSheetList(Control owner) : this()
         {
             if (owner == null)
-                throw new ArgumentNullException("owner");
+                throw new ArgumentNullException(nameof(owner));
 
             owner.SuspendLayout();
             owner.Controls.Add(this);

@@ -19,6 +19,8 @@
  */
 
 using System;
+using System.Threading.Tasks;
+using GKCore;
 using GKCore.Design;
 using GKTests;
 using GKTests.Stubs;
@@ -46,6 +48,13 @@ namespace GDModel.Providers.GEDCOM
 
             Assert.Throws(typeof(ArgumentNullException), () => { GEDCOMChecker.CheckGEDCOMFormat(null, null); });
             GEDCOMChecker.CheckGEDCOMFormat(fBaseWin.Context, progress);
+        }
+
+        [Test]
+        public async Task Test_WorkDataCollector()
+        {
+            Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await WorkDataCollector.Collect(null); });
+            await WorkDataCollector.Collect(fBaseWin.Context);
         }
     }
 }

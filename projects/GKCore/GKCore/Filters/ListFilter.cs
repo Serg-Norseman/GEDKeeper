@@ -84,7 +84,7 @@ namespace GKCore.Filters
         public virtual void Assign(ListFilter other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             fConditions.Clear();
             fConditions.AddRange(other.fConditions);

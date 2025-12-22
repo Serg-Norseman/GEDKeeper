@@ -420,7 +420,7 @@ namespace GKUI.Platform
         public override void SetClipboardImage(object image)
         {
             if (image == null)
-                throw new ArgumentNullException("image");
+                throw new ArgumentNullException(nameof(image));
 
             var sdImage = (Image)image;
             Clipboard.SetImage(sdImage);
@@ -439,7 +439,7 @@ namespace GKUI.Platform
             var container = AppHost.Container;
 
             if (container == null)
-                throw new ArgumentNullException("container");
+                throw new ArgumentNullException(nameof(container));
 
             container.Reset();
             ValidationFactory.InitGDMValidators();

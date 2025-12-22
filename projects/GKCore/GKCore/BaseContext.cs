@@ -203,11 +203,15 @@ namespace GKCore
 
         #region Data Manipulation
 
-        public void CollectEventValues(GDMCustomEvent evt)
+        public void CollectEvent(GDMCustomEvent evt, bool values = true)
         {
             if (evt == null) return;
 
             string evKey = evt.GetEventKey();
+            fEventStats.Increment(evKey);
+
+            if (!values) return;
+
             string evVal = evt.StringValue;
             if (!string.IsNullOrEmpty(evKey) && !string.IsNullOrEmpty(evVal)) {
                 fValuesCollection.Add(evKey, evVal);
@@ -359,7 +363,7 @@ namespace GKCore
         public async Task<bool> DeleteMediaRecord(GDMMultimediaRecord mRec)
         {
             if (mRec == null)
-                throw new ArgumentNullException("mRec");
+                throw new ArgumentNullException(nameof(mRec));
 
             if (mRec.FileReferences.Count > 0) {
                 bool fileDeleted = await MediaDelete(mRec.FileReferences[0]);
@@ -683,7 +687,7 @@ namespace GKCore
         public async Task CheckPersonSex(IView owner, GDMIndividualRecord iRec)
         {
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             try {
                 BeginUpdate();
@@ -869,7 +873,7 @@ namespace GKCore
         public MediaStoreStatus VerifyMediaFile(string fileReference, out string displayFileName)
         {
             if (fileReference == null)
-                throw new ArgumentNullException("fileReference");
+                throw new ArgumentNullException(nameof(fileReference));
 
             var mediaStore = MediaStore.GetMediaStore(this, fileReference);
             return mediaStore.VerifyMediaFile(out displayFileName);
@@ -1122,6 +1126,8 @@ namespace GKCore
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LoadGedComFailed));
                     Clear();
                 }
+
+                await WorkDataCollector.Collect(this);
 
                 AppHost.ForceGC();
             } catch (Exception ex) {

@@ -162,7 +162,7 @@ namespace GKCore.Cultures
         public override string[] GetSurnames(GDMIndividualRecord iRec)
         {
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             var parts = GetNamePartsEx(iRec);
             bool female = (iRec.Sex == GDMSex.svFemale);

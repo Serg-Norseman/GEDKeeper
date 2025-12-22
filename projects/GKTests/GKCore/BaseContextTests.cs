@@ -224,12 +224,12 @@ namespace GKCore
         {
             Assert.IsNotNull(fContext.ValuesCollection);
 
-            fContext.CollectEventValues(null);
+            fContext.CollectEvent(null);
             Assert.AreEqual(0, fContext.ValuesCollection.Count);
 
             var evt = new GDMIndividualAttribute((int)GEDCOMTagType._AWARD, "Congressional Gold Medal");
 
-            fContext.CollectEventValues(evt);
+            fContext.CollectEvent(evt);
             Assert.AreEqual(1, fContext.ValuesCollection.Count);
         }
 

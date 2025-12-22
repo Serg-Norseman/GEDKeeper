@@ -129,8 +129,8 @@ namespace GDModel.Providers.GEDCOM
                 if (!note.IsPointer) {
                     TransformNote(note);
                 } else {
-                    var noteRec = fTree.GetPtrValue<GDMNoteRecord>(note);
-                    if (noteRec == null) tag.Notes.RemoveAt(i);
+                    if (!fTree.ExistsXRef(note.XRef))
+                        tag.Notes.RemoveAt(i);
                 }
             }
         }
@@ -144,8 +144,8 @@ namespace GDModel.Providers.GEDCOM
                 if (!sourCit.IsPointer) {
                     TransformSourceCitation(sourCit);
                 } else {
-                    var sourRec = fTree.GetPtrValue<GDMSourceRecord>(sourCit);
-                    if (sourRec == null) tag.SourceCitations.RemoveAt(i);
+                    if (!fTree.ExistsXRef(sourCit.XRef))
+                        tag.SourceCitations.RemoveAt(i);
                 }
             }
         }
@@ -159,16 +159,16 @@ namespace GDModel.Providers.GEDCOM
                 if (!mmLink.IsPointer) {
                     TransformMultimediaLink(mmLink);
                 } else {
-                    var mmRec = fTree.GetPtrValue<GDMMultimediaRecord>(mmLink);
-                    if (mmRec == null) tag.MultimediaLinks.RemoveAt(i);
+                    if (!fTree.ExistsXRef(mmLink.XRef))
+                        tag.MultimediaLinks.RemoveAt(i);
                 }
             }
         }
 
         private void CheckPointerWithNotes(GDMPointerWithNotes ptr)
         {
-            GDMRecord val = fTree.GetPtrValue<GDMRecord>(ptr);
-            if (!string.IsNullOrEmpty(ptr.XRef) && val == null) {
+            var xref = ptr.XRef;
+            if (!string.IsNullOrEmpty(xref) && !fTree.ExistsXRef(xref)) {
                 ptr.XRef = string.Empty;
             }
 
@@ -178,10 +178,10 @@ namespace GDModel.Providers.GEDCOM
         private void CheckEventPlace(GDMPlace place, GDMCustomEvent evt)
         {
             GDMPointer placeLocation = place.Location;
-            GDMLocationRecord locRec = fTree.GetPtrValue<GDMLocationRecord>(placeLocation);
 
             // if the pointer is damaged
-            if (placeLocation.XRef != "" && locRec == null) {
+            string xref = placeLocation.XRef;
+            if (!string.IsNullOrEmpty(xref) && !fTree.ExistsXRef(xref)) {
                 placeLocation.XRef = "";
             }
 
@@ -230,9 +230,6 @@ namespace GDModel.Providers.GEDCOM
             if (evt.HasPlace) {
                 CheckEventPlace(evt.Place, evt);
             }
-
-            string key = evt.GetTagName() + ":" + evType;
-            fBaseContext.EventStats.Increment(key);
         }
 
         private void CheckUserRef(GDMRecord rec, GDMUserReference userRef)
@@ -243,8 +240,6 @@ namespace GDModel.Providers.GEDCOM
         {
             CheckTagWithNotes(persName);
             CheckTagWithSourceCitations(persName);
-
-            fBaseContext.CollectNameLangs(persName);
         }
 
         private void CheckIndividualRecord(GDMIndividualRecord iRec)
@@ -252,10 +247,7 @@ namespace GDModel.Providers.GEDCOM
             if (iRec.HasEvents) {
                 for (int i = 0, num = iRec.Events.Count; i < num; i++) {
                     GDMCustomEvent evt = iRec.Events[i];
-
                     CheckEvent(evt);
-
-                    fBaseContext.CollectEventValues(evt);
                 }
             }
 
@@ -288,8 +280,6 @@ namespace GDModel.Providers.GEDCOM
                     CheckTagWithSourceCitations(asso);
                 }
             }
-
-            fBaseContext.ImportNames(iRec);
 
             if (fFormat == GEDCOMFormat.RootsMagic) {
                 // _FSFTID -> fsft
@@ -617,7 +607,7 @@ namespace GDModel.Providers.GEDCOM
         public static bool CheckGEDCOMFormat(BaseContext baseContext, IProgressController pc)
         {
             if (baseContext == null)
-                throw new ArgumentNullException("baseContext");
+                throw new ArgumentNullException(nameof(baseContext));
 
             var instance = new GEDCOMChecker(baseContext, pc);
             return instance.CheckFormat();
@@ -640,10 +630,10 @@ namespace GDModel.Providers.GEDCOM
         public static void SyncTreeLocations(BaseContext baseContext, IProgressController pc)
         {
             if (baseContext == null)
-                throw new ArgumentNullException("baseContext");
+                throw new ArgumentNullException(nameof(baseContext));
 
             if (pc == null)
-                throw new ArgumentNullException("pc");
+                throw new ArgumentNullException(nameof(pc));
 
             try {
                 var tree = baseContext.Tree;

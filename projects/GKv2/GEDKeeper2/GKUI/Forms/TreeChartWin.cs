@@ -646,7 +646,7 @@ namespace GKUI.Forms
         {
             GDMIndividualRecord iRec = record as GDMIndividualRecord;
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             fTreeBox.SelectByRec(iRec);
         }

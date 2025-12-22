@@ -83,7 +83,7 @@ namespace GKCore.Maps
         public static void CopyPoints(IMapBrowser browser, IList<GeoPoint> gmapPoints, bool byPerson)
         {
             if (gmapPoints == null)
-                throw new ArgumentNullException("gmapPoints");
+                throw new ArgumentNullException(nameof(gmapPoints));
 
             var globOpts = GlobalOptions.Instance;
 

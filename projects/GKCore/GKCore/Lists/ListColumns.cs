@@ -180,7 +180,7 @@ namespace GKCore.Lists
         public void CopyTo(ListColumns target)
         {
             if (target == null)
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
 
             int num = fColumns.Count;
             for (int i = 0; i < num; i++) {

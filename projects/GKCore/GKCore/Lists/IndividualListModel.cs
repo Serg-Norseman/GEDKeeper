@@ -106,7 +106,7 @@ namespace GKCore.Lists
         {
             var otherFilter = other as IndividualListFilter;
             if (otherFilter == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             base.Assign(otherFilter);
 

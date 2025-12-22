@@ -75,7 +75,7 @@ namespace GKCore.Cultures
         public virtual string[] GetSurnames(GDMIndividualRecord iRec)
         {
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             var parts = GetNamePartsEx(iRec);
             bool female = (iRec.Sex == GDMSex.svFemale);
@@ -98,7 +98,7 @@ namespace GKCore.Cultures
         public NamePartsRet GetNameParts(GDMPersonalName personalName)
         {
             if (personalName == null)
-                throw new ArgumentNullException("personalName");
+                throw new ArgumentNullException(nameof(personalName));
 
             bool hasPatronymic = HasPatronymic;
 
@@ -122,7 +122,7 @@ namespace GKCore.Cultures
         public NamePartsRet GetNamePartsEx(GDMIndividualRecord iRec, bool formatted = true)
         {
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             if (iRec.PersonalNames.Count > 0) {
                 GDMPersonalName personalName = iRec.PersonalNames[0];

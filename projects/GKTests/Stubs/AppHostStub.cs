@@ -135,7 +135,7 @@ namespace GKTests.Stubs
             var container = AppHost.Container;
 
             if (container == null)
-                throw new ArgumentNullException("container");
+                throw new ArgumentNullException(nameof(container));
 
             container.Reset();
             ValidationFactory.InitGDMValidators();

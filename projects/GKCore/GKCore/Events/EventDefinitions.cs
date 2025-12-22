@@ -155,7 +155,7 @@ namespace GKCore.Events
         public void Collect(GDMCustomEvent evt)
         {
             if (evt == null)
-                throw new ArgumentNullException("evt");
+                throw new ArgumentNullException(nameof(evt));
 
             try {
                 string tag = evt.GetTagName();

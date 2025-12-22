@@ -230,7 +230,7 @@ namespace GDModel
         public void RemoveRepository(GDMRepositoryRecord repRec)
         {
             if (repRec == null)
-                throw new ArgumentNullException("repRec");
+                throw new ArgumentNullException(nameof(repRec));
 
             foreach (GDMRepositoryCitation repCit in fRepositoryCitations) {
                 if (repCit.XRef == repRec.XRef) {

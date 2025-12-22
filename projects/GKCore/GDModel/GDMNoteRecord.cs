@@ -121,7 +121,7 @@ namespace GDModel
         public void SetNoteText(string text)
         {
             if (text == null)
-                throw new ArgumentNullException("text");
+                throw new ArgumentNullException(nameof(text));
 
             fLines.Text = text;
         }

@@ -137,7 +137,7 @@ namespace GDModel.Providers.GEDCOM
         public GEDCOMParser(string data, bool ignoreWhitespace)
         {
             if (data == null)
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(data));
 
             fIgnoreWhitespace = ignoreWhitespace;
 

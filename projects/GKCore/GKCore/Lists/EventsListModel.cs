@@ -159,7 +159,7 @@ namespace GKCore.Lists
                                 }
 
                                 evt = newEvent;
-                                fBaseWin.Context.CollectEventValues(evt);
+                                fBaseWin.Context.CollectEvent(evt);
                             }
                         }
                         break;

@@ -478,7 +478,7 @@ namespace GKCore.Kinships
         public static KinshipsGraph SearchGraph(BaseContext context, GDMIndividualRecord iRec)
         {
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             KinshipsGraph graph = new KinshipsGraph(context);
             graph.SearchKGInt(null, iRec, KinshipType.ktUndefined, KinshipType.ktUndefined, KinshipExt.None);

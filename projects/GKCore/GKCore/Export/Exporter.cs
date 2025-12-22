@@ -46,7 +46,7 @@ namespace GKCore.Export
         protected Exporter(IBaseWindow baseWin)
         {
             if (baseWin == null)
-                throw new ArgumentNullException("baseWin");
+                throw new ArgumentNullException(nameof(baseWin));
 
             fBase = baseWin;
             fTree = baseWin.Context.Tree;

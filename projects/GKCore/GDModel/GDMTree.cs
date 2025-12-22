@@ -403,6 +403,11 @@ namespace GDModel
             return fXRefIndex.TryGetValue(xref, out record) ? record as T : null;
         }
 
+        public bool ExistsXRef(string xref)
+        {
+            return fXRefIndex.ContainsKey(xref);
+        }
+
         #endregion
 
         public int[] GetRecordStats()

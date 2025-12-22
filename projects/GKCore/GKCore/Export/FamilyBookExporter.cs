@@ -423,10 +423,10 @@ namespace GKCore.Export
         private static void PrepareSpecIndex(StringList index, string val, GDMIndividualRecord iRec)
         {
             if (index == null)
-                throw new ArgumentNullException("index");
+                throw new ArgumentNullException(nameof(index));
 
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             StringList persons;
 

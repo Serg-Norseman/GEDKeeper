@@ -38,7 +38,7 @@ namespace GKCore.Plugins
         public static PluginInfo GetPluginInfo(IPlugin plugin)
         {
             if (plugin == null)
-                throw new ArgumentNullException("plugin");
+                throw new ArgumentNullException(nameof(plugin));
 
             PluginInfo info = new PluginInfo();
 

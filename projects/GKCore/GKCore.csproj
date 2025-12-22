@@ -420,6 +420,7 @@
     <Compile Include="GKCore\Validation\ValidationFactory.cs" />
     <Compile Include="GKCore\Validation\ValidationMessage.cs" />
     <Compile Include="GKCore\Validation\ValidationResult.cs" />
+    <Compile Include="GKCore\WorkDataCollector.cs" />
     <Compile Include="GKUI\ImageBox.cs" />
     <Compile Include="GKUI\Themes\BaseThemeManager.cs" />
     <Compile Include="GKUI\Themes\IThemedView.cs" />

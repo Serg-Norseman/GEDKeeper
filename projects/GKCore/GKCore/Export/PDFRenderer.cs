@@ -60,7 +60,7 @@ namespace GKCore.Export
         {
             PdfContentByte gfx = target as PdfContentByte;
             if (gfx == null)
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
 
             fCanvas = gfx;
         }
