@@ -1224,6 +1224,8 @@ namespace GKCore
             return false;
         }
 
+        public abstract void Invoke(Action action);
+
         #endregion
 
         #region ISingleInstanceEnforcer implementation
@@ -1235,14 +1237,14 @@ namespace GKCore
 
         void ISingleInstanceEnforcer.OnMessageReceived(MessageEventArgs e)
         {
-            OnMessageReceivedInvoker invoker = delegate (MessageEventArgs eventArgs) {
+            Invoke(delegate () {
                 try {
-                    string msg = eventArgs.Message as string;
+                    string msg = e.Message as string;
 
                     if (!string.IsNullOrEmpty(msg) && msg == "restore") {
                         Restore();
                     } else {
-                        string[] args = eventArgs.Message as string[];
+                        string[] args = e.Message as string[];
                         if (args != null) {
                             // A obligatory recovery of window, otherwise it will fail to load
                             Restore();
@@ -1253,13 +1255,7 @@ namespace GKCore
                 } catch (Exception ex) {
                     Logger.WriteError("AppHost.OnMessageReceived()", ex);
                 }
-            };
-
-            //if (InvokeRequired) {
-            //    Invoke(invoker, e);
-            //} else {
-            invoker(e);
-            //}
+            });
         }
 
         #endregion

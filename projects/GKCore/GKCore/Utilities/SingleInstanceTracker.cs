@@ -3,14 +3,14 @@
  * (http://www.codeproject.com/Articles/19682/A-Pure-NET-Single-Instance-Application-Solution)
  */
 
-#define IPC_SUPPORTS
+// Cancelled forever. Do not use!
+//#define IPC_SUPPORTS
 
 #if NETCOREAPP || NETSTANDARD2_0
 #undef IPC_SUPPORTS
 #endif
 
 using System;
-using System.Threading;
 using BSLib;
 
 namespace GKCore.Utilities
@@ -19,6 +19,7 @@ namespace GKCore.Utilities
     using System.Runtime.Remoting;
     using System.Runtime.Remoting.Channels;
     using System.Runtime.Remoting.Channels.Ipc;
+    using System.Threading;
 #endif
 
     /// <summary>

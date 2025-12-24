@@ -129,6 +129,10 @@ namespace GKTests.Stubs
         {
         }
 
+        public override void Invoke(Action action)
+        {
+        }
+
         public static void ConfigureBootstrap()
         {
             var appHost = new AppHostStub();

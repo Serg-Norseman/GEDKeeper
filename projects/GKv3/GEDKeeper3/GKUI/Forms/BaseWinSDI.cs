@@ -272,6 +272,8 @@ namespace GKUI.Forms
             recView.KeyDown += Form_KeyDown;
             recView.ContextMenu = contextMenu;
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
+            recView.DragEnter += Form_DragEnter;
+            recView.DragDrop += Form_DragDrop;
             recView.UpdateContents();
 
             var strRecType = ((int)recType).ToString();

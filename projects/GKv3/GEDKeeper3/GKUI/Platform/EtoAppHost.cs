@@ -425,6 +425,15 @@ namespace GKUI.Platform
             }
         }
 
+        public override void Invoke(Action action)
+        {
+            try {
+                Application.Instance.Invoke(action);
+            } catch (Exception ex) {
+                Logger.WriteError("EtoAppHost.Invoke()", ex);
+            }
+        }
+
         #region KeyLayout functions
 
         public override int GetKeyLayout()

@@ -393,6 +393,21 @@ namespace GKUI.Platform
             }
         }
 
+        private SynchronizationContext fSyncContext;
+
+        public override void Invoke(Action action)
+        {
+            try {
+                if (fSyncContext == null) {
+                    fSyncContext = new SynchronizationContext();
+                }
+
+                fSyncContext.Post(_ => action(), null);
+            } catch (Exception ex) {
+                Logger.WriteError("WFAppHost.Invoke()", ex);
+            }
+        }
+
         #region KeyLayout functions
 
         public override int GetKeyLayout()
