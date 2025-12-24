@@ -47,7 +47,7 @@ namespace GKCore.Utilities
         {
             // Check arguments
             if (buffer == null)
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException(nameof(buffer));
 
             Array.Clear(buffer, 0, buffer.Length);
         }

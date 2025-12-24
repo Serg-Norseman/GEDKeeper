@@ -95,7 +95,7 @@ namespace GKCore.Options
         public void LoadFromFile(IniFile iniFile)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             try {
                 Format = (PedigreeFormat)iniFile.ReadInteger("Pedigree", "Format", 0);
@@ -118,7 +118,7 @@ namespace GKCore.Options
         public void SaveToFile(IniFile iniFile)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             iniFile.WriteInteger("Pedigree", "Format", (sbyte)Format);
             iniFile.WriteBool("Pedigree", "IncludeAttributes", IncludeAttributes);

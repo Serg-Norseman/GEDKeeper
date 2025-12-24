@@ -62,7 +62,7 @@ namespace GKCore.Options
         public void LoadFromFile(IniFile iniFile)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             try {
                 Autosave = iniFile.ReadBool("Common", "Autosave", false);
@@ -80,7 +80,7 @@ namespace GKCore.Options
         public void SaveToFile(IniFile iniFile)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             iniFile.WriteBool("Common", "Autosave", Autosave);
             iniFile.WriteInteger("Common", "AutosaveInterval", AutosaveInterval);

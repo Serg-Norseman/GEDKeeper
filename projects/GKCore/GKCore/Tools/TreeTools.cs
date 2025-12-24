@@ -136,7 +136,7 @@ namespace GKCore.Tools
         public static void GenPatriarchsGraphviz(IBaseWindow baseWin, string outpath, int minGens, bool loneSuppress, IProgressController progress)
         {
             if (baseWin == null)
-                throw new ArgumentNullException("baseWin");
+                throw new ArgumentNullException(nameof(baseWin));
 
             string[] options = { "ratio=auto" };
             GraphvizWriter gvw = new GraphvizWriter("Family Tree", options);
@@ -183,16 +183,16 @@ namespace GKCore.Tools
         public static void WalkTree(GDMTree tree, GDMIndividualRecord iRec, TreeWalkMode mode, WalkProc walkProc, object extData)
         {
             if (tree == null)
-                throw new ArgumentNullException("tree");
+                throw new ArgumentNullException(nameof(tree));
 
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             if (walkProc == null)
-                throw new ArgumentNullException("walkProc");
+                throw new ArgumentNullException(nameof(walkProc));
 
             if (extData == null)
-                throw new ArgumentNullException("extData");
+                throw new ArgumentNullException(nameof(extData));
 
             WalkTreeInt(tree, iRec, mode, walkProc, extData);
         }
@@ -200,13 +200,13 @@ namespace GKCore.Tools
         public static void WalkTree(GDMTree tree, GDMIndividualRecord iRec, TreeWalkMode mode, List<GDMRecord> walkList)
         {
             if (tree == null)
-                throw new ArgumentNullException("tree");
+                throw new ArgumentNullException(nameof(tree));
 
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             if (walkList == null)
-                throw new ArgumentNullException("walkList");
+                throw new ArgumentNullException(nameof(walkList));
 
             WalkTreeInt(tree, iRec, mode, DefaultWalkProc, walkList);
         }
@@ -280,10 +280,10 @@ namespace GKCore.Tools
         public static void MergeTree(GDMTree mainTree, GDMTree extTree, ITextBox logBox, bool selfTest = false)
         {
             if (mainTree == null)
-                throw new ArgumentNullException("mainTree");
+                throw new ArgumentNullException(nameof(mainTree));
 
             if (extTree == null)
-                throw new ArgumentNullException("extTree");
+                throw new ArgumentNullException(nameof(extTree));
 
             if (logBox != null) {
                 logBox.Clear();
@@ -349,10 +349,10 @@ namespace GKCore.Tools
         public static void MergeTreeFile(GDMTree mainTree, string fileName, ITextBox logBox, bool selfTest = false)
         {
             if (mainTree == null)
-                throw new ArgumentNullException("mainTree");
+                throw new ArgumentNullException(nameof(mainTree));
 
             if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException("fileName");
+                throw new ArgumentNullException(nameof(fileName));
 
             using (var extTree = new GDMTree()) {
                 var gedcomProvider = new GEDCOMProvider(extTree);
@@ -365,13 +365,13 @@ namespace GKCore.Tools
         public static async Task MergeRecord(IBaseWindow baseWin, GDMRecord targetRec, GDMRecord sourceRec, bool bookmark)
         {
             if (baseWin == null)
-                throw new ArgumentNullException("baseWin");
+                throw new ArgumentNullException(nameof(baseWin));
 
             if (targetRec == null)
-                throw new ArgumentNullException("targetRec");
+                throw new ArgumentNullException(nameof(targetRec));
 
             if (sourceRec == null)
-                throw new ArgumentNullException("sourceRec");
+                throw new ArgumentNullException(nameof(sourceRec));
 
             if (targetRec.RecordType == GDMRecordType.rtRepository) {
                 var res = await AppHost.StdDialogs.ShowQuestion(LangMan.LS(LSID.RepoRecsMergeWarning));
@@ -551,7 +551,7 @@ namespace GKCore.Tools
         public static void CheckRelations(GDMTree tree, List<GDMRecord> splitList)
         {
             if (splitList == null)
-                throw new ArgumentNullException("splitList");
+                throw new ArgumentNullException(nameof(splitList));
 
             // check relations betweeen individuals from list
             // put in the relationship queue only the families between the persons of the primary queue
@@ -631,7 +631,7 @@ namespace GKCore.Tools
         public static List<ULIndividual> GetUnlinkedNamesakes(IBaseWindow baseWin, IProgressController progress)
         {
             if (baseWin == null)
-                throw new ArgumentNullException("baseWin");
+                throw new ArgumentNullException(nameof(baseWin));
 
             GDMTree tree = baseWin.Context.Tree;
 
@@ -718,16 +718,16 @@ namespace GKCore.Tools
                                           DuplicateFoundFunc foundFunc, IProgressController pc)
         {
             if (treeA == null)
-                throw new ArgumentNullException("treeA");
+                throw new ArgumentNullException(nameof(treeA));
 
             if (treeB == null)
-                throw new ArgumentNullException("treeB");
+                throw new ArgumentNullException(nameof(treeB));
 
             if (foundFunc == null)
-                throw new ArgumentNullException("foundFunc");
+                throw new ArgumentNullException(nameof(foundFunc));
 
             if (pc == null)
-                throw new ArgumentNullException("pc");
+                throw new ArgumentNullException(nameof(pc));
 
             MatchParams mParams;
             //mParams.IndistinctMatching = true;
@@ -765,10 +765,10 @@ namespace GKCore.Tools
         public static void CompareTree(BaseContext context, string fileName, ITextBox logBox)
         {
             if (context == null)
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
 
             if (logBox == null)
-                throw new ArgumentNullException("logBox");
+                throw new ArgumentNullException(nameof(logBox));
 
             using (var tempTree = new GDMTree()) {
                 var gedcomProvider = new GEDCOMProvider(tempTree);
@@ -781,13 +781,13 @@ namespace GKCore.Tools
         public static void CompareTree(BaseContext context, GDMTree tempTree, ITextBox logBox)
         {
             if (context == null)
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
 
             if (tempTree == null)
-                throw new ArgumentNullException("tempTree");
+                throw new ArgumentNullException(nameof(tempTree));
 
             if (logBox == null)
-                throw new ArgumentNullException("logBox");
+                throw new ArgumentNullException(nameof(logBox));
 
             GDMTree mainTree = context.Tree;
 
@@ -903,7 +903,7 @@ namespace GKCore.Tools
         public static void SearchPlaces_Clear(StringList placesList)
         {
             if (placesList == null)
-                throw new ArgumentNullException("placesList");
+                throw new ArgumentNullException(nameof(placesList));
 
             placesList.Clear();
         }
@@ -942,13 +942,13 @@ namespace GKCore.Tools
         public static void SearchPlaces(GDMTree tree, StringList placesList, IProgressController pc, string filter = "*", bool checkLocation = true)
         {
             if (tree == null)
-                throw new ArgumentNullException("tree");
+                throw new ArgumentNullException(nameof(tree));
 
             if (placesList == null)
-                throw new ArgumentNullException("placesList");
+                throw new ArgumentNullException(nameof(placesList));
 
             if (pc == null)
-                throw new ArgumentNullException("pc");
+                throw new ArgumentNullException(nameof(pc));
 
             SearchPlaces_Clear(placesList);
 

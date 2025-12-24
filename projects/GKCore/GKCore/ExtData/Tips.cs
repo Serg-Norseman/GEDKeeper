@@ -72,7 +72,7 @@ namespace GKCore.ExtData
         public void CollectTips(StringList tipsList)
         {
             if (tipsList == null)
-                throw new ArgumentNullException("tipsList");
+                throw new ArgumentNullException(nameof(tipsList));
 
             try {
                 for (int i = 0; i < fTips.Tips.Length; i++) {

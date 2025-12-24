@@ -224,10 +224,10 @@ namespace GKUI.Components
         public static GKListView CreateRecordsView(Panel parent, BaseContext baseContext, GDMRecordType recType, bool simpleList)
         {
             if (parent == null)
-                throw new ArgumentNullException("parent");
+                throw new ArgumentNullException(nameof(parent));
 
             if (baseContext == null)
-                throw new ArgumentNullException("baseContext");
+                throw new ArgumentNullException(nameof(baseContext));
 
             GKListView recView = new GKListView();
             recView.ListMan = RecordsListModel<GDMRecord>.Create(baseContext, recType, simpleList);

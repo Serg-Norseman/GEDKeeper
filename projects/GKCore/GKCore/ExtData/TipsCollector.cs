@@ -34,7 +34,7 @@ namespace GKCore.ExtData
         public static void Collect(BaseContext context, StringList tipsList, bool onlyAlive = true)
         {
             if (tipsList == null)
-                throw new ArgumentNullException("tipsList");
+                throw new ArgumentNullException(nameof(tipsList));
 
             try {
                 var tree = context.Tree;

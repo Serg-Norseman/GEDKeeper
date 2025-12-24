@@ -49,10 +49,10 @@ namespace GKCore.Tools
         public void LoadOtherFile(GDMTree mainTree, string fileName)
         {
             if (mainTree == null)
-                throw new ArgumentNullException("mainTree");
+                throw new ArgumentNullException(nameof(mainTree));
 
             if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException("fileName");
+                throw new ArgumentNullException(nameof(fileName));
 
             fMainTree = mainTree;
 

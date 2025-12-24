@@ -271,9 +271,8 @@ namespace GKCore.Charts
 
         public void SetColor(IColor c)
         {
-            if (c == null) {
-                throw new ArgumentNullException("c");
-            }
+            if (c == null)
+                throw new ArgumentNullException(nameof(c));
 
             fLastColor = FormatColor(c);
             fLastColorOpacity = string.Format(fFmt, "{0}", c.GetA() / 255.0);

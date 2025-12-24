@@ -70,7 +70,7 @@ namespace GKUI.Platform
         public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool reduce)
         {
             if (stream == null)
-                throw new ArgumentNullException("stream");
+                throw new ArgumentNullException(nameof(stream));
 
             try {
                 var bmpDPI = ImageProcess.GetBitmapDPI(stream);
@@ -139,7 +139,7 @@ namespace GKUI.Platform
         public IImage LoadImage(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException("fileName");
+                throw new ArgumentNullException(nameof(fileName));
 
             if (!File.Exists(fileName))
                 return null;
@@ -171,10 +171,10 @@ namespace GKUI.Platform
         public void SaveImage(IImage image, string fileName)
         {
             if (image == null)
-                throw new ArgumentNullException("image");
+                throw new ArgumentNullException(nameof(image));
 
             if (fileName == null)
-                throw new ArgumentNullException("fileName");
+                throw new ArgumentNullException(nameof(fileName));
 
             try {
                 ((Bitmap)((ImageHandler)image).Handle).Save(fileName, ImageFormat.Bitmap);

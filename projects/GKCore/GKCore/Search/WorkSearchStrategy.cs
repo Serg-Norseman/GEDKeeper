@@ -32,7 +32,7 @@ namespace GKCore.Search
         public WorkSearchStrategy(IWorkWindow workWindow, string searchPattern)
         {
             if (searchPattern == null)
-                throw new ArgumentNullException("searchPattern");
+                throw new ArgumentNullException(nameof(searchPattern));
 
             fSearchPattern = searchPattern;
             fWorkWindow = workWindow;

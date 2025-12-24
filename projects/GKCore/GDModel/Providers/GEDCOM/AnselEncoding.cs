@@ -160,13 +160,13 @@ namespace GDModel.Providers.GEDCOM
         public override int GetByteCount(char[] chars, int index, int count)
         {
             if (chars == null) {
-                throw new ArgumentNullException("chars");
+                throw new ArgumentNullException(nameof(chars));
             }
             if (index < 0 || index > chars.Length) {
-                throw new ArgumentOutOfRangeException("index");
+                throw new ArgumentOutOfRangeException(nameof(index));
             }
             if (count < 0 || count > (chars.Length - index)) {
-                throw new ArgumentOutOfRangeException("count");
+                throw new ArgumentOutOfRangeException(nameof(count));
             }
 
             int byteCount = 0;
@@ -188,7 +188,7 @@ namespace GDModel.Providers.GEDCOM
         public override int GetByteCount(string s)
         {
             if (s == null) {
-                throw new ArgumentNullException("s");
+                throw new ArgumentNullException(nameof(s));
             }
 
             char[] chars = s.ToCharArray();
@@ -199,16 +199,16 @@ namespace GDModel.Providers.GEDCOM
         public override int GetBytes(char[] chars, int charIndex, int charCount, byte[] bytes, int byteIndex)
         {
             if (chars == null) {
-                throw new ArgumentNullException("chars");
+                throw new ArgumentNullException(nameof(chars));
             }
             if (bytes == null) {
-                throw new ArgumentNullException("bytes");
+                throw new ArgumentNullException(nameof(bytes));
             }
             if (charIndex < 0 || charIndex > chars.Length) {
-                throw new ArgumentOutOfRangeException("charIndex");
+                throw new ArgumentOutOfRangeException(nameof(charIndex));
             }
             if (byteIndex < 0 || byteIndex > bytes.Length) {
-                throw new ArgumentOutOfRangeException("byteIndex");
+                throw new ArgumentOutOfRangeException(nameof(byteIndex));
             }
             if ((bytes.Length - byteIndex) < charCount) {
                 throw new ArgumentException("Arg_InsufficientSpace");
@@ -241,7 +241,7 @@ namespace GDModel.Providers.GEDCOM
         public override int GetBytes(string s, int charIndex, int charCount, byte[] bytes, int byteIndex)
         {
             if (s == null) {
-                throw new ArgumentNullException("s");
+                throw new ArgumentNullException(nameof(s));
             }
 
             char[] chars = s.ToCharArray();
@@ -252,13 +252,13 @@ namespace GDModel.Providers.GEDCOM
         public override int GetCharCount(byte[] bytes, int index, int count)
         {
             if (bytes == null) {
-                throw new ArgumentNullException("bytes");
+                throw new ArgumentNullException(nameof(bytes));
             }
             if (index < 0 || index > bytes.Length) {
-                throw new ArgumentOutOfRangeException("index");
+                throw new ArgumentOutOfRangeException(nameof(index));
             }
             if (count < 0 || count > (bytes.Length - index)) {
-                throw new ArgumentOutOfRangeException("count");
+                throw new ArgumentOutOfRangeException(nameof(count));
             }
 
             int c = 0;
@@ -288,19 +288,19 @@ namespace GDModel.Providers.GEDCOM
         public override int GetChars(byte[] bytes, int byteIndex, int byteCount, char[] chars, int charIndex)
         {
             if (bytes == null) {
-                throw new ArgumentNullException("bytes");
+                throw new ArgumentNullException(nameof(bytes));
             }
             if (chars == null) {
-                throw new ArgumentNullException("chars");
+                throw new ArgumentNullException(nameof(chars));
             }
             if (byteIndex < 0 || byteIndex > bytes.Length) {
-                throw new ArgumentOutOfRangeException("byteIndex");
+                throw new ArgumentOutOfRangeException(nameof(byteIndex));
             }
             if (byteCount < 0 || byteCount > (bytes.Length - byteIndex)) {
-                throw new ArgumentOutOfRangeException("byteCount");
+                throw new ArgumentOutOfRangeException(nameof(byteCount));
             }
             if (charIndex < 0 || charIndex > chars.Length) {
-                throw new ArgumentOutOfRangeException("charIndex");
+                throw new ArgumentOutOfRangeException(nameof(charIndex));
             }
             if ((chars.Length - charIndex) < byteCount) {
                 throw new ArgumentException("Arg_InsufficientSpace");
@@ -342,13 +342,13 @@ namespace GDModel.Providers.GEDCOM
         public override string GetString(byte[] bytes, int index, int count)
         {
             if (bytes == null) {
-                throw new ArgumentNullException("bytes");
+                throw new ArgumentNullException(nameof(bytes));
             }
             if (index < 0 || index > bytes.Length) {
-                throw new ArgumentOutOfRangeException("index");
+                throw new ArgumentOutOfRangeException(nameof(index));
             }
             if (count < 0 || count > (bytes.Length - index)) {
-                throw new ArgumentOutOfRangeException("count");
+                throw new ArgumentOutOfRangeException(nameof(count));
             }
             if (count == 0) {
                 return string.Empty;

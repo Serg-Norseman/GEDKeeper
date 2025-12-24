@@ -266,7 +266,7 @@ namespace GKCore.Options
         public void LoadFromFile(IniFile iniFile)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             FamilyVisible = iniFile.ReadBool("Chart", "FamilyVisible", true);
             NameVisible = iniFile.ReadBool("Chart", "NameVisible", true);
@@ -343,7 +343,7 @@ namespace GKCore.Options
         public void SaveToFile(IniFile iniFile)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             iniFile.WriteBool("Chart", "FamilyVisible", FamilyVisible);
             iniFile.WriteBool("Chart", "NameVisible", NameVisible);

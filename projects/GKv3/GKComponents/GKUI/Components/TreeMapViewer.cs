@@ -45,7 +45,7 @@ namespace GKUI.Components
         public PaintItemEventArgs(Graphics graphics, MapItem item)
         {
             if (graphics == null) {
-                throw new ArgumentNullException("graphics");
+                throw new ArgumentNullException(nameof(graphics));
             }
 
             this.graphics = graphics;

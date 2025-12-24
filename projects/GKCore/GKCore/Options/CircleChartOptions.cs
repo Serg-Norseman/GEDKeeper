@@ -85,7 +85,7 @@ namespace GKCore.Options
         public void LoadFromFile(IniFile iniFile)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             try {
                 var utils = AppHost.GfxProvider;
@@ -105,7 +105,7 @@ namespace GKCore.Options
         public void SaveToFile(IniFile iniFile)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             for (int i = 0; i < MAX_BRUSHES; i++) {
                 iniFile.WriteInteger("AncestorsCircle", "Brush_"+Convert.ToString(i), BrushColor[i].ToArgb());

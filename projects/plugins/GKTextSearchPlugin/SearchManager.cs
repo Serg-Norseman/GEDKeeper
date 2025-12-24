@@ -200,7 +200,7 @@ namespace GKTextSearchPlugin
         public void UpdateRecord(IBaseWindow baseWin, GDMRecord record)
         {
             if (baseWin == null)
-                throw new ArgumentNullException("baseWin");
+                throw new ArgumentNullException(nameof(baseWin));
 
             if (record == null || !IsIndexedRecord(record)) return;
 
@@ -218,7 +218,7 @@ namespace GKTextSearchPlugin
         public void DeleteRecord(IBaseWindow baseWin, GDMRecord record)
         {
             if (baseWin == null)
-                throw new ArgumentNullException("baseWin");
+                throw new ArgumentNullException(nameof(baseWin));
 
             try {
                 lock (fLock) {
@@ -243,7 +243,7 @@ namespace GKTextSearchPlugin
         private List<SearchEntry> Search(IBaseWindow baseWin, string searchText, int resNum)
         {
             if (baseWin == null)
-                throw new ArgumentNullException("baseWin");
+                throw new ArgumentNullException(nameof(baseWin));
 
             List<SearchEntry> res = new List<SearchEntry>();
 

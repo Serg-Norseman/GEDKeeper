@@ -853,7 +853,7 @@ namespace GKCore
         public async Task LoadBase(IBaseWindow baseWin, string fileName)
         {
             if (baseWin == null)
-                throw new ArgumentNullException(@"baseWin");
+                throw new ArgumentNullException(nameof(baseWin));
 
             try {
                 if (!HasFeatureSupport(Feature.Mobile)) {
@@ -1101,10 +1101,10 @@ namespace GKCore
         public void RequestGeoCoords(string searchValue, IList<GeoPoint> pointsList, short results = 1)
         {
             if (string.IsNullOrEmpty(searchValue))
-                throw new ArgumentNullException(@"searchValue");
+                throw new ArgumentNullException(nameof(searchValue));
 
             if (pointsList == null)
-                throw new ArgumentNullException(@"pointsList");
+                throw new ArgumentNullException(nameof(pointsList));
 
             try {
                 IGeocoder geocoder = CreateGeocoder();

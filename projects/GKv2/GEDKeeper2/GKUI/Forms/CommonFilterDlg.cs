@@ -68,10 +68,10 @@ namespace GKUI.Forms
         public CommonFilterDlg(IBaseWindow baseWin, IRecordsListModel listMan) : this()
         {
             if (baseWin == null)
-                throw new ArgumentNullException("baseWin");
+                throw new ArgumentNullException(nameof(baseWin));
 
             if (listMan == null)
-                throw new ArgumentNullException("listMan");
+                throw new ArgumentNullException(nameof(listMan));
 
             fBase = baseWin;
             fListMan = listMan;

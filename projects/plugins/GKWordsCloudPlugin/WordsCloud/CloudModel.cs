@@ -70,7 +70,7 @@ namespace GKWordsCloudPlugin.WordsCloud
         public void SetWords(List<Word> words)
         {
             if (words == null)
-                throw new ArgumentNullException("words");
+                throw new ArgumentNullException(nameof(words));
 
             fWords = words;
         }

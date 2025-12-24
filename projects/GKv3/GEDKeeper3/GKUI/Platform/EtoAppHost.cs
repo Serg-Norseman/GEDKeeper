@@ -47,6 +47,7 @@ namespace GKUI.Platform
 {
     using CommonDialog = Forms.CommonDialog;
     using FormWindowState = Eto.Forms.WindowState;
+    using ITimer = GKCore.ITimer;
 
     /// <summary>
     /// The main implementation of the platform-specific application's host for
@@ -461,7 +462,7 @@ namespace GKUI.Platform
         public override void SetClipboardImage(object image)
         {
             if (image == null)
-                throw new ArgumentNullException("image");
+                throw new ArgumentNullException(nameof(image));
 
             var etoImage = (Image)image;
             using (var clipboard = new Clipboard()) {

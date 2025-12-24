@@ -172,7 +172,7 @@ namespace GKCore.Linguistics
         public static string MorphNoun(string noun, DeclensionCase ncase, Number num, DeclensionGender gender, bool animate, bool endingstressed)
         {
             if (string.IsNullOrEmpty(noun))
-                throw new ArgumentNullException("noun");
+                throw new ArgumentNullException(nameof(noun));
 
             if (noun.Length < 2) {
                 throw new Exception(SWordTooShort);
@@ -362,10 +362,10 @@ namespace GKCore.Linguistics
             return result;
         }
 
-        public static string MorphAdjective(String adjective, DeclensionCase c, Number q, DeclensionGender g)
+        public static string MorphAdjective(string adjective, DeclensionCase c, Number q, DeclensionGender g)
         {
             if (string.IsNullOrEmpty(adjective))
-                throw new ArgumentNullException("adjective");
+                throw new ArgumentNullException(nameof(adjective));
 
             if (adjective.Length < 4) {
                 throw new Exception(SWordTooShort);

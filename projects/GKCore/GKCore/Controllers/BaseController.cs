@@ -1643,7 +1643,7 @@ namespace GKCore.Controllers
         public static async Task<GDMIndividualRecord> SelectSpouseFor(IView owner, IBaseWindow baseWin, GDMIndividualRecord iRec)
         {
             if (iRec == null)
-                throw new ArgumentNullException(@"iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             GDMSex needSex;
             switch (iRec.Sex) {

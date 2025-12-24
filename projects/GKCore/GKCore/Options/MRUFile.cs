@@ -52,7 +52,7 @@ namespace GKCore.Options
         public void LoadFromFile(IniFile iniFile, string section)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             FileName = iniFile.ReadString(section, "FileName", "");
             WinRect.Left = iniFile.ReadInteger(section, "WinL", 10);
@@ -66,7 +66,7 @@ namespace GKCore.Options
         public void SaveToFile(IniFile iniFile, string section)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             iniFile.WriteString(section, "FileName", FileName);
             iniFile.WriteInteger(section, "WinL", WinRect.Left);
@@ -80,7 +80,7 @@ namespace GKCore.Options
         public static void DeleteKeys(IniFile iniFile, string section)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             iniFile.DeleteKey(section, "FileName");
             iniFile.DeleteKey(section, "WinL");

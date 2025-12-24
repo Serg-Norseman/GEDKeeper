@@ -208,10 +208,10 @@ namespace GKUI.Components
         public static GKListView CreateRecordsView(Control parent, BaseContext baseContext, GDMRecordType recType, bool simpleList)
         {
             if (parent == null)
-                throw new ArgumentNullException("parent");
+                throw new ArgumentNullException(nameof(parent));
 
             if (baseContext == null)
-                throw new ArgumentNullException("baseContext");
+                throw new ArgumentNullException(nameof(baseContext));
 
             GKListView recView = new GKListView();
             recView.HideSelection = false;
@@ -230,7 +230,7 @@ namespace GKUI.Components
         public static GKListView CreateListView(Control parent)
         {
             if (parent == null)
-                throw new ArgumentNullException("parent");
+                throw new ArgumentNullException(nameof(parent));
 
             GKListView listView = new GKListView();
             listView.Dock = DockStyle.Fill;

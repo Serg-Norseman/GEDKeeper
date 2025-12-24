@@ -24,7 +24,7 @@ namespace GKCore.Utilities
         public MessageEventArgs(object message)
         {
             if (message == null)
-                throw new ArgumentNullException("message", @"message cannot be null.");
+                throw new ArgumentNullException(nameof(message));
 
             Message = message;
         }

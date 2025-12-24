@@ -92,7 +92,7 @@ namespace GKCore.ExtData
         public void CollectTips(StringList tipsList, DateTime dtx)
         {
             if (tipsList == null)
-                throw new ArgumentNullException("tipsList");
+                throw new ArgumentNullException(nameof(tipsList));
 
             try {
                 bool firstTip = true;

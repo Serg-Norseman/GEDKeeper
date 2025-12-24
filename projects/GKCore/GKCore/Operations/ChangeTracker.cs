@@ -43,10 +43,10 @@ namespace GKCore.Operations
         public bool DoOrdinaryOperation(OperationType type, IGDMObject obj, object newVal)
         {
             if (obj == null)
-                throw new ArgumentNullException("obj");
+                throw new ArgumentNullException(nameof(obj));
 
             if (newVal == null)
-                throw new ArgumentNullException("newVal");
+                throw new ArgumentNullException(nameof(newVal));
 
             return DoOperation(new OrdinaryOperation(this, type, obj, newVal));
         }
@@ -54,7 +54,7 @@ namespace GKCore.Operations
         public bool DoIndividualNameChange(GDMIndividualRecord iRec, string surname, string name, string patronymic, string marriedSurname, string nickname)
         {
             if (iRec == null)
-                throw new ArgumentNullException("iRec");
+                throw new ArgumentNullException(nameof(iRec));
 
             return DoOperation(new IndividualNameChange(this, iRec, surname, name, patronymic, marriedSurname, nickname));
         }

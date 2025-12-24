@@ -53,7 +53,7 @@ namespace GKMap
         {
             fMonitor = new SimpleMonitor();
             if (collection == null) {
-                throw new ArgumentNullException("collection");
+                throw new ArgumentNullException(nameof(collection));
             }
             CopyFrom(collection);
         }

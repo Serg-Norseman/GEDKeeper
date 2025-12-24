@@ -328,7 +328,7 @@ namespace GKCore.Stats
         public void GetSpecStats(StatsMode mode, List<StatsItem> values)
         {
             if (values == null)
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
 
             values.Clear();
 

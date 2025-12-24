@@ -64,7 +64,7 @@ namespace GKCore.Utilities
         public void Serialize(BinaryWriter bw)
         {
             if (bw == null)
-                throw new ArgumentNullException("bw");
+                throw new ArgumentNullException(nameof(bw));
 
             bw.Write(ID);
             bw.Write(Time);
@@ -75,7 +75,7 @@ namespace GKCore.Utilities
         public static IpcMessage Deserialize(BinaryReader br)
         {
             if (br == null)
-                throw new ArgumentNullException("br");
+                throw new ArgumentNullException(nameof(br));
 
             IpcMessage msg = new IpcMessage();
             msg.ID = br.ReadInt64();
@@ -203,7 +203,7 @@ namespace GKCore.Utilities
         public static void SendMessage(IpcParamEx ipcMsg)
         {
             if (ipcMsg == null)
-                throw new ArgumentNullException("ipcMsg");
+                throw new ArgumentNullException(nameof(ipcMsg));
 
             try {
                 Random rnd = new Random();
@@ -229,7 +229,7 @@ namespace GKCore.Utilities
         public static string SafeSerialize(string[] args)
         {
             if (args == null)
-                throw new ArgumentNullException("args");
+                throw new ArgumentNullException(nameof(args));
 
             string result = null;
 
@@ -245,7 +245,7 @@ namespace GKCore.Utilities
         public static string[] SafeDeserialize(string str)
         {
             if (str == null)
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
 
             try {
                 byte[] pb = Convert.FromBase64String(str);

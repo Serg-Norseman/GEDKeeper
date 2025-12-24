@@ -74,7 +74,7 @@ namespace GKCore.ExtData
         public ExtResource FindURL(string ident)
         {
             if (string.IsNullOrEmpty(ident))
-                throw new ArgumentNullException("ident");
+                throw new ArgumentNullException(nameof(ident));
 
             try {
                 for (int i = 0; i < fResources.Resources.Length; i++) {

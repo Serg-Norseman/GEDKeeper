@@ -103,7 +103,7 @@ namespace Org.Mentalis.Network.ProxySocket
         public new void Connect(EndPoint remoteEP)
         {
             if (remoteEP == null)
-                throw new ArgumentNullException("<remoteEP> cannot be null.");
+                throw new ArgumentNullException(nameof(remoteEP));
             if (this.ProtocolType != ProtocolType.Tcp || ProxyType == ProxyTypes.None || ProxyEndPoint == null)
                 base.Connect(remoteEP);
             else {
@@ -129,7 +129,7 @@ namespace Org.Mentalis.Network.ProxySocket
         public new void Connect(string host, int port)
         {
             if (host == null)
-                throw new ArgumentNullException("<host> cannot be null.");
+                throw new ArgumentNullException(nameof(host));
             if (port <= 0 || port > 65535)
                 throw new ArgumentException("Invalid port.");
             if (this.ProtocolType != ProtocolType.Tcp || ProxyType == ProxyTypes.None || ProxyEndPoint == null)

@@ -572,10 +572,10 @@ namespace GKCore.Tools
         public static void CheckBase(IBaseWindow baseWin, List<CheckObj> checksList, IProgressController progress, TreeInspectionOptions options = null)
         {
             if (baseWin == null)
-                throw new ArgumentNullException("baseWin");
+                throw new ArgumentNullException(nameof(baseWin));
 
             if (checksList == null)
-                throw new ArgumentNullException("checksList");
+                throw new ArgumentNullException(nameof(checksList));
 
             Censuses.Instance.Load(GKUtils.GetExternalsPath() + "censuses\\Russia.yaml");
 
@@ -620,10 +620,10 @@ namespace GKCore.Tools
         public static async Task RepairProblem(IView owner, IBaseWindow baseWin, CheckObj checkObj)
         {
             if (baseWin == null)
-                throw new ArgumentNullException("baseWin");
+                throw new ArgumentNullException(nameof(baseWin));
 
             if (checkObj == null)
-                throw new ArgumentNullException("checkObj");
+                throw new ArgumentNullException(nameof(checkObj));
 
             GDMTree tree = baseWin.Context.Tree;
 

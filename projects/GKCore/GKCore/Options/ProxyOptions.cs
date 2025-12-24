@@ -64,7 +64,7 @@ namespace GKCore.Options
         public void LoadFromFile(IniFile iniFile)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             UseProxy = iniFile.ReadBool("Proxy", "UseProxy", false);
             Server = iniFile.ReadString("Proxy", "Server", "");
@@ -76,7 +76,7 @@ namespace GKCore.Options
         public void SaveToFile(IniFile iniFile)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             iniFile.WriteBool("Proxy", "UseProxy", UseProxy);
             iniFile.WriteString("Proxy", "Server", Server);

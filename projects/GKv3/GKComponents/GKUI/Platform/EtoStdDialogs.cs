@@ -176,7 +176,7 @@ namespace GKUI.Platform
         private static void ConvertFileDialogFilters(FileDialog fileDlg, string filter)
         {
             if (fileDlg == null)
-                throw new ArgumentNullException("fileDlg");
+                throw new ArgumentNullException(nameof(fileDlg));
 
             var filterParts = filter.Split('|');
             int filtersNum = filterParts.Length / 2;

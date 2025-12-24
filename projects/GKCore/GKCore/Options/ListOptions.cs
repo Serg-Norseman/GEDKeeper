@@ -211,7 +211,7 @@ namespace GKCore.Options
         public void LoadFromFile(IniFile iniFile, int optsVersion)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             try {
                 SortColumn = iniFile.ReadInteger(fName, "SortColumn", 0);
@@ -228,7 +228,7 @@ namespace GKCore.Options
         public void SaveToFile(IniFile iniFile, int optsVersion)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             iniFile.WriteInteger(fName, "SortColumn", SortColumn);
             iniFile.WriteInteger(fName, "SplitterPosition", SplitterPosition);
@@ -418,7 +418,7 @@ namespace GKCore.Options
         public void LoadFromFile(IniFile iniFile, int optsVersion)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             for (var lt = GKListType.ltFirst; lt <= GKListType.ltLast; lt++) {
                 fOptions[(int)lt].LoadFromFile(iniFile, optsVersion);
@@ -428,7 +428,7 @@ namespace GKCore.Options
         public void SaveToFile(IniFile iniFile, int optsVersion)
         {
             if (iniFile == null)
-                throw new ArgumentNullException("iniFile");
+                throw new ArgumentNullException(nameof(iniFile));
 
             for (var lt = GKListType.ltFirst; lt <= GKListType.ltLast; lt++) {
                 fOptions[(int)lt].SaveToFile(iniFile, optsVersion);

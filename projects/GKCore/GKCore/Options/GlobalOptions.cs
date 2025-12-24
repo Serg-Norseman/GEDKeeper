@@ -587,7 +587,7 @@ namespace GKCore.Options
         public static void LoadMRUFromFile(IniFile ini, List<MRUFile> mruFiles)
         {
             if (ini == null)
-                throw new ArgumentNullException("ini");
+                throw new ArgumentNullException(nameof(ini));
 
             try {
                 int cnt = ini.ReadInteger("Common", "MRUFiles_Count", 0);
@@ -626,7 +626,7 @@ namespace GKCore.Options
         public void LoadPluginsFromFile(IniFile ini)
         {
             if (ini == null)
-                throw new ArgumentNullException("ini");
+                throw new ArgumentNullException(nameof(ini));
 
             try {
                 int num = AppHost.Plugins.Count;
@@ -649,7 +649,7 @@ namespace GKCore.Options
         public void SavePluginsToFile(IniFile ini)
         {
             if (ini == null)
-                throw new ArgumentNullException("ini");
+                throw new ArgumentNullException(nameof(ini));
 
             try {
                 int num = AppHost.Plugins.Count;
@@ -676,7 +676,7 @@ namespace GKCore.Options
         private void LoadStringList(IniFile ini, StringList list, string section, string itemPrefix = "Item_")
         {
             if (ini == null)
-                throw new ArgumentNullException("ini");
+                throw new ArgumentNullException(nameof(ini));
 
             try {
                 int cnt = ini.ReadInteger(section, "Count", 0);
@@ -692,7 +692,7 @@ namespace GKCore.Options
         private void SaveStringList(IniFile ini, StringList list, string section, string itemPrefix = "Item_")
         {
             if (ini == null)
-                throw new ArgumentNullException("ini");
+                throw new ArgumentNullException(nameof(ini));
 
             try {
                 int cnt = list.Count;
@@ -730,7 +730,7 @@ namespace GKCore.Options
         private void LoadRSFilters(IniFile ini)
         {
             if (ini == null)
-                throw new ArgumentNullException("ini");
+                throw new ArgumentNullException(nameof(ini));
 
             try {
                 for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
@@ -746,7 +746,7 @@ namespace GKCore.Options
         private void SaveRSFilters(IniFile ini)
         {
             if (ini == null)
-                throw new ArgumentNullException("ini");
+                throw new ArgumentNullException(nameof(ini));
 
             try {
                 for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
@@ -766,7 +766,7 @@ namespace GKCore.Options
         public void LoadFromFile(IniFile ini)
         {
             if (ini == null)
-                throw new ArgumentNullException("ini");
+                throw new ArgumentNullException(nameof(ini));
 
             int optsVersion = ini.ReadInteger("Common", "OptsVersion", 0);
 
@@ -892,7 +892,7 @@ namespace GKCore.Options
         public void LoadFromFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException("fileName");
+                throw new ArgumentNullException(nameof(fileName));
 
             Logger.WriteInfo("Options load path: " + fileName);
 
@@ -909,7 +909,7 @@ namespace GKCore.Options
         public void SaveToFile(IniFile ini)
         {
             if (ini == null)
-                throw new ArgumentNullException("ini");
+                throw new ArgumentNullException(nameof(ini));
 
             ini.WriteInteger("Common", "OptsVersion", OPTS_VERSION);
 
@@ -1050,7 +1050,7 @@ namespace GKCore.Options
         public void SaveToFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException("fileName");
+                throw new ArgumentNullException(nameof(fileName));
 
             try {
                 using (var ini = new IniFile(fileName)) {
