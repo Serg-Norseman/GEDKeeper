@@ -24,6 +24,7 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Graphics;
+using GKCore.Export.Formats;
 using GKCore.Locales;
 
 namespace GKCore.Export

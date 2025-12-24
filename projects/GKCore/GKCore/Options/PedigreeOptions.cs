@@ -47,6 +47,7 @@ namespace GKCore.Options
         public bool IncludeSourceCitations;
         public bool IncludeGenerations;
         public bool IncludePortraits;
+        public bool SortEvents;
 
         public PedigreeNumbering AscendNumbering;
         public PedigreeNumbering DescendNumbering;
@@ -66,6 +67,7 @@ namespace GKCore.Options
             IncludeSourceCitations = false;
             IncludeGenerations = true;
             IncludePortraits = false;
+            SortEvents = true;
 
             AscendNumbering = PedigreeNumbering.Kobrin_Konovalov_A;
             DescendNumbering = PedigreeNumbering.Kobrin_Konovalov_D;
@@ -84,6 +86,7 @@ namespace GKCore.Options
             IncludeSourceCitations = srcOptions.IncludeSourceCitations;
             IncludeGenerations = srcOptions.IncludeGenerations;
             IncludePortraits = srcOptions.IncludePortraits;
+            SortEvents = srcOptions.SortEvents;
 
             AscendNumbering = srcOptions.AscendNumbering;
             DescendNumbering = srcOptions.DescendNumbering;
@@ -103,6 +106,7 @@ namespace GKCore.Options
                 IncludeSourceCitations = iniFile.ReadBool("Pedigree", "IncludeSourceCitations", false);
                 IncludeGenerations = iniFile.ReadBool("Pedigree", "IncludeGenerations", true);
                 IncludePortraits = iniFile.ReadBool("Pedigree", "IncludePortraits", false);
+                SortEvents = iniFile.ReadBool("Pedigree", "SortEvents", true);
 
                 AscendNumbering = (PedigreeNumbering)iniFile.ReadInteger("Pedigree", "AscendNumbering", (int)PedigreeNumbering.Kobrin_Konovalov_A);
                 DescendNumbering = (PedigreeNumbering)iniFile.ReadInteger("Pedigree", "DescendNumbering", (int)PedigreeNumbering.Kobrin_Konovalov_D);
@@ -124,6 +128,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Pedigree", "IncludeSourceCitations", IncludeSourceCitations);
             iniFile.WriteBool("Pedigree", "IncludeGenerations", IncludeGenerations);
             iniFile.WriteBool("Pedigree", "IncludePortraits", IncludePortraits);
+            iniFile.WriteBool("Pedigree", "SortEvents", SortEvents);
 
             iniFile.WriteInteger("Pedigree", "AscendNumbering", (int)AscendNumbering);
             iniFile.WriteInteger("Pedigree", "DescendNumbering", (int)DescendNumbering);

@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Design;
+using GKCore.Export.Formats;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Options;

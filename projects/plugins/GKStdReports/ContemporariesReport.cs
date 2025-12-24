@@ -25,6 +25,7 @@ using GKCore;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Export;
+using GKCore.Export.Formats;
 using GKCore.Stats;
 
 // FIXME: very bad algorithm

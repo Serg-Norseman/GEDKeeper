@@ -25,6 +25,7 @@ using GDModel.Providers.GEDCOM;
 using GKCore.Calendar;
 using GKCore.Design;
 using GKCore.Design.Graphics;
+using GKCore.Export.Formats;
 using GKCore.Locales;
 using GKCore.Options;
 
@@ -390,7 +391,8 @@ namespace GKCore.Export
 
         private void WriteEventList(PedigreePerson person, List<PedigreeEvent> evList)
         {
-            SortHelper.QuickSort(evList, EventsCompare);
+            if (fOptions.PedigreeOptions.SortEvents)
+                SortHelper.QuickSort(evList, EventsCompare);
 
             int evtNum = evList.Count;
             for (int i = 0; i < evtNum; i++) {

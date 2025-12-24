@@ -38,8 +38,14 @@ using itImage = iTextSharp.text.Image;
 using itRectangle = iTextSharp.text.Rectangle;
 using itTable = iTextSharp.text.pdf.PdfPTable;
 
-namespace GKCore.Export
+namespace GKCore.Export.Formats
 {
+    public enum PDFPageSize
+    {
+        None, A0, A1, A2, A3, A4, A5,
+    }
+
+
     public class PDFWriter : CustomWriter
     {
         internal sealed class FontHandler : TypeHandler<itFont>, IFont

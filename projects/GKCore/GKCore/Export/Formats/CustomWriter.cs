@@ -22,7 +22,7 @@ using BSLib;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
 
-namespace GKCore.Export
+namespace GKCore.Export.Formats
 {
     public enum TextAlignment
     {

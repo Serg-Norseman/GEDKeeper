@@ -20,6 +20,7 @@
 
 using System;
 using GDModel;
+using GKCore.Export.Formats;
 using GKCore.Options;
 using GKTests;
 using GKTests.Stubs;

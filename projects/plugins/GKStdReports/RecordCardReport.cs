@@ -26,6 +26,7 @@ using GKCore;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Export;
+using GKCore.Export.Formats;
 using GKCore.Locales;
 
 namespace GKStdReports

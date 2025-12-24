@@ -31,7 +31,7 @@ using GKCore.Design.Graphics;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
-namespace GKCore.Export
+namespace GKCore.Export.Formats
 {
     using itImage = iTextSharp.text.Image;
 

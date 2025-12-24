@@ -1108,6 +1108,7 @@ namespace GKCore.Locales
             /* 1053 */ "Subject",
             /* 1054 */ "Override themes font",
             /* 1055 */ "Files",
+            /* 1056 */ "Sort events",
         };
     }
 }

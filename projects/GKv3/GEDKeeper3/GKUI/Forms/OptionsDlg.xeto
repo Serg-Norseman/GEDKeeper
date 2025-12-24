@@ -568,6 +568,7 @@
               </StackLayout>
               <CheckBox x:Name="chkGenerations" />
               <CheckBox x:Name="chkPortraits" />
+              <CheckBox x:Name="chkSortEvents" />
 
               <TableLayout Style="paddedTable8">
                 <TableRow>

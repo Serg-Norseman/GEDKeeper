@@ -25,6 +25,7 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Export;
+using GKCore.Export.Formats;
 using GKCore.Locales;
 
 namespace GKCore.Stats

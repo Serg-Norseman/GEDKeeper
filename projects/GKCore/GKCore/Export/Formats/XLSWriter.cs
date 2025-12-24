@@ -20,7 +20,7 @@
 
 using GKCore.Design.Graphics;
 
-namespace GKCore.Export
+namespace GKCore.Export.Formats
 {
 #if !NETCOREAPP && !NETSTANDARD2_0
     using ExcelLibrary.SpreadSheet;

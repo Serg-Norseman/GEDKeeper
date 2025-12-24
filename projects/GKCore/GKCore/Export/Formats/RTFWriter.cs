@@ -24,7 +24,7 @@ using BSLib;
 using Elistia.DotNetRtfWriter;
 using GKCore.Design.Graphics;
 
-namespace GKCore.Export
+namespace GKCore.Export.Formats
 {
     /// <summary>
     /// 

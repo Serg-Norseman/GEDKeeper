@@ -1132,7 +1132,8 @@ namespace GKCore.Locales
         /* 1053 */ Subject,
         /* 1054 */ OverrideThemesFont,
         /* 1055 */ MediaFiles,
+        /* 1056 */ SortEvents,
 
-        /* 0000 */ Last = MediaFiles
+        /* 0000 */ Last = SortEvents
     }
 }
