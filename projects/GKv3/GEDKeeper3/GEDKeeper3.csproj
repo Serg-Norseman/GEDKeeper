@@ -41,7 +41,7 @@
 
 
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
-        <TargetFramework>net6.0-windows</TargetFramework>
+        <TargetFramework>net8.0-windows</TargetFramework>
         <OutputType>WinExe</OutputType>
         <OutputPath>..\..\..\bin\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -64,7 +64,7 @@
 
 
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) ">
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <OutputType>exe</OutputType>
         <OutputPath>..\..\..\bin\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -84,7 +84,7 @@
 
 
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_FREEBSD')) ">
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <OutputType>exe</OutputType>
         <OutputPath>..\..\..\bin\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -101,7 +101,7 @@
 
 
     <PropertyGroup Condition=" $(DefineConstants.Contains('OS_MACOS')) ">
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <OutputType>exe</OutputType>
         <PublishTrimmed>false</PublishTrimmed>
         <SelfContained>false</SelfContained>
