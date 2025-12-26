@@ -283,7 +283,7 @@ namespace GDModel
             }
 
             if (fCalendar != GDMCalendar.dcGregorian) {
-                parts[pIdx++] = GEDCOMConsts.GEDCOMDateEscapeArray[(int)fCalendar];
+                parts[pIdx++] = GEDCOMConsts.GEDCOMDateFullEscapeArray[(int)fCalendar];
             }
 
             if (fDay > 0) {

@@ -48,7 +48,7 @@ namespace GKUI.Platform
         {
             var gfx = target as SKSurface;
             if (gfx == null)
-                throw new ArgumentException("target");
+                throw new ArgumentException(nameof(target));
 
             fSurface = gfx;
             fCanvas = gfx.Canvas;
@@ -70,7 +70,7 @@ namespace GKUI.Platform
         public override IImage LoadImage(string fileName)
         {
             if (fileName == null)
-                throw new ArgumentNullException("fileName");
+                throw new ArgumentNullException(nameof(fileName));
 
             var img = SKImage.FromEncodedData(fileName);
             return new SKImageHandler(img);

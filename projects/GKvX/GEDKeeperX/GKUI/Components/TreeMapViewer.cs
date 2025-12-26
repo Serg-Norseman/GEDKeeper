@@ -46,7 +46,7 @@ namespace GKUI.Components
         public PaintItemEventArgs(SKCanvas canvas, MapItem item)
         {
             if (canvas == null) {
-                throw new ArgumentNullException("canvas");
+                throw new ArgumentNullException(nameof(canvas));
             }
 
             this.canvas = canvas;

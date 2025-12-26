@@ -103,7 +103,7 @@ namespace GKCore.Charts
         {
 #if !DESK_METHOD
             if (generation < -127 || generation > 127)
-                throw new ArgumentOutOfRangeException("generation");
+                throw new ArgumentOutOfRangeException(nameof(generation));
 
             int index = generation + 127;
             fEdges[index] = value;
@@ -126,7 +126,7 @@ namespace GKCore.Charts
             int generation = person.Generation;
 
             if (generation < -127 || generation > 127)
-                throw new ArgumentOutOfRangeException("generation");
+                throw new ArgumentOutOfRangeException(nameof(generation));
 
             int index = generation + 127;
             int result = fEdges[index];

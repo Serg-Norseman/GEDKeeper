@@ -65,7 +65,7 @@ namespace GKUI.Platform
             {
                 get {
                     if (index < 0 || index >= fTabControl.ItemSource.Count)
-                        throw new ArgumentOutOfRangeException("index");
+                        throw new ArgumentOutOfRangeException(nameof(index));
 
                     return new TabPageHandler(fTabControl.ItemSource[index]);
                 }

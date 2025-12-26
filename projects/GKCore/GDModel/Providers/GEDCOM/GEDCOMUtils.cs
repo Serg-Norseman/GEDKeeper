@@ -663,7 +663,7 @@ namespace GDModel.Providers.GEDCOM
             // extract escape
             if (strTok.CurrentToken == GEDCOMToken.XRef) {
                 // FIXME: check for errors
-                var escapeStr = "@" + strTok.GetWord() + "@";
+                var escapeStr = strTok.GetWord();
                 int idx = ArrayHelper.IndexOf(GEDCOMConsts.GEDCOMDateEscapeArray, escapeStr);
                 if (idx >= 0) {
                     calendar = (GDMCalendar)idx;
@@ -1221,25 +1221,6 @@ namespace GDModel.Providers.GEDCOM
 
                 if (num3 == 0) {
                     return ekv.Value;
-                }
-                if (num3 < 0) {
-                    i = num2 + 1;
-                } else {
-                    num = num2 - 1;
-                }
-            }
-            return ~i;
-        }
-
-        public static int BinarySearch<T>(T[] array, T value) where T : IComparable<T>
-        {
-            int i = 0;
-            int num = array.Length - 1;
-            while (i <= num) {
-                int num2 = i + (num - i >> 1);
-                int num3 = array[num2].CompareTo(value);
-                if (num3 == 0) {
-                    return num2;
                 }
                 if (num3 < 0) {
                     i = num2 + 1;

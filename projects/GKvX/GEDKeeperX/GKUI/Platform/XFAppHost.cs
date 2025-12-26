@@ -255,6 +255,11 @@ namespace GKUI.Platform
             // not supported
         }
 
+        public override void Invoke(Action action)
+        {
+            action();
+        }
+
         #region Bootstrapper
 
         /// <summary>

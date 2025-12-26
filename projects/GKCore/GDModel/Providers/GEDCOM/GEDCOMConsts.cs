@@ -74,6 +74,7 @@ namespace GDModel.Providers.GEDCOM
         internal static readonly string[] GEDCOMDateApproximatedArray;
         internal static readonly string[] GEDCOMDateRangeArray;
         internal static readonly string[] GEDCOMDateEscapeArray;
+        internal static readonly string[] GEDCOMDateFullEscapeArray;
 
         public static readonly string[] GEDCOMMonthArray;
         internal static readonly string[] GEDCOMMonthHebrewArray;
@@ -93,6 +94,13 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMDateRangeArray = new string[] { "AFT", "BEF", "BET", "AND" };
 
             GEDCOMDateEscapeArray = new string[]
+            {
+                "#DGREGORIAN", "#DJULIAN", "#DHEBREW", "#DFRENCH R", "#DROMAN",
+                "#DISLAMIC", // GK+ (nonstandard)
+                "#DUNKNOWN"
+            };
+
+            GEDCOMDateFullEscapeArray = new string[]
             {
                 "@#DGREGORIAN@", "@#DJULIAN@", "@#DHEBREW@", "@#DFRENCH R@", "@#DROMAN@",
                 "@#DISLAMIC@", // GK+ (nonstandard)

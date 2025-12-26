@@ -78,7 +78,7 @@ namespace GKUI.Platform
         public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool reduce)
         {
             if (stream == null)
-                throw new ArgumentNullException("stream");
+                throw new ArgumentNullException(nameof(stream));
 
             try {
                 var img = SKImage.FromEncodedData(stream);
@@ -91,7 +91,7 @@ namespace GKUI.Platform
         public IImage LoadImage(string fileName)
         {
             if (fileName == null)
-                throw new ArgumentNullException("fileName");
+                throw new ArgumentNullException(nameof(fileName));
 
             var img = ImageSource.FromFile(fileName);
             return new XFImageHandler(img);
@@ -121,10 +121,10 @@ namespace GKUI.Platform
         public void SaveImage(IImage image, string fileName)
         {
             /*if (image == null)
-                throw new ArgumentNullException("image");
+                throw new ArgumentNullException(nameof(image));
 
             if (fileName == null)
-                throw new ArgumentNullException("fileName");
+                throw new ArgumentNullException(nameof(fileName));
 
             ((ImageHandler)image).Handle.Save(fileName, ImageFormat.Bmp);*/
             throw new NotImplementedException();

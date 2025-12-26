@@ -3,6 +3,9 @@
 set CONFIG_TYPE=Debug
 for %%a in (release Release RELEASE) do if (%%a)==(%1) SET CONFIG_TYPE=Release
 
+set MSBDIR="C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin"
+@if exist %MSBDIR%\msbuild.exe goto build
+
 set MSBDIR="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin"
 @if exist %MSBDIR%\msbuild.exe goto build
 
