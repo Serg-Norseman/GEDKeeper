@@ -56,8 +56,8 @@ namespace GDModel.Providers.GEDCOM
 
     public enum GEDCOMDateFormat
     {
-        Standard,
-        System
+        Standard,   // GEDCOM
+        System      // OS
     }
 
 
@@ -97,35 +97,40 @@ namespace GDModel.Providers.GEDCOM
 
         #region Parse functions
 
-        public static string Trim(string str)
+        public static unsafe string Trim(string str)
         {
             if (string.IsNullOrEmpty(str)) return string.Empty;
 
-            int li = 0;
-            int ri = str.Length - 1;
+            int strLen = str.Length;
+            fixed (char* strPtr = str) {
+                int li = 0;
+                int ri = strLen - 1;
 
-            while (li < ri && str[li] <= ' ') li++;
-            while (ri >= li && str[ri] <= ' ') ri--;
-            int newLen = ri - li + 1;
+                while (li < ri && strPtr[li] <= ' ') li++;
+                while (ri >= li && strPtr[ri] <= ' ') ri--;
+                int newLen = ri - li + 1;
 
-            string result = (newLen == str.Length) ? str : str.Substring(li, newLen);
-            return result;
+                string result = (newLen == strLen) ? str : new string(strPtr, li, newLen);
+                return result;
+            }
         }
 
-        public static string CleanXRef(string str)
+        public static unsafe string CleanXRef(string str)
         {
             string result = str;
             if (!string.IsNullOrEmpty(str)) {
                 int strLen = str.Length;
                 int sx = -1;
-                for (int i = 0; i < strLen; i++) {
-                    char chr = str[i];
-                    if (chr == GEDCOMConsts.PointerDelimiter) {
-                        if (sx == -1) {
-                            sx = i;
-                        } else {
-                            result = str.Substring(sx + 1, i - 1 - sx);
-                            break;
+                fixed (char* strPtr = str) {
+                    for (int i = 0; i < strLen; i++) {
+                        char chr = strPtr[i];
+                        if (chr == GEDCOMConsts.PointerDelimiter) {
+                            if (sx == -1) {
+                                sx = i;
+                            } else {
+                                result = new string(strPtr, sx + 1, i - 1 - sx);
+                                break;
+                            }
                         }
                     }
                 }
@@ -304,45 +309,46 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // XRefPtr format: ...@<xref>@...
-        public static string ParseXRefPointer(StringSpan str, out string xref)
+        public static unsafe string ParseXRefPointer(StringSpan str, out string xref)
         {
             xref = string.Empty;
             if (str.IsEmptyOrEnd) {
                 return string.Empty;
             }
 
-            int strLen = str.Length;
-            char[] strVal = str.Data;
-
-            // skip leading whitespaces
             int strBeg = str.Pos;
-            while (strBeg < strLen && strVal[strBeg] == GEDCOMConsts.Delimiter) strBeg++;
+            int strLen = str.Length;
 
-            // check empty string
-            if (strLen - strBeg == 0) {
-                return string.Empty;
-            }
+            fixed (char* strPtr = str.Data) {
+                // skip leading whitespaces
+                while (strBeg < strLen && strPtr[strBeg] == GEDCOMConsts.Delimiter) strBeg++;
 
-            int init = -1, fin = strBeg;
-            for (int i = strBeg; i < strLen; i++) {
-                char chr = strVal[i];
-                if (chr == GEDCOMConsts.PointerDelimiter) {
-                    if (init == -1) {
-                        if (i == strBeg) {
-                            init = i;
+                // check empty string
+                if (strLen - strBeg == 0) {
+                    return string.Empty;
+                }
+
+                int init = -1, fin = strBeg;
+                for (int i = strBeg; i < strLen; i++) {
+                    char chr = strPtr[i];
+                    if (chr == GEDCOMConsts.PointerDelimiter) {
+                        if (init == -1) {
+                            if (i == strBeg) {
+                                init = i;
+                            }
+                        } else {
+                            fin = i;
+                            xref = new string(strPtr, init + 1, fin - 1 - init);
+                            fin += 1;
+                            break;
                         }
-                    } else {
-                        fin = i;
-                        xref = new string(strVal, init + 1, fin - 1 - init);
-                        fin += 1;
+                    } else if (chr == '#' && i == init + 1) {
                         break;
                     }
-                } else if (chr == '#' && i == init + 1) {
-                    break;
                 }
-            }
 
-            return new string(strVal, fin, strLen - fin);
+                return new string(strPtr, fin, strLen - fin);
+            }
         }
 
         // Time format: hour:minutes:seconds.fraction
@@ -366,28 +372,31 @@ namespace GDModel.Providers.GEDCOM
             seconds = 0;
             fraction = 0;
 
+            string result;
             if (!strValue.IsEmpty) {
                 var strTok = GEDCOMParser.Default;
                 strTok.Reset(strValue);
 
-                hour = (byte)strTok.RequestNextInt();
-                strTok.RequestNextSymbol(':');
-                minutes = (byte)strTok.RequestNextInt();
+                hour = (byte)strTok.RequestInt();
+                strTok.RequestSymbol(':');
+                minutes = (byte)strTok.RequestInt();
 
                 strTok.Next();
                 if (strTok.HasSymbol(':')) {
-                    seconds = (byte)strTok.RequestNextInt();
+                    seconds = (byte)strTok.RequestInt();
 
                     strTok.Next();
                     if (strTok.HasSymbol('.')) {
-                        fraction = (short)strTok.RequestNextInt();
+                        fraction = (short)strTok.RequestInt();
                     }
                 }
 
-                strValue = strTok.GetRest();
+                result = strTok.GetRest();
+            } else {
+                result = string.Empty;
             }
 
-            return strValue;
+            return result;
         }
 
         // CutoutPosition format: x1 y1 x2 y2
@@ -401,10 +410,10 @@ namespace GDModel.Providers.GEDCOM
 
                 if (!strValue.IsEmptyOrEnd) {
                     var parser = new GEDCOMParser(strValue, true);
-                    x1 = parser.RequestNextSignedInt();
-                    y1 = parser.RequestNextSignedInt();
-                    x2 = parser.RequestNextSignedInt();
-                    y2 = parser.RequestNextSignedInt();
+                    x1 = parser.RequestSignedInt();
+                    y1 = parser.RequestSignedInt();
+                    x2 = parser.RequestSignedInt();
+                    y2 = parser.RequestSignedInt();
                 }
 
                 position.SetRawData(x1, y1, x2, y2);
@@ -722,8 +731,9 @@ namespace GDModel.Providers.GEDCOM
             }
 
             // extract year
-            if (strTok.CurrentToken == GEDCOMToken.Number) {
-                year = (short)strTok.GetNumber();
+            int yNum;
+            if (strTok.HasNumber(4, out yNum)) {
+                year = (short)yNum;
                 strTok.Next();
 
                 // extract year modifier
@@ -738,20 +748,22 @@ namespace GDModel.Providers.GEDCOM
                 }
 
                 // extract bc/ad
-                if (strTok.CurrentToken == GEDCOMToken.Word && strTok.GetWord() == "B") {
+                // GEDCOM readers should accept B.C., BC and BCE (GEDCOM 5.5.1 Annotated Edition)
+                if (strTok.CurrentToken == GEDCOMToken.Word && strTok.GetSymbol() == 'B') {
                     strTok.Next();
-                    if (!strTok.HasSymbol('.')) {
+                    if (strTok.HasSymbol('.')) {
+                        strTok.Next();
+                    }
+                    if (strTok.CurrentToken != GEDCOMToken.Word || strTok.GetSymbol() != 'C') {
                         // error
                     }
                     strTok.Next();
-                    if (strTok.CurrentToken != GEDCOMToken.Word || strTok.GetWord() != "C") {
-                        // error
+                    if (strTok.HasSymbol('.')) {
+                        strTok.Next();
                     }
-                    strTok.Next();
-                    if (!strTok.HasSymbol('.')) {
-                        // error
+                    if (strTok.CurrentToken == GEDCOMToken.Word && strTok.GetSymbol() == 'E') {
+                        strTok.Next();
                     }
-                    strTok.Next();
                     yearBC = true;
                 }
             }
@@ -765,7 +777,6 @@ namespace GDModel.Providers.GEDCOM
                 day = 0;
             }
 
-            //date.SetRawData(approximated, calendar, year, yearBC, yearModifier, month, day, dateFormat);
             string result = strTok.GetRest();
             return result;
         }
@@ -787,7 +798,7 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        public static string ParseName(GDMPersonalName persName, StringSpan strValue)
+        public static unsafe string ParseName(GDMPersonalName persName, StringSpan strValue)
         {
             if (strValue.IsEmptyOrEnd) {
                 return string.Empty;
@@ -797,44 +808,42 @@ namespace GDModel.Providers.GEDCOM
             string surname = string.Empty;
             string lastPart = string.Empty;
 
-            int strLen = strValue.Length;
-            char[] strVal = strValue.Data;
-
-            // skip leading whitespaces
             int strBeg = strValue.Pos;
-            while (strBeg < strLen && strVal[strBeg] == ' ') strBeg++;
+            int strLen = strValue.Length;
 
-            // check empty string
-            if (strLen - strBeg == 0) {
-                return string.Empty;
-            }
+            fixed (char* strPtr = strValue.Data) {
+                // skip leading whitespaces
+                while (strBeg < strLen && strPtr[strBeg] == ' ') strBeg++;
 
-            int fs = -1, ss = strBeg;
-            for (int i = strBeg; i < strLen; i++) {
-                char chr = strVal[i];
-                if (chr == GEDCOMConsts.NameSeparator) {
-                    if (fs == -1) {
-                        fs = i;
-                        firstPart = new string(strVal, strBeg, i - strBeg);
-                    } else {
-                        ss = i;
-                        surname = new string(strVal, fs + 1, (ss - fs) - 1);
-                        ss += 1;
-                        break;
+                // check empty string
+                if (strLen - strBeg == 0) {
+                    return string.Empty;
+                }
+
+                int fs = -1, ss = strBeg;
+                for (int i = strBeg; i < strLen; i++) {
+                    char chr = strPtr[i];
+                    if (chr == GEDCOMConsts.NameSeparator) {
+                        if (fs == -1) {
+                            fs = i;
+                            firstPart = new string(strPtr, strBeg, i - strBeg);
+                        } else {
+                            ss = i;
+                            surname = new string(strPtr, fs + 1, (ss - fs) - 1);
+                            ss += 1;
+                            break;
+                        }
                     }
+                }
+
+                if (fs < 0) {
+                    firstPart = new string(strPtr, ss, strLen - ss);
+                } else {
+                    lastPart = new string(strPtr, ss, strLen - ss);
                 }
             }
 
-            if (fs < 0) {
-                firstPart = new string(strVal, ss, strLen - ss);
-            } else {
-                lastPart = new string(strVal, ss, strLen - ss);
-            }
-
-            persName.Given = firstPart;
-            persName.Surname = surname;
-            persName.NameSuffix = lastPart;
-
+            persName.SetRawData(firstPart, surname, lastPart);
             return string.Empty;
         }
 

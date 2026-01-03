@@ -1587,14 +1587,13 @@ namespace GDModel.Providers.GEDCOM
             if (tagType == GEDCOMTagType.DATE) {
                 DateTime date;
                 GEDCOMUtils.ParseDate(tree, tagValue, out date);
-                changeDate.ChangeDateTime = date;
+                changeDate.SetRawDate(date);
                 curTag = changeDate;
                 addHandler = TagHandler.ChangeDateTag;
             } else if (tagType == GEDCOMTagType.TIME) {
                 TimeSpan time;
                 GEDCOMUtils.ParseTime(tagValue, out time);
-                DateTime date = changeDate.ChangeDateTime;
-                changeDate.ChangeDateTime = date.Add(time);
+                changeDate.SetRawTime(time);
             } else if (tagType == GEDCOMTagType.NOTE) {
                 curTag = changeDate.AddTag(new GDMNotes());
                 curTag.ParseString(tagValue);

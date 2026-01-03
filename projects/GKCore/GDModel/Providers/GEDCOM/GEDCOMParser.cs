@@ -72,11 +72,11 @@ namespace GDModel.Providers.GEDCOM
     public enum GEDCOMToken
     {
         Unknown,
-        Whitespace,
-        Symbol,
-        Word,
-        Number,
-        XRef,
+        Whitespace, // space or tab
+        Symbol,     // any symbol that is not a letter or a number
+        Word,       // any sequence of letters and numbers beginning with Latin characters, not interrupted by punctuation marks
+        Number,     // any number
+        XRef,       // any sequence of letters and numbers between the @ symbols
         EOL
     }
 
@@ -271,7 +271,6 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SkipWhitespaces()
         {
             while (fCurrentToken <= GEDCOMToken.Whitespace) {
@@ -333,43 +332,43 @@ namespace GDModel.Providers.GEDCOM
             return (fCurrentToken == GEDCOMToken.Word && GetWord() == token);
         }
 
-        public void RequestSymbol(char symbol)
+        public bool HasWord(char[] token)
         {
-            if (!HasSymbol(symbol)) {
-                throw new GEDCOMParserException("Required symbol not found");
+            bool result = (fCurrentToken == GEDCOMToken.Word);
+            if (result) {
+                // fStrValue = new string(fData, fSavePos, fTokenEnd - fSavePos);
+                for (int i = 0; i < token.Length; i++) {
+                    if (fData[fSavePos + i] != token[i]) {
+                        result = false;
+                        break;
+                    }
+                }
             }
+            return result;
         }
 
-        public void RequestNextSymbol(char symbol)
+        public void RequestSymbol(char symbol)
         {
-            Next();
-            if (!HasSymbol(symbol)) {
+            var token = Next();
+            if (token != GEDCOMToken.Symbol || fData[fSavePos] != symbol) {
                 throw new GEDCOMParserException("Required symbol not found");
             }
         }
 
         public int RequestInt()
         {
-            if (fCurrentToken != GEDCOMToken.Number) {
-                throw new GEDCOMParserException("Required integer not found");
-            }
-            return GetNumber();
-        }
-
-        public int RequestNextInt()
-        {
             var token = Next();
             if (token != GEDCOMToken.Number) {
                 throw new GEDCOMParserException("Required integer not found");
             }
-            return GetNumber();
+            return fIntValue;
         }
 
-        public int RequestNextSignedInt()
+        public int RequestSignedInt()
         {
             var token = Next();
 
-            bool neg = HasSymbol('-');
+            bool neg = (fCurrentToken == GEDCOMToken.Symbol && fData[fSavePos] == '-');
             if (neg) {
                 token = Next();
             }
@@ -378,7 +377,7 @@ namespace GDModel.Providers.GEDCOM
                 throw new GEDCOMParserException("Required integer not found");
             }
 
-            int number = GetNumber();
+            int number = fIntValue;
             if (neg) {
                 number = -number;
             }

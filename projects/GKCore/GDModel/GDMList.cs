@@ -224,18 +224,15 @@ namespace GDModel
             if (fDataList == null) return;
 
             for (int i = 0, num = fDataList.Count; i < num; i++) {
-                var item = fDataList[i];
-                if (item != null) {
-                    item.ReplaceXRefs(map);
-                }
+                fDataList[i].ReplaceXRefs(map);
             }
         }
 
         public void Sort(Comparison<T> comparer)
         {
-            if (fDataList != null) {
-                ListTimSort<T>.Sort(fDataList, comparer);
-            }
+            if (fDataList == null) return;
+
+            ListTimSort<T>.Sort(fDataList, comparer);
         }
 
         internal void TrimExcess()
@@ -244,10 +241,7 @@ namespace GDModel
 
             fDataList.TrimExcess();
             for (int i = 0, num = fDataList.Count; i < num; i++) {
-                var item = fDataList[i];
-                if (item != null) {
-                    item.TrimExcess();
-                }
+                fDataList[i].TrimExcess();
             }
         }
     }

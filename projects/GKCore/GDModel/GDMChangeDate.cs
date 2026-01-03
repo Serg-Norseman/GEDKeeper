@@ -78,5 +78,15 @@ namespace GDModel
 
             hashCode.Add(fChangeDateTime);
         }
+
+        internal void SetRawDate(DateTime date)
+        {
+            fChangeDateTime = date;
+        }
+
+        internal void SetRawTime(TimeSpan time)
+        {
+            fChangeDateTime = fChangeDateTime.AddTicks(time.Ticks);
+        }
     }
 }

@@ -742,6 +742,22 @@ namespace GDModel
 
         [Test]
         [TestCase("", "")]
+        [TestCase("2024", "2024")]
+        [TestCase("001B.C.", "001B.C.")]
+        [TestCase("001BC", "001B.C.")]
+        [TestCase("001BCE", "001B.C.")]
+        [TestCase("OCT 2024", "OCT 2024")]
+        [TestCase("01 OCT 2024", "01 OCT 2024")]
+        [TestCase("@#DJULIAN@ 29 FEB 2024", "@#DJULIAN@ 29 FEB 2024")]
+        public void Test_Format(string value, string expected)
+        {
+            var d = new GDMDate();
+            d.ParseString(value);
+            Assert.AreEqual(expected, d.StringValue);
+        }
+
+        [Test]
+        [TestCase("", "")]
         [TestCase("2024", "2025")]
         [TestCase("001B.C.", "001")]
         [TestCase("OCT 2024", "NOV 2024")]

@@ -93,6 +93,7 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMDateApproximatedArray = new string[] { "", "ABT", "CAL", "EST" };
             GEDCOMDateRangeArray = new string[] { "AFT", "BEF", "BET", "AND" };
 
+            // GDMCalendar = { dcGregorian, dcJulian, dcHebrew, dcFrench, dcRoman, dcIslamic, dcUnknown }
             GEDCOMDateEscapeArray = new string[]
             {
                 "#DGREGORIAN", "#DJULIAN", "#DHEBREW", "#DFRENCH R", "#DROMAN",

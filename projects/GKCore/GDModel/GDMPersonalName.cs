@@ -328,6 +328,13 @@ namespace GDModel
             return GEDCOMUtils.ParseName(this, strValue);
         }
 
+        internal void SetRawData(string firstPart, string surname, string lastPart)
+        {
+            fGiven = GEDCOMUtils.Trim(firstPart);
+            fSurname = GEDCOMUtils.Trim(surname);
+            fNameSuffix = GEDCOMUtils.Trim(lastPart);
+        }
+
         private static bool IsUnknown(string str)
         {
             return string.Equals(str, "?") || (string.Compare(str, "unknown", true) == 0);
