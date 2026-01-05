@@ -587,8 +587,6 @@ namespace GDModel.Providers.GEDCOM
                         }
                     }
 
-                    fTree.TrimExcess();
-
                     result = true;
                 } finally {
                     repMap.Dispose();

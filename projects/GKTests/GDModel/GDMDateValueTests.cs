@@ -66,20 +66,20 @@ namespace GDModel
                 dtx1.ParseString("1716/"); // potentially incorrect value
                 Assert.AreEqual("1716", dtx1.StringValue);
 
-                dtx1.ParseString("1716/1717");
-                Assert.AreEqual("1716/1717", dtx1.StringValue);
+                dtx1.ParseString("1716/17");
+                Assert.AreEqual("1716/17", dtx1.StringValue);
 
                 dtx1.ParseString("1716/20");
                 Assert.AreEqual("1716/20", dtx1.StringValue);
 
-                dtx1.ParseString("3 MAY 1835/1838");
-                Assert.AreEqual("03 MAY 1835/1838", dtx1.StringValue);
+                dtx1.ParseString("3 MAY 1835/36");
+                Assert.AreEqual("03 MAY 1835/36", dtx1.StringValue);
 
-                dtx1.ParseString("ABT 1844/1845");
-                Assert.AreEqual("ABT 1844/1845", dtx1.StringValue);
+                dtx1.ParseString("ABT 1844/45");
+                Assert.AreEqual("ABT 1844/45", dtx1.StringValue);
 
-                dtx1.ParseString("FEB 1746/1747");
-                Assert.AreEqual("FEB 1746/1747", dtx1.StringValue);
+                dtx1.ParseString("FEB 1746/47");
+                Assert.AreEqual("FEB 1746/47", dtx1.StringValue);
 
                 dtx1.ParseString("INT 20 JAN 2013 (today)");
                 Assert.IsTrue(dtx1.Date.Equals(dt), "dtx1.DateTime.Equals(dt)");

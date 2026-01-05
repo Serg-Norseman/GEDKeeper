@@ -1060,11 +1060,6 @@ namespace GKCore
 
         public async Task<bool> FileLoad(string fileName, bool showProgress = true)
         {
-            return await FileLoad(fileName, true, showProgress, true);
-        }
-
-        public async Task<bool> FileLoad(string fileName, bool loadSecure, bool showProgress, bool checkValidation)
-        {
             bool result = true;
 
             try {
@@ -1073,14 +1068,9 @@ namespace GKCore
                 if (ext == ".ged") {
                     fileProvider = new GEDCOMProvider(fTree);
                 } else if (ext == ".geds") {
-                    string pw;
-                    if (loadSecure) {
-                        pw = await AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password));
-                        if (string.IsNullOrEmpty(pw)) {
-                            AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
-                            return false;
-                        }
-                    } else {
+                    string pw = await AppHost.StdDialogs.GetPassword(LangMan.LS(LSID.Password));
+                    if (string.IsNullOrEmpty(pw)) {
+                        AppHost.StdDialogs.ShowError(LangMan.LS(LSID.PasswordIsNotSpecified));
                         return false;
                     }
 
@@ -1109,9 +1099,7 @@ namespace GKCore
                 result = result && isLoaded;
 
                 bool isChecked = false;
-                if (result && checkValidation) {
-                    AppHost.ForceGC();
-
+                if (result) {
                     if (!showProgress) {
                         isChecked = GEDCOMChecker.CheckGEDCOMFormat(this, null);
                     } else {
@@ -1125,9 +1113,9 @@ namespace GKCore
                 if (!result) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LoadGedComFailed));
                     Clear();
+                } else {
+                    await WorkDataCollector.Collect(this);
                 }
-
-                await WorkDataCollector.Collect(this);
 
                 AppHost.ForceGC();
             } catch (Exception ex) {

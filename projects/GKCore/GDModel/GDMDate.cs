@@ -37,6 +37,7 @@ namespace GDModel
         public static readonly GDMDate Empty = new GDMDate();
 
         public const int UNKNOWN_YEAR = -1;
+        public const sbyte EMPTY_YEAR_MOD = -1; // because the value "00" is valid for reading/writing
 
         private GDMApproximated fApproximated;
         private GDMCalendar fCalendar;
@@ -44,7 +45,7 @@ namespace GDModel
         private byte fMonth;
         private short fYear;
         private bool fYearBC;
-        private string fYearModifier;
+        private sbyte fYearModifier;
         private UDN fUDN;
 
 
@@ -95,7 +96,12 @@ namespace GDModel
             }
         }
 
-        public string YearModifier
+        /// <summary>
+        /// Year modifier shows the possible date alternatives for pre-1752 date
+        /// brought about by a changing the beginning of the year from MAR to JAN
+        /// in the English calendar change of 1752, for example, 15 APR 1699/00.
+        /// </summary>
+        public sbyte YearModifier
         {
             get { return fYearModifier; }
             set { fYearModifier = value; }
@@ -108,7 +114,7 @@ namespace GDModel
             fCalendar = GDMCalendar.dcGregorian;
             fYear = UNKNOWN_YEAR;
             fYearBC = false;
-            fYearModifier = string.Empty;
+            fYearModifier = EMPTY_YEAR_MOD;
             fMonth = 0;
             fDay = 0;
         }
@@ -126,7 +132,7 @@ namespace GDModel
             fCalendar = GDMCalendar.dcGregorian;
             fYear = UNKNOWN_YEAR;
             fYearBC = false;
-            fYearModifier = string.Empty;
+            fYearModifier = EMPTY_YEAR_MOD;
             fMonth = 0;
             fDay = 0;
 
@@ -180,7 +186,7 @@ namespace GDModel
 
         public override void SetDateTime(DateTime value)
         {
-            SetGregorian(value.Day, value.Month, value.Year);
+            SetDate(GDMCalendar.dcGregorian, value.Day, value.Month, value.Year);
         }
 
         public override string ParseString(string strValue)
@@ -211,7 +217,7 @@ namespace GDModel
         /// Internal helper method for parser
         /// </summary>
         internal void SetRawData(GDMApproximated approximated, GDMCalendar calendar,
-                                 short year, bool yearBC, string yearModifier, byte month, byte day)
+                                 short year, bool yearBC, sbyte yearModifier, byte month, byte day)
         {
             fApproximated = approximated;
             fCalendar = calendar;
@@ -226,16 +232,10 @@ namespace GDModel
 
         #region Private methods of parsing of the input format
 
-        public static string[] GetMonthNames(GDMCalendar calendar)
+        private static string[] GetMonthNames(GDMCalendar calendar)
         {
             string[] monthes;
             switch (calendar) {
-                case GDMCalendar.dcGregorian:
-                case GDMCalendar.dcJulian:
-                case GDMCalendar.dcRoman:
-                    monthes = GEDCOMConsts.GEDCOMMonthArray;
-                    break;
-
                 case GDMCalendar.dcHebrew:
                     monthes = GEDCOMConsts.GEDCOMMonthHebrewArray;
                     break;
@@ -248,28 +248,15 @@ namespace GDModel
                     monthes = GEDCOMConsts.GEDCOMMonthIslamicArray;
                     break;
 
-                case GDMCalendar.dcUnknown:
+                //case GDMCalendar.dcGregorian:
+                //case GDMCalendar.dcJulian:
+                //case GDMCalendar.dcRoman:
+                //case GDMCalendar.dcUnknown:
                 default:
                     monthes = GEDCOMConsts.GEDCOMMonthArray;
                     break;
             }
             return monthes;
-        }
-
-        private static string CheckGEDCOMMonth(GDMCalendar calendar, string str)
-        {
-            // An empty string is a valid identifier for an unknown month
-            if (string.IsNullOrEmpty(str)) return string.Empty;
-
-            string[] monthes = GDMDate.GetMonthNames(calendar);
-            str = str.ToUpperInvariant();
-            for (int m = 0; m < monthes.Length; m++) {
-                if (monthes[m] == str) {
-                    return str;
-                }
-            }
-
-            throw new GDMDateException("The string {0} is not a valid {1} month identifier", str, calendar.ToString());
         }
 
         #endregion
@@ -297,8 +284,9 @@ namespace GDModel
 
             if (fYear != UNKNOWN_YEAR) {
                 string yearStr = fYear.ToString("D3");
-                if (!string.IsNullOrEmpty(fYearModifier)) {
-                    yearStr = yearStr + "/" + fYearModifier;
+
+                if (fYearModifier >= 0) {
+                    yearStr = yearStr + "/" + fYearModifier.ToString("D2");
                 }
 
                 if (fYearBC) {
@@ -311,146 +299,27 @@ namespace GDModel
             return string.Join(" ", parts, 0, pIdx);
         }
 
-        private static byte GetMonthNumber(GDMCalendar calendar, string strMonth)
+        public void SetDate(GDMCalendar calendar, int day, string month, int year, bool yearBC)
         {
-            string su = GEDCOMUtils.InvariantTextInfo.ToUpper(strMonth);
+            string[] monthArray = GetMonthNames(calendar);
+            string su = GEDCOMUtils.InvariantTextInfo.ToUpper(month);
+            int monthIdx = ArrayHelper.IndexOf(monthArray, su);
+            /*if (monthIdx < 0)
+                throw new GDMDateException("The string {0} is not a valid {1} month identifier", str, calendar.ToString());*/
 
-            int month;
-            switch (calendar) {
-                case GDMCalendar.dcHebrew:
-                    month = ArrayHelper.IndexOf(GEDCOMConsts.GEDCOMMonthHebrewArray, su);
-                    break;
-
-                case GDMCalendar.dcFrench:
-                    month = ArrayHelper.IndexOf(GEDCOMConsts.GEDCOMMonthFrenchArray, su);
-                    break;
-
-                default:
-                    month = ArrayHelper.IndexOf(GEDCOMConsts.GEDCOMMonthArray, su);
-                    break;
-            }
-
-            return (byte)(month + 1);
+            SetDate(calendar, day, monthIdx + 1, year, yearBC);
         }
 
         public void SetDate(GDMCalendar calendar, int day, int month, int year, bool yearBC = false)
-        {
-            switch (calendar) {
-                case GDMCalendar.dcGregorian:
-                    SetGregorian(day, month, year);
-                    break;
-
-                case GDMCalendar.dcJulian:
-                    SetJulian(day, month, year);
-                    break;
-
-                case GDMCalendar.dcHebrew:
-                    SetHebrew(day, month, year);
-                    break;
-
-                case GDMCalendar.dcFrench:
-                    SetFrench(day, month, year);
-                    break;
-
-                case GDMCalendar.dcRoman:
-                    SetRoman(day, month, year, yearBC);
-                    break;
-
-                case GDMCalendar.dcIslamic:
-                    SetIslamic(day, month, year);
-                    break;
-
-                case GDMCalendar.dcUnknown:
-                    SetUnknown(day, month, year, yearBC);
-                    break;
-            }
-        }
-
-        private void SetDateInternal(GDMCalendar calendar, int day, string month, int year, string yearModifier, bool yearBC)
-        {
-            SetDateInternal(calendar, day, GetMonthNumber(calendar, month), year, yearModifier, yearBC);
-        }
-
-        private void SetDateInternal(GDMCalendar calendar, int day, int month, int year, string yearModifier, bool yearBC)
         {
             fCalendar = calendar;
             fDay = (byte)day;
             fMonth = (byte)month;
             fYear = (short)year;
-            fYearModifier = yearModifier;
+            fYearModifier = EMPTY_YEAR_MOD;
             fYearBC = yearBC;
 
             DateChanged();
-        }
-
-        public void SetGregorian(int day, int month, int year)
-        {
-            SetDateInternal(GDMCalendar.dcGregorian, day, month, year, "", false);
-        }
-
-        public void SetGregorian(int day, string month, int year, string yearModifier, bool yearBC)
-        {
-            SetDateInternal(GDMCalendar.dcGregorian, day, CheckGEDCOMMonth(GDMCalendar.dcGregorian, month), year, yearModifier, yearBC);
-        }
-
-        public void SetJulian(int day, int month, int year)
-        {
-            SetDateInternal(GDMCalendar.dcJulian, day, month, year, "", false);
-        }
-
-        public void SetJulian(int day, string month, int year, bool yearBC)
-        {
-            SetDateInternal(GDMCalendar.dcJulian, day, CheckGEDCOMMonth(GDMCalendar.dcJulian, month), year, "", yearBC);
-        }
-
-        public void SetHebrew(int day, int month, int year)
-        {
-            SetDateInternal(GDMCalendar.dcHebrew, day, month, year, "", false);
-        }
-
-        public void SetHebrew(int day, string month, int year, bool yearBC)
-        {
-            SetDateInternal(GDMCalendar.dcHebrew, day, CheckGEDCOMMonth(GDMCalendar.dcHebrew, month), year, "", yearBC);
-        }
-
-        public void SetFrench(int day, int month, int year)
-        {
-            SetDateInternal(GDMCalendar.dcFrench, day, month, year, "", false);
-        }
-
-        public void SetFrench(int day, string month, int year, bool yearBC)
-        {
-            SetDateInternal(GDMCalendar.dcFrench, day, CheckGEDCOMMonth(GDMCalendar.dcFrench, month), year, "", yearBC);
-        }
-
-        public void SetRoman(int day, int month, int year, bool yearBC)
-        {
-            SetDateInternal(GDMCalendar.dcRoman, day, month, year, "", yearBC);
-        }
-
-        public void SetRoman(int day, string month, int year, bool yearBC)
-        {
-            SetDateInternal(GDMCalendar.dcRoman, day, CheckGEDCOMMonth(GDMCalendar.dcRoman, month), year, "", yearBC);
-        }
-
-        public void SetUnknown(int day, int month, int year, bool yearBC)
-        {
-            SetDateInternal(GDMCalendar.dcUnknown, day, month, year, "", yearBC);
-        }
-
-        public void SetUnknown(int day, string month, int year, bool yearBC)
-        {
-            SetDateInternal(GDMCalendar.dcUnknown, day, CheckGEDCOMMonth(GDMCalendar.dcUnknown, month), year, "", yearBC);
-        }
-
-        public void SetIslamic(int day, int month, int year)
-        {
-            SetDateInternal(GDMCalendar.dcIslamic, day, month, year, "", false);
-        }
-
-        public void SetIslamic(int day, string month, int year)
-        {
-            SetDateInternal(GDMCalendar.dcIslamic, day, CheckGEDCOMMonth(GDMCalendar.dcIslamic, month), year, "", false);
         }
 
         #region UDN processing

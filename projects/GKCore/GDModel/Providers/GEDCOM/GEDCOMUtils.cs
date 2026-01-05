@@ -275,9 +275,8 @@ namespace GDModel.Providers.GEDCOM
             }
 
             token = strTok.Next();
-            if (token == GEDCOMToken.XRef) {
+            if (strTok.HasXRef(out tagXRef)) {
                 // here XRef is a pure value without delimiters
-                tagXRef = strTok.GetWord();
 
                 // FIXME: check for errors
                 //throw new EGEDCOMException(string.Format("The string {0} contains an unterminated XRef pointer", str));
@@ -288,10 +287,9 @@ namespace GDModel.Providers.GEDCOM
                 strTok.SkipWhitespaces();
             }
 
-            if (strTok.CurrentToken != GEDCOMToken.Word) {
+            if (!strTok.HasWord(out tagName)) {
                 // syntax error
             }
-            tagName = strTok.GetWord();
             result += 1;
 
             // GEDCOM specification (https://gedcom.io/specifications/ged551.pdf, page 86)
@@ -437,9 +435,8 @@ namespace GDModel.Providers.GEDCOM
             strTok.SkipWhitespaces();
 
             int idx = 0;
-            if (strTok.CurrentToken == GEDCOMToken.Word) {
-                string su = strTok.GetWord();
-                idx = ArrayHelper.BinarySearch(GEDCOMConsts.GEDCOMDateTypes, su, string.CompareOrdinal);
+            if (strTok.HasWord(out string su)) {
+                idx = BinarySearch(GEDCOMConsts.GEDCOMDateTypes, su);
             }
             var dateType = (idx < 0) ? GEDCOMDateType.SIMP : (GEDCOMDateType)idx;
 
@@ -496,13 +493,15 @@ namespace GDModel.Providers.GEDCOM
         {
             strTok.SkipWhitespaces();
 
-            if (strTok.HasWord(GEDCOMTagName.FROM)) {
+            string token;
+
+            if (strTok.HasWord(out token) && token == GEDCOMTagName.FROM) {
                 strTok.Next();
                 ParseDate(owner, date.DateFrom, strTok);
                 strTok.SkipWhitespaces();
             }
 
-            if (strTok.HasWord(GEDCOMTagName.TO)) {
+            if (strTok.HasWord(out token) && token == GEDCOMTagName.TO) {
                 strTok.Next();
                 ParseDate(owner, date.DateTo, strTok);
                 strTok.SkipWhitespaces();
@@ -527,12 +526,12 @@ namespace GDModel.Providers.GEDCOM
             bool isAQDeviance = (format == GEDCOMFormat.gf_AncestQuest);*/
 
             strTok.SkipWhitespaces();
+            string token;
 
-            if (strTok.CurrentToken != GEDCOMToken.Word) {
+            if (!strTok.HasWord(out token)) {
                 // error!
             }
-            string su = strTok.GetWord();
-            int dateType = ArrayHelper.BinarySearch(GEDCOMConsts.GEDCOMDateRangeArray, su, string.CompareOrdinal);
+            int dateType = BinarySearch(GEDCOMConsts.GEDCOMDateRangeArray, token);
 
             if (dateType == 0) { // "AFT"
                 strTok.Next();
@@ -550,7 +549,7 @@ namespace GDModel.Providers.GEDCOM
                 ParseDate(owner, date.After, strTok);
                 strTok.SkipWhitespaces();
 
-                if (!strTok.HasWord(GEDCOMTagName.AND)) {
+                if (!strTok.HasWord(out token) || token != GEDCOMTagName.AND) {
                     //&& !(isAQDeviance && strTok.RequireSymbol('-'))) {
                     throw new GEDCOMRangeDateException(strTok.GetFullStr());
                 }
@@ -577,7 +576,7 @@ namespace GDModel.Providers.GEDCOM
         {
             strTok.SkipWhitespaces();
 
-            if (!strTok.HasWord(GEDCOMTagName.INT)) {
+            if (!strTok.HasWord(out string token) || token != GEDCOMTagName.INT) {
                 throw new GEDCOMIntDateException(strTok.GetFullStr());
             }
             strTok.Next();
@@ -586,10 +585,11 @@ namespace GDModel.Providers.GEDCOM
             strTok.SkipWhitespaces();
             if (strTok.HasSymbol('(')) {
                 var phrase = new StringBuilder();
-                phrase.Append(strTok.GetWord());
+                phrase.Append(strTok.GetToken());
                 do {
                     strTok.Next();
-                    phrase.Append(strTok.GetWord());
+                    // GetToken() covers all token types
+                    phrase.Append(strTok.GetToken());
                 } while (!strTok.HasSymbol(')'));
 
                 date.DatePhrase = phrase.ToString();
@@ -622,7 +622,7 @@ namespace GDModel.Providers.GEDCOM
             GDMCalendar calendar;
             short year;
             bool yearBC;
-            string yearModifier;
+            sbyte yearModifier;
             byte month;
             byte day;
 
@@ -637,13 +637,13 @@ namespace GDModel.Providers.GEDCOM
         // Format: [ <YEAR>[B.C.] | <MONTH> <YEAR> | <DAY> <MONTH> <YEAR> ] (see p.45-46)
         public static string ParseDate(GDMTree owner, GEDCOMParser strTok, out GDMApproximated approximated,
                                        out GDMCalendar calendar, out short year, out bool yearBC,
-                                       out string yearModifier, out byte month, out byte day)
+                                       out sbyte yearModifier, out byte month, out byte day)
         {
             approximated = GDMApproximated.daExact;
             calendar = GDMCalendar.dcGregorian;
             year = GDMDate.UNKNOWN_YEAR;
             yearBC = false;
-            yearModifier = string.Empty;
+            yearModifier = GDMDate.EMPTY_YEAR_MOD;
             month = 0;
             day = 0;
             GEDCOMDateFormat dateFormat = GEDCOMDateFormat.Standard;
@@ -659,9 +659,8 @@ namespace GDModel.Providers.GEDCOM
             }
 
             // extract approximated
-            if (strTok.CurrentToken == GEDCOMToken.Word) {
-                string su = InvariantTextInfo.ToUpper(strTok.GetWord());
-                int idx = ArrayHelper.BinarySearch(GEDCOMConsts.GEDCOMDateApproximatedArray, su, string.CompareOrdinal);
+            if (strTok.HasWord(out string strApprox)) {
+                int idx = BinarySearch(GEDCOMConsts.GEDCOMDateApproximatedArray, InvariantTextInfo.ToUpper(strApprox));
                 if (idx >= 0) {
                     approximated = (GDMApproximated)idx;
                     strTok.Next();
@@ -670,9 +669,8 @@ namespace GDModel.Providers.GEDCOM
             }
 
             // extract escape
-            if (strTok.CurrentToken == GEDCOMToken.XRef) {
+            if (strTok.HasXRef(out string escapeStr)) {
                 // FIXME: check for errors
-                var escapeStr = strTok.GetWord();
                 int idx = ArrayHelper.IndexOf(GEDCOMConsts.GEDCOMDateEscapeArray, escapeStr);
                 if (idx >= 0) {
                     calendar = (GDMCalendar)idx;
@@ -699,11 +697,10 @@ namespace GDModel.Providers.GEDCOM
             }
 
             // extract month
-            if (strTok.CurrentToken == GEDCOMToken.Word) {
+            if (strTok.HasWord(out string strMonth)) {
                 // in this case, according to performance test results, BinarySearch is more efficient
-                // than a simple search or even a dictionary search (why?!)
-                string su = InvariantTextInfo.ToUpper(strTok.GetWord());
-                int idx = BinarySearch(GEDCOMConsts.GEDCOMMonthValues, su, string.CompareOrdinal);
+                // than a simple search or even a dictionary search
+                int idx = BinarySearch(GEDCOMConsts.GEDCOMMonthValues, InvariantTextInfo.ToUpper(strMonth));
                 month = (byte)((idx < 0) ? 0 : idx);
 
                 strTok.Next();
@@ -731,18 +728,18 @@ namespace GDModel.Providers.GEDCOM
             }
 
             // extract year
-            int yNum;
-            if (strTok.HasNumber(4, out yNum)) {
-                year = (short)yNum;
+            int numTok;
+            if (strTok.HasNumber(4, out numTok)) {
+                year = (short)numTok;
                 strTok.Next();
 
                 // extract year modifier
                 if (strTok.HasSymbol(GEDCOMConsts.YearModifierSeparator)) {
                     strTok.Next();
-                    if (strTok.CurrentToken != GEDCOMToken.Number) {
+                    if (!strTok.HasNumber(2, out numTok)) {
                         // error
                     } else {
-                        yearModifier = strTok.GetWord();
+                        yearModifier = (sbyte)numTok;
                     }
                     strTok.Next();
                 }
@@ -1023,8 +1020,8 @@ namespace GDModel.Providers.GEDCOM
             strTok.Reset(strValue);
             strTok.SkipWhitespaces();
 
-            if (strTok.CurrentToken == GEDCOMToken.Word) {
-                string su = InvariantTextInfo.ToUpper(strTok.GetWord());
+            if (strTok.HasWord(out string su)) {
+                su = InvariantTextInfo.ToUpper(su);
 
                 if (su == "INFANT") {
                     age.Relative = -1;
@@ -1050,21 +1047,21 @@ namespace GDModel.Providers.GEDCOM
             int months = -1;
             int days = -1;
 
-            if (strTok.CurrentToken == GEDCOMToken.Symbol) {
+            GEDCOMToken token = strTok.CurrentToken;
+            if (token == GEDCOMToken.Symbol) {
                 var sym = strTok.GetSymbol();
                 if (sym == '<') {
                     relative = -1;
                 } else if (sym == '>') {
                     relative = 1;
                 }
-                strTok.Next();
+                token = strTok.Next();
             }
 
             int val = -1;
             bool valid = true;
 
-            GEDCOMToken token;
-            while ((token = strTok.CurrentToken) != GEDCOMToken.EOL) {
+            while (token != GEDCOMToken.EOL) {
                 if (token == GEDCOMToken.Number) {
                     val = strTok.GetNumber();
                 } else if (token == GEDCOMToken.Word) {
@@ -1077,7 +1074,7 @@ namespace GDModel.Providers.GEDCOM
                         days = val;
                     }
                 }
-                strTok.Next();
+                token = strTok.Next();
             }
 
             if (valid && (years != -1 || months != -1 || days != -1)) {
@@ -1089,90 +1086,6 @@ namespace GDModel.Providers.GEDCOM
 
             return strTok.GetRest();
         }
-
-        /*public static string ParseAge(GDMAge age, string strValue)
-        {
-            if (string.Compare(strValue, "INFANT", true) == 0) {
-                age.Relative = -1;
-                age.Years = 1;
-                return string.Empty;
-            } else if (string.Compare(strValue, "CHILD", true) == 0) {
-                age.Relative = -1;
-                age.Years = 8;
-                return string.Empty;
-            } else if (string.Compare(strValue, "STILLBORN", true) == 0) {
-                age.Relative = 0;
-                age.Years = 0;
-                age.Months = 0;
-                age.Days = 0;
-                return string.Empty;
-            } else {
-                int relative = 0;
-                int years = -1;
-                int months = -1;
-                int days = -1;
-
-                int chIdx = 0;
-                if (strValue[0] == '<') {
-                    relative = -1;
-                    chIdx = 1;
-                } else if (strValue[0] == '>') {
-                    relative = 1;
-                    chIdx = 1;
-                }
-
-                bool valid = true;
-                int val = -1;
-                while (valid && (chIdx < strValue.Length)) {
-                    char c = strValue[chIdx];
-
-                    if (!char.IsWhiteSpace(c)) {
-                        bool isDigit = char.IsDigit(c);
-
-                        if (val == -1 && !isDigit) {
-                            valid = false;
-                        } else if (isDigit) {
-                            int digit = c - '0';
-                            val = (val == -1) ? digit : (val * 10 + digit);
-                        } else if (c == 'Y' || c == 'y') {
-                            if (years != -1) {
-                                valid = false;
-                            } else {
-                                years = val;
-                                val = -1;
-                            }
-                        } else if (c == 'M' || c == 'm') {
-                            if (months != -1) {
-                                valid = false;
-                            } else {
-                                months = val;
-                                val = -1;
-                            }
-                        } else if (c == 'D' || c == 'd') {
-                            if (days != -1) {
-                                valid = false;
-                            } else {
-                                days = val;
-                                val = -1;
-                            }
-                        } else {
-                            valid = false;
-                        }
-                    }
-
-                    chIdx++;
-                }
-
-                if (valid && (years != -1 || months != -1 || days != -1)) {
-                    age.Relative = relative;
-                    age.Years = years;
-                    age.Months = months;
-                    age.Days = days;
-                }
-
-                return strValue.Substring(chIdx);
-            }
-        }*/
 
         #endregion
 
@@ -1203,10 +1116,10 @@ namespace GDModel.Providers.GEDCOM
             if (string.IsNullOrEmpty(val)) return defVal;
 
             if (normalize) {
-                val = GEDCOMUtils.InvariantTextInfo.ToLower(val.Trim());
+                val = InvariantTextInfo.ToLower(val.Trim());
             }
 
-            int idx = ArrayHelper.BinarySearch<string>(values, val, string.CompareOrdinal);
+            int idx = BinarySearch(values, val);
             if (idx >= 0) {
 #if PCL
                 return (T)Convert.ChangeType(idx, typeof(T), null);
@@ -1218,7 +1131,7 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        public static int BinarySearch(EnumTuple[] array, string key, Comparison<string> comparer)
+        public static int BinarySearch(EnumTuple[] array, string key)
         {
             int i = 0;
             int num = array.Length - 1;
@@ -1226,11 +1139,32 @@ namespace GDModel.Providers.GEDCOM
                 int num2 = i + (num - i >> 1);
 
                 EnumTuple ekv = array[num2];
-                int num3 = comparer(ekv.Key, key);
-
+                int num3 = string.CompareOrdinal(ekv.Key, key);
                 if (num3 == 0) {
                     return ekv.Value;
                 }
+
+                if (num3 < 0) {
+                    i = num2 + 1;
+                } else {
+                    num = num2 - 1;
+                }
+            }
+            return ~i;
+        }
+
+        public static int BinarySearch(string[] array, string value)
+        {
+            int i = 0;
+            int num = array.Length - 1;
+            while (i <= num) {
+                int num2 = i + (num - i >> 1);
+
+                int num3 = string.CompareOrdinal(array[num2], value);
+                if (num3 == 0) {
+                    return num2;
+                }
+
                 if (num3 < 0) {
                     i = num2 + 1;
                 } else {

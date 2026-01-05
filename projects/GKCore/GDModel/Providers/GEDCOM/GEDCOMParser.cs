@@ -308,7 +308,7 @@ namespace GDModel.Providers.GEDCOM
             return fData[fSavePos];
         }
 
-        public string GetWord()
+        public string GetToken()
         {
             if (fValueReset) {
                 fStrValue = new string(fData, fSavePos, fTokenEnd - fSavePos);
@@ -327,23 +327,17 @@ namespace GDModel.Providers.GEDCOM
             return (fCurrentToken == GEDCOMToken.Whitespace && fData[fSavePos] == symbol);
         }
 
-        public bool HasWord(string token)
-        {
-            return (fCurrentToken == GEDCOMToken.Word && GetWord() == token);
-        }
-
-        public bool HasWord(char[] token)
+        public bool HasWord(out string token)
         {
             bool result = (fCurrentToken == GEDCOMToken.Word);
-            if (result) {
-                // fStrValue = new string(fData, fSavePos, fTokenEnd - fSavePos);
-                for (int i = 0; i < token.Length; i++) {
-                    if (fData[fSavePos + i] != token[i]) {
-                        result = false;
-                        break;
-                    }
-                }
-            }
+            token = !result ? string.Empty : new string(fData, fSavePos, fTokenEnd - fSavePos);
+            return result;
+        }
+
+        public bool HasXRef(out string token)
+        {
+            bool result = (fCurrentToken == GEDCOMToken.XRef);
+            token = !result ? string.Empty : new string(fData, fSavePos, fTokenEnd - fSavePos);
             return result;
         }
 
