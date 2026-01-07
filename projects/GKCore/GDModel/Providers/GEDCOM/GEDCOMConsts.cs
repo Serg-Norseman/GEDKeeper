@@ -86,6 +86,8 @@ namespace GDModel.Providers.GEDCOM
 
         internal static readonly string[] AgeRelatives;
 
+        internal static readonly EnumTuple[] MultimediaFormatValues;
+
         static GEDCOMConsts()
         {
             GEDCOMDateTypes = new string[] { "", "ABT", "AFT", "BEF", "BET", "CAL", "EST", "FROM", "INT", "TO" };
@@ -224,6 +226,53 @@ namespace GDModel.Providers.GEDCOM
                 string.Empty,                       // 1 ::  0
                 GEDCOMConsts.AgeRelativeGreater,    // 2 :: +1 ">"
             };
+
+            MultimediaFormatValues = new EnumTuple[] {
+                new EnumTuple("7z", (int)GDMMultimediaFormat.mf7Z),
+                new EnumTuple("avi", (int)GDMMultimediaFormat.mfAVI),
+                new EnumTuple("bmp", (int)GDMMultimediaFormat.mfBMP),
+                new EnumTuple("djvu", (int)GDMMultimediaFormat.mfDJVU),
+                new EnumTuple("doc", (int)GDMMultimediaFormat.mfDOC),
+                new EnumTuple("docx", (int)GDMMultimediaFormat.mfDOCX),
+                new EnumTuple("gif", (int)GDMMultimediaFormat.mfGIF),
+                new EnumTuple("htm", (int)GDMMultimediaFormat.mfHTM),
+                new EnumTuple("html", (int)GDMMultimediaFormat.mfHTM),
+                new EnumTuple("jpeg", (int)GDMMultimediaFormat.mfJPG),
+                new EnumTuple("jpg", (int)GDMMultimediaFormat.mfJPG),
+                new EnumTuple("mka", (int)GDMMultimediaFormat.mfMKA),
+                new EnumTuple("mkv", (int)GDMMultimediaFormat.mfMKV),
+                new EnumTuple("mov", (int)GDMMultimediaFormat.mfMOV),
+                new EnumTuple("mp3", (int)GDMMultimediaFormat.mfMP3),
+                new EnumTuple("mp4", (int)GDMMultimediaFormat.mfMP4),
+                new EnumTuple("mpeg", (int)GDMMultimediaFormat.mfMPG),
+                new EnumTuple("mpg", (int)GDMMultimediaFormat.mfMPG),
+                new EnumTuple("odp", (int)GDMMultimediaFormat.mfODP),
+                new EnumTuple("ods", (int)GDMMultimediaFormat.mfODS),
+                new EnumTuple("odt", (int)GDMMultimediaFormat.mfODT),
+                new EnumTuple("ogv", (int)GDMMultimediaFormat.mfOGV),
+                new EnumTuple("ole", (int)GDMMultimediaFormat.mfOLE),
+                new EnumTuple("pcx", (int)GDMMultimediaFormat.mfPCX),
+                new EnumTuple("pdf", (int)GDMMultimediaFormat.mfPDF),
+                new EnumTuple("png", (int)GDMMultimediaFormat.mfPNG),
+                new EnumTuple("ppt", (int)GDMMultimediaFormat.mfPPT),
+                new EnumTuple("pptx", (int)GDMMultimediaFormat.mfPPTX),
+                new EnumTuple("psd", (int)GDMMultimediaFormat.mfPSD),
+                new EnumTuple("rar", (int)GDMMultimediaFormat.mfRAR),
+                new EnumTuple("raw", (int)GDMMultimediaFormat.mfRAW),
+                new EnumTuple("rtf", (int)GDMMultimediaFormat.mfRTF),
+                new EnumTuple("tga", (int)GDMMultimediaFormat.mfTGA),
+                new EnumTuple("tif", (int)GDMMultimediaFormat.mfTIF),
+                new EnumTuple("tiff", (int)GDMMultimediaFormat.mfTIF),
+                new EnumTuple("txt", (int)GDMMultimediaFormat.mfTXT),
+                new EnumTuple("wav", (int)GDMMultimediaFormat.mfWAV),
+                new EnumTuple("webp", (int)GDMMultimediaFormat.mfWEBP),
+                new EnumTuple("wma", (int)GDMMultimediaFormat.mfWMA),
+                new EnumTuple("wmv", (int)GDMMultimediaFormat.mfWMV),
+                new EnumTuple("xls", (int)GDMMultimediaFormat.mfXLS),
+                new EnumTuple("xlsx", (int)GDMMultimediaFormat.mfXLSX),
+                new EnumTuple("zip", (int)GDMMultimediaFormat.mfZIP),
+            };
+            Array.Sort(MultimediaFormatValues);
         }
     }
 }

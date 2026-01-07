@@ -175,6 +175,7 @@ namespace GDModel
 
         public static GDMMultimediaFormat RecognizeFormat(string fileName)
         {
+            // GetMultimediaExt() -> GetFileExtension() already returns in lowercase
             var strFmt = GetMultimediaExt(fileName);
             return string.IsNullOrEmpty(strFmt) ? GDMMultimediaFormat.mfUnknown : GEDCOMUtils.GetMultimediaFormatVal(strFmt);
         }
