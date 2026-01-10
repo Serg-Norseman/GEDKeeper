@@ -1966,20 +1966,30 @@ namespace GDModel.Providers.GEDCOM
 
         private static void WriteRecordValue(StreamWriter stream, int level, GDMRecord record)
         {
-            string str = level.ToString();
+            var parts = new string[9];
+            int pIdx = 0;
+
+            parts[pIdx++] = level.ToString();
 
             if (!string.IsNullOrEmpty(record.XRef)) {
-                str = str + " @" + record.XRef + "@";
+                parts[pIdx++] = " @";
+                parts[pIdx++] = record.XRef;
+                parts[pIdx++] = "@";
             }
 
-            str = str + " " + record.GetTagName();
+            parts[pIdx++] = " ";
+            parts[pIdx++] = record.GetTagName();
 
             string strValue = record.StringValue;
             if (!string.IsNullOrEmpty(strValue)) {
-                str = str + " " + strValue;
+                parts[pIdx++] = " ";
+                parts[pIdx++] = strValue;
             }
 
-            stream.Write(str + GEDCOMConsts.NewLine);
+            parts[pIdx++] = GEDCOMConsts.NewLine;
+
+            string str = string.Join("", parts, 0, pIdx);
+            stream.Write(str);
         }
 
         private static void WriteTagValue(StreamWriter stream, int level, GDMTag tag)
@@ -2053,11 +2063,22 @@ namespace GDModel.Providers.GEDCOM
             bool isEmpty = string.IsNullOrEmpty(tagValue);
             if (string.IsNullOrEmpty(tagName) || (isEmpty && skipEmpty)) return;
 
-            string str = level + " " + tagName;
+            var parts = new string[6];
+            int pIdx = 0;
+
+            parts[pIdx++] = level.ToString();
+            parts[pIdx++] = " ";
+            parts[pIdx++] = tagName;
+
             if (!string.IsNullOrEmpty(tagValue)) {
-                str = str + " " + tagValue;
+                parts[pIdx++] = " ";
+                parts[pIdx++] = tagValue;
             }
-            stream.Write(str + GEDCOMConsts.NewLine);
+
+            parts[pIdx++] = GEDCOMConsts.NewLine;
+
+            string str = string.Join("", parts, 0, pIdx);
+            stream.Write(str);
         }
 
 

@@ -10,5 +10,6 @@ public class Program
         Summary summary;
         summary = BenchmarkRunner.Run<MediaFormatVal>();
         summary = BenchmarkRunner.Run<BinarySearch>();
+        summary = BenchmarkRunner.Run<StrTrim>();
     }
 }

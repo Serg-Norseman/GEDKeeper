@@ -97,6 +97,9 @@ namespace GDModel.Providers.GEDCOM
 
         #region Parse functions
 
+        /// <summary>
+        /// This implementation is 17-27% faster than the standard one.
+        /// </summary>
         public static unsafe string Trim(string str)
         {
             if (string.IsNullOrEmpty(str)) return string.Empty;

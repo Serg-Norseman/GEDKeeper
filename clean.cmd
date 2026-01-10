@@ -72,6 +72,9 @@ rmdir .\projects\GKv3\GEDKeeper3\obj /s /q
 rmdir .\projects\GKv3\GKComponents\bin /s /q
 rmdir .\projects\GKv3\GKComponents\obj /s /q
 
+rmdir .\projects\GKv3\GKBenchmarks\bin /s /q
+rmdir .\projects\GKv3\GKBenchmarks\obj /s /q
+
 rem <<< GKvX >>>
 
 rmdir .\projects\GKvX\.vs /s /q
