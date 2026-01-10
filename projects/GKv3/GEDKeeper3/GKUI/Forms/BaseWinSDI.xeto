@@ -52,9 +52,9 @@
   </Form.ToolBar>
 
   <Form.Menu>
-    <complat:GKMenuBar IncludeSystemItems="None">
+    <complat:GKMenuBar>
 
-      <ButtonMenuItem x:Name="miFile">
+      <ButtonMenuItem x:Name="miFile" Text="&amp;File">
         <ButtonMenuItem x:Name="miFileNew" Shortcut="CommonModifier+N" Image="{Resource Resources.btn_create_new.gif, GKCore}" Click="miFileNew_Click" />
         <ButtonMenuItem x:Name="miFileLoad" Shortcut="CommonModifier+O" Image="{Resource Resources.btn_load.gif, GKCore}" Click="miFileLoad_Click" />
         <ButtonMenuItem x:Name="miMRUFiles" Enabled="False" />
@@ -68,11 +68,9 @@
           <ButtonMenuItem x:Name="miExportTable" Image="{Resource Resources.btn_excel.gif, GKCore}" Click="miExportTable_Click" />
           <ButtonMenuItem x:Name="miExportToStrictGEDCOM" Click="miExportToStrictGEDCOM_Click" />
         </ButtonMenuItem>
-        <SeparatorMenuItem />
-        <ButtonMenuItem x:Name="miExit" Shortcut="CommonModifier+X" Image="{Resource Resources.btn_exit.gif, GKCore}" Click="miExit_Click" />
       </ButtonMenuItem>
 
-      <ButtonMenuItem x:Name="miEdit">
+      <ButtonMenuItem x:Name="miEdit" Text="&amp;Edit">
         <ButtonMenuItem x:Name="miRecordAdd" Shortcut="CommonModifier+I" Image="{Resource Resources.btn_rec_new.gif, GKCore}" Click="miRecordAdd_Click" />
         <ButtonMenuItem x:Name="miRecordEdit" Shortcut="CommonModifier+Enter" Image="{Resource Resources.btn_rec_edit.gif, GKCore}" Click="miRecordEdit_Click" />
         <ButtonMenuItem x:Name="miRecordDelete" Shortcut="CommonModifier+L" Image="{Resource Resources.btn_rec_delete.gif, GKCore}" Click="miRecordDelete_Click" />
@@ -128,21 +126,27 @@
 
       <ButtonMenuItem x:Name="miPlugins" />
 
-      <ButtonMenuItem x:Name="miWindow">
+      <ButtonMenuItem x:Name="miWindow" Text="&amp;Window">
         <ButtonMenuItem x:Name="miWinCascade" Click="miWinCascade_Click" />
         <ButtonMenuItem x:Name="miWinHTile" Click="miWinHTile_Click" />
         <ButtonMenuItem x:Name="miWinVTile" Click="miWinVTile_Click" />
         <ButtonMenuItem x:Name="miWinMinimize" Click="miWinMinimize_Click" />
       </ButtonMenuItem>
 
-      <ButtonMenuItem x:Name="miHelp">
+      <ButtonMenuItem x:Name="miHelp" Text="&amp;Help">
         <ButtonMenuItem x:Name="miContext" Shortcut="F1" Image="{Resource Resources.btn_help.gif, GKCore}" Click="miContext_Click" />
         <SeparatorMenuItem />
         <ButtonMenuItem x:Name="miLogSend" Click="miLogSend_Click" />
         <ButtonMenuItem x:Name="miLogView" Click="miLogView_Click" />
-        <SeparatorMenuItem />
-        <ButtonMenuItem x:Name="miAbout" Image="{Resource Resources.btn_scroll.gif, GKCore}" Click="miAbout_Click" />
       </ButtonMenuItem>
+
+      <GKMenuBar.QuitItem>
+        <ButtonMenuItem x:Name="miExit" Shortcut="CommonModifier+X" Image="{Resource Resources.btn_exit.gif, GKCore}" Click="miExit_Click" />
+      </GKMenuBar.QuitItem>
+
+      <GKMenuBar.AboutItem>
+        <ButtonMenuItem x:Name="miAbout" Image="{Resource Resources.btn_scroll.gif, GKCore}" Click="miAbout_Click" />
+			</GKMenuBar.AboutItem>
 
     </complat:GKMenuBar>
   </Form.Menu>
