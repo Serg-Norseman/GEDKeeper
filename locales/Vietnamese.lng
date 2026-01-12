@@ -30,8 +30,8 @@
 029=Bản đồ
 030=Thống kê
 031=Phả hệ đi lên
-032=Phương pháp d'Aboville 
-033=Phương pháp Kobrin-Konovalov 
+032=Phương pháp d'Aboville
+033=Phương pháp Kobrin-Konovalov
 034=Phương pháp Sosa-Stradonitz
 035=Trình tổ chức
 036=Tập lệnh…
@@ -1069,3 +1069,7 @@
 1051=Create a calculated birth event
 1052=No age on event date
 1053=Subject
+1054=Override themes font
+1055=Files
+1056=Sort events
+1057=Tải lại
