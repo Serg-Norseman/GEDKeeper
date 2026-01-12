@@ -502,7 +502,7 @@
 501=- Todos -
 502=- Não -
 503=- qualquer -
-504=Base de dados principal 
+504=Base de dados principal
 505=Base de Dados para unir
 506=[base de dados atual]
 507=Existe um filtro por fonte. Quer adicionar a fonte a um novo indivíduo?
@@ -714,7 +714,7 @@
 713=Registos de indivíduos
 714=Directorias
 715=Não foi possível detetar automaticamente o género usando o nome "{0}". É género masculino?
-716=Salvar automaticamente a cada 
+716=Salvar automaticamente a cada
 717=minutos
 718=Incluindo o número de gerações
 719=Ocultar segmentos vazios
@@ -1072,3 +1072,4 @@
 1054=Override themes font
 1055=Files
 1056=Sort events
+1057=Recarregar

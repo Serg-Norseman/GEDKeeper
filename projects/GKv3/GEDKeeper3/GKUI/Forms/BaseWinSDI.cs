@@ -73,6 +73,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miFile;
         private ButtonMenuItem miFileNew;
         private ButtonMenuItem miFileLoad;
+        private ButtonMenuItem miFileReload;
         private ButtonMenuItem miMRUFiles;
         private ButtonMenuItem miFileSave;
         private ButtonMenuItem miFileSaveAs;
@@ -1009,6 +1010,12 @@ namespace GKUI.Forms
         {
             await fController.LoadFileEx();
         }
+
+        private async void miFileReload_Click(object sender, EventArgs e)
+        {
+            await fController.ReloadFile();
+        }
+
 
         private void miFileSaveAs_Click(object sender, EventArgs e)
         {

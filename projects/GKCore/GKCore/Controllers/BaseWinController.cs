@@ -162,6 +162,15 @@ namespace GKCore.Controllers
             }
         }
 
+        public async Task ReloadFile()
+        {
+            if (fContext.IsUnknown()) return;
+
+            if (!fView.CheckModified()) return;
+
+            LoadFile(fContext.FileName);
+        }
+
         public async void SaveFile(string fileName)
         {
             if (await fContext.FileSave(fileName)) {
@@ -831,6 +840,7 @@ namespace GKCore.Controllers
                 if (!hasMobile) {
                     GetControl<IMenuItem>("miFileSave").Enabled = canSave;
                     GetControl<IMenuItem>("miFileSaveAs").Enabled = canSave;
+                    GetControl<IMenuItem>("miFileReload").Enabled = baseEn && !fContext.IsUnknown();
 
                     GetControl<IMenuItem>("miFileClose").Enabled = baseEn;
                     GetControl<IMenuItem>("miFileProperties").Enabled = baseEn;
@@ -921,6 +931,7 @@ namespace GKCore.Controllers
 
                     GetControl<IMenuItem>("miFileNew").Text = LangMan.LS(LSID.MIFileNew);
                     GetControl<IMenuItem>("miFileLoad").Text = LangMan.LS(LSID.MIFileLoad);
+                    GetControl<IMenuItem>("miFileReload").Text = LangMan.LS(LSID.MIFileReload);
                     GetControl<IMenuItem>("miMRUFiles").Text = LangMan.LS(LSID.MIMRUFiles);
                     GetControl<IMenuItem>("miFileSave").Text = LangMan.LS(LSID.MIFileSave);
                     GetControl<IMenuItem>("miFileSaveAs").Text = LangMan.LS(LSID.MIFileSaveAs);

@@ -57,6 +57,7 @@
       <ButtonMenuItem x:Name="miFile" Text="&amp;File">
         <ButtonMenuItem x:Name="miFileNew" Shortcut="CommonModifier+N" Image="{Resource Resources.btn_create_new.gif, GKCore}" Click="miFileNew_Click" />
         <ButtonMenuItem x:Name="miFileLoad" Shortcut="CommonModifier+O" Image="{Resource Resources.btn_load.gif, GKCore}" Click="miFileLoad_Click" />
+        <ButtonMenuItem x:Name="miFileReload" Image="{Resource Resources.btn_load.gif, GKCore}" Click="miFileReload_Click" />
         <ButtonMenuItem x:Name="miMRUFiles" Enabled="False" />
         <ButtonMenuItem x:Name="miFileSave" Shortcut="CommonModifier+S" Image="{Resource Resources.btn_save.gif, GKCore}" Click="miFileSave_Click" />
         <ButtonMenuItem x:Name="miFileSaveAs" Click="miFileSaveAs_Click" />
