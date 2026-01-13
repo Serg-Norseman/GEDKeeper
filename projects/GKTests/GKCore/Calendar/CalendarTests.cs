@@ -14,12 +14,6 @@ namespace GKCore.Calendar
     [TestFixture]
     public class CalendarTests
     {
-        [Test]
-        public void Test_Parts()
-        {
-        }
-
-
         private static string d2s(int day, string month, int year, string weekday)
         {
             return string.Format("{0} {1} {2}, {3}", day, month, year, weekday);

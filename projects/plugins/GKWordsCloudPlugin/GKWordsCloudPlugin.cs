@@ -21,7 +21,7 @@ using GKWordsCloudPlugin.WordsCloud;
 [assembly: AssemblyTitle("GKWordsCloudPlugin")]
 [assembly: AssemblyDescription("GEDKeeper WordsCloud plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2017-2023 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2017-2026 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.1.0.0")]
 [assembly: AssemblyCulture("")]
 

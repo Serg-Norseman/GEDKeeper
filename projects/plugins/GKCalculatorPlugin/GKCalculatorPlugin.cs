@@ -16,7 +16,7 @@ using GKCore.Plugins;
 [assembly: AssemblyTitle("GKCalculatorPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Calculator plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2014-2023 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2014-2026 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("2.0.0.0")]
 [assembly: AssemblyCulture("")]
 

@@ -18,7 +18,7 @@ using GKCore.Plugins;
 [assembly: AssemblyTitle("GKStdReports")]
 [assembly: AssemblyDescription("GEDKeeper standard reports plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2018-2023 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2018-2026 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("0.7.0.0")]
 [assembly: AssemblyCulture("")]
 

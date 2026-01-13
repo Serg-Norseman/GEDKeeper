@@ -21,7 +21,7 @@ using GKCore.Utilities;
 [assembly: AssemblyTitle("GKTextSearchPlugin")]
 [assembly: AssemblyDescription("GEDKeeper TextSearch plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2014-2023 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2014-2026 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyCulture("")]
 

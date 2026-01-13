@@ -16,7 +16,7 @@ using GKCore.Plugins;
 [assembly: AssemblyTitle("GKCalendarPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Calendar plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2014-2023 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2014-2026 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.1.0.0")]
 [assembly: AssemblyCulture("")]
 

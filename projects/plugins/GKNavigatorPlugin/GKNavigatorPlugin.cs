@@ -20,7 +20,7 @@ using GKCore.Plugins;
 [assembly: AssemblyTitle("GKNavigatorPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Navigator plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
-[assembly: AssemblyCopyright("Copyright © 2016,2022-2025 by Sergey V. Zhdanovskih")]
+[assembly: AssemblyCopyright("Copyright © 2016,2022-2026 by Sergey V. Zhdanovskih")]
 [assembly: AssemblyVersion("1.2.0.0")]
 [assembly: AssemblyCulture("")]
 
