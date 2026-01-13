@@ -29,6 +29,7 @@ namespace GKCore
         Mobile,             // -> SingleBase UI, AppData/Local instead of AppData/Roaming, no Plugins
         PrintPreview,
         Graphics,
+        DesktopV3,
     }
 
 

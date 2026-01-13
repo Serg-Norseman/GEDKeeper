@@ -285,6 +285,10 @@ namespace GKUI.Platform
                 case Feature.Graphics:
                     result = true;
                     break;
+
+                case Feature.DesktopV3:
+                    result = false;
+                    break;
             }
 
             return result;

@@ -828,7 +828,10 @@ namespace GKCore.Controllers
                 if (!hasMobile) {
                     GetControl<IMenuItem>("miFileSave").Enabled = canSave;
                     GetControl<IMenuItem>("miFileSaveAs").Enabled = canSave;
-                    GetControl<IMenuItem>("miFileReload").Enabled = baseEn && !fContext.IsUnknown();
+
+                    if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                        GetControl<IMenuItem>("miFileReload").Enabled = baseEn && !fContext.IsUnknown();
+                    }
 
                     GetControl<IMenuItem>("miFileClose").Enabled = baseEn;
                     GetControl<IMenuItem>("miFileProperties").Enabled = baseEn;
@@ -854,7 +857,11 @@ namespace GKCore.Controllers
 
                     GetControl<IMenuItem>("miTreeTools").Enabled = baseEn;
                     GetControl<IMenuItem>("miOrganizer").Enabled = baseEn;
-                    GetControl<IMenuItem>("miSlideshow").Enabled = baseEn;
+
+                    if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+                        GetControl<IMenuItem>("miSlideshow").Enabled = baseEn;
+                    }
+
                     GetControl<IMenuItem>("miScripts").Enabled = baseEn;
                 }
 
@@ -919,7 +926,11 @@ namespace GKCore.Controllers
 
                     GetControl<IMenuItem>("miFileNew").Text = LangMan.LS(LSID.MIFileNew);
                     GetControl<IMenuItem>("miFileLoad").Text = LangMan.LS(LSID.MIFileLoad);
-                    GetControl<IMenuItem>("miFileReload").Text = LangMan.LS(LSID.MIFileReload);
+
+                    if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                        GetControl<IMenuItem>("miFileReload").Text = LangMan.LS(LSID.MIFileReload);
+                    }
+
                     GetControl<IMenuItem>("miMRUFiles").Text = LangMan.LS(LSID.MIMRUFiles);
                     GetControl<IMenuItem>("miFileSave").Text = LangMan.LS(LSID.MIFileSave);
                     GetControl<IMenuItem>("miFileSaveAs").Text = LangMan.LS(LSID.MIFileSaveAs);
