@@ -367,11 +367,18 @@ namespace GDModel
         }
 
         [Test]
-        public void Test_ParseString()
+        [TestCase("20", "20")] // Day
+        [TestCase("020", "020")] // Year
+        [TestCase("0020", "020")] // Year
+        [TestCase("32", "032")] // Year
+        [TestCase("032", "032")] // Year
+        [TestCase("0032", "032")] // Year
+        [TestCase("20 DEC 1980", "20 DEC 1980")]
+        public void Test_ParseString(string dtx, string expected)
         {
             GDMDate instance = new GDMDate();
-            Assert.AreEqual("", instance.ParseString("20 DEC 1980"));
-            Assert.AreEqual("20 DEC 1980", instance.StringValue);
+            Assert.AreEqual("", instance.ParseString(dtx));
+            Assert.AreEqual(expected, instance.StringValue);
         }
 
         [Test]
@@ -733,6 +740,8 @@ namespace GDModel
 
         [Test]
         [TestCase("", "")]
+        [TestCase("20", "20")] // Day
+        [TestCase("020", "020")] // Year
         [TestCase("2024", "2024")]
         [TestCase("001B.C.", "001B.C.")]
         [TestCase("001BC", "001B.C.")]
