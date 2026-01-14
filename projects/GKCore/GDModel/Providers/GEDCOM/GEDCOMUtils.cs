@@ -74,7 +74,7 @@ namespace GDModel.Providers.GEDCOM
     /// This class contains helper methods for working with the GEDCOM data format.
     /// </summary>
     /// <remarks>
-    /// This class has been heavily refactored under profiling. Any alterations must take into account the factor 
+    /// This class has been heavily refactored under profiling. Any alterations must take into account the factor
     /// of performance degradation when changing the approach, even in small things.
     /// </remarks>
     public static class GEDCOMUtils
@@ -760,11 +760,6 @@ namespace GDModel.Providers.GEDCOM
                 strTok.Next();
             }
 
-            if (day > 0 && month == 0 && year == GDMDate.UNKNOWN_YEAR) {
-                year = day;
-                day = 0;
-            }
-
             string result = strTok.GetRest();
             return result;
         }
@@ -1099,7 +1094,7 @@ namespace GDModel.Providers.GEDCOM
          *  - simple-loop based (test): 449 (104 %), 437 (104.8 %)
          *  - dict-based (GEDCOMEnumHelper): 399 (92.8 %), 397 (92 %)
          *  - bin-search-based: 326 (75.8 %), 324 (77.7 %)
-         * 
+         *
          * On all tests wins BinarySearch-based.
          */
         public static T Str2Enum<T>(string val, string[] values, T defVal, bool normalize = true)
