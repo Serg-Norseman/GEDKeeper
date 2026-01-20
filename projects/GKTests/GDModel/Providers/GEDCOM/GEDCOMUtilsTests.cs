@@ -93,7 +93,7 @@ namespace GDModel.Providers.GEDCOM
             str = GEDCOMUtils.Trim("   test3        ");
             Assert.AreEqual("test3", str);
 
-            str = GEDCOMUtils.Trim(null);
+            str = GEDCOMUtils.Trim((string)null);
             Assert.AreEqual("", str);
         }
 

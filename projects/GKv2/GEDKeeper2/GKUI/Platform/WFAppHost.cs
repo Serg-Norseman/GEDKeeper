@@ -283,10 +283,12 @@ namespace GKUI.Platform
                     break;
 
                 case Feature.Graphics:
+                case Feature.DesktopV2:
                     result = true;
                     break;
 
                 case Feature.DesktopV3:
+                case Feature.Mobile:
                     result = false;
                     break;
             }

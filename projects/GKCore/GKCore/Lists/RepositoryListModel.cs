@@ -39,10 +39,9 @@ namespace GKCore.Lists
             return result;
         }
 
-        public override void Fetch(GDMRepositoryRecord aRec)
+        protected override string GetQuickFilterBuffer()
         {
-            base.Fetch(aRec);
-            fQuickFilterBuffer = fFetchedRec.RepositoryName;
+            return fFetchedRec.RepositoryName;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

@@ -35,7 +35,6 @@ namespace GKCore.Lists
         private readonly GDMRecordType fRecordType;
         private bool fSimpleList;
         private readonly QuickFilterParams fQuickFilter;
-        protected string fQuickFilterBuffer;
 
 
         public GDMRecordType RecordType
@@ -79,9 +78,16 @@ namespace GKCore.Lists
             DoneContent();
         }
 
+        protected virtual string GetQuickFilterBuffer()
+        {
+            // not applicable to all types of records
+            return string.Empty;
+        }
+
         protected virtual bool CheckQuickFilter()
         {
-            return CheckQuickFilter(fQuickFilterBuffer);
+            string quickFilterBuffer = GetQuickFilterBuffer();
+            return CheckQuickFilter(quickFilterBuffer);
         }
 
         protected bool CheckQuickFilter(string str)

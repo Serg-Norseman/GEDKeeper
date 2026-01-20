@@ -25,10 +25,36 @@ namespace GKCore
         RecentFilesLoad,
         Themes,
         OverwritePrompt,
+
+        /// <summary>
+        /// Implementations where localizations is embedded in the assembly resources.
+        /// </summary>
         EmbeddedLocales,
-        Mobile,             // -> SingleBase UI, AppData/Local instead of AppData/Roaming, no Plugins
+
+        /// <summary>
+        /// Version 3.XX for mobile, based on Xamarin.
+        /// SingleBase UI, AppData/Local instead of AppData/Roaming, no Plugins.
+        /// </summary>
+        Mobile,
+
+        /// <summary>
+        /// PrintPreview doesn't work in Eto.Forms on the Windows/WPF backend (.NET 6-8).
+        /// </summary>
         PrintPreview,
+
+        /// <summary>
+        /// Experiments with terminal implementation (Graphics = true for desktop2/3 and mobile).
+        /// </summary>
         Graphics,
+
+        /// <summary>
+        /// Version 2.XX for desktop, based on WinForms (.NET Framework 4.8).
+        /// </summary>
+        DesktopV2,
+
+        /// <summary>
+        /// Version 3.XX for desktop, based on Eto.Forms (.NET 8).
+        /// </summary>
         DesktopV3,
     }
 

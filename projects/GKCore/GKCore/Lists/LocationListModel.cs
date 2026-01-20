@@ -6,7 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Filters;

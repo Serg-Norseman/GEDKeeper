@@ -318,9 +318,9 @@ namespace GDModel
 
         internal void SetRawData(string firstPart, string surname, string lastPart)
         {
-            fGiven = GEDCOMUtils.Trim(firstPart);
-            fSurname = GEDCOMUtils.Trim(surname);
-            fNameSuffix = GEDCOMUtils.Trim(lastPart);
+            fGiven = firstPart;
+            fSurname = surname;
+            fNameSuffix = lastPart;
         }
 
         private static bool IsUnknown(string str)

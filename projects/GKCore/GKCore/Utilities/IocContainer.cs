@@ -60,12 +60,7 @@ namespace GKCore.Utilities
             fRegisteredObjects.Clear();
         }
 
-        public void Register<TTypeToResolve, TConcrete>()
-        {
-            Register<TTypeToResolve, TConcrete>(LifeCycle.Singleton);
-        }
-
-        public void Register<TTypeToResolve, TConcrete>(LifeCycle lifeCycle, bool canReplace = false)
+        public void Register<TTypeToResolve, TConcrete>(LifeCycle lifeCycle = LifeCycle.Singleton, bool canReplace = false)
         {
             Type typeToResolve = typeof(TTypeToResolve);
 
@@ -83,12 +78,18 @@ namespace GKCore.Utilities
 
         public TTypeToResolve Resolve<TTypeToResolve>(params object[] parameters)
         {
-            return (TTypeToResolve) Resolve(typeof(TTypeToResolve), parameters);
+            return (TTypeToResolve)Resolve(typeof(TTypeToResolve), parameters);
         }
 
         public TTypeToResolve TryResolve<TTypeToResolve>(params object[] parameters)
         {
-            return (TTypeToResolve)TryResolve(typeof(TTypeToResolve), parameters);
+            Type typeToResolve = typeof(TTypeToResolve);
+
+            RegisteredObject registeredObject;
+            if (!fRegisteredObjects.TryGetValue(typeToResolve, out registeredObject)) {
+                return default(TTypeToResolve);
+            }
+            return (TTypeToResolve)GetInstance(registeredObject, parameters);
         }
 
         public object Resolve(Type typeToResolve, params object[] parameters)
@@ -97,15 +98,6 @@ namespace GKCore.Utilities
             if (!fRegisteredObjects.TryGetValue(typeToResolve, out registeredObject)) {
                 throw new TypeNotRegisteredException(string.Format(
                     "The type {0} has not been registered", typeToResolve.Name));
-            }
-            return GetInstance(registeredObject, parameters);
-        }
-
-        public object TryResolve(Type typeToResolve, params object[] parameters)
-        {
-            RegisteredObject registeredObject;
-            if (!fRegisteredObjects.TryGetValue(typeToResolve, out registeredObject)) {
-                return null;
             }
             return GetInstance(registeredObject, parameters);
         }
@@ -122,8 +114,8 @@ namespace GKCore.Utilities
                     parameters = new object[paramsLength];
                     if (paramsLength > 0) {
                         for (int i = 0; i < paramsLength; i++) {
-                            ParameterInfo parameterInfo = constructorParameters[i];
-                            parameters[i] = Resolve(parameterInfo.ParameterType);
+                            var paramType = constructorParameters[i].ParameterType;
+                            parameters[i] = Resolve(paramType);
                         }
                     }
                 }

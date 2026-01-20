@@ -19,5 +19,7 @@ public class Program
         summary = BenchmarkRunner.Run<MediaFormatVal>();
         summary = BenchmarkRunner.Run<BinarySearch>();
         summary = BenchmarkRunner.Run<StrTrim>();
+        summary = BenchmarkRunner.Run<Str2Enum>();
+        summary = BenchmarkRunner.Run<GEDCOMIdentNormalize>();
     }
 }

@@ -273,7 +273,8 @@ namespace GKCore.Lists
             var allNames = fOptions.SearchAndFilterByAllNames;
 
             if (!allNames) {
-                return IsMatchesMask(fQuickFilterBuffer, fltName);
+                string quickFilterBuffer = GetQuickFilterBuffer();
+                return IsMatchesMask(quickFilterBuffer, fltName);
             } else {
                 var persNames = fFetchedRec.PersonalNames;
                 for (int k = 0, num = persNames.Count; k < num; k++) {
@@ -547,10 +548,14 @@ namespace GKCore.Lists
         private string buf_mili_rank;
         private string buf_title;
 
+        protected override string GetQuickFilterBuffer()
+        {
+            return GKUtils.GetNameString(fFetchedRec, true, false);
+        }
+
         public override void Fetch(GDMIndividualRecord aRec)
         {
             base.Fetch(aRec);
-            fQuickFilterBuffer = GKUtils.GetNameString(fFetchedRec, true, false);
 
             buf_bd = null;
             buf_dd = null;

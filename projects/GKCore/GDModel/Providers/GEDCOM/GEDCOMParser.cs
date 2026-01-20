@@ -7,7 +7,6 @@
  */
 
 using System;
-using System.Runtime.CompilerServices;
 
 namespace GDModel.Providers.GEDCOM
 {
@@ -34,11 +33,11 @@ namespace GDModel.Providers.GEDCOM
         }
 
         // :this() for compatibility with the old assembly chain
-        public StringSpan(char[] data, int length, int pos) : this()
+        public StringSpan(char[] data, int pos, int length) : this()
         {
             Data = data;
-            Length = length; // full length of data in line buffer
             Pos = pos; // current position between 0 and length
+            Length = length; // full length of data in line buffer
         }
 
         public static implicit operator string(StringSpan span)
@@ -48,7 +47,7 @@ namespace GDModel.Providers.GEDCOM
 
         public static implicit operator StringSpan(string str)
         {
-            return (string.IsNullOrEmpty(str)) ? StringSpan.Empty : new StringSpan(str.ToCharArray(), str.Length, 0);
+            return (string.IsNullOrEmpty(str)) ? StringSpan.Empty : new StringSpan(str.ToCharArray(), 0, str.Length);
         }
 
         public override string ToString()
@@ -273,7 +272,7 @@ namespace GDModel.Providers.GEDCOM
 
         public StringSpan GetRestSpan()
         {
-            return new StringSpan(fData, fLength, fPos);
+            return new StringSpan(fData, fPos, fLength);
         }
 
         public string GetFullStr()
@@ -283,7 +282,7 @@ namespace GDModel.Providers.GEDCOM
 
         public StringSpan GetFullSpan()
         {
-            return new StringSpan(fData, fLength, 0);
+            return new StringSpan(fData, 0, fLength);
         }
 
         public int GetNumber()

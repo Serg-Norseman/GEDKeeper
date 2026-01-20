@@ -41,10 +41,9 @@ namespace GKCore.Lists
             return result;
         }
 
-        public override void Fetch(GDMFamilyRecord aRec)
+        protected override string GetQuickFilterBuffer()
         {
-            base.Fetch(aRec);
-            fQuickFilterBuffer = GKUtils.GetFamilyString(fBaseContext.Tree, fFetchedRec);
+            return GKUtils.GetFamilyString(fBaseContext.Tree, fFetchedRec);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -56,7 +55,7 @@ namespace GKCore.Lists
                     break;
 
                 case ColumnType.ctFamilyStr:
-                    result = fQuickFilterBuffer;
+                    result = GKUtils.GetFamilyString(fBaseContext.Tree, fFetchedRec);
                     break;
 
                 case ColumnType.ctMarriageDate:

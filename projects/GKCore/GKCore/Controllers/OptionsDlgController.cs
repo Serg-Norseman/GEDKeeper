@@ -232,9 +232,9 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkGenerations").Checked = fOptions.PedigreeOptions.IncludeGenerations;
             GetControl<ICheckBox>("chkPortraits").Checked = fOptions.PedigreeOptions.IncludePortraits;
 
-#if GK3
-            GetControl<ICheckBox>("chkSortEvents").Checked = fOptions.PedigreeOptions.SortEvents;
-#endif
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                GetControl<ICheckBox>("chkSortEvents").Checked = fOptions.PedigreeOptions.SortEvents;
+            }
 
             switch (fOptions.PedigreeOptions.Format) {
                 case PedigreeFormat.Excess:
@@ -259,9 +259,9 @@ namespace GKCore.Controllers
             fOptions.PedigreeOptions.IncludeGenerations = GetControl<ICheckBox>("chkGenerations").Checked;
             fOptions.PedigreeOptions.IncludePortraits = GetControl<ICheckBox>("chkPortraits").Checked;
 
-#if GK3
-            fOptions.PedigreeOptions.SortEvents = GetControl<ICheckBox>("chkSortEvents").Checked;
-#endif
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                fOptions.PedigreeOptions.SortEvents = GetControl<ICheckBox>("chkSortEvents").Checked;
+            }
 
             if (GetControl<IRadioButton>("radExcess").Checked) {
                 fOptions.PedigreeOptions.Format = PedigreeFormat.Excess;
@@ -1119,9 +1119,9 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkGenerations").Text = LangMan.LS(LSID.IncludeGenerations);
             GetControl<ICheckBox>("chkPortraits").Text = LangMan.LS(LSID.IncludePortraits);
 
-#if GK3
-            GetControl<ICheckBox>("chkSortEvents").Text = LangMan.LS(LSID.SortEvents);
-#endif
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                GetControl<ICheckBox>("chkSortEvents").Text = LangMan.LS(LSID.SortEvents);
+            }
 
             GetControl<IGroupBox>("grpPedigreeFormat").Text = LangMan.LS(LSID.PedigreeFormat);
             GetControl<IRadioButton>("radExcess").Text = LangMan.LS(LSID.PF1);

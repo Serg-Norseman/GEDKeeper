@@ -45,10 +45,9 @@ namespace GKCore.Lists
             return result;
         }
 
-        public override void Fetch(GDMGroupRecord aRec)
+        protected override string GetQuickFilterBuffer()
         {
-            base.Fetch(aRec);
-            fQuickFilterBuffer = fFetchedRec.GroupName;
+            return fFetchedRec.GroupName;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

@@ -45,10 +45,9 @@ namespace GKCore.Lists
             return result;
         }
 
-        public override void Fetch(GDMTaskRecord aRec)
+        protected override string GetQuickFilterBuffer()
         {
-            base.Fetch(aRec);
-            fQuickFilterBuffer = GKUtils.GetTaskGoalStr(fBaseContext.Tree, fFetchedRec);
+            return GKUtils.GetTaskGoalStr(fBaseContext.Tree, fFetchedRec);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
@@ -60,7 +59,7 @@ namespace GKCore.Lists
                     break;
 
                 case ColumnType.ctGoal:
-                    result = fQuickFilterBuffer;
+                    result = GKUtils.GetTaskGoalStr(fBaseContext.Tree, fFetchedRec);
                     break;
 
                 case ColumnType.ctPriority:

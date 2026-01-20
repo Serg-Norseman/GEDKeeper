@@ -9,6 +9,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using BSLib;
 using GKCore;
@@ -57,6 +58,7 @@ namespace GDModel.Providers.GEDCOM
 
     public static class GEDCOMExtensions
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static GEDCOMTagType GetTagType(this GDMTag tag)
         {
             return (GEDCOMTagType)tag.Id;
@@ -90,9 +92,10 @@ namespace GDModel.Providers.GEDCOM
         /// </summary>
         public static unsafe string Trim(string str)
         {
-            if (string.IsNullOrEmpty(str)) return string.Empty;
-
+            if (str == null) return string.Empty;
             int strLen = str.Length;
+            if (strLen == 0) return string.Empty;
+
             fixed (char* strPtr = str) {
                 int li = 0;
                 int ri = strLen - 1;
@@ -102,6 +105,25 @@ namespace GDModel.Providers.GEDCOM
                 int newLen = ri - li + 1;
 
                 string result = (newLen == strLen) ? str : new string(strPtr, li, newLen);
+                return result;
+            }
+        }
+
+        public static unsafe string TrimSpan(StringSpan str)
+        {
+            if (str.Data == null) return string.Empty;
+            int strLen = str.Length;
+            if (strLen == 0) return string.Empty;
+
+            fixed (char* strPtr = str.Data) {
+                int li = str.Pos;
+                int ri = str.Pos + str.Length - 1;
+
+                while (li < ri && strPtr[li] <= ' ') li++;
+                while (ri >= li && strPtr[ri] <= ' ') ri--;
+                int newLen = ri - li + 1;
+
+                string result = new string(strPtr, li, newLen);
                 return result;
             }
         }
@@ -163,7 +185,7 @@ namespace GDModel.Providers.GEDCOM
                 for (int i = 0; i < strLen; i++) {
                     char ch = ch_ptr[i];
                     if (ch >= '0' && ch <= '9') {
-                        result = (result * 10 + ((int)ch - 48));
+                        result = (result * 10 + (ch - 48));
                     }
                 }
             }
@@ -787,14 +809,17 @@ namespace GDModel.Providers.GEDCOM
                 return string.Empty;
             }
 
-            string firstPart = string.Empty;
-            string surname = string.Empty;
-            string lastPart = string.Empty;
+            StringSpan firstPart = StringSpan.Empty;
+            StringSpan surname = StringSpan.Empty;
+            StringSpan lastPart = StringSpan.Empty;
 
             int strBeg = strValue.Pos;
             int strLen = strValue.Length;
 
             fixed (char* strPtr = strValue.Data) {
+                // due to the new implementation of TrimSpan, the check for leading spaces and an empty line after has been removed
+
+                /*
                 // skip leading whitespaces
                 while (strBeg < strLen && strPtr[strBeg] == ' ') strBeg++;
 
@@ -802,6 +827,7 @@ namespace GDModel.Providers.GEDCOM
                 if (strLen - strBeg == 0) {
                     return string.Empty;
                 }
+                */
 
                 int fs = -1, ss = strBeg;
                 for (int i = strBeg; i < strLen; i++) {
@@ -809,10 +835,10 @@ namespace GDModel.Providers.GEDCOM
                     if (chr == GEDCOMConsts.NameSeparator) {
                         if (fs == -1) {
                             fs = i;
-                            firstPart = new string(strPtr, strBeg, i - strBeg);
+                            firstPart = new StringSpan(strValue.Data, strBeg, i - strBeg);
                         } else {
                             ss = i;
-                            surname = new string(strPtr, fs + 1, (ss - fs) - 1);
+                            surname = new StringSpan(strValue.Data, fs + 1, (ss - fs) - 1);
                             ss += 1;
                             break;
                         }
@@ -820,13 +846,13 @@ namespace GDModel.Providers.GEDCOM
                 }
 
                 if (fs < 0) {
-                    firstPart = new string(strPtr, ss, strLen - ss);
+                    firstPart = new StringSpan(strValue.Data, ss, strLen - ss);
                 } else {
-                    lastPart = new string(strPtr, ss, strLen - ss);
+                    lastPart = new StringSpan(strValue.Data, ss, strLen - ss);
                 }
             }
 
-            persName.SetRawData(firstPart, surname, lastPart);
+            persName.SetRawData(TrimSpan(firstPart), TrimSpan(surname), TrimSpan(lastPart));
             return string.Empty;
         }
 
@@ -1077,6 +1103,34 @@ namespace GDModel.Providers.GEDCOM
 
         #region GEDCOM Enums Parse
 
+        /// <summary>
+        /// This implementation is only suitable for use in GEDCOM parsing, where identifier strings have a short lifetime.
+        /// Warning: unsafe case conversion (only for ASCII chars), violating string immutability!
+        /// This implementation is 55% faster (with spaces) or 75-80% faster (without spaces) than the standard one (InvariantTextInfo.ToLower(stringX.Trim())).
+        /// </summary>
+        public static unsafe string FastNormalization(string str)
+        {
+            if (str == null) return string.Empty;
+            int strLen = str.Length;
+            if (strLen == 0) return string.Empty;
+
+            fixed (char* strPtr = str) {
+                int li = 0;
+                int ri = strLen - 1;
+
+                while (li < ri && strPtr[li] <= ' ') li++;
+                while (ri >= li && strPtr[ri] <= ' ') ri--;
+                int newLen = ri - li + 1;
+
+                // fast unsafe ascii to lower
+                // unsafe case conversion with string immutability violation!
+                for (int i = li; i <= ri; i++) strPtr[i] = (char)(strPtr[i] | ' ');
+
+                string result = (newLen == strLen) ? str : new string(strPtr, li, newLen);
+                return result;
+            }
+        }
+
         public static string Enum2Str(IConvertible enumVal, string[] values)
         {
 #if PCL
@@ -1092,7 +1146,7 @@ namespace GDModel.Providers.GEDCOM
          * Performance (100.000 iterations, random access):
          *  - if-based (origin): 430 (100 %), 417 (100 %)
          *  - simple-loop based (test): 449 (104 %), 437 (104.8 %)
-         *  - dict-based (GEDCOMEnumHelper): 399 (92.8 %), 397 (92 %)
+         *  - dict-based: 399 (92.8 %), 397 (92 %)
          *  - bin-search-based: 326 (75.8 %), 324 (77.7 %)
          *
          * On all tests wins BinarySearch-based.
@@ -1102,7 +1156,7 @@ namespace GDModel.Providers.GEDCOM
             if (string.IsNullOrEmpty(val)) return defVal;
 
             if (normalize) {
-                val = InvariantTextInfo.ToLower(val.Trim());
+                val = FastNormalization(val);
             }
 
             int idx = BinarySearch(values, val);

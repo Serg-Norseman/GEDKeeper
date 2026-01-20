@@ -315,10 +315,12 @@ namespace GKUI.Platform
 #endif
                     break;
 
-                case Feature.Graphics:
-                    result = true;
+                case Feature.DesktopV2:
+                case Feature.Mobile:
+                    result = false;
                     break;
 
+                case Feature.Graphics:
                 case Feature.DesktopV3:
                     result = true;
                     break;

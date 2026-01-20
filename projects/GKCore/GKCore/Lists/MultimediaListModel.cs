@@ -49,11 +49,15 @@ namespace GKCore.Lists
             return result;
         }
 
+        protected override string GetQuickFilterBuffer()
+        {
+            return fFileRef.Title;
+        }
+
         public override void Fetch(GDMMultimediaRecord aRec)
         {
             base.Fetch(aRec);
             fFileRef = fFetchedRec.FileReferences[0];
-            fQuickFilterBuffer = fFileRef.Title;
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

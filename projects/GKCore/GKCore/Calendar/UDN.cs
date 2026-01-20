@@ -98,7 +98,7 @@ namespace GKCore.Calendar
                 CalendarConverter.jd_to_gregorian2(unmaskedVal, out y, out m, out d);
             }
 
-            int sign = Math.Sign(y);
+            int sign = Sign(y);
             y = Math.Abs(y);
             string sy = HasKnownYear() ? y.ToString().PadLeft(4, '0') : "????";
             if (sign == -1) sy = "-" + sy;
@@ -196,7 +196,6 @@ namespace GKCore.Calendar
         /// <param name="r">The right value to compare</param>
         /// <returns>'-1' when the `l` is less than the `r`, '1' when the `l` is greater than the `r` and '0' when
         /// the `l` and the `r` are equal.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int CompareVal(int l, int r)
         {
             int result = 0;
@@ -204,7 +203,7 @@ namespace GKCore.Calendar
             {
                 if ((IgnoreYear & r) == 0)
                 {
-                    result = Math.Sign(((int) (ValueMask & l)) - ((int) (ValueMask & r)));
+                    result = Sign(((int) (ValueMask & l)) - ((int) (ValueMask & r)));
                 }
                 else
                 {
@@ -219,7 +218,7 @@ namespace GKCore.Calendar
             {
                 if ((IgnoreMonth & r) == 0)
                 {
-                    result = Math.Sign(((int) (ValueMask & l)) - ((int) (ValueMask & r)));
+                    result = Sign(((int) (ValueMask & l)) - ((int) (ValueMask & r)));
                 }
                 else
                 {
@@ -234,7 +233,7 @@ namespace GKCore.Calendar
             {
                 if ((IgnoreDay & r) == 0)
                 {
-                    result = Math.Sign(((int) (ValueMask & l)) - ((int) (ValueMask & r)));
+                    result = Sign(((int) (ValueMask & l)) - ((int) (ValueMask & r)));
                 }
                 else
                 {
@@ -311,6 +310,18 @@ namespace GKCore.Calendar
             return result;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sign(int value)
+        {
+            return unchecked(value >> 31 | (int)((uint)-value >> 31));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Max(int val1, int val2)
+        {
+            return (val1 >= val2) ? val1 : val2;
+        }
+
         /// <summary>
         /// Calculates Julian day number (JDN, https://en.wikipedia.org/wiki/Julian_day) using the specified date in
         /// the specified <paramref name="calendar"/>.
@@ -329,7 +340,6 @@ namespace GKCore.Calendar
         ///
         /// This method doesn't change the 27th and 28th bit ("date before" and "date after").
         /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int CreateVal(UDNCalendarType calendar, int year, int month, int day)
         {
             int result = 0;
@@ -361,8 +371,8 @@ namespace GKCore.Calendar
              * `result` after the code from above is a valid JDN.
              */
             int uYear = year;
-            int uMonth = Math.Max(UnknownMonth + 1, month);
-            int uDay = Math.Max(UnknownDay + 1, day);
+            int uMonth = Max(UnknownMonth + 1, month);
+            int uDay = Max(UnknownDay + 1, day);
 
             switch (calendar) {
                 case UDNCalendarType.ctGregorian:

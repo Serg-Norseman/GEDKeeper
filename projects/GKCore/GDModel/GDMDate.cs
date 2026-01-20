@@ -155,7 +155,8 @@ namespace GDModel
             fMonth = srcDate.fMonth;
             fDay = srcDate.fDay;
 
-            DateChanged();
+            // DateChanged();
+            fUDN = srcDate.fUDN;
         }
 
         public override DateTime GetDateTime()

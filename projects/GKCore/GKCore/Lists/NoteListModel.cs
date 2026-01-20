@@ -42,13 +42,9 @@ namespace GKCore.Lists
             return result;
         }
 
-        public override bool CheckFilter()
+        protected override bool CheckQuickFilter()
         {
-            bool res = IsMatchesMask(fFetchedLines, QuickFilter.Value);
-
-            res = res && CheckCommonFilter(fFetchedRec);
-
-            return res;
+            return IsMatchesMask(fFetchedLines, QuickFilter.Value);
         }
 
         public override void Fetch(GDMNoteRecord aRec)

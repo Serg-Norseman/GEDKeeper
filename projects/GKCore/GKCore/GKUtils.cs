@@ -1465,16 +1465,10 @@ namespace GKCore
             return ((evt == null) ? null : evt.Date.Value);
         }
 
-        public static string GetMarriageDateStr(GDMFamilyRecord fRec, DateFormat dateFormat, bool sign)
+        public static string GetMarriageDateStr(GDMFamilyRecord fRec, DateFormat dateFormat, bool sign = false)
         {
             GDMCustomDate date = GetMarriageDate(fRec);
             return (date == null) ? string.Empty : date.GetDisplayStringExt(dateFormat, sign, false);
-        }
-
-        public static string GetMarriageDateStr(GDMFamilyRecord fRec, DateFormat dateFormat)
-        {
-            GDMCustomDate date = GetMarriageDate(fRec);
-            return (date == null) ? string.Empty : date.GetDisplayStringExt(dateFormat, false, false);
         }
 
         /// <summary>
@@ -3733,9 +3727,6 @@ namespace GKCore
 
         public static string GetFamilyString(GDMTree tree, GDMFamilyRecord family)
         {
-            if (family == null)
-                throw new ArgumentNullException(nameof(family));
-
             return GetFamilyString(tree, family, LangMan.LS(LSID.UnkMale), LangMan.LS(LSID.UnkFemale));
         }
 
@@ -3749,14 +3740,14 @@ namespace GKCore
 
             string husband, wife;
 
-            GDMIndividualRecord spouse = tree.GetPtrValue(family.Husband);
+            GDMIndividualRecord spouse = tree.GetPtrValue<GDMIndividualRecord>(family.Husband);
             if (spouse == null) {
                 husband = (unkHusband == null) ? "?" : unkHusband;
             } else {
                 husband = GetNameString(spouse, false);
             }
 
-            spouse = tree.GetPtrValue(family.Wife);
+            spouse = tree.GetPtrValue<GDMIndividualRecord>(family.Wife);
             if (spouse == null) {
                 wife = (unkWife == null) ? "?" : unkWife;
             } else {
@@ -3880,22 +3871,24 @@ namespace GKCore
         {
             GDMPersonalName result;
 
-            int count = iRec.PersonalNames.Count;
+            var persNames = iRec.PersonalNames;
+            int count = persNames.Count;
+
             if (count == 0) {
                 result = null;
             } else if (count == 1 || defLang == GDMLanguageID.Unknown) {
-                result = iRec.PersonalNames[0];
+                result = persNames[0];
             } else {
                 result = null;
                 for (int i = 0; i < count; i++) {
-                    var pn = iRec.PersonalNames[i];
+                    var pn = persNames[i];
                     if (pn.Language == defLang) {
                         result = pn;
                         break;
                     }
                 }
                 if (result == null) {
-                    result = iRec.PersonalNames[0];
+                    result = persNames[0];
                 }
             }
 

@@ -222,13 +222,11 @@ namespace GKUI.Platform
 
                 case Feature.EmbeddedLocales:
                 case Feature.Mobile:
+                case Feature.Graphics:
                     result = true; // [Accepted]
                     break;
 
-                case Feature.Graphics:
-                    result = true;
-                    break;
-
+                case Feature.DesktopV2:
                 case Feature.DesktopV3:
                     result = false;
                     break;
