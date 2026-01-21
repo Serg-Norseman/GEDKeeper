@@ -20,7 +20,6 @@ using GKCore.Export;
 using GKCore.Filters;
 using GKCore.Lists;
 using GKCore.Locales;
-using GKCore.Media;
 using GKCore.Search;
 using GKUI.Components;
 using Terminal.Gui;

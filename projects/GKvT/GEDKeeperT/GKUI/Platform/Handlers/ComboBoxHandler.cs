@@ -6,19 +6,25 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using BSLib;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
+using GKCore.Utilities;
 using Terminal.Gui;
 
 namespace GKUI.Platform.Handlers
 {
-    /*public sealed class ComboBoxHandler : BaseControlHandler<ComboBox, ComboBoxHandler>, IComboBox
+    public sealed class ComboBoxHandler : BaseControlHandler<ComboBox, ComboBoxHandler>, IComboBox
     {
+        private ExtObservableList<IComboItem> fItems;
+
         public ComboBoxHandler(ComboBox control) : base(control)
         {
+            fItems = new ExtObservableList<IComboItem>();
+            control.SetSource(fItems);
         }
 
         public new bool Enabled
@@ -32,7 +38,7 @@ namespace GKUI.Platform.Handlers
 
         public IList Items
         {
-            get { return Control.Items; }
+            get { return fItems; }
         }
 
         public bool ReadOnly
@@ -43,14 +49,18 @@ namespace GKUI.Platform.Handlers
 
         public int SelectedIndex
         {
-            get { return Control.SelectedIndex; }
-            set { Control.SelectedIndex = value; }
+            get { return Control.SelectedItem; }
+            set { Control.SelectedItem = value; }
         }
 
         public object SelectedItem
         {
-            get { return Control.SelectedValue; }
-            set { Control.SelectedValue = value; }
+            get {
+                int selectedIndex = Control.SelectedItem;
+                var comboItem = (selectedIndex >= 0 && selectedIndex < fItems.Count) ? fItems[selectedIndex] : null;
+                return comboItem;
+            }
+            set {  }
         }
 
         public bool Sorted
@@ -71,22 +81,20 @@ namespace GKUI.Platform.Handlers
 
         public void Add(object item)
         {
-            Control.Items.Add((string)item);
+            fItems.Add(new ComboItem<object>((string)item, item));
         }
 
         public void AddItem<T>(string caption, T tag, IImage image = null)
         {
-            Control.Items.Add(new GKComboItem<T>(caption, tag, image));
+            fItems.Add(new ComboItem<T>(caption, tag, image));
         }
 
         public void AddRange(IEnumerable<object> items, bool sorted = false)
         {
-            Control.Items.Clear();
-            //Control.Sorted = false;
+            fItems.Clear();
             foreach (var item in items) {
-                Control.Items.Add(new GKComboItem<object>(item.ToString(), item));
+                fItems.Add(new ComboItem<object>(item.ToString(), item));
             }
-            //Control.Sorted = sorted;
         }
 
         public void AddStrings(StringList strings)
@@ -99,46 +107,43 @@ namespace GKUI.Platform.Handlers
 
         public void BeginUpdate()
         {
-            //Control.BeginUpdate();
         }
 
         public void Clear()
         {
-            Control.Items.Clear();
+            fItems.Clear();
         }
 
         public void EndUpdate()
         {
-            //Control.EndUpdate();
         }
 
         public void Sort()
         {
-            Control.Items.Sort((x, y) => string.Compare(x.Text, y.Text, StringComparison.CurrentCulture));
+            fItems.Sort((x, y) => string.Compare(x.Text, y.Text, StringComparison.CurrentCulture));
         }
 
         public T GetSelectedTag<T>()
         {
-            object selectedItem = Control.SelectedValue;
-            GKComboItem<T> comboItem = selectedItem as GKComboItem<T>;
+            int selectedIndex = Control.SelectedItem;
+            var comboItem = (selectedIndex >= 0 && selectedIndex < fItems.Count) ? fItems[selectedIndex] as ComboItem<T> : null;
             T itemTag = (comboItem != null) ? comboItem.Tag : default(T);
             return itemTag;
         }
 
         public void SetSelectedTag<T>(T tagValue, bool allowDefault = true)
         {
-            foreach (object item in Control.Items) {
-                GKComboItem<T> comboItem = item as GKComboItem<T>;
-
+            for (int i = 0; i < fItems.Count; i++) {
+                var comboItem = fItems[i] as ComboItem<T>;
                 if (comboItem != null && object.Equals(comboItem.Tag, tagValue)) {
-                    Control.SelectedValue = item;
+                    Control.SelectedItem = i;
                     return;
                 }
             }
 
             if (allowDefault) {
-                Control.SelectedIndex = 0;
+                Control.SelectedItem = 0;
             }
         }
-    }*/
+    }
 }

@@ -296,11 +296,13 @@ namespace GKUI.Platform
 
             // dialogs
             container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);
+            container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
             container.Register<INoteEditDlg, NoteEditDlg>(LifeCycle.Transient);
             container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(ComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
             ControlsManager.RegisterHandlerType(typeof(MenuItem), typeof(MenuItemHandler));
             ControlsManager.RegisterHandlerType(typeof(MenuBarItem), typeof(MenuItemHandler));
