@@ -1,0 +1,114 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GEDKeeperT", "GEDKeeperT\GEDKeeperT.csproj", "{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKCore.nstd", "..\GKCore\GKCore.nstd.csproj", "{10D619AF-E1CD-4F4A-9C19-5E434300B48F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{89782CA9-48D0-451A-AEB1-4E1771CEAC47}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\.editorconfig = ..\..\.editorconfig
+		..\GKConfigurations3.targets = ..\GKConfigurations3.targets
+		..\..\locales\help_enu\gkhHistory.html = ..\..\locales\help_enu\gkhHistory.html
+		..\..\locales\help_rus\gkhHistory.html = ..\..\locales\help_rus\gkhHistory.html
+		NOTES.md = NOTES.md
+		..\..\README.md = ..\..\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{4AF8EEE8-8592-420C-B5C5-E6DDBA389BA1}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\locales\Afrikaans.lng = ..\..\locales\Afrikaans.lng
+		..\..\locales\Belarusian.lng = ..\..\locales\Belarusian.lng
+		..\..\locales\Chinese Simplified.lng = ..\..\locales\Chinese Simplified.lng
+		..\..\locales\Czech.lng = ..\..\locales\Czech.lng
+		..\..\locales\Dutch.lng = ..\..\locales\Dutch.lng
+		..\..\locales\English.lng = ..\..\locales\English.lng
+		..\..\locales\French.lng = ..\..\locales\French.lng
+		..\..\locales\German.lng = ..\..\locales\German.lng
+		..\..\locales\Hungarian.lng = ..\..\locales\Hungarian.lng
+		..\..\locales\Icelandic.lng = ..\..\locales\Icelandic.lng
+		..\..\locales\Italian.lng = ..\..\locales\Italian.lng
+		..\..\locales\Japanese.lng = ..\..\locales\Japanese.lng
+		..\..\locales\Kazakh (Cyrillic).lng = ..\..\locales\Kazakh (Cyrillic).lng
+		..\..\locales\Polish.lng = ..\..\locales\Polish.lng
+		..\..\locales\Portuguese.lng = ..\..\locales\Portuguese.lng
+		..\..\locales\Russian.lng = ..\..\locales\Russian.lng
+		..\..\locales\Serbian (Latin).lng = ..\..\locales\Serbian (Latin).lng
+		..\..\locales\Spanish.lng = ..\..\locales\Spanish.lng
+		..\..\locales\Turkish.lng = ..\..\locales\Turkish.lng
+		..\..\locales\Ukrainian.lng = ..\..\locales\Ukrainian.lng
+		..\..\locales\Vietnamese.lng = ..\..\locales\Vietnamese.lng
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKMap.Core.nstd", "..\GKMap\GKMap.Core\GKMap.Core.nstd.csproj", "{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|FreeBSD = Debug|FreeBSD
+		Debug|Linux = Debug|Linux
+		Debug|MacOS = Debug|MacOS
+		Debug|MSWin64 = Debug|MSWin64
+		Release|FreeBSD = Release|FreeBSD
+		Release|Linux = Release|Linux
+		Release|MacOS = Release|MacOS
+		Release|MSWin64 = Release|MSWin64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Debug|FreeBSD.ActiveCfg = Debug|FreeBSD
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Debug|FreeBSD.Build.0 = Debug|FreeBSD
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Debug|Linux.ActiveCfg = Debug|Linux
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Debug|Linux.Build.0 = Debug|Linux
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Debug|MacOS.ActiveCfg = Debug|MacOS
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Debug|MacOS.Build.0 = Debug|MacOS
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Debug|MSWin64.ActiveCfg = Debug|MSWin64
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Debug|MSWin64.Build.0 = Debug|MSWin64
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Release|FreeBSD.ActiveCfg = Release|FreeBSD
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Release|FreeBSD.Build.0 = Release|FreeBSD
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Release|Linux.ActiveCfg = Release|Linux
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Release|Linux.Build.0 = Release|Linux
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Release|MacOS.ActiveCfg = Release|MacOS
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Release|MacOS.Build.0 = Release|MacOS
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Release|MSWin64.ActiveCfg = Release|MSWin64
+		{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}.Release|MSWin64.Build.0 = Release|MSWin64
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Debug|FreeBSD.ActiveCfg = Debug|FreeBSD
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Debug|FreeBSD.Build.0 = Debug|FreeBSD
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Debug|Linux.ActiveCfg = Debug|Linux
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Debug|Linux.Build.0 = Debug|Linux
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Debug|MacOS.ActiveCfg = Debug|MacOS
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Debug|MacOS.Build.0 = Debug|MacOS
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Debug|MSWin64.ActiveCfg = Debug|MSWin64
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Debug|MSWin64.Build.0 = Debug|MSWin64
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Release|FreeBSD.ActiveCfg = Release|FreeBSD
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Release|FreeBSD.Build.0 = Release|FreeBSD
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Release|Linux.ActiveCfg = Release|Linux
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Release|Linux.Build.0 = Release|Linux
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Release|MacOS.ActiveCfg = Release|MacOS
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Release|MacOS.Build.0 = Release|MacOS
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Release|MSWin64.ActiveCfg = Release|MSWin64
+		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Release|MSWin64.Build.0 = Release|MSWin64
+		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Debug|FreeBSD.ActiveCfg = Debug|Any CPU
+		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Debug|FreeBSD.Build.0 = Debug|Any CPU
+		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Debug|Linux.ActiveCfg = Debug|Any CPU
+		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Debug|Linux.Build.0 = Debug|Any CPU
+		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Debug|MacOS.ActiveCfg = Debug|Any CPU
+		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Debug|MacOS.Build.0 = Debug|Any CPU
+		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Debug|MSWin64.ActiveCfg = Debug|Any CPU
+		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Debug|MSWin64.Build.0 = Debug|Any CPU
+		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|FreeBSD.ActiveCfg = Release|Any CPU
+		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|FreeBSD.Build.0 = Release|Any CPU
+		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|Linux.ActiveCfg = Release|Any CPU
+		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|Linux.Build.0 = Release|Any CPU
+		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|MacOS.ActiveCfg = Release|Any CPU
+		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|MacOS.Build.0 = Release|Any CPU
+		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|MSWin64.ActiveCfg = Release|Any CPU
+		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|MSWin64.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C05CBCB7-0B24-41CC-8BDC-E5BB79045E5D}
+	EndGlobalSection
+EndGlobal

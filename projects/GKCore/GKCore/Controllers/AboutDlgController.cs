@@ -26,9 +26,9 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-#if !GK3
-            GetControl<ILabel>("lblProduct").Text = GKData.APP_TITLE;
-#endif
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV2) || !AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+                GetControl<ILabel>("lblProduct").Text = GKData.APP_TITLE;
+            }
 
             GetControl<ILabel>("lblVersion").Text = @"Version " + AppHost.GetAppVersion();
             GetControl<ILabel>("lblCopyright").Text = AppHost.GetAppCopyright();

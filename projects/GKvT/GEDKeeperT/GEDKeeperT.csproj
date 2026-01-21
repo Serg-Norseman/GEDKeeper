@@ -1,0 +1,77 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <OutputType>exe</OutputType>
+        <RootNamespace />
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        <StartupObject>GEDKeeperT.GKProgram</StartupObject>
+        <SelfContained>true</SelfContained>
+        <PublishSingleFile>true</PublishSingleFile>
+
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>MSWin64;Linux;MacOS;FreeBSD</Platforms>
+    </PropertyGroup>
+
+    <Import Project="..\..\GKConfigurations3.targets" />
+
+    <ItemGroup>
+        <Reference Include="BSLib">
+            <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.Design">
+            <HintPath>..\..\libs\netstd\BSLib.Design.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.DataViz.Model">
+            <HintPath>..\..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
+        <PackageReference Include="Terminal.Gui" Version="1.20.0-develop.4 " />
+    </ItemGroup>
+
+
+    <PropertyGroup Condition=" $(DefineConstants.Contains('OS_MSWIN')) ">
+        <TargetFramework>net8.0</TargetFramework>
+        <OutputType>exe</OutputType>
+        <OutputPath>..\..\..\bin\</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Platform)' == 'MSWin64' ">
+        <PlatformTarget>x64</PlatformTarget>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    </PropertyGroup>
+
+
+    <PropertyGroup Condition=" $(DefineConstants.Contains('OS_LINUX')) ">
+        <TargetFramework>net6.0</TargetFramework>
+        <OutputType>exe</OutputType>
+        <OutputPath>..\..\..\bin\</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        <PlatformTarget>x64</PlatformTarget>
+        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    </PropertyGroup>
+
+
+    <PropertyGroup Condition=" $(DefineConstants.Contains('OS_MACOS')) ">
+        <RuntimeIdentifiers>osx-x64;osx-arm64</RuntimeIdentifiers>
+    </PropertyGroup>
+
+    <Target Name="MacBundleLocaleFiles" BeforeTargets="MacFinishBundle">
+        <ItemGroup>
+            <LocaleFiles Include="GEDKeeper\locales\**\*" />
+        </ItemGroup>
+        <Copy SourceFiles="@(LocaleFiles)" DestinationFolder="$(OutputContents)\locales\%(RecursiveDir)" />
+    </Target>
+
+</Project>

@@ -530,12 +530,18 @@ namespace GKCore.Controllers
 
         private void SetSplitterPos(TabParts tab, int splitterPos)
         {
-            if (splitterPos <= 0) splitterPos = 300;
+            var splName = tab.SplitterName;
 
-            var splitterHandler = GetControl<ISplitter>(tab.SplitterName);
-            fView.EnableSplitterEvent(splitterHandler, false);
-            splitterHandler.Position = splitterPos;
-            fView.EnableSplitterEvent(splitterHandler, true);
+            try {
+                if (splitterPos <= 0) splitterPos = 300;
+
+                var splitterHandler = GetControl<ISplitter>(splName);
+                fView.EnableSplitterEvent(splitterHandler, false);
+                splitterHandler.Position = splitterPos;
+                fView.EnableSplitterEvent(splitterHandler, true);
+            } catch (Exception ex) {
+                Logger.WriteError(string.Format("BaseWinController.SetSplitterPos(): Field `{0}` not found", splName));
+            }
         }
 
         public GDMRecordType GetSelectedRecordType()
@@ -913,7 +919,7 @@ namespace GKCore.Controllers
                     tabControl.Pages[10].Text = LangMan.LS(LSID.RPLocations);
                 }
 
-                bool hasGfx = AppHost.Instance.HasFeatureSupport(Feature.Graphics);
+                bool gfxUI = AppHost.Instance.HasFeatureSupport(Feature.Graphics);
 
                 if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                     GetControl<IMenuItem>("miFile").Text = LangMan.LS(LSID.MIFile);
@@ -956,8 +962,6 @@ namespace GKCore.Controllers
                     GetControl<IMenuItem>("miPedigreeAscend").Text = LangMan.LS(LSID.MIPedigreeAscend);
                     GetControl<IMenuItem>("miPedigreeDescend").Text = LangMan.LS(LSID.MIPedigreeDescend);
                     GetControl<IMenuItem>("miStats").Text = LangMan.LS(LSID.MIStats) + @"...";
-                    GetControl<IMenuItem>("miAncestorsCircle").Text = LangMan.LS(LSID.AncestorsCircle);
-                    GetControl<IMenuItem>("miDescendantsCircle").Text = LangMan.LS(LSID.DescendantsCircle);
                     GetControl<IMenuItem>("miRelationshipCalculator").Text = LangMan.LS(LSID.RelationshipCalculator);
 
                     GetControl<IMenuItem>("miChronicle").Text = LangMan.LS(LSID.MIChronicle) + @"...";
@@ -983,7 +987,10 @@ namespace GKCore.Controllers
                     GetControl<IMenuItem>("miLogSend").Text = LangMan.LS(LSID.LogSend);
                     GetControl<IMenuItem>("miLogView").Text = LangMan.LS(LSID.LogView);
 
-                    if (hasGfx) {
+                    if (gfxUI) {
+                        GetControl<IMenuItem>("miAncestorsCircle").Text = LangMan.LS(LSID.AncestorsCircle);
+                        GetControl<IMenuItem>("miDescendantsCircle").Text = LangMan.LS(LSID.DescendantsCircle);
+
                         GetControl<IMenuItem>("miMap").Text = LangMan.LS(LSID.MIMap) + @"...";
                         GetControl<IMenuItem>("miMap").Enabled = !disNoStd;
 
@@ -1046,10 +1053,12 @@ namespace GKCore.Controllers
                         mi.Text = plugin.DisplayName;
                     }
 
-                    var miThemes = GetControl<IMenuItem>("miThemes");
-                    miThemes.Text = LangMan.LS(LSID.Themes);
-                    if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) {
-                        miThemes.Enabled = false;
+                    if (gfxUI) {
+                        var miThemes = GetControl<IMenuItem>("miThemes");
+                        miThemes.Text = LangMan.LS(LSID.Themes);
+                        if (!AppHost.Instance.HasFeatureSupport(Feature.Themes)) {
+                            miThemes.Enabled = false;
+                        }
                     }
                 }
             } catch (Exception ex) {

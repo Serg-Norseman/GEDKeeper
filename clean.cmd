@@ -92,6 +92,13 @@ rmdir .\projects\GKvX\GEDKeeperX.iOS\obj /s /q
 rmdir .\projects\GKvX\Adapt.Presentation.Controls\bin /s /q
 rmdir .\projects\GKvX\Adapt.Presentation.Controls\obj /s /q
 
+rem <<< GKvT >>>
+
+rmdir .\projects\GKvT\.vs /s /q
+
+rmdir .\projects\GKvT\GEDKeeperT\bin /s /q
+rmdir .\projects\GKvT\GEDKeeperT\obj /s /q
+
 rem <<< Plugins cleaning >>>
 
 rmdir .\projects\plugins\GEDmill\bin /s /q
