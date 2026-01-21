@@ -41,6 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{4AF8
 		..\..\locales\Spanish.lng = ..\..\locales\Spanish.lng
 		..\..\locales\Turkish.lng = ..\..\locales\Turkish.lng
 		..\..\locales\Ukrainian.lng = ..\..\locales\Ukrainian.lng
+		..\..\locales\Vietnamese.lng = ..\..\locales\Vietnamese.lng
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "subprojects", "subprojects", "{0801C061-F6A6-466B-A355-3F7B6225ADB2}"

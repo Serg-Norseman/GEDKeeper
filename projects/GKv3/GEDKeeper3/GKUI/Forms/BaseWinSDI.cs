@@ -1004,7 +1004,6 @@ namespace GKUI.Forms
             await fController.ReloadFile();
         }
 
-
         private void miFileSaveAs_Click(object sender, EventArgs e)
         {
             SaveFileEx(true);
