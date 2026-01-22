@@ -6,7 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using BSLib;
@@ -28,11 +27,6 @@ namespace GKUI.Platform.Handlers
             set { Control.Enabled = value; }
         }
 
-        public IList Items
-        {
-            get { return Control.Items; }
-        }
-
         public bool ReadOnly
         {
             get { return (Control.DropDownStyle == ComboBoxStyle.DropDownList); }
@@ -49,12 +43,6 @@ namespace GKUI.Platform.Handlers
         {
             get { return Control.SelectedItem; }
             set { Control.SelectedItem = value; }
-        }
-
-        public bool Sorted
-        {
-            get { return Control.Sorted; }
-            set { Control.Sorted = value; }
         }
 
         public string Text

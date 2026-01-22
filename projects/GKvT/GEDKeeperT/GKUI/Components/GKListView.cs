@@ -34,20 +34,29 @@ namespace GKUI.Components
 
         public int SelectedIndex
         {
-            get => throw new System.NotImplementedException();
-            set => throw new System.NotImplementedException();
+            get {
+                return 0;
+            }
+            set {
+            }
         }
 
         public int SortColumn
         {
-            get => throw new System.NotImplementedException();
-            set => throw new System.NotImplementedException();
+            get {
+                return 0;
+            }
+            set {
+            }
         }
 
         public GKSortOrder SortOrder
         {
-            get => throw new System.NotImplementedException();
-            set => throw new System.NotImplementedException();
+            get {
+                return GKSortOrder.None;
+            }
+            set {
+            }
         }
 
 

@@ -6,12 +6,11 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using BSLib;
-using GKCore.Design.Graphics;
 using GKCore.Design.Controls;
+using GKCore.Design.Graphics;
 
 namespace GKUI.Platform.Handlers
 {
@@ -19,11 +18,6 @@ namespace GKUI.Platform.Handlers
     {
         public ComboBoxHandler(ComboBox control) : base(control)
         {
-        }
-
-        public IList Items
-        {
-            get { return Control.Items; }
         }
 
         public bool ReadOnly
@@ -42,12 +36,6 @@ namespace GKUI.Platform.Handlers
         {
             get { return Control.SelectedItem; }
             set { Control.SelectedItem = value; }
-        }
-
-        public bool Sorted
-        {
-            get { return Control.Sorted; }
-            set { Control.Sorted = value; }
         }
 
         public string Text

@@ -21,9 +21,6 @@
         <Reference Include="BSLib">
             <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
         </Reference>
-        <Reference Include="BSLib.Design">
-            <HintPath>..\..\libs\netstd\BSLib.Design.dll</HintPath>
-        </Reference>
         <Reference Include="BSLib.DataViz.Model">
             <HintPath>..\..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
         </Reference>

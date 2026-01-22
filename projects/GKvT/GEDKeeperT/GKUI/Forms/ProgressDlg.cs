@@ -232,7 +232,8 @@ namespace GKUI.Forms
             try {
                 /*if (InvokeRequired) {
                     BeginInvoke(action, null);
-                } else*/ {
+                } else*/
+                {
                     action();
                 }
             } catch {

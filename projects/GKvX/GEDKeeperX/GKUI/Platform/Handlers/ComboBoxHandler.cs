@@ -6,7 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System.Collections;
 using System.Collections.Generic;
 using BSLib;
 using GKCore.Design.Controls;
@@ -17,11 +16,6 @@ namespace GKUI.Platform
 {
     public sealed class PickerHandler : BaseControlHandler<GKComboBox, PickerHandler>, IComboBox
     {
-        public IList Items
-        {
-            get { return Control.Items; }
-        }
-
         public bool ReadOnly
         {
             get { return Control.ReadOnly; }
@@ -38,16 +32,6 @@ namespace GKUI.Platform
         {
             get { return Control.SelectedItem; }
             set { Control.SelectedItem = value; }
-        }
-
-        public bool Sorted
-        {
-            get { return false; }
-            set {
-                if (value) {
-                    Sort();
-                }
-            }
         }
 
         public string Text

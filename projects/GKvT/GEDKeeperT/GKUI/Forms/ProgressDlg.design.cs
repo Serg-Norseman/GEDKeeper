@@ -17,39 +17,35 @@ namespace GKUI.Forms
         private void InitializeComponent()
         {
             lblTitle = new Label() { X = 1, Y = 0 };
-            lblTitle.Text = "test";
+            Add(lblTitle);
 
-            ProgressBar1 = new ProgressBar() { X = 1, Y = 1, Width = 60, Height = 1, ProgressBarStyle = ProgressBarStyle.MarqueeContinuous };
-            ProgressBar1.Fraction = 1.0f;
+            ProgressBar1 = new ProgressBar() { X = 1, Y = 1, Width = 60, Height = 1, ProgressBarStyle = ProgressBarStyle.MarqueeContinuous, Fraction = 1.0f };
+            Add(ProgressBar1);
 
             lblTimePassed = new Label() { X = 1, Y = 3 };
+            Add(lblTimePassed);
 
             lblPassedVal = new Label() { X = 53, Y = 3 };
+            Add(lblPassedVal);
 
             lblTimeRemain = new Label() { X = 1, Y = 4 };
+            Add(lblTimeRemain);
 
             lblRemainVal = new Label() { X = 53, Y = 4 };
+            Add(lblRemainVal);
 
             lblTimeTotal = new Label() { X = 1, Y = 5 };
+            Add(lblTimeTotal);
 
             lblTotalVal = new Label() { X = 53, Y = 5 };
+            Add(lblTotalVal);
 
             btnCancel = new Button() { Enabled = false, TabIndex = 1 };
             btnCancel.MouseClick += btnCancel_Click;
+            AddButton(btnCancel);
 
-            //AutoSize = true;
             Width = 64;
             Height = 10;
-
-            Add(ProgressBar1);
-            Add(lblTitle);
-            Add(lblTimePassed);
-            Add(lblTimeRemain);
-            Add(lblPassedVal);
-            Add(lblRemainVal);
-            Add(lblTimeTotal);
-            Add(lblTotalVal);
-            AddButton(btnCancel);
         }
     }
 }

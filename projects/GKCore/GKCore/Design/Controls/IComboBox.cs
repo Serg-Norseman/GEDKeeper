@@ -6,7 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System.Collections;
 using System.Collections.Generic;
 using BSLib;
 using GKCore.Design.Graphics;
@@ -15,11 +14,9 @@ namespace GKCore.Design.Controls
 {
     public interface IComboBox : IBaseControl
     {
-        IList Items { get; }
         bool ReadOnly { get; set; }
         int SelectedIndex { get; set; }
         object SelectedItem { get; set; }
-        bool Sorted { get; set; }
         string Text { get; set; }
 
         void Add(object item);

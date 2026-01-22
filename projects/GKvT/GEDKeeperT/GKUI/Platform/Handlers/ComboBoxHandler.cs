@@ -7,7 +7,6 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using BSLib;
 using GKCore.Design.Controls;
@@ -19,26 +18,12 @@ namespace GKUI.Platform.Handlers
 {
     public sealed class ComboBoxHandler : BaseControlHandler<ComboBox, ComboBoxHandler>, IComboBox
     {
-        private ExtObservableList<IComboItem> fItems;
+        private readonly ExtObservableList<IComboItem> fItems;
 
         public ComboBoxHandler(ComboBox control) : base(control)
         {
             fItems = new ExtObservableList<IComboItem>();
             control.SetSource(fItems);
-        }
-
-        public new bool Enabled
-        {
-            get { return Control.Enabled; }
-            set {
-                Control.Enabled = value;
-                //Control.BackgroundColor = (value) ? SystemColors.WindowBackground : SystemColors.Control;
-            }
-        }
-
-        public IList Items
-        {
-            get { return fItems; }
         }
 
         public bool ReadOnly
@@ -61,16 +46,6 @@ namespace GKUI.Platform.Handlers
                 return comboItem;
             }
             set {  }
-        }
-
-        public bool Sorted
-        {
-            get { return false; }
-            set {
-                if (value) {
-                    Sort();
-                }
-            }
         }
 
         public string Text
@@ -127,15 +102,13 @@ namespace GKUI.Platform.Handlers
         {
             int selectedIndex = Control.SelectedItem;
             var comboItem = (selectedIndex >= 0 && selectedIndex < fItems.Count) ? fItems[selectedIndex] as ComboItem<T> : null;
-            T itemTag = (comboItem != null) ? comboItem.Tag : default(T);
-            return itemTag;
+            return (comboItem != null) ? comboItem.Tag : default;
         }
 
         public void SetSelectedTag<T>(T tagValue, bool allowDefault = true)
         {
             for (int i = 0; i < fItems.Count; i++) {
-                var comboItem = fItems[i] as ComboItem<T>;
-                if (comboItem != null && object.Equals(comboItem.Tag, tagValue)) {
+                if (fItems[i] is ComboItem<T> comboItem && object.Equals(comboItem.Tag, tagValue)) {
                     Control.SelectedItem = i;
                     return;
                 }

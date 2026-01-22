@@ -39,12 +39,12 @@ namespace GKUI.Forms
 
         ITextBox IFilePropertiesDlg.Address
         {
-            get { return  GetControlHandler<ITextBox>(txtAddress); }
+            get { return GetControlHandler<ITextBox>(txtAddress); }
         }
 
         ITextBox IFilePropertiesDlg.Tel
         {
-            get { return  GetControlHandler<ITextBox>(txtTel); }
+            get { return GetControlHandler<ITextBox>(txtTel); }
         }
 
         #endregion

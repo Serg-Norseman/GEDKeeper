@@ -296,9 +296,20 @@ namespace GKUI.Platform
 
             // dialogs
             container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);
+            container.Register<IChronicleWin, ChronicleWin>(LifeCycle.Transient);
+            // ICircleChartWin - not
             container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
+            // ILanguageSelectDlg - not
+            // ILocExpertDlg - not
+            // IMapsViewerWin - not
             container.Register<INoteEditDlg, NoteEditDlg>(LifeCycle.Transient);
+            // INoteEditDlgEx - not
+            container.Register<IOrganizerWin, OrganizerWin>(LifeCycle.Transient);
+            // IPartialView - not
+            // IPatriarchsViewer - not
+            // IPortraitSelectDlg - not
             container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
+            // ISlideshowWin - not
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));

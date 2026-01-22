@@ -7,7 +7,6 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using BSLib;
 using Eto.Forms;
@@ -32,11 +31,6 @@ namespace GKUI.Platform.Handlers
             }
         }
 
-        public IList Items
-        {
-            get { return Control.Items; }
-        }
-
         public bool ReadOnly
         {
             get { return Control.ReadOnly; }
@@ -56,16 +50,6 @@ namespace GKUI.Platform.Handlers
         {
             get { return Control.SelectedValue; }
             set { Control.SelectedValue = value; }
-        }
-
-        public bool Sorted
-        {
-            get { return false; }
-            set {
-                if (value) {
-                    Sort();
-                }
-            }
         }
 
         public string Text

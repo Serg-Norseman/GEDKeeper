@@ -71,7 +71,7 @@ namespace GKCore.Controllers
 
         public override void UpdateView()
         {
-            fView.Language.Text = GEDCOMUtils.GetLanguageStr(fBase.Context.Tree.Header.Language);
+            fView.Language.SetSelectedTag(fBase.Context.Tree.Header.Language);
 
             GDMSubmitterRecord submitter = fBase.Context.Tree.GetSubmitter();
             fView.Name.Text = submitter.Name;

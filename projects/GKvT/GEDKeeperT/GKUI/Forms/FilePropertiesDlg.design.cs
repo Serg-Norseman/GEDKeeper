@@ -22,10 +22,10 @@ namespace GKUI.Forms
 
         private void InitializeComponent()
         {
-            lblName = new Label() { X = 1, Y = 1, AutoSize = true, TabIndex = 0};
+            lblName = new Label() { X = 1, Y = 1, AutoSize = true, TabIndex = 0 };
             lblTelephone = new Label() { X = 1, Y = 3, AutoSize = true, TabIndex = 2 };
-            lblAddress = new Label() { X = 1, Y = 5, AutoSize = true, TabIndex = 4};
-            lblLanguage = new Label() { X = 1, Y = 11, AutoSize = true, TabIndex = 6};
+            lblAddress = new Label() { X = 1, Y = 5, AutoSize = true, TabIndex = 4 };
+            lblLanguage = new Label() { X = 1, Y = 11, AutoSize = true, TabIndex = 6 };
 
             txtName = new TextField() { X = 1, Y = 2, TabIndex = 1, Width = 54, Height = 1 };
             txtTel = new TextField() { X = 1, Y = 4, TabIndex = 3, Width = 54, Height = 1 };
@@ -36,46 +36,30 @@ namespace GKUI.Forms
             container.Border = new Border() { BorderStyle = BorderStyle.None };
             container.Height = Dim.Fill();
             container.Width = Dim.Fill();
-            container.Add(lblName);
-            container.Add(lblAddress);
-            container.Add(lblLanguage);
-            container.Add(lblTelephone);
-            container.Add(txtName);
-            container.Add(txtLanguage);
-            container.Add(txtTel);
-            container.Add(txtAddress);
+            container.Add(lblName, lblTelephone, lblAddress, lblLanguage);
+            container.Add(txtName, txtTel, txtAddress, txtLanguage);
 
-            pageAuthor = new TabView.Tab();
-            pageAuthor.View = container;
+            pageAuthor = new TabView.Tab() { View = container };
 
-            lvRecordStats = new GKListView();
-            lvRecordStats.FullRowSelect = true;
-            lvRecordStats.MultiSelect = false;
+            lvRecordStats = new GKListView() { FullRowSelect = true, MultiSelect = false };
             lvRecordStats.Width = Dim.Fill();
             lvRecordStats.Height = Dim.Fill();
-            lvRecordStats.TabIndex = 1;
 
-            pageOther = new TabView.Tab();
-            pageOther.View = lvRecordStats;
+            pageOther = new TabView.Tab() { View = lvRecordStats };
 
-            btnAccept = new Button();
-            btnAccept.TabIndex = 1;
-            btnAccept.MouseClick += AcceptClickHandler;
-
-            btnCancel = new Button();
-            btnCancel.TabIndex = 2;
-            btnCancel.MouseClick += CancelClickHandler;
-
-            PageControl1 = new TabView();
+            PageControl1 = new TabView() { Width = 58, Height = 18, TabIndex = 0 };
             PageControl1.AddTab(pageAuthor, true);
             PageControl1.AddTab(pageOther, false);
-            PageControl1.Width = 58;
-            PageControl1.Height = 18;
-            PageControl1.TabIndex = 0;
             Add(PageControl1);
 
+            btnAccept = new Button() { TabIndex = 1 };
+            btnAccept.MouseClick += AcceptClickHandler;
             AddButton(btnAccept);
+
+            btnCancel = new Button() { TabIndex = 2 };
+            btnCancel.MouseClick += CancelClickHandler;
             AddButton(btnCancel);
+
             Width = 60;
             Height = 21;
         }

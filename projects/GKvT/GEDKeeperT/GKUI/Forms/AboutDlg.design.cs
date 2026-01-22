@@ -30,19 +30,20 @@ namespace GKUI.Forms
             lblMail.MouseClick += LabelMail_Click;
 
             lblProjSite = new Label { Text = "https://gedkeeper.net/", X = 1, Y = 5, ColorScheme = linkScheme };
+            lblProjSite.MouseClick += LabelMail_Click;
 
             lblForum = new Label { Text = "https://gedkeeper.github.io/", X = 1, Y = 6, ColorScheme = linkScheme };
-            lblProjSite.MouseClick += LabelMail_Click;
+            lblForum.MouseClick += LabelMail_Click;
 
             lblChannel = new Label { Text = "https://gedkeeper.github.io/", X = 1, Y = 7, ColorScheme = linkScheme };
             lblChannel.MouseClick += LabelMail_Click;
 
+            Add(lblProduct, lblVersion, lblCopyright, lblChannel, lblForum, lblProjSite, lblMail);
+
             btnClose = new Button();
             btnClose.MouseClick += CancelClickHandler;
-
-            Add(lblProduct, lblVersion, lblCopyright, lblChannel);
-            Add(lblForum, lblProjSite, lblMail);
             AddButton(btnClose);
+
             Width = 60;
             Height = 12;
         }
