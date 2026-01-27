@@ -1,5 +1,7 @@
 ﻿using GKUI.Components;
-using Terminal.Gui;
+using Terminal.Gui.Drawing;
+using Terminal.Gui.ViewBase;
+using Terminal.Gui.Views;
 
 namespace GKUI.Forms
 {
@@ -7,14 +9,14 @@ namespace GKUI.Forms
     {
         private Button btnAccept;
         private Button btnCancel;
-        private TabView.Tab pageAuthor;
+        private Tab pageAuthor;
         private Label lblName;
         private Label lblAddress;
         private Label lblTelephone;
         private TextField txtName;
         private TextField txtTel;
         private TextView txtAddress;
-        private TabView.Tab pageOther;
+        private Tab pageOther;
         private TabView PageControl1;
         private GKListView lvRecordStats;
         private ComboBox txtLanguage;
@@ -22,46 +24,46 @@ namespace GKUI.Forms
 
         private void InitializeComponent()
         {
-            lblName = new Label() { X = 1, Y = 1, AutoSize = true, TabIndex = 0 };
-            lblTelephone = new Label() { X = 1, Y = 3, AutoSize = true, TabIndex = 2 };
-            lblAddress = new Label() { X = 1, Y = 5, AutoSize = true, TabIndex = 4 };
-            lblLanguage = new Label() { X = 1, Y = 11, AutoSize = true, TabIndex = 6 };
+            lblName = new Label() { X = 1, Y = 1 };
+            lblTelephone = new Label() { X = 1, Y = 3 };
+            lblAddress = new Label() { X = 1, Y = 5 };
+            lblLanguage = new Label() { X = 1, Y = 11 };
 
-            txtName = new TextField() { X = 1, Y = 2, TabIndex = 1, Width = 54, Height = 1 };
-            txtTel = new TextField() { X = 1, Y = 4, TabIndex = 3, Width = 54, Height = 1 };
-            txtAddress = new TextView() { X = 1, Y = 6, TabIndex = 5, Width = 54, Height = 5, Multiline = true };
-            txtLanguage = new ComboBox() { X = 1, Y = 12, TabIndex = 7, Width = 54, Height = 1 };
+            txtName = new TextField() { X = 1, Y = 2, Width = 54, Height = 1 };
+            txtTel = new TextField() { X = 1, Y = 4, Width = 54, Height = 1 };
+            txtAddress = new TextView() { X = 1, Y = 6, Width = 54, Height = 5, Multiline = true };
+            txtLanguage = new ComboBox() { X = 1, Y = 12, Width = 54, Height = 1 };
 
             var container = new View();
-            container.Border = new Border() { BorderStyle = BorderStyle.None };
+            container.Border.BorderStyle = LineStyle.None;
             container.Height = Dim.Fill();
             container.Width = Dim.Fill();
             container.Add(lblName, lblTelephone, lblAddress, lblLanguage);
             container.Add(txtName, txtTel, txtAddress, txtLanguage);
 
-            pageAuthor = new TabView.Tab() { View = container };
+            pageAuthor = new Tab() { View = container };
 
             lvRecordStats = new GKListView() { FullRowSelect = true, MultiSelect = false };
             lvRecordStats.Width = Dim.Fill();
             lvRecordStats.Height = Dim.Fill();
 
-            pageOther = new TabView.Tab() { View = lvRecordStats };
+            pageOther = new Tab() { View = lvRecordStats };
 
-            PageControl1 = new TabView() { Width = 58, Height = 18, TabIndex = 0 };
+            PageControl1 = new TabView() { Width = 58, Height = 18 };
             PageControl1.AddTab(pageAuthor, true);
             PageControl1.AddTab(pageOther, false);
             Add(PageControl1);
 
-            btnAccept = new Button() { TabIndex = 1 };
-            btnAccept.MouseClick += AcceptClickHandler;
+            btnAccept = new Button() { };
+            btnAccept.Accepted += AcceptClickHandler;
             AddButton(btnAccept);
 
-            btnCancel = new Button() { TabIndex = 2 };
-            btnCancel.MouseClick += CancelClickHandler;
+            btnCancel = new Button() { };
+            btnCancel.Accepted += CancelClickHandler;
             AddButton(btnCancel);
 
-            Width = 60;
-            Height = 21;
+            Width = 62;
+            Height = 24;
         }
     }
 }

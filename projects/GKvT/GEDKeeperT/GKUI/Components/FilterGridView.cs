@@ -7,7 +7,7 @@
  */
 
 using GKCore.Lists;
-using Terminal.Gui;
+using Terminal.Gui.ViewBase;
 
 namespace GKUI.Components
 {

@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BSLib;
 using GDModel;
 using GKCore;
@@ -22,7 +23,11 @@ using GKCore.Lists;
 using GKCore.Locales;
 using GKCore.Search;
 using GKUI.Components;
-using Terminal.Gui;
+using Terminal.Gui.App;
+using Terminal.Gui.Drawing;
+using Terminal.Gui.Input;
+using Terminal.Gui.ViewBase;
+using Terminal.Gui.Views;
 
 namespace GKUI.Forms
 {
@@ -32,6 +37,7 @@ namespace GKUI.Forms
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
 
         private StatusBar StatusBar;
+        private Label lblStatusLine;
         private MenuItem tbPrev; // tb->menu
         private MenuItem tbNext; // tb->menu
         private MenuItem tbSendMail; // tb->menu
@@ -40,7 +46,7 @@ namespace GKUI.Forms
         private MenuItem miFileNew;
         private MenuItem miFileLoad;
         private MenuItem miFileReload;
-        private MenuBarItem miMRUFiles;
+        private MenuItem miMRUFiles;
         private MenuItem miFileSave;
         private MenuItem miFileSaveAs;
         private MenuItem miFileClose;
@@ -94,7 +100,7 @@ namespace GKUI.Forms
         private MenuItem miContMediaMoveFile2Rel;
         private MenuItem miContMediaMoveFile2Arc;
         private MenuItem miContMediaMoveFile;
-        private ContextMenu contextMenu;
+        private PopoverMenu contextMenu;
         private MenuItem miContRecordAdd;
         private MenuItem miTreeCompare;
         private MenuItem miTreeMerge;
@@ -104,22 +110,22 @@ namespace GKUI.Forms
         private MenuItem miTreeCheck;
         private MenuItem miPatSearch;
         private MenuItem miPlacesManager;
-        private ContextMenu summaryMenu;
+        private PopoverMenu summaryMenu;
         private MenuItem miCopyContent;
         private MenuItem miExportToStrictGEDCOM;
         private MenuItem miChronicle;
 
-        private TabView.Tab tab1;
-        private TabView.Tab tab2;
-        private TabView.Tab tab3;
-        private TabView.Tab tab4;
-        private TabView.Tab tab5;
-        private TabView.Tab tab6;
-        private TabView.Tab tab7;
-        private TabView.Tab tab8;
-        private TabView.Tab tab9;
-        private TabView.Tab tab10;
-        private TabView.Tab tab11;
+        private Tab tab1;
+        private Tab tab2;
+        private Tab tab3;
+        private Tab tab4;
+        private Tab tab5;
+        private Tab tab6;
+        private Tab tab7;
+        private Tab tab8;
+        private Tab tab9;
+        private Tab tab10;
+        private Tab tab11;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -190,19 +196,19 @@ namespace GKUI.Forms
             fController.SetLocale();
         }
 
-        private TabView.Tab CreatePage(string pageText, GDMRecordType recType)
+        private Tab CreatePage(string pageText, GDMRecordType recType)
         {
             var summary = new HyperView();
-            summary.Border = new Border() { BorderStyle = BorderStyle.Single };
+            summary.Border.BorderStyle = LineStyle.Single;
             summary.Height = Dim.Fill();
             summary.Width = Dim.Fill();
             //summary.OnLink += mPersonSummaryLink;
 
             //summary.ContextMenu = summaryMenu;
-            summary.MouseClick += (args) => {
-                if (args.MouseEvent.Flags.HasFlag(MouseFlags.Button3Clicked)) {
-                    summaryMenu.Position = new Point(args.MouseEvent.X, args.MouseEvent.Y);
-                    summaryMenu.Show();
+            summary.MouseEvent += (sender, args) => {
+                if (args.Flags.HasFlag(MouseFlags.RightButtonReleased)) {
+                    summaryMenu.SetPosition(args.Position);
+                    Application.Popover.Show(summaryMenu);
                 }
             };
 
@@ -217,17 +223,17 @@ namespace GKUI.Forms
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
 
             //recView.ContextMenu = contextMenu;
-            recView.MouseClick += (args) => {
-                if (args.MouseEvent.Flags.HasFlag(MouseFlags.Button3Clicked)) {
-                    contextMenu.Position = new Point(args.MouseEvent.X, args.MouseEvent.Y);
-                    contextMenu.Show();
+            recView.MouseEvent += (sender, args) => {
+                if (args.Flags.HasFlag(MouseFlags.RightButtonReleased)) {
+                    contextMenu.SetPosition(args.Position);
+                    Application.Popover.Show(contextMenu);
                 }
             };
 
             var left = new FrameView() {
                 X = 0,
                 Height = Dim.Fill(),
-                Width = Dim.Percent(70)
+                Width = Dim.Percent(70),
             };
             left.Add(recView);
 
@@ -239,7 +245,7 @@ namespace GKUI.Forms
             right.Add(summary);
 
             var container = new View();
-            container.Border = new Border() { BorderStyle = BorderStyle.None };
+            container.Border.BorderStyle = LineStyle.None;
             container.Height = Dim.Fill();
             container.Width = Dim.Fill();
             container.Add(left);
@@ -252,7 +258,9 @@ namespace GKUI.Forms
             spl.Orientation = Orientation.Horizontal;
             spl.FixedPanel = SplitterFixedPanel.Panel2;*/
 
-            TabView.Tab tabPage = new TabView.Tab(pageText, container);
+            var tabPage = new Tab();
+            tabPage.DisplayText = pageText;
+            tabPage.View = container;
             tabsRecords.AddTab(tabPage, false);
 
             fController.SetTabPart(recType, recView, recType.ToString(), summary);
@@ -264,17 +272,19 @@ namespace GKUI.Forms
 
         #region Form handlers
 
-        private void Form_Activated(Toplevel top)
+        /*private void Form_Activated(Toplevel top)
         {
+            // FIXME
             AppHost.Instance.BaseChanged(this);
         }
 
         private void Form_Deactivate(Toplevel top)
         {
+            // FIXME
             AppHost.Instance.BaseChanged(null);
-        }
+        }*/
 
-        private void Form_Load()
+        protected override void OnLoading()
         {
             try {
                 ((IWorkWindow)this).UpdateSettings();
@@ -285,21 +295,24 @@ namespace GKUI.Forms
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.Form_Load()", ex);
             }
+
+            base.OnLoading();
         }
 
-        private void Form_Closing(ToplevelClosingEventArgs e)
+        protected override bool OnClosing()
         {
-            e.Cancel = !CheckModified();
-            if (e.Cancel) return;
+            bool cancel = !CheckModified();
+            if (cancel) return true;
 
             fController.SaveListsSettings();
-
             AppHost.Instance.BaseClosed(this);
+
+            return base.OnClosing();
         }
 
-        private void Form_Closed(Toplevel top)
+        /*private void Form_Closed(Toplevel top)
         {
-        }
+        }*/
 
         void IBaseWindowView.EnableSplitterEvent(object controlHandler, bool enable)
         {
@@ -397,11 +410,10 @@ namespace GKUI.Forms
             }*/
         }
 
-        private void List_SelectedIndexChanged(TableView.SelectedCellChangedEventArgs e)
+        private void List_SelectedIndexChanged(object sender, SelectedCellChangedEventArgs e)
         {
-            var sender = GetRecordsViewByType(GetSelectedRecordType()) as GKListView;
-            if (e != null && sender != null) {
-                fController.ChangeListItem(sender);
+            if (sender is GKListView listView) {
+                fController.ChangeListItem(listView);
                 AppHost.Instance.SelectedIndexChanged(this);
             }
         }
@@ -482,7 +494,7 @@ namespace GKUI.Forms
             bool result = true;
             if (!fContext.Modified) return result;
 
-            var dialogResult = MessageBox.Query(GKData.APP_TITLE, LangMan.LS(LSID.FileSaveQuery), "Yes", "No", LangMan.LS(LSID.DlgCancel));
+            var dialogResult = MessageBox.Query(Application.Instance, GKData.APP_TITLE, LangMan.LS(LSID.FileSaveQuery), "Yes", "No", LangMan.LS(LSID.DlgCancel));
             switch (dialogResult) {
                 case 0: // Yes
                     SaveFileEx(false);
@@ -576,7 +588,8 @@ namespace GKUI.Forms
                 statusLine = statusLine + ", " + LangMan.LS(LSID.SBFiltered) + ": " + listMan.FilteredCount.ToString();
             }
 
-            StatusBar.Items[0].Title = statusLine;
+            //StatusBar.Items[0].Title = statusLine;
+            lblStatusLine.Text = statusLine;
         }
 
         void IWorkWindow.UpdateSettings()
@@ -657,7 +670,9 @@ namespace GKUI.Forms
 
         public void ShowRecordsTab(GDMRecordType recType)
         {
-            tabsRecords.TabIndex = (int)recType - 1;
+            var tabs = tabsRecords.Tabs.ToList();
+            var selTab = tabs[(int)recType - 1];
+            tabsRecords.SelectedTab = selTab;
         }
 
         public void SelectRecordByXRef(string xref, bool delayedTransition = false)
@@ -706,7 +721,7 @@ namespace GKUI.Forms
             // not supported
         }
 
-        private void StatusBar_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void StatusBar_MouseDoubleClick(object sender, CommandEventArgs e)
         {
             fContext.SwitchShieldState();
             UpdateShieldState();
@@ -716,7 +731,6 @@ namespace GKUI.Forms
         public void UpdateMRU()
         {
             try {
-                //miMRUFiles.Enabled = (AppHost.Options.MRUFiles.Count > 0);
                 int num = AppHost.Options.MRUFiles.Count;
                 var subItems = new MenuItem[num];
                 for (int i = 0; i < num; i++) {
@@ -728,7 +742,8 @@ namespace GKUI.Forms
                     });
                     subItems[i] = mi;
                 }
-                miMRUFiles.Children = subItems;
+                miMRUFiles.Enabled = (num > 0);
+                miMRUFiles.SubMenu = new Menu(subItems);
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.UpdateMRU()", ex);
             }

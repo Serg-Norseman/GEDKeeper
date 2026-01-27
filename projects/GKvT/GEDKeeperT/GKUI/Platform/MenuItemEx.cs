@@ -9,7 +9,7 @@
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKUI.Platform.Handlers;
-using Terminal.Gui;
+using Terminal.Gui.Views;
 
 namespace GKUI.Platform
 {
@@ -21,9 +21,9 @@ namespace GKUI.Platform
         private ItemAction fAction;
         private MenuSubItems fItems;
 
-        public bool Enabled
+        public bool Checked
         {
-            get { return IsEnabled(); }
+            get { return false; }
             set { /* TODO! */ }
         }
 

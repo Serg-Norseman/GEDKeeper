@@ -1,21 +1,22 @@
-﻿using Terminal.Gui;
+﻿using Terminal.Gui.ViewBase;
+using Terminal.Gui.Views;
 
 namespace GKUI.Forms
 {
     partial class OrganizerWin
     {
         private TabView tabsData;
-        private TabView.Tab pageAddresses;
-        private TabView.Tab pageTelephones;
-        private TabView.Tab pageMails;
-        private TabView.Tab pageWebs;
+        private Tab pageAddresses;
+        private Tab pageTelephones;
+        private Tab pageMails;
+        private Tab pageWebs;
 
         private void InitializeComponent()
         {
-            pageAddresses = new TabView.Tab();
-            pageTelephones = new TabView.Tab();
-            pageMails = new TabView.Tab();
-            pageWebs = new TabView.Tab();
+            pageAddresses = new Tab();
+            pageTelephones = new Tab();
+            pageMails = new Tab();
+            pageWebs = new Tab();
 
             tabsData = new TabView();
             tabsData.AddTab(pageAddresses, true);
@@ -28,7 +29,6 @@ namespace GKUI.Forms
 
             Width = 78;
             Height = 24;
-            Loaded += OrganizerWin_Load;
         }
     }
 }

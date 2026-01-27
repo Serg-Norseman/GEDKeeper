@@ -10,7 +10,8 @@ using System;
 using System.Threading;
 using GKCore.Design;
 using GKCore.Locales;
-using Terminal.Gui;
+using Terminal.Gui.App;
+using Terminal.Gui.Input;
 
 namespace GKUI.Forms
 {
@@ -31,8 +32,6 @@ namespace GKUI.Forms
         public ProgressDlg()
         {
             InitializeComponent();
-
-            this.Closed += ProgressDlg_Closed;
 
             ThreadError = new ThreadError(1, "No error");
             fInitEvent = new ManualResetEvent(false);
@@ -60,20 +59,20 @@ namespace GKUI.Forms
             base.Dispose(disposing);
         }
 
-        public override void OnLoaded()
+        protected override void OnLoading()
         {
-            base.OnLoaded();
             fRequiresClose = true;
             fInitEvent.Set();
         }
 
-        private void ProgressDlg_Closed(Terminal.Gui.Toplevel obj)
+        protected override bool OnClosing()
         {
             fRequiresClose = false;
             fCancelEvent.Set();
+            return false;
         }
 
-        private void btnCancel_Click(MouseEventArgs e)
+        private void btnCancel_Click(object sender, CommandEventArgs e)
         {
             //Cursor.Current = Cursors.WaitCursor;
             //Cursor.Show();
@@ -151,12 +150,11 @@ namespace GKUI.Forms
             TimeSpan restTime = new TimeSpan((long)((passTime.Ticks / pos) * (max - pos)));
             TimeSpan sumTime = passTime + restTime;
 
-            Application.MainLoop?.Invoke(() => {
+            Application.Instance.Invoke(() => {
                 ProgressBar1.Fraction = (float)fVal / fMaximum;
                 lblPassedVal.Text = TimeSpanToString(passTime);
                 lblRemainVal.Text = TimeSpanToString(restTime);
                 lblTotalVal.Text = TimeSpanToString(sumTime);
-                SetNeedsDisplay();
             });
         }
 

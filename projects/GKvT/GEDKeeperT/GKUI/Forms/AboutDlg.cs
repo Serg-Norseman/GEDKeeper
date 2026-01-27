@@ -9,7 +9,8 @@
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Design.Views;
-using Terminal.Gui;
+using Terminal.Gui.Input;
+using Terminal.Gui.Views;
 
 namespace GKUI.Forms
 {
@@ -26,9 +27,9 @@ namespace GKUI.Forms
             fController.UpdateView();
         }
 
-        private void LabelMail_Click(MouseEventArgs e)
+        private void LabelMail_Click(object sender, Mouse e)
         {
-            if (e.MouseEvent.View is Label lbl) {
+            if (sender is Label lbl && e.Flags.HasFlag(MouseFlags.LeftButtonClicked)) {
                 GKUtils.LoadExtFile(lbl.Text.ToString());
                 e.Handled = true;
             }

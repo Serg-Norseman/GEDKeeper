@@ -56,10 +56,6 @@ namespace GKUI.Forms
 
             fController = new OrganizerController(this);
             fController.Init(baseWin);
-        }
-
-        private void OrganizerWin_Load()
-        {
             fController.UpdateView();
         }
     }

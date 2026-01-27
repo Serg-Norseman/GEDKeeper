@@ -9,7 +9,7 @@
 using System;
 using System.Linq;
 using GKCore.Design.Controls;
-using Terminal.Gui;
+using Terminal.Gui.Views;
 
 namespace GKUI.Platform.Handlers
 {
@@ -22,10 +22,11 @@ namespace GKUI.Platform.Handlers
             public ITabPage this[int index]
             {
                 get {
-                    if (index < 0 || index >= fTabControl.Tabs.Count)
+                    var tabs = fTabControl.Tabs;
+                    if (index < 0 || index >= tabs.Count)
                         throw new ArgumentOutOfRangeException(nameof(index));
 
-                    return new TabPageHandler(fTabControl.Tabs.ElementAt(index));
+                    return new TabPageHandler(tabs.ElementAt(index));
                 }
             }
 
@@ -60,7 +61,8 @@ namespace GKUI.Platform.Handlers
 
         public void SetTabVisible(ITabPage tabPage, bool visible)
         {
-            // TabView.Tab hasn't Visible
+            if (tabPage != null)
+                tabPage.Visible = visible;
         }
     }
 }

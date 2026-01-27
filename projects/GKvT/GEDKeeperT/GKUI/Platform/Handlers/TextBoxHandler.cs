@@ -7,7 +7,8 @@
  */
 
 using GKCore.Design.Controls;
-using Terminal.Gui;
+using GKUI.Components;
+using Terminal.Gui.Views;
 
 namespace GKUI.Platform.Handlers
 {
@@ -17,28 +18,16 @@ namespace GKUI.Platform.Handlers
         {
         }
 
-        public new bool Enabled
-        {
-            get { return Control.Enabled; }
-            set {
-                Control.Enabled = value;
-                SetBackColor();
-            }
-        }
-
         public string[] Lines
         {
-            get { return new string[] { Control.Text.ToString() }; /*return UIHelper.Convert(Control.Text)*/; }
-            set { }
+            get { return UIHelper.Convert(Control.Text); }
+            set { Control.Text = UIHelper.Convert(value); }
         }
 
         public bool ReadOnly
         {
             get { return Control.ReadOnly; }
-            set {
-                Control.ReadOnly = value;
-                SetBackColor();
-            }
+            set { Control.ReadOnly = value; }
         }
 
         public string SelectedText
@@ -61,11 +50,6 @@ namespace GKUI.Platform.Handlers
         public void Clear()
         {
             Control.Text = string.Empty;
-        }
-
-        private void SetBackColor()
-        {
-            //Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
         }
 
         public void Copy()

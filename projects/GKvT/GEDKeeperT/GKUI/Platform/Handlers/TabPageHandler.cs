@@ -8,36 +8,37 @@
 
 using GKCore.Design;
 using GKCore.Design.Controls;
-using Terminal.Gui;
+using Terminal.Gui.Views;
 
 namespace GKUI.Platform.Handlers
 {
-    public sealed class TabPageHandler : ControlHandler<TabView.Tab, TabPageHandler>, ITabPage
+    public sealed class TabPageHandler : ControlHandler<Tab, TabPageHandler>, ITabPage
     {
-        public TabPageHandler(TabView.Tab control) : base(control)
+        public TabPageHandler(Tab control) : base(control)
         {
         }
 
         public string Text
         {
-            get { return Control.Text.ToString(); }
-            set { Control.Text = value; }
+            get { return Control.DisplayText; }
+            set { Control.DisplayText = value; }
         }
 
         public bool Enabled
         {
-            get { return true; }
-            set { }
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
         }
 
         public bool Visible
         {
-            get { return true; }
-            set { }
+            get { return Control.Visible; }
+            set { Control.Visible = value; }
         }
 
         public void Activate()
         {
+            Control.SetFocus();
         }
     }
 }

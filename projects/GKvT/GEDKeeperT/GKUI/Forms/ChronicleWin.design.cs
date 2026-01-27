@@ -1,5 +1,5 @@
 ﻿using GKUI.Components;
-using Terminal.Gui;
+using Terminal.Gui.ViewBase;
 
 namespace GKUI.Forms
 {

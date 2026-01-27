@@ -6,10 +6,9 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
-using Terminal.Gui;
+using Terminal.Gui.Views;
 
 namespace GKUI.Platform.Handlers
 {
@@ -21,7 +20,7 @@ namespace GKUI.Platform.Handlers
 
         public IColor BackColor
         {
-            get { return new ColorHandler(Control.ColorScheme.Normal.Background); }
+            get { return new ColorHandler(Control.GetScheme().Normal.Background); }
             set {
                 //Control.ColorScheme.Normal.Background = ((ColorHandler)value).Handle;
             }

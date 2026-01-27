@@ -44,6 +44,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{4AF8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKMap.Core.nstd", "..\GKMap\GKMap.Core\GKMap.Core.nstd.csproj", "{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKStdReports.nstd", "..\plugins\GKStdReports\GKStdReports.nstd.csproj", "{98C073CC-9F21-46FF-BF70-8719E619A122}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|FreeBSD = Debug|FreeBSD
@@ -104,9 +108,28 @@ Global
 		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|MacOS.Build.0 = Release|Any CPU
 		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|MSWin64.ActiveCfg = Release|Any CPU
 		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|MSWin64.Build.0 = Release|Any CPU
+		{98C073CC-9F21-46FF-BF70-8719E619A122}.Debug|FreeBSD.ActiveCfg = Debug|Any CPU
+		{98C073CC-9F21-46FF-BF70-8719E619A122}.Debug|FreeBSD.Build.0 = Debug|Any CPU
+		{98C073CC-9F21-46FF-BF70-8719E619A122}.Debug|Linux.ActiveCfg = Debug|Any CPU
+		{98C073CC-9F21-46FF-BF70-8719E619A122}.Debug|Linux.Build.0 = Debug|Any CPU
+		{98C073CC-9F21-46FF-BF70-8719E619A122}.Debug|MacOS.ActiveCfg = Debug|Any CPU
+		{98C073CC-9F21-46FF-BF70-8719E619A122}.Debug|MacOS.Build.0 = Debug|Any CPU
+		{98C073CC-9F21-46FF-BF70-8719E619A122}.Debug|MSWin64.ActiveCfg = Debug|Any CPU
+		{98C073CC-9F21-46FF-BF70-8719E619A122}.Debug|MSWin64.Build.0 = Debug|Any CPU
+		{98C073CC-9F21-46FF-BF70-8719E619A122}.Release|FreeBSD.ActiveCfg = Release|Any CPU
+		{98C073CC-9F21-46FF-BF70-8719E619A122}.Release|FreeBSD.Build.0 = Release|Any CPU
+		{98C073CC-9F21-46FF-BF70-8719E619A122}.Release|Linux.ActiveCfg = Release|Any CPU
+		{98C073CC-9F21-46FF-BF70-8719E619A122}.Release|Linux.Build.0 = Release|Any CPU
+		{98C073CC-9F21-46FF-BF70-8719E619A122}.Release|MacOS.ActiveCfg = Release|Any CPU
+		{98C073CC-9F21-46FF-BF70-8719E619A122}.Release|MacOS.Build.0 = Release|Any CPU
+		{98C073CC-9F21-46FF-BF70-8719E619A122}.Release|MSWin64.ActiveCfg = Release|Any CPU
+		{98C073CC-9F21-46FF-BF70-8719E619A122}.Release|MSWin64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{98C073CC-9F21-46FF-BF70-8719E619A122} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C05CBCB7-0B24-41CC-8BDC-E5BB79045E5D}

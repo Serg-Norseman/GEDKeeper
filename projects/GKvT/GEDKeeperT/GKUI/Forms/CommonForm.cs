@@ -10,7 +10,9 @@ using System;
 using System.Reflection;
 using GKCore;
 using GKCore.Design;
-using Terminal.Gui;
+using Terminal.Gui.App;
+using Terminal.Gui.Input;
+using Terminal.Gui.Views;
 
 namespace GKUI.Forms
 {
@@ -75,6 +77,26 @@ namespace GKUI.Forms
         {
             //throw new NotImplementedException();
         }
+
+        protected override bool OnIsRunningChanging(bool oldIsRunning, bool newIsRunning)
+        {
+            if (!newIsRunning) {
+                // Stopping
+                return OnClosing();
+            } else {
+                OnLoading();
+                return false;
+            }
+        }
+
+        protected virtual void OnLoading()
+        {
+        }
+
+        protected virtual bool OnClosing()
+        {
+            return false; // Cancel = false
+        }
     }
 
 
@@ -85,13 +107,10 @@ namespace GKUI.Forms
     {
         public CommonWindow()
         {
-            Loaded += Form_Load;
-            Closed += Form_Closed;
         }
 
         public virtual void Show(bool showInTaskbar)
         {
-            //ShowInTaskbar = showInTaskbar;
             //Show();
         }
 
@@ -99,14 +118,15 @@ namespace GKUI.Forms
         {
         }
 
-        private void Form_Load()
+        protected override void OnLoading()
         {
             AppHost.Instance.LoadWindow(this);
         }
 
-        private void Form_Closed(Toplevel top)
+        protected override bool OnClosing()
         {
             AppHost.Instance.CloseWindow(this);
+            return false;
         }
     }
 
@@ -164,10 +184,6 @@ namespace GKUI.Forms
 
         public CommonDialog()
         {
-            /*Maximizable = false;
-            Minimizable = false;
-            Resizable = false;
-            ShowInTaskbar = false;*/
             DialogResult = DialogResult.None;
 
             fControlsManager = new ControlsManager(this);
@@ -194,7 +210,7 @@ namespace GKUI.Forms
             return false;
         }
 
-        protected virtual void CancelClickHandler(MouseEventArgs e)
+        protected virtual void CancelClickHandler(object sender, CommandEventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             //Close(DialogResult.Cancel);
@@ -224,6 +240,26 @@ namespace GKUI.Forms
         {
             Application.RequestStop(this);
         }
+
+        protected override bool OnIsRunningChanging(bool oldIsRunning, bool newIsRunning)
+        {
+            if (!newIsRunning) {
+                // Stopping
+                return OnClosing();
+            } else {
+                OnLoading();
+                return false;
+            }
+        }
+
+        protected virtual void OnLoading()
+        {
+        }
+
+        protected virtual bool OnClosing()
+        {
+            return false; // Cancel = false
+        }
     }
 
 
@@ -236,7 +272,7 @@ namespace GKUI.Forms
     {
         protected TController fController;
 
-        protected virtual void AcceptClickHandler(MouseEventArgs e)
+        protected virtual void AcceptClickHandler(object sender, CommandEventArgs e)
         {
             try {
                 DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
@@ -245,7 +281,7 @@ namespace GKUI.Forms
             }
         }
 
-        protected override async void CancelClickHandler(MouseEventArgs e)
+        protected override async void CancelClickHandler(object sender, CommandEventArgs e)
         {
             try {
                 if (await fController.Cancel())
@@ -255,10 +291,11 @@ namespace GKUI.Forms
             }
         }
 
-        /*protected override void OnClosing(CancelEventArgs e)
+        protected override bool OnClosing()
         {
-            base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
-        }*/
+            // FIXME
+            bool cancel = false; // fController.CheckChangesPersistence();
+            return cancel;
+        }
     }
 }

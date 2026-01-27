@@ -8,7 +8,7 @@
 
 using BSLib;
 using GKCore.Design.Graphics;
-using Terminal.Gui;
+using Terminal.Gui.Drawing;
 
 namespace GKUI.Platform.Handlers
 {

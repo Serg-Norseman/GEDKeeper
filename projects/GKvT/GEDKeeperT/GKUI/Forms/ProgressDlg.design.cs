@@ -1,4 +1,4 @@
-﻿using Terminal.Gui;
+﻿using Terminal.Gui.Views;
 
 namespace GKUI.Forms
 {
@@ -40,12 +40,12 @@ namespace GKUI.Forms
             lblTotalVal = new Label() { X = 53, Y = 5 };
             Add(lblTotalVal);
 
-            btnCancel = new Button() { Enabled = false, TabIndex = 1 };
-            btnCancel.MouseClick += btnCancel_Click;
+            btnCancel = new Button() { Enabled = false };
+            btnCancel.Accepted += btnCancel_Click;
             AddButton(btnCancel);
 
             Width = 64;
-            Height = 10;
+            Height = 12;
         }
     }
 }

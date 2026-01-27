@@ -22,7 +22,8 @@ using GKCore.Utilities;
 using GKCore.Validation;
 using GKUI.Forms;
 using GKUI.Platform.Handlers;
-using Terminal.Gui;
+using Terminal.Gui.App;
+using Terminal.Gui.Views;
 
 namespace GKUI.Platform
 {
@@ -94,7 +95,7 @@ namespace GKUI.Platform
 
         public override void Quit()
         {
-            Application.Top.Running = false;
+            Application.Instance.RequestStop();
         }
 
         public override bool ExecuteWork(ProgressStart proc, string title = "")
@@ -118,7 +119,7 @@ namespace GKUI.Platform
                     proc((IProgressController)obj);
                 });
 
-                Application.RunState rs;
+                SessionToken rs;
                 DialogResult dialogResult = DialogResult.Abort;
                 try {
                     workerThread.Start(progressForm);
@@ -127,7 +128,7 @@ namespace GKUI.Platform
 
                     rs = Application.Begin(progForm);
 
-                    Application.MainLoop.AddTimeout(TimeSpan.FromMilliseconds(10), x => true);
+                    //Application.MainLoop.AddTimeout(TimeSpan.FromMilliseconds(10), x => true);
                 } finally {
                     workerThread.Join();
                 }
@@ -319,8 +320,9 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(MenuBarItem), typeof(MenuItemHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(TabView), typeof(TabControlHandler));
-            ControlsManager.RegisterHandlerType(typeof(TabView.Tab), typeof(TabPageHandler));
+            ControlsManager.RegisterHandlerType(typeof(Tab), typeof(TabPageHandler));
             ControlsManager.RegisterHandlerType(typeof(TextField), typeof(TextBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(TextValidateField), typeof(MaskedTextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TextView), typeof(TextAreaHandler));
         }
 

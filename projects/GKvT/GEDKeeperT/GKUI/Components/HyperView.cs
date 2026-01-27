@@ -9,7 +9,7 @@
 using System.Text.RegularExpressions;
 using BSLib;
 using GKCore.Design.Controls;
-using Terminal.Gui;
+using Terminal.Gui.Views;
 
 namespace GKUI.Components
 {

@@ -7,7 +7,7 @@
  */
 
 using GKCore.Design.Controls;
-using Terminal.Gui;
+using Terminal.Gui.Views;
 
 namespace GKUI.Platform.Handlers
 {
@@ -19,8 +19,8 @@ namespace GKUI.Platform.Handlers
 
         public bool Checked
         {
-            get { return Control.Checked; }
-            set { Control.Checked = value; }
+            get { return Control.Value == CheckState.Checked; }
+            set { Control.Value = (value) ? CheckState.Checked : CheckState.UnChecked; }
         }
 
         public string Text

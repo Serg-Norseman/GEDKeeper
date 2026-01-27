@@ -11,7 +11,7 @@ using System.IO;
 using BSLib;
 using GKCore.Design.Graphics;
 using GKUI.Platform.Handlers;
-using Terminal.Gui;
+using Terminal.Gui.Drawing;
 
 namespace GKUI.Platform
 {
@@ -79,20 +79,20 @@ namespace GKUI.Platform
             byte alpha, red, green, blue;
             GfxHelper.DecomposeARGB(argb, out alpha, out red, out green, out blue);
 
-            var clr = new TrueColor(red, green, blue);
-            return new ColorHandler(clr.ToConsoleColor());
+            var clr = new Color(red, green, blue);
+            return new ColorHandler(clr);
         }
 
         public IColor CreateColor(int r, int g, int b)
         {
-            var clr = new TrueColor(r, g, b);
-            return new ColorHandler(clr.ToConsoleColor());
+            var clr = new Color(r, g, b);
+            return new ColorHandler(clr);
         }
 
         public IColor CreateColor(int a, int r, int g, int b)
         {
-            var clr = new TrueColor(r, g, b);
-            return new ColorHandler(clr.ToConsoleColor());
+            var clr = new Color(r, g, b);
+            return new ColorHandler(clr);
         }
 
         public IColor CreateColor(string signature)

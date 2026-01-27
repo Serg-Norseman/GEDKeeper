@@ -11,7 +11,7 @@ using System.Linq;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
-using Terminal.Gui;
+using Terminal.Gui.Views;
 
 namespace GKUI.Platform.Handlers
 {
@@ -22,21 +22,22 @@ namespace GKUI.Platform.Handlers
         public IMenuItem this[int index]
         {
             get {
-                var btnItem = fItem as MenuBarItem;
-                if (btnItem == null)
+                var barItem = fItem as MenuBarItem;
+                if (barItem == null)
                     throw new Exception("Type mismatch");
 
-                if (index < 0 || index >= btnItem.Children.Length)
-                    throw new ArgumentOutOfRangeException("index");
+                var subItems = barItem.PopoverMenu.Root.SubViews.ToArray();
+                if (index < 0 || index >= subItems.Length)
+                    throw new ArgumentOutOfRangeException(nameof(index));
 
-                return new MenuItemHandler(btnItem.Children[index]);
+                return new MenuItemHandler(subItems[index] as MenuItem);
             }
         }
 
         public int Count
         {
             get {
-                return (fItem is MenuBarItem barItem && barItem.Children != null) ? barItem.Children.Length : 0;
+                return (fItem is MenuBarItem barItem) ? barItem.PopoverMenu.Root.SubViews.Count : 0;
             }
         }
 
@@ -59,23 +60,17 @@ namespace GKUI.Platform.Handlers
         public bool Checked
         {
             get {
-                return Control.Checked;
+                return false/*Control.Checked*/;
             }
             set {
-                Control.Checked = value;
+                //Control.Checked = value;
             }
         }
 
         public bool Enabled
         {
-            get { return Control.IsEnabled(); }
-            set {
-                if (value) {
-                    Control.CanExecute = () => { return true; };
-                } else {
-                    Control.CanExecute = () => { return false; };
-                }
-            }
+            get { return Control.Enabled; }
+            set { Control.Enabled = value; }
         }
 
         public IImage Glyph
@@ -103,16 +98,14 @@ namespace GKUI.Platform.Handlers
 
         public int ItemsCount
         {
-            get { return (Control is MenuBarItem) ? ((MenuBarItem)Control).Children.Length : 0; }
+            get { return (Control is MenuBarItem barItem) ? barItem.PopoverMenu.Root.SubViews.Count : 0; }
         }
 
         public IMenuItem AddItem(string text, object tag, IImage image, ItemAction action)
         {
-            if (Control is MenuBarItem) {
+            if (Control is MenuBarItem barItem) {
                 var item = new MenuItemEx(text, tag, image, action);
-                var childrenList = ((MenuBarItem)Control).Children.ToList();
-                childrenList.Add(item);
-                ((MenuBarItem)Control).Children = childrenList.ToArray();
+                barItem.PopoverMenu.Root.Add(item);
                 return item;
             } else {
                 return null;
@@ -121,8 +114,8 @@ namespace GKUI.Platform.Handlers
 
         public void ClearItems()
         {
-            if (Control is MenuBarItem) {
-                ((MenuBarItem)Control).Children = null;
+            if (Control is MenuBarItem barItem) {
+                barItem.PopoverMenu.Root.RemoveAll();
             }
         }
     }

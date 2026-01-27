@@ -10,13 +10,14 @@ using System;
 using BSLib;
 using GKCore.Design.Controls;
 using GKCore.Lists;
-using Terminal.Gui;
+using Terminal.Gui.ViewBase;
+using Terminal.Gui.Views;
 
 namespace GKUI.Components
 {
     public class GKSheetList : View, ISheetList
     {
-        private readonly ContextMenu fContextMenu;
+        private readonly PopoverMenu fContextMenu;
         private readonly GKListView fList;
 
         private EnumSet<SheetButton> fButtons;
@@ -77,7 +78,7 @@ namespace GKUI.Components
 
         public GKSheetList()
         {
-            fContextMenu = new ContextMenu();
+            fContextMenu = new PopoverMenu();
 
             fList = new GKListView();
             fList.Width = Dim.Fill();
@@ -88,7 +89,7 @@ namespace GKUI.Components
             fListModel = null;
         }
 
-        public GKSheetList(TabView.Tab tab) : this()
+        public GKSheetList(Tab tab) : this()
         {
             tab.View = this;
         }

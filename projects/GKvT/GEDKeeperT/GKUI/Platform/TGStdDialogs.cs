@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 using GKCore;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
-using NStack;
-using Terminal.Gui;
+using Terminal.Gui.App;
+using Terminal.Gui.Views;
 
 namespace GKUI.Platform
 {
@@ -58,10 +58,11 @@ namespace GKUI.Platform
         {
             var dlg = new OpenDialog() {
                 Title = title,
-                DirectoryPath = context,
-                AllowedFileTypes = GetFilterFileTypes(filter),
+                Path = context,
                 AllowsMultipleSelection = false,
             };
+            // FIXME: dont work!
+            GetFilterFileTypes(filter, dlg.AllowedTypes);
             Application.Run(dlg);
             if (!dlg.Canceled) {
                 return Task.FromResult(dlg.FilePaths[0]);
@@ -70,25 +71,28 @@ namespace GKUI.Platform
             }
         }
 
-        private string[] GetFilterFileTypes(string filter)
+        private void GetFilterFileTypes(string filter, List<IAllowedType> allowedTypes)
         {
             var filterParts = filter.Split('|');
             int filtersNum = filterParts.Length / 2;
             var result = new List<string>();
             for (int i = 0; i < filtersNum; i++) {
                 int idx = i * 2;
-                //string name = filterParts[idx];
+                string name = filterParts[idx];
                 string exts = filterParts[idx + 1];
                 string[] extensions = exts.Split(',');
 
+                result.Clear();
                 for (int k = 0; k < extensions.Length; k++) {
                     var ext = extensions[k];
                     if (ext[0] == '*')
                         ext = ext.Substring(1);
                     result.Add(ext);
                 }
+
+                var tgExts = result.ToArray();
+                allowedTypes.Add(new AllowedType(name, tgExts));
             }
-            return result.ToArray();
         }
 
         public Task<string> GetSaveFile(string context, string filter)
@@ -109,7 +113,7 @@ namespace GKUI.Platform
                 title = GKData.APP_TITLE;
             }
 
-            MessageBox.Query(title, msg, "OK");
+            MessageBox.Query(Application.Instance, title, msg, "OK");
         }
 
         public void ShowMessage(string msg, string title = "")
@@ -118,7 +122,7 @@ namespace GKUI.Platform
                 title = GKData.APP_TITLE;
             }
 
-            MessageBox.Query(title, msg, "OK");
+            MessageBox.Query(Application.Instance, title, msg, "OK");
         }
 
         public void ShowError(string msg, string title = "")
@@ -127,7 +131,7 @@ namespace GKUI.Platform
                 title = GKData.APP_TITLE;
             }
 
-            MessageBox.Query(title, msg, "OK");
+            MessageBox.Query(Application.Instance, title, msg, "OK");
         }
 
         public Task<bool> ShowQuestion(string msg, string title = "")
@@ -136,7 +140,7 @@ namespace GKUI.Platform
                 title = GKData.APP_TITLE;
             }
 
-            return Task.FromResult(MessageBox.Query(title, msg, new ustring[] { "Yes", "No" }) == 0);
+            return Task.FromResult(MessageBox.Query(Application.Instance, title, msg, new string[] { "Yes", "No" }) == 0);
         }
 
         public void ShowWarning(string msg, string title = "")
@@ -145,7 +149,7 @@ namespace GKUI.Platform
                 title = GKData.APP_TITLE;
             }
 
-            MessageBox.Query(title, msg, "OK");
+            MessageBox.Query(Application.Instance, title, msg, "OK");
         }
 
 

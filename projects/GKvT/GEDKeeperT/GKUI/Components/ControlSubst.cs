@@ -6,7 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using Terminal.Gui;
+using Terminal.Gui.ViewBase;
+using Terminal.Gui.Views;
 
 namespace GKUI.Components
 {
@@ -26,7 +27,7 @@ namespace GKUI.Components
     {
     }
 
-    public class TabPage : TabView.Tab
+    public class TabPage : Tab
     {
     }
 

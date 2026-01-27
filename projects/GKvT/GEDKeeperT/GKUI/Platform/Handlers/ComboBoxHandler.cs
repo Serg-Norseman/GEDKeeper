@@ -6,23 +6,22 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using BSLib;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
-using GKCore.Utilities;
-using Terminal.Gui;
+using Terminal.Gui.Views;
 
 namespace GKUI.Platform.Handlers
 {
     public sealed class ComboBoxHandler : BaseControlHandler<ComboBox, ComboBoxHandler>, IComboBox
     {
-        private readonly ExtObservableList<IComboItem> fItems;
+        private readonly ObservableCollection<IComboItem> fItems;
 
         public ComboBoxHandler(ComboBox control) : base(control)
         {
-            fItems = new ExtObservableList<IComboItem>();
+            fItems = new ObservableCollection<IComboItem>();
             control.SetSource(fItems);
         }
 
@@ -95,7 +94,7 @@ namespace GKUI.Platform.Handlers
 
         public void Sort()
         {
-            fItems.Sort((x, y) => string.Compare(x.Text, y.Text, StringComparison.CurrentCulture));
+            //fItems.Sort((x, y) => string.Compare(x.Text, y.Text, StringComparison.CurrentCulture));
         }
 
         public T GetSelectedTag<T>()

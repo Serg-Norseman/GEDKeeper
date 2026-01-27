@@ -12,9 +12,9 @@ using Terminal.Gui.Views;
 
 namespace GKUI.Platform.Handlers
 {
-    public sealed class TextAreaHandler : BaseControlHandler<TextView, TextAreaHandler>, ITextBox
+    public sealed class MaskedTextBoxHandler : BaseControlHandler<TextValidateField, MaskedTextBoxHandler>, ITextBox
     {
-        public TextAreaHandler(TextView control) : base(control)
+        public MaskedTextBoxHandler(TextValidateField control) : base(control)
         {
         }
 
@@ -26,19 +26,19 @@ namespace GKUI.Platform.Handlers
 
         public bool ReadOnly
         {
-            get { return Control.ReadOnly; }
-            set { Control.ReadOnly = value; }
+            get { return false; }
+            set { }
         }
 
         public string SelectedText
         {
-            get { return Control.SelectedText.ToString(); }
-            set { }
+            get { return Control.Text; }
+            set { Control.Text = value; }
         }
 
         public string Text
         {
-            get { return Control.Text.ToString(); }
+            get { return Control.Text; }
             set { Control.Text = value; }
         }
 
@@ -59,7 +59,6 @@ namespace GKUI.Platform.Handlers
 
         public void SelectAll()
         {
-            Control.SelectAll();
         }
     }
 }

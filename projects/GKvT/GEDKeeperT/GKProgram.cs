@@ -11,7 +11,8 @@ using GKCore;
 using GKCore.Utilities;
 using GKUI.Forms;
 using GKUI.Platform;
-using Terminal.Gui;
+using Terminal.Gui.App;
+using Terminal.Gui.Configuration;
 
 [assembly: AssemblyTitle("GEDKeeperT")]
 [assembly: AssemblyDescription("")]
@@ -31,6 +32,10 @@ namespace GEDKeeperT
         {
             Application.Init();
 
+            ConfigurationManager.Enable(ConfigLocations.All);
+            ThemeManager.Theme = /*"Default"; // */ "TurboPascal 5";
+            ConfigurationManager.Apply();
+
             TGAppHost.Startup(args);
 
             using (var tracker = new SingleInstanceTracker(GKData.APP_TITLE, AppHost.GetSingleInstanceEnforcer)) {
@@ -41,9 +46,7 @@ namespace GEDKeeperT
                         appHost.Init(args, false);
 
                         var win = new BaseWinSDI();
-                        Application.Top.Add(win);
-
-                        Application.Run();
+                        Application.Instance.Run(win);
                         Application.Shutdown();
                     } finally {
                         AppHost.DoneSettings();

@@ -11,7 +11,9 @@ using System.Linq;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
+using GKUI.Components;
 using Terminal.Gui;
+using Terminal.Gui.Views;
 
 namespace GKUI.Platform.Handlers
 {
@@ -83,68 +85,7 @@ namespace GKUI.Platform.Handlers
         }
     }*/
 
-    // TextMaskField - only v2
-    /*public sealed class MaskedTextBoxHandler : BaseControlHandler<MaskedTextBox, MaskedTextBoxHandler>, ITextBox
-    {
-        public MaskedTextBoxHandler(MaskedTextBox control) : base(control)
-        {
-        }
-
-        public new bool Enabled
-        {
-            get { return Control.Enabled; }
-            set {
-                Control.Enabled = value;
-                //Control.BackgroundColor = (value) ? SystemColors.WindowBackground : SystemColors.Control;
-            }
-        }
-
-        public string[] Lines
-        {
-            get { return UIHelper.Convert(Control.Text); }
-            set {  }
-        }
-
-        public bool ReadOnly
-        {
-            get { return Control.ReadOnly; }
-            set { Control.ReadOnly = value; }
-        }
-
-        public string SelectedText
-        {
-            get { return Control.SelectedText; }
-            set { Control.SelectedText = value; }
-        }
-
-        public string Text
-        {
-            get { return Control.Text; }
-            set { Control.Text = value; }
-        }
-
-        public void AppendText(string text)
-        {
-            //Control.Append(text, true);
-        }
-
-        public void Clear()
-        {
-            Control.Text = string.Empty;
-        }
-
-        public void Copy()
-        {
-            UIHelper.SetClipboardText(Control.SelectedText);
-        }
-
-        public void SelectAll()
-        {
-            Control.SelectAll();
-        }
-    }
-
-    public sealed class DateBoxHandler : BaseControlHandler<GKDateBox, DateBoxHandler>, IDateBox
+    /*public sealed class DateBoxHandler : BaseControlHandler<GKDateBox, DateBoxHandler>, IDateBox
     {
         public DateBoxHandler(GKDateBox control) : base(control)
         {

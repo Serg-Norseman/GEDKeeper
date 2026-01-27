@@ -1,4 +1,5 @@
-﻿using Terminal.Gui;
+﻿using Terminal.Gui.Drawing;
+using Terminal.Gui.Views;
 
 namespace GKUI.Forms
 {
@@ -21,31 +22,35 @@ namespace GKUI.Forms
 
             lblCopyright = new Label { X = 1, Y = 3 };
 
-            var backColor = this.ColorScheme.Normal.Background;
-            var linkScheme = new ColorScheme() {
-                Normal = Attribute.Make(Color.Blue, backColor)
+            var backColor = this.GetScheme().Normal.Background;
+            var linkScheme = new Scheme() {
+                Normal = new Attribute(Color.BrightBlue, backColor, TextStyle.Underline)
             };
 
-            lblMail = new Label { Text = "mailto:gedkeeper@yandex.ru", X = 1, Y = 4, ColorScheme = linkScheme };
-            lblMail.MouseClick += LabelMail_Click;
+            lblMail = new Label { Text = "mailto:gedkeeper@yandex.ru", X = 1, Y = 4 };
+            lblMail.SetScheme(linkScheme);
+            lblMail.MouseEvent += LabelMail_Click;
 
-            lblProjSite = new Label { Text = "https://gedkeeper.net/", X = 1, Y = 5, ColorScheme = linkScheme };
-            lblProjSite.MouseClick += LabelMail_Click;
+            lblProjSite = new Label { Text = "https://gedkeeper.net/", X = 1, Y = 5 };
+            lblProjSite.SetScheme(linkScheme);
+            lblProjSite.MouseEvent += LabelMail_Click;
 
-            lblForum = new Label { Text = "https://gedkeeper.github.io/", X = 1, Y = 6, ColorScheme = linkScheme };
-            lblForum.MouseClick += LabelMail_Click;
+            lblForum = new Label { Text = "https://gedkeeper.github.io/", X = 1, Y = 6 };
+            lblForum.SetScheme(linkScheme);
+            lblForum.MouseEvent += LabelMail_Click;
 
-            lblChannel = new Label { Text = "https://gedkeeper.github.io/", X = 1, Y = 7, ColorScheme = linkScheme };
-            lblChannel.MouseClick += LabelMail_Click;
+            lblChannel = new Label { Text = "https://gedkeeper.github.io/", X = 1, Y = 7 };
+            lblChannel.SetScheme(linkScheme);
+            lblChannel.MouseEvent += LabelMail_Click;
 
             Add(lblProduct, lblVersion, lblCopyright, lblChannel, lblForum, lblProjSite, lblMail);
 
             btnClose = new Button();
-            btnClose.MouseClick += CancelClickHandler;
+            btnClose.Accepted += CancelClickHandler;
             AddButton(btnClose);
 
             Width = 60;
-            Height = 12;
+            Height = 14;
         }
     }
 }

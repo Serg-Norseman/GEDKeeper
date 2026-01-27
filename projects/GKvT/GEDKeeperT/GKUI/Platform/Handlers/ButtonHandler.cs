@@ -8,7 +8,7 @@
 
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
-using Terminal.Gui;
+using Terminal.Gui.Views;
 
 namespace GKUI.Platform.Handlers
 {

@@ -1,4 +1,4 @@
-﻿using Terminal.Gui;
+﻿using Terminal.Gui.Views;
 
 namespace GKUI.Forms
 {
@@ -10,19 +10,19 @@ namespace GKUI.Forms
 
         private void InitializeComponent()
         {
-            txtNote = new TextView() { X = 1, Y = 1, Width = 56, Height = 15, Multiline = true, WordWrap = true, TabIndex = 0 };
+            txtNote = new TextView() { X = 1, Y = 1, Width = 56, Height = 15, Multiline = true, WordWrap = true };
             Add(txtNote);
 
-            btnAccept = new Button() { TabIndex = 1, IsDefault = true };
-            btnAccept.MouseClick += AcceptClickHandler;
+            btnAccept = new Button() { IsDefault = true };
+            btnAccept.Accepted += AcceptClickHandler;
             AddButton(btnAccept);
 
-            btnCancel = new Button() { TabIndex = 2 };
-            btnCancel.MouseClick += CancelClickHandler;
+            btnCancel = new Button() { };
+            btnCancel.Accepted += CancelClickHandler;
             AddButton(btnCancel);
 
-            Width = 60;
-            Height = 20;
+            Width = 62;
+            Height = 22;
         }
     }
 }

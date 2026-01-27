@@ -6,7 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using Terminal.Gui;
+using Terminal.Gui.ViewBase;
 
 namespace GKUI.Components
 {

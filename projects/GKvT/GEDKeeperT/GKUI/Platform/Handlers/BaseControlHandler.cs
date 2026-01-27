@@ -7,7 +7,7 @@
  */
 
 using GKCore.Design;
-using Terminal.Gui;
+using Terminal.Gui.ViewBase;
 
 namespace GKUI.Platform.Handlers
 {
