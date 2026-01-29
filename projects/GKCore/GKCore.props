@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-    <ItemGroup>
+    <ItemGroup Condition=" !$(DefineConstants.Contains('TERM')) ">
         <EmbeddedResource Include="Resources\fonts\FreeSans.ttf">
             <LogicalName>Resources.fonts.FreeSans.ttf</LogicalName>
         </EmbeddedResource>
@@ -10,7 +10,7 @@
         </EmbeddedResource>
     </ItemGroup>
 
-    <ItemGroup>
+    <ItemGroup Condition=" !$(DefineConstants.Contains('TERM')) ">
         <EmbeddedResource Include="Resources\btn_accept.gif" />
         <EmbeddedResource Include="Resources\btn_cancel.gif" />
         <EmbeddedResource Include="Resources\btn_copy.gif" />

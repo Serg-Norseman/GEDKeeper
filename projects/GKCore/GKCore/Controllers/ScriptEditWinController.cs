@@ -6,7 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-#if !MOBILE
+#if !MOBILE && !TERM
 
 using System;
 using System.IO;

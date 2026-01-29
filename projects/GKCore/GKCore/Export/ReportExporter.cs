@@ -87,18 +87,22 @@ namespace GKCore.Export
             } else if (string.Equals(ext, ".rtf")) {
                 writer = new RTFWriter();
             } else {
+#if !TERM
                 writer = new PDFWriter();
+#else
+                return;
+#endif
             }
 
             bool success = Generate(writer);
 
-            #if !CI_MODE
+#if !CI_MODE
             if (!success) {
                 AppHost.StdDialogs.ShowError(LangMan.LS(LSID.GenerationFailed));
             } else {
                 if (show) ShowResult();
             }
-            #endif
+#endif
         }
     }
 }

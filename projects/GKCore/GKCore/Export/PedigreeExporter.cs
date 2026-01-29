@@ -233,7 +233,7 @@ namespace GKCore.Export
         private void WriteExcessFmt(PedigreePerson person)
         {
             if (fOptions.PedigreeOptions.IncludePortraits) {
-                float factor = (fWriter is PDFWriter) ? 0.6f : 1.0f;
+                float factor = (fWriter.IsPDF()) ? 0.6f : 1.0f;
                 IImage image = fBase.Context.GetPrimaryBitmap(person.IRec, (int)(fDefImageWidth * factor), (int)(fDefImageHeight * factor), false);
                 fWriter.AddImage(image, TextAlignment.taRight);
             }

@@ -40,6 +40,11 @@ namespace GKCore.Export.Formats
             fMargins = new ExtMargins(20);
         }
 
+        public virtual bool IsPDF()
+        {
+            return false;
+        }
+
         public abstract bool SupportedText();
 
         public abstract bool SupportedTables();

@@ -6,6 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+#if !TERM
+
 using System;
 using System.Collections.Generic;
 using BSLib;
@@ -272,3 +274,5 @@ namespace GKCore.Controllers
         }
     }
 }
+
+#endif

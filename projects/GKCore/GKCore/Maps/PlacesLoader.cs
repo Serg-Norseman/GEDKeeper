@@ -68,6 +68,7 @@ namespace GKCore.Maps
             mapPoints.Add(new GeoPoint(gmPt.Latitude, gmPt.Longitude, gmPt.Hint, date));
         }
 
+#if !TERM
         public static void CopyPoints(IMapBrowser browser, IList<GeoPoint> gmapPoints, bool byPerson)
         {
             if (gmapPoints == null)
@@ -95,6 +96,7 @@ namespace GKCore.Maps
                 browser.EndUpdate();
             }
         }
+#endif
 
         public static CoordsRect GetPointsFrame(IList<GeoPoint> mapPoints)
         {

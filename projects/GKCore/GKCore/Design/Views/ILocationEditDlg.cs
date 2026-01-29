@@ -6,6 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+#if !TERM
+
 using GDModel;
 using GKCore.Design.Controls;
 using GKCore.Lists;
@@ -27,3 +29,5 @@ namespace GKCore.Design.Views
         ITextBox Longitude { get; }
     }
 }
+
+#endif

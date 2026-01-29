@@ -530,6 +530,7 @@ namespace GKCore.Controllers
         {
             var result = new ModificationResult<GDMLocationRecord>();
 
+#if !TERM
             try {
                 baseWin.Context.BeginUpdate();
                 GDMTree tree = baseWin.Context.Tree;
@@ -565,6 +566,7 @@ namespace GKCore.Controllers
             } finally {
                 baseWin.Context.EndUpdate();
             }
+#endif
 
             return result;
         }
@@ -1740,11 +1742,13 @@ namespace GKCore.Controllers
 
         public static void ShowMap(IBaseWindow baseWin, List<GeoPoint> fixedPoints = null)
         {
+#if !TERM
             var mapsWin = AppHost.Container.Resolve<IMapsViewerWin>(baseWin);
             if (fixedPoints != null) {
                 mapsWin.ShowFixedPoints(fixedPoints);
             }
             AppHost.Instance.ShowWindow(mapsWin);
+#endif
         }
 
         public static void ShowMap_Sub(IBaseWindow baseWin, GDMLocationRecord locRec)

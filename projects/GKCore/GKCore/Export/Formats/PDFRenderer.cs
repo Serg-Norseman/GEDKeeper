@@ -6,6 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+#if !TERM
+
 #if NETCOREAPP || NETSTANDARD2_0
 #define UNOFF_ITS
 #endif
@@ -340,3 +342,5 @@ namespace GKCore.Export.Formats
         }
     }
 }
+
+#endif

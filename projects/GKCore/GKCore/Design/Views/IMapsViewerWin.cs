@@ -6,6 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+#if !TERM
+
 using System.Collections.Generic;
 using GKCore.Design.Controls;
 using GKCore.Maps;
@@ -30,3 +32,5 @@ namespace GKCore.Design.Views
         void ShowFixedPoints(IEnumerable<GeoPoint> points);
     }
 }
+
+#endif

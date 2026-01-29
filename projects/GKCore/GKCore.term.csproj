@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net8.0</TargetFrameworks>
+        <AssemblyName>GKCore</AssemblyName>
+        <RootNamespace />
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>MSWin64;Linux;Linux_ARM;MacOS;FreeBSD</Platforms>
+
+        <NoWarn>$(NoWarn);NU1902;NU1903;NU1904</NoWarn>
+
+        <DefineConstants>$(DefineConstants);TERM</DefineConstants>
+    </PropertyGroup>
+
+    <Import Project="..\GKConfigurations3.targets" />
+
+
+    <PropertyGroup Condition="' $(Platform)' != 'Unknown' ">
+        <OutputPath>bin\</OutputPath>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <Compile Include="..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <Reference Include="BSLib">
+            <HintPath>..\libs\netstd\BSLib.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.DataViz.Model">
+            <HintPath>..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
+        </Reference>
+        <Reference Include="RtfWriter">
+            <HintPath>..\libs\netstd\RtfWriter.dll</HintPath>
+        </Reference>
+        <Reference Include="SwiftExcel">
+            <HintPath>..\libs\netstd\SwiftExcel.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <PackageReference Include="YamlDotNet" Version="16.2.1" />
+        <PackageReference Include="UTF.Unknown" Version="2.5.1" />
+        <PackageReference Include="System.IO.Packaging" Version="8.0.1" />
+    </ItemGroup>
+
+
+    <Import Project="GKCore.props" />
+
+</Project>

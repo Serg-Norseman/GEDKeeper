@@ -6,6 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+#if !TERM
+
 #if NETCOREAPP || NETSTANDARD2_0
 #define UNOFF_ITS
 #endif
@@ -111,6 +113,11 @@ namespace GKCore.Export.Formats
                 if (fDocument != null) fDocument.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public override bool IsPDF()
+        {
+            return true;
         }
 
         public override bool SupportedText()
@@ -532,3 +539,5 @@ namespace GKCore.Export.Formats
         }
     }
 }
+
+#endif

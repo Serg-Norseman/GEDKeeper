@@ -99,6 +99,13 @@ rmdir .\projects\GKvT\.vs /s /q
 rmdir .\projects\GKvT\GEDKeeperT\bin /s /q
 rmdir .\projects\GKvT\GEDKeeperT\obj /s /q
 
+rem <<< GKcli >>>
+
+rmdir .\projects\GKcli\.vs /s /q
+
+rmdir .\projects\GKcli\bin /s /q
+rmdir .\projects\GKcli\obj /s /q
+
 rem <<< Plugins cleaning >>>
 
 rmdir .\projects\plugins\GEDmill\bin /s /q

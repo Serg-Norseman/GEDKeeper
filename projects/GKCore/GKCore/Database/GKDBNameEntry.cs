@@ -6,6 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+#if !TERM
+
 using System;
 using GDModel;
 using SQLite;
@@ -47,3 +49,5 @@ namespace GKCore.Database
         }
     }
 }
+
+#endif

@@ -8,7 +8,7 @@
 
 #pragma warning disable IDE0060 // Remove unused parameter
 
-#if !MOBILE
+#if !MOBILE && !TERM
 
 using System;
 using System.Collections.Generic;

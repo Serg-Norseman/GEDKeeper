@@ -6,6 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+#if !TERM
+
 using System.Collections.Generic;
 using GKCore.Maps;
 using GKMap;
@@ -36,3 +38,5 @@ namespace GKCore.Design.Controls
         void ZoomToBounds();
     }
 }
+
+#endif
