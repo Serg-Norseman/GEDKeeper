@@ -32,7 +32,7 @@
 
     <ItemGroup>
         <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
-        <PackageReference Include="Terminal.Gui" Version="2.0.0-develop.4884" />
+        <PackageReference Include="Terminal.Gui" Version="2.0.0-develop.4957" />
     </ItemGroup>
 
 

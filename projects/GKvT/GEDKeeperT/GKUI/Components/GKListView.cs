@@ -65,6 +65,7 @@ namespace GKUI.Components
             Style.ExpandLastColumn = true;
             FullRowSelect = true;
             CanFocus = true;
+            VerticalScrollBar.Visible = true;
 
             // if user clicks the mouse in TableView
             this.Activating += (s, e) => {

@@ -13,6 +13,8 @@ using GKUI.Forms;
 using GKUI.Platform;
 using Terminal.Gui.App;
 using Terminal.Gui.Configuration;
+using Terminal.Gui.Drawing;
+using Terminal.Gui.Views;
 
 [assembly: AssemblyTitle("GEDKeeperT")]
 [assembly: AssemblyDescription("")]
@@ -33,8 +35,10 @@ namespace GEDKeeperT
             Application.Init();
 
             ConfigurationManager.Enable(ConfigLocations.All);
-            ThemeManager.Theme = /*"Default"; // */ "TurboPascal 5";
+            ThemeManager.Theme = "Default"; // */ "TurboPascal 5";
             ConfigurationManager.Apply();
+
+            Menu.DefaultBorderStyle = LineStyle.Single;
 
             TGAppHost.Startup(args);
 
