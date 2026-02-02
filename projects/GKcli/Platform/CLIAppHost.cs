@@ -7,7 +7,6 @@
  */
 
 using System;
-using System.Diagnostics;
 using BSLib;
 using GKCore;
 using GKCore.Design;
@@ -63,7 +62,7 @@ public sealed class CLIAppHost : AppHost
 
     public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
     {
-        return null;
+        return new CLITimer(msInterval, elapsedHandler);
     }
 
     public override void Quit()
@@ -74,7 +73,6 @@ public sealed class CLIAppHost : AppHost
     {
         using (var progressForm = ResolveDialog<IProgressDialog>()) {
             proc(progressForm);
-            Debug.WriteLine("AppHostStub.ExecuteWork()");
             return true;
         }
     }
@@ -137,7 +135,6 @@ public sealed class CLIAppHost : AppHost
         container.Reset();
         ValidationFactory.InitGDMValidators();
 
-        // controls and other
         //container.Register<IStdDialogs, StdDialogsStub>(LifeCycle.Singleton);
         container.Register<IGraphicsProvider, CLIGfxProvider>(LifeCycle.Singleton);
         //container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);

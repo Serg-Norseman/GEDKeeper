@@ -16,8 +16,14 @@ internal enum CommandCategory
 {
     Application,
     File,
+
     Individual,
-    Note
+    Family,
+
+    Note,
+    Multimedia,
+    Source,
+    Repository
 }
 
 internal class CommandData

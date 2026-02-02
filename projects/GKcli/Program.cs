@@ -20,19 +20,27 @@ internal class Program
 
     static void Main(string[] args)
     {
-        CLIAppHost.ConfigureBootstrap();
+        CLIAppHost.Startup(args);
 
-        Console.Clear();
-        Console.WriteLine("GEDKeeper CLI");
+        AppHost.InitSettings();
+        try {
+            AppHost.Instance.Init(args, false);
 
-        while (true) {
+            Console.Clear();
             Console.WriteLine();
+            PromptHelper.WriteMarkupLine("[darkcyan]GEDKeeper CLI[/]");
 
-            var cmdList = CommandController.Instance.GetCommands(CommandCategory.Application);
-            var selected = Prompt.Select($"Select a command", cmdList);
-            CommandController.Instance.ExecuteCommand(selected, baseContext, null);
+            while (true) {
+                Console.WriteLine();
 
-            if (selected == CommandCenter.CMD_EXIT) break;
+                var cmdList = CommandController.Instance.GetCommands(CommandCategory.Application);
+                var selected = Prompt.Select($"Select a command", cmdList);
+                CommandController.Instance.ExecuteCommand(selected, baseContext, null);
+
+                if (selected == CommandController.CMD_EXIT) break;
+            }
+        } finally {
+            AppHost.DoneSettings();
         }
     }
 }

@@ -65,7 +65,9 @@ public sealed class CLIGfxProvider : IGraphicsProvider
 
     public IColor CreateColor(int argb)
     {
-        return null;
+        GfxHelper.DecomposeARGB(argb, out byte alpha, out byte red, out byte green, out byte blue);
+        var color = ColorHandler.ToConsoleColor(red, green, blue);
+        return new ColorHandler(color);
     }
 
     public IColor CreateColor(string signature)
