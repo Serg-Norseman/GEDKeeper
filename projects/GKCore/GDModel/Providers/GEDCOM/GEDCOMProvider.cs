@@ -2698,7 +2698,11 @@ namespace GDModel.Providers.GEDCOM
             if (tagType == GEDCOMTagType.NPFX) {
                 persName.NamePrefix = tagValue;
             } else if (tagType == GEDCOMTagType.GIVN) {
-                persName.Given = tagValue;
+                // In this format, the full name (NAME) contains a patronymic,
+                // but it's not present in the subtags.
+                // Therefore, only one GIVN makes the patronymic in NAME unavailable.
+                if (tree.Format != GEDCOMFormat.FamilyUniverse)
+                    persName.Given = tagValue;
             } else if (tagType == GEDCOMTagType.NICK) {
                 persName.Nickname = tagValue;
             } else if (tagType == GEDCOMTagType.SPFX) {
@@ -2980,6 +2984,7 @@ namespace GDModel.Providers.GEDCOM
                 new GEDCOMAppFormat(GEDCOMFormat.FamilyHistorian, "FAMILY_HISTORIAN", "Family Historian", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.FamilyTreeMaker, "FTM", "Family Tree Maker", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.FamilyTreeMaker, "FTW", "Family Tree Maker", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.FamilyUniverse, "Family-Universe", "Семейные Легенды", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.FamyTale, "FAMYTALE", "FamyTale", -1, true),
                 new GEDCOMAppFormat(GEDCOMFormat.FTB, "MYHERITAGE", "MyHeritage Family Tree Builder", -1, true),
                 new GEDCOMAppFormat(GEDCOMFormat.GENBOX, "GENBOX", "Genbox Family History", -1),

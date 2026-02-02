@@ -93,11 +93,9 @@ namespace GDModel.Providers.GEDCOM
             { new byte[] { 0xE4, 0x6F }, 0xF5 },    /* х+ */
             { new byte[] { 0xE8, 0x6F }, 0xF6 },    /* ц+ */
             { new byte[] { 0xF7, 0xB2 }, 0xF7 },    /* ч+ */
+            { new byte[] { 0xB2 }, 0xF8 },          /* ш+ */
+            { new byte[] { 0xE1, 0x75 }, 0xF9 },    /* щ+ */
 
-            //{ new byte[] { 0xE1, 0x75 }, 0xF8 },    /* ш+ */
-            { new byte[] { 0xB2 }, 0xF8 },    /* ш+ */
-
-            //{ new byte[] { 0xE8, 0x75 }, 0xF9 },    /* щ */
             //{ new byte[] { 0xE2, 0x75 }, 0xFA },  /* ъ [-] */ 
 
             { new byte[] { 0xE3, 0x75 }, 0xFB },    /* ы+ */

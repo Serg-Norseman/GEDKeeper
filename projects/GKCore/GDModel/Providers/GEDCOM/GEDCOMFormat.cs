@@ -23,6 +23,7 @@ namespace GDModel.Providers.GEDCOM
         EasyTree,
         FamilyHistorian,
         FamilyTreeMaker,
+        FamilyUniverse,
         FamyTale,
         FTB,
         gedcom4j,
