@@ -155,8 +155,7 @@ namespace GDModel.Providers.GEDCOM
         private void DefineEncoding(GEDCOMFormat format, string streamCharset)
         {
             GEDCOMCharacterSet charSet = fTree.Header.CharacterSet.Value;
-            switch (charSet)
-            {
+            switch (charSet) {
                 case GEDCOMCharacterSet.csUTF8:
                     if (!SysUtils.IsUnicodeEncoding(fEncoding)) {
                         SetEncoding(Encoding.UTF8); // file without BOM
@@ -178,7 +177,7 @@ namespace GDModel.Providers.GEDCOM
                     break;
 
                 case GEDCOMCharacterSet.csANSEL:
-                    if (format == GEDCOMFormat.ALTREE) {
+                    if (format == GEDCOMFormat.ALTREE || format == GEDCOMFormat.BROSKEEP) {
                         // Agelong Tree 4.0 with ANSEL is actually characteristic
                         // for the Russian-language data export
                         SetEncoding(Encoding.GetEncoding(1251));
@@ -359,6 +358,7 @@ namespace GDModel.Providers.GEDCOM
                 var stack = new Stack<StackTuple>(9);
                 var header = fTree.Header;
                 bool ilb = false;
+                bool ansel1251 = false;
 
                 // check the integrity of utf8 the lines
                 bool checkLI = false;
@@ -390,9 +390,21 @@ namespace GDModel.Providers.GEDCOM
                             }
                         }
 
+                        byte[] convBuf;
+                        if (ansel1251) {
+                            // fEncoding = win1251
+                            convBuf = BKAnsel1251.Decode(fLineBuffer, lineLen);
+                            lineLen = convBuf.Length;
+                            //string testStr = fEncoding.GetString(convBuf);
+                            //SysUtils.DoNotInline(testStr);
+                        } else {
+                            convBuf = fLineBuffer;
+                        }
+
                         // To minimize string conversions, allocations and splitting into parts - the conversion of strings
                         // from the file is performed only into an array of characters and the parser works only with the array.
-                        int charsLen = fEncoding.GetChars(fLineBuffer, 0, lineLen, line, 0);
+                        int charsLen = fEncoding.GetChars(convBuf, 0, lineLen, line, 0);
+
                         strTok.Reset(line, 0, charsLen);
                         int lineRes = GEDCOMUtils.ParseTag(strTok, out tagLevel, out tagXRef, out tagName, out tagValue);
 
@@ -444,6 +456,7 @@ namespace GDModel.Providers.GEDCOM
                             fTree.Format = format;
                             DefineEncoding(format, streamCharset);
                             checkLI = (format == GEDCOMFormat.FTB && Encoding.UTF8.Equals(fEncoding));
+                            ansel1251 = (format == GEDCOMFormat.BROSKEEP && fTree.Header.CharacterSet.Value == GEDCOMCharacterSet.csANSEL);
                         }
 
                         StackTuple stackTuple = AddTreeTag(fTree, tagLevel, tagId, tagValue);
@@ -2299,7 +2312,7 @@ namespace GDModel.Providers.GEDCOM
 
             level += 1;
             GEDCOMProvider.WriteTagLine(stream, level, GEDCOMTagName.FORM, fileRef.MultimediaFormat, true);
-            GEDCOMProvider.WriteTagLine(stream, (level+1), GEDCOMTagName.TYPE, GEDCOMUtils.GetMediaTypeStr(fileRef.MediaType), true);
+            GEDCOMProvider.WriteTagLine(stream, (level + 1), GEDCOMTagName.TYPE, GEDCOMUtils.GetMediaTypeStr(fileRef.MediaType), true);
             GEDCOMProvider.WriteTagLine(stream, level, GEDCOMTagName.TITL, fileRef.Title, true);
             return true;
         }
@@ -2694,7 +2707,7 @@ namespace GDModel.Providers.GEDCOM
                 persName.Surname = tagValue;
             } else if (tagType == GEDCOMTagType.NSFX) {
                 persName.NameSuffix = tagValue;
-            } else if (tagType == GEDCOMTagType._PATN || tagType == GEDCOMTagType._MIDN) {
+            } else if (tagType == GEDCOMTagType._PATN || tagType == GEDCOMTagType._MIDN || tagType == GEDCOMTagType._SECG) {
                 persName.PatronymicName = tagValue;
             } else if (tagType == GEDCOMTagType._MARN || tagType == GEDCOMTagType._MARNM) {
                 persName.MarriedName = tagValue;
@@ -2819,8 +2832,7 @@ namespace GDModel.Providers.GEDCOM
                 su == GEDCOMConsts.GEDCOMDateRangeArray[1] ||
                 su == GEDCOMConsts.GEDCOMDateApproximatedArray[1] ||
                 su == GEDCOMConsts.GEDCOMDateApproximatedArray[2] ||
-                su == GEDCOMConsts.GEDCOMDateApproximatedArray[3])
-            {
+                su == GEDCOMConsts.GEDCOMDateApproximatedArray[3]) {
                 result = result.Remove(0, 4);
             }
             return result;
@@ -2963,6 +2975,7 @@ namespace GDModel.Providers.GEDCOM
                 new GEDCOMAppFormat(GEDCOMFormat.Ahnenblatt, "AHN", "Ahnenblatt", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.AncestQuest, "AncestQuest", "Ancestral Quest", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.Ancestry, "Ancestry.com Family Trees", "WikiTree", -1, true),
+                new GEDCOMAppFormat(GEDCOMFormat.BROSKEEP, "BROSKEEP", "Brother's Keeper", -1, true),
                 new GEDCOMAppFormat(GEDCOMFormat.EasyTree, "EasyTree", "EasyTree", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.FamilyHistorian, "FAMILY_HISTORIAN", "Family Historian", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.FamilyTreeMaker, "FTM", "Family Tree Maker", -1),
@@ -2984,6 +2997,7 @@ namespace GDModel.Providers.GEDCOM
                 new GEDCOMAppFormat(GEDCOMFormat.PAF, "PAF", "Personal Ancestral File", -1, true),
                 new GEDCOMAppFormat(GEDCOMFormat.Reunion, "Reunion", "Reunion", -1, true),
                 new GEDCOMAppFormat(GEDCOMFormat.RootsMagic, "RootsMagic", "RootsMagic", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.SyniumFamilyTree, "SyniumFamilyTree", "MobileFamilyTree", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.WikiTree, "WikiTree.com", "WikiTree", -1, true),
             };
 
@@ -3160,6 +3174,7 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._YHAP, GEDCOMTagName._YHAP, true);
 
             // import only
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType._SECG, GEDCOMTagName._SECG);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._MARNM, GEDCOMTagName._MARNM);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._MIDN, GEDCOMTagName._MIDN);
 

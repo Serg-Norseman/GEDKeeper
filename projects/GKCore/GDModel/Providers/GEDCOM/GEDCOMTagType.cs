@@ -187,6 +187,8 @@ namespace GDModel.Providers.GEDCOM
         WWW,
 
         // non-standard extended tags
+        _SECG, // [SyniumFamilyTree], Second given name
+
         _BOOKMARK, // [GK]
         _CENN, // Census Name [BKW6]
         _DATE, // Date value in non-standard use (source records) [GK]
@@ -403,6 +405,7 @@ namespace GDModel.Providers.GEDCOM
         public const string _YHAP = "_YHAP"; // [MyFamilyTree]
 
         // import only
+        public const string _SECG = "SECG"; // Second given name [SyniumFamilyTree]
         public const string _MARNM = "_MARNM"; // Married Surname [AQ3, PAF5, Geni]
         public const string _MIDN = "_MIDN"; // Middle Name [WikiTree]
 

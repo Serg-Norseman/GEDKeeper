@@ -381,7 +381,6 @@
     <Compile Include="GKCore\Linguistics\ShortDoubleMetaphone.cs" />
     <Compile Include="GKCore\Logging\Logger.cs" />
     <Compile Include="GKCore\Logging\ILogger.cs" />
-    <Compile Include="GKCore\Logging\Log4NetHelper.cs" />
     <Compile Include="GKCore\Logging\LogManager.cs" />
     <Compile Include="GKCore\Maps\GeoPoint.cs" />
     <Compile Include="GKCore\Maps\GoogleGeocoder.cs" />

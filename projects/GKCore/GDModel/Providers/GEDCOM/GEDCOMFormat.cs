@@ -19,6 +19,7 @@ namespace GDModel.Providers.GEDCOM
         ALTREE,
         AncestQuest,
         Ancestry,
+        BROSKEEP,
         EasyTree,
         FamilyHistorian,
         FamilyTreeMaker,
@@ -39,6 +40,7 @@ namespace GDModel.Providers.GEDCOM
         PAF,
         Reunion,
         RootsMagic,
+        SyniumFamilyTree,
         WikiTree,
 
         Last = WikiTree
