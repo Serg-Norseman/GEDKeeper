@@ -323,12 +323,12 @@ namespace GKCore.Charts
                     }
 
                     DateFormat dateFormat = (options.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
-                    bool shortenDateRanges = options.ShortenDateRanges && options.OnlyYears;
+                    bool shortenDates = options.ShortenDates /*&& options.OnlyYears*/;
 
                     SetFlag(PersonFlag.pfIsDead, (deathEvent != null));
                     GlobalOptions glob = GlobalOptions.Instance;
-                    fBirthDate = GKUtils.GEDCOMEventToDateStr(birthEvent, dateFormat, glob.ShowDatesSign, shortenDateRanges);
-                    fDeathDate = GKUtils.GEDCOMEventToDateStr(deathEvent, dateFormat, glob.ShowDatesSign, shortenDateRanges);
+                    fBirthDate = GKUtils.GEDCOMEventToDateStr(birthEvent, dateFormat, glob.ShowDatesSign, shortenDates);
+                    fDeathDate = GKUtils.GEDCOMEventToDateStr(deathEvent, dateFormat, glob.ShowDatesSign, shortenDates);
 
                     if (options.ShowPlaces) {
                         fBirthPlace = GKUtils.GetPlaceStr(birthEvent, false, options.OnlyLocality);

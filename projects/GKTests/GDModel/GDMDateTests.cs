@@ -661,11 +661,11 @@ namespace GDModel
             GDMDate instance = new GDMDate();
             instance.SetDate(GDMCalendar.dcJulian, 20, 12, 1980);
             instance.YearBC = true;
-            string result = instance.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true);
+            string result = instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, true);
             Assert.AreEqual("BC 1980.12.20 [J]", result);
 
             instance.Approximated = GDMApproximated.daEstimated;
-            result = instance.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true);
+            result = instance.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, true);
             Assert.AreEqual("~ BC 1980.12.20 [J]", result);
         }
 
@@ -736,6 +736,34 @@ namespace GDModel
             Assert.AreEqual(null, GDMDate.CreateByFormattedStr("1980", false));
 
             Assert.Throws(typeof(GDMDateException), () => { GDMDate.CreateByFormattedStr("1980", true); });
+        }
+
+        [Test]
+        [TestCase("2024", DateFormat.dfYYYY_MM_DD, true, "2024")]
+        [TestCase("2024", DateFormat.dfYYYY_MM_DD, false, "2024.__.__")]
+        [TestCase("OCT 2024", DateFormat.dfYYYY_MM_DD, true, "2024.10")]
+        [TestCase("OCT 2024", DateFormat.dfYYYY_MM_DD, false, "2024.10.__")]
+        [TestCase("01 OCT 2024", DateFormat.dfYYYY_MM_DD, true, "2024.10.01")]
+        [TestCase("01 OCT 2024", DateFormat.dfYYYY_MM_DD, false, "2024.10.01")]
+        [TestCase("01 2024", DateFormat.dfYYYY_MM_DD, true, "2024")]
+        [TestCase("01 2024", DateFormat.dfYYYY_MM_DD, false, "2024.__.01")]
+        [TestCase("01 OCT ", DateFormat.dfYYYY_MM_DD, true, "")]
+        [TestCase("01 OCT ", DateFormat.dfYYYY_MM_DD, false, "____.10.01")]
+        [TestCase("2024", DateFormat.dfDD_MM_YYYY, true, "2024")]
+        [TestCase("2024", DateFormat.dfDD_MM_YYYY, false, "__.__.2024")]
+        [TestCase("OCT 2024", DateFormat.dfDD_MM_YYYY, true, "10.2024")]
+        [TestCase("OCT 2024", DateFormat.dfDD_MM_YYYY, false, "__.10.2024")]
+        [TestCase("01 OCT 2024", DateFormat.dfDD_MM_YYYY, true, "01.10.2024")]
+        [TestCase("01 OCT 2024", DateFormat.dfDD_MM_YYYY, false, "01.10.2024")]
+        [TestCase("01 2024", DateFormat.dfDD_MM_YYYY, true, "2024")]
+        [TestCase("01 2024", DateFormat.dfDD_MM_YYYY, false, "01.__.2024")]
+        [TestCase("01 OCT ", DateFormat.dfDD_MM_YYYY, true, "")]
+        [TestCase("01 OCT ", DateFormat.dfDD_MM_YYYY, false, "01.10.____")]
+        public void Test_FormatShorten(string value, DateFormat dateFormat, bool shorten, string expected)
+        {
+            var d = new GDMDate();
+            d.ParseString(value);
+            Assert.AreEqual(expected, d.GetDisplayString(dateFormat, false, false, shorten));
         }
 
         [Test]

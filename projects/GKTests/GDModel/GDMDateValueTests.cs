@@ -36,10 +36,10 @@ namespace GDModel
 
             using (GDMDateValue dtx1 = new GDMDateValue()) {
                 Assert.IsNotNull(dtx1, "dtx1 != null");
-                Assert.AreEqual("", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true)); // value is empty
+                Assert.AreEqual("", dtx1.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, true)); // value is empty
 
                 dtx1.ParseString("20 JAN 2013");
-                Assert.AreEqual("2013.01.20 [G]", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true));
+                Assert.AreEqual("2013.01.20 [G]", dtx1.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, true));
 
                 Assert.AreEqual(string.Empty, dtx1.ParseString((string)null));
             }

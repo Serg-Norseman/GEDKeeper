@@ -190,6 +190,7 @@
                           <StackLayoutItem />
                           <CheckBox x:Name="chkDiffLines" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         </StackLayout>
+
                         <CheckBox x:Name="chkBirthDate" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkDeathDate" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <StackLayout Orientation="Horizontal" Spacing="20">
@@ -200,12 +201,26 @@
                           <StackLayoutItem />
                           <CheckBox x:Name="chkShowAge" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                          <StackLayoutItem />
+                          <CheckBox x:Name="chkDateDesignations" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                          <StackLayoutItem />
+                          <CheckBox x:Name="chkUseAdditionalDates" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        </StackLayout>
+
                         <CheckBox x:Name="chkMarriagesDates" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkKinship" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkSignsVisible" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkTreeDecorative" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+
                         <CheckBox x:Name="chkPortraitsVisible" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                        <CheckBox x:Name="chkDefaultPortraits" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <StackLayout Orientation="Horizontal" Spacing="20">
+                          <StackLayoutItem />
+                          <CheckBox x:Name="chkDefaultPortraits" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        </StackLayout>
+
                         <CheckBox x:Name="chkInvertedTree" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkChildlessExclude" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkShowPlaces" CheckedChanged="chkTreeChartOption_CheckedChanged" />
@@ -222,13 +237,11 @@
                         <CheckBox x:Name="chkDottedLinesOfAdoptedChildren" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkDottedLinesOfDivorcedSpouses" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkBoldNames" CheckedChanged="chkTreeChartOption_CheckedChanged" />
+                        <CheckBox x:Name="chkFullNameOnOneLine" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkMinimizingWidth" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkURNotesVisible" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkSameCardsWidth" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                        <CheckBox x:Name="chkFullNameOnOneLine" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                        <CheckBox x:Name="chkDateDesignations" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkMourningEdges" CheckedChanged="chkTreeChartOption_CheckedChanged" />
-                        <CheckBox x:Name="chkUseAdditionalDates" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkExtendedTree" />
                         <CheckBox x:Name="chkUseInlineImagesInSvg" />
 

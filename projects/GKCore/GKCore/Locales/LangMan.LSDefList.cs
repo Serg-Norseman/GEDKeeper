@@ -916,7 +916,7 @@ namespace GKCore.Locales
             /* 894 */ "Fragment {0}, size {1}, quality {2}",
             /* 895 */ "Refresh",
             /* 896 */ "Reset filter",
-            /* 897 */ "Shorten date ranges",
+            /* 897 */ "Shorten incomplete dates and ranges",
             /* 898 */ "Press Enter to save the filter",
 
             /* 899 */ "Today is jubilee of {0}",

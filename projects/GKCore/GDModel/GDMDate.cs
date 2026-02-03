@@ -202,6 +202,8 @@ namespace GDModel
             return result;
         }
 
+        #region Private methods of parsing of the input format
+
         /// <summary>
         /// Internal helper method for parser
         /// </summary>
@@ -213,13 +215,11 @@ namespace GDModel
             fYear = year;
             fYearBC = yearBC;
             fYearModifier = yearModifier;
-            fMonth = month;
+            fMonth = VerifyMonth(calendar, month, false);
             fDay = day;
 
             DateChanged();
         }
-
-        #region Private methods of parsing of the input format
 
         private static string[] GetMonthNames(GDMCalendar calendar)
         {
@@ -248,6 +248,31 @@ namespace GDModel
             return monthes;
         }
 
+        // Most officially used calendars have 10 (Early Roman),
+        // 12 (Late Roman, Gregorian and Julian, Hijri), or 13 months (Ethiopic).
+        // Variable (12/13): Hebrew and Chinese.
+        private static byte VerifyMonth(GDMCalendar calendar, byte month, bool aException)
+        {
+            // Attempt to fix "write error" (e.g. 20 -> 02, 40 -> 04, 120 -> 12)
+            if (month > 13 && month % 10 == 0) {
+                month /= 10;
+            }
+
+            // Validation of the final value
+            // FIXME: check on a calendar with more than 12 months
+            string[] monthArray = GetMonthNames(calendar);
+            if (month < 1 || month > monthArray.Length) {
+                if (aException) {
+                    throw new ArgumentOutOfRangeException(nameof(month),
+                        $"Invalid month number: {month}. Expected value between 1 and {monthArray.Length}.");
+                } else {
+                    month = 0;
+                }
+            }
+
+            return month;
+        }
+
         #endregion
 
         protected override string GetStringValue()
@@ -268,7 +293,11 @@ namespace GDModel
 
             if (fMonth > 0) {
                 string[] months = GetMonthNames(fCalendar);
-                parts[pIdx++] = months[fMonth - 1];
+                if (fMonth <= months.Length) {
+                    parts[pIdx++] = months[fMonth - 1];
+                } else {
+                    // FIXME: log error
+                }
             }
 
             if (fYear != UNKNOWN_YEAR) {
@@ -392,23 +421,7 @@ namespace GDModel
             return (dtx != null) ? dtx.GetUDN() : UDN.Unknown;
         }
 
-        // Left as a reminder.
-        // In all cases, 20-23% slower than int.ToString().PadLeft(...)!
-        // A complete failure in the attempt at optimization. Respect to MS :)
-        /*private static unsafe string xI2S(int number, int totalWidth)
-        {
-            char paddingChar = (totalWidth > 2 || number == 0) ? '_' : '0';
-            var result = new string(paddingChar, totalWidth);
-            fixed (char* ch_ptr = result) {
-                while (number > 0) {
-                    ch_ptr[--totalWidth] = (char)(48 + number % 10);
-                    number /= 10;
-                }
-            }
-            return result;
-        }*/
-
-        public string GetDisplayString(DateFormat format, bool includeBC = false, bool showCalendar = false)
+        public override string GetDisplayString(DateFormat format, bool sign = false, bool showCalendar = false, bool shorten = false)
         {
             if (fYear <= 0 && fMonth <= 0 && fDay <= 0)
                 return string.Empty;
@@ -418,35 +431,62 @@ namespace GDModel
             int day = fDay;
             bool ybc = fYearBC;
 
-            var parts = new string[7];
+            bool letYear, letMonth, letDay;
+            if (shorten) {
+                letYear = year > 0;
+                letMonth = (letYear && month > 0);
+                letDay = (letMonth && day > 0);
+            } else {
+                letYear = true;
+                letMonth = true;
+                letDay = true;
+            }
+
+            var parts = new string[8];
             int pIdx = 0;
+
+            if (sign && fApproximated != GDMApproximated.daExact) {
+                parts[pIdx++] = "~ ";
+            }
 
             switch (format) {
                 case DateFormat.dfDD_MM_YYYY:
-                    parts[pIdx++] = day > 0 ? day.ToString("D2", null) : "__";
-                    parts[pIdx++] = ".";
-                    parts[pIdx++] = month > 0 ? month.ToString("D2", null) : "__";
-                    parts[pIdx++] = ".";
-                    parts[pIdx++] = year > 0 ? year.ToString().PadLeft(4, '_') : "____";
-                    if (includeBC && ybc) {
-                        parts[pIdx++] = " BC";
+                    if (letDay) {
+                        parts[pIdx++] = day > 0 ? day.ToString("D2", null) : "__";
+                        parts[pIdx++] = ".";
+                    }
+                    if (letMonth) {
+                        parts[pIdx++] = month > 0 ? month.ToString("D2", null) : "__";
+                        parts[pIdx++] = ".";
+                    }
+                    if (letYear) {
+                        parts[pIdx++] = year > 0 ? year.ToString().PadLeft(4, '_') : "____";
+                        if (sign && ybc) {
+                            parts[pIdx++] = " BC";
+                        }
                     }
                     break;
 
                 case DateFormat.dfYYYY_MM_DD:
-                    if (includeBC && ybc) {
-                        parts[pIdx++] = "BC ";
+                    if (letYear) {
+                        if (sign && ybc) {
+                            parts[pIdx++] = "BC ";
+                        }
+                        parts[pIdx++] = year > 0 ? year.ToString().PadLeft(4, '_') : "____";
                     }
-                    parts[pIdx++] = year > 0 ? year.ToString().PadLeft(4, '_') : "____";
-                    parts[pIdx++] = ".";
-                    parts[pIdx++] = month > 0 ? month.ToString("D2", null) : "__";
-                    parts[pIdx++] = ".";
-                    parts[pIdx++] = day > 0 ? day.ToString("D2", null) : "__";
+                    if (letMonth) {
+                        parts[pIdx++] = ".";
+                        parts[pIdx++] = month > 0 ? month.ToString("D2", null) : "__";
+                    }
+                    if (letDay) {
+                        parts[pIdx++] = ".";
+                        parts[pIdx++] = day > 0 ? day.ToString("D2", null) : "__";
+                    }
                     break;
 
                 case DateFormat.dfYYYY:
                     if (year > 0) {
-                        if (includeBC && ybc) {
+                        if (sign && ybc) {
                             parts[pIdx++] = "BC ";
                         }
                         parts[pIdx++] = year.ToString().PadLeft(4, '_');
@@ -459,16 +499,6 @@ namespace GDModel
             }
 
             return string.Concat(parts);
-        }
-
-        public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar, bool shorten = false)
-        {
-            string result = GetDisplayString(format, true, showCalendar);
-            if (sign && fApproximated != GDMApproximated.daExact) {
-                result = "~ " + result;
-            }
-
-            return result;
         }
 
         #endregion

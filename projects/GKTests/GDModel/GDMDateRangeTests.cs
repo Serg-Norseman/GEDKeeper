@@ -29,28 +29,28 @@ namespace GDModel
                 Assert.IsNotNull(dtx1, "dtx1 != null");
                 Assert.AreEqual("", dtx1.StringValue);
                 Assert.AreEqual(new DateTime(0), dtx1.GetDateTime());
-                Assert.AreEqual("", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true)); // date is empty
+                Assert.AreEqual("", dtx1.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, true)); // date is empty
                 UDN udn = dtx1.GetUDN();
                 Assert.IsTrue(udn.IsEmpty());
 
                 dtx1.ParseString("BET 04 JAN 2013 AND 25 JAN 2013");
                 Assert.AreEqual("BET 04 JAN 2013 AND 25 JAN 2013", dtx1.StringValue);
                 Assert.AreEqual(new DateTime(0), dtx1.Date);
-                Assert.AreEqual("2013.01.04 [G] - 2013.01.25 [G]", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true));
+                Assert.AreEqual("2013.01.04 [G] - 2013.01.25 [G]", dtx1.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, true));
                 udn = dtx1.GetUDN();
                 Assert.IsFalse(udn.IsEmpty());
 
                 dtx1.ParseString("BEF 20 JAN 2013");
                 Assert.AreEqual("BEF 20 JAN 2013", dtx1.StringValue);
                 Assert.AreEqual(TestUtils.ParseDT("20.01.2013"), dtx1.Date);
-                Assert.AreEqual("< 2013.01.20 [G]", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true));
+                Assert.AreEqual("< 2013.01.20 [G]", dtx1.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, true));
                 udn = dtx1.GetUDN();
                 Assert.IsFalse(udn.IsEmpty());
 
                 dtx1.ParseString("AFT 20 JAN 2013");
                 Assert.AreEqual("AFT 20 JAN 2013", dtx1.StringValue);
                 Assert.AreEqual(TestUtils.ParseDT("20.01.2013"), dtx1.Date);
-                Assert.AreEqual("2013.01.20 [G] >", dtx1.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, true));
+                Assert.AreEqual("2013.01.20 [G] >", dtx1.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, true));
                 udn = dtx1.GetUDN();
                 Assert.IsFalse(udn.IsEmpty());
 
@@ -63,6 +63,11 @@ namespace GDModel
                 });
 
                 Assert.AreEqual(string.Empty, dtx1.ParseString((string)null));
+
+                dtx1.ParseString("BET 2013 AND 2014");
+                Assert.AreEqual("BET 2013 AND 2014", dtx1.StringValue);
+                Assert.AreEqual("2013 [G] - 2014 [G]", dtx1.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, true, true));
+                Assert.AreEqual("2013/14", dtx1.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, false, true));
             }
         }
     }

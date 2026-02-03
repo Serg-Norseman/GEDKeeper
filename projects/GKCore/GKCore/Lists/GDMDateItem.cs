@@ -32,7 +32,7 @@ namespace GKCore.Lists
                 strVal = "";
             } else {
                 GlobalOptions glob = GlobalOptions.Instance;
-                strVal = fDate.GetDisplayStringExt(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
+                strVal = fDate.GetDisplayString(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
             }
 
             return strVal;

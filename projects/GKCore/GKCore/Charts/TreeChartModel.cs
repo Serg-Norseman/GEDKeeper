@@ -502,7 +502,7 @@ namespace GKCore.Charts
         private string GetMarriageDate(GDMFamilyRecord family)
         {
             DateFormat dateFormat = fOptions.OnlyYears ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
-            return GKUtils.GetMarriageDateStr(family, dateFormat, GlobalOptions.Instance.ShowDatesSign);
+            return GKUtils.GetMarriageDateStr(family, dateFormat, GlobalOptions.Instance.ShowDatesSign, false, fOptions.ShortenDates);
         }
 
         private bool RequireAncestors(TreeChartPerson person)

@@ -7,7 +7,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -805,6 +804,29 @@ namespace GKCore.Utilities
             }
 
             return differences;
+        }
+
+        // Left as a reminder.
+        // In all cases, 2% faster or 6-8% slower than int.ToString().PadLeft(...)!
+        // A complete failure in the attempt at optimization. Respect to MS :)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static unsafe string I2S(int number, int totalWidth)
+        {
+            char paddingChar = (totalWidth > 2 || number <= 0) ? '_' : '0';
+            var result = new string('\0', totalWidth);
+            fixed (char* ch_ptr = result) {
+                while (totalWidth > 0) {
+                    if (number > 0) {
+                        int next = (int)((number * 0xCCCCCCCD) >> 35);  // number /= 10
+                        int digit = number - (next * 10);               // number % 10
+                        ch_ptr[--totalWidth] = (char)(48 + digit);
+                        number = next;
+                    } else {
+                        ch_ptr[--totalWidth] = paddingChar;
+                    }
+                }
+            }
+            return result;
         }
 
         #region UTF-8 strings

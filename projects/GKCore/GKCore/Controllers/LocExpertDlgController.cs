@@ -108,7 +108,7 @@ namespace GKCore.Controllers
         {
             var cmbEventDates = GetControl<IComboBox>("cmbEventDates");
             foreach (var cd in eventDates) {
-                cmbEventDates.AddItem(cd.GetDisplayStringExt(DateFormat.dfDD_MM_YYYY, true, true), cd);
+                cmbEventDates.AddItem(cd.GetDisplayString(DateFormat.dfDD_MM_YYYY, true, true), cd);
             }
 
             GetControl<IDateControl>("dtlPlaceDate").Date = new GDMDate();

@@ -1176,7 +1176,7 @@ namespace GKCore
 
         public static string GEDCOMEventToDateStr(GDMCustomEvent evt, DateFormat format, bool sign, bool shorten = false)
         {
-            return (evt == null) ? string.Empty : evt.Date.GetDisplayStringExt(format, sign, false, shorten);
+            return (evt == null) ? string.Empty : evt.Date.GetDisplayString(format, sign, false, shorten);
         }
 
         public static string CompactDate(string date)
@@ -1465,10 +1465,10 @@ namespace GKCore
             return ((evt == null) ? null : evt.Date.Value);
         }
 
-        public static string GetMarriageDateStr(GDMFamilyRecord fRec, DateFormat dateFormat, bool sign = false)
+        public static string GetMarriageDateStr(GDMFamilyRecord fRec, DateFormat dateFormat, bool sign = false, bool showCalendar = false, bool shorten = false)
         {
             GDMCustomDate date = GetMarriageDate(fRec);
-            return (date == null) ? string.Empty : date.GetDisplayStringExt(dateFormat, sign, false);
+            return (date == null) ? string.Empty : date.GetDisplayString(dateFormat, sign, showCalendar, shorten);
         }
 
         /// <summary>
@@ -3300,7 +3300,7 @@ namespace GKCore
                             summary.Add("    " + st);
                         }
 
-                        st = locName.Date.GetDisplayStringExt(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
+                        st = locName.Date.GetDisplayString(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
                         if (!string.IsNullOrEmpty(st)) {
                             summary.Add("    " + st);
                         }
@@ -3323,7 +3323,7 @@ namespace GKCore
                                 summary.Add("    " + st);
                             }
 
-                            st = topLev.Date.GetDisplayStringExt(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
+                            st = topLev.Date.GetDisplayString(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
                             if (!string.IsNullOrEmpty(st)) {
                                 summary.Add("    " + st);
                             }
@@ -3345,7 +3345,7 @@ namespace GKCore
                         int num = fullNames.Count;
                         for (int i = 0; i < num; i++) {
                             var xName = fullNames[i];
-                            summary.Add("    " + string.Format("{0}: {1}", xName.Date.GetDisplayStringExt(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar, false), xName.StringValue));
+                            summary.Add("    " + string.Format("{0}: {1}", xName.Date.GetDisplayString(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar, false), xName.StringValue));
                         }
                     }
 

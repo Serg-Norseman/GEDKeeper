@@ -159,14 +159,14 @@ namespace GDModel
             return (fValue == null) ? 0 : fValue.GetChronologicalYear();
         }
 
-        public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar, bool shorten = false)
+        public override string GetDisplayString(DateFormat format, bool sign = false, bool showCalendar = false, bool shorten = false)
         {
-            return (fValue == null) ? string.Empty : fValue.GetDisplayStringExt(format, sign, showCalendar, shorten);
+            return (fValue == null) ? string.Empty : fValue.GetDisplayString(format, sign, showCalendar, shorten);
         }
 
         public override string ToString()
         {
-            return GetDisplayStringExt(DateFormat.dfDD_MM_YYYY, true, true, false);
+            return GetDisplayString(DateFormat.dfDD_MM_YYYY, true, true, false);
         }
 
         public override void GetDateRange(out GDMDate dateStart, out GDMDate dateEnd)

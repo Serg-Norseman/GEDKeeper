@@ -150,7 +150,7 @@ namespace GDModel
             return result;
         }
 
-        public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar, bool shorten = false)
+        public override string GetDisplayString(DateFormat format, bool sign = false, bool showCalendar = false, bool shorten = false)
         {
             string result;
 

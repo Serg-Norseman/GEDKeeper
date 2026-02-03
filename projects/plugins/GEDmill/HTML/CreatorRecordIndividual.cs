@@ -229,10 +229,10 @@ namespace GEDmill.HTML
             string deathyear = "";
             if (!fConcealed) {
                 if (fInferredBirthday != null && fInferredBirthday.Date != null) {
-                    birthyear = fInferredBirthday.Date.GetDisplayStringExt(DateFormat.dfYYYY, false, false);
+                    birthyear = fInferredBirthday.Date.GetDisplayString(DateFormat.dfYYYY, false, false);
                 }
                 if (fInferredDeathday != null && fInferredDeathday.Date != null) {
-                    deathyear = fInferredDeathday.Date.GetDisplayStringExt(DateFormat.dfYYYY, false, false);
+                    deathyear = fInferredDeathday.Date.GetDisplayString(DateFormat.dfYYYY, false, false);
                 }
             }
 
@@ -891,14 +891,14 @@ namespace GEDmill.HTML
 
             string birthday;
             if (fActualBirthday != null) {
-                birthday = fActualBirthday.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, false) + fBirthdaySourceRefs;
+                birthday = fActualBirthday.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, false) + fBirthdaySourceRefs;
             } else {
                 birthday = "";
             }
 
             string deathday;
             if (fActualDeathday != null) {
-                deathday = fActualDeathday.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, false) + fDeathdaySourceRefs;
+                deathday = fActualDeathday.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, false) + fDeathdaySourceRefs;
             } else {
                 deathday = "";
             }

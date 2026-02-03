@@ -687,7 +687,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkShowAge").Checked = fOptions.TreeChartOptions.AgeVisible;
             GetControl<ICheckBox>("chkTreeSurnameFirst").Checked = fOptions.TreeChartOptions.SurnameFirstInOrder;
             GetControl<ICheckBox>("chkURNotesVisible").Checked = fOptions.TreeChartOptions.URNotesVisible;
-            GetControl<ICheckBox>("chkShortenDateRanges").Checked = fOptions.TreeChartOptions.ShortenDateRanges;
+            GetControl<ICheckBox>("chkShortenDateRanges").Checked = fOptions.TreeChartOptions.ShortenDates;
             GetControl<ICheckBox>("chkSameCardsWidth").Checked = fOptions.TreeChartOptions.SameCardsWidth;
             GetControl<ICheckBox>("chkFullNameOnOneLine").Checked = fOptions.TreeChartOptions.FullNameOnOneLine;
             GetControl<ICheckBox>("chkDateDesignations").Checked = fOptions.TreeChartOptions.DateDesignations;
@@ -802,7 +802,7 @@ namespace GKCore.Controllers
             fOptions.TreeChartOptions.AgeVisible = GetControl<ICheckBox>("chkShowAge").Checked;
             fOptions.TreeChartOptions.SurnameFirstInOrder = GetControl<ICheckBox>("chkTreeSurnameFirst").Checked;
             fOptions.TreeChartOptions.URNotesVisible = GetControl<ICheckBox>("chkURNotesVisible").Checked;
-            fOptions.TreeChartOptions.ShortenDateRanges = GetControl<ICheckBox>("chkShortenDateRanges").Checked;
+            fOptions.TreeChartOptions.ShortenDates = GetControl<ICheckBox>("chkShortenDateRanges").Checked;
             fOptions.TreeChartOptions.SameCardsWidth = GetControl<ICheckBox>("chkSameCardsWidth").Checked;
             fOptions.TreeChartOptions.FullNameOnOneLine = GetControl<ICheckBox>("chkFullNameOnOneLine").Checked;
             fOptions.TreeChartOptions.DateDesignations = GetControl<ICheckBox>("chkDateDesignations").Checked;
@@ -1019,7 +1019,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkShowAge").Text = LangMan.LS(LSID.ShowAge);
             GetControl<ICheckBox>("chkTreeSurnameFirst").Text = LangMan.LS(LSID.SurnameFirstInOrder);
             GetControl<ICheckBox>("chkURNotesVisible").Text = LangMan.LS(LSID.ShowTreeNotes);
-            GetControl<ICheckBox>("chkShortenDateRanges").Text = LangMan.LS(LSID.ShortenDateRanges);
+            GetControl<ICheckBox>("chkShortenDateRanges").Text = LangMan.LS(LSID.ShortenDates);
             GetControl<ICheckBox>("chkSameCardsWidth").Text = LangMan.LS(LSID.SameCardsWidth);
             GetControl<ICheckBox>("chkFullNameOnOneLine").Text = LangMan.LS(LSID.FullNameOnOneLine);
             GetControl<ICheckBox>("chkDateDesignations").Text = LangMan.LS(LSID.DateDesignations);

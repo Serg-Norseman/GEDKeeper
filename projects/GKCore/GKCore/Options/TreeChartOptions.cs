@@ -59,7 +59,7 @@ namespace GKCore.Options
         public GfxBorderStyle BorderStyle;
         public bool SurnameFirstInOrder;
         public bool URNotesVisible;
-        public bool ShortenDateRanges;
+        public bool ShortenDates;
         public bool SameCardsWidth;
         public bool HideDescSpouses; // without option's load/save
         public bool TrackSelectedLines;
@@ -140,7 +140,7 @@ namespace GKCore.Options
             BorderStyle = GfxBorderStyle.None;
             SurnameFirstInOrder = true;
             URNotesVisible = false;
-            ShortenDateRanges = false;
+            ShortenDates = false;
             SameCardsWidth = false;
             HideDescSpouses = false;
             TrackSelectedLines = true;
@@ -229,7 +229,7 @@ namespace GKCore.Options
             AgeVisible = srcOptions.AgeVisible;
             SurnameFirstInOrder = srcOptions.SurnameFirstInOrder;
             URNotesVisible = srcOptions.URNotesVisible;
-            ShortenDateRanges = srcOptions.ShortenDateRanges;
+            ShortenDates = srcOptions.ShortenDates;
             SameCardsWidth = srcOptions.SameCardsWidth;
             HideDescSpouses = srcOptions.HideDescSpouses;
             TrackSelectedLines = srcOptions.TrackSelectedLines;
@@ -288,7 +288,7 @@ namespace GKCore.Options
             AgeVisible = iniFile.ReadBool("Chart", "AgeVisible", false);
             SurnameFirstInOrder = iniFile.ReadBool("Chart", "SurnameFirstInOrder", true);
             URNotesVisible = iniFile.ReadBool("Chart", "URNotesVisible", false);
-            ShortenDateRanges = iniFile.ReadBool("Chart", "ShortenDateRanges", false);
+            ShortenDates = iniFile.ReadBool("Chart", "ShortenDateRanges", false);
             SameCardsWidth = iniFile.ReadBool("Chart", "SameCardsWidth", false);
 
             MaleColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "MaleColor", MALE_COLOR));
@@ -365,7 +365,7 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "AgeVisible", AgeVisible);
             iniFile.WriteBool("Chart", "SurnameFirstInOrder", SurnameFirstInOrder);
             iniFile.WriteBool("Chart", "URNotesVisible", URNotesVisible);
-            iniFile.WriteBool("Chart", "ShortenDateRanges", ShortenDateRanges);
+            iniFile.WriteBool("Chart", "ShortenDateRanges", ShortenDates);
             iniFile.WriteBool("Chart", "SameCardsWidth", SameCardsWidth);
 
             iniFile.WriteInteger("Chart", "MaleColor", MaleColor.ToArgb());

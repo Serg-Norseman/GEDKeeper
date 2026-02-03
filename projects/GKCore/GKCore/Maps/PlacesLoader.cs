@@ -85,7 +85,7 @@ namespace GKCore.Maps
                     GeoPoint pt = gmapPoints[i];
                     string stHint = pt.Hint;
                     if (byPerson && pt.Date != null) {
-                        stHint = stHint + " [" + pt.Date.GetDisplayStringExt(globOpts.DefDateFormat, false, false) + "]";
+                        stHint = stHint + " [" + pt.Date.GetDisplayString(globOpts.DefDateFormat, false, false) + "]";
                     }
 
                     browser.AddPoint(pt.Latitude, pt.Longitude, stHint);

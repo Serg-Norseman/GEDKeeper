@@ -940,7 +940,7 @@ namespace GKCore.Locales
         /* 894 */ DQHint,
         /* 895 */ Refresh,
         /* 896 */ ResetFilter,
-        /* 897 */ ShortenDateRanges,
+        /* 897 */ ShortenDates,
         /* 898 */ PressEnterToSaveFilter,
 
         /* 899 */ AnniversaryToday,

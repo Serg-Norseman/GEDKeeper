@@ -59,7 +59,7 @@ namespace GEDmill.Model
         public string Date
         {
             get {
-                return (fDate == null) ? null : fDate.GetDisplayStringExt(DateFormat.dfYYYY_MM_DD, true, false);
+                return (fDate == null) ? null : fDate.GetDisplayString(DateFormat.dfYYYY_MM_DD, true, false);
             }
         }
 

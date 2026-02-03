@@ -148,7 +148,7 @@ namespace GDModel
             return result;
         }
 
-        public override string GetDisplayStringExt(DateFormat format, bool sign, bool showCalendar, bool shorten = false)
+        public override string GetDisplayString(DateFormat format, bool sign = false, bool showCalendar = false, bool shorten = false)
         {
             string result;
 
@@ -157,15 +157,12 @@ namespace GDModel
 
             if (!aftEmpty) {
                 if (!befEmpty) {
-                    var dateAfter = fDateAfter.GetDisplayString(format, true, showCalendar);
-                    var dateBefore = fDateBefore.GetDisplayString(format, true, showCalendar);
+                    var dateAfter = fDateAfter.GetDisplayString(format, true, showCalendar, shorten);
+                    var dateBefore = fDateBefore.GetDisplayString(format, true, showCalendar, shorten);
 
                     if (shorten) {
-                        // FIXME: bad algorithm!
-                        string dtA = dateAfter.Replace("__.__.", "");
-                        string dtB = dateBefore.Replace("__.__.", "");
-                        if (dtA.Length == 4 && dtB.Length == 4 && dtB.StartsWith(dtA.Substring(0, 2))) {
-                            result = dtA + "/" + dtB.Substring(2);
+                        if (dateAfter.Length == 4 && dateBefore.Length == 4 && dateBefore.StartsWith(dateAfter.Substring(0, 2))) {
+                            result = dateAfter + "/" + dateBefore.Substring(2);
                         } else {
                             result = dateAfter + " - " + dateBefore;
                         }
