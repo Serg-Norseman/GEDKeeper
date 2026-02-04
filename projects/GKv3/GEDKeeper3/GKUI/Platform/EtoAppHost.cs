@@ -89,13 +89,17 @@ namespace GKUI.Platform
 
         public override IForm GetActiveForm()
         {
-            // Form, Dialog -> Window
-            foreach (var wnd in Application.Instance.Windows) {
-                if (wnd.HasFocus) {
-                    return wnd as IForm;
+            try {
+                // Form, Dialog -> Window
+                foreach (var wnd in Application.Instance.Windows) {
+                    if (wnd.HasFocus) {
+                        return wnd as IForm;
+                    }
                 }
+                return null;
+            } catch {
+                return null;
             }
-            return null;
         }
 
         public override IWindow GetActiveWindow()

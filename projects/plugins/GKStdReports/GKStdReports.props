@@ -13,6 +13,7 @@
         <Compile Include="RepositoriesReport.cs" />
         <Compile Include="SourcesReport.cs" />
         <Compile Include="RecordCardReport.cs" />
+        <Compile Include="SearchIndexReport.cs" />
     </ItemGroup>
 
     <ItemGroup>

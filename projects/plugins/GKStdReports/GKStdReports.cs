@@ -19,7 +19,7 @@ using GKCore.Plugins;
 [assembly: AssemblyDescription("GEDKeeper standard reports plugin")]
 [assembly: AssemblyProduct("GEDKeeper")]
 [assembly: AssemblyCopyright("Copyright © 2018-2026 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyVersion("0.7.0.0")]
+[assembly: AssemblyVersion("0.8.0.0")]
 [assembly: AssemblyCulture("")]
 
 #if DEBUG
@@ -61,6 +61,9 @@ namespace GKStdReports
         ConsanguinityCommonAncestors,
         RecordCardReport,
         NotSelectedRecord,
+
+        SearchIndexReport,
+        EarliestPlace,
     }
 
 
@@ -71,17 +74,12 @@ namespace GKStdReports
         public static ILangMan Instance
         {
             get { return fInstance; }
-            set {
-                // TODO: for lang changes
-                //if (fInstance == null /* finstance.Lang != value.Lang */) {
-                    fInstance = value;
-                //}
-            }
+            internal set { fInstance = value; }
         }
 
         public static string LS(Enum lsid)
         {
-            return (fInstance == null) ? "" : fInstance.LS(lsid);
+            return (fInstance == null) ? string.Empty : fInstance.LS(lsid);
         }
     }
 
@@ -265,6 +263,23 @@ namespace GKStdReports
             }
 
             using (var report = new RecordCardReport(curBase, selRecord)) {
+                report.Options = GlobalOptions.Instance;
+                report.Generate(true);
+            }
+        }
+    }
+
+
+    public class SearchIndexPlugin : StdReportPlugin
+    {
+        public override string DisplayName { get { return SRLangMan.LS(PLS.SearchIndexReport); } }
+
+        public override void Execute()
+        {
+            IBaseWindow curBase = Host.GetCurrentFile();
+            if (curBase == null) return;
+
+            using (var report = new SearchIndexReport(curBase)) {
                 report.Options = GlobalOptions.Instance;
                 report.Generate(true);
             }

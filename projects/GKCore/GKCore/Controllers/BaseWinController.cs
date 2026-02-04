@@ -1162,7 +1162,7 @@ namespace GKCore.Controllers
 
         public void ExportTable()
         {
-            using (TableExporter exExp = new TableExporter(fView)) {
+            using (var exExp = new RecordsTableExporter(fView)) {
                 exExp.Options = AppHost.Options;
                 exExp.Generate(true);
             }

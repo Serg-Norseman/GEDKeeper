@@ -53,6 +53,8 @@ namespace GKCore.Tools
         public readonly List<PatriarchObj> Links;
         public bool HasLinks;
 
+        public object ExtData;
+
         public PatriarchObj()
         {
             Links = new List<PatriarchObj>();

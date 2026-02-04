@@ -319,6 +319,20 @@ namespace GDModel
             return Date.GetChronologicalYear();
         }
 
+        public bool GetChronoPlace(out int year, out string place)
+        {
+            bool result = (fPlace != null && !string.IsNullOrEmpty(fPlace.StringValue));
+            if (result) {
+                year = fDate.GetChronologicalYear();
+                place = fPlace.StringValue;
+                result = result && (year != 0);
+            } else {
+                year = 0;
+                place = null;
+            }
+            return result;
+        }
+
         protected override void ProcessHashes(ref HashCode hashCode)
         {
             base.ProcessHashes(ref hashCode);

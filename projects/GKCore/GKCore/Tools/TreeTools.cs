@@ -211,7 +211,7 @@ namespace GKCore.Tools
 
         private static void WalkTreeInt(GDMTree tree, GDMIndividualRecord iRec, TreeWalkMode mode, WalkProc walkProc, object extData)
         {
-            if (!walkProc(iRec, mode, extData)) return;
+            if (iRec == null || !walkProc(iRec, mode, extData)) return;
 
             if (mode == TreeWalkMode.twmNone) return;
 

@@ -9,11 +9,8 @@
 using System.IO;
 using System.Threading.Tasks;
 using BSLib;
-using GDModel;
 using GKCore.Design;
 using GKCore.Export.Formats;
-using GKCore.Lists;
-using GKCore.Locales;
 using GKCore.Options;
 
 namespace GKCore.Export
@@ -21,44 +18,14 @@ namespace GKCore.Export
     /// <summary>
     /// 
     /// </summary>
-    public sealed class TableExporter : Exporter
+    public abstract class TableExporter : Exporter
     {
-        private readonly GDMRecordType fRecType;
-        private readonly IRecordsListModel fListMan;
-
         public TableExporter(IBaseWindow baseWin) : base(baseWin)
         {
-            fRecType = fBase.GetSelectedRecordType();
-            fListMan = fBase.GetRecordsListManByType(fRecType);
         }
 
-        private void GenerateInt(IProgressController progress)
+        protected virtual void GenerateInt(IProgressController progress)
         {
-            int recordsCount = fListMan.FilteredCount;
-            progress.Begin(LangMan.LS(LSID.MIExport) + "...", recordsCount);
-            try {
-                var columns = fListMan.ColumnsMap;
-                int colNum = columns.Count;
-                fWriter.BeginTable(colNum, recordsCount + 1);
-
-                for (int k = 0; k < colNum; k++) {
-                    fWriter.AddTableCell(columns[k].Caption);
-                }
-
-                for (int i = 0; i < recordsCount; i++) {
-                    object rowData = fListMan.GetContentItem(i);
-                    var itemData = fListMan.GetItemData(rowData);
-                    for (int k = 0; k < itemData.Length; k++) {
-                        string colVal = itemData[k].ToString();
-                        colVal = colVal.Replace("\r\n", " ").Replace("\"", "'");
-                        fWriter.AddTableCell(colVal);
-                    }
-
-                    progress.Increment();
-                }
-            } finally {
-                progress.End();
-            }
         }
 
         public override async void Generate(bool show)
