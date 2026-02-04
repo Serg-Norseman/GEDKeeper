@@ -1098,6 +1098,7 @@ namespace GKCore.Locales
             /* 1055 */ "Files",
             /* 1056 */ "Sort events",
             /* 1057 */ "Reload",
+            /* 1058 */ "Multiple lines of spouses",
         };
     }
 }

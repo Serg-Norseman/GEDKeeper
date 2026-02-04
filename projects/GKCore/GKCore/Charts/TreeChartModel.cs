@@ -1617,43 +1617,38 @@ namespace GKCore.Charts
             int spousesCount = person.GetSpousesCount();
             int childrenCount = person.GetChildsCount();
 
+            bool multipleLines = fOptions.MultipleSpouseLines;
+            int linesNum = (multipleLines) ? spousesCount : Math.Min(1, spousesCount);
+
             // draw lines of spouses
-            int spbOfs = (person.Height - 10) / (spousesCount + 1);
-            int spbBeg = person.PtY + (person.Height - spbOfs * (spousesCount - 1)) / 2;
-            switch (person.Sex) {
-                case GDMSex.svMale:
-                    for (int i = 0; i < spousesCount; i++) {
-                        TreeChartPerson spouse = person.GetSpouse(i);
-                        bool commonLaw = fOptions.DottedLinesOfCommonLawSpouses && spouse.HasFlag(PersonFlag.pfCommonLaw);
-                        bool isTrackedSpouse = isTracked || HasTrackedLines(spouse, drawMode) || HasTrackedChild(spouse, drawMode);
-                        bool isMatchedSpouse = isTrackedSpouse && HasTrackedSources(person, spouse);
+            int spbOfs = (person.Height - 10) / (linesNum + 1);
+            int spbBeg = person.PtY + (person.Height - spbOfs * (linesNum - 1)) / 2;
 
-                        int spbV = spbBeg + spbOfs * i;
+            for (int i = 0; i < spousesCount; i++) {
+                TreeChartPerson spouse = person.GetSpouse(i);
+                bool commonLaw = fOptions.DottedLinesOfCommonLawSpouses && spouse.HasFlag(PersonFlag.pfCommonLaw);
+                bool isTrackedSpouse = isTracked || HasTrackedLines(spouse, drawMode) || HasTrackedChild(spouse, drawMode);
+                bool isMatchedSpouse = isTrackedSpouse && HasTrackedSources(person, spouse);
+
+                int spbV = (multipleLines) ? spbBeg + spbOfs * i : spbBeg;
+
+                switch (person.Sex) {
+                    case GDMSex.svMale:
                         DrawLine(spouse.Rect.Left, spbV, person.Rect.Right + 1, spbV, commonLaw, isTrackedSpouse, isMatchedSpouse); // h
-
                         if (!string.IsNullOrEmpty(spouse.MarriageDate)) {
                             int q = (!fOptions.InvertedTree) ? 4 : 3;
                             DrawText(spouse.MarriageDate, spouse.Rect.Left, spbV, q);
                         }
-                    }
-                    break;
+                        break;
 
-                case GDMSex.svFemale:
-                    for (int i = 0; i < spousesCount; i++) {
-                        TreeChartPerson spouse = person.GetSpouse(i);
-                        bool commonLaw = fOptions.DottedLinesOfCommonLawSpouses && spouse.HasFlag(PersonFlag.pfCommonLaw);
-                        bool isTrackedSpouse = isTracked || HasTrackedLines(spouse, drawMode) || HasTrackedChild(spouse, drawMode);
-                        bool isMatchedSpouse = isTrackedSpouse && HasTrackedSources(person, spouse);
-
-                        int spbV = spbBeg + spbOfs * i;
+                    case GDMSex.svFemale:
                         DrawLine(spouse.Rect.Right + 1, spbV, person.Rect.Left, spbV, commonLaw, isTrackedSpouse, isMatchedSpouse); // h
-
                         if (!string.IsNullOrEmpty(spouse.MarriageDate)) {
                             int q = (!fOptions.InvertedTree) ? 1 : 2;
                             DrawText(spouse.MarriageDate, spouse.Rect.Right + 1, spbV, q);
                         }
-                    }
-                    break;
+                        break;
+                }
             }
 
             // draw spouses

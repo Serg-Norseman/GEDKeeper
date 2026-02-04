@@ -244,6 +244,7 @@
                         <CheckBox x:Name="chkMourningEdges" CheckedChanged="chkTreeChartOption_CheckedChanged" />
                         <CheckBox x:Name="chkExtendedTree" />
                         <CheckBox x:Name="chkUseInlineImagesInSvg" />
+                        <CheckBox x:Name="chkMultipleSpouseLines" />
 
                         <StackLayoutItem />
 

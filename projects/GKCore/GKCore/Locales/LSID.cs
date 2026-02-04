@@ -1122,7 +1122,8 @@ namespace GKCore.Locales
         /* 1055 */ MediaFiles,
         /* 1056 */ SortEvents,
         /* 1057 */ MIFileReload,
+        /* 1058 */ MultipleSpouseLines,
 
-        /* 0000 */ Last = MIFileReload
+        /* 0000 */ Last = MultipleSpouseLines
     }
 }

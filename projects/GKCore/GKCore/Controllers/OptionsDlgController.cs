@@ -694,6 +694,10 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkMourningEdges").Checked = fOptions.TreeChartOptions.MourningEdges;
             GetControl<ICheckBox>("chkUseAdditionalDates").Checked = fOptions.TreeChartOptions.UseAdditionalDates;
 
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                GetControl<ICheckBox>("chkMultipleSpouseLines").Checked = fOptions.TreeChartOptions.MultipleSpouseLines;
+            }
+
             GetControl<ILabel>("lblMaleColor").BackColor = fOptions.TreeChartOptions.MaleColor;
             GetControl<ILabel>("lblFemaleColor").BackColor = fOptions.TreeChartOptions.FemaleColor;
             GetControl<ILabel>("lblUnkSexColor").BackColor = fOptions.TreeChartOptions.UnkSexColor;
@@ -808,6 +812,10 @@ namespace GKCore.Controllers
             fOptions.TreeChartOptions.DateDesignations = GetControl<ICheckBox>("chkDateDesignations").Checked;
             fOptions.TreeChartOptions.MourningEdges = GetControl<ICheckBox>("chkMourningEdges").Checked;
             fOptions.TreeChartOptions.UseAdditionalDates = GetControl<ICheckBox>("chkUseAdditionalDates").Checked;
+
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                fOptions.TreeChartOptions.MultipleSpouseLines = GetControl<ICheckBox>("chkMultipleSpouseLines").Checked;
+            }
 
             fOptions.TreeChartOptions.MaleColor = GetControl<ILabel>("lblMaleColor").BackColor;
             fOptions.TreeChartOptions.FemaleColor = GetControl<ILabel>("lblFemaleColor").BackColor;
@@ -1025,6 +1033,10 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkDateDesignations").Text = LangMan.LS(LSID.DateDesignations);
             GetControl<ICheckBox>("chkMourningEdges").Text = LangMan.LS(LSID.MourningEdges);
             GetControl<ICheckBox>("chkUseAdditionalDates").Text = LangMan.LS(LSID.UseAdditionalDates);
+
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                GetControl<ICheckBox>("chkMultipleSpouseLines").Text = LangMan.LS(LSID.MultipleSpouseLines);
+            }
 
             GetControl<ILabel>("lblMaleColor").Text = LangMan.LS(LSID.Man);
             GetControl<ILabel>("lblFemaleColor").Text = LangMan.LS(LSID.Woman);
