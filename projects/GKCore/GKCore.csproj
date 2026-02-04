@@ -90,6 +90,7 @@
     <Compile Include="GKCore\Controllers\LocExpertDlgController.cs" />
     <Compile Include="GKCore\Design\Views\IEventDefEditDlg.cs" />
     <Compile Include="GKCore\Events\EventUtils.cs" />
+    <Compile Include="GKCore\Export\RecordsTableExporter.cs" />
     <Compile Include="GKCore\Filters\FilterExpression.cs" />
     <Compile Include="GKCore\Filters\ListFilter.cs" />
     <Compile Include="GKCore\Lists\FlatListModel.cs" />
