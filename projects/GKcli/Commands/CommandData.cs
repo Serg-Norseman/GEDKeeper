@@ -16,6 +16,8 @@ internal enum CommandCategory
 {
     Application,
     File,
+    Service,
+    Tools,
 
     Individual,
     Family,
@@ -28,14 +30,23 @@ internal enum CommandCategory
 
 internal class CommandData
 {
-    public string Command { get; private set; }
+    public string Sign { get; private set; }
     public CommandCategory Category { get; private set; }
     public CommandFunc Func { get; private set; }
+    public BaseCommand Instance { get; private set; }
 
-    public CommandData(string command, CommandCategory category, CommandFunc func)
+    public CommandData(string sign, CommandCategory category, CommandFunc func)
     {
-        Command = command;
+        Sign = sign;
         Category = category;
         Func = func;
+    }
+
+    public CommandData(BaseCommand commandInstance)
+    {
+        Instance = commandInstance;
+        Sign = commandInstance.Sign;
+        Category = commandInstance.Category;
+        Func = (ctx, obj) => commandInstance.Execute(ctx, obj);
     }
 }

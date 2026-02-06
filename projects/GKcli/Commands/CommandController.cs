@@ -14,6 +14,7 @@ using System.Linq;
 using GDModel;
 using GKCore;
 using GKCore.Locales;
+using GKCore.Options;
 using GKUI.Platform;
 using Sharprompt;
 
@@ -42,22 +43,28 @@ internal class CommandController
         RegisterCommands(this);
     }
 
-    private void RegisterCommand(string command, CommandCategory category, CommandFunc func)
+    private void RegisterCommand(string sign, CommandCategory category, CommandFunc func)
     {
-        var cmd = new CommandData(command, category, func);
-        fCommands.Add(command, cmd);
+        var cmd = new CommandData(sign, category, func);
+        fCommands.Add(sign, cmd);
     }
 
-    public void ExecuteCommand(string command, BaseContext baseContext, object obj)
+    private void RegisterCommand(BaseCommand commandInstance)
     {
-        if (fCommands.TryGetValue(command, out CommandData data)) {
+        var cmd = new CommandData(commandInstance);
+        fCommands.Add(commandInstance.Sign, cmd);
+    }
+
+    public void ExecuteCommand(string sign, BaseContext baseContext, object obj)
+    {
+        if (fCommands.TryGetValue(sign, out CommandData data)) {
             data.Func(baseContext, obj);
         }
     }
 
     public IList<string> GetCommands(CommandCategory category, bool hasReturn = false)
     {
-        var result = fCommands.Values.Where(c => c.Category == category).Select(c => c.Command).ToList();
+        var result = fCommands.Values.Where(c => c.Category == category).Select(c => c.Sign).ToList();
 
         if (hasReturn)
             result.Add(CMD_RETURN);
@@ -92,8 +99,23 @@ internal class CommandController
         controller.RegisterCommand(CMD_SOURCE_CAT, CommandCategory.Application, SourceMenu);
         controller.RegisterCommand(CMD_SOURCE_LIST, CommandCategory.Source, SourceList);
 
-        controller.RegisterCommand(CMD_REPO_CAT, CommandCategory.Application, RepositoryMenu);
-        controller.RegisterCommand(CMD_REPO_LIST, CommandCategory.Repository, RepositoryList);
+        // Repository operations
+        controller.RegisterCommand(new RepositoryMenuCommand());
+        controller.RegisterCommand(new RepositoryListCommand());
+
+        controller.RegisterCommand(CMD_SVC_CAT, CommandCategory.Application, ServiceMenu);
+        controller.RegisterCommand(CMD_SVC_TOOLS, CommandCategory.Service, ToolsMenu);
+        controller.RegisterCommand(CMD_SVC_OPTIONS, CommandCategory.Service, Options);
+        controller.RegisterCommand(CMD_SVC_LANG, CommandCategory.Service, LangChange);
+
+        controller.RegisterCommand(new TreeCompareCommand());
+        controller.RegisterCommand(CMD_TREE_MERGE, CommandCategory.Tools, TreeMerge);
+        controller.RegisterCommand(CMD_TREE_SPLIT, CommandCategory.Tools, TreeSplit);
+        controller.RegisterCommand(CMD_REC_MERGE, CommandCategory.Tools, RecMerge);
+        controller.RegisterCommand(CMD_FAMILY_GROUPS, CommandCategory.Tools, FamilyGroups);
+        controller.RegisterCommand(CMD_TREE_CHECK, CommandCategory.Tools, TreeCheck);
+        controller.RegisterCommand(CMD_PAT_SEARCH, CommandCategory.Tools, PatSearch);
+        controller.RegisterCommand(CMD_PLACES_MANAGER, CommandCategory.Tools, PlacesManager);
 
         controller.RegisterCommand(CMD_EXIT, CommandCategory.Application, AppExit);
     }
@@ -110,6 +132,85 @@ internal class CommandController
         if (baseContext.Modified) {
             WriteLine("The file has been modified.");
         }
+    }
+
+    #endregion
+
+    #region Service operations
+
+    public const string CMD_SVC_CAT = "service";
+    public static void ServiceMenu(BaseContext baseContext, object obj)
+    {
+        var cmdList = CommandController.Instance.GetCommands(CommandCategory.Service, true);
+        var selected = Prompt.Select($"Select a service operation", cmdList);
+        if (selected != CMD_RETURN)
+            CommandController.Instance.ExecuteCommand(selected, baseContext, obj);
+    }
+
+    public const string CMD_SVC_LANG = "language";
+    public static void LangChange(BaseContext baseContext, object obj)
+    {
+        var langs = AppHost.Options.Languages;
+        if (langs.Count > 0) {
+            var selectedLang = Prompt.Select("Select a language", langs, pageSize: 10,
+                textSelector: (LangRecord r) => { return r.Name; });
+
+            WriteLine(string.Format("Selected: {0}", selectedLang.FileName));
+            AppHost.Instance.LoadLanguage(selectedLang.Code, false);
+        }
+    }
+
+    public const string CMD_SVC_TOOLS = "tools";
+    public static void ToolsMenu(BaseContext baseContext, object obj)
+    {
+        var cmdList = CommandController.Instance.GetCommands(CommandCategory.Tools, true);
+        var selected = Prompt.Select($"Select a tool", cmdList);
+        if (selected != CMD_RETURN)
+            CommandController.Instance.ExecuteCommand(selected, baseContext, obj);
+    }
+
+    public const string CMD_SVC_OPTIONS = "options";
+    public static void Options(BaseContext baseContext, object obj)
+    {
+    }
+
+    #endregion
+
+    #region Tree operations
+
+    public const string CMD_TREE_MERGE = "tree merge";
+    public static void TreeMerge(BaseContext baseContext, object obj)
+    {
+    }
+
+    public const string CMD_TREE_SPLIT = "tree split";
+    public static void TreeSplit(BaseContext baseContext, object obj)
+    {
+    }
+
+    public const string CMD_REC_MERGE = "record merge";
+    public static void RecMerge(BaseContext baseContext, object obj)
+    {
+    }
+
+    public const string CMD_FAMILY_GROUPS = "family groups";
+    public static void FamilyGroups(BaseContext baseContext, object obj)
+    {
+    }
+
+    public const string CMD_TREE_CHECK = "tree check";
+    public static void TreeCheck(BaseContext baseContext, object obj)
+    {
+    }
+
+    public const string CMD_PAT_SEARCH = "patriarch search";
+    public static void PatSearch(BaseContext baseContext, object obj)
+    {
+    }
+
+    public const string CMD_PLACES_MANAGER = "places manager";
+    public static void PlacesManager(BaseContext baseContext, object obj)
+    {
     }
 
     #endregion
@@ -177,7 +278,7 @@ internal class CommandController
         WriteLine("File properties");
 
         GDMSubmitterRecord submitter = baseContext.Tree.GetSubmitter();
-        WriteLine(1, "{0}: [yellow]{1}[/]", LangMan.LS(LSID.GeneralName), submitter.Name);
+        WriteLine(1, "{0}: [yellow]{1}[/]", LangMan.LS(LSID.Author), submitter.Name);
         WriteLine(1, "{0}: [yellow]{1}[/]", LangMan.LS(LSID.Address), submitter.Address.Lines.Text);
         if (submitter.Address.PhoneNumbers.Count > 0) {
             WriteLine(1, "{0}: [yellow]{1}[/]", LangMan.LS(LSID.Telephone), submitter.Address.PhoneNumbers[0].StringValue);
@@ -333,69 +434,51 @@ internal class CommandController
 
     #endregion
 
-    #region Repository operations
-
-    public const string CMD_REPO_CAT = "repository";
-    public static void RepositoryMenu(BaseContext baseContext, object obj)
-    {
-        var cmdList = CommandController.Instance.GetCommands(CommandCategory.Repository, true);
-        var selected = Prompt.Select($"Select a repository operation", cmdList);
-        if (selected != CMD_RETURN)
-            CommandController.Instance.ExecuteCommand(selected, baseContext, obj);
-    }
-
-    public const string CMD_REPO_LIST = "list repositories";
-    public static void RepositoryList(BaseContext baseContext, object obj)
-    {
-        var selected = SelectRecord(baseContext, GDMRecordType.rtRepository, "Select a repository", "Repository: {0}", "No records.");
-    }
-
-    #endregion
 
     #region Utilities
 
-    private static void WriteLine()
+    internal static void WriteLine()
     {
         Console.WriteLine();
     }
 
-    private static void WriteLine(string value)
+    internal static void WriteLine(string value)
     {
         PromptHelper.WriteMarkupLine(value);
     }
 
-    private static void WriteLine(int indent, string value)
+    internal static void WriteLine(int indent, string value)
     {
         var strIndent = new string(' ', indent * 2);
         PromptHelper.WriteMarkupLine(strIndent + value);
     }
 
-    private static void WriteLine(string value, params object[] args)
+    internal static void WriteLine(string value, params object[] args)
     {
         PromptHelper.WriteMarkupLine(string.Format(value, args));
     }
 
-    private static void WriteLine(int indent, string value, params object[] args)
+    internal static void WriteLine(int indent, string value, params object[] args)
     {
         var strIndent = new string(' ', indent * 2);
         PromptHelper.WriteMarkupLine(strIndent + string.Format(value, args));
     }
 
-    private static void LoadFile(BaseContext baseContext, string selectedFile)
+    internal static void LoadFile(BaseContext baseContext, string selectedFile)
     {
         WriteLine("Selected file: {0}", selectedFile);
         var result = baseContext.FileLoad(selectedFile, false).GetAwaiter().GetResult();
         WriteLine("Database loaded successfully. Records: {0}.", baseContext.Tree.RecordsCount);
     }
 
-    private static void SaveFile(BaseContext baseContext, string selectedFile)
+    internal static void SaveFile(BaseContext baseContext, string selectedFile)
     {
         WriteLine("Selected file: {0}", selectedFile);
         var result = baseContext.FileSave(selectedFile).GetAwaiter().GetResult();
         WriteLine("Database saved successfully.");
     }
 
-    private static GDMRecord SelectRecord(BaseContext baseContext, GDMRecordType recordType, string prompt, string yesMsg, string noMsg)
+    internal static GDMRecord SelectRecord(BaseContext baseContext, GDMRecordType recordType, string prompt, string yesMsg, string noMsg)
     {
         GDMRecord result = null;
 

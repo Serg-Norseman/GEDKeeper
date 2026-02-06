@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../GKCore"
+		},
+		{
+			"path": "../GKvT"
+		}
+	],
+	"settings": {}
+}
