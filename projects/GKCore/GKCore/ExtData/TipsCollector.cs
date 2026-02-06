@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using BSLib;
 using GDModel;
 using GKCore.Cultures;
@@ -27,27 +28,51 @@ namespace GKCore.ExtData
             try {
                 var tree = context.Tree;
                 var dtNow = AppHost.Instance.GetCurrentDateTime();
-                string title;
 
-                title = LangMan.LS(LSID.BirthDays);
-                bool birtFirstTip = true;
+                var birthdays = new List<string>();
+                var deathdays = new List<string>();
                 var indiEnum = tree.GetEnumerator<GDMIndividualRecord>();
                 GDMIndividualRecord iRec;
                 while (indiEnum.MoveNext(out iRec)) {
                     var lifeEvents = iRec.GetLifeEvents(true);
 
-                    if (onlyAlive && (lifeEvents.DeathEvent != null || lifeEvents.BurialEvent != null)) continue;
-
-                    if (lifeEvents.BirthEvent == null) continue;
-                    var dt = lifeEvents.BirthEvent.Date.Value as GDMDate;
-
-                    if (dt != null && dt.IsValidDate()) {
-                        int days = GKUtils.GetDaysFor(dt, dtNow, out int years, out bool anniversary);
-                        if (days >= 0 && days < 3) {
-                            string tip = GetBirthTipMessage(context.Culture, iRec, days, years, anniversary);
-                            AddTip(tipsList, title, tip, ref birtFirstTip);
+                    if (lifeEvents.BirthEvent != null && (!onlyAlive || (lifeEvents.DeathEvent == null && lifeEvents.BurialEvent == null))) {
+                        var dt = lifeEvents.BirthEvent.Date.Value as GDMDate;
+                        if (dt != null && dt.IsValidDate()) {
+                            int days = GKUtils.GetDaysFor(dt, dtNow, out int years, out bool anniversary);
+                            if (days >= 0 && days < 3) {
+                                string tip = GetBirthTipMessage(context.Culture, iRec, days, years, anniversary);
+                                birthdays.Add(tip);
+                            }
                         }
                     }
+
+                    if (lifeEvents.DeathEvent != null && !onlyAlive) {
+                        var dt = lifeEvents.DeathEvent.Date.Value as GDMDate;
+                        if (dt != null && dt.IsValidDate()) {
+                            int days = GKUtils.GetDaysFor(dt, dtNow, out int years, out bool anniversary);
+                            if (days >= 0 && days < 3) {
+                                string tip = GetDeathTipMessage(context.Culture, iRec, days, years, anniversary);
+                                deathdays.Add(tip);
+                            }
+                        }
+                    }
+                }
+
+                string title;
+
+                if (birthdays.Count > 0) {
+                    title = LangMan.LS(LSID.BirthDays);
+                    bool firstTip = true;
+                    foreach (var tip in birthdays)
+                        AddTip(tipsList, title, tip, ref firstTip);
+                }
+
+                if (deathdays.Count > 0) {
+                    title = LangMan.LS(LSID.DeathDays);
+                    bool firstTip = true;
+                    foreach (var tip in deathdays)
+                        AddTip(tipsList, title, tip, ref firstTip);
                 }
 
                 title = LangMan.LS(LSID.WeddingAnniversaries);
@@ -114,6 +139,26 @@ namespace GKCore.ExtData
                         break;
                 }
             }
+            return tip;
+        }
+
+        private static string GetDeathTipMessage(ICulture culture, GDMIndividualRecord iRec, int days, int years, bool anniversary)
+        {
+            string nm = culture.GetPossessiveName(iRec);
+            string tip;
+
+            switch (days) {
+                case 0:
+                    tip = string.Format(LangMan.LS(LSID.DeathdayToday), nm);
+                    break;
+                case 1:
+                    tip = string.Format(LangMan.LS(LSID.DeathdayTomorrow), nm);
+                    break;
+                default:
+                    tip = string.Format(LangMan.LS(LSID.DeathdayRemained), nm, days);
+                    break;
+            }
+
             return tip;
         }
 

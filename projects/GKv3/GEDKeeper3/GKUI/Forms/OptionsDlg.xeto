@@ -20,7 +20,13 @@
                     <StackLayout Style="vertListStack">
 
                       <CheckBox x:Name="chkLoadRecentFiles" />
-                      <CheckBox x:Name="chkShowOnStart" />
+
+                      <CheckBox x:Name="chkShowOnStart" CheckedChanged="chkOtherOption_CheckedChanged" />
+                      <StackLayout Orientation="Horizontal" Spacing="20">
+                        <StackLayoutItem />
+                        <CheckBox x:Name="chkShowEventsOnlyAlive" />
+                      </StackLayout>
+
                       <CheckBox x:Name="chkAutoCheckUpdates" />
                       <CheckBox x:Name="chkDialogClosingWarn" />
                       <CheckBox x:Name="chkDisplayFullFileName" />

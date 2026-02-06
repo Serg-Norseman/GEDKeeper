@@ -274,6 +274,7 @@ namespace GKCore.Options
         public bool ShowNumberOfSubstructures { get; set; }
 
         public bool ShowTips { get; set; }
+        public bool ShowTipsOnlyAlive { get; set; }
 
         public bool SurnameFirstInOrder { get; set; }
 
@@ -351,6 +352,7 @@ namespace GKCore.Options
             fBackups.ResetDefaults();
 
             ShowTips = true;
+            ShowTipsOnlyAlive = true;
             LoadRecentFiles = false;
             AutoCheckUpdates = true;
             CharsetDetection = false;
@@ -763,6 +765,7 @@ namespace GKCore.Options
             LastDir = ini.ReadString("Common", "LastDir", "");
             PlacesWithAddress = ini.ReadBool("Common", "PlacesWithAddress", false);
             ShowTips = ini.ReadBool("Common", "ShowTips", true);
+            ShowTipsOnlyAlive = ini.ReadBool("Common", "ShowTipsOnlyAlive", true);
             InterfaceLang = (ushort)ini.ReadInteger("Common", "InterfaceLang", 0);
             ShowDatesCalendar = ini.ReadBool("Common", "ShowDatesCalendar", false);
             ShowDatesSign = ini.ReadBool("Common", "ShowDatesSigns", false);
@@ -906,6 +909,7 @@ namespace GKCore.Options
             ini.WriteString("Common", "LastDir", LastDir);
             ini.WriteBool("Common", "PlacesWithAddress", PlacesWithAddress);
             ini.WriteBool("Common", "ShowTips", ShowTips);
+            ini.WriteBool("Common", "ShowTipsOnlyAlive", ShowTipsOnlyAlive);
             ini.WriteInteger("Common", "InterfaceLang", InterfaceLang);
             ini.WriteBool("Common", "ShowDatesCalendar", ShowDatesCalendar);
             ini.WriteBool("Common", "ShowDatesSigns", ShowDatesSign);

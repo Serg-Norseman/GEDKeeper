@@ -146,6 +146,9 @@ namespace GKCore.Controllers
         public void UpdateOtherOptions()
         {
             GetControl<ICheckBox>("chkShowOnStart").Checked = fOptions.ShowTips;
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                GetControl<ICheckBox>("chkShowEventsOnlyAlive").Checked = fOptions.ShowTipsOnlyAlive;
+            }
 
             var hasRecentFilesLoad = AppHost.Instance.HasFeatureSupport(Feature.RecentFilesLoad);
             GetControl<ICheckBox>("chkLoadRecentFiles").Checked = fOptions.LoadRecentFiles && hasRecentFilesLoad;
@@ -183,9 +186,21 @@ namespace GKCore.Controllers
             }
         }
 
+        public void ChangeOtherOption()
+        {
+            bool tips = GetControl<ICheckBox>("chkShowOnStart").Checked;
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                GetControl<ICheckBox>("chkShowEventsOnlyAlive").Enabled = tips;
+            }
+        }
+
         public async void AcceptOtherOptions()
         {
             fOptions.ShowTips = GetControl<ICheckBox>("chkShowOnStart").Checked;
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                fOptions.ShowTipsOnlyAlive = GetControl<ICheckBox>("chkShowEventsOnlyAlive").Checked;
+            }
+
             fOptions.LoadRecentFiles = GetControl<ICheckBox>("chkLoadRecentFiles").Checked;
             fOptions.AutoCheckUpdates = GetControl<ICheckBox>("chkAutoCheckUpdates").Checked;
             fOptions.CharsetDetection = GetControl<ICheckBox>("chkCharsetDetection").Checked;
@@ -948,7 +963,12 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblBackupRevisionsMaxCount").Text = LangMan.LS(LSID.BackupRevisionsMaxCount);
 
             GetControl<IGroupBox>("grpOther").Text = LangMan.LS(LSID.Other);
+
             GetControl<ICheckBox>("chkShowOnStart").Text = LangMan.LS(LSID.StartupTips);
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                GetControl<ICheckBox>("chkShowEventsOnlyAlive").Text = LangMan.LS(LSID.ShowEventsOnlyAlive);
+            }
+
             GetControl<ICheckBox>("chkLoadRecentFiles").Text = LangMan.LS(LSID.LoadRecentFiles);
             GetControl<ICheckBox>("chkAutoCheckUpdates").Text = LangMan.LS(LSID.AutoCheckUpdates);
             GetControl<ICheckBox>("chkCharsetDetection").Text = LangMan.LS(LSID.CharsetDetection);

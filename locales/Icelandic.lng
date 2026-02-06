@@ -1074,3 +1074,9 @@
 1056=Sort events
 1057=Endurhlaða
 1058=Multiple lines of spouses
+
+1059=Death days
+1060=Today is deathday of {0}
+1061=Tomorrow is deathday of {0}
+1062={1} days remain before the deathday of {0}
+1063=Events for the living only

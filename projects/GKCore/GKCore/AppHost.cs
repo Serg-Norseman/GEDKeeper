@@ -178,7 +178,7 @@ namespace GKCore
             }
         }
 
-        private void FinalSteps()
+        private static void FinalSteps()
         {
             if (Options.AutoCheckUpdates) {
                 UpdateMan.CheckUpdate();
@@ -797,8 +797,9 @@ namespace GKCore
 
         private void ProcessLoaded(BaseContext context)
         {
-            if (GlobalOptions.Instance.ShowTips) {
-                TipsCollector.Collect(context, fTips);
+            var globOpts = GlobalOptions.Instance;
+            if (globOpts.ShowTips) {
+                TipsCollector.Collect(context, fTips, globOpts.ShowTipsOnlyAlive);
             }
         }
 

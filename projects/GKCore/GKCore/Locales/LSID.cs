@@ -1124,6 +1124,12 @@ namespace GKCore.Locales
         /* 1057 */ MIFileReload,
         /* 1058 */ MultipleSpouseLines,
 
-        /* 0000 */ Last = MultipleSpouseLines
+        /* 1059 */ DeathDays,
+        /* 1060 */ DeathdayToday,
+        /* 1061 */ DeathdayTomorrow,
+        /* 1062 */ DeathdayRemained,
+        /* 1063 */ ShowEventsOnlyAlive,
+
+        /* 0000 */ Last = ShowEventsOnlyAlive
     }
 }

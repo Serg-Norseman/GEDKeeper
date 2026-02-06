@@ -245,6 +245,11 @@ namespace GKUI.Forms
             fController.SetLocale();
         }
 
+        private void chkOtherOption_CheckedChanged(object sender, EventArgs e)
+        {
+            fController.ChangeOtherOption();
+        }
+
         private void chkTreeChartOption_CheckedChanged(object sender, EventArgs e)
         {
             fController.ChangeTreeChartOption();
