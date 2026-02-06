@@ -672,7 +672,7 @@ namespace GKCore.Lists
             return null;
         }
 
-        public object GetContentItem(int itemIndex)
+        public virtual object GetContentItem(int itemIndex)
         {
             object result = (itemIndex < 0 || itemIndex >= fContentList.Count) ? null : fContentList[itemIndex].Record;
             return result;

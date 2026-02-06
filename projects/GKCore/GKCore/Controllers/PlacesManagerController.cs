@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using BSLib;
 using GDModel;
@@ -66,19 +67,23 @@ namespace GKCore.Controllers
 
         public async void ShowLocExpert()
         {
-            var placeObj = GetSelectedPlace();
-            if (placeObj == null) return;
+            try {
+                var placeObj = GetSelectedPlace();
+                if (placeObj == null) return;
 
-            string placeName = placeObj.Name;
+                string placeName = placeObj.Name;
 
-            var eventDates = new SortedSet<GDMCustomDate>();
-            foreach (var evt in placeObj.Facts) {
-                if (!evt.Date.IsEmpty())
-                    eventDates.Add(evt.Date);
-            }
+                var eventDates = new SortedSet<GDMCustomDate>();
+                foreach (var evt in placeObj.Facts) {
+                    if (!evt.Date.IsEmpty())
+                        eventDates.Add(evt.Date);
+                }
 
-            using (var dlg = AppHost.ResolveDialog<ILocExpertDlg>(fBase, eventDates, placeName)) {
-                await AppHost.Instance.ShowModalAsync(dlg, fView);
+                using (var dlg = AppHost.ResolveDialog<ILocExpertDlg>(fBase, eventDates, placeName)) {
+                    await AppHost.Instance.ShowModalAsync(dlg, fView);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("PlacesManagerController.ShowLocExpert()", ex);
             }
         }
 
@@ -136,28 +141,32 @@ namespace GKCore.Controllers
 
         public async void CreateLocationRecord(IList<object> placesList)
         {
-            PlaceObj pObj = placesList.Count > 0 ? (PlaceObj) placesList[0] : null;
-            if (pObj == null) return;
+            try {
+                PlaceObj pObj = placesList.Count > 0 ? (PlaceObj)placesList[0] : null;
+                if (pObj == null) return;
 
-            // for cases [*] and [**]
-            if (pObj.Name.Contains("*]")) {
-                AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.PlaceAlreadyInBook));
-            } else {
-                GDMLocationRecord locRec = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
-                if (locRec == null) return;
+                // for cases [*] and [**]
+                if (pObj.Name.Contains("*]")) {
+                    AppHost.StdDialogs.ShowMessage(LangMan.LS(LSID.PlaceAlreadyInBook));
+                } else {
+                    GDMLocationRecord locRec = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtLocation, new object[] { pObj.Name }) as GDMLocationRecord;
+                    if (locRec == null) return;
 
-                for (var pi = 0; pi < placesList.Count; pi++) {
-                    PlaceObj place = (PlaceObj) placesList[pi];
-                    int num = place.Facts.Count;
-                    for (int i = 0; i < num; i++) {
-                        GDMCustomEvent evt = place.Facts[i];
-                        evt.Place.StringValue = GKUtils.GetLocationNameExt(locRec, evt.Date.Value);
-                        evt.Place.Location.XRef = locRec.XRef;
+                    for (var pi = 0; pi < placesList.Count; pi++) {
+                        PlaceObj place = (PlaceObj)placesList[pi];
+                        int num = place.Facts.Count;
+                        for (int i = 0; i < num; i++) {
+                            GDMCustomEvent evt = place.Facts[i];
+                            evt.Place.StringValue = GKUtils.GetLocationNameExt(locRec, evt.Date.Value);
+                            evt.Place.Location.XRef = locRec.XRef;
+                        }
                     }
-                }
 
-                CheckPlaces();
-                fBase.RefreshLists(false);
+                    CheckPlaces();
+                    fBase.RefreshLists(false);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("PlacesManagerController.CreateLocationRecord()", ex);
             }
         }
 

@@ -30,6 +30,12 @@ namespace GKCore.Lists
             DataSource = fItems;
         }
 
+        public override object GetContentItem(int itemIndex)
+        {
+            object result = (itemIndex < 0 || itemIndex >= fItems.Count) ? null : fItems[itemIndex].Tag;
+            return result;
+        }
+
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
         {
             object[] values = fFetchedRec.Values;
