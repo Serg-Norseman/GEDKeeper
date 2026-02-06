@@ -8,13 +8,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
 using GDModel;
 using GKCore;
-using GKCore.Locales;
-using GKCore.Options;
 using GKUI.Platform;
 using Sharprompt;
 
@@ -24,7 +20,7 @@ internal class CommandController
 {
     #region Common
 
-    private readonly Dictionary<string, CommandData> fCommands = new Dictionary<string, CommandData>();
+    private readonly Dictionary<string, BaseCommand> fCommands = new Dictionary<string, BaseCommand>();
 
     private static CommandController fInstance;
 
@@ -40,400 +36,103 @@ internal class CommandController
 
     private CommandController()
     {
-        RegisterCommands(this);
-    }
+        // Files operations
+        RegisterCommand(new FileMenuCommand());
+        RegisterCommand(new FileNewCommand());
+        RegisterCommand(new FileLoadCommand());
+        RegisterCommand(new FileLoadRecentCommand());
+        RegisterCommand(new FileSaveCommand());
+        RegisterCommand(new FileSaveAsCommand());
+        RegisterCommand(new FilePropsCommand());
 
-    private void RegisterCommand(string sign, CommandCategory category, CommandFunc func)
-    {
-        var cmd = new CommandData(sign, category, func);
-        fCommands.Add(sign, cmd);
+        // Individuals operations
+        RegisterCommand(new IndiMenuCommand());
+        RegisterCommand(new IndiListCommand());
+        RegisterCommand(new IndiAddCommand());
+
+        // Families operations
+        RegisterCommand(new FamMenuCommand());
+        RegisterCommand(new FamListCommand());
+
+        // Notes operations
+        RegisterCommand(new NoteMenuCommand());
+        RegisterCommand(new NoteListCommand());
+        RegisterCommand(new NoteAddCommand());
+
+        // Multimedia operations
+        RegisterCommand(new MediaMenuCommand());
+        RegisterCommand(new MediaListCommand());
+
+        // Sources operations
+        RegisterCommand(new SourceMenuCommand());
+        RegisterCommand(new SourceListCommand());
+
+        // Repositories operations
+        RegisterCommand(new RepositoryMenuCommand());
+        RegisterCommand(new RepositoryListCommand());
+
+        // Service
+        RegisterCommand(new ServiceMenuCommand());
+        RegisterCommand(new ToolsMenuCommand());
+        RegisterCommand(new OptionsCommand());
+        RegisterCommand(new LangChangeCommand());
+
+        // Tools
+        RegisterCommand(new TreeCompareCommand());
+        RegisterCommand(new TreeMergeCommand());
+        RegisterCommand(new TreeSplitCommand());
+        RegisterCommand(new RecMergeCommand());
+        RegisterCommand(new FamilyGroupsCommand());
+        RegisterCommand(new TreeCheckCommand());
+        RegisterCommand(new PatSearchCommand());
+        RegisterCommand(new PlacesManagerCommand());
+
+        // Application and menu
+        RegisterCommand(new MenuReturnCommand());
+        RegisterCommand(new AppExitCommand());
     }
 
     private void RegisterCommand(BaseCommand commandInstance)
     {
-        var cmd = new CommandData(commandInstance);
-        fCommands.Add(commandInstance.Sign, cmd);
+        fCommands.Add(commandInstance.Sign, commandInstance);
     }
 
     public void ExecuteCommand(string sign, BaseContext baseContext, object obj)
     {
-        if (fCommands.TryGetValue(sign, out CommandData data)) {
-            data.Func(baseContext, obj);
+        if (fCommands.TryGetValue(sign, out BaseCommand cmd)) {
+            cmd.Execute(baseContext, obj);
         }
     }
 
-    public IList<string> GetCommands(CommandCategory category, bool hasReturn = false)
+    public IList<BaseCommand> GetCommands(CommandCategory category, bool hasReturn = false)
     {
-        var result = fCommands.Values.Where(c => c.Category == category).Select(c => c.Sign).ToList();
+        var result = fCommands.Values.Where(c => c.Category == category).ToList();
 
         if (hasReturn)
-            result.Add(CMD_RETURN);
+            result.Add(new MenuReturnCommand());
 
         return result;
     }
 
-    private static void RegisterCommands(CommandController controller)
-    {
-        controller.RegisterCommand(CMD_FILE_CAT, CommandCategory.Application, FileMenu);
-        controller.RegisterCommand(CMD_FILE_NEW, CommandCategory.File, FileNew);
-        controller.RegisterCommand(CMD_FILE_LOAD, CommandCategory.File, FileLoad);
-        controller.RegisterCommand(CMD_FILE_LOAD_RECENT, CommandCategory.File, FileLoadRecent);
-        controller.RegisterCommand(CMD_FILE_SAVE, CommandCategory.File, FileSave);
-        controller.RegisterCommand(CMD_FILE_SAVE_AS, CommandCategory.File, FileSaveAs);
-        controller.RegisterCommand(CMD_FILE_PROPS, CommandCategory.File, FileProps);
-
-        controller.RegisterCommand(CMD_INDI_CAT, CommandCategory.Application, IndiMenu);
-        controller.RegisterCommand(CMD_INDI_LIST, CommandCategory.Individual, IndiList);
-        controller.RegisterCommand(CMD_INDI_ADD, CommandCategory.Individual, IndiAdd);
-
-        controller.RegisterCommand(CMD_FAM_CAT, CommandCategory.Application, FamMenu);
-        controller.RegisterCommand(CMD_FAM_LIST, CommandCategory.Family, FamList);
-
-        controller.RegisterCommand(CMD_NOTE_CAT, CommandCategory.Application, NoteMenu);
-        controller.RegisterCommand(CMD_NOTE_LIST, CommandCategory.Note, NoteList);
-        controller.RegisterCommand(CMD_NOTE_ADD, CommandCategory.Note, NoteAdd);
-
-        controller.RegisterCommand(CMD_MEDIA_CAT, CommandCategory.Application, MediaMenu);
-        controller.RegisterCommand(CMD_MEDIA_LIST, CommandCategory.Multimedia, MediaList);
-
-        controller.RegisterCommand(CMD_SOURCE_CAT, CommandCategory.Application, SourceMenu);
-        controller.RegisterCommand(CMD_SOURCE_LIST, CommandCategory.Source, SourceList);
-
-        // Repository operations
-        controller.RegisterCommand(new RepositoryMenuCommand());
-        controller.RegisterCommand(new RepositoryListCommand());
-
-        controller.RegisterCommand(CMD_SVC_CAT, CommandCategory.Application, ServiceMenu);
-        controller.RegisterCommand(CMD_SVC_TOOLS, CommandCategory.Service, ToolsMenu);
-        controller.RegisterCommand(CMD_SVC_OPTIONS, CommandCategory.Service, Options);
-        controller.RegisterCommand(CMD_SVC_LANG, CommandCategory.Service, LangChange);
-
-        controller.RegisterCommand(new TreeCompareCommand());
-        controller.RegisterCommand(CMD_TREE_MERGE, CommandCategory.Tools, TreeMerge);
-        controller.RegisterCommand(CMD_TREE_SPLIT, CommandCategory.Tools, TreeSplit);
-        controller.RegisterCommand(CMD_REC_MERGE, CommandCategory.Tools, RecMerge);
-        controller.RegisterCommand(CMD_FAMILY_GROUPS, CommandCategory.Tools, FamilyGroups);
-        controller.RegisterCommand(CMD_TREE_CHECK, CommandCategory.Tools, TreeCheck);
-        controller.RegisterCommand(CMD_PAT_SEARCH, CommandCategory.Tools, PatSearch);
-        controller.RegisterCommand(CMD_PLACES_MANAGER, CommandCategory.Tools, PlacesManager);
-
-        controller.RegisterCommand(CMD_EXIT, CommandCategory.Application, AppExit);
-    }
-
-    #endregion
-
-    #region Application operations
-
     public const string CMD_RETURN = "return";
-
     public const string CMD_EXIT = "exit";
-    public static void AppExit(BaseContext baseContext, object obj)
+
+    public string SelectCommand(CommandCategory category, bool hasReturn, string message, BaseContext baseContext)
     {
-        if (baseContext.Modified) {
-            WriteLine("The file has been modified.");
-        }
-    }
+        var cmdList = GetCommands(category, hasReturn);
 
-    #endregion
+        var selected = Prompt.Select(message, cmdList,
+            textSelector: (BaseCommand cmd) => { return cmd.Text; });
 
-    #region Service operations
-
-    public const string CMD_SVC_CAT = "service";
-    public static void ServiceMenu(BaseContext baseContext, object obj)
-    {
-        var cmdList = CommandController.Instance.GetCommands(CommandCategory.Service, true);
-        var selected = Prompt.Select($"Select a service operation", cmdList);
-        if (selected != CMD_RETURN)
-            CommandController.Instance.ExecuteCommand(selected, baseContext, obj);
-    }
-
-    public const string CMD_SVC_LANG = "language";
-    public static void LangChange(BaseContext baseContext, object obj)
-    {
-        var langs = AppHost.Options.Languages;
-        if (langs.Count > 0) {
-            var selectedLang = Prompt.Select("Select a language", langs, pageSize: 10,
-                textSelector: (LangRecord r) => { return r.Name; });
-
-            WriteLine(string.Format("Selected: {0}", selectedLang.FileName));
-            AppHost.Instance.LoadLanguage(selectedLang.Code, false);
-        }
-    }
-
-    public const string CMD_SVC_TOOLS = "tools";
-    public static void ToolsMenu(BaseContext baseContext, object obj)
-    {
-        var cmdList = CommandController.Instance.GetCommands(CommandCategory.Tools, true);
-        var selected = Prompt.Select($"Select a tool", cmdList);
-        if (selected != CMD_RETURN)
-            CommandController.Instance.ExecuteCommand(selected, baseContext, obj);
-    }
-
-    public const string CMD_SVC_OPTIONS = "options";
-    public static void Options(BaseContext baseContext, object obj)
-    {
-    }
-
-    #endregion
-
-    #region Tree operations
-
-    public const string CMD_TREE_MERGE = "tree merge";
-    public static void TreeMerge(BaseContext baseContext, object obj)
-    {
-    }
-
-    public const string CMD_TREE_SPLIT = "tree split";
-    public static void TreeSplit(BaseContext baseContext, object obj)
-    {
-    }
-
-    public const string CMD_REC_MERGE = "record merge";
-    public static void RecMerge(BaseContext baseContext, object obj)
-    {
-    }
-
-    public const string CMD_FAMILY_GROUPS = "family groups";
-    public static void FamilyGroups(BaseContext baseContext, object obj)
-    {
-    }
-
-    public const string CMD_TREE_CHECK = "tree check";
-    public static void TreeCheck(BaseContext baseContext, object obj)
-    {
-    }
-
-    public const string CMD_PAT_SEARCH = "patriarch search";
-    public static void PatSearch(BaseContext baseContext, object obj)
-    {
-    }
-
-    public const string CMD_PLACES_MANAGER = "places manager";
-    public static void PlacesManager(BaseContext baseContext, object obj)
-    {
-    }
-
-    #endregion
-
-    #region File operations
-
-    public const string CMD_FILE_CAT = "gedcom files";
-    public static void FileMenu(BaseContext baseContext, object obj)
-    {
-        var cmdList = CommandController.Instance.GetCommands(CommandCategory.File, true);
-        var selected = Prompt.Select($"Select a file operation", cmdList);
-        if (selected != CMD_RETURN)
-            CommandController.Instance.ExecuteCommand(selected, baseContext, obj);
-    }
-
-    public const string CMD_FILE_NEW = "new gedcom";
-    public static void FileNew(BaseContext baseContext, object obj)
-    {
-        baseContext.Clear();
-        WriteLine("Database created. Records: {0}.", baseContext.Tree.RecordsCount);
-    }
-
-    public const string CMD_FILE_LOAD = "load gedcom";
-    public static void FileLoad(BaseContext baseContext, object obj)
-    {
-        string selectedFile = PromptHelper.SelectFile(GKUtils.GetAppPath(), ".ged");
-        LoadFile(baseContext, selectedFile);
-    }
-
-    public const string CMD_FILE_LOAD_RECENT = "recent gedcom";
-    public static void FileLoadRecent(BaseContext baseContext, object obj)
-    {
-        var files = AppHost.Options.MRUFiles.Select(f => f.FileName).ToList();
-        if (files.Count > 0) {
-            var selectedFile = Prompt.Select("Select a recent file", files, pageSize: 10);
-            LoadFile(baseContext, selectedFile);
+        if (selected != null && selected.Sign != CommandController.CMD_RETURN) {
+            ExecuteCommand(selected.Sign, baseContext, null);
+            return selected.Sign;
         } else {
-            WriteLine("No recent files.");
-        }
-    }
-
-    public const string CMD_FILE_SAVE = "save gedcom";
-    public static void FileSave(BaseContext baseContext, object obj)
-    {
-        //string selectedFile = PromptHelper.SelectFile(GKUtils.GetAppPath(), ".ged");
-        //LoadFile(baseContext, selectedFile);
-
-        WriteLine("Not implemented.");
-    }
-
-    public const string CMD_FILE_SAVE_AS = "save as gedcom";
-    public static void FileSaveAs(BaseContext baseContext, object obj)
-    {
-        string selectedFolder = PromptHelper.SelectFolder(GKUtils.GetAppPath());
-        var fileName = Prompt.Input<string>("Enter a new file name (.ged)");
-        SaveFile(baseContext, Path.Combine(selectedFolder, fileName, ".ged"));
-    }
-
-    /// <summary>
-    /// See <see cref="GKCore.Controllers.FilePropertiesDlgController"/>.
-    /// </summary>
-    public const string CMD_FILE_PROPS = "properties of gedcom";
-    public static void FileProps(BaseContext baseContext, object obj)
-    {
-        WriteLine("File properties");
-
-        GDMSubmitterRecord submitter = baseContext.Tree.GetSubmitter();
-        WriteLine(1, "{0}: [yellow]{1}[/]", LangMan.LS(LSID.Author), submitter.Name);
-        WriteLine(1, "{0}: [yellow]{1}[/]", LangMan.LS(LSID.Address), submitter.Address.Lines.Text);
-        if (submitter.Address.PhoneNumbers.Count > 0) {
-            WriteLine(1, "{0}: [yellow]{1}[/]", LangMan.LS(LSID.Telephone), submitter.Address.PhoneNumbers[0].StringValue);
-        }
-
-        WriteLine();
-        WriteLine(1, LangMan.LS(LSID.MIFileProperties));
-        int[] stats = baseContext.Tree.GetRecordStats();
-        for (int i = 1; i < stats.Length; i++) {
-            WriteLine(2, "{0}: [yellow]{1}[/]", LangMan.LS(GKData.RecordTypes[i].Name), stats[i]);
+            return string.Empty;
         }
     }
 
     #endregion
-
-    #region Individual operations
-
-    public const string CMD_INDI_CAT = "individuals";
-    public static void IndiMenu(BaseContext baseContext, object obj)
-    {
-        var cmdList = CommandController.Instance.GetCommands(CommandCategory.Individual, true);
-        var selected = Prompt.Select($"Select a individual operation", cmdList);
-        if (selected != CMD_RETURN)
-            CommandController.Instance.ExecuteCommand(selected, baseContext, obj);
-    }
-
-    public const string CMD_INDI_LIST = "list individuals";
-    public static void IndiList(BaseContext baseContext, object obj)
-    {
-        var selected = SelectRecord(baseContext, GDMRecordType.rtIndividual, "Select a individual", "Individual: {0}", "No records.");
-        if (selected != null)
-            IndiChange(selected as GDMIndividualRecord);
-    }
-
-    public const string CMD_INDI_ADD = "add individual";
-    public static void IndiAdd(BaseContext baseContext, object obj)
-    {
-        var name = Prompt.Input<string>("Enter the individual's name [first_name /last_name/]");
-        var sex = Prompt.Input<char>("Enter the individual's sex [m/f]", validators: [Validators.Required(), SexVal()]);
-        var indiRec = baseContext.Tree.CreateIndividual();
-        var persName = indiRec.AddPersonalName(new GDMPersonalName());
-        persName.ParseString(name);
-        indiRec.Sex = (sex == 'm') ? GDMSex.svMale : GDMSex.svFemale;
-        WriteLine("Individual: {0}", GKUtils.GetNameString(indiRec, false));
-
-        IndiChange(indiRec);
-    }
-
-    private static void IndiChange(GDMIndividualRecord iRec)
-    {
-        // defaultValue
-        var continueFlag = Prompt.Input<bool>("Continue editing? [true/false]");
-        if (!continueFlag) return;
-
-        var newEvent = new GDMIndividualEvent();
-        CommandForms.InputEvent(newEvent);
-    }
-
-    private static Func<object, ValidationResult> SexVal(string errorMessage = null)
-    {
-        return delegate (object input) {
-            if (!(input is char sym)) {
-                return ValidationResult.Success;
-            }
-
-            sym = char.ToLowerInvariant(sym);
-            return (sym == 'm' || sym == 'f') ? ValidationResult.Success : new ValidationResult(errorMessage ?? "");
-        };
-    }
-
-    #endregion
-
-    #region Family operations
-
-    public const string CMD_FAM_CAT = "families";
-    public static void FamMenu(BaseContext baseContext, object obj)
-    {
-        var cmdList = CommandController.Instance.GetCommands(CommandCategory.Family, true);
-        var selected = Prompt.Select($"Select a family operation", cmdList);
-        if (selected != CMD_RETURN)
-            CommandController.Instance.ExecuteCommand(selected, baseContext, obj);
-    }
-
-    public const string CMD_FAM_LIST = "list families";
-    public static void FamList(BaseContext baseContext, object obj)
-    {
-        var selected = SelectRecord(baseContext, GDMRecordType.rtFamily, "Select a family", "Family: {0}", "No records.");
-    }
-
-    #endregion
-
-    #region Note operations
-
-    public const string CMD_NOTE_CAT = "notes";
-    public static void NoteMenu(BaseContext baseContext, object obj)
-    {
-        var cmdList = CommandController.Instance.GetCommands(CommandCategory.Note, true);
-        var selected = Prompt.Select($"Select a note operation", cmdList);
-        if (selected != CMD_RETURN)
-            CommandController.Instance.ExecuteCommand(selected, baseContext, obj);
-    }
-
-    public const string CMD_NOTE_LIST = "list notes";
-    public static void NoteList(BaseContext baseContext, object obj)
-    {
-        var selected = SelectRecord(baseContext, GDMRecordType.rtNote, "Select a note", "Note: {0}", "No records.");
-    }
-
-    public const string CMD_NOTE_ADD = "add note";
-    public static void NoteAdd(BaseContext baseContext, object obj)
-    {
-        var text = Prompt.Input<string>("Enter the note's text");
-        WriteLine("Note: {0}", text);
-    }
-
-    #endregion
-
-    #region Multimedia operations
-
-    public const string CMD_MEDIA_CAT = "media";
-    public static void MediaMenu(BaseContext baseContext, object obj)
-    {
-        var cmdList = CommandController.Instance.GetCommands(CommandCategory.Multimedia, true);
-        var selected = Prompt.Select($"Select a multimedia operation", cmdList);
-        if (selected != CMD_RETURN)
-            CommandController.Instance.ExecuteCommand(selected, baseContext, obj);
-    }
-
-    public const string CMD_MEDIA_LIST = "list multimedia";
-    public static void MediaList(BaseContext baseContext, object obj)
-    {
-        var selected = SelectRecord(baseContext, GDMRecordType.rtMultimedia, "Select a multimedia", "Multimedia: {0}", "No records.");
-    }
-
-    #endregion
-
-    #region Source operations
-
-    public const string CMD_SOURCE_CAT = "source";
-    public static void SourceMenu(BaseContext baseContext, object obj)
-    {
-        var cmdList = CommandController.Instance.GetCommands(CommandCategory.Source, true);
-        var selected = Prompt.Select($"Select a source operation", cmdList);
-        if (selected != CMD_RETURN)
-            CommandController.Instance.ExecuteCommand(selected, baseContext, obj);
-    }
-
-    public const string CMD_SOURCE_LIST = "list sources";
-    public static void SourceList(BaseContext baseContext, object obj)
-    {
-        var selected = SelectRecord(baseContext, GDMRecordType.rtSource, "Select a source", "Source: {0}", "No records.");
-    }
-
-    #endregion
-
 
     #region Utilities
 

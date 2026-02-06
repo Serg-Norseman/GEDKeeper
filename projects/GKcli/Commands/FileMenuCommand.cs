@@ -6,20 +6,19 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GDModel;
 using GKCore;
 using GKCore.Locales;
 
 namespace GKUI.Commands;
 
-internal class RepositoryListCommand : BaseCommand
+internal class FileMenuCommand : BaseCommand
 {
-    public RepositoryListCommand() : base("list_repositories", LangMan.LS(LSID.Find), CommandCategory.Repository)
+    public FileMenuCommand() : base("gedcom_files", LangMan.LS(LSID.MIFile), CommandCategory.Application)
     {
     }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        var selected = CommandController.SelectRecord(baseContext, GDMRecordType.rtRepository, "Select a repository", "Repository: {0}", "No records.");
+        CommandController.Instance.SelectCommand(CommandCategory.File, true, "Select a file operation", baseContext);
     }
 }

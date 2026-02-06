@@ -6,20 +6,21 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GDModel;
 using GKCore;
 using GKCore.Locales;
+using Sharprompt;
 
 namespace GKUI.Commands;
 
-internal class RepositoryListCommand : BaseCommand
+internal class NoteAddCommand : BaseCommand
 {
-    public RepositoryListCommand() : base("list_repositories", LangMan.LS(LSID.Find), CommandCategory.Repository)
+    public NoteAddCommand() : base("add_note", LangMan.LS(LSID.MIRecordAdd), CommandCategory.Note)
     {
     }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        var selected = CommandController.SelectRecord(baseContext, GDMRecordType.rtRepository, "Select a repository", "Repository: {0}", "No records.");
+        var text = Prompt.Input<string>("Enter the note's text");
+        CommandController.WriteLine("Note: {0}", text);
     }
 }

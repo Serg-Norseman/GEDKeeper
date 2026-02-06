@@ -8,21 +8,17 @@
 
 using GKCore;
 using GKCore.Locales;
-using Sharprompt;
 
 namespace GKUI.Commands;
 
 internal class RepositoryMenuCommand : BaseCommand
 {
-    public RepositoryMenuCommand() : base("repository", LSID.RPRepositories, CommandCategory.Application)
+    public RepositoryMenuCommand() : base("repositories", LangMan.LS(LSID.RPRepositories), CommandCategory.Application)
     {
     }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        var cmdList = CommandController.Instance.GetCommands(CommandCategory.Repository, true);
-        var selected = Prompt.Select($"Select a repository operation", cmdList);
-        if (selected != "return")
-            CommandController.Instance.ExecuteCommand(selected, baseContext, obj);
+        CommandController.Instance.SelectCommand(CommandCategory.Repository, true, "Select a repository operation", baseContext);
     }
 }

@@ -7,7 +7,6 @@
  */
 
 using GKCore;
-using GKCore.Locales;
 
 namespace GKUI.Commands;
 
@@ -17,8 +16,8 @@ namespace GKUI.Commands;
 internal abstract class BaseCommand
 {
     private CommandCategory fCategory;
-    private LSID fLocalizedID;
     private string fSign;
+    private string fText;
 
     /// <summary>
     /// Gets the category of the command.
@@ -26,14 +25,6 @@ internal abstract class BaseCommand
     public CommandCategory Category
     {
         get { return fCategory; }
-    }
-
-    /// <summary>
-    /// Gets the localized identifier (LSID) of the command.
-    /// </summary>
-    public LSID LocalizedID
-    {
-        get { return fLocalizedID; }
     }
 
     /// <summary>
@@ -45,15 +36,23 @@ internal abstract class BaseCommand
     }
 
     /// <summary>
+    /// Gets the localized identifier (LSID) of the command.
+    /// </summary>
+    public string Text
+    {
+        get { return fText; }
+    }
+
+    /// <summary>
     /// Constructor for the command.
     /// </summary>
     /// <param name="sign">Internal identifier of the command.</param>
     /// <param name="localizedID">Localized identifier (LSID) of the command.</param>
     /// <param name="category">Category of the command.</param>
-    protected BaseCommand(string sign, LSID localizedID, CommandCategory category)
+    protected BaseCommand(string sign, string text, CommandCategory category)
     {
         fSign = sign;
-        fLocalizedID = localizedID;
+        fText = text;
         fCategory = category;
     }
 

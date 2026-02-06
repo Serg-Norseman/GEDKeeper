@@ -6,20 +6,22 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GDModel;
 using GKCore;
 using GKCore.Locales;
 
 namespace GKUI.Commands;
 
-internal class RepositoryListCommand : BaseCommand
+internal class FileSaveCommand : BaseCommand
 {
-    public RepositoryListCommand() : base("list_repositories", LangMan.LS(LSID.Find), CommandCategory.Repository)
+    public FileSaveCommand() : base("save_gedcom", LangMan.LS(LSID.MIFileSave), CommandCategory.File)
     {
     }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        var selected = CommandController.SelectRecord(baseContext, GDMRecordType.rtRepository, "Select a repository", "Repository: {0}", "No records.");
+        //string selectedFile = PromptHelper.SelectFile(GKUtils.GetAppPath(), ".ged");
+        //CommandController.LoadFile(baseContext, selectedFile);
+
+        CommandController.WriteLine("Not implemented.");
     }
 }

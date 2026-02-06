@@ -13,7 +13,7 @@ namespace GKUI.Commands;
 
 internal class TreeCompareCommand : BaseCommand
 {
-    public TreeCompareCommand() : base("tree_compare", LSID.TreeCompare, CommandCategory.Tools)
+    public TreeCompareCommand() : base("tree_compare", LangMan.LS(LSID.TreeCompare), CommandCategory.Tools)
     {
     }
 

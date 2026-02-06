@@ -6,20 +6,18 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GDModel;
 using GKCore;
 using GKCore.Locales;
 
 namespace GKUI.Commands;
 
-internal class RepositoryListCommand : BaseCommand
+internal class OptionsCommand : BaseCommand
 {
-    public RepositoryListCommand() : base("list_repositories", LangMan.LS(LSID.Find), CommandCategory.Repository)
+    public OptionsCommand() : base("options", LangMan.LS(LSID.MIOptions), CommandCategory.Service)
     {
     }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        var selected = CommandController.SelectRecord(baseContext, GDMRecordType.rtRepository, "Select a repository", "Repository: {0}", "No records.");
     }
 }

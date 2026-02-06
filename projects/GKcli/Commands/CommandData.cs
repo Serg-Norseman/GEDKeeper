@@ -6,14 +6,12 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GKCore;
-
 namespace GKUI.Commands;
-
-internal delegate void CommandFunc(BaseContext baseContext, object obj);
 
 internal enum CommandCategory
 {
+    None,
+
     Application,
     File,
     Service,
@@ -26,27 +24,4 @@ internal enum CommandCategory
     Multimedia,
     Source,
     Repository
-}
-
-internal class CommandData
-{
-    public string Sign { get; private set; }
-    public CommandCategory Category { get; private set; }
-    public CommandFunc Func { get; private set; }
-    public BaseCommand Instance { get; private set; }
-
-    public CommandData(string sign, CommandCategory category, CommandFunc func)
-    {
-        Sign = sign;
-        Category = category;
-        Func = func;
-    }
-
-    public CommandData(BaseCommand commandInstance)
-    {
-        Instance = commandInstance;
-        Sign = commandInstance.Sign;
-        Category = commandInstance.Category;
-        Func = (ctx, obj) => commandInstance.Execute(ctx, obj);
-    }
 }

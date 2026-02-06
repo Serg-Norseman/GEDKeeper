@@ -10,7 +10,6 @@ using System;
 using GKCore;
 using GKUI.Commands;
 using GKUI.Platform;
-using Sharprompt;
 
 namespace GKcli;
 
@@ -32,11 +31,7 @@ internal class Program
 
             while (true) {
                 Console.WriteLine();
-
-                var cmdList = CommandController.Instance.GetCommands(CommandCategory.Application);
-                var selected = Prompt.Select($"Select a command", cmdList);
-                CommandController.Instance.ExecuteCommand(selected, baseContext, null);
-
+                var selected = CommandController.Instance.SelectCommand(CommandCategory.Application, false, "Select a command", baseContext);
                 if (selected == CommandController.CMD_EXIT) break;
             }
         } finally {
