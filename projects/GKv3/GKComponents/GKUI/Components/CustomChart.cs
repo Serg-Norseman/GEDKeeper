@@ -13,7 +13,6 @@ using Eto.Forms;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
-using GKCore.Export;
 using GKCore.Export.Formats;
 using GKCore.Locales;
 using GKUI.Platform.Handlers;
@@ -32,7 +31,7 @@ namespace GKUI.Components
 
         public event EventHandler NavRefresh;
 
-        public new virtual float Scale
+        public virtual float Scale
         {
             get { return 0; }
         }

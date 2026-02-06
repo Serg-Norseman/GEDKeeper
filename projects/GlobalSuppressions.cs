@@ -23,9 +23,11 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Style", "IDE0090:'new' expression can be simplified")]
 [assembly: SuppressMessage("Style", "IDE0251:Member can be made 'readonly'")]
 [assembly: SuppressMessage("Style", "IDE0290")]
+[assembly: SuppressMessage("Style", "IDE0300")]
 [assembly: SuppressMessage("Style", "IDE0180:Use tuple to swap values")]
 [assembly: SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming rule violation")]
 
 [assembly: SuppressMessage("Style", "CA1510")]
 [assembly: SuppressMessage("Style", "CA1825:Avoid unnecessary zero-length array allocations.")]
+[assembly: SuppressMessage("Style", "CA1861")]

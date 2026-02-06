@@ -21,8 +21,8 @@ using GKCore.Design.Graphics;
 using GKCore.Locales;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
-using it = iTextSharp.text;
 using itCell = iTextSharp.text.pdf.PdfPCell;
+using itDraw = iTextSharp.text.pdf.draw;
 using itFont = iTextSharp.text.Font;
 using itImage = iTextSharp.text.Image;
 using itRectangle = iTextSharp.text.Rectangle;
@@ -40,7 +40,7 @@ namespace GKCore.Export.Formats
     {
         internal sealed class FontHandler : TypeHandler<itFont>, IFont
         {
-            private float fHeight;
+            private readonly float fHeight;
 
             public BaseFont BaseFont
             {
@@ -90,9 +90,9 @@ namespace GKCore.Export.Formats
         private Document fDocument;
         private bool fMulticolumns;
         private PdfWriter fPdfWriter;
-        private PDFPageSize fPredefPage;
+        private readonly PDFPageSize fPredefPage;
         private itTable fTable;
-        private Stack<ITextElementArray> fStack;
+        private readonly Stack<ITextElementArray> fStack;
 
         public PDFWriter()
         {
@@ -364,7 +364,7 @@ namespace GKCore.Export.Formats
 #else
             color = BaseColor.Black;
 #endif
-            var line1 = new it.pdf.draw.LineSeparator(0.0f, 100.0f, color, Element.ALIGN_LEFT, 1);
+            var line1 = new itDraw.LineSeparator(0.0f, 100.0f, color, Element.ALIGN_LEFT, 1);
             fDocument.Add(new Chunk(line1));
         }
 

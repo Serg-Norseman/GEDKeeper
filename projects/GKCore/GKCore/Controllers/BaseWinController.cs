@@ -459,7 +459,7 @@ namespace GKCore.Controllers
         {
             if (hyperView == null) return;
 
-            var text = Regex.Replace(hyperView.Lines.Text, @"\[.*?\]", string.Empty);
+            var text = Regex.Replace(hyperView.Lines.Text, @"\[.*?\]", string.Empty, RegexOptions.Compiled);
             AppHost.Instance.SetClipboardText(text);
         }
 
@@ -539,7 +539,7 @@ namespace GKCore.Controllers
                 fView.EnableSplitterEvent(splitterHandler, false);
                 splitterHandler.Position = splitterPos;
                 fView.EnableSplitterEvent(splitterHandler, true);
-            } catch (Exception ex) {
+            } catch (Exception) {
                 Logger.WriteError(string.Format("BaseWinController.SetSplitterPos(): Field `{0}` not found", splName));
             }
         }
