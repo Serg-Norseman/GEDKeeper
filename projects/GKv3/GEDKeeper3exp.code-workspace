@@ -1,0 +1,26 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../GKCore"
+		},
+		{
+			"path": "../GKMap/GKMap.Core"
+		},
+		{
+			"path": "../GKMap/GKMap.EtoForms"
+		},
+		{
+			"path": "../GKTests"
+		},
+		{
+			"path": "../GKGenetix/GKGenetix.Core"
+		},
+		{
+			"path": "../GKGenetix/GKGenetix.UI.EtoForms"
+		}
+	],
+	"settings": {}
+}

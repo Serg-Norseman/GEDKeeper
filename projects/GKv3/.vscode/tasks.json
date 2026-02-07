@@ -1,0 +1,12 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": ["build", "${workspaceFolder}/GEDKeeper3exp.sln", "/p:Configuration=Release", "/p:Platform=MSWin64"],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "GEDKeeper3",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/../../bin/GEDKeeper3.exe",
+            "console": "integratedTerminal",
+        }
+    ]
+}
