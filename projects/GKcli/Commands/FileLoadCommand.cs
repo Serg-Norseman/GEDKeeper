@@ -10,7 +10,7 @@ using GKCore;
 using GKCore.Locales;
 using GKUI.Platform;
 
-namespace GKUI.Commands;
+namespace GKcli.Commands;
 
 internal class FileLoadCommand : BaseCommand
 {

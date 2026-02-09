@@ -12,7 +12,7 @@ using GKCore.Locales;
 using GKUI.Platform;
 using Sharprompt;
 
-namespace GKUI.Commands;
+namespace GKcli.Commands;
 
 internal class FileSaveAsCommand : BaseCommand
 {

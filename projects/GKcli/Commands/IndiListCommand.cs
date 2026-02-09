@@ -9,9 +9,8 @@
 using GDModel;
 using GKCore;
 using GKCore.Locales;
-using Sharprompt;
 
-namespace GKUI.Commands;
+namespace GKcli.Commands;
 
 internal class IndiListCommand : BaseCommand
 {
@@ -22,17 +21,11 @@ internal class IndiListCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
         var selected = CommandController.SelectRecord(baseContext, GDMRecordType.rtIndividual, "Select a individual", "Individual: {0}", "No records.");
-        if (selected != null)
-            IndiChange(selected as GDMIndividualRecord);
-    }
+        if (selected != null) {
+            var newEvent = new GDMIndividualEvent();
+            CommandController.SetVariable("selectedObj", newEvent);
 
-    private static void IndiChange(GDMIndividualRecord iRec)
-    {
-        // defaultValue
-        var continueFlag = Prompt.Input<bool>("Continue editing? [true/false]");
-        if (!continueFlag) return;
-
-        var newEvent = new GDMIndividualEvent();
-        CommandForms.InputEvent(newEvent);
+            CommandController.Instance.SelectCommand(CommandCategory.Events, true, "Select an event operation", baseContext);
+        }
     }
 }

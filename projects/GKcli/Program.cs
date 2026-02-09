@@ -8,7 +8,6 @@
 
 using System;
 using GKCore;
-using GKUI.Commands;
 using GKUI.Platform;
 
 namespace GKcli;

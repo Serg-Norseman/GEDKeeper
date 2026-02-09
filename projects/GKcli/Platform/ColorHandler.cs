@@ -8,7 +8,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using BSLib;
 using GKCore.Design.Graphics;

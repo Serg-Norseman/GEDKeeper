@@ -10,7 +10,7 @@ using GDModel;
 using GKCore;
 using GKCore.Locales;
 
-namespace GKUI.Commands;
+namespace GKcli.Commands;
 
 internal class RepositoryListCommand : BaseCommand
 {

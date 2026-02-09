@@ -124,21 +124,7 @@ namespace GKCore.Controllers
 
         private void SetEventTypes(EventTarget target)
         {
-            var freqList = new List<FreqItem<EventDef>>();
-            var eventStats = fBase.Context.EventStats;
-
-            var eventDefs = AppHost.EventDefinitions.List;
-            for (int i = 0; i < eventDefs.Count; i++) {
-                var evDef = eventDefs[i];
-
-                if ((evDef.Target == target || evDef.Target == EventTarget.etAny) && evDef.Enabled) {
-                    string key = evDef.Tag + ":" + evDef.Type;
-                    int stat = eventStats.GetValue(key);
-
-                    freqList.Add(new FreqItem<EventDef>(evDef, evDef.DisplayName, stat));
-                }
-            }
-
+            var freqList = BaseController.GetFrequencyEventTypes(fBase.Context, target);
             FreqCollection<string>.PopulateCombo(fView.EventType, freqList, null);
         }
 

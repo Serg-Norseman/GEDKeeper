@@ -31,3 +31,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Style", "CA1510")]
 [assembly: SuppressMessage("Style", "CA1825:Avoid unnecessary zero-length array allocations.")]
 [assembly: SuppressMessage("Style", "CA1861")]
+[assembly: SuppressMessage("Style", "IDE0130")]

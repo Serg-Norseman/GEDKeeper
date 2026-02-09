@@ -11,7 +11,7 @@ using GKCore.Locales;
 using GKCore.Options;
 using Sharprompt;
 
-namespace GKUI.Commands;
+namespace GKcli.Commands;
 
 internal class LangChangeCommand : BaseCommand
 {

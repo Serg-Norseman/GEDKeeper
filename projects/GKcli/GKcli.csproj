@@ -31,4 +31,10 @@
         <PackageReference Include="Sharprompt" Version="3.0.1" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Compile Include="..\GlobalSuppressions.cs">
+            <Link>GlobalSuppressions.cs</Link>
+        </Compile>
+    </ItemGroup>
+
 </Project>

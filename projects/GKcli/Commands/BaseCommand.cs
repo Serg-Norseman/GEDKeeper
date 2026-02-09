@@ -8,7 +8,7 @@
 
 using GKCore;
 
-namespace GKUI.Commands;
+namespace GKcli.Commands;
 
 /// <summary>
 /// Abstract base class for commands.

@@ -13,7 +13,7 @@ using GKCore;
 using GKCore.Locales;
 using Sharprompt;
 
-namespace GKUI.Commands;
+namespace GKcli.Commands;
 
 internal class IndiAddCommand : BaseCommand
 {
@@ -30,18 +30,6 @@ internal class IndiAddCommand : BaseCommand
         persName.ParseString(name);
         indiRec.Sex = (sex == 'm') ? GDMSex.svMale : GDMSex.svFemale;
         CommandController.WriteLine("Individual: {0}", GKUtils.GetNameString(indiRec, false));
-
-        IndiChange(indiRec);
-    }
-
-    private static void IndiChange(GDMIndividualRecord iRec)
-    {
-        // defaultValue
-        var continueFlag = Prompt.Input<bool>("Continue editing? [true/false]");
-        if (!continueFlag) return;
-
-        var newEvent = new GDMIndividualEvent();
-        CommandForms.InputEvent(newEvent);
     }
 
     private static Func<object, ValidationResult> SexVal(string errorMessage = null)

@@ -10,7 +10,7 @@ using GKCore;
 using GKCore.Locales;
 using Sharprompt;
 
-namespace GKUI.Commands;
+namespace GKcli.Commands;
 
 internal class ToolsMenuCommand : BaseCommand
 {

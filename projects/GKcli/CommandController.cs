@@ -10,11 +10,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GDModel;
+using GKcli.Commands;
 using GKCore;
 using GKUI.Platform;
 using Sharprompt;
 
-namespace GKUI.Commands;
+namespace GKcli;
+
+internal enum CommandCategory
+{
+    None,
+
+    Application,
+    File,
+    Service,
+    Tools,
+    Events,
+
+    Individual,
+    Family,
+
+    Note,
+    Multimedia,
+    Source,
+    Repository
+}
 
 internal class CommandController
 {
@@ -23,6 +43,7 @@ internal class CommandController
     private readonly Dictionary<string, BaseCommand> fCommands = new Dictionary<string, BaseCommand>();
 
     private static CommandController fInstance;
+    private static Dictionary<string, object> fVariables = new Dictionary<string, object>();
 
     public static CommandController Instance
     {
@@ -44,6 +65,9 @@ internal class CommandController
         RegisterCommand(new FileSaveCommand());
         RegisterCommand(new FileSaveAsCommand());
         RegisterCommand(new FilePropsCommand());
+
+        // Events
+        RegisterCommand(new EventEditCommand());
 
         // Individuals operations
         RegisterCommand(new IndiMenuCommand());
@@ -196,4 +220,17 @@ internal class CommandController
     }
 
     #endregion
+
+    public static void SetVariable(string varName, object varValue)
+    {
+        fVariables[varName] = varValue;
+    }
+
+    public static object GetVariable(string varName)
+    {
+        object result;
+        if (!fVariables.TryGetValue(varName, out result))
+            result = null;
+        return result;
+    }
 }

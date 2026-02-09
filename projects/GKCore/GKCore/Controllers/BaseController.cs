@@ -28,6 +28,7 @@ using GKCore.Names;
 using GKCore.Operations;
 using GKCore.Options;
 using GKCore.Tools;
+using GKCore.Utilities;
 
 namespace GKCore.Controllers
 {
@@ -74,6 +75,40 @@ namespace GKCore.Controllers
             combo.Text = current;
             combo.ReadOnly = readOnly;
         }
+
+        #region Events
+
+        public static List<FreqItem<EventDef>> GetFrequencyEventTypes(BaseContext baseContext, EventTarget target)
+        {
+            var freqList = new List<FreqItem<EventDef>>();
+            var eventStats = baseContext.EventStats;
+
+            var eventDefs = AppHost.EventDefinitions.List;
+            for (int i = 0; i < eventDefs.Count; i++) {
+                var evDef = eventDefs[i];
+
+                if ((evDef.Target == target || evDef.Target == EventTarget.etAny) && evDef.Enabled) {
+                    string key = evDef.Tag + ":" + evDef.Type;
+                    int stat = eventStats.GetValue(key);
+
+                    freqList.Add(new FreqItem<EventDef>(evDef, evDef.DisplayName, stat));
+                }
+            }
+
+            return freqList;
+        }
+
+        public static void ValidateEvent(GDMCustomEvent evt, EventDef eventDef)
+        {
+            if (eventDef != null && eventDef.Kind == EventKind.ekFact) {
+                var attrValue = evt.StringValue;
+                if (string.IsNullOrEmpty(attrValue) && !eventDef.AcceptableEmpty) {
+                    throw new Exception(LangMan.LS(LSID.FactValueIsInvalid));
+                }
+            }
+        }
+
+        #endregion
 
         #region Modify routines
 
@@ -1702,6 +1737,8 @@ namespace GKCore.Controllers
 
         #endregion
 
+        #region Media
+
         public static void ShowMedia(IBaseWindow baseWin, string link, bool modal)
         {
             string[] parts = link.Remove(0, GKData.INFO_HREF_VIEW.Length).Split('_');
@@ -1739,6 +1776,10 @@ namespace GKCore.Controllers
                 }
             }
         }
+
+        #endregion
+
+        #region Maps
 
         public static void ShowMap(IBaseWindow baseWin, List<GeoPoint> fixedPoints = null)
         {
@@ -1844,5 +1885,7 @@ namespace GKCore.Controllers
 
             ShowMap(baseWin, geoPoints);
         }
+
+        #endregion
     }
 }
