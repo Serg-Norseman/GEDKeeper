@@ -147,11 +147,14 @@ namespace GKCore.Filters
                         childExpr = BuildComparison(propertyExpr, valueExpr, condExp.Operator);
                     }
                 } else if (condition is ColumnConditionExpression columnExp) {
-                    MethodInfo meth = fListSource.GetType().GetMethod("GetColumnValueEx", BindingFlags.NonPublic | BindingFlags.Instance);
-                    Expression propertyExpr = Expression.Call(Expression.Constant(fListSource), meth, Expression.Constant(columnExp.ColumnIndex), Expression.Constant(-1), Expression.Constant(false));
-                    //Expression propertyExpr = Expression.Call(listSource, meth, Expression.Constant(columnExp.ColumnIndex), Expression.Constant(false));
+                    var valueType = columnExp.Value.GetType();
+                    var needStrColValue = (valueType == typeof(string));
 
-                    propertyExpr = Expression.Convert(propertyExpr, columnExp.Value.GetType());
+                    MethodInfo meth = fListSource.GetType().GetMethod("GetColumnValueEx", BindingFlags.NonPublic | BindingFlags.Instance);
+
+                    Expression propertyExpr = Expression.Call(Expression.Constant(fListSource), meth, Expression.Constant(columnExp.ColumnIndex), Expression.Constant(-1), Expression.Constant(needStrColValue));
+                    propertyExpr = Expression.Convert(propertyExpr, valueType);
+
                     Expression valueExpr = Expression.Constant(columnExp.Value);
                     childExpr = BuildComparison(propertyExpr, valueExpr, columnExp.Operator);
                 }
@@ -193,10 +196,15 @@ namespace GKCore.Filters
                     return Expression.GreaterThan(left, right);
 
                 case ConditionOperator.Contains:
-                    return Expression.Call(left, "Contains", Type.EmptyTypes, right);
-
-                case ConditionOperator.NotContains:
-                    return Expression.Not(Expression.Call(left, "Contains", Type.EmptyTypes, right));
+                case ConditionOperator.NotContains: {
+                        var leftIsNotNull = Expression.NotEqual(left, Expression.Constant(null, typeof(string)));
+                        var containsCall = Expression.Call(left, "Contains", Type.EmptyTypes, right);
+                        Expression result = Expression.Condition(leftIsNotNull, containsCall, Expression.Constant(false));
+                        if (op == ConditionOperator.NotContains) {
+                            result = Expression.Not(result);
+                        }
+                        return result;
+                    }
 
                 case ConditionOperator.ContainsMask:
                     MethodInfo meth1 = typeof(GKUtils).GetMethod("MatchesMask", BindingFlags.Public | BindingFlags.Static);
