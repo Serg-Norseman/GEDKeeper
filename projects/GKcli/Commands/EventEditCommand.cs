@@ -24,9 +24,8 @@ internal class EventEditCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        obj = CommandController.GetVariable("selectedObj");
-
-        if (!(obj is GDMCustomEvent evt)) {
+        var evt = CommandController.GetVariable<GDMCustomEvent>("selectedObj");
+        if (evt == null) {
             CommandController.WriteLine("Error: Expected an event");
             return;
         }

@@ -13,11 +13,20 @@ using Sharprompt;
 
 namespace GKcli.Commands;
 
+internal class ServiceMenuCommand : BaseCommand
+{
+    public ServiceMenuCommand() : base("service", LangMan.LS(LSID.MIService), CommandCategory.Application) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        CommandController.Instance.SelectCommand(CommandCategory.Service, true, "Select a service operation");
+    }
+}
+
+
 internal class LangChangeCommand : BaseCommand
 {
-    public LangChangeCommand() : base("language", LangMan.LS(LSID.Language), CommandCategory.Service)
-    {
-    }
+    public LangChangeCommand() : base("language", LangMan.LS(LSID.Language), CommandCategory.Service) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {

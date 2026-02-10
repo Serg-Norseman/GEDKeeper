@@ -12,11 +12,20 @@ using GKCore.Locales;
 
 namespace GKcli.Commands;
 
+internal class MediaMenuCommand : BaseCommand
+{
+    public MediaMenuCommand() : base("media", LangMan.LS(LSID.RPMultimedia), CommandCategory.Application) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        CommandController.Instance.SelectCommand(CommandCategory.Multimedia, true, "Select a multimedia operation");
+    }
+}
+
+
 internal class MediaListCommand : BaseCommand
 {
-    public MediaListCommand() : base("list_multimedia", LangMan.LS(LSID.Find), CommandCategory.Multimedia)
-    {
-    }
+    public MediaListCommand() : base("list_multimedia", LangMan.LS(LSID.Find), CommandCategory.Multimedia) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {

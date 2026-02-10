@@ -13,9 +13,7 @@ namespace GKcli.Commands;
 
 internal class AppExitCommand : BaseCommand
 {
-    public AppExitCommand() : base(CommandController.CMD_EXIT, LangMan.LS(LSID.MIExit), CommandCategory.Application)
-    {
-    }
+    public AppExitCommand() : base(CommandController.CMD_EXIT, LangMan.LS(LSID.MIExit), CommandCategory.Application) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
@@ -28,9 +26,7 @@ internal class AppExitCommand : BaseCommand
 
 internal class MenuReturnCommand : BaseCommand
 {
-    public MenuReturnCommand() : base(CommandController.CMD_RETURN, LangMan.LS(LSID.Backward), CommandCategory.None)
-    {
-    }
+    public MenuReturnCommand() : base(CommandController.CMD_RETURN, LangMan.LS(LSID.Backward), CommandCategory.None) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {

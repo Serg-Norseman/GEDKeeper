@@ -40,6 +40,7 @@ internal class CommandController
 {
     #region Common
 
+    private readonly BaseContext fBaseContext = new BaseContext(null);
     private readonly Dictionary<string, BaseCommand> fCommands = new Dictionary<string, BaseCommand>();
 
     private static CommandController fInstance;
@@ -82,6 +83,8 @@ internal class CommandController
         RegisterCommand(new NoteMenuCommand());
         RegisterCommand(new NoteListCommand());
         RegisterCommand(new NoteAddCommand());
+        RegisterCommand(new NoteEditCommand());
+        RegisterCommand(new NoteDeleteCommand());
 
         // Multimedia operations
         RegisterCommand(new MediaMenuCommand());
@@ -141,15 +144,16 @@ internal class CommandController
     public const string CMD_RETURN = "return";
     public const string CMD_EXIT = "exit";
 
-    public string SelectCommand(CommandCategory category, bool hasReturn, string message, BaseContext baseContext)
+    public string SelectCommand(CommandCategory category, bool hasReturn, string message)
     {
         var cmdList = GetCommands(category, hasReturn);
 
+        Console.WriteLine();
         var selected = Prompt.Select(message, cmdList,
             textSelector: (BaseCommand cmd) => { return cmd.Text; });
 
-        if (selected != null && selected.Sign != CommandController.CMD_RETURN) {
-            ExecuteCommand(selected.Sign, baseContext, null);
+        if (selected != null) {
+            ExecuteCommand(selected.Sign, fBaseContext, null);
             return selected.Sign;
         } else {
             return string.Empty;
@@ -226,11 +230,9 @@ internal class CommandController
         fVariables[varName] = varValue;
     }
 
-    public static object GetVariable(string varName)
+    public static T GetVariable<T>(string varName) where T : class
     {
-        object result;
-        if (!fVariables.TryGetValue(varName, out result))
-            result = null;
-        return result;
+        fVariables.TryGetValue(varName, out object result);
+        return result as T;
     }
 }

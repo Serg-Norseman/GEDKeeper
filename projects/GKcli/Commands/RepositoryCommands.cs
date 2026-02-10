@@ -12,11 +12,20 @@ using GKCore.Locales;
 
 namespace GKcli.Commands;
 
+internal class RepositoryMenuCommand : BaseCommand
+{
+    public RepositoryMenuCommand() : base("repositories", LangMan.LS(LSID.RPRepositories), CommandCategory.Application) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        CommandController.Instance.SelectCommand(CommandCategory.Repository, true, "Select a repository operation");
+    }
+}
+
+
 internal class RepositoryListCommand : BaseCommand
 {
-    public RepositoryListCommand() : base("list_repositories", LangMan.LS(LSID.Find), CommandCategory.Repository)
-    {
-    }
+    public RepositoryListCommand() : base("list_repositories", LangMan.LS(LSID.Find), CommandCategory.Repository) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {

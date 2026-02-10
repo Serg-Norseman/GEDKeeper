@@ -15,11 +15,37 @@ using Sharprompt;
 
 namespace GKcli.Commands;
 
+internal class IndiMenuCommand : BaseCommand
+{
+    public IndiMenuCommand() : base("individuals", LangMan.LS(LSID.RPIndividuals), CommandCategory.Application) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        CommandController.Instance.SelectCommand(CommandCategory.Individual, true, "Select a individual operation");
+    }
+}
+
+
+internal class IndiListCommand : BaseCommand
+{
+    public IndiListCommand() : base("list_individuals", LangMan.LS(LSID.Find), CommandCategory.Individual) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        var selected = CommandController.SelectRecord(baseContext, GDMRecordType.rtIndividual, "Select a individual", "Individual: {0}", "No records.");
+        if (selected != null) {
+            var newEvent = new GDMIndividualEvent();
+            CommandController.SetVariable("selectedObj", newEvent);
+
+            CommandController.Instance.SelectCommand(CommandCategory.Events, true, "Select an event operation");
+        }
+    }
+}
+
+
 internal class IndiAddCommand : BaseCommand
 {
-    public IndiAddCommand() : base("add_individual", LangMan.LS(LSID.MIRecordAdd), CommandCategory.Individual)
-    {
-    }
+    public IndiAddCommand() : base("add_individual", LangMan.LS(LSID.MIRecordAdd), CommandCategory.Individual) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {

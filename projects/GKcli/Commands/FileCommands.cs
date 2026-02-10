@@ -1,0 +1,120 @@
+/*
+ *  GEDKeeper, the personal genealogical database editor.
+ *  Copyright (C) 2009-2026 by Sergey V. Zhdanovskih.
+ *
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
+ */
+
+using System.IO;
+using System.Linq;
+using GDModel;
+using GKCore;
+using GKCore.Locales;
+using GKUI.Platform;
+using Sharprompt;
+
+namespace GKcli.Commands;
+
+internal class FileMenuCommand : BaseCommand
+{
+    public FileMenuCommand() : base("gedcom_files", LangMan.LS(LSID.MIFile), CommandCategory.Application) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        CommandController.Instance.SelectCommand(CommandCategory.File, true, "Select a file operation");
+    }
+}
+
+
+internal class FileNewCommand : BaseCommand
+{
+    public FileNewCommand() : base("new_gedcom", LangMan.LS(LSID.MIFileNew), CommandCategory.File) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        baseContext.Clear();
+        CommandController.WriteLine("Database created. Records: {0}.", baseContext.Tree.RecordsCount);
+    }
+}
+
+
+internal class FileLoadCommand : BaseCommand
+{
+    public FileLoadCommand() : base("load_gedcom", LangMan.LS(LSID.MIFileLoad), CommandCategory.File) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        string selectedFile = PromptHelper.SelectFile(GKUtils.GetAppPath(), ".ged");
+        CommandController.LoadFile(baseContext, selectedFile);
+    }
+}
+
+
+internal class FileLoadRecentCommand : BaseCommand
+{
+    public FileLoadRecentCommand() : base("recent_gedcom", LangMan.LS(LSID.MIMRUFiles), CommandCategory.File) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        var files = AppHost.Options.MRUFiles.Select(f => f.FileName).ToList();
+        if (files.Count > 0) {
+            var selectedFile = Prompt.Select("Select a recent file", files, pageSize: 10);
+            CommandController.LoadFile(baseContext, selectedFile);
+        } else {
+            CommandController.WriteLine("No recent files.");
+        }
+    }
+}
+
+
+internal class FileSaveCommand : BaseCommand
+{
+    public FileSaveCommand() : base("save_gedcom", LangMan.LS(LSID.MIFileSave), CommandCategory.File) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        //string selectedFile = PromptHelper.SelectFile(GKUtils.GetAppPath(), ".ged");
+        //CommandController.LoadFile(baseContext, selectedFile);
+
+        CommandController.WriteLine("Not implemented.");
+    }
+}
+
+
+internal class FileSaveAsCommand : BaseCommand
+{
+    public FileSaveAsCommand() : base("saveas_gedcom", LangMan.LS(LSID.MIFileSaveAs), CommandCategory.File) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        string selectedFolder = PromptHelper.SelectFolder(GKUtils.GetAppPath());
+        var fileName = Prompt.Input<string>("Enter a new file name (.ged)");
+        CommandController.SaveFile(baseContext, Path.Combine(selectedFolder, fileName + ".ged"));
+    }
+}
+
+
+internal class FilePropsCommand : BaseCommand
+{
+    public FilePropsCommand() : base("properties_gedcom", LangMan.LS(LSID.MIFileProperties), CommandCategory.File) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        CommandController.WriteLine("File properties");
+
+        GDMSubmitterRecord submitter = baseContext.Tree.GetSubmitter();
+        CommandController.WriteLine(1, "{0}: [yellow]{1}[/]", LangMan.LS(LSID.Author), submitter.Name);
+        CommandController.WriteLine(1, "{0}: [yellow]{1}[/]", LangMan.LS(LSID.Address), submitter.Address.Lines.Text);
+        if (submitter.Address.PhoneNumbers.Count > 0) {
+            CommandController.WriteLine(1, "{0}: [yellow]{1}[/]", LangMan.LS(LSID.Telephone), submitter.Address.PhoneNumbers[0].StringValue);
+        }
+
+        CommandController.WriteLine();
+        CommandController.WriteLine(1, LangMan.LS(LSID.MIFileProperties));
+        int[] stats = baseContext.Tree.GetRecordStats();
+        for (int i = 1; i < stats.Length; i++) {
+            CommandController.WriteLine(2, "{0}: [yellow]{1}[/]", LangMan.LS(GKData.RecordTypes[i].Name), stats[i]);
+        }
+    }
+}
