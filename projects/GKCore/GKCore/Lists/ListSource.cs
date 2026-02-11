@@ -441,13 +441,6 @@ namespace GKCore.Lists
 
                 // check user conditions
                 res = res && (fFilterFunc == null || fFilterFunc(rec as T));
-
-                /*var conditions = fFilter.Conditions;
-                for (int i = 0, num = conditions.Count; i < num; i++) {
-                    ColumnConditionExpression fcond = conditions[i];
-                    res = res && CheckCommonCondition(fcond);
-                    if (!res) break;
-                }*/
             } catch (Exception ex) {
                 Logger.WriteError("ListSource.CheckCommonFilter()", ex);
                 res = true;

@@ -29,7 +29,8 @@ namespace GKUI.Components
             public object ColumnText
             {
                 get {
-                    return fGrid.fFields[ColumnIndex + 1];
+                    var colIndex = ColumnIndex + 1; // 0 is empty item
+                    return (colIndex >= 0 && colIndex < fGrid.fFields.Length) ? fGrid.fFields[colIndex] : string.Empty;
                 }
                 set {
                     ColumnIndex = fGrid.fListMan.GetFieldColumnId(fGrid.fFields, value.ToString());

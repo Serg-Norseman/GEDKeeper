@@ -34,6 +34,9 @@ namespace GKCore
     internal delegate void OnMessageReceivedInvoker(MessageEventArgs e);
 
 
+    /// <summary>
+    /// Layout type for window arrangement.
+    /// </summary>
     public enum WinLayout
     {
         Cascade = 0,
@@ -101,6 +104,9 @@ namespace GKCore
             fLocalesCollection = new LocalesCollection();
         }
 
+        /// <summary>
+        /// Basic actions that must be performed when exiting the application.
+        /// </summary>
         protected virtual void ApplicationExit()
         {
             AppHost.Instance.SaveLastBases();
@@ -120,6 +126,9 @@ namespace GKCore
             }
         }
 
+        /// <summary>
+        /// Logging basic system and runtime information.
+        /// </summary>
         public static void LogSysInfo()
         {
             try {
@@ -137,16 +146,15 @@ namespace GKCore
             }
         }
 
+        /// <summary>
+        /// Basic actions that must be performed when launching the application.
+        /// </summary>
         public virtual async Task Init(string[] args, bool isMDI)
         {
             GKUtils.InitGEDCOM();
             await LoadLanguage(AppHost.Options.InterfaceLang, true);
             SetArgs(args);
-            StartupWork();
-        }
 
-        public virtual async void StartupWork()
-        {
             if (HasFeatureSupport(Feature.Themes)) {
                 ThemeManager.LoadThemes();
                 ApplyTheme(GlobalOptions.Instance.Theme);
@@ -172,21 +180,20 @@ namespace GKCore
                 } finally {
                 }
 
-                FinalSteps();
+                if (Options.AutoCheckUpdates) {
+                    UpdateMan.CheckUpdate();
+                }
+
+                SysUtils.LogSystemInfo();
             } catch (Exception ex) {
-                Logger.WriteError("AppHost.StartupWork()", ex);
+                Logger.WriteError("AppHost.Init()", ex);
             }
         }
 
-        private static void FinalSteps()
-        {
-            if (Options.AutoCheckUpdates) {
-                UpdateMan.CheckUpdate();
-            }
-
-            SysUtils.LogSystemInfo();
-        }
-
+        /// <summary>
+        /// Setting arguments during normal application startup
+        /// or via IPC transfer from a second instance.
+        /// </summary>
         public void SetArgs(string[] args)
         {
             if (args != null) {
@@ -218,12 +225,6 @@ namespace GKCore
             }
         }
 
-        public string GetCurrentFileName()
-        {
-            IBaseWindow cb = GetCurrentFile();
-            return (cb == null) ? "" : cb.Context.FileName;
-        }
-
         public void BeginLoading()
         {
             fLoadingCount++;
@@ -238,6 +239,9 @@ namespace GKCore
             }
         }
 
+        /// <summary>
+        /// Display tips and reminders after loading files.
+        /// </summary>
         public async Task ShowTips()
         {
             if (fTips.Count <= 0) return;
@@ -645,6 +649,9 @@ namespace GKCore
             // May have a desktop-only implementation
         }
 
+        /// <summary>
+        /// Calculates the position of the widget (plugin) window for a given alignment type on the screen.
+        /// </summary>
         protected ExtPoint WidgetLocate(ExtRect formBounds, WidgetLocation location)
         {
             const int ScrPaddingX = 10;
@@ -895,6 +902,9 @@ namespace GKCore
             return result;
         }
 
+        /// <summary>
+        /// Emergency saving in case of application crashes.
+        /// </summary>
         public void CriticalSave()
         {
             try {

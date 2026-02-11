@@ -12,6 +12,9 @@ using GKCore.Locales;
 
 namespace GKCore.Plugins
 {
+    /// <summary>
+    /// Types of widget (plugin) window alignment relative to the screen.
+    /// </summary>
     [Flags]
     public enum WidgetLocation : uint
     {

@@ -411,7 +411,6 @@ namespace GKCore.Controllers
             AppHost.Instance.AddMRU("test.ged");
 
             fMainWin.Activate();
-            Assert.AreEqual("Unknown", AppHost.Instance.GetCurrentFileName());
         }
 
          

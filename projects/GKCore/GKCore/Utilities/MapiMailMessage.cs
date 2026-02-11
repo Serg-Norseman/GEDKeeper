@@ -133,37 +133,41 @@ namespace GKCore.Utilities
         /// </summary>
         private void ShowMail()
         {
-            NativeMethods.MapiMessage message = new NativeMethods.MapiMessage();
+            try {
+                NativeMethods.MapiMessage message = new NativeMethods.MapiMessage();
 
-            using (RecipientCollection.InteropRecipientCollection interopRecipients
-                   = _recipientCollection.GetInteropRepresentation()) {
+                using (RecipientCollection.InteropRecipientCollection interopRecipients
+                       = _recipientCollection.GetInteropRepresentation()) {
 
-                message.Subject = _subject;
-                message.NoteText = _body;
+                    message.Subject = _subject;
+                    message.NoteText = _body;
 
-                message.Recipients = interopRecipients.Handle;
-                message.RecipientCount = _recipientCollection.Count;
+                    message.Recipients = interopRecipients.Handle;
+                    message.RecipientCount = _recipientCollection.Count;
 
-                // Check if we need to add attachments
-                if (_files.Count > 0) {
-                    // Add attachments
-                    message.Files = AllocAttachments(out message.FileCount);
+                    // Check if we need to add attachments
+                    if (_files.Count > 0) {
+                        // Add attachments
+                        message.Files = AllocAttachments(out message.FileCount);
+                    }
+
+                    // Signal the creating thread (make the remaining code async)
+                    _manualResetEvent.Set();
+
+                    int error = (int)NativeMethods.MAPISendMail(IntPtr.Zero, IntPtr.Zero, message, MAPI_DIALOG, 0);
+
+                    if (_files.Count > 0) {
+                        // Deallocate the files
+                        DeallocFiles(message);
+                    }
+
+                    // Check for error
+                    if (error != SUCCESS_SUCCESS) {
+                        throw new Exception(NativeMethods.MAPIErrorText(error));
+                    }
                 }
-
-                // Signal the creating thread (make the remaining code async)
-                _manualResetEvent.Set();
-
-                int error = (int)NativeMethods.MAPISendMail(IntPtr.Zero, IntPtr.Zero, message, MAPI_DIALOG, 0);
-
-                if (_files.Count > 0) {
-                    // Deallocate the files
-                    DeallocFiles(message);
-                }
-
-                // Check for error
-                if (error != SUCCESS_SUCCESS) {
-                    throw new Exception(NativeMethods.MAPIErrorText(error));
-                }
+            } catch (Exception ex) {
+                Logger.WriteError("MapiMailMessage.ShowMail()", ex);
             }
         }
 
