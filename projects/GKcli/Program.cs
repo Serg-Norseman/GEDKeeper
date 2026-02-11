@@ -12,6 +12,7 @@ using GKUI.Platform;
 
 namespace GKcli;
 
+
 internal class Program
 {
     static void Main(string[] args)
@@ -27,7 +28,7 @@ internal class Program
             PromptHelper.WriteMarkupLine("[darkcyan]GEDKeeper CLI[/]");
 
             while (true) {
-                var selected = CommandController.Instance.SelectCommand(CommandCategory.Application, false, "Select a command");
+                var selected = CommandController.Instance.SelectCommand(CommandCategory.Application, false, CLILangMan.LS(CLS.SelectCommand));
                 if (selected == CommandController.CMD_EXIT) break;
             }
         } finally {

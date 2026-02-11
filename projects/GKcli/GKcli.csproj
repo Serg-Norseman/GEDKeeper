@@ -37,4 +37,13 @@
         </Compile>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="GKcli.enu">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKcli.rus">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
 </Project>

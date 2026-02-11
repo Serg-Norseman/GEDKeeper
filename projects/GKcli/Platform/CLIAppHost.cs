@@ -60,6 +60,17 @@ public sealed class CLIAppHost : AppHost
     {
     }
 
+    protected override void UpdateLang()
+    {
+        base.UpdateLang();
+
+        try {
+            CLILangMan.Instance = this.CreateLangMan(this);
+        } catch (Exception ex) {
+            Logger.WriteError("CLIAppHost.UpdateLang()", ex);
+        }
+    }
+
     public override ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
     {
         return new CLITimer(msInterval, elapsedHandler);
