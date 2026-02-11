@@ -144,12 +144,12 @@ namespace GKCore.Controllers
                     break;
 
                 case GDMGoalType.gtFamily:
-                    fTempRec = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtFamily, new object[0]);
+                    fTempRec = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtFamily, Array.Empty<object>());
                     fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 
                 case GDMGoalType.gtSource:
-                    fTempRec = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtSource, new object[0]);
+                    fTempRec = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtSource, Array.Empty<object>());
                     fView.Goal.Text = GKUtils.GetGoalStr(fBase.Context.Tree, gt, fTempRec);
                     break;
 

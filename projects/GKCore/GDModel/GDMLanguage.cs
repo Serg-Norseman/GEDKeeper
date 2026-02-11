@@ -144,7 +144,7 @@ namespace GDModel
         {
             GDMLanguage srcLang = (source as GDMLanguage);
             if (srcLang == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(source);
 

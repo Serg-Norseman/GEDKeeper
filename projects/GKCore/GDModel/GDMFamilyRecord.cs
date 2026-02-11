@@ -85,7 +85,7 @@ namespace GDModel
             if (famEvent != null) {
                 Events.Add(evt);
             } else {
-                throw new ArgumentException(@"Event has the invalid type", "evt");
+                throw new ArgumentException(@"Event has the invalid type", nameof(evt));
             }
 
             return evt;
@@ -157,7 +157,7 @@ namespace GDModel
         {
             GDMFamilyRecord sourceRec = source as GDMFamilyRecord;
             if (sourceRec == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(source);
 
@@ -171,7 +171,7 @@ namespace GDModel
         {
             GDMFamilyRecord targetFamily = targetRecord as GDMFamilyRecord;
             if (targetFamily == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(targetRecord));
 
             base.MoveTo(targetRecord);
 

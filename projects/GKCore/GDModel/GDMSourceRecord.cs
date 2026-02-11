@@ -114,7 +114,7 @@ namespace GDModel
         {
             GDMSourceRecord otherSource = (source as GDMSourceRecord);
             if (otherSource == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(otherSource);
 
@@ -156,7 +156,7 @@ namespace GDModel
         {
             GDMSourceRecord targetSource = targetRecord as GDMSourceRecord;
             if (targetSource == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(targetRecord));
 
             GDMLines titl = new GDMLines();
             GDMLines orig = new GDMLines();

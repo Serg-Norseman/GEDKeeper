@@ -160,7 +160,7 @@ namespace GKCore.Lists
         protected IGDMObject fDataOwner;
         protected IView fOwner;
         protected IGDMList<T> fStructList;
-        private List<CustomAction> fCustomActions;
+        private readonly List<CustomAction> fCustomActions;
 
 
         public EnumSet<RecordAction> AllowedActions

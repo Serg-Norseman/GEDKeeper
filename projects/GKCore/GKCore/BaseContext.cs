@@ -1418,7 +1418,7 @@ namespace GKCore
         public GDMFamilyRecord AddFamilyForSpouse(GDMIndividualRecord spouse)
         {
             if (spouse == null)
-                throw new ArgumentNullException(@"spouse");
+                throw new ArgumentNullException(nameof(spouse));
 
             GDMSex sex = spouse.Sex;
             if (sex < GDMSex.svMale || sex > GDMSex.svFemale) {

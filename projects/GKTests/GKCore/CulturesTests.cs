@@ -17,7 +17,7 @@ namespace GKCore.Cultures
     [TestFixture]
     public class CulturesTests
     {
-        private BaseContext fContext;
+        private readonly BaseContext fContext;
 
         public CulturesTests()
         {

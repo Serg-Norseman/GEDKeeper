@@ -142,7 +142,7 @@ namespace GDModel.Providers.GEDCOM
         public override int GetMaxCharCount(int byteCount)
         {
             if (byteCount < 0) {
-                throw new ArgumentOutOfRangeException("byteCount", @"ArgRange_NonNegative");
+                throw new ArgumentOutOfRangeException(nameof(byteCount), @"ArgRange_NonNegative");
             }
 
             return byteCount;
@@ -151,7 +151,7 @@ namespace GDModel.Providers.GEDCOM
         public override int GetMaxByteCount(int charCount)
         {
             if (charCount < 0) {
-                throw new ArgumentOutOfRangeException("charCount", @"ArgRange_NonNegative");
+                throw new ArgumentOutOfRangeException(nameof(charCount), @"ArgRange_NonNegative");
             }
 
             return (charCount * 2);

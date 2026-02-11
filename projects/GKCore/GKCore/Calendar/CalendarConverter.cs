@@ -411,7 +411,7 @@ namespace GKCore.Calendar
                     num++;
                     do
                     {
-                        jd = (jd + hebrew_month_days(year, mon));
+                        jd += hebrew_month_days(year, mon);
                         mon++;
                     }
                     while (mon != num);
@@ -424,7 +424,7 @@ namespace GKCore.Calendar
                     num2++;
                     do
                     {
-                        jd = (jd + hebrew_month_days(year, mon));
+                        jd += hebrew_month_days(year, mon);
                         mon++;
                     }
                     while (mon != num2);
@@ -439,7 +439,7 @@ namespace GKCore.Calendar
                     num3++;
                     do
                     {
-                        jd = (jd + hebrew_month_days(year, mon));
+                        jd += hebrew_month_days(year, mon);
                         mon++;
                     }
                     while (mon != num3);

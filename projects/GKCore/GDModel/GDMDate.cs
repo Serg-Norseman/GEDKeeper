@@ -145,7 +145,7 @@ namespace GDModel
         {
             GDMDate srcDate = source as GDMDate;
             if (srcDate == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             fApproximated = srcDate.fApproximated;
             fCalendar = srcDate.fCalendar;

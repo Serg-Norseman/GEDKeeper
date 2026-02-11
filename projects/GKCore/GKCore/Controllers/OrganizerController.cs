@@ -86,7 +86,7 @@ namespace GKCore.Controllers
             fView.WebsList.ListView.UpdateContents();
         }
 
-        private void PrepareEvent(string iName, IGDMStructWithAddress ev)
+        private void PrepareEvent(string iName, GDMCustomEvent ev)
         {
             if (!ev.HasAddress) return;
             GDMAddress addr = ev.Address;

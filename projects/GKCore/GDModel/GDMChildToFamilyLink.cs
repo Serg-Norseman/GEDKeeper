@@ -63,7 +63,7 @@ namespace GDModel
         {
             GDMChildToFamilyLink srcCFL = source as GDMChildToFamilyLink;
             if (srcCFL == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(source);
 

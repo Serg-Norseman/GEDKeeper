@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Threading.Tasks;
 using BSLib;
 using GDModel;
@@ -86,7 +87,7 @@ namespace GKCore.Lists
             GDMMultimediaRecord mmRec;
             switch (eArgs.Action) {
                 case RecordAction.raAdd:
-                    mmRec = await BaseController.SelectRecord(fOwner, fBaseWin, GDMRecordType.rtMultimedia, new object[0]) as GDMMultimediaRecord;
+                    mmRec = await BaseController.SelectRecord(fOwner, fBaseWin, GDMRecordType.rtMultimedia, Array.Empty<object>()) as GDMMultimediaRecord;
                     if (mmRec != null) {
                         result = fUndoman.DoOrdinaryOperation(OperationType.otRecordMediaAdd, (GDMObject)dataOwner, mmRec);
                         mmLink = dataOwner.FindMultimediaLink(mmRec);

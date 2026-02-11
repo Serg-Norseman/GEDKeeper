@@ -235,7 +235,7 @@ namespace GDModel
         {
             if (fTags == null) return null;
 
-            IList<GDMTag> result = new List<GDMTag>();
+            var result = new List<GDMTag>();
 
             GDMTag tag = FindTag(tagName, 0);
             while (tag != null) {

@@ -65,7 +65,7 @@ namespace GKCore.Events
             }
         }
 
-        private static IList<SpecEvent> GetIndiEvents(GDMTree tree, GDMIndividualRecord indiRec, GEDCOMTagType targetEventType)
+        private static List<SpecEvent> GetIndiEvents(GDMTree tree, GDMIndividualRecord indiRec, GEDCOMTagType targetEventType)
         {
             var children = new List<GDMIndividualRecord>();
             for (int j = 0, jNum = indiRec.SpouseToFamilyLinks.Count; j < jNum; j++) {

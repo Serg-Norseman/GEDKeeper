@@ -53,7 +53,7 @@ namespace GKCore.Utilities
 
     public sealed class IocContainer
     {
-        private readonly IDictionary<Type, RegisteredObject> fRegisteredObjects = new Dictionary<Type, RegisteredObject>();
+        private readonly Dictionary<Type, RegisteredObject> fRegisteredObjects = new Dictionary<Type, RegisteredObject>();
 
         public void Reset()
         {

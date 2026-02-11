@@ -21,6 +21,8 @@ csharp_new_line_before_open_brace = methods, properties, events, indexers, types
 csharp_new_line_before_else = false
 csharp_new_line_before_catch = false
 csharp_new_line_before_finally = false
+csharp_style_prefer_switch_expression = false
+csharp_style_prefer_primary_constructors = false
 
 [*.{xeto,md,yml,yaml,lng}]
 indent_style = space
@@ -28,3 +30,13 @@ indent_size = 2
 
 [*.sh]
 end_of_line = lf
+
+; Specially protected style tradition of this project
+[*.cs]
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_style.f_pascal_style.capitalization = pascal_case
+dotnet_naming_style.f_pascal_style.required_prefix = f
+dotnet_naming_rule.private_fields_with_f.symbols = private_fields
+dotnet_naming_rule.private_fields_with_f.style = f_pascal_style
+dotnet_naming_rule.private_fields_with_f.severity = warning

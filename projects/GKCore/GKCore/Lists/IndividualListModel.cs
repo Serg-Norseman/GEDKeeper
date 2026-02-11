@@ -149,7 +149,7 @@ namespace GKCore.Lists
         private GDMGroupRecord filter_grp;
         private UDN filter_abd;
         private GDMSourceRecord filter_source;
-        private GlobalOptions fOptions;
+        private readonly GlobalOptions fOptions;
 
 
         public IndividualListModel(BaseContext baseContext) :

@@ -41,7 +41,7 @@ namespace GDModel
         {
             GDMChangeDate otherChnDate = (source as GDMChangeDate);
             if (otherChnDate == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(otherChnDate);
 

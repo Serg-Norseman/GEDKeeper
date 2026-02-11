@@ -15,9 +15,9 @@ namespace GKcli.Commands;
 /// </summary>
 internal abstract class BaseCommand
 {
-    private CommandCategory fCategory;
-    private string fSign;
-    private string fText;
+    private readonly CommandCategory fCategory;
+    private readonly string fSign;
+    private readonly string fText;
 
     /// <summary>
     /// Gets the category of the command.

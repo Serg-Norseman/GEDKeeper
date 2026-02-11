@@ -42,10 +42,10 @@ namespace GKCore.Maps
         public void GetPlacePoints(string searchValue, List<GeoPoint> pointsList, short results = 1)
         {
             if (string.IsNullOrEmpty(searchValue))
-                throw new ArgumentNullException(@"searchValue");
+                throw new ArgumentNullException(nameof(searchValue));
 
             if (pointsList == null)
-                throw new ArgumentNullException(@"pointsList");
+                throw new ArgumentNullException(nameof(pointsList));
 
             try {
                 List<GeoPoint> cachedPoints;

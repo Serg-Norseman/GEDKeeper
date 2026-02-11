@@ -145,7 +145,7 @@ namespace GKCore
                 int curLen = result.Length;
                 if (maxLength > 0 && curLen > maxLength) break;
 
-                if (curLen != 0) result.Append(" ");
+                if (curLen != 0) result.Append(' ');
                 result.Append(strings[i].Trim());
             }
 
@@ -1001,14 +1001,16 @@ namespace GKCore
 
         private static char[] ExtractSeparators(string pattern)
         {
-            if (string.IsNullOrEmpty(pattern)) return new char[0];
+            if (string.IsNullOrEmpty(pattern))
+                return Array.Empty<char>();
 
             string specifiersPattern = @"(d{1,4}|M{1,4}|y{1,5})";
             string separatorsOnly = Regex.Replace(pattern, specifiersPattern, "");
 
             //return separatorsOnly.Distinct().Where(s => !Char.IsWhiteSpace(s)).ToArray();
 
-            if (separatorsOnly.Length == 0) return new char[0];
+            if (separatorsOnly.Length == 0)
+                return Array.Empty<char>();
 
             char[] buffer = new char[separatorsOnly.Length];
             int uniqueCount = 0;

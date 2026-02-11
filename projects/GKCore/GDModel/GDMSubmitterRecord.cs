@@ -13,8 +13,8 @@ namespace GDModel
 {
     public sealed class GDMSubmitterRecord : GDMRecord
     {
-        private GDMAddress fAddress;
-        private GDMList<GDMLanguage> fLanguages;
+        private readonly GDMAddress fAddress;
+        private readonly GDMList<GDMLanguage> fLanguages;
         private string fName;
         private string fRegisteredReference;
 

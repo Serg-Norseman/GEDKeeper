@@ -123,7 +123,7 @@ namespace GKMap
 
             if (_requestContentBuffer == null) {
                 _requestContentBuffer = new byte[ContentLength];
-            } else if (ContentLength == default(long)) {
+            } else if (ContentLength == default) {
                 _requestContentBuffer = new byte[int.MaxValue];
             } else if (_requestContentBuffer.Length != ContentLength) {
                 Array.Resize(ref _requestContentBuffer, (int)ContentLength);

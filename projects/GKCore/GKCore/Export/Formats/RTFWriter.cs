@@ -59,7 +59,7 @@ namespace GKCore.Export.Formats
         private readonly Align[] iAlignments = new Align[] { Align.Left, Align.Center, Align.Right, Align.FullyJustify };
 
         private RtfDocument fDocument;
-        private Stack<RtfParagraph> fStack;
+        private readonly Stack<RtfParagraph> fStack;
         private RtfTable fTable;
         private int fTableCol;
         private int fTableRow;

@@ -915,18 +915,18 @@ namespace GKCore.Linguistics
 
         #region Spelling of numbers
 
-        private static string[] hundrs = new string[] {
+        private static readonly string[] hundrs = new string[] {
             "", "сто ", "двести ", "триста ", "четыреста ", "пятьсот ",
             "шестьсот ", "семьсот ", "восемьсот ", "девятьсот "
         };
 
         // 2..9
-        private static string[] tens = new string[] {
+        private static readonly string[] tens = new string[] {
             "двадцать ", "тридцать ", "сорок ", "пятьдесят ",
             "шестьдесят ", "семьдесят ", "восемьдесят ", "девяносто "
         };
 
-        private static string[] ones = new string[] {
+        private static readonly string[] ones = new string[] {
             "", "один ", "два ", "три ", "четыре ", "пять ", "шесть ",
             "семь ", "восемь ", "девять ", "десять ", "одиннадцать ",
             "двенадцать ", "тринадцать ", "четырнадцать ", "пятнадцать ",
@@ -934,13 +934,13 @@ namespace GKCore.Linguistics
         };
 
         // 0..1, 1..2
-        private static string[][] onetwo = {
+        private static readonly string[][] onetwo = {
             new string[] {"один ", "два "},
             new string[] {"одна ", "две "}
         };
 
         // 0..3, 1..5
-        private static string[][] abbrs = {
+        private static readonly string[][] abbrs = {
             new string[] {"миллиарда ", "миллиард ", "миллиардов ", "млрд. ", ""},
             new string[] {"миллиона ", "миллион ", "миллионов ", "млн. ", ""},
             new string[] {"тысячи ", "тысяча ", "тысяч ", "тыс. ", ""},

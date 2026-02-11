@@ -20,7 +20,7 @@ namespace GDModel
 
         private struct GEDCOMListEnumerator : IEnumerator<T>
         {
-            private readonly IList<T> fDataList;
+            private readonly List<T> fDataList;
             private int fIndex;
             private int fSize;
 

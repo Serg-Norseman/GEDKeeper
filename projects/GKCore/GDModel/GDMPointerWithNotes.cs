@@ -49,7 +49,7 @@ namespace GDModel
         {
             GDMPointerWithNotes sourceObj = source as GDMPointerWithNotes;
             if (sourceObj == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(source);
 

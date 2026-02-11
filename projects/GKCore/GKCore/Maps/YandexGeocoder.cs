@@ -38,7 +38,7 @@ namespace GKCore.Maps
             return ParseXml(requestUrl);
         }
 
-        private IList<GeoPoint> ParseXml(string url)
+        private List<GeoPoint> ParseXml(string url)
         {
             var geoObjects = new List<GeoPoint>();
 

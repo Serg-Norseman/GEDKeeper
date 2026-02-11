@@ -200,7 +200,7 @@ namespace GDModel
         {
             GDMRecord sourceRec = source as GDMRecord;
             if (sourceRec == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(source);
 

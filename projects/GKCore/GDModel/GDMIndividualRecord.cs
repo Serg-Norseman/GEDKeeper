@@ -176,7 +176,7 @@ namespace GDModel
                 if (evt is GDMIndividualEvent || evt is GDMIndividualAttribute) {
                     Events.Add(evt);
                 } else {
-                    throw new ArgumentException(@"Event has the invalid type", "evt");
+                    throw new ArgumentException(@"Event has the invalid type", nameof(evt));
                 }
             }
 
@@ -313,7 +313,7 @@ namespace GDModel
         {
             GDMIndividualRecord sourceRec = source as GDMIndividualRecord;
             if (sourceRec == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(source);
 
@@ -330,7 +330,7 @@ namespace GDModel
         {
             GDMIndividualRecord targetIndi = targetRecord as GDMIndividualRecord;
             if (targetIndi == null) {
-                throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(targetRecord));
             }
 
             base.MoveTo(targetRecord);

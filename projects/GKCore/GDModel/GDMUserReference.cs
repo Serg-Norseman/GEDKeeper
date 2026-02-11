@@ -42,7 +42,7 @@ namespace GDModel
         {
             GDMUserReference srcUserRef = (source as GDMUserReference);
             if (srcUserRef == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(source);
 

@@ -455,7 +455,7 @@ namespace GKCore.Utilities
             return list;
         }
 
-        private static void CleanOldMessages(IList<IpcMessage> list)
+        private static void CleanOldMessages(List<IpcMessage> list)
         {
             DateTime dtNow = DateTime.UtcNow;
             for (int i = list.Count - 1; i >= 0; --i) {

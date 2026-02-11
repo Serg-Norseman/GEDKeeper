@@ -17,7 +17,7 @@ namespace GKCore.ExtData
     [TestFixture]
     public class HolidaysTests
     {
-        private Holidays fHolidays;
+        private readonly Holidays fHolidays;
 
         public HolidaysTests()
         {

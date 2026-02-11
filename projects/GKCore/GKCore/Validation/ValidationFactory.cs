@@ -43,7 +43,7 @@ namespace GKCore.Validation
             }
         }
 
-        private static IEnumerable<ValidationMessage> FlattenError(Exception exception)
+        private static List<ValidationMessage> FlattenError(Exception exception)
         {
             var messages = new List<ValidationMessage>();
             var currentException = exception;

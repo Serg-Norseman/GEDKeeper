@@ -1163,6 +1163,8 @@ namespace GKCore.Charts
             InitGraphics();
         }
 
+        private static readonly float[] DashPattern = new float[] { 4.0F, 2.0F };
+
         public void InitGraphics()
         {
             DoneGraphics();
@@ -1182,17 +1184,17 @@ namespace GKCore.Charts
             fLinePen = fRenderer.CreatePen(clrLine, 1f);
             fLineDecorativePen = fRenderer.CreatePen(clrDecor, 1f);
             fLineSelectedPen = fRenderer.CreatePen(clrLine, 2.4f);
-            fLineDottedPen = fRenderer.CreatePen(clrLine, 1f, new float[] { 4.0F, 2.0F });
-            fLineDottedDecorativePen = fRenderer.CreatePen(clrDecor, 1f, new float[] {4.0F, 2.0F});
-            fLineDottedSelectedPen = fRenderer.CreatePen(clrLine, 2.4f, new float[] { 4.0F, 2.0F });
+            fLineDottedPen = fRenderer.CreatePen(clrLine, 1f, DashPattern);
+            fLineDottedDecorativePen = fRenderer.CreatePen(clrDecor, 1f, DashPattern);
+            fLineDottedSelectedPen = fRenderer.CreatePen(clrLine, 2.4f, DashPattern);
             fSolidBlack = fRenderer.CreateBrush(fClrBlack);
             fSolidF = fRenderer.CreateBrush(ChartRenderer.GetColor(GKColors.Red));
             fSolidM = fRenderer.CreateBrush(ChartRenderer.GetColor(GKColors.Blue));
 
             var clrGreen = ChartRenderer.GetColor(GKColors.ForestGreen);
-            fLineTMSYPen = fRenderer.CreatePen(clrGreen, 2.4f, new float[] { 4.0F, 2.0F });
+            fLineTMSYPen = fRenderer.CreatePen(clrGreen, 2.4f, DashPattern);
             var clrCrimson = ChartRenderer.GetColor(GKColors.Crimson);
-            fLineTMSNPen = fRenderer.CreatePen(clrCrimson, 2.4f, new float[] { 4.0F, 2.0F });
+            fLineTMSNPen = fRenderer.CreatePen(clrCrimson, 2.4f, DashPattern);
         }
 
         private void DoneGraphics()

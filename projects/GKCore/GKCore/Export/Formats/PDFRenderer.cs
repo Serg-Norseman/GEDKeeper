@@ -83,7 +83,7 @@ namespace GKCore.Export.Formats
 
         #region Private methods
 
-        private static Dictionary<string, BaseFont> fFontsCache = new Dictionary<string, BaseFont>();
+        private static readonly Dictionary<string, BaseFont> fFontsCache = new Dictionary<string, BaseFont>();
 
         private static BaseFont GetBaseFont(IFont font)
         {

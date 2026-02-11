@@ -20,7 +20,7 @@ namespace GKCore.Export
     [TestFixture]
     public class ExportersTests
     {
-        private BaseContext fContext;
+        private readonly BaseContext fContext;
 
         public ExportersTests()
         {

@@ -62,7 +62,7 @@ namespace GKCore.Utilities
         public byte[] Checksum
         {
             get {
-                fHashAlgorithm.TransformFinalBlock(new byte[0], 0, 0);
+                fHashAlgorithm.TransformFinalBlock(Array.Empty<byte>(), 0, 0);
                 return fHashAlgorithm.Hash;
             }
         }
@@ -70,7 +70,7 @@ namespace GKCore.Utilities
         public ulong Checksum64
         {
             get {
-                fHashAlgorithm.TransformFinalBlock(new byte[0], 0, 0);
+                fHashAlgorithm.TransformFinalBlock(Array.Empty<byte>(), 0, 0);
                 return BitConverter.ToUInt64(fHashAlgorithm.Hash, 0);
             }
         }

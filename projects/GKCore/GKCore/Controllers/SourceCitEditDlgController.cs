@@ -87,7 +87,7 @@ namespace GKCore.Controllers
 
         public async void AddSource()
         {
-            object[] anArgs = new object[0];
+            object[] anArgs = Array.Empty<object>();
             GDMSourceRecord src = await BaseController.SelectRecord(fView, fBase, GDMRecordType.rtSource, anArgs) as GDMSourceRecord;
             if (src == null) return;
 

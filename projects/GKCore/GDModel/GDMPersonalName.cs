@@ -230,7 +230,7 @@ namespace GDModel
         {
             GDMPersonalName otherName = (source as GDMPersonalName);
             if (otherName == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(otherName);
 

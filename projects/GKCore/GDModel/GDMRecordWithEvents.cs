@@ -89,7 +89,7 @@ namespace GDModel
         {
             GDMRecordWithEvents sourceRec = source as GDMRecordWithEvents;
             if (sourceRec == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(source);
 
@@ -109,7 +109,7 @@ namespace GDModel
         {
             GDMRecordWithEvents target = targetRecord as GDMRecordWithEvents;
             if (target == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(targetRecord));
 
             base.MoveTo(targetRecord);
 

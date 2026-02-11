@@ -142,7 +142,7 @@ namespace GDModel
         {
             GDMSourceCitation sourceObj = (source as GDMSourceCitation);
             if (sourceObj == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(sourceObj);
 

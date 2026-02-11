@@ -286,7 +286,7 @@ namespace GDModel.Providers.FamilyShow
             return result;
         }
 
-        private void ProcessSpouse(ICollection<FamilyRec> families, GDMIndividualRecord individual, string spouseId)
+        private static void ProcessSpouse(ICollection<FamilyRec> families, GDMIndividualRecord individual, string spouseId)
         {
             string husbId, wifeId;
             if (individual.Sex == GDMSex.svMale) {

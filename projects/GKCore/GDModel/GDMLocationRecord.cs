@@ -91,7 +91,7 @@ namespace GDModel
         {
             GDMLocationRecord otherLoc = (source as GDMLocationRecord);
             if (otherLoc == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(otherLoc);
 
@@ -108,7 +108,7 @@ namespace GDModel
         {
             GDMLocationRecord targetLoc = (targetRecord as GDMLocationRecord);
             if (targetLoc == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(targetRecord));
 
             base.MoveTo(targetRecord);
 

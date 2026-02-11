@@ -56,7 +56,7 @@ namespace GDModel
         {
             GDMGroupRecord sourceObj = source as GDMGroupRecord;
             if (sourceObj == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(sourceObj);
 
@@ -137,7 +137,7 @@ namespace GDModel
         {
             var targetGroup = targetRecord as GDMGroupRecord;
             if (targetGroup == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(targetRecord));
 
             base.MoveTo(targetRecord);
 

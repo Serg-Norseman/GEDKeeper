@@ -6,6 +6,10 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+#pragma warning disable CA1825 // Avoid zero-length array allocations
+#pragma warning disable CA1861 // Avoid constant arrays as arguments
+
+using System;
 using System.Collections.Generic;
 using GKCore.Locales;
 

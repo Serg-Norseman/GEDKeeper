@@ -66,7 +66,7 @@ namespace GDModel
         {
             GDMCutoutPosition sourceObj = (source as GDMCutoutPosition);
             if (sourceObj == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             fX1 = sourceObj.fX1;
             fY1 = sourceObj.fY1;

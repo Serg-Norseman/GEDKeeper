@@ -74,7 +74,7 @@ namespace GDModel
         {
             GDMFamilyEvent sourceObj = (source as GDMFamilyEvent);
             if (sourceObj == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(sourceObj);
             if (sourceObj.fHusbandAge != null) HusbandAge.Assign(sourceObj.fHusbandAge);

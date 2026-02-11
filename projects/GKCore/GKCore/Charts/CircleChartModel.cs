@@ -466,7 +466,7 @@ namespace GKCore.Charts
         private bool IsNarrowSegment(string text, float radius, float wedgeAngle, IFont font)
         {
             ExtSizeF size = fRenderer.GetTextSize(text, font);
-            radius = radius + size.Height / 2.0f;
+            radius += size.Height / 2.0f;
 
             float wedgeL = radius * (float)MathHelper.DegreesToRadians(wedgeAngle);
 

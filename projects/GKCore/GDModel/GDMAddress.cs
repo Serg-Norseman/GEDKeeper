@@ -140,7 +140,7 @@ namespace GDModel
         {
             GDMAddress otherAddr = source as GDMAddress;
             if (otherAddr == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(source);
 

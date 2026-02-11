@@ -47,7 +47,7 @@ namespace GDModel
         {
             GDMMultimediaRecord sourceObj = source as GDMMultimediaRecord;
             if (sourceObj == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(sourceObj);
 
@@ -62,7 +62,7 @@ namespace GDModel
         {
             GDMMultimediaRecord targetMedia = (targetRecord as GDMMultimediaRecord);
             if (targetMedia == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(targetRecord));
 
             base.MoveTo(targetRecord);
 

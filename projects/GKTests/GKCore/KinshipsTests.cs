@@ -16,7 +16,7 @@ namespace GKCore.Kinships
     [TestFixture]
     public class KinshipsTests
     {
-        private BaseContext fContext;
+        private readonly BaseContext fContext;
 
         public KinshipsTests()
         {

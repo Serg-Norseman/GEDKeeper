@@ -490,7 +490,7 @@ namespace GKUI.Themes
 
         private static void ThemeStatusBarPanelHandler(IThemedView view, Component component, Theme theme)
         {
-            var ctl = (StatusBarPanel)component;
+            //var ctl = (StatusBarPanel)component;
             //ctl.BackColor = theme.Colors[ThemeColor.Control);
             //ctl.ForeColor = theme.Colors[ThemeColor.ControlText);
         }

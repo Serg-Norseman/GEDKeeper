@@ -20,7 +20,7 @@ namespace GKCore.Options
     {
         public const int MAX_BRUSHES = 12;
 
-        private static int[] DefBrushColor = new int[] {
+        private static readonly int[] DefBrushColor = new int[] {
             /* 00 */ GKColors.Coral,
             /* 01 */ GKColors.CadetBlue,
             /* 02 */ GKColors.DarkGray,

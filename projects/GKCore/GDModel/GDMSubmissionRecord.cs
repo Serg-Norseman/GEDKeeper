@@ -26,7 +26,7 @@ namespace GDModel
         private int fGenerationsOfAncestors;
         private int fGenerationsOfDescendants;
         private GDMOrdinanceProcessFlag fOrdinanceProcessFlag;
-        private GDMPointer fSubmitter;
+        private readonly GDMPointer fSubmitter;
 
         public string FamilyFileName
         {

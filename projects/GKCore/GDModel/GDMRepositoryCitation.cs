@@ -36,7 +36,7 @@ namespace GDModel
         {
             GDMSourceCallNumber sourceObj = (source as GDMSourceCallNumber);
             if (sourceObj == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(sourceObj);
             fMediaType = sourceObj.fMediaType;
@@ -105,7 +105,7 @@ namespace GDModel
         {
             GDMRepositoryCitation sourceObj = source as GDMRepositoryCitation;
             if (sourceObj == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(source);
             if (sourceObj.fCallNumbers != null) AssignList(sourceObj.fCallNumbers, CallNumbers);

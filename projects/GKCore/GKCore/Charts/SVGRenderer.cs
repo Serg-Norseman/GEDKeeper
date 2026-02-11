@@ -59,7 +59,7 @@ namespace GKCore.Charts
         private SvgGraphics fGfx;
         private object fTarget;
         private float fTranslucent;
-        private TextWriter fWriter;
+        private StreamWriter fWriter;
 
         public SVGRenderer(string svgFileName)
         {

@@ -105,7 +105,7 @@ namespace GDModel
         {
             GDMCommunicationRecord otherComm = (source as GDMCommunicationRecord);
             if (otherComm == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(otherComm);
 

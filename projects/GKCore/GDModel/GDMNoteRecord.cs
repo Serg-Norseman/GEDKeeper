@@ -39,7 +39,7 @@ namespace GDModel
         {
             GDMNoteRecord sourceObj = (source as GDMNoteRecord);
             if (sourceObj == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "source");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(source));
 
             base.Assign(sourceObj);
 
@@ -79,7 +79,7 @@ namespace GDModel
         {
             GDMNoteRecord targetNote = (targetRecord as GDMNoteRecord);
             if (targetNote == null)
-                throw new ArgumentException(@"Argument is null or wrong type", "targetRecord");
+                throw new ArgumentException(@"Argument is null or wrong type", nameof(targetRecord));
 
             string targetText = targetNote.Lines.Text;
             base.MoveTo(targetRecord);

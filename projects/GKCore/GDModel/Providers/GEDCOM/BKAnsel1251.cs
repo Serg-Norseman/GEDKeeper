@@ -32,7 +32,7 @@ namespace GDModel.Providers.GEDCOM
             }
         }
 
-        private static readonly Dictionary<byte[], byte> Mapping = new Dictionary<byte[], byte>(new ByteArrayComparer())
+        private static readonly Dictionary<byte[], byte> fMapping = new Dictionary<byte[], byte>(new ByteArrayComparer())
         {
             { new byte[] { 0xC0 }, 0xC0 },          /* А+ */
             { new byte[] { 0xC1 }, 0xC1 },          /* Б+ */
@@ -114,7 +114,7 @@ namespace GDModel.Providers.GEDCOM
                     // Check for a two-byte sequence
                     if (i + 1 < lineLen) {
                         byte[] duo = new byte[] { input[i], input[i + 1] };
-                        if (Mapping.TryGetValue(duo, out byte dVal)) {
+                        if (fMapping.TryGetValue(duo, out byte dVal)) {
                             result.Add(dVal);
                             i++;
                             continue;
@@ -123,7 +123,7 @@ namespace GDModel.Providers.GEDCOM
 
                     // Check for a single-byte sequence
                     byte[] solo = new byte[] { input[i] };
-                    if (Mapping.TryGetValue(solo, out byte sVal))
+                    if (fMapping.TryGetValue(solo, out byte sVal))
                         result.Add(sVal);
                     else
                         result.Add(input[i]); // Leave it as is, unless it's in the mapping
@@ -132,7 +132,7 @@ namespace GDModel.Providers.GEDCOM
                 return result.ToArray();
             } catch (Exception ex) {
                 Logger.WriteError("BKAnsel1251.Decode()", ex);
-                throw ex;
+                throw;
             }
         }
     }

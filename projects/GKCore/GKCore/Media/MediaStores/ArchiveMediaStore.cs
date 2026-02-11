@@ -61,7 +61,7 @@ namespace GKCore.Media
 
         protected override Stream LoadMediaStream(bool throwException)
         {
-            Stream resultStream = null;
+            MemoryStream resultStream = null;
 
             if (!File.Exists(fArchiveFileName)) {
                 if (throwException) {
