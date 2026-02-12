@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using BSLib;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Design;
@@ -82,11 +81,6 @@ namespace GKUI.Platform
         {
             var window = GetCurrentPage() as IWindow;
             return window;
-        }
-
-        public override IntPtr GetTopWindowHandle()
-        {
-            throw new NotImplementedException();
         }
 
         public override async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
@@ -176,21 +170,6 @@ namespace GKUI.Platform
             return fPlatformSpecifics.GetExternalStorageDirectory();
         }
 
-        public override ExtRect GetActiveScreenWorkingArea()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void SetWindowBounds(IWindow window, ExtRect bounds)
-        {
-            // not for mobile
-        }
-
-        public override string SelectFolder(string folderPath)
-        {
-            return string.Empty;
-        }
-
         public override bool HasFeatureSupport(Feature feature)
         {
             bool result = false;
@@ -238,11 +217,6 @@ namespace GKUI.Platform
         public override void SetClipboardText(string text)
         {
             Clipboard.SetTextAsync(text);
-        }
-
-        public override void SetClipboardImage(object image)
-        {
-            // not supported
         }
 
         public override void Invoke(Action action)
@@ -329,7 +303,6 @@ namespace GKUI.Platform
             container.Register<IEventDefEditDlg, EventDefEditDlg>(LifeCycle.Transient);
             container.Register<ISourceCallNumberEditDlg, SourceCallNumberEditDlg>(LifeCycle.Transient);
             container.Register<IRepositoryCitEditDlg, RepositoryCitEditDlg>(LifeCycle.Transient);
-
             container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
@@ -344,10 +317,8 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(TabViewControl), typeof(TabControlHandler));
             ControlsManager.RegisterHandlerType(typeof(GKTreeView), typeof(TreeViewHandler));
             ControlsManager.RegisterHandlerType(typeof(MenuItem), typeof(MenuItemHandler));
-
             ControlsManager.RegisterHandlerType(typeof(GroupBox), typeof(GroupBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ToolbarItem), typeof(ToolbarItemHandler));
-
             ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(PickerHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
             ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));

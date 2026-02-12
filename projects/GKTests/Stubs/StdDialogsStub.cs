@@ -27,6 +27,11 @@ namespace GKTests.Stubs
             return await Task.FromResult(fStrResult);
         }
 
+        public async Task<string> SelectFolder(string folderPath)
+        {
+            return await Task.FromResult(folderPath);
+        }
+
         private static string fOpenedFileName;
 
         public static void SetOpenedFile(string fileName)

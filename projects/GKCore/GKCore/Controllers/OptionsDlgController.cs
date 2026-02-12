@@ -652,9 +652,9 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnExtBackupFolderChoose").Enabled = enable;
         }
 
-        public void SelectExtBackupFolder()
+        public async void SelectExtBackupFolder()
         {
-            var selectedFolder = AppHost.Instance.SelectFolder(fOptions.Backups.ExtendedFolder);
+            var selectedFolder = await AppHost.StdDialogs.SelectFolder(fOptions.Backups.ExtendedFolder);
             if (!string.IsNullOrEmpty(selectedFolder)) {
                 GetControl<ITextBox>("txtExtBackupFolder").Text = selectedFolder;
             }

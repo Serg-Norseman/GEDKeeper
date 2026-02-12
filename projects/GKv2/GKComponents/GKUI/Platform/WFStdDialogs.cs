@@ -53,6 +53,15 @@ namespace GKUI.Platform
             }
         }
 
+        public async Task<string> SelectFolder(string folderPath)
+        {
+            using (var fldDlg = new FolderBrowserDialog()) {
+                fldDlg.SelectedPath = folderPath;
+                string retStr = (fldDlg.ShowDialog() != DialogResult.OK) ? string.Empty : fldDlg.SelectedPath;
+                return await Task.FromResult(retStr);
+            }
+        }
+
         public async Task<string> GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt)
         {
             filter = filter.Replace(',', ';');

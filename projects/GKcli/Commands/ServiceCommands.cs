@@ -9,24 +9,25 @@
 using GKCore;
 using GKCore.Locales;
 using GKCore.Options;
+using GKUI.Platform;
 using Sharprompt;
 
 namespace GKcli.Commands;
 
 internal class ServiceMenuCommand : BaseCommand
 {
-    public ServiceMenuCommand() : base("service", LangMan.LS(LSID.MIService), CommandCategory.Application) { }
+    public ServiceMenuCommand() : base("service", LSID.MIService, CommandCategory.Application) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        CommandController.Instance.SelectCommand(CommandCategory.Service, true, "Select a service operation");
+        CommandController.SelectCommand(CommandCategory.Service, true, "Select a service operation");
     }
 }
 
 
 internal class LangChangeCommand : BaseCommand
 {
-    public LangChangeCommand() : base("language", LangMan.LS(LSID.Language), CommandCategory.Service) { }
+    public LangChangeCommand() : base("language", LSID.Language, CommandCategory.Service) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
@@ -35,7 +36,7 @@ internal class LangChangeCommand : BaseCommand
             var selectedLang = Prompt.Select("Select a language", langs, pageSize: 10,
                 textSelector: (LangRecord r) => { return r.Name; });
 
-            CommandController.WriteLine(string.Format("Selected: {0}", selectedLang.FileName));
+            PromptHelper.WriteLine(string.Format("Selected: {0}", selectedLang.FileName));
             AppHost.Instance.LoadLanguage(selectedLang.Code, false);
         }
     }

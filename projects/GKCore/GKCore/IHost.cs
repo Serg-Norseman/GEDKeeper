@@ -97,8 +97,6 @@ namespace GKCore
         void UpdateControls(bool forceDeactivate, bool blockDependent = false);
         void ShowHelpTopic(string topic);
 
-        string SelectFolder(string folderPath);
-
         bool HasFeatureSupport(Feature feature);
     }
 }

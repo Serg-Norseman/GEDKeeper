@@ -12,13 +12,14 @@ using GKCore;
 using GKCore.Controllers;
 using GKCore.Events;
 using GKCore.Locales;
+using GKUI.Platform;
 using Sharprompt;
 
 namespace GKcli.Commands;
 
 internal class EventEditCommand : BaseCommand
 {
-    public EventEditCommand() : base("edit_event", LangMan.LS(LSID.Event), CommandCategory.Events)
+    public EventEditCommand() : base("edit_event", LSID.Event, CommandCategory.Events)
     {
     }
 
@@ -26,15 +27,15 @@ internal class EventEditCommand : BaseCommand
     {
         var evt = CommandController.GetVariable<GDMCustomEvent>("selectedObj");
         if (evt == null) {
-            CommandController.WriteLine("Error: Expected an event");
+            PromptHelper.WriteLine("Error: Expected an event");
             return;
         }
 
         var editedEvent = EditEvent(baseContext, evt);
         if (editedEvent != null) {
-            CommandController.WriteLine("Event edited successfully");
+            PromptHelper.WriteLine("Event edited successfully");
         } else {
-            CommandController.WriteLine("Event editing cancelled or failed");
+            PromptHelper.WriteLine("Event editing cancelled or failed");
         }
     }
 
@@ -98,7 +99,7 @@ internal class EventEditCommand : BaseCommand
                         var value = Prompt.Input<string>("Enter value", defaultValue: eventToEdit.StringValue);
                         eventToEdit.StringValue = value;
                     } else {
-                        CommandController.WriteLine("This event type doesn't have a value field.");
+                        PromptHelper.WriteLine("This event type doesn't have a value field.");
                     }
                     break;
 
@@ -127,7 +128,7 @@ internal class EventEditCommand : BaseCommand
         try {
             GDMCustomDate dt = eventToAccept.Date.Value;
             if (dt == null) {
-                CommandController.WriteLine("Error: Date is required");
+                PromptHelper.WriteLine("Error: Date is required");
                 return false;
             }
 
@@ -136,7 +137,7 @@ internal class EventEditCommand : BaseCommand
 
             return true;
         } catch (Exception ex) {
-            CommandController.WriteLine($"Validation error: {ex.Message}");
+            PromptHelper.WriteLine($"Validation error: {ex.Message}");
             return false;
         }
     }
@@ -145,11 +146,11 @@ internal class EventEditCommand : BaseCommand
     {
         string eventType = GKUtils.GetEventName(evt);
 
-        CommandController.WriteLine($"Event Type: [yellow]{eventType}[/]");
-        CommandController.WriteLine($"Date: [yellow]{evt.Date.StringValue}[/]");
-        CommandController.WriteLine($"Place: [yellow]{evt.Place.StringValue}[/]");
-        CommandController.WriteLine($"Cause: [yellow]{evt.Cause}[/]");
-        CommandController.WriteLine($"Agency: [yellow]{evt.Agency}[/]");
-        CommandController.WriteLine($"Value: [yellow]{evt.StringValue}[/]");
+        PromptHelper.WriteLine($"Event Type: [yellow]{eventType}[/]");
+        PromptHelper.WriteLine($"Date: [yellow]{evt.Date.StringValue}[/]");
+        PromptHelper.WriteLine($"Place: [yellow]{evt.Place.StringValue}[/]");
+        PromptHelper.WriteLine($"Cause: [yellow]{evt.Cause}[/]");
+        PromptHelper.WriteLine($"Agency: [yellow]{evt.Agency}[/]");
+        PromptHelper.WriteLine($"Value: [yellow]{evt.StringValue}[/]");
     }
 }

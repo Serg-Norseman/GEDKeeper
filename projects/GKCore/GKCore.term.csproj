@@ -48,7 +48,6 @@
     <ItemGroup>
         <PackageReference Include="YamlDotNet" Version="16.2.1" />
         <PackageReference Include="UTF.Unknown" Version="2.5.1" />
-        <PackageReference Include="System.IO.Packaging" Version="8.0.1" />
     </ItemGroup>
 
 

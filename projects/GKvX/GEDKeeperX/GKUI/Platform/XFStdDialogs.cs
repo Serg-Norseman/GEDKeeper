@@ -38,6 +38,11 @@ namespace GKUI.Platform
             throw new NotSupportedException();
         }
 
+        public async Task<string> SelectFolder(string folderPath)
+        {
+            throw new NotSupportedException();
+        }
+
         public async Task<string> GetOpenFile(string title, string context, string filter,
                                   int filterIndex, string defaultExt)
         {

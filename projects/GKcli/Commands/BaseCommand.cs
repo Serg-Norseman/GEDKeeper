@@ -6,9 +6,32 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using GKCore;
+using GKCore.Locales;
+using GKUI.Platform;
 
 namespace GKcli.Commands;
+
+internal enum CommandCategory
+{
+    None,
+
+    Application,
+    File,
+    Service,
+    Tools,
+    Events,
+
+    Individual,
+    Family,
+
+    Note,
+    Multimedia,
+    Source,
+    Repository
+}
+
 
 /// <summary>
 /// Abstract base class for commands.
@@ -17,7 +40,7 @@ internal abstract class BaseCommand
 {
     private readonly CommandCategory fCategory;
     private readonly string fSign;
-    private readonly string fText;
+    private readonly Enum fLSID;
 
     /// <summary>
     /// Gets the category of the command.
@@ -40,7 +63,18 @@ internal abstract class BaseCommand
     /// </summary>
     public string Text
     {
-        get { return fText; }
+        get {
+            if (fLSID is LSID lsid) {
+                return LangMan.LS(lsid);
+            } else if (fLSID is CLS cls) {
+                return CLILangMan.LS(cls);
+            }
+            return "#";
+        }
+    }
+
+    public BaseCommand()
+    {
     }
 
     /// <summary>
@@ -49,10 +83,10 @@ internal abstract class BaseCommand
     /// <param name="sign">Internal identifier of the command.</param>
     /// <param name="localizedID">Localized identifier (LSID) of the command.</param>
     /// <param name="category">Category of the command.</param>
-    protected BaseCommand(string sign, string text, CommandCategory category)
+    protected BaseCommand(string sign, Enum lsid, CommandCategory category)
     {
         fSign = sign;
-        fText = text;
+        fLSID = lsid;
         fCategory = category;
     }
 

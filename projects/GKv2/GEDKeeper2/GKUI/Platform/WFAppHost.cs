@@ -239,14 +239,6 @@ namespace GKUI.Platform
             }
         }
 
-        public override string SelectFolder(string folderPath)
-        {
-            using (var fldDlg = new FolderBrowserDialog()) {
-                fldDlg.SelectedPath = folderPath;
-                return (fldDlg.ShowDialog() != DialogResult.OK) ? string.Empty : fldDlg.SelectedPath;
-            }
-        }
-
         public override bool HasFeatureSupport(Feature feature)
         {
             bool result = false;
@@ -402,8 +394,6 @@ namespace GKUI.Platform
             }
         }
 
-        #region KeyLayout functions
-
         public override int GetKeyLayout()
         {
             InputLanguage currentLang = InputLanguage.CurrentInputLanguage;
@@ -434,8 +424,6 @@ namespace GKUI.Platform
             var sdImage = (Image)image;
             Clipboard.SetImage(sdImage);
         }
-
-        #endregion
 
         #region Bootstrapper
 
@@ -523,7 +511,6 @@ namespace GKUI.Platform
             container.Register<IDNATestEditDlg, DNATestEditDlg>(LifeCycle.Transient);
             container.Register<IAgeEditDlg, AgeEditDlg>(LifeCycle.Transient);
             container.Register<IChronicleWin, ChronicleWin>(LifeCycle.Transient);
-
             container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
@@ -546,7 +533,6 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(ToolStripLabel), typeof(LabelToolItemHandler));
             ControlsManager.RegisterHandlerType(typeof(ToolStripDropDownButton), typeof(DropDownToolItemHandler));
             ControlsManager.RegisterHandlerType(typeof(Splitter), typeof(SplitterHandler));
-
             ControlsManager.RegisterHandlerType(typeof(GKTabControl), typeof(TabControlHandler));
             ControlsManager.RegisterHandlerType(typeof(GKComboBox), typeof(ComboBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));

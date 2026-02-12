@@ -14,18 +14,18 @@ namespace GKcli.Commands;
 
 internal class SourceMenuCommand : BaseCommand
 {
-    public SourceMenuCommand() : base("sources", LangMan.LS(LSID.RPSources), CommandCategory.Application) { }
+    public SourceMenuCommand() : base("sources", LSID.RPSources, CommandCategory.Application) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        CommandController.Instance.SelectCommand(CommandCategory.Source, true, "Select a source operation");
+        CommandController.SelectCommand(CommandCategory.Source, true, "Select a source operation");
     }
 }
 
 
 internal class SourceListCommand : BaseCommand
 {
-    public SourceListCommand() : base("list_sources", LangMan.LS(LSID.Find), CommandCategory.Source) { }
+    public SourceListCommand() : base("list_sources", LSID.Find, CommandCategory.Source) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {

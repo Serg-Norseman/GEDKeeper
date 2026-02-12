@@ -113,36 +113,13 @@ namespace GKUI.Platform
             return activeWin;
         }
 
-        public override IntPtr GetTopWindowHandle()
-        {
-            return IntPtr.Zero;
-        }
-
         public override async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
             var efModal = dialog as CommonDialog;
             if (efModal == null) return false;
 
-            //Window activeWin = GetActiveForm() as Window;
-            /*if (keepModeless) {
-#if OS_MSWIN
-                //NativeMethods.PostMessage(mainHandle, NativeMethods.WM_KEEPMODELESS, IntPtr.Zero, IntPtr.Zero);
-#endif
-            }*/
-
             efModal.ShowModal(owner as Control);
             return await efModal.DialogResultTask;
-        }
-
-        public override void EnableWindow(IWidgetForm form, bool value)
-        {
-            Form frm = form as Form;
-
-            if (frm != null) {
-#if OS_MSWIN
-                //NativeMethods.EnableWindow(frm.Handle, value);
-#endif
-            }
         }
 
         public override void SaveWinState(IBaseWindow baseWin, MRUFile mf)
@@ -260,14 +237,6 @@ namespace GKUI.Platform
             if (form != null) {
                 var loc = WidgetLocate(UIHelper.Rt2Rt(form.Bounds), location);
                 form.Location = new Point(loc.X, loc.Y);
-            }
-        }
-
-        public override string SelectFolder(string folderPath)
-        {
-            using (var fldDlg = new SelectFolderDialog()) {
-                fldDlg.Directory = folderPath;
-                return (fldDlg.ShowDialog(null) != DialogResult.Ok) ? string.Empty : fldDlg.Directory;
             }
         }
 
@@ -433,8 +402,6 @@ namespace GKUI.Platform
             }
         }
 
-        #region KeyLayout functions
-
         public override int GetKeyLayout()
         {
             // InputLanguage only exists in WinForms
@@ -467,8 +434,6 @@ namespace GKUI.Platform
                 clipboard.Image = etoImage;
             }
         }
-
-        #endregion
 
         #region Bootstrapper
 

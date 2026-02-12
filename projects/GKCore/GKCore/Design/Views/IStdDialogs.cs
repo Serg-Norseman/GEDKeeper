@@ -18,6 +18,8 @@ namespace GKCore.Design.Views
     {
         Task<string> GetInput(object owner, string prompt, string value);
 
+        Task<string> SelectFolder(string folderPath);
+
         Task<string> GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt);
 
         Task<string[]> GetOpenFiles(string title, string context, string filter, int filterIndex, string defaultExt);

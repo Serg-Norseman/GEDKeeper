@@ -18,30 +18,30 @@ namespace GKcli.Commands;
 
 internal class FileMenuCommand : BaseCommand
 {
-    public FileMenuCommand() : base("gedcom_files", LangMan.LS(LSID.MIFile), CommandCategory.Application) { }
+    public FileMenuCommand() : base("gedcom_files", LSID.MIFile, CommandCategory.Application) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        CommandController.Instance.SelectCommand(CommandCategory.File, true, "Select a file operation");
+        CommandController.SelectCommand(CommandCategory.File, true, "Select a file operation");
     }
 }
 
 
 internal class FileNewCommand : BaseCommand
 {
-    public FileNewCommand() : base("new_gedcom", LangMan.LS(LSID.MIFileNew), CommandCategory.File) { }
+    public FileNewCommand() : base("new_gedcom", LSID.MIFileNew, CommandCategory.File) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
         baseContext.Clear();
-        CommandController.WriteLine("Database created. Records: {0}.", baseContext.Tree.RecordsCount);
+        PromptHelper.WriteLine("Database created. Records: {0}.", baseContext.Tree.RecordsCount);
     }
 }
 
 
 internal class FileLoadCommand : BaseCommand
 {
-    public FileLoadCommand() : base("load_gedcom", LangMan.LS(LSID.MIFileLoad), CommandCategory.File) { }
+    public FileLoadCommand() : base("load_gedcom", LSID.MIFileLoad, CommandCategory.File) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
@@ -53,7 +53,7 @@ internal class FileLoadCommand : BaseCommand
 
 internal class FileLoadRecentCommand : BaseCommand
 {
-    public FileLoadRecentCommand() : base("recent_gedcom", LangMan.LS(LSID.MIMRUFiles), CommandCategory.File) { }
+    public FileLoadRecentCommand() : base("recent_gedcom", LSID.MIMRUFiles, CommandCategory.File) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
@@ -62,7 +62,7 @@ internal class FileLoadRecentCommand : BaseCommand
             var selectedFile = Prompt.Select("Select a recent file", files, pageSize: 10);
             CommandController.LoadFile(baseContext, selectedFile);
         } else {
-            CommandController.WriteLine("No recent files.");
+            PromptHelper.WriteLine("No recent files.");
         }
     }
 }
@@ -70,21 +70,21 @@ internal class FileLoadRecentCommand : BaseCommand
 
 internal class FileSaveCommand : BaseCommand
 {
-    public FileSaveCommand() : base("save_gedcom", LangMan.LS(LSID.MIFileSave), CommandCategory.File) { }
+    public FileSaveCommand() : base("save_gedcom", LSID.MIFileSave, CommandCategory.File) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
         //string selectedFile = PromptHelper.SelectFile(GKUtils.GetAppPath(), ".ged");
         //CommandController.LoadFile(baseContext, selectedFile);
 
-        CommandController.WriteLine("Not implemented.");
+        PromptHelper.WriteLine("Not implemented.");
     }
 }
 
 
 internal class FileSaveAsCommand : BaseCommand
 {
-    public FileSaveAsCommand() : base("saveas_gedcom", LangMan.LS(LSID.MIFileSaveAs), CommandCategory.File) { }
+    public FileSaveAsCommand() : base("saveas_gedcom", LSID.MIFileSaveAs, CommandCategory.File) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
@@ -97,24 +97,24 @@ internal class FileSaveAsCommand : BaseCommand
 
 internal class FilePropsCommand : BaseCommand
 {
-    public FilePropsCommand() : base("properties_gedcom", LangMan.LS(LSID.MIFileProperties), CommandCategory.File) { }
+    public FilePropsCommand() : base("properties_gedcom", LSID.MIFileProperties, CommandCategory.File) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        CommandController.WriteLine("File properties");
+        PromptHelper.WriteLine("File properties");
 
         GDMSubmitterRecord submitter = baseContext.Tree.GetSubmitter();
-        CommandController.WriteLine(1, "{0}: [yellow]{1}[/]", LangMan.LS(LSID.Author), submitter.Name);
-        CommandController.WriteLine(1, "{0}: [yellow]{1}[/]", LangMan.LS(LSID.Address), submitter.Address.Lines.Text);
+        PromptHelper.WriteLine(1, "{0}: [yellow]{1}[/]", LangMan.LS(LSID.Author), submitter.Name);
+        PromptHelper.WriteLine(1, "{0}: [yellow]{1}[/]", LangMan.LS(LSID.Address), submitter.Address.Lines.Text);
         if (submitter.Address.PhoneNumbers.Count > 0) {
-            CommandController.WriteLine(1, "{0}: [yellow]{1}[/]", LangMan.LS(LSID.Telephone), submitter.Address.PhoneNumbers[0].StringValue);
+            PromptHelper.WriteLine(1, "{0}: [yellow]{1}[/]", LangMan.LS(LSID.Telephone), submitter.Address.PhoneNumbers[0].StringValue);
         }
 
-        CommandController.WriteLine();
-        CommandController.WriteLine(1, LangMan.LS(LSID.MIFileProperties));
+        PromptHelper.WriteLine();
+        PromptHelper.WriteLine(1, LangMan.LS(LSID.MIFileProperties));
         int[] stats = baseContext.Tree.GetRecordStats();
         for (int i = 1; i < stats.Length; i++) {
-            CommandController.WriteLine(2, "{0}: [yellow]{1}[/]", LangMan.LS(GKData.RecordTypes[i].Name), stats[i]);
+            PromptHelper.WriteLine(2, "{0}: [yellow]{1}[/]", LangMan.LS(GKData.RecordTypes[i].Name), stats[i]);
         }
     }
 }

@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -16,6 +17,33 @@ namespace GKUI.Platform;
 
 internal static class PromptHelper
 {
+    internal static void WriteLine()
+    {
+        Console.WriteLine();
+    }
+
+    internal static void WriteLine(string value)
+    {
+        WriteMarkupLine(value);
+    }
+
+    internal static void WriteLine(int indent, string value)
+    {
+        var strIndent = new string(' ', indent * 2);
+        WriteMarkupLine(strIndent + value);
+    }
+
+    internal static void WriteLine(string value, params object[] args)
+    {
+        WriteMarkupLine(string.Format(value, args));
+    }
+
+    internal static void WriteLine(int indent, string value, params object[] args)
+    {
+        var strIndent = new string(' ', indent * 2);
+        WriteMarkupLine(strIndent + string.Format(value, args));
+    }
+
     public static string SelectFile(string initialPath, params string[] extensions)
     {
         initialPath = initialPath.TrimEnd('/').TrimEnd('\\');
@@ -96,5 +124,27 @@ internal static class PromptHelper
         }
         Console.ResetColor();
         Console.WriteLine();
+    }
+
+    public static bool GetConfirm(string message, char chY, char chN, string errorMsg)
+    {
+        var answer = Prompt.Input<char>($"{message} ({chY}/{chN})?", defaultValue: chY,
+            validators: new[] {
+                Validators.Required(),
+                value => {
+                    char val = (value is char sym) ? char.ToLower(sym) : (char)0;
+
+                    chY = char.ToLower(chY);
+                    chN = char.ToLower(chN);
+                    if (val == chY || val == chN) {
+                        return ValidationResult.Success;
+                    } else {
+                        return new ValidationResult(string.Format(errorMsg, chY, chN));
+                    }
+                }
+            }
+        );
+
+        return answer == chY;
     }
 }

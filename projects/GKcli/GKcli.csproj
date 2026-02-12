@@ -11,7 +11,7 @@
         <OutputPath>..\..\bin\</OutputPath>
 
         <Configurations>Debug;Release</Configurations>
-        <Platforms>AnyCPU</Platforms>
+        <Platforms>MSWin64;Linux;Linux_ARM;MacOS;FreeBSD</Platforms>
     </PropertyGroup>
 
     <Import Project="..\GKConfigurations3.targets" />

@@ -14,14 +14,18 @@ namespace GKCore.Options
     /// <summary>
     /// Introduced for isolation from System.WinForms.
     /// </summary>
-	public enum WindowState
-	{
-		Normal,
-		Minimized,
-		Maximized
-	}
+    public enum WindowState
+    {
+        Normal,
+        Minimized,
+        Maximized
+    }
 
-	public sealed class MRUFile
+
+    /// <summary>
+    /// Most Recently Used (MRU) files.
+    /// </summary>
+    public sealed class MRUFile
     {
         public string FileName;
         public ExtRect WinRect;

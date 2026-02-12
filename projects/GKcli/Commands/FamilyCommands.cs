@@ -14,18 +14,18 @@ namespace GKcli.Commands;
 
 internal class FamMenuCommand : BaseCommand
 {
-    public FamMenuCommand() : base("families", LangMan.LS(LSID.RPFamilies), CommandCategory.Application) { }
+    public FamMenuCommand() : base("families", LSID.RPFamilies, CommandCategory.Application) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        CommandController.Instance.SelectCommand(CommandCategory.Family, true, "Select a family operation");
+        CommandController.SelectCommand(CommandCategory.Family, true, "Select a family operation");
     }
 }
 
 
 internal class FamListCommand : BaseCommand
 {
-    public FamListCommand() : base("list_families", LangMan.LS(LSID.Find), CommandCategory.Family) { }
+    public FamListCommand() : base("list_families", LSID.Find, CommandCategory.Family) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {

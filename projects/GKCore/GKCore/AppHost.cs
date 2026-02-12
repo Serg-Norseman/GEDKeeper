@@ -255,16 +255,37 @@ namespace GKCore
             fTips.Clear();
         }
 
+        /// <summary>
+        /// Force activate the application window (or top work window).
+        /// Desktop UI only, no mobile or terminal.
+        /// </summary>
         public virtual void Activate()
         {
-            // May have a desktop-only implementation
         }
 
-        public abstract IForm GetActiveForm();
+        /// <summary>
+        /// Not for command-line interface (CLI).
+        /// </summary>
+        public virtual IForm GetActiveForm()
+        {
+            return null;
+        }
 
-        public abstract IWindow GetActiveWindow();
+        /// <summary>
+        /// Not for command-line interface (CLI).
+        /// </summary>
+        public virtual IWindow GetActiveWindow()
+        {
+            return null;
+        }
 
-        public abstract IntPtr GetTopWindowHandle();
+        /// <summary>
+        /// Not for command-line interface (CLI).
+        /// </summary>
+        public virtual IntPtr GetTopWindowHandle()
+        {
+            return IntPtr.Zero;
+        }
 
         public void ShowWindow(IWindow window)
         {
@@ -273,10 +294,15 @@ namespace GKCore
             }
         }
 
+        /// <summary>
+        /// Force activate the widget window.
+        /// Desktop UI only, no mobile or terminal.
+        /// </summary>
         public virtual void EnableWindow(IWidgetForm form, bool value)
         {
-            // May have a desktop-only implementation
         }
+
+        #region MRU support
 
         public MRUFile GetMRUFile(IBaseWindow baseWin)
         {
@@ -294,33 +320,42 @@ namespace GKCore
             if (mf != null) SaveWinState(baseWin, mf);
         }
 
-        public virtual void SaveWinState(IBaseWindow baseWin, MRUFile mf)
-        {
-            // May have a desktop-only implementation
-        }
-
-        public virtual void RestoreWinState(IBaseWindow baseWin, MRUFile mf)
-        {
-            // May have a desktop-only implementation
-        }
-
         public void RestoreWinMRU(IBaseWindow baseWin)
         {
             var mf = GetMRUFile(baseWin);
             if (mf != null) RestoreWinState(baseWin, mf);
         }
 
-        protected virtual void UpdateLang()
-        {
-            foreach (var win in GetRunningForms<IWindow>()) {
-                win.SetLocale();
-            }
-        }
-
         protected void UpdateMRU()
         {
             foreach (var baseWin in GetRunningForms<IBaseWindow>()) {
                 baseWin.UpdateMRU();
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Desktop UI only, no mobile or terminal.
+        /// </summary>
+        public virtual void SaveWinState(IBaseWindow baseWin, MRUFile mf)
+        {
+        }
+
+        /// <summary>
+        /// Desktop UI only, no mobile or terminal.
+        /// </summary>
+        public virtual void RestoreWinState(IBaseWindow baseWin, MRUFile mf)
+        {
+        }
+
+        /// <summary>
+        /// Update the locale setting in the application and in all open windows.
+        /// </summary>
+        protected virtual void UpdateLang()
+        {
+            foreach (var win in GetRunningForms<IWindow>()) {
+                win.SetLocale();
             }
         }
 
@@ -344,26 +379,36 @@ namespace GKCore
             return DateTime.Now;
         }
 
+        /// <summary>
+        /// Get the input language code. Not supported in the terminal.
+        /// </summary>
         public virtual int GetKeyLayout()
         {
-            // May have a desktop-only implementation
             return 0;
         }
 
+        /// <summary>
+        /// Set the input language code. Not supported in the terminal.
+        /// </summary>
         public virtual void SetKeyLayout(int layout)
         {
-            // May have a desktop-only implementation
         }
 
         public abstract ITimer CreateTimer(double msInterval, EventHandler elapsedHandler);
 
+        /// <summary>
+        /// Platform-dependent call to terminate the application.
+        /// </summary>
         public abstract void Quit();
 
         public abstract bool ExecuteWork(ProgressStart proc, string title = "");
 
+        /// <summary>
+        /// Arrange windows in a multi-window desktop UI application according to a given layout.
+        /// Desktop UI only, no mobile or terminal.
+        /// </summary>
         public virtual void LayoutWindows(WinLayout layout)
         {
-            // May have a desktop-only implementation
         }
 
         public virtual string GetExternalStorageDirectory()
@@ -374,9 +419,21 @@ namespace GKCore
 
         #region Extended clipboard functions
 
-        public abstract void SetClipboardText(string text);
+        /// <summary>
+        /// Copy the text to the clipboard.
+        /// Desktop UI only, no mobile or terminal.
+        /// </summary>
+        public virtual void SetClipboardText(string text)
+        {
+        }
 
-        public abstract void SetClipboardImage(object image);
+        /// <summary>
+        /// Copy the diagram image to the clipboard.
+        /// Desktop UI only, no mobile or terminal.
+        /// </summary>
+        public virtual void SetClipboardImage(object image)
+        {
+        }
 
         public void SetClipboardObj<T>(object obj) where T : class
         {
@@ -445,11 +502,10 @@ namespace GKCore
             }
         }
 
-        protected static string GetAppSign()
-        {
-            return fAppSign;
-        }
-
+        /// <summary>
+        /// Set the application signature for functions that obtain system-dependent paths
+        /// to application data in the user profile.
+        /// </summary>
         protected static void SetAppSign(string value)
         {
             fAppSign = value;
@@ -472,7 +528,7 @@ namespace GKCore
                     specialFolder = Environment.SpecialFolder.LocalApplicationData;
                 }
 
-                path = Environment.GetFolderPath(specialFolder) + Path.DirectorySeparatorChar + GetAppSign() + Path.DirectorySeparatorChar;
+                path = Environment.GetFolderPath(specialFolder) + Path.DirectorySeparatorChar + fAppSign + Path.DirectorySeparatorChar;
             } else {
                 path = fAppDataPath;
             }
@@ -539,9 +595,13 @@ namespace GKCore
 
         #region IHost implementation
 
+        /// <summary>
+        /// When a database or diagram window is closed,
+        /// identifies and closes all dependent auxiliary windows.
+        /// Desktop UI only, no mobile or terminal.
+        /// </summary>
         public virtual void CloseDependentWindows(IWindow owner)
         {
-            // May have a desktop-only implementation
         }
 
         public IWorkWindow GetWorkWindow()
@@ -612,10 +672,27 @@ namespace GKCore
             if (widInfo.MenuItem != null) widInfo.MenuItem.Checked = false;
         }
 
-        public abstract ExtRect GetActiveScreenWorkingArea();
+        /// <summary>
+        /// Obtaining the working area of ​​the active system screen for the chart and widget window positioning functions.
+        /// Desktop UI only, no mobile or terminal.
+        /// </summary>
+        public virtual ExtRect GetActiveScreenWorkingArea()
+        {
+            return ExtRect.Empty;
+        }
 
-        public abstract void SetWindowBounds(IWindow window, ExtRect bounds);
+        /// <summary>
+        /// Set the position of the window according to the specified bounds.
+        /// Desktop UI only, no mobile or terminal.
+        /// </summary>
+        public virtual void SetWindowBounds(IWindow window, ExtRect bounds)
+        {
+        }
 
+        /// <summary>
+        /// Set the position of the diagram window according to the specified setting.
+        /// Desktop UI only, no mobile or terminal.
+        /// </summary>
         public void SetWindowBounds(IWindow window, ChartWindowsShowMode mode)
         {
             var scrBounds = GetActiveScreenWorkingArea();
@@ -644,9 +721,12 @@ namespace GKCore
             }
         }
 
+        /// <summary>
+        /// Arrange widget window in a multi-window desktop UI application according to a given alignment type.
+        /// Desktop UI only, no mobile or terminal.
+        /// </summary>
         public virtual void WidgetLocate(IWidgetForm view, WidgetLocation location)
         {
-            // May have a desktop-only implementation
         }
 
         /// <summary>
@@ -1215,8 +1295,6 @@ namespace GKCore
 
             ThemeManager.ApplyTheme(view, component);
         }
-
-        public abstract string SelectFolder(string folderPath);
 
         public virtual bool HasFeatureSupport(Feature feature)
         {

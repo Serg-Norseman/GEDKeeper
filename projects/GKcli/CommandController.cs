@@ -17,46 +17,15 @@ using Sharprompt;
 
 namespace GKcli;
 
-internal enum CommandCategory
-{
-    None,
-
-    Application,
-    File,
-    Service,
-    Tools,
-    Events,
-
-    Individual,
-    Family,
-
-    Note,
-    Multimedia,
-    Source,
-    Repository
-}
-
 internal class CommandController
 {
     #region Common
 
-    private readonly BaseContext fBaseContext = new BaseContext(null);
-    private readonly Dictionary<string, BaseCommand> fCommands = new Dictionary<string, BaseCommand>();
-
-    private static CommandController fInstance;
+    private static readonly BaseContext fBaseContext = new BaseContext(null);
+    private static readonly Dictionary<string, BaseCommand> fCommands = new Dictionary<string, BaseCommand>();
     private static Dictionary<string, object> fVariables = new Dictionary<string, object>();
 
-    public static CommandController Instance
-    {
-        get {
-            if (fInstance == null) {
-                fInstance = new CommandController();
-            }
-            return fInstance;
-        }
-    }
-
-    private CommandController()
+    static CommandController()
     {
         // Files operations
         RegisterCommand(new FileMenuCommand());
@@ -119,19 +88,19 @@ internal class CommandController
         RegisterCommand(new AppExitCommand());
     }
 
-    private void RegisterCommand(BaseCommand commandInstance)
+    private static void RegisterCommand(BaseCommand commandInstance)
     {
         fCommands.Add(commandInstance.Sign, commandInstance);
     }
 
-    public void ExecuteCommand(string sign, BaseContext baseContext, object obj)
+    public static void ExecuteCommand(string sign, BaseContext baseContext, object obj)
     {
         if (fCommands.TryGetValue(sign, out BaseCommand cmd)) {
             cmd.Execute(baseContext, obj);
         }
     }
 
-    public IList<BaseCommand> GetCommands(CommandCategory category, bool hasReturn = false)
+    public static IList<BaseCommand> GetCommands(CommandCategory category, bool hasReturn = false)
     {
         var result = fCommands.Values.Where(c => c.Category == category).ToList();
 
@@ -144,7 +113,7 @@ internal class CommandController
     public const string CMD_RETURN = "return";
     public const string CMD_EXIT = "exit";
 
-    public string SelectCommand(CommandCategory category, bool hasReturn, string message)
+    public static string SelectCommand(CommandCategory category, bool hasReturn, string message)
     {
         var cmdList = GetCommands(category, hasReturn);
 
@@ -164,45 +133,23 @@ internal class CommandController
 
     #region Utilities
 
-    internal static void WriteLine()
+    internal static bool GetConfirm(string message)
     {
-        Console.WriteLine();
-    }
-
-    internal static void WriteLine(string value)
-    {
-        PromptHelper.WriteMarkupLine(value);
-    }
-
-    internal static void WriteLine(int indent, string value)
-    {
-        var strIndent = new string(' ', indent * 2);
-        PromptHelper.WriteMarkupLine(strIndent + value);
-    }
-
-    internal static void WriteLine(string value, params object[] args)
-    {
-        PromptHelper.WriteMarkupLine(string.Format(value, args));
-    }
-
-    internal static void WriteLine(int indent, string value, params object[] args)
-    {
-        var strIndent = new string(' ', indent * 2);
-        PromptHelper.WriteMarkupLine(strIndent + string.Format(value, args));
+        return PromptHelper.GetConfirm(message, 'Д', 'н', "Пожалуйста, введите '{0}' или '{1}'");
     }
 
     internal static void LoadFile(BaseContext baseContext, string selectedFile)
     {
-        WriteLine("Selected file: {0}", selectedFile);
+        PromptHelper.WriteLine("Selected file: {0}", selectedFile);
         var result = baseContext.FileLoad(selectedFile, false).GetAwaiter().GetResult();
-        WriteLine("Database loaded successfully. Records: {0}.", baseContext.Tree.RecordsCount);
+        PromptHelper.WriteLine("Database loaded successfully. Records: {0}.", baseContext.Tree.RecordsCount);
     }
 
     internal static void SaveFile(BaseContext baseContext, string selectedFile)
     {
-        WriteLine("Selected file: {0}", selectedFile);
+        PromptHelper.WriteLine("Selected file: {0}", selectedFile);
         var result = baseContext.FileSave(selectedFile).GetAwaiter().GetResult();
-        WriteLine("Database saved successfully.");
+        PromptHelper.WriteLine("Database saved successfully.");
     }
 
     internal static GDMRecord SelectRecord(BaseContext baseContext, GDMRecordType recordType, string prompt, string yesMsg, string noMsg)
@@ -215,15 +162,32 @@ internal class CommandController
                 pageSize: 10,
                 textSelector: (GDMRecord r) => { return GKUtils.GetRecordName(baseContext.Tree, r, false); });
 
-            WriteLine(string.Format(yesMsg, GKUtils.GetRecordName(baseContext.Tree, result, false)));
+            PromptHelper.WriteLine(string.Format(yesMsg, GKUtils.GetRecordName(baseContext.Tree, result, false)));
         } else {
-            WriteLine(noMsg);
+            PromptHelper.WriteLine(noMsg);
         }
 
         return result;
     }
 
+    public static void DeleteRecord<T>(BaseContext baseContext, string expectedMsg) where T : GDMRecord
+    {
+        var rec = GetVariable<GDMNoteRecord>("selectedObj");
+        if (rec == null) {
+            PromptHelper.WriteLine(expectedMsg);
+            return;
+        }
+
+        bool result = GetConfirm("Подтвердите удаление");
+        if (result) {
+            baseContext.DeleteRecord(rec);
+            SetVariable("selectedObj", null);
+        }
+    }
+
     #endregion
+
+    #region Variables
 
     public static void SetVariable(string varName, object varValue)
     {
@@ -235,4 +199,6 @@ internal class CommandController
         fVariables.TryGetValue(varName, out object result);
         return result as T;
     }
+
+    #endregion
 }

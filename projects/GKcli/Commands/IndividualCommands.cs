@@ -11,24 +11,25 @@ using System.ComponentModel.DataAnnotations;
 using GDModel;
 using GKCore;
 using GKCore.Locales;
+using GKUI.Platform;
 using Sharprompt;
 
 namespace GKcli.Commands;
 
 internal class IndiMenuCommand : BaseCommand
 {
-    public IndiMenuCommand() : base("individuals", LangMan.LS(LSID.RPIndividuals), CommandCategory.Application) { }
+    public IndiMenuCommand() : base("individuals", LSID.RPIndividuals, CommandCategory.Application) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        CommandController.Instance.SelectCommand(CommandCategory.Individual, true, "Select a individual operation");
+        CommandController.SelectCommand(CommandCategory.Individual, true, "Select a individual operation");
     }
 }
 
 
 internal class IndiListCommand : BaseCommand
 {
-    public IndiListCommand() : base("list_individuals", LangMan.LS(LSID.Find), CommandCategory.Individual) { }
+    public IndiListCommand() : base("list_individuals", LSID.Find, CommandCategory.Individual) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
@@ -37,7 +38,7 @@ internal class IndiListCommand : BaseCommand
             var newEvent = new GDMIndividualEvent();
             CommandController.SetVariable("selectedObj", newEvent);
 
-            CommandController.Instance.SelectCommand(CommandCategory.Events, true, "Select an event operation");
+            CommandController.SelectCommand(CommandCategory.Events, true, "Select an event operation");
         }
     }
 }
@@ -45,7 +46,7 @@ internal class IndiListCommand : BaseCommand
 
 internal class IndiAddCommand : BaseCommand
 {
-    public IndiAddCommand() : base("add_individual", LangMan.LS(LSID.MIRecordAdd), CommandCategory.Individual) { }
+    public IndiAddCommand() : base("add_individual", LSID.MIRecordAdd, CommandCategory.Individual) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
@@ -55,7 +56,7 @@ internal class IndiAddCommand : BaseCommand
         var persName = indiRec.AddPersonalName(new GDMPersonalName());
         persName.ParseString(name);
         indiRec.Sex = (sex == 'm') ? GDMSex.svMale : GDMSex.svFemale;
-        CommandController.WriteLine("Individual: {0}", GKUtils.GetNameString(indiRec, false));
+        PromptHelper.WriteLine("Individual: {0}", GKUtils.GetNameString(indiRec, false));
     }
 
     private static Func<object, ValidationResult> SexVal(string errorMessage = null)

@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GDModel.Providers;
-using GDModel.Providers.FamilyShow;
 using GDModel.Providers.GEDCOM;
 using GDModel.Providers.GedML;
 using GDModel.Providers.GEDZIP;
@@ -36,6 +35,10 @@ using GKCore.Utilities;
 
 namespace GKCore
 {
+#if !TERM
+using GDModel.Providers.FamilyShow;
+#endif
+
     public class FileProps
     {
         public int Checksum;
@@ -795,8 +798,7 @@ namespace GKCore
                     }
                     break;
 
-                case MediaStoreType.mstArchive:
-                    {
+                case MediaStoreType.mstArchive: {
                         string currentFileName = MediaLoad(fileRef);
                         result = MediaSave(fileRef, currentFileName, newStoreType);
                     }
@@ -1066,7 +1068,12 @@ namespace GKCore
                 } else if (ext == ".xml") {
                     fileProvider = new GedMLProvider(fTree);
                 } else if (ext == ".familyx") {
+#if !TERM
                     fileProvider = new FamilyXProvider(fTree);
+#else
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FormatUnsupported));
+                    return false;
+#endif
                 } else if (ext == ".gdz" || ext == ".zip") {
                     fileProvider = new GEDZIPProvider(fTree);
                 } else {

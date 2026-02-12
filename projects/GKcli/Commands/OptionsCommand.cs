@@ -13,7 +13,7 @@ namespace GKcli.Commands;
 
 internal class OptionsCommand : BaseCommand
 {
-    public OptionsCommand() : base("options", LangMan.LS(LSID.MIOptions), CommandCategory.Service)
+    public OptionsCommand() : base("options", LSID.MIOptions, CommandCategory.Service)
     {
     }
 
