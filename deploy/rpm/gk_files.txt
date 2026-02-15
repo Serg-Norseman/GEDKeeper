@@ -10,4 +10,4 @@
 ../scripts/
 ../samples/
 ../themes/
-../externals/*.yaml
+../externals/

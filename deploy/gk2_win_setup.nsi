@@ -348,7 +348,7 @@ Section "$(gkreq)"
 
     CreateDirectory "$INSTDIR\externals"
     SetOutPath "$INSTDIR\externals"
-    File "..\externals\*.yaml"
+    File /r "..\externals\*.*"
 
     CreateDirectory "$SMPROGRAMS\GEDKeeper2"
     SetOutPath "$INSTDIR\bin"

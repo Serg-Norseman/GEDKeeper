@@ -33,7 +33,7 @@ cp -r $DEV_PATH/bin/ ~/$LIB_PATH/
 cp -r $DEV_PATH/plugins/ ~/$LIB_PATH/
 
 cp -r $DEV_PATH/backgrounds/ ~/$LIB_PATH/
-cp -r $DEV_PATH/externals/*.yaml ~/$EXT_PATH/
+cp -r $DEV_PATH/externals/ ~/$EXT_PATH/
 cp -r $DEV_PATH/locales/ ~/$LIB_PATH/
 cp -r $DEV_PATH/samples/ ~/$LIB_PATH/
 cp -r $DEV_PATH/scripts/ ~/$LIB_PATH/

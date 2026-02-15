@@ -1,0 +1,186 @@
+/* style.css - ПРОСТАЯ РАБОЧАЯ ВЕРСИЯ */
+
+/* Общие стили для всего документа */
+body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background-color: #faf8f5;
+    color: #2c3e50;
+    line-height: 1.5;
+    padding: 30px 40px;
+    max-width: 1200px;
+    margin: 20px auto;
+    border: 1px solid #dcd5cc;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== ПРОСТОЕ РЕШЕНИЕ: ИСПОЛЬЗУЕМ FLOAT ===== */
+
+/* Все картинки с align="right" получают float */
+img[align="right"] {
+    float: right;
+    width: 150px;
+    height: auto;
+    max-height: 180px;
+    object-fit: contain;
+    border: 1px solid #ccc;
+    padding: 5px;
+    background-color: white;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    margin: 0 0 15px 20px; /* Отступы: сверху 0, справа 0, снизу 15px, слева 20px */
+    
+    /* Убираем абсолютное позиционирование */
+    position: static;
+}
+
+/* Принудительно очищаем обтекание после каждой группы */
+/* Каждый новый блок персоны начинается с p, содержащего a[name] */
+p:has(a[name]) {
+    clear: both; /* Очищаем от предыдущей картинки */
+    padding-top: 10px; /* Небольшой отступ сверху */
+}
+
+/* Первый абзац после заголовка */
+.style_1 + p:has(a[name]) {
+    padding-top: 0;
+}
+
+/* Добавляем небольшой отступ между персонами */
+p:has(a[name]) + p:has(a[name]) {
+    margin-top: 20px;
+}
+
+/* Для длинных абзацев - они будут обтекать картинку */
+p:has(> .style_4) {
+    margin: 5px 0;
+}
+
+/* ===== ОСТАЛЬНЫЕ СТИЛИ (как в оригинале) ===== */
+
+/* Стили для заголовка */
+.style_0 {
+    font-size: 42px;
+    font-weight: bold;
+    text-align: center;
+    color: #8b4513;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #c0a98b;
+    padding-bottom: 20px;
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-family: 'Book Antiqua', 'Palatino', serif;
+    text-shadow: 2px 2px 2px rgba(0,0,0,0.1);
+    clear: both;
+}
+
+/* Стили для заголовков разделов */
+.style_1 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #5d3a1a;
+    border-left: 8px solid #b8860b;
+    padding-left: 20px;
+    margin-top: 40px;
+    margin-bottom: 25px;
+    display: block;
+    font-family: 'Book Antiqua', 'Palatino', serif;
+    clear: both;
+}
+
+/* Стили для ссылок */
+.style_3 {
+    color: #2c5530;
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px dotted #a9a9a9;
+    transition: color 0.2s ease, border-bottom-color 0.2s ease;
+}
+
+.style_3:hover {
+    color: #8b4513;
+    border-bottom: 1px solid #8b4513;
+    cursor: pointer;
+}
+
+/* Стили для основного текста */
+.style_4 {
+    font-size: 16px;
+    color: #3e4a5e;
+    line-height: 1.7;
+	word-wrap: break-word;
+}
+
+/* Стили для имен */
+.style_5 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1e2f4b;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background-color: #f0ebe5;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* Стили для ссылок-якорей */
+a[name] {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Абзацы с информацией о родителях */
+p:has(> .style_4:first-child):has(a.style_3) {
+    margin: 3px 0;
+    line-height: 1.4;
+}
+
+/* Абзацы с местами (Узбекистан и т.д.) */
+p:has(> .style_4:only-child):not(:has(a)) {
+    font-style: italic;
+    color: #6d7a8d;
+    margin: 3px 0;
+}
+
+/* Стили для оглавления */
+body > p:has(a[href^="#"]):not(:has(.style_1)) {
+    margin-left: 25px;
+    position: relative;
+    clear: none; /* В оглавлении не нужно очищать */
+}
+
+body > p:has(a[href^="#"]):not(:has(.style_1))::before {
+    content: "•";
+    color: #b8860b;
+    font-weight: bold;
+    position: absolute;
+    left: -15px;
+    top: -2px;
+    font-size: 18px;
+}
+
+/* Корректировка для мобильных устройств */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
+    .style_0 {
+        font-size: 32px;
+    }
+    
+    .style_1 {
+        font-size: 24px;
+    }
+    
+    img[align="right"] {
+        float: none;
+        display: block;
+        margin: 15px auto;
+        max-width: 100%;
+    }
+    
+    p:has(a[name]) {
+        clear: none;
+    }
+}

@@ -45,6 +45,13 @@ namespace GKCore.Export.Formats
             return false;
         }
 
+        /// <summary>
+        /// So far, only for HTML reports (Family Book). Rework it later.
+        /// </summary>
+        public virtual void SetExternalStyles(string fileName)
+        {
+        }
+
         public abstract bool SupportedText();
 
         public abstract bool SupportedTables();

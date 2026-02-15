@@ -47,6 +47,7 @@ namespace GKCore.Export.Formats
             }
         }
 
+        private string fExternalStyles;
         private StreamWriter fStream;
         private readonly Dictionary<string, string> fStyles;
         private int fTableCol, fTableColsCount;
@@ -55,6 +56,11 @@ namespace GKCore.Export.Formats
         public HTMLWriter()
         {
             fStyles = new Dictionary<string, string>();
+        }
+
+        public override void SetExternalStyles(string fileName)
+        {
+            fExternalStyles = fileName;
         }
 
         public override bool SupportedText()
@@ -76,14 +82,6 @@ namespace GKCore.Export.Formats
             fStream.WriteLine("<meta HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=utf-8\">");
             fStream.WriteLine("<link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\"/>");
             fStream.WriteLine("<title>" + fDocumentTitle + "</title>");
-
-            fStream.WriteLine("<style type=\"text/css\">");
-            foreach (KeyValuePair<string, string> entry in fStyles)
-            {
-                fStream.WriteLine("." + entry.Key + " { " + entry.Value + " }");
-            }
-            fStream.WriteLine("</style>");
-
             fStream.WriteLine("</head>");
             fStream.WriteLine("<body>");
         }
@@ -95,6 +93,30 @@ namespace GKCore.Export.Formats
 
             fStream.Flush();
             fStream.Close();
+
+            WriteStyles();
+        }
+
+        private void WriteStyles()
+        {
+            string targetStylesFile = Path.GetDirectoryName(fFileName) + Path.DirectorySeparatorChar + "style.css";
+
+            if (!string.IsNullOrEmpty(fExternalStyles)) {
+                string sourceStylesFile = Path.Combine(GKUtils.GetExternalsPath(), fExternalStyles);
+
+                if (File.Exists(sourceStylesFile)) {
+                    File.Copy(sourceStylesFile, targetStylesFile, true);
+                    return;
+                }
+            }
+
+            // default styles
+            using (var stream = new StreamWriter(new FileStream(targetStylesFile, FileMode.Create, FileAccess.Write), Encoding.UTF8)) {
+                foreach (KeyValuePair<string, string> entry in fStyles) {
+                    stream.WriteLine("." + entry.Key + " { " + entry.Value + " }");
+                }
+                stream.Flush();
+            }
         }
 
         public override void EnablePageNumbers()

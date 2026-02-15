@@ -134,6 +134,8 @@ namespace GKCore.Export
                 fBoldFont = fWriter.CreateFont("", 8f, true, false, clrBlack);
                 fSymFont = fWriter.CreateFont("", 12f, true, false, clrBlack);
 
+                fWriter.SetExternalStyles("fb_styles/style.css");
+
                 fWriter.EnablePageNumbers();
 
                 var pageSize = fWriter.GetPageSize();
