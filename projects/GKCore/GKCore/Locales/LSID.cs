@@ -1130,6 +1130,9 @@ namespace GKCore.Locales
         /* 1062 */ DeathdayRemained,
         /* 1063 */ ShowEventsOnlyAlive,
 
-        /* 0000 */ Last = ShowEventsOnlyAlive
+        /* 1064 */ IncludeEvents,
+        /* 1065 */ MergeNotes,
+
+        /* 0000 */ Last = MergeNotes
     }
 }

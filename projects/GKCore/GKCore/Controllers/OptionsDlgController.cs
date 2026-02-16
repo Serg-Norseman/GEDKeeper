@@ -288,6 +288,30 @@ namespace GKCore.Controllers
             fOptions.PedigreeOptions.DescendNumbering = GetControl<IComboBox>("cmbDescendNumbering").GetSelectedTag<PedigreeNumbering>();
         }
 
+        public void ResetFamilyBookOptions()
+        {
+            fOptions.FamilyBookOptions.ResetDefaults();
+            UpdateFamilyBookOptions();
+        }
+
+        public void UpdateFamilyBookOptions()
+        {
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                GetControl<ICheckBox>("chkFBIncludeEvents").Checked = fOptions.FamilyBookOptions.IncludeEvents;
+                GetControl<ICheckBox>("chkFBIncludeNotes").Checked = fOptions.FamilyBookOptions.IncludeNotes;
+                GetControl<ICheckBox>("chkFBMergeNotes").Checked = fOptions.FamilyBookOptions.MergeNotes;
+            }
+        }
+
+        public void AcceptFamilyBookOptions()
+        {
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                fOptions.FamilyBookOptions.IncludeEvents = GetControl<ICheckBox>("chkFBIncludeEvents").Checked;
+                fOptions.FamilyBookOptions.IncludeNotes = GetControl<ICheckBox>("chkFBIncludeNotes").Checked;
+                fOptions.FamilyBookOptions.MergeNotes = GetControl<ICheckBox>("chkFBMergeNotes").Checked;
+            }
+        }
+
         public void UpdateWomanSurnameFormat()
         {
             WomanSurnameFormat wsFmt = fOptions.WomanSurnameFormat;
@@ -881,8 +905,9 @@ namespace GKCore.Controllers
             fOptions.ListOptions[GDMRecordType.rtIndividual].Columns.CopyTo(fTempColumns);
             UpdateColumnsList();
 
-            // pedigrees
+            // reports
             UpdatePedigreesOptions();
+            UpdateFamilyBookOptions();
 
             // specials
             UpdateSpecials();
@@ -913,8 +938,9 @@ namespace GKCore.Controllers
             AcceptWomanSurnameFormat();
             AcceptColumnsList();
 
-            // pedigrees
+            // reports
             AcceptPedigreesOptions();
+            AcceptFamilyBookOptions();
 
             // specials
             AcceptSpecials();
@@ -1138,6 +1164,16 @@ namespace GKCore.Controllers
             GetControl<ITabPage>("pageNavigation").Text = LangMan.LS(LSID.Navigation);
 
             GetControl<ITabPage>("pageGeo").Text = LangMan.LS(LSID.LocationsAndMaps);
+
+            // Reports
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                GetControl<ITabPage>("pageReports").Text = LangMan.LS(LSID.Reports);
+
+                GetControl<ITabPage>("pageFamilyBook").Text = LangMan.LS(LSID.FamilyBook);
+                GetControl<ICheckBox>("chkFBIncludeEvents").Text = LangMan.LS(LSID.IncludeEvents);
+                GetControl<ICheckBox>("chkFBIncludeNotes").Text = LangMan.LS(LSID.IncludeNotes);
+                GetControl<ICheckBox>("chkFBMergeNotes").Text = LangMan.LS(LSID.MergeNotes);
+            }
 
             // Pedigree
             GetControl<ITabPage>("pagePedigree").Text = LangMan.LS(LSID.Pedigrees);

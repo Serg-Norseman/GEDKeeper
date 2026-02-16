@@ -14,6 +14,7 @@ using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Export.Formats;
 using GKCore.Locales;
+using GKCore.Options;
 
 namespace GKCore.Export
 {
@@ -68,6 +69,7 @@ namespace GKCore.Export
             new CatalogProps("Catalog_Sources", LangMan.LS(LSID.RPSources))
         };
 
+        private readonly FamilyBookOptions fOptions;
         private IFont fTitleFont;
         private IFont fChapFont;
         private IFont fSubchapFont;
@@ -83,14 +85,13 @@ namespace GKCore.Export
         // temp options
         public bool SkipEmptyCatalogs = true;
         public bool CatalogNewPages = false;
-        public bool IncludeEvents = true;
-        public bool IncludeNotes = true;
 
 
         public FamilyBookExporter(IBaseWindow baseWin)
             : base(baseWin, true)
         {
             fTitle = LangMan.LS(LSID.FamilyBook);
+            fOptions = GlobalOptions.Instance.FamilyBookOptions;
         }
 
         protected override void Dispose(bool disposing)
@@ -344,7 +345,7 @@ namespace GKCore.Export
                 fWriter.EndParagraph();
             }
 
-            if (IncludeEvents && iRec.HasEvents) {
+            if (fOptions.IncludeEvents && iRec.HasEvents) {
                 int num = iRec.Events.Count;
                 for (int i = 0; i < num; i++) {
                     GDMCustomEvent evt = iRec.Events[i];
@@ -365,11 +366,16 @@ namespace GKCore.Export
                 }
             }
 
-            if (IncludeNotes && iRec.HasNotes) {
+            if (fOptions.IncludeNotes && iRec.HasNotes) {
                 int num = iRec.Notes.Count;
                 for (int i = 0; i < num; i++) {
                     GDMLines noteLines = fTree.GetNoteLines(iRec.Notes[i]);
-                    fWriter.AddParagraph(GKUtils.MergeStrings(noteLines), fTextFont);
+
+                    if (fOptions.MergeNotes) {
+                        fWriter.AddParagraph(GKUtils.MergeStrings(noteLines), fTextFont);
+                    } else {
+                        fWriter.AddParagraph(noteLines.Text, fTextFont);
+                    }
                 }
             }
         }

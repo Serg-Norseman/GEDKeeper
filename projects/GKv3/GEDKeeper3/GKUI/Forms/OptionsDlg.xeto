@@ -9,7 +9,7 @@
     <TableRow ScaleHeight="True">
       <TabControl x:Name="PageControl1">
 
-        <TabPage x:Name="pageCommon">
+        <TabPage x:Name="pageCommon" Padding="4">
 
           <TabControl x:Name="tabsCommon">
             <TabPage x:Name="pageComOther">
@@ -171,11 +171,11 @@
           </StackLayout>
         </TabPage>
 
-        <TabPage x:Name="pageCharts">
+        <TabPage x:Name="pageCharts" Padding="4">
 
           <TabControl x:Name="tabsCharts">
 
-            <TabPage x:Name="pageTreeChart">
+            <TabPage x:Name="pageTreeChart" Padding="4">
 
               <TabControl x:Name="tabsTreeCharts">
 
@@ -409,7 +409,7 @@
 
         </TabPage>
 
-        <TabPage x:Name="pageUIView">
+        <TabPage x:Name="pageUIView" Padding="4">
 
           <TabControl x:Name="PageControl2">
 
@@ -564,45 +564,57 @@
 
         </TabPage>
 
-        <TabPage x:Name="pagePedigree" Padding="8">
+        <TabPage x:Name="pageReports" Padding="4">
+          <TabControl x:Name="PageControlRep">
 
-          <GroupBox x:Name="grpPedigree">
-            <StackLayout Style="vertListStack">
-              <GroupBox x:Name="grpPedigreeFormat">
+            <TabPage x:Name="pagePedigree" Padding="8">
+              <GroupBox x:Name="grpPedigree">
                 <StackLayout Style="vertListStack">
-                  <RadioButton x:Name="radExcess" />
-                  <RadioButton x:Name="radCompact" />
+                  <GroupBox x:Name="grpPedigreeFormat">
+                    <StackLayout Style="vertListStack">
+                      <RadioButton x:Name="radExcess" />
+                      <RadioButton x:Name="radCompact" />
+                    </StackLayout>
+                  </GroupBox>
+
+                  <CheckBox x:Name="chkAttributes" />
+                  <CheckBox x:Name="chkNotes" />
+                  <CheckBox x:Name="chkSources" />
+                  <StackLayout Orientation="Horizontal" Spacing="20">
+                    <StackLayoutItem />
+                    <CheckBox x:Name="chkSourcePages" />
+                  </StackLayout>
+                  <StackLayout Orientation="Horizontal" Spacing="20">
+                    <StackLayoutItem />
+                    <CheckBox x:Name="chkSourceCitations" />
+                  </StackLayout>
+                  <CheckBox x:Name="chkGenerations" />
+                  <CheckBox x:Name="chkPortraits" />
+                  <CheckBox x:Name="chkSortEvents" />
+
+                  <TableLayout Style="paddedTable8">
+                    <TableRow>
+                      <Label x:Name="lblAscendNumbering" />
+                      <ComboBox x:Name="cmbAscendNumbering" ReadOnly="True" Width="160" />
+                    </TableRow>
+                    <TableRow>
+                      <Label x:Name="lblDescendNumbering" />
+                      <ComboBox x:Name="cmbDescendNumbering" ReadOnly="True" Width="160" />
+                    </TableRow>
+                  </TableLayout>
                 </StackLayout>
               </GroupBox>
+            </TabPage>
 
-              <CheckBox x:Name="chkAttributes" />
-              <CheckBox x:Name="chkNotes" />
-              <CheckBox x:Name="chkSources" />
-              <StackLayout Orientation="Horizontal" Spacing="20">
-                <StackLayoutItem />
-                <CheckBox x:Name="chkSourcePages" />
+            <TabPage x:Name="pageFamilyBook" Padding="8">
+              <StackLayout Style="vertListStack">
+                <CheckBox x:Name="chkFBIncludeEvents" />
+                <CheckBox x:Name="chkFBIncludeNotes" />
+                <CheckBox x:Name="chkFBMergeNotes" />
               </StackLayout>
-              <StackLayout Orientation="Horizontal" Spacing="20">
-                <StackLayoutItem />
-                <CheckBox x:Name="chkSourceCitations" />
-              </StackLayout>
-              <CheckBox x:Name="chkGenerations" />
-              <CheckBox x:Name="chkPortraits" />
-              <CheckBox x:Name="chkSortEvents" />
+            </TabPage>
 
-              <TableLayout Style="paddedTable8">
-                <TableRow>
-                  <Label x:Name="lblAscendNumbering" />
-                  <ComboBox x:Name="cmbAscendNumbering" ReadOnly="True" Width="160" />
-                </TableRow>
-                <TableRow>
-                  <Label x:Name="lblDescendNumbering" />
-                  <ComboBox x:Name="cmbDescendNumbering" ReadOnly="True" Width="160" />
-                </TableRow>
-              </TableLayout>
-            </StackLayout>
-          </GroupBox>
-
+          </TabControl>
         </TabPage>
 
         <TabPage x:Name="pageSpecials" Padding="8">

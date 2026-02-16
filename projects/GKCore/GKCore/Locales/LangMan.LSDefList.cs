@@ -1105,6 +1105,9 @@ namespace GKCore.Locales
             /* 1061 */ "Tomorrow is deathday of {0}",
             /* 1062 */ "{1} days remain before the deathday of {0}",
             /* 1063 */ "Events for the living only",
+
+            /* 1064 */ "Include events",
+            /* 1065 */ "Notes without line breaks",
         };
     }
 }

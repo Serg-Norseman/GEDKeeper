@@ -51,6 +51,9 @@ namespace GKUI.Forms
         private TabPage pageMultimedia;
         private TabPage pageEventTypes;
         private GKSheetList slEventTypes;
+        private TabControl PageControlRep;
+        private TabPage pageReports;
+        private TabPage pageFamilyBook;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -189,8 +192,15 @@ namespace GKUI.Forms
                     break;
 
                 case 4:
-                    // pedigrees
-                    fController.ResetPedigreesOptions();
+                    // reports
+                    switch (PageControlRep.SelectedIndex) {
+                        case 0:
+                            fController.ResetPedigreesOptions();
+                            break;
+                        case 1:
+                            fController.ResetFamilyBookOptions();
+                            break;
+                    }
                     break;
 
                 case 5:
@@ -231,7 +241,8 @@ namespace GKUI.Forms
                     break;
 
                 case OptionsPage.opPedigree:
-                    PageControl1.SelectedPage = pagePedigree;
+                    PageControl1.SelectedPage = pageReports;
+                    PageControlRep.SelectedPage = pagePedigree;
                     break;
 
                 case OptionsPage.opMultimedia:

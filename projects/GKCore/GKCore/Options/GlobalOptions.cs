@@ -40,6 +40,7 @@ namespace GKCore.Options
         private readonly BackupOptions fBackups;
         private readonly CircleChartOptions fCircleChartOptions;
         private readonly StringList fEventFilters;
+        private readonly FamilyBookOptions fFamilyBookOptions;
         private readonly StringList fFARPatterns;
         private readonly StringList fFARReplacements;
         private readonly List<LangRecord> fLanguages;
@@ -128,6 +129,11 @@ namespace GKCore.Options
         public bool ExtendedLocations { get; set; }
 
         public bool EL_AbbreviatedNames { get; set; }
+
+        public FamilyBookOptions FamilyBookOptions
+        {
+            get { return fFamilyBookOptions; }
+        }
 
         public StringList FARPatterns
         {
@@ -318,6 +324,7 @@ namespace GKCore.Options
             fFARReplacements = new StringList();
             fRSFilters = new Dictionary<GDMRecordType, StringList>();
             fBackups = new BackupOptions();
+            fFamilyBookOptions = new FamilyBookOptions();
 
             ResetDefaults();
         }
@@ -808,6 +815,7 @@ namespace GKCore.Options
 
             fTreeChartOptions.LoadFromFile(ini);
             fPedigreeOptions.LoadFromFile(ini);
+            fFamilyBookOptions.LoadFromFile(ini);
             fProxy.LoadFromFile(ini);
 
             LoadStringList(ini, fNameFilters, "NameFilters", "Filter_");
@@ -951,6 +959,7 @@ namespace GKCore.Options
 
             fTreeChartOptions.SaveToFile(ini);
             fPedigreeOptions.SaveToFile(ini);
+            fFamilyBookOptions.SaveToFile(ini);
             fProxy.SaveToFile(ini);
 
             fNameFilters.Sort();
