@@ -577,6 +577,10 @@ namespace GDModel.Providers.GEDCOM
                 curTag = tree.AddRecord(new GDMGroupRecord(tree));
                 addHandler = TagHandler.GroupRecordTag;
 
+            } else if ((tagType == GEDCOMTagType._LABL) && (tree.Format == GEDCOMFormat.SyniumFamilyTree)) {
+                curTag = tree.AddRecord(new GDMGroupRecord(tree));
+                addHandler = TagHandler.GroupRecordTag;
+
             } else if (tagType == GEDCOMTagType._RESEARCH) {
                 curTag = tree.AddRecord(new GDMResearchRecord(tree));
                 addHandler = TagHandler.ResearchRecordTag;
@@ -867,7 +871,7 @@ namespace GDModel.Providers.GEDCOM
             TagHandler addHandler = TagHandler.Null;
 
             GEDCOMTagType tagType = (GEDCOMTagType)tagId;
-            if (tagType == GEDCOMTagType.NAME) {
+            if (tagType == GEDCOMTagType.NAME || tagType == GEDCOMTagType.TITL) {
                 groupRec.GroupName = tagValue;
             } else if (tagType == GEDCOMTagType._MEMBER) {
                 curTag = groupRec.Members.Add(new GDMIndividualLink(tagId, tagValue));
@@ -3159,6 +3163,7 @@ namespace GDModel.Providers.GEDCOM
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._GRP, GEDCOMTagName._GRP, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._HAIR, GEDCOMTagName._HAIR, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._HOBBY, GEDCOMTagName._HOBBY, true);
+            GEDCOMTagsTable.RegisterTag(GEDCOMTagType._LABL, GEDCOMTagName._LABL, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._LOC, GEDCOMTagName._LOC, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._MARN, GEDCOMTagName._MARN, true);
             GEDCOMTagsTable.RegisterTag(GEDCOMTagType._MDCL, GEDCOMTagName._MDCL, true);

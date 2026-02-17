@@ -196,6 +196,7 @@ namespace GDModel.Providers.GEDCOM
         _FOLDER, // [GK]
         _GOAL, // [GK]
         _GRP, // Group record [Genney]
+        _LABL, // Label record [SyniumFamilyTree]
         _LANG, // [GK], outdated, replaced by LANG
         _MARN, // Married Surname [BKW6]
         _MARNM, // Married Surname [AQ3, PAF5, Geni]
@@ -382,6 +383,7 @@ namespace GDModel.Providers.GEDCOM
         public const string _GRP = "_GRP"; // Group record [Genney]
         public const string _HAIR = "_HAIR"; // [BKW6, PAF]
         public const string _HOBBY = "_HOBBY"; // Hobby [GK]
+        public const string _LABL = "LABL"; // Label record [SyniumFamilyTree]
         public const string _LOC = "_LOC"; // [GEDCOM 5.5EL]
         public const string _MARN = "_MARN"; // Married Surname [BKW6]
         public const string _MDCL = "_MDCL"; // Medical condition [FTM, FTW]
