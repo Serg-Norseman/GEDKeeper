@@ -17,6 +17,9 @@ using GKCore.Plugins;
 
 namespace GKCore
 {
+    /// <summary>
+    /// Features available depending on the platform, operating system, or framework.
+    /// </summary>
     public enum Feature
     {
         GridCellFormat,

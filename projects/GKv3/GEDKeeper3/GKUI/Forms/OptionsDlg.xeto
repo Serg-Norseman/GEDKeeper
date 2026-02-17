@@ -609,8 +609,16 @@
             <TabPage x:Name="pageFamilyBook" Padding="8">
               <StackLayout Style="vertListStack">
                 <CheckBox x:Name="chkFBIncludeEvents" />
+                <StackLayout Orientation="Horizontal" Spacing="20">
+                  <StackLayoutItem />
+                  <CheckBox x:Name="chkFBIncludeFamilyEvents" />
+                </StackLayout>
+
                 <CheckBox x:Name="chkFBIncludeNotes" />
-                <CheckBox x:Name="chkFBMergeNotes" />
+                <StackLayout Orientation="Horizontal" Spacing="20">
+                  <StackLayoutItem />
+                  <CheckBox x:Name="chkFBMergeNotes" />
+                </StackLayout>
               </StackLayout>
             </TabPage>
 

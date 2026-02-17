@@ -853,13 +853,13 @@ namespace GKCore
             return result;
         }
 
-        public static string GetEventDesc(GDMTree tree, GDMCustomEvent evt, bool hyperLink = true)
+        public static string GetEventDesc(GDMTree tree, GDMCustomEvent evt, bool hyperLink = true, bool shortenDatesOpt = false)
         {
             if (evt == null)
                 throw new ArgumentNullException(nameof(evt));
 
             var globOpts = GlobalOptions.Instance;
-            string dt = GEDCOMEventToDateStr(evt, globOpts.DefDateFormat, globOpts.ShowDatesSign);
+            string dt = GEDCOMEventToDateStr(evt, globOpts.DefDateFormat, globOpts.ShowDatesSign, globOpts.TreeChartOptions.ShortenDates && shortenDatesOpt);
 
             string place = string.Empty;
             if (evt.HasPlace) {

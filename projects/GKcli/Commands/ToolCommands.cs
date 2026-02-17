@@ -75,7 +75,7 @@ internal class PlacesManagerCommand : BaseCommand
 
 internal class RecMergeCommand : BaseCommand
 {
-    public RecMergeCommand() : base("record_merge", LSID.RecMerge, CommandCategory.Tools) { }
+    public RecMergeCommand() : base("record_merge", LSID.MergeDuplicates, CommandCategory.Tools) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {

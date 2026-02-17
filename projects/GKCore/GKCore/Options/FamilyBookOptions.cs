@@ -16,6 +16,7 @@ namespace GKCore.Options
         public bool IncludeEvents;
         public bool IncludeNotes;
         public bool MergeNotes;
+        public bool IncludeFamilyEvents;
 
         public FamilyBookOptions()
         {
@@ -30,6 +31,7 @@ namespace GKCore.Options
             IncludeEvents = srcOptions.IncludeEvents;
             IncludeNotes = srcOptions.IncludeNotes;
             MergeNotes = srcOptions.MergeNotes;
+            IncludeFamilyEvents = srcOptions.IncludeFamilyEvents;
         }
 
         public void ResetDefaults()
@@ -37,6 +39,7 @@ namespace GKCore.Options
             IncludeEvents = true;
             IncludeNotes = true;
             MergeNotes = true;
+            IncludeFamilyEvents = false;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -48,6 +51,7 @@ namespace GKCore.Options
                 IncludeEvents = iniFile.ReadBool("FamilyBook", "IncludeEvents", true);
                 IncludeNotes = iniFile.ReadBool("FamilyBook", "IncludeNotes", true);
                 MergeNotes = iniFile.ReadBool("FamilyBook", "MergeNotes", true);
+                IncludeFamilyEvents = iniFile.ReadBool("FamilyBook", "IncludeFamilyEvents", false);
             } catch (Exception) {
                 throw new Exception("Error loading FamilyBookOptions");
             }
@@ -61,6 +65,7 @@ namespace GKCore.Options
             iniFile.WriteBool("FamilyBook", "IncludeEvents", IncludeEvents);
             iniFile.WriteBool("FamilyBook", "IncludeNotes", IncludeNotes);
             iniFile.WriteBool("FamilyBook", "MergeNotes", MergeNotes);
+            iniFile.WriteBool("FamilyBook", "IncludeFamilyEvents", IncludeFamilyEvents);
         }
     }
 }

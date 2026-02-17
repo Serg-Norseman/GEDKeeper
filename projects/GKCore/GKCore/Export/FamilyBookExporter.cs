@@ -7,6 +7,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using BSLib;
 using GDModel;
 using GDModel.Providers.GEDCOM;
@@ -83,7 +85,6 @@ namespace GKCore.Export
         private StringList deathCauses, occuIndex, reliIndex, sourcesIndex;
 
         // temp options
-        public bool SkipEmptyCatalogs = true;
         public bool CatalogNewPages = false;
 
 
@@ -94,35 +95,12 @@ namespace GKCore.Export
             fOptions = GlobalOptions.Instance.FamilyBookOptions;
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing) {
-                if (mainIndex != null)
-                    mainIndex.Dispose();
-                if (byIndex != null)
-                    byIndex.Dispose();
-                if (dyIndex != null)
-                    dyIndex.Dispose();
-                if (bpIndex != null)
-                    bpIndex.Dispose();
-                if (dpIndex != null)
-                    dpIndex.Dispose();
-                if (deathCauses != null)
-                    deathCauses.Dispose();
-                if (occuIndex != null)
-                    occuIndex.Dispose();
-                if (reliIndex != null)
-                    reliIndex.Dispose();
-                if (sourcesIndex != null)
-                    sourcesIndex.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
         protected override void InternalGenerate()
         {
             try {
                 PrepareData();
+                bool hasContent = mainIndex.Count > 0;
+                bool hasIndexes = BookCatalogs.Count(x => x.Index != null && x.Index.Count > 0) > 0;
 
                 IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
                 IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
@@ -136,91 +114,102 @@ namespace GKCore.Export
                 fSymFont = fWriter.CreateFont("", 12f, true, false, clrBlack);
 
                 fWriter.SetExternalStyles("fb_styles/style.css");
-
                 fWriter.EnablePageNumbers();
 
                 var pageSize = fWriter.GetPageSize();
                 float halfpage = (pageSize.GetHeight() - (fTitleFont.Size * 4)) / 2f;
                 fWriter.NewLine(0.0f, halfpage);
                 fWriter.AddParagraph(fTitle, fTitleFont, TextAlignment.taCenter);
-                fWriter.NewPage();
 
-                fWriter.AddParagraph(LangMan.LS(LSID.TableOfContents), fChapFont);
-                fWriter.NewLine();
-                fWriter.AddParagraphLink("1. " + LangMan.LS(LSID.PersonalRecords), fLinkFont, "IndividualRecords");
-                fWriter.AddParagraphLink("2. " + LangMan.LS(LSID.Indexes), fLinkFont, "Catalogs");
+                // table of contents
 
-                int catNum = 0;
-                for (BookCatalog cat = BookCatalog.Catalog_First; cat <= BookCatalog.Catalog_Last; cat++) {
-                    CatalogProps catProps = BookCatalogs[(int)cat];
-
-                    if (!SkipEmptyCatalogs || catProps.Index.Count > 0) {
-                        catNum++;
-                        string title = "2." + catNum.ToString() + ". " + catProps.Title;
-
-                        fWriter.BeginParagraph(TextAlignment.taLeft, 0.0f, 0.0f, 1f);
-                        fWriter.AddParagraphChunkLink(title, fLinkFont, catProps.Sign);
-                        fWriter.EndParagraph();
-                    }
-                }
-
-                fWriter.NewPage();
-
-                fWriter.BeginParagraph(TextAlignment.taCenter, 0, 20f);
-                fWriter.AddParagraphChunkAnchor(LangMan.LS(LSID.PersonalRecords), fChapFont, "IndividualRecords");
-                fWriter.EndParagraph();
-                fWriter.NewLine();
-
-                fWriter.BeginMulticolumns(3, 10f);
-                char sym = '!';
-                int num = mainIndex.Count;
-                for (int i = 0; i < num; i++) {
-                    string text = mainIndex[i];
-                    GDMIndividualRecord iRec = mainIndex.GetObject(i) as GDMIndividualRecord;
-
-                    char isym = (string.IsNullOrEmpty(text)) ? '?' : text[0];
-                    if ((isym >= 'A' && isym <= 'Z') || (isym >= 'А' && isym <= 'Я')) {
-                        if (sym != isym) {
-                            fWriter.AddParagraph("" + isym, fSymFont, TextAlignment.taCenter);
-                            fWriter.NewLine();
-                            sym = isym;
-                        }
-                    }
-
-                    ExposePerson(iRec, text);
-
+                if (hasContent) {
+                    fWriter.NewPage();
+                    fWriter.AddParagraph(LangMan.LS(LSID.TableOfContents), fChapFont);
                     fWriter.NewLine();
+                    fWriter.AddParagraphLink("1. " + LangMan.LS(LSID.PersonalRecords), fLinkFont, "IndividualRecords");
                 }
-                fWriter.EndMulticolumns();
 
-                fWriter.NewPage();
+                if (hasIndexes) {
+                    fWriter.AddParagraphLink("2. " + LangMan.LS(LSID.Indexes), fLinkFont, "Catalogs");
 
-                fWriter.BeginParagraph(TextAlignment.taCenter, 0, 20f);
-                fWriter.AddParagraphChunkAnchor(LangMan.LS(LSID.Indexes), fChapFont, "Catalogs");
-                fWriter.EndParagraph();
-                fWriter.NewLine();
+                    int catNum = 0;
+                    for (BookCatalog cat = BookCatalog.Catalog_First; cat <= BookCatalog.Catalog_Last; cat++) {
+                        CatalogProps catProps = BookCatalogs[(int)cat];
 
-                fWriter.BeginMulticolumns(3, 10f);
-                for (BookCatalog cat = BookCatalog.Catalog_First; cat <= BookCatalog.Catalog_Last; cat++) {
-                    CatalogProps catProps = BookCatalogs[(int)cat];
-                    
-                    if (!SkipEmptyCatalogs || catProps.Index.Count > 0) {
-                        if (CatalogNewPages) {
-                            fWriter.NewPage();
-                            fWriter.BeginMulticolumns(3, 10f);
+                        if (catProps.Index.Count > 0) {
+                            catNum++;
+                            string title = "2." + catNum.ToString() + ". " + catProps.Title;
+
+                            fWriter.BeginParagraph(TextAlignment.taLeft, 0.0f, 0.0f, 1f);
+                            fWriter.AddParagraphChunkLink(title, fLinkFont, catProps.Sign);
+                            fWriter.EndParagraph();
                         }
-
-                        ExposeCatalog(catProps);
                     }
                 }
 
-                fWriter.EndMulticolumns();
+                // indi records and indexes
+
+                if (hasContent) {
+                    fWriter.NewPage();
+                    fWriter.BeginParagraph(TextAlignment.taCenter, 0, 20f);
+                    fWriter.AddParagraphChunkAnchor(LangMan.LS(LSID.PersonalRecords), fChapFont, "IndividualRecords");
+                    fWriter.EndParagraph();
+                    fWriter.NewLine();
+
+                    fWriter.BeginMulticolumns(3, 10f);
+                    char sym = '!';
+                    int num = mainIndex.Count;
+                    for (int i = 0; i < num; i++) {
+                        string text = mainIndex[i];
+                        GDMIndividualRecord iRec = mainIndex.GetObject(i) as GDMIndividualRecord;
+
+                        char isym = (string.IsNullOrEmpty(text)) ? '?' : text[0];
+                        if ((isym >= 'A' && isym <= 'Z') || (isym >= 'А' && isym <= 'Я')) {
+                            if (sym != isym) {
+                                fWriter.AddParagraph("" + isym, fSymFont, TextAlignment.taCenter);
+                                fWriter.NewLine();
+                                sym = isym;
+                            }
+                        }
+
+                        ExposePerson(iRec, text);
+
+                        fWriter.NewLine();
+                    }
+                    fWriter.EndMulticolumns();
+                }
+
+                if (hasIndexes) {
+                    fWriter.NewPage();
+                    fWriter.BeginParagraph(TextAlignment.taCenter, 0, 20f);
+                    fWriter.AddParagraphChunkAnchor(LangMan.LS(LSID.Indexes), fChapFont, "Catalogs");
+                    fWriter.EndParagraph();
+                    fWriter.NewLine();
+
+                    fWriter.BeginMulticolumns(3, 10f);
+                    for (BookCatalog cat = BookCatalog.Catalog_First; cat <= BookCatalog.Catalog_Last; cat++) {
+                        CatalogProps catProps = BookCatalogs[(int)cat];
+                        if (catProps.Index.Count > 0) {
+                            if (CatalogNewPages) {
+                                fWriter.NewPage();
+                                fWriter.BeginMulticolumns(3, 10f);
+                            }
+                            ExposeCatalog(catProps);
+                        }
+                    }
+                    fWriter.EndMulticolumns();
+                }
             } catch (Exception ex) {
                 Logger.WriteError("FamilyBookExporter.InternalGenerate()", ex);
                 throw;
             }
         }
 
+        /// <summary>
+        /// Only collects data on people and their events for indexes.
+        /// It does not prepare data for displaying people's events.
+        /// </summary>
         private void PrepareData()
         {
             mainIndex = new StringList();
@@ -243,14 +232,11 @@ namespace GKCore.Export
 
                 mainIndex.AddObject(text, iRec);
 
-                int evNum = iRec.Events.Count;
-                for (int k = 0; k < evNum; k++) {
+                for (int k = 0, evNum = iRec.Events.Count; k < evNum; k++) {
                     GDMCustomEvent evt = iRec.Events[k];
-                    if (evt == null)
-                        continue;
+                    if (evt == null) continue;
 
-                    int srcNum2 = evt.SourceCitations.Count;
-                    for (int m = 0; m < srcNum2; m++) {
+                    for (int m = 0, srcNum2 = evt.SourceCitations.Count; m < srcNum2; m++) {
                         var sourceRec = fTree.GetPtrValue<GDMSourceRecord>(evt.SourceCitations[m]);
                         if (sourceRec == null) continue;
 
@@ -268,29 +254,18 @@ namespace GKCore.Export
                     if (evtType == GEDCOMTagType.BIRT) {
                         // Analysis on births
                         PrepareEventYear(byIndex, evt, iRec);
-                        st = GKUtils.GetPlaceStr(evt, false);
-                        if (!string.IsNullOrEmpty(st))
-                            PrepareSpecIndex(bpIndex, st, iRec);
+                        PrepareSpecIndex(bpIndex, GKUtils.GetPlaceStr(evt, false), iRec);
                     } else if (evtType == GEDCOMTagType.DEAT) {
                         // Analysis by causes of death
                         PrepareEventYear(dyIndex, evt, iRec);
-                        st = GKUtils.GetPlaceStr(evt, false);
-                        if (!string.IsNullOrEmpty(st))
-                            PrepareSpecIndex(dpIndex, st, iRec);
-
-                        st = evt.Cause;
-                        if (!string.IsNullOrEmpty(st))
-                            PrepareSpecIndex(deathCauses, st, iRec);
+                        PrepareSpecIndex(dpIndex, GKUtils.GetPlaceStr(evt, false), iRec);
+                        PrepareSpecIndex(deathCauses, evt.Cause, iRec);
                     } else if (evtType == GEDCOMTagType.OCCU) {
                         // Analysis by occupation
-                        st = evt.StringValue;
-                        if (!string.IsNullOrEmpty(st))
-                            PrepareSpecIndex(occuIndex, st, iRec);
+                        PrepareSpecIndex(occuIndex, evt.StringValue, iRec);
                     } else if (evtType == GEDCOMTagType.RELI) {
                         // Analysis by religion
-                        st = evt.StringValue;
-                        if (!string.IsNullOrEmpty(st))
-                            PrepareSpecIndex(reliIndex, st, iRec);
+                        PrepareSpecIndex(reliIndex, evt.StringValue, iRec);
                     }
                 }
 
@@ -346,23 +321,39 @@ namespace GKCore.Export
             }
 
             if (fOptions.IncludeEvents && iRec.HasEvents) {
-                int num = iRec.Events.Count;
-                for (int i = 0; i < num; i++) {
+                var filteredEvents = new List<FBEvent>();
+
+                for (int i = 0, num = iRec.Events.Count; i < num; i++) {
                     GDMCustomEvent evt = iRec.Events[i];
                     var evtType = evt.GetTagType();
+
+                    // Only the main dates of birth and death are displayed in the person's header.
+                    // Or, in the future, introduce a toggle option.
                     if (evtType == GEDCOMTagType.BIRT || evtType == GEDCOMTagType.DEAT)
                         continue;
-                    
-                    string evtName = GKUtils.GetEventName(evt);
-                    string evtVal = evt.StringValue;
-                    string evtDesc = GKUtils.GetEventDesc(fBase.Context.Tree, evt, false);
 
-                    string tmp = evtName + ": " + evtVal;
-                    if (evtVal != "")
-                        tmp += ", ";
-                    tmp += evtDesc;
+                    filteredEvents.Add(new FBEvent(evt));
+                }
 
-                    fWriter.AddParagraph(tmp, fTextFont);
+                if (fOptions.IncludeFamilyEvents) {
+                    for (int m = 0, num2 = iRec.SpouseToFamilyLinks.Count; m < num2; m++) {
+                        GDMFamilyRecord family = fTree.GetPtrValue(iRec.SpouseToFamilyLinks[m]);
+                        if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
+
+                        GDMIndividualRecord spRec;
+                        spRec = (iRec.Sex == GDMSex.svMale) ? fTree.GetPtrValue(family.Wife) : fTree.GetPtrValue(family.Husband);
+                        if (spRec == null) continue;
+
+                        for (int i = 0, num = family.Events.Count; i < num; i++) {
+                            GDMCustomEvent evt = family.Events[i];
+                            filteredEvents.Add(new FBEvent(evt, spRec));
+                        }
+                    }
+                }
+
+                filteredEvents.Sort((a, b) => a.Event.Date.CompareTo(b.Event.Date));
+                for (int i = 0, num = filteredEvents.Count; i < num; i++) {
+                    ExposeEvent(filteredEvents[i]);
                 }
             }
 
@@ -377,6 +368,31 @@ namespace GKCore.Export
                         fWriter.AddParagraph(noteLines.Text, fTextFont);
                     }
                 }
+            }
+        }
+
+        private void ExposeEvent(FBEvent fbEvent)
+        {
+            GDMCustomEvent evt = fbEvent.Event;
+            GDMIndividualRecord spouse = fbEvent.Spouse;
+
+            string evtName = GKUtils.GetEventName(evt);
+            string evtVal = evt.StringValue;
+            string evtDesc = GKUtils.GetEventDesc(fBase.Context.Tree, evt, false, true);
+
+            string tmp = evtName + ": " + evtVal;
+            if (evtVal != "")
+                tmp += ", ";
+            tmp += evtDesc;
+
+            if (spouse == null) {
+                fWriter.AddParagraph(tmp, fTextFont);
+            } else {
+                tmp += ", ";
+                fWriter.BeginParagraph(TextAlignment.taLeft, 0, 0, 0);
+                fWriter.AddParagraphChunk(tmp, fTextFont);
+                fWriter.AddParagraphChunkLink(GKUtils.GetNameString(spouse, true, false), fLinkFont, spouse.XRef);
+                fWriter.EndParagraph();
             }
         }
 
@@ -417,8 +433,14 @@ namespace GKCore.Export
             }
         }
 
+        /// <summary>
+        /// Adds a person to the corresponding index if the category is not empty.
+        /// </summary>
         private static void PrepareSpecIndex(StringList index, string val, GDMIndividualRecord iRec)
         {
+            if (string.IsNullOrEmpty(val))
+                return;
+
             if (index == null)
                 throw new ArgumentNullException(nameof(index));
 
@@ -448,6 +470,24 @@ namespace GKCore.Export
             int dtY = evt.GetChronologicalYear();
             if (dtY != 0) {
                 PrepareSpecIndex(index, dtY.ToString(), iRec);
+            }
+        }
+
+
+        private sealed class FBEvent
+        {
+            public GDMCustomEvent Event;
+            public GDMIndividualRecord Spouse;
+
+            public FBEvent(GDMCustomEvent evt)
+            {
+                Event = evt;
+            }
+
+            public FBEvent(GDMCustomEvent evt, GDMIndividualRecord spouse)
+            {
+                Event = evt;
+                Spouse = spouse;
             }
         }
     }

@@ -298,6 +298,7 @@ namespace GKCore.Controllers
         {
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 GetControl<ICheckBox>("chkFBIncludeEvents").Checked = fOptions.FamilyBookOptions.IncludeEvents;
+                GetControl<ICheckBox>("chkFBIncludeFamilyEvents").Checked = fOptions.FamilyBookOptions.IncludeFamilyEvents;
                 GetControl<ICheckBox>("chkFBIncludeNotes").Checked = fOptions.FamilyBookOptions.IncludeNotes;
                 GetControl<ICheckBox>("chkFBMergeNotes").Checked = fOptions.FamilyBookOptions.MergeNotes;
             }
@@ -307,6 +308,7 @@ namespace GKCore.Controllers
         {
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 fOptions.FamilyBookOptions.IncludeEvents = GetControl<ICheckBox>("chkFBIncludeEvents").Checked;
+                fOptions.FamilyBookOptions.IncludeFamilyEvents = GetControl<ICheckBox>("chkFBIncludeFamilyEvents").Checked;
                 fOptions.FamilyBookOptions.IncludeNotes = GetControl<ICheckBox>("chkFBIncludeNotes").Checked;
                 fOptions.FamilyBookOptions.MergeNotes = GetControl<ICheckBox>("chkFBMergeNotes").Checked;
             }
@@ -1171,6 +1173,7 @@ namespace GKCore.Controllers
 
                 GetControl<ITabPage>("pageFamilyBook").Text = LangMan.LS(LSID.FamilyBook);
                 GetControl<ICheckBox>("chkFBIncludeEvents").Text = LangMan.LS(LSID.IncludeEvents);
+                GetControl<ICheckBox>("chkFBIncludeFamilyEvents").Text = LangMan.LS(LSID.IncludeFamilyEvents);
                 GetControl<ICheckBox>("chkFBIncludeNotes").Text = LangMan.LS(LSID.IncludeNotes);
                 GetControl<ICheckBox>("chkFBMergeNotes").Text = LangMan.LS(LSID.MergeNotes);
             }

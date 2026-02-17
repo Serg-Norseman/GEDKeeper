@@ -257,12 +257,11 @@ namespace GKCore.Export
             }
 
             var evList = new List<PedigreeEvent>();
-            int i;
             if (person.IRec.HasEvents) {
                 fWriter.AddParagraph(LangMan.LS(LSID.Events) + ":", fTextFont);
 
                 int num = person.IRec.Events.Count;
-                for (i = 0; i < num; i++) {
+                for (int i = 0; i < num; i++) {
                     GDMCustomEvent evt = person.IRec.Events[i];
                     if (!(evt is GDMIndividualAttribute) || fOptions.PedigreeOptions.IncludeAttributes) {
                         var pEvt = new PedigreeEvent(person.IRec, evt);
@@ -273,8 +272,7 @@ namespace GKCore.Export
                 WriteEventList(person, evList);
             }
 
-            int num2 = person.IRec.SpouseToFamilyLinks.Count;
-            for (i = 0; i < num2; i++) {
+            for (int i = 0, num2 = person.IRec.SpouseToFamilyLinks.Count; i < num2; i++) {
                 GDMFamilyRecord family = fTree.GetPtrValue(person.IRec.SpouseToFamilyLinks[i]);
                 if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
 
@@ -339,8 +337,7 @@ namespace GKCore.Export
 
             bool spIndex = person.IRec.SpouseToFamilyLinks.Count > 1;
 
-            int num2 = person.IRec.SpouseToFamilyLinks.Count;
-            for (int i = 0; i < num2; i++) {
+            for (int i = 0, spNum = person.IRec.SpouseToFamilyLinks.Count; i < spNum; i++) {
                 GDMFamilyRecord family = fTree.GetPtrValue(person.IRec.SpouseToFamilyLinks[i]);
                 if (fBase.Context.IsRecordAccess(family.Restriction)) {
                     GDMIndividualRecord spRec;
