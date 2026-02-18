@@ -112,6 +112,7 @@ namespace GKCore.Charts
         private bool fHasMediaFail;
         private TreeChartPerson fHighlightedPerson;
         private long fHighlightedStart;
+        private readonly List<LineHandle> fInfoLines;
         private TreeChartKind fKind;
         private TreeChartPerson fKinRoot;
         private int fLevelDistance;
@@ -308,6 +309,7 @@ namespace GKCore.Charts
             fFilter = new ChartFilter();
             fFilterData = new GKVarCache<GDMIndividualRecord, bool>();
             fGraph = null;
+            fInfoLines = new List<LineHandle>();
             fLines = new Dictionary<int, LineHandle>();
             fPersons = new List<TreeChartPerson>();
             fPreparedFamilies = new HashSet<string>();
@@ -439,7 +441,7 @@ namespace GKCore.Charts
             fBranchDistance = sourceModel.fBranchDistance;
             fCertaintyIndex = sourceModel.fCertaintyIndex;
             fDepthLimitAncestors = sourceModel.fDepthLimitAncestors;
-            fDepthLimitDescendants= sourceModel.fDepthLimitDescendants;
+            fDepthLimitDescendants = sourceModel.fDepthLimitDescendants;
             fDrawFont = sourceModel.fDrawFont;
             fBookmarkPic = sourceModel.fBookmarkPic;
             fExpPic = sourceModel.fExpPic;
@@ -1037,6 +1039,25 @@ namespace GKCore.Charts
             fLayout.RecalcChart();
 
             RecalcTreeBounds();
+
+            fInfoLines.Clear();
+            if (fOptions.ShowInfoLines) {
+                var router = new LineRouter(fPersons, fLines.Values.ToList());
+
+                var dictionary = fPersons.Where(x => x.Rec != null).ToDictionary(x => x.Rec.XRef);
+
+                for (int i = 0; i < fPersons.Count; i++) {
+                    var person = fPersons[i];
+                    if (person.Associations != null && person.Associations.Length > 0) {
+                        for (int k = 0; k < person.Associations.Length; k++) {
+                            string assoXRef = person.Associations[k];
+                            if (dictionary.TryGetValue(assoXRef, out TreeChartPerson target)) {
+                                router.Route(person, target, fInfoLines);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         #endregion
@@ -1771,9 +1792,21 @@ namespace GKCore.Charts
                 Draw(fRoot, fKind, drawMode);
             }
 
+            DrawInfoLines();
+
             if (fOptions.BorderStyle != GfxBorderStyle.None) {
                 var rt = ExtRect.CreateBounds(fOffsetX, fOffsetY, fImageWidth, fImageHeight);
                 BorderPainter.DrawBorder(fRenderer, rt, fOptions.BorderStyle);
+            }
+        }
+
+        private void DrawInfoLines()
+        {
+            if (!fOptions.ShowInfoLines) return;
+
+            for (int i = 0; i < fInfoLines.Count; i++) {
+                LineHandle line = fInfoLines[i];
+                DrawLine(line.X1, line.Y1, line.X2, line.Y2, false, false, false);
             }
         }
 

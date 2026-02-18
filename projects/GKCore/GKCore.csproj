@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\BKAnsel1251.cs" />
+    <Compile Include="GKCore\Charts\LineRouter.cs" />
     <Compile Include="GKCore\Controllers\MediaFileEditDlgController.cs" />
     <Compile Include="GKCore\Design\Views\IChronicleWin.cs" />
     <Compile Include="GKCore\Backups\BackupTool.cs" />
@@ -406,6 +407,7 @@
     <Compile Include="GKCore\Search\FARPropertyType.cs" />
     <Compile Include="GKCore\Search\SearchResult.cs" />
     <Compile Include="GKCore\Search\WorkSearchStrategy.cs" />
+    <Compile Include="GKCore\Utilities\PriorityQueue.cs" />
     <Compile Include="GKCore\Utilities\Shortcut.cs" />
     <Compile Include="GKCore\Utilities\MapiMailMessage.cs" />
     <Compile Include="GKCore\Utilities\FreqCollection.cs" />

@@ -71,6 +71,9 @@ namespace GKCore.Options
         public bool UseAdditionalDates;
         public bool MultipleSpouseLines;
 
+        // temp debug option
+        public bool ShowInfoLines = false;
+
         public IColor MaleColor;
         public IColor FemaleColor;
         public IColor UnkSexColor;

@@ -98,6 +98,7 @@ namespace GKCore.Charts
         public int NameLines;
         public string Note;
         public GDMSourceCitation[] Sources;
+        public string[] Associations;
 
 
         public int Height
@@ -415,6 +416,14 @@ namespace GKCore.Charts
                     } else {
                         Sources = new GDMSourceCitation[0];
                     }
+
+                    if (options.ShowInfoLines && fRec.HasAssociations) {
+                        Associations = new string[fRec.Associations.Count];
+                        for (int i = 0; i < fRec.Associations.Count; i++)
+                            Associations[i] = fRec.Associations[i].XRef;
+                    } else {
+                        Associations = Array.Empty<string>();
+                    }
                 } else {
                     fSurname = "";
                     fName = "< ? >";
@@ -430,6 +439,7 @@ namespace GKCore.Charts
 
                     cas = 0.0f;
                     Sources = new GDMSourceCitation[0];
+                    Associations = Array.Empty<string>();
                 }
 
                 CertaintyAssessment = string.Format("{0:0.00}", cas);
