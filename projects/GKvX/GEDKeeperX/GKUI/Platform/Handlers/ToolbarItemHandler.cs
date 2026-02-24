@@ -13,7 +13,7 @@ using Xamarin.Forms;
 
 namespace GKUI.Platform
 {
-    public sealed class ToolbarItemHandler : ControlHandler<ToolbarItem, ToolbarItemHandler>, IButtonToolItem
+    public sealed class ToolbarItemHandler : ControlHandler<ToolbarItem, ToolbarItemHandler>, IToolItem
     {
         public ToolbarItemHandler(ToolbarItem control) : base(control)
         {

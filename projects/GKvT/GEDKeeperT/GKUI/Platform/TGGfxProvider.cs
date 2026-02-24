@@ -71,7 +71,7 @@ namespace GKUI.Platform
 
         public IFont CreateFont(string fontName, float size, bool bold)
         {
-            return null;
+            return new FontHandler(fontName);
         }
 
         public IColor CreateColor(int argb)

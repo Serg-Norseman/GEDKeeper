@@ -7,6 +7,7 @@
  */
 
 using GKCore.Design.Views;
+using Terminal.Gui;
 
 namespace GKUI.Forms
 {
@@ -31,9 +32,7 @@ namespace GKUI.Forms
             }
         }
 
-        /*private readonly TableRow fContentRow;
-        private readonly TableLayout fStatusBar;
-        private readonly TableRow fStatusRow;*/
+        private readonly StatusBar fStatusBar;
         private readonly StatusLinesEx fStatusLines;
 
         public IStatusLines StatusLines
@@ -41,84 +40,26 @@ namespace GKUI.Forms
             get { return fStatusLines; }
         }
 
-        /*public new Control Content
-        {
-            get {
-                return (fContentRow.Cells.Count > 0) ? fContentRow.Cells[0].Control : null;
-            }
-            set {
-                if (fContentRow.Cells.Count > 0) {
-                    fContentRow.Cells[0].Control = value;
-                } else {
-                    fContentRow.Cells.Add(value);
-                }
-            }
-        }*/
-
         public StatusForm()
         {
-            /*fStatusRow = new TableRow() {
-                Cells = { null }
-            };
-
-            fStatusBar = new TableLayout() {
-                Rows = {
-                    fStatusRow
+            fStatusBar = new StatusBar() {
+                Visible = true,
+                Items = new StatusItem[] {
+                    new StatusItem(Key.Null, "test status", null)
                 }
             };
+            this.StatusBar = fStatusBar;
 
-            fContentRow = new TableRow() {
-                ScaleHeight = true,
-                Cells = { null }
-            };
-
-            base.Content = new TableLayout() {
-                Rows = {
-                    fContentRow,
-                    fStatusBar
-                }
-            };
-
-            fStatusLines = new StatusLinesEx(this);*/
+            fStatusLines = new StatusLinesEx(this);
         }
 
         protected string GetStatusLine(int index)
         {
-            /*if (index < 0 || index >= fStatusRow.Cells.Count) {
-                return string.Empty;
-            } else {
-                return ((Label)fStatusRow.Cells[index].Control).Text;
-            }*/
             return string.Empty;
         }
 
         protected void SetStatusLine(int index, string value)
         {
-            /*fStatusBar.SuspendLayout();
-
-            Label panel = null;
-            if (index < 0) {
-                return;
-            } else if (index >= fStatusRow.Cells.Count) {
-                while (index >= fStatusRow.Cells.Count) {
-                    panel = new Label();
-                    fStatusRow.Cells.Add(panel);
-                }
-            }
-
-            panel = (Label)fStatusRow.Cells[index].Control;
-            if (panel == null) {
-                panel = new Label();
-                fStatusRow.Cells[index].Control = panel;
-            }
-            panel.Text = value;
-
-            for (int i = 0; i < fStatusRow.Cells.Count; i++) {
-                fStatusRow.Cells[i].ScaleWidth = true;
-            }
-            //fStatusBar.Panels[fStatusBar.Panels.Count - 1].AutoSize = StatusBarPanelAutoSize.Spring;
-
-            fStatusBar.ResumeLayout();*/
         }
     }
 }

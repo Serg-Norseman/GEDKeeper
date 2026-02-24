@@ -259,7 +259,7 @@ namespace GKCore.Controllers
 #if NETCOREAPP
             GetControl<IButton>("tbExcelExport").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ExportTable);
 #else
-            GetControl<IButtonToolItem>("tbExcelExport").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ExportTable);
+            GetControl<IToolItem>("tbExcelExport").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_ExportTable);
 #endif
         }
 

@@ -46,12 +46,18 @@ namespace GKUI.Platform
         public object Tag
         {
             get { return null; }
-            set {  }
+            set { }
         }
 
         public string Text
         {
             get { return string.Empty; }
+            set { }
+        }
+
+        public bool Visible
+        {
+            get { return true; }
             set { }
         }
 

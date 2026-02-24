@@ -109,6 +109,7 @@ namespace GKCore.Charts
         private IImage fInfoPic;
         private IImage fCollapsePic;
         private KinshipsGraph fGraph;
+        private bool fGraphicsMode;
         private bool fHasMediaFail;
         private TreeChartPerson fHighlightedPerson;
         private long fHighlightedStart;
@@ -304,6 +305,8 @@ namespace GKCore.Charts
         {
             ScaleLimits = true;
 
+            fGraphicsMode = AppHost.Instance.HasFeatureSupport(Feature.Graphics);
+
             fDepthLimitAncestors = -1;
             fDepthLimitDescendants = -1;
             fFilter = new ChartFilter();
@@ -409,6 +412,9 @@ namespace GKCore.Charts
 
         private void InitSigns(ChartRenderer renderer)
         {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Graphics))
+                return;
+
             if (fSignsPic != null)
                 return;
 
@@ -950,11 +956,19 @@ namespace GKCore.Charts
                 fDefCharWidth = fRenderer.GetTextWidth("A", fDrawFont);
             }
 
-            fBranchDistance = (int)Math.Round(fOptions.BranchDistance * fScale);
-            fLevelDistance = (int)Math.Round(fOptions.LevelDistance * fScale);
-            fMargins = (int)Math.Round(fOptions.Margins * fScale);
-            fNodePadding = (int)(fOptions.Padding * fScale);
-            fSpouseDistance = (int)Math.Round(fOptions.SpouseDistance * fScale);
+            if (fGraphicsMode) {
+                fBranchDistance = (int)Math.Round(fOptions.BranchDistance * fScale);
+                fLevelDistance = (int)Math.Round(fOptions.LevelDistance * fScale);
+                fMargins = (int)Math.Round(fOptions.Margins * fScale);
+                fNodePadding = (int)(fOptions.Padding * fScale);
+                fSpouseDistance = (int)Math.Round(fOptions.SpouseDistance * fScale);
+            } else {
+                fBranchDistance = 20;
+                fLevelDistance = 9;
+                fMargins = 1;
+                fNodePadding = 1;
+                fSpouseDistance = 20;
+            }
         }
 
         private void RecalcPersonBounds()
@@ -1398,7 +1412,7 @@ namespace GKCore.Charts
 
                 DrawCoverGlass(bordRt, person);
 
-                if (fOptions.SignsVisible && !person.Signs.IsEmpty()) {
+                if (fOptions.SignsVisible && fSignsPic != null && !person.Signs.IsEmpty()) {
                     int i = 0;
                     int dy = (int)(21 * fPicScale);
                     for (var cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++) {
@@ -1414,14 +1428,17 @@ namespace GKCore.Charts
 
                 // only for existing individuals
                 if (person.Rec != null) {
+                    int offsetX = 1;
+                    int offsetY = 1;
+
                     // draw XRef
                     if (fXRefVisible) {
-                        DrawText(person.Rec.XRef, bordRt.Right, bordRt.Bottom, 3, false);
+                        DrawText(person.Rec.XRef, bordRt.Right + offsetX, bordRt.Bottom + offsetY, 3, false);
                     }
 
                     // draw CI
                     if (fCertaintyIndex) {
-                        fRenderer.DrawString(person.CertaintyAssessment, fDrawFont, fSolidBlack, bordRt.Left, bordRt.Bottom);
+                        fRenderer.DrawString(person.CertaintyAssessment, fDrawFont, fSolidBlack, bordRt.Left, bordRt.Bottom + offsetY);
                     }
                 }
 
@@ -1494,9 +1511,10 @@ namespace GKCore.Charts
 
             var tH = (int)fDrawFont.Height;
             int aY = (!fOptions.InvertedTree) ? crY + (pY - crY - tH) / 2 : pY + (crY - pY - tH) / 2;
+            int offsetX = fGraphicsMode ? 4 : 1;
 
-            DrawText(person.FatherAge, person.PtX - 4, aY, 3, fSolidM);
-            DrawText(person.MotherAge, person.PtX + 4, aY, 2, fSolidF);
+            DrawText(person.FatherAge, person.PtX - offsetX, aY, 3, fSolidM);
+            DrawText(person.MotherAge, person.PtX + offsetX, aY, 2, fSolidF);
         }
 
         private void DrawAncestors(TreeChartPerson person, ChartDrawMode drawMode, bool isTracked)

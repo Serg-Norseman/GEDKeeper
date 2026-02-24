@@ -6,6 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
+using NStack;
 using Terminal.Gui;
 
 namespace GKUI.Components
@@ -58,19 +60,37 @@ namespace GKUI.Components
     {
     }
 
-    public class ToolStrip : View
+    public class ToolStrip : MenuBar
     {
     }
 
-    public class ToolStripMenuItem : View
+    public class ToolStripItem : MenuItem
+    {
+        public ToolStripItem()
+        {
+        }
+
+        public ToolStripItem(ustring title, ustring help, Action action) : base(title, help, action)
+        {
+        }
+    }
+
+    public class ToolStripMenuItem : ToolStripItem
+    {
+        public ToolStripMenuItem()
+        {
+        }
+
+        public ToolStripMenuItem(ustring title, ustring help, Action action) : base(title, help, action)
+        {
+        }
+    }
+
+    public class ToolStripButton : MenuBarItem
     {
     }
 
-    public class ToolStripButton : View
-    {
-    }
-
-    public class ToolStripDropDownButton : View
+    public class ToolStripDropDownButton : ToolStripButton
     {
     }
 
@@ -83,10 +103,6 @@ namespace GKUI.Components
     }
 
     public class ToolStripSeparator : View
-    {
-    }
-
-    public class ContextMenuStrip : View
     {
     }
 

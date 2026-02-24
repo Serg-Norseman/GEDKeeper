@@ -737,10 +737,10 @@ namespace GKCore.Controllers
             SubstituteControl<IRadioButton>(view, "radSelected");
             SubstituteControl<IButton>(view, "btnSelectPlaces");
             SubstituteControl<ICheckBox>(view, "chkLinesVisible");
-            SubstituteControl<IButtonToolItem>(view, "tbLoadPlaces");
-            SubstituteControl<IButtonToolItem>(view, "tbProviders");
+            SubstituteControl<IToolItem>(view, "tbLoadPlaces");
+            SubstituteControl<IToolItem>(view, "tbProviders");
             SubstituteControl<ITabPage>(view, "pageCoordinates");
-            SubstituteControl<IButtonToolItem>(view, "tbClear");
+            SubstituteControl<IToolItem>(view, "tbClear");
             SubstituteControl<IButton>(view, "btnSearch");
             SubstituteControl<IToolItem>(view, "tbSaveSnapshot");
 
@@ -1728,9 +1728,9 @@ namespace GKCore.Controllers
         public void Test_SlideshowController()
         {
             var view = Substitute.For<ISlideshowWin>();
-            SubstituteControl<IButtonToolItem>(view, "tbStart");
-            SubstituteControl<IButtonToolItem>(view, "tbPrev");
-            SubstituteControl<IButtonToolItem>(view, "tbNext");
+            SubstituteControl<IToolItem>(view, "tbStart");
+            SubstituteControl<IToolItem>(view, "tbPrev");
+            SubstituteControl<IToolItem>(view, "tbNext");
 
             var controller = new SlideshowController(view);
             controller.Init(fBaseWin);

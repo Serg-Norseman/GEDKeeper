@@ -188,7 +188,6 @@
     <Compile Include="GKCore\Design\ControlsManager.cs" />
     <Compile Include="GKCore\Design\Controls\ComboItem.cs" />
     <Compile Include="GKCore\Design\Controls\IButton.cs" />
-    <Compile Include="GKCore\Design\Controls\IButtonToolItem.cs" />
     <Compile Include="GKCore\Design\Controls\ICheckBox.cs" />
     <Compile Include="GKCore\Design\Controls\IComboBox.cs" />
     <Compile Include="GKCore\Design\Controls\IComboItem.cs" />

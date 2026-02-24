@@ -162,10 +162,10 @@ namespace GKCore.Controllers
 
 #if NETCOREAPP
             // only for GKv3 (GKDropDownToolItem), not for GKv2 (ComboBox)
-            GetControl<IButtonToolItem>("cmbSizes").Text = "Sizes";
+            GetControl<IToolItem>("cmbSizes").Text = "Sizes";
 #endif
 
-            GetControl<IButtonToolItem>("ddbtnActions").Text = LangMan.LS(LSID.Actions);
+            GetControl<IToolItem>("ddbtnActions").Text = LangMan.LS(LSID.Actions);
             GetControl<IMenuItem>("miSelectAndCopy").Text = LangMan.LS(LSID.SelectAndCopy);
             GetControl<IMenuItem>("miImport").Text = LangMan.LS(LSID.Import);
             GetControl<IMenuItem>("miExport").Text = LangMan.LS(LSID.MIExport);

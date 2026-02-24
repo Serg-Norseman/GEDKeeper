@@ -27,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
+        <ProjectReference Include="..\..\GKCore\GKCore.term.csproj" />
     </ItemGroup>
 
     <ItemGroup>

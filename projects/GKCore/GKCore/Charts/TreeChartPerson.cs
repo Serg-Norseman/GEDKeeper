@@ -414,7 +414,7 @@ namespace GKCore.Charts
                             Sources[i] = srcCit;
                         }
                     } else {
-                        Sources = new GDMSourceCitation[0];
+                        Sources = Array.Empty<GDMSourceCitation>();
                     }
 
                     if (options.ShowInfoLines && fRec.HasAssociations) {
@@ -438,7 +438,7 @@ namespace GKCore.Charts
                     fSex = GDMSex.svUnknown;
 
                     cas = 0.0f;
-                    Sources = new GDMSourceCitation[0];
+                    Sources = Array.Empty<GDMSourceCitation>();
                     Associations = Array.Empty<string>();
                 }
 
@@ -650,8 +650,7 @@ namespace GKCore.Charts
         private void DefineExpands()
         {
             if (fFlags.Contains(PersonFlag.pfAncWalk) && fFlags.Contains(PersonFlag.pfDescWalk)
-                && fFlags.Contains(PersonFlag.pfHasInvDesc))
-            {
+                && fFlags.Contains(PersonFlag.pfHasInvDesc)) {
                 // it's hack
                 fFlags.Exclude(PersonFlag.pfHasInvDesc);
             }

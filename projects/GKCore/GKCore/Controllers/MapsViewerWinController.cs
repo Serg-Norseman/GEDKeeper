@@ -309,10 +309,10 @@ namespace GKCore.Controllers
             GetControl<IRadioButton>("radSelected").Text = LangMan.LS(LSID.MapSelOnSelected);
             GetControl<IButton>("btnSelectPlaces").Text = LangMan.LS(LSID.Show);
             GetControl<ICheckBox>("chkLinesVisible").Text = LangMan.LS(LSID.LinesVisible);
-            GetControl<IButtonToolItem>("tbLoadPlaces").Text = LangMan.LS(LSID.LoadPlaces);
-            GetControl<IButtonToolItem>("tbProviders").Text = LangMan.LS(LSID.Providers);
+            GetControl<IToolItem>("tbLoadPlaces").Text = LangMan.LS(LSID.LoadPlaces);
+            GetControl<IToolItem>("tbProviders").Text = LangMan.LS(LSID.Providers);
             GetControl<ITabPage>("pageCoordinates").Text = LangMan.LS(LSID.Coordinates);
-            GetControl<IButtonToolItem>("tbClear").Text = LangMan.LS(LSID.Clear);
+            GetControl<IToolItem>("tbClear").Text = LangMan.LS(LSID.Clear);
             GetControl<IButton>("btnSearch").Text = LangMan.LS(LSID.Search);
 
             SetToolTip("tbSaveSnapshot", LangMan.LS(LSID.ImageSaveTip));

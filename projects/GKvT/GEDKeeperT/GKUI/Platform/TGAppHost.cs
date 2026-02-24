@@ -20,6 +20,7 @@ using GKCore.Options;
 using GKCore.Plugins;
 using GKCore.Utilities;
 using GKCore.Validation;
+using GKUI.Components;
 using GKUI.Forms;
 using GKUI.Platform.Handlers;
 using Terminal.Gui;
@@ -89,7 +90,7 @@ namespace GKUI.Platform
 
         public override GKCore.ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
         {
-            throw new NotImplementedException();
+            return new TGTimer(msInterval, elapsedHandler);
         }
 
         public override void Quit()
@@ -175,11 +176,6 @@ namespace GKUI.Platform
                 //var loc = WidgetLocate(UIHelper.Rt2Rt(form.Bounds), location);
                 //form.Location = new Point(loc.X, loc.Y);
             }
-        }
-
-        public override string SelectFolder(string folderPath)
-        {
-            throw new NotImplementedException();
         }
 
         public override bool HasFeatureSupport(Feature feature)
@@ -308,6 +304,7 @@ namespace GKUI.Platform
             // IPartialView - not
             // IPatriarchsViewer - not
             // IPortraitSelectDlg - not
+            container.Register<ITreeChartWin, TreeChartWin>(LifeCycle.Transient);
             container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
             // ISlideshowWin - not
 
@@ -322,6 +319,9 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(TabView.Tab), typeof(TabPageHandler));
             ControlsManager.RegisterHandlerType(typeof(TextField), typeof(TextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TextView), typeof(TextAreaHandler));
+            ControlsManager.RegisterHandlerType(typeof(ToolStripButton), typeof(MenuItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(ToolStripDropDownButton), typeof(MenuItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(ToolStripMenuItem), typeof(MenuItemHandler));
         }
 
         #endregion
@@ -332,15 +332,6 @@ namespace GKUI.Platform
             CheckPortable(args);
             Logger.Init(GetLogFilename());
             LogSysInfo();
-
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionsHandler;
-        }
-
-        private static void UnhandledExceptionsHandler(object sender, UnhandledExceptionEventArgs e)
-        {
-            // Saving the copy for restoration
-            AppHost.Instance.CriticalSave();
-            Logger.WriteError("GK.UnhandledExceptionsHandler()", (Exception)e.ExceptionObject);
         }
     }
 }

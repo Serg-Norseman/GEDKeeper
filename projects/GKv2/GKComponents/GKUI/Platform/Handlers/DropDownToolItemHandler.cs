@@ -16,7 +16,7 @@ namespace GKUI.Platform.Handlers
     /// <summary>
     /// 
     /// </summary>
-    public class DropDownToolItemHandler : ControlHandler<ToolStripDropDownButton, DropDownToolItemHandler>, IButtonToolItem
+    public class DropDownToolItemHandler : ControlHandler<ToolStripDropDownButton, DropDownToolItemHandler>, IToolItem
     {
         private IImage fGlyph;
 

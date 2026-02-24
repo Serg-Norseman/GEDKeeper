@@ -53,7 +53,7 @@ namespace GKCore.Controllers
 
             if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) return;
 
-            GetControl<IButtonToolItem>("tbModes").Text = LangMan.LS(LSID.ModesTip);
+            GetControl<IToolItem>("tbModes").Text = LangMan.LS(LSID.ModesTip);
             GetControl<IMenuItem>("miFanMode").Text = LangMan.LS(LSID.FanMode);
 
             SetToolTip("tbImageSave", LangMan.LS(LSID.ImageSaveTip));

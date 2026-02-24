@@ -21,14 +21,11 @@ namespace GKCore.Design.Controls
     /// <summary>
     /// 
     /// </summary>
-    public interface IMenuItem : IControl
+    public interface IMenuItem : IToolItem
     {
         bool Checked { get; set; }
-        bool Enabled { get; set; }
-        IImage Glyph { get; set; }
         IMenuItems SubItems { get; }
         object Tag { get; set; }
-        string Text { get; set; }
 
         IMenuItem AddItem(string text, object tag, IImage image, ItemAction action);
         void ClearItems();

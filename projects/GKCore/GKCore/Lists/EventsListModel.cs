@@ -181,6 +181,9 @@ namespace GKCore.Lists
                             } else if (evt is GDMFamilyEvent famEvt) {
                                 evt = famEvt.Clone();
                             }
+                            if (evt is GDMIndividualEventDetail indiEvtDet && indiEvtDet.HasAge) {
+                                indiEvtDet.Age.Clear();
+                            }
                             result = fUndoman.DoOrdinaryOperation(OperationType.otRecordEventAdd, record, evt);
                         }
                         break;

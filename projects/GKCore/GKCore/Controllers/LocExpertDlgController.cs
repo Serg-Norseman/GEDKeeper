@@ -90,10 +90,10 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnTopLinkAdd").Text = LangMan.LS(LSID.DoAdd);
             GetControl<IButton>("btnTopLinkEdit").Text = LangMan.LS(LSID.DoEdit);
 #else
-            GetControl<IButtonToolItem>("btnLocNameAdd").Text = LangMan.LS(LSID.DoAdd);
-            GetControl<IButtonToolItem>("btnLocNameEdit").Text = LangMan.LS(LSID.DoEdit);
-            GetControl<IButtonToolItem>("btnTopLinkAdd").Text = LangMan.LS(LSID.DoAdd);
-            GetControl<IButtonToolItem>("btnTopLinkEdit").Text = LangMan.LS(LSID.DoEdit);
+            GetControl<IToolItem>("btnLocNameAdd").Text = LangMan.LS(LSID.DoAdd);
+            GetControl<IToolItem>("btnLocNameEdit").Text = LangMan.LS(LSID.DoEdit);
+            GetControl<IToolItem>("btnTopLinkAdd").Text = LangMan.LS(LSID.DoAdd);
+            GetControl<IToolItem>("btnTopLinkEdit").Text = LangMan.LS(LSID.DoEdit);
 #endif
         }
 
@@ -126,10 +126,10 @@ namespace GKCore.Controllers
             GetControl<IButton>("btnTopLinkAdd").Enabled = entry.Pair != null && entry.TopLevelLink == null;
             GetControl<IButton>("btnTopLinkEdit").Enabled = entry.Pair != null && entry.TopLevelLink != null;
 #else
-            GetControl<IButtonToolItem>("btnLocNameAdd").Enabled = entry.Pair == null;
-            GetControl<IButtonToolItem>("btnLocNameEdit").Enabled = entry.Pair != null;
-            GetControl<IButtonToolItem>("btnTopLinkAdd").Enabled = entry.Pair != null && entry.TopLevelLink == null;
-            GetControl<IButtonToolItem>("btnTopLinkEdit").Enabled = entry.Pair != null && entry.TopLevelLink != null;
+            GetControl<IToolItem>("btnLocNameAdd").Enabled = entry.Pair == null;
+            GetControl<IToolItem>("btnLocNameEdit").Enabled = entry.Pair != null;
+            GetControl<IToolItem>("btnTopLinkAdd").Enabled = entry.Pair != null && entry.TopLevelLink == null;
+            GetControl<IToolItem>("btnTopLinkEdit").Enabled = entry.Pair != null && entry.TopLevelLink != null;
 #endif
         }
 

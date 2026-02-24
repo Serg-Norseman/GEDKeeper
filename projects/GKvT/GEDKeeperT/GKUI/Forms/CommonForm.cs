@@ -73,7 +73,7 @@ namespace GKUI.Forms
 
         public void Close()
         {
-            //throw new NotImplementedException();
+            Application.RequestStop(this);
         }
     }
 
@@ -91,8 +91,7 @@ namespace GKUI.Forms
 
         public virtual void Show(bool showInTaskbar)
         {
-            //ShowInTaskbar = showInTaskbar;
-            //Show();
+            Application.Run(this);
         }
 
         public virtual void SetLocale()

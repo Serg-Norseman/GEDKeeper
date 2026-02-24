@@ -101,6 +101,12 @@ namespace GKUI.Platform.Handlers
             set { Control.Title = value; }
         }
 
+        public bool Visible
+        {
+            get { return true; }
+            set { }
+        }
+
         public int ItemsCount
         {
             get { return (Control is MenuBarItem) ? ((MenuBarItem)Control).Children.Length : 0; }

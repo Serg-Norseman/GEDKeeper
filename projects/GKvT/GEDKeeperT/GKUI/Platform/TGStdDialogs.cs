@@ -25,7 +25,7 @@ namespace GKUI.Platform
         {
         }
 
-        public Task<IColor> SelectColor(IColor color)
+        public async Task<IColor> SelectColor(IColor color)
         {
             /*using (var clrDlg = new ColorDialog()) {
                 if (color != null) {
@@ -42,7 +42,7 @@ namespace GKUI.Platform
             return null;
         }
 
-        public Task<IFont> SelectFont(IFont font)
+        public async Task<IFont> SelectFont(IFont font)
         {
             /*Font sdFont = ((FontHandler)font).Handle;
 
@@ -54,7 +54,12 @@ namespace GKUI.Platform
             return null;
         }
 
-        public Task<string> GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt)
+        public async Task<string> SelectFolder(string folderPath)
+        {
+            return string.Empty;
+        }
+
+        public async Task<string> GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt)
         {
             var dlg = new OpenDialog() {
                 Title = title,
@@ -64,10 +69,15 @@ namespace GKUI.Platform
             };
             Application.Run(dlg);
             if (!dlg.Canceled) {
-                return Task.FromResult(dlg.FilePaths[0]);
+                return dlg.FilePaths[0];
             } else {
-                return Task.FromResult(string.Empty);
+                return string.Empty;
             }
+        }
+
+        public async Task<string[]> GetOpenFiles(string title, string context, string filter, int filterIndex, string defaultExt)
+        {
+            throw new System.NotImplementedException();
         }
 
         private string[] GetFilterFileTypes(string filter)
@@ -91,15 +101,15 @@ namespace GKUI.Platform
             return result.ToArray();
         }
 
-        public Task<string> GetSaveFile(string context, string filter)
+        public async Task<string> GetSaveFile(string context, string filter)
         {
-            return GetSaveFile("", "", filter, 1, "", "");
+            return GetSaveFile("", "", filter, 1, "", "").Result;
         }
 
-        public Task<string> GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
-                                 string suggestedFileName, bool overwritePrompt = true)
+        public async Task<string> GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
+                                              string suggestedFileName, bool overwritePrompt = true)
         {
-            return Task.FromResult(string.Empty);
+            return string.Empty;
         }
 
 
@@ -130,13 +140,13 @@ namespace GKUI.Platform
             MessageBox.Query(title, msg, "OK");
         }
 
-        public Task<bool> ShowQuestion(string msg, string title = "")
+        public async Task<bool> ShowQuestion(string msg, string title = "")
         {
             if (string.IsNullOrEmpty(title)) {
                 title = GKData.APP_TITLE;
             }
 
-            return Task.FromResult(MessageBox.Query(title, msg, new ustring[] { "Yes", "No" }) == 0);
+            return MessageBox.Query(title, msg, new ustring[] { "Yes", "No" }) == 0;
         }
 
         public void ShowWarning(string msg, string title = "")
@@ -148,24 +158,18 @@ namespace GKUI.Platform
             MessageBox.Query(title, msg, "OK");
         }
 
-
-        public Task<string> GetInput(object owner, string prompt, string value)
+        public async Task<string> GetInput(object owner, string prompt, string value)
         {
             /*bool res = GKInputBox.QueryText(owner, GKData.APP_TITLE, prompt, ref value);
             return res && !string.IsNullOrEmpty(value);*/
-            return Task.FromResult(string.Empty);
+            return string.Empty;
         }
 
-        public Task<string> GetPassword(string prompt)
+        public async Task<string> GetPassword(string prompt)
         {
             /*bool res = GKInputBox.QueryPassword(GKData.APP_TITLE, prompt, ref value);
             return res && !string.IsNullOrEmpty(value);*/
-            return Task.FromResult(string.Empty);
-        }
-
-        public Task<string[]> GetOpenFiles(string title, string context, string filter, int filterIndex, string defaultExt)
-        {
-            throw new System.NotImplementedException();
+            return string.Empty;
         }
     }
 }

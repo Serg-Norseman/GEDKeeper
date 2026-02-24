@@ -151,6 +151,8 @@ namespace GKUI.Components
                 }
                 for (int i = 0; i < fListMan.ContentList.Count; i++) {
                     var item = fListMan.GetContentItem(i);
+                    if (item == null) continue;
+
                     var ex = fListMan.GetItemData(item);
                     dt.Rows.Add(ex);
                 }

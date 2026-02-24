@@ -13,7 +13,7 @@ using GKCore.Design.Graphics;
 
 namespace GKUI.Platform.Handlers
 {
-    public class ButtonToolItemHandler : ControlHandler<ToolItem, ButtonToolItemHandler>, IButtonToolItem
+    public class ButtonToolItemHandler : ControlHandler<ToolItem, ButtonToolItemHandler>, IToolItem
     {
         private IImage fGlyph;
 

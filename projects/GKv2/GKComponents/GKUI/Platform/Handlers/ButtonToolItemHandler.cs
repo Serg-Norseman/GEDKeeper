@@ -16,7 +16,7 @@ namespace GKUI.Platform.Handlers
     /// <summary>
     /// 
     /// </summary>
-    public class ButtonToolItemHandler : ControlHandler<ToolStripButton, ButtonToolItemHandler>, IButtonToolItem
+    public class ButtonToolItemHandler : ControlHandler<ToolStripButton, ButtonToolItemHandler>, IToolItem
     {
         private IImage fGlyph;
 

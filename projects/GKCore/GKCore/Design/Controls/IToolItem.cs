@@ -17,5 +17,7 @@ namespace GKCore.Design.Controls
     {
         bool Enabled { get; set; }
         IImage Glyph { get; set; }
+        string Text { get; set; }
+        bool Visible { get; set; }
     }
 }

@@ -93,9 +93,9 @@ namespace GKCore.Controllers
         {
             fView.StatusLines[0] = string.Format("{0} / {1} [{2}]", fCurrentIndex + 1, fFileRefs.Count, fCurrentText);
 
-            GetControl<IButtonToolItem>("tbStart").Enabled = (fFileRefs.Count > 0);
-            GetControl<IButtonToolItem>("tbPrev").Enabled = (fCurrentIndex > 0);
-            GetControl<IButtonToolItem>("tbNext").Enabled = (fCurrentIndex < fFileRefs.Count - 1);
+            GetControl<IToolItem>("tbStart").Enabled = (fFileRefs.Count > 0);
+            GetControl<IToolItem>("tbPrev").Enabled = (fCurrentIndex > 0);
+            GetControl<IToolItem>("tbNext").Enabled = (fCurrentIndex < fFileRefs.Count - 1);
         }
 
         private void SetFileRef()
@@ -140,11 +140,11 @@ namespace GKCore.Controllers
         public bool SwitchActive()
         {
             if (!fActive) {
-                GetControl<IButtonToolItem>("tbStart").Text = LangMan.LS(LSID.Stop);
+                GetControl<IToolItem>("tbStart").Text = LangMan.LS(LSID.Stop);
                 GetControl<IToolItem>("tbStart").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Stop, true);
                 fTimer.Start();
             } else {
-                GetControl<IButtonToolItem>("tbStart").Text = LangMan.LS(LSID.Start);
+                GetControl<IToolItem>("tbStart").Text = LangMan.LS(LSID.Start);
                 GetControl<IToolItem>("tbStart").Glyph = AppHost.ThemeManager.GetThemeImage(ThemeElement.Glyph_Start, true);
                 fTimer.Stop();
             }
@@ -158,7 +158,7 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.Slideshow));
 
-            GetControl<IButtonToolItem>("tbStart").Text = LangMan.LS(LSID.Start);
+            GetControl<IToolItem>("tbStart").Text = LangMan.LS(LSID.Start);
 
             SetToolTip("tbPrev", LangMan.LS(LSID.PrevRec));
             SetToolTip("tbNext", LangMan.LS(LSID.NextRec));

@@ -88,6 +88,12 @@ namespace GKUI.Platform.Handlers
             set { Control.Text = value; }
         }
 
+        public bool Visible
+        {
+            get { return Control.Visible; }
+            set { Control.Visible = value; }
+        }
+
         public IMenuItem AddItem(string text, object tag, IImage image, ItemAction action)
         {
             var item = new MenuItemEx(text, tag, image, action);

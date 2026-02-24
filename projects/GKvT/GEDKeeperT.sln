@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GEDKeeperT", "GEDKeeperT\GEDKeeperT.csproj", "{0E927839-EA8C-4701-8AFE-DCA933D0B2A9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKCore.nstd", "..\GKCore\GKCore.nstd.csproj", "{10D619AF-E1CD-4F4A-9C19-5E434300B48F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKCore.term", "..\GKCore\GKCore.term.csproj", "{10D619AF-E1CD-4F4A-9C19-5E434300B48F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{89782CA9-48D0-451A-AEB1-4E1771CEAC47}"
 	ProjectSection(SolutionItems) = preProject
@@ -41,8 +41,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{4AF8
 		..\..\locales\Ukrainian.lng = ..\..\locales\Ukrainian.lng
 		..\..\locales\Vietnamese.lng = ..\..\locales\Vietnamese.lng
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKMap.Core.nstd", "..\GKMap\GKMap.Core\GKMap.Core.nstd.csproj", "{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,22 +86,6 @@ Global
 		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Release|MacOS.Build.0 = Release|MacOS
 		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Release|MSWin64.ActiveCfg = Release|MSWin64
 		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Release|MSWin64.Build.0 = Release|MSWin64
-		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Debug|FreeBSD.ActiveCfg = Debug|Any CPU
-		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Debug|FreeBSD.Build.0 = Debug|Any CPU
-		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Debug|Linux.ActiveCfg = Debug|Any CPU
-		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Debug|Linux.Build.0 = Debug|Any CPU
-		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Debug|MacOS.ActiveCfg = Debug|Any CPU
-		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Debug|MacOS.Build.0 = Debug|Any CPU
-		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Debug|MSWin64.ActiveCfg = Debug|Any CPU
-		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Debug|MSWin64.Build.0 = Debug|Any CPU
-		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|FreeBSD.ActiveCfg = Release|Any CPU
-		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|FreeBSD.Build.0 = Release|Any CPU
-		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|Linux.ActiveCfg = Release|Any CPU
-		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|Linux.Build.0 = Release|Any CPU
-		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|MacOS.ActiveCfg = Release|Any CPU
-		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|MacOS.Build.0 = Release|Any CPU
-		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|MSWin64.ActiveCfg = Release|Any CPU
-		{6AE2CF0D-9C2C-4226-A46F-3E6C2C1CB4EA}.Release|MSWin64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

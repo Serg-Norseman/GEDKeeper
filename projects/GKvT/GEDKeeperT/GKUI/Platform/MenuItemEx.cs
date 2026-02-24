@@ -50,6 +50,12 @@ namespace GKUI.Platform
             set { Title = value; }
         }
 
+        public bool Visible
+        {
+            get { return true; }
+            set { }
+        }
+
         public MenuItemEx(string text)
         {
             fItems = new MenuSubItems(this);
