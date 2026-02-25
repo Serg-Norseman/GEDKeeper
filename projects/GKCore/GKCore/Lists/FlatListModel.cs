@@ -32,7 +32,7 @@ namespace GKCore.Lists
 
         public override object GetContentItem(int itemIndex)
         {
-            object result = (itemIndex < 0 || itemIndex >= fItems.Count) ? null : fItems[itemIndex].Tag;
+            object result = (itemIndex < 0 || itemIndex >= fItems.Count) ? null : fItems[itemIndex];
             return result;
         }
 
