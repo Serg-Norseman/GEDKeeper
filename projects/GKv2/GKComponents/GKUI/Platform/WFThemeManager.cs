@@ -236,6 +236,11 @@ namespace GKUI.Themes
             return Color.Black;
         }
 
+        public static Color GetThemeColor(ThemeElement element)
+        {
+            return GetThemeColor(fCurrentTheme, element);
+        }
+
         private static void ThemeButtonHandler(IThemedView view, Component component, Theme theme)
         {
             var ctl = (Button)component;

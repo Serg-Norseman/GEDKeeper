@@ -8,10 +8,12 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Locales;
 using GKCore.Options;
@@ -150,7 +152,7 @@ namespace GKCore.Controllers
                     }
 
                     fam.AddSpouse(parent);
-                    
+
                     UpdateChart();
                 }
             }
@@ -354,6 +356,33 @@ namespace GKCore.Controllers
                 if (indiRec != null) selectedIndividuals.Add(indiRec);
             }
             BaseController.ShowMap_IndiList(fBase, selectedIndividuals);
+        }
+
+        public async Task SelectBackgroundColor()
+        {
+            var opts = GlobalOptions.Instance.TreeChartOptions;
+
+            IColor color = await AppHost.StdDialogs.SelectColor(opts.BackgroundColor);
+            opts.BackgroundColor = color;
+            opts.BackgroundImage = string.Empty;
+
+            fView.TreeBox.ResetBackground();
+            fView.TreeBox.Invalidate();
+        }
+
+        public async Task SelectBackgroundImage()
+        {
+            var opts = GlobalOptions.Instance.TreeChartOptions;
+
+            string fileName = await AppHost.StdDialogs.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.ImagesFilter), 1, "");
+            if (string.IsNullOrEmpty(fileName)) {
+                opts.BackgroundImage = string.Empty;
+            } else {
+                opts.BackgroundImage = fileName;
+            }
+
+            fView.TreeBox.ResetBackground();
+            fView.TreeBox.Invalidate();
         }
 
         public override void SetLocale()

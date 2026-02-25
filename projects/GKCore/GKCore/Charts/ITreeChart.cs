@@ -67,5 +67,7 @@ namespace GKCore.Charts
         void SelectBy(TreeChartPerson person, bool needCenter);
         void SetRenderer(ChartRenderer renderer);
         void SetScale(float value);
+
+        void ResetBackground();
     }
 }

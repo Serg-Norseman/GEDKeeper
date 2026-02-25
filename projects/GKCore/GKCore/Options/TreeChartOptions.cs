@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.IO;
 using BSLib;
 using GKCore.Charts;
 using GKCore.Design;
@@ -80,7 +81,10 @@ namespace GKCore.Options
         public IColor UnHusbandColor;
         public IColor UnWifeColor;
 
-        public string DefFontName {  get; set; }
+        public IColor BackgroundColor;
+        public string BackgroundImage;
+
+        public string DefFontName { get; set; }
         public int DefFontSize { get; set; }
 
         public IColor DefFontColor;
@@ -182,6 +186,9 @@ namespace GKCore.Options
             MourningEdges = true;
             UseAdditionalDates = false;
             MultipleSpouseLines = true;
+
+            BackgroundColor = ChartRenderer.GetColor(GKColors.Black);
+            BackgroundImage = string.Empty;
         }
 
         public void Assign(IOptions source)
@@ -255,6 +262,9 @@ namespace GKCore.Options
             MourningEdges = srcOptions.MourningEdges;
             UseAdditionalDates = srcOptions.UseAdditionalDates;
             MultipleSpouseLines = srcOptions.MultipleSpouseLines;
+
+            BackgroundColor = srcOptions.BackgroundColor;
+            BackgroundImage = srcOptions.BackgroundImage;
         }
 
         public void LoadFromFile(IniFile iniFile)
@@ -333,6 +343,11 @@ namespace GKCore.Options
             MourningEdges = iniFile.ReadBool("Chart", "MourningEdges", true);
             UseAdditionalDates = iniFile.ReadBool("Chart", "UseAdditionalDates", false);
             MultipleSpouseLines = iniFile.ReadBool("Chart", "MultipleSpouseLines", true);
+
+            BackgroundColor = ChartRenderer.GetColor(iniFile.ReadInteger("Chart", "BackgroundColor", GKColors.Black));
+            BackgroundImage = iniFile.ReadString("Chart", "BackgroundImage", string.Empty);
+            if (!string.IsNullOrEmpty(BackgroundImage) && !File.Exists(BackgroundImage))
+                BackgroundImage = string.Empty;
         }
 
         public void SaveToFile(IniFile iniFile)
@@ -411,6 +426,9 @@ namespace GKCore.Options
             iniFile.WriteBool("Chart", "MourningEdges", MourningEdges);
             iniFile.WriteBool("Chart", "UseAdditionalDates", UseAdditionalDates);
             iniFile.WriteBool("Chart", "MultipleSpouseLines", MultipleSpouseLines);
+
+            iniFile.WriteInteger("Chart", "BackgroundColor", BackgroundColor.ToArgb());
+            iniFile.WriteString("Chart", "BackgroundImage", BackgroundImage);
         }
     }
 }

@@ -13,6 +13,8 @@ namespace GKCore.Design.Graphics
     /// </summary>
     public static class GKColors
     {
+        public const int BlackA = -16777216; // temp hack
+
         public const int Black = 0x000000;
         public const int Blue = 0x0000FF;
         public const int CadetBlue = 0x5F9EA0;

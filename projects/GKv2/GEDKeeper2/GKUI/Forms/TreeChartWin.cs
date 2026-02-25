@@ -440,26 +440,14 @@ namespace GKUI.Forms
             }
         }
 
-        private void miFillColor_Click(object sender, EventArgs e)
+        private async void miFillColor_Click(object sender, EventArgs e)
         {
-            using (var colorDialog1 = new ColorDialog()) {
-                if (colorDialog1.ShowDialog() != DialogResult.OK) return;
-
-                fTreeBox.BackgroundImage = null;
-                fTreeBox.BackColor = colorDialog1.Color;
-                fTreeBox.Invalidate();
-            }
+            await fController.SelectBackgroundColor();
         }
 
         private async void miFillImage_Click(object sender, EventArgs e)
         {
-            string fileName = await AppHost.StdDialogs.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.ImagesFilter), 1, "");
-            if (string.IsNullOrEmpty(fileName)) return;
-
-            Image img = new Bitmap(fileName);
-            fTreeBox.BackgroundImage = img;
-            fTreeBox.BackgroundImageLayout = ImageLayout.Tile;
-            fTreeBox.Invalidate();
+            await fController.SelectBackgroundImage();
         }
 
         private void miModeItem_Click(object sender, EventArgs e)

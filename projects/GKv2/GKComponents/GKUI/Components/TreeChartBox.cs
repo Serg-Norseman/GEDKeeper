@@ -10,15 +10,18 @@
 
 using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using BSLib;
 using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Design;
+using GKCore.Design.Graphics;
 using GKCore.Options;
 using GKUI.Platform;
 using GKUI.Platform.Handlers;
+using GKUI.Themes;
 
 namespace GKUI.Components
 {
@@ -35,6 +38,7 @@ namespace GKUI.Components
         private readonly TweenLibrary fTween;
 
         private ITreeControl fActiveControl;
+        private Image fBackgroundImage;
         private ChartControlMode fMode = ChartControlMode.Default;
         private int fMouseX;
         private int fMouseY;
@@ -155,6 +159,8 @@ namespace GKUI.Components
 
         public TreeChartBox()
         {
+            fBackgroundImage = null;
+
             fModel = new TreeChartModel(this);
             fRenderer = null;
             fSelected = null;
@@ -295,6 +301,11 @@ namespace GKUI.Components
             return fModel.GetOffsets();
         }
 
+        public void ResetBackground()
+        {
+            fBackgroundImage = null;
+        }
+
         private void DrawBackground(RenderTarget target, BackgroundMode background)
         {
             int width, height;
@@ -314,17 +325,28 @@ namespace GKUI.Components
 
                 case BackgroundMode.bmImage:
                 case BackgroundMode.bmFill:
-                case BackgroundMode.bmAny:
-                    if (BackgroundImage != null) {
-                        // texture filling can be done by the control itself when the property is set,
-                        // and when printing, sheet filling is not needed
-                        if (target != RenderTarget.Printer) {
-                            using (Brush textureBrush = new TextureBrush(BackgroundImage)) {
-                                fRenderer.FillRectangle(new BrushHandler(textureBrush), 0, 0, width, height);
+                case BackgroundMode.bmAny: {
+                        // when printing, sheet filling is not needed
+                        if (target == RenderTarget.Printer) {
+                            fRenderer.DrawRectangle(null, UIHelper.ConvertColor(Color.White), 0, 0, width, height);
+                        } else {
+                            var opts = GlobalOptions.Instance.TreeChartOptions;
+
+                            if (!string.IsNullOrEmpty(opts.BackgroundImage) && fBackgroundImage == null && File.Exists(opts.BackgroundImage)) {
+                                fBackgroundImage = new Bitmap(opts.BackgroundImage);
+                            }
+
+                            if (fBackgroundImage != null) {
+                                using (Brush textureBrush = new TextureBrush(fBackgroundImage)) {
+                                    fRenderer.FillRectangle(new BrushHandler(textureBrush), 0, 0, width, height);
+                                }
+                            } else {
+                                IColor backColor = opts.BackgroundColor;
+                                if (backColor.ToArgb() == GKColors.BlackA)
+                                    backColor = UIHelper.ConvertColor(WFThemeManager.GetThemeColor(ThemeElement.Control));
+                                fRenderer.DrawRectangle(null, backColor, 0, 0, width, height);
                             }
                         }
-                    } else {
-                        fRenderer.DrawRectangle(null, UIHelper.ConvertColor(BackColor), 0, 0, width, height);
                     }
                     break;
             }

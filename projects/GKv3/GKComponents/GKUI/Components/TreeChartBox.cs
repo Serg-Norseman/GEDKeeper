@@ -9,6 +9,7 @@
 //#define DEBUG_IMAGE
 
 using System;
+using System.IO;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
@@ -16,9 +17,11 @@ using GDModel;
 using GKCore;
 using GKCore.Charts;
 using GKCore.Design;
+using GKCore.Design.Graphics;
 using GKCore.Options;
 using GKUI.Platform;
 using GKUI.Platform.Handlers;
+using GKUI.Themes;
 
 namespace GKUI.Components
 {
@@ -34,6 +37,7 @@ namespace GKUI.Components
         private readonly TweenLibrary fTween;
 
         private ITreeControl fActiveControl;
+        private Image fBackgroundImage;
         private ChartControlMode fMode = ChartControlMode.Default;
         private int fMouseX;
         private int fMouseY;
@@ -155,6 +159,7 @@ namespace GKUI.Components
         public TreeChartBox()
         {
             BackgroundColor = Colors.White;
+            fBackgroundImage = null;
 
             fModel = new TreeChartModel(this);
             fRenderer = null;
@@ -295,6 +300,11 @@ namespace GKUI.Components
             return fModel.GetOffsets();
         }
 
+        public void ResetBackground()
+        {
+            fBackgroundImage = null;
+        }
+
         private void DrawBackground(RenderTarget target, BackgroundMode background)
         {
             int width, height;
@@ -318,19 +328,28 @@ namespace GKUI.Components
 
                 case BackgroundMode.bmImage:
                 case BackgroundMode.bmFill:
-                case BackgroundMode.bmAny:
-                    if (BackgroundImage != null) {
+                case BackgroundMode.bmAny: {
                         // when printing, sheet filling is not needed
-                        if (target != RenderTarget.Printer) {
-                            using (Brush textureBrush = new TextureBrush(BackgroundImage)) {
-                                fRenderer.FillRectangle(new BrushHandler(textureBrush), 0, 0, width, height);
+                        if (target == RenderTarget.Printer) {
+                            fRenderer.DrawRectangle(null, UIHelper.ConvertColor(Colors.White), 0, 0, width, height);
+                        } else {
+                            var opts = GlobalOptions.Instance.TreeChartOptions;
+
+                            if (!string.IsNullOrEmpty(opts.BackgroundImage) && fBackgroundImage == null && File.Exists(opts.BackgroundImage)) {
+                                fBackgroundImage = new Bitmap(opts.BackgroundImage);
+                            }
+
+                            if (fBackgroundImage != null) {
+                                using (Brush textureBrush = new TextureBrush(fBackgroundImage)) {
+                                    fRenderer.FillRectangle(new BrushHandler(textureBrush), 0, 0, width, height);
+                                }
+                            } else {
+                                IColor backColor = opts.BackgroundColor;
+                                if (backColor.ToArgb() == GKColors.BlackA)
+                                    backColor = UIHelper.ConvertColor(EtoThemeManager.GetThemeColor(ThemeElement.Control));
+                                fRenderer.DrawRectangle(null, backColor, 0, 0, width, height);
                             }
                         }
-                    } else {
-                        // FIXME: Find the location where 0x00000000 is assigned. Themes?
-                        if (BackgroundColor == Color.FromArgb(0, 0, 0, 0)) BackgroundColor = Colors.White;
-
-                        fRenderer.DrawRectangle(null, UIHelper.ConvertColor(BackgroundColor), 0, 0, width, height);
                     }
                     break;
             }
