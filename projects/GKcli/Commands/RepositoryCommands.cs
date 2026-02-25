@@ -23,12 +23,12 @@ internal class RepositoryMenuCommand : BaseCommand
 }
 
 
-internal class RepositoryListCommand : BaseCommand
+internal class RepositoryListCommand : RecordCommand
 {
     public RepositoryListCommand() : base("list_repositories", LSID.Find, CommandCategory.Repository) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        var selected = CommandController.SelectRecord(baseContext, GDMRecordType.rtRepository, "Select a repository", "Repository: {0}", "No records.");
+        var selected = SelectRecord(baseContext, GDMRecordType.rtRepository, "Select a repository", "Repository: {0}", "No records.");
     }
 }

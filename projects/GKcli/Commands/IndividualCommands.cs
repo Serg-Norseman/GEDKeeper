@@ -27,13 +27,13 @@ internal class IndiMenuCommand : BaseCommand
 }
 
 
-internal class IndiListCommand : BaseCommand
+internal class IndiListCommand : RecordCommand
 {
     public IndiListCommand() : base("list_individuals", LSID.Find, CommandCategory.Individual) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        var selected = CommandController.SelectRecord(baseContext, GDMRecordType.rtIndividual, "Select a individual", "Individual: {0}", "No records.");
+        var selected = SelectRecord(baseContext, GDMRecordType.rtIndividual, "Select a individual", "Individual: {0}", "No records.");
         if (selected != null) {
             var newEvent = new GDMIndividualEvent();
             CommandController.SetVariable("selectedObj", newEvent);

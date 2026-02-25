@@ -23,12 +23,12 @@ internal class SourceMenuCommand : BaseCommand
 }
 
 
-internal class SourceListCommand : BaseCommand
+internal class SourceListCommand : RecordCommand
 {
     public SourceListCommand() : base("list_sources", LSID.Find, CommandCategory.Source) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        CommandController.SelectRecord(baseContext, GDMRecordType.rtSource, "Select a source", "Source: {0}", "No records.");
+        SelectRecord(baseContext, GDMRecordType.rtSource, "Select a source", "Source: {0}", "No records.");
     }
 }

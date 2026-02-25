@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.IO;
 using System.Linq;
 using GDModel;
@@ -39,19 +40,39 @@ internal class FileNewCommand : BaseCommand
 }
 
 
-internal class FileLoadCommand : BaseCommand
+internal abstract class FileCommand : BaseCommand
+{
+    public FileCommand(string sign, Enum lsid, CommandCategory category) : base(sign, lsid, category) { }
+
+    protected static void LoadFile(BaseContext baseContext, string selectedFile)
+    {
+        PromptHelper.WriteLine("Selected file: {0}", selectedFile);
+        var result = baseContext.FileLoad(selectedFile, false).GetAwaiter().GetResult();
+        PromptHelper.WriteLine("Database loaded successfully. Records: {0}.", baseContext.Tree.RecordsCount);
+    }
+
+    protected static void SaveFile(BaseContext baseContext, string selectedFile)
+    {
+        PromptHelper.WriteLine("Selected file: {0}", selectedFile);
+        var result = baseContext.FileSave(selectedFile).GetAwaiter().GetResult();
+        PromptHelper.WriteLine("Database saved successfully.");
+    }
+}
+
+
+internal class FileLoadCommand : FileCommand
 {
     public FileLoadCommand() : base("load_gedcom", LSID.MIFileLoad, CommandCategory.File) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
         string selectedFile = PromptHelper.SelectFile(GKUtils.GetAppPath(), ".ged");
-        CommandController.LoadFile(baseContext, selectedFile);
+        LoadFile(baseContext, selectedFile);
     }
 }
 
 
-internal class FileLoadRecentCommand : BaseCommand
+internal class FileLoadRecentCommand : FileCommand
 {
     public FileLoadRecentCommand() : base("recent_gedcom", LSID.MIMRUFiles, CommandCategory.File) { }
 
@@ -60,7 +81,7 @@ internal class FileLoadRecentCommand : BaseCommand
         var files = AppHost.Options.MRUFiles.Select(f => f.FileName).ToList();
         if (files.Count > 0) {
             var selectedFile = Prompt.Select("Select a recent file", files, pageSize: 10);
-            CommandController.LoadFile(baseContext, selectedFile);
+            LoadFile(baseContext, selectedFile);
         } else {
             PromptHelper.WriteLine("No recent files.");
         }
@@ -74,15 +95,12 @@ internal class FileSaveCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        //string selectedFile = PromptHelper.SelectFile(GKUtils.GetAppPath(), ".ged");
-        //CommandController.LoadFile(baseContext, selectedFile);
-
         PromptHelper.WriteLine("Not implemented.");
     }
 }
 
 
-internal class FileSaveAsCommand : BaseCommand
+internal class FileSaveAsCommand : FileCommand
 {
     public FileSaveAsCommand() : base("saveas_gedcom", LSID.MIFileSaveAs, CommandCategory.File) { }
 
@@ -90,7 +108,7 @@ internal class FileSaveAsCommand : BaseCommand
     {
         string selectedFolder = PromptHelper.SelectFolder(GKUtils.GetAppPath());
         var fileName = Prompt.Input<string>("Enter a new file name (.ged)");
-        CommandController.SaveFile(baseContext, Path.Combine(selectedFolder, fileName + ".ged"));
+        SaveFile(baseContext, Path.Combine(selectedFolder, fileName + ".ged"));
     }
 }
 

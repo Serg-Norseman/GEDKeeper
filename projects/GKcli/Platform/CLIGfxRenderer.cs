@@ -23,25 +23,6 @@ public sealed class CLIGfxRenderer : ChartRenderer
     {
     }
 
-    public override void SetSmoothing(bool value)
-    {
-    }
-
-    public override void DrawArc(IPen pen, float x, float y, float width, float height, float startAngle, float sweepAngle)
-    {
-        // implementation is impossible
-    }
-
-    public override void DrawImage(IImage image, float x, float y, float width, float height, string imName)
-    {
-        // implementation is impossible
-    }
-
-    public override void DrawImage(IImage image, ExtRect destinationRect, ExtRect sourceRect)
-    {
-        // implementation is impossible
-    }
-
     public override ExtSizeF GetTextSize(string text, IFont font)
     {
         if (string.IsNullOrEmpty(text) || font == null)
@@ -70,11 +51,6 @@ public sealed class CLIGfxRenderer : ChartRenderer
         // *
     }
 
-    public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)
-    {
-        // implementation is impossible
-    }
-
     public override IPen CreatePen(IColor color, float width, float[] dashPattern = null)
     {
         // *
@@ -85,47 +61,5 @@ public sealed class CLIGfxRenderer : ChartRenderer
     {
         // *
         return null;
-    }
-
-    public override IGfxPath CreateCirclePath(float x, float y, float width, float height)
-    {
-        // implementation is impossible
-        return null;
-    }
-
-    public override IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle, float ang1, float ang2)
-    {
-        // implementation is impossible
-        return null;
-    }
-
-    public override void SetTranslucent(float value)
-    {
-        // implementation is impossible
-    }
-
-    public override void ScaleTransform(float sx, float sy)
-    {
-        // implementation is impossible
-    }
-
-    public override void TranslateTransform(float dx, float dy)
-    {
-        // implementation is impossible
-    }
-
-    public override void RotateTransform(float angle)
-    {
-        // implementation is impossible
-    }
-
-    public override void RestoreTransform()
-    {
-        // implementation is impossible
-    }
-
-    public override void SaveTransform()
-    {
-        // implementation is impossible
     }
 }

@@ -23,12 +23,12 @@ internal class MediaMenuCommand : BaseCommand
 }
 
 
-internal class MediaListCommand : BaseCommand
+internal class MediaListCommand : RecordCommand
 {
     public MediaListCommand() : base("list_multimedia", LSID.Find, CommandCategory.Multimedia) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        CommandController.SelectRecord(baseContext, GDMRecordType.rtMultimedia, "Select a multimedia", "Multimedia: {0}", "No records.");
+        SelectRecord(baseContext, GDMRecordType.rtMultimedia, "Select a multimedia", "Multimedia: {0}", "No records.");
     }
 }

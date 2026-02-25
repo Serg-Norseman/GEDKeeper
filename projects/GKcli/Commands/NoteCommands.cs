@@ -28,13 +28,13 @@ internal class NoteMenuCommand : BaseCommand
 }
 
 
-internal class NoteListCommand : BaseCommand
+internal class NoteListCommand : RecordCommand
 {
     public NoteListCommand() : base("list_notes", LSID.Find, CommandCategory.Note) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        var selected = CommandController.SelectRecord(baseContext, GDMRecordType.rtNote, "Select a note", "Note: {0}", "No records.");
+        var selected = SelectRecord(baseContext, GDMRecordType.rtNote, "Select a note", "Note: {0}", "No records.");
         if (selected != null)
             CommandController.SetVariable("selectedObj", selected);
     }
@@ -76,12 +76,12 @@ internal class NoteEditCommand : BaseCommand
 }
 
 
-internal class NoteDeleteCommand : BaseCommand
+internal class NoteDeleteCommand : RecordCommand
 {
     public NoteDeleteCommand() : base("delete_note", LSID.MIRecordDelete, CommandCategory.Note) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        CommandController.DeleteRecord<GDMNoteRecord>(baseContext, "[darkred]Error:[/] [red]Expected an note record[/]");
+        DeleteRecord<GDMNoteRecord>(baseContext, "[darkred]Error:[/] [red]Expected an note record[/]");
     }
 }

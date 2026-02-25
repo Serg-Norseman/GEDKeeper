@@ -122,10 +122,19 @@ namespace GKCore.Charts
             DrawImage(image, x, y, image.Width, image.Height, imName);
         }
 
-        public abstract void DrawImage(IImage image, float destX, float destY,
-                                       float destWidth, float destHeight, string imName);
-        public abstract void DrawImage(IImage image, ExtRect destinationRect,
-                                       ExtRect sourceRect);
+        /// <summary>
+        /// Not applicable for terminal implementations.
+        /// </summary>
+        public virtual void DrawImage(IImage image, float destX, float destY, float destWidth, float destHeight, string imName)
+        {
+        }
+
+        /// <summary>
+        /// Not applicable for terminal implementations.
+        /// </summary>
+        public virtual void DrawImage(IImage image, ExtRect destinationRect, ExtRect sourceRect)
+        {
+        }
 
         public int GetTextWidth(string text, IFont font)
         {
@@ -141,19 +150,25 @@ namespace GKCore.Charts
             DrawString(text, font, brush, x, y);
         }
 
+        /// <summary>
+        /// Not applicable for most areas except exports.
+        /// </summary>
         public virtual void DrawAnchor(string text, string anchor, IFont font, IBrush brush, float x, float y)
         {
-            // Not applicable for most areas except exports
         }
 
+        /// <summary>
+        /// Not applicable for most areas.
+        /// </summary>
         public virtual void DrawArc(IPen pen, float x, float y, float width, float height, float startAngle, float sweepAngle)
         {
-            // Not applicable for most areas
         }
 
+        /// <summary>
+        /// Not applicable for most areas except exports.
+        /// </summary>
         public virtual void DrawHyperlink(string text, string anchor, IFont font, IBrush brush, float x, float y)
         {
-            // Not applicable for most areas except exports
         }
 
         public abstract void DrawLine(IPen pen, float x1, float y1, float x2, float y2);
@@ -168,7 +183,12 @@ namespace GKCore.Charts
             // dummy
         }
 
-        public abstract void DrawPath(IPen pen, IBrush brush, IGfxPath path);
+        /// <summary>
+        /// Not applicable for terminal implementations.
+        /// </summary>
+        public virtual void DrawPath(IPen pen, IBrush brush, IGfxPath path)
+        {
+        }
 
         public virtual IFont CreateFont(string fontName, float size, bool bold)
         {
@@ -184,16 +204,60 @@ namespace GKCore.Charts
 
         public abstract IBrush CreateBrush(IColor color);
 
-        public abstract IGfxPath CreateCirclePath(float x, float y, float width, float height);
-        public abstract IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle, float ang1, float ang2);
+        /// <summary>
+        /// Not applicable for terminal implementations.
+        /// </summary>
+        public virtual IGfxPath CreateCirclePath(float x, float y, float width, float height)
+        {
+            return null;
+        }
 
-        public abstract void ScaleTransform(float sx, float sy);
-        public abstract void TranslateTransform(float dx, float dy);
-        public abstract void RotateTransform(float angle);
+        /// <summary>
+        /// Not applicable for terminal implementations.
+        /// </summary>
+        public virtual IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle, float ang1, float ang2)
+        {
+            return null;
+        }
 
-        public abstract void RestoreTransform();
-        public abstract void SaveTransform();
+        /// <summary>
+        /// Not applicable for terminal implementations.
+        /// </summary>
+        public virtual void ScaleTransform(float sx, float sy)
+        {
+        }
 
+        /// <summary>
+        /// Not applicable for terminal implementations.
+        /// </summary>
+        public virtual void TranslateTransform(float dx, float dy)
+        {
+        }
+
+        /// <summary>
+        /// Not applicable for terminal implementations.
+        /// </summary>
+        public virtual void RotateTransform(float angle)
+        {
+        }
+
+        /// <summary>
+        /// Not applicable for terminal implementations.
+        /// </summary>
+        public virtual void RestoreTransform()
+        {
+        }
+
+        /// <summary>
+        /// Not applicable for terminal implementations.
+        /// </summary>
+        public virtual void SaveTransform()
+        {
+        }
+
+        /// <summary>
+        /// Not applicable for terminal implementations.
+        /// </summary>
         public virtual void DrawArcText(string text, float centerX, float centerY,
                                         float radius, float startAngle, float wedgeAngle,
                                         bool inside, bool clockwise, IFont font, IBrush brush)

@@ -23,12 +23,12 @@ internal class FamMenuCommand : BaseCommand
 }
 
 
-internal class FamListCommand : BaseCommand
+internal class FamListCommand : RecordCommand
 {
     public FamListCommand() : base("list_families", LSID.Find, CommandCategory.Family) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        CommandController.SelectRecord(baseContext, GDMRecordType.rtFamily, "Select a family", "Family: {0}", "No records.");
+        SelectRecord(baseContext, GDMRecordType.rtFamily, "Select a family", "Family: {0}", "No records.");
     }
 }
