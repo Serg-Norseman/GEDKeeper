@@ -6,6 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+#if !TERM
+
 using System;
 using System.Collections.Generic;
 using BSLib;
@@ -67,6 +69,11 @@ namespace GKCore.Export.Formats
         public RTFWriter()
         {
             fStack = new Stack<RtfParagraph>();
+        }
+
+        public override OutFormat GetFormat()
+        {
+            return OutFormat.RTF;
         }
 
         public override bool SupportedText()
@@ -316,3 +323,5 @@ namespace GKCore.Export.Formats
         }
     }
 }
+
+#endif

@@ -48,10 +48,12 @@ namespace GKCore.Export
         public static async Task<string> GetTableFile()
         {
             string availableFormats = "CSV files (*.csv)|*.csv";
+#if !TERM
 #if !NETCOREAPP
             availableFormats += "|" + "Excel files (*.xls)|*.xls";
 #else
             availableFormats += "|" + "Excel files (*.xlsx)|*.xlsx";
+#endif
 #endif
 
             return await AppHost.StdDialogs.GetSaveFile(GlobalOptions.Instance.ReportExportLastDir, availableFormats);
@@ -70,9 +72,12 @@ namespace GKCore.Export
             TableWriter result;
 
             string ext = FileHelper.GetFileExtension(fileName);
+#if !TERM
             if (string.Equals(ext, ".xls") || string.Equals(ext, ".xlsx")) {
                 result = new XLSWriter();
-            } else {
+            } else
+#endif
+            {
                 result = new CSVWriter();
             }
 

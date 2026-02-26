@@ -279,14 +279,6 @@ namespace GKCore
             return null;
         }
 
-        /// <summary>
-        /// Not for command-line interface (CLI).
-        /// </summary>
-        public virtual IntPtr GetTopWindowHandle()
-        {
-            return IntPtr.Zero;
-        }
-
         public void ShowWindow(IWindow window)
         {
             if (window != null) {
@@ -1262,6 +1254,10 @@ namespace GKCore
             }
         }
 
+        /// <summary>
+        /// Framework-specific presentation settings.
+        /// For example, in GKv3, fixes to the appearance of WPF ToolBars.
+        /// </summary>
         protected virtual void ApplyThemeProperties()
         {
             // dummy

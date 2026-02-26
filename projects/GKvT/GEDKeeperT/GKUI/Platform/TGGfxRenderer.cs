@@ -6,10 +6,12 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using BSLib;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
 using Terminal.Gui;
+using Attribute = Terminal.Gui.Attribute;
 
 namespace GKUI.Platform
 {
@@ -27,16 +29,6 @@ namespace GKUI.Platform
         public override void SetTarget(object target)
         {
             fTargetView = target as View;
-        }
-
-        public override void DrawImage(IImage image, float x, float y, float width, float height, string imName)
-        {
-            // implementation is impossible
-        }
-
-        public override void DrawImage(IImage image, ExtRect destinationRect, ExtRect sourceRect)
-        {
-            // implementation is impossible
         }
 
         public override ExtSizeF GetTextSize(string text, IFont font)
@@ -116,11 +108,6 @@ namespace GKUI.Platform
             // *
         }
 
-        public override void DrawPath(IPen pen, IBrush brush, IGfxPath path)
-        {
-            // implementation is impossible
-        }
-
         public override IPen CreatePen(IColor color, float width, float[] dashPattern = null)
         {
             // *
@@ -133,46 +120,40 @@ namespace GKUI.Platform
             return null;
         }
 
-        public override IGfxPath CreateCirclePath(float x, float y, float width, float height)
+        #region Lines
+
+        //private Dictionary<(int x, int y), LineDir> fLines = new Dictionary<(int x, int y), LineDir>();
+
+        [Flags]
+        private enum LineDir
         {
-            // implementation is impossible
-            return null;
+            None = 0,
+            Up = 1,
+            Down = 2,
+            Left = 4,
+            Right = 8,
+            Vertical = Up | Down,
+            Horizontal = Left | Right
         }
 
-        public override IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle, float ang1, float ang2)
+        private char GetLineChar(LineDir dir)
         {
-            // implementation is impossible
-            return null;
+            return dir switch {
+                LineDir.Vertical => '│',
+                LineDir.Horizontal => '─',
+                (LineDir.Down | LineDir.Right) => '┌',
+                (LineDir.Down | LineDir.Left) => '┐',
+                (LineDir.Up | LineDir.Right) => '└',
+                (LineDir.Up | LineDir.Left) => '┘',
+                (LineDir.Vertical | LineDir.Right) => '├',
+                (LineDir.Vertical | LineDir.Left) => '┤',
+                (LineDir.Horizontal | LineDir.Down) => '┬',
+                (LineDir.Horizontal | LineDir.Up) => '┴',
+                (LineDir.Vertical | LineDir.Horizontal) => '┼',
+                _ => ' '
+            };
         }
 
-        public override void SetTranslucent(float value)
-        {
-            // implementation is impossible
-        }
-
-        public override void ScaleTransform(float sx, float sy)
-        {
-            // implementation is impossible
-        }
-
-        public override void TranslateTransform(float dx, float dy)
-        {
-            // implementation is impossible
-        }
-
-        public override void RotateTransform(float angle)
-        {
-            // implementation is impossible
-        }
-
-        public override void RestoreTransform()
-        {
-            // implementation is impossible
-        }
-
-        public override void SaveTransform()
-        {
-            // implementation is impossible
-        }
+        #endregion
     }
 }

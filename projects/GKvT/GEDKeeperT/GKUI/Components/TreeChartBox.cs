@@ -182,7 +182,7 @@ namespace GKUI.Components
 
         public void Invalidate()
         {
-            // ?
+            InvalidateContent();
         }
 
         public override void SetLayout(IChartLayout layout)
@@ -295,6 +295,10 @@ namespace GKUI.Components
             return fModel.GetOffsets();
         }
 
+        public void ResetBackground()
+        {
+        }
+
         private void DrawBackground(RenderTarget target, BackgroundMode background)
         {
             /*int width, height;
@@ -333,8 +337,7 @@ namespace GKUI.Components
 
         public ExtRect GetClientRect()
         {
-            //return UIHelper.Rt2Rt(base.ClientRectangle);
-            return ExtRect.Empty;
+            return UIHelper.Rt2Rt(base.ClientRectangle);
         }
 
         public ExtPoint GetDrawOrigin()
@@ -408,25 +411,26 @@ namespace GKUI.Components
 
         public override bool OnKeyDown(KeyEvent e)
         {
+            bool result = false;
+
             switch (e.Key) {
                 case Key.F4:
                     ToggleCollapse();
+                    result = true;
                     break;
 
-                /*case Key.Add:
-                case Key.Oemplus:
-                    SetScale(fModel.Scale + 0.05f);
-                    e.Handled = true;
-                    break;
-
-                case Key.Subtract:
-                case Key.OemMinus:
-                    SetScale(fModel.Scale - 0.05f);
-                    e.Handled = true;
+                /*case (Key)'+':
+                case (Key)'-':
+                    SetScale(fModel.Scale +/- 0.05f);
+                    result = true;
                     break;*/
+
+                default:
+                    result = base.OnKeyDown(e);
+                    break;
             }
 
-            return base.OnKeyDown(e);
+            return result;
         }
 
         /*protected override void OnSizeChanged(EventArgs e)

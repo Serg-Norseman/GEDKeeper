@@ -6,6 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+#if !TERM
+
 using GKCore.Design.Graphics;
 
 namespace GKCore.Export.Formats
@@ -94,3 +96,5 @@ namespace GKCore.Export.Formats
 #endif
     }
 }
+
+#endif

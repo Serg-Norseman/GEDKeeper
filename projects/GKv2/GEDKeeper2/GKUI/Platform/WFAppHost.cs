@@ -48,10 +48,6 @@ namespace GKUI.Platform
         {
         }
 
-        /// <summary>
-        /// Framework-specific presentation settings.
-        /// For example, in GKv3, fixes to the appearance of WPF ToolBars.
-        /// </summary>
         protected override void ApplyThemeProperties()
         {
         }
@@ -96,18 +92,10 @@ namespace GKUI.Platform
             return activeWin;
         }
 
-        public override IntPtr GetTopWindowHandle()
-        {
-            var ownerForm = GetActiveWindow() as Form;
-            return (ownerForm == null) ? IntPtr.Zero : ownerForm.Handle;
-        }
-
         public override async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
             var wfModal = dialog as CommonDialog;
             if (wfModal == null) return false;
-
-            //IntPtr mainHandle = GetTopWindowHandle();
 
             if (keepModeless) {
                 foreach (IWindow win in fRunningForms) {
@@ -117,9 +105,6 @@ namespace GKUI.Platform
                     }
                 }
             }
-
-            // for WinForms works better without this
-            //UIHelper.CenterFormByParent((Form)dialog, mainHandle);
 
             wfModal.ShowDialog(owner as IWin32Window);
             return await wfModal.DialogResultTask;

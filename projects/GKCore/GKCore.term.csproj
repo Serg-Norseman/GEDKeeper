@@ -36,12 +36,6 @@
         <Reference Include="BSLib.DataViz.Model">
             <HintPath>..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
         </Reference>
-        <Reference Include="RtfWriter">
-            <HintPath>..\libs\netstd\RtfWriter.dll</HintPath>
-        </Reference>
-        <Reference Include="SwiftExcel">
-            <HintPath>..\libs\netstd\SwiftExcel.dll</HintPath>
-        </Reference>
     </ItemGroup>
 
 

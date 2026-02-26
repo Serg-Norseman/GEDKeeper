@@ -8,12 +8,23 @@
 
 using System;
 using System.Reflection;
+using BSLib;
 using Terminal.Gui;
 
 namespace GKUI.Components
 {
     public static class UIHelper
     {
+        public static Rect Rt2Rt(ExtRect ert)
+        {
+            return new Rect(ert.Left, ert.Top, ert.GetWidth(), ert.GetHeight());
+        }
+
+        public static ExtRect Rt2Rt(Rect ert)
+        {
+            return ExtRect.CreateBounds(ert.Left, ert.Top, ert.Width, ert.Height);
+        }
+
         public static ToolStripMenuItem AddToolStripItem(ToolStripDropDownButton contextMenu, string text, object tag, Action clickHandler)
         {
             var items = contextMenu.Children;

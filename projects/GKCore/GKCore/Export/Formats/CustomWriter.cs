@@ -20,6 +20,13 @@ namespace GKCore.Export.Formats
         taJustify
     }
 
+    public enum OutFormat
+    {
+        Unknown,
+        PDF,
+        RTF
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -40,9 +47,9 @@ namespace GKCore.Export.Formats
             fMargins = new ExtMargins(20);
         }
 
-        public virtual bool IsPDF()
+        public virtual OutFormat GetFormat()
         {
-            return false;
+            return OutFormat.Unknown;
         }
 
         /// <summary>

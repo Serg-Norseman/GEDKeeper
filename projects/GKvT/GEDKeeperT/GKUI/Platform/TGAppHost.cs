@@ -11,13 +11,10 @@ using System.Globalization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using BSLib;
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
-using GKCore.Options;
-using GKCore.Plugins;
 using GKCore.Utilities;
 using GKCore.Validation;
 using GKUI.Components;
@@ -61,31 +58,11 @@ namespace GKUI.Platform
             return (fRunningForms != null && fRunningForms.Count > 0) ? fRunningForms[0] : null;
         }
 
-        public override IntPtr GetTopWindowHandle()
-        {
-            throw new NotImplementedException();
-        }
-
         public override async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
             var tgDlg = dialog as CommonDialog;
             Application.Run(tgDlg);
             return (tgDlg.DialogResult == DialogResult.Ok);
-        }
-
-        public override void EnableWindow(IWidgetForm form, bool value)
-        {
-            // not supported
-        }
-
-        public override void SaveWinState(IBaseWindow baseWin, MRUFile mf)
-        {
-            // not supported
-        }
-
-        public override void RestoreWinState(IBaseWindow baseWin, MRUFile mf)
-        {
-            // not supported
         }
 
         public override GKCore.ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
@@ -153,90 +130,25 @@ namespace GKUI.Platform
             }
         }
 
-        public override void CloseDependentWindows(IWindow owner)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override ExtRect GetActiveScreenWorkingArea()
-        {
-            // not supported
-            return ExtRect.Empty;
-        }
-
-        public override void SetWindowBounds(IWindow window, ExtRect bounds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void WidgetLocate(IWidgetForm view, WidgetLocation location)
-        {
-            var form = view as Window;
-            if (form != null) {
-                //var loc = WidgetLocate(UIHelper.Rt2Rt(form.Bounds), location);
-                //form.Location = new Point(loc.X, loc.Y);
-            }
-        }
-
         public override bool HasFeatureSupport(Feature feature)
         {
             bool result = false;
-
             switch (feature) {
-                case Feature.GridCellFormat:
-                    result = false;
-                    break;
-
-                case Feature.InternetProxy:
-                    result = false;
-                    break;
-
-                case Feature.MediaPlayer:
-                    result = false;
-                    break;
-
                 case Feature.RecentFilesLoad:
-                    // In the SDI interface, it is not clear how to implement it correctly
                     result = true;
                     break;
 
-                case Feature.Themes:
-                    result = false;
-                    break;
-
-                case Feature.OverwritePrompt:
-                    result = false;
-                    break;
-
-                case Feature.PrintPreview:
-                    result = false;
-                    break;
-
-                case Feature.Graphics:
-                    result = false;
-                    break;
-
-                case Feature.DesktopV2:
-                case Feature.DesktopV3:
-                case Feature.Mobile:
+                default:
                     result = false;
                     break;
             }
-
             return result;
-        }
-
-        public override void LayoutWindows(WinLayout layout)
-        {
-            // not supported
         }
 
         public override void Invoke(Action action)
         {
             action();
         }
-
-        #region KeyLayout functions
 
         public override int GetKeyLayout()
         {
@@ -255,17 +167,8 @@ namespace GKUI.Platform
 
         public override void SetClipboardText(string text)
         {
-            throw new NotImplementedException();
+            Application.Driver.Clipboard.SetClipboardData(text);
         }
-
-        public override void SetClipboardImage(object image)
-        {
-            // not supported
-        }
-
-        #endregion
-
-        #region Bootstrapper
 
         /// <summary>
         /// This function implements initialization of IoC-container for WinForms presentation.
@@ -323,8 +226,6 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(ToolStripDropDownButton), typeof(MenuItemHandler));
             ControlsManager.RegisterHandlerType(typeof(ToolStripMenuItem), typeof(MenuItemHandler));
         }
-
-        #endregion
 
         public static void Startup(string[] args)
         {

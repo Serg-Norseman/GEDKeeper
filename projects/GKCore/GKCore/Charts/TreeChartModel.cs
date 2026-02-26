@@ -1372,7 +1372,12 @@ namespace GKCore.Charts
                 persRt.Offset(fOffsetX, fOffsetY);
 
                 if (person.HasFlag(PersonFlag.pfIsDead) && fOptions.MourningEdges) {
-                    ExtRect dt = persRt.GetOffset(-2, -2);
+                    ExtRect dt;
+                    if (fGraphicsMode) {
+                        dt = persRt.GetOffset(-2, -2);
+                    } else {
+                        dt = persRt;
+                    }
                     DrawBorder(null, dt, true, person);
                 }
 
@@ -1382,7 +1387,7 @@ namespace GKCore.Charts
                 }
 
                 ExtRect bordRt = persRt;
-                if (person.Portrait != null) {
+                if (fGraphicsMode && person.Portrait != null) {
                     ExtRect portRt = person.PortraitArea.GetOffset(persRt.Left, persRt.Top);
                     fRenderer.DrawImage(person.Portrait, portRt.Left, portRt.Top, portRt.GetWidth(), portRt.GetHeight(), person.Rec.XRef);
 
@@ -1412,7 +1417,7 @@ namespace GKCore.Charts
 
                 DrawCoverGlass(bordRt, person);
 
-                if (fOptions.SignsVisible && fSignsPic != null && !person.Signs.IsEmpty()) {
+                if (fGraphicsMode && fOptions.SignsVisible && !person.Signs.IsEmpty()) {
                     int i = 0;
                     int dy = (int)(21 * fPicScale);
                     for (var cps = SpecialUserRef.urRI_StGeorgeCross; cps <= SpecialUserRef.urLast; cps++) {
@@ -1443,7 +1448,7 @@ namespace GKCore.Charts
                 }
 
                 // only interactive mode
-                if (drawMode == ChartDrawMode.dmInteractive) {
+                if (fGraphicsMode && drawMode == ChartDrawMode.dmInteractive) {
                     if (person.HasFlag(PersonFlag.pfCanExpand)) {
                         ExtRect expRt = GetExpanderRect(bordRt);
                         fRenderer.DrawImage(fExpPic, expRt.Left, expRt.Top, expRt.Width, expRt.Height, string.Empty);
@@ -1856,8 +1861,9 @@ namespace GKCore.Charts
         {
             // drawing relative offset of tree on graphics
             var viewport = fView.Viewport;
+            bool virtualCanvas = fView.VirtualCanvas;
 
-            if (drawMode == ChartDrawMode.dmInteractive) {
+            if (drawMode == ChartDrawMode.dmInteractive && virtualCanvas) {
                 fVisibleArea = viewport;
             } else {
                 fVisibleArea = ExtRect.CreateBounds(0, 0, fImageWidth, fImageHeight);
@@ -1868,7 +1874,6 @@ namespace GKCore.Charts
                 spx = 0;
                 spy = 0;
             } else {
-                bool virtualCanvas = fView.VirtualCanvas;
                 var imgViewport = fView.ImageViewport;
 
                 if (fImageWidth < viewport.Width) {

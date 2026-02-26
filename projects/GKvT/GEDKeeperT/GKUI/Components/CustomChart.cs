@@ -8,13 +8,8 @@
 
 using System;
 using BSLib;
-using GKCore;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
-using GKCore.Export;
-using GKCore.Export.Formats;
-using GKCore.Locales;
-using GKUI.Platform.Handlers;
 using Terminal.Gui;
 
 namespace GKUI.Components
@@ -28,7 +23,7 @@ namespace GKUI.Components
 
         public event EventHandler NavRefresh;
 
-        public new virtual float Scale
+        public virtual float Scale
         {
             get { return 0; }
         }
@@ -45,103 +40,13 @@ namespace GKUI.Components
         {
         }
 
-        /*protected override void OnKeyDown(KeyEventArgs e)
+        public override bool OnKeyDown(KeyEvent keyEvent)
         {
-            e.Handled = true;
-            switch (e.KeyCode) {
-                case Keys.Left:
-                    HorizontalScroll.Value =
-                        Math.Max(HorizontalScroll.Value - HorizontalScroll.SmallChange, 0);
-                    PerformLayout();
-                    break;
-
-                case Keys.Right:
-                    HorizontalScroll.Value += HorizontalScroll.SmallChange;
-                    PerformLayout();
-                    break;
-
-                case Keys.Up:
-                    VerticalScroll.Value =
-                        Math.Max(VerticalScroll.Value - VerticalScroll.SmallChange, 0);
-                    PerformLayout();
-                    break;
-
-                case Keys.Down:
-                    VerticalScroll.Value += VerticalScroll.SmallChange;
-                    PerformLayout();
-                    break;
-
-                case Keys.PageUp:
-                    if (Keys.None == ModifierKeys) {
-                        VerticalScroll.Value =
-                            Math.Max(VerticalScroll.Value - VerticalScroll.LargeChange, 0);
-                    } else if (Keys.Shift == ModifierKeys) {
-                        HorizontalScroll.Value =
-                            Math.Max(HorizontalScroll.Value - HorizontalScroll.LargeChange, 0);
-                    }
-                    PerformLayout();
-                    break;
-
-                case Keys.PageDown:
-                    if (Keys.None == ModifierKeys) {
-                        VerticalScroll.Value += VerticalScroll.LargeChange;
-                    } else if (Keys.Shift == ModifierKeys) {
-                        HorizontalScroll.Value += HorizontalScroll.LargeChange;
-                    }
-                    PerformLayout();
-                    break;
-
-                case Keys.Home:
-                    if (Keys.None == ModifierKeys) {
-                        VerticalScroll.Value = 0;
-                    } else if (Keys.Shift == ModifierKeys) {
-                        HorizontalScroll.Value = 0;
-                    }
-                    PerformLayout();
-                    break;
-
-                case Keys.End:
-                    if (Keys.None == ModifierKeys) {
-                        VerticalScroll.Value = VerticalScroll.Maximum;
-                    } else if (Keys.Shift == ModifierKeys) {
-                        HorizontalScroll.Value = HorizontalScroll.Maximum;
-                    }
-                    PerformLayout();
-                    break;
-
-                case Keys.Back:
-                    NavPrev();
-                    break;
-
-                default:
-                    base.OnKeyDown(e);
-                    break;
-            }
-        }*/
-
-        /*protected override void OnMouseUp(MouseEventArgs e)
-        {
-            if (MouseButtons.XButton1 == e.Button) {
+            if (keyEvent.Key == Key.Backspace) {
                 NavPrev();
-            } else if (MouseButtons.XButton2 == e.Button) {
-                NavNext();
-            } else {
-                base.OnMouseUp(e);
-            }
-        }*/
-
-        /*protected override void OnMouseWheel(MouseEventArgs e)
-        {
-            if (Keys.None == ModifierKeys) {
-                VerticalScroll.Value = Algorithms.CheckBounds(VerticalScroll.Value - e.Delta, VerticalScroll.Minimum, VerticalScroll.Maximum);
-                PerformLayout();
-            } else if (Keys.Shift == ModifierKeys) {
-                HorizontalScroll.Value = Algorithms.CheckBounds(HorizontalScroll.Value - e.Delta, HorizontalScroll.Minimum, HorizontalScroll.Maximum);
-                PerformLayout();
-            } else {
-                base.OnMouseWheel(e);
-            }
-        }*/
+                return true;
+            } else return base.OnKeyDown(keyEvent);
+        }
 
         #region Print and snaphots support
 

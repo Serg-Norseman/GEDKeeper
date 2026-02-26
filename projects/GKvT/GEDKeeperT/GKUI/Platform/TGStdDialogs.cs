@@ -44,13 +44,6 @@ namespace GKUI.Platform
 
         public async Task<IFont> SelectFont(IFont font)
         {
-            /*Font sdFont = ((FontHandler)font).Handle;
-
-            using (FontDialog fontDlg = new FontDialog())
-            {
-                fontDlg.Font = sdFont;
-                return (fontDlg.ShowDialog(null) != DialogResult.Ok) ? null : new FontHandler(fontDlg.Font);
-            }*/
             return null;
         }
 

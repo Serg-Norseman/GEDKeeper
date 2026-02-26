@@ -84,14 +84,14 @@ namespace GKCore.Export
             CustomWriter writer;
             if (string.Equals(ext, ".html")) {
                 writer = new HTMLWriter();
+#if !TERM
             } else if (string.Equals(ext, ".rtf")) {
                 writer = new RTFWriter();
-            } else {
-#if !TERM
+            } else if (string.Equals(ext, ".pdf")) {
                 writer = new PDFWriter();
-#else
-                return;
 #endif
+            } else {
+                return;
             }
 
             bool success = Generate(writer);

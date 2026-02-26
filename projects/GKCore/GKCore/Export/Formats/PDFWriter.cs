@@ -115,9 +115,9 @@ namespace GKCore.Export.Formats
             base.Dispose(disposing);
         }
 
-        public override bool IsPDF()
+        public override OutFormat GetFormat()
         {
-            return true;
+            return OutFormat.PDF;
         }
 
         public override bool SupportedText()

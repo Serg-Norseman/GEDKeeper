@@ -9,17 +9,14 @@
 using System;
 using BSLib;
 using GKCore.Design;
-using GKCore.Utilities;
 using Terminal.Gui;
+using Attribute = Terminal.Gui.Attribute;
 
 namespace GKUI.Components
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class ScrollablePanel : /*ScrollView, */ View, IScrollableContainer
+    public class ScrollablePanel : ScrollView, IScrollableContainer
     {
-        /*private class GraphContent : View
+        private class GraphContent : View
         {
             private ScrollablePanel fPanel;
 
@@ -30,26 +27,49 @@ namespace GKUI.Components
 
             public override void Redraw(Rect region)
             {
-                //base.Redraw(region);
-                //Driver.SetAttribute(ColorScheme.Normal);
+                base.Redraw(region);
+                Driver.SetAttribute(ColorScheme.Normal);
                 fPanel.OnPaint(this);
             }
         }
 
+        private readonly GraphContent fCanvas;
 
-        private readonly GraphContent fCanvas;*/
+        public const int SmallChange = 1;
+        public const int LargeChange = 10;
 
         private bool fCenteredImage;
+        private bool fHasHScroll;
+        private bool fHasVScroll;
+        private Rect fImageRect;
         private Size fImageSize;
         private ExtRect fImageViewport;
+        private int fMouseOffsetX, fMouseOffsetY;
+        private Attribute? fTextColor;
         private ExtRect fViewport;
 
-        public bool AutoScroll { get; set; }
+        public Rect CanvasRectangle
+        {
+            get { return new Rect(0, 0, ContentSize.Width, ContentSize.Height); }
+        }
 
         protected bool CenteredImage
         {
             get { return fCenteredImage; }
-            set { fCenteredImage = value; }
+            set {
+                fCenteredImage = value;
+                UpdateProperties();
+            }
+        }
+
+        public Rect ClientRectangle
+        {
+            get { return Bounds; }
+        }
+
+        protected Rect ImageRect
+        {
+            get { return fImageRect; }
         }
 
         public ExtRect ImageViewport
@@ -57,150 +77,188 @@ namespace GKUI.Components
             get { return fImageViewport; }
         }
 
+        public Point MouseOffset
+        {
+            get { return new Point(fMouseOffsetX, fMouseOffsetY); }
+        }
+
+        public bool HScroll
+        {
+            get { return fHasHScroll; }
+        }
+
+        public bool VScroll
+        {
+            get { return fHasVScroll; }
+        }
+
+        public Attribute TextColor
+        {
+            get { return fTextColor ?? ColorScheme.Normal; }
+            set { fTextColor = value; }
+        }
+
         public ExtRect Viewport
         {
-            get {
-                /*var scrollPos = AutoScrollPosition;
-                var clientSize = ClientSize;
-                return ExtRect.CreateBounds(Math.Abs(scrollPos.X), Math.Abs(scrollPos.Y), clientSize.Width, clientSize.Height);*/
-                var bounds = base.Bounds;
-                return ExtRect.CreateBounds(0, 0, bounds.Width, bounds.Height);
-                //return fViewport;
-            }
+            get { return fViewport; }
         }
 
         public bool VirtualCanvas
         {
-            get { return true; }
+            get { return false; }
         }
-
 
         public ScrollablePanel()
         {
-            Border = new Border() { BorderStyle = BorderStyle.Single };
+            //Border = new Border() { BorderStyle = BorderStyle.Single };
 
-            /*ShowVerticalScrollIndicator = true;
+            ShowVerticalScrollIndicator = true;
             ShowHorizontalScrollIndicator = true;
             AutoHideScrollBars = false;
+            CanFocus = true;
 
             fCanvas = new GraphContent(this);
+            fCanvas.X = 0;
+            fCanvas.Y = 0;
+            fCanvas.CanFocus = false;
             Add(fCanvas);
-            
-            UIHelper.AddPrivEvents(this, "vertical", "ChangedPosition", OnScroll);
-            UIHelper.AddPrivEvents(this, "horizontal", "ChangedPosition", OnScroll);*/
 
-            AutoScroll = true;
-
-            // ContentOffset View.OnDrawContent
-        }
-
-        private void OnScroll()
-        {
-            SysUtils.DoNotInline(this);
-            UpdateProperties();
+            //UIHelper.AddPrivEvents(this, "vertical", "ChangedPosition", OnScroll);
+            //UIHelper.AddPrivEvents(this, "horizontal", "ChangedPosition", OnScroll);*/
         }
 
         protected virtual void OnPaint(View content)
         {
         }
 
-        public override void Redraw(Rect region)
+        /*private void OnScroll()
         {
-            base.Redraw(region);
-            Driver.SetAttribute(ColorScheme.Normal);
-            OnPaint(this);
-        }
-
-        /*protected Rectangle GetClientRect(bool includePadding)
-        {
-            int left = 0;
-            int top = 0;
-            int width = ClientSize.Width;
-            int height = ClientSize.Height;
-
-            if (includePadding) {
-                left += Padding.Left;
-                top += Padding.Top;
-                width -= Padding.Horizontal;
-                height -= Padding.Vertical;
-            }
-
-            return new Rectangle(left, top, width, height);
+            SysUtils.DoNotInline(this);
+            UpdateProperties();
         }*/
 
         private void UpdateProperties()
         {
-            /*var clientRect = base.Bounds;
+            int canvWidth = Math.Max(fImageSize.Width, Bounds.Width);
+            int canvHeight = Math.Max(fImageSize.Height, Bounds.Height);
+
+            if (ContentSize.Width != canvWidth || ContentSize.Height != canvHeight) {
+                ContentSize = new Size(canvWidth, canvHeight);
+                fCanvas.Width = canvWidth;
+                fCanvas.Height = canvHeight;
+            }
+
+            var clientRect = base.Bounds;
             var scrollPos = base.ContentOffset;
 
-            //if (fViewport.IsEmpty) return;
+            fViewport = new ExtRect(scrollPos.X, scrollPos.Y, clientRect.Width, clientRect.Height);
 
-            /*var viewport = this.Viewport;
-            var fHasHScroll = (viewport.Width < fImageSize.Width);
-            var fHasVScroll = (viewport.Height < fImageSize.Height);
+            fHasHScroll = (fViewport.Width < fImageSize.Width);
+            fHasVScroll = (fViewport.Height < fImageSize.Height);
 
-            int destX, destY;
+            int destX = 0, destY = 0;
 
             if (fHasHScroll) {
-                destX = 0;
-                //fMouseOffsetX = fViewport.Left;
-            } else {
-                if (fCenteredImage) {
-                    destX = (viewport.Width - fImageSize.Width) / 2;
-                    //fMouseOffsetX = -destX;
-                } else {
-                    destX = 0;
-                    //fMouseOffsetX = 0;
-                }
+                fMouseOffsetX = fViewport.Left;
+            } else if (fCenteredImage) {
+                destX = (fViewport.Width - fImageSize.Width) / 2;
+                fMouseOffsetX = -destX;
             }
 
             if (fHasVScroll) {
-                destY = 0;
-                //fMouseOffsetY = fViewport.Top;
-            } else {
-                if (fCenteredImage) {
-                    destY = (viewport.Height - fImageSize.Height) / 2;
-                    //fMouseOffsetY = -destY;
-                } else {
-                    destY = 0;
-                    //fMouseOffsetY = 0;
-                }
+                fMouseOffsetY = fViewport.Top;
+            } else if (fCenteredImage) {
+                destY = (fViewport.Height - fImageSize.Height) / 2;
+                fMouseOffsetY = -destY;
             }
 
-            //fImageRect = new Rectangle(destX, destY, fImageSize.Width, fImageSize.Height);
-
-            int width = Math.Min(fImageSize.Width, viewport.Width);
-            int height = Math.Min(fImageSize.Height, viewport.Height);
-            fImageViewport = ExtRect.CreateBounds(destX, destY, width, height);*/
+            fImageRect = new Rect(destX, destY, fImageSize.Width, fImageSize.Height);
+            int width = Math.Min(fImageSize.Width, fViewport.Width);
+            int height = Math.Min(fImageSize.Height, fViewport.Height);
+            fImageViewport = ExtRect.CreateBounds(destX, destY, width, height);
         }
 
-        /*protected override void OnMouseDown(MouseEventArgs e)
+        public override bool OnEnter(View nextFocused)
         {
-            if (!Focused) {
-                Focus();
-            }
+            UpdateProperties();
+            return base.OnEnter(nextFocused);
+        }
 
-            base.OnMouseDown(e);
-        }*/
-
-        /*protected override void OnScroll(ScrollEventArgs e)
+        public override bool OnKeyDown(KeyEvent keyEvent)
         {
-            if (e.Type == ScrollEventType.ThumbTrack) {
-                switch (e.ScrollOrientation) {
-                    case ScrollOrientation.HorizontalScroll:
-                        AutoScrollPosition = new Point(e.NewValue, -AutoScrollPosition.Y);
+            bool result = false;
+
+            if (Enabled && HasFocus) {
+                var key = keyEvent.Key;
+                bool hasCtrl = false;
+                if ((key & Key.CtrlMask) == Key.CtrlMask) {
+                    hasCtrl = true;
+                    key = key & ~Key.CtrlMask;
+                }
+
+                switch (key) {
+                    case Key.CursorUp:
+                        result = ScrollUp(1);
+                        break;
+                    case Key.CursorDown:
+                        result = ScrollDown(1);
+                        break;
+                    case Key.CursorLeft:
+                        result = ScrollLeft(1);
+                        break;
+                    case Key.CursorRight:
+                        result = ScrollRight(1);
                         break;
 
-                    case ScrollOrientation.VerticalScroll:
-                        AutoScrollPosition = new Point(-AutoScrollPosition.X, e.NewValue);
+                    case Key.PageUp:
+                        result = ScrollUp(Bounds.Height);
+                        break;
+                    case Key.PageDown:
+                        result = ScrollDown(Bounds.Height);
+                        break;
+
+                    case Key.Home:
+                        result = ScrollLeft(ContentSize.Width);
+                        if (hasCtrl) {
+                            result = result && ScrollUp(ContentSize.Height);
+                        }
+                        break;
+
+                    case Key.End:
+                        result = ScrollRight(ContentSize.Width);
+                        if (hasCtrl) {
+                            result = result && ScrollDown(ContentSize.Height);
+                        }
                         break;
                 }
             }
 
-            UpdateProperties();
+            return result;
+        }
 
-            base.OnScroll(e);
-        }*/
+        public override bool MouseEvent(MouseEvent me)
+        {
+            if (me.Flags == MouseFlags.Button1Pressed && !HasFocus) {
+                SetFocus();
+                return true;
+            }
+
+            if (me.Flags.HasFlag(MouseFlags.WheeledDown)) {
+                if (me.Flags.HasFlag(MouseFlags.ButtonShift)) {
+                    ScrollRight(1);
+                } else ScrollDown(1);
+                return true;
+            }
+
+            if (me.Flags.HasFlag(MouseFlags.WheeledUp)) {
+                if (me.Flags.HasFlag(MouseFlags.ButtonShift)) {
+                    ScrollLeft(1);
+                } else ScrollUp(1);
+                return true;
+            }
+
+            return base.MouseEvent(me);
+        }
 
         /// <summary>
         /// Updates the scroll position.
@@ -209,7 +267,9 @@ namespace GKUI.Components
         /// <param name="posY">The Y position.</param>
         protected void UpdateScrollPosition(int posX, int posY)
         {
-            //AutoScrollPosition = new Point(posX, posY);
+            ContentOffset = new Point(posX, posY);
+            UpdateProperties();
+            //InvalidateContent();
         }
 
         /// <summary>
@@ -219,7 +279,8 @@ namespace GKUI.Components
         /// <param name="dy">The Y shift.</param>
         protected void AdjustScroll(int dx, int dy)
         {
-            //UpdateScrollPosition(HorizontalScroll.Value + dx, VerticalScroll.Value + dy);
+            var scrollPos = ContentOffset;
+            UpdateScrollPosition(scrollPos.X + dx, scrollPos.Y + dy);
         }
 
         /// <summary>
@@ -229,35 +290,23 @@ namespace GKUI.Components
         /// <param name="noRedraw">Flag of the need to redraw.</param>
         protected void SetImageSize(ExtSize imageSize, bool noRedraw = false)
         {
-            if (AutoScroll && !imageSize.IsEmpty) {
+            if (!imageSize.IsEmpty && (fImageSize.Width != imageSize.Width || fImageSize.Height != imageSize.Height)) {
                 fImageSize = new Size(imageSize.Width, imageSize.Height);
-
-                //AutoScrollMinSize = new Size(imageSize.Width + Padding.Horizontal, imageSize.Height + Padding.Vertical);
-
-                /*var clientSize = fViewport;
-                int canvWidth = Math.Max(imageSize.Width, clientSize.Width);
-                int canvHeight = Math.Max(imageSize.Height, clientSize.Height);
-
-                ContentSize = new Size(canvWidth, canvHeight);
-                fCanvas.Width = canvWidth;
-                fCanvas.Height = canvHeight;*/
 
                 UpdateProperties();
             }
 
-            if (!noRedraw) Invalidate();
+            if (!noRedraw) InvalidateContent();
         }
 
-        /*protected Point GetImageRelativeLocation(PointF mpt)
+        protected Point GetImageRelativeLocation(Point mpt, bool buttons)
         {
-            return new Point((int)mpt.X + Math.Abs(AutoScrollPosition.X), (int)mpt.Y + Math.Abs(AutoScrollPosition.Y));
-        }*/
+            return new Point(mpt.X + fMouseOffsetX, mpt.Y + fMouseOffsetY);
+        }
 
-        public void Invalidate()
+        protected void InvalidateContent()
         {
-            //fCanvas.Redraw(fCanvas.Bounds);
-
-            base.Redraw(base.Bounds);
+            fCanvas.SetNeedsDisplay();
         }
     }
 }

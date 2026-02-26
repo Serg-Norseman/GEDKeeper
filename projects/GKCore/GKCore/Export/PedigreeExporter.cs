@@ -233,7 +233,7 @@ namespace GKCore.Export
         private void WriteExcessFmt(PedigreePerson person)
         {
             if (fOptions.PedigreeOptions.IncludePortraits) {
-                float factor = (fWriter.IsPDF()) ? 0.6f : 1.0f;
+                float factor = (fWriter.GetFormat() == OutFormat.PDF) ? 0.6f : 1.0f;
                 IImage image = fBase.Context.GetPrimaryBitmap(person.IRec, (int)(fDefImageWidth * factor), (int)(fDefImageHeight * factor), false);
                 fWriter.AddImage(image, TextAlignment.taRight);
             }
@@ -551,7 +551,7 @@ namespace GKCore.Export
 
         protected override void InternalGenerate()
         {
-            bool isRtf = (fWriter is RTFWriter);
+            bool isRtf = (fWriter.GetFormat() == OutFormat.RTF);
 
             IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
             IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
