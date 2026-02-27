@@ -898,7 +898,7 @@
 894={0} töredék, {1} méret, {2} minőség
 895=Frissítés
 896=Szűrő visszaállítása
-897=Dátumtartományok lerövidítése
+897=Rövidítse le a hiányos dátumokat és tartományokat
 898=Nyomjon Entert a szűrő mentéséhez
 899=Ma van {0} évfordulója
 900=Holnap lesz {0} évfordulója
@@ -1069,18 +1069,18 @@
 1051=Kiszámított születési esemény létrehozása
 1052=Nincs életkor rögzítve az esemény dátumakor
 1053=Tárgy
-1054=Override themes font
-1055=Files
-1056=Sort events
-1057=Újratöltés
-1058=Multiple lines of spouses
+1054=Témák betűtípusának felülírása
+1055=Fájlok
+1056=Események rendezése
+1057=Újratölt
+1058=Több házastársi vonal
 
-1059=Death days
-1060=Today is deathday of {0}
-1061=Tomorrow is deathday of {0}
-1062={1} days remain before the deathday of {0}
-1063=Events for the living only
+1059=Halál dátuma
+1060=Ma van {0} születésnapja
+1061=Holnap lesz {0} születésnapja
+1062={1} nap van hátra "{0}" születésnapjáig
+1063=Csak élőknek szóló események
 
-1064=Include events
-1065=Notes without line breaks
-1066=Include family events
+1064=Események belefoglalása
+1065=Kapcsolódások nélküli jegyzet
+1066=Családi események bevonása

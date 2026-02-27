@@ -898,7 +898,7 @@
 894=Fragmento {0}, tamaño {1}, calidad {2}
 895=Refrescar
 896=Restablecer filtro
-897=Acortar intervalos de fechas
+897=Acortar fechas y rangos incompletos
 898=Pulse Enter para guardar el filtro
 899=Hoy es el aniversario de {0}
 900=Mañana es el aniversario de {0}
@@ -1069,9 +1069,9 @@
 1051=Crear un evento calculado de nacimiento
 1052=Fecha del evento no determinada
 1053=Asunto
-1054=Override themes font
-1055=Files
-1056=Sort events
+1054=Anular fuente de temas
+1055=Archivos
+1056=Ordenar eventos
 1057=Recargar
 1058=Multiple lines of spouses
 

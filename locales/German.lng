@@ -50,7 +50,7 @@
 049=Inhalt
 050=Über
 051=Datensätze
-052=gefiltert
+052=Gefiltert
 053=Personen
 054=Familien
 055=Bemerkungen
@@ -271,7 +271,7 @@
 270=Nachname | Vorname Patronym
 271=Nachname | Vorname | Patronym
 272=Datumsformat in Listen
-273=Adresse in die Ortszeilen einfügen
+273=Adresse anzeigen
 274=Personen ohne Eltern hervorheben
 275=Unverheiratete Personen hervorheben
 276=Standardwerte
@@ -666,7 +666,7 @@
 665=Nummerierung der Nachkommen
 666=Statistiken
 667=Bild speichern
-668=Anzeigemodi
+668=Anzeigemodus
 669=Neues Skript erstellen
 670=Skript öffnen
 671=Skript speichern
@@ -843,7 +843,7 @@
 839=Anbieter
 840=Koordinaten
 841=Orte laden
-842=Nur Ort (keine Adresse)
+842=Adresse nicht anzeigen
 843=Zum Hauptzweig springen
 844=Breite minimieren
 845={0}. Wollen Sie fortsetzen?
@@ -898,7 +898,7 @@
 894=Fragment {0}, Größe {1}, Qualität {2}
 895=Aktualisieren
 896=Filter zurücksetzen
-897=Datumsintervall abkürzen
+897=Unvollständige Datumsangaben und -intervalle kürzen
 898=Eingabetaste drücken, um den Filter zu speichern
 899=Heute ist das Jubiläum von {0}
 900=Morgen ist das Jubiläum von {0}
@@ -948,8 +948,8 @@
 940=Erweiterte Orte
 941=Hinzufügen mehrerer Fotografien
 942={0} Fotografien von {1} hinzugefügt.
-943=Verweise auf oberster Ebene
-944=Verweis auf oberster Ebene löschen?
+943=Übergeordnete Orte
+944=Verweis auf übergeordneten Ort löschen?
 945=Hilfe ist für diese Sprache nicht verfügbar. Es wird eine englische Hilfe angezeigt.
 946=Straße & Hausnr.
 
@@ -959,13 +959,13 @@
 950=Rechte Hälfte
 
 951=Russisches Kaiserreich:Rekrut
-952=Reihenfolge der Orte umkehren
+952=Ortsbestandteile umkehren
 953=Abgekürzte Ortsnamen
 954=Linie bei freiehelichen Partnern gepunktet
 955=Anzahl der Ereignis-Substrukturen anstelle von Haken anzeigen
 956=Bilder-Cache leeren
-957=Auswahllinien hervorheben
-958=Prüfe übereinstimmende Quellen
+957=Unmittelbare Verwandtschaften hervorheben
+958=Übereinstimmende Quellen hervorheben
 959=Bemerkung ohne Verweise
 960=Quelle ohne Verweise
 961=Verweise prüfen
@@ -1069,18 +1069,18 @@
 1051=Berechnetes Geburtsereignis erstellen
 1052=Kein Alter am Ereignisdatum angegeben
 1053=Betreff
-1054=Override themes font
-1055=Files
-1056=Sort events
-1057=Neu laden
-1058=Multiple lines of spouses
+1054=Überschreibe Schriftart des Designs
+1055=Dateien
+1056=Sortiere Ereignisse
+1057=Erneut laden
+1058=Mehrere Zeilen für Ehepartner
 
-1059=Death days
-1060=Today is deathday of {0}
-1061=Tomorrow is deathday of {0}
-1062={1} days remain before the deathday of {0}
-1063=Events for the living only
+1059=Todestage
+1060=Heute ist der Todestag von {0}
+1061=Morgen ist der Todestag von {0}
+1062=Noch {1} Tage bis zum Todestag von "{0}"
+1063=Ereignisse nur für Lebende
 
-1064=Include events
-1065=Notes without line breaks
-1066=Include family events
+1064=Ereignisse einfügen
+1065=Bemerkungen ohne Zeilenumbrüche
+1066=Familienereignisse einfügen
