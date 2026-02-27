@@ -1334,7 +1334,7 @@ namespace GKCore.Charts
             int sY2 = fOffsetY + y2;
             fRenderer.DrawLine(linePen, sX, sY, sX2, sY2);
 
-            if (fOptions.Decorative && decorativeLinePen != null) {
+            if (fGraphicsMode && fOptions.Decorative && decorativeLinePen != null) {
                 if (sX == sX2) {
                     fRenderer.DrawLine(decorativeLinePen, sX + 1, sY + 1, sX2 + 1, sY2 - 1);
                 } else if (sY == sY2) {
@@ -1541,15 +1541,17 @@ namespace GKCore.Charts
             Draw(person.Father, TreeChartKind.ckAncestors, drawMode);
             Draw(person.Mother, TreeChartKind.ckAncestors, drawMode);
 
+            int dY = (fGraphicsMode) ? 1 : 0;
+
             int crY, parY, pY;
             if (!fOptions.InvertedTree) {
                 pY = person.PtY;
                 crY = person.PtY - fLevelDistance / 2;
-                parY = ((person.Father != null) ? person.Father.PtY + person.Father.Height : person.Mother.PtY + person.Mother.Height) + 1;
+                parY = ((person.Father != null) ? person.Father.PtY + person.Father.Height : person.Mother.PtY + person.Mother.Height) + dY;
             } else {
                 pY = person.PtY + person.Height;
                 crY = person.PtY + person.Height + fLevelDistance / 2;
-                parY = ((person.Father != null) ? person.Father.PtY : person.Mother.PtY) - 1;
+                parY = ((person.Father != null) ? person.Father.PtY : person.Mother.PtY) - dY;
             }
 
             bool dotted = IsDottedLines(person);

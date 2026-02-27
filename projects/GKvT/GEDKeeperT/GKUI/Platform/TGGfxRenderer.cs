@@ -7,9 +7,11 @@
  */
 
 using System;
+using System.Collections.Generic;
 using BSLib;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
+using GKUI.Platform.Handlers;
 using Terminal.Gui;
 using Attribute = Terminal.Gui.Attribute;
 
@@ -29,6 +31,7 @@ namespace GKUI.Platform
         public override void SetTarget(object target)
         {
             fTargetView = target as View;
+            fLines.Clear();
         }
 
         public override ExtSizeF GetTextSize(string text, IFont font)
@@ -51,7 +54,6 @@ namespace GKUI.Platform
             int col = (int)x;
             int row = (int)y;
             for (int i = 0; i < text.Length; i++) {
-                //driver.Move(col + i, row);
                 fTargetView.AddRune(col + i, row, text[i]);
             }
         }
@@ -60,47 +62,95 @@ namespace GKUI.Platform
         {
             int ix1 = (int)x1, iy1 = (int)y1, ix2 = (int)x2, iy2 = (int)y2;
 
+            //var penColor = (pen == null) ? null : ((PenHandler)pen).Color;
+            //var color = (penColor == null) ? Color.White : ((ColorHandler)penColor).Handle;
+
             var driver = Application.Driver;
             var lineAttr = new Attribute(Color.White, Color.Blue);
             driver.SetAttribute(lineAttr);
 
             if (ix1 == ix2) {
-                for (int y = iy1; y <= iy2; y++) {
-                    //driver.Move(ix1, y);
-                    //driver.AddRune(driver.VLine);
-                    fTargetView.AddRune(ix1, y, driver.VLine);
-                }
+                int len = (iy2 - iy1) + 1;
+                DrawLine(ix1, iy1, len, true);
             } else {
-                for (int x = ix1; x <= ix2; x++) {
-                    //driver.Move(x, iy1);
-                    //driver.AddRune(driver.HLine);
-                    fTargetView.AddRune(x, iy1, driver.HLine);
-                }
+                int len = (ix2 - ix1) + 1;
+                DrawLine(ix1, iy1, len, false);
             }
+        }
+
+        public void DrawLine(int startX, int startY, int length, bool isVertical, bool optimize = false)
+        {
+            LineDir lineSegment;
+            int dx, dy;
+            if (isVertical) {
+                lineSegment = LineDir.Vertical;
+                dx = 0;
+                dy = 1;
+            } else {
+                lineSegment = LineDir.Horizontal;
+                dx = 1;
+                dy = 0;
+            }
+
+            int x = startX, y = startY;
+            for (int i = 0; i < length; i++) {
+                if (!optimize) {
+                    fTargetView.AddRune(x, y, GetLineChar(lineSegment));
+                } else {
+                    LineDir next;
+                    bool hasNext = (i < length - 1);
+
+                    if (isVertical) {
+                        next = hasNext ? LineDir.Down : LineDir.None;
+                    } else {
+                        next = hasNext ? LineDir.Right : LineDir.None;
+                    }
+
+                    LineDir existing = /*LineDir.None; // */ GetCross(x, y);
+                    /*if (i > 0) existing |= isVertical ? LineDir.Up : LineDir.Left;
+                    if (i < length - 1) existing |= isVertical ? LineDir.Down : LineDir.Right;
+
+                    // adjoining
+                    if (isVertical) {
+                        if (fLines.TryGetValue((x - 1, y), out var l)) existing |= LineDir.Left;
+                        if (fLines.TryGetValue((x + 1, y), out var r)) existing |= LineDir.Right;
+                    } else {
+                        if (fLines.TryGetValue((x, y - 1), out var u)) existing |= LineDir.Up;
+                        if (fLines.TryGetValue((x, y + 1), out var d)) existing |= LineDir.Down;
+                    }*/
+
+                    LineDir combined = existing | next;
+                    if (combined == next) combined = lineSegment;
+
+                    fLines[(x, y)] = combined;
+                    fTargetView.AddRune(x, y, GetLineChar(combined));
+                }
+
+                x += dx;
+                y += dy;
+            }
+        }
+
+        private LineDir GetCross(int x, int y)
+        {
+            LineDir result = LineDir.None;
+            if (fLines.ContainsKey((x - 1, y))) result |= LineDir.Left;
+            if (fLines.ContainsKey((x + 1, y))) result |= LineDir.Right;
+            if (fLines.ContainsKey((x, y - 1))) result |= LineDir.Up;
+            if (fLines.ContainsKey((x, y + 1))) result |= LineDir.Down;
+            return result;
         }
 
         public override void DrawRectangle(IPen pen, IColor fillColor, float x, float y, float width, float height, int cornersRadius = 0)
         {
+            //var penColor = (pen == null) ? null : ((PenHandler)pen).Color;
+            //var color = (penColor == null) ? Color.Black : ((ColorHandler)penColor).Handle;
+
             var driver = Application.Driver;
-            var rectColor = new Attribute(Color.Blue, Color.Gray);
+            var rectColor = new Attribute(Color.Black, Color.Gray);
             driver.SetAttribute(rectColor);
-            //driver.DrawWindowFrame(new Rect((int)x, (int)y, (int)width, (int)height), 1, 1, 1, 1, true, true);
+
             fTargetView.DrawFrame(new Rect((int)x, (int)y, (int)width, (int)height), 0, true);
-
-            /*int ix1 = (int)x, iy1 = (int)y, ix2 = (int)x + (int)width - 1, iy2 = (int)y + (int)height - 1;
-
-            for (int iy = iy1 + 1; iy <= iy2 - 1; iy++) {
-                driver.Move(ix1, iy); driver.AddRune(driver.VLine);
-                driver.Move(ix2, iy); driver.AddRune(driver.VLine);
-            }
-            for (int ix = ix1 + 1; ix <= ix2 - 1; ix++) {
-                driver.Move(ix, iy1); driver.AddRune(driver.HLine);
-                driver.Move(ix, iy2); driver.AddRune(driver.HLine);
-            }
-            driver.Move(ix1, iy1); driver.AddRune(driver.ULCorner);
-            driver.Move(ix2, iy1); driver.AddRune(driver.URCorner);
-            driver.Move(ix1, iy2); driver.AddRune(driver.LLCorner);
-            driver.Move(ix2, iy2); driver.AddRune(driver.LRCorner);*/
         }
 
         public override void FillRectangle(IBrush brush, float x, float y, float width, float height)
@@ -110,8 +160,7 @@ namespace GKUI.Platform
 
         public override IPen CreatePen(IColor color, float width, float[] dashPattern = null)
         {
-            // *
-            return null;
+            return new PenHandler(color);
         }
 
         public override IBrush CreateBrush(IColor color)
@@ -122,7 +171,7 @@ namespace GKUI.Platform
 
         #region Lines
 
-        //private Dictionary<(int x, int y), LineDir> fLines = new Dictionary<(int x, int y), LineDir>();
+        private Dictionary<(int x, int y), LineDir> fLines = new Dictionary<(int x, int y), LineDir>();
 
         [Flags]
         private enum LineDir
@@ -136,7 +185,7 @@ namespace GKUI.Platform
             Horizontal = Left | Right
         }
 
-        private char GetLineChar(LineDir dir)
+        private static char GetLineChar(LineDir dir)
         {
             return dir switch {
                 LineDir.Vertical => '│',

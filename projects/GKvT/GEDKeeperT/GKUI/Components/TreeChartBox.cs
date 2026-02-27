@@ -464,22 +464,15 @@ namespace GKUI.Components
             base.OnDoubleClick(e);
         }*/
 
-        /*protected override void OnMouseWheel(MouseEventArgs e)
-        {
-            if (ModifierKeys == Keys.Control) {
-                float newScale = (e.Delta > 0) ? fModel.Scale + 0.05f : fModel.Scale - 0.05f;
-                SetScale(newScale);
-            } else base.OnMouseWheel(e);
-        }*/
-
-        /*private MouseAction GetMouseAction(MouseEventArgs e, gkcMouseEvent mouseEvent, out TreeChartPerson person)
+        private MouseAction GetMouseAction(MouseEventArgs e, gkcMouseEvent mouseEvent, out TreeChartPerson person)
         {
             var result = MouseAction.None;
             person = null;
 
             ExtPoint offsets = fModel.GetOffsets();
-            int aX = e.X - offsets.X;
-            int aY = e.Y - offsets.Y;
+            int aX = e.MouseEvent.X - offsets.X;
+            int aY = e.MouseEvent.Y - offsets.Y;
+            var mouseFlags = e.MouseEvent.Flags;
 
             int num = fModel.Persons.Count;
             for (int i = 0; i < num; i++) {
@@ -490,34 +483,34 @@ namespace GKUI.Components
                 if (persRt.Contains(aX, aY)) {
                     person = p;
 
-                    if (e.Button == MouseButtons.Left && mouseEvent == gkcMouseEvent.meDown) {
+                    if (mouseFlags == MouseFlags.Button1Pressed) {
                         result = MouseAction.Select;
                         break;
-                    } else if (e.Button == MouseButtons.Right && mouseEvent == gkcMouseEvent.meUp) {
+                    } else if (mouseFlags == MouseFlags.Button2Released) {
                         result = MouseAction.Properties;
                         break;
-                    } else if (mouseEvent == MouseEvent.meMove) {
+                    } else if (mouseEvent == gkcMouseEvent.meMove) {
                         result = MouseAction.Highlight;
                         break;
                     }
                 }
 
                 ExtRect expRt = fModel.GetExpanderRect(persRt);
-                if ((e.Button == MouseButtons.Left && mouseEvent == gkcMouseEvent.meUp) && expRt.Contains(aX, aY)) {
+                if ((mouseFlags == MouseFlags.Button1Released) && expRt.Contains(aX, aY)) {
                     person = p;
                     result = MouseAction.Expand;
                     break;
                 }
 
                 expRt = fModel.GetCollapseRect(p);
-                if ((e.Button == MouseButtons.Left && mouseEvent == gkcMouseEvent.meUp) && expRt.Contains(aX, aY)) {
+                if ((mouseFlags == MouseFlags.Button1Released) && expRt.Contains(aX, aY)) {
                     person = p;
                     result = MouseAction.CollapseBranch;
                     break;
                 }
 
                 ExtRect infoRt = fModel.GetInfoRect(persRt);
-                if ((e.Button == MouseButtons.Left && mouseEvent == gkcMouseEvent.meUp) && infoRt.Contains(aX, aY)) {
+                if ((mouseFlags == MouseFlags.Button1Released) && infoRt.Contains(aX, aY)) {
                     person = p;
                     result = MouseAction.Info;
                     break;
@@ -525,13 +518,18 @@ namespace GKUI.Components
             }
 
             if (result == MouseAction.None && person == null) {
-                if (e.Button == MouseButtons.Right && mouseEvent == gkcMouseEvent.meDown) {
+                if (mouseFlags == MouseFlags.Button2Pressed) {
                     result = MouseAction.Drag;
                 }
             }
 
             return result;
-        }*/
+        }
+
+        public override bool MouseEvent(Terminal.Gui.MouseEvent me)
+        {
+            return base.MouseEvent(me);
+        }
 
         /*protected override void OnMouseDown(MouseEventArgs e)
         {
