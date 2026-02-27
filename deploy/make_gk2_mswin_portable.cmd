@@ -1,8 +1,11 @@
 @echo off
 
-set APP_VER=2.37.0
+set APP_VER=2.38.0
 
 call ..\clean.cmd
+
+set MSBDIR="C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin"
+@if exist %MSBDIR%\msbuild.exe goto build
 
 set MSBDIR="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin"
 @if exist %MSBDIR%\msbuild.exe goto build
