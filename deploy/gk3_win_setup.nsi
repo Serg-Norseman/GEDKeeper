@@ -326,6 +326,10 @@ Section "$(gkreq)"
     SetOutPath "$INSTDIR\externals"
     File /r "..\externals\*.*"
 
+    CreateDirectory "$INSTDIR\backgrounds"
+    SetOutPath "$INSTDIR\backgrounds"
+    File /r "..\backgrounds\*.*"
+
     CreateDirectory "$SMPROGRAMS\GEDKeeper3"
     SetOutPath "$INSTDIR\bin"
     CreateShortCut "$SMPROGRAMS\GEDKeeper3\GEDKeeper3.lnk" "$INSTDIR\bin\GEDKeeper3.exe" "" "$INSTDIR\bin\GEDKeeper3.exe" 0
@@ -590,52 +594,14 @@ Section "Uninstall"
 
     Delete $INSTDIR\uninstall.exe
 
-    Delete "$INSTDIR\bin\*.*"
-    RMDir "$INSTDIR\bin"
-
-    Delete "$INSTDIR\locales\help_rus\images\*.*"
-    RMDir "$INSTDIR\locales\help_rus\images"
-    Delete "$INSTDIR\locales\help_rus\*.*"
-    RMDir "$INSTDIR\locales\help_rus"
-
-    Delete "$INSTDIR\locales\help_enu\images\*.*"
-    RMDir "$INSTDIR\locales\help_enu\images"
-    Delete "$INSTDIR\locales\help_enu\*.*"
-    RMDir "$INSTDIR\locales\help_enu"
-
-    Delete "$INSTDIR\locales\help_spa\images\*.*"
-    RMDir "$INSTDIR\locales\help_spa\images"
-    Delete "$INSTDIR\locales\help_spa\*.*"
-    RMDir "$INSTDIR\locales\help_spa"
-
-    Delete "$INSTDIR\locales\help\images\*.*"
-    RMDir "$INSTDIR\locales\help\images"
-    Delete "$INSTDIR\locales\help\*.*"
-    RMDir "$INSTDIR\locales\help"
-
-    Delete "$INSTDIR\locales\cultures\*.*"
-    RMDir "$INSTDIR\locales\cultures"
-
-    Delete "$INSTDIR\locales\*.*"
-    RMDir "$INSTDIR\locales"
-
-    Delete "$INSTDIR\externals\*.*"
-    RMDir "$INSTDIR\externals"
-
-    Delete "$INSTDIR\scripts\*.lua"
-    RMDir "$INSTDIR\scripts"
-
-    Delete "$INSTDIR\plugins\*.*"
-    RMDir "$INSTDIR\plugins"
-
-    Delete "$INSTDIR\samples\*.*"
-    RMDir "$INSTDIR\samples"
-
-    Delete "$INSTDIR\themes\Modern\*.*"
-    RMDir "$INSTDIR\themes\Modern"
-
-    Delete "$INSTDIR\themes\*.*"
-    RMDir "$INSTDIR\themes"
+    RMDir /r "$INSTDIR\bin"
+    RMDir /r "$INSTDIR\backgrounds"
+    RMDir /r "$INSTDIR\locales"
+    RMDir /r "$INSTDIR\externals"
+    RMDir /r "$INSTDIR\scripts"
+    RMDir /r "$INSTDIR\plugins"
+    RMDir /r "$INSTDIR\samples"
+    RMDir /r "$INSTDIR\themes"
 
     ; Remove shortcuts, if any
     Delete "$SMPROGRAMS\GEDKeeper3\*.*"

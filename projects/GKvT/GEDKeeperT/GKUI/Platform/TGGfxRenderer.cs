@@ -78,7 +78,7 @@ namespace GKUI.Platform
             }
         }
 
-        public void DrawLine(int startX, int startY, int length, bool isVertical, bool optimize = false)
+        public void DrawLine(int startX, int startY, int length, bool isVertical, bool optimize = true)
         {
             LineDir lineSegment;
             int dx, dy;

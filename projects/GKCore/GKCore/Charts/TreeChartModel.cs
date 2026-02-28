@@ -1665,7 +1665,7 @@ namespace GKCore.Charts
             int spousesCount = person.GetSpousesCount();
             int childrenCount = person.GetChildsCount();
 
-            bool multipleLines = fOptions.MultipleSpouseLines;
+            bool multipleLines = fGraphicsMode && fOptions.MultipleSpouseLines;
             int linesNum = (multipleLines) ? spousesCount : Math.Min(1, spousesCount);
 
             // draw lines of spouses
