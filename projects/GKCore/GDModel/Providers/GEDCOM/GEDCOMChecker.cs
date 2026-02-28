@@ -269,6 +269,15 @@ namespace GDModel.Providers.GEDCOM
                 }
             }
 
+            if (iRec.HasGroups && fFormat == GEDCOMFormat.SyniumFamilyTree) {
+                for (int i = 0, num = iRec.Groups.Count; i < num; i++) {
+                    var group = fTree.GetPtrValue<GDMGroupRecord>(iRec.Groups[i]);
+                    if (group != null && group.IndexOfMember(iRec) <= 0) {
+                        group.AddMember(iRec, true);
+                    }
+                }
+            }
+
             if (fFormat == GEDCOMFormat.RootsMagic) {
                 // _FSFTID -> fsft
                 var fsftTag = FindSubTagValue(iRec, "_FSFTID");
@@ -343,6 +352,11 @@ namespace GDModel.Providers.GEDCOM
 
         private void CheckGroupRecord(GDMGroupRecord group)
         {
+            // After loading files from SyniumFamilyTree, there will be one-way links to groups
+            // that may be removed here before the XRef correction fixes everything.
+            if (fFormat == GEDCOMFormat.SyniumFamilyTree)
+                return;
+
             for (int i = group.Members.Count - 1; i >= 0; i--) {
                 GDMIndividualRecord mbr = fTree.GetPtrValue(group.Members[i]);
                 if (mbr == null) {

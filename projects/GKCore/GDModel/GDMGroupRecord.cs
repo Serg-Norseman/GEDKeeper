@@ -108,7 +108,7 @@ namespace GDModel
             return result;
         }
 
-        public bool AddMember(GDMIndividualRecord member)
+        public bool AddMember(GDMIndividualRecord member, bool onlyDirect = false)
         {
             if (member == null) return false;
 
@@ -116,9 +116,11 @@ namespace GDModel
             mbrLink.XRef = member.XRef;
             fMembers.Add(mbrLink);
 
-            var ptr = new GDMPointer((int)GEDCOMTagType._GROUP);
-            ptr.XRef = this.XRef;
-            member.Groups.Add(ptr);
+            if (!onlyDirect) {
+                var ptr = new GDMPointer((int)GEDCOMTagType._GROUP);
+                ptr.XRef = this.XRef;
+                member.Groups.Add(ptr);
+            }
 
             return true;
         }

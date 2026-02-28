@@ -766,6 +766,8 @@ namespace GDModel.Providers.GEDCOM
                 curTag = indiRec.DNATests.Add(new GDMDNATest());
                 curTag.ParseString(tagValue);
                 addHandler = TagHandler.DNATestTag;
+            } else if ((tagType == GEDCOMTagType._LABL) && (tree.Format == GEDCOMFormat.SyniumFamilyTree)) {
+                curTag = indiRec.Groups.Add(new GDMPointer(tagId, tagValue));
             } else {
                 return AddRecordWithEventsTag(tree, indiRec, tagLevel, tagId, tagValue);
             }
