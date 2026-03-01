@@ -42,6 +42,7 @@ Community group: [Google Groups: GEDKeeper (en)](https://groups.google.com/g/ged
 - "GEDKeeper3", cross-platform (.NET 8 & Eto.Forms, x64), Linux, MacOS and only Windows 10/11
 - "GEDKeeperX", mobile (Xamarin), Android
 - "GKcli", experimental terminal (.NET 8 & Sharprompt)
+- "GEDKeeperT", experimental terminal UI (.NET 8 & Terminal.Gui 1.20)
 
 
 ## Supported languages
