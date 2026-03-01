@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -73,24 +74,32 @@ namespace GKCore.Controllers
 
         public void AddFamily()
         {
-            TreeChartPerson p = fView.TreeBox.Selected;
-            if (p == null || p.Rec == null) return;
+            try {
+                TreeChartPerson p = fView.TreeBox.Selected;
+                if (p == null || p.Rec == null) return;
 
-            GDMFamilyRecord fam = fBase.Context.AddFamilyForSpouse(p.Rec);
-            if (fam == null) return;
+                GDMFamilyRecord fam = fBase.Context.AddFamilyForSpouse(p.Rec);
+                if (fam == null) return;
 
-            UpdateChart();
+                UpdateChart();
+            } catch (Exception ex) {
+                Logger.WriteError("TreeChartWinController.AddFamily()", ex);
+            }
         }
 
         private async void InternalChildAdd(GDMSex needSex)
         {
-            TreeChartPerson p = fView.TreeBox.Selected;
-            if (p == null || p.Rec == null) return;
+            try {
+                TreeChartPerson p = fView.TreeBox.Selected;
+                if (p == null || p.Rec == null) return;
 
-            GDMIndividualRecord child = await BaseController.AddChildForParent(fView, fBase, p.Rec, needSex);
-            if (child == null) return;
+                GDMIndividualRecord child = await BaseController.AddChildForParent(fView, fBase, p.Rec, needSex);
+                if (child == null) return;
 
-            UpdateChart();
+                UpdateChart();
+            } catch (Exception ex) {
+                Logger.WriteError("TreeChartWinController.InternalChildAdd()", ex);
+            }
         }
 
         public void AddSon()
@@ -105,56 +114,64 @@ namespace GKCore.Controllers
 
         public async void AddSpouse()
         {
-            TreeChartPerson p = fView.TreeBox.Selected;
-            if (p == null || p.Rec == null) return;
+            try {
+                TreeChartPerson p = fView.TreeBox.Selected;
+                if (p == null || p.Rec == null) return;
 
-            GDMIndividualRecord iRec = p.Rec;
-            GDMIndividualRecord iSpouse = await BaseController.SelectSpouseFor(fView, fBase, iRec);
-            if (iSpouse == null) return;
+                GDMIndividualRecord iRec = p.Rec;
+                GDMIndividualRecord iSpouse = await BaseController.SelectSpouseFor(fView, fBase, iRec);
+                if (iSpouse == null) return;
 
-            GDMFamilyRecord fam = fBase.Context.Tree.CreateFamily();
-            fam.AddSpouse(iRec);
-            fam.AddSpouse(iSpouse);
-            UpdateChart();
+                GDMFamilyRecord fam = fBase.Context.Tree.CreateFamily();
+                fam.AddSpouse(iRec);
+                fam.AddSpouse(iSpouse);
+                UpdateChart();
+            } catch (Exception ex) {
+                Logger.WriteError("TreeChartWinController.AddSpouse()", ex);
+            }
         }
 
         private async void ParentAdd(GDMSex needSex)
         {
-            TreeChartPerson p = fView.TreeBox.Selected;
-            if (p == null || p.Rec == null) return;
+            try {
+                TreeChartPerson p = fView.TreeBox.Selected;
+                if (p == null || p.Rec == null) return;
 
-            bool needParent;
+                bool needParent;
 
-            GDMFamilyRecord fam = fBase.Context.Tree.GetParentsFamily(p.Rec);
-            bool familyExist = fam != null;
+                GDMFamilyRecord fam = fBase.Context.Tree.GetParentsFamily(p.Rec);
+                bool familyExist = fam != null;
 
-            if (familyExist) {
-                GDMIndividualRecord father, mother;
-                fBase.Context.Tree.GetSpouses(fam, out father, out mother);
+                if (familyExist) {
+                    GDMIndividualRecord father, mother;
+                    fBase.Context.Tree.GetSpouses(fam, out father, out mother);
 
-                needParent = (father == null && needSex == GDMSex.svMale) ||
-                             (mother == null && needSex == GDMSex.svFemale);
-            } else {
-                needParent = true;
-            }
-
-            if (needParent) {
-                GDMIndividualRecord parent = await BaseController.SelectPerson(fView, fBase, p.Rec, TargetMode.tmChild, needSex);
-                if (parent != null) {
-                    if (!familyExist) {
-                        fam = fBase.Context.Tree.CreateFamily();
-                        fam.AddChild(p.Rec);
-                    }
-
-                    if (fam.HasMember(parent)) {
-                        AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
-                        return;
-                    }
-
-                    fam.AddSpouse(parent);
-
-                    UpdateChart();
+                    needParent = (father == null && needSex == GDMSex.svMale) ||
+                                 (mother == null && needSex == GDMSex.svFemale);
+                } else {
+                    needParent = true;
                 }
+
+                if (needParent) {
+                    GDMIndividualRecord parent = await BaseController.SelectPerson(fView, fBase, p.Rec, TargetMode.tmChild, needSex);
+                    if (parent != null) {
+                        if (!familyExist) {
+                            fam = fBase.Context.Tree.CreateFamily();
+                            fam.AddChild(p.Rec);
+                        }
+
+                        if (fam.HasMember(parent)) {
+                            AppHost.StdDialogs.ShowAlert(LangMan.LS(LSID.InvalidLink));
+                            return;
+                        }
+
+                        fam.AddSpouse(parent);
+
+                        UpdateChart();
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("TreeChartWinController.ParentAdd()", ex);
             }
         }
 
@@ -170,50 +187,62 @@ namespace GKCore.Controllers
 
         public async void Edit()
         {
-            TreeChartPerson p = fView.TreeBox.Selected;
-            if (p == null || p.Rec == null) return;
+            try {
+                TreeChartPerson p = fView.TreeBox.Selected;
+                if (p == null || p.Rec == null) return;
 
-            var indiRes = await BaseController.ModifyIndividual(fView, fBase, p.Rec, null, TargetMode.tmNone, GDMSex.svUnknown);
-            if (indiRes.Result) {
-                UpdateChart();
+                var indiRes = await BaseController.ModifyIndividual(fView, fBase, p.Rec, null, TargetMode.tmNone, GDMSex.svUnknown);
+                if (indiRes.Result) {
+                    UpdateChart();
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("TreeChartWinController.Edit()", ex);
             }
         }
 
         public async void Delete()
         {
-            TreeChartPerson p = fView.TreeBox.Selected;
-            if (p == null || p.Rec == null || p == fView.TreeBox.Model.Root) return;
+            try {
+                TreeChartPerson p = fView.TreeBox.Selected;
+                if (p == null || p.Rec == null || p == fView.TreeBox.Model.Root) return;
 
-            await BaseController.DeleteRecord(fBase, p.Rec, true);
-            UpdateChart();
+                await BaseController.DeleteRecord(fBase, p.Rec, true);
+                UpdateChart();
+            } catch (Exception ex) {
+                Logger.WriteError("TreeChartWinController.Delete()", ex);
+            }
         }
 
         public async void ModifyPerson(TreeChartPerson person)
         {
-            if (person == null) return;
+            try {
+                if (person == null) return;
 
-            bool modified = false;
+                bool modified = false;
 
-            if (person.Rec != null) {
-                var indiRes = await BaseController.ModifyIndividual(fView, fBase, person.Rec, null, TargetMode.tmNone, GDMSex.svUnknown);
-                modified = indiRes.Result;
-            } else {
-                // this is "stub" person, only in descendant tree
-                // key properties = BaseSpouse & BaseFamily
-                TreeChartPerson baseSpouse = person.BaseSpouse;
-                GDMFamilyRecord baseFamily = person.BaseFamily;
+                if (person.Rec != null) {
+                    var indiRes = await BaseController.ModifyIndividual(fView, fBase, person.Rec, null, TargetMode.tmNone, GDMSex.svUnknown);
+                    modified = indiRes.Result;
+                } else {
+                    // this is "stub" person, only in descendant tree
+                    // key properties = BaseSpouse & BaseFamily
+                    TreeChartPerson baseSpouse = person.BaseSpouse;
+                    GDMFamilyRecord baseFamily = person.BaseFamily;
 
-                if (baseSpouse != null && baseFamily != null) {
-                    GDMIndividualRecord iSpouse = await BaseController.SelectSpouseFor(fView, fBase, person.BaseSpouse.Rec);
+                    if (baseSpouse != null && baseFamily != null) {
+                        GDMIndividualRecord iSpouse = await BaseController.SelectSpouseFor(fView, fBase, person.BaseSpouse.Rec);
 
-                    if (iSpouse != null) {
-                        modified = baseFamily.AddSpouse(iSpouse);
+                        if (iSpouse != null) {
+                            modified = baseFamily.AddSpouse(iSpouse);
+                        }
                     }
                 }
-            }
 
-            if (modified) {
-                UpdateChart();
+                if (modified) {
+                    UpdateChart();
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("TreeChartWinController.ModifyPerson()", ex);
             }
         }
 
@@ -291,12 +320,16 @@ namespace GKCore.Controllers
 
         public async void SetFilter()
         {
-            using (var dlgFilter = AppHost.Container.Resolve<ITreeFilterDlg>(fBase)) {
-                dlgFilter.Filter = fView.TreeBox.Model.Filter;
+            try {
+                using (var dlgFilter = AppHost.Container.Resolve<ITreeFilterDlg>(fBase)) {
+                    dlgFilter.Filter = fView.TreeBox.Model.Filter;
 
-                if (await AppHost.Instance.ShowModalAsync(dlgFilter, fView)) {
-                    fView.GenChart();
+                    if (await AppHost.Instance.ShowModalAsync(dlgFilter, fView)) {
+                        fView.GenChart();
+                    }
                 }
+            } catch (Exception ex) {
+                Logger.WriteError("TreeChartWinController.SetFilter()", ex);
             }
         }
 
@@ -360,29 +393,37 @@ namespace GKCore.Controllers
 
         public async Task SelectBackgroundColor()
         {
-            var opts = GlobalOptions.Instance.TreeChartOptions;
+            try {
+                var opts = GlobalOptions.Instance.TreeChartOptions;
 
-            IColor color = await AppHost.StdDialogs.SelectColor(opts.BackgroundColor);
-            opts.BackgroundColor = color;
-            opts.BackgroundImage = string.Empty;
+                IColor color = await AppHost.StdDialogs.SelectColor(opts.BackgroundColor);
+                opts.BackgroundColor = color;
+                opts.BackgroundImage = string.Empty;
 
-            fView.TreeBox.ResetBackground();
-            fView.TreeBox.Invalidate();
+                fView.TreeBox.ResetBackground();
+                fView.TreeBox.Invalidate();
+            } catch (Exception ex) {
+                Logger.WriteError("TreeChartWinController.SelectBackgroundColor()", ex);
+            }
         }
 
         public async Task SelectBackgroundImage()
         {
-            var opts = GlobalOptions.Instance.TreeChartOptions;
+            try {
+                var opts = GlobalOptions.Instance.TreeChartOptions;
 
-            string fileName = await AppHost.StdDialogs.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.ImagesFilter), 1, "");
-            if (string.IsNullOrEmpty(fileName)) {
-                opts.BackgroundImage = string.Empty;
-            } else {
-                opts.BackgroundImage = fileName;
+                string fileName = await AppHost.StdDialogs.GetOpenFile("", GKUtils.GetBackgroundsPath(), LangMan.LS(LSID.ImagesFilter), 1, "");
+                if (string.IsNullOrEmpty(fileName)) {
+                    opts.BackgroundImage = string.Empty;
+                } else {
+                    opts.BackgroundImage = fileName;
+                }
+
+                fView.TreeBox.ResetBackground();
+                fView.TreeBox.Invalidate();
+            } catch (Exception ex) {
+                Logger.WriteError("TreeChartWinController.SelectBackgroundImage()", ex);
             }
-
-            fView.TreeBox.ResetBackground();
-            fView.TreeBox.Invalidate();
         }
 
         public override void SetLocale()

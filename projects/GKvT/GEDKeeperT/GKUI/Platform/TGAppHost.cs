@@ -82,13 +82,6 @@ namespace GKUI.Platform
             using (var progressForm = ResolveDialog<IProgressDialog>()) {
                 var progForm = progressForm as CommonDialog;
 
-                // In test mode, when a stub is substituted for the real form, 
-                // the modal show of the dialog does not block further code execution after ExecuteWork.
-                if (TEST_MODE || progForm == null) {
-                    proc(progressForm);
-                    return true;
-                }
-
                 if (!string.IsNullOrEmpty(title))
                     progressForm.SetTitle(title);
 
@@ -209,6 +202,7 @@ namespace GKUI.Platform
             // IPortraitSelectDlg - not
             container.Register<ITreeChartWin, TreeChartWin>(LifeCycle.Transient);
             container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
+            // IScriptEditWin - not
             // ISlideshowWin - not
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));

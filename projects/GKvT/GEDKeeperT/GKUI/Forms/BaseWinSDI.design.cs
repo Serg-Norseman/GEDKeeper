@@ -45,8 +45,6 @@ namespace GKUI.Forms
                     miTreeAncestors = new MenuItem("miTreeAncestors", "", miTreeAncestors_Click, null, null, Key.CtrlMask | Key.A),
                     miTreeDescendants = new MenuItem("miTreeDescendants", "", miTreeDescendants_Click, null, null, Key.CtrlMask | Key.D),
                     miTreeBoth = new MenuItem("miTreeBoth", "", miTreeBoth_Click),
-                    //miAncestorsCircle = new MenuItem("miAncestorsCircle", "", miAncestorsCircle_Click),
-                    //miDescendantsCircle = new MenuItem("miDescendantsCircle", "", miDescendantsCircle_Click),
                     null,
                     miPedigreeAscend = new MenuItem("miPedigreeAscend", "", miPedigreeAscend_Click),
                     miPedigreeDescend = new MenuItem("miPedigreeDescend", "", miPedigreeDescend_Click, null, null, Key.CtrlMask | Key.K),
@@ -62,9 +60,8 @@ namespace GKUI.Forms
                 miService = new MenuBarItem("_Service", new MenuItem[] {
                     miChronicle = new MenuItem("miChronicle", "", miChronicle_Click),
                     miOrganizer = new MenuItem("miOrganizer", "", miOrganizer_Click),
-                    //miSlideshow = new MenuItem("miSlideshow", "", miSlideshow_Click),
                     null,
-                    miScripts = new MenuItem("miScripts", "", miScripts_Click, null, null, Key.F11),
+                    //miScripts = new MenuItem("miScripts", "", miScripts_Click, null, null, Key.F11),
                     miTreeTools = new MenuBarItem("miTreeTools", new MenuItem[] {
                         miTreeCompare = new MenuItem("miTreeCompare", "", miTTTreeCompare_Click),
                         miTreeMerge = new MenuItem("miTreeMerge", "", miTTTreeMerge_Click),

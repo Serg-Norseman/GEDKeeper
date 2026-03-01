@@ -46,11 +46,15 @@ namespace GKCore.Controllers
     {
         public static async void ViewRecordInfo(IView owner, IBaseWindow baseWin, GDMRecord record)
         {
-            if (record == null) return;
+            try {
+                if (record == null) return;
 
-            using (var dlg = AppHost.ResolveDialog<IRecordInfoDlg>(baseWin)) {
-                dlg.Record = record;
-                await AppHost.Instance.ShowModalAsync(dlg, owner, false);
+                using (var dlg = AppHost.ResolveDialog<IRecordInfoDlg>(baseWin)) {
+                    dlg.Record = record;
+                    await AppHost.Instance.ShowModalAsync(dlg, owner, false);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseController.ViewRecordInfo()", ex);
             }
         }
 

@@ -77,5 +77,21 @@ namespace GKUI.Components
 
             fieldType.GetEvent(eventName).AddEventHandler(fieldVal, eventHandler);
         }
+
+        // original is internal and inaccessible
+        public static void ViewToScreen(View view, int col, int row, out int rcol, out int rrow)
+        {
+            var viewFrame = view.Frame;
+            rcol = col + viewFrame.X;
+            rrow = row + viewFrame.Y;
+
+            var curContainer = view.SuperView;
+            while (curContainer != null) {
+                viewFrame = curContainer.Frame;
+                rcol += viewFrame.X;
+                rrow += viewFrame.Y;
+                curContainer = curContainer.SuperView;
+            }
+        }
     }
 }

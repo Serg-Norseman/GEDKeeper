@@ -11,18 +11,15 @@ using GKCore.Design.Graphics;
 
 namespace GKUI.Platform.Handlers
 {
-    public sealed class PenHandler : TypeHandler<object>, IPen
+    public sealed class BrushHandler : TypeHandler<object>, IBrush
     {
         private static readonly object fFake = new object();
 
         public IColor Color { get; set; }
-        public float DashOffset { get; set; }
-        public float Width { get; }
 
-        public PenHandler(IColor color, float width) : base(fFake)
+        public BrushHandler(IColor color) : base(fFake)
         {
             Color = color;
-            Width = width;
         }
     }
 }

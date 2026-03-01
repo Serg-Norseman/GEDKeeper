@@ -8,36 +8,51 @@
 
 using System;
 using GKCore;
+using stTimer = System.Threading.Timer;
 
 namespace GKUI.Platform;
 
 public sealed class TGTimer : ITimer
 {
+    private readonly stTimer fTimer;
+    private bool fEnabled;
+    private int fInterval;
+
     public double Interval
     {
-        get { return 0; }
+        get { return fInterval; }
         set { }
     }
 
     public bool Enabled
     {
-        get { return false; }
-        set { }
+        get { return fEnabled; }
+        set { fEnabled = value; }
     }
 
     public TGTimer(double msInterval, EventHandler elapsedHandler)
     {
+        fInterval = (int)msInterval;
+        fTimer = new stTimer((object state) => {
+            if (fEnabled && elapsedHandler != null) {
+                elapsedHandler(this, new EventArgs());
+            }
+        }, null, 0, fInterval);
     }
 
     public void Dispose()
     {
+        if (fTimer != null)
+            fTimer.Dispose();
     }
 
     public void Start()
     {
+        fEnabled = true;
     }
 
     public void Stop()
     {
+        fEnabled = false;
     }
 }

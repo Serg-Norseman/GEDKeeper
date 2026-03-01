@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using BSLib;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
+using GKUI.Components;
 using GKUI.Platform.Handlers;
 using Terminal.Gui;
 using Attribute = Terminal.Gui.Attribute;
@@ -62,11 +63,11 @@ namespace GKUI.Platform
         {
             int ix1 = (int)x1, iy1 = (int)y1, ix2 = (int)x2, iy2 = (int)y2;
 
-            //var penColor = (pen == null) ? null : ((PenHandler)pen).Color;
-            //var color = (penColor == null) ? Color.White : ((ColorHandler)penColor).Handle;
+            var penColor = (pen == null) ? null : ((PenHandler)pen).Color;
+            var color = (penColor == null) ? Color.White : ((ColorHandler)penColor).Handle;
 
             var driver = Application.Driver;
-            var lineAttr = new Attribute(Color.White, Color.Blue);
+            var lineAttr = new Attribute(color, Color.Blue);
             driver.SetAttribute(lineAttr);
 
             if (ix1 == ix2) {
@@ -78,7 +79,7 @@ namespace GKUI.Platform
             }
         }
 
-        public void DrawLine(int startX, int startY, int length, bool isVertical, bool optimize = true)
+        private void DrawLine(int startX, int startY, int length, bool isVertical, bool optimize = true)
         {
             LineDir lineSegment;
             int dx, dy;
@@ -99,26 +100,13 @@ namespace GKUI.Platform
                 } else {
                     LineDir next;
                     bool hasNext = (i < length - 1);
-
                     if (isVertical) {
                         next = hasNext ? LineDir.Down : LineDir.None;
                     } else {
                         next = hasNext ? LineDir.Right : LineDir.None;
                     }
 
-                    LineDir existing = /*LineDir.None; // */ GetCross(x, y);
-                    /*if (i > 0) existing |= isVertical ? LineDir.Up : LineDir.Left;
-                    if (i < length - 1) existing |= isVertical ? LineDir.Down : LineDir.Right;
-
-                    // adjoining
-                    if (isVertical) {
-                        if (fLines.TryGetValue((x - 1, y), out var l)) existing |= LineDir.Left;
-                        if (fLines.TryGetValue((x + 1, y), out var r)) existing |= LineDir.Right;
-                    } else {
-                        if (fLines.TryGetValue((x, y - 1), out var u)) existing |= LineDir.Up;
-                        if (fLines.TryGetValue((x, y + 1), out var d)) existing |= LineDir.Down;
-                    }*/
-
+                    LineDir existing = GetCross(x, y);
                     LineDir combined = existing | next;
                     if (combined == next) combined = lineSegment;
 
@@ -143,14 +131,20 @@ namespace GKUI.Platform
 
         public override void DrawRectangle(IPen pen, IColor fillColor, float x, float y, float width, float height, int cornersRadius = 0)
         {
-            //var penColor = (pen == null) ? null : ((PenHandler)pen).Color;
-            //var color = (penColor == null) ? Color.Black : ((ColorHandler)penColor).Handle;
+            var penColor = (pen == null) ? null : ((PenHandler)pen).Color;
+            var penWidth = (pen == null) ? 1 : (int)((PenHandler)pen).Width;
+            var color = (penColor == null) ? Color.Black : ((ColorHandler)penColor).Handle;
+            var borderStyle = (penWidth == 2) ? BorderStyle.Double : BorderStyle.Single;
 
             var driver = Application.Driver;
-            var rectColor = new Attribute(Color.Black, Color.Gray);
+            var rectColor = new Attribute(color, Color.Gray);
             driver.SetAttribute(rectColor);
 
-            fTargetView.DrawFrame(new Rect((int)x, (int)y, (int)width, (int)height), 0, true);
+            UIHelper.ViewToScreen(fTargetView, (int)x, (int)y, out int rcol, out int rrow);
+            var scrRect = new Rect(rcol, rrow, (int)width, (int)height);
+            var savedClip = fTargetView.ClipToBounds();
+            driver.DrawWindowFrame(scrRect, 1, 1, 1, 1, border: true, fill: true, new Border() { BorderStyle = borderStyle });
+            driver.Clip = savedClip;
         }
 
         public override void FillRectangle(IBrush brush, float x, float y, float width, float height)
@@ -160,13 +154,12 @@ namespace GKUI.Platform
 
         public override IPen CreatePen(IColor color, float width, float[] dashPattern = null)
         {
-            return new PenHandler(color);
+            return new PenHandler(color, width);
         }
 
         public override IBrush CreateBrush(IColor color)
         {
-            // *
-            return null;
+            return new BrushHandler(color);
         }
 
         #region Lines

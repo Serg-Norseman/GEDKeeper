@@ -66,7 +66,7 @@ namespace GKUI.Forms
             fTreeBox.PersonModify += ImageTree_PersonModify;
             fTreeBox.RootChanged += ImageTree_RootChanged;
             fTreeBox.InfoRequest += ImageTree_InfoRequest;
-            //fTreeBox.PersonProperties += ImageTree_PersonProperties;
+            fTreeBox.PersonProperties += ImageTree_PersonProperties;
             fTreeBox.Options = GlobalOptions.Instance.TreeChartOptions;
             fTreeBox.NavRefresh += ImageTree_NavRefresh;
             fTreeBox.ZoomChanged += ImageTree_NavRefresh;
@@ -206,7 +206,8 @@ namespace GKUI.Forms
 
         private void ImageTree_PersonProperties(object sender, MouseEventArgs e)
         {
-            //MenuPerson.Show(fTreeBox, new Point(e.X, e.Y));
+            MenuPerson.Position = new Point(e.MouseEvent.X, e.MouseEvent.Y);
+            MenuPerson.Show();
         }
 
         private void ImageTree_RootChanged(object sender, TreeChartPerson person)
@@ -405,15 +406,9 @@ namespace GKUI.Forms
             }
         }
 
-        private void miFillColor_Click()
+        private async void miFillColor_Click()
         {
-            /*using (var colorDialog1 = new ColorDialog()) {
-                if (colorDialog1.ShowDialog() != DialogResult.OK) return;
-
-                fTreeBox.BackgroundImage = null;
-                fTreeBox.BackColor = colorDialog1.Color;
-                fTreeBox.Invalidate();
-            }*/
+            await fController.SelectBackgroundColor();
         }
 
         private void miModeItem_Click()

@@ -123,19 +123,19 @@ namespace GKUI.Components
             fCanvas.CanFocus = false;
             Add(fCanvas);
 
-            //UIHelper.AddPrivEvents(this, "vertical", "ChangedPosition", OnScroll);
-            //UIHelper.AddPrivEvents(this, "horizontal", "ChangedPosition", OnScroll);*/
+            // The scroll event is not published in the original ScrollView
+            UIHelper.AddPrivEvents(this, "vertical", "ChangedPosition", OnScroll);
+            UIHelper.AddPrivEvents(this, "horizontal", "ChangedPosition", OnScroll);
         }
 
         protected virtual void OnPaint(View content)
         {
         }
 
-        /*private void OnScroll()
+        private void OnScroll()
         {
-            SysUtils.DoNotInline(this);
             UpdateProperties();
-        }*/
+        }
 
         private void UpdateProperties()
         {
@@ -151,7 +151,7 @@ namespace GKUI.Components
             var clientRect = base.Bounds;
             var scrollPos = base.ContentOffset;
 
-            fViewport = new ExtRect(scrollPos.X, scrollPos.Y, clientRect.Width, clientRect.Height);
+            fViewport = new ExtRect(Math.Abs(scrollPos.X), Math.Abs(scrollPos.Y), clientRect.Width, clientRect.Height);
 
             fHasHScroll = (fViewport.Width < fImageSize.Width);
             fHasVScroll = (fViewport.Height < fImageSize.Height);

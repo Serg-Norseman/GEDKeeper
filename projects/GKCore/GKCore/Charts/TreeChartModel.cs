@@ -354,7 +354,7 @@ namespace GKCore.Charts
 
         private void TickTimer(object sender, EventArgs e)
         {
-            if (fView == null) return;
+            if (fView == null || fOptions == null) return;
 
             bool reqInv = false;
 
@@ -1209,8 +1209,13 @@ namespace GKCore.Charts
             // Anti-aliasing works differently in EtoForms and WinForms.
             IColor clrLine, clrDecor;
 #if GK3
-            clrLine = ChartRenderer.GetColor(GKColors.DimGray);
-            clrDecor = ChartRenderer.GetColor(GKColors.DarkGray);
+            if (fGraphicsMode) {
+                clrLine = ChartRenderer.GetColor(GKColors.DimGray);
+                clrDecor = ChartRenderer.GetColor(GKColors.DarkGray);
+            } else {
+                clrLine = ChartRenderer.GetColor(GKColors.White);
+                clrDecor = ChartRenderer.GetColor(GKColors.DarkGray);
+            }
 #else
             clrLine = ChartRenderer.GetColor(GKColors.Black);
             clrDecor = ChartRenderer.GetColor(GKColors.DimGray);

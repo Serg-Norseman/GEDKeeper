@@ -303,39 +303,55 @@ namespace GKCore.Controllers
 
         public void DuplicateRecord()
         {
-            GDMRecord original = GetSelectedRecordEx();
-            GDMRecord target = BaseController.DuplicateRecord(fContext, original);
-            if (target != null) {
-                NotifyRecord(target, RecordAction.raAdd);
-                RefreshLists(false);
-                SelectRecordByXRef(target.XRef);
+            try {
+                GDMRecord original = GetSelectedRecordEx();
+                GDMRecord target = BaseController.DuplicateRecord(fContext, original);
+                if (target != null) {
+                    NotifyRecord(target, RecordAction.raAdd);
+                    RefreshLists(false);
+                    SelectRecordByXRef(target.XRef);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.DuplicateRecord()", ex);
             }
         }
 
         public async void AddRecord()
         {
-            GDMRecordType rt = GetSelectedRecordType();
+            try {
+                GDMRecordType rt = GetSelectedRecordType();
 
-            GDMRecord record = await BaseController.AddRecord(fView, fView, rt, null);
-            if (record != null) {
-                UpdateChangedRecords(record);
+                GDMRecord record = await BaseController.AddRecord(fView, fView, rt, null);
+                if (record != null) {
+                    UpdateChangedRecords(record);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.AddRecord()", ex);
             }
         }
 
         public async void EditRecord()
         {
-            GDMRecord record = GetSelectedRecordEx();
-            if (record != null && await BaseController.EditRecord(fView, fView, record)) {
-                UpdateChangedRecords(null);
+            try {
+                GDMRecord record = GetSelectedRecordEx();
+                if (record != null && await BaseController.EditRecord(fView, fView, record)) {
+                    UpdateChangedRecords(null);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.EditRecord()", ex);
             }
         }
 
         public async void DeleteRecord()
         {
-            GDMRecordType rt = GetSelectedRecordType();
-            GDMRecord record = GetSelectedRecordEx();
-            if (record != null && await BaseController.DeleteRecord(fView, record, true)) {
-                RefreshRecordsView(rt);
+            try {
+                GDMRecordType rt = GetSelectedRecordType();
+                GDMRecord record = GetSelectedRecordEx();
+                if (record != null && await BaseController.DeleteRecord(fView, record, true)) {
+                    RefreshRecordsView(rt);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.DeleteRecord()", ex);
             }
         }
 
@@ -866,9 +882,8 @@ namespace GKCore.Controllers
 
                     if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
                         GetControl<IMenuItem>("miSlideshow").Enabled = baseEn;
+                        GetControl<IMenuItem>("miScripts").Enabled = baseEn;
                     }
-
-                    GetControl<IMenuItem>("miScripts").Enabled = baseEn;
                 }
 
                 if (fHasToolbar) {
@@ -966,7 +981,6 @@ namespace GKCore.Controllers
 
                     GetControl<IMenuItem>("miChronicle").Text = LangMan.LS(LSID.MIChronicle) + @"...";
                     GetControl<IMenuItem>("miOrganizer").Text = LangMan.LS(LSID.MIOrganizer) + @"...";
-                    GetControl<IMenuItem>("miScripts").Text = LangMan.LS(LSID.MIScripts);
                     GetControl<IMenuItem>("miTreeTools").Text = LangMan.LS(LSID.MITreeTools);
                     GetControl<IMenuItem>("miOptions").Text = LangMan.LS(LSID.MIOptions) + @"...";
 
@@ -993,6 +1007,8 @@ namespace GKCore.Controllers
 
                         GetControl<IMenuItem>("miMap").Text = LangMan.LS(LSID.MIMap) + @"...";
                         GetControl<IMenuItem>("miMap").Enabled = !disNoStd;
+
+                        GetControl<IMenuItem>("miScripts").Text = LangMan.LS(LSID.MIScripts);
 
                         GetControl<IMenuItem>("miSlideshow").Text = LangMan.LS(LSID.Slideshow) + @"...";
                         GetControl<IMenuItem>("miPhotosBatchAdding").Text = LangMan.LS(LSID.PhotosBatchAdding);

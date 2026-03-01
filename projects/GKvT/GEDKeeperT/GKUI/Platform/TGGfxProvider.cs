@@ -107,7 +107,7 @@ namespace GKUI.Platform
 
         public IPen CreatePen(IColor color, float width)
         {
-            return new PenHandler(color);
+            return new PenHandler(color, width);
         }
 
         public ExtSizeF GetTextSize(string text, IFont font, object target)

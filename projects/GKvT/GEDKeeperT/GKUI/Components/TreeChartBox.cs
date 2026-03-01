@@ -13,12 +13,15 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Options;
-using GKUI.Platform;
 using Terminal.Gui;
 using gkcMouseEvent = GKCore.Charts.MouseEvent;
+using tgMouseEvent = Terminal.Gui.MouseEvent;
+using tgMouseEventArgs = Terminal.Gui.View.MouseEventArgs;
 
 namespace GKUI.Components
 {
+    public delegate void MouseEventHandler(object sender, tgMouseEventArgs e);
+
     /// <summary>
     /// 
     /// </summary>
@@ -27,10 +30,8 @@ namespace GKUI.Components
         #region Private fields
 
         private readonly TreeChartModel fModel;
-        private readonly TreeControlsList<ITreeControl> fTreeControls;
         private readonly TweenLibrary fTween;
 
-        private ITreeControl fActiveControl;
         private ChartControlMode fMode = ChartControlMode.Default;
         private int fMouseX;
         private int fMouseY;
@@ -48,7 +49,7 @@ namespace GKUI.Components
 
         public event RootChangedEventHandler RootChanged;
 
-        //public event MouseEventHandler PersonProperties;
+        public event MouseEventHandler PersonProperties;
 
         public event EventHandler ZoomChanged;
 
@@ -155,9 +156,6 @@ namespace GKUI.Components
             fRenderer = null;
             fSelected = null;
             fTraceSelected = true;
-
-            fTreeControls = new TreeControlsList<ITreeControl>();
-
             fTween = new TweenLibrary();
         }
 
@@ -171,8 +169,6 @@ namespace GKUI.Components
             if (disposing) {
                 fTween.Dispose();
                 fModel.Dispose();
-
-                if (fTreeControls != null) fTreeControls.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -199,17 +195,7 @@ namespace GKUI.Components
 
         public override void SetScale(float value)
         {
-            fModel.Scale = value;
-
-            RecalcChart();
-
-            if (fTraceSelected && fSelected != null) {
-                CenterPerson(fSelected, false);
-            }
-
-            fTreeControls.UpdateState();
-
-            DoZoomChanged();
+            // not supported
         }
 
         public void GenChart(bool rootCenter)
@@ -401,7 +387,7 @@ namespace GKUI.Components
 
         private void DoPersonProperties(MouseEventArgs eArgs)
         {
-            //PersonProperties?.Invoke(this, eArgs);
+            PersonProperties?.Invoke(this, eArgs);
         }
 
         private void DoZoomChanged()
@@ -421,8 +407,7 @@ namespace GKUI.Components
 
                 /*case (Key)'+':
                 case (Key)'-':
-                    SetScale(fModel.Scale +/- 0.05f);
-                    result = true;
+                    // not supported
                     break;*/
 
                 default:
@@ -451,28 +436,18 @@ namespace GKUI.Components
             fRenderer.SetTarget(content);
 
             InternalDraw(RenderTarget.Screen, ChartDrawMode.dmInteractive, BackgroundMode.bmAny);
-
-            // interactive controls
-            fTreeControls.Draw(fRenderer);
         }
 
-        /*protected override void OnDoubleClick(EventArgs e)
-        {
-            TreeChartPerson p = fSelected;
-            DoPersonModify(new PersonModifyEventArgs(p));
-
-            base.OnDoubleClick(e);
-        }*/
-
-        private MouseAction GetMouseAction(MouseEventArgs e, gkcMouseEvent mouseEvent, out TreeChartPerson person)
+        private MouseAction GetMouseAction(tgMouseEvent e, gkcMouseEvent mouseEvent, out TreeChartPerson person)
         {
             var result = MouseAction.None;
             person = null;
 
+            var viewport = base.Viewport;
             ExtPoint offsets = fModel.GetOffsets();
-            int aX = e.MouseEvent.X - offsets.X;
-            int aY = e.MouseEvent.Y - offsets.Y;
-            var mouseFlags = e.MouseEvent.Flags;
+            int aX = e.X + viewport.Left - offsets.X;
+            int aY = e.Y + viewport.Top - offsets.Y;
+            var mouseFlags = e.Flags;
 
             int num = fModel.Persons.Count;
             for (int i = 0; i < num; i++) {
@@ -486,7 +461,7 @@ namespace GKUI.Components
                     if (mouseFlags == MouseFlags.Button1Pressed) {
                         result = MouseAction.Select;
                         break;
-                    } else if (mouseFlags == MouseFlags.Button2Released) {
+                    } else if (mouseFlags == MouseFlags.Button3Released) {
                         result = MouseAction.Properties;
                         break;
                     } else if (mouseEvent == gkcMouseEvent.meMove) {
@@ -495,7 +470,7 @@ namespace GKUI.Components
                     }
                 }
 
-                ExtRect expRt = fModel.GetExpanderRect(persRt);
+                /*ExtRect expRt = fModel.GetExpanderRect(persRt);
                 if ((mouseFlags == MouseFlags.Button1Released) && expRt.Contains(aX, aY)) {
                     person = p;
                     result = MouseAction.Expand;
@@ -514,33 +489,41 @@ namespace GKUI.Components
                     person = p;
                     result = MouseAction.Info;
                     break;
-                }
+                }*/
             }
 
-            if (result == MouseAction.None && person == null) {
-                if (mouseFlags == MouseFlags.Button2Pressed) {
-                    result = MouseAction.Drag;
-                }
+            if (result == MouseAction.None && person == null && mouseFlags == MouseFlags.Button3Pressed) {
+                result = MouseAction.Drag;
             }
 
             return result;
         }
 
-        public override bool MouseEvent(Terminal.Gui.MouseEvent me)
+        public override bool MouseEvent(tgMouseEvent me)
         {
+            if (me.Flags.HasFlag(MouseFlags.ReportMousePosition)) {
+                return OnMouseMove(me);
+            } else if (me.Flags.HasFlag(MouseFlags.Button1Pressed) || me.Flags.HasFlag(MouseFlags.Button3Pressed)) {
+                return OnMouseDown(me);
+            } else if (me.Flags.HasFlag(MouseFlags.Button1Released) || me.Flags.HasFlag(MouseFlags.Button3Released)) {
+                return OnMouseUp(me);
+            } else if (me.Flags.HasFlag(MouseFlags.Button1DoubleClicked)) {
+                TreeChartPerson p = fSelected;
+                DoPersonModify(new PersonModifyEventArgs(p));
+                return true;
+            }
+
             return base.MouseEvent(me);
         }
 
-        /*protected override void OnMouseDown(MouseEventArgs e)
+        protected bool OnMouseDown(tgMouseEvent e)
         {
-            Point evtPt = e.Location;
-            fMouseX = evtPt.X;
-            fMouseY = evtPt.Y;
+            fMouseX = e.X;
+            fMouseY = e.Y;
 
             switch (fMode) {
                 case ChartControlMode.Default:
-                    TreeChartPerson mPers;
-                    MouseAction mAct = GetMouseAction(e, gkcMouseEvent.meDown, out mPers);
+                    MouseAction mAct = GetMouseAction(e, gkcMouseEvent.meDown, out TreeChartPerson mPers);
 
                     switch (mAct) {
                         case MouseAction.Select:
@@ -557,74 +540,40 @@ namespace GKUI.Components
                     break;
 
                 case ChartControlMode.ControlsVisible:
-                    fTreeControls.MouseDown(evtPt.X, evtPt.Y);
+                    // not supported
                     break;
             }
 
-            base.OnMouseDown(e);
-        }*/
+            return true;
+        }
 
-        /*protected override void OnMouseMove(MouseEventArgs e)
+        protected bool OnMouseMove(tgMouseEvent e)
         {
-            Point evtPt = e.Location;
-
             switch (fMode) {
                 case ChartControlMode.Default:
-                    TreeChartPerson mPers;
-                    MouseAction mAct = GetMouseAction(e, gkcMouseEvent.meMove, out mPers);
-
+                    /*MouseAction mAct = GetMouseAction(e, gkcMouseEvent.meMove, out TreeChartPerson mPers);
                     if (mAct == MouseAction.Highlight) {
                         SetHighlight(mPers);
                     } else {
                         SetHighlight(null);
-
-                        if (GlobalOptions.Instance.TreeChartOptions.UseExtraControls) {
-                            ITreeControl ctl = fTreeControls.Contains(evtPt.X, evtPt.Y);
-
-                            if (ctl != null) {
-                                fMode = ChartControlMode.ControlsVisible;
-                                ctl.UpdateState();
-                                ctl.Visible = true;
-                                ctl.MouseMove(evtPt.X, evtPt.Y);
-                                fActiveControl = ctl;
-
-                                fToolTip.Show(ctl.Tip, this, e.X + Left, e.Y + Top, 1500);
-                            }
-                        }
-                    }
+                    }*/
                     break;
 
                 case ChartControlMode.DragImage:
-                    AdjustScroll(-(evtPt.X - fMouseX), -(evtPt.Y - fMouseY));
-                    fMouseX = evtPt.X;
-                    fMouseY = evtPt.Y;
-                    break;
-
-                case ChartControlMode.ControlsVisible:
-                    if (fActiveControl != null) {
-                        if (!(fActiveControl.Contains(evtPt.X, evtPt.Y) || fActiveControl.MouseCaptured)) {
-                            fMode = ChartControlMode.Default;
-                            fActiveControl.Visible = false;
-                            fToolTip.Hide(this);
-                            fActiveControl = null;
-                        } else {
-                            fActiveControl.MouseMove(evtPt.X, evtPt.Y);
-                        }
-                    }
+                    AdjustScroll((e.X - fMouseX), (e.Y - fMouseY));
+                    fMouseX = e.X;
+                    fMouseY = e.Y;
                     break;
             }
 
-            base.OnMouseMove(e);
-        }*/
+            return true;
+        }
 
-        /*protected override void OnMouseUp(MouseEventArgs e)
+        protected bool OnMouseUp(tgMouseEvent e)
         {
-            Point evtPt = e.Location;
-
             switch (fMode) {
                 case ChartControlMode.Default:
-                    TreeChartPerson mPers;
-                    MouseAction mAct = GetMouseAction(e, gkcMouseEvent.meUp, out mPers);
+                    MouseAction mAct = GetMouseAction(e, gkcMouseEvent.meUp, out TreeChartPerson mPers);
 
                     switch (mAct) {
                         case MouseAction.None:
@@ -633,7 +582,7 @@ namespace GKUI.Components
                         case MouseAction.Properties:
                             SelectBy(mPers, false);
                             if (fSelected == mPers && fSelected.Rec != null) {
-                                DoPersonProperties(new MouseEventArgs(e.Button, 1, e.X, e.Y, 0));
+                                DoPersonProperties(new MouseEventArgs(e));
                             }
                             break;
 
@@ -657,12 +606,12 @@ namespace GKUI.Components
                     break;
 
                 case ChartControlMode.ControlsVisible:
-                    fTreeControls.MouseUp(evtPt.X, evtPt.Y);
+                    // not supported
                     break;
             }
 
-            base.OnMouseUp(e);
-        }*/
+            return true;
+        }
 
         #endregion
 

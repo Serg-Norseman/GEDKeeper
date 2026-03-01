@@ -25,7 +25,7 @@ namespace GKUI.Components
 
         public virtual float Scale
         {
-            get { return 0; }
+            get { return 1.0f; }
         }
 
 
