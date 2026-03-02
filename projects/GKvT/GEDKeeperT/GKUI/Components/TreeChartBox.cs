@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  GEDKeeper, the personal genealogical database editor.
  *  Copyright (C) 2009-2026 by Sergey V. Zhdanovskih.
  *
@@ -50,8 +50,6 @@ namespace GKUI.Components
         public event RootChangedEventHandler RootChanged;
 
         public event MouseEventHandler PersonProperties;
-
-        public event EventHandler ZoomChanged;
 
         public event InfoRequestEventHandler InfoRequest;
 
@@ -336,11 +334,7 @@ namespace GKUI.Components
         public void RecalcChart(bool noRedraw = false)
         {
             fRenderer.SetTarget(this);
-
-            try {
-                fModel.RecalcChart();
-            } finally {
-            }
+            fModel.RecalcChart();
 
             var imageSize = GetImageSize();
             SetImageSize(imageSize, noRedraw);
@@ -388,11 +382,6 @@ namespace GKUI.Components
         private void DoPersonProperties(MouseEventArgs eArgs)
         {
             PersonProperties?.Invoke(this, eArgs);
-        }
-
-        private void DoZoomChanged()
-        {
-            ZoomChanged?.Invoke(this, new EventArgs());
         }
 
         public override bool OnKeyDown(KeyEvent e)
@@ -501,16 +490,21 @@ namespace GKUI.Components
 
         public override bool MouseEvent(tgMouseEvent me)
         {
-            if (me.Flags.HasFlag(MouseFlags.ReportMousePosition)) {
-                return OnMouseMove(me);
-            } else if (me.Flags.HasFlag(MouseFlags.Button1Pressed) || me.Flags.HasFlag(MouseFlags.Button3Pressed)) {
-                return OnMouseDown(me);
-            } else if (me.Flags.HasFlag(MouseFlags.Button1Released) || me.Flags.HasFlag(MouseFlags.Button3Released)) {
-                return OnMouseUp(me);
-            } else if (me.Flags.HasFlag(MouseFlags.Button1DoubleClicked)) {
-                TreeChartPerson p = fSelected;
-                DoPersonModify(new PersonModifyEventArgs(p));
-                return true;
+            var bounds = base.Bounds;
+            // Scrollbars are always visible
+            bounds = new Rect(bounds.Left, bounds.Top, bounds.Width - 1, bounds.Height - 1);
+
+            if (bounds.Contains(me.X, me.Y)) {
+                if (me.Flags == MouseFlags.ReportMousePosition || (me.Flags.HasFlag(MouseFlags.ReportMousePosition | MouseFlags.Button3Pressed))) {
+                    return OnMouseMove(me);
+                } else if (me.Flags.HasFlag(MouseFlags.Button1Pressed) || me.Flags.HasFlag(MouseFlags.Button3Pressed)) {
+                    return OnMouseDown(me);
+                } else if (me.Flags.HasFlag(MouseFlags.Button1Released) || me.Flags.HasFlag(MouseFlags.Button3Released)) {
+                    return OnMouseUp(me);
+                } else if (me.Flags.HasFlag(MouseFlags.Button1DoubleClicked)) {
+                    DoPersonModify(new PersonModifyEventArgs(fSelected));
+                    return true;
+                }
             }
 
             return base.MouseEvent(me);

@@ -345,27 +345,27 @@ namespace GKUI.Forms
             //miContRecordDuplicate.Enabled = (recView == fController.GetRecordsViewByType(GDMRecordType.rtIndividual));
         }
 
-        private void miRecordAdd_Click()
+        private void miRecordAdd_Click(object sender, EventArgs e)
         {
             AddRecord();
         }
 
-        private void miRecordEdit_Click()
+        private void miRecordEdit_Click(object sender, EventArgs e)
         {
             EditRecord();
         }
 
-        private void miRecordDelete_Click()
+        private void miRecordDelete_Click(object sender, EventArgs e)
         {
             DeleteRecord();
         }
 
-        private void miRecordDuplicate_Click()
+        private void miRecordDuplicate_Click(object sender, EventArgs e)
         {
             DuplicateRecord();
         }
 
-        private void miRecordMerge_Click()
+        private void miRecordMerge_Click(object sender, EventArgs e)
         {
             var recView = GetRecordsViewByType(GetSelectedRecordType()) as GKListView;
             if (recView != null) {
@@ -377,7 +377,7 @@ namespace GKUI.Forms
             }
         }
 
-        private void miContMediaMoveFile_Click()
+        private void miContMediaMoveFile_Click(object sender, EventArgs e)
         {
             /*MediaStoreType storeType;
             if (sender == miContMediaMoveFile2Abs) {
@@ -417,7 +417,7 @@ namespace GKUI.Forms
             fController.SelectSummaryLink((IHyperView)sender, linkName);
         }
 
-        private void miCopyContent_Click()
+        private void miCopyContent_Click(object sender, EventArgs e)
         {
             fController.CopyContent();
         }
@@ -723,7 +723,7 @@ namespace GKUI.Forms
                     string fn = AppHost.Options.MRUFiles[i].FileName;
 
                     int idx = i;
-                    var mi = new MenuItem(fn, "", () => {
+                    var mi = new MenuItem(fn, "", (sender, e) => {
                         AppHost.Instance.LoadBase(this, AppHost.Options.MRUFiles[idx].FileName);
                     });
                     subItems[i] = mi;
@@ -739,7 +739,7 @@ namespace GKUI.Forms
             fController.UpdateControls(forceDeactivate, blockDependent);
         }
 
-        private void miExit_Click()
+        private void miExit_Click(object sender, EventArgs e)
         {
             AppHost.Instance.Quit();
         }
@@ -754,133 +754,133 @@ namespace GKUI.Forms
             fController.Redo();
         }
 
-        private void miExportToFamilyBook_Click()
+        private void miExportToFamilyBook_Click(object sender, EventArgs e)
         {
             fController.ExportToFamilyBook();
         }
 
-        private void miExportToTreesAlbum_Click()
+        private void miExportToTreesAlbum_Click(object sender, EventArgs e)
         {
             fController.ExportToTreesAlbum();
         }
 
-        private void miExportTable_Click()
+        private void miExportTable_Click(object sender, EventArgs e)
         {
             fController.ExportTable();
         }
 
-        private void miExportToStrictGEDCOM_Click()
+        private void miExportToStrictGEDCOM_Click(object sender, EventArgs e)
         {
             fController.ExportToStrictGEDCOM();
         }
 
-        private void miFileProperties_Click()
+        private void miFileProperties_Click(object sender, EventArgs e)
         {
             fController.ShowFileProperties();
         }
 
-        private void miScripts_Click()
+        private void miScripts_Click(object sender, EventArgs e)
         {
             fController.ShowScripts();
         }
 
-        private void miTTTreeSplit_Click()
+        private void miTTTreeSplit_Click(object sender, EventArgs e)
         {
             fController.ShowTreeSplit();
         }
 
-        private void miTTTreeMerge_Click()
+        private void miTTTreeMerge_Click(object sender, EventArgs e)
         {
             fController.ShowTreeMerge();
         }
 
-        private void miTTTreeCompare_Click()
+        private void miTTTreeCompare_Click(object sender, EventArgs e)
         {
             fController.ShowTreeCompare();
         }
 
-        private void miTTTreeCheck_Click()
+        private void miTTTreeCheck_Click(object sender, EventArgs e)
         {
             fController.ShowTreeCheck();
         }
 
-        private void miTTRecMerge_Click()
+        private void miTTRecMerge_Click(object sender, EventArgs e)
         {
             BaseController.ShowRecMerge(this, this, null, null);
         }
 
-        private void miTTPlacesManager_Click()
+        private void miTTPlacesManager_Click(object sender, EventArgs e)
         {
             fController.ShowPlacesManager();
         }
 
-        private void miTTPatSearch_Click()
+        private void miTTPatSearch_Click(object sender, EventArgs e)
         {
             fController.ShowPatSearch();
         }
 
-        private void miTTFamilyGroups_Click()
+        private void miTTFamilyGroups_Click(object sender, EventArgs e)
         {
             fController.ShowFamilyGroups();
         }
 
-        private void miPhotosBatchAdding_Click()
+        private void miPhotosBatchAdding_Click(object sender, EventArgs e)
         {
             fController.ShowPhotosBatchAdding();
         }
 
-        private void miCleanImagesCache_Click()
+        private void miCleanImagesCache_Click(object sender, EventArgs e)
         {
             AppHost.CleanImagesCache();
         }
 
-        private void miOptions_Click()
+        private void miOptions_Click(object sender, EventArgs e)
         {
             AppHost.Instance.ShowOptions(this);
         }
 
-        private void miFileClose_Click()
+        private void miFileClose_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void miFileNew_Click()
+        private void miFileNew_Click(object sender, EventArgs e)
         {
             fController.NewFile();
         }
 
-        private async void miFileLoad_Click()
+        private async void miFileLoad_Click(object sender, EventArgs e)
         {
             //LoadFile();
             await fController.LoadFileEx();
         }
 
-        private async void miFileReload_Click()
+        private async void miFileReload_Click(object sender, EventArgs e)
         {
             await fController.ReloadFile();
         }
 
-        private void miFileSaveAs_Click()
+        private void miFileSaveAs_Click(object sender, EventArgs e)
         {
             SaveFileEx(true);
         }
 
-        private void miFileSave_Click()
+        private void miFileSave_Click(object sender, EventArgs e)
         {
             SaveFileEx(false);
         }
 
-        private void miSearch_Click()
+        private void miSearch_Click(object sender, EventArgs e)
         {
             (this as IWorkWindow).QuickSearch();
         }
 
-        private void miFindAndReplace_Click()
+        private void miFindAndReplace_Click(object sender, EventArgs e)
         {
             fController.FindAndReplace();
         }
 
-        private void miFilter_Click()
+        private void miFilter_Click(object sender, EventArgs e)
         {
             fController.SetFilter();
         }
@@ -900,95 +900,79 @@ namespace GKUI.Forms
             fController.SendMail();
         }
 
-        private void tbPartialView_Click()
+        private void tbPartialView_Click(object sender, EventArgs e)
         {
             // not supported
             fController.ShowPartialView();
         }
 
-        /*private void miMap_Click()
+        /*private void miMap_Click(object sender, EventArgs e)
         {
             // not supported
             fController.ShowMap();
         }*/
 
-        private void miChronicle_Click()
+        private void miChronicle_Click(object sender, EventArgs e)
         {
             fController.ShowChronicle();
         }
 
-        private void miOrganizer_Click()
+        private void miOrganizer_Click(object sender, EventArgs e)
         {
             fController.ShowOrganizer();
         }
 
-        private void miRelationshipCalculator_Click()
+        private void miRelationshipCalculator_Click(object sender, EventArgs e)
         {
             fController.ShowRelationshipCalculator();
         }
 
-        /*private void miSlideshow_Click()
-        {
-            // not supported
-            fController.ShowSlideshow();
-        }*/
-
-        private void miStats_Click()
+        private void miStats_Click(object sender, EventArgs e)
         {
             fController.ShowStats();
         }
 
-        private void miPedigreeAscend_Click()
+        private void miPedigreeAscend_Click(object sender, EventArgs e)
         {
             fController.GeneratePedigree(PedigreeType.Ascend);
         }
 
-        private void miPedigreeDescend_Click()
+        private void miPedigreeDescend_Click(object sender, EventArgs e)
         {
             fController.GeneratePedigree(PedigreeType.Descend);
         }
 
-        private void miTreeAncestors_Click()
+        private void miTreeAncestors_Click(object sender, EventArgs e)
         {
             fController.ShowTreeChart(TreeChartKind.ckAncestors);
         }
 
-        private void miTreeDescendants_Click()
+        private void miTreeDescendants_Click(object sender, EventArgs e)
         {
             fController.ShowTreeChart(TreeChartKind.ckDescendants);
         }
 
-        private void miTreeBoth_Click()
+        private void miTreeBoth_Click(object sender, EventArgs e)
         {
             fController.ShowTreeChart(TreeChartKind.ckBoth);
         }
 
-        private void miAncestorsCircle_Click()
-        {
-            BaseController.ShowCircleChart(this, CircleChartType.Ancestors);
-        }
-
-        private void miDescendantsCircle_Click()
-        {
-            BaseController.ShowCircleChart(this, CircleChartType.Descendants);
-        }
-
-        private void miLogSend_Click()
+        private void miLogSend_Click(object sender, EventArgs e)
         {
             fController.SendLog();
         }
 
-        private void miLogView_Click()
+        private void miLogView_Click(object sender, EventArgs e)
         {
             fController.ShowLog();
         }
 
-        private void miAbout_Click()
+        private void miAbout_Click(object sender, EventArgs e)
         {
             fController.ShowAbout();
         }
 
-        private void miContext_Click()
+        private void miContext_Click(object sender, EventArgs e)
         {
             AppHost.Instance.ShowHelpTopic("");
         }

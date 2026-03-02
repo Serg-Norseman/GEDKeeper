@@ -122,30 +122,30 @@ namespace GKUI.Components
             fCanvas.Y = 0;
             fCanvas.CanFocus = false;
             Add(fCanvas);
-
-            // The scroll event is not published in the original ScrollView
-            UIHelper.AddPrivEvents(this, "vertical", "ChangedPosition", OnScroll);
-            UIHelper.AddPrivEvents(this, "horizontal", "ChangedPosition", OnScroll);
         }
 
         protected virtual void OnPaint(View content)
         {
         }
 
-        private void OnScroll()
+        protected override void OnScroll()
         {
+            base.OnScroll();
+
             UpdateProperties();
         }
 
-        private void UpdateProperties()
+        private void UpdateProperties(bool resizeCanvas = false)
         {
-            int canvWidth = Math.Max(fImageSize.Width, Bounds.Width);
-            int canvHeight = Math.Max(fImageSize.Height, Bounds.Height);
+            if (resizeCanvas) {
+                int canvWidth = Math.Max(fImageSize.Width, Bounds.Width);
+                int canvHeight = Math.Max(fImageSize.Height, Bounds.Height);
 
-            if (ContentSize.Width != canvWidth || ContentSize.Height != canvHeight) {
-                ContentSize = new Size(canvWidth, canvHeight);
-                fCanvas.Width = canvWidth;
-                fCanvas.Height = canvHeight;
+                if (ContentSize.Width != canvWidth || ContentSize.Height != canvHeight) {
+                    ContentSize = new Size(canvWidth, canvHeight);
+                    fCanvas.Width = canvWidth;
+                    fCanvas.Height = canvHeight;
+                }
             }
 
             var clientRect = base.Bounds;
@@ -180,7 +180,7 @@ namespace GKUI.Components
 
         public override bool OnEnter(View nextFocused)
         {
-            UpdateProperties();
+            UpdateProperties(true);
             return base.OnEnter(nextFocused);
         }
 
@@ -269,7 +269,6 @@ namespace GKUI.Components
         {
             ContentOffset = new Point(posX, posY);
             UpdateProperties();
-            //InvalidateContent();
         }
 
         /// <summary>
@@ -292,11 +291,9 @@ namespace GKUI.Components
         {
             if (!imageSize.IsEmpty && (fImageSize.Width != imageSize.Width || fImageSize.Height != imageSize.Height)) {
                 fImageSize = new Size(imageSize.Width, imageSize.Height);
-
-                UpdateProperties();
+                UpdateProperties(true);
+                if (!noRedraw) InvalidateContent();
             }
-
-            if (!noRedraw) InvalidateContent();
         }
 
         protected Point GetImageRelativeLocation(Point mpt, bool buttons)

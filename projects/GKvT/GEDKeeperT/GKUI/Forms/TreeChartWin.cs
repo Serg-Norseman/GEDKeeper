@@ -57,9 +57,9 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //miModeBoth.Tag = TreeChartKind.ckBoth;
-            //miModeAncestors.Tag = TreeChartKind.ckAncestors;
-            //miModeDescendants.Tag = TreeChartKind.ckDescendants;
+            miModeBoth.Tag = TreeChartKind.ckBoth;
+            miModeAncestors.Tag = TreeChartKind.ckAncestors;
+            miModeDescendants.Tag = TreeChartKind.ckDescendants;
 
             fTreeBox = new TreeChartBox(new TGGfxRenderer());
             fTreeBox.Base = baseWin;
@@ -69,7 +69,6 @@ namespace GKUI.Forms
             fTreeBox.PersonProperties += ImageTree_PersonProperties;
             fTreeBox.Options = GlobalOptions.Instance.TreeChartOptions;
             fTreeBox.NavRefresh += ImageTree_NavRefresh;
-            fTreeBox.ZoomChanged += ImageTree_NavRefresh;
             fTreeBox.X = 0;
             fTreeBox.Y = 2; // Leave one row for the toplevel menu
             fTreeBox.Width = Dim.Fill();
@@ -124,17 +123,17 @@ namespace GKUI.Forms
 
         #region Interface handlers
 
-        private void tbFilter_Click()
+        private void tbFilter_Click(object sender, EventArgs e)
         {
             SetFilter();
         }
 
-        private void tbPrev_Click()
+        private void tbPrev_Click(object sender, EventArgs e)
         {
             NavPrev();
         }
 
-        private void tbNext_Click()
+        private void tbNext_Click(object sender, EventArgs e)
         {
             NavNext();
         }
@@ -168,7 +167,7 @@ namespace GKUI.Forms
                     break;
 
                 case Key.F6:
-                    miRebuildTree_Click();
+                    miRebuildTree_Click(null, null);
                     break;
 
                 case Key.F7:
@@ -199,7 +198,7 @@ namespace GKUI.Forms
             }
         }
 
-        private void tbImageSave_Click()
+        private void tbImageSave_Click(object sender, EventArgs e)
         {
             fController.SaveSnapshot();
         }
@@ -248,26 +247,26 @@ namespace GKUI.Forms
             }
         }
 
-        private void miGensX_Click()
+        private void miGensX_Click(object sender, EventArgs e)
         {
-            /*int depth = UIHelper.GetMenuItemTag<int>(tbGensCommon, sender);
+            int depth = UIHelper.GetMenuItemTag<int>(tbGensCommon, sender);
             fTreeBox.DepthLimitAncestors = depth;
             fTreeBox.DepthLimitDescendants = depth;
-            GenChart();*/
+            GenChart();
         }
 
-        private void miGensXAncestors_Click()
+        private void miGensXAncestors_Click(object sender, EventArgs e)
         {
-            /*int depth = UIHelper.GetMenuItemTag<int>(tbGensAncestors, sender);
+            int depth = UIHelper.GetMenuItemTag<int>(tbGensAncestors, sender);
             fTreeBox.DepthLimitAncestors = depth;
-            GenChart();*/
+            GenChart();
         }
 
-        private void miGensXDescendants_Click()
+        private void miGensXDescendants_Click(object sender, EventArgs e)
         {
-            /*int depth = UIHelper.GetMenuItemTag<int>(tbGensDescendants, sender);
+            int depth = UIHelper.GetMenuItemTag<int>(tbGensDescendants, sender);
             fTreeBox.DepthLimitDescendants = depth;
-            GenChart();*/
+            GenChart();
         }
 
         private void SetupDepth()
@@ -284,67 +283,67 @@ namespace GKUI.Forms
             }
         }
 
-        private void miEdit_Click()
+        private void miEdit_Click(object sender, EventArgs e)
         {
             fController.Edit();
         }
 
-        private void miFatherAdd_Click()
+        private void miFatherAdd_Click(object sender, EventArgs e)
         {
             fController.AddFather();
         }
 
-        private void miMotherAdd_Click()
+        private void miMotherAdd_Click(object sender, EventArgs e)
         {
             fController.AddMother();
         }
 
-        private void miSpouseAdd_Click()
+        private void miSpouseAdd_Click(object sender, EventArgs e)
         {
             fController.AddSpouse();
         }
 
-        private void miSonAdd_Click()
+        private void miSonAdd_Click(object sender, EventArgs e)
         {
             fController.AddSon();
         }
 
-        private void miDaughterAdd_Click()
+        private void miDaughterAdd_Click(object sender, EventArgs e)
         {
             fController.AddDaughter();
         }
 
-        private void miFamilyAdd_Click()
+        private void miFamilyAdd_Click(object sender, EventArgs e)
         {
             fController.AddFamily();
         }
 
-        private void miDelete_Click()
+        private void miDelete_Click(object sender, EventArgs e)
         {
             fController.Delete();
         }
 
-        private void miRebuildKinships_Click()
+        private void miRebuildKinships_Click(object sender, EventArgs e)
         {
             fTreeBox.RebuildKinships();
         }
 
-        private void miMapAncestors_Click()
+        private void miMapAncestors_Click(object sender, EventArgs e)
         {
             fController.ShowMapAncestors();
         }
 
-        private void miMapDescendants_Click()
+        private void miMapDescendants_Click(object sender, EventArgs e)
         {
             fController.ShowMapDescendants();
         }
 
-        private void miMapAll_Click()
+        private void miMapAll_Click(object sender, EventArgs e)
         {
             fController.ShowMapAll();
         }
 
-        private void miTraceSelected_Click()
+        private void miTraceSelected_Click(object sender, EventArgs e)
         {
             miTraceSelected.Checked = !miTraceSelected.Checked;
 
@@ -352,20 +351,20 @@ namespace GKUI.Forms
             fTreeBox.TraceSelected = miTraceSelected.Checked;
         }
 
-        private void miTraceKinships_Click()
+        private void miTraceKinships_Click(object sender, EventArgs e)
         {
             miTraceKinships.Checked = !miTraceKinships.Checked;
             fTreeBox.TraceKinships = miTraceKinships.Checked;
         }
 
-        private void miHideDescSpouses_Click()
+        private void miHideDescSpouses_Click(object sender, EventArgs e)
         {
             miHideDescSpouses.Checked = !miHideDescSpouses.Checked;
             fTreeBox.Options.HideDescSpouses = miHideDescSpouses.Checked;
             GenChart();
         }
 
-        private void miCertaintyIndex_Click()
+        private void miCertaintyIndex_Click(object sender, EventArgs e)
         {
             miCertaintyIndex.Checked = !miCertaintyIndex.Checked;
 
@@ -373,7 +372,7 @@ namespace GKUI.Forms
             fTreeBox.CertaintyIndex = miCertaintyIndex.Checked;
         }
 
-        private void miXRefVisible_Click()
+        private void miXRefVisible_Click(object sender, EventArgs e)
         {
             miXRefVisible.Checked = !miXRefVisible.Checked;
 
@@ -381,21 +380,21 @@ namespace GKUI.Forms
             fTreeBox.XRefVisible = miXRefVisible.Checked;
         }
 
-        private void miTrackSelectedLines_Click()
+        private void miTrackSelectedLines_Click(object sender, EventArgs e)
         {
             miTrackSelectedLines.Checked = !miTrackSelectedLines.Checked;
             fTreeBox.Options.TrackSelectedLines = miTrackSelectedLines.Checked;
             fTreeBox.Invalidate();
         }
 
-        private void miTrackMatchedSources_Click()
+        private void miTrackMatchedSources_Click(object sender, EventArgs e)
         {
             miTrackMatchedSources.Checked = !miTrackMatchedSources.Checked;
             fTreeBox.Options.TrackMatchedSources = miTrackMatchedSources.Checked;
             fTreeBox.Invalidate();
         }
 
-        private void miParentAges_Click()
+        private void miParentAges_Click(object sender, EventArgs e)
         {
             miParentAges.Checked = !miParentAges.Checked;
             fTreeBox.Options.ParentAges = miParentAges.Checked;
@@ -406,20 +405,20 @@ namespace GKUI.Forms
             }
         }
 
-        private async void miFillColor_Click()
+        private async void miFillColor_Click(object sender, EventArgs e)
         {
             await fController.SelectBackgroundColor();
         }
 
-        private void miModeItem_Click()
+        private void miModeItem_Click(object sender, EventArgs e)
         {
-            /*TreeChartKind newMode = (TreeChartKind)((ToolStripMenuItem)sender).Tag;
+            TreeChartKind newMode = (TreeChartKind)((MenuItem)sender).Tag;
             if (fTreeBox.Model.Kind == newMode) return;
 
-            GenChart(fPerson, newMode);*/
+            GenChart(fPerson, newMode);
         }
 
-        private void miRebuildTree_Click()
+        private void miRebuildTree_Click(object sender, EventArgs e)
         {
             try {
                 TreeChartPerson p = fTreeBox.Selected;
@@ -432,7 +431,7 @@ namespace GKUI.Forms
             }
         }
 
-        private void miSelectColor_Click()
+        private void miSelectColor_Click(object sender, EventArgs e)
         {
             fController.SelectColor();
         }
@@ -450,27 +449,27 @@ namespace GKUI.Forms
             miGoToPrimaryBranch.Enabled = (p != null && p.Rec != null && p.IsDup);*/
         }
 
-        private void tbOptions_Click()
+        private void tbOptions_Click(object sender, EventArgs e)
         {
             AppHost.Instance.ShowOptions(this, OptionsPage.opTreeChart);
         }
 
-        private void miGoToRecord_Click()
+        private void miGoToRecord_Click(object sender, EventArgs e)
         {
             fController.GoToRecord();
         }
 
-        private void miGoToPrimaryBranch_Click()
+        private void miGoToPrimaryBranch_Click(object sender, EventArgs e)
         {
             fController.GoToPrimaryBranch();
         }
 
-        private void miOpenInNewWindow_Click()
+        private void miOpenInNewWindow_Click(object sender, EventArgs e)
         {
             fController.OpenInNewWindow();
         }
 
-        private void miMergeDuplicates_Click()
+        private void miMergeDuplicates_Click(object sender, EventArgs e)
         {
             fController.MergeDuplicates();
         }
@@ -571,11 +570,8 @@ namespace GKUI.Forms
 
         public void SelectByRec(GDMRecord record)
         {
-            GDMIndividualRecord iRec = record as GDMIndividualRecord;
-            if (iRec == null)
-                throw new ArgumentNullException(nameof(iRec));
-
-            fTreeBox.SelectByRec(iRec);
+            if (record is GDMIndividualRecord iRec)
+                fTreeBox.SelectByRec(iRec);
         }
 
         public void QuickSearch()

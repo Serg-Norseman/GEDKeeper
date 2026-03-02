@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKUI.Platform.Handlers;
@@ -38,12 +39,6 @@ namespace GKUI.Platform
             get { return fItems; }
         }
 
-        public object Tag
-        {
-            get { return Data; }
-            set { Data = value; }
-        }
-
         public string Text
         {
             get { return Title.ToString(); }
@@ -66,15 +61,15 @@ namespace GKUI.Platform
         {
             fItems = new MenuSubItems(this);
             Title = text;
-            Data = tag;
+            Tag = tag;
         }
 
         public MenuItemEx(string text, object tag, IImage image, ItemAction action)
         {
             fItems = new MenuSubItems(this);
             Title = text;
-            Action = Item_Click;
-            Data = tag;
+            Action += Item_Click;
+            Tag = tag;
             fAction = action;
         }
 
@@ -99,7 +94,7 @@ namespace GKUI.Platform
             //Items.Clear();
         }
 
-        private void Item_Click()
+        private void Item_Click(object sender, EventArgs e)
         {
             if (fAction != null) {
                 fAction(this);

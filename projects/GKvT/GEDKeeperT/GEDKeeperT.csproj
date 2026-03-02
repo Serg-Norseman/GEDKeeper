@@ -24,6 +24,12 @@
         <Reference Include="BSLib.DataViz.Model">
             <HintPath>..\..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
         </Reference>
+        <Reference Include="Terminal.Gui">
+            <HintPath>..\libs\Terminal.Gui.dll</HintPath>
+        </Reference>
+        <Reference Include="NStack">
+            <HintPath>..\libs\NStack.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup>
@@ -32,7 +38,7 @@
 
     <ItemGroup>
         <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
-        <PackageReference Include="Terminal.Gui" Version="1.20.0-develop.4 " />
+        <!--PackageReference Include="Terminal.Gui" Version="1.20.0-develop.4 " /-->
     </ItemGroup>
 
 

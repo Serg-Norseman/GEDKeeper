@@ -72,7 +72,8 @@ namespace GKUI.Platform
 
         public override void Quit()
         {
-            Application.Top.Running = false;
+            //Application.Top.Running = false;
+            Application.RequestStop();
         }
 
         public override bool ExecuteWork(ProgressStart proc, string title = "")

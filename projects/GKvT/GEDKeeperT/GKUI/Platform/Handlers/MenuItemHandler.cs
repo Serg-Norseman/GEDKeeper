@@ -91,8 +91,8 @@ namespace GKUI.Platform.Handlers
 
         public object Tag
         {
-            get { return Control.Data; }
-            set { Control.Data = value; }
+            get { return Control.Tag; }
+            set { Control.Tag = value; }
         }
 
         public string Text

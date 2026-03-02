@@ -70,7 +70,7 @@ namespace GKUI.Components
         {
         }
 
-        public ToolStripItem(ustring title, ustring help, Action action) : base(title, help, action)
+        public ToolStripItem(ustring title, ustring help, EventHandler action) : base(title, help, action)
         {
         }
     }
@@ -81,7 +81,7 @@ namespace GKUI.Components
         {
         }
 
-        public ToolStripMenuItem(ustring title, ustring help, Action action) : base(title, help, action)
+        public ToolStripMenuItem(ustring title, ustring help, EventHandler action) : base(title, help, action)
         {
         }
     }

@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using BSLib;
 using GKCore.Charts;
 using GKCore.Design.Graphics;
-using GKUI.Components;
 using GKUI.Platform.Handlers;
 using Terminal.Gui;
 using Attribute = Terminal.Gui.Attribute;
@@ -140,7 +139,7 @@ namespace GKUI.Platform
             var rectColor = new Attribute(color, Color.Gray);
             driver.SetAttribute(rectColor);
 
-            UIHelper.ViewToScreen(fTargetView, (int)x, (int)y, out int rcol, out int rrow);
+            fTargetView.ViewToScreen((int)x, (int)y, out int rcol, out int rrow);
             var scrRect = new Rect(rcol, rrow, (int)width, (int)height);
             var savedClip = fTargetView.ClipToBounds();
             driver.DrawWindowFrame(scrRect, 1, 1, 1, 1, border: true, fill: true, new Border() { BorderStyle = borderStyle });
