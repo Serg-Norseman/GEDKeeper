@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BSLib;
 using GDModel;
 using GKCore;
@@ -196,7 +197,7 @@ namespace GKUI.Forms
             summary.Border = new Border() { BorderStyle = BorderStyle.Single };
             summary.Height = Dim.Fill();
             summary.Width = Dim.Fill();
-            //summary.OnLink += mPersonSummaryLink;
+            summary.OnLink += mPersonSummaryLink;
 
             //summary.ContextMenu = summaryMenu;
             summary.MouseClick += (args) => {
@@ -209,7 +210,6 @@ namespace GKUI.Forms
             var recView = new GKListView();
             recView.Height = Dim.Fill();
             recView.Width = Dim.Fill();
-            //recView.AllowsMarking = false;
             recView.MultiSelect = true;
             //recView.MouseDoubleClick += miRecordEdit_Click;
             recView.SelectedCellChanged += List_SelectedIndexChanged;
@@ -230,6 +230,7 @@ namespace GKUI.Forms
                 Width = Dim.Percent(70)
             };
             left.Add(recView);
+            recView.SetupScroll();
 
             var right = new FrameView() {
                 X = Pos.Right(left) + 1,
@@ -369,11 +370,11 @@ namespace GKUI.Forms
         {
             var recView = GetRecordsViewByType(GetSelectedRecordType()) as GKListView;
             if (recView != null) {
-                /*var items = recView.GetSelectedItems();
-                fController.ShowRecMerge(
+                var items = recView.GetSelectedItems();
+                BaseController.ShowRecMerge(this, this,
                     items.Count > 0 ? items[0] as GDMRecord : null,
                     items.Count > 1 ? items[1] as GDMRecord : null
-                );*/
+                );
             }
         }
 
@@ -657,7 +658,10 @@ namespace GKUI.Forms
 
         public void ShowRecordsTab(GDMRecordType recType)
         {
-            tabsRecords.TabIndex = (int)recType - 1;
+            var tabs = tabsRecords.Tabs.ToArray();
+            var selTab = tabs[(int)recType - 1];
+            //tabsRecords.TabIndex = (int)recType - 1;
+            tabsRecords.SelectedTab = selTab;
         }
 
         public void SelectRecordByXRef(string xref, bool delayedTransition = false)
@@ -683,16 +687,6 @@ namespace GKUI.Forms
         {
             // not supported
         }
-
-        /*private void Form_DragEnter(object sender, DragEventArgs e)
-        {
-            // not supported
-        }
-
-        private void Form_DragDrop(object sender, DragEventArgs e)
-        {
-            // not supported
-        }*/
 
         void IBaseWindowView.LoadBase(string fileName)
         {
@@ -851,7 +845,6 @@ namespace GKUI.Forms
 
         private async void miFileLoad_Click(object sender, EventArgs e)
         {
-            //LoadFile();
             await fController.LoadFileEx();
         }
 
@@ -898,12 +891,6 @@ namespace GKUI.Forms
         private void tbSendMail_Click(object sender, EventArgs e)
         {
             fController.SendMail();
-        }
-
-        private void tbPartialView_Click(object sender, EventArgs e)
-        {
-            // not supported
-            fController.ShowPartialView();
         }
 
         /*private void miMap_Click(object sender, EventArgs e)

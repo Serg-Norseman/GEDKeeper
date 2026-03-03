@@ -6,7 +6,9 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using GKCore;
 using GKCore.Design.Controls;
+using GKUI.Components;
 using Terminal.Gui;
 
 namespace GKUI.Platform.Handlers
@@ -17,28 +19,16 @@ namespace GKUI.Platform.Handlers
         {
         }
 
-        public new bool Enabled
-        {
-            get { return Control.Enabled; }
-            set {
-                Control.Enabled = value;
-                SetBackColor();
-            }
-        }
-
         public string[] Lines
         {
-            get { return new string[] { Control.Text.ToString() }; /*return UIHelper.Convert(Control.Text)*/; }
-            set { }
+            get { return UIHelper.Convert(Control.Text.ToString()); }
+            set { Control.Text = UIHelper.Convert(value); }
         }
 
         public bool ReadOnly
         {
             get { return Control.ReadOnly; }
-            set {
-                Control.ReadOnly = value;
-                SetBackColor();
-            }
+            set { Control.ReadOnly = value; }
         }
 
         public string SelectedText
@@ -55,7 +45,6 @@ namespace GKUI.Platform.Handlers
 
         public void AppendText(string text)
         {
-            //Control.Append(text, true);
         }
 
         public void Clear()
@@ -63,14 +52,9 @@ namespace GKUI.Platform.Handlers
             Control.Text = string.Empty;
         }
 
-        private void SetBackColor()
-        {
-            //Control.BackgroundColor = (!Control.ReadOnly && Enabled) ? SystemColors.WindowBackground : SystemColors.Control;
-        }
-
         public void Copy()
         {
-            //UIHelper.SetClipboardText(Control.SelectedText);
+            AppHost.Instance.SetClipboardText(Control.Text.ToString());
         }
 
         public void SelectAll()

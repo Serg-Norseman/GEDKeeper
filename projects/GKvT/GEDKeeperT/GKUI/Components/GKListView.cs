@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  GEDKeeper, the personal genealogical database editor.
  *  Copyright (C) 2009-2026 by Sergey V. Zhdanovskih.
  *
@@ -19,7 +19,9 @@ namespace GKUI.Components
 {
     public class GKListView : TableView, IListView
     {
+        private readonly DataTable fDataTable;
         private IListSource fListMan;
+        private DataColumn fSortColumn;
 
         public IListSource ListMan
         {
@@ -27,68 +29,165 @@ namespace GKUI.Components
                 return fListMan;
             }
             set {
-                fListMan = value;
-                UpdateContents(true);
+                if (fListMan != value) {
+                    fListMan = value;
+                    UpdateContents(true);
+                }
             }
         }
 
         public int SelectedIndex
         {
-            get {
-                return 0;
-            }
-            set {
-            }
+            get { return base.SelectedRow; }
+            set { SelectItem(value); }
         }
 
         public int SortColumn
         {
-            get {
-                return 0;
-            }
-            set {
-            }
+            get { return (fListMan != null) ? fListMan.SortColumn : 0; }
+            set { if (fListMan != null) fListMan.SortColumn = value; }
         }
 
         public GKSortOrder SortOrder
         {
-            get {
-                return GKSortOrder.None;
-            }
-            set {
-            }
+            get { return (fListMan != null) ? fListMan.SortOrder : GKSortOrder.None; }
+            set { if (fListMan != null) fListMan.SortOrder = value; }
         }
 
 
         public GKListView()
         {
             Style.AlwaysShowHeaders = true;
+            Style.ShowHorizontalHeaderOverline = false;
             Style.ExpandLastColumn = true;
             FullRowSelect = true;
+            CanFocus = true;
+
+            //SetupScroll();
+
+            this.MouseClick += e => {
+                this.ScreenToCell(e.MouseEvent.X, e.MouseEvent.Y, out DataColumn clickedCol);
+                if (clickedCol != null && e.MouseEvent.Flags.HasFlag(MouseFlags.Button1Clicked)) {
+                    this.SetSortColumn(clickedCol.Ordinal);
+
+                    if (fSortColumn != null) fSortColumn.ColumnName = TrimArrows(fSortColumn.ColumnName);
+                    fSortColumn = clickedCol;
+                    fSortColumn.ColumnName += (SortOrder == GKSortOrder.Ascending) ? '▲' : '▼';
+                }
+            };
+
+            fDataTable = new DataTable();
+            this.Table = fDataTable;
         }
 
-        public void AddColumn(string caption, int width, bool autoSize = false, GKHorizontalAlignment textAlign = GKHorizontalAlignment.Left)
+        public void SetupScroll()
         {
+            // The host SuperView parameter can't be null
+            var sbVertical = new ScrollBarView(this, true);
+            //sbVertical.AutoHideScrollBars = false;
+
+            sbVertical.ChangedPosition += () => {
+                RowOffset = sbVertical.Position;
+                if (RowOffset != sbVertical.Position) {
+                    sbVertical.Position = RowOffset;
+                }
+                SetNeedsDisplay();
+            };
+            /*_scrollBar.OtherScrollBarView.ChangedPosition += () => {
+				_listView.LeftItem = _scrollBar.OtherScrollBarView.Position;
+				if (_listView.LeftItem != _scrollBar.OtherScrollBarView.Position) {
+					_scrollBar.OtherScrollBarView.Position = _listView.LeftItem;
+				}
+				_listView.SetNeedsDisplay ();
+			};*/
+
+            DrawContent += (e) => {
+                sbVertical.Size = fDataTable.Rows?.Count ?? 0;
+                sbVertical.Position = RowOffset;
+                //	_scrollBar.OtherScrollBarView.Size = _listView.Maxlength - 1;
+                //	_scrollBar.OtherScrollBarView.Position = _listView.LeftItem;
+                sbVertical.Refresh();
+            };
         }
 
-        public IList<object> GetSelectedItems()
+        private string TrimArrows(string columnName)
         {
-            return new List<object>();
-        }
-
-        public void ResizeColumns()
-        {
-        }
-
-        public void SortModelColumn(int columnId)
-        {
+            return columnName.TrimEnd('▼', '▲');
         }
 
         public void Activate()
         {
+            SetFocus();
         }
 
-        public void AddCheckedColumn(string caption, int width, bool autoSize)
+        public void SetSortColumn(int sortColumn, bool checkOrder = true)
+        {
+            if (fListMan == null) return;
+
+            object rec = GetSelectedData();
+
+            fListMan.SetSortColumn(sortColumn, checkOrder);
+            UpdateDataTable();
+
+            if (rec != null) SelectItem(rec);
+        }
+
+        public void SortModelColumn(int columnId)
+        {
+            if (fListMan == null) return;
+
+            int sortColumn = fListMan.GetColumnIndex(columnId);
+            if (sortColumn != -1) {
+                SetSortColumn(sortColumn, false);
+            }
+        }
+
+        public void UpdateContents(bool columnsChanged = false)
+        {
+            if (fListMan == null) return;
+
+            try {
+                object tempRec = GetSelectedData();
+                fListMan.ContentList.BeginUpdate();
+                try {
+                    if (columnsChanged || fDataTable.Columns.Count == 0 || fListMan.ColumnsMap.Count == 0) {
+                        fListMan.UpdateColumns(this);
+
+                        fDataTable.Columns.Clear();
+                        foreach (var col in fListMan.ColumnsMap) {
+                            fDataTable.Columns.Add(col.Caption);
+                        }
+                    }
+
+                    fListMan.UpdateContents();
+                    fListMan.SortContents(false);
+
+                    UpdateDataTable();
+
+                    ResizeColumns();
+                } finally {
+                    fListMan.ContentList.EndUpdate();
+                    if (tempRec != null) SelectItem(tempRec);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("GKListView.UpdateContents()", ex);
+            }
+        }
+
+        private void UpdateDataTable()
+        {
+            fDataTable.BeginLoadData();
+            fDataTable.Rows.Clear();
+            for (int i = 0; i < fListMan.ContentList.Count; i++) {
+                var item = fListMan.GetContentItem(i);
+                var row = fListMan.GetItemData(item);
+                fDataTable.Rows.Add(row);
+            }
+            fDataTable.EndLoadData();
+            this.Update();
+        }
+
+        public void DeleteRecord(object data)
         {
         }
 
@@ -100,8 +199,41 @@ namespace GKUI.Components
         {
         }
 
-        public void DeleteRecord(object data)
+        public void AddColumn(string caption, int width, bool autoSize = false)
         {
+            AddColumn(caption, width, autoSize, GKHorizontalAlignment.Left);
+        }
+
+        public void AddCheckedColumn(string caption, int width, bool autoSize = false)
+        {
+        }
+
+        public void AddColumn(string caption, int width, bool autoSize = false, GKHorizontalAlignment textAlign = GKHorizontalAlignment.Left)
+        {
+        }
+
+        public void SetColumnCaption(int index, string caption)
+        {
+        }
+
+        public void ResizeColumn(int columnIndex)
+        {
+        }
+
+        public void ResizeColumns()
+        {
+            if (fListMan == null) return;
+
+            /*for (int i = 0; i < Columns.Count; i++) {
+                if (fListMan.IsColumnAutosize(i)) {
+                    ResizeColumn(i);
+                }
+            }*/
+        }
+
+        public IList<object> GetSelectedItems()
+        {
+            return new List<object>();
         }
 
         public object GetSelectedData()
@@ -114,51 +246,22 @@ namespace GKUI.Components
             return (selectedRow >= 0 && selectedRow < contentList.Count) ? contentList[selectedRow].Record : null;
         }
 
-        public void ResizeColumn(int columnIndex)
-        {
-        }
-
         public void SelectItem(int index)
         {
+            base.SelectedRow = index;
+            base.EnsureSelectedCellIsVisible();
         }
 
         public void SelectItem(object rowData)
         {
-        }
-
-        public void SetColumnCaption(int index, string caption)
-        {
-        }
-
-        public void SetSortColumn(int sortColumn, bool checkOrder)
-        {
-        }
-
-        public void UpdateContents(bool columnsChanged = false)
-        {
-            if (fListMan == null) return;
+            if (fListMan == null || rowData == null) return;
 
             try {
-                fListMan.ContentList.BeginUpdate();
-                fListMan.UpdateContents();
-                fListMan.SortContents(false);
-                fListMan.ContentList.EndUpdate();
-
-                var dt = new DataTable();
-                fListMan.UpdateColumns(this);
-                foreach (var col in fListMan.ColumnsMap) {
-                    dt.Columns.Add(col.Caption);
-                }
-                for (int i = 0; i < fListMan.ContentList.Count; i++) {
-                    var item = fListMan.GetContentItem(i);
-                    if (item == null) continue;
-
-                    var ex = fListMan.GetItemData(item);
-                    dt.Rows.Add(ex);
-                }
-                this.Table = dt;
+                // "virtual" mode
+                int idx = fListMan.IndexOfItem(rowData);
+                SelectItem(idx);
             } catch (Exception ex) {
-                Logger.WriteError("GKListView.UpdateContents()", ex);
+                Logger.WriteError("GKListView.SelectItem()", ex);
             }
         }
     }

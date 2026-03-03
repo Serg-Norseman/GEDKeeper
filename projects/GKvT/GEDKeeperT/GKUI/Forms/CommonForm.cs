@@ -163,10 +163,6 @@ namespace GKUI.Forms
 
         public CommonDialog()
         {
-            /*Maximizable = false;
-            Minimizable = false;
-            Resizable = false;
-            ShowInTaskbar = false;*/
             DialogResult = DialogResult.None;
 
             fControlsManager = new ControlsManager(this);

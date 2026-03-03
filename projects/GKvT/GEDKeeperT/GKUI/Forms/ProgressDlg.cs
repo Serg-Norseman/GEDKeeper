@@ -32,8 +32,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            this.Closed += ProgressDlg_Closed;
-
             ThreadError = new ThreadError(1, "No error");
             fInitEvent = new ManualResetEvent(false);
             fBeginEvent = new ManualResetEvent(false);
@@ -60,23 +58,22 @@ namespace GKUI.Forms
             base.Dispose(disposing);
         }
 
-        public override void OnLoaded()
+        protected override void OnLoaded()
         {
             base.OnLoaded();
             fRequiresClose = true;
             fInitEvent.Set();
         }
 
-        private void ProgressDlg_Closed(Terminal.Gui.Toplevel obj)
+        protected override void OnClosed(Toplevel top)
         {
+            base.OnClosed(top);
             fRequiresClose = false;
             fCancelEvent.Set();
         }
 
         private void btnCancel_Click(MouseEventArgs e)
         {
-            //Cursor.Current = Cursors.WaitCursor;
-            //Cursor.Show();
             fCancelEvent.Set();
         }
 

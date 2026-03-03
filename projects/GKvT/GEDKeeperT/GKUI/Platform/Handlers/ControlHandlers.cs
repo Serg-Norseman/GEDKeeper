@@ -83,7 +83,7 @@ namespace GKUI.Platform.Handlers
         }
     }*/
 
-    // TextMaskField - only v2
+    // TextMaskField - only v2 (TextValidateField)
     /*public sealed class MaskedTextBoxHandler : BaseControlHandler<MaskedTextBox, MaskedTextBoxHandler>, ITextBox
     {
         public MaskedTextBoxHandler(MaskedTextBox control) : base(control)

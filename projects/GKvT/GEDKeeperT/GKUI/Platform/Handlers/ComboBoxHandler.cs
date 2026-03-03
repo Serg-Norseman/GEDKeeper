@@ -95,7 +95,9 @@ namespace GKUI.Platform.Handlers
 
         public void Sort()
         {
+            fItems.BeginUpdate();
             fItems.Sort((x, y) => string.Compare(x.Text, y.Text, StringComparison.CurrentCulture));
+            fItems.EndUpdate();
         }
 
         public T GetSelectedTag<T>()

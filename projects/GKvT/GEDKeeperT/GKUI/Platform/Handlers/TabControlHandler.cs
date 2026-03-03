@@ -17,15 +17,16 @@ namespace GKUI.Platform.Handlers
     {
         private class TabPageItems : ITabPages
         {
-            private TabView fTabControl;
+            private readonly TabView fTabControl;
 
             public ITabPage this[int index]
             {
                 get {
-                    if (index < 0 || index >= fTabControl.Tabs.Count)
+                    var tabs = fTabControl.Tabs;
+                    if (index < 0 || index >= tabs.Count)
                         throw new ArgumentOutOfRangeException(nameof(index));
 
-                    return new TabPageHandler(fTabControl.Tabs.ElementAt(index));
+                    return new TabPageHandler(tabs[index]);
                 }
             }
 
@@ -40,7 +41,7 @@ namespace GKUI.Platform.Handlers
             }
         }
 
-        private TabPageItems fItems;
+        private readonly TabPageItems fItems;
 
         public TabControlHandler(TabView control) : base(control)
         {
@@ -50,7 +51,13 @@ namespace GKUI.Platform.Handlers
         public int SelectedIndex
         {
             get { return Control.Tabs.ToList().IndexOf(Control.SelectedTab); }
-            set { }
+            set {
+                var tabs = Control.Tabs;
+                if (value < 0 || value >= tabs.Count)
+                    throw new ArgumentOutOfRangeException(nameof(value));
+
+                Control.SelectedTab = tabs[value];
+            }
         }
 
         public ITabPages Pages
@@ -60,7 +67,8 @@ namespace GKUI.Platform.Handlers
 
         public void SetTabVisible(ITabPage tabPage, bool visible)
         {
-            // TabView.Tab hasn't Visible
+            if (tabPage != null)
+                tabPage.Visible = visible;
         }
     }
 }

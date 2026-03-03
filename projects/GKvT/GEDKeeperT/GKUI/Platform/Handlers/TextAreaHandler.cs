@@ -6,7 +6,9 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using GKCore;
 using GKCore.Design.Controls;
+using GKUI.Components;
 using Terminal.Gui;
 
 namespace GKUI.Platform.Handlers
@@ -19,8 +21,8 @@ namespace GKUI.Platform.Handlers
 
         public string[] Lines
         {
-            get { return /*UIHelper.Convert(Control.Text)*/ new string[0]; }
-            set { }
+            get { return UIHelper.Convert(Control.Text.ToString()); }
+            set { Control.Text = UIHelper.Convert(value); }
         }
 
         public bool ReadOnly
@@ -43,7 +45,7 @@ namespace GKUI.Platform.Handlers
 
         public void AppendText(string text)
         {
-            //Control.Append(text, true);
+            Control.Text += "\r\n" + text;
         }
 
         public void Clear()
@@ -53,7 +55,7 @@ namespace GKUI.Platform.Handlers
 
         public void Copy()
         {
-            //UIHelper.SetClipboardText(Control.SelectedText);
+            AppHost.Instance.SetClipboardText(Control.Text.ToString());
         }
 
         public void SelectAll()

@@ -16,76 +16,76 @@ namespace GKUI.Forms
 
             MainMenu1 = new MenuBar(new MenuBarItem[] {
                 miFile = new MenuBarItem("_File", new MenuItem[] {
-                    miFileNew = new MenuItem("_New", "", miFileNew_Click, null, null, Key.CtrlMask | Key.N),
-                    miFileLoad = new MenuItem("_Open", "", miFileLoad_Click, null, null, Key.CtrlMask | Key.O),
+                    miFileNew = new MenuItem("_New", miFileNew_Click, Key.CtrlMask | Key.N),
+                    miFileLoad = new MenuItem("_Open", miFileLoad_Click, Key.CtrlMask | Key.O),
                     miMRUFiles = new MenuBarItem("_Recent", "", null),
-                    miFileSave = new MenuItem("_Save", "", miFileSave_Click, null, null, Key.CtrlMask | Key.S),
-                    miFileSaveAs = new MenuItem("_SaveAs", "", miFileSaveAs_Click),
-                    miFileClose = new MenuItem("_Close", "", miFileClose_Click),
+                    miFileSave = new MenuItem("_Save", miFileSave_Click, Key.CtrlMask | Key.S),
+                    miFileSaveAs = new MenuItem("_SaveAs", miFileSaveAs_Click),
+                    miFileClose = new MenuItem("_Close", miFileClose_Click),
                     null,
-                    miFileProperties = new MenuItem("_Properties", "", miFileProperties_Click),
+                    miFileProperties = new MenuItem("_Properties", miFileProperties_Click),
                     null,
                     miExport = new MenuBarItem("_Export", new MenuItem[] {
-                        miExportTable = new MenuItem("_ExportTable", "", miExportTable_Click),
-                        miExportToStrictGEDCOM = new MenuItem("Export to strict GEDCOM", "", miExportToStrictGEDCOM_Click),
+                        miExportTable = new MenuItem("_ExportTable", miExportTable_Click),
+                        miExportToStrictGEDCOM = new MenuItem("Export to strict GEDCOM", miExportToStrictGEDCOM_Click),
                     }),
                     null,
-                    miExit = new MenuItem("_Exit", "", miExit_Click, null, null, Key.CtrlMask | Key.X)
+                    miExit = new MenuItem("_Exit", miExit_Click, Key.CtrlMask | Key.X)
                 }),
                 miEdit = new MenuBarItem("_Edit", new MenuItem[] {
-                    miRecordAdd = new MenuItem("miRecordAdd", "", miRecordAdd_Click, null, null, Key.CtrlMask | Key.I),
-                    miRecordEdit = new MenuItem("miRecordEdit", "", miRecordEdit_Click),
-                    miRecordDelete = new MenuItem("miRecordDelete", "", miRecordDelete_Click, null, null, Key.CtrlMask | Key.L),
+                    miRecordAdd = new MenuItem("miRecordAdd", miRecordAdd_Click, Key.CtrlMask | Key.I),
+                    miRecordEdit = new MenuItem("miRecordEdit", miRecordEdit_Click),
+                    miRecordDelete = new MenuItem("miRecordDelete", miRecordDelete_Click, Key.CtrlMask | Key.L),
                     null,
-                    miSearch = new MenuItem("miSearch", "", miSearch_Click),
-                    miFindAndReplace = new MenuItem("miFindAndReplace", "", miFindAndReplace_Click),
-                    miFilter = new MenuItem("miFilter", "", miFilter_Click, null, null, Key.CtrlMask | Key.F)
+                    miSearch = new MenuItem("miSearch", miSearch_Click),
+                    miFindAndReplace = new MenuItem("miFindAndReplace", miFindAndReplace_Click),
+                    miFilter = new MenuItem("miFilter", miFilter_Click, Key.CtrlMask | Key.F)
                 }),
                 miPedigree = new MenuBarItem("_Pedigree", new MenuItem[] {
-                    miTreeAncestors = new MenuItem("miTreeAncestors", "", miTreeAncestors_Click, null, null, Key.CtrlMask | Key.A),
-                    miTreeDescendants = new MenuItem("miTreeDescendants", "", miTreeDescendants_Click, null, null, Key.CtrlMask | Key.D),
-                    miTreeBoth = new MenuItem("miTreeBoth", "", miTreeBoth_Click),
+                    miTreeAncestors = new MenuItem("miTreeAncestors", miTreeAncestors_Click, Key.CtrlMask | Key.A),
+                    miTreeDescendants = new MenuItem("miTreeDescendants", miTreeDescendants_Click, Key.CtrlMask | Key.D),
+                    miTreeBoth = new MenuItem("miTreeBoth", miTreeBoth_Click),
                     null,
-                    miPedigreeAscend = new MenuItem("miPedigreeAscend", "", miPedigreeAscend_Click),
-                    miPedigreeDescend = new MenuItem("miPedigreeDescend", "", miPedigreeDescend_Click, null, null, Key.CtrlMask | Key.K),
-                    miExportToFamilyBook = new MenuItem("miExportToFamilyBook", "", miExportToFamilyBook_Click),
-                    miExportToTreesAlbum = new MenuItem("miExportToTreesAlbum", "", miExportToTreesAlbum_Click),
+                    miPedigreeAscend = new MenuItem("miPedigreeAscend", miPedigreeAscend_Click),
+                    miPedigreeDescend = new MenuItem("miPedigreeDescend", miPedigreeDescend_Click, Key.CtrlMask | Key.K),
+                    miExportToFamilyBook = new MenuItem("miExportToFamilyBook", miExportToFamilyBook_Click),
+                    miExportToTreesAlbum = new MenuItem("miExportToTreesAlbum", miExportToTreesAlbum_Click),
                     //null,
-                    //miMap = new MenuItem("miMap", "", miMap_Click, null, null, Key.CtrlMask | Key.M),
+                    //miMap = new MenuItem("miMap", miMap_Click, Key.CtrlMask | Key.M),
                     null,
-                    miStats = new MenuItem("miStats", "", miStats_Click, null, null, Key.CtrlMask | Key.T),
+                    miStats = new MenuItem("miStats", miStats_Click, Key.CtrlMask | Key.T),
                     null,
-                    miRelationshipCalculator = new MenuItem("miRelationshipCalculator", "", miRelationshipCalculator_Click)
+                    miRelationshipCalculator = new MenuItem("miRelationshipCalculator", miRelationshipCalculator_Click)
                 }),
                 miService = new MenuBarItem("_Service", new MenuItem[] {
-                    miChronicle = new MenuItem("miChronicle", "", miChronicle_Click),
-                    miOrganizer = new MenuItem("miOrganizer", "", miOrganizer_Click),
+                    miChronicle = new MenuItem("miChronicle", miChronicle_Click),
+                    miOrganizer = new MenuItem("miOrganizer", miOrganizer_Click),
                     null,
-                    //miScripts = new MenuItem("miScripts", "", miScripts_Click, null, null, Key.F11),
+                    //miScripts = new MenuItem("miScripts", miScripts_Click, Key.F11),
                     miTreeTools = new MenuBarItem("miTreeTools", new MenuItem[] {
-                        miTreeCompare = new MenuItem("miTreeCompare", "", miTTTreeCompare_Click),
-                        miTreeMerge = new MenuItem("miTreeMerge", "", miTTTreeMerge_Click),
-                        miTreeSplit = new MenuItem("miTreeSplit", "", miTTTreeSplit_Click),
-                        miRecMerge = new MenuItem("miRecMerge", "", miTTRecMerge_Click),
-                        miFamilyGroups = new MenuItem("miFamilyGroups", "", miTTFamilyGroups_Click),
-                        miTreeCheck = new MenuItem("miTreeCheck", "", miTTTreeCheck_Click),
-                        miPatSearch = new MenuItem("miPatSearch", "", miTTPatSearch_Click),
-                        miPlacesManager = new MenuItem("miPlacesManager", "", miTTPlacesManager_Click)
+                        miTreeCompare = new MenuItem("miTreeCompare", miTTTreeCompare_Click),
+                        miTreeMerge = new MenuItem("miTreeMerge", miTTTreeMerge_Click),
+                        miTreeSplit = new MenuItem("miTreeSplit", miTTTreeSplit_Click),
+                        miRecMerge = new MenuItem("miRecMerge", miTTRecMerge_Click),
+                        miFamilyGroups = new MenuItem("miFamilyGroups", miTTFamilyGroups_Click),
+                        miTreeCheck = new MenuItem("miTreeCheck", miTTTreeCheck_Click),
+                        miPatSearch = new MenuItem("miPatSearch", miTTPatSearch_Click),
+                        miPlacesManager = new MenuItem("miPlacesManager", miTTPlacesManager_Click)
                     }),
                     null,
-                    miOptions = new MenuItem("miOptions", "", miOptions_Click)
+                    miOptions = new MenuItem("miOptions", miOptions_Click)
                 }),
                 miReports = new MenuBarItem("_Reports", new MenuItem[] {
                 }),
                 miPlugins = new MenuBarItem("_Plugins", new MenuItem[] {
                 }),
                 miHelp = new MenuBarItem("_Help", new MenuItem[] {
-                    miContext = new MenuItem("miContext", "", miContext_Click, null, null, Key.F1),
+                    miContext = new MenuItem("miContext", miContext_Click, Key.F1),
                     null,
-                    miLogSend = new MenuItem("miLogSend", "", miLogSend_Click),
-                    miLogView = new MenuItem("miLogView", "", miLogView_Click),
+                    miLogSend = new MenuItem("miLogSend", miLogSend_Click),
+                    miLogView = new MenuItem("miLogView", miLogView_Click),
                     null,
-                    miAbout = new MenuItem("miAbout", "", miAbout_Click)
+                    miAbout = new MenuItem("miAbout", miAbout_Click)
                 })
             });
             Application.Top.Add(MainMenu1);
@@ -96,6 +96,8 @@ namespace GKUI.Forms
 
             InitializeContextMenu();
 
+            // The disabled border leaves padding of 1 on all sides!
+            //Border.BorderStyle = BorderStyle.None;
             X = 0;
             Y = 1; // Leave one row for the toplevel menu
             Width = Dim.Fill();
@@ -111,16 +113,16 @@ namespace GKUI.Forms
 
         private void InitializeContextMenu()
         {
-            miContMediaMoveFile2Abs = new MenuItem("miContMediaMoveFile2Abs", "", miContMediaMoveFile_Click);
-            miContMediaMoveFile2Rel = new MenuItem("miContMediaMoveFile2Rel", "", miContMediaMoveFile_Click);
-            miContMediaMoveFile2Arc = new MenuItem("miContMediaMoveFile2Arc", "", miContMediaMoveFile_Click);
+            miContMediaMoveFile2Abs = new MenuItem("miContMediaMoveFile2Abs", miContMediaMoveFile_Click);
+            miContMediaMoveFile2Rel = new MenuItem("miContMediaMoveFile2Rel", miContMediaMoveFile_Click);
+            miContMediaMoveFile2Arc = new MenuItem("miContMediaMoveFile2Arc", miContMediaMoveFile_Click);
             miContMediaMoveFile = new MenuBarItem("miContMediaMoveFile", new MenuItem[] { miContMediaMoveFile2Abs, miContMediaMoveFile2Rel, miContMediaMoveFile2Arc });
 
-            miContRecordAdd = new MenuItem("miContRecordAdd", "", miRecordAdd_Click);
-            miContRecordEdit = new MenuItem("miContRecordEdit", "", miRecordEdit_Click);
-            miContRecordDelete = new MenuItem("miContRecordDelete", "", miRecordDelete_Click);
-            miContRecordDuplicate = new MenuItem("miContRecordDuplicate", "", miRecordDuplicate_Click);
-            miContRecordMerge = new MenuItem("miContRecordMerge", "", miRecordMerge_Click);
+            miContRecordAdd = new MenuItem("miContRecordAdd", miRecordAdd_Click);
+            miContRecordEdit = new MenuItem("miContRecordEdit", miRecordEdit_Click);
+            miContRecordDelete = new MenuItem("miContRecordDelete", miRecordDelete_Click);
+            miContRecordDuplicate = new MenuItem("miContRecordDuplicate", miRecordDuplicate_Click);
+            miContRecordMerge = new MenuItem("miContRecordMerge", miRecordMerge_Click);
 
             contextMenu = new ContextMenu();
             contextMenu.MenuItems = new MenuBarItem("Actions", new MenuItem[] {
@@ -128,7 +130,7 @@ namespace GKUI.Forms
             });
             //contextMenu.Opening += contextMenu_Opening;
 
-            miCopyContent = new MenuItem("miCopyContent", "", miCopyContent_Click);
+            miCopyContent = new MenuItem("miCopyContent", miCopyContent_Click);
 
             summaryMenu = new ContextMenu();
             summaryMenu.MenuItems = new MenuBarItem("Actions", new MenuItem[] {
