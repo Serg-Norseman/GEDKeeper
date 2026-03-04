@@ -41,7 +41,7 @@ namespace GKUI.Forms
             Add(lblProduct, lblVersion, lblCopyright, lblChannel, lblForum, lblProjSite, lblMail);
 
             btnClose = new Button();
-            btnClose.MouseClick += CancelClickHandler;
+            btnClose.Clicked += CancelClickHandler;
             AddButton(btnClose);
 
             Width = 60;

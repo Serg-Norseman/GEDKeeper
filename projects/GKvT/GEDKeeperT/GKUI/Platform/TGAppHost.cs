@@ -191,6 +191,7 @@ namespace GKUI.Platform
             container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);
             container.Register<IChronicleWin, ChronicleWin>(LifeCycle.Transient);
             // ICircleChartWin - not
+            container.Register<IFamilyEditDlg, FamilyEditDlg>(LifeCycle.Transient);
             container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
             // ILanguageSelectDlg - not
             // ILocExpertDlg - not

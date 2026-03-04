@@ -14,11 +14,11 @@ namespace GKUI.Forms
             Add(txtNote);
 
             btnAccept = new Button() { TabIndex = 1, IsDefault = true };
-            btnAccept.MouseClick += AcceptClickHandler;
+            btnAccept.Clicked += AcceptClickHandler;
             AddButton(btnAccept);
 
             btnCancel = new Button() { TabIndex = 2 };
-            btnCancel.MouseClick += CancelClickHandler;
+            btnCancel.Clicked += CancelClickHandler;
             AddButton(btnCancel);
 
             Width = 60;

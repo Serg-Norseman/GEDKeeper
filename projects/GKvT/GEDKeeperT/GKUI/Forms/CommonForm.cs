@@ -189,7 +189,7 @@ namespace GKUI.Forms
             return false;
         }
 
-        protected virtual void CancelClickHandler(MouseEventArgs e)
+        protected virtual void CancelClickHandler(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             //Close(DialogResult.Cancel);
@@ -231,7 +231,7 @@ namespace GKUI.Forms
     {
         protected TController fController;
 
-        protected virtual void AcceptClickHandler(MouseEventArgs e)
+        protected virtual void AcceptClickHandler(object sender, EventArgs e)
         {
             try {
                 DialogResult = fController.Accept() ? DialogResult.Ok : DialogResult.None;
@@ -240,7 +240,7 @@ namespace GKUI.Forms
             }
         }
 
-        protected override async void CancelClickHandler(MouseEventArgs e)
+        protected override async void CancelClickHandler(object sender, EventArgs e)
         {
             try {
                 if (await fController.Cancel())

@@ -53,11 +53,11 @@ namespace GKUI.Forms
             Add(PageControl1);
 
             btnAccept = new Button() { TabIndex = 1 };
-            btnAccept.MouseClick += AcceptClickHandler;
+            btnAccept.Clicked += AcceptClickHandler;
             AddButton(btnAccept);
 
             btnCancel = new Button() { TabIndex = 2 };
-            btnCancel.MouseClick += CancelClickHandler;
+            btnCancel.Clicked += CancelClickHandler;
             AddButton(btnCancel);
 
             Width = 60;
