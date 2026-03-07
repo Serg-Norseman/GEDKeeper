@@ -6,11 +6,13 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GKCore;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
+using GKUI.Platform.Handlers;
 using NStack;
 using Terminal.Gui;
 
@@ -27,29 +29,30 @@ namespace GKUI.Platform
 
         public async Task<IColor> SelectColor(IColor color)
         {
-            /*using (var clrDlg = new ColorDialog()) {
-                if (color != null) {
-                    Color sdColor = ((ColorHandler)color).Handle;
-                    clrDlg.Color = sdColor;
-                }
+            var dlg = new ColorDialog() {
+                //Title = title,
+            };
+            if (color != null) {
+                Color sdColor = ((ColorHandler)color).Handle;
+                dlg.Color = sdColor;
+            }
 
-                if (clrDlg.ShowDialog(null) == DialogResult.Ok) {
-                    return new ColorHandler(clrDlg.Color);
-                } else {
-                    return color;
-                }
-            }*/
-            return null;
+            Application.Run(dlg);
+            if (!dlg.Canceled) {
+                return new ColorHandler(dlg.Color);
+            } else {
+                return color;
+            }
         }
 
         public async Task<IFont> SelectFont(IFont font)
         {
-            return null;
+            return font;
         }
 
         public async Task<string> SelectFolder(string folderPath)
         {
-            return string.Empty;
+            return folderPath;
         }
 
         public async Task<string> GetOpenFile(string title, string context, string filter, int filterIndex, string defaultExt)
@@ -70,7 +73,7 @@ namespace GKUI.Platform
 
         public async Task<string[]> GetOpenFiles(string title, string context, string filter, int filterIndex, string defaultExt)
         {
-            throw new System.NotImplementedException();
+            return Array.Empty<string>();
         }
 
         private string[] GetFilterFileTypes(string filter)

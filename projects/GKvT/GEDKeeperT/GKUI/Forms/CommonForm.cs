@@ -163,6 +163,8 @@ namespace GKUI.Forms
 
         public CommonDialog()
         {
+            ButtonAlignment = Dialog.ButtonAlignments.Right;
+
             DialogResult = DialogResult.None;
 
             fControlsManager = new ControlsManager(this);

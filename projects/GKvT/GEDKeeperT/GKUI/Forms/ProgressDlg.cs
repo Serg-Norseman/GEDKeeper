@@ -72,7 +72,7 @@ namespace GKUI.Forms
             fCancelEvent.Set();
         }
 
-        private void btnCancel_Click(MouseEventArgs e)
+        private void btnCancel_Click(object sender, MouseEventArgs e)
         {
             fCancelEvent.Set();
         }

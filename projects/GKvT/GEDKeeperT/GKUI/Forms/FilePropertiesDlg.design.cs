@@ -1,4 +1,6 @@
-﻿using GKUI.Components;
+﻿#pragma warning disable IDE1006 // Naming Styles
+
+using GKUI.Components;
 using Terminal.Gui;
 
 namespace GKUI.Forms

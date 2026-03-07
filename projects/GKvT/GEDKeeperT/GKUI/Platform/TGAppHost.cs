@@ -60,9 +60,14 @@ namespace GKUI.Platform
 
         public override async Task<bool> ShowModalAsync(ICommonDialog dialog, IView owner, bool keepModeless = false)
         {
-            var tgDlg = dialog as CommonDialog;
-            Application.Run(tgDlg);
-            return (tgDlg.DialogResult == DialogResult.Ok);
+            try {
+                var tgDlg = dialog as CommonDialog;
+                Application.Run(tgDlg);
+                return (tgDlg.DialogResult == DialogResult.Ok);
+            } catch (Exception ex) {
+                Logger.WriteError("TGAppHost.ShowModalAsync()", ex);
+                return false;
+            }
         }
 
         public override GKCore.ITimer CreateTimer(double msInterval, EventHandler elapsedHandler)
@@ -72,14 +77,11 @@ namespace GKUI.Platform
 
         public override void Quit()
         {
-            //Application.Top.Running = false;
             Application.RequestStop();
         }
 
         public override bool ExecuteWork(ProgressStart proc, string title = "")
         {
-            //var activeWnd = GetActiveWindow() as IWin32Window;
-
             using (var progressForm = ResolveDialog<IProgressDialog>()) {
                 var progForm = progressForm as CommonDialog;
 
@@ -103,22 +105,7 @@ namespace GKUI.Platform
                 } finally {
                     workerThread.Join();
                 }
-
                 Application.End(rs);
-
-                /*if (dialogResult == DialogResult.Abort) {
-                    if (progressForm.ThreadError.Message == "") {
-                        // Abort means there were file IO errors
-                        StdDialogs.ShowAlert("UnkProblem");
-                    } else {
-                        // Abort means there were file IO errors
-                        StdDialogs.ShowAlert(progressForm.ThreadError.Message);
-                    }
-                }
-
-                if (dialogResult != DialogResult.OK) {
-                    return false;
-                }*/
 
                 return true;
             }
@@ -175,11 +162,8 @@ namespace GKUI.Platform
 #endif
 
             var appHost = new TGAppHost();
+
             var container = AppHost.Container;
-
-            if (container == null)
-                throw new ArgumentNullException("container");
-
             container.Reset();
             ValidationFactory.InitGDMValidators();
 
@@ -190,9 +174,11 @@ namespace GKUI.Platform
             // dialogs
             container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);
             container.Register<IChronicleWin, ChronicleWin>(LifeCycle.Transient);
+            container.Register<IEventEditDlg, EventEditDlg>(LifeCycle.Transient);
             // ICircleChartWin - not
             container.Register<IFamilyEditDlg, FamilyEditDlg>(LifeCycle.Transient);
             container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
+            container.Register<IGroupEditDlg, GroupEditDlg>(LifeCycle.Transient);
             // ILanguageSelectDlg - not
             // ILocExpertDlg - not
             // IMapsViewerWin - not
@@ -202,33 +188,39 @@ namespace GKUI.Platform
             // IPartialView - not
             // IPatriarchsViewer - not
             // IPortraitSelectDlg - not
+            container.Register<IRepositoryEditDlg, RepositoryEditDlg>(LifeCycle.Transient);
             container.Register<ITreeChartWin, TreeChartWin>(LifeCycle.Transient);
             container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
             // IScriptEditWin - not
             // ISlideshowWin - not
+            container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ComboBox), typeof(ComboBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(FrameView), typeof(GroupBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(Label), typeof(LabelHandler));
             ControlsManager.RegisterHandlerType(typeof(MenuItem), typeof(MenuItemHandler));
             ControlsManager.RegisterHandlerType(typeof(MenuBarItem), typeof(MenuItemHandler));
+            ControlsManager.RegisterHandlerType(typeof(NumericStepper), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
+            ControlsManager.RegisterHandlerType(typeof(RadioButton), typeof(RadioButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(TabView), typeof(TabControlHandler));
             ControlsManager.RegisterHandlerType(typeof(TabView.Tab), typeof(TabPageHandler));
             ControlsManager.RegisterHandlerType(typeof(TextField), typeof(TextBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(TextValidateField), typeof(MaskedTextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TextView), typeof(TextAreaHandler));
-            ControlsManager.RegisterHandlerType(typeof(ToolStripButton), typeof(MenuItemHandler));
-            ControlsManager.RegisterHandlerType(typeof(ToolStripDropDownButton), typeof(MenuItemHandler));
-            ControlsManager.RegisterHandlerType(typeof(ToolStripMenuItem), typeof(MenuItemHandler));
+
+            ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKDateControl), typeof(DateControlHandler));
+            ControlsManager.RegisterHandlerType(typeof(GKListView), typeof(ListViewHandler));
+            ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
         }
 
         public static void Startup(string[] args)
         {
             ConfigureBootstrap();
-            CheckPortable(args);
-            Logger.Init(GetLogFilename());
-            LogSysInfo();
+            StartupCore(args);
         }
     }
 }

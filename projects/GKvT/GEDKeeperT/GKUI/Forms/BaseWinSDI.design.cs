@@ -1,3 +1,5 @@
+#pragma warning disable IDE1006 // Naming Styles
+
 using Terminal.Gui;
 
 namespace GKUI.Forms

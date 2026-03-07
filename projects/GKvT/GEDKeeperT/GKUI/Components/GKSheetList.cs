@@ -82,6 +82,7 @@ namespace GKUI.Components
             fList = new GKListView();
             fList.Width = Dim.Fill();
             fList.Height = Dim.Fill();
+            fList.KeyDown += List_KeyDown;
             Add(fList);
 
             Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
@@ -91,6 +92,11 @@ namespace GKUI.Components
         public GKSheetList(TabView.Tab tab) : this()
         {
             tab.View = this;
+        }
+
+        public GKSheetList(View owner) : this()
+        {
+            owner.Add(this);
         }
 
         public void Activate()
@@ -183,28 +189,30 @@ namespace GKUI.Components
             ItemEdit(sender, e);
         }
 
-        private void List_KeyDown(object sender, KeyEventArgs e)
+        private void List_KeyDown(object sender, KeyEventEventArgs e)
         {
-            /*if (e.Control) {
+            if (e.KeyEvent.IsCtrl) {
+                var key = e.KeyEvent.Key & ~Key.CtrlMask;
+
                 bool handled = true;
-                switch (e.Key) {
-                    case Keys.I:
+                switch (key) {
+                    case Key.I:
                         ItemAdd(sender, e);
                         break;
-                    case Keys.L:
+                    case Key.L:
                         ItemDelete(sender, e);
                         break;
-                    case Keys.Enter:
+                    case Key.Enter:
                         ItemEdit(sender, e);
                         break;
 
-                    case Keys.C:
+                    case Key.C:
                         ItemCopy(sender, e);
                         break;
-                    case Keys.X:
+                    case Key.X:
                         ItemCut(sender, e);
                         break;
-                    case Keys.V:
+                    case Key.V:
                         ItemPaste(sender, e);
                         break;
                     default:
@@ -212,7 +220,7 @@ namespace GKUI.Components
                         break;
                 }
                 e.Handled = handled;
-            }*/
+            }
         }
 
         private void RestoreSelected(object itemData)

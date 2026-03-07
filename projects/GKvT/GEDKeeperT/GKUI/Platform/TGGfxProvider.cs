@@ -24,49 +24,37 @@ namespace GKUI.Platform
         {
         }
 
+        public void FreeImage(ref IImage image)
+        {
+        }
+
+        public Stream CheckOrientation(Stream inputStream)
+        {
+            return inputStream;
+        }
+
+        public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool reduce)
+        {
+            return null;
+        }
+
         public IImage LoadImage(string fileName)
+        {
+            return null;
+        }
+
+        public IImage LoadResourceImage(Type baseType, string resName, ImageTarget target)
+        {
+            return null;
+        }
+
+        public IImage LoadResourceImage(string resName, ImageTarget target, bool makeTransp = false)
         {
             return null;
         }
 
         public void SaveImage(IImage image, string fileName)
         {
-        }
-
-        public IImage CreateImage(Stream stream)
-        {
-            return null;
-        }
-
-        public IImage CreateImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea)
-        {
-            return null;
-        }
-
-        public IImage LoadResourceImage(string resName, bool makeTransp)
-        {
-            return null;
-        }
-
-        public IGfxPath CreatePath()
-        {
-            return null;
-        }
-
-        public IGfxPath CreateCirclePath(float x, float y, float width, float height)
-        {
-            return null;
-        }
-
-        public IGfxPath CreateCircleSegmentPath(float inRad, float extRad, float wedgeAngle, float ang1, float ang2)
-        {
-            return null;
-        }
-
-        public IGfxPath CreateCircleSegmentPath(int ctX, int ctY, float inRad, float extRad, float wedgeAngle,
-            float ang1, float ang2)
-        {
-            return null;
         }
 
         public IFont CreateFont(string fontName, float size, bool bold)
@@ -83,36 +71,17 @@ namespace GKUI.Platform
             return new ColorHandler(clr.ToConsoleColor());
         }
 
-        public IColor CreateColor(int r, int g, int b)
-        {
-            var clr = new TrueColor(r, g, b);
-            return new ColorHandler(clr.ToConsoleColor());
-        }
-
-        public IColor CreateColor(int a, int r, int g, int b)
-        {
-            var clr = new TrueColor(r, g, b);
-            return new ColorHandler(clr.ToConsoleColor());
-        }
-
         public IColor CreateColor(string signature)
         {
             return null;
         }
 
-        public IBrush CreateSolidBrush(IColor color)
-        {
-            return null;
-        }
-
-        public IPen CreatePen(IColor color, float width)
-        {
-            return new PenHandler(color, width);
-        }
-
         public ExtSizeF GetTextSize(string text, IFont font, object target)
         {
-            return new ExtSizeF();
+            if (string.IsNullOrEmpty(text) || font == null)
+                return ExtSizeF.Empty;
+
+            return new ExtSizeF(text.Length, 1);
         }
 
         public string GetDefaultFontName()
@@ -120,34 +89,9 @@ namespace GKUI.Platform
             return string.Empty;
         }
 
-        public Stream CheckOrientation(Stream inputStream)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void FreeImage(ref IImage image)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool reduce)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IImage LoadResourceImage(Type baseType, string resName, ImageTarget target)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IImage LoadResourceImage(string resName, ImageTarget target, bool makeTransp = false)
-        {
-            throw new NotImplementedException();
-        }
-
         public float GetDefaultFontSize()
         {
-            return 6.0f;
+            return 1.0f;
         }
     }
 }

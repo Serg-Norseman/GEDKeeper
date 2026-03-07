@@ -111,6 +111,7 @@ namespace GKUI.Platform.Handlers
         public IMenuItem AddItem(string text, object tag, IImage image, ItemAction action)
         {
             if (Control is MenuBarItem barItem) {
+                //UIHelper.AddToolStripItem(barItem, text, tag, (s, e) => { action(s); });
                 var item = new MenuItemEx(text, tag, image, action);
                 var childrenList = barItem.Children.ToList();
                 childrenList.Add(item);

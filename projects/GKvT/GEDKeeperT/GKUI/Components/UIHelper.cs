@@ -9,10 +9,18 @@
 using System;
 using System.Text;
 using BSLib;
+using GDModel;
+using GKCore;
+using GKCore.Design.Controls;
+using GKCore.Lists;
+using GKCore.Options;
 using Terminal.Gui;
 
 namespace GKUI.Components
 {
+    /// <summary>
+    /// Static functions only for UI implementation.
+    /// </summary>
     public static class UIHelper
     {
         public static Rect Rt2Rt(ExtRect ert)
@@ -25,20 +33,48 @@ namespace GKUI.Components
             return ExtRect.CreateBounds(ert.Left, ert.Top, ert.Width, ert.Height);
         }
 
-        public static ToolStripMenuItem AddToolStripItem(ToolStripDropDownButton contextMenu, string text, object tag, EventHandler clickHandler)
+        public static T GetSelectedTag<T>(this ComboBox comboBox)
+        {
+            var dataList = comboBox.Source.ToList();
+
+            int selectedIndex = comboBox.SelectedItem;
+            var comboItem = (selectedIndex >= 0 && selectedIndex < dataList.Count) ? dataList[selectedIndex] as ComboItem<T> : null;
+            return (comboItem != null) ? comboItem.Tag : default;
+        }
+
+        public static void SetSelectedTag<T>(this ComboBox comboBox, T tagValue, bool allowDefault = true)
+        {
+            var dataList = comboBox.Source.ToList();
+
+            for (int i = 0; i < dataList.Count; i++) {
+                object item = dataList[i];
+                var comboItem = item as ComboItem<T>;
+
+                if (comboItem != null && object.Equals(comboItem.Tag, tagValue)) {
+                    comboBox.SelectedItem = i;
+                    return;
+                }
+            }
+
+            if (allowDefault) {
+                comboBox.SelectedItem = 0;
+            }
+        }
+
+        public static MenuItem AddToolStripItem(MenuBarItem contextMenu, string text, object tag, EventHandler clickHandler)
         {
             var items = contextMenu.Children;
             var len = items.Length;
             Array.Resize(ref items, len + 1);
 
-            var tsItem = new ToolStripMenuItem(text, "", clickHandler);
+            var tsItem = new MenuItem(text, "", clickHandler);
             tsItem.Tag = tag;
             items[len] = tsItem;
             contextMenu.Children = items;
             return tsItem;
         }
 
-        public static T GetMenuItemTag<T>(ToolStripDropDownButton contextMenu, object sender)
+        public static T GetMenuItemTag<T>(MenuBarItem contextMenu, object sender)
         {
             foreach (var tsItem in contextMenu.Children) {
                 tsItem.Checked = false;
@@ -48,7 +84,7 @@ namespace GKUI.Components
             return (T)senderItem.Tag;
         }
 
-        public static void SetMenuItemTag<T>(ToolStripDropDownButton contextMenu, T value)
+        public static void SetMenuItemTag<T>(MenuBarItem contextMenu, T value)
         {
             foreach (var tsItem in contextMenu.Children) {
                 T itemTag = (T)tsItem.Tag;
@@ -56,6 +92,32 @@ namespace GKUI.Components
                     tsItem.PerformAction();
                     break;
                 }
+            }
+        }
+
+        public static GKListView CreateRecordsView(View parent, BaseContext baseContext, GDMRecordType recType, bool simpleList)
+        {
+            if (parent == null)
+                throw new ArgumentNullException(nameof(parent));
+
+            if (baseContext == null)
+                throw new ArgumentNullException(nameof(baseContext));
+
+            GKListView recView = new GKListView();
+            recView.ListMan = RecordsListModel<GDMRecord>.Create(baseContext, recType, simpleList);
+            parent.Add(recView);
+
+            return recView;
+        }
+
+        public static void ProcessName(object sender)
+        {
+            if (sender is TextField tb && GlobalOptions.Instance.FirstCapitalLetterInNames) {
+                tb.Text = GKUtils.UniformName(tb.Text.ToString());
+            }
+
+            if (sender is ComboBox cmb && GlobalOptions.Instance.FirstCapitalLetterInNames) {
+                cmb.Text = GKUtils.UniformName(cmb.Text.ToString());
             }
         }
 

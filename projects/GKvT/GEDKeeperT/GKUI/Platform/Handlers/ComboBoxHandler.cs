@@ -24,6 +24,8 @@ namespace GKUI.Platform.Handlers
         {
             fItems = new ExtObservableList<IComboItem>();
             control.SetSource(fItems);
+            control.HideDropdownListOnClick = true;
+            control.SearchMode = false;
         }
 
         public bool ReadOnly
@@ -45,13 +47,13 @@ namespace GKUI.Platform.Handlers
                 var comboItem = (selectedIndex >= 0 && selectedIndex < fItems.Count) ? fItems[selectedIndex] : null;
                 return comboItem;
             }
-            set {  }
+            set { }
         }
 
         public string Text
         {
             get { return Control.Text.ToString(); }
-            set { Control.Text = value; }
+            set { Control.Text = string.IsNullOrEmpty(value) ? string.Empty : value; }
         }
 
         public void Add(object item)
@@ -82,6 +84,7 @@ namespace GKUI.Platform.Handlers
 
         public void BeginUpdate()
         {
+            fItems.BeginUpdate();
         }
 
         public void Clear()
@@ -91,6 +94,7 @@ namespace GKUI.Platform.Handlers
 
         public void EndUpdate()
         {
+            fItems.EndUpdate();
         }
 
         public void Sort()

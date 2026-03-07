@@ -1,93 +1,94 @@
-﻿using GKUI.Components;
+﻿#pragma warning disable IDE1006 // Naming Styles
+
 using Terminal.Gui;
 
 namespace GKUI.Forms
 {
     partial class TreeChartWin
     {
-        private ToolStrip ToolBar1;
-        private ToolStripButton tbImageSave;
+        private MenuBar ToolBar1;
+        private MenuBarItem tbImageSave;
         private ContextMenu MenuPerson;
-        private ToolStripMenuItem miEdit;
-        private ToolStripMenuItem miSpouseAdd;
-        private ToolStripMenuItem miSonAdd;
-        private ToolStripMenuItem miDaughterAdd;
-        private ToolStripMenuItem miFamilyAdd;
-        private ToolStripMenuItem miDelete;
-        private ToolStripMenuItem miRebuildKinships;
-        private ToolStripDropDownButton tbModes;
-        private ToolStripMenuItem miModeBoth;
-        private ToolStripMenuItem miModeAncestors;
-        private ToolStripMenuItem miModeDescendants;
-        private ToolStripMenuItem miTraceSelected;
-        private ToolStripMenuItem miTraceKinships;
-        private ToolStripMenuItem miCertaintyIndex;
-        private ToolStripMenuItem miXRefVisible;
-        private ToolStripMenuItem miTrackSelectedLines;
-        private ToolStripMenuItem miTrackMatchedSources;
-        private ToolStripMenuItem miRebuildTree;
-        private ToolStripMenuItem miFillColor;
-        private ToolStripMenuItem miFatherAdd;
-        private ToolStripMenuItem miMotherAdd;
-        private ToolStripButton tbOptions;
-        private ToolStripButton tbFilter;
-        private ToolStripButton tbPrev;
-        private ToolStripButton tbNext;
-        private ToolStripMenuItem miSelectColor;
-        private ToolStripMenuItem miGoToRecord;
-        private ToolStripDropDownButton tbGensCommon;
-        private ToolStripDropDownButton tbGensAncestors;
-        private ToolStripDropDownButton tbGensDescendants;
-        private ToolStripMenuItem miGoToPrimaryBranch;
-        private ToolStripMenuItem miOpenInNewWindow;
-        private ToolStripMenuItem miMergeDuplicates;
-        private ToolStripMenuItem miHideDescSpouses;
-        private ToolStripMenuItem miParentAges;
+        private MenuItem miEdit;
+        private MenuItem miSpouseAdd;
+        private MenuItem miSonAdd;
+        private MenuItem miDaughterAdd;
+        private MenuItem miFamilyAdd;
+        private MenuItem miDelete;
+        private MenuItem miRebuildKinships;
+        private MenuBarItem tbModes;
+        private MenuItem miModeBoth;
+        private MenuItem miModeAncestors;
+        private MenuItem miModeDescendants;
+        private MenuItem miTraceSelected;
+        private MenuItem miTraceKinships;
+        private MenuItem miCertaintyIndex;
+        private MenuItem miXRefVisible;
+        private MenuItem miTrackSelectedLines;
+        private MenuItem miTrackMatchedSources;
+        private MenuItem miRebuildTree;
+        private MenuItem miFillColor;
+        private MenuItem miFatherAdd;
+        private MenuItem miMotherAdd;
+        private MenuBarItem tbOptions;
+        private MenuBarItem tbFilter;
+        private MenuBarItem tbPrev;
+        private MenuBarItem tbNext;
+        private MenuItem miSelectColor;
+        private MenuItem miGoToRecord;
+        private MenuBarItem tbGensCommon;
+        private MenuBarItem tbGensAncestors;
+        private MenuBarItem tbGensDescendants;
+        private MenuItem miGoToPrimaryBranch;
+        private MenuItem miOpenInNewWindow;
+        private MenuItem miMergeDuplicates;
+        private MenuItem miHideDescSpouses;
+        private MenuItem miParentAges;
         private MenuBarItem miMaps;
-        private ToolStripMenuItem miMapAncestors;
-        private ToolStripMenuItem miMapDescendants;
-        private ToolStripMenuItem miMapAll;
+        private MenuItem miMapAncestors;
+        private MenuItem miMapDescendants;
+        private MenuItem miMapAll;
 
         private void InitializeComponent()
         {
-            miModeBoth = new ToolStripMenuItem();
+            miModeBoth = new MenuItem();
             miModeBoth.Action += miModeItem_Click;
 
-            miModeAncestors = new ToolStripMenuItem();
+            miModeAncestors = new MenuItem();
             miModeAncestors.Action += miModeItem_Click;
 
-            miModeDescendants = new ToolStripMenuItem();
+            miModeDescendants = new MenuItem();
             miModeDescendants.Action += miModeItem_Click;
 
-            miHideDescSpouses = new ToolStripMenuItem();
+            miHideDescSpouses = new MenuItem();
             miHideDescSpouses.Action += miHideDescSpouses_Click;
 
-            miTraceSelected = new ToolStripMenuItem();
+            miTraceSelected = new MenuItem();
             miTraceSelected.Action += miTraceSelected_Click;
 
-            miTraceKinships = new ToolStripMenuItem();
+            miTraceKinships = new MenuItem();
             miTraceKinships.Action += miTraceKinships_Click;
 
-            miCertaintyIndex = new ToolStripMenuItem();
+            miCertaintyIndex = new MenuItem();
             miCertaintyIndex.Action += miCertaintyIndex_Click;
 
-            miXRefVisible = new ToolStripMenuItem();
+            miXRefVisible = new MenuItem();
             miXRefVisible.Action += miXRefVisible_Click;
 
-            miTrackSelectedLines = new ToolStripMenuItem();
+            miTrackSelectedLines = new MenuItem();
             miTrackSelectedLines.Action += miTrackSelectedLines_Click;
 
-            miTrackMatchedSources = new ToolStripMenuItem();
+            miTrackMatchedSources = new MenuItem();
             miTrackMatchedSources.Action += miTrackMatchedSources_Click;
 
-            miParentAges = new ToolStripMenuItem();
+            miParentAges = new MenuItem();
             miParentAges.Action += miParentAges_Click;
 
-            miFillColor = new ToolStripMenuItem();
+            miFillColor = new MenuItem();
             miFillColor.Action += miFillColor_Click;
 
-            tbModes = new ToolStripDropDownButton();
-            tbModes.Children = new ToolStripItem[] {
+            tbModes = new MenuBarItem();
+            tbModes.Children = new MenuItem[] {
                 miModeBoth,
                 miModeAncestors,
                 miModeDescendants,
@@ -105,86 +106,86 @@ namespace GKUI.Forms
                 miFillColor,
             };
 
-            tbImageSave = new ToolStripButton();
+            tbImageSave = new MenuBarItem();
             tbImageSave.Action += tbImageSave_Click;
 
-            tbGensCommon = new ToolStripDropDownButton();
-            tbGensAncestors = new ToolStripDropDownButton();
-            tbGensDescendants = new ToolStripDropDownButton();
+            tbGensCommon = new MenuBarItem();
+            tbGensAncestors = new MenuBarItem();
+            tbGensDescendants = new MenuBarItem();
 
-            tbFilter = new ToolStripButton();
+            tbFilter = new MenuBarItem();
             tbFilter.Action += tbFilter_Click;
 
-            tbPrev = new ToolStripButton();
+            tbPrev = new MenuBarItem();
             tbPrev.Action += tbPrev_Click;
 
-            tbNext = new ToolStripButton();
+            tbNext = new MenuBarItem();
             tbNext.Action += tbNext_Click;
 
-            tbOptions = new ToolStripButton();
+            tbOptions = new MenuBarItem();
             tbOptions.Action += tbOptions_Click;
 
-            miEdit = new ToolStripMenuItem();
+            miEdit = new MenuItem();
             miEdit.Action += miEdit_Click;
 
-            miFatherAdd = new ToolStripMenuItem();
+            miFatherAdd = new MenuItem();
             miFatherAdd.Action += miFatherAdd_Click;
 
-            miMotherAdd = new ToolStripMenuItem();
+            miMotherAdd = new MenuItem();
             miMotherAdd.Action += miMotherAdd_Click;
 
-            miFamilyAdd = new ToolStripMenuItem();
+            miFamilyAdd = new MenuItem();
             miFamilyAdd.Action += miFamilyAdd_Click;
 
-            miSpouseAdd = new ToolStripMenuItem();
+            miSpouseAdd = new MenuItem();
             miSpouseAdd.Action += miSpouseAdd_Click;
 
-            miSonAdd = new ToolStripMenuItem();
+            miSonAdd = new MenuItem();
             miSonAdd.Action += miSonAdd_Click;
 
-            miDaughterAdd = new ToolStripMenuItem();
+            miDaughterAdd = new MenuItem();
             miDaughterAdd.Action += miDaughterAdd_Click;
 
-            miDelete = new ToolStripMenuItem();
+            miDelete = new MenuItem();
             miDelete.Action += miDelete_Click;
 
-            miGoToRecord = new ToolStripMenuItem();
+            miGoToRecord = new MenuItem();
             miGoToRecord.Action += miGoToRecord_Click;
 
-            miGoToPrimaryBranch = new ToolStripMenuItem();
+            miGoToPrimaryBranch = new MenuItem();
             miGoToPrimaryBranch.Action += miGoToPrimaryBranch_Click;
 
-            miOpenInNewWindow = new ToolStripMenuItem();
+            miOpenInNewWindow = new MenuItem();
             miOpenInNewWindow.Action += miOpenInNewWindow_Click;
 
-            miMergeDuplicates = new ToolStripMenuItem();
+            miMergeDuplicates = new MenuItem();
             miMergeDuplicates.Action += miMergeDuplicates_Click;
 
-            miRebuildTree = new ToolStripMenuItem();
+            miRebuildTree = new MenuItem();
             miRebuildTree.Shortcut = Key.F6;
             miRebuildTree.Action += miRebuildTree_Click;
 
-            miRebuildKinships = new ToolStripMenuItem();
+            miRebuildKinships = new MenuItem();
             miRebuildKinships.Shortcut = Key.F7;
             miRebuildKinships.Action += miRebuildKinships_Click;
 
-            miMapAncestors = new ToolStripMenuItem();
+            miMapAncestors = new MenuItem();
             miMapAncestors.Action += miMapAncestors_Click;
 
-            miMapDescendants = new ToolStripMenuItem();
+            miMapDescendants = new MenuItem();
             miMapDescendants.Action += miMapDescendants_Click;
 
-            miMapAll = new ToolStripMenuItem();
+            miMapAll = new MenuItem();
             miMapAll.Action += miMapAll_Click;
 
             miMaps = new MenuBarItem();
-            miMaps.Children = new ToolStripItem[] {
+            miMaps.Children = new MenuItem[] {
                 miMapAncestors,
                 miMapDescendants,
                 miMapAll
             };
 
-            miSelectColor = new ToolStripMenuItem();
+            miSelectColor = new MenuItem();
             miSelectColor.Action += miSelectColor_Click;
 
             MenuPerson = new ContextMenu();
@@ -214,8 +215,8 @@ namespace GKUI.Forms
             });
             //MenuPerson.Opening += new System.ComponentModel.CancelEventHandler(MenuPerson_Opening);
 
-            ToolBar1 = new ToolStrip();
-            ToolBar1.Menus = new ToolStripButton[] {
+            ToolBar1 = new MenuBar();
+            ToolBar1.Menus = new MenuBarItem[] {
                 tbImageSave,
                 tbGensCommon,
                 tbGensAncestors,

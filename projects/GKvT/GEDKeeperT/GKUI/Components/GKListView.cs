@@ -65,7 +65,7 @@ namespace GKUI.Components
 
             //SetupScroll();
 
-            this.MouseClick += e => {
+            this.MouseClick += (s, e) => {
                 this.ScreenToCell(e.MouseEvent.X, e.MouseEvent.Y, out DataColumn clickedCol);
                 if (clickedCol != null && e.MouseEvent.Flags.HasFlag(MouseFlags.Button1Clicked)) {
                     this.SetSortColumn(clickedCol.Ordinal);
@@ -86,7 +86,7 @@ namespace GKUI.Components
             var sbVertical = new ScrollBarView(this, true);
             //sbVertical.AutoHideScrollBars = false;
 
-            sbVertical.ChangedPosition += () => {
+            sbVertical.ChangedPosition += (s, e) => {
                 RowOffset = sbVertical.Position;
                 if (RowOffset != sbVertical.Position) {
                     sbVertical.Position = RowOffset;
@@ -101,7 +101,7 @@ namespace GKUI.Components
 				_listView.SetNeedsDisplay ();
 			};*/
 
-            DrawContent += (e) => {
+            DrawContent += (s, e) => {
                 sbVertical.Size = fDataTable.Rows?.Count ?? 0;
                 sbVertical.Position = RowOffset;
                 //	_scrollBar.OtherScrollBarView.Size = _listView.Maxlength - 1;
@@ -110,7 +110,7 @@ namespace GKUI.Components
             };
         }
 
-        private string TrimArrows(string columnName)
+        private static string TrimArrows(string columnName)
         {
             return columnName.TrimEnd('▼', '▲');
         }
@@ -191,7 +191,7 @@ namespace GKUI.Components
         {
         }
 
-        public void Clear()
+        public new void Clear()
         {
         }
 

@@ -7,23 +7,20 @@
  */
 
 using GKCore.Design.Controls;
-using GKCore.Design.Graphics;
 using Terminal.Gui;
 
 namespace GKUI.Platform.Handlers
 {
-    public sealed class LabelHandler : BaseControlHandler<Label, LabelHandler>, ILabel
+    public sealed class RadioButtonHandler : BaseControlHandler<RadioButton, RadioButtonHandler>, IRadioButton
     {
-        public LabelHandler(Label control) : base(control)
+        public RadioButtonHandler(RadioButton control) : base(control)
         {
         }
 
-        public IColor BackColor
+        public bool Checked
         {
-            get { return new ColorHandler(Control.ColorScheme.Normal.Background); }
-            set {
-                //Control.ColorScheme.Normal.Background = ((ColorHandler)value).Handle;
-            }
+            get { return Control.Checked; }
+            set { Control.Checked = value; }
         }
 
         public string Text

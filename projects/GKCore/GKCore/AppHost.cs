@@ -1454,6 +1454,13 @@ namespace GKCore
             }
         }
 
+        protected static void StartupCore(string[] args)
+        {
+            CheckPortable(args);
+            Logger.Init(GetLogFilename());
+            LogSysInfo();
+        }
+
         public static void CheckPortable(string[] args)
         {
             const string HomeDirArg = "-homedir:";

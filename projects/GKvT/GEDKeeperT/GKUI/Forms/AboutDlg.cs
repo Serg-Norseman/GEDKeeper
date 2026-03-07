@@ -26,7 +26,7 @@ namespace GKUI.Forms
             fController.UpdateView();
         }
 
-        private void LabelMail_Click(MouseEventArgs e)
+        private void LabelMail_Click(object sender, MouseEventArgs e)
         {
             if (e.MouseEvent.View is Label lbl) {
                 GKUtils.LoadExtFile(lbl.Text.ToString());

@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Linq;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKUI.Platform.Handlers;
@@ -17,7 +18,7 @@ namespace GKUI.Platform
     /// <summary>
     /// 
     /// </summary>
-    public class MenuItemEx : MenuItem, IMenuItem
+    public class MenuItemEx : MenuBarItem, IMenuItem
     {
         private ItemAction fAction;
         private MenuSubItems fItems;
@@ -83,9 +84,14 @@ namespace GKUI.Platform
 
         public IMenuItem AddItem(string text, object tag, IImage image, ItemAction action)
         {
-            /*var item = new MenuItemEx(text, tag, image, action);
-            Items.Add(item);
-            return item;*/
+            IMenuItem result = null;
+            if (this is MenuBarItem barItem) {
+                var item = new MenuItemEx(text, tag, image, action);
+                var childrenList = barItem.Children.ToList();
+                childrenList.Add(item);
+                barItem.Children = childrenList.ToArray();
+                result = item;
+            }
             return null;
         }
 

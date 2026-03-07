@@ -28,9 +28,9 @@ namespace GKUI.Forms
         #region Design components
 
         private readonly TreeChartBox fTreeBox;
-        private ToolStripMenuItem miGensInfCommon;
-        private ToolStripMenuItem miGensInfAncestors;
-        private ToolStripMenuItem miGensInfDescendants;
+        private MenuItem miGensInfCommon;
+        private MenuItem miGensInfAncestors;
+        private MenuItem miGensInfDescendants;
 
         #endregion
 
@@ -159,7 +159,7 @@ namespace GKUI.Forms
             }
         }
 
-        private void TreeChartWin_KeyDown(KeyEventEventArgs e)
+        private void TreeChartWin_KeyDown(object sender, KeyEventEventArgs e)
         {
             switch (e.KeyEvent.Key) {
                 case Key.F5:

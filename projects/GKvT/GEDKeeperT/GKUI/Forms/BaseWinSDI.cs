@@ -200,7 +200,7 @@ namespace GKUI.Forms
             summary.OnLink += mPersonSummaryLink;
 
             //summary.ContextMenu = summaryMenu;
-            summary.MouseClick += (args) => {
+            summary.MouseClick += (s, args) => {
                 if (args.MouseEvent.Flags.HasFlag(MouseFlags.Button3Clicked)) {
                     summaryMenu.Position = new Point(args.MouseEvent.X, args.MouseEvent.Y);
                     summaryMenu.Show();
@@ -217,7 +217,7 @@ namespace GKUI.Forms
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
 
             //recView.ContextMenu = contextMenu;
-            recView.MouseClick += (args) => {
+            recView.MouseClick += (s, args) => {
                 if (args.MouseEvent.Flags.HasFlag(MouseFlags.Button3Clicked)) {
                     contextMenu.Position = new Point(args.MouseEvent.X, args.MouseEvent.Y);
                     contextMenu.Show();
@@ -398,11 +398,10 @@ namespace GKUI.Forms
             }*/
         }
 
-        private void List_SelectedIndexChanged(TableView.SelectedCellChangedEventArgs e)
+        private void List_SelectedIndexChanged(object sender, TableView.SelectedCellChangedEventArgs e)
         {
-            var sender = GetRecordsViewByType(GetSelectedRecordType()) as GKListView;
-            if (e != null && sender != null) {
-                fController.ChangeListItem(sender);
+            if (sender is GKListView listView) {
+                fController.ChangeListItem(listView);
                 AppHost.Instance.SelectedIndexChanged(this);
             }
         }

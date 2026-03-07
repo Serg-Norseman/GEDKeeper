@@ -40,9 +40,7 @@ namespace GEDKeeperT
                         var appHost = (TGAppHost)AppHost.Instance;
                         appHost.Init(args, false);
 
-                        var win = new BaseWinSDI();
-                        Application.Top.Add(win);
-
+                        Application.Top.Add(new BaseWinSDI());
                         Application.Run();
                         Application.Shutdown();
                     } finally {

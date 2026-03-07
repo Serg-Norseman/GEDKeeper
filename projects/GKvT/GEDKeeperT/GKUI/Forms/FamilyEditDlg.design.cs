@@ -1,4 +1,6 @@
-﻿using Terminal.Gui;
+﻿#pragma warning disable IDE1006 // Naming Styles
+
+using Terminal.Gui;
 
 namespace GKUI.Forms
 {
@@ -156,7 +158,7 @@ namespace GKUI.Forms
             frameFamily.TabIndex = 0;
             frameFamily.Title = "";
 
-            tabsData.AddTab(pageChilds, false);
+            tabsData.AddTab(pageChilds, true);
             tabsData.AddTab(pageEvents, false);
             tabsData.AddTab(pageNotes, false);
             tabsData.AddTab(pageMultimedia, false);

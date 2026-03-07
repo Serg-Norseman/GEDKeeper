@@ -6,33 +6,22 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System.Collections.Generic;
 using GKCore.Design.Controls;
-using GKCore.Stats;
 using Terminal.Gui;
 
 namespace GKUI.Components
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class ZGraphControl : View, IGraphControl
+    public class LogChart : View, ILogChart
     {
-
-        public ZGraphControl()
+        public void Activate()
         {
         }
 
-        public void Activate()
+        public void AddFragment(int val)
         {
-            SetFocus();
         }
 
         public new void Clear()
-        {
-        }
-
-        public void PrepareArray(string title, string xAxis, string yAxis, ChartStyle style, bool excludeUnknowns, List<StatsItem> vals)
         {
         }
     }
