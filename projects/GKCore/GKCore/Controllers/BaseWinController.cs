@@ -1145,20 +1145,28 @@ namespace GKCore.Controllers
 
         private async void ShowCommonFilter(GDMRecordType rt, IRecordsListModel listMan)
         {
-            using (var dlg = AppHost.Container.Resolve<ICommonFilterDlg>(fView, listMan)) {
-                if (await AppHost.Instance.ShowModalAsync(dlg, fView, false)) {
-                    AppHost.Instance.NotifyFilter(fView, rt, listMan, listMan.Filter);
-                    ApplyFilter(rt);
+            try {
+                using (var dlg = AppHost.Container.Resolve<ICommonFilterDlg>(fView, listMan)) {
+                    if (await AppHost.Instance.ShowModalAsync(dlg, fView, false)) {
+                        AppHost.Instance.NotifyFilter(fView, rt, listMan, listMan.Filter);
+                        ApplyFilter(rt);
+                    }
                 }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowCommonFilter()", ex);
             }
         }
 
         private async void ShowPersonsFilter(GDMRecordType rt, IRecordsListModel listMan)
         {
-            using (var dlg = AppHost.Container.Resolve<IPersonsFilterDlg>(fView, listMan)) {
-                if (await AppHost.Instance.ShowModalAsync(dlg, fView, false)) {
-                    ApplyFilter(rt, listMan);
+            try {
+                using (var dlg = AppHost.Container.Resolve<IPersonsFilterDlg>(fView, listMan)) {
+                    if (await AppHost.Instance.ShowModalAsync(dlg, fView, false)) {
+                        ApplyFilter(rt, listMan);
+                    }
                 }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowPersonsFilter()", ex);
             }
         }
 
@@ -1200,94 +1208,126 @@ namespace GKCore.Controllers
         public async void ShowScripts()
         {
             try {
-                fContext.BeginUpdate();
+                try {
+                    fContext.BeginUpdate();
 
-                using (var dlg = AppHost.Container.Resolve<IScriptEditWin>(fView)) {
-                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                    using (var dlg = AppHost.Container.Resolve<IScriptEditWin>(fView)) {
+                        await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                    }
+                } finally {
+                    fContext.EndUpdate();
                 }
-            } finally {
-                fContext.EndUpdate();
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowScripts()", ex);
             }
         }
 
         public async void ShowTreeSplit()
         {
             try {
-                fContext.BeginUpdate();
-                using (var dlg = AppHost.Container.Resolve<ITreeSplitDlg>(fView)) {
-                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                try {
+                    fContext.BeginUpdate();
+                    using (var dlg = AppHost.Container.Resolve<ITreeSplitDlg>(fView)) {
+                        await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                    }
+                } finally {
+                    fContext.EndUpdate();
                 }
-            } finally {
-                fContext.EndUpdate();
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowTreeSplit()", ex);
             }
         }
 
         public async void ShowTreeMerge()
         {
             try {
-                fContext.BeginUpdate();
-                using (var dlg = AppHost.Container.Resolve<ITreeMergeDlg>(fView)) {
-                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                try {
+                    fContext.BeginUpdate();
+                    using (var dlg = AppHost.Container.Resolve<ITreeMergeDlg>(fView)) {
+                        await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                    }
+                } finally {
+                    fContext.EndUpdate();
                 }
-            } finally {
-                fContext.EndUpdate();
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowTreeMerge()", ex);
             }
         }
 
         public async void ShowTreeCompare()
         {
             try {
-                fContext.BeginUpdate();
-                using (var dlg = AppHost.Container.Resolve<ITreeCompareDlg>(fView)) {
-                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                try {
+                    fContext.BeginUpdate();
+                    using (var dlg = AppHost.Container.Resolve<ITreeCompareDlg>(fView)) {
+                        await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                    }
+                } finally {
+                    fContext.EndUpdate();
                 }
-            } finally {
-                fContext.EndUpdate();
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowTreeCompare()", ex);
             }
         }
 
         public async void ShowTreeCheck()
         {
             try {
-                fContext.BeginUpdate();
-                using (var dlg = AppHost.Container.Resolve<ITreeCheckDlg>(fView)) {
-                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                try {
+                    fContext.BeginUpdate();
+                    using (var dlg = AppHost.Container.Resolve<ITreeCheckDlg>(fView)) {
+                        await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                    }
+                } finally {
+                    fContext.EndUpdate();
                 }
-            } finally {
-                fContext.EndUpdate();
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowTreeCheck()", ex);
             }
         }
 
         public async void ShowPlacesManager()
         {
             try {
-                fContext.BeginUpdate();
-                using (var dlg = AppHost.Container.Resolve<IPlacesManagerDlg>(fView)) {
-                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                try {
+                    fContext.BeginUpdate();
+                    using (var dlg = AppHost.Container.Resolve<IPlacesManagerDlg>(fView)) {
+                        await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                    }
+                } finally {
+                    fContext.EndUpdate();
                 }
-            } finally {
-                fContext.EndUpdate();
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowPlacesManager()", ex);
             }
         }
 
         public async void ShowPatSearch()
         {
             try {
-                fContext.BeginUpdate();
-                using (var dlg = AppHost.Container.Resolve<IPatriarchsSearchDlg>(fView)) {
-                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                try {
+                    fContext.BeginUpdate();
+                    using (var dlg = AppHost.Container.Resolve<IPatriarchsSearchDlg>(fView)) {
+                        await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                    }
+                } finally {
+                    fContext.EndUpdate();
                 }
-            } finally {
-                fContext.EndUpdate();
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowPatSearch()", ex);
             }
         }
 
         public void ShowFamilyGroups()
         {
             try {
-                var dlg = AppHost.Container.Resolve<IFragmentSearchDlg>(fView);
-                AppHost.Instance.ShowWindow(dlg);
-            } finally {
+                try {
+                    var dlg = AppHost.Container.Resolve<IFragmentSearchDlg>(fView);
+                    AppHost.Instance.ShowWindow(dlg);
+                } finally {
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowFamilyGroups()", ex);
             }
         }
 
@@ -1387,53 +1427,77 @@ namespace GKCore.Controllers
 
         public async void ShowChronicle()
         {
-            using (var dlg = AppHost.Container.Resolve<IChronicleWin>(fView)) {
-                await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+            try {
+                using (var dlg = AppHost.Container.Resolve<IChronicleWin>(fView)) {
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowChronicle()", ex);
             }
         }
 
         public async void ShowOrganizer()
         {
-            using (var dlg = AppHost.Container.Resolve<IOrganizerWin>(fView)) {
-                await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+            try {
+                using (var dlg = AppHost.Container.Resolve<IOrganizerWin>(fView)) {
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowOrganizer()", ex);
             }
         }
 
         public async void ShowRelationshipCalculator()
         {
-            using (var dlg = AppHost.Container.Resolve<IRelationshipCalculatorDlg>(fView)) {
-                await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+            try {
+                using (var dlg = AppHost.Container.Resolve<IRelationshipCalculatorDlg>(fView)) {
+                    await AppHost.Instance.ShowModalAsync(dlg, fView, false);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowRelationshipCalculator()", ex);
             }
         }
 
         public void ShowSlideshow()
         {
-            var win = AppHost.Container.Resolve<ISlideshowWin>(fView);
-            AppHost.Instance.ShowWindow(win);
+            try {
+                var win = AppHost.Container.Resolve<ISlideshowWin>(fView);
+                AppHost.Instance.ShowWindow(win);
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowSlideshow()", ex);
+            }
         }
 
         public void ShowStats()
         {
-            List<GDMRecord> selectedRecords = GetContentList(GDMRecordType.rtIndividual);
+            try {
+                List<GDMRecord> selectedRecords = GetContentList(GDMRecordType.rtIndividual);
 
-            var win = AppHost.Container.Resolve<IStatisticsWin>(fView, selectedRecords);
-            AppHost.Instance.ShowWindow(win);
+                var win = AppHost.Container.Resolve<IStatisticsWin>(fView, selectedRecords);
+                AppHost.Instance.ShowWindow(win);
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowStats()", ex);
+            }
         }
 
         public void GeneratePedigree(PedigreeType type)
         {
-            var selPerson = GetSelectedPerson();
-            if (selPerson == null) {
-                AppHost.StdDialogs.ShowError(LangMan.LS(LSID.NotSelectedPerson));
-                return;
-            }
+            try {
+                var selPerson = GetSelectedPerson();
+                if (selPerson == null) {
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.NotSelectedPerson));
+                    return;
+                }
 
-            if (BaseController.DetectCycle(fContext.Tree, selPerson)) return;
+                if (BaseController.DetectCycle(fContext.Tree, selPerson)) return;
 
-            using (var p = new PedigreeExporter(fView, selPerson)) {
-                p.Options = AppHost.Options;
-                p.Type = type;
-                p.Generate(true);
+                using (var p = new PedigreeExporter(fView, selPerson)) {
+                    p.Options = AppHost.Options;
+                    p.Type = type;
+                    p.Generate(true);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.GeneratePedigree()", ex);
             }
         }
 
@@ -1517,25 +1581,33 @@ namespace GKCore.Controllers
 
         public void FindAndReplace()
         {
-            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                throw new NotImplementedException();
-            }
+            try {
+                if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                    throw new NotImplementedException();
+                }
 
-            var win = AppHost.Container.Resolve<IFARDlg>(fView);
-            AppHost.Instance.ShowWindow(win);
+                var win = AppHost.Container.Resolve<IFARDlg>(fView);
+                AppHost.Instance.ShowWindow(win);
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.FindAndReplace()", ex);
+            }
         }
 
         public void ShowPartialView()
         {
-            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                throw new NotImplementedException();
+            try {
+                if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                    throw new NotImplementedException();
+                }
+
+                var recType = GetSelectedRecordType();
+                var listMan = GetRecordsListManByType(recType);
+
+                var win = AppHost.Container.Resolve<IPartialView>(fView, recType, listMan.Filter);
+                AppHost.Instance.ShowWindow(win);
+            } catch (Exception ex) {
+                Logger.WriteError("BaseWinController.ShowPartialView()", ex);
             }
-
-            var recType = GetSelectedRecordType();
-            var listMan = GetRecordsListManByType(recType);
-
-            var win = AppHost.Container.Resolve<IPartialView>(fView, recType, listMan.Filter);
-            AppHost.Instance.ShowWindow(win);
         }
 
         #endregion

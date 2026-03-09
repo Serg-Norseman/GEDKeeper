@@ -110,6 +110,19 @@ namespace GKUI.Components
             return recView;
         }
 
+        public static GKListView CreateListView(View parent)
+        {
+            if (parent == null)
+                throw new ArgumentNullException(nameof(parent));
+
+            GKListView listView = new GKListView();
+            listView.Width = Dim.Fill();
+            listView.Height = Dim.Fill();
+            parent.Add(listView);
+
+            return listView;
+        }
+
         public static void ProcessName(object sender)
         {
             if (sender is TextField tb && GlobalOptions.Instance.FirstCapitalLetterInNames) {

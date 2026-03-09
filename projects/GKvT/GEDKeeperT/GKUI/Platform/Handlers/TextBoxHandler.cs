@@ -40,7 +40,7 @@ namespace GKUI.Platform.Handlers
         public string Text
         {
             get { return Control.Text.ToString(); }
-            set { Control.Text = value; }
+            set { Control.Text = string.IsNullOrEmpty(value) ? string.Empty : value; }
         }
 
         public void AppendText(string text)

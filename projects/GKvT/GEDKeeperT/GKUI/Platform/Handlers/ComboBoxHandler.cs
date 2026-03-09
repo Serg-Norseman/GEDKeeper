@@ -26,6 +26,7 @@ namespace GKUI.Platform.Handlers
             control.SetSource(fItems);
             control.HideDropdownListOnClick = true;
             control.SearchMode = false;
+            control.DropDownBorderStyle = BorderStyle.Single;
         }
 
         public bool ReadOnly

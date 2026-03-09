@@ -1708,35 +1708,43 @@ namespace GKCore.Controllers
 
         public static void ShowTreeChart(IBaseWindow baseWin, GDMIndividualRecord selPerson, TreeChartKind chartKind)
         {
-            if (baseWin == null) return;
+            try {
+                if (baseWin == null) return;
 
-            if (selPerson == null) {
-                var mruFile = AppHost.Instance.GetMRUFile(baseWin);
-                if (mruFile != null) {
-                    selPerson = baseWin.Context.Tree.FindXRef<GDMIndividualRecord>(mruFile.LastTreeRecord);
+                if (selPerson == null) {
+                    var mruFile = AppHost.Instance.GetMRUFile(baseWin);
+                    if (mruFile != null) {
+                        selPerson = baseWin.Context.Tree.FindXRef<GDMIndividualRecord>(mruFile.LastTreeRecord);
+                    }
                 }
-            }
 
-            if (selPerson == null) return;
+                if (selPerson == null) return;
 
-            if (DetectCycle(baseWin.Context.Tree, selPerson)) return;
+                if (DetectCycle(baseWin.Context.Tree, selPerson)) return;
 
-            if (TreeChartModel.CheckTreeChartSize(baseWin.Context.Tree, selPerson, chartKind)) {
-                var fmChart = AppHost.Container.Resolve<ITreeChartWin>(baseWin);
-                fmChart.GenChart(selPerson, chartKind);
-                AppHost.Instance.ShowWindow(fmChart);
+                if (TreeChartModel.CheckTreeChartSize(baseWin.Context.Tree, selPerson, chartKind)) {
+                    var fmChart = AppHost.Container.Resolve<ITreeChartWin>(baseWin);
+                    fmChart.GenChart(selPerson, chartKind);
+                    AppHost.Instance.ShowWindow(fmChart);
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("BaseController.ShowTreeChart()", ex);
             }
         }
 
         public static void ShowCircleChart(IBaseWindow baseWin, CircleChartType chartKind)
         {
-            var selPerson = baseWin.GetSelectedPerson();
-            if (selPerson == null) return;
+            try {
+                var selPerson = baseWin.GetSelectedPerson();
+                if (selPerson == null) return;
 
-            if (BaseController.DetectCycle(baseWin.Context.Tree, selPerson)) return;
+                if (BaseController.DetectCycle(baseWin.Context.Tree, selPerson)) return;
 
-            var fmChart = AppHost.Container.Resolve<ICircleChartWin>(baseWin, selPerson, chartKind);
-            AppHost.Instance.ShowWindow(fmChart);
+                var fmChart = AppHost.Container.Resolve<ICircleChartWin>(baseWin, selPerson, chartKind);
+                AppHost.Instance.ShowWindow(fmChart);
+            } catch (Exception ex) {
+                Logger.WriteError("BaseController.ShowCircleChart()", ex);
+            }
         }
 
         #endregion
@@ -1787,13 +1795,17 @@ namespace GKCore.Controllers
 
         public static void ShowMap(IBaseWindow baseWin, List<GeoPoint> fixedPoints = null)
         {
+            try {
 #if !TERM
-            var mapsWin = AppHost.Container.Resolve<IMapsViewerWin>(baseWin);
-            if (fixedPoints != null) {
-                mapsWin.ShowFixedPoints(fixedPoints);
-            }
-            AppHost.Instance.ShowWindow(mapsWin);
+                var mapsWin = AppHost.Container.Resolve<IMapsViewerWin>(baseWin);
+                if (fixedPoints != null) {
+                    mapsWin.ShowFixedPoints(fixedPoints);
+                }
+                AppHost.Instance.ShowWindow(mapsWin);
 #endif
+            } catch (Exception ex) {
+                Logger.WriteError("BaseController.ShowMap()", ex);
+            }
         }
 
         public static void ShowMap_Sub(IBaseWindow baseWin, GDMLocationRecord locRec)

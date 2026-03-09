@@ -142,7 +142,7 @@ namespace GKUI.Platform
             fTargetView.ViewToScreen((int)x, (int)y, out int rcol, out int rrow);
             var scrRect = new Rect(rcol, rrow, (int)width, (int)height);
             var savedClip = fTargetView.ClipToBounds();
-            driver.DrawWindowFrame(scrRect, 1, 1, 1, 1, border: true, fill: true, new Border() { BorderStyle = borderStyle });
+            driver.DrawWindowFrame(scrRect, 1, 1, 1, 1, border: true, fill: true, borderStyle);
             driver.Clip = savedClip;
         }
 

@@ -173,7 +173,10 @@ namespace GKUI.Platform
 
             // dialogs
             container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);
+            container.Register<IAddressEditDlg, AddressEditDlg>(LifeCycle.Transient);
+            container.Register<IAgeEditDlg, AgeEditDlg>(LifeCycle.Transient);
             container.Register<IChronicleWin, ChronicleWin>(LifeCycle.Transient);
+            //container.Register<ICommunicationEditDlg, CommunicationEditDlg>(LifeCycle.Transient);
             container.Register<IEventEditDlg, EventEditDlg>(LifeCycle.Transient);
             // ICircleChartWin - not
             container.Register<IFamilyEditDlg, FamilyEditDlg>(LifeCycle.Transient);
@@ -182,15 +185,20 @@ namespace GKUI.Platform
             // ILanguageSelectDlg - not
             // ILocExpertDlg - not
             // IMapsViewerWin - not
+            //container.Register<IMediaEditDlg, MediaEditDlg>(LifeCycle.Transient);
             container.Register<INoteEditDlg, NoteEditDlg>(LifeCycle.Transient);
             // INoteEditDlgEx - not
             container.Register<IOrganizerWin, OrganizerWin>(LifeCycle.Transient);
             // IPartialView - not
             // IPatriarchsViewer - not
             // IPortraitSelectDlg - not
+            container.Register<IRelationshipCalculatorDlg, RelationshipCalculatorDlg>(LifeCycle.Transient);
             container.Register<IRepositoryEditDlg, RepositoryEditDlg>(LifeCycle.Transient);
+            //container.Register<IResearchEditDlg, ResearchEditDlg>(LifeCycle.Transient);
             container.Register<ITreeChartWin, TreeChartWin>(LifeCycle.Transient);
             container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
+            container.Register<ISourceEditDlg, SourceEditDlg>(LifeCycle.Transient);
+            container.Register<ITaskEditDlg, TaskEditDlg>(LifeCycle.Transient);
             // IScriptEditWin - not
             // ISlideshowWin - not
             container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
