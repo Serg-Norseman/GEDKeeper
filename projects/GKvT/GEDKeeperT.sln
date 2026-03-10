@@ -44,6 +44,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{4AF8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Terminal.Gui", "..\..\..\..\TermUI\Terminal.Gui\Terminal.Gui.csproj", "{E754238B-E183-F029-C57D-700B94C15EF7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|FreeBSD = Debug|FreeBSD
@@ -88,6 +90,22 @@ Global
 		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Release|MacOS.Build.0 = Release|MacOS
 		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Release|MSWin64.ActiveCfg = Release|MSWin64
 		{10D619AF-E1CD-4F4A-9C19-5E434300B48F}.Release|MSWin64.Build.0 = Release|MSWin64
+		{E754238B-E183-F029-C57D-700B94C15EF7}.Debug|FreeBSD.ActiveCfg = Debug|Any CPU
+		{E754238B-E183-F029-C57D-700B94C15EF7}.Debug|FreeBSD.Build.0 = Debug|Any CPU
+		{E754238B-E183-F029-C57D-700B94C15EF7}.Debug|Linux.ActiveCfg = Debug|Any CPU
+		{E754238B-E183-F029-C57D-700B94C15EF7}.Debug|Linux.Build.0 = Debug|Any CPU
+		{E754238B-E183-F029-C57D-700B94C15EF7}.Debug|MacOS.ActiveCfg = Debug|Any CPU
+		{E754238B-E183-F029-C57D-700B94C15EF7}.Debug|MacOS.Build.0 = Debug|Any CPU
+		{E754238B-E183-F029-C57D-700B94C15EF7}.Debug|MSWin64.ActiveCfg = Debug|Any CPU
+		{E754238B-E183-F029-C57D-700B94C15EF7}.Debug|MSWin64.Build.0 = Debug|Any CPU
+		{E754238B-E183-F029-C57D-700B94C15EF7}.Release|FreeBSD.ActiveCfg = Release|Any CPU
+		{E754238B-E183-F029-C57D-700B94C15EF7}.Release|FreeBSD.Build.0 = Release|Any CPU
+		{E754238B-E183-F029-C57D-700B94C15EF7}.Release|Linux.ActiveCfg = Release|Any CPU
+		{E754238B-E183-F029-C57D-700B94C15EF7}.Release|Linux.Build.0 = Release|Any CPU
+		{E754238B-E183-F029-C57D-700B94C15EF7}.Release|MacOS.ActiveCfg = Release|Any CPU
+		{E754238B-E183-F029-C57D-700B94C15EF7}.Release|MacOS.Build.0 = Release|Any CPU
+		{E754238B-E183-F029-C57D-700B94C15EF7}.Release|MSWin64.ActiveCfg = Release|Any CPU
+		{E754238B-E183-F029-C57D-700B94C15EF7}.Release|MSWin64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -52,7 +52,7 @@ namespace GKUI.Forms
             GroupBox1.Add(cmbGoalType);
             GroupBox1.Add(txtGoal);
             GroupBox1.Location = new Point(0, 0);
-            GroupBox1.Size = new Size(64, 7);
+            GroupBox1.Size = new Size(76, 7);
             GroupBox1.TabIndex = 0;
             GroupBox1.TabStop = false;
 
@@ -69,23 +69,23 @@ namespace GKUI.Forms
             lblStopDate.TabIndex = 8;
 
             cmbGoalType.Location = new Point(12, 0);
-            cmbGoalType.Size = new Size(10, 1);
+            cmbGoalType.Size = new Size(16, 2);
             cmbGoalType.TabIndex = 1;
             cmbGoalType.SelectedItemChanged += cmbGoalType_SelectedIndexChanged;
 
-            txtGoal.Location = new Point(23, 0);
+            txtGoal.Location = new Point(29, 0);
             txtGoal.ReadOnly = true;
-            txtGoal.Size = new Size(32, 1);
+            txtGoal.Size = new Size(38, 1);
             txtGoal.TabIndex = 2;
 
             btnGoalSelect.Text = "+";
-            btnGoalSelect.Location = new Point(56, 0);
+            btnGoalSelect.Location = new Point(68, 0);
             btnGoalSelect.Size = new Size(5, 1);
             btnGoalSelect.TabIndex = 3;
             btnGoalSelect.Clicked += btnGoalSelect_Click;
 
             txtPriority.Location = new Point(12, 2);
-            txtPriority.Size = new Size(15, 1);
+            txtPriority.Size = new Size(16, 2);
             txtPriority.TabIndex = 5;
 
             txtStartDate.Location = new Point(12, 4);
@@ -98,7 +98,7 @@ namespace GKUI.Forms
 
             tabsData.AddTab(pageNotes, true);
             tabsData.Location = new Point(0, 7);
-            tabsData.Size = new Size(66, 20);
+            tabsData.Size = new Size(76, 20);
             tabsData.TabIndex = 1;
 
             btnAccept.Size = new Size(16, 1);
@@ -109,7 +109,7 @@ namespace GKUI.Forms
             btnCancel.TabIndex = 3;
             btnCancel.Clicked += CancelClickHandler;
 
-            Size = new Size(68, 32);
+            Size = new Size(78, 31);
             Add(tabsData);
             Add(GroupBox1);
             AddButton(btnAccept);

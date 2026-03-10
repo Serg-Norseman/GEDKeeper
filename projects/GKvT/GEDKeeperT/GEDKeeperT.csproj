@@ -24,9 +24,9 @@
         <Reference Include="BSLib.DataViz.Model">
             <HintPath>..\..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
         </Reference>
-        <Reference Include="Terminal.Gui">
+        <!--Reference Include="Terminal.Gui">
             <HintPath>..\libs\Terminal.Gui.dll</HintPath>
-        </Reference>
+        </Reference-->
         <Reference Include="NStack">
             <HintPath>..\libs\NStack.dll</HintPath>
         </Reference>
@@ -34,6 +34,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\GKCore\GKCore.term.csproj" />
+        <ProjectReference Include="..\..\..\..\..\TermUI\Terminal.Gui\Terminal.Gui.csproj" />
     </ItemGroup>
 
     <ItemGroup>

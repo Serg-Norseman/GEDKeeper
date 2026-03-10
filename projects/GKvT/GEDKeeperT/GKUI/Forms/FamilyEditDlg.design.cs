@@ -136,7 +136,7 @@ namespace GKUI.Forms
 
             cmbMarriageStatus.X = 14;
             cmbMarriageStatus.Y = 5;
-            cmbMarriageStatus.Width = 25;
+            cmbMarriageStatus.Width = 30;
             cmbMarriageStatus.TabIndex = 11;
 
             frameFamily.Add(lblHusband);
@@ -170,14 +170,14 @@ namespace GKUI.Forms
             tabsData.Height = 26;
             tabsData.TabIndex = 1;
 
-            lblRestriction.X = 2;
-            lblRestriction.Y = 35;
+            lblRestriction.X = 1;
+            lblRestriction.Y = 36;
             lblRestriction.Width = 11;
             lblRestriction.TabIndex = 2;
             lblRestriction.Text = "lblRestriction";
 
             cmbRestriction.X = 28;
-            cmbRestriction.Y = 35;
+            cmbRestriction.Y = 36;
             cmbRestriction.Width = 25;
             cmbRestriction.TabIndex = 3;
             cmbRestriction.SelectedItemChanged += cbRestriction_SelectedIndexChanged;
@@ -191,7 +191,7 @@ namespace GKUI.Forms
             btnCancel.Clicked += CancelClickHandler;
 
             Width = 104;
-            Height = 41;
+            Height = 39;
 
             Add(tabsData);
             Add(frameFamily);

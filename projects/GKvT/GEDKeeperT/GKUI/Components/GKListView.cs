@@ -62,6 +62,7 @@ namespace GKUI.Components
             Style.ExpandLastColumn = true;
             FullRowSelect = true;
             CanFocus = true;
+            MultiSelect = false;
 
             //SetupScroll();
 

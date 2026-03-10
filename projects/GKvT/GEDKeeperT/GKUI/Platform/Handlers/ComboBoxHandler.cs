@@ -24,6 +24,7 @@ namespace GKUI.Platform.Handlers
         {
             fItems = new ExtObservableList<IComboItem>();
             control.SetSource(fItems);
+            control.MaxDropDownItems = 10;
             control.HideDropdownListOnClick = true;
             control.SearchMode = false;
             control.DropDownBorderStyle = BorderStyle.Single;

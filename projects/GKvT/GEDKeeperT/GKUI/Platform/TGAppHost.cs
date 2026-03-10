@@ -192,6 +192,7 @@ namespace GKUI.Platform
             // IPartialView - not
             // IPatriarchsViewer - not
             // IPortraitSelectDlg - not
+            container.Register<IPersonEditDlg, PersonEditDlg>(LifeCycle.Transient);
             container.Register<IRelationshipCalculatorDlg, RelationshipCalculatorDlg>(LifeCycle.Transient);
             container.Register<IRepositoryEditDlg, RepositoryEditDlg>(LifeCycle.Transient);
             //container.Register<IResearchEditDlg, ResearchEditDlg>(LifeCycle.Transient);
