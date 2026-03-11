@@ -12,6 +12,7 @@ using BSLib;
 using GKCore.Design.Controls;
 using GKCore.Design.Graphics;
 using GKCore.Utilities;
+using GKUI.Components;
 using Terminal.Gui;
 
 namespace GKUI.Platform.Handlers
@@ -24,10 +25,7 @@ namespace GKUI.Platform.Handlers
         {
             fItems = new ExtObservableList<IComboItem>();
             control.SetSource(fItems);
-            control.MaxDropDownItems = 10;
-            control.HideDropdownListOnClick = true;
-            control.SearchMode = false;
-            control.DropDownBorderStyle = BorderStyle.Single;
+            UIHelper.SetupComboBox(control);
         }
 
         public bool ReadOnly

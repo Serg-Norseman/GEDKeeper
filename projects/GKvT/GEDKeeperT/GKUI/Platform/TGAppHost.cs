@@ -174,35 +174,34 @@ namespace GKUI.Platform
             // dialogs
             container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);
             container.Register<IAddressEditDlg, AddressEditDlg>(LifeCycle.Transient);
-            container.Register<IAgeEditDlg, AgeEditDlg>(LifeCycle.Transient);
-            container.Register<IChronicleWin, ChronicleWin>(LifeCycle.Transient);
-            //container.Register<ICommunicationEditDlg, CommunicationEditDlg>(LifeCycle.Transient);
+            container.Register<IAssociationEditDlg, AssociationEditDlg>(LifeCycle.Transient);
+            container.Register<ICommunicationEditDlg, CommunicationEditDlg>(LifeCycle.Transient);
             container.Register<IEventEditDlg, EventEditDlg>(LifeCycle.Transient);
-            // ICircleChartWin - not
             container.Register<IFamilyEditDlg, FamilyEditDlg>(LifeCycle.Transient);
             container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
             container.Register<IGroupEditDlg, GroupEditDlg>(LifeCycle.Transient);
-            // ILanguageSelectDlg - not
-            // ILocExpertDlg - not
-            // IMapsViewerWin - not
-            //container.Register<IMediaEditDlg, MediaEditDlg>(LifeCycle.Transient);
+            container.Register<IMediaEditDlg, MediaEditDlg>(LifeCycle.Transient);
+            container.Register<IMediaViewerWin, MediaViewerWin>(LifeCycle.Transient);
             container.Register<INoteEditDlg, NoteEditDlg>(LifeCycle.Transient);
-            // INoteEditDlgEx - not
             container.Register<IOrganizerWin, OrganizerWin>(LifeCycle.Transient);
-            // IPartialView - not
-            // IPatriarchsViewer - not
-            // IPortraitSelectDlg - not
+            container.Register<IParentsEditDlg, ParentsEditDlg>(LifeCycle.Transient);
+            container.Register<IPersonalNameEditDlg, PersonalNameEditDlg>(LifeCycle.Transient);
             container.Register<IPersonEditDlg, PersonEditDlg>(LifeCycle.Transient);
+            container.Register<IRecordSelectDialog, RecordSelectDlg>(LifeCycle.Transient);
             container.Register<IRelationshipCalculatorDlg, RelationshipCalculatorDlg>(LifeCycle.Transient);
             container.Register<IRepositoryEditDlg, RepositoryEditDlg>(LifeCycle.Transient);
-            //container.Register<IResearchEditDlg, ResearchEditDlg>(LifeCycle.Transient);
-            container.Register<ITreeChartWin, TreeChartWin>(LifeCycle.Transient);
-            container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
+            container.Register<IResearchEditDlg, ResearchEditDlg>(LifeCycle.Transient);
+            container.Register<ISourceCitEditDlg, SourceCitEditDlg>(LifeCycle.Transient);
             container.Register<ISourceEditDlg, SourceEditDlg>(LifeCycle.Transient);
             container.Register<ITaskEditDlg, TaskEditDlg>(LifeCycle.Transient);
-            // IScriptEditWin - not
-            // ISlideshowWin - not
+            container.Register<ITreeChartWin, TreeChartWin>(LifeCycle.Transient);
             container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
+            container.Register<IRecordInfoDlg, RecordInfoDlg>(LifeCycle.Transient);
+            container.Register<ISourceCallNumberEditDlg, SourceCallNumberEditDlg>(LifeCycle.Transient);
+            container.Register<IRepositoryCitEditDlg, RepositoryCitEditDlg>(LifeCycle.Transient);
+            container.Register<IAgeEditDlg, AgeEditDlg>(LifeCycle.Transient);
+            container.Register<IChronicleWin, ChronicleWin>(LifeCycle.Transient);
+            container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
 
             ControlsManager.RegisterHandlerType(typeof(Button), typeof(ButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(CheckBox), typeof(CheckBoxHandler));

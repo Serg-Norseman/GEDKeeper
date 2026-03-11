@@ -82,7 +82,6 @@ namespace GKUI.Forms
             tabsData.TabIndex = 0;
 
             var pgComView = new View();
-            pgComView.Add(dateCtl);
             pgComView.Add(lblEvent);
             pgComView.Add(lblPlace);
             pgComView.Add(lblDate);
@@ -99,6 +98,7 @@ namespace GKUI.Forms
             pgComView.Add(btnAge);
             pgComView.Add(lblAge);
             pgComView.Add(txtAge);
+            pgComView.Add(dateCtl);
             pageCommon.View = pgComView;
 
             lblEvent.X = 1;
@@ -152,8 +152,6 @@ namespace GKUI.Forms
 
             dateCtl.X = 1;
             dateCtl.Y = 11;
-            dateCtl.Width = 74;
-            dateCtl.Height = 6;
             dateCtl.TabIndex = 10;
 
             lblAge.X = 1;

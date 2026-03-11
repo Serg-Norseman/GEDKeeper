@@ -161,7 +161,7 @@ namespace GKCore.Controllers
 
             var quickFilter = ((IRecordsListModel)recordsList.ListMan).QuickFilter;
             quickFilter.Value = flt;
-            fView.FilterCtl.Params = quickFilter;
+            if (fView.FilterCtl != null) fView.FilterCtl.Params = quickFilter;
 
             switch (fRecType) {
                 case GDMRecordType.rtIndividual: {

@@ -104,6 +104,9 @@ namespace GKUI.Components
                 throw new ArgumentNullException(nameof(baseContext));
 
             GKListView recView = new GKListView();
+            recView.Location = new Point(0, 0);
+            recView.Height = Dim.Fill();
+            recView.Width = Dim.Fill();
             recView.ListMan = RecordsListModel<GDMRecord>.Create(baseContext, recType, simpleList);
             parent.Add(recView);
 
@@ -150,6 +153,14 @@ namespace GKUI.Components
                 strBuilder.Append(line);
             }
             return strBuilder.ToString();
+        }
+
+        public static void SetupComboBox(ComboBox comboBox)
+        {
+            comboBox.MaxDropDownItems = 10;
+            comboBox.HideDropdownListOnClick = true;
+            comboBox.SearchMode = false;
+            comboBox.DropDownBorderStyle = BorderStyle.Single;
         }
     }
 }

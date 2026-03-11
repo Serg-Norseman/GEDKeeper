@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using GDModel;
 using GKCore;
 using GKCore.Design.Controls;
@@ -59,17 +60,25 @@ namespace GKUI.Components
         public void SetLocale()
         {
             int num = GKData.DateKinds.Length;
+            var items = new ComboItem<string>[num];
             for (int i = 0; i < num; i++) {
-                //cmbDateType.Items.Add(LangMan.LS(GKData.DateKinds[i].Name));
+                items[i] = new ComboItem<string>(LangMan.LS(GKData.DateKinds[i].Name));
             }
+            cmbDateType.SetSource(items);
+            UIHelper.SetupComboBox(cmbDateType);
 
+            var cdrItems = new List<ComboItem<GDMCalendar>>();
             for (GDMCalendar gc = GDMCalendar.dcGregorian; gc <= GDMCalendar.dcLast; gc++) {
                 GKData.CalendarStruct cdr = GKData.DateCalendars[(int)gc];
                 if (!cdr.HasSupport) continue;
 
-                //cmbDate1Calendar.Items.Add(new GKComboItem<GDMCalendar>(LangMan.LS(cdr.Name), gc));
-                //cmbDate2Calendar.Items.Add(new GKComboItem<GDMCalendar>(LangMan.LS(cdr.Name), gc));
+                cdrItems.Add(new ComboItem<GDMCalendar>(LangMan.LS(cdr.Name), gc));
             }
+            cmbDate1Calendar.SetSource(cdrItems);
+            cmbDate2Calendar.SetSource(cdrItems);
+
+            UIHelper.SetupComboBox(cmbDate1Calendar);
+            UIHelper.SetupComboBox(cmbDate2Calendar);
 
             //cmbDate1Calendar.SelectedIndex = 0;
             //cmbDate2Calendar.SelectedIndex = 0;
@@ -294,39 +303,39 @@ namespace GKUI.Components
 
             cmbDateType.ReadOnly = true;
             cmbDateType.Location = new Point(1, 1);
-            cmbDateType.Size = new Size(10, 1);
+            cmbDateType.Size = new Size(16, 2);
             cmbDateType.TabIndex = 1;
             //cmbDateType.SelectedIndexChanged += cmbDateType_SelectedIndexChanged;
 
-            txtDate1.Location = new Point(12, 1);
-            txtDate1.Size = new Size(14, 1);
+            txtDate1.Location = new Point(18, 1);
+            txtDate1.Size = new Size(18, 1);
             txtDate1.TabIndex = 2;
             //txtDate1.TextChanged += txtDate_TextChanged;
 
             cmbDate1Calendar.ReadOnly = true;
-            cmbDate1Calendar.Location = new Point(12, 3);
-            cmbDate1Calendar.Size = new Size(20, 1);
+            cmbDate1Calendar.Location = new Point(18, 3);
+            cmbDate1Calendar.Size = new Size(17, 2);
             cmbDate1Calendar.TabIndex = 3;
             //cmbDate1Calendar.SelectedIndexChanged += cmbDateCalendar_SelectedIndexChanged;
 
-            chkBC1.Location = new Point(34, 3);
+            chkBC1.Location = new Point(36, 3);
             chkBC1.Size = new Size(5, 1);
             chkBC1.TabIndex = 4;
             chkBC1.Text = "BC";
             //chkBC1.CheckedChanged += chkBC_CheckedChanged;
 
-            txtDate2.Location = new Point(46, 1);
-            txtDate2.Size = new Size(14, 1);
+            txtDate2.Location = new Point(42, 1);
+            txtDate2.Size = new Size(18, 1);
             txtDate2.TabIndex = 5;
             //txtDate2.TextChanged += txtDate_TextChanged;
 
             cmbDate2Calendar.ReadOnly = true;
-            cmbDate2Calendar.Location = new Point(46, 3);
-            cmbDate2Calendar.Size = new Size(20, 1);
+            cmbDate2Calendar.Location = new Point(42, 3);
+            cmbDate2Calendar.Size = new Size(17, 2);
             cmbDate2Calendar.TabIndex = 6;
             //cmbDate2Calendar.SelectedIndexChanged += cmbDateCalendar_SelectedIndexChanged;
 
-            chkBC2.Location = new Point(68, 3);
+            chkBC2.Location = new Point(60, 3);
             chkBC2.Size = new Size(5, 1);
             chkBC2.TabIndex = 7;
             chkBC2.Text = "BC";
@@ -340,8 +349,7 @@ namespace GKUI.Components
             Add(txtDate2);
             Add(cmbDateType);
 
-            Height = 5;
-            Width = 20;
+            Size = new Size(68, 6);
         }
 
 #pragma warning restore IDE1006 // Naming Styles
