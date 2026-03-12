@@ -100,6 +100,7 @@ namespace GKUI.Forms
             txtAddress.Multiline = true;
             txtAddress.Size = new Size(40, 6);
             txtAddress.TabIndex = 4;
+            txtAddress.KeyDown += txtAddress_KeyDown;
 
             btnAccept.Size = new Size(16, 1);
             btnAccept.TabIndex = 1;

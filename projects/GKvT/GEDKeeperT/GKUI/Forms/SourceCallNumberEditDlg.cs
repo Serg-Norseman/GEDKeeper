@@ -40,8 +40,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //cmbMediaType.ReadOnly
-
             fController = new SourceCallNumberDlgController(this);
             fController.Init(baseWin);
         }

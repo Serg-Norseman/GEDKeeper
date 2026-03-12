@@ -24,11 +24,11 @@ namespace GKUI.Forms
 
         private void InitializeComponent()
         {
-            btnAccept = new Button() { TabIndex = 1 };
+            btnAccept = new Button() { Width = 16, TabIndex = 1 };
             btnAccept.Clicked += AcceptClickHandler;
             AddButton(btnAccept);
 
-            btnCancel = new Button() { TabIndex = 2 };
+            btnCancel = new Button() { Width = 16, TabIndex = 2 };
             btnCancel.Clicked += CancelClickHandler;
             AddButton(btnCancel);
 

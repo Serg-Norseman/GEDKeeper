@@ -76,7 +76,10 @@ namespace GKUI.Forms
             miDetails.Title = LangMan.LS(LSID.Details);
             miDetails.Action += miDetails_Click;
 
-            contextMenu = new ContextMenu(this, new MenuBarItem(new MenuItem[] { miDetails }));
+            contextMenu = new ContextMenu();
+            contextMenu.MenuItems = new MenuBarItem("Actions", new MenuItem[] {
+                miDetails
+            });
 
             UpdateRecordsView();
         }
@@ -109,7 +112,12 @@ namespace GKUI.Forms
                 fListRecords = null;
             }
             fListRecords = UIHelper.CreateRecordsView(panList, fController.Base.Context, fController.RecType, true);
-            //fListRecords.ContextMenu = contextMenu;
+            fListRecords.MouseClick += (s, args) => {
+                if (args.MouseEvent.Flags.HasFlag(MouseFlags.Button3Clicked)) {
+                    contextMenu.Position = new Point(args.MouseEvent.X, args.MouseEvent.Y);
+                    contextMenu.Show();
+                }
+            };
         }
 
         private void miDetails_Click(object sender, EventArgs e)
@@ -150,21 +158,16 @@ namespace GKUI.Forms
 
         private void txtFastFilter_TextChanged(object sender, EventArgs e)
         {
-            /*if (!AppHost.TEST_MODE) {
-                if (fChangeTimer == null) {
-                    fChangeTimer = new System.Timers.Timer(500);
-                    fChangeTimer.AutoReset = false;
-                    fChangeTimer.Elapsed += (sdr, args) => {
-                        if (IsHandleCreated)
-                            BeginInvoke(new UpdateDelegate(fController.UpdateView));
-                    };
-                } else {
-                    fChangeTimer.Stop();
-                }
-                fChangeTimer.Start();
+            if (fChangeTimer == null) {
+                fChangeTimer = new System.Timers.Timer(500);
+                fChangeTimer.AutoReset = false;
+                fChangeTimer.Elapsed += (sdr, args) => {
+                    fController.UpdateView();
+                };
             } else {
-                fController.UpdateView();
-            }*/
+                fChangeTimer.Stop();
+            }
+            fChangeTimer.Start();
         }
 
         private void txtFastFilter_KeyDown(object sender, KeyEventEventArgs e)
@@ -173,6 +176,7 @@ namespace GKUI.Forms
                 fController.ChangeFilter();
                 e.Handled = true;
             }
+            fController.UpdateView();
         }
 
         public void SetTarget(TargetMode mode, GDMIndividualRecord target, GDMSex needSex, string defFilter = "*")

@@ -65,10 +65,12 @@ namespace GKCore.Controllers
             fView.GroupsList.OnModify += ModifyGroupsSheet;
             fView.ParentsList.OnModify += ModifyParentsSheet;
 
+            fView.RestrictionCombo.ReadOnly = true;
             for (GDMRestriction res = GDMRestriction.rnNone; res <= GDMRestriction.rnPrivacy; res++) {
                 fView.RestrictionCombo.Add(LangMan.LS(GKData.Restrictions[(int)res]));
             }
 
+            fView.SexCombo.ReadOnly = true;
             for (GDMSex sx = GDMSex.svUnknown; sx <= GDMSex.svLast; sx++) {
                 string name = GKUtils.SexStr(sx);
                 IImage image = GetSexImage(sx);

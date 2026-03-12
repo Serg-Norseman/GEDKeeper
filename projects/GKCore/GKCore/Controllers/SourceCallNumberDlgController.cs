@@ -37,6 +37,7 @@ namespace GKCore.Controllers
 
         public SourceCallNumberDlgController(ISourceCallNumberEditDlg view) : base(view)
         {
+            fView.MediaTypeCombo.ReadOnly = true;
             for (GDMMediaType mt = GDMMediaType.mtUnknown; mt <= GDMMediaType.mtLast; mt++) {
                 fView.MediaTypeCombo.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
             }

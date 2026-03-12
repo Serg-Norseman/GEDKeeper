@@ -79,8 +79,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            txtAddress.KeyDown += txtAddress_KeyDown;
-
             fPhonesList = new GKSheetList(pagePhones);
             fMailsList = new GKSheetList(pageEmails);
             fWebsList = new GKSheetList(pageWebPages);

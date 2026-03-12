@@ -16,7 +16,7 @@ namespace GKUI.Forms
         private Label Lab2;
         private Label Lab1;
         private Button btnClose;
-        
+
         private void InitializeComponent()
         {
             btnClose = new Button();

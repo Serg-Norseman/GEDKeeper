@@ -71,9 +71,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //cmbCorrType.ReadOnly = true;
-            //txtDir.ReadOnly = true;
-
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
 

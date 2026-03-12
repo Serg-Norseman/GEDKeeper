@@ -57,8 +57,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //cmbLinkageType.ReadOnly
-
             fController = new ParentsEditDlgController(this);
             fController.Init(baseWin);
         }

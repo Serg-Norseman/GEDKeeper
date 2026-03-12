@@ -52,9 +52,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //cmbRel1.ReadOnly = true;
-            //cmbRel2.ReadOnly = true;
-
             txtVal1.Provider = new NetMaskedTextProvider(LangMan.LS(LSID.AgeInputMask));
             txtVal2.Provider = new NetMaskedTextProvider(LangMan.LS(LSID.AgeInputMask));
 

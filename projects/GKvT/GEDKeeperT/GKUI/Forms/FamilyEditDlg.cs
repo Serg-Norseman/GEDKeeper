@@ -15,6 +15,7 @@ using GKCore.Design.Views;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKUI.Components;
+using NStack;
 
 namespace GKUI.Forms
 {
@@ -92,8 +93,6 @@ namespace GKUI.Forms
             InitializeComponent();
 
             //tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
-            //txtHusband.TextChanged += EditSpouse_TextChanged;
-            //txtWife.TextChanged += EditSpouse_TextChanged;
 
             fChildrenList = new GKSheetList(pageChilds);
             fEventsList = new GKSheetList(pageEvents);
@@ -146,7 +145,7 @@ namespace GKUI.Forms
             fController.JumpToWife();
         }
 
-        private void EditSpouse_TextChanged(object sender, EventArgs e)
+        private void EditSpouse_TextChanged(object sender, ustring e)
         {
             SetTitle(string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.Family), txtHusband.Text, txtWife.Text));
         }

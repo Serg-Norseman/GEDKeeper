@@ -42,10 +42,12 @@ namespace GKCore.Controllers
         {
             fTempRec = null;
 
+            fView.Priority.ReadOnly = true;
             for (GDMResearchPriority rp = GDMResearchPriority.rpNone; rp <= GDMResearchPriority.rpTop; rp++) {
                 fView.Priority.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
             }
 
+            fView.GoalType.ReadOnly = true;
             for (GDMGoalType gt = GDMGoalType.gtIndividual; gt <= GDMGoalType.gtOther; gt++) {
                 fView.GoalType.Add(LangMan.LS(GKData.GoalNames[(int)gt]));
             }

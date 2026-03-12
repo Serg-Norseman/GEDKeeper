@@ -41,6 +41,9 @@ namespace GKCore.Controllers
 
         public AgeEditDlgController(IAgeEditDlg view) : base(view)
         {
+            fView.RelativeCombo1.ReadOnly = true;
+            fView.RelativeCombo2.ReadOnly = true;
+
             for (int i = 0; i < GEDCOMConsts.AgeRelatives.Length; i++) {
                 fView.RelativeCombo1.AddItem(GEDCOMConsts.AgeRelatives[i], i - 1);
                 fView.RelativeCombo2.AddItem(GEDCOMConsts.AgeRelatives[i], i - 1);

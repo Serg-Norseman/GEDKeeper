@@ -43,7 +43,7 @@ namespace GKUI.Forms
             Add(lblTotalVal);
 
             btnCancel = new Button() { Enabled = false, TabIndex = 1 };
-            btnCancel.MouseClick += btnCancel_Click;
+            btnCancel.Clicked += btnCancel_Click;
             AddButton(btnCancel);
 
             Width = 64;

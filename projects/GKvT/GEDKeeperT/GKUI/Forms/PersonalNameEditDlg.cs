@@ -94,9 +94,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //cmbNameType.ReadOnly
-            //cmbLanguage.ReadOnly
-
             fController = new PersonalNameEditDlgController(this);
             fController.Init(baseWin);
         }

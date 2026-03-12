@@ -44,6 +44,9 @@ namespace GKCore.Controllers
 
         public MediaEditDlgController(IMediaEditDlg view) : base(view)
         {
+            fView.MediaType.ReadOnly = true;
+            fView.StoreType.ReadOnly = true;
+
             for (GDMMediaType mt = GDMMediaType.mtUnknown; mt <= GDMMediaType.mtLast; mt++) {
                 fView.MediaType.Add(LangMan.LS(GKData.MediaTypes[(int)mt]));
             }

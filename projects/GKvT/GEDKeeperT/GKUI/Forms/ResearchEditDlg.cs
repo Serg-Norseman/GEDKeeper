@@ -88,9 +88,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //cmbPriority.ReadOnly = true;
-            //cmbStatus.ReadOnly = true;
-
             fTasksList = new GKSheetList(pageTasks);
             fCommunicationsList = new GKSheetList(pageCommunications);
             fGroupsList = new GKSheetList(pageGroups);

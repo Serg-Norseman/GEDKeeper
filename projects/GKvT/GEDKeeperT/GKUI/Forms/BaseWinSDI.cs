@@ -215,6 +215,7 @@ namespace GKUI.Forms
             recView.SelectedCellChanged += List_SelectedIndexChanged;
             recView.UpdateContents();
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
+            recView.KeyDown += Form_KeyDown;
 
             //recView.ContextMenu = contextMenu;
             recView.MouseClick += (s, args) => {
@@ -312,32 +313,36 @@ namespace GKUI.Forms
             fController.SetMainTitle();
         }
 
-        /*private void Form_KeyDown(object sender, KeyEventArgs e)
+        private void Form_KeyDown(object sender, KeyEventEventArgs e)
         {
-            switch (e.Key) {
-                    /*case Keys.I:
-						ItemAdd();
-						break;
-					case Keys.D:
-						ItemDelete();
-						break;*//*
+            if (e.KeyEvent.IsCtrl) {
+                var key = e.KeyEvent.Key & ~Key.CtrlMask;
+                switch (key) {
+                    case Key.I:
+                        AddRecord();
+                        e.Handled = true;
+                        break;
 
-                case Keys.Enter:
-                    if (e.Control) {
+                    case Key.L:
+                        DeleteRecord();
+                        e.Handled = true;
+                        break;
+
+                    case Key.Enter:
                         EditRecord();
-                    }
-                    break;
+                        e.Handled = true;
+                        break;
 
-                case Keys.F12:
-                    break;
+                    case Key.F12:
+                        break;
 
-                    /*case Keys.F:
-        			if (e.Control) {
-        				QuickFind();
-        			}
-        			break;*//*
+                    case Key.F:
+                        (this as IWorkWindow).QuickSearch();
+                        e.Handled = true;
+                        break;
+                }
             }
-        }*/
+        }
 
         private void contextMenu_Opening(object sender, EventArgs e)
         {

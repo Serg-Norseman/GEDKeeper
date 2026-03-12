@@ -29,16 +29,16 @@ namespace GKUI.Forms
             };
 
             lblMail = new Label { Text = "mailto:gedkeeper@yandex.ru", X = 1, Y = 4, ColorScheme = linkScheme };
-            lblMail.MouseClick += LabelMail_Click;
+            lblMail.Clicked += LabelMail_Click;
 
             lblProjSite = new Label { Text = "https://gedkeeper.net/", X = 1, Y = 5, ColorScheme = linkScheme };
-            lblProjSite.MouseClick += LabelMail_Click;
+            lblProjSite.Clicked += LabelMail_Click;
 
             lblForum = new Label { Text = "https://gedkeeper.github.io/", X = 1, Y = 6, ColorScheme = linkScheme };
-            lblForum.MouseClick += LabelMail_Click;
+            lblForum.Clicked += LabelMail_Click;
 
             lblChannel = new Label { Text = "https://gedkeeper.github.io/", X = 1, Y = 7, ColorScheme = linkScheme };
-            lblChannel.MouseClick += LabelMail_Click;
+            lblChannel.Clicked += LabelMail_Click;
 
             Add(lblProduct, lblVersion, lblCopyright, lblChannel, lblForum, lblProjSite, lblMail);
 

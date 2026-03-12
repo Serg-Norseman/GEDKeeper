@@ -61,15 +61,21 @@ namespace GKUI.Forms
             lblAge = new Label();
             txtAge = new TextField();
 
-            btnAccept.Width = 15;
+            btnAddress.Width = 16;
+            btnAddress.TabIndex = 1;
+            btnAddress.Clicked += btnAddress_Click;
+
+            btnAccept.Width = 16;
             btnAccept.TabIndex = 2;
-            btnAccept.Text = "btnAccept";
             btnAccept.Clicked += AcceptClickHandler;
 
-            btnCancel.Width = 15;
+            btnCancel.Width = 16;
             btnCancel.TabIndex = 3;
-            btnCancel.Text = "btnCancel";
             btnCancel.Clicked += CancelClickHandler;
+
+            AddButton(btnAddress);
+            AddButton(btnAccept);
+            AddButton(btnCancel);
 
             tabsData.AddTab(pageCommon, true);
             tabsData.AddTab(pageNotes, false);
@@ -128,7 +134,7 @@ namespace GKUI.Forms
             txtEventPlace.Y = 8;
             txtEventPlace.Width = 61;
             txtEventPlace.TabIndex = 6;
-            //txtEventPlace.KeyDown += EditEventPlace_KeyDown;
+            txtEventPlace.KeyDown += EditEventPlace_KeyDown;
 
             btnPlaceAdd.X = 64;
             btnPlaceAdd.Y = 8;
@@ -148,7 +154,6 @@ namespace GKUI.Forms
             lblDate.Y = 10;
             lblDate.Width = 6;
             lblDate.TabIndex = 10;
-            lblDate.Text = "lblDate";
 
             dateCtl.X = 1;
             dateCtl.Y = 11;
@@ -157,7 +162,6 @@ namespace GKUI.Forms
             lblAge.X = 1;
             lblAge.Y = 17;
             lblAge.TabIndex = 18;
-            lblAge.Text = "lblAge";
 
             txtAge.X = 1;
             txtAge.Y = 18;
@@ -188,18 +192,9 @@ namespace GKUI.Forms
             txtEventOrg.Width = 74;
             txtEventOrg.TabIndex = 21;
 
-            btnAddress.Width = 16;
-            btnAddress.TabIndex = 1;
-            btnAddress.Text = "btnAddress";
-            btnAddress.Clicked += btnAddress_Click;
-
             Width = 80;
             Height = 36;
             Add(tabsData);
-
-            AddButton(btnAddress);
-            AddButton(btnAccept);
-            AddButton(btnCancel);
         }
     }
 }

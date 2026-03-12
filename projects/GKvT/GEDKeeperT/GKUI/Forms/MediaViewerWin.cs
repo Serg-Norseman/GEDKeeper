@@ -113,12 +113,10 @@ namespace GKUI.Forms
 
         public void SetViewImage(IImage img)
         {
-            /*var imageCtl = new GKUI.Components.ImageView();
+            var imageCtl = new GKUI.Components.ImageView();
             imageCtl.OpenImage(fController, img);
 
-            fController.ProcessPortraits(imageCtl);
-
-            SetViewControl(imageCtl);*/
+            SetViewControl(imageCtl);
         }
 
         public void DisposeViewControl()

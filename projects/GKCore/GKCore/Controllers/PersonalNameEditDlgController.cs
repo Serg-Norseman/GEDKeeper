@@ -48,6 +48,8 @@ namespace GKCore.Controllers
 
         public PersonalNameEditDlgController(IPersonalNameEditDlg view) : base(view)
         {
+            fView.NameType.ReadOnly = true;
+            fView.Language.ReadOnly = true;
             for (GDMNameType nt = GDMNameType.ntNone; nt <= GDMNameType.ntMarried; nt++) {
                 fView.NameType.Add(LangMan.LS(GKData.NameTypes[(int)nt]));
             }

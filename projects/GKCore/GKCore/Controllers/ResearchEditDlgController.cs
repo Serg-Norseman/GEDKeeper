@@ -42,10 +42,12 @@ namespace GKCore.Controllers
             fView.CommunicationsList.OnModify += ListJumpHandler;
             fView.GroupsList.OnModify += ListJumpHandler;
 
+            fView.Priority.ReadOnly = true;
             for (GDMResearchPriority rp = GDMResearchPriority.rpNone; rp <= GDMResearchPriority.rpTop; rp++) {
                 fView.Priority.Add(LangMan.LS(GKData.PriorityNames[(int)rp]));
             }
 
+            fView.Status.ReadOnly = true;
             for (GDMResearchStatus rs = GDMResearchStatus.rsDefined; rs <= GDMResearchStatus.rsWithdrawn; rs++) {
                 fView.Status.Add(LangMan.LS(GKData.StatusNames[(int)rs]));
             }

@@ -71,9 +71,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //txtPriority.ReadOnly = true;
-            //cmbGoalType.ReadOnly = true;
-
             fNotesList = new GKSheetList(pageNotes);
 
             fController = new TaskEditDlgController(this);

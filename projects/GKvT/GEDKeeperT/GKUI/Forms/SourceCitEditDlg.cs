@@ -56,8 +56,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //txtCertainty.ReadOnly
-
             fController = new SourceCitEditDlgController(this);
             fController.Init(baseWin);
         }

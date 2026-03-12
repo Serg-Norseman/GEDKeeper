@@ -191,9 +191,6 @@ namespace GKUI.Forms
         public PersonEditDlg()
         {
             InitializeComponent();
-
-            // cmbRestriction.ReadOnly
-            // cmbSex.ReadOnly
         }
 
         public PersonEditDlg(IBaseWindow baseWin) : this()

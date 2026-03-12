@@ -89,8 +89,6 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //cmbMediaType.ReadOnly = true;
-            //cmbStoreType.ReadOnly = true;
             //tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
             fFilesList = new GKSheetList(pageFiles);

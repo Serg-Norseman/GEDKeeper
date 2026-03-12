@@ -41,10 +41,12 @@ namespace GKCore.Controllers
         {
             fTempInd = null;
 
+            fView.CorrType.ReadOnly = true;
             for (GDMCommunicationType ct = GDMCommunicationType.ctCall; ct <= GDMCommunicationType.ctLast; ct++) {
                 fView.CorrType.Add(LangMan.LS(GKData.CommunicationNames[(int)ct]));
             }
 
+            fView.Dir.ReadOnly = true;
             fView.Dir.AddRange(new object[] {
                 LangMan.LS(LSID.CD_1),
                 LangMan.LS(LSID.CD_2)

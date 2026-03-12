@@ -40,10 +40,12 @@ namespace GKCore.Controllers
 
         public FamilyEditDlgController(IFamilyEditDlg view) : base(view)
         {
+            fView.Restriction.ReadOnly = true;
             for (GDMRestriction res = GDMRestriction.rnNone; res <= GDMRestriction.rnLast; res++) {
                 fView.Restriction.Add(LangMan.LS(GKData.Restrictions[(int)res]));
             }
 
+            fView.MarriageStatus.ReadOnly = true;
             for (int i = 0; i < GKData.MarriageStatus.Length; i++) {
                 fView.MarriageStatus.Add(LangMan.LS(GKData.MarriageStatus[i].Name));
             }

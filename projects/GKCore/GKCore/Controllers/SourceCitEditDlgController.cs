@@ -41,6 +41,7 @@ namespace GKCore.Controllers
         {
             fSourcesList = new StringList();
 
+            fView.Certainty.ReadOnly = true;
             for (int i = 0; i < GKData.CertaintyAssessments.Length; i++) {
                 fView.Certainty.Add(LangMan.LS(GKData.CertaintyAssessments[i]));
             }

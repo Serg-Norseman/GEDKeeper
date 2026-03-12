@@ -13,6 +13,7 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Lists;
+using GKCore.Utilities;
 using GKUI.Components;
 using Terminal.Gui;
 
@@ -73,12 +74,12 @@ namespace GKUI.Forms
 
         IComboBox IEventEditDlg.Cause
         {
-            get { return  GetControlHandler<IComboBox>(txtEventCause); }
+            get { return GetControlHandler<IComboBox>(txtEventCause); }
         }
 
         IComboBox IEventEditDlg.Agency
         {
-            get { return  GetControlHandler<IComboBox>(txtEventOrg); }
+            get { return GetControlHandler<IComboBox>(txtEventOrg); }
         }
 
         #endregion
@@ -121,10 +122,10 @@ namespace GKUI.Forms
 
         private void EditEventType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            /*if (cmbEventType.Text == FreqCollection<string>.LineItem) {
-                cmbEventType.SelectedIndex = 0;
+            if (cmbEventType.Text == FreqCollection<string>.LineItem) {
+                //cmbEventType.SelectedIndex = 0;
                 return;
-            }*/
+            }
 
             fController.ChangeEventType();
         }

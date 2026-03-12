@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Design.Views;
@@ -26,12 +27,10 @@ namespace GKUI.Forms
             fController.UpdateView();
         }
 
-        private void LabelMail_Click(object sender, MouseEventArgs e)
+        private void LabelMail_Click(object sender, EventArgs e)
         {
-            if (e.MouseEvent.View is Label lbl) {
+            if (sender is Label lbl)
                 GKUtils.LoadExtFile(lbl.Text.ToString());
-                e.Handled = true;
-            }
         }
     }
 }

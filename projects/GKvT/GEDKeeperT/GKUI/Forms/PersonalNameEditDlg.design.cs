@@ -101,7 +101,6 @@ namespace GKUI.Forms
             txtPatronymic.KeyDown += txtXName_KeyDown;
             txtPatronymic.Leave += txtXName_Leave;
 
-
             lblSurnamePrefix.Location = new Point(32, 1);
             lblSurnamePrefix.TabIndex = 8;
 
@@ -130,7 +129,6 @@ namespace GKUI.Forms
             txtNickname.Size = new Size(30, 1);
             txtNickname.TabIndex = 15;
 
-
             lblType.Location = new Point(1, 13);
             lblType.TabIndex = 16;
 
@@ -145,7 +143,6 @@ namespace GKUI.Forms
             cmbLanguage.Size = new Size(30, 2);
             cmbLanguage.TabIndex = 21;
             cmbLanguage.SelectedItemChanged += cmbLanguage_SelectedIndexChanged;
-
 
             Size = new Size(64, 23);
             Add(cmbLanguage);
