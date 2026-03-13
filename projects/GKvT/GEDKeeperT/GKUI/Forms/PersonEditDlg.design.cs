@@ -129,11 +129,11 @@ namespace GKUI.Forms
 
             btnAccept.Size = new Size(16, 1);
             btnAccept.TabIndex = 5;
-            btnAccept.MouseClick += AcceptClickHandler;
+            btnAccept.Clicked += AcceptClickHandler;
 
             btnCancel.Size = new Size(16, 1);
             btnCancel.TabIndex = 6;
-            btnCancel.MouseClick += CancelClickHandler;
+            btnCancel.Clicked += CancelClickHandler;
 
             AddButton(btnNameCopy);
             AddButton(btnAccept);

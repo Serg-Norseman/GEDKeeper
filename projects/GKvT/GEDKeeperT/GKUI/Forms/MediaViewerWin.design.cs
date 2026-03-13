@@ -8,7 +8,7 @@ namespace GKUI.Forms
     {
         private void InitializeComponent()
         {
-            Size = new Size(100, 60);
+            Size = new Size(160, 60);
             Closing += MediaViewerWin_FormClosing;
             KeyDown += MediaViewerWin_KeyDown;
         }

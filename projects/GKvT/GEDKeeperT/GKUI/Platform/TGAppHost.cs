@@ -175,6 +175,7 @@ namespace GKUI.Platform
             container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);
             container.Register<IAddressEditDlg, AddressEditDlg>(LifeCycle.Transient);
             container.Register<IAssociationEditDlg, AssociationEditDlg>(LifeCycle.Transient);
+            //container.Register<IBaseWindow, BaseWinSDI>(LifeCycle.Transient); // breaks menu and statusbar
             container.Register<ICommunicationEditDlg, CommunicationEditDlg>(LifeCycle.Transient);
             container.Register<IEventEditDlg, EventEditDlg>(LifeCycle.Transient);
             container.Register<IFamilyEditDlg, FamilyEditDlg>(LifeCycle.Transient);

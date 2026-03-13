@@ -39,7 +39,7 @@
 
     <ItemGroup>
         <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
-        <!--PackageReference Include="Terminal.Gui" Version="1.20.0-develop.4 " /-->
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
     </ItemGroup>
 
 

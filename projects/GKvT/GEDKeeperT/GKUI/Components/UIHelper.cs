@@ -162,5 +162,30 @@ namespace GKUI.Components
             comboBox.SearchMode = false;
             comboBox.DropDownBorderStyle = BorderStyle.Single;
         }
+
+        public static Size CalculateTerminalSize(int imgW, int imgH, int maxW, int maxH, double charW = 7.5, double charH = 14.0)
+        {
+            // We take into account the "stretched" character. Since the character is taller than the width,
+            // the image in the terminal will be compressed horizontally, unless the aspect ratio is adjusted.
+            double asciiAspect = charW / charH;
+            double imageAspect = (double)imgW / imgH;
+
+            // Adjusted aspect ratio for the terminal.
+            double targetAspect = imageAspect / asciiAspect;
+
+            int resultW, resultH;
+
+            // First, we try to fit it to the maximum width.
+            resultW = maxW;
+            resultH = (int)Math.Round(resultW / targetAspect);
+
+            // If the height exceeds the limit, we adjust it to the maximum height
+            if (resultH > maxH) {
+                resultH = maxH;
+                resultW = (int)Math.Round(resultH * targetAspect);
+            }
+
+            return new Size(resultW, resultH);
+        }
     }
 }
