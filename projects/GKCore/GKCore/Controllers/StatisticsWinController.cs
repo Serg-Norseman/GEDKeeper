@@ -43,6 +43,8 @@ namespace GKCore.Controllers
 
         public StatisticsWinController(IStatisticsWin view, List<GDMRecord> selectedRecords) : base(view)
         {
+            fView.StatsType.ReadOnly = true;
+
             fSelectedRecords = selectedRecords;
 
             fCurrentValues = new List<StatsItem>();

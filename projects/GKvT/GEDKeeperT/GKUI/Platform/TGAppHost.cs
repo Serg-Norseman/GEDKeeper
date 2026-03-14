@@ -182,6 +182,7 @@ namespace GKUI.Platform
             container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
             container.Register<IGroupEditDlg, GroupEditDlg>(LifeCycle.Transient);
             container.Register<IMediaEditDlg, MediaEditDlg>(LifeCycle.Transient);
+            container.Register<IMediaFileEditDlg, MediaFileEditDlg>(LifeCycle.Transient);
             container.Register<IMediaViewerWin, MediaViewerWin>(LifeCycle.Transient);
             container.Register<INoteEditDlg, NoteEditDlg>(LifeCycle.Transient);
             container.Register<IOrganizerWin, OrganizerWin>(LifeCycle.Transient);
@@ -194,12 +195,14 @@ namespace GKUI.Platform
             container.Register<IResearchEditDlg, ResearchEditDlg>(LifeCycle.Transient);
             container.Register<ISourceCitEditDlg, SourceCitEditDlg>(LifeCycle.Transient);
             container.Register<ISourceEditDlg, SourceEditDlg>(LifeCycle.Transient);
+            container.Register<IStatisticsWin, StatisticsWin>(LifeCycle.Transient);
             container.Register<ITaskEditDlg, TaskEditDlg>(LifeCycle.Transient);
             container.Register<ITreeChartWin, TreeChartWin>(LifeCycle.Transient);
             container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
             container.Register<IRecordInfoDlg, RecordInfoDlg>(LifeCycle.Transient);
             container.Register<ISourceCallNumberEditDlg, SourceCallNumberEditDlg>(LifeCycle.Transient);
             container.Register<IRepositoryCitEditDlg, RepositoryCitEditDlg>(LifeCycle.Transient);
+            container.Register<IDNATestEditDlg, DNATestEditDlg>(LifeCycle.Transient);
             container.Register<IAgeEditDlg, AgeEditDlg>(LifeCycle.Transient);
             container.Register<IChronicleWin, ChronicleWin>(LifeCycle.Transient);
             container.Register<IProgressDialog, ProgressDlg>(LifeCycle.Transient);
@@ -214,6 +217,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(NumericStepper), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(RadioButton), typeof(RadioButtonHandler));
+            ControlsManager.RegisterHandlerType(typeof(TabPage), typeof(TabPageHandler));
             ControlsManager.RegisterHandlerType(typeof(TabView), typeof(TabControlHandler));
             ControlsManager.RegisterHandlerType(typeof(TabView.Tab), typeof(TabPageHandler));
             ControlsManager.RegisterHandlerType(typeof(TextField), typeof(TextBoxHandler));

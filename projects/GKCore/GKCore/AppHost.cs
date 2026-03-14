@@ -896,6 +896,7 @@ namespace GKCore
                         return result;
                     }
 
+#if !TERM
                     result = AppHost.Container.Resolve<IBaseWindow>();
                     ShowWindow(result);
 
@@ -907,6 +908,7 @@ namespace GKCore
                     }
 
                     RestoreWinMRU(result);
+#endif
 
                     await EndLoading();
                 } finally {

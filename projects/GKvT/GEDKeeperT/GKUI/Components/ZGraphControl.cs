@@ -16,7 +16,7 @@ namespace GKUI.Components
     /// <summary>
     /// 
     /// </summary>
-    public sealed class ZGraphControl : View, IGraphControl
+    public sealed class ZGraphControl : GraphView, IGraphControl
     {
 
         public ZGraphControl()

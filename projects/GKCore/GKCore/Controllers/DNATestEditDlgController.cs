@@ -43,16 +43,19 @@ namespace GKCore.Controllers
 
         public DNATestEditDlgController(IDNATestEditDlg view) : base(view)
         {
+            fView.Restriction.ReadOnly = true;
             for (GDMRestriction res = GDMRestriction.rnNone; res <= GDMRestriction.rnLast; res++) {
                 fView.Restriction.Add(LangMan.LS(GKData.Restrictions[(int)res]));
             }
 
+            fView.StoreType.ReadOnly = true;
             for (var mst = MediaStoreType.mstReference; mst <= MediaStoreType.mstURL; mst++) {
                 if (mst == MediaStoreType.mstArchive) continue;
 
                 fView.StoreType.AddItem(LangMan.LS(GKData.GKStoreTypes[(int)mst].Name), mst);
             }
 
+            fView.FileFormat.ReadOnly = true;
             for (var dff = GDMDNAFileFormat.None; dff <= GDMDNAFileFormat.STR; dff++) {
                 fView.FileFormat.AddItem(dff.ToString(), dff);
             }

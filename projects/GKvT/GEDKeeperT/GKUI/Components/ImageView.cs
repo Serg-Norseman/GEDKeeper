@@ -84,7 +84,6 @@ namespace GKUI.Components
                     matrix[y, x] = new BrSym(brSym.Symbol, brSym.Attribute);
 
                     //var color = ColorMapper.GetClosestConsoleColor(new TrueColor(pixel.R, pixel.G, pixel.B));
-                    //matrix[y, x] = new BrSym('x', GetAttribute(color)); // '\x2591'
                 }
             }
 
