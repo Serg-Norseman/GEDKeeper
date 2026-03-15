@@ -101,7 +101,7 @@ namespace GKUI.Components
 
         public void Activate()
         {
-            //Focus();
+            SetFocus();
         }
 
         public void UpdateSheet()
@@ -176,7 +176,7 @@ namespace GKUI.Components
         private void List_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (fListModel != null) {
-                int itemIndex = -1; // fList.SelectedIndex;
+                int itemIndex = fList.SelectedIndex;
                 object itemData = fList.GetSelectedData();
                 if (itemData == null) return;
 

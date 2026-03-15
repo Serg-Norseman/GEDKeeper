@@ -71,7 +71,7 @@ namespace GKUI.Forms
             cmbGoalType.Location = new Point(12, 0);
             cmbGoalType.Size = new Size(16, 2);
             cmbGoalType.TabIndex = 1;
-            cmbGoalType.SelectedItemChanged += cmbGoalType_SelectedIndexChanged;
+            cmbGoalType.SelectedIndexChanged += cmbGoalType_SelectedIndexChanged;
 
             txtGoal.Location = new Point(29, 0);
             txtGoal.ReadOnly = true;

@@ -26,6 +26,7 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Style", "IDE0251:Member can be made 'readonly'")]
 [assembly: SuppressMessage("Style", "IDE0290:Use primary constructor")]
 [assembly: SuppressMessage("Style", "IDE0300:Collection initialization can be simplified")]
+[assembly: SuppressMessage("Style", "IDE0305:Collection initialization can be simplified")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming rule violation")]
 
 [assembly: SuppressMessage("Style", "CA1510:Use ArgumentNullException throw helper")]

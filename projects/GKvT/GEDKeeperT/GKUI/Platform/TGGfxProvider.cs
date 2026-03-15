@@ -60,7 +60,6 @@ namespace GKUI.Platform
                 throw new ArgumentNullException(nameof(stream));
 
             try {
-                var bmpDPI = ImageProcess.GetBitmapDPI(stream);
                 var bmp = Image.Load<Rgba32>(stream);
                 Image<Rgba32> result = null;
 
@@ -74,16 +73,6 @@ namespace GKUI.Platform
                     } else {
                         imgWidth = cutoutArea.Width;
                         imgHeight = cutoutArea.Height;
-                    }
-
-                    if (reduce) {
-                        /*float targetDPI = Screen.PrimaryScreen.DPI;
-
-                        if (bmpDPI != 0 && bmpDPI > targetDPI) {
-                            float resizeRatio = targetDPI / bmpDPI;
-                            imgWidth = (int)Math.Round(imgWidth * resizeRatio);
-                            imgHeight = (int)Math.Round(imgHeight * resizeRatio);
-                        }*/
                     }
 
                     bool thumbIsEmpty = (thumbWidth <= 0 && thumbHeight <= 0);

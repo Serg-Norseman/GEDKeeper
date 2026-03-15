@@ -35,7 +35,7 @@ namespace GKUI.Forms
             cbType.Text = "test";
             cbType.Location = new Point(1, 0);
             cbType.Size = new Size(43, 2);
-            cbType.SelectedItemChanged += cbType_SelectedIndexChanged;
+            cbType.SelectedIndexChanged += cbType_SelectedIndexChanged;
 
             tbExcelExport = new Button();
             tbExcelExport.Text = "Excel";

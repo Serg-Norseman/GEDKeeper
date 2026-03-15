@@ -92,7 +92,7 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
+            tabsData.SelectedTabChanged += tabControl_SelectedTabChanged;
 
             fChildrenList = new GKSheetList(pageChilds);
             fEventsList = new GKSheetList(pageEvents);
@@ -107,7 +107,7 @@ namespace GKUI.Forms
 
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //fController.LockEditor(cmbRestriction.SelectedIndex == (int)GDMRestriction.rnLocked);
+            fController.LockEditor(cmbRestriction.SelectedIndex == (int)GDMRestriction.rnLocked);
         }
 
         public void SetTarget(TargetMode targetType, GDMIndividualRecord target)
@@ -145,7 +145,7 @@ namespace GKUI.Forms
             fController.JumpToWife();
         }
 
-        private void EditSpouse_TextChanged(object sender, ustring e)
+        private void EditSpouse_TextChanged(object sender, string e)
         {
             SetTitle(string.Format("{0} \"{1} - {2}\"", LangMan.LS(LSID.Family), txtHusband.Text, txtWife.Text));
         }

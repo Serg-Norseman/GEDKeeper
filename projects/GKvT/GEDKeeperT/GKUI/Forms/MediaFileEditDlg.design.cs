@@ -85,7 +85,7 @@ namespace GKUI.Forms
             cmbStoreType.Location = new Point(23, 8);
             cmbStoreType.Size = new Size(30, 2);
             cmbStoreType.TabIndex = 8;
-            cmbStoreType.SelectedItemChanged += cmbStoreType_SelectedIndexChanged;
+            cmbStoreType.SelectedIndexChanged += cmbStoreType_SelectedIndexChanged;
 
             Size = new Size(74, 14);
             Add(lblName);

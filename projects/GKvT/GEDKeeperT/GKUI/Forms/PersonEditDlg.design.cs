@@ -145,7 +145,7 @@ namespace GKUI.Forms
             cmbRestriction.Location = new Point(26, 46);
             cmbRestriction.Size = new Size(20, 2);
             cmbRestriction.TabIndex = 2;
-            cmbRestriction.SelectedItemChanged += cbRestriction_SelectedIndexChanged;
+            cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
 
             Add(lblRestriction, cmbRestriction);
 
@@ -220,7 +220,7 @@ namespace GKUI.Forms
             cmbSex.Location = new Point(57, 3);
             cmbSex.Size = new Size(18, 2);
             cmbSex.TabIndex = 17;
-            cmbSex.SelectedItemChanged += cbSex_SelectedIndexChanged;
+            cmbSex.SelectedIndexChanged += cbSex_SelectedIndexChanged;
 
             chkPatriarch.Location = new Point(57, 5);
             chkPatriarch.TabIndex = 18;

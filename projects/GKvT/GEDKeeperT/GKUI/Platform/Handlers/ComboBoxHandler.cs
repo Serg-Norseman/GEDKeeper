@@ -36,14 +36,14 @@ namespace GKUI.Platform.Handlers
 
         public int SelectedIndex
         {
-            get { return Control.SelectedItem; }
-            set { Control.SelectedItem = value; }
+            get { return Control.SelectedIndex; }
+            set { Control.SelectedIndex = value; }
         }
 
         public object SelectedItem
         {
             get {
-                int selectedIndex = Control.SelectedItem;
+                int selectedIndex = Control.SelectedIndex;
                 var comboItem = (selectedIndex >= 0 && selectedIndex < fItems.Count) ? fItems[selectedIndex] : null;
                 return comboItem;
             }
@@ -106,7 +106,7 @@ namespace GKUI.Platform.Handlers
 
         public T GetSelectedTag<T>()
         {
-            int selectedIndex = Control.SelectedItem;
+            int selectedIndex = Control.SelectedIndex;
             var comboItem = (selectedIndex >= 0 && selectedIndex < fItems.Count) ? fItems[selectedIndex] as ComboItem<T> : null;
             return (comboItem != null) ? comboItem.Tag : default;
         }
@@ -115,13 +115,13 @@ namespace GKUI.Platform.Handlers
         {
             for (int i = 0; i < fItems.Count; i++) {
                 if (fItems[i] is ComboItem<T> comboItem && object.Equals(comboItem.Tag, tagValue)) {
-                    Control.SelectedItem = i;
+                    Control.SelectedIndex = i;
                     return;
                 }
             }
 
             if (allowDefault) {
-                Control.SelectedItem = 0;
+                Control.SelectedIndex = 0;
             }
         }
     }

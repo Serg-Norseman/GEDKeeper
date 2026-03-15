@@ -190,7 +190,7 @@ namespace GKUI.Forms
             cmbRestriction.Y = 36;
             cmbRestriction.Width = 25;
             cmbRestriction.TabIndex = 3;
-            cmbRestriction.SelectedItemChanged += cbRestriction_SelectedIndexChanged;
+            cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
 
             Width = 104;
             Height = 39;

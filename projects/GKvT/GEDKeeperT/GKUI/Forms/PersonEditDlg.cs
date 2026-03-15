@@ -195,12 +195,12 @@ namespace GKUI.Forms
 
         public PersonEditDlg(IBaseWindow baseWin) : this()
         {
-            //tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
+            tabsData.SelectedTabChanged += tabControl_SelectedTabChanged;
 
             txtMarriedSurname.TextChanged += Names_TextChanged;
             txtSurname.TextChanged += Names_TextChanged;
             txtName.TextChanged += Names_TextChanged;
-            //cmbPatronymic.TextChanged += Names_TextChanged;
+            cmbPatronymic.TextChanged += Names_TextChanged;
 
             fEventsList = new GKSheetList(pageEvents);
             fSpousesList = new GKSheetList(pageSpouses);
@@ -267,7 +267,7 @@ namespace GKUI.Forms
             }
         }
 
-        private void Names_TextChanged(object sender, ustring e)
+        private void Names_TextChanged(object sender, string e)
         {
             SetTitle(string.Format("{0} \"{1} {2} {3}\" [{4}]", LangMan.LS(LSID.Person), txtSurname.Text, txtName.Text,
                                   cmbPatronymic.Text, fController.IndividualRecord.GetXRefNum()));
@@ -354,7 +354,7 @@ namespace GKUI.Forms
 
         public void SetNeedSex(GDMSex needSex)
         {
-            cmbSex.SelectedItem = (int)needSex;
+            cmbSex.SelectedIndex = (int)needSex;
         }
     }
 }

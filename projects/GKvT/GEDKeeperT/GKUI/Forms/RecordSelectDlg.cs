@@ -156,7 +156,7 @@ namespace GKUI.Forms
 
         private System.Timers.Timer fChangeTimer;
 
-        private void txtFastFilter_TextChanged(object sender, EventArgs e)
+        private void txtFastFilter_TextChanged(object sender, string e)
         {
             if (fChangeTimer == null) {
                 fChangeTimer = new System.Timers.Timer(500);

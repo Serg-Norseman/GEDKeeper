@@ -140,7 +140,7 @@ namespace GKUI.Forms
             cmbRestriction.Location = new Point(1, 20);
             cmbRestriction.Size = new Size(20, 2);
             cmbRestriction.TabIndex = 3;
-            cmbRestriction.SelectedItemChanged += cbRestriction_SelectedIndexChanged;
+            cmbRestriction.SelectedIndexChanged += cbRestriction_SelectedIndexChanged;
 
             var commView = new View();
             commView.Add(lblYHaplogroup);

@@ -37,7 +37,7 @@ namespace GKUI.Components
         {
             var dataList = comboBox.Source.ToList();
 
-            int selectedIndex = comboBox.SelectedItem;
+            int selectedIndex = comboBox.SelectedIndex;
             var comboItem = (selectedIndex >= 0 && selectedIndex < dataList.Count) ? dataList[selectedIndex] as ComboItem<T> : null;
             return (comboItem != null) ? comboItem.Tag : default;
         }
@@ -51,13 +51,13 @@ namespace GKUI.Components
                 var comboItem = item as ComboItem<T>;
 
                 if (comboItem != null && object.Equals(comboItem.Tag, tagValue)) {
-                    comboBox.SelectedItem = i;
+                    comboBox.SelectedIndex = i;
                     return;
                 }
             }
 
             if (allowDefault) {
-                comboBox.SelectedItem = 0;
+                comboBox.SelectedIndex = 0;
             }
         }
 

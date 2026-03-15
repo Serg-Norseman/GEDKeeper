@@ -88,7 +88,7 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
+            tabsData.SelectedTabChanged += tabControl_SelectedTabChanged;
 
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
@@ -123,7 +123,7 @@ namespace GKUI.Forms
         private void EditEventType_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbEventType.Text == FreqCollection<string>.LineItem) {
-                //cmbEventType.SelectedIndex = 0;
+                cmbEventType.SelectedIndex = 0;
                 return;
             }
 

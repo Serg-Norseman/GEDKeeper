@@ -40,7 +40,7 @@ namespace GKUI.Forms
             txtFastFilter.Size = new Size(60, 2);
             txtFastFilter.TabIndex = 0;
             txtFastFilter.KeyDown += txtFastFilter_KeyDown;
-            //txtFastFilter.TextChanged += txtFastFilter_TextChanged;
+            txtFastFilter.TextChanged += txtFastFilter_TextChanged;
 
             panList.Location = new Point(1, 3);
             panList.Size = new Size(60, 35);

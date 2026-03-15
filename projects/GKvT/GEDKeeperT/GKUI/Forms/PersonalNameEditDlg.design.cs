@@ -142,7 +142,7 @@ namespace GKUI.Forms
             cmbLanguage.Location = new Point(1, 17);
             cmbLanguage.Size = new Size(30, 2);
             cmbLanguage.TabIndex = 21;
-            cmbLanguage.SelectedItemChanged += cmbLanguage_SelectedIndexChanged;
+            cmbLanguage.SelectedIndexChanged += cmbLanguage_SelectedIndexChanged;
 
             Size = new Size(64, 23);
             Add(cmbLanguage);

@@ -76,7 +76,7 @@ namespace GKUI.Forms
             fController.View();
         }
 
-        private void edName_TextChanged(object sender, ustring e)
+        private void edName_TextChanged(object sender, string e)
         {
             SetTitle(string.Format("{0} \"{1}\"", LangMan.LS(LSID.RPMultimedia), txtName.Text));
         }

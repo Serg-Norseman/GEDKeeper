@@ -115,7 +115,7 @@ namespace GKUI.Forms
             cmbEventType.Y = 2;
             cmbEventType.Width = 32;
             cmbEventType.TabIndex = 1;
-            cmbEventType.SelectedItemChanged += EditEventType_SelectedIndexChanged;
+            cmbEventType.SelectedIndexChanged += EditEventType_SelectedIndexChanged;
 
             lblAttrValue.X = 1;
             lblAttrValue.Y = 4;

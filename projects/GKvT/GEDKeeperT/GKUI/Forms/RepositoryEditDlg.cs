@@ -51,7 +51,7 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
+            tabsData.SelectedTabChanged += tabControl_SelectedTabChanged;
 
             fNotesList = new GKSheetList(pageNotes);
             fUserRefList = new GKSheetList(pageUserRefs);

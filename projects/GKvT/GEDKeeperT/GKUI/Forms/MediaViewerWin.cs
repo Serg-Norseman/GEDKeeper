@@ -64,7 +64,7 @@ namespace GKUI.Forms
             if (localizable != null) localizable.SetLocale();
         }
 
-        private void MediaViewerWin_FormClosing(/*object sender,*/ ToplevelClosingEventArgs e)
+        private void MediaViewerWin_FormClosing(object sender, ToplevelClosingEventArgs e)
         {
         }
 

@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using BSLib;
 using GDModel;
 using GKCore;
 using GKCore.Design.Controls;
@@ -80,8 +81,8 @@ namespace GKUI.Components
             UIHelper.SetupComboBox(cmbDate1Calendar);
             UIHelper.SetupComboBox(cmbDate2Calendar);
 
-            //cmbDate1Calendar.SelectedIndex = 0;
-            //cmbDate2Calendar.SelectedIndex = 0;
+            cmbDate1Calendar.SelectedIndex = 0;
+            cmbDate2Calendar.SelectedIndex = 0;
 
             //fToolTip.SetToolTip(txtDate1, txtDate1.RegionalDatePattern);
             //fToolTip.SetToolTip(txtDate2, txtDate2.RegionalDatePattern);
@@ -89,7 +90,7 @@ namespace GKUI.Components
 
         public void ChangeDateType()
         {
-            /*int idx = cmbDateType.SelectedIndex;
+            int idx = cmbDateType.SelectedIndex;
             if (idx < 0 || idx >= GKData.DateKinds.Length) return;
 
             byte dates = GKData.DateKinds[idx].Dates;
@@ -102,7 +103,7 @@ namespace GKUI.Components
 
             txtDate2.Enabled = vis2;
             cmbDate2Calendar.Enabled = vis2;
-            chkBC2.Enabled = vis2;*/
+            chkBC2.Enabled = vis2;
 
             DoDateChanged();
         }
@@ -138,7 +139,7 @@ namespace GKUI.Components
             if (gcd2 == null) throw new ArgumentNullException("gcd2");
             gcd2.YearBC = chkBC2.Checked;
 
-            /*switch ((GDMDateType)cmbDateType.SelectedIndex) {
+            switch ((GDMDateType)cmbDateType.SelectedIndex) {
                 case GDMDateType.Exact:
                     result = gcd1;
                     break;
@@ -178,14 +179,14 @@ namespace GKUI.Components
                 case GDMDateType.Estimated: // EST gcd1
                     result = GDMCustomDate.CreateApproximated(gcd1, GDMApproximated.daEstimated);
                     break;
-            }*/
+            }
 
             return result;
         }
 
         private void SetDate(GDMCustomDate date)
         {
-            /*if (date is GDMDateRange dtRange) {
+            if (date is GDMDateRange dtRange) {
                 if (dtRange.After.StringValue == "" && dtRange.Before.StringValue != "") {
                     cmbDateType.SelectedIndex = 1; // BEF gcd2
                 } else if (dtRange.After.StringValue != "" && dtRange.Before.StringValue == "") {
@@ -236,7 +237,7 @@ namespace GKUI.Components
                 cmbDateType.Enabled = false;
             } else {
                 cmbDateType.Enabled = true;
-            }*/
+            }
         }
 
         private void FillControls(int dateIndex, GDMDate date)
@@ -265,12 +266,12 @@ namespace GKUI.Components
             }
         }
 
-        private void chkBC_CheckedChanged(object sender, EventArgs e)
+        private void chkBC_CheckedChanged(object sender, bool e)
         {
             DoDateChanged();
         }
 
-        private void txtDate_TextChanged(object sender, EventArgs e)
+        private void txtDate_TextChanged(object sender, string text)
         {
             DoDateChanged();
         }
@@ -305,24 +306,24 @@ namespace GKUI.Components
             cmbDateType.Location = new Point(1, 1);
             cmbDateType.Size = new Size(16, 2);
             cmbDateType.TabIndex = 1;
-            //cmbDateType.SelectedIndexChanged += cmbDateType_SelectedIndexChanged;
+            cmbDateType.SelectedIndexChanged += cmbDateType_SelectedIndexChanged;
 
             txtDate1.Location = new Point(18, 1);
             txtDate1.Size = new Size(18, 1);
             txtDate1.TabIndex = 2;
-            //txtDate1.TextChanged += txtDate_TextChanged;
+            txtDate1.TextChanged += txtDate_TextChanged;
 
             cmbDate1Calendar.ReadOnly = true;
             cmbDate1Calendar.Location = new Point(18, 3);
             cmbDate1Calendar.Size = new Size(17, 2);
             cmbDate1Calendar.TabIndex = 3;
-            //cmbDate1Calendar.SelectedIndexChanged += cmbDateCalendar_SelectedIndexChanged;
+            cmbDate1Calendar.SelectedIndexChanged += cmbDateCalendar_SelectedIndexChanged;
 
             chkBC1.Location = new Point(36, 3);
             chkBC1.Size = new Size(5, 1);
             chkBC1.TabIndex = 4;
             chkBC1.Text = "BC";
-            //chkBC1.CheckedChanged += chkBC_CheckedChanged;
+            chkBC1.CheckedChanged += chkBC_CheckedChanged;
 
             txtDate2.Location = new Point(42, 1);
             txtDate2.Size = new Size(18, 1);
@@ -333,13 +334,13 @@ namespace GKUI.Components
             cmbDate2Calendar.Location = new Point(42, 3);
             cmbDate2Calendar.Size = new Size(17, 2);
             cmbDate2Calendar.TabIndex = 6;
-            //cmbDate2Calendar.SelectedIndexChanged += cmbDateCalendar_SelectedIndexChanged;
+            cmbDate2Calendar.SelectedIndexChanged += cmbDateCalendar_SelectedIndexChanged;
 
             chkBC2.Location = new Point(60, 3);
             chkBC2.Size = new Size(5, 1);
             chkBC2.TabIndex = 7;
             chkBC2.Text = "BC";
-            //chkBC2.CheckedChanged += chkBC_CheckedChanged;
+            chkBC2.CheckedChanged += chkBC_CheckedChanged;
 
             Add(chkBC2);
             Add(chkBC1);

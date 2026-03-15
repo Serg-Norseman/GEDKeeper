@@ -69,7 +69,7 @@ namespace GKUI.Forms
             fController.CalcStats();
         }
 
-        private void StatisticsWin_Load()
+        private void StatisticsWin_Load(object sender, EventArgs e)
         {
             SetLocale();
         }

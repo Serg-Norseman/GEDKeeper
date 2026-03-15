@@ -90,7 +90,7 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
+            tabsData.SelectedTabChanged += tabControl_SelectedTabChanged;
 
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
@@ -101,7 +101,7 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
-        private void EditShortTitle_TextChanged(object sender, ustring e)
+        private void EditShortTitle_TextChanged(object sender, string e)
         {
             SetTitle(string.Format("{0} \"{1}\"", LangMan.LS(LSID.Source), txtShortTitle.Text));
         }

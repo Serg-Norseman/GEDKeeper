@@ -99,7 +99,7 @@ namespace GKUI.Forms
 
         public DNATestEditDlg(IBaseWindow baseWin) : this()
         {
-            //tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
+            tabsData.SelectedTabChanged += tabControl_SelectedTabChanged;
 
             fNotesList = new GKSheetList(pageNotes);
             fMediaList = new GKSheetList(pageMultimedia);
@@ -115,7 +115,7 @@ namespace GKUI.Forms
 
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            fController.LockEditor(cmbRestriction.SelectedItem == (int)GDMRestriction.rnLocked);
+            fController.LockEditor(cmbRestriction.SelectedIndex == (int)GDMRestriction.rnLocked);
         }
     }
 }

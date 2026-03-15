@@ -266,17 +266,17 @@ namespace GKUI.Forms
 
         #region Form handlers
 
-        private void Form_Activated(Toplevel top)
+        private void Form_Activated(object sender, Toplevel top)
         {
             AppHost.Instance.BaseChanged(this);
         }
 
-        private void Form_Deactivate(Toplevel top)
+        private void Form_Deactivate(object sender, Toplevel top)
         {
             AppHost.Instance.BaseChanged(null);
         }
 
-        private void Form_Load()
+        private void Form_Load(object sender, EventArgs e)
         {
             try {
                 ((IWorkWindow)this).UpdateSettings();
@@ -289,7 +289,7 @@ namespace GKUI.Forms
             }
         }
 
-        private void Form_Closing(ToplevelClosingEventArgs e)
+        private void Form_Closing(object sender, ToplevelClosingEventArgs e)
         {
             e.Cancel = !CheckModified();
             if (e.Cancel) return;
@@ -299,7 +299,7 @@ namespace GKUI.Forms
             AppHost.Instance.BaseClosed(this);
         }
 
-        private void Form_Closed(Toplevel top)
+        private void Form_Closed(object sender, Toplevel top)
         {
         }
 

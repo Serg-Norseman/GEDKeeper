@@ -130,7 +130,7 @@ namespace GKUI.Forms
             contextMenu.MenuItems = new MenuBarItem("Actions", new MenuItem[] {
                 miContRecordAdd, miContRecordEdit, miContRecordDelete, miContRecordDuplicate, miContRecordMerge, miContMediaMoveFile
             });
-            //contextMenu.Opening += contextMenu_Opening;
+            //contextMenu.MenuBar.MenuOpening += contextMenu_Opening;
 
             miCopyContent = new MenuItem("miCopyContent", miCopyContent_Click);
 

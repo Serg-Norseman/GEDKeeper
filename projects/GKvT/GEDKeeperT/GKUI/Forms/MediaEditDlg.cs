@@ -89,7 +89,7 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
+            tabsData.SelectedTabChanged += tabControl_SelectedTabChanged;
 
             fFilesList = new GKSheetList(pageFiles);
             fNotesList = new GKSheetList(pageNotes);
@@ -110,7 +110,7 @@ namespace GKUI.Forms
             fController.View();
         }
 
-        private void edName_TextChanged(object sender, ustring e)
+        private void edName_TextChanged(object sender, string e)
         {
             SetTitle(string.Format("{0} \"{1}\"", LangMan.LS(LSID.RPMultimedia), txtName.Text));
         }

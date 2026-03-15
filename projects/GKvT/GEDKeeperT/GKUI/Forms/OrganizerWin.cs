@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Views;
@@ -58,7 +59,7 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
-        private void OrganizerWin_Load()
+        private void OrganizerWin_Load(object sender, EventArgs e)
         {
             fController.UpdateView();
         }
