@@ -30,6 +30,8 @@ namespace GKCore.Controllers
 
         public FARDlgController(IFARDlg view) : base(view)
         {
+            GetControl<IComboBox>("cmbProperty").ReadOnly = true;
+            GetControl<IComboBox>("cmbRecord").ReadOnly = true;
         }
 
         public override void SetLocale()

@@ -26,7 +26,7 @@ namespace GKUI.Forms
 
             grpSummary = new FrameView();
             grpSummary.Location = new Point(0, 0);
-            grpSummary.Size = new Size(118, 16);
+            grpSummary.Size = new Size(138, 16);
             grpSummary.TabIndex = 0;
             grpSummary.TabStop = false;
             grpSummary.Add(lvSummary);
@@ -54,18 +54,22 @@ namespace GKUI.Forms
             fListStats.Size = new Size(50, 35);
 
             fGraph = new ZGraphControl();
-            fGraph.Location = new Point(50, 3);
-            fGraph.Size = new Size(66, 35);
+            fGraph.X = Pos.Right(fListStats) + 1;
+            fGraph.Y = Pos.Bottom(ToolBar1) + 1;
+            //fGraph.Location = new Point(50, 3);
+            //fGraph.Size = new Size(66, 35);
+            fGraph.Height = Dim.Fill();
+            fGraph.Width = Dim.Fill();
 
             Panel1 = new FrameView();
             Panel1.Location = new Point(0, 16);
-            Panel1.Size = new Size(118, 42);
+            Panel1.Size = new Size(138, 42);
             Panel1.TabIndex = 2;
             Panel1.Add(fListStats, fGraph, ToolBar1);
 
             X = Pos.Center();
             Y = Pos.Center();
-            Size = new Size(120, 60);
+            Size = new Size(140, 60);
             Add(grpSummary);
             Add(Panel1);
             Loaded += StatisticsWin_Load;

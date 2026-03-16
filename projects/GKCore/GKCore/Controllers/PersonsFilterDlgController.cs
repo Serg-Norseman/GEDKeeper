@@ -28,6 +28,9 @@ namespace GKCore.Controllers
         public PersonsFilterDlgController(IPersonsFilterDlg view, IRecordsListModel listMan) : base(view)
         {
             fListMan = (IndividualListModel)listMan;
+
+            fView.GroupCombo.ReadOnly = true;
+            fView.SourceCombo.ReadOnly = true;
         }
 
         public void RemoveFilter(IComboBox sender)

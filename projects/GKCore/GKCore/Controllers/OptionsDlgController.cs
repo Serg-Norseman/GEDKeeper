@@ -57,6 +57,16 @@ namespace GKCore.Controllers
                 pluginsModel.DataSource = AppHost.Plugins.List;
                 listView.ListMan = pluginsModel;
             }
+
+            GetControl<IComboBox>("cmbLanguages").ReadOnly = true;
+            GetControl<IComboBox>("cmbCertaintyAlgorithm").ReadOnly = true;
+            GetControl<IComboBox>("cmbChartWindowsShowMode").ReadOnly = true;
+            GetControl<IComboBox>("cmbMediaStoreDefault").ReadOnly = true;
+            GetControl<IComboBox>("cmbTextEffect").ReadOnly = true;
+            GetControl<IComboBox>("cmbMatchPatternMethod").ReadOnly = true;
+            GetControl<IComboBox>("cmbAscendNumbering").ReadOnly = true;
+            GetControl<IComboBox>("cmbDescendNumbering").ReadOnly = true;
+            GetControl<IComboBox>("cmbGeocoder").ReadOnly = true;
         }
 
         public async void ChangeTab()

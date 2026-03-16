@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using GKCore;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
+using GKCore.Locales;
 using GKUI.Platform.Handlers;
 using NStack;
 using Terminal.Gui;
@@ -156,16 +157,69 @@ namespace GKUI.Platform
 
         public async Task<string> GetInput(object owner, string prompt, string value)
         {
-            /*bool res = GKInputBox.QueryText(owner, GKData.APP_TITLE, prompt, ref value);
-            return res && !string.IsNullOrEmpty(value);*/
-            return string.Empty;
+            var x = new InputDialog(GKData.APP_TITLE, prompt, value, false);
+            Application.Run(x);
+            return x.InputValue;
         }
 
         public async Task<string> GetPassword(string prompt)
         {
-            /*bool res = GKInputBox.QueryPassword(GKData.APP_TITLE, prompt, ref value);
-            return res && !string.IsNullOrEmpty(value);*/
-            return string.Empty;
+            var x = new InputDialog(GKData.APP_TITLE, prompt, string.Empty, true);
+            Application.Run(x);
+            return x.InputValue;
+        }
+
+
+        private class InputDialog : Dialog
+        {
+            private readonly TextField fInputField;
+            private readonly Label fPromptLabel;
+
+            public string InputValue { get; private set; } = string.Empty;
+            public bool Cancelled { get; private set; } = true;
+
+            public InputDialog(string title, string prompt, string defaultValue = "", bool isPassword = false) : base(title, 60, 8)
+            {
+                fPromptLabel = new Label(prompt) {
+                    X = 1,
+                    Y = 1,
+                    Width = Dim.Fill() - 1
+                };
+                Add(fPromptLabel);
+
+                fInputField = new TextField(defaultValue) {
+                    X = 1,
+                    Y = 2,
+                    Width = Dim.Fill() - 1,
+                    Secret = isPassword
+                };
+                Add(fInputField);
+
+                var acceptButton = new Button(LangMan.LS(LSID.DlgAccept));
+                acceptButton.Clicked += (s, e) => {
+                    InputValue = fInputField.Text.ToString() ?? string.Empty;
+                    Cancelled = false;
+                    Application.RequestStop();
+                };
+
+                var cancelButton = new Button(LangMan.LS(LSID.DlgCancel));
+                cancelButton.Clicked += (s, e) => {
+                    Cancelled = true;
+                    Application.RequestStop();
+                };
+
+                ButtonAlignment = ButtonAlignments.Right;
+                AddButton(acceptButton);
+                AddButton(cancelButton);
+
+                fInputField.SetFocus();
+            }
+
+            /*public bool ShowDialog()
+            {
+                Application.Run(this);
+                return result;
+            }*/
         }
     }
 }

@@ -158,10 +158,11 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.TreeSplit));
 
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics) && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ITabPage>("pageTreeSplit").Text = LangMan.LS(LSID.TreeSplit);
                 GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
             }
+
             GetControl<IButton>("btnSelectAll").Text = LangMan.LS(LSID.SelAll);
             GetControl<IButton>("btnSelectFamily").Text = LangMan.LS(LSID.SelFamily);
             GetControl<IButton>("btnSelectAncestors").Text = LangMan.LS(LSID.SelAncestors);

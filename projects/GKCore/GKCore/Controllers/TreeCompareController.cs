@@ -116,10 +116,11 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.TreeCompare));
 
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics) && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ITabPage>("pageTreeCompare").Text = LangMan.LS(LSID.TreeCompare);
                 GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
             }
+
             GetControl<IGroupBox>("grpMatchType").Text = LangMan.LS(LSID.MatchType);
             GetControl<ILabel>("lblFile").Text = LangMan.LS(LSID.MIFile);
             GetControl<IButton>("btnFileChoose").Text = LangMan.LS(LSID.DlgSelect) + @"...";

@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using Terminal.Gui;
 
 namespace GKUI.Platform
@@ -63,6 +64,59 @@ namespace GKUI.Platform
             long g = (long)c1.Green - c2.Green;
             long b = (long)c1.Blue - c2.Blue;
             return Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
+        }
+
+
+        private static readonly (char chr, double weight)[] Shades = {
+            (' ', 0.0), ('░', 0.25), ('▒', 0.5), ('▓', 0.75), ('█', 1.0)
+        };
+
+        public record PixColor(double r, double g, double b, tgColor fg, tgColor bg, char chr);
+
+        public static List<PixColor> InitPixelColors()
+        {
+            var result = new List<PixColor>();
+
+            for (int bg = 0; bg < Win16Palette.Length; bg++) {
+                TrueColor bgEntry = Win16Palette[bg];
+
+                for (int fg = 0; fg < Win16Palette.Length; fg++) {
+                    TrueColor fgEntry = Win16Palette[fg];
+
+                    if (fg == bg) continue;
+
+                    foreach (var shade in Shades) {
+                        // Calculating the mixed color
+                        double r = bgEntry.Red * (1 - shade.weight) + fgEntry.Red * shade.weight;
+                        double g = bgEntry.Green * (1 - shade.weight) + fgEntry.Green * shade.weight;
+                        double b = bgEntry.Blue * (1 - shade.weight) + fgEntry.Blue * shade.weight;
+
+                        result.Add(new PixColor(r, g, b, (tgColor)fg, (tgColor)bg, shade.chr));
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private static readonly PixColor Default = new PixColor(0, 0, 0, tgColor.Gray, tgColor.Black, ' ');
+
+        public static PixColor FindBestMatch(List<PixColor> pixColors, int targetR, int targetG, int targetB)
+        {
+            var bestMatch = Default;
+
+            double minDistance = double.MaxValue;
+            foreach (var pixCol in pixColors) {
+                // Euclidean distance
+                double distance = Math.Sqrt(Math.Pow(targetR - pixCol.r, 2) + Math.Pow(targetG - pixCol.g, 2) + Math.Pow(targetB - pixCol.b, 2));
+
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    bestMatch = pixCol;
+                }
+            }
+
+            return bestMatch;
         }
     }
 }

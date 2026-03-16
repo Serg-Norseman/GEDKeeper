@@ -42,10 +42,12 @@ namespace GKCore.Controllers
         public override void SetLocale()
         {
             fView.SetTitle(LangMan.LS(LSID.TreeMerge));
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+
+            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics) && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ITabPage>("pageTreeMerge").Text = LangMan.LS(LSID.TreeMerge);
                 GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
             }
+
             GetControl<IButton>("btnTreeMerge").Text = LangMan.LS(LSID.DlgSelect) + @"...";
             GetControl<ILabel>("lblMasterBase").Text = LangMan.LS(LSID.MasterBase);
             GetControl<ILabel>("lblOtherBase").Text = LangMan.LS(LSID.OtherBase);
