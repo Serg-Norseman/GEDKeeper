@@ -60,6 +60,8 @@ namespace GKUI.Components
             Style.AlwaysShowHeaders = true;
             Style.ShowHorizontalHeaderOverline = false;
             Style.ExpandLastColumn = true;
+            Style.AlwaysShowVerticalCellLines = true;
+            Style.ShowNullSymbol = false;
             FullRowSelect = true;
             CanFocus = true;
             MultiSelect = false;

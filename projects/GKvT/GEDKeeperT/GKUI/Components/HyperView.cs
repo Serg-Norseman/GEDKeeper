@@ -18,7 +18,7 @@ using Terminal.Gui;
 
 namespace GKUI.Components
 {
-    using TGAttribute = Terminal.Gui.Attribute;
+    using tgAttribute = Terminal.Gui.Attribute;
 
     public delegate void LinkEventHandler(object sender, string linkName);
 
@@ -53,9 +53,9 @@ namespace GKUI.Components
         private Size fTextSize;
         private bool fWordWrap;
 
-        private TGAttribute fDefaultAttr;
-        private TGAttribute fLinkAttr;
-        private TGAttribute fLinkHoverAttr;
+        private tgAttribute fDefaultAttr;
+        private tgAttribute fLinkAttr;
+        private tgAttribute fLinkHoverAttr;
 
 
         public event LinkEventHandler OnLink;
@@ -111,9 +111,9 @@ namespace GKUI.Components
 
         private void UpdateLinkAttributes()
         {
-            fDefaultAttr = TGAttribute.Make(fForeColor, fBackColor);
-            fLinkAttr = TGAttribute.Make(fLinkColor, fBackColor);
-            fLinkHoverAttr = TGAttribute.Make(fLinkColor, fBackColor);
+            fDefaultAttr = tgAttribute.Make(fForeColor, fBackColor);
+            fLinkAttr = tgAttribute.Make(fLinkColor, fBackColor);
+            fLinkHoverAttr = tgAttribute.Make(fLinkColor, fBackColor);
         }
 
         protected override void Dispose(bool disposing)
@@ -318,7 +318,7 @@ namespace GKUI.Components
                             attr = (chunk == fCurrentLink) ? fLinkHoverAttr : fLinkAttr;
                         } else if (chunk.Color != null) {
                             var chColor = ((ColorHandler)chunk.Color).Handle;
-                            attr = TGAttribute.Make(chColor, fBackColor);
+                            attr = tgAttribute.Make(chColor, fBackColor);
                         }
 
                         Driver.SetAttribute(attr);

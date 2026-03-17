@@ -9,8 +9,8 @@ namespace GKUI.Forms
     {
         private FrameView GroupBox1;
         private TabView tabsData;
-        private TabView.Tab pageNotes;
-        private TabView.Tab pageMultimedia;
+        private TabPage pageNotes;
+        private TabPage pageMultimedia;
         private Button btnAccept;
         private Button btnCancel;
         private Label lblTheme;
@@ -40,8 +40,8 @@ namespace GKUI.Forms
             btnAccept = new Button();
             btnCancel = new Button();
             tabsData = new TabView();
-            pageNotes = new TabView.Tab();
-            pageMultimedia = new TabView.Tab();
+            pageNotes = new TabPage();
+            pageMultimedia = new TabPage();
 
             btnAccept.Size = new Size(16, 1);
             btnAccept.TabIndex = 2;

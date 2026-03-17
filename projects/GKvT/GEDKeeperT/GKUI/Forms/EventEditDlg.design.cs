@@ -10,11 +10,11 @@ namespace GKUI.Forms
         private Button btnAccept;
         private Button btnCancel;
         private TabView tabsData;
-        private TabView.Tab pageNotes;
-        private TabView.Tab pageMultimedia;
-        private TabView.Tab pageSources;
+        private TabPage pageNotes;
+        private TabPage pageMultimedia;
+        private TabPage pageSources;
         private Button btnAddress;
-        private TabView.Tab pageCommon;
+        private TabPage pageCommon;
         private Label lblEvent;
         private Label lblPlace;
         private Label lblDate;
@@ -38,7 +38,7 @@ namespace GKUI.Forms
             btnAccept = new Button();
             btnCancel = new Button();
             tabsData = new TabView();
-            pageCommon = new TabView.Tab();
+            pageCommon = new TabPage();
             dateCtl = new GKDateControl();
             lblEvent = new Label();
             lblPlace = new Label();
@@ -53,9 +53,9 @@ namespace GKUI.Forms
             txtEventCause = new ComboBox();
             txtEventOrg = new ComboBox();
             txtAttribute = new ComboBox();
-            pageNotes = new TabView.Tab();
-            pageMultimedia = new TabView.Tab();
-            pageSources = new TabView.Tab();
+            pageNotes = new TabPage();
+            pageMultimedia = new TabPage();
+            pageSources = new TabPage();
             btnAddress = new Button();
             btnAge = new Button();
             lblAge = new Label();

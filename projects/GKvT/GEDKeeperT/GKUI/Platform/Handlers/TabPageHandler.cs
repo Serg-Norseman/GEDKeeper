@@ -12,9 +12,9 @@ using Terminal.Gui;
 
 namespace GKUI.Platform.Handlers
 {
-    public sealed class TabPageHandler : ControlHandler<TabView.Tab, TabPageHandler>, ITabPage
+    public sealed class TabPageHandler : ControlHandler<TabPage, TabPageHandler>, ITabPage
     {
-        public TabPageHandler(TabView.Tab control) : base(control)
+        public TabPageHandler(TabPage control) : base(control)
         {
         }
 

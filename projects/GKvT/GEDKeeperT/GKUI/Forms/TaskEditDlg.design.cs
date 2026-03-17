@@ -9,7 +9,7 @@ namespace GKUI.Forms
     {
         private FrameView GroupBox1;
         private TabView tabsData;
-        private TabView.Tab pageNotes;
+        private TabPage pageNotes;
         private Button btnAccept;
         private Button btnCancel;
         private Label lblPriority;
@@ -39,7 +39,7 @@ namespace GKUI.Forms
             btnAccept = new Button();
             btnCancel = new Button();
             tabsData = new TabView();
-            pageNotes = new TabView.Tab();
+            pageNotes = new TabPage();
 
             GroupBox1.Add(lblPriority);
             GroupBox1.Add(lblStartDate);

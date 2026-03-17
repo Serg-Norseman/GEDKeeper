@@ -1,20 +1,101 @@
 #pragma warning disable IDE1006 // Naming Styles
 
+using System;
 using Terminal.Gui;
 
 namespace GKUI.Forms
 {
     partial class BaseWinSDI
     {
+        private StatusBar stbMain;
+        private MenuBar MainMenu1;
+        private MenuBarItem miFile;
+        private MenuItem miFileNew;
+        private MenuItem miFileLoad;
+        private MenuItem miFileReload;
+        private MenuBarItem miMRUFiles;
+        private MenuItem miFileSave;
+        private MenuItem miFileSaveAs;
+        private MenuItem miFileClose;
+        private MenuItem miFileProperties;
+        private MenuItem miExportTable;
+        private MenuItem miExportToFamilyBook;
+        private MenuItem miExportToTreesAlbum;
+        private MenuItem miTreeTools;
+        private MenuItem miExit;
+        private MenuBarItem miEdit;
+        private MenuItem miRecordAdd;
+        private MenuItem miRecordEdit;
+        private MenuItem miRecordDelete;
+        private MenuItem miSearch;
+        private MenuItem miFindAndReplace;
+        private MenuItem miFilter;
+        private MenuItem miOptions;
+        private MenuBarItem miPedigree;
+        private MenuItem miTreeAncestors;
+        private MenuItem miTreeDescendants;
+        private MenuItem miPedigreeDescend;
+        //private MenuItem miMap;
+        private MenuItem miStats;
+        private MenuBarItem miHelp;
+        private MenuItem miContext;
+        private MenuItem miLogSend;
+        private MenuItem miLogView;
+        private MenuItem miAbout;
+        //private ContextMenu MenuMRU;
+        private MenuItem miOrganizer;
+        private MenuBarItem miService;
+        private MenuItem miScripts;
+        private MenuItem miExport;
+        private MenuItem miTreeBoth;
+        private MenuBarItem miReports;
+        private MenuBarItem miPlugins;
+        private MenuItem miPedigreeAscend;
+        private MenuItem miRelationshipCalculator;
+        private TabView tabsRecords;
+        private MenuItem miContRecordDuplicate;
+        private MenuItem miContRecordDelete;
+        private MenuItem miContRecordEdit;
+        private MenuItem miContRecordMerge;
+        private MenuItem miContMediaMoveFile2Abs;
+        private MenuItem miContMediaMoveFile2Rel;
+        private MenuItem miContMediaMoveFile2Arc;
+        private MenuItem miContMediaMoveFile;
+        private ContextMenu contextMenu;
+        private MenuItem miContRecordAdd;
+        private MenuItem miTreeCompare;
+        private MenuItem miTreeMerge;
+        private MenuItem miTreeSplit;
+        private MenuItem miRecMerge;
+        private MenuItem miFamilyGroups;
+        private MenuItem miTreeCheck;
+        private MenuItem miPatSearch;
+        private MenuItem miPlacesManager;
+        private ContextMenu summaryMenu;
+        private MenuItem miCopyContent;
+        private MenuItem miExportToStrictGEDCOM;
+        private MenuItem miChronicle;
+        private TabPage tab1;
+        private TabPage tab2;
+        private TabPage tab3;
+        private TabPage tab4;
+        private TabPage tab5;
+        private TabPage tab6;
+        private TabPage tab7;
+        private TabPage tab8;
+        private TabPage tab9;
+        private TabPage tab10;
+        private TabPage tab11;
+
         private void InitializeComponent()
         {
-            StatusBar = new StatusBar() {
+            stbMain = new StatusBar() {
                 Visible = true,
                 Items = new StatusItem[] {
                     new StatusItem(Key.Null, "", null)
                 }
             };
-            Application.Top.Add(StatusBar);
+            Application.Top.Add(stbMain);
 
             MainMenu1 = new MenuBar(new MenuBarItem[] {
                 miFile = new MenuBarItem("_File", new MenuItem[] {
@@ -77,10 +158,8 @@ namespace GKUI.Forms
                     null,
                     miOptions = new MenuItem("miOptions", miOptions_Click)
                 }),
-                miReports = new MenuBarItem("_Reports", new MenuItem[] {
-                }),
-                miPlugins = new MenuBarItem("_Plugins", new MenuItem[] {
-                }),
+                miReports = new MenuBarItem("_Reports", Array.Empty<MenuItem>()),
+                miPlugins = new MenuBarItem("_Plugins", Array.Empty<MenuItem>()),
                 miHelp = new MenuBarItem("_Help", new MenuItem[] {
                     miContext = new MenuItem("miContext", miContext_Click, Key.F1),
                     null,

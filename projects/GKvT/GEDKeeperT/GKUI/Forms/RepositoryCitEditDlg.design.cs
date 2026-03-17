@@ -10,7 +10,7 @@ namespace GKUI.Forms
         private ComboBox cmbRepository;
         private Label lblRepository;
         private TabView tabsData;
-        private TabView.Tab pageCallNumbers;
+        private TabPage pageCallNumbers;
         private Button btnAccept;
         private Button btnCancel;
         private Button btnRepositoryAdd;
@@ -23,7 +23,7 @@ namespace GKUI.Forms
             btnAccept = new Button();
             btnCancel = new Button();
             tabsData = new TabView();
-            pageCallNumbers = new TabView.Tab();
+            pageCallNumbers = new TabPage();
             btnRepositoryAdd = new Button();
 
             btnAccept.Size = new Size(16, 1);

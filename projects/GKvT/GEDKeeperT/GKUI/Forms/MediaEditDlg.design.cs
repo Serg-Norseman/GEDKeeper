@@ -7,12 +7,12 @@ namespace GKUI.Forms
     partial class MediaEditDlg
     {
         private TabView tabsData;
-        private TabView.Tab pageNotes;
-        private TabView.Tab pageSources;
+        private TabPage pageNotes;
+        private TabPage pageSources;
         private Button btnAccept;
         private Button btnCancel;
         private Button btnView;
-        private TabView.Tab pageCommon;
+        private TabPage pageCommon;
         private Label lblName;
         private TextField txtName;
         private Label lblType;
@@ -22,13 +22,13 @@ namespace GKUI.Forms
         private Label lblFile;
         private TextField txtFile;
         private Button btnFileSelect;
-        private TabView.Tab pageUserRefs;
-        private TabView.Tab pageFiles;
+        private TabPage pageUserRefs;
+        private TabPage pageFiles;
 
         private void InitializeComponent()
         {
             tabsData = new TabView();
-            pageCommon = new TabView.Tab();
+            pageCommon = new TabPage();
             lblName = new Label();
             lblType = new Label();
             lblStoreType = new Label();
@@ -38,13 +38,13 @@ namespace GKUI.Forms
             cmbStoreType = new ComboBox();
             txtFile = new TextField();
             btnFileSelect = new Button();
-            pageNotes = new TabView.Tab();
-            pageSources = new TabView.Tab();
+            pageNotes = new TabPage();
+            pageSources = new TabPage();
             btnAccept = new Button();
             btnCancel = new Button();
             btnView = new Button();
-            pageUserRefs = new TabView.Tab();
-            pageFiles = new TabView.Tab();
+            pageUserRefs = new TabPage();
+            pageFiles = new TabPage();
 
             btnView.Size = new Size(16, 1);
             btnView.TabIndex = 1;

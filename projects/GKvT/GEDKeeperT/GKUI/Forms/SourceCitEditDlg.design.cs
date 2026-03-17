@@ -17,8 +17,8 @@ namespace GKUI.Forms
         private ComboBox txtCertainty;
         private ComboBox cmbSource;
         private TabView tabsData;
-        private TabView.Tab pageCommon;
-        private TabView.Tab pageOther;
+        private TabPage pageCommon;
+        private TabPage pageOther;
         private TextView txtText;
         private GKDateControl dateCtl;
 
@@ -27,7 +27,7 @@ namespace GKUI.Forms
             btnAccept = new Button();
             btnCancel = new Button();
             tabsData = new TabView();
-            pageCommon = new TabView.Tab();
+            pageCommon = new TabPage();
             lblPage = new Label();
             txtPage = new TextField();
             lblSource = new Label();
@@ -35,7 +35,7 @@ namespace GKUI.Forms
             lblCertainty = new Label();
             txtCertainty = new ComboBox();
             cmbSource = new ComboBox();
-            pageOther = new TabView.Tab();
+            pageOther = new TabPage();
             txtText = new TextView();
             dateCtl = new GKDateControl();
 

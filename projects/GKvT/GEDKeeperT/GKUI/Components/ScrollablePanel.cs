@@ -10,7 +10,7 @@ using System;
 using BSLib;
 using GKCore.Design;
 using Terminal.Gui;
-using Attribute = Terminal.Gui.Attribute;
+using tgAttribute = Terminal.Gui.Attribute;
 
 namespace GKUI.Components
 {
@@ -45,7 +45,7 @@ namespace GKUI.Components
         private Size fImageSize;
         private ExtRect fImageViewport;
         private int fMouseOffsetX, fMouseOffsetY;
-        private Attribute? fTextColor;
+        private tgAttribute? fTextColor;
         private ExtRect fViewport;
 
         public Rect CanvasRectangle
@@ -92,7 +92,7 @@ namespace GKUI.Components
             get { return fHasVScroll; }
         }
 
-        public Attribute TextColor
+        public tgAttribute TextColor
         {
             get { return fTextColor ?? ColorScheme.Normal; }
             set { fTextColor = value; }

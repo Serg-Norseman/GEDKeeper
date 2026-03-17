@@ -9,10 +9,10 @@ namespace GKUI.Forms
         private Button btnAccept;
         private Button btnCancel;
         private TabView tabsAddrData;
-        private TabView.Tab pagePhones;
-        private TabView.Tab pageEmails;
-        private TabView.Tab pageCommon;
-        private TabView.Tab pageWebPages;
+        private TabPage pagePhones;
+        private TabPage pageEmails;
+        private TabPage pageCommon;
+        private TabPage pageWebPages;
         private Label lblCountry;
         private Label lblState;
         private Label lblCity;
@@ -29,7 +29,7 @@ namespace GKUI.Forms
             btnAccept = new Button();
             btnCancel = new Button();
             tabsAddrData = new TabView();
-            pageCommon = new TabView.Tab();
+            pageCommon = new TabPage();
             lblCountry = new Label();
             lblState = new Label();
             lblCity = new Label();
@@ -40,9 +40,9 @@ namespace GKUI.Forms
             txtCity = new TextField();
             txtPostalCode = new TextField();
             txtAddress = new TextView();
-            pagePhones = new TabView.Tab();
-            pageEmails = new TabView.Tab();
-            pageWebPages = new TabView.Tab();
+            pagePhones = new TabPage();
+            pageEmails = new TabPage();
+            pageWebPages = new TabPage();
 
             tabsAddrData.AddTab(pageCommon, true);
             tabsAddrData.AddTab(pagePhones, false);

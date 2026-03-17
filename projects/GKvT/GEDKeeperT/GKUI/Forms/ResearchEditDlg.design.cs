@@ -11,13 +11,13 @@ namespace GKUI.Forms
         private TextField txtName;
         private Label lblName;
         private TabView tabsData;
-        private TabView.Tab pageNotes;
-        private TabView.Tab pageTasks;
+        private TabPage pageNotes;
+        private TabPage pageTasks;
         private Button btnAccept;
         private Button btnCancel;
         private Label lblPriority;
         private ComboBox cmbPriority;
-        private TabView.Tab pageCommunications;
+        private TabPage pageCommunications;
         private Label lblStatus;
         private ComboBox cmbStatus;
         private Label lblStartDate;
@@ -26,7 +26,7 @@ namespace GKUI.Forms
         private GKDateBox txtStopDate;
         private Label lblPercent;
         private NumericStepper nudPercent;
-        private TabView.Tab pageGroups;
+        private TabPage pageGroups;
 
         private void InitializeComponent()
         {
@@ -46,10 +46,10 @@ namespace GKUI.Forms
             btnAccept = new Button();
             btnCancel = new Button();
             tabsData = new TabView();
-            pageTasks = new TabView.Tab();
-            pageCommunications = new TabView.Tab();
-            pageGroups = new TabView.Tab();
-            pageNotes = new TabView.Tab();
+            pageTasks = new TabPage();
+            pageCommunications = new TabPage();
+            pageGroups = new TabPage();
+            pageNotes = new TabPage();
 
             btnAccept.Size = new Size(16, 1);
             btnAccept.TabIndex = 2;

@@ -10,12 +10,12 @@ namespace GKUI.Forms
         private Button btnAccept;
         private Button btnCancel;
         private TabView tabsData;
-        private TabView.Tab pageNotes;
-        private TabView.Tab pageMultimedia;
-        private TabView.Tab pageRepositories;
-        private TabView.Tab pageText;
+        private TabPage pageNotes;
+        private TabPage pageMultimedia;
+        private TabPage pageRepositories;
+        private TabPage pageText;
         private TextView txtText;
-        private TabView.Tab pageCommon;
+        private TabPage pageCommon;
         private Label lblShortTitle;
         private TextField txtShortTitle;
         private Label lblAuthor;
@@ -26,14 +26,14 @@ namespace GKUI.Forms
         private TextView txtPublication;
         private Label lblDate;
         private GKDateControl dateCtl;
-        private TabView.Tab pageUserRefs;
+        private TabPage pageUserRefs;
 
         private void InitializeComponent()
         {
             btnAccept = new Button();
             btnCancel = new Button();
             tabsData = new TabView();
-            pageCommon = new TabView.Tab();
+            pageCommon = new TabPage();
             lblShortTitle = new Label();
             lblAuthor = new Label();
             lblTitle = new Label();
@@ -42,14 +42,14 @@ namespace GKUI.Forms
             txtAuthor = new TextView();
             txtTitle = new TextView();
             txtPublication = new TextView();
-            pageText = new TabView.Tab();
+            pageText = new TabPage();
             txtText = new TextView();
-            pageRepositories = new TabView.Tab();
-            pageNotes = new TabView.Tab();
-            pageMultimedia = new TabView.Tab();
+            pageRepositories = new TabPage();
+            pageNotes = new TabPage();
+            pageMultimedia = new TabPage();
             lblDate = new Label();
             dateCtl = new GKDateControl();
-            pageUserRefs = new TabView.Tab();
+            pageUserRefs = new TabPage();
 
             tabsData.AddTab(pageCommon, true);
             tabsData.AddTab(pageText, false);

@@ -7,11 +7,11 @@ namespace GKUI.Forms
     partial class FamilyEditDlg
     {
         private TabView tabsData;
-        private TabView.Tab pageEvents;
-        private TabView.Tab pageNotes;
-        private TabView.Tab pageMultimedia;
-        private TabView.Tab pageSources;
-        private TabView.Tab pageChilds;
+        private TabPage pageEvents;
+        private TabPage pageNotes;
+        private TabPage pageMultimedia;
+        private TabPage pageSources;
+        private TabPage pageChilds;
         private Button btnAccept;
         private Button btnCancel;
         private FrameView frameFamily;
@@ -29,7 +29,7 @@ namespace GKUI.Forms
         private ComboBox cmbMarriageStatus;
         private Label lblRestriction;
         private ComboBox cmbRestriction;
-        private TabView.Tab pageUserRefs;
+        private TabPage pageUserRefs;
 
         private void InitializeComponent()
         {
@@ -51,12 +51,12 @@ namespace GKUI.Forms
             lblRestriction = new Label();
             cmbRestriction = new ComboBox();
             tabsData = new TabView();
-            pageChilds = new TabView.Tab();
-            pageEvents = new TabView.Tab();
-            pageNotes = new TabView.Tab();
-            pageMultimedia = new TabView.Tab();
-            pageSources = new TabView.Tab();
-            pageUserRefs = new TabView.Tab();
+            pageChilds = new TabPage();
+            pageEvents = new TabPage();
+            pageNotes = new TabPage();
+            pageMultimedia = new TabPage();
+            pageSources = new TabPage();
+            pageUserRefs = new TabPage();
 
             btnAccept.Width = 16;
             btnAccept.TabIndex = 4;

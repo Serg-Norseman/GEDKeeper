@@ -13,7 +13,9 @@ using GKCore;
 using GKCore.Design.Graphics;
 using GKUI.Platform.Handlers;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Bmp;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using Terminal.Gui;
 
 namespace GKUI.Platform
@@ -49,9 +51,26 @@ namespace GKUI.Platform
         public Stream CheckOrientation(Stream inputStream)
         {
             inputStream.Seek(0, SeekOrigin.Begin);
-            Stream transformStream = ImageProcess.PrepareImage(inputStream);
+            Stream transformStream = PrepareImage(inputStream);
             transformStream.Seek(0, SeekOrigin.Begin);
             return transformStream;
+        }
+
+        /// <summary>
+        /// To avoid having to perform additional checks for bad files in GfxProvider.LoadImage(),
+        /// this method should always load the stream, check the orientation, and return the prepared result.
+        /// For fast loading of cached files, only BMP format is used.
+        /// </summary>
+        private static Stream PrepareImage(Stream inputStream)
+        {
+            var outputStream = new MemoryStream();
+            using (var image = Image.Load<Bgr565>(inputStream)) {
+                image.Mutate(x => x.AutoOrient());
+
+                var encoder = new BmpEncoder() { BitsPerPixel = BmpBitsPerPixel.Pixel16 };
+                image.SaveAsBmp(outputStream, encoder);
+            }
+            return outputStream;
         }
 
         public IImage LoadImage(Stream stream, int thumbWidth, int thumbHeight, ExtRect cutoutArea, bool reduce)

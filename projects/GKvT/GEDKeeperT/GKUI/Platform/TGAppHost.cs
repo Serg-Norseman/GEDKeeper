@@ -222,7 +222,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(RadioButton), typeof(RadioButtonHandler));
             ControlsManager.RegisterHandlerType(typeof(TabPage), typeof(TabPageHandler));
             ControlsManager.RegisterHandlerType(typeof(TabView), typeof(TabControlHandler));
-            ControlsManager.RegisterHandlerType(typeof(TabView.Tab), typeof(TabPageHandler));
+            ControlsManager.RegisterHandlerType(typeof(TabPage), typeof(TabPageHandler));
             ControlsManager.RegisterHandlerType(typeof(TextField), typeof(TextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TextValidateField), typeof(MaskedTextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TextView), typeof(TextAreaHandler));

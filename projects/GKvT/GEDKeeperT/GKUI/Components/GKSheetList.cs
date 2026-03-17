@@ -10,12 +10,23 @@ using System;
 using BSLib;
 using GKCore.Design.Controls;
 using GKCore.Lists;
+using GKCore.Locales;
 using Terminal.Gui;
 
 namespace GKUI.Components
 {
     public class GKSheetList : View, ISheetList
     {
+        private readonly MenuItem fBtnAdd;
+        private readonly MenuItem fBtnDelete;
+        private readonly MenuItem fBtnEdit;
+        private readonly MenuItem fBtnLinkJump;
+        private readonly MenuItem fBtnMoveUp;
+        private readonly MenuItem fBtnMoveDown;
+        private readonly MenuItem fBtnCopy;
+        private readonly MenuItem fBtnCut;
+        private readonly MenuItem fBtnPaste;
+        private readonly MenuItem fBtnDetails;
         private readonly ContextMenu fContextMenu;
         private readonly GKListView fList;
 
@@ -77,19 +88,41 @@ namespace GKUI.Components
 
         public GKSheetList()
         {
+            fBtnDetails = CreateButton("btnView", LangMan.LS(LSID.View), ItemDetails);
+            fBtnPaste = CreateButton("btnPaste", LangMan.LS(LSID.Paste), ItemPaste);
+            fBtnCut = CreateButton("btnCut", LangMan.LS(LSID.Cut), ItemCut);
+            fBtnCopy = CreateButton("btnCopy", LangMan.LS(LSID.Copy), ItemCopy);
+            fBtnMoveDown = CreateButton("btnDown", LangMan.LS(LSID.RecordMoveDown), ItemMoveDown);
+            fBtnMoveUp = CreateButton("btnUp", LangMan.LS(LSID.RecordMoveUp), ItemMoveUp);
+            fBtnLinkJump = CreateButton("btnJump", LangMan.LS(LSID.RecordGoto), ItemJump);
+            fBtnDelete = CreateButton("btnDelete", LangMan.LS(LSID.MIRecordDelete), ItemDelete);
+            fBtnEdit = CreateButton("btnEdit", LangMan.LS(LSID.MIRecordEdit), ItemEdit);
+            fBtnAdd = CreateButton("btnAdd", LangMan.LS(LSID.MIRecordAdd), ItemAdd);
+
             fContextMenu = new ContextMenu();
+            fContextMenu.MenuItems = new MenuBarItem("Actions", new MenuItem[] {
+                fBtnAdd, fBtnEdit, fBtnDelete, fBtnLinkJump, fBtnMoveUp, fBtnMoveDown, fBtnCopy, fBtnCut, fBtnPaste, fBtnDetails
+            });
 
             fList = new GKListView();
+            fList.Location = new Point(0, 0);
             fList.Width = Dim.Fill();
             fList.Height = Dim.Fill();
             fList.KeyDown += List_KeyDown;
             Add(fList);
 
+            fList.MouseClick += (s, args) => {
+                if (args.MouseEvent.Flags.HasFlag(MouseFlags.Button3Clicked)) {
+                    fContextMenu.Position = new Point(args.MouseEvent.X, args.MouseEvent.Y);
+                    fContextMenu.Show();
+                }
+            };
+
             Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
             fListModel = null;
         }
 
-        public GKSheetList(TabView.Tab tab) : this()
+        public GKSheetList(TabPage tab) : this()
         {
             tab.View = this;
         }
@@ -116,14 +149,13 @@ namespace GKUI.Components
 
         #region Private methods
 
-        private static Button CreateButton(string name, string toolTip, EventHandler<EventArgs> click)
+        private MenuItem CreateButton(string name, string toolTip, EventHandler click)
         {
-            /*var btn = new Button();
-            btn.Style = "iconBtn";
-            btn.ToolTip = toolTip;
-            btn.Click += click;
-            return btn;*/
-            return null;
+            var btn = new MenuItem();
+            btn.Title = toolTip;
+            btn.Action += click;
+            btn.CanExecute = () => { return !fReadOnly; };
+            return btn;
         }
 
         public void UpdateButtons()
@@ -161,22 +193,12 @@ namespace GKUI.Components
         private void SetReadOnly(bool value)
         {
             fReadOnly = value;
-            /*fBtnAdd.Enabled = !fReadOnly;
-            fBtnDelete.Enabled = !fReadOnly;
-            fBtnEdit.Enabled = !fReadOnly;
-            fBtnMoveUp.Enabled = !fReadOnly;
-            fBtnMoveDown.Enabled = !fReadOnly;
-            fBtnCopy.Enabled = !fReadOnly;
-            fBtnCut.Enabled = !fReadOnly;
-            fBtnPaste.Enabled = !fReadOnly;
-
-            fList.BackgroundColor = (fReadOnly) ? SystemColors.Control : SystemColors.WindowBackground;*/
         }
 
         private void List_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (fListModel != null) {
-                int itemIndex = fList.SelectedIndex;
+                int itemIndex = -1; // fList.SelectedIndex;
                 object itemData = fList.GetSelectedData();
                 if (itemData == null) return;
 

@@ -9,14 +9,14 @@ namespace GKUI.Forms
     {
         private Button btnAccept;
         private Button btnCancel;
-        private TabView.Tab pageAuthor;
+        private TabPage pageAuthor;
         private Label lblName;
         private Label lblAddress;
         private Label lblTelephone;
         private TextField txtName;
         private TextField txtTel;
         private TextView txtAddress;
-        private TabView.Tab pageOther;
+        private TabPage pageOther;
         private TabView PageControl1;
         private GKListView lvRecordStats;
         private ComboBox txtLanguage;
@@ -45,12 +45,12 @@ namespace GKUI.Forms
             var container = new View();
             container.Add(lblName, lblTelephone, lblAddress, lblLanguage);
             container.Add(txtName, txtTel, txtAddress, txtLanguage);
-            pageAuthor = new TabView.Tab() { View = container };
+            pageAuthor = new TabPage() { View = container };
 
             lvRecordStats = new GKListView();
             lvRecordStats.Width = Dim.Fill();
             lvRecordStats.Height = Dim.Fill();
-            pageOther = new TabView.Tab() { View = lvRecordStats };
+            pageOther = new TabPage() { View = lvRecordStats };
 
             PageControl1 = new TabView() { Width = 58, Height = 18, TabIndex = 0 };
             PageControl1.AddTab(pageAuthor, true);

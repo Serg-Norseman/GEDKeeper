@@ -29,102 +29,6 @@ namespace GKUI.Forms
 {
     public sealed partial class BaseWinSDI : CommonWindow, IBaseWindowView
     {
-        #region Design components
-#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
-
-        private StatusBar StatusBar;
-        private MenuItem tbPrev; // tb->menu
-        private MenuItem tbNext; // tb->menu
-        private MenuItem tbSendMail; // tb->menu
-        private MenuBar MainMenu1;
-        private MenuBarItem miFile;
-        private MenuItem miFileNew;
-        private MenuItem miFileLoad;
-        private MenuItem miFileReload;
-        private MenuBarItem miMRUFiles;
-        private MenuItem miFileSave;
-        private MenuItem miFileSaveAs;
-        private MenuItem miFileClose;
-        private MenuItem miFileProperties;
-        private MenuItem miExportTable;
-        private MenuItem miExportToFamilyBook;
-        private MenuItem miExportToTreesAlbum;
-        private MenuItem miTreeTools;
-        private MenuItem miExit;
-        private MenuBarItem miEdit;
-        private MenuItem miRecordAdd;
-        private MenuItem miRecordEdit;
-        private MenuItem miRecordDelete;
-        private MenuItem miSearch;
-        private MenuItem miFindAndReplace;
-        private MenuItem miFilter;
-        private MenuItem miOptions;
-        private MenuBarItem miPedigree;
-        private MenuItem miTreeAncestors;
-        private MenuItem miTreeDescendants;
-        private MenuItem miPedigreeDescend;
-        //private MenuItem miMap;
-        private MenuItem miStats;
-        private MenuBarItem miHelp;
-        private MenuItem miContext;
-        private MenuItem miLogSend;
-        private MenuItem miLogView;
-        private MenuItem miAbout;
-        //private ContextMenu MenuMRU;
-        //private ContextMenu MenuPedigree;
-        private MenuItem miPedigree_dAboville2;
-        private MenuItem miPedigree_Konovalov2;
-        private MenuItem miOrganizer;
-        private MenuBarItem miService;
-        private MenuItem miScripts;
-        private MenuItem miExport;
-        private MenuItem miTreeBoth;
-        //private MenuItem miAncestorsCircle;
-        private MenuBarItem miReports;
-        private MenuBarItem miPlugins;
-        //private MenuItem miSlideshow;
-        private MenuItem miPedigreeAscend;
-        //private MenuItem miDescendantsCircle;
-        private MenuItem miRelationshipCalculator;
-        private TabView tabsRecords;
-        private MenuItem miContRecordDuplicate;
-        private MenuItem miContRecordDelete;
-        private MenuItem miContRecordEdit;
-        private MenuItem miContRecordMerge;
-        private MenuItem miContMediaMoveFile2Abs;
-        private MenuItem miContMediaMoveFile2Rel;
-        private MenuItem miContMediaMoveFile2Arc;
-        private MenuItem miContMediaMoveFile;
-        private ContextMenu contextMenu;
-        private MenuItem miContRecordAdd;
-        private MenuItem miTreeCompare;
-        private MenuItem miTreeMerge;
-        private MenuItem miTreeSplit;
-        private MenuItem miRecMerge;
-        private MenuItem miFamilyGroups;
-        private MenuItem miTreeCheck;
-        private MenuItem miPatSearch;
-        private MenuItem miPlacesManager;
-        private ContextMenu summaryMenu;
-        private MenuItem miCopyContent;
-        private MenuItem miExportToStrictGEDCOM;
-        private MenuItem miChronicle;
-
-        private TabView.Tab tab1;
-        private TabView.Tab tab2;
-        private TabView.Tab tab3;
-        private TabView.Tab tab4;
-        private TabView.Tab tab5;
-        private TabView.Tab tab6;
-        private TabView.Tab tab7;
-        private TabView.Tab tab8;
-        private TabView.Tab tab9;
-        private TabView.Tab tab10;
-        private TabView.Tab tab11;
-
-#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
-        #endregion
-
         #region Private fields
 
         private readonly BaseWinController fController;
@@ -191,7 +95,7 @@ namespace GKUI.Forms
             fController.SetLocale();
         }
 
-        private TabView.Tab CreatePage(string pageText, GDMRecordType recType)
+        private TabPage CreatePage(string pageText, GDMRecordType recType)
         {
             var summary = new HyperView();
             summary.Border = new Border() { BorderStyle = BorderStyle.Single };
@@ -254,7 +158,7 @@ namespace GKUI.Forms
             spl.Orientation = Orientation.Horizontal;
             spl.FixedPanel = SplitterFixedPanel.Panel2;*/
 
-            TabView.Tab tabPage = new TabView.Tab(pageText, container);
+            var tabPage = new TabPage(pageText, container);
             tabsRecords.AddTab(tabPage, false);
 
             fController.SetTabPart(recType, recView, recType.ToString(), summary);
@@ -373,7 +277,7 @@ namespace GKUI.Forms
 
         private void miRecordMerge_Click(object sender, EventArgs e)
         {
-            var recView = GetRecordsViewByType(GetSelectedRecordType()) as GKListView;
+            var recView = GetRecordsViewByType(GetSelectedRecordType());
             if (recView != null) {
                 var items = recView.GetSelectedItems();
                 BaseController.ShowRecMerge(this, this,
@@ -581,7 +485,7 @@ namespace GKUI.Forms
                 statusLine = statusLine + ", " + LangMan.LS(LSID.SBFiltered) + ": " + listMan.FilteredCount.ToString();
             }
 
-            StatusBar.Items[0].Title = statusLine;
+            stbMain.Items[0].Title = statusLine;
         }
 
         void IWorkWindow.UpdateSettings()

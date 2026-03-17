@@ -10,9 +10,9 @@ namespace GKUI.Forms
         private TextField edName;
         private Label lblName;
         private TabView tabsGroupData;
-        private TabView.Tab pageNotes;
-        private TabView.Tab pageMultimedia;
-        private TabView.Tab pageMembers;
+        private TabPage pageNotes;
+        private TabPage pageMultimedia;
+        private TabPage pageMembers;
         private Button btnAccept;
         private Button btnCancel;
 
@@ -24,9 +24,9 @@ namespace GKUI.Forms
             btnAccept = new Button();
             btnCancel = new Button();
             tabsGroupData = new TabView();
-            pageMembers = new TabView.Tab();
-            pageNotes = new TabView.Tab();
-            pageMultimedia = new TabView.Tab();
+            pageMembers = new TabPage();
+            pageNotes = new TabPage();
+            pageMultimedia = new TabPage();
 
             btnAccept.Size = new Size(16, 1);
             btnAccept.TabIndex = 2;
