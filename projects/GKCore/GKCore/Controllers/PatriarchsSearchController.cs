@@ -100,16 +100,19 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.PatriarchsSearch));
 
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                GetControl<ITabPage>("pagePatSearch").Text = LangMan.LS(LSID.PatriarchsSearch);
-                GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+                if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+                    GetControl<ITabPage>("pagePatSearch").Text = LangMan.LS(LSID.PatriarchsSearch);
+                    GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+                }
+
+                GetControl<IButton>("btnPatriarchsDiagram").Text = LangMan.LS(LSID.PatriarchsDiagram);
             }
 
             GetControl<ILabel>("lblMinGenerations").Text = LangMan.LS(LSID.MinGenerations);
             GetControl<IButton>("btnSetPatriarch").Text = LangMan.LS(LSID.SetPatFlag);
             GetControl<IButton>("btnPatSearch").Text = LangMan.LS(LSID.Search);
             GetControl<ICheckBox>("chkWithoutDates").Text = LangMan.LS(LSID.WithoutDates);
-            GetControl<IButton>("btnPatriarchsDiagram").Text = LangMan.LS(LSID.PatriarchsDiagram);
         }
 
         public override void ApplyTheme()

@@ -20,9 +20,20 @@ namespace GKUI.Platform.Handlers
 
         public IColor BackColor
         {
-            get { return new ColorHandler(Control.ColorScheme.Normal.Background); }
+            get {
+                if (Control.ColorScheme == null) {
+                    return new ColorHandler(Color.Black);
+                }
+                return new ColorHandler(Control.ColorScheme.Normal.Background);
+            }
             set {
-                //Control.ColorScheme.Normal.Background = ((ColorHandler)value).Handle;
+                if (Control.ColorScheme == null) {
+                    return;
+                }
+                var attr = Control.ColorScheme.Normal;
+                Control.ColorScheme = new ColorScheme() {
+                    Normal = new Attribute(attr.Foreground, ((ColorHandler)value).Handle)
+                };
             }
         }
 

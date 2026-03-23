@@ -13,7 +13,6 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Locales;
-using NStack;
 
 namespace GKUI.Forms
 {

@@ -14,7 +14,6 @@ using GKCore.Design.Graphics;
 using GKCore.Design.Views;
 using GKCore.Locales;
 using GKUI.Platform.Handlers;
-using NStack;
 using Terminal.Gui;
 
 namespace GKUI.Platform
@@ -143,7 +142,7 @@ namespace GKUI.Platform
                 title = GKData.APP_TITLE;
             }
 
-            return MessageBox.Query(title, msg, new ustring[] { "Yes", "No" }) == 0;
+            return MessageBox.Query(title, msg, new string[] { "Yes", "No" }) == 0;
         }
 
         public void ShowWarning(string msg, string title = "")

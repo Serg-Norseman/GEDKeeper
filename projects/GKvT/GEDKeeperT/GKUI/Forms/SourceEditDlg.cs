@@ -6,7 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System;
 using GDModel;
 using GKCore.Controllers;
 using GKCore.Design;
@@ -15,7 +14,6 @@ using GKCore.Design.Views;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKUI.Components;
-using NStack;
 
 namespace GKUI.Forms
 {

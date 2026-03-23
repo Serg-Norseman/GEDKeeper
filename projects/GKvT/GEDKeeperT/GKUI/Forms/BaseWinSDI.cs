@@ -530,14 +530,12 @@ namespace GKUI.Forms
 
         void IWorkWindow.QuickSearch()
         {
-            /*if (!AllowQuickSearch()) return;
+            if (!AllowQuickSearch()) return;
 
             QuickSearchDlg qsDlg = new QuickSearchDlg(this);
-
-            Rectangle client = Bounds;
-            qsDlg.Location = new Point(client.Left, client.Bottom - qsDlg.Height);
-
-            qsDlg.Show();*/
+            var client = Bounds;
+            qsDlg.Location = new Point(client.Left, client.Bottom + 1 - qsDlg.Bounds.Height);
+            Application.Run(qsDlg);
         }
 
         #endregion

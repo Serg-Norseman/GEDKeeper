@@ -129,7 +129,9 @@ namespace GKCore.Controllers
             fView.SetTitle(LangMan.LS(LSID.TreeCheck));
 
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
-                GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+                if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+                    GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
+                }
                 GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.Details);
                 GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
                 GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.CopyXRef);

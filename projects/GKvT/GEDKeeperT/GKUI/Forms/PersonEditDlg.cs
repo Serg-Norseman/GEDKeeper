@@ -16,7 +16,6 @@ using GKCore.Design.Views;
 using GKCore.Lists;
 using GKCore.Locales;
 using GKUI.Components;
-using NStack;
 using Terminal.Gui;
 
 namespace GKUI.Forms

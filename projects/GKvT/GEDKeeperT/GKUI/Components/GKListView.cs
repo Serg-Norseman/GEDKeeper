@@ -23,6 +23,10 @@ namespace GKUI.Components
         private IListSource fListMan;
         private DataColumn fSortColumn;
 
+        public bool CheckBoxes { get; set; }
+
+        public event EventHandler DoubleClick;
+
         public IListSource ListMan
         {
             get {
@@ -253,6 +257,7 @@ namespace GKUI.Components
         {
             base.SelectedRow = index;
             base.EnsureSelectedCellIsVisible();
+            base.SetNeedsDisplay();
         }
 
         public void SelectItem(object rowData)

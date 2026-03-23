@@ -29,6 +29,7 @@ namespace GEDKeeperT
     {
         public static void Main(string[] args)
         {
+            Application.Style = TUIStyle.Classic;
             Application.Init();
 
             TGAppHost.Startup(args);

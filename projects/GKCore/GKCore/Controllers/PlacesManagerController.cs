@@ -174,7 +174,7 @@ namespace GKCore.Controllers
         {
             fView.SetTitle(LangMan.LS(LSID.PlacesManager));
 
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics) && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ITabPage>("pagePlaceManage").Text = LangMan.LS(LSID.PlacesManager);
                 GetControl<IButton>("btnClose").Text = LangMan.LS(LSID.DlgClose);
                 GetControl<IButton>("btnLocExpert").Text = LangMan.LS(LSID.LocExpert);

@@ -62,7 +62,11 @@ namespace GKCore.Controllers
             GetControl<IComboBox>("cmbCertaintyAlgorithm").ReadOnly = true;
             GetControl<IComboBox>("cmbChartWindowsShowMode").ReadOnly = true;
             GetControl<IComboBox>("cmbMediaStoreDefault").ReadOnly = true;
-            GetControl<IComboBox>("cmbTextEffect").ReadOnly = true;
+
+            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+                GetControl<IComboBox>("cmbTextEffect").ReadOnly = true;
+            }
+
             GetControl<IComboBox>("cmbMatchPatternMethod").ReadOnly = true;
             GetControl<IComboBox>("cmbAscendNumbering").ReadOnly = true;
             GetControl<IComboBox>("cmbDescendNumbering").ReadOnly = true;
@@ -767,30 +771,34 @@ namespace GKCore.Controllers
             GetControl<INumericBox>("numDefaultDepthAncestors").Value = fOptions.TreeChartOptions.DepthLimitAncestors;
             GetControl<INumericBox>("numDefaultDepthDescendants").Value = fOptions.TreeChartOptions.DepthLimitDescendants;
 
-            var hasExtraControls = !AppHost.Instance.HasFeatureSupport(Feature.Mobile);
-            GetControl<ICheckBox>("chkUseExtraControls").Checked = fOptions.TreeChartOptions.UseExtraControls && hasExtraControls;
-            GetControl<ICheckBox>("chkUseExtraControls").Visible = hasExtraControls;
+            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+                var hasExtraControls = !AppHost.Instance.HasFeatureSupport(Feature.Mobile);
+                GetControl<ICheckBox>("chkUseExtraControls").Checked = fOptions.TreeChartOptions.UseExtraControls && hasExtraControls;
+                GetControl<ICheckBox>("chkUseExtraControls").Visible = hasExtraControls;
 
-            UpdateTreeChartFont();
+                UpdateTreeChartFont();
 
-            var cmbTextEffect = GetControl<IComboBox>("cmbTextEffect");
-            cmbTextEffect.Clear();
-            for (TextEffect itm = TextEffect.First; itm <= TextEffect.Last; itm++) {
-                cmbTextEffect.AddItem(LangMan.LS(GKData.TextEffects[(int)itm]), itm);
-            }
-            cmbTextEffect.SetSelectedTag(fOptions.TreeChartOptions.TextEffect);
+                var cmbTextEffect = GetControl<IComboBox>("cmbTextEffect");
+                cmbTextEffect.Clear();
+                for (TextEffect itm = TextEffect.First; itm <= TextEffect.Last; itm++) {
+                    cmbTextEffect.AddItem(LangMan.LS(GKData.TextEffects[(int)itm]), itm);
+                }
+                cmbTextEffect.SetSelectedTag(fOptions.TreeChartOptions.TextEffect);
 
 #if NETCOREAPP
-            cmbTextEffect.Enabled = false;
+                cmbTextEffect.Enabled = false;
 #else
-            cmbTextEffect.Enabled = !AppHost.Instance.HasFeatureSupport(Feature.Mobile);
+                cmbTextEffect.Enabled = !AppHost.Instance.HasFeatureSupport(Feature.Mobile);
 #endif
+            }
         }
 
         public void UpdateTreeChartFont()
         {
-            var opts = fOptions.TreeChartOptions;
-            GetControl<ILabel>("lblChartFont").Text = $"{opts.DefFontName}, {opts.DefFontSize}";
+            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+                var opts = fOptions.TreeChartOptions;
+                GetControl<ILabel>("lblChartFont").Text = $"{opts.DefFontName}, {opts.DefFontSize}";
+            }
         }
 
         public void UpdateUIFont()
@@ -885,9 +893,10 @@ namespace GKCore.Controllers
             fOptions.TreeChartOptions.DepthLimitAncestors = (int)GetControl<INumericBox>("numDefaultDepthAncestors").Value;
             fOptions.TreeChartOptions.DepthLimitDescendants = (int)GetControl<INumericBox>("numDefaultDepthDescendants").Value;
 
-            fOptions.TreeChartOptions.UseExtraControls = GetControl<ICheckBox>("chkUseExtraControls").Checked;
-
-            fOptions.TreeChartOptions.TextEffect = GetControl<IComboBox>("cmbTextEffect").GetSelectedTag<TextEffect>();
+            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+                fOptions.TreeChartOptions.UseExtraControls = GetControl<ICheckBox>("chkUseExtraControls").Checked;
+                fOptions.TreeChartOptions.TextEffect = GetControl<IComboBox>("cmbTextEffect").GetSelectedTag<TextEffect>();
+            }
         }
 
         public void ResetCircleChartsOptions()
@@ -1101,7 +1110,7 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblUnkSexColor").Text = LangMan.LS(LSID.UnkSex);
             GetControl<ILabel>("lblUnHusbandColor").Text = LangMan.LS(LSID.UnHusband);
             GetControl<ILabel>("lblUnWifeColor").Text = LangMan.LS(LSID.UnWife);
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics) && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ILabel>("lblChartFontTitle").Text = LangMan.LS(LSID.Font);
             }
 
@@ -1117,11 +1126,12 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblDefaultDepthAncestors").Text = LangMan.LS(LSID.DefaultDepth) + ": " + LangMan.LS(LSID.Ancestors);
             GetControl<ILabel>("lblDefaultDepthDescendants").Text = LangMan.LS(LSID.DefaultDepth) + ": " + LangMan.LS(LSID.Descendants);
 
-            GetControl<ICheckBox>("chkUseExtraControls").Text = LangMan.LS(LSID.UseExtraControls);
+            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+                GetControl<ICheckBox>("chkUseExtraControls").Text = LangMan.LS(LSID.UseExtraControls);
+                GetControl<ILabel>("lblTextEffect").Text = LangMan.LS(LSID.TextEffect);
 
-            GetControl<ILabel>("lblTextEffect").Text = LangMan.LS(LSID.TextEffect);
-
-            GetControl<ITabPage>("pageAncCircle").Text = LangMan.LS(LSID.AncestorsCircle);
+                GetControl<ITabPage>("pageAncCircle").Text = LangMan.LS(LSID.AncestorsCircle);
+            }
 
             // UIView
             GetControl<ITabPage>("pageUIView").Text = LangMan.LS(LSID.Interface);

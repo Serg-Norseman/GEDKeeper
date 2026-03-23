@@ -221,6 +221,14 @@ namespace GKUI.Forms
         {
             Application.RequestStop(this);
         }
+
+        protected void Close(DialogResult dialogResult)
+        {
+            if (dialogResult != DialogResult.None) {
+                //fTaskSource.SetResult(dialogResult == DialogResult.Ok);
+                DialogResult = dialogResult;
+            }
+        }
     }
 
 

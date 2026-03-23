@@ -68,7 +68,7 @@ namespace GKUI.Platform
 
 
         private static readonly (char chr, double weight)[] Shades = {
-            (' ', 0.0), ('░', 0.25), ('▒', 0.5), ('▓', 0.75), ('█', 1.0)
+            (' ', 0.0), ('░', 0.25), ('▒', 0.5), ('▓', 0.75)/*, ('█', 1.0)*/
         };
 
         public record PixColor(double r, double g, double b, tgColor fg, tgColor bg, char chr);
@@ -85,7 +85,11 @@ namespace GKUI.Platform
 
                     if (fg == bg) continue;
 
-                    foreach (var shade in Shades) {
+                    for (int i = 0; i < Shades.Length; i++) {
+                        //if (i == 0 && fg != 0) continue;
+
+                        var shade = Shades[i];
+
                         // Calculating the mixed color
                         double r = bgEntry.Red * (1 - shade.weight) + fgEntry.Red * shade.weight;
                         double g = bgEntry.Green * (1 - shade.weight) + fgEntry.Green * shade.weight;

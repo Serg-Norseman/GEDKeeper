@@ -27,9 +27,9 @@
         <!--Reference Include="Terminal.Gui">
             <HintPath>..\libs\Terminal.Gui.dll</HintPath>
         </Reference-->
-        <Reference Include="NStack">
+        <!--Reference Include="NStack">
             <HintPath>..\libs\NStack.dll</HintPath>
-        </Reference>
+        </Reference-->
     </ItemGroup>
 
     <ItemGroup>
