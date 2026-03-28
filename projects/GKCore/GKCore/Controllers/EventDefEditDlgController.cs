@@ -38,6 +38,7 @@ namespace GKCore.Controllers
 
         public EventDefEditDlgController(IEventDefEditDlg view) : base(view)
         {
+            fView.TagCombo.ReadOnly = true;
         }
 
         public override bool Accept()

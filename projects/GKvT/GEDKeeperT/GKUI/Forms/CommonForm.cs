@@ -10,6 +10,7 @@ using System;
 using System.Reflection;
 using GKCore;
 using GKCore.Design;
+using GKUI.Components;
 using Terminal.Gui;
 
 namespace GKUI.Forms
@@ -168,6 +169,12 @@ namespace GKUI.Forms
             DialogResult = DialogResult.None;
 
             fControlsManager = new ControlsManager(this);
+        }
+
+        protected override void OnLoaded()
+        {
+            base.OnLoaded();
+            UIHelper.FixTabView(this);
         }
 
         public void SetTitle(string title)

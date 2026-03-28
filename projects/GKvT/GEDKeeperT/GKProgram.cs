@@ -41,6 +41,8 @@ namespace GEDKeeperT
                         var appHost = (TGAppHost)AppHost.Instance;
                         appHost.Init(args, false);
 
+                        //ColorSchemesEx.ApplyTheme("TP7"); // "NC"
+
                         Application.Top.Add(new BaseWinSDI());
                         Application.Run();
                         Application.Shutdown();

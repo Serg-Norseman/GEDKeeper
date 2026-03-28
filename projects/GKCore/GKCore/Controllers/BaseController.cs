@@ -569,7 +569,6 @@ namespace GKCore.Controllers
         {
             var result = new ModificationResult<GDMLocationRecord>();
 
-#if !TERM
             try {
                 baseWin.Context.BeginUpdate();
                 GDMTree tree = baseWin.Context.Tree;
@@ -605,7 +604,6 @@ namespace GKCore.Controllers
             } finally {
                 baseWin.Context.EndUpdate();
             }
-#endif
 
             return result;
         }

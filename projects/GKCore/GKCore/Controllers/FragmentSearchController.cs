@@ -37,9 +37,11 @@ namespace GKCore.Controllers
         }
 
         private GroupMapItem fCurrentItem;
+        private bool fTerm;
 
         public FragmentSearchController(IFragmentSearchDlg view) : base(view)
         {
+            fTerm = !AppHost.Instance.HasFeatureSupport(Feature.Graphics);
         }
 
         public override void UpdateView()
@@ -54,7 +56,9 @@ namespace GKCore.Controllers
                 treeFragments = TreeTools.SearchTreeFragments(fBase.Context.Tree, controller);
             });
 
-            fView.LogChart.Clear();
+            if (!fTerm)
+                fView.LogChart.Clear();
+
             fView.GroupsTree.BeginUpdate();
             try {
                 fView.GroupsTree.Clear();
@@ -81,7 +85,9 @@ namespace GKCore.Controllers
                     }
 
                     fView.GroupsTree.Expand(groupItem);
-                    fView.LogChart.AddFragment(cnt);
+
+                    if (!fTerm)
+                        fView.LogChart.AddFragment(cnt);
                 }
             } finally {
                 treeFragments.Clear();
@@ -126,14 +132,19 @@ namespace GKCore.Controllers
                 GetControl<IMenuItem>("miDetails").Text = LangMan.LS(LSID.Details);
                 GetControl<IMenuItem>("miGoToRecord").Text = LangMan.LS(LSID.GoToPersonRecord);
                 GetControl<IMenuItem>("miCopyXRef").Text = LangMan.LS(LSID.CopyXRef);
-                GetControl<IMenuItem>("miDQRefresh").Text = LangMan.LS(LSID.Refresh);
-                GetControl<IMenuItem>("miDQResetFilter").Text = LangMan.LS(LSID.ResetFilter);
+
+                if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+                    GetControl<IMenuItem>("miDQRefresh").Text = LangMan.LS(LSID.Refresh);
+                    GetControl<IMenuItem>("miDQResetFilter").Text = LangMan.LS(LSID.ResetFilter);
+                }
             }
 
-            GetControl<ITabPage>("pageFamilyGroups").Text = LangMan.LS(LSID.FragmentSearch);
             GetControl<IButton>("btnAnalyseGroups").Text = LangMan.LS(LSID.Analyze);
 
-            GetControl<ITabPage>("pageDataQuality").Text = LangMan.LS(LSID.DataQuality);
+            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+                GetControl<ITabPage>("pageFamilyGroups").Text = LangMan.LS(LSID.FragmentSearch);
+                GetControl<ITabPage>("pageDataQuality").Text = LangMan.LS(LSID.DataQuality);
+            }
         }
 
         public override void ApplyTheme()

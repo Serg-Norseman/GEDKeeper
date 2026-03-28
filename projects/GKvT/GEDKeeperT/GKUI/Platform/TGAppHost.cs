@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using GKCore;
+using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Design.Views;
@@ -170,6 +171,7 @@ namespace GKUI.Platform
             // controls and other
             container.Register<IStdDialogs, TGStdDialogs>(LifeCycle.Singleton);
             container.Register<IGraphicsProvider, TGGfxProvider>(LifeCycle.Singleton);
+            container.Register<ITreeChart, TreeChartBox>(LifeCycle.Transient);
 
             // dialogs
             container.Register<IAboutDlg, AboutDlg>(LifeCycle.Transient);
@@ -181,10 +183,15 @@ namespace GKUI.Platform
             container.Register<IEventEditDlg, EventEditDlg>(LifeCycle.Transient);
             container.Register<IFamilyEditDlg, FamilyEditDlg>(LifeCycle.Transient);
             container.Register<IFilePropertiesDlg, FilePropertiesDlg>(LifeCycle.Transient);
+            container.Register<IFragmentSearchDlg, TTFamilyGroupsDlg>(LifeCycle.Transient);
             container.Register<IGroupEditDlg, GroupEditDlg>(LifeCycle.Transient);
+            container.Register<ILocationEditDlg, LocationEditDlg>(LifeCycle.Transient);
+            container.Register<ILocationNameEditDlg, LocationNameEditDlg>(LifeCycle.Transient);
+            container.Register<ILocationLinkEditDlg, LocationLinkEditDlg>(LifeCycle.Transient);
             container.Register<IMediaEditDlg, MediaEditDlg>(LifeCycle.Transient);
             container.Register<IMediaFileEditDlg, MediaFileEditDlg>(LifeCycle.Transient);
             container.Register<IMediaViewerWin, MediaViewerWin>(LifeCycle.Transient);
+            container.Register<INameEditDlg, NameEditDlg>(LifeCycle.Transient);
             container.Register<INoteEditDlg, NoteEditDlg>(LifeCycle.Transient);
             container.Register<IOptionsDlg, OptionsDlg>(LifeCycle.Transient);
             container.Register<IOrganizerWin, OrganizerWin>(LifeCycle.Transient);
@@ -194,22 +201,27 @@ namespace GKUI.Platform
             container.Register<IPlacesManagerDlg, TTPlacesManagerDlg>(LifeCycle.Transient);
             container.Register<IPersonalNameEditDlg, PersonalNameEditDlg>(LifeCycle.Transient);
             container.Register<IPersonEditDlg, PersonEditDlg>(LifeCycle.Transient);
+            container.Register<IRecMergeDlg, TTRecMergeDlg>(LifeCycle.Transient);
             container.Register<IRecordSelectDialog, RecordSelectDlg>(LifeCycle.Transient);
             container.Register<IRelationshipCalculatorDlg, RelationshipCalculatorDlg>(LifeCycle.Transient);
             container.Register<IRepositoryEditDlg, RepositoryEditDlg>(LifeCycle.Transient);
             container.Register<IResearchEditDlg, ResearchEditDlg>(LifeCycle.Transient);
+            container.Register<ISexCheckDlg, SexCheckDlg>(LifeCycle.Transient);
             container.Register<ISourceCitEditDlg, SourceCitEditDlg>(LifeCycle.Transient);
             container.Register<ISourceEditDlg, SourceEditDlg>(LifeCycle.Transient);
+            //container.Register<IScriptEditWin, ScriptEditWin>(LifeCycle.Transient);
             container.Register<IStatisticsWin, StatisticsWin>(LifeCycle.Transient);
             container.Register<ITaskEditDlg, TaskEditDlg>(LifeCycle.Transient);
             container.Register<ITreeChartWin, TreeChartWin>(LifeCycle.Transient);
             container.Register<ITreeCheckDlg, TTTreeCheckDlg>(LifeCycle.Transient);
             container.Register<ITreeCompareDlg, TTTreeCompareDlg>(LifeCycle.Transient);
+            container.Register<ITreeFilterDlg, TreeFilterDlg>(LifeCycle.Transient);
             container.Register<ITreeMergeDlg, TTTreeMergeDlg>(LifeCycle.Transient);
             container.Register<ITreeSplitDlg, TTTreeSplitDlg>(LifeCycle.Transient);
             container.Register<IUserRefEditDlg, UserRefEditDlg>(LifeCycle.Transient);
             container.Register<IRecordInfoDlg, RecordInfoDlg>(LifeCycle.Transient);
             container.Register<IFARDlg, FindAndReplaceDlg>(LifeCycle.Transient);
+            container.Register<IEventDefEditDlg, EventDefEditDlg>(LifeCycle.Transient);
             container.Register<ISourceCallNumberEditDlg, SourceCallNumberEditDlg>(LifeCycle.Transient);
             container.Register<IRepositoryCitEditDlg, RepositoryCitEditDlg>(LifeCycle.Transient);
             container.Register<IDNATestEditDlg, DNATestEditDlg>(LifeCycle.Transient);
@@ -227,6 +239,7 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(NumericStepper), typeof(NumericBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(ProgressBar), typeof(ProgressBarHandler));
             ControlsManager.RegisterHandlerType(typeof(RadioButton), typeof(RadioButtonHandler));
+            ControlsManager.RegisterHandlerType(typeof(TreeView), typeof(TreeViewHandler));
             ControlsManager.RegisterHandlerType(typeof(TabPage), typeof(TabPageHandler));
             ControlsManager.RegisterHandlerType(typeof(TabView), typeof(TabControlHandler));
             ControlsManager.RegisterHandlerType(typeof(TabPage), typeof(TabPageHandler));
@@ -234,10 +247,10 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(TextValidateField), typeof(MaskedTextBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(TextView), typeof(TextAreaHandler));
 
+            ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
             ControlsManager.RegisterHandlerType(typeof(GKDateBox), typeof(DateBoxHandler));
             ControlsManager.RegisterHandlerType(typeof(GKDateControl), typeof(DateControlHandler));
             ControlsManager.RegisterHandlerType(typeof(GKListView), typeof(ListViewHandler));
-            ControlsManager.RegisterHandlerType(typeof(LogChart), typeof(LogChartHandler));
         }
 
         public static void Startup(string[] args)

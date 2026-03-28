@@ -137,6 +137,9 @@ namespace GKUI.Components
 
         private void UpdateProperties(bool resizeCanvas = false)
         {
+            if (Bounds.IsEmpty)
+                return;
+
             if (resizeCanvas) {
                 int canvWidth = Math.Max(fImageSize.Width, Bounds.Width);
                 int canvHeight = Math.Max(fImageSize.Height, Bounds.Height);
@@ -182,6 +185,12 @@ namespace GKUI.Components
         {
             UpdateProperties(true);
             return base.OnEnter(nextFocused);
+        }
+
+        protected override void OnLayoutComplete(LayoutEventArgs args)
+        {
+            base.OnLayoutComplete(args);
+            UpdateProperties(true);
         }
 
         public override bool OnKeyDown(KeyEvent keyEvent)

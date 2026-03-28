@@ -6,8 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-#if !TERM
-
 using System;
 using System.Collections.Generic;
 using BSLib;
@@ -101,7 +99,8 @@ namespace GKCore.Controllers
 
                 fLocalUndoman.Commit();
 
-                /*if (isChanged)*/ {
+                /*if (isChanged)*/
+                {
                     fBase.Context.Tree.RenameLocationRecord(fLocationRecord);
                 }
 
@@ -126,7 +125,9 @@ namespace GKCore.Controllers
             fView.NotesList.ListModel.DataOwner = fLocationRecord;
             fView.MediaList.ListModel.DataOwner = fLocationRecord;
 
+#if !TERM
             ShowOnMap();
+#endif
         }
 
         public GeoPoint GetSelectedGeoPoint()
@@ -141,11 +142,14 @@ namespace GKCore.Controllers
                 return;
             }
 
+            var searchPoints = new List<GeoPoint>();
+            AppHost.Instance.RequestGeoCoords(location, searchPoints);
+            fPointsModel.DataSource = searchPoints;
+            fView.GeoCoordsList.UpdateContents();
+
+#if !TERM
             fView.MapBrowser.BeginUpdate();
             try {
-                var searchPoints = new List<GeoPoint>();
-
-                AppHost.Instance.RequestGeoCoords(location, searchPoints);
                 fView.MapBrowser.ClearPoints();
 
                 for (int i = 0, num = searchPoints.Count; i < num; i++) {
@@ -157,12 +161,10 @@ namespace GKCore.Controllers
                         fView.MapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
                     }
                 }
-
-                fPointsModel.DataSource = searchPoints;
-                fView.GeoCoordsList.UpdateContents();
             } finally {
                 fView.MapBrowser.EndUpdate();
             }
+#endif
         }
 
         public void SelectCoords()
@@ -187,9 +189,15 @@ namespace GKCore.Controllers
             GeoPoint pt = GetSelectedGeoPoint();
             if (pt == null) return;
 
+#if !TERM
             fView.MapBrowser.SetCenter(pt.Latitude, pt.Longitude, -1);
+#else
+            fView.Latitude.Text = GEDCOMUtils.CoordToStr(pt.Latitude);
+            fView.Longitude.Text = GEDCOMUtils.CoordToStr(pt.Longitude);
+#endif
         }
 
+#if !TERM
         public void SelectCursorCoords()
         {
             var pos = fView.MapBrowser.TargetPosition;
@@ -204,6 +212,7 @@ namespace GKCore.Controllers
                 fView.MapBrowser.SetCenter(ConvertHelper.ParseFloat(fView.Latitude.Text, 0), ConvertHelper.ParseFloat(fView.Longitude.Text, 0), -1);
             }
         }
+#endif
 
         public override void SetLocale()
         {
@@ -217,14 +226,16 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblName").Text = LangMan.LS(LSID.Title);
             GetControl<ILabel>("lblLatitude").Text = LangMan.LS(LSID.Latitude);
             GetControl<ILabel>("lblLongitude").Text = LangMan.LS(LSID.Longitude);
-            GetControl<IButton>("btnShowOnMap").Text = LangMan.LS(LSID.Show);
             GetControl<IGroupBox>("grpSearch").Text = LangMan.LS(LSID.SearchCoords);
             GetControl<IButton>("btnSearch").Text = LangMan.LS(LSID.Search);
             GetControl<IButton>("btnSelect").Text = LangMan.LS(LSID.SelectCoords);
             GetControl<IButton>("btnSelectName").Text = LangMan.LS(LSID.SelectName);
-            GetControl<IButton>("btnSelectCursor").Text = LangMan.LS(LSID.CursorCoords);
 
+#if !TERM
+            GetControl<IButton>("btnSelectCursor").Text = LangMan.LS(LSID.CursorCoords);
+            GetControl<IButton>("btnShowOnMap").Text = LangMan.LS(LSID.Show);
             SetToolTip("btnShowOnMap", LangMan.LS(LSID.ShowOnMapTip));
+#endif
 
             GetControl<ITabPage>("pageHistory").Text = LangMan.LS(LSID.History);
             GetControl<IGroupBox>("pageHistNames").Text = LangMan.LS(LSID.Names);
@@ -274,5 +285,3 @@ namespace GKCore.Controllers
         }
     }
 }
-
-#endif

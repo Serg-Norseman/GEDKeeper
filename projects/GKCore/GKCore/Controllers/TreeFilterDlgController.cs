@@ -38,6 +38,8 @@ namespace GKCore.Controllers
 
         public TreeFilterDlgController(ITreeFilterDlg view) : base(view)
         {
+            fView.SourceCombo.ReadOnly = true;
+
             fView.PersonsList.Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbDelete);
             fView.PersonsList.OnModify += ListModify;
         }

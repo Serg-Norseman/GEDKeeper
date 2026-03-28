@@ -19,7 +19,6 @@ namespace GKUI.Components
 {
     using static GKUI.Platform.ColorMapper;
     using tgSize = Terminal.Gui.Size;
-    using sysRune = System.Rune;
     using tgAttribute = Terminal.Gui.Attribute;
 
     public class ImageView : View
@@ -70,7 +69,7 @@ namespace GKUI.Components
             }
         }
 
-        private record BrSym(sysRune Symbol, tgAttribute Attribute);
+        private record BrSym(char Symbol, tgAttribute Attribute);
 
         private BrSym[,] GenerateImageMatrix(Image<Rgba32> image)
         {

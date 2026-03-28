@@ -38,6 +38,7 @@ namespace GKCore.Controllers
 
         public NameEditDlgController(INameEditDlg view) : base(view)
         {
+            fView.SexCombo.ReadOnly = true;
             for (GDMSex sx = GDMSex.svUnknown; sx <= GDMSex.svLast; sx++) {
                 fView.SexCombo.Add(GKUtils.SexStr(sx));
             }

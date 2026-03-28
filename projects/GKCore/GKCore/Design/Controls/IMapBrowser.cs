@@ -6,11 +6,12 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-#if !TERM
 
 using System.Collections.Generic;
 using GKCore.Maps;
+#if !TERM
 using GKMap;
+#endif
 
 namespace GKCore.Design.Controls
 {
@@ -19,12 +20,15 @@ namespace GKCore.Design.Controls
     /// </summary>
     public interface IMapBrowser : IBaseControl
     {
+#if !TERM
         IMapControl MapControl { get; }
+
+        PointLatLng TargetPosition { get; set; }
+#endif
 
         bool ShowPoints { get; set; }
         bool ShowLines { get; set; }
         IList<GeoPoint> MapPoints { get; }
-        PointLatLng TargetPosition { get; set; }
 
         int AddPoint(double latitude, double longitude, string hint);
         int AddPoint(GeoPoint pt);
@@ -38,5 +42,3 @@ namespace GKCore.Design.Controls
         void ZoomToBounds();
     }
 }
-
-#endif

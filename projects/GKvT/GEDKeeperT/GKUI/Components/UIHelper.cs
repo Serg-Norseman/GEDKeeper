@@ -187,5 +187,19 @@ namespace GKUI.Components
 
             return new Size(resultW, resultH);
         }
+
+        /// <summary>
+        /// Bugfix Terminal.Gui v1.20 with empty first tab after dialog loads.
+        /// </summary>
+        public static void FixTabView(View view)
+        {
+            foreach (var vw in view.Subviews) {
+                FixTabView(vw);
+
+                if (vw is TabView tabView && tabView.Tabs.Count > 0) {
+                    tabView.SelectedTab = tabView.Tabs[0];
+                }
+            }
+        }
     }
 }

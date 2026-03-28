@@ -12,6 +12,7 @@ using Terminal.Gui;
 
 namespace GKUI.Platform
 {
+    using tgAttribute = Terminal.Gui.Attribute;
     using tgColor = Terminal.Gui.Color;
 
     public static class ColorMapper
@@ -121,6 +122,54 @@ namespace GKUI.Platform
             }
 
             return bestMatch;
+        }
+    }
+
+
+    public static class ColorSchemesEx
+    {
+        static ColorSchemesEx()
+        {
+            MakeTurboPascalTheme();
+            MakeNortonCommanderTheme();
+        }
+
+        public static void MakeTurboPascalTheme()
+        {
+            var _tpScheme = new ColorScheme {
+                Normal = tgAttribute.Make(Color.White, Color.Blue),
+                Focus = tgAttribute.Make(Color.Black, Color.Cyan), // Активный элемент
+                HotNormal = tgAttribute.Make(Color.BrightYellow, Color.Blue), // Хоткеи в меню
+                HotFocus = tgAttribute.Make(Color.BrightYellow, Color.Cyan),
+                Disabled = tgAttribute.Make(Color.Gray, Color.Blue)
+            };
+
+            Colors.ColorSchemes["TP7"] = _tpScheme;
+        }
+
+        public static void MakeNortonCommanderTheme()
+        {
+            var _ncScheme = new ColorScheme {
+                Normal = tgAttribute.Make(Color.White, Color.Blue),
+                Focus = tgAttribute.Make(Color.Black, Color.White), // Инверсия при фокусе
+                HotNormal = tgAttribute.Make(Color.BrightYellow, Color.Blue),
+                HotFocus = tgAttribute.Make(Color.BrightYellow, Color.White),
+                Disabled = tgAttribute.Make(Color.Gray, Color.Blue)
+            };
+
+            Colors.ColorSchemes["NC"] = _ncScheme;
+        }
+
+        public static void ApplyTheme(string scheme)
+        {
+            var theme = Colors.ColorSchemes[scheme];
+
+            if (Application.Top != null) {
+                Application.Top.ColorScheme = theme;
+            }
+            Colors.Menu = theme;
+            Colors.Dialog = theme;
+            Colors.Base = theme;
         }
     }
 }

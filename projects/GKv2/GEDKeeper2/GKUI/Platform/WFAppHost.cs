@@ -410,8 +410,6 @@ namespace GKUI.Platform
             Clipboard.SetImage(sdImage);
         }
 
-        #region Bootstrapper
-
         /// <summary>
         /// This function implements initialization of IoC-container for WinForms presentation.
         /// </summary>
@@ -526,14 +524,10 @@ namespace GKUI.Platform
             ControlsManager.RegisterHandlerType(typeof(GKListView), typeof(ListViewHandler));
         }
 
-        #endregion
-
         public static void Startup(string[] args)
         {
             ConfigureBootstrap();
-            CheckPortable(args);
-            Logger.Init(GetLogFilename());
-            LogSysInfo();
+            StartupCore(args);
 
             Application.ThreadException += ExExceptionHandler;
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException, true);

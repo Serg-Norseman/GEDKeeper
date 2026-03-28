@@ -675,7 +675,7 @@ namespace GKUI.Components
 
         public void CenterPerson(TreeChartPerson person, bool animation = true)
         {
-            if (person == null || fTween.Busy) return;
+            if (person == null || fTween.Busy || (!base.HScroll && !base.VScroll)) return;
 
             var viewport = this.Viewport;
             int widthMax = fModel.ImageWidth - viewport.Width;
