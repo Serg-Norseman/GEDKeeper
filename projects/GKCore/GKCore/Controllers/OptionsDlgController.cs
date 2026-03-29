@@ -29,6 +29,7 @@ namespace GKCore.Controllers
     {
         private readonly GlobalOptions fOptions;
         private readonly ListColumns fTempColumns;
+        private bool fIsTerm;
 
 
         public GlobalOptions Options
@@ -39,6 +40,8 @@ namespace GKCore.Controllers
 
         public OptionsDlgController(IOptionsDlg view) : base(view)
         {
+            fIsTerm = !AppHost.Instance.HasFeatureSupport(Feature.Graphics);
+
             fOptions = GlobalOptions.Instance;
             fTempColumns = IndividualListModel.CreateListColumns();
 
@@ -63,7 +66,7 @@ namespace GKCore.Controllers
             GetControl<IComboBox>("cmbChartWindowsShowMode").ReadOnly = true;
             GetControl<IComboBox>("cmbMediaStoreDefault").ReadOnly = true;
 
-            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+            if (!fIsTerm) {
                 GetControl<IComboBox>("cmbTextEffect").ReadOnly = true;
             }
 
@@ -453,7 +456,7 @@ namespace GKCore.Controllers
             }
             combo.SetSelectedTag(fOptions.MatchPatternMethod);
 
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+            if (!fIsTerm && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 UpdateUIFont();
                 GetControl<ICheckBox>("chkOverrideThemesFont").Checked = fOptions.OverrideThemesFont;
             }
@@ -510,7 +513,7 @@ namespace GKCore.Controllers
 
             fOptions.MatchPatternMethod = GetControl<IComboBox>("cmbMatchPatternMethod").GetSelectedTag<MatchPatternMethod>();
 
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+            if (!fIsTerm && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 fOptions.OverrideThemesFont = GetControl<ICheckBox>("chkOverrideThemesFont").Checked;
             }
         }
@@ -771,7 +774,7 @@ namespace GKCore.Controllers
             GetControl<INumericBox>("numDefaultDepthAncestors").Value = fOptions.TreeChartOptions.DepthLimitAncestors;
             GetControl<INumericBox>("numDefaultDepthDescendants").Value = fOptions.TreeChartOptions.DepthLimitDescendants;
 
-            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+            if (!fIsTerm) {
                 var hasExtraControls = !AppHost.Instance.HasFeatureSupport(Feature.Mobile);
                 GetControl<ICheckBox>("chkUseExtraControls").Checked = fOptions.TreeChartOptions.UseExtraControls && hasExtraControls;
                 GetControl<ICheckBox>("chkUseExtraControls").Visible = hasExtraControls;
@@ -795,7 +798,7 @@ namespace GKCore.Controllers
 
         public void UpdateTreeChartFont()
         {
-            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+            if (!fIsTerm) {
                 var opts = fOptions.TreeChartOptions;
                 GetControl<ILabel>("lblChartFont").Text = $"{opts.DefFontName}, {opts.DefFontSize}";
             }
@@ -893,7 +896,7 @@ namespace GKCore.Controllers
             fOptions.TreeChartOptions.DepthLimitAncestors = (int)GetControl<INumericBox>("numDefaultDepthAncestors").Value;
             fOptions.TreeChartOptions.DepthLimitDescendants = (int)GetControl<INumericBox>("numDefaultDepthDescendants").Value;
 
-            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+            if (!fIsTerm) {
                 fOptions.TreeChartOptions.UseExtraControls = GetControl<ICheckBox>("chkUseExtraControls").Checked;
                 fOptions.TreeChartOptions.TextEffect = GetControl<IComboBox>("cmbTextEffect").GetSelectedTag<TextEffect>();
             }
@@ -976,6 +979,9 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
+            // in order of execution - called before a similar assignment in the constructor
+            fIsTerm = !AppHost.Instance.HasFeatureSupport(Feature.Graphics);
+
             fView.SetTitle(LangMan.LS(LSID.MIOptions));
 
             GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
@@ -1110,7 +1116,8 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblUnkSexColor").Text = LangMan.LS(LSID.UnkSex);
             GetControl<ILabel>("lblUnHusbandColor").Text = LangMan.LS(LSID.UnHusband);
             GetControl<ILabel>("lblUnWifeColor").Text = LangMan.LS(LSID.UnWife);
-            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics) && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+
+            if (!fIsTerm && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ILabel>("lblChartFontTitle").Text = LangMan.LS(LSID.Font);
             }
 
@@ -1126,7 +1133,7 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblDefaultDepthAncestors").Text = LangMan.LS(LSID.DefaultDepth) + ": " + LangMan.LS(LSID.Ancestors);
             GetControl<ILabel>("lblDefaultDepthDescendants").Text = LangMan.LS(LSID.DefaultDepth) + ": " + LangMan.LS(LSID.Descendants);
 
-            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+            if (!fIsTerm) {
                 GetControl<ICheckBox>("chkUseExtraControls").Text = LangMan.LS(LSID.UseExtraControls);
                 GetControl<ILabel>("lblTextEffect").Text = LangMan.LS(LSID.TextEffect);
 
@@ -1155,7 +1162,7 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkSurnameFirstInOrder").Text = LangMan.LS(LSID.SurnameFirstInOrder);
             GetControl<ICheckBox>("chkSurnameInCapitals").Text = LangMan.LS(LSID.SurnameInCapitals);
 
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+            if (!fIsTerm && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 GetControl<ILabel>("lblUIFontTitle").Text = LangMan.LS(LSID.Font);
                 GetControl<ICheckBox>("chkOverrideThemesFont").Text = LangMan.LS(LSID.OverrideThemesFont);
             }

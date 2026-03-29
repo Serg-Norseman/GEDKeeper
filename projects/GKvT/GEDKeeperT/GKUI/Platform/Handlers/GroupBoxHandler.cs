@@ -19,8 +19,8 @@ namespace GKUI.Platform.Handlers
 
         public string Text
         {
-            get { return Control.Title.ToString(); }
-            set { Control.Text = value; }
+            get { return Control.Title; }
+            set { Control.Title = value; }
         }
     }
 }

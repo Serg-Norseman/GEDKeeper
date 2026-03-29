@@ -214,10 +214,6 @@ namespace GKUI.Forms
         private Button btnExtBackupFolderChoose;
         private TabPage pageGEDCOM;
         private TabPage pageNames;
-        private Label lblUIFontTitle;
-        private FrameView panUIFont;
-        private Label lblUIFont;
-        private CheckBox chkOverrideThemesFont;
 
         private void InitializeComponent()
         {
@@ -428,10 +424,6 @@ namespace GKUI.Forms
             btnExtBackupFolderChoose = new Button();
             pageGEDCOM = new TabPage();
             pageNames = new TabPage();
-            lblUIFontTitle = new Label();
-            panUIFont = new FrameView();
-            lblUIFont = new Label();
-            chkOverrideThemesFont = new CheckBox();
 
             //
 
@@ -629,27 +621,16 @@ namespace GKUI.Forms
 
             //
 
-            chkCharsetDetection.Location = new Point(2, 1);
             chkCharsetDetection.TabIndex = 1;
-
-            chkDisableNonStdFeatures.Location = new Point(2, 3);
             chkDisableNonStdFeatures.TabIndex = 2;
-
-            chkEnableStdValidation.Location = new Point(2, 5);
             chkEnableStdValidation.TabIndex = 3;
-
-            chkUseExtendedNotes.Location = new Point(2, 7);
             chkUseExtendedNotes.TabIndex = 4;
-
-            chkKeepRichNames.Location = new Point(2, 9);
             chkKeepRichNames.TabIndex = 5;
 
             pageGEDCOM.Text = "GEDCOM";
-            pageGEDCOM.View.Add(chkEnableStdValidation);
-            pageGEDCOM.View.Add(chkDisableNonStdFeatures);
-            pageGEDCOM.View.Add(chkUseExtendedNotes);
-            pageGEDCOM.View.Add(chkKeepRichNames);
-            pageGEDCOM.View.Add(chkCharsetDetection);
+            pageGEDCOM.View = new StackLayout(Orientation.Vertical, 1, 1, new View[] {
+                chkCharsetDetection, chkDisableNonStdFeatures, chkEnableStdValidation, chkUseExtendedNotes, chkKeepRichNames
+            });
 
             //
 
@@ -665,47 +646,27 @@ namespace GKUI.Forms
 
             //
 
-            pageMultimedia.View.Add(cmbMediaStoreDefault);
-            pageMultimedia.View.Add(chkDeleteMediaFileWithoutConfirm);
-            pageMultimedia.View.Add(chkAllowDeleteMediaFileFromRefs);
-            pageMultimedia.View.Add(chkAllowDeleteMediaFileFromStgArc);
-            pageMultimedia.View.Add(lblMediaStoreDefault);
-            pageMultimedia.View.Add(chkAllowMediaStoreRelativeReferences);
-            pageMultimedia.View.Add(chkAllowMediaDirectRefs);
-            pageMultimedia.View.Add(chkEmbeddedMediaPlayer);
-            pageMultimedia.View.Add(chkRemovableMediaWarning);
-            pageMultimedia.View.Add(chkHighlightInaccessibleFiles);
-
-            chkRemovableMediaWarning.Location = new Point(2, 1);
             chkRemovableMediaWarning.TabIndex = 1;
-
-            chkEmbeddedMediaPlayer.Location = new Point(2, 3);
             chkEmbeddedMediaPlayer.TabIndex = 2;
-
-            chkAllowMediaDirectRefs.Location = new Point(2, 5);
             chkAllowMediaDirectRefs.TabIndex = 3;
-
-            chkAllowMediaStoreRelativeReferences.Location = new Point(2, 7);
             chkAllowMediaStoreRelativeReferences.TabIndex = 4;
 
-            lblMediaStoreDefault.Location = new Point(2, 9);
             lblMediaStoreDefault.TabIndex = 5;
-
-            cmbMediaStoreDefault.Location = new Point(46, 9);
             cmbMediaStoreDefault.Size = new Size(32, 2);
             cmbMediaStoreDefault.TabIndex = 6;
 
-            chkAllowDeleteMediaFileFromStgArc.Location = new Point(2, 11);
             chkAllowDeleteMediaFileFromStgArc.TabIndex = 7;
-
-            chkAllowDeleteMediaFileFromRefs.Location = new Point(2, 13);
             chkAllowDeleteMediaFileFromRefs.TabIndex = 8;
-
-            chkDeleteMediaFileWithoutConfirm.Location = new Point(2, 15);
             chkDeleteMediaFileWithoutConfirm.TabIndex = 9;
-
-            chkHighlightInaccessibleFiles.Location = new Point(2, 17);
             chkHighlightInaccessibleFiles.TabIndex = 10;
+
+            pageMultimedia.View = new StackLayout(Orientation.Vertical, 1, 1, new View[] {
+                chkRemovableMediaWarning, chkEmbeddedMediaPlayer, chkAllowMediaDirectRefs, chkAllowMediaStoreRelativeReferences,
+
+                new StackLayout(Orientation.Horizontal, 0, 2, new View[] {lblMediaStoreDefault, cmbMediaStoreDefault }),
+
+                chkAllowDeleteMediaFileFromStgArc, chkAllowDeleteMediaFileFromRefs, chkDeleteMediaFileWithoutConfirm, chkHighlightInaccessibleFiles
+            });
 
             //
 
@@ -1149,79 +1110,39 @@ namespace GKUI.Forms
 
             //
 
-            radDMY.Location = new Point(1, 1);
+            radDMY.Location = new Point(2, 0);
             radDMY.TabIndex = 0;
+            radDMY.Group = "df";
 
-            radYMD.Location = new Point(1, 2);
+            radYMD.Location = new Point(2, 1);
             radYMD.TabIndex = 1;
+            radYMD.Group = "df";
 
             grpDateFormat.Add(radYMD);
             grpDateFormat.Add(radDMY);
-            grpDateFormat.Location = new Point(1, 1);
-            grpDateFormat.Size = new Size(42, 5);
+            grpDateFormat.Size = new Size(42, 4);
             grpDateFormat.TabIndex = 0;
             grpDateFormat.TabStop = false;
 
-            chkShowDatesCalendar.Location = new Point(1, 7);
             chkShowDatesCalendar.TabIndex = 1;
-
-            chkShowDatesSigns.Location = new Point(1, 9);
             chkShowDatesSigns.TabIndex = 2;
-
-            chkLocalizedCalendarSignatures.Location = new Point(1, 11);
             chkLocalizedCalendarSignatures.TabIndex = 3;
-
-            chkShortenDateRanges.Location = new Point(1, 13);
             chkShortenDateRanges.TabIndex = 4;
-
-            chkPlacesWithAddress.Location = new Point(1, 16);
             chkPlacesWithAddress.TabIndex = 5;
-
-            chkHighlightUnparented.Location = new Point(1, 18);
             chkHighlightUnparented.TabIndex = 6;
-
-            chkHighlightUnmarried.Location = new Point(1, 20);
             chkHighlightUnmarried.TabIndex = 7;
-
-            chkAutoSortChildren.Location = new Point(1, 22);
             chkAutoSortChildren.TabIndex = 8;
-
-            chkAutoSortSpouses.Location = new Point(1, 24);
             chkAutoSortSpouses.TabIndex = 9;
-
-            chkShowNumberOfSubstructures.Location = new Point(1, 26);
             chkShowNumberOfSubstructures.TabIndex = 10;
 
-            lblUIFontTitle.Location = new Point(1, 29);
-            lblUIFontTitle.TabIndex = 0;
-
-            panUIFont.Add(lblUIFont);
-            panUIFont.Location = new Point(12, 28);
-            panUIFont.Size = new Size(26, 3);
-            panUIFont.TabIndex = 21;
-            //panUIFont.Clicked += panUIFont_Click;
-
-            lblUIFont.Location = new Point(0, 0);
-            lblUIFont.TabIndex = 0;
-            lblUIFont.Clicked += panUIFont_Click;
-
-            chkOverrideThemesFont.Location = new Point(1, 32);
-            chkOverrideThemesFont.TabIndex = 22;
-
-            pageViewCommon.View.Add(grpDateFormat);
-            pageViewCommon.View.Add(chkShowNumberOfSubstructures);
-            pageViewCommon.View.Add(chkShortenDateRanges);
-            pageViewCommon.View.Add(chkPlacesWithAddress);
-            pageViewCommon.View.Add(chkHighlightUnparented);
-            pageViewCommon.View.Add(chkLocalizedCalendarSignatures);
-            pageViewCommon.View.Add(chkShowDatesSigns);
-            pageViewCommon.View.Add(chkShowDatesCalendar);
-            pageViewCommon.View.Add(chkAutoSortSpouses);
-            pageViewCommon.View.Add(chkAutoSortChildren);
-            pageViewCommon.View.Add(chkHighlightUnmarried);
-            pageViewCommon.View.Add(lblUIFontTitle);
-            pageViewCommon.View.Add(panUIFont);
-            pageViewCommon.View.Add(chkOverrideThemesFont);
+            pageViewCommon.View = new StackLayout(Orientation.Vertical, 1, 1, new View[] {
+                grpDateFormat,
+                chkShowDatesCalendar, chkShowDatesSigns, chkLocalizedCalendarSignatures, chkShortenDateRanges,
+                chkPlacesWithAddress,
+                chkHighlightUnparented, chkHighlightUnmarried,
+                chkAutoSortChildren, chkAutoSortSpouses,
+                chkShowNumberOfSubstructures,
+            });
 
             //
 
@@ -1398,14 +1319,12 @@ namespace GKUI.Forms
 
             //
 
-            chkShortKinshipForm.Location = new Point(1, 1);
-            chkShortKinshipForm.TabIndex = 4;
+            chkShortKinshipForm.TabIndex = 1;
+            chkExtendedKinships.TabIndex = 2;
 
-            chkExtendedKinships.Location = new Point(1, 3);
-            chkExtendedKinships.TabIndex = 17;
-
-            pageSpecials.View.Add(chkShortKinshipForm);
-            pageSpecials.View.Add(chkExtendedKinships);
+            pageSpecials.View = new StackLayout(Orientation.Vertical, 1, 1, new View[] {
+                chkShortKinshipForm, chkExtendedKinships
+            });
 
             //
 
