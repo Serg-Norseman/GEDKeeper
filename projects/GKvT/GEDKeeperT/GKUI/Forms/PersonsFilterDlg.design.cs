@@ -1,6 +1,5 @@
 ﻿#pragma warning disable IDE1006 // Naming Styles
 
-using GKUI.Components;
 using Terminal.Gui;
 using Terminal.Gui.TextValidateProviders;
 
@@ -58,12 +57,15 @@ namespace GKUI.Forms
 
             rbSexAll.Location = new Point(1, 1);
             rbSexAll.TabIndex = 0;
+            rbSexAll.Group = "sx";
 
             rbSexMale.Location = new Point(1, 2);
             rbSexMale.TabIndex = 1;
+            rbSexMale.Group = "sx";
 
             rbSexFemale.Location = new Point(1, 3);
             rbSexFemale.TabIndex = 2;
+            rbSexFemale.Group = "sx";
 
             chkOnlyPatriarchs.Location = new Point(1, 5);
             chkOnlyPatriarchs.TabIndex = 29;
@@ -80,18 +82,22 @@ namespace GKUI.Forms
             rbAll.Location = new Point(1, 1);
             rbAll.TabIndex = 0;
             rbAll.CheckedChanged += rgLife_CheckedChanged;
+            rbAll.Group = "lf";
 
             rbOnlyLive.Location = new Point(1, 2);
             rbOnlyLive.TabIndex = 1;
             rbOnlyLive.CheckedChanged += rgLife_CheckedChanged;
+            rbOnlyLive.Group = "lf";
 
             rbOnlyDead.Location = new Point(1, 3);
             rbOnlyDead.TabIndex = 2;
             rbOnlyDead.CheckedChanged += rgLife_CheckedChanged;
+            rbOnlyDead.Group = "lf";
 
             rbAliveBefore.Location = new Point(1, 4);
             rbAliveBefore.TabIndex = 3;
             rbAliveBefore.CheckedChanged += rgLife_CheckedChanged;
+            rbAliveBefore.Group = "lf";
 
             txtAliveBeforeDate.Enabled = false;
             txtAliveBeforeDate.Location = new Point(5, 5);

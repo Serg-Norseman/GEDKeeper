@@ -30,6 +30,7 @@ namespace GKCore.Controllers
             fListModel = new FlatListModel();
             fView.RecordStats.ListMan = fListModel;
 
+            fView.Language.ReadOnly = true;
             for (var lid = GDMLanguageID.Unknown; lid < GDMLanguageID.Yiddish; lid++) {
                 fView.Language.AddItem(GEDCOMUtils.GetLanguageStr(lid), lid);
             }

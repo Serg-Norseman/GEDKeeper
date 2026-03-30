@@ -16,7 +16,7 @@ using GKCore.Options;
 using Terminal.Gui;
 using gkcMouseEvent = GKCore.Charts.MouseEvent;
 using tgMouseEvent = Terminal.Gui.MouseEvent;
-using tgMouseEventArgs = Terminal.Gui.View.MouseEventArgs;
+using tgMouseEventArgs = Terminal.Gui.MouseEventArgs;
 
 namespace GKUI.Components
 {

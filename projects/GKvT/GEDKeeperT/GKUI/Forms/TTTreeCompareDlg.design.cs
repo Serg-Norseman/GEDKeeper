@@ -83,10 +83,10 @@ namespace GKUI.Forms
             ListCompare.Location = new Point(1, 11);
             ListCompare.Multiline = true;
             ListCompare.ReadOnly = true;
-            ListCompare.Size = new Size(96, 48);
+            ListCompare.Size = new Size(96, 40);
             ListCompare.TabIndex = 0;
 
-            Size = new Size(100, 62);
+            Size = new Size(100, 54);
         }
     }
 }

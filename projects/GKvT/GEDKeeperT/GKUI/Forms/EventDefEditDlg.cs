@@ -10,6 +10,7 @@ using GKCore.Controllers;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Events;
+using Terminal.Gui;
 
 namespace GKUI.Forms
 {

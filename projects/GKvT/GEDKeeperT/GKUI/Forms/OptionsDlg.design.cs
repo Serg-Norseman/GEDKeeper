@@ -452,34 +452,34 @@ namespace GKUI.Forms
 
             //
 
-            chkUseProxy.Location = new Point(2, 2);
+            chkUseProxy.Location = new Point(2, 1);
             chkUseProxy.TabIndex = 0;
 
-            lblProxyServer.Location = new Point(1, 4);
+            lblProxyServer.Location = new Point(1, 3);
             lblProxyServer.TabIndex = 0;
 
-            txtProxyServer.Location = new Point(14, 4);
+            txtProxyServer.Location = new Point(14, 3);
             txtProxyServer.Size = new Size(24, 1);
             txtProxyServer.TabIndex = 1;
 
-            lblProxyPort.Location = new Point(1, 6);
+            lblProxyPort.Location = new Point(1, 5);
             lblProxyPort.TabIndex = 1;
 
-            txtProxyPort.Location = new Point(14, 6);
+            txtProxyPort.Location = new Point(14, 5);
             txtProxyPort.Size = new Size(24, 1);
             txtProxyPort.TabIndex = 2;
 
-            lblProxyLogin.Location = new Point(1, 8);
+            lblProxyLogin.Location = new Point(1, 7);
             lblProxyLogin.TabIndex = 2;
 
-            txtProxyLogin.Location = new Point(14, 8);
+            txtProxyLogin.Location = new Point(14, 7);
             txtProxyLogin.Size = new Size(24, 1);
             txtProxyLogin.TabIndex = 3;
 
-            lblProxyPassword.Location = new Point(1, 10);
+            lblProxyPassword.Location = new Point(1, 9);
             lblProxyPassword.TabIndex = 3;
 
-            txtProxyPass.Location = new Point(14, 10);
+            txtProxyPass.Location = new Point(14, 9);
             txtProxyPass.Secret = true;
             txtProxyPass.Size = new Size(24, 1);
             txtProxyPass.TabIndex = 4;
@@ -494,7 +494,7 @@ namespace GKUI.Forms
             grpInternet.Add(txtProxyLogin);
             grpInternet.Add(txtProxyPass);
             grpInternet.Location = new Point(1, 1);
-            grpInternet.Size = new Size(40, 14);
+            grpInternet.Size = new Size(40, 13);
             grpInternet.TabIndex = 1;
             grpInternet.TabStop = false;
 
@@ -508,36 +508,36 @@ namespace GKUI.Forms
             grpOther.Add(chkLoadRecentFiles);
             grpOther.Add(chkShowOnStart);
             grpOther.Location = new Point(1, 15);
-            grpOther.Size = new Size(80, 16);
+            grpOther.Size = new Size(80, 14);
             grpOther.TabIndex = 2;
             grpOther.TabStop = false;
 
-            chkLoadRecentFiles.Location = new Point(2, 2);
+            chkLoadRecentFiles.Location = new Point(2, 1);
             chkLoadRecentFiles.TabIndex = 9;
 
-            chkShowOnStart.Location = new Point(2, 3);
+            chkShowOnStart.Location = new Point(2, 2);
             chkShowOnStart.TabIndex = 0;
 
-            chkAutoCheckUpdates.Location = new Point(2, 4);
+            chkAutoCheckUpdates.Location = new Point(2, 3);
             chkAutoCheckUpdates.TabIndex = 9;
 
-            chkDialogClosingWarn.Location = new Point(2, 5);
+            chkDialogClosingWarn.Location = new Point(2, 4);
             chkDialogClosingWarn.TabIndex = 9;
 
-            chkDisplayFullFileName.Location = new Point(2, 6);
+            chkDisplayFullFileName.Location = new Point(2, 5);
             chkDisplayFullFileName.TabIndex = 9;
 
-            lblChartWindowsShowMode.Location = new Point(2, 8);
+            lblChartWindowsShowMode.Location = new Point(2, 7);
             lblChartWindowsShowMode.TabIndex = 12;
 
-            cmbChartWindowsShowMode.Location = new Point(37, 8);
+            cmbChartWindowsShowMode.Location = new Point(37, 7);
             cmbChartWindowsShowMode.Size = new Size(27, 2);
             cmbChartWindowsShowMode.TabIndex = 12;
 
-            chkKeepInfoPansOverallSize.Location = new Point(2, 10);
+            chkKeepInfoPansOverallSize.Location = new Point(2, 9);
             chkKeepInfoPansOverallSize.TabIndex = 15;
 
-            chkFilesOverwriteWarn.Location = new Point(2, 12);
+            chkFilesOverwriteWarn.Location = new Point(2, 10);
             chkFilesOverwriteWarn.TabIndex = 16;
 
             //
@@ -1039,33 +1039,36 @@ namespace GKUI.Forms
 
             //
 
-            radSNP.Location = new Point(1, 1);
+            radSNP.Location = new Point(1, 0);
             radSNP.TabIndex = 0;
             radSNP.CheckedChanged += rgFNPFormat_CheckedChanged;
+            radSNP.Group = "snp";
 
-            radS_NP.Location = new Point(1, 2);
+            radS_NP.Location = new Point(1, 1);
             radS_NP.TabIndex = 1;
             radS_NP.CheckedChanged += rgFNPFormat_CheckedChanged;
+            radS_NP.Group = "snp";
 
-            radS_N_P.Location = new Point(1, 3);
+            radS_N_P.Location = new Point(1, 2);
             radS_N_P.TabIndex = 2;
             radS_N_P.CheckedChanged += rgFNPFormat_CheckedChanged;
+            radS_N_P.Group = "snp";
 
             rgFNPFormat.Add(radSNP);
             rgFNPFormat.Add(radS_NP);
             rgFNPFormat.Add(radS_N_P);
             rgFNPFormat.Location = new Point(1, 1);
-            rgFNPFormat.Size = new Size(42, 6);
+            rgFNPFormat.Size = new Size(42, 5);
             rgFNPFormat.TabIndex = 0;
             rgFNPFormat.TabStop = false;
 
-            chkSurnameFirstInOrder.Location = new Point(1, 8);
+            chkSurnameFirstInOrder.Location = new Point(1, 7);
             chkSurnameFirstInOrder.TabIndex = 1;
 
-            chkFirstCapitalLetterInNames.Location = new Point(1, 10);
+            chkFirstCapitalLetterInNames.Location = new Point(1, 9);
             chkFirstCapitalLetterInNames.TabIndex = 2;
 
-            chkSurnameInCapitals.Location = new Point(1, 12);
+            chkSurnameInCapitals.Location = new Point(1, 11);
             chkSurnameInCapitals.TabIndex = 3;
 
             chkExtendWomanSurnames.Location = new Point(1, 1);
@@ -1075,18 +1078,22 @@ namespace GKUI.Forms
             radMaiden_Married.Location = new Point(3, 3);
             radMaiden_Married.TabIndex = 5;
             radMaiden_Married.TabStop = true;
+            radMaiden_Married.Group = "an";
 
             radMarried_Maiden.Location = new Point(3, 4);
             radMarried_Maiden.TabIndex = 4;
             radMarried_Maiden.TabStop = true;
+            radMarried_Maiden.Group = "an";
 
             radMaiden.Location = new Point(3, 5);
             radMaiden.TabIndex = 3;
             radMaiden.TabStop = true;
+            radMaiden.Group = "an";
 
             radMarried.Location = new Point(3, 6);
             radMarried.TabIndex = 2;
             radMarried.TabStop = true;
+            radMarried.Group = "an";
 
             chkSimpleSingleSurnames.Location = new Point(1, 8);
             chkSimpleSingleSurnames.TabIndex = 6;
@@ -1097,7 +1104,7 @@ namespace GKUI.Forms
             grpAdvancedNames.Add(radMaiden_Married);
             grpAdvancedNames.Add(chkExtendWomanSurnames);
             grpAdvancedNames.Add(chkSimpleSingleSurnames);
-            grpAdvancedNames.Location = new Point(1, 14);
+            grpAdvancedNames.Location = new Point(1, 13);
             grpAdvancedNames.Size = new Size(64, 12);
             grpAdvancedNames.TabIndex = 4;
             grpAdvancedNames.TabStop = false;
@@ -1250,68 +1257,60 @@ namespace GKUI.Forms
 
             //
 
-            chkAttributes.Location = new Point(2, 2);
+            chkAttributes.Location = new Point(2, 1);
             chkAttributes.TabIndex = 0;
 
-            chkNotes.Location = new Point(2, 3);
+            chkNotes.Location = new Point(2, 2);
             chkNotes.TabIndex = 1;
 
-            chkSources.Location = new Point(2, 5);
+            chkSources.Location = new Point(2, 3);
             chkSources.TabIndex = 2;
 
-            chkSourcePages.Location = new Point(5, 7);
+            chkSourcePages.Location = new Point(5, 4);
             chkSourcePages.TabIndex = 2;
 
-            chkSourceCitations.Location = new Point(5, 8);
+            chkSourceCitations.Location = new Point(5, 5);
             chkSourceCitations.TabIndex = 2;
 
-            chkGenerations.Location = new Point(2, 10);
+            chkGenerations.Location = new Point(2, 6);
             chkGenerations.TabIndex = 2;
 
-            chkPortraits.Location = new Point(2, 11);
+            chkPortraits.Location = new Point(2, 7);
             chkPortraits.TabIndex = 2;
 
-            radExcess.Location = new Point(1, 1);
-            radExcess.TabIndex = 3;
+            radExcess.Location = new Point(1, 0);
+            radExcess.TabIndex = 1;
+            radExcess.Group = "pf";
 
-            radCompact.Location = new Point(1, 2);
+            radCompact.Location = new Point(1, 1);
             radCompact.TabIndex = 2;
+            radCompact.Group = "pf";
 
             grpPedigreeFormat.Add(radExcess);
             grpPedigreeFormat.Add(radCompact);
-            grpPedigreeFormat.Location = new Point(2, 13);
-            grpPedigreeFormat.Size = new Size(40, 5);
+            grpPedigreeFormat.Location = new Point(2, 9);
+            grpPedigreeFormat.Size = new Size(40, 4);
             grpPedigreeFormat.TabIndex = 3;
             grpPedigreeFormat.TabStop = false;
 
-            lblAscendNumbering.Location = new Point(2, 19);
+            lblAscendNumbering.Location = new Point(2, 14);
             lblAscendNumbering.TabIndex = 5;
 
-            cmbAscendNumbering.Location = new Point(28, 19);
+            cmbAscendNumbering.Location = new Point(28, 14);
             cmbAscendNumbering.Size = new Size(28, 2);
             cmbAscendNumbering.TabIndex = 6;
 
-            lblDescendNumbering.Location = new Point(2, 21);
+            lblDescendNumbering.Location = new Point(2, 16);
             lblDescendNumbering.TabIndex = 7;
 
-            cmbDescendNumbering.Location = new Point(28, 21);
+            cmbDescendNumbering.Location = new Point(28, 16);
             cmbDescendNumbering.Size = new Size(28, 2);
             cmbDescendNumbering.TabIndex = 8;
 
-            grpPedigree.Add(lblDescendNumbering);
-            grpPedigree.Add(cmbDescendNumbering);
-            grpPedigree.Add(lblAscendNumbering);
-            grpPedigree.Add(cmbAscendNumbering);
-            grpPedigree.Add(chkAttributes);
-            grpPedigree.Add(chkNotes);
-            grpPedigree.Add(chkGenerations);
-            grpPedigree.Add(chkSources);
-            grpPedigree.Add(chkSourcePages);
-            grpPedigree.Add(chkSourceCitations);
-            grpPedigree.Add(chkPortraits);
-            grpPedigree.Add(grpPedigreeFormat);
+            grpPedigree.Add(chkAttributes, chkNotes, chkSources, chkSourcePages, chkSourceCitations, chkGenerations, chkPortraits);
+            grpPedigree.Add(grpPedigreeFormat, lblAscendNumbering, cmbAscendNumbering, lblDescendNumbering, cmbDescendNumbering);
             grpPedigree.Location = new Point(1, 1);
-            grpPedigree.Size = new Size(60, 25);
+            grpPedigree.Size = new Size(60, 20);
             grpPedigree.TabIndex = 0;
             grpPedigree.TabStop = false;
 

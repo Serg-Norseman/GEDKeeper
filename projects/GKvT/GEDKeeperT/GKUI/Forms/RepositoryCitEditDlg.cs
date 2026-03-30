@@ -14,6 +14,7 @@ using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKCore.Lists;
 using GKUI.Components;
+using Terminal.Gui;
 
 namespace GKUI.Forms
 {

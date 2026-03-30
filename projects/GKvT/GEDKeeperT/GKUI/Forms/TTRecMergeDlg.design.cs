@@ -186,29 +186,27 @@ namespace GKUI.Forms
             pageMerge.View.Add(ProgressBar1);
 
             radPersons.Checked = true;
-            radPersons.Location = new Point(1, 1);
             radPersons.TabIndex = 0;
-            radPersons.TabStop = true;
             radPersons.Clicked += radMergeMode_Click;
+            radPersons.Group = "mode";
 
-            radNotes.Location = new Point(1, 2);
-            radNotes.TabIndex = 1;
-            radNotes.Clicked += radMergeMode_Click;
-
-            radFamilies.Location = new Point(1, 3);
-            radFamilies.TabIndex = 2;
+            radFamilies.TabIndex = 1;
             radFamilies.Clicked += radMergeMode_Click;
+            radFamilies.Group = "mode";
 
-            radSources.Location = new Point(1, 4);
+            radNotes.TabIndex = 2;
+            radNotes.Clicked += radMergeMode_Click;
+            radNotes.Group = "mode";
+
             radSources.TabIndex = 3;
             radSources.Clicked += radMergeMode_Click;
+            radSources.Group = "mode";
 
-            rgMode.Add(radSources);
-            rgMode.Add(radFamilies);
-            rgMode.Add(radNotes);
-            rgMode.Add(radPersons);
             rgMode.Location = new Point(1, 1);
             rgMode.Size = new Size(30, 8);
+            rgMode.Add(new StackLayout(Orientation.Vertical, 1, 0, new View[] {
+                radPersons, radFamilies, radNotes, radSources
+            }) { Height = Dim.Fill(), Width = Dim.Fill() });
             rgMode.TabIndex = 0;
             rgMode.TabStop = false;
 

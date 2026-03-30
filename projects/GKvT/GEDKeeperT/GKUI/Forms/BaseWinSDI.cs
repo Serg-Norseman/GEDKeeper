@@ -129,36 +129,16 @@ namespace GKUI.Forms
                 }
             };
 
-            var left = new FrameView() {
-                X = 0,
-                Height = Dim.Fill(),
-                Width = Dim.Percent(70)
-            };
-            left.Add(recView);
+            var spl = new SplitterContainer(Orientation.Vertical, 70);
+            spl.Panel1.Add(recView);
+            spl.Panel2.Add(summary);
+
+            // works only after adding to some container
             recView.SetupScroll();
 
-            var right = new FrameView() {
-                X = Pos.Right(left) + 1,
-                Height = Dim.Fill(),
-                Width = Dim.Percent(30)
-            };
-            right.Add(summary);
-
-            var container = new View();
-            container.Border = new Border() { BorderStyle = BorderStyle.None };
-            container.Height = Dim.Fill();
-            container.Width = Dim.Fill();
-            container.Add(left);
-            container.Add(right);
-
-            /*Splitter spl = new Splitter();
-            spl.Panel1 = recView;
-            spl.Panel2 = summary;
-            spl.RelativePosition = 300;
-            spl.Orientation = Orientation.Horizontal;
-            spl.FixedPanel = SplitterFixedPanel.Panel2;*/
-
-            var tabPage = new TabPage(pageText, container);
+            var tabPage = new TabPage();
+            tabPage.Text = pageText;
+            tabPage.View.Add(spl);
             tabsRecords.AddTab(tabPage, false);
 
             fController.SetTabPart(recType, recView, recType.ToString(), summary);
