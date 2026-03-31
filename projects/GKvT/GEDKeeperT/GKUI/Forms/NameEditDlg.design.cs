@@ -32,11 +32,11 @@ namespace GKUI.Forms
             txtFPatr = new TextField();
             txtMPatr = new TextField();
 
-            btnAccept.Size = new Size(114, 30);
+            btnAccept.Size = new Size(16, 1);
             btnAccept.TabIndex = 5;
             btnAccept.Clicked += AcceptClickHandler;
 
-            btnCancel.Size = new Size(113, 30);
+            btnCancel.Size = new Size(16, 1);
             btnCancel.TabIndex = 6;
             btnCancel.Clicked += CancelClickHandler;
 

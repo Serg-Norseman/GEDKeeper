@@ -105,10 +105,7 @@ namespace GKUI.Forms
 
             //summary.ContextMenu = summaryMenu;
             summary.MouseClick += (s, args) => {
-                if (args.MouseEvent.Flags.HasFlag(MouseFlags.Button3Clicked)) {
-                    summaryMenu.Position = new Point(args.MouseEvent.X, args.MouseEvent.Y);
-                    summaryMenu.Show();
-                }
+                summaryMenu.Show(args.MouseEvent);
             };
 
             var recView = new GKListView();
@@ -123,10 +120,7 @@ namespace GKUI.Forms
 
             //recView.ContextMenu = contextMenu;
             recView.MouseClick += (s, args) => {
-                if (args.MouseEvent.Flags.HasFlag(MouseFlags.Button3Clicked)) {
-                    contextMenu.Position = new Point(args.MouseEvent.X, args.MouseEvent.Y);
-                    contextMenu.Show();
-                }
+                contextMenu.Show(args.MouseEvent);
             };
 
             var spl = new SplitterContainer(Orientation.Vertical, 70);
@@ -598,7 +592,6 @@ namespace GKUI.Forms
             try {
                 //miMRUFiles.Enabled = (AppHost.Options.MRUFiles.Count > 0);
                 int num = AppHost.Options.MRUFiles.Count;
-                var subItems = new MenuItem[num];
                 for (int i = 0; i < num; i++) {
                     string fn = AppHost.Options.MRUFiles[i].FileName;
 
@@ -606,9 +599,8 @@ namespace GKUI.Forms
                     var mi = new MenuItem(fn, "", (sender, e) => {
                         AppHost.Instance.LoadBase(this, AppHost.Options.MRUFiles[idx].FileName);
                     });
-                    subItems[i] = mi;
+                    miMRUFiles.Children.Add(mi);
                 }
-                miMRUFiles.Children = subItems;
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinSDI.UpdateMRU()", ex);
             }
@@ -778,12 +770,6 @@ namespace GKUI.Forms
         {
             fController.SendMail();
         }
-
-        /*private void miMap_Click(object sender, EventArgs e)
-        {
-            // not supported
-            fController.ShowMap();
-        }*/
 
         private void miChronicle_Click(object sender, EventArgs e)
         {

@@ -12,7 +12,6 @@ using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
 using GKUI.Components;
-using Terminal.Gui;
 
 namespace GKUI.Forms
 {
@@ -37,10 +36,7 @@ namespace GKUI.Forms
             ListChecks.DoubleClick += ListChecks_DblClick;
             ListChecks.CheckBoxes = true;
             ListChecks.MouseClick += (s, args) => {
-                if (args.MouseEvent.Flags.HasFlag(MouseFlags.Button3Clicked)) {
-                    contextMenu.Position = new Point(args.MouseEvent.X, args.MouseEvent.Y);
-                    contextMenu.Show();
-                }
+                contextMenu.Show(args.MouseEvent);
             };
 
             fController = new TreeCheckController(this);

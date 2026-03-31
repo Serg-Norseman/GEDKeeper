@@ -35,14 +35,12 @@ namespace GKUI.Forms
         private MenuItem miTreeAncestors;
         private MenuItem miTreeDescendants;
         private MenuItem miPedigreeDescend;
-        //private MenuItem miMap;
         private MenuItem miStats;
         private MenuBarItem miHelp;
         private MenuItem miContext;
         private MenuItem miLogSend;
         private MenuItem miLogView;
         private MenuItem miAbout;
-        //private ContextMenu MenuMRU;
         private MenuItem miOrganizer;
         private MenuBarItem miService;
         private MenuItem miScripts;
@@ -133,8 +131,6 @@ namespace GKUI.Forms
                     miPedigreeDescend = new MenuItem("miPedigreeDescend", miPedigreeDescend_Click, Key.CtrlMask | Key.K),
                     miExportToFamilyBook = new MenuItem("miExportToFamilyBook", miExportToFamilyBook_Click),
                     miExportToTreesAlbum = new MenuItem("miExportToTreesAlbum", miExportToTreesAlbum_Click),
-                    //null,
-                    //miMap = new MenuItem("miMap", miMap_Click, Key.CtrlMask | Key.M),
                     null,
                     miStats = new MenuItem("miStats", miStats_Click, Key.CtrlMask | Key.T),
                     null,
@@ -206,7 +202,7 @@ namespace GKUI.Forms
             miContRecordMerge = new MenuItem("miContRecordMerge", miRecordMerge_Click);
 
             contextMenu = new ContextMenu();
-            contextMenu.MenuItems = new MenuBarItem("Actions", new MenuItem[] {
+            contextMenu.Items.AddRange(new [] {
                 miContRecordAdd, miContRecordEdit, miContRecordDelete, miContRecordDuplicate, miContRecordMerge, miContMediaMoveFile
             });
             //contextMenu.MenuBar.MenuOpening += contextMenu_Opening;
@@ -214,9 +210,7 @@ namespace GKUI.Forms
             miCopyContent = new MenuItem("miCopyContent", miCopyContent_Click);
 
             summaryMenu = new ContextMenu();
-            summaryMenu.MenuItems = new MenuBarItem("Actions", new MenuItem[] {
-                miCopyContent
-            });
+            summaryMenu.Items.AddRange(new[] { miCopyContent });
         }
     }
 }

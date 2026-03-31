@@ -60,9 +60,9 @@ namespace GKUI.Forms
 
         private void edName_KeyPress(object sender, KeyEventEventArgs e)
         {
-            /*if (e.KeyEvent.Key == '/') {
+            if (e.KeyEvent.KeyChar == '/') {
                 e.Handled = true;
-            }*/
+            }
         }
     }
 }

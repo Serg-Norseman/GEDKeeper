@@ -108,6 +108,7 @@ namespace GKUI.Forms
             btnReplaceAll.TabIndex = 15;
             btnReplaceAll.Clicked += btnReplaceAll_Click;
 
+            ColorScheme = Colors.Dialog;
             X = Pos.Center();
             Y = Pos.Center();
             Size = new Size(80, 16);

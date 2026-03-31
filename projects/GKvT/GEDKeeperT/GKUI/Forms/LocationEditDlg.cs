@@ -85,7 +85,7 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //tabsData.SelectedIndexChanged += tabsData_SelectedIndexChanged;
+            tabsData.SelectedTabChanged += tabsData_SelectedIndexChanged;
 
             fNamesList = new GKSheetList(pageHistNames);
             fLinksList = new GKSheetList(pageHistLinks);
@@ -128,24 +128,14 @@ namespace GKUI.Forms
             fController.SelectName();
         }
 
-        private void btnSelectCursor_Click(object sender, EventArgs e)
-        {
-            //fController.SelectCursorCoords();
-        }
-
         private void ListGeoCoords_Click(object sender, EventArgs e)
         {
             fController.SelectGeoPoint();
         }
 
-        private void EditName_TextChanged(object sender, EventArgs e)
+        private void EditName_TextChanged(object sender, string e)
         {
             SetTitle(string.Format("{0} \"{1}\"", LangMan.LS(LSID.Location), txtName.Text));
-        }
-
-        private void btnShowOnMap_Click(object sender, EventArgs e)
-        {
-            //fController.ShowOnMap();
         }
     }
 }

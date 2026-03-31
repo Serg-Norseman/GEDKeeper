@@ -55,9 +55,9 @@ namespace GKUI.Forms
 
         private void edName_KeyPress(object sender, KeyEventEventArgs e)
         {
-            /*if (e.KeyChar == '/') {
+            if (e.KeyEvent.KeyChar == '/') {
                 e.Handled = true;
-            }*/
+            }
         }
     }
 }

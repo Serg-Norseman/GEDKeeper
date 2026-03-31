@@ -28,8 +28,8 @@ namespace GKUI.Forms
             tabsData.Height = Dim.Fill();
             Add(tabsData);
 
-            Width = 78;
-            Height = 24;
+            Width = 100;
+            Height = 34;
             Loaded += OrganizerWin_Load;
         }
     }

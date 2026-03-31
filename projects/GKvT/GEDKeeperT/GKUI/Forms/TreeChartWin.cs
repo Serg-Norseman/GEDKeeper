@@ -205,8 +205,7 @@ namespace GKUI.Forms
 
         private void ImageTree_PersonProperties(object sender, MouseEventArgs e)
         {
-            MenuPerson.Position = new Point(e.MouseEvent.X, e.MouseEvent.Y);
-            MenuPerson.Show();
+            MenuPerson.Show(e.MouseEvent);
         }
 
         private void ImageTree_RootChanged(object sender, TreeChartPerson person)
@@ -326,21 +325,6 @@ namespace GKUI.Forms
         private void miRebuildKinships_Click(object sender, EventArgs e)
         {
             fTreeBox.RebuildKinships();
-        }
-
-        private void miMapAncestors_Click(object sender, EventArgs e)
-        {
-            fController.ShowMapAncestors();
-        }
-
-        private void miMapDescendants_Click(object sender, EventArgs e)
-        {
-            fController.ShowMapDescendants();
-        }
-
-        private void miMapAll_Click(object sender, EventArgs e)
-        {
-            fController.ShowMapAll();
         }
 
         private void miTraceSelected_Click(object sender, EventArgs e)

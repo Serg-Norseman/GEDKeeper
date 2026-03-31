@@ -87,9 +87,7 @@ namespace GKUI.Platform
             IMenuItem result = null;
             if (this is MenuBarItem barItem) {
                 var item = new MenuItemEx(text, tag, image, action);
-                var childrenList = barItem.Children.ToList();
-                childrenList.Add(item);
-                barItem.Children = childrenList.ToArray();
+                barItem.Children.Add(item);
                 result = item;
             }
             return null;

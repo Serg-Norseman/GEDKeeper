@@ -64,32 +64,18 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
-            //TabIndexChanged += Form_TabIndexChanged;
-
             fController = new RecordSelectDlgController(this);
             fController.Init(baseWin);
             fController.RecType = recType;
-
-            //fltCtl.ParamsChanged += txtFastFilter_TextChanged;
 
             var miDetails = new MenuItem();
             miDetails.Title = LangMan.LS(LSID.Details);
             miDetails.Action += miDetails_Click;
 
             contextMenu = new ContextMenu();
-            contextMenu.MenuItems = new MenuBarItem("Actions", new MenuItem[] {
-                miDetails
-            });
+            contextMenu.Items.AddRange(new[] { miDetails });
 
             UpdateRecordsView();
-        }
-
-        private void Form_TabIndexChanged(object sender, EventArgs e)
-        {
-            /*if (fltCtl.CanFocus) {
-                fListRecords.SetFocus();
-                fListRecords.SelectItem(0);
-            }*/
         }
 
         protected override void Dispose(bool disposing)
@@ -113,10 +99,7 @@ namespace GKUI.Forms
             }
             fListRecords = UIHelper.CreateRecordsView(panList, fController.Base.Context, fController.RecType, true);
             fListRecords.MouseClick += (s, args) => {
-                if (args.MouseEvent.Flags.HasFlag(MouseFlags.Button3Clicked)) {
-                    contextMenu.Position = new Point(args.MouseEvent.X, args.MouseEvent.Y);
-                    contextMenu.Show();
-                }
+                contextMenu.Show(args.MouseEvent);
             };
         }
 

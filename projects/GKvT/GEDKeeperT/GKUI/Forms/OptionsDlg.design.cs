@@ -162,8 +162,6 @@ namespace GKUI.Forms
         private CheckBox chkUseInlineImagesInSvg;
         private CheckBox chkUseExtendedNotes;
         private CheckBox chkKeepRichNames;
-        private Label lblChartWindowsShowMode;
-        private ComboBox cmbChartWindowsShowMode;
         private CheckBox chkExtendedTree;
         private CheckBox chkHighlightInaccessibleFiles;
         private CheckBox chkTreeSurnameFirst;
@@ -372,8 +370,6 @@ namespace GKUI.Forms
             chkUseInlineImagesInSvg = new CheckBox();
             chkUseExtendedNotes = new CheckBox();
             chkKeepRichNames = new CheckBox();
-            lblChartWindowsShowMode = new Label();
-            cmbChartWindowsShowMode = new ComboBox();
             chkExtendedTree = new CheckBox();
             chkHighlightInaccessibleFiles = new CheckBox();
             chkTreeSurnameFirst = new CheckBox();
@@ -500,15 +496,13 @@ namespace GKUI.Forms
 
             grpOther.Add(chkKeepInfoPansOverallSize);
             grpOther.Add(chkFilesOverwriteWarn);
-            grpOther.Add(lblChartWindowsShowMode);
-            grpOther.Add(cmbChartWindowsShowMode);
             grpOther.Add(chkDisplayFullFileName);
             grpOther.Add(chkDialogClosingWarn);
             grpOther.Add(chkAutoCheckUpdates);
             grpOther.Add(chkLoadRecentFiles);
             grpOther.Add(chkShowOnStart);
             grpOther.Location = new Point(1, 15);
-            grpOther.Size = new Size(80, 14);
+            grpOther.Size = new Size(80, 11);
             grpOther.TabIndex = 2;
             grpOther.TabStop = false;
 
@@ -527,77 +521,73 @@ namespace GKUI.Forms
             chkDisplayFullFileName.Location = new Point(2, 5);
             chkDisplayFullFileName.TabIndex = 9;
 
-            lblChartWindowsShowMode.Location = new Point(2, 7);
-            lblChartWindowsShowMode.TabIndex = 12;
-
-            cmbChartWindowsShowMode.Location = new Point(37, 7);
-            cmbChartWindowsShowMode.Size = new Size(27, 2);
-            cmbChartWindowsShowMode.TabIndex = 12;
-
-            chkKeepInfoPansOverallSize.Location = new Point(2, 9);
+            chkKeepInfoPansOverallSize.Location = new Point(2, 6);
             chkKeepInfoPansOverallSize.TabIndex = 15;
 
-            chkFilesOverwriteWarn.Location = new Point(2, 10);
+            chkFilesOverwriteWarn.Location = new Point(2, 7);
             chkFilesOverwriteWarn.TabIndex = 16;
 
             //
 
-            radFBNone.Location = new Point(1, 2);
+            radFBNone.Location = new Point(1, 0);
             radFBNone.TabIndex = 0;
             radFBNone.TabStop = true;
+            radFBNone.Group = "fb";
 
-            radFBOnlyPrev.Location = new Point(1, 3);
+            radFBOnlyPrev.Location = new Point(1, 1);
             radFBOnlyPrev.TabIndex = 1;
             radFBOnlyPrev.TabStop = true;
+            radFBOnlyPrev.Group = "fb";
 
-            radFBEachRevision.Location = new Point(1, 4);
+            radFBEachRevision.Location = new Point(1, 2);
             radFBEachRevision.TabIndex = 2;
             radFBEachRevision.TabStop = true;
+            radFBEachRevision.Group = "fb";
 
             grpFileBackup.Add(radFBNone);
             grpFileBackup.Add(radFBOnlyPrev);
             grpFileBackup.Add(radFBEachRevision);
             grpFileBackup.Location = new Point(1, 1);
-            grpFileBackup.Size = new Size(42, 7);
+            grpFileBackup.Size = new Size(42, 5);
             grpFileBackup.TabIndex = 6;
             grpFileBackup.TabStop = false;
 
-            chkAutosave.Location = new Point(1, 9);
+            chkAutosave.Location = new Point(1, 7);
             chkAutosave.TabIndex = 7;
 
-            numASMin.Location = new Point(29, 9);
+            numASMin.Location = new Point(29, 7);
             numASMin.Maximum = 120;
             numASMin.Minimum = 1;
             numASMin.Size = new Size(6, 1);
             numASMin.TabIndex = 8;
             numASMin.Value = 1;
 
-            lblMinutes.Location = new Point(37, 9);
+            lblMinutes.Location = new Point(37, 7);
             lblMinutes.TabIndex = 9;
 
-            lblBackupRevisionsMaxCount.Location = new Point(1, 11);
+            lblBackupRevisionsMaxCount.Location = new Point(1, 9);
             lblBackupRevisionsMaxCount.TabIndex = 10;
 
-            numBackupRevisionsMaxCount.Location = new Point(41, 11);
+            numBackupRevisionsMaxCount.Location = new Point(41, 9);
             numBackupRevisionsMaxCount.Maximum = 1000;
             numBackupRevisionsMaxCount.Size = new Size(7, 1);
             numBackupRevisionsMaxCount.TabIndex = 8;
             numBackupRevisionsMaxCount.Value = 1;
 
-            chkExtBackupEnabled.Location = new Point(1, 14);
+            chkExtBackupEnabled.Location = new Point(1, 13);
             chkExtBackupEnabled.TabIndex = 3;
             chkExtBackupEnabled.CheckedChanged += chkExtBackupEnabled_CheckedChanged;
 
-            lblExtBackupFolder.Location = new Point(1, 16);
+            lblExtBackupFolder.Location = new Point(1, 15);
             lblExtBackupFolder.TabIndex = 7;
 
-            txtExtBackupFolder.Location = new Point(1, 17);
+            txtExtBackupFolder.Location = new Point(10, 15);
             txtExtBackupFolder.ReadOnly = true;
-            txtExtBackupFolder.Size = new Size(43, 1);
+            txtExtBackupFolder.Size = new Size(33, 1);
             txtExtBackupFolder.TabIndex = 8;
 
             btnExtBackupFolderChoose.Enabled = false;
-            btnExtBackupFolderChoose.Location = new Point(45, 17);
+            btnExtBackupFolderChoose.Location = new Point(45, 15);
             btnExtBackupFolderChoose.Size = new Size(14, 1);
             btnExtBackupFolderChoose.TabIndex = 9;
             btnExtBackupFolderChoose.Clicked += btnExtBackupFolderChoose_Click;

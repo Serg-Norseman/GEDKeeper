@@ -63,10 +63,10 @@ namespace GKCore.Controllers
 
             GetControl<IComboBox>("cmbLanguages").ReadOnly = true;
             GetControl<IComboBox>("cmbCertaintyAlgorithm").ReadOnly = true;
-            GetControl<IComboBox>("cmbChartWindowsShowMode").ReadOnly = true;
             GetControl<IComboBox>("cmbMediaStoreDefault").ReadOnly = true;
 
             if (!fIsTerm) {
+                GetControl<IComboBox>("cmbChartWindowsShowMode").ReadOnly = true;
                 GetControl<IComboBox>("cmbTextEffect").ReadOnly = true;
             }
 
@@ -540,10 +540,12 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkKeepRichNames").Checked = fOptions.KeepRichNames && !isMobile;
             GetControl<ICheckBox>("chkKeepRichNames").Visible = !isMobile;
 
-            var chartWinMode = !isMobile ? fOptions.ChartWindowsShowMode : ChartWindowsShowMode.Default;
-            GetControl<IComboBox>("cmbChartWindowsShowMode").SetSelectedTag(chartWinMode);
-            GetControl<IComboBox>("cmbChartWindowsShowMode").Visible = !isMobile;
-            GetControl<ILabel>("lblChartWindowsShowMode").Visible = !isMobile;
+            if (!fIsTerm) {
+                var chartWinMode = !isMobile ? fOptions.ChartWindowsShowMode : ChartWindowsShowMode.Default;
+                GetControl<IComboBox>("cmbChartWindowsShowMode").SetSelectedTag(chartWinMode);
+                GetControl<IComboBox>("cmbChartWindowsShowMode").Visible = !isMobile;
+                GetControl<ILabel>("lblChartWindowsShowMode").Visible = !isMobile;
+            }
 
             GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Checked = fOptions.KeepInfoPansOverallSize && !isMobile;
             GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Visible = !isMobile;
@@ -573,7 +575,9 @@ namespace GKCore.Controllers
             fOptions.UseExtendedNotes = GetControl<ICheckBox>("chkUseExtendedNotes").Checked;
             fOptions.KeepRichNames = GetControl<ICheckBox>("chkKeepRichNames").Checked;
 
-            fOptions.ChartWindowsShowMode = GetControl<IComboBox>("cmbChartWindowsShowMode").GetSelectedTag<ChartWindowsShowMode>();
+            if (!fIsTerm) {
+                fOptions.ChartWindowsShowMode = GetControl<IComboBox>("cmbChartWindowsShowMode").GetSelectedTag<ChartWindowsShowMode>();
+            }
 
             fOptions.KeepInfoPansOverallSize = GetControl<ICheckBox>("chkKeepInfoPansOverallSize").Checked;
 
@@ -1236,11 +1240,13 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkUseExtendedNotes").Text = LangMan.LS(LSID.UseExtendedNotes);
             GetControl<ICheckBox>("chkKeepRichNames").Text = LangMan.LS(LSID.KeepRichNames);
 
-            GetControl<ILabel>("lblChartWindowsShowMode").Text = LangMan.LS(LSID.ChartWindowsShowMode);
-            combo = GetControl<IComboBox>("cmbChartWindowsShowMode");
-            combo.Clear();
-            for (ChartWindowsShowMode cwsm = ChartWindowsShowMode.Default; cwsm <= ChartWindowsShowMode.RightHalf; cwsm++) {
-                combo.AddItem(LangMan.LS(GKData.ChartWindowsShowModes[(int)cwsm]), cwsm);
+            if (!fIsTerm) {
+                GetControl<ILabel>("lblChartWindowsShowMode").Text = LangMan.LS(LSID.ChartWindowsShowMode);
+                combo = GetControl<IComboBox>("cmbChartWindowsShowMode");
+                combo.Clear();
+                for (ChartWindowsShowMode cwsm = ChartWindowsShowMode.Default; cwsm <= ChartWindowsShowMode.RightHalf; cwsm++) {
+                    combo.AddItem(LangMan.LS(GKData.ChartWindowsShowModes[(int)cwsm]), cwsm);
+                }
             }
 
             GetControl<ICheckBox>("chkExtendedTree").Text = LangMan.LS(LSID.ExtendedTree);

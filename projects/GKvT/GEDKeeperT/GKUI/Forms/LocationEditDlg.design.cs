@@ -76,7 +76,7 @@ namespace GKUI.Forms
             txtName.Location = new Point(1, 2);
             txtName.Size = new Size(53, 1);
             txtName.TabIndex = 1;
-            //txtName.TextChanged += EditName_TextChanged;
+            txtName.TextChanged += EditName_TextChanged;
             txtName.KeyDown += EditName_KeyDown;
 
             lblLatitude.Location = new Point(55, 1);

@@ -36,12 +36,7 @@ namespace GKUI.Forms
             chkCheckCensuses = new CheckBox();
             chkCheckLinks = new CheckBox();
 
-            contextMenu.MenuItems = new MenuBarItem("Actions", new MenuItem[] {
-                miDetails,
-                miGoToRecord,
-                null,
-                miCopyXRef
-            });
+            contextMenu.Items.AddRange(new[] { miDetails, miGoToRecord, null, miCopyXRef });
             //contextMenu.Opening += new System.ComponentModel.CancelEventHandler(contextMenu_Opening);
 
             miDetails.Action += miDetails_Click;

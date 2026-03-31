@@ -45,15 +45,12 @@ namespace GKUI.Forms
             miDetails.Action += miDetails_Click;
 
             contextMenu = new ContextMenu();
-            contextMenu.MenuItems = new MenuBarItem("Actions", new MenuItem[] { miDetails });
+            contextMenu.Items.AddRange(new[] { miDetails });
 
             ListPlaces = UIHelper.CreateListView(Panel4);
             ListPlaces.DoubleClick += ListPlaces_DblClick;
             ListPlaces.MouseClick += (s, args) => {
-                if (args.MouseEvent.Flags.HasFlag(MouseFlags.Button3Clicked)) {
-                    contextMenu.Position = new Point(args.MouseEvent.X, args.MouseEvent.Y);
-                    contextMenu.Show();
-                }
+                contextMenu.Show(args.MouseEvent);
             };
 
             fController = new PlacesManagerController(this);
@@ -81,11 +78,6 @@ namespace GKUI.Forms
         private void btnAnalysePlaces_Click(object sender, EventArgs e)
         {
             fController.CheckPlaces();
-        }
-
-        private void btnLocExpert_Click(object sender, EventArgs e)
-        {
-            fController.ShowLocExpert();
         }
 
         private void btnIntoList_Click(object sender, EventArgs e)

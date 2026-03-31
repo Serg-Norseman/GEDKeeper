@@ -471,10 +471,12 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miModeAncestors").Text = LangMan.LS(LSID.TM_Ancestors);
             GetControl<IMenuItem>("miModeDescendants").Text = LangMan.LS(LSID.TM_Descendants);
 
-            GetControl<IMenuItem>("miMaps").Text = LangMan.LS(LSID.MIMap);
-            GetControl<IMenuItem>("miMapAncestors").Text = LangMan.LS(LSID.Ancestors);
-            GetControl<IMenuItem>("miMapDescendants").Text = LangMan.LS(LSID.Descendants);
-            GetControl<IMenuItem>("miMapAll").Text = LangMan.LS(LSID.TM_Both);
+            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+                GetControl<IMenuItem>("miMaps").Text = LangMan.LS(LSID.MIMap);
+                GetControl<IMenuItem>("miMapAncestors").Text = LangMan.LS(LSID.Ancestors);
+                GetControl<IMenuItem>("miMapDescendants").Text = LangMan.LS(LSID.Descendants);
+                GetControl<IMenuItem>("miMapAll").Text = LangMan.LS(LSID.TM_Both);
+            }
 
             GetControl<IMenuItem>("miFillColor").Text = LangMan.LS(LSID.FillColor);
             GetControl<IMenuItem>("miTraceSelected").Text = LangMan.LS(LSID.TM_TraceSelected);

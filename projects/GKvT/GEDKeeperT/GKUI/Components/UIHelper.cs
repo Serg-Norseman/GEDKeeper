@@ -63,14 +63,9 @@ namespace GKUI.Components
 
         public static MenuItem AddToolStripItem(MenuBarItem contextMenu, string text, object tag, EventHandler clickHandler)
         {
-            var items = contextMenu.Children;
-            var len = items.Length;
-            Array.Resize(ref items, len + 1);
-
             var tsItem = new MenuItem(text, "", clickHandler);
             tsItem.Tag = tag;
-            items[len] = tsItem;
-            contextMenu.Children = items;
+            contextMenu.Children.Add(tsItem);
             return tsItem;
         }
 

@@ -71,6 +71,7 @@ namespace GKUI.Forms
 
             btnClose.Size = new Size(16, 1);
             btnClose.TabIndex = 9;
+            btnClose.Clicked += CancelClickHandler;
 
             Size = new Size(60, 22);
             Add(txtResult);

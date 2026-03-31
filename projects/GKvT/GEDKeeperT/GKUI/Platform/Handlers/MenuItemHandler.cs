@@ -26,7 +26,7 @@ namespace GKUI.Platform.Handlers
                 if (barItem == null)
                     throw new Exception("Type mismatch");
 
-                if (index < 0 || index >= barItem.Children.Length)
+                if (index < 0 || index >= barItem.Children.Count)
                     throw new ArgumentOutOfRangeException(nameof(index));
 
                 return new MenuItemHandler(barItem.Children[index]);
@@ -36,7 +36,7 @@ namespace GKUI.Platform.Handlers
         public int Count
         {
             get {
-                return (fItem is MenuBarItem barItem && barItem.Children != null) ? barItem.Children.Length : 0;
+                return (fItem is MenuBarItem barItem) ? barItem.Children.Count : 0;
             }
         }
 
@@ -105,7 +105,7 @@ namespace GKUI.Platform.Handlers
 
         public int ItemsCount
         {
-            get { return (Control is MenuBarItem barItem) ? barItem.Children.Length : 0; }
+            get { return (Control is MenuBarItem barItem) ? barItem.Children.Count : 0; }
         }
 
         public IMenuItem AddItem(string text, object tag, IImage image, ItemAction action)
@@ -113,9 +113,7 @@ namespace GKUI.Platform.Handlers
             if (Control is MenuBarItem barItem) {
                 //UIHelper.AddToolStripItem(barItem, text, tag, (s, e) => { action(s); });
                 var item = new MenuItemEx(text, tag, image, action);
-                var childrenList = barItem.Children.ToList();
-                childrenList.Add(item);
-                barItem.Children = childrenList.ToArray();
+                barItem.Children.Add(item);
                 return item;
             } else {
                 return null;
@@ -125,7 +123,7 @@ namespace GKUI.Platform.Handlers
         public void ClearItems()
         {
             if (Control is MenuBarItem barItem) {
-                barItem.Children = null;
+                barItem.Children.Clear();
             }
         }
     }

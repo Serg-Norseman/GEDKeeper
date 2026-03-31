@@ -91,7 +91,7 @@ namespace GKUI.Components
         public HyperView()
         {
             CanFocus = true;
-            WantContinuousButtonPressed = false;
+            AutoHideScrollBars = false;
             ShowVerticalScrollIndicator = true;
             ShowHorizontalScrollIndicator = true;
 
@@ -139,13 +139,13 @@ namespace GKUI.Components
 
         private void ArrangeText()
         {
-            if (fLines.Count == 0) {
+            if (fLines.Count == 0 || Bounds.IsEmpty) {
                 fTextSize = Size.Empty;
                 ContentSize = fTextSize;
                 return;
             }
 
-            int maxWidth = Bounds.Width - (2 * BorderWidth);
+            int maxWidth = Bounds.Width - (2 * BorderWidth) - 1;
             if (maxWidth <= 0) return;
 
             try {
@@ -285,12 +285,14 @@ namespace GKUI.Components
 
         public override void Redraw(Rect bounds)
         {
+            base.Redraw(bounds);
+
             try {
                 Driver.SetAttribute(fDefaultAttr);
 
                 for (int r = 0; r < bounds.Height; r++) {
                     Move(0, r);
-                    for (int c = 0; c < bounds.Width; c++) {
+                    for (int c = 0; c < bounds.Width - 1; c++) {
                         Driver.AddRune(' ');
                     }
                 }
@@ -325,16 +327,6 @@ namespace GKUI.Components
                         Move(xOffset, yOffset);
                         Driver.AddStr(ct);
 
-                        /*for (int i = 0; i < ct.Length; i++) {
-                            int screenX = xOffset + i;
-                            int screenY = yOffset;
-
-                            if (screenY >= 0 && screenY < bounds.Height && screenX >= 0 && screenX < bounds.Width) {
-                                Move(screenX, screenY);
-                                Driver.AddRune((Rune)ct[i]);
-                            }
-                        }*/
-
                         xOffset += chunk.Width;
                     }
                 }
@@ -348,13 +340,11 @@ namespace GKUI.Components
             OnLink?.Invoke(this, linkName);
         }
 
-        /*protected override void OnResize(EventArgs e)
+        protected override void OnLayoutComplete(LayoutEventArgs args)
         {
-            if (fAcceptFontChange) {
-                ArrangeText();
-            }
-            base.OnResize(e);
-        }*/
+            ArrangeText();
+            base.OnLayoutComplete(args);
+        }
 
         public override bool ProcessKey(KeyEvent kb)
         {
@@ -371,18 +361,6 @@ namespace GKUI.Components
                 case Key.End:
                     ContentOffset = new Point(0, ContentSize.Height - Bounds.Height);
                     return true;
-                case Key.CursorLeft:
-                    ContentOffset = new Point(Math.Min(0, ContentOffset.X + 1), ContentOffset.Y);
-                    return true;
-                case Key.CursorRight:
-                    ContentOffset = new Point(Math.Max(ContentSize.Width - Bounds.Width, ContentOffset.X - 1), ContentOffset.Y);
-                    return true;
-                case Key.CursorUp:
-                    ContentOffset = new Point(ContentOffset.X, Math.Min(0, ContentOffset.Y + 1));
-                    return true;
-                case Key.CursorDown:
-                    ContentOffset = new Point(ContentOffset.X, Math.Max(ContentSize.Height - Bounds.Height, ContentOffset.Y - 1));
-                    return true;
                 case Key.Enter:
                     if (fCurrentLink != null) DoLink(fCurrentLink.URL);
                     return true;
@@ -392,23 +370,22 @@ namespace GKUI.Components
 
         public override bool MouseEvent(MouseEvent me)
         {
-            if (!me.Flags.HasFlag(MouseFlags.Button1Clicked) && !me.Flags.HasFlag(MouseFlags.ReportMousePosition)) {
-                return false;
-            }
+            if (me.Flags.HasFlag(MouseFlags.Button1Clicked)) {
+                // negative offset
+                var contentPt = new Point(me.X - BorderWidth - ContentOffset.X, me.Y - BorderWidth - ContentOffset.Y);
 
-            var contentPt = new Point(me.X - BorderWidth + ContentOffset.X, me.Y - BorderWidth + ContentOffset.Y);
-
-            fCurrentLink = null;
-            foreach (var hit in fLinkHits) {
-                if (hit.Contains(contentPt.X, contentPt.Y)) {
-                    fCurrentLink = hit.Chunk;
-                    break;
+                fCurrentLink = null;
+                foreach (var hit in fLinkHits) {
+                    if (hit.Contains(contentPt.X, contentPt.Y)) {
+                        fCurrentLink = hit.Chunk;
+                        break;
+                    }
                 }
-            }
 
-            if (me.Flags.HasFlag(MouseFlags.Button1Clicked) && fCurrentLink != null) {
-                DoLink(fCurrentLink.URL);
-                return true;
+                if (fCurrentLink != null) {
+                    DoLink(fCurrentLink.URL);
+                    return true;
+                }
             }
 
             return base.MouseEvent(me);

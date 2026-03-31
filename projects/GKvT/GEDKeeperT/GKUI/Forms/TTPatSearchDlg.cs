@@ -64,10 +64,5 @@ namespace GKUI.Forms
         {
             fController.SetPatriarch();
         }
-
-        private void btnPatriarchsDiagram_Click(object sender, EventArgs e)
-        {
-            fController.ShowPatriarchsDiagram();
-        }
     }
 }

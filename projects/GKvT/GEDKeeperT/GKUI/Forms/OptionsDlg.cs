@@ -7,7 +7,6 @@
  */
 
 using System;
-using System.Threading.Tasks;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Design.Controls;
@@ -73,29 +72,6 @@ namespace GKUI.Forms
         private void PanColor_Click(object sender, EventArgs e)
         {
             fController.SelectLabColor(GetControlHandler<ILabel>(sender as Label));
-        }
-
-        private async void panChartFont_Click(object sender, EventArgs e)
-        {
-            await ChangeFont(fController.Options.TreeChartOptions);
-            fController.UpdateTreeChartFont();
-        }
-
-        private async void panUIFont_Click(object sender, EventArgs e)
-        {
-            await ChangeFont(fController.Options);
-            fController.UpdateUIFont();
-        }
-
-        private async Task ChangeFont(IFontOptions opts)
-        {
-            /*var sdFont = new Font(opts.DefFontName, opts.DefFontSize);
-            IFont font = new FontHandler(sdFont);
-            font = await AppHost.StdDialogs.SelectFont(font);
-            if (font != null) {
-                opts.DefFontName = font.Name;
-                opts.DefFontSize = (int)(Math.Round(font.Size));
-            }*/
         }
 
         private void btnColumnUp_Click(object sender, EventArgs e)

@@ -11,7 +11,6 @@ using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
-using Terminal.Gui;
 
 namespace GKUI.Forms
 {
@@ -41,11 +40,6 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
-        private void Form_Closed(object sender, Toplevel e)
-        {
-            fController.SetExternalFilter(null);
-        }
-
         public override void SetLocale()
         {
             fController.SetLocale();
@@ -54,11 +48,6 @@ namespace GKUI.Forms
         private void btnAnalyseGroups_Click(object sender, EventArgs e)
         {
             fController.CheckGroups();
-        }
-
-        private void tvGroups_DoubleClick(object sender, EventArgs e)
-        {
-            fController.SelectPerson();
         }
 
         private void miDetails_Click(object sender, EventArgs e)
@@ -80,14 +69,5 @@ namespace GKUI.Forms
         {
             fController.CopySelectedXRef();
         }
-
-        #region Data Quality
-
-        private void miResetFilter_Click(object sender, EventArgs e)
-        {
-            fController.SetExternalFilter(null);
-        }
-
-        #endregion
     }
 }

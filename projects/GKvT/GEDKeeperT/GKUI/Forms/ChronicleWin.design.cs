@@ -16,8 +16,8 @@ namespace GKUI.Forms
             lvEvents.Height = Dim.Fill();
             Add(lvEvents);
 
-            Width = 80;
-            Height = 24;
+            Width = 100;
+            Height = 34;
         }
     }
 }

@@ -60,7 +60,6 @@ namespace GKUI.Forms
         private void cmbRepository_KeyUp(object sender, KeyEventEventArgs e)
         {
             fController.RefreshRepositoriesList(cmbRepository.Text.ToString());
-            //cmbRepository.SelectionStart = cmbRepository.Text.Length;
         }
     }
 }

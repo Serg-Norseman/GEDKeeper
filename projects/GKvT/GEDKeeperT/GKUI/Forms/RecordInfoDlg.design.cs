@@ -12,14 +12,10 @@ namespace GKUI.Forms
         private void InitializeComponent()
         {
             hyperView1 = new HyperView();
-            hyperView1.LinkColor = Color.Blue;
             hyperView1.Location = new Point(0, 0);
             hyperView1.Height = Dim.Fill();
             hyperView1.Width = Dim.Fill();
             hyperView1.OnLink += HyperViewLink;
-            hyperView1.TabIndex = 0;
-            hyperView1.TabStop = true;
-            hyperView1.WordWrap = true;
 
             Size = new Size(64, 48);
             Add(hyperView1);

@@ -44,10 +44,6 @@ namespace GKUI.Forms
         private MenuItem miMergeDuplicates;
         private MenuItem miHideDescSpouses;
         private MenuItem miParentAges;
-        private MenuBarItem miMaps;
-        private MenuItem miMapAncestors;
-        private MenuItem miMapDescendants;
-        private MenuItem miMapAll;
 
         private void InitializeComponent()
         {
@@ -88,7 +84,7 @@ namespace GKUI.Forms
             miFillColor.Action += miFillColor_Click;
 
             tbModes = new MenuBarItem();
-            tbModes.Children = new MenuItem[] {
+            tbModes.Children.AddRange(new [] {
                 miModeBoth,
                 miModeAncestors,
                 miModeDescendants,
@@ -104,7 +100,7 @@ namespace GKUI.Forms
                 miParentAges,
                 null,
                 miFillColor,
-            };
+            });
 
             tbImageSave = new MenuBarItem();
             tbImageSave.Action += tbImageSave_Click;
@@ -169,27 +165,11 @@ namespace GKUI.Forms
             miRebuildKinships.Shortcut = Key.F7;
             miRebuildKinships.Action += miRebuildKinships_Click;
 
-            miMapAncestors = new MenuItem();
-            miMapAncestors.Action += miMapAncestors_Click;
-
-            miMapDescendants = new MenuItem();
-            miMapDescendants.Action += miMapDescendants_Click;
-
-            miMapAll = new MenuItem();
-            miMapAll.Action += miMapAll_Click;
-
-            miMaps = new MenuBarItem();
-            miMaps.Children = new MenuItem[] {
-                miMapAncestors,
-                miMapDescendants,
-                miMapAll
-            };
-
             miSelectColor = new MenuItem();
             miSelectColor.Action += miSelectColor_Click;
 
             MenuPerson = new ContextMenu();
-            MenuPerson.MenuItems = new MenuBarItem("Actions", new MenuItem[] {
+            MenuPerson.Items.AddRange(new[] {
                 miEdit,
                 null,
                 miFatherAdd,
@@ -208,8 +188,6 @@ namespace GKUI.Forms
                 null,
                 miRebuildTree,
                 miRebuildKinships,
-                null,
-                miMaps,
                 null,
                 miSelectColor
             });

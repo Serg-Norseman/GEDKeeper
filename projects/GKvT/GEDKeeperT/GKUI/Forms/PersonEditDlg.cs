@@ -346,9 +346,9 @@ namespace GKUI.Forms
 
         private void edSurname_KeyPress(object sender, KeyEventEventArgs e)
         {
-            /*if (e.KeyEvent.Key == '/') {
+            if (e.KeyEvent.KeyChar == '/') {
                 e.Handled = true;
-            }*/
+            }
         }
 
         public void SetNeedSex(GDMSex needSex)

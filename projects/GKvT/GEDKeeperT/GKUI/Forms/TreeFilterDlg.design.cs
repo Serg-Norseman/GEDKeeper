@@ -47,12 +47,12 @@ namespace GKUI.Forms
             rbCutNone.Location = new Point(1, 1);
             rbCutNone.TabIndex = 0;
             rbCutNone.TabStop = true;
-            rbCutNone.Clicked += new System.EventHandler(rbCutNoneClick);
+            rbCutNone.Clicked += rbCutNoneClick;
             rbCutNone.Group = "cut";
 
             rbCutYears.Location = new Point(1, 3);
             rbCutYears.TabIndex = 1;
-            rbCutYears.Clicked += new System.EventHandler(rbCutNoneClick);
+            rbCutYears.Clicked += rbCutNoneClick;
             rbCutYears.Group = "cut";
 
             lblYear.Location = new Point(4, 4);
@@ -66,7 +66,7 @@ namespace GKUI.Forms
 
             rbCutPersons.Location = new Point(1, 6);
             rbCutPersons.TabIndex = 4;
-            rbCutPersons.Clicked += new System.EventHandler(rbCutNoneClick);
+            rbCutPersons.Clicked += rbCutNoneClick;
             rbCutPersons.Group = "cut";
 
             rgBranchCut.Add(lblYear);

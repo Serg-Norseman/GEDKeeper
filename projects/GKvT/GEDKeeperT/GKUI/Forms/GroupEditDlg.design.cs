@@ -40,17 +40,16 @@ namespace GKUI.Forms
             AddButton(btnCancel);
 
             lblName.Location = new Point(1, 1);
-            lblName.TabIndex = 0;
+            lblName.TabIndex = 1;
 
             edName.Location = new Point(1, 2);
             edName.Size = new Size(62, 1);
-            edName.TabIndex = 0;
+            edName.TabIndex = 2;
 
             GroupBox1.Add(lblName);
             GroupBox1.Add(edName);
             GroupBox1.Location = new Point(1, 0);
             GroupBox1.Size = new Size(66, 6);
-            GroupBox1.TabIndex = 0;
             GroupBox1.TabStop = false;
 
             tabsGroupData.AddTab(pageMembers, true);

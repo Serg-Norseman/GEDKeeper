@@ -100,7 +100,7 @@ namespace GKUI.Components
             fBtnAdd = CreateButton("btnAdd", LangMan.LS(LSID.MIRecordAdd), ItemAdd);
 
             fContextMenu = new ContextMenu();
-            fContextMenu.MenuItems = new MenuBarItem("Actions", new MenuItem[] {
+            fContextMenu.Items.AddRange(new [] {
                 fBtnAdd, fBtnEdit, fBtnDelete, fBtnLinkJump, fBtnMoveUp, fBtnMoveDown, fBtnCopy, fBtnCut, fBtnPaste, fBtnDetails
             });
 
