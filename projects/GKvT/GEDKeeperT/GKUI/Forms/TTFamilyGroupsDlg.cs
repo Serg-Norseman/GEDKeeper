@@ -27,7 +27,7 @@ namespace GKUI.Forms
 
         ILogChart IFragmentSearchDlg.LogChart
         {
-            get { return null; }
+            get { return gkLogChart1; }
         }
 
         #endregion

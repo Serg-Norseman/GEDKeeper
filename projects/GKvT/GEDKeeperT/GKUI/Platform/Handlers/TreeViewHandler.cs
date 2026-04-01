@@ -48,6 +48,7 @@ namespace GKUI.Platform.Handlers
 
         public void Clear()
         {
+            Control.ClearObjects();
         }
 
         public void EndUpdate()

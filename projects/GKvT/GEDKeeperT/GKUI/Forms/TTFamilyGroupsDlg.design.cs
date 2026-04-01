@@ -1,5 +1,6 @@
 ﻿#pragma warning disable IDE1006 // Naming Styles
 
+using GKUI.Components;
 using Terminal.Gui;
 
 namespace GKUI.Forms
@@ -7,6 +8,7 @@ namespace GKUI.Forms
     partial class TTFamilyGroupsDlg
     {
         private TreeView tvGroups;
+        private LogChart gkLogChart1;
         private Button btnAnalyseGroups;
         private MenuItem miDetails;
         private MenuItem miGoToRecord;
@@ -16,6 +18,7 @@ namespace GKUI.Forms
         private void InitializeComponent()
         {
             btnAnalyseGroups = new Button();
+            gkLogChart1 = new LogChart();
             tvGroups = new TreeView();
             menuGT = new ContextMenu();
             miDetails = new MenuItem();
@@ -27,9 +30,14 @@ namespace GKUI.Forms
             btnAnalyseGroups.TabIndex = 7;
             btnAnalyseGroups.Clicked += btnAnalyseGroups_Click;
 
+            gkLogChart1.Location = new Point(18, 42);
+            gkLogChart1.Size = new Size(102, 1);
+            gkLogChart1.TabIndex = 1;
+            gkLogChart1.TabStop = false;
+
             //tvGroups.ContextMenuStrip = menuGT;
             tvGroups.Location = new Point(0, 0);
-            tvGroups.Size = new Size(80, 38);
+            tvGroups.Size = new Size(120, 38);
             tvGroups.TabIndex = 0;
             //tvGroups.DoubleClick += tvGroups_DoubleClick;
             tvGroups.MouseClick += (s, args) => {
@@ -44,11 +52,12 @@ namespace GKUI.Forms
             miCopyXRef.Action += miCopyXRef_Click;
 
             Add(btnAnalyseGroups);
+            Add(gkLogChart1);
             Add(tvGroups);
 
             X = Pos.Center();
             Y = Pos.Center();
-            Size = new Size(82, 45);
+            Size = new Size(122, 45);
         }
     }
 }

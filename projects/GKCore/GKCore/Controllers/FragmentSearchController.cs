@@ -56,8 +56,7 @@ namespace GKCore.Controllers
                 treeFragments = TreeTools.SearchTreeFragments(fBase.Context.Tree, controller);
             });
 
-            if (!fTerm)
-                fView.LogChart.Clear();
+            fView.LogChart.Clear();
 
             fView.GroupsTree.BeginUpdate();
             try {
@@ -86,8 +85,7 @@ namespace GKCore.Controllers
 
                     fView.GroupsTree.Expand(groupItem);
 
-                    if (!fTerm)
-                        fView.LogChart.AddFragment(cnt);
+                    fView.LogChart.AddFragment(cnt);
                 }
             } finally {
                 treeFragments.Clear();

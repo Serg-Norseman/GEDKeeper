@@ -247,20 +247,22 @@ namespace GKUI.Components
 
         public override bool MouseEvent(MouseEvent me)
         {
-            if (me.Flags == MouseFlags.Button1Pressed && !HasFocus) {
+            var mFlags = me.Flags;
+
+            if (mFlags == MouseFlags.Button1Pressed && !HasFocus) {
                 SetFocus();
                 return true;
             }
 
-            if (me.Flags.HasFlag(MouseFlags.WheeledDown)) {
-                if (me.Flags.HasFlag(MouseFlags.ButtonShift)) {
+            if (mFlags.HasFlag(MouseFlags.WheeledDown)) {
+                if (mFlags.HasFlag(MouseFlags.ButtonShift)) {
                     ScrollRight(1);
                 } else ScrollDown(1);
                 return true;
             }
 
-            if (me.Flags.HasFlag(MouseFlags.WheeledUp)) {
-                if (me.Flags.HasFlag(MouseFlags.ButtonShift)) {
+            if (mFlags.HasFlag(MouseFlags.WheeledUp)) {
+                if (mFlags.HasFlag(MouseFlags.ButtonShift)) {
                     ScrollLeft(1);
                 } else ScrollUp(1);
                 return true;

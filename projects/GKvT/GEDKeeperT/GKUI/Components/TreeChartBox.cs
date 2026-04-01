@@ -495,13 +495,14 @@ namespace GKUI.Components
             bounds = new Rect(bounds.Left, bounds.Top, bounds.Width - 1, bounds.Height - 1);
 
             if (bounds.Contains(me.X, me.Y)) {
-                if (me.Flags == MouseFlags.ReportMousePosition || (me.Flags.HasFlag(MouseFlags.ReportMousePosition | MouseFlags.Button3Pressed))) {
+                var mFlags = me.Flags;
+                if (mFlags.HasFlag(MouseFlags.ReportMousePosition)) {
                     return OnMouseMove(me);
-                } else if (me.Flags.HasFlag(MouseFlags.Button1Pressed) || me.Flags.HasFlag(MouseFlags.Button3Pressed)) {
+                } else if (mFlags.HasFlag(MouseFlags.Button1Pressed) || mFlags.HasFlag(MouseFlags.Button3Pressed)) {
                     return OnMouseDown(me);
-                } else if (me.Flags.HasFlag(MouseFlags.Button1Released) || me.Flags.HasFlag(MouseFlags.Button3Released)) {
+                } else if (mFlags.HasFlag(MouseFlags.Button1Released) || mFlags.HasFlag(MouseFlags.Button3Released)) {
                     return OnMouseUp(me);
-                } else if (me.Flags.HasFlag(MouseFlags.Button1DoubleClicked)) {
+                } else if (mFlags.HasFlag(MouseFlags.Button1DoubleClicked)) {
                     DoPersonModify(new PersonModifyEventArgs(fSelected));
                     return true;
                 }
