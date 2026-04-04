@@ -758,6 +758,10 @@ namespace GKCore.Charts
 
         public IColor GetFillColor(bool dead)
         {
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+                return ChartRenderer.GetColor(GKColors.Silver);
+            }
+
             if (fFlags.Contains(PersonFlag.pfSpecialMark)) {
                 return ChartRenderer.GetColor(GKColors.Khaki);
             }

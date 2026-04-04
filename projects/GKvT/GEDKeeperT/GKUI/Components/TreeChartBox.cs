@@ -13,6 +13,7 @@ using GKCore;
 using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Options;
+using GKUI.Platform.Handlers;
 using Terminal.Gui;
 using gkcMouseEvent = GKCore.Charts.MouseEvent;
 using tgMouseEvent = Terminal.Gui.MouseEvent;
@@ -285,7 +286,7 @@ namespace GKUI.Components
 
         private void DrawBackground(RenderTarget target, BackgroundMode background)
         {
-            /*int width, height;
+            int width, height;
             if (target == RenderTarget.Screen) {
                 var rect = ClientRectangle;
                 width = rect.Width;
@@ -303,9 +304,13 @@ namespace GKUI.Components
                 case BackgroundMode.bmImage:
                 case BackgroundMode.bmFill:
                 case BackgroundMode.bmAny:
-                    fRenderer.DrawRectangle(null, UIHelper.ConvertColor(BackColor), 0, 0, width, height);
+                    if (((ColorHandler)fOptions.BackgroundColor).Handle == Color.Black) {
+                        fOptions.BackgroundColor = new ColorHandler(Color.Blue);
+                    }
+                    var backColor = fOptions.BackgroundColor;
+                    fRenderer.DrawRectangle(null, backColor, 0, 0, width, height);
                     break;
-            }*/
+            }
         }
 
         private void InternalDraw(RenderTarget target, ChartDrawMode drawMode, BackgroundMode background)
@@ -410,11 +415,8 @@ namespace GKUI.Components
         /*protected override void OnSizeChanged(EventArgs e)
         {
             SaveSelection();
-
             var imageSize = GetImageSize();
             SetImageSize(imageSize);
-            fTreeControls.UpdateView();
-
             RestoreSelection();
 
             base.OnSizeChanged(e);

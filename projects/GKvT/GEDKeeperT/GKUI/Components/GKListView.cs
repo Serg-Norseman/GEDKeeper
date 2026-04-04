@@ -62,7 +62,9 @@ namespace GKUI.Components
         public GKListView()
         {
             Style.AlwaysShowHeaders = true;
-            Style.ShowHorizontalHeaderOverline = false;
+            Style.ShowHorizontalHeaderOverline = true;
+            Style.ShowHorizontalHeaderUnderline = true;
+            Style.ShowHorizontalTableUnderline = true;
             Style.ExpandLastColumn = true;
             Style.AlwaysShowVerticalCellLines = true;
             Style.ShowNullSymbol = false;
@@ -92,6 +94,8 @@ namespace GKUI.Components
             // The host SuperView parameter can't be null
             var sbVertical = new ScrollBarView(this, true);
             //sbVertical.AutoHideScrollBars = false;
+            sbVertical.Y = 1;
+            sbVertical.Margin = 1;
 
             sbVertical.ChangedPosition += (s, e) => {
                 RowOffset = sbVertical.Position;

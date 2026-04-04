@@ -130,19 +130,21 @@ namespace GKUI.Platform
 
         public override void DrawRectangle(IPen pen, IColor fillColor, float x, float y, float width, float height, int cornersRadius = 0)
         {
+            var backColor = (fillColor == null) ? Color.Gray : ((ColorHandler)fillColor).Handle;
+
             var penColor = (pen == null) ? null : ((PenHandler)pen).Color;
-            var penWidth = (pen == null) ? 1 : (int)((PenHandler)pen).Width;
-            var color = (penColor == null) ? Color.Black : ((ColorHandler)penColor).Handle;
-            var borderStyle = (penWidth == 2) ? BorderStyle.Double : BorderStyle.Single;
+            var penWidth = (pen == null) ? 0 : (int)((PenHandler)pen).Width;
+            var foreColor = (penColor == null) ? Color.Black : ((ColorHandler)penColor).Handle;
+            var borderStyle = (BorderStyle)penWidth;
 
             var driver = Application.Driver;
-            var rectColor = new Attribute(color, Color.Gray);
+            var rectColor = new Attribute(foreColor, backColor);
             driver.SetAttribute(rectColor);
 
             fTargetView.ViewToScreen((int)x, (int)y, out int rcol, out int rrow);
             var scrRect = new Rect(rcol, rrow, (int)width, (int)height);
             var savedClip = fTargetView.ClipToBounds();
-            driver.DrawWindowFrame(scrRect, 1, 1, 1, 1, border: true, fill: true, borderStyle);
+            driver.DrawWindowFrame(scrRect, 1, 1, 1, 1, border: (borderStyle != BorderStyle.None), fill: true, borderStyle);
             driver.Clip = savedClip;
         }
 

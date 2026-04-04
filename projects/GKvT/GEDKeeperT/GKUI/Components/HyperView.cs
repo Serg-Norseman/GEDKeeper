@@ -91,9 +91,13 @@ namespace GKUI.Components
         public HyperView()
         {
             CanFocus = true;
+
+            VerticalScrollBar.Y = 1;
+            VerticalScrollBar.Margin = 1;
+
             AutoHideScrollBars = false;
             ShowVerticalScrollIndicator = true;
-            ShowHorizontalScrollIndicator = true;
+            ShowHorizontalScrollIndicator = false;
 
             fChunks = new List<BBTextChunk>();
             fCurrentLink = null;
@@ -145,7 +149,7 @@ namespace GKUI.Components
                 return;
             }
 
-            int maxWidth = Bounds.Width - (2 * BorderWidth) - 1;
+            int maxWidth = Bounds.Width - (2 * BorderWidth) - 2 /* padding */;
             if (maxWidth <= 0) return;
 
             try {
@@ -283,22 +287,60 @@ namespace GKUI.Components
             }
         }
 
-        public override void Redraw(Rect bounds)
+        public override void Redraw(Rect region)
         {
-            base.Redraw(bounds);
+            base.Redraw(region);
 
+            Driver.SetAttribute(GetNormalColor());
+
+            var br = Bounds.Right - 1;
+            var bb = Bounds.Bottom - 1;
+
+            for (int r = 0; r <= bb; r++) {
+                Move(0, r);
+                for (int c = 0; c <= br; c++) {
+                    char sym = '\0';
+                    if (r == 0) {
+                        if (c == 0) {
+                            sym = Driver.ULCorner;
+                        } else if (c == br) {
+                            sym = Driver.URCorner;
+                        } else {
+                            sym = Driver.HLine;
+                        }
+                    } else if (r == bb) {
+                        if (c == 0) {
+                            sym = Driver.LLCorner;
+                        } else if (c == br) {
+                            sym = Driver.LRCorner;
+                        } else {
+                            sym = Driver.HLine;
+                        }
+                    } else {
+                        if (c == 0) {
+                            sym = Driver.VLine;
+                        }
+                    }
+
+                    if (sym != 0) Driver.AddRune(sym);
+                }
+            }
+        }
+
+        public override void OnDrawContent(Rect viewport)
+        {
             try {
                 Driver.SetAttribute(fDefaultAttr);
 
-                for (int r = 0; r < bounds.Height; r++) {
+                for (int r = 0; r < viewport.Height; r++) {
                     Move(0, r);
-                    for (int c = 0; c < bounds.Width - 1; c++) {
+                    for (int c = 0; c < viewport.Width; c++) {
                         Driver.AddRune(' ');
                     }
                 }
 
-                var contentOffset = ContentOffset;
-                int xOffset = BorderWidth + contentOffset.X;
+                var contentOffset = viewport.Location;
+                int xOffset = BorderWidth + 1 /* padding */ + contentOffset.X;
                 int yOffset = BorderWidth + contentOffset.Y;
 
                 int line = -1;
@@ -309,7 +351,7 @@ namespace GKUI.Components
 
                     if (line != chunk.Line) {
                         line = chunk.Line;
-                        xOffset = BorderWidth + contentOffset.X;
+                        xOffset = BorderWidth + 1 /* padding */ + contentOffset.X;
                         yOffset += 1;
                     }
 
@@ -331,8 +373,10 @@ namespace GKUI.Components
                     }
                 }
             } catch (Exception ex) {
-                Logger.WriteError("HyperView.Redraw()", ex);
+                Logger.WriteError("HyperView.OnDrawContent()", ex);
             }
+
+            base.OnDrawContent(viewport);
         }
 
         private void DoLink(string linkName)
