@@ -49,9 +49,7 @@ namespace GKUI.Forms
 
             ListPlaces = UIHelper.CreateListView(Panel4);
             ListPlaces.DoubleClick += ListPlaces_DblClick;
-            ListPlaces.MouseClick += (s, args) => {
-                contextMenu.Show(args.MouseEvent);
-            };
+            ListPlaces.ContextMenu = contextMenu;
 
             fController = new PlacesManagerController(this);
             fController.Init(baseWin);

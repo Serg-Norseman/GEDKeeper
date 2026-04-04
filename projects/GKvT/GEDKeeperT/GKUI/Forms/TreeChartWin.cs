@@ -205,7 +205,7 @@ namespace GKUI.Forms
 
         private void ImageTree_PersonProperties(object sender, MouseEventArgs e)
         {
-            MenuPerson.Show(e.MouseEvent);
+            MenuPerson.Show((View)sender, e.MouseEvent);
         }
 
         private void ImageTree_RootChanged(object sender, TreeChartPerson person)

@@ -102,11 +102,7 @@ namespace GKUI.Forms
             summary.Height = Dim.Fill();
             summary.Width = Dim.Fill();
             summary.OnLink += mPersonSummaryLink;
-
-            //summary.ContextMenu = summaryMenu;
-            summary.MouseClick += (s, args) => {
-                summaryMenu.Show(args.MouseEvent);
-            };
+            summary.ContextMenu = summaryMenu;
 
             var recView = new GKListView();
             recView.Height = Dim.Fill();
@@ -117,11 +113,7 @@ namespace GKUI.Forms
             recView.UpdateContents();
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
             recView.KeyDown += Form_KeyDown;
-
-            //recView.ContextMenu = contextMenu;
-            recView.MouseClick += (s, args) => {
-                contextMenu.Show(args.MouseEvent);
-            };
+            recView.ContextMenu = contextMenu;
 
             var spl = new SplitterContainer(Orientation.Vertical, 70);
             spl.Panel1.Add(recView);

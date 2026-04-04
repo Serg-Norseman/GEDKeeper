@@ -98,9 +98,7 @@ namespace GKUI.Forms
                 fListRecords = null;
             }
             fListRecords = UIHelper.CreateRecordsView(panList, fController.Base.Context, fController.RecType, true);
-            fListRecords.MouseClick += (s, args) => {
-                contextMenu.Show(args.MouseEvent);
-            };
+            fListRecords.ContextMenu = contextMenu;
         }
 
         private void miDetails_Click(object sender, EventArgs e)

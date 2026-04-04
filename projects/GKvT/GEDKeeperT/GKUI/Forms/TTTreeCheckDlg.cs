@@ -35,9 +35,7 @@ namespace GKUI.Forms
             ListChecks = UIHelper.CreateListView(panProblemsContainer);
             ListChecks.DoubleClick += ListChecks_DblClick;
             ListChecks.CheckBoxes = true;
-            ListChecks.MouseClick += (s, args) => {
-                contextMenu.Show(args.MouseEvent);
-            };
+            ListChecks.ContextMenu = contextMenu;
 
             fController = new TreeCheckController(this);
             fController.Init(baseWin);

@@ -100,7 +100,7 @@ namespace GKUI.Components
             fBtnAdd = CreateButton("btnAdd", LangMan.LS(LSID.MIRecordAdd), ItemAdd);
 
             fContextMenu = new ContextMenu();
-            fContextMenu.Items.AddRange(new [] {
+            fContextMenu.Items.AddRange(new[] {
                 fBtnAdd, fBtnEdit, fBtnDelete, fBtnLinkJump, fBtnMoveUp, fBtnMoveDown, fBtnCopy, fBtnCut, fBtnPaste, fBtnDetails
             });
 
@@ -109,14 +109,8 @@ namespace GKUI.Components
             fList.Width = Dim.Fill();
             fList.Height = Dim.Fill();
             fList.KeyDown += List_KeyDown;
+            fList.ContextMenu = fContextMenu;
             Add(fList);
-
-            fList.MouseClick += (s, args) => {
-                if (args.MouseEvent.Flags.HasFlag(MouseFlags.Button3Clicked)) {
-                    fContextMenu.Position = new Point(args.MouseEvent.X, args.MouseEvent.Y);
-                    fContextMenu.Show();
-                }
-            };
 
             Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);
             fListModel = null;
