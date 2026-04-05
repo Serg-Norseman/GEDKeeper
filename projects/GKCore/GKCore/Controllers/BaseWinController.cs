@@ -503,7 +503,7 @@ namespace GKCore.Controllers
         /// <param name="userChange">true - if user change event (SplitterMoved), false - settings change event</param>
         public void SetSummaryWidth(bool userChange)
         {
-            if (AppHost.Instance.HasFeatureSupport(Feature.Mobile))
+            if (!AppHost.Instance.HasFeatureSupport(Feature.Graphics) || AppHost.Instance.HasFeatureSupport(Feature.Mobile))
                 return;
 
             try {

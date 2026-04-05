@@ -309,7 +309,7 @@ namespace GKUI.Components
             cmbDateType.SelectedIndexChanged += cmbDateType_SelectedIndexChanged;
 
             txtDate1.Location = new Point(18, 1);
-            txtDate1.Size = new Size(18, 1);
+            txtDate1.Size = new Size(20, 1);
             txtDate1.TabIndex = 2;
             txtDate1.TextChanged += txtDate_TextChanged;
 
@@ -325,18 +325,18 @@ namespace GKUI.Components
             chkBC1.Text = "BC";
             chkBC1.CheckedChanged += chkBC_CheckedChanged;
 
-            txtDate2.Location = new Point(42, 1);
-            txtDate2.Size = new Size(18, 1);
+            txtDate2.Location = new Point(43, 1);
+            txtDate2.Size = new Size(20, 1);
             txtDate2.TabIndex = 5;
-            //txtDate2.TextChanged += txtDate_TextChanged;
+            txtDate2.TextChanged += txtDate_TextChanged;
 
             cmbDate2Calendar.ReadOnly = true;
-            cmbDate2Calendar.Location = new Point(42, 3);
+            cmbDate2Calendar.Location = new Point(43, 3);
             cmbDate2Calendar.Size = new Size(17, 2);
             cmbDate2Calendar.TabIndex = 6;
             cmbDate2Calendar.SelectedIndexChanged += cmbDateCalendar_SelectedIndexChanged;
 
-            chkBC2.Location = new Point(60, 3);
+            chkBC2.Location = new Point(61, 3);
             chkBC2.Size = new Size(5, 1);
             chkBC2.TabIndex = 7;
             chkBC2.Text = "BC";
@@ -350,7 +350,7 @@ namespace GKUI.Components
             Add(txtDate2);
             Add(cmbDateType);
 
-            Size = new Size(68, 6);
+            Size = new Size(70, 6);
         }
 
 #pragma warning restore IDE1006 // Naming Styles

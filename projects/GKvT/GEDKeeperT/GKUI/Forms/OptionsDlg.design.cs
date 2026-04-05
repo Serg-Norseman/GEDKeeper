@@ -82,7 +82,6 @@ namespace GKUI.Forms
         private Label lblUnkSexColor;
         private Label lblUnHusbandColor;
         private Label lblUnWifeColor;
-        private PanelView panel1;
         private RadioButton radFBNone;
         private RadioButton radFBOnlyPrev;
         private RadioButton radFBEachRevision;
@@ -348,7 +347,6 @@ namespace GKUI.Forms
             chkAutoSortChildren = new CheckBox();
             chkHighlightUnmarried = new CheckBox();
             pageViewPersons = new TabPage();
-            panel1 = new PanelView();
             lstPersonColumns = new GKListView();
             btnColumnUp = new Button();
             btnColumnDown = new Button();
@@ -1145,28 +1143,24 @@ namespace GKUI.Forms
 
             lstPersonColumns.Location = new Point(0, 0);
             lstPersonColumns.Height = Dim.Fill();
-            lstPersonColumns.Width = Dim.Fill();
+            lstPersonColumns.Width = Dim.Fill(7);
             lstPersonColumns.TabIndex = 1;
 
-            panel1.Add(lstPersonColumns);
-            panel1.Location = new Point(0, 0);
-            panel1.Width = 60;
-            panel1.Height = Dim.Fill();
-            panel1.TabIndex = 1;
-
-            btnColumnUp.Text = "u";
-            btnColumnUp.Location = new Point(62, 1);
+            btnColumnUp.Text = "▲";
+            btnColumnUp.Y = 1;
+            btnColumnUp.X = Pos.AnchorEnd(6);
             btnColumnUp.Size = new Size(5, 1);
             btnColumnUp.TabIndex = 2;
             btnColumnUp.Clicked += btnColumnUp_Click;
 
-            btnColumnDown.Text = "d";
-            btnColumnDown.Location = new Point(62, 3);
+            btnColumnDown.Text = "▼";
+            btnColumnDown.Y = 3;
+            btnColumnDown.X = Pos.AnchorEnd(6);
             btnColumnDown.Size = new Size(5, 1);
             btnColumnDown.TabIndex = 3;
             btnColumnDown.Clicked += btnColumnDown_Click;
 
-            pageViewPersons.View.Add(panel1);
+            pageViewPersons.View.Add(lstPersonColumns);
             pageViewPersons.View.Add(btnColumnUp);
             pageViewPersons.View.Add(btnColumnDown);
 

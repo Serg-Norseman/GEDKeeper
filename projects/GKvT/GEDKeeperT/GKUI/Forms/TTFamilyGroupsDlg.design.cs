@@ -39,7 +39,6 @@ namespace GKUI.Forms
             tvGroups.Location = new Point(0, 0);
             tvGroups.Size = new Size(120, 38);
             tvGroups.TabIndex = 0;
-            //tvGroups.DoubleClick += tvGroups_DoubleClick;
 
             menuGT.Items.AddRange(new[] { miDetails, miGoToRecord, null, miCopyXRef });
             //menuGT.Opening += new System.ComponentModel.CancelEventHandler(contextMenu_Opening);

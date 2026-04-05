@@ -110,6 +110,7 @@ namespace GKUI.Components
             fList.Height = Dim.Fill();
             fList.KeyDown += List_KeyDown;
             fList.ContextMenu = fContextMenu;
+            fList.DoubleClick += List_DoubleClick;
             Add(fList);
 
             Buttons = EnumSet<SheetButton>.Create(SheetButton.lbAdd, SheetButton.lbEdit, SheetButton.lbDelete);

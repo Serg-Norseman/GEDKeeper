@@ -33,11 +33,11 @@ namespace GKUI.Forms
             txtDesc = new TextField();
 
             btnAccept.Size = new Size(16, 1);
-            btnAccept.TabIndex = 5;
+            btnAccept.TabIndex = 9;
             btnAccept.Clicked += AcceptClickHandler;
 
             btnCancel.Size = new Size(16, 1);
-            btnCancel.TabIndex = 6;
+            btnCancel.TabIndex = 10;
             btnCancel.Clicked += CancelClickHandler;
 
             AddButton(btnAccept);
@@ -59,23 +59,23 @@ namespace GKUI.Forms
             cmbTag.TabIndex = 3;
 
             lblType.Location = new Point(1, 5);
-            lblType.TabIndex = 7;
+            lblType.TabIndex = 4;
 
             txtType.Location = new Point(16, 5);
             txtType.Size = new Size(27, 1);
-            txtType.TabIndex = 8;
+            txtType.TabIndex = 5;
 
             chkEnabled.Location = new Point(1, 7);
-            chkEnabled.TabIndex = 9;
+            chkEnabled.TabIndex = 6;
 
             lblDesc.Location = new Point(1, 9);
-            lblDesc.TabIndex = 10;
+            lblDesc.TabIndex = 7;
 
             txtDesc.Location = new Point(16, 9);
             txtDesc.Size = new Size(27, 1);
-            txtDesc.TabIndex = 11;
+            txtDesc.TabIndex = 8;
 
-            Size = new Size(42, 14);
+            Size = new Size(46, 14);
             Add(lblDesc);
             Add(txtDesc);
             Add(chkEnabled);

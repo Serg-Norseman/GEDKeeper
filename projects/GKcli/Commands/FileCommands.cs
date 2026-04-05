@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using GDModel;
@@ -47,15 +48,19 @@ internal abstract class FileCommand : BaseCommand
     protected static void LoadFile(BaseContext baseContext, string selectedFile)
     {
         PromptHelper.WriteLine("Selected file: {0}", selectedFile);
+        var sw = Stopwatch.StartNew();
         var result = baseContext.FileLoad(selectedFile, false).GetAwaiter().GetResult();
-        PromptHelper.WriteLine("Database loaded successfully. Records: {0}.", baseContext.Tree.RecordsCount);
+        sw.Stop();
+        PromptHelper.WriteLine("Database loaded successfully. Records: {0}. Time: {1:F3}s.", baseContext.Tree.RecordsCount, sw.Elapsed.TotalSeconds);
     }
 
     protected static void SaveFile(BaseContext baseContext, string selectedFile)
     {
         PromptHelper.WriteLine("Selected file: {0}", selectedFile);
+        var sw = Stopwatch.StartNew();
         var result = baseContext.FileSave(selectedFile).GetAwaiter().GetResult();
-        PromptHelper.WriteLine("Database saved successfully.");
+        sw.Stop();
+        PromptHelper.WriteLine("Database saved successfully. Time: {0:F3}s.", sw.Elapsed.TotalSeconds);
     }
 }
 

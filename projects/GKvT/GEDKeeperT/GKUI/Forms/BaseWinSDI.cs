@@ -108,16 +108,19 @@ namespace GKUI.Forms
             recView.Height = Dim.Fill();
             recView.Width = Dim.Fill();
             recView.MultiSelect = true;
-            //recView.MouseDoubleClick += miRecordEdit_Click;
+            recView.DoubleClick += miRecordEdit_Click;
             recView.SelectedCellChanged += List_SelectedIndexChanged;
             recView.UpdateContents();
             recView.ListMan = RecordsListModel<GDMRecord>.Create(fContext, recType, false);
             recView.KeyDown += Form_KeyDown;
             recView.ContextMenu = contextMenu;
 
+            var strRecType = ((int)recType).ToString();
+
             var spl = new SplitterContainer(Orientation.Vertical, 70);
             spl.Panel1.Add(recView);
             spl.Panel2.Add(summary);
+            spl.Id = "splitter" + strRecType;
 
             // works only after adding to some container
             recView.SetupScroll();
@@ -127,7 +130,7 @@ namespace GKUI.Forms
             tabPage.View.Add(spl);
             tabsRecords.AddTab(tabPage, false);
 
-            fController.SetTabPart(recType, recView, recType.ToString(), summary);
+            fController.SetTabPart(recType, recView, spl.Id, summary);
 
             return tabPage;
         }
@@ -148,6 +151,11 @@ namespace GKUI.Forms
 
         private void Form_Load(object sender, EventArgs e)
         {
+            // FIXME: dirty hack
+            // This main form is created independently and added to `Top`, instead of Application.Run(new BaseWinSDI()).
+            // Therefore, Running is not true for it. Because of this, RequestStop does not work properly when closing.
+            Running = true;
+
             try {
                 ((IWorkWindow)this).UpdateSettings();
 

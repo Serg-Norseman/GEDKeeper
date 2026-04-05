@@ -25,8 +25,6 @@ namespace GKUI.Components
 
         public bool CheckBoxes { get; set; }
 
-        public event EventHandler DoubleClick;
-
         public IListSource ListMan
         {
             get {

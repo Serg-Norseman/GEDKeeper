@@ -74,7 +74,7 @@ namespace GKUI.Forms
 
         public void Close()
         {
-            Application.RequestStop(this);
+            this.RequestStop();
         }
     }
 
