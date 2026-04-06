@@ -26,16 +26,6 @@ namespace GKUI.Forms
         private FrameView panUnkSexColor;
         private FrameView panUnHusbandColor;
         private FrameView panUnWifeColor;
-        private FrameView grpInternet;
-        private Label lblProxyServer;
-        private Label lblProxyPort;
-        private Label lblProxyLogin;
-        private Label lblProxyPassword;
-        private CheckBox chkUseProxy;
-        private TextField txtProxyServer;
-        private TextField txtProxyPort;
-        private TextField txtProxyLogin;
-        private TextField txtProxyPass;
         private TabPage pageUIView;
         private TabView PageControl2;
         private TabPage pageViewCommon;
@@ -231,16 +221,6 @@ namespace GKUI.Forms
             lblGeoSearchCountry = new Label();
             lblGeocoder = new Label();
             lblLanguage = new Label();
-            grpInternet = new FrameView();
-            lblProxyServer = new Label();
-            lblProxyPort = new Label();
-            lblProxyLogin = new Label();
-            lblProxyPassword = new Label();
-            chkUseProxy = new CheckBox();
-            txtProxyServer = new TextField();
-            txtProxyPort = new TextField();
-            txtProxyLogin = new TextField();
-            txtProxyPass = new TextField();
             grpOther = new FrameView();
             chkDialogClosingWarn = new CheckBox();
             chkCharsetDetection = new CheckBox();
@@ -421,17 +401,17 @@ namespace GKUI.Forms
 
             //
 
-            lblLanguage.Location = new Point(1, 32);
+            lblLanguage.Location = new Point(1, 14);
             lblLanguage.TabIndex = 0;
 
-            cmbLanguages.Location = new Point(14, 32);
+            cmbLanguages.Location = new Point(14, 14);
             cmbLanguages.Size = new Size(28, 2);
             cmbLanguages.TabIndex = 4;
 
-            lblCertaintyAlgorithm.Location = new Point(1, 34);
+            lblCertaintyAlgorithm.Location = new Point(1, 16);
             lblCertaintyAlgorithm.TabIndex = 7;
 
-            cmbCertaintyAlgorithm.Location = new Point(36, 34);
+            cmbCertaintyAlgorithm.Location = new Point(36, 16);
             cmbCertaintyAlgorithm.Size = new Size(28, 2);
             cmbCertaintyAlgorithm.TabIndex = 8;
 
@@ -442,55 +422,8 @@ namespace GKUI.Forms
             pageComOther.View.Add(lblLanguage);
             pageComOther.View.Add(cmbLanguages);
             pageComOther.View.Add(grpOther);
-            pageComOther.View.Add(grpInternet);
 
             //
-
-            chkUseProxy.Location = new Point(2, 1);
-            chkUseProxy.TabIndex = 0;
-
-            lblProxyServer.Location = new Point(1, 3);
-            lblProxyServer.TabIndex = 0;
-
-            txtProxyServer.Location = new Point(14, 3);
-            txtProxyServer.Size = new Size(24, 1);
-            txtProxyServer.TabIndex = 1;
-
-            lblProxyPort.Location = new Point(1, 5);
-            lblProxyPort.TabIndex = 1;
-
-            txtProxyPort.Location = new Point(14, 5);
-            txtProxyPort.Size = new Size(24, 1);
-            txtProxyPort.TabIndex = 2;
-
-            lblProxyLogin.Location = new Point(1, 7);
-            lblProxyLogin.TabIndex = 2;
-
-            txtProxyLogin.Location = new Point(14, 7);
-            txtProxyLogin.Size = new Size(24, 1);
-            txtProxyLogin.TabIndex = 3;
-
-            lblProxyPassword.Location = new Point(1, 9);
-            lblProxyPassword.TabIndex = 3;
-
-            txtProxyPass.Location = new Point(14, 9);
-            txtProxyPass.Secret = true;
-            txtProxyPass.Size = new Size(24, 1);
-            txtProxyPass.TabIndex = 4;
-
-            grpInternet.Add(lblProxyServer);
-            grpInternet.Add(lblProxyPort);
-            grpInternet.Add(lblProxyLogin);
-            grpInternet.Add(lblProxyPassword);
-            grpInternet.Add(chkUseProxy);
-            grpInternet.Add(txtProxyServer);
-            grpInternet.Add(txtProxyPort);
-            grpInternet.Add(txtProxyLogin);
-            grpInternet.Add(txtProxyPass);
-            grpInternet.Location = new Point(1, 1);
-            grpInternet.Size = new Size(40, 13);
-            grpInternet.TabIndex = 1;
-            grpInternet.TabStop = false;
 
             grpOther.Add(chkKeepInfoPansOverallSize);
             grpOther.Add(chkFilesOverwriteWarn);
@@ -499,7 +432,7 @@ namespace GKUI.Forms
             grpOther.Add(chkAutoCheckUpdates);
             grpOther.Add(chkLoadRecentFiles);
             grpOther.Add(chkShowOnStart);
-            grpOther.Location = new Point(1, 15);
+            grpOther.Location = new Point(1, 1);
             grpOther.Size = new Size(80, 11);
             grpOther.TabIndex = 2;
             grpOther.TabStop = false;

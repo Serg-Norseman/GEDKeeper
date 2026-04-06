@@ -130,6 +130,8 @@ namespace GKCore.Controllers
 
         public void UpdateProxyOptions()
         {
+            if (fIsTerm) return;
+
             var isMobile = AppHost.Instance.HasFeatureSupport(Feature.Mobile);
             GetControl<IGroupBox>("grpInternet").Visible = !isMobile;
 
@@ -145,6 +147,8 @@ namespace GKCore.Controllers
 
         public void AcceptProxyOptions()
         {
+            if (fIsTerm) return;
+
             fOptions.Proxy.UseProxy = GetControl<ICheckBox>("chkUseProxy").Checked;
             fOptions.Proxy.Server = GetControl<ITextBox>("txtProxyServer").Text;
             fOptions.Proxy.Port = GetControl<ITextBox>("txtProxyPort").Text;
@@ -1003,12 +1007,14 @@ namespace GKCore.Controllers
                 GetControl<IButton>("btnExtBackupFolderChoose").Text = LangMan.LS(LSID.DlgSelect);
             }
 
-            GetControl<IGroupBox>("grpInternet").Text = LangMan.LS(LSID.Internet);
-            GetControl<ICheckBox>("chkUseProxy").Text = LangMan.LS(LSID.ProxyUse);
-            GetControl<ILabel>("lblProxyServer").Text = LangMan.LS(LSID.ProxyServer);
-            GetControl<ILabel>("lblProxyPort").Text = LangMan.LS(LSID.ProxyPort);
-            GetControl<ILabel>("lblProxyLogin").Text = LangMan.LS(LSID.ProxyLogin);
-            GetControl<ILabel>("lblProxyPassword").Text = LangMan.LS(LSID.Password);
+            if (!fIsTerm) {
+                GetControl<IGroupBox>("grpInternet").Text = LangMan.LS(LSID.Internet);
+                GetControl<ICheckBox>("chkUseProxy").Text = LangMan.LS(LSID.ProxyUse);
+                GetControl<ILabel>("lblProxyServer").Text = LangMan.LS(LSID.ProxyServer);
+                GetControl<ILabel>("lblProxyPort").Text = LangMan.LS(LSID.ProxyPort);
+                GetControl<ILabel>("lblProxyLogin").Text = LangMan.LS(LSID.ProxyLogin);
+                GetControl<ILabel>("lblProxyPassword").Text = LangMan.LS(LSID.Password);
+            }
 
             GetControl<IGroupBox>("grpFileBackup").Text = LangMan.LS(LSID.BackupOnSave);
             GetControl<IRadioButton>("radFBNone").Text = LangMan.LS(LSID.Not);

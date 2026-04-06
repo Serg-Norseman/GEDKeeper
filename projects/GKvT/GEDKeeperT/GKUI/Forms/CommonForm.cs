@@ -267,11 +267,12 @@ namespace GKUI.Forms
             }
         }
 
-        /*protected override void OnClosing(CancelEventArgs e)
+        protected override bool OnClosing(ToplevelClosingEventArgs e)
         {
+            e.Cancel = fController.CheckChangesPersistence().Result;
             base.OnClosing(e);
-            e.Cancel = fController.CheckChangesPersistence();
-        }*/
+            return e.Cancel;
+        }
 
         /// <summary>
         /// This is necessary so that when user switch to the desired tab,
@@ -279,11 +280,11 @@ namespace GKUI.Forms
         /// </summary>
         protected static void tabControl_SelectedTabChanged(object sender, EventArgs e)
         {
-            /*var tabCtl = (TabControl)sender;
-            var selectedTab = tabCtl.SelectedPage;
-            if (selectedTab != null && selectedTab.Content != null) {
-                selectedTab.Content.Focus();
-            }*/
+            var tabCtl = (TabView)sender;
+            var selectedTab = tabCtl.SelectedTab;
+            if (selectedTab != null && selectedTab.View != null) {
+                selectedTab.View.SetFocus();
+            }
         }
     }
 }

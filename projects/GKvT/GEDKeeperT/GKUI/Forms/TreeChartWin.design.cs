@@ -36,7 +36,6 @@ namespace GKUI.Forms
         private MenuBarItem tbNext;
         private MenuItem miSelectColor;
         private MenuItem miGoToRecord;
-        private MenuBarItem tbGensCommon;
         private MenuBarItem tbGensAncestors;
         private MenuBarItem tbGensDescendants;
         private MenuItem miGoToPrimaryBranch;
@@ -105,7 +104,6 @@ namespace GKUI.Forms
             tbImageSave = new MenuBarItem();
             tbImageSave.Action += tbImageSave_Click;
 
-            tbGensCommon = new MenuBarItem();
             tbGensAncestors = new MenuBarItem();
             tbGensDescendants = new MenuBarItem();
 
@@ -196,7 +194,6 @@ namespace GKUI.Forms
             ToolBar1 = new MenuBar();
             ToolBar1.Menus = new MenuBarItem[] {
                 tbImageSave,
-                tbGensCommon,
                 tbGensAncestors,
                 tbGensDescendants,
                 tbModes,

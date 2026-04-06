@@ -151,7 +151,6 @@ namespace GKUI.Forms
 
         private void Form_Load(object sender, EventArgs e)
         {
-            // FIXME: dirty hack
             // This main form is created independently and added to `Top`, instead of Application.Run(new BaseWinSDI()).
             // Therefore, Running is not true for it. Because of this, RequestStop does not work properly when closing.
             Running = true;

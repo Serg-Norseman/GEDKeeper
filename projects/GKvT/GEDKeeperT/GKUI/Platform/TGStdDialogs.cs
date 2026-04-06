@@ -105,8 +105,17 @@ namespace GKUI.Platform
         public async Task<string> GetSaveFile(string title, string context, string filter, int filterIndex, string defaultExt,
                                               string suggestedFileName, bool overwritePrompt = true)
         {
-            // FIXME!!!
-            return string.Empty;
+            var dlg = new SaveDialog() {
+                Title = title,
+                DirectoryPath = context,
+                AllowedFileTypes = GetFilterFileTypes(filter),
+            };
+            Application.Run(dlg);
+            if (!dlg.Canceled) {
+                return dlg.FilePath;
+            } else {
+                return string.Empty;
+            }
         }
 
 

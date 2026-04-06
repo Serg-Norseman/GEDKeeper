@@ -357,7 +357,10 @@ namespace GKCore.Controllers
         {
             var treeOptions = GlobalOptions.Instance.TreeChartOptions;
 
-            GetControl<IToolItem>("tbGensCommon").Visible = !treeOptions.SeparateDepth;
+            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+                GetControl<IToolItem>("tbGensCommon").Visible = !treeOptions.SeparateDepth;
+            }
+
             GetControl<IToolItem>("tbGensAncestors").Visible = treeOptions.SeparateDepth;
             GetControl<IToolItem>("tbGensDescendants").Visible = treeOptions.SeparateDepth;
         }
@@ -428,7 +431,6 @@ namespace GKCore.Controllers
 
         public override void SetLocale()
         {
-            GetControl<IToolItem>("tbGensCommon").Text = LangMan.LS(LSID.Generations);
             GetControl<IToolItem>("tbGensAncestors").Text = LangMan.LS(LSID.Generations) + ": " + LangMan.LS(LSID.Ancestors);
             GetControl<IToolItem>("tbGensDescendants").Text = LangMan.LS(LSID.Generations) + ": " + LangMan.LS(LSID.Descendants);
             GetControl<IToolItem>("tbModes").Text = LangMan.LS(LSID.ModesTip);
@@ -457,6 +459,7 @@ namespace GKCore.Controllers
                 GetControl<IToolItem>("tbOptions").Text = LangMan.LS(LSID.MIOptions);
                 GetControl<IToolItem>("tbFilter").Text = LangMan.LS(LSID.MIFilter);
             } else {
+                GetControl<IToolItem>("tbGensCommon").Text = LangMan.LS(LSID.Generations);
                 GetControl<IToolItem>("tbBorders").Text = LangMan.LS(LSID.Borders);
                 GetControl<IToolItem>("tbDocPreview").Enabled = AppHost.Instance.HasFeatureSupport(Feature.PrintPreview);
                 GetControl<IMenuItem>("miFillImage").Text = LangMan.LS(LSID.FillImage);
@@ -464,7 +467,6 @@ namespace GKCore.Controllers
 
             if (AppHost.Instance.HasFeatureSupport(Feature.Mobile)) return;
 
-            GetControl<IMenuItem>("miGensInfCommon").Text = LangMan.LS(LSID.Unlimited);
             GetControl<IMenuItem>("miGensInfAncestors").Text = LangMan.LS(LSID.Unlimited);
             GetControl<IMenuItem>("miGensInfDescendants").Text = LangMan.LS(LSID.Unlimited);
             GetControl<IMenuItem>("miModeBoth").Text = LangMan.LS(LSID.TM_Both);
@@ -472,6 +474,8 @@ namespace GKCore.Controllers
             GetControl<IMenuItem>("miModeDescendants").Text = LangMan.LS(LSID.TM_Descendants);
 
             if (AppHost.Instance.HasFeatureSupport(Feature.Graphics)) {
+                GetControl<IMenuItem>("miGensInfCommon").Text = LangMan.LS(LSID.Unlimited);
+
                 GetControl<IMenuItem>("miMaps").Text = LangMan.LS(LSID.MIMap);
                 GetControl<IMenuItem>("miMapAncestors").Text = LangMan.LS(LSID.Ancestors);
                 GetControl<IMenuItem>("miMapDescendants").Text = LangMan.LS(LSID.Descendants);

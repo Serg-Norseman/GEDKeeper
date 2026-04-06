@@ -28,7 +28,6 @@ namespace GKUI.Forms
         #region Design components
 
         private readonly TreeChartBox fTreeBox;
-        private MenuItem miGensInfCommon;
         private MenuItem miGensInfAncestors;
         private MenuItem miGensInfDescendants;
 
@@ -77,7 +76,6 @@ namespace GKUI.Forms
 
             PopulateContextMenus();
 
-            miGensInfCommon.Checked = true;
             miGensInfAncestors.Checked = true;
             miGensInfDescendants.Checked = true;
 
@@ -235,23 +233,13 @@ namespace GKUI.Forms
 
         private void PopulateContextMenus()
         {
-            miGensInfCommon = UIHelper.AddToolStripItem(tbGensCommon, "Inf", -1, miGensX_Click);
             miGensInfAncestors = UIHelper.AddToolStripItem(tbGensAncestors, "Inf", -1, miGensXAncestors_Click);
             miGensInfDescendants = UIHelper.AddToolStripItem(tbGensDescendants, "Inf", -1, miGensXDescendants_Click);
 
             for (int i = 1; i <= 9; i++) {
-                UIHelper.AddToolStripItem(tbGensCommon, i.ToString(), i, miGensX_Click);
                 UIHelper.AddToolStripItem(tbGensAncestors, i.ToString(), i, miGensXAncestors_Click);
                 UIHelper.AddToolStripItem(tbGensDescendants, i.ToString(), i, miGensXDescendants_Click);
             }
-        }
-
-        private void miGensX_Click(object sender, EventArgs e)
-        {
-            int depth = UIHelper.GetMenuItemTag<int>(tbGensCommon, sender);
-            fTreeBox.DepthLimitAncestors = depth;
-            fTreeBox.DepthLimitDescendants = depth;
-            GenChart();
         }
 
         private void miGensXAncestors_Click(object sender, EventArgs e)
@@ -274,12 +262,8 @@ namespace GKUI.Forms
 
             fController.SetupDepth();
 
-            if (!treeOptions.SeparateDepth) {
-                UIHelper.SetMenuItemTag(tbGensCommon, treeOptions.DepthLimit);
-            } else {
-                UIHelper.SetMenuItemTag(tbGensAncestors, treeOptions.DepthLimitAncestors);
-                UIHelper.SetMenuItemTag(tbGensDescendants, treeOptions.DepthLimitDescendants);
-            }
+            UIHelper.SetMenuItemTag(tbGensAncestors, treeOptions.DepthLimitAncestors);
+            UIHelper.SetMenuItemTag(tbGensDescendants, treeOptions.DepthLimitDescendants);
         }
 
         private void miEdit_Click(object sender, EventArgs e)

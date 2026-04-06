@@ -79,7 +79,6 @@ namespace GKUI.Forms
                 var txtBox = new TextView();
                 txtBox.Multiline = true;
                 txtBox.ReadOnly = true;
-                // FIXME: fix encoding! and test other!!!
                 txtBox.Text = text;
 
                 SetViewControl(txtBox);

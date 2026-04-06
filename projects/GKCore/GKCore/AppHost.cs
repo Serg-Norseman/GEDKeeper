@@ -1104,7 +1104,7 @@ namespace GKCore
 
         public static async Task<ushort> RequestLanguage()
         {
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
+            if (AppHost.Instance.HasFeatureSupport(Feature.Graphics) && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 using (var dlg = AppHost.ResolveDialog<ILanguageSelectDlg>()) {
                     if (await AppHost.Instance.ShowModalAsync(dlg, null, false)) {
                         return (ushort)dlg.SelectedLanguage;

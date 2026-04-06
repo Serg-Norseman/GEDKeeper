@@ -10,6 +10,8 @@
         <StartupObject>GEDKeeperT.GKProgram</StartupObject>
         <SelfContained>true</SelfContained>
         <PublishSingleFile>true</PublishSingleFile>
+        <PublishTrimmed>true</PublishTrimmed>
+        <TrimMode>link</TrimMode>
 
         <Configurations>Debug;Release</Configurations>
         <Platforms>MSWin64;Linux;MacOS;FreeBSD</Platforms>
