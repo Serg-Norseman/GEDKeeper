@@ -41,7 +41,7 @@ Community group: [Google Groups: GEDKeeper (en)](https://groups.google.com/g/ged
 - "GEDKeeper2", legacy (.NET Framework 4.8 & WinForms, x86), only Windows 7 or later
 - "GEDKeeper3", cross-platform (.NET 8 & Eto.Forms, x64), Linux, MacOS and only Windows 10/11
 - "GEDKeeperX", mobile (Xamarin), Android
-- "GKcli", experimental terminal text (.NET 8 & Sharprompt)
+- "GKcli", experimental interactive terminal and MCP server for integration with LLM (.NET 8 & Sharprompt, MCP)
 - "GEDKeeperT", terminal UI (.NET 8 & TermUI)
 
 

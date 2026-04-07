@@ -8,6 +8,7 @@
 
 using System;
 using GKcli.Commands;
+using GKcli.MCP;
 using GKCore;
 using GKUI.Platform;
 
@@ -24,16 +25,37 @@ internal class Program
         try {
             AppHost.Instance.Init(args, false);
 
-            Console.Clear();
-            Console.WriteLine();
-            PromptHelper.WriteMarkupLine("[darkcyan]GEDKeeper CLI[/]");
-
-            while (true) {
-                var selected = CommandController.SelectCommand(CommandCategory.Application, false, CLILangMan.LS(CLS.SelectCommand));
-                if (selected == CommandController.CMD_EXIT) break;
+            // Check if running in MCP mode
+            bool mcpMode = Array.IndexOf(args, "--mcp") >= 0;
+            if (mcpMode) {
+                RunMCPServer();
+            } else {
+                RunInteractiveMode();
             }
         } finally {
             AppHost.DoneSettings();
+        }
+    }
+
+    private static void RunMCPServer()
+    {
+        try {
+            var server = new MCPServer();
+            server.Run();
+        } catch (Exception ex) {
+            MCPServer.Log($"Fatal error during initialization: {ex}");
+            Environment.Exit(1);
+        }
+    }
+
+    private static void RunInteractiveMode()
+    {
+        Console.Clear();
+        Console.WriteLine();
+        PromptHelper.WriteMarkupLine("[darkcyan]GEDKeeper CLI[/]");
+        while (true) {
+            var selected = CommandController.SelectCommand(CommandCategory.Application, false, CLILangMan.LS(CLS.SelectCommand));
+            if (selected == CommandController.CMD_EXIT) break;
         }
     }
 }
