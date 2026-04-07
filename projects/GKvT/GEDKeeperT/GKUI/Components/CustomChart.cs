@@ -70,6 +70,26 @@ namespace GKUI.Components
 
         public void SaveSnapshot(string fileName)
         {
+            string ext = FileHelper.GetFileExtension(fileName);
+            if (ext == ".txt") {
+                var prevRenderer = fRenderer;
+
+                var txtRenderer = new TXTRenderer(fileName);
+                SetRenderer(txtRenderer);
+                fRenderer.SetTarget(null);
+
+                ExtSize imageSize = GetImageSize();
+                txtRenderer.SetViewBox(imageSize.Width, imageSize.Height);
+
+                fRenderer.BeginDrawing();
+                try {
+                    RenderImage(RenderTarget.SVG);
+                } finally {
+                    fRenderer.EndDrawing();
+
+                    SetRenderer(prevRenderer);
+                }
+            }
         }
 
         public virtual void SetLayout(IChartLayout layout)

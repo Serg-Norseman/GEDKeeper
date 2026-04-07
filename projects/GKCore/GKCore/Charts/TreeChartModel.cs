@@ -412,7 +412,7 @@ namespace GKCore.Charts
 
         private void InitSigns(ChartRenderer renderer)
         {
-            if (!AppHost.Instance.HasFeatureSupport(Feature.Graphics))
+            if (!fGraphicsMode)
                 return;
 
             if (fSignsPic != null)

@@ -101,6 +101,8 @@ namespace GKUI.Forms
             btnRec2Select.TabIndex = 14;
             btnRec2Select.Clicked += btnRec2Select_Click;
 
+            // Due to a bug in ScrollView, text is drawn outside the component's boundaries
+            // if it is not in a FrameView.
             var vview1 = new FrameView();
             vview1.Location = new Point(1, 4);
             vview1.Size = new Size(50, 30);

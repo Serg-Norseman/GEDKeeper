@@ -307,10 +307,23 @@ namespace GKCore.Controllers
 
         public async void SaveSnapshot()
         {
-            string filters = GKUtils.GetImageFilter(true);
-            filters += "|" + LangMan.LS(LSID.PDFFilter);
+            string filters, defExt;
 
-            string fileName = await AppHost.StdDialogs.GetSaveFile("", GlobalOptions.Instance.ImageExportLastDir, filters, 2, "jpg", "");
+#if !TERM
+            filters = GKUtils.GetImageFilter(true);
+            filters += "|" + LangMan.LS(LSID.PDFFilter);
+            defExt = "jpg";
+#else
+            filters = "TXT files (*.txt)|*.txt";
+            defExt = "txt";
+#endif
+
+            string defPath = GlobalOptions.Instance.ImageExportLastDir;
+            if (string.IsNullOrEmpty(defPath)) {
+                defPath = GlobalOptions.Instance.LastDir;
+            }
+
+            string fileName = await AppHost.StdDialogs.GetSaveFile("", defPath, filters, 2, defExt, "");
             if (!string.IsNullOrEmpty(fileName)) {
                 GlobalOptions.Instance.ImageExportLastDir = Path.GetDirectoryName(fileName);
 
