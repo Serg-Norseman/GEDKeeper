@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -70,6 +71,7 @@ namespace GKCore.Utilities
             return (encoding != null) && (encoding == Encoding.Unicode || encoding == Encoding.BigEndianUnicode || encoding == Encoding.UTF8 || encoding == Encoding.UTF32);
         }
 
+#if NET8_0_OR_GREATER
         public static IEnumerable<string> FastSearchFiles(string rootPath, string pattern)
         {
             var options = new EnumerationOptions {
@@ -80,6 +82,7 @@ namespace GKCore.Utilities
             };
             return Directory.EnumerateFiles(rootPath, pattern, options);
         }
+#endif
 
         #endregion
 
@@ -336,6 +339,90 @@ namespace GKCore.Utilities
         }
 
         #endregion
+
+        /// <summary>
+        /// Computes the Levenshtein edit distance between two strings.
+        /// Uses an optimized single-row algorithm with O(min(m,n)) memory.
+        /// </summary>
+        public static int Levenshtein(string a, string b)
+        {
+            if (string.IsNullOrEmpty(a)) return b?.Length ?? 0;
+            if (string.IsNullOrEmpty(b)) return a.Length;
+
+            // Ensure b is the shorter string for optimal memory usage
+            if (a.Length < b.Length)
+                (a, b) = (b, a);
+
+            var costs = new int[b.Length + 1];
+            for (int i = 0; i <= b.Length; i++) costs[i] = i;
+
+            for (int i = 1; i <= a.Length; i++) {
+                int prev = costs[0];
+                costs[0] = i;
+                for (int j = 1; j <= b.Length; j++) {
+                    int current = costs[j];
+                    costs[j] = Math.Min(
+                        Math.Min(costs[j - 1] + 1, costs[j] + 1),
+                        prev + (a[i - 1] == b[j - 1] ? 0 : 1));
+                    prev = current;
+                }
+            }
+
+            return costs[b.Length];
+        }
+
+        /// <summary>
+        /// Determines the total number of differences between words in two strings.
+        /// Takes into account permutations and the separators ' ' and '/'.
+        /// </summary>
+        public static int GetDiffIndex(string str1, string str2)
+        {
+            if (string.IsNullOrEmpty(str1) || string.IsNullOrEmpty(str2))
+                return Math.Max(str1?.Length ?? 0, str2?.Length ?? 0);
+
+            // Split strings into tokens (words), removing empty elements
+            char[] separators = { ' ', '/' };
+            var words1 = str1.Split(separators, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var words2 = str2.Split(separators, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            int totalDifference = 0;
+            var matchedIndices2 = new HashSet<int>();
+
+            // For each word from the first line, look for the best match in the second
+            foreach (var word1 in words1) {
+                int minLev = int.MaxValue;
+                int bestMatchIndex = -1;
+
+                for (int i = 0; i < words2.Count; i++) {
+                    if (matchedIndices2.Contains(i)) continue;
+
+                    int dist = Levenshtein(word1.ToLower(), words2[i].ToLower());
+
+                    if (dist < minLev) {
+                        minLev = dist;
+                        bestMatchIndex = i;
+                    }
+                }
+
+                // If find a match with a difference of 1-3 characters (or an exact match)
+                if (bestMatchIndex != -1 && minLev <= 3) {
+                    totalDifference += minLev;
+                    matchedIndices2.Add(bestMatchIndex);
+                } else {
+                    // If a word does not find a pair, consider its entire length as a discrepancy
+                    totalDifference += word1.Length;
+                }
+            }
+
+            // Add the length of all the words from the second line that remain without a pair
+            for (int i = 0; i < words2.Count; i++) {
+                if (!matchedIndices2.Contains(i)) {
+                    totalDifference += words2[i].Length;
+                }
+            }
+
+            return totalDifference;
+        }
 
         public static string StripHTML(string source)
         {
