@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -67,6 +68,17 @@ namespace GKCore.Utilities
         public static bool IsUnicodeEncoding(Encoding encoding)
         {
             return (encoding != null) && (encoding == Encoding.Unicode || encoding == Encoding.BigEndianUnicode || encoding == Encoding.UTF8 || encoding == Encoding.UTF32);
+        }
+
+        public static IEnumerable<string> FastSearchFiles(string rootPath, string pattern)
+        {
+            var options = new EnumerationOptions {
+                IgnoreInaccessible = true,
+                RecurseSubdirectories = true,
+                ReturnSpecialDirectories = false,
+                AttributesToSkip = FileAttributes.System
+            };
+            return Directory.EnumerateFiles(rootPath, pattern, options);
         }
 
         #endregion

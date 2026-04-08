@@ -67,8 +67,6 @@ public sealed class CLIAppHost : AppHost
         container.Register<IGraphicsProvider, CLIGfxProvider>(LifeCycle.Singleton);
         container.Register<IProgressDialog, CLIProgress>(LifeCycle.Transient);
 
-        CheckPortable(args);
-        Logger.Init(GetLogFilename());
-        LogSysInfo();
+        StartupCore(args);
     }
 }

@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Text;
 using GKcli.Commands;
 using GKcli.MCP;
 using GKCore;
@@ -14,11 +15,13 @@ using GKUI.Platform;
 
 namespace GKcli;
 
-
 internal class Program
 {
     static void Main(string[] args)
     {
+        Console.InputEncoding = Encoding.UTF8;
+        Console.OutputEncoding = Encoding.UTF8;
+
         CLIAppHost.Startup(args);
 
         AppHost.InitSettings();

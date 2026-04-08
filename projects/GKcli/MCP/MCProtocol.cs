@@ -19,7 +19,7 @@ namespace GKcli.MCP;
 internal class MCPRequest
 {
     [JsonPropertyName("jsonrpc")]
-    public string JsonRpc { get; set; } = "2.0";
+    public string JsonRpc { get; set; }
 
     [JsonPropertyName("id")]
     public JsonElement? Id { get; set; }
@@ -110,7 +110,7 @@ internal class MCPError
 internal class MCPToolsListResult
 {
     [JsonPropertyName("tools")]
-    public List<MCPTool> Tools { get; set; } = new();
+    public List<MCPTool> Tools { get; set; }
 }
 
 /// <summary>
@@ -133,6 +133,10 @@ internal class MCPTool
 /// </summary>
 internal class MCPToolInputSchema
 {
+    [JsonIgnore]
+    public static readonly MCPToolInputSchema Empty = new MCPToolInputSchema { Properties = new(), Required = new() };
+
+
     [JsonPropertyName("type")]
     public string Type { get; set; } = "object";
 
@@ -197,7 +201,7 @@ internal class MCPCapabilities
 internal class MCPToolsCapability
 {
     [JsonPropertyName("listChanged")]
-    public bool ListChanged { get; set; } = false;
+    public bool ListChanged { get; set; }
 }
 
 /// <summary>
@@ -206,8 +210,8 @@ internal class MCPToolsCapability
 internal class MCPServerInfo
 {
     [JsonPropertyName("name")]
-    public string Name { get; set; } = "GKcli";
+    public string Name { get; set; }
 
     [JsonPropertyName("version")]
-    public string Version { get; set; } = "1.0.0";
+    public string Version { get; set; }
 }

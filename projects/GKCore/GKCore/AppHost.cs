@@ -1261,6 +1261,24 @@ namespace GKCore
         }
 
         /// <summary>
+        /// Set forced backup of each file revision (on each save).
+        /// </summary>
+        /// <returns>previous settings to restore</returns>
+        public BackupOptions SetForcedBackup()
+        {
+            var prevBackups = new BackupOptions();
+            prevBackups.Assign(GlobalOptions.Instance.Backups);
+            GlobalOptions.Instance.Backups.FileBackup = Backups.FileBackup.fbEachRevision;
+            GlobalOptions.Instance.Backups.FileBackupEachRevisionMaxCount = 999;
+            return prevBackups;
+        }
+
+        public void SetRegularBackup(BackupOptions backupOptions)
+        {
+            GlobalOptions.Instance.Backups.Assign(backupOptions);
+        }
+
+        /// <summary>
         /// Framework-specific presentation settings.
         /// For example, in GKv3, fixes to the appearance of WPF ToolBars.
         /// </summary>

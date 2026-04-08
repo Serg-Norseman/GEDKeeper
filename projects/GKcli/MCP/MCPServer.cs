@@ -8,11 +8,20 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using GKCore;
 
 namespace GKcli.MCP;
+
+internal delegate List<MCPContent> MCPToolHandler(JsonElement args);
+
+internal class MCPSrvTool
+{
+    public MCPTool Tool { get; set; }
+    public MCPToolHandler Handler { get; set; }
+}
 
 /// <summary>
 /// Minimal MCP server that reads JSON-RPC 2.0 messages from stdin and writes responses to stdout.
@@ -23,6 +32,7 @@ internal class MCPServer
     private readonly BaseContext fContext;
     private readonly JsonSerializerOptions fJsonOptions;
     private readonly MCPToolkit fToolkit;
+    private readonly Dictionary<string, MCPSrvTool> fTools;
 
     public MCPServer()
     {
@@ -31,7 +41,8 @@ internal class MCPServer
         fContext = new BaseContext(null);
         Log("BaseContext created successfully");
 
-        fToolkit = new MCPToolkit(fContext);
+        fTools = new Dictionary<string, MCPSrvTool>();
+        fToolkit = new MCPToolkit(fContext, this);
 
         fJsonOptions = new JsonSerializerOptions {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -45,51 +56,70 @@ internal class MCPServer
     /// </summary>
     public void Run()
     {
-        Log("MCP Server main loop started");
+        Log("MCP Server started");
+
+        // Since using such tools is a risky process,
+        // we force backup of each file revision (each save).
+        var prevBackups = AppHost.Instance.SetForcedBackup();
 
         var stdin = Console.In;
-        string? line;
+        string line;
         while ((line = stdin.ReadLine()) != null) {
             line = line.Trim();
-            if (string.IsNullOrEmpty(line))
-                continue;
+            if (string.IsNullOrEmpty(line)) continue;
 
             try {
                 Log($"Received: {line}");
                 var request = JsonSerializer.Deserialize<MCPRequest>(line, fJsonOptions);
 
                 // Notifications don't have an "id" and don't require a response
-                bool isNotification = request?.Id == null || !request.Id.HasValue ||
-                                      request.Id.Value.ValueKind == JsonValueKind.Null ||
-                                      request.Id.Value.ValueKind == JsonValueKind.Undefined;
-
-                if (isNotification && request?.Method == "notifications/initialized") {
-                    Log("Client initialized notification received");
-                    continue;
-                }
-
-                if (isNotification) {
+                if (IsNotificationRequest(request)) {
+                    if (request?.Method == "notifications/initialized") {
+                        Log("Client initialized notification received");
+                    }
                     Log($"Skipping notification: {request.Method}");
                     continue;
                 }
 
                 var response = ProcessRequest(request);
-                var json = JsonSerializer.Serialize(response, fJsonOptions);
-                Log($"Sending: {json}");
-                Console.WriteLine(json);
-                Console.Out.Flush();
+                SendResponse(response, false);
             } catch (Exception ex) {
                 Log($"Error processing request: {ex.Message}");
                 var errorResponse = new MCPResponse {
                     Error = MCPError.InternalError(null, ex.Message)
                 };
-                var json = JsonSerializer.Serialize(errorResponse, fJsonOptions);
-                Console.WriteLine(json);
-                Console.Out.Flush();
+                SendResponse(errorResponse, true);
             }
         }
 
-        Log("MCP Server stopped (stdin closed)");
+        // Restore backup options
+        AppHost.Instance.SetRegularBackup(prevBackups);
+
+        Log("MCP Server stopped");
+    }
+
+    private static bool IsNotificationRequest(MCPRequest request)
+    {
+        return request?.Id == null || !request.Id.HasValue
+            || request.Id.Value.ValueKind == JsonValueKind.Null || request.Id.Value.ValueKind == JsonValueKind.Undefined;
+    }
+
+    private void SendResponse(MCPResponse response, bool isError)
+    {
+        var json = JsonSerializer.Serialize(response, fJsonOptions);
+
+#if RELEASE
+        if (!isError) {
+            string jsonStr = json;
+            if (jsonStr.Length > 1000) {
+                jsonStr = jsonStr.Substring(0, 1000);
+            }
+            Log($"Sending: {jsonStr}");
+        }
+#endif
+
+        Console.Out.WriteLine(json);
+        Console.Out.Flush();
     }
 
     public static void Log(string message)
@@ -101,7 +131,7 @@ internal class MCPServer
         Console.Error.Flush();
     }
 
-    private MCPResponse ProcessRequest(MCPRequest? request)
+    private MCPResponse ProcessRequest(MCPRequest request)
     {
         if (request == null) {
             return new MCPResponse {
@@ -127,7 +157,7 @@ internal class MCPServer
         var result = new MCPInitializeResult {
             ProtocolVersion = "2024-11-05",
             Capabilities = new MCPCapabilities {
-                Tools = new MCPToolsCapability { ListChanged = false }
+                Tools = new MCPToolsCapability { ListChanged = true }
             },
             ServerInfo = new MCPServerInfo {
                 Name = "GKcli",
@@ -138,9 +168,13 @@ internal class MCPServer
         return new MCPResponse { Id = request.Id, Result = result };
     }
 
+    /// <summary>
+    /// Returns the list of available MCP tools.
+    /// </summary>
     private MCPResponse HandleToolsList(MCPRequest request)
     {
-        var result = fToolkit.GetToolsList();
+        var result = new MCPToolsListResult();
+        result.Tools = fTools.Values.Select(it => it.Tool).ToList();
         return new MCPResponse { Id = request.Id, Result = result };
     }
 
@@ -165,7 +199,8 @@ internal class MCPServer
             string toolName = nameElem.GetString()!;
             p.TryGetProperty("arguments", out var arguments);
 
-            var content = fToolkit.ExecuteTool(toolName, arguments);
+            var content = ExecuteTool(toolName, arguments);
+
             return new MCPResponse {
                 Id = request.Id,
                 Result = new { Content = content, IsError = false }
@@ -179,5 +214,25 @@ internal class MCPServer
                 }
             };
         }
+    }
+
+    /// <summary>
+    /// Execute an MCP tool call by name and arguments.
+    /// </summary>
+    private List<MCPContent> ExecuteTool(string toolName, JsonElement? arguments)
+    {
+        if (fTools.TryGetValue(toolName, out MCPSrvTool internalTool)) {
+            var args = arguments?.ValueKind == JsonValueKind.Object ? arguments.Value : default;
+
+            return internalTool.Handler(args);
+        } else {
+            throw new ArgumentException($"Unknown tool: {toolName}");
+        }
+    }
+
+    internal void RegisterTool(MCPTool tool, MCPToolHandler handler)
+    {
+        var intTool = new MCPSrvTool() { Tool = tool, Handler = handler };
+        fTools.Add(tool.Name, intTool);
     }
 }

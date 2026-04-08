@@ -35,6 +35,13 @@ namespace GKCore.Options
         {
             var srcOptions = source as BackupOptions;
             if (srcOptions == null) return;
+
+            Autosave = srcOptions.Autosave;
+            AutosaveInterval = srcOptions.AutosaveInterval;
+            FileBackup = srcOptions.FileBackup;
+            FileBackupEachRevisionMaxCount = srcOptions.FileBackupEachRevisionMaxCount;
+            ExtendedBackup = srcOptions.ExtendedBackup;
+            ExtendedFolder = srcOptions.ExtendedFolder;
         }
 
         public void ResetDefaults()
