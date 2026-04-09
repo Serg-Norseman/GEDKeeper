@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Text;
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Graphics;
@@ -59,6 +60,11 @@ public sealed class CLIAppHost : AppHost
 
     public static void Startup(string[] args)
     {
+        // Without this, an attempt to save a file with a non-Latin name
+        // resulted in the name appearing in 866 encoding (system default).
+        Console.InputEncoding = Encoding.UTF8;
+        Console.OutputEncoding = Encoding.UTF8;
+
         var appHost = new CLIAppHost();
 
         var container = Container;

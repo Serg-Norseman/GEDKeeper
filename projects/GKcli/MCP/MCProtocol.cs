@@ -25,7 +25,7 @@ internal class MCPRequest
     public JsonElement? Id { get; set; }
 
     [JsonPropertyName("method")]
-    public string? Method { get; set; }
+    public string Method { get; set; }
 
     [JsonPropertyName("params")]
     public JsonElement? Params { get; set; }
@@ -44,11 +44,11 @@ internal class MCPResponse
 
     [JsonPropertyName("result")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public object? Result { get; set; }
+    public object Result { get; set; }
 
     [JsonPropertyName("error")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public MCPError? Error { get; set; }
+    public MCPError Error { get; set; }
 
     public MCPResponse()
     {
@@ -68,7 +68,7 @@ internal class MCPError
     public string Message { get; set; } = "";
 
     [JsonPropertyName("data")]
-    public object? Data { get; set; }
+    public object Data { get; set; }
 
     public static MCPError FromException(int code, Exception ex)
     {
@@ -79,7 +79,7 @@ internal class MCPError
         };
     }
 
-    public static MCPError MethodNotFound(object? id)
+    public static MCPError MethodNotFound()
     {
         return new MCPError {
             Code = -32601,
@@ -87,7 +87,7 @@ internal class MCPError
         };
     }
 
-    public static MCPError InvalidParams(object? id, string message)
+    public static MCPError InvalidParams(string message)
     {
         return new MCPError {
             Code = -32602,
@@ -95,7 +95,7 @@ internal class MCPError
         };
     }
 
-    public static MCPError InternalError(object? id, string message)
+    public static MCPError InternalError(string message)
     {
         return new MCPError {
             Code = -32603,

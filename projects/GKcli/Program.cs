@@ -7,7 +7,6 @@
  */
 
 using System;
-using System.Text;
 using GKcli.Commands;
 using GKcli.MCP;
 using GKCore;
@@ -19,9 +18,7 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        Console.InputEncoding = Encoding.UTF8;
-        Console.OutputEncoding = Encoding.UTF8;
-
+        // Here are some important settings for working in the terminal.
         CLIAppHost.Startup(args);
 
         AppHost.InitSettings();
@@ -54,8 +51,7 @@ internal class Program
     private static void RunInteractiveMode()
     {
         Console.Clear();
-        Console.WriteLine();
-        PromptHelper.WriteMarkupLine("[darkcyan]GEDKeeper CLI[/]");
+        PromptHelper.WriteMarkupLine("\n[darkcyan]GEDKeeper CLI[/]");
         while (true) {
             var selected = CommandController.SelectCommand(CommandCategory.Application, false, CLILangMan.LS(CLS.SelectCommand));
             if (selected == CommandController.CMD_EXIT) break;

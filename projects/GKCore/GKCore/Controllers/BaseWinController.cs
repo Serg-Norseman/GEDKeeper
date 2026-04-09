@@ -99,18 +99,21 @@ namespace GKCore.Controllers
         {
             fNavman.Clear();
             fChangedRecords.Clear();
+
             fContext.Clear();
+            fContext.SetFileName(string.Empty);
+            fContext.Modified = false;
         }
 
         // FIXME: Identify and test the need for this method
         public void CreateNewFile()
         {
             Clear();
-            RefreshLists(false);
-            ClearSummaries();
             fContext.SetFileName(LangMan.LS(LSID.Unknown));
             fContext.Tree.Header.Language = GlobalOptions.Instance.GetCurrentItfLang();
-            fContext.Modified = false;
+
+            RefreshLists(false);
+            ClearSummaries();
         }
 
         public async void NewFile()
