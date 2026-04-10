@@ -243,7 +243,6 @@ namespace GKCore.Utilities
                         else deskType = DesktopType.Gnome;
                     }
                 } catch (Exception) {
-                    Debug.Assert(false);
                 }
             }
 

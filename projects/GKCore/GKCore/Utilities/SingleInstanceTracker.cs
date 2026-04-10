@@ -3,6 +3,8 @@
  * (http://www.codeproject.com/Articles/19682/A-Pure-NET-Single-Instance-Application-Solution)
  */
 
+#if !TERM
+
 // Cancelled forever. Do not use!
 //#define IPC_SUPPORTS
 
@@ -30,10 +32,10 @@ namespace GKCore.Utilities
         private readonly bool fIsFirstInstance;
         private readonly SingleInstanceProxy fProxy;
 
-        #if IPC_SUPPORTS
+#if IPC_SUPPORTS
         private IChannel fIpcChannel;
         private Mutex fSingleInstanceMutex;
-        #endif
+#endif
 
         /// <summary>
         /// Gets a value indicating whether this instance of the application is the first instance.
@@ -69,7 +71,7 @@ namespace GKCore.Utilities
                 // Do not attempt to construct the IPC channel if there is no need for messages
                 if (enforcerRetriever != null)
                 {
-                    #if IPC_SUPPORTS
+#if IPC_SUPPORTS
 
                     fSingleInstanceMutex = new Mutex(true, name, out fIsFirstInstance);
 
@@ -108,7 +110,7 @@ namespace GKCore.Utilities
                         fProxy = (SingleInstanceProxy)Activator.GetObject(typeof(SingleInstanceProxy), proxyUri);
                     }
                     
-                    #else
+#else
 
                     fIsFirstInstance = IpcFake.CreateMutex(name, true);
 
@@ -126,7 +128,7 @@ namespace GKCore.Utilities
                     } else {
                     }
 
-                    #endif
+#endif
                 }
             }
             catch (Exception ex)
@@ -142,7 +144,7 @@ namespace GKCore.Utilities
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
-                #if IPC_SUPPORTS
+#if IPC_SUPPORTS
 
                 if (fSingleInstanceMutex != null) {
                     fSingleInstanceMutex.Close();
@@ -154,12 +156,12 @@ namespace GKCore.Utilities
                     fIpcChannel = null;
                 }
 
-                #else
+#else
 
                 IpcFake.StopServer();
                 IpcFake.ReleaseAllMutexes();
 
-                #endif
+#endif
             }
             base.Dispose(disposing);
         }
@@ -174,7 +176,7 @@ namespace GKCore.Utilities
         /// The first instance might have terminated.</exception>
         public void SendMessageToFirstInstance(object message)
         {
-            #if IPC_SUPPORTS
+#if IPC_SUPPORTS
 
             if (fIpcChannel == null)
                 throw new InvalidOperationException("The object was constructed with the SingleInstanceTracker(string name) constructor overload, or with the SingleInstanceTracker(string name, SingleInstanceEnforcerRetriever enforcerRetriever) constructor overload, with enforcerRetriever set to null, thus you cannot send messages to the first instance.");
@@ -185,7 +187,7 @@ namespace GKCore.Utilities
                 throw new SingleInstancingException("Failed to send message to the first instance of the application. The first instance might have terminated.", ex);
             }
 
-            #else
+#else
 
             try {
                 string[] args = message as string[];
@@ -198,7 +200,9 @@ namespace GKCore.Utilities
                 Logger.WriteError("SingleInstanceTracker.SendMessageToFirstInstance.2()", ex);
             }
 
-            #endif
+#endif
         }
     }
 }
+
+#endif

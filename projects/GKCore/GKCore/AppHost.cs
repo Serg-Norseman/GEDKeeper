@@ -155,6 +155,7 @@ namespace GKCore
             await LoadLanguage(AppHost.Options.InterfaceLang, true);
             SetArgs(args);
 
+#if !TERM
             if (HasFeatureSupport(Feature.Themes)) {
                 ThemeManager.LoadThemes();
                 ApplyTheme(GlobalOptions.Instance.Theme);
@@ -188,6 +189,7 @@ namespace GKCore
             } catch (Exception ex) {
                 Logger.WriteError("AppHost.Init()", ex);
             }
+#endif
         }
 
         /// <summary>
@@ -1478,7 +1480,9 @@ namespace GKCore
         {
             CheckPortable(args);
             Logger.Init(GetLogFilename());
+#if !TERM
             LogSysInfo();
+#endif
         }
 
         public static void CheckPortable(string[] args)

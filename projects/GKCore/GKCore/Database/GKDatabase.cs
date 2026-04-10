@@ -48,9 +48,6 @@ namespace GKCore.Database
                 throw new GKDatabaseException("Database already connected");
 
             string databaseName = GetBaseName();
-
-            Debug.WriteLine("DatabaseName: " + databaseName);
-
             fConnection = new SQLiteConnection(databaseName);
 
             CreateDatabase();

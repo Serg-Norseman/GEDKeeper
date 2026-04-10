@@ -169,6 +169,12 @@ internal class MCPContent
 
     [JsonPropertyName("text")]
     public string Text { get; set; } = "";
+
+
+    public static List<MCPContent> CreateSimpleContent(string text)
+    {
+        return new List<MCPContent> { new MCPContent { Text = text } };
+    }
 }
 
 /// <summary>

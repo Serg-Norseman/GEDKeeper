@@ -8,13 +8,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
+using System.Threading.Tasks;
 using GKCore;
 
 namespace GKcli.MCP;
@@ -33,25 +33,36 @@ internal class MCPSrvTool
 /// </summary>
 internal class MCPServer
 {
+    private readonly CancellationTokenSource fCancellationToken;
     private readonly BaseContext fContext;
     private readonly JsonSerializerOptions fJsonOptions;
     private readonly MCPToolkit fToolkit;
     private readonly Dictionary<string, MCPSrvTool> fTools;
+    private readonly List<MCPTool> fToolsList;
 
     public MCPServer()
     {
-        int pid = Process.GetCurrentProcess().Id;
+        int pid = Environment.ProcessId;
+        fCancellationToken = new CancellationTokenSource();
 
+        // Jan, LM Studio clients terminate the process in such a way
+        // that this handlers is not called.
         AppDomain.CurrentDomain.ProcessExit += (s, e) => {
             Log($"[EXIT] Process {pid} terminated. Code: {Environment.ExitCode}\n");
         };
-
-        using var cts = new CancellationTokenSource();
         Console.CancelKeyPress += (s, e) => {
             e.Cancel = true;
-            cts.Cancel();
+            fCancellationToken.Cancel();
             Log($"[SIGINT] Interrupt signal received for PID: {pid}\n");
         };
+
+        Task.Run(async () => {
+            while (!fCancellationToken.IsCancellationRequested) {
+                Log($"Keep-alive tick process {pid}");
+                await Task.Delay(30000);
+            }
+            Log("Cancelled");
+        });
 
         var utf8NoBom = new UTF8Encoding(false);
         // Important: disable buffering so that messages are sent instantly.
@@ -60,10 +71,10 @@ internal class MCPServer
         Log($"Initializing MCP server ({pid})...");
 
         fContext = new BaseContext(null);
-        Log("BaseContext created successfully");
-
         fTools = new Dictionary<string, MCPSrvTool>();
         fToolkit = new MCPToolkit(fContext, this);
+        // The list is generated in MCPToolkit.RegisterTools().
+        fToolsList = fTools.Values.Select(it => it.Tool).ToList();
 
         fJsonOptions = new JsonSerializerOptions {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -85,17 +96,21 @@ internal class MCPServer
 
         try {
             var stdin = Console.In;
-            while (true) {
-                // If line == null -> MCP client closed the stream.
-                string line = await stdin.ReadLineAsync();
-                if (line == null) break;
-
+            while (!fCancellationToken.IsCancellationRequested) {
                 try {
-                    line = line.Trim();
+                    // If line == null -> MCP client closed the stream.
+                    string line = await stdin.ReadLineAsync();
                     if (string.IsNullOrEmpty(line)) continue;
 
                     Log($"Received: {line}");
                     var request = JsonSerializer.Deserialize<MCPRequest>(line, fJsonOptions);
+
+                    if (request == null) {
+                        SendResponse(new MCPResponse {
+                            Error = MCPError.InvalidParams("Invalid request")
+                        });
+                        continue;
+                    }
 
                     if (IsNotificationRequest(request)) {
                         // If the MCP-Client sends a notification, it must not be responded to,
@@ -103,24 +118,22 @@ internal class MCPServer
                         continue;
                     }
 
-                    var response = ProcessRequest(request);
-                    SendResponse(response, false);
+                    ProcessRequest(request);
                 } catch (Exception ex) {
                     Log($"Error processing request: {ex.Message}");
-                    var errorResponse = new MCPResponse {
+                    SendResponse(new MCPResponse {
                         Error = MCPError.InternalError(ex.Message)
-                    };
-                    SendResponse(errorResponse, true);
+                    });
                 }
             }
         } catch (Exception ex) {
             Log($"Run().Exception: {ex.Message}");
+        } finally {
+            // Restore backup options.
+            AppHost.Instance.SetRegularBackup(prevBackups);
+
+            Log("MCP Server stopped");
         }
-
-        // Restore backup options.
-        AppHost.Instance.SetRegularBackup(prevBackups);
-
-        Log("MCP Server stopped");
     }
 
     private static bool IsNotificationRequest(MCPRequest request)
@@ -130,23 +143,21 @@ internal class MCPServer
             || request.Id.Value.ValueKind == JsonValueKind.Null || request.Id.Value.ValueKind == JsonValueKind.Undefined;
     }
 
-    private async void SendResponse(MCPResponse response, bool isError)
+    private async void SendResponse(MCPResponse response)
     {
         var json = JsonSerializer.Serialize(response, fJsonOptions);
-
-#if RELEASE
-        if (!isError) {
-            string jsonStr = json;
-            if (jsonStr.Length > 1000) {
-                jsonStr = jsonStr.Substring(0, 1000);
-            }
-            Log($"Sending: {jsonStr}");
-        }
-#endif
 
         // It definitely doesn't work with `Content-Length` and `WriteAsync()`.
         await Console.Out.WriteLineAsync(json);
         await Console.Out.FlushAsync();
+
+#if DEBUG
+        /*string jsonStr = json;
+        if (jsonStr.Length > 200) {
+            jsonStr = jsonStr.Substring(0, 200);
+        }
+        Log($"Sending: {jsonStr}");*/
+#endif
     }
 
     public static void Log(string message)
@@ -158,14 +169,8 @@ internal class MCPServer
         //Console.Error.Flush();
     }
 
-    private MCPResponse ProcessRequest(MCPRequest request)
+    private void ProcessRequest(MCPRequest request)
     {
-        if (request == null) {
-            return new MCPResponse {
-                Error = MCPError.InvalidParams("Invalid request")
-            };
-        }
-
         var response = request.Method switch {
             "initialize" => HandleInitialize(request),
             "tools/list" => HandleToolsList(request),
@@ -175,8 +180,7 @@ internal class MCPServer
                 Error = MCPError.MethodNotFound()
             }
         };
-
-        return response;
+        SendResponse(response);
     }
 
     private MCPResponse HandleInitialize(MCPRequest request)
@@ -186,7 +190,7 @@ internal class MCPServer
         // during the initialization process between the client and the server!
 
         var result = new MCPInitializeResult {
-            ProtocolVersion = "2024-11-05",
+            ProtocolVersion = "2025-06-18", //"2024-11-05",
             Capabilities = new MCPCapabilities {
                 Tools = new MCPToolsCapability { ListChanged = false }
             },
@@ -204,8 +208,10 @@ internal class MCPServer
     /// </summary>
     private MCPResponse HandleToolsList(MCPRequest request)
     {
+        // Some clients (like Jan) re-request the list of tools very frequently,
+        // so it's better to have a cached list in advance.
         var result = new MCPToolsListResult();
-        result.Tools = fTools.Values.Select(it => it.Tool).ToList();
+        result.Tools = fToolsList;
         return new MCPResponse { Id = request.Id, Result = result };
     }
 

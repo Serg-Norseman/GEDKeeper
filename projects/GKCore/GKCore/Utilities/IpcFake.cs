@@ -6,6 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+#if !TERM
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -554,3 +556,5 @@ namespace GKCore.Utilities
         #endregion
     }
 }
+
+#endif

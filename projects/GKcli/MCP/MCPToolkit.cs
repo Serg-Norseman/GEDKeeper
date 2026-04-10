@@ -85,7 +85,7 @@ internal class MCPToolkit
 
         server.RegisterTool(new MCPTool {
             Name = "file_search",
-            Description = "Find all GEDCOM files",
+            Description = "Find all GEDCOM files on disk",
             InputSchema = MCPToolInputSchema.Empty
         }, ToolFileSearch);
 
@@ -95,12 +95,32 @@ internal class MCPToolkit
             InputSchema = MCPToolInputSchema.Empty
         }, ToolFileValidate);
 
+        // Records common
+
+        server.RegisterTool(new MCPTool {
+            Name = "record_search",
+            Description = "Search for any records by name/title using fuzzy matching. Available record types: Individual, Family, Note, Source, Repository, Multimedia, Group, Task, Research, Communication, Location.",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["record_type"] = new MCPToolProperty { Type = "string", Description = "Record type (e.g., 'Individual', 'Family', 'Note', 'Source', 'Repository', 'Multimedia', 'Group', 'Task', 'Research', 'Communication', 'Location')" },
+                    ["search_text"] = new MCPToolProperty { Type = "string", Description = "Text to search for (name, title, etc.)" },
+                    ["threshold"] = new MCPToolProperty { Type = "number", Description = "Fuzzy match threshold (0.0-1.0, default: 0.15). Lower = stricter match." }
+                },
+                Required = new List<string> { "record_type", "search_text" }
+            }
+        }, ToolRecordSearch);
+
         // Individuals
 
         server.RegisterTool(new MCPTool {
             Name = "individual_list",
-            Description = "List all individuals in the database",
-            InputSchema = MCPToolInputSchema.Empty
+            Description = "List all individuals in the database with pagination support (20 items per page)",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" }
+                },
+                Required = new List<string> { }
+            }
         }, ToolIndividualList);
 
         server.RegisterTool(new MCPTool {
@@ -141,8 +161,13 @@ internal class MCPToolkit
 
         server.RegisterTool(new MCPTool {
             Name = "family_list",
-            Description = "List all families in the database",
-            InputSchema = MCPToolInputSchema.Empty
+            Description = "List all families in the database with pagination support (20 items per page)",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" }
+                },
+                Required = new List<string> { }
+            }
         }, ToolFamilyList);
 
         server.RegisterTool(new MCPTool {
@@ -175,7 +200,7 @@ internal class MCPToolkit
             Description = "List all notes in the database with pagination support (20 items per page)",
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
-                    ["offset"] = new MCPToolProperty { Type = "integer", Description = "Starting index (0-based, default: 0)" }
+                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" }
                 },
                 Required = new List<string> { }
             }
@@ -382,7 +407,7 @@ internal class MCPToolkit
     {
         fContext.Clear();
 
-        return CreateSimpleContent($"Database created. Records: {fContext.Tree.RecordsCount}.");
+        return MCPContent.CreateSimpleContent($"Database created. Records: {fContext.Tree.RecordsCount}.");
     }
 
     private List<MCPContent> ToolFileLoad(JsonElement args)
@@ -393,7 +418,7 @@ internal class MCPToolkit
         fContext.FileLoad(path, false).GetAwaiter().GetResult();
         sw.Stop();
 
-        return CreateSimpleContent($"Database loaded: {path}. Records: {fContext.Tree.RecordsCount}. Time: {sw.Elapsed.TotalSeconds:F3}s.");
+        return MCPContent.CreateSimpleContent($"Database loaded: {path}. Records: {fContext.Tree.RecordsCount}. Time: {sw.Elapsed.TotalSeconds:F3}s.");
     }
 
     private List<MCPContent> ToolFileSave(JsonElement args)
@@ -404,7 +429,7 @@ internal class MCPToolkit
         fContext.FileSave(path).GetAwaiter().GetResult();
         sw.Stop();
 
-        return CreateSimpleContent($"Database saved: {path}. Time: {sw.Elapsed.TotalSeconds:F3}s.");
+        return MCPContent.CreateSimpleContent($"Database saved: {path}. Time: {sw.Elapsed.TotalSeconds:F3}s.");
     }
 
     private List<MCPContent> ToolFileProps(JsonElement args)
@@ -424,7 +449,7 @@ internal class MCPToolkit
             lines.Add($"  {GKData.RecordTypes[i].Name}: {stats[i]}");
         }
 
-        return CreateSimpleContent(string.Join("\n", lines));
+        return MCPContent.CreateSimpleContent(string.Join("\n", lines));
     }
 
     private List<MCPContent> ToolFileRecent(JsonElement args)
@@ -444,7 +469,7 @@ internal class MCPToolkit
     {
         var globOpts = GlobalOptions.Instance;
         if (globOpts.MRUFiles.Count == 0)
-            return CreateSimpleContent("No recently opened files available.");
+            return MCPContent.CreateSimpleContent("No recently opened files available.");
 
         var mruFile = globOpts.MRUFiles[0];
         string path = mruFile.FileName;
@@ -455,7 +480,7 @@ internal class MCPToolkit
         fContext.FileLoad(path, false).GetAwaiter().GetResult();
         sw.Stop();
 
-        return CreateSimpleContent($"Database reloaded: {path.Replace('\\', '/')}. Records: {fContext.Tree.RecordsCount}. Time: {sw.Elapsed.TotalSeconds:F3}s.");
+        return MCPContent.CreateSimpleContent($"Database reloaded: {path.Replace('\\', '/')}. Records: {fContext.Tree.RecordsCount}. Time: {sw.Elapsed.TotalSeconds:F3}s.");
     }
 
     private List<MCPContent> ToolFileSearch(JsonElement args)
@@ -476,7 +501,7 @@ internal class MCPToolkit
         int recordsCount = fContext.Tree.RecordsCount;
 
         if (isUnknown && recordsCount == 0) {
-            return CreateSimpleContent("Database state: INVALID (unknown, no records). The file is new, empty, or corrupted.");
+            return MCPContent.CreateSimpleContent("Database state: INVALID (unknown, no records). The file is new, empty, or corrupted.");
         }
 
         var lines = new List<string> {
@@ -485,7 +510,67 @@ internal class MCPToolkit
             $"  Records: {recordsCount}"
         };
 
-        return CreateSimpleContent(string.Join("\n", lines));
+        return MCPContent.CreateSimpleContent(string.Join("\n", lines));
+    }
+
+    #endregion
+
+    #region Record Common
+
+    private static readonly Dictionary<string, GDMRecordType> RecordTypeMap = new Dictionary<string, GDMRecordType>(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Individual"] = GDMRecordType.rtIndividual,
+        ["Family"] = GDMRecordType.rtFamily,
+        ["Note"] = GDMRecordType.rtNote,
+        ["Source"] = GDMRecordType.rtSource,
+        ["Repository"] = GDMRecordType.rtRepository,
+        ["Multimedia"] = GDMRecordType.rtMultimedia,
+        ["Group"] = GDMRecordType.rtGroup,
+        ["Task"] = GDMRecordType.rtTask,
+        ["Research"] = GDMRecordType.rtResearch,
+        ["Communication"] = GDMRecordType.rtCommunication,
+        ["Location"] = GDMRecordType.rtLocation
+    };
+
+    private List<MCPContent> ToolRecordSearch(JsonElement args)
+    {
+        string recordTypeStr = GetRequiredArgument(args, "record_type");
+        string searchText = GetRequiredArgument(args, "search_text");
+        double threshold = GetDoubleArgument(args, "threshold", 0.15);
+
+        if (!RecordTypeMap.TryGetValue(recordTypeStr, out GDMRecordType recordType))
+        {
+            string availableTypes = string.Join(", ", RecordTypeMap.Keys);
+            return MCPContent.CreateSimpleContent($"Unknown record type: '{recordTypeStr}'. Available types: {availableTypes}");
+        }
+
+        var recList = fContext.Tree.GetRecords(recordType);
+        if (recList.Count == 0)
+            return MCPContent.CreateSimpleContent($"No {recordTypeStr.ToLower()} records in database.");
+
+        var matches = new List<string>();
+        foreach (var rec in recList)
+        {
+            string recordName = GKUtils.GetRecordName(fContext.Tree, rec, false);
+            int diff = SysUtils.GetDiffIndex(searchText, recordName);
+            double matchThreshold = recordName.Length * threshold;
+
+            if (diff <= matchThreshold)
+            {
+                matches.Add($"|{rec.XRef}|{recordName}|{diff}|");
+            }
+        }
+
+        if (matches.Count == 0)
+            return MCPContent.CreateSimpleContent($"No matches found for '{searchText}' in {recordTypeStr.ToLower()} records.");
+
+        var lines = new List<string> {
+            $"Search results for '{searchText}' in {recordTypeStr} records ({matches.Count} matches):",
+            "| XRef | Name | Diff |",
+            "|---|---|---|"
+        };
+        lines.AddRange(matches);
+        return MCPContent.CreateSimpleContent(string.Join("\n", lines));
     }
 
     #endregion
@@ -495,24 +580,16 @@ internal class MCPToolkit
     private List<MCPContent> ToolIndividualList(JsonElement args)
     {
         var recList = fContext.Tree.GetRecords(GDMRecordType.rtIndividual);
-        if (recList.Count == 0)
-            return CreateSimpleContent("No individuals in database.");
-
-        var rows = new List<string> {
-            $"Individuals ({recList.Count}):",
-            "| XRef | Name | Sex |",
-            "|---|---|---|"
-        };
-        foreach (var rec in recList) {
-            var iRec = (GDMIndividualRecord)rec;
-            string indiName = GKUtils.GetRecordName(fContext.Tree, rec, false);
-            string sex = GKData.SexData[(int)iRec.Sex].Sign;
-            rows.Add($"|{rec.XRef}|{indiName}|{sex}|");
-        }
-
-        MCPServer.Log($"Successfully generated response for {rows.Count} rows");
-
-        return CreateSimpleContent(string.Join("\n", rows));
+        return PageableTable("individuals", args, recList.Count, (int index) => {
+            if (index == -1) {
+                return "| XRef | Name | Sex |\n|---|---|---|";
+            } else {
+                var iRec = (GDMIndividualRecord)recList[index];
+                string indiName = GKUtils.GetRecordName(fContext.Tree, iRec, false);
+                string sex = GKData.SexData[(int)iRec.Sex].Sign;
+                return $"|{iRec.XRef}|{indiName}|{sex}|";
+            }
+        });
     }
 
     private List<MCPContent> ToolIndividualSearch(JsonElement args)
@@ -521,7 +598,7 @@ internal class MCPToolkit
 
         var recList = fContext.Tree.GetRecords(GDMRecordType.rtIndividual);
         if (recList.Count == 0)
-            return CreateSimpleContent("No individuals in database.");
+            return MCPContent.CreateSimpleContent("No individuals in database.");
 
         var matches = new List<string>();
         foreach (var rec in recList) {
@@ -537,7 +614,7 @@ internal class MCPToolkit
         }
 
         if (matches.Count == 0)
-            return CreateSimpleContent($"No matches found for: {searchName}");
+            return MCPContent.CreateSimpleContent($"No matches found for: {searchName}");
 
         var lines = new List<string> {
             $"Search results for '{searchName}' ({matches.Count}):",
@@ -545,7 +622,7 @@ internal class MCPToolkit
             "|---|---|---|---|"
         };
         lines.AddRange(matches);
-        return CreateSimpleContent(string.Join("\n", lines));
+        return MCPContent.CreateSimpleContent(string.Join("\n", lines));
     }
 
     private List<MCPContent> ToolIndividualAdd(JsonElement args)
@@ -563,7 +640,7 @@ internal class MCPToolkit
         fContext.SetModified();
 
         string resultName = GKUtils.GetNameString(indiRec, false);
-        return CreateSimpleContent($"Individual added: {resultName}");
+        return MCPContent.CreateSimpleContent($"Individual added: {resultName}");
     }
 
     private List<MCPContent> ToolIndividualDelete(JsonElement args)
@@ -572,11 +649,11 @@ internal class MCPToolkit
 
         var indiRec = fContext.Tree.FindXRef<GDMIndividualRecord>(xref);
         if (indiRec == null)
-            return CreateSimpleContent($"Individual not found with XRef: {xref}");
+            return MCPContent.CreateSimpleContent($"Individual not found with XRef: {xref}");
 
         fContext.DeleteRecord(indiRec);
 
-        return CreateSimpleContent($"Individual deleted: {xref}");
+        return MCPContent.CreateSimpleContent($"Individual deleted: {xref}");
     }
 
     #endregion
@@ -586,41 +663,18 @@ internal class MCPToolkit
     private List<MCPContent> ToolFamilyList(JsonElement args)
     {
         var recList = fContext.Tree.GetRecords(GDMRecordType.rtFamily);
-        if (recList.Count == 0)
-            return CreateSimpleContent("No families in database.");
-
-        int offset = GetIntArgument(args, "offset", 0);
-        if (offset < 0) offset = 0;
-        if (offset >= recList.Count) offset = recList.Count - 1;
-
-        int endIndex = Math.Min(offset + pageSize, recList.Count);
-        int actualCount = endIndex - offset;
-
-        var result = new StringBuilder();
-        result.AppendLine($"Families ({offset + 1}-{endIndex} of {recList.Count}):");
-        result.AppendLine("| XRef | Husband | Wife |");
-        result.AppendLine("|---|---|---|");
-
-        for (int i = offset; i < endIndex; i++) {
-            var famRec = (GDMFamilyRecord)recList[i];
-
-            var husbandRec = fContext.Tree.GetPtrValue(famRec.Husband);
-            string husbandName = husbandRec == null ? "-" : GKUtils.GetRecordName(fContext.Tree, husbandRec, false);
-
-            var wifeRec = fContext.Tree.GetPtrValue(famRec.Wife);
-            string wifeName = wifeRec == null ? "-" : GKUtils.GetRecordName(fContext.Tree, wifeRec, false);
-
-            result.AppendLine($"|{famRec.XRef}|{husbandName}|{wifeName}|");
-        }
-
-        if (endIndex < recList.Count) {
-            result.AppendLine("");
-            result.AppendLine($"_Next page: use parameter offset={endIndex}_");
-        }
-
-        MCPServer.Log($"Successfully generated response for {actualCount} rows (offset {offset})");
-
-        return CreateSimpleContent(result.ToString());
+        return PageableTable("families", args, recList.Count, (int index) => {
+            if (index == -1) {
+                return "| XRef | Husband | Wife |\n|---|---|---|";
+            } else {
+                var famRec = (GDMFamilyRecord)recList[index];
+                var husbandRec = fContext.Tree.GetPtrValue(famRec.Husband);
+                string husbandName = husbandRec == null ? "-" : GKUtils.GetRecordName(fContext.Tree, husbandRec, false);
+                var wifeRec = fContext.Tree.GetPtrValue(famRec.Wife);
+                string wifeName = wifeRec == null ? "-" : GKUtils.GetRecordName(fContext.Tree, wifeRec, false);
+                return $"|{famRec.XRef}|{husbandName}|{wifeName}|";
+            }
+        });
     }
 
     private List<MCPContent> ToolFamilyAdd(JsonElement args)
@@ -631,12 +685,12 @@ internal class MCPToolkit
         // Find the husband by XRef
         var husbandRec = fContext.Tree.FindXRef<GDMIndividualRecord>(husbandXRef);
         if (husbandRec == null)
-            return CreateSimpleContent($"Husband not found with XRef: {husbandXRef}");
+            return MCPContent.CreateSimpleContent($"Husband not found with XRef: {husbandXRef}");
 
         // Find the wife by XRef
         var wifeRec = fContext.Tree.FindXRef<GDMIndividualRecord>(wifeXRef);
         if (wifeRec == null)
-            return CreateSimpleContent($"Wife not found with XRef: {wifeXRef}");
+            return MCPContent.CreateSimpleContent($"Wife not found with XRef: {wifeXRef}");
 
         // Create a new family record
         var familyRec = fContext.Tree.CreateFamily();
@@ -644,7 +698,7 @@ internal class MCPToolkit
         familyRec.AddSpouse(wifeRec);
         fContext.SetModified();
 
-        return CreateSimpleContent($"Family added: husband {husbandXRef}, wife {wifeXRef}");
+        return MCPContent.CreateSimpleContent($"Family added: husband {husbandXRef}, wife {wifeXRef}");
     }
 
     private List<MCPContent> ToolFamilyDelete(JsonElement args)
@@ -653,11 +707,11 @@ internal class MCPToolkit
 
         var familyRec = fContext.Tree.FindXRef<GDMFamilyRecord>(xref);
         if (familyRec == null)
-            return CreateSimpleContent($"Family not found with XRef: {xref}");
+            return MCPContent.CreateSimpleContent($"Family not found with XRef: {xref}");
 
         fContext.DeleteRecord(familyRec);
 
-        return CreateSimpleContent($"Family deleted: {xref}");
+        return MCPContent.CreateSimpleContent($"Family deleted: {xref}");
     }
 
     #endregion
@@ -667,37 +721,17 @@ internal class MCPToolkit
     private List<MCPContent> ToolNoteList(JsonElement args)
     {
         var recList = fContext.Tree.GetRecords(GDMRecordType.rtNote);
-        if (recList.Count == 0)
-            return CreateSimpleContent("No notes in database.");
-
-        int offset = GetIntArgument(args, "offset", 0);
-        if (offset < 0) offset = 0;
-        if (offset >= recList.Count) offset = recList.Count - 1;
-
-        int endIndex = Math.Min(offset + pageSize, recList.Count);
-        int actualCount = endIndex - offset;
-
-        var result = new StringBuilder();
-        result.AppendLine($"Notes ({offset + 1}-{endIndex} of {recList.Count}):");
-        result.AppendLine("| XRef | Text preview |");
-        result.AppendLine("|---|---|");
-
-        for (int i = offset; i < endIndex; i++) {
-            var rec = (GDMNoteRecord)recList[i];
-            string preview = rec.Lines.Text;
-            if (preview != null && preview.Length > 80)
-                preview = preview.Substring(0, 80) + "...";
-            result.AppendLine($"|{rec.XRef}|{preview}|");
-        }
-
-        if (endIndex < recList.Count) {
-            result.AppendLine("");
-            result.AppendLine($"_Next page: use parameter offset={endIndex}_");
-        }
-
-        MCPServer.Log($"Successfully generated response for {actualCount} rows (offset {offset})");
-
-        return CreateSimpleContent(result.ToString());
+        return PageableTable("notes", args, recList.Count, (int index) => {
+            if (index == -1) {
+                return "| XRef | Text preview |\n|---|---|";
+            } else {
+                var rec = (GDMNoteRecord)recList[index];
+                string preview = rec.Lines.Text;
+                if (preview != null && preview.Length > 80)
+                    preview = preview.Substring(0, 80) + "...";
+                return $"|{rec.XRef}|{preview}|";
+            }
+        });
     }
 
     private List<MCPContent> ToolNoteAdd(JsonElement args)
@@ -708,7 +742,7 @@ internal class MCPToolkit
         noteRec.Lines.Text = text;
         fContext.SetModified();
 
-        return CreateSimpleContent($"Note added: {text}");
+        return MCPContent.CreateSimpleContent($"Note added: {text}");
     }
 
     private List<MCPContent> ToolNoteDelete(JsonElement args)
@@ -717,11 +751,11 @@ internal class MCPToolkit
 
         var noteRec = fContext.Tree.FindXRef<GDMNoteRecord>(xref);
         if (noteRec == null)
-            return CreateSimpleContent($"Note not found with XRef: {xref}");
+            return MCPContent.CreateSimpleContent($"Note not found with XRef: {xref}");
 
         fContext.DeleteRecord(noteRec);
 
-        return CreateSimpleContent($"Note deleted: {xref}");
+        return MCPContent.CreateSimpleContent($"Note deleted: {xref}");
     }
 
     #endregion
@@ -731,37 +765,15 @@ internal class MCPToolkit
     private List<MCPContent> ToolSourceList(JsonElement args)
     {
         var recList = fContext.Tree.GetRecords(GDMRecordType.rtSource);
-        if (recList.Count == 0)
-            return CreateSimpleContent("No sources in database.");
-
-        int page = GetIntArgument(args, "page", 1);
-        if (page < 1) page = 1;
-
-        int totalPages = (recList.Count + pageSize - 1) / pageSize;
-        if (page > totalPages) page = totalPages;
-
-        int startIndex = (page - 1) * pageSize;
-        int endIndex = Math.Min(startIndex + pageSize, recList.Count);
-
-        var rows = new List<string> {
-            $"Sources (page {page}/{totalPages}, {startIndex + 1}-{endIndex} of {recList.Count}):",
-            "| XRef | Short title | Source title |",
-            "|---|---|---|"
-        };
-        for (int i = startIndex; i < endIndex; i++) {
-            var rec = (GDMSourceRecord)recList[i];
-            string sourceTitle = rec.Title.Lines.Text;
-            rows.Add($"|{rec.XRef}|{rec.ShortTitle}|{sourceTitle}|");
-        }
-
-        if (page < totalPages) {
-            rows.Add("");
-            rows.Add($"_Next page: use parameter page={page + 1}_");
-        }
-
-        MCPServer.Log($"Successfully generated response for {rows.Count} rows (page {page}/{totalPages})");
-
-        return CreateSimpleContent(string.Join("\n", rows));
+        return PageableTable("sources", args, recList.Count, (int index) => {
+            if (index == -1) {
+                return "| XRef | Short title | Source title |\n|---|---|---|";
+            } else {
+                var rec = (GDMSourceRecord)recList[index];
+                string sourceTitle = rec.Title.Lines.Text;
+                return $"|{rec.XRef}|{rec.ShortTitle}|{sourceTitle}|";
+            }
+        });
     }
 
     private List<MCPContent> ToolSourceAdd(JsonElement args)
@@ -772,7 +784,7 @@ internal class MCPToolkit
         sourceRec.Title.Lines.Text = title;
         fContext.SetModified();
 
-        return CreateSimpleContent($"Source added: {title}");
+        return MCPContent.CreateSimpleContent($"Source added: {title}");
     }
 
     private List<MCPContent> ToolSourceDelete(JsonElement args)
@@ -781,11 +793,11 @@ internal class MCPToolkit
 
         var sourceRec = fContext.Tree.FindXRef<GDMSourceRecord>(xref);
         if (sourceRec == null)
-            return CreateSimpleContent($"Source not found with XRef: {xref}");
+            return MCPContent.CreateSimpleContent($"Source not found with XRef: {xref}");
 
         fContext.DeleteRecord(sourceRec);
 
-        return CreateSimpleContent($"Source deleted: {xref}");
+        return MCPContent.CreateSimpleContent($"Source deleted: {xref}");
     }
 
     #endregion
@@ -796,7 +808,7 @@ internal class MCPToolkit
     {
         var recList = fContext.Tree.GetRecords(GDMRecordType.rtRepository);
         if (recList.Count == 0)
-            return CreateSimpleContent("No repositories in database.");
+            return MCPContent.CreateSimpleContent("No repositories in database.");
 
         var rows = new List<string> {
             $"Repositories ({recList.Count}):",
@@ -810,7 +822,7 @@ internal class MCPToolkit
 
         MCPServer.Log($"Successfully generated response for {rows.Count} rows");
 
-        return CreateSimpleContent(string.Join("\n", rows));
+        return MCPContent.CreateSimpleContent(string.Join("\n", rows));
     }
 
     private List<MCPContent> ToolRepositoryAdd(JsonElement args)
@@ -821,7 +833,7 @@ internal class MCPToolkit
         repoRec.RepositoryName = name;
         fContext.SetModified();
 
-        return CreateSimpleContent($"Repository added: {name}");
+        return MCPContent.CreateSimpleContent($"Repository added: {name}");
     }
 
     private List<MCPContent> ToolRepositoryDelete(JsonElement args)
@@ -830,11 +842,11 @@ internal class MCPToolkit
 
         var repoRec = fContext.Tree.FindXRef<GDMRepositoryRecord>(xref);
         if (repoRec == null)
-            return CreateSimpleContent($"Repository not found with XRef: {xref}");
+            return MCPContent.CreateSimpleContent($"Repository not found with XRef: {xref}");
 
         fContext.DeleteRecord(repoRec);
 
-        return CreateSimpleContent($"Repository deleted: {xref}");
+        return MCPContent.CreateSimpleContent($"Repository deleted: {xref}");
     }
 
     #endregion
@@ -844,42 +856,20 @@ internal class MCPToolkit
     private List<MCPContent> ToolMultimediaList(JsonElement args)
     {
         var recList = fContext.Tree.GetRecords(GDMRecordType.rtMultimedia);
-        if (recList.Count == 0)
-            return CreateSimpleContent("No multimedia records in database.");
+        return PageableTable("multimedia", args, recList.Count, (int index) => {
+            if (index == -1) {
+                return "| XRef | Title | Type | File |\n|---|---|---|---|";
+            } else {
+                var rec = (GDMMultimediaRecord)recList[index];
+                var fileRef = rec.FileReferences.Count > 0 ? rec.FileReferences[0] : null;
+                if (fileRef == null) return string.Empty;
 
-        int page = GetIntArgument(args, "page", 1);
-        if (page < 1) page = 1;
-
-        int totalPages = (recList.Count + pageSize - 1) / pageSize;
-        if (page > totalPages) page = totalPages;
-
-        int startIndex = (page - 1) * pageSize;
-        int endIndex = Math.Min(startIndex + pageSize, recList.Count);
-
-        var rows = new List<string> {
-            $"Multimedia (page {page}/{totalPages}, {startIndex + 1}-{endIndex} of {recList.Count}):",
-            "| XRef | Title | Type | File |",
-            "|---|---|---|---|"
-        };
-        for (int i = startIndex; i < endIndex; i++) {
-            var rec = (GDMMultimediaRecord)recList[i];
-            var fileRef = rec.FileReferences.Count > 0 ? rec.FileReferences[0] : null;
-            if (fileRef == null) continue;
-
-            string title = fileRef.Title;
-            string mediaType = LangMan.LS(GKData.MediaTypes[(int)fileRef.MediaType]);
-            string file = fileRef.StringValue;
-            rows.Add($"|{rec.XRef}|{title}|{mediaType}|{file}|");
-        }
-
-        if (page < totalPages) {
-            rows.Add("");
-            rows.Add($"_Next page: use parameter page={page + 1}_");
-        }
-
-        MCPServer.Log($"Successfully generated response for {rows.Count} rows (page {page}/{totalPages})");
-
-        return CreateSimpleContent(string.Join("\n", rows));
+                string title = fileRef.Title;
+                string mediaType = LangMan.LS(GKData.MediaTypes[(int)fileRef.MediaType]);
+                string file = fileRef.StringValue;
+                return $"|{rec.XRef}|{title}|{mediaType}|{file}|";
+            }
+        });
     }
 
     #endregion
@@ -890,7 +880,7 @@ internal class MCPToolkit
     {
         var recList = fContext.Tree.GetRecords(GDMRecordType.rtGroup);
         if (recList.Count == 0)
-            return CreateSimpleContent("No groups in database.");
+            return MCPContent.CreateSimpleContent("No groups in database.");
 
         var rows = new List<string> {
             $"Groups ({recList.Count}):",
@@ -905,7 +895,7 @@ internal class MCPToolkit
 
         MCPServer.Log($"Successfully generated response for {rows.Count} rows");
 
-        return CreateSimpleContent(string.Join("\n", rows));
+        return MCPContent.CreateSimpleContent(string.Join("\n", rows));
     }
 
     private List<MCPContent> ToolGroupAdd(JsonElement args)
@@ -916,7 +906,7 @@ internal class MCPToolkit
         groupRec.GroupName = name;
         fContext.SetModified();
 
-        return CreateSimpleContent($"Group added: {name}");
+        return MCPContent.CreateSimpleContent($"Group added: {name}");
     }
 
     private List<MCPContent> ToolGroupAddMember(JsonElement args)
@@ -936,22 +926,22 @@ internal class MCPToolkit
         }
 
         if (targetGroup == null)
-            return CreateSimpleContent($"Group not found: {groupName}");
+            return MCPContent.CreateSimpleContent($"Group not found: {groupName}");
 
         // Find the individual by XRef
         var indiRec = fContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)
-            return CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
+            return MCPContent.CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
 
         // Check if already a member
         if (targetGroup.IndexOfMember(indiRec) >= 0)
-            return CreateSimpleContent($"Individual {individualXRef} is already a member of group '{groupName}'.");
+            return MCPContent.CreateSimpleContent($"Individual {individualXRef} is already a member of group '{groupName}'.");
 
         targetGroup.AddMember(indiRec);
         fContext.SetModified();
 
         string indiName = GKUtils.GetNameString(indiRec, false);
-        return CreateSimpleContent($"Individual added to group '{groupName}': {indiName} ({individualXRef})");
+        return MCPContent.CreateSimpleContent($"Individual added to group '{groupName}': {indiName} ({individualXRef})");
     }
 
     private List<MCPContent> ToolGroupDelete(JsonElement args)
@@ -960,11 +950,11 @@ internal class MCPToolkit
 
         var groupRec = fContext.Tree.FindXRef<GDMGroupRecord>(xref);
         if (groupRec == null)
-            return CreateSimpleContent($"Group not found with XRef: {xref}");
+            return MCPContent.CreateSimpleContent($"Group not found with XRef: {xref}");
 
         fContext.DeleteRecord(groupRec);
 
-        return CreateSimpleContent($"Group deleted: {xref}");
+        return MCPContent.CreateSimpleContent($"Group deleted: {xref}");
     }
 
     #endregion
@@ -974,40 +964,18 @@ internal class MCPToolkit
     private List<MCPContent> ToolTaskList(JsonElement args)
     {
         var recList = fContext.Tree.GetRecords(GDMRecordType.rtTask);
-        if (recList.Count == 0)
-            return CreateSimpleContent("No tasks in database.");
-
-        int page = GetIntArgument(args, "page", 1);
-        if (page < 1) page = 1;
-
-        int totalPages = (recList.Count + pageSize - 1) / pageSize;
-        if (page > totalPages) page = totalPages;
-
-        int startIndex = (page - 1) * pageSize;
-        int endIndex = Math.Min(startIndex + pageSize, recList.Count);
-
-        var rows = new List<string> {
-            $"Tasks (page {page}/{totalPages}, {startIndex + 1}-{endIndex} of {recList.Count}):",
-            "| XRef | Goal | Priority | Start Date | Stop Date |",
-            "|---|---|---|---|---|"
-        };
-        for (int i = startIndex; i < endIndex; i++) {
-            var rec = (GDMTaskRecord)recList[i];
-            string goal = GKUtils.GetTaskGoalStr(fContext.Tree, rec);
-            string priority = LangMan.LS(GKData.PriorityNames[(int)rec.Priority]);
-            string startDate = GetDateValue(rec.StartDate);
-            string stopDate = GetDateValue(rec.StopDate);
-            rows.Add($"|{rec.XRef}|{goal}|{priority}|{startDate}|{stopDate}|");
-        }
-
-        if (page < totalPages) {
-            rows.Add("");
-            rows.Add($"_Next page: use parameter page={page + 1}_");
-        }
-
-        MCPServer.Log($"Successfully generated response for {rows.Count} rows (page {page}/{totalPages})");
-
-        return CreateSimpleContent(string.Join("\n", rows));
+        return PageableTable("tasks", args, recList.Count, (int index) => {
+            if (index == -1) {
+                return "| XRef | Goal | Priority | Start Date | Stop Date |\n|---|---|---|---|---|";
+            } else {
+                var rec = (GDMTaskRecord)recList[index];
+                string goal = GKUtils.GetTaskGoalStr(fContext.Tree, rec);
+                string priority = LangMan.LS(GKData.PriorityNames[(int)rec.Priority]);
+                string startDate = GetDateValue(rec.StartDate);
+                string stopDate = GetDateValue(rec.StopDate);
+                return $"|{rec.XRef}|{goal}|{priority}|{startDate}|{stopDate}|";
+            }
+        });
     }
 
     #endregion
@@ -1017,42 +985,20 @@ internal class MCPToolkit
     private List<MCPContent> ToolResearchList(JsonElement args)
     {
         var recList = fContext.Tree.GetRecords(GDMRecordType.rtResearch);
-        if (recList.Count == 0)
-            return CreateSimpleContent("No researches in database.");
-
-        int page = GetIntArgument(args, "page", 1);
-        if (page < 1) page = 1;
-
-        int totalPages = (recList.Count + pageSize - 1) / pageSize;
-        if (page > totalPages) page = totalPages;
-
-        int startIndex = (page - 1) * pageSize;
-        int endIndex = Math.Min(startIndex + pageSize, recList.Count);
-
-        var rows = new List<string> {
-            $"Researches (page {page}/{totalPages}, {startIndex + 1}-{endIndex} of {recList.Count}):",
-            "| XRef | Name | Priority | Status | Start Date | Stop Date | Percent |",
-            "|---|---|---|---|---|---|---|"
-        };
-        for (int i = startIndex; i < endIndex; i++) {
-            var rec = (GDMResearchRecord)recList[i];
-            string name = rec.ResearchName;
-            string priority = LangMan.LS(GKData.PriorityNames[(int)rec.Priority]);
-            string status = LangMan.LS(GKData.StatusNames[(int)rec.Status]);
-            string startDate = GetDateValue(rec.StartDate);
-            string stopDate = GetDateValue(rec.StopDate);
-            string percent = rec.Percent.ToString();
-            rows.Add($"|{rec.XRef}|{name}|{priority}|{status}|{startDate}|{stopDate}|{percent}|");
-        }
-
-        if (page < totalPages) {
-            rows.Add("");
-            rows.Add($"_Next page: use parameter page={page + 1}_");
-        }
-
-        MCPServer.Log($"Successfully generated response for {rows.Count} rows (page {page}/{totalPages})");
-
-        return CreateSimpleContent(string.Join("\n", rows));
+        return PageableTable("researches", args, recList.Count, (int index) => {
+            if (index == -1) {
+                return "| XRef | Name | Priority | Status | Start Date | Stop Date | Percent |\n|---|---|---|---|---|---|---|";
+            } else {
+                var rec = (GDMResearchRecord)recList[index];
+                string name = rec.ResearchName;
+                string priority = LangMan.LS(GKData.PriorityNames[(int)rec.Priority]);
+                string status = LangMan.LS(GKData.StatusNames[(int)rec.Status]);
+                string startDate = GetDateValue(rec.StartDate);
+                string stopDate = GetDateValue(rec.StopDate);
+                string percent = rec.Percent.ToString();
+                return $"|{rec.XRef}|{name}|{priority}|{status}|{startDate}|{stopDate}|{percent}|";
+            }
+        });
     }
 
     #endregion
@@ -1062,40 +1008,18 @@ internal class MCPToolkit
     private List<MCPContent> ToolCommunicationList(JsonElement args)
     {
         var recList = fContext.Tree.GetRecords(GDMRecordType.rtCommunication);
-        if (recList.Count == 0)
-            return CreateSimpleContent("No communications in database.");
-
-        int page = GetIntArgument(args, "page", 1);
-        if (page < 1) page = 1;
-
-        int totalPages = (recList.Count + pageSize - 1) / pageSize;
-        if (page > totalPages) page = totalPages;
-
-        int startIndex = (page - 1) * pageSize;
-        int endIndex = Math.Min(startIndex + pageSize, recList.Count);
-
-        var rows = new List<string> {
-            $"Communications (page {page}/{totalPages}, {startIndex + 1}-{endIndex} of {recList.Count}):",
-            "| XRef | Theme | Corresponder | Type | Date |",
-            "|---|---|---|---|---|"
-        };
-        for (int i = startIndex; i < endIndex; i++) {
-            var rec = (GDMCommunicationRecord)recList[i];
-            string theme = rec.CommName;
-            string corresponder = GKUtils.GetCorresponderStr(fContext.Tree, rec, false);
-            string type = LangMan.LS(GKData.CommunicationNames[(int)rec.CommunicationType]);
-            string date = GetDateValue(rec.Date);
-            rows.Add($"|{rec.XRef}|{theme}|{corresponder}|{type}|{date}|");
-        }
-
-        if (page < totalPages) {
-            rows.Add("");
-            rows.Add($"_Next page: use parameter page={page + 1}_");
-        }
-
-        MCPServer.Log($"Successfully generated response for {rows.Count} rows (page {page}/{totalPages})");
-
-        return CreateSimpleContent(string.Join("\n", rows));
+        return PageableTable("communications", args, recList.Count, (int index) => {
+            if (index == -1) {
+                return "| XRef | Theme | Corresponder | Type | Date |\n|---|---|---|---|---|";
+            } else {
+                var rec = (GDMCommunicationRecord)recList[index];
+                string theme = rec.CommName;
+                string corresponder = GKUtils.GetCorresponderStr(fContext.Tree, rec, false);
+                string type = LangMan.LS(GKData.CommunicationNames[(int)rec.CommunicationType]);
+                string date = GetDateValue(rec.Date);
+                return $"|{rec.XRef}|{theme}|{corresponder}|{type}|{date}|";
+            }
+        });
     }
 
     #endregion
@@ -1105,44 +1029,54 @@ internal class MCPToolkit
     private List<MCPContent> ToolLocationList(JsonElement args)
     {
         var recList = fContext.Tree.GetRecords(GDMRecordType.rtLocation);
-        if (recList.Count == 0)
-            return CreateSimpleContent("No locations in database.");
-
-        int page = GetIntArgument(args, "page", 1);
-        if (page < 1) page = 1;
-
-        int totalPages = (recList.Count + pageSize - 1) / pageSize;
-        if (page > totalPages) page = totalPages;
-
-        int startIndex = (page - 1) * pageSize;
-        int endIndex = Math.Min(startIndex + pageSize, recList.Count);
-
-        var rows = new List<string> {
-            $"Locations (page {page}/{totalPages}, {startIndex + 1}-{endIndex} of {recList.Count}):",
-            "| XRef | Name | Lati | Long |",
-            "|---|---|---|---|"
-        };
-        for (int i = startIndex; i < endIndex; i++) {
-            var rec = (GDMLocationRecord)recList[i];
-            string name = rec.GetNameByDate(null, true);
-            string lati = rec.Map.Lati.ToString();
-            string longi = rec.Map.Long.ToString();
-            rows.Add($"|{rec.XRef}|{name}|{lati}|{longi}|");
-        }
-
-        if (page < totalPages) {
-            rows.Add("");
-            rows.Add($"_Next page: use parameter page={page + 1}_");
-        }
-
-        MCPServer.Log($"Successfully generated response for {rows.Count} rows (page {page}/{totalPages})");
-
-        return CreateSimpleContent(string.Join("\n", rows));
+        return PageableTable("locations", args, recList.Count, (int index) => {
+            if (index == -1) {
+                return "| XRef | Name | Lati | Long |\n|---|---|---|---|";
+            } else {
+                var rec = (GDMLocationRecord)recList[index];
+                string name = rec.GetNameByDate(null, true);
+                string lat = rec.Map.Lati.ToString();
+                string lng = rec.Map.Long.ToString();
+                return $"|{rec.XRef}|{name}|{lat}|{lng}|";
+            }
+        });
     }
 
     #endregion
 
     #region Utilities
+
+    private delegate string RowBuilder(int index);
+
+    private List<MCPContent> PageableTable(string tableName, JsonElement args, int recordCount, RowBuilder buildRow)
+    {
+        if (recordCount == 0)
+            return MCPContent.CreateSimpleContent($"No {tableName} in database.");
+
+        int page = GetIntArgument(args, "page", 1);
+        if (page < 1) page = 1;
+
+        int totalPages = (recordCount + pageSize - 1) / pageSize;
+        if (page > totalPages) page = totalPages;
+
+        int startIndex = (page - 1) * pageSize;
+        int endIndex = Math.Min(startIndex + pageSize, recordCount);
+
+        var lines = new StringBuilder();
+        lines.Append($"{tableName} (page {page}/{totalPages}, {startIndex + 1}-{endIndex} of {recordCount}):\n");
+        lines.Append(buildRow(-1)); // header
+        for (int i = startIndex; i < endIndex; i++) {
+            lines.Append("\n");
+            lines.Append(buildRow(i));
+        }
+        if (page < totalPages) {
+            lines.Append($"\n\n_Next page: use parameter page={page + 1}_");
+        }
+
+        MCPServer.Log($"Successfully generated response for {recordCount} rows (page {page}/{totalPages})");
+
+        return MCPContent.CreateSimpleContent(lines.ToString());
+    }
 
     protected static string GetDateValue(GDMCustomDate date)
     {
@@ -1174,9 +1108,12 @@ internal class MCPToolkit
         return argElem.GetInt32();
     }
 
-    private static List<MCPContent> CreateSimpleContent(string text)
+    private static double GetDoubleArgument(JsonElement args, string argName, double defaultValue)
     {
-        return new List<MCPContent> { new MCPContent { Text = text } };
+        if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.Number)
+            return defaultValue;
+
+        return argElem.GetDouble();
     }
 
     #endregion
