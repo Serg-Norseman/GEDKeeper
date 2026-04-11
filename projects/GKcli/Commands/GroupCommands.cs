@@ -86,7 +86,7 @@ internal class GroupAddCommand : BaseCommand
         groupRec.GroupName = name;
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"Group added: {name}");
+        return MCPContent.CreateSimpleContent($"Group added: {name} with XRef `{groupRec.XRef}`");
     }
 }
 
@@ -104,47 +104,87 @@ internal class GroupAddMemberCommand : BaseCommand
     {
         return new MCPTool {
             Name = Sign,
-            Description = "Add an individual to a group by their XRef identifier",
+            Description = "Add an individual to a group by their XRef identifiers",
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
-                    ["group_name"] = new MCPToolProperty { Type = "string", Description = "Name of the group" },
+                    ["group_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the group (e.g., 'G1', 'G2')" },
                     ["individual_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the individual (e.g., 'I1', 'I2')" }
                 },
-                Required = new List<string> { "group_name", "individual_xref" }
+                Required = new List<string> { "group_xref", "individual_xref" }
             }
         };
     }
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string groupName = MCPHelper.GetRequiredArgument(args, "group_name");
+        string groupXRef = MCPHelper.GetRequiredArgument(args, "group_xref");
         string individualXRef = MCPHelper.GetRequiredArgument(args, "individual_xref");
 
-        var groupRecs = baseContext.Tree.GetRecords(GDMRecordType.rtGroup);
-        GDMGroupRecord targetGroup = null;
-        foreach (var rec in groupRecs) {
-            var gr = rec as GDMGroupRecord;
-            if (gr != null && string.Equals(gr.GroupName, groupName, StringComparison.OrdinalIgnoreCase)) {
-                targetGroup = gr;
-                break;
-            }
-        }
-
-        if (targetGroup == null)
-            return MCPContent.CreateSimpleContent($"Group not found: {groupName}");
+        var groupRec = baseContext.Tree.FindXRef<GDMGroupRecord>(groupXRef);
+        if (groupRec == null)
+            return MCPContent.CreateSimpleContent($"Group not found with XRef: {groupXRef}");
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)
             return MCPContent.CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
 
-        if (targetGroup.IndexOfMember(indiRec) >= 0)
-            return MCPContent.CreateSimpleContent($"Individual {individualXRef} is already a member of group '{groupName}'.");
+        if (groupRec.IndexOfMember(indiRec) >= 0)
+            return MCPContent.CreateSimpleContent($"Individual {individualXRef} is already a member of group '{groupXRef}'.");
 
-        targetGroup.AddMember(indiRec);
+        groupRec.AddMember(indiRec);
         baseContext.SetModified();
 
         string indiName = GKUtils.GetNameString(indiRec, false);
-        return MCPContent.CreateSimpleContent($"Individual added to group '{groupName}': {indiName} ({individualXRef})");
+        return MCPContent.CreateSimpleContent($"Individual added to group '{groupXRef}': {indiName} ({individualXRef})");
+    }
+}
+
+
+internal class GroupDeleteMemberCommand : BaseCommand
+{
+    public GroupDeleteMemberCommand() : base("group_delete_member", null, CommandCategory.Group) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Empty for interactive mode
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Remove an individual from a group by their XRef identifiers",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["group_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the group (e.g., 'G1', 'G2')" },
+                    ["individual_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the individual (e.g., 'I1', 'I2')" }
+                },
+                Required = new List<string> { "group_xref", "individual_xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string groupXRef = MCPHelper.GetRequiredArgument(args, "group_xref");
+        string individualXRef = MCPHelper.GetRequiredArgument(args, "individual_xref");
+
+        var groupRec = baseContext.Tree.FindXRef<GDMGroupRecord>(groupXRef);
+        if (groupRec == null)
+            return MCPContent.CreateSimpleContent($"Group not found with XRef: {groupXRef}");
+
+        var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
+        if (indiRec == null)
+            return MCPContent.CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
+
+        if (groupRec.IndexOfMember(indiRec) < 0)
+            return MCPContent.CreateSimpleContent($"Individual {individualXRef} is not a member of group '{groupXRef}'.");
+
+        groupRec.RemoveMember(indiRec);
+        baseContext.SetModified();
+
+        string indiName = GKUtils.GetNameString(indiRec, false);
+        return MCPContent.CreateSimpleContent($"Individual removed from group '{groupXRef}': {indiName} ({individualXRef})");
     }
 }
 

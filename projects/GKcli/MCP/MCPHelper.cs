@@ -81,6 +81,14 @@ public static class MCPHelper
         return argElem.GetInt32();
     }
 
+    internal static string GetStringArgument(JsonElement args, string argName, string defaultValue)
+    {
+        if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.String)
+            return defaultValue;
+
+        return argElem.GetString()!;
+    }
+
     internal static double GetDoubleArgument(JsonElement args, string argName, double defaultValue)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.Number)

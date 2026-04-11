@@ -96,7 +96,7 @@ internal class SourceAddCommand : BaseCommand
         sourceRec.Title.Lines.Text = title;
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"Source added: {title}");
+        return MCPContent.CreateSimpleContent($"Source added: {title} with XRef `{sourceRec.XRef}`");
     }
 }
 

@@ -134,7 +134,7 @@ internal class IndiAddCommand : BaseCommand
         baseContext.SetModified();
 
         string resultName = GKUtils.GetNameString(indiRec, false);
-        return MCPContent.CreateSimpleContent($"Individual added: {resultName}");
+        return MCPContent.CreateSimpleContent($"Individual added: {resultName} with XRef `{indiRec.XRef}`");
     }
 }
 

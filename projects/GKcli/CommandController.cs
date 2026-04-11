@@ -44,6 +44,10 @@ internal class CommandController
 
         // Records operations
         RegisterCommand(new RecordSearchCommand());
+        RegisterCommand(new RecordAddUserRefCommand());
+        RegisterCommand(new RecordDeleteUserRefCommand());
+        RegisterCommand(new RecordAddSourceCitationCommand());
+        RegisterCommand(new RecordDeleteSourceCitationCommand());
 
         // Events
         RegisterCommand(new EventEditCommand());
@@ -59,6 +63,8 @@ internal class CommandController
         RegisterCommand(new FamMenuCommand());
         RegisterCommand(new FamListCommand());
         RegisterCommand(new FamAddCommand());
+        RegisterCommand(new FamAddChildCommand());
+        RegisterCommand(new FamDeleteChildCommand());
         RegisterCommand(new FamDeleteCommand());
 
         // Notes operations
@@ -88,6 +94,7 @@ internal class CommandController
         RegisterCommand(new GroupListCommand());
         RegisterCommand(new GroupAddCommand());
         RegisterCommand(new GroupAddMemberCommand());
+        RegisterCommand(new GroupDeleteMemberCommand());
         RegisterCommand(new GroupDeleteCommand());
 
         // Tasks operations

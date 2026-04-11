@@ -109,7 +109,7 @@ internal class NoteAddCommand : BaseCommand
         noteRec.Lines.Text = text;
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"Note added: {text}");
+        return MCPContent.CreateSimpleContent($"Note added: {text} with XRef `{noteRec.XRef}`");
     }
 }
 

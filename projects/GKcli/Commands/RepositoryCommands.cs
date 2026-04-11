@@ -96,7 +96,7 @@ internal class RepositoryAddCommand : BaseCommand
         repoRec.RepositoryName = name;
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"Repository added: {name}");
+        return MCPContent.CreateSimpleContent($"Repository added: {name} with XRef `{repoRec.XRef}`");
     }
 }
 

@@ -2,11 +2,16 @@
 
 ## Обзор
 
-**GKcli** — это CLI-приложение GEDKeeper с поддержкой протокола [MCP](https://modelcontextprotocol.io/) (Model Context Protocol). MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др.) взаимодействовать с генеалогической базой данных через набор инструментов.
+**GKcli** — это CLI-приложение GEDKeeper с поддержкой протокола [MCP](https://modelcontextprotocol.io/) (Model Context Protocol).
+MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др.) взаимодействовать с генеалогической базой данных через набор инструментов.
 
-**Запуск:** `GKcli --mcp`
+**Запуск в LLM-клиентах:** `GKcli --mcp`
 
 **Протокол:** MCP `2025-06-18`, JSON-RPC 2.0 поверх stdin/stdout. Без внешних зависимостей — только `System.Text.Json`.
+
+**Внимание:** не рекомендуется для тестирования использовать LM Studio (пока не будет удалено это предупреждение),
+т.к. в этой программе каждые 1-2 минуты перезапускается новый экземпляр MCP-сервера, что приводит к непрерывным сбросам контекста БД.
+Пока успешное функционирование подтверждено только для Jan.
 
 ---
 
@@ -30,6 +35,10 @@
 | Инструмент | Описание | Параметры |
 |---|---|---|
 | `record_search` | Нечёткий поиск по любым записям (имя/заголовок) | `record_type` (string), `search_text` (string), `threshold` (number, по умолч. 0.15) |
+| `record_add_userref` | Добавить пользовательскую сноску к записи | `record_xref` (string), `string_value` (string), `reference_type` (string, необязательно) |
+| `record_delete_userref` | Удалить пользовательскую сноску из записи | `record_xref` (string), `reference_index` (integer, 0-based) |
+| `record_add_source` | Добавить цитату источника к записи | `record_xref` (string), `source_xref` (string), `page` (string, необязательно), `certainty` (integer, 0–3, необязательно) |
+| `record_delete_source` | Удалить цитату источника из записи | `record_xref` (string), `citation_index` (integer, 0-based) |
 
 **Типы записей:** `Individual`, `Family`, `Note`, `Source`, `Repository`, `Multimedia`, `Group`, `Task`, `Research`, `Communication`, `Location`
 
@@ -52,6 +61,8 @@
 |---|---|---|
 | `family_list` | Список всех семей (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
 | `family_add` | Создать семью | `husband_xref` (string), `wife_xref` (string) |
+| `family_add_child` | Добавить ребёнка в семью | `family_xref` (string), `child_xref` (string) |
+| `family_delete_child` | Удалить ребёнка из семьи | `family_xref` (string), `child_xref` (string) |
 | `family_delete` | Удалить семью | `xref` (string, напр. `F1`) |
 
 ---
@@ -100,7 +111,8 @@
 |---|---|---|
 | `group_list` | Список групп | — |
 | `group_add` | Создать группу | `name` (string) |
-| `group_add_member` | Добавить персону в группу | `group_name` (string), `individual_xref` (string) |
+| `group_add_member` | Добавить персону в группу | `group_xref` (string), `individual_xref` (string) |
+| `group_delete_member` | Удалить персону из группы | `group_xref` (string), `individual_xref` (string) |
 | `group_delete` | Удалить группу | `xref` (string, напр. `G1`) |
 
 ---

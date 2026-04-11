@@ -110,7 +110,7 @@ internal class FamAddCommand : BaseCommand
         familyRec.AddSpouse(wifeRec);
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"Family added: husband {husbandXRef}, wife {wifeXRef}");
+        return MCPContent.CreateSimpleContent($"Family with XRef `{familyRec.XRef}` added: husband {husbandXRef}, wife {wifeXRef}");
     }
 }
 
@@ -149,5 +149,103 @@ internal class FamDeleteCommand : BaseCommand
         baseContext.DeleteRecord(familyRec);
 
         return MCPContent.CreateSimpleContent($"Family deleted: {xref}");
+    }
+}
+
+
+internal class FamAddChildCommand : BaseCommand
+{
+    public FamAddChildCommand() : base("family_add_child", null, CommandCategory.Family) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Empty for interactive mode
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Add a child to a family by their XRef identifiers",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["family_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the family (e.g., 'F1')" },
+                    ["child_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the child (e.g., 'I3')" }
+                },
+                Required = new List<string> { "family_xref", "child_xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string familyXRef = MCPHelper.GetRequiredArgument(args, "family_xref");
+        string childXRef = MCPHelper.GetRequiredArgument(args, "child_xref");
+
+        var familyRec = baseContext.Tree.FindXRef<GDMFamilyRecord>(familyXRef);
+        if (familyRec == null)
+            return MCPContent.CreateSimpleContent($"Family not found with XRef: {familyXRef}");
+
+        var childRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(childXRef);
+        if (childRec == null)
+            return MCPContent.CreateSimpleContent($"Child not found with XRef: {childXRef}");
+
+        if (familyRec.IndexOfChild(childRec) >= 0)
+            return MCPContent.CreateSimpleContent($"Child {childXRef} is already a member of family '{familyXRef}'.");
+
+        familyRec.AddChild(childRec);
+        baseContext.SetModified();
+
+        string childName = GKUtils.GetNameString(childRec, false);
+        return MCPContent.CreateSimpleContent($"Child added to family '{familyXRef}': {childName} ({childXRef})");
+    }
+}
+
+
+internal class FamDeleteChildCommand : BaseCommand
+{
+    public FamDeleteChildCommand() : base("family_delete_child", null, CommandCategory.Family) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Empty for interactive mode
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Remove a child from a family by their XRef identifiers",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["family_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the family (e.g., 'F1')" },
+                    ["child_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the child (e.g., 'I3')" }
+                },
+                Required = new List<string> { "family_xref", "child_xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string familyXRef = MCPHelper.GetRequiredArgument(args, "family_xref");
+        string childXRef = MCPHelper.GetRequiredArgument(args, "child_xref");
+
+        var familyRec = baseContext.Tree.FindXRef<GDMFamilyRecord>(familyXRef);
+        if (familyRec == null)
+            return MCPContent.CreateSimpleContent($"Family not found with XRef: {familyXRef}");
+
+        var childRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(childXRef);
+        if (childRec == null)
+            return MCPContent.CreateSimpleContent($"Child not found with XRef: {childXRef}");
+
+        if (familyRec.IndexOfChild(childRec) < 0)
+            return MCPContent.CreateSimpleContent($"Child {childXRef} is not a member of family '{familyXRef}'.");
+
+        familyRec.RemoveChild(childRec);
+        baseContext.SetModified();
+
+        string childName = GKUtils.GetNameString(childRec, false);
+        return MCPContent.CreateSimpleContent($"Child removed from family '{familyXRef}': {childName} ({childXRef})");
     }
 }
