@@ -9,7 +9,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using GKcli.Commands;
+using GKcli.MCP;
 using GKCore;
 using GKUI.Platform;
 using Sharprompt;
@@ -18,8 +20,6 @@ namespace GKcli;
 
 internal class CommandController
 {
-    #region Common
-
     private static readonly BaseContext fBaseContext = new BaseContext(null);
     private static readonly Dictionary<string, BaseCommand> fCommands = new Dictionary<string, BaseCommand>();
     private static Dictionary<string, object> fVariables = new Dictionary<string, object>();
@@ -37,6 +37,13 @@ internal class CommandController
         RegisterCommand(new FileSaveCommand());
         RegisterCommand(new FileSaveAsCommand());
         RegisterCommand(new FilePropsCommand());
+        RegisterCommand(new FileRecentCommand());
+        RegisterCommand(new FileReloadCommand());
+        RegisterCommand(new FileSearchCommand());
+        RegisterCommand(new FileValidateCommand());
+
+        // Records operations
+        RegisterCommand(new RecordSearchCommand());
 
         // Events
         RegisterCommand(new EventEditCommand());
@@ -45,10 +52,14 @@ internal class CommandController
         RegisterCommand(new IndiMenuCommand());
         RegisterCommand(new IndiListCommand());
         RegisterCommand(new IndiAddCommand());
+        RegisterCommand(new IndiSearchCommand());
+        RegisterCommand(new IndiDeleteCommand());
 
         // Families operations
         RegisterCommand(new FamMenuCommand());
         RegisterCommand(new FamListCommand());
+        RegisterCommand(new FamAddCommand());
+        RegisterCommand(new FamDeleteCommand());
 
         // Notes operations
         RegisterCommand(new NoteMenuCommand());
@@ -64,10 +75,32 @@ internal class CommandController
         // Sources operations
         RegisterCommand(new SourceMenuCommand());
         RegisterCommand(new SourceListCommand());
+        RegisterCommand(new SourceAddCommand());
+        RegisterCommand(new SourceDeleteCommand());
 
         // Repositories operations
         RegisterCommand(new RepositoryMenuCommand());
         RegisterCommand(new RepositoryListCommand());
+        RegisterCommand(new RepositoryAddCommand());
+        RegisterCommand(new RepositoryDeleteCommand());
+
+        // Groups operations
+        RegisterCommand(new GroupListCommand());
+        RegisterCommand(new GroupAddCommand());
+        RegisterCommand(new GroupAddMemberCommand());
+        RegisterCommand(new GroupDeleteCommand());
+
+        // Tasks operations
+        RegisterCommand(new TaskListCommand());
+
+        // Researches operations
+        RegisterCommand(new ResearchListCommand());
+
+        // Communications operations
+        RegisterCommand(new CommunicationListCommand());
+
+        // Locations operations
+        RegisterCommand(new LocationListCommand());
 
         // Service
         RegisterCommand(new ServiceMenuCommand());
@@ -135,5 +168,17 @@ internal class CommandController
         return result as T;
     }
 
-    #endregion
+    internal static IEnumerable<BaseCommand> GetCommands()
+    {
+        return fCommands.Values;
+    }
+
+    public static List<MCPContent> ExecuteTool(string toolName, JsonElement args)
+    {
+        if (fCommands.TryGetValue(toolName, out BaseCommand cmd)) {
+            return cmd.ExecuteTool(fBaseContext, args);
+        } else {
+            throw new ArgumentException($"Unknown tool: {toolName}");
+        }
+    }
 }

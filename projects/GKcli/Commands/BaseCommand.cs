@@ -7,6 +7,9 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using GKcli.MCP;
 using GKCore;
 using GKCore.Locales;
 using GKUI.Platform;
@@ -29,7 +32,14 @@ internal enum CommandCategory
     Note,
     Multimedia,
     Source,
-    Repository
+    Repository,
+
+    Group,
+    Research,
+    Task,
+    Communication,
+
+    Location,
 }
 
 
@@ -96,4 +106,21 @@ internal abstract class BaseCommand
     /// <param name="baseContext">Base context for the command.</param>
     /// <param name="obj">Additional object parameter.</param>
     public abstract void Execute(BaseContext baseContext, object obj);
+
+
+    /// <summary>
+    /// Creates an MCP tool object to support the built-in MCP server.
+    /// </summary>
+    public virtual MCPTool CreateTool()
+    {
+        return null;
+    }
+
+    /// <summary>
+    /// Runs MCP tool to support built-in MCP server.
+    /// </summary>
+    public virtual List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        return null;
+    }
 }

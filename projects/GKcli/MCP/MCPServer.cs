@@ -19,14 +19,6 @@ using GKCore;
 
 namespace GKcli.MCP;
 
-internal delegate List<MCPContent> MCPToolHandler(JsonElement args);
-
-internal class MCPSrvTool
-{
-    public MCPTool Tool { get; set; }
-    public MCPToolHandler Handler { get; set; }
-}
-
 /// <summary>
 /// Minimal MCP server that reads JSON-RPC 2.0 messages from stdin and writes responses to stdout.
 /// No external packages — only System.Text.Json from .NET 8.
@@ -34,11 +26,8 @@ internal class MCPSrvTool
 internal class MCPServer
 {
     private readonly CancellationTokenSource fCancellationToken;
-    private readonly BaseContext fContext;
     private readonly JsonSerializerOptions fJsonOptions;
-    private readonly MCPToolkit fToolkit;
-    private readonly Dictionary<string, MCPSrvTool> fTools;
-    private readonly List<MCPTool> fToolsList;
+    private readonly MCPToolsListResult fToolsList;
 
     public MCPServer()
     {
@@ -70,11 +59,12 @@ internal class MCPServer
 
         Log($"Initializing MCP server ({pid})...");
 
-        fContext = new BaseContext(null);
-        fTools = new Dictionary<string, MCPSrvTool>();
-        fToolkit = new MCPToolkit(fContext, this);
-        // The list is generated in MCPToolkit.RegisterTools().
-        fToolsList = fTools.Values.Select(it => it.Tool).ToList();
+        // The list is generated after registration.
+        var commands = CommandController.GetCommands();
+        // Register tools from commands
+        fToolsList = new MCPToolsListResult() {
+            Tools = commands.Select(cmd => cmd.CreateTool()).Where(tl => tl != null).ToList()
+        };
 
         fJsonOptions = new JsonSerializerOptions {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -210,9 +200,7 @@ internal class MCPServer
     {
         // Some clients (like Jan) re-request the list of tools very frequently,
         // so it's better to have a cached list in advance.
-        var result = new MCPToolsListResult();
-        result.Tools = fToolsList;
-        return new MCPResponse { Id = request.Id, Result = result };
+        return new MCPResponse { Id = request.Id, Result = fToolsList };
     }
 
     private MCPResponse HandleToolsCall(MCPRequest request)
@@ -236,7 +224,8 @@ internal class MCPServer
             string toolName = nameElem.GetString()!;
             p.TryGetProperty("arguments", out var arguments);
 
-            var content = ExecuteTool(toolName, arguments);
+            // Execute an MCP tool call by name and arguments.
+            var content = CommandController.ExecuteTool(toolName, arguments);
 
             return new MCPResponse {
                 Id = request.Id,
@@ -251,25 +240,5 @@ internal class MCPServer
                 }
             };
         }
-    }
-
-    /// <summary>
-    /// Execute an MCP tool call by name and arguments.
-    /// </summary>
-    private List<MCPContent> ExecuteTool(string toolName, JsonElement? arguments)
-    {
-        if (fTools.TryGetValue(toolName, out MCPSrvTool internalTool)) {
-            var args = arguments?.ValueKind == JsonValueKind.Object ? arguments.Value : default;
-
-            return internalTool.Handler(args);
-        } else {
-            throw new ArgumentException($"Unknown tool: {toolName}");
-        }
-    }
-
-    internal void RegisterTool(MCPTool tool, MCPToolHandler handler)
-    {
-        var intTool = new MCPSrvTool() { Tool = tool, Handler = handler };
-        fTools.Add(tool.Name, intTool);
     }
 }
