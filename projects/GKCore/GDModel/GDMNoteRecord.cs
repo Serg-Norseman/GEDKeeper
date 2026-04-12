@@ -120,5 +120,10 @@ namespace GDModel
 
             hashCode.Add(fLines);
         }
+
+        public override GDMStructureType GetAccessibleSubstructures()
+        {
+            return 0;
+        }
     }
 }

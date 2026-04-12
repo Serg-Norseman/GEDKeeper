@@ -310,5 +310,10 @@ namespace GDModel
             ProcessHashes(ref hashCode, fSourceCitations);
             ProcessHashes(ref hashCode, fUserReferences);
         }
+
+        public virtual GDMStructureType GetAccessibleSubstructures()
+        {
+            return 0;
+        }
     }
 }

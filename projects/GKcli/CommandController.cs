@@ -48,6 +48,10 @@ internal class CommandController
         RegisterCommand(new RecordDeleteUserRefCommand());
         RegisterCommand(new RecordAddSourceCitationCommand());
         RegisterCommand(new RecordDeleteSourceCitationCommand());
+        RegisterCommand(new RecordAddMultimediaLinkCommand());
+        RegisterCommand(new RecordDeleteMultimediaLinkCommand());
+        RegisterCommand(new RecordAddNoteCommand());
+        RegisterCommand(new RecordDeleteNoteCommand());
 
         // Events
         RegisterCommand(new EventEditCommand());
@@ -58,6 +62,8 @@ internal class CommandController
         RegisterCommand(new IndiAddCommand());
         RegisterCommand(new IndiSearchCommand());
         RegisterCommand(new IndiDeleteCommand());
+        RegisterCommand(new IndiAddAssociationCommand());
+        RegisterCommand(new IndiDeleteAssociationCommand());
 
         // Families operations
         RegisterCommand(new FamMenuCommand());

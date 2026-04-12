@@ -325,16 +325,23 @@ internal class FileSearchCommand : BaseCommand
     {
         return new MCPTool {
             Name = Sign,
-            Description = "Find all GEDCOM files on disk",
-            InputSchema = MCPToolInputSchema.Empty
+            Description = "Find all GEDCOM files on disk in the specified directory",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["path"] = new MCPToolProperty { Type = "string", Description = "Root directory path to search in (e.g., 'd:/')" }
+                },
+                Required = new List<string> { "path" }
+            }
         };
     }
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
+        string path = MCPHelper.GetRequiredArgument(args, "path");
+
         var result = new List<MCPContent>();
 
-        var gedFiles = SysUtils.FastSearchFiles("d:/", "*.ged");
+        var gedFiles = SysUtils.FastSearchFiles(path, "*.ged");
         foreach (var fn in gedFiles) {
             result.Add(new MCPContent { Text = fn.Replace('\\', '/') });
         }

@@ -101,5 +101,10 @@ namespace GDModel
             hashCode.Add(fAddress);
             hashCode.Add(fRepositoryName);
         }
+
+        public override GDMStructureType GetAccessibleSubstructures()
+        {
+            return GDMStructureType.NoteLink | GDMStructureType.UserReference;
+        }
     }
 }

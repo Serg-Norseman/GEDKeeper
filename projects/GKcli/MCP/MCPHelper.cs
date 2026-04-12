@@ -96,4 +96,12 @@ public static class MCPHelper
 
         return argElem.GetDouble();
     }
+
+    internal static bool GetBoolArgument(JsonElement args, string argName, bool defaultValue)
+    {
+        if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.True && argElem.ValueKind != JsonValueKind.False)
+            return defaultValue;
+
+        return argElem.GetBoolean();
+    }
 }

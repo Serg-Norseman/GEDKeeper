@@ -172,6 +172,9 @@ internal class RecordAddUserRefCommand : BaseCommand
         if (record == null)
             return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
 
+        if (!record.GetAccessibleSubstructures().HasFlag(GDMStructureType.UserReference))
+            return MCPContent.CreateSimpleContent($"Record type '{recordXRef}' ({record.RecordType}) does not support user references.");
+
         var userRef = new GDMUserReference();
         userRef.StringValue = stringValue;
         userRef.ReferenceType = referenceType;
@@ -271,6 +274,9 @@ internal class RecordAddSourceCitationCommand : BaseCommand
         if (record == null)
             return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
 
+        if (!record.GetAccessibleSubstructures().HasFlag(GDMStructureType.SourceCitation))
+            return MCPContent.CreateSimpleContent($"Record type '{recordXRef}' ({record.RecordType}) does not support source citations.");
+
         var sourceRec = baseContext.Tree.FindXRef<GDMSourceRecord>(sourceXRef);
         if (sourceRec == null)
             return MCPContent.CreateSimpleContent($"Source not found with XRef: {sourceXRef}");
@@ -334,5 +340,210 @@ internal class RecordDeleteSourceCitationCommand : BaseCommand
         baseContext.SetModified();
 
         return MCPContent.CreateSimpleContent($"Source citation removed from record '{recordXRef}' at index {citationIndex}: {citInfo}");
+    }
+}
+
+
+internal class RecordAddMultimediaLinkCommand : BaseCommand
+{
+    public RecordAddMultimediaLinkCommand() : base("record_add_multimedia", null, CommandCategory.Tools) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Empty for interactive mode
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Add a multimedia link to any record by its XRef identifier",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["record_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record (e.g., 'I1', 'F1', 'N2')" },
+                    ["multimedia_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the multimedia record (e.g., 'M1')" },
+                    ["is_primary"] = new MCPToolProperty { Type = "boolean", Description = "Whether this is the primary multimedia (default: false)" }
+                },
+                Required = new List<string> { "record_xref", "multimedia_xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
+        string multimediaXRef = MCPHelper.GetRequiredArgument(args, "multimedia_xref");
+        bool isPrimary = MCPHelper.GetBoolArgument(args, "is_primary", false);
+
+        var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
+        if (record == null)
+            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+
+        if (!record.GetAccessibleSubstructures().HasFlag(GDMStructureType.MultimediaLink))
+            return MCPContent.CreateSimpleContent($"Record type '{recordXRef}' ({record.RecordType}) does not support multimedia links.");
+
+        var mmRec = baseContext.Tree.FindXRef<GDMMultimediaRecord>(multimediaXRef);
+        if (mmRec == null)
+            return MCPContent.CreateSimpleContent($"Multimedia record not found with XRef: {multimediaXRef}");
+
+        var mmLink = new GDMMultimediaLink();
+        mmLink.XRef = multimediaXRef;
+        mmLink.IsPrimary = isPrimary;
+        record.MultimediaLinks.Add(mmLink);
+        baseContext.SetModified();
+
+        int linkIndex = record.MultimediaLinks.IndexOf(mmLink);
+        return MCPContent.CreateSimpleContent($"Multimedia link added to record '{recordXRef}' at index {linkIndex}: multimedia '{multimediaXRef}', primary {isPrimary}");
+    }
+}
+
+
+internal class RecordDeleteMultimediaLinkCommand : BaseCommand
+{
+    public RecordDeleteMultimediaLinkCommand() : base("record_delete_multimedia", null, CommandCategory.Tools) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Empty for interactive mode
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Remove a multimedia link from a record by record XRef and link index",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["record_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record (e.g., 'I1', 'F1', 'N2')" },
+                    ["link_index"] = new MCPToolProperty { Type = "integer", Description = "Zero-based index of the multimedia link in the record's multimedia list" }
+                },
+                Required = new List<string> { "record_xref", "link_index" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
+        int linkIndex = MCPHelper.GetIntArgument(args, "link_index", -1);
+
+        var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
+        if (record == null)
+            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+
+        if (!record.HasMultimediaLinks)
+            return MCPContent.CreateSimpleContent($"Record '{recordXRef}' has no multimedia links.");
+
+        if (linkIndex < 0 || linkIndex >= record.MultimediaLinks.Count)
+            return MCPContent.CreateSimpleContent($"Invalid multimedia link index {linkIndex} for record '{recordXRef}' (has {record.MultimediaLinks.Count} links).");
+
+        var mmLink = record.MultimediaLinks[linkIndex];
+        string linkInfo = $"multimedia '{mmLink.XRef}', title '{mmLink.Title}', primary {mmLink.IsPrimary}";
+
+        record.MultimediaLinks.RemoveAt(linkIndex);
+        baseContext.SetModified();
+
+        return MCPContent.CreateSimpleContent($"Multimedia link removed from record '{recordXRef}' at index {linkIndex}: {linkInfo}");
+    }
+}
+
+
+internal class RecordAddNoteCommand : BaseCommand
+{
+    public RecordAddNoteCommand() : base("record_add_note", null, CommandCategory.Tools) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Empty for interactive mode
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Add a note link to any record by its XRef identifier",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["record_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record (e.g., 'I1', 'F1', 'N2')" },
+                    ["note_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the note record (e.g., 'N1')" }
+                },
+                Required = new List<string> { "record_xref", "note_xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
+        string noteXRef = MCPHelper.GetRequiredArgument(args, "note_xref");
+
+        var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
+        if (record == null)
+            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+
+        if (!record.GetAccessibleSubstructures().HasFlag(GDMStructureType.NoteLink))
+            return MCPContent.CreateSimpleContent($"Record type '{recordXRef}' ({record.RecordType}) does not support note links.");
+
+        var noteRec = baseContext.Tree.FindXRef<GDMNoteRecord>(noteXRef);
+        if (noteRec == null)
+            return MCPContent.CreateSimpleContent($"Note record not found with XRef: {noteXRef}");
+
+        var noteLink = new GDMNotes();
+        noteLink.XRef = noteXRef;
+        record.Notes.Add(noteLink);
+        baseContext.SetModified();
+
+        int noteIndex = record.Notes.IndexOf(noteLink);
+        return MCPContent.CreateSimpleContent($"Note link added to record '{recordXRef}' at index {noteIndex}: note '{noteXRef}'");
+    }
+}
+
+
+internal class RecordDeleteNoteCommand : BaseCommand
+{
+    public RecordDeleteNoteCommand() : base("record_delete_note", null, CommandCategory.Tools) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Empty for interactive mode
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Remove a note link from a record by record XRef and note index",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["record_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record (e.g., 'I1', 'F1', 'N2')" },
+                    ["note_index"] = new MCPToolProperty { Type = "integer", Description = "Zero-based index of the note link in the record's notes list" }
+                },
+                Required = new List<string> { "record_xref", "note_index" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
+        int noteIndex = MCPHelper.GetIntArgument(args, "note_index", -1);
+
+        var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
+        if (record == null)
+            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+
+        if (!record.HasNotes)
+            return MCPContent.CreateSimpleContent($"Record '{recordXRef}' has no notes.");
+
+        if (noteIndex < 0 || noteIndex >= record.Notes.Count)
+            return MCPContent.CreateSimpleContent($"Invalid note index {noteIndex} for record '{recordXRef}' (has {record.Notes.Count} notes).");
+
+        var noteLink = record.Notes[noteIndex];
+        string noteInfo = $"note '{noteLink.XRef}'";
+
+        record.Notes.RemoveAt(noteIndex);
+        baseContext.SetModified();
+
+        return MCPContent.CreateSimpleContent($"Note link removed from record '{recordXRef}' at index {noteIndex}: {noteInfo}");
     }
 }

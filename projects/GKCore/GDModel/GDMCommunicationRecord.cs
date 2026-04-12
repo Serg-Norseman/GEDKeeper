@@ -154,5 +154,10 @@ namespace GDModel
             hashCode.Add(fCommDirection);
             hashCode.Add(fCorresponder);
         }
+
+        public override GDMStructureType GetAccessibleSubstructures()
+        {
+            return GDMStructureType.NoteLink | GDMStructureType.MultimediaLink;
+        }
     }
 }

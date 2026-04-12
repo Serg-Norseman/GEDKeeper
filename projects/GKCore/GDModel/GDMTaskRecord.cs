@@ -118,5 +118,10 @@ namespace GDModel
             hashCode.Add(fStartDate);
             hashCode.Add(fStopDate);
         }
+
+        public override GDMStructureType GetAccessibleSubstructures()
+        {
+            return GDMStructureType.NoteLink;
+        }
     }
 }

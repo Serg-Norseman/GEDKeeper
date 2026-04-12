@@ -156,5 +156,10 @@ namespace GDModel
             hashCode.Add(fGroupName);
             ProcessHashes(ref hashCode, fMembers);
         }
+
+        public override GDMStructureType GetAccessibleSubstructures()
+        {
+            return GDMStructureType.MemberLink | GDMStructureType.NoteLink | GDMStructureType.MultimediaLink;
+        }
     }
 }

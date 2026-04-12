@@ -5,7 +5,7 @@
 **GKcli** — это CLI-приложение GEDKeeper с поддержкой протокола [MCP](https://modelcontextprotocol.io/) (Model Context Protocol).
 MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др.) взаимодействовать с генеалогической базой данных через набор инструментов.
 
-**Запуск в LLM-клиентах:** `GKcli --mcp`
+**Запуск в LLM-клиентах:** `GKcli --mcp` (аргумент обязателен, т.к. без него запускается интерактивный текстовый терминал, частично повторяющий по составу функций MCP-сервер).
 
 **Протокол:** MCP `2025-06-18`, JSON-RPC 2.0 поверх stdin/stdout. Без внешних зависимостей — только `System.Text.Json`.
 
@@ -25,7 +25,7 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 | `file_props` | Получить информацию о текущей базе (автор, адрес, статистика записей) | — |
 | `file_recent` | Список недавно открытых файлов | — |
 | `file_reload` | Перезагрузить последний открытый файл | — |
-| `file_search` | Найти все GEDCOM-файлы на диске (`d:/`) | — |
+| `file_search` | Найти все GEDCOM-файлы на диске | `path` (string) — корневой каталог для поиска |
 | `file_validate` | Проверить валидность текущей базы | — |
 
 ---
@@ -39,6 +39,10 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 | `record_delete_userref` | Удалить пользовательскую сноску из записи | `record_xref` (string), `reference_index` (integer, 0-based) |
 | `record_add_source` | Добавить цитату источника к записи | `record_xref` (string), `source_xref` (string), `page` (string, необязательно), `certainty` (integer, 0–3, необязательно) |
 | `record_delete_source` | Удалить цитату источника из записи | `record_xref` (string), `citation_index` (integer, 0-based) |
+| `record_add_multimedia` | Добавить ссылку на мультимедиа к записи | `record_xref` (string), `multimedia_xref` (string), `is_primary` (boolean, по умолч. false) |
+| `record_delete_multimedia` | Удалить ссылку на мультимедиа из записи | `record_xref` (string), `link_index` (integer, 0-based) |
+| `record_add_note` | Добавить ссылку на заметку к записи | `record_xref` (string), `note_xref` (string) |
+| `record_delete_note` | Удалить ссылку на заметку из записи | `record_xref` (string), `note_index` (integer, 0-based) |
 
 **Типы записей:** `Individual`, `Family`, `Note`, `Source`, `Repository`, `Multimedia`, `Group`, `Task`, `Research`, `Communication`, `Location`
 
@@ -52,6 +56,8 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 | `individual_search` | Нечёткий поиск по имени (порог 16%) | `name` (string) |
 | `individual_add` | Добавить персону | `name` (string), `sex` (string: `m`/`f`) |
 | `individual_delete` | Удалить персону | `xref` (string, напр. `I1`) |
+| `individual_add_association` | Добавить ассоциацию (связь) между двумя персонами | `individual_xref` (string), `associate_xref` (string), `relation` (string) |
+| `individual_delete_association` | Удалить ассоциацию у персоны | `individual_xref` (string), `association_index` (integer, 0-based) |
 
 ---
 

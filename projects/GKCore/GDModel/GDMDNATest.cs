@@ -248,5 +248,10 @@ namespace GDModel
             hashCode.Add(fYHaplogroup);
             hashCode.Add(fFileReference);
         }
+
+        public GDMStructureType GetAccessibleSubstructures()
+        {
+            return GDMStructureType.NoteLink | GDMStructureType.MultimediaLink;
+        }
     }
 }

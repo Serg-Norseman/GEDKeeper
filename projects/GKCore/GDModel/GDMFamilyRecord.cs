@@ -303,5 +303,10 @@ namespace GDModel
             hashCode.Add(fWife);
             hashCode.Add(fStatus);
         }
+
+        public override GDMStructureType GetAccessibleSubstructures()
+        {
+            return GDMStructureType.ChildLink | GDMStructureType.Event | GDMStructureType.NoteLink | GDMStructureType.MultimediaLink | GDMStructureType.SourceCitation | GDMStructureType.UserReference;
+        }
     }
 }

@@ -510,8 +510,7 @@ namespace GDModel
             }
 
             // 0% name match would be pointless checking other details
-            if (nameMatch != 0.0f && matchParams.DatesCheck)
-            {
+            if (nameMatch != 0.0f && matchParams.DatesCheck) {
                 var dates = GetLifeEvents();
                 var indiDates = indi.GetLifeEvents();
 
@@ -602,6 +601,15 @@ namespace GDModel
             ProcessHashes(ref hashCode, fPersonalNames);
             ProcessHashes(ref hashCode, fSpouseToFamilyLinks);
             hashCode.Add(fSex);
+        }
+
+        public override GDMStructureType GetAccessibleSubstructures()
+        {
+            return
+                GDMStructureType.Event | GDMStructureType.PersonalName | GDMStructureType.SpouseLink | GDMStructureType.ParentLink |
+                GDMStructureType.NoteLink | GDMStructureType.MultimediaLink | GDMStructureType.SourceCitation |
+                GDMStructureType.Association | GDMStructureType.UserReference |
+                GDMStructureType.GroupLink | GDMStructureType.DNATest;
         }
     }
 }

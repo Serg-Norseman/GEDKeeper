@@ -245,5 +245,11 @@ namespace GDModel
             ProcessHashes(ref hashCode, fNotes);
             hashCode.Add(fText);
         }
+
+        public GDMStructureType GetAccessibleSubstructures()
+        {
+            // Multimedia and Notes converted to record + link
+            return 0;
+        }
     }
 }

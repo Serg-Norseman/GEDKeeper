@@ -314,5 +314,10 @@ namespace GDModel
             ProcessHashes(ref hashCode, fCommunications);
             ProcessHashes(ref hashCode, fGroups);
         }
+
+        public override GDMStructureType GetAccessibleSubstructures()
+        {
+            return GDMStructureType.TaskLink | GDMStructureType.CommunicationLink | GDMStructureType.GroupLink | GDMStructureType.NoteLink;
+        }
     }
 }

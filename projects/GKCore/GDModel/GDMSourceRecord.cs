@@ -255,5 +255,10 @@ namespace GDModel
             hashCode.Add(fText);
             hashCode.Add(fTitle);
         }
+
+        public override GDMStructureType GetAccessibleSubstructures()
+        {
+            return GDMStructureType.RepositoryCitation | GDMStructureType.NoteLink | GDMStructureType.MultimediaLink | GDMStructureType.UserReference;
+        }
     }
 }

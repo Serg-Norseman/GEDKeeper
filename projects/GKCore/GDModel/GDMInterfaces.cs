@@ -78,28 +78,28 @@ namespace GDModel
     }
 
 
-    public interface IGDMStructWithNotes
+    public interface IGDMStructWithNotes : IGDMStructure
     {
         bool HasNotes { get; }
         GDMList<GDMNotes> Notes { get; }
     }
 
 
-    public interface IGDMStructWithSourceCitations
+    public interface IGDMStructWithSourceCitations : IGDMStructure
     {
         bool HasSourceCitations { get; }
         GDMList<GDMSourceCitation> SourceCitations { get; }
     }
 
 
-    public interface IGDMStructWithMultimediaLinks
+    public interface IGDMStructWithMultimediaLinks : IGDMStructure
     {
         bool HasMultimediaLinks { get; }
         GDMList<GDMMultimediaLink> MultimediaLinks { get; }
     }
 
 
-    public interface IGDMStructWithUserReferences
+    public interface IGDMStructWithUserReferences : IGDMStructure
     {
         bool HasUserReferences { get; }
         GDMList<GDMUserReference> UserReferences { get; }
@@ -132,7 +132,7 @@ namespace GDModel
     }
 
 
-    public interface IGDMRecord : IGDMPointerHost, IGDMStructWithLists, IGDMStructWithUserReferences
+    public interface IGDMRecord : IGDMPointerHost, IGDMStructWithLists, IGDMStructWithUserReferences, IGDMStructure
     {
         string AutomatedRecordID { get; }
         GDMChangeDate ChangeDate { get; }

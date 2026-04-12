@@ -349,5 +349,10 @@ namespace GDModel
             ProcessHashes(ref hashCode, fSourceCitations);
             ProcessHashes(ref hashCode, fMultimediaLinks);
         }
+
+        public GDMStructureType GetAccessibleSubstructures()
+        {
+            return GDMStructureType.NoteLink | GDMStructureType.MultimediaLink | GDMStructureType.SourceCitation;
+        }
     }
 }

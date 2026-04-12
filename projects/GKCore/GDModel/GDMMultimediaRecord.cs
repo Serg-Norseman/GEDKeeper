@@ -103,5 +103,10 @@ namespace GDModel
 
             ProcessHashes(ref hashCode, fFileReferences);
         }
+
+        public override GDMStructureType GetAccessibleSubstructures()
+        {
+            return GDMStructureType.MediaFile | GDMStructureType.NoteLink | GDMStructureType.SourceCitation | GDMStructureType.UserReference;
+        }
     }
 }

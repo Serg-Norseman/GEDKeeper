@@ -79,5 +79,10 @@ namespace GDModel
 
             ProcessHashes(ref hashCode, fNotes);
         }
+
+        public GDMStructureType GetAccessibleSubstructures()
+        {
+            return GDMStructureType.NoteLink;
+        }
     }
 }

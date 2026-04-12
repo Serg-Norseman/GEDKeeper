@@ -402,5 +402,10 @@ namespace GDModel
             hashCode.Add(fReligiousName);
             hashCode.Add(fCensusName);
         }
+
+        public GDMStructureType GetAccessibleSubstructures()
+        {
+            return GDMStructureType.NoteLink | GDMStructureType.SourceCitation;
+        }
     }
 }

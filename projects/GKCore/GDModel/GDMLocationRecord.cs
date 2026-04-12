@@ -330,5 +330,10 @@ namespace GDModel
             ProcessHashes(ref hashCode, fNames);
             ProcessHashes(ref hashCode, fTopLevels);
         }
+
+        public override GDMStructureType GetAccessibleSubstructures()
+        {
+            return GDMStructureType.LocName | GDMStructureType.LocLink | GDMStructureType.NoteLink | GDMStructureType.MultimediaLink;
+        }
     }
 }
