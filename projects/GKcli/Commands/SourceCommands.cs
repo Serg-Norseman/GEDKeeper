@@ -12,6 +12,7 @@ using GDModel;
 using GKcli.MCP;
 using GKCore;
 using GKCore.Locales;
+using GKUI.Platform;
 
 namespace GKcli.Commands;
 
@@ -26,13 +27,13 @@ internal class SourceMenuCommand : BaseCommand
 }
 
 
-internal class SourceListCommand : RecordCommand
+internal class SourceListCommand : BaseCommand
 {
     public SourceListCommand() : base("source_list", LSID.Find, CommandCategory.Source) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        SelectRecord(baseContext, GDMRecordType.rtSource, "Select a source", "Source: {0}", "No records.");
+        PromptHelper.SelectRecord(baseContext, GDMRecordType.rtSource, "Select a source", "Source: {0}", "No records.");
     }
 
     public override MCPTool CreateTool()

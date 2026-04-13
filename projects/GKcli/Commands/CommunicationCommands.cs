@@ -49,7 +49,7 @@ internal class CommunicationListCommand : BaseCommand
                 string theme = rec.CommName;
                 string corresponder = GKUtils.GetCorresponderStr(baseContext.Tree, rec, false);
                 string type = LangMan.LS(GKData.CommunicationNames[(int)rec.CommunicationType]);
-                string date = MCPHelper.GetDateValue(rec.Date);
+                string date = GKUtils.GetDateDisplayString(rec.Date);
                 return $"|{rec.XRef}|{theme}|{corresponder}|{type}|{date}|";
             }
         });

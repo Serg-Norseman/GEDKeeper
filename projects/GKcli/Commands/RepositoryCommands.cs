@@ -12,6 +12,7 @@ using GDModel;
 using GKcli.MCP;
 using GKCore;
 using GKCore.Locales;
+using GKUI.Platform;
 
 namespace GKcli.Commands;
 
@@ -26,13 +27,13 @@ internal class RepositoryMenuCommand : BaseCommand
 }
 
 
-internal class RepositoryListCommand : RecordCommand
+internal class RepositoryListCommand : BaseCommand
 {
     public RepositoryListCommand() : base("repository_list", LSID.Find, CommandCategory.Repository) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        var selected = SelectRecord(baseContext, GDMRecordType.rtRepository, "Select a repository", "Repository: {0}", "No records.");
+        var selected = PromptHelper.SelectRecord(baseContext, GDMRecordType.rtRepository, "Select a repository", "Repository: {0}", "No records.");
     }
 
     public override MCPTool CreateTool()

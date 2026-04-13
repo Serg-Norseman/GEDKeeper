@@ -48,8 +48,8 @@ internal class TaskListCommand : BaseCommand
                 var rec = (GDMTaskRecord)recList[index];
                 string goal = GKUtils.GetTaskGoalStr(baseContext.Tree, rec);
                 string priority = LangMan.LS(GKData.PriorityNames[(int)rec.Priority]);
-                string startDate = MCPHelper.GetDateValue(rec.StartDate);
-                string stopDate = MCPHelper.GetDateValue(rec.StopDate);
+                string startDate = GKUtils.GetDateDisplayString(rec.StartDate);
+                string stopDate = GKUtils.GetDateDisplayString(rec.StopDate);
                 return $"|{rec.XRef}|{goal}|{priority}|{startDate}|{stopDate}|";
             }
         });

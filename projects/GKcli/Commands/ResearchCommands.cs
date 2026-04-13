@@ -49,8 +49,8 @@ internal class ResearchListCommand : BaseCommand
                 string name = rec.ResearchName;
                 string priority = LangMan.LS(GKData.PriorityNames[(int)rec.Priority]);
                 string status = LangMan.LS(GKData.StatusNames[(int)rec.Status]);
-                string startDate = MCPHelper.GetDateValue(rec.StartDate);
-                string stopDate = MCPHelper.GetDateValue(rec.StopDate);
+                string startDate = GKUtils.GetDateDisplayString(rec.StartDate);
+                string stopDate = GKUtils.GetDateDisplayString(rec.StopDate);
                 string percent = rec.Percent.ToString();
                 return $"|{rec.XRef}|{name}|{priority}|{status}|{startDate}|{stopDate}|{percent}|";
             }

@@ -12,6 +12,7 @@ using GDModel;
 using GKcli.MCP;
 using GKCore;
 using GKCore.Locales;
+using GKUI.Platform;
 
 namespace GKcli.Commands;
 
@@ -26,13 +27,13 @@ internal class MediaMenuCommand : BaseCommand
 }
 
 
-internal class MediaListCommand : RecordCommand
+internal class MediaListCommand : BaseCommand
 {
     public MediaListCommand() : base("multimedia_list", LSID.Find, CommandCategory.Multimedia) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        SelectRecord(baseContext, GDMRecordType.rtMultimedia, "Select a multimedia", "Multimedia: {0}", "No records.");
+        PromptHelper.SelectRecord(baseContext, GDMRecordType.rtMultimedia, "Select a multimedia", "Multimedia: {0}", "No records.");
     }
 
     public override MCPTool CreateTool()

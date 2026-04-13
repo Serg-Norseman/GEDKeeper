@@ -10,8 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
-using GDModel;
-using GKCore.Options;
 
 namespace GKcli.MCP;
 
@@ -54,23 +52,9 @@ public static class MCPHelper
         return MCPContent.CreateSimpleContent(lines.ToString());
     }
 
-    public static string ToUpperFirst(string s) 
+    public static string ToUpperFirst(string s)
     {
         return string.IsNullOrEmpty(s) ? s : char.ToUpper(s[0]) + s.Substring(1);
-    }
-
-    internal static string GetDateValue(GDMCustomDate date)
-    {
-        string result;
-
-        if (date == null) {
-            result = string.Empty;
-        } else {
-            GlobalOptions glob = GlobalOptions.Instance;
-            result = date.GetDisplayString(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
-        }
-
-        return result;
     }
 
     internal static string GetRequiredArgument(JsonElement args, string argName)

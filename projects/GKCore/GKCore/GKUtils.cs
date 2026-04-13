@@ -1176,6 +1176,20 @@ namespace GKCore
             }
         }
 
+        public static string GetDateDisplayString(GDMCustomDate date)
+        {
+            string result;
+
+            if (date == null) {
+                result = string.Empty;
+            } else {
+                GlobalOptions glob = GlobalOptions.Instance;
+                result = date.GetDisplayString(glob.DefDateFormat, glob.ShowDatesSign, glob.ShowDatesCalendar);
+            }
+
+            return result;
+        }
+
         public static string GEDCOMEventToDateStr(GDMCustomEvent evt, DateFormat format, bool sign, bool shorten = false)
         {
             return (evt == null) ? string.Empty : evt.Date.GetDisplayString(format, sign, false, shorten);

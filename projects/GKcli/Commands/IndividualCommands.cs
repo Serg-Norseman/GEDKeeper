@@ -33,13 +33,13 @@ internal class IndiMenuCommand : BaseCommand
 }
 
 
-internal class IndiListCommand : RecordCommand
+internal class IndiListCommand : BaseCommand
 {
     public IndiListCommand() : base("individual_list", LSID.Find, CommandCategory.Individual) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        var selected = SelectRecord(baseContext, GDMRecordType.rtIndividual, "Select a individual", "Individual: {0}", "No records.");
+        var selected = PromptHelper.SelectRecord(baseContext, GDMRecordType.rtIndividual, "Select a individual", "Individual: {0}", "No records.");
         if (selected != null) {
             var newEvent = new GDMIndividualEvent();
             CommandController.SetVariable("selectedObj", newEvent);
@@ -397,7 +397,7 @@ internal class IndiListAssociationsCommand : BaseCommand
 }
 
 
-internal class IndiListEventsCommand : ListEventsCommand
+internal class IndiListEventsCommand : EventCommand
 {
     public IndiListEventsCommand() : base("individual_list_events", null, CommandCategory.Individual) { }
 
@@ -428,7 +428,7 @@ internal class IndiListEventsCommand : ListEventsCommand
         if (indiRec == null)
             return MCPContent.CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
 
-        return GetList(baseContext, "individual", indiRec);
+        return GetEventsList(baseContext, "individual", indiRec);
     }
 }
 
@@ -471,7 +471,7 @@ internal class IndiListEventTypesCommand : BaseCommand
 }
 
 
-internal class IndiAddEventCommand : BaseCommand
+internal class IndiAddEventCommand : EventCommand
 {
     public IndiAddEventCommand() : base("individual_add_event", null, CommandCategory.Individual) { }
 
@@ -510,57 +510,7 @@ internal class IndiAddEventCommand : BaseCommand
         if (indiRec == null)
             return MCPContent.CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
 
-        string tag = MCPHelper.GetRequiredArgument(args, "tag");
-        string argType = MCPHelper.GetStringArgument(args, "type", "");
-        EventDef matchedDef = AppHost.EventDefinitions.Find(tag, argType);
-
-        // Determine if this tag corresponds to a fact
-        bool isFact = matchedDef != null && matchedDef.HasValue();
-        GDMCustomEvent newEvent = isFact ? new GDMIndividualAttribute() : new GDMIndividualEvent();
-        newEvent.SetName(tag);
-        newEvent.Classification = matchedDef != null ? matchedDef.Type : argType;
-
-        // Date
-        string dateStr = MCPHelper.GetStringArgument(args, "date", "");
-        if (!string.IsNullOrEmpty(dateStr)) {
-            newEvent.Date.ParseString(dateStr);
-        }
-
-        // Place (string or location xref)
-        string placeStr = MCPHelper.GetStringArgument(args, "place", "");
-        string locationXRef = MCPHelper.GetStringArgument(args, "location_xref", "");
-        if (!string.IsNullOrEmpty(locationXRef)) {
-            var locRec = baseContext.Tree.FindXRef<GDMLocationRecord>(locationXRef);
-            if (locRec == null)
-                return MCPContent.CreateSimpleContent($"Location not found with XRef: {locationXRef}");
-            baseContext.Tree.SetPtrValue(newEvent.Place.Location, locRec);
-        } else if (!string.IsNullOrEmpty(placeStr)) {
-            newEvent.Place.StringValue = placeStr;
-        }
-
-        // Cause
-        string cause = MCPHelper.GetStringArgument(args, "cause", "");
-        if (!string.IsNullOrEmpty(cause)) {
-            newEvent.Cause = cause;
-        }
-
-        // Agency
-        string agency = MCPHelper.GetStringArgument(args, "agency", "");
-        if (!string.IsNullOrEmpty(agency)) {
-            newEvent.Agency = agency;
-        }
-
-        // Value (for facts)
-        if (isFact) {
-            string value = MCPHelper.GetStringArgument(args, "value", "");
-            newEvent.StringValue = value;
-        }
-
-        indiRec.Events.Add(newEvent);
-        baseContext.SetModified();
-
-        string evtName = matchedDef != null ? matchedDef.DisplayName : tag;
-        return MCPContent.CreateSimpleContent($"Event '{evtName}' added to individual '{individualXRef}' at index {indiRec.Events.Count - 1}");
+        return AddEvent(baseContext, indiRec, "individual", args);
     }
 }
 

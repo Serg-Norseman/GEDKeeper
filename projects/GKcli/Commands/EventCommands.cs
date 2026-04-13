@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using GDModel;
 using GKcli.MCP;
 using GKCore;
@@ -158,11 +159,11 @@ internal class EventEditCommand : BaseCommand
 }
 
 
-internal abstract class ListEventsCommand : BaseCommand
+internal abstract class EventCommand : BaseCommand
 {
-    protected ListEventsCommand(string sign, Enum lsid, CommandCategory category) : base(sign, lsid, category) { }
+    protected EventCommand(string sign, Enum lsid, CommandCategory category) : base(sign, lsid, category) { }
 
-    protected static List<MCPContent> GetList(BaseContext baseContext, string recName, GDMRecordWithEvents recordWithEvents)
+    protected static List<MCPContent> GetEventsList(BaseContext baseContext, string recName, GDMRecordWithEvents recordWithEvents)
     {
         if (!recordWithEvents.HasEvents)
             return MCPContent.CreateSimpleContent($"{MCPHelper.ToUpperFirst(recName)} '{recordWithEvents.XRef}' has no events.");
@@ -175,7 +176,7 @@ internal abstract class ListEventsCommand : BaseCommand
         for (int i = 0; i < recordWithEvents.Events.Count; i++) {
             var evt = recordWithEvents.Events[i];
             string eventName = GKUtils.GetEventName(evt);
-            string dateStr = MCPHelper.GetDateValue(evt.Date.Value);
+            string dateStr = GKUtils.GetDateDisplayString(evt.Date.Value);
             string ageStr = GKUtils.GetAgeDisplayStr(evt);
             string placeStr = GKUtils.GetEventPlaceAndAttributeValues(evt);
             string causeStr = GKUtils.GetEventCause(evt);
@@ -186,5 +187,74 @@ internal abstract class ListEventsCommand : BaseCommand
         }
 
         return MCPContent.CreateSimpleContent(string.Join("\n", rows));
+    }
+
+    protected static List<MCPContent> AddEvent(BaseContext baseContext, GDMRecordWithEvents record, string recName, JsonElement args)
+    {
+        string tag = MCPHelper.GetRequiredArgument(args, "tag");
+        string argType = MCPHelper.GetStringArgument(args, "type", "");
+        EventDef matchedDef = AppHost.EventDefinitions.Find(tag, argType);
+
+        // Determine if this tag corresponds to a fact
+        bool isFact = matchedDef != null && matchedDef.HasValue();
+
+        GDMCustomEvent newEvent;
+        if (record is GDMIndividualRecord) {
+            if (isFact) {
+                newEvent = new GDMIndividualAttribute();
+            } else {
+                newEvent = new GDMIndividualEvent();
+            }
+        } else {
+            newEvent = new GDMFamilyEvent();
+        }
+        newEvent.SetName(tag);
+        newEvent.Classification = matchedDef != null ? matchedDef.Type : argType;
+
+        // Date
+        string dateStr = MCPHelper.GetStringArgument(args, "date", "");
+        if (!string.IsNullOrEmpty(dateStr)) {
+            // TODO: intelligent date parsing in various variants
+            GDMDate gcd = GDMDate.CreateByFormattedStr(dateStr, GDMCalendar.dcGregorian, false);
+            newEvent.Date.ParseString(gcd.StringValue);
+        }
+
+        // TODO: Age!
+
+        // Place (string or location xref)
+        string placeStr = MCPHelper.GetStringArgument(args, "place", "");
+        string locationXRef = MCPHelper.GetStringArgument(args, "location_xref", "");
+        if (!string.IsNullOrEmpty(locationXRef)) {
+            var locRec = baseContext.Tree.FindXRef<GDMLocationRecord>(locationXRef);
+            if (locRec == null)
+                return MCPContent.CreateSimpleContent($"Location not found with XRef: {locationXRef}");
+            baseContext.Tree.SetPtrValue(newEvent.Place.Location, locRec);
+        } else if (!string.IsNullOrEmpty(placeStr)) {
+            newEvent.Place.StringValue = placeStr;
+        }
+
+        // Cause
+        string cause = MCPHelper.GetStringArgument(args, "cause", "");
+        if (!string.IsNullOrEmpty(cause)) {
+            newEvent.Cause = cause;
+        }
+
+        // Agency
+        string agency = MCPHelper.GetStringArgument(args, "agency", "");
+        if (!string.IsNullOrEmpty(agency)) {
+            newEvent.Agency = agency;
+        }
+
+        // Value (for facts)
+        if (isFact) {
+            string value = MCPHelper.GetStringArgument(args, "value", "");
+            newEvent.StringValue = value;
+        }
+
+        record.Events.Add(newEvent);
+        baseContext.SetModified();
+
+        string evtName = matchedDef != null ? matchedDef.DisplayName : tag;
+        return MCPContent.CreateSimpleContent($"Event '{evtName}' added to {recName} '{record.XRef}' at index {record.Events.Count - 1}");
     }
 }

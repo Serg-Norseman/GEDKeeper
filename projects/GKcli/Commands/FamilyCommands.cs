@@ -14,6 +14,7 @@ using GKCore;
 using GKCore.Controllers;
 using GKCore.Events;
 using GKCore.Locales;
+using GKUI.Platform;
 
 namespace GKcli.Commands;
 
@@ -28,13 +29,13 @@ internal class FamMenuCommand : BaseCommand
 }
 
 
-internal class FamListCommand : RecordCommand
+internal class FamListCommand : BaseCommand
 {
     public FamListCommand() : base("family_list", LSID.Find, CommandCategory.Family) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        SelectRecord(baseContext, GDMRecordType.rtFamily, "Select a family", "Family: {0}", "No records.");
+        PromptHelper.SelectRecord(baseContext, GDMRecordType.rtFamily, "Select a family", "Family: {0}", "No records.");
     }
 
     public override MCPTool CreateTool()
@@ -310,7 +311,7 @@ internal class FamListChildrenCommand : BaseCommand
 }
 
 
-internal class FamListEventsCommand : ListEventsCommand
+internal class FamListEventsCommand : EventCommand
 {
     public FamListEventsCommand() : base("family_list_events", null, CommandCategory.Family) { }
 
@@ -341,7 +342,7 @@ internal class FamListEventsCommand : ListEventsCommand
         if (familyRec == null)
             return MCPContent.CreateSimpleContent($"Family not found with XRef: {familyXRef}");
 
-        return GetList(baseContext, "family", familyRec);
+        return GetEventsList(baseContext, "family", familyRec);
     }
 }
 
@@ -384,7 +385,7 @@ internal class FamListEventTypesCommand : BaseCommand
 }
 
 
-internal class FamAddEventCommand : BaseCommand
+internal class FamAddEventCommand : EventCommand
 {
     public FamAddEventCommand() : base("family_add_event", null, CommandCategory.Family) { }
 
@@ -423,55 +424,7 @@ internal class FamAddEventCommand : BaseCommand
         if (familyRec == null)
             return MCPContent.CreateSimpleContent($"Family not found with XRef: {familyXRef}");
 
-        string tag = MCPHelper.GetRequiredArgument(args, "tag");
-        string argType = MCPHelper.GetStringArgument(args, "type", "");
-        EventDef matchedDef = AppHost.EventDefinitions.Find(tag, argType);
-
-        GDMFamilyEvent newEvent = new GDMFamilyEvent();
-        newEvent.SetName(tag);
-        newEvent.Classification = matchedDef != null ? matchedDef.Type : argType;
-
-        // Date
-        string dateStr = MCPHelper.GetStringArgument(args, "date", "");
-        if (!string.IsNullOrEmpty(dateStr)) {
-            newEvent.Date.ParseString(dateStr);
-        }
-
-        // Place (string or location xref)
-        string placeStr = MCPHelper.GetStringArgument(args, "place", "");
-        string locationXRef = MCPHelper.GetStringArgument(args, "location_xref", "");
-        if (!string.IsNullOrEmpty(locationXRef)) {
-            var locRec = baseContext.Tree.FindXRef<GDMLocationRecord>(locationXRef);
-            if (locRec == null)
-                return MCPContent.CreateSimpleContent($"Location not found with XRef: {locationXRef}");
-            baseContext.Tree.SetPtrValue(newEvent.Place.Location, locRec);
-        } else if (!string.IsNullOrEmpty(placeStr)) {
-            newEvent.Place.StringValue = placeStr;
-        }
-
-        // Cause
-        string cause = MCPHelper.GetStringArgument(args, "cause", "");
-        if (!string.IsNullOrEmpty(cause)) {
-            newEvent.Cause = cause;
-        }
-
-        // Agency
-        string agency = MCPHelper.GetStringArgument(args, "agency", "");
-        if (!string.IsNullOrEmpty(agency)) {
-            newEvent.Agency = agency;
-        }
-
-        // Value (for facts)
-        string value = MCPHelper.GetStringArgument(args, "value", "");
-        if (!string.IsNullOrEmpty(value)) {
-            newEvent.StringValue = value;
-        }
-
-        familyRec.Events.Add(newEvent);
-        baseContext.SetModified();
-
-        string evtName = matchedDef != null ? matchedDef.DisplayName : tag;
-        return MCPContent.CreateSimpleContent($"Event '{evtName}' added to family '{familyXRef}' at index {familyRec.Events.Count - 1}");
+        return AddEvent(baseContext, familyRec, "family", args);
     }
 }
 

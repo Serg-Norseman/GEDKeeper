@@ -31,13 +31,13 @@ internal class NoteMenuCommand : BaseCommand
 }
 
 
-internal class NoteListCommand : RecordCommand
+internal class NoteListCommand : BaseCommand
 {
     public NoteListCommand() : base("note_list", LSID.Find, CommandCategory.Note) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        var selected = SelectRecord(baseContext, GDMRecordType.rtNote, "Select a note", "Note: {0}", "No records.");
+        var selected = PromptHelper.SelectRecord(baseContext, GDMRecordType.rtNote, "Select a note", "Note: {0}", "No records.");
         if (selected != null)
             CommandController.SetVariable("selectedObj", selected);
     }
@@ -134,13 +134,13 @@ internal class NoteEditCommand : BaseCommand
 }
 
 
-internal class NoteDeleteCommand : RecordCommand
+internal class NoteDeleteCommand : BaseCommand
 {
     public NoteDeleteCommand() : base("note_delete", LSID.MIRecordDelete, CommandCategory.Note) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        DeleteRecord<GDMNoteRecord>(baseContext, "[darkred]Error:[/] [red]Expected an note record[/]");
+        PromptHelper.DeleteRecord<GDMNoteRecord>(baseContext, "[darkred]Error:[/] [red]Expected an note record[/]");
     }
 
     public override MCPTool CreateTool()

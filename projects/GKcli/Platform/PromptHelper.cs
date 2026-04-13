@@ -11,6 +11,9 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using GDModel;
+using GKcli;
+using GKCore;
 using Sharprompt;
 
 namespace GKUI.Platform;
@@ -146,5 +149,38 @@ internal static class PromptHelper
         );
 
         return answer == chY;
+    }
+
+    public static GDMRecord SelectRecord(BaseContext baseContext, GDMRecordType recordType, string prompt, string yesMsg, string noMsg)
+    {
+        GDMRecord result = null;
+
+        var recList = baseContext.Tree.GetRecords(recordType);
+        if (recList.Count > 0) {
+            result = Prompt.Select(prompt, recList,
+                pageSize: 10,
+                textSelector: (GDMRecord r) => { return GKUtils.GetRecordName(baseContext.Tree, r, false); });
+
+            PromptHelper.WriteLine(string.Format(yesMsg, GKUtils.GetRecordName(baseContext.Tree, result, false)));
+        } else {
+            PromptHelper.WriteLine(noMsg);
+        }
+
+        return result;
+    }
+
+    public static void DeleteRecord<T>(BaseContext baseContext, string expectedMsg) where T : GDMRecord
+    {
+        var rec = CommandController.GetVariable<T>("selectedObj");
+        if (rec == null) {
+            PromptHelper.WriteLine(expectedMsg);
+            return;
+        }
+
+        bool result = CommandController.GetConfirm("Удалить запись");
+        if (result) {
+            baseContext.DeleteRecord(rec);
+            CommandController.SetVariable("selectedObj", null);
+        }
     }
 }
