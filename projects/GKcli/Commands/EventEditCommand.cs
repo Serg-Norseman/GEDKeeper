@@ -7,7 +7,9 @@
  */
 
 using System;
+using System.Collections.Generic;
 using GDModel;
+using GKcli.MCP;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Events;
@@ -152,5 +154,37 @@ internal class EventEditCommand : BaseCommand
         PromptHelper.WriteLine($"Cause: [yellow]{evt.Cause}[/]");
         PromptHelper.WriteLine($"Agency: [yellow]{evt.Agency}[/]");
         PromptHelper.WriteLine($"Value: [yellow]{evt.StringValue}[/]");
+    }
+}
+
+
+internal abstract class ListEventsCommand : BaseCommand
+{
+    protected ListEventsCommand(string sign, Enum lsid, CommandCategory category) : base(sign, lsid, category) { }
+
+    protected static List<MCPContent> GetList(BaseContext baseContext, string recName, GDMRecordWithEvents recordWithEvents)
+    {
+        if (!recordWithEvents.HasEvents)
+            return MCPContent.CreateSimpleContent($"{MCPHelper.ToUpperFirst(recName)} '{recordWithEvents.XRef}' has no events.");
+
+        var rows = new List<string> {
+            $"Events for {recName} '{recordWithEvents.XRef}' ({recordWithEvents.Events.Count}):",
+            "| Index | Event | Date | Age | Place | Cause | Sources | Notes | Media |",
+            "|---|---|---|---|---|---|---|---|---|"
+        };
+        for (int i = 0; i < recordWithEvents.Events.Count; i++) {
+            var evt = recordWithEvents.Events[i];
+            string eventName = GKUtils.GetEventName(evt);
+            string dateStr = MCPHelper.GetDateValue(evt.Date.Value);
+            string ageStr = GKUtils.GetAgeDisplayStr(evt);
+            string placeStr = GKUtils.GetEventPlaceAndAttributeValues(evt);
+            string causeStr = GKUtils.GetEventCause(evt);
+            string sourcesStr = evt.HasSourceCitations ? evt.SourceCitations.Count.ToString() : string.Empty;
+            string notesStr = evt.HasNotes ? evt.Notes.Count.ToString() : string.Empty;
+            string mediaStr = evt.HasMultimediaLinks ? evt.MultimediaLinks.Count.ToString() : string.Empty;
+            rows.Add($"|{i + 1}|{eventName}|{dateStr}|{ageStr}|{placeStr}|{causeStr}|{sourcesStr}|{notesStr}|{mediaStr}|");
+        }
+
+        return MCPContent.CreateSimpleContent(string.Join("\n", rows));
     }
 }

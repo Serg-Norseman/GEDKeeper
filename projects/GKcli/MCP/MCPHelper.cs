@@ -39,8 +39,11 @@ public static class MCPHelper
         lines.Append($"{tableName} (page {page}/{totalPages}, {startIndex + 1}-{endIndex} of {recordCount}):\n");
         lines.Append(buildRow(-1)); // header
         for (int i = startIndex; i < endIndex; i++) {
+            var line = buildRow(i);
+            if (string.IsNullOrEmpty(line)) continue;
+
             lines.Append("\n");
-            lines.Append(buildRow(i));
+            lines.Append(line);
         }
         if (page < totalPages) {
             lines.Append($"\n\n_Next page: use parameter page={page + 1}_");
@@ -49,6 +52,11 @@ public static class MCPHelper
         MCPServer.Log($"Successfully generated response for {recordCount} rows (page {page}/{totalPages})");
 
         return MCPContent.CreateSimpleContent(lines.ToString());
+    }
+
+    public static string ToUpperFirst(string s) 
+    {
+        return string.IsNullOrEmpty(s) ? s : char.ToUpper(s[0]) + s.Substring(1);
     }
 
     internal static string GetDateValue(GDMCustomDate date)

@@ -28,29 +28,28 @@ internal class GroupListCommand : BaseCommand
     {
         return new MCPTool {
             Name = Sign,
-            Description = "List all groups in the database",
-            InputSchema = MCPToolInputSchema.Empty
+            Description = "List all groups in the database with pagination support (20 items per page)",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" }
+                },
+                Required = new List<string> { }
+            }
         };
     }
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         var recList = baseContext.Tree.GetRecords(GDMRecordType.rtGroup);
-        if (recList.Count == 0)
-            return MCPContent.CreateSimpleContent("No groups in database.");
-
-        var rows = new List<string> {
-            $"Groups ({recList.Count}):",
-            "| XRef | Group | Members |",
-            "|---|---|---|"
-        };
-        foreach (var rec in recList) {
-            var groupRec = (GDMGroupRecord)rec;
-            int membersCount = groupRec.Members.Count;
-            rows.Add($"|{rec.XRef}|{groupRec.GroupName}|{membersCount}|");
-        }
-
-        return MCPContent.CreateSimpleContent(string.Join("\n", rows));
+        return MCPHelper.PageableTable("groups", args, recList.Count, (int index) => {
+            if (index == -1) {
+                return "| XRef | Group | Members |\n|---|---|---|";
+            } else {
+                var rec = (GDMGroupRecord)recList[index];
+                int membersCount = rec.Members.Count;
+                return $"|{rec.XRef}|{rec.GroupName}|{membersCount}|";
+            }
+        });
     }
 }
 
@@ -223,5 +222,62 @@ internal class GroupDeleteCommand : BaseCommand
         baseContext.DeleteRecord(groupRec);
 
         return MCPContent.CreateSimpleContent($"Group deleted: {xref}");
+    }
+}
+
+
+internal class GroupListMembersCommand : BaseCommand
+{
+    public GroupListMembersCommand() : base("group_list_members", null, CommandCategory.Group) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Empty for interactive mode
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "List all members of a group by its XRef identifier",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["group_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the group (e.g., 'G1')" }
+                },
+                Required = new List<string> { "group_xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string groupXRef = MCPHelper.GetRequiredArgument(args, "group_xref");
+
+        var groupRec = baseContext.Tree.FindXRef<GDMGroupRecord>(groupXRef);
+        if (groupRec == null)
+            return MCPContent.CreateSimpleContent($"Group not found with XRef: {groupXRef}");
+
+        if (groupRec.Members.Count <= 0)
+            return MCPContent.CreateSimpleContent($"Group '{groupXRef}' has no members.");
+
+        var rows = new List<string> {
+            $"Members of group '{groupXRef}' ({groupRec.Members.Count}):",
+            "| Index | Member XRef | Name | Sex |",
+            "|---|---|---|---|"
+        };
+        for (int i = 0; i < groupRec.Members.Count; i++) {
+            var memberPtr = groupRec.Members[i];
+            var memberRec = baseContext.Tree.GetPtrValue<GDMIndividualRecord>(memberPtr);
+
+            if (memberRec != null) {
+                string memberName = GKUtils.GetNameString(memberRec, false);
+                string sex = GKData.SexData[(int)memberRec.Sex].Sign;
+                rows.Add($"|{i}|{memberPtr.XRef}|{memberName}|{sex}|");
+            } else {
+                rows.Add($"|{i}|{memberPtr.XRef}|(not found)|-|");
+            }
+        }
+
+        return MCPContent.CreateSimpleContent(string.Join("\n", rows));
     }
 }

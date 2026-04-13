@@ -46,12 +46,16 @@ internal class CommandController
         RegisterCommand(new RecordSearchCommand());
         RegisterCommand(new RecordAddUserRefCommand());
         RegisterCommand(new RecordDeleteUserRefCommand());
+        RegisterCommand(new RecordListUserRefsCommand());
         RegisterCommand(new RecordAddSourceCitationCommand());
         RegisterCommand(new RecordDeleteSourceCitationCommand());
+        RegisterCommand(new RecordListSourceCitationsCommand());
         RegisterCommand(new RecordAddMultimediaLinkCommand());
         RegisterCommand(new RecordDeleteMultimediaLinkCommand());
+        RegisterCommand(new RecordListMultimediaCommand());
         RegisterCommand(new RecordAddNoteCommand());
         RegisterCommand(new RecordDeleteNoteCommand());
+        RegisterCommand(new RecordListNotesCommand());
 
         // Events
         RegisterCommand(new EventEditCommand());
@@ -64,6 +68,11 @@ internal class CommandController
         RegisterCommand(new IndiDeleteCommand());
         RegisterCommand(new IndiAddAssociationCommand());
         RegisterCommand(new IndiDeleteAssociationCommand());
+        RegisterCommand(new IndiListAssociationsCommand());
+        RegisterCommand(new IndiListEventsCommand());
+        RegisterCommand(new IndiDeleteEventCommand());
+        RegisterCommand(new IndiListEventTypesCommand());
+        RegisterCommand(new IndiAddEventCommand());
 
         // Families operations
         RegisterCommand(new FamMenuCommand());
@@ -72,6 +81,11 @@ internal class CommandController
         RegisterCommand(new FamAddChildCommand());
         RegisterCommand(new FamDeleteChildCommand());
         RegisterCommand(new FamDeleteCommand());
+        RegisterCommand(new FamListChildrenCommand());
+        RegisterCommand(new FamListEventsCommand());
+        RegisterCommand(new FamDeleteEventCommand());
+        RegisterCommand(new FamListEventTypesCommand());
+        RegisterCommand(new FamAddEventCommand());
 
         // Notes operations
         RegisterCommand(new NoteMenuCommand());
@@ -102,6 +116,7 @@ internal class CommandController
         RegisterCommand(new GroupAddMemberCommand());
         RegisterCommand(new GroupDeleteMemberCommand());
         RegisterCommand(new GroupDeleteCommand());
+        RegisterCommand(new GroupListMembersCommand());
 
         // Tasks operations
         RegisterCommand(new TaskListCommand());
@@ -143,7 +158,8 @@ internal class CommandController
 
     public static string SelectCommand(CommandCategory category, bool hasReturn, string message)
     {
-        var cmdList = fCommands.Values.Where(c => c.Category == category).ToList();
+        // For commands implemented in MCP but not implemented for CLI, there will be no name.
+        var cmdList = fCommands.Values.Where(c => (c.Category == category && c.Text != "#")).ToList();
         if (hasReturn)
             cmdList.Add(new MenuReturnCommand());
 

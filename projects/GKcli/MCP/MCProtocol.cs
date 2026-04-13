@@ -198,7 +198,37 @@ internal class MCPInitializeResult
 internal class MCPCapabilities
 {
     [JsonPropertyName("tools")]
-    public MCPToolsCapability Tools { get; set; } = new();
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public MCPToolsCapability Tools { get; set; }
+
+    [JsonPropertyName("resources")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public MCPResourcesCapability Resources { get; set; }
+
+    [JsonPropertyName("prompts")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public MCPPromptsCapability Prompts { get; set; }
+}
+
+/// <summary>
+/// MCP Resources capability.
+/// </summary>
+internal class MCPResourcesCapability
+{
+    [JsonPropertyName("subscribe")]
+    public bool Subscribe { get; set; }
+
+    [JsonPropertyName("listChanged")]
+    public bool ListChanged { get; set; }
+}
+
+/// <summary>
+/// MCP Prompts capability.
+/// </summary>
+internal class MCPPromptsCapability
+{
+    [JsonPropertyName("listChanged")]
+    public bool ListChanged { get; set; }
 }
 
 /// <summary>
@@ -220,4 +250,217 @@ internal class MCPServerInfo
 
     [JsonPropertyName("version")]
     public string Version { get; set; }
+}
+
+// ===================== Resources =====================
+
+/// <summary>
+/// MCP Resource definition.
+/// </summary>
+internal class MCPResource
+{
+    [JsonPropertyName("uri")]
+    public string Uri { get; set; } = "";
+
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = "";
+
+    [JsonPropertyName("title")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Title { get; set; }
+
+    [JsonPropertyName("description")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Description { get; set; }
+
+    [JsonPropertyName("mimeType")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string MimeType { get; set; }
+
+    [JsonPropertyName("size")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public long? Size { get; set; }
+}
+
+/// <summary>
+/// MCP Resource Template definition.
+/// </summary>
+internal class MCPResourceTemplate
+{
+    [JsonPropertyName("uriTemplate")]
+    public string UriTemplate { get; set; } = "";
+
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = "";
+
+    [JsonPropertyName("title")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Title { get; set; }
+
+    [JsonPropertyName("description")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Description { get; set; }
+
+    [JsonPropertyName("mimeType")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string MimeType { get; set; }
+}
+
+/// <summary>
+/// MCP Resource Contents (base type).
+/// </summary>
+internal class MCPResourceContents
+{
+    [JsonPropertyName("uri")]
+    public string Uri { get; set; } = "";
+
+    [JsonPropertyName("mimeType")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string MimeType { get; set; }
+
+    [JsonPropertyName("text")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Text { get; set; }
+
+    [JsonPropertyName("blob")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Blob { get; set; }
+}
+
+/// <summary>
+/// MCP Resources List response result.
+/// </summary>
+internal class MCPResourcesListResult
+{
+    [JsonPropertyName("resources")]
+    public List<MCPResource> Resources { get; set; } = new();
+
+    [JsonPropertyName("nextCursor")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string NextCursor { get; set; }
+}
+
+/// <summary>
+/// MCP Resource Templates List response result.
+/// </summary>
+internal class MCPResourceTemplatesListResult
+{
+    [JsonPropertyName("resourceTemplates")]
+    public List<MCPResourceTemplate> ResourceTemplates { get; set; } = new();
+
+    [JsonPropertyName("nextCursor")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string NextCursor { get; set; }
+}
+
+/// <summary>
+/// MCP Read Resource response result.
+/// </summary>
+internal class MCPReadResourceResult
+{
+    [JsonPropertyName("contents")]
+    public List<MCPResourceContents> Contents { get; set; } = new();
+}
+
+// ===================== Prompts =====================
+
+/// <summary>
+/// MCP Prompt Argument definition.
+/// </summary>
+internal class MCPPromptArgument
+{
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = "";
+
+    [JsonPropertyName("description")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Description { get; set; }
+
+    [JsonPropertyName("required")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool? Required { get; set; }
+}
+
+/// <summary>
+/// MCP Prompt definition.
+/// </summary>
+internal class MCPPrompt
+{
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = "";
+
+    [JsonPropertyName("title")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Title { get; set; }
+
+    [JsonPropertyName("description")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Description { get; set; }
+
+    [JsonPropertyName("arguments")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<MCPPromptArgument> Arguments { get; set; }
+}
+
+/// <summary>
+/// MCP Prompt Content (text, image, audio, or resource).
+/// </summary>
+internal class MCPPromptContent
+{
+    [JsonPropertyName("type")]
+    public string Type { get; set; } = "text";
+
+    [JsonPropertyName("text")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Text { get; set; }
+
+    [JsonPropertyName("data")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Data { get; set; }
+
+    [JsonPropertyName("mimeType")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string MimeType { get; set; }
+
+    [JsonPropertyName("resource")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public MCPResourceContents Resource { get; set; }
+}
+
+/// <summary>
+/// MCP Prompt Message.
+/// </summary>
+internal class MCPPromptMessage
+{
+    [JsonPropertyName("role")]
+    public string Role { get; set; } = "user"; // "user" or "assistant"
+
+    [JsonPropertyName("content")]
+    public MCPPromptContent Content { get; set; } = new();
+}
+
+/// <summary>
+/// MCP Prompts List response result.
+/// </summary>
+internal class MCPPromptsListResult
+{
+    [JsonPropertyName("prompts")]
+    public List<MCPPrompt> Prompts { get; set; } = new();
+
+    [JsonPropertyName("nextCursor")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string NextCursor { get; set; }
+}
+
+/// <summary>
+/// MCP Get Prompt response result.
+/// </summary>
+internal class MCPPromptGetResult
+{
+    [JsonPropertyName("description")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Description { get; set; }
+
+    [JsonPropertyName("messages")]
+    public List<MCPPromptMessage> Messages { get; set; } = new();
 }

@@ -39,28 +39,27 @@ internal class RepositoryListCommand : RecordCommand
     {
         return new MCPTool {
             Name = Sign,
-            Description = "List all repositories in the database",
-            InputSchema = MCPToolInputSchema.Empty
+            Description = "List all repositories in the database with pagination support (20 items per page)",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" }
+                },
+                Required = new List<string> { }
+            }
         };
     }
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         var recList = baseContext.Tree.GetRecords(GDMRecordType.rtRepository);
-        if (recList.Count == 0)
-            return MCPContent.CreateSimpleContent("No repositories in database.");
-
-        var rows = new List<string> {
-            $"Repositories ({recList.Count}):",
-            "| XRef | Repository |",
-            "|---|---|"
-        };
-        foreach (var rec in recList) {
-            var repoRec = (GDMRepositoryRecord)rec;
-            rows.Add($"|{rec.XRef}|{repoRec.RepositoryName}|");
-        }
-
-        return MCPContent.CreateSimpleContent(string.Join("\n", rows));
+        return MCPHelper.PageableTable("repositories", args, recList.Count, (int index) => {
+            if (index == -1) {
+                return "| XRef | Repository |\n|---|---|";
+            } else {
+                var rec = (GDMRepositoryRecord)recList[index];
+                return $"|{rec.XRef}|{rec.RepositoryName}|";
+            }
+        });
     }
 }
 

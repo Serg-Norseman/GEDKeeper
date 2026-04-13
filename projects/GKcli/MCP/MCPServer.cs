@@ -28,6 +28,8 @@ internal class MCPServer
     private readonly CancellationTokenSource fCancellationToken;
     private readonly JsonSerializerOptions fJsonOptions;
     private readonly MCPToolsListResult fToolsList;
+    private readonly MCPResourcesListResult fResourcesList;
+    private readonly MCPPromptsListResult fPromptsList;
 
     public MCPServer()
     {
@@ -64,6 +66,16 @@ internal class MCPServer
         // Register tools from commands
         fToolsList = new MCPToolsListResult() {
             Tools = commands.Select(cmd => cmd.CreateTool()).Where(tl => tl != null).ToList()
+        };
+
+        // Initialize resources (minimal stub)
+        fResourcesList = new MCPResourcesListResult() {
+            Resources = new List<MCPResource>()
+        };
+
+        // Initialize prompts (minimal stub)
+        fPromptsList = new MCPPromptsListResult() {
+            Prompts = new List<MCPPrompt>()
         };
 
         fJsonOptions = new JsonSerializerOptions {
@@ -165,6 +177,11 @@ internal class MCPServer
             "initialize" => HandleInitialize(request),
             "tools/list" => HandleToolsList(request),
             "tools/call" => HandleToolsCall(request),
+            "resources/list" => HandleResourcesList(request),
+            "resources/templates/list" => HandleResourceTemplatesList(request),
+            "resources/read" => HandleResourceRead(request),
+            "prompts/list" => HandlePromptsList(request),
+            "prompts/get" => HandlePromptsGet(request),
             _ => new MCPResponse {
                 Id = request.Id,
                 Error = MCPError.MethodNotFound()
@@ -182,7 +199,9 @@ internal class MCPServer
         var result = new MCPInitializeResult {
             ProtocolVersion = "2025-06-18", //"2024-11-05",
             Capabilities = new MCPCapabilities {
-                Tools = new MCPToolsCapability { ListChanged = false }
+                Tools = new MCPToolsCapability { ListChanged = false },
+                Resources = new MCPResourcesCapability { Subscribe = false, ListChanged = false },
+                Prompts = new MCPPromptsCapability { ListChanged = false }
             },
             ServerInfo = new MCPServerInfo {
                 Name = "GKcli",
@@ -238,6 +257,110 @@ internal class MCPServer
                     Content = new List<MCPContent> { new MCPContent { Text = ex.Message } },
                     IsError = true
                 }
+            };
+        }
+    }
+
+    /// <summary>
+    /// Returns the list of available resources.
+    /// </summary>
+    private MCPResponse HandleResourcesList(MCPRequest request)
+    {
+        // Minimal stub: return empty list
+        return new MCPResponse { Id = request.Id, Result = fResourcesList };
+    }
+
+    /// <summary>
+    /// Returns the list of resource templates.
+    /// </summary>
+    private MCPResponse HandleResourceTemplatesList(MCPRequest request)
+    {
+        // Minimal stub: return empty list
+        return new MCPResponse {
+            Id = request.Id,
+            Result = new MCPResourceTemplatesListResult {
+                ResourceTemplates = new List<MCPResourceTemplate>()
+            }
+        };
+    }
+
+    /// <summary>
+    /// Reads the content of a specific resource by URI.
+    /// </summary>
+    private MCPResponse HandleResourceRead(MCPRequest request)
+    {
+        try {
+            if (request.Params == null || request.Params.Value.ValueKind != JsonValueKind.Object) {
+                return new MCPResponse {
+                    Id = request.Id,
+                    Error = MCPError.InvalidParams("Missing params")
+                };
+            }
+
+            var p = request.Params.Value;
+            if (!p.TryGetProperty("uri", out var uriElem) || uriElem.ValueKind != JsonValueKind.String) {
+                return new MCPResponse {
+                    Id = request.Id,
+                    Error = MCPError.InvalidParams("Missing uri")
+                };
+            }
+
+            string uri = uriElem.GetString()!;
+
+            // Minimal stub: resource not found
+            return new MCPResponse {
+                Id = request.Id,
+                Error = MCPError.InvalidParams($"Resource not found: {uri}")
+            };
+        } catch (Exception ex) {
+            return new MCPResponse {
+                Id = request.Id,
+                Error = MCPError.InternalError(ex.Message)
+            };
+        }
+    }
+
+    /// <summary>
+    /// Returns the list of available prompts.
+    /// </summary>
+    private MCPResponse HandlePromptsList(MCPRequest request)
+    {
+        // Minimal stub: return empty list
+        return new MCPResponse { Id = request.Id, Result = fPromptsList };
+    }
+
+    /// <summary>
+    /// Gets a specific prompt with arguments resolved.
+    /// </summary>
+    private MCPResponse HandlePromptsGet(MCPRequest request)
+    {
+        try {
+            if (request.Params == null || request.Params.Value.ValueKind != JsonValueKind.Object) {
+                return new MCPResponse {
+                    Id = request.Id,
+                    Error = MCPError.InvalidParams("Missing params")
+                };
+            }
+
+            var p = request.Params.Value;
+            if (!p.TryGetProperty("name", out var nameElem) || nameElem.ValueKind != JsonValueKind.String) {
+                return new MCPResponse {
+                    Id = request.Id,
+                    Error = MCPError.InvalidParams("Missing name")
+                };
+            }
+
+            string name = nameElem.GetString()!;
+
+            // Minimal stub: prompt not found
+            return new MCPResponse {
+                Id = request.Id,
+                Error = MCPError.InvalidParams($"Prompt not found: {name}")
+            };
+        } catch (Exception ex) {
+            return new MCPResponse {
+                Id = request.Id,
+                Error = MCPError.InternalError(ex.Message)
             };
         }
     }

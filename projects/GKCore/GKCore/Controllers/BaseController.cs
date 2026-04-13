@@ -82,6 +82,21 @@ namespace GKCore.Controllers
 
         #region Events
 
+        public static List<EventDef> GetEventTypes(EventTarget target)
+        {
+            var result = new List<EventDef>();
+
+            var eventDefs = AppHost.EventDefinitions.List;
+            for (int i = 0; i < eventDefs.Count; i++) {
+                var evDef = eventDefs[i];
+                if ((evDef.Target == target || evDef.Target == EventTarget.etAny) && evDef.Enabled) {
+                    result.Add(evDef);
+                }
+            }
+
+            return result;
+        }
+
         public static List<FreqItem<EventDef>> GetFrequencyEventTypes(BaseContext baseContext, EventTarget target)
         {
             var freqList = new List<FreqItem<EventDef>>();

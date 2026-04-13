@@ -547,3 +547,219 @@ internal class RecordDeleteNoteCommand : BaseCommand
         return MCPContent.CreateSimpleContent($"Note link removed from record '{recordXRef}' at index {noteIndex}: {noteInfo}");
     }
 }
+
+
+internal class RecordListUserRefsCommand : BaseCommand
+{
+    public RecordListUserRefsCommand() : base("record_list_userrefs", null, CommandCategory.Tools) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Empty for interactive mode
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "List all user references (custom notes) of a record by its XRef identifier",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["record_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record (e.g., 'I1', 'F1', 'N2')" }
+                },
+                Required = new List<string> { "record_xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
+
+        var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
+        if (record == null)
+            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+
+        if (!record.HasUserReferences)
+            return MCPContent.CreateSimpleContent($"Record '{recordXRef}' has no user references.");
+
+        var rows = new List<string> {
+            $"User references for record '{recordXRef}' ({record.UserReferences.Count}):",
+            "| Index | Value | Type |",
+            "|---|---|---|"
+        };
+        for (int i = 0; i < record.UserReferences.Count; i++) {
+            var userRef = record.UserReferences[i];
+            rows.Add($"|{i}|{userRef.StringValue}|{userRef.ReferenceType}|");
+        }
+
+        return MCPContent.CreateSimpleContent(string.Join("\n", rows));
+    }
+}
+
+
+internal class RecordListSourceCitationsCommand : BaseCommand
+{
+    public RecordListSourceCitationsCommand() : base("record_list_sources", null, CommandCategory.Tools) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Empty for interactive mode
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "List all source citations of a record by its XRef identifier",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["record_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record (e.g., 'I1', 'F1', 'N2')" }
+                },
+                Required = new List<string> { "record_xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
+
+        var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
+        if (record == null)
+            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+
+        if (!record.HasSourceCitations)
+            return MCPContent.CreateSimpleContent($"Record '{recordXRef}' has no source citations.");
+
+        var rows = new List<string> {
+            $"Source citations for record '{recordXRef}' ({record.SourceCitations.Count}):",
+            "| Index | Source XRef | Source short title | Page | Certainty |",
+            "|---|---|---|---|---|"
+        };
+        static string CertaintyLabel(int val) => val switch {
+            0 => "unreliable",
+            1 => "questionable",
+            2 => "secondary",
+            3 => "primary",
+            _ => "unknown"
+        };
+        for (int i = 0; i < record.SourceCitations.Count; i++) {
+            var citation = record.SourceCitations[i];
+            var sourceRec = baseContext.Tree.GetPtrValue<GDMSourceRecord>(citation);
+
+            rows.Add($"|{i}|{citation.XRef}|{sourceRec.ShortTitle}|{citation.Page}|{CertaintyLabel(citation.GetValidCertaintyAssessment())}|");
+        }
+
+        return MCPContent.CreateSimpleContent(string.Join("\n", rows));
+    }
+}
+
+
+internal class RecordListMultimediaCommand : BaseCommand
+{
+    public RecordListMultimediaCommand() : base("record_list_multimedia", null, CommandCategory.Tools) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Empty for interactive mode
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "List all multimedia links of a record by its XRef identifier",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["record_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record (e.g., 'I1', 'F1', 'N2')" }
+                },
+                Required = new List<string> { "record_xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
+
+        var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
+        if (record == null)
+            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+
+        if (!record.HasMultimediaLinks)
+            return MCPContent.CreateSimpleContent($"Record '{recordXRef}' has no multimedia links.");
+
+        var rows = new List<string> {
+            $"Multimedia links for record '{recordXRef}' ({record.MultimediaLinks.Count}):",
+            "| Index | Media XRef | Primary | Title |",
+            "|---|---|---|---|"
+        };
+        for (int i = 0; i < record.MultimediaLinks.Count; i++) {
+            var mmLink = record.MultimediaLinks[i];
+            var mmRec = baseContext.Tree.GetPtrValue<GDMMultimediaRecord>(mmLink);
+            if (mmRec.FileReferences.Count <= 0) continue;
+
+            var fileRef = mmRec.FileReferences[0];
+
+            rows.Add($"|{i}|{mmLink.XRef}|{mmLink.IsPrimary}|{fileRef.Title}|");
+        }
+
+        return MCPContent.CreateSimpleContent(string.Join("\n", rows));
+    }
+}
+
+
+internal class RecordListNotesCommand : BaseCommand
+{
+    public RecordListNotesCommand() : base("record_list_notes", null, CommandCategory.Tools) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Empty for interactive mode
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "List all note links of a record by its XRef identifier",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["record_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record (e.g., 'I1', 'F1', 'N2')" }
+                },
+                Required = new List<string> { "record_xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
+
+        var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
+        if (record == null)
+            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+
+        if (!record.HasNotes)
+            return MCPContent.CreateSimpleContent($"Record '{recordXRef}' has no notes.");
+
+        var rows = new List<string> {
+            $"Note links for record '{recordXRef}' ({record.Notes.Count}):",
+            "| Index | Note XRef | Text preview |",
+            "|---|---|---|"
+        };
+        for (int i = 0; i < record.Notes.Count; i++) {
+            var noteLink = record.Notes[i];
+            var noteRec = baseContext.Tree.GetPtrValue<GDMNoteRecord>(noteLink);
+
+            string preview = noteRec.Lines.Text;
+            if (preview != null && preview.Length > 80)
+                preview = preview.Substring(0, 80) + "...";
+
+            rows.Add($"|{i}|{noteLink.XRef}|{preview}|");
+        }
+
+        return MCPContent.CreateSimpleContent(string.Join("\n", rows));
+    }
+}

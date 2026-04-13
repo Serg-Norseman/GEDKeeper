@@ -1093,17 +1093,21 @@ using GDModel.Providers.FamilyShow;
                 }
                 result = result && isLoaded;
 
-                bool isChecked = false;
-                if (result) {
-                    if (!showProgress) {
-                        isChecked = GEDCOMChecker.CheckGEDCOMFormat(this, null);
-                    } else {
-                        AppHost.Instance.ExecuteWork((controller) => {
-                            isChecked = GEDCOMChecker.CheckGEDCOMFormat(this, controller);
-                        });
+                // If format is completely up-to-date,
+                // then checking is not necessary to strictly save loading time.
+                if (!IsRelevantFormat()) {
+                    bool isChecked = false;
+                    if (result) {
+                        if (!showProgress) {
+                            isChecked = GEDCOMChecker.CheckGEDCOMFormat(this, null);
+                        } else {
+                            AppHost.Instance.ExecuteWork((controller) => {
+                                isChecked = GEDCOMChecker.CheckGEDCOMFormat(this, controller);
+                            });
+                        }
                     }
+                    result = result && isChecked;
                 }
-                result = result && isChecked;
 
                 if (!result) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.LoadGedComFailed));
@@ -1187,12 +1191,17 @@ using GDModel.Providers.FamilyShow;
             return null;
         }
 
+        private bool IsRelevantFormat()
+        {
+            GetFormatAndVersion(out GEDCOMFormat format, out int fileVer);
+            return (format == GEDCOMFormat.Native && fileVer == GKData.APP_FORMAT_CURVER);
+        }
+
         private void CheckFileVersion(string fileName)
         {
             try {
                 if (!AppHost.TEST_MODE && !IsGEDZIP()) {
-                    GetFormatAndVersion(out GEDCOMFormat format, out int fileVer);
-                    if (format != GEDCOMFormat.Native || fileVer < GKData.APP_FORMAT_CURVER) {
+                    if (!IsRelevantFormat()) {
                         var path = Path.GetDirectoryName(fileName) + Path.DirectorySeparatorChar;
                         var pureFileName = Path.GetFileNameWithoutExtension(fileName);
                         var ext = Path.GetExtension(fileName);

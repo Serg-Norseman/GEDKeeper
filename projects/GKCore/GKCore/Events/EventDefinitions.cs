@@ -74,6 +74,11 @@ namespace GKCore.Events
             Protected = false;
             AcceptableEmpty = false;
         }
+
+        public bool HasValue()
+        {
+            return Kind == EventKind.ekFact;
+        }
     }
 
 

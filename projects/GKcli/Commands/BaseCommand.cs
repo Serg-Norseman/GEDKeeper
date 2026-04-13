@@ -70,6 +70,7 @@ internal abstract class BaseCommand
 
     /// <summary>
     /// Gets the localized identifier (LSID) of the command.
+    /// For commands implemented in MCP but not implemented for CLI, there will be no name.
     /// </summary>
     public string Text
     {
