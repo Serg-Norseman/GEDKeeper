@@ -68,9 +68,9 @@ internal class MCPServer
             Tools = commands.Select(cmd => cmd.CreateTool()).Where(tl => tl != null).ToList()
         };
 
-        // Initialize resources (minimal stub)
+        // Initialize resources
         fResourcesList = new MCPResourcesListResult() {
-            Resources = new List<MCPResource>()
+            Resources = CommandController.GetResources().Select(x => x.CreateResource()).ToList()
         };
 
         // Initialize prompts (minimal stub)
@@ -306,6 +306,19 @@ internal class MCPServer
             }
 
             string uri = uriElem.GetString()!;
+
+            // Match registered resources
+            var resContent = CommandController.GetResource(uri);
+            if (resContent != null) {
+                Logger.WriteInfo($"Returned contents for resource {uri}");
+
+                return new MCPResponse {
+                    Id = request.Id,
+                    Result = new {
+                        Contents = resContent,
+                    }
+                };
+            }
 
             // Minimal stub: resource not found
             return new MCPResponse {

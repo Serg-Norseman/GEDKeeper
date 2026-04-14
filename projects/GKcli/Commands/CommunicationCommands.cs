@@ -55,3 +55,41 @@ internal class CommunicationListCommand : BaseCommand
         });
     }
 }
+
+
+internal class CommunicationDeleteCommand : BaseCommand
+{
+    public CommunicationDeleteCommand() : base("communication_delete", null, CommandCategory.Communication) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Empty for interactive mode
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Delete a communication record from the database by its XRef identifier",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the communication (e.g., 'COMM1')" }
+                },
+                Required = new List<string> { "xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+
+        var commRec = baseContext.Tree.FindXRef<GDMCommunicationRecord>(xref);
+        if (commRec == null)
+            return MCPContent.CreateSimpleContent($"Communication not found with XRef: {xref}");
+
+        baseContext.DeleteRecord(commRec);
+
+        return MCPContent.CreateSimpleContent($"Communication deleted: {xref}");
+    }
+}

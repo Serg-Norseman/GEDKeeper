@@ -53,3 +53,41 @@ internal class LocationListCommand : BaseCommand
         });
     }
 }
+
+
+internal class LocationDeleteCommand : BaseCommand
+{
+    public LocationDeleteCommand() : base("location_delete", null, CommandCategory.Location) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Empty for interactive mode
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Delete a location record from the database by its XRef identifier",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the location (e.g., 'LOC1')" }
+                },
+                Required = new List<string> { "xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+
+        var locRec = baseContext.Tree.FindXRef<GDMLocationRecord>(xref);
+        if (locRec == null)
+            return MCPContent.CreateSimpleContent($"Location not found with XRef: {xref}");
+
+        baseContext.DeleteRecord(locRec);
+
+        return MCPContent.CreateSimpleContent($"Location deleted: {xref}");
+    }
+}

@@ -57,3 +57,41 @@ internal class ResearchListCommand : BaseCommand
         });
     }
 }
+
+
+internal class ResearchDeleteCommand : BaseCommand
+{
+    public ResearchDeleteCommand() : base("research_delete", null, CommandCategory.Research) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Empty for interactive mode
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Delete a research record from the database by its XRef identifier",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the research (e.g., 'RES1')" }
+                },
+                Required = new List<string> { "xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+
+        var researchRec = baseContext.Tree.FindXRef<GDMResearchRecord>(xref);
+        if (researchRec == null)
+            return MCPContent.CreateSimpleContent($"Research not found with XRef: {xref}");
+
+        baseContext.DeleteRecord(researchRec);
+
+        return MCPContent.CreateSimpleContent($"Research deleted: {xref}");
+    }
+}

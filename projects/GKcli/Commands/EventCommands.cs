@@ -214,9 +214,8 @@ internal abstract class EventCommand : BaseCommand
         // Date
         string dateStr = MCPHelper.GetStringArgument(args, "date", "");
         if (!string.IsNullOrEmpty(dateStr)) {
-            // TODO: intelligent date parsing in various variants
-            GDMDate gcd = GDMDate.CreateByFormattedStr(dateStr, GDMCalendar.dcGregorian, false);
-            newEvent.Date.ParseString(gcd.StringValue);
+            // Prompt is configured to transmit only GEDCOM-compatible strings.
+            newEvent.Date.ParseString(dateStr);
         }
 
         // TODO: Age!

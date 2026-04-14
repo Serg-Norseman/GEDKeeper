@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text.Json;
 using GKcli.Commands;
 using GKcli.MCP;
+using GKcli.Resources;
 using GKCore;
 using GKUI.Platform;
 using Sharprompt;
@@ -22,6 +23,7 @@ internal class CommandController
 {
     private static readonly BaseContext fBaseContext = new BaseContext(null);
     private static readonly Dictionary<string, BaseCommand> fCommands = new Dictionary<string, BaseCommand>();
+    private static readonly Dictionary<string, BaseResource> fResources = new Dictionary<string, BaseResource>();
     private static Dictionary<string, object> fVariables = new Dictionary<string, object>();
 
     public const string CMD_RETURN = "return";
@@ -97,6 +99,8 @@ internal class CommandController
         // Multimedia operations
         RegisterCommand(new MediaMenuCommand());
         RegisterCommand(new MediaListCommand());
+        RegisterCommand(new MediaAddCommand());
+        RegisterCommand(new MediaDeleteCommand());
 
         // Sources operations
         RegisterCommand(new SourceMenuCommand());
@@ -120,15 +124,19 @@ internal class CommandController
 
         // Tasks operations
         RegisterCommand(new TaskListCommand());
+        RegisterCommand(new TaskDeleteCommand());
 
         // Researches operations
         RegisterCommand(new ResearchListCommand());
+        RegisterCommand(new ResearchDeleteCommand());
 
         // Communications operations
         RegisterCommand(new CommunicationListCommand());
+        RegisterCommand(new CommunicationDeleteCommand());
 
         // Locations operations
         RegisterCommand(new LocationListCommand());
+        RegisterCommand(new LocationDeleteCommand());
 
         // Service
         RegisterCommand(new ServiceMenuCommand());
@@ -149,11 +157,19 @@ internal class CommandController
         // Application and menu
         RegisterCommand(new MenuReturnCommand());
         RegisterCommand(new AppExitCommand());
+
+        // Resources
+        RegisterResource(new GEDCOMDateSpecResource());
     }
 
     private static void RegisterCommand(BaseCommand commandInstance)
     {
         fCommands.Add(commandInstance.Sign, commandInstance);
+    }
+
+    private static void RegisterResource(BaseResource resource)
+    {
+        fResources.Add(resource.Uri, resource);
     }
 
     public static string SelectCommand(CommandCategory category, bool hasReturn, string message)
@@ -208,6 +224,20 @@ internal class CommandController
             return cmd.ExecuteTool(fBaseContext, args);
         } else {
             throw new ArgumentException($"Unknown tool: {toolName}");
+        }
+    }
+
+    internal static IEnumerable<BaseResource> GetResources()
+    {
+        return fResources.Values;
+    }
+
+    public static List<MCPResourceContents> GetResource(string uri)
+    {
+        if (fResources.TryGetValue(uri, out BaseResource res)) {
+            return res.Get(fBaseContext);
+        } else {
+            return null;
         }
     }
 }

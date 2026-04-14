@@ -55,3 +55,41 @@ internal class TaskListCommand : BaseCommand
         });
     }
 }
+
+
+internal class TaskDeleteCommand : BaseCommand
+{
+    public TaskDeleteCommand() : base("task_delete", null, CommandCategory.Task) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Empty for interactive mode
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Delete a task record from the database by its XRef identifier",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the task (e.g., 'TSK1')" }
+                },
+                Required = new List<string> { "xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+
+        var taskRec = baseContext.Tree.FindXRef<GDMTaskRecord>(xref);
+        if (taskRec == null)
+            return MCPContent.CreateSimpleContent($"Task not found with XRef: {xref}");
+
+        baseContext.DeleteRecord(taskRec);
+
+        return MCPContent.CreateSimpleContent($"Task deleted: {xref}");
+    }
+}

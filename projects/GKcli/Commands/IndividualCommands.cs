@@ -490,7 +490,7 @@ internal class IndiAddEventCommand : EventCommand
                     ["individual_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the individual (e.g., 'I1')" },
                     ["tag"] = new MCPToolProperty { Type = "string", Description = "GEDCOM tag of the event type (from individual_list_event_types)" },
                     ["type"] = new MCPToolProperty { Type = "string", Description = "Event type classification (optional, from individual_list_event_types)" },
-                    ["date"] = new MCPToolProperty { Type = "string", Description = "Date string in dd/mm/yyyy format (any part may be empty, e.g., '15/04/1990', '/04/1990', '//1990')" },
+                    ["date"] = new MCPToolProperty { Type = "string", Description = "Date string. Follow the GEDCOM date specification from the resource 'gedcom://date_spec'." },
                     ["place"] = new MCPToolProperty { Type = "string", Description = "Place as a free-form string" },
                     ["location_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of a location record (alternative to place string)" },
                     ["cause"] = new MCPToolProperty { Type = "string", Description = "Cause of the event" },

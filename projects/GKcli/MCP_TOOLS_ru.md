@@ -122,6 +122,8 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 | Инструмент | Описание | Параметры |
 |---|---|---|
 | `multimedia_list` | Список мультимедиа-записей (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
+| `multimedia_add` | Добавить мультимедиа-запись с файловой ссылкой | `title` (string) — название, `file_path` (string) — путь к файлу или URL, `media_type` (string — `Unknown`, `Audio`, `Book`, `Card`, `Electronic`, `Fiche`, `Film`, `Magazine`, `Manuscript`, `Map`, `Newspaper`, `Photo`, `Tombstone`, `Video`), `store_type` (string — `Reference`, `RelativeReference`, `Archive`, `URL`) |
+| `multimedia_delete` | Удалить мультимедиа-запись | `xref` (string, напр. `M1`) |
 
 ---
 
@@ -143,6 +145,7 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 | Инструмент | Описание | Параметры |
 |---|---|---|
 | `task_list` | Список задач (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
+| `task_delete` | Удалить задачу | `xref` (string, напр. `TSK1`) |
 
 ---
 
@@ -151,6 +154,7 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 | Инструмент | Описание | Параметры |
 |---|---|---|
 | `research_list` | Список исследований (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
+| `research_delete` | Удалить исследование | `xref` (string, напр. `RES1`) |
 
 ---
 
@@ -159,6 +163,7 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 | Инструмент | Описание | Параметры |
 |---|---|---|
 | `communication_list` | Список записей переписки (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
+| `communication_delete` | Удалить запись переписки | `xref` (string, напр. `COMM1`) |
 
 ---
 
@@ -167,6 +172,7 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 | Инструмент | Описание | Параметры |
 |---|---|---|
 | `location_list` | Список местоположений (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
+| `location_delete` | Удалить местоположение | `xref` (string, напр. `LOC1`) |
 
 ---
 
