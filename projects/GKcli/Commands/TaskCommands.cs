@@ -7,8 +7,10 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using GDModel;
+using GDModel.Providers.GEDCOM;
 using GKcli.MCP;
 using GKCore;
 using GKCore.Locales;
@@ -21,7 +23,7 @@ internal class TaskListCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()
@@ -57,13 +59,87 @@ internal class TaskListCommand : BaseCommand
 }
 
 
+internal class TaskAddCommand : BaseCommand
+{
+    private static Dictionary<string, GDMResearchPriority> PriorityMap;
+
+    public TaskAddCommand() : base("task_add", null, CommandCategory.Task) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
+    }
+
+    private static void RequireMaps()
+    {
+        if (PriorityMap == null) {
+            PriorityMap = new Dictionary<string, GDMResearchPriority>();
+            for (GDMResearchPriority pt = GDMResearchPriority.rpNone; pt <= GDMResearchPriority.rpTop; pt++) {
+                PriorityMap.Add(LangMan.LS(GKData.PriorityNames[(int)pt]), pt);
+            }
+        }
+    }
+
+    public override MCPTool CreateTool()
+    {
+        RequireMaps();
+
+        var priorities = PriorityMap.Keys.ToList();
+
+        return new MCPTool {
+            Name = Sign,
+            Description = "Add a new task record to the database",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["goal"] = new MCPToolProperty { Type = "string", Description = "Goal of the task item (arbitrary name or XRef identifier of the individual, family, source)" },
+                    ["priority"] = new MCPToolProperty { Type = "string", Description = "Priority of the task.", Enum = priorities },
+                    ["start_date"] = new MCPToolProperty { Type = "string", Description = "Task start date" },
+                    ["stop_date"] = new MCPToolProperty { Type = "string", Description = "Task end date" },
+                },
+                Required = new List<string> { "goal", "priority" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string goal = MCPHelper.GetRequiredArgument(args, "goal");
+        string goalName;
+        var record = baseContext.Tree.FindXRef<GDMRecord>(goal);
+        if (record != null) {
+            goal = GEDCOMUtils.EncloseXRef(goal);
+            goalName = GKUtils.GetRecordName(baseContext.Tree, record, false);
+        } else {
+            goalName = goal;
+        }
+
+        string priorityStr = MCPHelper.GetRequiredArgument(args, "priority");
+        if (!PriorityMap.TryGetValue(priorityStr, out var priority))
+            return MCPContent.CreateSimpleContent($"Invalid priority: '{priorityStr}'.");
+
+        string startDate = MCPHelper.GetStringArgument(args, "start_date", string.Empty);
+        string stopDate = MCPHelper.GetStringArgument(args, "stop_date", string.Empty);
+
+        var taskRec = baseContext.Tree.CreateTask();
+        taskRec.Goal = goal;
+        taskRec.Priority = priority;
+        taskRec.StartDate.ParseString(startDate);
+        taskRec.StopDate.ParseString(stopDate);
+
+        baseContext.SetModified();
+
+        return MCPContent.CreateSimpleContent($"Task record added: {taskRec.XRef} - \"{goalName}\"");
+    }
+}
+
+
 internal class TaskDeleteCommand : BaseCommand
 {
     public TaskDeleteCommand() : base("task_delete", null, CommandCategory.Task) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()

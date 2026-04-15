@@ -124,10 +124,12 @@ internal class CommandController
 
         // Tasks operations
         RegisterCommand(new TaskListCommand());
+        RegisterCommand(new TaskAddCommand());
         RegisterCommand(new TaskDeleteCommand());
 
         // Researches operations
         RegisterCommand(new ResearchListCommand());
+        RegisterCommand(new ResearchAddCommand());
         RegisterCommand(new ResearchDeleteCommand());
 
         // Communications operations
@@ -136,6 +138,7 @@ internal class CommandController
 
         // Locations operations
         RegisterCommand(new LocationListCommand());
+        RegisterCommand(new LocationAddCommand());
         RegisterCommand(new LocationDeleteCommand());
 
         // Service
@@ -159,6 +162,7 @@ internal class CommandController
         RegisterCommand(new AppExitCommand());
 
         // Resources
+        RegisterCommand(new GEDCOMDateSpecCommand());
         RegisterResource(new GEDCOMDateSpecResource());
     }
 

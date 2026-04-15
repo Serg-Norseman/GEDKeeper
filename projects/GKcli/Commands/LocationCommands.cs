@@ -20,7 +20,7 @@ internal class LocationListCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()
@@ -55,13 +55,56 @@ internal class LocationListCommand : BaseCommand
 }
 
 
+internal class LocationAddCommand : BaseCommand
+{
+    public LocationAddCommand() : base("location_add", null, CommandCategory.Location) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Add a new location record to the database",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["name"] = new MCPToolProperty { Type = "string", Description = "Name of the location item" },
+                    ["lati"] = new MCPToolProperty { Type = "number", Description = "Latitude" },
+                    ["long"] = new MCPToolProperty { Type = "number", Description = "Longitude" },
+                },
+                Required = new List<string> { "name" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string name = MCPHelper.GetRequiredArgument(args, "name");
+        double lat = MCPHelper.GetDoubleArgument(args, "lati", 0);
+        double lng = MCPHelper.GetDoubleArgument(args, "long", 0);
+
+        var locRec = baseContext.Tree.CreateLocation();
+        locRec.LocationName = name;
+        locRec.Map.Lati = lat;
+        locRec.Map.Long = lng;
+
+        baseContext.SetModified();
+
+        return MCPContent.CreateSimpleContent($"Location record added: {locRec.XRef} - \"{name}\"");
+    }
+}
+
+
 internal class LocationDeleteCommand : BaseCommand
 {
     public LocationDeleteCommand() : base("location_delete", null, CommandCategory.Location) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()

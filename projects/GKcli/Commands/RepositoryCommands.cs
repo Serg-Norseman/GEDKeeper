@@ -71,7 +71,7 @@ internal class RepositoryAddCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()
@@ -107,7 +107,7 @@ internal class RepositoryDeleteCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()

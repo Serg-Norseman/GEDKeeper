@@ -154,7 +154,7 @@ internal class IndiSearchCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()
@@ -212,7 +212,7 @@ internal class IndiDeleteCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()
@@ -250,7 +250,7 @@ internal class IndiAddAssociationCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()
@@ -304,7 +304,7 @@ internal class IndiDeleteAssociationCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()
@@ -354,7 +354,7 @@ internal class IndiListAssociationsCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()
@@ -403,7 +403,7 @@ internal class IndiListEventsCommand : EventCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()
@@ -439,7 +439,7 @@ internal class IndiListEventTypesCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()
@@ -477,7 +477,7 @@ internal class IndiAddEventCommand : EventCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()
@@ -490,7 +490,7 @@ internal class IndiAddEventCommand : EventCommand
                     ["individual_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the individual (e.g., 'I1')" },
                     ["tag"] = new MCPToolProperty { Type = "string", Description = "GEDCOM tag of the event type (from individual_list_event_types)" },
                     ["type"] = new MCPToolProperty { Type = "string", Description = "Event type classification (optional, from individual_list_event_types)" },
-                    ["date"] = new MCPToolProperty { Type = "string", Description = "Date string. Follow the GEDCOM date specification from the resource 'gedcom://date_spec'." },
+                    ["date"] = new MCPToolProperty { Type = "string", Description = "Date string. Follow the GEDCOM date specification from the gedcom_date_spec tool or resource 'gedcom://date_spec'." },
                     ["place"] = new MCPToolProperty { Type = "string", Description = "Place as a free-form string" },
                     ["location_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of a location record (alternative to place string)" },
                     ["cause"] = new MCPToolProperty { Type = "string", Description = "Cause of the event" },
@@ -521,7 +521,7 @@ internal class IndiDeleteEventCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()

@@ -247,7 +247,7 @@ internal class FileRecentCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()
@@ -280,7 +280,7 @@ internal class FileReloadCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()
@@ -318,7 +318,7 @@ internal class FileSearchCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()
@@ -357,7 +357,7 @@ internal class FileValidateCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Empty for interactive mode
+        // Not implemented yet
     }
 
     public override MCPTool CreateTool()

@@ -157,6 +157,10 @@ internal class MCPToolProperty
 
     [JsonPropertyName("description")]
     public string Description { get; set; } = "";
+
+    [JsonPropertyName("enum")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<string> Enum { get; set; }
 }
 
 /// <summary>

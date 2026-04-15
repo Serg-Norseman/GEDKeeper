@@ -97,11 +97,19 @@ internal class MCPServer
         var prevBackups = AppHost.Instance.SetForcedBackup();
 
         try {
+            int nullsBeforeExit = 0;
             var stdin = Console.In;
             while (!fCancellationToken.IsCancellationRequested) {
                 try {
                     // If line == null -> MCP client closed the stream.
                     string line = await stdin.ReadLineAsync();
+                    if (line == null) {
+                        // 10 attempts to check for a possible failure,
+                        // although if the stream is already closed, it's pointless.
+                        nullsBeforeExit++;
+                        if (nullsBeforeExit >= 10) break;
+                    }
+
                     if (string.IsNullOrEmpty(line)) continue;
 
                     Log($"Received: {line}");
