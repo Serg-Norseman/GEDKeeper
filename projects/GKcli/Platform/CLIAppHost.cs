@@ -65,6 +65,11 @@ public sealed class CLIAppHost : AppHost
         Console.InputEncoding = Encoding.UTF8;
         Console.OutputEncoding = Encoding.UTF8;
 
+#if NETCOREAPP3_1_OR_GREATER
+        // support for legacy encodings
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+#endif
+
         var appHost = new CLIAppHost();
 
         var container = Container;

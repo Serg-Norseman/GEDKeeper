@@ -32,6 +32,7 @@
     <ItemGroup>
         <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
         <PackageReference Include="Sharprompt" Version="3.0.1" />
+        <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
     </ItemGroup>
 
     <ItemGroup>

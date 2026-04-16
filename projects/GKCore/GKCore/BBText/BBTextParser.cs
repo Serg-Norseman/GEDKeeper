@@ -21,6 +21,8 @@ namespace GKCore.BBText
     /// It is located in this package, with the support of cross-platform wrappers
     /// because of the future use when exporting text notes to the program's output
     /// reports.
+    ///
+    /// Supported tags: [color], [size], [b], [i], [s], [u], [url].
     /// </summary>
     public class BBTextParser
     {

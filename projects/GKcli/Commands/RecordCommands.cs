@@ -9,11 +9,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using BSLib;
 using GDModel;
 using GKcli.MCP;
 using GKCore;
+using GKCore.Design;
 using GKCore.Locales;
 using GKCore.Utilities;
+using GKUI.Platform;
 
 namespace GKcli.Commands;
 
@@ -720,5 +723,45 @@ internal class RecordListNotesCommand : BaseCommand
         }
 
         return MCPContent.CreateSimpleContent(string.Join("\n", rows));
+    }
+}
+
+
+internal class RecordInfoCommand : BaseCommand
+{
+    public RecordInfoCommand() : base("record_info", null, CommandCategory.Service) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Provides complete information about a record by its XRef identifier.",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record (e.g., 'I1', 'F1', 'S1')" }
+                },
+                Required = new List<string> { "xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+
+        var record = baseContext.Tree.FindXRef<GDMRecord>(xref);
+        if (record == null)
+            return MCPContent.CreateSimpleContent($"Record not found with XRef: {xref}");
+
+        StringList ctx = new StringList();
+        GKUtils.GetRecordContent(baseContext, record, ctx, RecordContentType.Quick);
+        string text = BbCodeConverter.ToMarkdown(ctx.Text);
+
+        return MCPContent.CreateSimpleContent(text);
     }
 }

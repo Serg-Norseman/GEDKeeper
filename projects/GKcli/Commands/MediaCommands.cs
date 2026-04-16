@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using GDModel;
@@ -55,10 +56,11 @@ internal class MediaListCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
+        // filenames removed to save tokens
         var recList = baseContext.Tree.GetRecords(GDMRecordType.rtMultimedia);
         return MCPHelper.PageableTable("multimedia", args, recList.Count, (int index) => {
             if (index == -1) {
-                return "| XRef | Title | Type | File |\n|---|---|---|---|";
+                return "| XRef | Title | Type |\n|---|---|---|";
             } else {
                 var rec = (GDMMultimediaRecord)recList[index];
                 var fileRef = rec.FileReferences.Count > 0 ? rec.FileReferences[0] : null;
@@ -66,8 +68,7 @@ internal class MediaListCommand : BaseCommand
 
                 string title = fileRef.Title;
                 string mediaType = LangMan.LS(GKData.MediaTypes[(int)fileRef.MediaType]);
-                string file = fileRef.StringValue;
-                return $"|{rec.XRef}|{title}|{mediaType}|{file}|";
+                return $"|{rec.XRef}|{title}|{mediaType}|";
             }
         });
     }
@@ -181,7 +182,7 @@ internal class MediaDeleteCommand : BaseCommand
             Description = "Delete a multimedia record from the database by its XRef identifier",
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
-                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the multimedia record (e.g., 'M1')" }
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the multimedia record (e.g., 'O1')" }
                 },
                 Required = new List<string> { "xref" }
             }
@@ -199,5 +200,117 @@ internal class MediaDeleteCommand : BaseCommand
         baseContext.DeleteRecord(mediaRec);
 
         return MCPContent.CreateSimpleContent($"Multimedia record deleted: {xref}");
+    }
+}
+
+
+internal class MediaGetCommand : BaseCommand
+{
+    public MediaGetCommand() : base("multimedia_get", null, CommandCategory.Multimedia) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Get a multimedia record from the database by its XRef identifier",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the multimedia record (e.g., 'O1')" }
+                },
+                Required = new List<string> { "xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+
+        var mediaRec = baseContext.Tree.FindXRef<GDMMultimediaRecord>(xref);
+        if (mediaRec == null)
+            return MCPContent.CreateSimpleContent($"Multimedia record not found with XRef: {xref}");
+
+        GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
+        if (fileRef == null)
+            return MCPContent.CreateSimpleContent($"Media record {xref} contains no files");
+
+        if (!GKUtils.UseEmbeddedViewer(fileRef.GetMultimediaFormat())) {
+            return MCPContent.CreateSimpleContent($"Media record {xref} could not be transferred");
+        } else {
+            //fView.SetTitle(fFileReference.Title);
+
+            MultimediaKind mmKind = GKUtils.GetMultimediaKind(fileRef.GetMultimediaFormat());
+
+            try {
+                switch (mmKind) {
+                    case MultimediaKind.mkImage: {
+                            //int fileNum = mediaRec.FileReferences.IndexOf(fileRef);
+                            //IImage img = baseContext.LoadMediaImage(mediaRec, fileNum, -1, -1, ExtRect.Empty, false, false);
+                            Stream fs = baseContext.MediaLoad(fileRef, false);
+                            if (fs != null) {
+                                try {
+                                    string mimeType = fileRef.MultimediaFormat;
+                                    if (mimeType == "jpg") mimeType = "jpeg";
+
+                                    return MCPHelper.CreateImageContent(fs, mimeType);
+                                } finally {
+                                    fs.Dispose();
+                                }
+                            }
+                            break;
+                        }
+
+                    case MultimediaKind.mkAudio:
+                    case MultimediaKind.mkVideo:
+                        return MCPContent.CreateSimpleContent($"Media record {xref} could not be transferred (audio/video)");
+
+                    case MultimediaKind.mkText: {
+                            Stream fs = baseContext.MediaLoad(fileRef, false);
+                            if (fs != null) {
+                                try {
+                                    string text = null;
+                                    switch (fileRef.GetMultimediaFormat()) {
+                                        case GDMMultimediaFormat.mfTXT:
+                                            using (StreamReader strd = GKUtils.GetDetectedStreamReader(fs)) {
+                                                text = strd.ReadToEnd();
+                                            }
+                                            break;
+
+                                        case GDMMultimediaFormat.mfRTF:
+                                            using (StreamReader strd = new StreamReader(fs)) {
+                                                text = CLIHelper.StripRtf(strd.ReadToEnd());
+                                            }
+                                            break;
+
+                                        case GDMMultimediaFormat.mfHTM:
+                                            using (StreamReader strd = new StreamReader(fs)) {
+                                                text = CLIHelper.GetPlainText(strd);
+                                            }
+                                            break;
+                                    }
+                                    if (!string.IsNullOrEmpty(text)) {
+                                        return MCPContent.CreateSimpleContent(text);
+                                    } else {
+                                        return MCPContent.CreateSimpleContent($"Media record {xref} could not be transferred (unsupported text format)");
+                                    }
+                                } finally {
+                                    fs.Dispose();
+                                }
+                            }
+                            break;
+                        }
+                }
+            } catch (Exception ex) {
+                Logger.WriteError("MediaGetCommand.ExecuteTool().Transfer", ex);
+                return MCPContent.CreateSimpleContent($"Media record {xref} caused an error");
+            }
+        }
+
+        return MCPContent.CreateSimpleContent($"Multimedia record received: {xref}");
     }
 }

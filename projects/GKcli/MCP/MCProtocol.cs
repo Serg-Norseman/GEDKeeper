@@ -172,12 +172,32 @@ internal class MCPContent
     public string Type { get; set; } = "text";
 
     [JsonPropertyName("text")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string Text { get; set; } = "";
+
+    /// <summary>
+    /// Base64 encoded binary image data.
+    /// </summary>
+    [JsonPropertyName("data")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Data { get; set; } = null;
+
+    /// <summary>
+    /// MIME type of the image ("image/png", "image/jpeg").
+    /// </summary>
+    [JsonPropertyName("mimeType")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string MimeType { get; set; } = null;
 
 
     public static List<MCPContent> CreateSimpleContent(string text)
     {
         return new List<MCPContent> { new MCPContent { Text = text } };
+    }
+
+    public static List<MCPContent> CreateImageContent(string data, string mimeType)
+    {
+        return new List<MCPContent> { new MCPContent { Type = "image", Text = null, Data = data, MimeType = mimeType } };
     }
 }
 

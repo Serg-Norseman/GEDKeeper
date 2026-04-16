@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Text.Json;
 
@@ -52,9 +53,18 @@ public static class MCPHelper
         return MCPContent.CreateSimpleContent(lines.ToString());
     }
 
-    public static string ToUpperFirst(string s)
+    internal static List<MCPContent> CreateImageContent(Stream imageStream, string mimeType)
     {
-        return string.IsNullOrEmpty(s) ? s : char.ToUpper(s[0]) + s.Substring(1);
+        string base64Data;
+        if (imageStream is MemoryStream memStream) {
+            base64Data = Convert.ToBase64String(memStream.ToArray());
+        } else {
+            using (var ms = new MemoryStream()) {
+                imageStream.CopyTo(ms);
+                base64Data = Convert.ToBase64String(ms.ToArray());
+            }
+        }
+        return MCPContent.CreateImageContent(base64Data, mimeType);
     }
 
     internal static string GetRequiredArgument(JsonElement args, string argName)

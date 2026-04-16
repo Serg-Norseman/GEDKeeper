@@ -45,6 +45,7 @@ internal class CommandController
         RegisterCommand(new FileValidateCommand());
 
         // Records operations
+        RegisterCommand(new RecordInfoCommand());
         RegisterCommand(new RecordSearchCommand());
         RegisterCommand(new RecordAddUserRefCommand());
         RegisterCommand(new RecordDeleteUserRefCommand());
@@ -101,6 +102,7 @@ internal class CommandController
         RegisterCommand(new MediaListCommand());
         RegisterCommand(new MediaAddCommand());
         RegisterCommand(new MediaDeleteCommand());
+        RegisterCommand(new MediaGetCommand());
 
         // Sources operations
         RegisterCommand(new SourceMenuCommand());
