@@ -8,14 +8,18 @@
 
 namespace GKCore.Design.Controls
 {
-    public interface ITextBox : ITextContainer
+    public interface ITextOutput
+    {
+        void AppendText(string text);
+        void Clear();
+    }
+
+    public interface ITextBox : ITextContainer, ITextOutput
     {
         string[] Lines { get; }
         bool ReadOnly { get; set; }
         string SelectedText { get; set; }
 
-        void AppendText(string text);
-        void Clear();
         void Copy();
         void SelectAll();
     }

@@ -132,6 +132,7 @@ internal class CommandController
         // Researches operations
         RegisterCommand(new ResearchListCommand());
         RegisterCommand(new ResearchAddCommand());
+        RegisterCommand(new ResearchEditCommand());
         RegisterCommand(new ResearchDeleteCommand());
 
         // Communications operations

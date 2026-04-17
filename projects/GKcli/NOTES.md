@@ -14,25 +14,31 @@ constantly launches new server instances, which leads to the loss of the interna
 - `Jan` is not as user-friendly in the interface, but it works stably with MCP servers,
 although it too often resumes the list of tools.
 
-Models used for testing: `Qwen3.5 4B/9B Q4_K_M` performed very well.
+- `GPT4All` - does not yet support the MCP protocol natively in the client.
+
+- `Msty` - not tested yet.
+
+Models used for testing: `Qwen3.5 4B/9B Q4_K_M/Q8` performed very well.
 
 # TODO
 
+- A full list of instruments and their data is sent via a system prompt to the model,
+consuming tokens. Minimize instruments!
+
 1 Priority
+- a single tool for obtaining lists of records
+- event - all props, age, address, sublists
 - individual's sublists tools, change sex, names and their parts control, bookmarks
 - family spouses replace/remove tools, change status
 - sources - repo links and all props
-- repo - address only?
-- media - files only
-- task - change props
-- research - change props and sublists
-- communication - change props
 - location - change coords, names, toplinks
-- event - all props, age, address, sublists
-- a single tool for obtaining lists of records
 
 2 Priority
-- tree merge (!)
+- media - files only
+- repo - address only?
+- task - change props
+- research - change sublists
+- communication - change props
 - tree check tool
 - tree compare with total refactoring
 - rec merge

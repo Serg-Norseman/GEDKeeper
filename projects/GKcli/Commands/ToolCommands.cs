@@ -6,8 +6,13 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System.Collections.Generic;
+using System.Text.Json;
+using GKcli.MCP;
 using GKCore;
 using GKCore.Locales;
+using GKCore.Tools;
+using GKUI.Platform;
 
 namespace GKcli.Commands;
 
@@ -49,6 +54,35 @@ internal class TreeMergeCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Merge another GEDCOM file into the current database",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["path"] = new MCPToolProperty { Type = "string", Description = "Path to the .ged file" }
+                },
+                Required = new List<string> { "path" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string path = MCPHelper.GetRequiredArgument(args, "path");
+
+        var textLog = new TextOutput();
+
+        //var sw = Stopwatch.StartNew();
+        TreeTools.MergeTreeFile(baseContext.Tree, path, textLog, true);
+        baseContext.SetModified();
+        //sw.Stop();
+        //return MCPContent.CreateSimpleContent($"Databases merged: {path}. Records: {baseContext.Tree.RecordsCount}. Time: {sw.Elapsed.TotalSeconds:F3}s.");
+
+        return MCPContent.CreateSimpleContent(textLog.ToString());
     }
 }
 

@@ -62,9 +62,6 @@ internal class ResearchListCommand : BaseCommand
 
 internal class ResearchAddCommand : BaseCommand
 {
-    private static Dictionary<string, GDMResearchPriority> PriorityMap;
-    private static Dictionary<string, GDMResearchStatus> StatusMap;
-
     public ResearchAddCommand() : base("research_add", null, CommandCategory.Research) { }
 
     public override void Execute(BaseContext baseContext, object obj)
@@ -72,29 +69,10 @@ internal class ResearchAddCommand : BaseCommand
         // Not implemented yet
     }
 
-    private static void RequireMaps()
-    {
-        if (PriorityMap == null) {
-            PriorityMap = new Dictionary<string, GDMResearchPriority>();
-            for (GDMResearchPriority pt = GDMResearchPriority.rpNone; pt <= GDMResearchPriority.rpTop; pt++) {
-                PriorityMap.Add(LangMan.LS(GKData.PriorityNames[(int)pt]), pt);
-            }
-        }
-
-        if (StatusMap == null) {
-            StatusMap = new Dictionary<string, GDMResearchStatus>();
-            for (var st = GDMResearchStatus.rsDefined; st <= GDMResearchStatus.rsWithdrawn; st++) {
-                StatusMap.Add(LangMan.LS(GKData.StatusNames[(int)st]), st);
-            }
-        }
-    }
-
     public override MCPTool CreateTool()
     {
-        RequireMaps();
-
-        var priorities = PriorityMap.Keys.ToList();
-        var statuses = StatusMap.Keys.ToList();
+        var priorities = RuntimeData.PriorityMap.Keys.ToList();
+        var statuses = RuntimeData.StatusMap.Keys.ToList();
 
         return new MCPTool {
             Name = Sign,
@@ -119,10 +97,10 @@ internal class ResearchAddCommand : BaseCommand
         string priorityStr = MCPHelper.GetRequiredArgument(args, "priority");
         string statusStr = MCPHelper.GetRequiredArgument(args, "status");
 
-        if (!PriorityMap.TryGetValue(priorityStr, out var priority))
+        if (!RuntimeData.PriorityMap.TryGetValue(priorityStr, out var priority))
             return MCPContent.CreateSimpleContent($"Invalid priority: '{priorityStr}'.");
 
-        if (!StatusMap.TryGetValue(statusStr, out var status))
+        if (!RuntimeData.StatusMap.TryGetValue(statusStr, out var status))
             return MCPContent.CreateSimpleContent($"Invalid status: '{statusStr}'.");
 
         string startDate = MCPHelper.GetStringArgument(args, "start_date", string.Empty);
@@ -140,6 +118,90 @@ internal class ResearchAddCommand : BaseCommand
         baseContext.SetModified();
 
         return MCPContent.CreateSimpleContent($"Research record added: {resRec.XRef} - \"{title}\"");
+    }
+}
+
+
+internal class ResearchEditCommand : BaseCommand
+{
+    public ResearchEditCommand() : base("research_edit", null, CommandCategory.Research) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
+    }
+
+    public override MCPTool CreateTool()
+    {
+        var priorities = RuntimeData.PriorityMap.Keys.ToList();
+        var statuses = RuntimeData.StatusMap.Keys.ToList();
+
+        return new MCPTool {
+            Name = Sign,
+            Description = "Edit an existing research record in the database. Only provided fields will be updated. Use 'xref' to identify the record to modify.",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "Unique identifier (XRef) of the research record to edit" },
+                    ["title"] = new MCPToolProperty { Type = "string", Description = "New title/name of the research item" },
+                    ["priority"] = new MCPToolProperty { Type = "string", Description = "New priority of the research.", Enum = priorities },
+                    ["status"] = new MCPToolProperty { Type = "string", Description = "New status of the research.", Enum = statuses },
+                    ["start_date"] = new MCPToolProperty { Type = "string", Description = "New research start date" },
+                    ["stop_date"] = new MCPToolProperty { Type = "string", Description = "New research end date" },
+                    ["percent"] = new MCPToolProperty { Type = "integer", Description = "New completion percentage (0-100)" },
+                },
+                Required = new List<string> { "xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+
+        var resRec = baseContext.Tree.FindXRef<GDMResearchRecord>(xref);
+        if (resRec == null)
+            return MCPContent.CreateSimpleContent($"Research record not found: '{xref}'.");
+
+        string title = MCPHelper.GetStringArgument(args, "title", null);
+        string priorityStr = MCPHelper.GetStringArgument(args, "priority", null);
+        string statusStr = MCPHelper.GetStringArgument(args, "status", null);
+        string startDate = MCPHelper.GetStringArgument(args, "start_date", null);
+        string stopDate = MCPHelper.GetStringArgument(args, "stop_date", null);
+        int percent = MCPHelper.GetIntArgument(args, "percent", -1);
+
+        if (title != null) {
+            resRec.ResearchName = title;
+        }
+
+        if (priorityStr != null) {
+            if (!RuntimeData.PriorityMap.TryGetValue(priorityStr, out var priority))
+                return MCPContent.CreateSimpleContent($"Invalid priority: '{priorityStr}'.");
+            resRec.Priority = priority;
+        }
+
+        if (statusStr != null) {
+            if (!RuntimeData.StatusMap.TryGetValue(statusStr, out var status))
+                return MCPContent.CreateSimpleContent($"Invalid status: '{statusStr}'.");
+            resRec.Status = status;
+        }
+
+        if (startDate != null) {
+            resRec.StartDate.ParseString(startDate);
+        }
+
+        if (stopDate != null) {
+            resRec.StopDate.ParseString(stopDate);
+        }
+
+        if (percent > -1) {
+            if (percent < 0 || percent > 100)
+                return MCPContent.CreateSimpleContent($"Percent value must be between 0 and 100, got: {percent}.");
+            resRec.Percent = percent;
+        }
+
+        baseContext.SetModified();
+
+        return MCPContent.CreateSimpleContent($"Research record updated: {resRec.XRef} - \"{resRec.ResearchName}\"");
     }
 }
 

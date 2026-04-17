@@ -77,9 +77,6 @@ internal class MediaListCommand : BaseCommand
 
 internal class MediaAddCommand : BaseCommand
 {
-    private static Dictionary<string, GDMMediaType> MediaTypeMap;
-    private static Dictionary<string, MediaStoreType> StoreTypeMap;
-
     public MediaAddCommand() : base("multimedia_add", null, CommandCategory.Multimedia) { }
 
     public override void Execute(BaseContext baseContext, object obj)
@@ -89,28 +86,14 @@ internal class MediaAddCommand : BaseCommand
 
     private static void RequireMaps()
     {
-        if (MediaTypeMap == null) {
-            MediaTypeMap = new Dictionary<string, GDMMediaType>();
-            for (GDMMediaType mt = GDMMediaType.mtUnknown; mt <= GDMMediaType.mtLast; mt++) {
-                MediaTypeMap.Add(LangMan.LS(GKData.MediaTypes[(int)mt]), mt);
-            }
-        }
-
-        if (StoreTypeMap == null) {
-            StoreTypeMap = new Dictionary<string, MediaStoreType>();
-            for (var st = MediaStoreType.mstReference; st <= MediaStoreType.mstURL; st++) {
-                StoreTypeMap.Add(LangMan.LS(GKData.GKStoreTypes[(int)st].Name), st);
-            }
-        }
     }
 
     public override MCPTool CreateTool()
     {
         RequireMaps();
 
-        //return string.Join(", ", result);
-        var mediaTypes = MediaTypeMap.Keys.ToList();
-        var storeTypes = StoreTypeMap.Keys.ToList();
+        var mediaTypes = RuntimeData.MediaTypeMap.Keys.ToList();
+        var storeTypes = RuntimeData.StoreTypeMap.Keys.ToList();
 
         return new MCPTool {
             Name = Sign,
@@ -119,9 +102,7 @@ internal class MediaAddCommand : BaseCommand
                 Properties = new Dictionary<string, MCPToolProperty> {
                     ["title"] = new MCPToolProperty { Type = "string", Description = "Title/name of the multimedia item" },
                     ["file_path"] = new MCPToolProperty { Type = "string", Description = "Path to the multimedia file on disk or URL" },
-                    //["media_type"] = new MCPToolProperty { Type = "string", Description = "Media type of the file. Available values: " + GetMediaTypeValues() },
                     ["media_type"] = new MCPToolProperty { Type = "string", Description = "Media type of the file.", Enum = mediaTypes },
-                    //["store_type"] = new MCPToolProperty { Type = "string", Description = "Storage type for the multimedia file. Available values: " + GetStoreTypeValues() }
                     ["store_type"] = new MCPToolProperty { Type = "string", Description = "Storage type for the multimedia file.", Enum = storeTypes }
                 },
                 Required = new List<string> { "title", "file_path", "media_type", "store_type" }
@@ -136,10 +117,10 @@ internal class MediaAddCommand : BaseCommand
         string mediaTypeStr = MCPHelper.GetRequiredArgument(args, "media_type");
         string storeTypeStr = MCPHelper.GetRequiredArgument(args, "store_type");
 
-        if (!MediaTypeMap.TryGetValue(mediaTypeStr, out var mediaType))
+        if (!RuntimeData.MediaTypeMap.TryGetValue(mediaTypeStr, out var mediaType))
             return MCPContent.CreateSimpleContent($"Invalid media type: '{mediaTypeStr}'.");
 
-        if (!StoreTypeMap.TryGetValue(storeTypeStr, out var storeType))
+        if (!RuntimeData.StoreTypeMap.TryGetValue(storeTypeStr, out var storeType))
             return MCPContent.CreateSimpleContent($"Invalid store type: '{storeTypeStr}'.");
 
         var tree = baseContext.Tree;

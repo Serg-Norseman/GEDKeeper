@@ -37,8 +37,7 @@ namespace GKCore.Tools
 
             bool res = (descendant == searchRec);
 
-            if (!res && descendant.ChildToFamilyLinks.Count > 0)
-            {
+            if (!res && descendant.ChildToFamilyLinks.Count > 0) {
                 GDMFamilyRecord family = tree.GetPtrValue(descendant.ChildToFamilyLinks[0]);
 
                 GDMIndividualRecord ancestor = tree.GetPtrValue(family.Husband);
@@ -265,7 +264,7 @@ namespace GKCore.Tools
 
         #region Merge trees and records
 
-        public static void MergeTree(GDMTree mainTree, GDMTree extTree, ITextBox logBox, bool selfTest = false)
+        public static void MergeTree(GDMTree mainTree, GDMTree extTree, ITextOutput logBox, bool selfTest = false)
         {
             if (mainTree == null)
                 throw new ArgumentNullException(nameof(mainTree));
@@ -325,7 +324,7 @@ namespace GKCore.Tools
             }
         }
 
-        private static void ThrowError(ITextBox logBox, string message)
+        private static void ThrowError(ITextOutput logBox, string message)
         {
             if (logBox != null) {
                 logBox.AppendText(message + CRLF);
@@ -334,7 +333,7 @@ namespace GKCore.Tools
             }
         }
 
-        public static void MergeTreeFile(GDMTree mainTree, string fileName, ITextBox logBox, bool selfTest = false)
+        public static void MergeTreeFile(GDMTree mainTree, string fileName, ITextOutput logBox, bool selfTest = false)
         {
             if (mainTree == null)
                 throw new ArgumentNullException(nameof(mainTree));
@@ -602,7 +601,7 @@ namespace GKCore.Tools
 
         #region Tree Compare
 
-        public class IndividualRecordComparer: IComparer<ULIndividual>
+        public class IndividualRecordComparer : IComparer<ULIndividual>
         {
             public int Compare(ULIndividual x, ULIndividual y)
             {
@@ -842,7 +841,7 @@ namespace GKCore.Tools
                     logBox.AppendText(LangMan.LS(LSID.SimilarNames) + CRLF);
                     for (int i = 0; i < namesCount; i++) {
                         logBox.AppendText("    " + names[i] + CRLF);
-                        var lst = (IList<GDMIndividualRecord>) names.GetObject(i);
+                        var lst = (IList<GDMIndividualRecord>)names.GetObject(i);
 
                         int num5 = lst.Count;
                         for (int j = 0; j < num5; j++) {
