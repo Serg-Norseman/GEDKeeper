@@ -141,7 +141,7 @@ internal class ResearchEditCommand : BaseCommand
             Description = "Edit an existing research record in the database. Only provided fields will be updated. Use 'xref' to identify the record to modify.",
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
-                    ["xref"] = new MCPToolProperty { Type = "string", Description = "Unique identifier (XRef) of the research record to edit" },
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "Unique identifier (XRef) of the record to edit" },
                     ["title"] = new MCPToolProperty { Type = "string", Description = "New title/name of the research item" },
                     ["priority"] = new MCPToolProperty { Type = "string", Description = "New priority of the research.", Enum = priorities },
                     ["status"] = new MCPToolProperty { Type = "string", Description = "New status of the research.", Enum = statuses },
@@ -206,6 +206,9 @@ internal class ResearchEditCommand : BaseCommand
 }
 
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordDeleteCommand"/>).
+/// </summary>
 internal class ResearchDeleteCommand : BaseCommand
 {
     public ResearchDeleteCommand() : base("research_delete", null, CommandCategory.Research) { }
@@ -213,32 +216,5 @@ internal class ResearchDeleteCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
         // Not implemented yet
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "Delete a research record from the database by its XRef identifier",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the research (e.g., 'RES1')" }
-                },
-                Required = new List<string> { "xref" }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
-
-        var researchRec = baseContext.Tree.FindXRef<GDMResearchRecord>(xref);
-        if (researchRec == null)
-            return MCPContent.CreateSimpleContent($"Research not found with XRef: {xref}");
-
-        baseContext.DeleteRecord(researchRec);
-
-        return MCPContent.CreateSimpleContent($"Research deleted: {xref}");
     }
 }

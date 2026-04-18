@@ -61,8 +61,6 @@ internal class TaskListCommand : BaseCommand
 
 internal class TaskAddCommand : BaseCommand
 {
-    private static Dictionary<string, GDMResearchPriority> PriorityMap;
-
     public TaskAddCommand() : base("task_add", null, CommandCategory.Task) { }
 
     public override void Execute(BaseContext baseContext, object obj)
@@ -70,21 +68,9 @@ internal class TaskAddCommand : BaseCommand
         // Not implemented yet
     }
 
-    private static void RequireMaps()
-    {
-        if (PriorityMap == null) {
-            PriorityMap = new Dictionary<string, GDMResearchPriority>();
-            for (GDMResearchPriority pt = GDMResearchPriority.rpNone; pt <= GDMResearchPriority.rpTop; pt++) {
-                PriorityMap.Add(LangMan.LS(GKData.PriorityNames[(int)pt]), pt);
-            }
-        }
-    }
-
     public override MCPTool CreateTool()
     {
-        RequireMaps();
-
-        var priorities = PriorityMap.Keys.ToList();
+        var priorities = RuntimeData.PriorityMap.Keys.ToList();
 
         return new MCPTool {
             Name = Sign,
@@ -114,7 +100,7 @@ internal class TaskAddCommand : BaseCommand
         }
 
         string priorityStr = MCPHelper.GetRequiredArgument(args, "priority");
-        if (!PriorityMap.TryGetValue(priorityStr, out var priority))
+        if (!RuntimeData.PriorityMap.TryGetValue(priorityStr, out var priority))
             return MCPContent.CreateSimpleContent($"Invalid priority: '{priorityStr}'.");
 
         string startDate = MCPHelper.GetStringArgument(args, "start_date", string.Empty);
@@ -133,9 +119,9 @@ internal class TaskAddCommand : BaseCommand
 }
 
 
-internal class TaskDeleteCommand : BaseCommand
+internal class TaskEditCommand : BaseCommand
 {
-    public TaskDeleteCommand() : base("task_delete", null, CommandCategory.Task) { }
+    public TaskEditCommand() : base("task_edit", null, CommandCategory.Task) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
@@ -144,12 +130,18 @@ internal class TaskDeleteCommand : BaseCommand
 
     public override MCPTool CreateTool()
     {
+        var priorities = RuntimeData.PriorityMap.Keys.ToList();
+
         return new MCPTool {
             Name = Sign,
-            Description = "Delete a task record from the database by its XRef identifier",
+            Description = "Edit an existing task record in the database. Only provided fields will be updated. Use 'xref' to identify the record to modify.",
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
-                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the task (e.g., 'TSK1')" }
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "Unique identifier (XRef) of the record to edit" },
+                    ["goal"] = new MCPToolProperty { Type = "string", Description = "New goal of the task item (arbitrary name or XRef identifier of the individual, family, source)" },
+                    ["priority"] = new MCPToolProperty { Type = "string", Description = "New priority of the task.", Enum = priorities },
+                    ["start_date"] = new MCPToolProperty { Type = "string", Description = "New task start date" },
+                    ["stop_date"] = new MCPToolProperty { Type = "string", Description = "New task end date" },
                 },
                 Required = new List<string> { "xref" }
             }
@@ -164,8 +156,54 @@ internal class TaskDeleteCommand : BaseCommand
         if (taskRec == null)
             return MCPContent.CreateSimpleContent($"Task not found with XRef: {xref}");
 
-        baseContext.DeleteRecord(taskRec);
+        string goal = MCPHelper.GetStringArgument(args, "goal", null);
+        if (goal != null) {
+            string goalName;
+            var record = baseContext.Tree.FindXRef<GDMRecord>(goal);
+            if (record != null) {
+                goal = GEDCOMUtils.EncloseXRef(goal);
+                goalName = GKUtils.GetRecordName(baseContext.Tree, record, false);
+            } else {
+                goalName = goal;
+            }
+            taskRec.Goal = goal;
+        } else {
+        }
 
-        return MCPContent.CreateSimpleContent($"Task deleted: {xref}");
+        string priorityStr = MCPHelper.GetStringArgument(args, "priority", null);
+        if (priorityStr != null) {
+            if (!RuntimeData.PriorityMap.TryGetValue(priorityStr, out var priority))
+                return MCPContent.CreateSimpleContent($"Invalid priority: '{priorityStr}'.");
+
+            taskRec.Priority = priority;
+        }
+
+        string startDate = MCPHelper.GetStringArgument(args, "start_date", null);
+        if (startDate != null) {
+            taskRec.StartDate.ParseString(startDate);
+        }
+
+        string stopDate = MCPHelper.GetStringArgument(args, "stop_date", null);
+        if (stopDate != null) {
+            taskRec.StopDate.ParseString(stopDate);
+        }
+
+        baseContext.SetModified();
+
+        return MCPContent.CreateSimpleContent($"Task record updated: {taskRec.XRef}");
+    }
+}
+
+
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordDeleteCommand"/>).
+/// </summary>
+internal class TaskDeleteCommand : BaseCommand
+{
+    public TaskDeleteCommand() : base("task_delete", null, CommandCategory.Task) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
     }
 }

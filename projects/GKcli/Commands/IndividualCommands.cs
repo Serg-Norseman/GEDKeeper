@@ -204,6 +204,9 @@ internal class IndiSearchCommand : BaseCommand
 }
 
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordDeleteCommand"/>).
+/// </summary>
 internal class IndiDeleteCommand : BaseCommand
 {
     public IndiDeleteCommand() : base("individual_delete", null, CommandCategory.Individual) { }
@@ -211,32 +214,5 @@ internal class IndiDeleteCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
         // Not implemented yet
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "Delete an individual from the database by their XRef identifier",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the individual (e.g., 'I1')" }
-                },
-                Required = new List<string> { "xref" }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
-
-        var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(xref);
-        if (indiRec == null)
-            return MCPContent.CreateSimpleContent($"Individual not found with XRef: {xref}");
-
-        baseContext.DeleteRecord(indiRec);
-
-        return MCPContent.CreateSimpleContent($"Individual deleted: {xref}");
     }
 }

@@ -147,6 +147,9 @@ internal class MediaAddCommand : BaseCommand
 }
 
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordDeleteCommand"/>).
+/// </summary>
 internal class MediaDeleteCommand : BaseCommand
 {
     public MediaDeleteCommand() : base("multimedia_delete", null, CommandCategory.Multimedia) { }
@@ -154,33 +157,6 @@ internal class MediaDeleteCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
         // Not implemented yet
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "Delete a multimedia record from the database by its XRef identifier",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the multimedia record (e.g., 'O1')" }
-                },
-                Required = new List<string> { "xref" }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
-
-        var mediaRec = baseContext.Tree.FindXRef<GDMMultimediaRecord>(xref);
-        if (mediaRec == null)
-            return MCPContent.CreateSimpleContent($"Multimedia record not found with XRef: {xref}");
-
-        baseContext.DeleteRecord(mediaRec);
-
-        return MCPContent.CreateSimpleContent($"Multimedia record deleted: {xref}");
     }
 }
 

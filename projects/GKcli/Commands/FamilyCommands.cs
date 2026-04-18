@@ -116,6 +116,9 @@ internal class FamAddCommand : BaseCommand
 }
 
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordDeleteCommand"/>).
+/// </summary>
 internal class FamDeleteCommand : BaseCommand
 {
     public FamDeleteCommand() : base("family_delete", null, CommandCategory.Family) { }
@@ -123,32 +126,5 @@ internal class FamDeleteCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
         // Not implemented yet
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "Delete a family from the database by their XRef identifier",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the family (e.g., 'F1')" }
-                },
-                Required = new List<string> { "xref" }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
-
-        var familyRec = baseContext.Tree.FindXRef<GDMFamilyRecord>(xref);
-        if (familyRec == null)
-            return MCPContent.CreateSimpleContent($"Family not found with XRef: {xref}");
-
-        baseContext.DeleteRecord(familyRec);
-
-        return MCPContent.CreateSimpleContent($"Family deleted: {xref}");
     }
 }

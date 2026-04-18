@@ -46,6 +46,7 @@ internal class CommandController
 
         // Records operations
         RegisterCommand(new RecordInfoCommand());
+        RegisterCommand(new RecordDeleteCommand());
         RegisterCommand(new RecordSearchCommand());
         RegisterCommand(new RecordAddUserRefCommand());
         RegisterCommand(new RecordDeleteUserRefCommand());
@@ -127,6 +128,7 @@ internal class CommandController
         // Tasks operations
         RegisterCommand(new TaskListCommand());
         RegisterCommand(new TaskAddCommand());
+        RegisterCommand(new TaskEditCommand());
         RegisterCommand(new TaskDeleteCommand());
 
         // Researches operations
@@ -137,11 +139,14 @@ internal class CommandController
 
         // Communications operations
         RegisterCommand(new CommunicationListCommand());
+        RegisterCommand(new CommunicationAddCommand());
+        RegisterCommand(new CommunicationEditCommand());
         RegisterCommand(new CommunicationDeleteCommand());
 
         // Locations operations
         RegisterCommand(new LocationListCommand());
         RegisterCommand(new LocationAddCommand());
+        RegisterCommand(new LocationEditCommand());
         RegisterCommand(new LocationDeleteCommand());
 
         // Service

@@ -67,6 +67,11 @@ public static class MCPHelper
         return MCPContent.CreateImageContent(base64Data, mimeType);
     }
 
+    internal static bool HasArgument(JsonElement args, string argName)
+    {
+        return args.TryGetProperty(argName, out var argElem);
+    }
+
     internal static string GetRequiredArgument(JsonElement args, string argName)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.String)

@@ -122,3 +122,47 @@ internal class RecordInfoCommand : BaseCommand
         return MCPContent.CreateSimpleContent(text);
     }
 }
+
+
+/// <summary>
+/// For MCP use only (for console - see <RecordType>DeleteCommand).
+///
+/// A general tool has been introduced to minimize the system prompt tokens
+/// that are used to pass tools to the model.
+/// </summary>
+internal class RecordDeleteCommand : BaseCommand
+{
+    public RecordDeleteCommand() : base("record_delete", null, CommandCategory.Service) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not applicable for MCP
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Delete a record from the database by its XRef identifier",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record" }
+                },
+                Required = new List<string> { "xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+
+        var record = baseContext.Tree.FindXRef<GDMRecord>(xref);
+        if (record == null)
+            return MCPContent.CreateSimpleContent($"Record not found with XRef: {xref}");
+
+        baseContext.DeleteRecord(record);
+
+        return MCPContent.CreateSimpleContent($"Record deleted: {xref}");
+    }
+}

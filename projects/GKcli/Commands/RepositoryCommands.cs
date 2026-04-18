@@ -101,6 +101,9 @@ internal class RepositoryAddCommand : BaseCommand
 }
 
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordDeleteCommand"/>).
+/// </summary>
 internal class RepositoryDeleteCommand : BaseCommand
 {
     public RepositoryDeleteCommand() : base("repository_delete", null, CommandCategory.Repository) { }
@@ -108,32 +111,5 @@ internal class RepositoryDeleteCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
         // Not implemented yet
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "Delete a repository from the database by their XRef identifier",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the repository (e.g., 'R1')" }
-                },
-                Required = new List<string> { "xref" }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
-
-        var repoRec = baseContext.Tree.FindXRef<GDMRepositoryRecord>(xref);
-        if (repoRec == null)
-            return MCPContent.CreateSimpleContent($"Repository not found with XRef: {xref}");
-
-        baseContext.DeleteRecord(repoRec);
-
-        return MCPContent.CreateSimpleContent($"Repository deleted: {xref}");
     }
 }

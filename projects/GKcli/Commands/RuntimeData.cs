@@ -37,6 +37,9 @@ internal static class RuntimeData
     public static readonly Dictionary<string, GDMResearchPriority> PriorityMap;
     public static readonly Dictionary<string, GDMResearchStatus> StatusMap;
 
+    public static readonly Dictionary<string, GDMCommunicationType> CommTypeMap;
+    public static readonly Dictionary<string, GDMCommunicationDir> CommDirMap;
+
     static RuntimeData()
     {
         MediaTypeMap = new Dictionary<string, GDMMediaType>();
@@ -58,5 +61,14 @@ internal static class RuntimeData
         for (var st = GDMResearchStatus.rsDefined; st <= GDMResearchStatus.rsWithdrawn; st++) {
             StatusMap.Add(LangMan.LS(GKData.StatusNames[(int)st]), st);
         }
+
+        CommTypeMap = new Dictionary<string, GDMCommunicationType>();
+        for (GDMCommunicationType ct = GDMCommunicationType.ctCall; ct <= GDMCommunicationType.ctLast; ct++) {
+            CommTypeMap.Add(LangMan.LS(GKData.CommunicationNames[(int)ct]), ct);
+        }
+
+        CommDirMap = new Dictionary<string, GDMCommunicationDir>();
+        CommDirMap.Add(LangMan.LS(LSID.CD_1), GDMCommunicationDir.cdFrom);
+        CommDirMap.Add(LangMan.LS(LSID.CD_2), GDMCommunicationDir.cdTo);
     }
 }

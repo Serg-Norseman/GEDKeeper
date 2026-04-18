@@ -134,6 +134,9 @@ internal class NoteEditCommand : BaseCommand
 }
 
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordDeleteCommand"/>).
+/// </summary>
 internal class NoteDeleteCommand : BaseCommand
 {
     public NoteDeleteCommand() : base("note_delete", LSID.MIRecordDelete, CommandCategory.Note) { }
@@ -141,32 +144,5 @@ internal class NoteDeleteCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
         PromptHelper.DeleteRecord<GDMNoteRecord>(baseContext, "[darkred]Error:[/] [red]Expected an note record[/]");
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "Delete a note from the database by their XRef identifier",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the note (e.g., 'N1')" }
-                },
-                Required = new List<string> { "xref" }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
-
-        var noteRec = baseContext.Tree.FindXRef<GDMNoteRecord>(xref);
-        if (noteRec == null)
-            return MCPContent.CreateSimpleContent($"Note not found with XRef: {xref}");
-
-        baseContext.DeleteRecord(noteRec);
-
-        return MCPContent.CreateSimpleContent($"Note deleted: {xref}");
     }
 }

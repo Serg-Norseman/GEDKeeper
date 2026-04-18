@@ -22,23 +22,21 @@ Models used for testing: `Qwen3.5 4B/9B Q4_K_M/Q8` performed very well.
 
 # TODO
 
-- A full list of instruments and their data is sent via a system prompt to the model,
+0 A full list of instruments and their data is sent via a system prompt to the model,
 consuming tokens. Minimize instruments!
+- reduce record list tools (-10)
 
 1 Priority
-- a single tool for obtaining lists of records
 - event - all props, age, address, sublists
 - individual's sublists tools, change sex, names and their parts control, bookmarks
 - family spouses replace/remove tools, change status
 - sources - repo links and all props
-- location - change coords, names, toplinks
+- location - names, toplinks
 
 2 Priority
 - media - files only
 - repo - address only?
-- task - change props
 - research - change sublists
-- communication - change props
 - tree check tool
 - tree compare with total refactoring
 - rec merge

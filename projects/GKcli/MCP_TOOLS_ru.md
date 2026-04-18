@@ -9,11 +9,14 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 
 **Протокол:** MCP `2025-06-18`, JSON-RPC 2.0 поверх stdin/stdout. Без внешних зависимостей.
 
-**Внимание:** не рекомендуется для тестирования использовать `LM Studio` (пока не будет удалено это предупреждение),
-т.к. в этой программе каждые 1-2 минуты перезапускается новый экземпляр MCP-сервера, что приводит к непрерывным сбросам контекста БД.
-Также MCP-протокол совсем не поддерживается в `GPT4All`.
+---
 
-Пока успешное функционирование подтверждено только для `Jan` (локальные и облачные модели с маркировкой использования инструментов).
+## LM-клиенты
+
+- **Jan**: подтверждено успешное стабильное функционирование MCP-сервера с локальными и облачными моделями (с маркировкой использования инструментов).
+- **LM Studio**: клиент каждые 1-2 минуты перезапускает новый экземпляр MCP-сервера, что приводит к непрерывным сбросам контекста БД.
+- **Msty**: клиент нормально не функционирует.
+- **GPT4All**: MCP-протокол совсем не поддерживается.
 
 ---
 
@@ -45,6 +48,7 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
+| `record_delete` | Удалить запись | `xref` (string, напр. `I1`) |
 | `record_info` | Получить полную информацию о записи | `xref` (string, напр. `I1`) |
 | `record_search` | Нечёткий поиск по любым записям (имя/заголовок) | `record_type` (string), `search_text` (string), `threshold` (number, по умолч. 0.15) |
 | `record_list_userrefs` | Список пользовательских сносок записи | `record_xref` (string) |
@@ -71,7 +75,6 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 | `individual_list` | Список всех персон (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
 | `individual_search` | Нечёткий поиск по имени (порог 16%) | `name` (string) |
 | `individual_add` | Добавить персону | `name` (string), `sex` (string: `m`/`f`), `nickname` (string, необязательно) |
-| `individual_delete` | Удалить персону | `xref` (string, напр. `I1`) |
 | `individual_list_associations` | Список всех ассоциаций персоны | `individual_xref` (string) |
 | `individual_add_association` | Добавить ассоциацию (связь) между двумя персонами | `individual_xref` (string), `associate_xref` (string), `relation` (string) |
 | `individual_delete_association` | Удалить ассоциацию у персоны | `individual_xref` (string), `association_index` (integer, 0-based) |
@@ -88,7 +91,6 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 |---|---|---|
 | `family_list` | Список всех семей (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
 | `family_add` | Создать семью | `husband_xref` (string), `wife_xref` (string) |
-| `family_delete` | Удалить семью | `xref` (string, напр. `F1`) |
 | `family_list_children` | Список детей семьи | `family_xref` (string) |
 | `family_add_child` | Добавить ребёнка в семью | `family_xref` (string), `child_xref` (string) |
 | `family_delete_child` | Удалить ребёнка из семьи | `family_xref` (string), `child_xref` (string) |
@@ -105,7 +107,6 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 |---|---|---|
 | `note_list` | Список заметок (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
 | `note_add` | Добавить заметку | `text` (string) |
-| `note_delete` | Удалить заметку | `xref` (string, напр. `N1`) |
 
 ---
 
@@ -115,7 +116,6 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 |---|---|---|
 | `source_list` | Список источников (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
 | `source_add` | Добавить источник | `title` (string) |
-| `source_delete` | Удалить источник | `xref` (string, напр. `S1`) |
 
 ---
 
@@ -125,7 +125,6 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 |---|---|---|
 | `repository_list` | Список всех хранилищ (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
 | `repository_add` | Добавить хранилище | `name` (string) |
-| `repository_delete` | Удалить хранилище | `xref` (string, напр. `R1`) |
 
 ---
 
@@ -135,7 +134,6 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 |---|---|---|
 | `multimedia_list` | Список мультимедиа-записей (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
 | `multimedia_add` | Добавить мультимедиа-запись с файловой ссылкой | `title` (string) — название, `file_path` (string) — путь к файлу или URL, `media_type` (string — `Unknown`, `Audio`, `Book`, `Card`, `Electronic`, `Fiche`, `Film`, `Magazine`, `Manuscript`, `Map`, `Newspaper`, `Photo`, `Tombstone`, `Video`), `store_type` (string — `Reference`, `RelativeReference`, `Archive`, `URL`) |
-| `multimedia_delete` | Удалить мультимедиа-запись | `xref` (string, напр. `O1`) |
 | `multimedia_get` | Получить мультимедиа-запись | `xref` (string, напр. `O1`) |
 
 ---
@@ -146,7 +144,6 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 |---|---|---|
 | `group_list` | Список групп (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
 | `group_add` | Создать группу | `name` (string) |
-| `group_delete` | Удалить группу | `xref` (string, напр. `G1`) |
 | `group_list_members` | Список членов группы | `group_xref` (string) |
 | `group_add_member` | Добавить персону в группу | `group_xref` (string), `individual_xref` (string) |
 | `group_delete_member` | Удалить персону из группы | `group_xref` (string), `individual_xref` (string) |
@@ -159,7 +156,7 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 |---|---|---|
 | `task_list` | Список задач (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
 | `task_add` | Добавить задачу | `goal` (string), `priority` (enum), `start_date` (string, необязательно), `stop_date` (string, необязательно) |
-| `task_delete` | Удалить задачу | `xref` (string, напр. `TSK1`) |
+| `task_edit` | Редактировать задачу | `xref` (string), `goal` (string, необязательно), `priority` (enum, необязательно), `start_date` (string, необязательно), `stop_date` (string, необязательно) |
 
 ---
 
@@ -170,7 +167,6 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 | `research_list` | Список исследований (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
 | `research_add` | Добавить исследование | `title` (string), `priority` (enum), `status` (enum), `start_date` (string, необязательно), `stop_date` (string, необязательно), `percent` (integer, необязательно) |
 | `research_edit` | Редактировать исследование | `xref` (string), `title` (string, необязательно), `priority` (enum, необязательно), `status` (enum, необязательно), `start_date` (string, необязательно), `stop_date` (string, необязательно), `percent` (integer, необязательно) |
-| `research_delete` | Удалить исследование | `xref` (string, напр. `RES1`) |
 
 ---
 
@@ -179,7 +175,8 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 | Инструмент | Описание | Параметры |
 |---|---|---|
 | `communication_list` | Список записей переписки (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
-| `communication_delete` | Удалить запись переписки | `xref` (string, напр. `COMM1`) |
+| `communication_add` | Добавить переписку | `name` (string), `type` (enum), `direction` (enum), `corresponderXRef` (string), `date` (string) |
+| `communication_edit` | Редактировать переписку | `xref` (string), `name` (string, необязательно), `type` (enum, необязательно), `direction` (enum, необязательно), `corresponderXRef` (string, необязательно), `date` (string, необязательно) |
 
 ---
 
@@ -189,4 +186,4 @@ MCP-сервер позволяет LLM-клиентам (LM Studio, Jan и др
 |---|---|---|
 | `location_list` | Список местоположений (пагинация, 20 на стр.) | `page` (integer, по умолч. 1) |
 | `location_add` | Добавить местоположение | `name` (string), `lati` (number, необязательно), `long` (number, необязательно) |
-| `location_delete` | Удалить местоположение | `xref` (string, напр. `LOC1`) |
+| `location_edit` | Редактировать местоположение | `xref` (string), `name` (string, необязательно), `lati` (number, необязательно), `long` (number, необязательно) |

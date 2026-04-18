@@ -89,6 +89,9 @@ internal class GroupAddCommand : BaseCommand
 }
 
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordDeleteCommand"/>).
+/// </summary>
 internal class GroupDeleteCommand : BaseCommand
 {
     public GroupDeleteCommand() : base("group_delete", null, CommandCategory.Group) { }
@@ -96,32 +99,5 @@ internal class GroupDeleteCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
         // Not implemented yet
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "Delete a group from the database by their XRef identifier",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the group (e.g., 'G1')" }
-                },
-                Required = new List<string> { "xref" }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
-
-        var groupRec = baseContext.Tree.FindXRef<GDMGroupRecord>(xref);
-        if (groupRec == null)
-            return MCPContent.CreateSimpleContent($"Group not found with XRef: {xref}");
-
-        baseContext.DeleteRecord(groupRec);
-
-        return MCPContent.CreateSimpleContent($"Group deleted: {xref}");
     }
 }

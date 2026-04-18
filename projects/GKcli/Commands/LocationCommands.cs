@@ -98,9 +98,9 @@ internal class LocationAddCommand : BaseCommand
 }
 
 
-internal class LocationDeleteCommand : BaseCommand
+internal class LocationEditCommand : BaseCommand
 {
-    public LocationDeleteCommand() : base("location_delete", null, CommandCategory.Location) { }
+    public LocationEditCommand() : base("location_edit", null, CommandCategory.Location) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
@@ -111,10 +111,13 @@ internal class LocationDeleteCommand : BaseCommand
     {
         return new MCPTool {
             Name = Sign,
-            Description = "Delete a location record from the database by its XRef identifier",
+            Description = "Edit an existing location record to the database. Only provided fields will be updated. Use 'xref' to identify the record to modify.",
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
-                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the location (e.g., 'LOC1')" }
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "Unique identifier (XRef) of the record to edit" },
+                    ["name"] = new MCPToolProperty { Type = "string", Description = "New name of the location item" },
+                    ["lati"] = new MCPToolProperty { Type = "number", Description = "New latitude" },
+                    ["long"] = new MCPToolProperty { Type = "number", Description = "New longitude" },
                 },
                 Required = new List<string> { "xref" }
             }
@@ -129,8 +132,37 @@ internal class LocationDeleteCommand : BaseCommand
         if (locRec == null)
             return MCPContent.CreateSimpleContent($"Location not found with XRef: {xref}");
 
-        baseContext.DeleteRecord(locRec);
+        string name = MCPHelper.GetStringArgument(args, "name", null);
+        if (name != null) {
+            locRec.LocationName = name;
+        }
 
-        return MCPContent.CreateSimpleContent($"Location deleted: {xref}");
+        if (MCPHelper.HasArgument(args, "lati")) {
+            double lat = MCPHelper.GetDoubleArgument(args, "lati", 0);
+            locRec.Map.Lati = lat;
+        }
+
+        if (MCPHelper.HasArgument(args, "long")) {
+            double lng = MCPHelper.GetDoubleArgument(args, "long", 0);
+            locRec.Map.Long = lng;
+        }
+
+        baseContext.SetModified();
+
+        return MCPContent.CreateSimpleContent($"Location record updated: {locRec.XRef} - \"{name}\"");
+    }
+}
+
+
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordDeleteCommand"/>).
+/// </summary>
+internal class LocationDeleteCommand : BaseCommand
+{
+    public LocationDeleteCommand() : base("location_delete", null, CommandCategory.Location) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
     }
 }
