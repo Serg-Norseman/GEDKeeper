@@ -16,6 +16,9 @@ using GKCore.Locales;
 
 namespace GKcli.Commands;
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordListCommand"/>).
+/// </summary>
 internal class CommunicationListCommand : BaseCommand
 {
     public CommunicationListCommand() : base("communication_list", null, CommandCategory.Communication) { }
@@ -23,37 +26,6 @@ internal class CommunicationListCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
         // Not implemented yet
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "List all communications in the database with pagination support (20 items per page)",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" }
-                },
-                Required = new List<string> { }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        var recList = baseContext.Tree.GetRecords(GDMRecordType.rtCommunication);
-        return MCPHelper.PageableTable("communications", args, recList.Count, (int index) => {
-            if (index == -1) {
-                return "| XRef | Theme | Corresponder | Type | Date |\n|---|---|---|---|---|";
-            } else {
-                var rec = (GDMCommunicationRecord)recList[index];
-                string theme = rec.CommName;
-                string corresponder = GKUtils.GetCorresponderStr(baseContext.Tree, rec, false);
-                string type = LangMan.LS(GKData.CommunicationNames[(int)rec.CommunicationType]);
-                string date = GKUtils.GetDateDisplayString(rec.Date);
-                return $"|{rec.XRef}|{theme}|{corresponder}|{type}|{date}|";
-            }
-        });
     }
 }
 

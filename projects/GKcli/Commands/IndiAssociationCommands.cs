@@ -117,6 +117,72 @@ internal class IndiAddAssociationCommand : BaseCommand
 }
 
 
+internal class IndiEditAssociationCommand : BaseCommand
+{
+    public IndiEditAssociationCommand() : base("individual_edit_association", null, CommandCategory.Individual) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Edit an association of an individual by individual XRef and association index",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["individual_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the individual (e.g., 'I1')" },
+                    ["association_index"] = new MCPToolProperty { Type = "integer", Description = "Zero-based index of the association in the individual's association list" },
+                    ["associate_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the associated individual (e.g., 'I2')" },
+                    ["relation"] = new MCPToolProperty { Type = "string", Description = "Description of the relationship (e.g., 'Friend', 'Witness', 'Godparent')" }
+                },
+                Required = new List<string> { "individual_xref", "association_index" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string individualXRef = MCPHelper.GetRequiredArgument(args, "individual_xref");
+        int associationIndex = MCPHelper.GetIntArgument(args, "association_index", -1);
+
+        var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
+        if (indiRec == null)
+            return MCPContent.CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
+
+        if (!indiRec.HasAssociations)
+            return MCPContent.CreateSimpleContent($"Individual '{individualXRef}' has no associations.");
+
+        if (associationIndex < 0 || associationIndex >= indiRec.Associations.Count)
+            return MCPContent.CreateSimpleContent($"Invalid association index {associationIndex} for individual '{individualXRef}' (has {indiRec.Associations.Count} associations).");
+
+        string associateXRef = MCPHelper.GetStringArgument(args, "associate_xref", null);
+        var assocRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(associateXRef);
+        if (assocRec == null)
+            return MCPContent.CreateSimpleContent($"Associated individual not found with XRef: {associateXRef}");
+
+        string relation = MCPHelper.GetStringArgument(args, "relation", null);
+
+        var association = indiRec.Associations[associationIndex];
+
+        if (associateXRef != null) {
+            association.XRef = associateXRef;
+        }
+
+        if (relation != null) {
+            association.Relation = relation;
+        }
+
+        baseContext.SetModified();
+
+        string assocInfo = $"associated '{association.XRef}', relation '{association.Relation}'";
+        return MCPContent.CreateSimpleContent($"Association updated from individual '{individualXRef}' at index {associationIndex}: {assocInfo}");
+    }
+}
+
+
 internal class IndiDeleteAssociationCommand : BaseCommand
 {
     public IndiDeleteAssociationCommand() : base("individual_delete_association", null, CommandCategory.Individual) { }

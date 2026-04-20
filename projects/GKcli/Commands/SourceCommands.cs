@@ -27,6 +27,9 @@ internal class SourceMenuCommand : BaseCommand
 }
 
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordListCommand"/>).
+/// </summary>
 internal class SourceListCommand : BaseCommand
 {
     public SourceListCommand() : base("source_list", LSID.Find, CommandCategory.Source) { }
@@ -34,34 +37,6 @@ internal class SourceListCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
         PromptHelper.SelectRecord(baseContext, GDMRecordType.rtSource, "Select a source", "Source: {0}", "No records.");
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "List all sources in the database with pagination support (20 items per page)",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" }
-                },
-                Required = new List<string> { }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        var recList = baseContext.Tree.GetRecords(GDMRecordType.rtSource);
-        return MCPHelper.PageableTable("sources", args, recList.Count, (int index) => {
-            if (index == -1) {
-                return "| XRef | Short title | Source title |\n|---|---|---|";
-            } else {
-                var rec = (GDMSourceRecord)recList[index];
-                string sourceTitle = rec.Title.Lines.Text;
-                return $"|{rec.XRef}|{rec.ShortTitle}|{sourceTitle}|";
-            }
-        });
     }
 }
 
@@ -82,7 +57,9 @@ internal class SourceAddCommand : BaseCommand
             Description = "Add a new source to the database",
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
-                    ["title"] = new MCPToolProperty { Type = "string", Description = "Source title" }
+                    ["title"] = new MCPToolProperty { Type = "string", Description = "Source title" },
+                    ["short_title"] = new MCPToolProperty { Type = "string", Description = "Source short title" },
+                    ["author"] = new MCPToolProperty { Type = "string", Description = "Source author" },
                 },
                 Required = new List<string> { "title" }
             }
@@ -92,12 +69,80 @@ internal class SourceAddCommand : BaseCommand
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string title = MCPHelper.GetRequiredArgument(args, "title");
+        string shortTitle = MCPHelper.GetStringArgument(args, "short_title", string.Empty);
+        string author = MCPHelper.GetStringArgument(args, "author", string.Empty);
 
         var sourceRec = baseContext.Tree.CreateSource();
         sourceRec.Title.Lines.Text = title;
+
+        if (!string.IsNullOrEmpty(shortTitle)) {
+            sourceRec.ShortTitle = shortTitle;
+        }
+
+        if (!string.IsNullOrEmpty(author)) {
+            sourceRec.Originator.Lines.Text = author;
+        }
+
         baseContext.SetModified();
 
         return MCPContent.CreateSimpleContent($"Source added: {title} with XRef `{sourceRec.XRef}`");
+    }
+}
+
+
+internal class SourceEditCommand : BaseCommand
+{
+    public SourceEditCommand() : base("source_edit", null, CommandCategory.Source) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Edit an existing source record in the database. Only provided fields will be updated. Use 'xref' to identify the record to modify.",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "Unique identifier (XRef) of the record to edit" },
+                    ["title"] = new MCPToolProperty { Type = "string", Description = "New title of source record" },
+                    ["short_title"] = new MCPToolProperty { Type = "string", Description = "New short title of source record" },
+                    ["author"] = new MCPToolProperty { Type = "string", Description = "New author of source record" },
+                },
+                Required = new List<string> { "xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+
+        var sourceRec = baseContext.Tree.FindXRef<GDMSourceRecord>(xref);
+        if (sourceRec == null)
+            return MCPContent.CreateSimpleContent($"Source record not found: '{xref}'.");
+
+        string title = MCPHelper.GetStringArgument(args, "title", null);
+        string shortTitle = MCPHelper.GetStringArgument(args, "short_title", null);
+        string author = MCPHelper.GetStringArgument(args, "author", null);
+
+        if (title != null) {
+            sourceRec.Title.Lines.Text = title;
+        }
+
+        if (shortTitle != null) {
+            sourceRec.ShortTitle = shortTitle;
+        }
+
+        if (author != null) {
+            sourceRec.Originator.Lines.Text = author;
+        }
+
+        baseContext.SetModified();
+
+        return MCPContent.CreateSimpleContent($"Source updated: {title} with XRef `{sourceRec.XRef}`");
     }
 }
 

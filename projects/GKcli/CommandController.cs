@@ -45,18 +45,23 @@ internal class CommandController
         RegisterCommand(new FileValidateCommand());
 
         // Records operations
+        RegisterCommand(new RecordListCommand());
         RegisterCommand(new RecordInfoCommand());
         RegisterCommand(new RecordDeleteCommand());
         RegisterCommand(new RecordSearchCommand());
+
         RegisterCommand(new RecordAddUserRefCommand());
         RegisterCommand(new RecordDeleteUserRefCommand());
         RegisterCommand(new RecordListUserRefsCommand());
+
         RegisterCommand(new RecordAddSourceCitationCommand());
         RegisterCommand(new RecordDeleteSourceCitationCommand());
         RegisterCommand(new RecordListSourceCitationsCommand());
+
         RegisterCommand(new RecordAddMultimediaLinkCommand());
         RegisterCommand(new RecordDeleteMultimediaLinkCommand());
         RegisterCommand(new RecordListMultimediaCommand());
+
         RegisterCommand(new RecordAddNoteCommand());
         RegisterCommand(new RecordDeleteNoteCommand());
         RegisterCommand(new RecordListNotesCommand());
@@ -67,31 +72,36 @@ internal class CommandController
         // Individuals operations
         RegisterCommand(new IndiMenuCommand());
         RegisterCommand(new IndiListCommand());
-        RegisterCommand(new IndiAddCommand());
         RegisterCommand(new IndiSearchCommand());
+        RegisterCommand(new IndiAddCommand());
         RegisterCommand(new IndiDeleteCommand());
-        RegisterCommand(new IndiAddAssociationCommand());
-        RegisterCommand(new IndiDeleteAssociationCommand());
+
         RegisterCommand(new IndiListAssociationsCommand());
+        RegisterCommand(new IndiAddAssociationCommand());
+        RegisterCommand(new IndiEditAssociationCommand());
+        RegisterCommand(new IndiDeleteAssociationCommand());
+
         RegisterCommand(new IndiListEventsCommand());
+        RegisterCommand(new IndiAddEventCommand());
         RegisterCommand(new IndiDeleteEventCommand());
         RegisterCommand(new IndiListEventTypesCommand());
-        RegisterCommand(new IndiAddEventCommand());
 
         // Families operations
         RegisterCommand(new FamMenuCommand());
         RegisterCommand(new FamListCommand());
         RegisterCommand(new FamAddCommand());
+        RegisterCommand(new FamDeleteCommand());
+
         RegisterCommand(new FamAddChildCommand());
         RegisterCommand(new FamDeleteChildCommand());
-        RegisterCommand(new FamDeleteCommand());
         RegisterCommand(new FamListChildrenCommand());
+
         RegisterCommand(new FamListEventsCommand());
+        RegisterCommand(new FamAddEventCommand());
         RegisterCommand(new FamDeleteEventCommand());
         RegisterCommand(new FamListEventTypesCommand());
-        RegisterCommand(new FamAddEventCommand());
 
-        // Notes operations
+        // Notes operations, completed
         RegisterCommand(new NoteMenuCommand());
         RegisterCommand(new NoteListCommand());
         RegisterCommand(new NoteAddCommand());
@@ -102,6 +112,7 @@ internal class CommandController
         RegisterCommand(new MediaMenuCommand());
         RegisterCommand(new MediaListCommand());
         RegisterCommand(new MediaAddCommand());
+        RegisterCommand(new MediaEditCommand());
         RegisterCommand(new MediaDeleteCommand());
         RegisterCommand(new MediaGetCommand());
 
@@ -109,23 +120,27 @@ internal class CommandController
         RegisterCommand(new SourceMenuCommand());
         RegisterCommand(new SourceListCommand());
         RegisterCommand(new SourceAddCommand());
+        RegisterCommand(new SourceEditCommand());
         RegisterCommand(new SourceDeleteCommand());
 
-        // Repositories operations
+        // Repositories operations, completed
         RegisterCommand(new RepositoryMenuCommand());
         RegisterCommand(new RepositoryListCommand());
         RegisterCommand(new RepositoryAddCommand());
+        RegisterCommand(new RepositoryEditCommand());
         RegisterCommand(new RepositoryDeleteCommand());
 
-        // Groups operations
+        // Groups operations, completed
         RegisterCommand(new GroupListCommand());
         RegisterCommand(new GroupAddCommand());
+        RegisterCommand(new GroupEditCommand());
+        RegisterCommand(new GroupDeleteCommand());
+
+        RegisterCommand(new GroupListMembersCommand());
         RegisterCommand(new GroupAddMemberCommand());
         RegisterCommand(new GroupDeleteMemberCommand());
-        RegisterCommand(new GroupDeleteCommand());
-        RegisterCommand(new GroupListMembersCommand());
 
-        // Tasks operations
+        // Tasks operations, completed
         RegisterCommand(new TaskListCommand());
         RegisterCommand(new TaskAddCommand());
         RegisterCommand(new TaskEditCommand());
@@ -137,7 +152,7 @@ internal class CommandController
         RegisterCommand(new ResearchEditCommand());
         RegisterCommand(new ResearchDeleteCommand());
 
-        // Communications operations
+        // Communications operations, completed
         RegisterCommand(new CommunicationListCommand());
         RegisterCommand(new CommunicationAddCommand());
         RegisterCommand(new CommunicationEditCommand());

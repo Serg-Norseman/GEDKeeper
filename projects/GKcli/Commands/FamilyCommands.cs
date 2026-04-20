@@ -27,6 +27,9 @@ internal class FamMenuCommand : BaseCommand
 }
 
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordListCommand"/>).
+/// </summary>
 internal class FamListCommand : BaseCommand
 {
     public FamListCommand() : base("family_list", LSID.Find, CommandCategory.Family) { }
@@ -34,37 +37,6 @@ internal class FamListCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
         PromptHelper.SelectRecord(baseContext, GDMRecordType.rtFamily, "Select a family", "Family: {0}", "No records.");
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "List all families in the database with pagination support (20 items per page)",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" }
-                },
-                Required = new List<string> { }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        var recList = baseContext.Tree.GetRecords(GDMRecordType.rtFamily);
-        return MCPHelper.PageableTable("families", args, recList.Count, (int index) => {
-            if (index == -1) {
-                return "| XRef | Husband | Wife |\n|---|---|---|";
-            } else {
-                var famRec = (GDMFamilyRecord)recList[index];
-                var husbandRec = baseContext.Tree.GetPtrValue(famRec.Husband);
-                string husbandName = husbandRec == null ? "-" : GKUtils.GetRecordName(baseContext.Tree, husbandRec, false);
-                var wifeRec = baseContext.Tree.GetPtrValue(famRec.Wife);
-                string wifeName = wifeRec == null ? "-" : GKUtils.GetRecordName(baseContext.Tree, wifeRec, false);
-                return $"|{famRec.XRef}|{husbandName}|{wifeName}|";
-            }
-        });
     }
 }
 

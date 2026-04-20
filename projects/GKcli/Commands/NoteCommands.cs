@@ -31,6 +31,9 @@ internal class NoteMenuCommand : BaseCommand
 }
 
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordListCommand"/>).
+/// </summary>
 internal class NoteListCommand : BaseCommand
 {
     public NoteListCommand() : base("note_list", LSID.Find, CommandCategory.Note) { }
@@ -40,36 +43,6 @@ internal class NoteListCommand : BaseCommand
         var selected = PromptHelper.SelectRecord(baseContext, GDMRecordType.rtNote, "Select a note", "Note: {0}", "No records.");
         if (selected != null)
             CommandController.SetVariable("selectedObj", selected);
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "List all notes in the database with pagination support (20 items per page)",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" }
-                },
-                Required = new List<string> { }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        var recList = baseContext.Tree.GetRecords(GDMRecordType.rtNote);
-        return MCPHelper.PageableTable("notes", args, recList.Count, (int index) => {
-            if (index == -1) {
-                return "| XRef | Text preview |\n|---|---|";
-            } else {
-                var rec = (GDMNoteRecord)recList[index];
-                string preview = rec.Lines.Text;
-                if (preview != null && preview.Length > 80)
-                    preview = preview.Substring(0, 80) + "...";
-                return $"|{rec.XRef}|{preview}|";
-            }
-        });
     }
 }
 
@@ -116,7 +89,7 @@ internal class NoteAddCommand : BaseCommand
 
 internal class NoteEditCommand : BaseCommand
 {
-    public NoteEditCommand() : base("edit_note", LSID.MIRecordEdit, CommandCategory.Note) { }
+    public NoteEditCommand() : base("note_edit", LSID.MIRecordEdit, CommandCategory.Note) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
@@ -130,6 +103,39 @@ internal class NoteEditCommand : BaseCommand
         noteRec.Lines.Text = text;
         baseContext.SetModified();
         PromptHelper.WriteLine("Note: {0}", text);
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Edit an existing note record in the database. Only provided fields will be updated. Use 'xref' to identify the record to modify.",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "Unique identifier (XRef) of the record to edit" },
+                    ["text"] = new MCPToolProperty { Type = "string", Description = "New text content of note record" },
+                },
+                Required = new List<string> { "xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+
+        var noteRec = baseContext.Tree.FindXRef<GDMNoteRecord>(xref);
+        if (noteRec == null)
+            return MCPContent.CreateSimpleContent($"Note record not found: '{xref}'.");
+
+        string text = MCPHelper.GetStringArgument(args, "text", null);
+        if (text != null) {
+            noteRec.Lines.Text = text;
+        }
+
+        baseContext.SetModified();
+
+        return MCPContent.CreateSimpleContent($"Note updated: {text} with XRef `{noteRec.XRef}`");
     }
 }
 

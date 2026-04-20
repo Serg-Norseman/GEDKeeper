@@ -14,6 +14,9 @@ using GKCore;
 
 namespace GKcli.Commands;
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordListCommand"/>).
+/// </summary>
 internal class GroupListCommand : BaseCommand
 {
     public GroupListCommand() : base("group_list", null, CommandCategory.Group) { }
@@ -21,34 +24,6 @@ internal class GroupListCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
         // Not implemented yet
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "List all groups in the database with pagination support (20 items per page)",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" }
-                },
-                Required = new List<string> { }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        var recList = baseContext.Tree.GetRecords(GDMRecordType.rtGroup);
-        return MCPHelper.PageableTable("groups", args, recList.Count, (int index) => {
-            if (index == -1) {
-                return "| XRef | Group | Members |\n|---|---|---|";
-            } else {
-                var rec = (GDMGroupRecord)recList[index];
-                int membersCount = rec.Members.Count;
-                return $"|{rec.XRef}|{rec.GroupName}|{membersCount}|";
-            }
-        });
     }
 }
 
@@ -85,6 +60,50 @@ internal class GroupAddCommand : BaseCommand
         baseContext.SetModified();
 
         return MCPContent.CreateSimpleContent($"Group added: {name} with XRef `{groupRec.XRef}`");
+    }
+}
+
+
+internal class GroupEditCommand : BaseCommand
+{
+    public GroupEditCommand() : base("group_edit", null, CommandCategory.Group) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Edit an existing group record to the database. Only provided fields will be updated. Use 'xref' to identify the record to modify.",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "Unique identifier (XRef) of the record to edit" },
+                    ["name"] = new MCPToolProperty { Type = "string", Description = "New name of the group item" },
+                },
+                Required = new List<string> { "xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+
+        var repoRec = baseContext.Tree.FindXRef<GDMGroupRecord>(xref);
+        if (repoRec == null)
+            return MCPContent.CreateSimpleContent($"Group not found with XRef: {xref}");
+
+        string name = MCPHelper.GetStringArgument(args, "name", null);
+        if (name != null) {
+            repoRec.GroupName = name;
+        }
+
+        baseContext.SetModified();
+
+        return MCPContent.CreateSimpleContent($"Group record updated: {repoRec.XRef} - \"{name}\"");
     }
 }
 

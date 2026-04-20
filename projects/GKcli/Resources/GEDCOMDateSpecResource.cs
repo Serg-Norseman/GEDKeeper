@@ -37,6 +37,7 @@ internal class GEDCOMDateSpecResource : BaseResource
         };
     }
 
+    // FIXME: If the date is partial, the model understands the specification as sometimes allowing "1960 MAR 15".
     public static string GetSpec()
     {
         // Parser accepts BC, BCE and B.C.

@@ -2998,7 +2998,7 @@ namespace GKCore
             }
         }
 
-        public static void ShowPersonInfo(BaseContext baseContext, GDMIndividualRecord iRec, StringList summary)
+        public static void ShowPersonInfo(BaseContext baseContext, GDMIndividualRecord iRec, StringList summary, RecordContentType contentType)
         {
             if (summary == null) return;
 
@@ -3034,8 +3034,10 @@ namespace GKCore
 
                         ShowRFN(iRec, summary);
 
-                        summary.Add("");
-                        summary.Add(HyperLink(GKData.INFO_HREF_EXPAND_ASSO + iRec.XRef, "[ + ] " + LangMan.LS(LSID.Associations)));
+                        if (contentType == RecordContentType.Full) {
+                            summary.Add("");
+                            summary.Add(HyperLink(GKData.INFO_HREF_EXPAND_ASSO + iRec.XRef, "[ + ] " + LangMan.LS(LSID.Associations)));
+                        }
                     }
                 } finally {
                     summary.EndUpdate();
@@ -3415,7 +3417,7 @@ namespace GKCore
 
             switch (record.RecordType) {
                 case GDMRecordType.rtIndividual:
-                    ShowPersonInfo(baseContext, record as GDMIndividualRecord, ctx);
+                    ShowPersonInfo(baseContext, record as GDMIndividualRecord, ctx, contentType);
                     break;
 
                 case GDMRecordType.rtFamily:

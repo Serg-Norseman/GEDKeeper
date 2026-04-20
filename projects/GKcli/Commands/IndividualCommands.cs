@@ -31,6 +31,9 @@ internal class IndiMenuCommand : BaseCommand
 }
 
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordListCommand"/>).
+/// </summary>
 internal class IndiListCommand : BaseCommand
 {
     public IndiListCommand() : base("individual_list", LSID.Find, CommandCategory.Individual) { }
@@ -44,35 +47,6 @@ internal class IndiListCommand : BaseCommand
 
             CommandController.SelectCommand(CommandCategory.Events, true, "Select an event operation");
         }
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "List all individuals in the database with pagination support (20 items per page)",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" }
-                },
-                Required = new List<string> { }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        var recList = baseContext.Tree.GetRecords(GDMRecordType.rtIndividual);
-        return MCPHelper.PageableTable("individuals", args, recList.Count, (int index) => {
-            if (index == -1) {
-                return "| XRef | Name | Sex |\n|---|---|---|";
-            } else {
-                var iRec = (GDMIndividualRecord)recList[index];
-                string indiName = GKUtils.GetRecordName(baseContext.Tree, iRec, false);
-                string sex = GKData.SexData[(int)iRec.Sex].Sign;
-                return $"|{iRec.XRef}|{indiName}|{sex}|";
-            }
-        });
     }
 }
 

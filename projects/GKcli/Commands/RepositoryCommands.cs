@@ -27,6 +27,9 @@ internal class RepositoryMenuCommand : BaseCommand
 }
 
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordListCommand"/>).
+/// </summary>
 internal class RepositoryListCommand : BaseCommand
 {
     public RepositoryListCommand() : base("repository_list", LSID.Find, CommandCategory.Repository) { }
@@ -34,33 +37,6 @@ internal class RepositoryListCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
         var selected = PromptHelper.SelectRecord(baseContext, GDMRecordType.rtRepository, "Select a repository", "Repository: {0}", "No records.");
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "List all repositories in the database with pagination support (20 items per page)",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" }
-                },
-                Required = new List<string> { }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        var recList = baseContext.Tree.GetRecords(GDMRecordType.rtRepository);
-        return MCPHelper.PageableTable("repositories", args, recList.Count, (int index) => {
-            if (index == -1) {
-                return "| XRef | Repository |\n|---|---|";
-            } else {
-                var rec = (GDMRepositoryRecord)recList[index];
-                return $"|{rec.XRef}|{rec.RepositoryName}|";
-            }
-        });
     }
 }
 
@@ -97,6 +73,50 @@ internal class RepositoryAddCommand : BaseCommand
         baseContext.SetModified();
 
         return MCPContent.CreateSimpleContent($"Repository added: {name} with XRef `{repoRec.XRef}`");
+    }
+}
+
+
+internal class RepositoryEditCommand : BaseCommand
+{
+    public RepositoryEditCommand() : base("repository_edit", null, CommandCategory.Repository) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Edit an existing repository record to the database. Only provided fields will be updated. Use 'xref' to identify the record to modify.",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "Unique identifier (XRef) of the record to edit" },
+                    ["name"] = new MCPToolProperty { Type = "string", Description = "New name of the repository item" },
+                },
+                Required = new List<string> { "xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+
+        var repoRec = baseContext.Tree.FindXRef<GDMRepositoryRecord>(xref);
+        if (repoRec == null)
+            return MCPContent.CreateSimpleContent($"Repository not found with XRef: {xref}");
+
+        string name = MCPHelper.GetStringArgument(args, "name", null);
+        if (name != null) {
+            repoRec.RepositoryName = name;
+        }
+
+        baseContext.SetModified();
+
+        return MCPContent.CreateSimpleContent($"Repository record updated: {repoRec.XRef} - \"{name}\"");
     }
 }
 

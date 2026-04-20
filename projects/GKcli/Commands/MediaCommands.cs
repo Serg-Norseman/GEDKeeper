@@ -31,6 +31,9 @@ internal class MediaMenuCommand : BaseCommand
 }
 
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="RecordListCommand"/>).
+/// </summary>
 internal class MediaListCommand : BaseCommand
 {
     public MediaListCommand() : base("multimedia_list", LSID.Find, CommandCategory.Multimedia) { }
@@ -38,39 +41,6 @@ internal class MediaListCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
         PromptHelper.SelectRecord(baseContext, GDMRecordType.rtMultimedia, "Select a multimedia", "Multimedia: {0}", "No records.");
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "List all multimedia records in the database with pagination support (20 items per page)",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" }
-                },
-                Required = new List<string> { }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        // filenames removed to save tokens
-        var recList = baseContext.Tree.GetRecords(GDMRecordType.rtMultimedia);
-        return MCPHelper.PageableTable("multimedia", args, recList.Count, (int index) => {
-            if (index == -1) {
-                return "| XRef | Title | Type |\n|---|---|---|";
-            } else {
-                var rec = (GDMMultimediaRecord)recList[index];
-                var fileRef = rec.FileReferences.Count > 0 ? rec.FileReferences[0] : null;
-                if (fileRef == null) return string.Empty;
-
-                string title = fileRef.Title;
-                string mediaType = LangMan.LS(GKData.MediaTypes[(int)fileRef.MediaType]);
-                return $"|{rec.XRef}|{title}|{mediaType}|";
-            }
-        });
     }
 }
 
@@ -84,14 +54,8 @@ internal class MediaAddCommand : BaseCommand
         // Not implemented yet
     }
 
-    private static void RequireMaps()
-    {
-    }
-
     public override MCPTool CreateTool()
     {
-        RequireMaps();
-
         var mediaTypes = RuntimeData.MediaTypeMap.Keys.ToList();
         var storeTypes = RuntimeData.StoreTypeMap.Keys.ToList();
 
@@ -143,6 +107,64 @@ internal class MediaAddCommand : BaseCommand
 
         string xref = mediaRec.XRef;
         return MCPContent.CreateSimpleContent($"Multimedia record added: {xref} - \"{title}\" ({mediaTypeStr}, {storeTypeStr})");
+    }
+}
+
+
+internal class MediaEditCommand : BaseCommand
+{
+    public MediaEditCommand() : base("multimedia_edit", null, CommandCategory.Multimedia) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
+    }
+
+    public override MCPTool CreateTool()
+    {
+        var mediaTypes = RuntimeData.MediaTypeMap.Keys.ToList();
+
+        return new MCPTool {
+            Name = Sign,
+            Description = "Edit an existing multimedia record in the database. Only provided fields will be updated. Use 'xref' to identify the record to modify.",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "Unique identifier (XRef) of the record to edit" },
+                    ["title"] = new MCPToolProperty { Type = "string", Description = "New title/name of the multimedia item" },
+                    ["media_type"] = new MCPToolProperty { Type = "string", Description = "New media type", Enum = mediaTypes },
+                },
+                Required = new List<string> { "xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+
+        var mediaRec = baseContext.Tree.FindXRef<GDMMultimediaRecord>(xref);
+        if (mediaRec == null)
+            return MCPContent.CreateSimpleContent($"Multimedia record not found: '{xref}'.");
+
+        var fileRef = mediaRec.FileReferences[0];
+
+        string title = MCPHelper.GetStringArgument(args, "title", null);
+        string mediaTypeStr = MCPHelper.GetStringArgument(args, "media_type", null);
+
+        if (title != null) {
+            fileRef.Title = title;
+        }
+
+        if (mediaTypeStr != null) {
+            if (!RuntimeData.MediaTypeMap.TryGetValue(mediaTypeStr, out var mediaType))
+                return MCPContent.CreateSimpleContent($"Invalid media type: '{mediaTypeStr}'.");
+
+            fileRef.MediaType = mediaType;
+        }
+
+        baseContext.SetModified();
+
+        return MCPContent.CreateSimpleContent($"Multimedia record updated: {xref} - \"{title}\" ({mediaTypeStr})");
     }
 }
 
