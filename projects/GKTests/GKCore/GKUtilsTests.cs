@@ -587,9 +587,9 @@ namespace GKCore
             GKUtils.ShowNoteInfo(fContext, noteRec, summary);
 
             summary.Clear();
-            GKUtils.ShowPersonInfo(fContext, null, null);
+            GKUtils.ShowPersonInfo(fContext, null, null, RecordContentType.Full);
             GDMIndividualRecord indRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
-            GKUtils.ShowPersonInfo(fContext, indRec, summary);
+            GKUtils.ShowPersonInfo(fContext, indRec, summary, RecordContentType.Full);
 
             summary.Clear();
             GKUtils.ShowSourceInfo(null, null, null, RecordContentType.Quick);
