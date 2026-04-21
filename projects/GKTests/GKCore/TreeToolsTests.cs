@@ -88,7 +88,7 @@ namespace GKCore.Tools
                     GDMIndividualRecord iRec2 = ctx1.Tree.FindXRef<GDMIndividualRecord>("I3");
                     Assert.IsNotNull(iRec2);
 
-                    await TreeTools.MergeRecord(baseWin, iRec1, iRec2, true);
+                    await TreeTools.MergeRecord(baseWin.Context, iRec1, iRec2, true);
 
                     treeFragments = TreeTools.SearchTreeFragments(ctx1.Tree, null);
                     Assert.AreEqual(3, treeFragments.Count);
@@ -125,7 +125,7 @@ namespace GKCore.Tools
         public async Task Test_MergeRecord_Null()
         {
             Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await TreeTools.MergeRecord(null, null, null, false); });
-            Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await TreeTools.MergeRecord(fBaseWin, null, null, false); });
+            Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await TreeTools.MergeRecord(fBaseWin.Context, null, null, false); });
         }
 
         [Test]
@@ -145,7 +145,7 @@ namespace GKCore.Tools
                 GDMIndividualRecord iRec2 = ctx1.Tree.FindXRef<GDMIndividualRecord>("I4");
                 Assert.IsNotNull(iRec2);
 
-                await TreeTools.MergeRecord(baseWin, iRec1, iRec2, true);
+                await TreeTools.MergeRecord(baseWin.Context, iRec1, iRec2, true);
             }
         }
 
@@ -166,7 +166,7 @@ namespace GKCore.Tools
                 GDMFamilyRecord famRec2 = ctx1.Tree.FindXRef<GDMFamilyRecord>("F2");
                 Assert.IsNotNull(famRec2);
 
-                await TreeTools.MergeRecord(baseWin, famRec1, famRec2, true);
+                await TreeTools.MergeRecord(baseWin.Context, famRec1, famRec2, true);
             }
         }
 

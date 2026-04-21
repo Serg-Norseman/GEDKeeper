@@ -163,6 +163,21 @@ internal abstract class EventCommand : BaseCommand
 {
     protected EventCommand(string sign, Enum lsid, CommandCategory category) : base(sign, lsid, category) { }
 
+    protected static List<MCPContent> GetEventTypes(EventTarget eventTarget)
+    {
+        var eventTypes = BaseController.GetEventTypes(eventTarget);
+
+        var rows = new List<string>(eventTypes.Count + 2) {
+            "|DisplayName|Tag|Type|HasValue|"
+        };
+        for (int i = 0; i < eventTypes.Count; i++) {
+            var evt = eventTypes[i];
+            rows.Add($"|{evt.DisplayName}|{evt.Tag}|{evt.Type}|{evt.HasValue()}|");
+        }
+
+        return MCPContent.CreateSimpleContent(string.Join("\n", rows));
+    }
+
     protected static List<MCPContent> GetEventsList(BaseContext baseContext, string recName, GDMRecordWithEvents recordWithEvents)
     {
         if (!recordWithEvents.HasEvents)
@@ -198,8 +213,9 @@ internal abstract class EventCommand : BaseCommand
         // Determine if this tag corresponds to a fact
         bool isFact = matchedDef != null && matchedDef.HasValue();
 
+        bool isIndi = (record is GDMIndividualRecord);
         GDMCustomEvent newEvent;
-        if (record is GDMIndividualRecord) {
+        if (isIndi) {
             if (isFact) {
                 newEvent = new GDMIndividualAttribute();
             } else {
@@ -248,6 +264,23 @@ internal abstract class EventCommand : BaseCommand
         if (isFact) {
             string value = MCPHelper.GetStringArgument(args, "value", "");
             newEvent.StringValue = value;
+        }
+
+        if (isIndi) {
+            string indiAge = MCPHelper.GetStringArgument(args, "age", null);
+            if (!string.IsNullOrEmpty(indiAge)) {
+                ((GDMIndividualEventDetail)newEvent).Age.StringValue = AgeEditDlgController.GetAgeStr(indiAge);
+            }
+        } else {
+            string husbAge = MCPHelper.GetStringArgument(args, "husband_age", null);
+            if (!string.IsNullOrEmpty(husbAge)) {
+                ((GDMFamilyEvent)newEvent).HusbandAge.StringValue = AgeEditDlgController.GetAgeStr(husbAge);
+            }
+
+            string wifeAge = MCPHelper.GetStringArgument(args, "wife_age", null);
+            if (!string.IsNullOrEmpty(wifeAge)) {
+                ((GDMFamilyEvent)newEvent).WifeAge.StringValue = AgeEditDlgController.GetAgeStr(wifeAge);
+            }
         }
 
         record.Events.Add(newEvent);

@@ -49,6 +49,7 @@ internal class CommandController
         RegisterCommand(new RecordInfoCommand());
         RegisterCommand(new RecordDeleteCommand());
         RegisterCommand(new RecordSearchCommand());
+        RegisterCommand(new RecordMergeCommand());
 
         RegisterCommand(new RecordAddUserRefCommand());
         RegisterCommand(new RecordDeleteUserRefCommand());
@@ -74,6 +75,7 @@ internal class CommandController
         RegisterCommand(new IndiListCommand());
         RegisterCommand(new IndiSearchCommand());
         RegisterCommand(new IndiAddCommand());
+        RegisterCommand(new IndiEditCommand());
         RegisterCommand(new IndiDeleteCommand());
 
         RegisterCommand(new IndiListAssociationsCommand());
@@ -122,6 +124,10 @@ internal class CommandController
         RegisterCommand(new SourceAddCommand());
         RegisterCommand(new SourceEditCommand());
         RegisterCommand(new SourceDeleteCommand());
+
+        RegisterCommand(new SourceListRepositoriesCommand());
+        RegisterCommand(new SourceAddRepositoryCommand());
+        RegisterCommand(new SourceDeleteRepositoryCommand());
 
         // Repositories operations, completed
         RegisterCommand(new RepositoryMenuCommand());

@@ -52,7 +52,7 @@ namespace GKCore.Controllers
             fView.RelativeCombo1.Activate();
         }
 
-        private static string GetAgeStr(string strAge)
+        public static string GetAgeStr(string strAge)
         {
             string mask = LangMan.LS(LSID.AgeInputMask);
             if (mask.Length != strAge.Length)

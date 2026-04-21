@@ -155,10 +155,7 @@ using GDModel.Providers.FamilyShow;
             set {
                 if (fShieldState != value) {
                     fShieldState = value;
-
-                    if (fViewer != null) {
-                        fViewer.RefreshLists(false);
-                    }
+                    RefreshLists(false);
                 }
             }
         }
@@ -342,10 +339,7 @@ using GDModel.Providers.FamilyShow;
 
             if (result) {
                 SetModified();
-
-                if (fViewer != null) {
-                    fViewer.NotifyRecord(record, RecordAction.raDelete);
-                }
+                NotifyRecord(record, RecordAction.raDelete);
             }
 
             return result;
@@ -1301,6 +1295,24 @@ using GDModel.Providers.FamilyShow;
             }
 
             ShieldState = ss;
+        }
+
+        /// <summary>
+        /// Appeals to the view. It is necessary to carefully avoid looping.
+        /// </summary>
+        public void NotifyRecord(GDMRecord record, RecordAction action)
+        {
+            if (fViewer != null)
+                fViewer.NotifyRecord(record, action);
+        }
+
+        /// <summary>
+        /// Appeals to the view. It is necessary to carefully avoid looping.
+        /// </summary>
+        public void RefreshLists(bool columnsChanged)
+        {
+            if (fViewer != null)
+                fViewer.RefreshLists(false);
         }
 
         #endregion

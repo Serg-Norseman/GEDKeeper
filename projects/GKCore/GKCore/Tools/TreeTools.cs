@@ -349,10 +349,10 @@ namespace GKCore.Tools
             }
         }
 
-        public static async Task MergeRecord(IBaseWindow baseWin, GDMRecord targetRec, GDMRecord sourceRec, bool bookmark)
+        public static async Task MergeRecord(BaseContext baseContext, GDMRecord targetRec, GDMRecord sourceRec, bool bookmark)
         {
-            if (baseWin == null)
-                throw new ArgumentNullException(nameof(baseWin));
+            if (baseContext == null)
+                throw new ArgumentNullException(nameof(baseContext));
 
             if (targetRec == null)
                 throw new ArgumentNullException(nameof(targetRec));
@@ -370,21 +370,21 @@ namespace GKCore.Tools
             using (var repMap = new GDMXRefReplacer()) {
                 repMap.AddXRef(sourceRec, sourceRec.XRef, targetRec.XRef);
 
-                GDMTree tree = baseWin.Context.Tree;
+                GDMTree tree = baseContext.Tree;
                 int num = tree.RecordsCount;
                 for (int i = 0; i < num; i++) {
                     tree[i].ReplaceXRefs(repMap);
                 }
 
                 sourceRec.MoveTo(targetRec);
-                await baseWin.Context.DeleteRecord(sourceRec);
+                await baseContext.DeleteRecord(sourceRec);
 
                 if (targetRec.RecordType == GDMRecordType.rtIndividual && bookmark) {
                     ((GDMIndividualRecord)targetRec).Bookmark = true;
                 }
 
-                baseWin.NotifyRecord(targetRec, RecordAction.raEdit);
-                baseWin.RefreshLists(false);
+                baseContext.NotifyRecord(targetRec, RecordAction.raEdit);
+                baseContext.RefreshLists(false);
             }
         }
 

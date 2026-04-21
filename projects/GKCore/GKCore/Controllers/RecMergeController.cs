@@ -235,14 +235,14 @@ namespace GKCore.Controllers
 
         public async void MergeToLeft()
         {
-            await TreeTools.MergeRecord(fBase, fRec1, fRec2, fBookmark);
+            await TreeTools.MergeRecord(fBase.Context, fRec1, fRec2, fBookmark);
             SetRec1(fRec1);
             SetRec2(null);
         }
 
         public async void MergeToRight()
         {
-            await TreeTools.MergeRecord(fBase, fRec2, fRec1, fBookmark);
+            await TreeTools.MergeRecord(fBase.Context, fRec2, fRec1, fBookmark);
             SetRec1(null);
             SetRec2(fRec2);
         }

@@ -85,7 +85,12 @@ internal class IndiAddCommand : BaseCommand
             Description = "Add a new individual to the database",
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
-                    ["name"] = new MCPToolProperty { Type = "string", Description = "Full name in one of these formats: 'Имя Отчество /Фамилия/' (Russian) or 'FirstName MiddleName /LastName/' (English) or 'FirstName /LastName/' or 'FirstName //' (if last name unknown). The last name MUST be enclosed in forward slashes like /Surname/." },
+                    ["name"] = new MCPToolProperty { Type = "string", Description = "Full name in one of these formats: '[Имя] [Отчество] [/Фамилия/]' or '[FirstName] [MiddleName] [/LastName/]'. Any part may be missing. The last name MUST be enclosed in slashes if present." },
+                    /*
+                    ["first_name"] = new MCPToolProperty { Type = "string", Description = "A individual's first name (given)." },
+                    ["middle_name"] = new MCPToolProperty { Type = "string", Description = "A individual's middle name or patronymic." },
+                    ["last_name"] = new MCPToolProperty { Type = "string", Description = "A individual's last name (surname)." },
+                     */
                     ["sex"] = new MCPToolProperty { Type = "string", Description = "Sex: 'm' or 'f'" },
                     ["nickname"] = new MCPToolProperty { Type = "string", Description = "Nickname or alternative name (optional)" }
                 },
@@ -116,6 +121,68 @@ internal class IndiAddCommand : BaseCommand
 
         string resultName = GKUtils.GetNameString(indiRec, false);
         return MCPContent.CreateSimpleContent($"Individual added: {resultName} with XRef `{indiRec.XRef}`");
+    }
+}
+
+
+internal class IndiEditCommand : BaseCommand
+{
+    public IndiEditCommand() : base("individual_edit", null, CommandCategory.Individual) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Edit an existing individual to the database. Only provided fields will be updated. Use 'xref' to identify the record to modify.",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record" },
+                    ["name"] = new MCPToolProperty { Type = "string", Description = "New full name in one of these formats: '[Имя] [Отчество] [/Фамилия/]' or '[FirstName] [MiddleName] [/LastName/]'. Any part may be missing. The last name MUST be enclosed in slashes if present." },
+                    ["sex"] = new MCPToolProperty { Type = "string", Description = "New sex: 'm' or 'f'" },
+                    ["nickname"] = new MCPToolProperty { Type = "string", Description = "New nickname or alternative name" }
+                },
+                Required = new List<string> { "xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+        var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(xref);
+        if (indiRec == null)
+            return MCPContent.CreateSimpleContent($"Individual not found with XRef: {xref}");
+
+        var persName = (indiRec.PersonalNames.Count > 0) ? indiRec.PersonalNames[0] : indiRec.AddPersonalName(new GDMPersonalName());
+
+        string name = MCPHelper.GetStringArgument(args, "name", null);
+        if (name != null) {
+            persName.ParseString(name);
+        }
+
+        string sexStr = MCPHelper.GetStringArgument(args, "sex", null);
+        if (sexStr != null) {
+            sexStr = sexStr.ToLowerInvariant();
+            char sex = (sexStr.Length > 0) ? sexStr[0] : 'm';
+            if (sex != 'm' && sex != 'f') sex = 'm';
+            indiRec.Sex = (sex == 'm') ? GDMSex.svMale : GDMSex.svFemale;
+        }
+
+        string nickname = MCPHelper.GetStringArgument(args, "nickname", null);
+        if (nickname != null) {
+            if (!string.IsNullOrEmpty(nickname)) {
+                persName.Nickname = nickname;
+            }
+        }
+
+        baseContext.SetModified();
+        string resultName = GKUtils.GetNameString(indiRec, false);
+        return MCPContent.CreateSimpleContent($"Individual updated: {resultName} with XRef `{indiRec.XRef}`");
     }
 }
 

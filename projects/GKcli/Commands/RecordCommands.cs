@@ -15,6 +15,7 @@ using GKcli.MCP;
 using GKCore;
 using GKCore.Design;
 using GKCore.Locales;
+using GKCore.Tools;
 using GKCore.Utilities;
 using GKUI.Platform;
 
@@ -361,5 +362,48 @@ internal class RecordDeleteCommand : BaseCommand
         baseContext.DeleteRecord(record);
 
         return MCPContent.CreateSimpleContent($"Record deleted: {xref}");
+    }
+}
+
+
+internal class RecordMergeCommand : BaseCommand
+{
+    public RecordMergeCommand() : base("record_merge", null, CommandCategory.Service) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not applicable for MCP
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Merge records by their XRef identifiers.",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["target_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the target record" },
+                    ["source_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record being merged" }
+                },
+                Required = new List<string> { "target_xref", "source_xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string targetXRef = MCPHelper.GetRequiredArgument(args, "target_xref");
+        var targetRecord = baseContext.Tree.FindXRef<GDMRecord>(targetXRef);
+        if (targetRecord == null)
+            return MCPContent.CreateSimpleContent($"Target record not found with XRef: {targetXRef}");
+
+        string sourceXRef = MCPHelper.GetRequiredArgument(args, "source_xref");
+        var sourceRecord = baseContext.Tree.FindXRef<GDMRecord>(sourceXRef);
+        if (sourceRecord == null)
+            return MCPContent.CreateSimpleContent($"Merged record not found with XRef: {sourceXRef}");
+
+        TreeTools.MergeRecord(baseContext, targetRecord, sourceRecord, false);
+
+        return MCPContent.CreateSimpleContent($"Record deleted: {sourceXRef}");
     }
 }

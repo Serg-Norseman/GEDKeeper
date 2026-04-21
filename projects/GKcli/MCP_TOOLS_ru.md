@@ -50,6 +50,7 @@
 |---|---|---|
 | `record_list` | Список всех записей указанного типа (пагинация, 20 на стр.) | `record_type` (string), `page` (integer, по умолч. 1) |
 | `record_delete` | Удалить запись | `xref` (string, напр. `I1`) |
+| `record_merge` | Объединить записи | `target_xref` (string, напр. `I1`), `source_xref` (string, напр. `I2`) |
 | `record_info` | Получить полную информацию о записи | `xref` (string, напр. `I1`) |
 | `record_search` | Нечёткий поиск по любым записям (имя/заголовок) | `record_type` (string), `search_text` (string), `threshold` (number, по умолч. 0.15) |
 | `record_list_userrefs` | Список пользовательских сносок записи | `record_xref` (string) |
@@ -75,13 +76,14 @@
 |---|---|---|
 | `individual_search` | Нечёткий поиск по имени (порог 16%) | `name` (string) |
 | `individual_add` | Добавить персону | `name` (string), `sex` (string: `m`/`f`), `nickname` (string, необязательно) |
+| `individual_edit` | Редактировать персону | `xref` (string), `name` (string, необязательно), `sex` (string: `m`/`f`, необязательно), `nickname` (string, необязательно) |
 | `individual_list_associations` | Список всех ассоциаций персоны | `individual_xref` (string) |
 | `individual_add_association` | Добавить ассоциацию (связь) между двумя персонами | `individual_xref` (string), `associate_xref` (string), `relation` (string) |
 | `individual_edit_association` | Редактировать ассоциацию (связь) между двумя персонами | `individual_xref` (string), `association_index` (integer, 0-based), `associate_xref` (string, необязательно), `relation` (string, необязательно) |
 | `individual_delete_association` | Удалить ассоциацию у персоны | `individual_xref` (string), `association_index` (integer, 0-based) |
 | `individual_list_events` | Список всех событий персоны | `individual_xref` (string) |
 | `individual_delete_event` | Удалить событие персоны | `individual_xref` (string), `event_index` (integer, 0-based) |
-| `individual_add_event` | Добавить событие персоне | `individual_xref` (string), `tag` (string), `type` (string, optional), `date` (string, dd/mm/yyyy), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string) |
+| `individual_add_event` | Добавить событие персоне | `individual_xref` (string), `tag` (string), `type` (string, optional), `date` (string, dd/mm/yyyy), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `age` (string) |
 | `individual_list_event_types` | Список всех доступных типов событий для персон | — |
 
 ---
@@ -96,7 +98,7 @@
 | `family_delete_child` | Удалить ребёнка из семьи | `family_xref` (string), `child_xref` (string) |
 | `family_list_events` | Список всех событий семьи | `family_xref` (string) |
 | `family_delete_event` | Удалить событие семьи | `family_xref` (string), `event_index` (integer, 0-based) |
-| `family_add_event` | Добавить событие семье | `family_xref` (string), `tag` (string), `type` (string, optional), `date` (string, dd/mm/yyyy), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string) |
+| `family_add_event` | Добавить событие семье | `family_xref` (string), `tag` (string), `type` (string, optional), `date` (string, dd/mm/yyyy), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `husband_age` (string), `wife_age` (string) |
 | `family_list_event_types` | Список всех доступных типов событий для семей | — |
 
 ---
@@ -116,6 +118,9 @@
 |---|---|---|
 | `source_add` | Добавить источник | `title` (string), `short_title` (string, необязательно), `author` (string, необязательно) |
 | `source_edit` | Редактировать источник | `xref` (string), `title` (string), `short_title` (string, необязательно), `author` (string, необязательно) |
+| `source_list_repositories` | Список ссылок на архивы | `source_xref` (string) |
+| `source_add_repository` | Добавить ссылку на архив в источник | `source_xref` (string), `repository_xref` (string) |
+| `source_delete_repository` | Удалить ссылку на архив из источника | `source_xref` (string), `repository_xref` (string) |
 
 ---
 

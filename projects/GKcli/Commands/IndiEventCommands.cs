@@ -11,10 +11,37 @@ using System.Text.Json;
 using GDModel;
 using GKcli.MCP;
 using GKCore;
-using GKCore.Controllers;
 using GKCore.Events;
 
 namespace GKcli.Commands;
+
+internal class IndiListEventTypesCommand : EventCommand
+{
+    public IndiListEventTypesCommand() : base("individual_list_event_types", null, CommandCategory.Individual) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "List all available event types for individuals",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> { },
+                Required = new List<string> { }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        return GetEventTypes(EventTarget.etIndividual);
+    }
+}
+
 
 internal class IndiListEventsCommand : EventCommand
 {
@@ -76,7 +103,8 @@ internal class IndiAddEventCommand : EventCommand
                     ["location_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of a location record (alternative to place string)" },
                     ["cause"] = new MCPToolProperty { Type = "string", Description = "Cause of the event" },
                     ["agency"] = new MCPToolProperty { Type = "string", Description = "Agency responsible for the event" },
-                    ["value"] = new MCPToolProperty { Type = "string", Description = "Fact value (used when the event is a fact/attribute), cannot contain the place of the event" }
+                    ["value"] = new MCPToolProperty { Type = "string", Description = "Fact value (used when the event is a fact/attribute), cannot contain the place of the event" },
+                    ["age"] = new MCPToolProperty { Type = "string", Description = "Age of the individual on the date of the event" },
                 },
                 Required = new List<string> { "individual_xref", "tag" }
             }
@@ -142,43 +170,5 @@ internal class IndiDeleteEventCommand : BaseCommand
         baseContext.SetModified();
 
         return MCPContent.CreateSimpleContent($"Event removed from individual '{individualXRef}' at index {eventIndex}: {evtInfo}");
-    }
-}
-
-
-internal class IndiListEventTypesCommand : BaseCommand
-{
-    public IndiListEventTypesCommand() : base("individual_list_event_types", null, CommandCategory.Individual) { }
-
-    public override void Execute(BaseContext baseContext, object obj)
-    {
-        // Not implemented yet
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "List all available event types for individuals",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> { },
-                Required = new List<string> { }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        var eventTypes = BaseController.GetEventTypes(EventTarget.etIndividual);
-
-        var rows = new List<string>(eventTypes.Count + 2) {
-            "|DisplayName|Tag|Type|HasValue|"
-        };
-        for (int i = 0; i < eventTypes.Count; i++) {
-            var evt = eventTypes[i];
-            rows.Add($"|{evt.DisplayName}|{evt.Tag}|{evt.Type}|{evt.HasValue()}|");
-        }
-
-        return MCPContent.CreateSimpleContent(string.Join("\n", rows));
     }
 }

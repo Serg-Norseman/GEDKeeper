@@ -11,12 +11,11 @@ using System.Text.Json;
 using GDModel;
 using GKcli.MCP;
 using GKCore;
-using GKCore.Controllers;
 using GKCore.Events;
 
 namespace GKcli.Commands;
 
-internal class FamListEventTypesCommand : BaseCommand
+internal class FamListEventTypesCommand : EventCommand
 {
     public FamListEventTypesCommand() : base("family_list_event_types", null, CommandCategory.Family) { }
 
@@ -39,17 +38,7 @@ internal class FamListEventTypesCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        var eventTypes = BaseController.GetEventTypes(EventTarget.etFamily);
-
-        var rows = new List<string>(eventTypes.Count + 2) {
-            "|DisplayName|Tag|Type|HasValue|"
-        };
-        for (int i = 0; i < eventTypes.Count; i++) {
-            var evt = eventTypes[i];
-            rows.Add($"|{evt.DisplayName}|{evt.Tag}|{evt.Type}|{evt.HasValue()}|");
-        }
-
-        return MCPContent.CreateSimpleContent(string.Join("\n", rows));
+        return GetEventTypes(EventTarget.etFamily);
     }
 }
 
@@ -114,7 +103,9 @@ internal class FamAddEventCommand : EventCommand
                     ["location_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of a location record (alternative to place string)" },
                     ["cause"] = new MCPToolProperty { Type = "string", Description = "Cause of the event" },
                     ["agency"] = new MCPToolProperty { Type = "string", Description = "Agency responsible for the event" },
-                    ["value"] = new MCPToolProperty { Type = "string", Description = "Fact value (used when the event is a fact/attribute), cannot contain the place of the event" }
+                    ["value"] = new MCPToolProperty { Type = "string", Description = "Fact value (used when the event is a fact/attribute), cannot contain the place of the event" },
+                    ["husband_age"] = new MCPToolProperty { Type = "string", Description = "Age of the husband on the date of the event" },
+                    ["wife_age"] = new MCPToolProperty { Type = "string", Description = "Age of the wife on the date of the event" },
                 },
                 Required = new List<string> { "family_xref", "tag" }
             }
