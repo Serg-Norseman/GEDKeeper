@@ -61,7 +61,7 @@ internal class TaskAddCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string goal = MCPHelper.GetRequiredArgument(args, "goal");
+        string goal = MCPHelper.GetRequiredStr(args, "goal");
         string goalName;
         var record = baseContext.Tree.FindXRef<GDMRecord>(goal);
         if (record != null) {
@@ -71,12 +71,12 @@ internal class TaskAddCommand : BaseCommand
             goalName = goal;
         }
 
-        string priorityStr = MCPHelper.GetRequiredArgument(args, "priority");
+        string priorityStr = MCPHelper.GetRequiredStr(args, "priority");
         if (!RuntimeData.PriorityMap.TryGetValue(priorityStr, out var priority))
             return MCPContent.CreateSimpleContent($"Invalid priority: '{priorityStr}'.");
 
-        string startDate = MCPHelper.GetStringArgument(args, "start_date", string.Empty);
-        string stopDate = MCPHelper.GetStringArgument(args, "stop_date", string.Empty);
+        string startDate = MCPHelper.GetOptionalStr(args, "start_date", string.Empty);
+        string stopDate = MCPHelper.GetOptionalStr(args, "stop_date", string.Empty);
 
         var taskRec = baseContext.Tree.CreateTask();
         taskRec.Goal = goal;
@@ -122,13 +122,13 @@ internal class TaskEditCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+        string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var taskRec = baseContext.Tree.FindXRef<GDMTaskRecord>(xref);
         if (taskRec == null)
             return MCPContent.CreateSimpleContent($"Task not found with XRef: {xref}");
 
-        string goal = MCPHelper.GetStringArgument(args, "goal", null);
+        string goal = MCPHelper.GetOptionalStr(args, "goal", null);
         if (goal != null) {
             string goalName;
             var record = baseContext.Tree.FindXRef<GDMRecord>(goal);
@@ -142,7 +142,7 @@ internal class TaskEditCommand : BaseCommand
         } else {
         }
 
-        string priorityStr = MCPHelper.GetStringArgument(args, "priority", null);
+        string priorityStr = MCPHelper.GetOptionalStr(args, "priority", null);
         if (priorityStr != null) {
             if (!RuntimeData.PriorityMap.TryGetValue(priorityStr, out var priority))
                 return MCPContent.CreateSimpleContent($"Invalid priority: '{priorityStr}'.");
@@ -150,12 +150,12 @@ internal class TaskEditCommand : BaseCommand
             taskRec.Priority = priority;
         }
 
-        string startDate = MCPHelper.GetStringArgument(args, "start_date", null);
+        string startDate = MCPHelper.GetOptionalStr(args, "start_date", null);
         if (startDate != null) {
             taskRec.StartDate.ParseString(startDate);
         }
 
-        string stopDate = MCPHelper.GetStringArgument(args, "stop_date", null);
+        string stopDate = MCPHelper.GetOptionalStr(args, "stop_date", null);
         if (stopDate != null) {
             taskRec.StopDate.ParseString(stopDate);
         }

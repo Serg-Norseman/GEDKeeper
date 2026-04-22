@@ -40,7 +40,7 @@ internal class SourceListRepositoriesCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string sourceXRef = MCPHelper.GetRequiredArgument(args, "source_xref");
+        string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
         var sourceRec = baseContext.Tree.FindXRef<GDMSourceRecord>(sourceXRef);
         if (sourceRec == null)
             return MCPContent.CreateSimpleContent($"Source not found with XRef: {sourceXRef}");
@@ -96,12 +96,12 @@ internal class SourceAddRepositoryCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string sourceXRef = MCPHelper.GetRequiredArgument(args, "source_xref");
+        string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
         var sourceRec = baseContext.Tree.FindXRef<GDMSourceRecord>(sourceXRef);
         if (sourceRec == null)
             return MCPContent.CreateSimpleContent($"Source not found with XRef: {sourceXRef}");
 
-        string repositoryXRef = MCPHelper.GetRequiredArgument(args, "repository_xref");
+        string repositoryXRef = MCPHelper.GetRequiredStr(args, "repository_xref");
         var repoRec = baseContext.Tree.FindXRef<GDMRepositoryRecord>(repositoryXRef);
         if (repoRec == null)
             return MCPContent.CreateSimpleContent($"Repository not found with XRef: {repositoryXRef}");
@@ -144,12 +144,12 @@ internal class SourceDeleteRepositoryCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string sourceXRef = MCPHelper.GetRequiredArgument(args, "source_xref");
+        string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
         var sourceRec = baseContext.Tree.FindXRef<GDMSourceRecord>(sourceXRef);
         if (sourceRec == null)
             return MCPContent.CreateSimpleContent($"Source not found with XRef: {sourceXRef}");
 
-        string repositoryXRef = MCPHelper.GetRequiredArgument(args, "repository_xref");
+        string repositoryXRef = MCPHelper.GetRequiredStr(args, "repository_xref");
         var repoRec = baseContext.Tree.FindXRef<GDMRepositoryRecord>(repositoryXRef);
         if (repoRec == null)
             return MCPContent.CreateSimpleContent($"Repository not found with XRef: {repositoryXRef}");

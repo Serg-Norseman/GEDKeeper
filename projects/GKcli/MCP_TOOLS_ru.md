@@ -85,6 +85,10 @@
 | `individual_delete_event` | Удалить событие персоны | `individual_xref` (string), `event_index` (integer, 0-based) |
 | `individual_add_event` | Добавить событие персоне | `individual_xref` (string), `tag` (string), `type` (string, optional), `date` (string, dd/mm/yyyy), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `age` (string) |
 | `individual_list_event_types` | Список всех доступных типов событий для персон | — |
+| `individual_list_personal_names` | Список всех персональных имён персоны | `individual_xref` (string) |
+| `individual_add_personal_name` | Добавить персональное имя персоны | `individual_xref` (string), `given` (string), `surname` (string), `surname_prefix` (string, необязательно), `name_prefix` (string, необязательно), `name_suffix` (string, необязательно), `nickname` (string, необязательно), `name_type` (string, необязательно), `language` (string, необязательно), `patronymic` (string, необязательно), `married_name` (string, необязательно), `religious_name` (string, необязательно), `census_name` (string, необязательно) |
+| `individual_edit_personal_name` | Редактировать персональное имя персоны | `individual_xref` (string), `name_index` (integer, 0-based), `given` (string, необязательно), `surname` (string, необязательно), `surname_prefix` (string, необязательно), `name_prefix` (string, необязательно), `name_suffix` (string, необязательно), `nickname` (string, необязательно), `name_type` (string, необязательно), `language` (string, необязательно), `patronymic` (string, необязательно), `married_name` (string, необязательно), `religious_name` (string, необязательно), `census_name` (string, необязательно) |
+| `individual_delete_personal_name` | Удалить персональное имя персоны | `individual_xref` (string), `name_index` (integer, 0-based) |
 
 ---
 
@@ -93,6 +97,7 @@
 | Инструмент | Описание | Параметры |
 |---|---|---|
 | `family_add` | Создать семью | `husband_xref` (string), `wife_xref` (string) |
+| `family_edit` | Редактировать семью | `xref` (string), `husband_xref` (string, необязательно), `wife_xref` (string, необязательно) |
 | `family_list_children` | Список детей семьи | `family_xref` (string) |
 | `family_add_child` | Добавить ребёнка в семью | `family_xref` (string), `child_xref` (string) |
 | `family_delete_child` | Удалить ребёнка из семьи | `family_xref` (string), `child_xref` (string) |

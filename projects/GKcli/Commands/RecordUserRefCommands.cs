@@ -39,7 +39,7 @@ internal class RecordListUserRefsCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
+        string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
@@ -90,9 +90,9 @@ internal class RecordAddUserRefCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
-        string stringValue = MCPHelper.GetRequiredArgument(args, "string_value");
-        string referenceType = MCPHelper.GetStringArgument(args, "reference_type", string.Empty);
+        string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
+        string stringValue = MCPHelper.GetRequiredStr(args, "string_value");
+        string referenceType = MCPHelper.GetOptionalStr(args, "reference_type", string.Empty);
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
@@ -139,8 +139,8 @@ internal class RecordDeleteUserRefCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
-        int referenceIndex = MCPHelper.GetIntArgument(args, "reference_index", -1);
+        string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
+        int referenceIndex = MCPHelper.GetOptionalInt(args, "reference_index", -1);
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)

@@ -25,7 +25,7 @@ public static class MCPHelper
         if (recordCount == 0)
             return MCPContent.CreateSimpleContent($"No {tableName} in database.");
 
-        int page = GetIntArgument(args, "page", 1);
+        int page = GetOptionalInt(args, "page", 1);
         if (page < 1) page = 1;
 
         int totalPages = (recordCount + pageSize - 1) / pageSize;
@@ -67,12 +67,12 @@ public static class MCPHelper
         return MCPContent.CreateImageContent(base64Data, mimeType);
     }
 
-    internal static bool HasArgument(JsonElement args, string argName)
+    internal static bool HasArg(JsonElement args, string argName)
     {
         return args.TryGetProperty(argName, out var argElem);
     }
 
-    internal static string GetRequiredArgument(JsonElement args, string argName)
+    internal static string GetRequiredStr(JsonElement args, string argName)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.String)
             throw new ArgumentException($"Missing required argument: {argName}");
@@ -80,7 +80,7 @@ public static class MCPHelper
         return argElem.GetString()!;
     }
 
-    internal static int GetIntArgument(JsonElement args, string argName, int defaultValue)
+    internal static int GetOptionalInt(JsonElement args, string argName, int defaultValue)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.Number)
             return defaultValue;
@@ -88,7 +88,7 @@ public static class MCPHelper
         return argElem.GetInt32();
     }
 
-    internal static string GetStringArgument(JsonElement args, string argName, string defaultValue)
+    internal static string GetOptionalStr(JsonElement args, string argName, string defaultValue)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.String)
             return defaultValue;
@@ -96,7 +96,7 @@ public static class MCPHelper
         return argElem.GetString()!;
     }
 
-    internal static double GetDoubleArgument(JsonElement args, string argName, double defaultValue)
+    internal static double GetOptionalDbl(JsonElement args, string argName, double defaultValue)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.Number)
             return defaultValue;
@@ -104,7 +104,7 @@ public static class MCPHelper
         return argElem.GetDouble();
     }
 
-    internal static bool GetBoolArgument(JsonElement args, string argName, bool defaultValue)
+    internal static bool GetOptionalBool(JsonElement args, string argName, bool defaultValue)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.True && argElem.ValueKind != JsonValueKind.False)
             return defaultValue;

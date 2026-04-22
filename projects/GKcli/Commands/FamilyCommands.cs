@@ -67,8 +67,8 @@ internal class FamAddCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string husbandXRef = MCPHelper.GetRequiredArgument(args, "husband_xref");
-        string wifeXRef = MCPHelper.GetRequiredArgument(args, "wife_xref");
+        string husbandXRef = MCPHelper.GetRequiredStr(args, "husband_xref");
+        string wifeXRef = MCPHelper.GetRequiredStr(args, "wife_xref");
 
         var husbandRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(husbandXRef);
         if (husbandRec == null)
@@ -84,6 +84,70 @@ internal class FamAddCommand : BaseCommand
         baseContext.SetModified();
 
         return MCPContent.CreateSimpleContent($"Family with XRef `{familyRec.XRef}` added: husband {husbandXRef}, wife {wifeXRef}");
+    }
+}
+
+
+internal class FamEditCommand : BaseCommand
+{
+    public FamEditCommand() : base("family_edit", null, CommandCategory.Family) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Edit an existing family record to the database with husband and wife. Only provided fields will be updated. Use 'xref' to identify the record to modify.",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "Unique identifier (XRef) of the record to edit" },
+                    ["husband_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the husband (e.g., 'I1'). Pass an empty string or '-' to delete." },
+                    ["wife_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the wife (e.g., 'I2'). Pass an empty string or '-' to delete." }
+                },
+                Required = new List<string> { "xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetRequiredStr(args, "xref");
+        var familyRec = baseContext.Tree.FindXRef<GDMFamilyRecord>(xref);
+        if (familyRec == null)
+            return MCPContent.CreateSimpleContent($"Family not found with XRef: {xref}");
+
+        string husbandXRef = MCPHelper.GetOptionalStr(args, "husband_xref", null);
+        if (husbandXRef != null) {
+            if (husbandXRef == "" || husbandXRef == "-") {
+                familyRec.Husband.XRef = "";
+            } else {
+                var husbandRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(husbandXRef);
+                if (husbandRec == null)
+                    return MCPContent.CreateSimpleContent($"Husband not found with XRef: {husbandXRef}");
+
+                familyRec.Husband.XRef = husbandRec.XRef;
+            }
+        }
+
+        string wifeXRef = MCPHelper.GetOptionalStr(args, "wife_xref", null);
+        if (wifeXRef != null) {
+            if (wifeXRef == "" || wifeXRef == "-") {
+                familyRec.Wife.XRef = "";
+            } else {
+                var wifeRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(wifeXRef);
+                if (wifeRec == null)
+                    return MCPContent.CreateSimpleContent($"Wife not found with XRef: {wifeXRef}");
+
+                familyRec.Wife.XRef = wifeRec.XRef;
+            }
+        }
+
+        baseContext.SetModified();
+        return MCPContent.CreateSimpleContent($"Family with XRef `{familyRec.XRef}` updated: husband {husbandXRef}, wife {wifeXRef}");
     }
 }
 

@@ -39,7 +39,7 @@ internal class RecordListMultimediaCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
+        string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
@@ -95,9 +95,9 @@ internal class RecordAddMultimediaLinkCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
-        string multimediaXRef = MCPHelper.GetRequiredArgument(args, "multimedia_xref");
-        bool isPrimary = MCPHelper.GetBoolArgument(args, "is_primary", false);
+        string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
+        string multimediaXRef = MCPHelper.GetRequiredStr(args, "multimedia_xref");
+        bool isPrimary = MCPHelper.GetOptionalBool(args, "is_primary", false);
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
@@ -148,8 +148,8 @@ internal class RecordDeleteMultimediaLinkCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
-        int linkIndex = MCPHelper.GetIntArgument(args, "link_index", -1);
+        string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
+        int linkIndex = MCPHelper.GetOptionalInt(args, "link_index", -1);
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)

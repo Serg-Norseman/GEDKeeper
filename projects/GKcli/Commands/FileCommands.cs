@@ -111,7 +111,7 @@ internal class FileLoadCommand : FileCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string path = MCPHelper.GetRequiredArgument(args, "path");
+        string path = MCPHelper.GetRequiredStr(args, "path");
 
         var sw = Stopwatch.StartNew();
         baseContext.FileLoad(path, false).GetAwaiter().GetResult();
@@ -177,7 +177,7 @@ internal class FileSaveAsCommand : FileCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string path = MCPHelper.GetRequiredArgument(args, "path");
+        string path = MCPHelper.GetRequiredStr(args, "path");
 
         var sw = Stopwatch.StartNew();
         baseContext.FileSave(path).GetAwaiter().GetResult();
@@ -337,7 +337,7 @@ internal class FileSearchCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string path = MCPHelper.GetRequiredArgument(args, "path");
+        string path = MCPHelper.GetRequiredStr(args, "path");
 
         var result = new List<MCPContent>();
 

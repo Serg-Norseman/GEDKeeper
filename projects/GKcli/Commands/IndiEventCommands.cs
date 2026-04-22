@@ -68,7 +68,7 @@ internal class IndiListEventsCommand : EventCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string individualXRef = MCPHelper.GetRequiredArgument(args, "individual_xref");
+        string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)
@@ -113,7 +113,7 @@ internal class IndiAddEventCommand : EventCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string individualXRef = MCPHelper.GetRequiredArgument(args, "individual_xref");
+        string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)
@@ -150,8 +150,8 @@ internal class IndiDeleteEventCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string individualXRef = MCPHelper.GetRequiredArgument(args, "individual_xref");
-        int eventIndex = MCPHelper.GetIntArgument(args, "event_index", -1);
+        string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
+        int eventIndex = MCPHelper.GetOptionalInt(args, "event_index", -1);
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)

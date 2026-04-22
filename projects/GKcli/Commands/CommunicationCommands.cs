@@ -62,9 +62,9 @@ internal class CommunicationAddCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string name = MCPHelper.GetRequiredArgument(args, "name");
-        string typeStr = MCPHelper.GetRequiredArgument(args, "type");
-        string dirStr = MCPHelper.GetRequiredArgument(args, "direction");
+        string name = MCPHelper.GetRequiredStr(args, "name");
+        string typeStr = MCPHelper.GetRequiredStr(args, "type");
+        string dirStr = MCPHelper.GetRequiredStr(args, "direction");
 
         if (!RuntimeData.CommTypeMap.TryGetValue(typeStr, out var commType))
             return MCPContent.CreateSimpleContent($"Invalid type: '{typeStr}'.");
@@ -72,9 +72,9 @@ internal class CommunicationAddCommand : BaseCommand
         if (!RuntimeData.CommDirMap.TryGetValue(dirStr, out var dir))
             return MCPContent.CreateSimpleContent($"Invalid direction: '{dirStr}'.");
 
-        string date = MCPHelper.GetRequiredArgument(args, "date");
+        string date = MCPHelper.GetRequiredStr(args, "date");
 
-        string corrXRef = MCPHelper.GetRequiredArgument(args, "corresponderXRef");
+        string corrXRef = MCPHelper.GetRequiredStr(args, "corresponderXRef");
         var corrRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(corrXRef);
         if (corrRec == null)
             return MCPContent.CreateSimpleContent($"Corresponder not found with XRef: {corrXRef}");
@@ -125,17 +125,17 @@ internal class CommunicationEditCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+        string xref = MCPHelper.GetRequiredStr(args, "xref");
         var commRec = baseContext.Tree.FindXRef<GDMCommunicationRecord>(xref);
         if (commRec == null)
             return MCPContent.CreateSimpleContent($"Communication record not found: '{xref}'.");
 
-        string name = MCPHelper.GetStringArgument(args, "name", null);
+        string name = MCPHelper.GetOptionalStr(args, "name", null);
         if (name != null) {
             commRec.CommName = name;
         }
 
-        string typeStr = MCPHelper.GetStringArgument(args, "type", null);
+        string typeStr = MCPHelper.GetOptionalStr(args, "type", null);
         if (typeStr != null) {
             if (!RuntimeData.CommTypeMap.TryGetValue(typeStr, out var commType))
                 return MCPContent.CreateSimpleContent($"Invalid type: '{typeStr}'.");
@@ -143,7 +143,7 @@ internal class CommunicationEditCommand : BaseCommand
             commRec.CommunicationType = commType;
         }
 
-        string dirStr = MCPHelper.GetStringArgument(args, "direction", null);
+        string dirStr = MCPHelper.GetOptionalStr(args, "direction", null);
         if (dirStr != null) {
             if (!RuntimeData.CommDirMap.TryGetValue(dirStr, out var dir))
                 return MCPContent.CreateSimpleContent($"Invalid direction: '{dirStr}'.");
@@ -152,12 +152,12 @@ internal class CommunicationEditCommand : BaseCommand
             commRec.SetCorresponder(dir, corrRec);
         }
 
-        string date = MCPHelper.GetStringArgument(args, "date", null);
+        string date = MCPHelper.GetOptionalStr(args, "date", null);
         if (date != null) {
             commRec.Date.ParseString(date);
         }
 
-        string corrXRef = MCPHelper.GetStringArgument(args, "corresponderXRef", null);
+        string corrXRef = MCPHelper.GetOptionalStr(args, "corresponderXRef", null);
         if (corrXRef != null) {
             var corrRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(corrXRef);
             if (corrRec == null)

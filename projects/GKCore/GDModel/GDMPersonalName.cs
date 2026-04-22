@@ -71,7 +71,7 @@ namespace GDModel
             }
         }
 
-        internal string FirstPart
+        public string FirstPart
         {
             get {
                 string result = fGiven;

@@ -55,9 +55,9 @@ internal class LocationAddCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string name = MCPHelper.GetRequiredArgument(args, "name");
-        double lat = MCPHelper.GetDoubleArgument(args, "lati", 0);
-        double lng = MCPHelper.GetDoubleArgument(args, "long", 0);
+        string name = MCPHelper.GetRequiredStr(args, "name");
+        double lat = MCPHelper.GetOptionalDbl(args, "lati", 0);
+        double lng = MCPHelper.GetOptionalDbl(args, "long", 0);
 
         var locRec = baseContext.Tree.CreateLocation();
         locRec.LocationName = name;
@@ -99,24 +99,24 @@ internal class LocationEditCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+        string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var locRec = baseContext.Tree.FindXRef<GDMLocationRecord>(xref);
         if (locRec == null)
             return MCPContent.CreateSimpleContent($"Location not found with XRef: {xref}");
 
-        string name = MCPHelper.GetStringArgument(args, "name", null);
+        string name = MCPHelper.GetOptionalStr(args, "name", null);
         if (name != null) {
             locRec.LocationName = name;
         }
 
-        if (MCPHelper.HasArgument(args, "lati")) {
-            double lat = MCPHelper.GetDoubleArgument(args, "lati", 0);
+        if (MCPHelper.HasArg(args, "lati")) {
+            double lat = MCPHelper.GetOptionalDbl(args, "lati", 0);
             locRec.Map.Lati = lat;
         }
 
-        if (MCPHelper.HasArgument(args, "long")) {
-            double lng = MCPHelper.GetDoubleArgument(args, "long", 0);
+        if (MCPHelper.HasArg(args, "long")) {
+            double lng = MCPHelper.GetOptionalDbl(args, "long", 0);
             locRec.Map.Long = lng;
         }
 

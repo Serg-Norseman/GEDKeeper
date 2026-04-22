@@ -68,7 +68,7 @@ internal class FamListEventsCommand : EventCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string familyXRef = MCPHelper.GetRequiredArgument(args, "family_xref");
+        string familyXRef = MCPHelper.GetRequiredStr(args, "family_xref");
 
         var familyRec = baseContext.Tree.FindXRef<GDMFamilyRecord>(familyXRef);
         if (familyRec == null)
@@ -114,7 +114,7 @@ internal class FamAddEventCommand : EventCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string familyXRef = MCPHelper.GetRequiredArgument(args, "family_xref");
+        string familyXRef = MCPHelper.GetRequiredStr(args, "family_xref");
 
         var familyRec = baseContext.Tree.FindXRef<GDMFamilyRecord>(familyXRef);
         if (familyRec == null)
@@ -151,8 +151,8 @@ internal class FamDeleteEventCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string familyXRef = MCPHelper.GetRequiredArgument(args, "family_xref");
-        int eventIndex = MCPHelper.GetIntArgument(args, "event_index", -1);
+        string familyXRef = MCPHelper.GetRequiredStr(args, "family_xref");
+        int eventIndex = MCPHelper.GetOptionalInt(args, "event_index", -1);
 
         var familyRec = baseContext.Tree.FindXRef<GDMFamilyRecord>(familyXRef);
         if (familyRec == null)

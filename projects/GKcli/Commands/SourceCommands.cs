@@ -68,9 +68,9 @@ internal class SourceAddCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string title = MCPHelper.GetRequiredArgument(args, "title");
-        string shortTitle = MCPHelper.GetStringArgument(args, "short_title", string.Empty);
-        string author = MCPHelper.GetStringArgument(args, "author", string.Empty);
+        string title = MCPHelper.GetRequiredStr(args, "title");
+        string shortTitle = MCPHelper.GetOptionalStr(args, "short_title", string.Empty);
+        string author = MCPHelper.GetOptionalStr(args, "author", string.Empty);
 
         var sourceRec = baseContext.Tree.CreateSource();
         sourceRec.Title.Lines.Text = title;
@@ -118,15 +118,15 @@ internal class SourceEditCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+        string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var sourceRec = baseContext.Tree.FindXRef<GDMSourceRecord>(xref);
         if (sourceRec == null)
             return MCPContent.CreateSimpleContent($"Source record not found: '{xref}'.");
 
-        string title = MCPHelper.GetStringArgument(args, "title", null);
-        string shortTitle = MCPHelper.GetStringArgument(args, "short_title", null);
-        string author = MCPHelper.GetStringArgument(args, "author", null);
+        string title = MCPHelper.GetOptionalStr(args, "title", null);
+        string shortTitle = MCPHelper.GetOptionalStr(args, "short_title", null);
+        string author = MCPHelper.GetOptionalStr(args, "author", null);
 
         if (title != null) {
             sourceRec.Title.Lines.Text = title;

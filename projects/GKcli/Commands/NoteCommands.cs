@@ -76,7 +76,7 @@ internal class NoteAddCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string text = MCPHelper.GetRequiredArgument(args, "text");
+        string text = MCPHelper.GetRequiredStr(args, "text");
 
         var noteRec = baseContext.Tree.CreateNote();
         noteRec.Lines.Text = text;
@@ -122,13 +122,13 @@ internal class NoteEditCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+        string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var noteRec = baseContext.Tree.FindXRef<GDMNoteRecord>(xref);
         if (noteRec == null)
             return MCPContent.CreateSimpleContent($"Note record not found: '{xref}'.");
 
-        string text = MCPHelper.GetStringArgument(args, "text", null);
+        string text = MCPHelper.GetOptionalStr(args, "text", null);
         if (text != null) {
             noteRec.Lines.Text = text;
         }

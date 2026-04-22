@@ -39,7 +39,7 @@ internal class IndiListAssociationsCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string individualXRef = MCPHelper.GetRequiredArgument(args, "individual_xref");
+        string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)
@@ -90,9 +90,9 @@ internal class IndiAddAssociationCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string individualXRef = MCPHelper.GetRequiredArgument(args, "individual_xref");
-        string associateXRef = MCPHelper.GetRequiredArgument(args, "associate_xref");
-        string relation = MCPHelper.GetRequiredArgument(args, "relation");
+        string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
+        string associateXRef = MCPHelper.GetRequiredStr(args, "associate_xref");
+        string relation = MCPHelper.GetRequiredStr(args, "relation");
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)
@@ -145,8 +145,8 @@ internal class IndiEditAssociationCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string individualXRef = MCPHelper.GetRequiredArgument(args, "individual_xref");
-        int associationIndex = MCPHelper.GetIntArgument(args, "association_index", -1);
+        string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
+        int associationIndex = MCPHelper.GetOptionalInt(args, "association_index", -1);
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)
@@ -158,12 +158,12 @@ internal class IndiEditAssociationCommand : BaseCommand
         if (associationIndex < 0 || associationIndex >= indiRec.Associations.Count)
             return MCPContent.CreateSimpleContent($"Invalid association index {associationIndex} for individual '{individualXRef}' (has {indiRec.Associations.Count} associations).");
 
-        string associateXRef = MCPHelper.GetStringArgument(args, "associate_xref", null);
+        string associateXRef = MCPHelper.GetOptionalStr(args, "associate_xref", null);
         var assocRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(associateXRef);
         if (assocRec == null)
             return MCPContent.CreateSimpleContent($"Associated individual not found with XRef: {associateXRef}");
 
-        string relation = MCPHelper.GetStringArgument(args, "relation", null);
+        string relation = MCPHelper.GetOptionalStr(args, "relation", null);
 
         var association = indiRec.Associations[associationIndex];
 
@@ -209,8 +209,8 @@ internal class IndiDeleteAssociationCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string individualXRef = MCPHelper.GetRequiredArgument(args, "individual_xref");
-        int associationIndex = MCPHelper.GetIntArgument(args, "association_index", -1);
+        string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
+        int associationIndex = MCPHelper.GetOptionalInt(args, "association_index", -1);
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)

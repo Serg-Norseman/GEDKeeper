@@ -40,6 +40,9 @@ internal static class RuntimeData
     public static readonly Dictionary<string, GDMCommunicationType> CommTypeMap;
     public static readonly Dictionary<string, GDMCommunicationDir> CommDirMap;
 
+    public static readonly Dictionary<string, GDMNameType> NameTypeMap;
+    public static readonly Dictionary<string, GDMLanguageID> LangMap;
+
     static RuntimeData()
     {
         MediaTypeMap = new Dictionary<string, GDMMediaType>();
@@ -70,5 +73,15 @@ internal static class RuntimeData
         CommDirMap = new Dictionary<string, GDMCommunicationDir>();
         CommDirMap.Add(LangMan.LS(LSID.CD_1), GDMCommunicationDir.cdFrom);
         CommDirMap.Add(LangMan.LS(LSID.CD_2), GDMCommunicationDir.cdTo);
+
+        NameTypeMap = new Dictionary<string, GDMNameType>();
+        for (GDMNameType nt = GDMNameType.ntNone; nt <= GDMNameType.ntMarried; nt++) {
+            NameTypeMap.Add(LangMan.LS(GKData.NameTypes[(int)nt]), nt);
+        }
+
+        LangMap = new Dictionary<string, GDMLanguageID>();
+        for (GDMLanguageID lng = GDMLanguageID.Afrikaans; lng <= GDMLanguageID.Yiddish; lng++) {
+            LangMap.Add(lng.ToString(), lng);
+        }
     }
 }

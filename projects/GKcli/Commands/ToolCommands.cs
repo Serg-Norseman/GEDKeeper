@@ -72,7 +72,7 @@ internal class TreeMergeCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string path = MCPHelper.GetRequiredArgument(args, "path");
+        string path = MCPHelper.GetRequiredStr(args, "path");
 
         var textLog = new TextOutput();
 

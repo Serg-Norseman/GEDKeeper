@@ -39,7 +39,7 @@ internal class FamListChildrenCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string familyXRef = MCPHelper.GetRequiredArgument(args, "family_xref");
+        string familyXRef = MCPHelper.GetRequiredStr(args, "family_xref");
 
         var familyRec = baseContext.Tree.FindXRef<GDMFamilyRecord>(familyXRef);
         if (familyRec == null)
@@ -97,8 +97,8 @@ internal class FamAddChildCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string familyXRef = MCPHelper.GetRequiredArgument(args, "family_xref");
-        string childXRef = MCPHelper.GetRequiredArgument(args, "child_xref");
+        string familyXRef = MCPHelper.GetRequiredStr(args, "family_xref");
+        string childXRef = MCPHelper.GetRequiredStr(args, "child_xref");
 
         var familyRec = baseContext.Tree.FindXRef<GDMFamilyRecord>(familyXRef);
         if (familyRec == null)
@@ -146,8 +146,8 @@ internal class FamDeleteChildCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string familyXRef = MCPHelper.GetRequiredArgument(args, "family_xref");
-        string childXRef = MCPHelper.GetRequiredArgument(args, "child_xref");
+        string familyXRef = MCPHelper.GetRequiredStr(args, "family_xref");
+        string childXRef = MCPHelper.GetRequiredStr(args, "child_xref");
 
         var familyRec = baseContext.Tree.FindXRef<GDMFamilyRecord>(familyXRef);
         if (familyRec == null)

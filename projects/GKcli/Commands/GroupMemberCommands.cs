@@ -39,7 +39,7 @@ internal class GroupListMembersCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string groupXRef = MCPHelper.GetRequiredArgument(args, "group_xref");
+        string groupXRef = MCPHelper.GetRequiredStr(args, "group_xref");
 
         var groupRec = baseContext.Tree.FindXRef<GDMGroupRecord>(groupXRef);
         if (groupRec == null)
@@ -97,8 +97,8 @@ internal class GroupAddMemberCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string groupXRef = MCPHelper.GetRequiredArgument(args, "group_xref");
-        string individualXRef = MCPHelper.GetRequiredArgument(args, "individual_xref");
+        string groupXRef = MCPHelper.GetRequiredStr(args, "group_xref");
+        string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
         var groupRec = baseContext.Tree.FindXRef<GDMGroupRecord>(groupXRef);
         if (groupRec == null)
@@ -146,8 +146,8 @@ internal class GroupDeleteMemberCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string groupXRef = MCPHelper.GetRequiredArgument(args, "group_xref");
-        string individualXRef = MCPHelper.GetRequiredArgument(args, "individual_xref");
+        string groupXRef = MCPHelper.GetRequiredStr(args, "group_xref");
+        string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
         var groupRec = baseContext.Tree.FindXRef<GDMGroupRecord>(groupXRef);
         if (groupRec == null)

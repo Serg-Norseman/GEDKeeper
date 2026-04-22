@@ -101,12 +101,12 @@ internal class IndiAddCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string name = MCPHelper.GetRequiredArgument(args, "name");
+        string name = MCPHelper.GetRequiredStr(args, "name");
 
-        string sexStr = MCPHelper.GetRequiredArgument(args, "sex").ToLowerInvariant();
+        string sexStr = MCPHelper.GetRequiredStr(args, "sex").ToLowerInvariant();
         char sex = (sexStr.Length > 0) ? sexStr[0] : 'm';
         if (sex != 'm' && sex != 'f') sex = 'm';
-        string nickname = MCPHelper.GetStringArgument(args, "nickname", string.Empty);
+        string nickname = MCPHelper.GetOptionalStr(args, "nickname", string.Empty);
 
         var indiRec = baseContext.Tree.CreateIndividual();
         indiRec.Sex = (sex == 'm') ? GDMSex.svMale : GDMSex.svFemale;
@@ -153,19 +153,19 @@ internal class IndiEditCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+        string xref = MCPHelper.GetRequiredStr(args, "xref");
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(xref);
         if (indiRec == null)
             return MCPContent.CreateSimpleContent($"Individual not found with XRef: {xref}");
 
         var persName = (indiRec.PersonalNames.Count > 0) ? indiRec.PersonalNames[0] : indiRec.AddPersonalName(new GDMPersonalName());
 
-        string name = MCPHelper.GetStringArgument(args, "name", null);
+        string name = MCPHelper.GetOptionalStr(args, "name", null);
         if (name != null) {
             persName.ParseString(name);
         }
 
-        string sexStr = MCPHelper.GetStringArgument(args, "sex", null);
+        string sexStr = MCPHelper.GetOptionalStr(args, "sex", null);
         if (sexStr != null) {
             sexStr = sexStr.ToLowerInvariant();
             char sex = (sexStr.Length > 0) ? sexStr[0] : 'm';
@@ -173,7 +173,7 @@ internal class IndiEditCommand : BaseCommand
             indiRec.Sex = (sex == 'm') ? GDMSex.svMale : GDMSex.svFemale;
         }
 
-        string nickname = MCPHelper.GetStringArgument(args, "nickname", null);
+        string nickname = MCPHelper.GetOptionalStr(args, "nickname", null);
         if (nickname != null) {
             if (!string.IsNullOrEmpty(nickname)) {
                 persName.Nickname = nickname;
@@ -212,7 +212,7 @@ internal class IndiSearchCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string searchName = MCPHelper.GetRequiredArgument(args, "name");
+        string searchName = MCPHelper.GetRequiredStr(args, "name");
 
         var recList = baseContext.Tree.GetRecords(GDMRecordType.rtIndividual);
         if (recList.Count == 0)

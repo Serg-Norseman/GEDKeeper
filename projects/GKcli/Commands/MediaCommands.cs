@@ -76,10 +76,10 @@ internal class MediaAddCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string title = MCPHelper.GetRequiredArgument(args, "title");
-        string filePath = MCPHelper.GetRequiredArgument(args, "file_path");
-        string mediaTypeStr = MCPHelper.GetRequiredArgument(args, "media_type");
-        string storeTypeStr = MCPHelper.GetRequiredArgument(args, "store_type");
+        string title = MCPHelper.GetRequiredStr(args, "title");
+        string filePath = MCPHelper.GetRequiredStr(args, "file_path");
+        string mediaTypeStr = MCPHelper.GetRequiredStr(args, "media_type");
+        string storeTypeStr = MCPHelper.GetRequiredStr(args, "store_type");
 
         if (!RuntimeData.MediaTypeMap.TryGetValue(mediaTypeStr, out var mediaType))
             return MCPContent.CreateSimpleContent($"Invalid media type: '{mediaTypeStr}'.");
@@ -140,7 +140,7 @@ internal class MediaEditCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+        string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var mediaRec = baseContext.Tree.FindXRef<GDMMultimediaRecord>(xref);
         if (mediaRec == null)
@@ -148,8 +148,8 @@ internal class MediaEditCommand : BaseCommand
 
         var fileRef = mediaRec.FileReferences[0];
 
-        string title = MCPHelper.GetStringArgument(args, "title", null);
-        string mediaTypeStr = MCPHelper.GetStringArgument(args, "media_type", null);
+        string title = MCPHelper.GetOptionalStr(args, "title", null);
+        string mediaTypeStr = MCPHelper.GetOptionalStr(args, "media_type", null);
 
         if (title != null) {
             fileRef.Title = title;
@@ -208,7 +208,7 @@ internal class MediaGetCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+        string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var mediaRec = baseContext.Tree.FindXRef<GDMMultimediaRecord>(xref);
         if (mediaRec == null)

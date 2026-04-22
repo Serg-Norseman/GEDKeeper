@@ -53,7 +53,7 @@ internal class GroupAddCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string name = MCPHelper.GetRequiredArgument(args, "name");
+        string name = MCPHelper.GetRequiredStr(args, "name");
 
         var groupRec = baseContext.Tree.CreateGroup();
         groupRec.GroupName = name;
@@ -90,13 +90,13 @@ internal class GroupEditCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+        string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var repoRec = baseContext.Tree.FindXRef<GDMGroupRecord>(xref);
         if (repoRec == null)
             return MCPContent.CreateSimpleContent($"Group not found with XRef: {xref}");
 
-        string name = MCPHelper.GetStringArgument(args, "name", null);
+        string name = MCPHelper.GetOptionalStr(args, "name", null);
         if (name != null) {
             repoRec.GroupName = name;
         }

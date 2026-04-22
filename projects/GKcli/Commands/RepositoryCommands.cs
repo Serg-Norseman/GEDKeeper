@@ -66,7 +66,7 @@ internal class RepositoryAddCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string name = MCPHelper.GetRequiredArgument(args, "name");
+        string name = MCPHelper.GetRequiredStr(args, "name");
 
         var repoRec = baseContext.Tree.CreateRepository();
         repoRec.RepositoryName = name;
@@ -103,13 +103,12 @@ internal class RepositoryEditCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
-
+        string xref = MCPHelper.GetRequiredStr(args, "xref");
         var repoRec = baseContext.Tree.FindXRef<GDMRepositoryRecord>(xref);
         if (repoRec == null)
             return MCPContent.CreateSimpleContent($"Repository not found with XRef: {xref}");
 
-        string name = MCPHelper.GetStringArgument(args, "name", null);
+        string name = MCPHelper.GetOptionalStr(args, "name", null);
         if (name != null) {
             repoRec.RepositoryName = name;
         }

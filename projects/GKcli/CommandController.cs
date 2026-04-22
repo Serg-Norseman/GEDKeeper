@@ -88,10 +88,16 @@ internal class CommandController
         RegisterCommand(new IndiDeleteEventCommand());
         RegisterCommand(new IndiListEventTypesCommand());
 
+        RegisterCommand(new IndiListPersonalNamesCommand());
+        RegisterCommand(new IndiAddPersonalNameCommand());
+        RegisterCommand(new IndiEditPersonalNameCommand());
+        RegisterCommand(new IndiDeletePersonalNameCommand());
+
         // Families operations
         RegisterCommand(new FamMenuCommand());
         RegisterCommand(new FamListCommand());
         RegisterCommand(new FamAddCommand());
+        RegisterCommand(new FamEditCommand());
         RegisterCommand(new FamDeleteCommand());
 
         RegisterCommand(new FamAddChildCommand());

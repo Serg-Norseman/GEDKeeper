@@ -39,7 +39,7 @@ internal class RecordListSourceCitationsCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
+        string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
@@ -100,10 +100,10 @@ internal class RecordAddSourceCitationCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
-        string sourceXRef = MCPHelper.GetRequiredArgument(args, "source_xref");
-        string page = MCPHelper.GetStringArgument(args, "page", string.Empty);
-        int certainty = MCPHelper.GetIntArgument(args, "certainty", -1);
+        string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
+        string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
+        string page = MCPHelper.GetOptionalStr(args, "page", string.Empty);
+        int certainty = MCPHelper.GetOptionalInt(args, "certainty", -1);
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
@@ -155,8 +155,8 @@ internal class RecordDeleteSourceCitationCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
-        int citationIndex = MCPHelper.GetIntArgument(args, "citation_index", -1);
+        string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
+        int citationIndex = MCPHelper.GetOptionalInt(args, "citation_index", -1);
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)

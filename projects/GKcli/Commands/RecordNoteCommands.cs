@@ -39,7 +39,7 @@ internal class RecordListNotesCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
+        string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
@@ -95,8 +95,8 @@ internal class RecordAddNoteCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
-        string noteXRef = MCPHelper.GetRequiredArgument(args, "note_xref");
+        string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
+        string noteXRef = MCPHelper.GetRequiredStr(args, "note_xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
@@ -146,8 +146,8 @@ internal class RecordDeleteNoteCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string recordXRef = MCPHelper.GetRequiredArgument(args, "record_xref");
-        int noteIndex = MCPHelper.GetIntArgument(args, "note_index", -1);
+        string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
+        int noteIndex = MCPHelper.GetOptionalInt(args, "note_index", -1);
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)

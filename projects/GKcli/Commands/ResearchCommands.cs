@@ -63,9 +63,9 @@ internal class ResearchAddCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string title = MCPHelper.GetRequiredArgument(args, "title");
-        string priorityStr = MCPHelper.GetRequiredArgument(args, "priority");
-        string statusStr = MCPHelper.GetRequiredArgument(args, "status");
+        string title = MCPHelper.GetRequiredStr(args, "title");
+        string priorityStr = MCPHelper.GetRequiredStr(args, "priority");
+        string statusStr = MCPHelper.GetRequiredStr(args, "status");
 
         if (!RuntimeData.PriorityMap.TryGetValue(priorityStr, out var priority))
             return MCPContent.CreateSimpleContent($"Invalid priority: '{priorityStr}'.");
@@ -73,9 +73,9 @@ internal class ResearchAddCommand : BaseCommand
         if (!RuntimeData.StatusMap.TryGetValue(statusStr, out var status))
             return MCPContent.CreateSimpleContent($"Invalid status: '{statusStr}'.");
 
-        string startDate = MCPHelper.GetStringArgument(args, "start_date", string.Empty);
-        string stopDate = MCPHelper.GetStringArgument(args, "stop_date", string.Empty);
-        int percent = MCPHelper.GetIntArgument(args, "percent", 0);
+        string startDate = MCPHelper.GetOptionalStr(args, "start_date", string.Empty);
+        string stopDate = MCPHelper.GetOptionalStr(args, "stop_date", string.Empty);
+        int percent = MCPHelper.GetOptionalInt(args, "percent", 0);
 
         var resRec = baseContext.Tree.CreateResearch();
         resRec.ResearchName = title;
@@ -126,18 +126,18 @@ internal class ResearchEditCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+        string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var resRec = baseContext.Tree.FindXRef<GDMResearchRecord>(xref);
         if (resRec == null)
             return MCPContent.CreateSimpleContent($"Research record not found: '{xref}'.");
 
-        string title = MCPHelper.GetStringArgument(args, "title", null);
-        string priorityStr = MCPHelper.GetStringArgument(args, "priority", null);
-        string statusStr = MCPHelper.GetStringArgument(args, "status", null);
-        string startDate = MCPHelper.GetStringArgument(args, "start_date", null);
-        string stopDate = MCPHelper.GetStringArgument(args, "stop_date", null);
-        int percent = MCPHelper.GetIntArgument(args, "percent", -1);
+        string title = MCPHelper.GetOptionalStr(args, "title", null);
+        string priorityStr = MCPHelper.GetOptionalStr(args, "priority", null);
+        string statusStr = MCPHelper.GetOptionalStr(args, "status", null);
+        string startDate = MCPHelper.GetOptionalStr(args, "start_date", null);
+        string stopDate = MCPHelper.GetOptionalStr(args, "stop_date", null);
+        int percent = MCPHelper.GetOptionalInt(args, "percent", -1);
 
         if (title != null) {
             resRec.ResearchName = title;

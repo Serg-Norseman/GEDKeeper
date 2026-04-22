@@ -55,7 +55,7 @@ internal class RecordListCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string recordTypeStr = MCPHelper.GetRequiredArgument(args, "record_type");
+        string recordTypeStr = MCPHelper.GetRequiredStr(args, "record_type");
         if (!RuntimeData.RecordTypeMap.TryGetValue(recordTypeStr, out GDMRecordType recordType)) {
             string availableTypes = string.Join(", ", RuntimeData.RecordTypeMap.Keys);
             return MCPContent.CreateSimpleContent($"Unknown record type: '{recordTypeStr}'. Available types: {availableTypes}");
@@ -244,9 +244,9 @@ internal class RecordSearchCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string recordTypeStr = MCPHelper.GetRequiredArgument(args, "record_type");
-        string searchText = MCPHelper.GetRequiredArgument(args, "search_text");
-        double threshold = MCPHelper.GetDoubleArgument(args, "threshold", 0.15);
+        string recordTypeStr = MCPHelper.GetRequiredStr(args, "record_type");
+        string searchText = MCPHelper.GetRequiredStr(args, "search_text");
+        double threshold = MCPHelper.GetOptionalDbl(args, "threshold", 0.15);
 
         if (!RuntimeData.RecordTypeMap.TryGetValue(recordTypeStr, out GDMRecordType recordType)) {
             string availableTypes = string.Join(", ", RuntimeData.RecordTypeMap.Keys);
@@ -307,7 +307,7 @@ internal class RecordInfoCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+        string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(xref);
         if (record == null)
@@ -353,7 +353,7 @@ internal class RecordDeleteCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string xref = MCPHelper.GetRequiredArgument(args, "xref");
+        string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(xref);
         if (record == null)
@@ -392,12 +392,12 @@ internal class RecordMergeCommand : BaseCommand
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        string targetXRef = MCPHelper.GetRequiredArgument(args, "target_xref");
+        string targetXRef = MCPHelper.GetRequiredStr(args, "target_xref");
         var targetRecord = baseContext.Tree.FindXRef<GDMRecord>(targetXRef);
         if (targetRecord == null)
             return MCPContent.CreateSimpleContent($"Target record not found with XRef: {targetXRef}");
 
-        string sourceXRef = MCPHelper.GetRequiredArgument(args, "source_xref");
+        string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
         var sourceRecord = baseContext.Tree.FindXRef<GDMRecord>(sourceXRef);
         if (sourceRecord == null)
             return MCPContent.CreateSimpleContent($"Merged record not found with XRef: {sourceXRef}");
