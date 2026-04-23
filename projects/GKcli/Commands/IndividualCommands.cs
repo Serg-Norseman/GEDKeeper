@@ -257,3 +257,104 @@ internal class IndiDeleteCommand : BaseCommand
         // Not implemented yet
     }
 }
+
+
+internal class IndiListSpousesCommand : BaseCommand
+{
+    public IndiListSpousesCommand() : base("individual_list_spouses", null, CommandCategory.Individual) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "List all spouses of an individual by their XRef identifier",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["individual_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the individual (e.g., 'I1')" }
+                },
+                Required = new List<string> { "individual_xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
+
+        var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
+        if (indiRec == null)
+            return MCPContent.CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
+
+        if (indiRec.SpouseToFamilyLinks.Count <= 0)
+            return MCPContent.CreateSimpleContent($"Individual '{individualXRef}' has no spouses.");
+
+        var rows = new List<string> {
+            $"Spouses for individual '{individualXRef}' ({indiRec.SpouseToFamilyLinks.Count}):",
+            "| Index | Family XRef | Spouse XRef | Spouse Name |",
+            "|---|---|---|---|"
+        };
+        for (int i = 0; i < indiRec.SpouseToFamilyLinks.Count; i++) {
+            var stfLink = indiRec.SpouseToFamilyLinks[i];
+            var familyRec = baseContext.Tree.GetPtrValue<GDMFamilyRecord>(stfLink);
+            var spouse = (familyRec != null) ? baseContext.Tree.GetSpouseBy(familyRec, indiRec) : null;
+            var spouseName = GKUtils.GetNameString(spouse, false);
+            rows.Add($"|{i}|{stfLink.XRef}|{familyRec.XRef}|{spouseName}|");
+        }
+
+        return MCPContent.CreateSimpleContent(string.Join("\n", rows));
+    }
+}
+
+
+internal class IndiListGroupsCommand : BaseCommand
+{
+    public IndiListGroupsCommand() : base("individual_list_groups", null, CommandCategory.Individual) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "List all groups an individual belongs to by their XRef identifier",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["individual_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the individual (e.g., 'I1')" }
+                },
+                Required = new List<string> { "individual_xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
+        var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
+        if (indiRec == null)
+            return MCPContent.CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
+
+        if (!indiRec.HasGroups)
+            return MCPContent.CreateSimpleContent($"Individual '{individualXRef}' belongs to no groups.");
+
+        var rows = new List<string> {
+            $"Groups for individual '{individualXRef}' ({indiRec.Groups.Count}):",
+            "| Index | Group XRef | Group Name |",
+            "|---|---|---|"
+        };
+        for (int i = 0; i < indiRec.Groups.Count; i++) {
+            var groupLink = indiRec.Groups[i];
+            var groupRec = baseContext.Tree.GetPtrValue<GDMGroupRecord>(groupLink);
+            rows.Add($"|{i}|{groupLink.XRef}|{groupRec.GroupName}|");
+        }
+
+        return MCPContent.CreateSimpleContent(string.Join("\n", rows));
+    }
+}

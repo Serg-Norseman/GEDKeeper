@@ -12,7 +12,6 @@ using System.Text.Json;
 using GDModel;
 using GKcli.MCP;
 using GKCore;
-using GKCore.Locales;
 
 namespace GKcli.Commands;
 

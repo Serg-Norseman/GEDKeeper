@@ -268,13 +268,15 @@ namespace GDModel
             return (spouse != null) && (fHusband.XRef == spouse.XRef || fWife.XRef == spouse.XRef);
         }
 
-        public bool AddChild(GDMIndividualRecord child)
+        public bool AddChild(GDMIndividualRecord child, GDMPedigreeLinkageType linkageType = GDMPedigreeLinkageType.plNone)
         {
             if (child == null) return false;
 
             fChildren.Add(new GDMChildLink(child.XRef));
 
-            child.ChildToFamilyLinks.Add(new GDMChildToFamilyLink(this.XRef));
+            var ctfLink = new GDMChildToFamilyLink(this.XRef);
+            ctfLink.PedigreeLinkageType = linkageType;
+            child.ChildToFamilyLinks.Add(ctfLink);
 
             return true;
         }

@@ -43,6 +43,8 @@ internal static class RuntimeData
     public static readonly Dictionary<string, GDMNameType> NameTypeMap;
     public static readonly Dictionary<string, GDMLanguageID> LangMap;
 
+    public static readonly Dictionary<string, GDMPedigreeLinkageType> LinkageTypeMap;
+
     static RuntimeData()
     {
         MediaTypeMap = new Dictionary<string, GDMMediaType>();
@@ -82,6 +84,11 @@ internal static class RuntimeData
         LangMap = new Dictionary<string, GDMLanguageID>();
         for (GDMLanguageID lng = GDMLanguageID.Afrikaans; lng <= GDMLanguageID.Yiddish; lng++) {
             LangMap.Add(lng.ToString(), lng);
+        }
+
+        LinkageTypeMap = new Dictionary<string, GDMPedigreeLinkageType>();
+        for (var plt = GDMPedigreeLinkageType.plNone; plt <= GDMPedigreeLinkageType.plFoster; plt++) {
+            LinkageTypeMap.Add(LangMan.LS(GKData.ParentTypes[(int)plt]), plt);
         }
     }
 }

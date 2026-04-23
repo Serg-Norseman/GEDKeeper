@@ -90,6 +90,8 @@
 | `individual_add_personal_name` | Добавить персональное имя персоны | `individual_xref` (string), `given` (string), `surname` (string), `surname_prefix` (string, необязательно), `name_prefix` (string, необязательно), `name_suffix` (string, необязательно), `nickname` (string, необязательно), `name_type` (string, необязательно), `language` (string, необязательно), `patronymic` (string, необязательно), `married_name` (string, необязательно), `religious_name` (string, необязательно), `census_name` (string, необязательно) |
 | `individual_edit_personal_name` | Редактировать персональное имя персоны | `individual_xref` (string), `name_index` (integer, 0-based), `given` (string, необязательно), `surname` (string, необязательно), `surname_prefix` (string, необязательно), `name_prefix` (string, необязательно), `name_suffix` (string, необязательно), `nickname` (string, необязательно), `name_type` (string, необязательно), `language` (string, необязательно), `patronymic` (string, необязательно), `married_name` (string, необязательно), `religious_name` (string, необязательно), `census_name` (string, необязательно) |
 | `individual_delete_personal_name` | Удалить персональное имя персоны | `individual_xref` (string), `name_index` (integer, 0-based) |
+| `individual_list_spouses` | Список всех супругов персоны | `individual_xref` (string) |
+| `individual_list_groups` | Список всех групп персоны | `individual_xref` (string) |
 
 ---
 
@@ -100,7 +102,7 @@
 | `family_add` | Создать семью | `husband_xref` (string), `wife_xref` (string) |
 | `family_edit` | Редактировать семью | `xref` (string), `husband_xref` (string, необязательно), `wife_xref` (string, необязательно) |
 | `family_list_children` | Список детей семьи | `family_xref` (string) |
-| `family_add_child` | Добавить ребёнка в семью | `family_xref` (string), `child_xref` (string) |
+| `family_add_child` | Добавить ребёнка в семью | `family_xref` (string), `child_xref` (string), `linkage_type` (string, необязательно) |
 | `family_delete_child` | Удалить ребёнка из семьи | `family_xref` (string), `child_xref` (string) |
 | `family_list_events` | Список всех событий семьи | `family_xref` (string) |
 | `family_delete_event` | Удалить событие семьи | `family_xref` (string), `event_index` (integer, 0-based) |
@@ -181,6 +183,15 @@
 |---|---|---|
 | `research_add` | Добавить исследование | `title` (string), `priority` (enum), `status` (enum), `start_date` (string, необязательно), `stop_date` (string, необязательно), `percent` (integer, необязательно) |
 | `research_edit` | Редактировать исследование | `xref` (string), `title` (string, необязательно), `priority` (enum, необязательно), `status` (enum, необязательно), `start_date` (string, необязательно), `stop_date` (string, необязательно), `percent` (integer, необязательно) |
+| `research_list_tasks` | Список всех задач исследования по его XRef идентификатору | `research_xref` (string) — XRef идентификатор исследования (например, 'R1') |
+| `research_add_task` | Добавить задачу в исследование по их XRef идентификаторам | `research_xref` (string) — XRef идентификатор исследования (например, 'R1', 'R2'), `task_xref` (string) — XRef идентификатор задачи (например, 'T1', 'T2') |
+| `research_delete_task` | Удалить задачу из исследования по их XRef идентификаторам | `research_xref` (string) — XRef идентификатор исследования (например, 'R1', 'R2'), `task_xref` (string) — XRef идентификатор задачи (например, 'T1', 'T2') |
+| `research_list_communications` | Список всех переписок исследования по его XRef идентификатору | `research_xref` (string) — XRef идентификатор исследования (например, 'R1') |
+| `research_add_communication` | Добавить переписку в исследование по их XRef идентификаторам | `research_xref` (string) — XRef идентификатор исследования (например, 'R1', 'R2'), `communication_xref` (string) — XRef идентификатор переписки (например, 'C1', 'C2') |
+| `research_delete_communication` | Удалить переписку из исследования по их XRef идентификаторам | `research_xref` (string) — XRef идентификатор исследования (например, 'R1', 'R2'), `communication_xref` (string) — XRef идентификатор переписки (например, 'C1', 'C2') |
+| `research_list_groups` | Список всех групп исследования по его XRef идентификатору | `research_xref` (string) — XRef идентификатор исследования (например, 'R1') |
+| `research_add_group` | Добавить группу в исследование по их XRef идентификаторам | `research_xref` (string) — XRef идентификатор исследования (например, 'R1', 'R2'), `group_xref` (string) — XRef идентификатор группы (например, 'G1', 'G2') |
+| `research_delete_group` | Удалить группу из исследования по их XRef идентификаторам | `research_xref` (string) — XRef идентификатор исследования (например, 'R1', 'R2'), `group_xref` (string) — XRef идентификатор группы (например, 'G1', 'G2') |
 
 ---
 

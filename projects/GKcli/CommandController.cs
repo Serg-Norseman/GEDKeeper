@@ -17,8 +17,6 @@ using GKCore;
 using GKUI.Platform;
 using Sharprompt;
 
-// MCP TODO sublists: individual, research, event
-
 namespace GKcli;
 
 internal class CommandController
@@ -79,6 +77,9 @@ internal class CommandController
         RegisterCommand(new IndiEditCommand());
         RegisterCommand(new IndiDeleteCommand());
 
+        RegisterCommand(new IndiListSpousesCommand()); // control through family tools
+        RegisterCommand(new IndiListGroupsCommand()); // control through group tools
+
         RegisterCommand(new IndiListAssociationsCommand());
         RegisterCommand(new IndiAddAssociationCommand());
         RegisterCommand(new IndiEditAssociationCommand());
@@ -112,7 +113,7 @@ internal class CommandController
         RegisterCommand(new FamDeleteEventCommand());
         RegisterCommand(new FamListEventTypesCommand());
 
-        // Notes operations, completed
+        // Notes operations
         RegisterCommand(new NoteMenuCommand());
         RegisterCommand(new NoteListCommand());
         RegisterCommand(new NoteAddCommand());
@@ -143,14 +144,14 @@ internal class CommandController
         RegisterCommand(new SourceAddRepositoryCommand());
         RegisterCommand(new SourceDeleteRepositoryCommand());
 
-        // Repositories operations, completed
+        // Repositories operations
         RegisterCommand(new RepositoryMenuCommand());
         RegisterCommand(new RepositoryListCommand());
         RegisterCommand(new RepositoryAddCommand());
         RegisterCommand(new RepositoryEditCommand());
         RegisterCommand(new RepositoryDeleteCommand());
 
-        // Groups operations, completed
+        // Groups operations
         RegisterCommand(new GroupListCommand());
         RegisterCommand(new GroupAddCommand());
         RegisterCommand(new GroupEditCommand());
@@ -160,7 +161,7 @@ internal class CommandController
         RegisterCommand(new GroupAddMemberCommand());
         RegisterCommand(new GroupDeleteMemberCommand());
 
-        // Tasks operations, completed
+        // Tasks operations
         RegisterCommand(new TaskListCommand());
         RegisterCommand(new TaskAddCommand());
         RegisterCommand(new TaskEditCommand());
@@ -172,7 +173,19 @@ internal class CommandController
         RegisterCommand(new ResearchEditCommand());
         RegisterCommand(new ResearchDeleteCommand());
 
-        // Communications operations, completed
+        RegisterCommand(new ResearchListTasksCommand());
+        RegisterCommand(new ResearchAddTaskCommand());
+        RegisterCommand(new ResearchDeleteTaskCommand());
+
+        RegisterCommand(new ResearchListCommunicationsCommand());
+        RegisterCommand(new ResearchAddCommunicationCommand());
+        RegisterCommand(new ResearchDeleteCommunicationCommand());
+
+        RegisterCommand(new ResearchListGroupsCommand());
+        RegisterCommand(new ResearchAddGroupCommand());
+        RegisterCommand(new ResearchDeleteGroupCommand());
+
+        // Communications operations
         RegisterCommand(new CommunicationListCommand());
         RegisterCommand(new CommunicationAddCommand());
         RegisterCommand(new CommunicationEditCommand());

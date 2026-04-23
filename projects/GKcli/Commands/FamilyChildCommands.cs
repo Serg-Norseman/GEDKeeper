@@ -7,6 +7,7 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using GDModel;
 using GKcli.MCP;
@@ -82,13 +83,16 @@ internal class FamAddChildCommand : BaseCommand
 
     public override MCPTool CreateTool()
     {
+        var linkageTypes = RuntimeData.LinkageTypeMap.Keys.ToList();
+
         return new MCPTool {
             Name = Sign,
             Description = "Add a child to a family by their XRef identifiers",
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
                     ["family_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the family (e.g., 'F1')" },
-                    ["child_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the child (e.g., 'I3')" }
+                    ["child_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the child (e.g., 'I3')" },
+                    ["linkage_type"] = new MCPToolProperty { Type = "string", Description = "Pedigree linkage type", Enum = linkageTypes },
                 },
                 Required = new List<string> { "family_xref", "child_xref" }
             }
@@ -111,7 +115,14 @@ internal class FamAddChildCommand : BaseCommand
         if (familyRec.IndexOfChild(childRec) >= 0)
             return MCPContent.CreateSimpleContent($"Child {childXRef} is already a member of family '{familyXRef}'.");
 
-        familyRec.AddChild(childRec);
+        var linkageType = GDMPedigreeLinkageType.plNone;
+        string linkageTypeStr = MCPHelper.GetOptionalStr(args, "linkage_type", null);
+        if (linkageTypeStr != null) {
+            if (!RuntimeData.LinkageTypeMap.TryGetValue(linkageTypeStr, out linkageType))
+                return MCPContent.CreateSimpleContent($"Invalid linkage type: '{linkageTypeStr}'.");
+        }
+
+        familyRec.AddChild(childRec, linkageType);
         baseContext.SetModified();
 
         string childName = GKUtils.GetNameString(childRec, false);
