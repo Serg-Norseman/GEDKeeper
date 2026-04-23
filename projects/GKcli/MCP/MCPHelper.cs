@@ -80,6 +80,14 @@ public static class MCPHelper
         return argElem.GetString()!;
     }
 
+    internal static int GetRequiredInt(JsonElement args, string argName)
+    {
+        if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.Number)
+            throw new ArgumentException($"Missing required argument: {argName}");
+
+        return argElem.GetInt32();
+    }
+
     internal static int GetOptionalInt(JsonElement args, string argName, int defaultValue)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.Number)

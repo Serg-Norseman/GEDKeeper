@@ -38,7 +38,7 @@ public static class BbCodeConverter
         int len = input.Length;
 
         // Lightweight state for [url=href]...[/url] handling
-        string? pendingHref = null;
+        string pendingHref = null;
 
         while (i < len) {
             // Fast path: regular characters

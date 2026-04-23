@@ -80,7 +80,7 @@ namespace GDModel
             ProcessHashes(ref hashCode, fNotes);
         }
 
-        public GDMStructureType GetAccessibleSubstructures()
+        public virtual GDMStructureType GetAccessibleSubstructures()
         {
             return GDMStructureType.NoteLink;
         }

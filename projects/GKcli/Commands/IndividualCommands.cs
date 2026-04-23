@@ -85,7 +85,7 @@ internal class IndiAddCommand : BaseCommand
             Description = "Add a new individual to the database",
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
-                    ["name"] = new MCPToolProperty { Type = "string", Description = "Full name in one of these formats: '[Имя] [Отчество] [/Фамилия/]' or '[FirstName] [MiddleName] [/LastName/]'. Any part may be missing. The last name MUST be enclosed in slashes if present." },
+                    ["name"] = new MCPToolProperty { Type = "string", Description = "Full name in one of these formats: 'Имя Отчество /Фамилия/' or 'FirstName MiddleName /LastName/'. Any part may be missing. The last name MUST be enclosed in slashes if present." },
                     /*
                     ["first_name"] = new MCPToolProperty { Type = "string", Description = "A individual's first name (given)." },
                     ["middle_name"] = new MCPToolProperty { Type = "string", Description = "A individual's middle name or patronymic." },
@@ -142,7 +142,7 @@ internal class IndiEditCommand : BaseCommand
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
                     ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record" },
-                    ["name"] = new MCPToolProperty { Type = "string", Description = "New full name in one of these formats: '[Имя] [Отчество] [/Фамилия/]' or '[FirstName] [MiddleName] [/LastName/]'. Any part may be missing. The last name MUST be enclosed in slashes if present." },
+                    ["name"] = new MCPToolProperty { Type = "string", Description = "New full name in one of these formats: 'Имя Отчество /Фамилия/' or 'FirstName MiddleName /LastName/'. Any part may be missing. The last name MUST be enclosed in slashes if present." },
                     ["sex"] = new MCPToolProperty { Type = "string", Description = "New sex: 'm' or 'f'" },
                     ["nickname"] = new MCPToolProperty { Type = "string", Description = "New nickname or alternative name" }
                 },

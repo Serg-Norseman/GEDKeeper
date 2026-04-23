@@ -84,6 +84,7 @@
 | `individual_list_events` | Список всех событий персоны | `individual_xref` (string) |
 | `individual_delete_event` | Удалить событие персоны | `individual_xref` (string), `event_index` (integer, 0-based) |
 | `individual_add_event` | Добавить событие персоне | `individual_xref` (string), `tag` (string), `type` (string, optional), `date` (string, dd/mm/yyyy), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `age` (string) |
+| `individual_edit_event` | Редактировать событие персоне | `individual_xref` (string), `event_index` (integer, 0-based), `date` (string, dd/mm/yyyy), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `age` (string) |
 | `individual_list_event_types` | Список всех доступных типов событий для персон | — |
 | `individual_list_personal_names` | Список всех персональных имён персоны | `individual_xref` (string) |
 | `individual_add_personal_name` | Добавить персональное имя персоны | `individual_xref` (string), `given` (string), `surname` (string), `surname_prefix` (string, необязательно), `name_prefix` (string, необязательно), `name_suffix` (string, необязательно), `nickname` (string, необязательно), `name_type` (string, необязательно), `language` (string, необязательно), `patronymic` (string, необязательно), `married_name` (string, необязательно), `religious_name` (string, необязательно), `census_name` (string, необязательно) |
@@ -104,6 +105,7 @@
 | `family_list_events` | Список всех событий семьи | `family_xref` (string) |
 | `family_delete_event` | Удалить событие семьи | `family_xref` (string), `event_index` (integer, 0-based) |
 | `family_add_event` | Добавить событие семье | `family_xref` (string), `tag` (string), `type` (string, optional), `date` (string, dd/mm/yyyy), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `husband_age` (string), `wife_age` (string) |
+| `family_edit_event` | Редактировать событие семье | `family_xref` (string), `event_index` (integer, 0-based), `date` (string, dd/mm/yyyy), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `husband_age` (string), `wife_age` (string) |
 | `family_list_event_types` | Список всех доступных типов событий для семей | — |
 
 ---
@@ -142,9 +144,13 @@
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
-| `multimedia_add` | Добавить мультимедиа-запись с файловой ссылкой | `title` (string) — название, `file_path` (string) — путь к файлу или URL, `media_type` (string — `Unknown`, `Audio`, `Book`, `Card`, `Electronic`, `Fiche`, `Film`, `Magazine`, `Manuscript`, `Map`, `Newspaper`, `Photo`, `Tombstone`, `Video`), `store_type` (string — `Reference`, `RelativeReference`, `Archive`, `URL`) |
+| `multimedia_add` | Добавить мультимедиа-запись с файловой ссылкой | `title` (string), `file_path` (string), `media_type` (string), `store_type` (string) |
 | `multimedia_edit` | Редактировать мультимедиа-запись | `xref` (string), `title` (string, необязательно), `media_type` (string, необязательно) |
 | `multimedia_get` | Получить мультимедиа-запись | `xref` (string, напр. `O1`) |
+| `multimedia_list_files` | Список файлов в мультимедиа-записи | `xref` (string) |
+| `multimedia_add_file` | Добавить файл в мультимедиа-запись | `xref` (string), `title` (string), `file_path` (string), `media_type` (string), `store_type` (string) |
+| `multimedia_edit_file` | Редактировать файл в мультимедиа-записи | `xref` (string), `file_index` (string), `title` (string, необязательно), `media_type` (string, необязательно) |
+| `multimedia_delete_file` | Удалить файл из мультимедиа-записи | `xref` (string), `file_index` (string) |
 
 ---
 
@@ -193,3 +199,11 @@
 |---|---|---|
 | `location_add` | Добавить местоположение | `name` (string), `lati` (number, необязательно), `long` (number, необязательно) |
 | `location_edit` | Редактировать местоположение | `xref` (string), `name` (string, необязательно), `lati` (number, необязательно), `long` (number, необязательно) |
+| `location_list_names` | Список всех имён местоположения | `location_xref` (string, напр. 'L1') |
+| `location_add_name` | Добавить имя к записи местоположения | `location_xref` (string, напр. 'L1'), `name` (string), `short_name` (string, необязательно), `date` (string, необязательно) |
+| `location_edit_name` | Редактировать имя местоположения | `location_xref` (string, напр. 'L1'), `name_index` (integer, 0-based), `name` (string, необязательно), `short_name` (string, необязательно), `date` (string, необязательно) |
+| `location_delete_name` | Удалить имя из местоположения | `location_xref` (string, напр. 'L1'), `name_index` (integer, 0-based) |
+| `location_list_top_links` | Список всех верхнеуровневых ссылок местоположения | `location_xref` (string, напр. 'L1') |
+| `location_add_top_link` | Добавить верхнеуровневую ссылку к записи местоположения | `location_xref` (string, напр. 'L1'), `top_link_xref` (string), `date` (string, необязательно) |
+| `location_edit_top_link` | Редактировать верхнеуровневую ссылку местоположения | `location_xref` (string, напр. 'L1'), `top_link_index` (integer, 0-based), `top_link_xref` (string, необязательно), `date` (string, необязательно) |
+| `location_delete_top_link` | Удалить верхнеуровневую ссылку из местоположения | `location_xref` (string, напр. 'L1'), `top_link_index` (integer, 0-based) |

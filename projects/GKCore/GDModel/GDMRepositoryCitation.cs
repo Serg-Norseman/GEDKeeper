@@ -134,7 +134,7 @@ namespace GDModel
             ProcessHashes(ref hashCode, fCallNumbers);
         }
 
-        public GDMStructureType GetAccessibleSubstructures()
+        public override GDMStructureType GetAccessibleSubstructures()
         {
             return GDMStructureType.SourceCallNumber;
         }

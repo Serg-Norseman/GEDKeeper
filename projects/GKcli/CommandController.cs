@@ -17,6 +17,8 @@ using GKCore;
 using GKUI.Platform;
 using Sharprompt;
 
+// MCP TODO sublists: individual, research, event
+
 namespace GKcli;
 
 internal class CommandController
@@ -49,7 +51,6 @@ internal class CommandController
         RegisterCommand(new RecordInfoCommand());
         RegisterCommand(new RecordDeleteCommand());
         RegisterCommand(new RecordSearchCommand());
-        RegisterCommand(new RecordMergeCommand());
 
         RegisterCommand(new RecordAddUserRefCommand());
         RegisterCommand(new RecordDeleteUserRefCommand());
@@ -85,6 +86,7 @@ internal class CommandController
 
         RegisterCommand(new IndiListEventsCommand());
         RegisterCommand(new IndiAddEventCommand());
+        RegisterCommand(new IndiEditEventCommand());
         RegisterCommand(new IndiDeleteEventCommand());
         RegisterCommand(new IndiListEventTypesCommand());
 
@@ -106,6 +108,7 @@ internal class CommandController
 
         RegisterCommand(new FamListEventsCommand());
         RegisterCommand(new FamAddEventCommand());
+        RegisterCommand(new FamEditEventCommand());
         RegisterCommand(new FamDeleteEventCommand());
         RegisterCommand(new FamListEventTypesCommand());
 
@@ -123,6 +126,11 @@ internal class CommandController
         RegisterCommand(new MediaEditCommand());
         RegisterCommand(new MediaDeleteCommand());
         RegisterCommand(new MediaGetCommand());
+
+        RegisterCommand(new MediaListFilesCommand());
+        RegisterCommand(new MediaAddFileCommand());
+        RegisterCommand(new MediaEditFileCommand());
+        RegisterCommand(new MediaDeleteFileCommand());
 
         // Sources operations
         RegisterCommand(new SourceMenuCommand());
@@ -175,6 +183,16 @@ internal class CommandController
         RegisterCommand(new LocationAddCommand());
         RegisterCommand(new LocationEditCommand());
         RegisterCommand(new LocationDeleteCommand());
+
+        RegisterCommand(new LocationListNamesCommand());
+        RegisterCommand(new LocationAddNameCommand());
+        RegisterCommand(new LocationEditNameCommand());
+        RegisterCommand(new LocationDeleteNameCommand());
+
+        RegisterCommand(new LocationListTopLinksCommand());
+        RegisterCommand(new LocationAddTopLinkCommand());
+        RegisterCommand(new LocationEditTopLinkCommand());
+        RegisterCommand(new LocationDeleteTopLinkCommand());
 
         // Service
         RegisterCommand(new ServiceMenuCommand());

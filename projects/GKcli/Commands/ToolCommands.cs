@@ -8,6 +8,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using GDModel;
 using GKcli.MCP;
 using GKCore;
 using GKCore.Locales;
@@ -113,6 +114,39 @@ internal class RecMergeCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
+        // Not applicable for MCP
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Merge records by their XRef identifiers.",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["target_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the target record" },
+                    ["source_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record being merged" }
+                },
+                Required = new List<string> { "target_xref", "source_xref" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string targetXRef = MCPHelper.GetRequiredStr(args, "target_xref");
+        var targetRecord = baseContext.Tree.FindXRef<GDMRecord>(targetXRef);
+        if (targetRecord == null)
+            return MCPContent.CreateSimpleContent($"Target record not found with XRef: {targetXRef}");
+
+        string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
+        var sourceRecord = baseContext.Tree.FindXRef<GDMRecord>(sourceXRef);
+        if (sourceRecord == null)
+            return MCPContent.CreateSimpleContent($"Merged record not found with XRef: {sourceXRef}");
+
+        TreeTools.MergeRecord(baseContext, targetRecord, sourceRecord, false);
+
+        return MCPContent.CreateSimpleContent($"Record deleted: {sourceXRef}");
     }
 }
 
