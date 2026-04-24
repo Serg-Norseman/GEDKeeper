@@ -31,6 +31,10 @@ internal class CommandController
 
     static CommandController()
     {
+    }
+
+    public static void InitCommands(bool mcp, bool pure)
+    {
         // Files operations
         RegisterCommand(new FileMenuCommand());
         RegisterCommand(new FileNewCommand());
@@ -49,6 +53,7 @@ internal class CommandController
         RegisterCommand(new RecordInfoCommand());
         RegisterCommand(new RecordDeleteCommand());
         RegisterCommand(new RecordSearchCommand());
+        RegisterCommand(new RecordSetRestrictionCommand());
 
         RegisterCommand(new RecordAddUserRefCommand());
         RegisterCommand(new RecordDeleteUserRefCommand());
@@ -151,61 +156,65 @@ internal class CommandController
         RegisterCommand(new RepositoryEditCommand());
         RegisterCommand(new RepositoryDeleteCommand());
 
-        // Groups operations
-        RegisterCommand(new GroupListCommand());
-        RegisterCommand(new GroupAddCommand());
-        RegisterCommand(new GroupEditCommand());
-        RegisterCommand(new GroupDeleteCommand());
+        // All 100+ instruments, including the system prompt, consume over 16,000 tokens.
+        // Until optimization or a transition to a different approach is implemented, a limiter is needed.
+        if (!mcp || !pure) {
+            // Groups operations
+            RegisterCommand(new GroupListCommand());
+            RegisterCommand(new GroupAddCommand());
+            RegisterCommand(new GroupEditCommand());
+            RegisterCommand(new GroupDeleteCommand());
 
-        RegisterCommand(new GroupListMembersCommand());
-        RegisterCommand(new GroupAddMemberCommand());
-        RegisterCommand(new GroupDeleteMemberCommand());
+            RegisterCommand(new GroupListMembersCommand());
+            RegisterCommand(new GroupAddMemberCommand());
+            RegisterCommand(new GroupDeleteMemberCommand());
 
-        // Tasks operations
-        RegisterCommand(new TaskListCommand());
-        RegisterCommand(new TaskAddCommand());
-        RegisterCommand(new TaskEditCommand());
-        RegisterCommand(new TaskDeleteCommand());
+            // Tasks operations
+            RegisterCommand(new TaskListCommand());
+            RegisterCommand(new TaskAddCommand());
+            RegisterCommand(new TaskEditCommand());
+            RegisterCommand(new TaskDeleteCommand());
 
-        // Researches operations
-        RegisterCommand(new ResearchListCommand());
-        RegisterCommand(new ResearchAddCommand());
-        RegisterCommand(new ResearchEditCommand());
-        RegisterCommand(new ResearchDeleteCommand());
+            // Researches operations
+            RegisterCommand(new ResearchListCommand());
+            RegisterCommand(new ResearchAddCommand());
+            RegisterCommand(new ResearchEditCommand());
+            RegisterCommand(new ResearchDeleteCommand());
 
-        RegisterCommand(new ResearchListTasksCommand());
-        RegisterCommand(new ResearchAddTaskCommand());
-        RegisterCommand(new ResearchDeleteTaskCommand());
+            RegisterCommand(new ResearchListTasksCommand());
+            RegisterCommand(new ResearchAddTaskCommand());
+            RegisterCommand(new ResearchDeleteTaskCommand());
 
-        RegisterCommand(new ResearchListCommunicationsCommand());
-        RegisterCommand(new ResearchAddCommunicationCommand());
-        RegisterCommand(new ResearchDeleteCommunicationCommand());
+            RegisterCommand(new ResearchListCommunicationsCommand());
+            RegisterCommand(new ResearchAddCommunicationCommand());
+            RegisterCommand(new ResearchDeleteCommunicationCommand());
 
-        RegisterCommand(new ResearchListGroupsCommand());
-        RegisterCommand(new ResearchAddGroupCommand());
-        RegisterCommand(new ResearchDeleteGroupCommand());
+            RegisterCommand(new ResearchListGroupsCommand());
+            RegisterCommand(new ResearchAddGroupCommand());
+            RegisterCommand(new ResearchDeleteGroupCommand());
 
-        // Communications operations
-        RegisterCommand(new CommunicationListCommand());
-        RegisterCommand(new CommunicationAddCommand());
-        RegisterCommand(new CommunicationEditCommand());
-        RegisterCommand(new CommunicationDeleteCommand());
+            // Communications operations
+            RegisterCommand(new CommunicationListCommand());
+            RegisterCommand(new CommunicationAddCommand());
+            RegisterCommand(new CommunicationEditCommand());
+            RegisterCommand(new CommunicationDeleteCommand());
 
-        // Locations operations
-        RegisterCommand(new LocationListCommand());
-        RegisterCommand(new LocationAddCommand());
-        RegisterCommand(new LocationEditCommand());
-        RegisterCommand(new LocationDeleteCommand());
+            // Locations operations
+            RegisterCommand(new LocationListCommand());
+            RegisterCommand(new LocationAddCommand());
+            RegisterCommand(new LocationEditCommand());
+            RegisterCommand(new LocationDeleteCommand());
 
-        RegisterCommand(new LocationListNamesCommand());
-        RegisterCommand(new LocationAddNameCommand());
-        RegisterCommand(new LocationEditNameCommand());
-        RegisterCommand(new LocationDeleteNameCommand());
+            RegisterCommand(new LocationListNamesCommand());
+            RegisterCommand(new LocationAddNameCommand());
+            RegisterCommand(new LocationEditNameCommand());
+            RegisterCommand(new LocationDeleteNameCommand());
 
-        RegisterCommand(new LocationListTopLinksCommand());
-        RegisterCommand(new LocationAddTopLinkCommand());
-        RegisterCommand(new LocationEditTopLinkCommand());
-        RegisterCommand(new LocationDeleteTopLinkCommand());
+            RegisterCommand(new LocationListTopLinksCommand());
+            RegisterCommand(new LocationAddTopLinkCommand());
+            RegisterCommand(new LocationEditTopLinkCommand());
+            RegisterCommand(new LocationDeleteTopLinkCommand());
+        }
 
         // Service
         RegisterCommand(new ServiceMenuCommand());

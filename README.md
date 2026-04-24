@@ -41,9 +41,31 @@ Community group: [Google Groups: GEDKeeper (en)](https://groups.google.com/g/ged
 - "GEDKeeper2", legacy (.NET Framework 4.8 & WinForms, x86), only Windows 7 or later
 - "GEDKeeper3", cross-platform (.NET 8 & Eto.Forms, x64), Linux, MacOS and only Windows 10/11
 - "GEDKeeperX", mobile (Xamarin), Android
-- "GKcli", experimental interactive terminal and MCP server for integration with LLM (.NET 8 & Sharprompt, MCP)
+- "GKcli", interactive terminal and MCP server for integration with LLM (.NET 8 & Sharprompt, MCP)
 - "GEDKeeperT", terminal UI (.NET 8 & TermUI)
 
+### GEDKeeper2
+
+An old, legacy implementation. Windows only. Supported for those who don't want to move from Windows 7/8/8.1, etc.
+
+### GEDKeeper3
+
+The current implementation is actively supported on a cross-platform framework.
+
+### GEDKeeperX
+
+A mobile implementation of GEDKeeper developed for Android. However, due to the end of Xamarin development
+and a lack of resources to migrate to another framework, support has been temporarily discontinued.
+
+### [GKcli](./projects/GKcli/README.md)
+
+An interactive terminal application for GEDKeeper, designed to provide powerful genealogical data management tools
+through both direct text interaction and integration with LLM clients via the Model Context Protocol (MCP).
+
+### GEDKeeperT
+
+A terminal-based GEDKeeper implementation with a 90s **TUI** aesthetic.
+Bringing genealogy to the terminal with a vintage cyber-retro feel.
 
 ## Supported languages
 

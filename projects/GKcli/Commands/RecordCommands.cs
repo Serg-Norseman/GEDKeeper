@@ -363,3 +363,54 @@ internal class RecordDeleteCommand : BaseCommand
         return MCPContent.CreateSimpleContent($"Record deleted: {xref}");
     }
 }
+
+
+internal class RecordSetRestrictionCommand : BaseCommand
+{
+    public RecordSetRestrictionCommand() : base("record_set_restriction", null, CommandCategory.Tools) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not applicable for MCP
+    }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Sets a restriction (access/visibility) for a record by its XRef identifier",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record" },
+                    ["restriction"] = new MCPToolProperty { Type = "string", Description = "Type of restriction", Enum = RuntimeData.RestrictionMap.Keys.ToList() }
+                },
+                Required = new List<string> { "xref", "restriction" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetRequiredStr(args, "xref");
+        string restrictionStr = MCPHelper.GetRequiredStr(args, "restriction");
+
+        var record = baseContext.Tree.FindXRef<GDMRecord>(xref);
+        if (record == null)
+            return MCPContent.CreateSimpleContent($"Record not found with XRef: {xref}");
+
+        if (!RuntimeData.RestrictionMap.TryGetValue(restrictionStr, out GDMRestriction restriction)) {
+            string availableRestrictions = string.Join(", ", RuntimeData.RestrictionMap.Keys);
+            return MCPContent.CreateSimpleContent($"Unknown restriction type: '{restrictionStr}'. Available types: {availableRestrictions}");
+        }
+
+        var recordWithEvents = record as GDMRecordWithEvents;
+        if (recordWithEvents == null) {
+            return MCPContent.CreateSimpleContent($"Record type '{record.RecordType}' does not support restrictions");
+        }
+
+        recordWithEvents.Restriction = restriction;
+        baseContext.SetModified();
+
+        return MCPContent.CreateSimpleContent($"Restriction '{restrictionStr}' has been set for record: {xref}");
+    }
+}

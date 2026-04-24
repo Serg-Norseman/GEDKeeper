@@ -45,6 +45,8 @@ internal static class RuntimeData
 
     public static readonly Dictionary<string, GDMPedigreeLinkageType> LinkageTypeMap;
 
+    public static readonly Dictionary<string, GDMRestriction> RestrictionMap;
+
     static RuntimeData()
     {
         MediaTypeMap = new Dictionary<string, GDMMediaType>();
@@ -89,6 +91,11 @@ internal static class RuntimeData
         LinkageTypeMap = new Dictionary<string, GDMPedigreeLinkageType>();
         for (var plt = GDMPedigreeLinkageType.plNone; plt <= GDMPedigreeLinkageType.plFoster; plt++) {
             LinkageTypeMap.Add(LangMan.LS(GKData.ParentTypes[(int)plt]), plt);
+        }
+
+        RestrictionMap = new Dictionary<string, GDMRestriction>();
+        for (var rs = GDMRestriction.rnNone; rs <= GDMRestriction.rnPrivacy; rs++) {
+            RestrictionMap.Add(LangMan.LS(GKData.Restrictions[(int)rs]), rs);
         }
     }
 }

@@ -84,7 +84,7 @@ internal class LocationAddTopLinkCommand : BaseCommand
                 Properties = new Dictionary<string, MCPToolProperty> {
                     ["location_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the location (e.g., 'L1')" },
                     ["top_link_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the top-level location to link to" },
-                    ["date"] = new MCPToolProperty { Type = "string", Description = "Date string. Follow the GEDCOM date specification (from gedcom_date_spec)" }
+                    ["date"] = new MCPToolProperty { Type = "string", Description = "Date string, strictly with the GEDCOM Date Spec" }
                 },
                 Required = new List<string> { "location_xref", "top_link_xref" }
             }
@@ -138,7 +138,7 @@ internal class LocationEditTopLinkCommand : BaseCommand
                     ["location_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the location (e.g., 'L1')" },
                     ["top_link_index"] = new MCPToolProperty { Type = "integer", Description = "Zero-based index of the top-level link in the location's top-links list" },
                     ["top_link_xref"] = new MCPToolProperty { Type = "string", Description = "New XRef identifier for the top-level location" },
-                    ["date"] = new MCPToolProperty { Type = "string", Description = "Date string. Follow the GEDCOM date specification (from gedcom_date_spec)" }
+                    ["date"] = new MCPToolProperty { Type = "string", Description = "Date string, strictly with the GEDCOM Date Spec" }
                 },
                 Required = new List<string> { "location_xref", "top_link_index" }
             }

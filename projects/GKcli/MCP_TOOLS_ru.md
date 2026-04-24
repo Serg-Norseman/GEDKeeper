@@ -7,6 +7,8 @@
 
 **Запуск в LLM-клиентах:** `GKcli --mcp` (аргумент обязателен, т.к. без него запускается интерактивный текстовый терминал, частично повторяющий по составу функций MCP-сервер).
 
+`--pure` - аргумент ограничивает инструменты близко к чистому GEDCOM, т.к. полный набор инструментов тратит при передаче через системный промт около 10-16 тыс. токенов.
+
 **Протокол:** MCP `2025-06-18`, JSON-RPC 2.0 поверх stdin/stdout. Без внешних зависимостей.
 
 ---
@@ -25,6 +27,10 @@
 - **Автосоздание бэкапов:** при работе через MCP автоматически включается принудительное резервное копирование каждого файла при сохранении.
 - **Пагинация:** таблицы с >20 записей разбиваются постранично; в конце ответа подсказка для запроса следующей страницы.
 - **Нечёткий поиск:** `individual_search` и `record_search` используют алгоритм нечёткого сопоставления с настраиваемым порогом.
+- **XRef-идентификаторы записей:** все идентификаторы автоматически генерируются при добавлении новых записей. Уникальность контролируется ядром комплекса приложений GEDKeeper.
+- **Обработка ошибок:** все ошибки, которые могут возникнуть в процессе работы - отправляются в человеко-читаемом виде из инструментов в LM-клиент для отображения пользователю.
+- **Поддержка локализаций**: по причине работы GKcli/MCP как части комплекса приложений GEDKeeper, инструмент использует те-же файлы и подходы к локализации, что и основное GUI-приложение. По умолчанию, при отсутствии специальной настройки, инструмент будет использовать английский язык взаимодействия. Настройку можно выполнить, запустив GKcli из командной строки без ключа `--mcp` - при этом будет доступен раздел настроек.
+- **Формат данных и валидация входных данных**: формат данных подробно описывается в дескрипторах инструментов внутри MCP-сервера, в них же выполняется окончательная валидация, после подготовки данных моделью.
 
 ---
 
@@ -53,6 +59,7 @@
 | `record_merge` | Объединить записи | `target_xref` (string, напр. `I1`), `source_xref` (string, напр. `I2`) |
 | `record_info` | Получить полную информацию о записи | `xref` (string, напр. `I1`) |
 | `record_search` | Нечёткий поиск по любым записям (имя/заголовок) | `record_type` (string), `search_text` (string), `threshold` (number, по умолч. 0.15) |
+| `record_set_restriction` | Установить ограничение доступа/видимости для записи | `xref` (string), `restriction` (string: `None`, `Locked`, `Confidential`, `Privacy`) |
 | `record_list_userrefs` | Список пользовательских сносок записи | `record_xref` (string) |
 | `record_add_userref` | Добавить пользовательскую сноску к записи | `record_xref` (string), `string_value` (string), `reference_type` (string, необязательно) |
 | `record_delete_userref` | Удалить пользовательскую сноску из записи | `record_xref` (string), `reference_index` (integer, 0-based) |
@@ -83,8 +90,8 @@
 | `individual_delete_association` | Удалить ассоциацию у персоны | `individual_xref` (string), `association_index` (integer, 0-based) |
 | `individual_list_events` | Список всех событий персоны | `individual_xref` (string) |
 | `individual_delete_event` | Удалить событие персоны | `individual_xref` (string), `event_index` (integer, 0-based) |
-| `individual_add_event` | Добавить событие персоне | `individual_xref` (string), `tag` (string), `type` (string, optional), `date` (string, dd/mm/yyyy), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `age` (string) |
-| `individual_edit_event` | Редактировать событие персоне | `individual_xref` (string), `event_index` (integer, 0-based), `date` (string, dd/mm/yyyy), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `age` (string) |
+| `individual_add_event` | Добавить событие персоне | `individual_xref` (string), `tag` (string), `type` (string, optional), `date` (string), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `age` (string) |
+| `individual_edit_event` | Редактировать событие персоне | `individual_xref` (string), `event_index` (integer, 0-based), `date` (string), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `age` (string) |
 | `individual_list_event_types` | Список всех доступных типов событий для персон | — |
 | `individual_list_personal_names` | Список всех персональных имён персоны | `individual_xref` (string) |
 | `individual_add_personal_name` | Добавить персональное имя персоны | `individual_xref` (string), `given` (string), `surname` (string), `surname_prefix` (string, необязательно), `name_prefix` (string, необязательно), `name_suffix` (string, необязательно), `nickname` (string, необязательно), `name_type` (string, необязательно), `language` (string, необязательно), `patronymic` (string, необязательно), `married_name` (string, необязательно), `religious_name` (string, необязательно), `census_name` (string, необязательно) |
@@ -106,13 +113,13 @@
 | `family_delete_child` | Удалить ребёнка из семьи | `family_xref` (string), `child_xref` (string) |
 | `family_list_events` | Список всех событий семьи | `family_xref` (string) |
 | `family_delete_event` | Удалить событие семьи | `family_xref` (string), `event_index` (integer, 0-based) |
-| `family_add_event` | Добавить событие семье | `family_xref` (string), `tag` (string), `type` (string, optional), `date` (string, dd/mm/yyyy), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `husband_age` (string), `wife_age` (string) |
-| `family_edit_event` | Редактировать событие семье | `family_xref` (string), `event_index` (integer, 0-based), `date` (string, dd/mm/yyyy), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `husband_age` (string), `wife_age` (string) |
+| `family_add_event` | Добавить событие семье | `family_xref` (string), `tag` (string), `type` (string, optional), `date` (string), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `husband_age` (string), `wife_age` (string) |
+| `family_edit_event` | Редактировать событие семье | `family_xref` (string), `event_index` (integer, 0-based), `date` (string), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `husband_age` (string), `wife_age` (string) |
 | `family_list_event_types` | Список всех доступных типов событий для семей | — |
 
 ---
 
-## Заметки (Notes), completed
+## Заметки (Notes)
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
@@ -133,7 +140,7 @@
 
 ---
 
-## Хранилища/архивы (Repositories), completed
+## Хранилища/архивы (Repositories)
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
@@ -156,7 +163,7 @@
 
 ---
 
-## Группы (Groups), completed
+## Группы (Groups)
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
@@ -168,7 +175,7 @@
 
 ---
 
-## Задачи (Tasks), completed
+## Задачи (Tasks)
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
@@ -195,7 +202,7 @@
 
 ---
 
-## Переписка (Communications), completed
+## Переписка (Communications)
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
@@ -218,3 +225,13 @@
 | `location_add_top_link` | Добавить верхнеуровневую ссылку к записи местоположения | `location_xref` (string, напр. 'L1'), `top_link_xref` (string), `date` (string, необязательно) |
 | `location_edit_top_link` | Редактировать верхнеуровневую ссылку местоположения | `location_xref` (string, напр. 'L1'), `top_link_index` (integer, 0-based), `top_link_xref` (string, необязательно), `date` (string, необязательно) |
 | `location_delete_top_link` | Удалить верхнеуровневую ссылку из местоположения | `location_xref` (string, напр. 'L1'), `top_link_index` (integer, 0-based) |
+
+---
+
+## TODO
+
+1. В разделе "Особенности реализации" указано, что нечеткий поиск имеет настраиваемый порог, но в описании инструмента `individual_search` указан фиксированный порог 16%, что создает путаницу.
+2. Отсутствие инструментов для экспорта/импорта в других форматах.
+3. Нет инструментов для расширенного поиска по датам, местам, событиям или комбинации критериев.
+4. Нет инструментов для генерации статистики, построения диаграмм, анализа поколений и т.д.
+5. Нет механизма отката изменений при частичной неудаче операции (например, при слиянии деревьев).

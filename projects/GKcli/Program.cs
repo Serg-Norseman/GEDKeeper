@@ -27,6 +27,12 @@ internal class Program
 
             // Check if running in MCP mode
             bool mcpMode = Array.IndexOf(args, "--mcp") >= 0;
+
+            // Check if running in pure GEDCOM mode
+            bool pureMode = Array.IndexOf(args, "--pure") >= 0;
+
+            CommandController.InitCommands(mcpMode, pureMode);
+
             if (mcpMode) {
                 RunMCPServer();
             } else {

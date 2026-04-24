@@ -53,7 +53,7 @@ internal class CommunicationAddCommand : BaseCommand
                     ["type"] = new MCPToolProperty { Type = "string", Description = "Type of the communication.", Enum = types },
                     ["direction"] = new MCPToolProperty { Type = "string", Description = "Direction of the communication.", Enum = dirs },
                     ["corresponderXRef"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the corresponder (e.g., 'I1')" },
-                    ["date"] = new MCPToolProperty { Type = "string", Description = "Communication date" },
+                    ["date"] = new MCPToolProperty { Type = "string", Description = "Communication date, strictly with the GEDCOM Date Spec" },
                 },
                 Required = new List<string> { "name", "type", "direction", "corresponderXRef", "date" }
             }
@@ -116,7 +116,7 @@ internal class CommunicationEditCommand : BaseCommand
                     ["type"] = new MCPToolProperty { Type = "string", Description = "New type of the communication.", Enum = types },
                     ["direction"] = new MCPToolProperty { Type = "string", Description = "New direction of the communication.", Enum = dirs },
                     ["corresponderXRef"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the new corresponder (e.g., 'I1')" },
-                    ["date"] = new MCPToolProperty { Type = "string", Description = "New communication date" },
+                    ["date"] = new MCPToolProperty { Type = "string", Description = "New communication date, strictly with the GEDCOM Date Spec" },
                 },
                 Required = new List<string> { "xref" }
             }
