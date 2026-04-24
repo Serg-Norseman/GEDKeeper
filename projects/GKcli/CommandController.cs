@@ -73,6 +73,7 @@ internal class CommandController
 
         // Events
         RegisterCommand(new EventEditCommand());
+        RegisterCommand(new EventTypeListCommand());
 
         // Individuals operations
         RegisterCommand(new IndiMenuCommand());
@@ -94,7 +95,6 @@ internal class CommandController
         RegisterCommand(new IndiAddEventCommand());
         RegisterCommand(new IndiEditEventCommand());
         RegisterCommand(new IndiDeleteEventCommand());
-        RegisterCommand(new IndiListEventTypesCommand());
 
         RegisterCommand(new IndiListPersonalNamesCommand());
         RegisterCommand(new IndiAddPersonalNameCommand());
@@ -116,7 +116,6 @@ internal class CommandController
         RegisterCommand(new FamAddEventCommand());
         RegisterCommand(new FamEditEventCommand());
         RegisterCommand(new FamDeleteEventCommand());
-        RegisterCommand(new FamListEventTypesCommand());
 
         // Notes operations
         RegisterCommand(new NoteMenuCommand());

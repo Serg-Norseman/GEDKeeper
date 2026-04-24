@@ -47,7 +47,7 @@ internal class RecordListCommand : BaseCommand
                     ["record_type"] = new MCPToolProperty { Type = "string", Description = "Record type", Enum = recTypes },
                     ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" }
                 },
-                Required = new List<string> { }
+                Required = new List<string> { "record_type" }
             }
         };
     }

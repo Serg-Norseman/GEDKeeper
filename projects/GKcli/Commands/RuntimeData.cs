@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using GDModel;
 using GKCore;
+using GKCore.Events;
 using GKCore.Locales;
 using GKCore.Media;
 
@@ -17,6 +18,15 @@ namespace GKcli.Commands;
 
 internal static class RuntimeData
 {
+    // "Date string, strictly with the GEDCOM Date Spec" - lax compliance, models make mistakes
+    public const string GEDCOMDateFormatDirective = "Strict 'GEDCOM Date Spec' format (from 'gedcom_date_spec' tool). ISO and other formats are prohibited.";
+
+
+    public static readonly Dictionary<string, EventTarget> RWETypeMap = new Dictionary<string, EventTarget>(StringComparer.OrdinalIgnoreCase) {
+        ["Individual"] = EventTarget.etIndividual,
+        ["Family"] = EventTarget.etFamily,
+    };
+
     public static readonly Dictionary<string, GDMRecordType> RecordTypeMap = new Dictionary<string, GDMRecordType>(StringComparer.OrdinalIgnoreCase) {
         ["Individual"] = GDMRecordType.rtIndividual,
         ["Family"] = GDMRecordType.rtFamily,

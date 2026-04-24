@@ -15,33 +15,6 @@ using GKCore.Events;
 
 namespace GKcli.Commands;
 
-internal class IndiListEventTypesCommand : EventCommand
-{
-    public IndiListEventTypesCommand() : base("individual_list_event_types", null, CommandCategory.Individual) { }
-
-    public override void Execute(BaseContext baseContext, object obj)
-    {
-        // Not implemented yet
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "List all available event types for individuals",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> { },
-                Required = new List<string> { }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        return GetEventTypes(EventTarget.etIndividual);
-    }
-}
-
 
 internal class IndiListEventsCommand : EventCommand
 {
@@ -90,15 +63,16 @@ internal class IndiAddEventCommand : EventCommand
 
     public override MCPTool CreateTool()
     {
+        var eventTypes = GetEventTypes(EventTarget.etIndividual);
+
         return new MCPTool {
             Name = Sign,
             Description = "Add an event to an individual by XRef identifier",
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
                     ["individual_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the individual (e.g., 'I1')" },
-                    ["tag"] = new MCPToolProperty { Type = "string", Description = "GEDCOM tag of the event type (from individual_list_event_types)" },
-                    ["type"] = new MCPToolProperty { Type = "string", Description = "Event type classification (optional, from individual_list_event_types)" },
-                    ["date"] = new MCPToolProperty { Type = "string", Description = "Date string, strictly with the GEDCOM Date Spec" },
+                    ["type"] = new MCPToolProperty { Type = "string", Description = "Event type", Enum = eventTypes },
+                    ["date"] = new MCPToolProperty { Type = "string", Description = RuntimeData.GEDCOMDateFormatDirective },
                     ["place"] = new MCPToolProperty { Type = "string", Description = "Place as a free-form string" },
                     ["location_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of a location record (alternative to place string)" },
                     ["cause"] = new MCPToolProperty { Type = "string", Description = "Cause of the event" },
@@ -106,7 +80,7 @@ internal class IndiAddEventCommand : EventCommand
                     ["value"] = new MCPToolProperty { Type = "string", Description = "Fact value (used when the event is a fact/attribute), cannot contain the place of the event" },
                     ["age"] = new MCPToolProperty { Type = "string", Description = "Age of the individual on the date of the event" },
                 },
-                Required = new List<string> { "individual_xref", "tag" }
+                Required = new List<string> { "individual_xref", "type" }
             }
         };
     }
@@ -142,9 +116,9 @@ internal class IndiEditEventCommand : EventCommand
                 Properties = new Dictionary<string, MCPToolProperty> {
                     ["individual_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the individual (e.g., 'I1')" },
                     ["event_index"] = new MCPToolProperty { Type = "integer", Description = "Zero-based index of the event in the individual's event list" },
-                    //["tag"] = new MCPToolProperty { Type = "string", Description = "GEDCOM tag of the event type (from individual_list_event_types)" },
-                    //["type"] = new MCPToolProperty { Type = "string", Description = "Event type classification (optional, from individual_list_event_types)" },
-                    ["date"] = new MCPToolProperty { Type = "string", Description = "Date string, strictly with the GEDCOM Date Spec" },
+                    //["tag"] = new MCPToolProperty { Type = "string", Description = "GEDCOM tag of the event type (from event_type_list)" },
+                    //["type"] = new MCPToolProperty { Type = "string", Description = "Event type classification (optional, from event_type_list)" },
+                    ["date"] = new MCPToolProperty { Type = "string", Description = RuntimeData.GEDCOMDateFormatDirective },
                     ["place"] = new MCPToolProperty { Type = "string", Description = "Place as a free-form string" },
                     ["location_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of a location record (alternative to place string)" },
                     ["cause"] = new MCPToolProperty { Type = "string", Description = "Cause of the event" },

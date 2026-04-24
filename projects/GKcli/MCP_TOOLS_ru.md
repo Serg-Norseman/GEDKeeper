@@ -72,6 +72,7 @@
 | `record_list_notes` | Список заметок записи | `record_xref` (string) |
 | `record_add_note` | Добавить ссылку на заметку к записи | `record_xref` (string), `note_xref` (string) |
 | `record_delete_note` | Удалить ссылку на заметку из записи | `record_xref` (string), `note_index` (integer, 0-based) |
+| `event_type_list` | Список всех доступных типов событий для персон или семей | `record_type` (string) |
 
 **Типы записей:** `Individual`, `Family`, `Note`, `Source`, `Repository`, `Multimedia`, `Group`, `Task`, `Research`, `Communication`, `Location`
 
@@ -90,9 +91,8 @@
 | `individual_delete_association` | Удалить ассоциацию у персоны | `individual_xref` (string), `association_index` (integer, 0-based) |
 | `individual_list_events` | Список всех событий персоны | `individual_xref` (string) |
 | `individual_delete_event` | Удалить событие персоны | `individual_xref` (string), `event_index` (integer, 0-based) |
-| `individual_add_event` | Добавить событие персоне | `individual_xref` (string), `tag` (string), `type` (string, optional), `date` (string), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `age` (string) |
+| `individual_add_event` | Добавить событие персоне | `individual_xref` (string), `type` (string), `date` (string), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `age` (string) |
 | `individual_edit_event` | Редактировать событие персоне | `individual_xref` (string), `event_index` (integer, 0-based), `date` (string), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `age` (string) |
-| `individual_list_event_types` | Список всех доступных типов событий для персон | — |
 | `individual_list_personal_names` | Список всех персональных имён персоны | `individual_xref` (string) |
 | `individual_add_personal_name` | Добавить персональное имя персоны | `individual_xref` (string), `given` (string), `surname` (string), `surname_prefix` (string, необязательно), `name_prefix` (string, необязательно), `name_suffix` (string, необязательно), `nickname` (string, необязательно), `name_type` (string, необязательно), `language` (string, необязательно), `patronymic` (string, необязательно), `married_name` (string, необязательно), `religious_name` (string, необязательно), `census_name` (string, необязательно) |
 | `individual_edit_personal_name` | Редактировать персональное имя персоны | `individual_xref` (string), `name_index` (integer, 0-based), `given` (string, необязательно), `surname` (string, необязательно), `surname_prefix` (string, необязательно), `name_prefix` (string, необязательно), `name_suffix` (string, необязательно), `nickname` (string, необязательно), `name_type` (string, необязательно), `language` (string, необязательно), `patronymic` (string, необязательно), `married_name` (string, необязательно), `religious_name` (string, необязательно), `census_name` (string, необязательно) |
@@ -113,9 +113,8 @@
 | `family_delete_child` | Удалить ребёнка из семьи | `family_xref` (string), `child_xref` (string) |
 | `family_list_events` | Список всех событий семьи | `family_xref` (string) |
 | `family_delete_event` | Удалить событие семьи | `family_xref` (string), `event_index` (integer, 0-based) |
-| `family_add_event` | Добавить событие семье | `family_xref` (string), `tag` (string), `type` (string, optional), `date` (string), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `husband_age` (string), `wife_age` (string) |
+| `family_add_event` | Добавить событие семье | `family_xref` (string), `type` (string), `date` (string), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `husband_age` (string), `wife_age` (string) |
 | `family_edit_event` | Редактировать событие семье | `family_xref` (string), `event_index` (integer, 0-based), `date` (string), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `husband_age` (string), `wife_age` (string) |
-| `family_list_event_types` | Список всех доступных типов событий для семей | — |
 
 ---
 

@@ -1,4 +1,4 @@
-# GKcli (command-line interface and MPC server)
+# GKcli (command-line interface and MCP server)
 
 GKcli is a command-line interface (CLI) application for GEDKeeper, designed to provide powerful tools for managing genealogical data
 through both direct text-based interaction and integration with LLM clients via the Model Context Protocol (MCP).

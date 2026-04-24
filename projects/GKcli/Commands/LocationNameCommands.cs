@@ -83,7 +83,7 @@ internal class LocationAddNameCommand : BaseCommand
                     ["location_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the location (e.g., 'L1')" },
                     ["name"] = new MCPToolProperty { Type = "string", Description = "The name to add to the location" },
                     ["short_name"] = new MCPToolProperty { Type = "string", Description = "The short name to add to the location" },
-                    ["date"] = new MCPToolProperty { Type = "string", Description = "Date string, strictly with the GEDCOM Date Spec" }
+                    ["date"] = new MCPToolProperty { Type = "string", Description = RuntimeData.GEDCOMDateFormatDirective }
                 },
                 Required = new List<string> { "location_xref", "name" }
             }
@@ -137,7 +137,7 @@ internal class LocationEditNameCommand : BaseCommand
                     ["name_index"] = new MCPToolProperty { Type = "integer", Description = "Zero-based index of the name in the location's name list" },
                     ["name"] = new MCPToolProperty { Type = "string", Description = "New value for the name" },
                     ["short_name"] = new MCPToolProperty { Type = "string", Description = "New short name" },
-                    ["date"] = new MCPToolProperty { Type = "string", Description = "Date string, strictly with the GEDCOM Date Spec" }
+                    ["date"] = new MCPToolProperty { Type = "string", Description = RuntimeData.GEDCOMDateFormatDirective }
                 },
                 Required = new List<string> { "location_xref", "name_index" }
             }

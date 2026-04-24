@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using GDModel;
 using GKcli.MCP;
@@ -163,16 +164,27 @@ internal abstract class EventCommand : BaseCommand
 {
     protected EventCommand(string sign, Enum lsid, CommandCategory category) : base(sign, lsid, category) { }
 
-    protected static List<MCPContent> GetEventTypes(EventTarget eventTarget)
+    protected static List<string> GetEventTypes(EventTarget eventTarget)
+    {
+        var eventTypes = BaseController.GetEventTypes(eventTarget);
+        var rows = new List<string>(eventTypes.Count);
+        for (int i = 0; i < eventTypes.Count; i++) {
+            var evt = eventTypes[i];
+            rows.Add(evt.DisplayName);
+        }
+        return rows;
+    }
+
+    protected static List<MCPContent> GetEventTypesTable(EventTarget eventTarget)
     {
         var eventTypes = BaseController.GetEventTypes(eventTarget);
 
         var rows = new List<string>(eventTypes.Count + 2) {
-            "|DisplayName|Tag|Type|HasValue|"
+            "|DisplayName|Tag|Type|\n|---|---|---|"
         };
         for (int i = 0; i < eventTypes.Count; i++) {
             var evt = eventTypes[i];
-            rows.Add($"|{evt.DisplayName}|{evt.Tag}|{evt.Type}|{evt.HasValue()}|");
+            rows.Add($"|{evt.DisplayName}|{evt.Tag}|{evt.Type}|");
         }
 
         return MCPContent.CreateSimpleContent(string.Join("\n", rows));
@@ -206,12 +218,13 @@ internal abstract class EventCommand : BaseCommand
 
     protected static List<MCPContent> AddEvent(BaseContext baseContext, GDMRecordWithEvents record, string recName, JsonElement args)
     {
-        string tag = MCPHelper.GetRequiredStr(args, "tag");
-        string argType = MCPHelper.GetOptionalStr(args, "type", "");
-        EventDef matchedDef = AppHost.EventDefinitions.Find(tag, argType);
+        string argType = MCPHelper.GetRequiredStr(args, "type");
+        EventDef matchedDef = AppHost.EventDefinitions.Find(argType);
+        if (matchedDef == null)
+            return MCPContent.CreateSimpleContent($"Event type '{argType}' not found");
 
         // Determine if this tag corresponds to a fact
-        bool isFact = matchedDef != null && matchedDef.HasValue();
+        bool isFact = matchedDef.HasValue();
 
         bool isIndi = (record is GDMIndividualRecord);
         GDMCustomEvent newEvent;
@@ -224,8 +237,8 @@ internal abstract class EventCommand : BaseCommand
         } else {
             newEvent = new GDMFamilyEvent();
         }
-        newEvent.SetName(tag);
-        newEvent.Classification = matchedDef != null ? matchedDef.Type : argType;
+        newEvent.SetName(matchedDef.Tag);
+        newEvent.Classification = matchedDef.Type;
 
         // Date
         string dateStr = MCPHelper.GetOptionalStr(args, "date", "");
@@ -284,8 +297,7 @@ internal abstract class EventCommand : BaseCommand
         record.Events.Add(newEvent);
         baseContext.SetModified();
 
-        string evtName = matchedDef != null ? matchedDef.DisplayName : tag;
-        return MCPContent.CreateSimpleContent($"Event '{evtName}' added to {recName} '{record.XRef}' at index {record.Events.Count - 1}");
+        return MCPContent.CreateSimpleContent($"Event '{argType}' added to {recName} '{record.XRef}' at index {record.Events.Count - 1}");
     }
 
     protected static List<MCPContent> EditEvent(BaseContext baseContext, GDMRecordWithEvents record, string recName, JsonElement args)
@@ -369,5 +381,44 @@ internal abstract class EventCommand : BaseCommand
         baseContext.SetModified();
         string evtName = GKUtils.GetEventName(evt);
         return MCPContent.CreateSimpleContent($"Event '{evtName}' updated to {recName} '{record.XRef}' at index {eventIndex}");
+    }
+}
+
+
+// FIXME: too large, causes context exhaustion, not suitable for use in other tools
+internal class EventTypeListCommand : EventCommand
+{
+    public EventTypeListCommand() : base("event_type_list", null, CommandCategory.None) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        // Not implemented yet
+    }
+
+    public override MCPTool CreateTool()
+    {
+        var recTypes = RuntimeData.RWETypeMap.Keys.ToList();
+
+        return new MCPTool {
+            Name = Sign,
+            Description = "List all available event types for individuals or families",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["record_type"] = new MCPToolProperty { Type = "string", Description = "Record type", Enum = recTypes },
+                },
+                Required = new List<string> { "record_type" }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string recordTypeStr = MCPHelper.GetRequiredStr(args, "record_type");
+        if (!RuntimeData.RWETypeMap.TryGetValue(recordTypeStr, out EventTarget eventTarget)) {
+            string availableTypes = string.Join(", ", RuntimeData.RecordTypeMap.Keys);
+            return MCPContent.CreateSimpleContent($"Unknown record type: '{recordTypeStr}'. Available types: {availableTypes}");
+        }
+
+        return GetEventTypesTable(eventTarget);
     }
 }

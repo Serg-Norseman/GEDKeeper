@@ -128,6 +128,12 @@ namespace GKCore.Events
             fIndex.Add(key, eventDef);
         }
 
+        public EventDef Find(string displayName)
+        {
+            EventDef result = fEventDefs.Find((def) => { return def.DisplayName == displayName; });
+            return result;
+        }
+
         public EventDef Find(string tag, string type)
         {
             string key = tag + ":" + type;
