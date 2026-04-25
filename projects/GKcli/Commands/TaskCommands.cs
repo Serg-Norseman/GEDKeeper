@@ -31,6 +31,9 @@ internal class TaskListCommand : BaseCommand
 }
 
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="TaskUpsertCommand"/>).
+/// </summary>
 internal class TaskAddCommand : BaseCommand
 {
     public TaskAddCommand() : base("task_add", null, CommandCategory.Task) { }
@@ -39,58 +42,12 @@ internal class TaskAddCommand : BaseCommand
     {
         // Not implemented yet
     }
-
-    public override MCPTool CreateTool()
-    {
-        var priorities = RuntimeData.PriorityMap.Keys.ToList();
-
-        return new MCPTool {
-            Name = Sign,
-            Description = "Add a new task record to the database",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["goal"] = new MCPToolProperty { Type = "string", Description = "Goal of the task item (arbitrary name or XRef identifier of the individual, family, source)" },
-                    ["priority"] = new MCPToolProperty { Type = "string", Description = "Priority of the task.", Enum = priorities },
-                    ["start_date"] = new MCPToolProperty { Type = "string", Description = "Task start date" },
-                    ["stop_date"] = new MCPToolProperty { Type = "string", Description = "Task end date" },
-                },
-                Required = new List<string> { "goal", "priority" }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        string goal = MCPHelper.GetRequiredStr(args, "goal");
-        string goalName;
-        var record = baseContext.Tree.FindXRef<GDMRecord>(goal);
-        if (record != null) {
-            goal = GEDCOMUtils.EncloseXRef(goal);
-            goalName = GKUtils.GetRecordName(baseContext.Tree, record, false);
-        } else {
-            goalName = goal;
-        }
-
-        string priorityStr = MCPHelper.GetRequiredStr(args, "priority");
-        if (!RuntimeData.PriorityMap.TryGetValue(priorityStr, out var priority))
-            return MCPContent.CreateSimpleContent($"Invalid priority: '{priorityStr}'.");
-
-        string startDate = MCPHelper.GetOptionalStr(args, "start_date", string.Empty);
-        string stopDate = MCPHelper.GetOptionalStr(args, "stop_date", string.Empty);
-
-        var taskRec = baseContext.Tree.CreateTask();
-        taskRec.Goal = goal;
-        taskRec.Priority = priority;
-        taskRec.StartDate.ParseString(startDate);
-        taskRec.StopDate.ParseString(stopDate);
-
-        baseContext.SetModified();
-
-        return MCPContent.CreateSimpleContent($"Task record added: {taskRec.XRef} - \"{goalName}\"");
-    }
 }
 
 
+/// <summary>
+/// For console use only (for MCP - see <see cref="TaskUpsertCommand"/>).
+/// </summary>
 internal class TaskEditCommand : BaseCommand
 {
     public TaskEditCommand() : base("task_edit", null, CommandCategory.Task) { }
@@ -98,71 +55,6 @@ internal class TaskEditCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
         // Not implemented yet
-    }
-
-    public override MCPTool CreateTool()
-    {
-        var priorities = RuntimeData.PriorityMap.Keys.ToList();
-
-        return new MCPTool {
-            Name = Sign,
-            Description = "Edit an existing task record in the database. Only provided fields will be updated. Use 'xref' to identify the record to modify.",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["xref"] = new MCPToolProperty { Type = "string", Description = "Unique identifier (XRef) of the record to edit" },
-                    ["goal"] = new MCPToolProperty { Type = "string", Description = "New goal of the task item (arbitrary name or XRef identifier of the individual, family, source)" },
-                    ["priority"] = new MCPToolProperty { Type = "string", Description = "New priority of the task.", Enum = priorities },
-                    ["start_date"] = new MCPToolProperty { Type = "string", Description = "New task start date" },
-                    ["stop_date"] = new MCPToolProperty { Type = "string", Description = "New task end date" },
-                },
-                Required = new List<string> { "xref" }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        string xref = MCPHelper.GetRequiredStr(args, "xref");
-
-        var taskRec = baseContext.Tree.FindXRef<GDMTaskRecord>(xref);
-        if (taskRec == null)
-            return MCPContent.CreateSimpleContent($"Task not found with XRef: {xref}");
-
-        string goal = MCPHelper.GetOptionalStr(args, "goal", null);
-        if (goal != null) {
-            string goalName;
-            var record = baseContext.Tree.FindXRef<GDMRecord>(goal);
-            if (record != null) {
-                goal = GEDCOMUtils.EncloseXRef(goal);
-                goalName = GKUtils.GetRecordName(baseContext.Tree, record, false);
-            } else {
-                goalName = goal;
-            }
-            taskRec.Goal = goal;
-        } else {
-        }
-
-        string priorityStr = MCPHelper.GetOptionalStr(args, "priority", null);
-        if (priorityStr != null) {
-            if (!RuntimeData.PriorityMap.TryGetValue(priorityStr, out var priority))
-                return MCPContent.CreateSimpleContent($"Invalid priority: '{priorityStr}'.");
-
-            taskRec.Priority = priority;
-        }
-
-        string startDate = MCPHelper.GetOptionalStr(args, "start_date", null);
-        if (startDate != null) {
-            taskRec.StartDate.ParseString(startDate);
-        }
-
-        string stopDate = MCPHelper.GetOptionalStr(args, "stop_date", null);
-        if (stopDate != null) {
-            taskRec.StopDate.ParseString(stopDate);
-        }
-
-        baseContext.SetModified();
-
-        return MCPContent.CreateSimpleContent($"Task record updated: {taskRec.XRef}");
     }
 }
 
@@ -177,5 +69,107 @@ internal class TaskDeleteCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
         // Not implemented yet
+    }
+}
+
+
+/// <summary>
+/// For MCP use only.
+/// </summary>
+internal class TaskUpsertCommand : BaseCommand
+{
+    public TaskUpsertCommand() : base("task_upsert", null, CommandCategory.None) { }
+
+    public override MCPTool CreateTool()
+    {
+        var priorities = RuntimeData.PriorityMap.Keys.ToList();
+
+        return new MCPTool {
+            Name = Sign,
+            Description = "Add new task or update existing. Provide 'xref' to edit; omit 'xref' to create. 'goal' and 'priority' required for new tasks.",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                    ["xref"] = new MCPToolProperty { Type = "string", Description = "Unique identifier (XRef) of the record to edit (omit for new)" },
+                    ["goal"] = new MCPToolProperty { Type = "string", Description = "Goal of the task item (arbitrary name or XRef identifier of the individual, family, source)" },
+                    ["priority"] = new MCPToolProperty { Type = "string", Description = "Priority of the task.", Enum = priorities },
+                    ["start_date"] = new MCPToolProperty { Type = "string", Description = "Task start date" },
+                    ["stop_date"] = new MCPToolProperty { Type = "string", Description = "Task end date" },
+                },
+                Required = new List<string> { }
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        string xref = MCPHelper.GetOptionalStr(args, "xref", null);
+        string goal = MCPHelper.GetOptionalStr(args, "goal", null);
+        string priorityStr = MCPHelper.GetOptionalStr(args, "priority", null);
+        string startDate = MCPHelper.GetOptionalStr(args, "start_date", null);
+        string stopDate = MCPHelper.GetOptionalStr(args, "stop_date", null);
+
+        bool isEdit = !string.IsNullOrEmpty(xref);
+        if (isEdit) {
+            var taskRec = baseContext.Tree.FindXRef<GDMTaskRecord>(xref);
+            if (taskRec == null)
+                return MCPContent.CreateSimpleContent($"❌ Task not found with XRef: {xref}");
+
+            if (goal != null) {
+                string goalName;
+                var record = baseContext.Tree.FindXRef<GDMRecord>(goal);
+                if (record != null) {
+                    goal = GEDCOMUtils.EncloseXRef(goal);
+                    goalName = GKUtils.GetRecordName(baseContext.Tree, record, false);
+                } else {
+                    goalName = goal;
+                }
+                taskRec.Goal = goal;
+            }
+
+            if (priorityStr != null) {
+                if (!RuntimeData.PriorityMap.TryGetValue(priorityStr, out var priority))
+                    return MCPContent.CreateSimpleContent($"❌ Invalid priority: '{priorityStr}'.");
+
+                taskRec.Priority = priority;
+            }
+
+            if (startDate != null) {
+                taskRec.StartDate.ParseString(startDate);
+            }
+
+            if (stopDate != null) {
+                taskRec.StopDate.ParseString(stopDate);
+            }
+
+            baseContext.SetModified();
+            return MCPContent.CreateSimpleContent($"✅ Task record updated: {taskRec.XRef}");
+        } else {
+            if (string.IsNullOrEmpty(goal))
+                return MCPContent.CreateSimpleContent("❌ 'goal' required for new task");
+
+            if (string.IsNullOrEmpty(priorityStr))
+                return MCPContent.CreateSimpleContent("❌ 'priority' required for new task");
+
+            string goalName;
+            var record = baseContext.Tree.FindXRef<GDMRecord>(goal);
+            if (record != null) {
+                goal = GEDCOMUtils.EncloseXRef(goal);
+                goalName = GKUtils.GetRecordName(baseContext.Tree, record, false);
+            } else {
+                goalName = goal;
+            }
+
+            if (!RuntimeData.PriorityMap.TryGetValue(priorityStr, out var priority))
+                return MCPContent.CreateSimpleContent($"❌ Invalid priority: '{priorityStr}'.");
+
+            var taskRec = baseContext.Tree.CreateTask();
+            taskRec.Goal = goal;
+            taskRec.Priority = priority;
+            if (startDate != null) taskRec.StartDate.ParseString(startDate);
+            if (stopDate != null) taskRec.StopDate.ParseString(stopDate);
+
+            baseContext.SetModified();
+            return MCPContent.CreateSimpleContent($"✅ Task record added: {taskRec.XRef} - \"{goalName}\"");
+        }
     }
 }

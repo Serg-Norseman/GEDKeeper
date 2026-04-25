@@ -83,8 +83,7 @@
 | Инструмент | Описание | Параметры |
 |---|---|---|
 | `individual_search` | Нечёткий поиск по имени (порог 16%) | `name` (string) |
-| `individual_add` | Добавить персону | `name` (string), `sex` (string: `m`/`f`), `nickname` (string, необязательно) |
-| `individual_edit` | Редактировать персону | `xref` (string), `name` (string, необязательно), `sex` (string: `m`/`f`, необязательно), `nickname` (string, необязательно) |
+| `individual_upsert` | Добавить персону или редактировать существующую | `xref` (string, необязательно), `name` (string), `sex` (string: `m`/`f`), `nickname` (string, необязательно) |
 | `individual_list_associations` | Список всех ассоциаций персоны | `individual_xref` (string) |
 | `individual_add_association` | Добавить ассоциацию (связь) между двумя персонами | `individual_xref` (string), `associate_xref` (string), `relation` (string) |
 | `individual_edit_association` | Редактировать ассоциацию (связь) между двумя персонами | `individual_xref` (string), `association_index` (integer, 0-based), `associate_xref` (string, необязательно), `relation` (string, необязательно) |
@@ -106,8 +105,7 @@
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
-| `family_add` | Создать семью | `husband_xref` (string), `wife_xref` (string) |
-| `family_edit` | Редактировать семью | `xref` (string), `husband_xref` (string, необязательно), `wife_xref` (string, необязательно) |
+| `family_upsert` | Создать семью или редактировать существующую | `xref` (string, необязательно), `husband_xref` (string), `wife_xref` (string) |
 | `family_list_children` | Список детей семьи | `family_xref` (string) |
 | `family_add_child` | Добавить ребёнка в семью | `family_xref` (string), `child_xref` (string), `linkage_type` (string, необязательно) |
 | `family_delete_child` | Удалить ребёнка из семьи | `family_xref` (string), `child_xref` (string) |
@@ -122,8 +120,7 @@
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
-| `note_add` | Добавить заметку | `text` (string) |
-| `note_edit` | Редактировать заметку | `xref` (string), `text` (string) |
+| `note_upsert` | Добавить заметку или редактировать существующую | `xref` (string, необязательно), `text` (string) |
 
 ---
 
@@ -131,8 +128,7 @@
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
-| `source_add` | Добавить источник | `title` (string), `short_title` (string, необязательно), `author` (string, необязательно) |
-| `source_edit` | Редактировать источник | `xref` (string), `title` (string), `short_title` (string, необязательно), `author` (string, необязательно) |
+| `source_upsert` | Добавить источник или редактировать существующий | `xref` (string, необязательно), `title` (string), `short_title` (string, необязательно), `author` (string, необязательно) |
 | `source_list_repositories` | Список ссылок на архивы | `source_xref` (string) |
 | `source_add_repository` | Добавить ссылку на архив в источник | `source_xref` (string), `repository_xref` (string) |
 | `source_delete_repository` | Удалить ссылку на архив из источника | `source_xref` (string), `repository_xref` (string) |
@@ -178,8 +174,7 @@
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
-| `task_add` | Добавить задачу | `goal` (string), `priority` (enum), `start_date` (string, необязательно), `stop_date` (string, необязательно) |
-| `task_edit` | Редактировать задачу | `xref` (string), `goal` (string, необязательно), `priority` (enum, необязательно), `start_date` (string, необязательно), `stop_date` (string, необязательно) |
+| `task_upsert` | Добавить задачу или редактировать существующую | `xref` (string, необязательно), `goal` (string), `priority` (enum), `start_date` (string, необязательно), `stop_date` (string, необязательно) |
 
 ---
 

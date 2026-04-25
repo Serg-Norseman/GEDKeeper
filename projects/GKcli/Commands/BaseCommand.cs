@@ -106,7 +106,9 @@ internal abstract class BaseCommand
     /// </summary>
     /// <param name="baseContext">Base context for the command.</param>
     /// <param name="obj">Additional object parameter.</param>
-    public abstract void Execute(BaseContext baseContext, object obj);
+    public virtual void Execute(BaseContext baseContext, object obj)
+    {
+    }
 
 
     /// <summary>

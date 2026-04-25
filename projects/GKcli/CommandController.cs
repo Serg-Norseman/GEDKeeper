@@ -81,6 +81,7 @@ internal class CommandController
         RegisterCommand(new IndiSearchCommand());
         RegisterCommand(new IndiAddCommand());
         RegisterCommand(new IndiEditCommand());
+        RegisterCommand(new IndividualUpsertCommand());
         RegisterCommand(new IndiDeleteCommand());
 
         RegisterCommand(new IndiListSpousesCommand()); // control through family tools
@@ -106,6 +107,7 @@ internal class CommandController
         RegisterCommand(new FamListCommand());
         RegisterCommand(new FamAddCommand());
         RegisterCommand(new FamEditCommand());
+        RegisterCommand(new FamilyUpsertCommand());
         RegisterCommand(new FamDeleteCommand());
 
         RegisterCommand(new FamAddChildCommand());
@@ -122,6 +124,7 @@ internal class CommandController
         RegisterCommand(new NoteListCommand());
         RegisterCommand(new NoteAddCommand());
         RegisterCommand(new NoteEditCommand());
+        RegisterCommand(new NoteUpsertCommand());
         RegisterCommand(new NoteDeleteCommand());
 
         // Multimedia operations
@@ -142,6 +145,7 @@ internal class CommandController
         RegisterCommand(new SourceListCommand());
         RegisterCommand(new SourceAddCommand());
         RegisterCommand(new SourceEditCommand());
+        RegisterCommand(new SourceUpsertCommand());
         RegisterCommand(new SourceDeleteCommand());
 
         RegisterCommand(new SourceListRepositoriesCommand());
@@ -172,6 +176,7 @@ internal class CommandController
             RegisterCommand(new TaskListCommand());
             RegisterCommand(new TaskAddCommand());
             RegisterCommand(new TaskEditCommand());
+            RegisterCommand(new TaskUpsertCommand());
             RegisterCommand(new TaskDeleteCommand());
 
             // Researches operations
