@@ -6,24 +6,31 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System.Collections.Generic;
-using System.Text.Json;
 using GDModel;
-using GKcli.MCP;
 using GKCore;
+using GKCore.Locales;
+using GKUI.Platform;
 
 namespace GKcli.Commands;
 
-/// <summary>
-/// For console use only (for MCP - see <see cref="RecordListCommand"/>).
-/// </summary>
-internal class LocationListCommand : BaseCommand
+internal class LocationMenuCommand : BaseCommand
 {
-    public LocationListCommand() : base("location_list", null, CommandCategory.Location) { }
+    public LocationMenuCommand() : base("locations", LSID.RPLocations, CommandCategory.Application) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Not implemented yet
+        CommandController.SelectCommand(CommandCategory.Location, true, "Select a location operation");
+    }
+}
+
+
+internal class LocationListCommand : BaseCommand
+{
+    public LocationListCommand() : base("location_list", LSID.Find, CommandCategory.Location) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        PromptHelper.SelectRecord(baseContext, GDMRecordType.rtLocation, "Select a location", "Location: {0}", "No records.");
     }
 }
 
@@ -36,38 +43,6 @@ internal class LocationAddCommand : BaseCommand
     {
         // Not implemented yet
     }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "Add a new location record to the database",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["name"] = new MCPToolProperty { Type = "string", Description = "Name of the location item" },
-                    ["lati"] = new MCPToolProperty { Type = "number", Description = "Latitude" },
-                    ["long"] = new MCPToolProperty { Type = "number", Description = "Longitude" },
-                },
-                Required = new List<string> { "name" }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        string name = MCPHelper.GetRequiredStr(args, "name");
-        double lat = MCPHelper.GetOptionalDbl(args, "lati", 0);
-        double lng = MCPHelper.GetOptionalDbl(args, "long", 0);
-
-        var locRec = baseContext.Tree.CreateLocation();
-        locRec.LocationName = name;
-        locRec.Map.Lati = lat;
-        locRec.Map.Long = lng;
-
-        baseContext.SetModified();
-
-        return MCPContent.CreateSimpleContent($"Location record added: {locRec.XRef} - \"{name}\"");
-    }
 }
 
 
@@ -79,57 +54,9 @@ internal class LocationEditCommand : BaseCommand
     {
         // Not implemented yet
     }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "Edit an existing location record to the database. Only provided fields will be updated. Use 'xref' to identify the record to modify.",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["xref"] = new MCPToolProperty { Type = "string", Description = "Unique identifier (XRef) of the record to edit" },
-                    ["name"] = new MCPToolProperty { Type = "string", Description = "New name of the location item" },
-                    ["lati"] = new MCPToolProperty { Type = "number", Description = "New latitude" },
-                    ["long"] = new MCPToolProperty { Type = "number", Description = "New longitude" },
-                },
-                Required = new List<string> { "xref" }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        string xref = MCPHelper.GetRequiredStr(args, "xref");
-
-        var locRec = baseContext.Tree.FindXRef<GDMLocationRecord>(xref);
-        if (locRec == null)
-            return MCPContent.CreateSimpleContent($"Location not found with XRef: {xref}");
-
-        string name = MCPHelper.GetOptionalStr(args, "name", null);
-        if (name != null) {
-            locRec.LocationName = name;
-        }
-
-        if (MCPHelper.HasArg(args, "lati")) {
-            double lat = MCPHelper.GetOptionalDbl(args, "lati", 0);
-            locRec.Map.Lati = lat;
-        }
-
-        if (MCPHelper.HasArg(args, "long")) {
-            double lng = MCPHelper.GetOptionalDbl(args, "long", 0);
-            locRec.Map.Long = lng;
-        }
-
-        baseContext.SetModified();
-
-        return MCPContent.CreateSimpleContent($"Location record updated: {locRec.XRef} - \"{name}\"");
-    }
 }
 
 
-/// <summary>
-/// For console use only (for MCP - see <see cref="RecordDeleteCommand"/>).
-/// </summary>
 internal class LocationDeleteCommand : BaseCommand
 {
     public LocationDeleteCommand() : base("location_delete", null, CommandCategory.Location) { }

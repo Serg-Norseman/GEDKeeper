@@ -8,6 +8,7 @@
 
 using System;
 using GKcli.Commands;
+using GKcli.Features;
 using GKcli.MCP;
 using GKCore;
 using GKUI.Platform;
@@ -28,11 +29,6 @@ internal class Program
             // Check if running in MCP mode
             bool mcpMode = Array.IndexOf(args, "--mcp") >= 0;
 
-            // Check if running in pure GEDCOM mode
-            bool pureMode = Array.IndexOf(args, "--pure") >= 0;
-
-            CommandController.InitCommands(mcpMode, pureMode);
-
             if (mcpMode) {
                 RunMCPServer();
             } else {
@@ -46,6 +42,8 @@ internal class Program
     private static void RunMCPServer()
     {
         try {
+            MCPController.InitFeatures();
+
             var server = new MCPServer();
             server.Run();
         } catch (Exception ex) {
@@ -56,6 +54,8 @@ internal class Program
 
     private static void RunInteractiveMode()
     {
+        CommandController.InitCommands();
+
         Console.Clear();
         PromptHelper.WriteMarkupLine("\n[darkcyan]GEDKeeper CLI[/]");
         while (true) {

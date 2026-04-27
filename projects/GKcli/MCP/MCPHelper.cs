@@ -119,4 +119,12 @@ public static class MCPHelper
 
         return argElem.GetBoolean();
     }
+
+    internal static int? GetOptionalNullableInt(JsonElement args, string argName, int? defaultValue)
+    {
+        if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.Number)
+            return defaultValue;
+
+        return argElem.GetInt32();
+    }
 }

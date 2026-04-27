@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using GKcli.MCP;
 using GKCore;
 
-namespace GKcli.Resources;
+namespace GKcli.Features;
 
 
 /// <summary>

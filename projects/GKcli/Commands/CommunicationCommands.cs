@@ -6,26 +6,31 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
 using GDModel;
-using GKcli.MCP;
 using GKCore;
 using GKCore.Locales;
+using GKUI.Platform;
 
 namespace GKcli.Commands;
 
-/// <summary>
-/// For console use only (for MCP - see <see cref="RecordListCommand"/>).
-/// </summary>
-internal class CommunicationListCommand : BaseCommand
+internal class CommunicationMenuCommand : BaseCommand
 {
-    public CommunicationListCommand() : base("communication_list", null, CommandCategory.Communication) { }
+    public CommunicationMenuCommand() : base("communications", LSID.RPCommunications, CommandCategory.Application) { }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Not implemented yet
+        CommandController.SelectCommand(CommandCategory.Communication, true, "Select a communication operation");
+    }
+}
+
+
+internal class CommunicationListCommand : BaseCommand
+{
+    public CommunicationListCommand() : base("communication_list", LSID.Find, CommandCategory.Communication) { }
+
+    public override void Execute(BaseContext baseContext, object obj)
+    {
+        PromptHelper.SelectRecord(baseContext, GDMRecordType.rtCommunication, "Select a communication", "Communication: {0}", "No records.");
     }
 }
 
@@ -38,57 +43,6 @@ internal class CommunicationAddCommand : BaseCommand
     {
         // Not implemented yet
     }
-
-    public override MCPTool CreateTool()
-    {
-        var types = RuntimeData.CommTypeMap.Keys.ToList();
-        var dirs = RuntimeData.CommDirMap.Keys.ToList();
-
-        return new MCPTool {
-            Name = Sign,
-            Description = "Add a new communication record to the database",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["name"] = new MCPToolProperty { Type = "string", Description = "Name of the communication item" },
-                    ["type"] = new MCPToolProperty { Type = "string", Description = "Type of the communication.", Enum = types },
-                    ["direction"] = new MCPToolProperty { Type = "string", Description = "Direction of the communication.", Enum = dirs },
-                    ["corresponderXRef"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the corresponder (e.g., 'I1')" },
-                    ["date"] = new MCPToolProperty { Type = "string", Description = "Communication date, strictly with the GEDCOM Date Spec" },
-                },
-                Required = new List<string> { "name", "type", "direction", "corresponderXRef", "date" }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        string name = MCPHelper.GetRequiredStr(args, "name");
-        string typeStr = MCPHelper.GetRequiredStr(args, "type");
-        string dirStr = MCPHelper.GetRequiredStr(args, "direction");
-
-        if (!RuntimeData.CommTypeMap.TryGetValue(typeStr, out var commType))
-            return MCPContent.CreateSimpleContent($"Invalid type: '{typeStr}'.");
-
-        if (!RuntimeData.CommDirMap.TryGetValue(dirStr, out var dir))
-            return MCPContent.CreateSimpleContent($"Invalid direction: '{dirStr}'.");
-
-        string date = MCPHelper.GetRequiredStr(args, "date");
-
-        string corrXRef = MCPHelper.GetRequiredStr(args, "corresponderXRef");
-        var corrRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(corrXRef);
-        if (corrRec == null)
-            return MCPContent.CreateSimpleContent($"Corresponder not found with XRef: {corrXRef}");
-
-        var commRec = baseContext.Tree.CreateCommunication();
-        commRec.CommName = name;
-        commRec.CommunicationType = commType;
-        commRec.Date.ParseString(date);
-        commRec.SetCorresponder(dir, corrRec);
-
-        baseContext.SetModified();
-
-        return MCPContent.CreateSimpleContent($"Communication record added: {commRec.XRef} - \"{name}\"");
-    }
 }
 
 
@@ -100,82 +54,9 @@ internal class CommunicationEditCommand : BaseCommand
     {
         // Not implemented yet
     }
-
-    public override MCPTool CreateTool()
-    {
-        var types = RuntimeData.CommTypeMap.Keys.ToList();
-        var dirs = RuntimeData.CommDirMap.Keys.ToList();
-
-        return new MCPTool {
-            Name = Sign,
-            Description = "Edit an existing communication record to the database. Only provided fields will be updated. Use 'xref' to identify the record to modify.",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["xref"] = new MCPToolProperty { Type = "string", Description = "Unique identifier (XRef) of the record to edit" },
-                    ["name"] = new MCPToolProperty { Type = "string", Description = "New name of the communication item" },
-                    ["type"] = new MCPToolProperty { Type = "string", Description = "New type of the communication.", Enum = types },
-                    ["direction"] = new MCPToolProperty { Type = "string", Description = "New direction of the communication.", Enum = dirs },
-                    ["corresponderXRef"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the new corresponder (e.g., 'I1')" },
-                    ["date"] = new MCPToolProperty { Type = "string", Description = "New communication date, strictly with the GEDCOM Date Spec" },
-                },
-                Required = new List<string> { "xref" }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        string xref = MCPHelper.GetRequiredStr(args, "xref");
-        var commRec = baseContext.Tree.FindXRef<GDMCommunicationRecord>(xref);
-        if (commRec == null)
-            return MCPContent.CreateSimpleContent($"Communication record not found: '{xref}'.");
-
-        string name = MCPHelper.GetOptionalStr(args, "name", null);
-        if (name != null) {
-            commRec.CommName = name;
-        }
-
-        string typeStr = MCPHelper.GetOptionalStr(args, "type", null);
-        if (typeStr != null) {
-            if (!RuntimeData.CommTypeMap.TryGetValue(typeStr, out var commType))
-                return MCPContent.CreateSimpleContent($"Invalid type: '{typeStr}'.");
-
-            commRec.CommunicationType = commType;
-        }
-
-        string dirStr = MCPHelper.GetOptionalStr(args, "direction", null);
-        if (dirStr != null) {
-            if (!RuntimeData.CommDirMap.TryGetValue(dirStr, out var dir))
-                return MCPContent.CreateSimpleContent($"Invalid direction: '{dirStr}'.");
-
-            var corrRec = baseContext.Tree.GetPtrValue(commRec.Corresponder);
-            commRec.SetCorresponder(dir, corrRec);
-        }
-
-        string date = MCPHelper.GetOptionalStr(args, "date", null);
-        if (date != null) {
-            commRec.Date.ParseString(date);
-        }
-
-        string corrXRef = MCPHelper.GetOptionalStr(args, "corresponderXRef", null);
-        if (corrXRef != null) {
-            var corrRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(corrXRef);
-            if (corrRec == null)
-                return MCPContent.CreateSimpleContent($"Corresponder not found with XRef: {corrXRef}");
-
-            commRec.SetCorresponder(commRec.CommDirection, corrRec);
-        }
-
-        baseContext.SetModified();
-
-        return MCPContent.CreateSimpleContent($"Communication record updated: {commRec.XRef} - \"{name}\"");
-    }
 }
 
 
-/// <summary>
-/// For console use only (for MCP - see <see cref="RecordDeleteCommand"/>).
-/// </summary>
 internal class CommunicationDeleteCommand : BaseCommand
 {
     public CommunicationDeleteCommand() : base("communication_delete", null, CommandCategory.Communication) { }

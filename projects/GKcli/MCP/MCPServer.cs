@@ -15,6 +15,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using GKcli.Features;
 using GKCore;
 
 namespace GKcli.MCP;
@@ -62,7 +63,7 @@ internal class MCPServer
         Log($"Initializing MCP server ({pid})...");
 
         // The list is generated after registration.
-        var commands = CommandController.GetCommands();
+        var commands = MCPController.GetTools();
         // Register tools from commands
         fToolsList = new MCPToolsListResult() {
             Tools = commands.Select(cmd => cmd.CreateTool()).Where(tl => tl != null).ToList()
@@ -70,7 +71,7 @@ internal class MCPServer
 
         // Initialize resources
         fResourcesList = new MCPResourcesListResult() {
-            Resources = CommandController.GetResources().Select(x => x.CreateResource()).ToList()
+            Resources = MCPController.GetResources().Select(x => x.CreateResource()).ToList()
         };
 
         // Initialize prompts (minimal stub)
@@ -252,7 +253,7 @@ internal class MCPServer
             p.TryGetProperty("arguments", out var arguments);
 
             // Execute an MCP tool call by name and arguments.
-            var content = CommandController.ExecuteTool(toolName, arguments);
+            var content = MCPController.ExecuteTool(toolName, arguments);
 
             return new MCPResponse {
                 Id = request.Id,
@@ -316,7 +317,7 @@ internal class MCPServer
             string uri = uriElem.GetString()!;
 
             // Match registered resources
-            var resContent = CommandController.GetResource(uri);
+            var resContent = MCPController.GetResource(uri);
             if (resContent != null) {
                 Logger.WriteInfo($"Returned contents for resource {uri}");
 

@@ -12,7 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using GDModel;
-using GKcli;
+using GKcli.Commands;
 using GKCore;
 using Sharprompt;
 

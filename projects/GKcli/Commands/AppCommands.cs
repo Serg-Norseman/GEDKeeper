@@ -6,10 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System.Collections.Generic;
-using System.Text.Json;
-using GKcli.MCP;
-using GKcli.Resources;
 using GKCore;
 using GKCore.Locales;
 
@@ -38,30 +34,5 @@ internal class MenuReturnCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-    }
-}
-
-
-internal class GEDCOMDateSpecCommand : BaseCommand
-{
-    public GEDCOMDateSpecCommand() : base("gedcom_date_spec", LSID.None, CommandCategory.Service) { }
-
-    public override void Execute(BaseContext baseContext, object obj)
-    {
-        // Not implemented yet
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "Get GEDCOM date specification",
-            InputSchema = MCPToolInputSchema.Empty
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        return MCPContent.CreateSimpleContent(GEDCOMDateSpecResource.GetSpec());
     }
 }

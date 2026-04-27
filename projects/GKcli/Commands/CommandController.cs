@@ -9,21 +9,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
-using GKcli.Commands;
-using GKcli.MCP;
-using GKcli.Resources;
 using GKCore;
 using GKUI.Platform;
 using Sharprompt;
 
-namespace GKcli;
+namespace GKcli.Commands;
 
 internal class CommandController
 {
     private static readonly BaseContext fBaseContext = new BaseContext(null);
     private static readonly Dictionary<string, BaseCommand> fCommands = new Dictionary<string, BaseCommand>();
-    private static readonly Dictionary<string, BaseResource> fResources = new Dictionary<string, BaseResource>();
     private static Dictionary<string, object> fVariables = new Dictionary<string, object>();
 
     public const string CMD_RETURN = "return";
@@ -33,7 +28,7 @@ internal class CommandController
     {
     }
 
-    public static void InitCommands(bool mcp, bool pure)
+    public static void InitCommands()
     {
         // Files operations
         RegisterCommand(new FileMenuCommand());
@@ -73,7 +68,6 @@ internal class CommandController
 
         // Events
         RegisterCommand(new EventEditCommand());
-        RegisterCommand(new EventTypeListCommand());
 
         // Individuals operations
         RegisterCommand(new IndiMenuCommand());
@@ -81,7 +75,6 @@ internal class CommandController
         RegisterCommand(new IndiSearchCommand());
         RegisterCommand(new IndiAddCommand());
         RegisterCommand(new IndiEditCommand());
-        RegisterCommand(new IndividualUpsertCommand());
         RegisterCommand(new IndiDeleteCommand());
 
         RegisterCommand(new IndiListSpousesCommand()); // control through family tools
@@ -107,7 +100,6 @@ internal class CommandController
         RegisterCommand(new FamListCommand());
         RegisterCommand(new FamAddCommand());
         RegisterCommand(new FamEditCommand());
-        RegisterCommand(new FamilyUpsertCommand());
         RegisterCommand(new FamDeleteCommand());
 
         RegisterCommand(new FamAddChildCommand());
@@ -124,7 +116,6 @@ internal class CommandController
         RegisterCommand(new NoteListCommand());
         RegisterCommand(new NoteAddCommand());
         RegisterCommand(new NoteEditCommand());
-        RegisterCommand(new NoteUpsertCommand());
         RegisterCommand(new NoteDeleteCommand());
 
         // Multimedia operations
@@ -145,7 +136,6 @@ internal class CommandController
         RegisterCommand(new SourceListCommand());
         RegisterCommand(new SourceAddCommand());
         RegisterCommand(new SourceEditCommand());
-        RegisterCommand(new SourceUpsertCommand());
         RegisterCommand(new SourceDeleteCommand());
 
         RegisterCommand(new SourceListRepositoriesCommand());
@@ -159,66 +149,66 @@ internal class CommandController
         RegisterCommand(new RepositoryEditCommand());
         RegisterCommand(new RepositoryDeleteCommand());
 
-        // All 100+ instruments, including the system prompt, consume over 16,000 tokens.
-        // Until optimization or a transition to a different approach is implemented, a limiter is needed.
-        if (!mcp || !pure) {
-            // Groups operations
-            RegisterCommand(new GroupListCommand());
-            RegisterCommand(new GroupAddCommand());
-            RegisterCommand(new GroupEditCommand());
-            RegisterCommand(new GroupDeleteCommand());
+        // Groups operations
+        RegisterCommand(new GroupMenuCommand());
+        RegisterCommand(new GroupListCommand());
+        RegisterCommand(new GroupAddCommand());
+        RegisterCommand(new GroupEditCommand());
+        RegisterCommand(new GroupDeleteCommand());
 
-            RegisterCommand(new GroupListMembersCommand());
-            RegisterCommand(new GroupAddMemberCommand());
-            RegisterCommand(new GroupDeleteMemberCommand());
+        RegisterCommand(new GroupListMembersCommand());
+        RegisterCommand(new GroupAddMemberCommand());
+        RegisterCommand(new GroupDeleteMemberCommand());
 
-            // Tasks operations
-            RegisterCommand(new TaskListCommand());
-            RegisterCommand(new TaskAddCommand());
-            RegisterCommand(new TaskEditCommand());
-            RegisterCommand(new TaskUpsertCommand());
-            RegisterCommand(new TaskDeleteCommand());
+        // Tasks operations
+        RegisterCommand(new TaskMenuCommand());
+        RegisterCommand(new TaskListCommand());
+        RegisterCommand(new TaskAddCommand());
+        RegisterCommand(new TaskEditCommand());
+        RegisterCommand(new TaskDeleteCommand());
 
-            // Researches operations
-            RegisterCommand(new ResearchListCommand());
-            RegisterCommand(new ResearchAddCommand());
-            RegisterCommand(new ResearchEditCommand());
-            RegisterCommand(new ResearchDeleteCommand());
+        // Researches operations
+        RegisterCommand(new ResearchMenuCommand());
+        RegisterCommand(new ResearchListCommand());
+        RegisterCommand(new ResearchAddCommand());
+        RegisterCommand(new ResearchEditCommand());
+        RegisterCommand(new ResearchDeleteCommand());
 
-            RegisterCommand(new ResearchListTasksCommand());
-            RegisterCommand(new ResearchAddTaskCommand());
-            RegisterCommand(new ResearchDeleteTaskCommand());
+        RegisterCommand(new ResearchListTasksCommand());
+        RegisterCommand(new ResearchAddTaskCommand());
+        RegisterCommand(new ResearchDeleteTaskCommand());
 
-            RegisterCommand(new ResearchListCommunicationsCommand());
-            RegisterCommand(new ResearchAddCommunicationCommand());
-            RegisterCommand(new ResearchDeleteCommunicationCommand());
+        RegisterCommand(new ResearchListCommunicationsCommand());
+        RegisterCommand(new ResearchAddCommunicationCommand());
+        RegisterCommand(new ResearchDeleteCommunicationCommand());
 
-            RegisterCommand(new ResearchListGroupsCommand());
-            RegisterCommand(new ResearchAddGroupCommand());
-            RegisterCommand(new ResearchDeleteGroupCommand());
+        RegisterCommand(new ResearchListGroupsCommand());
+        RegisterCommand(new ResearchAddGroupCommand());
+        RegisterCommand(new ResearchDeleteGroupCommand());
 
-            // Communications operations
-            RegisterCommand(new CommunicationListCommand());
-            RegisterCommand(new CommunicationAddCommand());
-            RegisterCommand(new CommunicationEditCommand());
-            RegisterCommand(new CommunicationDeleteCommand());
+        // Communications operations
+        RegisterCommand(new CommunicationMenuCommand());
+        RegisterCommand(new CommunicationListCommand());
+        RegisterCommand(new CommunicationAddCommand());
+        RegisterCommand(new CommunicationEditCommand());
+        RegisterCommand(new CommunicationDeleteCommand());
 
-            // Locations operations
-            RegisterCommand(new LocationListCommand());
-            RegisterCommand(new LocationAddCommand());
-            RegisterCommand(new LocationEditCommand());
-            RegisterCommand(new LocationDeleteCommand());
+        // Locations operations
+        RegisterCommand(new LocationMenuCommand());
+        RegisterCommand(new LocationListCommand());
+        RegisterCommand(new LocationAddCommand());
+        RegisterCommand(new LocationEditCommand());
+        RegisterCommand(new LocationDeleteCommand());
 
-            RegisterCommand(new LocationListNamesCommand());
-            RegisterCommand(new LocationAddNameCommand());
-            RegisterCommand(new LocationEditNameCommand());
-            RegisterCommand(new LocationDeleteNameCommand());
+        RegisterCommand(new LocationListNamesCommand());
+        RegisterCommand(new LocationAddNameCommand());
+        RegisterCommand(new LocationEditNameCommand());
+        RegisterCommand(new LocationDeleteNameCommand());
 
-            RegisterCommand(new LocationListTopLinksCommand());
-            RegisterCommand(new LocationAddTopLinkCommand());
-            RegisterCommand(new LocationEditTopLinkCommand());
-            RegisterCommand(new LocationDeleteTopLinkCommand());
-        }
+        RegisterCommand(new LocationListTopLinksCommand());
+        RegisterCommand(new LocationAddTopLinkCommand());
+        RegisterCommand(new LocationEditTopLinkCommand());
+        RegisterCommand(new LocationDeleteTopLinkCommand());
 
         // Service
         RegisterCommand(new ServiceMenuCommand());
@@ -239,10 +229,6 @@ internal class CommandController
         // Application and menu
         RegisterCommand(new MenuReturnCommand());
         RegisterCommand(new AppExitCommand());
-
-        // Resources
-        RegisterCommand(new GEDCOMDateSpecCommand());
-        RegisterResource(new GEDCOMDateSpecResource());
     }
 
     private static void RegisterCommand(BaseCommand commandInstance)
@@ -250,21 +236,16 @@ internal class CommandController
         fCommands.Add(commandInstance.Sign, commandInstance);
     }
 
-    private static void RegisterResource(BaseResource resource)
-    {
-        fResources.Add(resource.Uri, resource);
-    }
-
     public static string SelectCommand(CommandCategory category, bool hasReturn, string message)
     {
         // For commands implemented in MCP but not implemented for CLI, there will be no name.
-        var cmdList = fCommands.Values.Where(c => (c.Category == category && c.Text != "#")).ToList();
+        var cmdList = fCommands.Values.Where(c => c.Category == category && c.Text != "#").ToList();
         if (hasReturn)
             cmdList.Add(new MenuReturnCommand());
 
         Console.WriteLine();
         var selected = Prompt.Select(message, cmdList,
-            textSelector: (BaseCommand cmd) => { return cmd.Text; });
+            textSelector: (cmd) => { return cmd.Text; });
 
         if (selected != null) {
             if (fCommands.TryGetValue(selected.Sign, out BaseCommand cmd)) {
@@ -294,33 +275,5 @@ internal class CommandController
     {
         fVariables.TryGetValue(varName, out object result);
         return result as T;
-    }
-
-    internal static IEnumerable<BaseCommand> GetCommands()
-    {
-        return fCommands.Values;
-    }
-
-    public static List<MCPContent> ExecuteTool(string toolName, JsonElement args)
-    {
-        if (fCommands.TryGetValue(toolName, out BaseCommand cmd)) {
-            return cmd.ExecuteTool(fBaseContext, args);
-        } else {
-            throw new ArgumentException($"Unknown tool: {toolName}");
-        }
-    }
-
-    internal static IEnumerable<BaseResource> GetResources()
-    {
-        return fResources.Values;
-    }
-
-    public static List<MCPResourceContents> GetResource(string uri)
-    {
-        if (fResources.TryGetValue(uri, out BaseResource res)) {
-            return res.Get(fBaseContext);
-        } else {
-            return null;
-        }
     }
 }

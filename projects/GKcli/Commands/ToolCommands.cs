@@ -6,14 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System.Collections.Generic;
-using System.Text.Json;
-using GDModel;
-using GKcli.MCP;
 using GKCore;
 using GKCore.Locales;
-using GKCore.Tools;
-using GKUI.Platform;
 
 namespace GKcli.Commands;
 
@@ -56,35 +50,6 @@ internal class TreeMergeCommand : BaseCommand
     public override void Execute(BaseContext baseContext, object obj)
     {
     }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "Merge another GEDCOM file into the current database",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["path"] = new MCPToolProperty { Type = "string", Description = "Path to the .ged file" }
-                },
-                Required = new List<string> { "path" }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        string path = MCPHelper.GetRequiredStr(args, "path");
-
-        var textLog = new TextOutput();
-
-        //var sw = Stopwatch.StartNew();
-        TreeTools.MergeTreeFile(baseContext.Tree, path, textLog, true);
-        baseContext.SetModified();
-        //sw.Stop();
-        //return MCPContent.CreateSimpleContent($"Databases merged: {path}. Records: {baseContext.Tree.RecordsCount}. Time: {sw.Elapsed.TotalSeconds:F3}s.");
-
-        return MCPContent.CreateSimpleContent(textLog.ToString());
-    }
 }
 
 
@@ -114,39 +79,6 @@ internal class RecMergeCommand : BaseCommand
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        // Not applicable for MCP
-    }
-
-    public override MCPTool CreateTool()
-    {
-        return new MCPTool {
-            Name = Sign,
-            Description = "Merge records by their XRef identifiers.",
-            InputSchema = new MCPToolInputSchema {
-                Properties = new Dictionary<string, MCPToolProperty> {
-                    ["target_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the target record" },
-                    ["source_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record being merged" }
-                },
-                Required = new List<string> { "target_xref", "source_xref" }
-            }
-        };
-    }
-
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
-    {
-        string targetXRef = MCPHelper.GetRequiredStr(args, "target_xref");
-        var targetRecord = baseContext.Tree.FindXRef<GDMRecord>(targetXRef);
-        if (targetRecord == null)
-            return MCPContent.CreateSimpleContent($"Target record not found with XRef: {targetXRef}");
-
-        string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
-        var sourceRecord = baseContext.Tree.FindXRef<GDMRecord>(sourceXRef);
-        if (sourceRecord == null)
-            return MCPContent.CreateSimpleContent($"Merged record not found with XRef: {sourceXRef}");
-
-        TreeTools.MergeRecord(baseContext, targetRecord, sourceRecord, false);
-
-        return MCPContent.CreateSimpleContent($"Record deleted: {sourceXRef}");
     }
 }
 

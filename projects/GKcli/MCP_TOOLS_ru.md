@@ -7,8 +7,6 @@
 
 **Запуск в LLM-клиентах:** `GKcli --mcp` (аргумент обязателен, т.к. без него запускается интерактивный текстовый терминал, частично повторяющий по составу функций MCP-сервер).
 
-`--pure` - аргумент ограничивает инструменты близко к чистому GEDCOM, т.к. полный набор инструментов тратит при передаче через системный промт около 10-16 тыс. токенов.
-
 **Протокол:** MCP `2025-06-18`, JSON-RPC 2.0 поверх stdin/stdout. Без внешних зависимостей.
 
 ---
@@ -46,7 +44,7 @@
 | `file_reload` | Перезагрузить последний открытый файл | — |
 | `file_search` | Найти все GEDCOM-файлы на диске | `path` (string) — корневой каталог для поиска |
 | `file_validate` | Проверить валидность текущей базы | — |
-| `tree_merge` | Влить другой GEDCOM файл в текущую базу данных | `path` (string) — путь к `.ged` |
+| `file_merge` | Влить другой GEDCOM файл в текущую базу данных | `path` (string) — путь к `.ged` |
 
 ---
 
@@ -85,16 +83,13 @@
 | `individual_search` | Нечёткий поиск по имени (порог 16%) | `name` (string) |
 | `individual_upsert` | Добавить персону или редактировать существующую | `xref` (string, необязательно), `name` (string), `sex` (string: `m`/`f`), `nickname` (string, необязательно) |
 | `individual_list_associations` | Список всех ассоциаций персоны | `individual_xref` (string) |
-| `individual_add_association` | Добавить ассоциацию (связь) между двумя персонами | `individual_xref` (string), `associate_xref` (string), `relation` (string) |
-| `individual_edit_association` | Редактировать ассоциацию (связь) между двумя персонами | `individual_xref` (string), `association_index` (integer, 0-based), `associate_xref` (string, необязательно), `relation` (string, необязательно) |
+| `individual_upsert_association` | Добавить ассоциацию персоне или редактировать существующую | `individual_xref` (string), `association_index` (integer, 0-based), `associate_xref` (string), `relation` (string) |
 | `individual_delete_association` | Удалить ассоциацию у персоны | `individual_xref` (string), `association_index` (integer, 0-based) |
 | `individual_list_events` | Список всех событий персоны | `individual_xref` (string) |
 | `individual_delete_event` | Удалить событие персоны | `individual_xref` (string), `event_index` (integer, 0-based) |
-| `individual_add_event` | Добавить событие персоне | `individual_xref` (string), `type` (string), `date` (string), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `age` (string) |
-| `individual_edit_event` | Редактировать событие персоне | `individual_xref` (string), `event_index` (integer, 0-based), `date` (string), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `age` (string) |
+| `individual_upsert_event` | Добавить событие персоне или редактировать существующее | `individual_xref` (string), `event_index` (integer, 0-based), `type` (string), `date` (string), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `age` (string) |
 | `individual_list_personal_names` | Список всех персональных имён персоны | `individual_xref` (string) |
-| `individual_add_personal_name` | Добавить персональное имя персоны | `individual_xref` (string), `given` (string), `surname` (string), `surname_prefix` (string, необязательно), `name_prefix` (string, необязательно), `name_suffix` (string, необязательно), `nickname` (string, необязательно), `name_type` (string, необязательно), `language` (string, необязательно), `patronymic` (string, необязательно), `married_name` (string, необязательно), `religious_name` (string, необязательно), `census_name` (string, необязательно) |
-| `individual_edit_personal_name` | Редактировать персональное имя персоны | `individual_xref` (string), `name_index` (integer, 0-based), `given` (string, необязательно), `surname` (string, необязательно), `surname_prefix` (string, необязательно), `name_prefix` (string, необязательно), `name_suffix` (string, необязательно), `nickname` (string, необязательно), `name_type` (string, необязательно), `language` (string, необязательно), `patronymic` (string, необязательно), `married_name` (string, необязательно), `religious_name` (string, необязательно), `census_name` (string, необязательно) |
+| `individual_upsert_personal_name` | Добавить персональное имя или редактировать существующее | `individual_xref` (string), `name_index` (integer, 0-based), `given` (string), `surname` (string), `surname_prefix` (string), `name_prefix` (string), `name_suffix` (string), `nickname` (string), `name_type` (string), `language` (string), `patronymic` (string), `married_name` (string), `religious_name` (string), `census_name` (string) |
 | `individual_delete_personal_name` | Удалить персональное имя персоны | `individual_xref` (string), `name_index` (integer, 0-based) |
 | `individual_list_spouses` | Список всех супругов персоны | `individual_xref` (string) |
 | `individual_list_groups` | Список всех групп персоны | `individual_xref` (string) |
@@ -111,8 +106,7 @@
 | `family_delete_child` | Удалить ребёнка из семьи | `family_xref` (string), `child_xref` (string) |
 | `family_list_events` | Список всех событий семьи | `family_xref` (string) |
 | `family_delete_event` | Удалить событие семьи | `family_xref` (string), `event_index` (integer, 0-based) |
-| `family_add_event` | Добавить событие семье | `family_xref` (string), `type` (string), `date` (string), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `husband_age` (string), `wife_age` (string) |
-| `family_edit_event` | Редактировать событие семье | `family_xref` (string), `event_index` (integer, 0-based), `date` (string), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `husband_age` (string), `wife_age` (string) |
+| `family_upsert_event` | Добавить событие семье или редактировать существующее | `family_xref` (string), `event_index` (integer, 0-based), `type` (string), `date` (string), `place` (string), `location_xref` (string), `cause` (string), `agency` (string), `value` (string), `husband_age` (string), `wife_age` (string) |
 
 ---
 
@@ -139,8 +133,7 @@
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
-| `repository_add` | Добавить хранилище/архив | `name` (string) |
-| `repository_edit` | Редактировать хранилище/архив | `xref` (string), `name` (string, необязательно) |
+| `repository_upsert` | Добавить хранилище/архив или редактировать существующее | `xref` (string), `name` (string) |
 
 ---
 
@@ -148,12 +141,10 @@
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
-| `multimedia_add` | Добавить мультимедиа-запись с файловой ссылкой | `title` (string), `file_path` (string), `media_type` (string), `store_type` (string) |
-| `multimedia_edit` | Редактировать мультимедиа-запись | `xref` (string), `title` (string, необязательно), `media_type` (string, необязательно) |
+| `multimedia_upsert` | Добавить мультимедиа-запись с файловой ссылкой или редактировать существующую | `xref` (string), `title` (string), `file_path` (string), `media_type` (string), `store_type` (string) |
 | `multimedia_get` | Получить мультимедиа-запись | `xref` (string, напр. `O1`) |
 | `multimedia_list_files` | Список файлов в мультимедиа-записи | `xref` (string) |
-| `multimedia_add_file` | Добавить файл в мультимедиа-запись | `xref` (string), `title` (string), `file_path` (string), `media_type` (string), `store_type` (string) |
-| `multimedia_edit_file` | Редактировать файл в мультимедиа-записи | `xref` (string), `file_index` (string), `title` (string, необязательно), `media_type` (string, необязательно) |
+| `multimedia_upsert_file` | Добавить файл в мультимедиа-запись или редактировать существующий | `xref` (string), `file_index` (integer, 0-based), `title` (string), `file_path` (string), `media_type` (string), `store_type` (string) |
 | `multimedia_delete_file` | Удалить файл из мультимедиа-записи | `xref` (string), `file_index` (string) |
 
 ---
@@ -162,8 +153,7 @@
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
-| `group_add` | Создать группу | `name` (string) |
-| `group_edit` | Редактировать группу | `xref` (string), `name` (string, необязательно) |
+| `group_upsert` | Создать группу или редактировать существующую | `xref` (string), `name` (string) |
 | `group_list_members` | Список членов группы | `group_xref` (string) |
 | `group_add_member` | Добавить персону в группу | `group_xref` (string), `individual_xref` (string) |
 | `group_delete_member` | Удалить персону из группы | `group_xref` (string), `individual_xref` (string) |
@@ -182,8 +172,7 @@
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
-| `research_add` | Добавить исследование | `title` (string), `priority` (enum), `status` (enum), `start_date` (string, необязательно), `stop_date` (string, необязательно), `percent` (integer, необязательно) |
-| `research_edit` | Редактировать исследование | `xref` (string), `title` (string, необязательно), `priority` (enum, необязательно), `status` (enum, необязательно), `start_date` (string, необязательно), `stop_date` (string, необязательно), `percent` (integer, необязательно) |
+| `research_upsert` | Добавить исследование или редактировать существующее | `xref` (string), `title` (string), `priority` (enum), `status` (enum), `start_date` (string), `stop_date` (string), `percent` (integer) |
 | `research_list_tasks` | Список всех задач исследования по его XRef идентификатору | `research_xref` (string) — XRef идентификатор исследования (например, 'R1') |
 | `research_add_task` | Добавить задачу в исследование по их XRef идентификаторам | `research_xref` (string) — XRef идентификатор исследования (например, 'R1', 'R2'), `task_xref` (string) — XRef идентификатор задачи (например, 'T1', 'T2') |
 | `research_delete_task` | Удалить задачу из исследования по их XRef идентификаторам | `research_xref` (string) — XRef идентификатор исследования (например, 'R1', 'R2'), `task_xref` (string) — XRef идентификатор задачи (например, 'T1', 'T2') |
@@ -200,8 +189,7 @@
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
-| `communication_add` | Добавить переписку | `name` (string), `type` (enum), `direction` (enum), `corresponderXRef` (string), `date` (string) |
-| `communication_edit` | Редактировать переписку | `xref` (string), `name` (string, необязательно), `type` (enum, необязательно), `direction` (enum, необязательно), `corresponderXRef` (string, необязательно), `date` (string, необязательно) |
+| `communication_upsert` | Добавить переписку или редактировать существующую | `xref` (string), `name` (string), `type` (enum), `direction` (enum), `corresponderXRef` (string), `date` (string) |
 
 ---
 
@@ -209,15 +197,12 @@
 
 | Инструмент | Описание | Параметры |
 |---|---|---|
-| `location_add` | Добавить местоположение | `name` (string), `lati` (number, необязательно), `long` (number, необязательно) |
-| `location_edit` | Редактировать местоположение | `xref` (string), `name` (string, необязательно), `lati` (number, необязательно), `long` (number, необязательно) |
+| `location_upsert` | Добавить местоположение или редактировать существующее | `xref` (string), `name` (string), `lati` (number), `long` (number) |
 | `location_list_names` | Список всех имён местоположения | `location_xref` (string, напр. 'L1') |
-| `location_add_name` | Добавить имя к записи местоположения | `location_xref` (string, напр. 'L1'), `name` (string), `short_name` (string, необязательно), `date` (string, необязательно) |
-| `location_edit_name` | Редактировать имя местоположения | `location_xref` (string, напр. 'L1'), `name_index` (integer, 0-based), `name` (string, необязательно), `short_name` (string, необязательно), `date` (string, необязательно) |
+| `location_upsert_name` | Добавить имя к записи местоположения или редактировать существующее | `location_xref` (string, напр. 'L1'), `name_index` (integer, 0-based), `name` (string), `short_name` (string), `date` (string) |
 | `location_delete_name` | Удалить имя из местоположения | `location_xref` (string, напр. 'L1'), `name_index` (integer, 0-based) |
 | `location_list_top_links` | Список всех верхнеуровневых ссылок местоположения | `location_xref` (string, напр. 'L1') |
-| `location_add_top_link` | Добавить верхнеуровневую ссылку к записи местоположения | `location_xref` (string, напр. 'L1'), `top_link_xref` (string), `date` (string, необязательно) |
-| `location_edit_top_link` | Редактировать верхнеуровневую ссылку местоположения | `location_xref` (string, напр. 'L1'), `top_link_index` (integer, 0-based), `top_link_xref` (string, необязательно), `date` (string, необязательно) |
+| `location_upsert_top_link` | Добавить верхнеуровневую ссылку к записи местоположения или редактировать существующую | `location_xref` (string, напр. 'L1'), `top_link_index` (integer, 0-based), `top_link_xref` (string), `date` (string) |
 | `location_delete_top_link` | Удалить верхнеуровневую ссылку из местоположения | `location_xref` (string, напр. 'L1'), `top_link_index` (integer, 0-based) |
 
 ---

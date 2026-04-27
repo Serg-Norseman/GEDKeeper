@@ -69,7 +69,7 @@ This will configure the tool and force the model to load the correct date format
 
 Configuration in **Jan** (`mcp_config.json`) for connection:
 
-`
+```
 {
   "mcpServers": {
     "gkcli": {
@@ -83,7 +83,7 @@ Configuration in **Jan** (`mcp_config.json`) for connection:
     },
   }
 }
-`
+```
 
 ### Examples
 
