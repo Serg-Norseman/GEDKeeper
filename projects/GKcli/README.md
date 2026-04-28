@@ -41,7 +41,7 @@ that partially duplicates the functionality of the MCP server).
 
 ### MCP Tools Reference
 
-- Tools reference in English
+- [Tools reference in English](./MCP_TOOLS_en.md)
 - [Tools reference in Russian](./MCP_TOOLS_ru.md)
 
 ## CLI Utility
