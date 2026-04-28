@@ -1819,6 +1819,7 @@ namespace GKCore.Controllers
 
             view.ShortTitle.Text = "sample text";
             view.Author.Lines.Returns(new string[] { "sample text" });
+            view.Date.Date = new GDMDate();
 
             controller.Accept();
 
