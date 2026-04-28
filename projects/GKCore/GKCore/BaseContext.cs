@@ -1200,8 +1200,13 @@ using GDModel.Providers.FamilyShow;
                         var pureFileName = Path.GetFileNameWithoutExtension(fileName);
                         var ext = Path.GetExtension(fileName);
                         var copyFileName = Path.Combine(path, pureFileName + "_prev_format" + ext);
-                        File.Copy(fFileName, copyFileName, true);
-                        File.SetAttributes(copyFileName, FileAttributes.Archive | FileAttributes.ReadOnly);
+
+                        if (File.Exists(copyFileName)) {
+                            //Logger.WriteInfo("A copy of the previous version already exists.");
+                        } else {
+                            File.Copy(fFileName, copyFileName, true);
+                            File.SetAttributes(copyFileName, FileAttributes.Archive | FileAttributes.ReadOnly);
+                        }
                     }
                 }
             } catch (Exception ex) {

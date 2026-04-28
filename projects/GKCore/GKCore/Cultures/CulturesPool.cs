@@ -25,12 +25,14 @@ namespace GKCore.Cultures
 
         public static ICulture DefineCulture(GDMLanguageID langID)
         {
-            ICulture result;
-            if (!fCultures.TryGetValue(langID, out result)) {
-                result = CreateCulture(langID);
-                fCultures.Add(langID, result);
+            lock (fCultures) {
+                ICulture result;
+                if (!fCultures.TryGetValue(langID, out result)) {
+                    result = CreateCulture(langID);
+                    fCultures.Add(langID, result);
+                }
+                return result;
             }
-            return result;
         }
 
         private static ICulture CreateCulture(GDMLanguageID langID)

@@ -34,12 +34,14 @@ namespace GKCore.Controllers
 {
     public sealed class TabParts
     {
+        public readonly GDMRecordType RecType;
         public readonly IListView ListView;
         public readonly string SplitterName;
         public readonly IHyperView Summary;
 
-        public TabParts(IListView listView, string splitterName, IHyperView summary)
+        public TabParts(GDMRecordType recType, IListView listView, string splitterName, IHyperView summary)
         {
+            RecType = recType;
             ListView = listView;
             SplitterName = splitterName;
             Summary = summary;
@@ -488,7 +490,7 @@ namespace GKCore.Controllers
 
         public void SetTabPart(GDMRecordType recType, IListView listView, string splitterName, IHyperView summary)
         {
-            fTabParts[(int)recType] = new TabParts(listView, splitterName, summary);
+            fTabParts[(int)recType] = new TabParts(recType, listView, splitterName, summary);
         }
 
         public void SetTabVisible(GDMRecordType recType, bool visible)
@@ -530,6 +532,7 @@ namespace GKCore.Controllers
                 for (int i = 0; i < fTabParts.Length; i++) {
                     var tab = fTabParts[i];
                     if (tab == null) continue;
+                    if (globOpts.DisableNonStdFeatures && tab.RecType >= GDMRecordType.rtGroup) continue;
 
                     if (globOpts.KeepInfoPansOverallSize) {
                         if (i != currentTab) {

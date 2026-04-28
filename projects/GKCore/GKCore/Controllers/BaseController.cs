@@ -1249,14 +1249,18 @@ namespace GKCore.Controllers
                 return result;
             }
 
+            // here a family that already exists, selected by the user and with the required spouse, can be returned
             GDMFamilyRecord family = await baseWin.Context.GetChildFamily(person, true, father);
             if (family == null) return result;
 
             var husb = baseWin.Context.Tree.GetPtrValue<GDMIndividualRecord>(family.Husband);
             if (husb != null) {
                 // selected family with husband
-                Logger.WriteError("BaseController.AddFather(): fail, because family already has father");
-                result = true;
+                if (husb == father) {
+                    result = true;
+                } else {
+                    Logger.WriteError("BaseController.AddFather(): unforeseen situation");
+                }
             } else {
                 // new family
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, father);
@@ -1292,14 +1296,18 @@ namespace GKCore.Controllers
                 return result;
             }
 
+            // here a family that already exists, selected by the user and with the required spouse, can be returned
             GDMFamilyRecord family = await baseWin.Context.GetChildFamily(person, true, mother);
             if (family == null) return result;
 
             var wife = baseWin.Context.Tree.GetPtrValue<GDMIndividualRecord>(family.Wife);
             if (wife != null) {
                 // selected family with wife
-                Logger.WriteError("BaseController.AddMother(): fail, because family already has mother");
-                result = true;
+                if (wife == mother) {
+                    result = true;
+                } else {
+                    Logger.WriteError("BaseController.AddMother(): unforeseen situation");
+                }
             } else {
                 // new family
                 result = localUndoman.DoOrdinaryOperation(OperationType.otFamilySpouseAttach, family, mother);

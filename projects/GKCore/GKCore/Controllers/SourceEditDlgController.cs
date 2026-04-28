@@ -72,21 +72,18 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
+                GDMCustomDate dt = fView.Date.Date;
+                if (dt == null) {
+                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.DateInvalid));
+                    return false;
+                }
+                fSourceRecord.Date.ParseString(dt.StringValue);
+
                 fSourceRecord.ShortTitle = fView.ShortTitle.Text;
                 fSourceRecord.Originator.SetLines(fView.Author.Lines);
                 fSourceRecord.Title.SetLines(fView.DescTitle.Lines);
                 fSourceRecord.Publication.SetLines(fView.Publication.Lines);
                 fSourceRecord.Text.SetLines(fView.Text.Lines);
-
-                try {
-                    GDMCustomDate dt = fView.Date.Date;
-                    if (dt == null) throw new ArgumentNullException("dt");
-
-                    fSourceRecord.Date.ParseString(dt.StringValue);
-                } catch (Exception) {
-                    AppHost.StdDialogs.ShowError(LangMan.LS(LSID.DateInvalid));
-                    throw;
-                }
 
                 if (!Validate(fSourceRecord)) return false;
 

@@ -7,7 +7,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Design;
@@ -70,15 +69,12 @@ namespace GKCore.Controllers
         public override bool Accept()
         {
             try {
-                try {
-                    GDMCustomDate dt = fView.Date.Date;
-                    if (dt == null) throw new ArgumentNullException("dt");
-
-                    fEvent.Date.ParseString(dt.StringValue);
-                } catch (Exception) {
+                GDMCustomDate dt = fView.Date.Date;
+                if (dt == null) {
                     AppHost.StdDialogs.ShowError(LangMan.LS(LSID.DateInvalid));
-                    throw;
+                    return false;
                 }
+                fEvent.Date.ParseString(dt.StringValue);
 
                 var eventDef = fView.EventType.GetSelectedTag<EventDef>();
                 if (eventDef.Kind == EventKind.ekFact) {
@@ -86,7 +82,7 @@ namespace GKCore.Controllers
 
                     if (string.IsNullOrEmpty(attrValue) && !eventDef.AcceptableEmpty) {
                         AppHost.StdDialogs.ShowError(LangMan.LS(LSID.FactValueIsInvalid));
-                        throw new Exception();
+                        return false;
                     }
 
                     fEvent.StringValue = attrValue;
@@ -117,7 +113,7 @@ namespace GKCore.Controllers
 
                 return true;
             } catch (Exception ex) {
-                Logger.WriteError("EventEditController.Accept()", ex);
+                Logger.WriteError("EventEditDlgController.Accept()", ex);
                 return false;
             }
         }

@@ -197,20 +197,21 @@ namespace GKCore.Charts
 
         protected static char GetLineChar(LineDir dir)
         {
-            return dir switch {
-                LineDir.Vertical => '│',
-                LineDir.Horizontal => '─',
-                (LineDir.Down | LineDir.Right) => '┌',
-                (LineDir.Down | LineDir.Left) => '┐',
-                (LineDir.Up | LineDir.Right) => '└',
-                (LineDir.Up | LineDir.Left) => '┘',
-                (LineDir.Vertical | LineDir.Right) => '├',
-                (LineDir.Vertical | LineDir.Left) => '┤',
-                (LineDir.Horizontal | LineDir.Down) => '┬',
-                (LineDir.Horizontal | LineDir.Up) => '┴',
-                (LineDir.Vertical | LineDir.Horizontal) => '┼',
-                _ => ' '
-            };
+            switch (dir) {
+                case LineDir.Vertical: return '│';
+                case LineDir.Horizontal: return '─';
+                case LineDir.Down | LineDir.Right: return '┌';
+                case LineDir.Down | LineDir.Left: return '┐';
+                case LineDir.Up | LineDir.Right: return '└';
+                case LineDir.Up | LineDir.Left: return '┘';
+                case LineDir.Vertical | LineDir.Right: return '├';
+                case LineDir.Vertical | LineDir.Left: return '┤';
+                case LineDir.Horizontal | LineDir.Down: return '┬';
+                case LineDir.Horizontal | LineDir.Up: return '┴';
+                case LineDir.Vertical | LineDir.Horizontal: return '┼';
+                default:
+                    return ' ';
+            }
         }
 
         #endregion
@@ -238,8 +239,9 @@ namespace GKCore.Charts
         public override void BeginDrawing()
         {
             fWriter = new StreamWriter(new FileStream(fFileName, FileMode.Create, FileAccess.Write), Encoding.UTF8);
-            fImage = new char[fHeight * fWidth];
-            Array.Fill(fImage, ' ');
+            int size = fHeight * fWidth;
+            fImage = new char[size];
+            for (int i = 0; i < size; i++) fImage[i] = ' ';
         }
 
         public override void EndDrawing()

@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using GDModel;
 
 namespace GKCore.Filters
@@ -78,6 +79,24 @@ namespace GKCore.Filters
             fConditions.AddRange(other.fConditions);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static int CompareObjects(object a, object b)
+        {
+            if (a == null && b == null) return 0;
+            if (a == null) return -1;
+            if (b == null) return 1;
+
+            if (a.GetType() != b.GetType()) {
+                throw new ArgumentException("Objects must be of the same type");
+            }
+
+            if (a is IComparable comparable) {
+                return comparable.CompareTo(b);
+            }
+
+            throw new ArgumentException("The type does not support comparison (IComparable)");
+        }
+
         internal static bool CheckCondition(ColumnConditionExpression fcond, object dataval)
         {
             bool res = true;
@@ -88,7 +107,7 @@ namespace GKCore.Filters
 
                 int compRes = 0;
                 if (fcond.Operator < ConditionOperator.Contains) {
-                    compRes = ((IComparable)dataval).CompareTo(fcond.Value);
+                    compRes = CompareObjects(dataval, fcond.Value);
                 }
 
                 switch (fcond.Operator) {

@@ -127,7 +127,7 @@ namespace GKCore.Media
                     if (zip != null) zip.Dispose();
                 }
                 result = true;
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 Logger.WriteError(string.Format("ArchiveMediaStore.SaveCopy({0}, {1})", sourceFileName, targetFileName), ex);
                 result = false;
             }

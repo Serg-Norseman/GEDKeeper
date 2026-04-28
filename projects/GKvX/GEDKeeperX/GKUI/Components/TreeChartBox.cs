@@ -307,6 +307,11 @@ namespace GKUI.Components
             return fModel.GetOffsets();
         }
 
+        public void ResetBackground()
+        {
+            //fBackgroundImage = null;
+        }
+
         private void DrawBackground(RenderTarget target, BackgroundMode background)
         {
             /*switch (background) {

@@ -106,6 +106,9 @@ namespace GKCore.Kinships
 
         public string DetermineKinship(GDMIndividualRecord targetRec, bool fullFormat = false, bool shortForm = false)
         {
+            if (!fKinshipsCulture.IsLoaded)
+                return "!KSC";
+
             if (targetRec == null) return "???";
             Vertex target = fGraph.FindVertex(targetRec.XRef);
             if (target == null) return "???";

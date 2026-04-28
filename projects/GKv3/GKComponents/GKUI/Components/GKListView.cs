@@ -307,9 +307,9 @@ namespace GKUI.Components
 
         public object GetSelectedData()
         {
-            if (SelectedRow < 0) return null;
-
             try {
+                if (SelectedRow < 0) return null;
+
                 return (fListMan != null && SelectedItem is ContentItem item) ? item.Record : base.SelectedItem;
             } catch (Exception ex) {
                 Logger.WriteError("GKListView.GetSelectedData()", ex);

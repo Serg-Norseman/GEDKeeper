@@ -184,6 +184,10 @@ namespace GKCore.Kinships
 
         public Dictionary<int, int> KinshipTypeIndexes { get; set; }
 
+        public bool IsLoaded
+        {
+            get { return KinshipTypeIndexes.Count > 0; }
+        }
 
         public KinshipsCulture()
         {
@@ -289,27 +293,28 @@ namespace GKCore.Kinships
                 new KSTypeEntry(41, "ktAunt_UncleWife", "", false),
             };
 
+            var emptyStrArr = new string[0];
             Definitions = new KSDefinitionEntry[] {
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktNone" },
                     new string[] {"ktFather", "ktMother", "ktHusband", "ktWife", "ktSon", "ktDaughter" },
                     "ktSame", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktHusband", "ktWife"},
                     new string[] {"ktSon", "ktDaughter"},
                     "ktSame", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktMother"},
                     new string[] {"ktHusband"},
                     "ktMothersHusband", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktFather"},
                     new string[] {"ktWife"},
                     "ktFathersWife", 0, 0),
@@ -339,205 +344,205 @@ namespace GKCore.Kinships
                     "ktAunt_MotherSister", -1, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktAunt_FatherSister", "ktAunt_MotherSister"},
                     new string[] {"ktHusband"},
                     "ktUncle_AuntHusband", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktUncle_FatherBrother", "ktUncle_MotherBrother"},
                     new string[] {"ktWife"},
                     "ktAunt_UncleWife", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktBrother", "ktSister"},
                     new string[] {"ktSon"},
                     "ktNephew", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktBrother", "ktSister"},
                     new string[] {"ktDaughter"},
                     "ktNiece", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktSon", "ktBrother"},
                     new string[] {"ktWife"},
                     "ktDaughterInLaw", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktDaughter", "ktSister"},
                     new string[] {"ktHusband"},
                     "ktSonInLaw", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktWife"},
                     new string[] {"ktFather"},
                     "ktWifeFather", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktWife"},
                     new string[] {"ktMother"},
                     "ktWifeMother", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktHusband"},
                     new string[] {"ktFather"},
                     "ktHusbandFather", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktHusband"},
                     new string[] {"ktMother"},
                     "ktHusbandMother", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktFather", "ktMother"},
                     new string[] {"ktFather"},
                     "ktGrandfather", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktFather", "ktMother"},
                     new string[] {"ktMother"},
                     "ktGrandmother", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktGrandfather", "ktGrandmother"},
                     new string[] {"ktFather"},
                     "ktGrandfather", +1, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktGrandfather", "ktGrandmother"},
                     new string[] {"ktMother"},
                     "ktGrandmother", +1, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktFather", "ktMother"},
                     new string[] {"ktSon"},
                     "ktBrother", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktFather", "ktMother"},
                     new string[] {"ktDaughter"},
                     "ktSister", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktSon", "ktDaughter", "ktSonInLaw", "ktDaughterInLaw"},
                     new string[] {"ktSon"},
                     "ktGrandson", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktSon", "ktDaughter", "ktSonInLaw", "ktDaughterInLaw"},
                     new string[] {"ktDaughter"},
                     "ktGranddaughter", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktGrandson", "ktGranddaughter"},
                     new string[] {"ktSon"},
                     "ktGrandson", +1, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktGrandson", "ktGranddaughter"},
                     new string[] {"ktDaughter"},
                     "ktGranddaughter", +1, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktUncle_FatherBrother", "ktUncle_MotherBrother", "ktUncle_AuntHusband", "ktAunt_FatherSister", "ktAunt_MotherSister", "ktAunt_UncleWife"},
                     new string[] {"ktSon"},
                     "ktBrother", 0, +1),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktUncle_FatherBrother", "ktUncle_MotherBrother", "ktUncle_AuntHusband", "ktAunt_FatherSister", "ktAunt_MotherSister", "ktAunt_UncleWife"},
                     new string[] {"ktDaughter"},
                     "ktSister", 0, +1),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktNephew", "ktNiece"},
                     new string[] {"ktSon"},
                     "ktGrandson", +1, +1),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktNephew", "ktNiece"},
                     new string[] {"ktDaughter"},
                     "ktGranddaughter", +1, +1),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktHusband"},
                     new string[] {"ktBrother"},
                     "ktBrotherInLaw_H", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktWife"},
                     new string[] {"ktBrother"},
                     "ktBrotherInLaw_W", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktHusbandFather", "ktHusbandMother"},
                     new string[] {"ktSon"},
                     "ktBrotherInLaw_H", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktWifeFather", "ktWifeMother"},
                     new string[] {"ktSon"},
                     "ktBrotherInLaw_W", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktHusband"},
                     new string[] {"ktSister"},
                     "ktSisterInLaw_H", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktWife"},
                     new string[] {"ktSister"},
                     "ktSisterInLaw_W", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktHusbandFather", "ktHusbandMother"},
                     new string[] {"ktDaughter"},
                     "ktSisterInLaw_H", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktWifeFather", "ktWifeMother"},
                     new string[] {"ktDaughter"},
                     "ktSisterInLaw_W", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktBrotherInLaw_H", "ktBrotherInLaw_W", "ktSisterInLaw_H", "ktSisterInLaw_W"},
                     new string[] {"ktSon"},
                     "ktNephew", 0, 0),
 
                 new KSDefinitionEntry(
-                    new string[0],
+                    emptyStrArr,
                     new string[] {"ktBrotherInLaw_H", "ktBrotherInLaw_W", "ktSisterInLaw_H", "ktSisterInLaw_W"},
                     new string[] {"ktDaughter"},
                     "ktNiece", 0, 0),
