@@ -3,8 +3,6 @@
  * (http://www.codeproject.com/Articles/19682/A-Pure-NET-Single-Instance-Application-Solution)
  */
 
-#if !TERM
-
 // Cancelled forever. Do not use!
 //#define IPC_SUPPORTS
 
@@ -204,5 +202,3 @@ namespace GKCore.Utilities
         }
     }
 }
-
-#endif

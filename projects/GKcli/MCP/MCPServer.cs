@@ -82,8 +82,11 @@ internal class MCPServer
         fJsonOptions = new JsonSerializerOptions {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             WriteIndented = false,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         };
+        fJsonOptions.Converters.Add(
+            new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+        );
     }
 
     /// <summary>
@@ -206,7 +209,7 @@ internal class MCPServer
         // during the initialization process between the client and the server!
 
         var result = new MCPInitializeResult {
-            ProtocolVersion = "2025-06-18", //"2024-11-05",
+            ProtocolVersion = "2025-11-25", //"2025-06-18", //"2024-11-05",
             Capabilities = new MCPCapabilities {
                 Tools = new MCPToolsCapability { ListChanged = false },
                 Resources = new MCPResourcesCapability { Subscribe = false, ListChanged = false },

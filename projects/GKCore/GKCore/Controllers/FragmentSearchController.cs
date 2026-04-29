@@ -205,7 +205,7 @@ namespace GKCore.Controllers
                             groupNum++;
                             var groupRecords = new List<GDMRecord>();
 
-                            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, groupRecords);
+                            TreeTools.WalkTree(tree, iRec, TreeWalkMode.twmAll, groupRecords);
 
                             int groupSize = groupRecords.Count;
                             float quality = 0.0f;

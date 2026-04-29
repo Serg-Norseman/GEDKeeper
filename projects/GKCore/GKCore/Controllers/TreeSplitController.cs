@@ -88,13 +88,13 @@ namespace GKCore.Controllers
             }
         }
 
-        public void Select(TreeTools.TreeWalkMode walkMode)
+        public void Select(TreeWalkMode walkMode)
         {
             fIndiMode = true;
             Select(fBase.GetSelectedPerson(), walkMode);
         }
 
-        public void Select(GDMIndividualRecord startPerson, TreeTools.TreeWalkMode walkMode)
+        public void Select(GDMIndividualRecord startPerson, TreeWalkMode walkMode)
         {
             fSplitList.Clear();
 

@@ -19,6 +19,7 @@ using GKCore.Locales;
 using GKCore.Names;
 using GKCore.Options;
 using GKCore.Stats;
+using GKCore.Tools;
 using GKTests;
 using GKTests.Stubs;
 using NSubstitute;
@@ -2080,7 +2081,7 @@ namespace GKCore.Controllers
 
             controller.UpdateView();
 
-            controller.Select(iRec, Tools.TreeTools.TreeWalkMode.twmAll);
+            controller.Select(iRec, TreeWalkMode.twmAll);
 
             // FIXME
             //ClickButton("btnSelectFamily", form);

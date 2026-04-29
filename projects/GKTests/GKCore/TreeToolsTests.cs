@@ -15,6 +15,7 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Kinships;
 using GKTests;
 using GKTests.Stubs;
 using NSubstitute;
@@ -179,7 +180,7 @@ namespace GKCore.Tools
             Assert.IsNotNull(placeObj.Facts);
         }
 
-        private static bool WalkProc(GDMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)
+        private static bool WalkProc(GDMIndividualRecord iRec, GDMIndividualRecord prevRec, KinshipType kinshipType, int generation, TreeWalkMode mode, object extData)
         {
             return true;
         }
@@ -192,17 +193,17 @@ namespace GKCore.Tools
 
             var tree = fBaseWin.Context.Tree;
             List<GDMRecord> walkList = new List<GDMRecord>();
-            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, walkList);
+            TreeTools.WalkTree(tree, iRec, TreeWalkMode.twmAll, walkList);
             Assert.AreEqual(5, walkList.Count, "TreeTools.TreeWalk(twmAll)"); // 3 linked from 4 total
 
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(tree, null, TreeTools.TreeWalkMode.twmAll, null); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(tree, null, TreeWalkMode.twmAll, null); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(tree, iRec, TreeWalkMode.twmAll, null); });
 
 
             object extData = null;
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(tree, null, TreeTools.TreeWalkMode.twmAll, WalkProc, extData); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, null, extData); });
-            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, WalkProc, extData); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(tree, null, TreeWalkMode.twmAll, WalkProc, extData); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(tree, iRec, TreeWalkMode.twmAll, null, extData); });
+            Assert.Throws(typeof(ArgumentNullException), () => { TreeTools.WalkTree(tree, iRec, TreeWalkMode.twmAll, WalkProc, extData); });
         }
 
         [Test]

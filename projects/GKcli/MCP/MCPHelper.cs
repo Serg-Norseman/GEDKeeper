@@ -53,7 +53,7 @@ public static class MCPHelper
         return MCPContent.CreateSimpleContent(lines.ToString());
     }
 
-    internal static List<MCPContent> CreateImageContent(Stream imageStream, string mimeType)
+    internal static List<MCPContent> CreateImageContent(Stream imageStream, string mimeType, Role[] audience, float priority)
     {
         string base64Data;
         if (imageStream is MemoryStream memStream) {
@@ -64,7 +64,7 @@ public static class MCPHelper
                 base64Data = Convert.ToBase64String(ms.ToArray());
             }
         }
-        return MCPContent.CreateImageContent(base64Data, mimeType);
+        return MCPContent.CreateImageContent(base64Data, mimeType, audience, priority);
     }
 
     internal static bool HasArg(JsonElement args, string argName)

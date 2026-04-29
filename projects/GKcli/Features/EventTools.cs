@@ -300,7 +300,7 @@ internal class GEDCOMDateSpecTool : BaseTool
 
     public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        return MCPContent.CreateSimpleContent(RuntimeData.GetDateSpec());
+        return MCPContent.CreateSimpleContent(RuntimeData.GetDateSpec(), [Role.Assistant], 1.0f);
     }
 }
 

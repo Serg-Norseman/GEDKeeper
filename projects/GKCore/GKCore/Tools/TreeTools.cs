@@ -16,11 +16,22 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Design;
 using GKCore.Design.Controls;
+using GKCore.Kinships;
 using GKCore.Lists;
 using GKCore.Locales;
 
 namespace GKCore.Tools
 {
+    public enum TreeWalkMode
+    {
+        twmAll,
+        twmFamily,
+        twmAncestors,
+        twmDescendants,
+        twmNone
+    }
+
+
     /// <summary>
     ///
     /// </summary>
@@ -156,18 +167,9 @@ namespace GKCore.Tools
 
         #region Tree Walk
 
-        public enum TreeWalkMode
-        {
-            twmAll,
-            twmFamily,
-            twmAncestors,
-            twmDescendants,
-            twmNone
-        }
+        public delegate bool WalkProc<T>(GDMIndividualRecord iRec, GDMIndividualRecord prevRec, KinshipType kinshipType, int generation, TreeWalkMode mode, T extData);
 
-        public delegate bool WalkProc(GDMIndividualRecord iRec, TreeWalkMode mode, object extData);
-
-        public static void WalkTree(GDMTree tree, GDMIndividualRecord iRec, TreeWalkMode mode, WalkProc walkProc, object extData)
+        public static void WalkTree<T>(GDMTree tree, GDMIndividualRecord iRec, TreeWalkMode mode, WalkProc<T> walkProc, T extData)
         {
             if (tree == null)
                 throw new ArgumentNullException(nameof(tree));
@@ -181,7 +183,7 @@ namespace GKCore.Tools
             if (extData == null)
                 throw new ArgumentNullException(nameof(extData));
 
-            WalkTreeInt(tree, iRec, mode, walkProc, extData);
+            WalkTreeInt(tree, iRec, null, KinshipType.ktNone, 0, mode, walkProc, extData);
         }
 
         public static void WalkTree(GDMTree tree, GDMIndividualRecord iRec, TreeWalkMode mode, List<GDMRecord> walkList)
@@ -195,12 +197,12 @@ namespace GKCore.Tools
             if (walkList == null)
                 throw new ArgumentNullException(nameof(walkList));
 
-            WalkTreeInt(tree, iRec, mode, DefaultWalkProc, walkList);
+            WalkTreeInt(tree, iRec, null, KinshipType.ktNone, 0, mode, DefaultWalkProc, walkList);
         }
 
-        private static bool DefaultWalkProc(GDMIndividualRecord iRec, TreeWalkMode mode, object extData)
+        private static bool DefaultWalkProc(GDMIndividualRecord iRec, GDMIndividualRecord prevRec, KinshipType kinshipType, int generation, TreeWalkMode mode, List<GDMRecord> extData)
         {
-            List<GDMRecord> walkList = (List<GDMRecord>)extData;
+            List<GDMRecord> walkList = extData;
             bool resContinue = (iRec != null && !walkList.Contains(iRec));
             if (resContinue) {
                 walkList.Add(iRec);
@@ -208,9 +210,9 @@ namespace GKCore.Tools
             return resContinue;
         }
 
-        private static void WalkTreeInt(GDMTree tree, GDMIndividualRecord iRec, TreeWalkMode mode, WalkProc walkProc, object extData)
+        private static void WalkTreeInt<T>(GDMTree tree, GDMIndividualRecord iRec, GDMIndividualRecord prevRec, KinshipType kinshipType, int generation, TreeWalkMode mode, WalkProc<T> walkProc, T extData)
         {
-            if (iRec == null || !walkProc(iRec, mode, extData)) return;
+            if (iRec == null || !walkProc(iRec, prevRec, kinshipType, generation, mode, extData)) return;
 
             if (mode == TreeWalkMode.twmNone) return;
 
@@ -221,8 +223,8 @@ namespace GKCore.Tools
                         GDMIndividualRecord father, mother;
                         tree.GetSpouses(family, out father, out mother);
 
-                        WalkTreeInt(tree, father, mode, walkProc, extData);
-                        WalkTreeInt(tree, mother, mode, walkProc, extData);
+                        WalkTreeInt(tree, father, iRec, KinshipType.ktFather, generation - 1, mode, walkProc, extData);
+                        WalkTreeInt(tree, mother, iRec, KinshipType.ktMother, generation - 1, mode, walkProc, extData);
                     }
                 }
             }
@@ -235,7 +237,7 @@ namespace GKCore.Tools
                     GDMIndividualRecord spouse = (iRec.Sex == GDMSex.svMale) ? tree.GetPtrValue(family.Wife) : tree.GetPtrValue(family.Husband);
 
                     TreeWalkMode intMode = ((mode == TreeWalkMode.twmAll) ? TreeWalkMode.twmAll : TreeWalkMode.twmNone);
-                    WalkTreeInt(tree, spouse, intMode, walkProc, extData);
+                    WalkTreeInt(tree, spouse, iRec, KinshipType.ktSpouse, generation, intMode, walkProc, extData);
 
                     switch (mode) {
                         case TreeWalkMode.twmAll:
@@ -254,7 +256,7 @@ namespace GKCore.Tools
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++) {
                         GDMIndividualRecord child = tree.GetPtrValue(family.Children[j]);
-                        WalkTreeInt(tree, child, intMode, walkProc, extData);
+                        WalkTreeInt(tree, child, iRec, KinshipType.ktChild, generation + 1, intMode, walkProc, extData);
                     }
                 }
             }

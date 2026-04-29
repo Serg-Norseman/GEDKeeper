@@ -26,6 +26,7 @@ using GDModel;
 using GDModel.Providers.GEDCOM;
 using GEDmill.Model;
 using GKCore;
+using GKCore.Kinships;
 using GKCore.Tools;
 using GKL = GKCore.Logging;
 
@@ -182,7 +183,7 @@ namespace GEDmill
             }
         }
 
-        private static bool RestrictProc(GDMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)
+        private static bool RestrictProc(GDMIndividualRecord iRec, GDMIndividualRecord prevRec, KinshipType kinshipType, int generation, TreeWalkMode mode, object extData)
         {
             bool visible = (bool)extData;
             GMHelper.SetVisibility(iRec, visible);
@@ -191,15 +192,15 @@ namespace GEDmill
 
         public static void RestrictAncestors(GDMTree tree, GDMIndividualRecord iRec, bool visible)
         {
-            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAncestors, RestrictProc, visible);
+            TreeTools.WalkTree(tree, iRec, TreeWalkMode.twmAncestors, RestrictProc, (object)visible);
         }
 
         public static void RestrictDescendants(GDMTree tree, GDMIndividualRecord iRec, bool visible)
         {
-            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmDescendants, RestrictProc, visible);
+            TreeTools.WalkTree(tree, iRec, TreeWalkMode.twmDescendants, RestrictProc, (object)visible);
         }
 
-        private static bool MarkProc(GDMIndividualRecord iRec, TreeTools.TreeWalkMode mode, object extData)
+        private static bool MarkProc(GDMIndividualRecord iRec, GDMIndividualRecord prevRec, KinshipType kinshipType, int generation, TreeWalkMode mode, object extData)
         {
             var marks = (List<GDMRecord>)extData;
             marks.Add(iRec);
@@ -208,7 +209,7 @@ namespace GEDmill
 
         public static void MarkConnected(GDMTree tree, GDMIndividualRecord iRec, List<GDMRecord> marks)
         {
-            TreeTools.WalkTree(tree, iRec, TreeTools.TreeWalkMode.twmAll, MarkProc, marks);
+            TreeTools.WalkTree(tree, iRec, TreeWalkMode.twmAll, MarkProc, marks);
         }
 
         public static void RestrictUnmarked(GDMTree tree, List<GDMRecord> marks, out int changed)

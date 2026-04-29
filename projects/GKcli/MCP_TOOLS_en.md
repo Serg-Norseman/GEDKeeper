@@ -207,6 +207,14 @@ allowing LLM clients to interact with genealogical databases through a set of to
 
 ---
 
+## Pedigree
+
+| Tool | Description | Parameters |
+|---|---|---|
+| `pedigree_traverse` | Traverse pedigree in a specified direction from an individual | `individual_xref` (string), `direction` (string), `depth` (integer, default 1), `output_format` (string) |
+
+---
+
 ## TODO
 
 1. In the "Implementation Features" section, it states that fuzzy search has an adjustable threshold, but the `individual_search` tool description specifies a fixed 16% threshold, which creates confusion.

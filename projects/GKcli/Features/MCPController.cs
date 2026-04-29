@@ -157,6 +157,9 @@ internal class MCPController
         RegisterTool(new LocationUpsertTopLinkTool());
         RegisterTool(new LocationDeleteTopLinkTool());
 
+        // Pedigree operations
+        RegisterTool(new PedigreeTraverseTool());
+
         // Tools
         RegisterTool(new TreeCompareTool());
         RegisterTool(new TreeSplitTool());

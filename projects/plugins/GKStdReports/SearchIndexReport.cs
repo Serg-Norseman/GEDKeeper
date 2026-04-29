@@ -13,6 +13,7 @@ using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Export;
 using GKCore.Export.Formats;
+using GKCore.Kinships;
 using GKCore.Locales;
 using GKCore.Tools;
 using static GKCore.Tools.TreeTools;
@@ -77,7 +78,7 @@ namespace GKStdReports
             fWriter.EndTable();
         }
 
-        private static bool DescWalkProc(GDMIndividualRecord iRec, TreeWalkMode mode, object extData)
+        private static bool DescWalkProc(GDMIndividualRecord iRec, GDMIndividualRecord prevRec, KinshipType kinshipType, int generation, TreeWalkMode mode, object extData)
         {
             bool resContinue = true;
 

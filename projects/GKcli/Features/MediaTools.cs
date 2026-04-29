@@ -44,14 +44,14 @@ internal class MediaGetTool : BaseTool
 
         var mediaRec = baseContext.Tree.FindXRef<GDMMultimediaRecord>(xref);
         if (mediaRec == null)
-            return MCPContent.CreateSimpleContent($"Multimedia record not found with XRef: {xref}");
+            return MCPContent.CreateSimpleContent($"❌ Multimedia record not found with XRef: {xref}");
 
         GDMFileReferenceWithTitle fileRef = mediaRec.FileReferences[0];
         if (fileRef == null)
-            return MCPContent.CreateSimpleContent($"Media record {xref} contains no files");
+            return MCPContent.CreateSimpleContent($"❌ Media record {xref} contains no files");
 
         if (!GKUtils.UseEmbeddedViewer(fileRef.GetMultimediaFormat())) {
-            return MCPContent.CreateSimpleContent($"Media record {xref} could not be transferred");
+            return MCPContent.CreateSimpleContent($"❌ Media record {xref} could not be transferred");
         } else {
             //fView.SetTitle(fFileReference.Title);
 
@@ -68,7 +68,7 @@ internal class MediaGetTool : BaseTool
                                     string mimeType = fileRef.MultimediaFormat;
                                     if (mimeType == "jpg") mimeType = "jpeg";
 
-                                    return MCPHelper.CreateImageContent(fs, mimeType);
+                                    return MCPHelper.CreateImageContent(fs, mimeType, [Role.User, Role.Assistant], 0.5f);
                                 } finally {
                                     fs.Dispose();
                                 }
@@ -78,7 +78,7 @@ internal class MediaGetTool : BaseTool
 
                     case MultimediaKind.mkAudio:
                     case MultimediaKind.mkVideo:
-                        return MCPContent.CreateSimpleContent($"Media record {xref} could not be transferred (audio/video)");
+                        return MCPContent.CreateSimpleContent($"❌ Media record {xref} could not be transferred (audio/video)");
 
                     case MultimediaKind.mkText: {
                             Stream fs = baseContext.MediaLoad(fileRef, false);
@@ -105,9 +105,9 @@ internal class MediaGetTool : BaseTool
                                             break;
                                     }
                                     if (!string.IsNullOrEmpty(text)) {
-                                        return MCPContent.CreateSimpleContent(text);
+                                        return MCPContent.CreateSimpleContent(text, [Role.User, Role.Assistant], 0.5f);
                                     } else {
-                                        return MCPContent.CreateSimpleContent($"Media record {xref} could not be transferred (unsupported text format)");
+                                        return MCPContent.CreateSimpleContent($"❌ Media record {xref} could not be transferred (unsupported text format)");
                                     }
                                 } finally {
                                     fs.Dispose();

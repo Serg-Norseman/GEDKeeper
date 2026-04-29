@@ -13,6 +13,7 @@ using GKCore;
 using GKCore.Events;
 using GKCore.Locales;
 using GKCore.Media;
+using GKCore.Tools;
 
 namespace GKcli.Platform;
 
@@ -56,6 +57,13 @@ internal static class RuntimeData
     public static readonly Dictionary<string, GDMPedigreeLinkageType> LinkageTypeMap;
 
     public static readonly Dictionary<string, GDMRestriction> RestrictionMap;
+
+    public static readonly Dictionary<string, TreeWalkMode> TraverseDirectionMap = new Dictionary<string, TreeWalkMode>(StringComparer.OrdinalIgnoreCase) {
+        //["All"] = TreeWalkMode.twmAll,
+        //["Family"] = TreeWalkMode.twmFamily,
+        ["Ancestors"] = TreeWalkMode.twmAncestors,
+        ["Descendants"] = TreeWalkMode.twmDescendants,
+    };
 
     static RuntimeData()
     {
@@ -114,7 +122,7 @@ internal static class RuntimeData
     {
         // Parser accepts BC, BCE and B.C.
 
-        return @"
+        const string dateSpec = @"
 Condensed GEDCOM Date Spec.
 Format: [Modifier] [Day] [Month] [Year] [Suffix].
 1. Basic parts:
@@ -137,5 +145,7 @@ Format: [Modifier] [Day] [Month] [Year] [Suffix].
 - Non-standard: ([TEXT]) - text in parentheses if date is not formalized and must also be written in UPPERCASE.
 - Nested modifiers are not allowed.
 ";
+
+        return dateSpec.Replace("\r\n", "\n");
     }
 }

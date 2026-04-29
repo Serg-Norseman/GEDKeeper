@@ -41,22 +41,22 @@ namespace GKUI.Forms
 
         private void btnSelectFamily_Click(object sender, EventArgs e)
         {
-            fController.Select(TreeTools.TreeWalkMode.twmFamily);
+            fController.Select(TreeWalkMode.twmFamily);
         }
 
         private void btnSelectAncestors_Click(object sender, EventArgs e)
         {
-            fController.Select(TreeTools.TreeWalkMode.twmAncestors);
+            fController.Select(TreeWalkMode.twmAncestors);
         }
 
         private void btnSelectDescendants_Click(object sender, EventArgs e)
         {
-            fController.Select(TreeTools.TreeWalkMode.twmDescendants);
+            fController.Select(TreeWalkMode.twmDescendants);
         }
 
         private void btnSelectAll_Click(object sender, EventArgs e)
         {
-            fController.Select(TreeTools.TreeWalkMode.twmAll);
+            fController.Select(TreeWalkMode.twmAll);
         }
 
         private void btnSelectList_Click(object sender, EventArgs e)
