@@ -33,6 +33,8 @@
         <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
         <PackageReference Include="Sharprompt" Version="3.0.1" />
         <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
+        <PackageReference Include="SmartComponents.LocalEmbeddings" Version="0.1.0-preview10148" />
+        <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
     </ItemGroup>
 
     <ItemGroup>
