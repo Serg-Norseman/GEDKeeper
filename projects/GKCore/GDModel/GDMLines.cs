@@ -20,6 +20,9 @@ namespace GDModel
         private const string LINE_BREAK = "\r\n";
 
 
+        /// <summary>
+        /// Assigning a string of text with safely platform-independent string splitting by newlines.
+        /// </summary>
         public string Text
         {
             get {

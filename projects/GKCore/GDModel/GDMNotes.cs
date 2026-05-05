@@ -61,6 +61,12 @@ namespace GDModel
             fLines.AddRange(value);
         }
 
+        public void SetLines(string text)
+        {
+            // built-in cleaning
+            fLines.Text = text;
+        }
+
         public override bool IsEmpty()
         {
             return fLines.IsEmpty();

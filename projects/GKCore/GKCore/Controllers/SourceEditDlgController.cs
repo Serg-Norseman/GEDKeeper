@@ -80,10 +80,10 @@ namespace GKCore.Controllers
                 fSourceRecord.Date.ParseString(dt.StringValue);
 
                 fSourceRecord.ShortTitle = fView.ShortTitle.Text;
-                fSourceRecord.Originator.SetLines(fView.Author.Lines);
-                fSourceRecord.Title.SetLines(fView.DescTitle.Lines);
-                fSourceRecord.Publication.SetLines(fView.Publication.Lines);
-                fSourceRecord.Text.SetLines(fView.Text.Lines);
+                fSourceRecord.Originator.SetLines(fView.Author.Text);
+                fSourceRecord.Title.SetLines(fView.DescTitle.Text);
+                fSourceRecord.Publication.SetLines(fView.Publication.Text);
+                fSourceRecord.Text.SetLines(fView.Text.Text);
 
                 if (!Validate(fSourceRecord)) return false;
 
