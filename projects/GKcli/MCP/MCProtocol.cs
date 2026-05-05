@@ -149,6 +149,8 @@ internal class MCPToolInputSchema
 
 /// <summary>
 /// MCP Tool property definition.
+/// Types: string (minLength, maxLength, pattern, enum, default), number, integer (minimum, maximum, default), boolean (default),
+/// array (items), object.
 /// </summary>
 internal class MCPToolProperty
 {

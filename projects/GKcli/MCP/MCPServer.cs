@@ -63,10 +63,8 @@ internal class MCPServer
         Log($"Initializing MCP server ({pid})...");
 
         // The list is generated after registration.
-        var commands = MCPController.GetTools();
-        // Register tools from commands
         fToolsList = new MCPToolsListResult() {
-            Tools = commands.Select(cmd => cmd.CreateTool()).Where(tl => tl != null).ToList()
+            Tools = MCPController.GetTools()
         };
 
         // Initialize resources

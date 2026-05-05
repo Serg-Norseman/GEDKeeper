@@ -32,6 +32,14 @@ allowing LLM clients to interact with genealogical databases through a set of to
 
 ---
 
+## Main Options
+
+- `--mcp` - option to run the CLI application in MCP server mode; basic and mandatory.
+- `--pure` - option to use only tools for working with standard GEDCOM structures and records.
+- `--tde` - option for the `Tool Discovery & Execution` operating mode, for maximum savings on system prompt tokens.
+
+---
+
 ## File Operations
 
 | Tool | Description | Parameters |

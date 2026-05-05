@@ -72,6 +72,14 @@ public static class MCPHelper
         return args.TryGetProperty(argName, out var argElem);
     }
 
+    internal static JsonElement GetRequiredObj(JsonElement args, string argName)
+    {
+        if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.Object)
+            throw new ArgumentException($"Missing required argument: {argName}");
+
+        return argElem;
+    }
+
     internal static string GetRequiredStr(JsonElement args, string argName)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.String)

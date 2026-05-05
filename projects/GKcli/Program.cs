@@ -29,8 +29,14 @@ internal class Program
             // Check if running in MCP mode
             bool mcpMode = Array.IndexOf(args, "--mcp") >= 0;
 
+            // Check if running in pure GEDCOM mode
+            bool pureMode = Array.IndexOf(args, "--pure") >= 0;
+
+            // Check if running in `Tool Discovery & Execution` mode
+            bool tdeMode = Array.IndexOf(args, "--tde") >= 0;
+
             if (mcpMode) {
-                RunMCPServer();
+                RunMCPServer(pureMode, tdeMode);
             } else {
                 RunInteractiveMode();
             }
@@ -39,10 +45,10 @@ internal class Program
         }
     }
 
-    private static void RunMCPServer()
+    private static void RunMCPServer(bool pureMode, bool tdeMode)
     {
         try {
-            MCPController.InitFeatures();
+            MCPController.InitFeatures(pureMode, tdeMode);
 
             var server = new MCPServer();
             server.Run();

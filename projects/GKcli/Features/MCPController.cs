@@ -19,14 +19,18 @@ internal class MCPController
 {
     private static readonly BaseContext fBaseContext = new BaseContext(null);
     private static readonly Dictionary<string, BaseTool> fTools = new Dictionary<string, BaseTool>();
+    private static readonly List<MCPTool> fMCPTools = new List<MCPTool>();
     private static readonly Dictionary<string, BaseResource> fResources = new Dictionary<string, BaseResource>();
+    private static bool fTDE = false;
 
     static MCPController()
     {
     }
 
-    public static void InitFeatures()
+    public static void InitFeatures(bool pureMode, bool tdeMode)
     {
+        fTDE = tdeMode;
+
         // Files operations
         RegisterTool(new FileNewTool());
         RegisterTool(new FileLoadTool());
@@ -71,8 +75,7 @@ internal class MCPController
         RegisterTool(new IndiSearchTool());
         RegisterTool(new IndividualUpsertTool());
 
-        RegisterTool(new IndiListSpousesTool()); // control through family tools
-        RegisterTool(new IndiListGroupsTool()); // control through group tools
+        RegisterTool(new IndiListSpousesTool()); // editing with family tools
 
         RegisterTool(new IndiListAssociationsTool());
         RegisterTool(new IndiUpsertAssociationTool());
@@ -118,44 +121,48 @@ internal class MCPController
         // Repositories operations
         RegisterTool(new RepositoryUpsertTool());
 
-        // Groups operations
-        RegisterTool(new GroupUpsertTool());
+        if (!pureMode) {
+            RegisterTool(new IndiListGroupsTool()); // editing with group tools
 
-        RegisterTool(new GroupListMembersTool());
-        RegisterTool(new GroupAddMemberTool());
-        RegisterTool(new GroupDeleteMemberTool());
+            // Groups operations
+            RegisterTool(new GroupUpsertTool());
 
-        // Tasks operations
-        RegisterTool(new TaskUpsertTool());
+            RegisterTool(new GroupListMembersTool());
+            RegisterTool(new GroupAddMemberTool());
+            RegisterTool(new GroupDeleteMemberTool());
 
-        // Researches operations
-        RegisterTool(new ResearchUpsertTool());
+            // Tasks operations
+            RegisterTool(new TaskUpsertTool());
 
-        RegisterTool(new ResearchListTasksTool());
-        RegisterTool(new ResearchAddTaskTool());
-        RegisterTool(new ResearchDeleteTaskTool());
+            // Researches operations
+            RegisterTool(new ResearchUpsertTool());
 
-        RegisterTool(new ResearchListCommunicationsTool());
-        RegisterTool(new ResearchAddCommunicationTool());
-        RegisterTool(new ResearchDeleteCommunicationTool());
+            RegisterTool(new ResearchListTasksTool());
+            RegisterTool(new ResearchAddTaskTool());
+            RegisterTool(new ResearchDeleteTaskTool());
 
-        RegisterTool(new ResearchListGroupsTool());
-        RegisterTool(new ResearchAddGroupTool());
-        RegisterTool(new ResearchDeleteGroupTool());
+            RegisterTool(new ResearchListCommunicationsTool());
+            RegisterTool(new ResearchAddCommunicationTool());
+            RegisterTool(new ResearchDeleteCommunicationTool());
 
-        // Communications operations
-        RegisterTool(new CommunicationUpsertTool());
+            RegisterTool(new ResearchListGroupsTool());
+            RegisterTool(new ResearchAddGroupTool());
+            RegisterTool(new ResearchDeleteGroupTool());
 
-        // Locations operations
-        RegisterTool(new LocationUpsertTool());
+            // Communications operations
+            RegisterTool(new CommunicationUpsertTool());
 
-        RegisterTool(new LocationListNamesTool());
-        RegisterTool(new LocationUpsertNameTool());
-        RegisterTool(new LocationDeleteNameTool());
+            // Locations operations
+            RegisterTool(new LocationUpsertTool());
 
-        RegisterTool(new LocationListTopLinksTool());
-        RegisterTool(new LocationUpsertTopLinkTool());
-        RegisterTool(new LocationDeleteTopLinkTool());
+            RegisterTool(new LocationListNamesTool());
+            RegisterTool(new LocationUpsertNameTool());
+            RegisterTool(new LocationDeleteNameTool());
+
+            RegisterTool(new LocationListTopLinksTool());
+            RegisterTool(new LocationUpsertTopLinkTool());
+            RegisterTool(new LocationDeleteTopLinkTool());
+        }
 
         // Pedigree operations
         RegisterTool(new PedigreeTraverseTool());
@@ -167,16 +174,32 @@ internal class MCPController
         RegisterTool(new TreeCheckTool());
         RegisterTool(new PatSearchTool());
         RegisterTool(new PlacesManagerTool());
+
+        if (tdeMode) {
+            RegisterTool(new SearchTool(), true);
+            RegisterTool(new UseTool(), true);
+        }
     }
 
-    private static void RegisterTool(BaseTool tool)
+    private static void RegisterTool(BaseTool tool, bool metaTool = false)
     {
         fTools.Add(tool.Sign, tool);
+
+        MCPTool mcpTool = tool.CreateTool();
+        if (mcpTool != null) {
+            if (fTDE && !metaTool) {
+                MCPToolDiscovery.Register(tool.Sign, mcpTool);
+            }
+
+            if (!fTDE || metaTool) {
+                fMCPTools.Add(mcpTool);
+            }
+        }
     }
 
-    internal static IEnumerable<BaseTool> GetTools()
+    internal static List<MCPTool> GetTools()
     {
-        return fTools.Values;
+        return fMCPTools;
     }
 
     public static List<MCPContent> ExecuteTool(string toolName, JsonElement args)
