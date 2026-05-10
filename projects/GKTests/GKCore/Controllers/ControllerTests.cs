@@ -1819,7 +1819,7 @@ namespace GKCore.Controllers
             Assert.AreEqual(0, src.RepositoryCitations.Count);*/
 
             view.ShortTitle.Text = "sample text";
-            view.Author.Lines.Returns(new string[] { "sample text" });
+            view.Author.Text.Returns("sample text");
             view.Date.Date = new GDMDate();
 
             controller.Accept();
