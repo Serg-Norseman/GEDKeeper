@@ -68,10 +68,24 @@ namespace GDModel.Providers.GEDCOM
     }
 
     /// <summary>
+    /// Character types used for parsing optimization.
+    /// </summary>
+    internal enum CharType : byte
+    {
+        Other = 0,
+        Whitespace = 1,
+        Letter = 2, // Alphabetical ASCII and Unicode characters and '_'
+        Digit = 3,
+        XRefDelimiter = 4,
+        EndOfLine = 5,
+        Symbol = 6 // Non-alphabetic ASCII characters
+    }
+
+    /// <summary>
     /// GEDCOMParser tokenized string into tokens.
     /// </summary>
     /// <remarks>
-    /// This class has been heavily refactored under profiling. Any alterations must take into account the factor 
+    /// This class has been heavily refactored under profiling. Any alterations must take into account the factor
     /// of performance degradation when changing the approach, even in small things.
     /// </remarks>
     public sealed class GEDCOMParser
@@ -79,6 +93,30 @@ namespace GDModel.Providers.GEDCOM
         public static readonly GEDCOMParser Default = new GEDCOMParser(false);
 
         private const char EOL = (char)0;
+
+        // Precomputed character type lookup table for performance optimization
+        private const int ExtASCIIRange = 256;
+        private static readonly CharType[] CharTypeTable = new CharType[ExtASCIIRange];
+
+        static GEDCOMParser()
+        {
+            // Initialize character type lookup table
+            for (int i = 0; i < ExtASCIIRange; i++) {
+                char ch = (char)i;
+                if (ch == ' ' || ch == '\t')
+                    CharTypeTable[i] = CharType.Whitespace;
+                else if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_' || char.IsLetter(ch))
+                    CharTypeTable[i] = CharType.Letter;
+                else if (ch >= '0' && ch <= '9')
+                    CharTypeTable[i] = CharType.Digit;
+                else if (ch == '@')
+                    CharTypeTable[i] = CharType.XRefDelimiter;
+                else if (ch == EOL)
+                    CharTypeTable[i] = CharType.EndOfLine;
+                else
+                    CharTypeTable[i] = CharType.Symbol;
+            }
+        }
 
         private GEDCOMToken fCurrentToken;
         private char[] fData;
@@ -162,98 +200,98 @@ namespace GDModel.Providers.GEDCOM
         {
             while (true) {
                 char ch = (fPos >= fLength) ? EOL : fData[fPos];
-                char ltr = (char)(ch | ' ');
+                CharType charType = (ch < ExtASCIIRange) ? CharTypeTable[ch] : CharType.Letter;
 
-                if ((ltr >= 'a' && ltr <= 'z') || ch == '_' || char.IsLetter(ch)) {
-                    fSavePos = fPos;
-                    fPos++;
-                    while (true) {
-                        ch = (fPos >= fLength) ? EOL : fData[fPos];
-                        ltr = (char)(ch | ' ');
-                        if ((ltr >= 'a' && ltr <= 'z') || ch == '_' || char.IsLetter(ch) || (!fPureWords && (ch >= '0' && ch <= '9'))) {
-                            fPos++;
-                        } else
-                            break;
-                    }
-
-                    fTokenEnd = fPos;
-                    fValueReset = true;
-                    fCurrentToken = GEDCOMToken.Word;
-                    return fCurrentToken;
-                }
-
-                if (ch >= '0' && ch <= '9') {
-                    fSavePos = fPos;
-                    fPos++;
-                    fIntValue = (ch - 48);
-                    while (true) {
-                        ch = (fPos >= fLength) ? EOL : fData[fPos];
-                        if (ch >= '0' && ch <= '9') {
-                            fPos++;
-                            fIntValue = (fIntValue * 10 + (ch - 48));
-                        } else
-                            break;
-                    }
-
-                    fTokenEnd = fPos;
-                    fValueReset = true;
-                    fCurrentToken = GEDCOMToken.Number;
-                    return fCurrentToken;
-                }
-
-                if (ch == ' ' || ch == '\t') {
-                    if (fIgnoreWhitespace) {
+                switch (charType) {
+                    case CharType.Letter:
+                        fSavePos = fPos;
                         fPos++;
-                        continue;
-                    }
-
-                    fSavePos = fPos;
-                    fPos++;
-
-                    if (!skipOneSpace) {
                         while (true) {
                             ch = (fPos >= fLength) ? EOL : fData[fPos];
-                            if (ch == ' ' || ch == '\t')
+                            charType = (ch < ExtASCIIRange) ? CharTypeTable[ch] : CharType.Letter;
+                            if (charType == CharType.Letter || (!fPureWords && charType == CharType.Digit)) {
                                 fPos++;
-                            else
+                            } else
                                 break;
                         }
-                    }
 
-                    fTokenEnd = fPos;
-                    fValueReset = true;
-                    fCurrentToken = GEDCOMToken.Whitespace;
-                    return fCurrentToken;
-                }
+                        fTokenEnd = fPos;
+                        fValueReset = true;
+                        fCurrentToken = GEDCOMToken.Word;
+                        return fCurrentToken;
 
-                if (ch == '@') {
-                    fSavePos = ++fPos;
-                    while (true) {
-                        ch = (fPos >= fLength) ? EOL : fData[fPos];
+                    case CharType.Digit:
+                        fSavePos = fPos;
                         fPos++;
-                        if (ch == '@') {
-                            fTokenEnd = fPos - 1;
-                            break;
+                        fIntValue = (ch - 48);
+                        while (true) {
+                            ch = (fPos >= fLength) ? EOL : fData[fPos];
+                            charType = (ch < 256) ? CharTypeTable[ch] : CharType.Symbol;
+                            if (charType == CharType.Digit) {
+                                fPos++;
+                                fIntValue = (fIntValue * 10 + (ch - 48));
+                            } else
+                                break;
                         }
-                    }
 
-                    fValueReset = true;
-                    fCurrentToken = GEDCOMToken.XRef;
-                    return fCurrentToken;
-                }
+                        fTokenEnd = fPos;
+                        fValueReset = true;
+                        fCurrentToken = GEDCOMToken.Number;
+                        return fCurrentToken;
 
-                if (ch == EOL) {
-                    fValueReset = true;
-                    fCurrentToken = GEDCOMToken.EOL;
-                    return fCurrentToken;
-                } else {
-                    fSavePos = fPos;
-                    fPos++;
+                    case CharType.Whitespace:
+                        if (fIgnoreWhitespace) {
+                            fPos++;
+                            continue;
+                        }
 
-                    fTokenEnd = fPos;
-                    fValueReset = true;
-                    fCurrentToken = GEDCOMToken.Symbol;
-                    return fCurrentToken;
+                        fSavePos = fPos;
+                        fPos++;
+
+                        if (!skipOneSpace) {
+                            while (true) {
+                                ch = (fPos >= fLength) ? EOL : fData[fPos];
+                                charType = (ch < ExtASCIIRange) ? CharTypeTable[ch] : CharType.Symbol;
+                                if (charType == CharType.Whitespace)
+                                    fPos++;
+                                else
+                                    break;
+                            }
+                        }
+
+                        fTokenEnd = fPos;
+                        fValueReset = true;
+                        fCurrentToken = GEDCOMToken.Whitespace;
+                        return fCurrentToken;
+
+                    case CharType.XRefDelimiter:
+                        fSavePos = ++fPos;
+                        while (true) {
+                            ch = (fPos >= fLength) ? EOL : fData[fPos];
+                            fPos++;
+                            if (ch == '@') {
+                                fTokenEnd = fPos - 1;
+                                break;
+                            }
+                        }
+
+                        fValueReset = true;
+                        fCurrentToken = GEDCOMToken.XRef;
+                        return fCurrentToken;
+
+                    case CharType.EndOfLine:
+                        fValueReset = true;
+                        fCurrentToken = GEDCOMToken.EOL;
+                        return fCurrentToken;
+
+                    default: // Symbol
+                        fSavePos = fPos;
+                        fPos++;
+
+                        fTokenEnd = fPos;
+                        fValueReset = true;
+                        fCurrentToken = GEDCOMToken.Symbol;
+                        return fCurrentToken;
                 }
             }
         }
