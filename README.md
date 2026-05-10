@@ -60,7 +60,8 @@ and a lack of resources to migrate to another framework, support has been tempor
 ### [GKcli](./projects/GKcli/README.md)
 
 An interactive terminal application for GEDKeeper, designed to provide powerful genealogical data management tools
-through both direct text interaction and integration with LLM clients via the Model Context Protocol (MCP).
+through both direct text interaction and integration with LLM clients via the MCP (Model Context Protocol),
+RAG (Retrieval-Augmented Generation) and LM Assistant Roles.
 
 ### GEDKeeperT
 
