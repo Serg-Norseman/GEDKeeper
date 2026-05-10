@@ -37,6 +37,7 @@ allowing LLM clients to interact with genealogical databases through a set of to
 - `--mcp` - option to run the CLI application in MCP server mode; basic and mandatory.
 - `--pure` - option to use only tools for working with standard GEDCOM structures and records.
 - `--tde` - option for the `Tool Discovery & Execution` operating mode, for maximum savings on system prompt tokens.
+- `--rag` - option to enable Retrieval-Augmented Generation tools for parsing historical documents with archaic spelling.
 
 ---
 
@@ -220,6 +221,15 @@ allowing LLM clients to interact with genealogical databases through a set of to
 | Tool | Description | Parameters |
 |---|---|---|
 | `pedigree_traverse` | Traverse pedigree in a specified direction from an individual | `individual_xref` (string), `direction` (string), `depth` (integer, default 1), `output_format` (string) |
+
+---
+
+## RAG Tools (Retrieval-Augmented Generation)
+
+| Tool | Description | Parameters |
+|---|---|---|
+| `rag_search_examples` | Tool for searching for patterns of parsing old documents | `input_text` (string, required) - Original census text (archaic spelling), `century` (string) - Century for pattern filtering: '17', '18', '19', `min_score` (number) - Minimum cosine similarity threshold (0.0–1.0), default 0.6, `top_k` (integer) - Maximum number of patterns to return, default 3 |
+| `rag_write_pattern` | Tool for writing a sample census text with a reference reading result | `raw_text` (string, required) - Original census text (archaic spelling), `corrected_result` (string, required) - Ideal parsing result (JSON/structure), `century` (string, required) - Century: '17', '18', '19', `quality_score` (number) - User pattern quality rating |
 
 ---
 
