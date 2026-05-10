@@ -10,6 +10,7 @@ using System;
 using GKcli.Commands;
 using GKcli.Features;
 using GKcli.MCP;
+using GKcli.RAG;
 using GKCore;
 using GKUI.Platform;
 
@@ -35,8 +36,14 @@ internal class Program
             // Check if running in `Tool Discovery & Execution` mode
             bool tdeMode = Array.IndexOf(args, "--tde") >= 0;
 
+            // Check if running in `Retrieval-Augmented Generation` mode
+            bool ragMode = Array.IndexOf(args, "--rag") >= 0;
+
+            // Common for all modes
+            RAGHelper.SetAppDataPath(AppHost.GetAppDataPathStatic());
+
             if (mcpMode) {
-                RunMCPServer(pureMode, tdeMode);
+                RunMCPServer(pureMode, tdeMode, ragMode);
             } else {
                 RunInteractiveMode();
             }
@@ -45,10 +52,10 @@ internal class Program
         }
     }
 
-    private static void RunMCPServer(bool pureMode, bool tdeMode)
+    private static void RunMCPServer(bool pureMode, bool tdeMode, bool ragMode)
     {
         try {
-            MCPController.InitFeatures(pureMode, tdeMode);
+            MCPController.InitFeatures(pureMode, tdeMode, ragMode);
 
             var server = new MCPServer();
             server.Run();

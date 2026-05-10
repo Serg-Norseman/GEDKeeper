@@ -10,12 +10,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using GKCore.Utilities;
+using GKUI.Platform;
 
 namespace GKcli.MCP;
 
 /// <summary>
-/// Tool Discovery & Execution Pattern.
+/// Tool Discovery & Execution Pattern ("progressive discovery").
 /// Supported: `search_tool` and `use_tool`.
 /// </summary>
 internal static class MCPToolDiscovery
@@ -24,52 +26,75 @@ internal static class MCPToolDiscovery
 
     private record SearchResult(MCPTool Tool, double Score);
 
+    // Cache for search results
+    private const int CacheSizeLimit = 100; // Limit cache size to prevent memory issues
+    private static readonly WeightedCache<string, IEnumerable<MCPTool>> fSearchCache = new WeightedCache<string, IEnumerable<MCPTool>>(CacheSizeLimit);
 
     // Weights for different parts of metadata
+    private const double ExactNameWeight = 2.0; // High weight for exact name matches
     private const double NameWeight = 1.0;
-    private const double TagWeight = 0.8;
-    private const double DescriptionWeight = 0.4;
+    private const double DescriptionWeight = 0.6;
 
 
-    private static readonly Dictionary<string, MCPTool> _tools = new();
-    private static readonly List<ToolMetadata> _registry = new();
+    private static readonly Dictionary<string, MCPTool> fTools = new();
+    private static readonly List<ToolMetadata> fRegistry = new();
 
 
     public static void Register(string name, MCPTool tool)
     {
-        _tools[tool.Name] = tool;
+        fTools[tool.Name] = tool;
 
-        _registry.Add(new ToolMetadata(
+        fRegistry.Add(new ToolMetadata(
             Tool: tool,
-            NameTags: Extract(tool.Name, ""),
-            DescTags: Extract("", tool.Description)
+            NameTags: ExtractTags(tool.Name, true),
+            DescTags: ExtractTags(tool.Description, false)
         ));
     }
 
     public static IEnumerable<MCPTool> Search(string query, int limit = 5)
     {
+        var cacheKey = $"{query}:{limit}";
+        var cachedResult = fSearchCache.Get(cacheKey);
+        if (cachedResult != null) return cachedResult;
+
         var queryTokens = PrepareTokens(query);
         if (queryTokens.Length == 0)
             return new List<MCPTool>();
 
-        return _registry
+        var result = fRegistry
             .Select(tool => new SearchResult(tool.Tool, CalculateScore(queryTokens, tool)))
             .Where(r => r.Score > 0.1) // Garbage cutoff threshold
             .OrderByDescending(r => r.Score)
             .Take(limit)
             .Select(r => r.Tool)
             .ToList();
+
+        fSearchCache.Add(cacheKey, result);
+
+        return result;
+    }
+
+    public static async Task<IEnumerable<MCPTool>> SearchAsync(string query, int limit = 5)
+    {
+        return await Task.Run(() => Search(query, limit));
+    }
+
+    public static void ClearCache()
+    {
+        fSearchCache.Clear();
     }
 
     private static double CalculateScore(string[] queryTokens, ToolMetadata tool)
     {
         double score = 0;
 
+        // High weight for exact name matches
+        if (queryTokens.Any(qt => string.Equals(qt, tool.Tool.Name, StringComparison.OrdinalIgnoreCase))) {
+            score += ExactNameWeight;
+        }
+
         // Search by name (most accurate)
         score += MatchTokens(queryTokens, tool.NameTags) * NameWeight;
-
-        // Search by other tags
-        //score += MatchTokens(queryTokens, tool.Tags.SelectMany(PrepareTokens).ToArray()) * TagWeight;
 
         // Search by description
         score += MatchTokens(queryTokens, tool.DescTags) * DescriptionWeight;
@@ -163,19 +188,21 @@ internal static class MCPToolDiscovery
         { "marriage", "union" }
     };
 
-    private static string[] Extract(string toolName, string description)
+    private static string[] ExtractTags(string str, bool toolName)
     {
         var tags = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        // Splitting the tool name (search_person_by_event -> search, person, by, event)
-        var nameTokens = SplitSnakeCase(toolName);
-        foreach (var token in nameTokens) tags.Add(token.ToLowerInvariant());
-
-        // Extracting nouns and verbs from the description
-        var descTokens = description.ToLowerInvariant()
-            .Split(new[] { ' ', '.', ',', ';', '(', ')' }, StringSplitOptions.RemoveEmptyEntries)
-            .Where(t => t.Length > 3 && !StopWords.Contains(t));
-        foreach (var token in descTokens) tags.Add(token);
+        IEnumerable<string> tokens;
+        if (toolName) {
+            // Splitting the tool name (search_person_by_event -> search, person, by, event)
+            tokens = SplitSnakeCase(str.ToLowerInvariant());
+        } else {
+            // Extracting nouns and verbs from the description
+            tokens = str.ToLowerInvariant()
+                .Split(new[] { ' ', '.', ',', ';', '(', ')' }, StringSplitOptions.RemoveEmptyEntries)
+                .Where(t => t.Length > 3 && !StopWords.Contains(t));
+        }
+        foreach (var token in tokens) tags.Add(token);
 
         // Adding normalized synonyms
         var synonymTags = new List<string>();

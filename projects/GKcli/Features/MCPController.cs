@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GKcli.MCP;
+using GKcli.RAG;
 using GKCore;
 
 namespace GKcli.Features;
@@ -27,7 +28,7 @@ internal class MCPController
     {
     }
 
-    public static void InitFeatures(bool pureMode, bool tdeMode)
+    public static void InitFeatures(bool pureMode, bool tdeMode, bool ragMode)
     {
         fTDE = tdeMode;
 
@@ -178,6 +179,11 @@ internal class MCPController
         if (tdeMode) {
             RegisterTool(new SearchTool(), true);
             RegisterTool(new UseTool(), true);
+        }
+
+        if (ragMode) {
+            RegisterTool(new RAGSearchExamplesTool(), true);
+            RegisterTool(new RAGWritePatternTool(), true);
         }
     }
 
