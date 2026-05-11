@@ -224,10 +224,18 @@ namespace GDModel.Providers.GEDCOM
         {
         }
 
-        private void CheckPersonalName(GDMPersonalName persName)
+        private void CheckPersonalName(GDMIndividualRecord iRec, GDMPersonalName persName)
         {
             CheckTagWithNotes(persName);
             CheckTagWithSourceCitations(persName);
+
+            if (fFormat == GEDCOMFormat.webtrees && persName.HasNotes) {
+                for (int i = persName.Notes.Count - 1; i >= 0; i--) {
+                    GDMNotes note = persName.Notes[i];
+                    persName.Notes.Extract(i);
+                    iRec.Notes.Add(note);
+                }
+            }
         }
 
         private void CheckIndividualRecord(GDMIndividualRecord iRec)
@@ -240,7 +248,7 @@ namespace GDModel.Providers.GEDCOM
             }
 
             for (int i = 0, num = iRec.PersonalNames.Count; i < num; i++) {
-                CheckPersonalName(iRec.PersonalNames[i]);
+                CheckPersonalName(iRec, iRec.PersonalNames[i]);
             }
 
             for (int i = iRec.ChildToFamilyLinks.Count - 1; i >= 0; i--) {
@@ -523,8 +531,45 @@ namespace GDModel.Providers.GEDCOM
         {
             string stdSign = GEDCOMUtils.GetSignByRecord(record);
             string xrefNum = record.GetXRefNum();
+            string stdXRef = stdSign + xrefNum;
+            long id = record.GetId();
 
-            return ((record.XRef == stdSign + xrefNum) && record.GetId() >= 0);
+            return (record.XRef == stdXRef && id >= 0);
+        }
+
+        /// <summary>
+        /// Moved October 2025, reverted May 2026: When processing some formats,
+        /// xref identifiers are dropped before normal processing. Do not remove this anymore.
+        /// </summary>
+        private void CheckIdentifiers()
+        {
+            int recsCount = fTree.RecordsCount;
+            fProgress?.Begin(LangMan.LS(LSID.IDsCorrect), recsCount * 2);
+
+            GDMXRefReplacer repMap = new GDMXRefReplacer();
+            try {
+                for (int i = 0; i < recsCount; i++) {
+                    GDMRecord rec = fTree[i];
+                    if (!CheckRecordXRef(rec)) {
+                        string oldXRef = rec.XRef;
+                        string newXRef = fTree.NewXRef(rec, true);
+                        repMap.AddXRef(rec, oldXRef, newXRef);
+                    }
+                    fProgress?.Increment();
+                }
+
+                if (repMap.Count > 0) {
+                    fTree.Header.ReplaceXRefs(repMap);
+                    for (int i = 0; i < recsCount; i++) {
+                        GDMRecord rec = fTree[i];
+                        rec.ReplaceXRefs(repMap);
+                        fProgress?.Increment();
+                    }
+                }
+            } finally {
+                repMap.Dispose();
+                //fProgress?.End();
+            }
         }
 
         private bool CheckFormat()
@@ -544,57 +589,20 @@ namespace GDModel.Providers.GEDCOM
                     if (tag != null) header.DeleteTag("_EXT_NAME");
                 }
 
-                if (fProgress != null)
-                    fProgress.Begin(LangMan.LS(LSID.FormatCheck), 200);
+                if (fFormat != GEDCOMFormat.Native)
+                    CheckIdentifiers();
 
-                GDMXRefReplacer repMap = new GDMXRefReplacer();
+                int recsCount = fTree.RecordsCount;
+                fProgress?.Begin(LangMan.LS(LSID.FormatCheck), recsCount);
                 try {
-                    bool isExtraneous = (fFormat != GEDCOMFormat.Native);
-
-                    int progress = 0;
-                    int recsCount = fTree.RecordsCount;
                     for (int i = 0; i < recsCount; i++) {
                         GDMRecord rec = fTree[i];
                         CheckRecord(rec);
-
-                        if (isExtraneous && !CheckRecordXRef(rec)) {
-                            string oldXRef = rec.XRef;
-                            string newXRef = fTree.NewXRef(rec, true);
-                            repMap.AddXRef(rec, oldXRef, newXRef);
-                        }
-
-                        if (fProgress != null) {
-                            int newProgress = (int)Math.Min(100, ((i + 1) * 100.0f) / recsCount);
-                            if (progress != newProgress) {
-                                progress = newProgress;
-                                fProgress.StepTo(progress);
-                            }
-                        }
+                        fProgress?.Increment();
                     }
-
-                    // !xrefValid
-                    if (repMap.Count > 0) {
-                        fTree.Header.ReplaceXRefs(repMap);
-                        for (int i = 0; i < recsCount; i++) {
-                            GDMRecord rec = fTree[i];
-                            rec.ReplaceXRefs(repMap);
-
-                            if (fProgress != null) {
-                                int newProgress = (int)Math.Min(100, ((i + 1) * 100.0f) / recsCount);
-                                if (progress != newProgress) {
-                                    progress = newProgress;
-                                    fProgress.StepTo(100 + progress);
-                                }
-                            }
-                        }
-                    }
-
                     result = true;
                 } finally {
-                    repMap.Dispose();
-
-                    if (fProgress != null)
-                        fProgress.End();
+                    fProgress?.End();
                 }
             } catch (Exception ex) {
                 Logger.WriteError("GEDCOMChecker.CheckFormat()", ex);

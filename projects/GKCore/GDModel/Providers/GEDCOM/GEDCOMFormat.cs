@@ -42,6 +42,7 @@ namespace GDModel.Providers.GEDCOM
         Reunion,
         RootsMagic,
         SyniumFamilyTree,
+        webtrees,
         WikiTree,
 
         Last = WikiTree

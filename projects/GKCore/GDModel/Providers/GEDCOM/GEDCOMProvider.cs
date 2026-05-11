@@ -3009,6 +3009,7 @@ namespace GDModel.Providers.GEDCOM
                 new GEDCOMAppFormat(GEDCOMFormat.Reunion, "Reunion", "Reunion", -1, true),
                 new GEDCOMAppFormat(GEDCOMFormat.RootsMagic, "RootsMagic", "RootsMagic", -1),
                 new GEDCOMAppFormat(GEDCOMFormat.SyniumFamilyTree, "SyniumFamilyTree", "MobileFamilyTree", -1),
+                new GEDCOMAppFormat(GEDCOMFormat.webtrees, "webtrees", "webtrees", -1, false),
                 new GEDCOMAppFormat(GEDCOMFormat.WikiTree, "WikiTree.com", "WikiTree", -1, true),
             };
 
