@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GKcli.MCP;
+using GKcli.Memory;
 using GKcli.RAG;
 using GKCore;
 
@@ -184,6 +185,9 @@ internal class MCPController
         if (ragMode) {
             RegisterTool(new RAGSearchExamplesTool(), true);
             RegisterTool(new RAGWritePatternTool(), true);
+
+            RegisterTool(new StoreFactTool(), true);
+            RegisterTool(new SearchMemoryTool(), true);
         }
     }
 

@@ -74,23 +74,28 @@ internal class FamilyUpsertTool : BaseTool
             baseContext.SetModified();
             return MCPContent.CreateSimpleContent($"✅ Family with XRef `{familyRec.XRef}` updated: husband {husbandXRef}, wife {wifeXRef}");
         } else {
-            if (string.IsNullOrEmpty(husbandXRef))
-                return MCPContent.CreateSimpleContent("❌ 'husband_xref' required for new family");
+            //return MCPContent.CreateSimpleContent("❌ 'husband_xref' required for new family");
+            //return MCPContent.CreateSimpleContent("❌ 'wife_xref' required for new family");
 
-            if (string.IsNullOrEmpty(wifeXRef))
-                return MCPContent.CreateSimpleContent("❌ 'wife_xref' required for new family");
-
-            var husbandRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(husbandXRef);
-            if (husbandRec == null)
-                return MCPContent.CreateSimpleContent($"❌ Husband not found with XRef: {husbandXRef}");
-
-            var wifeRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(wifeXRef);
-            if (wifeRec == null)
-                return MCPContent.CreateSimpleContent($"❌ Wife not found with XRef: {wifeXRef}");
+            if (string.IsNullOrEmpty(husbandXRef) && string.IsNullOrEmpty(wifeXRef))
+                return MCPContent.CreateSimpleContent("❌ To create a new family, at least one spouse must be specified ('husband_xref' or 'wife_xref').");
 
             var familyRec = baseContext.Tree.CreateFamily();
-            familyRec.AddSpouse(husbandRec);
-            familyRec.AddSpouse(wifeRec);
+
+            if (!string.IsNullOrEmpty(husbandXRef)) {
+                var husbandRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(husbandXRef);
+                if (husbandRec == null)
+                    return MCPContent.CreateSimpleContent($"❌ Husband not found with XRef: {husbandXRef}");
+                familyRec.AddSpouse(husbandRec);
+            }
+
+            if (!string.IsNullOrEmpty(wifeXRef)) {
+                var wifeRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(wifeXRef);
+                if (wifeRec == null)
+                    return MCPContent.CreateSimpleContent($"❌ Wife not found with XRef: {wifeXRef}");
+                familyRec.AddSpouse(wifeRec);
+            }
+
             baseContext.SetModified();
 
             return MCPContent.CreateSimpleContent($"✅ Family with XRef `{familyRec.XRef}` added: husband {husbandXRef}, wife {wifeXRef}");

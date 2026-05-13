@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  GEDKeeper, the personal genealogical database editor.
  *  Copyright (C) 2009-2026 by Sergey V. Zhdanovskih.
  *
@@ -147,5 +147,17 @@ Format: [Modifier] [Day] [Month] [Year] [Suffix].
 ";
 
         return dateSpec.Replace("\r\n", "\n");
+    }
+
+    // Store both versions of the pattern: the original and the normalized one.
+    // Calculate the embedding for the normalized one,
+    // but return the original one to the context—this will preserve authenticity for LLM.
+    public static string NormalizeRussianHistoricalOrthography(string text)
+    {
+        // Примеры правил для русского языка 17–19 вв.:
+        return text
+            .Replace("ѣ", "е").Replace("ѳ", "ф").Replace("і", "и")  // ять, фита, и десятеричное
+            .Replace("ъ", "").Replace("ѵ", "и")                      // ер на конце, ижица
+            .ToLowerInvariant();
     }
 }

@@ -8,9 +8,9 @@
 
 using System;
 using GKcli.Commands;
+using GKcli.Database;
 using GKcli.Features;
 using GKcli.MCP;
-using GKcli.RAG;
 using GKCore;
 using GKUI.Platform;
 
@@ -40,7 +40,7 @@ internal class Program
             bool ragMode = Array.IndexOf(args, "--rag") >= 0;
 
             // Common for all modes
-            RAGHelper.SetAppDataPath(AppHost.GetAppDataPathStatic());
+            LLMDatabase.SetAppDataPath(AppHost.GetAppDataPathStatic());
 
             if (mcpMode) {
                 RunMCPServer(pureMode, tdeMode, ragMode);
