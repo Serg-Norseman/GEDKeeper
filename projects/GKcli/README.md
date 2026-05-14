@@ -53,13 +53,13 @@ and querying genealogical records, including individuals, families, sources, mul
 
 GKcli includes specialized LM assistant roles, each with distinct personalities and expertise:
 
-### [Genus](./Assistants/Genus.md)
+### [Genus](../../externals/assistants/Genus.md)
 A helpful AI assistant with a balanced approach to genealogical research. Adaptable and practical, focusing on breaking down complex queries into manageable parts while maintaining accuracy.
 
-### [Genius](./Assistants/Genius.md)
+### [Genius](../../externals/assistants/Genius.md)
 A genealogical research agent with an analytical approach to archives and lineages. Precise, dry, and objective in style. Ideal for detailed research tasks requiring accuracy and methodical investigation.
 
-### [Lare](./Assistants/Lare.md)
+### [Lare](../../externals/assistants/Lare.md)
 An Ancient Guardian of Lineage and Memory, embodying the spirit of historical preservation. Speaks with the gravity of history, offering a profound and solemn approach to genealogical research.
 
 ## Future Development
