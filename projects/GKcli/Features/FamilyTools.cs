@@ -22,7 +22,7 @@ internal class FamilyUpsertTool : BaseTool
     {
         return new MCPTool {
             Name = Sign,
-            Description = "Add new family or update existing. Provide 'xref' to edit; omit 'xref' to create. 'husband_xref' and 'wife_xref' required for new families.",
+            Description = "Add new family or update existing. Provide 'xref' to edit; omit 'xref' to create. 'husband_xref' and 'wife_xref' required for new families (either can be omitted, but not both).",
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
                     ["xref"] = new MCPToolProperty { Type = "string", Description = "Unique identifier (XRef) of the record to edit (omit for new)" },

@@ -39,12 +39,15 @@ internal class SearchTool : BaseTool
     {
         return new MCPTool {
             Name = Sign,
-            Description = "Search available tools by keywords",
+            Description = "Search available tools by keywords (English only, do not mix tools with different purposes in one query)",
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
                     ["query"] = new MCPToolProperty { Type = "string", Description = "Keyword query string" },
                 },
                 Required = new List<string> { "query" }
+            },
+            Annotations = new MCPToolAnnotations() {
+                ReadOnlyHint = true,
             }
         };
     }

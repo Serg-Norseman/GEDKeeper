@@ -22,6 +22,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "locales", "locales", "{02EA
 		..\..\locales\Russian.lng = ..\..\locales\Russian.lng
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assistants", "assistants", "{E2E23B62-AA45-4A7B-8AAA-F9070FAFB5BE}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\externals\assistants\Genius.md = ..\..\externals\assistants\Genius.md
+		..\..\externals\assistants\Genus.md = ..\..\externals\assistants\Genus.md
+		..\..\externals\assistants\Lare.md = ..\..\externals\assistants\Lare.md
+		..\..\externals\assistants\README_ru.md = ..\..\externals\assistants\README_ru.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|FreeBSD = Debug|FreeBSD

@@ -32,6 +32,10 @@ internal class StoreFactTool : BaseTool
                     ["fact"] = new MCPToolProperty { Type = "string", Description = "The fact to be stored in memory" }
                 },
                 Required = new List<string> { "fact" }
+            },
+            Annotations = new MCPToolAnnotations() {
+                ReadOnlyHint = false,
+                DestructiveHint = false,
             }
         };
     }
@@ -68,6 +72,9 @@ internal class SearchMemoryTool : BaseTool
                     ["top_k"] = new MCPToolProperty { Type = "integer", Description = "Maximum number of results to return", Default = 5 }
                 },
                 Required = new List<string> { "query" }
+            },
+            Annotations = new MCPToolAnnotations() {
+                ReadOnlyHint = true,
             }
         };
     }

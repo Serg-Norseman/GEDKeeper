@@ -47,6 +47,9 @@ internal class RAGSearchExamplesTool : BaseTool
                     ["top_k"] = new MCPToolProperty { Type = "integer", Description = "Maximum number of patterns to return", Default = 3 },
                 },
                 Required = new List<string> { "input_text" }
+            },
+            Annotations = new MCPToolAnnotations() {
+                ReadOnlyHint = true,
             }
         };
     }
@@ -82,6 +85,10 @@ internal class RAGWritePatternTool : BaseTool
                     ["quality_score"] = new MCPToolProperty { Type = "number", Description = "User pattern quality rating" },
                 },
                 Required = new List<string> { "raw_text", "corrected_result", "century" }
+            },
+            Annotations = new MCPToolAnnotations() {
+                ReadOnlyHint = false,
+                DestructiveHint = false,
             }
         };
     }

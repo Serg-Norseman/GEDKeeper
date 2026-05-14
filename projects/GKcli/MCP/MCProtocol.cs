@@ -126,6 +126,13 @@ internal class MCPTool
 
     [JsonPropertyName("inputSchema")]
     public MCPToolInputSchema InputSchema { get; set; } = new();
+
+    /// <summary>
+    /// Optional annotations that provide hints about the tool's behavior.
+    /// </summary>
+    [JsonPropertyName("annotations")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public MCPToolAnnotations Annotations { get; set; }
 }
 
 /// <summary>
@@ -167,6 +174,47 @@ internal class MCPToolProperty
     [JsonPropertyName("default")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public object Default { get; set; } = null;
+}
+
+/// <summary>
+/// MCP Tool annotations definition according to the MCP standard.
+/// </summary>
+internal class MCPToolAnnotations
+{
+    /// <summary>
+    /// A human-readable title for the tool.
+    /// </summary>
+    [JsonPropertyName("title")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Title { get; set; }
+
+    /// <summary>
+    /// Indicates if the tool does not modify its environment (read-only).
+    /// </summary>
+    [JsonPropertyName("readOnlyHint")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool? ReadOnlyHint { get; set; }
+
+    /// <summary>
+    /// Indicates if the tool may perform destructive updates (e.g., delete, overwrite).
+    /// </summary>
+    [JsonPropertyName("destructiveHint")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool? DestructiveHint { get; set; }
+
+    /// <summary>
+    /// Indicates if calling the tool repeatedly with the same arguments has no additional effect.
+    /// </summary>
+    [JsonPropertyName("idempotentHint")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool? IdempotentHint { get; set; }
+
+    /// <summary>
+    /// Indicates if the tool may interact with an "open world" (e.g., external APIs, internet).
+    /// </summary>
+    [JsonPropertyName("openWorldHint")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool? OpenWorldHint { get; set; }
 }
 
 /// <summary>
