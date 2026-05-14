@@ -4,7 +4,7 @@ set APP_VER=3.15.0
 
 call ..\clean.cmd
 
-dotnet build ../projects/GKv3/GEDKeeper3.sln /p:Configuration=Release /p:Platform=MSWin64
+dotnet build ../projects/GKcli/GKcli.sln /p:Configuration=Release /p:Platform=MSWin64
 
 set BUILD_STATUS=%ERRORLEVEL%
 if %BUILD_STATUS%==0 goto installer
@@ -16,7 +16,7 @@ exit /b %BUILD_STATUS%
 
 :installer
 rem cd .\deploy
-call gk_win_portable.cmd %APP_VER% win64
+call gk_win_cli.cmd %APP_VER% win64
 rem cd ..
 pause
 exit /b 0
