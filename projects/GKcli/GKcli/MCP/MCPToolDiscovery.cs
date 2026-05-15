@@ -24,16 +24,32 @@ internal static class MCPToolDiscovery
 {
     private record ToolMetadata(MCPTool Tool, string[] NameTags, string[] DescTags);
 
-    private record SearchResult(MCPTool Tool, double Score);
+    private struct SearchResult
+    {
+        public readonly MCPTool Tool;
+        public readonly double Score;
+
+        public SearchResult(MCPTool tool, double score)
+        {
+            Tool = tool;
+            Score = score;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}: {1:F3}", Tool.Name, Score);
+        }
+    }
 
     // Cache for search results
     private const int CacheSizeLimit = 100; // Limit cache size to prevent memory issues
     private static readonly WeightedCache<string, IEnumerable<MCPTool>> fSearchCache = new WeightedCache<string, IEnumerable<MCPTool>>(CacheSizeLimit);
 
     // Weights for different parts of metadata
+    // The names of the tools may contain technical terms (upsert) that will make searching from LM difficult.
     private const double ExactNameWeight = 2.0; // High weight for exact name matches
-    private const double NameWeight = 1.0;
-    private const double DescriptionWeight = 0.6;
+    private const double NameWeight = 0.6;
+    private const double DescriptionWeight = 1.0;
 
 
     private static readonly Dictionary<string, MCPTool> fTools = new();
@@ -61,10 +77,13 @@ internal static class MCPToolDiscovery
         if (queryTokens.Length == 0)
             return new List<MCPTool>();
 
-        var result = fRegistry
+        var searchResults = fRegistry
             .Select(tool => new SearchResult(tool.Tool, CalculateScore(queryTokens, tool)))
             .Where(r => r.Score > 0.1) // Garbage cutoff threshold
             .OrderByDescending(r => r.Score)
+            /*.ToList()*/;
+
+        var result = searchResults
             .Take(limit)
             .Select(r => r.Tool)
             .ToList();

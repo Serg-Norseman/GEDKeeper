@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using GKCore;
 
 [assembly: AssemblyTitle("GKcli")]
@@ -7,3 +8,5 @@ using GKCore;
 [assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
 [assembly: AssemblyVersion(GKData.APP_VERSION_3X)]
 [assembly: AssemblyCulture("")]
+
+[assembly: InternalsVisibleTo("GKcli.Tests")]

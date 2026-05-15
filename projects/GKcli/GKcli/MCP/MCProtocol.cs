@@ -16,7 +16,7 @@ namespace GKcli.MCP;
 /// <summary>
 /// JSON-RPC 2.0 Request message.
 /// </summary>
-internal class MCPRequest
+public class MCPRequest
 {
     [JsonPropertyName("jsonrpc")]
     public string JsonRpc { get; set; }
@@ -34,7 +34,7 @@ internal class MCPRequest
 /// <summary>
 /// JSON-RPC 2.0 Response message.
 /// </summary>
-internal class MCPResponse
+public class MCPResponse
 {
     [JsonPropertyName("jsonrpc")]
     public string JsonRpc { get; set; }
@@ -59,7 +59,7 @@ internal class MCPResponse
 /// <summary>
 /// JSON-RPC 2.0 Error object.
 /// </summary>
-internal class MCPError
+public class MCPError
 {
     [JsonPropertyName("code")]
     public int Code { get; set; }
@@ -107,7 +107,7 @@ internal class MCPError
 /// <summary>
 /// MCP Tools List response result.
 /// </summary>
-internal class MCPToolsListResult
+public class MCPToolsListResult
 {
     [JsonPropertyName("tools")]
     public List<MCPTool> Tools { get; set; }
@@ -116,7 +116,7 @@ internal class MCPToolsListResult
 /// <summary>
 /// MCP Tool definition.
 /// </summary>
-internal class MCPTool
+public class MCPTool
 {
     [JsonPropertyName("name")]
     public string Name { get; set; } = "";
@@ -138,7 +138,7 @@ internal class MCPTool
 /// <summary>
 /// MCP Tool input schema.
 /// </summary>
-internal class MCPToolInputSchema
+public class MCPToolInputSchema
 {
     [JsonIgnore]
     public static readonly MCPToolInputSchema Empty = new MCPToolInputSchema { Properties = new(), Required = new() };
@@ -159,7 +159,7 @@ internal class MCPToolInputSchema
 /// Types: string (minLength, maxLength, pattern, enum, default), number, integer (minimum, maximum, default), boolean (default),
 /// array (items), object.
 /// </summary>
-internal class MCPToolProperty
+public class MCPToolProperty
 {
     [JsonPropertyName("type")]
     public string Type { get; set; } = "string";
@@ -179,7 +179,7 @@ internal class MCPToolProperty
 /// <summary>
 /// MCP Tool annotations definition according to the MCP standard.
 /// </summary>
-internal class MCPToolAnnotations
+public class MCPToolAnnotations
 {
     /// <summary>
     /// A human-readable title for the tool.
@@ -220,7 +220,7 @@ internal class MCPToolAnnotations
 /// <summary>
 /// MCP Call result content item.
 /// </summary>
-internal class MCPContent
+public class MCPContent
 {
     [JsonPropertyName("type")]
     public string Type { get; set; } = "text";
@@ -279,7 +279,7 @@ internal class MCPContent
 /// Role enumeration for MCP annotations.
 /// </summary>
 [JsonConverter(typeof(JsonStringEnumConverter<Role>))]
-internal enum Role
+public enum Role
 {
     [JsonPropertyName("user")]
     User,
@@ -291,7 +291,7 @@ internal enum Role
 /// <summary>
 /// MCP Content annotations.
 /// </summary>
-internal class Annotations
+public class Annotations
 {
     /// <summary>
     /// Gets or sets the intended audience for this content as an array of <see cref="Role"/> values.
@@ -336,7 +336,7 @@ internal class Annotations
 /// <summary>
 /// MCP Initialize result.
 /// </summary>
-internal class MCPInitializeResult
+public class MCPInitializeResult
 {
     [JsonPropertyName("protocolVersion")]
     public string ProtocolVersion { get; set; } = "2024-11-05";
@@ -351,7 +351,7 @@ internal class MCPInitializeResult
 /// <summary>
 /// MCP Capabilities.
 /// </summary>
-internal class MCPCapabilities
+public class MCPCapabilities
 {
     [JsonPropertyName("tools")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -369,7 +369,7 @@ internal class MCPCapabilities
 /// <summary>
 /// MCP Resources capability.
 /// </summary>
-internal class MCPResourcesCapability
+public class MCPResourcesCapability
 {
     [JsonPropertyName("subscribe")]
     public bool Subscribe { get; set; }
@@ -381,7 +381,7 @@ internal class MCPResourcesCapability
 /// <summary>
 /// MCP Prompts capability.
 /// </summary>
-internal class MCPPromptsCapability
+public class MCPPromptsCapability
 {
     [JsonPropertyName("listChanged")]
     public bool ListChanged { get; set; }
@@ -390,7 +390,7 @@ internal class MCPPromptsCapability
 /// <summary>
 /// MCP Tools capability.
 /// </summary>
-internal class MCPToolsCapability
+public class MCPToolsCapability
 {
     [JsonPropertyName("listChanged")]
     public bool ListChanged { get; set; }
@@ -399,7 +399,7 @@ internal class MCPToolsCapability
 /// <summary>
 /// MCP Server info.
 /// </summary>
-internal class MCPServerInfo
+public class MCPServerInfo
 {
     [JsonPropertyName("name")]
     public string Name { get; set; }
@@ -413,7 +413,7 @@ internal class MCPServerInfo
 /// <summary>
 /// MCP Resource definition.
 /// </summary>
-internal class MCPResource
+public class MCPResource
 {
     [JsonPropertyName("uri")]
     public string Uri { get; set; } = "";
@@ -441,7 +441,7 @@ internal class MCPResource
 /// <summary>
 /// MCP Resource Template definition.
 /// </summary>
-internal class MCPResourceTemplate
+public class MCPResourceTemplate
 {
     [JsonPropertyName("uriTemplate")]
     public string UriTemplate { get; set; } = "";
@@ -465,7 +465,7 @@ internal class MCPResourceTemplate
 /// <summary>
 /// MCP Resource Contents (base type).
 /// </summary>
-internal class MCPResourceContents
+public class MCPResourceContents
 {
     [JsonPropertyName("uri")]
     public string Uri { get; set; } = "";
@@ -486,7 +486,7 @@ internal class MCPResourceContents
 /// <summary>
 /// MCP Resources List response result.
 /// </summary>
-internal class MCPResourcesListResult
+public class MCPResourcesListResult
 {
     [JsonPropertyName("resources")]
     public List<MCPResource> Resources { get; set; } = new();
@@ -499,7 +499,7 @@ internal class MCPResourcesListResult
 /// <summary>
 /// MCP Resource Templates List response result.
 /// </summary>
-internal class MCPResourceTemplatesListResult
+public class MCPResourceTemplatesListResult
 {
     [JsonPropertyName("resourceTemplates")]
     public List<MCPResourceTemplate> ResourceTemplates { get; set; } = new();
@@ -512,7 +512,7 @@ internal class MCPResourceTemplatesListResult
 /// <summary>
 /// MCP Read Resource response result.
 /// </summary>
-internal class MCPReadResourceResult
+public class MCPReadResourceResult
 {
     [JsonPropertyName("contents")]
     public List<MCPResourceContents> Contents { get; set; } = new();
@@ -523,7 +523,7 @@ internal class MCPReadResourceResult
 /// <summary>
 /// MCP Prompt Argument definition.
 /// </summary>
-internal class MCPPromptArgument
+public class MCPPromptArgument
 {
     [JsonPropertyName("name")]
     public string Name { get; set; } = "";
@@ -540,7 +540,7 @@ internal class MCPPromptArgument
 /// <summary>
 /// MCP Prompt definition.
 /// </summary>
-internal class MCPPrompt
+public class MCPPrompt
 {
     [JsonPropertyName("name")]
     public string Name { get; set; } = "";
@@ -561,7 +561,7 @@ internal class MCPPrompt
 /// <summary>
 /// MCP Prompt Content (text, image, audio, or resource).
 /// </summary>
-internal class MCPPromptContent
+public class MCPPromptContent
 {
     [JsonPropertyName("type")]
     public string Type { get; set; } = "text";
@@ -586,7 +586,7 @@ internal class MCPPromptContent
 /// <summary>
 /// MCP Prompt Message.
 /// </summary>
-internal class MCPPromptMessage
+public class MCPPromptMessage
 {
     [JsonPropertyName("role")]
     public string Role { get; set; } = "user"; // "user" or "assistant"
@@ -598,7 +598,7 @@ internal class MCPPromptMessage
 /// <summary>
 /// MCP Prompts List response result.
 /// </summary>
-internal class MCPPromptsListResult
+public class MCPPromptsListResult
 {
     [JsonPropertyName("prompts")]
     public List<MCPPrompt> Prompts { get; set; } = new();
@@ -611,7 +611,7 @@ internal class MCPPromptsListResult
 /// <summary>
 /// MCP Get Prompt response result.
 /// </summary>
-internal class MCPPromptGetResult
+public class MCPPromptGetResult
 {
     [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

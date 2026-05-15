@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36915.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKcli", "GKcli.csproj", "{BE792E18-05D0-4B0B-941F-55B750B84FAE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKcli", "GKcli\GKcli.csproj", "{BE792E18-05D0-4B0B-941F-55B750B84FAE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCore.term", "..\GKCore\GKCore.term.csproj", "{B29DE69C-7116-9BE4-7779-544BB18C54A1}"
 EndProject
@@ -29,6 +29,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assistants", "assistants", 
 		..\..\externals\assistants\Lare.md = ..\..\externals\assistants\Lare.md
 		..\..\externals\assistants\README_ru.md = ..\..\externals\assistants\README_ru.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKsse", "GKsse\GKsse.csproj", "{2370809A-2667-4698-8153-4B27A020C5E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKcli.Tests", "GKcli.Tests\GKcli.Tests.csproj", "{89394BD3-B2AF-46FD-AE06-405219948210}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +88,46 @@ Global
 		{B29DE69C-7116-9BE4-7779-544BB18C54A1}.Release|MacOS.Build.0 = Release|MacOS
 		{B29DE69C-7116-9BE4-7779-544BB18C54A1}.Release|MSWin64.ActiveCfg = Release|MSWin64
 		{B29DE69C-7116-9BE4-7779-544BB18C54A1}.Release|MSWin64.Build.0 = Release|MSWin64
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|FreeBSD.ActiveCfg = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|FreeBSD.Build.0 = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|Linux.ActiveCfg = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|Linux.Build.0 = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|Linux_ARM.ActiveCfg = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|Linux_ARM.Build.0 = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|MacOS.ActiveCfg = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|MacOS.Build.0 = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|MSWin64.ActiveCfg = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|MSWin64.Build.0 = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|FreeBSD.ActiveCfg = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|FreeBSD.Build.0 = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|Linux.ActiveCfg = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|Linux.Build.0 = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|Linux_ARM.ActiveCfg = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|Linux_ARM.Build.0 = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|MacOS.ActiveCfg = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|MacOS.Build.0 = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|MSWin64.ActiveCfg = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|MSWin64.Build.0 = Release|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Debug|FreeBSD.ActiveCfg = Debug|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Debug|FreeBSD.Build.0 = Debug|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Debug|Linux.ActiveCfg = Debug|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Debug|Linux.Build.0 = Debug|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Debug|Linux_ARM.ActiveCfg = Debug|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Debug|Linux_ARM.Build.0 = Debug|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Debug|MacOS.ActiveCfg = Debug|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Debug|MacOS.Build.0 = Debug|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Debug|MSWin64.ActiveCfg = Debug|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Debug|MSWin64.Build.0 = Debug|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Release|FreeBSD.ActiveCfg = Release|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Release|FreeBSD.Build.0 = Release|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Release|Linux.ActiveCfg = Release|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Release|Linux.Build.0 = Release|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Release|Linux_ARM.ActiveCfg = Release|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Release|Linux_ARM.Build.0 = Release|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Release|MacOS.ActiveCfg = Release|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Release|MacOS.Build.0 = Release|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Release|MSWin64.ActiveCfg = Release|Any CPU
+		{89394BD3-B2AF-46FD-AE06-405219948210}.Release|MSWin64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

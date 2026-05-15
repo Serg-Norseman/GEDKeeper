@@ -16,8 +16,7 @@ using GKCore;
 
 namespace GKcli.Features;
 
-// TODO: 88 instruments, including the system prompt, consume over 10,000 tokens - optimize!
-internal class MCPController
+public class MCPController
 {
     private static readonly BaseContext fBaseContext = new BaseContext(null);
     private static readonly Dictionary<string, BaseTool> fTools = new Dictionary<string, BaseTool>();

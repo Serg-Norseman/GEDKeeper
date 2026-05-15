@@ -15,7 +15,7 @@ using SQLite;
 namespace GKcli.Database;
 
 
-internal static class LLMDatabase
+public static class LLMDatabase
 {
     private static readonly string SQLiteDB = @"gkrag.db";
     //private const string TblExtractionPatternSQL = "create table [ExtractionPattern] ([Id] integer not null primary key autoincrement, [RawText] text not null, [CorrectedResult] text not null, [Embedding] text not null, [Century] text not null default '')";

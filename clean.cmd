@@ -103,8 +103,14 @@ rem <<< GKcli >>>
 
 rmdir .\projects\GKcli\.vs /s /q
 
-rmdir .\projects\GKcli\bin /s /q
-rmdir .\projects\GKcli\obj /s /q
+rmdir .\projects\GKcli\GKcli\bin /s /q
+rmdir .\projects\GKcli\GKcli\obj /s /q
+
+rmdir .\projects\GKcli\GKcli.Tests\bin /s /q
+rmdir .\projects\GKcli\GKcli.Tests\obj /s /q
+
+rmdir .\projects\GKcli\GKsse\bin /s /q
+rmdir .\projects\GKcli\GKsse\obj /s /q
 
 rem <<< Plugins cleaning >>>
 

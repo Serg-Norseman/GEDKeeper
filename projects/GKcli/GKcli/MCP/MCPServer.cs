@@ -24,7 +24,7 @@ namespace GKcli.MCP;
 /// Minimal MCP server that reads JSON-RPC 2.0 messages from stdin and writes responses to stdout.
 /// No external packages — only System.Text.Json from .NET 8.
 /// </summary>
-internal class MCPServer
+public class MCPServer
 {
     private readonly CancellationTokenSource fCancellationToken;
     private readonly JsonSerializerOptions fJsonOptions;
@@ -112,25 +112,7 @@ internal class MCPServer
                         if (nullsBeforeExit >= 10) break;
                     }
 
-                    if (string.IsNullOrEmpty(line)) continue;
-
-                    Log($"Received: {line}");
-                    var request = JsonSerializer.Deserialize<MCPRequest>(line, fJsonOptions);
-
-                    if (request == null) {
-                        SendResponse(new MCPResponse {
-                            Error = MCPError.InvalidParams("Invalid request")
-                        });
-                        continue;
-                    }
-
-                    if (IsNotificationRequest(request)) {
-                        // If the MCP-Client sends a notification, it must not be responded to,
-                        // otherwise it will violate the protocol and cause a session reset.
-                        continue;
-                    }
-
-                    ProcessRequest(request);
+                    ProcessRequest(line);
                 } catch (Exception ex) {
                     Log($"Error processing request: {ex.Message}");
                     SendResponse(new MCPResponse {
@@ -181,8 +163,26 @@ internal class MCPServer
         //Console.Error.Flush();
     }
 
-    private void ProcessRequest(MCPRequest request)
+    private void ProcessRequest(string line)
     {
+        if (string.IsNullOrEmpty(line)) return;
+
+        Log($"Received: {line}");
+        var request = JsonSerializer.Deserialize<MCPRequest>(line, fJsonOptions);
+
+        if (request == null) {
+            SendResponse(new MCPResponse {
+                Error = MCPError.InvalidParams("Invalid request")
+            });
+            return;
+        }
+
+        if (IsNotificationRequest(request)) {
+            // If the MCP-Client sends a notification, it must not be responded to,
+            // otherwise it will violate the protocol and cause a session reset.
+            return;
+        }
+
         var response = request.Method switch {
             "initialize" => HandleInitialize(request),
             "tools/list" => HandleToolsList(request),
@@ -197,7 +197,48 @@ internal class MCPServer
                 Error = MCPError.MethodNotFound()
             }
         };
+
         SendResponse(response);
+    }
+
+    public async Task<string> ProcessSSERequestAsync(string line)
+    {
+        if (string.IsNullOrEmpty(line)) return string.Empty;
+
+        Log($"Received: {line}");
+        var request = JsonSerializer.Deserialize<MCPRequest>(line, fJsonOptions);
+
+        if (request == null) {
+            //TODO
+            /*SendResponse(new MCPResponse {
+                Error = MCPError.InvalidParams("Invalid request")
+            });*/
+            return string.Empty;
+        }
+
+        if (IsNotificationRequest(request)) {
+            // If the MCP-Client sends a notification, it must not be responded to,
+            // otherwise it will violate the protocol and cause a session reset.
+            return string.Empty;
+        }
+
+        var response = request.Method switch {
+            "initialize" => HandleInitialize(request),
+            "tools/list" => HandleToolsList(request),
+            "tools/call" => HandleToolsCall(request),
+            "resources/list" => HandleResourcesList(request),
+            "resources/templates/list" => HandleResourceTemplatesList(request),
+            "resources/read" => HandleResourceRead(request),
+            "prompts/list" => HandlePromptsList(request),
+            "prompts/get" => HandlePromptsGet(request),
+            _ => new MCPResponse {
+                Id = request.Id,
+                Error = MCPError.MethodNotFound()
+            }
+        };
+
+        var json = JsonSerializer.Serialize(response, fJsonOptions);
+        return json;
     }
 
     private MCPResponse HandleInitialize(MCPRequest request)

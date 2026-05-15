@@ -11,7 +11,7 @@ using SQLite;
 
 namespace GKcli.Database;
 
-internal sealed class MemoryEntry
+public sealed class MemoryEntry
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }

@@ -76,7 +76,7 @@ internal class IndividualUpsertTool : BaseTool
     {
         return new MCPTool {
             Name = Sign,
-            Description = "Add new individual or update existing. Provide 'xref' to edit; omit 'xref' to create. 'name' and 'sex' required for new individuals.",
+            Description = "Add new individual/person or update existing. Provide 'xref' to edit; omit 'xref' to create. 'name' and 'sex' required for new individuals.",
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
                     ["xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record to edit (omit for new)" },
