@@ -345,8 +345,17 @@ namespace GKUI.Components
                                 }
                             } else {
                                 IColor backColor = opts.BackgroundColor;
-                                if (backColor.ToArgb() == GKColors.BlackA)
+
+                                int backInt = backColor.ToArgb();
+                                //Logger.WriteInfo("backColor: " + backInt);
+                                if (backInt == GKColors.BlackA)
                                     backColor = UIHelper.ConvertColor(EtoThemeManager.GetThemeColor(ThemeElement.Control));
+
+                                // FIXME: some weird stuff in Linux
+                                backInt = backColor.ToArgb();
+                                if (backInt == GKColors.BlackA)
+                                    backColor = UIHelper.ConvertColor(Colors.White);
+
                                 fRenderer.DrawRectangle(null, backColor, 0, 0, width, height);
                             }
                         }
