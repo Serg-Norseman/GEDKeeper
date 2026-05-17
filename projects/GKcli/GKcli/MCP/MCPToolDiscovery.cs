@@ -46,10 +46,9 @@ internal static class MCPToolDiscovery
     private static readonly WeightedCache<string, IEnumerable<MCPTool>> fSearchCache = new WeightedCache<string, IEnumerable<MCPTool>>(CacheSizeLimit);
 
     // Weights for different parts of metadata
-    // The names of the tools may contain technical terms (upsert) that will make searching from LM difficult.
     private const double ExactNameWeight = 2.0; // High weight for exact name matches
-    private const double NameWeight = 0.6;
-    private const double DescriptionWeight = 1.0;
+    private const double NameWeight = 1.0;
+    private const double DescriptionWeight = 0.6;
 
 
     private static readonly Dictionary<string, MCPTool> fTools = new();
