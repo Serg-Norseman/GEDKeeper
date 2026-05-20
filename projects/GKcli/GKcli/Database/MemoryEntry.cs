@@ -11,11 +11,18 @@ using SQLite;
 
 namespace GKcli.Database;
 
+[Table("memory_entries")]
 public sealed class MemoryEntry
 {
-    [PrimaryKey, AutoIncrement]
+    [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get; set; }
+
+    [Column("content")]
     public string Content { get; set; }
+
+    [Column("embedding")]
     public byte[] Embedding { get; set; }
+
+    [Column("created_at")]
     public DateTime CreatedAt { get; set; }
 }

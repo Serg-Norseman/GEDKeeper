@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.Json;
 using GKcli.Database;
 using SmartComponents.LocalEmbeddings;
 
@@ -33,7 +34,7 @@ internal static class RAGHelper
     public static string SearchMemory(string query, int topK = 10)
     {
         var inputVector = GetCachedEmbedding(query);
-        var entries = LLMDatabase.GetMemoryEntries();
+        var entries = LLMDatabase.GetMemoryEntries().GetAwaiter().GetResult();
         var bestMatches = entries
             .Select(me => new { Entry = me, Score = inputVector.Similarity(new EmbeddingF32(me.Embedding)) })
             .OrderByDescending(x => x.Score).Take(topK).ToList();
@@ -87,7 +88,7 @@ This is data from memory. Use it in your answer and mention that you remembered 
         var inputVector = GetCachedEmbedding(inputText);
 
         // Extract patterns from database
-        var patterns = LLMDatabase.GetPatterns(century);
+        var patterns = LLMDatabase.GetPatterns(century).GetAwaiter().GetResult();
 
         // Count the similarities
         var bestMatches = patterns
@@ -201,6 +202,15 @@ Please note:
         float divisor = (float)(Math.Sqrt(magnitudeA) * Math.Sqrt(magnitudeB));
         return divisor == 0 ? 0 : dotProduct / divisor;
     }*/
+
+    public static string[] DeserializeJsonList(string json)
+    {
+        try {
+            return JsonSerializer.Deserialize<string[]>(json) ?? Array.Empty<string>();
+        } catch {
+            return Array.Empty<string>();
+        }
+    }
 
     #endregion
 }

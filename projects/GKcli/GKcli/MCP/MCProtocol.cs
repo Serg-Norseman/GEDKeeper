@@ -174,6 +174,10 @@ public class MCPToolProperty
     [JsonPropertyName("default")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public object Default { get; set; } = null;
+
+    [JsonPropertyName("items")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public MCPToolProperty Items { get; set; }
 }
 
 /// <summary>

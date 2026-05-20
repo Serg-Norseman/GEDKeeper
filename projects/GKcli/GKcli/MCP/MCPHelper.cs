@@ -112,6 +112,20 @@ public static class MCPHelper
         return argElem.GetString()!;
     }
 
+    internal static string[] GetOptionalStringArray(JsonElement args, string argName, string[] defaultValue)
+    {
+        if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.String)
+            return defaultValue;
+
+        var result = new List<string>();
+        foreach (var item in argElem.EnumerateArray()) {
+            if (item.ValueKind == JsonValueKind.String) {
+                result.Add(item.GetString()!);
+            }
+        }
+        return result.ToArray();
+    }
+
     internal static double GetOptionalDbl(JsonElement args, string argName, double defaultValue)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.Number)
