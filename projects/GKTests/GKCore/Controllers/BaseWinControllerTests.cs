@@ -6,6 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using GKCore.Design.Views;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace GKCore.Controllers
@@ -13,6 +15,13 @@ namespace GKCore.Controllers
     [TestFixture]
     public class BaseWinControllerTests
     {
+        [Test]
+        public void Test_BaseWinController()
+        {
+            var view = Substitute.For<IBaseWindowView>();
+            //var controller = new BaseWinController(view);
+        }
+
         /*
         public override async void Setup()
         {

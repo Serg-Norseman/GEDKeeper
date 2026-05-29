@@ -8,30 +8,20 @@
 
 using System.IO;
 using GDModel;
-using GKCore.Design;
 using GKCore.Design.Views;
-using GKCore.Locales;
 using GKCore.Options;
 using GKTests;
-using GKTests.Stubs;
 using NSubstitute;
 using NUnit.Framework;
 
 namespace GKCore.Controllers
 {
     [TestFixture]
-    public class MediaViewerControllerTests
+    public class MediaViewerControllerTests : ControllerTest
     {
-        private readonly IBaseWindow fBaseWin;
-
-        public MediaViewerControllerTests()
+        public MediaViewerControllerTests() : base()
         {
-            TestUtils.InitUITest();
-
-            LangMan.DefInit();
             GlobalOptions.Instance.AllowMediaStoreReferences = true;
-
-            fBaseWin = new BaseWindowStub(true);
         }
 
         [Test]
