@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using GKTests;
 using NUnit.Framework;
 
 namespace GDModel.Providers.GEDCOM
@@ -13,6 +14,11 @@ namespace GDModel.Providers.GEDCOM
     [TestFixture]
     public class GEDCOMProviderTests
     {
+        public GEDCOMProviderTests()
+        {
+            TestUtils.InitGEDCOMProviderTest();
+        }
+
         [Test]
         public void Test_GetGEDCOMFormat()
         {
@@ -32,7 +38,7 @@ namespace GDModel.Providers.GEDCOM
             Assert.IsNotNull(props);
             Assert.IsTrue(props.SkipEmpty);
 
-            props = GEDCOMTagsTable.GetTagProps("test");
+            props = GEDCOMTagsTable.GetTagProps("samp");
             Assert.IsNull(props);
         }
     }

@@ -434,7 +434,6 @@ namespace GDModel.Providers.GEDCOM
                             }
                         }
 
-                        tagName = invariantText.ToUpper(tagName);
                         tagId = GEDCOMTagsTable.Lookup(tagName);
                     } catch (GEDCOMInvalidFormatException) {
                         throw;

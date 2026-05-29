@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace GDModel.Providers.GEDCOM
@@ -88,7 +89,7 @@ namespace GDModel.Providers.GEDCOM
 
         static GEDCOMTagsTable()
         {
-            fDictionary = new Dictionary<string, GEDCOMTagProps>();
+            fDictionary = new Dictionary<string, GEDCOMTagProps>(StringComparer.OrdinalIgnoreCase);
             fList = new Dictionary<int, GEDCOMTagProps>();
         }
     }
