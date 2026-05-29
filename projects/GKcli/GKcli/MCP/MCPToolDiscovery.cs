@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using GKcli.Platform;
 using GKCore.Utilities;
 using GKUI.Platform;
 
@@ -76,6 +77,8 @@ internal static class MCPToolDiscovery
         if (queryTokens.Length == 0)
             return new List<MCPTool>();
 
+        AdjustQueryLimit(ref queryTokens, ref limit);
+
         var searchResults = fRegistry
             .Select(tool => new SearchResult(tool.Tool, CalculateScore(queryTokens, tool)))
             .Where(r => r.Score > 0.1) // Garbage cutoff threshold
@@ -90,6 +93,39 @@ internal static class MCPToolDiscovery
         fSearchCache.Add(cacheKey, result);
 
         return result;
+    }
+
+    private static readonly string[] upsertTokens = new string[] { "add", "edit", "create", "update" };
+
+    private static void AdjustQueryLimit(ref string[] queryTokens, ref int limit)
+    {
+        // Increase limit based on RecordTypeMap terms found in query
+        // For each RecordTypeMap term found (beyond the first one), increase limit by 3
+        int adjustedLimit = limit;
+
+        int recordTypeMatches = 0;
+        foreach (var keyTok in RuntimeData.RecordTypeMap.Keys) {
+            if (queryTokens.Any(token => token.Equals(keyTok, StringComparison.OrdinalIgnoreCase))) {
+                recordTypeMatches++;
+            }
+        }
+
+        int upsertMatches = 0;
+        foreach (var keyTok in upsertTokens) {
+            if (queryTokens.Any(token => token.Equals(keyTok, StringComparison.OrdinalIgnoreCase))) {
+                upsertMatches++;
+            }
+        }
+
+        if (recordTypeMatches > 0 && upsertMatches > 0) {
+            adjustedLimit += recordTypeMatches * 3;
+
+            int len = queryTokens.Length;
+            Array.Resize(ref queryTokens, len + 1);
+            queryTokens[len] = "upsert";
+        }
+
+        limit = adjustedLimit;
     }
 
     public static async Task<IEnumerable<MCPTool>> SearchAsync(string query, int limit = 5)

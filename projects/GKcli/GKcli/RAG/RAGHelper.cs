@@ -31,35 +31,6 @@ internal static class RAGHelper
         fNumberFormat.NumberDecimalSeparator = ".";
     }
 
-    public static string SearchMemory(string query, int topK = 10)
-    {
-        var inputVector = GetCachedEmbedding(query);
-        var entries = LLMDatabase.GetMemoryEntries().GetAwaiter().GetResult();
-        var bestMatches = entries
-            .Select(me => new { Entry = me, Score = inputVector.Similarity(new EmbeddingF32(me.Embedding)) })
-            .OrderByDescending(x => x.Score).Take(topK).ToList();
-
-        // Forming a context for the MCP server
-        string examples = $@"<memory>
-<instruction>
-This is data from memory. Use it in your answer and mention that you remembered it.
-</instruction>
-
-{string.Join("\n\n", bestMatches.Select((m, i) => $@"
-<fact id=""{i + 1}"" score=""{m.Score:F3}"">
-{m.Entry.Content}
-</fact>"))}
-
-<guidance>
-{(bestMatches.Average(m => m.Score) < 0.5
-    ? "⚠️ Facts with low similarity were found. Pay particular attention to deviations in structure."
-    : "✅ The facts are relevant. Follow their structure.")}
-</guidance>
-</memory>";
-
-        return examples;
-    }
-
     public static string SearchExamples(string inputText, string century = null, int topK = 10)
     {
         /*
@@ -128,7 +99,7 @@ Please note:
     private static readonly TimeSpan CacheTTL = TimeSpan.FromHours(2);
     private static readonly int MaxCacheSize = 500;
 
-    private static EmbeddingF32 GetCachedEmbedding(string text)
+    internal static EmbeddingF32 GetCachedEmbedding(string text)
     {
         if (fEmbeddingsCache.TryGetValue(text, out var cached) && DateTime.UtcNow - cached.Timestamp < CacheTTL)
             return cached.Vector;

@@ -6,13 +6,10 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using GKcli.Database;
 using GKcli.Features;
 using GKcli.MCP;
-using GKcli.RAG;
 using GKCore;
 
 namespace GKcli.Memory;
@@ -44,13 +41,7 @@ internal class StoreFactTool : BaseTool
     {
         string fact = MCPHelper.GetRequiredStr(args, "fact");
 
-        var entry = new MemoryEntry {
-            Content = fact,
-            Embedding = RAGHelper.Embed(fact).Buffer.ToArray(),
-            CreatedAt = DateTime.UtcNow
-        };
-
-        LLMDatabase.WriteMemoryEntry(entry);
+        MemoryService.StoreFact(fact).GetAwaiter().GetResult();
 
         return MCPContent.CreateSimpleContent("✅ The fact was successfully stored in memory.");
     }
@@ -84,7 +75,7 @@ internal class SearchMemoryTool : BaseTool
         string query = MCPHelper.GetRequiredStr(args, "query");
         int topK = MCPHelper.GetOptionalInt(args, "top_k", 5);
 
-        var results = RAGHelper.SearchMemory(query, topK);
+        var results = MemoryService.SearchMemory(query, topK).GetAwaiter().GetResult();
 
         return MCPContent.CreateSimpleContent(results);
     }

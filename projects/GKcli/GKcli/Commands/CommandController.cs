@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GKcli.LMChat;
 using GKCore;
 using GKUI.Platform;
 using Sharprompt;
@@ -215,6 +216,7 @@ internal class CommandController
         RegisterCommand(new ToolsMenuCommand());
         RegisterCommand(new OptionsCommand());
         RegisterCommand(new LangChangeCommand());
+        RegisterCommand(new LMChatCommand());
 
         // Tools
         RegisterCommand(new TreeCompareCommand());

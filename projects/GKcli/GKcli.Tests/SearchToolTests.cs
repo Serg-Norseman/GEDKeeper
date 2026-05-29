@@ -1,23 +1,14 @@
 ﻿using System.Text.Json;
-using GKcli.Features;
 using GKcli.MCP;
-using GKCore;
-using GKCore.Locales;
 using NUnit.Framework;
 
 namespace GKcli.Tests;
 
 [TestFixture]
-public class SearchToolTests
+public class SearchToolTests : MCPToolTests
 {
-    private readonly BaseContext fContext;
-
-    public SearchToolTests()
+    public SearchToolTests() : base()
     {
-        LangMan.DefInit();
-        MCPController.InitFeatures(pureMode: false, tdeMode: true, ragMode: true);
-
-        fContext = new BaseContext(null);
     }
 
     [Test]
@@ -26,7 +17,12 @@ public class SearchToolTests
     [TestCase("individual add edit event", "individual_upsert_event")]
     [TestCase("add edit individual", "individual_upsert")]
     [TestCase("create individual family person", "individual_upsert")]
-    //[TestCase("create individual family list person events", "individual_upsert")] - 12th place!
+    [TestCase("create individual family list person events", "family_list_events")] // 0
+    [TestCase("create individual family list person events", "individual_list_events")] // 1
+    [TestCase("create individual family list person events", "individual_upsert_event")] // 2
+    [TestCase("create individual family list person events", "family_upsert_event")] // 3
+    [TestCase("create individual family list person events", "individual_upsert")] // 4
+    [TestCase("create individual family list person events", "family_upsert")] // 5
     public void Test_Search(string query, string toolName)
     {
         var instance = new SearchTool();
@@ -45,6 +41,7 @@ public class SearchToolTests
 
     private static bool ExistsTool(List<MCPContent> result, string toolName)
     {
-        return result.Where(r => r.Text.Contains(toolName)).Any();
+        string tn = $"\"{toolName}\"";
+        return result.Where(r => r.Text.Contains(tn)).Any();
     }
 }

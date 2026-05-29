@@ -42,6 +42,11 @@ internal static class RuntimeData
         ["Location"] = GDMRecordType.rtLocation
     };
 
+    public static readonly string[] KeyEntities = new string[] {
+        "individual", "family", "note", "source", "repository", "multimedia", "group", "task", "research", "communication", "location",
+        "personal", "name", "child", "event", "fact", "association", "link", "citation", "user", "reference"
+    };
+
     public static readonly Dictionary<string, GDMMediaType> MediaTypeMap;
     public static readonly Dictionary<string, MediaStoreType> StoreTypeMap;
 

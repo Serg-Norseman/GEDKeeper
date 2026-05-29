@@ -62,23 +62,23 @@ public static class LLMDatabase
     {
         CheckConnection();
         if (string.IsNullOrEmpty(century)) {
-            return await fConnection.QueryAsync<ExtractionPattern>("select [Id], [RawText], [CorrectedResult], [Embedding], [Century] from [ExtractionPattern]");
+            return await fConnection.QueryAsync<ExtractionPattern>("select [id], [raw_text], [corrected_result], [embedding], [century] from [extraction_patterns]");
         } else {
-            return await fConnection.QueryAsync<ExtractionPattern>("select [Id], [RawText], [CorrectedResult], [Embedding], [Century] from [ExtractionPattern] where [Century] = ?", century);
+            return await fConnection.QueryAsync<ExtractionPattern>("select [id], [raw_text], [corrected_result], [embedding], [century] from [extraction_patterns] where [century] = ?", century);
         }
     }
 
     public static async Task DeletePattern(int id)
     {
         CheckConnection();
-        await fConnection.ExecuteAsync("delete from [ExtractionPattern] where [Id] = ?", id);
+        await fConnection.ExecuteAsync("delete from [extraction_patterns] where [Id] = ?", id);
     }
 
     /*public static void UpdatePattern(int id, string inputText, string embedding, string correctedResult, string century)
     {
         CheckConnection();
 
-        fConnection.Execute("update [ExtractionPattern] set [RawText] = ?, [CorrectedResult] = ?, [Embedding] = ?, [Century] = ? where [Id] = ?", inputText, correctedResult, embedding, century, id);
+        fConnection.Execute("update [extraction_patterns] set [raw_text] = ?, [corrected_result] = ?, [embedding] = ?, [century] = ? where [Id] = ?", inputText, correctedResult, embedding, century, id);
     }*/
 
     public static async Task WritePattern(string inputText, byte[] embedding, string correctedResult, string century)
@@ -93,14 +93,14 @@ public static class LLMDatabase
         };
         await fConnection.InsertAsync(pattern);
 
-        //fConnection.Execute("insert into [ExtractionPattern] ([RawText], [CorrectedResult], [Embedding], [Century]) values (?, ?, ?, ?)", inputText, correctedResult, embedding, century);
+        //fConnection.Execute("insert into [extraction_patterns] ([raw_text], [corrected_result], [embedding], [century]) values (?, ?, ?, ?)", inputText, correctedResult, embedding, century);
     }
 
     public static async Task<(int totalPatterns, IList<string> uniqueCenturies)> GetPatternStats()
     {
         CheckConnection();
-        var totalCount = await fConnection.ExecuteScalarAsync<int>("select count(*) from [ExtractionPattern]");
-        var uniqueCenturies = await fConnection.QueryScalarsAsync<string>("select distinct [Century] from [ExtractionPattern] where [Century] is not null and [Century] != ''");
+        var totalCount = await fConnection.ExecuteScalarAsync<int>("select count(*) from [extraction_patterns]");
+        var uniqueCenturies = await fConnection.QueryScalarsAsync<string>("select distinct [century] from [extraction_patterns] where [century] is not null and [century] != ''");
         return (totalCount, uniqueCenturies);
     }
 
@@ -117,7 +117,7 @@ public static class LLMDatabase
     internal static async Task<IList<MemoryEntry>> GetMemoryEntries()
     {
         CheckConnection();
-        return await fConnection.QueryAsync<MemoryEntry>("select [Content], [Embedding] from [MemoryEntry]");
+        return await fConnection.QueryAsync<MemoryEntry>("select [content], [embedding] from [memory_entries]");
     }
 
     public static async Task WriteMemoryEntry(MemoryEntry entry)

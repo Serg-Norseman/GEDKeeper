@@ -16,6 +16,7 @@ public enum CLS
     SelectCommand = 1,
     Answers = 2,
     ConfirmError = 3,
+    LMChat = 4,
 }
 
 

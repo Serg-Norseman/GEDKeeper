@@ -8,29 +8,84 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using GKcli.Database;
 using GKcli.RAG;
+using GKCore;
+using Microsoft.Extensions.Configuration;
+using SmartComponents.LocalEmbeddings;
 
 namespace GKcli.Memory;
 
 internal class MemoryService
 {
-    private const string LocalModel = "llama3";
-    private readonly string _localLmLlapiUrl; // e.g., "http://localhost:11434/api/generate" for Ollama
+    private readonly string _localAPI;
+    private readonly string _localModel;
+    private readonly int _tokenThresholdChars = 5000; // Trigger threshold in characters (~4-5k characters)
 
     private readonly HttpClient _httpClient;
-    private readonly int _tokenThresholdChars; // Trigger threshold in characters (~4-5k characters)
 
-    public MemoryService(string localLmUrl = "http://localhost:11434/api/generate", int charThreshold = 5000)
+    public MemoryService()
     {
+        var config = new ConfigurationBuilder()
+            .SetBasePath(GKUtils.GetBinPath())
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+        _localAPI = config.GetSection("LMSettings:LocalAPI").Value;
+        _localModel = config.GetSection("LMSettings:LocalModel").Value;
+        _tokenThresholdChars = 5;// int.Parse(config.GetSection("LMSettings:CharThreshold").Value);
+
         _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(30) };
-        _localLmLlapiUrl = localLmUrl;
-        _tokenThresholdChars = charThreshold;
     }
+
+    #region Facts
+
+    public static async Task StoreFact(string fact)
+    {
+        var entry = new MemoryEntry {
+            Content = fact,
+            Embedding = RAGHelper.Embed(fact).Buffer.ToArray(),
+            CreatedAt = DateTime.UtcNow
+        };
+
+        await LLMDatabase.WriteMemoryEntry(entry);
+    }
+
+    public static async Task<string> SearchMemory(string query, int topK = 10)
+    {
+        var inputVector = RAGHelper.GetCachedEmbedding(query);
+        var entries = await LLMDatabase.GetMemoryEntries();
+        var bestMatches = entries
+            .Select(me => new { Entry = me, Score = inputVector.Similarity(new EmbeddingF32(me.Embedding)) })
+            .OrderByDescending(x => x.Score).Take(topK).ToList();
+
+        // Forming a context for the MCP server
+        string examples = $@"<memory>
+<instruction>
+This is data from memory. Use it in your answer and mention that you remembered it.
+</instruction>
+
+{string.Join("\n\n", bestMatches.Select((m, i) => $@"
+<fact id=""{i + 1}"" score=""{m.Score:F3}"">
+{m.Entry.Content}
+</fact>"))}
+
+<guidance>
+{(bestMatches.Average(m => m.Score) < 0.5
+    ? "⚠️ Facts with low similarity were found. Pay particular attention to deviations in structure."
+    : "✅ The facts are relevant. Follow their structure.")}
+</guidance>
+</memory>";
+
+        return examples;
+    }
+
+    #endregion
 
     #region Context
 
@@ -146,17 +201,22 @@ NEW DIALOGUE TURNS FROM CURRENT SESSION:
 Output the new merged global summary in English. It must contain ALL key chronological information. Do not write anything except the summary.";
 
         // Send request to local model (example based on Ollama API structure)
+        /*var requestBody = new {
+             model = _localModel, // or qwen2.5 / mistral, as installed by the user
+             prompt = compressPrompt,
+             stream = false,
+             options = new { temperature = 0.1 } // Minimal temperature for factual accuracy
+         };*/
+
         var requestBody = new {
-            model = LocalModel, // or qwen2.5 / mistral, as installed by the user
-            prompt = compressPrompt,
-            stream = false,
-            options = new { temperature = 0.1 } // Minimal temperature for factual accuracy
+            model = _localModel,
+            messages = new object[] { new { content = compressPrompt, role = "user" } }
         };
 
         var jsonRequest = JsonSerializer.Serialize(requestBody);
         var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync(_localLmLlapiUrl, content);
+        var response = await _httpClient.PostAsync(_localAPI, content);
         if (response.IsSuccessStatusCode) {
             var jsonResponse = await response.Content.ReadAsStringAsync();
             using var doc = JsonDocument.Parse(jsonResponse);
