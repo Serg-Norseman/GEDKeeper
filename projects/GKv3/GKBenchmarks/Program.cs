@@ -21,6 +21,7 @@ public class Program
         summary = BenchmarkRunner.Run<StrTrim>();
         summary = BenchmarkRunner.Run<Str2Enum>();
         summary = BenchmarkRunner.Run<GEDCOMIdentNormalize>();
+        summary = BenchmarkRunner.Run<CalendarConverterBenchmark>();
         //summary = BenchmarkRunner.Run<I2S>();
     }
 }

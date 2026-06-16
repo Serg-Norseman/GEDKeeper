@@ -12,6 +12,7 @@
  */
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace GKCore.Calendar
 {
@@ -19,26 +20,31 @@ namespace GKCore.Calendar
     {
         #region Aux functions
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int iFloor(double x)
         {
             return (int)Math.Floor(x);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int iCeil(double x)
         {
             return (int)Math.Ceiling(x);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static double _modf(double a, double b)
         {
             return (a - b * Math.Floor(a / b));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int _modi(double a, double b)
         {
             return (int)Math.Truncate(a - b * Math.Floor(a / b));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int downwardRounding(int dividend, int divisor)
         {
             if (dividend >= 0) {
@@ -49,10 +55,7 @@ namespace GKCore.Calendar
             return dividend;
         }
 
-        #endregion
-
-        #region Julian day specific
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int jwday(double j)
         {
             return _modi(Math.Floor(j + 1.5), 7.0);
@@ -80,21 +83,21 @@ namespace GKCore.Calendar
         // Based on "Fourmilab Calendar Converter"
         public static void jd_to_gregorian(double jd, out int year, out int month, out int day)
         {
-            double wjd = (Math.Floor((jd - 0.5)) + 0.5);
-            double depoch = (wjd - GREGORIAN_EPOCH);
-            int quadricent = iFloor((depoch / 146097.0));
+            double wjd = Math.Floor(jd - 0.5) + 0.5;
+            double depoch = wjd - GREGORIAN_EPOCH;
+            int quadricent = iFloor(depoch / 146097.0);
             double dqc = _modf(depoch, 146097.0);
-            int cent = iFloor((dqc / 36524.0));
+            int cent = iFloor(dqc / 36524.0);
             double dcent = _modf(dqc, 36524.0);
-            int quad = iFloor((dcent / 1461.0));
+            int quad = iFloor(dcent / 1461.0);
             double dquad = _modf(dcent, 1461.0);
-            int yindex = iFloor((dquad / 365.0));
+            int yindex = iFloor(dquad / 365.0);
             year = quadricent * 400 + cent * 100 + (quad << 2) + yindex;
             if (cent != 4 && yindex != 4)
             {
                 year++;
             }
-            double yearday = (wjd - gregorian_to_jd(year, 1, 1));
+            double yearday = wjd - gregorian_to_jd(year, 1, 1);
             int leapadj = (wjd < gregorian_to_jd(year, 3, 1) ? 0 : (leap_gregorian(year) ? 1 : 2));
             month = iFloor((((yearday + leapadj) * 12.0 + 373.0) / 367.0));
             day = (int)(Math.Truncate(wjd - gregorian_to_jd(year, month, 1)) + 1);
@@ -108,14 +111,14 @@ namespace GKCore.Calendar
             int y = year + 4800 - a;
             int m = month + 12 * a - 3;
 
-            return (day + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045);
+            return day + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045;
         }
 
         // Based on https://en.wikipedia.org/wiki/Julian_day
         // astronomical years, 0 = "-4713/11/24"
         public static void jd_to_gregorian2(int jd, out int year, out int month, out int day)
         {
-            int a = (jd) + 32044;
+            int a = jd + 32044;
             int b = (4 * a + 3) / 146097;
             int c = a - (146097 * b) / 4;
             int d = (4 * c + 3) / 1461;
@@ -125,111 +128,6 @@ namespace GKCore.Calendar
             day = e - (153 * m + 2) / 5 + 1;
             month = m + 3 - 12 * (m / 10);
             year = 100 * b + d - 4800 + m / 10;
-        }
-
-
-        // Based on http://aa.quae.nl/en/reken/juliaansedag.html
-        public static int gregorian_to_jd3(int year, int month, int day)
-        {
-            int c0 = downwardRounding(month - 3, 12);
-            int x4 = year + c0;
-            int x3 = downwardRounding(x4, 100);
-            int x2 = x4 - 100 * x3;
-            int x1 = month - 3 - 12 * c0;
-            return (downwardRounding(146097 * x3, 4) +
-                    downwardRounding(36525 * x2, 100) +
-                    downwardRounding(153 * x1 + 2, 5) + day + 1721119);
-        }
-
-        // Based on http://aa.quae.nl/en/reken/juliaansedag.html
-        public static void jd_to_gregorian3(int jd, out int year,
-                                            out int month, out int day)
-        {
-            int sjd = (jd);
-            int x3 = downwardRounding(4 * sjd - 6884477, 146097);
-            int r3 = 4 * sjd - 6884477 - 146097 * x3;
-            int temp = 100 * downwardRounding(r3, 4);
-            int x2 = downwardRounding(temp + 99, 36525);
-            int r2 = temp + 99 - 36525 * x2;
-            temp = 5 * downwardRounding(r2, 100);
-            int x1 = downwardRounding(temp + 2, 153);
-            int r1 = temp + 2 - 153 * x1;
-            day = downwardRounding(r1, 5) + 1;
-            int c0 = downwardRounding(x1 + 2, 12);
-            month = x1 - 12 * c0 + 3;
-            year = 100 * x3 + x2 + c0;
-        }
-
-
-        public static int gregorian_to_jd4(int year, int month, int day)
-        {
-            int c3 = downwardRounding(month - 3, 12);
-            int x1 = month - 3 - 12 * c3;
-            int z2 = downwardRounding(153 * x1 + 2, 5) + day - 1;
-            int x2 = year + c3;
-            int c2 = 365 * x2 + downwardRounding(x2, 4) -
-                downwardRounding(x2, 100) + downwardRounding(x2, 400);
-            return (c2 + z2 + 1721120);
-        }
-
-        public static void jd_to_gregorian4(int jd, out int year, out int month, out int day)
-        {
-            int sjd = (jd);
-            int y2 = sjd - 1721120;
-            int x2 = downwardRounding(400 * y2 + 799, 146097);
-            int c2 = 365 * x2 + downwardRounding(x2, 4) -
-                downwardRounding(x2, 100) + downwardRounding(x2, 400);
-            int z2 = y2 - c2;
-            int zeta = downwardRounding(z2, 367);
-            x2 += zeta;
-            c2 = 365 * x2 + downwardRounding(x2, 4) - downwardRounding(x2, 100) +
-                downwardRounding(x2, 400);
-            z2 = y2 - c2;
-            int x1 = downwardRounding(5 * z2 + 2, 153);
-            int c1 = downwardRounding(153 * x1 + 2, 5);
-            int z1 = z2 - c1;
-            int c0 = downwardRounding(x1 + 2, 12);
-            year = x2 + c0;
-            month = x1 - 12 * c0 + 3;
-            day = z1 + 1;
-        }
-
-
-        public static int gregorian_to_jd5(int year, int month, int day)
-        {
-            int x2 = 12 * year + month - 1;
-            int c2 = 30 * x2 + downwardRounding(7 * x2 + 5, 12) -
-                2 * downwardRounding(x2 + 10, 12) +
-                downwardRounding(x2 + 46, 48) -
-                downwardRounding(x2 + 1198, 1200) +
-                downwardRounding(x2 + 4798, 4800);
-            return (c2 + day - 1 + 1721060);
-        }
-
-        public static void jd_to_gregorian5(int jd, out int year, out int month, out int day)
-        {
-            int sjd = (jd);
-            int y2 = sjd - 1721060;
-            int x2 = downwardRounding(4800 * y2 + 15793, 146097);
-            int c2 = 30 * x2 + downwardRounding(7 * x2 + 5, 12) -
-                2 * downwardRounding(x2 + 10, 12) +
-                downwardRounding(x2 + 46, 48) -
-                downwardRounding(x2 + 1198, 1200) +
-                downwardRounding(x2 + 4798, 4800);
-            int z2 = y2 - c2;
-            int zeta = downwardRounding(z2, 33);
-            x2 += zeta;
-            c2 = 30 * x2 + downwardRounding(7 * x2 + 5, 12) -
-                2 * downwardRounding(x2 + 10, 12) +
-                downwardRounding(x2 + 46, 48) -
-                downwardRounding(x2 + 1198, 1200) +
-                downwardRounding(x2 + 4798, 4800);
-            z2 = y2 - c2;
-            int x1 = downwardRounding(x2, 12);
-            int z1 = x2 - 12 * x1;
-            year = x1;
-            month = z1 + 1;
-            day = z2 + 1;
         }
 
         #endregion
@@ -286,7 +184,7 @@ namespace GKCore.Calendar
 
         public static void jd_to_julian2(int jd, out int year, out int month, out int day)
         {
-            int c = ((int) (jd)) + 32082;
+            int c = jd + 32082;
             int d = (4 * c + 3) / 1461;
             int e = c - (1461 * d) / 4;
             int m = (5 * e + 2) / 153;
@@ -294,32 +192,6 @@ namespace GKCore.Calendar
             day = e - (153 * m + 2) / 5 + 1;
             month = m + 3 - 12 * (m / 10);
             year = d - 4800 + m / 10;
-        }
-
-
-        // Based on http://aa.quae.nl/en/reken/juliaansedag.html
-        public static int julian_to_jd3(int year, int month, int day)
-        {
-            int c0 = downwardRounding(month - 3, 12);
-            int j1 = downwardRounding(1461 * (year + c0), 4);
-            int j2 = downwardRounding(153 * month - 1836 * c0 - 457, 5);
-            return (j1 + j2 + day + 1721117);
-        }
-
-        // Based on http://aa.quae.nl/en/reken/juliaansedag.html
-        public static void jd_to_julian3(int jd, out int year, out int month,
-                                         out int day)
-        {
-            int y2 = (jd) - 1721118;
-            int k2 = 4 * y2 + 3;
-            int temp = downwardRounding(k2, 1461);
-            int k1 = 5 * downwardRounding(k2 - 1461 * temp, 4) + 2;
-            int x1 = downwardRounding(k1, 153);
-            int c0 = downwardRounding(x1 + 2, 12);
-            year = downwardRounding(k2, 1461) + c0;
-            month = x1 - 12 * c0 + 3;
-            temp = downwardRounding(k1, 153);
-            day = downwardRounding(k1 - 153 * temp, 5) + 1;
         }
 
         #endregion
@@ -472,16 +344,10 @@ namespace GKCore.Calendar
 
         // Everything below is based on http://aa.quae.nl/en/reken/juliaansedag.html
 
-        private static int getRunningMonthNumberOfTheFirstMonth(int year)
-        {
-            // It's `c1(x1)`.
-            return downwardRounding(235 * year + 1, 19);
-        }
-
         private static int getTheFirstDelay(int year)
         {
             // It's `v1(x1)`
-            int c1x1 = getRunningMonthNumberOfTheFirstMonth(year);
+            int c1x1 = downwardRounding(235 * year + 1, 19); // getRunningMonthNumberOfTheFirstMonth
             int qx1 = downwardRounding(c1x1, 1095);
             int rx1 = c1x1 - 1095 * qx1;
             int v1 = 15 * qx1 + 765433 * rx1 + 12084;
@@ -503,8 +369,7 @@ namespace GKCore.Calendar
         {
             // It's `v3(x1)`
             int v3 = downwardRounding(getLengthOfYear(year) + 19, 15);
-            v3 = v3 - 2 * downwardRounding(v3, 2);
-            return 2 * v3;
+            return 2 * (v3 - 2 * downwardRounding(v3, 2));
         }
 
         private static int getTheFourthDelay(int year)
@@ -517,8 +382,7 @@ namespace GKCore.Calendar
         private static int getRunningDayNumberOfNewYear(int year)
         {
             // It's `c2(x1)`.
-            return getTheSecondDelay(year) + getTheThirdDelay(year) +
-                getTheFourthDelay(year - 1);
+            return getTheSecondDelay(year) + getTheThirdDelay(year) + getTheFourthDelay(year - 1);
         }
 
         private static int getLengthOfYear(int year)
@@ -630,10 +494,9 @@ namespace GKCore.Calendar
         }
 
         // Based on http://aa.quae.nl/en/reken/juliaansedag.html
-        public static void jd_to_islamic3(int jd, out int year, out int month,
-                                          out int day)
+        public static void jd_to_islamic3(int jd, out int year, out int month, out int day)
         {
-            int k2 = 30 * ((jd) - 1948440) + 15;
+            int k2 = 30 * (jd - 1948440) + 15;
             int temp = k2 - 10631 * downwardRounding(k2, 10631);
             int k1 = downwardRounding(temp, 30) * 11 + 5;
             year = downwardRounding(k2, 10631) + 1;
@@ -817,6 +680,22 @@ namespace GKCore.Calendar
                     year = month < 9 ? year + 5508 : year + 5509;
                     break;
             }
+        }
+
+        public static double byzantine_to_jd(int year, int month, int day, ByzantineStyle style)
+        {
+            int julianYear = year;
+
+            switch (style) {
+                case ByzantineStyle.March:
+                    julianYear = month < 3 ? year - 5507 : year - 5508;
+                    break;
+                case ByzantineStyle.September:
+                    julianYear = month < 9 ? year - 5508 : year - 5509;
+                    break;
+            }
+
+            return julian_to_jd(julianYear, month, day);
         }
 
         #endregion

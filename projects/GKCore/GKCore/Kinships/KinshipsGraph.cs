@@ -104,6 +104,16 @@ namespace GKCore.Kinships
             fGraph.FindPathTree(root);
         }
 
+        /// <summary>
+        /// Determining the full kinship between two individuals.
+        /// The starting point is specified in <see cref="SetTreeRoot"/>.
+        /// Cycles in the graph must be eliminated by database verification methods;
+        /// possible logical exceptions that are not data errors must be eliminated in the pathfinding method.
+        /// </summary>
+        /// <param name="targetRec">final person for determining the degree of kinship</param>
+        /// <param name="fullFormat">the ability to output a short final definition (for a tree) or a full multiple parts (for a calculator)</param>
+        /// <param name="shortForm">a sign of reducing degrees to numbers, instead of multiple prefixes</param>
+        /// <returns>full kinship string</returns>
         public string DetermineKinship(GDMIndividualRecord targetRec, bool fullFormat = false, bool shortForm = false)
         {
             if (!fKinshipsCulture.IsLoaded)

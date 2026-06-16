@@ -33,6 +33,9 @@ namespace GKCore.Calendar
 
         private const int IgnoreYMD = IgnoreYear | IgnoreMonth | IgnoreDay;
 
+        private const int DateFlags = DateAfter | DateBefore | ApproximateDate;
+        private const int AllFlags = IgnoreYMD | DateFlags;
+
         private const int ValueMask = 0x3FFFFFF;
 
         public const int UnknownYear = 0;
@@ -198,54 +201,42 @@ namespace GKCore.Calendar
         /// the `l` and the `r` are equal.</returns>
         private static int CompareVal(int l, int r)
         {
+            // Quick check for identical flags
+            int flagsL = l & AllFlags;
+            int flagsR = r & AllFlags;
+            if (flagsL == flagsR) {
+                // If the flags match, compare only the days
+                return Sign((l & ValueMask) - (r & ValueMask));
+            }
+
             int result = 0;
-            if ((IgnoreYear & l) == 0)
-            {
-                if ((IgnoreYear & r) == 0)
-                {
-                    result = Sign(((int) (ValueMask & l)) - ((int) (ValueMask & r)));
-                }
-                else
-                {
+
+            if ((IgnoreYear & l) == 0) {
+                if ((IgnoreYear & r) == 0) {
+                    result = Sign((ValueMask & l) - (ValueMask & r));
+                } else {
                     result = 1;
                 }
-            }
-            else if ((IgnoreYear & r) == 0)
-            {
+            } else if ((IgnoreYear & r) == 0) {
                 result = -1;
-            }
-            else if ((IgnoreMonth & l) == 0)
-            {
-                if ((IgnoreMonth & r) == 0)
-                {
-                    result = Sign(((int) (ValueMask & l)) - ((int) (ValueMask & r)));
-                }
-                else
-                {
+            } else if ((IgnoreMonth & l) == 0) {
+                if ((IgnoreMonth & r) == 0) {
+                    result = Sign((ValueMask & l) - (ValueMask & r));
+                } else {
                     result = 1;
                 }
-            }
-            else if ((IgnoreMonth & r) == 0)
-            {
+            } else if ((IgnoreMonth & r) == 0) {
                 result = -1;
-            }
-            else if ((IgnoreDay & l) == 0)
-            {
-                if ((IgnoreDay & r) == 0)
-                {
-                    result = Sign(((int) (ValueMask & l)) - ((int) (ValueMask & r)));
-                }
-                else
-                {
+            } else if ((IgnoreDay & l) == 0) {
+                if ((IgnoreDay & r) == 0) {
+                    result = Sign((ValueMask & l) - (ValueMask & r));
+                } else {
                     result = 1;
                 }
-            }
-            else if ((IgnoreDay & r) == 0)
-            {
+            } else if ((IgnoreDay & r) == 0) {
                 result = -1;
             }
-            if (result == 0)
-            {
+            if (result == 0) {
                 /*
                  * Here we got equal JDNs-UDNs. Now we need to do an additional processing of `ApproximateDate`,
                  * `DateBefore` and `DateAfter` flags to implement the following ordering:
@@ -279,31 +270,19 @@ namespace GKCore.Calendar
                  * | A   | 1          | ~ A |                                                   |
                  * +-----+------------+-----+---------------------------------------------------+
                  */
-                if ((DateBefore & l) != 0)
-                {
+                if ((DateBefore & l) != 0) {
                     result = ((DateBefore & r) != 0) ? 0 : -1;
-                }
-                else if ((DateAfter & l) != 0)
-                {
+                } else if ((DateAfter & l) != 0) {
                     result = ((DateAfter & r) != 0) ? 0 : 1;
-                }
-                else if ((ApproximateDate & l) != 0)
-                {
-                    if ((ApproximateDate & r) != 0)
-                    {
+                } else if ((ApproximateDate & l) != 0) {
+                    if ((ApproximateDate & r) != 0) {
                         result = 0;
-                    }
-                    else
-                    {
+                    } else {
                         result = ((DateBefore & r) != 0) ? 1 : -1;
                     }
-                }
-                else if ((DateAfter & r) != 0)
-                {
+                } else if ((DateAfter & r) != 0) {
                     result = -1;
-                }
-                else
-                {
+                } else {
                     result = (((DateBefore | ApproximateDate) & r) != 0) ? 1 : 0;
                 }
             }
@@ -497,8 +476,7 @@ namespace GKCore.Calendar
         /// throws an exception.</returns>
         public static UDN CreateBetween(UDN left, UDN right, bool checkYears = true)
         {
-            if (checkYears && (((IgnoreYear & left.fValue) != 0) || ((IgnoreYear & right.fValue) != 0)))
-            {
+            if (checkYears && (((IgnoreYear & left.fValue) != 0) || ((IgnoreYear & right.fValue) != 0))) {
                 throw new Exception("`Between` member requires dates with valid years");
             }
             /*
@@ -524,6 +502,13 @@ namespace GKCore.Calendar
         }
 
         #endregion
+
+        /// <summary>Checks year, month and day parts of this date.</summary>
+        /// <returns>True if this date has valid parts and false otherwise.</returns>
+        public bool IsFullyKnown()
+        {
+            return (IgnoreYMD & fValue) == 0;
+        }
 
         /// <summary>Checks year part of this date.</summary>
         /// <returns>True if this date has valid year (`IgnoreYear` flag isn't set) and false otherwise.</returns>
