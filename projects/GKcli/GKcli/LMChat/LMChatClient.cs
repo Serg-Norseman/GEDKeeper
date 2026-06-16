@@ -53,7 +53,7 @@ public class LMChatClient
     /// </summary>
     public async Task<string> SendMessageAsync(CancellationToken cancellationToken = default)
     {
-        var request = new ChatRequest(_modelId, this.History, Stream: false);
+        var request = new ChatRequest(_modelId, this.History, stream: false);
 
         var response = await _httpClient.PostAsJsonAsync("v1/chat/completions", request, cancellationToken);
         response.EnsureSuccessStatusCode();
@@ -67,7 +67,7 @@ public class LMChatClient
     /// </summary>
     public async Task<IAsyncEnumerable<string>> SendMessageStreamAsync(CancellationToken cancellationToken = default)
     {
-        var request = new ChatRequest(_modelId, this.History, Stream: true);
+        var request = new ChatRequest(_modelId, this.History, stream: true);
         var response = await _httpClient.PostAsJsonAsync("v1/chat/completions", request, cancellationToken);
         response.EnsureSuccessStatusCode();
 

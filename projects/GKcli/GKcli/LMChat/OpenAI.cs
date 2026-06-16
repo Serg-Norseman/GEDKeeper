@@ -3,33 +3,99 @@ using System.Text.Json.Serialization;
 
 namespace GKcli.LMChat.OpenAI;
 
-public record ChatMessage(
-    [property: JsonPropertyName("role")] string Role,
-    [property: JsonPropertyName("content")] string Content
-);
 
-internal record ChatRequest(
-    [property: JsonPropertyName("model")] string Model,
-    [property: JsonPropertyName("messages")] List<ChatMessage> Messages,
-    [property: JsonPropertyName("stream")] bool Stream
-);
+public class ChatMessage
+{
+    [JsonPropertyName("role")]
+    public string Role { get; set; }
 
-internal record ChatResponse(
-    [property: JsonPropertyName("choices")] List<ChatChoice> Choices
-);
+    [JsonPropertyName("content")]
+    public string Content { get; set; }
 
-internal record ChatChoice(
-    [property: JsonPropertyName("message")] ChatMessage Message
-);
+    [JsonPropertyName("tool_calls")]
+    public List<ToolCall> ToolCalls { get; set; }
 
-internal record ChatStreamResponse(
-    [property: JsonPropertyName("choices")] List<ChatStreamChoice> Choices
-);
+    public ChatMessage()
+    {
+    }
 
-internal record ChatStreamChoice(
-    [property: JsonPropertyName("delta")] ChatDelta Delta
-);
+    public ChatMessage(string role, string content)
+    {
+        Role = role;
+        Content = content;
+    }
+}
 
-internal record ChatDelta(
-    [property: JsonPropertyName("content")] string Content
-);
+
+public class ToolCall
+{
+    public string Id { get; set; }
+    public string Type { get; set; } = "function";
+    public FunctionCall Function { get; set; }
+}
+
+
+public class FunctionCall
+{
+    public string Name { get; set; }
+    public string Arguments { get; set; }
+}
+
+
+public class ChatRequest
+{
+    [JsonPropertyName("model")]
+    public string Model { get; set; }
+
+    [JsonPropertyName("messages")]
+    public List<ChatMessage> Messages { get; set; }
+
+    [JsonPropertyName("stream")]
+    public bool Stream { get; set; }
+
+    public ChatRequest()
+    {
+    }
+
+    public ChatRequest(string model, List<ChatMessage> messages, bool stream)
+    {
+        Model = model;
+        Messages = messages;
+        Stream = stream;
+    }
+}
+
+
+public class ChatResponse
+{
+    [JsonPropertyName("choices")]
+    public List<ChatChoice> Choices { get; set; }
+}
+
+
+public class ChatChoice
+{
+    [JsonPropertyName("message")]
+    public ChatMessage Message { get; set; }
+}
+
+
+public class ChatStreamResponse
+{
+    [JsonPropertyName("choices")]
+    public List<ChatStreamChoice> Choices { get; set; }
+}
+
+
+public class ChatStreamChoice
+{
+    [JsonPropertyName("delta")]
+    public ChatDelta Delta { get; set; }
+}
+
+
+public class ChatDelta
+{
+    [JsonPropertyName("content")]
+    public string Content { get; set; }
+}

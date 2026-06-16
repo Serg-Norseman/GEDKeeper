@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKsse", "GKsse\GKsse.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKcli.Tests", "GKcli.Tests\GKcli.Tests.csproj", "{89394BD3-B2AF-46FD-AE06-405219948210}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCortex", "GKCortex\GKCortex.csproj", "{BE0D28BD-231D-470A-91BB-940670D8D8C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|FreeBSD = Debug|FreeBSD
@@ -128,6 +130,26 @@ Global
 		{89394BD3-B2AF-46FD-AE06-405219948210}.Release|MacOS.Build.0 = Release|Any CPU
 		{89394BD3-B2AF-46FD-AE06-405219948210}.Release|MSWin64.ActiveCfg = Release|Any CPU
 		{89394BD3-B2AF-46FD-AE06-405219948210}.Release|MSWin64.Build.0 = Release|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Debug|FreeBSD.ActiveCfg = Debug|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Debug|FreeBSD.Build.0 = Debug|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Debug|Linux.ActiveCfg = Debug|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Debug|Linux.Build.0 = Debug|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Debug|Linux_ARM.ActiveCfg = Debug|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Debug|Linux_ARM.Build.0 = Debug|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Debug|MacOS.ActiveCfg = Debug|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Debug|MacOS.Build.0 = Debug|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Debug|MSWin64.ActiveCfg = Debug|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Debug|MSWin64.Build.0 = Debug|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Release|FreeBSD.ActiveCfg = Release|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Release|FreeBSD.Build.0 = Release|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Release|Linux.ActiveCfg = Release|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Release|Linux.Build.0 = Release|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Release|Linux_ARM.ActiveCfg = Release|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Release|Linux_ARM.Build.0 = Release|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Release|MacOS.ActiveCfg = Release|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Release|MacOS.Build.0 = Release|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Release|MSWin64.ActiveCfg = Release|Any CPU
+		{BE0D28BD-231D-470A-91BB-940670D8D8C3}.Release|MSWin64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
