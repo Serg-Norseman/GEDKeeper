@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
-using GKcli.MCP;
+using GKCortex.MCP;
+using GKCortex.Protocols;
 using NUnit.Framework;
 
 namespace GKcli.Tests;

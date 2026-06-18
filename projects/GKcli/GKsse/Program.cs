@@ -4,10 +4,10 @@ using System.IO;
 using System.Text;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using GKcli.Database;
-using GKcli.Features;
-using GKcli.MCP;
 using GKCore;
+using GKCortex.Database;
+using GKCortex.Features;
+using GKCortex.MCP;
 using GKUI.Platform;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -28,7 +28,7 @@ internal class Program
         AppHost.InitSettings();
         AppHost.Instance.Init(args, false);
         LLMDatabase.SetAppDataPath(AppHost.GetAppDataPathStatic());
-        MCPController.InitFeatures(pureMode: false, tdeMode: true, ragMode: true);
+        MCPController.InitFeatures(embedded: false, pureMode: false, tdeMode: true, ragMode: true);
         Log("MCP Server started");
         AppHost.Instance.SetForcedBackup();
 

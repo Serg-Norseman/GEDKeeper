@@ -23,6 +23,12 @@
 		},
 		{
 			"path": "./GKBenchmarks"
+		},
+		{
+			"path": "../GKcli/GKCortex"
+		},
+		{
+			"path": "../plugins/GKLMChatPlugin"
 		}
 	],
 	"settings": {}

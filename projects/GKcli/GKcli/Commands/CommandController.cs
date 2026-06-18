@@ -9,7 +9,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GKcli.LMChat;
 using GKCore;
 using GKUI.Platform;
 using Sharprompt;

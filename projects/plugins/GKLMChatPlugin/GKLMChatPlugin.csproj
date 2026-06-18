@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net8.0</TargetFrameworks>
+        <AssemblyName>GKLMChatPlugin</AssemblyName>
+        <RootNamespace>GKLMChatPlugin</RootNamespace>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <OutputPath>..\..\..\plugins\</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+
+    <Import Project="..\..\GKConfigurations3.targets" />
+
+
+    <ItemGroup>
+        <Reference Include="BSLib">
+            <HintPath>..\..\libs\netstd\BSLib.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
+        <ProjectReference Include="..\..\GKv3\GKComponents\GKComponents.csproj" />
+        <ProjectReference Include="..\..\GKcli\GKCortex\GKCortex.net.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Eto.Forms" Version="2.10.0" />
+        <PackageReference Include="Eto.Serialization.Xaml" Version="2.10.0" />
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4022.49" PrivateAssets="All" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="GKLMChatPlugin.cs" />
+        <Compile Include="LMChatForm.cs" />
+
+        <None Include="GKLMChatPlugin.enu">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="GKLMChatPlugin.rus">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+</Project>

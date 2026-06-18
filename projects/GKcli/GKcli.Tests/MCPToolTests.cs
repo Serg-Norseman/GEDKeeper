@@ -1,6 +1,6 @@
-using GKcli.Features;
 using GKCore;
 using GKCore.Locales;
+using GKCortex.Features;
 
 namespace GKcli.Tests;
 
@@ -11,7 +11,7 @@ public class MCPToolTests
     static MCPToolTests()
     {
         LangMan.DefInit();
-        MCPController.InitFeatures(pureMode: false, tdeMode: true, ragMode: true);
+        MCPController.InitFeatures(embedded: false, pureMode: false, tdeMode: true, ragMode: true);
     }
 
     public MCPToolTests()

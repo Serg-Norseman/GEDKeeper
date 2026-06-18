@@ -1,0 +1,12 @@
+﻿using System.Reflection;
+using System.Runtime.CompilerServices;
+using GKCore;
+
+[assembly: AssemblyTitle("GKCortex")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyProduct(GKData.APP_TITLE)]
+[assembly: AssemblyCopyright(GKData.APP_COPYRIGHT)]
+[assembly: AssemblyVersion(GKData.APP_VERSION_3X)]
+[assembly: AssemblyCulture("")]
+
+[assembly: InternalsVisibleTo("GKCortex.Tests")]

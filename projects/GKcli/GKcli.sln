@@ -32,7 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assistants", "assistants", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKsse", "GKsse\GKsse.csproj", "{2370809A-2667-4698-8153-4B27A020C5E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKcli.Tests", "GKcli.Tests\GKcli.Tests.csproj", "{89394BD3-B2AF-46FD-AE06-405219948210}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCortex.Tests", "GKcli.Tests\GKCortex.Tests.csproj", "{89394BD3-B2AF-46FD-AE06-405219948210}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCortex", "GKCortex\GKCortex.csproj", "{BE0D28BD-231D-470A-91BB-940670D8D8C3}"
 EndProject

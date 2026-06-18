@@ -112,6 +112,9 @@ rmdir .\projects\GKcli\GKcli.Tests\obj /s /q
 rmdir .\projects\GKcli\GKsse\bin /s /q
 rmdir .\projects\GKcli\GKsse\obj /s /q
 
+rmdir .\projects\GKcli\GKCortex\bin /s /q
+rmdir .\projects\GKcli\GKCortex\obj /s /q
+
 rem <<< Plugins cleaning >>>
 
 rmdir .\projects\plugins\GEDmill\bin /s /q

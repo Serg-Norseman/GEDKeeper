@@ -1,5 +1,5 @@
 using System.Text.Json;
-using GKcli.Memory;
+using GKCortex.Memory;
 using NUnit.Framework;
 
 namespace GKcli.Tests;

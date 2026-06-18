@@ -1,5 +1,5 @@
 using System.Text.Json;
-using GKcli.RAG;
+using GKCortex.RAG;
 using NUnit.Framework;
 
 namespace GKcli.Tests;

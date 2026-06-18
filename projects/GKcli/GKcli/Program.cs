@@ -8,10 +8,10 @@
 
 using System;
 using GKcli.Commands;
-using GKcli.Database;
-using GKcli.Features;
-using GKcli.MCP;
 using GKCore;
+using GKCortex.Database;
+using GKCortex.Features;
+using GKCortex.MCP;
 using GKUI.Platform;
 
 namespace GKcli;
@@ -55,7 +55,7 @@ internal class Program
     private static void RunMCPServer(bool pureMode, bool tdeMode, bool ragMode)
     {
         try {
-            MCPController.InitFeatures(pureMode, tdeMode, ragMode);
+            MCPController.InitFeatures(embedded: false, pureMode, tdeMode, ragMode);
 
             var server = new MCPServer();
             server.Run();
