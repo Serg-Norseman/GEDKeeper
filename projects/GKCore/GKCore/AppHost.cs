@@ -1266,7 +1266,7 @@ namespace GKCore
         /// Set forced backup of each file revision (on each save).
         /// </summary>
         /// <returns>previous settings to restore</returns>
-        public BackupOptions SetForcedBackup()
+        public static BackupOptions SetForcedBackup()
         {
             var prevBackups = new BackupOptions();
             prevBackups.Assign(GlobalOptions.Instance.Backups);
@@ -1275,7 +1275,7 @@ namespace GKCore
             return prevBackups;
         }
 
-        public void SetRegularBackup(BackupOptions backupOptions)
+        public static void SetRegularBackup(BackupOptions backupOptions)
         {
             GlobalOptions.Instance.Backups.Assign(backupOptions);
         }

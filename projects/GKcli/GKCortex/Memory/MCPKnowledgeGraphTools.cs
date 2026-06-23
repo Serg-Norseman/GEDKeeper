@@ -8,6 +8,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GKCore;
 using GKCortex.Features;
 using GKCortex.MCP;
@@ -36,12 +37,12 @@ internal class GetKnowledgeSubgraphTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string entityId = MCPHelper.GetRequiredStr(args, "entity_id");
 
         var service = new MemoryService();
-        string result = service.GetLocalSubGraphAsTextAsync(entityId).GetAwaiter().GetResult();
+        string result = await service.GetLocalSubGraphAsTextAsync(entityId);
 
         return MCPContent.CreateSimpleContent(result);
     }
@@ -73,7 +74,7 @@ internal class AddKnowledgeNodeTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string entityId = MCPHelper.GetRequiredStr(args, "entity_id");
         string name = MCPHelper.GetRequiredStr(args, "name");
@@ -81,7 +82,7 @@ internal class AddKnowledgeNodeTool : BaseTool
         string description = MCPHelper.GetRequiredStr(args, "description");
 
         var service = new MemoryService();
-        service.AddEntityAsync(entityId, name, type, description).GetAwaiter().GetResult();
+        await service.AddEntityAsync(entityId, name, type, description);
 
         return MCPContent.CreateSimpleContent($"✅ Node '{name}' [{type.ToUpperInvariant()}] successfully recorded in the knowledge graph.");
     }
@@ -113,7 +114,7 @@ internal class ConnectKnowledgeNodesTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string sourceId = MCPHelper.GetRequiredStr(args, "source_id");
         string predicate = MCPHelper.GetRequiredStr(args, "predicate");
@@ -121,7 +122,7 @@ internal class ConnectKnowledgeNodesTool : BaseTool
         string contextNotes = MCPHelper.GetRequiredStr(args, "context_notes");
 
         var service = new MemoryService();
-        service.AddRelationAsync(sourceId, predicate, targetId, contextNotes).GetAwaiter().GetResult();
+        await service.AddRelationAsync(sourceId, predicate, targetId, contextNotes);
 
         return MCPContent.CreateSimpleContent($"✅ Relationship successfully created: {sourceId} --({predicate})--> {targetId}.");
     }

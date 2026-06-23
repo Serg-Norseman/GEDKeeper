@@ -9,7 +9,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GKCore;
+using GKCortex.LMChat;
 using GKCortex.MCP;
 using GKCortex.Memory;
 using GKCortex.Protocols;
@@ -20,6 +22,7 @@ namespace GKCortex.Features;
 public class MCPController
 {
     private static BaseContext fBaseContext = new BaseContext(null);
+    private static ILMChat fLMChat = null;
     private static readonly Dictionary<string, BaseTool> fTools = new Dictionary<string, BaseTool>();
     private static readonly List<MCPTool> fMCPTools = new List<MCPTool>();
     private static readonly Dictionary<string, BaseResource> fResources = new Dictionary<string, BaseResource>();
@@ -27,6 +30,18 @@ public class MCPController
 
     static MCPController()
     {
+    }
+
+    public static void SetLMChat(ILMChat lmChat)
+    {
+        if (lmChat != null) {
+            fLMChat = lmChat;
+        }
+    }
+
+    public static ILMChat GetLMChat()
+    {
+        return fLMChat;
     }
 
     public static void SetContext(BaseContext baseContext)
@@ -236,10 +251,10 @@ public class MCPController
         return fMCPTools;
     }
 
-    public static List<MCPContent> ExecuteTool(string toolName, JsonElement args)
+    public static async Task<List<MCPContent>> ExecuteTool(string toolName, JsonElement args)
     {
         if (fTools.TryGetValue(toolName, out BaseTool cmd)) {
-            return cmd.ExecuteTool(fBaseContext, args);
+            return await cmd.ExecuteTool(fBaseContext, args);
         } else {
             throw new ArgumentException($"Unknown tool: {toolName}");
         }

@@ -5,6 +5,7 @@
         <AssemblyName>GKCortex</AssemblyName>
         <RootNamespace>GKCortex</RootNamespace>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,9 +19,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="SmartComponents.LocalEmbeddings" Version="0.1.0-preview10148" />
+        <PackageReference Include="SmartComponents.LocalEmbeddings" Version="0.1.0-preview10148" PrivateAssets="All" />
         <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
         <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
+        <PackageReference Include="Markdig" Version="1.3.2" />
     </ItemGroup>
 
     <ItemGroup>

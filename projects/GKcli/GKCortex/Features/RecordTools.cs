@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore;
@@ -43,7 +44,7 @@ internal class RecordListTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordTypeStr = MCPHelper.GetRequiredStr(args, "record_type");
         if (!RuntimeData.RecordTypeMap.TryGetValue(recordTypeStr, out GDMRecordType recordType)) {
@@ -227,7 +228,7 @@ internal class RecordSearchTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordTypeStr = MCPHelper.GetRequiredStr(args, "record_type");
         string searchText = MCPHelper.GetRequiredStr(args, "search_text");
@@ -285,7 +286,7 @@ internal class RecordInfoTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetRequiredStr(args, "xref");
 
@@ -320,7 +321,7 @@ internal class RecordDeleteTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetRequiredStr(args, "xref");
 
@@ -328,7 +329,7 @@ internal class RecordDeleteTool : BaseTool
         if (record == null)
             return MCPContent.CreateSimpleContent($"Record not found with XRef: {xref}");
 
-        baseContext.DeleteRecord(record);
+        await baseContext.DeleteRecord(record);
 
         return MCPContent.CreateSimpleContent($"Record deleted: {xref}");
     }
@@ -354,7 +355,7 @@ internal class RecordSetRestrictionTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetRequiredStr(args, "xref");
         string restrictionStr = MCPHelper.GetRequiredStr(args, "restriction");
@@ -400,7 +401,7 @@ internal class RecordMergeTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string targetXRef = MCPHelper.GetRequiredStr(args, "target_xref");
         var targetRecord = baseContext.Tree.FindXRef<GDMRecord>(targetXRef);

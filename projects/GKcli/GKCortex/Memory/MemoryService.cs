@@ -9,12 +9,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using GKCore;
 using GKCortex.Database;
+using GKCortex.Features;
 using GKCortex.RAG;
 using SmartComponents.LocalEmbeddings;
 
@@ -22,24 +21,10 @@ namespace GKCortex.Memory;
 
 internal class MemoryService
 {
-    private readonly string _localAPI;
-    private readonly string _localModel;
     private readonly int _tokenThresholdChars = 5000; // Trigger threshold in characters (~4-5k characters)
-
-    private readonly HttpClient _httpClient;
 
     public MemoryService()
     {
-        /*var config = new ConfigurationBuilder()
-            .SetBasePath(GKUtils.GetBinPath())
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-        _localAPI = config.GetSection("LMSettings:LocalAPI").Value;
-        _localModel = config.GetSection("LMSettings:LocalModel").Value;
-        _tokenThresholdChars = 5;// int.Parse(config.GetSection("LMSettings:CharThreshold").Value);*/
-
-        _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(30) };
     }
 
     #region Facts
@@ -199,41 +184,20 @@ NEW DIALOGUE TURNS FROM CURRENT SESSION:
 
 Output the new merged global summary in English. It must contain ALL key chronological information. Do not write anything except the summary.";
 
-        // Send request to local model (example based on Ollama API structure)
-        /*var requestBody = new {
-             model = _localModel, // or qwen2.5 / mistral, as installed by the user
-             prompt = compressPrompt,
-             stream = false,
-             options = new { temperature = 0.1 } // Minimal temperature for factual accuracy
-         };*/
+        var lmClient = MCPController.GetLMChat();
+        if (lmClient == null) return;
 
-        var requestBody = new {
-            model = _localModel,
-            messages = new object[] { new { content = compressPrompt, role = "user" } }
-        };
+        // Send request to local model (minimal temperature for factual accuracy)
+        var newGlobalSummary = await lmClient.SendMessageSingleAsync("user", compressPrompt, 0.1f);
 
-        var jsonRequest = JsonSerializer.Serialize(requestBody);
-        var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+        if (!string.IsNullOrEmpty(newGlobalSummary)) {
+            // Update state in DB: 
+            // Clear current session (or keep last 2 lines), and consolidate global memory.
+            summary.GlobalSummary = newGlobalSummary;
+            summary.CurrentSessionSummary = "Context cleared after archival. Dialogue continues from this point.\n";
+            summary.LastUpdated = DateTime.UtcNow;
 
-        var response = await _httpClient.PostAsync(_localAPI, content);
-        if (response.IsSuccessStatusCode) {
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-            using var doc = JsonDocument.Parse(jsonResponse);
-
-            // Extract response text (in Ollama the field is called "response")
-            if (doc.RootElement.TryGetProperty("response", out var responseElement)) {
-                string newGlobalSummary = responseElement.GetString()?.Trim() ?? string.Empty;
-
-                if (!string.IsNullOrEmpty(newGlobalSummary)) {
-                    // Update state in DB: 
-                    // Clear current session (or keep last 2 lines), and consolidate global memory.
-                    summary.GlobalSummary = newGlobalSummary;
-                    summary.CurrentSessionSummary = "Context cleared after archival. Dialogue continues from this point.\n";
-                    summary.LastUpdated = DateTime.UtcNow;
-
-                    await LLMDatabase.UpdateSummary(summary);
-                }
-            }
+            await LLMDatabase.UpdateSummary(summary);
         }
     }
 

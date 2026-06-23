@@ -717,7 +717,7 @@ namespace GKCore.Charts
                 // if the person have more than one families - to hide unknown spouses it is impossible
                 bool skipUnkSpouses = fOptions.HideUnknownSpouses && spousesNum < 2;
 
-                bool skipChildless = fOptions.ChildlessExclude && fContext.IsChildless(indiRec);
+                bool skipChildless = fOptions.ChildlessExclude && BaseContext.IsChildless(indiRec);
 
                 if (skipChildless && generation != 0 && spousesNum == 0)
                     return null;

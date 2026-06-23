@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCore.Options;
@@ -33,7 +34,7 @@ internal class FileNewTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         baseContext.Clear();
         return MCPContent.CreateSimpleContent($"Database created. Records: {baseContext.Tree.RecordsCount}.");
@@ -65,12 +66,12 @@ internal class FileLoadTool : FileTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string path = MCPHelper.GetRequiredStr(args, "path");
 
         var sw = Stopwatch.StartNew();
-        baseContext.FileLoad(path, false).GetAwaiter().GetResult();
+        await baseContext.FileLoad(path, false);
         sw.Stop();
 
         return MCPContent.CreateSimpleContent($"Database loaded: {path}. Records: {baseContext.Tree.RecordsCount}. Time: {sw.Elapsed.TotalSeconds:F3}s.");
@@ -96,12 +97,12 @@ internal class FileSaveTool : FileTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string path = MCPHelper.GetRequiredStr(args, "path");
 
         var sw = Stopwatch.StartNew();
-        baseContext.FileSave(path).GetAwaiter().GetResult();
+        await baseContext.FileSave(path);
         sw.Stop();
 
         return MCPContent.CreateSimpleContent($"Database saved: {path}. Time: {sw.Elapsed.TotalSeconds:F3}s.");
@@ -122,7 +123,7 @@ internal class FilePropsTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         var lines = new List<string> { "File properties" };
 
@@ -157,7 +158,7 @@ internal class FileRecentTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         var result = new List<MCPContent>();
 
@@ -185,7 +186,7 @@ internal class FileReloadTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         var globOpts = GlobalOptions.Instance;
         if (globOpts.MRUFiles.Count == 0)
@@ -197,7 +198,7 @@ internal class FileReloadTool : BaseTool
         baseContext.Clear();
 
         var sw = Stopwatch.StartNew();
-        baseContext.FileLoad(path, false).GetAwaiter().GetResult();
+        await baseContext.FileLoad(path, false);
         sw.Stop();
 
         return MCPContent.CreateSimpleContent($"Database reloaded: {path.Replace('\\', '/')}. Records: {baseContext.Tree.RecordsCount}. Time: {sw.Elapsed.TotalSeconds:F3}s.");
@@ -223,7 +224,7 @@ internal class FileSearchTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string path = MCPHelper.GetRequiredStr(args, "path");
 
@@ -252,7 +253,7 @@ internal class FileValidateTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         bool isUnknown = baseContext.IsUnknown();
         int recordsCount = baseContext.Tree.RecordsCount;
@@ -290,7 +291,7 @@ internal class FileMergeTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string path = MCPHelper.GetRequiredStr(args, "path");
 

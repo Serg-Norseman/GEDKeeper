@@ -8,6 +8,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCortex.MCP;
@@ -33,7 +34,7 @@ internal class RecordListMultimediaTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
 
@@ -84,7 +85,7 @@ internal class RecordAddMultimediaLinkTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         string multimediaXRef = MCPHelper.GetRequiredStr(args, "multimedia_xref");
@@ -132,7 +133,7 @@ internal class RecordDeleteMultimediaLinkTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         int linkIndex = MCPHelper.GetOptionalInt(args, "link_index", -1);

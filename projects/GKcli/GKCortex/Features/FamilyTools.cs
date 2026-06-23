@@ -8,6 +8,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCortex.MCP;
@@ -36,7 +37,7 @@ internal class FamilyUpsertTool : BaseTool
     }
 
     // TODO: Logic for the case when one of the spouses is unknown
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string husbandXRef = MCPHelper.GetOptionalStr(args, "husband_xref", null);

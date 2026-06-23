@@ -29,7 +29,7 @@ public class WeightedCache<TKey, TValue> : IDisposable where TKey : notnull
             Timestamp = DateTime.UtcNow.Ticks;
         }
 
-        public int CompareTo(Node? other)
+        public int CompareTo(Node other)
         {
             if (other == null) return 1;
             // Primary sort by weight, secondary by timestamp (FIFO for same weights)

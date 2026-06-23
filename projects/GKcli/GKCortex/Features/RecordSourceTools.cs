@@ -8,6 +8,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCortex.MCP;
@@ -33,7 +34,7 @@ internal class RecordListSourceCitationsTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
 
@@ -89,7 +90,7 @@ internal class RecordAddSourceCitationTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
@@ -139,7 +140,7 @@ internal class RecordDeleteSourceCitationTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         int citationIndex = MCPHelper.GetOptionalInt(args, "citation_index", -1);

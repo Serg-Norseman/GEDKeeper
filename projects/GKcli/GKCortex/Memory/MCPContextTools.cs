@@ -8,6 +8,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GKCore;
 using GKCortex.Features;
 using GKCortex.MCP;
@@ -38,12 +39,12 @@ internal class GetContextSummaryTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string sessionId = MCPHelper.GetRequiredStr(args, "session_id");
 
         var service = new MemoryService();
-        var summary = service.GetInjectedContextAsync(sessionId).GetAwaiter().GetResult();
+        var summary = await service.GetInjectedContextAsync(sessionId);
 
         if (summary == null)
             return MCPContent.CreateSimpleContent("❌ History is empty. This is the first dialogue with the user.");
@@ -77,7 +78,7 @@ internal class SaveChatMilestoneTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string sessionId = MCPHelper.GetRequiredStr(args, "session_id");
         string userLine = MCPHelper.GetRequiredStr(args, "user_line");
@@ -85,7 +86,7 @@ internal class SaveChatMilestoneTool : BaseTool
 
         var service = new MemoryService();
         // Note: Consider async-over-sync pattern or background queue for production use
-        service.AppendAndOptimizeContextAsync(sessionId, userLine, assistantLine).GetAwaiter().GetResult();
+        await service.AppendAndOptimizeContextAsync(sessionId, userLine, assistantLine);
 
         return MCPContent.CreateSimpleContent("✅ Interaction successfully recorded to the long-term session log.");
     }

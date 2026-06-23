@@ -8,6 +8,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCore.Utilities;
@@ -34,7 +35,7 @@ internal class IndiSearchTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string searchName = MCPHelper.GetRequiredStr(args, "name");
 
@@ -95,7 +96,7 @@ internal class IndividualUpsertTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string name = MCPHelper.GetOptionalStr(args, "name", null);
@@ -174,7 +175,7 @@ internal class IndiListSpousesTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
@@ -221,7 +222,7 @@ internal class IndiListGroupsTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);

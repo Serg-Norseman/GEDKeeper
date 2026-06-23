@@ -8,6 +8,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCortex.MCP;
@@ -34,7 +35,7 @@ internal class SourceListRepositoriesTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
         var sourceRec = baseContext.Tree.FindXRef<GDMSourceRecord>(sourceXRef);
@@ -85,7 +86,7 @@ internal class SourceAddRepositoryTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
         var sourceRec = baseContext.Tree.FindXRef<GDMSourceRecord>(sourceXRef);
@@ -128,7 +129,7 @@ internal class SourceDeleteRepositoryTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
         var sourceRec = baseContext.Tree.FindXRef<GDMSourceRecord>(sourceXRef);

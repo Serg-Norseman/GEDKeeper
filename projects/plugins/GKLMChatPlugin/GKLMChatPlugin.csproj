@@ -8,6 +8,7 @@
         <OutputPath>..\..\..\plugins\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
@@ -31,7 +32,9 @@
     <ItemGroup>
         <PackageReference Include="Eto.Forms" Version="2.10.0" />
         <PackageReference Include="Eto.Serialization.Xaml" Version="2.10.0" />
-        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4022.49" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4022.49" />
+
+        <PackageReference Include="SmartComponents.LocalEmbeddings" Version="0.1.0-preview10148" PrivateAssets="All" />
     </ItemGroup>
 
     <ItemGroup>

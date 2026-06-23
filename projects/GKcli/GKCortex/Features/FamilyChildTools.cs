@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCortex.MCP;
@@ -34,7 +35,7 @@ internal class FamListChildrenTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string familyXRef = MCPHelper.GetRequiredStr(args, "family_xref");
 
@@ -90,7 +91,7 @@ internal class FamAddChildTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string familyXRef = MCPHelper.GetRequiredStr(args, "family_xref");
         string childXRef = MCPHelper.GetRequiredStr(args, "child_xref");
@@ -141,7 +142,7 @@ internal class FamDeleteChildTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string familyXRef = MCPHelper.GetRequiredStr(args, "family_xref");
         string childXRef = MCPHelper.GetRequiredStr(args, "child_xref");

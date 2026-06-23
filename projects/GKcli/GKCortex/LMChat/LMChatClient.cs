@@ -18,26 +18,42 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using GKCortex.Features;
-using GKCortex.MCP;
 using GKCortex.Protocols;
 
 namespace GKCortex.LMChat;
 
-public class LMChatClient
+
+public interface ILMChatView
+{
+    void ShowMessage(string msg, string role);
+
+    void StartStreamingMessage(int requestId);
+    void UpdateStreamingMessage(int requestId, string content);
+    void FinalizeStreamingMessage(int requestId);
+}
+
+
+public interface ILMChat
+{
+    LMHistoryStorage HistoryStorage { get; }
+    LMSettings Settings { get; }
+
+    Task<string> SendMessageSingleAsync(string role, string content, float temperature);
+    Task SendMessageAsync();
+}
+
+
+public class LMChatClient : ILMChat
 {
     private readonly HttpClient fHttpClient;
-    private readonly MCPServer fMCPServer;
-    private string fModelId;
+    private int fRequestId;
     private string fSystemPrompt;
-    private List<ToolDef> fTools;
+    private readonly List<ToolDef> fTools;
+    private readonly CancellationTokenSource fTokenSource;
 
-    public List<ChatMessage> History { get; private set; }
+    public LMHistoryStorage HistoryStorage { get; private set; }
 
-    public string ModelId
-    {
-        get { return fModelId; }
-        set { fModelId = value; }
-    }
+    public LMSettings Settings { get; set; }
 
     public string SystemPrompt
     {
@@ -45,50 +61,64 @@ public class LMChatClient
         set { fSystemPrompt = value; }
     }
 
-    #region Model parameters
+    public ILMChatView View { get; set; }
 
-    public double Temperature { get; set; } = 0.7;
-    public double TopP { get; set; } = 0.9;
-    public double PresencePenalty { get; set; } = 0.0;
-    public double FrequencyPenalty { get; set; } = 0.0;
-    public int MaxTokens { get; set; } = 2048;
-    public bool ReasoningMode { get; set; } = true;
 
-    #endregion
-
-    public LMChatClient(string baseUrl, string modelId, string apiKey = null, MCPServer mcpServer = null)
+    public LMChatClient(LMSettings settings)
     {
-        fHttpClient = new HttpClient { BaseAddress = new Uri(baseUrl) };
-        fModelId = modelId;
-        fSystemPrompt = "You are an advanced AI assistant for the GEDKeeper genealogy program. You help analyze databases and build family trees.";
-
-        fMCPServer = mcpServer;
-
-        if (!string.IsNullOrEmpty(apiKey))
-            fHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
-
+        fHttpClient = new HttpClient();
         fHttpClient.Timeout = Timeout.InfiniteTimeSpan;
         fHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         fHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));
 
-        History = new List<ChatMessage>();
+        fSystemPrompt = "You are an advanced AI assistant for the GEDKeeper genealogy program. You help analyze databases and build family trees.";
+
+        Settings = settings;
+        HistoryStorage = new LMHistoryStorage();
 
         var mcpTools = MCPController.GetTools();
         fTools = mcpTools.Select(mT => new ToolDef(mT)).ToList();
+
+        fTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(5));
+
+        NewSession();
+    }
+
+    /// <summary>
+    /// Clear chat history.
+    /// </summary>
+    public void NewSession()
+    {
+        HistoryStorage.CreateNewSession("unknown", Settings, fSystemPrompt);
+        fRequestId = 0;
+    }
+
+    /// <summary>
+    /// Cancel current request.
+    /// </summary>
+    public void CancelRequest()
+    {
+        fTokenSource.Cancel();
+        fTokenSource.TryReset();
     }
 
     public void AddHistory(string role, string content)
     {
-        History.Add(new ChatMessage(role, content));
+        HistoryStorage.AddToCurrentHistory(new ChatMessage(role, content));
     }
 
-    public void AddHistory(ChatMessage message)
+    private void RequireHttp()
     {
-        History.Add(message);
+        fHttpClient.BaseAddress = new Uri(Settings.APIAddress);
+
+        if (!string.IsNullOrEmpty(Settings.APIKey))
+            fHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.APIKey);
     }
 
     public async Task<List<ModelData>> LoadModelsAsync()
     {
+        RequireHttp();
+
         var response = await fHttpClient.GetAsync("v1/models");
         response.EnsureSuccessStatusCode();
 
@@ -96,135 +126,189 @@ public class LMChatClient
         return data.Data;
     }
 
+    /// <summary>
+    /// Process tool calls and return result
+    /// </summary>
+    private async Task ProcessToolCallsAsync(List<ToolCall> toolCalls)
+    {
+        fTokenSource.TryReset();
+
+        // Create new message for tool results
+        var toolResults = new List<ChatMessage>();
+
+        foreach (var toolCall in toolCalls) {
+            if (toolCall.Type != "function" || toolCall.Function == null) continue;
+            string funcName = toolCall.Function.Name;
+
+            ChatMessage toolResult = null;
+            try {
+                View?.ShowMessage($"Attempt to call the tool '{funcName}'", "system");
+
+                // Parse tool arguments
+                JsonElement args = JsonDocument.Parse(toolCall.Function.Arguments).RootElement;
+
+                // Execute tool via MCPController
+                var contents = await MCPController.ExecuteTool(funcName, args);
+
+                // Convert result to string
+                string resultText = string.Join("\n", contents.Select(c => c.Text ?? ""));
+
+                // Create message with tool result
+                toolResult = new ChatMessage("tool", resultText);
+            } catch (Exception ex) {
+                // In case of error, create message with error description
+                toolResult = new ChatMessage("tool", $"Error executing tool '{funcName}': {ex.Message}");
+            }
+
+            if (toolResult != null) {
+                toolResults.Add(toolResult);
+                // Add tool results to history
+                ProcessMessage(toolResult);
+            }
+        }
+
+        // If tools were called, send a new request with results
+        if (toolResults.Count > 0) {
+            fTokenSource.TryReset();
+
+            // Create new request with tool results
+            var request = CreateRequest(false);
+            var response = await fHttpClient.PostAsJsonAsync("v1/chat/completions", request, fTokenSource.Token);
+            response.EnsureSuccessStatusCode();
+
+            var result = await response.Content.ReadFromJsonAsync<ChatResponse>(fTokenSource.Token);
+            var finalMessage = result?.Choices?.FirstOrDefault()?.Message;
+            // Add final assistant message to history
+            ProcessMessage(finalMessage);
+        }
+    }
+
     private ChatRequest CreateRequest(bool stream)
     {
-        var request = new ChatRequest(fModelId, this.History, stream);
-        request.Temperature = Temperature;
-        request.TopP = TopP;
-        request.PresencePenalty = PresencePenalty;
-        request.FrequencyPenalty = FrequencyPenalty;
-        request.MaxTokens = MaxTokens;
+        var request = new ChatRequest(Settings.ModelId, this.HistoryStorage.CurrentHistory, stream);
+        request.Temperature = Settings.Temperature;
+        request.TopP = Settings.TopP;
+        request.PresencePenalty = Settings.PresencePenalty;
+        request.FrequencyPenalty = Settings.FrequencyPenalty;
+        request.MaxTokens = Settings.MaxTokens;
         request.Tools = fTools;
 
         return request;
     }
 
-    /// <summary>
-    /// Regular request (waiting for the model's complete response)
-    /// </summary>
-    public async Task<string> SendMessageAsync(CancellationToken cancellationToken = default)
+    public void ProcessMessage(ChatMessage message)
     {
-        // Add system prompt to the beginning of the history if it's not there yet
-        if (History.Count == 0) {
-            AddHistory("system", fSystemPrompt);
+        if (message == null) return;
+
+        HistoryStorage.AddToCurrentHistory(message);
+        View?.ShowMessage(JsonSerializer.Serialize(message.Content), message.Role);
+    }
+
+    private async Task ProcessReceivedMessage(ChatMessage message)
+    {
+        // Add assistant's message to history (null if tool_calls are present)
+        if (!string.IsNullOrEmpty(message.Content)) {
+            ProcessMessage(message);
         }
-
-        var request = CreateRequest(false);
-        var response = await fHttpClient.PostAsJsonAsync("v1/chat/completions", request, cancellationToken);
-        response.EnsureSuccessStatusCode();
-
-        var result = await response.Content.ReadFromJsonAsync<ChatResponse>(cancellationToken: cancellationToken);
-        var message = result?.Choices?.FirstOrDefault()?.Message;
-
-        if (message == null)
-            return string.Empty;
-
-        // Add assistant's message to history
-        AddHistory(message);
 
         // Check for tool calls
         if (message.ToolCalls != null && message.ToolCalls.Count > 0) {
             // Process tool calls
-            return await ProcessToolCallsAsync(message.ToolCalls, cancellationToken);
+            await ProcessToolCallsAsync(message.ToolCalls);
         }
-
-        // Return text content
-        return message.Content ?? string.Empty;
     }
 
     /// <summary>
-    /// Process tool calls and return result
+    /// Single request (waiting for the model's complete response).
     /// </summary>
-    private async Task<string> ProcessToolCallsAsync(List<ToolCall> toolCalls, CancellationToken cancellationToken)
+    public async Task<string> SendMessageSingleAsync(string role, string content, float temperature)
     {
-        // Create new message for tool results
-        var toolResults = new List<ChatMessage>();
+        RequireHttp();
 
-        foreach (var toolCall in toolCalls) {
-            if (toolCall.Type == "function" && toolCall.Function != null) {
-                try {
-                    // Parse tool arguments
-                    JsonElement args = JsonDocument.Parse(toolCall.Function.Arguments).RootElement;
+        var messages = new List<ChatMessage>();
+        messages.Add(new ChatMessage(role, content));
 
-                    // Execute tool via MCPController
-                    List<MCPContent> contents = MCPController.ExecuteTool(toolCall.Function.Name, args);
+        var request = new ChatRequest(Settings.ModelId, messages, false);
+        request.Temperature = temperature;
+        request.TopP = Settings.TopP;
+        request.PresencePenalty = Settings.PresencePenalty;
+        request.FrequencyPenalty = Settings.FrequencyPenalty;
+        request.MaxTokens = Settings.MaxTokens;
 
-                    // Convert result to string
-                    string resultText = string.Join("\n", contents.Select(c => c.Text ?? ""));
+        var response = await fHttpClient.PostAsJsonAsync("v1/chat/completions", request, fTokenSource.Token);
+        response.EnsureSuccessStatusCode();
 
-                    // Create message with tool result
-                    var toolResultMessage = new ChatMessage {
-                        Role = "tool",
-                        Content = resultText
-                    };
+        var result = await response.Content.ReadFromJsonAsync<ChatResponse>(fTokenSource.Token);
+        var message = result?.Choices?.FirstOrDefault()?.Message;
+        if (message != null && !string.IsNullOrEmpty(message.Content)) {
+            return message.Content;
+        }
 
-                    toolResults.Add(toolResultMessage);
-                } catch (Exception ex) {
-                    // In case of error, create message with error description
-                    var errorResultMessage = new ChatMessage {
-                        Role = "tool",
-                        Content = $"Error executing tool '{toolCall.Function.Name}': {ex.Message}"
-                    };
+        return null;
+    }
 
-                    toolResults.Add(errorResultMessage);
+    /// <summary>
+    /// Request.
+    /// </summary>
+    public async Task SendMessageAsync()
+    {
+        RequireHttp();
+
+        fRequestId += 1;
+        fTokenSource.TryReset();
+
+        var request = CreateRequest(Settings.StreamMode);
+
+        var response = await fHttpClient.PostAsJsonAsync("v1/chat/completions", request, fTokenSource.Token);
+        response.EnsureSuccessStatusCode();
+
+        if (!Settings.StreamMode) {
+            // Regular request (waiting for the model's complete response).
+
+            var result = await response.Content.ReadFromJsonAsync<ChatResponse>(fTokenSource.Token);
+            var message = result?.Choices?.FirstOrDefault()?.Message;
+            if (message != null)
+                await ProcessReceivedMessage(message);
+        } else {
+            // Streaming request (streaming tokens as they are generated).
+
+            string fullResponse = "";
+            var accumulatedToolCalls = new Dictionary<int, ToolCall>();
+
+            try {
+                View?.StartStreamingMessage(fRequestId);
+
+                var stream = await response.Content.ReadAsStreamAsync(fTokenSource.Token);
+                var tokenStream = StreamTokensAndToolCallsAsync(stream, fTokenSource.Token, accumulatedToolCalls);
+                await foreach (var item in tokenStream) {
+                    if (item.IsToken) {
+                        fullResponse += item.Content;
+                        View?.UpdateStreamingMessage(fRequestId, fullResponse);
+                    } else if (item.IsToolCall) {
+                        // Tool calls are being accumulated in accumulatedToolCalls list
+                        // We could display tool calls as they arrive if needed
+                    }
+                }
+            } finally {
+                // Add the complete assistant message to history
+                AddHistory("assistant", fullResponse);
+                View?.FinalizeStreamingMessage(fRequestId);
+
+                // Process tool calls if any were received
+                if (accumulatedToolCalls.Count > 0) {
+                    // Create a message containing the tool calls
+                    var toolCallMessage = new ChatMessage("assistant", "");
+                    toolCallMessage.ToolCalls = accumulatedToolCalls.Values.ToList();
+                    await ProcessReceivedMessage(toolCallMessage);
                 }
             }
         }
-
-        // Add tool results to history
-        foreach (var toolResult in toolResults) {
-            AddHistory(toolResult);
-        }
-
-        // If tools were called, send a new request with results
-        if (toolResults.Count > 0) {
-            // Create new request with tool results
-            var request = CreateRequest(false);
-            var response = await fHttpClient.PostAsJsonAsync("v1/chat/completions", request, cancellationToken);
-            response.EnsureSuccessStatusCode();
-
-            var result = await response.Content.ReadFromJsonAsync<ChatResponse>(cancellationToken: cancellationToken);
-            var finalMessage = result?.Choices?.FirstOrDefault()?.Message;
-
-            if (finalMessage != null) {
-                // Add final assistant message to history
-                AddHistory(finalMessage);
-                return finalMessage.Content ?? string.Empty;
-            }
-        }
-
-        return string.Empty;
     }
 
-    /// <summary>
-    /// Streaming request (streaming tokens as they are generated)
-    /// </summary>
-    public async Task<IAsyncEnumerable<string>> SendMessageStreamAsync(CancellationToken cancellationToken = default)
-    {
-        // Add system prompt to the beginning of the history if it's not there yet
-        if (History.Count == 0) {
-            AddHistory("system", fSystemPrompt);
-        }
-
-        var request = CreateRequest(true);
-        var response = await fHttpClient.PostAsJsonAsync("v1/chat/completions", request, cancellationToken);
-        response.EnsureSuccessStatusCode();
-
-        var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
-        return StreamTokensAsync(stream, cancellationToken);
-    }
-
-    private static async IAsyncEnumerable<string> StreamTokensAsync(Stream stream, [EnumeratorCancellation] CancellationToken cancellationToken)
+    private async IAsyncEnumerable<StreamItem> StreamTokensAndToolCallsAsync(
+        Stream stream,
+        [EnumeratorCancellation] CancellationToken cancellationToken,
+        Dictionary<int, ToolCall> accumulatedToolCalls)
     {
         using var reader = new StreamReader(stream);
         while (!reader.EndOfStream) {
@@ -238,15 +322,59 @@ public class LMChatClient
             if (jsonText == "[DONE]")
                 break;
 
-            ChatStreamResponse? chunk = null;
+            ChatStreamResponse chunk = null;
             try {
                 chunk = JsonSerializer.Deserialize<ChatStreamResponse>(jsonText);
             } catch { /* Ignore incomplete lines */ }
 
-            var content = chunk?.Choices?.FirstOrDefault()?.Delta?.Content;
-            if (!string.IsNullOrEmpty(content)) {
-                yield return content;
+            if (chunk?.Choices?.FirstOrDefault() is { } choice) {
+                // Handle content tokens
+                var content = choice.Delta?.Content;
+                if (!string.IsNullOrEmpty(content)) {
+                    yield return new StreamItem { IsToken = true, Content = content };
+                }
+
+                // Handle tool calls
+                if (choice.Delta?.ToolCalls != null) {
+                    foreach (var toolCallDelta in choice.Delta.ToolCalls) {
+                        // Find or create the tool call in our accumulated list
+                        ToolCall existingToolCall = null;
+                        if (!accumulatedToolCalls.TryGetValue(toolCallDelta.Index, out existingToolCall)) {
+                            existingToolCall = new ToolCall();
+                            accumulatedToolCalls[toolCallDelta.Index] = existingToolCall;
+                        }
+
+                        // Update the tool call with the delta information
+                        if (!string.IsNullOrEmpty(toolCallDelta.Id)) {
+                            existingToolCall.Id = toolCallDelta.Id;
+                        }
+                        if (!string.IsNullOrEmpty(toolCallDelta.Type)) {
+                            existingToolCall.Type = toolCallDelta.Type;
+                        }
+                        if (toolCallDelta.Function != null) {
+                            if (existingToolCall.Function == null) {
+                                existingToolCall.Function = new FunctionCall();
+                            }
+                            if (!string.IsNullOrEmpty(toolCallDelta.Function.Name)) {
+                                existingToolCall.Function.Name = toolCallDelta.Function.Name;
+                            }
+                            if (!string.IsNullOrEmpty(toolCallDelta.Function.Arguments)) {
+                                existingToolCall.Function.Arguments += toolCallDelta.Function.Arguments;
+                            }
+                        }
+
+                        yield return new StreamItem { IsToolCall = true, ToolCall = existingToolCall };
+                    }
+                }
             }
         }
     }
+}
+
+internal class StreamItem
+{
+    public bool IsToken { get; set; }
+    public string Content { get; set; }
+    public bool IsToolCall { get; set; }
+    public ToolCall ToolCall { get; set; }
 }

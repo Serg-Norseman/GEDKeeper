@@ -8,6 +8,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GKCore;
 using GKCortex.Features;
 using GKCortex.MCP;
@@ -38,11 +39,11 @@ internal class StoreFactTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string fact = MCPHelper.GetRequiredStr(args, "fact");
 
-        MemoryService.StoreFact(fact).GetAwaiter().GetResult();
+        await MemoryService.StoreFact(fact);
 
         return MCPContent.CreateSimpleContent("✅ The fact was successfully stored in memory.");
     }
@@ -71,12 +72,12 @@ internal class SearchMemoryTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string query = MCPHelper.GetRequiredStr(args, "query");
         int topK = MCPHelper.GetOptionalInt(args, "top_k", 5);
 
-        var results = MemoryService.SearchMemory(query, topK).GetAwaiter().GetResult();
+        var results = await MemoryService.SearchMemory(query, topK);
 
         return MCPContent.CreateSimpleContent(results);
     }

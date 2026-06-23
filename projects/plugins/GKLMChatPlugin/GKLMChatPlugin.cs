@@ -8,12 +8,13 @@
 
 using System;
 using System.Reflection;
+using BSLib;
 using GKCore;
 using GKCore.Design.Graphics;
 using GKCore.Locales;
 using GKCore.Plugins;
 using GKCortex.Features;
-using GKCortex.MCP;
+using GKCortex.LMChat;
 
 [assembly: AssemblyTitle("GKLMChatPlugin")]
 [assembly: AssemblyDescription("GEDKeeper LMChat plugin")]
@@ -33,24 +34,49 @@ namespace GKLMChatPlugin
     public enum PLS
     {
         Title = 1,
+        Model = 2,
+        Settings = 3,
+        Send = 4,
+        Temperature = 5,
+        TopP = 6,
+        PresencePenalty = 7,
+        FrequencyPenalty = 8,
+        MaxTokens = 9,
+        StreamMode = 10,
+        SystemPrompt = 11,
+        NewSession = 12,
+        Stop = 13,
+        APIAddress = 14,
+        APIKey = 15,
+        Session = 16,
+        RenameSession = 17,
     }
 
     public class Plugin : OrdinaryPlugin
     {
         private string fDisplayName = "LMChat";
         private ILangMan fLangMan;
-        private MCPServer fMCPServer;
+        private LMSettings fLMSettings;
 
         public override string DisplayName { get { return fDisplayName; } }
         public override ILangMan LangMan { get { return fLangMan; } }
         public override IImage Icon { get { return null; } }
         public override PluginCategory Category { get { return PluginCategory.Common; } }
 
+        public LMSettings LMSettings
+        {
+            get {
+                if (fLMSettings == null) {
+                    fLMSettings = new LMSettings();
+                }
+                return fLMSettings;
+            }
+        }
+
         public override bool Startup(IHost host)
         {
             var result = base.Startup(host);
             MCPController.InitFeatures(embedded: true, pureMode: false, tdeMode: true, ragMode: true);
-            fMCPServer = new MCPServer();
             return result;
         }
 
@@ -58,7 +84,7 @@ namespace GKLMChatPlugin
         {
             var baseWin = Host.GetCurrentFile();
             MCPController.SetContext(baseWin.Context);
-            var frm = new LMChatForm(fLangMan, fMCPServer);
+            var frm = new LMChatForm(this);
             frm.Show();
         }
 
@@ -70,6 +96,16 @@ namespace GKLMChatPlugin
             } catch (Exception ex) {
                 Logger.WriteError("GKLMChatPlugin.OnLanguageChange()", ex);
             }
+        }
+
+        public override void LoadOptions(IniFile ini)
+        {
+            LMSettings.LoadOptions(ini, "GKLMChatPlugin");
+        }
+
+        public override void SaveOptions(IniFile ini)
+        {
+            LMSettings.SaveOptions(ini, "GKLMChatPlugin");
         }
     }
 }

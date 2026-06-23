@@ -97,7 +97,7 @@ public class MCPServer
 
         // Since using such tools is a risky process,
         // we force backup of each file revision (each save).
-        var prevBackups = AppHost.Instance.SetForcedBackup();
+        var prevBackups = AppHost.SetForcedBackup();
 
         try {
             int nullsBeforeExit = 0;
@@ -113,7 +113,7 @@ public class MCPServer
                         if (nullsBeforeExit >= 10) break;
                     }
 
-                    ProcessRequest(line);
+                    await ProcessRequest(line);
                 } catch (Exception ex) {
                     Log($"Error processing request: {ex.Message}");
                     SendResponse(new MCPResponse {
@@ -125,7 +125,7 @@ public class MCPServer
             Log($"Run().Exception: {ex.Message}");
         } finally {
             // Restore backup options.
-            AppHost.Instance.SetRegularBackup(prevBackups);
+            AppHost.SetRegularBackup(prevBackups);
 
             Log("MCP Server stopped");
         }
@@ -164,7 +164,7 @@ public class MCPServer
         //Console.Error.Flush();
     }
 
-    private void ProcessRequest(string line)
+    private async Task ProcessRequest(string line)
     {
         if (string.IsNullOrEmpty(line)) return;
 
@@ -187,7 +187,7 @@ public class MCPServer
         var response = request.Method switch {
             "initialize" => HandleInitialize(request),
             "tools/list" => HandleToolsList(request),
-            "tools/call" => HandleToolsCall(request),
+            "tools/call" => await HandleToolsCall(request),
             "resources/list" => HandleResourcesList(request),
             "resources/templates/list" => HandleResourceTemplatesList(request),
             "resources/read" => HandleResourceRead(request),
@@ -226,7 +226,7 @@ public class MCPServer
         var response = request.Method switch {
             "initialize" => HandleInitialize(request),
             "tools/list" => HandleToolsList(request),
-            "tools/call" => HandleToolsCall(request),
+            "tools/call" => await HandleToolsCall(request),
             "resources/list" => HandleResourcesList(request),
             "resources/templates/list" => HandleResourceTemplatesList(request),
             "resources/read" => HandleResourceRead(request),
@@ -242,7 +242,7 @@ public class MCPServer
         return json;
     }
 
-    private MCPResponse HandleInitialize(MCPRequest request)
+    private static MCPResponse HandleInitialize(MCPRequest request)
     {
         // Actual protocol version = "2025-11-25".
         // FIXME: The version is not simply "specified" - it is negotiated
@@ -274,7 +274,7 @@ public class MCPServer
         return new MCPResponse { Id = request.Id, Result = fToolsList };
     }
 
-    private MCPResponse HandleToolsCall(MCPRequest request)
+    private async Task<MCPResponse> HandleToolsCall(MCPRequest request)
     {
         try {
             if (request.Params == null || request.Params.Value.ValueKind != JsonValueKind.Object) {
@@ -296,7 +296,7 @@ public class MCPServer
             p.TryGetProperty("arguments", out var arguments);
 
             // Execute an MCP tool call by name and arguments.
-            var content = MCPController.ExecuteTool(toolName, arguments);
+            var content = await MCPController.ExecuteTool(toolName, arguments);
 
             return new MCPResponse {
                 Id = request.Id,

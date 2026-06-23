@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCore.Locales;
@@ -35,7 +36,7 @@ internal class MediaListFilesTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetRequiredStr(args, "xref");
 
@@ -88,7 +89,7 @@ internal class MediaUpsertFileTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetRequiredStr(args, "xref");
         int? fileIndex = MCPHelper.GetOptionalNullableInt(args, "file_index", null);
@@ -183,7 +184,7 @@ internal class MediaDeleteFileTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetRequiredStr(args, "xref");
         int fileIndex = MCPHelper.GetRequiredInt(args, "file_index");

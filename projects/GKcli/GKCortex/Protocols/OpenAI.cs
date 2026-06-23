@@ -175,6 +175,18 @@ public class ChatChoice
 
 public class ChatStreamResponse
 {
+    [JsonPropertyName("id")]
+    public string Id { get; set; } = string.Empty;
+
+    [JsonPropertyName("object")]
+    public string ObjectType { get; set; } = string.Empty;
+
+    [JsonPropertyName("created")]
+    public long Created { get; set; }
+
+    [JsonPropertyName("model")]
+    public string Model { get; set; } = string.Empty;
+
     [JsonPropertyName("choices")]
     public List<ChatStreamChoice> Choices { get; set; }
 }
@@ -182,15 +194,54 @@ public class ChatStreamResponse
 
 public class ChatStreamChoice
 {
+    [JsonPropertyName("index")]
+    public int Index { get; set; }
+
     [JsonPropertyName("delta")]
-    public ChatDelta Delta { get; set; }
+    public ChatStreamDelta Delta { get; set; }
+
+    [JsonPropertyName("finish_reason")]
+    public string? FinishReason { get; set; }
 }
 
 
-public class ChatDelta
+public class ChatStreamDelta
 {
+    [JsonPropertyName("role")]
+    public string Role { get; set; }
+
+
     [JsonPropertyName("content")]
     public string Content { get; set; }
+
+    [JsonPropertyName("tool_calls")]
+    public List<ChatStreamToolCall> ToolCalls { get; set; }
+}
+
+
+public class ChatStreamToolCall
+{
+    [JsonPropertyName("index")]
+    public int Index { get; set; }
+
+    [JsonPropertyName("id")]
+    public string Id { get; set; }
+
+    [JsonPropertyName("type")]
+    public string Type { get; set; }
+
+    [JsonPropertyName("function")]
+    public ChatStreamFunction Function { get; set; }
+}
+
+
+public class ChatStreamFunction
+{
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
+
+    [JsonPropertyName("arguments")]
+    public string Arguments { get; set; }
 }
 
 

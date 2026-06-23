@@ -8,6 +8,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GKCore;
 using GKCortex.Features;
 using GKCortex.MCP;
@@ -34,10 +35,10 @@ internal class GetUserProfileTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         var service = new MemoryService();
-        var prefs = service.GetAllPreferencesAsync().GetAwaiter().GetResult();
+        var prefs = await service.GetAllPreferencesAsync();
 
         if (prefs.Count == 0)
             return MCPContent.CreateSimpleContent("❌ User profile is empty. No specific style triggers or research focus preferences have been set yet.");
@@ -70,13 +71,13 @@ internal class UpdateUserProfileTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string key = MCPHelper.GetRequiredStr(args, "key");
         string value = MCPHelper.GetRequiredStr(args, "value");
 
         var service = new MemoryService();
-        bool success = service.SetPreferenceAsync(key, value, 1.0).GetAwaiter().GetResult();
+        bool success = await service.SetPreferenceAsync(key, value, 1.0);
 
         if (!success)
             return MCPContent.CreateSimpleContent("❌ Provided key is empty or invalid.");
@@ -108,12 +109,12 @@ internal class RemoveUserPreferenceTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string key = MCPHelper.GetRequiredStr(args, "key");
 
         var service = new MemoryService();
-        bool deleted = service.DeletePreferenceAsync(key).GetAwaiter().GetResult();
+        bool deleted = await service.DeletePreferenceAsync(key);
 
         if (!deleted)
             return MCPContent.CreateSimpleContent($"❌ Parameter '{key}' not found in user profile.");

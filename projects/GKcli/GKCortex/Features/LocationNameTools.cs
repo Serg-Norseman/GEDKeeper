@@ -8,6 +8,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCortex.MCP;
@@ -33,7 +34,7 @@ internal class LocationListNamesTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string locationXRef = MCPHelper.GetRequiredStr(args, "location_xref");
 
@@ -82,7 +83,7 @@ internal class LocationUpsertNameTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string locationXRef = MCPHelper.GetRequiredStr(args, "location_xref");
         int? nameIndex = MCPHelper.GetOptionalNullableInt(args, "name_index", null);
@@ -165,7 +166,7 @@ internal class LocationDeleteNameTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string locationXRef = MCPHelper.GetRequiredStr(args, "location_xref");
         int nameIndex = MCPHelper.GetOptionalInt(args, "name_index", -1);

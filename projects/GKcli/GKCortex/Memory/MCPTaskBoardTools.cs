@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GKCore;
 using GKCortex.Features;
 using GKCortex.MCP;
@@ -39,13 +40,13 @@ internal class CreateGenealogyTaskTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string targetPerson = MCPHelper.GetRequiredStr(args, "target_person");
         string goalDescription = MCPHelper.GetRequiredStr(args, "goal_description");
 
         var service = new MemoryService();
-        int newId = service.CreateTaskAsync(targetPerson, goalDescription).GetAwaiter().GetResult();
+        int newId = await service.CreateTaskAsync(targetPerson, goalDescription);
 
         return MCPContent.CreateSimpleContent($"✅ Created new research task #{newId}. Focus on completing this task.");
     }
@@ -79,14 +80,14 @@ internal class UpdateTaskProgressTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         int taskId = MCPHelper.GetRequiredInt(args, "task_id");
         string addCheckedSource = MCPHelper.GetOptionalStr(args, "add_checked_source", "");
         string[] setNextSteps = MCPHelper.GetOptionalStringArray(args, "set_next_steps", Array.Empty<string>());
 
         var service = new MemoryService();
-        bool success = service.UpdateTaskProgressAsync(taskId, addCheckedSource, setNextSteps).GetAwaiter().GetResult();
+        bool success = await service.UpdateTaskProgressAsync(taskId, addCheckedSource, setNextSteps);
 
         if (!success)
             return MCPContent.CreateSimpleContent($"❌ Task with ID {taskId} not found.");
@@ -118,13 +119,13 @@ internal class ChangeTaskStatusTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         int taskId = MCPHelper.GetRequiredInt(args, "task_id");
         string status = MCPHelper.GetRequiredStr(args, "status");
 
         var service = new MemoryService();
-        bool success = service.ChangeTaskStatusAsync(taskId, status).GetAwaiter().GetResult();
+        bool success = await service.ChangeTaskStatusAsync(taskId, status);
 
         if (!success)
             return MCPContent.CreateSimpleContent($"❌ Failed to change status for task #{taskId}. Verify ID and status value (COMPLETED/PAUSED/ACTIVE).");

@@ -1,2 +1,18 @@
 ;1033,eng,English
 01=AI Assistant
+02=Model
+03=Settings
+04=Send
+05=Temperature
+06=Top-P
+07=Presence Penalty
+08=Frequency Penalty
+09=Max Tokens
+10=Stream Mode
+11=System Prompt
+12=New Session
+13=Stop
+14=API Address
+15=API Key
+16=Session
+17=Rename Session

@@ -65,7 +65,7 @@ namespace GKCore
             GDMIndividualRecord iRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
             Assert.IsNotNull(iRec);
 
-            Assert.AreEqual(false, fContext.IsChildless(iRec));
+            Assert.AreEqual(false, BaseContext.IsChildless(iRec));
         }
 
         [Test]

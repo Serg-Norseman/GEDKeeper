@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCore.Controllers;
@@ -272,7 +273,7 @@ internal class EventTypeListTool : EventTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordTypeStr = MCPHelper.GetRequiredStr(args, "record_type");
         if (!RuntimeData.RWETypeMap.TryGetValue(recordTypeStr, out EventTarget eventTarget)) {
@@ -298,7 +299,7 @@ internal class GEDCOMDateSpecTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         return MCPContent.CreateSimpleContent(RuntimeData.GetDateSpec(), [Role.Assistant], 1.0f);
     }

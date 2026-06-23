@@ -8,9 +8,10 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GDModel;
-using GKCortex.MCP;
 using GKCore;
+using GKCortex.MCP;
 using GKCortex.Protocols;
 
 namespace GKCortex.Features;
@@ -33,7 +34,7 @@ internal class GroupListMembersTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string groupXRef = MCPHelper.GetRequiredStr(args, "group_xref");
 
@@ -86,7 +87,7 @@ internal class GroupAddMemberTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string groupXRef = MCPHelper.GetRequiredStr(args, "group_xref");
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
@@ -130,7 +131,7 @@ internal class GroupDeleteMemberTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string groupXRef = MCPHelper.GetRequiredStr(args, "group_xref");
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");

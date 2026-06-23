@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GKCortex.Database;
 using SmartComponents.LocalEmbeddings;
 
@@ -31,7 +32,7 @@ internal static class RAGHelper
         fNumberFormat.NumberDecimalSeparator = ".";
     }
 
-    public static string SearchExamples(string inputText, string century = null, int topK = 10)
+    public static async Task<string> SearchExamples(string inputText, string century = null, int topK = 10)
     {
         /*
         For archaic spelling, pure semantic search is insufficient. A hybrid search and post-ranking are needed.
@@ -59,7 +60,7 @@ internal static class RAGHelper
         var inputVector = GetCachedEmbedding(inputText);
 
         // Extract patterns from database
-        var patterns = LLMDatabase.GetPatterns(century).GetAwaiter().GetResult();
+        var patterns = await LLMDatabase.GetPatterns(century);
 
         // Count the similarities
         var bestMatches = patterns

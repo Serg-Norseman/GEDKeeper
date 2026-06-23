@@ -8,6 +8,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCortex.MCP;
@@ -33,7 +34,7 @@ internal class ResearchListTasksTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
 
@@ -85,7 +86,7 @@ internal class ResearchAddTaskTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string taskXRef = MCPHelper.GetRequiredStr(args, "task_xref");
@@ -129,7 +130,7 @@ internal class ResearchDeleteTaskTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string taskXRef = MCPHelper.GetRequiredStr(args, "task_xref");
@@ -172,7 +173,7 @@ internal class ResearchListCommunicationsTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
 
@@ -225,7 +226,7 @@ internal class ResearchAddCommunicationTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string communicationXRef = MCPHelper.GetRequiredStr(args, "communication_xref");
@@ -268,7 +269,7 @@ internal class ResearchDeleteCommunicationTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string communicationXRef = MCPHelper.GetRequiredStr(args, "communication_xref");
@@ -310,7 +311,7 @@ internal class ResearchListGroupsTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
 
@@ -362,7 +363,7 @@ internal class ResearchAddGroupTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string groupXRef = MCPHelper.GetRequiredStr(args, "group_xref");
@@ -405,7 +406,7 @@ internal class ResearchDeleteGroupTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string groupXRef = MCPHelper.GetRequiredStr(args, "group_xref");

@@ -11,6 +11,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
+using Markdig;
 
 namespace GKCortex.Utilities;
 
@@ -98,5 +99,16 @@ public static class CLIHelper
             html.AppendLine("</table>");
             return html.ToString();
         });
+    }
+
+
+    public static string ConvertMarkdownToHtml(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+            return text;
+
+        var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().ConfigureNewLine("\n").Build();
+
+        return Markdown.ToHtml(text, pipeline);
     }
 }

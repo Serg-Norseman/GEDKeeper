@@ -527,7 +527,7 @@ using GDModel.Providers.FamilyShow;
             return result;
         }
 
-        public bool IsChildless(GDMIndividualRecord iRec)
+        public static bool IsChildless(GDMIndividualRecord iRec)
         {
             int exp = GKUtils.GetLifeExpectancy(iRec);
             return (exp != -1 && exp < 15);
