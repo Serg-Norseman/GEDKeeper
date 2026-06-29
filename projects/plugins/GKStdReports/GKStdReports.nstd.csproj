@@ -10,6 +10,7 @@
 
         <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
     </PropertyGroup>
 
     <Import Project="..\..\GKConfigurations3.targets" />

@@ -102,9 +102,9 @@ public class LMChatClient : ILMChat
         fTokenSource.TryReset();
     }
 
-    public void AddHistory(string role, string content)
+    public async Task AddHistory(string role, string content)
     {
-        HistoryStorage.AddToCurrentHistory(new ChatMessage(role, content));
+        await HistoryStorage.AddToCurrentHistory(new ChatMessage(role, content));
     }
 
     private void RequireHttp()
@@ -163,7 +163,7 @@ public class LMChatClient : ILMChat
             if (toolResult != null) {
                 toolResults.Add(toolResult);
                 // Add tool results to history
-                ProcessMessage(toolResult);
+                await ProcessMessage(toolResult);
             }
         }
 
@@ -179,7 +179,7 @@ public class LMChatClient : ILMChat
             var result = await response.Content.ReadFromJsonAsync<ChatResponse>(fTokenSource.Token);
             var finalMessage = result?.Choices?.FirstOrDefault()?.Message;
             // Add final assistant message to history
-            ProcessMessage(finalMessage);
+            await ProcessMessage(finalMessage);
         }
     }
 
@@ -196,11 +196,11 @@ public class LMChatClient : ILMChat
         return request;
     }
 
-    public void ProcessMessage(ChatMessage message)
+    public async Task ProcessMessage(ChatMessage message)
     {
         if (message == null) return;
 
-        HistoryStorage.AddToCurrentHistory(message);
+        await HistoryStorage.AddToCurrentHistory(message);
         View?.ShowMessage(JsonSerializer.Serialize(message.Content), message.Role);
     }
 
@@ -208,7 +208,7 @@ public class LMChatClient : ILMChat
     {
         // Add assistant's message to history (null if tool_calls are present)
         if (!string.IsNullOrEmpty(message.Content)) {
-            ProcessMessage(message);
+            await ProcessMessage(message);
         }
 
         // Check for tool calls
@@ -279,7 +279,7 @@ public class LMChatClient : ILMChat
                 View?.StartStreamingMessage(fRequestId);
 
                 var stream = await response.Content.ReadAsStreamAsync(fTokenSource.Token);
-                var tokenStream = StreamTokensAndToolCallsAsync(stream, fTokenSource.Token, accumulatedToolCalls);
+                var tokenStream = StreamTokensAndToolCallsAsync(stream, accumulatedToolCalls, fTokenSource.Token);
                 await foreach (var item in tokenStream) {
                     if (item.IsToken) {
                         fullResponse += item.Content;
@@ -291,7 +291,7 @@ public class LMChatClient : ILMChat
                 }
             } finally {
                 // Add the complete assistant message to history
-                AddHistory("assistant", fullResponse);
+                await AddHistory("assistant", fullResponse);
                 View?.FinalizeStreamingMessage(fRequestId);
 
                 // Process tool calls if any were received
@@ -305,10 +305,10 @@ public class LMChatClient : ILMChat
         }
     }
 
-    private async IAsyncEnumerable<StreamItem> StreamTokensAndToolCallsAsync(
+    private static async IAsyncEnumerable<StreamItem> StreamTokensAndToolCallsAsync(
         Stream stream,
-        [EnumeratorCancellation] CancellationToken cancellationToken,
-        Dictionary<int, ToolCall> accumulatedToolCalls)
+        Dictionary<int, ToolCall> accumulatedToolCalls,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         using var reader = new StreamReader(stream);
         while (!reader.EndOfStream) {
@@ -338,7 +338,7 @@ public class LMChatClient : ILMChat
                 if (choice.Delta?.ToolCalls != null) {
                     foreach (var toolCallDelta in choice.Delta.ToolCalls) {
                         // Find or create the tool call in our accumulated list
-                        ToolCall existingToolCall = null;
+                        ToolCall existingToolCall;
                         if (!accumulatedToolCalls.TryGetValue(toolCallDelta.Index, out existingToolCall)) {
                             existingToolCall = new ToolCall();
                             accumulatedToolCalls[toolCallDelta.Index] = existingToolCall;

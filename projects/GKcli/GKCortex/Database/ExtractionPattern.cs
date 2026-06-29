@@ -11,7 +11,7 @@ using SQLite;
 namespace GKCortex.Database;
 
 [Table("extraction_patterns")]
-internal sealed class ExtractionPattern
+internal sealed class ExtractionPattern : IEntity
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get; set; }

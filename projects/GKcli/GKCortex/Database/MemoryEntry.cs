@@ -12,7 +12,7 @@ using SQLite;
 namespace GKCortex.Database;
 
 [Table("memory_entries")]
-public sealed class MemoryEntry
+public sealed class MemoryEntry : IEntity
 {
     [Column("id"), PrimaryKey, AutoIncrement]
     public int Id { get; set; }

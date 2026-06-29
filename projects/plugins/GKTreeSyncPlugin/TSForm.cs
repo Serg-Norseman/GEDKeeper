@@ -32,6 +32,7 @@ namespace GKTreeSyncPlugin
     public partial class TSForm : Form, ILocalizable
     {
 #if NETCOREAPP
+#pragma warning disable CS0169, CS0649, IDE0044, IDE0051
         private Panel panel1;
         private GroupBox groupBox1;
         private Button btnSelectFile;
@@ -43,6 +44,7 @@ namespace GKTreeSyncPlugin
         private CheckBox chkOnlyModified;
         private GKListView lvRecords;
         private TextArea mSyncRes;
+#pragma warning restore CS0169, CS0649, IDE0044, IDE0051
 #endif
 
         private readonly IBaseWindow fBase;

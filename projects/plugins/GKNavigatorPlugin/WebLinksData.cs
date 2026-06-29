@@ -1,4 +1,5 @@
-﻿/*
+﻿
+/*
  *  GEDKeeper, the personal genealogical database editor.
  *  Copyright (C) 2009-2026 by Sergey V. Zhdanovskih.
  *
@@ -6,14 +7,11 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-#pragma warning disable CA1416
-
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using BSLib;
 using GKCore;
@@ -79,7 +77,7 @@ namespace GKNavigatorPlugin
                 CSVFiles = Directory.GetFiles(csvPath, "*.csv");
             } catch (Exception ex) {
                 Logger.WriteError("HistoryData.LoadFiles()", ex);
-                CSVFiles = new string[0];
+                CSVFiles = Array.Empty<string>();
             }
         }
 

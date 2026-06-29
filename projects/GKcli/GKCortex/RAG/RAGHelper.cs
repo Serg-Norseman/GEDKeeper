@@ -18,6 +18,17 @@ using SmartComponents.LocalEmbeddings;
 namespace GKCortex.RAG;
 
 
+internal class SearchResult<T> where T : IEntity
+{
+    public int Id;
+    public T Entity;
+    public double Score;
+}
+
+
+internal class PatternSearchResult : SearchResult<ExtractionPattern> { }
+
+
 /// <summary>
 /// Helper class for RAG (Retrieval-Augmented Generation).
 /// </summary>
@@ -32,44 +43,64 @@ internal static class RAGHelper
         fNumberFormat.NumberDecimalSeparator = ".";
     }
 
+    /// <summary>
+    /// Reciprocal Rank Fusion (RRF).
+    /// </summary>
+    /// <returns></returns>
+    private static List<PatternSearchResult> ReciprocalRankFusion(List<PatternSearchResult> semanticMatches, List<PatternSearchResult> keywordMatches, double k = 60.0)
+    {
+        var result = new List<PatternSearchResult>();
+
+        var rrfScores = new Dictionary<int, PatternSearchResult>();
+
+        for (int index = 0; index < semanticMatches.Count; index++) {
+            var match = semanticMatches[index];
+            match.Score = 1.0 / (k + (index + 1));
+            rrfScores[match.Id] = match;
+        }
+
+        for (int index = 0; index < keywordMatches.Count; index++) {
+            var match = keywordMatches[index];
+            var rank = 1.0 / (k + (index + 1));
+
+            if (rrfScores.TryGetValue(match.Id, out PatternSearchResult rrfMath)) {
+                rrfMath.Score += rank;
+            } else {
+                match.Score = rank;
+                rrfScores[match.Id] = match;
+            }
+        }
+
+        return result;
+    }
+
+    const bool DEBUG_OPT = true;
+
     public static async Task<string> SearchExamples(string inputText, string century = null, int topK = 10)
     {
-        /*
-        For archaic spelling, pure semantic search is insufficient. A hybrid search and post-ranking are needed.
+        List<PatternSearchResult> bestMatches;
 
-        // Semantic search (current approach)
-        var semanticMatches = await SearchByEmbeddingAsync(inputText, century, topK * 2);
-    
-        // Fuzzy matching keywords (for spelling variations)
-        var keywordMatches = await SearchByFuzzyKeywordsAsync(inputText, century, topK * 2);
-    
-        // Reciprocal Rank Fusion to combine results
-        var fused = ReciprocalRankFusion(semanticMatches, keywordMatches, k=60);
-    
-        // Post-ranking using meta-features
-        var reranked = fused.OrderByDescending(m => 
-            m.Score * 
-            CenturyRelevanceWeight(m.Pattern.Century, century) * 
-            OrthographySimilarity(inputText, m.Pattern.RawText) // heuristics for old spelling
-        ).Take(topK).ToList();
-    
-        return reranked;
-        */
+        if (DEBUG_OPT) {
+            // For archaic spelling, pure semantic search is insufficient. A hybrid search and post-ranking are needed.
 
-        // Obtain a vector for the new census text
-        var inputVector = GetCachedEmbedding(inputText);
+            // Semantic search (current approach)
+            var semanticMatches = await SearchByEmbeddingAsync(inputText, century, topK * 2);
 
-        // Extract patterns from database
-        var patterns = await LLMDatabase.GetPatterns(century);
+            // Fuzzy matching keywords (for spelling variations)
+            var keywordMatches = await SearchByFuzzyKeywordsAsync(inputText, century, topK * 2);
 
-        // Count the similarities
-        var bestMatches = patterns
-            .Select(p => new { Pattern = p, Score = inputVector.Similarity(new EmbeddingF32(p.Embedding)) })
-            .OrderByDescending(x => x.Score).Take(topK).ToList();
+            // Reciprocal Rank Fusion to combine results
+            var fused = ReciprocalRankFusion(semanticMatches, keywordMatches);
 
-        /*var bestMatches = patterns
-            .Select(p => new { Pattern = p, Score = CosineSimilarity(inputVector, GetVector(p.Embedding)) })
-            .OrderByDescending(x => x.Score).Take(topK).ToList();*/
+            // Post-ranking using meta-features
+            bestMatches = fused.OrderByDescending(m =>
+                m.Score
+            /* * CenturyRelevanceWeight(m.Pattern.Century, century)
+            * OrthographySimilarity(inputText, m.Pattern.RawText) // heuristics for old spelling */
+            ).Take(topK).ToList();
+        } else {
+            bestMatches = await SearchByEmbeddingAsync(inputText, century, topK);
+        }
 
         // Forming a context for the MCP server
         string examples = $@"<rag_examples century=""{century}"">
@@ -83,8 +114,8 @@ Please note:
 
 {string.Join("\n\n", bestMatches.Select((m, i) => $@"
 <example id=""{i + 1}"" score=""{m.Score:F3}"">
-<input>{m.Pattern.RawText}</input>
-<output>{m.Pattern.CorrectedResult}</output>
+<input>{m.Entity.RawText}</input>
+<output>{m.Entity.CorrectedResult}</output>
 </example>"))}
 
 <guidance>
@@ -95,6 +126,47 @@ Please note:
 </rag_examples>";
 
         return examples;
+    }
+
+    /// <summary>
+    /// Semantic search (current approach).
+    /// </summary>
+    private static async Task<List<PatternSearchResult>> SearchByEmbeddingAsync(string inputText, string century, int topK)
+    {
+        // Obtain a vector for the new census text
+        var inputVector = GetCachedEmbedding(inputText);
+
+        // Extract patterns from database
+        var patterns = await LLMDatabase.GetPatterns(century);
+
+        // Count the similarities
+        var bestMatches = patterns
+            .Select(p => new PatternSearchResult { Id = p.Id, Entity = p, Score = inputVector.Similarity(new EmbeddingF32(p.Embedding)) })
+            .OrderByDescending(x => x.Score).Take(topK).ToList();
+
+        /*var bestMatches = patterns
+            .Select(p => new { Pattern = p, Score = CosineSimilarity(inputVector, GetVector(p.Embedding)) })
+            .OrderByDescending(x => x.Score).Take(topK).ToList();*/
+
+        return bestMatches;
+    }
+
+    private static async Task<List<PatternSearchResult>> SearchByFuzzyKeywordsAsync(string inputText, string century, int topK)
+    {
+        var result = new List<PatternSearchResult>();
+
+        /*string formattedQuery = string.Join(" ", inputText.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(w => w + "*"));
+        var ftsRankedIds = LLMDatabase.Query<Fact>(@"
+            SELECT f.Id 
+            FROM Fact f
+            JOIN FactFTS fts ON f.Id = fts.rowid
+            WHERE FactFTS MATCH ?
+            ORDER BY bm25(fts) ASC 
+            LIMIT ?", formattedQuery, topK)
+        .Select(f => f.Id)
+        .ToList();*/
+
+        return await Task.FromResult(result); // temp
     }
 
     private static readonly TimeSpan CacheTTL = TimeSpan.FromHours(2);
@@ -122,11 +194,11 @@ Please note:
         fEmbeddingsCache.Clear();
     }
 
-    public static void WritePattern(string inputText, string correctedResult, string century)
+    public static async Task WritePattern(string inputText, string correctedResult, string century)
     {
         //var embedding = SetVector(Embed(inputText));
         var embedding = Embed(inputText).Buffer.ToArray();
-        LLMDatabase.WritePattern(inputText, embedding, correctedResult, century);
+        await LLMDatabase.WritePattern(inputText, embedding, correctedResult, century);
     }
 
     #region Utilities

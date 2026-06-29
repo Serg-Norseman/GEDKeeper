@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Security.Permissions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using BSLib;
 using GDModel;
@@ -434,9 +435,9 @@ namespace GKUI.Forms
             fController.CreateNewFile();
         }
 
-        public void LoadFile(string fileName)
+        public async Task LoadFile(string fileName)
         {
-            fController.LoadFile(fileName);
+            await fController.LoadFile(fileName);
         }
 
         public void SaveFile(string fileName)
@@ -863,9 +864,9 @@ namespace GKUI.Forms
             Close();
         }
 
-        private void miFileNew_Click(object sender, EventArgs e)
+        private async void miFileNew_Click(object sender, EventArgs e)
         {
-            fController.NewFile();
+            await fController.NewFile();
         }
 
         private async void miFileLoad_Click(object sender, EventArgs e)

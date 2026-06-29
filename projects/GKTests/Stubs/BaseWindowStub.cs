@@ -7,6 +7,7 @@
  */
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore;
@@ -58,7 +59,7 @@ namespace GKTests.Stubs
         public void DuplicateRecord() { }
         public void EditRecord() { }
         public bool IsUnknown() { return false; }
-        public void LoadFile(string fileName) { }
+        public async Task LoadFile(string fileName) { }
         public void NotifyRecord(GDMRecord record, RecordAction action) { }
         public bool RecordIsFiltered(GDMRecord record) { return false; }
         public void SaveFile(string fileName) { }

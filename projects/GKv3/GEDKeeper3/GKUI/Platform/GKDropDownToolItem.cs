@@ -6,7 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-#pragma warning disable CS0612, CA1416
+#pragma warning disable CS0612, CA1416, CS8981
 
 using System;
 using Eto;

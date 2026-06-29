@@ -102,7 +102,7 @@ internal class RAGWritePatternTool : BaseTool
         string century = MCPHelper.GetOptionalStr(args, "century", null); // ?
         double qualityScore = MCPHelper.GetOptionalDbl(args, "quality_score", 0); // ?!
 
-        RAGHelper.WritePattern(rawText, correctedResult, century);
+        await RAGHelper.WritePattern(rawText, correctedResult, century);
 
         return MCPContent.CreateSimpleContent("✅ The pattern was written successfully.");
     }

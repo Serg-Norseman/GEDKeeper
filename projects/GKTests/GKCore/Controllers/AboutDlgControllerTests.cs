@@ -18,7 +18,7 @@ namespace GKCore.Controllers
     public class AboutDlgControllerTests : ControllerTest
     {
         [Test]
-        public async Task Test_AboutDlgController()
+        public void Test_AboutDlgController()
         {
             IAboutDlg view = CreateMockView();
             var controller = new AboutDlgController(view);

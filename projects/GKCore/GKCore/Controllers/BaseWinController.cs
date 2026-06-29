@@ -118,7 +118,7 @@ namespace GKCore.Controllers
             ClearSummaries();
         }
 
-        public async void NewFile()
+        public async Task NewFile()
         {
             if (!AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 await AppHost.Instance.CreateBase("");
@@ -127,7 +127,7 @@ namespace GKCore.Controllers
             }
         }
 
-        public async void LoadFile(string fileName)
+        public async Task LoadFile(string fileName)
         {
             Clear();
 
@@ -161,7 +161,7 @@ namespace GKCore.Controllers
 
             if (!fView.CheckModified()) return;
 
-            LoadFile(fContext.FileName);
+            await LoadFile(fContext.FileName);
         }
 
         public async void SaveFile(string fileName)

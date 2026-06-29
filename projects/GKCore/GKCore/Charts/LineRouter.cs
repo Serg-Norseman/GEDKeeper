@@ -231,8 +231,20 @@ namespace GKCore.Charts
                 Y = y;
             }
 
-            public static bool operator ==(Vector a, Vector b) => a.X == b.X && a.Y == b.Y;
-            public static bool operator !=(Vector a, Vector b) => !(a == b);
+            public static bool operator ==(Vector a, Vector b)
+            {
+                return a.X == b.X && a.Y == b.Y;
+            }
+
+            public static bool operator !=(Vector a, Vector b)
+            {
+                return !(a == b);
+            }
+
+            public override bool Equals(object obj)
+            {
+                return (obj is Vector vector) && (X == vector.X) && (Y == vector.Y);
+            }
         }
 
         private List<ExtPoint> ReconstructPath(Node endNode)

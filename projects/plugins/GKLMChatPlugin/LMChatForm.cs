@@ -67,9 +67,9 @@ namespace GKLMChatPlugin
             fModelDropDown = new DropDown();
             fSessionDropDown = new DropDown();
             var renameSessionButton = new ButtonMenuItem { Text = fLangMan.LS(PLS.RenameSession) };
-            var settingsButton = new Button { Text = fLangMan.LS(PLS.Settings) };
+            var settingsButton = new Button { Text = "⚙ " + fLangMan.LS(PLS.Settings) };
             var newSessionButton = new ButtonMenuItem { Text = fLangMan.LS(PLS.NewSession) };
-            var sessionActionsButton = new Button { Text = "✎" };
+            var sessionActionsButton = new Button { Text = "✎ " + fLangMan.LS(PLS.Session) };
 
             var topPanel = new StackLayout {
                 Orientation = Orientation.Horizontal,
@@ -223,7 +223,7 @@ namespace GKLMChatPlugin
             var frequencyValueLabel = new Label { Text = fLMSettings.FrequencyPenalty.ToString("F2") };
 
             var maxTokensLabel = new Label { Text = fLangMan.LS(PLS.MaxTokens) };
-            var maxTokensNumeric = new NumericUpDown { MinValue = 1, MaxValue = 8192, Value = fLMSettings.MaxTokens };
+            var maxTokensNumeric = new NumericStepper { MinValue = 1, MaxValue = 8192, Value = fLMSettings.MaxTokens };
 
             var streamModeCheckBox = new CheckBox { Text = fLangMan.LS(PLS.StreamMode), Checked = fLMSettings.StreamMode };
 
@@ -413,7 +413,7 @@ namespace GKLMChatPlugin
             fSendButton.Enabled = false;
             fStopButton.Enabled = true;
 
-            fLMClient.AddHistory("user", userText);
+            await fLMClient.AddHistory("user", userText);
             ShowMessage(userText, "user");
 
             try {

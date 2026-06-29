@@ -812,7 +812,7 @@ namespace GKCore.Controllers
                 baseWin.Context.EndUpdate();
             }
 
-            SelectIndividualPortrait(baseWin, indivRec);
+            await SelectIndividualPortrait(baseWin, indivRec);
 
             return result;
         }
@@ -1471,7 +1471,7 @@ namespace GKCore.Controllers
             var cvImpl = AppHost.Container.TryResolve<IComputerVision>();
             if (cvImpl == null) return;
 
-            await Task.Run(async () => {
+            await Task.Run(() => {
                 GDMTree tree = baseWin.Context.Tree;
 
                 for (int k = 0, num2 = tree.RecordsCount; k < num2; k++) {
@@ -1505,7 +1505,7 @@ namespace GKCore.Controllers
                 SetMultimediaLinkRegion(mmLink, region, false);
             }
 
-            SelectIndividualPortrait(baseWin, indiRec, mmLink);
+            await SelectIndividualPortrait(baseWin, indiRec, mmLink);
 
             return true;
         }
@@ -1548,7 +1548,7 @@ namespace GKCore.Controllers
             if (result) {
                 result = localUndoman.DoOrdinaryOperation(OperationType.otIndividualPortraitAttach, iRec, mmLink);
                 if (result) {
-                    SelectIndividualPortrait(baseWin, iRec, mmLink);
+                    await SelectIndividualPortrait(baseWin, iRec, mmLink);
                 }
             }
 

@@ -7,6 +7,7 @@
  */
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore.Filters;
@@ -30,7 +31,7 @@ namespace GKCore.Design
         void DeleteRecord();
         void DuplicateRecord();
         void EditRecord();
-        void LoadFile(string fileName);
+        Task LoadFile(string fileName);
         void NotifyRecord(GDMRecord record, RecordAction action);
         bool RecordIsFiltered(GDMRecord record);
         void RefreshLists(bool columnsChanged);

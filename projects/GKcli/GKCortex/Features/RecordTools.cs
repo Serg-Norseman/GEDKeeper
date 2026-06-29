@@ -413,7 +413,7 @@ internal class RecordMergeTool : BaseTool
         if (sourceRecord == null)
             return MCPContent.CreateSimpleContent($"Merged record not found with XRef: {sourceXRef}");
 
-        TreeTools.MergeRecord(baseContext, targetRecord, sourceRecord, false);
+        await TreeTools.MergeRecord(baseContext, targetRecord, sourceRecord, false);
 
         return MCPContent.CreateSimpleContent($"Record deleted: {sourceXRef}");
     }

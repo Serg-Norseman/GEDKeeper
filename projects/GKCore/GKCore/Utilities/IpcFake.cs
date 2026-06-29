@@ -82,8 +82,8 @@ namespace GKCore.Utilities
         private static string fMsgFilePath = null;
         private static string fMsgFileName = null;
         private static FileSystemWatcher fFileWatcher = null;
-        private static object fProcessLock = new object();
-        private static List<IpcMessage> fProcessedMsgs = new List<IpcMessage>();
+        private static readonly object fProcessLock = new object();
+        private static readonly List<IpcMessage> fProcessedMsgs = new List<IpcMessage>();
 
         private const double IpcMsgValidSecs = 4.0;
         private const int IpcComRetryCount = 30;
@@ -98,7 +98,7 @@ namespace GKCore.Utilities
         private const double GmpMutexValidSecs = 190.0;
         private const int GmpMutexRefreshMs = 60 * 1000;
 
-        private static List<KeyValuePair<string, string>> fMutexes = new List<KeyValuePair<string, string>>();
+        private static readonly List<KeyValuePair<string, string>> fMutexes = new List<KeyValuePair<string, string>>();
         private static int fLastRefresh = 0;
 
 

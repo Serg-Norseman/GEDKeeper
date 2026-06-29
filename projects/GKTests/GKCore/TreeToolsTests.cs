@@ -123,7 +123,7 @@ namespace GKCore.Tools
         }
 
         [Test]
-        public async Task Test_MergeRecord_Null()
+        public void Test_MergeRecord_Null()
         {
             Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await TreeTools.MergeRecord(null, null, null, false); });
             Assert.ThrowsAsync(typeof(ArgumentNullException), async () => { await TreeTools.MergeRecord(fBaseWin.Context, null, null, false); });

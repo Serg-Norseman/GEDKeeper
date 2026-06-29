@@ -201,7 +201,7 @@ public class ChatStreamChoice
     public ChatStreamDelta Delta { get; set; }
 
     [JsonPropertyName("finish_reason")]
-    public string? FinishReason { get; set; }
+    public string FinishReason { get; set; }
 }
 
 

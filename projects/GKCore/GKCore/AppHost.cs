@@ -903,7 +903,7 @@ namespace GKCore
                     ShowWindow(result);
 
                     if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName)) {
-                        result.LoadFile(fileName);
+                        await result.LoadFile(fileName);
                         ProcessLoaded(result.Context);
                     } else {
                         result.CreateNewFile();
@@ -951,7 +951,7 @@ namespace GKCore
                     BeginLoading();
 
                     if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName)) {
-                        baseWin.LoadFile(fileName);
+                        await baseWin.LoadFile(fileName);
                         ProcessLoaded(baseWin.Context);
                         RestoreWinMRU(baseWin);
                     }

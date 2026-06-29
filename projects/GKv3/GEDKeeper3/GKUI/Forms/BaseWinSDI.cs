@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using BSLib;
 using Eto.Drawing;
 using Eto.Forms;
@@ -562,9 +563,9 @@ namespace GKUI.Forms
             fController.CreateNewFile();
         }
 
-        public void LoadFile(string fileName)
+        public async Task LoadFile(string fileName)
         {
-            fController.LoadFile(fileName);
+            await fController.LoadFile(fileName);
         }
 
         public void SaveFile(string fileName)

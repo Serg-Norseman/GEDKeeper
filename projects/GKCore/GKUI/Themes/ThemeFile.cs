@@ -6,6 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+#pragma warning disable CS0649
+
 namespace GKUI.Themes
 {
     internal sealed class TFElement
