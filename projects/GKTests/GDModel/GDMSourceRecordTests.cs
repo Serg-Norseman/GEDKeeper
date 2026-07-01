@@ -108,7 +108,7 @@ namespace GDModel
             using (GDMSourceCitation srcCit = indiv.AddSource(sourRec, "p2", 3)) {
                 Assert.IsNotNull(srcCit);
 
-                int idx = indiv.IndexOfSource(sourRec);
+                int idx = indiv.IndexOfSource(sourRec.XRef);
                 Assert.AreEqual(0, idx);
 
                 var foundSrcCit = indiv.FindSourceCitation(sourRec);

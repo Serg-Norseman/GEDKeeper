@@ -464,6 +464,10 @@ namespace GKCore.Controllers
                 UpdateUIFont();
                 GetControl<ICheckBox>("chkOverrideThemesFont").Checked = fOptions.OverrideThemesFont;
             }
+
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                GetControl<ICheckBox>("chkSourceFilterChecksEvents").Checked = fOptions.SourceFilterChecksEvents;
+            }
         }
 
         public NameFormat GetSelectedNameFormat()
@@ -519,6 +523,10 @@ namespace GKCore.Controllers
 
             if (!fIsTerm && !AppHost.Instance.HasFeatureSupport(Feature.Mobile)) {
                 fOptions.OverrideThemesFont = GetControl<ICheckBox>("chkOverrideThemesFont").Checked;
+            }
+
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                fOptions.SourceFilterChecksEvents = GetControl<ICheckBox>("chkSourceFilterChecksEvents").Checked;
             }
         }
 
@@ -1201,6 +1209,9 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblMatchPatternMethod").Text = LangMan.LS(LSID.MatchPatternMethod);
 
             GetControl<ITabPage>("pageNavigation").Text = LangMan.LS(LSID.Navigation);
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                GetControl<ICheckBox>("chkSourceFilterChecksEvents").Text = LangMan.LS(LSID.SourceFilteringAlsoChecksEvents);
+            }
 
             GetControl<ITabPage>("pageGeo").Text = LangMan.LS(LSID.LocationsAndMaps);
 

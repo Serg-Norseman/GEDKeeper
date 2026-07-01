@@ -524,6 +524,7 @@
                 </TableLayout>
 
                 <CheckBox x:Name="chkSAFByAllNames" />
+                <CheckBox x:Name="chkSourceFilterChecksEvents" />
 
                 <StackLayoutItem Expand="True" />
               </StackLayout>

@@ -273,6 +273,20 @@ namespace GDModel
             if (fMultimediaLinks != null) fMultimediaLinks.ReplaceXRefs(map);
         }
 
+        public int IndexOfSource(string sourceXRef)
+        {
+            if (!string.IsNullOrEmpty(sourceXRef) && fSourceCitations != null) {
+                int num = fSourceCitations.Count;
+                for (int i = 0; i < num; i++) {
+                    if (fSourceCitations[i].XRef == sourceXRef) {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
         public override float IsMatch(GDMTag tag, MatchParams matchParams)
         {
             if (tag == null) return 0.0f;

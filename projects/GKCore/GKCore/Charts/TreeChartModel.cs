@@ -108,6 +108,7 @@ namespace GKCore.Charts
         private IImage fExpPic;
         private IImage fInfoPic;
         private IImage fCollapsePic;
+        private GlobalOptions fGlobalOptions;
         private KinshipsGraph fGraph;
         private bool fGraphicsMode;
         private bool fHasMediaFail;
@@ -303,6 +304,8 @@ namespace GKCore.Charts
 
         public TreeChartModel(ITreeChart view)
         {
+            fGlobalOptions = GlobalOptions.Instance;
+
             ScaleLimits = true;
 
             fGraphicsMode = AppHost.Instance.HasFeatureSupport(Feature.Graphics);
@@ -666,9 +669,7 @@ namespace GKCore.Charts
                     break;
 
                 case FilterGroupMode.Selected:
-                    GDMSourceRecord filterSource;
-                    filterSource = string.IsNullOrEmpty(fFilter.SourceRef) ? null : fTree.FindXRef<GDMSourceRecord>(fFilter.SourceRef);
-                    if (person.IndexOfSource(filterSource) < 0) {
+                    if (!person.HasSource(fFilter.SourceRef, fGlobalOptions.SourceFilterChecksEvents)) {
                         result = false;
                     }
                     break;

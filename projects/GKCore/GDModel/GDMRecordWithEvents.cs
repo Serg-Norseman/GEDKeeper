@@ -127,6 +127,21 @@ namespace GDModel
             if (fEvents != null) fEvents.ReplaceXRefs(map);
         }
 
+        public bool HasSource(string sourceXRef, bool checkEvents)
+        {
+            int res = IndexOfSource(sourceXRef);
+            if (res >= 0) return true;
+
+            if (checkEvents && fEvents != null) {
+                for (int i = 0, num = fEvents.Count; i < num; i++) {
+                    res = fEvents[i].IndexOfSource(sourceXRef);
+                    if (res >= 0) return true;
+                }
+            }
+
+            return false;
+        }
+
         public GDMCustomEvent FindEvent(string eventName)
         {
             GDMCustomEvent result = null;

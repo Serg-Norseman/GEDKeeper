@@ -182,12 +182,12 @@ namespace GDModel
             if (fUserReferences != null) fUserReferences.TrimExcess();
         }
 
-        public int IndexOfSource(GDMSourceRecord sourceRec)
+        public int IndexOfSource(string sourceXRef)
         {
-            if (sourceRec != null && fSourceCitations != null) {
+            if (!string.IsNullOrEmpty(sourceXRef) && fSourceCitations != null) {
                 int num = fSourceCitations.Count;
                 for (int i = 0; i < num; i++) {
-                    if (fSourceCitations[i].XRef == sourceRec.XRef) {
+                    if (fSourceCitations[i].XRef == sourceXRef) {
                         return i;
                     }
                 }

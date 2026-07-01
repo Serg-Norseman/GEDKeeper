@@ -282,6 +282,8 @@ namespace GKCore.Options
         public bool ShowTips { get; set; }
         public bool ShowTipsOnlyAlive { get; set; }
 
+        public bool SourceFilterChecksEvents { get; set; }
+
         public bool SurnameFirstInOrder { get; set; }
 
         public bool SurnameInCapitals { get; set; }
@@ -423,6 +425,8 @@ namespace GKCore.Options
             WomanSurnameFormat = WomanSurnameFormat.wsfNotExtend;
             SimpleSingleSurnames = false;
             UnrestrictedExtendedSurnames = false;
+
+            SourceFilterChecksEvents = false;
         }
 
         public void ResetDefaults_Specials()
@@ -804,6 +808,7 @@ namespace GKCore.Options
             WomanSurnameFormat = (WomanSurnameFormat)ini.ReadInteger("Common", "WomanSurnameFormat", 0);
             SimpleSingleSurnames = ini.ReadBool("Common", "SimpleSingleSurnames", false);
             UnrestrictedExtendedSurnames = ini.ReadBool("Common", "UnrestrictedExtendedSurnames", false);
+            SourceFilterChecksEvents = ini.ReadBool("Common", "SourceFilterChecksEvents", false);
 
             Geocoder = ini.ReadString("Common", "Geocoder", "Google");
             GeoSearchCountry = ini.ReadString("Common", "GeoSearchCountry", "");
@@ -951,6 +956,7 @@ namespace GKCore.Options
             ini.WriteInteger("Common", "WomanSurnameFormat", (int)WomanSurnameFormat);
             ini.WriteBool("Common", "SimpleSingleSurnames", SimpleSingleSurnames);
             ini.WriteBool("Common", "UnrestrictedExtendedSurnames", UnrestrictedExtendedSurnames);
+            ini.WriteBool("Common", "SourceFilterChecksEvents", SourceFilterChecksEvents);
 
             ini.WriteString("Common", "Geocoder", Geocoder);
             ini.WriteString("Common", "GeoSearchCountry", GeoSearchCountry);

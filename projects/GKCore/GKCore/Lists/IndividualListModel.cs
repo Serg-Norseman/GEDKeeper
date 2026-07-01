@@ -148,7 +148,6 @@ namespace GKCore.Lists
 
         private GDMGroupRecord filter_grp;
         private UDN filter_abd;
-        private GDMSourceRecord filter_source;
         private readonly GlobalOptions fOptions;
 
 
@@ -350,7 +349,7 @@ namespace GKCore.Lists
                     break;
 
                 case FilterGroupMode.Selected:
-                    if (fFetchedRec.IndexOfSource(filter_source) < 0) return false;
+                    if (!fFetchedRec.HasSource(iFilter.SourceRef, fOptions.SourceFilterChecksEvents)) return false;
                     break;
             }
 
@@ -364,7 +363,6 @@ namespace GKCore.Lists
             IndividualListFilter iFilter = (IndividualListFilter)fFilter;
             filter_abd = GDMDate.GetUDNByFormattedStr(iFilter.AliveBeforeDate, GDMCalendar.dcGregorian);
             filter_grp = (iFilter.GroupRef == "") ? null : fBaseContext.Tree.FindXRef<GDMGroupRecord>(iFilter.GroupRef);
-            filter_source = (iFilter.SourceRef == "") ? null : fBaseContext.Tree.FindXRef<GDMSourceRecord>(iFilter.SourceRef);
         }
 
         private object GetNameValueEx(int colSubtype)
