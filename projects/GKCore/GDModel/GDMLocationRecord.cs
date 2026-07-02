@@ -307,19 +307,12 @@ namespace GDModel
 
         public void SortNames()
         {
-            fNames.Sort(ElementsCompare);
+            GDMTree.SortDates(fNames);
         }
 
         public void SortTopLevels()
         {
-            fTopLevels.Sort(ElementsCompare);
-        }
-
-        private static int ElementsCompare(IGDMStructWithDate cp1, IGDMStructWithDate cp2)
-        {
-            UDN udn1 = cp1.Date.GetUDN();
-            UDN udn2 = cp2.Date.GetUDN();
-            return udn1.CompareTo(udn2);
+            GDMTree.SortDates(fTopLevels);
         }
 
         protected override void ProcessHashes(ref HashCode hashCode)

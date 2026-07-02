@@ -1110,6 +1110,7 @@ namespace GKCore.Locales
             /* 1065 */ "Notes without line breaks",
             /* 1066 */ "Include family events",
             /* 1067 */ "Source filtering also checks events",
+            /* 1068 */ "Automatic sorting of events",
         };
     }
 }

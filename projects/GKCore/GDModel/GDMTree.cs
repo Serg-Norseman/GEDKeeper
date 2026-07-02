@@ -803,6 +803,19 @@ namespace GDModel
             return (spouse == husb) ? wife : husb;
         }
 
+        public static void SortDates<T>(GDMList<T> list) where T : GDMTag, IGDMStructWithDate
+        {
+            if (list != null)
+                list.Sort(ElementsCompare);
+        }
+
+        private static int ElementsCompare(IGDMStructWithDate cp1, IGDMStructWithDate cp2)
+        {
+            UDN udn1 = cp1.Date.GetUDN();
+            UDN udn2 = cp2.Date.GetUDN();
+            return udn1.CompareTo(udn2);
+        }
+
         #region Updating
 
         public bool IsUpdated()

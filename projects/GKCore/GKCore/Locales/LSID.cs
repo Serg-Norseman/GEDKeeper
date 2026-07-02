@@ -1134,7 +1134,8 @@ namespace GKCore.Locales
         /* 1065 */ MergeNotes,
         /* 1066 */ IncludeFamilyEvents,
         /* 1067 */ SourceFilteringAlsoChecksEvents,
+        /* 1068 */ AutoSortEvents,
 
-        /* 0000 */ Last = SourceFilteringAlsoChecksEvents
+        /* 0000 */ Last = AutoSortEvents
     }
 }

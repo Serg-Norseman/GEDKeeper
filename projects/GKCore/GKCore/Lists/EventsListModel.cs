@@ -147,6 +147,10 @@ namespace GKCore.Lists
                                 }
 
                                 evt = newEvent;
+
+                                if (fOptions.AutoSortEvents) {
+                                    record.SortEvents();
+                                }
                                 fBaseWin.Context.CollectEvent(evt);
                             }
                         }

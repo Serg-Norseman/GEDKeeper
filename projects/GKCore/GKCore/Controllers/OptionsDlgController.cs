@@ -444,6 +444,9 @@ namespace GKCore.Controllers
 
             GetControl<ICheckBox>("chkAutoSortChildren").Checked = fOptions.AutoSortChildren;
             GetControl<ICheckBox>("chkAutoSortSpouses").Checked = fOptions.AutoSortSpouses;
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                GetControl<ICheckBox>("chkAutoSortEvents").Checked = fOptions.AutoSortEvents;
+            }
             GetControl<ICheckBox>("chkFirstCapitalLetterInNames").Checked = fOptions.FirstCapitalLetterInNames;
 
             GetControl<ICheckBox>("chkShortKinshipForm").Checked = fOptions.ShortKinshipForm;
@@ -510,6 +513,9 @@ namespace GKCore.Controllers
 
             fOptions.AutoSortChildren = GetControl<ICheckBox>("chkAutoSortChildren").Checked;
             fOptions.AutoSortSpouses = GetControl<ICheckBox>("chkAutoSortSpouses").Checked;
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                fOptions.AutoSortEvents = GetControl<ICheckBox>("chkAutoSortEvents").Checked;
+            }
             fOptions.FirstCapitalLetterInNames = GetControl<ICheckBox>("chkFirstCapitalLetterInNames").Checked;
 
             fOptions.ShortKinshipForm = GetControl<ICheckBox>("chkShortKinshipForm").Checked;
@@ -1175,6 +1181,9 @@ namespace GKCore.Controllers
 
             GetControl<ICheckBox>("chkAutoSortChildren").Text = LangMan.LS(LSID.AutoSortChildren);
             GetControl<ICheckBox>("chkAutoSortSpouses").Text = LangMan.LS(LSID.AutoSortSpouses);
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                GetControl<ICheckBox>("chkAutoSortEvents").Text = LangMan.LS(LSID.AutoSortEvents);
+            }
             GetControl<ICheckBox>("chkFirstCapitalLetterInNames").Text = LangMan.LS(LSID.FirstCapitalLetterInNames);
             GetControl<ICheckBox>("chkShortKinshipForm").Text = LangMan.LS(LSID.ShortKinshipForm);
             GetControl<ICheckBox>("chkSurnameFirstInOrder").Text = LangMan.LS(LSID.SurnameFirstInOrder);

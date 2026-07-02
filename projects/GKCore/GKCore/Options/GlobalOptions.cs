@@ -81,6 +81,8 @@ namespace GKCore.Options
 
         public bool AutoSortSpouses { get; set; }
 
+        public bool AutoSortEvents { get; set; }
+
         public BackupOptions Backups { get { return fBackups; } }
 
         public CertaintyAlgorithm CertaintyAlgorithm { get; set; }
@@ -412,6 +414,7 @@ namespace GKCore.Options
             ListHighlightUnmarriedPersons = false;
             AutoSortChildren = true;
             AutoSortSpouses = false;
+            AutoSortEvents = false;
             FirstCapitalLetterInNames = false;
             ShortKinshipForm = false;
             SurnameFirstInOrder = true;
@@ -792,6 +795,7 @@ namespace GKCore.Options
             AutoCheckUpdates = ini.ReadBool("Common", "AutoCheckUpdates", true);
             AutoSortChildren = ini.ReadBool("Common", "AutoSortChildren", true);
             AutoSortSpouses = ini.ReadBool("Common", "AutoSortSpouses", false);
+            AutoSortEvents = ini.ReadBool("Common", "AutoSortEvents", false);
             CharsetDetection = ini.ReadBool("Common", "CharsetDetection", false);
             FirstCapitalLetterInNames = ini.ReadBool("Common", "FirstCapitalLetterInNames", false);
             DialogClosingWarn = ini.ReadBool("Common", "DialogClosingWarn", false);
@@ -938,6 +942,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "AutoCheckUpdates", AutoCheckUpdates);
             ini.WriteBool("Common", "AutoSortChildren", AutoSortChildren);
             ini.WriteBool("Common", "AutoSortSpouses", AutoSortSpouses);
+            ini.WriteBool("Common", "AutoSortEvents", AutoSortEvents);
             ini.WriteBool("Common", "CharsetDetection", CharsetDetection);
             ini.WriteBool("Common", "FirstCapitalLetterInNames", FirstCapitalLetterInNames);
             ini.WriteBool("Common", "DialogClosingWarn", DialogClosingWarn);

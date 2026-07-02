@@ -207,6 +207,11 @@ namespace GDModel
             return result;
         }
 
+        public void SortEvents()
+        {
+            GDMTree.SortDates(fEvents);
+        }
+
         public abstract GDMCustomEvent AddEvent(GDMCustomEvent evt);
 
         public UDN GetUDN(string eventSign)
