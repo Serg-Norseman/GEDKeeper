@@ -43,6 +43,20 @@ namespace GKCore.Controllers
         {
         }
 
+        public override void Init(IBaseWindow baseWin)
+        {
+            base.Init(baseWin);
+
+            fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
+            fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
+        }
+
+        public override void Done()
+        {
+            fView.SourcesList.ListModel.SaveSettings();
+            fView.UserRefList.ListModel.SaveSettings();
+        }
+
         public override bool Accept()
         {
             try {
@@ -71,6 +85,9 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             fView.Note.Text = fNoteRecord.Lines.Text.Trim();
+
+            fView.SourcesList.ListModel.DataOwner = fNoteRecord;
+            fView.UserRefList.ListModel.DataOwner = fNoteRecord;
         }
 
         public void SetBold()
@@ -137,6 +154,12 @@ namespace GKCore.Controllers
 
             GetControl<IButton>("btnAccept").Text = LangMan.LS(LSID.DlgAccept);
             GetControl<IButton>("btnCancel").Text = LangMan.LS(LSID.DlgCancel);
+
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                GetControl<ITabPage>("pageEditor").Text = LangMan.LS(LSID.Note);
+                GetControl<ITabPage>("pageSources").Text = LangMan.LS(LSID.RPSources);
+                GetControl<ITabPage>("pageUserRefs").Text = LangMan.LS(LSID.UserRefs);
+            }
         }
 
         public override void ApplyTheme()

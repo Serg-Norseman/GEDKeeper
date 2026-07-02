@@ -2898,6 +2898,8 @@ namespace GKCore
                         summary.AddILines(noteRec.Lines, "");
 
                         ShowSubjectLinks(baseContext.Tree, noteRec, summary);
+
+                        RecListSourcesRefresh(baseContext, noteRec, summary);
                     }
                 } finally {
                     summary.EndUpdate();

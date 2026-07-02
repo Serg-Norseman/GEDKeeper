@@ -8,6 +8,7 @@
 
 using GDModel;
 using GKCore.Design.Controls;
+using GKCore.Lists;
 
 namespace GKCore.Design.Views
 {
@@ -16,6 +17,9 @@ namespace GKCore.Design.Views
         GDMNoteRecord NoteRecord { get; set; }
 
         ITextBox Note { get; }
+
+        ISheetList SourcesList { get; }
+        ISheetList UserRefList { get; }
     }
 
 

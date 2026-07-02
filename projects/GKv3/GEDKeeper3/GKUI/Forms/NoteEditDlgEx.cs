@@ -14,6 +14,7 @@ using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Lists;
 using GKUI.Components;
 using GKUI.Platform;
 
@@ -44,6 +45,8 @@ namespace GKUI.Forms
         private ToolBar toolStrip1;
         private TabPage pageEditor;
         private TabControl tabControl1;
+        private GKSheetList fSourcesList;
+        private GKSheetList fUserRefList;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -59,6 +62,16 @@ namespace GKUI.Forms
         ITextBox INoteEdit.Note
         {
             get { return GetControlHandler<ITextBox>(txtNote); }
+        }
+
+        ISheetList INoteEdit.SourcesList
+        {
+            get { return fSourcesList; }
+        }
+
+        ISheetList INoteEdit.UserRefList
+        {
+            get { return fUserRefList; }
         }
 
         #endregion

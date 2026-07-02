@@ -13,6 +13,8 @@ using GKCore.Controllers;
 using GKCore.Design;
 using GKCore.Design.Controls;
 using GKCore.Design.Views;
+using GKCore.Lists;
+using GKUI.Components;
 
 namespace GKUI.Forms
 {
@@ -24,6 +26,9 @@ namespace GKUI.Forms
         private Button btnAccept;
         private Button btnCancel;
         private RichTextArea txtNote;
+        private TabControl tabsData;
+        private GKSheetList fSourcesList;
+        private GKSheetList fUserRefList;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -41,11 +46,23 @@ namespace GKUI.Forms
             get { return GetControlHandler<ITextBox>(txtNote); }
         }
 
+        ISheetList INoteEdit.SourcesList
+        {
+            get { return fSourcesList; }
+        }
+
+        ISheetList INoteEdit.UserRefList
+        {
+            get { return fUserRefList; }
+        }
+
         #endregion
 
         public NoteEditDlg(IBaseWindow baseWin)
         {
             XamlReader.Load(this);
+
+            tabsData.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
             fController = new NoteEditDlgController(this);
             fController.Init(baseWin);

@@ -41,6 +41,13 @@
         <TabPage x:Name="pagePreview">
           <comcom:HyperView x:Name="hyperView1" />
         </TabPage>
+
+        <TabPage x:Name="pageSources">
+          <comcom:GKSheetList x:Name="fSourcesList" />
+        </TabPage>
+        <TabPage x:Name="pageUserRefs">
+          <comcom:GKSheetList x:Name="fUserRefList" />
+        </TabPage>
       </TabControl>
     </TableRow>
 
