@@ -96,6 +96,8 @@ namespace GKCore.Options
             get { return fCircleChartOptions; }
         }
 
+        public bool ConvenientSourcesFormat { get; set; }
+
         public GEDCOMCharacterSet DefCharacterSet
         {
             get { return GEDCOMCharacterSet.csUTF8; }
@@ -430,6 +432,7 @@ namespace GKCore.Options
             UnrestrictedExtendedSurnames = false;
 
             SourceFilterChecksEvents = false;
+            ConvenientSourcesFormat = false;
         }
 
         public void ResetDefaults_Specials()
@@ -813,6 +816,7 @@ namespace GKCore.Options
             SimpleSingleSurnames = ini.ReadBool("Common", "SimpleSingleSurnames", false);
             UnrestrictedExtendedSurnames = ini.ReadBool("Common", "UnrestrictedExtendedSurnames", false);
             SourceFilterChecksEvents = ini.ReadBool("Common", "SourceFilterChecksEvents", false);
+            ConvenientSourcesFormat = ini.ReadBool("Common", "ConvenientSourcesFormat", false);
 
             Geocoder = ini.ReadString("Common", "Geocoder", "Google");
             GeoSearchCountry = ini.ReadString("Common", "GeoSearchCountry", "");
@@ -962,6 +966,7 @@ namespace GKCore.Options
             ini.WriteBool("Common", "SimpleSingleSurnames", SimpleSingleSurnames);
             ini.WriteBool("Common", "UnrestrictedExtendedSurnames", UnrestrictedExtendedSurnames);
             ini.WriteBool("Common", "SourceFilterChecksEvents", SourceFilterChecksEvents);
+            ini.WriteBool("Common", "ConvenientSourcesFormat", ConvenientSourcesFormat);
 
             ini.WriteString("Common", "Geocoder", Geocoder);
             ini.WriteString("Common", "GeoSearchCountry", GeoSearchCountry);

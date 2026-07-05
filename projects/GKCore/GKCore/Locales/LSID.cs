@@ -1135,7 +1135,8 @@ namespace GKCore.Locales
         /* 1066 */ IncludeFamilyEvents,
         /* 1067 */ SourceFilteringAlsoChecksEvents,
         /* 1068 */ AutoSortEvents,
+        /* 1069 */ ConvenientSourcesFormat,
 
-        /* 0000 */ Last = AutoSortEvents
+        /* 0000 */ Last = ConvenientSourcesFormat
     }
 }

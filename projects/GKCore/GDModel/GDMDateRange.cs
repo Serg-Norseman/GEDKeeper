@@ -170,11 +170,11 @@ namespace GDModel
                         result = dateAfter + " - " + dateBefore;
                     }
                 } else {
-                    result = fDateAfter.GetDisplayString(format, true, showCalendar);
+                    result = fDateAfter.GetDisplayString(format, true, showCalendar, shorten);
                     if (sign) result += " >";
                 }
             } else if (!befEmpty) {
-                result = fDateBefore.GetDisplayString(format, true, showCalendar);
+                result = fDateBefore.GetDisplayString(format, true, showCalendar, shorten);
                 if (sign) result = "< " + result;
             } else {
                 result = "";

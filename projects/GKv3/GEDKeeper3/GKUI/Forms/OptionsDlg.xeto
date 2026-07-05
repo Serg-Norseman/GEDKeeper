@@ -526,6 +526,7 @@
 
                 <CheckBox x:Name="chkSAFByAllNames" />
                 <CheckBox x:Name="chkSourceFilterChecksEvents" />
+                <CheckBox x:Name="chkConvenientSourcesFormat" />
 
                 <StackLayoutItem Expand="True" />
               </StackLayout>

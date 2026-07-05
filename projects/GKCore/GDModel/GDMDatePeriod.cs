@@ -159,13 +159,13 @@ namespace GDModel
 
             if (!frEmpty) {
                 if (!toEmpty) {
-                    result = fDateFrom.GetDisplayString(format, true, showCalendar) + " - " + fDateTo.GetDisplayString(format, true, showCalendar);
+                    result = fDateFrom.GetDisplayString(format, true, showCalendar, shorten) + " - " + fDateTo.GetDisplayString(format, true, showCalendar, shorten);
                 } else {
-                    result = fDateFrom.GetDisplayString(format, true, showCalendar);
+                    result = fDateFrom.GetDisplayString(format, true, showCalendar, shorten);
                     if (sign) result += " >";
                 }
             } else if (!toEmpty) {
-                result = fDateTo.GetDisplayString(format, true, showCalendar);
+                result = fDateTo.GetDisplayString(format, true, showCalendar, shorten);
                 if (sign) result = "< " + result;
             } else {
                 result = "";

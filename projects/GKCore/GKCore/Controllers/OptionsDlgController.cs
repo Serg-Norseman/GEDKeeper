@@ -470,6 +470,7 @@ namespace GKCore.Controllers
 
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 GetControl<ICheckBox>("chkSourceFilterChecksEvents").Checked = fOptions.SourceFilterChecksEvents;
+                GetControl<ICheckBox>("chkConvenientSourcesFormat").Checked = fOptions.ConvenientSourcesFormat;
             }
         }
 
@@ -533,6 +534,7 @@ namespace GKCore.Controllers
 
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 fOptions.SourceFilterChecksEvents = GetControl<ICheckBox>("chkSourceFilterChecksEvents").Checked;
+                fOptions.ConvenientSourcesFormat = GetControl<ICheckBox>("chkConvenientSourcesFormat").Checked;
             }
         }
 
@@ -851,8 +853,6 @@ namespace GKCore.Controllers
             GetControl<ICheckBox>("chkDiffLines").Enabled = GetControl<ICheckBox>("chkName").Checked && GetControl<ICheckBox>("chkPatronymic").Checked;
 
             GetControl<ICheckBox>("chkOnlyYears").Enabled = GetControl<ICheckBox>("chkBirthDate").Checked && GetControl<ICheckBox>("chkDeathDate").Checked;
-
-            GetControl<ICheckBox>("chkShowAge").Enabled = GetControl<ICheckBox>("chkOnlyYears").Checked && !GetControl<ICheckBox>("chkShowPlaces").Checked;
 
             bool fullNameOnOneLine = GetControl<ICheckBox>("chkFullNameOnOneLine").Checked;
             GetControl<ICheckBox>("chkSurname").Enabled = !fullNameOnOneLine;
@@ -1220,6 +1220,7 @@ namespace GKCore.Controllers
             GetControl<ITabPage>("pageNavigation").Text = LangMan.LS(LSID.Navigation);
             if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                 GetControl<ICheckBox>("chkSourceFilterChecksEvents").Text = LangMan.LS(LSID.SourceFilteringAlsoChecksEvents);
+                GetControl<ICheckBox>("chkConvenientSourcesFormat").Text = LangMan.LS(LSID.ConvenientSourcesFormat);
             }
 
             GetControl<ITabPage>("pageGeo").Text = LangMan.LS(LSID.LocationsAndMaps);

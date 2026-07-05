@@ -1111,6 +1111,7 @@ namespace GKCore.Locales
             /* 1066 */ "Include family events",
             /* 1067 */ "Source filtering also checks events",
             /* 1068 */ "Automatic sorting of events",
+            /* 1069 */ "Output sources to filters in a convenient format",
         };
     }
 }

@@ -24,10 +24,12 @@ namespace GKCore.Controllers
     public sealed class PersonsFilterDlgController : DialogController<IPersonsFilterDlg>
     {
         private readonly IndividualListModel fListMan;
+        private readonly GlobalOptions fOptions;
 
         public PersonsFilterDlgController(IPersonsFilterDlg view, IRecordsListModel listMan) : base(view)
         {
             fListMan = (IndividualListModel)listMan;
+            fOptions = GlobalOptions.Instance;
 
             fView.GroupCombo.ReadOnly = true;
             fView.SourceCombo.ReadOnly = true;
@@ -37,21 +39,19 @@ namespace GKCore.Controllers
         {
             if (sender == null) return;
 
-            GlobalOptions options = GlobalOptions.Instance;
-
             if (sender == fView.NameCombo) {
-                GKUtils.RemoveFilter(sender.Text, options.NameFilters);
-                UpdateFiltersCombo(sender, options.NameFilters);
+                GKUtils.RemoveFilter(sender.Text, fOptions.NameFilters);
+                UpdateFiltersCombo(sender, fOptions.NameFilters);
             }
 
             if (sender == fView.ResidenceCombo) {
-                GKUtils.RemoveFilter(sender.Text, options.ResidenceFilters);
-                UpdateFiltersCombo(sender, options.ResidenceFilters);
+                GKUtils.RemoveFilter(sender.Text, fOptions.ResidenceFilters);
+                UpdateFiltersCombo(sender, fOptions.ResidenceFilters);
             }
 
             if (sender == fView.EventValCombo) {
-                GKUtils.RemoveFilter(sender.Text, options.EventFilters);
-                UpdateFiltersCombo(sender, options.EventFilters);
+                GKUtils.RemoveFilter(sender.Text, fOptions.EventFilters);
+                UpdateFiltersCombo(sender, fOptions.EventFilters);
             }
 
             sender.Text = "*";
@@ -62,9 +62,9 @@ namespace GKCore.Controllers
             try {
                 IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
 
-                iFilter.Name = GKUtils.SaveFilter(fView.NameCombo.Text, GlobalOptions.Instance.NameFilters);
-                iFilter.Residence = GKUtils.SaveFilter(fView.ResidenceCombo.Text, GlobalOptions.Instance.ResidenceFilters);
-                iFilter.EventVal = GKUtils.SaveFilter(fView.EventValCombo.Text, GlobalOptions.Instance.EventFilters);
+                iFilter.Name = GKUtils.SaveFilter(fView.NameCombo.Text, fOptions.NameFilters);
+                iFilter.Residence = GKUtils.SaveFilter(fView.ResidenceCombo.Text, fOptions.ResidenceFilters);
+                iFilter.EventVal = GKUtils.SaveFilter(fView.EventValCombo.Text, fOptions.EventFilters);
 
                 iFilter.Sex = (GDMSex)fView.GetSexRadio();
                 iFilter.PatriarchOnly = fView.OnlyPatriarchsCheck.Checked;
@@ -132,11 +132,10 @@ namespace GKCore.Controllers
         public override void UpdateView()
         {
             IndividualListFilter iFilter = (IndividualListFilter)fListMan.Filter;
-            GlobalOptions options = GlobalOptions.Instance;
 
-            UpdateFiltersCombo(fView.NameCombo, options.NameFilters);
-            UpdateFiltersCombo(fView.ResidenceCombo, options.ResidenceFilters);
-            UpdateFiltersCombo(fView.EventValCombo, options.EventFilters);
+            UpdateFiltersCombo(fView.NameCombo, fOptions.NameFilters);
+            UpdateFiltersCombo(fView.ResidenceCombo, fOptions.ResidenceFilters);
+            UpdateFiltersCombo(fView.EventValCombo, fOptions.EventFilters);
 
             int lifeSel;
             if (iFilter.FilterLifeMode != FilterLifeMode.lmTimeLocked) {
@@ -181,15 +180,36 @@ namespace GKCore.Controllers
             fView.SourceCombo.AddItem<GDMRecord>(LangMan.LS(LSID.SrcAny), null);
             var sources = GKUtils.GetSources(tree);
             foreach (var item in sources) {
-                fView.SourceCombo.AddItem<GDMRecord>(item.ShortTitle, item);
+                fView.SourceCombo.AddItem<GDMRecord>(GetSourceComfortableName(item), item);
             }
 
             if (iFilter.SourceMode != FilterGroupMode.Selected) {
                 fView.SourceCombo.SelectedIndex = (int)iFilter.SourceMode;
             } else {
                 var sourceRec = tree.FindXRef<GDMSourceRecord>(iFilter.SourceRef);
-                if (sourceRec != null) fView.SourceCombo.Text = sourceRec.ShortTitle;
+                if (sourceRec != null) fView.SourceCombo.Text = GetSourceComfortableName(sourceRec);
             }
+        }
+
+        private string GetSourceComfortableName(GDMSourceRecord sourceRecord)
+        {
+            if (fOptions.ConvenientSourcesFormat) {
+                string strDate = string.Empty;
+                var date = sourceRecord.Date.Value;
+                if (date != null) {
+                    strDate = date.GetDisplayString(fOptions.DefDateFormat, false, false, true);
+                    if (!string.IsNullOrEmpty(strDate)) {
+                        strDate = string.Format(", {0}", strDate);
+                    }
+                }
+                string strRepo = string.Empty;
+                string repositories = GKUtils.GetSourceRepositories(fBase.Context.Tree, sourceRecord);
+                if (!string.IsNullOrEmpty(repositories)) {
+                    strRepo = string.Format(", {0}", repositories);
+                }
+                return string.Format("{0}{1}{2}", sourceRecord.ShortTitle, strDate, strRepo);
+            }
+            return sourceRecord.ShortTitle;
         }
 
         public override void SetLocale()
