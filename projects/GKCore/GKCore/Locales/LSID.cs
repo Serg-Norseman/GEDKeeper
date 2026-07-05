@@ -1136,7 +1136,8 @@ namespace GKCore.Locales
         /* 1067 */ SourceFilteringAlsoChecksEvents,
         /* 1068 */ AutoSortEvents,
         /* 1069 */ ConvenientSourcesFormat,
+        /* 1070 */ PhotoAlbum,
 
-        /* 0000 */ Last = ConvenientSourcesFormat
+        /* 0000 */ Last = PhotoAlbum
     }
 }

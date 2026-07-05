@@ -956,6 +956,7 @@ namespace GKCore.Controllers
 
                     if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
                         GetControl<IMenuItem>("miFileReload").Text = LangMan.LS(LSID.MIFileReload);
+                        GetControl<IMenuItem>("miExportToPhotoAlbum").Text = LangMan.LS(LSID.PhotoAlbum);
                     }
 
                     GetControl<IMenuItem>("miMRUFiles").Text = LangMan.LS(LSID.MIMRUFiles);
@@ -1173,6 +1174,13 @@ namespace GKCore.Controllers
                 }
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinController.ShowPersonsFilter()", ex);
+            }
+        }
+
+        public void ExportToPhotoAlbum()
+        {
+            using (var exp = new PhotoAlbumExporter(fView)) {
+                exp.Generate(true);
             }
         }
 

@@ -92,6 +92,7 @@
         <ButtonMenuItem x:Name="miPedigreeDescend" Shortcut="CommonModifier+P" Click="miPedigreeDescend_Click" />
         <ButtonMenuItem x:Name="miExportToFamilyBook" Click="miExportToFamilyBook_Click" />
         <ButtonMenuItem x:Name="miExportToTreesAlbum" Click="miExportToTreesAlbum_Click" />
+        <ButtonMenuItem x:Name="miExportToPhotoAlbum" Click="miExportToPhotoAlbum_Click" />
         <SeparatorMenuItem />
         <ButtonMenuItem x:Name="miMap" Shortcut="CommonModifier+M" Click="miMap_Click" />
         <SeparatorMenuItem />

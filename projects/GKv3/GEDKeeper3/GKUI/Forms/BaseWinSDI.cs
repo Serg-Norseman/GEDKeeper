@@ -71,6 +71,7 @@ namespace GKUI.Forms
         private ButtonMenuItem miExportTable;
         private ButtonMenuItem miExportToFamilyBook;
         private ButtonMenuItem miExportToTreesAlbum;
+        private ButtonMenuItem miExportToPhotoAlbum;
         private ButtonMenuItem miTreeTools;
         private ButtonMenuItem miExit;
         private ButtonMenuItem miEdit;
@@ -898,6 +899,11 @@ namespace GKUI.Forms
         private void miRedo_Click(object sender, EventArgs e)
         {
             fController.Redo();
+        }
+
+        private void miExportToPhotoAlbum_Click(object sender, EventArgs e)
+        {
+            fController.ExportToPhotoAlbum();
         }
 
         private void miExportToFamilyBook_Click(object sender, EventArgs e)
