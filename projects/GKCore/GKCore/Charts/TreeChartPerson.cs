@@ -624,6 +624,9 @@ namespace GKCore.Charts
 
                     if (options.DeathDateVisible) {
                         Lines[idx] = fDeathDate;
+                        if (!string.IsNullOrEmpty(fAge)) {
+                            Lines[idx] += string.Concat(" (", fAge, ")");
+                        }
                         idx++;
 
                         if (options.SeparateDatesAndPlacesLines) {
