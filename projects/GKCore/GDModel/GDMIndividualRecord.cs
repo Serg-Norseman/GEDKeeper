@@ -590,6 +590,24 @@ namespace GDModel
             return result;
         }
 
+        public void SetPrimaryMultimediaLinkToZero()
+        {
+            if (!HasMultimediaLinks) return;
+
+            int pmlIndex = -1;
+            for (int i = 0, num = MultimediaLinks.Count; i < num; i++) {
+                GDMMultimediaLink mmLink = MultimediaLinks[i];
+                if (mmLink.IsPrimary) {
+                    pmlIndex = i;
+                    break;
+                }
+            }
+
+            if (pmlIndex > 0) {
+                MultimediaLinks.Exchange(0, pmlIndex);
+            }
+        }
+
         protected override void ProcessHashes(ref HashCode hashCode)
         {
             base.ProcessHashes(ref hashCode);

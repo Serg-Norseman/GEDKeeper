@@ -778,6 +778,12 @@ namespace GDModel.Providers.GEDCOM
         {
             GDMIndividualRecord indiRec = (GDMIndividualRecord)tag;
 
+            if (Strict) {
+                // This option is only needed when exporting to other programs,
+                // so changing the order of portrait photos will only be possible here.
+                indiRec.SetPrimaryMultimediaLinkToZero();
+            }
+
             WriteRecordWithEvents(stream, level, indiRec);
 
             level += 1;
