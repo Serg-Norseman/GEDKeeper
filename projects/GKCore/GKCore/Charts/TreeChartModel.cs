@@ -512,6 +512,9 @@ namespace GKCore.Charts
 
         private string GetMarriageDate(GDMFamilyRecord family)
         {
+            if (family == null)
+                return string.Empty;
+
             DateFormat dateFormat = fOptions.OnlyYears ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;
             return GKUtils.GetMarriageDateStr(family, dateFormat, GlobalOptions.Instance.ShowDatesSign, false, fOptions.ShortenDates);
         }
@@ -556,11 +559,11 @@ namespace GKCore.Charts
 
                 if ((fDepthLimitAncestors <= -1 || Math.Abs(personNode.Generation) != fDepthLimitAncestors) && indiRec.ChildToFamilyLinks.Count > 0 && !dupFlag) {
                     GDMChildToFamilyLink childLink = indiRec.ChildToFamilyLinks[0];
+                    GDMFamilyRecord family = fTree.GetPtrValue(childLink);
+                    if (family == null) return;
 
                     var adopted = (childLink.PedigreeLinkageType == GDMPedigreeLinkageType.plAdopted);
                     personNode.SetFlag(PersonFlag.pfAdopted, adopted);
-
-                    GDMFamilyRecord family = fTree.GetPtrValue(childLink);
 
                     bool isDup = fPreparedFamilies.Contains(family.XRef);
                     if (!isDup) fPreparedFamilies.Add(family.XRef);
@@ -1111,6 +1114,7 @@ namespace GKCore.Charts
                 int num = person.SpouseToFamilyLinks.Count;
                 for (int i = 0; i < num; i++) {
                     GDMFamilyRecord family = fTree.GetPtrValue(person.SpouseToFamilyLinks[i]);
+                    if (family == null) continue;
 
                     int num2 = family.Children.Count;
                     for (int j = 0; j < num2; j++) {
@@ -1291,9 +1295,6 @@ namespace GKCore.Charts
                 y2 = tmp;
             }
 
-            /*if (fVisibleArea.GetWidth() <= 0 || fVisibleArea.GetHeight() <= 0) {
-                return false;
-            }*/
             bool isLineVisible = MathHelper.HasRangeIntersection(fVisibleArea.Left, fVisibleArea.Right, x1, x2)
                 && MathHelper.HasRangeIntersection(fVisibleArea.Top, fVisibleArea.Bottom, y1, y2);
 

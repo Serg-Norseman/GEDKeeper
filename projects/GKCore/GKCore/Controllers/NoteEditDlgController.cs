@@ -47,14 +47,18 @@ namespace GKCore.Controllers
         {
             base.Init(baseWin);
 
-            fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
-            fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                fView.SourcesList.ListModel = new SourceCitationsListModel(fView, baseWin, fLocalUndoman);
+                fView.UserRefList.ListModel = new URefsListModel(fView, baseWin, fLocalUndoman);
+            }
         }
 
         public override void Done()
         {
-            fView.SourcesList.ListModel.SaveSettings();
-            fView.UserRefList.ListModel.SaveSettings();
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                fView.SourcesList.ListModel.SaveSettings();
+                fView.UserRefList.ListModel.SaveSettings();
+            }
         }
 
         public override bool Accept()
@@ -86,8 +90,10 @@ namespace GKCore.Controllers
         {
             fView.Note.Text = fNoteRecord.Lines.Text.Trim();
 
-            fView.SourcesList.ListModel.DataOwner = fNoteRecord;
-            fView.UserRefList.ListModel.DataOwner = fNoteRecord;
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                fView.SourcesList.ListModel.DataOwner = fNoteRecord;
+                fView.UserRefList.ListModel.DataOwner = fNoteRecord;
+            }
         }
 
         public void SetBold()
