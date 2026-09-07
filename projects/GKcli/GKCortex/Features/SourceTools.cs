@@ -8,7 +8,6 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCortex.MCP;
@@ -37,7 +36,7 @@ internal class SourceUpsertTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string title = MCPHelper.GetOptionalStr(args, "title", null);

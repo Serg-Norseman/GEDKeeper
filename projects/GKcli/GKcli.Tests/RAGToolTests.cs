@@ -14,7 +14,7 @@ public class RAGToolTests : MCPToolTests
     #region RAG Tools Tests
 
     [Test]
-    public async Task Test_RAGSearchExamplesTool_ExecuteTool()
+    public void Test_RAGSearchExamplesTool_ExecuteTool()
     {
         // Arrange
         var tool = new RAGSearchExamplesTool();
@@ -23,7 +23,7 @@ public class RAGToolTests : MCPToolTests
         });
 
         // Act
-        var result = await tool.ExecuteTool(fContext, args);
+        var result = tool.ExecuteTool(fContext, args);
 
         // Assert
         Assert.IsNotNull(result);
@@ -32,7 +32,7 @@ public class RAGToolTests : MCPToolTests
     }
 
     [Test]
-    public async Task Test_RAGSearchExamplesTool_ExecuteTool_WithAllParameters()
+    public void Test_RAGSearchExamplesTool_ExecuteTool_WithAllParameters()
     {
         // Arrange
         var tool = new RAGSearchExamplesTool();
@@ -44,7 +44,7 @@ public class RAGToolTests : MCPToolTests
         });
 
         // Act
-        var result = await tool.ExecuteTool(fContext, args);
+        var result = tool.ExecuteTool(fContext, args);
 
         // Assert
         Assert.IsNotNull(result);
@@ -53,7 +53,7 @@ public class RAGToolTests : MCPToolTests
     }
 
     [Test]
-    public async Task Test_RAGSearchExamplesTool_ExecuteTool_MissingInputText_ThrowsException()
+    public void Test_RAGSearchExamplesTool_ExecuteTool_MissingInputText_ThrowsException()
     {
         // Arrange
         var tool = new RAGSearchExamplesTool();
@@ -62,11 +62,11 @@ public class RAGToolTests : MCPToolTests
         JsonElement args = doc.RootElement;
 
         // Act & Assert
-        Assert.ThrowsAsync<ArgumentException>(() => tool.ExecuteTool(fContext, args));
+        Assert.Throws<ArgumentException>(() => tool.ExecuteTool(fContext, args));
     }
 
     [Test]
-    public async Task Test_RAGWritePatternTool_ExecuteTool()
+    public void Test_RAGWritePatternTool_ExecuteTool()
     {
         // Arrange
         var tool = new RAGWritePatternTool();
@@ -78,7 +78,7 @@ public class RAGToolTests : MCPToolTests
         });
 
         // Act
-        var result = await tool.ExecuteTool(fContext, args);
+        var result = tool.ExecuteTool(fContext, args);
 
         // Assert
         Assert.IsNotNull(result);
@@ -87,7 +87,7 @@ public class RAGToolTests : MCPToolTests
     }
 
     [Test]
-    public async Task Test_RAGWritePatternTool_ExecuteTool_MissingRequiredParameters_ThrowsException()
+    public void Test_RAGWritePatternTool_ExecuteTool_MissingRequiredParameters_ThrowsException()
     {
         // Arrange
         var tool = new RAGWritePatternTool();
@@ -96,11 +96,11 @@ public class RAGToolTests : MCPToolTests
         JsonElement args = doc.RootElement;
 
         // Act & Assert
-        Assert.ThrowsAsync<ArgumentException>(() => tool.ExecuteTool(fContext, args));
+        Assert.Throws<ArgumentException>(() => tool.ExecuteTool(fContext, args));
     }
 
     [Test]
-    public async Task Test_RAGWritePatternTool_ExecuteTool_WithOptionalParameters()
+    public void Test_RAGWritePatternTool_ExecuteTool_WithOptionalParameters()
     {
         // Arrange
         var tool = new RAGWritePatternTool();
@@ -111,7 +111,7 @@ public class RAGToolTests : MCPToolTests
         });
 
         // Act
-        var result = await tool.ExecuteTool(fContext, args);
+        var result = tool.ExecuteTool(fContext, args);
 
         // Assert
         Assert.IsNotNull(result);

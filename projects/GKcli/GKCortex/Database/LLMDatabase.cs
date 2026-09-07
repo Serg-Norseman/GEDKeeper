@@ -9,7 +9,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using System.Threading.Tasks;
 using SQLite;
 
 namespace GKCortex.Database;
@@ -20,7 +19,7 @@ public static class LLMDatabase
     private static readonly string SQLiteDB = @"gkrag.db";
 
     private static string fAppDataPath = string.Empty;
-    private static SQLiteAsyncConnection fConnection;
+    private static SQLiteConnection fConnection;
 
     public static void SetAppDataPath(string path)
     {
@@ -34,9 +33,9 @@ public static class LLMDatabase
         string dbPath = Path.Combine(fAppDataPath, SQLiteDB);
 
         if (File.Exists(dbPath)) {
-            fConnection = new SQLiteAsyncConnection(dbPath);
-            fConnection.ExecuteScalarAsync<string>("PRAGMA journal_mode = WAL;");
-            fConnection.ExecuteAsync("PRAGMA auto_vacuum = FULL;");
+            fConnection = new SQLiteConnection(dbPath);
+            fConnection.ExecuteScalar<string>("PRAGMA journal_mode = WAL;");
+            fConnection.Execute("PRAGMA auto_vacuum = FULL;");
         } else {
             using (var conn = new SQLiteConnection(dbPath)) {
                 //conn.BeginTransaction();
@@ -58,20 +57,20 @@ public static class LLMDatabase
 
     #region Patterns
 
-    internal static async Task<IList<ExtractionPattern>> GetPatterns(string century = null)
+    internal static IList<ExtractionPattern> GetPatterns(string century = null)
     {
         CheckConnection();
         if (string.IsNullOrEmpty(century)) {
-            return await fConnection.QueryAsync<ExtractionPattern>("select [id], [raw_text], [corrected_result], [embedding], [century] from [extraction_patterns]");
+            return fConnection.Query<ExtractionPattern>("select [id], [raw_text], [corrected_result], [embedding], [century] from [extraction_patterns]");
         } else {
-            return await fConnection.QueryAsync<ExtractionPattern>("select [id], [raw_text], [corrected_result], [embedding], [century] from [extraction_patterns] where [century] = ?", century);
+            return fConnection.Query<ExtractionPattern>("select [id], [raw_text], [corrected_result], [embedding], [century] from [extraction_patterns] where [century] = ?", century);
         }
     }
 
-    public static async Task DeletePattern(int id)
+    public static void DeletePattern(int id)
     {
         CheckConnection();
-        await fConnection.ExecuteAsync("delete from [extraction_patterns] where [Id] = ?", id);
+        fConnection.Execute("delete from [extraction_patterns] where [Id] = ?", id);
     }
 
     /*public static void UpdatePattern(int id, string inputText, string embedding, string correctedResult, string century)
@@ -81,7 +80,7 @@ public static class LLMDatabase
         fConnection.Execute("update [extraction_patterns] set [raw_text] = ?, [corrected_result] = ?, [embedding] = ?, [century] = ? where [Id] = ?", inputText, correctedResult, embedding, century, id);
     }*/
 
-    public static async Task WritePattern(string inputText, byte[] embedding, string correctedResult, string century)
+    public static void WritePattern(string inputText, byte[] embedding, string correctedResult, string century)
     {
         CheckConnection();
 
@@ -91,16 +90,16 @@ public static class LLMDatabase
             CorrectedResult = correctedResult,
             Century = century
         };
-        await fConnection.InsertAsync(pattern);
+        fConnection.Insert(pattern);
 
         //fConnection.Execute("insert into [extraction_patterns] ([raw_text], [corrected_result], [embedding], [century]) values (?, ?, ?, ?)", inputText, correctedResult, embedding, century);
     }
 
-    public static async Task<(int totalPatterns, IList<string> uniqueCenturies)> GetPatternStats()
+    public static (int totalPatterns, IList<string> uniqueCenturies) GetPatternStats()
     {
         CheckConnection();
-        var totalCount = await fConnection.ExecuteScalarAsync<int>("select count(*) from [extraction_patterns]");
-        var uniqueCenturies = await fConnection.QueryScalarsAsync<string>("select distinct [century] from [extraction_patterns] where [century] is not null and [century] != ''");
+        var totalCount = fConnection.ExecuteScalar<int>("select count(*) from [extraction_patterns]");
+        var uniqueCenturies = fConnection.QueryScalars<string>("select distinct [century] from [extraction_patterns] where [century] is not null and [century] != ''");
         return (totalCount, uniqueCenturies);
     }
 
@@ -114,16 +113,16 @@ public static class LLMDatabase
 
     #region Memory Entries
 
-    internal static async Task<IList<MemoryEntry>> GetMemoryEntries()
+    internal static IList<MemoryEntry> GetMemoryEntries()
     {
         CheckConnection();
-        return await fConnection.QueryAsync<MemoryEntry>("select [content], [embedding] from [memory_entries]");
+        return fConnection.Query<MemoryEntry>("select [content], [embedding] from [memory_entries]");
     }
 
-    public static async Task WriteMemoryEntry(MemoryEntry entry)
+    public static void WriteMemoryEntry(MemoryEntry entry)
     {
         CheckConnection();
-        await fConnection.InsertAsync(entry);
+        fConnection.Insert(entry);
     }
 
     #endregion
@@ -133,22 +132,22 @@ public static class LLMDatabase
     /// <summary>
     /// Extract context summarization.
     /// </summary>
-    internal static async Task<AssistantSummary> GetSummary(string sessionId)
+    internal static AssistantSummary GetSummary(string sessionId)
     {
         CheckConnection();
-        return await fConnection.Table<AssistantSummary>().Where(s => s.SessionId == sessionId).FirstOrDefaultAsync();
+        return fConnection.Table<AssistantSummary>().Where(s => s.SessionId == sessionId).FirstOrDefault();
     }
 
-    internal static async Task InsertSummary(AssistantSummary summary)
+    internal static void InsertSummary(AssistantSummary summary)
     {
         CheckConnection();
-        await fConnection.InsertAsync(summary);
+        fConnection.Insert(summary);
     }
 
-    internal static async Task UpdateSummary(AssistantSummary summary)
+    internal static void UpdateSummary(AssistantSummary summary)
     {
         CheckConnection();
-        await fConnection.UpdateAsync(summary);
+        fConnection.Update(summary);
     }
 
     #endregion
@@ -158,34 +157,34 @@ public static class LLMDatabase
     /// <summary>
     /// Extract user profile and preferences
     /// </summary>
-    internal static async Task<List<UserPreference>> GetUserPreferences()
+    internal static List<UserPreference> GetUserPreferences()
     {
         CheckConnection();
-        return await fConnection.Table<UserPreference>().ToListAsync();
+        return fConnection.Table<UserPreference>().ToList();
     }
 
-    internal static async Task<UserPreference> GetPreference(string normalizedKey)
+    internal static UserPreference GetPreference(string normalizedKey)
     {
         CheckConnection();
-        return await fConnection.Table<UserPreference>().Where(p => p.PrefKey == normalizedKey).FirstOrDefaultAsync();
+        return fConnection.Table<UserPreference>().Where(p => p.PrefKey == normalizedKey).FirstOrDefault();
     }
 
-    internal static async Task InsertPreference(UserPreference newPref)
+    internal static void InsertPreference(UserPreference newPref)
     {
         CheckConnection();
-        await fConnection.InsertAsync(newPref);
+        fConnection.Insert(newPref);
     }
 
-    internal static async Task UpdatePreference(UserPreference existingPref)
+    internal static void UpdatePreference(UserPreference existingPref)
     {
         CheckConnection();
-        await fConnection.UpdateAsync(existingPref);
+        fConnection.Update(existingPref);
     }
 
-    internal static async Task DeletePreference(UserPreference existing)
+    internal static void DeletePreference(UserPreference existing)
     {
         CheckConnection();
-        await fConnection.DeleteAsync(existing);
+        fConnection.Delete(existing);
     }
 
     #endregion
@@ -195,80 +194,80 @@ public static class LLMDatabase
     /// <summary>
     /// Extract active research tasks (Blackboard)
     /// </summary>
-    internal static async Task<List<AssistantTask>> GetActiveTasks()
+    internal static List<AssistantTask> GetActiveTasks()
     {
         CheckConnection();
-        return await fConnection.Table<AssistantTask>().Where(t => t.Status == "ACTIVE").ToListAsync();
+        return fConnection.Table<AssistantTask>().Where(t => t.Status == "ACTIVE").ToList();
     }
 
-    internal static async Task<AssistantTask> GetTask(int taskId)
+    internal static AssistantTask GetTask(int taskId)
     {
         CheckConnection();
-        return await fConnection.Table<AssistantTask>().Where(t => t.TaskId == taskId).FirstOrDefaultAsync();
+        return fConnection.Table<AssistantTask>().Where(t => t.TaskId == taskId).FirstOrDefault();
     }
 
-    internal static async Task InsertTask(AssistantTask value)
+    internal static void InsertTask(AssistantTask value)
     {
         CheckConnection();
-        await fConnection.InsertAsync(value);
+        fConnection.Insert(value);
     }
 
-    internal static async Task UpdateTask(AssistantTask value)
+    internal static void UpdateTask(AssistantTask value)
     {
         CheckConnection();
-        await fConnection.UpdateAsync(value);
+        fConnection.Update(value);
     }
 
     #endregion
 
     #region Graph
 
-    internal static async Task<GraphEntity> GetEntity(string normalizedId)
+    internal static GraphEntity GetEntity(string normalizedId)
     {
         CheckConnection();
-        return await fConnection.Table<GraphEntity>().Where(e => e.EntityId == normalizedId).FirstOrDefaultAsync();
+        return fConnection.Table<GraphEntity>().Where(e => e.EntityId == normalizedId).FirstOrDefault();
     }
 
-    internal static async Task InsertEntity(GraphEntity entity)
+    internal static void InsertEntity(GraphEntity entity)
     {
         CheckConnection();
-        await fConnection.InsertAsync(entity);
+        fConnection.Insert(entity);
     }
 
-    internal static async Task UpdateEntity(GraphEntity entity)
+    internal static void UpdateEntity(GraphEntity entity)
     {
         CheckConnection();
-        await fConnection.UpdateAsync(entity);
+        fConnection.Update(entity);
     }
 
-    internal static async Task<GraphRelation> GetRelation(string src, string trg, string pred)
+    internal static GraphRelation GetRelation(string src, string trg, string pred)
     {
         CheckConnection();
-        return await fConnection.Table<GraphRelation>().Where(r => r.SourceEntityId == src && r.Predicate == pred && r.TargetEntityId == trg).FirstOrDefaultAsync();
+        return fConnection.Table<GraphRelation>().Where(r => r.SourceEntityId == src && r.Predicate == pred && r.TargetEntityId == trg).FirstOrDefault();
     }
 
-    internal static async Task<List<GraphRelation>> GetRelationBySource(string normalizedId)
+    internal static List<GraphRelation> GetRelationBySource(string normalizedId)
     {
         CheckConnection();
-        return await fConnection.Table<GraphRelation>().Where(r => r.SourceEntityId == normalizedId).ToListAsync();
+        return fConnection.Table<GraphRelation>().Where(r => r.SourceEntityId == normalizedId).ToList();
     }
 
-    internal static async Task<List<GraphRelation>> GetRelationByTarget(string normalizedId)
+    internal static List<GraphRelation> GetRelationByTarget(string normalizedId)
     {
         CheckConnection();
-        return await fConnection.Table<GraphRelation>().Where(r => r.TargetEntityId == normalizedId).ToListAsync();
+        return fConnection.Table<GraphRelation>().Where(r => r.TargetEntityId == normalizedId).ToList();
     }
 
-    internal static async Task InsertRelation(GraphRelation relation)
+    internal static void InsertRelation(GraphRelation relation)
     {
         CheckConnection();
-        await fConnection.InsertAsync(relation);
+        fConnection.Insert(relation);
     }
 
-    internal static async Task UpdateRelation(GraphRelation relation)
+    internal static void UpdateRelation(GraphRelation relation)
     {
         CheckConnection();
-        await fConnection.UpdateAsync(relation);
+        fConnection.Update(relation);
     }
 
     #endregion

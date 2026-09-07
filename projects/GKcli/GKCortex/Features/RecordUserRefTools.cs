@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  GEDKeeper, the personal genealogical database editor.
  *  Copyright (C) 2009-2026 by Sergey V. Zhdanovskih.
  *
@@ -8,7 +8,6 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCortex.MCP;
@@ -34,16 +33,16 @@ internal class RecordListUserRefsTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
-            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Record not found with XRef: {recordXRef}");
 
         if (!record.HasUserReferences)
-            return MCPContent.CreateSimpleContent($"Record '{recordXRef}' has no user references.");
+            return MCPContent.CreateSimpleContent($"❌ Record '{recordXRef}' has no user references.");
 
         var rows = new List<string> {
             $"User references for record '{recordXRef}' ({record.UserReferences.Count}):",
@@ -80,7 +79,7 @@ internal class RecordAddUserRefTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         string stringValue = MCPHelper.GetRequiredStr(args, "string_value");
@@ -88,10 +87,10 @@ internal class RecordAddUserRefTool : BaseTool
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
-            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Record not found with XRef: {recordXRef}");
 
         if (!record.GetAccessibleSubstructures().HasFlag(GDMStructureType.UserReference))
-            return MCPContent.CreateSimpleContent($"Record type '{recordXRef}' ({record.RecordType}) does not support user references.");
+            return MCPContent.CreateSimpleContent($"❌ Record type '{recordXRef}' ({record.RecordType}) does not support user references.");
 
         var userRef = new GDMUserReference();
         userRef.StringValue = stringValue;
@@ -100,7 +99,7 @@ internal class RecordAddUserRefTool : BaseTool
         baseContext.SetModified();
 
         int refIndex = record.UserReferences.IndexOf(userRef);
-        return MCPContent.CreateSimpleContent($"User reference added to record '{recordXRef}' at index {refIndex}: \"{stringValue}\" ({referenceType})");
+        return MCPContent.CreateSimpleContent($"✅ User reference added to record '{recordXRef}' at index {refIndex}: \"{stringValue}\" ({referenceType})");
     }
 }
 
@@ -124,20 +123,20 @@ internal class RecordDeleteUserRefTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         int referenceIndex = MCPHelper.GetOptionalInt(args, "reference_index", -1);
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
-            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Record not found with XRef: {recordXRef}");
 
         if (!record.HasUserReferences)
-            return MCPContent.CreateSimpleContent($"Record '{recordXRef}' has no user references.");
+            return MCPContent.CreateSimpleContent($"❌ Record '{recordXRef}' has no user references.");
 
         if (referenceIndex < 0 || referenceIndex >= record.UserReferences.Count)
-            return MCPContent.CreateSimpleContent($"Invalid reference index {referenceIndex} for record '{recordXRef}' (has {record.UserReferences.Count} references).");
+            return MCPContent.CreateSimpleContent($"❌ Invalid reference index {referenceIndex} for record '{recordXRef}' (has {record.UserReferences.Count} references).");
 
         var userRef = record.UserReferences[referenceIndex];
         string refInfo = $"\"{userRef.StringValue}\" ({userRef.ReferenceType})";
@@ -145,6 +144,6 @@ internal class RecordDeleteUserRefTool : BaseTool
         record.UserReferences.RemoveAt(referenceIndex);
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"User reference removed from record '{recordXRef}' at index {referenceIndex}: {refInfo}");
+        return MCPContent.CreateSimpleContent($"✅ User reference removed from record '{recordXRef}' at index {referenceIndex}: {refInfo}");
     }
 }

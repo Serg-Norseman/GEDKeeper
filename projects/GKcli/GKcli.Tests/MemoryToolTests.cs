@@ -14,7 +14,7 @@ public class MemoryToolTests : MCPToolTests
     #region Context Tools Tests
 
     [Test]
-    public async Task Test_GetContextSummaryTool_ExecuteTool()
+    public void Test_GetContextSummaryTool_ExecuteTool()
     {
         // Arrange
         var tool = new GetContextSummaryTool();
@@ -24,7 +24,7 @@ public class MemoryToolTests : MCPToolTests
         JsonElement args = doc.RootElement;
 
         // Act
-        var result = await tool.ExecuteTool(fContext, args);
+        var result = tool.ExecuteTool(fContext, args);
 
         // Assert
         Assert.IsNotNull(result);
@@ -33,7 +33,7 @@ public class MemoryToolTests : MCPToolTests
     }
 
     [Test]
-    public async Task Test_GetContextSummaryTool_ExecuteTool_MissingSessionId_ThrowsException()
+    public void Test_GetContextSummaryTool_ExecuteTool_MissingSessionId_ThrowsException()
     {
         // Arrange
         var tool = new GetContextSummaryTool();
@@ -42,11 +42,11 @@ public class MemoryToolTests : MCPToolTests
         JsonElement args = doc.RootElement;
 
         // Act & Assert
-        Assert.ThrowsAsync<ArgumentException>(() => tool.ExecuteTool(fContext, args));
+        Assert.Throws<ArgumentException>(() => tool.ExecuteTool(fContext, args));
     }
 
     [Test]
-    public async Task Test_SaveChatMilestoneTool_ExecuteTool()
+    public void Test_SaveChatMilestoneTool_ExecuteTool()
     {
         // Arrange
         var tool = new SaveChatMilestoneTool();
@@ -58,7 +58,7 @@ public class MemoryToolTests : MCPToolTests
         JsonElement args = doc.RootElement;
 
         // Act
-        var result = await tool.ExecuteTool(fContext, args);
+        var result = tool.ExecuteTool(fContext, args);
 
         // Assert
         Assert.IsNotNull(result);
@@ -83,7 +83,7 @@ public class MemoryToolTests : MCPToolTests
     #region Memory Tools Tests
 
     [Test]
-    public async Task Test_StoreFactTool_ExecuteTool()
+    public void Test_StoreFactTool_ExecuteTool()
     {
         // Arrange
         var tool = new StoreFactTool();
@@ -93,7 +93,7 @@ public class MemoryToolTests : MCPToolTests
         JsonElement args = doc.RootElement;
 
         // Act
-        var result = await tool.ExecuteTool(fContext, args);
+        var result = tool.ExecuteTool(fContext, args);
 
         // Assert
         Assert.IsNotNull(result);
@@ -114,7 +114,7 @@ public class MemoryToolTests : MCPToolTests
     }
 
     [Test]
-    public async Task Test_SearchMemoryTool_ExecuteTool()
+    public void Test_SearchMemoryTool_ExecuteTool()
     {
         // Arrange
         var tool = new SearchMemoryTool();
@@ -124,7 +124,7 @@ public class MemoryToolTests : MCPToolTests
         JsonElement args = doc.RootElement;
 
         // Act
-        var result = await tool.ExecuteTool(fContext, args);
+        var result = tool.ExecuteTool(fContext, args);
 
         // Assert
         Assert.IsNotNull(result);
@@ -132,20 +132,20 @@ public class MemoryToolTests : MCPToolTests
     }
 
     [Test]
-    public async Task Test_StoreAndSearch_ExecuteTool()
+    public void Test_StoreAndSearch_ExecuteTool()
     {
         var storeTool = new StoreFactTool();
 
         // fact 1
         using var doc1 = JsonDocument.Parse($"{{ \"fact\": \"ревизская сказка\" }}");
-        var result = await storeTool.ExecuteTool(fContext, doc1.RootElement);
+        var result = storeTool.ExecuteTool(fContext, doc1.RootElement);
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Count > 0);
         //Assert.IsTrue(result[0].Text.Contains("✅'], ['Test]
 
         // fact 2
         using var doc2 = JsonDocument.Parse($"{{ \"fact\": \"переписная книга\" }}");
-        result = await storeTool.ExecuteTool(fContext, doc2.RootElement);
+        result = storeTool.ExecuteTool(fContext, doc2.RootElement);
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Count > 0);
         //Assert.IsTrue(result[0].Text.Contains("✅'], ['Test]
@@ -153,13 +153,13 @@ public class MemoryToolTests : MCPToolTests
         // mixed search
         var searchTool = new SearchMemoryTool();
         using var doc = JsonDocument.Parse($"{{ \"query\": \"переписная сказка\" }}");
-        result = await searchTool.ExecuteTool(fContext, doc.RootElement);
+        result = searchTool.ExecuteTool(fContext, doc.RootElement);
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Count > 0);
     }
 
     [Test]
-    public async Task Test_SearchMemoryTool_ExecuteTool_WithTopK()
+    public void Test_SearchMemoryTool_ExecuteTool_WithTopK()
     {
         // Arrange
         var tool = new SearchMemoryTool();
@@ -170,7 +170,7 @@ public class MemoryToolTests : MCPToolTests
         JsonElement args = doc.RootElement;
 
         // Act
-        var result = await tool.ExecuteTool(fContext, args);
+        var result = tool.ExecuteTool(fContext, args);
 
         // Assert
         Assert.IsNotNull(result);
@@ -178,7 +178,7 @@ public class MemoryToolTests : MCPToolTests
     }
 
     [Test]
-    public async Task Test_SearchMemoryTool_ExecuteTool_MissingQuery_ThrowsException()
+    public void Test_SearchMemoryTool_ExecuteTool_MissingQuery_ThrowsException()
     {
         // Arrange
         var tool = new SearchMemoryTool();
@@ -187,7 +187,7 @@ public class MemoryToolTests : MCPToolTests
         JsonElement args = doc.RootElement;
 
         // Act & Assert
-        Assert.ThrowsAsync<ArgumentException>(() => tool.ExecuteTool(fContext, args));
+        Assert.Throws<ArgumentException>(() => tool.ExecuteTool(fContext, args));
     }
 
     #endregion

@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using GKCore;
 using GKCortex.Features;
 using GKCortex.Protocols;
@@ -54,7 +53,7 @@ internal class SearchTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string query = MCPHelper.GetRequiredStr(args, "query");
         var found = MCPToolDiscovery.Search(query);
@@ -88,11 +87,11 @@ internal class UseTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string toolName = MCPHelper.GetRequiredStr(args, "tool_name");
         var arguments = MCPHelper.GetRequiredObj(args, "arguments");
 
-        return await MCPController.ExecuteTool(toolName, arguments);
+        return MCPController.ExecuteTool(toolName, arguments);
     }
 }

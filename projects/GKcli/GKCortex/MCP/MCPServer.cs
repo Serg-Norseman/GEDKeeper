@@ -113,7 +113,7 @@ public class MCPServer
                         if (nullsBeforeExit >= 10) break;
                     }
 
-                    await ProcessRequest(line);
+                    ProcessRequest(line);
                 } catch (Exception ex) {
                     Log($"Error processing request: {ex.Message}");
                     SendResponse(new MCPResponse {
@@ -164,7 +164,7 @@ public class MCPServer
         //Console.Error.Flush();
     }
 
-    private async Task ProcessRequest(string line)
+    private void ProcessRequest(string line)
     {
         if (string.IsNullOrEmpty(line)) return;
 
@@ -187,7 +187,7 @@ public class MCPServer
         var response = request.Method switch {
             "initialize" => HandleInitialize(request),
             "tools/list" => HandleToolsList(request),
-            "tools/call" => await HandleToolsCall(request),
+            "tools/call" => HandleToolsCall(request),
             "resources/list" => HandleResourcesList(request),
             "resources/templates/list" => HandleResourceTemplatesList(request),
             "resources/read" => HandleResourceRead(request),
@@ -202,7 +202,7 @@ public class MCPServer
         SendResponse(response);
     }
 
-    public async Task<string> ProcessSSERequestAsync(string line)
+    public string ProcessSSERequest(string line)
     {
         if (string.IsNullOrEmpty(line)) return string.Empty;
 
@@ -226,7 +226,7 @@ public class MCPServer
         var response = request.Method switch {
             "initialize" => HandleInitialize(request),
             "tools/list" => HandleToolsList(request),
-            "tools/call" => await HandleToolsCall(request),
+            "tools/call" => HandleToolsCall(request),
             "resources/list" => HandleResourcesList(request),
             "resources/templates/list" => HandleResourceTemplatesList(request),
             "resources/read" => HandleResourceRead(request),
@@ -274,7 +274,7 @@ public class MCPServer
         return new MCPResponse { Id = request.Id, Result = fToolsList };
     }
 
-    private async Task<MCPResponse> HandleToolsCall(MCPRequest request)
+    private MCPResponse HandleToolsCall(MCPRequest request)
     {
         try {
             if (request.Params == null || request.Params.Value.ValueKind != JsonValueKind.Object) {
@@ -296,7 +296,7 @@ public class MCPServer
             p.TryGetProperty("arguments", out var arguments);
 
             // Execute an MCP tool call by name and arguments.
-            var content = await MCPController.ExecuteTool(toolName, arguments);
+            var content = MCPController.ExecuteTool(toolName, arguments);
 
             return new MCPResponse {
                 Id = request.Id,

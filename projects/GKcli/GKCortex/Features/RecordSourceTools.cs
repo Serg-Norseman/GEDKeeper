@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  GEDKeeper, the personal genealogical database editor.
  *  Copyright (C) 2009-2026 by Sergey V. Zhdanovskih.
  *
@@ -8,7 +8,6 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCortex.MCP;
@@ -34,16 +33,16 @@ internal class RecordListSourceCitationsTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
-            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Record not found with XRef: {recordXRef}");
 
         if (!record.HasSourceCitations)
-            return MCPContent.CreateSimpleContent($"Record '{recordXRef}' has no source citations.");
+            return MCPContent.CreateSimpleContent($"❌ Record '{recordXRef}' has no source citations.");
 
         var rows = new List<string> {
             $"Source citations for record '{recordXRef}' ({record.SourceCitations.Count}):",
@@ -83,14 +82,14 @@ internal class RecordAddSourceCitationTool : BaseTool
                     ["record_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the record (e.g., 'I1', 'F1', 'N2')" },
                     ["source_xref"] = new MCPToolProperty { Type = "string", Description = "XRef identifier of the source (e.g., 'S1')" },
                     ["page"] = new MCPToolProperty { Type = "string", Description = "Page or reference within the source" },
-                    ["certainty"] = new MCPToolProperty { Type = "integer", Description = "Certainty assessment level (0 � unreliable, 1 � questionable, 2 � secondary, 3 � primary)" }
+                    ["certainty"] = new MCPToolProperty { Type = "integer", Description = "Certainty assessment level (0 – unreliable, 1 – questionable, 2 – secondary, 3 – primary)" }
                 },
                 Required = new List<string> { "record_xref", "source_xref" }
             }
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
@@ -99,14 +98,14 @@ internal class RecordAddSourceCitationTool : BaseTool
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
-            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Record not found with XRef: {recordXRef}");
 
         if (!record.GetAccessibleSubstructures().HasFlag(GDMStructureType.SourceCitation))
-            return MCPContent.CreateSimpleContent($"Record type '{recordXRef}' ({record.RecordType}) does not support source citations.");
+            return MCPContent.CreateSimpleContent($"❌ Record type '{recordXRef}' ({record.RecordType}) does not support source citations.");
 
         var sourceRec = baseContext.Tree.FindXRef<GDMSourceRecord>(sourceXRef);
         if (sourceRec == null)
-            return MCPContent.CreateSimpleContent($"Source not found with XRef: {sourceXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Source not found with XRef: {sourceXRef}");
 
         var citation = new GDMSourceCitation();
         citation.XRef = sourceXRef;
@@ -116,7 +115,7 @@ internal class RecordAddSourceCitationTool : BaseTool
         baseContext.SetModified();
 
         int citIndex = record.SourceCitations.IndexOf(citation);
-        return MCPContent.CreateSimpleContent($"Source citation added to record '{recordXRef}' at index {citIndex}: source '{sourceXRef}', page '{page}', certainty {certainty}");
+        return MCPContent.CreateSimpleContent($"✅ Source citation added to record '{recordXRef}' at index {citIndex}: source '{sourceXRef}', page '{page}', certainty {certainty}");
     }
 }
 
@@ -140,20 +139,20 @@ internal class RecordDeleteSourceCitationTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         int citationIndex = MCPHelper.GetOptionalInt(args, "citation_index", -1);
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
-            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Record not found with XRef: {recordXRef}");
 
         if (!record.HasSourceCitations)
-            return MCPContent.CreateSimpleContent($"Record '{recordXRef}' has no source citations.");
+            return MCPContent.CreateSimpleContent($"❌ Record '{recordXRef}' has no source citations.");
 
         if (citationIndex < 0 || citationIndex >= record.SourceCitations.Count)
-            return MCPContent.CreateSimpleContent($"Invalid citation index {citationIndex} for record '{recordXRef}' (has {record.SourceCitations.Count} citations).");
+            return MCPContent.CreateSimpleContent($"❌ Invalid citation index {citationIndex} for record '{recordXRef}' (has {record.SourceCitations.Count} citations).");
 
         var citation = record.SourceCitations[citationIndex];
         string citInfo = $"source '{citation.XRef}', page '{citation.Page}', certainty {citation.CertaintyAssessment}";
@@ -161,6 +160,6 @@ internal class RecordDeleteSourceCitationTool : BaseTool
         record.SourceCitations.RemoveAt(citationIndex);
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"Source citation removed from record '{recordXRef}' at index {citationIndex}: {citInfo}");
+        return MCPContent.CreateSimpleContent($"✅ Source citation removed from record '{recordXRef}' at index {citationIndex}: {citInfo}");
     }
 }

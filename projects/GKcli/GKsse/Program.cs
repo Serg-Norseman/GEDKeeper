@@ -81,7 +81,7 @@ internal class Program
             Log($"POST received: {jsonRpcRequest[..Math.Min(150, jsonRpcRequest.Length)]}...");
 
             try {
-                string jsonRpcResponse = await mcpServer.ProcessSSERequestAsync(jsonRpcRequest);
+                string jsonRpcResponse = mcpServer.ProcessSSERequest(jsonRpcRequest);
 
                 // Check if the request is a "notification" (no "id" field)
                 bool isNotification = !jsonRpcRequest.Contains("\"id\"");

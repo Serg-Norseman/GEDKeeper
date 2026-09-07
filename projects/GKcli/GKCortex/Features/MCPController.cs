@@ -9,7 +9,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GKCore;
 using GKCortex.LMChat;
 using GKCortex.MCP;
@@ -251,10 +250,10 @@ public class MCPController
         return fMCPTools;
     }
 
-    public static async Task<List<MCPContent>> ExecuteTool(string toolName, JsonElement args)
+    public static List<MCPContent> ExecuteTool(string toolName, JsonElement args)
     {
         if (fTools.TryGetValue(toolName, out BaseTool cmd)) {
-            return await cmd.ExecuteTool(fBaseContext, args);
+            return cmd.ExecuteTool(fBaseContext, args);
         } else {
             throw new ArgumentException($"Unknown tool: {toolName}");
         }

@@ -148,7 +148,7 @@ public class LMChatClient : ILMChat
                 JsonElement args = JsonDocument.Parse(toolCall.Function.Arguments).RootElement;
 
                 // Execute tool via MCPController
-                var contents = await MCPController.ExecuteTool(funcName, args);
+                var contents = MCPController.ExecuteTool(funcName, args);
 
                 // Convert result to string
                 string resultText = string.Join("\n", contents.Select(c => c.Text ?? ""));

@@ -29,7 +29,7 @@ internal class MemoryService
 
     #region Facts
 
-    public static async Task StoreFact(string fact)
+    public static void StoreFact(string fact)
     {
         var entry = new MemoryEntry {
             Content = fact,
@@ -37,13 +37,13 @@ internal class MemoryService
             CreatedAt = DateTime.UtcNow
         };
 
-        await LLMDatabase.WriteMemoryEntry(entry);
+        LLMDatabase.WriteMemoryEntry(entry);
     }
 
-    public static async Task<string> SearchMemory(string query, int topK = 10)
+    public static string SearchMemory(string query, int topK = 10)
     {
         var inputVector = RAGHelper.GetCachedEmbedding(query);
-        var entries = await LLMDatabase.GetMemoryEntries();
+        var entries = LLMDatabase.GetMemoryEntries();
         var bestMatches = entries
             .Select(me => new { Entry = me, Score = inputVector.Similarity(new EmbeddingF32(me.Embedding)) })
             .OrderByDescending(x => x.Score).Take(topK).ToList();
@@ -76,11 +76,11 @@ This is data from memory. Use it in your answer and mention that you remembered 
     /// <summary>
     /// Aggregates all memory layers into a single text block for injection into the LM context
     /// </summary>
-    public async Task<string> GetInjectedContextAsync(string sessionId)
+    public string GetInjectedContext(string sessionId)
     {
         var sb = new StringBuilder();
         sb.AppendLine("=== ASSISTANT OFFLINE MEMORY (HARD CONTEXT) ===");
-        AssistantSummary summary = await LLMDatabase.GetSummary(sessionId);
+        AssistantSummary summary = LLMDatabase.GetSummary(sessionId);
 
         sb.AppendLine("[CHRONOLOGY AND BRIEF DIALOGUE CONTENT]:");
         if (summary != null) {
@@ -91,7 +91,7 @@ This is data from memory. Use it in your answer and mention that you remembered 
         }
         sb.AppendLine();
 
-        var preferences = await LLMDatabase.GetUserPreferences();
+        var preferences = LLMDatabase.GetUserPreferences();
         sb.AppendLine("[USER PROFILE AND PREFERENCES]:");
         if (preferences.Count > 0) {
             foreach (var pref in preferences) {
@@ -102,7 +102,7 @@ This is data from memory. Use it in your answer and mention that you remembered 
         }
         sb.AppendLine();
 
-        var activeTasks = await LLMDatabase.GetActiveTasks();
+        var activeTasks = LLMDatabase.GetActiveTasks();
         sb.AppendLine("[ACTIVE GENEALOGICAL TASKS IN PROGRESS]:");
         if (activeTasks.Count > 0) {
             foreach (var task in activeTasks) {
@@ -128,10 +128,10 @@ This is data from memory. Use it in your answer and mention that you remembered 
     /// <summary>
     /// Adds new dialogue turns to the current session and compresses them if necessary.
     /// </summary>
-    public async Task AppendAndOptimizeContextAsync(string sessionId, string newUserMessage, string assistantResponse)
+    public void AppendAndOptimizeContext(string sessionId, string newUserMessage, string assistantResponse)
     {
         // 1. Get current record from DB
-        var summary = await LLMDatabase.GetSummary(sessionId);
+        var summary = LLMDatabase.GetSummary(sessionId);
 
         if (summary == null) {
             summary = new AssistantSummary {
@@ -140,7 +140,7 @@ This is data from memory. Use it in your answer and mention that you remembered 
                 CurrentSessionSummary = $"User: {newUserMessage}\nAssistant: {assistantResponse}\n",
                 LastUpdated = DateTime.UtcNow
             };
-            await LLMDatabase.InsertSummary(summary);
+            LLMDatabase.InsertSummary(summary);
             return;
         }
 
@@ -155,21 +155,21 @@ This is data from memory. Use it in your answer and mention that you remembered 
             // but with mandatory error handling inside.
             _ = Task.Run(async () => {
                 try {
-                    await CompressContextAsync(summary);
+                    CompressContext(summary);
                 } catch (Exception ex) {
                     // Your logger should go here (Console.Error.WriteLine for MCP)
                     Console.Error.WriteLine($"❌ Background context compression failed: {ex.Message}");
                 }
             });
         } else {
-            await LLMDatabase.UpdateSummary(summary);
+            LLMDatabase.UpdateSummary(summary);
         }
     }
 
     /// <summary>
     /// Calls the local model to transfer the current session into global memory
     /// </summary>
-    private async Task CompressContextAsync(AssistantSummary summary)
+    private void CompressContext(AssistantSummary summary)
     {
         // Formulate a strict system prompt for a weaker model to prevent hallucinations
         string compressPrompt = $@"You are the background memory compression module for a genealogical assistant. 
@@ -188,7 +188,7 @@ Output the new merged global summary in English. It must contain ALL key chronol
         if (lmClient == null) return;
 
         // Send request to local model (minimal temperature for factual accuracy)
-        var newGlobalSummary = await lmClient.SendMessageSingleAsync("user", compressPrompt, 0.1f);
+        var newGlobalSummary = lmClient.SendMessageSingleAsync("user", compressPrompt, 0.1f).GetAwaiter().GetResult();
 
         if (!string.IsNullOrEmpty(newGlobalSummary)) {
             // Update state in DB: 
@@ -197,7 +197,7 @@ Output the new merged global summary in English. It must contain ALL key chronol
             summary.CurrentSessionSummary = "Context cleared after archival. Dialogue continues from this point.\n";
             summary.LastUpdated = DateTime.UtcNow;
 
-            await LLMDatabase.UpdateSummary(summary);
+            LLMDatabase.UpdateSummary(summary);
         }
     }
 
@@ -208,20 +208,20 @@ Output the new merged global summary in English. It must contain ALL key chronol
     /// <summary>
     /// Adds or updates a user setting/preference in upsert mode.
     /// </summary>
-    public async Task<bool> SetPreferenceAsync(string key, string value, double confidenceScore = 1.0)
+    public bool SetPreference(string key, string value, double confidenceScore = 1.0)
     {
         if (string.IsNullOrWhiteSpace(key)) return false;
 
         // Normalize key to lowercase to avoid duplicates due to case variations from small models
         string normalizedKey = key.Trim().ToLowerInvariant();
-        var existingPref = await LLMDatabase.GetPreference(normalizedKey);
+        var existingPref = LLMDatabase.GetPreference(normalizedKey);
 
         if (existingPref != null) {
             // If value is the same, just update date and confidence if it's higher
             existingPref.PrefValue = value.Trim();
             existingPref.ConfidenceScore = Math.Max(existingPref.ConfidenceScore, confidenceScore);
             existingPref.LastUpdated = DateTime.UtcNow;
-            await LLMDatabase.UpdatePreference(existingPref);
+            LLMDatabase.UpdatePreference(existingPref);
         } else {
             var newPref = new UserPreference {
                 PrefKey = normalizedKey,
@@ -229,7 +229,7 @@ Output the new merged global summary in English. It must contain ALL key chronol
                 ConfidenceScore = confidenceScore,
                 LastUpdated = DateTime.UtcNow
             };
-            await LLMDatabase.InsertPreference(newPref);
+            LLMDatabase.InsertPreference(newPref);
         }
 
         return true;
@@ -238,9 +238,9 @@ Output the new merged global summary in English. It must contain ALL key chronol
     /// <summary>
     /// Returns all preferences as a convenient dictionary.
     /// </summary>
-    public async Task<Dictionary<string, string>> GetAllPreferencesAsync()
+    public Dictionary<string, string> GetAllPreferences()
     {
-        var list = await LLMDatabase.GetUserPreferences();
+        var list = LLMDatabase.GetUserPreferences();
         var result = new Dictionary<string, string>();
 
         foreach (var item in list) {
@@ -253,13 +253,13 @@ Output the new merged global summary in English. It must contain ALL key chronol
     /// <summary>
     /// Removes a specific key from the profile if the preference is no longer relevant.
     /// </summary>
-    public async Task<bool> DeletePreferenceAsync(string key)
+    public bool DeletePreference(string key)
     {
         string normalizedKey = key.Trim().ToLowerInvariant();
-        var existing = await LLMDatabase.GetPreference(normalizedKey);
+        var existing = LLMDatabase.GetPreference(normalizedKey);
 
         if (existing == null) return false;
-        await LLMDatabase.DeletePreference(existing);
+        LLMDatabase.DeletePreference(existing);
         return true;
     }
 
@@ -270,7 +270,7 @@ Output the new merged global summary in English. It must contain ALL key chronol
     /// <summary>
     /// Creates a new genealogical research task.
     /// </summary>
-    public async Task<int> CreateTaskAsync(string targetPerson, string goalDescription)
+    public int CreateTask(string targetPerson, string goalDescription)
     {
         var task = new AssistantTask {
             TargetPerson = targetPerson?.Trim() ?? string.Empty,
@@ -281,16 +281,16 @@ Output the new merged global summary in English. It must contain ALL key chronol
             CreatedAt = DateTime.UtcNow
         };
 
-        await LLMDatabase.InsertTask(task);
+        LLMDatabase.InsertTask(task);
         return task.TaskId; // sqlite-net automatically populates ID after insert
     }
 
     /// <summary>
     /// Adds a verified source and/or overwrites the plan for next steps.
     /// </summary>
-    public async Task<bool> UpdateTaskProgressAsync(int taskId, string newCheckedSource, string[] newNextSteps)
+    public bool UpdateTaskProgress(int taskId, string newCheckedSource, string[] newNextSteps)
     {
-        var task = await LLMDatabase.GetTask(taskId);
+        var task = LLMDatabase.GetTask(taskId);
 
         if (task == null) return false;
 
@@ -310,23 +310,23 @@ Output the new merged global summary in English. It must contain ALL key chronol
             task.NextStepsJson = JsonSerializer.Serialize(newNextSteps);
         }
 
-        await LLMDatabase.UpdateTask(task);
+        LLMDatabase.UpdateTask(task);
         return true;
     }
 
     /// <summary>
     /// Changes task status (COMPLETED, PAUSED, ACTIVE)
     /// </summary>
-    public async Task<bool> ChangeTaskStatusAsync(int taskId, string newStatus)
+    public bool ChangeTaskStatus(int taskId, string newStatus)
     {
-        var task = await LLMDatabase.GetTask(taskId);
+        var task = LLMDatabase.GetTask(taskId);
 
         if (task == null) return false;
 
         string status = newStatus?.Trim().ToUpperInvariant() ?? "ACTIVE";
         if (status == "ACTIVE" || status == "COMPLETED" || status == "PAUSED") {
             task.Status = status;
-            await LLMDatabase.UpdateTask(task);
+            LLMDatabase.UpdateTask(task);
             return true;
         }
 
@@ -340,18 +340,18 @@ Output the new merged global summary in English. It must contain ALL key chronol
     /// <summary>
     /// Adds or updates a node in the knowledge graph
     /// </summary>
-    public async Task AddEntityAsync(string id, string name, string type, string description = "")
+    public void AddEntity(string id, string name, string type, string description = "")
     {
         var normalizedId = id.Trim().ToLowerInvariant();
-        var existing = await LLMDatabase.GetEntity(normalizedId);
+        var existing = LLMDatabase.GetEntity(normalizedId);
 
         if (existing != null) {
             existing.Name = name.Trim();
             existing.Type = type.Trim().ToUpperInvariant();
             if (!string.IsNullOrEmpty(description)) existing.Description = description.Trim();
-            await LLMDatabase.UpdateEntity(existing);
+            LLMDatabase.UpdateEntity(existing);
         } else {
-            await LLMDatabase.InsertEntity(new GraphEntity {
+            LLMDatabase.InsertEntity(new GraphEntity {
                 EntityId = normalizedId,
                 Name = name.Trim(),
                 Type = type.Trim().ToUpperInvariant(),
@@ -363,17 +363,17 @@ Output the new merged global summary in English. It must contain ALL key chronol
     /// <summary>
     /// Creates a directed relationship between two graph nodes
     /// </summary>
-    public async Task AddRelationAsync(string sourceId, string predicate, string targetId, string notes = "")
+    public void AddRelation(string sourceId, string predicate, string targetId, string notes = "")
     {
         var src = sourceId.Trim().ToLowerInvariant();
         var trg = targetId.Trim().ToLowerInvariant();
         var pred = predicate.Trim().ToUpperInvariant();
 
         // Check for duplicate relationships to prevent graph clutter
-        var existing = await LLMDatabase.GetRelation(src, trg, pred);
+        var existing = LLMDatabase.GetRelation(src, trg, pred);
 
         if (existing == null) {
-            await LLMDatabase.InsertRelation(new GraphRelation {
+            LLMDatabase.InsertRelation(new GraphRelation {
                 SourceEntityId = src,
                 Predicate = pred,
                 TargetEntityId = trg,
@@ -385,11 +385,11 @@ Output the new merged global summary in English. It must contain ALL key chronol
     /// <summary>
     /// Extracts the ego-network (entity and all its first-order connections) for the local LM
     /// </summary>
-    public async Task<string> GetLocalSubGraphAsTextAsync(string entityId)
+    public string GetLocalSubGraphAsText(string entityId)
     {
         var normalizedId = entityId.Trim().ToLowerInvariant();
 
-        var mainEntity = await LLMDatabase.GetEntity(normalizedId);
+        var mainEntity = LLMDatabase.GetEntity(normalizedId);
         if (mainEntity == null) return $"❌ Entity with ID '{entityId}' not found in knowledge base.";
 
         var sb = new StringBuilder();
@@ -398,18 +398,18 @@ Output the new merged global summary in English. It must contain ALL key chronol
         sb.AppendLine("RELATIONS AND CONTEXTUAL LANDSCAPE:");
 
         // Outgoing relations (From this node)
-        var outgoing = await LLMDatabase.GetRelationBySource(normalizedId);
+        var outgoing = LLMDatabase.GetRelationBySource(normalizedId);
         foreach (var rel in outgoing) {
-            var target = await LLMDatabase.GetEntity(rel.TargetEntityId);
+            var target = LLMDatabase.GetEntity(rel.TargetEntityId);
             string targetName = target != null ? $"{target.Name} [{target.Type}]" : rel.TargetEntityId;
             string notes = string.IsNullOrEmpty(rel.ContextNotes) ? "" : $" ({rel.ContextNotes})";
             sb.AppendLine($"  => [{mainEntity.Name}] --({rel.Predicate})--> [{targetName}]{notes}");
         }
 
         // Incoming relations (To this node)
-        var incoming = await LLMDatabase.GetRelationByTarget(normalizedId);
+        var incoming = LLMDatabase.GetRelationByTarget(normalizedId);
         foreach (var rel in incoming) {
-            var source = await LLMDatabase.GetEntity(rel.SourceEntityId);
+            var source = LLMDatabase.GetEntity(rel.SourceEntityId);
             string sourceName = source != null ? $"{source.Name} [{source.Type}]" : rel.SourceEntityId;
             string notes = string.IsNullOrEmpty(rel.ContextNotes) ? "" : $" ({rel.ContextNotes})";
             sb.AppendLine($"  <= [{sourceName}] --({rel.Predicate})--> [{mainEntity.Name}]{notes}");

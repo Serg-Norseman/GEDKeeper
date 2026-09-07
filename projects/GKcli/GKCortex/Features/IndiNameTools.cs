@@ -9,7 +9,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCortex.MCP;
@@ -35,16 +34,16 @@ internal class IndiListPersonalNamesTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)
-            return MCPContent.CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Individual not found with XRef: {individualXRef}");
 
         if (indiRec.PersonalNames.Count <= 0)
-            return MCPContent.CreateSimpleContent($"Individual '{individualXRef}' has no personal names.");
+            return MCPContent.CreateSimpleContent($"❌ Individual '{individualXRef}' has no personal names.");
 
         var rows = new List<string> {
             $"Personal names for individual '{individualXRef}' ({indiRec.PersonalNames.Count}):",
@@ -95,7 +94,7 @@ internal class IndiUpsertPersonalNameTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
         int? nameIndex = MCPHelper.GetOptionalNullableInt(args, "name_index", null);
@@ -276,20 +275,20 @@ internal class IndiDeletePersonalNameTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
         int nameIndex = MCPHelper.GetOptionalInt(args, "name_index", -1);
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)
-            return MCPContent.CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Individual not found with XRef: {individualXRef}");
 
         if (indiRec.PersonalNames.Count <= 0)
-            return MCPContent.CreateSimpleContent($"Individual '{individualXRef}' has no personal names.");
+            return MCPContent.CreateSimpleContent($"❌ Individual '{individualXRef}' has no personal names.");
 
         if (nameIndex < 0 || nameIndex >= indiRec.PersonalNames.Count)
-            return MCPContent.CreateSimpleContent($"Invalid name index {nameIndex} for individual '{individualXRef}' (has {indiRec.PersonalNames.Count} personal names).");
+            return MCPContent.CreateSimpleContent($"❌ Invalid name index {nameIndex} for individual '{individualXRef}' (has {indiRec.PersonalNames.Count} personal names).");
 
         var personalName = indiRec.PersonalNames[nameIndex];
         string nameInfo = $"{personalName.FullName}";
@@ -297,6 +296,6 @@ internal class IndiDeletePersonalNameTool : BaseTool
         indiRec.PersonalNames.RemoveAt(nameIndex);
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"Personal name removed from individual '{individualXRef}' at index {nameIndex}: {nameInfo}");
+        return MCPContent.CreateSimpleContent($"✅ Personal name removed from individual '{individualXRef}' at index {nameIndex}: {nameInfo}");
     }
 }

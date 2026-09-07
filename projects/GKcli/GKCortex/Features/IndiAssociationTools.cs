@@ -8,7 +8,6 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCortex.MCP;
@@ -34,7 +33,7 @@ internal class IndiListAssociationsTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
@@ -81,7 +80,7 @@ internal class IndiUpsertAssociationTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
         int? associationIndex = MCPHelper.GetOptionalNullableInt(args, "association_index", null);
@@ -154,7 +153,7 @@ internal class IndiDeleteAssociationTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
         int associationIndex = MCPHelper.GetOptionalInt(args, "association_index", -1);

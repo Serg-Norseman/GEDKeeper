@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  GEDKeeper, the personal genealogical database editor.
  *  Copyright (C) 2009-2026 by Sergey V. Zhdanovskih.
  *
@@ -8,7 +8,6 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCortex.MCP;
@@ -34,16 +33,16 @@ internal class RecordListNotesTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
-            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Record not found with XRef: {recordXRef}");
 
         if (!record.HasNotes)
-            return MCPContent.CreateSimpleContent($"Record '{recordXRef}' has no notes.");
+            return MCPContent.CreateSimpleContent($"❌ Record '{recordXRef}' has no notes.");
 
         var rows = new List<string> {
             $"Note links for record '{recordXRef}' ({record.Notes.Count}):",
@@ -85,21 +84,21 @@ internal class RecordAddNoteTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         string noteXRef = MCPHelper.GetRequiredStr(args, "note_xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
-            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Record not found with XRef: {recordXRef}");
 
         if (!record.GetAccessibleSubstructures().HasFlag(GDMStructureType.NoteLink))
-            return MCPContent.CreateSimpleContent($"Record type '{recordXRef}' ({record.RecordType}) does not support note links.");
+            return MCPContent.CreateSimpleContent($"❌ Record type '{recordXRef}' ({record.RecordType}) does not support note links.");
 
         var noteRec = baseContext.Tree.FindXRef<GDMNoteRecord>(noteXRef);
         if (noteRec == null)
-            return MCPContent.CreateSimpleContent($"Note record not found with XRef: {noteXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Note record not found with XRef: {noteXRef}");
 
         var noteLink = new GDMNotes();
         noteLink.XRef = noteXRef;
@@ -107,7 +106,7 @@ internal class RecordAddNoteTool : BaseTool
         baseContext.SetModified();
 
         int noteIndex = record.Notes.IndexOf(noteLink);
-        return MCPContent.CreateSimpleContent($"Note link added to record '{recordXRef}' at index {noteIndex}: note '{noteXRef}'");
+        return MCPContent.CreateSimpleContent($"✅ Note link added to record '{recordXRef}' at index {noteIndex}: note '{noteXRef}'");
     }
 }
 
@@ -131,20 +130,20 @@ internal class RecordDeleteNoteTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         int noteIndex = MCPHelper.GetOptionalInt(args, "note_index", -1);
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
         if (record == null)
-            return MCPContent.CreateSimpleContent($"Record not found with XRef: {recordXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Record not found with XRef: {recordXRef}");
 
         if (!record.HasNotes)
-            return MCPContent.CreateSimpleContent($"Record '{recordXRef}' has no notes.");
+            return MCPContent.CreateSimpleContent($"❌ Record '{recordXRef}' has no notes.");
 
         if (noteIndex < 0 || noteIndex >= record.Notes.Count)
-            return MCPContent.CreateSimpleContent($"Invalid note index {noteIndex} for record '{recordXRef}' (has {record.Notes.Count} notes).");
+            return MCPContent.CreateSimpleContent($"❌ Invalid note index {noteIndex} for record '{recordXRef}' (has {record.Notes.Count} notes).");
 
         var noteLink = record.Notes[noteIndex];
         string noteInfo = $"note '{noteLink.XRef}'";
@@ -152,6 +151,6 @@ internal class RecordDeleteNoteTool : BaseTool
         record.Notes.RemoveAt(noteIndex);
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"Note link removed from record '{recordXRef}' at index {noteIndex}: {noteInfo}");
+        return MCPContent.CreateSimpleContent($"✅ Note link removed from record '{recordXRef}' at index {noteIndex}: {noteInfo}");
     }
 }

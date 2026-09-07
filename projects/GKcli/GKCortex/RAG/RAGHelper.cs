@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GKCortex.Database;
 using SmartComponents.LocalEmbeddings;
 
@@ -76,7 +75,7 @@ internal static class RAGHelper
 
     const bool DEBUG_OPT = false;
 
-    public static async Task<string> SearchExamples(string inputText, string century = null, int topK = 10)
+    public static string SearchExamples(string inputText, string century = null, int topK = 10)
     {
         List<PatternSearchResult> bestMatches;
 
@@ -84,10 +83,10 @@ internal static class RAGHelper
             // For archaic spelling, pure semantic search is insufficient. A hybrid search and post-ranking are needed.
 
             // Semantic search (current approach)
-            var semanticMatches = await SearchByEmbeddingAsync(inputText, century, topK * 2);
+            var semanticMatches = SearchByEmbeddingAsync(inputText, century, topK * 2);
 
             // Fuzzy matching keywords (for spelling variations)
-            var keywordMatches = await SearchByFuzzyKeywordsAsync(inputText, century, topK * 2);
+            var keywordMatches = SearchByFuzzyKeywordsAsync(inputText, century, topK * 2);
 
             // Reciprocal Rank Fusion to combine results
             var fused = ReciprocalRankFusion(semanticMatches, keywordMatches);
@@ -99,7 +98,7 @@ internal static class RAGHelper
             * OrthographySimilarity(inputText, m.Pattern.RawText) // heuristics for old spelling */
             ).Take(topK).ToList();
         } else {
-            bestMatches = await SearchByEmbeddingAsync(inputText, century, topK);
+            bestMatches = SearchByEmbeddingAsync(inputText, century, topK);
         }
 
         // Forming a context for the MCP server
@@ -131,13 +130,13 @@ Please note:
     /// <summary>
     /// Semantic search (current approach).
     /// </summary>
-    private static async Task<List<PatternSearchResult>> SearchByEmbeddingAsync(string inputText, string century, int topK)
+    private static List<PatternSearchResult> SearchByEmbeddingAsync(string inputText, string century, int topK)
     {
         // Obtain a vector for the new census text
         var inputVector = GetCachedEmbedding(inputText);
 
         // Extract patterns from database
-        var patterns = await LLMDatabase.GetPatterns(century);
+        var patterns = LLMDatabase.GetPatterns(century);
 
         // Count the similarities
         var bestMatches = patterns
@@ -151,7 +150,7 @@ Please note:
         return bestMatches;
     }
 
-    private static async Task<List<PatternSearchResult>> SearchByFuzzyKeywordsAsync(string inputText, string century, int topK)
+    private static List<PatternSearchResult> SearchByFuzzyKeywordsAsync(string inputText, string century, int topK)
     {
         var result = new List<PatternSearchResult>();
 
@@ -166,7 +165,7 @@ Please note:
         .Select(f => f.Id)
         .ToList();*/
 
-        return await Task.FromResult(result); // temp
+        return result; // temp
     }
 
     private static readonly TimeSpan CacheTTL = TimeSpan.FromHours(2);
@@ -194,11 +193,11 @@ Please note:
         fEmbeddingsCache.Clear();
     }
 
-    public static async Task WritePattern(string inputText, string correctedResult, string century)
+    public static void WritePattern(string inputText, string correctedResult, string century)
     {
         //var embedding = SetVector(Embed(inputText));
         var embedding = Embed(inputText).Buffer.ToArray();
-        await LLMDatabase.WritePattern(inputText, embedding, correctedResult, century);
+        LLMDatabase.WritePattern(inputText, embedding, correctedResult, century);
     }
 
     #region Utilities

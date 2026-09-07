@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCore.Media;
@@ -39,7 +38,7 @@ internal class MediaGetTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetRequiredStr(args, "xref");
 
@@ -119,11 +118,11 @@ internal class MediaGetTool : BaseTool
                 }
             } catch (Exception ex) {
                 Logger.WriteError("MediaGetTool.ExecuteTool().Transfer", ex);
-                return MCPContent.CreateSimpleContent($"Media record {xref} caused an error");
+                return MCPContent.CreateSimpleContent($"❌ Media record {xref} caused an error");
             }
         }
 
-        return MCPContent.CreateSimpleContent($"Multimedia record received: {xref}");
+        return MCPContent.CreateSimpleContent($"✅ Multimedia record received: {xref}");
     }
 }
 
@@ -153,7 +152,7 @@ internal class MediaUpsertTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string title = MCPHelper.GetOptionalStr(args, "title", null);

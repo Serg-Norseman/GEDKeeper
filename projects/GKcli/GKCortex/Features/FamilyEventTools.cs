@@ -8,7 +8,6 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCore.Events;
@@ -36,7 +35,7 @@ internal class FamListEventsTool : EventTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string familyXRef = MCPHelper.GetRequiredStr(args, "family_xref");
 
@@ -68,7 +67,7 @@ internal class FamDeleteEventTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string familyXRef = MCPHelper.GetRequiredStr(args, "family_xref");
         int eventIndex = MCPHelper.GetOptionalInt(args, "event_index", -1);
@@ -124,7 +123,7 @@ internal class FamUpsertEventTool : EventTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string familyXRef = MCPHelper.GetRequiredStr(args, "family_xref");
 

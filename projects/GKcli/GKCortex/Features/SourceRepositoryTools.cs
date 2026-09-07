@@ -8,7 +8,6 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCortex.MCP;
@@ -35,15 +34,15 @@ internal class SourceListRepositoriesTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
         var sourceRec = baseContext.Tree.FindXRef<GDMSourceRecord>(sourceXRef);
         if (sourceRec == null)
-            return MCPContent.CreateSimpleContent($"Source not found with XRef: {sourceXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Source not found with XRef: {sourceXRef}");
 
         if (sourceRec.RepositoryCitations.Count <= 0)
-            return MCPContent.CreateSimpleContent($"Source '{sourceXRef}' has no repository citations.");
+            return MCPContent.CreateSimpleContent($"❌ Source '{sourceXRef}' has no repository citations.");
 
         var rows = new List<string> {
             $"Repository citations of source '{sourceXRef}' ({sourceRec.RepositoryCitations.Count}):",
@@ -86,26 +85,26 @@ internal class SourceAddRepositoryTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
         var sourceRec = baseContext.Tree.FindXRef<GDMSourceRecord>(sourceXRef);
         if (sourceRec == null)
-            return MCPContent.CreateSimpleContent($"Source not found with XRef: {sourceXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Source not found with XRef: {sourceXRef}");
 
         string repositoryXRef = MCPHelper.GetRequiredStr(args, "repository_xref");
         var repoRec = baseContext.Tree.FindXRef<GDMRepositoryRecord>(repositoryXRef);
         if (repoRec == null)
-            return MCPContent.CreateSimpleContent($"Repository not found with XRef: {repositoryXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Repository not found with XRef: {repositoryXRef}");
 
         if (sourceRec.FindRepository(repoRec) != null)
-            return MCPContent.CreateSimpleContent($"Source {sourceXRef} already cites repository '{repositoryXRef}'.");
+            return MCPContent.CreateSimpleContent($"❌ Source {sourceXRef} already cites repository '{repositoryXRef}'.");
 
         sourceRec.AddRepository(repoRec);
         baseContext.SetModified();
 
         string repoName = GKUtils.GetRecordName(baseContext.Tree, repoRec, false);
-        return MCPContent.CreateSimpleContent($"Repository citation added to source '{sourceXRef}': {repoName} ({repositoryXRef})");
+        return MCPContent.CreateSimpleContent($"✅ Repository citation added to source '{sourceXRef}': {repoName} ({repositoryXRef})");
     }
 }
 
@@ -129,25 +128,25 @@ internal class SourceDeleteRepositoryTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
         var sourceRec = baseContext.Tree.FindXRef<GDMSourceRecord>(sourceXRef);
         if (sourceRec == null)
-            return MCPContent.CreateSimpleContent($"Source not found with XRef: {sourceXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Source not found with XRef: {sourceXRef}");
 
         string repositoryXRef = MCPHelper.GetRequiredStr(args, "repository_xref");
         var repoRec = baseContext.Tree.FindXRef<GDMRepositoryRecord>(repositoryXRef);
         if (repoRec == null)
-            return MCPContent.CreateSimpleContent($"Repository not found with XRef: {repositoryXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Repository not found with XRef: {repositoryXRef}");
 
         if (sourceRec.FindRepository(repoRec) == null)
-            return MCPContent.CreateSimpleContent($"There is no citation for repository '{repositoryXRef}' in source {sourceXRef}.");
+            return MCPContent.CreateSimpleContent($"❌ There is no citation for repository '{repositoryXRef}' in source {sourceXRef}.");
 
         sourceRec.RemoveRepository(repoRec);
         baseContext.SetModified();
 
         string repoName = GKUtils.GetRecordName(baseContext.Tree, repoRec, false);
-        return MCPContent.CreateSimpleContent($"Repository citation removed from source '{sourceXRef}': {repoName} ({repositoryXRef})");
+        return MCPContent.CreateSimpleContent($"✅ Repository citation removed from source '{sourceXRef}': {repoName} ({repositoryXRef})");
     }
 }

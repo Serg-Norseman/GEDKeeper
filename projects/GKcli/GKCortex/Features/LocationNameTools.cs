@@ -8,7 +8,6 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCortex.MCP;
@@ -34,16 +33,16 @@ internal class LocationListNamesTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string locationXRef = MCPHelper.GetRequiredStr(args, "location_xref");
 
         var locRec = baseContext.Tree.FindXRef<GDMLocationRecord>(locationXRef);
         if (locRec == null)
-            return MCPContent.CreateSimpleContent($"Location not found with XRef: {locationXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Location not found with XRef: {locationXRef}");
 
         if (locRec.Names.Count <= 0)
-            return MCPContent.CreateSimpleContent($"Location '{locationXRef}' has no names.");
+            return MCPContent.CreateSimpleContent($"❌ Location '{locationXRef}' has no names.");
 
         var rows = new List<string> {
             $"Names for location '{locationXRef}' ({locRec.Names.Count}):",
@@ -83,7 +82,7 @@ internal class LocationUpsertNameTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string locationXRef = MCPHelper.GetRequiredStr(args, "location_xref");
         int? nameIndex = MCPHelper.GetOptionalNullableInt(args, "name_index", null);
@@ -166,20 +165,20 @@ internal class LocationDeleteNameTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string locationXRef = MCPHelper.GetRequiredStr(args, "location_xref");
         int nameIndex = MCPHelper.GetOptionalInt(args, "name_index", -1);
 
         var locRec = baseContext.Tree.FindXRef<GDMLocationRecord>(locationXRef);
         if (locRec == null)
-            return MCPContent.CreateSimpleContent($"Location not found with XRef: {locationXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Location not found with XRef: {locationXRef}");
 
         if (locRec.Names.Count <= 0)
-            return MCPContent.CreateSimpleContent($"Location '{locationXRef}' has no names.");
+            return MCPContent.CreateSimpleContent($"❌ Location '{locationXRef}' has no names.");
 
         if (nameIndex < 0 || nameIndex >= locRec.Names.Count)
-            return MCPContent.CreateSimpleContent($"Invalid name index {nameIndex} for location '{locationXRef}' (has {locRec.Names.Count} names).");
+            return MCPContent.CreateSimpleContent($"❌ Invalid name index {nameIndex} for location '{locationXRef}' (has {locRec.Names.Count} names).");
 
         var locationName = locRec.Names[nameIndex];
         string nameInfo = $"'{locationName.StringValue}'";
@@ -189,6 +188,6 @@ internal class LocationDeleteNameTool : BaseTool
         locRec.SortNames();
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"Name removed from location '{locationXRef}' at index {nameIndex}: {nameInfo}");
+        return MCPContent.CreateSimpleContent($"✅ Name removed from location '{locationXRef}' at index {nameIndex}: {nameInfo}");
     }
 }

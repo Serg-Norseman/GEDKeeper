@@ -8,7 +8,6 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCore.Utilities;
@@ -35,13 +34,13 @@ internal class IndiSearchTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string searchName = MCPHelper.GetRequiredStr(args, "name");
 
         var recList = baseContext.Tree.GetRecords(GDMRecordType.rtIndividual);
         if (recList.Count == 0)
-            return MCPContent.CreateSimpleContent("No individuals in database.");
+            return MCPContent.CreateSimpleContent("❌ No individuals in database.");
 
         var matches = new List<string>();
         foreach (var rec in recList) {
@@ -57,7 +56,7 @@ internal class IndiSearchTool : BaseTool
         }
 
         if (matches.Count == 0)
-            return MCPContent.CreateSimpleContent($"No matches found for: {searchName}");
+            return MCPContent.CreateSimpleContent($"❌ No matches found for: {searchName}");
 
         var lines = new List<string> {
             $"Search results for '{searchName}' ({matches.Count}):",
@@ -96,7 +95,7 @@ internal class IndividualUpsertTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string name = MCPHelper.GetOptionalStr(args, "name", null);
@@ -175,16 +174,16 @@ internal class IndiListSpousesTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)
-            return MCPContent.CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Individual not found with XRef: {individualXRef}");
 
         if (indiRec.SpouseToFamilyLinks.Count <= 0)
-            return MCPContent.CreateSimpleContent($"Individual '{individualXRef}' has no spouses.");
+            return MCPContent.CreateSimpleContent($"❌ Individual '{individualXRef}' has no spouses.");
 
         var rows = new List<string> {
             $"Spouses for individual '{individualXRef}' ({indiRec.SpouseToFamilyLinks.Count}):",
@@ -222,15 +221,15 @@ internal class IndiListGroupsTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)
-            return MCPContent.CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Individual not found with XRef: {individualXRef}");
 
         if (!indiRec.HasGroups)
-            return MCPContent.CreateSimpleContent($"Individual '{individualXRef}' belongs to no groups.");
+            return MCPContent.CreateSimpleContent($"❌ Individual '{individualXRef}' belongs to no groups.");
 
         var rows = new List<string> {
             $"Groups for individual '{individualXRef}' ({indiRec.Groups.Count}):",

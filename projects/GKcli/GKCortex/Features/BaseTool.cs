@@ -8,7 +8,6 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GKCore;
 using GKCortex.Protocols;
 
@@ -54,8 +53,8 @@ internal abstract class BaseTool
     /// <summary>
     /// Runs MCP tool to support built-in MCP server.
     /// </summary>
-    public virtual async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public virtual List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
-        return await Task.FromResult(new List<MCPContent>());
+        return new List<MCPContent>();
     }
 }

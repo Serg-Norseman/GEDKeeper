@@ -9,7 +9,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
@@ -42,7 +41,7 @@ internal class TaskUpsertTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string goal = MCPHelper.GetOptionalStr(args, "goal", null);

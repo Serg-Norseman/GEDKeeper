@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  GEDKeeper, the personal genealogical database editor.
  *  Copyright (C) 2009-2026 by Sergey V. Zhdanovskih.
  *
@@ -9,7 +9,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 using BSLib;
 using GDModel;
 using GKCore;
@@ -44,12 +43,12 @@ internal class RecordListTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordTypeStr = MCPHelper.GetRequiredStr(args, "record_type");
         if (!RuntimeData.RecordTypeMap.TryGetValue(recordTypeStr, out GDMRecordType recordType)) {
             string availableTypes = string.Join(", ", RuntimeData.RecordTypeMap.Keys);
-            return MCPContent.CreateSimpleContent($"Unknown record type: '{recordTypeStr}'. Available types: {availableTypes}");
+            return MCPContent.CreateSimpleContent($"❌ Unknown record type: '{recordTypeStr}'. Available types: {availableTypes}");
         }
 
         var recList = baseContext.Tree.GetRecords(recordType);
@@ -200,7 +199,7 @@ internal class RecordListTool : BaseTool
                 });
 
             default:
-                return MCPContent.CreateSimpleContent($"Unsupported record type: '{recordTypeStr}'");
+                return MCPContent.CreateSimpleContent($"❌ Unsupported record type: '{recordTypeStr}'");
         }
     }
 }
@@ -228,7 +227,7 @@ internal class RecordSearchTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string recordTypeStr = MCPHelper.GetRequiredStr(args, "record_type");
         string searchText = MCPHelper.GetRequiredStr(args, "search_text");
@@ -236,12 +235,12 @@ internal class RecordSearchTool : BaseTool
 
         if (!RuntimeData.RecordTypeMap.TryGetValue(recordTypeStr, out GDMRecordType recordType)) {
             string availableTypes = string.Join(", ", RuntimeData.RecordTypeMap.Keys);
-            return MCPContent.CreateSimpleContent($"Unknown record type: '{recordTypeStr}'. Available types: {availableTypes}");
+            return MCPContent.CreateSimpleContent($"❌ Unknown record type: '{recordTypeStr}'. Available types: {availableTypes}");
         }
 
         var recList = baseContext.Tree.GetRecords(recordType);
         if (recList.Count == 0)
-            return MCPContent.CreateSimpleContent($"No {recordTypeStr.ToLower()} records in database.");
+            return MCPContent.CreateSimpleContent($"❌ No {recordTypeStr.ToLower()} records in database.");
 
         var matches = new List<string>();
         foreach (var rec in recList) {
@@ -255,7 +254,7 @@ internal class RecordSearchTool : BaseTool
         }
 
         if (matches.Count == 0)
-            return MCPContent.CreateSimpleContent($"No matches found for '{searchText}' in {recordTypeStr.ToLower()} records.");
+            return MCPContent.CreateSimpleContent($"❌ No matches found for '{searchText}' in {recordTypeStr.ToLower()} records.");
 
         var lines = new List<string> {
             $"Search results for '{searchText}' in {recordTypeStr} records ({matches.Count} matches):",
@@ -286,13 +285,13 @@ internal class RecordInfoTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(xref);
         if (record == null)
-            return MCPContent.CreateSimpleContent($"Record not found with XRef: {xref}");
+            return MCPContent.CreateSimpleContent($"❌ Record not found with XRef: {xref}");
 
         StringList ctx = new StringList();
         GKUtils.GetRecordContent(baseContext, record, ctx, RecordContentType.Quick);
@@ -321,17 +320,17 @@ internal class RecordDeleteTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(xref);
         if (record == null)
-            return MCPContent.CreateSimpleContent($"Record not found with XRef: {xref}");
+            return MCPContent.CreateSimpleContent($"❌ Record not found with XRef: {xref}");
 
-        await baseContext.DeleteRecord(record);
+        baseContext.DeleteRecord(record).GetAwaiter();
 
-        return MCPContent.CreateSimpleContent($"Record deleted: {xref}");
+        return MCPContent.CreateSimpleContent($"✅ Record deleted: {xref}");
     }
 }
 
@@ -355,29 +354,29 @@ internal class RecordSetRestrictionTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetRequiredStr(args, "xref");
         string restrictionStr = MCPHelper.GetRequiredStr(args, "restriction");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(xref);
         if (record == null)
-            return MCPContent.CreateSimpleContent($"Record not found with XRef: {xref}");
+            return MCPContent.CreateSimpleContent($"❌ Record not found with XRef: {xref}");
 
         if (!RuntimeData.RestrictionMap.TryGetValue(restrictionStr, out GDMRestriction restriction)) {
             string availableRestrictions = string.Join(", ", RuntimeData.RestrictionMap.Keys);
-            return MCPContent.CreateSimpleContent($"Unknown restriction type: '{restrictionStr}'. Available types: {availableRestrictions}");
+            return MCPContent.CreateSimpleContent($"❌ Unknown restriction type: '{restrictionStr}'. Available types: {availableRestrictions}");
         }
 
         var recordWithEvents = record as GDMRecordWithEvents;
         if (recordWithEvents == null) {
-            return MCPContent.CreateSimpleContent($"Record type '{record.RecordType}' does not support restrictions");
+            return MCPContent.CreateSimpleContent($"❌ Record type '{record.RecordType}' does not support restrictions");
         }
 
         recordWithEvents.Restriction = restriction;
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"Restriction '{restrictionStr}' has been set for record: {xref}");
+        return MCPContent.CreateSimpleContent($"✅ Restriction '{restrictionStr}' has been set for record: {xref}");
     }
 }
 
@@ -401,20 +400,20 @@ internal class RecordMergeTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string targetXRef = MCPHelper.GetRequiredStr(args, "target_xref");
         var targetRecord = baseContext.Tree.FindXRef<GDMRecord>(targetXRef);
         if (targetRecord == null)
-            return MCPContent.CreateSimpleContent($"Target record not found with XRef: {targetXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Target record not found with XRef: {targetXRef}");
 
         string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
         var sourceRecord = baseContext.Tree.FindXRef<GDMRecord>(sourceXRef);
         if (sourceRecord == null)
-            return MCPContent.CreateSimpleContent($"Merged record not found with XRef: {sourceXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Merged record not found with XRef: {sourceXRef}");
 
-        await TreeTools.MergeRecord(baseContext, targetRecord, sourceRecord, false);
+        TreeTools.MergeRecord(baseContext, targetRecord, sourceRecord, false).GetAwaiter();
 
-        return MCPContent.CreateSimpleContent($"Record deleted: {sourceXRef}");
+        return MCPContent.CreateSimpleContent($"✅ Record deleted: {sourceXRef}");
     }
 }

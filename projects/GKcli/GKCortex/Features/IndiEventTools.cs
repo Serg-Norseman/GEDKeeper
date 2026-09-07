@@ -8,7 +8,6 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCore.Events;
@@ -36,13 +35,13 @@ internal class IndiListEventsTool : EventTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)
-            return MCPContent.CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Individual not found with XRef: {individualXRef}");
 
         return GetEventsList(baseContext, "individual", indiRec);
     }
@@ -68,20 +67,20 @@ internal class IndiDeleteEventTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
         int eventIndex = MCPHelper.GetOptionalInt(args, "event_index", -1);
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)
-            return MCPContent.CreateSimpleContent($"Individual not found with XRef: {individualXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Individual not found with XRef: {individualXRef}");
 
         if (!indiRec.HasEvents)
-            return MCPContent.CreateSimpleContent($"Individual '{individualXRef}' has no events.");
+            return MCPContent.CreateSimpleContent($"❌ Individual '{individualXRef}' has no events.");
 
         if (eventIndex < 0 || eventIndex >= indiRec.Events.Count)
-            return MCPContent.CreateSimpleContent($"Invalid event index {eventIndex} for individual '{individualXRef}' (has {indiRec.Events.Count} events).");
+            return MCPContent.CreateSimpleContent($"❌ Invalid event index {eventIndex} for individual '{individualXRef}' (has {indiRec.Events.Count} events).");
 
         var evt = indiRec.Events[eventIndex];
         string evtInfo = GKUtils.GetEventName(evt);
@@ -89,7 +88,7 @@ internal class IndiDeleteEventTool : BaseTool
         indiRec.Events.RemoveAt(eventIndex);
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"Event removed from individual '{individualXRef}' at index {eventIndex}: {evtInfo}");
+        return MCPContent.CreateSimpleContent($"✅ Event removed from individual '{individualXRef}' at index {eventIndex}: {evtInfo}");
     }
 }
 
@@ -123,7 +122,7 @@ internal class IndiUpsertEventTool : EventTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 

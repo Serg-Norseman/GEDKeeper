@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  GEDKeeper, the personal genealogical database editor.
  *  Copyright (C) 2009-2026 by Sergey V. Zhdanovskih.
  *
@@ -8,7 +8,6 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCortex.MCP;
@@ -34,16 +33,16 @@ internal class ResearchListTasksTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
 
         var researchRec = baseContext.Tree.FindXRef<GDMResearchRecord>(researchXRef);
         if (researchRec == null)
-            return MCPContent.CreateSimpleContent($"Research not found with XRef: {researchXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Research not found with XRef: {researchXRef}");
 
         if (researchRec.Tasks.Count <= 0)
-            return MCPContent.CreateSimpleContent($"Research '{researchXRef}' has no tasks.");
+            return MCPContent.CreateSimpleContent($"❌ Research '{researchXRef}' has no tasks.");
 
         var rows = new List<string> {
             $"Tasks of research '{researchXRef}' ({researchRec.Tasks.Count}):",
@@ -86,27 +85,27 @@ internal class ResearchAddTaskTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string taskXRef = MCPHelper.GetRequiredStr(args, "task_xref");
 
         var researchRec = baseContext.Tree.FindXRef<GDMResearchRecord>(researchXRef);
         if (researchRec == null)
-            return MCPContent.CreateSimpleContent($"Research not found with XRef: {researchXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Research not found with XRef: {researchXRef}");
 
         var taskRec = baseContext.Tree.FindXRef<GDMTaskRecord>(taskXRef);
         if (taskRec == null)
-            return MCPContent.CreateSimpleContent($"Task not found with XRef: {taskXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Task not found with XRef: {taskXRef}");
 
         if (researchRec.IndexOfTask(taskRec) >= 0)
-            return MCPContent.CreateSimpleContent($"Task {taskXRef} is already assigned to research '{researchXRef}'.");
+            return MCPContent.CreateSimpleContent($"❌ Task {taskXRef} is already assigned to research '{researchXRef}'.");
 
         researchRec.AddTask(taskRec);
         baseContext.SetModified();
 
         string taskName = GKUtils.GetTaskGoalStr(baseContext.Tree, taskRec);
-        return MCPContent.CreateSimpleContent($"Task added to research '{researchXRef}': {taskName} ({taskXRef})");
+        return MCPContent.CreateSimpleContent($"✅ Task added to research '{researchXRef}': {taskName} ({taskXRef})");
     }
 }
 
@@ -130,27 +129,27 @@ internal class ResearchDeleteTaskTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string taskXRef = MCPHelper.GetRequiredStr(args, "task_xref");
 
         var researchRec = baseContext.Tree.FindXRef<GDMResearchRecord>(researchXRef);
         if (researchRec == null)
-            return MCPContent.CreateSimpleContent($"Research not found with XRef: {researchXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Research not found with XRef: {researchXRef}");
 
         var taskRec = baseContext.Tree.FindXRef<GDMTaskRecord>(taskXRef);
         if (taskRec == null)
-            return MCPContent.CreateSimpleContent($"Task not found with XRef: {taskXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Task not found with XRef: {taskXRef}");
 
         if (researchRec.IndexOfTask(taskRec) < 0)
-            return MCPContent.CreateSimpleContent($"Task {taskXRef} is not assigned to research '{researchXRef}'.");
+            return MCPContent.CreateSimpleContent($"❌ Task {taskXRef} is not assigned to research '{researchXRef}'.");
 
         researchRec.RemoveTask(taskRec);
         baseContext.SetModified();
 
         string taskName = GKUtils.GetTaskGoalStr(baseContext.Tree, taskRec);
-        return MCPContent.CreateSimpleContent($"Task removed from research '{researchXRef}': {taskName} ({taskXRef})");
+        return MCPContent.CreateSimpleContent($"✅ Task removed from research '{researchXRef}': {taskName} ({taskXRef})");
     }
 }
 
@@ -173,16 +172,16 @@ internal class ResearchListCommunicationsTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
 
         var researchRec = baseContext.Tree.FindXRef<GDMResearchRecord>(researchXRef);
         if (researchRec == null)
-            return MCPContent.CreateSimpleContent($"Research not found with XRef: {researchXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Research not found with XRef: {researchXRef}");
 
         if (researchRec.Communications.Count <= 0)
-            return MCPContent.CreateSimpleContent($"Research '{researchXRef}' has no communications.");
+            return MCPContent.CreateSimpleContent($"❌ Research '{researchXRef}' has no communications.");
 
         var rows = new List<string> {
             $"Communications of research '{researchXRef}' ({researchRec.Communications.Count}):",
@@ -226,26 +225,26 @@ internal class ResearchAddCommunicationTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string communicationXRef = MCPHelper.GetRequiredStr(args, "communication_xref");
 
         var researchRec = baseContext.Tree.FindXRef<GDMResearchRecord>(researchXRef);
         if (researchRec == null)
-            return MCPContent.CreateSimpleContent($"Research not found with XRef: {researchXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Research not found with XRef: {researchXRef}");
 
         var commRec = baseContext.Tree.FindXRef<GDMCommunicationRecord>(communicationXRef);
         if (commRec == null)
-            return MCPContent.CreateSimpleContent($"Communication not found with XRef: {communicationXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Communication not found with XRef: {communicationXRef}");
 
         if (researchRec.IndexOfCommunication(commRec) >= 0)
-            return MCPContent.CreateSimpleContent($"Communication {communicationXRef} is already assigned to research '{researchXRef}'.");
+            return MCPContent.CreateSimpleContent($"❌ Communication {communicationXRef} is already assigned to research '{researchXRef}'.");
 
         researchRec.AddCommunication(commRec);
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"Communication added to research '{researchXRef}': {commRec.CommName} ({communicationXRef})");
+        return MCPContent.CreateSimpleContent($"✅ Communication added to research '{researchXRef}': {commRec.CommName} ({communicationXRef})");
     }
 }
 
@@ -269,26 +268,26 @@ internal class ResearchDeleteCommunicationTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string communicationXRef = MCPHelper.GetRequiredStr(args, "communication_xref");
 
         var researchRec = baseContext.Tree.FindXRef<GDMResearchRecord>(researchXRef);
         if (researchRec == null)
-            return MCPContent.CreateSimpleContent($"Research not found with XRef: {researchXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Research not found with XRef: {researchXRef}");
 
         var commRec = baseContext.Tree.FindXRef<GDMCommunicationRecord>(communicationXRef);
         if (commRec == null)
-            return MCPContent.CreateSimpleContent($"Communication not found with XRef: {communicationXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Communication not found with XRef: {communicationXRef}");
 
         if (researchRec.IndexOfCommunication(commRec) < 0)
-            return MCPContent.CreateSimpleContent($"Communication {communicationXRef} is not assigned to research '{researchXRef}'.");
+            return MCPContent.CreateSimpleContent($"❌ Communication {communicationXRef} is not assigned to research '{researchXRef}'.");
 
         researchRec.RemoveCommunication(commRec);
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"Communication removed from research '{researchXRef}': {commRec.CommName} ({communicationXRef})");
+        return MCPContent.CreateSimpleContent($"✅ Communication removed from research '{researchXRef}': {commRec.CommName} ({communicationXRef})");
     }
 }
 
@@ -311,16 +310,16 @@ internal class ResearchListGroupsTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
 
         var researchRec = baseContext.Tree.FindXRef<GDMResearchRecord>(researchXRef);
         if (researchRec == null)
-            return MCPContent.CreateSimpleContent($"Research not found with XRef: {researchXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Research not found with XRef: {researchXRef}");
 
         if (researchRec.Groups.Count <= 0)
-            return MCPContent.CreateSimpleContent($"Research '{researchXRef}' has no groups.");
+            return MCPContent.CreateSimpleContent($"❌ Research '{researchXRef}' has no groups.");
 
         var rows = new List<string> {
             $"Groups of research '{researchXRef}' ({researchRec.Groups.Count}):",
@@ -363,26 +362,26 @@ internal class ResearchAddGroupTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string groupXRef = MCPHelper.GetRequiredStr(args, "group_xref");
 
         var researchRec = baseContext.Tree.FindXRef<GDMResearchRecord>(researchXRef);
         if (researchRec == null)
-            return MCPContent.CreateSimpleContent($"Research not found with XRef: {researchXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Research not found with XRef: {researchXRef}");
 
         var groupRec = baseContext.Tree.FindXRef<GDMGroupRecord>(groupXRef);
         if (groupRec == null)
-            return MCPContent.CreateSimpleContent($"Group not found with XRef: {groupXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Group not found with XRef: {groupXRef}");
 
         if (researchRec.IndexOfGroup(groupRec) >= 0)
-            return MCPContent.CreateSimpleContent($"Group {groupXRef} is already assigned to research '{researchXRef}'.");
+            return MCPContent.CreateSimpleContent($"❌ Group {groupXRef} is already assigned to research '{researchXRef}'.");
 
         researchRec.AddGroup(groupRec);
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"Group added to research '{researchXRef}': {groupRec.GroupName} ({groupXRef})");
+        return MCPContent.CreateSimpleContent($"✅ Group added to research '{researchXRef}': {groupRec.GroupName} ({groupXRef})");
     }
 }
 
@@ -406,25 +405,25 @@ internal class ResearchDeleteGroupTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string groupXRef = MCPHelper.GetRequiredStr(args, "group_xref");
 
         var researchRec = baseContext.Tree.FindXRef<GDMResearchRecord>(researchXRef);
         if (researchRec == null)
-            return MCPContent.CreateSimpleContent($"Research not found with XRef: {researchXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Research not found with XRef: {researchXRef}");
 
         var groupRec = baseContext.Tree.FindXRef<GDMGroupRecord>(groupXRef);
         if (groupRec == null)
-            return MCPContent.CreateSimpleContent($"Group not found with XRef: {groupXRef}");
+            return MCPContent.CreateSimpleContent($"❌ Group not found with XRef: {groupXRef}");
 
         if (researchRec.IndexOfGroup(groupRec) < 0)
-            return MCPContent.CreateSimpleContent($"Group {groupXRef} is not assigned to research '{researchXRef}'.");
+            return MCPContent.CreateSimpleContent($"❌ Group {groupXRef} is not assigned to research '{researchXRef}'.");
 
         researchRec.RemoveGroup(groupRec);
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"Group removed from research '{researchXRef}': {groupRec.GroupName} ({groupXRef})");
+        return MCPContent.CreateSimpleContent($"✅ Group removed from research '{researchXRef}': {groupRec.GroupName} ({groupXRef})");
     }
 }

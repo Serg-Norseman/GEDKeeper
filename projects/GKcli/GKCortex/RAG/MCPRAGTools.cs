@@ -9,7 +9,6 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using GKCore;
 using GKCortex.Features;
 using GKCortex.MCP;
@@ -56,14 +55,14 @@ internal class RAGSearchExamplesTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string inputText = MCPHelper.GetRequiredStr(args, "input_text");
         string century = MCPHelper.GetOptionalStr(args, "century", null);
         double minScore = MCPHelper.GetOptionalDbl(args, "min_score", 0.6f); // ?!
         int topK = MCPHelper.GetOptionalInt(args, "top_k", 3);
 
-        string result = await RAGHelper.SearchExamples(inputText, century, topK);
+        string result = RAGHelper.SearchExamples(inputText, century, topK);
 
         return MCPContent.CreateSimpleContent(result);
     }
@@ -95,14 +94,14 @@ internal class RAGWritePatternTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string rawText = MCPHelper.GetRequiredStr(args, "raw_text");
         string correctedResult = MCPHelper.GetRequiredStr(args, "corrected_result");
         string century = MCPHelper.GetOptionalStr(args, "century", null); // ?
         double qualityScore = MCPHelper.GetOptionalDbl(args, "quality_score", 0); // ?!
 
-        await RAGHelper.WritePattern(rawText, correctedResult, century);
+        RAGHelper.WritePattern(rawText, correctedResult, century);
 
         return MCPContent.CreateSimpleContent("✅ The pattern was written successfully.");
     }

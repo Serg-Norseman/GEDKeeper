@@ -9,7 +9,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 using GDModel;
 using GKCore;
 using GKCore.Locales;
@@ -36,16 +35,16 @@ internal class MediaListFilesTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var mediaRec = baseContext.Tree.FindXRef<GDMMultimediaRecord>(xref);
         if (mediaRec == null)
-            return MCPContent.CreateSimpleContent($"Multimedia record not found with XRef: {xref}");
+            return MCPContent.CreateSimpleContent($"❌ Multimedia record not found with XRef: {xref}");
 
         if (mediaRec.FileReferences.Count <= 0)
-            return MCPContent.CreateSimpleContent($"Multimedia record '{xref}' has no file references.");
+            return MCPContent.CreateSimpleContent($"❌ Multimedia record '{xref}' has no file references.");
 
         var rows = new List<string> {
             $"Files for multimedia record '{xref}' ({mediaRec.FileReferences.Count}):",
@@ -89,7 +88,7 @@ internal class MediaUpsertFileTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetRequiredStr(args, "xref");
         int? fileIndex = MCPHelper.GetOptionalNullableInt(args, "file_index", null);
@@ -184,20 +183,20 @@ internal class MediaDeleteFileTool : BaseTool
         };
     }
 
-    public override async Task<List<MCPContent>> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
     {
         string xref = MCPHelper.GetRequiredStr(args, "xref");
         int fileIndex = MCPHelper.GetRequiredInt(args, "file_index");
 
         var mediaRec = baseContext.Tree.FindXRef<GDMMultimediaRecord>(xref);
         if (mediaRec == null)
-            return MCPContent.CreateSimpleContent($"Multimedia record not found: '{xref}'.");
+            return MCPContent.CreateSimpleContent($"❌ Multimedia record not found: '{xref}'.");
 
         if (mediaRec.FileReferences.Count <= 0)
-            return MCPContent.CreateSimpleContent($"Multimedia record '{xref}' has no file references.");
+            return MCPContent.CreateSimpleContent($"❌ Multimedia record '{xref}' has no file references.");
 
         if (fileIndex < 0 || fileIndex >= mediaRec.FileReferences.Count)
-            return MCPContent.CreateSimpleContent($"Invalid file index {fileIndex} for multimedia record '{xref}' (has {mediaRec.FileReferences.Count} files).");
+            return MCPContent.CreateSimpleContent($"❌ Invalid file index {fileIndex} for multimedia record '{xref}' (has {mediaRec.FileReferences.Count} files).");
 
         var fileRef = mediaRec.FileReferences[fileIndex];
         string fileInfo = $"\"{fileRef.Title}\", media type '{fileRef.MediaType}'";
@@ -205,6 +204,6 @@ internal class MediaDeleteFileTool : BaseTool
         mediaRec.FileReferences.RemoveAt(fileIndex);
         baseContext.SetModified();
 
-        return MCPContent.CreateSimpleContent($"File removed from multimedia record '{xref}' at index {fileIndex}: {fileInfo}");
+        return MCPContent.CreateSimpleContent($"✅ File removed from multimedia record '{xref}' at index {fileIndex}: {fileInfo}");
     }
 }
