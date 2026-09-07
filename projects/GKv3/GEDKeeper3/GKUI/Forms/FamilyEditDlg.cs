@@ -128,6 +128,14 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                tabsData.SelectedIndexChanged -= tabControl_SelectedIndexChanged;
+            }
+            base.Dispose(disposing);
+        }
+
         private void cbRestriction_SelectedIndexChanged(object sender, EventArgs e)
         {
             fController.LockEditor(cmbRestriction.SelectedIndex == (int)GDMRestriction.rnLocked);

@@ -104,8 +104,8 @@ namespace GKLMChatPlugin
             fStopButton.Click += (s, e) => StopMessage();
             settingsButton.Click += (s, e) => ShowSettingsDialog();
             newSessionButton.Click += (s, e) => NewSession();
-            renameSessionButton.Click += (s, e) => RenameSession();
-            fSessionDropDown.SelectedIndexChanged += (s, e) => LoadSelectedSession();
+            renameSessionButton.Click += async (s, e) => await RenameSession();
+            fSessionDropDown.SelectedIndexChanged += async (s, e) => await LoadSelectedSession();
 
             sessionActionsButton.ContextMenu = new ContextMenu {
                 Items = {

@@ -67,5 +67,13 @@ namespace GKUI.Forms
             fController = new NoteEditDlgController(this);
             fController.Init(baseWin);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                tabsData.SelectedIndexChanged -= tabControl_SelectedIndexChanged;
+            }
+            base.Dispose(disposing);
+        }
     }
 }

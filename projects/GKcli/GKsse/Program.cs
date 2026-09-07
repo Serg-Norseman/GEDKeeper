@@ -30,14 +30,14 @@ internal class Program
         LLMDatabase.SetAppDataPath(AppHost.GetAppDataPathStatic());
         MCPController.InitFeatures(embedded: false, pureMode: false, tdeMode: true, ragMode: true);
         Log("MCP Server started");
-        AppHost.Instance.SetForcedBackup();
+        AppHost.SetForcedBackup();
 
 
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddSingleton<MCPServer>();
         var app = builder.Build();
 
-        app.MapGet("/mcp", async (HttpContext context, string? sessionId, MCPServer mcpServer) => {
+        app.MapGet("/mcp", async (HttpContext context, string sessionId, MCPServer mcpServer) => {
             sessionId ??= Guid.NewGuid().ToString("N");
 
             context.Response.ContentType = "text/event-stream";
@@ -74,14 +74,14 @@ internal class Program
         });
 
         // POST /mcp — receiving JSON-RPC commands from the client
-        app.MapPost("/mcp", async (HttpContext context, string? sessionId, MCPServer mcpServer) => {
+        app.MapPost("/mcp", async (HttpContext context, string sessionId, MCPServer mcpServer) => {
             using var reader = new StreamReader(context.Request.Body, Encoding.UTF8);
             string jsonRpcRequest = await reader.ReadToEndAsync();
 
             Log($"POST received: {jsonRpcRequest[..Math.Min(150, jsonRpcRequest.Length)]}...");
 
             try {
-                string? jsonRpcResponse = await mcpServer.ProcessSSERequestAsync(jsonRpcRequest);
+                string jsonRpcResponse = await mcpServer.ProcessSSERequestAsync(jsonRpcRequest);
 
                 // Check if the request is a "notification" (no "id" field)
                 bool isNotification = !jsonRpcRequest.Contains("\"id\"");

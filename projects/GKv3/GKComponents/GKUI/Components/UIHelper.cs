@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -488,6 +489,54 @@ namespace GKUI.Components
             }
 
             return imFmt;
+        }
+
+        public static void ClearAllHandlers(object control, string eventName)
+        {
+            if (control == null) throw new ArgumentNullException(nameof(control));
+            if (string.IsNullOrEmpty(eventName)) throw new ArgumentException("Event name cannot be empty.", nameof(eventName));
+
+            Type type = control.GetType();
+
+            // Attempt for standard (automatic) events via hidden delegate field
+            FieldInfo field = GetFieldInHierarchy(type, eventName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            if (field != null) {
+                field.SetValue(control, null);
+                return;
+            }
+
+            // Attempt for UI components (WinForms/WPF) using EventHandlerList
+            PropertyInfo eventsProp = type.GetProperty("Events", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (eventsProp != null) {
+                EventHandlerList eventTable = (EventHandlerList)eventsProp.GetValue(control, null);
+                if (eventTable != null) {
+                    // Look for the static key of the event (usually called "Event" + eventName or "Key" + eventName)
+                    FieldInfo keyField = GetFieldInHierarchy(type, "Event" + eventName, BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
+                                      ?? GetFieldInHierarchy(type, "Key" + eventName, BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+
+                    if (keyField != null) {
+                        object eventKey = keyField.GetValue(null);
+                        // Remove the current delegate chain from the table
+                        Delegate d = eventTable[eventKey];
+                        if (d != null) {
+                            eventTable.RemoveHandler(eventKey, d);
+                        }
+                        return;
+                    }
+                }
+            }
+
+            throw new InvalidOperationException($"Could not find field or key for event '{eventName}' for class {type.FullName}.");
+        }
+
+        private static FieldInfo GetFieldInHierarchy(Type type, string fieldName, BindingFlags flags)
+        {
+            while (type != null) {
+                FieldInfo field = type.GetField(fieldName, flags);
+                if (field != null) return field;
+                type = type.BaseType;
+            }
+            return null;
         }
     }
 }

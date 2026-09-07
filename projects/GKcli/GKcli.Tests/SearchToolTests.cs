@@ -24,7 +24,7 @@ public class SearchToolTests : MCPToolTests
     [TestCase("create individual family list person events", "family_upsert_event")] // 3
     [TestCase("create individual family list person events", "individual_upsert")] // 4
     [TestCase("create individual family list person events", "family_upsert")] // 5
-    public void Test_Search(string query, string toolName)
+    public async Task Test_Search(string query, string toolName)
     {
         var instance = new SearchTool();
         Assert.IsNotNull(instance);
@@ -33,7 +33,7 @@ public class SearchToolTests : MCPToolTests
         using (JsonDocument doc = JsonDocument.Parse(jsonString)) {
             JsonElement args = doc.RootElement;
 
-            var result = instance.ExecuteTool(fContext, args);
+            var result = await instance.ExecuteTool(fContext, args);
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Count > 0);
             Assert.IsTrue(ExistsTool(result, toolName));

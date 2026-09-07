@@ -84,6 +84,7 @@ namespace GKUI.Components
         {
             if (disposing) {
                 ListMan = null;
+                Clear();
             }
             base.Dispose(disposing);
         }
@@ -208,11 +209,24 @@ namespace GKUI.Components
 
         public void Clear()
         {
-            Columns.Clear();
+            ClearColumns();
         }
 
         public void ClearColumns()
         {
+            foreach (var col in Columns) {
+                var dataCell = col.DataCell;
+                if (dataCell is TextBoxCell textCell) {
+                    textCell.Binding.Unbind();
+                    textCell.Binding = null;
+                }
+                if (dataCell is CheckBoxCell checkCell) {
+                    checkCell.Binding.Unbind();
+                    checkCell.Binding = null;
+                }
+                //col.DataCell = null;
+            }
+
             Columns.Clear();
         }
 

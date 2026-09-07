@@ -8,7 +8,9 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 using System.Text;
+using BSLib;
 
 namespace GKCore
 {
@@ -20,6 +22,16 @@ namespace GKCore
         public static void Init(string fileName)
         {
             fLogFilename = fileName;
+        }
+
+        private static ILogger fInstance;
+
+        public static ILogger GetLogger()
+        {
+            if (fInstance == null) {
+                fInstance = new LegacyLogHelper();
+            }
+            return fInstance;
         }
 
         private static void WriteMessage(string level, string msg)
@@ -95,5 +107,69 @@ namespace GKCore
             message += BuildExceptionMessage(e.InnerException, indent);
             return message;
         }
+
+        #region Helper
+
+        private class LegacyLogHelper : ILogger
+        {
+            public LegacyLogHelper()
+            {
+            }
+
+            public void WriteDebug(string msg)
+            {
+                Logger.WriteInfo(msg);
+            }
+
+            public void WriteDebug(string str, params object[] args)
+            {
+                WriteDebug(string.Format(str, args));
+            }
+
+            public void WriteInfo(string msg)
+            {
+                Logger.WriteInfo(msg);
+            }
+
+            public void WriteInfo(string str, params object[] args)
+            {
+                WriteInfo(string.Format(str, args));
+            }
+
+            public void WriteError(string msg)
+            {
+                Logger.WriteError(msg);
+            }
+
+            public void WriteError(string msg, Exception ex)
+            {
+                Logger.WriteError(msg, ex);
+            }
+
+            public void WriteWarn(string msg)
+            {
+                Logger.WriteInfo(msg);
+            }
+
+            public void WriteWarn(string str, params object[] args)
+            {
+                WriteInfo(string.Format(str, args));
+            }
+
+
+            public void WriteNumError(int num, Exception ex)
+            {
+                var err = ex as ReflectionTypeLoadException;
+                if (err != null) {
+                    foreach (var item in err.LoaderExceptions) {
+                        WriteError(item.Message);
+                    }
+                }
+                WriteError("#" + num + " " + ex.Message);
+                WriteError(ex.StackTrace);
+            }
+        }
+
+        #endregion
     }
 }

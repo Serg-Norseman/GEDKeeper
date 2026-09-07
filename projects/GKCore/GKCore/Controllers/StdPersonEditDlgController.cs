@@ -25,6 +25,15 @@ namespace GKCore.Controllers
             fView.ChildrenList.OnItemValidating += PersonEditDlg_ItemValidating;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                fView.ChildrenList.OnModify -= ModifyChildrenSheet;
+                fView.ChildrenList.OnItemValidating -= PersonEditDlg_ItemValidating;
+            }
+            base.Dispose(disposing);
+        }
+
         private void PersonEditDlg_ItemValidating(object sender, ItemValidatingEventArgs e)
         {
             var record = e.Item as GDMRecord;

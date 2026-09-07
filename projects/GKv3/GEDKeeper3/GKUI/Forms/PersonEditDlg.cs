@@ -255,6 +255,7 @@ namespace GKUI.Forms
         {
             if (disposing) {
                 imgPortrait.Image = null;
+                tabsData.SelectedIndexChanged -= tabControl_SelectedIndexChanged;
             }
             base.Dispose(disposing);
         }

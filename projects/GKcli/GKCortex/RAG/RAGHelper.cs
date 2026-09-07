@@ -74,7 +74,7 @@ internal static class RAGHelper
         return result;
     }
 
-    const bool DEBUG_OPT = true;
+    const bool DEBUG_OPT = false;
 
     public static async Task<string> SearchExamples(string inputText, string century = null, int topK = 10)
     {

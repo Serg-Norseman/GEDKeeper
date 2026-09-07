@@ -35,6 +35,15 @@ namespace GKCore.Lists
             ListSource = listSource;
             Record = record;
         }
+
+        public object GetValue(int column)
+        {
+            return ListSource.GetColumnExternalValue(this, column);
+        }
+
+        public void SetValue(int column, object value)
+        {
+        }
     }
 
 

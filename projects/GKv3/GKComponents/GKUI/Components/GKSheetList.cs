@@ -147,6 +147,8 @@ namespace GKUI.Components
                 }
 
                 fList.ContextMenu = null;
+
+                ClearContextMenu();
                 fContextMenu.Dispose();
 
                 fList.Dispose();
@@ -445,7 +447,8 @@ namespace GKUI.Components
             if (fListModel == null) return;
 
             if (fListModel.CustomActions.Count > 0) {
-                fContextMenu.Items.Clear();
+                ClearContextMenu();
+
                 foreach (var custAct in fListModel.CustomActions) {
                     var miAction = new ButtonMenuItem();
                     miAction.Text = custAct.Name;
@@ -455,6 +458,19 @@ namespace GKUI.Components
             }
 
             fList.ContextMenu = (fListModel.CustomActions.Count > 0) ? fContextMenu : null;
+        }
+
+        private void ClearContextMenu()
+        {
+            DisposeActionHandlers();
+            fContextMenu.Items.Clear();
+        }
+
+        private void DisposeActionHandlers()
+        {
+            foreach (var miAction in fContextMenu.Items) {
+                UIHelper.ClearAllHandlers(miAction, "Click");
+            }
         }
 
         #endregion

@@ -122,6 +122,14 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                tabsData.SelectedIndexChanged -= tabControl_SelectedIndexChanged;
+            }
+            base.Dispose(disposing);
+        }
+
         private void EditShortTitle_TextChanged(object sender, EventArgs e)
         {
             SetTitle(string.Format("{0} \"{1}\"", LangMan.LS(LSID.Source), txtShortTitle.Text));

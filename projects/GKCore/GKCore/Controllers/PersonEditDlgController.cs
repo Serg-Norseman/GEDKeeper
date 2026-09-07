@@ -81,6 +81,13 @@ namespace GKCore.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing) {
+                fView.NamesList.OnModify -= ModifyNamesSheet;
+                fView.SpousesList.OnModify -= ModifySpousesSheet;
+                fView.SpousesList.OnBeforeChange -= BeforeChangeSpousesSheet;
+                fView.AssociationsList.OnModify -= ModifyAssociationsSheet;
+                fView.GroupsList.OnModify -= ModifyGroupsSheet;
+                fView.ParentsList.OnModify -= ModifyParentsSheet;
+
                 if (fPortraitImg != null) fPortraitImg.Dispose();
             }
             base.Dispose(disposing);

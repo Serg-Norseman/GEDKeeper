@@ -17,11 +17,12 @@ using Sharprompt;
 
 namespace GKcli.Commands;
 
-internal class LMChatCommand : BaseCommand
+internal class LMChatCommand : BaseCommand, ILMChatView
 {
     private readonly string _localAPI;
     private readonly string _localModel;
     private readonly bool _stream;
+    private readonly LMSettings _settings;
 
     public LMChatCommand() : base("lm_chat", CLS.LMChat, CommandCategory.Service)
     {
@@ -33,11 +34,18 @@ internal class LMChatCommand : BaseCommand
         _localAPI = config.GetSection("LMSettings:LocalAPI").Value;
         _localModel = config.GetSection("LMSettings:LocalModel").Value;
         _stream = bool.Parse(config.GetSection("LMSettings:Stream").Value);
+
+        _settings = new LMSettings();
+        _settings.APIAddress = _localAPI;
+        //_settings.APIKey = ;
+        _settings.ModelId = _localModel;
+        _settings.StreamMode = _stream;
     }
 
     public override void Execute(BaseContext baseContext, object obj)
     {
-        var client = new LMChatClient(_localAPI, _localModel);
+        var client = new LMChatClient(_settings);
+        client.View = this;
         client.AddHistory("system", "You are a helpful AI assistant in a desktop application.");
 
         PromptHelper.WriteLine("Chat started. Type 'quit' to exit.");
@@ -48,6 +56,26 @@ internal class LMChatCommand : BaseCommand
         RunChatLoop(client, _stream, cts.Token).Wait();
     }
 
+    public void ShowMessage(string msg, string role)
+    {
+        Console.Write(msg);
+        Console.WriteLine();
+    }
+
+    public void StartStreamingMessage(int requestId)
+    {
+    }
+
+    public void UpdateStreamingMessage(int requestId, string content)
+    {
+        Console.Write(content);
+    }
+
+    public void FinalizeStreamingMessage(int requestId)
+    {
+        Console.WriteLine();
+    }
+
     private async Task RunChatLoop(LMChatClient client, bool stream, CancellationToken cancellationToken)
     {
         while (true) {
@@ -55,27 +83,9 @@ internal class LMChatCommand : BaseCommand
             if (string.IsNullOrEmpty(userInput) || userInput.ToLower() == "quit") break;
 
             try {
-                client.AddHistory("user", userInput);
-
+                await client.AddHistory("user", userInput);
                 Console.Write("Assistant: ");
-                string fullResponse = "";
-                if (stream) {
-                    // Streaming (real-time output by letters/words)
-                    var tokenStream = await client.SendMessageStreamAsync(cancellationToken);
-
-                    await foreach (var token in tokenStream) {
-                        if (cancellationToken.IsCancellationRequested)
-                            break;
-                        Console.Write(token);
-                        fullResponse += token; // Collect the full response
-                    }
-                } else {
-                    // Regular request (if streaming is not needed)
-                    fullResponse = await client.SendMessageAsync(cancellationToken);
-                    Console.Write(fullResponse);
-                }
-                client.AddHistory("assistant", fullResponse);
-                Console.WriteLine();
+                await client.SendMessageAsync();
             } catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) {
                 PromptHelper.WriteLine("Error: Model response took too long (5-minute limit exceeded).");
             } catch (Exception ex) {

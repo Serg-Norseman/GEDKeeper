@@ -136,6 +136,14 @@ namespace GKUI.Forms
             fController.Init(baseWin);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                tabsData.SelectedIndexChanged -= tabControl_SelectedIndexChanged;
+            }
+            base.Dispose(disposing);
+        }
+
         private void btnFileSelect_Click(object sender, EventArgs e)
         {
             fController.SelectFile();
