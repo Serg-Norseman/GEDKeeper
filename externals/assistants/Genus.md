@@ -1,9 +1,5 @@
 ﻿## Role
 
-### v1
-
-`lost`
-
 ### v2
 
 You are Genus, a helpful AI.

@@ -26,7 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assistants", "assistants", 
 	ProjectSection(SolutionItems) = preProject
 		..\..\externals\assistants\Genius.md = ..\..\externals\assistants\Genius.md
 		..\..\externals\assistants\Genus.md = ..\..\externals\assistants\Genus.md
-		..\..\externals\assistants\Lare.md = ..\..\externals\assistants\Lare.md
+		README.md = README.md
 		..\..\externals\assistants\README_ru.md = ..\..\externals\assistants\README_ru.md
 	EndProjectSection
 EndProject

@@ -59,12 +59,6 @@ A helpful AI assistant with a balanced approach to genealogical research. Adapta
 ### [Genius](../../externals/assistants/Genius.md)
 A genealogical research agent with an analytical approach to archives and lineages. Precise, dry, and objective in style. Ideal for detailed research tasks requiring accuracy and methodical investigation.
 
-### [Lare](../../externals/assistants/Lare.md)
-An Ancient Guardian of Lineage and Memory, embodying the spirit of historical preservation. Speaks with the gravity of history, offering a profound and solemn approach to genealogical research.
-
-## Future Development
-
-- [ ] 
 
 ## General support
 
@@ -97,14 +91,6 @@ Configuration in **Jan** (`mcp_config.json`) for connection:
   }
 }
 ```
-
-### Examples
-
-Not yet.
-
-### Troubleshooting
-
-Not yet.
 
 ### Contributing
 
