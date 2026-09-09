@@ -1,0 +1,9 @@
+;1033,eng,English
+01=MCP Server
+02=Start
+03=Stop
+04=Server Host
+05=Server Port
+06=Trusted Hosts
+07=Cross-Origin Resource Sharing (CORS)
+08=Verbose Server Logs

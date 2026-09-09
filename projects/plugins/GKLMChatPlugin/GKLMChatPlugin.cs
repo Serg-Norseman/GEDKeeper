@@ -15,6 +15,7 @@ using GKCore.Locales;
 using GKCore.Plugins;
 using GKCortex.Features;
 using GKCortex.LMChat;
+using GKCortex.Utilities;
 
 [assembly: AssemblyTitle("GKLMChatPlugin")]
 [assembly: AssemblyDescription("GEDKeeper LMChat plugin")]
@@ -52,7 +53,7 @@ namespace GKLMChatPlugin
         RenameSession = 17,
     }
 
-    public class Plugin : OrdinaryPlugin
+    public class Plugin : LMPlugin
     {
         private string fDisplayName = "LMChat";
         private ILangMan fLangMan;
@@ -76,7 +77,6 @@ namespace GKLMChatPlugin
         public override bool Startup(IHost host)
         {
             var result = base.Startup(host);
-            MCPController.InitFeatures(embedded: true, pureMode: false, tdeMode: true, ragMode: true);
             return result;
         }
 

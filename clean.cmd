@@ -109,9 +109,6 @@ rmdir .\projects\GKcli\GKcli\obj /s /q
 rmdir .\projects\GKcli\GKcli.Tests\bin /s /q
 rmdir .\projects\GKcli\GKcli.Tests\obj /s /q
 
-rmdir .\projects\GKcli\GKsse\bin /s /q
-rmdir .\projects\GKcli\GKsse\obj /s /q
-
 rmdir .\projects\GKcli\GKCortex\bin /s /q
 rmdir .\projects\GKcli\GKCortex\obj /s /q
 
@@ -160,3 +157,6 @@ del .\appdata\cvhist.yaml
 
 rmdir .\projects\plugins\GKGenetixPlugin\bin /s /q
 rmdir .\projects\plugins\GKGenetixPlugin\obj /s /q
+
+rmdir .\projects\plugins\GKMCPPlugin\bin /s /q
+rmdir .\projects\plugins\GKMCPPlugin\obj /s /q
