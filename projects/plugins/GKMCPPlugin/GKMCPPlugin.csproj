@@ -25,7 +25,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\GKCore\GKCore.nstd.csproj" />
         <ProjectReference Include="..\..\GKv3\GKComponents\GKComponents.csproj" />
-        <ProjectReference Include="..\..\GKcli\GKCortex\GKCortex.net.csproj" />
+        <ProjectReference Include="..\..\GKCortex\GKCortex.csproj" />
     </ItemGroup>
 
     <ItemGroup>

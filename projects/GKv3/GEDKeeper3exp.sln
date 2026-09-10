@@ -86,7 +86,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKTreeSyncPlugin.net", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKXBenchmarks", "GKBenchmarks\GKXBenchmarks.csproj", "{4C716119-9E1F-4C76-87BF-EAA31242623B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCortex.net", "..\GKcli\GKCortex\GKCortex.net.csproj", "{EB96DC99-E9D4-3937-5C09-A400C6497B4F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKCortex.net", "..\GKCortex\GKCortex.csproj", "{EB96DC99-E9D4-3937-5C09-A400C6497B4F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKMCPPlugin", "..\plugins\GKMCPPlugin\GKMCPPlugin.csproj", "{2370809A-2667-4698-8153-4B27A020C5E2}"
 EndProject

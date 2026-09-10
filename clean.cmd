@@ -75,8 +75,8 @@ rmdir .\projects\GKv3\GKComponents\obj /s /q
 rmdir .\projects\GKv3\GKBenchmarks\bin /s /q
 rmdir .\projects\GKv3\GKBenchmarks\obj /s /q
 
-rmdir .\projects\GKcli\GKCortex\bin /s /q
-rmdir .\projects\GKcli\GKCortex\obj /s /q
+rmdir .\projects\GKCortex\bin /s /q
+rmdir .\projects\GKCortex\obj /s /q
 
 rem <<< GKvX >>>
 
