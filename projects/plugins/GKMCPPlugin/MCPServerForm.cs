@@ -10,12 +10,74 @@ using System;
 using Eto.Drawing;
 using Eto.Forms;
 using GKCore.Locales;
-using GKCortex.MCP;
 
 namespace GKMCPPlugin;
 
 public class MCPServerForm : Dialog
 {
+    private readonly ILangMan fLangMan;
+    private readonly Plugin fPlugin;
+
+    public MCPServerForm(Plugin plugin, ILangMan langMan)
+    {
+        fPlugin = plugin;
+        fLangMan = langMan;
+
+        InitControls();
+        LayoutForm();
+        UpdateUIState();
+    }
+
+    private async void OnStartServerClick(object sender, EventArgs e)
+    {
+        if (!int.TryParse(_portTextBox.Text, out int port) || port < 1 || port > 65535) {
+            MessageBox.Show(this, "Укажите корректный номер порта (1-65535).", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxType.Error);
+            return;
+        }
+        fPlugin.ServerPort = port;
+
+        UpdateUIState();
+        _statusLabel.Text = "Запуск сервера...";
+        _statusLabel.TextColor = Colors.Orange;
+
+        try {
+            fPlugin.ServerHost = _hostTextBox.Text;
+            fPlugin.EnableCors = _corsCheckBox.Checked ?? false;
+            fPlugin.AllowedHosts = _allowedHostsTextBox.Text;
+            fPlugin.VerboseLogging = _verboseLoggingCheckBox.Checked ?? false;
+
+            await fPlugin.StartAsync();
+
+            _statusLabel.Text = $"Активен: http://{fPlugin.ServerHost}:{fPlugin.ServerPort}/mcp";
+            _statusLabel.TextColor = Colors.Green;
+        } catch (Exception ex) {
+            _statusLabel.Text = "Ошибка при запуске";
+            _statusLabel.TextColor = Colors.Red;
+            MessageBox.Show(this, $"Не удалось запустить сервер: {ex.Message}", "Ошибка сети", MessageBoxType.Error);
+            UpdateUIState();
+        }
+    }
+
+    private async void OnStopServerClick(object sender, EventArgs e)
+    {
+        _statusLabel.Text = "Остановка сервера...";
+        _statusLabel.TextColor = Colors.Orange;
+        _stopButton.Enabled = false;
+
+        try {
+            await fPlugin.StopAsync();
+
+            _statusLabel.Text = "Сервер остановлен";
+            _statusLabel.TextColor = SystemColors.ControlText;
+        } catch (Exception ex) {
+            MessageBox.Show(this, $"Ошибка при остановке сервера: {ex.Message}", "Ошибка", MessageBoxType.Error);
+        } finally {
+            UpdateUIState();
+        }
+    }
+
+    #region Design
+
     private TextBox _hostTextBox;
     private TextBox _portTextBox;
     private TextBox _allowedHostsTextBox;
@@ -27,35 +89,21 @@ public class MCPServerForm : Dialog
     private Label _statusLabel;
     private StackLayout _allowedHostsRow;
 
-    private readonly ILangMan fLangMan;
-    private readonly MCPServerController fServerController;
-
-    public MCPServerForm(ILangMan langMan, MCPServer mcpServer)
+    private void InitControls()
     {
-        fLangMan = langMan;
-
         Title = "MCP Server Settings & Control";
         ClientSize = new Size(480, 420);
         MinimumSize = new Size(400, 350);
 
-        fServerController = new MCPServerController(mcpServer);
+        _hostTextBox = new TextBox { Text = fPlugin.ServerHost, ToolTip = "IP или хост для прослушивания (например, localhost или 0.0.0.0)" };
+        _portTextBox = new TextBox { Text = fPlugin.ServerPort.ToString(), ToolTip = "Порт для соединений" };
+        _allowedHostsTextBox = new TextBox { Text = fPlugin.AllowedHosts, ToolTip = "Список разрешенных Origin через запятую" };
 
-        InitControls();
-        LayoutForm();
-        UpdateUIState();
-    }
-
-    private void InitControls()
-    {
-        _hostTextBox = new TextBox { Text = "localhost", ToolTip = "IP или хост для прослушивания (например, localhost или 0.0.0.0)" };
-        _portTextBox = new TextBox { Text = "8080", ToolTip = "Порт для соединений" };
-        _allowedHostsTextBox = new TextBox { Text = "http://localhost:3000", ToolTip = "Список разрешенных Origin через запятую" };
-
-        _autoStartCheckBox = new CheckBox { Text = "Автозапуск при старте приложения", Checked = false };
-        _corsCheckBox = new CheckBox { Text = fLangMan.LS(PLS.CORS), Checked = true };
+        _autoStartCheckBox = new CheckBox { Text = "Автозапуск при старте приложения", Checked = fPlugin.AutoStart };
+        _corsCheckBox = new CheckBox { Text = fLangMan.LS(PLS.CORS), Checked = fPlugin.EnableCors };
         _corsCheckBox.CheckedChanged += (s, e) => _allowedHostsRow.Visible = _corsCheckBox.Checked ?? false;
 
-        _verboseLoggingCheckBox = new CheckBox { Text = fLangMan.LS(PLS.VerboseServerLogs), Checked = false };
+        _verboseLoggingCheckBox = new CheckBox { Text = fLangMan.LS(PLS.VerboseServerLogs), Checked = fPlugin.VerboseLogging };
 
         _startButton = new Button { Text = fLangMan.LS(PLS.Start), ImagePosition = ButtonImagePosition.Left };
         _startButton.Click += OnStartServerClick;
@@ -98,56 +146,9 @@ public class MCPServerForm : Dialog
         Content = mainLayout;
     }
 
-    private async void OnStartServerClick(object sender, EventArgs e)
-    {
-        if (!int.TryParse(_portTextBox.Text, out int port) || port < 1 || port > 65535) {
-            MessageBox.Show(this, "Укажите корректный номер порта (1-65535).", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxType.Error);
-            return;
-        }
-
-        UpdateUIState();
-        _statusLabel.Text = "Запуск сервера...";
-        _statusLabel.TextColor = Colors.Orange;
-
-        try {
-            string host = _hostTextBox.Text;
-            bool enableCors = _corsCheckBox.Checked ?? false;
-            string allowedHosts = _allowedHostsTextBox.Text;
-            bool verboseLogging = _verboseLoggingCheckBox.Checked ?? false;
-
-            await fServerController.StartAsync(host, port, enableCors, allowedHosts, verboseLogging);
-
-            _statusLabel.Text = $"Активен: http://{host}:{port}/mcp";
-            _statusLabel.TextColor = Colors.Green;
-        } catch (Exception ex) {
-            _statusLabel.Text = "Ошибка при запуске";
-            _statusLabel.TextColor = Colors.Red;
-            MessageBox.Show(this, $"Не удалось запустить сервер: {ex.Message}", "Ошибка сети", MessageBoxType.Error);
-            UpdateUIState();
-        }
-    }
-
-    private async void OnStopServerClick(object sender, EventArgs e)
-    {
-        _statusLabel.Text = "Остановка сервера...";
-        _statusLabel.TextColor = Colors.Orange;
-        _stopButton.Enabled = false;
-
-        try {
-            await fServerController.StopAsync();
-
-            _statusLabel.Text = "Сервер остановлен";
-            _statusLabel.TextColor = SystemColors.ControlText;
-        } catch (Exception ex) {
-            MessageBox.Show(this, $"Ошибка при остановке сервера: {ex.Message}", "Ошибка", MessageBoxType.Error);
-        } finally {
-            UpdateUIState();
-        }
-    }
-
     private void UpdateUIState()
     {
-        var isRunning = fServerController.IsRunning;
+        var isRunning = fPlugin.IsRunning();
 
         _startButton.Enabled = !isRunning;
         _stopButton.Enabled = isRunning;
@@ -159,4 +160,6 @@ public class MCPServerForm : Dialog
         _verboseLoggingCheckBox.Enabled = !isRunning;
         _autoStartCheckBox.Enabled = !isRunning;
     }
+
+    #endregion
 }

@@ -52,7 +52,7 @@ internal abstract class EventTool : BaseTool
     protected static List<MCPContent> GetEventsList(BaseContext baseContext, string recName, GDMRecordWithEvents recordWithEvents)
     {
         if (!recordWithEvents.HasEvents)
-            return MCPContent.CreateSimpleContent($"{CLIHelper.ToUpperFirst(recName)} '{recordWithEvents.XRef}' has no events.");
+            return MCPContent.CreateSimpleContent($"{TextHelper.ToUpperFirst(recName)} '{recordWithEvents.XRef}' has no events.");
 
         var rows = new List<string> {
             $"Events for {recName} '{recordWithEvents.XRef}' ({recordWithEvents.Events.Count}):",

@@ -94,13 +94,13 @@ internal class MediaGetTool : BaseTool
 
                                         case GDMMultimediaFormat.mfRTF:
                                             using (StreamReader strd = new StreamReader(fs)) {
-                                                text = CLIHelper.StripRtf(strd.ReadToEnd());
+                                                text = TextHelper.StripRtf(strd.ReadToEnd());
                                             }
                                             break;
 
                                         case GDMMultimediaFormat.mfHTM:
                                             using (StreamReader strd = new StreamReader(fs)) {
-                                                text = CLIHelper.GetPlainText(strd);
+                                                text = TextHelper.GetPlainText(strd);
                                             }
                                             break;
                                     }

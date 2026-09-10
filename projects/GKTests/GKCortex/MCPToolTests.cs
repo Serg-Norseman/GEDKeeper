@@ -2,7 +2,7 @@ using GKCore;
 using GKCore.Locales;
 using GKCortex.Features;
 
-namespace GKcli.Tests;
+namespace GKCortex.Tests;
 
 public class MCPToolTests
 {

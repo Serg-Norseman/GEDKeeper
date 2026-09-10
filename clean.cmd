@@ -75,6 +75,9 @@ rmdir .\projects\GKv3\GKComponents\obj /s /q
 rmdir .\projects\GKv3\GKBenchmarks\bin /s /q
 rmdir .\projects\GKv3\GKBenchmarks\obj /s /q
 
+rmdir .\projects\GKcli\GKCortex\bin /s /q
+rmdir .\projects\GKcli\GKCortex\obj /s /q
+
 rem <<< GKvX >>>
 
 rmdir .\projects\GKvX\.vs /s /q
@@ -98,22 +101,6 @@ rmdir .\projects\GKvT\.vs /s /q
 
 rmdir .\projects\GKvT\GEDKeeperT\bin /s /q
 rmdir .\projects\GKvT\GEDKeeperT\obj /s /q
-
-rem <<< GKcli >>>
-
-rmdir .\projects\GKcli\.vs /s /q
-
-rmdir .\projects\GKcli\GKcli\bin /s /q
-rmdir .\projects\GKcli\GKcli\obj /s /q
-
-rmdir .\projects\GKcli\GKcli.Tests\bin /s /q
-rmdir .\projects\GKcli\GKcli.Tests\obj /s /q
-
-rmdir .\projects\GKcli\GKCortex\bin /s /q
-rmdir .\projects\GKcli\GKCortex\obj /s /q
-
-rmdir .\projects\GKcli\BSLib.LMKit\bin /s /q
-rmdir .\projects\GKcli\BSLib.LMKit\obj /s /q
 
 rem <<< Plugins cleaning >>>
 

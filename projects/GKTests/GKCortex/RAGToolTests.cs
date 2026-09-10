@@ -1,8 +1,9 @@
+using System;
 using System.Text.Json;
 using GKCortex.RAG;
 using NUnit.Framework;
 
-namespace GKcli.Tests;
+namespace GKCortex.Tests;
 
 [TestFixture]
 public class RAGToolTests : MCPToolTests

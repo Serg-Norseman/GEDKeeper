@@ -8,6 +8,7 @@
 
 using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using BSLib;
 using GKCore;
 using GKCore.Design.Graphics;
@@ -37,11 +38,11 @@ public enum PLS
     Title = 1,
     Start = 2,
     Stop = 3,
-    ServerHost,
-    ServerPort,
-    TrustedHosts,
-    CORS, // Cross-Origin Resource Sharing (CORS)
-    VerboseServerLogs,
+    ServerHost = 4,
+    ServerPort = 5,
+    TrustedHosts = 6,
+    CORS = 7,
+    VerboseServerLogs = 8,
 }
 
 public sealed class Plugin : LMPlugin
@@ -49,7 +50,6 @@ public sealed class Plugin : LMPlugin
     private string fDisplayName = "GKMCPPlugin";
     private ILangMan fLangMan;
     private MCPServer fMCPServer;
-    private bool fAutoStart;
 
 
     public override string DisplayName { get { return fDisplayName; } }
@@ -74,7 +74,7 @@ public sealed class Plugin : LMPlugin
         var baseWin = Host.GetCurrentFile();
         MCPController.SetContext(baseWin.Context);
 
-        using (var dlg = new MCPServerForm(fLangMan, fMCPServer)) {
+        using (var dlg = new MCPServerForm(this, fLangMan)) {
             dlg.ShowModal();
         }
     }
@@ -112,13 +112,35 @@ public sealed class Plugin : LMPlugin
         return result;
     }
 
+    internal bool IsRunning()
+    {
+        return fMCPServer.IsRunning;
+    }
+
+    internal async Task StartAsync()
+    {
+        await fMCPServer.StartAsync(ServerHost, ServerPort, EnableCors, AllowedHosts, VerboseLogging);
+    }
+
+    internal async Task StopAsync()
+    {
+        await fMCPServer.StopAsync();
+    }
+
+    internal bool AutoStart = false;
+    internal string ServerHost = "localhost";
+    internal int ServerPort = 8080;
+    internal bool EnableCors = false;
+    internal string AllowedHosts = "http://localhost:3000";
+    internal bool VerboseLogging = false;
+
     public override void LoadOptions(IniFile ini)
     {
-        fAutoStart = ini.ReadBool("GKMCPPlugin", "AutoStart", false);
+        AutoStart = ini.ReadBool("GKMCPPlugin", "AutoStart", false);
     }
 
     public override void SaveOptions(IniFile ini)
     {
-        ini.WriteBool("GKMCPPlugin", "AutoStart", fAutoStart);
+        ini.WriteBool("GKMCPPlugin", "AutoStart", AutoStart);
     }
 }

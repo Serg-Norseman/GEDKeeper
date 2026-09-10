@@ -23,6 +23,7 @@
             <HintPath>..\libs\netstd\BSLib.DataViz.Model.dll</HintPath>
         </Reference>
         <ProjectReference Include="..\GKCore\GKCore.nstd.csproj" />
+        <ProjectReference Include="..\GKcli\GKCortex\GKCortex.csproj" />
     </ItemGroup>
 
 

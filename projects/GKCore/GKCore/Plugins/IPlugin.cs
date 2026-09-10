@@ -85,7 +85,11 @@ namespace GKCore.Plugins
         void OnHostDeactivate();
         void OnLanguageChange();
 
+        /// <summary>
+        /// Called after the Startup handler.
+        /// </summary>
         void LoadOptions(IniFile ini);
+
         void SaveOptions(IniFile ini);
     }
 }

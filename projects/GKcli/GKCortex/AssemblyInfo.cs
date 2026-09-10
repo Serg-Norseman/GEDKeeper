@@ -9,4 +9,4 @@ using GKCore;
 [assembly: AssemblyVersion(GKData.APP_VERSION_3X)]
 [assembly: AssemblyCulture("")]
 
-[assembly: InternalsVisibleTo("GKCortex.Tests")]
+[assembly: InternalsVisibleTo("GKTests")]
