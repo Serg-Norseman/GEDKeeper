@@ -26,18 +26,23 @@ public class MCPServerForm : Dialog
         InitControls();
         LayoutForm();
         UpdateUIState();
+
+        if (fPlugin.IsRunning()) {
+            _statusLabel.Text = string.Format(fLangMan.LS(PLS.ServerStarted), $"http://{fPlugin.ServerHost}:{fPlugin.ServerPort}/mcp");
+            _statusLabel.TextColor = Colors.Green;
+        }
     }
 
     private async void OnStartServerClick(object sender, EventArgs e)
     {
         if (!int.TryParse(_portTextBox.Text, out int port) || port < 1 || port > 65535) {
-            MessageBox.Show(this, "Укажите корректный номер порта (1-65535).", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxType.Error);
+            MessageBox.Show(this, fLangMan.LS(PLS.ValidPortRequired), fLangMan.LS(PLS.ValidationError), MessageBoxButtons.OK, MessageBoxType.Error);
             return;
         }
         fPlugin.ServerPort = port;
 
         UpdateUIState();
-        _statusLabel.Text = "Запуск сервера...";
+        _statusLabel.Text = fLangMan.LS(PLS.StartingServer);
         _statusLabel.TextColor = Colors.Orange;
 
         try {
@@ -48,29 +53,30 @@ public class MCPServerForm : Dialog
 
             await fPlugin.StartAsync();
 
-            _statusLabel.Text = $"Активен: http://{fPlugin.ServerHost}:{fPlugin.ServerPort}/mcp";
+            _statusLabel.Text = string.Format(fLangMan.LS(PLS.ServerStarted), $"http://{fPlugin.ServerHost}:{fPlugin.ServerPort}/mcp");
             _statusLabel.TextColor = Colors.Green;
         } catch (Exception ex) {
-            _statusLabel.Text = "Ошибка при запуске";
+            _statusLabel.Text = fLangMan.LS(PLS.ErrorStartingServer);
             _statusLabel.TextColor = Colors.Red;
-            MessageBox.Show(this, $"Не удалось запустить сервер: {ex.Message}", "Ошибка сети", MessageBoxType.Error);
+            MessageBox.Show(this, string.Format(fLangMan.LS(PLS.StartingError), ex.Message), fLangMan.LS(PLS.Error), MessageBoxType.Error);
+        } finally {
             UpdateUIState();
         }
     }
 
     private async void OnStopServerClick(object sender, EventArgs e)
     {
-        _statusLabel.Text = "Остановка сервера...";
+        _statusLabel.Text = fLangMan.LS(PLS.StoppingServer);
         _statusLabel.TextColor = Colors.Orange;
         _stopButton.Enabled = false;
 
         try {
             await fPlugin.StopAsync();
 
-            _statusLabel.Text = "Сервер остановлен";
+            _statusLabel.Text = fLangMan.LS(PLS.ServerStopped);
             _statusLabel.TextColor = SystemColors.ControlText;
         } catch (Exception ex) {
-            MessageBox.Show(this, $"Ошибка при остановке сервера: {ex.Message}", "Ошибка", MessageBoxType.Error);
+            MessageBox.Show(this, string.Format(fLangMan.LS(PLS.StoppingError), ex.Message), fLangMan.LS(PLS.Error), MessageBoxType.Error);
         } finally {
             UpdateUIState();
         }
@@ -87,21 +93,21 @@ public class MCPServerForm : Dialog
     private Button _startButton;
     private Button _stopButton;
     private Label _statusLabel;
-    private StackLayout _allowedHostsRow;
 
     private void InitControls()
     {
-        Title = "MCP Server Settings & Control";
-        ClientSize = new Size(480, 420);
-        MinimumSize = new Size(400, 350);
+        Title = fLangMan.LS(PLS.MCPServerSettings);
+        ClientSize = new Size(480, 320);
 
-        _hostTextBox = new TextBox { Text = fPlugin.ServerHost, ToolTip = "IP или хост для прослушивания (например, localhost или 0.0.0.0)" };
-        _portTextBox = new TextBox { Text = fPlugin.ServerPort.ToString(), ToolTip = "Порт для соединений" };
-        _allowedHostsTextBox = new TextBox { Text = fPlugin.AllowedHosts, ToolTip = "Список разрешенных Origin через запятую" };
+        _hostTextBox = new TextBox { Text = fPlugin.ServerHost, ToolTip = fLangMan.LS(PLS.HostToolTip) };
+        _portTextBox = new TextBox { Text = fPlugin.ServerPort.ToString(), ToolTip = fLangMan.LS(PLS.PortToolTip) };
+        _allowedHostsTextBox = new TextBox { Text = fPlugin.AllowedHosts, ToolTip = fLangMan.LS(PLS.AllowedHostsTip), Enabled = false };
 
-        _autoStartCheckBox = new CheckBox { Text = "Автозапуск при старте приложения", Checked = fPlugin.AutoStart };
+        _autoStartCheckBox = new CheckBox { Text = fLangMan.LS(PLS.AutoStart), Checked = fPlugin.AutoStart };
+        _autoStartCheckBox.CheckedChanged += (s, e) => { fPlugin.AutoStart = _autoStartCheckBox.Checked ?? false; };
+
         _corsCheckBox = new CheckBox { Text = fLangMan.LS(PLS.CORS), Checked = fPlugin.EnableCors };
-        _corsCheckBox.CheckedChanged += (s, e) => _allowedHostsRow.Visible = _corsCheckBox.Checked ?? false;
+        _corsCheckBox.CheckedChanged += (s, e) => _allowedHostsTextBox.Enabled = _corsCheckBox.Checked ?? false;
 
         _verboseLoggingCheckBox = new CheckBox { Text = fLangMan.LS(PLS.VerboseServerLogs), Checked = fPlugin.VerboseLogging };
 
@@ -111,7 +117,7 @@ public class MCPServerForm : Dialog
         _stopButton = new Button { Text = fLangMan.LS(PLS.Stop) };
         _stopButton.Click += OnStopServerClick;
 
-        _statusLabel = new Label { Text = "Сервер остановлен", VerticalAlignment = VerticalAlignment.Center };
+        _statusLabel = new Label { Text = fLangMan.LS(PLS.ServerStopped), VerticalAlignment = VerticalAlignment.Center };
     }
 
     private void LayoutForm()
@@ -121,12 +127,7 @@ public class MCPServerForm : Dialog
         configLayout.AddRow(new Label { Text = fLangMan.LS(PLS.ServerHost), VerticalAlignment = VerticalAlignment.Center }, _hostTextBox);
         configLayout.AddRow(new Label { Text = fLangMan.LS(PLS.ServerPort), VerticalAlignment = VerticalAlignment.Center }, _portTextBox);
         configLayout.AddRow(null, _corsCheckBox);
-
-        _allowedHostsRow = new StackLayout(new Label { Text = fLangMan.LS(PLS.TrustedHosts), VerticalAlignment = VerticalAlignment.Center }, _allowedHostsTextBox) {
-            Orientation = Orientation.Horizontal
-        };
-        configLayout.AddRow(null, _allowedHostsRow);
-
+        configLayout.AddRow(new Label { Text = fLangMan.LS(PLS.TrustedHosts), VerticalAlignment = VerticalAlignment.Center }, _allowedHostsTextBox);
         configLayout.AddRow(null, _verboseLoggingCheckBox);
         configLayout.AddRow(null, _autoStartCheckBox);
 
@@ -137,7 +138,7 @@ public class MCPServerForm : Dialog
             Items = { _startButton, _stopButton, new StackLayoutItem(_statusLabel, VerticalAlignment.Center, true) }
         };
 
-        var groupBox = new GroupBox { Text = "Конфигурация MCP сервера", Content = configLayout };
+        var groupBox = new GroupBox { Text = fLangMan.LS(PLS.MCPSrvConfig), Content = configLayout };
 
         var mainLayout = new DynamicLayout { Padding = new Padding(12) };
         mainLayout.Add(groupBox, yscale: true);
@@ -153,9 +154,9 @@ public class MCPServerForm : Dialog
         _startButton.Enabled = !isRunning;
         _stopButton.Enabled = isRunning;
 
-        _hostTextBox.ReadOnly = isRunning;
-        _portTextBox.ReadOnly = isRunning;
-        _allowedHostsTextBox.ReadOnly = isRunning;
+        _hostTextBox.Enabled = !isRunning;
+        _portTextBox.Enabled = !isRunning;
+        _allowedHostsTextBox.Enabled = !isRunning;
         _corsCheckBox.Enabled = !isRunning;
         _verboseLoggingCheckBox.Enabled = !isRunning;
         _autoStartCheckBox.Enabled = !isRunning;

@@ -28,7 +28,7 @@
 			"path": "../GKcli/GKCortex"
 		},
 		{
-			"path": "../plugins/GKLMChatPlugin"
+			"path": "../plugins/GKMCPPlugin"
 		}
 	],
 	"settings": {}

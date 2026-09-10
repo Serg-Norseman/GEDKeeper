@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using GKCortex.Database;
 using SmartComponents.LocalEmbeddings;
@@ -102,7 +103,10 @@ internal static class RAGHelper
         }
 
         // Forming a context for the MCP server
-        string examples = $@"<rag_examples century=""{century}"">
+        var examples = new StringBuilder();
+        examples.Append($@"<rag_examples century=""{century}"">");
+        if (bestMatches.Count > 0) {
+            examples.Append($@"
 <instruction>
 Use the following examples as a template for parsing historical text.
 Please note:
@@ -119,12 +123,15 @@ Please note:
 
 <guidance>
 {(bestMatches.Average(m => m.Score) < 0.5
-    ? "⚠️ Examples with low similarity were found. Pay particular attention to deviations in structure."
-    : "✅ The examples are relevant. Follow their structure.")}
-</guidance>
-</rag_examples>";
+            ? "⚠️ Examples with low similarity were found. Pay particular attention to deviations in structure."
+            : "✅ The examples are relevant. Follow their structure.")}
+</guidance>");
+        } else {
+            examples.Append("No data found.");
+        }
+        examples.Append("</rag_examples>");
 
-        return examples;
+        return examples.ToString();
     }
 
     /// <summary>

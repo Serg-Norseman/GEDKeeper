@@ -1,13 +1,9 @@
-# GKcli MCP Tools Reference
+# GKmcp Tools Reference
 
 ## Overview
 
-**GKcli** is a GEDKeeper CLI application with [MCP](https://modelcontextprotocol.io/) protocol support,
+**GKmcp** is a GEDKeeper plugin with [MCP](https://modelcontextprotocol.io/) protocol support,
 allowing LLM clients to interact with genealogical databases through a set of tools.
-
-**Running in LLM clients:** `GKcli --mcp` (argument is required, as without it an interactive text terminal is launched, partially replicating the MCP-server functionality set).
-
-**Protocol:** MCP `2025-06-18`, JSON-RPC 2.0 over stdin/stdout. No external dependencies.
 
 ---
 
@@ -22,17 +18,16 @@ allowing LLM clients to interact with genealogical databases through a set of to
 
 ## Implementation Features
 
-- **Auto-backups:** when working through MCP, automatic forced backup of each file is enabled upon saving.
 - **Pagination:** tables with >20 records are paginated; a hint for requesting the next page is provided at the end of the response.
 - **Fuzzy search:** `individual_search` and `record_search` use a fuzzy matching algorithm with adjustable threshold.
 - **Record XRef identifiers:** all identifiers are automatically generated when adding new records. Uniqueness is controlled by the GEDKeeper application suite core.
 - **Error handling:** all errors that may occur during operation are sent in human-readable form from tools to the LM client for display to the user.
-- **Localization support**: due to GKcli/MCP working as part of the GEDKeeper application suite, the tool uses the same files and localization approaches as the main GUI application. By default, when no special setting is present, the tool will use English for interaction. The setting can be configured by running GKcli from the command line without the `--mcp` flag - the settings section will then be accessible.
+- **Localization support**: due to GKmcp working as part of the GEDKeeper application suite, the tool uses the same files and localization approaches as the main GUI application. By default, when no special setting is present, the tool will use English for interaction. The setting can be configured by running GKcli from the command line without the `--mcp` flag - the settings section will then be accessible.
 - **Data format and input validation**: the data format is described in detail in the tool descriptors within the MCP server, where final validation is also performed after data preparation by the model.
 
 ---
 
-## Main Options
+## Main Options (obsolete; relevant for an implementation based on stdio)
 
 - `--mcp` - option to run the CLI application in MCP server mode; basic and mandatory.
 - `--pure` - option to use only tools for working with standard GEDCOM structures and records.
@@ -236,7 +231,5 @@ allowing LLM clients to interact with genealogical databases through a set of to
 ## TODO
 
 1. In the "Implementation Features" section, it states that fuzzy search has an adjustable threshold, but the `individual_search` tool description specifies a fixed 16% threshold, which creates confusion.
-2. Lack of tools for exporting/importing in other formats.
-3. No tools for advanced search by dates, places, events, or combinations of criteria.
-4. No tools for generating statistics, building charts, analyzing generations, etc.
-5. No mechanism for rolling back changes when an operation partially fails (e.g., when merging trees).
+2. No tools for advanced search by dates, places, events, or combinations of criteria.
+3. No tools for generating statistics, building charts, analyzing generations, etc.

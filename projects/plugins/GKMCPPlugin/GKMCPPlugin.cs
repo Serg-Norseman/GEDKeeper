@@ -43,6 +43,22 @@ public enum PLS
     TrustedHosts = 6,
     CORS = 7,
     VerboseServerLogs = 8,
+    AutoStart = 9,
+    ServerStopped = 10,
+    ServerStarted = 11,
+    Error = 12,
+    MCPSrvConfig = 13,
+    ValidPortRequired = 14,
+    ValidationError = 15,
+    StartingServer = 16,
+    ErrorStartingServer = 17,
+    StoppingServer = 18,
+    MCPServerSettings = 19,
+    HostToolTip = 20,
+    PortToolTip = 21,
+    AllowedHostsTip = 22,
+    StartingError = 23,
+    StoppingError = 24,
 }
 
 public sealed class Plugin : LMPlugin
@@ -137,6 +153,9 @@ public sealed class Plugin : LMPlugin
     public override void LoadOptions(IniFile ini)
     {
         AutoStart = ini.ReadBool("GKMCPPlugin", "AutoStart", false);
+        if (AutoStart) {
+            StartAsync();
+        }
     }
 
     public override void SaveOptions(IniFile ini)

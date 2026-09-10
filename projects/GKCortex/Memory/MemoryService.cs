@@ -49,7 +49,10 @@ internal class MemoryService
             .OrderByDescending(x => x.Score).Take(topK).ToList();
 
         // Forming a context for the MCP server
-        string examples = $@"<memory>
+        var examples = new StringBuilder();
+        examples.Append("<memory>");
+        if (bestMatches.Count > 0) {
+            examples.Append($@"
 <instruction>
 This is data from memory. Use it in your answer and mention that you remembered it.
 </instruction>
@@ -61,12 +64,16 @@ This is data from memory. Use it in your answer and mention that you remembered 
 
 <guidance>
 {(bestMatches.Average(m => m.Score) < 0.5
-    ? "⚠️ Facts with low similarity were found. Pay particular attention to deviations in structure."
-    : "✅ The facts are relevant. Follow their structure.")}
+                ? "⚠️ Facts with low similarity were found. Pay particular attention to deviations in structure."
+                : "✅ The facts are relevant. Follow their structure.")}
 </guidance>
-</memory>";
+            ");
+        } else {
+            examples.Append("No data found.");
+        }
+        examples.Append("</memory>");
 
-        return examples;
+        return examples.ToString();
     }
 
     #endregion
