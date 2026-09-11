@@ -142,7 +142,7 @@ namespace GKCore.Controllers
         public async void CreateLocationRecord(IList<object> placesList)
         {
             try {
-                PlaceObj pObj = placesList.Count > 0 ? (PlaceObj)placesList[0] : null;
+                PlaceObj pObj = placesList.Count > 0 ? (PlaceObj)((FlatItem)placesList[0]).Tag : null;
                 if (pObj == null) return;
 
                 // for cases [*] and [**]
