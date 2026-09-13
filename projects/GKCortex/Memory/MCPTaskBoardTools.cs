@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json;
 using GKCore;
 using GKCortex.Features;
@@ -15,6 +16,37 @@ using GKCortex.MCP;
 using GKCortex.Protocols;
 
 namespace GKCortex.Memory;
+
+
+internal class GetActiveTasksTool : BaseTool
+{
+    public GetActiveTasksTool() : base("get_active_tasks") { }
+
+    public override MCPTool CreateTool()
+    {
+        return new MCPTool {
+            Name = Sign,
+            Description = "Retrieve the active genealogy research tasks",
+            InputSchema = new MCPToolInputSchema {
+                Properties = new Dictionary<string, MCPToolProperty> {
+                },
+                Required = new List<string> { "target_person", "goal_description" }
+            },
+            Annotations = new MCPToolAnnotations() {
+                ReadOnlyHint = true,
+            }
+        };
+    }
+
+    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    {
+        var sb = new StringBuilder();
+        var service = new MemoryService();
+        service.GetActiveTasks(sb);
+
+        return MCPContent.CreateSimpleContent(sb.ToString());
+    }
+}
 
 
 internal class CreateGenealogyTaskTool : BaseTool

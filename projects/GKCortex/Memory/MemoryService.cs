@@ -109,8 +109,16 @@ This is data from memory. Use it in your answer and mention that you remembered 
         }
         sb.AppendLine();
 
+        GetActiveTasks(sb);
+        sb.AppendLine("=================================================");
+
+        return sb.ToString();
+    }
+
+    public void GetActiveTasks(StringBuilder sb)
+    {
         var activeTasks = LLMDatabase.GetActiveTasks();
-        sb.AppendLine("[ACTIVE GENEALOGICAL TASKS IN PROGRESS]:");
+        sb.AppendLine("[ACTIVE GENEALOGICAL TASKS]:");
         if (activeTasks.Count > 0) {
             foreach (var task in activeTasks) {
                 sb.AppendLine($"* TASK ID: {task.TaskId}");
@@ -125,11 +133,8 @@ This is data from memory. Use it in your answer and mention that you remembered 
                 sb.AppendLine($"  Planned steps: {(nextSteps.Length > 0 ? string.Join(" -> ", nextSteps) : "not defined")}");
             }
         } else {
-            sb.AppendLine("- No active tasks. Any new complex user request should initiate task creation.");
+            sb.AppendLine("❌ No active tasks. Any new complex user request should initiate task creation.");
         }
-        sb.AppendLine("=================================================");
-
-        return sb.ToString();
     }
 
     /// <summary>

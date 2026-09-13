@@ -219,9 +219,10 @@ public class MCPController
             RegisterTool(new AddKnowledgeNodeTool(), true);
             RegisterTool(new ConnectKnowledgeNodesTool(), true);
 
-            /*RegisterTool(new CreateGenealogyTaskTool(), true);
+            RegisterTool(new GetActiveTasksTool(), true);
+            RegisterTool(new CreateGenealogyTaskTool(), true);
             RegisterTool(new UpdateTaskProgressTool(), true);
-            RegisterTool(new ChangeTaskStatusTool(), true);*/
+            RegisterTool(new ChangeTaskStatusTool(), true);
 
             RegisterTool(new GetUserProfileTool(), true);
             RegisterTool(new UpdateUserProfileTool(), true);
