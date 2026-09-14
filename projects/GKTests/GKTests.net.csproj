@@ -24,6 +24,7 @@
         </Reference>
         <ProjectReference Include="..\GKCore\GKCore.nstd.csproj" />
         <ProjectReference Include="..\GKCortex\GKCortex.csproj" />
+        <ProjectReference Include="..\plugins\GKMCPPlugin\GKMCPPlugin.csproj" />
     </ItemGroup>
 
 

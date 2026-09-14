@@ -1,6 +1,6 @@
 using System;
 using System.Text.Json;
-using GKCortex.RAG;
+using GKCortex.Tools;
 using NUnit.Framework;
 
 namespace GKCortex.Tests;

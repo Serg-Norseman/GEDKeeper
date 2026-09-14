@@ -21,7 +21,7 @@ namespace GKCortex.MCP;
 /// Tool Discovery & Execution Pattern ("progressive discovery").
 /// Supported: `search_tool` and `use_tool`.
 /// </summary>
-internal static class MCPToolDiscovery
+public static class MCPToolDiscovery
 {
     private record ToolMetadata(MCPTool Tool, string[] NameTags, string[] DescTags);
 
@@ -97,6 +97,8 @@ internal static class MCPToolDiscovery
 
     private static readonly string[] upsertTokens = new string[] { "add", "edit", "create", "update" };
 
+    public static HashSet<string> EnhancementTokens { get; private set; } = new HashSet<string>();
+
     private static void AdjustQueryLimit(ref string[] queryTokens, ref int limit)
     {
         // Increase limit based on RecordTypeMap terms found in query
@@ -104,7 +106,7 @@ internal static class MCPToolDiscovery
         int adjustedLimit = limit;
 
         int recordTypeMatches = 0;
-        foreach (var keyTok in RuntimeData.RecordTypeMap.Keys) {
+        foreach (var keyTok in EnhancementTokens) {
             if (queryTokens.Any(token => token.Equals(keyTok, StringComparison.OrdinalIgnoreCase))) {
                 recordTypeMatches++;
             }

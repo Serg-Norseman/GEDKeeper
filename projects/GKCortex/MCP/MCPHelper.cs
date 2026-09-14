@@ -19,9 +19,9 @@ public static class MCPHelper
 {
     private const int pageSize = 20;
 
-    internal delegate string RowBuilder(int index);
+    public delegate string RowBuilder(int index);
 
-    internal static List<MCPContent> PageableTable(string tableName, JsonElement args, int recordCount, RowBuilder buildRow)
+    public static List<MCPContent> PageableTable(string tableName, JsonElement args, int recordCount, RowBuilder buildRow)
     {
         if (recordCount == 0)
             return MCPContent.CreateSimpleContent($"No {tableName} in database.");
@@ -54,7 +54,7 @@ public static class MCPHelper
         return MCPContent.CreateSimpleContent(lines.ToString());
     }
 
-    internal static List<MCPContent> CreateImageContent(Stream imageStream, string mimeType, Role[] audience, float priority)
+    public static List<MCPContent> CreateImageContent(Stream imageStream, string mimeType, Role[] audience, float priority)
     {
         string base64Data;
         if (imageStream is MemoryStream memStream) {
@@ -68,7 +68,7 @@ public static class MCPHelper
         return MCPContent.CreateImageContent(base64Data, mimeType, audience, priority);
     }
 
-    internal static bool HasArg(JsonElement args, string argName)
+    public static bool HasArg(JsonElement args, string argName)
     {
         return args.TryGetProperty(argName, out var argElem);
     }
@@ -81,7 +81,7 @@ public static class MCPHelper
         return argElem;
     }
 
-    internal static string GetRequiredStr(JsonElement args, string argName)
+    public static string GetRequiredStr(JsonElement args, string argName)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.String)
             throw new ArgumentException($"Missing required argument: {argName}");
@@ -89,7 +89,7 @@ public static class MCPHelper
         return argElem.GetString()!;
     }
 
-    internal static int GetRequiredInt(JsonElement args, string argName)
+    public static int GetRequiredInt(JsonElement args, string argName)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.Number)
             throw new ArgumentException($"Missing required argument: {argName}");
@@ -97,7 +97,7 @@ public static class MCPHelper
         return argElem.GetInt32();
     }
 
-    internal static int GetOptionalInt(JsonElement args, string argName, int defaultValue)
+    public static int GetOptionalInt(JsonElement args, string argName, int defaultValue)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.Number)
             return defaultValue;
@@ -105,7 +105,7 @@ public static class MCPHelper
         return argElem.GetInt32();
     }
 
-    internal static string GetOptionalStr(JsonElement args, string argName, string defaultValue)
+    public static string GetOptionalStr(JsonElement args, string argName, string defaultValue)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.String)
             return defaultValue;
@@ -127,7 +127,7 @@ public static class MCPHelper
         return result.ToArray();
     }
 
-    internal static double GetOptionalDbl(JsonElement args, string argName, double defaultValue)
+    public static double GetOptionalDbl(JsonElement args, string argName, double defaultValue)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.Number)
             return defaultValue;
@@ -135,7 +135,7 @@ public static class MCPHelper
         return argElem.GetDouble();
     }
 
-    internal static bool GetOptionalBool(JsonElement args, string argName, bool defaultValue)
+    public static bool GetOptionalBool(JsonElement args, string argName, bool defaultValue)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.True && argElem.ValueKind != JsonValueKind.False)
             return defaultValue;
@@ -143,7 +143,7 @@ public static class MCPHelper
         return argElem.GetBoolean();
     }
 
-    internal static int? GetOptionalNullableInt(JsonElement args, string argName, int? defaultValue)
+    public static int? GetOptionalNullableInt(JsonElement args, string argName, int? defaultValue)
     {
         if (!args.TryGetProperty(argName, out var argElem) || argElem.ValueKind != JsonValueKind.Number)
             return defaultValue;
