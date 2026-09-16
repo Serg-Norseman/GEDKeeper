@@ -6,13 +6,15 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
 using GKCore.Utilities;
-using GKCortex.MCP;
-using GKCortex.Protocols;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -34,8 +36,11 @@ internal class IndiSearchTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string searchName = MCPHelper.GetRequiredStr(args, "name");
 
         var recList = baseContext.Tree.GetRecords(GDMRecordType.rtIndividual);
@@ -95,8 +100,11 @@ internal class IndividualUpsertTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string name = MCPHelper.GetOptionalStr(args, "name", null);
         string sexStr = MCPHelper.GetOptionalStr(args, "sex", null);
@@ -125,7 +133,7 @@ internal class IndividualUpsertTool : BaseTool
                 persName.Nickname = nickname;
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtIndividual);
             string resultName = GKUtils.GetNameString(indiRec, false);
             return MCPContent.CreateSimpleContent($"✅ Individual updated: {resultName} with XRef `{indiRec.XRef}`");
         } else {
@@ -148,7 +156,7 @@ internal class IndividualUpsertTool : BaseTool
                 persName.Nickname = nickname;
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtIndividual);
             string resultName = GKUtils.GetNameString(indiRec, false);
             return MCPContent.CreateSimpleContent($"✅ Individual added: {resultName} with XRef `{indiRec.XRef}`");
         }
@@ -174,8 +182,11 @@ internal class IndiListSpousesTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
@@ -221,8 +232,11 @@ internal class IndiListGroupsTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
         if (indiRec == null)

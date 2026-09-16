@@ -6,12 +6,14 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -33,8 +35,11 @@ internal class RecordListMultimediaTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
@@ -84,8 +89,11 @@ internal class RecordAddMultimediaLinkTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         string multimediaXRef = MCPHelper.GetRequiredStr(args, "multimedia_xref");
         bool isPrimary = MCPHelper.GetOptionalBool(args, "is_primary", false);
@@ -105,7 +113,7 @@ internal class RecordAddMultimediaLinkTool : BaseTool
         mmLink.XRef = multimediaXRef;
         mmLink.IsPrimary = isPrimary;
         record.MultimediaLinks.Add(mmLink);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         int linkIndex = record.MultimediaLinks.IndexOf(mmLink);
         return MCPContent.CreateSimpleContent($"✅ Multimedia link added to record '{recordXRef}' at index {linkIndex}: multimedia '{multimediaXRef}', primary {isPrimary}");
@@ -132,8 +140,11 @@ internal class RecordDeleteMultimediaLinkTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         int linkIndex = MCPHelper.GetOptionalInt(args, "link_index", -1);
 
@@ -151,7 +162,7 @@ internal class RecordDeleteMultimediaLinkTool : BaseTool
         string linkInfo = $"multimedia '{mmLink.XRef}', title '{mmLink.Title}', primary {mmLink.IsPrimary}";
 
         record.MultimediaLinks.RemoveAt(linkIndex);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         return MCPContent.CreateSimpleContent($"✅ Multimedia link removed from record '{recordXRef}' at index {linkIndex}: {linkInfo}");
     }

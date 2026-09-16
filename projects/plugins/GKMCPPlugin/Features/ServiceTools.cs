@@ -6,7 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using GKCortex.MCP;
+using ZLMKit.MCP;
 
 namespace GKMCPPlugin.Features;
 

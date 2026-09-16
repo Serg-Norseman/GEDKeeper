@@ -1363,6 +1363,14 @@ using GDModel.Providers.FamilyShow;
             Modified = true;
         }
 
+        public void SetExternalModified(GDMRecordType recordType)
+        {
+            AppHost.Instance.Invoke(() => {
+                SetModified();
+                fViewer?.RefreshRecordsView(recordType);
+            });
+        }
+
         /// <summary>
         /// This method performs a basic locking of the records for their
         /// editors.

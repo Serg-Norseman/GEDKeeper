@@ -6,12 +6,14 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -33,8 +35,11 @@ internal class GroupListMembersTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string groupXRef = MCPHelper.GetRequiredStr(args, "group_xref");
 
         var groupRec = baseContext.Tree.FindXRef<GDMGroupRecord>(groupXRef);
@@ -86,8 +91,11 @@ internal class GroupAddMemberTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string groupXRef = MCPHelper.GetRequiredStr(args, "group_xref");
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
@@ -103,7 +111,7 @@ internal class GroupAddMemberTool : BaseTool
             return MCPContent.CreateSimpleContent($"Individual {individualXRef} is already a member of group '{groupXRef}'.");
 
         groupRec.AddMember(indiRec);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         string indiName = GKUtils.GetNameString(indiRec, false);
         return MCPContent.CreateSimpleContent($"Individual added to group '{groupXRef}': {indiName} ({individualXRef})");
@@ -130,8 +138,11 @@ internal class GroupDeleteMemberTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string groupXRef = MCPHelper.GetRequiredStr(args, "group_xref");
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
@@ -147,7 +158,7 @@ internal class GroupDeleteMemberTool : BaseTool
             return MCPContent.CreateSimpleContent($"Individual {individualXRef} is not a member of group '{groupXRef}'.");
 
         groupRec.RemoveMember(indiRec);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         string indiName = GKUtils.GetNameString(indiRec, false);
         return MCPContent.CreateSimpleContent($"Individual removed from group '{groupXRef}': {indiName} ({individualXRef})");

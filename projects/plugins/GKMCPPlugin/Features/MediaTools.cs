@@ -14,9 +14,10 @@ using System.Text.Json;
 using GDModel;
 using GKCore;
 using GKCore.Media;
-using GKCortex.MCP;
-using GKCortex.Protocols;
 using GKMCPPlugin.Utilities;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -38,8 +39,11 @@ internal class MediaGetTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var mediaRec = baseContext.Tree.FindXRef<GDMMultimediaRecord>(xref);
@@ -152,8 +156,11 @@ internal class MediaUpsertTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string title = MCPHelper.GetOptionalStr(args, "title", null);
         string filePath = MCPHelper.GetOptionalStr(args, "file_path", null);
@@ -179,7 +186,7 @@ internal class MediaUpsertTool : BaseTool
                 fileRef.MediaType = mediaType;
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtMultimedia);
             return MCPContent.CreateSimpleContent($"✅ Multimedia record updated: {xref} - \"{fileRef.Title}\" ({mediaTypeStr})");
         } else {
             if (string.IsNullOrEmpty(title))
@@ -216,7 +223,7 @@ internal class MediaUpsertTool : BaseTool
             fileRef.Title = title;
             tree.AddRecord(mediaRec);
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtMultimedia);
             return MCPContent.CreateSimpleContent($"✅ Multimedia record added: {mediaRec.XRef} - \"{title}\" ({mediaTypeStr}, {storeTypeStr})");
         }
     }

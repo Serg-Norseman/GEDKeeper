@@ -6,13 +6,15 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
 using GKMCPPlugin.Utilities;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -34,8 +36,11 @@ internal class LocationListNamesTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string locationXRef = MCPHelper.GetRequiredStr(args, "location_xref");
 
         var locRec = baseContext.Tree.FindXRef<GDMLocationRecord>(locationXRef);
@@ -83,8 +88,11 @@ internal class LocationUpsertNameTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string locationXRef = MCPHelper.GetRequiredStr(args, "location_xref");
         int? nameIndex = MCPHelper.GetOptionalNullableInt(args, "name_index", null);
         string name = MCPHelper.GetOptionalStr(args, "name", null);
@@ -121,7 +129,7 @@ internal class LocationUpsertNameTool : BaseTool
 
             locRec.SortNames();
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtLocation);
             string nameInfo = $"'{locationName.StringValue}'";
             return MCPContent.CreateSimpleContent($"✅ Name updated for location '{locationXRef}' at index {index}: {nameInfo}");
         } else {
@@ -139,7 +147,7 @@ internal class LocationUpsertNameTool : BaseTool
 
             locRec.SortNames();
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtLocation);
             int newIndex = locRec.Names.IndexOf(locationName);
             return MCPContent.CreateSimpleContent($"✅ Name added to location '{locationXRef}' at index {newIndex}: '{name}'");
         }
@@ -166,8 +174,11 @@ internal class LocationDeleteNameTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string locationXRef = MCPHelper.GetRequiredStr(args, "location_xref");
         int nameIndex = MCPHelper.GetOptionalInt(args, "name_index", -1);
 
@@ -187,7 +198,7 @@ internal class LocationDeleteNameTool : BaseTool
         locRec.Names.RemoveAt(nameIndex);
 
         locRec.SortNames();
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtLocation);
 
         return MCPContent.CreateSimpleContent($"✅ Name removed from location '{locationXRef}' at index {nameIndex}: {nameInfo}");
     }

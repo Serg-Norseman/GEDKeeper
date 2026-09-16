@@ -6,14 +6,16 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
 using GKCore.Events;
-using GKCortex.MCP;
-using GKCortex.Protocols;
 using GKMCPPlugin.Utilities;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -36,8 +38,11 @@ internal class IndiListEventsTool : EventTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
@@ -68,8 +73,11 @@ internal class IndiDeleteEventTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
         int eventIndex = MCPHelper.GetOptionalInt(args, "event_index", -1);
 
@@ -87,7 +95,7 @@ internal class IndiDeleteEventTool : BaseTool
         string evtInfo = GKUtils.GetEventName(evt);
 
         indiRec.Events.RemoveAt(eventIndex);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         return MCPContent.CreateSimpleContent($"✅ Event removed from individual '{individualXRef}' at index {eventIndex}: {evtInfo}");
     }
@@ -123,8 +131,11 @@ internal class IndiUpsertEventTool : EventTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);

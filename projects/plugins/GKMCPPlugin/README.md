@@ -1,6 +1,6 @@
 # GKMCPPlugin or GKmcp (GEDKeeper MCP Server plugin)
 
-GKMCPPlugin is a plugin for GEDKeeper, designed to provide powerful tools for managing genealogical data
+GKMCPPlugin (GKmcp) is a plugin for GEDKeeper, designed to provide powerful tools for managing genealogical data
 through integration with LLM clients via the Model Context Protocol (MCP).
 
 ## MCP Tools
@@ -45,7 +45,7 @@ enabling LLM clients to interact with genealogical databases through a comprehen
 
 ## LM Assistant Roles
 
-GKcli includes specialized LM assistant role:
+GKmcp includes specialized LM assistant role:
 
 ### [Genus](../../../externals/assistants/Genus.md)
 A helpful AI assistant with a balanced approach to genealogical research. Adaptable and practical, focusing on breaking down complex queries into manageable parts while maintaining accuracy.

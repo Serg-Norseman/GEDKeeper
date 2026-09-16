@@ -310,6 +310,9 @@ Section "$(gkreq)"
     CreateDirectory "$INSTDIR\plugins"
     SetOutPath "$INSTDIR\plugins"
 
+    SetOutPath "$INSTDIR\plugins\runtimes"
+    File /r "..\plugins\runtimes\*.*"
+
     CreateDirectory "$INSTDIR\samples"
     SetOutPath "$INSTDIR\samples"
     File "..\samples\*.*"
@@ -577,6 +580,24 @@ SectionGroup /e "$(gkplg)"
     Section "$(gkp_navig)"
         SetOutPath "$INSTDIR\plugins"
         File "..\plugins\GKNavigatorPlugin.*"
+    SectionEnd
+
+    Section "MCP Server Plugin"
+        SetOutPath "$INSTDIR\plugins"
+        File "..\plugins\GKMCPPlugin.*"
+
+        File "..\plugins\ZLMKit.dll"
+        File "..\plugins\HtmlAgilityPack.dll"
+        File "..\plugins\SQLite*.*"
+        File "..\plugins\SmartComponents*.*"
+        File "..\plugins\Microsoft.ML.*.*"
+        File "..\plugins\FastBertTokenizer.dll"
+
+        File "..\plugins\Microsoft*.*"
+        File "..\plugins\System*.*"
+
+        SetOutPath "$INSTDIR\plugins\LocalEmbeddingsModel"
+        File /r "..\plugins\LocalEmbeddingsModel\*.*"
     SectionEnd
 SectionGroupEnd
 

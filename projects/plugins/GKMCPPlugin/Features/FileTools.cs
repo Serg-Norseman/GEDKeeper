@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json;
@@ -14,9 +15,10 @@ using GKCore;
 using GKCore.Options;
 using GKCore.Tools;
 using GKCore.Utilities;
-using GKCortex.MCP;
-using GKCortex.Protocols;
 using GKMCPPlugin.Utilities;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -33,8 +35,11 @@ internal class FileNewTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         baseContext.Clear();
         return MCPContent.CreateSimpleContent($"Database created. Records: {baseContext.Tree.RecordsCount}.");
     }
@@ -65,8 +70,11 @@ internal class FileLoadTool : FileTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string path = MCPHelper.GetRequiredStr(args, "path");
 
         var sw = Stopwatch.StartNew();
@@ -96,8 +104,11 @@ internal class FileSaveTool : FileTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string path = MCPHelper.GetRequiredStr(args, "path");
 
         var sw = Stopwatch.StartNew();
@@ -122,8 +133,11 @@ internal class FilePropsTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         var lines = new List<string> { "File properties" };
 
         GDMSubmitterRecord submitter = baseContext.Tree.GetSubmitter();
@@ -157,7 +171,7 @@ internal class FileRecentTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
         var result = new List<MCPContent>();
 
@@ -185,8 +199,11 @@ internal class FileReloadTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         var globOpts = GlobalOptions.Instance;
         if (globOpts.MRUFiles.Count == 0)
             return MCPContent.CreateSimpleContent("No recently opened files available.");
@@ -223,7 +240,7 @@ internal class FileSearchTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
         string path = MCPHelper.GetRequiredStr(args, "path");
 
@@ -252,8 +269,11 @@ internal class FileValidateTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         bool isUnknown = baseContext.IsUnknown();
         int recordsCount = baseContext.Tree.RecordsCount;
 
@@ -290,15 +310,18 @@ internal class FileMergeTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string path = MCPHelper.GetRequiredStr(args, "path");
 
         var textLog = new TextOutput();
 
         //var sw = Stopwatch.StartNew();
         TreeTools.MergeTreeFile(baseContext.Tree, path, textLog, true);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
         //sw.Stop();
         //return MCPContent.CreateSimpleContent($"Databases merged: {path}. Records: {baseContext.Tree.RecordsCount}. Time: {sw.Elapsed.TotalSeconds:F3}s.");
 

@@ -6,14 +6,16 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
 using GKMCPPlugin.Utilities;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -43,8 +45,11 @@ internal class CommunicationUpsertTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string name = MCPHelper.GetOptionalStr(args, "name", null);
         string typeStr = MCPHelper.GetOptionalStr(args, "type", null);
@@ -82,7 +87,7 @@ internal class CommunicationUpsertTool : BaseTool
                 commRec.SetCorresponder(commRec.CommDirection, corrRec);
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtCommunication);
             return MCPContent.CreateSimpleContent($"✅ Communication record updated: {commRec.XRef} - \"{name}\"");
         } else {
             if (string.IsNullOrEmpty(name))
@@ -116,7 +121,7 @@ internal class CommunicationUpsertTool : BaseTool
             commRec.Date.ParseString(date);
             commRec.SetCorresponder(dir, corrRec);
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtCommunication);
             return MCPContent.CreateSimpleContent($"✅ Communication record added: {commRec.XRef} - \"{name}\"");
         }
     }

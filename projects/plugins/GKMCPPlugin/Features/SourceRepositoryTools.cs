@@ -6,12 +6,14 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -34,8 +36,11 @@ internal class SourceListRepositoriesTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
         var sourceRec = baseContext.Tree.FindXRef<GDMSourceRecord>(sourceXRef);
         if (sourceRec == null)
@@ -85,8 +90,11 @@ internal class SourceAddRepositoryTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
         var sourceRec = baseContext.Tree.FindXRef<GDMSourceRecord>(sourceXRef);
         if (sourceRec == null)
@@ -101,7 +109,7 @@ internal class SourceAddRepositoryTool : BaseTool
             return MCPContent.CreateSimpleContent($"❌ Source {sourceXRef} already cites repository '{repositoryXRef}'.");
 
         sourceRec.AddRepository(repoRec);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         string repoName = GKUtils.GetRecordName(baseContext.Tree, repoRec, false);
         return MCPContent.CreateSimpleContent($"✅ Repository citation added to source '{sourceXRef}': {repoName} ({repositoryXRef})");
@@ -128,8 +136,11 @@ internal class SourceDeleteRepositoryTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
         var sourceRec = baseContext.Tree.FindXRef<GDMSourceRecord>(sourceXRef);
         if (sourceRec == null)
@@ -144,7 +155,7 @@ internal class SourceDeleteRepositoryTool : BaseTool
             return MCPContent.CreateSimpleContent($"❌ There is no citation for repository '{repositoryXRef}' in source {sourceXRef}.");
 
         sourceRec.RemoveRepository(repoRec);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         string repoName = GKUtils.GetRecordName(baseContext.Tree, repoRec, false);
         return MCPContent.CreateSimpleContent($"✅ Repository citation removed from source '{sourceXRef}': {repoName} ({repositoryXRef})");

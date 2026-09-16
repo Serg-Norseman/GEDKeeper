@@ -6,12 +6,14 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -36,8 +38,11 @@ internal class SourceUpsertTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string title = MCPHelper.GetOptionalStr(args, "title", null);
         string shortTitle = MCPHelper.GetOptionalStr(args, "short_title", null);
@@ -53,7 +58,7 @@ internal class SourceUpsertTool : BaseTool
             if (shortTitle != null) sourceRec.ShortTitle = shortTitle;
             if (author != null) sourceRec.Originator.Lines.Text = author;
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtSource);
             return MCPContent.CreateSimpleContent($"✅ Source updated: {title} with XRef `{sourceRec.XRef}`");
         } else {
             if (string.IsNullOrEmpty(title))
@@ -64,7 +69,7 @@ internal class SourceUpsertTool : BaseTool
             if (!string.IsNullOrEmpty(shortTitle)) sourceRec.ShortTitle = shortTitle;
             if (!string.IsNullOrEmpty(author)) sourceRec.Originator.Lines.Text = author;
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtSource);
             return MCPContent.CreateSimpleContent($"✅ Source added: {title} with XRef `{sourceRec.XRef}`");
         }
     }

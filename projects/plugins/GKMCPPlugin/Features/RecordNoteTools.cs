@@ -6,12 +6,14 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -33,8 +35,11 @@ internal class RecordListNotesTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
@@ -84,8 +89,11 @@ internal class RecordAddNoteTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         string noteXRef = MCPHelper.GetRequiredStr(args, "note_xref");
 
@@ -103,7 +111,7 @@ internal class RecordAddNoteTool : BaseTool
         var noteLink = new GDMNotes();
         noteLink.XRef = noteXRef;
         record.Notes.Add(noteLink);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         int noteIndex = record.Notes.IndexOf(noteLink);
         return MCPContent.CreateSimpleContent($"✅ Note link added to record '{recordXRef}' at index {noteIndex}: note '{noteXRef}'");
@@ -130,8 +138,11 @@ internal class RecordDeleteNoteTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         int noteIndex = MCPHelper.GetOptionalInt(args, "note_index", -1);
 
@@ -149,7 +160,7 @@ internal class RecordDeleteNoteTool : BaseTool
         string noteInfo = $"note '{noteLink.XRef}'";
 
         record.Notes.RemoveAt(noteIndex);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         return MCPContent.CreateSimpleContent($"✅ Note link removed from record '{recordXRef}' at index {noteIndex}: {noteInfo}");
     }

@@ -6,13 +6,15 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
 using GKMCPPlugin.Utilities;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -34,8 +36,11 @@ internal class LocationListTopLinksTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string locationXRef = MCPHelper.GetRequiredStr(args, "location_xref");
 
         var locRec = baseContext.Tree.FindXRef<GDMLocationRecord>(locationXRef);
@@ -84,8 +89,11 @@ internal class LocationUpsertTopLinkTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string locationXRef = MCPHelper.GetRequiredStr(args, "location_xref");
         int? topLinkIndex = MCPHelper.GetOptionalNullableInt(args, "top_link_index", null);
         string topLinkXRef = MCPHelper.GetOptionalStr(args, "top_link_xref", null);
@@ -121,7 +129,7 @@ internal class LocationUpsertTopLinkTool : BaseTool
 
             locRec.SortTopLevels();
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtNone);
             string topLinkInfo = $"'{topLink.StringValue}'";
             return MCPContent.CreateSimpleContent($"✅ Top-level link updated for location '{locationXRef}' at index {index}: {topLinkInfo}");
         } else {
@@ -141,7 +149,7 @@ internal class LocationUpsertTopLinkTool : BaseTool
 
             locRec.SortTopLevels();
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtNone);
             int newIndex = locRec.TopLevels.IndexOf(topLink);
             return MCPContent.CreateSimpleContent($"✅ Top-level link added to location '{locationXRef}' at index {newIndex}: '{topLinkXRef}'");
         }
@@ -168,8 +176,11 @@ internal class LocationDeleteTopLinkTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string locationXRef = MCPHelper.GetRequiredStr(args, "location_xref");
         int topLinkIndex = MCPHelper.GetOptionalInt(args, "top_link_index", -1);
 
@@ -189,7 +200,7 @@ internal class LocationDeleteTopLinkTool : BaseTool
         locRec.TopLevels.RemoveAt(topLinkIndex);
 
         locRec.SortTopLevels();
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         return MCPContent.CreateSimpleContent($"Top-level link removed from location '{locationXRef}' at index {topLinkIndex}: {topLinkInfo}");
     }

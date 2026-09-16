@@ -6,15 +6,17 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using GDModel;
 using GKCore;
 using GKCore.Locales;
-using GKCortex.MCP;
-using GKCortex.Protocols;
 using GKMCPPlugin.Utilities;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -36,8 +38,11 @@ internal class MediaListFilesTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var mediaRec = baseContext.Tree.FindXRef<GDMMultimediaRecord>(xref);
@@ -89,8 +94,11 @@ internal class MediaUpsertFileTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetRequiredStr(args, "xref");
         int? fileIndex = MCPHelper.GetOptionalNullableInt(args, "file_index", null);
         string title = MCPHelper.GetOptionalStr(args, "title", null);
@@ -125,7 +133,7 @@ internal class MediaUpsertFileTool : BaseTool
                 fileRef.MediaType = mediaType;
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtMultimedia);
             string fileInfo = $"\"{fileRef.Title}\", media type '{fileRef.MediaType}'";
             return MCPContent.CreateSimpleContent($"✅ File updated in multimedia record '{xref}' at index {index}: {fileInfo}");
         } else {
@@ -157,7 +165,7 @@ internal class MediaUpsertFileTool : BaseTool
             fileRef.MediaType = mediaType;
             fileRef.Title = title;
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtMultimedia);
             int newIndex = mediaRec.FileReferences.IndexOf(fileRef);
             return MCPContent.CreateSimpleContent($"✅ File added to multimedia record '{xref}' at index {newIndex}: \"{title}\" ({mediaTypeStr}, {storeTypeStr})");
         }
@@ -184,8 +192,11 @@ internal class MediaDeleteFileTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetRequiredStr(args, "xref");
         int fileIndex = MCPHelper.GetRequiredInt(args, "file_index");
 
@@ -203,7 +214,7 @@ internal class MediaDeleteFileTool : BaseTool
         string fileInfo = $"\"{fileRef.Title}\", media type '{fileRef.MediaType}'";
 
         mediaRec.FileReferences.RemoveAt(fileIndex);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtMultimedia);
 
         return MCPContent.CreateSimpleContent($"✅ File removed from multimedia record '{xref}' at index {fileIndex}: {fileInfo}");
     }

@@ -6,14 +6,16 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
 using GKMCPPlugin.Utilities;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -45,8 +47,11 @@ internal class ResearchUpsertTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string title = MCPHelper.GetOptionalStr(args, "title", null);
         string priorityStr = MCPHelper.GetOptionalStr(args, "priority", null);
@@ -91,7 +96,7 @@ internal class ResearchUpsertTool : BaseTool
                 resRec.Percent = percent;
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtResearch);
             return MCPContent.CreateSimpleContent($"✅ Research record updated: {resRec.XRef} - \"{resRec.ResearchName}\"");
         } else {
             if (string.IsNullOrEmpty(title))
@@ -130,7 +135,7 @@ internal class ResearchUpsertTool : BaseTool
                 resRec.Percent = 0;
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtResearch);
             return MCPContent.CreateSimpleContent($"✅ Research record added: {resRec.XRef} - \"{title}\"");
         }
     }

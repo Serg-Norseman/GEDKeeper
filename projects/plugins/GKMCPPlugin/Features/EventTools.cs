@@ -13,9 +13,10 @@ using GDModel;
 using GKCore;
 using GKCore.Controllers;
 using GKCore.Events;
-using GKCortex.MCP;
-using GKCortex.Protocols;
 using GKMCPPlugin.Utilities;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -49,7 +50,7 @@ internal abstract class EventTool : BaseTool
         return MCPContent.CreateSimpleContent(string.Join("\n", rows));
     }
 
-    protected static List<MCPContent> GetEventsList(BaseContext baseContext, string recName, GDMRecordWithEvents recordWithEvents)
+    protected static List<MCPContent> GetEventsList(BaseContext context, string recName, GDMRecordWithEvents recordWithEvents)
     {
         if (!recordWithEvents.HasEvents)
             return MCPContent.CreateSimpleContent($"{TextHelper.ToUpperFirst(recName)} '{recordWithEvents.XRef}' has no events.");
@@ -159,7 +160,7 @@ internal abstract class EventTool : BaseTool
                 }
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtNone);
             string evtName = GKUtils.GetEventName(evt);
             return MCPContent.CreateSimpleContent($"✅ Event '{evtName}' updated to {recName} '{record.XRef}' at index {eventIndex}");
         } else {
@@ -244,7 +245,7 @@ internal abstract class EventTool : BaseTool
 
             record.Events.Add(newEvent);
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtNone);
             return MCPContent.CreateSimpleContent($"✅ Event '{argType}' added to {recName} '{record.XRef}' at index {record.Events.Count - 1}");
         }
     }
@@ -272,7 +273,7 @@ internal class EventTypeListTool : EventTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
         string recordTypeStr = MCPHelper.GetRequiredStr(args, "record_type");
         if (!RuntimeData.RWETypeMap.TryGetValue(recordTypeStr, out EventTarget eventTarget)) {
@@ -298,7 +299,7 @@ internal class GEDCOMDateSpecTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
         return MCPContent.CreateSimpleContent(RuntimeData.GetDateSpec(), [Role.Assistant], 1.0f);
     }
@@ -319,7 +320,7 @@ internal class GEDCOMDateSpecResource : BaseResource
         };
     }
 
-    public override List<MCPResourceContents> Get(BaseContext baseContext)
+    public override List<MCPResourceContents> Get(IRuntimeContext context)
     {
         return new List<MCPResourceContents> {
             new MCPResourceContents {

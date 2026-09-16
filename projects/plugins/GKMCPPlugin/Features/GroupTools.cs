@@ -6,12 +6,14 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -34,8 +36,11 @@ internal class GroupUpsertTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string name = MCPHelper.GetOptionalStr(args, "name", null);
 
@@ -49,7 +54,7 @@ internal class GroupUpsertTool : BaseTool
                 groupRec.GroupName = name;
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtGroup);
             return MCPContent.CreateSimpleContent($"✅ Group record updated: {groupRec.XRef} - \"{groupRec.GroupName}\"");
         } else {
             if (string.IsNullOrEmpty(name))
@@ -58,7 +63,7 @@ internal class GroupUpsertTool : BaseTool
             var groupRec = baseContext.Tree.CreateGroup();
             groupRec.GroupName = name;
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtGroup);
             return MCPContent.CreateSimpleContent($"✅ Group added: {name} with XRef `{groupRec.XRef}`");
         }
     }

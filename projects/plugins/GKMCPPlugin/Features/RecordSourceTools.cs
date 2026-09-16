@@ -6,12 +6,14 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -33,8 +35,11 @@ internal class RecordListSourceCitationsTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
@@ -89,8 +94,11 @@ internal class RecordAddSourceCitationTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         string sourceXRef = MCPHelper.GetRequiredStr(args, "source_xref");
         string page = MCPHelper.GetOptionalStr(args, "page", string.Empty);
@@ -112,7 +120,7 @@ internal class RecordAddSourceCitationTool : BaseTool
         citation.Page = page;
         citation.CertaintyAssessment = certainty;
         record.SourceCitations.Add(citation);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         int citIndex = record.SourceCitations.IndexOf(citation);
         return MCPContent.CreateSimpleContent($"✅ Source citation added to record '{recordXRef}' at index {citIndex}: source '{sourceXRef}', page '{page}', certainty {certainty}");
@@ -139,8 +147,11 @@ internal class RecordDeleteSourceCitationTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         int citationIndex = MCPHelper.GetOptionalInt(args, "citation_index", -1);
 
@@ -158,7 +169,7 @@ internal class RecordDeleteSourceCitationTool : BaseTool
         string citInfo = $"source '{citation.XRef}', page '{citation.Page}', certainty {citation.CertaintyAssessment}";
 
         record.SourceCitations.RemoveAt(citationIndex);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         return MCPContent.CreateSimpleContent($"✅ Source citation removed from record '{recordXRef}' at index {citationIndex}: {citInfo}");
     }

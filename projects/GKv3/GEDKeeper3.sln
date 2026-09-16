@@ -78,6 +78,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKGenetixPlugin.net", "..\p
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKTests.net", "..\GKTests\GKTests.net.csproj", "{32521FE6-112C-4095-B0A8-755C5C94D00A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKMCPPlugin", "..\plugins\GKMCPPlugin\GKMCPPlugin.csproj", "{2370809A-2667-4698-8153-4B27A020C5E2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "llm", "llm", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\externals\assistants\Genus.md = ..\..\externals\assistants\Genus.md
+		..\..\externals\assistants\README_ru.md = ..\..\externals\assistants\README_ru.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|FreeBSD = Debug|FreeBSD
@@ -452,6 +460,26 @@ Global
 		{32521FE6-112C-4095-B0A8-755C5C94D00A}.Release|MacOS.Build.0 = Release|Any CPU
 		{32521FE6-112C-4095-B0A8-755C5C94D00A}.Release|MSWin64.ActiveCfg = Release|Any CPU
 		{32521FE6-112C-4095-B0A8-755C5C94D00A}.Release|MSWin64.Build.0 = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|FreeBSD.ActiveCfg = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|FreeBSD.Build.0 = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|Linux.ActiveCfg = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|Linux.Build.0 = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|Linux_ARM.ActiveCfg = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|Linux_ARM.Build.0 = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|MacOS.ActiveCfg = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|MacOS.Build.0 = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|MSWin64.ActiveCfg = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Debug|MSWin64.Build.0 = Debug|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|FreeBSD.ActiveCfg = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|FreeBSD.Build.0 = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|Linux.ActiveCfg = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|Linux.Build.0 = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|Linux_ARM.ActiveCfg = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|Linux_ARM.Build.0 = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|MacOS.ActiveCfg = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|MacOS.Build.0 = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|MSWin64.ActiveCfg = Release|Any CPU
+		{2370809A-2667-4698-8153-4B27A020C5E2}.Release|MSWin64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -471,6 +499,7 @@ Global
 		{88D5D8A9-8495-40DB-A53A-EEBA47312751} = {B8B3F590-CF25-40FC-8454-D673B594DBF3}
 		{751A8DFC-D527-45B0-AF9A-0F2FB9C9251E} = {B8B3F590-CF25-40FC-8454-D673B594DBF3}
 		{D2BCF181-9B1A-4A37-B197-9CB39359BE18} = {B8B3F590-CF25-40FC-8454-D673B594DBF3}
+		{2370809A-2667-4698-8153-4B27A020C5E2} = {B8B3F590-CF25-40FC-8454-D673B594DBF3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C05CBCB7-0B24-41CC-8BDC-E5BB79045E5D}

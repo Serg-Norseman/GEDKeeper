@@ -6,15 +6,17 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
 using GKMCPPlugin.Utilities;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -42,8 +44,11 @@ internal class TaskUpsertTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string goal = MCPHelper.GetOptionalStr(args, "goal", null);
         string priorityStr = MCPHelper.GetOptionalStr(args, "priority", null);
@@ -83,7 +88,7 @@ internal class TaskUpsertTool : BaseTool
                 taskRec.StopDate.ParseString(stopDate);
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtTask);
             return MCPContent.CreateSimpleContent($"✅ Task record updated: {taskRec.XRef}");
         } else {
             if (string.IsNullOrEmpty(goal))
@@ -110,7 +115,7 @@ internal class TaskUpsertTool : BaseTool
             if (startDate != null) taskRec.StartDate.ParseString(startDate);
             if (stopDate != null) taskRec.StopDate.ParseString(stopDate);
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtTask);
             return MCPContent.CreateSimpleContent($"✅ Task record added: {taskRec.XRef} - \"{goalName}\"");
         }
     }

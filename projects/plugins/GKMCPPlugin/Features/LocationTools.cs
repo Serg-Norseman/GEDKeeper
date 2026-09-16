@@ -6,12 +6,14 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -36,8 +38,11 @@ internal class LocationUpsertTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string name = MCPHelper.GetOptionalStr(args, "name", null);
         bool hasLati = MCPHelper.HasArg(args, "lati");
@@ -63,7 +68,7 @@ internal class LocationUpsertTool : BaseTool
                 locRec.Map.Long = lng;
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtLocation);
             return MCPContent.CreateSimpleContent($"✅ Location record updated: {locRec.XRef} - \"{locRec.LocationName}\"");
         } else {
             if (string.IsNullOrEmpty(name))
@@ -80,7 +85,7 @@ internal class LocationUpsertTool : BaseTool
                 locRec.Map.Long = lng;
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtLocation);
             return MCPContent.CreateSimpleContent($"✅ Location record added: {locRec.XRef} - \"{name}\"");
         }
     }

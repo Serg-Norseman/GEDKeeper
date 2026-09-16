@@ -6,12 +6,14 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -36,8 +38,11 @@ internal class FamilyUpsertTool : BaseTool
     }
 
     // TODO: Logic for the case when one of the spouses is unknown
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string husbandXRef = MCPHelper.GetOptionalStr(args, "husband_xref", null);
         string wifeXRef = MCPHelper.GetOptionalStr(args, "wife_xref", null);
@@ -72,7 +77,7 @@ internal class FamilyUpsertTool : BaseTool
                 }
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtFamily);
             return MCPContent.CreateSimpleContent($"✅ Family with XRef `{familyRec.XRef}` updated: husband {husbandXRef}, wife {wifeXRef}");
         } else {
             //return MCPContent.CreateSimpleContent("❌ 'husband_xref' required for new family");
@@ -97,7 +102,7 @@ internal class FamilyUpsertTool : BaseTool
                 familyRec.AddSpouse(wifeRec);
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtFamily);
 
             return MCPContent.CreateSimpleContent($"✅ Family with XRef `{familyRec.XRef}` added: husband {husbandXRef}, wife {wifeXRef}");
         }

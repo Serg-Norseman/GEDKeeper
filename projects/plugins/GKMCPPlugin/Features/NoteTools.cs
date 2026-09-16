@@ -6,12 +6,14 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -34,8 +36,11 @@ internal class NoteUpsertTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string text = MCPHelper.GetOptionalStr(args, "text", null);
 
@@ -47,7 +52,7 @@ internal class NoteUpsertTool : BaseTool
 
             if (text != null) noteRec.Lines.Text = text;
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtNote);
             string preview = (text != null && text.Length > 10) ? text.Substring(0, 10) + "..." : text;
             return MCPContent.CreateSimpleContent($"✅ Note updated: {preview} with XRef `{noteRec.XRef}`");
         } else {
@@ -57,7 +62,7 @@ internal class NoteUpsertTool : BaseTool
             var noteRec = baseContext.Tree.CreateNote();
             noteRec.Lines.Text = text;
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtNote);
             string preview = (text != null && text.Length > 10) ? text.Substring(0, 10) + "..." : text;
             return MCPContent.CreateSimpleContent($"✅ Note added: {text} with XRef `{noteRec.XRef}`");
         }

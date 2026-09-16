@@ -6,12 +6,14 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -33,8 +35,11 @@ internal class RecordListUserRefsTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(recordXRef);
@@ -79,8 +84,11 @@ internal class RecordAddUserRefTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         string stringValue = MCPHelper.GetRequiredStr(args, "string_value");
         string referenceType = MCPHelper.GetOptionalStr(args, "reference_type", string.Empty);
@@ -96,7 +104,7 @@ internal class RecordAddUserRefTool : BaseTool
         userRef.StringValue = stringValue;
         userRef.ReferenceType = referenceType;
         record.UserReferences.Add(userRef);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         int refIndex = record.UserReferences.IndexOf(userRef);
         return MCPContent.CreateSimpleContent($"✅ User reference added to record '{recordXRef}' at index {refIndex}: \"{stringValue}\" ({referenceType})");
@@ -123,8 +131,11 @@ internal class RecordDeleteUserRefTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string recordXRef = MCPHelper.GetRequiredStr(args, "record_xref");
         int referenceIndex = MCPHelper.GetOptionalInt(args, "reference_index", -1);
 
@@ -142,7 +153,7 @@ internal class RecordDeleteUserRefTool : BaseTool
         string refInfo = $"\"{userRef.StringValue}\" ({userRef.ReferenceType})";
 
         record.UserReferences.RemoveAt(referenceIndex);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         return MCPContent.CreateSimpleContent($"✅ User reference removed from record '{recordXRef}' at index {referenceIndex}: {refInfo}");
     }

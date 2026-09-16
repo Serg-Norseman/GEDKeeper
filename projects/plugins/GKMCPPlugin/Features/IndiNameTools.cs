@@ -6,14 +6,16 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
 using GKMCPPlugin.Utilities;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -35,8 +37,11 @@ internal class IndiListPersonalNamesTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
@@ -95,8 +100,11 @@ internal class IndiUpsertPersonalNameTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
         int? nameIndex = MCPHelper.GetOptionalNullableInt(args, "name_index", null);
         string given = MCPHelper.GetOptionalStr(args, "given", null);
@@ -185,7 +193,7 @@ internal class IndiUpsertPersonalNameTool : BaseTool
                 personalName.CensusName = censusName;
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtIndividual);
             string nameInfo = $"{personalName.FullName}";
             return MCPContent.CreateSimpleContent($"✅ Personal name updated for individual '{individualXRef}' at index {index}: {nameInfo}");
         } else {
@@ -249,7 +257,7 @@ internal class IndiUpsertPersonalNameTool : BaseTool
 
             indiRec.AddPersonalName(personalName);
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtIndividual);
             int newIndex = indiRec.PersonalNames.IndexOf(personalName);
             return MCPContent.CreateSimpleContent($"✅ Personal name added to individual '{individualXRef}' at index {newIndex}: {personalName.FullName}");
         }
@@ -276,8 +284,11 @@ internal class IndiDeletePersonalNameTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
         int nameIndex = MCPHelper.GetOptionalInt(args, "name_index", -1);
 
@@ -295,7 +306,7 @@ internal class IndiDeletePersonalNameTool : BaseTool
         string nameInfo = $"{personalName.FullName}";
 
         indiRec.PersonalNames.RemoveAt(nameIndex);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtIndividual);
 
         return MCPContent.CreateSimpleContent($"✅ Personal name removed from individual '{individualXRef}' at index {nameIndex}: {nameInfo}");
     }

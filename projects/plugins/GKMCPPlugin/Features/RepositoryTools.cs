@@ -6,12 +6,14 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -34,8 +36,11 @@ internal class RepositoryUpsertTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetOptionalStr(args, "xref", null);
         string name = MCPHelper.GetOptionalStr(args, "name", null);
 
@@ -49,7 +54,7 @@ internal class RepositoryUpsertTool : BaseTool
                 repoRec.RepositoryName = name;
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtRepository);
             return MCPContent.CreateSimpleContent($"✅ Repository record updated: {repoRec.XRef} - \"{repoRec.RepositoryName}\"");
         } else {
             if (string.IsNullOrEmpty(name))
@@ -58,7 +63,7 @@ internal class RepositoryUpsertTool : BaseTool
             var repoRec = baseContext.Tree.CreateRepository();
             repoRec.RepositoryName = name;
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtRepository);
             return MCPContent.CreateSimpleContent($"✅ Repository added: {name} with XRef `{repoRec.XRef}`");
         }
     }

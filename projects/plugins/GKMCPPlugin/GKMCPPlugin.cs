@@ -11,12 +11,13 @@ using System.Reflection;
 using System.Threading.Tasks;
 using BSLib;
 using GKCore;
+using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Locales;
 using GKCore.Plugins;
-using GKCortex.MCP;
 using GKMCPPlugin.Features;
 using GKMCPPlugin.Utilities;
+using ZLMKit.MCP;
 
 [assembly: AssemblyTitle("GKMCPPlugin")]
 [assembly: AssemblyDescription("GEDKeeper MCP Server plugin")]
@@ -61,11 +62,12 @@ public enum PLS
     StoppingError = 24,
 }
 
-public sealed class Plugin : OrdinaryPlugin
+public sealed class Plugin : WidgetPlugin
 {
     private string fDisplayName = "GKMCPPlugin";
     private ILangMan fLangMan;
     private MCPServer fMCPServer;
+    private RuntimeContext fRuntimeContext;
 
 
     public override string DisplayName { get { return fDisplayName; } }
@@ -76,21 +78,20 @@ public sealed class Plugin : OrdinaryPlugin
 
     public Plugin()
     {
-        InitFeatures(embedded: true, pureMode: false, tdeMode: true, ragMode: true);
     }
 
-    protected override void Dispose(bool disposing)
+    public override void BaseChanged(IBaseWindow baseWin)
     {
-        if (disposing) {
-        }
-        base.Dispose(disposing);
+        fRuntimeContext.BaseContext = baseWin.Context;
+    }
+
+    public override void BaseClosed(IBaseWindow baseWin)
+    {
+        fRuntimeContext.BaseContext = null;
     }
 
     public override void Execute()
     {
-        var baseWin = Host.GetCurrentFile();
-        MCPController.SetContext(baseWin.Context);
-
         using (var dlg = new MCPServerForm(this, fLangMan)) {
             dlg.ShowModal();
         }
@@ -110,7 +111,14 @@ public sealed class Plugin : OrdinaryPlugin
     {
         bool result = base.Startup(host);
         try {
+            RuntimeContext.Initialize();
+
             fMCPServer = new MCPServer();
+            fRuntimeContext = new RuntimeContext(fMCPServer);
+            fMCPServer.Context = fRuntimeContext;
+
+            InitFeatures(fMCPServer, embedded: true, pureMode: false, tdeMode: true, ragMode: true);
+
             return result;
         } catch (Exception ex) {
             Logger.WriteError("GKMCPPlugin.Startup()", ex);
@@ -122,6 +130,7 @@ public sealed class Plugin : OrdinaryPlugin
     {
         bool result = true;
         try {
+            StopAsync();
         } catch (Exception ex) {
             Logger.WriteError("GKMCPPlugin.Shutdown()", ex);
             result = false;
@@ -170,158 +179,157 @@ public sealed class Plugin : OrdinaryPlugin
 
     #region MCP Features
 
-    public static void InitFeatures(bool embedded, bool pureMode, bool tdeMode, bool ragMode)
+    public static void InitFeatures(MCPServer mcpServer, bool embedded, bool pureMode, bool tdeMode, bool ragMode)
     {
-        foreach (var keyTok in RuntimeData.RecordTypeMap.Keys)
-            MCPToolDiscovery.EnhancementTokens.Add(keyTok);
+        MCPToolDiscovery.SetQueryEqualizer(new QueryEqualizer());
 
-        MCPController.InitFeatures(tdeMode, ragMode);
+        mcpServer.InitFeatures(tdeMode, ragMode);
 
         // Files operations
         if (!embedded) {
-            MCPController.RegisterTool(new FileNewTool());
-            MCPController.RegisterTool(new FileLoadTool());
-            MCPController.RegisterTool(new FileSaveTool());
-            MCPController.RegisterTool(new FileRecentTool());
-            MCPController.RegisterTool(new FileReloadTool());
-            MCPController.RegisterTool(new FileSearchTool());
+            mcpServer.RegisterTool(new FileNewTool());
+            mcpServer.RegisterTool(new FileLoadTool());
+            mcpServer.RegisterTool(new FileSaveTool());
+            mcpServer.RegisterTool(new FileRecentTool());
+            mcpServer.RegisterTool(new FileReloadTool());
+            mcpServer.RegisterTool(new FileSearchTool());
         }
-        MCPController.RegisterTool(new FilePropsTool());
-        MCPController.RegisterTool(new FileValidateTool());
-        MCPController.RegisterTool(new FileMergeTool());
+        mcpServer.RegisterTool(new FilePropsTool());
+        mcpServer.RegisterTool(new FileValidateTool());
+        mcpServer.RegisterTool(new FileMergeTool());
 
         // Records operations
-        MCPController.RegisterTool(new RecordListTool());
-        MCPController.RegisterTool(new RecordInfoTool());
-        MCPController.RegisterTool(new RecordDeleteTool());
-        MCPController.RegisterTool(new RecordSearchTool());
-        MCPController.RegisterTool(new RecordSetRestrictionTool());
-        MCPController.RegisterTool(new RecordMergeTool());
+        mcpServer.RegisterTool(new RecordListTool());
+        mcpServer.RegisterTool(new RecordInfoTool());
+        mcpServer.RegisterTool(new RecordDeleteTool());
+        mcpServer.RegisterTool(new RecordSearchTool());
+        mcpServer.RegisterTool(new RecordSetRestrictionTool());
+        mcpServer.RegisterTool(new RecordMergeTool());
 
-        MCPController.RegisterTool(new RecordAddUserRefTool());
-        MCPController.RegisterTool(new RecordDeleteUserRefTool());
-        MCPController.RegisterTool(new RecordListUserRefsTool());
+        mcpServer.RegisterTool(new RecordAddUserRefTool());
+        mcpServer.RegisterTool(new RecordDeleteUserRefTool());
+        mcpServer.RegisterTool(new RecordListUserRefsTool());
 
-        MCPController.RegisterTool(new RecordAddSourceCitationTool());
-        MCPController.RegisterTool(new RecordDeleteSourceCitationTool());
-        MCPController.RegisterTool(new RecordListSourceCitationsTool());
+        mcpServer.RegisterTool(new RecordAddSourceCitationTool());
+        mcpServer.RegisterTool(new RecordDeleteSourceCitationTool());
+        mcpServer.RegisterTool(new RecordListSourceCitationsTool());
 
-        MCPController.RegisterTool(new RecordAddMultimediaLinkTool());
-        MCPController.RegisterTool(new RecordDeleteMultimediaLinkTool());
-        MCPController.RegisterTool(new RecordListMultimediaTool());
+        mcpServer.RegisterTool(new RecordAddMultimediaLinkTool());
+        mcpServer.RegisterTool(new RecordDeleteMultimediaLinkTool());
+        mcpServer.RegisterTool(new RecordListMultimediaTool());
 
-        MCPController.RegisterTool(new RecordAddNoteTool());
-        MCPController.RegisterTool(new RecordDeleteNoteTool());
-        MCPController.RegisterTool(new RecordListNotesTool());
+        mcpServer.RegisterTool(new RecordAddNoteTool());
+        mcpServer.RegisterTool(new RecordDeleteNoteTool());
+        mcpServer.RegisterTool(new RecordListNotesTool());
 
         // Events
-        MCPController.RegisterTool(new EventTypeListTool());
-        MCPController.RegisterTool(new GEDCOMDateSpecTool());
-        MCPController.RegisterResource(new GEDCOMDateSpecResource());
+        mcpServer.RegisterTool(new EventTypeListTool());
+        mcpServer.RegisterTool(new GEDCOMDateSpecTool());
+        mcpServer.RegisterResource(new GEDCOMDateSpecResource());
 
         // Individuals operations
-        MCPController.RegisterTool(new IndiSearchTool());
-        MCPController.RegisterTool(new IndividualUpsertTool());
+        mcpServer.RegisterTool(new IndiSearchTool());
+        mcpServer.RegisterTool(new IndividualUpsertTool());
 
-        MCPController.RegisterTool(new IndiListSpousesTool()); // editing with family tools
+        mcpServer.RegisterTool(new IndiListSpousesTool()); // editing with family tools
 
-        MCPController.RegisterTool(new IndiListAssociationsTool());
-        MCPController.RegisterTool(new IndiUpsertAssociationTool());
-        MCPController.RegisterTool(new IndiDeleteAssociationTool());
+        mcpServer.RegisterTool(new IndiListAssociationsTool());
+        mcpServer.RegisterTool(new IndiUpsertAssociationTool());
+        mcpServer.RegisterTool(new IndiDeleteAssociationTool());
 
-        MCPController.RegisterTool(new IndiListEventsTool());
-        MCPController.RegisterTool(new IndiUpsertEventTool());
-        MCPController.RegisterTool(new IndiDeleteEventTool());
+        mcpServer.RegisterTool(new IndiListEventsTool());
+        mcpServer.RegisterTool(new IndiUpsertEventTool());
+        mcpServer.RegisterTool(new IndiDeleteEventTool());
 
-        MCPController.RegisterTool(new IndiListPersonalNamesTool());
-        MCPController.RegisterTool(new IndiUpsertPersonalNameTool());
-        MCPController.RegisterTool(new IndiDeletePersonalNameTool());
+        mcpServer.RegisterTool(new IndiListPersonalNamesTool());
+        mcpServer.RegisterTool(new IndiUpsertPersonalNameTool());
+        mcpServer.RegisterTool(new IndiDeletePersonalNameTool());
 
         // Families operations
-        MCPController.RegisterTool(new FamilyUpsertTool());
+        mcpServer.RegisterTool(new FamilyUpsertTool());
 
-        MCPController.RegisterTool(new FamAddChildTool());
-        MCPController.RegisterTool(new FamDeleteChildTool());
-        MCPController.RegisterTool(new FamListChildrenTool());
+        mcpServer.RegisterTool(new FamAddChildTool());
+        mcpServer.RegisterTool(new FamDeleteChildTool());
+        mcpServer.RegisterTool(new FamListChildrenTool());
 
-        MCPController.RegisterTool(new FamListEventsTool());
-        MCPController.RegisterTool(new FamUpsertEventTool());
-        MCPController.RegisterTool(new FamDeleteEventTool());
+        mcpServer.RegisterTool(new FamListEventsTool());
+        mcpServer.RegisterTool(new FamUpsertEventTool());
+        mcpServer.RegisterTool(new FamDeleteEventTool());
 
         // Notes operations
-        MCPController.RegisterTool(new NoteUpsertTool());
+        mcpServer.RegisterTool(new NoteUpsertTool());
 
         // Multimedia operations
-        MCPController.RegisterTool(new MediaUpsertTool());
-        MCPController.RegisterTool(new MediaGetTool());
+        mcpServer.RegisterTool(new MediaUpsertTool());
+        mcpServer.RegisterTool(new MediaGetTool());
 
-        MCPController.RegisterTool(new MediaListFilesTool());
-        MCPController.RegisterTool(new MediaUpsertFileTool());
-        MCPController.RegisterTool(new MediaDeleteFileTool());
+        mcpServer.RegisterTool(new MediaListFilesTool());
+        mcpServer.RegisterTool(new MediaUpsertFileTool());
+        mcpServer.RegisterTool(new MediaDeleteFileTool());
 
         // Sources operations
-        MCPController.RegisterTool(new SourceUpsertTool());
+        mcpServer.RegisterTool(new SourceUpsertTool());
 
-        MCPController.RegisterTool(new SourceListRepositoriesTool());
-        MCPController.RegisterTool(new SourceAddRepositoryTool());
-        MCPController.RegisterTool(new SourceDeleteRepositoryTool());
+        mcpServer.RegisterTool(new SourceListRepositoriesTool());
+        mcpServer.RegisterTool(new SourceAddRepositoryTool());
+        mcpServer.RegisterTool(new SourceDeleteRepositoryTool());
 
         // Repositories operations
-        MCPController.RegisterTool(new RepositoryUpsertTool());
+        mcpServer.RegisterTool(new RepositoryUpsertTool());
 
         if (!pureMode) {
-            MCPController.RegisterTool(new IndiListGroupsTool()); // editing with group tools
+            mcpServer.RegisterTool(new IndiListGroupsTool()); // editing with group tools
 
             // Groups operations
-            MCPController.RegisterTool(new GroupUpsertTool());
+            mcpServer.RegisterTool(new GroupUpsertTool());
 
-            MCPController.RegisterTool(new GroupListMembersTool());
-            MCPController.RegisterTool(new GroupAddMemberTool());
-            MCPController.RegisterTool(new GroupDeleteMemberTool());
+            mcpServer.RegisterTool(new GroupListMembersTool());
+            mcpServer.RegisterTool(new GroupAddMemberTool());
+            mcpServer.RegisterTool(new GroupDeleteMemberTool());
 
             // Tasks operations
-            MCPController.RegisterTool(new TaskUpsertTool());
+            mcpServer.RegisterTool(new TaskUpsertTool());
 
             // Researches operations
-            MCPController.RegisterTool(new ResearchUpsertTool());
+            mcpServer.RegisterTool(new ResearchUpsertTool());
 
-            MCPController.RegisterTool(new ResearchListTasksTool());
-            MCPController.RegisterTool(new ResearchAddTaskTool());
-            MCPController.RegisterTool(new ResearchDeleteTaskTool());
+            mcpServer.RegisterTool(new ResearchListTasksTool());
+            mcpServer.RegisterTool(new ResearchAddTaskTool());
+            mcpServer.RegisterTool(new ResearchDeleteTaskTool());
 
-            MCPController.RegisterTool(new ResearchListCommunicationsTool());
-            MCPController.RegisterTool(new ResearchAddCommunicationTool());
-            MCPController.RegisterTool(new ResearchDeleteCommunicationTool());
+            mcpServer.RegisterTool(new ResearchListCommunicationsTool());
+            mcpServer.RegisterTool(new ResearchAddCommunicationTool());
+            mcpServer.RegisterTool(new ResearchDeleteCommunicationTool());
 
-            MCPController.RegisterTool(new ResearchListGroupsTool());
-            MCPController.RegisterTool(new ResearchAddGroupTool());
-            MCPController.RegisterTool(new ResearchDeleteGroupTool());
+            mcpServer.RegisterTool(new ResearchListGroupsTool());
+            mcpServer.RegisterTool(new ResearchAddGroupTool());
+            mcpServer.RegisterTool(new ResearchDeleteGroupTool());
 
             // Communications operations
-            MCPController.RegisterTool(new CommunicationUpsertTool());
+            mcpServer.RegisterTool(new CommunicationUpsertTool());
 
             // Locations operations
-            MCPController.RegisterTool(new LocationUpsertTool());
+            mcpServer.RegisterTool(new LocationUpsertTool());
 
-            MCPController.RegisterTool(new LocationListNamesTool());
-            MCPController.RegisterTool(new LocationUpsertNameTool());
-            MCPController.RegisterTool(new LocationDeleteNameTool());
+            mcpServer.RegisterTool(new LocationListNamesTool());
+            mcpServer.RegisterTool(new LocationUpsertNameTool());
+            mcpServer.RegisterTool(new LocationDeleteNameTool());
 
-            MCPController.RegisterTool(new LocationListTopLinksTool());
-            MCPController.RegisterTool(new LocationUpsertTopLinkTool());
-            MCPController.RegisterTool(new LocationDeleteTopLinkTool());
+            mcpServer.RegisterTool(new LocationListTopLinksTool());
+            mcpServer.RegisterTool(new LocationUpsertTopLinkTool());
+            mcpServer.RegisterTool(new LocationDeleteTopLinkTool());
         }
 
         // Pedigree operations
-        MCPController.RegisterTool(new PedigreeTraverseTool());
+        mcpServer.RegisterTool(new PedigreeTraverseTool());
 
         // Tools
-        MCPController.RegisterTool(new TreeCompareTool());
-        MCPController.RegisterTool(new TreeSplitTool());
-        MCPController.RegisterTool(new FamilyGroupsTool());
-        MCPController.RegisterTool(new TreeCheckTool());
-        MCPController.RegisterTool(new PatSearchTool());
-        MCPController.RegisterTool(new PlacesManagerTool());
+        mcpServer.RegisterTool(new TreeCompareTool());
+        mcpServer.RegisterTool(new TreeSplitTool());
+        mcpServer.RegisterTool(new FamilyGroupsTool());
+        mcpServer.RegisterTool(new TreeCheckTool());
+        mcpServer.RegisterTool(new PatSearchTool());
+        mcpServer.RegisterTool(new PlacesManagerTool());
     }
 
     #endregion

@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -16,9 +17,10 @@ using GKCore.Design;
 using GKCore.Locales;
 using GKCore.Tools;
 using GKCore.Utilities;
-using GKCortex.MCP;
-using GKCortex.Protocols;
 using GKMCPPlugin.Utilities;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -43,8 +45,11 @@ internal class RecordListTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string recordTypeStr = MCPHelper.GetRequiredStr(args, "record_type");
         if (!RuntimeData.RecordTypeMap.TryGetValue(recordTypeStr, out GDMRecordType recordType)) {
             string availableTypes = string.Join(", ", RuntimeData.RecordTypeMap.Keys);
@@ -227,8 +232,11 @@ internal class RecordSearchTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string recordTypeStr = MCPHelper.GetRequiredStr(args, "record_type");
         string searchText = MCPHelper.GetRequiredStr(args, "search_text");
         double threshold = MCPHelper.GetOptionalDbl(args, "threshold", 0.15);
@@ -285,8 +293,11 @@ internal class RecordInfoTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(xref);
@@ -320,8 +331,11 @@ internal class RecordDeleteTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetRequiredStr(args, "xref");
 
         var record = baseContext.Tree.FindXRef<GDMRecord>(xref);
@@ -354,8 +368,11 @@ internal class RecordSetRestrictionTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string xref = MCPHelper.GetRequiredStr(args, "xref");
         string restrictionStr = MCPHelper.GetRequiredStr(args, "restriction");
 
@@ -374,7 +391,7 @@ internal class RecordSetRestrictionTool : BaseTool
         }
 
         recordWithEvents.Restriction = restriction;
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         return MCPContent.CreateSimpleContent($"✅ Restriction '{restrictionStr}' has been set for record: {xref}");
     }
@@ -400,8 +417,11 @@ internal class RecordMergeTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string targetXRef = MCPHelper.GetRequiredStr(args, "target_xref");
         var targetRecord = baseContext.Tree.FindXRef<GDMRecord>(targetXRef);
         if (targetRecord == null)

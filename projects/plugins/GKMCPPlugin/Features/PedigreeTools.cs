@@ -14,9 +14,10 @@ using GDModel;
 using GKCore;
 using GKCore.Kinships;
 using GKCore.Tools;
-using GKCortex.MCP;
-using GKCortex.Protocols;
 using GKMCPPlugin.Utilities;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -45,8 +46,11 @@ internal class PedigreeTraverseTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
         string directionStr = MCPHelper.GetRequiredStr(args, "direction").ToLowerInvariant();
         int depth = MCPHelper.GetOptionalInt(args, "depth", 1);

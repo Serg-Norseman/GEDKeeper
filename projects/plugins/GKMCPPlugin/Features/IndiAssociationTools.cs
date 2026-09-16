@@ -6,12 +6,14 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -33,8 +35,11 @@ internal class IndiListAssociationsTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
 
         var indiRec = baseContext.Tree.FindXRef<GDMIndividualRecord>(individualXRef);
@@ -80,8 +85,11 @@ internal class IndiUpsertAssociationTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
         int? associationIndex = MCPHelper.GetOptionalNullableInt(args, "association_index", null);
         string associateXRef = MCPHelper.GetRequiredStr(args, "associate_xref");
@@ -115,7 +123,7 @@ internal class IndiUpsertAssociationTool : BaseTool
                 association.Relation = relation;
             }
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtNone);
             string assocInfo = $"associated '{association.XRef}', relation '{association.Relation}'";
             return MCPContent.CreateSimpleContent($"✅ Association updated for individual '{individualXRef}' at index {index}: {assocInfo}");
         } else {
@@ -126,7 +134,7 @@ internal class IndiUpsertAssociationTool : BaseTool
             }
             indiRec.Associations.Add(association);
 
-            baseContext.SetModified();
+            baseContext.SetExternalModified(GDMRecordType.rtNone);
             int assocIndex = indiRec.Associations.IndexOf(association);
             return MCPContent.CreateSimpleContent($"✅ Association added to individual '{individualXRef}' at index {assocIndex}: associated '{associateXRef}', relation '{association.Relation ?? "not specified"}'");
         }
@@ -153,8 +161,11 @@ internal class IndiDeleteAssociationTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string individualXRef = MCPHelper.GetRequiredStr(args, "individual_xref");
         int associationIndex = MCPHelper.GetOptionalInt(args, "association_index", -1);
 
@@ -172,7 +183,7 @@ internal class IndiDeleteAssociationTool : BaseTool
         string assocInfo = $"associated '{association.XRef}', relation '{association.Relation}'";
 
         indiRec.Associations.RemoveAt(associationIndex);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         return MCPContent.CreateSimpleContent($"Association removed from individual '{individualXRef}' at index {associationIndex}: {assocInfo}");
     }

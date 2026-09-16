@@ -6,12 +6,14 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -33,8 +35,11 @@ internal class ResearchListTasksTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
 
         var researchRec = baseContext.Tree.FindXRef<GDMResearchRecord>(researchXRef);
@@ -85,8 +90,11 @@ internal class ResearchAddTaskTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string taskXRef = MCPHelper.GetRequiredStr(args, "task_xref");
 
@@ -102,7 +110,7 @@ internal class ResearchAddTaskTool : BaseTool
             return MCPContent.CreateSimpleContent($"❌ Task {taskXRef} is already assigned to research '{researchXRef}'.");
 
         researchRec.AddTask(taskRec);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         string taskName = GKUtils.GetTaskGoalStr(baseContext.Tree, taskRec);
         return MCPContent.CreateSimpleContent($"✅ Task added to research '{researchXRef}': {taskName} ({taskXRef})");
@@ -129,8 +137,11 @@ internal class ResearchDeleteTaskTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string taskXRef = MCPHelper.GetRequiredStr(args, "task_xref");
 
@@ -146,7 +157,7 @@ internal class ResearchDeleteTaskTool : BaseTool
             return MCPContent.CreateSimpleContent($"❌ Task {taskXRef} is not assigned to research '{researchXRef}'.");
 
         researchRec.RemoveTask(taskRec);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         string taskName = GKUtils.GetTaskGoalStr(baseContext.Tree, taskRec);
         return MCPContent.CreateSimpleContent($"✅ Task removed from research '{researchXRef}': {taskName} ({taskXRef})");
@@ -172,8 +183,11 @@ internal class ResearchListCommunicationsTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
 
         var researchRec = baseContext.Tree.FindXRef<GDMResearchRecord>(researchXRef);
@@ -225,8 +239,11 @@ internal class ResearchAddCommunicationTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string communicationXRef = MCPHelper.GetRequiredStr(args, "communication_xref");
 
@@ -242,7 +259,7 @@ internal class ResearchAddCommunicationTool : BaseTool
             return MCPContent.CreateSimpleContent($"❌ Communication {communicationXRef} is already assigned to research '{researchXRef}'.");
 
         researchRec.AddCommunication(commRec);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         return MCPContent.CreateSimpleContent($"✅ Communication added to research '{researchXRef}': {commRec.CommName} ({communicationXRef})");
     }
@@ -268,8 +285,11 @@ internal class ResearchDeleteCommunicationTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string communicationXRef = MCPHelper.GetRequiredStr(args, "communication_xref");
 
@@ -285,7 +305,7 @@ internal class ResearchDeleteCommunicationTool : BaseTool
             return MCPContent.CreateSimpleContent($"❌ Communication {communicationXRef} is not assigned to research '{researchXRef}'.");
 
         researchRec.RemoveCommunication(commRec);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         return MCPContent.CreateSimpleContent($"✅ Communication removed from research '{researchXRef}': {commRec.CommName} ({communicationXRef})");
     }
@@ -310,8 +330,11 @@ internal class ResearchListGroupsTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
 
         var researchRec = baseContext.Tree.FindXRef<GDMResearchRecord>(researchXRef);
@@ -362,8 +385,11 @@ internal class ResearchAddGroupTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string groupXRef = MCPHelper.GetRequiredStr(args, "group_xref");
 
@@ -379,7 +405,7 @@ internal class ResearchAddGroupTool : BaseTool
             return MCPContent.CreateSimpleContent($"❌ Group {groupXRef} is already assigned to research '{researchXRef}'.");
 
         researchRec.AddGroup(groupRec);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         return MCPContent.CreateSimpleContent($"✅ Group added to research '{researchXRef}': {groupRec.GroupName} ({groupXRef})");
     }
@@ -405,8 +431,11 @@ internal class ResearchDeleteGroupTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string researchXRef = MCPHelper.GetRequiredStr(args, "research_xref");
         string groupXRef = MCPHelper.GetRequiredStr(args, "group_xref");
 
@@ -422,7 +451,7 @@ internal class ResearchDeleteGroupTool : BaseTool
             return MCPContent.CreateSimpleContent($"❌ Group {groupXRef} is not assigned to research '{researchXRef}'.");
 
         researchRec.RemoveGroup(groupRec);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         return MCPContent.CreateSimpleContent($"✅ Group removed from research '{researchXRef}': {groupRec.GroupName} ({groupXRef})");
     }

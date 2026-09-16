@@ -6,14 +6,16 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using GDModel;
 using GKCore;
-using GKCortex.MCP;
-using GKCortex.Protocols;
 using GKMCPPlugin.Utilities;
+using ZLMKit;
+using ZLMKit.MCP;
+using ZLMKit.Protocols;
 
 namespace GKMCPPlugin.Features;
 
@@ -35,8 +37,11 @@ internal class FamListChildrenTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string familyXRef = MCPHelper.GetRequiredStr(args, "family_xref");
 
         var familyRec = baseContext.Tree.FindXRef<GDMFamilyRecord>(familyXRef);
@@ -91,8 +96,11 @@ internal class FamAddChildTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string familyXRef = MCPHelper.GetRequiredStr(args, "family_xref");
         string childXRef = MCPHelper.GetRequiredStr(args, "child_xref");
 
@@ -115,7 +123,7 @@ internal class FamAddChildTool : BaseTool
         }
 
         familyRec.AddChild(childRec, linkageType);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         string childName = GKUtils.GetNameString(childRec, false);
         return MCPContent.CreateSimpleContent($"Child added to family '{familyXRef}': {childName} ({childXRef})");
@@ -142,8 +150,11 @@ internal class FamDeleteChildTool : BaseTool
         };
     }
 
-    public override List<MCPContent> ExecuteTool(BaseContext baseContext, JsonElement args)
+    public override List<MCPContent> ExecuteTool(IRuntimeContext context, JsonElement args)
     {
+        var baseContext = context.Get<BaseContext>();
+        ArgumentNullException.ThrowIfNull(baseContext);
+
         string familyXRef = MCPHelper.GetRequiredStr(args, "family_xref");
         string childXRef = MCPHelper.GetRequiredStr(args, "child_xref");
 
@@ -159,7 +170,7 @@ internal class FamDeleteChildTool : BaseTool
             return MCPContent.CreateSimpleContent($"Child {childXRef} is not a member of family '{familyXRef}'.");
 
         familyRec.RemoveChild(childRec);
-        baseContext.SetModified();
+        baseContext.SetExternalModified(GDMRecordType.rtNone);
 
         string childName = GKUtils.GetNameString(childRec, false);
         return MCPContent.CreateSimpleContent($"Child removed from family '{familyXRef}': {childName} ({childXRef})");

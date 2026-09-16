@@ -573,6 +573,9 @@ namespace GKCore.Controllers
 
         public IListView GetRecordsViewByType(GDMRecordType recType)
         {
+            if (recType == GDMRecordType.rtNone)
+                return null;
+
             int rt = (int)recType;
             TabParts tabPart = (rt < 0 || rt >= fTabParts.Length) ? null : fTabParts[rt];
             return (tabPart == null) ? null : tabPart.ListView;
