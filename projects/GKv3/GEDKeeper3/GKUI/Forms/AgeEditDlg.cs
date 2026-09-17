@@ -70,8 +70,9 @@ namespace GKUI.Forms
         {
             XamlReader.Load(this);
 
-            txtVal1.Provider = new FixedMaskedTextProvider(LangMan.LS(LSID.AgeInputMask), CultureInfo.InvariantCulture);
-            txtVal2.Provider = new FixedMaskedTextProvider(LangMan.LS(LSID.AgeInputMask), CultureInfo.InvariantCulture);
+            var mask = AgeEditDlgController.GetFixedMask();
+            txtVal1.Provider = new FixedMaskedTextProvider(mask, CultureInfo.InvariantCulture);
+            txtVal2.Provider = new FixedMaskedTextProvider(mask, CultureInfo.InvariantCulture);
 
             fController = new AgeEditDlgController(this);
             fController.Init(baseWin);

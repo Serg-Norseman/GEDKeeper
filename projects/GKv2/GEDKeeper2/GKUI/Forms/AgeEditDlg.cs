@@ -53,13 +53,15 @@ namespace GKUI.Forms
         {
             InitializeComponent();
 
+            var mask = AgeEditDlgController.GetFixedMask();
+
             txtVal1.Culture = CultureInfo.InvariantCulture;
             txtVal1.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
-            txtVal1.Mask = LangMan.LS(LSID.AgeInputMask);
+            txtVal1.Mask = mask;
 
             txtVal2.Culture = CultureInfo.InvariantCulture;
             txtVal2.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
-            txtVal2.Mask = LangMan.LS(LSID.AgeInputMask);
+            txtVal2.Mask = mask;
 
             fController = new AgeEditDlgController(this);
             fController.Init(baseWin);

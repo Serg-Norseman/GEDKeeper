@@ -52,6 +52,14 @@ namespace GKCore.Controllers
             fView.RelativeCombo1.Activate();
         }
 
+        public static string GetFixedMask()
+        {
+            // 9 - Optional digit or space. Convert here to avoid changing all localization files.
+            // a - Optional alphanumeric. Block this!
+            var mask = LangMan.LS(LSID.AgeInputMask).Replace("0", "9").Replace("a", @"\a");
+            return mask;
+        }
+
         public static string GetAgeStr(string strAge)
         {
             string mask = LangMan.LS(LSID.AgeInputMask);
