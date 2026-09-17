@@ -6,6 +6,9 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+#pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable CA1822 // Mark members as static
+
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BSLib;

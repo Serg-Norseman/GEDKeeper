@@ -56,7 +56,7 @@ namespace GKCore.Charts
             }
         }
 
-        public List<ExtPoint> GetNodeEndpoints(ExtRect rect)
+        public static List<ExtPoint> GetNodeEndpoints(ExtRect rect)
         {
             var result = new List<ExtPoint>();
 
@@ -218,7 +218,7 @@ namespace GKCore.Charts
             return new Vector(Math.Sign(to.X - from.X), Math.Sign(to.Y - from.Y));
         }
 
-        private readonly struct Vector
+        private readonly struct Vector : IEquatable<Vector>
         {
             public static Vector Zero = new Vector(0, 0);
 
@@ -245,9 +245,21 @@ namespace GKCore.Charts
             {
                 return (obj is Vector vector) && (X == vector.X) && (Y == vector.Y);
             }
+
+            public bool Equals(Vector vector)
+            {
+                return (X == vector.X) && (Y == vector.Y);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked {
+                    return (X * 397) ^ Y;
+                }
+            }
         }
 
-        private List<ExtPoint> ReconstructPath(Node endNode)
+        private static List<ExtPoint> ReconstructPath(Node endNode)
         {
             var path = new List<ExtPoint>();
 

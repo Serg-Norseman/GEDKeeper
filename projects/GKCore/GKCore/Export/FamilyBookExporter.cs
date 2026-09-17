@@ -71,7 +71,7 @@ namespace GKCore.Export
             new CatalogProps("Catalog_Sources", LangMan.LS(LSID.RPSources))
         };
 
-        private readonly FamilyBookOptions fOptions;
+        private readonly FamilyBookOptions fbOptions;
         private IFont fTitleFont;
         private IFont fChapFont;
         private IFont fSubchapFont;
@@ -92,7 +92,7 @@ namespace GKCore.Export
             : base(baseWin, true)
         {
             fTitle = LangMan.LS(LSID.FamilyBook);
-            fOptions = GlobalOptions.Instance.FamilyBookOptions;
+            fbOptions = GlobalOptions.Instance.FamilyBookOptions;
         }
 
         protected override void InternalGenerate()
@@ -100,7 +100,7 @@ namespace GKCore.Export
             try {
                 PrepareData();
                 bool hasContent = mainIndex.Count > 0;
-                bool hasIndexes = BookCatalogs.Count(x => x.Index != null && x.Index.Count > 0) > 0;
+                bool hasIndexes = BookCatalogs.Any(x => x.Index != null && x.Index.Count > 0);
 
                 IColor clrBlack = AppHost.GfxProvider.CreateColor(0x000000);
                 IColor clrBlue = AppHost.GfxProvider.CreateColor(0x0000FF);
@@ -320,7 +320,7 @@ namespace GKCore.Export
                 fWriter.EndParagraph();
             }
 
-            if (fOptions.IncludeEvents && iRec.HasEvents) {
+            if (fbOptions.IncludeEvents && iRec.HasEvents) {
                 var filteredEvents = new List<FBEvent>();
 
                 for (int i = 0, num = iRec.Events.Count; i < num; i++) {
@@ -335,7 +335,7 @@ namespace GKCore.Export
                     filteredEvents.Add(new FBEvent(evt));
                 }
 
-                if (fOptions.IncludeFamilyEvents) {
+                if (fbOptions.IncludeFamilyEvents) {
                     for (int m = 0, num2 = iRec.SpouseToFamilyLinks.Count; m < num2; m++) {
                         GDMFamilyRecord family = fTree.GetPtrValue(iRec.SpouseToFamilyLinks[m]);
                         if (!fBase.Context.IsRecordAccess(family.Restriction)) continue;
@@ -357,12 +357,12 @@ namespace GKCore.Export
                 }
             }
 
-            if (fOptions.IncludeNotes && iRec.HasNotes) {
+            if (fbOptions.IncludeNotes && iRec.HasNotes) {
                 int num = iRec.Notes.Count;
                 for (int i = 0; i < num; i++) {
                     GDMLines noteLines = fTree.GetNoteLines(iRec.Notes[i]);
 
-                    if (fOptions.MergeNotes) {
+                    if (fbOptions.MergeNotes) {
                         fWriter.AddParagraph(GKUtils.MergeStrings(noteLines), fTextFont);
                     } else {
                         fWriter.AddParagraph(noteLines.Text, fTextFont);

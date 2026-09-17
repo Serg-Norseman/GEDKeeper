@@ -84,6 +84,8 @@ namespace GDModel.Providers.GEDCOM
 
         private SymmetricAlgorithm CreateCSP(byte majorVer, byte minorVer)
         {
+            SymmetricAlgorithm result = null;
+
             int blockSize;
 #if NETCOREAPP
             blockSize = 128; // .net6: BlockSize must be 128 in this implementation.
@@ -92,17 +94,15 @@ namespace GDModel.Providers.GEDCOM
 #endif
 
             if (majorVer >= 1) {
-                SymmetricAlgorithm csp = null;
-
                 byte[] pwd = Encoding.Unicode.GetBytes(fPassword);
 
                 switch (minorVer) {
                     case 1: {
                             byte[] salt = SCCrypt.CreateRandomSalt(7);
-                            csp = new DESCryptoServiceProvider();
+                            result = new DESCryptoServiceProvider();
                             var pdb = new PasswordDeriveBytes(pwd, salt);
                             try {
-                                csp.Key = pdb.CryptDeriveKey("DES", "SHA1", csp.KeySize, csp.IV);
+                                result.Key = pdb.CryptDeriveKey("DES", "SHA1", result.KeySize, result.IV);
                                 SCCrypt.ClearBytes(salt);
                             } finally {
                                 var pdbDisp = pdb as IDisposable;
@@ -112,27 +112,24 @@ namespace GDModel.Providers.GEDCOM
                         break;
 
                     case 2:
-                    case 3:
-                        {
+                    case 3: {
                             var keyBytes = new byte[blockSize / 8];
                             Array.Copy(pwd, keyBytes, Math.Min(keyBytes.Length, pwd.Length));
-                            csp = new RijndaelManaged();
-                            csp.KeySize = blockSize;
-                            csp.BlockSize = blockSize;
-                            csp.Key = keyBytes;
-                            csp.IV = keyBytes;
-                            csp.Padding = PaddingMode.PKCS7;
-                            csp.Mode = CipherMode.CBC;
+                            result = new RijndaelManaged();
+                            result.KeySize = blockSize;
+                            result.BlockSize = blockSize;
+                            result.Key = keyBytes;
+                            result.IV = keyBytes;
+                            result.Padding = PaddingMode.PKCS7;
+                            result.Mode = CipherMode.CBC;
                         }
                         break;
                 }
 
                 SCCrypt.ClearBytes(pwd);
-
-                return csp;
             }
 
-            return null;
+            return result;
         }
     }
 }

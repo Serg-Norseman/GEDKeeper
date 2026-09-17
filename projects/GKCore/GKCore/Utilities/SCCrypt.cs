@@ -23,7 +23,7 @@ namespace GKCore.Utilities
             byte[] randBytes = (length >= 1) ? new byte[length] : new byte[1];
 
             // Create a new RNGCryptoServiceProvider
-            using (var rand = new RNGCryptoServiceProvider()) {
+            using (var rand = RandomNumberGenerator.Create()) {
                 // Fill the buffer with random bytes
                 rand.GetBytes(randBytes);
                 // return the bytes
