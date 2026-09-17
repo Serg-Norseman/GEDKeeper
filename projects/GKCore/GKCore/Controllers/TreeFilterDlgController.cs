@@ -82,6 +82,19 @@ namespace GKCore.Controllers
                     }
                 }
 
+                if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                    fFilter.HideDatesAfterBoundary = fView.HideDatesAfterBoundaryCheck.Checked;
+                    if (fFilter.HideDatesAfterBoundary) {
+                        try {
+                            DateTime.Parse(fView.DateBoundary.Text);
+                        } catch {
+                            AppHost.StdDialogs.ShowError(LangMan.LS(LSID.DateInvalid));
+                            return false;
+                        }
+                        fFilter.DateBoundary = GDMDate.GetUDNByFormattedStr(fView.DateBoundary.Text, GDMCalendar.dcGregorian);
+                    }
+                }
+
                 return true;
             } catch (Exception ex) {
                 Logger.WriteError("TreeFilterDlgController.Accept()", ex);
@@ -109,7 +122,28 @@ namespace GKCore.Controllers
                 fView.SourceCombo.AddItem<GDMRecord>(item.ShortTitle, item);
             }
 
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                fView.HideDatesAfterBoundaryCheck.Checked = fFilter.HideDatesAfterBoundary;
+                fView.DateBoundary.Enabled = fFilter.HideDatesAfterBoundary;
+                if (fFilter.HideDatesAfterBoundary) {
+                    fView.DateBoundary.Text = PatchDateFormatSimple(fFilter.DateBoundary.ToString());
+                } else {
+                    fView.DateBoundary.Text = string.Empty;
+                }
+            }
+
             UpdateControls();
+        }
+
+        private static string PatchDateFormatSimple(string udnStr)
+        {
+            if (string.IsNullOrEmpty(udnStr)) return udnStr;
+
+            string[] parts = udnStr.Split('/');
+            if (parts.Length != 3) return udnStr;
+
+            // parts[0] = yyyy, parts[1] = MM, parts[2] = dd
+            return $"{parts[2]}.{parts[1]}.{parts[0]}";
         }
 
         public void UpdateControls()
@@ -206,6 +240,10 @@ namespace GKCore.Controllers
             GetControl<ILabel>("lblYear").Text = LangMan.LS(LSID.Year);
             GetControl<IRadioButton>("rbCutPersons").Text = LangMan.LS(LSID.BCut_Persons);
             GetControl<ILabel>("lblRPSources").Text = LangMan.LS(LSID.RPSources);
+
+            if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                GetControl<ICheckBox>("chkHideDatesAfterBoundary").Text = LangMan.LS(LSID.HideDatesAfterBoundary);
+            }
         }
 
         public override void ApplyTheme()

@@ -47,6 +47,16 @@
             <ComboBox x:Name="cmbSource" ReadOnly="True" Width="260" />
           </StackLayout>
         </TableRow>
+
+        <TableRow>
+        </TableRow>
+
+        <TableRow>
+          <StackLayout Orientation="Horizontal" Spacing="8">
+            <CheckBox x:Name="chkHideDatesAfterBoundary" CheckedChanged="chkHideDatesAfterBoundary_CheckedChanged" />
+            <MaskedTextBox x:Name="txtDateBoundary" Enabled="False" />
+          </StackLayout>
+        </TableRow>
       </TableLayout>
     </TableRow>
 

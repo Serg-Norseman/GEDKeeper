@@ -1137,6 +1137,7 @@ namespace GKCore.Locales
         /* 1068 */ AutoSortEvents,
         /* 1069 */ ConvenientSourcesFormat,
         /* 1070 */ PhotoAlbum,
+        /* 1071 */ HideDatesAfterBoundary,
 
         /* 0000 */ Last = PhotoAlbum
     }

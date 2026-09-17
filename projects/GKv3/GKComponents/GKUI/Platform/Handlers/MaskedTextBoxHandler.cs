@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using Eto.Drawing;
 using Eto.Forms;
 using GKCore;
 using GKCore.Design.Controls;
@@ -24,7 +25,7 @@ namespace GKUI.Platform.Handlers
             get { return Control.Enabled; }
             set {
                 Control.Enabled = value;
-                //Control.BackgroundColor = (value) ? SystemColors.WindowBackground : SystemColors.Control;
+                Control.BackgroundColor = (value) ? SystemColors.ControlBackground : SystemColors.Control;
             }
         }
 

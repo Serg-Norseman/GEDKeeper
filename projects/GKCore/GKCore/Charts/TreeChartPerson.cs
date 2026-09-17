@@ -306,6 +306,7 @@ namespace GKCore.Charts
                     fSex = iRec.Sex;
 
                     TreeChartOptions options = fModel.Options;
+                    ChartFilter filter = fModel.Filter;
 
                     var lifeDates = iRec.GetLifeEvents(true);
                     GDMCustomEvent birthEvent = lifeDates.BirthEvent;
@@ -321,6 +322,14 @@ namespace GKCore.Charts
                             deathEvent = lifeDates.BurialEvent;
                             if (deathEvent != null) deathSign = ImportUtils.STD_BURIED_SIGN;
                         }
+                    }
+
+                    if (filter.HideDatesAfterBoundary) {
+                        if (birthEvent != null && birthEvent.Date.GetUDN().CompareTo(filter.DateBoundary) > 0)
+                            birthEvent = null;
+
+                        if (deathEvent != null && deathEvent.Date.GetUDN().CompareTo(filter.DateBoundary) > 0)
+                            deathEvent = null;
                     }
 
                     DateFormat dateFormat = (options.OnlyYears) ? DateFormat.dfYYYY : DateFormat.dfDD_MM_YYYY;

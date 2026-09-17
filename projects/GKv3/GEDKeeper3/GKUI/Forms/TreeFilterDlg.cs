@@ -7,6 +7,7 @@
  */
 
 using System;
+using Eto.Drawing;
 using Eto.Forms;
 using Eto.Serialization.Xaml;
 using GKCore.Charts;
@@ -35,6 +36,8 @@ namespace GKUI.Forms
         private Label lblYear;
         private NumericStepper edYear;
         private GKSheetList fPersonsList;
+        private CheckBox chkHideDatesAfterBoundary;
+        private MaskedTextBox txtDateBoundary;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -62,6 +65,16 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbSource); }
         }
 
+        ICheckBox ITreeFilterDlg.HideDatesAfterBoundaryCheck
+        {
+            get { return GetControlHandler<ICheckBox>(chkHideDatesAfterBoundary); }
+        }
+
+        ITextBox ITreeFilterDlg.DateBoundary
+        {
+            get { return GetControlHandler<ITextBox>(txtDateBoundary); }
+        }
+
         #endregion
 
         public TreeFilterDlg(IBaseWindow baseWin)
@@ -69,6 +82,8 @@ namespace GKUI.Forms
             XamlReader.Load(this);
 
             UIHelper.FixRadioButtons(this, rgBranchCut);
+
+            txtDateBoundary.Provider = new FixedMaskedTextProvider("00/00/0000");
 
             fController = new TreeFilterDlgController(this);
             fController.Init(baseWin);
@@ -85,6 +100,12 @@ namespace GKUI.Forms
         private void TreeFilterDlg_Load(object sender, EventArgs e)
         {
             fController.UpdateView();
+        }
+
+        private void chkHideDatesAfterBoundary_CheckedChanged(object sender, EventArgs e)
+        {
+            txtDateBoundary.Enabled = chkHideDatesAfterBoundary.Checked.Value;
+            txtDateBoundary.BackgroundColor = txtDateBoundary.Enabled ? SystemColors.ControlBackground : SystemColors.Control;
         }
     }
 }

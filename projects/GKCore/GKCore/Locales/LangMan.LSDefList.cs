@@ -1113,6 +1113,7 @@ namespace GKCore.Locales
             /* 1068 */ "Automatic sorting of events",
             /* 1069 */ "Output sources to filters in a convenient format",
             /* 1070 */ "Photo album",
+            /* 1071 */ "Hide dates after the boundary",
         };
     }
 }

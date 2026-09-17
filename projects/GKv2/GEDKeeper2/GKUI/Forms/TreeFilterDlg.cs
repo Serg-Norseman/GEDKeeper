@@ -44,6 +44,16 @@ namespace GKUI.Forms
             get { return GetControlHandler<IComboBox>(cmbSource); }
         }
 
+        ICheckBox ITreeFilterDlg.HideDatesAfterBoundaryCheck
+        {
+            get { return null; }
+        }
+
+        ITextBox ITreeFilterDlg.DateBoundary
+        {
+            get { return null; }
+        }
+
         #endregion
 
         public TreeFilterDlg(IBaseWindow baseWin)

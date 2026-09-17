@@ -7,6 +7,7 @@
  */
 
 using BSLib;
+using GKCore.Calendar;
 using GKCore.Lists;
 
 namespace GKCore.Charts
@@ -35,6 +36,9 @@ namespace GKCore.Charts
         public int BranchYear;
         public string BranchPersons;
 
+        public bool HideDatesAfterBoundary;
+        public UDN DateBoundary;
+
         public ChartFilter()
         {
             Reset();
@@ -44,6 +48,8 @@ namespace GKCore.Charts
         {
             SourceMode = FilterGroupMode.All;
             BranchCut = BranchCutType.None;
+            HideDatesAfterBoundary = false;
+            DateBoundary = UDN.Empty;
         }
 
         public void Backup()

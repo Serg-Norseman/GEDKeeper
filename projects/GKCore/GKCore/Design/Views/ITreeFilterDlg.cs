@@ -19,5 +19,8 @@ namespace GKCore.Design.Views
         ISheetList PersonsList { get; }
         INumericBox YearNum { get; }
         IComboBox SourceCombo { get; }
+
+        ICheckBox HideDatesAfterBoundaryCheck { get; }
+        ITextBox DateBoundary { get; }
     }
 }
