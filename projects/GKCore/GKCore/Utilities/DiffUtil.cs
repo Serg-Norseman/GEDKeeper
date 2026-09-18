@@ -66,6 +66,13 @@ namespace GKCore.Utilities
             return Diff(seq1, seq2, new DiffOption<T>());
         }
 
+        public static IEnumerable<DiffResult<T>> Diff<T>(IEnumerable<T> seq1, IEnumerable<T> seq2, IEqualityComparer<T> equalityComparer)
+        {
+            var option = new DiffOption<T>();
+            option.EqualityComparer = equalityComparer;
+            return Diff(seq1, seq2, option);
+        }
+
         public static IEnumerable<DiffResult<T>> Diff<T>(IEnumerable<T> seq1, IEnumerable<T> seq2, DiffOption<T> option)
         {
             if (seq1 == null || seq2 == null || (!seq1.Any() && !seq2.Any()))
@@ -174,18 +181,18 @@ namespace GKCore.Utilities
                 throw new Exception();
         }
 
-        public static char GetStatusChar(DiffStatus status)
+        public static string GetStatusChar(DiffStatus status)
         {
             switch (status) {
                 case DiffStatus.Equal:
-                    return '=';
+                    return " "; // '=';
                 case DiffStatus.Deleted:
-                    return '-';
+                    return "❌"; // '-';
                 case DiffStatus.Inserted:
-                    return '+';
+                    return "➕"; // '+';
                 case DiffStatus.Modified:
                 case DiffStatus.DeepModified:
-                    return '≠';
+                    return "⚡"; // '≠';
             }
 
             throw new System.Exception();

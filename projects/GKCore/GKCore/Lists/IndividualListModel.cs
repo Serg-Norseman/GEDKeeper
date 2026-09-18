@@ -655,7 +655,7 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class IndiGroupsListModel : SheetModel<GDMPointer>
+    public sealed class IndiGroupsListModel : SheetModel<GDMGroupLink>
     {
         private GDMGroupRecord fGroupRec;
 
@@ -671,7 +671,7 @@ namespace GKCore.Lists
             return result;
         }
 
-        public override void Fetch(GDMPointer aRec)
+        public override void Fetch(GDMGroupLink aRec)
         {
             base.Fetch(aRec);
             fGroupRec = fBaseContext.Tree.GetPtrValue<GDMGroupRecord>(fFetchedRec);

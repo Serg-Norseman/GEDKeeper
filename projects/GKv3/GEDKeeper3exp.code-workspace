@@ -29,7 +29,12 @@
 		},
 		{
 			"path": "../plugins/GKMCPPlugin"
+		},
+		{
+			"path": "../plugins/GKTreeSyncPlugin"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"dotnet.preferCSharpExtension": true
+	}
 }

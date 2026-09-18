@@ -7,16 +7,14 @@
  */
 
 using System;
+using System.Linq;
 using GDModel;
 using GKCore;
-using GKCore.Charts;
 using GKCore.Design;
-using GKCore.Design.Graphics;
-using GKCore.Lists;
 using GKCore.Locales;
-using GKCore.Options;
-using GKCore.Tools;
+using GKCore.Sync;
 using GKCore.Utilities;
+using GKUI.Components;
 
 namespace GKTreeSyncPlugin
 {
@@ -26,7 +24,6 @@ namespace GKTreeSyncPlugin
 #else
     using Eto.Forms;
     using Eto.Serialization.Xaml;
-    using GKUI.Components;
 #endif
 
     public partial class TSForm : Form, ILocalizable
@@ -49,7 +46,7 @@ namespace GKTreeSyncPlugin
 
         private readonly IBaseWindow fBase;
         private readonly SyncTool fSyncTool;
-        private readonly DiffListModel fListModel;
+        private readonly DiffRecordsModel fListModel;
 
         public TSForm()
         {
@@ -74,8 +71,9 @@ namespace GKTreeSyncPlugin
 #if !NETCOREAPP
             lvRecords.CheckBoxes = true;
 #endif
-            fListModel = new DiffListModel(fBase.Context);
+            fListModel = new DiffRecordsModel(fBase.Context);
             lvRecords.ListMan = fListModel;
+            lvRecords.CellDoubleClick += lvRecords_CellDoubleClick;
         }
 
         public void SetLocale()
@@ -92,7 +90,7 @@ namespace GKTreeSyncPlugin
 
             txtFile.Text = fileName;
             fSyncTool.LoadOtherFile(fBase.Context.Tree, fileName);
-            fSyncTool.CompareRecords(GetRecordType());
+            fSyncTool.CompareTrees(GetRecordType());
             UpdateLists();
         }
 
@@ -114,6 +112,18 @@ namespace GKTreeSyncPlugin
             return rbSyncAll.Checked ? GDMRecordType.rtNone : (GDMRecordType)(cmbRecordTypes.SelectedIndex + 1);
         }
 
+        private void lvRecords_CellDoubleClick(object sender, GridCellMouseEventArgs e)
+        {
+            var item = lvRecords.GetSelectedData() as DiffRecord;
+            if (item == null) return;
+
+            var modifiedRecords = fSyncTool.Results.Where((x) => x.Status >= DiffStatus.Modified).ToList();
+            int selectedIndex = modifiedRecords.IndexOf(item);
+            using (var detailForm = new TSDetailForm(fBase, modifiedRecords, selectedIndex)) {
+                detailForm.ShowModal();
+            }
+        }
+
         private void UpdateLists()
         {
 #if !NETCOREAPP
@@ -123,109 +133,6 @@ namespace GKTreeSyncPlugin
 #endif
             fListModel.DataSource = fSyncTool.Results;
             lvRecords.UpdateContents();
-        }
-    }
-
-
-    public sealed class DiffListModel : SimpleListModel<DiffRecord>
-    {
-        public bool ShowOnlyModified { get; set; }
-
-
-        public DiffListModel(BaseContext baseContext) :
-            base(baseContext, CreateListColumns())
-        {
-        }
-
-        public static ListColumns CreateListColumns()
-        {
-            var result = new ListColumns(GKListType.ltNone);
-            result.AddColumn("Sync", DataType.dtBool, 40, true);
-            result.AddColumn("XRef 1", DataType.dtString, 100, true);
-            result.AddColumn("XRef 2", DataType.dtString, 100, true);
-            result.AddColumn("Name 1", DataType.dtString, 400, true);
-            result.AddColumn("Name 2", DataType.dtString, 400, true);
-            return result;
-        }
-
-        public override bool CheckFilter()
-        {
-            bool res = (!ShowOnlyModified || fFetchedRec.Status != DiffStatus.Equal);
-            return res;
-        }
-
-        // fetched data
-        private string item1, item2;
-        private char diffChar;
-        private int backColor;
-
-        public override void Fetch(DiffRecord aRec)
-        {
-            base.Fetch(aRec);
-
-            diffChar = DiffUtil.GetStatusChar(fFetchedRec.Status);
-
-            switch (fFetchedRec.Status) {
-                case DiffStatus.Equal:
-                default:
-                    item1 = diffChar + " " + fFetchedRec.Obj1.XRef;
-                    item2 = diffChar + " " + fFetchedRec.Obj2.XRef;
-                    backColor = GKColors.White;
-                    break;
-
-                case DiffStatus.Deleted:
-                    item1 = diffChar + " " + fFetchedRec.Obj1.XRef;
-                    item2 = " ";
-                    backColor = GKColors.Coral;
-                    break;
-
-                case DiffStatus.Inserted:
-                    item1 = " ";
-                    item2 = diffChar + " " + fFetchedRec.Obj2.XRef;
-                    backColor = GKColors.LightBlue;
-                    break;
-
-                case DiffStatus.Modified:
-                case DiffStatus.DeepModified:
-                    item1 = diffChar + " " + fFetchedRec.Obj1.XRef;
-                    item2 = diffChar + " " + fFetchedRec.Obj2.XRef;
-                    backColor = (fFetchedRec.Status == DiffStatus.Modified) ? GKColors.Yellow : GKColors.Orange;
-                    break;
-            }
-        }
-
-        protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
-        {
-            object result = null;
-            switch (colType) {
-                case 0:
-                    result = fFetchedRec.Checked;
-                    break;
-                case 1:
-                    result = item1;
-                    break;
-                case 2:
-                    result = item2;
-                    break;
-                case 3:
-                    result = GKUtils.GetRecordName(fBaseContext.Tree, fFetchedRec.Obj1, false);
-                    break;
-                case 4:
-                    result = GKUtils.GetRecordName(fBaseContext.Tree, fFetchedRec.Obj2, false);
-                    break;
-            }
-            return result;
-        }
-
-        public override IColor GetBackgroundColor(int itemIndex, object rowData)
-        {
-            return ChartRenderer.GetColor(backColor);
-        }
-
-        protected override void SetColumnValueEx(DiffRecord item, int colIndex, object value)
-        {
-            if (item != null && colIndex == 0 && value is bool chk)
-                item.Checked = chk;
         }
     }
 }

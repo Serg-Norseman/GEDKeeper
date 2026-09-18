@@ -11,7 +11,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMLocationName : GDMValueTag, IGDMStructWithDate
+    public class GDMLocationName : GDMValueTag, IGDMStructWithDate, IEquatable<GDMLocationName>
     {
         private string fAbbreviation;
         private readonly GDMDateValue fDate;
@@ -99,6 +99,11 @@ namespace GDModel
             hashCode.Add(fAbbreviation);
             hashCode.Add(fDate);
             hashCode.Add(fLanguage);
+        }
+
+        public bool Equals(GDMLocationName other)
+        {
+            return base.Equals(other) && fAbbreviation == other.fAbbreviation && fDate.Equals(other.fDate) && fLanguage == other.fLanguage;
         }
     }
 }

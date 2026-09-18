@@ -117,7 +117,7 @@ namespace GDModel
             fMembers.Add(mbrLink);
 
             if (!onlyDirect) {
-                var ptr = new GDMPointer((int)GEDCOMTagType._GROUP);
+                var ptr = new GDMGroupLink((int)GEDCOMTagType._GROUP);
                 ptr.XRef = this.XRef;
                 member.Groups.Add(ptr);
             }

@@ -29,7 +29,7 @@ namespace GDModel
         private GDMList<GDMAssociation> fAssociations;
         private readonly GDMList<GDMChildToFamilyLink> fChildToFamilyLinks;
         private GDMList<GDMDNATest> fDNATests;
-        private GDMList<GDMPointer> fGroups;
+        private GDMList<GDMGroupLink> fGroups;
         private readonly GDMList<GDMPersonalName> fPersonalNames;
         private readonly GDMList<GDMSpouseToFamilyLink> fSpouseToFamilyLinks;
         private GDMSex fSex;
@@ -92,11 +92,11 @@ namespace GDModel
             get { return fGroups != null && fGroups.Count != 0; }
         }
 
-        public GDMList<GDMPointer> Groups
+        public GDMList<GDMGroupLink> Groups
         {
             get {
                 if (fGroups == null) {
-                    fGroups = new GDMList<GDMPointer>();
+                    fGroups = new GDMList<GDMGroupLink>();
                 }
 
                 return fGroups;
@@ -385,7 +385,7 @@ namespace GDModel
             }
 
             while (fGroups != null && fGroups.Count > 0) {
-                GDMPointer obj = fGroups.Extract(0);
+                var obj = fGroups.Extract(0);
                 targetIndi.Groups.Add(obj);
             }
         }

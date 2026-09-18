@@ -11,7 +11,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMMap : GDMTag
+    public sealed class GDMMap : GDMTag, IEquatable<GDMMap>
     {
         private double fLati;
         private double fLong;
@@ -66,6 +66,11 @@ namespace GDModel
 
             hashCode.Add(fLati);
             hashCode.Add(fLong);
+        }
+
+        public bool Equals(GDMMap other)
+        {
+            return base.Equals(other) && fLati == other.fLati && fLong == other.fLong;
         }
     }
 }

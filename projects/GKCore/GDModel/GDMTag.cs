@@ -19,7 +19,7 @@ namespace GDModel
     /// for reading and writing the values of tags in the terminology and
     /// according to the rules of GEDCOM.
     /// </summary>
-    public class GDMTag : GDMObject
+    public class GDMTag : GDMObject, IEquatable<GDMTag>
     {
         #region Protected fields
 
@@ -315,10 +315,15 @@ namespace GDModel
             ProcessHashes(ref result);
             return result.ToHashCode();
         }
+
+        public bool Equals(GDMTag other)
+        {
+            return fId == other.fId;
+        }
     }
 
 
-    public class GDMValueTag : GDMTag
+    public class GDMValueTag : GDMTag, IEquatable<GDMValueTag>
     {
         protected string fStringValue;
 
@@ -369,6 +374,11 @@ namespace GDModel
             base.ProcessHashes(ref hashCode);
 
             hashCode.Add(fStringValue);
+        }
+
+        public bool Equals(GDMValueTag other)
+        {
+            return base.Equals(other) && fStringValue == other.fStringValue;
         }
     }
 }

@@ -56,4 +56,26 @@ namespace GDModel
             base.ProcessHashes(ref hashCode);
         }
     }
+
+
+    public class GDMGroupLink : GDMPointer
+    {
+        public GDMGroupLink()
+        {
+        }
+
+        public GDMGroupLink(int tagId) : base(tagId)
+        {
+        }
+
+        public GDMGroupLink(int tagId, StringSpan tagValue)
+        {
+            SetNameValue(tagId, tagValue);
+        }
+
+        protected override void ProcessHashes(ref HashCode hashCode)
+        {
+            base.ProcessHashes(ref hashCode);
+        }
+    }
 }

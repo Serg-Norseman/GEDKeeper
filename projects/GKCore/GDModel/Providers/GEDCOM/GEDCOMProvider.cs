@@ -754,7 +754,7 @@ namespace GDModel.Providers.GEDCOM
                 curTag.ParseString(tagValue);
                 addHandler = TagHandler.AssociationTag;
             } else if (tagType == GEDCOMTagType._GROUP) {
-                curTag = indiRec.Groups.Add(new GDMPointer(tagId, tagValue));
+                curTag = indiRec.Groups.Add(new GDMGroupLink(tagId, tagValue));
             } else if (tagType == GEDCOMTagType.ALIA) {
                 var asso = new GDMAssociation();
                 asso.ParseString(tagValue);
@@ -766,7 +766,7 @@ namespace GDModel.Providers.GEDCOM
                 curTag.ParseString(tagValue);
                 addHandler = TagHandler.DNATestTag;
             } else if ((tagType == GEDCOMTagType._LABL) && (tree.Format == GEDCOMFormat.SyniumFamilyTree)) {
-                curTag = indiRec.Groups.Add(new GDMPointer(tagId, tagValue));
+                curTag = indiRec.Groups.Add(new GDMGroupLink(tagId, tagValue));
             } else {
                 return AddRecordWithEventsTag(tree, indiRec, tagLevel, tagId, tagValue);
             }
@@ -2058,8 +2058,7 @@ namespace GDModel.Providers.GEDCOM
             IList<T> internalList = list.GetList();
             if (internalList == null) return;
 
-            int num = internalList.Count;
-            for (int i = 0; i < num; i++) {
+            for (int i = 0, num = internalList.Count; i < num; i++) {
                 var item = internalList[i];
                 if (item != null) {
                     tagHandler(stream, level, item);
@@ -2228,9 +2227,19 @@ namespace GDModel.Providers.GEDCOM
 
             if (place.HasNotes) WriteList(stream, level, place.Notes, WriteNote);
 
-            if (!Strict) WriteBaseTag(stream, level, place.Location);
+            GDMMap placeMap;
+            if (!Strict) {
+                WriteBaseTag(stream, level, place.Location);
+                placeMap = place.Map;
+            } else {
+                /*GDMTree tree = null; // need to pull the tree out here!
+                var locRec = tree.GetPtrValue<GDMLocationRecord>(place.Location);
+                placeMap = (locRec != null) ? locRec.Map : place.Map;*/
 
-            WriteMap(stream, level, place.Map);
+                placeMap = place.Map;
+            }
+
+            WriteMap(stream, level, placeMap);
             WriteTagLine(stream, level, GEDCOMTagName.FORM, place.Form, true);
 
             return true;

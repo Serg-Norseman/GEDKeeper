@@ -9,10 +9,12 @@
 using System;
 using System.Reflection;
 using GKCore;
+using GKCore.Charts;
 using GKCore.Design;
 using GKCore.Design.Graphics;
 using GKCore.Locales;
 using GKCore.Plugins;
+using GKCore.Utilities;
 
 [assembly: AssemblyTitle("GKTreeSyncPlugin")]
 [assembly: AssemblyDescription("GEDKeeper Tree Synchronization plugin")]
@@ -59,6 +61,7 @@ namespace GKTreeSyncPlugin
             IBaseWindow curBase = Host.GetCurrentFile();
             if (curBase == null) return;
 
+            if (fForm != null) fForm.Dispose();
             fForm = new TSForm(this, curBase);
             fForm.Show();
         }
@@ -87,6 +90,30 @@ namespace GKTreeSyncPlugin
             /*if (fForm != null) {
                 fForm.BaseChanged(null);
             }*/
+        }
+
+        internal static IColor GetDiffColor(DiffStatus diffStatus)
+        {
+            int backColor;
+            switch (diffStatus) {
+                case DiffStatus.Equal:
+                default:
+                    backColor = GKColors.White;
+                    break;
+                case DiffStatus.Deleted:
+                    backColor = GKColors.Coral;
+                    break;
+                case DiffStatus.Inserted:
+                    backColor = GKColors.LightBlue;
+                    break;
+                case DiffStatus.Modified:
+                    backColor = GKColors.Yellow;
+                    break;
+                case DiffStatus.DeepModified:
+                    backColor = GKColors.Orange;
+                    break;
+            }
+            return ChartRenderer.GetColor(backColor);
         }
     }
 }

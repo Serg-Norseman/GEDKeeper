@@ -82,7 +82,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKTests.net", "..\GKTests\G
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKVisionPlugin.net", "..\plugins\GKVisionPlugin\GKVisionPlugin.net.csproj", "{9C574C30-C083-4B59-ACD4-FDFA42D3BA17}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKTreeSyncPlugin.net", "..\plugins\GKTreeSyncPlugin\GKTreeSyncPlugin.net.csproj", "{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GKTreeSyncPlugin", "..\plugins\GKTreeSyncPlugin\GKTreeSyncPlugin.csproj", "{3DD8ACF9-EC65-4996-A153-D671AB06A3B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GKXBenchmarks", "GKBenchmarks\GKXBenchmarks.csproj", "{4C716119-9E1F-4C76-87BF-EAA31242623B}"
 EndProject

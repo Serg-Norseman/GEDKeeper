@@ -49,8 +49,7 @@ An old, legacy implementation. Windows only. Supported for those who don't want 
 ### GEDKeeper3
 
 The current implementation is actively supported on a cross-platform framework.
-Integration with LLM clients via the MCP (Model Context Protocol), RAG (Retrieval-Augmented Generation) and LM Assistant role is available
-[GKMCPPlugin](./projects/plugins/GKMCPPlugin/README.md).
+Integration with LLM clients via the MCP and RAG is available [MCP Server plugin](./projects/plugins/GKMCPPlugin/README.md).
 
 ### GEDKeeperX
 

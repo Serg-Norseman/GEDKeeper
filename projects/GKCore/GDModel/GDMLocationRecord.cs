@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using GDModel.Providers.GEDCOM;
-using GKCore.Calendar;
 using GKCore.Options;
 
 namespace GDModel
