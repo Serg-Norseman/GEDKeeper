@@ -35,6 +35,7 @@ internal sealed class DiffContentsModel : SimpleListModel<DiffTag>
     {
         var result = new ListColumns(GKListType.ltNone);
         result.AddColumn("Sync", DataType.dtBool, 40, true);
+        result.AddColumn("#", DataType.dtInteger, 40, true);
         result.AddColumn("Content 1", DataType.dtString, 400, true);
         result.AddColumn("Content 2", DataType.dtString, 400, true);
         return result;
@@ -87,9 +88,12 @@ internal sealed class DiffContentsModel : SimpleListModel<DiffTag>
                 result = fFetchedRec.Checked;
                 break;
             case 1:
-                result = prefix1 + fTagContentHandler(fBaseContext.Tree, fFetchedRec.Obj1);
+                result = fFetchedRec.Num;
                 break;
             case 2:
+                result = prefix1 + fTagContentHandler(fBaseContext.Tree, fFetchedRec.Obj1);
+                break;
+            case 3:
                 result = prefix2 + fTagContentHandler(fBaseContext.Tree, fFetchedRec.Obj2);
                 break;
         }

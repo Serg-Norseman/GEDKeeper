@@ -29,6 +29,7 @@ internal sealed class DiffRecordsModel : SimpleListModel<DiffRecord>
     {
         var result = new ListColumns(GKListType.ltNone);
         result.AddColumn("Sync", DataType.dtBool, 40, true);
+        result.AddColumn("#", DataType.dtInteger, 40, true);
         result.AddColumn("XRef 1", DataType.dtString, 100, true);
         result.AddColumn("XRef 2", DataType.dtString, 100, true);
         result.AddColumn("Name 1", DataType.dtString, 400, true);
@@ -83,15 +84,18 @@ internal sealed class DiffRecordsModel : SimpleListModel<DiffRecord>
                 result = fFetchedRec.Checked;
                 break;
             case 1:
-                result = item1;
+                result = fFetchedRec.Num;
                 break;
             case 2:
-                result = item2;
+                result = item1;
                 break;
             case 3:
-                result = GKUtils.GetRecordName(fBaseContext.Tree, fFetchedRec.Obj1, false);
+                result = item2;
                 break;
             case 4:
+                result = GKUtils.GetRecordName(fBaseContext.Tree, fFetchedRec.Obj1, false);
+                break;
+            case 5:
                 result = GKUtils.GetRecordName(fBaseContext.Tree, fFetchedRec.Obj2, false);
                 break;
         }

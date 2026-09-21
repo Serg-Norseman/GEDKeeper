@@ -356,6 +356,8 @@
     <Compile Include="GKCore\Database\GKDBNameEntry.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GDModel\Providers\FileProvider.cs" />
+    <Compile Include="GKCore\Sync\DiffRecord.cs" />
+    <Compile Include="GKCore\Sync\SyncTool.cs" />
     <Compile Include="GKCore\Utilities\ChecksumStream.cs" />
     <Compile Include="GKCore\Utilities\ExtObservableList.cs" />
     <Compile Include="GKCore\Utilities\GKVarCache.cs" />
@@ -413,7 +415,6 @@
     <Compile Include="GKCore\Utilities\MapiMailMessage.cs" />
     <Compile Include="GKCore\Utilities\FreqCollection.cs" />
     <Compile Include="GKCore\Utilities\SysUtils.cs" />
-    <Compile Include="GKCore\Tools\SyncTool.cs" />
     <Compile Include="GKCore\Validation\BaseValidator.cs" />
     <Compile Include="GKCore\Validation\Concrete\GDMAddressValidator.cs" />
     <Compile Include="GKCore\Validation\Concrete\GDMEventValidator.cs" />

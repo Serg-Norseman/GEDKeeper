@@ -41,6 +41,8 @@ namespace GKCore.Sync
 
         public void CompareTrees(GDMRecordType recordType)
         {
+            DiffRecord.ResetNum();
+
             Results = new List<DiffRecord>();
 
             var records1 = fMainTree.GetRecords(recordType);
@@ -71,6 +73,8 @@ namespace GKCore.Sync
 
         public static List<DiffTag> CompareRecords(DiffRecord diffRecord)
         {
+            DiffTag.ResetNum();
+
             List<DiffTag> differences;
 
             switch (diffRecord.Obj1.RecordType) {

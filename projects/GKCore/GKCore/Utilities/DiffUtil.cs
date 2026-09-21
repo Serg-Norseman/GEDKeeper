@@ -24,6 +24,10 @@ namespace GKCore.Utilities
 
     public class DiffResult<T>
     {
+        public static int LastNum;
+
+        public int Num { get; private set; }
+
         public T Obj1 { get; private set; }
         public T Obj2 { get; private set; }
         public DiffStatus Status { get; set; }
@@ -33,6 +37,12 @@ namespace GKCore.Utilities
             Obj1 = obj1;
             Obj2 = obj2;
             Status = status;
+            Num = ++LastNum;
+        }
+
+        public static void ResetNum()
+        {
+            LastNum = 0;
         }
 
         public override string ToString()
@@ -229,8 +239,8 @@ namespace GKCore.Utilities
             public override int GetHashCode()
             {
                 var hash = 17;
-                hash = hash * 23 + X.GetHashCode();
-                hash = hash * 23 + Y.GetHashCode();
+                hash = hash * 23 + X;
+                hash = hash * 23 + Y;
 
                 return hash;
             }
