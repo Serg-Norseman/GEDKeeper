@@ -11,7 +11,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public class GDMPointer : GDMTag, IGDMPointerHost, IEquatable<GDMPointer>
+    public class GDMPointer : GDMTag, IGDMPointerHost, IGDEquatable<GDMPointer>
     {
         private string fXRef;
 
@@ -86,9 +86,9 @@ namespace GDModel
             hashCode.Add(fXRef);
         }
 
-        public bool Equals(GDMPointer other)
+        public bool DataEquals(GDMPointer other)
         {
-            return base.Equals(other) && fXRef == other.fXRef;
+            return base.DataEquals(other) && fXRef == other.fXRef;
         }
     }
 }

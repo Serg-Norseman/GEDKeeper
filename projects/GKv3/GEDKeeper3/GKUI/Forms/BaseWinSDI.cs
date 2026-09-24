@@ -143,6 +143,7 @@ namespace GKUI.Forms
         private ButtonToolItem tbPartialView;
         private ButtonMenuItem miExportToStrictGEDCOM;
         private ButtonMenuItem miChronicle;
+        private ButtonMenuItem miTreeSync;
 
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
         #endregion
@@ -215,6 +216,13 @@ namespace GKUI.Forms
             tabsRecords.SelectedIndex = 0;
 
             fController.SetLocale();
+
+#if DEBUG
+            miTreeSync.Visible = true;
+            miTreeSync.Text = "Tree Sync";
+#elif RELEASE
+            miTreeSync.Visible = false;
+#endif
         }
 
         protected override void Dispose(bool disposing)
@@ -984,6 +992,14 @@ namespace GKUI.Forms
         private void miCleanImagesCache_Click(object sender, EventArgs e)
         {
             AppHost.CleanImagesCache();
+        }
+
+        private void miTreeSync_Click(object sender, EventArgs e)
+        {
+#if DEBUG
+            using (var dlg = new TSForm(this))
+                dlg.ShowModal();
+#endif
         }
 
         private void miOptions_Click(object sender, EventArgs e)

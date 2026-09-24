@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
-  x:Class="GKTreeSyncPlugin.TSDetailForm"
+  x:Class="GKUI.Forms.TSDetailForm"
   Title="Record Differences">
 
   <TableLayout Style="paddedTable8">
     <TableRow>
       <Panel x:Name="panel1" Padding="4">
         <StackLayout Orientation="Vertical" Spacing="4">
-          <Label x:Name="lblRecordInfo" Text="Record:" />
+          <Label x:Name="lblRecordInfo" Text="Record:" Height="40" />
 
           <StackLayout Orientation="Horizontal" Spacing="4">
             <Button x:Name="btnPrevRecord" Text="&lt; Prev Record" Width="120" Click="btnPrevRecord_Click" />
             <Button x:Name="btnNextRecord" Text="Next Record &gt;" Width="120" Click="btnNextRecord_Click" />
-            <Button x:Name="btnCopyToLeft" Text="&lt;&lt; Copy to Left" Width="120" Click="btnCopyToLeft_Click" />
-            <Button x:Name="btnCopyToRight" Text="Copy to Right &gt;&gt;" Width="120" Click="btnCopyToRight_Click" />
+            <StackLayoutItem Expand="True" />
+            <Button x:Name="btnMerge" Text="Merge" Width="120" Click="btnMerge_Click" />
           </StackLayout>
         </StackLayout>
       </Panel>
     </TableRow>
 
     <TableRow ScaleHeight="True">
-      <comcom:GKListView x:Name="lvContents" Height="400" />
+      <comcom:GKListView x:Name="lvContents" Height="300" />
+    </TableRow>
+
+    <TableRow>
+      <comcom:HyperView x:Name="hvLeftRecord" Height="100" />
+    </TableRow>
+
+    <TableRow>
+      <comcom:HyperView x:Name="hvRightRecord" Height="100" />
     </TableRow>
   </TableLayout>
 

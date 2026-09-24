@@ -11,10 +11,27 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
+    public class GDMMemberLink : GDMIndividualLink
+    {
+        public GDMMemberLink()
+        {
+        }
+
+        public GDMMemberLink(int tagId) : base(tagId)
+        {
+        }
+
+        public GDMMemberLink(int tagId, StringSpan tagValue)
+        {
+            SetNameValue(tagId, tagValue);
+        }
+    }
+
+
     public sealed class GDMGroupRecord : GDMRecord
     {
         private string fGroupName;
-        private readonly GDMList<GDMIndividualLink> fMembers;
+        private readonly GDMList<GDMMemberLink> fMembers;
 
 
         public string GroupName
@@ -23,7 +40,7 @@ namespace GDModel
             set { fGroupName = value; }
         }
 
-        public GDMList<GDMIndividualLink> Members
+        public GDMList<GDMMemberLink> Members
         {
             get { return fMembers; }
         }
@@ -34,7 +51,7 @@ namespace GDModel
             SetName(GEDCOMTagType._GROUP);
 
             fGroupName = string.Empty;
-            fMembers = new GDMList<GDMIndividualLink>();
+            fMembers = new GDMList<GDMMemberLink>();
         }
 
         protected override void Dispose(bool disposing)
@@ -112,7 +129,7 @@ namespace GDModel
         {
             if (member == null) return false;
 
-            GDMIndividualLink mbrLink = new GDMIndividualLink((int)GEDCOMTagType._MEMBER);
+            var mbrLink = new GDMMemberLink((int)GEDCOMTagType._MEMBER);
             mbrLink.XRef = member.XRef;
             fMembers.Add(mbrLink);
 

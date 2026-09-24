@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Form xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+<Dialog xmlns="http://schema.picoe.ca/eto.forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:comcom="clr-namespace:GKUI.Components;assembly=GKComponents"
-  x:Class="GKTreeSyncPlugin.TSForm"
+  x:Class="GKUI.Forms.TSForm"
   Title="TSForm">
 
   <TableLayout Style="paddedTable8">
@@ -40,4 +40,4 @@
     </TableRow>
   </TableLayout>
 
-</Form>
+</Dialog>

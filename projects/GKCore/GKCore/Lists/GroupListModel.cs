@@ -74,7 +74,7 @@ namespace GKCore.Lists
     /// <summary>
     /// 
     /// </summary>
-    public sealed class GroupMembersListModel : SheetModel<GDMIndividualLink>
+    public sealed class GroupMembersListModel : SheetModel<GDMMemberLink>
     {
         private GDMIndividualRecord fMember;
 
@@ -91,10 +91,10 @@ namespace GKCore.Lists
             return result;
         }
 
-        public override void Fetch(GDMIndividualLink aRec)
+        public override void Fetch(GDMMemberLink aRec)
         {
             base.Fetch(aRec);
-            fMember = fBaseContext.Tree.GetPtrValue(fFetchedRec);
+            fMember = fBaseContext.Tree.GetPtrValue<GDMIndividualRecord>(fFetchedRec);
         }
 
         protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)

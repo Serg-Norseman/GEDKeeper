@@ -29,9 +29,6 @@
 		},
 		{
 			"path": "../plugins/GKMCPPlugin"
-		},
-		{
-			"path": "../plugins/GKTreeSyncPlugin"
 		}
 	],
 	"settings": {

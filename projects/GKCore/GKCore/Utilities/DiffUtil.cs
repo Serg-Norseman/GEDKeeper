@@ -48,7 +48,7 @@ namespace GKCore.Utilities
         public override string ToString()
         {
             var obj = Status != DiffStatus.Inserted ? Obj1 : Obj2;
-            return string.Format("{0} {1}", DiffUtil.GetStatusChar(Status), obj);
+            return string.Format("{0} {1}", DiffUtil.GetStatusChar(Status, false), obj);
         }
     }
 
@@ -191,18 +191,32 @@ namespace GKCore.Utilities
                 throw new Exception();
         }
 
-        public static string GetStatusChar(DiffStatus status)
+        public static string GetStatusChar(DiffStatus status, bool userView = true)
         {
-            switch (status) {
-                case DiffStatus.Equal:
-                    return " "; // '=';
-                case DiffStatus.Deleted:
-                    return "❌"; // '-';
-                case DiffStatus.Inserted:
-                    return "➕"; // '+';
-                case DiffStatus.Modified:
-                case DiffStatus.DeepModified:
-                    return "⚡"; // '≠';
+            if (userView) {
+                switch (status) {
+                    case DiffStatus.Equal:
+                        return " "; // '=';
+                    case DiffStatus.Deleted:
+                        return "❌"; // '-';
+                    case DiffStatus.Inserted:
+                        return "➕"; // '+';
+                    case DiffStatus.Modified:
+                    case DiffStatus.DeepModified:
+                        return "⚡"; // '≠';
+                }
+            } else {
+                switch (status) {
+                    case DiffStatus.Equal:
+                        return "=";
+                    case DiffStatus.Deleted:
+                        return "-";
+                    case DiffStatus.Inserted:
+                        return "+";
+                    case DiffStatus.Modified:
+                    case DiffStatus.DeepModified:
+                        return "≠";
+                }
             }
 
             throw new System.Exception();

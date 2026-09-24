@@ -10,6 +10,9 @@ using System;
 using System.Collections.Generic;
 using GDModel;
 using GDModel.Providers.GEDCOM;
+using GKCore.Charts;
+using GKCore.Design.Graphics;
+using GKCore.Locales;
 using GKCore.Utilities;
 
 namespace GKCore.Sync
@@ -23,6 +26,30 @@ namespace GKCore.Sync
         private GDMTree fOtherTree;
 
         public List<DiffRecord> Results;
+
+        public static IColor GetDiffColor(DiffStatus diffStatus)
+        {
+            int backColor;
+            switch (diffStatus) {
+                case DiffStatus.Equal:
+                default:
+                    backColor = GKColors.White;
+                    break;
+                case DiffStatus.Deleted:
+                    backColor = GKColors.Coral;
+                    break;
+                case DiffStatus.Inserted:
+                    backColor = GKColors.LightBlue;
+                    break;
+                case DiffStatus.Modified:
+                    backColor = GKColors.Yellow;
+                    break;
+                case DiffStatus.DeepModified:
+                    backColor = GKColors.Orange;
+                    break;
+            }
+            return ChartRenderer.GetColor(backColor);
+        }
 
         public void LoadOtherFile(GDMTree mainTree, string fileName)
         {
@@ -71,7 +98,7 @@ namespace GKCore.Sync
             }
         }
 
-        public static List<DiffTag> CompareRecords(DiffRecord diffRecord)
+        public List<DiffTag> CompareRecords(DiffRecord diffRecord)
         {
             DiffTag.ResetNum();
 
@@ -176,60 +203,6 @@ namespace GKCore.Sync
             CompareLists<T>(struct1, struct2, new PointerComparer<T>(), true, differences);
         }
 
-        public static string CommonTagContentHandler(GDMTree tree, GDMTag tag)
-        {
-            string result = string.Empty;
-
-            if (tag is GDMPersonalName persName) {
-                result = $"Personal Name: {persName.StringValue}";
-            } else if (tag is GDMAssociation asso) {
-                result = $"Association: {asso.StringValue}";
-            } else if (tag is GDMDNATest dnaTest) {
-                result = $"DNA Test: {dnaTest.StringValue}";
-            } else if (tag is GDMGroupLink groupLink) {
-                result = $"Group Link: {groupLink.XRef}";
-            } else if (tag is GDMChildToFamilyLink ctfLink) {
-                result = $"ChildToFamily Link: {ctfLink.XRef}";
-            } else if (tag is GDMSpouseToFamilyLink stfLink) {
-                result = $"SpouseToFamily Link: {stfLink.XRef}";
-            } else if (tag is GDMUserReference userRef) {
-                result = $"UserRef: {userRef.StringValue}, RefType: {userRef.ReferenceType}";
-            } else if (tag is GDMNotes notes) {
-                result = $"Notes Link: {notes.XRef}";
-            } else if (tag is GDMMultimediaLink mediaLink) {
-                result = $"Media Link: {mediaLink.XRef}";
-            } else if (tag is GDMSourceCitation sourLink) {
-                result = $"Source Link: {sourLink.XRef}, Page: {sourLink.Page}, CertaintyAssessment: {sourLink.CertaintyAssessment}";
-            } else if (tag is GDMChildLink childLink) {
-                result = $"Child Link: {childLink.XRef}";
-            } else if (tag is GDMCustomEvent evt) {
-                result = $"Event: {GKUtils.GetEventName(evt)}";
-            } else if (tag is GDMValueTag valTag) {
-                string label;
-                var tagType = (GEDCOMTagType)valTag.Id;
-                switch (tagType) {
-                    case GEDCOMTagType.NOTE:
-                        label = "NoteText";
-                        break;
-                    case GEDCOMTagType.RIN:
-                        label = "AutomatedRecordID";
-                        break;
-                    case GEDCOMTagType.NAME:
-                        label = "Name";
-                        break;
-                    case GEDCOMTagType.SEX:
-                        label = "Sex";
-                        break;
-                    default:
-                        label = tagType.ToString();
-                        break;
-                }
-                result = $"{label}: {valTag.StringValue}";
-            }
-
-            return result;
-        }
-
         private static void CompareSimpleTag(GEDCOMTagType tagType, string val1, string val2, List<DiffTag> differences)
         {
             if (string.IsNullOrEmpty(val1) && string.IsNullOrEmpty(val2))
@@ -237,6 +210,13 @@ namespace GKCore.Sync
 
             var diffStatus = (val1 == val2) ? DiffStatus.Equal : DiffStatus.Modified;
             differences.Add(new DiffTag(new GDMValueTag((int)tagType, val1), new GDMValueTag((int)tagType, val2), diffStatus));
+        }
+
+        private static void CompareStruct<T>(T struct1, T struct2, List<DiffTag> differences) where T : GDMTag
+        {
+            var eq1 = (IGDEquatable<T>)struct1;
+            if (!eq1.DataEquals(struct2))
+                differences.Add(new DiffTag(struct1, struct2, DiffStatus.Modified));
         }
 
         private static void CompareRecords(GDMRecord rec1, GDMRecord rec2, List<DiffTag> differences)
@@ -254,7 +234,7 @@ namespace GKCore.Sync
             CompareRecords(rec1, rec2, differences);
 
             CompareEvents(rec1, rec2, differences);
-            // RESN *
+            CompareSimpleTag(GEDCOMTagType.RESN, LangMan.LS(GKData.Restrictions[(int)rec1.Restriction]), LangMan.LS(GKData.Restrictions[(int)rec2.Restriction]), differences);
         }
 
         private static List<DiffTag> CompareIndividualRecords(GDMIndividualRecord indiRec1, GDMIndividualRecord indiRec2)
@@ -281,7 +261,7 @@ namespace GKCore.Sync
 
             CompareEventRecords(famRec1, famRec2, differences);
 
-            CompareSimpleTag(GEDCOMTagType._STAT, famRec1.Status.ToString(), famRec2.Status.ToString(), differences); // *
+            CompareSimpleTag(GEDCOMTagType._STAT, LangMan.LS(GKData.MarriageStatus[(int)famRec1.Status].Name), LangMan.LS(GKData.MarriageStatus[(int)famRec2.Status].Name), differences);
 
             string husb1XRef = famRec1.Husband?.XRef ?? "";
             string husb2XRef = famRec2.Husband?.XRef ?? "";
@@ -312,7 +292,6 @@ namespace GKCore.Sync
             CompareRecords(mediaRec1, mediaRec2, differences);
 
             CompareTagLists<GDMFileReferenceWithTitle>(mediaRec1.FileReferences, mediaRec2.FileReferences, differences);
-            // GDMMultimediaRecord.FileReferences *
 
             return differences;
         }
@@ -329,9 +308,9 @@ namespace GKCore.Sync
             CompareSimpleTag(GEDCOMTagType.PUBL, sourRec1.Publication.StringValue, sourRec1.Publication.StringValue, differences);
             CompareSimpleTag(GEDCOMTagType.TEXT, sourRec1.Text.StringValue, sourRec1.Text.StringValue, differences);
 
-            // Data, Date *
             CompareTagLists<GDMRepositoryCitation>(sourRec1.RepositoryCitations, sourRec2.RepositoryCitations, differences);
-            // GDMRepositoryCitation.CallNumbers *
+            CompareStruct(sourRec1.Data, sourRec2.Data, differences);
+            CompareSimpleTag(GEDCOMTagType.DATE, GetDateStr(sourRec1.Date), GetDateStr(sourRec1.Date), differences);
 
             return differences;
         }
@@ -343,10 +322,7 @@ namespace GKCore.Sync
             CompareRecords(repRec1, repRec2, differences);
 
             CompareSimpleTag(GEDCOMTagType.NAME, repRec1.RepositoryName, repRec2.RepositoryName, differences);
-
-            if (!repRec1.Address.Equals(repRec2.Address)) {
-                differences.Add(new DiffTag(repRec1.Address, repRec2.Address, DiffStatus.Modified)); // *
-            }
+            CompareStruct(repRec1.Address, repRec2.Address, differences);
 
             return differences;
         }
@@ -358,7 +334,7 @@ namespace GKCore.Sync
             CompareRecords(groupRec1, groupRec2, differences);
 
             CompareSimpleTag(GEDCOMTagType.NAME, groupRec1.GroupName, groupRec2.GroupName, differences);
-            ComparePtrLists<GDMIndividualLink>(groupRec1.Members, groupRec2.Members, differences);
+            ComparePtrLists<GDMMemberLink>(groupRec1.Members, groupRec2.Members, differences);
 
             return differences;
         }
@@ -370,12 +346,11 @@ namespace GKCore.Sync
             CompareRecords(resRec1, resRec2, differences);
 
             CompareSimpleTag(GEDCOMTagType.NAME, resRec1.ResearchName, resRec2.ResearchName, differences);
-
-            CompareSimpleTag(GEDCOMTagType._PRIORITY, resRec1.Priority.ToString(), resRec2.Priority.ToString(), differences); // *
-            CompareSimpleTag(GEDCOMTagType._STATUS, resRec1.Status.ToString(), resRec2.Status.ToString(), differences); // *
-            CompareSimpleTag(GEDCOMTagType._PERCENT, resRec1.Percent.ToString(), resRec2.Percent.ToString(), differences); // *
-            CompareSimpleTag(GEDCOMTagType._STARTDATE, resRec1.StartDate.ToString(), resRec2.StartDate.ToString(), differences); // *
-            CompareSimpleTag(GEDCOMTagType._STOPDATE, resRec1.StopDate.ToString(), resRec2.StopDate.ToString(), differences); // *
+            CompareSimpleTag(GEDCOMTagType._PRIORITY, GetPriorityStr(resRec1.Priority), GetPriorityStr(resRec2.Priority), differences);
+            CompareSimpleTag(GEDCOMTagType._STATUS, LangMan.LS(GKData.StatusNames[(int)resRec1.Status]), LangMan.LS(GKData.StatusNames[(int)resRec2.Status]), differences);
+            CompareSimpleTag(GEDCOMTagType._PERCENT, resRec1.Percent.ToString(), resRec2.Percent.ToString(), differences);
+            CompareSimpleTag(GEDCOMTagType._STARTDATE, GetDateStr(resRec1.StartDate), GetDateStr(resRec2.StartDate), differences);
+            CompareSimpleTag(GEDCOMTagType._STOPDATE, GetDateStr(resRec1.StopDate), GetDateStr(resRec2.StopDate), differences);
 
             // simple pointers, not require details
             ComparePtrLists<GDMPointer>(resRec1.Tasks, resRec2.Tasks, differences);
@@ -385,16 +360,16 @@ namespace GKCore.Sync
             return differences;
         }
 
-        private static List<DiffTag> CompareTaskRecords(GDMTaskRecord taskRec1, GDMTaskRecord taskRec2)
+        private List<DiffTag> CompareTaskRecords(GDMTaskRecord taskRec1, GDMTaskRecord taskRec2)
         {
             var differences = new List<DiffTag>();
 
             CompareRecords(taskRec1, taskRec2, differences);
 
-            CompareSimpleTag(GEDCOMTagType._GOAL, taskRec1.Goal.ToString(), taskRec2.Goal.ToString(), differences); // *
-            CompareSimpleTag(GEDCOMTagType._PRIORITY, taskRec1.Priority.ToString(), taskRec2.Priority.ToString(), differences); // *
-            CompareSimpleTag(GEDCOMTagType._STARTDATE, taskRec1.StartDate.ToString(), taskRec2.StartDate.ToString(), differences); // *
-            CompareSimpleTag(GEDCOMTagType._STOPDATE, taskRec1.StopDate.ToString(), taskRec2.StopDate.ToString(), differences); // *
+            CompareSimpleTag(GEDCOMTagType._GOAL, GKUtils.GetTaskGoalStr(fMainTree, taskRec1), GKUtils.GetTaskGoalStr(fOtherTree, taskRec2), differences);
+            CompareSimpleTag(GEDCOMTagType._PRIORITY, GetPriorityStr(taskRec1.Priority), GetPriorityStr(taskRec2.Priority), differences);
+            CompareSimpleTag(GEDCOMTagType._STARTDATE, GetDateStr(taskRec1.StartDate), GetDateStr(taskRec2.StartDate), differences);
+            CompareSimpleTag(GEDCOMTagType._STOPDATE, GetDateStr(taskRec1.StopDate), GetDateStr(taskRec2.StopDate), differences);
 
             return differences;
         }
@@ -406,9 +381,9 @@ namespace GKCore.Sync
             CompareRecords(commRec1, commRec2, differences);
 
             CompareSimpleTag(GEDCOMTagType.NAME, commRec1.CommName, commRec2.CommName, differences);
-            CompareSimpleTag(GEDCOMTagType.TYPE, commRec1.CommunicationType.ToString(), commRec2.CommunicationType.ToString(), differences); // *
-            //CompareSimpleTag(GEDCOMTagType., commRec1.CommDirection.ToString(), commRec2.CommDirection.ToString(), differences); // *
-            CompareSimpleTag(GEDCOMTagType.DATE, commRec1.Date.ToString(), commRec2.Date.ToString(), differences); // *
+            CompareSimpleTag(GEDCOMTagType.TYPE, LangMan.LS(GKData.CommunicationNames[(int)commRec1.CommunicationType]), LangMan.LS(GKData.CommunicationNames[(int)commRec2.CommunicationType]), differences);
+            //CompareSimpleTag(GEDCOMTagType., commRec1.CommDirection.ToString(), commRec2.CommDirection.ToString(), differences); // TODO
+            CompareSimpleTag(GEDCOMTagType.DATE, GetDateStr(commRec1.Date), GetDateStr(commRec2.Date), differences);
 
             return differences;
         }
@@ -419,14 +394,81 @@ namespace GKCore.Sync
 
             CompareRecords(locRec1, locRec2, differences);
 
-            if (!locRec1.Map.Equals(locRec2.Map)) {
-                differences.Add(new DiffTag(locRec1.Map, locRec2.Map, DiffStatus.Modified));
-            }
-
-            CompareLists<GDMLocationName>(locRec1.Names, locRec2.Names, new ValueTagComparer<GDMLocationName>(), true, differences); // * diff by names(strVal), modifies by hash
-            ComparePtrLists<GDMLocationLink>(locRec1.TopLevels, locRec2.TopLevels, differences); // *
+            CompareStruct(locRec1.Map, locRec2.Map, differences);
+            CompareLists<GDMLocationName>(locRec1.Names, locRec2.Names, new ValueTagComparer<GDMLocationName>(), true, differences);
+            ComparePtrLists<GDMLocationLink>(locRec1.TopLevels, locRec2.TopLevels, differences);
 
             return differences;
+        }
+
+        private static string GetDateStr(GDMCustomDate date)
+        {
+            return GKUtils.GetDateDisplayString(date);
+        }
+
+        private static string GetPriorityStr(GDMResearchPriority priority)
+        {
+            return LangMan.LS(GKData.PriorityNames[(int)priority]);
+        }
+
+        public bool Merge(GDMRecord target, GDMRecord source, IEnumerable<DiffTag> tagsDiff)
+        {
+            bool result = false;
+
+#if RELEASE
+            AppHost.StdDialogs.ShowWarning("Merge functionality is not yet implemented.");
+            return result;
+#endif
+
+            // TODO: Implement merging logic
+            foreach (var diff in tagsDiff) {
+                switch (diff.Status) {
+                    case DiffStatus.Equal:
+                        // TODO: disable checkbox for equal status
+                        break;
+
+                    case DiffStatus.Deleted:
+                        DeleteStruct(target, diff.Obj1);
+                        result = true;
+                        break;
+
+                    case DiffStatus.Inserted:
+                        if (CheckLinks(diff)) {
+                            InsertStruct(target, diff.Obj2);
+                            result = true;
+                        }
+                        break;
+
+                    case DiffStatus.Modified:
+                    case DiffStatus.DeepModified:
+                        if (CheckLinks(diff)) {
+                            diff.Obj1.Assign(diff.Obj2);
+                            result = true;
+                        }
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        // TODO: CROSS-RECORD LINKS! - for merge and insert!
+        private bool CheckLinks(DiffTag tagDiff)
+        {
+            // TODO: Create a cross-index from the XRef in the second file to the position in the diff
+            // to determine whether it is local to the second file or existed in the first.
+            return false;
+        }
+
+        private void DeleteStruct<T>(GDMRecord target, T xStruct) where T : GDMTag
+        {
+            // TODO: variations of record types and first-level structure types!
+        }
+
+        private void InsertStruct<T>(GDMRecord target, T xStruct) where T : GDMTag
+        {
+            // TODO: cross-record links
+            // TODO: variations of record types and first-level structure types!
         }
     }
 }

@@ -366,7 +366,7 @@ namespace GDModel.Providers.GEDCOM
                 return;
 
             for (int i = group.Members.Count - 1; i >= 0; i--) {
-                GDMIndividualRecord mbr = fTree.GetPtrValue(group.Members[i]);
+                var mbr = fTree.GetPtrValue<GDMIndividualRecord>(group.Members[i]);
                 if (mbr == null) {
                     group.Members.RemoveAt(i);
                 } else {

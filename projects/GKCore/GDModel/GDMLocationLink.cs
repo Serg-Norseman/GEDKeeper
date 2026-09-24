@@ -17,7 +17,7 @@ namespace GDModel
     }
 
 
-    public sealed class GDMLocationLink : GDMPointer, IGDMStructWithDate, IEquatable<GDMLocationLink>
+    public sealed class GDMLocationLink : GDMPointer, IGDMStructWithDate, IGDEquatable<GDMLocationLink>
     {
         private readonly GDMDateValue fDate;
         private GDMLocationRelationship fRelationship;
@@ -91,9 +91,9 @@ namespace GDModel
             hashCode.Add(fRelationship);
         }
 
-        public bool Equals(GDMLocationLink other)
+        public bool DataEquals(GDMLocationLink other)
         {
-            return base.Equals(other) && fDate.Equals(other.fDate) && fRelationship == other.fRelationship;
+            return base.DataEquals(other) && fDate.Equals(other.fDate) && fRelationship == other.fRelationship;
         }
     }
 }

@@ -13,13 +13,18 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
+    public interface IGDEquatable<T>
+    {
+        bool DataEquals(T other);
+    }
+
     /// <summary>
     /// The main class of the entire storage infrastructure in the GEDCOM format.
     /// The ancestor of all structural classes. Contains the main logic
     /// for reading and writing the values of tags in the terminology and
     /// according to the rules of GEDCOM.
     /// </summary>
-    public class GDMTag : GDMObject, IEquatable<GDMTag>
+    public class GDMTag : GDMObject, IGDEquatable<GDMTag>
     {
         #region Protected fields
 
@@ -316,14 +321,14 @@ namespace GDModel
             return result.ToHashCode();
         }
 
-        public bool Equals(GDMTag other)
+        public bool DataEquals(GDMTag other)
         {
-            return fId == other.fId;
+            return (this == other || fId == other.fId);
         }
     }
 
 
-    public class GDMValueTag : GDMTag, IEquatable<GDMValueTag>
+    public class GDMValueTag : GDMTag, IGDEquatable<GDMValueTag>
     {
         protected string fStringValue;
 
@@ -376,7 +381,7 @@ namespace GDModel
             hashCode.Add(fStringValue);
         }
 
-        public bool Equals(GDMValueTag other)
+        public bool DataEquals(GDMValueTag other)
         {
             return base.Equals(other) && fStringValue == other.fStringValue;
         }

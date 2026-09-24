@@ -6,7 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -24,11 +23,6 @@ namespace GDModel
         public GDMIndividualLink(int tagId, StringSpan tagValue)
         {
             SetNameValue(tagId, tagValue);
-        }
-
-        protected override void ProcessHashes(ref HashCode hashCode)
-        {
-            base.ProcessHashes(ref hashCode);
         }
     }
 
@@ -50,11 +44,6 @@ namespace GDModel
         {
             SetNameValue(tagId, tagValue);
         }
-
-        protected override void ProcessHashes(ref HashCode hashCode)
-        {
-            base.ProcessHashes(ref hashCode);
-        }
     }
 
 
@@ -71,11 +60,6 @@ namespace GDModel
         public GDMGroupLink(int tagId, StringSpan tagValue)
         {
             SetNameValue(tagId, tagValue);
-        }
-
-        protected override void ProcessHashes(ref HashCode hashCode)
-        {
-            base.ProcessHashes(ref hashCode);
         }
     }
 }

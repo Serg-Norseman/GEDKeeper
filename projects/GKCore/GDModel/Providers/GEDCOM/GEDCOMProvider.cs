@@ -881,7 +881,7 @@ namespace GDModel.Providers.GEDCOM
             if (tagType == GEDCOMTagType.NAME || tagType == GEDCOMTagType.TITL) {
                 groupRec.GroupName = tagValue;
             } else if (tagType == GEDCOMTagType._MEMBER) {
-                curTag = groupRec.Members.Add(new GDMIndividualLink(tagId, tagValue));
+                curTag = groupRec.Members.Add(new GDMMemberLink(tagId, tagValue));
             } else {
                 return AddRecordTag(tree, owner, tagLevel, tagId, tagValue);
             }

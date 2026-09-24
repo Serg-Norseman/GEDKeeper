@@ -2201,7 +2201,7 @@ namespace GKCore
 
         #region Show information summary
 
-        private static void ShowAddressSummary(GDMAddress address, StringList summary)
+        public static void ShowAddressSummary(GDMAddress address, StringList summary)
         {
             if (address != null && !address.IsEmpty() && summary != null) {
                 summary.Add("    " + LangMan.LS(LSID.Address) + ":");
@@ -2231,18 +2231,15 @@ namespace GKCore
                     summary.Add("    " + ts);
                 }
 
-                int num = address.PhoneNumbers.Count;
-                for (int i = 0; i < num; i++) {
+                for (int i = 0, num = address.PhoneNumbers.Count; i < num; i++) {
                     summary.Add("    " + address.PhoneNumbers[i].StringValue);
                 }
 
-                int num2 = address.EmailAddresses.Count;
-                for (int i = 0; i < num2; i++) {
+                for (int i = 0, num = address.EmailAddresses.Count; i < num; i++) {
                     summary.Add("    " + address.EmailAddresses[i].StringValue);
                 }
 
-                int num3 = address.WebPages.Count;
-                for (int i = 0; i < num3; i++) {
+                for (int i = 0, num = address.WebPages.Count; i < num; i++) {
                     summary.Add("    " + MakeLinks(address.WebPages[i].StringValue));
                 }
             }
@@ -2633,6 +2630,19 @@ namespace GKCore
             }
         }
 
+        public static string GetUserReferenceStr(GDMTree tree, GDMUserReference userRef)
+        {
+            return string.Concat(userRef.ReferenceType, ", ", userRef.StringValue);
+        }
+
+        public static string GetAssociationStr(GDMTree tree, GDMAssociation ast)
+        {
+            var relIndi = tree.GetPtrValue(ast);
+            string nm = (relIndi == null) ? string.Empty : GetNameString(relIndi, false);
+            string xref = (relIndi == null) ? string.Empty : relIndi.XRef;
+            return string.Join(' ', ast.Relation, HyperLink(xref, nm));
+        }
+
         private static void RecListAssociationsRefresh(BaseContext baseContext, GDMIndividualRecord record, StringList summary)
         {
             if (record == null || summary == null) return;
@@ -2645,12 +2655,7 @@ namespace GKCore
                     int num = record.Associations.Count;
                     for (int i = 0; i < num; i++) {
                         GDMAssociation ast = record.Associations[i];
-                        var relIndi = baseContext.Tree.GetPtrValue(ast);
-
-                        string nm = ((relIndi == null) ? string.Empty : GetNameString(relIndi, false));
-                        string xref = ((relIndi == null) ? string.Empty : relIndi.XRef);
-
-                        summary.Add("    " + ast.Relation + " " + HyperLink(xref, nm));
+                        summary.Add("    " + GetAssociationStr(baseContext.Tree, ast));
                     }
                 }
             } catch (Exception ex) {
@@ -3294,6 +3299,11 @@ namespace GKCore
             } catch (Exception ex) {
                 Logger.WriteError("GKUtils.ShowCommunicationInfo()", ex);
             }
+        }
+
+        public static string GetMapStr(GDMTree tree, GDMMap map)
+        {
+            return string.Concat(GEDCOMUtils.CoordToStr(map.Lati), "; ", GEDCOMUtils.CoordToStr(map.Long));
         }
 
         public static void ShowLocationInfo(BaseContext baseContext, GDMLocationRecord locRec, StringList summary)

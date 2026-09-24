@@ -6,7 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System;
 using GDModel.Providers.GEDCOM;
 
 namespace GDModel
@@ -22,11 +21,6 @@ namespace GDModel
         {
             SetName(GEDCOMTagType.FAMS);
             XRef = familyXRef;
-        }
-
-        protected override void ProcessHashes(ref HashCode hashCode)
-        {
-            base.ProcessHashes(ref hashCode);
         }
     }
 }
