@@ -2640,7 +2640,7 @@ namespace GKCore
             var relIndi = tree.GetPtrValue(ast);
             string nm = (relIndi == null) ? string.Empty : GetNameString(relIndi, false);
             string xref = (relIndi == null) ? string.Empty : relIndi.XRef;
-            return string.Join(' ', ast.Relation, HyperLink(xref, nm));
+            return string.Concat(ast.Relation, " ", HyperLink(xref, nm));
         }
 
         private static void RecListAssociationsRefresh(BaseContext baseContext, GDMIndividualRecord record, StringList summary)
