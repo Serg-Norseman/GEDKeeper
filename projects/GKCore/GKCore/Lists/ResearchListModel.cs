@@ -232,7 +232,7 @@ namespace GKCore.Lists
                     result = fCommRec.CommName;
                     break;
                 case 1:
-                    result = GKUtils.GetCorresponderStr(fBaseWin.Context.Tree, fCommRec, false);
+                    result = GKInfoPanel.GetCorresponderStr(fBaseWin.Context.Tree, fCommRec, false);
                     break;
                 case 2:
                     result = LangMan.LS(GKData.CommunicationNames[(int)fCommRec.CommunicationType]);

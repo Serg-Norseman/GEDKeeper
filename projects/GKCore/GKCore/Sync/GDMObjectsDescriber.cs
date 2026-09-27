@@ -17,55 +17,55 @@ namespace GKCore.Sync
     {
         // TODO: Implement a better and more efficient solution,
         // but only after all the data is being extracted.
-        public static string GetBriefDescription(GDMTree tree, GDMTag tag)
+        public static string GetBriefDescription(GDMTree tree, GDMRecord record, GDMTag tag)
         {
             string result = string.Empty;
             if (tag == null) return result;
 
-            if (tag is GDMValueTag valTag) {
-                result = GetTagDescription(valTag);
-            } else if (tag is GDMPersonalName persName) {
-                result = $"Personal Name: {persName.StringValue}";
+            if (tag is GDMPersonalName persName) {
+                result = GetPersonalNameStr(tree, record, persName);
             } else if (tag is GDMChildToFamilyLink ctfLink) {
-                result = $"ChildToFamily Link: {ctfLink.XRef}";
+                result = GetPtrDescription(LangMan.LS(LSID.Parents), tree, ctfLink);
             } else if (tag is GDMSpouseToFamilyLink stfLink) {
-                result = GetPtrDescription(LangMan.LS(LSID.Spouse), tree, stfLink);
+                result = GetPtrDescription(LangMan.LS(LSID.Family), tree, stfLink);
             } else if (tag is GDMChildLink childLink) {
                 result = GetPtrDescription("Child", tree, childLink); // FIXME: single form
             } else if (tag is GDMCustomEvent evt) {
-                result = $"Event: {GKUtils.GetEventName(evt)}";
+                result = GKUtils.GetEventStr(evt);
             } else if (tag is GDMNotes notes) {
-                result = $"Notes Link: {notes.XRef}";
+                result = GetNotesPtrStr(tree, notes);
             } else if (tag is GDMMultimediaLink mediaLink) {
-                result = $"Media Link: {mediaLink.XRef}";
+                result = GetPtrDescription("Media", tree, mediaLink);
             } else if (tag is GDMSourceCitation sourLink) {
-                result = $"Source Link: {sourLink.XRef}, Page: {sourLink.Page}, CertaintyAssessment: {sourLink.CertaintyAssessment}";
+                result = $"{LangMan.LS(LSID.Source)}: {GKInfoPanel.GetSourceCitationStr(tree, sourLink)}";
             } else if (tag is GDMUserReference userRef) {
-                result = $"UserRef: {GKUtils.GetUserReferenceStr(tree, userRef)}"; // FIXME: single form
+                result = $"UserRef: {GKInfoPanel.GetUserReferenceStr(tree, userRef)}"; // FIXME: single form
             } else if (tag is GDMAddress addr) {
-                result = $"Address: {addr.StringValue}";
+                result = GKInfoPanel.GetAddressStr(tree, addr);
             } else if (tag is GDMRepositoryCitation repoCit) {
-                result = $"Repository Citation: {repoCit.StringValue}";
+                result = GetPtrDescription(LangMan.LS(LSID.Repository), tree, repoCit);
             } else if (tag is GDMFileReferenceWithTitle fileRef) {
-                result = $"File Reference: {fileRef.StringValue}";
+                result = GetFileReferenceStr(tree, fileRef);
             } else if (tag is GDMAssociation asso) {
-                result = $"{LangMan.LS(LSID.Association)}: {GKUtils.GetAssociationStr(tree, asso)}";
+                result = $"{LangMan.LS(LSID.Association)}: {GKInfoPanel.GetAssociationStr(tree, asso)}";
             } else if (tag is GDMLocationName locName) {
-                result = $"Location Name: {locName.StringValue}";
+                result = GetLocationNameStr(tree, locName);
             } else if (tag is GDMLocationLink locLink) {
-                result = $"Location Link: {locLink.XRef}";
+                result = GetLocationLinkStr(tree, locLink);
             } else if (tag is GDMMemberLink memberLink) {
                 result = GetPtrDescription("Member", tree, memberLink); // FIXME: single form
             } else if (tag is GDMGroupLink groupLink) {
                 result = GetPtrDescription(LangMan.LS(LSID.Group), tree, groupLink);
             } else if (tag is GDMSourceCallNumber callNum) {
-                result = $"Call Number: {callNum.StringValue}";
+                result = GetSourceCallNumberStr(tree, callNum);
             } else if (tag is GDMSourceData sourData) {
-                result = $"Source Data: {sourData.StringValue}";
+                result = GetSourceDataStr(tree, sourData);
             } else if (tag is GDMMap map) {
-                result = $"{LangMan.LS(LSID.Coordinates)}: {GKUtils.GetMapStr(tree, map)}";
+                result = $"{LangMan.LS(LSID.Coordinates)}: {GKInfoPanel.GetMapStr(tree, map)}";
             } else if (tag is GDMDNATest dnaTest) {
-                result = $"DNA Test: {dnaTest.StringValue}";
+                result = GetDNATestStr(tree, dnaTest);
+            } else if (tag is GDMValueTag valTag) {
+                result = GetTagDescription(valTag);
             } else if (tag is GDMPointer ptr) {
                 result = $"Unk ptr"; // All derived classes are in the list above!
             } else {
@@ -75,7 +75,7 @@ namespace GKCore.Sync
             return result;
         }
 
-        public static void GetFullDescription(GDMTree tree, GDMTag tag, StringList summary)
+        public static void GetFullDescription(GDMTree tree, GDMRecord record, GDMTag tag, StringList summary)
         {
             summary.Clear();
             if (tag == null) {
@@ -85,38 +85,40 @@ namespace GKCore.Sync
 
             string result = string.Empty;
 
+            //var visitor = new GDMTagSummaryVisitor(tree, record, summary);
+            //tag.Accept(visitor);
+
             if (tag is GDMPersonalName persName) {
-                result = $"Personal Name: {persName.StringValue}";
+                ShowPersonalNameSummary(tree, record, persName, summary);
             } else if (tag is GDMChildToFamilyLink ctfLink) {
-                result = $"ChildToFamily Link: {ctfLink.XRef}";
-            } else if (tag is GDMSpouseToFamilyLink stfLink) {
-                result = GetPtrDescription(LangMan.LS(LSID.Spouse), tree, stfLink);
+                ShowChildToFamilyLinkSummary(tree, ctfLink, summary);
             } else if (tag is GDMCustomEvent evt) {
-                result = $"Event: {GKUtils.GetEventName(evt)}";
+                bool individual = record is GDMIndividualRecord;
+                GKInfoPanel.ShowEventSummary(tree, evt, summary, individual);
             } else if (tag is GDMNotes notes) {
-                result = $"Notes Link: {notes.XRef}";
+                ShowNotesSummary(tree, notes, summary);
             } else if (tag is GDMMultimediaLink mediaLink) {
-                result = $"Media Link: {mediaLink.XRef}";
+                ShowMultimediaLinkSummary(tree, mediaLink, summary);
             } else if (tag is GDMSourceCitation sourLink) {
-                result = $"Source Link: {sourLink.XRef}, Page: {sourLink.Page}, CertaintyAssessment: {sourLink.CertaintyAssessment}";
+                GKInfoPanel.ShowSourceCitationSummary(tree, sourLink, summary, "");
             } else if (tag is GDMAddress addr) {
-                GKUtils.ShowAddressSummary(addr, summary);
+                GKInfoPanel.ShowAddressSummary(addr, summary);
             } else if (tag is GDMRepositoryCitation repoCit) {
-                result = $"Repository Citation: {repoCit.StringValue}";
+                ShowRepositoryCitationSummary(tree, repoCit, summary);
             } else if (tag is GDMFileReferenceWithTitle fileRef) {
-                result = $"File Reference: {fileRef.StringValue}";
+                ShowFileReferenceSummary(tree, fileRef, summary);
             } else if (tag is GDMLocationName locName) {
-                result = $"Location Name: {locName.StringValue}";
+                ShowLocationNameSummary(tree, locName, summary);
             } else if (tag is GDMLocationLink locLink) {
-                result = $"Location Link: {locLink.XRef}";
+                ShowLocationLinkSummary(tree, locLink, summary);
             } else if (tag is GDMSourceCallNumber callNum) {
-                result = $"Call Number: {callNum.StringValue}";
+                ShowSourceCallNumberSummary(tree, callNum, summary);
             } else if (tag is GDMSourceData sourData) {
-                result = $"Source Data: {sourData.StringValue}";
+                ShowSourceDataSummary(tree, sourData, summary);
             } else if (tag is GDMDNATest dnaTest) {
-                result = $"DNA Test: {dnaTest.StringValue}";
+                ShowDNATestSummary(tree, dnaTest, summary);
             } else {
-                result = GetBriefDescription(tree, tag);
+                result = GetBriefDescription(tree, record, tag);
             }
 
             if (!string.IsNullOrEmpty(result))
@@ -192,6 +194,142 @@ namespace GKCore.Sync
             }
 
             return string.Format("{0}: {1}", tagName, valueTag.StringValue);
+        }
+
+
+        private static string GetNotesPtrStr(GDMTree tree, GDMNotes notes)
+        {
+            return $"Notes Link: {notes.XRef}";
+        }
+
+        private static void ShowNotesSummary(GDMTree tree, GDMNotes notes, StringList summary)
+        {
+            summary.Add($"Notes Link: {notes.XRef}");
+        }
+
+
+        private static string GetFileReferenceStr(GDMTree tree, GDMFileReferenceWithTitle fileRef)
+        {
+            return $"{LangMan.LS(LSID.File)}: {fileRef.Title}";
+        }
+
+        private static void ShowFileReferenceSummary(GDMTree tree, GDMFileReferenceWithTitle fileRef, StringList summary)
+        {
+            summary.Add($"File Reference: {fileRef.StringValue}");
+            //return $"File Reference: {fileRef.StringValue}";
+        }
+
+
+        private static string GetLocationNameStr(GDMTree tree, GDMLocationName locName)
+        {
+            return $"Location Name: {locName.StringValue}";
+        }
+
+        private static void ShowLocationNameSummary(GDMTree tree, GDMLocationName locName, StringList summary)
+        {
+            summary.Add($"Location Name: {locName.StringValue}");
+        }
+
+
+        private static string GetLocationLinkStr(GDMTree tree, GDMLocationLink locLink)
+        {
+            return $"Location Link: {locLink.XRef}";
+        }
+
+        private static void ShowLocationLinkSummary(GDMTree tree, GDMLocationLink locLink, StringList summary)
+        {
+            summary.Add($"Location Link: {locLink.XRef}");
+        }
+
+
+        private static string GetSourceCallNumberStr(GDMTree tree, GDMSourceCallNumber callNum)
+        {
+            return $"Call Number: {callNum.StringValue}";
+        }
+
+        private static void ShowSourceCallNumberSummary(GDMTree tree, GDMSourceCallNumber callNum, StringList summary)
+        {
+            summary.Add($"Call Number: {callNum.StringValue}");
+        }
+
+
+        private static string GetSourceDataStr(GDMTree tree, GDMSourceData sourData)
+        {
+            return $"Source Data: {sourData.StringValue}";
+        }
+
+        private static void ShowSourceDataSummary(GDMTree tree, GDMSourceData sourData, StringList summary)
+        {
+            summary.Add($"Source Data: {sourData.StringValue}");
+        }
+
+
+        private static string GetDNATestStr(GDMTree tree, GDMDNATest dnaTest)
+        {
+            return $"{LangMan.LS(LSID.DNATest)}: {dnaTest.TestName}";
+        }
+
+        private static void ShowDNATestSummary(GDMTree tree, GDMDNATest dnaTest, StringList summary)
+        {
+            summary.Add($"{LangMan.LS(LSID.DNATest)}: {dnaTest.TestName}");
+        }
+
+
+        private static string GetPersonalNameStr(GDMTree tree, GDMRecord record, GDMPersonalName persName)
+        {
+            var indiRec = record as GDMIndividualRecord;
+            return $"Personal Name: {GKUtils.GetNameString(indiRec, persName, false, false)}";
+        }
+
+        private static void ShowPersonalNameSummary(GDMTree tree, GDMRecord record, GDMPersonalName persName, StringList summary)
+        {
+            var indiRec = record as GDMIndividualRecord;
+            summary.Add($"Personal Name: {GKUtils.GetNameString(indiRec, persName, false, false)}");
+        }
+
+
+        private static void ShowChildToFamilyLinkSummary(GDMTree tree, GDMChildToFamilyLink ctfLink, StringList summary)
+        {
+            summary.Add($"ChildToFamily Link: {ctfLink.XRef}");
+        }
+
+        private static void ShowMultimediaLinkSummary(GDMTree tree, GDMMultimediaLink mediaLink, StringList summary)
+        {
+            summary.Add($"Media Link: {mediaLink.XRef}");
+        }
+
+        private static void ShowRepositoryCitationSummary(GDMTree tree, GDMRepositoryCitation repoCit, StringList summary)
+        {
+            summary.Add($"Repository Citation: {repoCit.StringValue}");
+        }
+
+
+        private class GDMTagSummaryVisitor : IGDMObjectVisitor
+        {
+            private readonly GDMTree fTree;
+            private readonly GDMRecord fRecord;
+            private readonly StringList fSummary;
+
+            public GDMTagSummaryVisitor(GDMTree tree, GDMRecord record, StringList summary)
+            {
+                fTree = tree;
+                fRecord = record;
+                fSummary = summary;
+            }
+
+            public void Visit(GDMPersonalName obj) => ShowPersonalNameSummary(fTree, fRecord, obj, fSummary);
+            public void Visit(GDMChildToFamilyLink obj) => ShowChildToFamilyLinkSummary(fTree, obj, fSummary);
+
+            public void Visit(GDMTag obj)
+            {
+                string result = GetBriefDescription(fTree, fRecord, obj);
+                fSummary.Add(result);
+            }
+
+            /*public void Visit(GDMCustomEvent obj)
+            {
+                throw new System.NotImplementedException();
+            }*/
         }
     }
 }

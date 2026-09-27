@@ -704,7 +704,7 @@ namespace GKStdReports
                 fWriter.NewLine();
                 fWriter.AddParagraph(LangMan.LS(LSID.Theme) + ": \"" + commRec.CommName.Trim() + "\"", fBUFont);
                 fWriter.NewLine();
-                fWriter.AddParagraph(LangMan.LS(LSID.Corresponder) + ": " + GKUtils.GetCorresponderStr(fTree, commRec, true), fTextFont);
+                fWriter.AddParagraph(LangMan.LS(LSID.Corresponder) + ": " + GKInfoPanel.GetCorresponderStr(fTree, commRec, true), fTextFont);
                 fWriter.AddParagraph(LangMan.LS(LSID.Type) + ": " + LangMan.LS(GKData.CommunicationNames[(int)commRec.CommunicationType]), fTextFont);
                 fWriter.AddParagraph(LangMan.LS(LSID.Date) + ": " + commRec.Date.GetDisplayString(fOptions.DefDateFormat), fTextFont);
 

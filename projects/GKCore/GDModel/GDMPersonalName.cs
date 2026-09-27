@@ -407,5 +407,10 @@ namespace GDModel
         {
             return GDMStructureType.NoteLink | GDMStructureType.SourceCitation;
         }
+
+        public override void Accept(IGDMObjectVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

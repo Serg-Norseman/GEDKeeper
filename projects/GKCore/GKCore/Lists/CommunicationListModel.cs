@@ -64,7 +64,7 @@ namespace GKCore.Lists
                     break;
 
                 case ColumnType.ctCorresponder:
-                    result = GKUtils.GetCorresponderStr(fBaseContext.Tree, fFetchedRec, false);
+                    result = GKInfoPanel.GetCorresponderStr(fBaseContext.Tree, fFetchedRec, false);
                     break;
 
                 case ColumnType.ctCommType:

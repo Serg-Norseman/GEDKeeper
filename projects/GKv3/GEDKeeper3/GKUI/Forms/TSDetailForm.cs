@@ -18,6 +18,7 @@ using GKCore.Options;
 using GKCore.Sync;
 using GKCore.Utilities;
 using GKUI.Components;
+using GDModel;
 
 namespace GKUI.Forms
 {
@@ -89,11 +90,15 @@ namespace GKUI.Forms
             if (fCurrentRecord == null) return;
 
             // Update record info label
-            string recName1 = GKUtils.GetRecordName(fBase.Context.Tree, fCurrentRecord.Obj1, false);
-            string recName2 = GKUtils.GetRecordName(fBase.Context.Tree, fCurrentRecord.Obj2, false);
+            string recName1 = GKUtils.GetRecordName(fSyncTool.MainTree, fCurrentRecord.Obj1, false);
+            string recName2 = GKUtils.GetRecordName(fSyncTool.OtherTree, fCurrentRecord.Obj2, false);
             lblRecordInfo.Text = string.Format("Record: {0} [{1}] ↔ {2} [{3}]",
                 recName1, fCurrentRecord.Obj1.XRef,
                 recName2, fCurrentRecord.Obj2.XRef);
+
+            fListModel.SyncTool = fSyncTool;
+            fListModel.Record1 = fCurrentRecord.Obj1;
+            fListModel.Record2 = fCurrentRecord.Obj2;
 
             // Compare records and update list
             var diffTags = fSyncTool.CompareRecords(fCurrentRecord);
@@ -111,8 +116,8 @@ namespace GKUI.Forms
             var diffTag = lvContents.GetSelectedData() as DiffTag;
             if (diffTag == null) return;
 
-            GDMObjectsDescriber.GetFullDescription(fBase.Context.Tree, diffTag.Obj1, hvLeftRecord.Lines);
-            GDMObjectsDescriber.GetFullDescription(fBase.Context.Tree, diffTag.Obj2, hvRightRecord.Lines);
+            GDMObjectsDescriber.GetFullDescription(fSyncTool.MainTree, fCurrentRecord.Obj1, diffTag.Obj1, hvLeftRecord.Lines);
+            GDMObjectsDescriber.GetFullDescription(fSyncTool.OtherTree, fCurrentRecord.Obj2, diffTag.Obj2, hvRightRecord.Lines);
         }
 
         private void btnPrevRecord_Click(object sender, EventArgs e)
@@ -146,6 +151,11 @@ namespace GKUI.Forms
 
         private sealed class DiffContentsModel : SimpleListModel<DiffTag>
         {
+            public SyncTool SyncTool { get; set; }
+            public GDMRecord Record1 { get; set; }
+            public GDMRecord Record2 { get; set; }
+
+
             public DiffContentsModel(BaseContext baseContext) :
                 base(baseContext, CreateListColumns())
             {
@@ -205,10 +215,10 @@ namespace GKUI.Forms
                         result = fFetchedRec.Num;
                         break;
                     case 2:
-                        result = prefix1 + GDMObjectsDescriber.GetBriefDescription(fBaseContext.Tree, fFetchedRec.Obj1);
+                        result = prefix1 + GDMObjectsDescriber.GetBriefDescription(SyncTool.MainTree, Record1, fFetchedRec.Obj1);
                         break;
                     case 3:
-                        result = prefix2 + GDMObjectsDescriber.GetBriefDescription(fBaseContext.Tree, fFetchedRec.Obj2);
+                        result = prefix2 + GDMObjectsDescriber.GetBriefDescription(SyncTool.OtherTree, Record2, fFetchedRec.Obj2);
                         break;
                 }
                 return result;

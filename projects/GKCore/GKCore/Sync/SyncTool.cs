@@ -27,6 +27,9 @@ namespace GKCore.Sync
 
         public List<DiffRecord> Results;
 
+        public GDMTree MainTree { get { return fMainTree; } }
+        public GDMTree OtherTree { get { return fOtherTree; } }
+
         public static IColor GetDiffColor(DiffStatus diffStatus)
         {
             int backColor;

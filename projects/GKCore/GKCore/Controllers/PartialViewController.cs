@@ -149,7 +149,7 @@ namespace GKCore.Controllers
             try {
                 NavAdd(record);
 
-                GKUtils.GetRecordContent(fBase.Context, record, fSummary.Lines, RecordContentType.Full);
+                GKInfoPanel.GetRecordContent(fBase.Context, record, fSummary.Lines, RecordContentType.Full);
             } catch (Exception ex) {
                 Logger.WriteError("PartialViewController.ChangeListItem()", ex);
             }
@@ -183,7 +183,7 @@ namespace GKCore.Controllers
                 var locRec = fBase.Context.Tree.FindXRef<GDMLocationRecord>(xref);
                 if (locRec != null) BaseController.ShowMap_Indi(fBase, locRec);
             } else if (linkName.StartsWith(GKData.INFO_HREF_EXPAND_ASSO)) {
-                GKUtils.ExpandExtInfo(fBase.Context, sender, linkName);
+                GKInfoPanel.ExpandExtInfo(fBase.Context, sender, linkName);
             } else {
                 SelectRecordByXRef(linkName);
             }

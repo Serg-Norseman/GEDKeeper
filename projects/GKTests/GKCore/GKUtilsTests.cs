@@ -313,8 +313,8 @@ namespace GKCore
         [Test]
         public void Test_GetCorresponderStr()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(null, fContext.Tree.FindXRef<GDMCommunicationRecord>("CM1"), false); });
-            Assert.Throws(typeof(ArgumentNullException), () => { GKUtils.GetCorresponderStr(fContext.Tree, null, false); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKInfoPanel.GetCorresponderStr(null, fContext.Tree.FindXRef<GDMCommunicationRecord>("CM1"), false); });
+            Assert.Throws(typeof(ArgumentNullException), () => { GKInfoPanel.GetCorresponderStr(fContext.Tree, null, false); });
         }
 
         [Test]
@@ -517,10 +517,10 @@ namespace GKCore
         [Test]
         public void Test_HyperLink()
         {
-            string st1 = GKUtils.HyperLink("@X001@", "test");
+            string st1 = GKInfoPanel.HyperLink("@X001@", "test");
             Assert.AreEqual("[url=" + "@X001@" + "]" + "test" + "[/url]", st1);
 
-            st1 = GKUtils.HyperLink("@X001@", "");
+            st1 = GKInfoPanel.HyperLink("@X001@", "");
             Assert.AreEqual("[url=" + "@X001@" + "]" + "???" + "[/url]", st1);
         }
 
@@ -567,59 +567,59 @@ namespace GKCore
             StringList summary = new StringList();
 
             summary.Clear();
-            GKUtils.ShowFamilyInfo(fContext, null, null);
+            GKInfoPanel.ShowFamilyInfo(fContext, null, null);
             GDMFamilyRecord famRec = fContext.Tree.FindXRef<GDMFamilyRecord>("F1");
-            GKUtils.ShowFamilyInfo(fContext, famRec, summary);
+            GKInfoPanel.ShowFamilyInfo(fContext, famRec, summary);
 
             summary.Clear();
-            GKUtils.ShowGroupInfo(null, null, null);
+            GKInfoPanel.ShowGroupInfo(null, null, null);
             GDMGroupRecord grpRec = fContext.Tree.FindXRef<GDMGroupRecord>("G1");
-            GKUtils.ShowGroupInfo(fContext, grpRec, summary);
+            GKInfoPanel.ShowGroupInfo(fContext, grpRec, summary);
 
             summary.Clear();
-            GKUtils.ShowMultimediaInfo(null, null, null);
+            GKInfoPanel.ShowMultimediaInfo(null, null, null);
             GDMMultimediaRecord mmRec = fContext.Tree.FindXRef<GDMMultimediaRecord>("O1");
-            GKUtils.ShowMultimediaInfo(fContext, mmRec, summary);
+            GKInfoPanel.ShowMultimediaInfo(fContext, mmRec, summary);
 
             summary.Clear();
-            GKUtils.ShowNoteInfo(null, null, null);
+            GKInfoPanel.ShowNoteInfo(null, null, null);
             GDMNoteRecord noteRec = fContext.Tree.FindXRef<GDMNoteRecord>("N1");
-            GKUtils.ShowNoteInfo(fContext, noteRec, summary);
+            GKInfoPanel.ShowNoteInfo(fContext, noteRec, summary);
 
             summary.Clear();
-            GKUtils.ShowPersonInfo(fContext, null, null, RecordContentType.Full);
+            GKInfoPanel.ShowPersonInfo(fContext, null, null, RecordContentType.Full);
             GDMIndividualRecord indRec = fContext.Tree.FindXRef<GDMIndividualRecord>("I1");
-            GKUtils.ShowPersonInfo(fContext, indRec, summary, RecordContentType.Full);
+            GKInfoPanel.ShowPersonInfo(fContext, indRec, summary, RecordContentType.Full);
 
             summary.Clear();
-            GKUtils.ShowSourceInfo(null, null, null, RecordContentType.Quick);
+            GKInfoPanel.ShowSourceInfo(null, null, null, RecordContentType.Quick);
             GDMSourceRecord srcRec = fContext.Tree.FindXRef<GDMSourceRecord>("S1");
-            GKUtils.ShowSourceInfo(fContext, srcRec, summary, RecordContentType.Quick);
+            GKInfoPanel.ShowSourceInfo(fContext, srcRec, summary, RecordContentType.Quick);
 
             summary.Clear();
-            GKUtils.ShowRepositoryInfo(null, null, null);
+            GKInfoPanel.ShowRepositoryInfo(null, null, null);
             GDMRepositoryRecord repRec = fContext.Tree.FindXRef<GDMRepositoryRecord>("R1");
-            GKUtils.ShowRepositoryInfo(fContext, repRec, summary);
+            GKInfoPanel.ShowRepositoryInfo(fContext, repRec, summary);
 
             summary.Clear();
-            GKUtils.ShowResearchInfo(null, null, null);
+            GKInfoPanel.ShowResearchInfo(null, null, null);
             GDMResearchRecord resRec = fContext.Tree.FindXRef<GDMResearchRecord>("RS1");
-            GKUtils.ShowResearchInfo(fContext, resRec, summary);
+            GKInfoPanel.ShowResearchInfo(fContext, resRec, summary);
 
             summary.Clear();
-            GKUtils.ShowTaskInfo(null, null, null);
+            GKInfoPanel.ShowTaskInfo(null, null, null);
             GDMTaskRecord taskRec = fContext.Tree.FindXRef<GDMTaskRecord>("TK1");
-            GKUtils.ShowTaskInfo(fContext, taskRec, summary);
+            GKInfoPanel.ShowTaskInfo(fContext, taskRec, summary);
 
             summary.Clear();
-            GKUtils.ShowCommunicationInfo(null, null, null);
+            GKInfoPanel.ShowCommunicationInfo(null, null, null);
             GDMCommunicationRecord commRec = fContext.Tree.FindXRef<GDMCommunicationRecord>("CM1");
-            GKUtils.ShowCommunicationInfo(fContext, commRec, summary);
+            GKInfoPanel.ShowCommunicationInfo(fContext, commRec, summary);
 
             summary.Clear();
-            GKUtils.ShowLocationInfo(null, null, null);
+            GKInfoPanel.ShowLocationInfo(null, null, null);
             GDMLocationRecord locRec = fContext.Tree.FindXRef<GDMLocationRecord>("L1");
-            GKUtils.ShowLocationInfo(fContext, locRec, summary);
+            GKInfoPanel.ShowLocationInfo(fContext, locRec, summary);
         }
 
         [Test]
@@ -667,7 +667,7 @@ namespace GKCore
         [Test]
         public void Test_GetRecordContent()
         {
-            GKUtils.GetRecordContent(null, null, null, RecordContentType.Quick);
+            GKInfoPanel.GetRecordContent(null, null, null, RecordContentType.Quick);
         }
 
         [Test]
@@ -717,7 +717,7 @@ namespace GKCore
         [TestCase("", "")]
         public void Test_MakeLinks(string source, string target)
         {
-            Assert.AreEqual(target, GKUtils.MakeLinks(source));
+            Assert.AreEqual(target, GKInfoPanel.MakeLinks(source));
         }
     }
 }

@@ -325,6 +325,11 @@ namespace GDModel
         {
             return (this == other || fId == other.fId);
         }
+
+        public virtual void Accept(IGDMObjectVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 
 

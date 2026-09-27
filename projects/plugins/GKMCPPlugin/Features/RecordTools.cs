@@ -183,7 +183,7 @@ internal class RecordListTool : BaseTool
                     } else {
                         var rec = (GDMCommunicationRecord)recList[index];
                         string theme = rec.CommName;
-                        string corresponder = GKUtils.GetCorresponderStr(baseContext.Tree, rec, false);
+                        string corresponder = GKInfoPanel.GetCorresponderStr(baseContext.Tree, rec, false);
                         string type = LangMan.LS(GKData.CommunicationNames[(int)rec.CommunicationType]);
                         string date = GKUtils.GetDateDisplayString(rec.Date);
                         return $"|{rec.XRef}|{theme}|{corresponder}|{type}|{date}|";
@@ -305,7 +305,7 @@ internal class RecordInfoTool : BaseTool
             return MCPContent.CreateSimpleContent($"❌ Record not found with XRef: {xref}");
 
         StringList ctx = new StringList();
-        GKUtils.GetRecordContent(baseContext, record, ctx, RecordContentType.Quick);
+        GKInfoPanel.GetRecordContent(baseContext, record, ctx, RecordContentType.Quick);
         string text = BbCodeConverter.ToMarkdown(ctx.Text);
 
         return MCPContent.CreateSimpleContent(text);

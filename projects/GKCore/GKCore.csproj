@@ -96,6 +96,7 @@
     <Compile Include="GKCore\Export\RecordsTableExporter.cs" />
     <Compile Include="GKCore\Filters\FilterExpression.cs" />
     <Compile Include="GKCore\Filters\ListFilter.cs" />
+    <Compile Include="GKCore\GKInfoPanel.cs" />
     <Compile Include="GKCore\Lists\FlatListModel.cs" />
     <Compile Include="GKCore\Lists\RecsListModel.cs" />
     <Compile Include="GKCore\Lists\TagsListModel.cs" />
@@ -357,6 +358,7 @@
     <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GDModel\Providers\FileProvider.cs" />
     <Compile Include="GKCore\Sync\DiffRecord.cs" />
+    <Compile Include="GKCore\Sync\GDMObjectsDescriber.cs" />
     <Compile Include="GKCore\Sync\SyncTool.cs" />
     <Compile Include="GKCore\Utilities\ChecksumStream.cs" />
     <Compile Include="GKCore\Utilities\ExtObservableList.cs" />

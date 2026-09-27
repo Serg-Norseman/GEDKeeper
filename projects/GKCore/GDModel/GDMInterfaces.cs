@@ -17,6 +17,15 @@ namespace GDModel
     }
 
 
+    public interface IGDMObjectVisitor
+    {
+        void Visit(GDMTag obj);
+        void Visit(GDMPersonalName obj);
+        void Visit(GDMChildToFamilyLink obj);
+        //void Visit(GDMCustomEvent obj);
+    }
+
+
     public interface IGDMList<T> : IDisposable, IEnumerable<T>
         where T : class, IGDMObject
     {

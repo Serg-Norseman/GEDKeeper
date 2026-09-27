@@ -370,7 +370,7 @@ namespace GKCore.Controllers
 
                 var hyperView = GetHyperViewByType(record.RecordType);
                 if (hyperView != null) {
-                    GKUtils.GetRecordContent(fContext, record, hyperView.Lines, RecordContentType.Full);
+                    GKInfoPanel.GetRecordContent(fContext, record, hyperView.Lines, RecordContentType.Full);
                 }
             } catch (Exception ex) {
                 Logger.WriteError("BaseWinController.ChangeListItem()", ex);
@@ -406,7 +406,7 @@ namespace GKCore.Controllers
                 var locRec = fContext.Tree.FindXRef<GDMLocationRecord>(xref);
                 if (locRec != null) BaseController.ShowMap_Indi(fView, locRec);
             } else if (linkName.StartsWith(GKData.INFO_HREF_EXPAND_ASSO)) {
-                GKUtils.ExpandExtInfo(fContext, sender, linkName);
+                GKInfoPanel.ExpandExtInfo(fContext, sender, linkName);
             } else {
                 SelectRecordByXRef(linkName);
             }
@@ -446,7 +446,7 @@ namespace GKCore.Controllers
         public StringList GetRecordContent(GDMRecord record, RecordContentType contentType)
         {
             StringList ctx = new StringList();
-            GKUtils.GetRecordContent(fContext, record, ctx, contentType);
+            GKInfoPanel.GetRecordContent(fContext, record, ctx, contentType);
             return ctx;
         }
 
