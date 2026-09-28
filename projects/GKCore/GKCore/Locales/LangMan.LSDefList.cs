@@ -1114,6 +1114,11 @@ namespace GKCore.Locales
             /* 1069 */ "Output sources to filters in a convenient format",
             /* 1070 */ "Photo album",
             /* 1071 */ "Hide dates after the boundary",
+            /* 1072 */ "Child",
+            /* 1073 */ "Member",
+            /* 1074 */ "Synchronization tool is extremely dangerous for data! Use only if you clearly understand your actions!",
+            /* 1075 */ "Synchronize databases",
+            /* 1076 */ "Synchronize records",
         };
     }
 }

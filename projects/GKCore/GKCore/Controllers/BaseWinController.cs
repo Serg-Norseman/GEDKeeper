@@ -1024,6 +1024,10 @@ namespace GKCore.Controllers
                         GetControl<IMenuItem>("miPhotosBatchAdding").Text = LangMan.LS(LSID.PhotosBatchAdding);
                         GetControl<IMenuItem>("miCleanImagesCache").Text = LangMan.LS(LSID.CleanImagesCache);
 
+                        if (AppHost.Instance.HasFeatureSupport(Feature.DesktopV3)) {
+                            GetControl<IMenuItem>("miTreeSync").Text = LangMan.LS(LSID.SynchronizeTrees);
+                        }
+
                         GetControl<IMenuItem>("miWindow").Text = LangMan.LS(LSID.MIWindow);
                         GetControl<IMenuItem>("miWinCascade").Text = LangMan.LS(LSID.MIWinCascade);
                         GetControl<IMenuItem>("miWinHTile").Text = LangMan.LS(LSID.MIWinHTile);

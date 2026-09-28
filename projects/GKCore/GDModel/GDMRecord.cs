@@ -50,6 +50,9 @@ namespace GDModel
         private GDMList<GDMUserReference> fUserReferences;
 
 
+        /// <summary>
+        /// RIN (Record Identification Number).
+        /// </summary>
         public string AutomatedRecordID
         {
             get { return fAutomatedRecordID; }

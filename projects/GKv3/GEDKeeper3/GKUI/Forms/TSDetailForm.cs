@@ -34,7 +34,6 @@ namespace GKUI.Forms
     {
 #if NETCOREAPP
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
-        private Panel panel1;
         private Button btnPrevRecord;
         private Button btnNextRecord;
         private Button btnMerge;
@@ -62,6 +61,8 @@ namespace GKUI.Forms
 #endif
 
             lvContents.SelectedItemsChanged += lvContents_SelectedItemsChanged;
+
+            SetLocale();
         }
 
         public TSDetailForm(IBaseWindow curBase, SyncTool syncTool, List<DiffRecord> recordsList, int currentIndex) : this()
@@ -82,7 +83,10 @@ namespace GKUI.Forms
 
         public void SetLocale()
         {
-            // TODO: Implement localization
+            this.Title = LangMan.LS(LSID.SynchronizeRecords);
+            btnPrevRecord.Text = LangMan.LS(LSID.PrevRec);
+            btnNextRecord.Text = LangMan.LS(LSID.NextRec);
+            btnMerge.Text = LangMan.LS(LSID.RecMerge);
         }
 
         private void UpdateView()
@@ -92,7 +96,8 @@ namespace GKUI.Forms
             // Update record info label
             string recName1 = GKUtils.GetRecordName(fSyncTool.MainTree, fCurrentRecord.Obj1, false);
             string recName2 = GKUtils.GetRecordName(fSyncTool.OtherTree, fCurrentRecord.Obj2, false);
-            lblRecordInfo.Text = string.Format("Record: {0} [{1}] ↔ {2} [{3}]",
+            lblRecordInfo.Text = string.Format("{0}: {1} [{2}] ↔ {3} [{4}]",
+                LangMan.LS(LSID.RM_Records),
                 recName1, fCurrentRecord.Obj1.XRef,
                 recName2, fCurrentRecord.Obj2.XRef);
 

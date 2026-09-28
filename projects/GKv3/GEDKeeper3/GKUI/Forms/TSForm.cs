@@ -77,10 +77,18 @@ namespace GKUI.Forms
             fListModel = new DiffRecordsModel(fBase.Context);
             lvRecords.ListMan = fListModel;
             lvRecords.CellDoubleClick += lvRecords_CellDoubleClick;
+
+            SetLocale();
         }
 
         public void SetLocale()
         {
+            this.Title = LangMan.LS(LSID.SynchronizeTrees);
+            lblFile.Text = LangMan.LS(LSID.File);
+            btnSelectFile.Text = LangMan.LS(LSID.DlgSelect) + @"...";
+            groupBox1.Text = LangMan.LS(LSID.RM_Records);
+            rbSyncAll.Text = LangMan.LS(LSID.All);
+            rbSyncSelected.Text = LangMan.LS(LSID.MapSelOnSelected);
         }
 
         private async void btnSelectFile_ClickAsync(object sender, EventArgs e)

@@ -134,8 +134,8 @@ namespace GKCore.Locales
         /* 104 */ WinPersonEdit,
         /* 105 */ WinCheckSex,
         /* 106 */ WinRecordSelect,
-        /* 107 */ WinSourceCitEdit,
-        /* 108 */ WinUserRefEdit,
+        /* 107 */ SourceCit,
+        /* 108 */ UserRef,
         /* 109 */ Note,
         /* 110 */ Source,
         /* 111 */ Page,
@@ -1138,7 +1138,12 @@ namespace GKCore.Locales
         /* 1069 */ ConvenientSourcesFormat,
         /* 1070 */ PhotoAlbum,
         /* 1071 */ HideDatesAfterBoundary,
+        /* 1072 */ Child,
+        /* 1073 */ Member,
+        /* 1074 */ SyncWarning,
+        /* 1075 */ SynchronizeTrees,
+        /* 1076 */ SynchronizeRecords,
 
-        /* 0000 */ Last = PhotoAlbum
+        /* 0000 */ Last = SynchronizeRecords
     }
 }

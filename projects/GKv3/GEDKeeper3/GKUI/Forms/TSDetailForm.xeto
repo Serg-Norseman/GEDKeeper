@@ -6,7 +6,7 @@
 
   <TableLayout Style="paddedTable8">
     <TableRow>
-      <Panel x:Name="panel1" Padding="4">
+      <Panel Padding="4">
         <StackLayout Orientation="Vertical" Spacing="4">
           <Label x:Name="lblRecordInfo" Text="Record:" Height="40" />
 

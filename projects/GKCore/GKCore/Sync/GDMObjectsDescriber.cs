@@ -29,17 +29,17 @@ namespace GKCore.Sync
             } else if (tag is GDMSpouseToFamilyLink stfLink) {
                 result = GetPtrDescription(LangMan.LS(LSID.Family), tree, stfLink);
             } else if (tag is GDMChildLink childLink) {
-                result = GetPtrDescription("Child", tree, childLink); // FIXME: single form
+                result = GetPtrDescription(LangMan.LS(LSID.Child), tree, childLink);
             } else if (tag is GDMCustomEvent evt) {
                 result = GKUtils.GetEventStr(evt);
             } else if (tag is GDMNotes notes) {
                 result = GetNotesPtrStr(tree, notes);
             } else if (tag is GDMMultimediaLink mediaLink) {
-                result = GetPtrDescription("Media", tree, mediaLink);
+                result = GetPtrDescription(LangMan.LS(LSID.RPMultimedia), tree, mediaLink);
             } else if (tag is GDMSourceCitation sourLink) {
                 result = $"{LangMan.LS(LSID.Source)}: {GKInfoPanel.GetSourceCitationStr(tree, sourLink)}";
             } else if (tag is GDMUserReference userRef) {
-                result = $"UserRef: {GKInfoPanel.GetUserReferenceStr(tree, userRef)}"; // FIXME: single form
+                result = $"{LangMan.LS(LSID.UserRef)}: {GKInfoPanel.GetUserReferenceStr(tree, userRef)}";
             } else if (tag is GDMAddress addr) {
                 result = GKInfoPanel.GetAddressStr(tree, addr);
             } else if (tag is GDMRepositoryCitation repoCit) {
@@ -53,7 +53,7 @@ namespace GKCore.Sync
             } else if (tag is GDMLocationLink locLink) {
                 result = GetLocationLinkStr(tree, locLink);
             } else if (tag is GDMMemberLink memberLink) {
-                result = GetPtrDescription("Member", tree, memberLink); // FIXME: single form
+                result = GetPtrDescription(LangMan.LS(LSID.Member), tree, memberLink);
             } else if (tag is GDMGroupLink groupLink) {
                 result = GetPtrDescription(LangMan.LS(LSID.Group), tree, groupLink);
             } else if (tag is GDMSourceCallNumber callNum) {
@@ -139,9 +139,6 @@ namespace GKCore.Sync
             switch (tagType) {
                 case GEDCOMTagType.NOTE:
                     tagName = LangMan.LS(LSID.Note);
-                    break;
-                case GEDCOMTagType.RIN:
-                    tagName = "AutomatedRecordID";
                     break;
                 case GEDCOMTagType.NAME:
                     tagName = LangMan.LS(LSID.GeneralName);

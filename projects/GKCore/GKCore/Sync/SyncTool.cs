@@ -418,12 +418,6 @@ namespace GKCore.Sync
         {
             bool result = false;
 
-#if RELEASE
-            AppHost.StdDialogs.ShowWarning("Merge functionality is not yet implemented.");
-            return result;
-#endif
-
-            // TODO: Implement merging logic
             foreach (var diff in tagsDiff) {
                 switch (diff.Status) {
                     case DiffStatus.Equal:
@@ -460,7 +454,18 @@ namespace GKCore.Sync
         {
             // TODO: Create a cross-index from the XRef in the second file to the position in the diff
             // to determine whether it is local to the second file or existed in the first.
-            return false;
+
+            // TODO: collect XRefs
+
+            // dummy temp check
+            if (tagDiff.Obj2 is GDMPointer ptr) {
+                var record = fMainTree.FindXRef<GDMRecord>(ptr.XRef);
+                if (record == null) {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void DeleteStruct<T>(GDMRecord target, T xStruct) where T : GDMTag
@@ -472,6 +477,29 @@ namespace GKCore.Sync
         {
             // TODO: cross-record links
             // TODO: variations of record types and first-level structure types!
+
+            if (xStruct is GDMIndividualEvent indiEvent) {
+                var copy = indiEvent.Clone();
+                ((GDMIndividualRecord)target).Events.Add(copy);
+            } else if (xStruct is GDMIndividualAttribute indiAttr) {
+                var copy = indiAttr.Clone();
+                ((GDMIndividualRecord)target).Events.Add(copy);
+            } else if (xStruct is GDMFamilyEvent famEvent) {
+                var copy = famEvent.Clone();
+                ((GDMFamilyRecord)target).Events.Add(copy);
+            } else if (xStruct is GDMAssociation asso) {
+                var copy = asso.Clone();
+                ((GDMIndividualRecord)target).Associations.Add(copy);
+            } else if (xStruct is GDMSourceCitation sourCit) {
+                var copy = sourCit.Clone();
+                target.SourceCitations.Add(copy);
+            } else if (xStruct is GDMLocationName locName) {
+                var copy = locName.Clone();
+                ((GDMLocationRecord)target).Names.Add(copy);
+            } else if (xStruct is GDMLocationLink locLink) {
+                var copy = locLink.Clone();
+                ((GDMLocationRecord)target).TopLevels.Add(copy);
+            }
         }
     }
 }
