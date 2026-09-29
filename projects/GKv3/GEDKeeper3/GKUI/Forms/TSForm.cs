@@ -44,6 +44,8 @@ namespace GKUI.Forms
         private CheckBox chkOnlyModified;
         private GKListView lvRecords;
         private TextArea mSyncRes;
+        private Button btnSyncRecords;
+        private Button btnAcceptChange;
 #pragma warning restore CS0169, CS0649, IDE0044, IDE0051
 #endif
 
@@ -77,6 +79,7 @@ namespace GKUI.Forms
             fListModel = new DiffRecordsModel(fBase.Context);
             lvRecords.ListMan = fListModel;
             lvRecords.CellDoubleClick += lvRecords_CellDoubleClick;
+            lvRecords.SelectedItemsChanged += lvRecords_SelectedItemsChanged;
 
             SetLocale();
         }
@@ -125,8 +128,18 @@ namespace GKUI.Forms
 
         private void lvRecords_CellDoubleClick(object sender, GridCellMouseEventArgs e)
         {
+            btnSyncRecords_Click(sender, e);
+        }
+
+        private void btnSyncRecords_Click(object sender, EventArgs e)
+        {
             var item = lvRecords.GetSelectedData() as DiffRecord;
             if (item == null) return;
+
+            if (item.Obj1 == null || item.Obj2 == null) {
+                // TODO: message, record added or deleted -> Accept action only
+                return;
+            }
 
             var records = fSyncTool.Results;
             if (item.Status >= DiffStatus.Modified)
@@ -136,6 +149,20 @@ namespace GKUI.Forms
             using (var detailForm = new TSDetailForm(fBase, fSyncTool, records, selectedIndex)) {
                 detailForm.ShowModal();
             }
+        }
+
+        private void lvRecords_SelectedItemsChanged(object sender, EventArgs e)
+        {
+            var item = lvRecords.GetSelectedData() as DiffRecord;
+            if (item == null) return;
+
+            btnSyncRecords.Enabled = (item.Status >= DiffStatus.Modified);
+            btnAcceptChange.Enabled = (item.Status == DiffStatus.Deleted || item.Status == DiffStatus.Inserted);
+        }
+
+        private void btnAcceptChange_Click(object sender, EventArgs e)
+        {
+            // TODO
         }
 
         private void UpdateLists()

@@ -449,22 +449,16 @@ namespace GKCore.Sync
             return result;
         }
 
-        // TODO: CROSS-RECORD LINKS! - for merge and insert!
         private bool CheckLinks(DiffTag tagDiff)
         {
-            // TODO: Create a cross-index from the XRef in the second file to the position in the diff
+            // Create a cross-index from the XRef in the second file to the position in the diff
             // to determine whether it is local to the second file or existed in the first.
-
-            // TODO: collect XRefs
-
-            // dummy temp check
-            if (tagDiff.Obj2 is GDMPointer ptr) {
-                var record = fMainTree.FindXRef<GDMRecord>(ptr.XRef);
-                if (record == null) {
-                    return false;
-                }
+            var refs = ReferenceVerifier.VerifyTagReferences(fMainTree, tagDiff.Obj2);
+            if (refs.Count > 0) {
+                // TODO: Compare links based on differences between trees for cases
+                // where records with a specific XRef were added independently.
+                return false;
             }
-
             return true;
         }
 

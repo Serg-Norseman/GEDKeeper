@@ -323,10 +323,10 @@ namespace GKCore.Sync
                 fSummary.Add(result);
             }
 
-            /*public void Visit(GDMCustomEvent obj)
+            public void Visit(GDMCustomEvent obj)
             {
                 throw new System.NotImplementedException();
-            }*/
+            }
         }
     }
 }

@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GDModel;
 using GKCore;
 using GKCore.Design;
 using GKCore.Design.Graphics;
@@ -18,7 +19,6 @@ using GKCore.Options;
 using GKCore.Sync;
 using GKCore.Utilities;
 using GKUI.Components;
-using GDModel;
 
 namespace GKUI.Forms
 {

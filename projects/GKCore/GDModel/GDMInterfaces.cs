@@ -22,7 +22,7 @@ namespace GDModel
         void Visit(GDMTag obj);
         void Visit(GDMPersonalName obj);
         void Visit(GDMChildToFamilyLink obj);
-        //void Visit(GDMCustomEvent obj);
+        void Visit(GDMCustomEvent obj);
     }
 
 

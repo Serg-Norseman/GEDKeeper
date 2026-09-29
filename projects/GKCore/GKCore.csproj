@@ -359,6 +359,7 @@
     <Compile Include="GDModel\Providers\FileProvider.cs" />
     <Compile Include="GKCore\Sync\DiffRecord.cs" />
     <Compile Include="GKCore\Sync\GDMObjectsDescriber.cs" />
+    <Compile Include="GKCore\Sync\ReferenceVerifier.cs" />
     <Compile Include="GKCore\Sync\SyncTool.cs" />
     <Compile Include="GKCore\Utilities\ChecksumStream.cs" />
     <Compile Include="GKCore\Utilities\ExtObservableList.cs" />

@@ -8,7 +8,7 @@
     <TableRow>
       <Panel x:Name="panel1" Padding="4">
         <StackLayout Orientation="Horizontal" Spacing="4">
-          <GroupBox x:Name="groupBox1" Text="Synchronize records" Padding="4">
+          <GroupBox x:Name="groupBox1" Text="Synchronize records" Padding="4" Enabled="False">
             <StackLayout Orientation="Vertical" Spacing="4">
               <RadioButton x:Name="rbSyncAll" Text="All" Checked="True" CheckedChanged="rbSyncRecords_CheckedChanged" />
               <StackLayout Orientation="Horizontal" Spacing="4">
@@ -26,6 +26,11 @@
             </StackLayout>
 
             <CheckBox x:Name="chkOnlyModified" Text="Only modified" CheckedChanged="chkOnlyModified_CheckStateChanged" />
+
+            <StackLayout Orientation="Horizontal" Spacing="4">
+              <Button x:Name="btnSyncRecords" Text="Sync Records..." Width="122" Click="btnSyncRecords_Click" />
+              <Button x:Name="btnAcceptChange" Text="Accept change" Width="122" Click="btnAcceptChange_Click" />
+            </StackLayout>
           </StackLayout>
         </StackLayout>
       </Panel>
