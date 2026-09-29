@@ -1082,6 +1082,11 @@ namespace GKCore
             }
         }
 
+        public static string GetPriorityStr(GDMResearchPriority priority)
+        {
+            return LangMan.LS(GKData.PriorityNames[(int)priority]);
+        }
+
         public static void ShowResearchInfo(BaseContext baseContext, GDMResearchRecord researchRec, StringList summary)
         {
             if (summary == null) return;

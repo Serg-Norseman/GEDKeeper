@@ -134,12 +134,7 @@ namespace GKUI.Forms
         private void btnSyncRecords_Click(object sender, EventArgs e)
         {
             var item = lvRecords.GetSelectedData() as DiffRecord;
-            if (item == null) return;
-
-            if (item.Obj1 == null || item.Obj2 == null) {
-                // TODO: message, record added or deleted -> Accept action only
-                return;
-            }
+            if (item == null || item.Obj1 == null || item.Obj2 == null) return;
 
             var records = fSyncTool.Results;
             if (item.Status >= DiffStatus.Modified)
@@ -162,7 +157,9 @@ namespace GKUI.Forms
 
         private void btnAcceptChange_Click(object sender, EventArgs e)
         {
-            // TODO
+            var records = fSyncTool.Results;
+            records = records.Where((x) => x.Checked && (x.Status == DiffStatus.Inserted || x.Status == DiffStatus.Deleted)).ToList();
+            fSyncTool.AcceptChange(records);
         }
 
         private void UpdateLists()

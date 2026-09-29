@@ -25,9 +25,6 @@
 			"path": "./GKBenchmarks"
 		},
 		{
-			"path": "../GKcli/GKCortex"
-		},
-		{
 			"path": "../plugins/GKMCPPlugin"
 		}
 	],

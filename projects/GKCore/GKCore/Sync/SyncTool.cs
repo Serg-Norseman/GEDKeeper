@@ -89,8 +89,7 @@ namespace GKCore.Sync
                     var rec1 = diffRec.Obj1;
                     var rec2 = diffRec.Obj2;
 
-                    // ChangeDateTime eliminated, only contents!
-                    if (rec1.XRef != rec2.XRef /*|| rec1.ChangeDate.ChangeDateTime != rec2.ChangeDate.ChangeDateTime*/) {
+                    if (rec1.XRef != rec2.XRef) {
                         diffRec.Status = DiffStatus.Modified;
                     }
 
@@ -313,7 +312,7 @@ namespace GKCore.Sync
 
             CompareTagLists<GDMRepositoryCitation>(sourRec1.RepositoryCitations, sourRec2.RepositoryCitations, differences);
             CompareStruct(sourRec1.Data, sourRec2.Data, differences);
-            CompareSimpleTag(GEDCOMTagType.DATE, GetDateStr(sourRec1.Date), GetDateStr(sourRec1.Date), differences);
+            CompareSimpleTag(GEDCOMTagType.DATE, GKUtils.GetDateDisplayString(sourRec1.Date), GKUtils.GetDateDisplayString(sourRec1.Date), differences);
 
             return differences;
         }
@@ -349,11 +348,11 @@ namespace GKCore.Sync
             CompareRecords(resRec1, resRec2, differences);
 
             CompareSimpleTag(GEDCOMTagType.NAME, resRec1.ResearchName, resRec2.ResearchName, differences);
-            CompareSimpleTag(GEDCOMTagType._PRIORITY, GetPriorityStr(resRec1.Priority), GetPriorityStr(resRec2.Priority), differences);
+            CompareSimpleTag(GEDCOMTagType._PRIORITY, GKInfoPanel.GetPriorityStr(resRec1.Priority), GKInfoPanel.GetPriorityStr(resRec2.Priority), differences);
             CompareSimpleTag(GEDCOMTagType._STATUS, LangMan.LS(GKData.StatusNames[(int)resRec1.Status]), LangMan.LS(GKData.StatusNames[(int)resRec2.Status]), differences);
             CompareSimpleTag(GEDCOMTagType._PERCENT, resRec1.Percent.ToString(), resRec2.Percent.ToString(), differences);
-            CompareSimpleTag(GEDCOMTagType._STARTDATE, GetDateStr(resRec1.StartDate), GetDateStr(resRec2.StartDate), differences);
-            CompareSimpleTag(GEDCOMTagType._STOPDATE, GetDateStr(resRec1.StopDate), GetDateStr(resRec2.StopDate), differences);
+            CompareSimpleTag(GEDCOMTagType._STARTDATE, GKUtils.GetDateDisplayString(resRec1.StartDate), GKUtils.GetDateDisplayString(resRec2.StartDate), differences);
+            CompareSimpleTag(GEDCOMTagType._STOPDATE, GKUtils.GetDateDisplayString(resRec1.StopDate), GKUtils.GetDateDisplayString(resRec2.StopDate), differences);
 
             // simple pointers, not require details
             ComparePtrLists<GDMPointer>(resRec1.Tasks, resRec2.Tasks, differences);
@@ -370,9 +369,9 @@ namespace GKCore.Sync
             CompareRecords(taskRec1, taskRec2, differences);
 
             CompareSimpleTag(GEDCOMTagType._GOAL, GKUtils.GetTaskGoalStr(fMainTree, taskRec1), GKUtils.GetTaskGoalStr(fOtherTree, taskRec2), differences);
-            CompareSimpleTag(GEDCOMTagType._PRIORITY, GetPriorityStr(taskRec1.Priority), GetPriorityStr(taskRec2.Priority), differences);
-            CompareSimpleTag(GEDCOMTagType._STARTDATE, GetDateStr(taskRec1.StartDate), GetDateStr(taskRec2.StartDate), differences);
-            CompareSimpleTag(GEDCOMTagType._STOPDATE, GetDateStr(taskRec1.StopDate), GetDateStr(taskRec2.StopDate), differences);
+            CompareSimpleTag(GEDCOMTagType._PRIORITY, GKInfoPanel.GetPriorityStr(taskRec1.Priority), GKInfoPanel.GetPriorityStr(taskRec2.Priority), differences);
+            CompareSimpleTag(GEDCOMTagType._STARTDATE, GKUtils.GetDateDisplayString(taskRec1.StartDate), GKUtils.GetDateDisplayString(taskRec2.StartDate), differences);
+            CompareSimpleTag(GEDCOMTagType._STOPDATE, GKUtils.GetDateDisplayString(taskRec1.StopDate), GKUtils.GetDateDisplayString(taskRec2.StopDate), differences);
 
             return differences;
         }
@@ -386,7 +385,7 @@ namespace GKCore.Sync
             CompareSimpleTag(GEDCOMTagType.NAME, commRec1.CommName, commRec2.CommName, differences);
             CompareSimpleTag(GEDCOMTagType.TYPE, LangMan.LS(GKData.CommunicationNames[(int)commRec1.CommunicationType]), LangMan.LS(GKData.CommunicationNames[(int)commRec2.CommunicationType]), differences);
             //CompareSimpleTag(GEDCOMTagType., commRec1.CommDirection.ToString(), commRec2.CommDirection.ToString(), differences); // TODO
-            CompareSimpleTag(GEDCOMTagType.DATE, GetDateStr(commRec1.Date), GetDateStr(commRec2.Date), differences);
+            CompareSimpleTag(GEDCOMTagType.DATE, GKUtils.GetDateDisplayString(commRec1.Date), GKUtils.GetDateDisplayString(commRec2.Date), differences);
 
             return differences;
         }
@@ -404,14 +403,11 @@ namespace GKCore.Sync
             return differences;
         }
 
-        private static string GetDateStr(GDMCustomDate date)
+        public bool AcceptChange(IEnumerable<DiffRecord> recordsDiff)
         {
-            return GKUtils.GetDateDisplayString(date);
-        }
-
-        private static string GetPriorityStr(GDMResearchPriority priority)
-        {
-            return LangMan.LS(GKData.PriorityNames[(int)priority]);
+            bool result = false;
+            // TODO
+            return result;
         }
 
         public bool Merge(GDMRecord target, GDMRecord source, IEnumerable<DiffTag> tagsDiff)
@@ -425,13 +421,13 @@ namespace GKCore.Sync
                         break;
 
                     case DiffStatus.Deleted:
-                        DeleteStruct(target, diff.Obj1);
+                        RemoveStruct(target, diff.Obj1);
                         result = true;
                         break;
 
                     case DiffStatus.Inserted:
                         if (CheckLinks(diff)) {
-                            InsertStruct(target, diff.Obj2);
+                            AddStruct(target, diff.Obj2);
                             result = true;
                         }
                         break;
@@ -462,37 +458,113 @@ namespace GKCore.Sync
             return true;
         }
 
-        private void DeleteStruct<T>(GDMRecord target, T xStruct) where T : GDMTag
+        private void RemoveStruct<T>(GDMRecord target, T xStruct) where T : GDMTag
         {
-            // TODO: variations of record types and first-level structure types!
+            if (xStruct is GDMPersonalName persName) {
+                ((GDMIndividualRecord)target).PersonalNames.Remove(persName);
+            } else if (xStruct is GDMDNATest dnaTest) {
+                ((GDMIndividualRecord)target).DNATests.Remove(dnaTest);
+            } else if (xStruct is GDMGroupLink groupLink) {
+                ((GDMIndividualRecord)target).Groups.Remove(groupLink);
+            } else if (xStruct is GDMChildToFamilyLink ctfLink) {
+                ((GDMIndividualRecord)target).ChildToFamilyLinks.Remove(ctfLink);
+            } else if (xStruct is GDMSpouseToFamilyLink spfLink) {
+                ((GDMIndividualRecord)target).SpouseToFamilyLinks.Remove(spfLink);
+            } else if (xStruct is GDMChildLink child) {
+                ((GDMFamilyRecord)target).Children.Remove(child);
+            } else if (xStruct is GDMIndividualEvent indiEvent) {
+                ((GDMIndividualRecord)target).Events.Remove(indiEvent);
+            } else if (xStruct is GDMIndividualAttribute indiAttr) {
+                ((GDMIndividualRecord)target).Events.Remove(indiAttr);
+            } else if (xStruct is GDMFamilyEvent famEvent) {
+                ((GDMFamilyRecord)target).Events.Remove(famEvent);
+            } else if (xStruct is GDMAssociation asso) {
+                ((GDMIndividualRecord)target).Associations.Remove(asso);
+            } else if (xStruct is GDMSourceCitation sourCit) {
+                target.SourceCitations.Remove(sourCit);
+            } else if (xStruct is GDMMultimediaLink mediaLink) {
+                target.MultimediaLinks.Remove(mediaLink);
+            } else if (xStruct is GDMNotes noteLink) {
+                target.Notes.Remove(noteLink);
+            } else if (xStruct is GDMUserReference userRef) {
+                target.UserReferences.Remove(userRef);
+            } else if (xStruct is GDMRepositoryCitation repoCit) {
+                ((GDMSourceRecord)target).RepositoryCitations.Remove(repoCit);
+            } else if (xStruct is GDMFileReferenceWithTitle fileRef) {
+                ((GDMMultimediaRecord)target).FileReferences.Remove(fileRef);
+            } else if (xStruct is GDMLocationName locName) {
+                ((GDMLocationRecord)target).Names.Remove(locName);
+            } else if (xStruct is GDMLocationLink locLink) {
+                ((GDMLocationRecord)target).TopLevels.Remove(locLink);
+            } else if (xStruct is GDMMemberLink member) {
+                ((GDMGroupRecord)target).Members.Remove(member);
+            } else if (xStruct is GDMPointer ptr) {
+                switch ((GEDCOMTagType)ptr.Id) {
+                    case GEDCOMTagType._TASK:
+                        ((GDMResearchRecord)target).Tasks.Remove(ptr);
+                        break;
+                    case GEDCOMTagType._COMM:
+                        ((GDMResearchRecord)target).Communications.Remove(ptr);
+                        break;
+                    case GEDCOMTagType._GROUP:
+                        ((GDMResearchRecord)target).Groups.Remove(ptr);
+                        break;
+                }
+            }
         }
 
-        private void InsertStruct<T>(GDMRecord target, T xStruct) where T : GDMTag
+        private void AddStruct<T>(GDMRecord target, T xStruct) where T : GDMTag
         {
-            // TODO: cross-record links
-            // TODO: variations of record types and first-level structure types!
-
-            if (xStruct is GDMIndividualEvent indiEvent) {
-                var copy = indiEvent.Clone();
-                ((GDMIndividualRecord)target).Events.Add(copy);
+            if (xStruct is GDMPersonalName persName) {
+                ((GDMIndividualRecord)target).PersonalNames.Add(persName.Clone());
+            } else if (xStruct is GDMDNATest dnaTest) {
+                ((GDMIndividualRecord)target).DNATests.Add(dnaTest.Clone());
+            } else if (xStruct is GDMGroupLink groupLink) {
+                ((GDMIndividualRecord)target).Groups.Add(groupLink.Clone());
+            } else if (xStruct is GDMChildToFamilyLink ctfLink) {
+                ((GDMIndividualRecord)target).ChildToFamilyLinks.Add(ctfLink.Clone());
+            } else if (xStruct is GDMSpouseToFamilyLink spfLink) {
+                ((GDMIndividualRecord)target).SpouseToFamilyLinks.Add(spfLink.Clone());
+            } else if (xStruct is GDMChildLink child) {
+                ((GDMFamilyRecord)target).Children.Add(child.Clone());
+            } else if (xStruct is GDMIndividualEvent indiEvent) {
+                ((GDMIndividualRecord)target).Events.Add(indiEvent.Clone());
             } else if (xStruct is GDMIndividualAttribute indiAttr) {
-                var copy = indiAttr.Clone();
-                ((GDMIndividualRecord)target).Events.Add(copy);
+                ((GDMIndividualRecord)target).Events.Add(indiAttr.Clone());
             } else if (xStruct is GDMFamilyEvent famEvent) {
-                var copy = famEvent.Clone();
-                ((GDMFamilyRecord)target).Events.Add(copy);
+                ((GDMFamilyRecord)target).Events.Add(famEvent.Clone());
             } else if (xStruct is GDMAssociation asso) {
-                var copy = asso.Clone();
-                ((GDMIndividualRecord)target).Associations.Add(copy);
+                ((GDMIndividualRecord)target).Associations.Add(asso.Clone());
             } else if (xStruct is GDMSourceCitation sourCit) {
-                var copy = sourCit.Clone();
-                target.SourceCitations.Add(copy);
+                target.SourceCitations.Add(sourCit.Clone());
+            } else if (xStruct is GDMMultimediaLink mediaLink) {
+                target.MultimediaLinks.Add(mediaLink.Clone());
+            } else if (xStruct is GDMNotes noteLink) {
+                target.Notes.Add(noteLink.Clone());
+            } else if (xStruct is GDMUserReference userRef) {
+                target.UserReferences.Add(userRef.Clone());
+            } else if(xStruct is GDMRepositoryCitation repoCit) {
+                ((GDMSourceRecord)target).RepositoryCitations.Add(repoCit.Clone());
+            } else if (xStruct is GDMFileReferenceWithTitle fileRef) {
+                ((GDMMultimediaRecord)target).FileReferences.Add(fileRef.Clone());
             } else if (xStruct is GDMLocationName locName) {
-                var copy = locName.Clone();
-                ((GDMLocationRecord)target).Names.Add(copy);
+                ((GDMLocationRecord)target).Names.Add(locName.Clone());
             } else if (xStruct is GDMLocationLink locLink) {
-                var copy = locLink.Clone();
-                ((GDMLocationRecord)target).TopLevels.Add(copy);
+                ((GDMLocationRecord)target).TopLevels.Add(locLink.Clone());
+            } else if (xStruct is GDMMemberLink member) {
+                ((GDMGroupRecord)target).Members.Add(member.Clone());
+            } else if (xStruct is GDMPointer ptr) {
+                switch ((GEDCOMTagType)ptr.Id) {
+                    case GEDCOMTagType._TASK:
+                        ((GDMResearchRecord)target).Tasks.Add(ptr.Clone());
+                        break;
+                    case GEDCOMTagType._COMM:
+                        ((GDMResearchRecord)target).Communications.Add(ptr.Clone());
+                        break;
+                    case GEDCOMTagType._GROUP:
+                        ((GDMResearchRecord)target).Groups.Add(ptr.Clone());
+                        break;
+                }
             }
         }
     }

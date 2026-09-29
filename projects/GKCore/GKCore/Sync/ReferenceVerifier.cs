@@ -417,6 +417,7 @@ namespace GKCore.Sync
         public GDMTagReferenceVerifier(GDMTree targetTree)
         {
             fTargetTree = targetTree;
+            fTempResult = new HashSet<string>();
         }
 
         public HashSet<string> GetResult()
