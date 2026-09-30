@@ -1143,7 +1143,8 @@ namespace GKCore.Locales
         /* 1074 */ SyncWarning,
         /* 1075 */ SynchronizeTrees,
         /* 1076 */ SynchronizeRecords,
+        /* 1077 */ ShowOnlyModified,
 
-        /* 0000 */ Last = SynchronizeRecords
+        /* 0000 */ Last = ShowOnlyModified
     }
 }

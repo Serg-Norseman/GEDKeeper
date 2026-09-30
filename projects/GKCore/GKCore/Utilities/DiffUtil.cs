@@ -22,10 +22,19 @@ namespace GKCore.Utilities
     }
 
 
-    public class DiffResult<T>
+    public interface IDiffResult
+    {
+        bool Checked { get; set; }
+        int Num { get; }
+        DiffStatus Status { get; set; }
+    }
+
+
+    public class DiffResult<T> : IDiffResult
     {
         public static int LastNum;
 
+        public bool Checked { get; set; }
         public int Num { get; private set; }
 
         public T Obj1 { get; private set; }

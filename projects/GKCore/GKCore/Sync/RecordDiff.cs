@@ -12,23 +12,41 @@ using GKCore.Utilities;
 
 namespace GKCore.Sync
 {
-    public sealed class DiffRecord : DiffResult<GDMRecord>
-    {
-        public bool Checked { get; set; }
+    #region Classes of differences
 
-        public DiffRecord(GDMRecord obj1, GDMRecord obj2, DiffStatus status) : base(obj1, obj2, status)
+    public sealed class RecordDiff : DiffResult<GDMRecord>
+    {
+        public RecordDiff(GDMRecord obj1, GDMRecord obj2, DiffStatus status) : base(obj1, obj2, status)
         {
         }
     }
 
-    public sealed class DiffTag : DiffResult<GDMTag>
-    {
-        public bool Checked { get; set; }
 
-        public DiffTag(GDMTag obj1, GDMTag obj2, DiffStatus status) : base(obj1, obj2, status)
+    public sealed class ValDiff : DiffResult<object>
+    {
+        public int ValType { get; private set; }
+        public string DisplayItem1 { get; private set; }
+        public string DisplayItem2 { get; private set; }
+
+        public ValDiff(int valType, object obj1, string displayItem1, object obj2, string displayItem2, DiffStatus status) : base(obj1, obj2, status)
+        {
+            ValType = valType;
+            DisplayItem1 = displayItem1;
+            DisplayItem2 = displayItem2;
+        }
+    }
+
+
+    public sealed class TagDiff : DiffResult<GDMTag>
+    {
+        public TagDiff(GDMTag obj1, GDMTag obj2, DiffStatus status) : base(obj1, obj2, status)
         {
         }
     }
+
+    #endregion 
+
+    #region Comparison classes
 
     internal class RecordComparer : IEqualityComparer<GDMRecord>
     {
@@ -43,6 +61,7 @@ namespace GKCore.Sync
         }
     }
 
+
     internal class EventComparer<T> : IEqualityComparer<T> where T : GDMCustomEvent
     {
         public bool Equals(T x, T y)
@@ -55,6 +74,7 @@ namespace GKCore.Sync
             return obj.GetHashCode();
         }
     }
+
 
     internal class TagComparer<T> : IEqualityComparer<T> where T : GDMTag
     {
@@ -69,6 +89,7 @@ namespace GKCore.Sync
         }
     }
 
+
     internal class ValueTagComparer<T> : IEqualityComparer<T> where T : GDMValueTag
     {
         public bool Equals(T x, T y)
@@ -82,6 +103,7 @@ namespace GKCore.Sync
         }
     }
 
+
     internal class PointerComparer<T> : IEqualityComparer<T> where T : GDMPointer
     {
         public bool Equals(T x, T y)
@@ -94,4 +116,6 @@ namespace GKCore.Sync
             return obj.GetHashCode();
         }
     }
+
+    #endregion
 }

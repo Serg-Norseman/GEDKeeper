@@ -1119,6 +1119,7 @@ namespace GKCore.Locales
             /* 1074 */ "Synchronization tool is extremely dangerous for data! Use only if you clearly understand your actions!",
             /* 1075 */ "Synchronize databases",
             /* 1076 */ "Synchronize records",
+            /* 1077 */ "Show only modified",
         };
     }
 }

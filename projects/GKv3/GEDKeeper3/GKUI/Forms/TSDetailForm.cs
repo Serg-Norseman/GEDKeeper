@@ -45,12 +45,12 @@ namespace GKUI.Forms
 #endif
 
         private readonly IBaseWindow fBase;
-        private readonly List<DiffRecord> fRecordsList;
+        private readonly List<RecordDiff> fRecordsList;
         private readonly DiffContentsModel fListModel;
         private readonly SyncTool fSyncTool;
 
         private int fCurrentIndex;
-        private DiffRecord fCurrentRecord;
+        private RecordDiff fCurrentRecord;
 
         public TSDetailForm()
         {
@@ -65,7 +65,7 @@ namespace GKUI.Forms
             SetLocale();
         }
 
-        public TSDetailForm(IBaseWindow curBase, SyncTool syncTool, List<DiffRecord> recordsList, int currentIndex) : this()
+        public TSDetailForm(IBaseWindow curBase, SyncTool syncTool, List<RecordDiff> recordsList, int currentIndex) : this()
         {
             fBase = curBase;
             fSyncTool = syncTool;
@@ -107,7 +107,7 @@ namespace GKUI.Forms
 
             // Compare records and update list
             var diffTags = fSyncTool.CompareRecords(fCurrentRecord);
-            fListModel.DataSource = diffTags;
+            fListModel.DataSource = diffTags.Cast<IDiffResult>().ToList();
             lvContents.UpdateContents();
 
             // Update navigation buttons
@@ -118,11 +118,16 @@ namespace GKUI.Forms
 
         private void lvContents_SelectedItemsChanged(object sender, EventArgs e)
         {
-            var diffTag = lvContents.GetSelectedData() as DiffTag;
-            if (diffTag == null) return;
+            var diff = lvContents.GetSelectedData() as IDiffResult;
+            if (diff == null) return;
 
-            GDMObjectsDescriber.GetFullDescription(fSyncTool.MainTree, fCurrentRecord.Obj1, diffTag.Obj1, hvLeftRecord.Lines);
-            GDMObjectsDescriber.GetFullDescription(fSyncTool.OtherTree, fCurrentRecord.Obj2, diffTag.Obj2, hvRightRecord.Lines);
+            if (diff is TagDiff tagDiff) {
+                GDMObjectsDescriber.GetFullDescription(fSyncTool.MainTree, fCurrentRecord.Obj1, tagDiff.Obj1, hvLeftRecord.Lines);
+                GDMObjectsDescriber.GetFullDescription(fSyncTool.OtherTree, fCurrentRecord.Obj2, tagDiff.Obj2, hvRightRecord.Lines);
+            } else {
+                hvLeftRecord.Lines.Text = " --- ";
+                hvRightRecord.Lines.Text = " --- ";
+            }
         }
 
         private void btnPrevRecord_Click(object sender, EventArgs e)
@@ -154,7 +159,7 @@ namespace GKUI.Forms
 
         #region List Model
 
-        private sealed class DiffContentsModel : SimpleListModel<DiffTag>
+        private sealed class DiffContentsModel : SimpleListModel<IDiffResult>
         {
             public SyncTool SyncTool { get; set; }
             public GDMRecord Record1 { get; set; }
@@ -179,7 +184,7 @@ namespace GKUI.Forms
             // fetched data
             private string prefix1, prefix2;
 
-            public override void Fetch(DiffTag aRec)
+            public override void Fetch(IDiffResult aRec)
             {
                 base.Fetch(aRec);
 
@@ -211,6 +216,19 @@ namespace GKUI.Forms
 
             protected override object GetColumnValueEx(int colType, int colSubtype, bool isVisible)
             {
+                string item1, item2;
+                if (fFetchedRec is TagDiff tagDiff) {
+                    item1 = GDMObjectsDescriber.GetBriefDescription(SyncTool.MainTree, Record1, tagDiff.Obj1);
+                    item2 = GDMObjectsDescriber.GetBriefDescription(SyncTool.OtherTree, Record2, tagDiff.Obj2);
+                } else
+                    if (fFetchedRec is ValDiff valDiff) {
+                        item1 = valDiff.DisplayItem1;
+                        item2 = valDiff.DisplayItem2;
+                    } else {
+                        item1 = string.Empty;
+                        item2 = string.Empty;
+                    }
+
                 object result = null;
                 switch (colType) {
                     case 0:
@@ -220,10 +238,10 @@ namespace GKUI.Forms
                         result = fFetchedRec.Num;
                         break;
                     case 2:
-                        result = prefix1 + GDMObjectsDescriber.GetBriefDescription(SyncTool.MainTree, Record1, fFetchedRec.Obj1);
+                        result = prefix1 + item1;
                         break;
                     case 3:
-                        result = prefix2 + GDMObjectsDescriber.GetBriefDescription(SyncTool.OtherTree, Record2, fFetchedRec.Obj2);
+                        result = prefix2 + item2;
                         break;
                 }
                 return result;
@@ -231,10 +249,10 @@ namespace GKUI.Forms
 
             public override IColor GetBackgroundColor(int itemIndex, object rowData)
             {
-                return SyncTool.GetDiffColor(((DiffTag)rowData).Status);
+                return SyncTool.GetDiffColor(((IDiffResult)rowData).Status);
             }
 
-            protected override void SetColumnValueEx(DiffTag item, int colIndex, object value)
+            protected override void SetColumnValueEx(IDiffResult item, int colIndex, object value)
             {
                 if (item != null && colIndex == 0 && value is bool chk)
                     item.Checked = chk;

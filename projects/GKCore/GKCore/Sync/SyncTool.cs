@@ -25,7 +25,7 @@ namespace GKCore.Sync
         private GDMTree fMainTree;
         private GDMTree fOtherTree;
 
-        public List<DiffRecord> Results;
+        public List<RecordDiff> Results;
 
         public GDMTree MainTree { get { return fMainTree; } }
         public GDMTree OtherTree { get { return fOtherTree; } }
@@ -71,16 +71,16 @@ namespace GKCore.Sync
 
         public void CompareTrees(GDMRecordType recordType)
         {
-            DiffRecord.ResetNum();
+            RecordDiff.ResetNum();
 
-            Results = new List<DiffRecord>();
+            Results = new List<RecordDiff>();
 
             var records1 = fMainTree.GetRecords(recordType);
             var records2 = fOtherTree.GetRecords(recordType);
 
             var diffResults = DiffUtil.Diff(records1, records2, new RecordComparer());
             foreach (var diff in diffResults) {
-                var diffRec = new DiffRecord(diff.Obj1, diff.Obj2, diff.Status);
+                var diffRec = new RecordDiff(diff.Obj1, diff.Obj2, diff.Status);
                 Results.Add(diffRec);
 
                 /// The primary method for determining the difference between trees based on records is by UID
@@ -100,11 +100,11 @@ namespace GKCore.Sync
             }
         }
 
-        public List<DiffTag> CompareRecords(DiffRecord diffRecord)
+        public List<IDiffResult> CompareRecords(RecordDiff diffRecord)
         {
-            DiffTag.ResetNum();
+            TagDiff.ResetNum();
 
-            List<DiffTag> differences;
+            List<IDiffResult> differences;
 
             switch (diffRecord.Obj1.RecordType) {
                 case GDMRecordType.rtIndividual:
@@ -148,46 +148,46 @@ namespace GKCore.Sync
             return differences;
         }
 
-        private static void CompareEvents(IGDMRecordWithEvents evRec1, IGDMRecordWithEvents evRec2, List<DiffTag> differences)
+        private static void CompareEvents(GDMRecordWithEvents evRec1, GDMRecordWithEvents evRec2, List<IDiffResult> differences)
         {
             CompareLists<GDMCustomEvent>(evRec1.Events, evRec2.Events, new EventComparer<GDMCustomEvent>(), true, differences);
         }
 
-        private static void CompareSourceCitations(IGDMStructWithSourceCitations struct1, IGDMStructWithSourceCitations struct2, List<DiffTag> differences)
+        private static void CompareSourceCitations(IGDMStructWithSourceCitations struct1, IGDMStructWithSourceCitations struct2, List<IDiffResult> differences)
         {
             CompareLists<GDMSourceCitation>(struct1.SourceCitations, struct2.SourceCitations, new PointerComparer<GDMSourceCitation>(), true, differences);
         }
 
-        private static void CompareMultimediaLinks(IGDMStructWithMultimediaLinks struct1, IGDMStructWithMultimediaLinks struct2, List<DiffTag> differences)
+        private static void CompareMultimediaLinks(IGDMStructWithMultimediaLinks struct1, IGDMStructWithMultimediaLinks struct2, List<IDiffResult> differences)
         {
             CompareLists<GDMMultimediaLink>(struct1.MultimediaLinks, struct2.MultimediaLinks, new PointerComparer<GDMMultimediaLink>(), true, differences);
         }
 
-        private static void CompareNotes(IGDMStructWithNotes struct1, IGDMStructWithNotes struct2, List<DiffTag> differences)
+        private static void CompareNotes(IGDMStructWithNotes struct1, IGDMStructWithNotes struct2, List<IDiffResult> differences)
         {
             CompareLists<GDMNotes>(struct1.Notes, struct2.Notes, new PointerComparer<GDMNotes>(), false, differences);
         }
 
-        private static void CompareUserReferences(IGDMStructWithUserReferences struct1, IGDMStructWithUserReferences struct2, List<DiffTag> differences)
+        private static void CompareUserReferences(IGDMStructWithUserReferences struct1, IGDMStructWithUserReferences struct2, List<IDiffResult> differences)
         {
             CompareLists<GDMUserReference>(struct1.UserReferences, struct2.UserReferences, new ValueTagComparer<GDMUserReference>(), true, differences);
         }
 
-        private static void CompareTagLists<T>(GDMList<T> struct1, GDMList<T> struct2, List<DiffTag> differences) where T : GDMTag
+        private static void CompareTagLists<T>(GDMList<T> struct1, GDMList<T> struct2, List<IDiffResult> differences) where T : GDMTag
         {
             /// The primary method for determining the difference between pointers is by GetHashCode
             /// (<see cref="TagComparer.Equals" />).
             CompareLists<T>(struct1, struct2, new TagComparer<T>(), false, differences);
         }
 
-        private static void CompareLists<T>(GDMList<T> struct1, GDMList<T> struct2, IEqualityComparer<T> equalityComparer, bool checkChanges, List<DiffTag> differences) where T : GDMTag
+        private static void CompareLists<T>(GDMList<T> struct1, GDMList<T> struct2, IEqualityComparer<T> equalityComparer, bool checkChanges, List<IDiffResult> differences) where T : GDMTag
         {
             var diffResults = DiffUtil.Diff(struct1, struct2, equalityComparer);
             foreach (var diff in diffResults) {
                 var obj1 = diff.Obj1;
                 var obj2 = diff.Obj2;
 
-                var diffRec = new DiffTag(obj1, obj2, diff.Status);
+                var diffRec = new TagDiff(obj1, obj2, diff.Status);
                 differences.Add(diffRec);
 
                 if (checkChanges && diffRec.Status == DiffStatus.Equal) {
@@ -198,54 +198,79 @@ namespace GKCore.Sync
             }
         }
 
-        private static void ComparePtrLists<T>(GDMList<T> struct1, GDMList<T> struct2, List<DiffTag> differences) where T : GDMPointer
+        private static void ComparePtrLists<T>(GDMList<T> struct1, GDMList<T> struct2, List<IDiffResult> differences) where T : GDMPointer
         {
             /// The primary method for determining the difference between pointers is by XRef
             /// (<see cref="PointerComparer.Equals" />).
             CompareLists<T>(struct1, struct2, new PointerComparer<T>(), true, differences);
         }
 
-        private static void CompareSimpleTag(GEDCOMTagType tagType, string val1, string val2, List<DiffTag> differences)
+        /// <summary>
+        /// GDMValueTag + DiffStatus.Modified -> Assign!
+        /// </summary>
+        private static void CompareTags(GEDCOMTagType tagType, string val1, string val2, List<IDiffResult> differences)
         {
             if (string.IsNullOrEmpty(val1) && string.IsNullOrEmpty(val2))
                 return;
 
             var diffStatus = (val1 == val2) ? DiffStatus.Equal : DiffStatus.Modified;
-            differences.Add(new DiffTag(new GDMValueTag((int)tagType, val1), new GDMValueTag((int)tagType, val2), diffStatus));
+            differences.Add(new TagDiff(new GDMValueTag((int)tagType, val1), new GDMValueTag((int)tagType, val2), diffStatus));
         }
 
-        private static void CompareStruct<T>(T struct1, T struct2, List<DiffTag> differences) where T : GDMTag
+        /// <summary>
+        /// Value + DiffStatus.Modified -> Assign!
+        /// </summary>
+        private static void CompareValues(GEDCOMTagType tagType, object val1, object val2, string displayItem1, string displayItem2, List<IDiffResult> differences)
+        {
+            if (val1 == null && val2 == null) return;
+            if (string.IsNullOrEmpty(displayItem1) && string.IsNullOrEmpty(displayItem2)) return;
+
+            var diffStatus = object.Equals(val1, val2) ? DiffStatus.Equal : DiffStatus.Modified;
+            differences.Add(new ValDiff((int)tagType, val1, displayItem1, val2, displayItem2, diffStatus));
+        }
+
+        private static void CompareValues(GEDCOMTagType tagType, object val1, object val2, List<IDiffResult> differences)
+        {
+            string displayItem1 = val1.ToString();
+            string displayItem2 = val2.ToString();
+            CompareValues(tagType, val1, val2, displayItem1, displayItem2, differences);
+        }
+
+        /// <summary>
+        /// T(GDMTag) + DiffStatus.Modified -> Assign!
+        /// </summary>
+        private static void CompareStruct<T>(T struct1, T struct2, List<IDiffResult> differences) where T : GDMTag
         {
             var eq1 = (IGDEquatable<T>)struct1;
             if (!eq1.DataEquals(struct2))
-                differences.Add(new DiffTag(struct1, struct2, DiffStatus.Modified));
+                differences.Add(new TagDiff(struct1, struct2, DiffStatus.Modified));
         }
 
-        private static void CompareRecords(GDMRecord rec1, GDMRecord rec2, List<DiffTag> differences)
+        private static void CompareRecords(GDMRecord rec1, GDMRecord rec2, List<IDiffResult> differences)
         {
             CompareSourceCitations(rec1, rec2, differences);
             CompareMultimediaLinks(rec1, rec2, differences);
             CompareNotes(rec1, rec2, differences);
             CompareUserReferences(rec1, rec2, differences);
 
-            CompareSimpleTag(GEDCOMTagType.RIN, rec1.AutomatedRecordID, rec2.AutomatedRecordID, differences);
+            CompareValues(GEDCOMTagType.RIN, rec1.AutomatedRecordID, rec2.AutomatedRecordID, differences);
         }
 
-        private static void CompareEventRecords(GDMRecordWithEvents rec1, GDMRecordWithEvents rec2, List<DiffTag> differences)
+        private static void CompareEventRecords(GDMRecordWithEvents rec1, GDMRecordWithEvents rec2, List<IDiffResult> differences)
         {
             CompareRecords(rec1, rec2, differences);
 
             CompareEvents(rec1, rec2, differences);
-            CompareSimpleTag(GEDCOMTagType.RESN, LangMan.LS(GKData.Restrictions[(int)rec1.Restriction]), LangMan.LS(GKData.Restrictions[(int)rec2.Restriction]), differences);
+            CompareValues(GEDCOMTagType.RESN, rec1.Restriction, rec2.Restriction, LangMan.LS(GKData.Restrictions[(int)rec1.Restriction]), LangMan.LS(GKData.Restrictions[(int)rec2.Restriction]), differences);
         }
 
-        private static List<DiffTag> CompareIndividualRecords(GDMIndividualRecord indiRec1, GDMIndividualRecord indiRec2)
+        private static List<IDiffResult> CompareIndividualRecords(GDMIndividualRecord indiRec1, GDMIndividualRecord indiRec2)
         {
-            var differences = new List<DiffTag>();
+            var differences = new List<IDiffResult>();
 
             CompareEventRecords(indiRec1, indiRec2, differences);
 
-            CompareSimpleTag(GEDCOMTagType.SEX, GKUtils.SexStr(indiRec1.Sex), GKUtils.SexStr(indiRec2.Sex), differences);
+            CompareValues(GEDCOMTagType.SEX, indiRec1.Sex, indiRec2.Sex, GKUtils.SexStr(indiRec1.Sex), GKUtils.SexStr(indiRec2.Sex), differences);
 
             CompareTagLists<GDMPersonalName>(indiRec1.PersonalNames, indiRec2.PersonalNames, differences);
             CompareTagLists<GDMAssociation>(indiRec1.Associations, indiRec2.Associations, differences);
@@ -257,39 +282,39 @@ namespace GKCore.Sync
             return differences;
         }
 
-        private static List<DiffTag> CompareFamilyRecords(GDMFamilyRecord famRec1, GDMFamilyRecord famRec2)
+        private static List<IDiffResult> CompareFamilyRecords(GDMFamilyRecord famRec1, GDMFamilyRecord famRec2)
         {
-            var differences = new List<DiffTag>();
+            var differences = new List<IDiffResult>();
 
             CompareEventRecords(famRec1, famRec2, differences);
 
-            CompareSimpleTag(GEDCOMTagType._STAT, LangMan.LS(GKData.MarriageStatus[(int)famRec1.Status].Name), LangMan.LS(GKData.MarriageStatus[(int)famRec2.Status].Name), differences);
+            CompareValues(GEDCOMTagType._STAT, famRec1.Status, famRec2.Status, LangMan.LS(GKData.MarriageStatus[(int)famRec1.Status].Name), LangMan.LS(GKData.MarriageStatus[(int)famRec2.Status].Name), differences);
 
             string husb1XRef = famRec1.Husband?.XRef ?? "";
             string husb2XRef = famRec2.Husband?.XRef ?? "";
-            CompareSimpleTag(GEDCOMTagType.HUSB, husb1XRef, husb2XRef, differences);
+            CompareValues(GEDCOMTagType.HUSB, husb1XRef, husb2XRef, differences);
             string wife1XRef = famRec1.Wife?.XRef ?? "";
             string wife2XRef = famRec2.Wife?.XRef ?? "";
-            CompareSimpleTag(GEDCOMTagType.WIFE, wife1XRef, wife2XRef, differences);
+            CompareValues(GEDCOMTagType.WIFE, wife1XRef, wife2XRef, differences);
             ComparePtrLists(famRec1.Children, famRec2.Children, differences); // simple pointers
 
             return differences;
         }
 
-        private static List<DiffTag> CompareNoteRecords(GDMNoteRecord noteRec1, GDMNoteRecord noteRec2)
+        private static List<IDiffResult> CompareNoteRecords(GDMNoteRecord noteRec1, GDMNoteRecord noteRec2)
         {
-            var differences = new List<DiffTag>();
+            var differences = new List<IDiffResult>();
 
             CompareRecords(noteRec1, noteRec2, differences);
 
-            CompareSimpleTag(GEDCOMTagType.NOTE, noteRec1.Lines.Text, noteRec2.Lines.Text, differences);
+            CompareValues(GEDCOMTagType.NOTE, noteRec1.Lines.Text, noteRec2.Lines.Text, differences);
 
             return differences;
         }
 
-        private static List<DiffTag> CompareMultimediaRecords(GDMMultimediaRecord mediaRec1, GDMMultimediaRecord mediaRec2)
+        private static List<IDiffResult> CompareMultimediaRecords(GDMMultimediaRecord mediaRec1, GDMMultimediaRecord mediaRec2)
         {
-            var differences = new List<DiffTag>();
+            var differences = new List<IDiffResult>();
 
             CompareRecords(mediaRec1, mediaRec2, differences);
 
@@ -298,61 +323,61 @@ namespace GKCore.Sync
             return differences;
         }
 
-        private static List<DiffTag> CompareSourceRecords(GDMSourceRecord sourRec1, GDMSourceRecord sourRec2)
+        private static List<IDiffResult> CompareSourceRecords(GDMSourceRecord sourRec1, GDMSourceRecord sourRec2)
         {
-            var differences = new List<DiffTag>();
+            var differences = new List<IDiffResult>();
 
             CompareRecords(sourRec1, sourRec2, differences);
 
-            CompareSimpleTag(GEDCOMTagType.ABBR, sourRec1.ShortTitle, sourRec1.ShortTitle, differences);
-            CompareSimpleTag(GEDCOMTagType.TITL, sourRec1.Title.StringValue, sourRec1.Title.StringValue, differences);
-            CompareSimpleTag(GEDCOMTagType.AUTH, sourRec1.Originator.StringValue, sourRec1.Originator.StringValue, differences);
-            CompareSimpleTag(GEDCOMTagType.PUBL, sourRec1.Publication.StringValue, sourRec1.Publication.StringValue, differences);
-            CompareSimpleTag(GEDCOMTagType.TEXT, sourRec1.Text.StringValue, sourRec1.Text.StringValue, differences);
+            CompareValues(GEDCOMTagType.ABBR, sourRec1.ShortTitle, sourRec2.ShortTitle, differences);
+            CompareValues(GEDCOMTagType.TITL, sourRec1.Title.StringValue, sourRec2.Title.StringValue, differences);
+            CompareValues(GEDCOMTagType.AUTH, sourRec1.Originator.StringValue, sourRec2.Originator.StringValue, differences);
+            CompareValues(GEDCOMTagType.PUBL, sourRec1.Publication.StringValue, sourRec2.Publication.StringValue, differences);
+            CompareValues(GEDCOMTagType.TEXT, sourRec1.Text.StringValue, sourRec2.Text.StringValue, differences);
 
             CompareTagLists<GDMRepositoryCitation>(sourRec1.RepositoryCitations, sourRec2.RepositoryCitations, differences);
             CompareStruct(sourRec1.Data, sourRec2.Data, differences);
-            CompareSimpleTag(GEDCOMTagType.DATE, GKUtils.GetDateDisplayString(sourRec1.Date), GKUtils.GetDateDisplayString(sourRec1.Date), differences);
+            CompareValues(GEDCOMTagType.DATE, sourRec1.Date, sourRec2.Date, GKUtils.GetDateDisplayString(sourRec1.Date), GKUtils.GetDateDisplayString(sourRec2.Date), differences);
 
             return differences;
         }
 
-        private static List<DiffTag> CompareRepositoryRecords(GDMRepositoryRecord repRec1, GDMRepositoryRecord repRec2)
+        private static List<IDiffResult> CompareRepositoryRecords(GDMRepositoryRecord repRec1, GDMRepositoryRecord repRec2)
         {
-            var differences = new List<DiffTag>();
+            var differences = new List<IDiffResult>();
 
             CompareRecords(repRec1, repRec2, differences);
 
-            CompareSimpleTag(GEDCOMTagType.NAME, repRec1.RepositoryName, repRec2.RepositoryName, differences);
+            CompareValues(GEDCOMTagType.NAME, repRec1.RepositoryName, repRec2.RepositoryName, differences);
             CompareStruct(repRec1.Address, repRec2.Address, differences);
 
             return differences;
         }
 
-        private static List<DiffTag> CompareGroupRecords(GDMGroupRecord groupRec1, GDMGroupRecord groupRec2)
+        private static List<IDiffResult> CompareGroupRecords(GDMGroupRecord groupRec1, GDMGroupRecord groupRec2)
         {
-            var differences = new List<DiffTag>();
+            var differences = new List<IDiffResult>();
 
             CompareRecords(groupRec1, groupRec2, differences);
 
-            CompareSimpleTag(GEDCOMTagType.NAME, groupRec1.GroupName, groupRec2.GroupName, differences);
+            CompareValues(GEDCOMTagType.NAME, groupRec1.GroupName, groupRec2.GroupName, differences);
             ComparePtrLists<GDMMemberLink>(groupRec1.Members, groupRec2.Members, differences);
 
             return differences;
         }
 
-        private static List<DiffTag> CompareResearchRecords(GDMResearchRecord resRec1, GDMResearchRecord resRec2)
+        private static List<IDiffResult> CompareResearchRecords(GDMResearchRecord resRec1, GDMResearchRecord resRec2)
         {
-            var differences = new List<DiffTag>();
+            var differences = new List<IDiffResult>();
 
             CompareRecords(resRec1, resRec2, differences);
 
-            CompareSimpleTag(GEDCOMTagType.NAME, resRec1.ResearchName, resRec2.ResearchName, differences);
-            CompareSimpleTag(GEDCOMTagType._PRIORITY, GKInfoPanel.GetPriorityStr(resRec1.Priority), GKInfoPanel.GetPriorityStr(resRec2.Priority), differences);
-            CompareSimpleTag(GEDCOMTagType._STATUS, LangMan.LS(GKData.StatusNames[(int)resRec1.Status]), LangMan.LS(GKData.StatusNames[(int)resRec2.Status]), differences);
-            CompareSimpleTag(GEDCOMTagType._PERCENT, resRec1.Percent.ToString(), resRec2.Percent.ToString(), differences);
-            CompareSimpleTag(GEDCOMTagType._STARTDATE, GKUtils.GetDateDisplayString(resRec1.StartDate), GKUtils.GetDateDisplayString(resRec2.StartDate), differences);
-            CompareSimpleTag(GEDCOMTagType._STOPDATE, GKUtils.GetDateDisplayString(resRec1.StopDate), GKUtils.GetDateDisplayString(resRec2.StopDate), differences);
+            CompareValues(GEDCOMTagType.NAME, resRec1.ResearchName, resRec2.ResearchName, differences);
+            CompareValues(GEDCOMTagType._PRIORITY, resRec1.Priority, resRec2.Priority, GKInfoPanel.GetPriorityStr(resRec1.Priority), GKInfoPanel.GetPriorityStr(resRec2.Priority), differences);
+            CompareValues(GEDCOMTagType._STATUS, resRec1.Status, resRec2.Status, LangMan.LS(GKData.StatusNames[(int)resRec1.Status]), LangMan.LS(GKData.StatusNames[(int)resRec2.Status]), differences);
+            CompareValues(GEDCOMTagType._PERCENT, resRec1.Percent, resRec2.Percent, resRec1.Percent.ToString(), resRec2.Percent.ToString(), differences);
+            CompareValues(GEDCOMTagType._STARTDATE, resRec1.StartDate, resRec2.StartDate, GKUtils.GetDateDisplayString(resRec1.StartDate), GKUtils.GetDateDisplayString(resRec2.StartDate), differences);
+            CompareValues(GEDCOMTagType._STOPDATE, resRec1.StopDate, resRec2.StopDate, GKUtils.GetDateDisplayString(resRec1.StopDate), GKUtils.GetDateDisplayString(resRec2.StopDate), differences);
 
             // simple pointers, not require details
             ComparePtrLists<GDMPointer>(resRec1.Tasks, resRec2.Tasks, differences);
@@ -362,37 +387,37 @@ namespace GKCore.Sync
             return differences;
         }
 
-        private List<DiffTag> CompareTaskRecords(GDMTaskRecord taskRec1, GDMTaskRecord taskRec2)
+        private List<IDiffResult> CompareTaskRecords(GDMTaskRecord taskRec1, GDMTaskRecord taskRec2)
         {
-            var differences = new List<DiffTag>();
+            var differences = new List<IDiffResult>();
 
             CompareRecords(taskRec1, taskRec2, differences);
 
-            CompareSimpleTag(GEDCOMTagType._GOAL, GKUtils.GetTaskGoalStr(fMainTree, taskRec1), GKUtils.GetTaskGoalStr(fOtherTree, taskRec2), differences);
-            CompareSimpleTag(GEDCOMTagType._PRIORITY, GKInfoPanel.GetPriorityStr(taskRec1.Priority), GKInfoPanel.GetPriorityStr(taskRec2.Priority), differences);
-            CompareSimpleTag(GEDCOMTagType._STARTDATE, GKUtils.GetDateDisplayString(taskRec1.StartDate), GKUtils.GetDateDisplayString(taskRec2.StartDate), differences);
-            CompareSimpleTag(GEDCOMTagType._STOPDATE, GKUtils.GetDateDisplayString(taskRec1.StopDate), GKUtils.GetDateDisplayString(taskRec2.StopDate), differences);
+            CompareValues(GEDCOMTagType._GOAL, taskRec1.Goal, taskRec2.Goal, GKUtils.GetTaskGoalStr(fMainTree, taskRec1), GKUtils.GetTaskGoalStr(fOtherTree, taskRec2), differences);
+            CompareValues(GEDCOMTagType._PRIORITY, taskRec1.Priority, taskRec2.Priority, GKInfoPanel.GetPriorityStr(taskRec1.Priority), GKInfoPanel.GetPriorityStr(taskRec2.Priority), differences);
+            CompareValues(GEDCOMTagType._STARTDATE, taskRec1.StartDate, taskRec2.StartDate, GKUtils.GetDateDisplayString(taskRec1.StartDate), GKUtils.GetDateDisplayString(taskRec2.StartDate), differences);
+            CompareValues(GEDCOMTagType._STOPDATE, taskRec1.StopDate, taskRec2.StopDate, GKUtils.GetDateDisplayString(taskRec1.StopDate), GKUtils.GetDateDisplayString(taskRec2.StopDate), differences);
 
             return differences;
         }
 
-        private static List<DiffTag> CompareCommunicationRecords(GDMCommunicationRecord commRec1, GDMCommunicationRecord commRec2)
+        private static List<IDiffResult> CompareCommunicationRecords(GDMCommunicationRecord commRec1, GDMCommunicationRecord commRec2)
         {
-            var differences = new List<DiffTag>();
+            var differences = new List<IDiffResult>();
 
             CompareRecords(commRec1, commRec2, differences);
 
-            CompareSimpleTag(GEDCOMTagType.NAME, commRec1.CommName, commRec2.CommName, differences);
-            CompareSimpleTag(GEDCOMTagType.TYPE, LangMan.LS(GKData.CommunicationNames[(int)commRec1.CommunicationType]), LangMan.LS(GKData.CommunicationNames[(int)commRec2.CommunicationType]), differences);
+            CompareValues(GEDCOMTagType.NAME, commRec1.CommName, commRec2.CommName, differences);
+            CompareValues(GEDCOMTagType.TYPE, commRec1.CommunicationType, commRec2.CommunicationType, LangMan.LS(GKData.CommunicationNames[(int)commRec1.CommunicationType]), LangMan.LS(GKData.CommunicationNames[(int)commRec2.CommunicationType]), differences);
             //CompareSimpleTag(GEDCOMTagType., commRec1.CommDirection.ToString(), commRec2.CommDirection.ToString(), differences); // TODO
-            CompareSimpleTag(GEDCOMTagType.DATE, GKUtils.GetDateDisplayString(commRec1.Date), GKUtils.GetDateDisplayString(commRec2.Date), differences);
+            CompareValues(GEDCOMTagType.DATE, commRec1.Date, commRec2.Date, GKUtils.GetDateDisplayString(commRec1.Date), GKUtils.GetDateDisplayString(commRec2.Date), differences);
 
             return differences;
         }
 
-        private static List<DiffTag> CompareLocationRecords(GDMLocationRecord locRec1, GDMLocationRecord locRec2)
+        private static List<IDiffResult> CompareLocationRecords(GDMLocationRecord locRec1, GDMLocationRecord locRec2)
         {
-            var differences = new List<DiffTag>();
+            var differences = new List<IDiffResult>();
 
             CompareRecords(locRec1, locRec2, differences);
 
@@ -403,14 +428,14 @@ namespace GKCore.Sync
             return differences;
         }
 
-        public bool AcceptChange(IEnumerable<DiffRecord> recordsDiff)
+        public bool AcceptChange(IEnumerable<RecordDiff> recordsDiff)
         {
             bool result = false;
             // TODO
             return result;
         }
 
-        public bool Merge(GDMRecord target, GDMRecord source, IEnumerable<DiffTag> tagsDiff)
+        public bool Merge(GDMRecord target, GDMRecord source, IEnumerable<IDiffResult> tagsDiff)
         {
             bool result = false;
 
@@ -421,23 +446,22 @@ namespace GKCore.Sync
                         break;
 
                     case DiffStatus.Deleted:
-                        RemoveStruct(target, diff.Obj1);
+                        var tagDiff_d = diff as TagDiff;
+                        RemoveStruct(target, tagDiff_d.Obj1);
                         result = true;
                         break;
 
                     case DiffStatus.Inserted:
-                        if (CheckLinks(diff)) {
-                            AddStruct(target, diff.Obj2);
+                        var tagDiff_i = diff as TagDiff;
+                        if (CheckLinks(tagDiff_i)) {
+                            AddStruct(target, tagDiff_i.Obj2);
                             result = true;
                         }
                         break;
 
                     case DiffStatus.Modified:
                     case DiffStatus.DeepModified:
-                        if (CheckLinks(diff)) {
-                            diff.Obj1.Assign(diff.Obj2);
-                            result = true;
-                        }
+                        result = AssignChange(target, diff);
                         break;
                 }
             }
@@ -445,7 +469,7 @@ namespace GKCore.Sync
             return result;
         }
 
-        private bool CheckLinks(DiffTag tagDiff)
+        private bool CheckLinks(TagDiff tagDiff)
         {
             // Create a cross-index from the XRef in the second file to the position in the diff
             // to determine whether it is local to the second file or existed in the first.
@@ -456,6 +480,139 @@ namespace GKCore.Sync
                 return false;
             }
             return true;
+        }
+
+        private bool AssignChange(GDMRecord target, IDiffResult diff)
+        {
+            if (diff is ValDiff valDiff) {
+                string strVal2 = Convert.ToString(valDiff.Obj2);
+
+                switch ((GEDCOMTagType)valDiff.ValType) {
+                    case GEDCOMTagType.RESN:
+                        ((GDMRecordWithEvents)target).Restriction = (GDMRestriction)valDiff.Obj2;
+                        break;
+                    case GEDCOMTagType.SEX:
+                        ((GDMIndividualRecord)target).Sex = (GDMSex)valDiff.Obj2;
+                        break;
+                    case GEDCOMTagType._STAT:
+                        ((GDMFamilyRecord)target).Status = (GDMMarriageStatus)valDiff.Obj2;
+                        break;
+                    case GEDCOMTagType.DATE:
+                        switch (target.RecordType) {
+                            case GDMRecordType.rtSource:
+                                ((GDMSourceRecord)target).Date.Assign(valDiff.Obj2 as GDMCustomDate);
+                                break;
+                            case GDMRecordType.rtCommunication:
+                                ((GDMCommunicationRecord)target).Date.Assign(valDiff.Obj2 as GDMCustomDate);
+                                break;
+                        }
+                        break;
+                    case GEDCOMTagType._PRIORITY:
+                        switch (target.RecordType) {
+                            case GDMRecordType.rtResearch:
+                                ((GDMResearchRecord)target).Priority = (GDMResearchPriority)valDiff.Obj2;
+                                break;
+                            case GDMRecordType.rtTask:
+                                ((GDMTaskRecord)target).Priority = (GDMResearchPriority)valDiff.Obj2;
+                                break;
+                        }
+                        break;
+                    case GEDCOMTagType._STATUS:
+                        ((GDMResearchRecord)target).Status = (GDMResearchStatus)valDiff.Obj2;
+                        break;
+                    case GEDCOMTagType._PERCENT:
+                        ((GDMResearchRecord)target).Percent = (int)valDiff.Obj2;
+                        break;
+                    case GEDCOMTagType._STARTDATE:
+                        switch (target.RecordType) {
+                            case GDMRecordType.rtResearch:
+                                ((GDMResearchRecord)target).StartDate.Assign(valDiff.Obj2 as GDMCustomDate);
+                                break;
+                            case GDMRecordType.rtTask:
+                                ((GDMTaskRecord)target).StartDate.Assign(valDiff.Obj2 as GDMCustomDate);
+                                break;
+                        }
+                        break;
+                    case GEDCOMTagType._STOPDATE:
+                        switch (target.RecordType) {
+                            case GDMRecordType.rtResearch:
+                                ((GDMResearchRecord)target).StopDate.Assign(valDiff.Obj2 as GDMCustomDate);
+                                break;
+                            case GDMRecordType.rtTask:
+                                ((GDMTaskRecord)target).StopDate.Assign(valDiff.Obj2 as GDMCustomDate);
+                                break;
+                        }
+                        break;
+                    case GEDCOMTagType._GOAL:
+                        ((GDMTaskRecord)target).Goal = strVal2;
+                        break;
+                    case GEDCOMTagType.TYPE:
+                        ((GDMCommunicationRecord)target).CommunicationType = (GDMCommunicationType)valDiff.Obj2;
+                        break;
+
+                    case GEDCOMTagType.RIN:
+                        target.AutomatedRecordID = strVal2;
+                        break;
+
+                    case GEDCOMTagType.HUSB:
+                        ((GDMFamilyRecord)target).Husband.XRef = strVal2;
+                        break;
+
+                    case GEDCOMTagType.WIFE:
+                        ((GDMFamilyRecord)target).Wife.XRef = strVal2;
+                        break;
+
+                    case GEDCOMTagType.NOTE:
+                        ((GDMNoteRecord)target).Lines.Text = strVal2;
+                        break;
+
+                    case GEDCOMTagType.ABBR:
+                        ((GDMSourceRecord)target).ShortTitle = strVal2;
+                        break;
+
+                    case GEDCOMTagType.TITL:
+                        ((GDMSourceRecord)target).Title.Lines.Text = strVal2;
+                        break;
+
+                    case GEDCOMTagType.AUTH:
+                        ((GDMSourceRecord)target).Originator.Lines.Text = strVal2;
+                        break;
+
+                    case GEDCOMTagType.PUBL:
+                        ((GDMSourceRecord)target).Publication.Lines.Text = strVal2;
+                        break;
+
+                    case GEDCOMTagType.TEXT:
+                        ((GDMSourceRecord)target).Text.Lines.Text = strVal2;
+                        break;
+
+                    case GEDCOMTagType.NAME:
+                        switch (target.RecordType) {
+                            case GDMRecordType.rtRepository:
+                                ((GDMRepositoryRecord)target).RepositoryName = strVal2;
+                                break;
+                            case GDMRecordType.rtGroup:
+                                ((GDMGroupRecord)target).GroupName = strVal2;
+                                break;
+                            case GDMRecordType.rtResearch:
+                                ((GDMResearchRecord)target).ResearchName = strVal2;
+                                break;
+                            case GDMRecordType.rtCommunication:
+                                ((GDMCommunicationRecord)target).CommName = strVal2;
+                                break;
+                        }
+                        break;
+                }
+
+                return false;
+            } else if (diff is TagDiff tagDiff) {
+                if (CheckLinks(tagDiff)) {
+                    tagDiff.Obj1.Assign(tagDiff.Obj2);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void RemoveStruct<T>(GDMRecord target, T xStruct) where T : GDMTag
@@ -543,7 +700,7 @@ namespace GKCore.Sync
                 target.Notes.Add(noteLink.Clone());
             } else if (xStruct is GDMUserReference userRef) {
                 target.UserReferences.Add(userRef.Clone());
-            } else if(xStruct is GDMRepositoryCitation repoCit) {
+            } else if (xStruct is GDMRepositoryCitation repoCit) {
                 ((GDMSourceRecord)target).RepositoryCitations.Add(repoCit.Clone());
             } else if (xStruct is GDMFileReferenceWithTitle fileRef) {
                 ((GDMMultimediaRecord)target).FileReferences.Add(fileRef.Clone());

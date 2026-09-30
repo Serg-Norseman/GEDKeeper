@@ -6,22 +6,12 @@
 
   <TableLayout Style="paddedTable8">
     <TableRow>
-      <Panel x:Name="panel1" Padding="4">
+      <Panel Padding="4">
         <StackLayout Orientation="Horizontal" Spacing="4">
-          <GroupBox x:Name="groupBox1" Text="Synchronize records" Padding="4" Enabled="False">
-            <StackLayout Orientation="Vertical" Spacing="4">
-              <RadioButton x:Name="rbSyncAll" Text="All" Checked="True" CheckedChanged="rbSyncRecords_CheckedChanged" />
-              <StackLayout Orientation="Horizontal" Spacing="4">
-                <RadioButton x:Name="rbSyncSelected" Text="Selected" CheckedChanged="rbSyncRecords_CheckedChanged" />
-                <ComboBox x:Name="cmbRecordTypes" ReadOnly="True" Width="120" />
-              </StackLayout>
-            </StackLayout>
-          </GroupBox>
-
           <StackLayout Orientation="Vertical" Spacing="4">
             <StackLayout Orientation="Horizontal" Spacing="4">
               <Label x:Name="lblFile" Text="File:" />
-              <TextBox x:Name="txtFile" ReadOnly="True" Width="449" />
+              <TextBox x:Name="txtFile" ReadOnly="True" Width="680" />
               <Button x:Name="btnSelectFile" Text="Select file..." Width="122" Click="btnSelectFile_ClickAsync" />
             </StackLayout>
 
@@ -37,7 +27,7 @@
     </TableRow>
 
     <TableRow ScaleHeight="True">
-      <comcom:GKListView x:Name="lvRecords" Height="380" />
+      <comcom:GKListView x:Name="lvRecords" Height="480" />
     </TableRow>
 
     <TableRow>

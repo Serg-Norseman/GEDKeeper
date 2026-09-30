@@ -33,14 +33,9 @@ namespace GKUI.Forms
     {
 #if NETCOREAPP
 #pragma warning disable CS0169, CS0649, IDE0044, IDE0051
-        private Panel panel1;
-        private GroupBox groupBox1;
         private Button btnSelectFile;
         private Label lblFile;
         private TextBox txtFile;
-        private ComboBox cmbRecordTypes;
-        private RadioButton rbSyncSelected;
-        private RadioButton rbSyncAll;
         private CheckBox chkOnlyModified;
         private GKListView lvRecords;
         private TextArea mSyncRes;
@@ -59,17 +54,11 @@ namespace GKUI.Forms
             InitializeComponent();
 #else
             XamlReader.Load(this);
-            UIHelper.FixRadioButtons(this, groupBox1);
 #endif
         }
 
         public TSForm(IBaseWindow curBase) : this()
         {
-            for (var rt = GDMRecordType.rtIndividual; rt <= GDMRecordType.rtLocation; rt++) {
-                var name = LangMan.LS(GKData.RecordTypes[(int)rt].Name);
-                cmbRecordTypes.Items.Add(name);
-            }
-
             fBase = curBase;
             fSyncTool = new SyncTool();
 
@@ -89,9 +78,7 @@ namespace GKUI.Forms
             this.Title = LangMan.LS(LSID.SynchronizeTrees);
             lblFile.Text = LangMan.LS(LSID.File);
             btnSelectFile.Text = LangMan.LS(LSID.DlgSelect) + @"...";
-            groupBox1.Text = LangMan.LS(LSID.RM_Records);
-            rbSyncAll.Text = LangMan.LS(LSID.All);
-            rbSyncSelected.Text = LangMan.LS(LSID.MapSelOnSelected);
+            chkOnlyModified.Text = LangMan.LS(LSID.ShowOnlyModified);
         }
 
         private async void btnSelectFile_ClickAsync(object sender, EventArgs e)
@@ -104,26 +91,13 @@ namespace GKUI.Forms
 
             txtFile.Text = fileName;
             fSyncTool.LoadOtherFile(fBase.Context.Tree, fileName);
-            fSyncTool.CompareTrees(GetRecordType());
+            fSyncTool.CompareTrees(GDMRecordType.rtNone);
             UpdateLists();
-        }
-
-        private void rbSyncRecords_CheckedChanged(object sender, EventArgs e)
-        {
-#if NETCOREAPP
-            if (sender is RadioButton radBtn && radBtn.HasFocus)
-#endif
-                cmbRecordTypes.Enabled = !rbSyncAll.Checked;
         }
 
         private void chkOnlyModified_CheckStateChanged(object sender, EventArgs e)
         {
             UpdateLists();
-        }
-
-        private GDMRecordType GetRecordType()
-        {
-            return rbSyncAll.Checked ? GDMRecordType.rtNone : (GDMRecordType)(cmbRecordTypes.SelectedIndex + 1);
         }
 
         private void lvRecords_CellDoubleClick(object sender, GridCellMouseEventArgs e)
@@ -133,7 +107,7 @@ namespace GKUI.Forms
 
         private void btnSyncRecords_Click(object sender, EventArgs e)
         {
-            var item = lvRecords.GetSelectedData() as DiffRecord;
+            var item = lvRecords.GetSelectedData() as RecordDiff;
             if (item == null || item.Obj1 == null || item.Obj2 == null) return;
 
             var records = fSyncTool.Results;
@@ -148,7 +122,7 @@ namespace GKUI.Forms
 
         private void lvRecords_SelectedItemsChanged(object sender, EventArgs e)
         {
-            var item = lvRecords.GetSelectedData() as DiffRecord;
+            var item = lvRecords.GetSelectedData() as RecordDiff;
             if (item == null) return;
 
             btnSyncRecords.Enabled = (item.Status >= DiffStatus.Modified);
@@ -175,7 +149,7 @@ namespace GKUI.Forms
 
         #region List Model
 
-        private sealed class DiffRecordsModel : SimpleListModel<DiffRecord>
+        private sealed class DiffRecordsModel : SimpleListModel<RecordDiff>
         {
             public bool ShowOnlyModified { get; set; }
 
@@ -206,7 +180,7 @@ namespace GKUI.Forms
             // fetched data
             private string item1, item2;
 
-            public override void Fetch(DiffRecord aRec)
+            public override void Fetch(RecordDiff aRec)
             {
                 base.Fetch(aRec);
 
@@ -264,11 +238,11 @@ namespace GKUI.Forms
 
             public override IColor GetBackgroundColor(int itemIndex, object rowData)
             {
-                DiffRecord diffRecord = rowData as DiffRecord;
+                RecordDiff diffRecord = rowData as RecordDiff;
                 return SyncTool.GetDiffColor(diffRecord.Status);
             }
 
-            protected override void SetColumnValueEx(DiffRecord item, int colIndex, object value)
+            protected override void SetColumnValueEx(RecordDiff item, int colIndex, object value)
             {
                 if (item != null && colIndex == 0 && value is bool chk)
                     item.Checked = chk;
