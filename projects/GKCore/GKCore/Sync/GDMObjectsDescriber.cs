@@ -15,8 +15,6 @@ namespace GKCore.Sync
 {
     public class GDMObjectsDescriber
     {
-        // TODO: Implement a better and more efficient solution,
-        // but only after all the data is being extracted.
         public static string GetBriefDescription(GDMTree tree, GDMRecord record, GDMTag tag)
         {
             string result = string.Empty;
@@ -84,9 +82,6 @@ namespace GKCore.Sync
             }
 
             string result = string.Empty;
-
-            //var visitor = new GDMTagSummaryVisitor(tree, record, summary);
-            //tag.Accept(visitor);
 
             if (tag is GDMPersonalName persName) {
                 ShowPersonalNameSummary(tree, record, persName, summary);
@@ -298,35 +293,6 @@ namespace GKCore.Sync
         private static void ShowRepositoryCitationSummary(GDMTree tree, GDMRepositoryCitation repoCit, StringList summary)
         {
             summary.Add($"Repository Citation: {repoCit.StringValue}");
-        }
-
-
-        private class GDMTagSummaryVisitor : IGDMObjectVisitor
-        {
-            private readonly GDMTree fTree;
-            private readonly GDMRecord fRecord;
-            private readonly StringList fSummary;
-
-            public GDMTagSummaryVisitor(GDMTree tree, GDMRecord record, StringList summary)
-            {
-                fTree = tree;
-                fRecord = record;
-                fSummary = summary;
-            }
-
-            public void Visit(GDMPersonalName obj) => ShowPersonalNameSummary(fTree, fRecord, obj, fSummary);
-            public void Visit(GDMChildToFamilyLink obj) => ShowChildToFamilyLinkSummary(fTree, obj, fSummary);
-
-            public void Visit(GDMTag obj)
-            {
-                string result = GetBriefDescription(fTree, fRecord, obj);
-                fSummary.Add(result);
-            }
-
-            public void Visit(GDMCustomEvent obj)
-            {
-                throw new System.NotImplementedException();
-            }
         }
     }
 }

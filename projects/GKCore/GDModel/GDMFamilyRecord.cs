@@ -310,5 +310,10 @@ namespace GDModel
         {
             return GDMStructureType.ChildLink | GDMStructureType.Event | GDMStructureType.NoteLink | GDMStructureType.MultimediaLink | GDMStructureType.SourceCitation | GDMStructureType.UserReference;
         }
+
+        public override void Accept(IGDMObjectVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

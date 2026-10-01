@@ -100,6 +100,21 @@ namespace GKCore.Sync
             }
         }
 
+        public static HashSet<string> VerifyTagReferences(GDMTree targetTree, GDMTag obj)
+        {
+            var result = new HashSet<string>();
+            if (obj != null) {
+                var visitor = new GDMTagReferenceVerifier();
+                obj.Accept(visitor);
+                foreach (var xRef in visitor.Result) {
+                    var refRecord = targetTree.FindXRef<GDMRecord>(xRef);
+                    if (refRecord == null)
+                        result.Add(xRef);
+                }
+            }
+            return result;
+        }
+
         /// <summary>
         /// Collects all XRefs from a record and its substructures.
         /// </summary>
@@ -173,11 +188,11 @@ namespace GKCore.Sync
             }
 
             if (record.HasUserReferences) {
-                // User references typically don't have XRefs
+                // Do nothing: user references don't have XRefs
             }
         }
 
-        public static void CollectRefsFromEvent(GDMCustomEvent evt, HashSet<string> refs)
+        internal static void CollectRefsFromEvent(GDMCustomEvent evt, HashSet<string> refs)
         {
             CollectStructWithPlace(evt, refs);
 
@@ -192,7 +207,7 @@ namespace GKCore.Sync
             CollectStructWithSourceCitations(evt, refs);
         }
 
-        private static void CollectRefsFromIndividual(GDMIndividualRecord individual, HashSet<string> refs)
+        internal static void CollectRefsFromIndividual(GDMIndividualRecord individual, HashSet<string> refs)
         {
             CollectRefsFromBaseRecord(individual, refs);
 
@@ -203,19 +218,16 @@ namespace GKCore.Sync
             }
 
             for (int i = 0; i < individual.ChildToFamilyLinks.Count; i++) {
-                var link = individual.ChildToFamilyLinks[i];
-                CollectRefsFromChildToFamilyLink(link, refs);
+                CollectRefsFromChildToFamilyLink(individual.ChildToFamilyLinks[i], refs);
             }
 
             for (int i = 0; i < individual.SpouseToFamilyLinks.Count; i++) {
-                var link = individual.SpouseToFamilyLinks[i];
-                CollectRefsFromSpouseToFamilyLink(link, refs);
+                CollectRefsFromSpouseToFamilyLink(individual.SpouseToFamilyLinks[i], refs);
             }
 
             if (individual.HasAssociations) {
                 for (int i = 0; i < individual.Associations.Count; i++) {
-                    var assoc = individual.Associations[i];
-                    CollectRefsFromAssociation(assoc, refs);
+                    CollectRefsFromAssociation(individual.Associations[i], refs);
                 }
             }
 
@@ -226,37 +238,36 @@ namespace GKCore.Sync
             }
 
             for (int i = 0; i < individual.PersonalNames.Count; i++) {
-                var name = individual.PersonalNames[i];
-                CollectRefsFromPersonalName(name, refs);
+                CollectRefsFromPersonalName(individual.PersonalNames[i], refs);
             }
         }
 
-        public static void CollectRefsFromSpouseToFamilyLink(GDMSpouseToFamilyLink link, HashSet<string> refs)
+        internal static void CollectRefsFromSpouseToFamilyLink(GDMSpouseToFamilyLink link, HashSet<string> refs)
         {
             CollectRef(link.XRef, refs);
             CollectStructWithNotes(link, refs);
         }
 
-        public static void CollectRefsFromAssociation(GDMAssociation assoc, HashSet<string> refs)
+        internal static void CollectRefsFromAssociation(GDMAssociation assoc, HashSet<string> refs)
         {
             CollectRef(assoc.XRef, refs);
             CollectStructWithNotes(assoc, refs);
             CollectStructWithSourceCitations(assoc, refs);
         }
 
-        public static void CollectRefsFromPersonalName(GDMPersonalName name, HashSet<string> refs)
+        internal static void CollectRefsFromPersonalName(GDMPersonalName name, HashSet<string> refs)
         {
             CollectStructWithNotes(name, refs);
             CollectStructWithSourceCitations(name, refs);
         }
 
-        public static void CollectRefsFromChildToFamilyLink(GDMChildToFamilyLink link, HashSet<string> refs)
+        internal static void CollectRefsFromChildToFamilyLink(GDMChildToFamilyLink link, HashSet<string> refs)
         {
             CollectRef(link.XRef, refs);
             CollectStructWithNotes(link, refs);
         }
 
-        private static void CollectRefsFromFamily(GDMFamilyRecord family, HashSet<string> refs)
+        internal static void CollectRefsFromFamily(GDMFamilyRecord family, HashSet<string> refs)
         {
             CollectRefsFromBaseRecord(family, refs);
 
@@ -268,22 +279,23 @@ namespace GKCore.Sync
 
             CollectRef(family.Husband.XRef, refs);
             CollectRef(family.Wife.XRef, refs);
+
             for (int i = 0; i < family.Children.Count; i++) {
                 CollectRef(family.Children[i].XRef, refs);
             }
         }
 
-        private static void CollectRefsFromNote(GDMNoteRecord note, HashSet<string> refs)
+        internal static void CollectRefsFromNote(GDMNoteRecord note, HashSet<string> refs)
         {
             CollectRefsFromBaseRecord(note, refs);
         }
 
-        private static void CollectRefsFromMultimedia(GDMMultimediaRecord media, HashSet<string> refs)
+        internal static void CollectRefsFromMultimedia(GDMMultimediaRecord media, HashSet<string> refs)
         {
             CollectRefsFromBaseRecord(media, refs);
         }
 
-        private static void CollectRefsFromSource(GDMSourceRecord source, HashSet<string> refs)
+        internal static void CollectRefsFromSource(GDMSourceRecord source, HashSet<string> refs)
         {
             CollectRefsFromBaseRecord(source, refs);
 
@@ -293,16 +305,22 @@ namespace GKCore.Sync
             }
 
             for (int i = 0; i < source.RepositoryCitations.Count; i++) {
-                CollectRef(source.RepositoryCitations[i].XRef, refs);
+                CollectRefsFromRepositoryCitation(source.RepositoryCitations[i], refs);
             }
         }
 
-        private static void CollectRefsFromRepository(GDMRepositoryRecord repository, HashSet<string> refs)
+        internal static void CollectRefsFromRepositoryCitation(GDMRepositoryCitation repCit, HashSet<string> refs)
+        {
+            CollectRef(repCit.XRef, refs);
+            CollectStructWithNotes(repCit, refs);
+        }
+
+        internal static void CollectRefsFromRepository(GDMRepositoryRecord repository, HashSet<string> refs)
         {
             CollectRefsFromBaseRecord(repository, refs);
         }
 
-        private static void CollectRefsFromGroup(GDMGroupRecord group, HashSet<string> refs)
+        internal static void CollectRefsFromGroup(GDMGroupRecord group, HashSet<string> refs)
         {
             CollectRefsFromBaseRecord(group, refs);
 
@@ -311,7 +329,7 @@ namespace GKCore.Sync
             }
         }
 
-        private static void CollectRefsFromResearch(GDMResearchRecord research, HashSet<string> refs)
+        internal static void CollectRefsFromResearch(GDMResearchRecord research, HashSet<string> refs)
         {
             CollectRefsFromBaseRecord(research, refs);
 
@@ -328,7 +346,7 @@ namespace GKCore.Sync
             }
         }
 
-        private static void CollectRefsFromTask(GDMTaskRecord task, HashSet<string> refs)
+        internal static void CollectRefsFromTask(GDMTaskRecord task, HashSet<string> refs)
         {
             CollectRefsFromBaseRecord(task, refs);
 
@@ -336,14 +354,14 @@ namespace GKCore.Sync
                 CollectRef(task.Goal, refs);
         }
 
-        private static void CollectRefsFromCommunication(GDMCommunicationRecord communication, HashSet<string> refs)
+        internal static void CollectRefsFromCommunication(GDMCommunicationRecord communication, HashSet<string> refs)
         {
             CollectRefsFromBaseRecord(communication, refs);
 
             CollectRef(communication.Corresponder.XRef, refs);
         }
 
-        private static void CollectRefsFromLocation(GDMLocationRecord location, HashSet<string> refs)
+        internal static void CollectRefsFromLocation(GDMLocationRecord location, HashSet<string> refs)
         {
             CollectRefsFromBaseRecord(location, refs);
 
@@ -352,19 +370,19 @@ namespace GKCore.Sync
             }
         }
 
-        private static void CollectRefsFromSubmission(GDMSubmissionRecord submission, HashSet<string> refs)
+        internal static void CollectRefsFromSubmission(GDMSubmissionRecord submission, HashSet<string> refs)
         {
             CollectRefsFromBaseRecord(submission, refs);
 
             CollectRef(submission.Submitter.XRef, refs);
         }
 
-        private static void CollectRefsFromSubmitter(GDMSubmitterRecord submitter, HashSet<string> refs)
+        internal static void CollectRefsFromSubmitter(GDMSubmitterRecord submitter, HashSet<string> refs)
         {
             CollectRefsFromBaseRecord(submitter, refs);
         }
 
-        private static void CollectRef(string xRef, HashSet<string> refs)
+        internal static void CollectRef(string xRef, HashSet<string> refs)
         {
             if (!string.IsNullOrEmpty(xRef))
                 refs.Add(xRef);
@@ -393,52 +411,27 @@ namespace GKCore.Sync
                 }
             }
         }
-
-        public static HashSet<string> VerifyTagReferences(GDMTree targetTree, GDMTag obj)
-        {
-            HashSet<string> result;
-            if (obj != null) {
-                var visitor = new GDMTagReferenceVerifier(targetTree);
-                obj.Accept(visitor);
-                result = visitor.GetResult();
-            } else {
-                result = new HashSet<string>();
-            }
-            return result;
-        }
     }
 
 
     internal class GDMTagReferenceVerifier : IGDMObjectVisitor
     {
-        private readonly GDMTree fTargetTree;
-        private readonly HashSet<string> fTempResult;
+        private readonly HashSet<string> fResult = new HashSet<string>();
 
-        public GDMTagReferenceVerifier(GDMTree targetTree)
-        {
-            fTargetTree = targetTree;
-            fTempResult = new HashSet<string>();
-        }
+        public HashSet<string> Result { get { return fResult; } }
 
-        public HashSet<string> GetResult()
+        public GDMTagReferenceVerifier()
         {
-            var result = new HashSet<string>();
-            foreach (var xRef in fTempResult) {
-                var refRecord = fTargetTree.FindXRef<GDMRecord>(xRef);
-                if (refRecord == null)
-                    result.Add(xRef);
-            }
-            return result;
         }
 
         public void Visit(GDMPersonalName obj)
         {
-            ReferenceVerifier.CollectRefsFromPersonalName(obj, fTempResult);
+            ReferenceVerifier.CollectRefsFromPersonalName(obj, fResult);
         }
 
         public void Visit(GDMChildToFamilyLink obj)
         {
-            ReferenceVerifier.CollectRefsFromChildToFamilyLink(obj, fTempResult);
+            ReferenceVerifier.CollectRefsFromChildToFamilyLink(obj, fResult);
         }
 
         public void Visit(GDMTag obj)
@@ -448,7 +441,82 @@ namespace GKCore.Sync
 
         public void Visit(GDMCustomEvent obj)
         {
-            ReferenceVerifier.CollectRefsFromEvent(obj, fTempResult);
+            ReferenceVerifier.CollectRefsFromEvent(obj, fResult);
+        }
+
+        public void Visit(GDMIndividualRecord obj)
+        {
+            ReferenceVerifier.CollectRefsFromIndividual(obj, fResult);
+        }
+
+        public void Visit(GDMSpouseToFamilyLink obj)
+        {
+            ReferenceVerifier.CollectRefsFromSpouseToFamilyLink(obj, fResult);
+        }
+
+        public void Visit(GDMAssociation obj)
+        {
+            ReferenceVerifier.CollectRefsFromAssociation(obj, fResult);
+        }
+
+        public void Visit(GDMFamilyRecord obj)
+        {
+            ReferenceVerifier.CollectRefsFromFamily(obj, fResult);
+        }
+
+        public void Visit(GDMNoteRecord obj)
+        {
+            ReferenceVerifier.CollectRefsFromNote(obj, fResult);
+        }
+
+        public void Visit(GDMMultimediaRecord obj)
+        {
+            ReferenceVerifier.CollectRefsFromMultimedia(obj, fResult);
+        }
+
+        public void Visit(GDMSourceRecord obj)
+        {
+            ReferenceVerifier.CollectRefsFromSource(obj, fResult);
+        }
+
+        public void Visit(GDMRepositoryRecord obj)
+        {
+            ReferenceVerifier.CollectRefsFromRepository(obj, fResult);
+        }
+
+        public void Visit(GDMGroupRecord obj)
+        {
+            ReferenceVerifier.CollectRefsFromGroup(obj, fResult);
+        }
+
+        public void Visit(GDMResearchRecord obj)
+        {
+            ReferenceVerifier.CollectRefsFromResearch(obj, fResult);
+        }
+
+        public void Visit(GDMTaskRecord obj)
+        {
+            ReferenceVerifier.CollectRefsFromTask(obj, fResult);
+        }
+
+        public void Visit(GDMCommunicationRecord obj)
+        {
+            ReferenceVerifier.CollectRefsFromCommunication(obj, fResult);
+        }
+
+        public void Visit(GDMLocationRecord obj)
+        {
+            ReferenceVerifier.CollectRefsFromLocation(obj, fResult);
+        }
+
+        public void Visit(GDMPointer obj)
+        {
+            ReferenceVerifier.CollectRef(obj.XRef, fResult);
+        }
+
+        public void Visit(GDMRepositoryCitation obj)
+        {
+            ReferenceVerifier.CollectRefsFromRepositoryCitation(obj, fResult);
         }
     }
 }

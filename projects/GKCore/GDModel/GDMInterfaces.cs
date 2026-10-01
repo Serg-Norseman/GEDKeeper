@@ -23,6 +23,21 @@ namespace GDModel
         void Visit(GDMPersonalName obj);
         void Visit(GDMChildToFamilyLink obj);
         void Visit(GDMCustomEvent obj);
+        void Visit(GDMIndividualRecord obj);
+        void Visit(GDMSpouseToFamilyLink obj);
+        void Visit(GDMAssociation obj);
+        void Visit(GDMFamilyRecord obj);
+        void Visit(GDMNoteRecord obj);
+        void Visit(GDMMultimediaRecord obj);
+        void Visit(GDMSourceRecord obj);
+        void Visit(GDMRepositoryRecord obj);
+        void Visit(GDMGroupRecord obj);
+        void Visit(GDMResearchRecord obj);
+        void Visit(GDMTaskRecord obj);
+        void Visit(GDMCommunicationRecord obj);
+        void Visit(GDMLocationRecord obj);
+        void Visit(GDMPointer obj);
+        void Visit(GDMRepositoryCitation obj);
     }
 
 

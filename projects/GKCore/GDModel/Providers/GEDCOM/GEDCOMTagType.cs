@@ -226,6 +226,10 @@ namespace GDModel.Providers.GEDCOM
         _FREL, // [Ages, FTM/FTW, Legacy, Family Tree Maker]
         _MREL, // [Ages, FTM/FTW, Legacy, Family Tree Maker]
         _FSFTID, // [FamilySearch]
+
+        // surrogate tags
+        _DIR, // internal use for GDMCommunicationRecord
+        _CORR, // internal use for GDMCommunicationRecord
     }
 
     public static class GEDCOMTagName

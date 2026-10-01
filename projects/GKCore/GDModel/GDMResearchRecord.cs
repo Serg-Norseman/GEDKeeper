@@ -319,5 +319,10 @@ namespace GDModel
         {
             return GDMStructureType.TaskLink | GDMStructureType.CommunicationLink | GDMStructureType.GroupLink | GDMStructureType.NoteLink;
         }
+
+        public override void Accept(IGDMObjectVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

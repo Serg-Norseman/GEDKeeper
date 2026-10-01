@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GDModel;
 using GDModel.Providers.GEDCOM;
 using GKCore.Charts;
@@ -231,8 +232,8 @@ namespace GKCore.Sync
 
         private static void CompareValues(GEDCOMTagType tagType, object val1, object val2, List<IDiffResult> differences)
         {
-            string displayItem1 = val1.ToString();
-            string displayItem2 = val2.ToString();
+            string displayItem1 = Convert.ToString(val1);
+            string displayItem2 = Convert.ToString(val2);
             CompareValues(tagType, val1, val2, displayItem1, displayItem2, differences);
         }
 
@@ -278,6 +279,9 @@ namespace GKCore.Sync
             ComparePtrLists<GDMGroupLink>(indiRec1.Groups, indiRec2.Groups, differences);
             ComparePtrLists<GDMChildToFamilyLink>(indiRec1.ChildToFamilyLinks, indiRec2.ChildToFamilyLinks, differences);
             ComparePtrLists<GDMSpouseToFamilyLink>(indiRec1.SpouseToFamilyLinks, indiRec2.SpouseToFamilyLinks, differences);
+
+            CompareValues(GEDCOMTagType._BOOKMARK, indiRec1.Bookmark, indiRec2.Bookmark, differences);
+            CompareValues(GEDCOMTagType._PATRIARCH, indiRec1.Patriarch, indiRec2.Patriarch, differences);
 
             return differences;
         }
@@ -409,8 +413,11 @@ namespace GKCore.Sync
 
             CompareValues(GEDCOMTagType.NAME, commRec1.CommName, commRec2.CommName, differences);
             CompareValues(GEDCOMTagType.TYPE, commRec1.CommunicationType, commRec2.CommunicationType, LangMan.LS(GKData.CommunicationNames[(int)commRec1.CommunicationType]), LangMan.LS(GKData.CommunicationNames[(int)commRec2.CommunicationType]), differences);
-            //CompareSimpleTag(GEDCOMTagType., commRec1.CommDirection.ToString(), commRec2.CommDirection.ToString(), differences); // TODO
+            CompareValues(GEDCOMTagType._DIR, commRec1.CommDirection, commRec2.CommDirection, LangMan.LS(GKData.CommunicationDirs[(int)commRec1.CommDirection]), LangMan.LS(GKData.CommunicationDirs[(int)commRec2.CommDirection]), differences);
             CompareValues(GEDCOMTagType.DATE, commRec1.Date, commRec2.Date, GKUtils.GetDateDisplayString(commRec1.Date), GKUtils.GetDateDisplayString(commRec2.Date), differences);
+
+            //CompareValues(GEDCOMTagType._CORR, commRec1.Corresponder.XRef, commRec2.Corresponder.XRef, differences);
+            CompareStruct(commRec1.Corresponder, commRec2.Corresponder, differences);
 
             return differences;
         }
@@ -428,13 +435,42 @@ namespace GKCore.Sync
             return differences;
         }
 
+        /// <summary>
+        /// Accept all checked changes in the tree - by records.
+        /// </summary>
         public bool AcceptChange(IEnumerable<RecordDiff> recordsDiff)
         {
-            bool result = false;
-            // TODO
+            bool result = true;
+            foreach (var diff in recordsDiff) {
+                switch (diff.Status) {
+                    case DiffStatus.Equal:
+                        // TODO: disable checkbox for equal status
+                        break;
+
+                    case DiffStatus.Deleted:
+                        fMainTree.DeleteRecord(diff.Obj1);
+                        break;
+
+                    case DiffStatus.Inserted:
+                        if (CheckLinks(diff.Obj2)) {
+                            // TODO
+                            //fMainTree.AddRecord(diff.Obj2.Clone());
+                        }
+                        break;
+
+                    case DiffStatus.Modified:
+                    case DiffStatus.DeepModified:
+                        // Merging changes into the record is only possible via the detailed comparison dialog.
+                        // TSDetailForm -> Merge()
+                        break;
+                }
+            }
             return result;
         }
 
+        /// <summary>
+        /// Merge changes of one record across different databases.
+        /// </summary>
         public bool Merge(GDMRecord target, GDMRecord source, IEnumerable<IDiffResult> tagsDiff)
         {
             bool result = false;
@@ -447,15 +483,13 @@ namespace GKCore.Sync
 
                     case DiffStatus.Deleted:
                         var tagDiff_d = diff as TagDiff;
-                        RemoveStruct(target, tagDiff_d.Obj1);
-                        result = true;
+                        result = RemoveStruct(target, tagDiff_d.Obj1);
                         break;
 
                     case DiffStatus.Inserted:
                         var tagDiff_i = diff as TagDiff;
-                        if (CheckLinks(tagDiff_i)) {
-                            AddStruct(target, tagDiff_i.Obj2);
-                            result = true;
+                        if (CheckLinks(tagDiff_i.Obj2)) {
+                            result = AddStruct(target, tagDiff_i.Obj2);
                         }
                         break;
 
@@ -469,12 +503,15 @@ namespace GKCore.Sync
             return result;
         }
 
-        private bool CheckLinks(TagDiff tagDiff)
+        private bool CheckLinks(GDMTag tag)
         {
-            // Create a cross-index from the XRef in the second file to the position in the diff
+            // TODO: Create a cross-index from the XRef in the second file to the position in the diff
             // to determine whether it is local to the second file or existed in the first.
-            var refs = ReferenceVerifier.VerifyTagReferences(fMainTree, tagDiff.Obj2);
+            var refs = ReferenceVerifier.VerifyTagReferences(fMainTree, tag);
             if (refs.Count > 0) {
+                var strList = string.Join(", ", refs);
+                var vote = AppHost.StdDialogs.ShowQuestion(string.Format("The main tree is missing records:\n{0}. Add them?", strList));
+
                 // TODO: Compare links based on differences between trees for cases
                 // where records with a specific XRef were added independently.
                 return false;
@@ -482,6 +519,9 @@ namespace GKCore.Sync
             return true;
         }
 
+        /// <summary>
+        /// Accept all checked changes in the record - by sub-structures and tags.
+        /// </summary>
         private bool AssignChange(GDMRecord target, IDiffResult diff)
         {
             if (diff is ValDiff valDiff) {
@@ -549,6 +589,21 @@ namespace GKCore.Sync
                     case GEDCOMTagType.TYPE:
                         ((GDMCommunicationRecord)target).CommunicationType = (GDMCommunicationType)valDiff.Obj2;
                         break;
+                    case GEDCOMTagType._DIR:
+                        ((GDMCommunicationRecord)target).CommDirection = (GDMCommunicationDir)valDiff.Obj2;
+                        break;
+
+                    /*case GEDCOMTagType._CORR:
+                        // processed as ptr
+                        ((GDMCommunicationRecord)target).Corresponder.XRef = strVal2;
+                        break;*/
+
+                    case GEDCOMTagType._BOOKMARK:
+                        ((GDMIndividualRecord)target).Bookmark = (bool)valDiff.Obj2;
+                        break;
+                    case GEDCOMTagType._PATRIARCH:
+                        ((GDMIndividualRecord)target).Patriarch = (bool)valDiff.Obj2;
+                        break;
 
                     case GEDCOMTagType.RIN:
                         target.AutomatedRecordID = strVal2;
@@ -606,7 +661,7 @@ namespace GKCore.Sync
 
                 return false;
             } else if (diff is TagDiff tagDiff) {
-                if (CheckLinks(tagDiff)) {
+                if (CheckLinks(tagDiff.Obj2)) {
                     tagDiff.Obj1.Assign(tagDiff.Obj2);
                     return true;
                 }
@@ -615,7 +670,7 @@ namespace GKCore.Sync
             return false;
         }
 
-        private void RemoveStruct<T>(GDMRecord target, T xStruct) where T : GDMTag
+        private bool RemoveStruct<T>(GDMRecord target, T xStruct) where T : GDMTag
         {
             if (xStruct is GDMPersonalName persName) {
                 ((GDMIndividualRecord)target).PersonalNames.Remove(persName);
@@ -668,9 +723,11 @@ namespace GKCore.Sync
                         break;
                 }
             }
+
+            return true;
         }
 
-        private void AddStruct<T>(GDMRecord target, T xStruct) where T : GDMTag
+        private bool AddStruct<T>(GDMRecord target, T xStruct) where T : GDMTag
         {
             if (xStruct is GDMPersonalName persName) {
                 ((GDMIndividualRecord)target).PersonalNames.Add(persName.Clone());
@@ -723,6 +780,8 @@ namespace GKCore.Sync
                         break;
                 }
             }
+
+            return true;
         }
     }
 }

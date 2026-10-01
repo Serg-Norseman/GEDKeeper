@@ -108,5 +108,10 @@ namespace GDModel
         {
             return GDMStructureType.MediaFile | GDMStructureType.NoteLink | GDMStructureType.SourceCitation | GDMStructureType.UserReference;
         }
+
+        public override void Accept(IGDMObjectVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

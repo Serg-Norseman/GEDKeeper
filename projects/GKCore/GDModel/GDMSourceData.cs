@@ -11,7 +11,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMSourceData : GDMTag, IGDMStructWithNotes
+    public sealed class GDMSourceData : GDMTag, IGDMStructWithNotes, IGDEquatable<GDMSourceData>
     {
         private string fAgency;
         private GDMList<GDMSourceEvent> fEvents;
@@ -103,6 +103,11 @@ namespace GDModel
         public GDMStructureType GetAccessibleSubstructures()
         {
             return GDMStructureType.NoteLink;
+        }
+
+        public bool DataEquals(GDMSourceData other)
+        {
+            return (other != null && this.GetHashCode() == other.GetHashCode());
         }
     }
 }

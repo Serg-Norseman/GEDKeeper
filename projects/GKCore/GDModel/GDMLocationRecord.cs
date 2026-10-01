@@ -327,5 +327,10 @@ namespace GDModel
         {
             return GDMStructureType.LocName | GDMStructureType.LocLink | GDMStructureType.NoteLink | GDMStructureType.MultimediaLink;
         }
+
+        public override void Accept(IGDMObjectVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

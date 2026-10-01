@@ -11,7 +11,7 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
-    public sealed class GDMAddress : GDMTag
+    public sealed class GDMAddress : GDMTag, IGDEquatable<GDMAddress>
     {
         private readonly GDMLines fLines;
         private string fAddressLine1;
@@ -245,6 +245,11 @@ namespace GDModel
             ProcessHashes(ref hashCode, fEmailList);
             ProcessHashes(ref hashCode, fFaxList);
             ProcessHashes(ref hashCode, fWWWList);
+        }
+
+        public bool DataEquals(GDMAddress other)
+        {
+            return (other != null && this.GetHashCode() == other.GetHashCode());
         }
     }
 }

@@ -629,5 +629,10 @@ namespace GDModel
                 GDMStructureType.Association | GDMStructureType.UserReference |
                 GDMStructureType.GroupLink | GDMStructureType.DNATest;
         }
+
+        public override void Accept(IGDMObjectVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

@@ -78,5 +78,10 @@ namespace GDModel
             hashCode.Add(fChildLinkageStatus);
             hashCode.Add(fPedigreeLinkageType);
         }
+
+        public override void Accept(IGDMObjectVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

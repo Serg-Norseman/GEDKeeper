@@ -125,5 +125,10 @@ namespace GDModel
         {
             return 0;
         }
+
+        public override void Accept(IGDMObjectVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

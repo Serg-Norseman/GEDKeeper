@@ -123,5 +123,10 @@ namespace GDModel
         {
             return GDMStructureType.NoteLink;
         }
+
+        public override void Accept(IGDMObjectVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

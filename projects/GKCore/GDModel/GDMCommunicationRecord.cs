@@ -90,7 +90,7 @@ namespace GDModel
             SetName(GEDCOMTagType._COMM);
 
             fDate = new GDMDate();
-            fCorresponder = new GDMIndividualLink();
+            fCorresponder = new GDMIndividualLink((int)GEDCOMTagType._CORR);
         }
 
         internal override void TrimExcess()
@@ -158,6 +158,11 @@ namespace GDModel
         public override GDMStructureType GetAccessibleSubstructures()
         {
             return GDMStructureType.NoteLink | GDMStructureType.MultimediaLink;
+        }
+
+        public override void Accept(IGDMObjectVisitor visitor)
+        {
+            visitor.Visit(this);
         }
     }
 }

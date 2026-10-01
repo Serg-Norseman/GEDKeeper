@@ -138,5 +138,10 @@ namespace GDModel
         {
             return GDMStructureType.SourceCallNumber;
         }
+
+        public override void Accept(IGDMObjectVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

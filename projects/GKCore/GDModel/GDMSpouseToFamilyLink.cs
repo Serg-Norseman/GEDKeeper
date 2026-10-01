@@ -22,5 +22,10 @@ namespace GDModel
             SetName(GEDCOMTagType.FAMS);
             XRef = familyXRef;
         }
+
+        public override void Accept(IGDMObjectVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

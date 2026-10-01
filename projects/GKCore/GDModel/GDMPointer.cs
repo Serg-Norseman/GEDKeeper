@@ -90,5 +90,10 @@ namespace GDModel
         {
             return base.DataEquals(other) && fXRef == other.fXRef;
         }
+
+        public override void Accept(IGDMObjectVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

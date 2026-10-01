@@ -98,5 +98,10 @@ namespace GDModel
 
             ProcessHashes(ref hashCode, fSourceCitations);
         }
+
+        public override void Accept(IGDMObjectVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }
