@@ -65,6 +65,7 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GDModel\GDMReferenceVerifier.cs" />
     <Compile Include="GDModel\GDMStructure.cs" />
     <Compile Include="GDModel\Providers\GEDCOM\BKAnsel1251.cs" />
     <Compile Include="GKCore\Charts\LineRouter.cs" />
@@ -357,9 +358,8 @@
     <Compile Include="GKCore\Database\GKDBNameEntry.cs" />
     <Compile Include="GKCore\Export\ReportExporter.cs" />
     <Compile Include="GDModel\Providers\FileProvider.cs" />
-    <Compile Include="GKCore\Sync\GDMObjectsDescriber.cs" />
+    <Compile Include="GKCore\Sync\ObjectDescriber.cs" />
     <Compile Include="GKCore\Sync\RecordDiff.cs" />
-    <Compile Include="GKCore\Sync\ReferenceVerifier.cs" />
     <Compile Include="GKCore\Sync\SyncTool.cs" />
     <Compile Include="GKCore\Utilities\ChecksumStream.cs" />
     <Compile Include="GKCore\Utilities\ExtObservableList.cs" />
