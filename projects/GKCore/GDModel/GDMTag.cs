@@ -13,6 +13,10 @@ using GDModel.Providers.GEDCOM;
 
 namespace GDModel
 {
+    /// <summary>
+    /// This class was introduced because using standard `IEquatable` and `Equals()` for value-based
+    /// equality checks breaks the behavior of `IndexOf` and similar methods in standard containers.
+    /// </summary>
     public interface IGDEquatable<T>
     {
         bool DataEquals(T other);

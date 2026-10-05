@@ -149,11 +149,6 @@ namespace GKCore.Sync
             return differences;
         }
 
-        private static void CompareEvents(GDMRecordWithEvents evRec1, GDMRecordWithEvents evRec2, List<IDiffResult> differences)
-        {
-            CompareLists<GDMCustomEvent>(evRec1.Events, evRec2.Events, new EventComparer<GDMCustomEvent>(), true, differences);
-        }
-
         private static void CompareSourceCitations(IGDMStructWithSourceCitations struct1, IGDMStructWithSourceCitations struct2, List<IDiffResult> differences)
         {
             CompareLists<GDMSourceCitation>(struct1.SourceCitations, struct2.SourceCitations, new PointerComparer<GDMSourceCitation>(), true, differences);
@@ -261,7 +256,8 @@ namespace GKCore.Sync
         {
             CompareRecords(rec1, rec2, differences);
 
-            CompareEvents(rec1, rec2, differences);
+            CompareLists<GDMCustomEvent>(rec1.Events, rec2.Events, new EventComparer<GDMCustomEvent>(), true, differences);
+
             CompareValues(GEDCOMTagType.RESN, rec1.Restriction, rec2.Restriction, LangMan.LS(GKData.Restrictions[(int)rec1.Restriction]), LangMan.LS(GKData.Restrictions[(int)rec2.Restriction]), differences);
         }
 
@@ -452,6 +448,7 @@ namespace GKCore.Sync
                         break;
 
                     case DiffStatus.Inserted:
+                        // VerifyReferences by Record - includes its record!
                         if (CheckLinks(diff.Obj2)) {
                             // TODO
                             //fMainTree.AddRecord(diff.Obj2.Clone());
@@ -505,16 +502,22 @@ namespace GKCore.Sync
 
         private bool CheckLinks(GDMTag tag)
         {
-            // TODO: Create a cross-index from the XRef in the second file to the position in the diff
-            // to determine whether it is local to the second file or existed in the first.
-            var refs = ReferenceVerifier.VerifyTagReferences(fMainTree, tag);
-            if (refs.Count > 0) {
-                var strList = string.Join(", ", refs);
-                var vote = AppHost.StdDialogs.ShowQuestion(string.Format("The main tree is missing records:\n{0}. Add them?", strList));
-
-                // TODO: Compare links based on differences between trees for cases
-                // where records with a specific XRef were added independently.
-                return false;
+            var missedRecords = GDMReferenceVerifier.VerifyReferences(tag, fOtherTree, fMainTree, true);
+            if (missedRecords.Count > 0) {
+                var refsList = missedRecords.Select(x => x.XRef);
+                var strList = string.Join(", ", refsList);
+                var vote = AppHost.StdDialogs.ShowQuestion(string.Format("The main tree is missing records:\n{0}. Add them?", strList)).GetAwaiter().GetResult();
+                if (vote) {
+                    // TODO: Create a cross-index from the XRef in the second file to the position in the diff
+                    // to determine whether it is local to the second file or existed in the first.
+                    foreach (var xref in refsList) {
+                        var sourceRecord = fOtherTree.FindXRef<GDMRecord>(xref);
+                        fMainTree.AddRecord(sourceRecord.Clone());
+                    }
+                    return false;
+                } else {
+                    return false;
+                }
             }
             return true;
         }

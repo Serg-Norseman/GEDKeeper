@@ -122,8 +122,8 @@ namespace GKUI.Forms
             if (diff == null) return;
 
             if (diff is TagDiff tagDiff) {
-                GDMObjectsDescriber.GetFullDescription(fSyncTool.MainTree, fCurrentRecord.Obj1, tagDiff.Obj1, hvLeftRecord.Lines);
-                GDMObjectsDescriber.GetFullDescription(fSyncTool.OtherTree, fCurrentRecord.Obj2, tagDiff.Obj2, hvRightRecord.Lines);
+                ObjectDescriber.GetFullDescription(fSyncTool.MainTree, fCurrentRecord.Obj1, tagDiff.Obj1, hvLeftRecord.Lines);
+                ObjectDescriber.GetFullDescription(fSyncTool.OtherTree, fCurrentRecord.Obj2, tagDiff.Obj2, hvRightRecord.Lines);
             } else {
                 hvLeftRecord.Lines.Text = " --- ";
                 hvRightRecord.Lines.Text = " --- ";
@@ -218,8 +218,8 @@ namespace GKUI.Forms
             {
                 string item1, item2;
                 if (fFetchedRec is TagDiff tagDiff) {
-                    item1 = GDMObjectsDescriber.GetBriefDescription(SyncTool.MainTree, Record1, tagDiff.Obj1);
-                    item2 = GDMObjectsDescriber.GetBriefDescription(SyncTool.OtherTree, Record2, tagDiff.Obj2);
+                    item1 = ObjectDescriber.GetBriefDescription(SyncTool.MainTree, Record1, tagDiff.Obj1);
+                    item2 = ObjectDescriber.GetBriefDescription(SyncTool.OtherTree, Record2, tagDiff.Obj2);
                 } else
                     if (fFetchedRec is ValDiff valDiff) {
                         item1 = valDiff.DisplayItem1;

@@ -220,6 +220,13 @@ namespace GDModel
             return result;
         }
 
+        public static GDMRecord Clone(this GDMRecord obj)
+        {
+            GDMRecord result = (GDMRecord)Activator.CreateInstance(obj.GetType());
+            result.Assign(obj);
+            return result;
+        }
+
         public static string GetEventKey(this GDMCustomEvent customEvent)
         {
             return (customEvent == null) ? string.Empty : customEvent.GetTagName() + ":" + customEvent.Classification;

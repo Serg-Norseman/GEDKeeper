@@ -13,7 +13,7 @@ using GKCore.Locales;
 
 namespace GKCore.Sync
 {
-    public class GDMObjectsDescriber
+    public class ObjectDescriber
     {
         public static string GetBriefDescription(GDMTree tree, GDMRecord record, GDMTag tag)
         {

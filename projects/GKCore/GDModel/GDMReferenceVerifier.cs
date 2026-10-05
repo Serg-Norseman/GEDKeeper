@@ -6,17 +6,15 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System;
 using System.Collections.Generic;
-using GDModel;
 using GDModel.Providers.GEDCOM;
 
-namespace GKCore.Sync
+namespace GDModel
 {
     /// <summary>
     /// Class for verifying references and dependencies between GDM records in different trees.
     /// </summary>
-    public class ReferenceVerifier
+    public class GDMReferenceVerifier
     {
         /// <summary>
         /// Represents the status of a reference in the destination tree.
@@ -43,76 +41,45 @@ namespace GKCore.Sync
         }
 
         /// <summary>
-        /// Verifies references for a given GDM record recursively.
+        /// Verifies all references for a given record.
         /// </summary>
-        public List<RefInfo> VerifyReferences(GDMRecord record, GDMTree sourceTree, GDMTree destinationTree)
+        public static List<RefInfo> VerifyReferences(GDMTag obj, GDMTree sourceTree, GDMTree targetTree, bool onlyMissing = false)
         {
-            if (record == null)
-                throw new ArgumentNullException(nameof(record));
-            if (sourceTree == null)
-                throw new ArgumentNullException(nameof(sourceTree));
-            if (destinationTree == null)
-                throw new ArgumentNullException(nameof(destinationTree));
-
             var refInfos = new List<RefInfo>();
             var processedRefs = new HashSet<string>();
+            var stack = new Stack<string>();
+            var visitor = new GDMTagReferenceVerifier();
 
-            VerifyReferencesRecursive(record, sourceTree, destinationTree, refInfos, processedRefs);
+            if (obj is GDMRecord record) {
+                stack.Push(record.XRef);
+            } else {
+                obj.Accept(visitor);
+                foreach (var link in visitor.Result) {
+                    if (!processedRefs.Contains(link))
+                        stack.Push(link);
+                }
+            }
+
+            while (stack.Count > 0) {
+                var currentXRef = stack.Pop();
+                processedRefs.Add(currentXRef);
+
+                var status = targetTree.FindXRef<GDMRecord>(currentXRef) != null ? RefStatus.Present : RefStatus.Missing;
+                if (!onlyMissing || status == RefStatus.Missing)
+                    refInfos.Add(new RefInfo(currentXRef, status));
+
+                var sourceRecord = sourceTree.FindXRef<GDMRecord>(currentXRef);
+
+                visitor.Result.Clear();
+                sourceRecord.Accept(visitor);
+
+                foreach (var link in visitor.Result) {
+                    if (!processedRefs.Contains(link))
+                        stack.Push(link);
+                }
+            }
 
             return refInfos;
-        }
-
-        /// <summary>
-        /// Recursively verifies references for a given GDM record and all its dependencies.
-        /// </summary>
-        /// <param name="record">The GDM record to verify.</param>
-        /// <param name="sourceTree">The tree to which the record belongs.</param>
-        /// <param name="destinationTree">The tree to check for ref presence.</param>
-        /// <param name="refInfos">The list to populate with RefInfo objects.</param>
-        /// <param name="processedRefs">Set of already processed refs to avoid infinite recursion.</param>
-        private void VerifyReferencesRecursive(GDMRecord record, GDMTree sourceTree, GDMTree destinationTree, List<RefInfo> refInfos, HashSet<string> processedRefs)
-        {
-            if (record == null || processedRefs.Contains(record.XRef))
-                return;
-
-            // Mark this record as processed
-            processedRefs.Add(record.XRef);
-
-            // Check if this record exists in the destination tree
-            var status = destinationTree.FindXRef<GDMRecord>(record.XRef) != null ? RefStatus.Present : RefStatus.Missing;
-            refInfos.Add(new RefInfo(record.XRef, status));
-
-            // If the record is missing in the destination tree, we still need to check its dependencies
-            // Get all links from the record and its substructures
-            var refs = CollectRefs(record, sourceTree);
-
-            // Check each link against the destination tree and recursively verify dependencies
-            foreach (var link in refs) {
-                if (!processedRefs.Contains(link)) {
-                    var linkedRecord = sourceTree.FindXRef<GDMRecord>(link);
-                    if (linkedRecord != null) {
-                        VerifyReferencesRecursive(linkedRecord, sourceTree, destinationTree, refInfos, processedRefs);
-                    } else {
-                        // If we can't find the record in the source tree, just add it to the list with missing status
-                        refInfos.Add(new RefInfo(link, RefStatus.Missing));
-                    }
-                }
-            }
-        }
-
-        public static HashSet<string> VerifyTagReferences(GDMTree targetTree, GDMTag obj)
-        {
-            var result = new HashSet<string>();
-            if (obj != null) {
-                var visitor = new GDMTagReferenceVerifier();
-                obj.Accept(visitor);
-                foreach (var xRef in visitor.Result) {
-                    var refRecord = targetTree.FindXRef<GDMRecord>(xRef);
-                    if (refRecord == null)
-                        result.Add(xRef);
-                }
-            }
-            return result;
         }
 
         /// <summary>
@@ -426,12 +393,12 @@ namespace GKCore.Sync
 
         public void Visit(GDMPersonalName obj)
         {
-            ReferenceVerifier.CollectRefsFromPersonalName(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromPersonalName(obj, fResult);
         }
 
         public void Visit(GDMChildToFamilyLink obj)
         {
-            ReferenceVerifier.CollectRefsFromChildToFamilyLink(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromChildToFamilyLink(obj, fResult);
         }
 
         public void Visit(GDMTag obj)
@@ -441,82 +408,82 @@ namespace GKCore.Sync
 
         public void Visit(GDMCustomEvent obj)
         {
-            ReferenceVerifier.CollectRefsFromEvent(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromEvent(obj, fResult);
         }
 
         public void Visit(GDMIndividualRecord obj)
         {
-            ReferenceVerifier.CollectRefsFromIndividual(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromIndividual(obj, fResult);
         }
 
         public void Visit(GDMSpouseToFamilyLink obj)
         {
-            ReferenceVerifier.CollectRefsFromSpouseToFamilyLink(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromSpouseToFamilyLink(obj, fResult);
         }
 
         public void Visit(GDMAssociation obj)
         {
-            ReferenceVerifier.CollectRefsFromAssociation(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromAssociation(obj, fResult);
         }
 
         public void Visit(GDMFamilyRecord obj)
         {
-            ReferenceVerifier.CollectRefsFromFamily(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromFamily(obj, fResult);
         }
 
         public void Visit(GDMNoteRecord obj)
         {
-            ReferenceVerifier.CollectRefsFromNote(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromNote(obj, fResult);
         }
 
         public void Visit(GDMMultimediaRecord obj)
         {
-            ReferenceVerifier.CollectRefsFromMultimedia(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromMultimedia(obj, fResult);
         }
 
         public void Visit(GDMSourceRecord obj)
         {
-            ReferenceVerifier.CollectRefsFromSource(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromSource(obj, fResult);
         }
 
         public void Visit(GDMRepositoryRecord obj)
         {
-            ReferenceVerifier.CollectRefsFromRepository(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromRepository(obj, fResult);
         }
 
         public void Visit(GDMGroupRecord obj)
         {
-            ReferenceVerifier.CollectRefsFromGroup(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromGroup(obj, fResult);
         }
 
         public void Visit(GDMResearchRecord obj)
         {
-            ReferenceVerifier.CollectRefsFromResearch(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromResearch(obj, fResult);
         }
 
         public void Visit(GDMTaskRecord obj)
         {
-            ReferenceVerifier.CollectRefsFromTask(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromTask(obj, fResult);
         }
 
         public void Visit(GDMCommunicationRecord obj)
         {
-            ReferenceVerifier.CollectRefsFromCommunication(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromCommunication(obj, fResult);
         }
 
         public void Visit(GDMLocationRecord obj)
         {
-            ReferenceVerifier.CollectRefsFromLocation(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromLocation(obj, fResult);
         }
 
         public void Visit(GDMPointer obj)
         {
-            ReferenceVerifier.CollectRef(obj.XRef, fResult);
+            GDMReferenceVerifier.CollectRef(obj.XRef, fResult);
         }
 
         public void Visit(GDMRepositoryCitation obj)
         {
-            ReferenceVerifier.CollectRefsFromRepositoryCitation(obj, fResult);
+            GDMReferenceVerifier.CollectRefsFromRepositoryCitation(obj, fResult);
         }
     }
 }
